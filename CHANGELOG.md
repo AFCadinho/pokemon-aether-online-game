@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The battle calculator now highlights its set-suggestion button only when battle evidence supports a match, instead of announcing catalog-only possibilities as new matches.
+
 - Aether Exchange item requests now show a concise transaction message followed by separate Bag and wallet changes, including creation escrow and cancellation refunds.
 
 - Leaving a spectated battle now waits for active animations to stop, preventing a client crash when battle events are still being shown.

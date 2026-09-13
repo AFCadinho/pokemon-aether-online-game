@@ -69,8 +69,21 @@ func _run() -> void:
 	var host := VBoxContainer.new()
 	content.add_child(host)
 	panel._add_set_suggestions(host)
-	_check(host.find_child("SetSuggestionsToggle", true, false) != null, "Inspector keeps the compact suggestion opener")
+	var evidence_backed_toggle := host.find_child("SetSuggestionsToggle", true, false) as Button
+	_check(evidence_backed_toggle != null, "Inspector keeps the compact suggestion opener")
+	_check(evidence_backed_toggle.text == "Set suggestions (3)" and evidence_backed_toggle.get_theme_color("font_color") == Color("#8ccbe8"), "Evidence-backed suggestions announce their available match count")
 	_check(host.find_child("ApplySetSuggestion", true, false) == null, "Suggestion cards do not expand the inspector layout")
+	var catalog_only_response := popup_response.duplicate(true)
+	catalog_only_response["observationCount"] = 0
+	for suggestion: Dictionary in catalog_only_response["suggestions"]:
+		suggestion["confidence"] = "weak"
+	panel.show_set_suggestions(ref, revision, catalog_only_response)
+	var catalog_only_host := VBoxContainer.new()
+	content.add_child(catalog_only_host)
+	panel._add_set_suggestions(catalog_only_host)
+	var catalog_only_toggle := catalog_only_host.find_child("SetSuggestionsToggle", true, false) as Button
+	_check(catalog_only_toggle.text == "Set suggestions" and catalog_only_toggle.get_theme_color("font_color") == Color("#f2f0ea"), "Catalog-only possibilities remain available without a misleading new-match badge")
+	panel.show_set_suggestions(ref, revision, popup_response)
 	panel._open_set_suggestions_popup()
 	await process_frame
 	_check(is_instance_valid(panel.set_suggestions_popup), "Suggestion opener creates its own popup layer")
