@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fainted Pokémon remain available for hypothetical damage calculations, and calculator errors no longer replace the selected matchup with question marks.
+
 - Item requests in My Exchange now use clear compact cards with their unit price, status, and fulfillment progress.
 
 - The battle calculator's set-suggestion button now gently pulses when battle evidence supports a match, then opens a clearer set picker with simpler evidence and calculator actions.
