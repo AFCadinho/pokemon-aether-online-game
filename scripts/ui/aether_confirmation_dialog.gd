@@ -16,7 +16,7 @@ const COLOR_TEXT := Color("eef8ff")
 const COLOR_MUTED := Color("9eb3c5")
 
 @onready var panel: PanelContainer = $Center/Panel
-@onready var accent_icon: Label = $Center/Panel/Margin/Content/Header/AccentIcon
+@onready var accent_icon: TextureRect = $Center/Panel/Margin/Content/Header/AccentIcon
 @onready var title_label: Label = $Center/Panel/Margin/Content/Header/Title
 @onready var close_button: Button = $Center/Panel/Margin/Content/Header/CloseButton
 @onready var message_label: Label = $Center/Panel/Margin/Content/MessagePanel/MessageMargin/Message
@@ -186,8 +186,7 @@ func _apply_styles() -> void:
 		"panel",
 		_make_style(COLOR_BACKGROUND, COLOR_ACCENT, 14, 2, true)
 	)
-	accent_icon.add_theme_color_override("font_color", COLOR_ACCENT)
-	accent_icon.add_theme_font_size_override("font_size", 22)
+	accent_icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	title_label.add_theme_color_override("font_color", COLOR_TEXT)
 	title_label.add_theme_font_size_override("font_size", 20)
 	message_label.add_theme_color_override("font_color", COLOR_MUTED)

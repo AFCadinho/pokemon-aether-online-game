@@ -38,6 +38,8 @@ func _init() -> void:
 		"Aether confirmation dialog fills the viewport on its first opening"
 	)
 	_check(dialog.get_node("Shade").visible, "Aether confirmation dialog dims the world")
+	var accent_icon := dialog.get_node("Center/Panel/Margin/Content/Header/AccentIcon") as TextureRect
+	_check(accent_icon != null and accent_icon.texture != null, "Aether confirmation dialog uses a font-independent header icon")
 	_check(
 		(dialog.get_node("Center/Panel/Margin/Content/Header/Title") as Label).text == "Set Aether Anchor",
 		"Aether confirmation dialog renders its configured title"

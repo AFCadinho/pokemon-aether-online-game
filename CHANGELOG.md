@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Shared confirmation and client-only dialogs now display their Aether icon correctly in the browser.
 - The Friend List refresh action now displays correctly in the browser.
 - Browser players can now view their own Guild overview and members. Guild and Battle Replay actions use clear icons, client-only notices match the game style, and NPC replays show the correct Trainer.
 - The Aethernet browser notice now fits and centers correctly at browser resolutions.
