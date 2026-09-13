@@ -1529,6 +1529,23 @@ func _update_list_grid_columns() -> void:
 	var available_width := list_scroll.size.x if list_scroll != null else 0.0
 	if available_width <= 0.0:
 		available_width = 560.0
+	# The list is initially laid out across the full workspace. Forms add the
+	# detail panel afterwards, so reserve that width before the grid's minimum
+	# size can force the panel beyond the popup's right edge.
+	if detail_panel != null and detail_panel.visible and list_scroll != null:
+		var list_panel := list_scroll.get_parent_control().get_parent_control().get_parent_control()
+		var workspace := detail_panel.get_parent_control() as BoxContainer
+		if list_panel != null and workspace != null:
+			var panel_chrome := maxf(list_panel.size.x - list_scroll.size.x, 0.0)
+			var reserved_width := (
+				detail_panel.get_combined_minimum_size().x
+				+ workspace.get_theme_constant("separation")
+				+ panel_chrome
+			)
+			available_width = minf(
+				available_width,
+				maxf(workspace.size.x - reserved_width, BROWSE_CARD_MIN_WIDTH),
+			)
 	var columns := int(floor((available_width + 8.0) / (BROWSE_CARD_MIN_WIDTH + 8.0)))
 	list_container.columns = clampi(columns, 1, BROWSE_GRID_MAX_COLUMNS)
 
@@ -1668,6 +1685,7 @@ func _render_detail() -> void:
 	var is_form := active_tab in ["sell", "wishlist"]
 	detail_panel.visible = is_form
 	action_bar.visible = not is_form
+	_update_list_grid_columns()
 	var target: BoxContainer = detail_stack if is_form else action_content
 	if selected_entry.is_empty():
 		var prompt := Label.new()
