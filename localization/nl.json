@@ -3094,6 +3094,8 @@
   "ui.staff.dev.level_cap_override_on": "Levelcap 100: aan",
   "ui.staff.dev.level_cap_override_off": "Levelcap 100: uit",
   "ui.staff.dev.level_cap_override_description": "Zet alleen je trainingscap op level 100; verhaalvoortgang en tradecap blijven gelijk",
+  "ui.staff.dev.level_cap_override_title": "Developer-trainingslevelcap",
+  "ui.staff.dev.level_cap_override_unavailable": "Developer-levelcapoverride is niet beschikbaar.",
   "ui.staff.dev.level_cap_override_enabled": "Developer-levelcapoverride staat aan. Je trainingscap is nu level 100.",
   "ui.staff.dev.level_cap_override_disabled": "Developer-levelcapoverride staat uit. Je normale progressiecap is hersteld.",
   "ui.staff.dev.level_cap_override_failed": "De developer-levelcapoverride kon niet worden bijgewerkt: {error}",
