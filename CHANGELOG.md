@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Opponent set suggestions can now be selected by clicking anywhere on their card, including the description and clue count.
+
 - Fainted Pokémon remain available for hypothetical damage calculations, and calculator errors no longer replace the selected matchup with question marks.
 
 - Item Buyer sales now show a confirmation with the item, quantity, and payout before removing anything from your Bag.
