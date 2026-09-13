@@ -377,6 +377,16 @@ func _sync_mount_visual() -> void:
 	mount_foreground_sprite.visible = foreground_frames != null
 	_sync_mount_animation(is_moving, last_direction)
 
+func _connect_mount_frame_sync() -> void:
+	if mount_sprite == null:
+		return
+	if not mount_sprite.frame_changed.is_connected(_on_mount_frame_changed):
+		mount_sprite.frame_changed.connect(_on_mount_frame_changed)
+
+func _on_mount_frame_changed() -> void:
+	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
+
 func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 	if mount_sprite == null or not mount_sprite.visible or mount_sprite.sprite_frames == null:
 		return
@@ -397,6 +407,7 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
+	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 
 func _sync_mount_foreground_frame() -> void:
@@ -406,8 +417,7 @@ func _sync_mount_foreground_frame() -> void:
 		return
 	mount_foreground_sprite.animation = mount_sprite.animation
 	mount_foreground_sprite.frame = mount_sprite.frame
-	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
-	mount_foreground_sprite.stop()
+	mount_foreground_sprite.pause()
 
 func _sync_mount_rider_delta() -> void:
 	if rider_node == null:
@@ -905,6 +915,7 @@ func _ready() -> void:
 	z_as_relative = false
 	base_look_position = look_node.position
 	base_rider_position = rider_node.position
+	_connect_mount_frame_sync()
 	PlayerSave.ensure_body_matches_gender(false)
 	_cache_appearance_sprites()
 	_apply_body_appearance(PlayerSave.appearance_body_id)
@@ -1527,8 +1538,6 @@ func _process(delta: float) -> void:
 	_update_sort_z()
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
-	_sync_mount_rider_delta()
-	_sync_mount_foreground_frame()
 	_update_fishing_activity(delta)
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
