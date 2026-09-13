@@ -241,6 +241,14 @@ func _check_land_mount_runtime_contract() -> void:
 		remote_player_source,
 		"_sync_mount_foreground_frame"
 	)
+	var local_activity_layer_source := _function_source(
+		player_source,
+		"_get_activity_layer_offset"
+	)
+	var remote_activity_layer_source := _function_source(
+		remote_player_source,
+		"_get_activity_layer_offset"
+	)
 	_check(
 		remote_create_visual_source.contains("_connect_mount_frame_sync()")
 		and remote_player_source.contains(
@@ -251,6 +259,13 @@ func _check_land_mount_runtime_contract() -> void:
 		and remote_mount_frame_source.contains("_sync_mount_foreground_frame()")
 		and remote_mount_foreground_source.contains("mount_foreground_sprite.pause()"),
 		"remote riders and foreground layers follow every high-speed mount animation frame"
+	)
+	_check(
+		local_activity_layer_source.contains("MountService.get_mount_movement_mode(active_mount_id)")
+		and local_activity_layer_source.contains("MountService.MOVEMENT_MODE_LAND")
+		and remote_activity_layer_source.contains("MountService.get_mount_movement_mode(current_mount_id)")
+		and remote_activity_layer_source.contains("MountService.MOVEMENT_MODE_LAND"),
+		"local and remote land mounts do not inherit Lapras's horizontal outfit offset"
 	)
 
 

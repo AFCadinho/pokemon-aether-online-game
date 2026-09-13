@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Other players now remain aligned with their mount while riding at high speed.
+- Riders and their outfits now remain aligned with land mounts while moving at high speed.
 - Pokédex and Item Dex catalogues now load through the browser's restricted account API, and the Pokédex Shiny selector displays its proper icon.
 - Town Map locations, interiors, connections, and legend entries now display their icons correctly in the browser.
 - Shared confirmation and client-only dialogs now display their Aether icon correctly in the browser.
