@@ -87,6 +87,9 @@ func _check_land_mount_runtime_contract() -> void:
 	var project_source := FileAccess.get_file_as_string("res://project.godot")
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	var remote_player_source := FileAccess.get_file_as_string(
+		"res://scripts/world/remote_player_avatar.gd"
+	)
 	var map_metadata_source := FileAccess.get_file_as_string("res://scripts/world/map_metadata.gd")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var loading_source := FileAccess.get_file_as_string("res://scripts/ui/loading_screen.gd")
@@ -224,6 +227,30 @@ func _check_land_mount_runtime_contract() -> void:
 		and player_source.count("refresh_pokemon_follower()") >= 4
 		and world_source.contains('player.call("is_land_mount_activity_active")'),
 		"land mounts hide local and remote follower Pokemon until dismounting"
+	)
+	var remote_create_visual_source := _function_source(remote_player_source, "_create_visual")
+	var remote_mount_animation_source := _function_source(
+		remote_player_source,
+		"_sync_mount_animation"
+	)
+	var remote_mount_frame_source := _function_source(
+		remote_player_source,
+		"_on_mount_frame_changed"
+	)
+	var remote_mount_foreground_source := _function_source(
+		remote_player_source,
+		"_sync_mount_foreground_frame"
+	)
+	_check(
+		remote_create_visual_source.contains("_connect_mount_frame_sync()")
+		and remote_player_source.contains(
+			"mount_sprite.frame_changed.connect(_on_mount_frame_changed)"
+		)
+		and remote_mount_animation_source.contains("_sync_mount_rider_delta()")
+		and remote_mount_frame_source.contains("_sync_mount_rider_delta()")
+		and remote_mount_frame_source.contains("_sync_mount_foreground_frame()")
+		and remote_mount_foreground_source.contains("mount_foreground_sprite.pause()"),
+		"remote riders and foreground layers follow every high-speed mount animation frame"
 	)
 
 
