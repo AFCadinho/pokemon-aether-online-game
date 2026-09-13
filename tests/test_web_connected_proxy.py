@@ -73,6 +73,18 @@ class ConnectedProxyTests(unittest.TestCase):
             stats_response = client.get("/api/pokemon/stats?species=rattata&level=2")
             self.assertEqual(stats_response.status_code, 200)
             self.assertEqual(dict(calls[-1].url.params), {"species": "rattata", "level": "2"})
+            pokedex_response = client.get(
+                "/api/auth/web/pokedex/species?limit=50&offset=0&dex=national&shiny=false"
+            )
+            self.assertEqual(pokedex_response.status_code, 200)
+            self.assertEqual(calls[-1].url.path, "/auth/web/pokedex/species")
+            self.assertEqual(calls[-1].url.params["limit"], "50")
+            item_dex_response = client.get(
+                "/api/auth/web/items/search?q=ball&limit=50&offset=0"
+            )
+            self.assertEqual(item_dex_response.status_code, 200)
+            self.assertEqual(calls[-1].url.path, "/auth/web/items/search")
+            self.assertEqual(calls[-1].url.params["q"], "ball")
             self.assertEqual(client.get("/api/battle/pvp/training/ai/live/training-test/spectate").status_code, 200)
             sprite = client.get("/pokemon-assets/battle/front/pikachu/animation.json")
             self.assertEqual(sprite.status_code, 200)
@@ -109,7 +121,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(world_preview.content, b"test-webp")
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 34)
+            self.assertEqual(len(calls), 36)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

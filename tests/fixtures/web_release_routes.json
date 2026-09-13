@@ -15,6 +15,8 @@
     ["GET", "/auth/web/trainers/kanto_route_1_lass_zoe/progress"], ["POST", "/auth/web/trainers/kanto_route_1_lass_zoe/rematch"],
     ["GET", "/auth/web/mail"], ["POST", "/auth/web/mail"], ["POST", "/auth/web/mail/5/read"], ["DELETE", "/auth/web/mail/5"],
     ["GET", "/auth/web/guilds/me"],
+    ["GET", "/auth/web/pokedex/species"], ["GET", "/auth/web/pokedex/species/pidgey"],
+    ["GET", "/auth/web/items/search"],
     ["GET", "/battle/trainer/resume"], ["GET", "/battle/wild/resume"],
     ["POST", "/battle/trainer"], ["POST", "/battle/wild-encounter"], ["POST", "/auth/web/wild-battles/battle-id/catch"],
     ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
@@ -25,6 +27,7 @@
     ["GET", "/game/guilds/me/bank"], ["POST", "/game/guilds/me/bank/deposit"],
     ["POST", "/game/aether-clash/challenges"], ["POST", "/auth/web/guilds/me/bank"],
     ["POST", "/auth/web/dev/pokemon"], ["POST", "/auth/web/pokemon"],
+    ["GET", "/game/pokedex/species"], ["GET", "/game/items/search"],
     ["GET", "/auth/web/world/story-escape"], ["GET", "/auth/web/mail-escape"],
     ["POST", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/0/escape"],
     ["POST", "/auth/web/pokemon/42/moves/invent"], ["POST", "/auth/web/wallet/rewards/free-money"],
