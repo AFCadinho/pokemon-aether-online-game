@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Missed attacks now aim at their target while the defending Pokémon visibly dodges to the side and returns to its position.
+
 - The battle calculator now lets players select any matchup and run preview calculations before either lead Pokémon has been chosen.
 
 - Opponent set suggestions now keep clearly labelled closest matches visible when later clues rule out every exact catalog set, while new exact evidence can draw attention again.

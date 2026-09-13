@@ -199,6 +199,9 @@ func reset_battle_pose() -> void:
 	_stop_active_tween()
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
+	if substitute_active:
+		_stop_substitute_tween()
+		_sync_substitute_idle_pose()
 	_update_stat_stage_panel_positions()
 
 func clear_pokemon() -> void:
@@ -234,6 +237,28 @@ func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
 	if not await AnimationWait.for_tween(self, active_tween):
 		return
 	_reset_sprites_pose(sprites)
+
+func play_dodge_tween(direction := 1.0, returning := false) -> void:
+	var sprites: Array[Node2D] = []
+	var uses_substitute := substitute_active and not substitute_revealed_for_move
+	if uses_substitute and is_instance_valid(substitute_sprite):
+		sprites.append(substitute_sprite)
+	else:
+		for sprite in _get_visible_sprites():
+			sprites.append(sprite)
+	if sprites.is_empty():
+		return
+	_stop_active_tween()
+	if uses_substitute:
+		_stop_substitute_tween()
+	var dodge_tween := create_tween().set_speed_scale(playback_speed).set_parallel(true)
+	active_tween = dodge_tween
+	for sprite in sprites:
+		var base_position := _get_substitute_idle_position() if sprite == substitute_sprite else _get_base_sprite_position(sprite as AnimatedSprite2D)
+		var offset := Vector2.ZERO if returning else Vector2(32.0 * direction, -12.0)
+		dodge_tween.tween_property(sprite, "position", base_position + offset, 0.16 if returning else 0.10).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	await AnimationWait.for_tween(self, dodge_tween)
+
 
 func set_substitute_active(is_active: bool, animate := true) -> void:
 	if substitute_sprite == null:
