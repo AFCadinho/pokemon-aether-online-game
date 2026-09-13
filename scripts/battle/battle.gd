@@ -3297,6 +3297,9 @@ func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
 
 func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited_fields: Dictionary) -> void:
 	_sync_damage_calc_matchup_assumptions()
+	var selected_species_key := _get_damage_calc_defender_species_key()
+	if selected_species_key != "":
+		damage_calc_defender_species_key = selected_species_key
 	damage_calc_defender_assumptions = assumptions.duplicate(true)
 	damage_calc_assumption_edited_fields = edited_fields.duplicate(true)
 	_persist_current_damage_calc_assumptions()
@@ -3306,6 +3309,10 @@ func _on_calc_panel_defender_assumptions_changed(assumptions: Dictionary, edited
 		_refresh_damage_calc_results()
 
 func _on_calc_panel_matchup_selection_changed() -> void:
+	var selected_species_key := _get_damage_calc_defender_species_key()
+	if selected_species_key != damage_calc_defender_species_key:
+		damage_calc_defender_species_key = selected_species_key
+		_adopt_damage_calc_panel_assumptions()
 	if damage_calc_request_in_flight:
 		damage_calc_request_token += 1
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
@@ -3629,8 +3636,11 @@ func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_field
 	return false
 
 func _get_damage_calc_defender_species_key() -> String:
+	var species := calc_panel.get_selected_opponent_species() if calc_panel != null else ""
+	if species != "":
+		return _slugify_damage_calc_species(species)
 	var active_pokemon: Dictionary = battle_state.get_active_player_pokemon("p2")
-	var species: String = str(active_pokemon.get("species", "")).strip_edges()
+	species = str(active_pokemon.get("species", "")).strip_edges()
 	if species == "":
 		species = _get_active_display_species("p2")
 	return _slugify_damage_calc_species(species)
