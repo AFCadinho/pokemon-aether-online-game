@@ -12,16 +12,27 @@ func _run() -> void:
 	var original_map: Node = game_state.current_map
 	var first := _make_map("FirstMap")
 	var second := _make_map("SecondMap")
-	root.add_child(first.map)
-	root.add_child(second.map)
+	var outer_world := Node2D.new()
+	outer_world.name = "OuterWorld"
+	root.add_child(outer_world)
+	outer_world.add_child(first.map)
+	outer_world.add_child(second.map)
 	var player: Node = load("res://scenes/player.tscn").instantiate()
 	player.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
+	outer_world.add_child(player)
+	game_state.current_map = null
+	await process_frame
+	player.refresh_map_layers()
+	_check(player.map_layers_owner == outer_world,
+		"bootstrap can temporarily resolve the outer World container")
+	outer_world.remove_child(player)
 	first.players.add_child(player)
 	game_state.current_map = first.map
-	await process_frame
 
 	player.refresh_map_layers()
 	_check(player.collision_tilemap == first.collision, "initial refresh resolves the active map")
+	_check(player.map_layers_owner == first.map,
+		"authoritative active map replaces a still-valid outer World cache")
 	var warm_generation: int = player.map_layer_cache_generation
 	for index in range(25):
 		player._resolve_current_map()
@@ -53,8 +64,7 @@ func _run() -> void:
 		"explicit refresh adopts runtime layer replacements")
 	game_state.current_map = original_map
 	player.free()
-	first.map.free()
-	second.map.free()
+	outer_world.free()
 	print("player_map_layer_cache_check: %s" % ("FAIL" if failed else "PASS"))
 	quit(1 if failed else 0)
 
