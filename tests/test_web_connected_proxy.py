@@ -35,6 +35,7 @@ class ConnectedProxyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "index.html").write_text("test export")
+            (root / "world-preview.webp").write_bytes(b"test-webp")
             (root / ".secret").write_text("not served")
             (root / "external.js").symlink_to("/etc/passwd")
             client = TestClient(proxy.create_app("http://127.0.0.1:8000", root, transport=httpx.MockTransport(upstream)), base_url="http://127.0.0.1:8061")
@@ -102,6 +103,10 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(static.headers["cross-origin-opener-policy"], "same-origin")
             self.assertEqual(static.headers["cross-origin-embedder-policy"], "require-corp")
             self.assertIn("frame-ancestors 'none'", static.headers["content-security-policy"])
+            world_preview = client.get("/world-preview.webp")
+            self.assertEqual(world_preview.status_code, 200)
+            self.assertEqual(world_preview.headers["content-type"], "image/webp")
+            self.assertEqual(world_preview.content, b"test-webp")
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
             self.assertEqual(len(calls), 34)
