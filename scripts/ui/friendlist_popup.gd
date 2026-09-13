@@ -9,6 +9,7 @@ signal incoming_friend_requests_changed(count: int)
 
 const POPUP_SIZE := Vector2(880, 620)
 const FRIENDLIST_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
+const REFRESH_ICON: Texture2D = preload("res://assets/ui/icons/refresh.svg")
 const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const UI_BG := Color("#050b14ed")
 const UI_SURFACE_RAISED := Color("#081522eb")
@@ -183,12 +184,13 @@ func _build_ui() -> void:
 	header.add_child(add_friend_button)
 
 	var refresh_button := Button.new()
-	refresh_button.text = "↻"
+	refresh_button.name = "RefreshFriendListButton"
+	refresh_button.icon = REFRESH_ICON
 	_set_localized_property(refresh_button, "tooltip_text", "ui.friends.refresh")
 	refresh_button.custom_minimum_size = Vector2(38, 38)
 	refresh_button.pressed.connect(_on_refresh_pressed)
 	_apply_button_style(refresh_button)
-	refresh_button.add_theme_font_size_override("font_size", 18)
+	refresh_button.add_theme_constant_override("icon_max_width", 20)
 	header.add_child(refresh_button)
 
 	var close_button := Button.new()
