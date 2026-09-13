@@ -100,6 +100,16 @@ static func canonicalize_success_response(response: Dictionary) -> Dictionary:
 	return canonical
 
 
+static func projection_revision_from_response(response: Dictionary) -> Dictionary:
+	var canonical := canonicalize_success_response(response)
+	var revision: Dictionary = {}
+	for field_name: String in REVISION_FIELDS:
+		if not canonical.has(field_name):
+			return {}
+		revision[field_name] = canonical.get(field_name)
+	return revision if is_valid_projection_revision(revision) else {}
+
+
 static func _canonicalize_json_integers(value: Variant) -> Variant:
 	if value is Dictionary:
 		var result: Dictionary = {}
