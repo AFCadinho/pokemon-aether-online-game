@@ -206,6 +206,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/aether_atelier_runtime_check.gd",
 	"res://tests/aether_exchange_check.gd",
 	"res://tests/sign_interactable_check.gd",
+	"res://tests/sign_catalog_runtime_check.gd",
 	"res://tests/sign_content_validation_check.gd",
 	"res://tests/pokemon_storage_service_contract_check.gd",
 	"res://tests/pvp_ranked_banlists_check.gd",

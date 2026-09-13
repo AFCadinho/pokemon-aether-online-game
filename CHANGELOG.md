@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Overworld signs now display their text correctly in exported game clients.
 - Other mounted players now keep their outfits aligned immediately when turning, without needing to stop first.
 - Riders and their outfits now stay visually together across every animated mount frame.
 - Pokédex and Item Dex catalogues now load through the browser's restricted account API, and the Pokédex Shiny selector displays its proper icon.

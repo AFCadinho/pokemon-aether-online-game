@@ -296,6 +296,7 @@ jobs:
           done
           grep -a -q "assets/player/male/body/body_manifest.json" "builds/windows/PokeAether.pck"
           grep -a -q "assets/player/female/body/body_manifest.json" "builds/windows/PokeAether.pck"
+          grep -a -q "data/world_text/signs/en/kanto/cerulean_city.json" "builds/windows/PokeAether.pck"
 
       - name: Verify Linux build
         run: |
@@ -308,6 +309,14 @@ jobs:
           done
           grep -a -q "assets/player/male/body/body_manifest.json" "builds/linux/PokeAether.pck"
           grep -a -q "assets/player/female/body/body_manifest.json" "builds/linux/PokeAether.pck"
+          grep -a -q "data/world_text/signs/en/kanto/cerulean_city.json" "builds/linux/PokeAether.pck"
+
+      - name: Verify sign catalogues in packed Linux runtime
+        run: |
+          sign_test_data="$(mktemp -d)"
+          XDG_DATA_HOME="$sign_test_data" ./godot --headless \
+            --main-pack "builds/linux/PokeAether.pck" \
+            --script "$GITHUB_WORKSPACE/tests/sign_catalog_runtime_check.gd"
 
       - name: Verify macOS build
         if: env.BUILD_MACOS == 'true'
@@ -328,6 +337,7 @@ jobs:
           done
           grep -a -q "assets/player/male/body/body_manifest.json" "$macos_pck"
           grep -a -q "assets/player/female/body/body_manifest.json" "$macos_pck"
+          grep -a -q "data/world_text/signs/en/kanto/cerulean_city.json" "$macos_pck"
 
       - name: Export macOS launcher
         if: ${{ env.BUILD_LAUNCHER == 'true' && env.BUILD_MACOS == 'true' }}
