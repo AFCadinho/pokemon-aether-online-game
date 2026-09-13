@@ -12,6 +12,7 @@ class HoverBattle extends BattleScript:
 class FakeHoverService extends HoverService:
 	var info_calls := 0
 	var info_moves: Array = [{"name": "Thunderbolt", "pp": 24, "maxpp": 24}]
+	var owner_speed: Dictionary = {}
 
 	func _fetch_hover_pokemon_info(_state: BattleState, _request: HTTPRequest, _pokemon: Dictionary, _viewer := "", ident := "") -> Dictionary:
 		info_calls += 1
@@ -22,6 +23,7 @@ class FakeHoverService extends HoverService:
 			"requested_ident": pokemon.get("ident", ""),
 			"species_metadata": {"types": ["electric"], "possibleAbilities": ["Static"]},
 			"speed_data": {"min": 188, "minNeutral31Iv": 240, "maxNeutral31Iv": 303, "max": 333},
+			"owner_speed": owner_speed.duplicate(true),
 			"confirmed_moves": [
 				{"name": "Thunderbolt", "pp": 8, "maxpp": 24},
 				{"name": "Surf", "pp": 24, "maxpp": 24},
@@ -89,15 +91,26 @@ func _ready() -> void:
 
 	battle.pvp_viewer_role = "participant"
 	battle.action_flow.set_local_player_id("p1")
-	var own := {"ident": "p1: Pikachu", "species": "Pikachu", "active": true, "metadataSlot": 1, "stats": {"spe": 333}}
+	var own := {"ident": "p1: Pikachu", "species": "Pikachu", "active": true, "metadataSlot": 1, "stats": {"spe": 333}, "types": ["electric"], "possibleAbilities": ["Static"]}
+	service.owner_speed = {"base": 236, "effective": 472, "stage": 2}
 	battle.battle_state.requests.p1 = {"active": [{"moves": [{"move": "Thunderbolt", "pp": 2, "maxpp": 15}]}]}
 	battle.hover_state.set_sprite_hover_player("p1")
 	await battle._show_pokemon_hover(own, own, "p1")
 	_check(battle.pokemon_hover_card.current_confirmed_moves[0].pp == 2 and battle.pokemon_hover_card.current_confirmed_moves[0].maxpp == 15, "participant sprite still uses exact owned PP")
-	_check(battle.pokemon_hover_card.current_speed_data == {"current": 333}, "participant hover replaces the possible range with exact owned Speed")
-	_check(battle.pokemon_hover_card.lowest_speed_label.text == "333", "participant card renders exact owned Speed")
+	_check(battle.pokemon_hover_card.current_speed_data == {"base": 236, "effective": 472, "stage": 2}, "participant hover prefers authoritative owned Speed")
+	_check(battle.pokemon_hover_card.lowest_speed_label.text == "472", "participant card renders effective owned Speed")
+	_check(battle.pokemon_hover_card.lowest_neutral_speed_label.text == "(236, +2)", "participant card renders base Speed and the real stat stage")
+	_check(battle.pokemon_hover_card.lowest_speed_label.get_theme_color("font_color").is_equal_approx(Color("#63d471")), "boosted effective Speed is green")
+	_check(battle.pokemon_hover_card.lowest_neutral_speed_label.get_theme_color("font_color").is_equal_approx(Color("#76ddff")), "original Speed breakdown is cyan")
 	_check(not battle.pokemon_hover_card.speed_separator_1.visible and not battle.pokemon_hover_card.highest_speed_label.visible, "participant card hides public speed tier separators")
-	_check(battle._get_owned_hover_current_speed(own, own, "Choice Scarf", {"spe": 1}) == 748, "exact owned Speed applies held-item and battle-stage modifiers")
+	_check(battle._get_owned_hover_current_speed(own, own, "Choice Scarf", {"spe": 1}) == {"base": 333, "effective": 748, "stage": 1}, "fallback owned Speed applies held-item and battle-stage modifiers")
+	_check(service._get_owner_speed_data({"ownerSpeed": {"base": 236, "effective": 354, "stage": 0}}) == {"base": 236, "effective": 354, "stage": 0}, "hover service accepts valid owner-only engine Speed")
+	battle.pokemon_hover_card.set_pokemon_data(own, [], "", "", {}, {"base": 236, "effective": 236, "stage": 0})
+	_check(battle.pokemon_hover_card.lowest_speed_label.get_theme_color("font_color").is_equal_approx(Color("#76ddff")), "unchanged exact Speed is cyan")
+	_check(not battle.pokemon_hover_card.lowest_neutral_speed_label.visible, "unchanged exact Speed needs no duplicate base value")
+	battle.pokemon_hover_card.set_pokemon_data(own, [], "", "", {}, {"base": 236, "effective": 157, "stage": -1})
+	_check(battle.pokemon_hover_card.lowest_speed_label.get_theme_color("font_color").is_equal_approx(Color("#ef4444")), "lowered effective Speed is red")
+	_check(battle.pokemon_hover_card.lowest_neutral_speed_label.text == "(236, -1)", "lowered Speed keeps the base and stage breakdown")
 	var saved_scale_source := Pokemon.new(
 		"Samurott-Hisui",
 		100,

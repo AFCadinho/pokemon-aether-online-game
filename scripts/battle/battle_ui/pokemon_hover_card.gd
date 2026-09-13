@@ -5,6 +5,7 @@ class_name PokemonHoverCard
 const TYPE_ICON_DIR := "res://assets/sprites/types"
 const LOW_SPEED_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 const HIGH_SPEED_COLOR := Color(0.3882353, 0.83137256, 0.44313726, 1.0)
+const EXACT_SPEED_COLOR := Color("#76ddff")
 const MIN_CARD_WIDTH := 220.0
 
 @onready var name_label: Label = $MarginContainer/VBoxContainer/NameLabel
@@ -287,28 +288,45 @@ func _set_speed_data(speed_data: Dictionary) -> void:
 		return
 
 	speed_row.visible = true
-	var current_speed: String = _format_speed_value(speed_data.get("current", ""))
-	var show_speed_range := current_speed == ""
+	var legacy_current: String = _format_speed_value(speed_data.get("current", ""))
+	var base_speed: String = _format_speed_value(speed_data.get("base", legacy_current))
+	var effective_speed: String = _format_speed_value(speed_data.get("effective", legacy_current))
+	var has_exact_speed := base_speed != "" and effective_speed != ""
+	var show_speed_range := not has_exact_speed
 	lowest_speed_label.remove_theme_color_override("font_color")
 	if show_speed_range:
 		lowest_speed_label.add_theme_color_override("font_color", LOW_SPEED_COLOR)
+	elif int(effective_speed) > int(base_speed):
+		lowest_speed_label.add_theme_color_override("font_color", HIGH_SPEED_COLOR)
+	elif int(effective_speed) < int(base_speed):
+		lowest_speed_label.add_theme_color_override("font_color", LOW_SPEED_COLOR)
+	else:
+		lowest_speed_label.add_theme_color_override("font_color", EXACT_SPEED_COLOR)
 	lowest_speed_label.text = (
 		_format_speed_value(speed_data.get("min", ""))
 		if show_speed_range
-		else current_speed
+		else effective_speed
 	)
 	speed_separator_1.visible = show_speed_range
-	lowest_neutral_speed_label.visible = show_speed_range
 	speed_separator_2.visible = show_speed_range
 	highest_neutral_speed_label.visible = show_speed_range
 	speed_separator_3.visible = show_speed_range
 	highest_speed_label.visible = show_speed_range
 	if not show_speed_range:
-		lowest_neutral_speed_label.text = ""
+		var stage := clampi(int(speed_data.get("stage", 0)), -6, 6)
+		var show_breakdown := effective_speed != base_speed or stage != 0
+		lowest_neutral_speed_label.visible = show_breakdown
+		lowest_neutral_speed_label.add_theme_color_override("font_color", EXACT_SPEED_COLOR)
+		var breakdown_parts: Array[String] = [base_speed]
+		if stage != 0:
+			breakdown_parts.append("%+d" % stage)
+		lowest_neutral_speed_label.text = "(%s)" % ", ".join(breakdown_parts) if show_breakdown else ""
 		highest_neutral_speed_label.text = ""
 		highest_speed_label.text = ""
 		return
 
+	lowest_neutral_speed_label.visible = true
+	lowest_neutral_speed_label.remove_theme_color_override("font_color")
 	lowest_neutral_speed_label.text = _format_speed_value(speed_data.get("minNeutral31Iv", speed_data.get("min_neutral_31_iv", "")))
 	highest_neutral_speed_label.text = _format_speed_value(speed_data.get("maxNeutral31Iv", speed_data.get("max_neutral_31_iv", "")))
 	highest_speed_label.text = _format_speed_value(speed_data.get("max", ""))
