@@ -4,6 +4,8 @@ signal battle_ended(result: Dictionary)
 signal damage_calc_prefetch_finished
 signal replay_closed
 
+const SPECTATOR_RENDER_SHUTDOWN_MAX_FRAMES := 120
+
 var replay_mode := false
 var replay_paused := true
 var replay_generation := 0
@@ -382,6 +384,7 @@ var pvp_allow_setup_animation := false
 var pvp_victory_message_added := false
 var pvp_switch_confirmation_active := false
 var spectator_sides_swapped := false
+var spectator_exit_in_progress := false
 var spectator_latest_raw_response: Dictionary = {}
 var spectator_source_battle_kind := ""
 var spectator_public_team_sizes: Dictionary = {}
@@ -433,6 +436,18 @@ var pending_status_condition_overlay_players: Dictionary = {}
 var pending_knock_off_targets_by_ident := {}
 var pending_booster_energy_modifier_targets_by_ident := {}
 var stat_stages_by_ident: Dictionary = {}
+
+
+func _exit_tree() -> void:
+	# Any non-standard teardown must also invalidate outstanding renderer
+	# continuations before child controls leave the SceneTree.
+	if event_renderer != null:
+		event_renderer.cancel_render()
+	if pokeball_summon_animation_player != null:
+		pokeball_summon_animation_player.cancel()
+	if capture_ball_animation_player != null:
+		capture_ball_animation_player.cancel()
+	_stop_capture_target_visibility_tween()
 var ability_stat_modifiers_by_ident: Dictionary = {}
 var type_changes_by_ident: Dictionary = {}
 var player_party_moves_by_key: Dictionary = {}
@@ -5140,6 +5155,8 @@ func _log_pvp_phase_warning(message: String, details: String) -> void:
 func _enqueue_pvp_battle_response(response: Dictionary, source: String, apply_event_conditions: bool = true, metadata: Dictionary = {}) -> bool:
 	if not _is_pvp_battle():
 		return _apply_api_response(response, apply_event_conditions)
+	if spectator_exit_in_progress:
+		return true
 
 	if not response is Dictionary:
 		return false
@@ -5177,7 +5194,7 @@ func _drain_pvp_event_queue() -> bool:
 
 	pvp_event_queue.is_rendering = true
 	var all_success := true
-	while pvp_event_queue.has_pending():
+	while pvp_event_queue.has_pending() and not spectator_exit_in_progress:
 		var queue_entry: Dictionary = pvp_event_queue.dequeue_next()
 		if queue_entry.is_empty():
 			continue
@@ -7720,6 +7737,8 @@ func _swap_ident_keyed_dictionary_sides(source: Dictionary) -> Dictionary:
 func _leave_spectator_battle() -> void:
 	if not _is_spectator_battle():
 		return
+	if spectator_exit_in_progress:
+		return
 	if battle_finished:
 		battle_result_overlay.visible = false
 		var completed_result := pending_battle_end_result.duplicate(true)
@@ -7731,6 +7750,25 @@ func _leave_spectator_battle() -> void:
 			}
 		_emit_battle_ended(completed_result)
 		return
+
+	# Stop the transport first, then let the active render coroutine unwind while
+	# this scene and all of its UI children are still inside the SceneTree.
+	# Otherwise a queued event can resume after World has detached this battle and
+	# call get_tree() through the mini feed during spectator teardown.
+	spectator_exit_in_progress = true
+	spectator_leave_button.disabled = true
+	spectator_switch_sides_button.disabled = true
+	PvpBattleRealtimeService.disconnect_room()
+	pvp_event_queue.discard_pending()
+	event_renderer.cancel_render()
+	pokeball_summon_animation_player.cancel()
+	capture_ball_animation_player.cancel()
+	_stop_capture_target_visibility_tween()
+
+	for _frame: int in range(SPECTATOR_RENDER_SHUTDOWN_MAX_FRAMES):
+		if not pvp_event_queue.is_rendering:
+			break
+		await get_tree().process_frame
 	_finish_battle({
 		"reason": "spectator_left",
 		"localPartyDefeated": false,
@@ -7798,6 +7836,7 @@ func _prepare_battle_setup(
 	training_ai_battle = false
 	pvp_local_canonical_roster.clear()
 	spectator_sides_swapped = false
+	spectator_exit_in_progress = false
 	spectator_latest_raw_response.clear()
 	spectator_source_battle_kind = ""
 	spectator_public_team_sizes.clear()
@@ -9691,6 +9730,8 @@ func _render_battle_events(
 	event_presentation.reset_recent_context()
 
 	for event_index: int in range(ordered_events.size()):
+		if spectator_exit_in_progress:
+			return
 		while replay_mode and replay_paused and owned_replay_generation == replay_generation:
 			await get_tree().process_frame
 		if replay_mode and owned_replay_generation != replay_generation:
@@ -9810,6 +9851,8 @@ func _render_battle_events(
 			])
 		if not (suppress_terminal_win_presentation and event_type == "win"):
 			await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)
+		if spectator_exit_in_progress:
+			return
 		if replay_mode and owned_replay_generation != replay_generation:
 			return
 		if event_type == "mega" or event_type == "primal":

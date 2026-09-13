@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Leaving a spectated battle now waits for active animations to stop, preventing a client crash when battle events are still being shown.
+
+- The launcher now repairs incomplete core music packs, and desktop releases verify their required music before building.
+
 - Developer Tools can now temporarily set the current account's training level cap to 100 without changing story progress, Badges, or the trade level cap.
 
 - Wanted items on the Aether Exchange now use the same card grid as other market listings, with a clear fulfillment progress bar.

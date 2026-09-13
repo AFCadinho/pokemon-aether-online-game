@@ -208,6 +208,26 @@ jobs:
                           archive.writestr(info, file.read())
           PY
 
+      - name: Restore required music resources for Godot compilation
+        run: |
+          curl -fsSL -o /tmp/pokeaether-music.zip "${UPDATE_BASE_URL}/assets/${MUSIC_ASSET_VERSION}.zip"
+          echo "${MUSIC_ASSET_SHA256}  /tmp/pokeaether-music.zip" | sha256sum --check --strict
+          test "$(stat -c %s /tmp/pokeaether-music.zip)" = "${MUSIC_ASSET_SIZE}"
+          unzip -oq /tmp/pokeaether-music.zip
+          required_music_files=(
+            "assets/music/login/lugia_theme_lofi.ogg"
+            "assets/music/overworld/kanto/towns/pallet_town.ogg"
+            "assets/music/overworld/kanto/towns/viridian_city.ogg"
+            "assets/music/overworld/kanto/routes/route1.ogg"
+            "assets/music/overworld/kanto/interiors/oaks_lab.ogg"
+            "assets/music/overworld/kanto/interiors/pokemon_center.ogg"
+            "assets/music/battle/wild/Kanto Wild Battle.ogg"
+            "assets/music/battle/trainer/Kalos Trainer Battle.ogg"
+          )
+          for music_file in "${required_music_files[@]}"; do
+            test -s "${music_file}"
+          done
+
       - name: Cache Godot imported assets
         uses: actions/cache@v6
         with:
@@ -215,7 +235,13 @@ jobs:
           key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/male/body/**/*.png', 'assets/player/female/body/**/*.png') }}
 
       - name: Import Godot assets
-        run: ./godot --headless --import --quit
+        run: |
+          set -o pipefail
+          ./godot --headless --import --quit 2>&1 | tee /tmp/godot-import.log
+          if grep -E 'SCRIPT ERROR:.*assets/music/|GDScript::reload \(res://scripts/services/web_demo_audio_catalog.gd:' /tmp/godot-import.log; then
+            echo "::error::Required music resources failed Godot import."
+            exit 1
+          fi
 
       - name: Verify client crash reporting
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
@@ -235,6 +261,7 @@ jobs:
           python3 tools/test_launcher_download_pipeline.py
           python3 launcher/tests/run_resumable_download_check.py
           ./godot --headless --path launcher --script res://tests/localization_check.gd
+          ./godot --headless --path launcher --script res://tests/music_asset_integrity_check.gd
 
       - name: Verify generated world access catalog
         run: ./godot --no-header --headless --path . res://tools/generate_world_access_catalog.tscn -- --check
