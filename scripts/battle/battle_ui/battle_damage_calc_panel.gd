@@ -185,6 +185,7 @@ var is_syncing_assumption_controls := false
 var localization_manager: Node
 var selected_viewer_ref := ""
 var selected_opponent_ref := ""
+var manual_matchup_selection_required := false
 var field_scenario: Dictionary = {}
 var viewer_boost_scenarios: Dictionary = {}
 var viewer_ability_scenarios: Dictionary = {}
@@ -293,6 +294,17 @@ func show_loading(attacker_name: String = "", defender_name: String = "") -> voi
 	_render_current_state()
 
 
+func show_ready() -> void:
+	is_loading = false
+	loading_attacker_name = ""
+	loading_defender_name = ""
+	last_response = {}
+	last_error = ""
+	last_notice = ""
+	pending_move_index = -1
+	_render_current_state()
+
+
 func show_notice(message: String) -> void:
 	close_assumption_popover()
 	is_loading = false
@@ -369,6 +381,21 @@ func set_knowledge_snapshot(snapshot: Dictionary, notify_assumption_changes: boo
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
+		_render_current_state()
+
+
+func set_manual_matchup_selection_required(required: bool) -> void:
+	if manual_matchup_selection_required == required:
+		return
+	manual_matchup_selection_required = required
+	if required:
+		selected_viewer_ref = ""
+		selected_opponent_ref = ""
+		last_response = {}
+	elif not knowledge_snapshot.is_empty():
+		selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
+		selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
+	if is_inside_tree() and not _is_catalog_search_active():
 		_render_current_state()
 
 
@@ -460,7 +487,12 @@ func _render_current_state() -> void:
 			_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
 		else:
 			_add_snapshot_profile_summary()
-		_add_status(_t("battle.calc.open_to_load"), TEXT_SECONDARY)
+		_add_status(
+			_t("battle.calc.preview_choose_matchup")
+			if manual_matchup_selection_required and (selected_viewer_ref == "" or selected_opponent_ref == "")
+			else _t("battle.calc.open_to_load"),
+			TEXT_SECONDARY
+		)
 		return
 
 	_render_your_damage_response(last_response)
@@ -2068,6 +2100,8 @@ func _resolve_selected_ref(relation: String, current_ref: String) -> String:
 			fallback = pokemon_ref
 		elif fallback == "":
 			fallback = pokemon_ref
+	if manual_matchup_selection_required and current_ref == "":
+		return ""
 	return fallback
 
 
