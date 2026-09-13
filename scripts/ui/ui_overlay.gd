@@ -49415,6 +49415,7 @@ func _format_system_warning_chat_message(text: String) -> String:
 
 
 func _exchange_item_request_system_message(message: Dictionary) -> String:
+	var message_type := str(message.get("type", "system.exchange_item_request_filled")).strip_edges().to_lower()
 	var item_id := str(message.get("itemId", "")).strip_edges()
 	var fallback_name := str(message.get("itemName", item_id)).strip_edges()
 	var item_name := ItemLocalization.display_name(item_id, fallback_name)
@@ -49422,10 +49423,15 @@ func _exchange_item_request_system_message(message: Dictionary) -> String:
 		"item": item_name,
 		"quantity": maxi(int(message.get("quantity", 0)), 0),
 		"amount": _format_money(maxi(int(message.get("totalPrice", 0)), 0)),
+		"unit_amount": _format_money(maxi(int(message.get("unitPrice", 0)), 0)),
 		"fulfilled": maxi(int(message.get("fulfilledQuantity", 0)), 0),
 		"requested": maxi(int(message.get("requestedQuantity", 0)), 0),
 		"remaining": maxi(int(message.get("remainingQuantity", 0)), 0),
 	}
+	if message_type == "system.exchange_item_request_created":
+		return LocalizationManager.text("ui.exchange.system.created", values)
+	if message_type == "system.exchange_item_request_cancelled":
+		return LocalizationManager.text("ui.exchange.system.cancelled", values)
 	match str(message.get("role", "")).strip_edges().to_lower():
 		"seller":
 			return LocalizationManager.text("ui.exchange.system.fill_seller", values)
@@ -49437,6 +49443,42 @@ func _exchange_item_request_system_message(message: Dictionary) -> String:
 				values,
 			)
 	return ""
+
+
+func _exchange_item_request_mutation_messages(message: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	var item_id := str(message.get("itemId", "")).strip_edges().to_lower()
+	var fallback_name := str(message.get("itemName", item_id)).strip_edges()
+	var item_name := ItemLocalization.display_name(item_id, fallback_name)
+	var quantity := maxi(int(message.get("quantity", 0)), 0)
+	match message_type:
+		"system.exchange_item_request_created":
+			var escrow := maxi(int(message.get("totalPrice", 0)), 0)
+			if escrow > 0:
+				result.append(_market_currency_spent_message(escrow, "money"))
+		"system.exchange_item_request_cancelled":
+			var refund := maxi(int(message.get("refundAmount", 0)), 0)
+			if refund > 0:
+				result.append(_market_currency_received_message(refund, "money"))
+		"system.exchange_item_request_filled":
+			if quantity <= 0 or item_id.is_empty():
+				return result
+			match str(message.get("role", "")).strip_edges().to_lower():
+				"requester":
+					result.append(LocalizationManager.text("ui.exchange.system.item_added", {
+						"item": item_name,
+						"quantity": quantity,
+					}))
+				"seller":
+					result.append(LocalizationManager.text("ui.exchange.system.item_removed", {
+						"item": item_name,
+						"quantity": quantity,
+					}))
+					var payment := maxi(int(message.get("totalPrice", 0)), 0)
+					if payment > 0:
+						result.append(_market_currency_received_message(payment, "money"))
+	return result
 
 func _scroll_chat_to_bottom() -> void:
 	var tree := get_tree()
@@ -49476,10 +49518,16 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		if system_notice_banner != null and bool(system_notice_banner.call("enqueue_notice", message)):
 			add_system_message(str(message.get("message", "")).strip_edges())
 		return
-	if message_type == "system.exchange_item_request_filled":
+	if message_type in [
+		"system.exchange_item_request_created",
+		"system.exchange_item_request_filled",
+		"system.exchange_item_request_cancelled",
+	]:
 		var exchange_message := _exchange_item_request_system_message(message)
 		if not exchange_message.is_empty():
 			add_system_message(exchange_message)
+		for mutation_message: String in _exchange_item_request_mutation_messages(message):
+			add_system_message(mutation_message)
 		return
 	if message_type == "system.aether_clash_announcement":
 		var clash_message: String = AETHER_CLASH_ANNOUNCEMENT_FORMATTER.format_event(

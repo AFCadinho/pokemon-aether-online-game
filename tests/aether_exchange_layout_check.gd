@@ -68,7 +68,8 @@ func _run() -> void:
 	var previous_locale: String = localization.current_locale
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
-		var requester_message := str(summary_overlay.call("_exchange_item_request_system_message", {
+		var fill_event := {
+			"type": "system.exchange_item_request_filled",
 			"role": "requester",
 			"itemId": "rare-candy",
 			"itemName": "Rare Candy",
@@ -78,22 +79,43 @@ func _run() -> void:
 			"requestedQuantity": 20,
 			"remainingQuantity": 15,
 			"completed": false,
-		}))
-		var seller_message := str(summary_overlay.call("_exchange_item_request_system_message", {
-			"role": "seller",
+		}
+		var requester_message := str(summary_overlay.call("_exchange_item_request_system_message", fill_event))
+		var seller_event := fill_event.merged({"role": "seller"}, true)
+		var seller_message := str(summary_overlay.call("_exchange_item_request_system_message", seller_event))
+		var requester_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", fill_event)
+		var seller_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", seller_event)
+		_check(not requester_message.begins_with("ui.exchange."), locale + ": requester fill system message is translated")
+		_check(requester_message.contains("5") and requester_message.contains("20"), locale + ": requester fill system message reports progress")
+		_check(not seller_message.begins_with("ui.exchange."), locale + ": seller fill system message is translated")
+		_check(seller_message.contains("5") and not seller_message.contains("5,000"), locale + ": seller fill summary stays separate from payment")
+		_check(requester_mutations.size() == 1 and str(requester_mutations[0]).contains("5") and not str(requester_mutations[0]).begins_with("ui."), locale + ": requester receives a separate translated Bag addition")
+		_check(seller_mutations.size() == 2 and str(seller_mutations[0]).contains("5") and str(seller_mutations[1]).contains("5,000"), locale + ": seller receives separate Bag and wallet changes")
+		var created_event := {
+			"type": "system.exchange_item_request_created",
 			"itemId": "rare-candy",
 			"itemName": "Rare Candy",
-			"quantity": 5,
-			"totalPrice": 5000,
-			"fulfilledQuantity": 5,
+			"quantity": 20,
+			"unitPrice": 5000,
+			"totalPrice": 100000,
+		}
+		var created_message := str(summary_overlay.call("_exchange_item_request_system_message", created_event))
+		var created_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", created_event)
+		_check(not created_message.begins_with("ui.exchange.") and created_message.contains("20") and created_message.contains("5,000"), locale + ": request creation has a translated transaction summary")
+		_check(created_mutations.size() == 1 and str(created_mutations[0]).contains("100,000"), locale + ": request creation reports the separate wallet debit")
+		var cancelled_event := {
+			"type": "system.exchange_item_request_cancelled",
+			"itemId": "rare-candy",
+			"itemName": "Rare Candy",
 			"requestedQuantity": 20,
+			"fulfilledQuantity": 5,
 			"remainingQuantity": 15,
-			"completed": false,
-		}))
-		_check(not requester_message.begins_with("ui.exchange."), locale + ": requester fill system message is translated")
-		_check(requester_message.contains("5") and requester_message.contains("20") and requester_message.contains("15"), locale + ": requester fill system message reports progress")
-		_check(not seller_message.begins_with("ui.exchange."), locale + ": seller fill system message is translated")
-		_check(seller_message.contains("5") and seller_message.contains("000"), locale + ": seller fill system message reports quantity and payment")
+			"refundAmount": 75000,
+		}
+		var cancelled_message := str(summary_overlay.call("_exchange_item_request_system_message", cancelled_event))
+		var cancelled_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", cancelled_event)
+		_check(not cancelled_message.begins_with("ui.exchange.") and cancelled_message.contains("15"), locale + ": cancellation has a translated transaction summary")
+		_check(cancelled_mutations.size() == 1 and str(cancelled_mutations[0]).contains("75,000"), locale + ": cancellation reports the separate wallet refund")
 		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "mine-items", "history"]:
 			summary_overlay.call("_hide_aether_exchange_pokemon_hover")
 			await process_frame
