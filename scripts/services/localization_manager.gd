@@ -6,6 +6,7 @@ const DEFAULT_LOCALE := "en"
 const SIMPLIFIED_CHINESE_FONT: Font = preload(
 	"res://assets/fonts/NotoSansCJKsc-Regular.otf"
 )
+const SYMBOL_FALLBACK_FONT: Font = preload("res://assets/fonts/DejaVuSans.ttf")
 const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/en.json",
@@ -28,8 +29,19 @@ var default_fallback_font: Font
 
 func _ready() -> void:
 	default_fallback_font = ThemeDB.fallback_font
+	_add_symbol_fallback(default_fallback_font)
+	_add_symbol_fallback(SIMPLIFIED_CHINESE_FONT)
 	_load_catalogs()
 	set_locale(DEFAULT_LOCALE)
+
+
+func _add_symbol_fallback(font: Font) -> void:
+	if font == null:
+		return
+	var fallback_fonts := font.fallbacks
+	if not fallback_fonts.has(SYMBOL_FALLBACK_FONT):
+		fallback_fonts.append(SYMBOL_FALLBACK_FONT)
+		font.fallbacks = fallback_fonts
 
 
 func set_locale(locale: String) -> String:

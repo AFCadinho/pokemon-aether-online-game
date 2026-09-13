@@ -97,6 +97,19 @@ func _check_locale_request_headers() -> void:
 func _check_runtime_translation(catalogs: Dictionary) -> void:
 	localization_manager.call("set_locale", "en")
 	_check(localization_manager.call("text", "ui.login.sign_in") == "Sign In", "English runtime translation works")
+	var bundled_symbol_font := load("res://assets/fonts/DejaVuSans.ttf") as Font
+	_check(bundled_symbol_font != null, "bundled UI symbol font loads")
+	for symbol: String in ["₽", "✦", "→"]:
+		_check(
+			bundled_symbol_font != null and bundled_symbol_font.has_char(symbol.unicode_at(0)),
+			"bundled UI symbol font contains %s" % symbol
+		)
+	_check(
+		ThemeDB.fallback_font != null
+			and bundled_symbol_font != null
+			and ThemeDB.fallback_font.fallbacks.has(bundled_symbol_font),
+		"English UI uses the bundled symbol font as a fallback"
+	)
 	localization_manager.call("set_locale", "nl")
 	_check(localization_manager.call("text", "ui.login.sign_in") == "Inloggen", "Dutch runtime translation works")
 	_check(

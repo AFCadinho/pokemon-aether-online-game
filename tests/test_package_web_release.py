@@ -28,6 +28,7 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn('${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json', source)
         self.assertIn('${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/sheet.png', source)
         build_source = (ROOT / 'tools/build_web_preview.py').read_text()
+        self.assertIn("b'assets/fonts/DejaVuSans.ttf'", build_source)
         self.assertIn("b'assets/sprites/pokemon/front/pikachu/sheet.png.import'", build_source)
         self.assertIn("b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import'", build_source)
 
