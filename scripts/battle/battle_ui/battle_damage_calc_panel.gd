@@ -147,6 +147,7 @@ var loading_attacker_name := ""
 var loading_defender_name := ""
 var last_response: Dictionary = {}
 var last_error := ""
+var last_notice := ""
 var defender_assumptions: Dictionary = {}
 var edited_assumption_fields: Dictionary = {}
 var knowledge_snapshot: Dictionary = {}
@@ -270,6 +271,7 @@ func show_idle() -> void:
 	loading_defender_name = ""
 	last_response = {}
 	last_error = ""
+	last_notice = ""
 	active_subtab = SUBTAB_YOUR_DAMAGE
 	active_inspector_tab = INSPECTOR_SET
 	selected_move_index = 0
@@ -285,8 +287,21 @@ func show_loading(attacker_name: String = "", defender_name: String = "") -> voi
 	loading_attacker_name = attacker_name
 	loading_defender_name = defender_name
 	last_error = ""
+	last_notice = ""
 	if _is_catalog_search_active():
 		return
+	_render_current_state()
+
+
+func show_notice(message: String) -> void:
+	close_assumption_popover()
+	is_loading = false
+	loading_attacker_name = ""
+	loading_defender_name = ""
+	last_response = {}
+	last_error = ""
+	last_notice = message.strip_edges()
+	pending_move_index = -1
 	_render_current_state()
 
 
@@ -297,6 +312,7 @@ func show_error(message: String) -> void:
 	loading_defender_name = ""
 	last_response = {}
 	last_error = _fallback_text(message, _t("battle.calc.error.failed"))
+	last_notice = ""
 	pending_move_index = -1
 	_render_current_state()
 
@@ -306,6 +322,7 @@ func show_response(response: Dictionary) -> void:
 	loading_attacker_name = ""
 	loading_defender_name = ""
 	last_error = ""
+	last_notice = ""
 	pending_move_index = -1
 
 	if not bool(response.get("success", false)):
@@ -409,6 +426,9 @@ func _render_current_state() -> void:
 	_clear_content()
 	render_target = content
 	_add_subtabs()
+	if last_notice != "":
+		_add_status(last_notice, TEXT_SECONDARY)
+		return
 
 	if not last_response.is_empty():
 		_render_your_damage_response(last_response)

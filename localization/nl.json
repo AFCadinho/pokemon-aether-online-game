@@ -4239,6 +4239,7 @@
   "battle.calc.error.invalid_snapshot_data": "De calculator kon niet laden omdat een of meer Pokémon ongeldige of onvolledige battledata hebben. Controleer hun aanvallen, Ability, IV's en EV's (maximaal 510 in totaal).",
   "battle.calc.error.reverse_requires_safe_snapshot": "Ontvangen schade wacht op een privacyveilige battle-snapshot. Probeer het opnieuw nadat de battle-status is vernieuwd.",
   "battle.calc.error.safe_snapshot_required": "De calculator wacht op een privacyveilige battle-snapshot. Probeer het opnieuw nadat de battle-status is vernieuwd.",
+  "battle.calc.waiting_for_leads": "Kies eerst je lead. De calculator is klaar zodra beide actieve Pokémon bekend zijn.",
   "battle.calc.error.selection": "Selecteer een beschikbare aanvaller en verdediger.",
   "battle.calc.end_of_turn_not_included": "Alleen directe schade; einde-van-de-beurt-effecten zijn niet meegenomen.",
   "battle.calc.evs_custom": "EV's aangepast",
