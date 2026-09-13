@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
+- Browser battles now preload map encounters and known teams so the intended battle sprite is ready before a Pokémon appears.
 
 ## 0.3.78 - 2026-09-13
 

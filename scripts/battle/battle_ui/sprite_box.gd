@@ -1060,12 +1060,13 @@ func _load_sprite_frames(
 	is_shiny: bool = false,
 	report_missing: bool = true
 ) -> SpriteFrames:
-	var cache_key := "%s|%s|%s|%s" % [
-		_normalize_species_asset_id(species),
-		side.strip_edges().to_lower(),
-		str(is_shiny),
-		str(SettingsManager.sprite_style),
-	]
+	var cache_key := _sprite_cache_key(species, side, is_shiny)
+	# Map/team prefetching stores the real web sheet in the global service. Read
+	# that cache before a SpriteBox-local HOME fallback so a newly mounted battle
+	# can draw the intended sprite on its very first visible frame.
+	var prefetched_frames := _load_cached_web_sprite_frames(species, side, is_shiny, cache_key)
+	if prefetched_frames != null:
+		return prefetched_frames
 	if sprite_frames_cache.has(cache_key):
 		return sprite_frames_cache[cache_key] as SpriteFrames
 	if _shared_sprite_frames_cache.has(cache_key):
@@ -1083,16 +1084,45 @@ func _load_sprite_frames(
 	if frames != null:
 		_apply_species_render_scale_override(frames, species, side)
 		_remember_sprite_frames(cache_key, frames)
-		var metadata := {}
-		for field: String in FRAME_METADATA_FIELDS:
-			var table: Dictionary = get(field)
-			var frame_key := _get_sprite_frames_key(frames)
-			if table.has(frame_key):
-				metadata[field] = table[frame_key]
-		if _shared_sprite_frames_cache.size() >= SPRITE_CACHE_LIMIT:
-			_shared_sprite_frames_cache.erase(_shared_sprite_frames_cache.keys()[0])
-		_shared_sprite_frames_cache[cache_key] = {"frames": frames, "metadata": metadata}
+		_remember_shared_sprite_frames(cache_key, frames)
 	return frames
+
+func _sprite_cache_key(species: String, side: String, is_shiny: bool) -> String:
+	return "%s|%s|%s|%s" % [
+		_normalize_species_asset_id(species),
+		side.strip_edges().to_lower(),
+		str(is_shiny),
+		str(SettingsManager.sprite_style),
+	]
+
+func _load_cached_web_sprite_frames(
+	species: String, side: String, is_shiny: bool, cache_key: String
+) -> SpriteFrames:
+	if not WebPokemonSpriteService.is_available():
+		return null
+	for asset_id: String in _get_species_asset_id_candidates(species):
+		var result: Dictionary = WebPokemonSpriteService.get_cached_frames(
+			asset_id, side, is_shiny, SettingsManager.sprite_style
+		)
+		var frames := result.get("frames") as SpriteFrames
+		if frames == null:
+			continue
+		_apply_web_sprite_result_metadata(frames, result, species, side, is_shiny)
+		_remember_sprite_frames(cache_key, frames)
+		_remember_shared_sprite_frames(cache_key, frames)
+		return frames
+	return null
+
+func _remember_shared_sprite_frames(cache_key: String, frames: SpriteFrames) -> void:
+	var metadata := {}
+	var frame_key := _get_sprite_frames_key(frames)
+	for field: String in FRAME_METADATA_FIELDS:
+		var table: Dictionary = get(field)
+		if table.has(frame_key):
+			metadata[field] = table[frame_key]
+	if _shared_sprite_frames_cache.size() >= SPRITE_CACHE_LIMIT:
+		_shared_sprite_frames_cache.erase(_shared_sprite_frames_cache.keys()[0])
+	_shared_sprite_frames_cache[cache_key] = {"frames": frames, "metadata": metadata}
 
 func _remember_sprite_frames(key: String, frames: SpriteFrames) -> void:
 	if sprite_frames_cache.size() >= SPRITE_CACHE_LIMIT:
@@ -1662,20 +1692,32 @@ func request_web_sprite_frames(species: String, side: String, is_shiny: bool = f
 		var frames := result.get("frames") as SpriteFrames
 		if frames == null:
 			continue
-		_set_sprite_frames_render_scale(frames, float(result.get("render_scale", 1.0)))
-		if str(result.get("style", "animated")) == "pixel":
-			_set_sprite_frames_display_scale_multiplier(frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
-		var frame_size_value: Variant = result.get("frame_size", Vector2.ZERO)
-		if frame_size_value is Vector2 and frame_size_value != Vector2.ZERO:
-			_set_sprite_frames_auto_anchor(frames, frame_size_value as Vector2)
-		_apply_species_position_offset(frames, species, side, is_shiny)
-		var cache_key := "%s|%s|%s|%s" % [
-			_normalize_species_asset_id(species), side.strip_edges().to_lower(),
-			str(is_shiny), str(SettingsManager.sprite_style),
-		]
+		_apply_web_sprite_result_metadata(frames, result, species, side, is_shiny)
+		var cache_key := _sprite_cache_key(species, side, is_shiny)
 		_remember_sprite_frames(cache_key, frames)
+		_remember_shared_sprite_frames(cache_key, frames)
 		return frames
 	return null
+
+
+func _apply_web_sprite_result_metadata(
+	frames: SpriteFrames, result: Dictionary, species: String, side: String, is_shiny: bool
+) -> void:
+	_set_sprite_frames_render_scale(frames, float(result.get("render_scale", 1.0)))
+	if str(result.get("style", "animated")) == "pixel":
+		_set_sprite_frames_display_scale_multiplier(frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
+	var frame_size_value: Variant = result.get("frame_size", Vector2.ZERO)
+	if frame_size_value is Vector2 and frame_size_value != Vector2.ZERO:
+		_set_sprite_frames_auto_anchor(frames, frame_size_value as Vector2)
+	var side_key := _get_sprite_side_folder(side, is_shiny)
+	var species_key := _normalize_species_asset_id(species)
+	var offset_value: Variant = SPECIES_POSITION_OFFSETS.get(
+		"%s:%s" % [side_key, species_key], Vector2.ZERO
+	)
+	_set_sprite_frames_position_offset(
+		frames,
+		offset_value as Vector2 if offset_value is Vector2 else Vector2.ZERO
+	)
 
 
 func _upgrade_single_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
