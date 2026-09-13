@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The Aethernet browser notice now fits and centers correctly at browser resolutions.
 - Side-quest markers above NPCs now display correctly in the browser.
 
 - Pokémon Summary tabs and front/back sprite switching now respond smoothly in the browser.

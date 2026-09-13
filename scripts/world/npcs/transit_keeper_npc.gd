@@ -67,10 +67,18 @@ func interact_with_player(_player: Node2D) -> void:
 
 
 func _show_browser_demo_notice() -> void:
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return
+	var dialog_layer := CanvasLayer.new()
+	dialog_layer.name = "AethernetBrowserDialogLayer"
+	dialog_layer.layer = 121
+	current_scene.add_child(dialog_layer)
 	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
 	if dialog == null:
+		dialog_layer.queue_free()
 		return
-	get_tree().current_scene.add_child(dialog)
+	dialog_layer.add_child(dialog)
 	dialog.configure(
 		LocalizationManager.text("ui.transit.browser_demo.title"),
 		LocalizationManager.text("ui.transit.browser_demo.message"),
@@ -79,7 +87,7 @@ func _show_browser_demo_notice() -> void:
 	)
 	dialog.confirmed.connect(func():
 		OS.shell_open("https://pokeaether.com/download")
-		dialog.queue_free()
+		dialog_layer.queue_free()
 	)
-	dialog.canceled.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog_layer.queue_free)
 	dialog.popup_centered(Vector2i(560, 250))
