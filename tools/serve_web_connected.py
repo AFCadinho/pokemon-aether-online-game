@@ -80,7 +80,7 @@ AI_BATTLE_ROUTE = re.compile(
 HTTP_ROUTE_PREFIXES = (
 	# Read/write game interfaces explicitly enabled in the browser demo. These
 	# retain the normal account and server-side authorization checks.
-	("GET", "/game/pokedex/"), ("GET", "/game/items/"),
+	("GET", "/auth/web/pokedex/"), ("GET", "/auth/web/items/"),
 	("GET", "/game/skills"),
 	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
 	("GET", "/battle/pvp/training/ai/live/"),
