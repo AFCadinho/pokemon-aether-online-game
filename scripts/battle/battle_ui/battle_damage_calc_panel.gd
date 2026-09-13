@@ -1292,44 +1292,49 @@ func _add_set_suggestion_build(parent: VBoxContainer, build: Dictionary) -> void
 		_make_stylebox(Color(SURFACE_CANVAS, 0.52), Color(BORDER_NEUTRAL, 0.88), 7, 9.0, 6.0)
 	)
 	parent.add_child(panel)
-	var grid := GridContainer.new()
-	grid.name = "SetSuggestionBuildGrid"
-	grid.columns = 2
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.add_theme_constant_override("h_separation", 12)
-	grid.add_theme_constant_override("v_separation", 5)
-	panel.add_child(grid)
-	_add_set_suggestion_build_row(grid, "item", _t("battle.calc.item"), str(build.get("item", "")), SET_ITEM_ACCENT)
-	_add_set_suggestion_build_row(grid, "ability", _t("battle.calc.ability"), str(build.get("ability", "")), SET_ABILITY_ACCENT)
-	_add_set_suggestion_build_row(grid, "nature", _t("battle.calc.nature"), str(build.get("nature", "")), SET_NATURE_ACCENT)
-	_add_set_suggestion_build_row(grid, "evs", _t("battle.calc.evs"), _set_suggestion_ev_text(build), SET_EVS_ACCENT)
-	_add_set_suggestion_build_row(grid, "moves", _t("battle.calc.guess.moves"), ", ".join(build.get("moves", [])), SET_MOVES_ACCENT, true)
+	var rows := VBoxContainer.new()
+	rows.name = "SetSuggestionBuildRows"
+	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rows.add_theme_constant_override("separation", 3)
+	panel.add_child(rows)
+	_add_set_suggestion_build_row(rows, "item", _t("battle.calc.item"), str(build.get("item", "")), SET_ITEM_ACCENT)
+	_add_set_suggestion_build_row(rows, "ability", _t("battle.calc.ability"), str(build.get("ability", "")), SET_ABILITY_ACCENT)
+	_add_set_suggestion_build_row(rows, "nature", _t("battle.calc.nature"), str(build.get("nature", "")), SET_NATURE_ACCENT)
+	_add_set_suggestion_build_row(rows, "evs", _t("battle.calc.evs"), _set_suggestion_ev_text(build), SET_EVS_ACCENT)
+	_add_set_suggestion_build_row(rows, "moves", _t("battle.calc.guess.moves"), ", ".join(build.get("moves", [])), SET_MOVES_ACCENT, true)
 
 
 func _add_set_suggestion_build_row(
-	parent: GridContainer,
+	parent: VBoxContainer,
 	key: String,
 	label_text: String,
 	value_text: String,
 	accent: Color,
 	wrap_value := false
 ) -> void:
+	var row := HBoxContainer.new()
+	row.name = "SetSuggestionBuildRow%s" % key.capitalize()
+	row.custom_minimum_size.y = 34 if wrap_value else 22
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 12)
+	parent.add_child(row)
 	var label := _make_label(label_text.to_upper(), 9, accent)
 	label.name = "SetSuggestionBuildLabel%s" % key.capitalize()
-	label.custom_minimum_size.x = 58
+	label.custom_minimum_size = Vector2(84, row.custom_minimum_size.y)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	parent.add_child(label)
+	row.add_child(label)
 	var value := _make_label(value_text if value_text != "" else "—", 12, TEXT_PRIMARY)
 	value.name = "SetSuggestionBuildValue%s" % key.capitalize()
 	value.tooltip_text = value.text
 	value.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value.custom_minimum_size.y = row.custom_minimum_size.y
 	if wrap_value:
-		value.custom_minimum_size.y = 34
 		value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		value.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 		value.clip_text = false
-	parent.add_child(value)
+	row.add_child(value)
 
 
 func _set_suggestion_ev_text(build: Dictionary) -> String:
