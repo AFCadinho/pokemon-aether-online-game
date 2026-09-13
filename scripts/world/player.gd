@@ -252,6 +252,10 @@ var ledge_down_tilemap: TileMapLayer
 var ledge_up_tilemap: TileMapLayer
 var ledge_left_tilemap: TileMapLayer
 var ledge_right_tilemap: TileMapLayer
+var resolved_map_cache: Node
+var map_layers_owner: Node
+var map_layers_initialized := false
+var map_layer_cache_generation := 0
 
 # Movement state.
 # is_moving voorkomt dat je nieuwe input verwerkt terwijl de speler nog naar
@@ -856,7 +860,7 @@ func _has_story_movement_context() -> bool:
 	var current_map := _resolve_current_map()
 	if current_map == null or not is_instance_valid(current_map):
 		return false
-	refresh_map_layers()
+	_ensure_map_layers()
 	return collision_tilemap != null
 
 func _is_story_grid_step_blocked(
@@ -2062,10 +2066,7 @@ func _get_fishing_ripple_position() -> Vector2:
 	return _snap_world_position(global_position) + (last_direction.normalized() * FISHING_RIPPLE_DISTANCE)
 
 func _is_water_tile_at(check_position: Vector2) -> bool:
-	if water_tilemap == null:
-		if _resolve_current_map() == null:
-			return false
-		refresh_map_layers()
+	_ensure_map_layers()
 	if water_tilemap == null:
 		return false
 	return _tilemap_has_tile_at(water_tilemap, check_position)
@@ -2273,7 +2274,7 @@ func play_walk_animation(direction: Vector2) -> void:
 	_sync_mount_animation(true, direction)
 
 func can_move_to(check_position: Vector2) -> bool:
-	refresh_map_layers()
+	_ensure_map_layers()
 
 	if _is_water_tile_at(check_position) and not _can_enter_water_tile(check_position):
 		_debug_surf_check("movement-blocked", {
@@ -2361,7 +2362,7 @@ func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 	return false
 
 func _get_ledge_directions_for_tile(check_position: Vector2) -> Array[Vector2]:
-	refresh_map_layers()
+	_ensure_map_layers()
 	return LedgeDirectionResolverScript.directions_for_tile(
 		check_position,
 		ledge_down_tilemap,
@@ -2420,23 +2421,14 @@ func _apply_static_activity_idle_pose(direction: Vector2) -> void:
 func refresh_map_layers() -> void:
 	var current_map: Node = _resolve_current_map()
 	if current_map == null:
-		collision_tilemap = null
-		grass_tilemap = null	
-		grass_visual_tilemap = null
-		water_tilemap = null
-		sand_tilemaps.clear()
-		block_down_tilemap = null
-		block_up_tilemap = null
-		block_left_tilemap = null
-		block_right_tilemap = null
-		ledge_down_tilemap = null
-		ledge_up_tilemap = null
-		ledge_left_tilemap = null
-		ledge_right_tilemap = null
+		_clear_map_layer_cache()
 		push_warning("Player.refresh_map_layers: could not resolve current map.")
 		return
 
 	GameState.current_map = current_map
+	map_layers_owner = current_map
+	map_layers_initialized = true
+	map_layer_cache_generation += 1
 	collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])
 	grass_tilemap = _find_tall_grass_tilemap(current_map)
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
@@ -2454,6 +2446,31 @@ func refresh_map_layers() -> void:
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
 	_apply_world_pixel_scale()
+
+
+func _ensure_map_layers() -> void:
+	var current_map := _resolve_current_map()
+	if current_map != null and map_layers_initialized and map_layers_owner == current_map:
+		return
+	refresh_map_layers()
+
+
+func _clear_map_layer_cache() -> void:
+	map_layers_owner = null
+	map_layers_initialized = false
+	collision_tilemap = null
+	grass_tilemap = null
+	grass_visual_tilemap = null
+	water_tilemap = null
+	sand_tilemaps.clear()
+	block_down_tilemap = null
+	block_up_tilemap = null
+	block_left_tilemap = null
+	block_right_tilemap = null
+	ledge_down_tilemap = null
+	ledge_up_tilemap = null
+	ledge_left_tilemap = null
+	ledge_right_tilemap = null
 
 
 func refresh_visual_depth() -> void:
@@ -2491,9 +2508,7 @@ func _collect_tilemap_layers_by_name(node: Node, layer_names: Array[String], lay
 		_collect_tilemap_layers_by_name(child, layer_names, layers)
 	
 func is_standing_on_tall_grass() -> bool:
-	if grass_tilemap == null:
-		refresh_map_layers()
-
+	_ensure_map_layers()
 	if grass_tilemap == null:
 		return false
 		
@@ -2585,11 +2600,7 @@ func _spawn_sand_footprint_effect() -> void:
 	next_sand_footprint_is_left = not next_sand_footprint_is_left
 
 func _get_sand_footprint_offset(check_position: Vector2) -> Variant:
-	if sand_tilemaps.is_empty():
-		var current_map := _resolve_current_map()
-		if current_map == null:
-			return null
-		_refresh_sand_tilemaps(current_map)
+	_ensure_map_layers()
 
 	for layer_name: String in SAND_FOOTPRINT_LAYER_OFFSETS:
 		var tilemap := sand_tilemaps.get(layer_name) as TileMapLayer
@@ -2728,15 +2739,33 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 	return false
 
 func _resolve_current_map() -> Node:
+	if (
+		resolved_map_cache != null
+		and is_instance_valid(resolved_map_cache)
+		and resolved_map_cache.is_ancestor_of(self)
+	):
+		return resolved_map_cache
+
+	resolved_map_cache = null
+	if (
+		GameState.current_map != null
+		and is_instance_valid(GameState.current_map)
+		and GameState.current_map.is_ancestor_of(self)
+	):
+		resolved_map_cache = GameState.current_map
+		return resolved_map_cache
+
 	var parent_node := get_parent()
 	while parent_node != null:
 		if _find_tilemap_layer(parent_node, ["Collision", "TallGrass"]) != null:
-			return parent_node
+			resolved_map_cache = parent_node
+			return resolved_map_cache
 
 		parent_node = parent_node.get_parent()
 
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		return GameState.current_map
+		resolved_map_cache = GameState.current_map
+		return resolved_map_cache
 
 	return null
 
