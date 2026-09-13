@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Item Dex now loads the next ten matching items automatically when players scroll down.
+
 - Fixed item request details and their action button extending beyond the Aether Exchange window.
 
 - Mount animation layers now update only when their animation frame changes, reducing rendering work while riding through detailed areas such as Cerulean City.
