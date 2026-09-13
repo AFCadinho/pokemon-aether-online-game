@@ -63,6 +63,7 @@ const CONDITION_GLOBAL_ACCENT := Color("#70b8d8")
 const CONDITION_OWN_ACCENT := Color("#42beeb")
 const CONDITION_OPPONENT_ACCENT := Color("#e7a93d")
 const CONFIRMED_ACCENT := STAGE_POSITIVE
+const UNRESOLVED_ACCENT := Color("#8ccbe8")
 const MANUAL_ACCENT := Color("#c9a66b")
 const ITEM_LABEL_ACCENT := LABEL_NEUTRAL
 const ABILITY_LABEL_ACCENT := LABEL_NEUTRAL
@@ -1265,21 +1266,28 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 		var count := int(counts[state])
 		if count == 0:
 			continue
-		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
-		var chip := _make_label(_t("battle.calc.guess.evidence_%s_count" % state, {"count": count}), 10, color)
+		var color := _set_suggestion_evidence_color(state)
+		var chip := _make_label(
+			_t("battle.calc.guess.evidence_%s_count" % state, {"count": count}),
+			11 if state == "unknown" else 10,
+			color
+		)
 		chip.name = "SetSuggestionEvidenceCount"
+		chip.set_meta("evidence_state", state)
 		chip.tooltip_text = "%s: %s" % [chip.text, _t("battle.calc.guess." + state)]
 		var chip_font := chip.get_theme_font("font")
 		var text_width := chip_font.get_string_size(
-			chip.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10
+			chip.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11 if state == "unknown" else 10
 		).x
-		chip.custom_minimum_size = Vector2(ceilf(text_width) + 12.0, 22)
+		chip.custom_minimum_size = Vector2(ceilf(text_width) + 14.0, 24 if state == "unknown" else 22)
 		chip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		chip.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		chip.mouse_filter = Control.MOUSE_FILTER_PASS
 		chip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, Color(color, 0.75), 8, 5.0, 1.0))
+		var chip_background := Color(color, 0.14) if state == "unknown" else CHIP_BG
+		var chip_border := Color(color, 0.92) if state == "unknown" else Color(color, 0.75)
+		chip.add_theme_stylebox_override("normal", _make_stylebox(chip_background, chip_border, 8, 6.0, 1.0))
 		summary.add_child(chip)
 
 
@@ -1298,7 +1306,7 @@ func _add_set_suggestion_details(parent: VBoxContainer, row: Dictionary) -> void
 		var state := str(item.get("state", "unknown"))
 		var value := _set_suggestion_evidence_label(item)
 		var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
-		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
+		var color := _set_suggestion_evidence_color(state)
 		var evidence_row := PanelContainer.new()
 		evidence_row.name = "SetSuggestionEvidenceRow"
 		evidence_row.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -1320,6 +1328,18 @@ func _add_set_suggestion_details(parent: VBoxContainer, row: Dictionary) -> void
 		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		evidence_content.add_child(state_label)
+
+
+func _set_suggestion_evidence_color(state: String) -> Color:
+	match state:
+		"match":
+			return CONFIRMED_ACCENT
+		"variant":
+			return WARNING_ACCENT
+		"conflict":
+			return DANGER_ACCENT
+		_:
+			return UNRESOLVED_ACCENT
 
 
 func _set_suggestion_evidence_label(item: Dictionary) -> String:

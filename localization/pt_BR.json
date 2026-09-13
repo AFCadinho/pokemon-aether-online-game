@@ -5973,7 +5973,7 @@
   "battle.calc.guess.conflict": "does not fit",
   "battle.calc.guess.evidence_match_count": "✓ Pistas compatíveis: {count}",
   "battle.calc.guess.evidence_variant_count": "~ Differences: {count}",
-  "battle.calc.guess.evidence_unknown_count": "? Unknown: {count}",
+  "battle.calc.guess.evidence_unknown_count": "? Precisa de mais informações: {count}",
   "battle.calc.guess.evidence_conflict_count": "× Conflicts: {count}",
   "battle.calc.guess.apply": "Calcular com este set",
   "battle.calc.guess.apply_hint": "Carrega este set na calculadora. Você ainda poderá ajustá-lo depois.",

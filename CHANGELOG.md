@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Set suggestions now show clues that need more information with a clearer blue status chip instead of faint “Unknown” text.
+
 - Switching the selected opponent in the battle calculator now clears the previous Pokémon's set, stats, Ability, item, and other custom assumptions.
 
 - Browser battles now lazy-load the regular animated battle sprites by default, with Gen 5 available as an optional sprite style and Pokémon HOME reserved for static display or loading fallback.

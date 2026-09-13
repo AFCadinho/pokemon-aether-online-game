@@ -4163,7 +4163,7 @@
   "battle.calc.guess.conflict": "past niet",
   "battle.calc.guess.evidence_match_count": "✓ Passende aanwijzingen: {count}",
   "battle.calc.guess.evidence_variant_count": "~ Afwijkingen: {count}",
-  "battle.calc.guess.evidence_unknown_count": "? Onzeker: {count}",
+  "battle.calc.guess.evidence_unknown_count": "? Meer info nodig: {count}",
   "battle.calc.guess.evidence_conflict_count": "× Conflicten: {count}",
   "battle.calc.guess.apply": "Reken met deze set",
   "battle.calc.guess.apply_hint": "Laadt deze set in de calculator. Je kunt hem daarna nog aanpassen.",

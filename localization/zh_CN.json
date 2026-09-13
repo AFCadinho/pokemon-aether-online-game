@@ -5970,7 +5970,7 @@
   "battle.calc.guess.conflict": "does not fit",
   "battle.calc.guess.evidence_match_count": "✓ 匹配线索：{count}",
   "battle.calc.guess.evidence_variant_count": "~ Differences: {count}",
-  "battle.calc.guess.evidence_unknown_count": "? Unknown: {count}",
+  "battle.calc.guess.evidence_unknown_count": "? 需要更多信息：{count}",
   "battle.calc.guess.evidence_conflict_count": "× Conflicts: {count}",
   "battle.calc.guess.apply": "使用此配置计算",
   "battle.calc.guess.apply_hint": "将此配置载入计算器，之后仍可调整。",
