@@ -118,11 +118,18 @@ func _run() -> void:
 	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
 	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "The selected suggestion shows evidence without expanding its list row")
-	var choices := panel.set_suggestions_popup.find_children("SetSuggestionChoice", "Button", true, false)
-	if choices.size() > 1:
-		(choices[1] as Button).pressed.emit()
-		await process_frame
-	_check(panel.selected_set_suggestion_key == "tank-0:tank-extra-0", "Selecting a compact row changes only the detail target")
+	var cards: Array[Node] = []
+	for index in range(1, suggestion_choices.get_child_count()):
+		cards.append(suggestion_choices.get_child(index))
+	var whole_card_interactive := cards.size() == 3 and (cards[1] as PanelContainer).mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND and not (cards[1] as PanelContainer).gui_input.get_connections().is_empty()
+	if cards.size() > 1:
+		var card_click := InputEventMouseButton.new()
+		card_click.button_index = MOUSE_BUTTON_LEFT
+		card_click.pressed = true
+		(cards[1] as PanelContainer).gui_input.emit(card_click)
+	_check(whole_card_interactive, "Every suggestion card advertises and handles its full clickable surface")
+	_check(panel.selected_set_suggestion_key == "tank-0:tank-extra-0", "Clicking anywhere on a compact card changes the detail target")
+	await process_frame
 	var selected_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
 	_check(selected_name != null and selected_name.text == "TankChomp Alternative 1", "The stable detail pane follows the selected suggestion")
 	panel._apply_set_suggestion(build)

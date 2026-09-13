@@ -1056,15 +1056,21 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 		var selected := selected_set_suggestion_key == suggestion_key
 		var card := PanelContainer.new()
 		card.name = "SetSuggestionCard"
+		card.mouse_filter = Control.MOUSE_FILTER_STOP
+		card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		var card_style := _make_stylebox(SURFACE_RAISED, TEXT_ACCENT if selected else BORDER_NEUTRAL, 8, 6.0, 4.0)
+		var hover_style := _make_stylebox(SURFACE_RAISED.lightened(0.04), TEXT_ACCENT, 8, 6.0, 4.0)
 		if selected:
-			card_style.border_width_left = 2
-			card_style.border_width_top = 2
-			card_style.border_width_right = 2
-			card_style.border_width_bottom = 2
+			card_style.set_border_width_all(2)
+			hover_style.set_border_width_all(2)
 		card.add_theme_stylebox_override("panel", card_style)
+		card.gui_input.connect(_on_set_suggestion_card_input.bind(suggestion_key))
+		card.mouse_entered.connect(func() -> void: card.add_theme_stylebox_override("panel", hover_style))
+		card.mouse_exited.connect(func() -> void: card.add_theme_stylebox_override("panel", card_style))
 		list.add_child(card)
 		var choice_row := VBoxContainer.new()
+		choice_row.mouse_filter = Control.MOUSE_FILTER_PASS
+		choice_row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		choice_row.add_theme_constant_override("separation", 3)
 		card.add_child(choice_row)
 		var context_parts: Array[String] = []
@@ -1090,6 +1096,8 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 		choice_row.add_child(choice)
 		var context := _make_popup_label(" · ".join(context_parts), 11, TEXT_MUTED, 2)
 		context.name = "SetSuggestionContext"
+		context.mouse_filter = Control.MOUSE_FILTER_PASS
+		context.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		choice_row.add_child(context)
 		_add_set_suggestion_evidence_summary(choice_row, row)
 
@@ -1120,6 +1128,11 @@ func _select_set_suggestion(suggestion_key: String) -> void:
 		return
 	selected_set_suggestion_key = suggestion_key
 	_refresh_set_suggestions_popup()
+
+
+func _on_set_suggestion_card_input(event: InputEvent, suggestion_key: String) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		_select_set_suggestion(suggestion_key)
 
 
 func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
@@ -1170,6 +1183,8 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 			counts[state] = int(counts[state]) + 1
 	var summary := HFlowContainer.new()
 	summary.name = "SetSuggestionEvidenceSummary"
+	summary.mouse_filter = Control.MOUSE_FILTER_PASS
+	summary.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	summary.add_theme_constant_override("h_separation", 5)
 	summary.add_theme_constant_override("v_separation", 4)
 	parent.add_child(summary)
@@ -1190,6 +1205,7 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		chip.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		chip.mouse_filter = Control.MOUSE_FILTER_PASS
+		chip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, Color(color, 0.75), 8, 5.0, 1.0))
 		summary.add_child(chip)
 
