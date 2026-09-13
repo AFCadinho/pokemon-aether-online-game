@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild Leaders can now transfer leadership to another member or disband a solo Guild before joining another Guild.
+
 - Browser battles now load their animated Gen 5 Pokémon sprites through the game origin, preventing the Pokémon HOME placeholders from remaining visible when browser cross-origin handling rejects an otherwise valid R2 response.
 
 - Players now reconnect to the shared overworld automatically after a failed connection instead of remaining visible only in chat.

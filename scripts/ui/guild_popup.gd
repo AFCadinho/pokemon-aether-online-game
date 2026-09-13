@@ -51,6 +51,7 @@ const GUILD_MEMBER_ACTION_PM := 1
 const GUILD_MEMBER_ACTION_CHANGE_RANK := 2
 const GUILD_MEMBER_ACTION_BANK_RIGHTS := 3
 const GUILD_MEMBER_ACTION_KICK := 4
+const GUILD_MEMBER_ACTION_TRANSFER_LEADERSHIP := 5
 const GUILD_BANK_PERMISSIONS: Array[String] = [
 	"bank_deposit",
 	"bank_withdraw",
@@ -1433,6 +1434,15 @@ func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> C
 	_apply_popup_menu_style(popup)
 	popup.add_item(_t("ui.guild.leave.action"), 1)
 	popup.set_item_disabled(popup.get_item_index(1), is_leader or is_leaving_guild)
+	if is_leader:
+		popup.add_separator()
+		popup.add_item(_t("ui.guild.disband.action"), 2)
+		var can_disband := _array_from_value(guild_home.get("members", [])).size() == 1
+		popup.set_item_disabled(popup.get_item_index(2), not can_disband or is_leaving_guild)
+		popup.set_item_tooltip(
+			popup.get_item_index(2),
+			_t("ui.guild.disband.tooltip" if can_disband else "ui.guild.disband.members_remain")
+		)
 	popup.id_pressed.connect(_on_guild_options_menu_pressed.bind(guild.duplicate(true)))
 	secondary_row.add_child(options)
 	return actions
@@ -1441,6 +1451,8 @@ func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> C
 func _on_guild_options_menu_pressed(id: int, guild: Dictionary) -> void:
 	if id == 1:
 		_confirm_guild_leave(guild)
+	elif id == 2:
+		_confirm_guild_disband(guild)
 
 
 func _build_guild_overview(guild: Dictionary) -> Control:
@@ -2922,6 +2934,60 @@ func _leave_current_guild(guild: Dictionary) -> void:
 	var left_guild_name := str(result.get("guildName", guild.get("name", _t("ui.guild.fallback.this_guild"))))
 	_set_browse_status(_t("ui.guild.leave.success", {"guild": left_guild_name}), false)
 	_show_guild_system_message("ui.guild.leave.success", {"guild": left_guild_name})
+
+
+func _confirm_guild_disband(guild: Dictionary) -> void:
+	if (
+		is_leaving_guild
+		or str(_dictionary(guild_home.get("membership", {})).get("role", "")) != "leader"
+		or _array_from_value(guild_home.get("members", [])).size() != 1
+	):
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildDisbandConfirmationDialog"
+	dialog.title = _t("ui.guild.disband.confirm_title")
+	dialog.dialog_text = _t("ui.guild.disband.confirm", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	})
+	dialog.ok_button_text = _t("ui.guild.disband.action")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "danger")
+	dialog.confirmed.connect(_disband_current_guild.bind(guild, dialog), CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(500, 220))
+
+
+func _disband_current_guild(guild: Dictionary, dialog: ConfirmationDialog) -> void:
+	if is_leaving_guild:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		if is_instance_valid(dialog):
+			dialog.queue_free()
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_leaving_guild = true
+	var result := _dictionary(await guild_service.call("disband_guild"))
+	is_leaving_guild = false
+	if is_instance_valid(dialog):
+		dialog.queue_free()
+	if not bool(result.get("success", false)):
+		_render_guild_home()
+		_set_member_status(str(result.get("error", _t("ui.guild.disband.error"))), true)
+		return
+	membership.clear()
+	guild_home.clear()
+	guild_bank_state.clear()
+	active_guild_section = "overview"
+	active_guild_bank_category = ""
+	active_guild_bank_full_view = false
+	_refresh_membership_state()
+	_show_page("browse")
+	await _refresh_from_server()
+	var guild_name := str(result.get("guildName", guild.get("name", _t("ui.guild.fallback.this_guild"))))
+	_set_browse_status(_t("ui.guild.disband.success", {"guild": guild_name}), false)
+	_show_guild_system_message("ui.guild.disband.success", {"guild": guild_name})
 
 
 func _build_guild_bank() -> Control:
@@ -5850,6 +5916,7 @@ func _build_guild_member_actions_button(
 	var online := bool(member.get("online", false))
 	var is_self := user_id == own_user_id
 	var can_change_rank := own_role == "leader" and member_role != "leader" and not is_self
+	var can_transfer_leadership := own_role == "leader" and member_role != "leader" and not is_self
 	var can_edit_bank_rights := can_manage_permissions and member_role != "leader" and not is_self
 	var can_kick := (
 		not is_self
@@ -5867,7 +5934,7 @@ func _build_guild_member_actions_button(
 		"tooltip_text",
 		"ui.guild.member.message_self" if is_self else "ui.guild.member.actions_tooltip"
 	)
-	actions.disabled = is_self or (not online and not can_change_rank and not can_edit_bank_rights and not can_kick)
+	actions.disabled = is_self or (not online and not can_change_rank and not can_edit_bank_rights and not can_kick and not can_transfer_leadership)
 	if not is_self:
 		actions.icon = GUILD_MEMBER_MANAGE_ICON
 		actions.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -5891,6 +5958,12 @@ func _build_guild_member_actions_button(
 		popup.add_separator(_t("ui.guild.member.menu_management"))
 	if can_change_rank:
 		popup.add_icon_item(GUILD_MEMBER_RANK_ICON, _t("ui.guild.member.change_rank"), GUILD_MEMBER_ACTION_CHANGE_RANK)
+	if can_transfer_leadership:
+		popup.add_icon_item(
+			GUILD_MEMBER_RANK_ICON,
+			_t("ui.guild.leadership.transfer_action"),
+			GUILD_MEMBER_ACTION_TRANSFER_LEADERSHIP
+		)
 	if can_edit_bank_rights:
 		popup.add_icon_item(GUILD_MEMBER_BANK_RIGHTS_ICON, _t("ui.guild.member.bank_rights"), GUILD_MEMBER_ACTION_BANK_RIGHTS)
 	if can_kick:
@@ -5911,6 +5984,43 @@ func _on_guild_member_action_selected(action_id: int, member: Dictionary) -> voi
 			_open_guild_member_bank_permissions(member)
 		GUILD_MEMBER_ACTION_KICK:
 			_open_guild_member_kick_dialog(member)
+		GUILD_MEMBER_ACTION_TRANSFER_LEADERSHIP:
+			_open_guild_leadership_transfer_dialog(member)
+
+
+func _open_guild_leadership_transfer_dialog(member: Dictionary) -> void:
+	var user_id := int(member.get("userId", 0))
+	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
+		return
+	var trainer_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildLeadershipTransferDialog_%d" % user_id
+	dialog.title = _t("ui.guild.leadership.transfer_title")
+	dialog.dialog_text = _t("ui.guild.leadership.transfer_confirm", {"trainer": trainer_name})
+	dialog.ok_button_text = _t("ui.guild.leadership.transfer_action_short")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "danger")
+	add_child(dialog)
+	dialog.confirmed.connect(_transfer_guild_leadership.bind(user_id, trainer_name, dialog))
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(500, 220))
+
+
+func _transfer_guild_leadership(user_id: int, trainer_name: String, dialog: ConfirmationDialog) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		if is_instance_valid(dialog):
+			dialog.queue_free()
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var result := _dictionary(await guild_service.call("transfer_leadership", user_id))
+	if is_instance_valid(dialog):
+		dialog.queue_free()
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.leadership.transfer_error"))), true)
+		return
+	_apply_home_result(result)
+	_set_member_status(_t("ui.guild.leadership.transfer_success", {"trainer": trainer_name}), false)
 
 
 func _on_guild_member_private_message_pressed(member: Dictionary) -> void:
