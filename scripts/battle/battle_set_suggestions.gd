@@ -44,6 +44,10 @@ static func normalize_response(response: Dictionary, revision: Dictionary, oppon
 			var allowed_fields := ["kind", "state", "turn", "value"]
 			if evidence.get("kind") == "damage":
 				allowed_fields.append_array(["direction", "move", "observedMin", "observedMax"])
+				if evidence.has("conditions"):
+					allowed_fields.append("conditions")
+					if not _valid_damage_conditions(evidence.get("conditions")):
+						return {"success": false}
 				if evidence.get("direction") not in ["own-to-opponent", "opponent-to-own"] or not evidence.get("move") is String or evidence["move"].is_empty() or evidence["move"].length() > 100:
 					return {"success": false}
 				for bound: String in ["observedMin", "observedMax"]:
@@ -64,6 +68,33 @@ static func normalize_response(response: Dictionary, revision: Dictionary, oppon
 			if not evidence.get("value") is String or evidence["value"].length() > 256:
 				return {"success": false}
 	return response.duplicate(true)
+
+
+static func _valid_damage_conditions(value: Variant) -> bool:
+	if not value is Dictionary or value.size() > 2:
+		return false
+	for role: Variant in value:
+		if role not in ["attacker", "defender"]:
+			return false
+		var participant: Variant = value[role]
+		if (
+			not participant is Dictionary or participant.size() != 2
+			or not participant.get("name") is String
+			or participant["name"].is_empty() or participant["name"].length() > 100
+			or not participant.get("boosts") is Dictionary
+			or participant["boosts"].is_empty() or participant["boosts"].size() > 7
+		):
+			return false
+		for stat: Variant in participant["boosts"]:
+			var amount: Variant = participant["boosts"][stat]
+			if (
+				stat not in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]
+				or typeof(amount) not in [TYPE_INT, TYPE_FLOAT]
+				or not is_finite(float(amount)) or float(amount) != floorf(float(amount))
+				or amount < -6 or amount > 6 or amount == 0
+			):
+				return false
+	return true
 
 
 static func valid_build(value: Variant) -> bool:

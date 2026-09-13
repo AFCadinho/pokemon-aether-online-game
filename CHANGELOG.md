@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Opponent-set damage clues now show relevant active stat stages, such as Zamazenta's Defense +1 from Dauntless Shield, in their hover details.
+
 - Set suggestions now show clues that need more information with a clearer blue status chip instead of faint “Unknown” text.
 
 - Switching the selected opponent in the battle calculator now clears the previous Pokémon's set, stats, Ability, item, and other custom assumptions.
