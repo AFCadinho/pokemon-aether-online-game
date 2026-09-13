@@ -184,6 +184,22 @@ static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: 
 	return allowed_genders[0]
 
 
+static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	if (
+		normalized_item_id.begins_with("aether-blossom-")
+		or normalized_item_id.begins_with("aether-female-")
+	):
+		return ["female"]
+	if (
+		normalized_item_id.begins_with("aether-male-")
+		or normalized_item_id.begins_with("adinho-")
+		or normalized_item_id.begins_with("ironfanton-")
+	):
+		return ["male"]
+	return []
+
+
 static func get_default_appearance(gender: String = "") -> Dictionary:
 	var normalized_gender: String = normalize_gender(gender)
 	var body_id: String = DEFAULT_FEMALE_BODY_ID if normalized_gender == "female" else DEFAULT_MALE_BODY_ID
@@ -218,6 +234,10 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 	var normalized_gender := normalize_gender(gender)
 	if normalized_gender == "":
 		normalized_gender = "male"
+	normalized_gender = resolve_cosmetic_icon_gender(
+		normalized_gender,
+		get_cosmetic_item_allowed_genders(normalized_item_id)
+	)
 	var cache_key := "%s:%s" % [normalized_gender, normalized_item_id]
 	if _cosmetic_item_icon_cache.has(cache_key):
 		return _cosmetic_item_icon_cache.get(cache_key) as Texture2D

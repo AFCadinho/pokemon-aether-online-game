@@ -23483,7 +23483,7 @@ func _refresh_bag_detail() -> void:
 
 func _bag_item_detail_description(item: Dictionary) -> String:
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		var allowed_models := _bag_item_allowed_genders(item)
 		var model_label := " or ".join(allowed_models).capitalize()
 		return LocalizationManager.text("ui.bag.description.wrong_model", {"models": model_label})
@@ -23529,7 +23529,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	if item_id == "escape-rope-action":
 		return true
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
 	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_mount_license", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
@@ -23557,13 +23557,15 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.change_name")
 	if use_action == "trainer_gender_change":
 		return LocalizationManager.text("ui.bag.action.change_gender")
-	if use_action == "open_item_bundle":
-		return LocalizationManager.text("ui.bag.action.open_box")
-	if use_action == "unlock_appearance":
+	if use_action in ["unlock_appearance", "open_item_bundle"]:
 		if not _bag_item_matches_player_gender(item):
 			var allowed_models := _bag_item_allowed_genders(item)
 			return LocalizationManager.text("ui.bag.action.model_only", {"models": " or ".join(allowed_models).capitalize()})
-		return LocalizationManager.text("ui.bag.action.move_to_customization")
+		return (
+			LocalizationManager.text("ui.bag.action.open_box")
+			if use_action == "open_item_bundle"
+			else LocalizationManager.text("ui.bag.action.move_to_customization")
+		)
 	if use_action == "redeem_aether_blessing":
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "activate_shiny_charm":
@@ -24769,7 +24771,11 @@ func _bag_item_allowed_genders(item: Dictionary) -> Array[String]:
 			var normalized_gender := CharacterAppearanceService.normalize_gender(str(gender_value))
 			if normalized_gender != "" and not allowed_genders.has(normalized_gender):
 				allowed_genders.append(normalized_gender)
-	return allowed_genders
+	if not allowed_genders.is_empty():
+		return allowed_genders
+	return CharacterAppearanceService.get_cosmetic_item_allowed_genders(
+		str(item.get("id", item.get("itemId", "")))
+	)
 
 
 func _bag_item_matches_player_gender(item: Dictionary) -> bool:
@@ -24930,6 +24936,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"gameplay": gameplay,
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
+			"genders": item.get("genders", []),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
 			"assignmentMode": str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower(),
 			"tradable": bool(item.get("tradable", false)),

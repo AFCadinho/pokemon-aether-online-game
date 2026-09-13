@@ -295,6 +295,11 @@ func _run() -> void:
 			== APPEARANCE.get_cosmetic_item_icon("adinho-chroma-shirt", "male"),
 		"cosmetic frame icons are cached"
 	)
+	_check(
+		APPEARANCE.get_cosmetic_item_icon("aether-blossom-outfit", "male")
+			== APPEARANCE.get_cosmetic_item_icon("aether-blossom-outfit", "female"),
+		"female-only outfit boxes always render their complete compatible-model icon"
+	)
 	for wardrobe_part: Dictionary in [
 		{"category": "top", "id": "Shirt"},
 		{"category": "top", "id": "IronFanton_Shirt"},
@@ -358,11 +363,11 @@ func _run() -> void:
 		"Bag slots render cosmetic icons with the item's compatible gender"
 	)
 	_check(
-			ui_source.contains(
-				'use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item)'
-			)
-				and ui_source.contains('LocalizationManager.text("ui.bag.action.model_only"'),
-		"Bag disables moving incompatible cosmetics to Character Customization"
+		ui_source.contains(
+			'use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item)'
+		)
+			and ui_source.contains('LocalizationManager.text("ui.bag.action.model_only"'),
+		"Bag disables using incompatible cosmetics and outfit boxes"
 	)
 	_check(
 		inventory_service_source.contains("APPEARANCE_ITEM_RETURN_ENDPOINT")
