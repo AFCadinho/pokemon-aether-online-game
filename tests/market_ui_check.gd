@@ -28,6 +28,11 @@ func _check_market_popup_contract() -> void:
 	_check_true(text.contains("MarketService.purchase_item("), "UIOverlay purchases from its active named market")
 	_check_true(text.contains('market_context.get("id", "standard_pokemart")'), "UIOverlay preserves the active market id during purchase")
 	_check_true(text.contains("MarketService.sell_standard_item(item_id, quantity)"), "UIOverlay sells through MarketService")
+	_check_true(
+		text.contains('LocalizationManager.text("ui.market.confirm_sale_title")')
+		and text.contains('Callable(self, "_submit_market_transaction").bind(selected_item, quantity)'),
+		"Item Buyer requires confirmation before submitting a sale"
+	)
 	_check_true(text.contains('market_mode == "player_sells"'), "UIOverlay supports the player-sells mode")
 	_check_true(text.contains("for inventory_value: Variant in inventory_items:"), "Market buyer builds its catalog from the player's inventory")
 	_check_true(text.contains('inventory_item.get("tradable"'), "Market buyer filters inventory by server-authoritative tradeability")

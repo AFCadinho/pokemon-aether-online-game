@@ -22927,7 +22927,37 @@ func _format_market_currency_amount(amount: int, currency: String) -> String:
 func _on_market_buy_pressed() -> void:
 	if market_purchase_in_progress or market_selected_item.is_empty():
 		return
-	var item_id := str(market_selected_item.get("id", "")).strip_edges()
+	var selected_item := market_selected_item.duplicate(true)
+	var item_id := str(selected_item.get("id", "")).strip_edges()
+	if item_id == "":
+		return
+	var quantity: int = max(int(market_quantity_spinbox.value), 1)
+	if market_mode == "player_sells":
+		var item_name := str(selected_item.get("name", _item_name_from_id(item_id)))
+		var total := int(selected_item.get("price", 0)) * quantity
+		_show_ui_confirm_popup(
+			LocalizationManager.text("ui.market.confirm_sale_title"),
+			LocalizationManager.text("ui.market.confirm_sale", {
+				"quantity": quantity,
+				"item": item_name,
+				"total": _format_market_currency_amount(
+					total,
+					str(selected_item.get("currency", "money"))
+				),
+			}),
+			LocalizationManager.text("ui.market.confirm_sale_action"),
+			Callable(self, "_submit_market_transaction").bind(selected_item, quantity),
+			Vector2i(460, 190),
+			true
+		)
+		return
+	_submit_market_transaction(selected_item, quantity)
+
+
+func _submit_market_transaction(item: Dictionary, quantity: int) -> void:
+	if market_purchase_in_progress:
+		return
+	var item_id := str(item.get("id", "")).strip_edges()
 	if item_id == "":
 		return
 
@@ -22938,7 +22968,6 @@ func _on_market_buy_pressed() -> void:
 		"ui.market.status.selling" if player_is_selling else "ui.market.status.buying"
 	), false)
 
-	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var result: Dictionary
 	if player_is_selling:
 		result = await MarketService.sell_standard_item(item_id, quantity)
@@ -22970,7 +22999,7 @@ func _on_market_buy_pressed() -> void:
 	var transaction_key := "sale" if player_is_selling else "purchase"
 	var transaction: Dictionary = _staff_dictionary_from_variant(result.get(transaction_key, {}))
 	var transacted_quantity: int = max(int(transaction.get("quantity", quantity)), 1)
-	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
+	var item_name := str(item.get("name", _item_name_from_id(item_id)))
 	_add_chat_message(LocalizationManager.text(
 		"ui.market.message.sold" if player_is_selling else "ui.market.message.bought",
 		{"quantity": transacted_quantity, "item": item_name},
