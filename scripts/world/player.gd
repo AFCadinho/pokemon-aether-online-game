@@ -2739,14 +2739,9 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 	return false
 
 func _resolve_current_map() -> Node:
-	if (
-		resolved_map_cache != null
-		and is_instance_valid(resolved_map_cache)
-		and resolved_map_cache.is_ancestor_of(self)
-	):
-		return resolved_map_cache
-
-	resolved_map_cache = null
+	# The World scene temporarily owns the player during bootstrap and also
+	# contains the active map. Prefer the authoritative map once World has
+	# selected it, even when an older cached ancestor remains valid.
 	if (
 		GameState.current_map != null
 		and is_instance_valid(GameState.current_map)
@@ -2755,6 +2750,14 @@ func _resolve_current_map() -> Node:
 		resolved_map_cache = GameState.current_map
 		return resolved_map_cache
 
+	if (
+		resolved_map_cache != null
+		and is_instance_valid(resolved_map_cache)
+		and resolved_map_cache.is_ancestor_of(self)
+	):
+		return resolved_map_cache
+
+	resolved_map_cache = null
 	var parent_node := get_parent()
 	while parent_node != null:
 		if _find_tilemap_layer(parent_node, ["Collision", "TallGrass"]) != null:
