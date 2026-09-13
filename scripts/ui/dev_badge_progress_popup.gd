@@ -7,7 +7,7 @@ signal closed
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/trainer_progress_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/trainer_progress_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/trainer_progress_radio_unchecked.svg")
-const POPUP_SIZE := Vector2(720, 540)
+const POPUP_SIZE := Vector2(720, 600)
 const REGION := "kanto"
 const BADGES: Array[Dictionary] = [
 	{"id": "boulder", "name": "Boulder", "texture": "res://assets/gym_badges/kanto_badges/Boulder_Badge.png"},
@@ -98,6 +98,8 @@ var badge_buttons: Dictionary = {}
 var badge_icon_rects: Dictionary = {}
 var badge_status_labels: Dictionary = {}
 var badge_state: Dictionary = {}
+var level_cap_override_button: Button
+var level_cap_override_enabled := false
 var key_item_buttons: Dictionary = {}
 var key_item_status_labels: Dictionary = {}
 var key_item_state: Dictionary = {}
@@ -140,6 +142,7 @@ func open() -> void:
 		_set_status(str(result.get("error", _t("ui.staff.badges.load_failed"))), true)
 		return
 	set_badge_state(result)
+	await _load_level_cap_override()
 
 
 func close() -> void:
@@ -256,6 +259,29 @@ func _build_ui() -> void:
 		UI_MUTED
 	)
 	notice_margin.add_child(notice_label)
+
+	var level_cap_panel := PanelContainer.new()
+	level_cap_panel.name = "LevelCapOverridePanel"
+	level_cap_panel.add_theme_stylebox_override("panel", _panel_style(Color("#102b25e8"), Color("#62a985"), 9, 1))
+	badge_content.add_child(level_cap_panel)
+	var level_cap_margin := MarginContainer.new()
+	_set_margins(level_cap_margin, 12, 8, 12, 8)
+	level_cap_panel.add_child(level_cap_margin)
+	var level_cap_row := HBoxContainer.new()
+	level_cap_row.add_theme_constant_override("separation", 10)
+	level_cap_margin.add_child(level_cap_row)
+	var level_cap_copy := VBoxContainer.new()
+	level_cap_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	level_cap_row.add_child(level_cap_copy)
+	level_cap_copy.add_child(_localized_label("ui.staff.dev.level_cap_override_title", 13, UI_TEXT))
+	level_cap_copy.add_child(_localized_label("ui.staff.dev.level_cap_override_description", 10, UI_MUTED))
+	level_cap_override_button = Button.new()
+	level_cap_override_button.name = "LevelCapOverrideButton"
+	level_cap_override_button.custom_minimum_size = Vector2(142, 36)
+	level_cap_override_button.focus_mode = Control.FOCUS_NONE
+	level_cap_override_button.pressed.connect(_toggle_level_cap_override)
+	level_cap_row.add_child(level_cap_override_button)
+	_refresh_level_cap_override_button()
 
 	var grid := GridContainer.new()
 	grid.name = "BadgeGrid"
@@ -586,6 +612,53 @@ func _submit_badges(badge_ids: Array[String], earned: bool) -> void:
 		_set_status(str(result.get("error", _t("ui.staff.badges.update_failed"))), true)
 		return
 	set_badge_state(result)
+
+
+func _load_level_cap_override() -> void:
+	var service := get_node_or_null("/root/TrainerProgressService")
+	if service == null or not service.has_method("get_developer_level_cap_override"):
+		return
+	var result: Dictionary = await service.call("get_developer_level_cap_override")
+	if bool(result.get("success", false)):
+		level_cap_override_enabled = bool(result.get("enabled", false))
+	_refresh_level_cap_override_button()
+
+
+func _toggle_level_cap_override() -> void:
+	if busy:
+		return
+	var service := get_node_or_null("/root/TrainerProgressService")
+	if service == null or not service.has_method("set_developer_level_cap_override"):
+		_set_status(_t("ui.staff.dev.level_cap_override_unavailable"), true)
+		return
+	_set_busy(true)
+	_set_status(_t("ui.staff.badges.saving"), false)
+	var result: Dictionary = await service.call("set_developer_level_cap_override", not level_cap_override_enabled)
+	_set_busy(false)
+	if not bool(result.get("success", false)):
+		_set_status(_t("ui.staff.dev.level_cap_override_failed", {
+			"error": str(result.get("error", _t("common.unknown_error"))),
+		}), true)
+		return
+	level_cap_override_enabled = bool(result.get("enabled", false))
+	var party_service := get_node_or_null("/root/PlayerPartyStateService")
+	if party_service != null and party_service.has_method("load_party"):
+		await party_service.call("load_party")
+	_refresh_level_cap_override_button()
+	_set_status(_t(
+		"ui.staff.dev.level_cap_override_enabled" if level_cap_override_enabled else "ui.staff.dev.level_cap_override_disabled"
+	), false)
+
+
+func _refresh_level_cap_override_button() -> void:
+	if level_cap_override_button == null:
+		return
+	_set_localized_property(
+		level_cap_override_button,
+		"text",
+		"ui.staff.dev.level_cap_override_on" if level_cap_override_enabled else "ui.staff.dev.level_cap_override_off"
+	)
+	_apply_button_style(level_cap_override_button, level_cap_override_enabled)
 
 
 func _show_tab(tab_id: String) -> void:
