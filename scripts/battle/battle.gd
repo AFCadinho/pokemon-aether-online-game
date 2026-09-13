@@ -242,6 +242,7 @@ const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_sup
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_OWNED_FORM_PROJECTION := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const BATTLE_CALCDEX_ERROR_FEEDBACK := preload("res://scripts/battle/battle_calcdex_error_feedback.gd")
+const BATTLE_CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_battle_presentation_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
@@ -2923,6 +2924,13 @@ func _refresh_damage_calc_results() -> void:
 	_show_damage_calc_loading()
 
 	var projection_revision := battle_state.get_calcdex_projection_revision()
+	if projection_revision.is_empty() and team_preview_lead_selection_active:
+		# A snapshot already loaded during Team Preview remains a valid source for
+		# subsequent manual matchup selections, even when the initial battle
+		# response did not seed BattleState's projection fence.
+		projection_revision = _damage_calc_projection_revision_from_response(
+			_damage_calc_as_dictionary(damage_calc_knowledge_snapshot.get("projectionRevision", {}))
+		)
 	if projection_revision.is_empty() and _is_pvp_battle():
 		# PvP realtime packets can arrive before the participant projection fence
 		# has been seeded locally. Recover the canonical room snapshot before
@@ -2933,6 +2941,20 @@ func _refresh_damage_calc_results() -> void:
 			damage_calc_request_in_flight = false
 			return
 		projection_revision = battle_state.get_calcdex_projection_revision()
+	elif projection_revision.is_empty() and team_preview_lead_selection_active:
+		# Trainer Team Preview can be shown from a creation response whose event
+		# delivery is still moving and therefore intentionally omits the Calcdex
+		# projection fence. Fetch the current participant-safe state solely to
+		# obtain that fence; do not apply it or invent active Pokémon/leads.
+		var state_response: Dictionary = await BattleApiClient.get_npc_battle_state(
+			damage_calc_request,
+			battle_state.battle_id,
+			last_rendered_event_seq
+		)
+		if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+			damage_calc_request_in_flight = false
+			return
+		projection_revision = _damage_calc_projection_revision_from_response(state_response)
 	var use_safe_matchup := false
 	var waiting_for_preview_selection := false
 	var snapshot_failure: Dictionary = {}
@@ -3108,6 +3130,15 @@ func _damage_calc_snapshot_matches_revision(projection_revision: Dictionary) -> 
 		damage_calc_knowledge_snapshot.get("projectionRevision", {})
 	)
 	return not cached_revision.is_empty() and cached_revision == projection_revision
+
+
+func _damage_calc_projection_revision_from_response(response: Dictionary) -> Dictionary:
+	var revision: Dictionary = {}
+	for field_name: String in BATTLE_CALCDEX_SNAPSHOT.REVISION_FIELDS:
+		if not response.has(field_name):
+			return {}
+		revision[field_name] = response.get(field_name)
+	return revision if BATTLE_CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) else {}
 
 
 func _damage_calc_prefetched_response_matches_revision(projection_revision: Dictionary) -> bool:

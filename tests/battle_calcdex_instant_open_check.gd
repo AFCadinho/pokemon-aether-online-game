@@ -43,6 +43,8 @@ func _run() -> void:
 	)
 	_check(refresh_source.find("open_calcdex") >= 0, "cold open uses the combined endpoint")
 	_check(refresh_source.find("get_calcdex_snapshot") >= 0, "Team Preview loads a selectable roster snapshot without inventing active Pokémon")
+	_check(refresh_source.find("get_npc_battle_state") >= 0, "trainer Team Preview recovers a missing projection fence from participant-safe state")
+	_check(refresh_source.find("_damage_calc_projection_revision_from_response") >= 0, "Team Preview reuses the validated snapshot revision for later selections")
 	_check(refresh_source.find("_damage_calc_snapshot_matches_revision") >= 0, "an exact cached revision skips the cold-open endpoint")
 	_check(refresh_source.find("damage_calc_prefetch_finished") >= 0, "opening waits for an already-running battle-start prefetch")
 	_check(refresh_source.find("set_knowledge_snapshot(damage_calc_knowledge_snapshot, false)") >= 0, "snapshot defaults do not cancel the first calculation")
