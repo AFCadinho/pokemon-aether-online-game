@@ -962,6 +962,12 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 	close_button.custom_minimum_size = Vector2(76, 32)
 	close_button.pressed.connect(_close_set_suggestions_popup)
 	header.add_child(close_button)
+	var note_panel := PanelContainer.new()
+	note_panel.name = "SetSuggestionsIntro"
+	note_panel.add_theme_stylebox_override("panel", _make_stylebox(Color(TEXT_ACCENT, 0.06), Color(TEXT_ACCENT, 0.28), 8, 9.0, 6.0))
+	column.add_child(note_panel)
+	var note := _make_popup_label(_t("battle.calc.guess.note"), 12, TEXT_SECONDARY, 2)
+	note_panel.add_child(note)
 
 	var suggestions_column := VBoxContainer.new()
 	suggestions_column.name = "SetSuggestionsList"
@@ -1010,15 +1016,24 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 5)
 	list_panel.add_child(list)
+	var choose_label := _make_label(_t("battle.calc.guess.choose").to_upper(), 10, TEXT_MUTED)
+	choose_label.name = "SetSuggestionChooseLabel"
+	list.add_child(choose_label)
 	for row: Dictionary in rows:
 		var suggestion_key := _get_set_suggestion_key(row)
 		var selected := selected_set_suggestion_key == suggestion_key
 		var card := PanelContainer.new()
 		card.name = "SetSuggestionCard"
-		card.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, TEXT_ACCENT if selected else BORDER_NEUTRAL, 8, 6.0, 4.0))
+		var card_style := _make_stylebox(SURFACE_RAISED, TEXT_ACCENT if selected else BORDER_NEUTRAL, 8, 6.0, 4.0)
+		if selected:
+			card_style.border_width_left = 2
+			card_style.border_width_top = 2
+			card_style.border_width_right = 2
+			card_style.border_width_bottom = 2
+		card.add_theme_stylebox_override("panel", card_style)
 		list.add_child(card)
 		var choice_row := VBoxContainer.new()
-		choice_row.add_theme_constant_override("separation", 5)
+		choice_row.add_theme_constant_override("separation", 3)
 		card.add_child(choice_row)
 		var context_parts: Array[String] = []
 		var format_name := str(row.get("formatName", "")).strip_edges()
@@ -1030,14 +1045,20 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 			"battle.calc.guess.variant_one" if variant_count == 1 else "battle.calc.guess.variant_count",
 			{"count": variant_count}
 		))
-		var choice := _make_toggle_button("%s\n%s" % [str(row.get("name", "")), " · ".join(context_parts)], selected)
+		var choice := _make_toggle_button(str(row.get("name", "")), selected)
 		choice.name = "SetSuggestionChoice"
 		choice.toggle_mode = false
 		choice.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		choice.custom_minimum_size.y = 42
+		choice.custom_minimum_size.y = 30
 		choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		choice.add_theme_stylebox_override("normal", _make_stylebox(Color.TRANSPARENT, Color.TRANSPARENT, 6, 5.0, 1.0))
+		choice.add_theme_stylebox_override("hover", _make_stylebox(Color(TEXT_ACCENT, 0.08), Color.TRANSPARENT, 6, 5.0, 1.0))
+		choice.add_theme_stylebox_override("pressed", _make_stylebox(Color(TEXT_ACCENT, 0.13), Color.TRANSPARENT, 6, 5.0, 1.0))
 		choice.pressed.connect(_select_set_suggestion.bind(suggestion_key))
 		choice_row.add_child(choice)
+		var context := _make_popup_label(" · ".join(context_parts), 11, TEXT_MUTED, 2)
+		context.name = "SetSuggestionContext"
+		choice_row.add_child(context)
 		_add_set_suggestion_evidence_summary(choice_row, row)
 
 	var selected_row: Dictionary = {}
@@ -1048,6 +1069,8 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 	if not selected_row.is_empty():
 		_add_selected_set_suggestion(workspace, selected_row)
 	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
+	ignore.name = "DismissSetSuggestions"
+	ignore.size_flags_horizontal = Control.SIZE_SHRINK_END
 	ignore.pressed.connect(func() -> void:
 		ignored_set_suggestions[selected_opponent_ref] = signature
 		_close_set_suggestions_popup(false)
@@ -1084,6 +1107,9 @@ func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail.add_theme_constant_override("separation", 5)
 	detail_scroll.add_child(detail)
+	var selected_label := _make_label(_t("battle.calc.guess.selected").to_upper(), 10, TEXT_ACCENT)
+	selected_label.name = "SetSuggestionSelectedLabel"
+	detail.add_child(selected_label)
 	var title := _make_popup_label(str(row.get("name", "")), 15, TEXT_PRIMARY)
 	title.name = "SetSuggestionName"
 	detail.add_child(title)
@@ -1092,8 +1118,14 @@ func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	preview.name = "SetSuggestionBuild"
 	detail.add_child(preview)
 	_add_set_suggestion_details(detail, row)
+	var action_hint := _make_popup_label(_t("battle.calc.guess.apply_hint"), 11, TEXT_MUTED, 2)
+	action_hint.name = "ApplySetSuggestionHint"
+	detail.add_child(action_hint)
 	var apply := _make_toggle_button(_t("battle.calc.guess.apply"), false)
 	apply.name = "ApplySetSuggestion"
+	apply.custom_minimum_size.y = 36
+	apply.add_theme_stylebox_override("normal", _make_dropdown_button_style(Color(TEXT_ACCENT, 0.14), Color(TEXT_ACCENT, 0.78)))
+	apply.add_theme_stylebox_override("hover", _make_dropdown_button_style(Color(TEXT_ACCENT, 0.23), TEXT_ACCENT))
 	apply.pressed.connect(_apply_set_suggestion.bind(build))
 	detail.add_child(apply)
 

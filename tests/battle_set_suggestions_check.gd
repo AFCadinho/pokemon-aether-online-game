@@ -71,7 +71,7 @@ func _run() -> void:
 	panel._add_set_suggestions(host)
 	var evidence_backed_toggle := host.find_child("SetSuggestionsToggle", true, false) as Button
 	_check(evidence_backed_toggle != null, "Inspector keeps the compact suggestion opener")
-	_check(evidence_backed_toggle.text == "Set suggestions (3)" and evidence_backed_toggle.get_theme_color("font_color") == Color("#8ccbe8"), "Evidence-backed suggestions announce their available match count")
+	_check(evidence_backed_toggle.text == "Possible opponent sets (3)" and evidence_backed_toggle.get_theme_color("font_color") == Color("#8ccbe8"), "Evidence-backed suggestions announce their available match count")
 	_check(evidence_backed_toggle.has_meta("set_suggestion_attention_pulse") and (evidence_backed_toggle.get_theme_stylebox("normal") as StyleBoxFlat).shadow_size == 4, "Evidence-backed suggestions receive a soft repeating attention glow")
 	_check(host.find_child("ApplySetSuggestion", true, false) == null, "Suggestion cards do not expand the inspector layout")
 	var catalog_only_response := popup_response.duplicate(true)
@@ -83,7 +83,7 @@ func _run() -> void:
 	content.add_child(catalog_only_host)
 	panel._add_set_suggestions(catalog_only_host)
 	var catalog_only_toggle := catalog_only_host.find_child("SetSuggestionsToggle", true, false) as Button
-	_check(catalog_only_toggle.text == "Set suggestions" and catalog_only_toggle.get_theme_color("font_color") == Color("#f2f0ea"), "Catalog-only possibilities remain available without a misleading new-match badge")
+	_check(catalog_only_toggle.text == "Possible opponent sets" and catalog_only_toggle.get_theme_color("font_color") == Color("#f2f0ea"), "Catalog-only possibilities remain available without a misleading new-match badge")
 	_check(not catalog_only_toggle.has_meta("set_suggestion_attention_pulse"), "Catalog-only possibilities do not pulse for attention")
 	panel.show_set_suggestions(ref, revision, popup_response)
 	panel._open_set_suggestions_popup()
@@ -95,10 +95,14 @@ func _run() -> void:
 	var suggestion_list := panel.set_suggestions_popup.find_child("SetSuggestionsList", true, false) as VBoxContainer
 	var suggestion_workspace := panel.set_suggestions_popup.find_child("SetSuggestionsWorkspace", true, false) as HBoxContainer
 	var suggestion_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
-	_check(suggestion_choices != null and suggestion_choices.get_child_count() == 3, "All three suggestions remain visible as fixed compact choices")
+	_check(suggestion_choices != null and suggestion_choices.get_child_count() == 4 and suggestion_choices.get_child(0).name == "SetSuggestionChooseLabel", "All three suggestions remain visible beneath a clear choice heading")
 	_check(suggestion_workspace != null, "Wide suggestion popup places its choice list beside the detail pane")
 	_check(suggestion_list != null and suggestion_list.get_child_count() <= 5, "Suggestion popup keeps a compact master-detail structure")
 	_check(panel.set_suggestions_popup.size.x <= 760 and panel.set_suggestions_popup.size.y <= 520, "Suggestion popup uses the available matchup workspace (%s)" % panel.set_suggestions_popup.size)
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionsIntro", true, false) != null, "Suggestion popup briefly explains what the player should do")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionSelectedLabel", true, false) != null, "Suggestion details identify the selected set")
+	var apply_button := panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) as Button
+	_check(apply_button != null and apply_button.text == "Calculate with this set" and panel.set_suggestions_popup.find_child("ApplySetSuggestionHint", true, false) != null, "The primary action explains its calculator effect")
 	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
@@ -110,7 +114,7 @@ func _run() -> void:
 		for child: Node in evidence_summary.get_children():
 			evidence_labels.append(str(child.text))
 			_check((child as Label).custom_minimum_size.x > 50.0, "Evidence label reserves enough width to render its text")
-	_check(evidence_labels.has("✓ Matches: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
+	_check(evidence_labels.has("✓ Clues matched: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
 	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
 	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "The selected suggestion shows evidence without expanding its list row")
