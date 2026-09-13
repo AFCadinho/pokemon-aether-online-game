@@ -136,10 +136,10 @@ func create_wish(item_id: String, quantity: int, unit_price: int, request_id := 
 	})
 
 
-func fulfill_wish(wish_id: String, request_id := "") -> Dictionary:
+func fulfill_wish(wish_id: String, quantity: int, request_id := "") -> Dictionary:
 	return await _mutate_wish(
 		WISHES_ENDPOINT + "/%s/fulfill" % wish_id.strip_edges().uri_encode(),
-		{"requestId": _request_id(request_id)}
+		{"requestId": _request_id(request_id), "quantity": maxi(quantity, 1)}
 	)
 
 
@@ -210,12 +210,27 @@ static func normalize_listing(value: Variant) -> Dictionary:
 
 static func normalize_wish(value: Variant) -> Dictionary:
 	var wish := _dictionary(value)
+	var quantity := maxi(int(wish.get("quantity", 1)), 1)
+	var default_fulfilled := quantity if str(wish.get("status", "active")) == "fulfilled" else 0
+	var fulfilled_quantity := clampi(int(wish.get("fulfilledQuantity", default_fulfilled)), 0, quantity)
+	var remaining_quantity := clampi(
+		int(wish.get("remainingQuantity", quantity - fulfilled_quantity)),
+		0,
+		quantity,
+	)
+	var unit_price := maxi(int(wish.get("unitPrice", 1)), 1)
 	return {
 		"id": str(wish.get("id", "")),
 		"item": _dictionary(wish.get("item", {})),
-		"quantity": maxi(int(wish.get("quantity", 1)), 1),
-		"unitPrice": maxi(int(wish.get("unitPrice", 1)), 1),
+		"quantity": quantity,
+		"fulfilledQuantity": fulfilled_quantity,
+		"remainingQuantity": remaining_quantity,
+		"unitPrice": unit_price,
 		"totalPrice": maxi(int(wish.get("totalPrice", 1)), 1),
+		"remainingTotalPrice": maxi(
+			int(wish.get("remainingTotalPrice", remaining_quantity * unit_price)),
+			0,
+		),
 		"status": str(wish.get("status", "active")),
 		"isMine": bool(wish.get("isMine", false)),
 		"createdAt": str(wish.get("createdAt", "")),
