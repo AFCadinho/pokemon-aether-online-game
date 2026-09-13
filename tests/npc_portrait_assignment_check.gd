@@ -23,6 +23,8 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_route_1_dadinho",
 	"kanto_rivals_house_daisy",
 	"kanto_route_1_north_guard",
+	"kanto_route_3_pokemon_center_clerk",
+	"kanto_route_3_pokemon_center_clerk_2",
 	"kanto_route_3_pokemon_center_magikarp_salesman",
 	"kanto_viridian_city_ace_trainer_victor",
 	"kanto_viridian_city_gardener_mabel",
@@ -90,6 +92,15 @@ func _init() -> void:
 		catalog.resolve_portrait_id("", "kanto_route_1_north_guard", ""),
 		"showdown_policeman_gen7",
 		"Route 1 route guard resolves the shared police portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_route_3_pokemon_center_clerk",
+			"kanto_route_3_pokemon_center_clerk"
+		),
+		"showdown_pokemonbreeder_gen4",
+		"Route 3 market seller resolves its clerk portrait instead of the dialogue fallback"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id(
