@@ -144,6 +144,9 @@ func _run() -> void:
 	var evidence_row := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceRow", true, false) as PanelContainer
 	_check(evidence_detail != null and evidence_detail.text.contains("Damage taken") and evidence_detail.text.contains("Surf"), "Damage clues state who dealt or took damage and name the move")
 	_check(evidence_row != null and evidence_row.tooltip_text.contains("19.0–21.0%") and evidence_row.tooltip_text.contains("calculated result"), "Hovering a clue explains the observed range and why the set fits")
+	var clue_tooltip_style := evidence_row.theme.get_stylebox("panel", "TooltipPanel") as StyleBoxFlat if evidence_row != null and evidence_row.theme != null else null
+	_check(clue_tooltip_style != null and clue_tooltip_style.bg_color == Color("#07111cf8") and clue_tooltip_style.shadow_size == 9 and clue_tooltip_style.border_width_bottom == 2, "Clue hover cards use the styled Calcdex surface instead of Godot's default tooltip")
+	_check(evidence_row != null and evidence_row.theme.get_color("font_color", "TooltipLabel") == Color("#f2f0ea"), "Clue hover text uses the readable Calcdex palette")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionBuildHeading", true, false) != null and panel.set_suggestions_popup.find_child("SetSuggestionEvidenceHeading", true, false) != null, "Set details and battle clues have separate scan-friendly sections")
 	var cards: Array[Node] = []
 	for index in range(1, suggestion_choices.get_child_count()):
