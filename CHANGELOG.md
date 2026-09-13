@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Overworld signs now display their text correctly in exported game clients.
+
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
