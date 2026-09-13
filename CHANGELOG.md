@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
+
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator

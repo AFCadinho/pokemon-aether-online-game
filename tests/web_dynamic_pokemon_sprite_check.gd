@@ -26,6 +26,8 @@ func _init() -> void:
 	_check(first_texture != null and second_texture != null and first_texture.atlas == second_texture.atlas,
 		"all downloaded frames share one WebGL sheet texture")
 	_check(first_texture != null and first_texture.region == Rect2(0, 0, 4, 4), "atlas frame region is preserved")
+	_check(first_texture != null and second_texture != null and first_texture.filter_clip and second_texture.filter_clip,
+		"linear filtering is clipped to each web sprite frame to prevent atlas seams")
 	_check(str(service.call("_normalize_segment", "Mr. Mime_Form")) == "mr-mime-form", "asset paths are normalized safely")
 	_check(str(service.call("_catalog_style", "animated")) == "animated", "normal animated sprites are the browser default")
 	_check(str(service.call("_catalog_style", "pixel")) == "pixel", "Gen 5 remains available as the pixel style")
