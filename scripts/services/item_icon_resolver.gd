@@ -27,6 +27,12 @@ static func load_icon(
 		canonical_id,
 		cosmetic_gender
 	)
+	if cosmetic_icon == null:
+		var fallback_gender := "female" if cosmetic_gender.strip_edges().to_lower() == "male" else "male"
+		cosmetic_icon = CharacterAppearanceServiceScript.get_cosmetic_item_icon(
+			canonical_id,
+			fallback_gender
+		)
 	if cosmetic_icon != null:
 		return cosmetic_icon
 

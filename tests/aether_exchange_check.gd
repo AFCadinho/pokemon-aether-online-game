@@ -2,6 +2,7 @@ extends SceneTree
 
 const EXCHANGE_SERVICE := preload("res://scripts/services/aether_exchange_service.gd")
 const EXCHANGE_POPUP := preload("res://scenes/interface/aether_exchange_popup.tscn")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const EXCHANGE_POPUP_PATH := "res://scripts/ui/aether_exchange_popup.gd"
 const EXCHANGE_SERVICE_PATH := "res://scripts/services/aether_exchange_service.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
@@ -259,6 +260,10 @@ func _run() -> void:
 	_check(catalog_tm_icon != null and catalog_tm_icon.resource_path.ends_with("/machine_WATER.png"), "Exchange uses Item Dex machine metadata when provided")
 	var outfit_icon := popup.call("_load_item_icon", "mysterious-outfit") as Texture2D
 	_check(outfit_icon != null and not outfit_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex cosmetic previews")
+	var blossom_icon := popup.call("_load_item_icon", "aether-blossom-dress") as Texture2D
+	_check(blossom_icon != null and not blossom_icon.resource_path.ends_with("/000.png"), "male Trainers see female-only cosmetic icons in the Exchange")
+	var adinho_icon := ITEM_ICON_RESOLVER.load_icon("adinho-classic-shirt", "", "", "female")
+	_check(adinho_icon != null and not adinho_icon.resource_path.ends_with("/000.png"), "female Trainers see male-only cosmetic icons in the Exchange")
 	var mount_icon := popup.call("_load_item_icon", "cyclizar-mount") as Texture2D
 	_check(mount_icon != null and not mount_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex mount previews")
 	var item_dex_overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")

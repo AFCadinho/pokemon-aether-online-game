@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainers can now browse and buy cosmetics for either character model, with compatible icons and clean outfit previews that show only the included pieces.
+
 - Guild Leaders can now transfer leadership to another member or disband a solo Guild before joining another Guild.
 
 - Cerulean City's nighttime lights now render more efficiently for smoother play on lower-end devices.

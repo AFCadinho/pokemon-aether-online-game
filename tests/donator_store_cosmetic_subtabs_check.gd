@@ -153,6 +153,7 @@ func _run() -> void:
 	_check(mysterious_item.get("price", 0) == 400, "Mysterious Outfit uses the complete four-item outfit price")
 	_check(mysterious_item.get("badge", "") == "4-ITEM BOX", "Mysterious Outfit communicates its four loose contents")
 	var mysterious_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(mysterious_preview.get("hair", "") == "", "complete outfit previews remove the Trainer's current hairstyle")
 	_check(mysterious_preview.get("facegear", "") == "Mysterious_Mask", "Mysterious preview includes the mask")
 	_check(mysterious_preview.get("top", "") == "Mysterious_Shirt", "Mysterious preview includes the shirt and gloves")
 	_check(mysterious_preview.get("bottom", "") == "Mysterious_Trousers", "Mysterious preview includes the trousers")
@@ -167,7 +168,11 @@ func _run() -> void:
 	_check(ironfanton_preview.get("hair", "") == "IronFanton_Hair", "IronFanton preview includes the hairstyle")
 	_check(ironfanton_preview.get("facial_hair", "") == "IronFanton_Beard", "IronFanton preview includes the beard")
 	_check(ironfanton_preview.get("top", "") == "IronFanton_Shirt", "IronFanton preview includes the shirt")
-	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom stays hidden for male models")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "male Trainers can browse the female-only Aether Blossom outfit")
+	store.call("_select_product", "aether-blossom-outfit")
+	var male_blossom_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(male_blossom_preview.get("gender", "") == "female", "female-only outfits use a female preview model for male Trainers")
+	_check(male_blossom_preview.get("hair", "") == "Aether_Blossom_Hair", "cross-model outfit previews render their included hairstyle")
 	store.call("_select_product", "adinho-classic-outfit")
 	var classic_item: Dictionary = store.call("_catalog_item", "adinho-classic-outfit")
 	_check(classic_item.get("name", "") == "Adinho Classic Box", "Classic product is clearly labelled as a box")
@@ -193,8 +198,8 @@ func _run() -> void:
 
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
-	_check(not store.product_buttons.has("adinho-classic-outfit"), "male-only Adinho Classic stays hidden for female models")
-	_check(not store.product_buttons.has("ironfanton-outfit"), "male-only IronFanton stays hidden for female models")
+	_check(store.product_buttons.has("adinho-classic-outfit"), "female Trainers can browse the male-only Adinho Classic outfit")
+	_check(store.product_buttons.has("ironfanton-outfit"), "female Trainers can browse the male-only IronFanton outfit")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
 	store.call("_select_product", "aether-blossom-outfit")
 	var blossom_item: Dictionary = store.call("_catalog_item", "aether-blossom-outfit")
@@ -264,7 +269,7 @@ func _run() -> void:
 	store.call("_select_cosmetic_subcategory", "outfits")
 	store.set_trainer_gender("male")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Adinho Classic is listed for compatible male models")
-	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom stays hidden for male models")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom remains visible for male models")
 	_check(store.call("_item_gender_badge", classic_item) == "MALE ONLY", "Adinho cards visibly identify male-only compatibility")
 	_check(
 		store.call("_item_gender_compatibility_note", classic_item) == "Male character models only.",
@@ -414,6 +419,11 @@ func _run() -> void:
 					"costs": [{"currency": "gems", "amount": 150}],
 				},
 				{
+					"itemId": "aether-blossom-outfit",
+					"genders": ["female"],
+					"costs": [{"currency": "gems", "amount": 400}],
+				},
+				{
 					"itemId": "squirtle-guild-emblem-template",
 					"genders": [],
 					"costs": [{"currency": "gems", "amount": 150}],
@@ -518,6 +528,9 @@ func _run() -> void:
 	store.call("_select_product", "mysterious-outfit")
 	_check(store.call("_gem_price", "mysterious-outfit") == 400, "Mysterious Outfit uses its server Aether Gem price")
 	_check(not store.purchase_button.disabled, "Mysterious Outfit can be purchased with enough Aether Gems")
+	store.call("_select_product", "aether-blossom-outfit")
+	_check(not store.purchase_button.disabled, "male Trainers can purchase female-only cosmetics for trading or gifts")
+	_check(store.call("_current_character_preview_appearance").get("gender", "") == "female", "purchasable cross-model cosmetics keep their compatible preview model")
 	store.call("_select_cosmetic_subcategory", "top")
 	store.call("_select_product", "adinho-chroma-shirt")
 	_check(not store.purchase_button.disabled, "server-listed cosmetic can be purchased with enough Aether Gems")
