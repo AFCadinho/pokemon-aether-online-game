@@ -13,6 +13,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/trainer_interaction_ownership_check.gd",
 	"res://tests/trainer_first_encounter_marker_check.gd",
 	"res://tests/developer_trainer_rematch_mode_check.gd",
+	"res://tests/developer_level_cap_override_check.gd",
 	"res://tests/battle_party_slot_resolver_check.gd",
 	"res://tests/training_room_battle_team_contract_check.gd",
 	"res://tests/battle_event_text_formatter_check.gd",

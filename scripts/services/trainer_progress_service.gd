@@ -7,6 +7,7 @@ signal progress_invalidated
 const TRAINER_PROGRESS_ENDPOINT := "/game/trainers/%s/progress"
 const TRAINER_REMATCH_ENDPOINT := "/game/trainers/%s/rematch"
 const DEVELOPER_REMATCH_MODE_ENDPOINT := "/game/dev/progression/trainer-rematch-mode"
+const DEVELOPER_LEVEL_CAP_OVERRIDE_ENDPOINT := "/game/dev/progression/pokemon-level-cap-override"
 const REQUEST_TIMEOUT_SECONDS := 5.0
 
 
@@ -33,7 +34,36 @@ func set_developer_rematch_mode(enabled: bool) -> Dictionary:
 	)
 
 
+func get_developer_level_cap_override() -> Dictionary:
+	return await _request_developer_level_cap_override(HTTPClient.METHOD_GET, "")
+
+
+func set_developer_level_cap_override(enabled: bool) -> Dictionary:
+	return await _request_developer_level_cap_override(
+		HTTPClient.METHOD_PUT,
+		JSON.stringify({"enabled": enabled})
+	)
+
+
+func _request_developer_level_cap_override(method: HTTPClient.Method, body: String) -> Dictionary:
+	return await _request_developer_setting(
+		DEVELOPER_LEVEL_CAP_OVERRIDE_ENDPOINT,
+		method,
+		body,
+		"Developer level-cap override"
+	)
+
+
 func _request_developer_rematch_mode(method: HTTPClient.Method, body: String) -> Dictionary:
+	return await _request_developer_setting(
+		DEVELOPER_REMATCH_MODE_ENDPOINT,
+		method,
+		body,
+		"Developer rematch mode"
+	)
+
+
+func _request_developer_setting(endpoint: String, method: HTTPClient.Method, body: String, label: String) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -45,7 +75,7 @@ func _request_developer_rematch_mode(method: HTTPClient.Method, body: String) ->
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	add_child(request)
 	var error := request.request(
-		base_url + DEVELOPER_REMATCH_MODE_ENDPOINT,
+		base_url + endpoint,
 		GatewayApiConfig.get_json_headers(),
 		method,
 		body
@@ -54,7 +84,7 @@ func _request_developer_rematch_mode(method: HTTPClient.Method, body: String) ->
 		request.queue_free()
 		return {
 			"success": false,
-			"error": "Developer rematch mode request failed to start: %s" % error_string(error),
+			"error": "%s request failed to start: %s" % [label, error_string(error)],
 		}
 
 	var result: Array = await request.request_completed
@@ -63,7 +93,7 @@ func _request_developer_rematch_mode(method: HTTPClient.Method, body: String) ->
 	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
 	var parsed: Variant = JSON.parse_string(response_text)
 	if response_code < 200 or response_code >= 300:
-		var message := "Developer rematch mode request failed with status %s" % response_code
+		var message := "%s request failed with status %s" % [label, response_code]
 		if parsed is Dictionary:
 			message = str((parsed as Dictionary).get("detail", message))
 		return {
@@ -75,7 +105,7 @@ func _request_developer_rematch_mode(method: HTTPClient.Method, body: String) ->
 		return {
 			"success": false,
 			"status": response_code,
-			"error": "Developer rematch mode response was not valid JSON.",
+			"error": "%s response was not valid JSON." % label,
 		}
 	return {
 		"success": true,
