@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Opponent set suggestions now keep clearly labelled closest matches visible when later clues rule out every exact catalog set, while new exact evidence can draw attention again.
+
 - Opening the battle calculator during lead selection now shows a clear waiting message instead of a privacy-snapshot error and placeholder matchup.
 
 - Opponent set suggestions can now be selected by clicking anywhere on their card, including the description and clue count.

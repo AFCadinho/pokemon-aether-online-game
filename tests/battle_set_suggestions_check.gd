@@ -33,9 +33,9 @@ func _run() -> void:
 	var invalid := build.duplicate(true)
 	invalid["evs"] = {"hp": 252, "def": 252, "spe": 252}
 	_check(not Suggestions.valid_build(invalid), "Illegal EV totals are rejected")
-	var changed_turn := response.duplicate(true)
-	changed_turn["suggestions"][0]["evidence"][0]["turn"] = 2
-	_check(Suggestions.signature(response) == Suggestions.signature(changed_turn), "Repeated equivalent evidence does not reannounce an ignored suggestion")
+	var new_turn_clue := response.duplicate(true)
+	new_turn_clue["suggestions"][0]["evidence"].append({"kind": "damage", "state": "match", "turn": 2, "value": "observed_range"})
+	_check(Suggestions.signature(response) != Suggestions.signature(new_turn_clue), "A new clue from a later turn reannounces an ignored suggestion")
 	var panel := CalcPanel.new()
 	var content := VBoxContainer.new()
 	content.name = "VBoxContainer"
@@ -85,6 +85,24 @@ func _run() -> void:
 	var catalog_only_toggle := catalog_only_host.find_child("SetSuggestionsToggle", true, false) as Button
 	_check(catalog_only_toggle.text == "Possible opponent sets" and catalog_only_toggle.get_theme_color("font_color") == Color("#f2f0ea"), "Catalog-only possibilities remain available without a misleading new-match badge")
 	_check(not catalog_only_toggle.has_meta("set_suggestion_attention_pulse"), "Catalog-only possibilities do not pulse for attention")
+	var closest_response := popup_response.duplicate(true)
+	closest_response["state"] = "closest"
+	for suggestion: Dictionary in closest_response["suggestions"]:
+		suggestion["confidence"] = "weak"
+		suggestion["evidence"] = [{"kind": "damage", "state": "conflict", "turn": 2, "value": "observed_range"}]
+	panel.show_set_suggestions(ref, revision, closest_response)
+	var closest_host := VBoxContainer.new()
+	content.add_child(closest_host)
+	panel._add_set_suggestions(closest_host)
+	var closest_toggle := closest_host.find_child("SetSuggestionsToggle", true, false) as Button
+	_check(closest_toggle.text == "Closest opponent sets", "Conflicting later clues retain clearly labelled closest sets")
+	_check(not closest_toggle.has_meta("set_suggestion_attention_pulse"), "Closest fallback sets never imitate a confirmed match")
+	panel._open_set_suggestions_popup()
+	await process_frame
+	var closest_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
+	_check(closest_choices != null and closest_choices.get_child_count() == 4, "Closest fallback keeps all three set cards available")
+	_check((panel.set_suggestions_popup.find_child("SetSuggestionsIntro", true, false) as PanelContainer).get_child(0).text.contains("No exact catalog set"), "Closest fallback explains why no exact match remains")
+	panel._close_set_suggestions_popup(false)
 	panel.show_set_suggestions(ref, revision, popup_response)
 	panel._open_set_suggestions_popup()
 	await process_frame
