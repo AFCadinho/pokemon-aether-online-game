@@ -4220,7 +4220,7 @@
   "battle.calc.error.invalid_snapshot_data": "A calculadora não pôde carregar porque um ou mais Pokémon têm dados de batalha inválidos ou incompletos. Verifique os golpes, a Habilidade, os IVs e os EVs (máximo de 510 no total).",
   "battle.calc.error.reverse_requires_safe_snapshot": "O dano recebido aguarda um snapshot de batalha seguro para privacidade. Tente novamente após a atualização do estado da batalha.",
   "battle.calc.error.safe_snapshot_required": "A calculadora aguarda um snapshot de batalha seguro para privacidade. Tente novamente após a atualização do estado da batalha.",
-  "battle.calc.waiting_for_leads": "Escolha primeiro seu Pokémon lead. A calculadora estará pronta quando os dois Pokémon ativos forem conhecidos.",
+  "battle.calc.preview_choose_matchup": "Selecione um Pokémon de cada equipe para visualizar o confronto.",
   "battle.calc.error.selection": "Selecione um atacante e defensor disponíveis.",
   "battle.calc.end_of_turn_not_included": "Apenas dano direto; efeitos de fim de turno não estão incluídos.",
   "battle.calc.evs_custom": "EVs personalizados",

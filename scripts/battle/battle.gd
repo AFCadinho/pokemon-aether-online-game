@@ -2900,9 +2900,7 @@ func _refresh_damage_calc_results() -> void:
 		if not team_preview_lead_selection_active:
 			_schedule_damage_calc_prefetch()
 		return
-	if team_preview_lead_selection_active:
-		calc_panel.show_notice(_t("battle.calc.waiting_for_leads"))
-		return
+	calc_panel.set_manual_matchup_selection_required(team_preview_lead_selection_active)
 	_sync_damage_calc_matchup_assumptions()
 	if battle_finished:
 		calc_panel.show_error(_t("battle.error.ended"))
@@ -2936,15 +2934,16 @@ func _refresh_damage_calc_results() -> void:
 			return
 		projection_revision = battle_state.get_calcdex_projection_revision()
 	var use_safe_matchup := false
+	var waiting_for_preview_selection := false
 	var snapshot_failure: Dictionary = {}
 	var response: Dictionary = {}
 	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
-		if damage_calc_prefetch_in_flight and damage_calc_prefetch_revision == projection_revision:
+		if not team_preview_lead_selection_active and damage_calc_prefetch_in_flight and damage_calc_prefetch_revision == projection_revision:
 			await damage_calc_prefetch_finished
 			if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
 				damage_calc_request_in_flight = false
 				return
-		if _damage_calc_prefetched_response_matches_revision(projection_revision):
+		if not team_preview_lead_selection_active and _damage_calc_prefetched_response_matches_revision(projection_revision):
 			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(
 				damage_calc_prefetched_open_response.get("snapshot", {})
 			).duplicate(true)
@@ -2966,6 +2965,32 @@ func _refresh_damage_calc_results() -> void:
 			use_safe_matchup = true
 		elif _damage_calc_snapshot_matches_revision(projection_revision):
 			use_safe_matchup = true
+		elif team_preview_lead_selection_active:
+			var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
+				damage_calc_request,
+				battle_state.battle_id,
+				projection_revision
+			)
+			if request_token != damage_calc_request_token:
+				damage_calc_request_in_flight = false
+				if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+					_refresh_damage_calc_results()
+				return
+			if bool(snapshot_response.get("success", false)):
+				damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
+				var viewer_stats_by_ref: Dictionary = await _get_damage_calc_viewer_stats_by_ref(
+					damage_calc_knowledge_snapshot
+				)
+				if request_token != damage_calc_request_token:
+					damage_calc_request_in_flight = false
+					return
+				calc_panel.set_viewer_stats_by_ref(viewer_stats_by_ref)
+				calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot, false)
+				use_safe_matchup = true
+			else:
+				snapshot_failure = snapshot_response.duplicate(true)
+				damage_calc_knowledge_snapshot.clear()
+				calc_panel.set_knowledge_snapshot({})
 		else:
 			var selection_direction := str(calc_panel.get_matchup_selection().get("direction", "own-to-opponent"))
 			var open_response: Dictionary = await BattleApiClient.open_calcdex(
@@ -3037,7 +3062,9 @@ func _refresh_damage_calc_results() -> void:
 		if response.is_empty():
 			var selection: Dictionary = calc_panel.get_matchup_selection()
 			if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
-				response = {"success": false, "error": _t("battle.calc.error.selection")}
+				waiting_for_preview_selection = team_preview_lead_selection_active
+				if not waiting_for_preview_selection:
+					response = {"success": false, "error": _t("battle.calc.error.selection")}
 			else:
 				response = await BattleApiClient.calculate_calcdex_matchup(
 					damage_calc_request, battle_state.battle_id, projection_revision,
@@ -3062,6 +3089,9 @@ func _refresh_damage_calc_results() -> void:
 		return
 	if damage_calc_refresh_queued:
 		_refresh_damage_calc_results()
+		return
+	if waiting_for_preview_selection:
+		calc_panel.show_ready()
 		return
 
 	if bool(response.get("success", false)):
