@@ -863,9 +863,12 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t("battle.calc.guess.title"), is_instance_valid(set_suggestions_popup))
 	button.name = "SetSuggestionsToggle"
 	var signature := SET_SUGGESTIONS.signature(set_suggestions)
-	if not rows.is_empty() and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
+	var evidence_backed_count := rows.filter(func(row: Dictionary) -> bool:
+		return str(row.get("confidence", "weak")) in ["possible", "strong"]
+	).size()
+	if evidence_backed_count > 0 and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
 		button.add_theme_color_override("font_color", TEXT_ACCENT)
-		button.text += " (%s)" % rows.size()
+		button.text += " (%s)" % evidence_backed_count
 	button.pressed.connect(func() -> void:
 		if is_instance_valid(set_suggestions_popup):
 			_close_set_suggestions_popup()
