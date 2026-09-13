@@ -14,6 +14,7 @@ const GUILD_MEMBER_MESSAGE_ICON: Texture2D = preload("res://assets/ui/icons/guil
 const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
 const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
 const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
+const GUILD_BROWSE_ICON: Texture2D = preload("res://assets/ui/icons/guild_browse.svg")
 const MORE_ACTIONS_ICON: Texture2D = preload("res://assets/ui/icons/more.svg")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
@@ -740,6 +741,9 @@ func _build_navigation() -> Control:
 	browse_tab_button = Button.new()
 	browse_tab_button.name = "BrowseGuildsButton"
 	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
+	browse_tab_button.icon = GUILD_BROWSE_ICON
+	browse_tab_button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	browse_tab_button.add_theme_constant_override("icon_max_width", 18)
 	browse_tab_button.custom_minimum_size = Vector2(190, 40)
 	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
 	navigation.add_child(browse_tab_button)
@@ -7923,18 +7927,21 @@ func _on_create_pressed() -> void:
 
 
 func _show_web_guild_download_dialog() -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = "Continue in the full client"
-	dialog.dialog_text = "You can browse guilds in the browser demo. Creating, joining or applying to a guild requires the downloadable client."
-	dialog.ok_button_text = "Download client"
-	dialog.cancel_button_text = "Not now"
-	dialog.confirmed.connect(func(): OS.shell_open("https://pokeaether.com/download"))
-	dialog.visibility_changed.connect(func():
-		if not dialog.visible:
-			dialog.queue_free()
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = "GuildWebClientRequiredDialog"
+	dialog.configure(
+		_t("ui.guild.web_client.title"),
+		_t("ui.guild.web_client.message"),
+		_t("ui.guild.web_client.download"),
+		_t("ui.guild.web_client.not_now")
 	)
+	dialog.confirmed.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(dialog.queue_free)
 	add_child(dialog)
-	dialog.popup_centered(Vector2i(500, 200))
+	dialog.popup_centered(Vector2i(560, 250))
 
 
 func _refresh_from_server() -> void:

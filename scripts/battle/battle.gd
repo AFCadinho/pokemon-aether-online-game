@@ -49,7 +49,7 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	action_flow.set_local_player_id("p1")
 	if not replay_is_wild_battle:
 		npc_trainer_display_name = str(first.get("trainerName", ""))
-		var trainer_sprite := "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
+		var trainer_sprite := _resolve_replay_trainer_sprite_id(first, replay_kind)
 		replay_trainer_data = {"name": npc_trainer_display_name, "_battle_sprite_id": trainer_sprite}
 		_show_replay_trainers()
 	else:
@@ -73,6 +73,22 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 		_show_replay_team_preview()
 	_hide_replay_actions()
 	return true
+
+func _resolve_replay_trainer_sprite_id(first: Dictionary, replay_kind: String) -> String:
+	if replay_kind == "ai_sparring":
+		return "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null or not catalog.has_method("resolve_battle_sprite_id"):
+		return ""
+	var trainer_class := str(first.get("trainerClass", "")).strip_edges().to_lower()
+	trainer_class = trainer_class.replace(" ", "_").replace("-", "_")
+	return str(catalog.call(
+		"resolve_battle_sprite_id",
+		str(first.get("battleSpriteId", "")),
+		str(first.get("portraitId", "")),
+		str(first.get("trainerId", "")),
+		"trainer_class_%s" % trainer_class if not trainer_class.is_empty() else ""
+	))
 
 func _show_replay_team_preview() -> void:
 	team_preview_lead_selection_active = true

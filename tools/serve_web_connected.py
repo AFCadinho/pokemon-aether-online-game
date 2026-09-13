@@ -26,7 +26,7 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
     ("PATCH", "/auth/web/party/battle-state"),
     ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
-    ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"),
+    ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"), ("GET", "/auth/web/guilds/me"),
     ("GET", "/auth/web/transit"),
     ("GET", "/auth/web/starter/options"), ("POST", "/auth/web/starter"),
     ("GET", "/auth/web/ai-sparring/statistics"),
