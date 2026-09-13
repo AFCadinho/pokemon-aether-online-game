@@ -107,6 +107,7 @@ func get_hover_card_data(
 		"confirmed_ability": confirmed_ability,
 		"stat_changes": stat_changes,
 		"speed_data": _get_hover_speed_data(pokemon_stats),
+		"owner_speed": _get_owner_speed_data(pokemon_info),
 		"species_metadata": _get_hover_species_metadata(pokemon_stats),
 		"pokemon_info": pokemon_info,
 	}
@@ -258,6 +259,18 @@ func _get_hover_speed_data(pokemon_stats: Dictionary) -> Dictionary:
 		return speed_value as Dictionary
 
 	return {}
+
+func _get_owner_speed_data(pokemon_info: Dictionary) -> Dictionary:
+	var speed_value: Variant = pokemon_info.get("ownerSpeed", pokemon_info.get("owner_speed", {}))
+	if not (speed_value is Dictionary):
+		return {}
+	var speed := speed_value as Dictionary
+	var base := int(speed.get("base", 0))
+	var effective := int(speed.get("effective", 0))
+	var stage := int(speed.get("stage", 0))
+	if base <= 0 or effective <= 0 or stage < -6 or stage > 6:
+		return {}
+	return {"base": base, "effective": effective, "stage": stage}
 
 func _get_hover_species_metadata(pokemon_stats: Dictionary) -> Dictionary:
 	var species_metadata := {}

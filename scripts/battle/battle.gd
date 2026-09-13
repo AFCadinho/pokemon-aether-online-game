@@ -1827,6 +1827,7 @@ func _show_pokemon_hover(
 	var confirmed_ability: String = str(hover_data.get("confirmed_ability", ""))
 	var stat_changes: Dictionary = hover_data.get("stat_changes", {})
 	var speed_data: Dictionary = hover_data.get("speed_data", {})
+	var owner_speed: Dictionary = hover_data.get("owner_speed", {})
 	var species_metadata: Dictionary = hover_data.get("species_metadata", {})
 	_debug_battle_move("pokemon-info parsed player=%s moves=%s item=%s ability=%s statChanges=%s speed=%s info=%s" % [
 		hover_owner_player_id,
@@ -1848,14 +1849,17 @@ func _show_pokemon_hover(
 	var local_hover_owner := _get_local_state_player_id()
 	var is_local_hover_owner := not _is_spectator_battle() and hover_owner_player_id == local_hover_owner
 	if is_local_hover_owner and not public_confirmed_only:
-		var current_speed := _get_owned_hover_current_speed(
-			request_pokemon_data,
-			display_data,
-			confirmed_item,
-			stat_changes
-		)
-		if current_speed > 0:
-			speed_data = {"current": current_speed}
+		if not owner_speed.is_empty():
+			speed_data = owner_speed
+		else:
+			var fallback_speed := _get_owned_hover_current_speed(
+				request_pokemon_data,
+				display_data,
+				confirmed_item,
+				stat_changes
+			)
+			if not fallback_speed.is_empty():
+				speed_data = fallback_speed
 		var own_hover_moves := _get_own_pokemon_hover_moves(hover_owner_player_id, display_data)
 		if not own_hover_moves.is_empty():
 			confirmed_moves = own_hover_moves
@@ -1918,7 +1922,7 @@ func _get_owned_hover_current_speed(
 	display_pokemon_data: Dictionary,
 	confirmed_item: String,
 	stat_changes: Dictionary
-) -> int:
+) -> Dictionary:
 	var stats: Dictionary = {}
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_pokemon_data)
 	if saved_pokemon != null:
@@ -1926,7 +1930,7 @@ func _get_owned_hover_current_speed(
 	stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, request_pokemon_data.get("stats", {}))
 	stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, display_pokemon_data.get("stats", {}))
 	if not stats.has("spe") or int(stats.get("spe", 0)) <= 0:
-		return 0
+		return {}
 
 	var item := confirmed_item.strip_edges()
 	if item == "":
@@ -1938,6 +1942,7 @@ func _get_owned_hover_current_speed(
 		"canEvolve",
 		display_pokemon_data.get("can_evolve", saved_pokemon.can_evolve if saved_pokemon != null else false)
 	))
+	var base_speed := int(stats.get("spe", 0))
 	stats = HeldItemStatModifierService.effective_stats(stats, item, species, can_evolve)
 
 	var current_speed := int(stats.get("spe", 0))
@@ -1946,7 +1951,7 @@ func _get_owned_hover_current_speed(
 		current_speed = int(floor(float(current_speed * (2 + speed_stage)) / 2.0))
 	elif speed_stage < 0:
 		current_speed = int(floor(float(current_speed * 2) / float(2 - speed_stage)))
-	return current_speed
+	return {"base": base_speed, "effective": current_speed, "stage": speed_stage}
 
 func _apply_hover_species_metadata(display_data: Dictionary, species_metadata: Dictionary) -> void:
 	if species_metadata.is_empty():
