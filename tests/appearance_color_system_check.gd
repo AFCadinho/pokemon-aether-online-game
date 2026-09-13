@@ -348,8 +348,9 @@ func _run() -> void:
 		"unisex cosmetic icons keep the current trainer model"
 	)
 	_check(
-		store_source.contains("get_cosmetic_item_icon(item_id, trainer_gender)"),
-		"Store cards use the shared spritesheet-frame icons"
+		store_source.contains("get_cosmetic_item_icon(")
+			and store_source.contains("_preview_gender_for_item(item)"),
+		"Store cards use spritesheet-frame icons for the item's compatible model"
 	)
 	_check(
 		ui_source.contains("_bag_item_icon_gender(item_id)")
