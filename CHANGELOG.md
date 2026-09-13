@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Exchange item requests now show a concise transaction message followed by separate Bag and wallet changes, including creation escrow and cancellation refunds.
+
 - Developer Tools can now temporarily set the current account's training level cap to 100 without changing story progress, Badges, or the trade level cap.
 
 - Wanted items on the Aether Exchange now use the same card grid as other market listings, with a clear fulfillment progress bar.
