@@ -1088,7 +1088,6 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 
 func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> void:
 	var rows := _as_array(set_suggestions.get("suggestions", []))
-	var signature := SET_SUGGESTIONS.signature(set_suggestions)
 	if set_suggestions_loading:
 		parent.add_child(_make_label(_t("battle.calc.guess.loading"), 12, TEXT_MUTED))
 		return
@@ -1184,15 +1183,6 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 			break
 	if not selected_row.is_empty():
 		_add_selected_set_suggestion(workspace, selected_row)
-	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
-	ignore.name = "DismissSetSuggestions"
-	ignore.size_flags_horizontal = Control.SIZE_SHRINK_END
-	ignore.pressed.connect(func() -> void:
-		ignored_set_suggestions[selected_opponent_ref] = signature
-		_close_set_suggestions_popup(false)
-		_render_current_state()
-	)
-	parent.add_child(ignore)
 
 
 func _get_set_suggestion_key(row: Dictionary) -> String:
@@ -1228,24 +1218,48 @@ func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail.add_theme_constant_override("separation", 7)
 	detail_scroll.add_child(detail)
+	var build := _set_suggestion_display_build(row)
+	var detail_header := HBoxContainer.new()
+	detail_header.name = "SetSuggestionDetailHeader"
+	detail_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_header.add_theme_constant_override("separation", 12)
+	detail.add_child(detail_header)
+	var title_column := VBoxContainer.new()
+	title_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_column.add_theme_constant_override("separation", 3)
+	detail_header.add_child(title_column)
 	var selected_label := _make_label(_t("battle.calc.guess.selected").to_upper(), 10, TEXT_ACCENT)
 	selected_label.name = "SetSuggestionSelectedLabel"
-	detail.add_child(selected_label)
+	title_column.add_child(selected_label)
 	var title := _make_popup_label(str(row.get("name", "")), 15, TEXT_PRIMARY)
 	title.name = "SetSuggestionName"
-	detail.add_child(title)
+	title_column.add_child(title)
+	var action_column := VBoxContainer.new()
+	action_column.name = "SetSuggestionPrimaryAction"
+	action_column.custom_minimum_size.x = 205
+	action_column.size_flags_horizontal = Control.SIZE_SHRINK_END
+	action_column.add_theme_constant_override("separation", 3)
+	detail_header.add_child(action_column)
+	var apply := _make_set_suggestion_apply_button(build)
+	action_column.add_child(apply)
+	var action_hint := _make_popup_label(_t("battle.calc.guess.apply_hint"), 9, TEXT_MUTED, 2)
+	action_hint.name = "ApplySetSuggestionHint"
+	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	action_hint.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	action_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	action_column.add_child(action_hint)
 	var build_heading := _make_label(_t("battle.calc.guess.set_details").to_upper(), 10, TEXT_ACCENT)
 	build_heading.name = "SetSuggestionBuildHeading"
 	detail.add_child(build_heading)
-	var build := _as_dictionary(row.get("build", {}))
 	_add_set_suggestion_build(detail, build)
 	_add_set_suggestion_details(detail, row)
-	var action_hint := _make_popup_label(_t("battle.calc.guess.apply_hint"), 11, TEXT_MUTED, 2)
-	action_hint.name = "ApplySetSuggestionHint"
-	detail.add_child(action_hint)
+
+
+func _make_set_suggestion_apply_button(build: Dictionary) -> Button:
 	var apply := _make_toggle_button(_t("battle.calc.guess.apply"), false)
 	apply.name = "ApplySetSuggestion"
-	apply.custom_minimum_size.y = 42
+	apply.custom_minimum_size.y = 40
+	apply.tooltip_text = _t("battle.calc.guess.apply_hint")
 	apply.add_theme_font_size_override("font_size", 13)
 	apply.add_theme_color_override("font_color", TEXT_PRIMARY)
 	apply.add_theme_color_override("font_hover_color", Color.WHITE)
@@ -1255,7 +1269,18 @@ func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	apply.add_theme_stylebox_override("pressed", _make_dropdown_button_style(Color("#0f7697"), Color.WHITE, 2))
 	apply.add_theme_stylebox_override("focus", _make_dropdown_button_style(Color("#123d52"), Color.WHITE, 2))
 	apply.pressed.connect(_apply_set_suggestion.bind(build))
-	detail.add_child(apply)
+	return apply
+
+
+func _set_suggestion_display_build(row: Dictionary) -> Dictionary:
+	var build := _as_dictionary(row.get("build", {})).duplicate(true)
+	var moves := _as_array(build.get("moves", []))
+	if moves.is_empty():
+		var reference := _as_dictionary(row.get("referenceBuild", {}))
+		var reference_moves := _as_array(reference.get("moves", []))
+		if not reference_moves.is_empty():
+			build["moves"] = reference_moves.duplicate(true)
+	return build
 
 
 func _add_set_suggestion_build(parent: VBoxContainer, build: Dictionary) -> void:
@@ -1300,8 +1325,10 @@ func _add_set_suggestion_build_row(
 	value.tooltip_text = value.text
 	value.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	if wrap_value:
+		value.custom_minimum_size.y = 34
 		value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		value.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+		value.clip_text = false
 	parent.add_child(value)
 
 

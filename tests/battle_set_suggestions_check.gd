@@ -60,6 +60,9 @@ func _run() -> void:
 	panel.edited_assumption_fields = {"nature": true, "evs": true}
 	var before := panel.get_defender_assumption_state()
 	var popup_response := response.duplicate(true)
+	# Catalog grouping can omit the effective move list while retaining the
+	# representative variant. The detail card should still show those moves.
+	popup_response["suggestions"][0]["build"]["moves"] = []
 	popup_response["suggestions"][0]["evidence"] = [
 		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
 			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0,
@@ -122,6 +125,7 @@ func _run() -> void:
 	_check(panel.set_suggestions_popup.exclusive, "Suggestion popup blocks input behind its modal layer")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionDetailsScroll", true, false) != null, "Suggestion details scroll independently from the fixed set list")
 	_check(panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) != null, "Suggestion popup has an explicit apply button")
+	_check(panel.set_suggestions_popup.find_child("DismissSetSuggestions", true, false) == null, "Suggestion popup has no redundant blank footer action")
 	var suggestion_list := panel.set_suggestions_popup.find_child("SetSuggestionsList", true, false) as VBoxContainer
 	var suggestion_workspace := panel.set_suggestions_popup.find_child("SetSuggestionsWorkspace", true, false) as HBoxContainer
 	var suggestion_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
@@ -133,16 +137,17 @@ func _run() -> void:
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionSelectedLabel", true, false) != null, "Suggestion details identify the selected set")
 	var apply_button := panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) as Button
 	_check(apply_button != null and apply_button.text == "Calculate with this set" and panel.set_suggestions_popup.find_child("ApplySetSuggestionHint", true, false) != null, "The primary action explains its calculator effect")
+	_check(apply_button != null and apply_button.get_parent().name == "SetSuggestionPrimaryAction" and apply_button.get_parent().get_parent().name == "SetSuggestionDetailHeader", "The calculate action occupies the free top-right area of the detail card")
 	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as PanelContainer
 	var suggestion_item := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueItem", true, false) as Label
 	var suggestion_moves := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueMoves", true, false) as Label
 	var suggestion_nature_label := panel.set_suggestions_popup.find_child("SetSuggestionBuildLabelNature", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
-	_check(suggestion_build != null and suggestion_item != null and suggestion_item.text == "Rocky Helmet" and suggestion_moves != null and suggestion_moves.text.contains("Earthquake"), "Suggested build details are split into scan-friendly labeled rows")
+	_check(suggestion_build != null and suggestion_item != null and suggestion_item.text == "Rocky Helmet" and suggestion_moves != null and suggestion_moves.text.contains("Earthquake") and suggestion_moves.custom_minimum_size.y >= 34.0, "Suggested build details and fallback catalog moves remain visibly allocated")
 	_check(suggestion_nature_label != null and suggestion_nature_label.get_theme_color("font_color") == Color("#e7b65d") and suggestion_item.get_theme_color("font_color") == Color("#f2f0ea"), "Set field labels use distinct accents while their values retain high contrast")
 	var apply_style := apply_button.get_theme_stylebox("normal") as StyleBoxFlat if apply_button != null else null
-	_check(apply_style != null and apply_button.custom_minimum_size.y == 42.0 and apply_style.bg_color == Color("#123d52") and apply_style.border_color.to_html(false) == "8ccbe8" and apply_style.border_color.a >= 0.94, "Calculate with this set is styled as the cyan primary action")
+	_check(apply_style != null and apply_button.custom_minimum_size.y == 40.0 and apply_style.bg_color == Color("#123d52") and apply_style.border_color.to_html(false) == "8ccbe8" and apply_style.border_color.a >= 0.94, "Calculate with this set is styled as the cyan primary action")
 	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HFlowContainer
 	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence summary shows every relevant non-zero category")
 	var evidence_labels: Array[String] = []
