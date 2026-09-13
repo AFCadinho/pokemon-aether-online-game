@@ -62,6 +62,7 @@ func _run() -> void:
 	_check(popup.find_child("GrantFirstThreeButton", true, false) != null, "first-three bulk developer action exists")
 	_check(popup.find_child("GrantAllButton", true, false) != null, "grant-all developer action exists")
 	_check(popup.find_child("ClearAllButton", true, false) != null, "clear-all developer action exists")
+	_check(popup.find_child("LevelCapOverrideButton", true, false) != null, "Trainer Progress exposes the level-cap override")
 	_check(popup.find_child("BadgesTabButton", true, false) != null, "trainer progress exposes a badges tab")
 	_check(popup.find_child("KeyItemsTabButton", true, false) != null, "trainer progress exposes a key-items tab")
 	_check(popup.find_child("StoryTabButton", true, false) != null, "trainer progress exposes a dedicated story tab")

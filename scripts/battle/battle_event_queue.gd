@@ -28,6 +28,9 @@ func clear() -> void:
 func has_pending() -> bool:
 	return not pending_updates.is_empty()
 
+func discard_pending() -> void:
+	pending_updates.clear()
+
 func set_render_completed_callback(callback: Callable) -> void:
 	render_completed_callback = callback
 

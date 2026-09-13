@@ -1,14 +1,14 @@
 extends SceneTree
 
 const SERVICE_PATH := "res://scripts/services/trainer_progress_service.gd"
-const OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
+const TRAINER_PROGRESS_POPUP_PATH := "res://scripts/ui/dev_badge_progress_popup.gd"
 
 var failures: Array[String] = []
 
 
 func _init() -> void:
 	var service_source := FileAccess.get_file_as_string(SERVICE_PATH)
-	var overlay_source := FileAccess.get_file_as_string(OVERLAY_PATH)
+	var popup_source := FileAccess.get_file_as_string(TRAINER_PROGRESS_POPUP_PATH)
 	_check(
 		service_source.contains('DEVELOPER_LEVEL_CAP_OVERRIDE_ENDPOINT := "/game/dev/progression/pokemon-level-cap-override"'),
 		"developer level-cap override uses the protected backend endpoint"
@@ -18,11 +18,11 @@ func _init() -> void:
 		"developer level-cap override service can update the setting"
 	)
 	_check(
-		overlay_source.contains("dev_level_cap_override_button"),
-		"Developer Tools exposes the level-cap override control"
+		popup_source.contains("LevelCapOverrideButton"),
+		"Trainer Progress exposes the level-cap override control"
 	)
 	_check(
-		overlay_source.contains("await PlayerPartyStateService.load_party()"),
+		popup_source.contains('get_node_or_null("/root/PlayerPartyStateService")'),
 		"changing the override refreshes the authoritative party level cap"
 	)
 	if failures.is_empty():
