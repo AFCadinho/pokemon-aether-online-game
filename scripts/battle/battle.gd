@@ -3993,6 +3993,8 @@ func _show_party(force_switch := false) -> void:
 	action_buttons.set_action_disabled("run", force_switch)
 	current_action_view = ActionView.PARTY
 	_update_party_slots()
+	if _is_pvp_battle():
+		_refresh_pvp_switch_cards()
 	moves_grid.visible = false
 	player_party_grid.visible = true
 	opponent_party_grid.visible = true
@@ -11543,6 +11545,10 @@ func _on_party_grid_party_selected(slot: int) -> void:
 	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
 		if local_force_switch:
 			_report_pvp_forced_switch_selection_blocked("switch_ineligible")
+		if _is_pvp_battle():
+			_update_party_slots()
+			_refresh_pvp_switch_cards()
+			current_action_panel.set_message(_t("battle.error.cannot_switch"))
 		return
 
 	var pvp_switch_context := {
@@ -16322,10 +16328,40 @@ func _can_switch_to_selected_pokemon(visual_slot: int, pokemon_data: Dictionary)
 		current_action_panel.set_message(_t("battle.error.cannot_switch"))
 		return false
 
+	if _is_pvp_battle():
+		var canonical_slot := _get_canonical_switch_submit_slot(visual_slot, pokemon_data)
+		# The rendered card can lag behind a received request. Only the latest
+		# participant request determines whether the outgoing choice is legal.
+		var candidate := BattleForceSwitchFlow.find_switch_candidate(canonical_slot, pvp_local_canonical_roster, _get_pvp_switch_request_team())
+		return force_switch_flow.can_switch_to_pokemon_data(candidate, local_state_player_id)
+
 	if not pokemon_data.is_empty():
 		return force_switch_flow.can_switch_to_pokemon_data(pokemon_data, local_state_player_id)
 
 	return force_switch_flow.can_switch_to_slot(visual_slot, local_state_player_id)
+
+
+func _get_pvp_switch_request_team() -> Array:
+	var local_player_id := _get_local_state_player_id()
+	if pvp_response_order != null:
+		var requests: Variant = pvp_response_order.latest_response.get("requests", {})
+		var request: Variant = requests.get(local_player_id, {}) if requests is Dictionary else {}
+		var side: Variant = request.get("side", {}) if request is Dictionary else {}
+		var team: Variant = side.get("pokemon", []) if side is Dictionary else []
+		if team is Array and not team.is_empty():
+			return team
+	return battle_state.get_player_team(local_player_id)
+
+
+func _refresh_pvp_switch_cards() -> void:
+	# This is the interactive selector, not the animation timeline. Refresh its
+	# health from the received request without changing presentation elsewhere.
+	var request_team := _get_pvp_switch_request_team()
+	var cards: Array = []
+	for value: Variant in _get_display_team_data(_get_local_state_player_id()):
+		if value is Dictionary:
+			cards.append(BattleForceSwitchFlow.refresh_switch_card(value, pvp_local_canonical_roster, request_team))
+	player_party_grid.set_party(cards)
 
 func _get_party_grid_selected_pokemon_data(visual_slot: int) -> Dictionary:
 	if player_party_grid != null and player_party_grid.has_method("get_pokemon_data_for_visual_slot"):
