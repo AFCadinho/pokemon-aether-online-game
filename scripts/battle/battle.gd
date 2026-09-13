@@ -243,6 +243,7 @@ const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_pu
 const BATTLE_OWNED_FORM_PROJECTION := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const BATTLE_CALCDEX_ERROR_FEEDBACK := preload("res://scripts/battle/battle_calcdex_error_feedback.gd")
 const BATTLE_CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const BATTLE_DAMAGE_CALC_PERSISTENCE := preload("res://scripts/battle/battle_damage_calc_persistence.gd")
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_battle_presentation_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
@@ -512,7 +513,7 @@ const STAT_STAGE_BADGE_LINE_MODIFIER := "modifier"
 const ABILITY_STAT_MODIFIER_SOURCE_FIELD_CONDITION := "field_condition"
 const ABILITY_STAT_MODIFIER_SOURCE_BOOSTER_ENERGY := "booster_energy"
 const DAMAGE_CALC_ASSUMPTIONS_PATH := "user://damage_calc_assumptions.json"
-const DAMAGE_CALC_ASSUMPTIONS_VERSION := 2
+const DAMAGE_CALC_ASSUMPTIONS_VERSION := 3
 const DAMAGE_CALC_DEFAULT_SCOPE := "gen9nationaldex"
 const BATTLE_LOG_RESPONSIVE_COLLAPSE_WIDTH := 1200
 const BATTLE_LOG_MEMORY_UNSET := -1
@@ -3503,7 +3504,11 @@ func _load_damage_calc_saved_assumptions() -> void:
 		var species_key: String = str(key_value).strip_edges()
 		if species_key == "":
 			continue
-		var assumptions: Dictionary = _sanitize_damage_calc_assumptions(_damage_calc_as_dictionary(species_data.get(key_value, {})))
+		var assumptions: Dictionary = _sanitize_damage_calc_assumptions(
+			BATTLE_DAMAGE_CALC_PERSISTENCE.remove_transient_fields(
+				_damage_calc_as_dictionary(species_data.get(key_value, {}))
+			)
+		)
 		if not assumptions.is_empty():
 			damage_calc_saved_assumptions[species_key] = assumptions
 
@@ -3567,11 +3572,11 @@ func _sanitize_damage_calc_assumptions(assumptions: Dictionary) -> Dictionary:
 	return sanitized
 
 func _get_persistable_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> Dictionary:
-	var edited_assumptions: Dictionary = {}
-	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves", "exactStats"]:
-		if bool(edited_fields.get(key, false)) and assumptions.has(key):
-			edited_assumptions[key] = assumptions.get(key)
-	return _sanitize_damage_calc_assumptions(edited_assumptions)
+	# Stat stages belong to the current active Pokémon and reset on switching.
+	# Persisting them by species lets an old manual 0 override a later public +1.
+	return _sanitize_damage_calc_assumptions(
+		BATTLE_DAMAGE_CALC_PERSISTENCE.select_persistent_fields(assumptions, edited_fields)
+	)
 
 func _sanitize_damage_calc_stat_table(stats: Dictionary, omit_default_ivs: bool) -> Dictionary:
 	var sanitized: Dictionary = {}
@@ -3607,7 +3612,7 @@ func _build_damage_calc_edited_fields(assumptions: Dictionary) -> Dictionary:
 	return edited
 
 func _should_store_damage_calc_assumptions(assumptions: Dictionary, edited_fields: Dictionary) -> bool:
-	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "boosts", "assumedMoves", "replaceMoves"]:
+	for key: String in ["item", "ability", "nature", "status", "evs", "ivs", "assumedMoves", "replaceMoves"]:
 		if not bool(edited_fields.get(key, false)):
 			continue
 		if not assumptions.has(key):
