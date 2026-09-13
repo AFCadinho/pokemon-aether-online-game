@@ -20,7 +20,8 @@ func _run() -> void:
 	var row := {"groupId": "tank", "variantId": "tank-1", "name": "TankChomp", "formatName": "National Dex",
 		"confidence": "strong", "build": build, "referenceBuild": build, "matchingVariantCount": 2, "alternativeBuilds": [],
 		"evidence": [{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
-			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0}]}
+			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0,
+			"conditions": {"defender": {"name": "Garchomp", "boosts": {"def": 1}}}}]}
 	var response := {"success": true, "schemaVersion": 1, "routeRevision": "set-inference-2", "projectionRevision": revision,
 		"opponentRef": ref, "species": "Garchomp", "catalogRevision": "fixture", "suggestions": [row],
 		"variantCount": 2, "observationCount": 2, "complete": true, "state": "matches"}
@@ -31,6 +32,9 @@ func _run() -> void:
 	var leaked := response.duplicate(true)
 	leaked["privateTeam"] = []
 	_check(not bool(Suggestions.normalize_response(leaked, revision, ref).get("success")), "Private fields are rejected")
+	var invalid_conditions := response.duplicate(true)
+	invalid_conditions["suggestions"][0]["evidence"][0]["conditions"]["defender"]["boosts"]["def"] = 7
+	_check(not bool(Suggestions.normalize_response(invalid_conditions, revision, ref).get("success")), "Damage clue conditions reject impossible stat stages")
 	var invalid := build.duplicate(true)
 	invalid["evs"] = {"hp": 252, "def": 252, "spe": 252}
 	_check(not Suggestions.valid_build(invalid), "Illegal EV totals are rejected")
@@ -58,7 +62,8 @@ func _run() -> void:
 	var popup_response := response.duplicate(true)
 	popup_response["suggestions"][0]["evidence"] = [
 		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
-			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0},
+			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0,
+			"conditions": {"defender": {"name": "Garchomp", "boosts": {"def": 1}}}},
 		{"kind": "move", "state": "variant", "turn": 1, "value": "Fire Blast"},
 		{"kind": "speed", "state": "unknown", "turn": 1, "value": "ambiguous",
 			"opponentFirst": true, "viewerMove": "Surf", "opponentMove": "Earthquake"},
@@ -151,7 +156,7 @@ func _run() -> void:
 	var evidence_detail := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) as Label
 	var evidence_row := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceRow", true, false) as PanelContainer
 	_check(evidence_detail != null and evidence_detail.text.contains("Damage taken") and evidence_detail.text.contains("Surf"), "Damage clues state who dealt or took damage and name the move")
-	_check(evidence_row != null and evidence_row.tooltip_text.contains("19.0–21.0%") and evidence_row.tooltip_text.contains("calculated result"), "Hovering a clue explains the observed range and why the set fits")
+	_check(evidence_row != null and evidence_row.tooltip_text.contains("19.0–21.0%") and evidence_row.tooltip_text.contains("Garchomp: Defense +1") and evidence_row.tooltip_text.contains("calculated result"), "Hovering a clue explains the observed range, active stat stages and why the set fits")
 	var clue_tooltip_style := evidence_row.theme.get_stylebox("panel", "TooltipPanel") as StyleBoxFlat if evidence_row != null and evidence_row.theme != null else null
 	_check(clue_tooltip_style != null and clue_tooltip_style.bg_color == Color("#07111cf8") and clue_tooltip_style.shadow_size == 9 and clue_tooltip_style.border_width_bottom == 2, "Clue hover cards use the styled Calcdex surface instead of Godot's default tooltip")
 	_check(evidence_row != null and evidence_row.theme.get_color("font_color", "TooltipLabel") == Color("#f2f0ea"), "Clue hover text uses the readable Calcdex palette")
