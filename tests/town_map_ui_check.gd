@@ -135,7 +135,15 @@ func _run() -> void:
 	_check(popup.detail_interiors_container.columns == 2, "Town Map interiors use a compact two-column grid")
 	_check(popup.detail_connections_container.columns == 2, "Connected locations use a two-column navigation grid")
 	_check(popup.detail_interiors_container.get_child_count() == 3, "Pallet Town interiors come from the world access catalog")
-	_check(popup.detail_interiors_container.get_child(0) is Label, "Interiors are displayed separately from route navigation")
+	var first_interior := popup.detail_interiors_container.get_child(0) as HBoxContainer
+	_check(first_interior != null, "Interiors are displayed separately from route navigation")
+	_check(
+		first_interior != null
+		and first_interior.get_child_count() == 2
+		and first_interior.get_child(0) is TextureRect
+		and (first_interior.get_child(0) as TextureRect).texture != null,
+		"Town Map interiors use a browser-safe icon"
+	)
 	popup._refresh_details("kanto_pewter_city")
 	_check(popup.detail_interiors_container.get_child_count() == 4, "Pewter City lists all accessible interiors")
 	var pewter_connections: Array[String] = []
@@ -171,6 +179,12 @@ func _run() -> void:
 	_check(popup.detail_description_label.text != "", "Planned route descriptions appear in the detail panel")
 	popup._refresh_details("kanto_pallet_town")
 	_check(popup.legend_kind_labels.size() == 3, "Town Map distinguishes settlements, routes, and special locations")
+	_check(popup.legend_kind_icons.size() == 3, "Every Town Map legend category has an icon")
+	for legend_icon_value: Variant in popup.legend_kind_icons.values():
+		var legend_icon := legend_icon_value as TextureRect
+		_check(legend_icon != null and legend_icon.texture != null, "Town Map legend icon is browser-safe")
+	var current_icon := popup.current_location_chip.find_child("CurrentLocationIcon", true, false) as TextureRect
+	_check(current_icon != null and current_icon.texture != null, "Current Town Map location uses a browser-safe icon")
 	_check(
 		popup.detail_connections_container.get_child_count() > 0
 		and popup.detail_connections_container.get_child(0) is Button,
@@ -179,6 +193,10 @@ func _run() -> void:
 	_check(
 		(popup.detail_connections_container.get_child(0) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL,
 		"Connected-location buttons fill their grid cells"
+	)
+	_check(
+		(popup.detail_connections_container.get_child(0) as Button).icon != null,
+		"Connected-location buttons use a browser-safe icon"
 	)
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
