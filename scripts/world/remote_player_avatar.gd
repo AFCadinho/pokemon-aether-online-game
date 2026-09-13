@@ -1848,13 +1848,16 @@ func _update_animation(is_moving: bool) -> void:
 		current_mount_id, current_appearance_signature, current_body_movement_style]
 	if next_state == _rendered_animation_state:
 		if is_moving:
-			_sync_all_part_sprites_to_body()
+			# The ordinary layer sync restores idle head frames and resets paused
+			# clothing frames. Mounted layers must retain the mount's mask frame.
+			if _uses_static_activity_movement_pose():
+				_sync_mounted_rider_frame()
+			else:
+				_sync_all_part_sprites_to_body()
 			_sync_mount_rider_delta()
 			_sync_mount_foreground_frame()
 		return
 	_rendered_animation_state = next_state
-	_apply_directional_appearance_layer_order()
-	_sync_activity_layer_offsets()
 	var uses_static_pose := _uses_static_activity_movement_pose()
 	var should_animate_movement := is_moving and not uses_static_pose
 	var animation_name := _get_walk_animation_name(last_direction) \
@@ -1879,6 +1882,10 @@ func _update_animation(is_moving: bool) -> void:
 			sprite.stop()
 	_sync_all_part_sprites_to_body()
 	_sync_mount_animation(is_moving, last_direction)
+	# Offset and layer order resolve direction from the body animation, so
+	# update them only after all sprites have adopted the new facing direction.
+	_apply_directional_appearance_layer_order()
+	_sync_activity_layer_offsets()
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 	_apply_activity_visual_offset()
