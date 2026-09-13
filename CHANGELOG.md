@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Item Buyer sales now show a confirmation with the item, quantity, and payout before removing anything from your Bag.
+
 - Fixed the Route 3 Pokémon Center market seller using Professor Oak's fallback portrait instead of the clerk portrait.
 
 - Item requests in My Exchange now use clear compact cards with their unit price, status, and fulfillment progress.
