@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Missed attacks now aim at their target while the defending Pokémon visibly dodges to the side and returns to its position.
+- Missed attacks now aim at their target while the defending Pokémon dodges to the side in sync with the trainer's dodge callout, then returns to its position.
 
 - The battle calculator now lets players select any matchup and run preview calculations before either lead Pokémon has been chosen.
 
