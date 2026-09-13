@@ -47,6 +47,8 @@ func _check_pokedex_runtime_translation() -> void:
 	var dex_selector := overlay.get("pokedex_dex_selector") as OptionButton
 	var name_label := overlay.get("pokedex_name_label") as Label
 	var tab_buttons := overlay.get("pokedex_tab_buttons") as Dictionary
+	var variant_buttons := overlay.get("pokedex_variant_buttons") as Dictionary
+	var shiny_button := variant_buttons.get("shiny") as Button
 	var moves_button := tab_buttons.get("moves") as Button
 	var detail_stack := overlay.get("pokedex_detail_stack") as VBoxContainer
 	_check(search != null and search.placeholder_text == "Zoek op naam of nummer...", "Pokédex search renders in Dutch")
@@ -62,6 +64,10 @@ func _check_pokedex_runtime_translation() -> void:
 	)
 	_check(name_label != null and name_label.text == "Selecteer een soort", "Pokédex empty header renders in Dutch")
 	_check(moves_button != null and moves_button.text == "Aanvallen", "Pokédex tabs render in Dutch")
+	_check(
+		shiny_button != null and shiny_button.text == "Shiny" and shiny_button.icon != null,
+		"Pokédex Shiny view uses a browser-safe icon"
+	)
 	_check(
 		detail_stack != null and _tree_contains_text(detail_stack, "POKÉDEXSTATUS"),
 		"Pokédex empty detail renders in Dutch"

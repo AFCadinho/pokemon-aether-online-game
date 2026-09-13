@@ -12107,6 +12107,10 @@ func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Bu
 	var button := Button.new()
 	button.name = "PokedexVariant_%s" % variant_id
 	_set_localized_control_property(button, "text", label_key)
+	if variant_id == "shiny":
+		button.icon = GLOBAL_SHINY_BUFF_ICON
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 18)
 	button.custom_minimum_size = Vector2(0, 32)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE

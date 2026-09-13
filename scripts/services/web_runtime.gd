@@ -38,7 +38,7 @@ static func gameplay_url(url: String) -> String:
 static func browser_gameplay_url(url: String) -> String:
 	# Transport mapping only. The proxy and account service each keep an
 	# explicit route allowlist; this never grants access to desktop endpoints.
-	for resource: String in ["boxes", "pokemon", "party", "inventory", "wallet", "markets", "trainers"]:
+	for resource: String in ["boxes", "pokemon", "party", "inventory", "wallet", "markets", "trainers", "pokedex", "items"]:
 		var source := "/game/" + resource
 		var offset := url.find(source)
 		if offset < 0:

@@ -9,8 +9,10 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for path: String in ["boxes/0", "pokemon/storage/move", "party/heal", "party/battle-state", "wallet/rewards/trainer-battle", "markets/standard", "trainers/zoe/progress"]:
+	for path: String in ["boxes/0", "pokemon/storage/move", "party/heal", "party/battle-state", "wallet/rewards/trainer-battle", "markets/standard", "trainers/zoe/progress", "pokedex/species", "pokedex/species/pidgey", "items/search"]:
 		_check(Runtime.browser_gameplay_url("http://localhost/api/game/" + path) == "http://localhost/api/auth/web/" + path, "browser route: " + path)
+	var pokedex_service_source := FileAccess.get_file_as_string("res://scripts/services/pokedex_service.gd")
+	_check(_function(pokedex_service_source, "_request_json").contains("WebRuntime.gameplay_url(url)"), "Pokédex requests use the scoped browser transport")
 	for path: String in ["trades", "loans", "guilds/me/bank", "aether-clash/challenges", "dev/pokemon", "party-escape"]:
 		_check(Runtime.browser_gameplay_url("/game/" + path) == "/game/" + path, "restricted route is not remapped: " + path)
 	var source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
