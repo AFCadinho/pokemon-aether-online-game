@@ -45,6 +45,12 @@ func _run() -> void:
 	var mount := {"itemId": "cyclizar-mount", "name": "Cyclizar Mount", "quantity": 1}
 	var listing := {"id": "preview-1", "assetType": "pokemon", "asset": pokemon, "quantity": 1, "unitPrice": 100, "totalPrice": 100, "status": "active"}
 	var wish := {"id": "preview-wish", "item": item, "quantity": 10, "unitPrice": 100, "totalPrice": 1000, "status": "active", "isMine": false}
+	var wishlist_items: Array = []
+	for index in range(20):
+		wishlist_items.append(item.merged({
+			"itemId": "preview-item-%d" % index,
+			"name": "Preview Item %d" % index,
+		}, true))
 	var listings: Array = []
 	for index in range(20):
 		var entry := listing.duplicate(true)
@@ -71,7 +77,7 @@ func _run() -> void:
 			popup.sellable_pokemon = [pokemon]
 			popup.browse_listings = listings
 			popup.browse_wishes = [wish]
-			popup.wishlist_catalog = [item]
+			popup.wishlist_catalog = wishlist_items
 			popup.my_wishes = [wish.merged({"isMine": true}, true)]
 			var own_listing := listing.merged({"status": "sold" if screen == "history" else "active"}, true)
 			if screen == "mine-items":
@@ -130,6 +136,8 @@ func _run() -> void:
 				var hover_ivs := exchange_hover_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
 				_check(not hover_stats.visible and hover_ivs.visible, description + ": hover replaces calculated stats with IVs")
 				_check_bounds(exchange_hover_card, popup, description)
+			if screen == "request":
+				_check(popup.list_container.columns == 3, description + ": item grid makes room for request details")
 			if screen in ["items", "tm", "outfit", "mount"]:
 				var item_icon := popup.list_container.get_child(0).find_child("BrowseCardIcon", true, false) as TextureRect
 				_check(item_icon != null, description + ": item offer has an icon")

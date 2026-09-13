@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed item request details and their action button extending beyond the Aether Exchange window.
+
 - Mount animation layers now update only when their animation frame changes, reducing rendering work while riding through detailed areas such as Cerulean City.
 
 - Trainers can now browse and buy cosmetics for either character model, with compatible icons and clean outfit previews that show only the included pieces.
