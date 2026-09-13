@@ -1213,6 +1213,9 @@ func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	var title := _make_popup_label(str(row.get("name", "")), 15, TEXT_PRIMARY)
 	title.name = "SetSuggestionName"
 	detail.add_child(title)
+	var build_heading := _make_label(_t("battle.calc.guess.set_details").to_upper(), 10, TEXT_ACCENT)
+	build_heading.name = "SetSuggestionBuildHeading"
+	detail.add_child(build_heading)
 	var build := _as_dictionary(row.get("build", {}))
 	var preview := _make_popup_label(_set_suggestion_build_text(build), 12, TEXT_SECONDARY, 3)
 	preview.name = "SetSuggestionBuild"
@@ -1269,15 +1272,63 @@ func _add_set_suggestion_details(parent: VBoxContainer, row: Dictionary) -> void
 	var count := int(row.get("matchingVariantCount", 1))
 	if count > 1:
 		parent.add_child(_make_popup_label(_t("battle.calc.guess.alternatives", {"count": count}), 11, TEXT_MUTED))
+	var heading := _make_label(_t("battle.calc.guess.battle_clues").to_upper(), 10, TEXT_ACCENT)
+	heading.name = "SetSuggestionEvidenceHeading"
+	parent.add_child(heading)
+	var hint := _make_popup_label(_t("battle.calc.guess.clue_hover_hint"), 10, TEXT_MUTED, 2)
+	hint.name = "SetSuggestionEvidenceHint"
+	parent.add_child(hint)
 	for item: Dictionary in row.get("evidence", []):
 		var kind := str(item.get("kind", ""))
 		var state := str(item.get("state", "unknown"))
-		var value := str(item.get("value", "")) if kind in ["move", "item", "ability"] else _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
+		var value := _set_suggestion_evidence_label(item)
 		var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
 		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
-		var explanation := _make_popup_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 11, color)
+		var evidence_row := PanelContainer.new()
+		evidence_row.name = "SetSuggestionEvidenceRow"
+		evidence_row.mouse_filter = Control.MOUSE_FILTER_STOP
+		evidence_row.mouse_default_cursor_shape = Control.CURSOR_HELP
+		evidence_row.tooltip_text = _set_suggestion_evidence_tooltip(item)
+		evidence_row.add_theme_stylebox_override("panel", _make_stylebox(Color(color, 0.055), Color(color, 0.28), 6, 7.0, 1.0))
+		parent.add_child(evidence_row)
+		var evidence_content := HBoxContainer.new()
+		evidence_content.add_theme_constant_override("separation", 8)
+		evidence_row.add_child(evidence_content)
+		var explanation := _make_popup_label("%s  %s" % [symbol, value], 11, color)
 		explanation.name = "SetSuggestionEvidenceDetail"
-		parent.add_child(explanation)
+		explanation.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		explanation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		evidence_content.add_child(explanation)
+		var state_label := _make_label(_t("battle.calc.guess." + state), 10, color)
+		state_label.name = "SetSuggestionEvidenceState"
+		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		evidence_content.add_child(state_label)
+
+
+func _set_suggestion_evidence_label(item: Dictionary) -> String:
+	var kind := str(item.get("kind", ""))
+	if kind in ["move", "item", "ability"]:
+		return str(item.get("value", ""))
+	if kind == "damage":
+		var key := "battle.calc.guess.damage_taken" if item.get("direction") == "own-to-opponent" else "battle.calc.guess.damage_dealt"
+		return _t(key, {"move": item.get("move", ""), "turn": item.get("turn", 0)})
+	return _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
+
+
+func _set_suggestion_evidence_tooltip(item: Dictionary) -> String:
+	var kind := str(item.get("kind", ""))
+	var observation := ""
+	if kind == "damage":
+		var range_text := "%0.1f–%0.1f%%" % [float(item.get("observedMin", 0.0)), float(item.get("observedMax", 0.0))]
+		var key := "battle.calc.guess.damage_taken_detail" if item.get("direction") == "own-to-opponent" else "battle.calc.guess.damage_dealt_detail"
+		observation = _t(key, {"move": item.get("move", ""), "range": range_text, "turn": item.get("turn", 0)})
+	elif kind == "speed":
+		var order_key := "battle.calc.guess.speed_first_detail" if bool(item.get("opponentFirst", false)) else "battle.calc.guess.speed_second_detail"
+		observation = _t(order_key, {"opponent_move": item.get("opponentMove", ""), "viewer_move": item.get("viewerMove", ""), "turn": item.get("turn", 0)})
+	else:
+		observation = _set_suggestion_evidence_label(item)
+	return "%s\n%s" % [observation, _t("battle.calc.guess.clue_result_" + str(item.get("state", "unknown")))]
 
 
 func _close_set_suggestions_popup(render_after := true) -> void:

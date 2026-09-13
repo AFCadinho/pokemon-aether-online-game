@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Opponent-set clues now distinguish damage dealt from damage taken, show the move and turn at a glance, and reveal the observed range and comparison details on hover.
+
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
