@@ -1,5 +1,7 @@
 extends SceneTree
 
+const MountServiceScript := preload("res://scripts/services/mount_service.gd")
+
 var failures := 0
 
 func _init() -> void:
@@ -39,6 +41,30 @@ func _run() -> void:
 	_check(body.animation == &"walk_right" and body.is_playing(), "starting movement starts walking")
 	avatar._update_animation(false)
 	_check(body.animation == &"idle_right" and not body.is_playing(), "stopping movement restores idle")
+	state.facingDirection = "right"
+	state.movement = {
+		"isMoving": true,
+		"activityStyle": "ride",
+		"mountId": "cyclizar",
+		"startPosition": {"x": 64, "y": 32},
+		"targetPosition": {"x": 96, "y": 32},
+		"duration": 0.065,
+	}
+	state.position.x = 96
+	avatar.apply_state(state)
+	avatar.mount_sprite.frame = 2
+	var expected_rider_position: Vector2 = avatar.base_rider_position + Vector2(
+		MountServiceScript.get_rider_frame_offset("cyclizar", "right", 2)
+	)
+	_check(
+		avatar.rider_node.position == expected_rider_position,
+		"remote rider follows Cyclizar's current animation frame"
+	)
+	_check(
+		avatar.mount_foreground_sprite.frame == avatar.mount_sprite.frame,
+		"remote mount foreground follows Cyclizar's current animation frame"
+	)
+	state.erase("movement")
 	parent.hide()
 	state.position.x = 128
 	avatar.apply_state(state)

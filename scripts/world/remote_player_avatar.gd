@@ -790,6 +790,7 @@ func _create_visual() -> void:
 		rider_node = look_node.get_node_or_null("Rider") as Node2D
 		if rider_node != null:
 			base_rider_position = rider_node.position
+		_connect_mount_frame_sync()
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
@@ -847,6 +848,19 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
+	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
+
+
+func _connect_mount_frame_sync() -> void:
+	if mount_sprite == null:
+		return
+	if not mount_sprite.frame_changed.is_connected(_on_mount_frame_changed):
+		mount_sprite.frame_changed.connect(_on_mount_frame_changed)
+
+
+func _on_mount_frame_changed() -> void:
+	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 
 
@@ -858,7 +872,7 @@ func _sync_mount_foreground_frame() -> void:
 	mount_foreground_sprite.animation = mount_sprite.animation
 	mount_foreground_sprite.frame = mount_sprite.frame
 	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
-	mount_foreground_sprite.stop()
+	mount_foreground_sprite.pause()
 
 
 func _sync_mount_rider_delta() -> void:
