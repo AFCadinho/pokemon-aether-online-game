@@ -876,11 +876,35 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 			_open_set_suggestions_popup()
 	)
 	parent.add_child(button)
+	if evidence_backed_count > 0 and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
+		_start_set_suggestion_attention_pulse(button)
 	if not set_suggestion_undo.is_empty():
 		var undo := _make_toggle_button(_t("battle.calc.guess.undo"), false)
 		undo.name = "UndoSetSuggestion"
 		undo.pressed.connect(_undo_set_suggestion)
 		parent.add_child(undo)
+
+
+func _start_set_suggestion_attention_pulse(button: Button) -> void:
+	var resting_background := Color(TEXT_ACCENT, 0.06)
+	var resting_border := Color(TEXT_ACCENT, 0.32)
+	var resting_glow := Color(TEXT_ACCENT, 0.12)
+	var lit_background := Color(TEXT_ACCENT, 0.16)
+	var lit_border := Color(TEXT_ACCENT, 0.95)
+	var lit_glow := Color(TEXT_ACCENT, 0.52)
+	var normal_style := _make_dropdown_button_style(resting_background, resting_border)
+	normal_style.shadow_color = resting_glow
+	normal_style.shadow_size = 4
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.set_meta("set_suggestion_attention_pulse", true)
+	var pulse := button.create_tween().set_loops()
+	pulse.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	pulse.tween_property(normal_style, "bg_color", lit_background, 0.9)
+	pulse.parallel().tween_property(normal_style, "border_color", lit_border, 0.9)
+	pulse.parallel().tween_property(normal_style, "shadow_color", lit_glow, 0.9)
+	pulse.tween_property(normal_style, "bg_color", resting_background, 0.9)
+	pulse.parallel().tween_property(normal_style, "border_color", resting_border, 0.9)
+	pulse.parallel().tween_property(normal_style, "shadow_color", resting_glow, 0.9)
 
 
 func _open_set_suggestions_popup() -> void:
