@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Pokémon Summary tabs and front/back sprite switching now respond smoothly in the browser.
 - Currency and navigation symbols now display correctly throughout the browser game, including global buffs and login.
 - The browser game now opens with a clearer PokeAether start screen, a simple play button and a link to the smoother, higher-quality game client.
 - Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.

@@ -28,6 +28,17 @@ func _init() -> void:
 	_check(first_texture != null and first_texture.region == Rect2(0, 0, 4, 4), "atlas frame region is preserved")
 	_check(first_texture != null and second_texture != null and first_texture.filter_clip and second_texture.filter_clip,
 		"linear filtering is clipped to each web sprite frame to prevent atlas seams")
+	_check(
+		service.call("_calculate_visual_bounds", {
+			"frame_width": 4,
+			"frame_height": 4,
+			"frames": [
+				{"x": 0, "y": 0, "w": 4, "h": 4},
+				{"x": 4, "y": 0, "w": 4, "h": 4},
+			],
+		}, image) == Rect2(0, 0, 4, 4),
+		"downloaded sheets calculate reusable visual bounds before GPU upload"
+	)
 	_check(str(service.call("_normalize_segment", "Mr. Mime_Form")) == "mr-mime-form", "asset paths are normalized safely")
 	_check(str(service.call("_catalog_style", "animated")) == "animated", "normal animated sprites are the browser default")
 	_check(str(service.call("_catalog_style", "pixel")) == "pixel", "Gen 5 remains available as the pixel style")
@@ -44,6 +55,8 @@ func _init() -> void:
 		"browser sprite downloads avoid unnecessary CORS preflight headers")
 	_check(service_source.contains("PREFETCH_CONCURRENCY := 4") and service_source.contains("_in_flight"),
 		"background prefetching is bounded and concurrent requests are deduplicated")
+	_check(service_source.contains('"visual_bounds": visual_bounds'),
+		"prefetched sprite results retain their CPU-calculated visual bounds")
 	var sprite_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
 	_check(sprite_source.contains("_load_cached_web_sprite_frames") and sprite_source.find("_load_cached_web_sprite_frames") < sprite_source.find("sprite_frames_cache.has"),
 		"battle sprites consume prefetched web sheets before any local HOME fallback")
