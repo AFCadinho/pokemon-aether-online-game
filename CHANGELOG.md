@@ -4,6 +4,10 @@
 
 - Fainted Pokémon remain available for hypothetical damage calculations, and calculator errors no longer replace the selected matchup with question marks.
 
+- Item Buyer sales now show a confirmation with the item, quantity, and payout before removing anything from your Bag.
+
+- Fixed the Route 3 Pokémon Center market seller using Professor Oak's fallback portrait instead of the clerk portrait.
+
 - Item requests in My Exchange now use clear compact cards with their unit price, status, and fulfillment progress.
 
 - The battle calculator's set-suggestion button now gently pulses when battle evidence supports a match, then opens a clearer set picker with simpler evidence and calculator actions.
