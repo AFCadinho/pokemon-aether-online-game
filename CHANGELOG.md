@@ -1,66 +1,47 @@
 # Changelog
 
-## Unreleased
+## 0.3.78 - 2026-09-13
 
-- Missed attacks now aim at their target while the defending Pokémon dodges to the side in sync with the trainer's dodge callout, then returns to its position.
+### Battles and calculator
 
-- The battle calculator now lets players select any matchup and run preview calculations before either lead Pokémon has been chosen.
+- Missed attacks now stay aimed at their target while the defending Pokémon dodges and then returns to its place.
+- You can use the battle calculator before either player has chosen their first Pokémon.
+- Suggested opponent sets remain visible as clearly marked close matches when no exact match is left.
+- You can select an opponent set by clicking anywhere on its card.
+- Fainted Pokémon remain available for test calculations, and an error no longer replaces your chosen matchup with question marks.
+- The set-suggestion button gently pulses when the battle reveals a likely match. The set picker also explains the clues and available actions more clearly.
+- PvP switches now use the latest battle information, so an old party card can no longer send out a fainted Pokémon.
+- Leaving a battle you are watching now waits for the current action to finish, preventing the game from closing unexpectedly.
 
-- Opponent set suggestions now keep clearly labelled closest matches visible when later clues rule out every exact catalog set, while new exact evidence can draw attention again.
+### Aether Exchange and items
 
-- Opponent set suggestions can now be selected by clicking anywhere on their card, including the description and clue count.
+- The Item Buyer now asks you to confirm the item, amount, and payment before removing anything from your Bag.
+- Item requests in My Exchange now use clear, compact cards showing the price per item, status, and delivery progress.
+- Creating or cancelling an item request now clearly shows what changed in your Bag and wallet, including reserved money and refunds.
+- Wanted items now use the same card layout as other Aether Exchange listings and include a clear progress bar.
+- Both players now receive a message in their chosen language when items are delivered through a request.
+- Item requests can now be completed in parts. Each delivery updates the progress and pays the offered price per item.
+- The Item Dex automatically loads ten more matching items when you scroll down.
+- Item-request details and buttons now remain inside the Aether Exchange window.
 
-- Fainted Pokémon remain available for hypothetical damage calculations, and calculator errors no longer replace the selected matchup with question marks.
+### Replays and browser play
 
-- Item Buyer sales now show a confirmation with the item, quantity, and payout before removing anything from your Bag.
+- Wild, Trainer, and PvP Battle Replays can now be shared just like AI Sparring replays.
+- Wild Battle Replays now show the Poké Ball animation and a successful catch instead of ending suddenly.
+- Animated Pokémon in browser battles now load more reliably and use fewer resources.
+- Browser login now explains when your Trainer is outside the area supported by the browser version.
+- After a connection problem, players now return to the shared world automatically instead of appearing only in chat.
 
-- Fixed the Route 3 Pokémon Center market seller using Professor Oak's fallback portrait instead of the clerk portrait.
+### World and interface
 
-- Item requests in My Exchange now use clear compact cards with their unit price, status, and fulfillment progress.
-
-- The battle calculator's set-suggestion button now gently pulses when battle evidence supports a match, then opens a clearer set picker with simpler evidence and calculator actions.
-
-- Aether Exchange item requests now show a concise transaction message followed by separate Bag and wallet changes, including creation escrow and cancellation refunds.
-
-- Leaving a spectated battle now waits for active animations to stop, preventing a client crash when battle events are still being shown.
-
-- The launcher now repairs incomplete core music packs, and desktop releases verify their required music before building.
-
-- Developer Tools can now temporarily set the current account's training level cap to 100 without changing story progress, Badges, or the trade level cap.
-
-- Wanted items on the Aether Exchange now use the same card grid as other market listings, with a clear fulfillment progress bar.
-
-- Both sides of an Aether Exchange item-request delivery now receive a localized system message with the result.
-
-- Movement through large maps now reuses their collision and terrain layers instead of searching the complete map again at every tile.
-
-- Item requests on the Aether Exchange can now be filled in parts, show delivery progress, and pay the offered price per item.
-
-- The Item Dex now loads the next ten matching items automatically when players scroll down.
-
-- Fixed item request details and their action button extending beyond the Aether Exchange window.
-
-- Mount animation layers now update only when their animation frame changes, reducing rendering work while riding through detailed areas such as Cerulean City.
-
-- Trainers can now browse and buy cosmetics for either character model, with compatible icons and clean outfit previews that show only the included pieces.
-
-- Guild Leaders can now transfer leadership to another member or disband a solo Guild before joining another Guild.
-
-- Cerulean City's original nighttime lighting has been restored while retaining the movement performance improvements.
-
-- PvP switch selections now check the latest battle status, preventing an outdated party card from submitting a fainted Pokémon.
-
-- Browser battles now load their animated Gen 5 Pokémon sprites through the game origin, preventing the Pokémon HOME placeholders from remaining visible when browser cross-origin handling rejects an otherwise valid R2 response.
-
-- Players now reconnect to the shared overworld automatically after a failed connection instead of remaining visible only in chat.
-
-- Available Wild, PvE and PvP Battle Replays now show the same sharing action as AI Sparring replays.
-
-- Wild Battle Replays now show the Ball animation and successful catch instead of stopping abruptly on the final turn.
-
-- Browser battles now load Gen 5 animated Pokémon sprites more reliably and with substantially lower WebGL texture overhead instead of remaining on the Pokémon HOME fallback.
-
-- Browser login now explains when your Trainer is outside the supported browser area instead of silently returning to the login screen.
+- The Route 3 Pokémon Center seller now shows the clerk's portrait instead of Professor Oak.
+- You can browse and buy cosmetics for either character model. Previews show only the included pieces and use matching icons.
+- Guild Leaders can transfer leadership to another member. Leaders of a solo Guild can disband it before joining another Guild.
+- Cerulean City's original nighttime lighting has been restored without losing the recent movement improvements.
+- Travelling through large maps is now smoother.
+- Riding a mount through detailed places such as Cerulean City now runs more smoothly.
+- The launcher now repairs incomplete music downloads, and desktop releases check that all required music is included.
+- Testers can temporarily raise their account's training level limit to 100 without changing story progress, Badges, or the trading limit.
 
 ## 0.3.76 - 2026-09-12
 
