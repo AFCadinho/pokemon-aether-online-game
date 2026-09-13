@@ -137,6 +137,10 @@ func _build_frames(metadata: Dictionary, image: Image) -> SpriteFrames:
 		var texture := AtlasTexture.new()
 		texture.atlas = sheet_texture
 		texture.region = Rect2(region)
+		# Battle sprites use linear filtering. Clip sampling to this atlas region
+		# so transparent frame edges cannot borrow dark pixels from a neighbouring
+		# animation frame and render them as long horizontal or vertical seams.
+		texture.filter_clip = true
 		result.add_frame(IDLE_ANIMATION, texture, maxf(float(definition.get("duration", 1.0)), 0.01))
 	return result if result.get_frame_count(IDLE_ANIMATION) > 0 else null
 
