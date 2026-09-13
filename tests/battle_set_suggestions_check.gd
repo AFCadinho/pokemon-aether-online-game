@@ -72,6 +72,7 @@ func _run() -> void:
 	var evidence_backed_toggle := host.find_child("SetSuggestionsToggle", true, false) as Button
 	_check(evidence_backed_toggle != null, "Inspector keeps the compact suggestion opener")
 	_check(evidence_backed_toggle.text == "Set suggestions (3)" and evidence_backed_toggle.get_theme_color("font_color") == Color("#8ccbe8"), "Evidence-backed suggestions announce their available match count")
+	_check(evidence_backed_toggle.has_meta("set_suggestion_attention_pulse") and (evidence_backed_toggle.get_theme_stylebox("normal") as StyleBoxFlat).shadow_size == 4, "Evidence-backed suggestions receive a soft repeating attention glow")
 	_check(host.find_child("ApplySetSuggestion", true, false) == null, "Suggestion cards do not expand the inspector layout")
 	var catalog_only_response := popup_response.duplicate(true)
 	catalog_only_response["observationCount"] = 0
@@ -83,6 +84,7 @@ func _run() -> void:
 	panel._add_set_suggestions(catalog_only_host)
 	var catalog_only_toggle := catalog_only_host.find_child("SetSuggestionsToggle", true, false) as Button
 	_check(catalog_only_toggle.text == "Set suggestions" and catalog_only_toggle.get_theme_color("font_color") == Color("#f2f0ea"), "Catalog-only possibilities remain available without a misleading new-match badge")
+	_check(not catalog_only_toggle.has_meta("set_suggestion_attention_pulse"), "Catalog-only possibilities do not pulse for attention")
 	panel.show_set_suggestions(ref, revision, popup_response)
 	panel._open_set_suggestions_popup()
 	await process_frame
