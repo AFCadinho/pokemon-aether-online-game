@@ -39,6 +39,8 @@ func _run() -> void:
 		"direction": "opponent-to-own", "move": "Earthquake", "observedMin": 35.0, "observedMax": 42.0})
 	_check(Suggestions.signature(response) != Suggestions.signature(new_turn_clue), "A new clue from a later turn reannounces an ignored suggestion")
 	var panel := CalcPanel.new()
+	_check(panel._format_observed_damage_range(78.15, 78.24) == "≈78.2%", "A narrow interval that rounds to one visible value is shown as an approximation")
+	_check(panel._format_observed_damage_range(78.2, 78.2) == "78.2%", "An exact observed percentage is not rendered as a duplicate range")
 	var content := VBoxContainer.new()
 	content.name = "VBoxContainer"
 	panel.add_child(content)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Narrow observed damage intervals now appear as one approximate percentage instead of repeating the same rounded value twice.
+
 - Battle-clue hover cards now use Calcdex styling instead of Godot's default tooltip appearance.
 
 - Opponent-set clues now distinguish damage dealt from damage taken, show the move and turn at a glance, and reveal the observed range and comparison details on hover.
