@@ -18,6 +18,7 @@ BUILD_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 RELEASE_VERSION = re.compile(r"^[0-9]+(?:\.[0-9]+){1,2}(?:[-+][A-Za-z0-9._-]+)?$")
 RELEASE_MARKER = "<!-- POKEAETHER_RELEASE_CONFIG -->"
 SPRITE_SIDES = ("front", "back", "shiny_front", "shiny_back")
+SPRITE_STYLES = ("animated", "pixel")
 
 
 def main() -> None:
@@ -26,8 +27,11 @@ def main() -> None:
     parser.add_argument("--release-version", required=True)
     parser.add_argument("--asset-base-url", required=True)
     parser.add_argument("--web-url", required=True)
-    for side in SPRITE_SIDES:
-        parser.add_argument(f"--sprite-{side.replace('_', '-')}-version", required=True)
+    for style in SPRITE_STYLES:
+        for side in SPRITE_SIDES:
+            parser.add_argument(
+                f"--sprite-{style}-{side.replace('_', '-')}-version", required=True
+            )
     parser.add_argument("--export-dir", type=Path, default=ROOT / "builds/web")
     parser.add_argument("--pages-dir", type=Path, default=ROOT / "builds/web-pages")
     parser.add_argument("--r2-dir", type=Path, default=ROOT / "builds/web-r2")
@@ -52,23 +56,30 @@ def main() -> None:
     r2_dir.mkdir(parents=True)
 
     sprite_versions = {
-        side: getattr(args, f"sprite_{side}_version")
-        for side in SPRITE_SIDES
+        style: {
+            side: getattr(args, f"sprite_{style}_{side}_version")
+            for side in SPRITE_SIDES
+        }
+        for style in SPRITE_STYLES
     }
-    for value in sprite_versions.values():
-        if not BUILD_ID.fullmatch(value):
-            parser.error("sprite versions must be safe immutable path segments")
+    for style_versions in sprite_versions.values():
+        for value in style_versions.values():
+            if not BUILD_ID.fullmatch(value):
+                parser.error("sprite versions must be safe immutable path segments")
     release_config = {
         "buildId": args.build_id,
         "releaseVersion": args.release_version,
         "assetBaseUrl": asset_base_url,
-        "spriteBases": {
+        "spriteStyles": {
             # Keep Godot's on-demand sprite requests on the Pages origin. The
-            # narrowly scoped Pages function streams the immutable file from
-            # R2, avoiding browser-specific CORS/COEP failures inside Godot's
+            # narrowly scoped Pages functions stream immutable files from R2,
+            # avoiding browser-specific CORS/COEP failures inside Godot's
             # HTTPRequest implementation.
-            side: f"{web_url}/pokemon-assets/gen5/{version}"
-            for side, version in sprite_versions.items()
+            style: {
+                side: f"{web_url}/pokemon-assets/{'battle' if style == 'animated' else 'gen5'}/{version}"
+                for side, version in style_versions.items()
+            }
+            for style, style_versions in sprite_versions.items()
         },
     }
 

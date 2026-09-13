@@ -15,7 +15,10 @@ from websockets.exceptions import ConnectionClosed, InvalidStatus
 
 ROOT = Path(__file__).resolve().parents[1]
 NEWS_URL = "https://updates.pokeaether.com/data/news.json"
-POKEMON_ASSET_ROOT = (ROOT / "assets/sprites/pokemon/gen5").resolve()
+POKEMON_ASSET_ROOTS = {
+    "battle": (ROOT / "assets/sprites/pokemon").resolve(),
+    "gen5": (ROOT / "assets/sprites/pokemon/gen5").resolve(),
+}
 HTTP_ROUTES = {
     ("GET", "/auth/status"), ("GET", "/presence/online-count"),
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
@@ -130,7 +133,7 @@ def create_app(upstream, build=None, *, transport=None):
         else:
             response = await call_next(request)
         response.headers.update(SECURITY_HEADERS)
-        if request.url.path.startswith("/pokemon-assets/gen5/") and response.status_code == 200:
+        if request.url.path.startswith(("/pokemon-assets/battle/", "/pokemon-assets/gen5/")) and response.status_code == 200:
             # Local packs can change without their URL changing. Production
             # uses versioned immutable R2 URLs; preview must revalidate.
             response.headers["Cache-Control"] = "no-cache"
@@ -260,14 +263,16 @@ def create_app(upstream, build=None, *, transport=None):
     async def pvp_battle_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "pvp-battle")
 
-    @app.get("/pokemon-assets/gen5/{side}/{species}/{filename}")
-    async def pokemon_asset(side: str, species: str, filename: str):
+    @app.get("/pokemon-assets/{style}/{side}/{species}/{filename}")
+    async def pokemon_asset(style: str, side: str, species: str, filename: str):
         if (side not in {"front", "back", "shiny_front", "shiny_back"}
+                or style not in POKEMON_ASSET_ROOTS
                 or not re.fullmatch(r"[a-z0-9-]{1,96}", species)
                 or filename not in {"animation.json", "sheet.png"}):
             return Response(status_code=404)
-        target = (POKEMON_ASSET_ROOT / side / species / filename).resolve()
-        if not target.is_relative_to(POKEMON_ASSET_ROOT) or target.is_symlink() or not target.is_file():
+        asset_root = POKEMON_ASSET_ROOTS[style]
+        target = (asset_root / side / species / filename).resolve()
+        if not target.is_relative_to(asset_root) or target.is_symlink() or not target.is_file():
             return Response(status_code=404)
         return FileResponse(target)
 

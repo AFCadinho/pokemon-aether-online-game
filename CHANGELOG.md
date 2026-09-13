@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser battles now lazy-load the regular animated battle sprites by default, with Gen 5 available as an optional sprite style and Pokémon HOME reserved for static display or loading fallback.
+
 - Narrow observed damage intervals now appear as one approximate percentage instead of repeating the same rounded value twice.
 
 - Battle-clue hover cards now use Calcdex styling instead of Godot's default tooltip appearance.

@@ -292,7 +292,8 @@ func set_sprite_style(style: String) -> bool:
 
 
 func is_gen5_animated_sprites_installed() -> bool:
-	return PokemonAssets.has_optional_gen5_animated_sprites()
+	# Browser builds stream this optional catalog from R2 on demand.
+	return OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()
 
 
 func set_performance_details(enabled: bool) -> void:

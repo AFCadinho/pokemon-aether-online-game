@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { isAllowedApiRoute, onRequest } from '../functions/api/[[path]].js';
 import { onRequestGet as getNews } from '../functions/news.json.js';
+import { onRequest as getBattleSprite } from '../functions/pokemon-assets/battle/[[path]].js';
 import { onRequest as getGen5Sprite } from '../functions/pokemon-assets/gen5/[[path]].js';
 
 const releaseRoutes = JSON.parse(readFileSync(new URL('./fixtures/web_release_routes.json', import.meta.url)));
@@ -93,6 +94,19 @@ const deniedSpriteMethod = await getGen5Sprite({
   env: { ASSET_BASE_URL: 'https://assets.example.test' },
 });
 assert.equal(deniedSpriteMethod.status, 405);
+
+const battleSprite = await getBattleSprite({
+  request: new Request('https://play.example.test/pokemon-assets/battle/pokemon-front-scale1-128-402b7a6cee88/pidgey/sheet.png'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(battleSprite.status, 200);
+assert.equal(forwarded.url, 'https://assets.example.test/web/assets/pokemon-front-scale1-128-402b7a6cee88/pidgey/sheet.png');
+assert.equal(battleSprite.headers.get('content-type'), 'image/png');
+const deniedBattleSpritePath = await getBattleSprite({
+  request: new Request('https://play.example.test/pokemon-assets/battle/pokemon-gen5-front-895716cf7862/pidgey/sheet.png'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(deniedBattleSpritePath.status, 404);
 
 globalThis.fetch = async request => {
   assert.equal(request, 'https://assets.example.test/data/news.json');

@@ -1652,12 +1652,15 @@ func request_web_sprite_frames(species: String, side: String, is_shiny: bool = f
 	if not WebPokemonSpriteService.is_available():
 		return null
 	for asset_id: String in _get_species_asset_id_candidates(species):
-		var result: Dictionary = await WebPokemonSpriteService.load_frames(asset_id, side, is_shiny)
+		var result: Dictionary = await WebPokemonSpriteService.load_frames(
+			asset_id, side, is_shiny, SettingsManager.sprite_style
+		)
 		var frames := result.get("frames") as SpriteFrames
 		if frames == null:
 			continue
 		_set_sprite_frames_render_scale(frames, float(result.get("render_scale", 1.0)))
-		_set_sprite_frames_display_scale_multiplier(frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
+		if str(result.get("style", "animated")) == "pixel":
+			_set_sprite_frames_display_scale_multiplier(frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
 		var frame_size_value: Variant = result.get("frame_size", Vector2.ZERO)
 		if frame_size_value is Vector2 and frame_size_value != Vector2.ZERO:
 			_set_sprite_frames_auto_anchor(frames, frame_size_value as Vector2)

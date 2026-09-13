@@ -11,7 +11,10 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-POKEMON_ASSET_ROOT = (ROOT / 'assets/sprites/pokemon/gen5').resolve()
+POKEMON_ASSET_ROOTS = {
+    '/pokemon-assets/battle/': (ROOT / 'assets/sprites/pokemon').resolve(),
+    '/pokemon-assets/gen5/': (ROOT / 'assets/sprites/pokemon/gen5').resolve(),
+}
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
@@ -22,7 +25,8 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         pass
 
     def end_headers(self):
-        cache_value = 'no-cache' if urlsplit(self.path).path.startswith('/pokemon-assets/gen5/') else 'no-store'
+        request_path = urlsplit(self.path).path
+        cache_value = 'no-cache' if any(request_path.startswith(prefix) for prefix in POKEMON_ASSET_ROOTS) else 'no-store'
         self.send_header('Cache-Control', cache_value)
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
@@ -50,10 +54,12 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         if path == '/news.json':
             self._json(200, {'items': []}, head)
             return
-        if path.startswith('/pokemon-assets/gen5/'):
-            relative = path.removeprefix('/pokemon-assets/gen5/')
-            target = (POKEMON_ASSET_ROOT / relative).resolve()
-            if (not target.is_relative_to(POKEMON_ASSET_ROOT) or target.is_symlink()
+        asset_route = next((prefix for prefix in POKEMON_ASSET_ROOTS if path.startswith(prefix)), '')
+        if asset_route:
+            asset_root = POKEMON_ASSET_ROOTS[asset_route]
+            relative = path.removeprefix(asset_route)
+            target = (asset_root / relative).resolve()
+            if (not target.is_relative_to(asset_root) or target.is_symlink()
                     or not target.is_file() or target.name not in {'animation.json', 'sheet.png'}):
                 self.send_error(404)
                 return

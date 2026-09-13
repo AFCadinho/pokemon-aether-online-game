@@ -1,6 +1,5 @@
 extends Node
 
-const ASSET_BASE := "/pokemon-assets/gen5"
 const IDLE_ANIMATION := "idle"
 const MAX_RESPONSE_BYTES := 4 * 1024 * 1024
 const CACHE_LIMIT := 96
@@ -14,24 +13,32 @@ func is_available() -> bool:
 	return OS.has_feature("web")
 
 
-func load_frames(asset_id: String, side: String, is_shiny: bool = false) -> Dictionary:
+func load_frames(
+	asset_id: String, side: String, is_shiny: bool = false, sprite_style: String = "animated"
+) -> Dictionary:
 	if not is_available():
+		return {}
+	var catalog_style := _catalog_style(sprite_style)
+	if catalog_style == "":
 		return {}
 	var normalized_id := _normalize_segment(asset_id)
 	var side_folder := ("shiny_" if is_shiny else "") + ("back" if side == "back" else "front")
 	if normalized_id == "":
 		return {}
-	var cache_key := "%s/%s" % [side_folder, normalized_id]
+	var cache_key := "%s/%s/%s" % [catalog_style, side_folder, normalized_id]
 	if _cache.has(cache_key):
 		return _cache[cache_key]
 
 	var release := WebRuntime.web_release_config()
-	var configured_bases: Variant = release.get("spriteBases", {})
+	var configured_styles: Variant = release.get("spriteStyles", {})
 	var base_root := ""
-	if configured_bases is Dictionary:
-		base_root = str((configured_bases as Dictionary).get(side_folder, "")).trim_suffix("/")
+	if configured_styles is Dictionary:
+		var configured_bases: Variant = (configured_styles as Dictionary).get(catalog_style, {})
+		if configured_bases is Dictionary:
+			base_root = str((configured_bases as Dictionary).get(side_folder, "")).trim_suffix("/")
 	if base_root == "":
-		base_root = WebRuntime.api_base_url().trim_suffix("/api") + ASSET_BASE + "/" + side_folder
+		var route := "/pokemon-assets/gen5" if catalog_style == "pixel" else "/pokemon-assets/battle"
+		base_root = WebRuntime.api_base_url().trim_suffix("/api") + route + "/" + side_folder
 	if base_root == "":
 		return {}
 	var base_url := "%s/%s" % [base_root, normalized_id]
@@ -56,6 +63,7 @@ func load_frames(asset_id: String, side: String, is_shiny: bool = false) -> Dict
 		return {}
 	var result := {
 		"frames": frames,
+		"style": catalog_style,
 		"render_scale": maxf(float(metadata.get("render_scale", metadata.get("scale", 1.0))), 1.0),
 		"frame_size": Vector2(float(metadata.get("frame_width", 0)), float(metadata.get("frame_height", 0))),
 	}
@@ -92,6 +100,12 @@ func _download_once(url: String) -> Dictionary:
 	if body.is_empty() or body.size() > MAX_RESPONSE_BYTES:
 		return {}
 	return {"body": body}
+
+
+func _catalog_style(sprite_style: String) -> String:
+	if sprite_style == "static":
+		return ""
+	return "pixel" if sprite_style == "pixel" else "animated"
 
 
 func _build_frames(metadata: Dictionary, image: Image) -> SpriteFrames:
