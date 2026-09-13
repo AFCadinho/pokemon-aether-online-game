@@ -181,6 +181,34 @@ func leave_guild() -> Dictionary:
 	}
 
 
+func transfer_leadership(user_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/leadership/%d" % user_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func disband_guild() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT,
+		HTTPClient.METHOD_DELETE,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	_set_current_membership({})
+	_set_current_guild({})
+	return {
+		"success": true,
+		"disbanded": bool(body.get("disbanded", false)),
+		"guildId": int(body.get("guildId", 0)),
+		"guildName": str(body.get("guildName", "")),
+	}
+
+
 func load_bank() -> Dictionary:
 	var response := await _authenticated_request(GUILD_BANK_ENDPOINT, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))

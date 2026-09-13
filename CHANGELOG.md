@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild Leaders can now transfer leadership to another member or disband a solo Guild before joining another Guild.
+
 - Cerulean City's nighttime lights now render more efficiently for smoother play on lower-end devices.
 
 - PvP switch selections now check the latest battle status, preventing an outdated party card from submitting a fainted Pokémon.

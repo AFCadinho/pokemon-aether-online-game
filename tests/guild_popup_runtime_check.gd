@@ -496,6 +496,12 @@ func _run() -> void:
 	popup.guild_home["announcement"] = original_announcement
 	var leader_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
 	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
+	_check(
+		leader_options != null
+		and leader_options.get_popup().get_item_index(2) >= 0
+		and leader_options.get_popup().is_item_disabled(leader_options.get_popup().get_item_index(2)),
+		"Guild disbanding stays disabled while other members remain"
+	)
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
 	_check(header_travel != null, "guild travel occupies the member header")
 	var guild_lobby_action := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
@@ -1177,6 +1183,11 @@ func _run() -> void:
 		managed_actions != null
 		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_CHANGE_RANK) >= 0,
 		"leaders can change a member's rank from the action menu"
+	)
+	_check(
+		managed_actions != null
+		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_TRANSFER_LEADERSHIP) >= 0,
+		"leaders can transfer leadership from the member action menu"
 	)
 	_check(
 		managed_actions != null
