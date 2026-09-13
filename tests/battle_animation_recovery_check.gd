@@ -17,6 +17,7 @@ func _run() -> void:
 	var box := load("res://scenes/battle/sprite_box.tscn").instantiate() as Control
 	get_tree().root.add_child(box)
 	box.single_sprite.visible = true
+	await _check_dodge(box)
 	var done := {"value": false}
 	_attack(box, done)
 	await get_tree().create_timer(0.03).timeout
@@ -70,6 +71,49 @@ func _run() -> void:
 func _attack(box: Node, done: Dictionary) -> void:
 	await box.play_attack_tween()
 	done["value"] = true
+
+func _check_dodge(box: Node) -> void:
+	var base_position: Vector2 = box.single_sprite.position
+	for direction in [-1.0, 1.0]:
+		await box.play_dodge_tween(direction)
+		_check(box.single_sprite.position == base_position + Vector2(32.0 * direction, -12.0), "both sides dodge away from their original position")
+		await get_tree().create_timer(0.2).timeout
+		_check(box.single_sprite.position != base_position, "dodge holds until the move has passed")
+		await box.play_dodge_tween(direction, true)
+		_check(box.single_sprite.position == base_position, "dodge returns exactly to the original pose")
+	box.play_dodge_tween()
+	await get_tree().create_timer(0.03).timeout
+	box.reset_battle_pose()
+	await get_tree().create_timer(0.15).timeout
+	_check(box.single_sprite.position == base_position, "cancelled dodge cannot displace the restored pose")
+	await box.set_substitute_active(true, false)
+	var doll_position: Vector2 = box.substitute_sprite.position
+	await box.play_dodge_tween()
+	_check(box.substitute_sprite.position != doll_position, "visible substitute also dodges")
+	box.reset_battle_pose()
+	_check(box.substitute_sprite.position == doll_position, "cancel restores substitute pose")
+	box.clear_substitute_immediately()
+	var router := BattleAnimationRouter.new()
+	router.setup(box, box, box.get_parent())
+	var config := {"category": "physical_contact", "miss": {"enabled": true, "target_offset": [56, -20], "sheet_offset": [56, -20], "shift_visual_center": true}, "projectile": {"enabled": true, "path": [[0, 0], [100, 100]]}, "orb": {"center": [384, 96]}}
+	for reverse in [false, true]:
+		var hit := router._create_move_animation_node(config, {}, reverse)
+		var miss := router._create_move_animation_node(config, {}, reverse)
+		router._apply_move_animation_options(miss, config, {"result": "miss"})
+		var actor := "p2a" if reverse else "p1a"
+		var target := "p1a" if reverse else "p2a"
+		router._apply_move_projectile_endpoint_anchors(hit, actor, target, box.get_parent(), config)
+		router._apply_move_projectile_endpoint_anchors(miss, actor, target, box.get_parent(), config, {"result": "miss"})
+		_check(hit.projectile_config == miss.projectile_config, "missed projectiles keep the same target on both sides")
+		_check(hit.sprite_position_offset == miss.sprite_position_offset and hit.sparkle_center == miss.sparkle_center and hit.orb_config == miss.orb_config, "missed contact and centered effects stay on target")
+		hit.free()
+		miss.free()
+	for result in ["hit", "immune", "fail", "miss"]:
+		var options := {"result": result}
+		await router._play_move_target_dodge("p2a", options)
+		_check((box.single_sprite.position != base_position) == (result == "miss"), "only true misses trigger a dodge: " + result)
+		_check(router._should_suppress_target_feedback_for_miss(config, options) == (result == "miss"), "misses suppress target impact feedback")
+		box.reset_battle_pose()
 
 func _substitute(box: Node, done: Dictionary) -> void:
 	await box.set_substitute_active(true)
