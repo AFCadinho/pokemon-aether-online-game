@@ -2,7 +2,6 @@ extends SceneTree
 
 const DayNightControllerScript := preload("res://scripts/world/day_night_controller.gd")
 const NightLightScene := preload("res://scenes/world/lighting/night_light.tscn")
-const NightGlowScene := preload("res://scenes/world/lighting/night_glow.tscn")
 const WorldTimeServiceScript := preload("res://scripts/services/world_time_service.gd")
 const CERULEAN_CITY_SCENE_PATH := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const VIRIDIAN_CITY_SCENE_PATH := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
@@ -28,36 +27,27 @@ func _init() -> void:
 	world.add_child(controller)
 	var night_light: Node = NightLightScene.instantiate()
 	world.add_child(night_light)
-	var night_glow: Node = NightGlowScene.instantiate()
-	world.add_child(night_glow)
 	root.add_child(world)
 	await process_frame
 
 	var point_light := night_light.get_node("PointLight2D") as PointLight2D
-	var glow_sprite := night_glow.get_node("GlowSprite") as Sprite2D
 	_check_true(not point_light.enabled, "night light is disabled during daytime")
 	_check_approx(point_light.energy, 0.0, "daytime light energy is zero")
-	_check_true(not glow_sprite.visible, "optimized glow is hidden during daytime")
 
 	world_time_service.call("set_debug_time", 0)
 	_check_true(point_light.enabled, "night light enables at midnight")
 	_check_approx(point_light.energy, float(night_light.get("max_energy")), "midnight reaches configured maximum energy")
-	_check_true(glow_sprite.visible, "optimized glow appears at midnight")
-	_check_approx(glow_sprite.modulate.a, float(night_glow.get("max_glow_alpha")), "midnight reaches configured glow opacity")
 
 	world_time_service.call("set_debug_time", 19)
 	_check_true(point_light.energy > 0.0, "night light fades in during dusk")
 	_check_true(point_light.energy < float(night_light.get("max_energy")), "dusk remains below maximum light energy")
-	_check_true(glow_sprite.modulate.a > 0.0, "optimized glow fades in during dusk")
-	_check_true(glow_sprite.modulate.a < float(night_glow.get("max_glow_alpha")), "dusk glow remains below maximum opacity")
 
 	controller.call("set_lighting_profile", "indoor")
 	_check_true(not point_light.enabled, "indoor profile disables outdoor night lights")
 	_check_approx(point_light.energy, 0.0, "indoor profile clears light energy")
-	_check_true(not glow_sprite.visible, "indoor profile hides the optimized glow")
 
 	_check_viridian_pilot_contract()
-	_check_cerulean_optimized_glow_contract()
+	_check_cerulean_night_light_contract()
 	world_time_service.call("clear_debug_time")
 	world.queue_free()
 	world_time_service.queue_free()
@@ -74,18 +64,10 @@ func _check_viridian_pilot_contract() -> void:
 	_check_true(scene_source.count("light_color = Color(1, 0.72, 0.38, 1)") == light_count, "Viridian lamps share the verified warm light treatment")
 
 
-func _check_cerulean_optimized_glow_contract() -> void:
+func _check_cerulean_night_light_contract() -> void:
 	var scene_source := FileAccess.get_file_as_string(CERULEAN_CITY_SCENE_PATH)
-	_check_true(scene_source.contains('path="res://scenes/world/lighting/night_glow.tscn"'), "Cerulean uses the batchable glow scene")
-	_check_true(scene_source.count('instance=ExtResource("8_ex4qq")') == 52, "Cerulean retains all hand-placed nighttime glows")
-	var optimized_glow := NightGlowScene.instantiate()
-	_check_true(optimized_glow.get_node_or_null("PointLight2D") == null, "optimized glow creates no point light")
-	var glow_sprite := optimized_glow.get_node("GlowSprite") as Sprite2D
-	var glow_material := glow_sprite.material as CanvasItemMaterial
-	_check_true(glow_sprite.z_index == 4, "optimized glow lights buildings without drawing over actors")
-	_check_true(glow_material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD, "optimized glow uses additive batching")
-	_check_true(glow_material.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED, "optimized glow avoids recursive light work")
-	optimized_glow.free()
+	_check_true(scene_source.contains('path="res://scenes/world/lighting/night_light.tscn"'), "Cerulean uses the original point-light scene")
+	_check_true(scene_source.count('instance=ExtResource("8_ex4qq")') == 52, "Cerulean retains all hand-placed nighttime lights")
 
 
 func _check_approx(actual: float, expected: float, label: String) -> void:
