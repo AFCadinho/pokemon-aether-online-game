@@ -5950,6 +5950,7 @@
   "battle.calc.guess.hide_details": "Hide evidence",
   "battle.calc.guess.alternatives": "{count} variants fit equally well; the exact set is uncertain.",
   "battle.calc.guess.set_details": "配置详情",
+  "battle.calc.guess.moves": "招式",
   "battle.calc.guess.battle_clues": "对战线索",
   "battle.calc.guess.clue_hover_hint": "将鼠标悬停在线索上可查看观测详情。",
   "battle.calc.guess.damage": "Damage, turn {turn}",

@@ -5953,6 +5953,7 @@
   "battle.calc.guess.hide_details": "Hide evidence",
   "battle.calc.guess.alternatives": "{count} variants fit equally well; the exact set is uncertain.",
   "battle.calc.guess.set_details": "Detalhes do set",
+  "battle.calc.guess.moves": "Golpes",
   "battle.calc.guess.battle_clues": "Pistas da batalha",
   "battle.calc.guess.clue_hover_hint": "Passe o cursor sobre uma pista para ver os detalhes observados.",
   "battle.calc.guess.damage": "Damage, turn {turn}",

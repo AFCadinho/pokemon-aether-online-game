@@ -4143,6 +4143,7 @@
   "battle.calc.guess.hide_details": "Verberg bewijs",
   "battle.calc.guess.alternatives": "{count} varianten passen even goed; de exacte set is onzeker.",
   "battle.calc.guess.set_details": "Setdetails",
+  "battle.calc.guess.moves": "Moves",
   "battle.calc.guess.battle_clues": "Aanwijzingen uit het gevecht",
   "battle.calc.guess.clue_hover_hint": "Beweeg over een aanwijzing voor de waargenomen battledetails.",
   "battle.calc.guess.damage": "Damage, beurt {turn}",
