@@ -95,6 +95,24 @@ func _check_dodge(box: Node) -> void:
 	box.clear_substitute_immediately()
 	var router := BattleAnimationRouter.new()
 	router.setup(box, box, box.get_parent())
+	var command_renderer := BattleEventRenderer.new()
+	command_renderer.animation_router = router
+	var commands: Array = []
+	command_renderer.show_trainer_command = func(command):
+		commands.append(command["kind"])
+		if command["kind"] == "dodge":
+			_check(box.single_sprite.position == base_position, "dodge callout fires at the start of the sprite movement")
+		return {"shown": true, "minimum_read_seconds": 0.7}
+	var command: Callable = await command_renderer._show_trainer_move_commands({}, "p1a", "Tackle", "p2a", "miss", true)
+	_check(commands == ["move"], "resource loading and attacker motion do not announce dodge early")
+	var synchronized_options := {"result": "miss", "on_dodge_started": command}
+	await router._play_move_target_dodge("p2a", synchronized_options)
+	_check(commands == ["move", "dodge"] and box.single_sprite.position != base_position, "callout and dodge share the same playback boundary")
+	await router._play_move_target_dodge("p2a", synchronized_options, true)
+	_check(commands == ["move", "dodge"], "returning does not repeat the dodge callout")
+	command_renderer.cancel_render()
+	command.call()
+	_check(commands == ["move", "dodge"], "cancelled event cannot show a stale dodge command")
 	var config := {"category": "physical_contact", "miss": {"enabled": true, "target_offset": [56, -20], "sheet_offset": [56, -20], "shift_visual_center": true}, "projectile": {"enabled": true, "path": [[0, 0], [100, 100]]}, "orb": {"center": [384, 96]}}
 	for reverse in [false, true]:
 		var hit := router._create_move_animation_node(config, {}, reverse)
