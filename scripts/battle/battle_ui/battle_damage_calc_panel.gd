@@ -415,26 +415,58 @@ func _render_current_state() -> void:
 		return
 
 	if is_loading:
-		_add_profile_summary(
-			_fallback_text(loading_attacker_name, _t("battle.calc.your_pokemon")),
-			_fallback_text(loading_defender_name, _t("battle.calc.opponent")),
-			_t("battle.calc.hp_unknown"),
-			_t("battle.calc.level_unknown")
-		)
+		if knowledge_snapshot.is_empty():
+			_add_profile_summary(
+				_fallback_text(loading_attacker_name, _t("battle.calc.your_pokemon")),
+				_fallback_text(loading_defender_name, _t("battle.calc.opponent")),
+				_t("battle.calc.hp_unknown"),
+				_t("battle.calc.level_unknown")
+			)
+		else:
+			_add_snapshot_profile_summary()
 		_add_status(_t("battle.calc.calculating"), TEXT_SECONDARY)
 		return
 
 	if last_error != "":
-		_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		if knowledge_snapshot.is_empty():
+			_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		else:
+			_add_snapshot_profile_summary()
 		_add_status(last_error, TEXT_ERROR)
 		return
 
 	if last_response.is_empty():
-		_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		if knowledge_snapshot.is_empty():
+			_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		else:
+			_add_snapshot_profile_summary()
 		_add_status(_t("battle.calc.open_to_load"), TEXT_SECONDARY)
 		return
 
 	_render_your_damage_response(last_response)
+
+
+func _add_snapshot_profile_summary() -> void:
+	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	var viewer_name := _snapshot_pokemon_name(viewer) if not viewer.is_empty() else _t("battle.calc.your_pokemon")
+	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
+	_add_profile_summary(
+		viewer_name,
+		opponent_name,
+		_get_hp_percent_label(opponent),
+		_get_level_label(opponent),
+		"",
+		_get_hp_percent_label(viewer),
+		_get_level_label(viewer),
+		viewer_name,
+		opponent_name,
+		_get_defender_hp_percent(viewer),
+		_get_defender_hp_percent(opponent),
+		"",
+		_get_effective_pokemon_status("own"),
+		_get_effective_pokemon_status("opponent")
+	)
 
 
 func _is_catalog_search_active() -> bool:

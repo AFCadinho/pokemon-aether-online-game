@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fainted Pokémon remain available for hypothetical damage calculations, and calculator errors no longer replace the selected matchup with question marks.
+
 - Item Buyer sales now show a confirmation with the item, quantity, and payout before removing anything from your Bag.
 
 - Fixed the Route 3 Pokémon Center market seller using Professor Oak's fallback portrait instead of the clerk portrait.
