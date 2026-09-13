@@ -11,6 +11,7 @@ var failed := false
 func _init() -> void:
 	_check_catalog_and_assets()
 	_check_rider_mask_and_offsets()
+	_check_static_rider_pose_uses_each_mount_mask_frame()
 	_check_rider_pixels_do_not_clip_at_frame_edges()
 	_check_player_scene_mount_layer()
 	quit(1 if failed else 0)
@@ -105,6 +106,31 @@ func _check_rider_pixels_do_not_clip_at_frame_edges() -> void:
 	_expect(
 		_opaque_pixel_count(mounted_frames.get_frame_texture(&"idle_left", 0).get_image()) == 2,
 		"positive side offset does not cut off hair at the right frame edge"
+	)
+
+
+func _check_static_rider_pose_uses_each_mount_mask_frame() -> void:
+	var source_frames := SpriteFrames.new()
+	source_frames.remove_animation(&"default")
+	source_frames.add_animation(&"walk_right")
+	for frame_index: int in range(4):
+		var image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+		image.fill(Color.TRANSPARENT)
+		image.set_pixel(0, 0, Color(float(frame_index + 1) / 4.0, 0.0, 0.0, 1.0))
+		source_frames.add_frame(&"walk_right", ImageTexture.create_from_image(image))
+
+	var mounted_frames := MountServiceScript.get_mounted_rider_frames(
+		source_frames,
+		"cyclizar",
+		{},
+		{},
+		true
+	)
+	var first_color := mounted_frames.get_frame_texture(&"walk_right", 0).get_image().get_pixel(0, 0)
+	var third_color := mounted_frames.get_frame_texture(&"walk_right", 2).get_image().get_pixel(0, 0)
+	_expect(
+		first_color.is_equal_approx(third_color),
+		"animated mount masks reuse one stable rider pose instead of walking outfit frames"
 	)
 
 
