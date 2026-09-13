@@ -3,6 +3,10 @@ extends SceneTree
 const Latency := preload("res://scripts/services/connection_latency.gd")
 var failed := false
 
+class TestCeruleanMap extends Node:
+	func get_map_id() -> String:
+		return "kanto_cerulean_city"
+
 
 func _init() -> void:
 	_run.call_deferred()
@@ -57,6 +61,7 @@ func _run() -> void:
 	_check(latency.sample(34060) == -1, "reset clears previous connection sample")
 
 	var settings := root.get_node("SettingsManager")
+	var game_state := root.get_node("GameState")
 	var overlay := root.get_node("PerformanceOverlay")
 	var presence := root.get_node("WorldPresenceService")
 	var pvp := root.get_node("PvpBattleRealtimeService")
@@ -81,6 +86,21 @@ func _run() -> void:
 	if details_toggle != null:
 		details_toggle.button_pressed = true
 	_check(settings.performance_details and overlay.details.visible, "details switch immediately reveals second line")
+	var original_map: Node = game_state.current_map
+	var cerulean_map := TestCeruleanMap.new()
+	root.add_child(cerulean_map)
+	game_state.current_map = cerulean_map
+	overlay.spike_recorder.log_path = "user://tests/performance_overlay_spikes.jsonl"
+	overlay._refresh()
+	_check(overlay.spike_recorder.is_recording(), "details start local spike recording in Cerulean")
+	_check(overlay.recording_readout.visible, "Cerulean recording is visible to the player")
+	game_state.current_map = original_map
+	overlay._refresh()
+	_check(not overlay.spike_recorder.is_recording(), "leaving Cerulean finishes the recording")
+	_check(FileAccess.file_exists(overlay.spike_recorder.log_path), "finished recording writes its diagnostics file")
+	if FileAccess.file_exists(overlay.spike_recorder.log_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(overlay.spike_recorder.log_path))
+	cerulean_map.queue_free()
 	settings.performance_details = false
 	settings.load_settings()
 	_check(settings.performance_details, "details preference survives reload")
