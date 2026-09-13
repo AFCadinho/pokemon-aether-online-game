@@ -134,9 +134,15 @@ func _run() -> void:
 	var apply_button := panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) as Button
 	_check(apply_button != null and apply_button.text == "Calculate with this set" and panel.set_suggestions_popup.find_child("ApplySetSuggestionHint", true, false) != null, "The primary action explains its calculator effect")
 	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
-	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
+	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as PanelContainer
+	var suggestion_item := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueItem", true, false) as Label
+	var suggestion_moves := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueMoves", true, false) as Label
+	var suggestion_nature_label := panel.set_suggestions_popup.find_child("SetSuggestionBuildLabelNature", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
-	_check(suggestion_build != null and suggestion_build.text.contains("Rocky Helmet") and suggestion_build.text.contains("Earthquake") and suggestion_build.custom_minimum_size.y > 0, "Suggested build details remain visibly allocated")
+	_check(suggestion_build != null and suggestion_item != null and suggestion_item.text == "Rocky Helmet" and suggestion_moves != null and suggestion_moves.text.contains("Earthquake"), "Suggested build details are split into scan-friendly labeled rows")
+	_check(suggestion_nature_label != null and suggestion_nature_label.get_theme_color("font_color") == Color("#e7b65d") and suggestion_item.get_theme_color("font_color") == Color("#f2f0ea"), "Set field labels use distinct accents while their values retain high contrast")
+	var apply_style := apply_button.get_theme_stylebox("normal") as StyleBoxFlat if apply_button != null else null
+	_check(apply_style != null and apply_button.custom_minimum_size.y == 42.0 and apply_style.bg_color == Color("#123d52") and apply_style.border_color.to_html(false) == "8ccbe8" and apply_style.border_color.a >= 0.94, "Calculate with this set is styled as the cyan primary action")
 	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HFlowContainer
 	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence summary shows every relevant non-zero category")
 	var evidence_labels: Array[String] = []
@@ -156,6 +162,7 @@ func _run() -> void:
 	var evidence_detail := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) as Label
 	var evidence_row := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceRow", true, false) as PanelContainer
 	_check(evidence_detail != null and evidence_detail.text.contains("Damage taken") and evidence_detail.text.contains("Surf"), "Damage clues state who dealt or took damage and name the move")
+	_check(evidence_detail != null and evidence_detail.get_theme_font_size("font_size") == 12 and evidence_row != null and evidence_row.custom_minimum_size.y == 30.0, "Battle clues use larger text and roomier rows")
 	_check(evidence_row != null and evidence_row.tooltip_text.contains("19.0–21.0%") and evidence_row.tooltip_text.contains("Garchomp: Defense +1") and evidence_row.tooltip_text.contains("calculated result"), "Hovering a clue explains the observed range, active stat stages and why the set fits")
 	var clue_tooltip_style := evidence_row.theme.get_stylebox("panel", "TooltipPanel") as StyleBoxFlat if evidence_row != null and evidence_row.theme != null else null
 	_check(clue_tooltip_style != null and clue_tooltip_style.bg_color == Color("#07111cf8") and clue_tooltip_style.shadow_size == 9 and clue_tooltip_style.border_width_bottom == 2, "Clue hover cards use the styled Calcdex surface instead of Godot's default tooltip")

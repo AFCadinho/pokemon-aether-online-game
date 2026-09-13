@@ -4143,6 +4143,7 @@
   "battle.calc.guess.hide_details": "Hide evidence",
   "battle.calc.guess.alternatives": "{count} variants fit equally well; the exact set is uncertain.",
   "battle.calc.guess.set_details": "Set details",
+  "battle.calc.guess.moves": "Moves",
   "battle.calc.guess.battle_clues": "Battle clues",
   "battle.calc.guess.clue_hover_hint": "Hover a clue to see the observed battle details.",
   "battle.calc.guess.damage": "Damage, turn {turn}",
