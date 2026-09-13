@@ -2897,7 +2897,11 @@ func _refresh_damage_calc_results() -> void:
 		# Set inference needs consecutive public start-of-turn snapshots. Keep
 		# collecting those while the drawer is closed so damage that prompted the
 		# player to open Calcdex can already be used as evidence.
-		_schedule_damage_calc_prefetch()
+		if not team_preview_lead_selection_active:
+			_schedule_damage_calc_prefetch()
+		return
+	if team_preview_lead_selection_active:
+		calc_panel.show_notice(_t("battle.calc.waiting_for_leads"))
 		return
 	_sync_damage_calc_matchup_assumptions()
 	if battle_finished:
