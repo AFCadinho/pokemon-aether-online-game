@@ -22,6 +22,12 @@ func _init() -> void:
 	var shell := FileAccess.get_file_as_string("res://infrastructure/web/shell.html")
 	_check(shell.contains("if (!local && !webRelease)"), "only unconfigured non-local web exports are blocked")
 	_check(shell.contains("window.POKEAETHER_WEB_RELEASE || null"), "production release configuration is explicit")
+	_check(shell.contains("pokeaether-logo.webp") and shell.contains("pokeaether-world-preview.webp"),
+		"browser start screen includes the PokeAether logo and gameplay preview")
+	_check(shell.contains(">Play now</button>") and shell.contains("progress[hidden] { display: none; }"),
+		"browser start screen has one clear action and hides idle loading progress")
+	_check(shell.contains("Smoother play and better graphics:") and shell.contains("https://pokeaether.com/download"),
+		"browser start screen recommends the smoother, higher-quality game client")
 	_check(ProjectSettings.get_setting("rendering/renderer/rendering_method.web") == "gl_compatibility", "web renderer override")
 	print("web_runtime_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)

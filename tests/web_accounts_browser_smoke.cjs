@@ -79,7 +79,7 @@ const assert = require('node:assert/strict');
     if (message.type() === 'error' && !message.text().includes('Failed to load resource')) errors.push(message.text().replace(/token=[^&'\s]+/g, 'token=[redacted]'));
   });
   const start = async () => {
-    await page.getByRole('button', { name: 'Open browser game' }).click();
+    await page.getByRole('button', { name: 'Play now' }).click();
     await page.waitForFunction(() => window.pokeaetherPreview?.loginReady, null, { timeout: 120000 });
     await page.waitForTimeout(2500);
   };

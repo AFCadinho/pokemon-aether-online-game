@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The browser game now opens with a clearer PokeAether start screen, a simple play button and a link to the smoother, higher-quality game client.
 - Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
 - Browser battles now preload map encounters and known teams so the intended battle sprite is ready before a Pokémon appears.
 - Emergency HOME battle fallbacks now fit the arena consistently instead of appearing at wildly different sizes.
