@@ -34,6 +34,15 @@ func _run() -> void:
 		),
 		"Team Preview accepts integer-valued revision numbers parsed from JSON as floats"
 	)
+	var pre_event_revision := wire_revision.duplicate(true)
+	pre_event_revision["eventSeq"] = -1.0
+	pre_event_revision["batchSeq"] = -1.0
+	var initial_calcdex_revision := CalcdexSnapshot.projection_revision_from_response(pre_event_revision)
+	_check(
+		initial_calcdex_revision.get("eventSeq") == 0
+		and initial_calcdex_revision.get("batchSeq") == 0,
+		"Team Preview maps pre-event delivery sentinels to the initial Calcdex revision"
+	)
 	_check(
 		not bool(CalcdexOpen.normalize_response({
 			"success": true,

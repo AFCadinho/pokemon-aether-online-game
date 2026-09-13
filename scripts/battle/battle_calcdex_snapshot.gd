@@ -107,6 +107,9 @@ static func projection_revision_from_response(response: Dictionary) -> Dictionar
 		if not canonical.has(field_name):
 			return {}
 		revision[field_name] = canonical.get(field_name)
+	for field_name: String in ["eventSeq", "batchSeq"]:
+		if typeof(revision.get(field_name)) == TYPE_INT and int(revision.get(field_name)) == -1:
+			revision[field_name] = 0
 	return revision if is_valid_projection_revision(revision) else {}
 
 
