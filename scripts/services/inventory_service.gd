@@ -816,11 +816,16 @@ func search_dev_items(query: String) -> Dictionary:
 	return await _search_items(DEV_ITEM_SEARCH_ENDPOINT, query)
 
 
-func search_items(query: String) -> Dictionary:
-	return await _search_items(ITEM_SEARCH_ENDPOINT, query)
+func search_items(query: String, limit: int = 10, offset: int = 0) -> Dictionary:
+	return await _search_items(ITEM_SEARCH_ENDPOINT, query, limit, offset)
 
 
-func _search_items(endpoint_template: String, query: String) -> Dictionary:
+func _search_items(
+	endpoint_template: String,
+	query: String,
+	limit: int = 10,
+	offset: int = 0
+) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -829,7 +834,8 @@ func _search_items(endpoint_template: String, query: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + endpoint_template % query.uri_encode(),
+		base_url + endpoint_template % query.uri_encode()
+		+ "&limit=%d&offset=%d" % [max(limit, 1), max(offset, 0)],
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""

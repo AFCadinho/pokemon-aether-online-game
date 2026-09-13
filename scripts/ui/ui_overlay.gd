@@ -321,6 +321,8 @@ const ITEM_DEX_SIZE := Vector2(920, 620)
 const ITEM_DEX_ACCENT := Color("#d8b767")
 const ITEM_DEX_ACCENT_SOFT := Color("#d8b767aa")
 const ITEM_DEX_ACCENT_FAINT := Color("#d8b76744")
+const ITEM_DEX_PAGE_SIZE := 10
+const ITEM_DEX_LOAD_MORE_THRESHOLD := 96.0
 const DEVELOPER_TOOLS_ACCENT := Color("#b69a5d")
 const DEVELOPER_TOOLS_ACCENT_SOFT := Color("#b69a5daa")
 const POKEDEX_SIZE := Vector2(1180, 720)
@@ -1542,6 +1544,7 @@ var dev_selected_item: Dictionary = {}
 var dev_item_search_request_id := 0
 var item_dex_popup: PanelContainer
 var item_dex_search_input: LineEdit
+var item_dex_results_scroll: ScrollContainer
 var item_dex_results_list: VBoxContainer
 var item_dex_results_count_label: Label
 var item_dex_icon: TextureRect
@@ -1555,6 +1558,10 @@ var item_dex_capture_label: Label
 var item_dex_availability_label: Label
 var item_dex_sources_list: VBoxContainer
 var item_dex_search_request_id := 0
+var item_dex_results_loaded_offset := 0
+var item_dex_results_displayed_count := 0
+var item_dex_results_has_more := false
+var item_dex_results_loading_more := false
 var item_dex_selected_item_id := ""
 var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
@@ -11406,15 +11413,16 @@ func _setup_item_dex_popup() -> void:
 	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
 	browser_stack.add_child(item_dex_search_input)
 
-	var results_scroll := ScrollContainer.new()
-	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	browser_stack.add_child(results_scroll)
+	item_dex_results_scroll = ScrollContainer.new()
+	item_dex_results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	item_dex_results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	browser_stack.add_child(item_dex_results_scroll)
+	item_dex_results_scroll.get_v_scroll_bar().value_changed.connect(_on_item_dex_results_scrolled)
 
 	item_dex_results_list = VBoxContainer.new()
 	item_dex_results_list.add_theme_constant_override("separation", 6)
 	item_dex_results_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	results_scroll.add_child(item_dex_results_list)
+	item_dex_results_scroll.add_child(item_dex_results_list)
 
 	var summary_panel := PanelContainer.new()
 	summary_panel.custom_minimum_size = Vector2(560, 0)
@@ -37455,8 +37463,14 @@ func _on_item_dex_search_changed(_text: String) -> void:
 func _refresh_item_dex_results() -> void:
 	if item_dex_results_list == null:
 		return
+	item_dex_results_loading_more = false
+	item_dex_results_loaded_offset = 0
+	item_dex_results_displayed_count = 0
+	item_dex_results_has_more = false
 	for child: Node in item_dex_results_list.get_children():
 		child.queue_free()
+	if item_dex_results_scroll != null:
+		item_dex_results_scroll.scroll_vertical = 0
 
 	var query := ""
 	if item_dex_search_input != null:
@@ -37473,7 +37487,7 @@ func _refresh_item_dex_results() -> void:
 
 	item_dex_search_request_id += 1
 	var request_id := item_dex_search_request_id
-	var search_result: Dictionary = await InventoryService.search_items(query)
+	var search_result: Dictionary = await InventoryService.search_items(query, ITEM_DEX_PAGE_SIZE, 0)
 	if request_id != item_dex_search_request_id:
 		return
 
@@ -37489,15 +37503,16 @@ func _refresh_item_dex_results() -> void:
 		item_dex_results_list.add_child(error_label)
 		return
 
-	var items := _normalize_dev_item_results(search_result.get("items", []))
-	items = _filter_player_facing_item_variants(items)
+	var raw_items := _normalize_dev_item_results(search_result.get("items", []))
+	item_dex_results_loaded_offset = raw_items.size()
+	item_dex_results_has_more = raw_items.size() == ITEM_DEX_PAGE_SIZE
+	var items := _filter_player_facing_item_variants(raw_items)
 	var count := 0
 	for item_value: Variant in items:
 		var item: Dictionary = item_value as Dictionary
 		item_dex_results_list.add_child(_create_item_dex_result_button(item))
 		count += 1
-		if count >= 40:
-			break
+	item_dex_results_displayed_count = count
 	if item_dex_results_count_label != null:
 		item_dex_results_count_label.text = LocalizationManager.plural(
 			"ui.item_dex.result.one",
@@ -37505,13 +37520,74 @@ func _refresh_item_dex_results() -> void:
 			count
 		)
 
-	if count == 0:
+	if count == 0 and not item_dex_results_has_more:
 		var empty_label := Label.new()
 		empty_label.text = LocalizationManager.text("ui.staff.dev.no_item_results")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		item_dex_results_list.add_child(empty_label)
+	elif count == 0:
+		_load_more_item_dex_results.call_deferred()
+
+func _on_item_dex_results_scrolled(_value: float) -> void:
+	if item_dex_results_scroll == null or not item_dex_results_has_more:
+		return
+	var scroll_bar := item_dex_results_scroll.get_v_scroll_bar()
+	if scroll_bar == null or scroll_bar.max_value <= scroll_bar.page:
+		return
+	if scroll_bar.value >= scroll_bar.max_value - scroll_bar.page - ITEM_DEX_LOAD_MORE_THRESHOLD:
+		_load_more_item_dex_results.call_deferred()
+
+func _load_more_item_dex_results() -> void:
+	if (
+		item_dex_results_loading_more
+		or not item_dex_results_has_more
+		or item_dex_results_list == null
+	):
+		return
+	item_dex_results_loading_more = true
+	var request_id := item_dex_search_request_id
+	var loading_label := Label.new()
+	loading_label.name = "ItemDexLoadMoreStatus"
+	loading_label.text = LocalizationManager.text("common.loading")
+	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_label.custom_minimum_size = Vector2(0, 38)
+	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	item_dex_results_list.add_child(loading_label)
+
+	var query := ""
+	if item_dex_search_input != null:
+		query = item_dex_search_input.text.strip_edges().to_lower()
+	var search_result: Dictionary = await InventoryService.search_items(
+		query,
+		ITEM_DEX_PAGE_SIZE,
+		item_dex_results_loaded_offset
+	)
+	if request_id != item_dex_search_request_id:
+		return
+	if is_instance_valid(loading_label):
+		loading_label.queue_free()
+	if not bool(search_result.get("success", false)):
+		item_dex_results_loading_more = false
+		return
+
+	var raw_items := _normalize_dev_item_results(search_result.get("items", []))
+	item_dex_results_loaded_offset += raw_items.size()
+	item_dex_results_has_more = raw_items.size() == ITEM_DEX_PAGE_SIZE
+	var items := _filter_player_facing_item_variants(raw_items)
+	for item_value: Variant in items:
+		item_dex_results_list.add_child(_create_item_dex_result_button(item_value as Dictionary))
+		item_dex_results_displayed_count += 1
+	if item_dex_results_count_label != null:
+		item_dex_results_count_label.text = LocalizationManager.plural(
+			"ui.item_dex.result.one",
+			"ui.item_dex.result.many",
+			item_dex_results_displayed_count
+		)
+	item_dex_results_loading_more = false
+	if items.is_empty() and item_dex_results_has_more:
+		_load_more_item_dex_results.call_deferred()
 
 ## Z-Crystals use their holdable form as the player-facing inventory item.  A
 ## legacy bag form may still exist in old data, but must never be offered.

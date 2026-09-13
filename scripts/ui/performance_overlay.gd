@@ -182,7 +182,9 @@ func _capture_session_context() -> Dictionary:
 
 func _capture_spike_context() -> Dictionary:
 	var world: Node = GameState.get_world()
-	var player: Node2D = world.get_node_or_null("Player") as Node2D if world != null else null
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player != null and player.get_parent() != null and player.get_parent().is_in_group("world"):
+		world = player.get_parent()
 	var weather_controller: Node = world.get_node_or_null("WeatherController") if world != null else null
 	var day_night_controller: Node = world.get_node_or_null("DayNightController") if world != null else null
 	var remote_count := 0
