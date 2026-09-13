@@ -44500,26 +44500,35 @@ func _load_pvp_training_ai_catalog() -> void:
 					if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 						pvp_training_ai_tiers.append(tier)
 		var modes_value: Variant = response.get("availableModes", [])
+		var raw_modes: Array[String] = []
 		if modes_value is Array:
-			var raw_modes: Array[String] = []
 			for mode_value: Variant in modes_value:
 				var mode := str(mode_value).strip_edges().to_lower()
 				if mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] and mode not in raw_modes:
 					raw_modes.append(mode)
-			if "ai4" in raw_modes:
-				pvp_training_ai_available_modes.append("ai4")
-			elif "shadow" in raw_modes:
-				# Compatibility with a backend deployed before plain AI4. The
-				# legacy mode still acts through AI4 and is shown simply as AI4.
-				pvp_training_ai_available_modes.append("shadow")
-			if "active" in raw_modes:
-				pvp_training_ai_available_modes.append("active")
-			if "intermediate" in raw_modes:
-				pvp_training_ai_available_modes.append("intermediate")
-			if "nightmare" in raw_modes:
-				pvp_training_ai_available_modes.append("nightmare")
-			if "elite" in raw_modes:
-				pvp_training_ai_available_modes.append("elite")
+		# A bot marked available is the same server-side availability gate used by
+		# the mode list. Keep Intermediate selectable if an older gateway response
+		# has not yet populated availableModes with it.
+		var bots_value: Variant = response.get("bots", [])
+		if bots_value is Array:
+			for bot_value: Variant in bots_value:
+				if bot_value is Dictionary and str(bot_value.get("id", "")) == "intermediate" and bool(bot_value.get("available", false)):
+					if "intermediate" not in raw_modes:
+						raw_modes.append("intermediate")
+		if "ai4" in raw_modes:
+			pvp_training_ai_available_modes.append("ai4")
+		elif "shadow" in raw_modes:
+			# Compatibility with a backend deployed before plain AI4. The
+			# legacy mode still acts through AI4 and is shown simply as AI4.
+			pvp_training_ai_available_modes.append("shadow")
+		if "active" in raw_modes:
+			pvp_training_ai_available_modes.append("active")
+		if "intermediate" in raw_modes:
+			pvp_training_ai_available_modes.append("intermediate")
+		if "nightmare" in raw_modes:
+			pvp_training_ai_available_modes.append("nightmare")
+		if "elite" in raw_modes:
+			pvp_training_ai_available_modes.append("elite")
 		pvp_training_ai_default_mode = str(response.get("defaultMode", "ai4")).strip_edges().to_lower()
 		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
 			pvp_training_ai_default_mode = (
