@@ -48,9 +48,13 @@ func _check_renderer_waits_at_presentation_boundary() -> void:
 	)
 	_check(
 		dodge_callback_index > move_read_index and not function_source.contains('"kind": "dodge"'),
-		"dodge callout is deferred until the sprite begins dodging"
+		"dodge callout is deferred until the move is ready to show"
 	)
 	_check(source.contains('"on_dodge_started": dodge_command'), "move playback receives the synchronized dodge callout")
+	_check(source.contains("await _wait(DODGE_ANTICIPATION_SECONDS"), "dodge callout receives a readable lead before movement")
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check(battle_source.contains("const DODGE_COMMAND_DISPLAY_SECONDS := 2.60"), "dodge callout stays visible longer than ordinary commands")
+	_check(battle_source.contains('command_kind == "dodge" else TrainerCommandCallout.DISPLAY_SECONDS'), "extended visibility applies only to dodge commands")
 	_check(source.contains("func _command_was_shown(result: Variant) -> bool:"), "renderer accepts legacy boolean and timed command callbacks")
 
 

@@ -97,19 +97,27 @@ func _check_dodge(box: Node) -> void:
 	router.setup(box, box, box.get_parent())
 	var command_renderer := BattleEventRenderer.new()
 	command_renderer.animation_router = router
+	command_renderer.host_node = box
 	var commands: Array = []
 	command_renderer.show_trainer_command = func(command):
 		commands.append(command["kind"])
 		if command["kind"] == "dodge":
-			_check(box.single_sprite.position == base_position, "dodge callout fires at the start of the sprite movement")
+			_check(box.single_sprite.position == base_position, "dodge callout fires before the sprite movement")
 		return {"shown": true, "minimum_read_seconds": 0.7}
 	var command: Callable = await command_renderer._show_trainer_move_commands({}, "p1a", "Tackle", "p2a", "miss", true)
 	_check(commands == ["move"], "resource loading and attacker motion do not announce dodge early")
 	var synchronized_options := {"result": "miss", "on_dodge_started": command}
 	await router._play_move_target_dodge("p2a", synchronized_options)
-	_check(commands == ["move", "dodge"] and box.single_sprite.position != base_position, "callout and dodge share the same playback boundary")
+	_check(commands == ["move", "dodge"] and box.single_sprite.position != base_position, "callout leads into the dodge movement")
 	await router._play_move_target_dodge("p2a", synchronized_options, true)
 	_check(commands == ["move", "dodge"], "returning does not repeat the dodge callout")
+	var anticipation_renderer := BattleEventRenderer.new()
+	anticipation_renderer.host_node = box
+	anticipation_renderer.show_trainer_command = func(_command): return {"shown": true}
+	var anticipation_started := Time.get_ticks_msec()
+	await anticipation_renderer._show_trainer_dodge_command({}, "p2a", anticipation_renderer.render_generation)
+	var anticipation_msec := Time.get_ticks_msec() - anticipation_started
+	_check(anticipation_msec >= 280 and anticipation_msec <= 700, "dodge callout visibly leads the movement")
 	command_renderer.cancel_render()
 	command.call()
 	_check(commands == ["move", "dodge"], "cancelled event cannot show a stale dodge command")

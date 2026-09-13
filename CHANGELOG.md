@@ -18,7 +18,7 @@
 
 ### Battles and calculator
 
-- Missed attacks now stay aimed at their target while the defending Pokémon dodges and then returns to its place.
+- Missed attacks now stay aimed at their target while the defending Pokémon dodges shortly after a longer, clearer trainer callout, then returns to its place.
 - You can use the battle calculator before either player has chosen their first Pokémon.
 - Suggested opponent sets remain visible as clearly marked close matches when no exact match is left.
 - You can select an opponent set by clicking anywhere on its card.

@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattleEventRenderer
 
 const FALLBACK_MOVE_ACTION_LEAD_SECONDS := 0.40
+const DODGE_ANTICIPATION_SECONDS := 0.32
 
 var battle_log_panel: BattleLogPanel
 var mini_battle_feed: MiniBattleFeed
@@ -335,20 +336,33 @@ func _show_trainer_move_commands(
 		return Callable()
 	# The router invokes this only when the target actually begins dodging,
 	# after the attacker's motion and any resource loading have completed.
-	return _show_trainer_dodge_command.bind(event_data, target_ident, owned_generation)
+	return _show_trainer_dodge_command.bind(
+		event_data,
+		target_ident,
+		owned_generation,
+		suppress_presentation_waits
+	)
 
 
-func _show_trainer_dodge_command(event_data: Dictionary, target_ident: String, owned_generation: int) -> void:
+func _show_trainer_dodge_command(
+	event_data: Dictionary,
+	target_ident: String,
+	owned_generation: int,
+	suppress_presentation_waits := false
+) -> void:
 	if owned_generation != render_generation:
 		return
 	if not show_trainer_command.is_valid():
 		return
-	show_trainer_command.call({
+	var dodge_command_result: Variant = show_trainer_command.call({
 		"kind": "dodge",
 		"player_id": _get_player_id_from_ident(target_ident),
 		"pokemon": target_ident,
 		"event": event_data,
 	})
+	if _command_was_shown(dodge_command_result):
+		# Let the command register just before the Pokemon responds.
+		await _wait(DODGE_ANTICIPATION_SECONDS, suppress_presentation_waits)
 
 
 func _command_was_shown(result: Variant) -> bool:
