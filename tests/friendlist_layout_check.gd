@@ -10,10 +10,11 @@ func _init() -> void:
 
 	_check(source.contains("const POPUP_SIZE := Vector2(880, 620)"), "Friend List uses a spacious social workspace")
 	_check(source.contains('const FRIENDLIST_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")'), "Friend List header uses its dedicated social icon")
+	_check(source.contains('const REFRESH_ICON: Texture2D = preload("res://assets/ui/icons/refresh.svg")'), "Friend List refresh uses a font-independent icon")
 	_check(source.contains('"ui.friends.title"'), "Friend List uses a concise localized title")
 	_check(source.contains('"ui.friends.subtitle"'), "Friend List header explains its scope with localized copy")
 	_check(source.contains('"ui.friends.add"'), "Adding a friend remains a clear localized primary action")
-	_check(source.contains('refresh_button.text = "↻"') and source.contains('close_button.text = "×"'), "Header utilities use compact controls")
+	_check(source.contains("refresh_button.icon = REFRESH_ICON") and source.contains('close_button.text = "×"'), "Header utilities use compact controls")
 	_check(source.contains("button.size_flags_horizontal = Control.SIZE_EXPAND_FILL"), "Social tabs share the available width")
 	_check(source.contains("func _refresh_tab_counts("), "Friends, requests and blocked tabs report their counts")
 	_check(source.contains("friends_summary_label.text ="), "Friends view reports total and online trainers")
