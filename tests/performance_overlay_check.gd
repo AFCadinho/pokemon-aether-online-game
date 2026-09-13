@@ -7,6 +7,16 @@ class TestCeruleanMap extends Node:
 	func get_map_id() -> String:
 		return "kanto_cerulean_city"
 
+class TestDiagnosticPlayer extends Node2D:
+	func is_tile_moving() -> bool:
+		return true
+
+	func get_active_mount_id() -> String:
+		return "cyclizar"
+
+	func get_current_move_duration() -> float:
+		return 0.065
+
 
 func _init() -> void:
 	_run.call_deferred()
@@ -94,6 +104,15 @@ func _run() -> void:
 	overlay._refresh()
 	_check(overlay.spike_recorder.is_recording(), "details start local spike recording in Cerulean")
 	_check(overlay.recording_readout.visible, "Cerulean recording is visible to the player")
+	var diagnostic_player := TestDiagnosticPlayer.new()
+	diagnostic_player.position = Vector2(320, 640)
+	diagnostic_player.add_to_group("player")
+	root.add_child(diagnostic_player)
+	var spike_context: Dictionary = overlay._capture_spike_context()
+	_check(spike_context.player.position == [320.0, 640.0], "spike context finds the active grouped player")
+	_check(spike_context.player.moving and spike_context.player.mount_id == "cyclizar",
+		"spike context distinguishes mounted movement")
+	diagnostic_player.queue_free()
 	game_state.current_map = original_map
 	overlay._refresh()
 	_check(not overlay.spike_recorder.is_recording(), "leaving Cerulean finishes the recording")
