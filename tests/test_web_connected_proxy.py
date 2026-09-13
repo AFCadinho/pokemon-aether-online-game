@@ -16,6 +16,12 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_upstream_websocket_keepalive_tolerates_local_development_stalls(self):
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["ping_interval"], 30)
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["ping_timeout"], 120)
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["close_timeout"], 5)
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["max_size"], 65536)
+
     def test_local_target_validation(self):
         for url in ["https://pokeaether.com", "http://localhost:8000", "http://127.0.0.1:8000/path", "http://user:pass@127.0.0.1:8000", "http://127.0.0.1:8000?target=remote"]:
             with self.assertRaises(ValueError):

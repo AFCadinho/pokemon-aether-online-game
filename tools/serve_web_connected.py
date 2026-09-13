@@ -15,6 +15,16 @@ from websockets.exceptions import ConnectionClosed, InvalidStatus
 
 ROOT = Path(__file__).resolve().parents[1]
 NEWS_URL = "https://updates.pokeaether.com/data/news.json"
+UPSTREAM_WEBSOCKET_OPTIONS = {
+    "open_timeout": 10,
+    "max_size": 65536,
+    # Local imports, debugger pauses and large asset loads can briefly stall
+    # the integration backend. Keep detecting dead connections, but do not
+    # drop chat or presence after the library's aggressive 20-second default.
+    "ping_interval": 30,
+    "ping_timeout": 120,
+    "close_timeout": 5,
+}
 POKEMON_ASSET_ROOTS = {
     "battle": (ROOT / "assets/sprites/pokemon").resolve(),
     "gen5": (ROOT / "assets/sprites/pokemon/gen5").resolve(),
@@ -202,7 +212,11 @@ def create_app(upstream, build=None, *, transport=None):
         url = httpx.URL(upstream.replace("http://", "ws://", 1) + f"/ws/{channel}", params=query)
         tasks = []
         try:
-            async with connect(str(url), proxy=None, open_timeout=10, max_size=65536) as remote:
+            async with connect(
+                str(url),
+                proxy=None,
+                **UPSTREAM_WEBSOCKET_OPTIONS,
+            ) as remote:
                 await socket.accept()
 
                 async def outbound():
