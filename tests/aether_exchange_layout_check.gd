@@ -68,6 +68,32 @@ func _run() -> void:
 	var previous_locale: String = localization.current_locale
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
+		var requester_message := str(summary_overlay.call("_exchange_item_request_system_message", {
+			"role": "requester",
+			"itemId": "rare-candy",
+			"itemName": "Rare Candy",
+			"quantity": 5,
+			"totalPrice": 5000,
+			"fulfilledQuantity": 5,
+			"requestedQuantity": 20,
+			"remainingQuantity": 15,
+			"completed": false,
+		}))
+		var seller_message := str(summary_overlay.call("_exchange_item_request_system_message", {
+			"role": "seller",
+			"itemId": "rare-candy",
+			"itemName": "Rare Candy",
+			"quantity": 5,
+			"totalPrice": 5000,
+			"fulfilledQuantity": 5,
+			"requestedQuantity": 20,
+			"remainingQuantity": 15,
+			"completed": false,
+		}))
+		_check(not requester_message.begins_with("ui.exchange."), locale + ": requester fill system message is translated")
+		_check(requester_message.contains("5") and requester_message.contains("20") and requester_message.contains("15"), locale + ": requester fill system message reports progress")
+		_check(not seller_message.begins_with("ui.exchange."), locale + ": seller fill system message is translated")
+		_check(seller_message.contains("5") and seller_message.contains("000"), locale + ": seller fill system message reports quantity and payment")
 		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "mine-items", "history"]:
 			summary_overlay.call("_hide_aether_exchange_pokemon_hover")
 			await process_frame
