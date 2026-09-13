@@ -147,6 +147,7 @@ def main():
     )
     forbidden_markers = (
         b'node_modules/playwright-core/',
+        b'assets/sprites/pokemon/front/pikachu/sheet.png.import',
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',
         b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn.remap',
     )

@@ -27,9 +27,12 @@ func _init() -> void:
 		"all downloaded frames share one WebGL sheet texture")
 	_check(first_texture != null and first_texture.region == Rect2(0, 0, 4, 4), "atlas frame region is preserved")
 	_check(str(service.call("_normalize_segment", "Mr. Mime_Form")) == "mr-mime-form", "asset paths are normalized safely")
+	_check(str(service.call("_catalog_style", "animated")) == "animated", "normal animated sprites are the browser default")
+	_check(str(service.call("_catalog_style", "pixel")) == "pixel", "Gen 5 remains available as the pixel style")
+	_check(str(service.call("_catalog_style", "static")) == "", "static style does not request a battle catalog")
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/web_pokemon_sprite_service.gd")
-	_check(service_source.contains("spriteBases") and service_source.contains("WebRuntime.web_release_config()"),
-		"production sprite catalogs use versioned R2 base URLs")
+	_check(service_source.contains("spriteStyles") and service_source.contains("WebRuntime.web_release_config()"),
+		"production sprite styles use versioned R2 base URLs")
 	_check(service_source.contains("DOWNLOAD_ATTEMPTS := 3") and service_source.contains("await _download_once(url)"),
 		"browser sprite downloads retry bounded transient failures")
 	_check(not service_source.contains("Accept: application/json,image/png"),
@@ -37,6 +40,11 @@ func _init() -> void:
 	var sprite_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
 	_check(sprite_source.contains("_upgrade_single_web_sprite.call_deferred"), "battle sprites upgrade without blocking the HOME fallback")
 	_check(sprite_source.contains("request_web_sprite_frames"), "battle, preview and detail screens share the web loader")
+	_check(sprite_source.contains('if str(result.get("style", "animated")) == "pixel"'),
+		"Gen 5 display scaling is limited to the optional pixel style")
+	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
+	_check(settings_source.contains('OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()'),
+		"browser players can select the remotely hosted Gen 5 style")
 	var sprite_scene := FileAccess.get_file_as_string("res://scenes/battle/sprite_box.tscn")
 	var preview_scene := FileAccess.get_file_as_string("res://scenes/battle/team_preview_layer.tscn")
 	_check(not sprite_scene.contains("assets/sprites/pokemon/front/") and sprite_scene.contains("pokemon_home/Pikachu.png"), "battle fallback does not require an excluded legacy sheet")

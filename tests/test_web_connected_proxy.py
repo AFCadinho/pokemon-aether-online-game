@@ -67,10 +67,10 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(stats_response.status_code, 200)
             self.assertEqual(dict(calls[-1].url.params), {"species": "rattata", "level": "2"})
             self.assertEqual(client.get("/api/battle/pvp/training/ai/live/training-test/spectate").status_code, 200)
-            sprite = client.get("/pokemon-assets/gen5/front/pikachu/animation.json")
+            sprite = client.get("/pokemon-assets/battle/front/pikachu/animation.json")
             self.assertEqual(sprite.status_code, 200)
             self.assertEqual(sprite.headers["cache-control"], "no-cache")
-            self.assertEqual(client.get("/pokemon-assets/gen5/front/pikachu/other.txt").status_code, 404)
+            self.assertEqual(client.get("/pokemon-assets/battle/front/pikachu/other.txt").status_code, 404)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/teams/catalog-team").status_code, 200)
             self.assertEqual(client.post("/api/battle/pvp/training/ai/battles", json={}).status_code, 200)
             # A complete six-Pokémon party can exceed the generic UI request

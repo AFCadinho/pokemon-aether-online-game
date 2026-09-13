@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Safely extract browser-readable Gen 5 sheets from an existing asset-pack zip."""
+"""Safely extract browser-readable battle sheets from an existing asset-pack zip."""
 from __future__ import annotations
 
 import argparse
@@ -9,15 +9,18 @@ import zipfile
 
 
 SIDES = ("front", "back", "shiny_front", "shiny_back")
+STYLES = ("animated", "pixel")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("archive", type=Path)
+    parser.add_argument("--style", choices=STYLES, required=True)
     parser.add_argument("--side", choices=SIDES, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    prefix = PurePosixPath(f"assets/sprites/pokemon/gen5/{args.side}")
+    style_root = "gen5/" if args.style == "pixel" else ""
+    prefix = PurePosixPath(f"assets/sprites/pokemon/{style_root}{args.side}")
     output = args.output.resolve()
     shutil.rmtree(output, ignore_errors=True)
     output.mkdir(parents=True)
