@@ -306,6 +306,11 @@ func _run() -> void:
 	popup.call("_render_current_list")
 	popup.call("_select_entry", wanted_order, "wish")
 	await process_frame
+	_check(list_container.columns == 5, "Wanted item requests use the five-column market grid")
+	var wanted_card := list_container.get_child(0) as Button
+	_check(wanted_card != null and wanted_card.custom_minimum_size.y == 190, "Wanted item requests use market cards")
+	var card_progress := wanted_card.find_child("BrowseWishProgress", true, false) as ProgressBar
+	_check(card_progress != null and card_progress.value == 1 and card_progress.max_value == 3, "Wanted item cards show delivered progress")
 	var fulfill_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
 	_check(fulfill_button != null and not fulfill_button.disabled, "Players can fulfill the remaining part of a wishlist order")
 	_check((popup.get("quantity_spin") as SpinBox).max_value == 2, "Fulfillment quantity is capped by the request remainder")

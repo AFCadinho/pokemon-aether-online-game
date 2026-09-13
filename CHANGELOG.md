@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wanted items on the Aether Exchange now use the same card grid as other market listings, with a clear fulfillment progress bar.
+
 - Both sides of an Aether Exchange item-request delivery now receive a localized system message with the result.
 
 - Movement through large maps now reuses their collision and terrain layers instead of searching the complete map again at every tile.
