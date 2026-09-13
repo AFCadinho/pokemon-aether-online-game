@@ -74,6 +74,22 @@ func _run() -> void:
 		"remote mount foreground follows Cyclizar's current animation frame"
 	)
 	state.erase("movement")
+	for direction: Vector2 in [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]:
+		avatar.last_direction = direction
+		avatar._update_animation(true)
+		var expected_offset := Vector2.ZERO
+		if direction == Vector2.LEFT:
+			expected_offset = Vector2(-4, 4)
+		elif direction == Vector2.RIGHT:
+			expected_offset = Vector2(4, 4)
+		elif direction == Vector2.DOWN:
+			expected_offset = Vector2(0, 4)
+		_check(hair.offset == expected_offset,
+			"remote mounted hair aligns immediately after turning %s" % direction)
+		avatar.mount_sprite.frame = 2
+		avatar._update_animation(true)
+		_check(hair.animation == body.animation and hair.frame == body.frame and body.frame == 2,
+			"remote mounted layers retain their mask frame between animation ticks")
 	parent.hide()
 	state.position.x = 128
 	avatar.apply_state(state)

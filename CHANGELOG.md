@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Other mounted players now keep their outfits aligned immediately when turning, without needing to stop first.
 - Riders and their outfits now stay visually together across every animated mount frame.
 - Pokédex and Item Dex catalogues now load through the browser's restricted account API, and the Pokédex Shiny selector displays its proper icon.
 - Town Map locations, interiors, connections, and legend entries now display their icons correctly in the browser.
