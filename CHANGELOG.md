@@ -4,6 +4,7 @@
 
 - Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
 - Browser battles now preload map encounters and known teams so the intended battle sprite is ready before a Pokémon appears.
+- Emergency HOME battle fallbacks now fit the arena consistently instead of appearing at wildly different sizes.
 
 ## 0.3.78 - 2026-09-13
 
