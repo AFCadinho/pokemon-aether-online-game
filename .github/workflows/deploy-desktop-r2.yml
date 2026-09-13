@@ -232,11 +232,16 @@ jobs:
         uses: actions/cache@v6
         with:
           path: .godot/imported
-          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/male/body/**/*.png', 'assets/player/female/body/**/*.png') }}
+          key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ env.MUSIC_ASSET_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/male/body/**/*.png', 'assets/player/female/body/**/*.png') }}
 
       - name: Import Godot assets
         run: |
           set -o pipefail
+          # The music pack is restored after checkout and is intentionally not
+          # committed. Godot may report stale preload errors on the first
+          # import while it creates the OGG import artifacts; a second import
+          # validates the fully imported project.
+          ./godot --headless --import --quit >/tmp/godot-import-initial.log 2>&1 || true
           ./godot --headless --import --quit 2>&1 | tee /tmp/godot-import.log
           if grep -E 'SCRIPT ERROR:.*assets/music/|GDScript::reload \(res://scripts/services/web_demo_audio_catalog.gd:' /tmp/godot-import.log; then
             echo "::error::Required music resources failed Godot import."
