@@ -21,6 +21,7 @@ class FakeHoverService extends HoverService:
 		return {
 			"requested_ident": pokemon.get("ident", ""),
 			"species_metadata": {"types": ["electric"], "possibleAbilities": ["Static"]},
+			"speed_data": {"min": 188, "minNeutral31Iv": 240, "maxNeutral31Iv": 303, "max": 333},
 			"confirmed_moves": [
 				{"name": "Thunderbolt", "pp": 8, "maxpp": 24},
 				{"name": "Surf", "pp": 24, "maxpp": 24},
@@ -82,14 +83,21 @@ func _ready() -> void:
 			await battle._show_pokemon_hover(display, display, side)
 			_check(battle.pokemon_hover_card.current_confirmed_moves == [{"name": "Thunderbolt", "pp": 8, "maxpp": 24}], "spectator " + perspective + " sees public PP on " + side)
 			_check(battle.pokemon_hover_card.move_labels[0].text.contains("8/24"), "spectator card renders maximum-PP scale once")
+			_check(battle.pokemon_hover_card.current_speed_data.get("current", 0) == 0, "spectator " + perspective + " keeps public speed tiers on " + side)
+			_check(battle.pokemon_hover_card.lowest_speed_label.text == "188" and battle.pokemon_hover_card.highest_speed_label.text == "333", "spectator card renders the full speed range")
+			_check(battle.pokemon_hover_card.speed_separator_1.visible and battle.pokemon_hover_card.highest_speed_label.visible, "spectator speed tier separators stay visible")
 
 	battle.pvp_viewer_role = "participant"
 	battle.action_flow.set_local_player_id("p1")
-	var own := {"ident": "p1: Pikachu", "species": "Pikachu", "active": true, "metadataSlot": 1}
+	var own := {"ident": "p1: Pikachu", "species": "Pikachu", "active": true, "metadataSlot": 1, "stats": {"spe": 333}}
 	battle.battle_state.requests.p1 = {"active": [{"moves": [{"move": "Thunderbolt", "pp": 2, "maxpp": 15}]}]}
 	battle.hover_state.set_sprite_hover_player("p1")
 	await battle._show_pokemon_hover(own, own, "p1")
 	_check(battle.pokemon_hover_card.current_confirmed_moves[0].pp == 2 and battle.pokemon_hover_card.current_confirmed_moves[0].maxpp == 15, "participant sprite still uses exact owned PP")
+	_check(battle.pokemon_hover_card.current_speed_data == {"current": 333}, "participant hover replaces the possible range with exact owned Speed")
+	_check(battle.pokemon_hover_card.lowest_speed_label.text == "333", "participant card renders exact owned Speed")
+	_check(not battle.pokemon_hover_card.speed_separator_1.visible and not battle.pokemon_hover_card.highest_speed_label.visible, "participant card hides public speed tier separators")
+	_check(battle._get_owned_hover_current_speed(own, own, "Choice Scarf", {"spe": 1}) == 748, "exact owned Speed applies held-item and battle-stage modifiers")
 	var saved_scale_source := Pokemon.new(
 		"Samurott-Hisui",
 		100,
