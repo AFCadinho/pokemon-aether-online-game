@@ -223,6 +223,18 @@ func _run() -> void:
 					if requests_section != null:
 						_check_bounds(requests_section, popup, description)
 						_check(requests_section.size.x < popup.list_scroll.size.x * 0.6, description + ": request section does not consume the full width")
+						var request_buttons := requests_section.find_children("*", "Button", true, false)
+						var request_card := request_buttons[0] as Button if not request_buttons.is_empty() else null
+						var request_progress := requests_section.find_child("PortfolioWishProgress", true, false) as ProgressBar
+						var request_price := requests_section.find_child("PortfolioWishPrice", true, false) as Label
+						var request_name := requests_section.find_child("PortfolioWishName", true, false) as Label
+						var request_state := requests_section.find_child("PortfolioWishState", true, false) as Label
+						_check(request_card != null and request_card.text.is_empty(), description + ": request card uses structured content instead of a truncated subtitle")
+						_check(request_progress != null and request_progress.value == 5 and request_progress.max_value == 20, description + ": request card shows fulfillment progress")
+						_check(request_price != null and request_price.text.contains("100"), description + ": request card shows its unit price separately")
+						if request_card != null:
+							for request_control: Control in [request_name, request_price, request_progress, request_state]:
+								_check(request_control != null and request_card.get_global_rect().grow(1).encloses(request_control.get_global_rect()), description + ": structured request content fits its card")
 			var active_content: Control = popup.detail_stack if popup.detail_panel.visible else popup.action_content
 			for button: Button in active_content.find_children("*", "Button", true, false):
 				if button.is_visible_in_tree():
