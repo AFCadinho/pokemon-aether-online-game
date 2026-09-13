@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Opponent-set detail labels and values now stay neatly top-aligned, including multi-line move lists.
+
 - Opponent-set details now keep suggested moves visible, place the calculate action in the card header, and remove the redundant footer button.
 
 - Opponent-set details now separate item, Ability, nature, EVs, and moves into clearer labeled rows, with larger battle clues and a prominent cyan calculate button.

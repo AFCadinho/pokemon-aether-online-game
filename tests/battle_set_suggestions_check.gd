@@ -142,9 +142,11 @@ func _run() -> void:
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as PanelContainer
 	var suggestion_item := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueItem", true, false) as Label
 	var suggestion_moves := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueMoves", true, false) as Label
+	var suggestion_moves_label := panel.set_suggestions_popup.find_child("SetSuggestionBuildLabelMoves", true, false) as Label
 	var suggestion_nature_label := panel.set_suggestions_popup.find_child("SetSuggestionBuildLabelNature", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
 	_check(suggestion_build != null and suggestion_item != null and suggestion_item.text == "Rocky Helmet" and suggestion_moves != null and suggestion_moves.text.contains("Earthquake") and suggestion_moves.custom_minimum_size.y >= 34.0, "Suggested build details and fallback catalog moves remain visibly allocated")
+	_check(suggestion_moves_label != null and suggestion_moves_label.get_parent() == suggestion_moves.get_parent() and suggestion_moves_label.custom_minimum_size == Vector2(84, 34) and suggestion_moves_label.position.y == suggestion_moves.position.y, "Set labels and values share a fixed column and top alignment, including wrapped moves")
 	_check(suggestion_nature_label != null and suggestion_nature_label.get_theme_color("font_color") == Color("#e7b65d") and suggestion_item.get_theme_color("font_color") == Color("#f2f0ea"), "Set field labels use distinct accents while their values retain high contrast")
 	var apply_style := apply_button.get_theme_stylebox("normal") as StyleBoxFlat if apply_button != null else null
 	_check(apply_style != null and apply_button.custom_minimum_size.y == 40.0 and apply_style.bg_color == Color("#123d52") and apply_style.border_color.to_html(false) == "8ccbe8" and apply_style.border_color.a >= 0.94, "Calculate with this set is styled as the cyan primary action")
