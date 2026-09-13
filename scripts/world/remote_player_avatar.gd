@@ -848,6 +848,7 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
+	_sync_mounted_rider_frame()
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 
@@ -860,8 +861,30 @@ func _connect_mount_frame_sync() -> void:
 
 
 func _on_mount_frame_changed() -> void:
+	_sync_mounted_rider_frame()
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
+
+
+func _sync_mounted_rider_frame() -> void:
+	if mount_sprite == null or not mount_sprite.visible:
+		return
+	if not _uses_static_activity_movement_pose():
+		return
+	var animation_name := mount_sprite.animation
+	for sprite in appearance_sprites:
+		if _is_unequipped_appearance_part_sprite(sprite):
+			continue
+		if sprite.sprite_frames == null \
+			or not sprite.sprite_frames.has_animation(animation_name):
+			continue
+		sprite.animation = animation_name
+		sprite.frame = mini(
+			mount_sprite.frame,
+			sprite.sprite_frames.get_frame_count(animation_name) - 1
+		)
+		sprite.frame_progress = mount_sprite.frame_progress
+		sprite.pause()
 
 
 func _sync_mount_foreground_frame() -> void:
@@ -1399,7 +1422,8 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 		body_frames,
 		current_mount_id,
 		_get_surf_fish_rider_offset_adjustments(),
-		_get_surf_fish_body_hidden_regions()
+		_get_surf_fish_body_hidden_regions(),
+		_uses_static_activity_movement_pose()
 	)
 
 	for sprite in appearance_sprites:
@@ -1518,7 +1542,9 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	part_frames = MountService.get_mounted_rider_frames(
 		part_frames,
 		current_mount_id,
-		_get_surf_fish_rider_offset_adjustments()
+		_get_surf_fish_rider_offset_adjustments(),
+		{},
+		_uses_static_activity_movement_pose()
 	)
 
 	sprite.sprite_frames = part_frames
@@ -1659,16 +1685,8 @@ func _get_activity_layer_offset(category: String) -> Vector2:
 		return Vector2.ZERO
 
 	var category_offsets: Dictionary = style_offsets as Dictionary
-	var direction_name := _get_activity_offset_direction()
-	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_RIDE \
-		and MountService.get_mount_movement_mode(current_mount_id) \
-		== MountService.MOVEMENT_MODE_LAND \
-		and direction_name in ["left", "right"]:
-		# Surf offsets should not pull remote land-mount cosmetics away from
-		# the body while the mount is moving horizontally.
-		direction_name = "default"
 	var direction_offsets: Variant = category_offsets.get(
-		direction_name,
+		_get_activity_offset_direction(),
 		category_offsets.get("default", {})
 	)
 	if direction_offsets is Dictionary:

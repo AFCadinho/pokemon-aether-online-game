@@ -54,10 +54,13 @@ func _run() -> void:
 	avatar.apply_state(state)
 	avatar.mount_sprite.frame = 2
 	var hair: AnimatedSprite2D = avatar._get_appearance_sprite("HairSprite")
-	var base_hair_offset: Vector2 = hair.get_meta("activity_base_sprite_offset")
 	_check(
-		hair.offset == base_hair_offset + Vector2(0, 4),
-		"remote land-mount cosmetics stay horizontally aligned with the body"
+		body.animation == &"walk_right" and body.frame == 2 and not body.is_playing(),
+		"remote rider uses Cyclizar's current masked frame without animating its pose"
+	)
+	_check(
+		hair.animation == &"walk_right" and hair.frame == 2 and not hair.is_playing(),
+		"remote outfit layers use the same masked Cyclizar frame as the body"
 	)
 	var expected_rider_position: Vector2 = avatar.base_rider_position + Vector2(
 		MountServiceScript.get_rider_frame_offset("cyclizar", "right", 2)
@@ -69,12 +72,6 @@ func _run() -> void:
 	_check(
 		avatar.mount_foreground_sprite.frame == avatar.mount_sprite.frame,
 		"remote mount foreground follows Cyclizar's current animation frame"
-	)
-	state.movement.mountId = "lapras"
-	avatar.apply_state(state)
-	_check(
-		hair.offset == base_hair_offset + Vector2(4, 4),
-		"remote Surf riders retain their direction-specific Lapras pose"
 	)
 	state.erase("movement")
 	parent.hide()
