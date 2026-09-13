@@ -50,7 +50,19 @@ func _run() -> void:
 	router.release.emit()
 	await get_tree().process_frame
 	_check(updates == [["old", true], ["new", true], ["new", false]], "late callback cannot overwrite the newer HP presentation")
-	box.queue_free()
+	box.reset_battle_pose()
+	var expected_detached_position: Vector2 = box.single_sprite.position
+	var expected_detached_scale: Vector2 = box.single_sprite.scale
+	get_tree().root.remove_child(box)
+	box.single_sprite.position = Vector2(999.0, 999.0)
+	box.single_sprite.scale = Vector2(9.0, 9.0)
+	box.reset_battle_pose()
+	_check(
+		box.single_sprite.position == expected_detached_position
+			and box.single_sprite.scale == expected_detached_scale,
+		"detached sprite boxes retain their cached battle pose"
+	)
+	box.free()
 	await get_tree().process_frame
 	print("PASS battle_animation_recovery_check" if not failed else "FAIL battle_animation_recovery_check")
 	get_tree().quit(1 if failed else 0)

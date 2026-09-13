@@ -181,7 +181,8 @@ func restore_battle_sprites_visibility(sprites: Array) -> void:
 			(sprite_value as AnimatedSprite2D).visible = true
 
 func _get_sprite_key(sprite: AnimatedSprite2D) -> String:
-	return str(sprite.get_path())
+	# Battle teardown can reset sprites after their controls leave the SceneTree.
+	return str(sprite.get_instance_id())
 
 func _snap_all_sprites_to_pixel_grid() -> void:
 	_snap_sprite_to_pixel_grid(single_sprite)
