@@ -2,24 +2,6 @@
 
 ## Unreleased
 
-- Other mounted players now keep their outfits aligned immediately when turning, without needing to stop first.
-- Riders and their outfits now stay visually together across every animated mount frame.
-- Pokédex and Item Dex catalogues now load through the browser's restricted account API, and the Pokédex Shiny selector displays its proper icon.
-- Town Map locations, interiors, connections, and legend entries now display their icons correctly in the browser.
-- Shared confirmation and client-only dialogs now display their Aether icon correctly in the browser.
-- The Friend List refresh action now displays correctly in the browser.
-- Browser players can now view their own Guild overview and members. Guild and Battle Replay actions use clear icons, client-only notices match the game style, and NPC replays show the correct Trainer.
-- The Aethernet browser notice now fits and centers correctly at browser resolutions.
-- Side-quest markers above NPCs now display correctly in the browser.
-
-- Pokémon Summary tabs and front/back sprite switching now respond smoothly in the browser.
-- Currency and navigation symbols now display correctly throughout the browser game, including global buffs and login.
-- The browser game now opens with a clearer PokeAether start screen, a simple play button and a link to the smoother, higher-quality game client.
-- Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
-- Browser battles now preload map encounters and known teams so the intended battle sprite is ready before a Pokémon appears.
-- Emergency HOME battle fallbacks now fit the arena consistently instead of appearing at wildly different sizes.
-- Wild and NPC battle transitions now prioritize only the Pokémon entering the field while the rest of each team keeps loading in the background.
-
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
@@ -57,8 +39,22 @@
 
 - Wild, Trainer, and PvP Battle Replays can now be shared just like AI Sparring replays.
 - Wild Battle Replays now show the Poké Ball animation and a successful catch instead of ending suddenly.
+- Browser players can now view their own Guild overview and members. Guild and Battle Replay actions use clear icons, client-only notices match the game style, and NPC replays show the correct Trainer.
+- Pokédex and Item Dex catalogues now load through the browser's restricted account API, and the Pokédex Shiny selector displays its proper icon.
+- Town Map locations, interiors, connections, and legend entries now display their icons correctly in the browser.
+- Shared confirmation and client-only dialogs now display their Aether icon correctly in the browser.
+- The Friend List refresh action now displays correctly in the browser.
+- The Aethernet browser notice now fits and centers correctly at browser resolutions.
+- Side-quest markers above NPCs now display correctly in the browser.
+- Pokémon Summary tabs and front/back sprite switching now respond smoothly in the browser.
+- Currency and navigation symbols now display correctly throughout the browser game, including global buffs and login.
+- The browser game now opens with a clearer PokeAether start screen, a simple play button and a link to the smoother, higher-quality game client.
 - Animated Pokémon in browser battles now load more reliably and use fewer resources.
 - Browser battles now use the regular animated Pokémon by default. Gen 5 animations remain available as an option, with static images used only where needed.
+- Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
+- Browser battles now preload map encounters and known teams so the intended battle sprite is ready before a Pokémon appears.
+- Emergency HOME battle fallbacks now fit the arena consistently instead of appearing at wildly different sizes.
+- Wild and NPC battle transitions now prioritize only the Pokémon entering the field while the rest of each team keeps loading in the background.
 - Browser login now explains when your Trainer is outside the area supported by the browser version.
 - After a connection problem, players now return to the shared world automatically instead of appearing only in chat.
 
@@ -70,6 +66,8 @@
 - Cerulean City's original nighttime lighting has been restored without losing the recent movement improvements.
 - Travelling through large maps is now smoother.
 - Riding a mount through detailed places such as Cerulean City now runs more smoothly.
+- Riders and their outfits now stay visually together across every animated mount frame.
+- Other mounted players now keep their outfits aligned immediately when turning, without needing to stop first.
 - The launcher now repairs incomplete music downloads, and desktop releases check that all required music is included.
 - Testers can temporarily raise their account's training level limit to 100 without changing story progress, Badges, or the trading limit.
 
