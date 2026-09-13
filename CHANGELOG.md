@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Developer Tools can now temporarily set the current account's training level cap to 100 without changing story progress, Badges, or the trade level cap.
+
 - Wanted items on the Aether Exchange now use the same card grid as other market listings, with a clear fulfillment progress bar.
 
 - Both sides of an Aether Exchange item-request delivery now receive a localized system message with the result.

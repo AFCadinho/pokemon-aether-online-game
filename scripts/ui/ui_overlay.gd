@@ -222,6 +222,7 @@ const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/ba
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
 const DEV_TRAINER_REMATCH_ICON: Texture2D = preload("res://assets/ui/icons/trainer_challenge.png")
+const DEV_LEVEL_CAP_ICON: Texture2D = preload("res://assets/ui/icons/trainer_challenge.png")
 const DEV_OVERWORLD_RESETS_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
@@ -1535,11 +1536,14 @@ var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_badge_progress_button: Button
 var dev_trainer_rematch_mode_button: Button
+var dev_level_cap_override_button: Button
 var dev_overworld_resets_button: Button
 var dev_badge_progress_popup: DevBadgeProgressPopup
 var dev_item_catalog: Array[Dictionary] = []
 var dev_trainer_rematch_mode_enabled := false
 var dev_trainer_rematch_mode_request_active := false
+var dev_level_cap_override_enabled := false
+var dev_level_cap_override_request_active := false
 var dev_selected_item: Dictionary = {}
 var dev_item_search_request_id := 0
 var item_dex_popup: PanelContainer
@@ -1975,6 +1979,7 @@ func _ready() -> void:
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
 	dev_badge_progress_button.pressed.connect(_on_dev_badge_progress_button_pressed)
 	dev_trainer_rematch_mode_button.pressed.connect(_on_dev_trainer_rematch_mode_button_pressed)
+	dev_level_cap_override_button.pressed.connect(_on_dev_level_cap_override_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
@@ -2397,6 +2402,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_trainer_rematch_mode_button != null:
 		dev_trainer_rematch_mode_button.visible = can_use_dev_tools
 		dev_trainer_rematch_mode_button.disabled = not can_use_dev_tools or dev_trainer_rematch_mode_request_active
+	if dev_level_cap_override_button != null:
+		dev_level_cap_override_button.visible = can_use_dev_tools
+		dev_level_cap_override_button.disabled = not can_use_dev_tools or dev_level_cap_override_request_active
 	if dev_overworld_resets_button != null:
 		dev_overworld_resets_button.visible = can_use_dev_tools
 		dev_overworld_resets_button.disabled = not can_use_dev_tools
@@ -9435,6 +9443,13 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_trainer_rematch_mode_button)
 		dev_actions_container.move_child(dev_trainer_rematch_mode_button, dev_clear_party_button.get_index())
 
+	dev_level_cap_override_button = Button.new()
+	dev_level_cap_override_button.custom_minimum_size = Vector2(190, 34)
+	dev_level_cap_override_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_level_cap_override_button)
+		dev_actions_container.move_child(dev_level_cap_override_button, dev_clear_party_button.get_index())
+
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
 	dev_add_menu_popup.visible = false
@@ -9826,6 +9841,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_heal_party_button,
 		dev_badge_progress_button,
 		dev_trainer_rematch_mode_button,
+		dev_level_cap_override_button,
 		dev_clear_party_button,
 	]:
 		_move_tool_menu_control(action_button, dev_quick_actions_grid)
@@ -9866,6 +9882,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		Color("#e3bd68")
 	)
 	_refresh_dev_trainer_rematch_mode_button()
+	_refresh_dev_level_cap_override_button()
 	_configure_tool_tile_button(
 		dev_clear_party_button,
 		"ui.staff.dev.clear_data",
@@ -33591,6 +33608,7 @@ func _on_dev_actions_button_pressed() -> void:
 	if dev_actions_popup.visible:
 		_refresh_dev_world_time_selector()
 		_refresh_dev_trainer_rematch_mode()
+		_refresh_dev_level_cap_override()
 		_position_action_slot_popup(dev_actions_popup, dev_actions_slot)
 		_hide_my_powers_menu()
 		_activate_ui_panel(dev_actions_popup)
@@ -33660,6 +33678,54 @@ func _on_dev_trainer_rematch_mode_button_pressed() -> void:
 	TrainerProgressService.invalidate_all()
 	_add_chat_message(LocalizationManager.text(
 		"ui.staff.dev.trainer_rematch_mode_enabled" if dev_trainer_rematch_mode_enabled else "ui.staff.dev.trainer_rematch_mode_disabled"
+	))
+
+
+func _refresh_dev_level_cap_override_button() -> void:
+	if dev_level_cap_override_button == null:
+		return
+	_configure_tool_tile_button(
+		dev_level_cap_override_button,
+		"ui.staff.dev.level_cap_override_on" if dev_level_cap_override_enabled else "ui.staff.dev.level_cap_override_off",
+		"ui.staff.dev.level_cap_override_description",
+		DEV_LEVEL_CAP_ICON,
+		Color("#83d9a3")
+	)
+
+
+func _refresh_dev_level_cap_override() -> void:
+	if not _can_use_dev_tools() or dev_level_cap_override_request_active:
+		return
+	dev_level_cap_override_request_active = true
+	var result: Dictionary = await TrainerProgressService.get_developer_level_cap_override()
+	dev_level_cap_override_request_active = false
+	if bool(result.get("success", false)):
+		dev_level_cap_override_enabled = bool(result.get("enabled", false))
+	_refresh_dev_level_cap_override_button()
+	_refresh_dev_tools_visibility()
+
+
+func _on_dev_level_cap_override_button_pressed() -> void:
+	if not _can_use_dev_tools() or dev_level_cap_override_request_active:
+		return
+	dev_level_cap_override_request_active = true
+	_refresh_dev_tools_visibility()
+	var result: Dictionary = await TrainerProgressService.set_developer_level_cap_override(
+		not dev_level_cap_override_enabled
+	)
+	dev_level_cap_override_request_active = false
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.staff.dev.level_cap_override_failed", {
+			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
+		}))
+		_refresh_dev_tools_visibility()
+		return
+	dev_level_cap_override_enabled = bool(result.get("enabled", false))
+	await PlayerPartyStateService.load_party()
+	_refresh_dev_level_cap_override_button()
+	_refresh_dev_tools_visibility()
+	_add_chat_message(LocalizationManager.text(
+		"ui.staff.dev.level_cap_override_enabled" if dev_level_cap_override_enabled else "ui.staff.dev.level_cap_override_disabled"
 	))
 
 
