@@ -163,6 +163,7 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 	var image := Image.new()
 	if image.load_png_from_buffer(image_result.body as PackedByteArray) != OK:
 		return {}
+	var visual_bounds := _calculate_visual_bounds(metadata, image)
 	var frames := _build_frames(metadata, image)
 	if frames == null:
 		return {}
@@ -171,6 +172,7 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 		"style": catalog_style,
 		"render_scale": maxf(float(metadata.get("render_scale", metadata.get("scale", 1.0))), 1.0),
 		"frame_size": Vector2(float(metadata.get("frame_width", 0)), float(metadata.get("frame_height", 0))),
+		"visual_bounds": visual_bounds,
 	}
 	return result
 
@@ -247,6 +249,32 @@ func _build_frames(metadata: Dictionary, image: Image) -> SpriteFrames:
 		texture.filter_clip = true
 		result.add_frame(IDLE_ANIMATION, texture, maxf(float(definition.get("duration", 1.0)), 0.01))
 	return result if result.get_frame_count(IDLE_ANIMATION) > 0 else null
+
+
+func _calculate_visual_bounds(metadata: Dictionary, image: Image) -> Rect2:
+	var definitions: Variant = metadata.get("frames", [])
+	if image == null or not (definitions is Array):
+		return Rect2()
+	var combined_bounds := Rect2()
+	var has_bounds := false
+	for definition_value: Variant in definitions as Array:
+		if not (definition_value is Dictionary):
+			continue
+		var definition := definition_value as Dictionary
+		var region := Rect2i(
+			int(definition.get("x", 0)), int(definition.get("y", 0)),
+			int(definition.get("w", metadata.get("frame_width", 0))),
+			int(definition.get("h", metadata.get("frame_height", 0)))
+		)
+		if region.size.x <= 0 or region.size.y <= 0 or not Rect2i(Vector2i.ZERO, image.get_size()).encloses(region):
+			continue
+		var used_rect := image.get_region(region).get_used_rect()
+		if not used_rect.has_area():
+			continue
+		var bounds := Rect2(Vector2(used_rect.position), Vector2(used_rect.size))
+		combined_bounds = combined_bounds.merge(bounds) if has_bounds else bounds
+		has_bounds = true
+	return combined_bounds if has_bounds else Rect2()
 
 
 func _remember(key: String, value: Dictionary) -> void:

@@ -21148,10 +21148,16 @@ func _set_localized_control_property(control: Control, property_name: String, ke
 	control.set(property_name, LocalizationManager.text(key))
 
 func _on_pokemon_summary_tab_selected(tab_id: String, card_key: String = "") -> void:
-	_apply_pokemon_summary_card_context(card_key)
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	if pokemon_summary_active_tab == tab_id:
+		return
 	pokemon_summary_active_tab = tab_id
+	_refresh_pokemon_summary_tab_buttons()
+	var pokemon := _get_active_pokemon_summary_pokemon()
+	if pokemon != null:
+		_render_pokemon_summary_content(pokemon)
 	_store_active_pokemon_summary_card_context()
-	_refresh_pokemon_summary()
 
 func _refresh_pokemon_summary_tab_buttons() -> void:
 	for tab_id_value: Variant in pokemon_summary_tab_buttons.keys():
@@ -26255,10 +26261,11 @@ func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> vo
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
+	_prefetch_pokemon_summary_web_sprites(pokemon)
+	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	pokemon_summary_web_sprite_generation += 1
 	var web_generation := pokemon_summary_web_sprite_generation
 
-	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
 		"_load_sprite_frames",
 		pokemon.species,
@@ -26290,6 +26297,20 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+
+
+func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
+	if pokemon == null or not WebPokemonSpriteService.is_available():
+		return
+	var entries: Array = []
+	for side: String in ["front", "back"]:
+		entries.append({
+			"species": pokemon.species,
+			"side": side,
+			"shiny": pokemon.shiny,
+			"style": SettingsManager.sprite_style,
+		})
+	WebPokemonSpriteService.prefetch(entries)
 
 
 func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -26484,6 +26505,10 @@ func _apply_pokemon_summary_sprite_center_offset(frames: SpriteFrames, animation
 func _get_pokemon_summary_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
+	if animation_name == "idle" and pokemon_summary_sprite_loader.has_method("_get_sprite_frames_visual_bounds"):
+		var cached_bounds: Variant = pokemon_summary_sprite_loader.call("_get_sprite_frames_visual_bounds", frames)
+		if cached_bounds is Rect2 and (cached_bounds as Rect2).has_area():
+			return cached_bounds as Rect2
 
 	var has_rect: bool = false
 	var combined_rect: Rect2 = Rect2()
@@ -26514,6 +26539,7 @@ func _render_pokemon_summary_content(pokemon: Pokemon) -> void:
 		if move_hover_panel != null:
 			move_hover_panel.visible = false
 	for child: Node in pokemon_summary_content_stack.get_children():
+		pokemon_summary_content_stack.remove_child(child)
 		child.queue_free()
 
 	match pokemon_summary_active_tab:

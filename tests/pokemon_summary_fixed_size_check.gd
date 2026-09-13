@@ -9,6 +9,22 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	var tab_handler := _function_source(overlay_source, "_on_pokemon_summary_tab_selected")
+	_check(
+		not tab_handler.contains("_refresh_pokemon_summary()")
+			and tab_handler.contains("_render_pokemon_summary_content(pokemon)"),
+		"tab changes rebuild only the selected content instead of the full Summary"
+	)
+	_check(
+		overlay_source.contains('_get_sprite_frames_visual_bounds", frames'),
+		"Summary sprites reuse the loader's cached visual bounds"
+	)
+	_check(
+		overlay_source.contains('for side: String in ["front", "back"]:')
+			and overlay_source.contains("WebPokemonSpriteService.prefetch(entries)"),
+		"browser Summary prefetches both sprite views"
+	)
 	var packed := load(OVERLAY_SCENE_PATH) as PackedScene
 	_check(packed != null, "Pokémon Summary scene loads")
 	if packed == null:
@@ -152,3 +168,11 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error(label)
+
+
+func _function_source(source: String, function_name: String) -> String:
+	var start := source.find("func %s(" % function_name)
+	if start < 0:
+		return ""
+	var next_function := source.find("\nfunc ", start + 5)
+	return source.substr(start) if next_function < 0 else source.substr(start, next_function - start)

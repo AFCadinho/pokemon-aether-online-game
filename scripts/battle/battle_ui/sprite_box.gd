@@ -1729,7 +1729,17 @@ func _apply_web_sprite_result_metadata(
 		_set_sprite_frames_display_scale_multiplier(frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
 	var frame_size_value: Variant = result.get("frame_size", Vector2.ZERO)
 	if frame_size_value is Vector2 and frame_size_value != Vector2.ZERO:
-		_set_sprite_frames_auto_anchor(frames, frame_size_value as Vector2)
+		var frame_size := frame_size_value as Vector2
+		var visual_bounds_value: Variant = result.get("visual_bounds", Rect2())
+		if visual_bounds_value is Rect2 and (visual_bounds_value as Rect2).has_area():
+			var visual_bounds := visual_bounds_value as Rect2
+			_set_sprite_frames_frame_size(frames, frame_size)
+			_set_sprite_frames_visual_bounds(frames, visual_bounds)
+			_set_sprite_frames_anchor(frames, _get_visual_bounds_horizontal_anchor(visual_bounds, frame_size), frame_size)
+		# Older/local callers without browser-computed bounds retain the existing
+		# fallback, but prepared web frames never need GPU pixel readback here.
+		elif not _sprite_frames_has_anchor(frames):
+			_set_sprite_frames_auto_anchor(frames, frame_size_value as Vector2)
 	var side_key := _get_sprite_side_folder(side, is_shiny)
 	var species_key := _normalize_species_asset_id(species)
 	var offset_value: Variant = SPECIES_POSITION_OFFSETS.get(
