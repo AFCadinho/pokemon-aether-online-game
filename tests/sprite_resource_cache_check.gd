@@ -21,6 +21,19 @@ func _run() -> void:
 	image.set_pixel(3, 2, Color(1, 1, 1, 6.0 / 255.0))
 	var bounds: Rect2 = first._calculate_texture_alpha_bounds(ImageTexture.create_from_image(image))
 	_check(bounds == Rect2(3, 2, 1, 1), "alpha threshold and transparent margins are preserved")
+	var small_home_scale: float = first._get_home_sprite_render_scale(Rect2(0, 0, 90, 140))
+	_check(is_equal_approx(small_home_scale, first.HOME_SPRITE_RENDER_SCALE), "small HOME fallbacks keep their existing size")
+	var large_home_bounds := Rect2(0, 0, 363, 403)
+	var large_home_scale: float = first._get_home_sprite_render_scale(large_home_bounds)
+	var large_home_display_size: Vector2 = (
+		large_home_bounds.size
+		* first.BATTLE_SPRITE_SCALE.x
+		* first.BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER
+		/ large_home_scale
+	)
+	_check(large_home_display_size.x <= first.HOME_SPRITE_MAX_DISPLAY_SIZE.x + 0.01, "wide HOME fallbacks fit the battle width budget")
+	_check(large_home_display_size.y <= first.HOME_SPRITE_MAX_DISPLAY_SIZE.y + 0.01, "tall HOME fallbacks fit the battle height budget")
+	_check(is_equal_approx(large_home_display_size.aspect(), large_home_bounds.size.aspect()), "HOME fallback scaling preserves aspect ratio")
 	var retained := Resource.new()
 	var cache := {}
 	Appearance._remember_appearance_resource(cache, "retained", retained)

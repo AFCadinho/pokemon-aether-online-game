@@ -17,6 +17,7 @@ const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
 const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
+const HOME_SPRITE_MAX_DISPLAY_SIZE := Vector2(200.0, 180.0)
 const BATTLE_SPRITE_ASSET_ALIASES := {
 	# Battle payloads use this form name, while the battle-sheet directory is
 	# the base species. Without the alias the loader falls through to the HOME
@@ -1519,8 +1520,28 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 	sprite_frames.add_frame(IDLE_ANIMATION, texture)
 	var frame_size := texture.get_size()
 	_set_sprite_frames_auto_anchor(sprite_frames, frame_size)
-	_set_sprite_frames_render_scale(sprite_frames, HOME_SPRITE_RENDER_SCALE)
+	_set_sprite_frames_render_scale(
+		sprite_frames,
+		_get_home_sprite_render_scale(_get_sprite_frames_visual_bounds(sprite_frames))
+	)
 	return sprite_frames
+
+func _get_home_sprite_render_scale(visual_bounds: Rect2) -> float:
+	if visual_bounds.size.x <= 0.0 or visual_bounds.size.y <= 0.0:
+		return HOME_SPRITE_RENDER_SCALE
+	# HOME artwork varies from small UI icons to 400+ px illustrations. Convert
+	# its visible alpha bounds to the same displayed-space budget while keeping a
+	# single uniform scale, so the emergency fallback cannot dominate the arena.
+	var unscaled_display_multiplier := (
+		BATTLE_SPRITE_SCALE.x * BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER
+	)
+	return maxf(
+		HOME_SPRITE_RENDER_SCALE,
+		maxf(
+			visual_bounds.size.x * unscaled_display_multiplier / HOME_SPRITE_MAX_DISPLAY_SIZE.x,
+			visual_bounds.size.y * unscaled_display_multiplier / HOME_SPRITE_MAX_DISPLAY_SIZE.y
+		)
+	)
 
 func _create_idle_sprite_frames(animation_speed: float) -> SpriteFrames:
 	var sprite_frames := SpriteFrames.new()
