@@ -5,8 +5,17 @@ const MAX_RESPONSE_BYTES := 4 * 1024 * 1024
 const CACHE_LIMIT := 96
 const DOWNLOAD_ATTEMPTS := 3
 const DOWNLOAD_RETRY_SECONDS := 0.35
+const PREFETCH_CONCURRENCY := 4
+
+class LoadTicket extends RefCounted:
+	signal completed
+	var result: Dictionary = {}
 
 var _cache: Dictionary = {}
+var _in_flight: Dictionary = {}
+var _prefetch_queue: Array[Dictionary] = []
+var _prefetch_queued_keys: Dictionary = {}
+var _prefetch_active := 0
 
 
 func is_available() -> bool:
@@ -18,16 +27,112 @@ func load_frames(
 ) -> Dictionary:
 	if not is_available():
 		return {}
-	var catalog_style := _catalog_style(sprite_style)
-	if catalog_style == "":
+	var identity := _sprite_identity(asset_id, side, is_shiny, sprite_style)
+	var cache_key := str(identity.get("cache_key", ""))
+	if cache_key == "":
 		return {}
-	var normalized_id := _normalize_segment(asset_id)
-	var side_folder := ("shiny_" if is_shiny else "") + ("back" if side == "back" else "front")
-	if normalized_id == "":
-		return {}
-	var cache_key := "%s/%s/%s" % [catalog_style, side_folder, normalized_id]
 	if _cache.has(cache_key):
 		return _cache[cache_key]
+	if _in_flight.has(cache_key):
+		var existing_ticket := _in_flight[cache_key] as LoadTicket
+		await existing_ticket.completed
+		return existing_ticket.result
+
+	var ticket := LoadTicket.new()
+	_in_flight[cache_key] = ticket
+	var result := await _load_frames_uncached(identity)
+	if not result.is_empty():
+		_remember(cache_key, result)
+	ticket.result = result
+	_in_flight.erase(cache_key)
+	ticket.completed.emit()
+	return result
+
+
+func get_cached_frames(
+	asset_id: String, side: String, is_shiny: bool = false, sprite_style: String = "animated"
+) -> Dictionary:
+	var identity := _sprite_identity(asset_id, side, is_shiny, sprite_style)
+	var cache_key := str(identity.get("cache_key", ""))
+	return _cache.get(cache_key, {}) if cache_key != "" else {}
+
+
+func prefetch(entries: Array) -> void:
+	if not is_available():
+		return
+	for entry_value: Variant in entries:
+		if not (entry_value is Dictionary):
+			continue
+		var entry := entry_value as Dictionary
+		var identity := _sprite_identity(
+			str(entry.get("species", entry.get("asset_id", ""))),
+			str(entry.get("side", "front")),
+			bool(entry.get("shiny", false)),
+			str(entry.get("style", "animated"))
+		)
+		var cache_key := str(identity.get("cache_key", ""))
+		if cache_key == "" or _cache.has(cache_key) or _in_flight.has(cache_key) or _prefetch_queued_keys.has(cache_key):
+			continue
+		var queued_entry := entry.duplicate(true)
+		queued_entry["cache_key"] = cache_key
+		_prefetch_queue.append(queued_entry)
+		_prefetch_queued_keys[cache_key] = true
+	_drain_prefetch_queue()
+
+
+func prefetch_and_wait(entries: Array) -> void:
+	prefetch(entries)
+	for entry_value: Variant in entries:
+		if not (entry_value is Dictionary):
+			continue
+		var entry := entry_value as Dictionary
+		await load_frames(
+			str(entry.get("species", entry.get("asset_id", ""))),
+			str(entry.get("side", "front")),
+			bool(entry.get("shiny", false)),
+			str(entry.get("style", "animated"))
+		)
+
+
+func _drain_prefetch_queue() -> void:
+	while _prefetch_active < PREFETCH_CONCURRENCY and not _prefetch_queue.is_empty():
+		var entry := _prefetch_queue.pop_front() as Dictionary
+		_prefetch_active += 1
+		_run_prefetch.call_deferred(entry)
+
+
+func _run_prefetch(entry: Dictionary) -> void:
+	await load_frames(
+		str(entry.get("species", entry.get("asset_id", ""))),
+		str(entry.get("side", "front")),
+		bool(entry.get("shiny", false)),
+		str(entry.get("style", "animated"))
+	)
+	_prefetch_queued_keys.erase(str(entry.get("cache_key", "")))
+	_prefetch_active = maxi(_prefetch_active - 1, 0)
+	_drain_prefetch_queue()
+
+
+func _sprite_identity(
+	asset_id: String, side: String, is_shiny: bool, sprite_style: String
+) -> Dictionary:
+	var catalog_style := _catalog_style(sprite_style)
+	var normalized_id := _normalize_segment(asset_id)
+	if catalog_style == "" or normalized_id == "":
+		return {}
+	var side_folder := ("shiny_" if is_shiny else "") + ("back" if side == "back" else "front")
+	return {
+		"catalog_style": catalog_style,
+		"normalized_id": normalized_id,
+		"side_folder": side_folder,
+		"cache_key": "%s/%s/%s" % [catalog_style, side_folder, normalized_id],
+	}
+
+
+func _load_frames_uncached(identity: Dictionary) -> Dictionary:
+	var catalog_style := str(identity.get("catalog_style", ""))
+	var normalized_id := str(identity.get("normalized_id", ""))
+	var side_folder := str(identity.get("side_folder", ""))
 
 	var release := WebRuntime.web_release_config()
 	var configured_styles: Variant = release.get("spriteStyles", {})
@@ -67,7 +172,6 @@ func load_frames(
 		"render_scale": maxf(float(metadata.get("render_scale", metadata.get("scale", 1.0))), 1.0),
 		"frame_size": Vector2(float(metadata.get("frame_width", 0)), float(metadata.get("frame_height", 0))),
 	}
-	_remember(cache_key, result)
 	return result
 
 

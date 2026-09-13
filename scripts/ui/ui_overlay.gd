@@ -9187,7 +9187,31 @@ func _set_pvp_training_team_preview(preview_value: Variant) -> void:
 				"species": species,
 				"shiny": bool(entry.get("shiny", false)),
 			})
+	_prefetch_web_team_sprites(pvp_training_team_preview_entries, "back")
 	_render_pvp_training_team_preview()
+
+func _prefetch_web_team_sprites(team_value: Variant, side: String) -> void:
+	if not WebPokemonSpriteService.is_available() or not (team_value is Array):
+		return
+	var entries: Array = []
+	var seen: Dictionary = {}
+	for pokemon_value: Variant in team_value as Array:
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon := pokemon_value as Dictionary
+		var species := str(pokemon.get("displaySpecies", pokemon.get("species", ""))).strip_edges()
+		var shiny := bool(pokemon.get("shiny", false))
+		var key := "%s|%s|%s" % [species.to_lower(), side, str(shiny)]
+		if species == "" or seen.has(key):
+			continue
+		seen[key] = true
+		entries.append({
+			"species": species,
+			"side": side,
+			"shiny": shiny,
+			"style": SettingsManager.sprite_style,
+		})
+	WebPokemonSpriteService.prefetch(entries)
 
 func _clear_pvp_training_team_preview() -> void:
 	_set_pvp_training_team_preview([])
@@ -44424,6 +44448,7 @@ func _refresh_pvp_training_ai_opponent_preview() -> void:
 		child.queue_free()
 	var pokemon_value: Variant = selected_entry.get("pokemon", [])
 	var pokemon: Array = pokemon_value if pokemon_value is Array else []
+	_prefetch_web_team_sprites(pokemon, "front")
 	pvp_training_ai_opponent_preview.visible = not selected_entry.is_empty() and not pokemon.is_empty()
 	if not pvp_training_ai_opponent_preview.visible:
 		return
@@ -45154,6 +45179,7 @@ func _refresh_ai_sparring_catalog_preview() -> void:
 	pvp_ai_sparring_catalog_preview_title.text = str(entry.get("displayName", ""))
 	var team_id := _selected_ai_sparring_player_catalog_team_id()
 	var pokemon := _array_from_variant(entry.get("pokemon", []))
+	_prefetch_web_team_sprites(pokemon, "back")
 	for pokemon_index in range(pokemon.size()):
 		var pokemon_value: Variant = pokemon[pokemon_index]
 		if pokemon_value is Dictionary:
