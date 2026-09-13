@@ -496,6 +496,7 @@ const DEBUG_BATTLE_MOVE_EVENTS := false
 const DEBUG_SIDE_CONDITION_EFFECTS := false
 const DEBUG_BATTLE_PRESENTATION_ORDER := false
 const DEBUG_BATTLE_START_EVENTS := false
+const DEBUG_CALCDEX_FLOW := true
 const SHINY_ENTRANCE_EFFECT_KEY := "shiny_sparkle"
 const SUMMON_RELEASE_AUDIO_BALL := "ball"
 const SUMMON_RELEASE_AUDIO_NONE := "none"
@@ -2924,6 +2925,16 @@ func _refresh_damage_calc_results() -> void:
 	_show_damage_calc_loading()
 
 	var projection_revision := battle_state.get_calcdex_projection_revision()
+	_debug_calcdex_flow(
+		"refresh token=%d preview=%s pvp=%s state_revision=%s cached_snapshot=%s disabled=%s" % [
+			request_token,
+			team_preview_lead_selection_active,
+			_is_pvp_battle(),
+			not projection_revision.is_empty(),
+			not damage_calc_knowledge_snapshot.is_empty(),
+			damage_calc_snapshot_disabled_for_battle,
+		]
+	)
 	if projection_revision.is_empty() and team_preview_lead_selection_active:
 		# A snapshot already loaded during Team Preview remains a valid source for
 		# subsequent manual matchup selections, even when the initial battle
@@ -2931,21 +2942,25 @@ func _refresh_damage_calc_results() -> void:
 		projection_revision = _damage_calc_projection_revision_from_response(
 			_damage_calc_as_dictionary(damage_calc_knowledge_snapshot.get("projectionRevision", {}))
 		)
+		_debug_calcdex_flow("cached preview revision valid=%s" % (not projection_revision.is_empty()))
 	if projection_revision.is_empty() and _is_pvp_battle():
 		# PvP realtime packets can arrive before the participant projection fence
 		# has been seeded locally. Recover the canonical room snapshot before
 		# refusing the calculator, instead of leaving the user on a generic wait
 		# message indefinitely.
+		_debug_calcdex_flow("recovering revision from PvP room")
 		await _reconcile_pvp_battle_from_room("calcdex_projection_recovery")
 		if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
 			damage_calc_request_in_flight = false
 			return
 		projection_revision = battle_state.get_calcdex_projection_revision()
+		_debug_calcdex_flow("PvP room revision valid=%s" % (not projection_revision.is_empty()))
 	elif projection_revision.is_empty() and team_preview_lead_selection_active:
 		# Trainer Team Preview can be shown from a creation response whose event
 		# delivery is still moving and therefore intentionally omits the Calcdex
 		# projection fence. Fetch the current participant-safe state solely to
 		# obtain that fence; do not apply it or invent active Pokémon/leads.
+		_debug_calcdex_flow("requesting participant-safe trainer state at cursor=%d" % last_rendered_event_seq)
 		var state_response: Dictionary = await BattleApiClient.get_npc_battle_state(
 			damage_calc_request,
 			battle_state.battle_id,
@@ -2954,7 +2969,9 @@ func _refresh_damage_calc_results() -> void:
 		if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
 			damage_calc_request_in_flight = false
 			return
+		_debug_calcdex_response("trainer state", state_response, true)
 		projection_revision = _damage_calc_projection_revision_from_response(state_response)
+		_debug_calcdex_flow("trainer state revision valid=%s" % (not projection_revision.is_empty()))
 	var use_safe_matchup := false
 	var waiting_for_preview_selection := false
 	var snapshot_failure: Dictionary = {}
@@ -2988,6 +3005,7 @@ func _refresh_damage_calc_results() -> void:
 		elif _damage_calc_snapshot_matches_revision(projection_revision):
 			use_safe_matchup = true
 		elif team_preview_lead_selection_active:
+			_debug_calcdex_flow("requesting Team Preview Calcdex snapshot")
 			var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
 				damage_calc_request,
 				battle_state.battle_id,
@@ -2998,6 +3016,7 @@ func _refresh_damage_calc_results() -> void:
 				if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
 					_refresh_damage_calc_results()
 				return
+			_debug_calcdex_response("Team Preview snapshot", snapshot_response, false)
 			if bool(snapshot_response.get("success", false)):
 				damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
 				var viewer_stats_by_ref: Dictionary = await _get_damage_calc_viewer_stats_by_ref(
@@ -3097,6 +3116,13 @@ func _refresh_damage_calc_results() -> void:
 					calc_panel.get_viewer_scenario(), calc_panel.get_battle_state_scenario()
 				)
 	else:
+		_debug_calcdex_flow(
+			"snapshot unavailable revision_valid=%s snapshot_disabled=%s failure_code=%s" % [
+				not projection_revision.is_empty(),
+				damage_calc_snapshot_disabled_for_battle,
+				_get_damage_calc_error_code(snapshot_failure),
+			]
+		)
 		response = {
 			"success": false,
 			"error": _t(BATTLE_CALCDEX_ERROR_FEEDBACK.message_key(snapshot_failure)),
@@ -3686,6 +3712,35 @@ func _get_damage_calc_error_code(response: Dictionary) -> String:
 	if detail is Dictionary:
 		code = str((detail as Dictionary).get("code", code)).strip_edges()
 	return code
+
+
+func _debug_calcdex_flow(message: String) -> void:
+	if DEBUG_CALCDEX_FLOW:
+		print("[Calcdex Flow] ", message)
+
+
+func _debug_calcdex_response(label: String, response: Dictionary, include_revision_fields: bool) -> void:
+	if not DEBUG_CALCDEX_FLOW:
+		return
+	var summary := "%s success=%s status=%s code=%s" % [
+		label,
+		bool(response.get("success", false)),
+		str(response.get("status", "missing")),
+		_get_damage_calc_error_code(response) if _get_damage_calc_error_code(response) != "" else "none",
+	]
+	if include_revision_fields:
+		var revision_fields: Array[String] = []
+		for field_name: String in BATTLE_CALCDEX_SNAPSHOT.REVISION_FIELDS:
+			if not response.has(field_name):
+				revision_fields.append("%s=missing" % field_name)
+				continue
+			var value: Variant = response.get(field_name)
+			var type_label := type_string(typeof(value))
+			if field_name == "snapshotFingerprint" and value is String:
+				type_label += "(%d chars)" % str(value).length()
+			revision_fields.append("%s=%s" % [field_name, type_label])
+		summary += " revision_fields=[%s]" % ", ".join(revision_fields)
+	_debug_calcdex_flow(summary)
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
