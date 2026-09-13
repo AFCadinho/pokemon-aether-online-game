@@ -39,20 +39,29 @@ jobs:
           python3 tools/build_discord_release_payload.py \
             --version "${RELEASE_VERSION}" \
             --release-notes "${RELEASE_NOTES}" \
-            > discord_payload.json
+            > discord_payloads.json
 
           python3 - <<'PY'
           import json
+          from pathlib import Path
 
-          with open("discord_payload.json", encoding="utf-8") as handle:
-              payload = json.load(handle)
-          embeds = payload.get("embeds") or []
-          fields = embeds[0].get("fields") if embeds else None
-          if not fields:
-              raise SystemExit("Discord release payload contains no release-note fields.")
+          with open("discord_payloads.json", encoding="utf-8") as handle:
+              payloads = json.load(handle).get("payloads") or []
+          if not payloads:
+              raise SystemExit("Discord release payload contains no messages.")
+
+          output_directory = Path("discord_payloads")
+          output_directory.mkdir()
+          for index, payload in enumerate(payloads, start=1):
+              output_path = output_directory / f"{index:03d}.json"
+              output_path.write_text(json.dumps(payload), encoding="utf-8")
+
+          print(f"Prepared {len(payloads)} Discord message(s).")
           PY
 
-          curl --fail-with-body --retry 2 --retry-delay 2 -sS \
-            -H "Content-Type: application/json" \
-            -d @discord_payload.json \
-            "${DISCORD_WEBHOOK_URL}"
+          for payload in discord_payloads/*.json; do
+            curl --fail-with-body --retry 2 --retry-delay 2 -sS \
+              -H "Content-Type: application/json" \
+              -d @"${payload}" \
+              "${DISCORD_WEBHOOK_URL}"
+          done
