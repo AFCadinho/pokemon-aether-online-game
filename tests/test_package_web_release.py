@@ -54,6 +54,8 @@ class PackageWebReleaseTests(unittest.TestCase):
                 '<!-- POKEAETHER_RELEASE_CONFIG --><script src="index.js"></script>', encoding='utf-8')
             for name, body in {
                 'index.js': b'js', 'index.wasm': b'wasm', 'index.pck': b'pck',
+                'pokeaether-logo.webp': b'logo',
+                'pokeaether-world-preview.webp': b'preview',
                 'browser-audio/music/theme.ogg': b'audio',
                 'build-receipt.json': b'{}',
             }.items():
@@ -85,6 +87,8 @@ class PackageWebReleaseTests(unittest.TestCase):
             self.assertNotIn('https://assets.example.test/web/assets/front-v1', html)
             self.assertFalse((pages / 'index.pck').exists())
             self.assertTrue((r2 / 'index.pck').is_file())
+            self.assertTrue((pages / 'pokeaether-logo.webp').is_file())
+            self.assertTrue((pages / 'pokeaether-world-preview.webp').is_file())
             release = json.loads((r2 / 'web-release.json').read_text(encoding='utf-8'))
             self.assertEqual(release['objects'][0]['key'].split('/')[0:3], ['web', 'releases', 'build-123'])
             headers = (pages / '_headers').read_text(encoding='utf-8')
