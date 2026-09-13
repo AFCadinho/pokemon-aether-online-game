@@ -3094,6 +3094,8 @@
   "ui.staff.dev.level_cap_override_on": "Level Cap 100: On",
   "ui.staff.dev.level_cap_override_off": "Level Cap 100: Off",
   "ui.staff.dev.level_cap_override_description": "Override only your training cap to level 100; story progress and trade cap stay unchanged",
+  "ui.staff.dev.level_cap_override_title": "Developer training level cap",
+  "ui.staff.dev.level_cap_override_unavailable": "Developer level-cap override is unavailable.",
   "ui.staff.dev.level_cap_override_enabled": "Developer level-cap override is on. Your training cap is now level 100.",
   "ui.staff.dev.level_cap_override_disabled": "Developer level-cap override is off. Your normal progression cap has been restored.",
   "ui.staff.dev.level_cap_override_failed": "Could not update the developer level-cap override: {error}",
