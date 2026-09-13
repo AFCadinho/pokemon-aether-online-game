@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CalcdexOpen := preload("res://scripts/battle/battle_calcdex_open.gd")
+const CalcdexSnapshot := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const DamageCalcPanel := preload("res://scripts/battle/battle_ui/battle_damage_calc_panel.gd")
 
 var failed := false
@@ -20,6 +21,19 @@ func _run() -> void:
 		"aggregateRevision": 1,
 		"battleEventSeq": 1,
 	}
+	var wire_revision := revision.duplicate(true)
+	for field_name: String in [
+		"visibilityContractVersion", "eventSeq", "batchSeq", "mechanicalRevision",
+		"aggregateRevision", "battleEventSeq",
+	]:
+		wire_revision[field_name] = float(wire_revision[field_name])
+	wire_revision["status"] = 200
+	_check(
+		CalcdexSnapshot.is_valid_projection_revision(
+			CalcdexSnapshot.projection_revision_from_response(wire_revision)
+		),
+		"Team Preview accepts integer-valued revision numbers parsed from JSON as floats"
+	)
 	_check(
 		not bool(CalcdexOpen.normalize_response({
 			"success": true,

@@ -3133,12 +3133,7 @@ func _damage_calc_snapshot_matches_revision(projection_revision: Dictionary) -> 
 
 
 func _damage_calc_projection_revision_from_response(response: Dictionary) -> Dictionary:
-	var revision: Dictionary = {}
-	for field_name: String in BATTLE_CALCDEX_SNAPSHOT.REVISION_FIELDS:
-		if not response.has(field_name):
-			return {}
-		revision[field_name] = response.get(field_name)
-	return revision if BATTLE_CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) else {}
+	return BATTLE_CALCDEX_SNAPSHOT.projection_revision_from_response(response)
 
 
 func _damage_calc_prefetched_response_matches_revision(projection_revision: Dictionary) -> bool:
