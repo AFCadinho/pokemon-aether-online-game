@@ -1289,6 +1289,7 @@ func _add_set_suggestion_details(parent: VBoxContainer, row: Dictionary) -> void
 		evidence_row.mouse_filter = Control.MOUSE_FILTER_STOP
 		evidence_row.mouse_default_cursor_shape = Control.CURSOR_HELP
 		evidence_row.tooltip_text = _set_suggestion_evidence_tooltip(item)
+		evidence_row.theme = _make_set_suggestion_tooltip_theme(color)
 		evidence_row.add_theme_stylebox_override("panel", _make_stylebox(Color(color, 0.055), Color(color, 0.28), 6, 7.0, 1.0))
 		parent.add_child(evidence_row)
 		var evidence_content := HBoxContainer.new()
@@ -1329,6 +1330,23 @@ func _set_suggestion_evidence_tooltip(item: Dictionary) -> String:
 	else:
 		observation = _set_suggestion_evidence_label(item)
 	return "%s\n%s" % [observation, _t("battle.calc.guess.clue_result_" + str(item.get("state", "unknown")))]
+
+
+func _make_set_suggestion_tooltip_theme(accent: Color) -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_stylebox(Color("#07111cf8"), Color(accent, 0.78), 8, 13.0, 10.0)
+	tooltip_style.border_width_bottom = 2
+	tooltip_style.shadow_color = Color("#000000b8")
+	tooltip_style.shadow_size = 9
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", TEXT_PRIMARY)
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", SURFACE_CANVAS)
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("line_spacing", "TooltipLabel", 3)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 
 func _close_set_suggestions_popup(render_after := true) -> void:
