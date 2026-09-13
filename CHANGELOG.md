@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cerulean City's nighttime lights now render more efficiently for smoother play on lower-end devices.
+
 - PvP switch selections now check the latest battle status, preventing an outdated party card from submitting a fainted Pokémon.
 
 - Browser battles now load their animated Gen 5 Pokémon sprites through the game origin, preventing the Pokémon HOME placeholders from remaining visible when browser cross-origin handling rejects an otherwise valid R2 response.
