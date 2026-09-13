@@ -3138,7 +3138,18 @@ func _get_activity_layer_offset(category: String) -> Vector2:
 		return Vector2.ZERO
 
 	var category_offsets: Dictionary = style_offsets as Dictionary
-	var direction_offsets: Variant = category_offsets.get(_get_activity_offset_direction(), category_offsets.get("default", {}))
+	var direction_name := _get_activity_offset_direction()
+	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_RIDE \
+		and MountService.get_mount_movement_mode(active_mount_id) \
+		== MountService.MOVEMENT_MODE_LAND \
+		and direction_name in ["left", "right"]:
+		# The side-specific head shift belongs to the Lapras Surf pose. Land
+		# mounts use the same rider sheet, but their outfit stays over the body.
+		direction_name = "default"
+	var direction_offsets: Variant = category_offsets.get(
+		direction_name,
+		category_offsets.get("default", {})
+	)
 	if direction_offsets is Dictionary:
 		var directional_category_offsets: Dictionary = direction_offsets as Dictionary
 		if directional_category_offsets.has(normalized_category):
