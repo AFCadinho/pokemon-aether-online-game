@@ -76,7 +76,7 @@ func _check_dodge(box: Node) -> void:
 	var base_position: Vector2 = box.single_sprite.position
 	for direction in [-1.0, 1.0]:
 		await box.play_dodge_tween(direction)
-		_check(box.single_sprite.position == base_position + Vector2(32.0 * direction, -12.0), "both sides dodge away from their original position")
+		_check(box.single_sprite.position == base_position + Vector2(48.0 * direction, -16.0), "both sides make a clear mirrored dodge away from their original position")
 		await get_tree().create_timer(0.2).timeout
 		_check(box.single_sprite.position != base_position, "dodge holds until the move has passed")
 		await box.play_dodge_tween(direction, true)
