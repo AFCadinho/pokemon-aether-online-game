@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Item requests on the Aether Exchange can now be filled in parts, show delivery progress, and pay the offered price per item.
+
 - The Item Dex now loads the next ten matching items automatically when players scroll down.
 
 - Cerulean City performance details can now record local frame-spike diagnostics while Trainers walk or ride through the city.

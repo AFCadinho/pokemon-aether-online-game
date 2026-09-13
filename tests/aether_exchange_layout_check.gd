@@ -44,7 +44,7 @@ func _run() -> void:
 	var outfit := {"itemId": "mysterious-outfit", "name": "Mysterious Outfit", "quantity": 1}
 	var mount := {"itemId": "cyclizar-mount", "name": "Cyclizar Mount", "quantity": 1}
 	var listing := {"id": "preview-1", "assetType": "pokemon", "asset": pokemon, "quantity": 1, "unitPrice": 100, "totalPrice": 100, "status": "active"}
-	var wish := {"id": "preview-wish", "item": item, "quantity": 10, "unitPrice": 100, "totalPrice": 1000, "status": "active", "isMine": false}
+	var wish := {"id": "preview-wish", "item": item, "quantity": 20, "fulfilledQuantity": 5, "remainingQuantity": 15, "unitPrice": 100, "totalPrice": 2000, "remainingTotalPrice": 1500, "status": "active", "isMine": false}
 	var wishlist_items: Array = []
 	for index in range(20):
 		wishlist_items.append(item.merged({

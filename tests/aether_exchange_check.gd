@@ -40,13 +40,18 @@ func _run() -> void:
 		"id": "wish-1",
 		"item": {"itemId": "poke-ball", "name": "Poké Ball"},
 		"quantity": 3,
+		"fulfilledQuantity": 1,
+		"remainingQuantity": 2,
 		"unitPrice": 250,
 		"totalPrice": 750,
+		"remainingTotalPrice": 500,
 		"status": "active",
 		"isMine": false,
 	})
 	_check(str(wish.get("id", "")) == "wish-1", "Exchange service retains wishlist order ids")
 	_check(int(wish.get("totalPrice", 0)) == 750, "Exchange service retains wishlist escrow totals")
+	_check(int(wish.get("fulfilledQuantity", 0)) == 1, "Exchange service retains partial fulfillment progress")
+	_check(int(wish.get("remainingQuantity", 0)) == 2, "Exchange service retains the remaining requested quantity")
 	_check(_dictionary(wish.get("item", {})).get("itemId") == "poke-ball", "Exchange service retains wishlist item snapshots")
 	service.free()
 
@@ -288,8 +293,11 @@ func _run() -> void:
 		"id": "wish-poke-balls",
 		"item": wishlist_item,
 		"quantity": 3,
+		"fulfilledQuantity": 1,
+		"remainingQuantity": 2,
 		"unitPrice": 250,
 		"totalPrice": 750,
+		"remainingTotalPrice": 500,
 		"status": "active",
 		"isMine": false,
 	}
@@ -299,12 +307,16 @@ func _run() -> void:
 	popup.call("_select_entry", wanted_order, "wish")
 	await process_frame
 	var fulfill_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
-	_check(fulfill_button != null and not fulfill_button.disabled, "Players with the full requested stack can fulfill a wishlist order")
+	_check(fulfill_button != null and not fulfill_button.disabled, "Players can fulfill the remaining part of a wishlist order")
+	_check((popup.get("quantity_spin") as SpinBox).max_value == 2, "Fulfillment quantity is capped by the request remainder")
+	var progress := popup.find_child("ExchangeWishProgress", true, false) as ProgressBar
+	_check(progress != null and progress.value == 1 and progress.max_value == 3, "Wishlist orders show delivered progress")
 	popup.set("sellable_items", [{"itemId": "poke-ball", "quantity": 2, "name": "Poké Ball"}])
 	popup.call("_select_entry", wanted_order, "wish")
 	await process_frame
 	fulfill_button = popup.find_child("ExchangeWishActionButton", true, false) as Button
-	_check(fulfill_button != null and fulfill_button.disabled, "Partial item stacks cannot partially fulfill a wishlist order")
+	_check(fulfill_button != null and not fulfill_button.disabled, "Partial item stacks can partially fulfill a wishlist order")
+	_check((popup.get("quantity_spin") as SpinBox).value == 2, "Fulfillment defaults to the maximum deliverable quantity")
 	var own_wish := wanted_order.duplicate(true)
 	own_wish["isMine"] = true
 	popup.set("active_tab", "mine")
@@ -351,7 +363,7 @@ func _run() -> void:
 	await process_frame
 	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
 	var active_request_buttons := requests_section.find_children("*", "Button", true, false)
-	_check(active_request_buttons.size() == 1 and (active_request_buttons[0] as Button).text.contains("750"), "Returning to Active restores outstanding requests")
+	_check(active_request_buttons.size() == 1 and (active_request_buttons[0] as Button).text.contains("250"), "Returning to Active restores outstanding requests at their unit price")
 	var sellable_garchomp := {
 		"pokemonId": 25,
 		"species": "garchomp",

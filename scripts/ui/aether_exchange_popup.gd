@@ -1624,11 +1624,15 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 	var asset := _entry_asset(entry, kind)
 	var metadata_label := Label.new()
 	metadata_label.name = "BrowseCardTrait"
-	metadata_label.text = (
-		_t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))})
-		if _entry_asset_type(entry, kind) == "pokemon"
-		else "×%d" % maxi(int(entry.get("quantity", 1)), 1)
-	)
+	if _entry_asset_type(entry, kind) == "pokemon":
+		metadata_label.text = _t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))})
+	elif kind == "wish":
+		metadata_label.text = _t("ui.exchange.wishlist.progress", {
+			"fulfilled": _wish_fulfilled_quantity(entry),
+			"quantity": maxi(int(entry.get("quantity", 1)), 1),
+		})
+	else:
+		metadata_label.text = "×%d" % maxi(int(entry.get("quantity", 1)), 1)
 	metadata_label.visible = kind != "wish_catalog"
 	metadata_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	metadata_label.add_theme_font_size_override("font_size", 13)
@@ -1646,6 +1650,8 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 	price.text = (
 		_t("ui.exchange.wishlist.choose")
 		if kind == "wish_catalog"
+		else _t("ui.exchange.price_each", {"amount": _format_money(int(entry.get("unitPrice", 0)))})
+		if kind == "wish"
 		else _t(
 			"ui.exchange.total",
 			{"amount": _format_money(int(entry.get("totalPrice", 0)))},
@@ -1655,7 +1661,7 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 	price.add_theme_font_size_override("font_size", 16)
 	price.add_theme_color_override("font_color", UI_MUTED if kind == "wish_catalog" else UI_GOLD)
 	stack.add_child(price)
-	if _entry_asset_type(entry, kind) == "item" and kind != "wish_catalog" and int(entry.get("quantity", 1)) > 1:
+	if _entry_asset_type(entry, kind) == "item" and kind not in ["wish", "wish_catalog"] and int(entry.get("quantity", 1)) > 1:
 		var unit_price := Label.new()
 		unit_price.text = _t("ui.exchange.price_each", {"amount": _format_money(int(entry.get("unitPrice", 0)))})
 		unit_price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1685,6 +1691,7 @@ func _render_detail() -> void:
 	var is_form := active_tab in ["sell", "wishlist"]
 	detail_panel.visible = is_form
 	action_bar.visible = not is_form
+	action_bar.custom_minimum_size.y = 100 if selected_kind == "wish" else 76
 	_update_list_grid_columns()
 	var target: BoxContainer = detail_stack if is_form else action_content
 	if selected_entry.is_empty():
@@ -1953,14 +1960,41 @@ func _build_wishlist_controls() -> void:
 
 func _build_wish_controls() -> void:
 	var status := str(selected_entry.get("status", "active"))
+	var total_quantity := maxi(int(selected_entry.get("quantity", 1)), 1)
+	var fulfilled_quantity := _wish_fulfilled_quantity(selected_entry)
+	var remaining_quantity := _wish_remaining_quantity(selected_entry)
 	var information := VBoxContainer.new()
 	information.alignment = BoxContainer.ALIGNMENT_CENTER
+	information.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action_content.add_child(information)
 	var price := Label.new()
-	price.text = _t("ui.exchange.wishlist.offer", {"amount": _format_money(int(selected_entry.get("totalPrice", 0)))})
+	price.text = _t("ui.exchange.price_each", {"amount": _format_money(int(selected_entry.get("unitPrice", 0)))})
 	price.add_theme_font_size_override("font_size", 17)
 	price.add_theme_color_override("font_color", UI_GOLD)
 	information.add_child(price)
+	var progress := ProgressBar.new()
+	progress.name = "ExchangeWishProgress"
+	progress.custom_minimum_size = Vector2(240, 12)
+	progress.max_value = total_quantity
+	progress.value = fulfilled_quantity
+	progress.show_percentage = false
+	progress.add_theme_stylebox_override(
+		"background", _compact_panel_style(UI_INTERACTIVE, UI_BORDER, 5, 1, 0, 0)
+	)
+	progress.add_theme_stylebox_override(
+		"fill", _compact_panel_style(Color("#26778b"), UI_CYAN, 5, 1, 0, 0)
+	)
+	progress.tooltip_text = _t("ui.exchange.wishlist.progress", {
+		"fulfilled": fulfilled_quantity,
+		"quantity": total_quantity,
+	})
+	information.add_child(progress)
+	var progress_label := Label.new()
+	progress_label.name = "ExchangeWishProgressLabel"
+	progress_label.text = progress.tooltip_text
+	progress_label.add_theme_font_size_override("font_size", 12)
+	progress_label.add_theme_color_override("font_color", UI_MUTED)
+	information.add_child(progress_label)
 	if status != "active":
 		var state := Label.new()
 		state.text = _t("ui.exchange.wishlist.state.%s" % status)
@@ -1975,14 +2009,35 @@ func _build_wish_controls() -> void:
 		action.pressed.connect(_confirm_cancel_wish)
 		_apply_button_style(action)
 	else:
-		var required := maxi(int(selected_entry.get("quantity", 1)), 1)
 		var item_id := str(_dictionary(selected_entry.get("item", {})).get("itemId", ""))
 		var available := _available_item_quantity(item_id)
+		var deliverable := mini(available, remaining_quantity)
+		if deliverable > 0:
+			var quantity_group := VBoxContainer.new()
+			quantity_group.custom_minimum_size = Vector2(155, 0)
+			var quantity_label := Label.new()
+			quantity_label.text = _t("ui.exchange.wishlist.quantity_to_sell")
+			quantity_label.add_theme_font_size_override("font_size", 12)
+			quantity_label.add_theme_color_override("font_color", UI_MUTED)
+			quantity_group.add_child(quantity_label)
+			quantity_spin = SpinBox.new()
+			quantity_spin.min_value = 1
+			quantity_spin.max_value = deliverable
+			quantity_spin.value = deliverable
+			quantity_spin.update_on_text_changed = true
+			quantity_spin.value_changed.connect(_update_wish_fulfill_total)
+			quantity_group.add_child(quantity_spin)
+			total_price_label = Label.new()
+			total_price_label.add_theme_font_size_override("font_size", 12)
+			total_price_label.add_theme_color_override("font_color", UI_GOLD)
+			quantity_group.add_child(total_price_label)
+			action_content.add_child(quantity_group)
+			_update_wish_fulfill_total(0)
 		action.text = _t("ui.exchange.action.fulfill_wish")
-		action.disabled = available < required
-		if available < required:
+		action.disabled = deliverable < 1
+		if deliverable < 1:
 			var reason := Label.new()
-			reason.text = _t("ui.exchange.wishlist.need_items", {"required": required, "available": available})
+			reason.text = _t("ui.exchange.wishlist.none_available")
 			reason.add_theme_font_size_override("font_size", 11)
 			reason.add_theme_color_override("font_color", UI_MUTED)
 			information.add_child(reason)
@@ -2081,15 +2136,17 @@ func _confirm_create_wish() -> void:
 
 
 func _confirm_fulfill_wish() -> void:
+	var quantity := int(quantity_spin.value) if quantity_spin != null else 0
+	var payment := quantity * int(selected_entry.get("unitPrice", 0))
 	_show_confirmation(
 		_t("ui.exchange.confirm.fulfill_wish_title"),
 		_t("ui.exchange.confirm.fulfill_wish", {
 			"name": _entry_name(selected_entry, selected_kind),
-			"quantity": int(selected_entry.get("quantity", 1)),
-			"amount": _format_money(int(selected_entry.get("totalPrice", 0))),
+			"quantity": quantity,
+			"amount": _format_money(payment),
 		}),
 		Callable(self, "_fulfill_wish_selected").bind(
-			str(selected_entry.get("id", "")), _new_request_id("fulfill-wish")
+			str(selected_entry.get("id", "")), quantity, _new_request_id("fulfill-wish")
 		)
 	)
 
@@ -2099,7 +2156,7 @@ func _confirm_cancel_wish() -> void:
 		_t("ui.exchange.confirm.cancel_wish_title"),
 		_t("ui.exchange.confirm.cancel_wish", {
 			"name": _entry_name(selected_entry, selected_kind),
-			"amount": _format_money(int(selected_entry.get("totalPrice", 0))),
+			"amount": _format_money(_wish_remaining_total_price(selected_entry)),
 		}),
 		Callable(self, "_cancel_wish_selected").bind(
 			str(selected_entry.get("id", "")), _new_request_id("cancel-wish")
@@ -2212,7 +2269,7 @@ func _create_wish_selected(quantity: int, unit_price: int, request_id: String) -
 	)
 
 
-func _fulfill_wish_selected(wish_id: String, request_id: String) -> void:
+func _fulfill_wish_selected(wish_id: String, quantity: int, request_id: String) -> void:
 	if request_busy:
 		return
 	request_busy = true
@@ -2220,7 +2277,7 @@ func _fulfill_wish_selected(wish_id: String, request_id: String) -> void:
 	_set_status(_t("ui.exchange.status.fulfilling_wish"), UI_MUTED)
 	var service := get_node_or_null("/root/AetherExchangeService")
 	await _finish_wish_mutation(
-		await service.call("fulfill_wish", wish_id, request_id)
+		await service.call("fulfill_wish", wish_id, quantity, request_id)
 		if service != null
 		else {"success": false, "error": _t("ui.exchange.error.action")},
 		"ui.exchange.status.wish_fulfilled"
@@ -2444,6 +2501,38 @@ func _update_sell_total(_value: float) -> void:
 	total_price_label.text = _t("ui.exchange.form_total", {"amount": _format_money(quantity * unit_price)})
 
 
+func _update_wish_fulfill_total(_value: float) -> void:
+	if total_price_label == null or quantity_spin == null:
+		return
+	var payment := int(quantity_spin.value) * int(selected_entry.get("unitPrice", 0))
+	total_price_label.text = _t("ui.exchange.wishlist.payout", {"amount": _format_money(payment)})
+
+
+func _wish_fulfilled_quantity(entry: Dictionary) -> int:
+	var quantity := maxi(int(entry.get("quantity", 1)), 1)
+	var fallback := quantity if str(entry.get("status", "active")) == "fulfilled" else 0
+	return clampi(int(entry.get("fulfilledQuantity", fallback)), 0, quantity)
+
+
+func _wish_remaining_quantity(entry: Dictionary) -> int:
+	var quantity := maxi(int(entry.get("quantity", 1)), 1)
+	return clampi(
+		int(entry.get("remainingQuantity", quantity - _wish_fulfilled_quantity(entry))),
+		0,
+		quantity,
+	)
+
+
+func _wish_remaining_total_price(entry: Dictionary) -> int:
+	return maxi(
+		int(entry.get(
+			"remainingTotalPrice",
+			_wish_remaining_quantity(entry) * int(entry.get("unitPrice", 0)),
+		)),
+		0,
+	)
+
+
 func _entry_name(entry: Dictionary, kind: String) -> String:
 	var asset := _entry_asset(entry, kind)
 	var asset_type := _entry_asset_type(entry, kind)
@@ -2472,9 +2561,13 @@ func _entry_subtitle(entry: Dictionary, kind: String) -> String:
 		return _t("ui.exchange.owned", {"quantity": int(asset.get("quantity", 1))})
 	var status := str(entry.get("status", "active"))
 	if kind == "wish":
-		return "%s · ×%d · %s  •  %s" % [
-			_t("ui.exchange.order.request"), int(entry.get("quantity", 1)),
-			_t("ui.exchange.wishlist.offer", {"amount": _format_money(int(entry.get("totalPrice", 0)))}),
+		return "%s · %s · %s  •  %s" % [
+			_t("ui.exchange.order.request"),
+			_t("ui.exchange.wishlist.progress", {
+				"fulfilled": _wish_fulfilled_quantity(entry),
+				"quantity": int(entry.get("quantity", 1)),
+			}),
+			_t("ui.exchange.price_each", {"amount": _format_money(int(entry.get("unitPrice", 0)))}),
 			_t("ui.exchange.wishlist.state.%s" % status),
 		]
 	return "%s · %s  •  %s" % [

@@ -179,6 +179,7 @@ const CODE_TO_KEY: Dictionary = {
 	"exchange_listing_unavailable": "backend.error.exchange_listing_unavailable",
 	"exchange_wishlist_not_found": "backend.error.exchange_wishlist_not_found",
 	"exchange_wishlist_unavailable": "backend.error.exchange_wishlist_unavailable",
+	"exchange_wishlist_quantity_unavailable": "backend.error.exchange_wishlist_quantity_unavailable",
 	"exchange_own_wishlist": "backend.error.exchange_own_wishlist",
 	"exchange_wishlist_requester_unavailable": "backend.error.exchange_wishlist_requester_unavailable",
 	"exchange_wishlist_refund_wallet_full": "backend.error.exchange_wishlist_refund_wallet_full",
