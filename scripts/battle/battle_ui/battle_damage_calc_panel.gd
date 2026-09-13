@@ -912,7 +912,8 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 	if knowledge_snapshot.is_empty() or not species_scenarios.is_empty():
 		return
 	var rows := _as_array(set_suggestions.get("suggestions", []))
-	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t("battle.calc.guess.title"), is_instance_valid(set_suggestions_popup))
+	var title_key := "battle.calc.guess.closest_title" if set_suggestions.get("state") == "closest" else "battle.calc.guess.title"
+	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t(title_key), is_instance_valid(set_suggestions_popup))
 	button.name = "SetSuggestionsToggle"
 	var signature := SET_SUGGESTIONS.signature(set_suggestions)
 	var evidence_backed_count := rows.filter(func(row: Dictionary) -> bool:
@@ -1005,7 +1006,8 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
 	column.add_child(header)
-	var title := _make_label(_t("battle.calc.guess.title"), 16, TEXT_PRIMARY)
+	var closest: bool = str(set_suggestions.get("state", "")) == "closest"
+	var title := _make_label(_t("battle.calc.guess.closest_title" if closest else "battle.calc.guess.title"), 16, TEXT_PRIMARY)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
 	var close_button := _make_toggle_button(_t("common.close"), false)
@@ -1016,9 +1018,10 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 	header.add_child(close_button)
 	var note_panel := PanelContainer.new()
 	note_panel.name = "SetSuggestionsIntro"
-	note_panel.add_theme_stylebox_override("panel", _make_stylebox(Color(TEXT_ACCENT, 0.06), Color(TEXT_ACCENT, 0.28), 8, 9.0, 6.0))
+	var note_color := WARNING_ACCENT if closest else TEXT_ACCENT
+	note_panel.add_theme_stylebox_override("panel", _make_stylebox(Color(note_color, 0.06), Color(note_color, 0.38 if closest else 0.28), 8, 9.0, 6.0))
 	column.add_child(note_panel)
-	var note := _make_popup_label(_t("battle.calc.guess.note"), 12, TEXT_SECONDARY, 2)
+	var note := _make_popup_label(_t("battle.calc.guess.closest_note" if closest else "battle.calc.guess.note"), 12, TEXT_SECONDARY, 2)
 	note_panel.add_child(note)
 
 	var suggestions_column := VBoxContainer.new()

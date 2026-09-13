@@ -80,9 +80,12 @@ static func valid_build(value: Variant) -> bool:
 
 
 static func signature(response: Dictionary) -> String:
-	var material: Array = []
+	var material: Array = [response.get("state", "")]
 	for row: Dictionary in response.get("suggestions", []):
-		material.append([row.get("groupId"), row.get("variantId"), row.get("confidence"), row.get("build")])
+		var evidence: Array = []
+		for clue: Dictionary in row.get("evidence", []):
+			evidence.append([clue.get("kind"), clue.get("state"), clue.get("turn"), clue.get("value")])
+		material.append([row.get("groupId"), row.get("variantId"), row.get("confidence"), row.get("build"), evidence])
 	return JSON.stringify(material).sha256_text()
 
 
