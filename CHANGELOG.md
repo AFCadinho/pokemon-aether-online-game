@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Leaving a spectated battle now waits for active animations to stop, preventing a client crash when battle events are still being shown.
+
+- The launcher now repairs incomplete core music packs, and desktop releases verify their required music before building.
+
 - Wanted items on the Aether Exchange now use the same card grid as other market listings, with a clear fulfillment progress bar.
 
 - Both sides of an Aether Exchange item-request delivery now receive a localized system message with the result.

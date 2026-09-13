@@ -25,6 +25,8 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_response_order_check.gd",
 	"res://tests/battle_result_overlay_check.gd",
 	"res://tests/battle_event_renderer_order_check.gd",
+	"res://tests/spectator_exit_render_teardown_check.gd",
+	"res://tests/desktop_music_integrity_check.gd",
 	"res://tests/battle_voice_director_check.gd",
 	"res://tests/battle_voice_timing_check.gd",
 	"res://tests/battle_rewind_helper_check.gd",
