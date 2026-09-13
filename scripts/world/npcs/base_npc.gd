@@ -8,6 +8,8 @@ const TrainerBattleMusicResolverScript := preload(
 	"res://scripts/world/npcs/trainer_battle_music_resolver.gd"
 )
 const THIEVING_PROMPT_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
+const MAIN_QUEST_MARKER_ICON: Texture2D = preload("res://assets/ui/main_quest_marker.svg")
+const SIDE_QUEST_MARKER_ICON: Texture2D = preload("res://assets/ui/side_quest_marker.svg")
 
 const MISSING_DIALOGUE_LINES: Array[String] = [
 	"This NPC has no dialogue.",
@@ -128,7 +130,7 @@ var nameplate_label: Label
 var thieving_prompt_button: Button
 var quest_marker_bindings: Array[Dictionary] = []
 var quest_marker: PanelContainer
-var quest_marker_label: Label
+var quest_marker_icon: TextureRect
 var movement_origin_tile := Vector2i.ZERO
 var movement_current_offset_tiles := 0
 var movement_direction_sign := 1
@@ -556,15 +558,13 @@ func _setup_quest_marker() -> void:
 	add_child(quest_marker)
 	_sync_overhead_ui_positions()
 
-	quest_marker_label = Label.new()
-	quest_marker_label.name = "Icon"
-	quest_marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	quest_marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	quest_marker_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quest_marker_label.add_theme_font_size_override("font_size", 20)
-	quest_marker_label.add_theme_constant_override("outline_size", 4)
-	quest_marker_label.add_theme_color_override("font_outline_color", Color("#07111cff"))
-	quest_marker.add_child(quest_marker_label)
+	quest_marker_icon = TextureRect.new()
+	quest_marker_icon.name = "Icon"
+	quest_marker_icon.custom_minimum_size = Vector2(20.0, 20.0)
+	quest_marker_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quest_marker_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	quest_marker_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	quest_marker.add_child(quest_marker_icon)
 
 
 func _refresh_quest_marker() -> void:
@@ -591,13 +591,32 @@ func _refresh_quest_marker() -> void:
 			break
 	quest_marker.visible = selected_type != ""
 	if selected_type == "main":
-		quest_marker_label.text = "!"
-		quest_marker_label.add_theme_color_override("font_color", Color("#ffd75aff"))
-		quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#9a691fff")))
+		_set_quest_marker_visual(
+			MAIN_QUEST_MARKER_ICON,
+			Color("#ffd75aff"),
+			Color("#9a691fff")
+		)
 	elif selected_type == "side":
-		quest_marker_label.text = "✦"
-		quest_marker_label.add_theme_color_override("font_color", Color("#75ddffff"))
-		quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#176b8fff")))
+		_set_side_quest_marker_visual()
+
+
+func _set_side_quest_marker_visual(
+	icon_color: Color = Color("#75ddffff"),
+	border_color: Color = Color("#176b8fff")
+) -> void:
+	_set_quest_marker_visual(SIDE_QUEST_MARKER_ICON, icon_color, border_color)
+
+
+func _set_quest_marker_visual(
+	icon_texture: Texture2D,
+	icon_color: Color,
+	border_color: Color
+) -> void:
+	if quest_marker == null or quest_marker_icon == null:
+		return
+	quest_marker_icon.texture = icon_texture
+	quest_marker_icon.modulate = icon_color
+	quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(border_color))
 
 
 func _quest_marker_binding_matches(binding: Dictionary, quest: Dictionary) -> bool:

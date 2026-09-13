@@ -222,10 +222,11 @@ func _verify_integration_contract() -> void:
 		"successful wild captures refresh local story progress"
 	)
 	_expect(
-		base_npc.contains('quest_marker_label.text = "!"')
-		and base_npc.contains('quest_marker_label.text = "✦"')
+		base_npc.contains("MAIN_QUEST_MARKER_ICON")
+		and base_npc.contains("SIDE_QUEST_MARKER_ICON")
+		and base_npc.contains("func _set_side_quest_marker_visual(")
 		and base_npc.contains('quest_type == "main"'),
-		"NPC quest markers distinguish main and side quests with main-story priority"
+		"NPC quest markers use bundled main and side icons with main-story priority"
 	)
 	_expect(
 		auth.contains("StoryService.reset_story()")
