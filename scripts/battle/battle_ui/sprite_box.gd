@@ -38,6 +38,9 @@ const SPECIES_POSITION_OFFSETS := {
 	"shiny_front:mimikyu-busted": Vector2(0, 8),
 }
 const ATTACK_TWEEN_OFFSET := Vector2(28, -6)
+const DODGE_TWEEN_OFFSET := Vector2(48, -16)
+const DODGE_OUT_SECONDS := 0.12
+const DODGE_RETURN_SECONDS := 0.18
 const DAMAGE_FLASH_COLOR := Color(1.0, 0.18, 0.18, 1.0)
 const DAMAGE_IMPACT_COLOR := Color(1.0, 1.0, 1.0, 1.0)
 const HEAL_FLASH_COLOR := Color(0.45, 1.0, 0.55, 1.0)
@@ -255,8 +258,9 @@ func play_dodge_tween(direction := 1.0, returning := false) -> void:
 	active_tween = dodge_tween
 	for sprite in sprites:
 		var base_position := _get_substitute_idle_position() if sprite == substitute_sprite else _get_base_sprite_position(sprite as AnimatedSprite2D)
-		var offset := Vector2.ZERO if returning else Vector2(32.0 * direction, -12.0)
-		dodge_tween.tween_property(sprite, "position", base_position + offset, 0.16 if returning else 0.10).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		var offset := Vector2.ZERO if returning else Vector2(DODGE_TWEEN_OFFSET.x * direction, DODGE_TWEEN_OFFSET.y)
+		var duration := DODGE_RETURN_SECONDS if returning else DODGE_OUT_SECONDS
+		dodge_tween.tween_property(sprite, "position", base_position + offset, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await AnimationWait.for_tween(self, dodge_tween)
 
 
