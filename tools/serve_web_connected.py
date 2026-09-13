@@ -15,7 +15,20 @@ from websockets.exceptions import ConnectionClosed, InvalidStatus
 
 ROOT = Path(__file__).resolve().parents[1]
 NEWS_URL = "https://updates.pokeaether.com/data/news.json"
-POKEMON_ASSET_ROOT = (ROOT / "assets/sprites/pokemon/gen5").resolve()
+UPSTREAM_WEBSOCKET_OPTIONS = {
+    "open_timeout": 10,
+    "max_size": 65536,
+    # Local imports, debugger pauses and large asset loads can briefly stall
+    # the integration backend. Keep detecting dead connections, but do not
+    # drop chat or presence after the library's aggressive 20-second default.
+    "ping_interval": 30,
+    "ping_timeout": 120,
+    "close_timeout": 5,
+}
+POKEMON_ASSET_ROOTS = {
+    "battle": (ROOT / "assets/sprites/pokemon").resolve(),
+    "gen5": (ROOT / "assets/sprites/pokemon/gen5").resolve(),
+}
 HTTP_ROUTES = {
     ("GET", "/auth/status"), ("GET", "/presence/online-count"),
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
@@ -23,7 +36,7 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
     ("PATCH", "/auth/web/party/battle-state"),
     ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
-    ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"),
+    ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"), ("GET", "/auth/web/guilds/me"),
     ("GET", "/auth/web/transit"),
     ("GET", "/auth/web/starter/options"), ("POST", "/auth/web/starter"),
     ("GET", "/auth/web/ai-sparring/statistics"),
@@ -67,7 +80,7 @@ AI_BATTLE_ROUTE = re.compile(
 HTTP_ROUTE_PREFIXES = (
 	# Read/write game interfaces explicitly enabled in the browser demo. These
 	# retain the normal account and server-side authorization checks.
-	("GET", "/game/pokedex/"), ("GET", "/game/items/"),
+	("GET", "/auth/web/pokedex/"), ("GET", "/auth/web/items/"),
 	("GET", "/game/skills"),
 	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
 	("GET", "/battle/pvp/training/ai/live/"),
@@ -130,7 +143,7 @@ def create_app(upstream, build=None, *, transport=None):
         else:
             response = await call_next(request)
         response.headers.update(SECURITY_HEADERS)
-        if request.url.path.startswith("/pokemon-assets/gen5/") and response.status_code == 200:
+        if request.url.path.startswith(("/pokemon-assets/battle/", "/pokemon-assets/gen5/")) and response.status_code == 200:
             # Local packs can change without their URL changing. Production
             # uses versioned immutable R2 URLs; preview must revalidate.
             response.headers["Cache-Control"] = "no-cache"
@@ -199,7 +212,11 @@ def create_app(upstream, build=None, *, transport=None):
         url = httpx.URL(upstream.replace("http://", "ws://", 1) + f"/ws/{channel}", params=query)
         tasks = []
         try:
-            async with connect(str(url), proxy=None, open_timeout=10, max_size=65536) as remote:
+            async with connect(
+                str(url),
+                proxy=None,
+                **UPSTREAM_WEBSOCKET_OPTIONS,
+            ) as remote:
                 await socket.accept()
 
                 async def outbound():
@@ -260,14 +277,16 @@ def create_app(upstream, build=None, *, transport=None):
     async def pvp_battle_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "pvp-battle")
 
-    @app.get("/pokemon-assets/gen5/{side}/{species}/{filename}")
-    async def pokemon_asset(side: str, species: str, filename: str):
+    @app.get("/pokemon-assets/{style}/{side}/{species}/{filename}")
+    async def pokemon_asset(style: str, side: str, species: str, filename: str):
         if (side not in {"front", "back", "shiny_front", "shiny_back"}
+                or style not in POKEMON_ASSET_ROOTS
                 or not re.fullmatch(r"[a-z0-9-]{1,96}", species)
                 or filename not in {"animation.json", "sheet.png"}):
             return Response(status_code=404)
-        target = (POKEMON_ASSET_ROOT / side / species / filename).resolve()
-        if not target.is_relative_to(POKEMON_ASSET_ROOT) or target.is_symlink() or not target.is_file():
+        asset_root = POKEMON_ASSET_ROOTS[style]
+        target = (asset_root / side / species / filename).resolve()
+        if not target.is_relative_to(asset_root) or target.is_symlink() or not target.is_file():
             return Response(status_code=404)
         return FileResponse(target)
 
@@ -275,10 +294,11 @@ def create_app(upstream, build=None, *, transport=None):
     async def static(path: str):
         target = (build / (path or "index.html")).resolve()
         if (not target.is_relative_to(build) or any(part.startswith(".") for part in Path(path).parts)
-                or not target.is_file() or target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".svg", ".ico", ".ogg", ".wav", ".mp3"}):
+                or not target.is_file() or target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".webp", ".svg", ".ico", ".ogg", ".wav", ".mp3"}):
             return Response(status_code=404)
         mime = {
             ".wasm": "application/wasm", ".pck": "application/octet-stream",
+            ".webp": "image/webp",
             ".ogg": "audio/ogg", ".wav": "audio/wav", ".mp3": "audio/mpeg",
         }.get(target.suffix)
         return FileResponse(target, media_type=mime)

@@ -23,7 +23,7 @@ func _ready() -> void:
 	clear_command()
 
 
-func show_command(message: String, trainer_faces_left: bool) -> void:
+func show_command(message: String, trainer_faces_left: bool, display_seconds := DISPLAY_SECONDS) -> void:
 	var cleaned_message := message.strip_edges()
 	if cleaned_message == "":
 		clear_command()
@@ -45,7 +45,7 @@ func show_command(message: String, trainer_faces_left: bool) -> void:
 	active_tween = create_tween()
 	active_tween.tween_property(self, "modulate:a", 1.0, FADE_IN_SECONDS)
 	active_tween.parallel().tween_property(self, "scale", Vector2.ONE, FADE_IN_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	active_tween.tween_interval(DISPLAY_SECONDS)
+	active_tween.tween_interval(maxf(display_seconds, 0.0))
 	active_tween.tween_property(self, "modulate:a", 0.0, FADE_OUT_SECONDS)
 	active_tween.tween_callback(_finish_hiding)
 

@@ -106,6 +106,11 @@ func _init() -> void:
 	_check(keeper_source.contains("npc.transit.attune_beacon_hint"), "Transit Keeper explains that the local Beacon must be attuned")
 	_check(keeper_source.contains("TransitMenuScript"), "Transit Keeper opens the Aethernet destination catalog")
 	_check(keeper_source.contains("menu.open(network)"), "Transit Keeper passes the complete network to the destination catalog")
+	_check(
+		keeper_source.contains('dialog_layer.name = "AethernetBrowserDialogLayer"')
+		and keeper_source.contains("dialog_layer.add_child(dialog)"),
+		"Browser Aethernet notice renders in a screen-space CanvasLayer"
+	)
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
 	_check(keeper_source.contains("PlayerWalletService.apply_wallet_result"), "Transit travel updates the local wallet projection")
 	var beacon_source := FileAccess.get_file_as_string(

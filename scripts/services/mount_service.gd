@@ -208,7 +208,8 @@ static func get_mounted_rider_frames(
 	base_frames: SpriteFrames,
 	mount_id: String,
 	rider_offset_adjustments: Dictionary = {},
-	hidden_regions: Dictionary = {}
+	hidden_regions: Dictionary = {},
+	static_source_pose := false
 ) -> SpriteFrames:
 	if base_frames == null:
 		return null
@@ -216,11 +217,12 @@ static func get_mounted_rider_frames(
 	if normalized_id == "":
 		return base_frames
 
-	var cache_key := "%s:%d:%s:%s" % [
+	var cache_key := "%s:%d:%s:%s:%s" % [
 		normalized_id,
 		base_frames.get_instance_id(),
 		JSON.stringify(rider_offset_adjustments),
 		JSON.stringify(hidden_regions),
+		static_source_pose,
 	]
 	if _rider_frames_cache.has(cache_key):
 		return _rider_frames_cache[cache_key] as SpriteFrames
@@ -246,7 +248,13 @@ static func get_mounted_rider_frames(
 		var direction_row := _direction_row(direction)
 		var frame_count := base_frames.get_frame_count(animation_name)
 		for frame_index: int in range(frame_count):
-			var source_texture := base_frames.get_frame_texture(animation_name, frame_index)
+			# Mounted riders keep one seated pose while the mount animates. Repeat
+			# that source pose so every mount frame still receives its own mask.
+			var source_frame_index := 0 if static_source_pose else frame_index
+			var source_texture := base_frames.get_frame_texture(
+				animation_name,
+				source_frame_index
+			)
 			var source_image := _get_texture_image(source_texture)
 			var offset := _get_rider_offset(rider_offsets_value as Dictionary, direction, frame_index)
 			offset += _get_rider_offset_adjustment(rider_offset_adjustments, direction)

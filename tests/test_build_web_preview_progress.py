@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from tools.build_web_preview import parse_export_progress, run_export
+from tools.build_web_preview import copy_web_shell_assets, parse_export_progress, run_export
 
 
 class BuildWebPreviewProgressTests(unittest.TestCase):
@@ -32,6 +32,15 @@ class BuildWebPreviewProgressTests(unittest.TestCase):
             )
         self.assertEqual(returncode, 0)
         self.assertIn('Godot export: 12% (export)', output.getvalue())
+
+    def test_shell_logo_is_copied_into_web_build(self):
+        with tempfile.TemporaryDirectory() as directory:
+            copied = copy_web_shell_assets(Path(directory))
+            self.assertEqual(
+                [path.name for path in copied],
+                ['pokeaether-logo.webp', 'pokeaether-world-preview.webp'],
+            )
+            self.assertTrue(all(path.stat().st_size > 0 for path in copied))
 
 
 if __name__ == '__main__':

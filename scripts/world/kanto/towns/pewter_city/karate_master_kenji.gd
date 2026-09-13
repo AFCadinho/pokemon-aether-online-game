@@ -70,9 +70,7 @@ func _refresh_quest_marker() -> void:
 		return
 	_setup_quest_marker()
 	quest_marker.visible = true
-	quest_marker_label.text = "✦"
-	quest_marker_label.add_theme_color_override("font_color", Color("#e3b96bff"))
-	quest_marker.add_theme_stylebox_override("panel", _quest_marker_style(Color("#755020ff")))
+	_set_side_quest_marker_visual(Color("#e3b96bff"), Color("#755020ff"))
 
 
 func _should_show_lesson_marker() -> bool:

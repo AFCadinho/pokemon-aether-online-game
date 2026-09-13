@@ -59,6 +59,10 @@ const EV_TRAINING_MAP_ID := "kanto_viridian_city"
 const EXPECTED_TRAINER_BATTLE_REJECTION_CODES: Array[String] = [
 	"pokemon_level_cap_party_ineligible",
 ]
+const WEB_BATTLE_SPRITE_PREFETCH_ALIASES := {
+	"mimikyu-disguised": "mimikyu",
+	"pikachu-rock-star": "pikachu-rockstar",
+}
 
 @export var initial_spawn_name := "InitialSpawn"
 
@@ -180,6 +184,8 @@ func _ready() -> void:
 	_sync_remote_players_visibility()
 	_connect_world_presence_signals()
 	if OS.has_feature("web"):
+		if not PlayerSave.party_changed.is_connected(_on_web_party_changed):
+			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
 		return
@@ -221,6 +227,187 @@ func _current_fishing_area_id() -> String:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and GameState.current_map.has_method("get_wild_encounter_area_id"):
 		return str(GameState.current_map.call("get_wild_encounter_area_id")).strip_edges()
 	return ""
+
+
+func _on_web_party_changed() -> void:
+	_schedule_current_map_web_sprite_prefetch()
+
+
+func _schedule_current_map_web_sprite_prefetch() -> void:
+	if not WebPokemonSpriteService.is_available():
+		return
+	var party_entries: Array = []
+	var seen: Dictionary = {}
+	_append_player_party_web_sprite_entries(party_entries, seen)
+	WebPokemonSpriteService.prefetch(party_entries)
+	var area_id := _current_fishing_area_id()
+	if area_id != "":
+		_prefetch_current_map_wild_sprites.call_deferred(area_id)
+
+
+func _prefetch_current_map_wild_sprites(area_id: String) -> void:
+	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
+	if area_id != _current_fishing_area_id() or not bool(response.get("success", false)):
+		return
+	var entries: Array = []
+	var seen: Dictionary = {}
+	var metadata := _dictionary_from_value(response.get("metadata", {}))
+	var encounter_types := _dictionary_from_value(metadata.get("encounterTypes", {}))
+	for encounter_value: Variant in encounter_types.values():
+		var encounter := _dictionary_from_value(encounter_value)
+		_append_web_sprite_entries_from_value(
+			encounter.get("pokemon", []), ["front"], entries, seen
+		)
+	WebPokemonSpriteService.prefetch(entries)
+
+
+func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false) -> void:
+	if not WebPokemonSpriteService.is_available():
+		return
+	var entries: Array = []
+	var seen: Dictionary = {}
+	_append_player_party_web_sprite_entries(entries, seen)
+	for key: String in ["ownTeam", "teamPreview"]:
+		_append_web_sprite_entries_from_value(response.get(key, []), ["back"], entries, seen)
+	for key: String in ["wildPokemon", "trainerTeam", "trainingAiTeam", "opponentTeam"]:
+		_append_web_sprite_entries_from_value(response.get(key, []), ["front"], entries, seen)
+	# Custom games, spectators and reconnects expose their known rosters inside
+	# state/side containers. Cache both orientations because either side may be
+	# mapped to the local player after the response is normalized.
+	for key: String in ["state", "battleState", "sides", "publicSides", "requests"]:
+		_append_web_sprite_entries_from_value(response.get(key, {}), ["front", "back"], entries, seen)
+	if wait_for_full_roster:
+		WebPokemonSpriteService.prefetch(entries)
+		await WebPokemonSpriteService.prefetch_and_wait(entries)
+		return
+
+	# Normal wild and NPC battles only block on the two Pokémon that appear
+	# immediately. The remaining roster keeps warming in the background instead
+	# of extending the encounter transition by several sprite downloads.
+	var priority_entries: Array = []
+	var priority_seen: Dictionary = {}
+	_append_player_lead_web_sprite_entry(priority_entries, priority_seen)
+	_append_first_web_sprite_entry_from_value(
+		response.get("ownTeam", []), ["back"], priority_entries, priority_seen
+	)
+	for key: String in ["wildPokemon", "trainerTeam", "trainingAiTeam", "opponentTeam"]:
+		_append_first_web_sprite_entry_from_value(
+			response.get(key, []), ["front"], priority_entries, priority_seen
+		)
+	for key: String in ["state", "battleState", "sides", "publicSides", "requests"]:
+		_append_active_web_sprite_entries_from_value(
+			response.get(key, {}), ["front", "back"], priority_entries, priority_seen
+		)
+	# Put the visible leads at the front of the bounded download pool before
+	# filling spare slots with the rest of the roster.
+	WebPokemonSpriteService.prefetch(priority_entries)
+	WebPokemonSpriteService.prefetch(entries)
+	await WebPokemonSpriteService.prefetch_and_wait(priority_entries)
+
+
+func _append_player_party_web_sprite_entries(entries: Array, seen: Dictionary) -> void:
+	for pokemon_value: Variant in PlayerSave.party:
+		if pokemon_value is Pokemon:
+			var pokemon := pokemon_value as Pokemon
+			_append_web_sprite_entry(pokemon.species, "back", pokemon.shiny, entries, seen)
+
+
+func _append_player_lead_web_sprite_entry(entries: Array, seen: Dictionary) -> void:
+	var lead_slot := PlayerSave.get_first_usable_party_slot()
+	if lead_slot <= 0 or lead_slot > PlayerSave.party.size():
+		return
+	var pokemon := PlayerSave.party[lead_slot - 1] as Pokemon
+	if pokemon != null:
+		_append_web_sprite_entry(pokemon.species, "back", pokemon.shiny, entries, seen)
+
+
+func _append_first_web_sprite_entry_from_value(
+	value: Variant, sides: Array[String], entries: Array, seen: Dictionary
+) -> bool:
+	if value is Array:
+		for child_value: Variant in value as Array:
+			if _append_first_web_sprite_entry_from_value(child_value, sides, entries, seen):
+				return true
+		return false
+	if not (value is Dictionary):
+		return false
+	var data := value as Dictionary
+	var species := str(data.get("displaySpecies", data.get("species", ""))).strip_edges()
+	if species != "":
+		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		for side: String in sides:
+			_append_web_sprite_entry(species, side, shiny, entries, seen)
+		return true
+	for child_value: Variant in data.values():
+		if child_value is Array or child_value is Dictionary:
+			if _append_first_web_sprite_entry_from_value(child_value, sides, entries, seen):
+				return true
+	return false
+
+
+func _append_active_web_sprite_entries_from_value(
+	value: Variant, sides: Array[String], entries: Array, seen: Dictionary
+) -> void:
+	if value is Array:
+		for child_value: Variant in value as Array:
+			_append_active_web_sprite_entries_from_value(child_value, sides, entries, seen)
+		return
+	if not (value is Dictionary):
+		return
+	var data := value as Dictionary
+	if bool(data.get("active", false)):
+		var species := str(data.get("displaySpecies", data.get("species", ""))).strip_edges()
+		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		for side: String in sides:
+			_append_web_sprite_entry(species, side, shiny, entries, seen)
+	for child_value: Variant in data.values():
+		if child_value is Array or child_value is Dictionary:
+			_append_active_web_sprite_entries_from_value(child_value, sides, entries, seen)
+
+
+func _append_web_sprite_entries_from_value(
+	value: Variant, sides: Array[String], entries: Array, seen: Dictionary
+) -> void:
+	if value is Array:
+		for child_value: Variant in value as Array:
+			_append_web_sprite_entries_from_value(child_value, sides, entries, seen)
+		return
+	if not (value is Dictionary):
+		return
+	var data := value as Dictionary
+	var species := ""
+	for species_key: String in ["displaySpecies", "species", "speciesId", "species_id"]:
+		species = str(data.get(species_key, "")).strip_edges()
+		if species != "":
+			break
+	if species != "":
+		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		for side: String in sides:
+			_append_web_sprite_entry(species, side, shiny, entries, seen)
+	for child_value: Variant in data.values():
+		if child_value is Array or child_value is Dictionary:
+			_append_web_sprite_entries_from_value(child_value, sides, entries, seen)
+
+
+func _append_web_sprite_entry(
+	species: String, side: String, shiny: bool, entries: Array, seen: Dictionary
+) -> void:
+	var normalized_species := species.strip_edges()
+	if normalized_species == "":
+		return
+	var key := "%s|%s|%s" % [normalized_species.to_lower(), side, str(shiny)]
+	if seen.has(key):
+		return
+	seen[key] = true
+	entries.append({
+		"species": normalized_species,
+		"side": side,
+		"shiny": shiny,
+		"style": SettingsManager.sprite_style,
+	})
+	var alias := str(WEB_BATTLE_SPRITE_PREFETCH_ALIASES.get(normalized_species.to_lower(), ""))
+	if alias != "":
+		_append_web_sprite_entry(alias, side, shiny, entries, seen)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -1549,6 +1736,7 @@ func _setup_web_demo_world() -> void:
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
+	_schedule_current_map_web_sprite_prefetch()
 	if bool(saved_state.get("teleportAcknowledgementRequired", false)):
 		var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
 		if not bool(ack_result.get("success", false)):
@@ -1656,6 +1844,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		player.call("restore_land_mount", land_mount_id_to_restore)
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+		_schedule_current_map_web_sprite_prefetch()
 	current_teleport_revision = int(state.get("teleportRevision", current_teleport_revision))
 	if bool(state.get("teleportAcknowledgementRequired", false)):
 		var ack_result: Dictionary = await _ack_authorized_teleport_state(state)
@@ -1733,6 +1922,7 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 	active_wild_encounter_type = str(response.get("encounterType", "")).strip_edges().to_lower()
 	active_wild_replay_shiny = wild_pokemon.shiny
 	_publish_world_presence(true)
+	await _prefetch_web_battle_sprites(response)
 	if not _mount_battle_ui():
 		_abort_battle_start(true)
 		wild_battle_resume_pending = true
@@ -1815,6 +2005,7 @@ func _resume_saved_trainer_battle(saved_state: Dictionary) -> Dictionary:
 	active_trainer_is_rematch = bool(response.get("isRematch", false))
 	active_battle_id = str(response.get("battleId", context["battleId"]))
 	_publish_world_presence(true)
+	await _prefetch_web_battle_sprites(response)
 	if player_pokemon == null or not _mount_battle_ui():
 		_show_trainer_resume_retry(saved_state)
 		return {"resumed": false, "retryable": true}
@@ -2373,6 +2564,8 @@ func _get_remote_players_parent(map: Node = null) -> Node:
 func _on_settings_changed() -> void:
 	_sync_remote_players_visibility()
 	_sync_local_player_nameplate_visibility()
+	if OS.has_feature("web"):
+		_schedule_current_map_web_sprite_prefetch()
 
 
 func _sync_local_player_nameplate_visibility() -> void:
@@ -3312,6 +3505,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	await _prefetch_web_battle_sprites(response)
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_publish_world_presence(true)
@@ -3419,6 +3613,7 @@ func start_triggered_wild_battle_for_area(
 		return
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_replay_shiny = wild_pokemon.shiny
+	await _prefetch_web_battle_sprites(response)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
@@ -3565,6 +3760,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_publish_world_presence(true)
+	await _prefetch_web_battle_sprites(response)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
@@ -3674,6 +3870,7 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(trainer_data)
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	await _prefetch_web_battle_sprites(response, true)
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
 	if not _mount_battle_ui():
@@ -3707,6 +3904,7 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		await cancel_pvp_battle_transition()
 		return false
 
+	await _prefetch_web_battle_sprites(response, true)
 	await _wait_for_pvp_battle_cover()
 	is_in_battle = true
 	active_battle_kind = "pvp"

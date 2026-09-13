@@ -2,6 +2,7 @@ extends SceneTree
 
 const EXCHANGE_SERVICE := preload("res://scripts/services/aether_exchange_service.gd")
 const EXCHANGE_POPUP := preload("res://scenes/interface/aether_exchange_popup.tscn")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const EXCHANGE_POPUP_PATH := "res://scripts/ui/aether_exchange_popup.gd"
 const EXCHANGE_SERVICE_PATH := "res://scripts/services/aether_exchange_service.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
@@ -39,13 +40,18 @@ func _run() -> void:
 		"id": "wish-1",
 		"item": {"itemId": "poke-ball", "name": "Poké Ball"},
 		"quantity": 3,
+		"fulfilledQuantity": 1,
+		"remainingQuantity": 2,
 		"unitPrice": 250,
 		"totalPrice": 750,
+		"remainingTotalPrice": 500,
 		"status": "active",
 		"isMine": false,
 	})
 	_check(str(wish.get("id", "")) == "wish-1", "Exchange service retains wishlist order ids")
 	_check(int(wish.get("totalPrice", 0)) == 750, "Exchange service retains wishlist escrow totals")
+	_check(int(wish.get("fulfilledQuantity", 0)) == 1, "Exchange service retains partial fulfillment progress")
+	_check(int(wish.get("remainingQuantity", 0)) == 2, "Exchange service retains the remaining requested quantity")
 	_check(_dictionary(wish.get("item", {})).get("itemId") == "poke-ball", "Exchange service retains wishlist item snapshots")
 	service.free()
 
@@ -259,6 +265,10 @@ func _run() -> void:
 	_check(catalog_tm_icon != null and catalog_tm_icon.resource_path.ends_with("/machine_WATER.png"), "Exchange uses Item Dex machine metadata when provided")
 	var outfit_icon := popup.call("_load_item_icon", "mysterious-outfit") as Texture2D
 	_check(outfit_icon != null and not outfit_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex cosmetic previews")
+	var blossom_icon := popup.call("_load_item_icon", "aether-blossom-dress") as Texture2D
+	_check(blossom_icon != null and not blossom_icon.resource_path.ends_with("/000.png"), "male Trainers see female-only cosmetic icons in the Exchange")
+	var adinho_icon := ITEM_ICON_RESOLVER.load_icon("adinho-classic-shirt", "", "", "female")
+	_check(adinho_icon != null and not adinho_icon.resource_path.ends_with("/000.png"), "female Trainers see male-only cosmetic icons in the Exchange")
 	var mount_icon := popup.call("_load_item_icon", "cyclizar-mount") as Texture2D
 	_check(mount_icon != null and not mount_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex mount previews")
 	var item_dex_overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
@@ -283,8 +293,11 @@ func _run() -> void:
 		"id": "wish-poke-balls",
 		"item": wishlist_item,
 		"quantity": 3,
+		"fulfilledQuantity": 1,
+		"remainingQuantity": 2,
 		"unitPrice": 250,
 		"totalPrice": 750,
+		"remainingTotalPrice": 500,
 		"status": "active",
 		"isMine": false,
 	}
@@ -293,13 +306,22 @@ func _run() -> void:
 	popup.call("_render_current_list")
 	popup.call("_select_entry", wanted_order, "wish")
 	await process_frame
+	_check(list_container.columns == 5, "Wanted item requests use the five-column market grid")
+	var wanted_card := list_container.get_child(0) as Button
+	_check(wanted_card != null and wanted_card.custom_minimum_size.y == 190, "Wanted item requests use market cards")
+	var card_progress := wanted_card.find_child("BrowseWishProgress", true, false) as ProgressBar
+	_check(card_progress != null and card_progress.value == 1 and card_progress.max_value == 3, "Wanted item cards show delivered progress")
 	var fulfill_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
-	_check(fulfill_button != null and not fulfill_button.disabled, "Players with the full requested stack can fulfill a wishlist order")
+	_check(fulfill_button != null and not fulfill_button.disabled, "Players can fulfill the remaining part of a wishlist order")
+	_check((popup.get("quantity_spin") as SpinBox).max_value == 2, "Fulfillment quantity is capped by the request remainder")
+	var progress := popup.find_child("ExchangeWishProgress", true, false) as ProgressBar
+	_check(progress != null and progress.value == 1 and progress.max_value == 3, "Wishlist orders show delivered progress")
 	popup.set("sellable_items", [{"itemId": "poke-ball", "quantity": 2, "name": "Poké Ball"}])
 	popup.call("_select_entry", wanted_order, "wish")
 	await process_frame
 	fulfill_button = popup.find_child("ExchangeWishActionButton", true, false) as Button
-	_check(fulfill_button != null and fulfill_button.disabled, "Partial item stacks cannot partially fulfill a wishlist order")
+	_check(fulfill_button != null and not fulfill_button.disabled, "Partial item stacks can partially fulfill a wishlist order")
+	_check((popup.get("quantity_spin") as SpinBox).value == 2, "Fulfillment defaults to the maximum deliverable quantity")
 	var own_wish := wanted_order.duplicate(true)
 	own_wish["isMine"] = true
 	popup.set("active_tab", "mine")
@@ -307,6 +329,10 @@ func _run() -> void:
 	popup.set("my_listings", [])
 	popup.set("my_wishes", [own_wish])
 	popup.call("_render_current_list")
+	var portfolio_progress := popup.find_child("PortfolioWishProgress", true, false) as ProgressBar
+	var portfolio_price := popup.find_child("PortfolioWishPrice", true, false) as Label
+	_check(portfolio_progress != null and portfolio_progress.value == 1 and portfolio_progress.max_value == 3, "My Exchange request cards show fulfillment progress")
+	_check(portfolio_price != null and portfolio_price.text.contains("250"), "My Exchange request cards separate the unit price from progress")
 	popup.call("_select_entry", own_wish, "wish")
 	await process_frame
 	var cancel_wish_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
@@ -346,7 +372,8 @@ func _run() -> void:
 	await process_frame
 	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
 	var active_request_buttons := requests_section.find_children("*", "Button", true, false)
-	_check(active_request_buttons.size() == 1 and (active_request_buttons[0] as Button).text.contains("750"), "Returning to Active restores outstanding requests")
+	var active_request_price := requests_section.find_child("PortfolioWishPrice", true, false) as Label
+	_check(active_request_buttons.size() == 1 and active_request_price != null and active_request_price.text.contains("250"), "Returning to Active restores outstanding requests at their unit price")
 	var sellable_garchomp := {
 		"pokemonId": 25,
 		"species": "garchomp",
@@ -554,6 +581,10 @@ func _run() -> void:
 	_check(overlay_source.contains("aether_exchange_popup.open_exchange()"), "Existing Exchange navigation opens the live popup")
 	_check(overlay_source.contains("pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)"), "Exchange Summary actions are connected to the UI overlay")
 	_check(overlay_source.contains("_open_readonly_pokemon_summary(pokemon_payload)"), "Exchange opens the existing read-only Pokémon Summary")
+	_check(overlay_source.contains('"system.exchange_item_request_created"'), "Exchange request creation events become system messages")
+	_check(overlay_source.contains('"system.exchange_item_request_filled"'), "Exchange fulfillment events become system messages")
+	_check(overlay_source.contains('"system.exchange_item_request_cancelled"'), "Exchange cancellation events become system messages")
+	_check(overlay_source.contains("_exchange_item_request_mutation_messages"), "Exchange mutations receive separate Bag and wallet messages")
 	_check(not overlay_source.contains("Aether Exchange is not implemented yet."), "Coming-soon behavior was removed")
 	_check(popup_source.contains("func _load_portfolio() -> bool:"), "Portfolio loads report whether they succeeded")
 	_check(popup_source.contains("func _load_browse() -> bool:"), "Browse loads report whether they succeeded")

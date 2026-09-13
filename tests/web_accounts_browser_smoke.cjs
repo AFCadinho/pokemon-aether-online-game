@@ -66,7 +66,9 @@ const assert = require('node:assert/strict');
   await context.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url());
 		if (url.origin !== new URL(previewUrl).origin) { external.push(url.origin); return route.abort(); }
-		if (url.pathname.startsWith('/pokemon-assets/gen5/')) pokemonAssets.push(url.pathname);
+		if (url.pathname.startsWith('/pokemon-assets/battle/') || url.pathname.startsWith('/pokemon-assets/gen5/')) {
+			pokemonAssets.push(url.pathname);
+		}
     if (!url.pathname.startsWith('/api/')) return route.continue();
 		const result = await request({ method: req.method(), path: url.pathname, body: req.postData() || '', headers: req.headers() });
     api.push({ path: url.pathname, status: result.status });
@@ -77,7 +79,7 @@ const assert = require('node:assert/strict');
     if (message.type() === 'error' && !message.text().includes('Failed to load resource')) errors.push(message.text().replace(/token=[^&'\s]+/g, 'token=[redacted]'));
   });
   const start = async () => {
-    await page.getByRole('button', { name: 'Open browser game' }).click();
+    await page.getByRole('button', { name: 'Play now' }).click();
     await page.waitForFunction(() => window.pokeaetherPreview?.loginReady, null, { timeout: 120000 });
     await page.waitForTimeout(2500);
   };

@@ -715,9 +715,6 @@ func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 	store_catalog_loaded = true
 	store_catalog_loading = false
 	_refresh_category_visibility()
-	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
-		selected_item_id = ""
-		_reset_selection_footer()
 	_render_products()
 	if selected_item_id == "":
 		_reset_selection_footer()
@@ -749,9 +746,6 @@ func show_purchase_success(item_name: String) -> void:
 
 func set_trainer_gender(value: String) -> void:
 	trainer_gender = "female" if value.strip_edges().to_lower() == "female" else "male"
-	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
-		selected_item_id = ""
-		_reset_selection_footer()
 	_render_products()
 	_refresh_character_preview()
 
@@ -763,9 +757,6 @@ func set_trainer_appearance(value: Dictionary) -> void:
 		if str(trainer_appearance.get("gender", trainer_gender)).strip_edges().to_lower() == "female"
 		else "male"
 	)
-	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
-		selected_item_id = ""
-		_reset_selection_footer()
 	_sync_character_preview_colors()
 	_render_products()
 	_refresh_character_preview()
@@ -1401,8 +1392,6 @@ func _render_products() -> void:
 		var categories: Array = item.get("categories", [])
 		if not categories.has(active_category):
 			continue
-		if not _item_matches_trainer_gender(item):
-			continue
 		if active_category == "cosmetics" and not _matches_cosmetic_subcategory(item):
 			continue
 		if not _item_matches_catalog_search(item):
@@ -1548,7 +1537,10 @@ func _create_product_card(item: Dictionary) -> Button:
 	icon.custom_minimum_size = Vector2(40, 40)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, trainer_gender)
+	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
+		item_id,
+		_preview_gender_for_item(item)
+	)
 	icon.texture = cosmetic_icon if cosmetic_icon != null else item.get("icon") as Texture2D
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	center.add_child(icon)
@@ -1631,37 +1623,47 @@ func _sync_character_preview_colors() -> void:
 
 
 func _current_character_preview_appearance() -> Dictionary:
+	var item := _catalog_item(selected_item_id)
+	var preview_gender := _preview_gender_for_item(item)
+	var is_outfit := _item_has_cosmetic_subcategory(item, "outfits")
 	var body_id := str(trainer_appearance.get("body", ""))
-	if not CharacterAppearanceService.body_supports_layered_parts(body_id, trainer_gender):
+	if preview_gender != trainer_gender or not CharacterAppearanceService.body_supports_layered_parts(body_id, preview_gender):
 		body_id = (
 			CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID
-			if trainer_gender == "female"
+			if preview_gender == "female"
 			else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
 		)
-	body_id = CharacterAppearanceService.resolve_body_model_id(body_id, trainer_gender)
+	body_id = CharacterAppearanceService.resolve_body_model_id(body_id, preview_gender)
+	var preview_hair := ""
+	if not is_outfit:
+		preview_hair = (
+			CharacterAppearanceService.deserialize_part_id(str(trainer_appearance.get("hair", "")))
+			if preview_gender == trainer_gender
+			else CharacterAppearanceService.get_default_part_id("hair", preview_gender)
+		)
 	var appearance := {
 		"body": body_id,
-		"hair": CharacterAppearanceService.deserialize_part_id(str(trainer_appearance.get("hair", CharacterAppearanceService.get_default_part_id("hair", trainer_gender)))),
+		"gender": preview_gender,
+		"hair": preview_hair,
 		"headgear": "",
 		"facial_hair": "",
 		"facegear": "",
-		"top": CharacterAppearanceService.get_default_part_id("top", trainer_gender),
-		"bottom": CharacterAppearanceService.get_default_part_id("bottom", trainer_gender),
-		"shoes": CharacterAppearanceService.get_default_part_id("shoes", trainer_gender),
-		"hair_color": str(character_preview_colors.get("hair_color", CharacterAppearanceService.get_default_hair_color(trainer_gender))),
+		"top": "" if is_outfit else CharacterAppearanceService.get_default_part_id("top", preview_gender),
+		"bottom": "" if is_outfit else CharacterAppearanceService.get_default_part_id("bottom", preview_gender),
+		"shoes": "" if is_outfit else CharacterAppearanceService.get_default_part_id("shoes", preview_gender),
+		"hair_color": str(character_preview_colors.get("hair_color", CharacterAppearanceService.get_default_hair_color(preview_gender))),
 		"facial_hair_color": str(character_preview_colors.get("facial_hair_color", "#ffffff")),
 		"skin_tone": CharacterAppearanceService.resolve_skin_tone(
 			str(trainer_appearance.get("body", body_id)),
 			str(trainer_appearance.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE)),
-			trainer_gender
+			preview_gender
 		),
-		"eye_color": str(trainer_appearance.get("eye_color", CharacterAppearanceService.get_default_eye_color(trainer_gender))),
+		"eye_color": str(trainer_appearance.get("eye_color", CharacterAppearanceService.get_default_eye_color(preview_gender))),
 		"facegear_color": str(character_preview_colors.get("facegear_color", "#ffffff")),
 		"top_color": str(character_preview_colors.get("top_color", "#ffffff")),
 		"bottom_color": str(character_preview_colors.get("bottom_color", "#ffffff")),
 		"shoes_color": str(character_preview_colors.get("shoes_color", "#ffffff")),
 	}
-	var item := _catalog_item(selected_item_id)
 	for preview_part: Dictionary in _preview_parts_for_item(item):
 		var slot := CharacterAppearanceService.normalize_part_category(str(preview_part.get("slot", "")))
 		var appearance_id := str(preview_part.get("appearance_id", "")).strip_edges()
@@ -1735,7 +1737,11 @@ func _refresh_character_preview() -> void:
 		character_preview_palette.visible = false
 		return
 
-	character_preview_eyebrow_label.text = _t("ui.store.preview.on_trainer")
+	character_preview_eyebrow_label.text = (
+		_item_gender_badge(item)
+		if not _item_matches_trainer_gender(item)
+		else _t("ui.store.preview.on_trainer")
+	)
 	character_preview_direction_row.visible = true
 	var appearance := _current_character_preview_appearance()
 	var preview_visual := _create_character_preview_visual(appearance)
@@ -1799,12 +1805,13 @@ func _create_character_preview_visual(appearance: Dictionary) -> Node2D:
 
 
 func _apply_character_preview_appearance(node: Node, appearance: Dictionary) -> void:
+	var preview_gender := str(appearance.get("gender", trainer_gender))
 	if node is AnimatedSprite2D:
 		var sprite := node as AnimatedSprite2D
 		if sprite.name == "BodySprite":
 			var body_frames := CharacterAppearanceService.get_skin_tinted_body_frames(
 				str(appearance.get("body", "")),
-				trainer_gender,
+				preview_gender,
 				CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 				str(appearance.get("skin_tone", CharacterAppearanceService.DEFAULT_SKIN_TONE))
 			)
@@ -1820,12 +1827,13 @@ func _apply_character_preview_appearance(node: Node, appearance: Dictionary) -> 
 
 
 func _apply_character_preview_part(sprite: AnimatedSprite2D, appearance: Dictionary) -> void:
+	var preview_gender := str(appearance.get("gender", trainer_gender))
 	var category := _character_preview_category_for_sprite(sprite.name)
 	if category == "":
 		return
 	if not CharacterAppearanceService.body_supports_layered_parts(
 		str(appearance.get("body", "")),
-		trainer_gender
+		preview_gender
 	):
 		sprite.visible = false
 		sprite.sprite_frames = null
@@ -1874,17 +1882,18 @@ func _character_preview_category_for_sprite(sprite_name: String) -> String:
 
 
 func _character_preview_part_id(category: String, appearance: Dictionary) -> String:
+	var preview_gender := str(appearance.get("gender", trainer_gender))
 	match CharacterAppearanceService.normalize_part_category(category):
 		"hair":
 			return CharacterAppearanceService.deserialize_part_id(
 				str(appearance.get("hair", ""))
 			)
 		"eyes":
-			return CharacterAppearanceService.get_default_part_id("eyes", trainer_gender)
+			return CharacterAppearanceService.get_default_part_id("eyes", preview_gender)
 		"eyebrows":
 			return CharacterAppearanceService.get_eyebrows_for_hair(
 				str(appearance.get("hair", "")),
-				trainer_gender
+				preview_gender
 			)
 		_:
 			return str(appearance.get(category, "")).strip_edges()
@@ -1895,12 +1904,13 @@ func _character_preview_part_frames(
 	part_id: String,
 	appearance: Dictionary
 ) -> SpriteFrames:
+	var preview_gender := str(appearance.get("gender", trainer_gender))
 	var normalized_category := CharacterAppearanceService.normalize_part_category(category)
 	if normalized_category == "eyes":
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
-			trainer_gender,
+			preview_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("eye_color", "#ffffff")), Color.WHITE)
 		)
@@ -1911,7 +1921,7 @@ func _character_preview_part_frames(
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
-			trainer_gender,
+			preview_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("hair_color", "#ffffff")), Color.WHITE),
 			true
@@ -1920,7 +1930,7 @@ func _character_preview_part_frames(
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
-			trainer_gender,
+			preview_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(
 				str(appearance.get("facial_hair_color", "#ffffff")),
@@ -1932,7 +1942,7 @@ func _character_preview_part_frames(
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
-			trainer_gender,
+			preview_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("facegear_color", "#ffffff")), Color.WHITE),
 			true
@@ -1941,7 +1951,7 @@ func _character_preview_part_frames(
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
-			trainer_gender,
+			preview_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("top_color", "#ffffff")), Color.WHITE),
 			true
@@ -1950,7 +1960,7 @@ func _character_preview_part_frames(
 		return CharacterAppearanceService.get_tinted_part_frames(
 			category,
 			part_id,
-			trainer_gender,
+			preview_gender,
 			CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
 			_parse_character_preview_color(str(appearance.get("bottom_color", "#ffffff")), Color.WHITE),
 			true
@@ -1964,7 +1974,7 @@ func _character_preview_part_frames(
 			_parse_character_preview_color(str(appearance.get("shoes_color", "#ffffff")), Color.WHITE),
 			true
 		)
-	return CharacterAppearanceService.get_part_frames(category, part_id, trainer_gender)
+	return CharacterAppearanceService.get_part_frames(category, part_id, preview_gender)
 
 
 func _parse_character_preview_color(color_text: String, fallback: Color) -> Color:
@@ -2170,6 +2180,13 @@ func _item_matches_trainer_gender(item: Dictionary) -> bool:
 	return genders.is_empty() or genders.has(trainer_gender)
 
 
+func _preview_gender_for_item(item: Dictionary) -> String:
+	return CharacterAppearanceService.resolve_cosmetic_icon_gender(
+		trainer_gender,
+		_item_genders(item)
+	)
+
+
 func _item_gender_badge(item: Dictionary) -> String:
 	var genders := _item_genders(item)
 	if genders == ["male"]:
@@ -2206,12 +2223,6 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 	if selected_item_id == "":
 		purchase_button.disabled = true
 		purchase_button.tooltip_text = _t("ui.store.purchase_select")
-		return
-	if not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
-		purchase_button.disabled = true
-		purchase_button.tooltip_text = _t("ui.store.error.incompatible_tooltip")
-		if update_status:
-			status_label.text = _t("ui.store.error.incompatible")
 		return
 	if store_catalog_loading or not store_catalog_loaded:
 		purchase_button.disabled = true

@@ -122,10 +122,10 @@ func show_catalog_sprite(
 	visible = true
 
 
-func show_command(message: String) -> void:
+func show_command(message: String, display_seconds := TrainerCommandCallout.DISPLAY_SECONDS) -> void:
 	if not visible or command_callout == null:
 		return
-	command_callout.call("show_command", message, facing_direction.x < 0.0)
+	command_callout.call("show_command", message, facing_direction.x < 0.0, display_seconds)
 
 
 func _resolve_npc_animation(sprite_frames: SpriteFrames, facing_direction: Vector2) -> StringName:

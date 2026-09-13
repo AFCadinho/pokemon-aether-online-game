@@ -321,6 +321,8 @@ const ITEM_DEX_SIZE := Vector2(920, 620)
 const ITEM_DEX_ACCENT := Color("#d8b767")
 const ITEM_DEX_ACCENT_SOFT := Color("#d8b767aa")
 const ITEM_DEX_ACCENT_FAINT := Color("#d8b76744")
+const ITEM_DEX_PAGE_SIZE := 10
+const ITEM_DEX_LOAD_MORE_THRESHOLD := 96.0
 const DEVELOPER_TOOLS_ACCENT := Color("#b69a5d")
 const DEVELOPER_TOOLS_ACCENT_SOFT := Color("#b69a5daa")
 const POKEDEX_SIZE := Vector2(1180, 720)
@@ -1542,6 +1544,7 @@ var dev_selected_item: Dictionary = {}
 var dev_item_search_request_id := 0
 var item_dex_popup: PanelContainer
 var item_dex_search_input: LineEdit
+var item_dex_results_scroll: ScrollContainer
 var item_dex_results_list: VBoxContainer
 var item_dex_results_count_label: Label
 var item_dex_icon: TextureRect
@@ -1555,6 +1558,10 @@ var item_dex_capture_label: Label
 var item_dex_availability_label: Label
 var item_dex_sources_list: VBoxContainer
 var item_dex_search_request_id := 0
+var item_dex_results_loaded_offset := 0
+var item_dex_results_displayed_count := 0
+var item_dex_results_has_more := false
+var item_dex_results_loading_more := false
 var item_dex_selected_item_id := ""
 var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
@@ -9180,7 +9187,31 @@ func _set_pvp_training_team_preview(preview_value: Variant) -> void:
 				"species": species,
 				"shiny": bool(entry.get("shiny", false)),
 			})
+	_prefetch_web_team_sprites(pvp_training_team_preview_entries, "back")
 	_render_pvp_training_team_preview()
+
+func _prefetch_web_team_sprites(team_value: Variant, side: String) -> void:
+	if not WebPokemonSpriteService.is_available() or not (team_value is Array):
+		return
+	var entries: Array = []
+	var seen: Dictionary = {}
+	for pokemon_value: Variant in team_value as Array:
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon := pokemon_value as Dictionary
+		var species := str(pokemon.get("displaySpecies", pokemon.get("species", ""))).strip_edges()
+		var shiny := bool(pokemon.get("shiny", false))
+		var key := "%s|%s|%s" % [species.to_lower(), side, str(shiny)]
+		if species == "" or seen.has(key):
+			continue
+		seen[key] = true
+		entries.append({
+			"species": species,
+			"side": side,
+			"shiny": shiny,
+			"style": SettingsManager.sprite_style,
+		})
+	WebPokemonSpriteService.prefetch(entries)
 
 func _clear_pvp_training_team_preview() -> void:
 	_set_pvp_training_team_preview([])
@@ -11406,15 +11437,16 @@ func _setup_item_dex_popup() -> void:
 	item_dex_search_input.text_changed.connect(_on_item_dex_search_changed)
 	browser_stack.add_child(item_dex_search_input)
 
-	var results_scroll := ScrollContainer.new()
-	results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	browser_stack.add_child(results_scroll)
+	item_dex_results_scroll = ScrollContainer.new()
+	item_dex_results_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	item_dex_results_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	browser_stack.add_child(item_dex_results_scroll)
+	item_dex_results_scroll.get_v_scroll_bar().value_changed.connect(_on_item_dex_results_scrolled)
 
 	item_dex_results_list = VBoxContainer.new()
 	item_dex_results_list.add_theme_constant_override("separation", 6)
 	item_dex_results_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	results_scroll.add_child(item_dex_results_list)
+	item_dex_results_scroll.add_child(item_dex_results_list)
 
 	var summary_panel := PanelContainer.new()
 	summary_panel.custom_minimum_size = Vector2(560, 0)
@@ -12075,6 +12107,10 @@ func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Bu
 	var button := Button.new()
 	button.name = "PokedexVariant_%s" % variant_id
 	_set_localized_control_property(button, "text", label_key)
+	if variant_id == "shiny":
+		button.icon = GLOBAL_SHINY_BUFF_ICON
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 18)
 	button.custom_minimum_size = Vector2(0, 32)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
@@ -21116,10 +21152,16 @@ func _set_localized_control_property(control: Control, property_name: String, ke
 	control.set(property_name, LocalizationManager.text(key))
 
 func _on_pokemon_summary_tab_selected(tab_id: String, card_key: String = "") -> void:
-	_apply_pokemon_summary_card_context(card_key)
+	if not _apply_pokemon_summary_card_context(card_key):
+		return
+	if pokemon_summary_active_tab == tab_id:
+		return
 	pokemon_summary_active_tab = tab_id
+	_refresh_pokemon_summary_tab_buttons()
+	var pokemon := _get_active_pokemon_summary_pokemon()
+	if pokemon != null:
+		_render_pokemon_summary_content(pokemon)
 	_store_active_pokemon_summary_card_context()
-	_refresh_pokemon_summary()
 
 func _refresh_pokemon_summary_tab_buttons() -> void:
 	for tab_id_value: Variant in pokemon_summary_tab_buttons.keys():
@@ -22919,7 +22961,37 @@ func _format_market_currency_amount(amount: int, currency: String) -> String:
 func _on_market_buy_pressed() -> void:
 	if market_purchase_in_progress or market_selected_item.is_empty():
 		return
-	var item_id := str(market_selected_item.get("id", "")).strip_edges()
+	var selected_item := market_selected_item.duplicate(true)
+	var item_id := str(selected_item.get("id", "")).strip_edges()
+	if item_id == "":
+		return
+	var quantity: int = max(int(market_quantity_spinbox.value), 1)
+	if market_mode == "player_sells":
+		var item_name := str(selected_item.get("name", _item_name_from_id(item_id)))
+		var total := int(selected_item.get("price", 0)) * quantity
+		_show_ui_confirm_popup(
+			LocalizationManager.text("ui.market.confirm_sale_title"),
+			LocalizationManager.text("ui.market.confirm_sale", {
+				"quantity": quantity,
+				"item": item_name,
+				"total": _format_market_currency_amount(
+					total,
+					str(selected_item.get("currency", "money"))
+				),
+			}),
+			LocalizationManager.text("ui.market.confirm_sale_action"),
+			Callable(self, "_submit_market_transaction").bind(selected_item, quantity),
+			Vector2i(460, 190),
+			true
+		)
+		return
+	_submit_market_transaction(selected_item, quantity)
+
+
+func _submit_market_transaction(item: Dictionary, quantity: int) -> void:
+	if market_purchase_in_progress:
+		return
+	var item_id := str(item.get("id", "")).strip_edges()
 	if item_id == "":
 		return
 
@@ -22930,7 +23002,6 @@ func _on_market_buy_pressed() -> void:
 		"ui.market.status.selling" if player_is_selling else "ui.market.status.buying"
 	), false)
 
-	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var result: Dictionary
 	if player_is_selling:
 		result = await MarketService.sell_standard_item(item_id, quantity)
@@ -22962,7 +23033,7 @@ func _on_market_buy_pressed() -> void:
 	var transaction_key := "sale" if player_is_selling else "purchase"
 	var transaction: Dictionary = _staff_dictionary_from_variant(result.get(transaction_key, {}))
 	var transacted_quantity: int = max(int(transaction.get("quantity", quantity)), 1)
-	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
+	var item_name := str(item.get("name", _item_name_from_id(item_id)))
 	_add_chat_message(LocalizationManager.text(
 		"ui.market.message.sold" if player_is_selling else "ui.market.message.bought",
 		{"quantity": transacted_quantity, "item": item_name},
@@ -23483,7 +23554,7 @@ func _refresh_bag_detail() -> void:
 
 func _bag_item_detail_description(item: Dictionary) -> String:
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		var allowed_models := _bag_item_allowed_genders(item)
 		var model_label := " or ".join(allowed_models).capitalize()
 		return LocalizationManager.text("ui.bag.description.wrong_model", {"models": model_label})
@@ -23529,7 +23600,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	if item_id == "escape-rope-action":
 		return true
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
+	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
 	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_mount_license", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
@@ -23557,13 +23628,15 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.change_name")
 	if use_action == "trainer_gender_change":
 		return LocalizationManager.text("ui.bag.action.change_gender")
-	if use_action == "open_item_bundle":
-		return LocalizationManager.text("ui.bag.action.open_box")
-	if use_action == "unlock_appearance":
+	if use_action in ["unlock_appearance", "open_item_bundle"]:
 		if not _bag_item_matches_player_gender(item):
 			var allowed_models := _bag_item_allowed_genders(item)
 			return LocalizationManager.text("ui.bag.action.model_only", {"models": " or ".join(allowed_models).capitalize()})
-		return LocalizationManager.text("ui.bag.action.move_to_customization")
+		return (
+			LocalizationManager.text("ui.bag.action.open_box")
+			if use_action == "open_item_bundle"
+			else LocalizationManager.text("ui.bag.action.move_to_customization")
+		)
 	if use_action == "redeem_aether_blessing":
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "activate_shiny_charm":
@@ -24769,7 +24842,11 @@ func _bag_item_allowed_genders(item: Dictionary) -> Array[String]:
 			var normalized_gender := CharacterAppearanceService.normalize_gender(str(gender_value))
 			if normalized_gender != "" and not allowed_genders.has(normalized_gender):
 				allowed_genders.append(normalized_gender)
-	return allowed_genders
+	if not allowed_genders.is_empty():
+		return allowed_genders
+	return CharacterAppearanceService.get_cosmetic_item_allowed_genders(
+		str(item.get("id", item.get("itemId", "")))
+	)
 
 
 func _bag_item_matches_player_gender(item: Dictionary) -> bool:
@@ -24930,6 +25007,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"gameplay": gameplay,
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
+			"genders": item.get("genders", []),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
 			"assignmentMode": str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower(),
 			"tradable": bool(item.get("tradable", false)),
@@ -26187,10 +26265,11 @@ func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> vo
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
+	_prefetch_pokemon_summary_web_sprites(pokemon)
+	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	pokemon_summary_web_sprite_generation += 1
 	var web_generation := pokemon_summary_web_sprite_generation
 
-	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
 		"_load_sprite_frames",
 		pokemon.species,
@@ -26222,6 +26301,20 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+
+
+func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
+	if pokemon == null or not WebPokemonSpriteService.is_available():
+		return
+	var entries: Array = []
+	for side: String in ["front", "back"]:
+		entries.append({
+			"species": pokemon.species,
+			"side": side,
+			"shiny": pokemon.shiny,
+			"style": SettingsManager.sprite_style,
+		})
+	WebPokemonSpriteService.prefetch(entries)
 
 
 func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -26416,6 +26509,10 @@ func _apply_pokemon_summary_sprite_center_offset(frames: SpriteFrames, animation
 func _get_pokemon_summary_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
+	if animation_name == "idle" and pokemon_summary_sprite_loader.has_method("_get_sprite_frames_visual_bounds"):
+		var cached_bounds: Variant = pokemon_summary_sprite_loader.call("_get_sprite_frames_visual_bounds", frames)
+		if cached_bounds is Rect2 and (cached_bounds as Rect2).has_area():
+			return cached_bounds as Rect2
 
 	var has_rect: bool = false
 	var combined_rect: Rect2 = Rect2()
@@ -26446,6 +26543,7 @@ func _render_pokemon_summary_content(pokemon: Pokemon) -> void:
 		if move_hover_panel != null:
 			move_hover_panel.visible = false
 	for child: Node in pokemon_summary_content_stack.get_children():
+		pokemon_summary_content_stack.remove_child(child)
 		child.queue_free()
 
 	match pokemon_summary_active_tab:
@@ -37448,8 +37546,14 @@ func _on_item_dex_search_changed(_text: String) -> void:
 func _refresh_item_dex_results() -> void:
 	if item_dex_results_list == null:
 		return
+	item_dex_results_loading_more = false
+	item_dex_results_loaded_offset = 0
+	item_dex_results_displayed_count = 0
+	item_dex_results_has_more = false
 	for child: Node in item_dex_results_list.get_children():
 		child.queue_free()
+	if item_dex_results_scroll != null:
+		item_dex_results_scroll.scroll_vertical = 0
 
 	var query := ""
 	if item_dex_search_input != null:
@@ -37466,7 +37570,7 @@ func _refresh_item_dex_results() -> void:
 
 	item_dex_search_request_id += 1
 	var request_id := item_dex_search_request_id
-	var search_result: Dictionary = await InventoryService.search_items(query)
+	var search_result: Dictionary = await InventoryService.search_items(query, ITEM_DEX_PAGE_SIZE, 0)
 	if request_id != item_dex_search_request_id:
 		return
 
@@ -37482,15 +37586,16 @@ func _refresh_item_dex_results() -> void:
 		item_dex_results_list.add_child(error_label)
 		return
 
-	var items := _normalize_dev_item_results(search_result.get("items", []))
-	items = _filter_player_facing_item_variants(items)
+	var raw_items := _normalize_dev_item_results(search_result.get("items", []))
+	item_dex_results_loaded_offset = raw_items.size()
+	item_dex_results_has_more = raw_items.size() == ITEM_DEX_PAGE_SIZE
+	var items := _filter_player_facing_item_variants(raw_items)
 	var count := 0
 	for item_value: Variant in items:
 		var item: Dictionary = item_value as Dictionary
 		item_dex_results_list.add_child(_create_item_dex_result_button(item))
 		count += 1
-		if count >= 40:
-			break
+	item_dex_results_displayed_count = count
 	if item_dex_results_count_label != null:
 		item_dex_results_count_label.text = LocalizationManager.plural(
 			"ui.item_dex.result.one",
@@ -37498,13 +37603,74 @@ func _refresh_item_dex_results() -> void:
 			count
 		)
 
-	if count == 0:
+	if count == 0 and not item_dex_results_has_more:
 		var empty_label := Label.new()
 		empty_label.text = LocalizationManager.text("ui.staff.dev.no_item_results")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.custom_minimum_size = Vector2(0, 44)
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		item_dex_results_list.add_child(empty_label)
+	elif count == 0:
+		_load_more_item_dex_results.call_deferred()
+
+func _on_item_dex_results_scrolled(_value: float) -> void:
+	if item_dex_results_scroll == null or not item_dex_results_has_more:
+		return
+	var scroll_bar := item_dex_results_scroll.get_v_scroll_bar()
+	if scroll_bar == null or scroll_bar.max_value <= scroll_bar.page:
+		return
+	if scroll_bar.value >= scroll_bar.max_value - scroll_bar.page - ITEM_DEX_LOAD_MORE_THRESHOLD:
+		_load_more_item_dex_results.call_deferred()
+
+func _load_more_item_dex_results() -> void:
+	if (
+		item_dex_results_loading_more
+		or not item_dex_results_has_more
+		or item_dex_results_list == null
+	):
+		return
+	item_dex_results_loading_more = true
+	var request_id := item_dex_search_request_id
+	var loading_label := Label.new()
+	loading_label.name = "ItemDexLoadMoreStatus"
+	loading_label.text = LocalizationManager.text("common.loading")
+	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_label.custom_minimum_size = Vector2(0, 38)
+	loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	item_dex_results_list.add_child(loading_label)
+
+	var query := ""
+	if item_dex_search_input != null:
+		query = item_dex_search_input.text.strip_edges().to_lower()
+	var search_result: Dictionary = await InventoryService.search_items(
+		query,
+		ITEM_DEX_PAGE_SIZE,
+		item_dex_results_loaded_offset
+	)
+	if request_id != item_dex_search_request_id:
+		return
+	if is_instance_valid(loading_label):
+		loading_label.queue_free()
+	if not bool(search_result.get("success", false)):
+		item_dex_results_loading_more = false
+		return
+
+	var raw_items := _normalize_dev_item_results(search_result.get("items", []))
+	item_dex_results_loaded_offset += raw_items.size()
+	item_dex_results_has_more = raw_items.size() == ITEM_DEX_PAGE_SIZE
+	var items := _filter_player_facing_item_variants(raw_items)
+	for item_value: Variant in items:
+		item_dex_results_list.add_child(_create_item_dex_result_button(item_value as Dictionary))
+		item_dex_results_displayed_count += 1
+	if item_dex_results_count_label != null:
+		item_dex_results_count_label.text = LocalizationManager.plural(
+			"ui.item_dex.result.one",
+			"ui.item_dex.result.many",
+			item_dex_results_displayed_count
+		)
+	item_dex_results_loading_more = false
+	if items.is_empty() and item_dex_results_has_more:
+		_load_more_item_dex_results.call_deferred()
 
 ## Z-Crystals use their holdable form as the player-facing inventory item.  A
 ## legacy bag form may still exist in old data, but must never be offered.
@@ -44312,6 +44478,7 @@ func _refresh_pvp_training_ai_opponent_preview() -> void:
 		child.queue_free()
 	var pokemon_value: Variant = selected_entry.get("pokemon", [])
 	var pokemon: Array = pokemon_value if pokemon_value is Array else []
+	_prefetch_web_team_sprites(pokemon, "front")
 	pvp_training_ai_opponent_preview.visible = not selected_entry.is_empty() and not pokemon.is_empty()
 	if not pvp_training_ai_opponent_preview.visible:
 		return
@@ -44388,26 +44555,35 @@ func _load_pvp_training_ai_catalog() -> void:
 					if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 						pvp_training_ai_tiers.append(tier)
 		var modes_value: Variant = response.get("availableModes", [])
+		var raw_modes: Array[String] = []
 		if modes_value is Array:
-			var raw_modes: Array[String] = []
 			for mode_value: Variant in modes_value:
 				var mode := str(mode_value).strip_edges().to_lower()
 				if mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] and mode not in raw_modes:
 					raw_modes.append(mode)
-			if "ai4" in raw_modes:
-				pvp_training_ai_available_modes.append("ai4")
-			elif "shadow" in raw_modes:
-				# Compatibility with a backend deployed before plain AI4. The
-				# legacy mode still acts through AI4 and is shown simply as AI4.
-				pvp_training_ai_available_modes.append("shadow")
-			if "active" in raw_modes:
-				pvp_training_ai_available_modes.append("active")
-			if "intermediate" in raw_modes:
-				pvp_training_ai_available_modes.append("intermediate")
-			if "nightmare" in raw_modes:
-				pvp_training_ai_available_modes.append("nightmare")
-			if "elite" in raw_modes:
-				pvp_training_ai_available_modes.append("elite")
+		# A bot marked available is the same server-side availability gate used by
+		# the mode list. Keep Intermediate selectable if an older gateway response
+		# has not yet populated availableModes with it.
+		var bots_value: Variant = response.get("bots", [])
+		if bots_value is Array:
+			for bot_value: Variant in bots_value:
+				if bot_value is Dictionary and str(bot_value.get("id", "")) == "intermediate" and bool(bot_value.get("available", false)):
+					if "intermediate" not in raw_modes:
+						raw_modes.append("intermediate")
+		if "ai4" in raw_modes:
+			pvp_training_ai_available_modes.append("ai4")
+		elif "shadow" in raw_modes:
+			# Compatibility with a backend deployed before plain AI4. The
+			# legacy mode still acts through AI4 and is shown simply as AI4.
+			pvp_training_ai_available_modes.append("shadow")
+		if "active" in raw_modes:
+			pvp_training_ai_available_modes.append("active")
+		if "intermediate" in raw_modes:
+			pvp_training_ai_available_modes.append("intermediate")
+		if "nightmare" in raw_modes:
+			pvp_training_ai_available_modes.append("nightmare")
+		if "elite" in raw_modes:
+			pvp_training_ai_available_modes.append("elite")
 		pvp_training_ai_default_mode = str(response.get("defaultMode", "ai4")).strip_edges().to_lower()
 		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
 			pvp_training_ai_default_mode = (
@@ -45033,6 +45209,7 @@ func _refresh_ai_sparring_catalog_preview() -> void:
 	pvp_ai_sparring_catalog_preview_title.text = str(entry.get("displayName", ""))
 	var team_id := _selected_ai_sparring_player_catalog_team_id()
 	var pokemon := _array_from_variant(entry.get("pokemon", []))
+	_prefetch_web_team_sprites(pokemon, "back")
 	for pokemon_index in range(pokemon.size()):
 		var pokemon_value: Variant = pokemon[pokemon_index]
 		if pokemon_value is Dictionary:
@@ -49330,6 +49507,73 @@ func _format_system_warning_chat_message(text: String) -> String:
 		_escape_bbcode(text),
 	]
 
+
+func _exchange_item_request_system_message(message: Dictionary) -> String:
+	var message_type := str(message.get("type", "system.exchange_item_request_filled")).strip_edges().to_lower()
+	var item_id := str(message.get("itemId", "")).strip_edges()
+	var fallback_name := str(message.get("itemName", item_id)).strip_edges()
+	var item_name := ItemLocalization.display_name(item_id, fallback_name)
+	var values := {
+		"item": item_name,
+		"quantity": maxi(int(message.get("quantity", 0)), 0),
+		"amount": _format_money(maxi(int(message.get("totalPrice", 0)), 0)),
+		"unit_amount": _format_money(maxi(int(message.get("unitPrice", 0)), 0)),
+		"fulfilled": maxi(int(message.get("fulfilledQuantity", 0)), 0),
+		"requested": maxi(int(message.get("requestedQuantity", 0)), 0),
+		"remaining": maxi(int(message.get("remainingQuantity", 0)), 0),
+	}
+	if message_type == "system.exchange_item_request_created":
+		return LocalizationManager.text("ui.exchange.system.created", values)
+	if message_type == "system.exchange_item_request_cancelled":
+		return LocalizationManager.text("ui.exchange.system.cancelled", values)
+	match str(message.get("role", "")).strip_edges().to_lower():
+		"seller":
+			return LocalizationManager.text("ui.exchange.system.fill_seller", values)
+		"requester":
+			return LocalizationManager.text(
+				"ui.exchange.system.fill_requester_complete"
+				if bool(message.get("completed", false))
+				else "ui.exchange.system.fill_requester_partial",
+				values,
+			)
+	return ""
+
+
+func _exchange_item_request_mutation_messages(message: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	var item_id := str(message.get("itemId", "")).strip_edges().to_lower()
+	var fallback_name := str(message.get("itemName", item_id)).strip_edges()
+	var item_name := ItemLocalization.display_name(item_id, fallback_name)
+	var quantity := maxi(int(message.get("quantity", 0)), 0)
+	match message_type:
+		"system.exchange_item_request_created":
+			var escrow := maxi(int(message.get("totalPrice", 0)), 0)
+			if escrow > 0:
+				result.append(_market_currency_spent_message(escrow, "money"))
+		"system.exchange_item_request_cancelled":
+			var refund := maxi(int(message.get("refundAmount", 0)), 0)
+			if refund > 0:
+				result.append(_market_currency_received_message(refund, "money"))
+		"system.exchange_item_request_filled":
+			if quantity <= 0 or item_id.is_empty():
+				return result
+			match str(message.get("role", "")).strip_edges().to_lower():
+				"requester":
+					result.append(LocalizationManager.text("ui.exchange.system.item_added", {
+						"item": item_name,
+						"quantity": quantity,
+					}))
+				"seller":
+					result.append(LocalizationManager.text("ui.exchange.system.item_removed", {
+						"item": item_name,
+						"quantity": quantity,
+					}))
+					var payment := maxi(int(message.get("totalPrice", 0)), 0)
+					if payment > 0:
+						result.append(_market_currency_received_message(payment, "money"))
+	return result
+
 func _scroll_chat_to_bottom() -> void:
 	var tree := get_tree()
 	if tree == null:
@@ -49367,6 +49611,17 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.staff_announcement":
 		if system_notice_banner != null and bool(system_notice_banner.call("enqueue_notice", message)):
 			add_system_message(str(message.get("message", "")).strip_edges())
+		return
+	if message_type in [
+		"system.exchange_item_request_created",
+		"system.exchange_item_request_filled",
+		"system.exchange_item_request_cancelled",
+	]:
+		var exchange_message := _exchange_item_request_system_message(message)
+		if not exchange_message.is_empty():
+			add_system_message(exchange_message)
+		for mutation_message: String in _exchange_item_request_mutation_messages(message):
+			add_system_message(mutation_message)
 		return
 	if message_type == "system.aether_clash_announcement":
 		var clash_message: String = AETHER_CLASH_ANNOUNCEMENT_FORMATTER.format_event(

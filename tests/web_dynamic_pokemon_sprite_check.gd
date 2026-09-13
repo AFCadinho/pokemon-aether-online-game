@@ -26,17 +26,56 @@ func _init() -> void:
 	_check(first_texture != null and second_texture != null and first_texture.atlas == second_texture.atlas,
 		"all downloaded frames share one WebGL sheet texture")
 	_check(first_texture != null and first_texture.region == Rect2(0, 0, 4, 4), "atlas frame region is preserved")
+	_check(first_texture != null and second_texture != null and first_texture.filter_clip and second_texture.filter_clip,
+		"linear filtering is clipped to each web sprite frame to prevent atlas seams")
+	_check(
+		service.call("_calculate_visual_bounds", {
+			"frame_width": 4,
+			"frame_height": 4,
+			"frames": [
+				{"x": 0, "y": 0, "w": 4, "h": 4},
+				{"x": 4, "y": 0, "w": 4, "h": 4},
+			],
+		}, image) == Rect2(0, 0, 4, 4),
+		"downloaded sheets calculate reusable visual bounds before GPU upload"
+	)
 	_check(str(service.call("_normalize_segment", "Mr. Mime_Form")) == "mr-mime-form", "asset paths are normalized safely")
+	_check(str(service.call("_catalog_style", "animated")) == "animated", "normal animated sprites are the browser default")
+	_check(str(service.call("_catalog_style", "pixel")) == "pixel", "Gen 5 remains available as the pixel style")
+	_check(str(service.call("_catalog_style", "static")) == "", "static style does not request a battle catalog")
+	service.call("_remember", "animated/front/pikachu", {"frames": frames})
+	var cached_result: Dictionary = service.call("get_cached_frames", "Pikachu", "front", false, "animated")
+	_check(cached_result.get("frames") == frames, "prefetched sheets can be read synchronously before first render")
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/web_pokemon_sprite_service.gd")
-	_check(service_source.contains("spriteBases") and service_source.contains("WebRuntime.web_release_config()"),
-		"production sprite catalogs use versioned R2 base URLs")
+	_check(service_source.contains("spriteStyles") and service_source.contains("WebRuntime.web_release_config()"),
+		"production sprite styles use versioned R2 base URLs")
 	_check(service_source.contains("DOWNLOAD_ATTEMPTS := 3") and service_source.contains("await _download_once(url)"),
 		"browser sprite downloads retry bounded transient failures")
 	_check(not service_source.contains("Accept: application/json,image/png"),
 		"browser sprite downloads avoid unnecessary CORS preflight headers")
+	_check(service_source.contains("PREFETCH_CONCURRENCY := 4") and service_source.contains("_in_flight"),
+		"background prefetching is bounded and concurrent requests are deduplicated")
+	_check(service_source.contains('"visual_bounds": visual_bounds'),
+		"prefetched sprite results retain their CPU-calculated visual bounds")
 	var sprite_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
-	_check(sprite_source.contains("_upgrade_single_web_sprite.call_deferred"), "battle sprites upgrade without blocking the HOME fallback")
+	_check(sprite_source.contains("_load_cached_web_sprite_frames") and sprite_source.find("_load_cached_web_sprite_frames") < sprite_source.find("sprite_frames_cache.has"),
+		"battle sprites consume prefetched web sheets before any local HOME fallback")
 	_check(sprite_source.contains("request_web_sprite_frames"), "battle, preview and detail screens share the web loader")
+	_check(sprite_source.contains('if str(result.get("style", "animated")) == "pixel"'),
+		"Gen 5 display scaling is limited to the optional pixel style")
+	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
+	_check(settings_source.contains('OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()'),
+		"browser players can select the remotely hosted Gen 5 style")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_check(world_source.contains("_prefetch_current_map_wild_sprites") and world_source.contains("encounterTypes"),
+		"browser maps prefetch their wild encounter pool")
+	_check(world_source.contains("WebPokemonSpriteService.prefetch(priority_entries)") and world_source.contains("await WebPokemonSpriteService.prefetch_and_wait(priority_entries)"),
+		"ordinary encounters wait only for the visible leads while the remaining roster warms in the background")
+	_check(world_source.contains("await _prefetch_web_battle_sprites(response, true)"),
+		"AI and custom team-preview battles can still finish their full-roster prefetch")
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(overlay_source.contains('_prefetch_web_team_sprites(pokemon, "front")') and overlay_source.contains('_prefetch_web_team_sprites(pokemon, "back")'),
+		"AI Sparring and custom-game team previews begin loading both player and opponent rosters early")
 	var sprite_scene := FileAccess.get_file_as_string("res://scenes/battle/sprite_box.tscn")
 	var preview_scene := FileAccess.get_file_as_string("res://scenes/battle/team_preview_layer.tscn")
 	_check(not sprite_scene.contains("assets/sprites/pokemon/front/") and sprite_scene.contains("pokemon_home/Pikachu.png"), "battle fallback does not require an excluded legacy sheet")

@@ -8,6 +8,7 @@ signal notification_received(notification: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
+const WEB_GUILD_HOME_ENDPOINT := "/auth/web/guilds/me"
 const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
@@ -155,7 +156,8 @@ func cancel_application(application_id: int) -> Dictionary:
 
 
 func load_home() -> Dictionary:
-	var response := await _authenticated_request(GUILD_HOME_ENDPOINT, HTTPClient.METHOD_GET, "")
+	var endpoint := WEB_GUILD_HOME_ENDPOINT if OS.has_feature("web") else GUILD_HOME_ENDPOINT
+	var response := await _authenticated_request(endpoint, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)) and int(response.get("status", 0)) == 404:
 		_set_current_membership({})
 		_set_current_guild({})
@@ -176,6 +178,34 @@ func leave_guild() -> Dictionary:
 	return {
 		"success": true,
 		"left": bool(body.get("left", false)),
+		"guildId": int(body.get("guildId", 0)),
+		"guildName": str(body.get("guildName", "")),
+	}
+
+
+func transfer_leadership(user_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/leadership/%d" % user_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func disband_guild() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT,
+		HTTPClient.METHOD_DELETE,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	_set_current_membership({})
+	_set_current_guild({})
+	return {
+		"success": true,
+		"disbanded": bool(body.get("disbanded", false)),
 		"guildId": int(body.get("guildId", 0)),
 		"guildName": str(body.get("guildName", "")),
 	}
@@ -905,7 +935,7 @@ func _normalize_guild(value: Variant) -> Dictionary:
 
 
 func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
-	if OS.has_feature("web") and path != "/auth/web/guilds":
+	if OS.has_feature("web") and path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT]:
 		return {"success": false, "error": "Guild gameplay requires the game client."}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()

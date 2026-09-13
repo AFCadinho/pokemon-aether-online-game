@@ -37,6 +37,9 @@ const ACCENT_DARK := Color("#123c58")
 const SURFACE := Color("#101e32")
 const SURFACE_RAISED := Color("#162b45")
 const DANGER := Color("#d96570")
+const REPLAY_EDIT_ICON: Texture2D = preload("res://assets/ui/icons/edit.svg")
+const REPLAY_FAVORITE_ICON: Texture2D = preload("res://assets/ui/icons/replay_favorite.svg")
+const REPLAY_PLAY_ICON: Texture2D = preload("res://assets/ui/icons/replay_play.svg")
 const AI_SCIENTIST_PORTRAIT := preload("res://assets/sprites/trainer_cards/showdown/scientist-gen7.png")
 const AI_VETERAN_PORTRAIT := preload("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png")
 const REPLAY_CATEGORIES := [
@@ -453,10 +456,10 @@ func _card(row: Dictionary) -> Control:
 		title.add_theme_color_override("font_color", INK)
 		title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		title_row.add_child(title)
-		var rename_button := _card_icon_button(title_row, "✎", _t("rename"))
+		var rename_button := _card_icon_button(title_row, REPLAY_EDIT_ICON, _t("rename"))
 		rename_button.disabled = state != "available"
 		rename_button.pressed.connect(func(): _rename(row))
-		var favorite_button := _card_icon_button(title_row, "★" if pinned else "☆", _t("unpin") if pinned else _t("pin"), pinned)
+		var favorite_button := _card_icon_button(title_row, REPLAY_FAVORITE_ICON, _t("unpin") if pinned else _t("pin"), pinned)
 		favorite_button.disabled = state != "available"
 		favorite_button.pressed.connect(func(): _edit(battle_id, {"favorite": not pinned}))
 	var matchup_row := HBoxContainer.new()
@@ -518,8 +521,7 @@ func _card(row: Dictionary) -> Control:
 	management_actions.alignment = BoxContainer.ALIGNMENT_END
 	management_actions.add_theme_constant_override("separation", 8)
 	action_column.add_child(management_actions)
-	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
-		_button(management_actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
+	_button(management_actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
 	_button(management_actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	var play_row := HBoxContainer.new()
 	play_row.alignment = BoxContainer.ALIGNMENT_END
@@ -531,12 +533,12 @@ func _card(row: Dictionary) -> Control:
 
 func _card_play_button(parent: Node) -> Button:
 	var button := Button.new()
-	button.text = "▶"
+	button.icon = REPLAY_PLAY_ICON
 	button.tooltip_text = _t("watch")
 	button.custom_minimum_size = Vector2(46, 38)
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.add_theme_font_size_override("font_size", 17)
+	button.add_theme_constant_override("icon_max_width", 22)
 	button.add_theme_stylebox_override("normal", _style(Color("#126b91"), ACCENT, 7, 1, 8, 8, 7, 7))
 	button.add_theme_stylebox_override("hover", _style(Color("#198abd"), Color("#a5ecff"), 7, 1, 8, 8, 7, 7))
 	button.add_theme_stylebox_override("pressed", _style(Color("#0d4b68"), ACCENT, 7, 1, 8, 8, 7, 7))
@@ -547,14 +549,14 @@ func _card_play_button(parent: Node) -> Button:
 	parent.add_child(button)
 	return button
 
-func _card_icon_button(parent: Node, glyph: String, tooltip: String, active := false) -> Button:
+func _card_icon_button(parent: Node, icon: Texture2D, tooltip: String, active := false) -> Button:
 	var button := Button.new()
-	button.text = glyph
+	button.icon = icon
 	button.tooltip_text = tooltip
 	button.custom_minimum_size = Vector2(28, 28)
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.add_theme_font_size_override("font_size", 20)
+	button.add_theme_constant_override("icon_max_width", 18)
 	var base := Color("#2e2616") if active else Color("#102035")
 	var hover := Color("#5a4920") if active else Color("#1b3853")
 	var border := Color("#d6ae47") if active else Color("#284966")

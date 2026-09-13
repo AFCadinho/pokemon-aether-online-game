@@ -6,7 +6,7 @@ const HTTP_ROUTES = new Set([
   'GET /auth/web/world', 'PUT /auth/web/world',
   'POST /auth/web/world/teleport-ack',
   'PATCH /auth/web/party/battle-state', 'GET /auth/web/profile',
-  'GET /auth/web/party', 'GET /auth/web/inventory', 'GET /auth/web/guilds',
+  'GET /auth/web/party', 'GET /auth/web/inventory', 'GET /auth/web/guilds', 'GET /auth/web/guilds/me',
   'GET /auth/web/transit', 'GET /auth/web/starter/options', 'POST /auth/web/starter',
   'GET /auth/web/ai-sparring/statistics', 'GET /auth/web/ai-sparring/history',
   'DELETE /auth/web/ai-sparring/history', 'GET /battle/pvp/training/ai/teams',

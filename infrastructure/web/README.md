@@ -123,7 +123,7 @@ ops/worktrees/slot-env slot-b -- python3 .worktrees/slot-b/frontend/tools/build_
 python3 .worktrees/slot-b/frontend/tools/serve_web_preview.py
 ```
 
-Open `http://127.0.0.1:8060` and click **Open browser game**. Use
+Open `http://127.0.0.1:8060` and click **Play now**. Use
 `--port 8061` if that port is occupied. The server binds only to 127.0.0.1, serves
 only the generated export, and does not log request URLs or bodies.
 

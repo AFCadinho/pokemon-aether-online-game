@@ -23,7 +23,7 @@ func _check_bounded_read_times() -> void:
 	_check_close(
 		BattleVoiceTimingScript.get_minimum_read_seconds("dodge", "Garchomp, dodge!"),
 		0.70,
-		"true-miss dodge receives an exclusive readable lead"
+		"true-miss dodge retains its readable text duration"
 	)
 	var long_switch := BattleVoiceTimingScript.get_minimum_read_seconds(
 		"switch",
@@ -41,17 +41,20 @@ func _check_renderer_waits_at_presentation_boundary() -> void:
 	var move_call_index := function_source.find('"kind": "move"')
 	var move_wait_index := function_source.find("await _wait(", move_call_index)
 	var move_read_index := function_source.find("_get_command_minimum_read_seconds(", move_wait_index)
-	var dodge_call_index := function_source.find('"kind": "dodge"', move_read_index)
-	var dodge_wait_index := function_source.find("await _wait(", dodge_call_index)
-	var dodge_read_index := function_source.find("_get_command_minimum_read_seconds(", dodge_wait_index)
+	var dodge_callback_index := function_source.find("return _show_trainer_dodge_command.bind(")
 	_check(
-		move_wait_index > move_call_index and move_read_index > move_wait_index and move_read_index < dodge_call_index,
+		move_wait_index > move_call_index and move_read_index > move_wait_index and move_read_index < dodge_callback_index,
 		"move callout lead is awaited before attack presentation"
 	)
 	_check(
-		dodge_wait_index > dodge_call_index and dodge_read_index > dodge_wait_index,
-		"dodge callout lead is awaited before miss presentation"
+		dodge_callback_index > move_read_index and not function_source.contains('"kind": "dodge"'),
+		"dodge callout is deferred until the move is ready to show"
 	)
+	_check(source.contains('"on_dodge_started": dodge_command'), "move playback receives the synchronized dodge callout")
+	_check(source.contains("await _wait(DODGE_ANTICIPATION_SECONDS"), "dodge callout receives a readable lead before movement")
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check(battle_source.contains("const DODGE_COMMAND_DISPLAY_SECONDS := 2.60"), "dodge callout stays visible longer than ordinary commands")
+	_check(battle_source.contains('command_kind == "dodge" else TrainerCommandCallout.DISPLAY_SECONDS'), "extended visibility applies only to dodge commands")
 	_check(source.contains("func _command_was_shown(result: Variant) -> bool:"), "renderer accepts legacy boolean and timed command callbacks")
 
 

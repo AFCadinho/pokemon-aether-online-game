@@ -24,6 +24,12 @@ const MUTED := Color("#91a8be")
 const ACCENT := Color("#55d5ff")
 const SURFACE := Color("#102239")
 const SURFACE_RAISED := Color("#17314d")
+const REPLAY_BEGIN_ICON: Texture2D = preload("res://assets/ui/icons/replay_begin.svg")
+const REPLAY_PREVIOUS_ICON: Texture2D = preload("res://assets/ui/icons/replay_previous.svg")
+const REPLAY_PLAY_ICON: Texture2D = preload("res://assets/ui/icons/replay_play.svg")
+const REPLAY_PAUSE_ICON: Texture2D = preload("res://assets/ui/icons/replay_pause.svg")
+const REPLAY_NEXT_ICON: Texture2D = preload("res://assets/ui/icons/replay_next.svg")
+const REPLAY_END_ICON: Texture2D = preload("res://assets/ui/icons/replay_end.svg")
 
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
@@ -56,6 +62,7 @@ func _button(parent: Node, text: String, action: Callable, variant := "secondary
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_constant_override("icon_max_width", 20)
 	var base := SURFACE_RAISED
 	var hover := Color("#234968")
 	var border := Color("#365b79")
@@ -259,20 +266,25 @@ func _build_transport_overlay() -> void:
 	var transport_buttons := HBoxContainer.new()
 	transport_buttons.add_theme_constant_override("separation", 5)
 	transport_center.add_child(transport_buttons)
-	var begin_button := _button(transport_buttons, "|◀", func(): seek(0), "quiet")
+	var begin_button := _button(transport_buttons, "", func(): seek(0), "quiet")
+	begin_button.icon = REPLAY_BEGIN_ICON
 	begin_button.custom_minimum_size = Vector2(36, 36)
 	begin_button.tooltip_text = _t("begin")
-	var previous_button := _button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet")
+	var previous_button := _button(transport_buttons, "", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet")
+	previous_button.icon = REPLAY_PREVIOUS_ICON
 	previous_button.custom_minimum_size = Vector2(36, 36)
 	previous_button.tooltip_text = _t("previous_turn")
-	play_button = _button(transport_buttons, "▶  " + _t("play"), _toggle, "primary")
+	play_button = _button(transport_buttons, _t("play"), _toggle, "primary")
+	play_button.icon = REPLAY_PLAY_ICON
 	play_button.custom_minimum_size = Vector2(70, 36)
-	var next_button := _button(transport_buttons, "▶", func():
+	var next_button := _button(transport_buttons, "", func():
 		var turn := timeline.turn_at(index) + 1
 		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet")
 	next_button.custom_minimum_size = Vector2(36, 36)
+	next_button.icon = REPLAY_NEXT_ICON
 	next_button.tooltip_text = _t("next_turn")
-	var end_button := _button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet")
+	var end_button := _button(transport_buttons, "", func(): seek(timeline.frames.size() - 1), "quiet")
+	end_button.icon = REPLAY_END_ICON
 	end_button.custom_minimum_size = Vector2(36, 36)
 	end_button.tooltip_text = _t("end")
 
@@ -357,7 +369,8 @@ func refresh_side_label(swapped: bool) -> void:
 		status_label.text = _perspective_label(swapped)
 
 func _refresh() -> void:
-	play_button.text = "Ⅱ  " + _t("pause") if playing else "▶  " + _t("play")
+	play_button.text = _t("pause") if playing else _t("play")
+	play_button.icon = REPLAY_PAUSE_ICON if playing else REPLAY_PLAY_ICON
 	position_label.text = _t("turn_position", {"turn": timeline.turn_at(index), "total": timeline.turn_at(timeline.frames.size() - 1)})
 	status_label.text = _perspective_label(view_swapped)
 	turn_picker.set_value_no_signal(timeline.turn_at(index))

@@ -112,6 +112,8 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 
 func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "", options: Dictionary = {}) -> void:
 	if not SettingsManager.battle_animations:
+		if _is_miss_animation(options):
+			await _notify_dodge_started(options)
 		return
 	if not _can_start_battle_animation("router.move_animation", {
 		"move": move_name,
@@ -123,10 +125,18 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 
 	var move_key: String = _normalize_move_name(move_name)
 	var config: Dictionary = _get_move_animation_config(move_key)
-	if config.is_empty():
+	var owned_generation := render_generation
+	var playback_options := options.duplicate(true)
+	playback_options["dodge_started"] = false
+	if not config.is_empty():
+		await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident, playback_options)
+	if owned_generation != render_generation or not _is_miss_animation(playback_options):
 		return
-
-	await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident, options)
+	# Even moves without available visual assets receive the standard dodge.
+	if not bool(playback_options["dodge_started"]):
+		await _play_move_target_dodge(_target_ident, playback_options)
+	if owned_generation == render_generation:
+		await _play_move_target_dodge(_target_ident, playback_options, true)
 
 
 func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
@@ -213,6 +223,7 @@ func _play_animation_config(
 		)
 		if underlay_overlay != null:
 			active_animation_nodes.append(underlay_overlay)
+		_play_move_target_dodge(move_target_ident, animation_options)
 		await _wait_for_animation_node(animation_node, overlay)
 		if owned_generation != render_generation:
 			return
@@ -233,6 +244,7 @@ func _play_animation_config(
 	hidden_actor_sprites = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
 	active_actor_restore = _restore_move_actor_sprite_if_needed.bind(config, move_actor_ident, hidden_actor_sprites)
 	parent_node.add_child(animation_node)
+	_play_move_target_dodge(move_target_ident, animation_options)
 	await _wait_for_animation_node(animation_node, parent_node)
 	if owned_generation != render_generation:
 		return
@@ -557,30 +569,32 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	return animation_node
 
 
-func _apply_move_animation_options(animation_node: MoveAnimationPlayer, config: Dictionary, animation_options: Dictionary) -> void:
+func _apply_move_animation_options(animation_node: MoveAnimationPlayer, _config: Dictionary, animation_options: Dictionary) -> void:
 	if animation_node == null or not _is_miss_animation(animation_options):
 		return
 
-	var miss_config := _get_miss_animation_config(config)
-	if miss_config.is_empty():
+	animation_node.shake_config.clear()
+
+
+func _play_move_target_dodge(target_ident: String, animation_options: Dictionary, returning := false) -> void:
+	if not _is_miss_animation(animation_options):
 		return
+	if not returning and not bool(animation_options.get("dodge_started", false)):
+		animation_options["dodge_started"] = true
+		await _notify_dodge_started(animation_options)
+	var target_box := _get_sprite_box_for_ident(target_ident)
+	if target_box == null or not target_box.has_method("play_dodge_tween"):
+		return
+	# Start only after all effect anchors have captured the normal target pose.
+	animation_options["dodge_started"] = true
+	var direction := -1.0 if _get_player_id_from_ident(target_ident) == "p1" else 1.0
+	await target_box.call("play_dodge_tween", direction, returning)
 
-	var target_offset := _get_miss_animation_offset(miss_config, "target_offset", Vector2(56.0, -20.0))
-	var default_sheet_offset := target_offset if str(config.get("category", "")) == "physical_contact" else Vector2.ZERO
-	var sheet_offset := _get_miss_animation_offset(miss_config, "sheet_offset", default_sheet_offset)
-	animation_node.sprite_position_offset += sheet_offset
 
-	if bool(miss_config.get("shift_visual_center", false)):
-		animation_node.sparkle_center += target_offset
-		if animation_node.orb_config.has("center"):
-			var orb_center := _vector2_from_config_value(animation_node.orb_config.get("center", []), animation_node.sparkle_center - target_offset)
-			animation_node.orb_config["center"] = [
-				orb_center.x + target_offset.x,
-				orb_center.y + target_offset.y,
-			]
-
-	if bool(miss_config.get("suppress_shake", true)):
-		animation_node.shake_config.clear()
+func _notify_dodge_started(animation_options: Dictionary) -> void:
+	var callback: Callable = animation_options.get("on_dodge_started", Callable())
+	if callback.is_valid():
+		await callback.call()
 
 
 func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String, animation_options: Dictionary = {}) -> void:
@@ -617,33 +631,12 @@ func _play_move_target_hit_flash_if_needed(config: Dictionary, target_ident: Str
 			enemy_sprite_box.play_hit_flash_tween(flash_config)
 
 
-func _should_suppress_target_feedback_for_miss(config: Dictionary, animation_options: Dictionary) -> bool:
-	if not _is_miss_animation(animation_options):
-		return false
-	var miss_config := _get_miss_animation_config(config)
-	return miss_config.is_empty() or bool(miss_config.get("suppress_target_feedback", true))
+func _should_suppress_target_feedback_for_miss(_config: Dictionary, animation_options: Dictionary) -> bool:
+	return _is_miss_animation(animation_options)
 
 
 func _is_miss_animation(animation_options: Dictionary) -> bool:
 	return str(animation_options.get("result", "")).strip_edges().to_lower() == "miss"
-
-
-func _get_miss_animation_config(config: Dictionary) -> Dictionary:
-	var miss_config: Dictionary = {}
-	var miss_value: Variant = config.get("miss", {})
-	if miss_value is Dictionary:
-		miss_config = miss_value as Dictionary
-
-	var category := str(config.get("category", ""))
-	var default_enabled := category != "field_impact" and category != "status_buff"
-	if not bool(miss_config.get("enabled", default_enabled)):
-		return {}
-
-	return miss_config
-
-
-func _get_miss_animation_offset(miss_config: Dictionary, key: String, fallback: Vector2) -> Vector2:
-	return _vector2_from_config_value(miss_config.get(key, [fallback.x, fallback.y]), fallback)
 
 
 func _color_from_config(value: Variant, fallback: Color) -> Color:
@@ -1041,7 +1034,7 @@ func _apply_move_projectile_endpoint_anchors(
 	target_ident: String,
 	parent_node: Node,
 	config: Dictionary = {},
-	animation_options: Dictionary = {}
+	_animation_options: Dictionary = {}
 ) -> void:
 	if actor_ident == "" or animation_node == null:
 		return
@@ -1068,14 +1061,6 @@ func _apply_move_projectile_endpoint_anchors(
 		)
 	if actor_anchor_parent == Vector2.ZERO or target_anchor_parent == Vector2.ZERO:
 		return
-
-	if _is_miss_animation(animation_options):
-		var miss_config := _get_miss_animation_config(config)
-		if not miss_config.is_empty():
-			var target_offset := _get_miss_animation_offset(miss_config, "target_offset", Vector2(56.0, -20.0))
-			if actor_id == "p2":
-				target_offset = Vector2(-target_offset.x, -target_offset.y)
-			target_anchor_parent += Vector2(target_offset.x * animation_node.scale.x, target_offset.y * animation_node.scale.y)
 
 	var actor_anchor := _parent_position_to_animation_source(animation_node, actor_anchor_parent)
 	var target_anchor := _parent_position_to_animation_source(animation_node, target_anchor_parent)

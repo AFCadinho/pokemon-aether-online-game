@@ -44,6 +44,8 @@ func _run() -> void:
 	_check(_tree_contains_text(popup, "1 vrienden · 1 online"), "Friend summary renders in Dutch")
 	_check(_tree_contains_text(popup, "Geen statusbericht"), "Friend status fallback renders in Dutch")
 	var search := popup.get("friend_search_input") as LineEdit
+	var refresh_button := popup.find_child("RefreshFriendListButton", true, false) as Button
+	_check(refresh_button != null and refresh_button.icon != null and refresh_button.text.is_empty(), "Friend refresh renders its vector icon without a font glyph")
 	_check(
 		search != null and search.placeholder_text == "Zoek op naam of gebruikersnaam",
 		"Friend search renders in Dutch"

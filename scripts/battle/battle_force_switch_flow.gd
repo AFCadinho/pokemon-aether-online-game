@@ -2,6 +2,8 @@ extends RefCounted
 
 class_name BattleForceSwitchFlow
 
+const PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_slot_resolver.gd")
+
 var battle_state: BattleState
 
 
@@ -84,6 +86,31 @@ func can_switch_to_pokemon_data(pokemon_data: Dictionary, player_id := "p1") -> 
 	if is_player_trapped_outside_force_switch(player_id):
 		return false
 
+	return is_available_switch_candidate(pokemon_data)
+
+
+static func find_switch_candidate(canonical_slot: int, canonical_roster: Array, request_team: Array) -> Dictionary:
+	# Request order changes after switches. Resolve the actual Pokemon before
+	# reading its health; a visual slot or old card must never supply eligibility.
+	if canonical_slot <= 0:
+		return {}
+	var candidate: Dictionary = {}
+	for value: Variant in request_team:
+		if not (value is Dictionary):
+			continue
+		var pokemon_data := value as Dictionary
+		var resolved_slot := PARTY_SLOT_RESOLVER.resolve_selected_slot(pokemon_data, canonical_roster) if not canonical_roster.is_empty() else PARTY_SLOT_RESOLVER.get_canonical_slot(pokemon_data)
+		if resolved_slot != canonical_slot:
+			continue
+		if not candidate.is_empty():
+			return {}
+		candidate = pokemon_data
+	return candidate.duplicate(true)
+
+
+static func is_available_switch_candidate(pokemon_data: Dictionary) -> bool:
+	if pokemon_data.is_empty():
+		return false
 	if bool(pokemon_data.get("active", false)):
 		return false
 
@@ -91,7 +118,32 @@ func can_switch_to_pokemon_data(pokemon_data: Dictionary, player_id := "p1") -> 
 		return false
 
 	var condition := str(pokemon_data.get("condition", "")).strip_edges().to_lower()
-	return condition != "0 fnt" and not condition.ends_with(" fnt")
+	if condition == "fnt" or condition.ends_with(" fnt"):
+		return false
+	var health := condition.split(" ", false, 1)[0] if condition != "" else ""
+	var current_health := str(health).split("/", false, 1)[0] if health != "" else ""
+	if current_health.is_valid_float():
+		return float(current_health) > 0
+	for key: String in ["hp", "currentHp", "current_hp"]:
+		var value: Variant = pokemon_data.get(key)
+		if (value is int or value is float) and float(value) <= 0:
+			return false
+	return true
+
+
+static func refresh_switch_card(card: Dictionary, canonical_roster: Array, request_team: Array) -> Dictionary:
+	var slot := PARTY_SLOT_RESOLVER.resolve_selected_slot(card, canonical_roster) if not canonical_roster.is_empty() else PARTY_SLOT_RESOLVER.get_canonical_slot(card)
+	var candidate := find_switch_candidate(slot, canonical_roster, request_team)
+	var refreshed := card.duplicate(true)
+	if candidate.is_empty():
+		return refreshed
+	for key: String in ["active", "fainted", "condition", "hp", "currentHp", "current_hp", "maxHp", "max_hp", "status"]:
+		if candidate.has(key):
+			refreshed[key] = candidate[key]
+	var condition := str(candidate.get("condition", ""))
+	if condition != "":
+		BattleHpEventHelper.new().apply_condition_fields(refreshed, condition)
+	return refreshed
 
 
 func should_hide_active_pokemon(player_id: String, defer_force_switch_active_hide: bool) -> bool:

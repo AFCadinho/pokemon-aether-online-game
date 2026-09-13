@@ -4,6 +4,7 @@ const LauncherServerHealthService := preload("res://scripts/server_health_servic
 const LauncherNewsLocalizationService := preload("res://scripts/news_localization_service.gd")
 const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
 const LauncherResumableDownloadService := preload("res://scripts/resumable_download_service.gd")
+const LauncherAssetPackIntegrity := preload("res://scripts/asset_pack_integrity.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
@@ -41,6 +42,18 @@ const ASSET_PACK_REQUIRED_PATHS := {
 	"pokemon-gen5-back": "assets/sprites/pokemon/gen5/back",
 	"pokemon-gen5-shiny-front": "assets/sprites/pokemon/gen5/shiny_front",
 	"pokemon-gen5-shiny-back": "assets/sprites/pokemon/gen5/shiny_back",
+}
+const ASSET_PACK_REQUIRED_FILES := {
+	"music": [
+		"assets/music/login/lugia_theme_lofi.ogg",
+		"assets/music/overworld/kanto/towns/pallet_town.ogg",
+		"assets/music/overworld/kanto/towns/viridian_city.ogg",
+		"assets/music/overworld/kanto/routes/route1.ogg",
+		"assets/music/overworld/kanto/interiors/oaks_lab.ogg",
+		"assets/music/overworld/kanto/interiors/pokemon_center.ogg",
+		"assets/music/battle/wild/Kanto Wild Battle.ogg",
+		"assets/music/battle/trainer/Kalos Trainer Battle.ogg",
+	],
 }
 const LAUNCHER_UPDATE_TEMP_DIR := "user://launcher_update"
 const LAUNCHER_UPDATE_STAGING_SUBDIR := "staging"
@@ -1996,10 +2009,13 @@ func _is_asset_pack_installed(asset_pack: Dictionary, local_asset_packs: Diction
 
 func _has_asset_pack_required_path(pack_id: String) -> bool:
 	var required_path := str(ASSET_PACK_REQUIRED_PATHS.get(pack_id, ""))
-	if required_path.is_empty():
-		return true
-
-	return DirAccess.dir_exists_absolute(_globalize_storage_path(install_dir.path_join(required_path)))
+	var required_files_value: Variant = ASSET_PACK_REQUIRED_FILES.get(pack_id, [])
+	var required_files: Array = required_files_value if required_files_value is Array else []
+	return LauncherAssetPackIntegrity.has_required_contents(
+		install_dir,
+		required_path,
+		required_files
+	)
 
 
 func _reset_download_progress_counters() -> void:

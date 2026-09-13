@@ -199,6 +199,8 @@ func _contains_word(value: String, word: String) -> bool:
 
 
 func _t(key: String, replacements: Dictionary = {}) -> String:
+	if not is_inside_tree():
+		return key
 	var localization_manager := get_tree().root.get_node_or_null("LocalizationManager")
 	if localization_manager != null:
 		return str(localization_manager.call("text", key, replacements))

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { isAllowedApiRoute, onRequest } from '../functions/api/[[path]].js';
 import { onRequestGet as getNews } from '../functions/news.json.js';
+import { onRequest as getBattleSprite } from '../functions/pokemon-assets/battle/[[path]].js';
+import { onRequest as getGen5Sprite } from '../functions/pokemon-assets/gen5/[[path]].js';
 
 const releaseRoutes = JSON.parse(readFileSync(new URL('./fixtures/web_release_routes.json', import.meta.url)));
 for (const [method, path] of releaseRoutes.allowed) assert.equal(isAllowedApiRoute(method, path), true, `${method} ${path}`);
@@ -62,6 +64,49 @@ assert.equal(forwarded.headers.get('cookie'), null);
 assert.equal(forwarded.headers.get('origin'), null);
 assert.equal(forwarded.headers.get('x-pokeaether-client-platform'), 'web');
 assert.equal(proxied.headers.get('set-cookie'), null);
+
+globalThis.fetch = async request => {
+  forwarded = request;
+  return new Response(new Uint8Array([0x89, 0x50, 0x4e, 0x47]), {
+    headers: {
+      'content-type': 'image/png',
+      'cache-control': 'public, max-age=31536000, immutable',
+      etag: 'test-only-etag',
+    },
+  });
+};
+const sprite = await getGen5Sprite({
+  request: new Request('https://play.example.test/pokemon-assets/gen5/pokemon-gen5-front-895716cf7862/pidgey/sheet.png'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(sprite.status, 200);
+assert.equal(forwarded.url, 'https://assets.example.test/web/assets/pokemon-gen5-front-895716cf7862/pidgey/sheet.png');
+assert.equal(sprite.headers.get('content-type'), 'image/png');
+assert.equal(sprite.headers.get('cross-origin-resource-policy'), 'same-origin');
+assert.equal(sprite.headers.get('cache-control'), 'public, max-age=31536000, immutable');
+const deniedSpritePath = await getGen5Sprite({
+  request: new Request('https://play.example.test/pokemon-assets/gen5/other/private.txt'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(deniedSpritePath.status, 404);
+const deniedSpriteMethod = await getGen5Sprite({
+  request: new Request('https://play.example.test/pokemon-assets/gen5/pokemon-gen5-front-895716cf7862/pidgey/sheet.png', { method: 'POST' }),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(deniedSpriteMethod.status, 405);
+
+const battleSprite = await getBattleSprite({
+  request: new Request('https://play.example.test/pokemon-assets/battle/pokemon-front-scale1-128-402b7a6cee88/pidgey/sheet.png'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(battleSprite.status, 200);
+assert.equal(forwarded.url, 'https://assets.example.test/web/assets/pokemon-front-scale1-128-402b7a6cee88/pidgey/sheet.png');
+assert.equal(battleSprite.headers.get('content-type'), 'image/png');
+const deniedBattleSpritePath = await getBattleSprite({
+  request: new Request('https://play.example.test/pokemon-assets/battle/pokemon-gen5-front-895716cf7862/pidgey/sheet.png'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(deniedBattleSpritePath.status, 404);
 
 globalThis.fetch = async request => {
   assert.equal(request, 'https://assets.example.test/data/news.json');

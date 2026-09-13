@@ -16,6 +16,12 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_upstream_websocket_keepalive_tolerates_local_development_stalls(self):
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["ping_interval"], 30)
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["ping_timeout"], 120)
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["close_timeout"], 5)
+        self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["max_size"], 65536)
+
     def test_local_target_validation(self):
         for url in ["https://pokeaether.com", "http://localhost:8000", "http://127.0.0.1:8000/path", "http://user:pass@127.0.0.1:8000", "http://127.0.0.1:8000?target=remote"]:
             with self.assertRaises(ValueError):
@@ -29,6 +35,7 @@ class ConnectedProxyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "index.html").write_text("test export")
+            (root / "world-preview.webp").write_bytes(b"test-webp")
             (root / ".secret").write_text("not served")
             (root / "external.js").symlink_to("/etc/passwd")
             client = TestClient(proxy.create_app("http://127.0.0.1:8000", root, transport=httpx.MockTransport(upstream)), base_url="http://127.0.0.1:8061")
@@ -66,11 +73,23 @@ class ConnectedProxyTests(unittest.TestCase):
             stats_response = client.get("/api/pokemon/stats?species=rattata&level=2")
             self.assertEqual(stats_response.status_code, 200)
             self.assertEqual(dict(calls[-1].url.params), {"species": "rattata", "level": "2"})
+            pokedex_response = client.get(
+                "/api/auth/web/pokedex/species?limit=50&offset=0&dex=national&shiny=false"
+            )
+            self.assertEqual(pokedex_response.status_code, 200)
+            self.assertEqual(calls[-1].url.path, "/auth/web/pokedex/species")
+            self.assertEqual(calls[-1].url.params["limit"], "50")
+            item_dex_response = client.get(
+                "/api/auth/web/items/search?q=ball&limit=50&offset=0"
+            )
+            self.assertEqual(item_dex_response.status_code, 200)
+            self.assertEqual(calls[-1].url.path, "/auth/web/items/search")
+            self.assertEqual(calls[-1].url.params["q"], "ball")
             self.assertEqual(client.get("/api/battle/pvp/training/ai/live/training-test/spectate").status_code, 200)
-            sprite = client.get("/pokemon-assets/gen5/front/pikachu/animation.json")
+            sprite = client.get("/pokemon-assets/battle/front/pikachu/animation.json")
             self.assertEqual(sprite.status_code, 200)
             self.assertEqual(sprite.headers["cache-control"], "no-cache")
-            self.assertEqual(client.get("/pokemon-assets/gen5/front/pikachu/other.txt").status_code, 404)
+            self.assertEqual(client.get("/pokemon-assets/battle/front/pikachu/other.txt").status_code, 404)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/teams/catalog-team").status_code, 200)
             self.assertEqual(client.post("/api/battle/pvp/training/ai/battles", json={}).status_code, 200)
             # A complete six-Pokémon party can exceed the generic UI request
@@ -96,9 +115,13 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(static.headers["cross-origin-opener-policy"], "same-origin")
             self.assertEqual(static.headers["cross-origin-embedder-policy"], "require-corp")
             self.assertIn("frame-ancestors 'none'", static.headers["content-security-policy"])
+            world_preview = client.get("/world-preview.webp")
+            self.assertEqual(world_preview.status_code, 200)
+            self.assertEqual(world_preview.headers["content-type"], "image/webp")
+            self.assertEqual(world_preview.content, b"test-webp")
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 34)
+            self.assertEqual(len(calls), 36)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

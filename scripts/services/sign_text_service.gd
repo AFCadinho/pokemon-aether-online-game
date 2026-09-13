@@ -89,11 +89,8 @@ func _load_sign_catalog(locale: String) -> Dictionary:
 
 
 func _collect_sign_entries(path: String, entries: Dictionary) -> void:
-	var absolute_path := ProjectSettings.globalize_path(path)
-	if not DirAccess.dir_exists_absolute(absolute_path):
-		return
-
-	var dir := DirAccess.open(absolute_path)
+	# Keep the res:// path intact so DirAccess can read from exported PCKs.
+	var dir := DirAccess.open(path)
 	if dir == null:
 		push_warning("SignTextService: could not open sign text directory %s" % path)
 		return

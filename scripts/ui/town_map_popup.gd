@@ -7,6 +7,14 @@ signal closed
 const REGION_MAP_PATH := "res://data/region_maps/kanto.json"
 const WORLD_ACCESS_PATH := "res://generated/world_access_catalog.json"
 const TownMapCanvasScript := preload("res://scripts/ui/town_map_canvas.gd")
+const CURRENT_LOCATION_ICON := preload("res://assets/ui/town_map_current.svg")
+const INTERIOR_ICON := preload("res://assets/ui/town_map_interior.svg")
+const CONNECTION_ICON := preload("res://assets/ui/town_map_connection.svg")
+const LEGEND_ICONS := {
+	"settlement": preload("res://assets/ui/town_map_settlement.svg"),
+	"route": preload("res://assets/ui/town_map_route.svg"),
+	"special": preload("res://assets/ui/town_map_special.svg"),
+}
 
 var region_data: Dictionary = {}
 var layout_data: Dictionary = {}
@@ -27,6 +35,7 @@ var detail_interiors_container: GridContainer
 var connections_title_label: Label
 var detail_connections_container: GridContainer
 var legend_kind_labels: Dictionary = {}
+var legend_kind_icons: Dictionary = {}
 var selected_location_id := ""
 var current_location_id := ""
 var owns_overworld_input_lock := false
@@ -167,11 +176,9 @@ func _build_ui() -> void:
 	var current_row := HBoxContainer.new()
 	current_row.add_theme_constant_override("separation", 7)
 	current_margin.add_child(current_row)
-	var current_dot := Label.new()
-	current_dot.text = "●"
-	current_dot.add_theme_font_size_override("font_size", 12)
-	current_dot.add_theme_color_override("font_color", Color("#5cecff"))
-	current_row.add_child(current_dot)
+	var current_icon := _icon_rect(CURRENT_LOCATION_ICON, Vector2(16, 16))
+	current_icon.name = "CurrentLocationIcon"
+	current_row.add_child(current_icon)
 	current_location_label = Label.new()
 	current_location_label.add_theme_font_size_override("font_size", 12)
 	current_location_label.add_theme_color_override("font_color", Color("#c8f8ff"))
@@ -389,16 +396,15 @@ func _add_legend_chip(parent: Container, kind: String, color: Color) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 5)
 	margin.add_child(row)
-	var dot := Label.new()
-	dot.text = "●"
-	dot.add_theme_font_size_override("font_size", 10)
-	dot.add_theme_color_override("font_color", color)
-	row.add_child(dot)
+	var icon := _icon_rect(LEGEND_ICONS.get(kind) as Texture2D, Vector2(16, 16))
+	icon.name = "LegendIcon_%s" % kind
+	row.add_child(icon)
 	var label := Label.new()
 	label.add_theme_font_size_override("font_size", 10)
 	label.add_theme_color_override("font_color", Color("#d4e0e8"))
 	row.add_child(label)
 	legend_kind_labels[kind] = label
+	legend_kind_icons[kind] = icon
 
 
 func _position_shell() -> void:
@@ -497,13 +503,18 @@ func _refresh_interior_items(interiors: Array) -> void:
 		var label := str(interior_data.get("label", "")).strip_edges()
 		if label == "":
 			continue
-		var item := Label.new()
-		item.text = "◆  %s" % label
+		var item := HBoxContainer.new()
 		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		item.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		item.tooltip_text = label
-		item.add_theme_font_size_override("font_size", 13)
-		item.add_theme_color_override("font_color", Color("#b8c9d4"))
+		item.add_theme_constant_override("separation", 7)
+		item.add_child(_icon_rect(INTERIOR_ICON, Vector2(16, 16)))
+		var item_label := Label.new()
+		item_label.text = label
+		item_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		item_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		item_label.add_theme_font_size_override("font_size", 13)
+		item_label.add_theme_color_override("font_color", Color("#b8c9d4"))
+		item.add_child(item_label)
 		detail_interiors_container.add_child(item)
 
 
@@ -522,7 +533,11 @@ func _refresh_connection_buttons(location_ids: Array[String]) -> void:
 		return
 	for location_id: String in location_ids:
 		var button := Button.new()
-		button.text = "→  %s" % _location_name(location_id)
+		button.text = _location_name(location_id)
+		button.icon = CONNECTION_ICON
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 18)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size = Vector2(0, 38)
@@ -542,6 +557,17 @@ func _refresh_connection_buttons(location_ids: Array[String]) -> void:
 		button.add_theme_stylebox_override("pressed", pressed_style)
 		button.pressed.connect(_refresh_details.bind(location_id))
 		detail_connections_container.add_child(button)
+
+
+func _icon_rect(texture: Texture2D, minimum_size: Vector2) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.custom_minimum_size = minimum_size
+	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return icon
 
 
 func _kind_color(kind: String) -> Color:

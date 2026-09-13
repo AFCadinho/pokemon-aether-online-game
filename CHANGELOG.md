@@ -2,11 +2,75 @@
 
 ## Unreleased
 
-- Wild Battle Replays now show the Ball animation and successful catch instead of stopping abruptly on the final turn.
+## 0.3.78 - 2026-09-13
 
-- Browser battles now load Gen 5 animated Pokémon sprites more reliably and with substantially lower WebGL texture overhead instead of remaining on the Pokémon HOME fallback.
+### Battles and calculator
 
-- Browser login now explains when your Trainer is outside the supported browser area instead of silently returning to the login screen.
+- Missed attacks now stay aimed at their target while the defending Pokémon makes a clear sideways dodge shortly after a longer trainer callout, then returns to its place.
+- You can use the battle calculator before either player has chosen their first Pokémon.
+- Suggested opponent sets remain visible as clearly marked close matches when no exact match is left.
+- You can select an opponent set by clicking anywhere on its card.
+- Fainted Pokémon remain available for test calculations, and an error no longer replaces your chosen matchup with question marks.
+- The set-suggestion button gently pulses when the battle reveals a likely match. The set picker also explains the clues and available actions more clearly.
+- Opponent-set details are now easier to scan, with neatly aligned information, visible move suggestions, clearer clues, and the calculate button at the top.
+- Damage clues now account for active stat changes, such as the Defense boost Zamazenta receives from Dauntless Shield.
+- Your own Pokémon's battle card now shows its exact Speed and clearly explains any changes from moves, items, Abilities, status, weather, or the battlefield. Opponents and spectators still see only the usual public estimate.
+- Set suggestions now mark clues that need more information with a clear blue label.
+- Choosing a different opponent in the calculator now removes information and choices left over from the previous Pokémon.
+- The calculator now follows the Pokémon's current stat changes during battle instead of using an older saved value.
+- Very small damage ranges are now shown as one estimated percentage instead of the same rounded number twice.
+- Battle clues now match the calculator's design and are easier to read.
+- Opponent clues clearly show whether damage was dealt or received, along with the move and turn. More details are available by pointing at the clue.
+- PvP switches now use the latest battle information, so an old party card can no longer send out a fainted Pokémon.
+- Leaving a battle you are watching now waits for the current action to finish, preventing the game from closing unexpectedly.
+
+### Aether Exchange and items
+
+- The Item Buyer now asks you to confirm the item, amount, and payment before removing anything from your Bag.
+- Item requests in My Exchange now use clear, compact cards showing the price per item, status, and delivery progress.
+- Creating or cancelling an item request now clearly shows what changed in your Bag and wallet, including reserved money and refunds.
+- Wanted items now use the same card layout as other Aether Exchange listings and include a clear progress bar.
+- Both players now receive a message in their chosen language when items are delivered through a request.
+- Item requests can now be completed in parts. Each delivery updates the progress and pays the offered price per item.
+- The Item Dex automatically loads ten more matching items when you scroll down.
+- Item-request details and buttons now remain inside the Aether Exchange window.
+
+### Replays and browser play
+
+- Wild, Trainer, and PvP Battle Replays can now be shared just like AI Sparring replays.
+- Wild Battle Replays now show the Poké Ball animation and a successful catch instead of ending suddenly.
+- Browser players can now view their own Guild overview and members. Guild and Battle Replay actions use clear icons, client-only notices match the game style, and NPC replays show the correct Trainer.
+- Pokédex and Item Dex catalogues now load through the browser's restricted account API, and the Pokédex Shiny selector displays its proper icon.
+- Town Map locations, interiors, connections, and legend entries now display their icons correctly in the browser.
+- Shared confirmation and client-only dialogs now display their Aether icon correctly in the browser.
+- The Friend List refresh action now displays correctly in the browser.
+- The Aethernet browser notice now fits and centers correctly at browser resolutions.
+- Side-quest markers above NPCs now display correctly in the browser.
+- Pokémon Summary tabs and front/back sprite switching now respond smoothly in the browser.
+- Currency and navigation symbols now display correctly throughout the browser game, including global buffs and login.
+- The browser game now opens with a clearer PokeAether start screen, a simple play button and a link to the smoother, higher-quality game client.
+- Animated Pokémon in browser battles now load more reliably and use fewer resources.
+- Browser battles now use the regular animated Pokémon by default. Gen 5 animations remain available as an option, with static images used only where needed.
+- Browser battle animations no longer show dark seams from neighbouring frames in their downloaded sprite sheets.
+- Browser battles now preload map encounters and known teams so the intended battle sprite is ready before a Pokémon appears.
+- Emergency HOME battle fallbacks now fit the arena consistently instead of appearing at wildly different sizes.
+- Wild and NPC battle transitions now prioritize only the Pokémon entering the field while the rest of each team keeps loading in the background.
+- Browser login now explains when your Trainer is outside the area supported by the browser version.
+- After a connection problem, players now return to the shared world automatically instead of appearing only in chat.
+
+### World and interface
+
+- Overworld signs now display their text correctly in exported game clients.
+- The Route 3 Pokémon Center seller now shows the clerk's portrait instead of Professor Oak.
+- You can browse and buy cosmetics for either character model. Previews show only the included pieces and use matching icons.
+- Guild Leaders can transfer leadership to another member. Leaders of a solo Guild can disband it before joining another Guild.
+- Cerulean City's original nighttime lighting has been restored without losing the recent movement improvements.
+- Travelling through large maps is now smoother.
+- Riding a mount through detailed places such as Cerulean City now runs more smoothly.
+- Riders and their outfits now stay visually together across every animated mount frame.
+- Other mounted players now keep their outfits aligned immediately when turning, without needing to stop first.
+- The launcher now repairs incomplete music downloads, and desktop releases check that all required music is included.
+- Testers can temporarily raise their account's training level limit to 100 without changing story progress, Badges, or the trading limit.
 
 ## 0.3.76 - 2026-09-12
 

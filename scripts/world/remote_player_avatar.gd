@@ -790,6 +790,7 @@ func _create_visual() -> void:
 		rider_node = look_node.get_node_or_null("Rider") as Node2D
 		if rider_node != null:
 			base_rider_position = rider_node.position
+		_connect_mount_frame_sync()
 	_collect_appearance_sprites(look_copy)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
@@ -847,7 +848,43 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
 		mount_sprite.stop()
+	_sync_mounted_rider_frame()
+	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
+
+
+func _connect_mount_frame_sync() -> void:
+	if mount_sprite == null:
+		return
+	if not mount_sprite.frame_changed.is_connected(_on_mount_frame_changed):
+		mount_sprite.frame_changed.connect(_on_mount_frame_changed)
+
+
+func _on_mount_frame_changed() -> void:
+	_sync_mounted_rider_frame()
+	_sync_mount_rider_delta()
+	_sync_mount_foreground_frame()
+
+
+func _sync_mounted_rider_frame() -> void:
+	if mount_sprite == null or not mount_sprite.visible:
+		return
+	if not _uses_static_activity_movement_pose():
+		return
+	var animation_name := mount_sprite.animation
+	for sprite in appearance_sprites:
+		if _is_unequipped_appearance_part_sprite(sprite):
+			continue
+		if sprite.sprite_frames == null \
+			or not sprite.sprite_frames.has_animation(animation_name):
+			continue
+		sprite.animation = animation_name
+		sprite.frame = mini(
+			mount_sprite.frame,
+			sprite.sprite_frames.get_frame_count(animation_name) - 1
+		)
+		sprite.frame_progress = mount_sprite.frame_progress
+		sprite.pause()
 
 
 func _sync_mount_foreground_frame() -> void:
@@ -858,7 +895,7 @@ func _sync_mount_foreground_frame() -> void:
 	mount_foreground_sprite.animation = mount_sprite.animation
 	mount_foreground_sprite.frame = mount_sprite.frame
 	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
-	mount_foreground_sprite.stop()
+	mount_foreground_sprite.pause()
 
 
 func _sync_mount_rider_delta() -> void:
@@ -1385,7 +1422,8 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 		body_frames,
 		current_mount_id,
 		_get_surf_fish_rider_offset_adjustments(),
-		_get_surf_fish_body_hidden_regions()
+		_get_surf_fish_body_hidden_regions(),
+		_uses_static_activity_movement_pose()
 	)
 
 	for sprite in appearance_sprites:
@@ -1504,7 +1542,9 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	part_frames = MountService.get_mounted_rider_frames(
 		part_frames,
 		current_mount_id,
-		_get_surf_fish_rider_offset_adjustments()
+		_get_surf_fish_rider_offset_adjustments(),
+		{},
+		_uses_static_activity_movement_pose()
 	)
 
 	sprite.sprite_frames = part_frames
@@ -1645,7 +1685,10 @@ func _get_activity_layer_offset(category: String) -> Vector2:
 		return Vector2.ZERO
 
 	var category_offsets: Dictionary = style_offsets as Dictionary
-	var direction_offsets: Variant = category_offsets.get(_get_activity_offset_direction(), category_offsets.get("default", {}))
+	var direction_offsets: Variant = category_offsets.get(
+		_get_activity_offset_direction(),
+		category_offsets.get("default", {})
+	)
 	if direction_offsets is Dictionary:
 		var directional_category_offsets: Dictionary = direction_offsets as Dictionary
 		if directional_category_offsets.has(normalized_category):
@@ -1805,13 +1848,16 @@ func _update_animation(is_moving: bool) -> void:
 		current_mount_id, current_appearance_signature, current_body_movement_style]
 	if next_state == _rendered_animation_state:
 		if is_moving:
-			_sync_all_part_sprites_to_body()
+			# The ordinary layer sync restores idle head frames and resets paused
+			# clothing frames. Mounted layers must retain the mount's mask frame.
+			if _uses_static_activity_movement_pose():
+				_sync_mounted_rider_frame()
+			else:
+				_sync_all_part_sprites_to_body()
 			_sync_mount_rider_delta()
 			_sync_mount_foreground_frame()
 		return
 	_rendered_animation_state = next_state
-	_apply_directional_appearance_layer_order()
-	_sync_activity_layer_offsets()
 	var uses_static_pose := _uses_static_activity_movement_pose()
 	var should_animate_movement := is_moving and not uses_static_pose
 	var animation_name := _get_walk_animation_name(last_direction) \
@@ -1836,6 +1882,10 @@ func _update_animation(is_moving: bool) -> void:
 			sprite.stop()
 	_sync_all_part_sprites_to_body()
 	_sync_mount_animation(is_moving, last_direction)
+	# Offset and layer order resolve direction from the body animation, so
+	# update them only after all sprites have adopted the new facing direction.
+	_apply_directional_appearance_layer_order()
+	_sync_activity_layer_offsets()
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 	_apply_activity_visual_offset()

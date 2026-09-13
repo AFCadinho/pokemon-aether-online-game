@@ -1,5 +1,7 @@
 extends SceneTree
 
+const MountServiceScript := preload("res://scripts/services/mount_service.gd")
+
 var failures := 0
 
 func _init() -> void:
@@ -39,6 +41,55 @@ func _run() -> void:
 	_check(body.animation == &"walk_right" and body.is_playing(), "starting movement starts walking")
 	avatar._update_animation(false)
 	_check(body.animation == &"idle_right" and not body.is_playing(), "stopping movement restores idle")
+	state.facingDirection = "right"
+	state.movement = {
+		"isMoving": true,
+		"activityStyle": "ride",
+		"mountId": "cyclizar",
+		"startPosition": {"x": 64, "y": 32},
+		"targetPosition": {"x": 96, "y": 32},
+		"duration": 0.065,
+	}
+	state.position.x = 96
+	avatar.apply_state(state)
+	avatar.mount_sprite.frame = 2
+	var hair: AnimatedSprite2D = avatar._get_appearance_sprite("HairSprite")
+	_check(
+		body.animation == &"walk_right" and body.frame == 2 and not body.is_playing(),
+		"remote rider uses Cyclizar's current masked frame without animating its pose"
+	)
+	_check(
+		hair.animation == &"walk_right" and hair.frame == 2 and not hair.is_playing(),
+		"remote outfit layers use the same masked Cyclizar frame as the body"
+	)
+	var expected_rider_position: Vector2 = avatar.base_rider_position + Vector2(
+		MountServiceScript.get_rider_frame_offset("cyclizar", "right", 2)
+	)
+	_check(
+		avatar.rider_node.position == expected_rider_position,
+		"remote rider follows Cyclizar's current animation frame"
+	)
+	_check(
+		avatar.mount_foreground_sprite.frame == avatar.mount_sprite.frame,
+		"remote mount foreground follows Cyclizar's current animation frame"
+	)
+	state.erase("movement")
+	for direction: Vector2 in [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]:
+		avatar.last_direction = direction
+		avatar._update_animation(true)
+		var expected_offset := Vector2.ZERO
+		if direction == Vector2.LEFT:
+			expected_offset = Vector2(-4, 4)
+		elif direction == Vector2.RIGHT:
+			expected_offset = Vector2(4, 4)
+		elif direction == Vector2.DOWN:
+			expected_offset = Vector2(0, 4)
+		_check(hair.offset == expected_offset,
+			"remote mounted hair aligns immediately after turning %s" % direction)
+		avatar.mount_sprite.frame = 2
+		avatar._update_animation(true)
+		_check(hair.animation == body.animation and hair.frame == body.frame and body.frame == 2,
+			"remote mounted layers retain their mask frame between animation ticks")
 	parent.hide()
 	state.position.x = 128
 	avatar.apply_state(state)

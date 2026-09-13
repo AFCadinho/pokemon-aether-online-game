@@ -50,6 +50,7 @@ func _run() -> void:
 	root.add_child(battle)
 	await process_frame
 	_check(battle.setup_battle_replay(recording), "Battle scene opens in replay mode")
+	_check(battle.replay_controls.play_button.icon != null, "Replay transport uses font-independent vector icons")
 	_check(str(battle.active_battle_environment_id) == "pvp_stadium", "Replay restores the AI Sparring stadium environment")
 	_check(battle.player_team_preview_layer.visible and battle.enemy_team_preview_layer.visible, "Replay begins with the recorded team preview")
 	_check(not battle.battle_actions_ready and battle.battle_request.has_meta("replay_read_only"), "Replay cannot issue battle actions")
@@ -83,6 +84,25 @@ func _run() -> void:
 	await battle.stop_battle_replay()
 	_check(not controls.busy and controls.closing, "Closing drains the animated renderer before freeing the battle")
 	battle.queue_free()
+	await process_frame
+	var npc_first := first.duplicate(true)
+	npc_first["replayKind"] = "pve"
+	npc_first["trainerName"] = "Lass Zoe"
+	npc_first["trainerClass"] = "Lass"
+	var npc_second := second.duplicate(true)
+	var npc_terminal := terminal.duplicate(true)
+	for npc_frame: Dictionary in [npc_second, npc_terminal]:
+		npc_frame["replayKind"] = "pve"
+		npc_frame["trainerName"] = "Lass Zoe"
+		npc_frame["trainerClass"] = "Lass"
+	var npc_recording := {"schemaVersion": 1, "frames": [npc_first, npc_second, npc_terminal]}
+	var npc_battle := scene.instantiate()
+	root.add_child(npc_battle)
+	await process_frame
+	_check(npc_battle.setup_battle_replay(npc_recording), "NPC Trainer replay opens")
+	_check(str(npc_battle.replay_trainer_data.get("_battle_sprite_id", "")) == "showdown_lass_gen6", "NPC replay resolves Lass Zoe instead of using the AI5 trainer")
+	await npc_battle.stop_battle_replay()
+	npc_battle.queue_free()
 	await process_frame
 	var wild_first := first.duplicate(true)
 	wild_first["replayKind"] = "wild"
@@ -148,9 +168,26 @@ func _run() -> void:
 		"playerRoster": [{"species": "Pikachu"}, {"species": "Charizard"}, {"species": "Tyranitar"}],
 		"opponentRoster": [{"species": "Blissey"}, {"species": "Scizor"}, {"species": "Garchomp"}]}))
 	library.list.add_child(library._card({"battleId": "preview2", "opponentDisplayName": "Grandmaster Hard", "createdAt": "2026-09-09T18:00:00", "turns": 36, "result": "loss", "status": "available", "expiresAt": "2026-10-09"}))
+	for replay_kind: String in ["wild", "pve", "pvp"]:
+		library.list.add_child(library._card({
+			"battleId": "share-" + replay_kind,
+			"kind": replay_kind,
+			"opponentDisplayName": "Replay opponent",
+			"createdAt": "2026-09-09T18:00:00",
+			"turns": 9,
+			"result": "win",
+			"status": "available",
+			"expiresAt": "2026-10-09",
+		}))
 	for i in range(4):
 		await process_frame
-	_check(library.list.get_child_count() == 2, "Library renders management cards")
+	_check(library.list.get_child_count() == 5, "Library renders management cards")
+	for card_index: int in range(2, 5):
+		var replay_card: Node = library.list.get_child(card_index)
+		var share_buttons: Array = replay_card.find_children("*", "Button", true, false).filter(
+			func(button: Button): return button.text == library._t("share")
+		)
+		_check(share_buttons.size() == 1, "Every available replay category exposes one share action")
 	_check(library.shell.get_theme_stylebox("panel") != null, "Library shell has a dedicated replay visual style")
 	_check(library.search.get_theme_stylebox("focus") != null and library.outcome.get_theme_stylebox("hover") != null, "Replay filters have focused and hover states")
 	_check(library.reset_filters_button != null and library.reset_filters_button.text != "", "Replay filters reset independently of live search")
@@ -168,6 +205,7 @@ func _run() -> void:
 	library._refresh_category_tabs()
 	_check(library.category_buttons.size() == 5 and library.category_buttons.has("ai_sparring") and library.category_buttons.has("wild"), "Replay library exposes future-ready category tabs")
 	var card_buttons: Array[Node] = library.list.get_child(0).find_children("*", "Button", true, false)
+	_check(card_buttons.filter(func(button: Button): return button.icon != null).size() >= 3, "Replay card actions use font-independent vector icons")
 	var watch_button := card_buttons[0] as Button if not card_buttons.is_empty() else null
 	_check(watch_button != null and watch_button.get_theme_stylebox("normal") != null, "Replay cards provide styled actions")
 	print("Replay library geometry: viewport=%s root=%s shell=%s minimum=%s" % [root.size, library.size, library.shell.get_rect(), library.shell.get_combined_minimum_size()])

@@ -2725,7 +2725,10 @@ func _update_sprite_style_status_label(message_key: String) -> void:
 	if sprite_style_status_label == null:
 		return
 
-	if message_key.is_empty() and not SettingsManager.is_gen5_animated_sprites_installed():
+	if (
+		message_key.is_empty() and not OS.has_feature("web")
+		and not SettingsManager.is_gen5_animated_sprites_installed()
+	):
 		message_key = "ui.settings.sprite.download_available"
 
 	sprite_style_status_label.text = LocalizationManager.text(message_key) if not message_key.is_empty() else ""

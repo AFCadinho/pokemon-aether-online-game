@@ -44,7 +44,13 @@ func _run() -> void:
 	var outfit := {"itemId": "mysterious-outfit", "name": "Mysterious Outfit", "quantity": 1}
 	var mount := {"itemId": "cyclizar-mount", "name": "Cyclizar Mount", "quantity": 1}
 	var listing := {"id": "preview-1", "assetType": "pokemon", "asset": pokemon, "quantity": 1, "unitPrice": 100, "totalPrice": 100, "status": "active"}
-	var wish := {"id": "preview-wish", "item": item, "quantity": 10, "unitPrice": 100, "totalPrice": 1000, "status": "active", "isMine": false}
+	var wish := {"id": "preview-wish", "item": item, "quantity": 20, "fulfilledQuantity": 5, "remainingQuantity": 15, "unitPrice": 100, "totalPrice": 2000, "remainingTotalPrice": 1500, "status": "active", "isMine": false}
+	var wishlist_items: Array = []
+	for index in range(20):
+		wishlist_items.append(item.merged({
+			"itemId": "preview-item-%d" % index,
+			"name": "Preview Item %d" % index,
+		}, true))
 	var listings: Array = []
 	for index in range(20):
 		var entry := listing.duplicate(true)
@@ -62,6 +68,54 @@ func _run() -> void:
 	var previous_locale: String = localization.current_locale
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
+		var fill_event := {
+			"type": "system.exchange_item_request_filled",
+			"role": "requester",
+			"itemId": "rare-candy",
+			"itemName": "Rare Candy",
+			"quantity": 5,
+			"totalPrice": 5000,
+			"fulfilledQuantity": 5,
+			"requestedQuantity": 20,
+			"remainingQuantity": 15,
+			"completed": false,
+		}
+		var requester_message := str(summary_overlay.call("_exchange_item_request_system_message", fill_event))
+		var seller_event := fill_event.merged({"role": "seller"}, true)
+		var seller_message := str(summary_overlay.call("_exchange_item_request_system_message", seller_event))
+		var requester_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", fill_event)
+		var seller_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", seller_event)
+		_check(not requester_message.begins_with("ui.exchange."), locale + ": requester fill system message is translated")
+		_check(requester_message.contains("5") and requester_message.contains("20"), locale + ": requester fill system message reports progress")
+		_check(not seller_message.begins_with("ui.exchange."), locale + ": seller fill system message is translated")
+		_check(seller_message.contains("5") and not seller_message.contains("5,000"), locale + ": seller fill summary stays separate from payment")
+		_check(requester_mutations.size() == 1 and str(requester_mutations[0]).contains("5") and not str(requester_mutations[0]).begins_with("ui."), locale + ": requester receives a separate translated Bag addition")
+		_check(seller_mutations.size() == 2 and str(seller_mutations[0]).contains("5") and str(seller_mutations[1]).contains("5,000"), locale + ": seller receives separate Bag and wallet changes")
+		var created_event := {
+			"type": "system.exchange_item_request_created",
+			"itemId": "rare-candy",
+			"itemName": "Rare Candy",
+			"quantity": 20,
+			"unitPrice": 5000,
+			"totalPrice": 100000,
+		}
+		var created_message := str(summary_overlay.call("_exchange_item_request_system_message", created_event))
+		var created_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", created_event)
+		_check(not created_message.begins_with("ui.exchange.") and created_message.contains("20") and created_message.contains("5,000"), locale + ": request creation has a translated transaction summary")
+		_check(created_mutations.size() == 1 and str(created_mutations[0]).contains("100,000"), locale + ": request creation reports the separate wallet debit")
+		var cancelled_event := {
+			"type": "system.exchange_item_request_cancelled",
+			"itemId": "rare-candy",
+			"itemName": "Rare Candy",
+			"requestedQuantity": 20,
+			"fulfilledQuantity": 5,
+			"remainingQuantity": 15,
+			"refundAmount": 75000,
+		}
+		var cancelled_message := str(summary_overlay.call("_exchange_item_request_system_message", cancelled_event))
+		var cancelled_mutations: Array = summary_overlay.call("_exchange_item_request_mutation_messages", cancelled_event)
+		_check(not cancelled_message.begins_with("ui.exchange.") and cancelled_message.contains("15"), locale + ": cancellation has a translated transaction summary")
+		_check(cancelled_mutations.size() == 1 and str(cancelled_mutations[0]).contains("75,000"), locale + ": cancellation reports the separate wallet refund")
 		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "mine-items", "history"]:
 			summary_overlay.call("_hide_aether_exchange_pokemon_hover")
 			await process_frame
@@ -71,7 +125,7 @@ func _run() -> void:
 			popup.sellable_pokemon = [pokemon]
 			popup.browse_listings = listings
 			popup.browse_wishes = [wish]
-			popup.wishlist_catalog = [item]
+			popup.wishlist_catalog = wishlist_items
 			popup.my_wishes = [wish.merged({"isMine": true}, true)]
 			var own_listing := listing.merged({"status": "sold" if screen == "history" else "active"}, true)
 			if screen == "mine-items":
@@ -130,6 +184,17 @@ func _run() -> void:
 				var hover_ivs := exchange_hover_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
 				_check(not hover_stats.visible and hover_ivs.visible, description + ": hover replaces calculated stats with IVs")
 				_check_bounds(exchange_hover_card, popup, description)
+			if screen == "request":
+				_check(popup.list_container.columns == 3, description + ": item grid makes room for request details")
+			if screen == "wanted":
+				_check(popup.list_container.columns == 5, description + ": wanted items use the five-column market grid")
+				var wanted_card := popup.list_container.get_child(0) as Button
+				var request_progress := wanted_card.find_child("BrowseWishProgress", true, false) as ProgressBar
+				_check(request_progress != null, description + ": wanted item card shows delivery progress")
+				if request_progress != null:
+					_check(request_progress.value == 5 and request_progress.max_value == 20, description + ": wanted item card shows the correct delivery progress")
+					_check(wanted_card.get_global_rect().grow(1).encloses(request_progress.get_global_rect()), description + ": wanted item progress fits its card")
+					_check_bounds(request_progress, popup, description)
 			if screen in ["items", "tm", "outfit", "mount"]:
 				var item_icon := popup.list_container.get_child(0).find_child("BrowseCardIcon", true, false) as TextureRect
 				_check(item_icon != null, description + ": item offer has an icon")
@@ -158,6 +223,18 @@ func _run() -> void:
 					if requests_section != null:
 						_check_bounds(requests_section, popup, description)
 						_check(requests_section.size.x < popup.list_scroll.size.x * 0.6, description + ": request section does not consume the full width")
+						var request_buttons := requests_section.find_children("*", "Button", true, false)
+						var request_card := request_buttons[0] as Button if not request_buttons.is_empty() else null
+						var request_progress := requests_section.find_child("PortfolioWishProgress", true, false) as ProgressBar
+						var request_price := requests_section.find_child("PortfolioWishPrice", true, false) as Label
+						var request_name := requests_section.find_child("PortfolioWishName", true, false) as Label
+						var request_state := requests_section.find_child("PortfolioWishState", true, false) as Label
+						_check(request_card != null and request_card.text.is_empty(), description + ": request card uses structured content instead of a truncated subtitle")
+						_check(request_progress != null and request_progress.value == 5 and request_progress.max_value == 20, description + ": request card shows fulfillment progress")
+						_check(request_price != null and request_price.text.contains("100"), description + ": request card shows its unit price separately")
+						if request_card != null:
+							for request_control: Control in [request_name, request_price, request_progress, request_state]:
+								_check(request_control != null and request_card.get_global_rect().grow(1).encloses(request_control.get_global_rect()), description + ": structured request content fits its card")
 			var active_content: Control = popup.detail_stack if popup.detail_panel.visible else popup.action_content
 			for button: Button in active_content.find_children("*", "Button", true, false):
 				if button.is_visible_in_tree():

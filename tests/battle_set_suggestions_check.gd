@@ -19,8 +19,10 @@ func _run() -> void:
 		"moves": ["Earthquake", "Stealth Rock", "Toxic", "Dragon Tail"]}
 	var row := {"groupId": "tank", "variantId": "tank-1", "name": "TankChomp", "formatName": "National Dex",
 		"confidence": "strong", "build": build, "referenceBuild": build, "matchingVariantCount": 2, "alternativeBuilds": [],
-		"evidence": [{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range"}]}
-	var response := {"success": true, "schemaVersion": 1, "routeRevision": "set-inference-1", "projectionRevision": revision,
+		"evidence": [{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
+			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0,
+			"conditions": {"defender": {"name": "Garchomp", "boosts": {"def": 1}}}}]}
+	var response := {"success": true, "schemaVersion": 1, "routeRevision": "set-inference-2", "projectionRevision": revision,
 		"opponentRef": ref, "species": "Garchomp", "catalogRevision": "fixture", "suggestions": [row],
 		"variantCount": 2, "observationCount": 2, "complete": true, "state": "matches"}
 	_check(bool(Suggestions.normalize_response(JSON.parse_string(JSON.stringify(response)), revision, ref).get("success")), "Wire numbers normalize")
@@ -30,13 +32,19 @@ func _run() -> void:
 	var leaked := response.duplicate(true)
 	leaked["privateTeam"] = []
 	_check(not bool(Suggestions.normalize_response(leaked, revision, ref).get("success")), "Private fields are rejected")
+	var invalid_conditions := response.duplicate(true)
+	invalid_conditions["suggestions"][0]["evidence"][0]["conditions"]["defender"]["boosts"]["def"] = 7
+	_check(not bool(Suggestions.normalize_response(invalid_conditions, revision, ref).get("success")), "Damage clue conditions reject impossible stat stages")
 	var invalid := build.duplicate(true)
 	invalid["evs"] = {"hp": 252, "def": 252, "spe": 252}
 	_check(not Suggestions.valid_build(invalid), "Illegal EV totals are rejected")
-	var changed_turn := response.duplicate(true)
-	changed_turn["suggestions"][0]["evidence"][0]["turn"] = 2
-	_check(Suggestions.signature(response) == Suggestions.signature(changed_turn), "Repeated equivalent evidence does not reannounce an ignored suggestion")
+	var new_turn_clue := response.duplicate(true)
+	new_turn_clue["suggestions"][0]["evidence"].append({"kind": "damage", "state": "match", "turn": 2, "value": "observed_range",
+		"direction": "opponent-to-own", "move": "Earthquake", "observedMin": 35.0, "observedMax": 42.0})
+	_check(Suggestions.signature(response) != Suggestions.signature(new_turn_clue), "A new clue from a later turn reannounces an ignored suggestion")
 	var panel := CalcPanel.new()
+	_check(panel._format_observed_damage_range(78.15, 78.24) == "≈78.2%", "A narrow interval that rounds to one visible value is shown as an approximation")
+	_check(panel._format_observed_damage_range(78.2, 78.2) == "78.2%", "An exact observed percentage is not rendered as a duplicate range")
 	var content := VBoxContainer.new()
 	content.name = "VBoxContainer"
 	panel.add_child(content)
@@ -52,10 +60,16 @@ func _run() -> void:
 	panel.edited_assumption_fields = {"nature": true, "evs": true}
 	var before := panel.get_defender_assumption_state()
 	var popup_response := response.duplicate(true)
+	# Catalog grouping can omit the effective move list while retaining the
+	# representative variant. The detail card should still show those moves.
+	popup_response["suggestions"][0]["build"]["moves"] = []
 	popup_response["suggestions"][0]["evidence"] = [
-		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range"},
+		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
+			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0,
+			"conditions": {"defender": {"name": "Garchomp", "boosts": {"def": 1}}}},
 		{"kind": "move", "state": "variant", "turn": 1, "value": "Fire Blast"},
-		{"kind": "speed", "state": "unknown", "turn": 1, "value": "ambiguous"},
+		{"kind": "speed", "state": "unknown", "turn": 1, "value": "ambiguous",
+			"opponentFirst": true, "viewerMove": "Surf", "opponentMove": "Earthquake"},
 		{"kind": "item", "state": "conflict", "turn": 1, "value": "Leftovers"},
 	]
 	for index in range(2):
@@ -69,41 +83,110 @@ func _run() -> void:
 	var host := VBoxContainer.new()
 	content.add_child(host)
 	panel._add_set_suggestions(host)
-	_check(host.find_child("SetSuggestionsToggle", true, false) != null, "Inspector keeps the compact suggestion opener")
+	var evidence_backed_toggle := host.find_child("SetSuggestionsToggle", true, false) as Button
+	_check(evidence_backed_toggle != null, "Inspector keeps the compact suggestion opener")
+	_check(evidence_backed_toggle.text == "Possible opponent sets (3)" and evidence_backed_toggle.get_theme_color("font_color") == Color("#8ccbe8"), "Evidence-backed suggestions announce their available match count")
+	_check(evidence_backed_toggle.has_meta("set_suggestion_attention_pulse") and (evidence_backed_toggle.get_theme_stylebox("normal") as StyleBoxFlat).shadow_size == 4, "Evidence-backed suggestions receive a soft repeating attention glow")
 	_check(host.find_child("ApplySetSuggestion", true, false) == null, "Suggestion cards do not expand the inspector layout")
+	var catalog_only_response := popup_response.duplicate(true)
+	catalog_only_response["observationCount"] = 0
+	for suggestion: Dictionary in catalog_only_response["suggestions"]:
+		suggestion["confidence"] = "weak"
+	panel.show_set_suggestions(ref, revision, catalog_only_response)
+	var catalog_only_host := VBoxContainer.new()
+	content.add_child(catalog_only_host)
+	panel._add_set_suggestions(catalog_only_host)
+	var catalog_only_toggle := catalog_only_host.find_child("SetSuggestionsToggle", true, false) as Button
+	_check(catalog_only_toggle.text == "Possible opponent sets" and catalog_only_toggle.get_theme_color("font_color") == Color("#f2f0ea"), "Catalog-only possibilities remain available without a misleading new-match badge")
+	_check(not catalog_only_toggle.has_meta("set_suggestion_attention_pulse"), "Catalog-only possibilities do not pulse for attention")
+	var closest_response := popup_response.duplicate(true)
+	closest_response["state"] = "closest"
+	for suggestion: Dictionary in closest_response["suggestions"]:
+		suggestion["confidence"] = "weak"
+		suggestion["evidence"] = [{"kind": "damage", "state": "conflict", "turn": 2, "value": "observed_range",
+			"direction": "opponent-to-own", "move": "Earthquake", "observedMin": 35.0, "observedMax": 42.0}]
+	panel.show_set_suggestions(ref, revision, closest_response)
+	var closest_host := VBoxContainer.new()
+	content.add_child(closest_host)
+	panel._add_set_suggestions(closest_host)
+	var closest_toggle := closest_host.find_child("SetSuggestionsToggle", true, false) as Button
+	_check(closest_toggle.text == "Closest opponent sets", "Conflicting later clues retain clearly labelled closest sets")
+	_check(not closest_toggle.has_meta("set_suggestion_attention_pulse"), "Closest fallback sets never imitate a confirmed match")
+	panel._open_set_suggestions_popup()
+	await process_frame
+	var closest_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
+	_check(closest_choices != null and closest_choices.get_child_count() == 4, "Closest fallback keeps all three set cards available")
+	_check((panel.set_suggestions_popup.find_child("SetSuggestionsIntro", true, false) as PanelContainer).get_child(0).text.contains("No exact catalog set"), "Closest fallback explains why no exact match remains")
+	panel._close_set_suggestions_popup(false)
+	panel.show_set_suggestions(ref, revision, popup_response)
 	panel._open_set_suggestions_popup()
 	await process_frame
 	_check(is_instance_valid(panel.set_suggestions_popup), "Suggestion opener creates its own popup layer")
 	_check(panel.set_suggestions_popup.exclusive, "Suggestion popup blocks input behind its modal layer")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionDetailsScroll", true, false) != null, "Suggestion details scroll independently from the fixed set list")
 	_check(panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) != null, "Suggestion popup has an explicit apply button")
+	_check(panel.set_suggestions_popup.find_child("DismissSetSuggestions", true, false) == null, "Suggestion popup has no redundant blank footer action")
 	var suggestion_list := panel.set_suggestions_popup.find_child("SetSuggestionsList", true, false) as VBoxContainer
 	var suggestion_workspace := panel.set_suggestions_popup.find_child("SetSuggestionsWorkspace", true, false) as HBoxContainer
 	var suggestion_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
-	_check(suggestion_choices != null and suggestion_choices.get_child_count() == 3, "All three suggestions remain visible as fixed compact choices")
+	_check(suggestion_choices != null and suggestion_choices.get_child_count() == 4 and suggestion_choices.get_child(0).name == "SetSuggestionChooseLabel", "All three suggestions remain visible beneath a clear choice heading")
 	_check(suggestion_workspace != null, "Wide suggestion popup places its choice list beside the detail pane")
 	_check(suggestion_list != null and suggestion_list.get_child_count() <= 5, "Suggestion popup keeps a compact master-detail structure")
 	_check(panel.set_suggestions_popup.size.x <= 760 and panel.set_suggestions_popup.size.y <= 520, "Suggestion popup uses the available matchup workspace (%s)" % panel.set_suggestions_popup.size)
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionsIntro", true, false) != null, "Suggestion popup briefly explains what the player should do")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionSelectedLabel", true, false) != null, "Suggestion details identify the selected set")
+	var apply_button := panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) as Button
+	_check(apply_button != null and apply_button.text == "Calculate with this set" and panel.set_suggestions_popup.find_child("ApplySetSuggestionHint", true, false) != null, "The primary action explains its calculator effect")
+	_check(apply_button != null and apply_button.get_parent().name == "SetSuggestionPrimaryAction" and apply_button.get_parent().get_parent().name == "SetSuggestionDetailHeader", "The calculate action occupies the free top-right area of the detail card")
 	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
-	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
+	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as PanelContainer
+	var suggestion_item := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueItem", true, false) as Label
+	var suggestion_moves := panel.set_suggestions_popup.find_child("SetSuggestionBuildValueMoves", true, false) as Label
+	var suggestion_moves_label := panel.set_suggestions_popup.find_child("SetSuggestionBuildLabelMoves", true, false) as Label
+	var suggestion_nature_label := panel.set_suggestions_popup.find_child("SetSuggestionBuildLabelNature", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
-	_check(suggestion_build != null and suggestion_build.text.contains("Rocky Helmet") and suggestion_build.text.contains("Earthquake") and suggestion_build.custom_minimum_size.y > 0, "Suggested build details remain visibly allocated")
+	_check(suggestion_build != null and suggestion_item != null and suggestion_item.text == "Rocky Helmet" and suggestion_moves != null and suggestion_moves.text.contains("Earthquake") and suggestion_moves.custom_minimum_size.y >= 34.0, "Suggested build details and fallback catalog moves remain visibly allocated")
+	_check(suggestion_moves_label != null and suggestion_moves_label.get_parent() == suggestion_moves.get_parent() and suggestion_moves_label.custom_minimum_size == Vector2(84, 34) and suggestion_moves_label.position.y == suggestion_moves.position.y, "Set labels and values share a fixed column and top alignment, including wrapped moves")
+	_check(suggestion_nature_label != null and suggestion_nature_label.get_theme_color("font_color") == Color("#e7b65d") and suggestion_item.get_theme_color("font_color") == Color("#f2f0ea"), "Set field labels use distinct accents while their values retain high contrast")
+	var apply_style := apply_button.get_theme_stylebox("normal") as StyleBoxFlat if apply_button != null else null
+	_check(apply_style != null and apply_button.custom_minimum_size.y == 40.0 and apply_style.bg_color == Color("#123d52") and apply_style.border_color.to_html(false) == "8ccbe8" and apply_style.border_color.a >= 0.94, "Calculate with this set is styled as the cyan primary action")
 	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HFlowContainer
 	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence summary shows every relevant non-zero category")
 	var evidence_labels: Array[String] = []
+	var unresolved_chip: Label
 	if evidence_summary != null:
 		for child: Node in evidence_summary.get_children():
 			evidence_labels.append(str(child.text))
 			_check((child as Label).custom_minimum_size.x > 50.0, "Evidence label reserves enough width to render its text")
-	_check(evidence_labels.has("✓ Matches: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
+			if str(child.get_meta("evidence_state", "")) == "unknown":
+				unresolved_chip = child as Label
+	_check(evidence_labels.has("✓ Clues matched: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
+	_check(unresolved_chip != null and unresolved_chip.text == "? More info needed: 1", "Unresolved evidence explains that more information is needed")
+	var unresolved_style := unresolved_chip.get_theme_stylebox("normal") as StyleBoxFlat if unresolved_chip != null else null
+	_check(unresolved_style != null and unresolved_chip.get_theme_color("font_color") == Color("#8ccbe8") and unresolved_style.border_color.a > 0.9 and unresolved_style.bg_color.a >= 0.14, "Unresolved evidence uses a prominent informational chip instead of muted disabled styling")
 	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
 	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
-	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "The selected suggestion shows evidence without expanding its list row")
-	var choices := panel.set_suggestions_popup.find_children("SetSuggestionChoice", "Button", true, false)
-	if choices.size() > 1:
-		(choices[1] as Button).pressed.emit()
-		await process_frame
-	_check(panel.selected_set_suggestion_key == "tank-0:tank-extra-0", "Selecting a compact row changes only the detail target")
+	var evidence_detail := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) as Label
+	var evidence_row := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceRow", true, false) as PanelContainer
+	_check(evidence_detail != null and evidence_detail.text.contains("Damage taken") and evidence_detail.text.contains("Surf"), "Damage clues state who dealt or took damage and name the move")
+	_check(evidence_detail != null and evidence_detail.get_theme_font_size("font_size") == 12 and evidence_row != null and evidence_row.custom_minimum_size.y == 30.0, "Battle clues use larger text and roomier rows")
+	_check(evidence_row != null and evidence_row.tooltip_text.contains("19.0–21.0%") and evidence_row.tooltip_text.contains("Garchomp: Defense +1") and evidence_row.tooltip_text.contains("calculated result"), "Hovering a clue explains the observed range, active stat stages and why the set fits")
+	var clue_tooltip_style := evidence_row.theme.get_stylebox("panel", "TooltipPanel") as StyleBoxFlat if evidence_row != null and evidence_row.theme != null else null
+	_check(clue_tooltip_style != null and clue_tooltip_style.bg_color == Color("#07111cf8") and clue_tooltip_style.shadow_size == 9 and clue_tooltip_style.border_width_bottom == 2, "Clue hover cards use the styled Calcdex surface instead of Godot's default tooltip")
+	_check(evidence_row != null and evidence_row.theme.get_color("font_color", "TooltipLabel") == Color("#f2f0ea"), "Clue hover text uses the readable Calcdex palette")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionBuildHeading", true, false) != null and panel.set_suggestions_popup.find_child("SetSuggestionEvidenceHeading", true, false) != null, "Set details and battle clues have separate scan-friendly sections")
+	var cards: Array[Node] = []
+	for index in range(1, suggestion_choices.get_child_count()):
+		cards.append(suggestion_choices.get_child(index))
+	var whole_card_interactive := cards.size() == 3 and (cards[1] as PanelContainer).mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND and not (cards[1] as PanelContainer).gui_input.get_connections().is_empty()
+	if cards.size() > 1:
+		var card_click := InputEventMouseButton.new()
+		card_click.button_index = MOUSE_BUTTON_LEFT
+		card_click.pressed = true
+		(cards[1] as PanelContainer).gui_input.emit(card_click)
+	_check(whole_card_interactive, "Every suggestion card advertises and handles its full clickable surface")
+	_check(panel.selected_set_suggestion_key == "tank-0:tank-extra-0", "Clicking anywhere on a compact card changes the detail target")
+	await process_frame
 	var selected_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
 	_check(selected_name != null and selected_name.text == "TankChomp Alternative 1", "The stable detail pane follows the selected suggestion")
 	panel._apply_set_suggestion(build)

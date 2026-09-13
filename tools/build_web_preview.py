@@ -23,6 +23,10 @@ WEB_AUDIO_SOURCE_DIRS = (
     ROOT / "assets/battles/animations",
 )
 WEB_AUDIO_SUFFIXES = {".ogg", ".wav", ".mp3"}
+WEB_SHELL_ASSETS = (
+    ROOT / "infrastructure/web/pokeaether-logo.webp",
+    ROOT / "infrastructure/web/pokeaether-world-preview.webp",
+)
 ANSI_ESCAPE = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
 EXPORT_PROGRESS = re.compile(r'^\[\s*(\d+)%\s*\]\s*([A-Za-z0-9_-]+)')
 
@@ -81,6 +85,18 @@ def copy_browser_audio(output: Path) -> list[dict[str, object]]:
     return copied
 
 
+def copy_web_shell_assets(output: Path) -> list[Path]:
+    """Copy the small assets referenced directly by the custom HTML shell."""
+    copied = []
+    for source in WEB_SHELL_ASSETS:
+        if not source.is_file() or source.stat().st_size == 0:
+            raise RuntimeError(f"Web shell asset is missing: {source.relative_to(ROOT)}")
+        target = output / source.name
+        shutil.copy2(source, target)
+        copied.append(target)
+    return copied
+
+
 def pack_contains(path: Path, marker: bytes) -> bool:
     overlap = b''
     with path.open('rb') as stream:
@@ -125,8 +141,9 @@ def main():
         tail = console_log.read_text(errors='replace').splitlines()[-80:]
         raise RuntimeError('Godot web export failed:\n' + '\n'.join(tail))
     browser_audio_files = copy_browser_audio(output)
+    shell_assets = copy_web_shell_assets(output)
     files = []
-    for name in ('index.html', 'index.js', 'index.wasm', 'index.pck'):
+    for name in ('index.html', 'index.js', 'index.wasm', 'index.pck', *(path.name for path in shell_assets)):
         path = output / name
         if not path.is_file() or path.stat().st_size == 0:
             raise RuntimeError(f'Export is incomplete: missing {name}')
@@ -136,6 +153,7 @@ def main():
     pck_path = output / 'index.pck'
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
+        b'assets/fonts/DejaVuSans.ttf',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
         b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
         b'lugia_theme_lofi.ogg-2fdce23a90553d794177dfc95f259e8f.oggvorbisstr',
@@ -147,6 +165,7 @@ def main():
     )
     forbidden_markers = (
         b'node_modules/playwright-core/',
+        b'assets/sprites/pokemon/front/pikachu/sheet.png.import',
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',
         b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn.remap',
     )

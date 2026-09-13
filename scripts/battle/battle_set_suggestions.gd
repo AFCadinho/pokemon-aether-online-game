@@ -13,7 +13,7 @@ static func normalize_response(response: Dictionary, revision: Dictionary, oppon
 	for key: String in fields:
 		if not response.has(key):
 			return {"success": false}
-	if response.get("routeRevision") != "set-inference-1" or response.get("schemaVersion") != 1 or response.get("projectionRevision") != revision or response.get("opponentRef") != opponent_ref:
+	if response.get("routeRevision") != "set-inference-2" or response.get("schemaVersion") != 1 or response.get("projectionRevision") != revision or response.get("opponentRef") != opponent_ref:
 		return {"success": false}
 	if not response.get("suggestions") is Array or response["suggestions"].size() > 3:
 		return {"success": false}
@@ -41,12 +41,60 @@ static func normalize_response(response: Dictionary, revision: Dictionary, oppon
 		for evidence: Variant in row["evidence"]:
 			if not evidence is Dictionary or evidence.get("kind") not in ["item", "ability", "move", "damage", "speed"] or evidence.get("state") not in ["match", "variant", "unknown", "conflict"]:
 				return {"success": false}
+			var allowed_fields := ["kind", "state", "turn", "value"]
+			if evidence.get("kind") == "damage":
+				allowed_fields.append_array(["direction", "move", "observedMin", "observedMax"])
+				if evidence.has("conditions"):
+					allowed_fields.append("conditions")
+					if not _valid_damage_conditions(evidence.get("conditions")):
+						return {"success": false}
+				if evidence.get("direction") not in ["own-to-opponent", "opponent-to-own"] or not evidence.get("move") is String or evidence["move"].is_empty() or evidence["move"].length() > 100:
+					return {"success": false}
+				for bound: String in ["observedMin", "observedMax"]:
+					if typeof(evidence.get(bound)) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(evidence[bound])) or evidence[bound] < 0 or evidence[bound] > 100:
+						return {"success": false}
+				if evidence["observedMin"] > evidence["observedMax"]:
+					return {"success": false}
+			elif evidence.get("kind") == "speed":
+				allowed_fields.append_array(["opponentFirst", "viewerMove", "opponentMove"])
+				if not evidence.get("opponentFirst") is bool:
+					return {"success": false}
+				for move_field: String in ["viewerMove", "opponentMove"]:
+					if not evidence.get(move_field) is String or evidence[move_field].length() > 100:
+						return {"success": false}
 			for key: Variant in evidence:
-				if key not in ["kind", "state", "turn", "value"]:
+				if key not in allowed_fields:
 					return {"success": false}
 			if not evidence.get("value") is String or evidence["value"].length() > 256:
 				return {"success": false}
 	return response.duplicate(true)
+
+
+static func _valid_damage_conditions(value: Variant) -> bool:
+	if not value is Dictionary or value.size() > 2:
+		return false
+	for role: Variant in value:
+		if role not in ["attacker", "defender"]:
+			return false
+		var participant: Variant = value[role]
+		if (
+			not participant is Dictionary or participant.size() != 2
+			or not participant.get("name") is String
+			or participant["name"].is_empty() or participant["name"].length() > 100
+			or not participant.get("boosts") is Dictionary
+			or participant["boosts"].is_empty() or participant["boosts"].size() > 7
+		):
+			return false
+		for stat: Variant in participant["boosts"]:
+			var amount: Variant = participant["boosts"][stat]
+			if (
+				stat not in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]
+				or typeof(amount) not in [TYPE_INT, TYPE_FLOAT]
+				or not is_finite(float(amount)) or float(amount) != floorf(float(amount))
+				or amount < -6 or amount > 6 or amount == 0
+			):
+				return false
+	return true
 
 
 static func valid_build(value: Variant) -> bool:
@@ -80,9 +128,12 @@ static func valid_build(value: Variant) -> bool:
 
 
 static func signature(response: Dictionary) -> String:
-	var material: Array = []
+	var material: Array = [response.get("state", "")]
 	for row: Dictionary in response.get("suggestions", []):
-		material.append([row.get("groupId"), row.get("variantId"), row.get("confidence"), row.get("build")])
+		var evidence: Array = []
+		for clue: Dictionary in row.get("evidence", []):
+			evidence.append(clue)
+		material.append([row.get("groupId"), row.get("variantId"), row.get("confidence"), row.get("build"), evidence])
 	return JSON.stringify(material).sha256_text()
 
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/aether_confirmation_dialog.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/aether_dialog.svg" id="2_icon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_message"]
 bg_color = Color(0.05490196, 0.105882354, 0.16470589, 0.96)
@@ -62,9 +63,12 @@ theme_override_constants/separation = 14
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="AccentIcon" type="Label" parent="Center/Panel/Margin/Content/Header"]
+[node name="AccentIcon" type="TextureRect" parent="Center/Panel/Margin/Content/Header"]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-text = "◆"
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/Content/Header"]
 layout_mode = 2

@@ -3,6 +3,7 @@ extends SceneTree
 const DayNightControllerScript := preload("res://scripts/world/day_night_controller.gd")
 const NightLightScene := preload("res://scenes/world/lighting/night_light.tscn")
 const WorldTimeServiceScript := preload("res://scripts/services/world_time_service.gd")
+const CERULEAN_CITY_SCENE_PATH := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const VIRIDIAN_CITY_SCENE_PATH := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 
 var failed := false
@@ -46,6 +47,7 @@ func _init() -> void:
 	_check_approx(point_light.energy, 0.0, "indoor profile clears light energy")
 
 	_check_viridian_pilot_contract()
+	_check_cerulean_night_light_contract()
 	world_time_service.call("clear_debug_time")
 	world.queue_free()
 	world_time_service.queue_free()
@@ -60,6 +62,12 @@ func _check_viridian_pilot_contract() -> void:
 	var light_count := scene_source.count('instance=ExtResource("21_night_light")')
 	_check_true(light_count >= 3, "Viridian City retains broad nighttime lamp coverage")
 	_check_true(scene_source.count("light_color = Color(1, 0.72, 0.38, 1)") == light_count, "Viridian lamps share the verified warm light treatment")
+
+
+func _check_cerulean_night_light_contract() -> void:
+	var scene_source := FileAccess.get_file_as_string(CERULEAN_CITY_SCENE_PATH)
+	_check_true(scene_source.contains('path="res://scenes/world/lighting/night_light.tscn"'), "Cerulean uses the original point-light scene")
+	_check_true(scene_source.count('instance=ExtResource("8_ex4qq")') == 52, "Cerulean retains all hand-placed nighttime lights")
 
 
 func _check_approx(actual: float, expected: float, label: String) -> void:

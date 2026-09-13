@@ -2,9 +2,8 @@ extends RefCounted
 
 class_name BattleEventRenderer
 
-const DODGE_RESPONSE_DELAY_SECONDS := 0.10
 const FALLBACK_MOVE_ACTION_LEAD_SECONDS := 0.40
-const FALLBACK_DODGE_ACTION_LEAD_SECONDS := 0.70
+const DODGE_ANTICIPATION_SECONDS := 0.32
 
 var battle_log_panel: BattleLogPanel
 var mini_battle_feed: MiniBattleFeed
@@ -152,8 +151,9 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 			"faint_target": faint_target_ident,
 			"stat_target": stat_change_target_ident,
 		})
+	var dodge_command := Callable()
 	if animations_allowed and attack_actor_ident != "" and move_animation_name != "":
-		await _show_trainer_move_commands(
+		dodge_command = await _show_trainer_move_commands(
 			event_data,
 			attack_actor_ident,
 			move_animation_name,
@@ -184,6 +184,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 		if animations_allowed and move_animation_name != "":
 			await animation_router.play_move_animation(move_animation_name, move_animation_actor_ident, move_animation_target_ident, {
 				"result": move_animation_result,
+				"on_dodge_started": dodge_command,
 			})
 			if owned_generation != render_generation:
 				return
@@ -309,10 +310,10 @@ func _show_trainer_move_commands(
 	target_ident: String,
 	animation_result: String,
 	suppress_presentation_waits := false
-) -> void:
+) -> Callable:
 	var owned_generation := render_generation
 	if not show_trainer_command.is_valid():
-		return
+		return Callable()
 	var attack_command_result: Variant = show_trainer_command.call({
 		"kind": "move",
 		"player_id": _get_player_id_from_ident(actor_ident),
@@ -330,12 +331,28 @@ func _show_trainer_move_commands(
 			suppress_presentation_waits
 		)
 		if owned_generation != render_generation:
-			return
+			return Callable()
 	if not attack_command_shown or animation_result != "miss" or target_ident == "":
-		return
+		return Callable()
+	# The router invokes this only when the target actually begins dodging,
+	# after the attacker's motion and any resource loading have completed.
+	return _show_trainer_dodge_command.bind(
+		event_data,
+		target_ident,
+		owned_generation,
+		suppress_presentation_waits
+	)
 
-	await _wait(DODGE_RESPONSE_DELAY_SECONDS, suppress_presentation_waits)
+
+func _show_trainer_dodge_command(
+	event_data: Dictionary,
+	target_ident: String,
+	owned_generation: int,
+	suppress_presentation_waits := false
+) -> void:
 	if owned_generation != render_generation:
+		return
+	if not show_trainer_command.is_valid():
 		return
 	var dodge_command_result: Variant = show_trainer_command.call({
 		"kind": "dodge",
@@ -344,15 +361,8 @@ func _show_trainer_move_commands(
 		"event": event_data,
 	})
 	if _command_was_shown(dodge_command_result):
-		await _wait(
-			_get_command_minimum_read_seconds(
-				dodge_command_result,
-				FALLBACK_DODGE_ACTION_LEAD_SECONDS
-			),
-			suppress_presentation_waits
-		)
-		if owned_generation != render_generation:
-			return
+		# Let the command register just before the Pokemon responds.
+		await _wait(DODGE_ANTICIPATION_SECONDS, suppress_presentation_waits)
 
 
 func _command_was_shown(result: Variant) -> bool:

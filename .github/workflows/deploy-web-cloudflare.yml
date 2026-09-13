@@ -49,6 +49,10 @@ env:
   POKEMON_HOME_ASSET_VERSION: pokemon-home-a74442caa16b
   POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-b7565d0885ae
   MUSIC_ASSET_VERSION: music-3f2a6df18793
+  POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-402b7a6cee88
+  POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-6b78c3968c2f
+  POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-066cf83cdfc7
+  POKEMON_SHINY_BACK_ASSET_VERSION: pokemon-shiny-back-scale1-128-cb0b6ecfc3ef
   POKEMON_GEN5_FRONT_ASSET_VERSION: pokemon-gen5-front-895716cf7862
   POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-2c6f2f001f7f
   POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-a51df15dc1fd
@@ -123,10 +127,14 @@ jobs:
           python3 tools/package_web_release.py \
             --build-id "${WEB_BUILD_ID}" --release-version "${RELEASE_VERSION}" \
             --web-url "${WEB_URL}" --asset-base-url "${ASSET_BASE_URL}" \
-            --sprite-front-version "${POKEMON_GEN5_FRONT_ASSET_VERSION}" \
-            --sprite-back-version "${POKEMON_GEN5_BACK_ASSET_VERSION}" \
-            --sprite-shiny-front-version "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" \
-            --sprite-shiny-back-version "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
+            --sprite-animated-front-version "${POKEMON_FRONT_ASSET_VERSION}" \
+            --sprite-animated-back-version "${POKEMON_BACK_ASSET_VERSION}" \
+            --sprite-animated-shiny-front-version "${POKEMON_SHINY_FRONT_ASSET_VERSION}" \
+            --sprite-animated-shiny-back-version "${POKEMON_SHINY_BACK_ASSET_VERSION}" \
+            --sprite-pixel-front-version "${POKEMON_GEN5_FRONT_ASSET_VERSION}" \
+            --sprite-pixel-back-version "${POKEMON_GEN5_BACK_ASSET_VERSION}" \
+            --sprite-pixel-shiny-front-version "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" \
+            --sprite-pixel-shiny-back-version "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
 
       - name: Install browser and Cloudflare tooling
         run: |
@@ -184,21 +192,27 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
         run: |
           publish_pack() {
-            side="$1"
-            version="$2"
+            style="$1"
+            side="$2"
+            version="$3"
             if curl -fsSI "${ASSET_BASE_URL}/web/assets/${version}/pikachu/animation.json" >/dev/null; then
               echo "Browser sprite catalog already exists: ${version}"
               return
             fi
             curl -fsSL -o "/tmp/${version}.zip" "${SOURCE_ASSET_BASE_URL}/assets/${version}.zip"
-            python3 tools/extract_web_sprite_pack.py "/tmp/${version}.zip" --side "${side}" --output "/tmp/web-sprites/${version}"
+            python3 tools/extract_web_sprite_pack.py "/tmp/${version}.zip" \
+              --style "${style}" --side "${side}" --output "/tmp/web-sprites/${version}"
             rclone copy "/tmp/web-sprites/${version}" "R2:${R2_BUCKET}/web/assets/${version}" \
               --immutable --header-upload "Cache-Control: public, max-age=31536000, immutable"
           }
-          publish_pack front "${POKEMON_GEN5_FRONT_ASSET_VERSION}"
-          publish_pack back "${POKEMON_GEN5_BACK_ASSET_VERSION}"
-          publish_pack shiny_front "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}"
-          publish_pack shiny_back "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
+          publish_pack animated front "${POKEMON_FRONT_ASSET_VERSION}"
+          publish_pack animated back "${POKEMON_BACK_ASSET_VERSION}"
+          publish_pack animated shiny_front "${POKEMON_SHINY_FRONT_ASSET_VERSION}"
+          publish_pack animated shiny_back "${POKEMON_SHINY_BACK_ASSET_VERSION}"
+          publish_pack pixel front "${POKEMON_GEN5_FRONT_ASSET_VERSION}"
+          publish_pack pixel back "${POKEMON_GEN5_BACK_ASSET_VERSION}"
+          publish_pack pixel shiny_front "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}"
+          publish_pack pixel shiny_back "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
 
       - name: Deploy Cloudflare Pages
         env:
@@ -238,8 +252,18 @@ jobs:
           done
           curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
             "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm" | grep -Eiq '^content-type: application/wasm'
-          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
-            "${ASSET_BASE_URL}/web/assets/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json" >/dev/null
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
+            "${WEB_URL}/pokemon-assets/battle/${POKEMON_FRONT_ASSET_VERSION}/pikachu/animation.json" \
+            | python3 -c 'import json,sys; value=json.load(sys.stdin); assert value.get("frames")'
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI \
+            "${WEB_URL}/pokemon-assets/battle/${POKEMON_FRONT_ASSET_VERSION}/pikachu/sheet.png" \
+            | grep -Eiq '^content-type: image/png'
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
+            "${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json" \
+            | python3 -c 'import json,sys; value=json.load(sys.stdin); assert value.get("frames")'
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI \
+            "${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/sheet.png" \
+            | grep -Eiq '^content-type: image/png'
 
       - name: Publish web client manifest
         if: inputs.publish_manifest

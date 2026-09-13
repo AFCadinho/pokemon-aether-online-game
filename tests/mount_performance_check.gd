@@ -34,6 +34,7 @@ func _run() -> void:
 	_check(player.completed <= 2 and player.position.x <= 50.0, "long hitch has bounded recovery")
 	player.free()
 	_check_resources()
+	await _check_mount_frame_sync()
 	print("Mount performance checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -71,6 +72,36 @@ func _check_resources() -> void:
 		Mounts.get_mounted_rider_frames(frames, "cyclizar", {"down": [index, 0]})
 	_check(Mounts._rider_frames_cache.size() <= Mounts.RIDER_FRAMES_CACHE_LIMIT, "appearance churn has bounded cache")
 	_check(first.get_frame_texture(&"default", 0).get_image() != null, "eviction preserves frames held by active riders")
+
+func _check_mount_frame_sync() -> void:
+	var player = load("res://scenes/player.tscn").instantiate()
+	player.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
+	root.add_child(player)
+	var mount := player.get_node("Look/MountSprite") as AnimatedSprite2D
+	var foreground := player.get_node("Look/MountForegroundSprite") as AnimatedSprite2D
+	var frames := SpriteFrames.new()
+	frames.remove_animation(&"default")
+	frames.add_animation(&"walk_left")
+	for frame_index in range(4):
+		var image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+		image.fill(Color.WHITE)
+		frames.add_frame(&"walk_left", ImageTexture.create_from_image(image))
+	mount.sprite_frames = frames
+	mount.animation = &"walk_left"
+	mount.visible = true
+	foreground.sprite_frames = frames
+	foreground.visible = true
+	player.set("active_mount_id", "cyclizar")
+	player.set("last_direction", Vector2.LEFT)
+	player._connect_mount_frame_sync()
+	mount.frame = 2
+	mount.frame_changed.emit()
+	_check(foreground.animation == &"walk_left" and foreground.frame == 2,
+		"mount foreground follows discrete frame changes without render-frame polling")
+	var expected_offset := Mounts.get_rider_frame_offset("cyclizar", "left", 2)
+	_check(player.get_node("Look/Rider").position == Vector2(expected_offset),
+		"mounted rider follows discrete frame changes without render-frame polling")
+	player.free()
 
 func _check(condition: bool, message: String) -> void:
 	if not condition:

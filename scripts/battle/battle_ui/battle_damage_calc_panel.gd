@@ -63,7 +63,13 @@ const CONDITION_GLOBAL_ACCENT := Color("#70b8d8")
 const CONDITION_OWN_ACCENT := Color("#42beeb")
 const CONDITION_OPPONENT_ACCENT := Color("#e7a93d")
 const CONFIRMED_ACCENT := STAGE_POSITIVE
+const UNRESOLVED_ACCENT := Color("#8ccbe8")
 const MANUAL_ACCENT := Color("#c9a66b")
+const SET_ITEM_ACCENT := Color("#66d6a3")
+const SET_ABILITY_ACCENT := Color("#79ccec")
+const SET_NATURE_ACCENT := Color("#e7b65d")
+const SET_EVS_ACCENT := Color("#b9a0ea")
+const SET_MOVES_ACCENT := Color("#8ccbe8")
 const ITEM_LABEL_ACCENT := LABEL_NEUTRAL
 const ABILITY_LABEL_ACCENT := LABEL_NEUTRAL
 const NATURE_LABEL_ACCENT := LABEL_NEUTRAL
@@ -147,6 +153,7 @@ var loading_attacker_name := ""
 var loading_defender_name := ""
 var last_response: Dictionary = {}
 var last_error := ""
+var last_notice := ""
 var defender_assumptions: Dictionary = {}
 var edited_assumption_fields: Dictionary = {}
 var knowledge_snapshot: Dictionary = {}
@@ -184,6 +191,7 @@ var is_syncing_assumption_controls := false
 var localization_manager: Node
 var selected_viewer_ref := ""
 var selected_opponent_ref := ""
+var manual_matchup_selection_required := false
 var field_scenario: Dictionary = {}
 var viewer_boost_scenarios: Dictionary = {}
 var viewer_ability_scenarios: Dictionary = {}
@@ -270,6 +278,7 @@ func show_idle() -> void:
 	loading_defender_name = ""
 	last_response = {}
 	last_error = ""
+	last_notice = ""
 	active_subtab = SUBTAB_YOUR_DAMAGE
 	active_inspector_tab = INSPECTOR_SET
 	selected_move_index = 0
@@ -285,8 +294,32 @@ func show_loading(attacker_name: String = "", defender_name: String = "") -> voi
 	loading_attacker_name = attacker_name
 	loading_defender_name = defender_name
 	last_error = ""
+	last_notice = ""
 	if _is_catalog_search_active():
 		return
+	_render_current_state()
+
+
+func show_ready() -> void:
+	is_loading = false
+	loading_attacker_name = ""
+	loading_defender_name = ""
+	last_response = {}
+	last_error = ""
+	last_notice = ""
+	pending_move_index = -1
+	_render_current_state()
+
+
+func show_notice(message: String) -> void:
+	close_assumption_popover()
+	is_loading = false
+	loading_attacker_name = ""
+	loading_defender_name = ""
+	last_response = {}
+	last_error = ""
+	last_notice = message.strip_edges()
+	pending_move_index = -1
 	_render_current_state()
 
 
@@ -297,6 +330,7 @@ func show_error(message: String) -> void:
 	loading_defender_name = ""
 	last_response = {}
 	last_error = _fallback_text(message, _t("battle.calc.error.failed"))
+	last_notice = ""
 	pending_move_index = -1
 	_render_current_state()
 
@@ -306,6 +340,7 @@ func show_response(response: Dictionary) -> void:
 	loading_attacker_name = ""
 	loading_defender_name = ""
 	last_error = ""
+	last_notice = ""
 	pending_move_index = -1
 
 	if not bool(response.get("success", false)):
@@ -346,12 +381,29 @@ func set_knowledge_snapshot(snapshot: Dictionary, notify_assumption_changes: boo
 	_prune_species_scenarios()
 	_clear_confirmed_status_scenarios()
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
+		close_assumption_popover()
 		_clear_sample_sets()
+		_clear_opponent_selection_assumptions()
 	_request_sample_sets_if_needed()
 	_refresh_current_scenario(notify_assumption_changes)
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
+		_render_current_state()
+
+
+func set_manual_matchup_selection_required(required: bool) -> void:
+	if manual_matchup_selection_required == required:
+		return
+	manual_matchup_selection_required = required
+	if required:
+		selected_viewer_ref = ""
+		selected_opponent_ref = ""
+		last_response = {}
+	elif not knowledge_snapshot.is_empty():
+		selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
+		selected_opponent_ref = _resolve_selected_ref("opponent", selected_opponent_ref)
+	if is_inside_tree() and not _is_catalog_search_active():
 		_render_current_state()
 
 
@@ -364,6 +416,10 @@ func get_defender_assumption_state() -> Dictionary:
 		"assumptions": defender_assumptions.duplicate(true),
 		"editedFields": edited_assumption_fields.duplicate(true),
 	}
+
+
+func get_selected_opponent_species() -> String:
+	return _get_selected_opponent_species()
 
 
 func close_assumption_popover() -> void:
@@ -409,32 +465,72 @@ func _render_current_state() -> void:
 	_clear_content()
 	render_target = content
 	_add_subtabs()
+	if last_notice != "":
+		_add_status(last_notice, TEXT_SECONDARY)
+		return
 
 	if not last_response.is_empty():
 		_render_your_damage_response(last_response)
 		return
 
 	if is_loading:
-		_add_profile_summary(
-			_fallback_text(loading_attacker_name, _t("battle.calc.your_pokemon")),
-			_fallback_text(loading_defender_name, _t("battle.calc.opponent")),
-			_t("battle.calc.hp_unknown"),
-			_t("battle.calc.level_unknown")
-		)
+		if knowledge_snapshot.is_empty():
+			_add_profile_summary(
+				_fallback_text(loading_attacker_name, _t("battle.calc.your_pokemon")),
+				_fallback_text(loading_defender_name, _t("battle.calc.opponent")),
+				_t("battle.calc.hp_unknown"),
+				_t("battle.calc.level_unknown")
+			)
+		else:
+			_add_snapshot_profile_summary()
 		_add_status(_t("battle.calc.calculating"), TEXT_SECONDARY)
 		return
 
 	if last_error != "":
-		_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		if knowledge_snapshot.is_empty():
+			_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		else:
+			_add_snapshot_profile_summary()
 		_add_status(last_error, TEXT_ERROR)
 		return
 
 	if last_response.is_empty():
-		_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
-		_add_status(_t("battle.calc.open_to_load"), TEXT_SECONDARY)
+		if knowledge_snapshot.is_empty():
+			_add_profile_summary(_t("battle.calc.your_pokemon"), _t("battle.calc.opponent"), _t("battle.calc.hp_unknown"), _t("battle.calc.level_unknown"))
+		else:
+			_add_snapshot_profile_summary()
+		_add_status(
+			_t("battle.calc.preview_choose_matchup")
+			if manual_matchup_selection_required and (selected_viewer_ref == "" or selected_opponent_ref == "")
+			else _t("battle.calc.open_to_load"),
+			TEXT_SECONDARY
+		)
 		return
 
 	_render_your_damage_response(last_response)
+
+
+func _add_snapshot_profile_summary() -> void:
+	var viewer := _get_snapshot_pokemon_by_ref(selected_viewer_ref)
+	var opponent := _get_snapshot_pokemon_by_ref(selected_opponent_ref)
+	var viewer_name := _snapshot_pokemon_name(viewer) if not viewer.is_empty() else _t("battle.calc.your_pokemon")
+	var opponent_name := _snapshot_pokemon_name(opponent) if not opponent.is_empty() else _t("battle.calc.opponent")
+	_add_profile_summary(
+		viewer_name,
+		opponent_name,
+		_get_hp_percent_label(opponent),
+		_get_level_label(opponent),
+		"",
+		_get_hp_percent_label(viewer),
+		_get_level_label(viewer),
+		viewer_name,
+		opponent_name,
+		_get_defender_hp_percent(viewer),
+		_get_defender_hp_percent(opponent),
+		"",
+		_get_effective_pokemon_status("own"),
+		_get_effective_pokemon_status("opponent")
+	)
 
 
 func _is_catalog_search_active() -> bool:
@@ -802,6 +898,15 @@ func _clear_sample_sets() -> void:
 	selected_sample_set_id = ""
 
 
+func _clear_opponent_selection_assumptions() -> void:
+	defender_assumptions.clear()
+	edited_assumption_fields.clear()
+	set_suggestion_undo.clear()
+	current_default_ability = ""
+	current_default_ability_species = ""
+	current_default_ability_loading = false
+
+
 func _request_sample_sets_if_needed() -> void:
 	_request_set_suggestions_if_needed()
 	var species := _get_selected_opponent_species()
@@ -860,12 +965,16 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 	if knowledge_snapshot.is_empty() or not species_scenarios.is_empty():
 		return
 	var rows := _as_array(set_suggestions.get("suggestions", []))
-	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t("battle.calc.guess.title"), is_instance_valid(set_suggestions_popup))
+	var title_key := "battle.calc.guess.closest_title" if set_suggestions.get("state") == "closest" else "battle.calc.guess.title"
+	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t(title_key), is_instance_valid(set_suggestions_popup))
 	button.name = "SetSuggestionsToggle"
 	var signature := SET_SUGGESTIONS.signature(set_suggestions)
-	if not rows.is_empty() and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
+	var evidence_backed_count := rows.filter(func(row: Dictionary) -> bool:
+		return str(row.get("confidence", "weak")) in ["possible", "strong"]
+	).size()
+	if evidence_backed_count > 0 and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
 		button.add_theme_color_override("font_color", TEXT_ACCENT)
-		button.text += " (%s)" % rows.size()
+		button.text += " (%s)" % evidence_backed_count
 	button.pressed.connect(func() -> void:
 		if is_instance_valid(set_suggestions_popup):
 			_close_set_suggestions_popup()
@@ -873,11 +982,35 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 			_open_set_suggestions_popup()
 	)
 	parent.add_child(button)
+	if evidence_backed_count > 0 and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
+		_start_set_suggestion_attention_pulse(button)
 	if not set_suggestion_undo.is_empty():
 		var undo := _make_toggle_button(_t("battle.calc.guess.undo"), false)
 		undo.name = "UndoSetSuggestion"
 		undo.pressed.connect(_undo_set_suggestion)
 		parent.add_child(undo)
+
+
+func _start_set_suggestion_attention_pulse(button: Button) -> void:
+	var resting_background := Color(TEXT_ACCENT, 0.06)
+	var resting_border := Color(TEXT_ACCENT, 0.32)
+	var resting_glow := Color(TEXT_ACCENT, 0.12)
+	var lit_background := Color(TEXT_ACCENT, 0.16)
+	var lit_border := Color(TEXT_ACCENT, 0.95)
+	var lit_glow := Color(TEXT_ACCENT, 0.52)
+	var normal_style := _make_dropdown_button_style(resting_background, resting_border)
+	normal_style.shadow_color = resting_glow
+	normal_style.shadow_size = 4
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.set_meta("set_suggestion_attention_pulse", true)
+	var pulse := button.create_tween().set_loops()
+	pulse.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	pulse.tween_property(normal_style, "bg_color", lit_background, 0.9)
+	pulse.parallel().tween_property(normal_style, "border_color", lit_border, 0.9)
+	pulse.parallel().tween_property(normal_style, "shadow_color", lit_glow, 0.9)
+	pulse.tween_property(normal_style, "bg_color", resting_background, 0.9)
+	pulse.parallel().tween_property(normal_style, "border_color", resting_border, 0.9)
+	pulse.parallel().tween_property(normal_style, "shadow_color", resting_glow, 0.9)
 
 
 func _open_set_suggestions_popup() -> void:
@@ -926,7 +1059,8 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
 	column.add_child(header)
-	var title := _make_label(_t("battle.calc.guess.title"), 16, TEXT_PRIMARY)
+	var closest: bool = str(set_suggestions.get("state", "")) == "closest"
+	var title := _make_label(_t("battle.calc.guess.closest_title" if closest else "battle.calc.guess.title"), 16, TEXT_PRIMARY)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
 	var close_button := _make_toggle_button(_t("common.close"), false)
@@ -935,6 +1069,13 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 	close_button.custom_minimum_size = Vector2(76, 32)
 	close_button.pressed.connect(_close_set_suggestions_popup)
 	header.add_child(close_button)
+	var note_panel := PanelContainer.new()
+	note_panel.name = "SetSuggestionsIntro"
+	var note_color := WARNING_ACCENT if closest else TEXT_ACCENT
+	note_panel.add_theme_stylebox_override("panel", _make_stylebox(Color(note_color, 0.06), Color(note_color, 0.38 if closest else 0.28), 8, 9.0, 6.0))
+	column.add_child(note_panel)
+	var note := _make_popup_label(_t("battle.calc.guess.closest_note" if closest else "battle.calc.guess.note"), 12, TEXT_SECONDARY, 2)
+	note_panel.add_child(note)
 
 	var suggestions_column := VBoxContainer.new()
 	suggestions_column.name = "SetSuggestionsList"
@@ -947,7 +1088,6 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 
 func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> void:
 	var rows := _as_array(set_suggestions.get("suggestions", []))
-	var signature := SET_SUGGESTIONS.signature(set_suggestions)
 	if set_suggestions_loading:
 		parent.add_child(_make_label(_t("battle.calc.guess.loading"), 12, TEXT_MUTED))
 		return
@@ -983,15 +1123,30 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 5)
 	list_panel.add_child(list)
+	var choose_label := _make_label(_t("battle.calc.guess.choose").to_upper(), 10, TEXT_MUTED)
+	choose_label.name = "SetSuggestionChooseLabel"
+	list.add_child(choose_label)
 	for row: Dictionary in rows:
 		var suggestion_key := _get_set_suggestion_key(row)
 		var selected := selected_set_suggestion_key == suggestion_key
 		var card := PanelContainer.new()
 		card.name = "SetSuggestionCard"
-		card.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, TEXT_ACCENT if selected else BORDER_NEUTRAL, 8, 6.0, 4.0))
+		card.mouse_filter = Control.MOUSE_FILTER_STOP
+		card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		var card_style := _make_stylebox(SURFACE_RAISED, TEXT_ACCENT if selected else BORDER_NEUTRAL, 8, 6.0, 4.0)
+		var hover_style := _make_stylebox(SURFACE_RAISED.lightened(0.04), TEXT_ACCENT, 8, 6.0, 4.0)
+		if selected:
+			card_style.set_border_width_all(2)
+			hover_style.set_border_width_all(2)
+		card.add_theme_stylebox_override("panel", card_style)
+		card.gui_input.connect(_on_set_suggestion_card_input.bind(suggestion_key))
+		card.mouse_entered.connect(func() -> void: card.add_theme_stylebox_override("panel", hover_style))
+		card.mouse_exited.connect(func() -> void: card.add_theme_stylebox_override("panel", card_style))
 		list.add_child(card)
 		var choice_row := VBoxContainer.new()
-		choice_row.add_theme_constant_override("separation", 5)
+		choice_row.mouse_filter = Control.MOUSE_FILTER_PASS
+		choice_row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		choice_row.add_theme_constant_override("separation", 3)
 		card.add_child(choice_row)
 		var context_parts: Array[String] = []
 		var format_name := str(row.get("formatName", "")).strip_edges()
@@ -1003,14 +1158,22 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 			"battle.calc.guess.variant_one" if variant_count == 1 else "battle.calc.guess.variant_count",
 			{"count": variant_count}
 		))
-		var choice := _make_toggle_button("%s\n%s" % [str(row.get("name", "")), " · ".join(context_parts)], selected)
+		var choice := _make_toggle_button(str(row.get("name", "")), selected)
 		choice.name = "SetSuggestionChoice"
 		choice.toggle_mode = false
 		choice.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		choice.custom_minimum_size.y = 42
+		choice.custom_minimum_size.y = 30
 		choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		choice.add_theme_stylebox_override("normal", _make_stylebox(Color.TRANSPARENT, Color.TRANSPARENT, 6, 5.0, 1.0))
+		choice.add_theme_stylebox_override("hover", _make_stylebox(Color(TEXT_ACCENT, 0.08), Color.TRANSPARENT, 6, 5.0, 1.0))
+		choice.add_theme_stylebox_override("pressed", _make_stylebox(Color(TEXT_ACCENT, 0.13), Color.TRANSPARENT, 6, 5.0, 1.0))
 		choice.pressed.connect(_select_set_suggestion.bind(suggestion_key))
 		choice_row.add_child(choice)
+		var context := _make_popup_label(" · ".join(context_parts), 11, TEXT_MUTED, 2)
+		context.name = "SetSuggestionContext"
+		context.mouse_filter = Control.MOUSE_FILTER_PASS
+		context.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		choice_row.add_child(context)
 		_add_set_suggestion_evidence_summary(choice_row, row)
 
 	var selected_row: Dictionary = {}
@@ -1020,13 +1183,6 @@ func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> vo
 			break
 	if not selected_row.is_empty():
 		_add_selected_set_suggestion(workspace, selected_row)
-	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
-	ignore.pressed.connect(func() -> void:
-		ignored_set_suggestions[selected_opponent_ref] = signature
-		_close_set_suggestions_popup(false)
-		_render_current_state()
-	)
-	parent.add_child(ignore)
 
 
 func _get_set_suggestion_key(row: Dictionary) -> String:
@@ -1038,6 +1194,11 @@ func _select_set_suggestion(suggestion_key: String) -> void:
 		return
 	selected_set_suggestion_key = suggestion_key
 	_refresh_set_suggestions_popup()
+
+
+func _on_set_suggestion_card_input(event: InputEvent, suggestion_key: String) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		_select_set_suggestion(suggestion_key)
 
 
 func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
@@ -1055,20 +1216,134 @@ func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	detail_panel.add_child(detail_scroll)
 	var detail := VBoxContainer.new()
 	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail.add_theme_constant_override("separation", 5)
+	detail.add_theme_constant_override("separation", 7)
 	detail_scroll.add_child(detail)
+	var build := _set_suggestion_display_build(row)
+	var detail_header := HBoxContainer.new()
+	detail_header.name = "SetSuggestionDetailHeader"
+	detail_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_header.add_theme_constant_override("separation", 12)
+	detail.add_child(detail_header)
+	var title_column := VBoxContainer.new()
+	title_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_column.add_theme_constant_override("separation", 3)
+	detail_header.add_child(title_column)
+	var selected_label := _make_label(_t("battle.calc.guess.selected").to_upper(), 10, TEXT_ACCENT)
+	selected_label.name = "SetSuggestionSelectedLabel"
+	title_column.add_child(selected_label)
 	var title := _make_popup_label(str(row.get("name", "")), 15, TEXT_PRIMARY)
 	title.name = "SetSuggestionName"
-	detail.add_child(title)
-	var build := _as_dictionary(row.get("build", {}))
-	var preview := _make_popup_label(_set_suggestion_build_text(build), 12, TEXT_SECONDARY, 3)
-	preview.name = "SetSuggestionBuild"
-	detail.add_child(preview)
+	title_column.add_child(title)
+	var action_column := VBoxContainer.new()
+	action_column.name = "SetSuggestionPrimaryAction"
+	action_column.custom_minimum_size.x = 205
+	action_column.size_flags_horizontal = Control.SIZE_SHRINK_END
+	action_column.add_theme_constant_override("separation", 3)
+	detail_header.add_child(action_column)
+	var apply := _make_set_suggestion_apply_button(build)
+	action_column.add_child(apply)
+	var action_hint := _make_popup_label(_t("battle.calc.guess.apply_hint"), 9, TEXT_MUTED, 2)
+	action_hint.name = "ApplySetSuggestionHint"
+	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	action_hint.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	action_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	action_column.add_child(action_hint)
+	var build_heading := _make_label(_t("battle.calc.guess.set_details").to_upper(), 10, TEXT_ACCENT)
+	build_heading.name = "SetSuggestionBuildHeading"
+	detail.add_child(build_heading)
+	_add_set_suggestion_build(detail, build)
 	_add_set_suggestion_details(detail, row)
+
+
+func _make_set_suggestion_apply_button(build: Dictionary) -> Button:
 	var apply := _make_toggle_button(_t("battle.calc.guess.apply"), false)
 	apply.name = "ApplySetSuggestion"
+	apply.custom_minimum_size.y = 40
+	apply.tooltip_text = _t("battle.calc.guess.apply_hint")
+	apply.add_theme_font_size_override("font_size", 13)
+	apply.add_theme_color_override("font_color", TEXT_PRIMARY)
+	apply.add_theme_color_override("font_hover_color", Color.WHITE)
+	apply.add_theme_color_override("font_pressed_color", Color.WHITE)
+	apply.add_theme_stylebox_override("normal", _make_dropdown_button_style(Color("#123d52"), Color(TEXT_ACCENT, 0.95), 2))
+	apply.add_theme_stylebox_override("hover", _make_dropdown_button_style(Color("#17607a"), TEXT_ACCENT, 2))
+	apply.add_theme_stylebox_override("pressed", _make_dropdown_button_style(Color("#0f7697"), Color.WHITE, 2))
+	apply.add_theme_stylebox_override("focus", _make_dropdown_button_style(Color("#123d52"), Color.WHITE, 2))
 	apply.pressed.connect(_apply_set_suggestion.bind(build))
-	detail.add_child(apply)
+	return apply
+
+
+func _set_suggestion_display_build(row: Dictionary) -> Dictionary:
+	var build := _as_dictionary(row.get("build", {})).duplicate(true)
+	var moves := _as_array(build.get("moves", []))
+	if moves.is_empty():
+		var reference := _as_dictionary(row.get("referenceBuild", {}))
+		var reference_moves := _as_array(reference.get("moves", []))
+		if not reference_moves.is_empty():
+			build["moves"] = reference_moves.duplicate(true)
+	return build
+
+
+func _add_set_suggestion_build(parent: VBoxContainer, build: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "SetSuggestionBuild"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(SURFACE_CANVAS, 0.52), Color(BORDER_NEUTRAL, 0.88), 7, 9.0, 6.0)
+	)
+	parent.add_child(panel)
+	var rows := VBoxContainer.new()
+	rows.name = "SetSuggestionBuildRows"
+	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rows.add_theme_constant_override("separation", 3)
+	panel.add_child(rows)
+	_add_set_suggestion_build_row(rows, "item", _t("battle.calc.item"), str(build.get("item", "")), SET_ITEM_ACCENT)
+	_add_set_suggestion_build_row(rows, "ability", _t("battle.calc.ability"), str(build.get("ability", "")), SET_ABILITY_ACCENT)
+	_add_set_suggestion_build_row(rows, "nature", _t("battle.calc.nature"), str(build.get("nature", "")), SET_NATURE_ACCENT)
+	_add_set_suggestion_build_row(rows, "evs", _t("battle.calc.evs"), _set_suggestion_ev_text(build), SET_EVS_ACCENT)
+	_add_set_suggestion_build_row(rows, "moves", _t("battle.calc.guess.moves"), ", ".join(build.get("moves", [])), SET_MOVES_ACCENT, true)
+
+
+func _add_set_suggestion_build_row(
+	parent: VBoxContainer,
+	key: String,
+	label_text: String,
+	value_text: String,
+	accent: Color,
+	wrap_value := false
+) -> void:
+	var row := HBoxContainer.new()
+	row.name = "SetSuggestionBuildRow%s" % key.capitalize()
+	row.custom_minimum_size.y = 34 if wrap_value else 22
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 12)
+	parent.add_child(row)
+	var label := _make_label(label_text.to_upper(), 9, accent)
+	label.name = "SetSuggestionBuildLabel%s" % key.capitalize()
+	label.custom_minimum_size = Vector2(84, row.custom_minimum_size.y)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	row.add_child(label)
+	var value := _make_label(value_text if value_text != "" else "—", 12, TEXT_PRIMARY)
+	value.name = "SetSuggestionBuildValue%s" % key.capitalize()
+	value.tooltip_text = value.text
+	value.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value.custom_minimum_size.y = row.custom_minimum_size.y
+	if wrap_value:
+		value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		value.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+		value.clip_text = false
+	row.add_child(value)
+
+
+func _set_suggestion_ev_text(build: Dictionary) -> String:
+	var stats: Array[String] = []
+	var evs := _as_dictionary(build.get("evs", {}))
+	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		if int(evs.get(stat, 0)) > 0:
+			stats.append("%s %s" % [evs[stat], stat.to_upper()])
+	return " / ".join(stats) if not stats.is_empty() else "0"
 
 
 func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) -> void:
@@ -1079,6 +1354,8 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 			counts[state] = int(counts[state]) + 1
 	var summary := HFlowContainer.new()
 	summary.name = "SetSuggestionEvidenceSummary"
+	summary.mouse_filter = Control.MOUSE_FILTER_PASS
+	summary.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	summary.add_theme_constant_override("h_separation", 5)
 	summary.add_theme_constant_override("v_separation", 4)
 	parent.add_child(summary)
@@ -1086,20 +1363,28 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 		var count := int(counts[state])
 		if count == 0:
 			continue
-		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
-		var chip := _make_label(_t("battle.calc.guess.evidence_%s_count" % state, {"count": count}), 10, color)
+		var color := _set_suggestion_evidence_color(state)
+		var chip := _make_label(
+			_t("battle.calc.guess.evidence_%s_count" % state, {"count": count}),
+			11 if state == "unknown" else 10,
+			color
+		)
 		chip.name = "SetSuggestionEvidenceCount"
+		chip.set_meta("evidence_state", state)
 		chip.tooltip_text = "%s: %s" % [chip.text, _t("battle.calc.guess." + state)]
 		var chip_font := chip.get_theme_font("font")
 		var text_width := chip_font.get_string_size(
-			chip.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10
+			chip.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11 if state == "unknown" else 10
 		).x
-		chip.custom_minimum_size = Vector2(ceilf(text_width) + 12.0, 22)
+		chip.custom_minimum_size = Vector2(ceilf(text_width) + 14.0, 24 if state == "unknown" else 22)
 		chip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		chip.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		chip.mouse_filter = Control.MOUSE_FILTER_PASS
-		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, Color(color, 0.75), 8, 5.0, 1.0))
+		chip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		var chip_background := Color(color, 0.14) if state == "unknown" else CHIP_BG
+		var chip_border := Color(color, 0.92) if state == "unknown" else Color(color, 0.75)
+		chip.add_theme_stylebox_override("normal", _make_stylebox(chip_background, chip_border, 8, 6.0, 1.0))
 		summary.add_child(chip)
 
 
@@ -1107,15 +1392,133 @@ func _add_set_suggestion_details(parent: VBoxContainer, row: Dictionary) -> void
 	var count := int(row.get("matchingVariantCount", 1))
 	if count > 1:
 		parent.add_child(_make_popup_label(_t("battle.calc.guess.alternatives", {"count": count}), 11, TEXT_MUTED))
+	var heading := _make_label(_t("battle.calc.guess.battle_clues").to_upper(), 10, TEXT_ACCENT)
+	heading.name = "SetSuggestionEvidenceHeading"
+	parent.add_child(heading)
+	var hint := _make_popup_label(_t("battle.calc.guess.clue_hover_hint"), 10, TEXT_MUTED, 2)
+	hint.name = "SetSuggestionEvidenceHint"
+	parent.add_child(hint)
 	for item: Dictionary in row.get("evidence", []):
 		var kind := str(item.get("kind", ""))
 		var state := str(item.get("state", "unknown"))
-		var value := str(item.get("value", "")) if kind in ["move", "item", "ability"] else _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
+		var value := _set_suggestion_evidence_label(item)
 		var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
-		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
-		var explanation := _make_popup_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 11, color)
+		var color := _set_suggestion_evidence_color(state)
+		var evidence_row := PanelContainer.new()
+		evidence_row.name = "SetSuggestionEvidenceRow"
+		evidence_row.custom_minimum_size.y = 30
+		evidence_row.mouse_filter = Control.MOUSE_FILTER_STOP
+		evidence_row.mouse_default_cursor_shape = Control.CURSOR_HELP
+		evidence_row.tooltip_text = _set_suggestion_evidence_tooltip(item)
+		evidence_row.theme = _make_set_suggestion_tooltip_theme(color)
+		evidence_row.add_theme_stylebox_override("panel", _make_stylebox(Color(color, 0.09), Color(color, 0.48), 7, 9.0, 3.0))
+		parent.add_child(evidence_row)
+		var evidence_content := HBoxContainer.new()
+		evidence_content.add_theme_constant_override("separation", 8)
+		evidence_row.add_child(evidence_content)
+		var explanation := _make_popup_label("%s  %s" % [symbol, value], 12, color)
 		explanation.name = "SetSuggestionEvidenceDetail"
-		parent.add_child(explanation)
+		explanation.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		explanation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		evidence_content.add_child(explanation)
+		var state_label := _make_label(_t("battle.calc.guess." + state), 11, color)
+		state_label.name = "SetSuggestionEvidenceState"
+		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		evidence_content.add_child(state_label)
+
+
+func _set_suggestion_evidence_color(state: String) -> Color:
+	match state:
+		"match":
+			return CONFIRMED_ACCENT
+		"variant":
+			return WARNING_ACCENT
+		"conflict":
+			return DANGER_ACCENT
+		_:
+			return UNRESOLVED_ACCENT
+
+
+func _set_suggestion_evidence_label(item: Dictionary) -> String:
+	var kind := str(item.get("kind", ""))
+	if kind in ["move", "item", "ability"]:
+		return str(item.get("value", ""))
+	if kind == "damage":
+		var key := "battle.calc.guess.damage_taken" if item.get("direction") == "own-to-opponent" else "battle.calc.guess.damage_dealt"
+		return _t(key, {"move": item.get("move", ""), "turn": item.get("turn", 0)})
+	return _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
+
+
+func _set_suggestion_evidence_tooltip(item: Dictionary) -> String:
+	var kind := str(item.get("kind", ""))
+	var observation := ""
+	if kind == "damage":
+		var range_text := _format_observed_damage_range(
+			float(item.get("observedMin", 0.0)),
+			float(item.get("observedMax", 0.0))
+		)
+		var key := "battle.calc.guess.damage_taken_detail" if item.get("direction") == "own-to-opponent" else "battle.calc.guess.damage_dealt_detail"
+		observation = _t(key, {"move": item.get("move", ""), "range": range_text, "turn": item.get("turn", 0)})
+		var conditions := _format_set_suggestion_damage_conditions(item.get("conditions", {}))
+		if not conditions.is_empty():
+			observation += "\n" + _t("battle.calc.battle_conditions", {"conditions": conditions})
+	elif kind == "speed":
+		var order_key := "battle.calc.guess.speed_first_detail" if bool(item.get("opponentFirst", false)) else "battle.calc.guess.speed_second_detail"
+		observation = _t(order_key, {"opponent_move": item.get("opponentMove", ""), "viewer_move": item.get("viewerMove", ""), "turn": item.get("turn", 0)})
+	else:
+		observation = _set_suggestion_evidence_label(item)
+	return "%s\n%s" % [observation, _t("battle.calc.guess.clue_result_" + str(item.get("state", "unknown")))]
+
+
+func _format_set_suggestion_damage_conditions(value: Variant) -> String:
+	if not value is Dictionary:
+		return ""
+	var participants: Array[String] = []
+	for role: String in ["attacker", "defender"]:
+		var participant: Variant = value.get(role, {})
+		if not participant is Dictionary:
+			continue
+		var boosts: Variant = participant.get("boosts", {})
+		if not boosts is Dictionary:
+			continue
+		var stages: Array[String] = []
+		for stat: String in ["atk", "def", "spa", "spd", "spe"]:
+			if not boosts.has(stat):
+				continue
+			var amount := clampi(int(boosts.get(stat, 0)), -6, 6)
+			if amount != 0:
+				stages.append("%s %s%s" % [
+					_get_ev_full_display_name(stat), "+" if amount > 0 else "", amount,
+				])
+		if not stages.is_empty():
+			participants.append("%s: %s" % [participant.get("name", ""), _join_string_array(stages, ", ")])
+	return _join_string_array(participants, " · ")
+
+
+func _format_observed_damage_range(minimum: float, maximum: float) -> String:
+	var minimum_text := "%0.1f" % minimum
+	var maximum_text := "%0.1f" % maximum
+	if minimum_text == maximum_text:
+		return "%s%s%%" % ["≈" if not is_equal_approx(minimum, maximum) else "", minimum_text]
+	return "%s–%s%%" % [minimum_text, maximum_text]
+
+
+func _make_set_suggestion_tooltip_theme(accent: Color) -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_stylebox(Color("#07111cf8"), Color(accent, 0.78), 8, 13.0, 10.0)
+	tooltip_style.border_width_bottom = 2
+	tooltip_style.shadow_color = Color("#000000b8")
+	tooltip_style.shadow_size = 9
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", TEXT_PRIMARY)
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", SURFACE_CANVAS)
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("line_spacing", "TooltipLabel", 3)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 
 func _close_set_suggestions_popup(render_after := true) -> void:
@@ -1147,29 +1550,6 @@ func _make_toggle_button(text: String, active: bool) -> Button:
 	button.custom_minimum_size.y = 28
 	_apply_calcdex_dropdown_style(button, 28, 12)
 	return button
-
-
-func _set_suggestion_build_text(build: Dictionary) -> String:
-	var stats: Array[String] = []
-	var evs := _as_dictionary(build.get("evs", {}))
-	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		if int(evs.get(stat, 0)) > 0:
-			stats.append("%s %s" % [evs[stat], stat.to_upper()])
-	var identity: Array[String] = []
-	for entry: Dictionary in [
-		{"label": _t("battle.calc.item"), "value": str(build.get("item", ""))},
-		{"label": _t("battle.calc.ability"), "value": str(build.get("ability", ""))},
-		{"label": _t("battle.calc.nature"), "value": str(build.get("nature", ""))},
-	]:
-		if entry["value"] != "":
-			identity.append("%s: %s" % [entry["label"], entry["value"]])
-	return "%s\n%s: %s\n%s: %s" % [
-		" · ".join(identity),
-		_t("battle.calc.evs"),
-		" / ".join(stats) if not stats.is_empty() else "0",
-		_t("battle.calc.opponent_moves"),
-		", ".join(build.get("moves", [])),
-	]
 
 
 func _apply_set_suggestion(build: Dictionary) -> void:
@@ -1745,9 +2125,12 @@ func _on_team_icon_pressed(relation: String, pokemon_ref: String) -> void:
 	else:
 		if pokemon_ref == selected_opponent_ref:
 			return
+		close_assumption_popover()
 		_clear_sample_sets()
 		selected_opponent_ref = pokemon_ref
+		_clear_opponent_selection_assumptions()
 		_request_sample_sets_if_needed()
+		_refresh_current_scenario(false)
 	expanded_result_key = ""
 	_clear_move_scenarios()
 	last_response = {}
@@ -1938,6 +2321,8 @@ func _resolve_selected_ref(relation: String, current_ref: String) -> String:
 			fallback = pokemon_ref
 		elif fallback == "":
 			fallback = pokemon_ref
+	if manual_matchup_selection_required and current_ref == "":
+		return ""
 	return fallback
 
 
