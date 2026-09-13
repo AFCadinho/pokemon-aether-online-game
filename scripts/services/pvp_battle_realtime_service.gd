@@ -332,6 +332,7 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 		return false
 	var normalized_event_type := event_type.strip_edges().to_lower()
 	if normalized_event_type not in [
+		"pvp.action_client_send_attempt",
 		"pvp.client_waiting_state",
 		"pvp.event_sequence_gap",
 		"pvp.invalid_realtime_response",
@@ -348,7 +349,7 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 		"requestId", "eventBatchId", "displayedPhase", "reasonCode",
 		"serverSeq", "phaseSeq", "lastRenderedSeq", "observedDurationMs",
 		"decisionGeneration", "inputLocked", "pendingAction", "forceSwitchRequired",
-		"decisionId", "selectionGate",
+		"decisionId", "selectionGate", "actionKind",
 	]:
 		if context.has(key):
 			payload[key] = context[key]
@@ -390,6 +391,15 @@ func send_action(action: String, battle_id: String, player_id: String, slot: int
 	if normalized_decision_kind in ["TEAM_PREVIEW", "MOVE_SELECTION", "FORCED_SWITCH"]:
 		payload["decisionKind"] = normalized_decision_kind
 	payload["idempotencyKey"] = request_id
+	# Send a separate, content-free marker immediately before the action frame.
+	# WebSocket ordering lets production diagnostics distinguish a client that
+	# reached the send boundary from an action frame that never reached Gateway.
+	report_diagnostic("pvp.action_client_send_attempt", {
+		"requestId": request_id,
+		"decisionId": str(decision_id).strip_edges(),
+		"decisionGeneration": int(decision_generation),
+		"actionKind": action,
+	})
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"Sending action packet",
