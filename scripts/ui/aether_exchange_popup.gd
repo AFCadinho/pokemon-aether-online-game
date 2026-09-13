@@ -1520,7 +1520,7 @@ func _update_list_grid_columns() -> void:
 	if active_tab == "mine":
 		list_container.columns = 2 if asset_filter == "item" else 1
 		return
-	if active_tab not in ["browse", "wishlist"]:
+	if active_tab not in ["browse", "wanted", "wishlist"]:
 		list_container.columns = 1
 		return
 	if rendered_list_entry_count == 0:
@@ -1552,7 +1552,7 @@ func _update_list_grid_columns() -> void:
 
 func _entry_button(entry: Dictionary, kind: String) -> Button:
 	var button := Button.new()
-	var browse_card := active_tab in ["browse", "wishlist"]
+	var browse_card := active_tab in ["browse", "wanted", "wishlist"]
 	button.custom_minimum_size = Vector2(
 		BROWSE_CARD_MIN_WIDTH if browse_card else 0.0,
 		BROWSE_CARD_HEIGHT if browse_card else 70,
@@ -1644,6 +1644,23 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 			metadata_label.text += " · HA"
 		metadata_label.tooltip_text = _t("ui.exchange.summary.shiny") + " / " + _t("ui.exchange.summary.hidden_ability")
 	stack.add_child(metadata_label)
+	if kind == "wish":
+		var total_quantity := maxi(int(entry.get("quantity", 1)), 1)
+		var progress := ProgressBar.new()
+		progress.name = "BrowseWishProgress"
+		progress.custom_minimum_size = Vector2(0, 9)
+		progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		progress.max_value = total_quantity
+		progress.value = _wish_fulfilled_quantity(entry)
+		progress.show_percentage = false
+		progress.add_theme_stylebox_override(
+			"background", _compact_panel_style(UI_INTERACTIVE, UI_BORDER, 4, 1, 0, 0)
+		)
+		progress.add_theme_stylebox_override(
+			"fill", _compact_panel_style(Color("#26778b"), UI_CYAN, 4, 1, 0, 0)
+		)
+		progress.tooltip_text = metadata_label.text
+		stack.add_child(progress)
 
 	var price := Label.new()
 	price.name = "BrowseCardPrice"

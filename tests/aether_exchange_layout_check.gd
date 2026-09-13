@@ -164,6 +164,15 @@ func _run() -> void:
 				_check_bounds(exchange_hover_card, popup, description)
 			if screen == "request":
 				_check(popup.list_container.columns == 3, description + ": item grid makes room for request details")
+			if screen == "wanted":
+				_check(popup.list_container.columns == 5, description + ": wanted items use the five-column market grid")
+				var wanted_card := popup.list_container.get_child(0) as Button
+				var request_progress := wanted_card.find_child("BrowseWishProgress", true, false) as ProgressBar
+				_check(request_progress != null, description + ": wanted item card shows delivery progress")
+				if request_progress != null:
+					_check(request_progress.value == 5 and request_progress.max_value == 20, description + ": wanted item card shows the correct delivery progress")
+					_check(wanted_card.get_global_rect().grow(1).encloses(request_progress.get_global_rect()), description + ": wanted item progress fits its card")
+					_check_bounds(request_progress, popup, description)
 			if screen in ["items", "tm", "outfit", "mount"]:
 				var item_icon := popup.list_container.get_child(0).find_child("BrowseCardIcon", true, false) as TextureRect
 				_check(item_icon != null, description + ": item offer has an icon")
