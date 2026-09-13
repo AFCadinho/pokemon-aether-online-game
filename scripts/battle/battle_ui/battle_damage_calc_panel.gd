@@ -1321,7 +1321,10 @@ func _set_suggestion_evidence_tooltip(item: Dictionary) -> String:
 	var kind := str(item.get("kind", ""))
 	var observation := ""
 	if kind == "damage":
-		var range_text := "%0.1f–%0.1f%%" % [float(item.get("observedMin", 0.0)), float(item.get("observedMax", 0.0))]
+		var range_text := _format_observed_damage_range(
+			float(item.get("observedMin", 0.0)),
+			float(item.get("observedMax", 0.0))
+		)
 		var key := "battle.calc.guess.damage_taken_detail" if item.get("direction") == "own-to-opponent" else "battle.calc.guess.damage_dealt_detail"
 		observation = _t(key, {"move": item.get("move", ""), "range": range_text, "turn": item.get("turn", 0)})
 	elif kind == "speed":
@@ -1330,6 +1333,14 @@ func _set_suggestion_evidence_tooltip(item: Dictionary) -> String:
 	else:
 		observation = _set_suggestion_evidence_label(item)
 	return "%s\n%s" % [observation, _t("battle.calc.guess.clue_result_" + str(item.get("state", "unknown")))]
+
+
+func _format_observed_damage_range(minimum: float, maximum: float) -> String:
+	var minimum_text := "%0.1f" % minimum
+	var maximum_text := "%0.1f" % maximum
+	if minimum_text == maximum_text:
+		return "%s%s%%" % ["≈" if not is_equal_approx(minimum, maximum) else "", minimum_text]
+	return "%s–%s%%" % [minimum_text, maximum_text]
 
 
 func _make_set_suggestion_tooltip_theme(accent: Color) -> Theme:
