@@ -2,8 +2,6 @@
 
 ## Unreleased
 
-- Overworld signs now display their text correctly in exported game clients.
-
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
@@ -62,6 +60,7 @@
 
 ### World and interface
 
+- Overworld signs now display their text correctly in exported game clients.
 - The Route 3 Pokémon Center seller now shows the clerk's portrait instead of Professor Oak.
 - You can browse and buy cosmetics for either character model. Previews show only the included pieces and use matching icons.
 - Guild Leaders can transfer leadership to another member. Leaders of a solo Guild can disband it before joining another Guild.
