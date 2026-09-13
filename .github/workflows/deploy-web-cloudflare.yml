@@ -20,7 +20,7 @@ on:
       asset_base_url:
         description: Public HTTPS custom domain attached to the existing R2 bucket
         required: true
-        default: https://web-assets.pokeaether.com
+        default: https://updates.pokeaether.com
         type: string
       source_asset_base_url:
         description: Public HTTPS origin containing the immutable desktop source asset archives
