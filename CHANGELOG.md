@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Item Dex now loads the next ten matching items automatically when players scroll down.
+
 - Cerulean City performance details can now record local frame-spike diagnostics while Trainers walk or ride through the city.
 
 - Fixed item request details and their action button extending beyond the Aether Exchange window.
