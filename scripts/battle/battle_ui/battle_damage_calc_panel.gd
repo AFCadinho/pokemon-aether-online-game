@@ -1362,12 +1362,40 @@ func _set_suggestion_evidence_tooltip(item: Dictionary) -> String:
 		)
 		var key := "battle.calc.guess.damage_taken_detail" if item.get("direction") == "own-to-opponent" else "battle.calc.guess.damage_dealt_detail"
 		observation = _t(key, {"move": item.get("move", ""), "range": range_text, "turn": item.get("turn", 0)})
+		var conditions := _format_set_suggestion_damage_conditions(item.get("conditions", {}))
+		if not conditions.is_empty():
+			observation += "\n" + _t("battle.calc.battle_conditions", {"conditions": conditions})
 	elif kind == "speed":
 		var order_key := "battle.calc.guess.speed_first_detail" if bool(item.get("opponentFirst", false)) else "battle.calc.guess.speed_second_detail"
 		observation = _t(order_key, {"opponent_move": item.get("opponentMove", ""), "viewer_move": item.get("viewerMove", ""), "turn": item.get("turn", 0)})
 	else:
 		observation = _set_suggestion_evidence_label(item)
 	return "%s\n%s" % [observation, _t("battle.calc.guess.clue_result_" + str(item.get("state", "unknown")))]
+
+
+func _format_set_suggestion_damage_conditions(value: Variant) -> String:
+	if not value is Dictionary:
+		return ""
+	var participants: Array[String] = []
+	for role: String in ["attacker", "defender"]:
+		var participant: Variant = value.get(role, {})
+		if not participant is Dictionary:
+			continue
+		var boosts: Variant = participant.get("boosts", {})
+		if not boosts is Dictionary:
+			continue
+		var stages: Array[String] = []
+		for stat: String in ["atk", "def", "spa", "spd", "spe"]:
+			if not boosts.has(stat):
+				continue
+			var amount := clampi(int(boosts.get(stat, 0)), -6, 6)
+			if amount != 0:
+				stages.append("%s %s%s" % [
+					_get_ev_full_display_name(stat), "+" if amount > 0 else "", amount,
+				])
+		if not stages.is_empty():
+			participants.append("%s: %s" % [participant.get("name", ""), _join_string_array(stages, ", ")])
+	return _join_string_array(participants, " · ")
 
 
 func _format_observed_damage_range(minimum: float, maximum: float) -> String:

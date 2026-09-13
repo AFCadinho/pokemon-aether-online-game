@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Opponent-set damage clues now show relevant active stat stages, such as Zamazenta's Defense +1 from Dauntless Shield, in their hover details.
+
 - Your own Pokémon's battle hover card now shows its exact current Speed instead of a possible Speed range; spectators and opponents still only see public speed tiers.
 
 - Set suggestions now show clues that need more information with a clearer blue status chip instead of faint “Unknown” text.
