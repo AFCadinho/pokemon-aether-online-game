@@ -24,7 +24,7 @@ const HTTP_ROUTES = new Set([
 ]);
 
 const HTTP_PREFIXES = [
-  ['GET', '/game/pokedex/'], ['GET', '/game/items/'], ['GET', '/game/skills'],
+  ['GET', '/auth/web/pokedex/'], ['GET', '/auth/web/items/'], ['GET', '/game/skills'],
   ['GET', '/game/donator-store'], ['POST', '/game/donator-store/'],
   ['GET', '/battle/pvp/training/ai/live/'],
   ['GET', '/battle/pvp/training/ai/teams/'],
