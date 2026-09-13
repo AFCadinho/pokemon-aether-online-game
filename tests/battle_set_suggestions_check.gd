@@ -135,11 +135,17 @@ func _run() -> void:
 	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HFlowContainer
 	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence summary shows every relevant non-zero category")
 	var evidence_labels: Array[String] = []
+	var unresolved_chip: Label
 	if evidence_summary != null:
 		for child: Node in evidence_summary.get_children():
 			evidence_labels.append(str(child.text))
 			_check((child as Label).custom_minimum_size.x > 50.0, "Evidence label reserves enough width to render its text")
+			if str(child.get_meta("evidence_state", "")) == "unknown":
+				unresolved_chip = child as Label
 	_check(evidence_labels.has("✓ Clues matched: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
+	_check(unresolved_chip != null and unresolved_chip.text == "? More info needed: 1", "Unresolved evidence explains that more information is needed")
+	var unresolved_style := unresolved_chip.get_theme_stylebox("normal") as StyleBoxFlat if unresolved_chip != null else null
+	_check(unresolved_style != null and unresolved_chip.get_theme_color("font_color") == Color("#8ccbe8") and unresolved_style.border_color.a > 0.9 and unresolved_style.bg_color.a >= 0.14, "Unresolved evidence uses a prominent informational chip instead of muted disabled styling")
 	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
 	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
 	var evidence_detail := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) as Label
