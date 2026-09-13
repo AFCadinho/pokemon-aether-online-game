@@ -1,31 +1,5 @@
 # Changelog
 
-## Unreleased
-
-- Opponent-set detail labels and values now stay neatly top-aligned, including multi-line move lists.
-
-- Opponent-set details now keep suggested moves visible, place the calculate action in the card header, and remove the redundant footer button.
-
-- Opponent-set details now separate item, Ability, nature, EVs, and moves into clearer labeled rows, with larger battle clues and a prominent cyan calculate button.
-
-- Opponent-set damage clues now show relevant active stat stages, such as Zamazenta's Defense +1 from Dauntless Shield, in their hover details.
-
-- Your own Pokémon's battle hover card now shows exact Speed in cyan, or effective Speed in green/red with the original stat and any real stat stage; items, abilities, status, weather, and field effects are included, while spectators and opponents still only see public speed tiers.
-
-- Set suggestions now show clues that need more information with a clearer blue status chip instead of faint “Unknown” text.
-
-- Switching the selected opponent in the battle calculator now clears the previous Pokémon's set, stats, Ability, item, and other custom assumptions.
-
-- Browser battles now lazy-load the regular animated battle sprites by default, with Gen 5 available as an optional sprite style and Pokémon HOME reserved for static display or loading fallback.
-
-- Calcdex now follows current in-battle stat stages instead of allowing an old saved stage override to replace a visible boost or drop.
-
-- Narrow observed damage intervals now appear as one approximate percentage instead of repeating the same rounded value twice.
-
-- Battle-clue hover cards now use Calcdex styling instead of Godot's default tooltip appearance.
-
-- Opponent-set clues now distinguish damage dealt from damage taken, show the move and turn at a glance, and reveal the observed range and comparison details on hover.
-
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
@@ -36,6 +10,15 @@
 - You can select an opponent set by clicking anywhere on its card.
 - Fainted Pokémon remain available for test calculations, and an error no longer replaces your chosen matchup with question marks.
 - The set-suggestion button gently pulses when the battle reveals a likely match. The set picker also explains the clues and available actions more clearly.
+- Opponent-set details are now easier to scan, with neatly aligned information, visible move suggestions, clearer clues, and the calculate button at the top.
+- Damage clues now account for active stat changes, such as the Defense boost Zamazenta receives from Dauntless Shield.
+- Your own Pokémon's battle card now shows its exact Speed and clearly explains any changes from moves, items, Abilities, status, weather, or the battlefield. Opponents and spectators still see only the usual public estimate.
+- Set suggestions now mark clues that need more information with a clear blue label.
+- Choosing a different opponent in the calculator now removes information and choices left over from the previous Pokémon.
+- The calculator now follows the Pokémon's current stat changes during battle instead of using an older saved value.
+- Very small damage ranges are now shown as one estimated percentage instead of the same rounded number twice.
+- Battle clues now match the calculator's design and are easier to read.
+- Opponent clues clearly show whether damage was dealt or received, along with the move and turn. More details are available by pointing at the clue.
 - PvP switches now use the latest battle information, so an old party card can no longer send out a fainted Pokémon.
 - Leaving a battle you are watching now waits for the current action to finish, preventing the game from closing unexpectedly.
 
@@ -55,6 +38,7 @@
 - Wild, Trainer, and PvP Battle Replays can now be shared just like AI Sparring replays.
 - Wild Battle Replays now show the Poké Ball animation and a successful catch instead of ending suddenly.
 - Animated Pokémon in browser battles now load more reliably and use fewer resources.
+- Browser battles now use the regular animated Pokémon by default. Gen 5 animations remain available as an option, with static images used only where needed.
 - Browser login now explains when your Trainer is outside the area supported by the browser version.
 - After a connection problem, players now return to the shared world automatically instead of appearing only in chat.
 
