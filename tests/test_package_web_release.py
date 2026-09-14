@@ -86,6 +86,12 @@ class PackageWebReleaseTests(unittest.TestCase):
             self.assertIn('https://play.example.test/pokemon-assets/battle/back-v1', html)
             self.assertIn('https://play.example.test/pokemon-assets/gen5/pixel-front-v1', html)
             self.assertNotIn('https://assets.example.test/web/assets/front-v1', html)
+            config = json.loads((pages / 'web-release-config.json').read_text(encoding='utf-8'))
+            self.assertEqual(config['buildId'], 'build-123')
+            self.assertEqual(
+                config['spriteStyles']['animated']['front'],
+                'https://play.example.test/pokemon-assets/battle/front-v1',
+            )
             self.assertFalse((pages / 'index.pck').exists())
             self.assertTrue((r2 / 'index.pck').is_file())
             self.assertTrue((pages / 'pokeaether-logo.webp').is_file())

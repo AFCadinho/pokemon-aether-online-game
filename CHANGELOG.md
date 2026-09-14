@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
+
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
