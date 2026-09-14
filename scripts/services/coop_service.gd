@@ -3,6 +3,24 @@ extends Node
 signal state_changed
 signal request_failed(message: String)
 
+const ORDINARY_TRAINERS := [
+	"kanto_route_1_lass_zoe",
+	"kanto_route_2_youngster_mason",
+	"kanto_route_2_bug_catcher_cale",
+	"kanto_viridian_forest_bug_catcher_rick",
+	"kanto_viridian_forest_bug_catcher_doug",
+	"kanto_viridian_forest_bug_catcher_anthony",
+	"kanto_pewter_city_gym_hiker_flint",
+	"kanto_pewter_city_gym_youngster_stone",
+]
+
+
+func trainer_entity(trainer_id: String) -> String:
+	if trainer_id in ORDINARY_TRAINERS or trainer_id == "kanto_alpha_gym_brock": return trainer_id
+	if trainer_id in ["kanto_route_22_gary_rival", "kanto_route_22_gary_bulbasaur", "kanto_route_22_gary_squirtle", "kanto_route_22_gary_charmander"]:
+		return "kanto_route_22_gary_oak"
+	return ""
+
 var available := false
 var party: Dictionary = {}
 var invitations: Array = []
@@ -100,8 +118,7 @@ func try_start(trainer_id: String) -> Dictionary:
 		return {"handled": false}
 	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
 		return {"handled": true, "success": false, "code": "coop_leader_required"}
-	var entity := "kanto_alpha_gym_brock" if trainer_id == "kanto_alpha_gym_brock" else "kanto_route_22_gary_oak" if trainer_id in [
-		"kanto_route_22_gary_rival", "kanto_route_22_gary_bulbasaur", "kanto_route_22_gary_squirtle", "kanto_route_22_gary_charmander"] else ""
+	var entity := trainer_entity(trainer_id)
 	if entity.is_empty():
 		return {"handled": true, "success": false, "code": "coop_interaction_unsupported"}
 	var world := GameState.get_world()
