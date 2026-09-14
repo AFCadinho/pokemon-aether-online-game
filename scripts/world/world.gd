@@ -1799,11 +1799,11 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 	authorized_teleport_in_progress = true
 	if player == null:
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "World player is not ready."}
 	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
 	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "Browser demo map is unavailable."}
 	if not authorized_teleport_locked_overworld:
 		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
@@ -1823,7 +1823,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		var packed_scene := await _load_map_scene_threaded(target_scene_path)
 		if packed_scene == null:
 			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
-			cancel_authorized_teleport()
+			cancel_authorized_teleport_effect()
 			is_loading_map = false
 			return {"success": false, "error": "Browser demo map could not be loaded."}
 		target_map = packed_scene.instantiate()
@@ -1839,7 +1839,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		player.call("reset_movement_state")
 	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
 	if not bool(position_result.get("success", false)):
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		is_loading_map = false
 		return position_result
 	_apply_camera_limits_for_map(target_map)
@@ -1864,6 +1864,10 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 				"success": false,
 				"error": str(ack_result.get("error", "Could not acknowledge browser teleport.")),
 			}
+	if aethernet_teleport_effect_pending:
+		await _play_local_aethernet_effect("arrive", false)
+		aethernet_teleport_effect_pending = false
+		_set_aethernet_effect_presence("")
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_in_progress = false
 	is_loading_map = false
