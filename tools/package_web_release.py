@@ -91,6 +91,14 @@ def main() -> None:
     ).replace("<", "\\u003c")
     injection = "<script>window.POKEAETHER_WEB_RELEASE=Object.freeze(" + release_json + ");</script>"
     (pages_dir / "index.html").write_text(html.replace(RELEASE_MARKER, injection), encoding="utf-8")
+    # Godot's JavaScriptBridge can lose complex window properties in some web
+    # runtimes even though the surrounding page can read them. Keep a same-
+    # origin JSON copy so runtime services can recover the immutable asset URLs
+    # without falling back to unversioned paths.
+    (pages_dir / "web-release-config.json").write_text(
+        json.dumps(release_config, separators=(",", ":"), ensure_ascii=True) + "\n",
+        encoding="utf-8",
+    )
 
     objects: list[dict[str, object]] = []
     for source in sorted(export_dir.rglob("*")):
