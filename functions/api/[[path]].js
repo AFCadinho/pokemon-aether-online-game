@@ -21,6 +21,7 @@ const HTTP_ROUTES = new Set([
   'POST /auth/web/wallet/rewards/wild-battle', 'POST /auth/web/wallet/rewards/trainer-battle',
   'POST /auth/web/mail',
   'POST /auth/web/respawn',
+  'POST /world/weather/developer',
 ]);
 
 const HTTP_PREFIXES = [
@@ -44,6 +45,11 @@ const HTTP_PREFIXES = [
   ['PATCH', '/game/replays'], ['DELETE', '/game/replays'],
   ['GET', '/auth/web/world/transitions/'], ['POST', '/auth/web/world/transitions/'],
   ['GET', '/auth/web/world/areas/'],
+  ['GET', '/game/dev/'], ['POST', '/game/dev/'],
+  ['PUT', '/game/dev/'], ['DELETE', '/game/dev/'],
+  ['GET', '/game/moderation/'], ['POST', '/game/moderation/'],
+  ['GET', '/game/chat/mutes/'], ['POST', '/game/chat/mutes'],
+  ['DELETE', '/game/chat/mutes/'],
 ];
 
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;

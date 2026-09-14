@@ -2321,6 +2321,7 @@ func _can_use_moderation_center() -> bool:
 	return _can_use_chat_moderation() or _can_manage_jail()
 
 func _refresh_dev_tools_visibility() -> void:
+	var is_web := OS.has_feature("web")
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_generate_dev_items: bool = _can_generate_dev_items()
@@ -2328,14 +2329,18 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_open_dev_actions: bool = can_use_dev_tools or can_generate_dev_items
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_return_from_impersonation := AuthService.is_impersonating()
+	var can_impersonate_here := can_impersonate and not is_web
+	var can_return_from_impersonation_here := can_return_from_impersonation and not is_web
 	var can_teleport: bool = _can_teleport_self()
 	var can_teleport_to_player: bool = _can_teleport_to_player()
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_photo_mode: bool = _can_use_content_creator_photo_mode()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
+	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web
+	var can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web
 	var has_staff_tool: bool = (
-		can_return_from_impersonation
-		or can_impersonate
+		can_return_from_impersonation_here
+		or can_impersonate_here
 		or can_teleport
 		or can_teleport_to_player
 		or can_teleport_other
@@ -2343,18 +2348,23 @@ func _refresh_dev_tools_visibility() -> void:
 		or _can_use_chat_moderation()
 		or _has_user_permission(CHAT_TRANSLATE_PERMISSION)
 	)
-	var has_visible_staff_action: bool = has_staff_tool or can_open_dev_actions or can_use_content_creator_photo_mode or can_use_content_creator_generation
+	var has_visible_staff_action: bool = (
+		has_staff_tool
+		or can_open_dev_actions
+		or can_use_content_creator_photo_mode_here
+		or can_use_content_creator_generation_here
+	)
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
-		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
+		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode_here
 	if alpha_tools_slot != null:
-		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation
+		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
 	if alpha_tools_button != null:
-		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation
-		alpha_tools_button.disabled = not can_use_content_creator_generation
+		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
+		alpha_tools_button.disabled = not can_use_content_creator_generation_here
 	if alpha_create_pokemon_button != null:
 		alpha_create_pokemon_button.visible = can_use_content_creator_generation
 		alpha_create_pokemon_button.disabled = not can_use_content_creator_generation
@@ -2412,9 +2422,11 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_add_money_button.visible = can_use_dev_tools
 		dev_add_money_button.disabled = not can_use_dev_tools
 	if staff_impersonate_button != null:
-		staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate
+		staff_impersonate_button.visible = (
+			can_return_from_impersonation_here or can_impersonate_here
+		)
 		staff_impersonate_button.disabled = not (
-			can_return_from_impersonation or can_impersonate
+			can_return_from_impersonation_here or can_impersonate_here
 		)
 	_refresh_staff_impersonate_button_copy()
 	if staff_teleport_button != null:
@@ -2429,7 +2441,7 @@ func _refresh_dev_tools_visibility() -> void:
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
-	if not can_impersonate or can_return_from_impersonation:
+	if not can_impersonate_here or can_return_from_impersonation_here:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
 	if not (can_teleport or can_teleport_to_player or can_teleport_other) and staff_teleport_popup != null:
@@ -2451,13 +2463,16 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_badge_progress_popup.close()
 	if not can_generate_dev_items and dev_add_item_popup != null:
 		dev_add_item_popup.visible = false
-	if not can_use_content_creator_generation and alpha_tools_popup != null:
+	if not can_use_content_creator_generation_here and alpha_tools_popup != null:
 		alpha_tools_popup.visible = false
-	if not can_use_content_creator_photo_mode and content_creator_tools_popup != null:
+	if not can_use_content_creator_photo_mode_here and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
-	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
+	if not can_use_content_creator_generation_here and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
-	if (not can_impersonate or can_return_from_impersonation) and staff_impersonate_popup != null:
+	if (
+		(not can_impersonate_here or can_return_from_impersonation_here)
+		and staff_impersonate_popup != null
+	):
 		staff_impersonate_popup.visible = false
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
@@ -33570,9 +33585,6 @@ func _execute_escape_rope() -> void:
 
 
 func _on_my_powers_button_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("My Powers")
-		return
 	if not bool(my_powers_button.get_meta("group_available", false)):
 		return
 	staff_actions_panel.visible = not staff_actions_panel.visible

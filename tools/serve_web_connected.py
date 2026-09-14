@@ -57,6 +57,7 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/mail"),
     ("POST", "/auth/web/respawn"),
     ("POST", "/auth/web/world/teleport-ack"),
+    ("POST", "/world/weather/developer"),
 }
 GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
     ("GET", r"/auth/web/boxes/\d+"), ("PATCH", r"/auth/web/boxes/\d+"),
@@ -106,6 +107,11 @@ HTTP_ROUTE_PREFIXES = (
     ("GET", "/auth/web/world/transitions/"),
     ("POST", "/auth/web/world/transitions/"),
     ("GET", "/auth/web/world/areas/"),
+    ("GET", "/game/dev/"), ("POST", "/game/dev/"),
+    ("PUT", "/game/dev/"), ("DELETE", "/game/dev/"),
+    ("GET", "/game/moderation/"), ("POST", "/game/moderation/"),
+    ("GET", "/game/chat/mutes/"), ("POST", "/game/chat/mutes"),
+    ("DELETE", "/game/chat/mutes/"),
 )
 SECURITY_HEADERS = {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer",

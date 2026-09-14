@@ -19,6 +19,9 @@
     ["GET", "/auth/web/items/search"],
     ["GET", "/battle/trainer/resume"], ["GET", "/battle/wild/resume"],
     ["POST", "/battle/trainer"], ["POST", "/battle/wild-encounter"], ["POST", "/auth/web/wild-battles/battle-id/catch"],
+    ["GET", "/game/dev/items/search"], ["POST", "/game/dev/wallet/money"], ["PUT", "/game/dev/progression/gym-badges"], ["DELETE", "/game/dev/party"],
+    ["GET", "/game/moderation/teleport-points"], ["POST", "/game/moderation/teleport-self"], ["GET", "/game/moderation/overview"],
+    ["GET", "/game/chat/mutes/42"], ["POST", "/game/chat/mutes"], ["DELETE", "/game/chat/mutes/42"], ["POST", "/world/weather/developer"],
     ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
   ],
   "denied": [

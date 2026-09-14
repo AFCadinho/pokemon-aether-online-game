@@ -14,6 +14,7 @@
 - Repaired Parcel hand-ins now preserve Professor Oak's complete closing conversation in the browser.
 - Oak's Parcel rewards now appear with their item jingle after the complete conversation.
 - Trainers now reappear correctly after completing an Aethernet teleport in the browser.
+- Permission-gated Developer and Staff Tools are now available from My Powers in the browser; player-facing creator tools remain desktop-only.
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
