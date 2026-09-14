@@ -36,6 +36,16 @@ func _run() -> void:
 	_expect(panel.cards.p3.info.text.contains("30 / 40") and panel.cards.p1.info.text.contains("80%"), "only own HP is exact")
 	_expect(panel.cards.p2.info.text.contains("DEF +1"), "public stat stages remain visible")
 	_expect(panel.cards.p3.hp.value == 75 and not panel._playing, "old damage is not replayed over reconnect snapshot")
+	var empty_snapshot: Dictionary = snapshot.duplicate(true)
+	empty_snapshot.positions.remove_at(3)
+	panel._apply_positions(empty_snapshot)
+	_expect(panel.cards.p4.sprite.current_single_species.is_empty() and panel.cards.p4.hp.value == 0 and panel.cards.p4.name.text.begins_with("OPPONENT 2"), "empty NPC position clears the prior sprite and health without a phantom faint")
+	var empty_capture := OS.get_environment("COOP_EMPTY_VISUAL_CAPTURE_PATH")
+	if not empty_capture.is_empty():
+		await create_timer(0.15).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(empty_capture) == OK, "empty position visual capture saved")
+	panel._apply_positions(snapshot)
 	var effects = panel._effects
 	var pair = effects.bind_pair("p3", "p4", panel.cards)
 	_expect(pair.player_sprite_box == panel.cards.p3.sprite and pair.enemy_sprite_box == panel.cards.p4.sprite, "partner controller targets the second opponent")

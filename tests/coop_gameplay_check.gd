@@ -11,10 +11,10 @@ func _run() -> void:
 	var service := root.get_node("CoopService")
 	service.set_process(false)
 	service.reset()
-	_expect(service.ORDINARY_TRAINERS.size() == 8, "ordinary trainer slice is explicitly bounded")
+	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
-	_expect(service.trainer_entity("kanto_route_1_youngster_liam").is_empty() and service.trainer_entity("kanto_viridian_forest_bug_catcher_sammy").is_empty(), "single-Pokemon trainers cannot silently duplicate their roster")
+	_expect(service.trainer_entity("kanto_route_3_youngster").is_empty(), "later trainers remain unsupported")
 	var activity := {"reservationId": "fixture", "battleId": "coop-fixture", "status": "active"}
 	service.apply_state({"party": {"leaderId": 1}, "invitations": [], "activity": activity,
 		"view": {"battleId": "coop-fixture", "revision": 2, "decisionId": "coop-1", "locked": false,
