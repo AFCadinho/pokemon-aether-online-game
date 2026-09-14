@@ -20,6 +20,7 @@ var _clock_at := 0
 var _server_time := 0.0
 var _epoch := 0
 var _action_signature := ""
+var _effects: Node
 
 
 func _ready() -> void:
@@ -63,6 +64,15 @@ func _ready() -> void:
 	_log.bbcode_enabled = false
 	_log.add_theme_font_size_override("normal_font_size", 17)
 	deck.add_child(_log)
+	var effect_layer := Control.new()
+	effect_layer.name = "CoopEffectsLayer"
+	effect_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(effect_layer)
+	_effects = load("res://scripts/battle/coop_battle_effects.gd").new()
+	effect_layer.add_child(_effects)
+	for controller: String in SLOTS:
+		_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
 	CoopService.state_changed.connect(_sync)
 	CoopService.request_failed.connect(_show_error)
 	_sync()
@@ -115,6 +125,7 @@ func _sync() -> void:
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
 		_epoch += 1
+		_effects.cancel()
 		displayed_battle = battle_id
 		displayed_cursor = -1
 		_revision = -1
@@ -160,12 +171,13 @@ func _present() -> void:
 		# Initial/reconnected snapshots and long gaps snap directly to authority.
 		# Never replay old damage over current HP, or spend a minute catching up.
 		var animate := displayed_cursor >= 0 and fresh.size() <= 20
+		var batch_started := Time.get_ticks_msec()
 		if displayed_cursor < 0:
 			_apply_positions(snapshot)
 		for event: Dictionary in fresh:
 			_append_event(event)
-			if animate:
-				await _animate_event(event)
+			if animate and Time.get_ticks_msec() - batch_started < 6000:
+				await _animate_event(event, fresh)
 				if epoch != _epoch:
 					_playing = false
 					_present.call_deferred()
@@ -318,7 +330,7 @@ func _append_event(event: Dictionary) -> void:
 		"-curestatus": text = "%s recovered from its status." % actor
 		"-boost", "-unboost", "-setboost": text = "%s: %s %s %s" % [actor, str(event.get("stat", "")).to_upper(), "↓" if event.kind == "-unboost" else "→" if event.kind == "-setboost" else "↑", str(event.get("amount", 0))]
 		"-start", "-end": text = "%s: %s %s" % [actor, str(event.get("condition", "")), "ended" if event.kind == "-end" else "started"]
-		"-miss": text = "%s: the attack missed." % actor
+		"-miss": text = "%s: the attack missed %s." % [actor, _role(str(event.get("target", "")))]
 		"cant": text = "%s could not act." % actor
 		"win", "tie": text = "Battle ended."
 	if not text.is_empty():
@@ -327,25 +339,21 @@ func _append_event(event: Dictionary) -> void:
 			_log.remove_paragraph(0)
 
 
-func _animate_event(event: Dictionary) -> void:
+func _animate_event(event: Dictionary, batch: Array = []) -> void:
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
 	var card: Dictionary = cards[actor]
 	match str(event.get("kind", "")):
 		"move":
-			var target := str(event.get("target", ""))
-			var direction := Vector2(18, -5) if actor in ["p1", "p3"] else Vector2(-18, 5)
-			if cards.has(target): direction = (cards[target].canvas.global_position - card.canvas.global_position).normalized() * 24
-			card.sprite.play_attack_tween(direction)
-		"-damage":
+			await _effects.play_move(event, batch, cards)
+			return
+		"-damage", "-heal":
 			card.hp.value = float(event.get("hpPercent", 0))
-			card.sprite.play_damage_tween()
-		"-heal":
-			card.hp.value = float(event.get("hpPercent", 0))
-			card.sprite.play_heal_tween()
-		"faint": card.sprite.play_faint_tween()
-		"-boost": card.sprite.play_stat_raise_tween()
-		"-unboost": card.sprite.play_stat_drop_tween()
+			await _effects.play_feedback(event, cards)
+			return
+		"faint", "-boost", "-unboost":
+			await _effects.play_feedback(event, cards)
+			return
 		"switch", "drag", "replace", "detailschange": _set_details(actor, str(event.get("details", "")), true)
 		_: return
 	await get_tree().create_timer(0.32 if event.get("kind") == "faint" else 0.22).timeout
