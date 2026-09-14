@@ -88,7 +88,15 @@ func _init() -> void:
 		milk_message_index >= 0 and milk_sound_index > milk_message_index,
 		"Moomoo Milk shows its System message before the received-item jingle"
 	)
-	_check_received_sound_after(oak_source, "quest_turn_in_completed_dialogue_id", "Oak's Pokedex reward")
+	var oak_journey_index := oak_source.find("quest_turn_in_journey_dialogue_id")
+	var oak_popup_index := oak_source.find("InventoryService.notify_story_reward_effects", oak_journey_index)
+	var oak_sound_index := oak_source.find('SfxManager.play("item_received")', oak_popup_index)
+	_check(
+		oak_journey_index >= 0
+		and oak_popup_index > oak_journey_index
+		and oak_sound_index > oak_popup_index,
+		"Oak's reward popups and received-item jingle follow the complete Parcel conversation"
+	)
 	var trainer_outro_index := world_source.find("await _show_trainer_outro_dialogue")
 	var trainer_popup_index := world_source.find("_notify_story_reward_items(", trainer_outro_index)
 	var trainer_sound_index := world_source.find('SfxManager.play("item_received")', trainer_popup_index)

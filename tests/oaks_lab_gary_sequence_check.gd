@@ -147,6 +147,13 @@ func _run() -> void:
 			< oak_text.find("quest_turn_in_journey_dialogue_id", oak_text.find("func _turn_in_quest_item")),
 		"Oak gives the journey-home instruction after Gary has departed"
 	)
+	_check_true(
+		oak_text.find("InventoryService.notify_story_reward_effects")
+			> oak_text.find("quest_turn_in_journey_dialogue_id", oak_text.find("func _turn_in_quest_item"))
+		and oak_text.find('SfxManager.play("item_received")')
+			> oak_text.find("InventoryService.notify_story_reward_effects"),
+		"Oak presents the Parcel rewards with sound after the complete conversation"
+	)
 	var repaired_receipt_start := oak_text.find("var should_play_gary_departure :=")
 	var completed_dialogue_start := oak_text.find(
 		"quest_turn_in_completed_dialogue_id",
