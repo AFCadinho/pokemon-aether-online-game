@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Browser players can move immediately after using Reset / New Game and now respawn in the complete default outfit.
 - The browser world now continues through Route 22, Route 2, Viridian Forest and the Pewter City Gym; Route 3 directs Trainers to the downloadable client.
 - Browser Trainers can use the Aethernet between Pallet Town, Viridian City, Pewter City and the Aether Clash Lobby, with free Lobby travel for Guild members.
 - Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
