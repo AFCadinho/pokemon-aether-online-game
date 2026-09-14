@@ -2326,6 +2326,8 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_generate_dev_items: bool = _can_generate_dev_items()
 	var can_generate_dev_pokemon: bool = _can_generate_dev_pokemon()
+	var can_generate_dev_pokemon_here := can_generate_dev_pokemon and not is_web
+	var can_use_dev_encounters_here := can_use_dev_tools and not is_web
 	var can_open_dev_actions: bool = can_use_dev_tools or can_generate_dev_items
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_return_from_impersonation := AuthService.is_impersonating()
@@ -2382,11 +2384,11 @@ func _refresh_dev_tools_visibility() -> void:
 	if staff_tools_button != null:
 		staff_tools_button.visible = has_staff_tool
 		staff_tools_button.disabled = not has_staff_tool
-	dev_add_pokemon_button.visible = can_generate_dev_pokemon
-	dev_add_pokemon_button.disabled = not can_generate_dev_pokemon
+	dev_add_pokemon_button.visible = can_generate_dev_pokemon_here
+	dev_add_pokemon_button.disabled = not can_generate_dev_pokemon_here
 	dev_add_team_button.disabled = true
-	dev_spawn_pokemon_button.visible = can_use_dev_tools
-	dev_spawn_pokemon_button.disabled = not can_use_dev_tools
+	dev_spawn_pokemon_button.visible = can_use_dev_encounters_here
+	dev_spawn_pokemon_button.disabled = not can_use_dev_encounters_here
 	if dev_add_button != null:
 		dev_add_button.visible = can_open_dev_actions
 		dev_add_button.disabled = not can_open_dev_actions
@@ -2412,9 +2414,9 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_overworld_resets_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
-	dev_cleanup_test_pokemon_button.visible = can_use_dev_tools
-	dev_cleanup_test_pokemon_button.disabled = not can_use_dev_tools
-	dev_pokemon_add_button.disabled = not can_generate_dev_pokemon
+	dev_cleanup_test_pokemon_button.visible = can_use_dev_tools and not is_web
+	dev_cleanup_test_pokemon_button.disabled = not can_use_dev_tools or is_web
+	dev_pokemon_add_button.disabled = not can_generate_dev_pokemon_here
 	if dev_add_item_button != null:
 		dev_add_item_button.visible = can_generate_dev_items
 		dev_add_item_button.disabled = not can_generate_dev_items
@@ -2461,6 +2463,8 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_clear_menu_popup.visible = false
 		if dev_badge_progress_popup != null:
 			dev_badge_progress_popup.close()
+	if is_web and dev_pokemon_popup != null:
+		dev_pokemon_popup.visible = false
 	if not can_generate_dev_items and dev_add_item_popup != null:
 		dev_add_item_popup.visible = false
 	if not can_use_content_creator_generation_here and alpha_tools_popup != null:
@@ -38293,21 +38297,21 @@ func _format_item_dex_source_costs(costs_value: Variant) -> String:
 	return " + ".join(rendered)
 
 func _on_dev_add_pokemon_button_pressed() -> void:
-	if not _can_generate_dev_pokemon():
+	if OS.has_feature("web") or not _can_generate_dev_pokemon():
 		return
 
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
 
 func _on_dev_add_team_button_pressed() -> void:
-	if not _can_generate_dev_pokemon():
+	if OS.has_feature("web") or not _can_generate_dev_pokemon():
 		return
 
 	dev_actions_popup.visible = false
 	_show_dev_pokemon_popup(DevPokemonPopupMode.TEAM)
 
 func _on_dev_spawn_pokemon_button_pressed() -> void:
-	if not _can_use_dev_tools():
+	if OS.has_feature("web") or not _can_use_dev_tools():
 		return
 
 	dev_actions_popup.visible = false
@@ -39154,6 +39158,8 @@ func _apply_staff_encounter_tab_style(button: Button, selected: bool) -> void:
 	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 func _on_dev_pokemon_add_button_pressed() -> void:
+	if OS.has_feature("web"):
+		return
 	if dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		if not _can_use_content_creator_generation():
 			return

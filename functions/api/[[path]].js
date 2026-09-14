@@ -53,6 +53,11 @@ const HTTP_PREFIXES = [
   ['DELETE', '/game/chat/mutes/'],
 ];
 
+const BLOCKED_WEB_ROUTES = new Set([
+  'POST /game/dev/pokemon',
+  'DELETE /game/dev/pokemon/test-fixtures',
+]);
+
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle']);
 const GAMEPLAY_ROUTES = [
@@ -74,6 +79,7 @@ const GAMEPLAY_ROUTES = [
 
 export function isAllowedApiRoute(method, path) {
   const normalizedMethod = method.toUpperCase();
+  if (BLOCKED_WEB_ROUTES.has(`${normalizedMethod} ${path}`)) return false;
   if (HTTP_ROUTES.has(`${normalizedMethod} ${path}`)) return true;
   if (GAMEPLAY_ROUTES.some(([verb, pattern]) => verb === normalizedMethod && pattern.test(path))) return true;
   if (normalizedMethod === 'GET' && WEBSOCKETS.has(path)) return true;

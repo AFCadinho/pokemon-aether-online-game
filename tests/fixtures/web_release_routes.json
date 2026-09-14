@@ -26,6 +26,7 @@
     ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
   ],
   "denied": [
+    ["POST", "/game/dev/pokemon"], ["DELETE", "/game/dev/pokemon/test-fixtures"],
     ["POST", "/auth/web/mail/5/claim"], ["POST", "/auth/web/mail/5/attachments/3/claim"],
     ["POST", "/game/mail/5/claim"], ["POST", "/game/trades"], ["POST", "/game/loans"],
     ["GET", "/game/guilds/me/bank"], ["POST", "/game/guilds/me/bank/deposit"],
