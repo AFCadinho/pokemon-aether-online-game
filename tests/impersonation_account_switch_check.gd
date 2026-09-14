@@ -90,12 +90,12 @@ func _run() -> void:
 			"var can_return_from_impersonation := AuthService.is_impersonating()"
 		)
 		and overlay.contains(
-			"staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate"
+			"can_return_from_impersonation_here or can_impersonate_here"
 		)
 		and overlay.contains(
 			"(can_show_staff_action_bar or can_return_from_impersonation)"
 		),
-		"return action stays visible when the target account has no staff permissions"
+		"desktop return action stays visible when the target account has no staff permissions"
 	)
 	_expect(
 		overlay.contains('settings_menu.call("show_impersonation_return_confirmation")')

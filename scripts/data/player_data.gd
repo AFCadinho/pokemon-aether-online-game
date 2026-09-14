@@ -71,24 +71,7 @@ func reset_account_state() -> void:
 	playtime_seconds = 0
 	flags = {}
 	earned_gym_badges.clear()
-	appearance_body_id = CharacterAppearanceService.DEFAULT_MALE_BODY_ID
-	appearance_hair_id = CharacterAppearanceService.DEFAULT_MALE_HAIR_ID
-	appearance_headgear_id = CharacterAppearanceService.DEFAULT_MALE_HEADGEAR_ID
-	appearance_facial_hair_id = ""
-	appearance_facegear_id = ""
-	appearance_top_id = CharacterAppearanceService.DEFAULT_MALE_TOP_ID
-	appearance_bottom_id = CharacterAppearanceService.DEFAULT_MALE_BOTTOM_ID
-	appearance_shoes_id = CharacterAppearanceService.DEFAULT_MALE_SHOES_ID
-	appearance_hair_color = CharacterAppearanceService.resolve_hair_color("", gender)
-	appearance_skin_tone = CharacterAppearanceService.DEFAULT_SKIN_TONE
-	appearance_eye_color = CharacterAppearanceService.resolve_eye_color("", gender)
-	appearance_facegear_color = "#ffffff"
-	appearance_facial_hair_color = "#ffffff"
-	appearance_top_color = "#ffffff"
-	appearance_bottom_color = "#ffffff"
-	appearance_shoes_color = "#ffffff"
-	appearance_hair_style_index = 0
-	ensure_body_matches_gender(true)
+	reset_appearance_to_defaults()
 	party_changed.emit()
 	gym_badges_changed.emit()
 
@@ -128,6 +111,12 @@ func reset_gameplay_progress() -> void:
 	if join_date != null:
 		flags["join_date"] = join_date
 
+	reset_appearance_to_defaults()
+	party_changed.emit()
+	gym_badges_changed.emit()
+
+
+func reset_appearance_to_defaults() -> void:
 	appearance_body_id = (
 		CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID
 		if gender == "female"
@@ -150,8 +139,6 @@ func reset_gameplay_progress() -> void:
 	appearance_shoes_color = "#ffffff"
 	appearance_hair_style_index = 0
 	ensure_body_matches_gender(true)
-	party_changed.emit()
-	gym_badges_changed.emit()
 
 
 func apply_gym_badge_state(state: Dictionary) -> void:

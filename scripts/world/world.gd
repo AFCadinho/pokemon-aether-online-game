@@ -188,6 +188,8 @@ func _ready() -> void:
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
+		if GameState.gameplay_reset_in_progress:
+			GameState.finish_gameplay_reset()
 		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
