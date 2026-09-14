@@ -10,6 +10,7 @@
 - Browser login now opens directly at the Trainer's saved location without briefly showing the Player's House.
 - Gary now stays beside Professor Oak and chooses his Kanto starter during the browser storyline.
 - Professor Oak now finishes the Parcel scene after Gary leaves by directing the Trainer home to their parents.
+- Repeating an already recorded Parcel hand-in now repairs stalled story progress toward visiting Mom.
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
