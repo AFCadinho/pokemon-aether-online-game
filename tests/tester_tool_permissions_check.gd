@@ -45,12 +45,11 @@ func _init() -> void:
 		"browser My Powers keeps player creator tools desktop-only while retaining Developer Tools"
 	)
 	_check(
-		visibility.contains("can_generate_dev_pokemon_here := can_generate_dev_pokemon and not is_web")
-		and visibility.contains("dev_add_pokemon_button.visible = can_generate_dev_pokemon_here")
-		and visibility.contains("dev_spawn_pokemon_button.visible = can_use_dev_encounters_here")
+		visibility.contains("dev_add_pokemon_button.visible = can_generate_dev_pokemon")
+		and visibility.contains("dev_spawn_pokemon_button.visible = can_use_dev_tools")
 		and visibility.contains("dev_world_preview_panel.visible = can_use_dev_tools")
-		and visibility.contains("dev_cleanup_test_pokemon_button.visible = can_use_dev_tools and not is_web"),
-		"developer Pokemon generation stays desktop-only while other Developer Tools remain available"
+		and visibility.contains("dev_cleanup_test_pokemon_button.visible = can_use_dev_tools"),
+		"permission-gated developer Pokemon generation remains available in the browser"
 	)
 	_check(
 		visibility.contains("dev_add_item_button.visible = can_generate_dev_items")
@@ -71,8 +70,8 @@ func _init() -> void:
 		"every interactive item-generator step rechecks item access"
 	)
 	_check(
-		create_dev_pokemon.contains('if OS.has_feature("web") or not _can_generate_dev_pokemon():')
-		and spawn_encounter.contains('if OS.has_feature("web") or not _can_use_dev_tools():')
+		create_dev_pokemon.contains("if not _can_generate_dev_pokemon():")
+		and spawn_encounter.contains("if not _can_use_dev_tools():")
 		and add_currency.contains("if not _can_use_dev_tools():")
 		and create_alpha_pokemon.contains("if not _can_use_content_creator_generation():"),
 		"Pokemon creation, general tester tools, and Alpha generation keep separate guards"

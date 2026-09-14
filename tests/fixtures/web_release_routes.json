@@ -1,6 +1,7 @@
 {
   "allowed": [
     ["PUT", "/auth/web/appearance"],
+    ["POST", "/pokemon/create-from-text"], ["POST", "/team/create-from-text"],
     ["GET", "/auth/web/boxes"], ["GET", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/31"],
     ["POST", "/auth/web/pokemon/storage/move"], ["DELETE", "/auth/web/pokemon/42"],
     ["PUT", "/auth/web/party"], ["PATCH", "/auth/web/party/battle-state"],
@@ -20,13 +21,12 @@
     ["GET", "/auth/web/items/search"],
     ["GET", "/battle/trainer/resume"], ["GET", "/battle/wild/resume"],
     ["POST", "/battle/trainer"], ["POST", "/battle/wild-encounter"], ["POST", "/auth/web/wild-battles/battle-id/catch"],
-    ["GET", "/game/dev/items/search"], ["POST", "/game/dev/wallet/money"], ["PUT", "/game/dev/progression/gym-badges"], ["DELETE", "/game/dev/party"],
+    ["GET", "/game/dev/items/search"], ["POST", "/game/dev/pokemon"], ["DELETE", "/game/dev/pokemon/test-fixtures"], ["POST", "/game/dev/wallet/money"], ["PUT", "/game/dev/progression/gym-badges"], ["DELETE", "/game/dev/party"],
     ["GET", "/game/moderation/teleport-points"], ["POST", "/game/moderation/teleport-self"], ["GET", "/game/moderation/overview"],
     ["GET", "/game/chat/mutes/42"], ["POST", "/game/chat/mutes"], ["DELETE", "/game/chat/mutes/42"], ["POST", "/world/weather/developer"],
     ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
   ],
   "denied": [
-    ["POST", "/game/dev/pokemon"], ["DELETE", "/game/dev/pokemon/test-fixtures"],
     ["POST", "/auth/web/mail/5/claim"], ["POST", "/auth/web/mail/5/attachments/3/claim"],
     ["POST", "/game/mail/5/claim"], ["POST", "/game/trades"], ["POST", "/game/loans"],
     ["GET", "/game/guilds/me/bank"], ["POST", "/game/guilds/me/bank/deposit"],

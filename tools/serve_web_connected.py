@@ -45,6 +45,7 @@ HTTP_ROUTES = {
     ("GET", "/battle/pvp/training/ai/teams"),
     ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
+    ("POST", "/pokemon/create-from-text"), ("POST", "/team/create-from-text"),
     ("POST", "/battle/wild-encounter"), ("GET", "/battle/wild/resume"),
     ("POST", "/battle/trainer"), ("GET", "/battle/trainer/resume"),
     ("POST", "/battle/pvp/rooms"),
@@ -114,10 +115,6 @@ HTTP_ROUTE_PREFIXES = (
     ("GET", "/game/chat/mutes/"), ("POST", "/game/chat/mutes"),
     ("DELETE", "/game/chat/mutes/"),
 )
-BLOCKED_WEB_ROUTES = {
-    ("POST", "/game/dev/pokemon"),
-    ("DELETE", "/game/dev/pokemon/test-fixtures"),
-}
 SECURITY_HEADERS = {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer",
     # Required by Godot's SharedArrayBuffer-backed WebAudio worklet mixer.
@@ -163,14 +160,11 @@ def create_app(upstream, build=None, *, transport=None):
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
     async def proxy(request: Request, path: str):
         route = "/" + path
-        allowed = (request.method, route) not in BLOCKED_WEB_ROUTES and ((request.method, route) in HTTP_ROUTES or any(
+        allowed = (request.method, route) in HTTP_ROUTES or any(
             request.method == method and (route.startswith(prefix) if prefix.endswith("/") else route == prefix or route.startswith(prefix + "/"))
             for method, prefix in HTTP_ROUTE_PREFIXES
-        ))
-        allowed = allowed or (
-            (request.method, route) not in BLOCKED_WEB_ROUTES
-            and any(request.method == method and pattern.fullmatch(route) for method, pattern in GAMEPLAY_ROUTES)
         )
+        allowed = allowed or any(request.method == method and pattern.fullmatch(route) for method, pattern in GAMEPLAY_ROUTES)
         if route == "/auth/web/world" and request.method in {"GET", "PUT"}:
             allowed = True
         if request.method == "GET" and route.startswith("/battle/pvp/training/ai/teams/"):
