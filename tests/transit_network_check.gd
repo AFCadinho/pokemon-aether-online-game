@@ -106,11 +106,7 @@ func _init() -> void:
 	_check(keeper_source.contains("npc.transit.attune_beacon_hint"), "Transit Keeper explains that the local Beacon must be attuned")
 	_check(keeper_source.contains("TransitMenuScript"), "Transit Keeper opens the Aethernet destination catalog")
 	_check(keeper_source.contains("menu.open(network)"), "Transit Keeper passes the complete network to the destination catalog")
-	_check(
-		keeper_source.contains('dialog_layer.name = "AethernetBrowserDialogLayer"')
-		and keeper_source.contains("dialog_layer.add_child(dialog)"),
-		"Browser Aethernet notice renders in a screen-space CanvasLayer"
-	)
+	_check(not keeper_source.contains('_show_browser_demo_notice'), "Browser Aethernet uses the travel network")
 	_check(keeper_source.contains("begin_authorized_teleport"), "Transit Keeper uses the authorized teleport flow")
 	_check(keeper_source.contains("PlayerWalletService.apply_wallet_result"), "Transit travel updates the local wallet projection")
 	var beacon_source := FileAccess.get_file_as_string(
@@ -124,7 +120,7 @@ func _init() -> void:
 	_check(beacon_source.contains("destination_id, global_position"), "Aether Beacon supplies its placed world position")
 	_check(transit_service_source.contains("save_current_player_state_now"), "Attunement synchronizes the player's current position first")
 	_check(transit_service_source.contains('"beaconPosition"'), "Attunement sends the placed Beacon position")
-	_check(transit_service_source.contains('TRANSIT_ENDPOINT + "/anchor"'), "Aether Anchor changes use the transit service")
+	_check(transit_service_source.contains('_transit_endpoint() + "/anchor"'), "Aether Anchor changes use the platform-specific transit service")
 	_check(beacon_source.contains("await super._process(delta)"), "Aether Beacon awaits the shared interaction coroutine")
 	_check(beacon_source.contains("requires_facing = false"), "Aether Beacon enforces omnidirectional interaction at runtime")
 	_check(beacon_source.contains("interaction_shape_size = Vector2(80, 80)"), "Aether Beacon enforces its local interaction radius at runtime")
