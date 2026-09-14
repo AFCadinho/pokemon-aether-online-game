@@ -54,7 +54,7 @@ func _request_json(endpoint: String, method: HTTPClient.Method, body: String) ->
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	add_child(request)
-	var error := request.request(base_url + endpoint, headers, method, body)
+	var error := request.request(base_url + _endpoint(endpoint), headers, method, body)
 	if error != OK:
 		request.queue_free()
 		return {"success": false, "error": "Could not start EV training request: %s" % error_string(error)}
@@ -102,6 +102,12 @@ func _extract_error(body: Dictionary, status: int) -> String:
 
 func _new_request_id() -> String:
 	return "%s-%s-%s" % [Time.get_unix_time_from_system(), Time.get_ticks_usec(), randi()]
+
+
+func _endpoint(desktop_endpoint: String) -> String:
+	if OS.has_feature("web"):
+		return desktop_endpoint.replace("/game/ev-training", "/auth/web/ev-training")
+	return desktop_endpoint
 
 
 func _dictionary(value: Variant) -> Dictionary:

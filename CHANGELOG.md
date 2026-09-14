@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- All side quests from Pallet Town through Brock can now be accepted and completed in the browser, including Fishing, Thieving, EV Training and Rock Smash objectives.
 - Permission-gated Developer Tools can now parse, generate, spawn, battle and clean up test Pokémon in the browser.
 - Browser Trainers can now save appearance changes from their Trainer Card.
 - Browser players can move immediately after using Reset / New Game and now respawn in the complete default outfit.
