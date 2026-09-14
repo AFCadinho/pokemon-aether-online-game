@@ -97,13 +97,11 @@ func interact_with_player(player: Node2D) -> void:
 
 	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
 	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
-	if not OS.has_feature("web"):
-		_prepare_gary_starter_sequence()
+	_prepare_gary_starter_sequence()
 	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
 	is_creating_starter = false
 	if not bool(create_result.get("success", false)):
-		if not OS.has_feature("web"):
-			_cancel_gary_starter_sequence()
+		_cancel_gary_starter_sequence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -120,14 +118,7 @@ func interact_with_player(player: Node2D) -> void:
 			{"pokemon": selected_species_name}
 		)
 	)
-	if OS.has_feature("web"):
-		await show_dialogue(
-			_format_dialogue_lines(
-				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
-				selected_species_name
-			)
-		)
-	elif last_starter_claim_already_completed:
+	if last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
 			_format_dialogue_lines(

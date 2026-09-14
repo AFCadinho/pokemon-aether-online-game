@@ -97,6 +97,10 @@ func _run() -> void:
 		"Gary stays visible while the starter claim hands off to his turn"
 	)
 	_check_true(
+		not oak_text.contains('OS.has_feature("web")'),
+		"browser and desktop share Gary's complete starter selection sequence"
+	)
+	_check_true(
 		gary_text.contains("func is_starter_sequence_active() -> bool:")
 		and gary_text.contains("return starter_sequence_pending or starter_sequence_running"),
 		"Gary exposes the complete pending and running starter sequence window"
