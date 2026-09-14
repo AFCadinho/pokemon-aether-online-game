@@ -23,6 +23,7 @@ const WEB_STORY_BOOTSTRAP_ENDPOINT := "/auth/web/world/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const WEB_STORY_INTERACTION_ENDPOINT := "/auth/web/world/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
+const WEB_STORY_QUEST_ACCEPT_ENDPOINT := "/auth/web/world/story/quests/%s/accept"
 const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const DEV_SIDE_QUEST_PROGRESS_ENDPOINT := "/game/dev/progression/side-quest"
 const DEV_ROCK_SMASH_RESPAWN_ENDPOINT := "/game/dev/overworld/rock-smash-respawn"
@@ -270,7 +271,7 @@ func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + (STORY_QUEST_ACCEPT_ENDPOINT % normalized_quest_id.uri_encode()),
+		base_url + (_story_quest_accept_endpoint() % normalized_quest_id.uri_encode()),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({
@@ -403,6 +404,10 @@ func _story_bootstrap_endpoint() -> String:
 
 func _story_interaction_endpoint() -> String:
 	return WEB_STORY_INTERACTION_ENDPOINT if OS.has_feature("web") else STORY_INTERACTION_ENDPOINT
+
+
+func _story_quest_accept_endpoint() -> String:
+	return WEB_STORY_QUEST_ACCEPT_ENDPOINT if OS.has_feature("web") else STORY_QUEST_ACCEPT_ENDPOINT
 
 
 func _is_valid_story_complete_body(

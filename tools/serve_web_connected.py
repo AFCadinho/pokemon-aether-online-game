@@ -85,7 +85,12 @@ HTTP_ROUTE_PREFIXES = (
 	# Read/write game interfaces explicitly enabled in the browser demo. These
 	# retain the normal account and server-side authorization checks.
 	("GET", "/auth/web/pokedex/"), ("GET", "/auth/web/items/"),
-	("GET", "/game/skills"),
+	("GET", "/auth/web/skills"),
+	("GET", "/auth/web/fishing/progression"), ("PUT", "/auth/web/fishing/selection"),
+	("GET", "/auth/web/ev-training/session"), ("POST", "/auth/web/ev-training/session"),
+	("POST", "/auth/web/ev-training/tutorial/focus"), ("POST", "/auth/web/ev-training/tutorial/session"),
+	("GET", "/auth/web/thieving"), ("POST", "/auth/web/thieving/"),
+	("GET", "/auth/web/rock-smash"), ("POST", "/auth/web/rock-smash/smash"),
 	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
 	("GET", "/battle/pvp/training/ai/live/"),
 	("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),
