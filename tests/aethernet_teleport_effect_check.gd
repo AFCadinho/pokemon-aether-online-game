@@ -54,6 +54,20 @@ func _run_checks() -> void:
 		world_source.contains('await _play_local_aethernet_effect("arrive", false)'),
 		"authorized travel plays the arrival animation"
 	)
+	var web_transition_source := _function_source(
+		world_source,
+		"_apply_web_demo_transition_state"
+	)
+	_check(
+		web_transition_source.contains('await _play_local_aethernet_effect("arrive", false)')
+		and web_transition_source.find('await _play_local_aethernet_effect("arrive", false)')
+			< web_transition_source.find("authorized_teleport_in_progress = false"),
+		"browser travel rematerializes the local trainer before unlocking movement"
+	)
+	_check(
+		web_transition_source.count("cancel_authorized_teleport_effect()") >= 4,
+		"browser travel failures restore a trainer hidden by the departure effect"
+	)
 	_check(
 		world_source.contains(
 			"func play_authorized_teleport_departure_effect() -> void:"
@@ -94,3 +108,11 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error("FAIL: %s" % label)
+
+
+func _function_source(source: String, function_name: String) -> String:
+	var start := source.find("func %s(" % function_name)
+	if start < 0:
+		return ""
+	var end := source.find("\nfunc ", start + 1)
+	return source.substr(start, end - start if end >= 0 else -1)
