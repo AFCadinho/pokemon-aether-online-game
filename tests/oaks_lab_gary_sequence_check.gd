@@ -147,6 +147,12 @@ func _run() -> void:
 			< oak_text.find("quest_turn_in_journey_dialogue_id", oak_text.find("func _turn_in_quest_item")),
 		"Oak gives the journey-home instruction after Gary has departed"
 	)
+	_check_true(
+		oak_text.contains('if bool(result.get("alreadyTurnedIn", false)):')
+		and oak_text.find('_cancel_pending_gary_parcel_departure(gary)', oak_text.find('if bool(result.get("alreadyTurnedIn", false)):'))
+			< oak_text.find('gary.call("play_parcel_return_departure", player)'),
+		"a repaired Parcel receipt does not replay Gary's departure"
+	)
 	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
 	_check_true(
 		starter_ball_text.contains("selection_stand_offset := Vector2(0, 32)"),
