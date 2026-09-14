@@ -4,6 +4,8 @@ signal state_changed
 signal request_failed(message: String)
 
 const ORDINARY_TRAINERS := [
+	"kanto_route_1_youngster_liam",
+	"kanto_viridian_forest_bug_catcher_sammy",
 	"kanto_route_1_lass_zoe",
 	"kanto_route_2_youngster_mason",
 	"kanto_route_2_bug_catcher_cale",

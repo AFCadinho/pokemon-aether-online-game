@@ -220,7 +220,7 @@ func _apply_positions(snapshot: Dictionary) -> void:
 			card.sprite.modulate.a = 0.25 if position.get("fainted", false) else 1.0
 		if not found:
 			cards[controller].sprite.clear_pokemon()
-			cards[controller].name.text = controller.to_upper() + "  ·  No active Pokémon"
+			cards[controller].name.text = _role(controller).to_upper() + "  ·  No active Pokémon"
 			cards[controller].info.text = ""
 			cards[controller].hp.value = 0
 			cards[controller].details = ""
