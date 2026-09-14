@@ -13,6 +13,7 @@ const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
+const WEB_GUILD_LOBBY_TELEPORT_ENDPOINT := "/auth/web/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
 const AETHER_CLASH_HISTORY_ENDPOINT := "/game/aether-clash/history"
@@ -314,7 +315,7 @@ func force_return_bank_loan_asset(asset_id: String) -> Dictionary:
 
 func teleport_to_lobby() -> Dictionary:
 	var response := await _authenticated_request(
-		GUILD_LOBBY_TELEPORT_ENDPOINT,
+		WEB_GUILD_LOBBY_TELEPORT_ENDPOINT if OS.has_feature("web") else GUILD_LOBBY_TELEPORT_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		"{}"
 	)
@@ -953,7 +954,7 @@ func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dic
 	if OS.has_feature("web"):
 		if path.begins_with("/game/aether-clash"):
 			path = path.replace("/game/aether-clash", "/auth/web/aether-clash")
-		elif path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT]:
+		elif path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT, WEB_GUILD_LOBBY_TELEPORT_ENDPOINT]:
 			return {"success": false, "error": "Guild gameplay requires the game client."}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
