@@ -12,7 +12,7 @@ const HTTP_ROUTES = new Set([
   'GET /auth/web/ai-sparring/statistics', 'GET /auth/web/ai-sparring/history',
   'DELETE /auth/web/ai-sparring/history', 'GET /battle/pvp/training/ai/teams',
   'GET /battle/pvp/training/ai/live', 'POST /battle/pvp/training/ai/battles',
-  'POST /battle/wild-encounter', 'GET /battle/wild/resume',
+  'POST /battle/wild-encounter', 'POST /battle/dev/wild', 'GET /battle/wild/resume',
   'POST /battle/trainer', 'GET /battle/trainer/resume',
   'POST /battle/pvp/rooms', 'GET /pokemon/stats',
   'POST /pokemon/create-from-text', 'POST /team/create-from-text',
