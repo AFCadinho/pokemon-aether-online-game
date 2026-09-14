@@ -5,8 +5,10 @@ var failed := false
 
 func _init() -> void:
 	var reset_service := _source("res://scripts/services/player_gameplay_reset_service.gd")
+	var player_state_service := _source("res://scripts/services/player_game_state_service.gd")
 	var game_state := _source("res://scripts/core/game_state.gd")
 	var player_data := _source("res://scripts/data/player_data.gd")
+	var loading := _source("res://scripts/ui/loading_screen.gd")
 	var world := _source("res://scripts/world/world.gd")
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
 	var starter := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
@@ -18,6 +20,7 @@ func _init() -> void:
 	_expect(reset_service.contains("pending_request_id"), "reset retains an idempotency key for safe retries")
 	_expect(game_state.contains("var gameplay_reset_in_progress := false"), "global state exposes an autosave reset barrier")
 	_expect(player_data.contains("func reset_gameplay_progress() -> void:"), "local player progress has an explicit reset operation")
+	_expect(player_data.contains("func reset_appearance_to_defaults() -> void:"), "new-game reset has one gender-aware default appearance operation")
 	_expect(world.contains("func prepare_for_gameplay_reset() -> Dictionary:"), "world drains in-flight saves before reset")
 	_expect(world.contains("GameState.gameplay_reset_in_progress"), "world persistence honors the reset barrier")
 	_expect(
@@ -29,7 +32,7 @@ func _init() -> void:
 		"only an explicitly authorized initial reset save may bypass the reset barrier"
 	)
 	var initial_world_setup := world.find("await _setup_initial_world_state()")
-	var reset_unlock := world.find("GameState.finish_gameplay_reset()")
+	var reset_unlock := world.find("GameState.finish_gameplay_reset()", initial_world_setup)
 	_expect(
 		initial_world_setup >= 0 and reset_unlock > initial_world_setup,
 		"the reset remains input-locked until its initial position save has completed"
@@ -52,6 +55,25 @@ func _init() -> void:
 		"the destructive confirmation explains mail attachment loss and session revocation"
 	)
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
+	_expect(
+		player_state_service.contains('const WEB_PLAYER_APPEARANCE_ENDPOINT := "/auth/web/appearance"')
+		and player_state_service.contains("func save_player_appearance(appearance: Dictionary)"),
+		"browser appearance saves use a dedicated narrow endpoint"
+	)
+	_expect(
+		overlay.contains('if OS.has_feature("web"):\n\t\treturn await PlayerGameStateService.save_player_appearance(')
+		and overlay.contains('result.get("appearance", {})'),
+		"Trainer Card saves and verifies the dedicated browser appearance response"
+	)
+	_expect(
+		loading.contains("PlayerSave.reset_appearance_to_defaults()")
+		and loading.contains('saved_state["appearance"] = PlayerSave.to_appearance_state()'),
+		"the reset reload replaces empty persisted appearance fields with the default outfit"
+	)
+	_expect(
+		world.contains('await _setup_web_demo_world()\n\t\tif GameState.gameplay_reset_in_progress:\n\t\t\tGameState.finish_gameplay_reset()'),
+		"the browser world releases the gameplay reset input lock after rebuilding"
+	)
 	_expect(overlay.contains("change_scene_to_file(LOADING_SCENE_PATH)"), "successful reset reloads authoritative state")
 	_expect(
 		chat_realtime.contains("if connecting or ready_state != WebSocketPeer.STATE_CLOSED:"),

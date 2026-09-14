@@ -46,7 +46,15 @@ def main() -> None:
     export_dir = args.export_dir.resolve()
     pages_dir = args.pages_dir.resolve()
     r2_dir = args.r2_dir.resolve()
-    for required in ("index.html", "index.js", "index.wasm", "index.pck", "build-receipt.json"):
+    for required in (
+        "index.html",
+        "index.js",
+        "index.wasm",
+        "index.pck",
+        "build-receipt.json",
+        "modules/manifest.json",
+        "modules/aether-clash-maps.pck",
+    ):
         if not (export_dir / required).is_file():
             parser.error(f"web export is incomplete: missing {required}")
 
@@ -91,6 +99,14 @@ def main() -> None:
     ).replace("<", "\\u003c")
     injection = "<script>window.POKEAETHER_WEB_RELEASE=Object.freeze(" + release_json + ");</script>"
     (pages_dir / "index.html").write_text(html.replace(RELEASE_MARKER, injection), encoding="utf-8")
+    # Godot's JavaScriptBridge can lose complex window properties in some web
+    # runtimes even though the surrounding page can read them. Keep a same-
+    # origin JSON copy so runtime services can recover the immutable asset URLs
+    # without falling back to unversioned paths.
+    (pages_dir / "web-release-config.json").write_text(
+        json.dumps(release_config, separators=(",", ":"), ensure_ascii=True) + "\n",
+        encoding="utf-8",
+    )
 
     objects: list[dict[str, object]] = []
     for source in sorted(export_dir.rglob("*")):
@@ -98,7 +114,7 @@ def main() -> None:
             continue
         relative = source.relative_to(export_dir)
         relative_name = relative.as_posix()
-        if relative_name in {"index.html", "build-receipt.json", "export.log", "export-console.log"}:
+        if relative_name in {"index.html", "build-receipt.json"} or source.suffix == ".log":
             continue
         on_r2 = relative_name.startswith("browser-audio/") or (
             source.name.startswith("index.") and source.name != "index.js"

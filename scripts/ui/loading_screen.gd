@@ -166,6 +166,14 @@ func _prepare_world() -> void:
 		elif not bool(position_response.get("success", false)):
 			push_warning("LoadingScreen: player position load failed: %s" % str(position_response.get("error", "Unknown error")))
 
+	# Story bootstrap can already have created the new spawn state with empty
+	# appearance fields. A reset must win over those fields and carry a complete,
+	# gender-correct default outfit into the rebuilt world.
+	if GameState.gameplay_reset_in_progress:
+		PlayerSave.reset_appearance_to_defaults()
+		if not saved_state.is_empty():
+			saved_state["appearance"] = PlayerSave.to_appearance_state()
+
 	# Mount restoration validates the saved mount against the account inventory.
 	# Hydrate that entitlement cache before the World consumes savedState.
 	var inventory_response: Dictionary = await InventoryService.load_inventory()

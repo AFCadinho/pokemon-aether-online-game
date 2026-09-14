@@ -20,7 +20,7 @@ on:
       asset_base_url:
         description: Public HTTPS custom domain attached to the existing R2 bucket
         required: true
-        default: https://web-assets.pokeaether.com
+        default: https://updates.pokeaether.com
         type: string
       source_asset_base_url:
         description: Public HTTPS origin containing the immutable desktop source asset archives
@@ -116,7 +116,9 @@ jobs:
           python3 tools/stamp_godot_version.py --project project.godot --export-presets export_presets.cfg \
             --version "${RELEASE_VERSION}" --web-build-id "${WEB_BUILD_ID}"
           ./godot --headless --import --quit
+          ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd
           python3 tools/build_web_preview.py --godot ./godot
+          python3 tools/build_web_asset_modules.py --godot ./godot
 
       - name: Package Pages and R2 release
         env:

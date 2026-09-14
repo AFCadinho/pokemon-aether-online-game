@@ -13,6 +13,7 @@ const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
+const WEB_GUILD_LOBBY_TELEPORT_ENDPOINT := "/auth/web/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
 const AETHER_CLASH_HISTORY_ENDPOINT := "/game/aether-clash/history"
@@ -314,7 +315,7 @@ func force_return_bank_loan_asset(asset_id: String) -> Dictionary:
 
 func teleport_to_lobby() -> Dictionary:
 	var response := await _authenticated_request(
-		GUILD_LOBBY_TELEPORT_ENDPOINT,
+		WEB_GUILD_LOBBY_TELEPORT_ENDPOINT if OS.has_feature("web") else GUILD_LOBBY_TELEPORT_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		"{}"
 	)
@@ -379,6 +380,9 @@ func create_aether_clash_challenge(
 	tier_id := "aether-ou",
 	stake_amount := 0
 ) -> Dictionary:
+	var module_result := await _ensure_web_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 	var response := await _authenticated_request(
 		AETHER_CLASH_CHALLENGES_ENDPOINT,
 		HTTPClient.METHOD_POST,
@@ -400,6 +404,9 @@ func create_aether_clash_player_challenge(
 ) -> Dictionary:
 	if target_user_id <= 0:
 		return {"success": false, "error": "Aether Clash target was missing."}
+	var module_result := await _ensure_web_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 	var response := await _authenticated_request(
 		AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT,
 		HTTPClient.METHOD_POST,
@@ -525,6 +532,9 @@ func leave_aether_clash_arena(challenge_id: String) -> Dictionary:
 
 
 func accept_aether_clash_challenge(challenge_id: String) -> Dictionary:
+	var module_result := await _ensure_web_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 	return await _aether_clash_action(challenge_id, "accept")
 
 
@@ -534,6 +544,12 @@ func decline_aether_clash_challenge(challenge_id: String) -> Dictionary:
 
 func cancel_aether_clash_challenge(challenge_id: String) -> Dictionary:
 	return await _aether_clash_action(challenge_id, "cancel")
+
+
+func _ensure_web_aether_clash_maps() -> Dictionary:
+	if not OS.has_feature("web"):
+		return {"success": true, "alreadyAvailable": true}
+	return await WebAssetModuleService.ensure_aether_clash_maps()
 
 
 static func normalize_aether_clash_champion(value: Variant) -> Dictionary:
@@ -935,8 +951,11 @@ func _normalize_guild(value: Variant) -> Dictionary:
 
 
 func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
-	if OS.has_feature("web") and path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT]:
-		return {"success": false, "error": "Guild gameplay requires the game client."}
+	if OS.has_feature("web"):
+		if path.begins_with("/game/aether-clash"):
+			path = path.replace("/game/aether-clash", "/auth/web/aether-clash")
+		elif path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT, WEB_GUILD_LOBBY_TELEPORT_ENDPOINT]:
+			return {"success": false, "error": "Guild gameplay requires the game client."}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS

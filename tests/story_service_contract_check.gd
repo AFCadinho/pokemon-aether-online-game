@@ -169,6 +169,10 @@ func _verify_integration_contract() -> void:
 	var oak := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
 	var oak_lab := _source("res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn")
 	var inventory := _source("res://scripts/services/inventory_service.gd")
+	var ev_training := _source("res://scripts/services/ev_training_service.gd")
+	var thieving := _source("res://scripts/services/thieving_service.gd")
+	var rock_smash := _source("res://scripts/services/rock_smash_service.gd")
+	var skills := _source("res://scripts/services/skills_service.gd")
 	var base_npc := _source("res://scripts/world/npcs/base_npc.gd")
 	_expect(
 		project.contains('StoryService="*res://scripts/services/story_service.gd"'),
@@ -182,6 +186,8 @@ func _verify_integration_contract() -> void:
 		game_state_service.contains('const PLAYER_STORY_ENDPOINT := "/game/story"')
 		and game_state_service.contains('const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"')
 		and game_state_service.contains('const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"')
+		and game_state_service.contains('const WEB_STORY_QUEST_ACCEPT_ENDPOINT := "/auth/web/world/story/quests/%s/accept"')
+		and game_state_service.contains("func _story_quest_accept_endpoint() -> String:")
 		and game_state_service.contains("func bootstrap_story() -> Dictionary:")
 		and game_state_service.contains("func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:")
 		and game_state_service.contains('"story": story'),
@@ -214,6 +220,15 @@ func _verify_integration_contract() -> void:
 		and inventory.contains('"/auth/web/npc-rewards"')
 		and inventory.contains('"/auth/web/npc-quest-item-turn-ins"'),
 		"inventory service exposes authoritative desktop and browser parcel rewards and turn-in"
+	)
+	_expect(
+		inventory.contains('const WEB_FISHING_PROGRESSION_ENDPOINT := "/auth/web/fishing/progression"')
+		and inventory.contains('const WEB_FISHING_SELECTION_ENDPOINT := "/auth/web/fishing/selection"')
+		and ev_training.contains('replace("/game/ev-training", "/auth/web/ev-training")')
+		and thieving.contains('replace("/game/thieving", "/auth/web/thieving")')
+		and rock_smash.contains('const WEB_SMASH_ENDPOINT := "/auth/web/rock-smash/smash"')
+		and skills.contains('const WEB_SKILLS_ENDPOINT := "/auth/web/skills"'),
+		"first-gym side-quest services select browser-authorized endpoints in web exports"
 	)
 	_expect(
 		inventory.contains('if bool(body.get("caught", false))')

@@ -3,6 +3,26 @@
 ## Unreleased
 
 - Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
+- All side quests from Pallet Town through Brock can now be accepted and completed in the browser, including Fishing, Thieving, EV Training and Rock Smash objectives.
+- Permission-gated Developer Tools can now parse, generate, spawn, battle and clean up test Pokémon in the browser.
+- Browser Trainers can now save appearance changes from their Trainer Card.
+- Browser players can move immediately after using Reset / New Game and now respawn in the complete default outfit.
+- The browser world now continues through Route 22, Route 2, Viridian Forest and the Pewter City Gym; Route 3 directs Trainers to the downloadable client.
+- Browser Trainers can use the Aethernet between Pallet Town, Viridian City, Pewter City and the Aether Clash Lobby, with free Lobby travel for Guild members.
+- Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
+- Map textures now take substantially less download space in both desktop and browser builds without reducing visual quality.
+- Aethernet Keepers and the Guild Lobby travel button now work in the browser where travel is supported.
+- Browser login now opens directly at the Trainer's saved location without briefly showing the Player's House.
+- Gary now stays beside Professor Oak and chooses his Kanto starter during the browser storyline.
+- Professor Oak now finishes the Parcel scene after Gary leaves by directing the Trainer home to their parents.
+- Repeating an already recorded Parcel hand-in now repairs stalled story progress toward visiting Mom.
+- Repaired Parcel hand-ins now preserve Professor Oak's complete closing conversation in the browser.
+- Oak's Parcel rewards now appear with their item jingle after the complete conversation.
+- Trainers now reappear correctly after completing an Aethernet teleport in the browser.
+- Permission-gated Developer and Staff Tools are now available from My Powers in the browser; player-facing creator tools remain desktop-only.
+
+- Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
+
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator

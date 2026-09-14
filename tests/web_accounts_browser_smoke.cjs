@@ -124,16 +124,16 @@ const assert = require('node:assert/strict');
 		// does not activate this button. Wait for the response to be rendered,
 		// then use its stable viewport position.
 		await page.waitForTimeout(750);
-		for (let attempt = 0; attempt < 10 && !api.some(item => item.path === '/api/auth/web/world'); attempt += 1) {
+		for (let attempt = 0; attempt < 10 && !(await page.evaluate(() => Boolean(window.pokeaetherPreview?.worldReady))); attempt += 1) {
 			await page.mouse.click(850, 524);
 			await page.waitForTimeout(500);
 		}
-		await waitForApi(item => item.path === '/api/auth/web/world' && item.status === 200, 120000);
+		await page.waitForFunction(() => window.pokeaetherPreview?.worldReady, null, { timeout: 120000 });
 		await waitForApi(item => item.path === '/api/auth/web/profile' && item.status === 200, 30000);
 		await waitForApi(item => item.path === '/api/auth/web/world/story' && item.status === 200, 30000);
 		await page.waitForTimeout(3000);
     await page.screenshot({ path: path.join(output, 'world.png') });
-    assert(api.some(item => item.path === '/api/auth/web/world' && item.status === 200), 'browser world position loads');
+		assert(api.some(item => item.path === '/api/auth/web/profile' && item.status === 200), 'browser profile supplies the initial world position');
     assert(api.some(item => item.path === '/api/auth/web/world/story' && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status === 200), 'demo NPC metadata really loads');
 		assert(presencePositions > 0, 'browser publishes its world position through the websocket');

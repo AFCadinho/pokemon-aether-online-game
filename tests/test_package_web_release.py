@@ -51,6 +51,7 @@ class PackageWebReleaseTests(unittest.TestCase):
             pages = root / 'pages'
             r2 = root / 'r2'
             (export / 'browser-audio/music').mkdir(parents=True)
+            (export / 'modules').mkdir(parents=True)
             (export / 'index.html').write_text(
                 '<!-- POKEAETHER_RELEASE_CONFIG --><script src="index.js"></script>', encoding='utf-8')
             for name, body in {
@@ -59,6 +60,9 @@ class PackageWebReleaseTests(unittest.TestCase):
                 'pokeaether-world-preview.webp': b'preview',
                 'browser-audio/music/theme.ogg': b'audio',
                 'build-receipt.json': b'{}',
+                'modules/manifest.json': b'{"schemaVersion":1,"modules":{}}',
+                'modules/aether-clash-maps.pck': b'module',
+                'modules/export.log': b'private build diagnostics',
             }.items():
                 path = export / name
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -86,10 +90,18 @@ class PackageWebReleaseTests(unittest.TestCase):
             self.assertIn('https://play.example.test/pokemon-assets/battle/back-v1', html)
             self.assertIn('https://play.example.test/pokemon-assets/gen5/pixel-front-v1', html)
             self.assertNotIn('https://assets.example.test/web/assets/front-v1', html)
+            config = json.loads((pages / 'web-release-config.json').read_text(encoding='utf-8'))
+            self.assertEqual(config['buildId'], 'build-123')
+            self.assertEqual(
+                config['spriteStyles']['animated']['front'],
+                'https://play.example.test/pokemon-assets/battle/front-v1',
+            )
             self.assertFalse((pages / 'index.pck').exists())
             self.assertTrue((r2 / 'index.pck').is_file())
             self.assertTrue((pages / 'pokeaether-logo.webp').is_file())
             self.assertTrue((pages / 'pokeaether-world-preview.webp').is_file())
+            self.assertTrue((pages / 'modules/aether-clash-maps.pck').is_file())
+            self.assertFalse((pages / 'modules/export.log').exists())
             release = json.loads((r2 / 'web-release.json').read_text(encoding='utf-8'))
             self.assertEqual(release['objects'][0]['key'].split('/')[0:3], ['web', 'releases', 'build-123'])
             headers = (pages / '_headers').read_text(encoding='utf-8')

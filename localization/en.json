@@ -2046,7 +2046,7 @@
   "ui.guild.close": "Close Guilds",
   "ui.guild.tab.browse": "Browse Guilds",
   "ui.guild.web_client.title": "Continue in the full client",
-  "ui.guild.web_client.message": "You can view Guilds in the browser. Creating, joining, applying, Guild Bank and Aether Clash require the downloadable client.",
+  "ui.guild.web_client.message": "You can view Guilds and use Aether Clash in the browser. Creating, joining, applying and Guild Bank require the downloadable client.",
   "ui.guild.web_client.download": "Download client",
   "ui.guild.web_client.not_now": "Not now",
   "ui.guild.tab.mine": "◆  My Guild",

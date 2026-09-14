@@ -2056,7 +2056,7 @@
   "ui.guild.close": "关闭公会",
   "ui.guild.tab.browse": "浏览公会",
   "ui.guild.web_client.title": "在完整客户端中继续",
-  "ui.guild.web_client.message": "你可以在浏览器中查看公会。创建、加入、申请、公会银行和 Aether Clash 需要下载客户端。",
+  "ui.guild.web_client.message": "你可以在浏览器中查看公会并使用 Aether Clash。创建、加入、申请和公会银行仍需要下载客户端。",
   "ui.guild.web_client.download": "下载客户端",
   "ui.guild.web_client.not_now": "暂不",
   "ui.guild.tab.mine": "◆ 我的公会",

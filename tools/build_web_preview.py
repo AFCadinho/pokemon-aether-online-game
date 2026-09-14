@@ -13,7 +13,7 @@ import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-# The browser demo deliberately ships its reachable-map and PvE music rather
+# The browser client deliberately ships its reachable-map and PvE music rather
 # than silently failing dynamic ResourceLoader calls. Keep a tight ceiling for
 # that complete audio slice, instead of treating it as optional content.
 MAX_INITIAL_BYTES = 312 * 1024 * 1024
@@ -153,6 +153,12 @@ def main():
     pck_path = output / 'index.pck'
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
+        b'generated/tiled_visuals/kanto_route_22/kanto_route_22.visual.tscn',
+        b'generated/tiled_visuals/kanto_route_2/kanto_route_2.visual.tscn',
+        b'generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn',
+        b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn',
+        b'generated/tiled_visuals/pewter_gym/pewter_gym.visual.tscn',
+        b'generated/tiled_visuals/lobby/lobby.visual.tscn',
         b'assets/fonts/DejaVuSans.ttf',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
         b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
@@ -167,7 +173,10 @@ def main():
         b'node_modules/playwright-core/',
         b'assets/sprites/pokemon/front/pikachu/sheet.png.import',
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',
-        b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn.remap',
+        b'generated/tiled_visuals/route_3/route_3.visual.tscn',
+        b'generated/tiled_visuals/waiting_area/waiting_area.visual.tscn',
+        b'generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn',
+        b'generated/tiled_visuals/aether_clash_battle_royale/aether_clash_battle_royale.visual.tscn',
     )
     for marker in required_markers:
         if not pack_contains(pck_path, marker):
@@ -186,7 +195,7 @@ def main():
         'phase': 7, 'accounts': True, 'onlineGameplay': True,
         'chat': True, 'aiSparring': True, 'ranked': False,
         'dynamicPokemonSprites': True,
-        'assetProfile': 'demo-maps-full-player-static-home-battle',
+        'assetProfile': 'kanto-through-pewter-lobby-core',
         'maxInitialBytes': MAX_INITIAL_BYTES,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),

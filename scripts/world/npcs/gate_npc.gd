@@ -304,9 +304,13 @@ func _set_guard_present(present: bool) -> void:
 
 func _show_transition_denied_dialogue(access: Dictionary) -> void:
 	var dialogue_reference_id := str(access.get("dialogueId", "")).strip_edges()
+	var fallback_lines := staff_blocked_dialogue_lines
+	var web_message := str(access.get("message", "")).strip_edges()
+	if OS.has_feature("web") and not web_message.is_empty():
+		fallback_lines = [web_message]
 	var lines := await _resolve_dialogue_lines(
 		dialogue_reference_id,
-		staff_blocked_dialogue_lines
+		fallback_lines
 	)
 	if not lines.is_empty():
 		await show_dialogue(lines)

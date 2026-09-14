@@ -16,6 +16,8 @@ var _in_flight: Dictionary = {}
 var _prefetch_queue: Array[Dictionary] = []
 var _prefetch_queued_keys: Dictionary = {}
 var _prefetch_active := 0
+var _release_config_cache: Dictionary = {}
+var _release_config_ticket: LoadTicket
 
 
 func is_available() -> bool:
@@ -134,7 +136,7 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 	var normalized_id := str(identity.get("normalized_id", ""))
 	var side_folder := str(identity.get("side_folder", ""))
 
-	var release := WebRuntime.web_release_config()
+	var release := await _get_release_config()
 	var configured_styles: Variant = release.get("spriteStyles", {})
 	var base_root := ""
 	if configured_styles is Dictionary:
@@ -175,6 +177,42 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 		"visual_bounds": visual_bounds,
 	}
 	return result
+
+
+func _get_release_config() -> Dictionary:
+	var bridge_config := WebRuntime.web_release_config()
+	if _has_sprite_styles(bridge_config):
+		_release_config_cache = bridge_config
+		return bridge_config
+	if _has_sprite_styles(_release_config_cache):
+		return _release_config_cache
+	if _release_config_ticket != null:
+		var existing_ticket := _release_config_ticket
+		await existing_ticket.completed
+		return existing_ticket.result
+
+	var ticket := LoadTicket.new()
+	_release_config_ticket = ticket
+	var result: Dictionary = {}
+	var origin := WebRuntime.api_base_url().trim_suffix("/api")
+	if origin != "":
+		var response := await _download(origin + "/web-release-config.json")
+		if not response.is_empty():
+			var parsed: Variant = JSON.parse_string(
+				(response.body as PackedByteArray).get_string_from_utf8()
+			)
+			if parsed is Dictionary and _has_sprite_styles(parsed as Dictionary):
+				result = parsed as Dictionary
+				_release_config_cache = result
+	ticket.result = result
+	_release_config_ticket = null
+	ticket.completed.emit()
+	return result
+
+
+func _has_sprite_styles(config: Dictionary) -> bool:
+	var styles: Variant = config.get("spriteStyles", {})
+	return styles is Dictionary and not (styles as Dictionary).is_empty()
 
 
 func _download(url: String) -> Dictionary:

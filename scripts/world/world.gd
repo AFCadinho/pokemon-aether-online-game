@@ -191,6 +191,8 @@ func _ready() -> void:
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
+		if GameState.gameplay_reset_in_progress:
+			GameState.finish_gameplay_reset()
 		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
@@ -1695,27 +1697,34 @@ func _setup_initial_world_state() -> void:
 
 
 func _setup_web_demo_world() -> void:
-	StoryService.reset_story()
-	var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
-	if not bool(bootstrap_response.get("success", false)):
-		push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
-		return
-	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
-	if not bool(profile_response.get("success", false)):
-		push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
-		return
-	_apply_web_demo_profile(profile_response)
-	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
-	if not bool(saved_state_response.get("success", false)):
-		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
-		return
-	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
-	if not bool(story_response.get("success", false)):
-		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
-	var saved_state := _dictionary_from_value(saved_state_response.get("state", {}))
+	var saved_state: Dictionary = {}
+	if GameState.has_prepared_world_state():
+		# The loading screen has already hydrated the account and position. Consume
+		# that state before the first await so the PlayersHouse placeholder from
+		# world.tscn can never be rendered as an intermediate browser frame.
+		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
+		if bool(prepared_state.get("hasSavedState", false)):
+			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
+	else:
+		# Keep direct world-scene launches usable for development and recovery.
+		StoryService.reset_story()
+		var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+		if not bool(bootstrap_response.get("success", false)):
+			push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
+			return
+		var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+		if not bool(profile_response.get("success", false)):
+			push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
+			return
+		_apply_web_demo_profile(profile_response)
+		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if not bool(saved_state_response.get("success", false)):
+			push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
+			return
+		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
@@ -1741,6 +1750,9 @@ func _setup_web_demo_world() -> void:
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	_schedule_current_map_web_sprite_prefetch()
+	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_response.get("success", false)):
+		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
 	if bool(saved_state.get("teleportAcknowledgementRequired", false)):
 		var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
 		if not bool(ack_result.get("success", false)):
@@ -1793,11 +1805,11 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 	authorized_teleport_in_progress = true
 	if player == null:
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "World player is not ready."}
 	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
 	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "Browser demo map is unavailable."}
 	if not authorized_teleport_locked_overworld:
 		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
@@ -1817,7 +1829,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		var packed_scene := await _load_map_scene_threaded(target_scene_path)
 		if packed_scene == null:
 			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
-			cancel_authorized_teleport()
+			cancel_authorized_teleport_effect()
 			is_loading_map = false
 			return {"success": false, "error": "Browser demo map could not be loaded."}
 		target_map = packed_scene.instantiate()
@@ -1833,7 +1845,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		player.call("reset_movement_state")
 	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
 	if not bool(position_result.get("success", false)):
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		is_loading_map = false
 		return position_result
 	_apply_camera_limits_for_map(target_map)
@@ -1858,6 +1870,10 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 				"success": false,
 				"error": str(ack_result.get("error", "Could not acknowledge browser teleport.")),
 			}
+	if aethernet_teleport_effect_pending:
+		await _play_local_aethernet_effect("arrive", false)
+		aethernet_teleport_effect_pending = false
+		_set_aethernet_effect_presence("")
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_in_progress = false
 	is_loading_map = false
