@@ -1,5 +1,6 @@
 {
   "allowed": [
+    ["PUT", "/auth/web/appearance"],
     ["GET", "/auth/web/boxes"], ["GET", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/31"],
     ["POST", "/auth/web/pokemon/storage/move"], ["DELETE", "/auth/web/pokemon/42"],
     ["PUT", "/auth/web/party"], ["PATCH", "/auth/web/party/battle-state"],
