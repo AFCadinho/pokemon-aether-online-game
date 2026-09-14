@@ -117,6 +117,7 @@ const CODE_TO_KEY: Dictionary = {
 	"guild_creation_incomplete": "ui.guild.error.create",
 	"aether_clash_membership_required": "backend.error.guild_membership_not_found",
 	"aether_clash_bot_unavailable": "ui.clash_bot.unavailable",
+	"aether_clash_bot_roster_unavailable": "ui.clash_bot.unavailable",
 	"aether_clash_bot_npc_required": "ui.clash_bot.npc_required",
 	"aether_clash_bot_count_limit": "ui.clash_bot.count_limit",
 	"aether_clash_bot_request_conflict": "ui.clash_bot.request_conflict",
