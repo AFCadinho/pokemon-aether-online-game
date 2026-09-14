@@ -16,6 +16,28 @@ func load_network() -> Dictionary:
 	return await _request_json(_transit_endpoint(), HTTPClient.METHOD_GET, "")
 
 
+func load_web_lobby_recovery() -> Dictionary:
+	if not OS.has_feature("web"):
+		return {"success": true, "body": {"eligible": false}}
+	return await _request_json("/auth/web/world/recovery", HTTPClient.METHOD_GET, "")
+
+
+func recover_web_to_lobby() -> Dictionary:
+	var destination_id := "aether_clash_lobby"
+	var request_id := str(pending_request_ids.get(destination_id, ""))
+	if request_id.is_empty():
+		request_id = "web-recovery-%s-%s" % [Time.get_ticks_usec(), randi()]
+		pending_request_ids[destination_id] = request_id
+	var result := await _request_json(
+		"/auth/web/world/recovery/lobby",
+		HTTPClient.METHOD_POST,
+		JSON.stringify({"requestId": request_id, "destinationId": destination_id})
+	)
+	if bool(result.get("success", false)):
+		pending_request_ids.erase(destination_id)
+	return result
+
+
 func attune(destination_id: String, beacon_position: Vector2) -> Dictionary:
 	var position_save := await _save_current_player_position()
 	if not bool(position_save.get("success", false)):
@@ -52,14 +74,12 @@ func set_anchor(destination_id: String, beacon_position: Vector2, anchor_slot: i
 
 
 func travel(destination_id: String) -> Dictionary:
-	if OS.has_feature("web"):
-		return {"success": false, "status": 403, "error": "Aethernet travel requires the downloadable client."}
 	var request_id := str(pending_request_ids.get(destination_id, ""))
 	if request_id.is_empty():
 		request_id = "transit-%s-%s" % [Time.get_ticks_usec(), randi()]
 		pending_request_ids[destination_id] = request_id
 	var result := await _request_json(
-		TRANSIT_ENDPOINT + "/travel",
+		_transit_endpoint() + "/travel",
 		HTTPClient.METHOD_POST,
 		JSON.stringify({"requestId": request_id, "destinationId": destination_id})
 	)

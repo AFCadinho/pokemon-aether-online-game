@@ -89,9 +89,12 @@ The server issues `session_type=web` independently of client headers. Web login
 rotates only other web sessions; desktop login rotates only desktop sessions.
 Web logout does not cancel desktop queues. Existing desktop-only and ranked
 routes reject web tokens by default. Browser movement uses the canonical
-character state through server-owned map and transition allowlists; an existing
-character outside the demo remains there and is refused browser-world entry.
-Background trade, guild notifications, thieving and Rock Smash discovery are disabled on web.
+character state through a server-owned projection of the canonical map and
+transition catalogs. The browser world reaches the Pewter City Gym and blocks
+Route 3 after applying the normal Brock requirement. A character at another
+Aethernet destination can explicitly move to the Aether Clash Lobby; this never
+happens automatically and changes the shared desktop position. Background trade,
+guild notifications, thieving and Rock Smash discovery are disabled on web.
 
 The client uses the page's origin plus `/api`, never the desktop production
 fallback. Pages proxies the approved API/WebSocket routes and same-origin news;
@@ -120,12 +123,18 @@ From the `game` workspace, for the assigned slot (example: slot-b):
 
 ```sh
 ops/worktrees/slot-env slot-b -- python3 .worktrees/slot-b/frontend/tools/build_web_preview.py
+ops/worktrees/slot-env slot-b -- python3 .worktrees/slot-b/frontend/tools/build_web_asset_modules.py
 python3 .worktrees/slot-b/frontend/tools/serve_web_preview.py
 ```
 
 Open `http://127.0.0.1:8060` and click **Play now**. Use
 `--port 8061` if that port is occupied. The server binds only to 127.0.0.1, serves
 only the generated export, and does not log request URLs or bodies.
+
+The core export includes Pallet Town through Pewter City plus the Aether Clash
+Lobby. Waiting Area, Guild Duel and Battle Royale maps live in the separately
+hashed `modules/aether-clash-maps.pck`; the web client verifies and mounts that
+pack before it creates or accepts a Clash or enters an arena portal.
 
 The assigned slot needs Godot's matching `web_nothreads_release.zip` export
 template installed in its own XDG data directory. This is engine tooling, not a

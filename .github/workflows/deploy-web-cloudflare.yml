@@ -117,6 +117,7 @@ jobs:
             --version "${RELEASE_VERSION}" --web-build-id "${WEB_BUILD_ID}"
           ./godot --headless --import --quit
           python3 tools/build_web_preview.py --godot ./godot
+          python3 tools/build_web_asset_modules.py --godot ./godot
 
       - name: Package Pages and R2 release
         env:
