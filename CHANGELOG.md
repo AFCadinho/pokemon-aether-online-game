@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Co-op testing now supports Zoe, Mason, Cale, Rick, Doug, Anthony, Flint and Stone with their original teams. Previously victorious Trainers can join as helpers without entering the solo rematch flow.
 - Co-op testing now plays move effects and battle sounds across all four Pokémon positions, including spread attacks and misses, with safe cancellation when leaving a battle.
 - Co-op testing now has a dedicated four-Pokémon battle screen with animated sprites, HP/status, clear ownership, legal target selection, replacement controls and a reconnect-safe battle history. Co-op remains disabled until release activation.
 - Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
