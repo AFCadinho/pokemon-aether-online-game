@@ -9,6 +9,7 @@
 - Aethernet Keepers and the Guild Lobby travel button now work in the browser where travel is supported.
 - Browser login now opens directly at the Trainer's saved location without briefly showing the Player's House.
 - Gary now stays beside Professor Oak and chooses his Kanto starter during the browser storyline.
+- Professor Oak now finishes the Parcel scene after Gary leaves by directing the Trainer home to their parents.
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 

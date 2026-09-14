@@ -142,6 +142,11 @@ func _run() -> void:
 		and oak_text.contains('gary.call("play_parcel_return_departure", player)'),
 		"Oak keeps Gary staged throughout the completed parcel scene"
 	)
+	_check_true(
+		oak_text.find('gary.call("play_parcel_return_departure", player)')
+			< oak_text.find("quest_turn_in_journey_dialogue_id", oak_text.find("func _turn_in_quest_item")),
+		"Oak gives the journey-home instruction after Gary has departed"
+	)
 	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
 	_check_true(
 		starter_ball_text.contains("selection_stand_offset := Vector2(0, 32)"),
