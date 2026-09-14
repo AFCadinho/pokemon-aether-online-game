@@ -235,6 +235,11 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		return
 	if not bool(result.get("storyRefreshSuccess", false)):
 		push_warning("Oak: parcel turn-in succeeded but story refresh did not complete locally.")
+	if bool(result.get("alreadyTurnedIn", false)):
+		# The server may be repairing an older receipt whose story event never
+		# advanced. Do not replay Gary's one-time departure scene during recovery.
+		_cancel_pending_gary_parcel_departure(gary)
+		return
 	await show_dialogue(await _resolve_dialogue_lines(
 		quest_turn_in_completed_dialogue_id,
 		[
