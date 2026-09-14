@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Permission-gated Developer Tools can now parse, generate, spawn and clean up test Pokémon in the browser.
+- Permission-gated Developer Tools can now parse, generate, spawn, battle and clean up test Pokémon in the browser.
 - Browser Trainers can now save appearance changes from their Trainer Card.
 - Browser players can move immediately after using Reset / New Game and now respawn in the complete default outfit.
 - The browser world now continues through Route 22, Route 2, Viridian Forest and the Pewter City Gym; Route 3 directs Trainers to the downloadable client.
