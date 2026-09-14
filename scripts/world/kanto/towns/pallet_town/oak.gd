@@ -235,11 +235,12 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		return
 	if not bool(result.get("storyRefreshSuccess", false)):
 		push_warning("Oak: parcel turn-in succeeded but story refresh did not complete locally.")
-	if bool(result.get("alreadyTurnedIn", false)):
+	var should_play_gary_departure := not bool(result.get("alreadyTurnedIn", false))
+	if not should_play_gary_departure:
 		# The server may be repairing an older receipt whose story event never
-		# advanced. Do not replay Gary's one-time departure scene during recovery.
+		# advanced. Keep Oak's remaining dialogue, but do not replay Gary's
+		# one-time departure scene during recovery.
 		_cancel_pending_gary_parcel_departure(gary)
-		return
 	await show_dialogue(await _resolve_dialogue_lines(
 		quest_turn_in_completed_dialogue_id,
 		[
@@ -256,9 +257,13 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		var reward_feedback_shown := InventoryService.notify_story_reward_effects(result.get("storyEffects", []))
 		if not reward_feedback_shown:
 			SfxManager.play("item_received")
-	if gary != null and gary.has_method("play_parcel_return_departure"):
+	if (
+		should_play_gary_departure
+		and gary != null
+		and gary.has_method("play_parcel_return_departure")
+	):
 		await gary.call("play_parcel_return_departure", player)
-	else:
+	elif should_play_gary_departure:
 		_cancel_pending_gary_parcel_departure(gary)
 	face_world_position(_get_body_feet_position(player))
 	if player != null and player.has_method("face_world_position"):
