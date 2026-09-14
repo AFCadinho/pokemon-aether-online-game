@@ -19,9 +19,12 @@ const AETHER_CLASH_HISTORY_ENDPOINT := "/game/aether-clash/history"
 const AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT := "/game/aether-clash/player-challenges"
 const AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT := "/game/aether-clash/portal-sessions"
 const AETHER_CLASH_SESSIONS_ENDPOINT := "/game/aether-clash/sessions"
+const AETHER_CLASH_BOTS_ENDPOINT := "/game/aether-clash/bot-guild"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
+var pending_bot_request: Dictionary = {}
+var bot_request_in_flight := false
 var current_membership: Dictionary = {}
 var current_guild: Dictionary = {}
 var membership_loaded := false
@@ -371,6 +374,40 @@ func load_aether_clash_history_detail(challenge_id: String) -> Dictionary:
 		"success": true,
 		"detail": _normalize_aether_clash_history_detail(response.get("body", {})),
 	}
+
+
+func load_aether_clash_bot_options() -> Dictionary:
+	var response := await _authenticated_request(AETHER_CLASH_BOTS_ENDPOINT + "/options", HTTPClient.METHOD_GET, "")
+	if not bool(response.get("success", false)):
+		return response
+	return {"success": true, "options": _dictionary(response.get("body", {})).duplicate(true)}
+
+
+func create_aether_clash_bot_challenge(bot_count: int, tier_id: String, spectator_access: String) -> Dictionary:
+	if bot_request_in_flight:
+		return {"success": false, "error": LocalizationManager.text("ui.clash_bot.pending")}
+	var settings := {"botCount": bot_count, "tierId": tier_id, "spectatorAccess": spectator_access}
+	if _dictionary(pending_bot_request.get("settings", {})) != settings:
+		pending_bot_request = {"settings": settings.duplicate(true), "requestId": _new_bot_request_id()}
+	var payload := settings.duplicate(true)
+	payload["requestId"] = str(pending_bot_request["requestId"])
+	bot_request_in_flight = true
+	var response := await _authenticated_request(
+		AETHER_CLASH_BOTS_ENDPOINT + "/challenges", HTTPClient.METHOD_POST, JSON.stringify(payload)
+	)
+	bot_request_in_flight = false
+	# Keep the same key after an ambiguous timeout; a retry recovers the session.
+	if bool(response.get("success", false)):
+		pending_bot_request.clear()
+	return _aether_clash_action_result(response)
+
+
+func _new_bot_request_id() -> String:
+	var bytes := Crypto.new().generate_random_bytes(16)
+	bytes[6] = (bytes[6] & 0x0f) | 0x40
+	bytes[8] = (bytes[8] & 0x3f) | 0x80
+	var hex := bytes.hex_encode()
+	return "%s-%s-%s-%s-%s" % [hex.substr(0, 8), hex.substr(8, 4), hex.substr(12, 4), hex.substr(16, 4), hex.substr(20, 12)]
 
 
 func create_aether_clash_challenge(

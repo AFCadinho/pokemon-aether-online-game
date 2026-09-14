@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the Clash Training Captain and a training setup menu with an independent opposing bot count. Training stays unavailable until bot-guild V1 is ready.
+
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
 ## 0.3.78 - 2026-09-13
