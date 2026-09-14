@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Co-op testing now has a dedicated four-Pokémon battle screen with animated sprites, HP/status, clear ownership, legal target selection, replacement controls and a reconnect-safe battle history. Co-op remains disabled until release activation.
 - Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
 - All side quests from Pallet Town through Brock can now be accepted and completed in the browser, including Fishing, Thieving, EV Training and Rock Smash objectives.
 - Permission-gated Developer Tools can now parse, generate, spawn, battle and clean up test Pokémon in the browser.
