@@ -4,6 +4,7 @@ class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
 const WEB_PLAYER_POSITION_ENDPOINT := "/auth/web/world"
+const WEB_PLAYER_APPEARANCE_ENDPOINT := "/auth/web/appearance"
 const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
 const WEB_PLAYER_TELEPORT_ACK_ENDPOINT := "/auth/web/world/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
@@ -654,6 +655,35 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"state": _dictionary_from_value(body.get("state", {})),
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
+	}
+
+
+func save_player_appearance(appearance: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if not OS.has_feature("web"):
+		return {
+			"success": false,
+			"error": "The dedicated appearance endpoint is only used by the browser client.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + WEB_PLAYER_APPEARANCE_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(appearance)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"appearance": _dictionary_from_value(body.get("appearance", {})),
 	}
 
 

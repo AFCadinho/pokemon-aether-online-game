@@ -18889,6 +18889,10 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 	_update_trainer_card_appearance_save_state("ui.appearance.status.saved")
 
 func _save_trainer_card_appearance_to_backend() -> Dictionary:
+	if OS.has_feature("web"):
+		return await PlayerGameStateService.save_player_appearance(
+			PlayerSave.to_appearance_state()
+		)
 	var world := GameState.get_world()
 	if world == null or not world.has_method("save_current_player_state_now"):
 		return {
@@ -18905,8 +18909,10 @@ func _save_trainer_card_appearance_to_backend() -> Dictionary:
 	}
 
 func _save_response_matches_current_appearance(result: Dictionary) -> bool:
-	var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
-	var appearance: Dictionary = _staff_dictionary_from_variant(state.get("appearance", {}))
+	var appearance: Dictionary = _staff_dictionary_from_variant(result.get("appearance", {}))
+	if appearance.is_empty():
+		var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
+		appearance = _staff_dictionary_from_variant(state.get("appearance", {}))
 	if appearance.is_empty():
 		return false
 

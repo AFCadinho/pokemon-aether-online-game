@@ -5,6 +5,7 @@ var failed := false
 
 func _init() -> void:
 	var reset_service := _source("res://scripts/services/player_gameplay_reset_service.gd")
+	var player_state_service := _source("res://scripts/services/player_game_state_service.gd")
 	var game_state := _source("res://scripts/core/game_state.gd")
 	var player_data := _source("res://scripts/data/player_data.gd")
 	var loading := _source("res://scripts/ui/loading_screen.gd")
@@ -54,6 +55,16 @@ func _init() -> void:
 		"the destructive confirmation explains mail attachment loss and session revocation"
 	)
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
+	_expect(
+		player_state_service.contains('const WEB_PLAYER_APPEARANCE_ENDPOINT := "/auth/web/appearance"')
+		and player_state_service.contains("func save_player_appearance(appearance: Dictionary)"),
+		"browser appearance saves use a dedicated narrow endpoint"
+	)
+	_expect(
+		overlay.contains('if OS.has_feature("web"):\n\t\treturn await PlayerGameStateService.save_player_appearance(')
+		and overlay.contains('result.get("appearance", {})'),
+		"Trainer Card saves and verifies the dedicated browser appearance response"
+	)
 	_expect(
 		loading.contains("PlayerSave.reset_appearance_to_defaults()")
 		and loading.contains('saved_state["appearance"] = PlayerSave.to_appearance_state()'),
