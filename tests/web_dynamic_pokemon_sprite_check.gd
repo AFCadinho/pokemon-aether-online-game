@@ -49,6 +49,8 @@ func _init() -> void:
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/web_pokemon_sprite_service.gd")
 	_check(service_source.contains("spriteStyles") and service_source.contains("WebRuntime.web_release_config()"),
 		"production sprite styles use versioned R2 base URLs")
+	_check(service_source.contains('"/web-release-config.json"') and service_source.contains("_has_sprite_styles"),
+		"browser sprites recover versioned release URLs when the JavaScript bridge loses its object")
 	_check(service_source.contains("DOWNLOAD_ATTEMPTS := 3") and service_source.contains("await _download_once(url)"),
 		"browser sprite downloads retry bounded transient failures")
 	_check(not service_source.contains("Accept: application/json,image/png"),
