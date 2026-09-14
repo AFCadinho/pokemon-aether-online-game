@@ -12,6 +12,7 @@
 - Professor Oak now finishes the Parcel scene after Gary leaves by directing the Trainer home to their parents.
 - Repeating an already recorded Parcel hand-in now repairs stalled story progress toward visiting Mom.
 - Repaired Parcel hand-ins now preserve Professor Oak's complete closing conversation in the browser.
+- Oak's Parcel rewards now appear with their item jingle after the complete conversation.
 - Trainers now reappear correctly after completing an Aethernet teleport in the browser.
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.

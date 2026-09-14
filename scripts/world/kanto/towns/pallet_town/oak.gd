@@ -248,15 +248,6 @@ func _turn_in_quest_item(player: Node2D) -> void:
 			"You and your new partner handled your first errand well. Your journey has truly begun.",
 		]
 	))
-	if bool(result.get("turnedIn", false)):
-		get_tree().call_group(
-			"ui_overlay",
-			"add_system_message",
-			LocalizationManager.text("ui.key_item.received_pokedex")
-		)
-		var reward_feedback_shown := InventoryService.notify_story_reward_effects(result.get("storyEffects", []))
-		if not reward_feedback_shown:
-			SfxManager.play("item_received")
 	if (
 		should_play_gary_departure
 		and gary != null
@@ -275,6 +266,17 @@ func _turn_in_quest_item(player: Node2D) -> void:
 			+ "They should be the first to hear that you are ready.",
 		]
 	))
+	if bool(result.get("turnedIn", false)):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.key_item.received_pokedex")
+		)
+		var item_reward_displayed := InventoryService.notify_story_reward_effects(
+			result.get("storyEffects", [])
+		)
+		if item_reward_displayed:
+			SfxManager.play("item_received")
 
 
 func _cancel_pending_gary_parcel_departure(gary: Node) -> void:
