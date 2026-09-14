@@ -8,6 +8,7 @@ var failed := false
 func _init() -> void:
 	var source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 	var visibility := _function_block(source, "func _refresh_dev_tools_visibility()")
+	var open_my_powers := _function_block(source, "func _on_my_powers_button_pressed()")
 	var open_dev_actions := _function_block(source, "func _can_open_dev_actions()")
 	var open_dev_menu := _function_block(source, "func _on_dev_actions_button_pressed()")
 	var open_resources := _function_block(source, "func _on_dev_add_button_pressed()")
@@ -31,6 +32,17 @@ func _init() -> void:
 	_check(
 		open_dev_actions.contains("return _can_use_dev_tools() or _can_generate_dev_items()"),
 		"item-only users can open the Developer Tools launcher"
+	)
+	_check(
+		not open_my_powers.contains('OS.has_feature("web")')
+		and open_my_powers.contains('get_meta("group_available", false)'),
+		"permission-gated My Powers opens in both browser and desktop builds"
+	)
+	_check(
+		visibility.contains("can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web")
+		and visibility.contains("can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web")
+		and visibility.contains("or can_open_dev_actions"),
+		"browser My Powers keeps player creator tools desktop-only while retaining Developer Tools"
 	)
 	_check(
 		visibility.contains("dev_add_pokemon_button.visible = can_generate_dev_pokemon")
