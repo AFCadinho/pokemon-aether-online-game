@@ -69,6 +69,9 @@ const WEB_BATTLE_SPRITE_PREFETCH_ALIASES := {
 var is_in_battle := false
 var battle_instance: Node
 var replay_return_callback: Callable
+var coop_controls: Control
+var coop_world_ready := false
+var coop_finishing := false
 
 func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bool:
 	if is_in_battle or wild_battle_resume_pending:
@@ -203,6 +206,7 @@ func _ready() -> void:
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
 	await _setup_initial_world_state()
+	_setup_coop_controls()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
@@ -1882,6 +1886,17 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 
 
 func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
+	if str(_dictionary_from_value(saved_state.get("activityContext", {})).get("kind", "")) == "coop":
+		_setup_coop_controls()
+		var coop_result: Dictionary = await CoopService.refresh()
+		if coop_result.get("success", false) and CoopService.activity.is_empty():
+			return {"resumed": false, "retryable": false}
+		if CoopService.activity.is_empty():
+			var context := _dictionary_from_value(saved_state.get("activityContext", {}))
+			CoopService.activity = {"reservationId": context.get("reservationId", ""),
+				"battleId": context.get("battleId", ""), "status": "starting", "canCancel": false}
+		_on_coop_state_changed()
+		return {"resumed": true, "retryable": false}
 	if str(_dictionary_from_value(saved_state.get("activityContext", {})).get("kind", "")) == "trainer":
 		return await _resume_saved_trainer_battle(saved_state)
 	wild_battle_resume_pending = false
@@ -2936,6 +2951,8 @@ func _is_remote_interaction_candidate_above(first: Dictionary, second: Dictionar
 
 
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
+	if active_battle_kind == "coop":
+		return  # Co-op reservation/settlement owns both stored activity states.
 	if not AuthService.is_authenticated() or player == null:
 		return
 	if _is_player_position_save_blocked_by_teleport():
@@ -3090,6 +3107,11 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 func _get_current_activity_context() -> Dictionary:
 	if not is_in_battle or active_battle_kind == "replay":
 		return {}
+	if active_battle_kind == "coop":
+		var context := {"kind": "coop", "reservationId": CoopService.activity.get("reservationId", "")}
+		if CoopService.activity.get("status") == "active":
+			context["battleId"] = active_battle_id
+		return context
 	return {
 		"kind": active_battle_kind,
 		"battleId": active_battle_id,
@@ -3112,6 +3134,8 @@ func _save_player_activity_state_deferred(activity_state: String, activity_conte
 
 
 func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
+	if active_battle_kind == "coop":
+		return
 	pending_activity_state_save = {
 		"state": activity_state,
 		"context": activity_context.duplicate(true),
@@ -3710,6 +3734,11 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"success": false,
 			"code": "trainer_battle_configuration_invalid",
 		}
+
+	if not OS.has_feature("web"):
+		var coop_result: Dictionary = await CoopService.try_start(trainer_id)
+		if coop_result.get("handled", false):
+			return coop_result
 
 	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
 	if player_lead_slot <= 0:
@@ -5072,7 +5101,77 @@ func recover_failed_trainer_battle_start() -> void:
 	# recovery idempotent because a normal rejected request already passes
 	# through _abort_battle_start; the second call repairs a browser-side lock
 	# left behind by an interrupted transition or error dialogue.
+	if active_battle_kind == "coop":
+		return
 	if is_in_battle:
 		_abort_battle_start()
 		return
 	_unlock_overworld_after_battle()
+
+
+func _setup_coop_controls() -> void:
+	if coop_world_ready or OS.has_feature("web"):
+		return
+	coop_world_ready = true
+	var layer := CanvasLayer.new()
+	layer.layer = 30
+	add_child(layer)
+	layer.add_child(preload("res://scripts/battle/coop_controls.gd").new())
+	CoopService.state_changed.connect(_on_coop_state_changed)
+	_on_coop_state_changed()
+
+
+func _on_coop_state_changed() -> void:
+	if not coop_world_ready or coop_finishing:
+		return
+	if CoopService.activity.is_empty():
+		if active_battle_kind == "coop":
+			finish_coop_activity.call_deferred()
+		return
+	if is_in_battle and active_battle_kind != "coop":
+		return
+	if active_battle_kind != "coop":
+		is_in_battle = true
+		active_battle_kind = "coop"
+		_lock_overworld_for_battle()
+		coop_controls = preload("res://scripts/battle/coop_controls.gd").new()
+		coop_controls.battle_mode = true
+		battle_ui_host.add_child(coop_controls)
+		battle_ui_host.visible = true
+	active_battle_id = str(CoopService.activity.get("battleId", ""))
+	_publish_world_presence(true)
+
+
+func finish_coop_activity() -> void:
+	var already_acknowledged := CoopService.activity.is_empty() and active_battle_kind == "coop"
+	if coop_finishing or (not already_acknowledged and CoopService.activity.get("status") not in ["finished", "cancelled"]):
+		return
+	coop_finishing = true
+	var key := str(CoopService.activity.get("reservationId", ""))
+	var profile: Dictionary = await PlayerGameStateService.load_player_profile()
+	if not profile.get("success", false):
+		coop_finishing = false
+		CoopService.request_failed.emit("Could not reload your Trainer. Please try again.")
+		return
+	# A lost acknowledgement response may leave only the local overlay. Release
+	# it only after the account profile confirms that no battle remains active.
+	if already_acknowledged and profile.get("position", {}).get("state", {}).get("activityState", "battle") == "battle":
+		coop_finishing = false
+		return
+	var inventory: Dictionary = await InventoryService.load_inventory()
+	if not inventory.get("success", false):
+		coop_finishing = false
+		return
+	PlayerSave.replace_party_from_state(profile.get("party", {}).get("party", []))
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": profile.get("wallet", {}), "badges": profile.get("badges", {})})
+	StoryService.apply_story(profile.get("story", {}))
+	if not already_acknowledged:
+		var response: Dictionary = await CoopService.party_action("acknowledge", {"reservationId": key})
+		if not response.get("success", false) and not CoopService.activity.is_empty():
+			coop_finishing = false
+			return
+	GameState.set_prepared_world_state({"hasSavedState": true, "savedState": profile.get("position", {}).get("state", {})})
+	# Account settlement already applied any respawn. Re-enter at that saved
+	# position; do not invoke the solo reward/blackout path a second time.
+	_abort_battle_start(true)
+	get_tree().call_deferred("reload_current_scene")
