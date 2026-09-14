@@ -1691,27 +1691,34 @@ func _setup_initial_world_state() -> void:
 
 
 func _setup_web_demo_world() -> void:
-	StoryService.reset_story()
-	var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
-	if not bool(bootstrap_response.get("success", false)):
-		push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
-		return
-	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
-	if not bool(profile_response.get("success", false)):
-		push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
-		return
-	_apply_web_demo_profile(profile_response)
-	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
-	if not bool(saved_state_response.get("success", false)):
-		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
-		return
-	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
-	if not bool(story_response.get("success", false)):
-		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
-	var saved_state := _dictionary_from_value(saved_state_response.get("state", {}))
+	var saved_state: Dictionary = {}
+	if GameState.has_prepared_world_state():
+		# The loading screen has already hydrated the account and position. Consume
+		# that state before the first await so the PlayersHouse placeholder from
+		# world.tscn can never be rendered as an intermediate browser frame.
+		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
+		if bool(prepared_state.get("hasSavedState", false)):
+			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
+	else:
+		# Keep direct world-scene launches usable for development and recovery.
+		StoryService.reset_story()
+		var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+		if not bool(bootstrap_response.get("success", false)):
+			push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
+			return
+		var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+		if not bool(profile_response.get("success", false)):
+			push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
+			return
+		_apply_web_demo_profile(profile_response)
+		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if not bool(saved_state_response.get("success", false)):
+			push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
+			return
+		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
@@ -1737,6 +1744,9 @@ func _setup_web_demo_world() -> void:
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	_schedule_current_map_web_sprite_prefetch()
+	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_response.get("success", false)):
+		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
 	if bool(saved_state.get("teleportAcknowledgementRequired", false)):
 		var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
 		if not bool(ack_result.get("success", false)):

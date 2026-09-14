@@ -7,6 +7,7 @@
 - Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
 - Map textures now take substantially less download space in both desktop and browser builds without reducing visual quality.
 - Aethernet Keepers and the Guild Lobby travel button now work in the browser where travel is supported.
+- Browser login now opens directly at the Trainer's saved location without briefly showing the Player's House.
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
