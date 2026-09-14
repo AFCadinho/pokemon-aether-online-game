@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CHECK_SCRIPTS: Array[String] = [
+	"res://tests/coop_gameplay_check.gd",
 	"res://tests/mount_performance_check.gd",
 	"res://tests/player_map_layer_cache_check.gd",
 	"res://tests/battle_display_data_presenter_check.gd",

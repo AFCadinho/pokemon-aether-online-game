@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
 ## 0.3.78 - 2026-09-13
 
 ### Battles and calculator
