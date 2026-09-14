@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- The browser world now continues through Route 22, Route 2, Viridian Forest and the Pewter City Gym; Route 3 directs Trainers to the downloadable client.
+- Browser Trainers can use the Aethernet between Pallet Town, Viridian City, Pewter City and the Aether Clash Lobby, with free Lobby travel for Guild members.
+- Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
+
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
 ## 0.3.78 - 2026-09-13

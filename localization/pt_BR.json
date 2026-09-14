@@ -2059,7 +2059,7 @@
   "ui.guild.close": "Fechar Guildas",
   "ui.guild.tab.browse": "Explorar Guildas",
   "ui.guild.web_client.title": "Continue no cliente completo",
-  "ui.guild.web_client.message": "Você pode ver Guildas no navegador. Criar, entrar, candidatar-se, Banco da Guilda e Aether Clash exigem o cliente para download.",
+  "ui.guild.web_client.message": "Você pode ver Guildas e usar o Aether Clash no navegador. Criar, entrar, candidatar-se e o Banco da Guilda exigem o cliente para download.",
   "ui.guild.web_client.download": "Baixar cliente",
   "ui.guild.web_client.not_now": "Agora não",
   "ui.guild.tab.mine": "◆  Minha Guilda",
