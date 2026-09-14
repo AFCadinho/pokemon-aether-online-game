@@ -23,6 +23,7 @@ var quest_turn_in_quest_id := ""
 var quest_turn_in_step_id := ""
 var quest_turn_in_dialogue_id := ""
 var quest_turn_in_completed_dialogue_id := ""
+var quest_turn_in_journey_dialogue_id := ""
 
 
 func _ready() -> void:
@@ -184,6 +185,9 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	quest_turn_in_completed_dialogue_id = str(
 		metadata.get("questTurnInCompletedDialogueId", "")
 	).strip_edges()
+	quest_turn_in_journey_dialogue_id = str(
+		metadata.get("questTurnInJourneyDialogueId", "")
+	).strip_edges()
 
 
 func _is_quest_turn_in_available() -> bool:
@@ -251,6 +255,16 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		await gary.call("play_parcel_return_departure", player)
 	else:
 		_cancel_pending_gary_parcel_departure(gary)
+	face_world_position(_get_body_feet_position(player))
+	if player != null and player.has_method("face_world_position"):
+		player.face_world_position(get_feet_position())
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_turn_in_journey_dialogue_id,
+		[
+			"Before you begin your journey, go home and check in with your parents. "
+			+ "They should be the first to hear that you are ready.",
+		]
+	))
 
 
 func _cancel_pending_gary_parcel_departure(gary: Node) -> void:
