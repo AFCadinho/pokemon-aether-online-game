@@ -116,6 +116,7 @@ jobs:
           python3 tools/stamp_godot_version.py --project project.godot --export-presets export_presets.cfg \
             --version "${RELEASE_VERSION}" --web-build-id "${WEB_BUILD_ID}"
           ./godot --headless --import --quit
+          ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd
           python3 tools/build_web_preview.py --godot ./godot
           python3 tools/build_web_asset_modules.py --godot ./godot
 
