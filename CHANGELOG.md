@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Oak's lab entrance now triggers on the reachable doorway tile in browser and desktop.
 - Your house and Oak's lab use smaller lossless map atlases in both browser and desktop, with their artwork unchanged.
 
 - Newly imported maps use compact lossless atlases while preserving their artwork in the browser and desktop client.

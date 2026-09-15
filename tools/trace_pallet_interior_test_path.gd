@@ -1,6 +1,9 @@
 extends SceneTree
 
 func _init() -> void:
+	_run.call_deferred()
+
+func _run() -> void:
 	var scene: PackedScene = load("res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn")
 	var root := scene.instantiate()
 	var collision := root.get_node("Collision") as TileMapLayer

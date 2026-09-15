@@ -2485,7 +2485,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tsc
 target_spawn_name = "FromPalletTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOaksLab" unique_id=550005627]
-position = Vector2(800, 640)
+position = Vector2(800, 672)
 shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="DoorTransitionHint" parent="Exits/ToOaksLab" unique_id=1983010285 instance=ExtResource("24_door_hint")]
