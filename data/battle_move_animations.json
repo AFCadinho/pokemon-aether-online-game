@@ -5707,7 +5707,7 @@
       "overlay_fill_enabled": false,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/grassyterrain/grassyterrain.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Giga Drain BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -7889,7 +7889,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/vinewhip/vinewhip.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7907,7 +7907,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/leafage/leafage.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8019,7 +8019,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/razorleaf/razorleaf.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8058,7 +8058,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/growth/growth.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {

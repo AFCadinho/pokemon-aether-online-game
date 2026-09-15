@@ -330,7 +330,7 @@
       "source": "Common:GrassyTerrain",
       "category": "field_start",
       "data_path": "res://assets/battles/animations/common/grassyterrain/grassyterrain.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {

@@ -10,6 +10,8 @@ const {execFileSync}=require('node:child_process');
   const origin=process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
   assert(['127.0.0.1','localhost'].includes(new URL(origin).hostname),'Loopback only');
   const output=path.resolve(__dirname,'../builds/web-real-battle-memory');
+  const scenario=process.env.POKEAETHER_WEB_MEMORY_SCENARIO || 'electric';
+  assert(['electric','grass'].includes(scenario),'Supported fixed scenario required');
   fs.mkdirSync(output,{recursive:true});
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const context=await browser.newContext({viewport:{width:1440,height:900}});
@@ -92,7 +94,7 @@ const {execFileSync}=require('node:child_process');
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,textureAudit,timingComparable:!textureAudit,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,textureAudit,timingComparable:!textureAudit,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();
