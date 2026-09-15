@@ -28,6 +28,7 @@ func _run() -> void:
 func _scene(dense: bool) -> Node2D:
 	var root := Node2D.new()
 	var tiles := TileSet.new()
+	tiles.set_meta("tiled_source_signature", "dense-layout-regression-fixture")
 	tiles.tile_size = Vector2i(32, 32)
 	tiles.add_custom_data_layer()
 	tiles.set_custom_data_layer_name(0, "semantic")
@@ -88,6 +89,7 @@ func _check_small_and_split() -> void:
 			root.free()
 			continue
 		_check(original.get_source_count() == 2 and before.get_tiles_count() == (1024 if dense else 96), "Original TileSet is not mutated")
+		_check(not layer.tile_set.has_meta("tiled_source_signature") and original.has_meta("tiled_source_signature"), "Dense source reuse signature is invalidated without mutating original")
 		_check(layer.tile_set.get_source_count() == (2 if dense else 1), "Unused source removed / large source split")
 		var errors := Validator.new().validate(root, path)
 		_check(errors.is_empty(), "Compact layout validates: " + str(errors))

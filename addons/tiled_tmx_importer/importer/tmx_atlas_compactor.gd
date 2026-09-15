@@ -41,6 +41,9 @@ func compact(root: Node, output_tileset_path: String) -> Dictionary:
 			if source.get_tile_animation_frames_count(coords) != 1 or source.get_tile_size_in_atlas(coords) != Vector2i.ONE:
 				return {"success": false, "error": "Animated or multi-cell atlas tiles require an animation-aware import path."}
 	var compact_set := original.duplicate(false) as TileSet
+	# The dense builder signature must never authorize reusing a remapped layout.
+	if compact_set.has_meta("tiled_source_signature"):
+		compact_set.remove_meta("tiled_source_signature")
 	for i in range(compact_set.get_source_count() - 1, -1, -1):
 		compact_set.remove_source(compact_set.get_source_id(i))
 	compact_set.set_meta("tiled_compact_atlas_version", VERSION)
