@@ -32,6 +32,20 @@ func _run() -> void:
 	passed = passed and audit.uniqueTextures == 1 and audit.estimatedRGBABytes == 64 * 32 * 4
 	passed = passed and audit.paths == [{"path": path, "width": 64, "height": 32}]
 	passed = passed and not ResourceLoader.has_cached(missing)
+	var world_path := "res://assets/ui/probe/sheet.png"
+	var world_sheet := ImageTexture.create_from_image(image)
+	world_sheet.take_over_path(world_path)
+	var world_missing := "res://generated/tiled_visuals/probe/not-loaded.texture.res"
+	var world_audit: Dictionary = probe.diagnostic_cached_world_textures([world_path, world_path, world_missing,
+		"user://session", "res://assets/ui/../../private/session", path, 123])
+	passed = passed and world_audit.paths == [{"path": world_path, "width": 64, "height": 32}]
+	passed = passed and world_audit.uniqueTextures == 1 and world_audit.estimatedRGBABytes == 64 * 32 * 4
+	passed = passed and not ResourceLoader.has_cached(world_missing)
+	passed = passed and probe.diagnostic_cached_effect_textures([world_path]).uniqueTextures == 0
+	var bounded_paths: Array = []
+	bounded_paths.resize(256)
+	bounded_paths.append(world_path)
+	passed = passed and probe.diagnostic_cached_world_textures(bounded_paths).uniqueTextures == 0
 	var electric_path := "res://assets/battles/animations/electricterrain/PRAS- Electric.png"
 	var electric := load(electric_path) as Texture2D
 	var reused := load(electric_path) as Texture2D
