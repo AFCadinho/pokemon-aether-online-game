@@ -29,10 +29,9 @@ func _init() -> void:
 	)
 	var web_audio_catalog := FileAccess.get_file_as_string("res://scripts/services/web_demo_audio_catalog.gd")
 	_check(
-		web_audio_catalog.contains("lugia_theme_lofi.ogg\")")
-			and web_audio_catalog.contains("Kanto Wild Battle.ogg\")")
-			and music_manager_source.contains("WebDemoAudioCatalog.get_stream(path)"),
-		"browser music explicitly preloads its imported streams instead of loading raw OGG paths"
+		not web_audio_catalog.contains("preload(")
+			and not music_manager_source.contains("WebDemoAudioCatalog.get_stream(path)"),
+		"browser music has no embedded music preloads"
 	)
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
 	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")

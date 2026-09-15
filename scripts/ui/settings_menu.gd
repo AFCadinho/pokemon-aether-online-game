@@ -205,6 +205,12 @@ func open(context: String = "game") -> void:
 
 
 func _process(_delta: float) -> void:
+	if OS.has_feature("web") and visible and fullscreen_check_box != null:
+		fullscreen_check_box.set_pressed_no_signal(SettingsManager.fullscreen)
+		fullscreen_check_box.disabled = not bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.supported())", true))
+		var error: Variant = JavaScriptBridge.eval("window.pokeaetherFullscreen?.error() || ''", true)
+		fullscreen_check_box.tooltip_text = str(error) if error != null else ""
+		resolution_options_button.disabled = true
 	if visible and world_pixel_scale_options_button != null:
 		if world_pixel_scale_options_button.disabled != (OS.has_feature("web") or ArenaCameraPolicy.is_locked(get_tree())):
 			_apply_world_pixel_scale_options_to_control()
@@ -1922,7 +1928,7 @@ func _on_performance_toggled(enabled: bool) -> void:
 
 
 func _on_fullscreen_toggled(enabled: bool) -> void:
-	resolution_options_button.disabled = enabled
+	resolution_options_button.disabled = enabled or OS.has_feature("web")
 	if loading_controls:
 		return
 

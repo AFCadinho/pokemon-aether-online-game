@@ -4,6 +4,11 @@
 
 - Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
 
+- Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
+
+- Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
+
+- Login failure messages remain visible on Welcome Back, and the browser preserves your original Remember me choice when restoring a session.
 - Improved resource cleanup when closing the game and during battle-preview transitions.
 
 - Corrected missing tiles in the browser's Misty-region interiors by rebuilding their lossless texture atlases with browser-safe dimensions. Browser login no longer starts the placeholder house's NPCs while downloading your saved map.
