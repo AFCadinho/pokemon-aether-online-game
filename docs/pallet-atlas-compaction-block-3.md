@@ -1,7 +1,8 @@
 # Pallet atlas — block 3 verification status
 
-Status: native rendered comparison and candidate export ready; live browser
-map-transition, memory and battle-latency checks remain pending. This document
+Status: native rendered comparison and live browser atlas residency/battle checks
+pass. Real house map-transition check has not passed; comparable audit-off
+battle-latency checks remain pending. This document
 does not certify block 3 complete or authorize importer rollout.
 
 ## Native rendered check
@@ -64,3 +65,62 @@ preparation step.
   from full desktop gameplay evidence.
 - Restore the normal Compose stack/database after each runtime; inspect health.
 - Record exact builds/results and decide whether block 4 is justified.
+
+## Disposable browser runtime — 2026-09-15
+
+The approved local runtime was executed with the existing clean candidate PCK
+above, Chromium/SwiftShader at 1440 × 900, fixed Grass fixture and real HTTP/WS
+traffic (no mocks). The diagnostic driver at `235d83a44` also whitelists the
+seven embedded PortableCompressedTexture2D subresource paths from the fixed
+compact visual. The standalone saved texture files are not the scene's live
+references: ResourceSaver embedded the textures in the prototype visual. The
+native regression now confirms these paths are visible to cached-only probes.
+No extra resource loads or GPU readbacks are used by this browser diagnostic.
+
+The retained `builds/web-real-battle-memory/pallet-compact-world-audit-report.json`
+confirms three successful real dev/wild starts, four resolved choices, three
+teardowns and zero JavaScript page errors. At initial world idle and after each
+battle it sees exactly seven compact Pallet textures (1,843,200 base-RGBA bytes,
+1.7578125 MiB); none of the thirteen original Pallet atlas paths is cached.
+Initial engine texture counter: 257,170,756 bytes (245.2571 MiB). All three
+post-battle idle counters: 270,817,666 bytes (258.2719 MiB), with 854 resources,
+zero orphan nodes and no pending sprite-cache work. Thus the warmed counter is
+stable across these three cycles, not unchanged relative to cold world idle.
+These are engine counters and bounded texture estimates, not physical GPU/RAM
+measurements. Do not infer a precise causal counter saving from older builds.
+The audit-enabled timings are explicitly **not comparable latency evidence**.
+
+The complete driver still reports `success=false`: the house transition did not
+complete. First the test walked into trees. An adjusted continuous-input route
+overshot the door column by one tile because presence updates lag input. A
+separate map-only run (`70770c51a` driver) used four Up/seven Right discrete steps
+and visually reached the correct door column, but continued Up still did not
+activate a transition within 20 seconds. Only `kanto_pallet_town` was reported
+as active; no transition-enter HTTP request appeared. Area-access requests
+returned HTTP 200, which alone does not establish `allowed=true`. Root cause
+is not established; neither blame the atlas nor claim the doorway works.
+No gameplay source or collision data was changed to bypass this failed check.
+
+Retained reports in this slot:
+
+- `pallet-compact-initial-audit-report.json`: first route failure; standalone
+  paths missed the embedded compact resources (not zero texture residency).
+- `pallet-compact-world-audit-report.json`: proven seven-texture residency and
+  three battle cycles; door-column overshoot, overall success=false.
+- `pallet-compact-map-only-report.json`: discrete correct-column attempt,
+  zero battles by design, doorway timeout and overall success=false.
+
+Each of the three wrapper invocations ended with `restored=1 test_exit=1`:
+the test failure was preserved while the normal stack was restored. Final
+inspection confirmed the normal `pokemon-aether-backend` Compose project,
+Postgres persistent volume at `/var/lib/postgresql/data`, 12 running services,
+healthy defined container checks and HTTP 200 on gateway/account health. The
+account health payload still reports the local unconfigured transactional-email
+worker as degraded; this is not complete stack certification. Known fixture
+mail timeouts and gated peripheral HTTP 403s also remain outside this test.
+
+Next: diagnose the doorway without bypassing real authorization, prove a real
+map cycle, and obtain separate audit-off control/candidate timing evidence.
+Block 4 remains held. New test/diagnostic follow-ups remain committed in slot C
+pending a passing map-cycle check; they are not advertised as integrated or as
+completion of block 3. No production, promotion or full paired gate was run.
