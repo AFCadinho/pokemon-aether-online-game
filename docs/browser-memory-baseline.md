@@ -380,6 +380,12 @@ UID warnings remain recorded; no full development certification, promotion,
 push or production operation is implied by these focused results.
 Both wrappers completed with `restored=1 test_exit=0`; PostgreSQL is back on the
 normal project's persistent volume and the temporary tmpfs databases are gone.
+Integration subsequently advanced with an independent battle-prewarm shutdown
+fix. Development was merged into this task to resolve only the changelog conflict,
+retaining all release and cleanup entries. Shared-sheet contract/probe tests and
+the incoming threaded-resource shutdown check pass together. The paired numbers
+above remain evidence for the exact identified builds, not a new combined-batch
+benchmark or a claim about post-shutdown-fix idle allocation.
 
 ## Battle timing protocol for a future candidate
 
