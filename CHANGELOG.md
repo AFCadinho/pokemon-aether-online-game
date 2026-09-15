@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op testing: Run and trainer Forfeit ask your partner for agreement, even after an attack was selected. Refusing lets both Trainers choose again without using a turn or PP. Forfeit warns that both Trainers lose; co-op remains disabled pending V1 acceptance.
+
 - Co-op testing: wild battles offer Wait to skip your own action without spending PP, giving your partner more catch attempts. Wild Pokémon still act. Trainer and single battles are unchanged; co-op remains disabled pending V1 acceptance.
 
 - Desktop automatic zoom now uses the same consistent world view as the browser, including interiors. Manual 1×, 1.5× and 2× outdoor zoom choices and saved preferences remain available.

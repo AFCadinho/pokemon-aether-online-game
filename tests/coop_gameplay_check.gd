@@ -24,8 +24,14 @@ func _run() -> void:
 	service.pending_command = {"decisionId": "coop-1", "idempotencyKey": "retry"}
 	service.apply_view({"battleId": "coop-fixture", "revision": 3, "decisionId": "coop-1", "locked": true})
 	_expect(service.pending_command.is_empty(), "a locked own choice confirms an uncertain submission")
+	service.pending_command = {"decisionId": "coop-1", "idempotencyKey": "attack", "action": {"type": "move", "slot": 1, "target": 1}}
+	service.apply_view({"battleId": "coop-fixture", "revision": 4, "decisionId": "coop-1", "locked": false,
+		"exitRequest": {"type": "run", "requestedBy": "p3"}, "legalActions": [{"type": "run"}, {"type": "reject-exit"}]})
+	_expect(service.pending_command.is_empty() and service.view.exitRequest.type == "run", "reconnect replaces an ambiguous attack retry with the partner exit response")
+	service.apply_view({"battleId": "coop-fixture", "revision": 5, "decisionId": "coop-2", "locked": false, "exitRequest": null})
+	_expect(service.view.decisionId == "coop-2", "refusal reopens the same battle with a fresh decision ID")
 	service.apply_view({"battleId": "someone-else", "revision": 99})
-	_expect(service.view["revision"] == 3, "another battle cannot replace the current snapshot")
+	_expect(service.view["revision"] == 5, "another battle cannot replace the current snapshot")
 	service.apply_state({"activity": {"reservationId": "fixture", "battleId": "coop-fixture", "status": "finished"}})
 	service.apply_state({"activity": activity})
 	_expect(service.activity["status"] == "finished", "late active snapshots cannot reopen a completed battle")
