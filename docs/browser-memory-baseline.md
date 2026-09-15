@@ -428,6 +428,65 @@ python3 tests/test_shared_electric_texture.py
 The historical `--expect-distinct` mode is only for the pre-sharing catalogue;
 it is expected to fail against the new shared catalogue.
 
+### Grass sharing — rendered control/candidate comparison
+
+The subsequent approved local run compared clean control `e319ac997cb934f47e6f32b19512c2f4ae93afcb`
+with clean candidate `a1daa009c96743be9648869d57040f8df864ca1c`.
+Both include the same newer battle-prewarm cleanup. Only the six Grass sheet
+paths differ in game code; the driver records the same fixed `grass` scenario.
+The temporary control commit is retained for reproducibility, not merged as a
+replacement for the shared catalogue. Backend fixture commit `90b554e34916e6899b466467b24633bac8b6a4f6`
+adds an allowlisted Grass scenario and rejects unknown scenarios before imports
+or any stack interruption. No arbitrary team text is accepted from the environment.
+
+Both use disposable Bulbasaur with Vine Whip against the same generated wild
+encounter, one battle with two resolved attack turns followed by two starts and
+Run actions. The screenshot confirms Vine Whip actually executes. Each run has
+three successful starts, four successful resolved choices, three teardown markers
+and zero JavaScript page errors. Optional texture-path diagnostics are disabled;
+these are 1440 × 900 headless Chromium/SwiftShader measurements, not hardware SLA
+or statistically established speedups.
+
+| Moment | Control | Shared candidate |
+| --- | ---: | ---: |
+| First request → playable actions | 4024 ms | 4094 ms |
+| Warm start 1 | 1311 ms | 1304 ms |
+| Warm start 2 | 1325 ms | 1319 ms |
+| First mount → actions | 394 ms | 376 ms |
+| Warm mount → actions | 309 / 300 ms | 302 / 302 ms |
+| First-ready texture counter | 420.19 MiB | 410.48 MiB |
+| Both warm-ready texture counters | 429.90 MiB | 420.19 MiB |
+| Idle after each teardown | 391.70 MiB | 391.36 MiB |
+
+The observed ready-counter difference is 9.708 MiB at all three starts. It is
+not a physical RAM/GPU measurement, and its difference from the native 7.03125 MiB
+base-RGBA estimate is not attributed to any unverified allocator mechanism.
+After teardown, the control already releases its extra battle resources: idle
+does not retain the full ready-counter saving. Idle values are stable across all
+three teardowns in each run. There are zero orphan nodes; sprite cache entries
+remain 4 at first-ready and 11 at both warm-ready moments, with zero in-flight,
+active or queued prefetch tasks. No preload policy, sprite quality or cache limit
+changed. These small paired results show no material entry slowdown, not proof
+for every device or animation.
+
+Raw reports are retained in this slot's ignored `builds/web-real-battle-memory/`
+as `grass-sharing-control-report.json` and `grass-sharing-candidate-report.json`.
+Core PCK SHA-256: control `561bae483ef2c8c795a5a43cee56aaa5aa96a57e3f2cdfb8ae24180aa76cc785`,
+candidate `4392f03d48ad4c46005d64b9509ee8a67a95fafea4883b768b5446a11ca94dc0`.
+Both initial exports remain approximately 261.6 MiB; sharing residency does not
+remove the original bitmap files from the pack. Each successful runtime returned
+`restored=1 test_exit=0`. An earlier invocation failed before opening Chromium
+because its script path was relative to the wrapper's backend working directory;
+it also restored the normal stack before the corrected run.
+
+The disposable browser still encounters 403s on unrelated gated endpoints and a
+mail timeout notice. Those are not evidence of fully healthy browser gameplay;
+the real battle endpoints and actions used for this comparison succeed. Existing
+native UID fallback warnings remain. Five backend guard/config tests, six Python
+sheet-identity tests, the distinct/shared native Grass prewarm checks and the
+threaded-resource shutdown regression pass. No full development gate, promotion,
+push, production operation or release is implied.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
