@@ -142,7 +142,7 @@ Real presence maps: Pallet → Player's House → Pallet. Both transition-enter
 HTTP requests returned 200. Screenshots were reviewed for the house and return.
 Texture counter after all three battles and after returning to Pallet is
 270,817,666 bytes, with 854 resources and zero orphan nodes. The intervening
-house snapshot uses 312,298,257 bytes; returning releases its additional
+house snapshot uses 312,298,262 bytes; returning releases its additional
 texture footprint. The atlas pixel/property/door-piece regression also passes.
 
 Candidate start-request → actions-ready durations: cold 11,785 ms, warm
