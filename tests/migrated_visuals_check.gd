@@ -2,7 +2,12 @@ extends SceneTree
 
 func _init() -> void:
 	var expected: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/tiled/migrated_visual_fingerprints.json"))
-	var valid := not expected.is_empty()
+	var ids: Array = []
+	for batch in preload("res://tools/migrate_remaining_visuals.gd").BATCHES:
+		ids.append_array(batch)
+	var valid := expected.size() == ids.size()
+	for id in ids:
+		valid = valid and expected.has(id)
 	for id in expected:
 		var path := "res://generated/tiled_visuals/%s/%s.visual.tscn" % [id, id]
 		var scene := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene

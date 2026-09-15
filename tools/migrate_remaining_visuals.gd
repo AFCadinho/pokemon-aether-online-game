@@ -43,6 +43,13 @@ func _run() -> void:
 		var root := scene.instantiate()
 		var before := Fingerprint.new().capture(root)
 		var old_paths := _textures(root)
+		if id == "pallet_town_compact":
+			# Prototype saved these exact seven files before embedding their copies.
+			# They may be retired only after the same textual-reference audit.
+			for source_id in [1, 1025, 2049, 5121, 6145, 8193, 9217]:
+				var legacy := _path(id).get_base_dir().path_join("assets/source_%d.texture.res" % source_id)
+				if FileAccess.file_exists(legacy) and legacy not in old_paths:
+					old_paths.append(legacy)
 		var temp := scratch.path_join(id + "/" + id + ".visual.tscn")
 		var saved := _save(root, temp)
 		root.free()

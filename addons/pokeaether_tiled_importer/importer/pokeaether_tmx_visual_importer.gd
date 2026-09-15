@@ -7,7 +7,7 @@ const TmxVisualImporter := preload("res://addons/tiled_tmx_importer/importer/tmx
 const GENERATED_VISUAL_ROOT := "res://generated/tiled_visuals"
 
 
-func import_tmx(tmx_path: String, visual_id_override: String = "") -> Dictionary:
+func import_tmx(tmx_path: String, visual_id_override: String = "", missing_tileset_paths: Dictionary = {}) -> Dictionary:
 	var visual_id := _derive_visual_id(tmx_path, visual_id_override)
 	if visual_id == "":
 		return {
@@ -27,7 +27,7 @@ func import_tmx(tmx_path: String, visual_id_override: String = "") -> Dictionary
 	# save. Never erase the previous assets before validating an incoming TMX.
 
 	var importer := TmxVisualImporter.new()
-	var result: Dictionary = importer.import_tmx(tmx_path, visual_scene_path)
+	var result: Dictionary = importer.import_tmx(tmx_path, visual_scene_path, missing_tileset_paths)
 	if not bool(result.get("success", false)):
 		return result
 
