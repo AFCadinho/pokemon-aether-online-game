@@ -13,7 +13,7 @@ const assert = require('node:assert/strict');
   const bridge = spawn(path.join(backend, 'ops/web_browser_test_python'), ['tests/web_browser_bridge.py', frontend], {
     env: {...process.env, POKEAETHER_WEB_BROWSER_TEST:'1', POKEAETHER_WEB_PREVIEW_ORIGIN:origin}, stdio:['pipe','pipe','pipe'],
   });
-  const pending = [], api = [], errors = [], external = [], positions = [], modules = [];
+  const pending = [], api = [], errors = [], external = [], positions = [], modules = [], samples=[];
   let stderr = '', chatSocket;
   bridge.stderr.on('data', data => { stderr += data; });
   readline.createInterface({input:bridge.stdout}).on('line', line => pending.shift()?.resolve(JSON.parse(line)));
@@ -42,8 +42,10 @@ const assert = require('node:assert/strict');
     return route.fulfill({status:result.status,contentType:'application/json',body:result.body});
   });
   const page = await context.newPage();
+  const cdp=await context.newCDPSession(page);
+  await cdp.send('Performance.enable');
   page.on('pageerror', error => errors.push(error.message));
-  page.on('console', message => { if (message.type()==='error' && !message.text().includes('Failed to load resource')) errors.push(message.text()); });
+  page.on('console', message => { if (message.type()==='error' && !message.text().includes('Failed to load resource') && !errors.includes(message.text())) errors.push(message.text()); });
   const wait = async (predicate, label, timeout=30000) => {
     const deadline=Date.now()+timeout;
     while(!predicate()) { assert(Date.now()<deadline,label); await page.waitForTimeout(100); }
@@ -117,11 +119,14 @@ const assert = require('node:assert/strict');
       await wait(()=>positions.slice(beforeTeleport).some(row=>row.mapId===map.mapId),'Authorized map transition '+map.mapId,60000);
       await page.waitForTimeout(1800);
       await page.screenshot({path:path.join(output,map.mapId+'.png')});
+      samples.push({mapId:map.mapId,jsMetrics:(await cdp.send('Performance.getMetrics')).metrics.filter(
+        item=>['JSHeapUsedSize','JSHeapTotalSize','Nodes'].includes(item.name))});
       console.log('Active map ready '+map.mapId);
     }
     assert.equal(external.length,0,'No external traffic');
     assert.equal(errors.length,0,'No runtime errors: '+errors.join('\n'));
-    fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({success:true,api,errors,external,positions,modules},null,2));
+    fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({success:true,api,errors,external,positions,modules,samples,
+      coverage:{bill:true,activeMaps:mapList.length,realBattles:false},memoryScope:'JS heap/DOM only, not Wasm or GPU RAM'},null,2));
     console.log('web_misty_gameplay_smoke: PASS (active Bill meeting, cell separation and ticket)');
   } finally {
     fs.writeFileSync(path.join(output,'api.json'),JSON.stringify(api,null,2));

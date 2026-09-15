@@ -442,7 +442,7 @@ func _append_web_sprite_entry(
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if OS.has_feature("web"):
-		if is_loading_map:
+		if is_loading_map or not _has_active_world_map():
 			return
 		if not is_in_battle:
 			position_presence_elapsed += delta
@@ -2988,10 +2988,16 @@ func _is_remote_interaction_candidate_above(first: Dictionary, second: Dictionar
 	return int(_dictionary_from_value(first.get("player", {})).get("userId", 0)) > int(_dictionary_from_value(second.get("player", {})).get("userId", 0))
 
 
+func _has_active_world_map() -> bool:
+	return GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map)
+
+
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
 	if active_battle_kind == "coop":
 		return  # Co-op reservation/settlement owns both stored activity states.
 	if not AuthService.is_authenticated() or player == null:
+		return
+	if not _has_active_world_map():
 		return
 	if _is_player_position_save_blocked_by_teleport():
 		return
