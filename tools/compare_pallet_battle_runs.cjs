@@ -17,14 +17,19 @@ function validate(run,variant) {
   const timings=[0,3,6].map(i=>events[i+1].engineTicksMs-events[i].engineTicksMs);
   assert(timings.every(x=>Number.isFinite(x) && x>0),'Valid engine timestamps');
   const labels=['cold_post_idle','warm1_post_idle','warm2_post_idle','pallet_returned'];
-  if(run.evidence.scope==='pallet_interiors') labels.push('lab_returned');
+  const interiors=run.evidence.scope==='pallet_interiors';
+  if(interiors) labels.push('house_entered','lab_entered','lab_returned');
   const post=labels.map(label=>{
     const sample=run.snapshots.find(x=>x.label===label)?.memory;
     assert(sample && Number.isFinite(sample.textureCounterBytes),'Complete post-idle samples');
     assert.equal(sample.orphanNodeCount,0); return sample;
   });
-  assert.equal(new Set(post.map(x=>x.textureCounterBytes)).size,1,'Stable texture counter after battles/map return');
-  return {timings,textureCounterBytes:post[0].textureCounterBytes};
+  // Different Pallet sectors expose additional NPC textures. Require a plateau
+  // at the unchanged battle-idle location, then compare matching map epochs.
+  const stable=interiors?post.slice(0,3):post;
+  assert.equal(new Set(stable.map(x=>x.textureCounterBytes)).size,1,'Stable texture counter after battles');
+  return {timings,textureCounterBytes:post[0].textureCounterBytes,
+    mapCounters:Object.fromEntries(labels.map((label,i)=>[label,post[i].textureCounterBytes]))};
 }
 function compare(control,candidate) {
   const old=validate(control,'original'), compact=validate(candidate,'compact');
@@ -39,6 +44,10 @@ function compare(control,candidate) {
     reviewThresholdMs:Math.max(i===0?500:100,ms*.1)}));
   return {rows,noObservedMaterialSlowdown:rows.every(x=>x.deltaMs<=x.reviewThresholdMs),
     postIdleTextureCounterSavingBytes:old.textureCounterBytes-compact.textureCounterBytes,
+    mapTextureCounterSavings:control.evidence.scope==='pallet_interiors' ?
+      ['house_entered','pallet_returned','lab_entered','lab_returned'].map(label=>({label,
+        controlBytes:old.mapCounters[label],candidateBytes:compact.mapCounters[label],
+        savingBytes:old.mapCounters[label]-compact.mapCounters[label]})) : [],
     sampleSizePerVariant:3,softwareWebGL:control.softwareWebGL,
     limitation:'One fixed scenario; not an SLA, statistical proof or physical GPU/RAM measurement.'};
 }

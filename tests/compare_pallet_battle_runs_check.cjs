@@ -19,16 +19,21 @@ test('matched stable runs pass with exact deltas',()=>{
 });
 test('material warm regression requires review',()=>assert.equal(
   compare(run('original'),run('compact',[4000,1500,1500])).noObservedMaterialSlowdown,false));
-test('interior scope requires both map cycles and stable lab return',()=>{
+test('interior scope requires both cycles, stable battle idle and matching map epochs',()=>{
   const interior=variant=>{
     const r=run(variant);r.evidence.scope='pallet_interiors';
     r.mapTransitions.push('kanto_oaks_lab','kanto_pallet_town');
-    r.snapshots.push({label:'lab_returned',memory:{...r.snapshots[0].memory}});
+    for(const label of ['house_entered','lab_entered','lab_returned']) {
+      r.snapshots.push({label,memory:{textureCounterBytes:variant==='original'?450:230,orphanNodeCount:0}});
+    }
     return r;
   };
-  assert.equal(compare(interior('original'),interior('compact')).noObservedMaterialSlowdown,true);
+  const result=compare(interior('original'),interior('compact'));
+  assert.equal(result.noObservedMaterialSlowdown,true);
+  assert.equal(result.mapTextureCounterSavings.at(-1).savingBytes,220);
   for(const mutate of [r=>r.mapTransitions.pop(),r=>r.snapshots.pop(),
-    r=>r.snapshots.at(-1).memory.textureCounterBytes++,r=>r.evidence.scope='pallet_exterior']) {
+    r=>r.snapshots.at(-1).memory.textureCounterBytes=NaN,r=>r.snapshots[1].memory.textureCounterBytes++,
+    r=>r.snapshots.at(-1).memory.orphanNodeCount++,r=>r.evidence.scope='pallet_exterior']) {
     const r=interior('compact');mutate(r);assert.throws(()=>compare(interior('original'),r));
   }
 });
