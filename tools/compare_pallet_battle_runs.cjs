@@ -15,7 +15,9 @@ function validate(run,variant) {
     ['battle_start_requested','battle_actions_ready','battle_teardown_begin']).flat(),'Three ordered battle cycles');
   const timings=[0,3,6].map(i=>events[i+1].engineTicksMs-events[i].engineTicksMs);
   assert(timings.every(x=>Number.isFinite(x) && x>0),'Valid engine timestamps');
-  const post=['cold_post_idle','warm1_post_idle','warm2_post_idle','pallet_returned'].map(label=>{
+  const labels=['cold_post_idle','warm1_post_idle','warm2_post_idle','pallet_returned'];
+  if(run.evidence.scope==='pallet_interiors') labels.push('lab_returned');
+  const post=labels.map(label=>{
     const sample=run.snapshots.find(x=>x.label===label)?.memory;
     assert(sample && Number.isFinite(sample.textureCounterBytes),'Complete post-idle samples');
     assert.equal(sample.orphanNodeCount,0); return sample;
