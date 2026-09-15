@@ -1,6 +1,6 @@
 # Browser memory baseline — initial phase, 2026-09-15
 
-Status: login and active-map baseline collected; repeated real-battle baseline
+Status: login and repeated active-map baseline collected; repeated real-battle baseline
 is still outstanding. No caching, prefetch, texture quality or loading strategy
 has been changed. This is not an optimization or a complete RAM certification.
 
@@ -44,9 +44,47 @@ the service cache, metadata and object overhead are not included.
 
 The map fixture uses canonical HTTP handlers with temporary SQLite data and
 authorized fixture travel; automatic trainer starts are suppressed. It does not
-play real battles. It is one traversal, not a matched same-map multi-cycle leak
-test. Browser probes ran locally, including overlapping test processes; battle
-latency conclusions require a separate serial controlled run.
+play real battles. Initial browser probes included overlapping test processes;
+battle latency conclusions require a separate serial controlled run.
+
+## Three-round map repeat
+
+A separate serial run completed Bill's sequence and three consecutive rounds
+through the same sixteen maps in one browser session. Each map sample waits for
+sprite downloads/prefetch to finish, followed by five seconds of idle time.
+No cache clearing, eviction change or forced garbage collection is used.
+
+- All sixteen matched map samples have exactly equal texture counters and
+  resource counts between rounds two and three. Warm texture counters range
+  from 280.38 MiB (Mt. Moon B2F) to 477.84 MiB (Cerulean Gym).
+- At the final Bill map, all three rounds have 336.22 MiB of engine textures,
+  343.5 MiB Wasm capacity, 890 resources and the same 52-sheet sprite cache
+  (36.71 MiB estimated RGBA; no outstanding downloads or prefetch).
+- Godot node counts at those same endpoints are 5660, 5708 and 5756: an increase
+  of 48 per round, averaging three per map transition. This is a concrete
+  retained-object candidate, not proof of a texture leak or its cause. Check
+  orphan-node counts and identify node ownership before proposing a fix.
+- CDP live JavaScript heap at the endpoints is approximately 54.16, 61.13 and
+  94.21 MiB. Collection timing and fixture traffic were not controlled; this
+  alone does not establish a JavaScript leak.
+- All 48 transitions pass, with no captured runtime errors or external traffic.
+
+The large texture allocation is reproducible but not continually growing in
+this warm map sequence. Do not reduce battle-prefetch based on these results.
+Real battle creation, first playable actions and teardown still need their own
+measurement; the map repeat supplies no battle-start latency evidence.
+
+Reproduce from the frontend task slot (with the connected preview on 8061):
+
+```sh
+POKEAETHER_MEMORY_PROBE=1 POKEAETHER_MEMORY_MAP_CYCLES=3 \
+  NODE_PATH=/home/adinho/.npm-global/lib/node_modules \
+  node tests/web_misty_gameplay_smoke.cjs
+```
+
+The diagnostic report is ignored at `builds/web-misty-gameplay-qa/memory-cycles.json`.
+Cycles are bounded to 1–5 and repeats require the opt-in memory probe. Ordinary
+gameplay smoke still defaults to one round.
 
 ## Battle timing protocol still to run
 

@@ -10,6 +10,10 @@ const assert = require('node:assert/strict');
   const frontend = path.resolve(__dirname, '..'), backend = path.resolve(frontend, '../backend');
   const origin = process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
   const memoryProbe = process.env.POKEAETHER_MEMORY_PROBE === '1';
+  const mapCycles = Number(process.env.POKEAETHER_MEMORY_MAP_CYCLES || '1');
+  assert(Number.isInteger(mapCycles) && mapCycles >= 1 && mapCycles <= 5,
+    'Memory map cycles must be an integer from 1 to 5');
+  assert(mapCycles === 1 || memoryProbe, 'Repeated map measurement requires the memory probe');
   assert.equal(new URL(origin).hostname, '127.0.0.1');
   const bridge = spawn(path.join(backend, 'ops/web_browser_test_python'), ['tests/web_browser_bridge.py', frontend], {
     env: {...process.env, POKEAETHER_WEB_BROWSER_TEST:'1', POKEAETHER_WEB_PREVIEW_ORIGIN:origin}, stdio:['pipe','pipe','pipe'],
@@ -112,23 +116,35 @@ const assert = require('node:assert/strict');
     console.log('Bill computer sequence and ticket completed');
     const mapList=JSON.parse((await request({command:'misty_map_list'})).body);
     assert(chatSocket,'Chat transport ready for isolated authorized teleport');
-    for(const map of mapList) {
+    for(let cycle=1;cycle<=mapCycles;cycle++) for(const map of mapList) {
       const beforeTeleport=positions.length;
       const prepared=await request({command:'prepare_misty_map',...map,suppressTrainers:true,teleport:true});
       assert.equal(prepared.status,200);
       chatSocket.send(JSON.stringify({type:'world.teleport.authorized',reason:'Isolated browser QA',state:JSON.parse(prepared.body)}));
       await wait(()=>positions.slice(beforeTeleport).some(row=>row.mapId===map.mapId),'Authorized map transition '+map.mapId,60000);
       await page.waitForTimeout(1800);
+      if (memoryProbe) {
+        // Wait for useful encounter prefetch rather than disabling it to make
+        // the memory number smaller. Capacity and texture counters are distinct.
+        await page.waitForFunction(() => {
+          const sample=window.pokeaetherMemoryProbe?.samples.at(-1);
+          return sample && performance.now()-sample.browserTimeMs < 2000 &&
+            sample.spriteCache?.inFlight === 0 && sample.spriteCache?.prefetchQueued === 0 &&
+            sample.spriteCache?.prefetchActive === 0;
+        },null,{timeout:60000});
+        await page.waitForTimeout(5000);
+      }
       await page.screenshot({path:path.join(output,map.mapId+'.png')});
-      samples.push({mapId:map.mapId,memoryProbe:memoryProbe ? await page.evaluate(()=>window.pokeaetherMemoryProbe?.samples.at(-1)) : null,
+      samples.push({cycle,mapId:map.mapId,memoryProbe:memoryProbe ? await page.evaluate(()=>window.pokeaetherMemoryProbe?.samples.at(-1)) : null,
         jsMetrics:(await cdp.send('Performance.getMetrics')).metrics.filter(
         item=>['JSHeapUsedSize','JSHeapTotalSize','Nodes'].includes(item.name))});
-      console.log('Active map ready '+map.mapId);
+      console.log('Active map ready '+map.mapId+' cycle '+cycle);
     }
     assert.equal(external.length,0,'No external traffic');
     assert.equal(errors.length,0,'No runtime errors: '+errors.join('\n'));
-    fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({success:true,api,errors,external,positions,modules,samples,
-      coverage:{bill:true,activeMaps:mapList.length,realBattles:false},memoryScope:'JS heap/DOM only, not Wasm or GPU RAM'},null,2));
+    fs.writeFileSync(path.join(output,mapCycles > 1 ? 'memory-cycles.json' : 'result.json'),JSON.stringify({success:true,api,errors,external,positions,modules,samples,
+      coverage:{bill:true,activeMaps:mapList.length,mapCycles,realBattles:false},
+      memoryScope:memoryProbe ? 'CDP JS heap, engine texture counter, observed Wasm capacity and shared sprite-cache estimate; not total physical RAM' : 'JS heap/DOM only, not Wasm or GPU RAM'},null,2));
     console.log('web_misty_gameplay_smoke: PASS (active Bill meeting, cell separation and ticket)');
   } finally {
     fs.writeFileSync(path.join(output,'api.json'),JSON.stringify(api,null,2));
