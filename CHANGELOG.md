@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Improved resource cleanup when closing the game and during battle-preview transitions.
+
 - Completed the Clash Training Captain flow for independently sized Bot Guild practice with stationary [BOT] trainers and normal battle timers. Training remains disabled pending separate release activation.
 
 - Prepared compact numbered [BOT] labels so stationary training bots stay readable in crowded arenas, and checked unequal guild rosters through the training UI. Training remains unavailable until V1 is complete.
