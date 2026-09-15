@@ -1,10 +1,10 @@
 # Pallet atlas — block 3 verification status
 
-Status: native rendered comparison and live browser atlas residency/battle checks
-pass. The house doorway geometry was corrected and the real map-cycle check
-now passes. Paired audit-off control/candidate battle-latency checks remain
-pending. This document
-does not certify block 3 complete or authorize importer rollout.
+Status: focused block-3 acceptance of the Pallet prototype is complete. Native
+render/pixel regressions, browser residency, real map cycles and matched
+audit-off battle timing checks pass. This is not full release certification,
+an exported desktop gameplay test on all platforms, or automatic authorization
+to roll the prototype out through the importer. Block 4 is the next work block.
 
 ## Native rendered check
 
@@ -54,7 +54,7 @@ user's normal 8061 preview was not rebuilt or replaced. No backend interruption,
 authentication, production access or full paired verification occurred in this
 preparation step.
 
-## Remaining acceptance
+## Original acceptance checklist
 
 - Approved disposable local runtime for real login, Pallet movement/doors,
   map transitions and three resolved battle/teardown cycles.
@@ -152,7 +152,89 @@ control; do not claim faster battles, non-regression or an SLA from them.
 The remaining check requires an otherwise identical old-atlas build under
 the same runtime/hardware conditions, with audits disabled on both sides.
 
-Block 4 remains held until the paired comparison is reviewed. The doorway
+At this point block 4 remained held until the paired comparison was reviewed. The doorway
 correction and diagnostic follow-ups are ready for local development integration
 after the successful focused checks. No production, promotion or full paired
 gate was run.
+
+## Matched atlas comparison — accepted
+
+Two fresh disposable-stack/browser runs were performed, restoring the normal
+stack between and after them. Both use Grass fixture, Chromium 153.0.8010.36,
+SwiftShader at 1440 × 900, Godot 4.6.2, identical commands and diagnostics,
+and backend commit `90b554e34916e6899b466467b24633bac8b6a4f6`.
+Both texture audits and map-only mode are disabled. The corrected house
+entrance remains unchanged. The only source difference between the two clean
+exports is the main Pallet scene's original/compact visual reference.
+
+| Build | Source commit | PCK SHA-256 |
+| --- | --- | --- |
+| Original control | `514d1464ef3deea8244558ba810790b1b3f294e5` | `0cad7f9dd5cb49ca5469da5cc935bea739b10c7356d0e6d39a34b00a6b81ec3b` |
+| Compact candidate | `53fdf8d3c9a49168f9946d83765e048cdbef1950` | `b545cf3f7a3a961f3cec0eff0f34b439de68b895d367f1bc83bc12c962e9ca60` |
+
+The driver records commit/export metadata, browser version, command digest,
+fixture digest and a tracked-tree digest normalized for that **one** visual
+reference. `tools/compare_pallet_battle_runs.cjs` rejects a mismatched tree,
+backend, driver, fixture, browser, engine, commands, scenario or viewport;
+also failed/audited/map-only runs, invalid cycle ordering, page errors,
+missing map cycles and unstable post-idle texture counters. Four focused
+synthetic test groups exercise successful comparison and those rejection gates.
+The normalized tracked-tree SHA-256 is identical on both sides:
+`4aeb3af5550f2d1125d382cf1c07898eb5c1f9ea4a39c915cf3969ef31bae2f7`.
+
+Before either run, the provisional review boundary was recorded: investigate
+a slowdown exceeding both 10% and 500 ms cold / 100 ms warm. This is a
+practical focused regression threshold, not a statistical confidence interval.
+
+| Start-request → actions-ready | Original (ms) | Compact (ms) | Delta (ms) |
+| --- | ---: | ---: | ---: |
+| Cold | 11,811 | 11,537 | -274 |
+| Warm 1 | 3,540 | 3,465 | -75 |
+| Warm 2 | 3,539 | 3,455 | -84 |
+
+Result: no observed material slowdown; all three candidate durations are lower
+in this pair. This is one fixed scenario with three starts per variant on a
+software renderer. Do not promise these absolute times on players' hardware,
+infer statistical speed improvement or advertise an all-battle/platform SLA.
+The substantially different older Grass/effect measurements are not controls
+for this pair and are not used to pass the candidate.
+
+Each run completed three starts, four resolved choices, three teardowns,
+zero page errors and real Pallet → Player's House → Pallet transitions.
+Both transition-enter requests succeeded. Post-battle idle and return counters
+are stable within each variant: original 410,372,490 bytes (391.3617 MiB),
+compact 270,817,666 bytes (258.2719 MiB). Paired engine texture-counter difference
+is 139,554,824 bytes (133.0899 MiB). Initial idle difference is the same.
+This is **not** physical process RAM/GPU memory or download-size reduction.
+The separate atlas base-RGBA estimate remains 48.4375 → 1.7578125 MiB;
+do not equate it with the runtime counter, which also includes engine-owned
+texture allocations. Retained original assets remain packed until pipeline
+rollout is designed; this prototype deliberately does not delete fixtures.
+
+Raw reports retained inside this slot (not Git):
+
+- `builds/web-real-battle-memory/pallet-matched-original-timing-report.json`
+- `builds/web-real-battle-memory/pallet-matched-compact-timing-report.json`
+
+Reproduce read-only comparison from the frontend slot:
+
+```sh
+node tools/compare_pallet_battle_runs.cjs \
+  builds/web-real-battle-memory/pallet-matched-original-timing-report.json \
+  builds/web-real-battle-memory/pallet-matched-compact-timing-report.json
+node --test tests/compare_pallet_battle_runs_check.cjs
+```
+
+The temporary original-reference control commit is retained as evidence and
+followed by an explicit compact-reference restoration commit. Final gameplay
+source matches the already approved compact candidate; the normal development
+preview on 8061 was not rebuilt or replaced. Both wrappers ended with
+`restored=1 test_exit=0`. Final inspection confirmed 12 normal services running,
+healthy defined container checks and the original normal Compose project with
+its persistent Postgres volume. The unrelated local email-worker/peripheral
+limitations recorded above are not full-stack certification failures or passed
+features of this atlas test. Proceed to block 4 as a separate bounded task:
+make compaction part of map import with importer/CI regression coverage, then
+consider other maps. Native pixel sampling, source properties and browser
+movement/depth behavior have evidence; exported Windows/Linux/macOS gameplay
+and full release certification remain outside this focused acceptance.
