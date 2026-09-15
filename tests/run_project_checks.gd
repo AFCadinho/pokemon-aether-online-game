@@ -148,6 +148,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pixel_perfect_rendering_check.gd",
 	"res://tests/web_asset_module_manifest_check.gd",
 	"res://tests/web_asset_module_queue_check.gd",
+	"res://tests/web_misty_tiles_probe.gd",
 	"res://tests/story_interaction_contract_check.gd",
 	"res://tests/story_trigger_lock_retry_check.gd",
 	"res://tests/mentor_help_menu_check.gd",
