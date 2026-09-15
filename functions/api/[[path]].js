@@ -3,6 +3,7 @@ const HTTP_ROUTES = new Set([
   'GET /auth/web/meta', 'GET /auth/web/me', 'POST /auth/web/signup',
   'POST /auth/web/login', 'POST /auth/web/logout',
   'GET /auth/web/preferences', 'PUT /auth/web/preferences',
+  'PUT /auth/web/appearance',
   'GET /auth/web/world', 'PUT /auth/web/world',
   'POST /auth/web/world/teleport-ack',
   'PATCH /auth/web/party/battle-state', 'GET /auth/web/profile',
@@ -11,9 +12,10 @@ const HTTP_ROUTES = new Set([
   'GET /auth/web/ai-sparring/statistics', 'GET /auth/web/ai-sparring/history',
   'DELETE /auth/web/ai-sparring/history', 'GET /battle/pvp/training/ai/teams',
   'GET /battle/pvp/training/ai/live', 'POST /battle/pvp/training/ai/battles',
-  'POST /battle/wild-encounter', 'GET /battle/wild/resume',
+  'POST /battle/wild-encounter', 'POST /battle/dev/wild', 'GET /battle/wild/resume',
   'POST /battle/trainer', 'GET /battle/trainer/resume',
   'POST /battle/pvp/rooms', 'GET /pokemon/stats',
+  'POST /pokemon/create-from-text', 'POST /team/create-from-text',
   'POST /auth/email-verification/confirm',
   'GET /auth/web/boxes', 'GET /auth/web/wallet', 'PUT /auth/web/party',
   'POST /auth/web/party/heal', 'POST /auth/web/party/swap', 'POST /auth/web/party/set-slot',
@@ -21,10 +23,21 @@ const HTTP_ROUTES = new Set([
   'POST /auth/web/wallet/rewards/wild-battle', 'POST /auth/web/wallet/rewards/trainer-battle',
   'POST /auth/web/mail',
   'POST /auth/web/respawn',
+  'GET /auth/web/world-pickups',
+  'GET /auth/web/skills',
+  'GET /auth/web/fishing/progression', 'PUT /auth/web/fishing/selection',
+  'GET /auth/web/ev-training/session', 'POST /auth/web/ev-training/session',
+  'POST /auth/web/ev-training/tutorial/focus', 'POST /auth/web/ev-training/tutorial/session',
+  'POST /auth/web/ev-training/session/end',
+  'GET /auth/web/thieving', 'POST /auth/web/thieving/pickpocket',
+  'POST /auth/web/thieving/public-service', 'POST /auth/web/thieving/jail/release',
+  'GET /auth/web/rock-smash', 'GET /auth/web/rock-smash/rewards',
+  'POST /auth/web/rock-smash/smash',
+  'POST /world/weather/developer',
 ]);
 
 const HTTP_PREFIXES = [
-  ['GET', '/auth/web/pokedex/'], ['GET', '/auth/web/items/'], ['GET', '/game/skills'],
+  ['GET', '/auth/web/pokedex/'], ['GET', '/auth/web/items/'],
   ['GET', '/game/donator-store'], ['POST', '/game/donator-store/'],
   ['GET', '/battle/pvp/training/ai/live/'],
   ['GET', '/battle/pvp/training/ai/teams/'],
@@ -44,11 +57,17 @@ const HTTP_PREFIXES = [
   ['PATCH', '/game/replays'], ['DELETE', '/game/replays'],
   ['GET', '/auth/web/world/transitions/'], ['POST', '/auth/web/world/transitions/'],
   ['GET', '/auth/web/world/areas/'],
+  ['GET', '/game/dev/'], ['POST', '/game/dev/'],
+  ['PUT', '/game/dev/'], ['DELETE', '/game/dev/'],
+  ['GET', '/game/moderation/'], ['POST', '/game/moderation/'],
+  ['GET', '/game/chat/mutes/'], ['POST', '/game/chat/mutes'],
+  ['DELETE', '/game/chat/mutes/'],
 ];
 
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle']);
 const GAMEPLAY_ROUTES = [
+  ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
   ['GET', /^\/auth\/web\/boxes\/\d+$/], ['PATCH', /^\/auth\/web\/boxes\/\d+$/],
   ['DELETE', /^\/auth\/web\/(?:pokemon|party)\/\d+$/],
   ['POST', /^\/auth\/web\/pokemon\/\d+\/(?:nickname|held-item|evolution|evs\/allocate|items\/use|moves\/(?:learn|delete|reorder))$/],

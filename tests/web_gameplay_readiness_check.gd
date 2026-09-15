@@ -20,6 +20,16 @@ func _run() -> void:
 	_check(ready.find("_connect_world_presence_signals()") < ready.find('if OS.has_feature("web")'), "both platforms connect the visible roster before branching")
 	var setup := _function(source, "_setup_web_demo_world")
 	_check(setup.contains('_return_web_demo_to_login(str(saved_state_response.get("error"'), "browser position failures preserve their player-facing reason")
+	_check(
+		setup.find("if GameState.has_prepared_world_state()")
+			< setup.find("await PlayerGameStateService.bootstrap_story()"),
+		"browser consumes the loading screen position before any fallback request"
+	)
+	_check(
+		setup.find("$CurrentMap.add_child(initial_map)")
+			< setup.find("await PlayerGameStateService.refresh_story()"),
+		"browser installs the saved map before asynchronous story refresh"
+	)
 	var return_to_login := _function(source, "_return_web_demo_to_login")
 	_check(return_to_login.find("AuthService.set_pending_login_notice(message)") < return_to_login.find("change_scene_to_file(LOGIN_SCENE_PATH)"), "browser world failures retain their notice before returning to login")
 	_check(setup.contains("await _resume_saved_wild_battle(saved_state)"), "browser restores wild AND trainer activity on entry")

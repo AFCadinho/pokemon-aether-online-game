@@ -69,6 +69,10 @@ const WEB_BATTLE_SPRITE_PREFETCH_ALIASES := {
 var is_in_battle := false
 var battle_instance: Node
 var replay_return_callback: Callable
+var coop_controls: Control
+var coop_world_ready := false
+var coop_finishing := false
+var coop_wild_step_pending := false
 
 func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bool:
 	if is_in_battle or wild_battle_resume_pending:
@@ -188,6 +192,8 @@ func _ready() -> void:
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
+		if GameState.gameplay_reset_in_progress:
+			GameState.finish_gameplay_reset()
 		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
@@ -201,6 +207,7 @@ func _ready() -> void:
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
 	await _setup_initial_world_state()
+	_setup_coop_controls()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
@@ -1691,27 +1698,34 @@ func _setup_initial_world_state() -> void:
 
 
 func _setup_web_demo_world() -> void:
-	StoryService.reset_story()
-	var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
-	if not bool(bootstrap_response.get("success", false)):
-		push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
-		return
-	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
-	if not bool(profile_response.get("success", false)):
-		push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
-		return
-	_apply_web_demo_profile(profile_response)
-	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
-	if not bool(saved_state_response.get("success", false)):
-		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
-		_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
-		return
-	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
-	if not bool(story_response.get("success", false)):
-		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
-	var saved_state := _dictionary_from_value(saved_state_response.get("state", {}))
+	var saved_state: Dictionary = {}
+	if GameState.has_prepared_world_state():
+		# The loading screen has already hydrated the account and position. Consume
+		# that state before the first await so the PlayersHouse placeholder from
+		# world.tscn can never be rendered as an intermediate browser frame.
+		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
+		if bool(prepared_state.get("hasSavedState", false)):
+			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
+	else:
+		# Keep direct world-scene launches usable for development and recovery.
+		StoryService.reset_story()
+		var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+		if not bool(bootstrap_response.get("success", false)):
+			push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
+			return
+		var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+		if not bool(profile_response.get("success", false)):
+			push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
+			return
+		_apply_web_demo_profile(profile_response)
+		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if not bool(saved_state_response.get("success", false)):
+			push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+			_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
+			return
+		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
@@ -1737,6 +1751,9 @@ func _setup_web_demo_world() -> void:
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	_schedule_current_map_web_sprite_prefetch()
+	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_response.get("success", false)):
+		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
 	if bool(saved_state.get("teleportAcknowledgementRequired", false)):
 		var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
 		if not bool(ack_result.get("success", false)):
@@ -1789,11 +1806,11 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 	authorized_teleport_in_progress = true
 	if player == null:
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "World player is not ready."}
 	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
 	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "Browser demo map is unavailable."}
 	if not authorized_teleport_locked_overworld:
 		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
@@ -1813,7 +1830,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		var packed_scene := await _load_map_scene_threaded(target_scene_path)
 		if packed_scene == null:
 			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
-			cancel_authorized_teleport()
+			cancel_authorized_teleport_effect()
 			is_loading_map = false
 			return {"success": false, "error": "Browser demo map could not be loaded."}
 		target_map = packed_scene.instantiate()
@@ -1829,7 +1846,7 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		player.call("reset_movement_state")
 	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
 	if not bool(position_result.get("success", false)):
-		cancel_authorized_teleport()
+		cancel_authorized_teleport_effect()
 		is_loading_map = false
 		return position_result
 	_apply_camera_limits_for_map(target_map)
@@ -1854,6 +1871,10 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 				"success": false,
 				"error": str(ack_result.get("error", "Could not acknowledge browser teleport.")),
 			}
+	if aethernet_teleport_effect_pending:
+		await _play_local_aethernet_effect("arrive", false)
+		aethernet_teleport_effect_pending = false
+		_set_aethernet_effect_presence("")
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_in_progress = false
 	is_loading_map = false
@@ -1866,6 +1887,17 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 
 
 func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
+	if str(_dictionary_from_value(saved_state.get("activityContext", {})).get("kind", "")) == "coop":
+		_setup_coop_controls()
+		var coop_result: Dictionary = await CoopService.refresh()
+		if coop_result.get("success", false) and CoopService.activity.is_empty():
+			return {"resumed": false, "retryable": false}
+		if CoopService.activity.is_empty():
+			var context := _dictionary_from_value(saved_state.get("activityContext", {}))
+			CoopService.activity = {"reservationId": context.get("reservationId", ""),
+				"battleId": context.get("battleId", ""), "status": "starting", "canCancel": false}
+		_on_coop_state_changed()
+		return {"resumed": true, "retryable": false}
 	if str(_dictionary_from_value(saved_state.get("activityContext", {})).get("kind", "")) == "trainer":
 		return await _resume_saved_trainer_battle(saved_state)
 	wild_battle_resume_pending = false
@@ -2920,6 +2952,8 @@ func _is_remote_interaction_candidate_above(first: Dictionary, second: Dictionar
 
 
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
+	if active_battle_kind == "coop":
+		return  # Co-op reservation/settlement owns both stored activity states.
 	if not AuthService.is_authenticated() or player == null:
 		return
 	if _is_player_position_save_blocked_by_teleport():
@@ -3074,6 +3108,11 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 func _get_current_activity_context() -> Dictionary:
 	if not is_in_battle or active_battle_kind == "replay":
 		return {}
+	if active_battle_kind == "coop":
+		var context := {"kind": "coop", "reservationId": CoopService.activity.get("reservationId", "")}
+		if CoopService.activity.get("status") == "active":
+			context["battleId"] = active_battle_id
+		return context
 	return {
 		"kind": active_battle_kind,
 		"battleId": active_battle_id,
@@ -3096,6 +3135,8 @@ func _save_player_activity_state_deferred(activity_state: String, activity_conte
 
 
 func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
+	if active_battle_kind == "coop":
+		return
 	pending_activity_state_save = {
 		"state": activity_state,
 		"context": activity_context.duplicate(true),
@@ -3532,6 +3573,22 @@ func start_triggered_wild_battle_for_area(
 ) -> void:
 	if is_in_battle or wild_battle_resume_pending:
 		return
+	if coop_wild_step_pending:
+		return
+	coop_wild_step_pending = true
+	var step_input_lock := not CoopService.party.is_empty() and not GameState.is_overworld_input_locked()
+	if step_input_lock:
+		GameState.lock_overworld_input()
+	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
+	coop_wild_step_pending = false
+	if step_input_lock and not is_in_battle and CoopService.activity.is_empty():
+		GameState.unlock_overworld_input()
+	if coop_step.get("handled", false):
+		if not coop_step.get("success", false):
+			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
+		return
+	if is_in_battle or wild_battle_resume_pending:
+		return
 
 	is_in_battle = true
 	active_battle_kind = "wild"
@@ -3694,6 +3751,11 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"success": false,
 			"code": "trainer_battle_configuration_invalid",
 		}
+
+	if not OS.has_feature("web"):
+		var coop_result: Dictionary = await CoopService.try_start(trainer_id)
+		if coop_result.get("handled", false):
+			return coop_result
 
 	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
 	if player_lead_slot <= 0:
@@ -5056,7 +5118,77 @@ func recover_failed_trainer_battle_start() -> void:
 	# recovery idempotent because a normal rejected request already passes
 	# through _abort_battle_start; the second call repairs a browser-side lock
 	# left behind by an interrupted transition or error dialogue.
+	if active_battle_kind == "coop":
+		return
 	if is_in_battle:
 		_abort_battle_start()
 		return
 	_unlock_overworld_after_battle()
+
+
+func _setup_coop_controls() -> void:
+	if coop_world_ready or OS.has_feature("web"):
+		return
+	coop_world_ready = true
+	var layer := CanvasLayer.new()
+	layer.layer = 30
+	add_child(layer)
+	layer.add_child(preload("res://scripts/battle/coop_controls.gd").new())
+	CoopService.state_changed.connect(_on_coop_state_changed)
+	_on_coop_state_changed()
+
+
+func _on_coop_state_changed() -> void:
+	if not coop_world_ready or coop_finishing:
+		return
+	if CoopService.activity.is_empty():
+		if active_battle_kind == "coop":
+			finish_coop_activity.call_deferred()
+		return
+	if is_in_battle and active_battle_kind != "coop":
+		return
+	if active_battle_kind != "coop":
+		is_in_battle = true
+		active_battle_kind = "coop"
+		_lock_overworld_for_battle()
+		coop_controls = preload("res://scripts/battle/coop_controls.gd").new()
+		coop_controls.battle_mode = true
+		battle_ui_host.add_child(coop_controls)
+		battle_ui_host.visible = true
+	active_battle_id = str(CoopService.activity.get("battleId", ""))
+	_publish_world_presence(true)
+
+
+func finish_coop_activity() -> void:
+	var already_acknowledged := CoopService.activity.is_empty() and active_battle_kind == "coop"
+	if coop_finishing or (not already_acknowledged and CoopService.activity.get("status") not in ["finished", "cancelled"]):
+		return
+	coop_finishing = true
+	var key := str(CoopService.activity.get("reservationId", ""))
+	var profile: Dictionary = await PlayerGameStateService.load_player_profile()
+	if not profile.get("success", false):
+		coop_finishing = false
+		CoopService.request_failed.emit("Could not reload your Trainer. Please try again.")
+		return
+	# A lost acknowledgement response may leave only the local overlay. Release
+	# it only after the account profile confirms that no battle remains active.
+	if already_acknowledged and profile.get("position", {}).get("state", {}).get("activityState", "battle") == "battle":
+		coop_finishing = false
+		return
+	var inventory: Dictionary = await InventoryService.load_inventory()
+	if not inventory.get("success", false):
+		coop_finishing = false
+		return
+	PlayerSave.replace_party_from_state(profile.get("party", {}).get("party", []))
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": profile.get("wallet", {}), "badges": profile.get("badges", {})})
+	StoryService.apply_story(profile.get("story", {}))
+	if not already_acknowledged:
+		var response: Dictionary = await CoopService.party_action("acknowledge", {"reservationId": key})
+		if not response.get("success", false) and not CoopService.activity.is_empty():
+			coop_finishing = false
+			return
+	GameState.set_prepared_world_state({"hasSavedState": true, "savedState": profile.get("position", {}).get("state", {})})
+	# Account settlement already applied any respawn. Re-enter at that saved
+	# position; do not invoke the solo reward/blackout path a second time.
+	_abort_battle_start(true)
+	get_tree().call_deferred("reload_current_scene")

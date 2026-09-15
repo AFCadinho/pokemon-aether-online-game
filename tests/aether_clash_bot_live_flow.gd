@@ -140,6 +140,11 @@ func _ready() -> void:
 		await get_tree().process_frame
 	print("LIVE_GODOT_FLOW_OK npc=true portal=true collision=true battle=true result=true")
 	_cleanup()
+	# Match the ordinary overlay's deferred scene teardown before engine shutdown.
+	battle.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	battle = null
 	get_tree().quit(0)
 
 func start_aether_clash_pvp_match(match_id: String, _engagement_id: String) -> bool:

@@ -51,6 +51,9 @@ func request_portal_entry(
 	var challenge_id := str(challenge.get("id", "")).strip_edges()
 	if challenge_id.is_empty():
 		return {"success": false, "error": _text("world.aether_clash.portal.unavailable")}
+	var module_result: Dictionary = await WebAssetModuleService.ensure_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 
 	var world := get_tree().get_first_node_in_group("world")
 	if (

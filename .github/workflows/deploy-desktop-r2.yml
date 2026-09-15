@@ -251,6 +251,9 @@ jobs:
       - name: Verify client crash reporting
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
 
+      - name: Verify generated map texture storage
+        run: ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd
+
       - name: Verify Simplified Chinese Pokémon terminology
         run: node tools/check_localization_terminology.mjs
 

@@ -153,6 +153,10 @@ def animation_metadata(
         "speed": 1.0,
         "frame_width": width,
         "frame_height": height,
+        # This pack uses a 96 px logical canvas: fronts are normally 2x,
+        # backs 3x, while Greninja's front is already at native resolution.
+        # Preserve the PNG pixels and explicitly undo only their authored scale.
+        "render_scale": max(width, height, 96) / 96.0,
         "source_frame_count": 1,
         "frames": [
             {

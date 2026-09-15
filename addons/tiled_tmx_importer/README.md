@@ -14,6 +14,7 @@ Scope:
 - Tiled flip flags are preserved through Godot alternative tiles
 - Tiled object layers and gameplay properties are ignored
 - one shared Godot `TileSet` is saved beside the imported scene and reused when its source signature has not changed
+- generated atlas chunks are stored with portable lossless compression for desktop and Web exports
 
 Out of scope:
 
@@ -43,3 +44,6 @@ godot --headless --path . --script res://addons/tiled_tmx_importer/import_tmx_cl
 ```
 
 The importer will also save `res://generated/tiled_visuals/desert/desert.visual.tileset.tres`.
+Generated `.texture.res` chunks are losslessly compressed automatically. The
+repository check `tests/generated_map_texture_storage_check.gd` rejects output
+that bypasses this storage contract.

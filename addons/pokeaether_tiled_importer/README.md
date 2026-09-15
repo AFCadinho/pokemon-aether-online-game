@@ -21,8 +21,12 @@ Generated visual files:
 
 - `<visual_id>.visual.tscn`
 - `<visual_id>.visual.tileset.tres`
+- `assets/*.texture.res` atlas chunks using portable lossless compression
 
 These files are safe to delete/regenerate. Do not put gameplay nodes in generated visual scenes.
+The generated-map texture check runs in CI and release workflows so a future
+map import cannot silently add raw multi-MiB texture resources to either the
+desktop or browser client.
 
 Visual render hints:
 

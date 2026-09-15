@@ -1,0 +1,50 @@
+name: Verify Generated Map Textures
+
+on:
+  pull_request:
+    paths:
+      - "addons/tiled_tmx_importer/**"
+      - "addons/pokeaether_tiled_importer/**"
+      - "generated/tiled_visuals/**"
+      - "tests/fixtures/tiled/**"
+      - "tests/generated_map_texture_storage_check.gd"
+      - "tests/tmx_visual_importer_check.gd"
+      - ".github/workflows/verify-generated-map-textures.yml"
+  push:
+    branches:
+      - development
+      - main
+    paths:
+      - "addons/tiled_tmx_importer/**"
+      - "addons/pokeaether_tiled_importer/**"
+      - "generated/tiled_visuals/**"
+      - "tests/fixtures/tiled/**"
+      - "tests/generated_map_texture_storage_check.gd"
+      - "tests/tmx_visual_importer_check.gd"
+      - ".github/workflows/verify-generated-map-textures.yml"
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  GODOT_VERSION: 4.6.2
+  GODOT_RELEASE: stable
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download Godot
+        run: |
+          curl -fsSL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv "Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64" godot
+          chmod +x godot
+
+      - name: Verify importer output and generated texture storage
+        run: |
+          ./godot --headless --path . --script res://tests/tmx_visual_importer_check.gd
+          ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd

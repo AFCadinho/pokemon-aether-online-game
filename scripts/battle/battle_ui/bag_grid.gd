@@ -90,6 +90,7 @@ func set_input_disabled(is_disabled: bool) -> void:
 	input_disabled = is_disabled
 	for button: Button in item_buttons:
 		button.disabled = input_disabled
+		button.modulate = Color("#8196ab") if input_disabled else Color.WHITE
 
 
 func _build_layout() -> void:
@@ -109,16 +110,20 @@ func _build_layout() -> void:
 	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	message_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	message_label.add_theme_color_override("font_color", Color("#9fb8cb"))
+	message_label.add_theme_font_size_override("font_size", 14)
+	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(message_label)
 
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	root.add_child(scroll)
 
 	content = VBoxContainer.new()
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_theme_constant_override("separation", 6)
+	content.add_theme_constant_override("separation", 8)
 	scroll.add_child(content)
 
 
@@ -147,16 +152,80 @@ func _create_item_button(item_data: Dictionary) -> Button:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.add_theme_font_size_override("font_size", 15)
-	button.text = _t("battle.bag.item_quantity", {
+	button.tooltip_text = _t("battle.bag.item_quantity", {
 		"item": item_name,
 		"quantity": quantity,
 	})
-	button.icon = _load_item_icon(item_id)
-	button.expand_icon = false
+	_style_item_button(button)
+	var padding := MarginContainer.new()
+	padding.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for edge: String in ["left", "right"]:
+		padding.add_theme_constant_override("margin_" + edge, 10)
+	for edge: String in ["top", "bottom"]:
+		padding.add_theme_constant_override("margin_" + edge, 7)
+	button.add_child(padding)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 12)
+	padding.add_child(row)
+	var icon := TextureRect.new()
+	icon.texture = _load_item_icon(item_id)
+	icon.custom_minimum_size = Vector2(32, 32)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	var name_label := Label.new()
+	name_label.text = item_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.add_theme_color_override("font_color", Color("#e5f3ff"))
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(name_label)
+	var badge := PanelContainer.new()
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	badge.add_theme_stylebox_override("panel", _row_style(Color("#102e43"), Color("#28516c")))
+	row.add_child(badge)
+	var count_label := Label.new()
+	count_label.text = "×%d" % quantity
+	count_label.custom_minimum_size.x = 34
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count_label.add_theme_font_size_override("font_size", 13)
+	count_label.add_theme_color_override("font_color", Color("#78dfff"))
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_child(count_label)
 	button.disabled = input_disabled or quantity <= 0
+	button.modulate = Color("#8196ab") if button.disabled else Color.WHITE
 	button.pressed.connect(_on_item_button_pressed.bind(item_data.duplicate(true)))
 	item_buttons.append(button)
 	return button
+
+
+func _style_item_button(button: Button) -> void:
+	button.add_theme_stylebox_override("normal", _row_style(Color("#0c1c2d"), Color("#244b68")))
+	button.add_theme_stylebox_override("hover", _row_style(Color("#12334a"), Color("#62d7ff")))
+	button.add_theme_stylebox_override("pressed", _row_style(Color("#174760"), Color("#a3edff")))
+	button.add_theme_stylebox_override("disabled", _row_style(Color("#0b1521"), Color("#253545")))
+	var focus := _row_style(Color.TRANSPARENT, Color("#a3edff"))
+	focus.set_border_width_all(2)
+	button.add_theme_stylebox_override("focus", focus)
+
+
+func _row_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(7)
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	return style
 
 
 func _get_capture_items(items: Array) -> Array:

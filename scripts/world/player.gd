@@ -1032,9 +1032,12 @@ func _apply_world_pixel_scale() -> void:
 	if arena_controller != null and arena_controller.call("apply_world_camera_policy", world_camera):
 		return
 	var window_size := window.size
-	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
+	var effective_scale := PixelPerfectRenderingScript.resolve_player_output_scale(
 		SettingsManager.get_effective_world_pixel_scale(window_size),
-		_get_current_map_world_access_area_type()
+		window_size,
+		_get_current_map_world_access_area_type(),
+		OS.has_feature("web"),
+		SettingsManager.is_world_pixel_scale_auto()
 	)
 	var canvas_scale := viewport.get_screen_transform().get_scale()
 	var baseline_zoom := PixelPerfectRenderingScript.camera_zoom_for_output_scale(
@@ -1048,10 +1051,9 @@ func _apply_world_pixel_scale() -> void:
 		and bool(photo_mode.call("apply_camera_baseline_zoom", world_camera, baseline_zoom))
 	):
 		return
-	PixelPerfectRenderingScript.apply_to_camera(
+	PixelPerfectRenderingScript.apply_output_scale_to_camera(
 		world_camera,
-		effective_scale,
-		window_size
+		effective_scale
 	)
 
 
@@ -2663,6 +2665,11 @@ func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = 
 		return
 
 	var resolved_type: String = str(encounter.get("encounter_type", encounter_type))
+	if CoopService.available and not CoopService.party.is_empty():
+		var coop_world := GameState.get_world()
+		if coop_world != null:
+			coop_world.start_triggered_wild_battle_for_area(str(encounter.get("area_id", "")), resolved_type)
+		return
 	if bool(encounter.get("use_map_trigger", false)):
 		if current_map.has_method("should_trigger_wild_encounter"):
 			if not bool(current_map.call("should_trigger_wild_encounter", resolved_type)):

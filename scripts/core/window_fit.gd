@@ -5,6 +5,8 @@ const MIN_WINDOW_SIZE := Vector2i(1280, 720)
 const WINDOWED_SAFE_MARGIN := Vector2i(80, 128)
 
 func _ready() -> void:
+	# Fill the window while retaining a uniform UI/world transform.
+	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	if OS.has_feature("web"):
 		return
 

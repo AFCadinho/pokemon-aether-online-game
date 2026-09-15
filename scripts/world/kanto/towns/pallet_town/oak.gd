@@ -23,6 +23,7 @@ var quest_turn_in_quest_id := ""
 var quest_turn_in_step_id := ""
 var quest_turn_in_dialogue_id := ""
 var quest_turn_in_completed_dialogue_id := ""
+var quest_turn_in_journey_dialogue_id := ""
 
 
 func _ready() -> void:
@@ -97,13 +98,11 @@ func interact_with_player(player: Node2D) -> void:
 
 	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
 	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
-	if not OS.has_feature("web"):
-		_prepare_gary_starter_sequence()
+	_prepare_gary_starter_sequence()
 	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
 	is_creating_starter = false
 	if not bool(create_result.get("success", false)):
-		if not OS.has_feature("web"):
-			_cancel_gary_starter_sequence()
+		_cancel_gary_starter_sequence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -120,14 +119,7 @@ func interact_with_player(player: Node2D) -> void:
 			{"pokemon": selected_species_name}
 		)
 	)
-	if OS.has_feature("web"):
-		await show_dialogue(
-			_format_dialogue_lines(
-				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
-				selected_species_name
-			)
-		)
-	elif last_starter_claim_already_completed:
+	if last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
 			_format_dialogue_lines(
@@ -193,6 +185,9 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	quest_turn_in_completed_dialogue_id = str(
 		metadata.get("questTurnInCompletedDialogueId", "")
 	).strip_edges()
+	quest_turn_in_journey_dialogue_id = str(
+		metadata.get("questTurnInJourneyDialogueId", "")
+	).strip_edges()
 
 
 func _is_quest_turn_in_available() -> bool:
@@ -240,11 +235,35 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		return
 	if not bool(result.get("storyRefreshSuccess", false)):
 		push_warning("Oak: parcel turn-in succeeded but story refresh did not complete locally.")
+	var should_play_gary_departure := not bool(result.get("alreadyTurnedIn", false))
+	if not should_play_gary_departure:
+		# The server may be repairing an older receipt whose story event never
+		# advanced. Keep Oak's remaining dialogue, but do not replay Gary's
+		# one-time departure scene during recovery.
+		_cancel_pending_gary_parcel_departure(gary)
 	await show_dialogue(await _resolve_dialogue_lines(
 		quest_turn_in_completed_dialogue_id,
 		[
 			"Thank you. This will be a great help to my research.",
 			"You and your new partner handled your first errand well. Your journey has truly begun.",
+		]
+	))
+	if (
+		should_play_gary_departure
+		and gary != null
+		and gary.has_method("play_parcel_return_departure")
+	):
+		await gary.call("play_parcel_return_departure", player)
+	elif should_play_gary_departure:
+		_cancel_pending_gary_parcel_departure(gary)
+	face_world_position(_get_body_feet_position(player))
+	if player != null and player.has_method("face_world_position"):
+		player.face_world_position(get_feet_position())
+	await show_dialogue(await _resolve_dialogue_lines(
+		quest_turn_in_journey_dialogue_id,
+		[
+			"Before you begin your journey, go home and check in with your parents. "
+			+ "They should be the first to hear that you are ready.",
 		]
 	))
 	if bool(result.get("turnedIn", false)):
@@ -253,13 +272,11 @@ func _turn_in_quest_item(player: Node2D) -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.key_item.received_pokedex")
 		)
-		var reward_feedback_shown := InventoryService.notify_story_reward_effects(result.get("storyEffects", []))
-		if not reward_feedback_shown:
+		var item_reward_displayed := InventoryService.notify_story_reward_effects(
+			result.get("storyEffects", [])
+		)
+		if item_reward_displayed:
 			SfxManager.play("item_received")
-	if gary != null and gary.has_method("play_parcel_return_departure"):
-		await gary.call("play_parcel_return_departure", player)
-	else:
-		_cancel_pending_gary_parcel_departure(gary)
 
 
 func _cancel_pending_gary_parcel_departure(gary: Node) -> void:

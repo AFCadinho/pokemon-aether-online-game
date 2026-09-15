@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "status": "preparation-only",
+  "finalDemoBoundary": "kanto_route_5",
+  "completionQuestId": "challenge_cerulean_gym",
+  "completionEventId": "kanto_alpha_gym_misty_battle",
+  "additionalMapIds": [
+    "kanto_route_3",
+    "kanto_route_3_pokemon_center",
+    "kanto_mt_moon_1f",
+    "kanto_mt_moon_b1f",
+    "kanto_mt_moon_b2f",
+    "kanto_route_4",
+    "kanto_cerulean_city",
+    "kanto_cerulean_city_pokemon_center",
+    "kanto_cerulean_city_house_1",
+    "kanto_cerulean_city_house_2",
+    "kanto_cerulean_city_house_3",
+    "kanto_cerulean_city_bike_store",
+    "kanto_cerulean_city_gym",
+    "kanto_route_24",
+    "kanto_route_25",
+    "kanto_route_25_bills_house"
+  ],
+  "additionalTransitDestinationIds": ["kanto_cerulean_city"],
+  "newBlockedTransitionIds": [
+    "kanto_cerulean_city__to_route_5_grass",
+    "kanto_cerulean_city__to_route_5_left",
+    "kanto_cerulean_city__to_route_5_right",
+    "kanto_cerulean_city__to_route_9",
+    "kanto_cerulean_city__to_cerulean_cave"
+  ],
+  "additionalVisualDirectories": [
+    "route_3", "mt_moon_1f", "mt_moon_b1f", "mt_moon_b2f", "route_4",
+    "cerulean_city", "cerulean_gym", "cerulean_bike_shop",
+    "cerulean_house_template_blue", "route_24", "route_25", "bills_house"
+  ]
+}

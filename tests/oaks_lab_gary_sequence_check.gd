@@ -97,6 +97,10 @@ func _run() -> void:
 		"Gary stays visible while the starter claim hands off to his turn"
 	)
 	_check_true(
+		not oak_text.contains('OS.has_feature("web")'),
+		"browser and desktop share Gary's complete starter selection sequence"
+	)
+	_check_true(
 		gary_text.contains("func is_starter_sequence_active() -> bool:")
 		and gary_text.contains("return starter_sequence_pending or starter_sequence_running"),
 		"Gary exposes the complete pending and running starter sequence window"
@@ -137,6 +141,40 @@ func _run() -> void:
 		oak_text.contains('gary.call("prepare_parcel_return_departure")')
 		and oak_text.contains('gary.call("play_parcel_return_departure", player)'),
 		"Oak keeps Gary staged throughout the completed parcel scene"
+	)
+	_check_true(
+		oak_text.find('gary.call("play_parcel_return_departure", player)')
+			< oak_text.find("quest_turn_in_journey_dialogue_id", oak_text.find("func _turn_in_quest_item")),
+		"Oak gives the journey-home instruction after Gary has departed"
+	)
+	_check_true(
+		oak_text.find("InventoryService.notify_story_reward_effects")
+			> oak_text.find("quest_turn_in_journey_dialogue_id", oak_text.find("func _turn_in_quest_item"))
+		and oak_text.find('SfxManager.play("item_received")')
+			> oak_text.find("InventoryService.notify_story_reward_effects"),
+		"Oak presents the Parcel rewards with sound after the complete conversation"
+	)
+	var repaired_receipt_start := oak_text.find("var should_play_gary_departure :=")
+	var completed_dialogue_start := oak_text.find(
+		"quest_turn_in_completed_dialogue_id",
+		repaired_receipt_start
+	)
+	var repaired_receipt_branch := oak_text.substr(
+		repaired_receipt_start,
+		completed_dialogue_start - repaired_receipt_start
+	)
+	_check_true(
+		repaired_receipt_start >= 0
+		and completed_dialogue_start > repaired_receipt_start
+		and repaired_receipt_branch.contains("_cancel_pending_gary_parcel_departure(gary)")
+		and not repaired_receipt_branch.contains("\n\t\treturn"),
+		"a repaired Parcel receipt continues through Oak's remaining dialogue"
+	)
+	_check_true(
+		oak_text.contains("if (\n\t\tshould_play_gary_departure")
+		and oak_text.find('gary.call("play_parcel_return_departure", player)')
+			> oak_text.find("if (\n\t\tshould_play_gary_departure"),
+		"a repaired Parcel receipt skips only Gary's one-time departure"
 	)
 	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
 	_check_true(

@@ -9,6 +9,46 @@
 - The Clash Training Captain reports team-preparation failures in your selected language. Bot Guild training remains unavailable while V1 is completed.
 
 - Added the Clash Training Captain and a training setup menu with an independent opposing bot count. Training stays unavailable until bot-guild V1 is ready.
+- Co-op testing: Run and trainer Forfeit ask your partner for agreement, even after an attack was selected. Refusing lets both Trainers choose again without using a turn or PP. Forfeit warns that both Trainers lose; co-op remains disabled pending V1 acceptance.
+
+- Co-op testing: wild battles offer Wait to skip your own action without spending PP, giving your partner more catch attempts. Wild Pokémon still act. Trainer and single battles are unchanged; co-op remains disabled pending V1 acceptance.
+
+- Desktop automatic zoom now uses the same consistent world view as the browser, including interiors. Manual 1×, 1.5× and 2× outdoor zoom choices and saved preferences remain available.
+
+- Browser world zoom now adapts to the window size with a consistent view on laptop, Full HD and 4K screens, without letterboxing. Desktop zoom settings are unchanged.
+
+- Co-op testing: either Trainer can leave a wild battle for both using Run, without a partner confirmation. Trainer battles cannot be fled. Wild co-op remains disabled pending catching and release acceptance.
+
+- Co-op testing now sends grass steps to the server and enters the shared battle screen when an encounter starts. Partners no longer enter separate solo wild battles; wild co-op remains disabled pending catching and fleeing support.
+
+- The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.
+
+- Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.
+
+- Overworld Poké Ball item pickups now work in the browser and stay collected after logging in again.
+
+- Co-op testing now includes Liam and Sammy with their original single Pokémon. Their unused opponent position stays empty and cannot be selected as an attack target. Co-op remains disabled pending release acceptance.
+- Co-op testing now supports Zoe, Mason, Cale, Rick, Doug, Anthony, Flint and Stone with their original teams. Previously victorious Trainers can join as helpers without entering the solo rematch flow.
+- Co-op testing now plays move effects and battle sounds across all four Pokémon positions, including spread attacks and misses, with safe cancellation when leaving a battle.
+- Co-op testing now has a dedicated four-Pokémon battle screen with animated sprites, HP/status, clear ownership, legal target selection, replacement controls and a reconnect-safe battle history. Co-op remains disabled until release activation.
+- Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
+- All side quests from Pallet Town through Brock can now be accepted and completed in the browser, including Fishing, Thieving, EV Training and Rock Smash objectives.
+- Permission-gated Developer Tools can now parse, generate, spawn, battle and clean up test Pokémon in the browser.
+- Browser Trainers can now save appearance changes from their Trainer Card.
+- Browser players can move immediately after using Reset / New Game and now respawn in the complete default outfit.
+- The browser world now continues through Route 22, Route 2, Viridian Forest and the Pewter City Gym; Route 3 directs Trainers to the downloadable client.
+- Browser Trainers can use the Aethernet between Pallet Town, Viridian City, Pewter City and the Aether Clash Lobby, with free Lobby travel for Guild members.
+- Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
+- Map textures now take substantially less download space in both desktop and browser builds without reducing visual quality.
+- Aethernet Keepers and the Guild Lobby travel button now work in the browser where travel is supported.
+- Browser login now opens directly at the Trainer's saved location without briefly showing the Player's House.
+- Gary now stays beside Professor Oak and chooses his Kanto starter during the browser storyline.
+- Professor Oak now finishes the Parcel scene after Gary leaves by directing the Trainer home to their parents.
+- Repeating an already recorded Parcel hand-in now repairs stalled story progress toward visiting Mom.
+- Repaired Parcel hand-ins now preserve Professor Oak's complete closing conversation in the browser.
+- Oak's Parcel rewards now appear with their item jingle after the complete conversation.
+- Trainers now reappear correctly after completing an Aethernet teleport in the browser.
+- Permission-gated Developer and Staff Tools are now available from My Powers in the browser; player-facing creator tools remain desktop-only.
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
