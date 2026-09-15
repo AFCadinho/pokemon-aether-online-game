@@ -44,9 +44,11 @@ const assert = require('node:assert/strict');
     if (url.pathname === '/news.json') return route.fulfill({status:200,contentType:'application/json',body:'{"items":[]}'});
     if (url.pathname.startsWith('/modules/')) modules.push(url.pathname);
     if (!url.pathname.startsWith('/api/')) return route.continue();
+    const requestedAt=Date.now();
     const result = await request({method:req.method(),path:url.pathname,body:req.postData()||'',headers:req.headers()});
+    const bridgeMs=Date.now()-requestedAt;
     const body=req.postData()?JSON.parse(req.postData()):{};
-    api.push({path:url.pathname,status:result.status,interactionId:body.interactionId,mapId:body.mapId});
+    api.push({path:url.pathname,status:result.status,interactionId:body.interactionId,mapId:body.mapId,bridgeMs});
     return route.fulfill({status:result.status,contentType:'application/json',body:result.body});
   });
   const page = await context.newPage();
@@ -118,6 +120,11 @@ const assert = require('node:assert/strict');
     await page.screenshot({path:path.join(output,'bill-restored-with-ticket.png')});
     console.log('Bill computer sequence and ticket completed');
     const mapList=JSON.parse((await request({command:'misty_map_list'})).body);
+    if (process.env.POKEAETHER_SMOKE_MAP_FILTER) {
+      const wanted=process.env.POKEAETHER_SMOKE_MAP_FILTER.split(',');
+      assert(wanted.every(id=>mapList.some(map=>map.mapId===id)), 'Unknown smoke map');
+      for(let i=mapList.length-1;i>=0;i--) if(!wanted.includes(mapList[i].mapId)) mapList.splice(i,1);
+    }
     if (process.env.POKEAETHER_MEMORY_MAP_FILTER) {
       assert(memoryProbe, 'Map filtering is diagnostic only');
       const wanted=process.env.POKEAETHER_MEMORY_MAP_FILTER.split(',');

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
+
 - Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.
 
 - Oak's lab entrance now triggers on the reachable doorway tile in browser and desktop.

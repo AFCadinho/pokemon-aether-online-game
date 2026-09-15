@@ -10,7 +10,7 @@ const SCOPES := {
 
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
-	if args.size() != 3 or not SCOPES.has(args[0]) or FileAccess.file_exists("res://scenes/world.tscn"):
+	if args.size() != 3 or (not SCOPES.has(args[0]) and args[0] != "desktop") or FileAccess.file_exists("res://scenes/world.tscn"):
 		push_error("Requires an empty project and arguments SCOPE PACK ABSOLUTE_FINGERPRINT_JSON.")
 		quit(2)
 		return
@@ -20,7 +20,12 @@ func _init() -> void:
 		return
 	var valid := true
 	var maps := 0
-	for id in SCOPES[args[0]]:
+	var visual_ids: Array = expected.keys() if args[0] == "desktop" else SCOPES[args[0]]
+	if args[0] == "desktop" and visual_ids.size() != 33:
+		push_error("Desktop probe requires the complete approved 33-map baseline.")
+		quit(2)
+		return
+	for id in visual_ids:
 		var path := "res://generated/tiled_visuals/%s/%s.visual.tscn" % [id, id]
 		var scene := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
 		if scene == null or not expected.has(id):
