@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Latest download links now point to the current release without storing extra copies. Older desktop and browser downloads retain one previous version for rollback.
+
 - Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
 
 - Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
