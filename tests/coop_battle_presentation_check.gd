@@ -36,6 +36,14 @@ func _run() -> void:
 	_expect(panel.cards.p3.info.text.contains("30 / 40") and panel.cards.p1.info.text.contains("80%"), "only own HP is exact")
 	_expect(panel.cards.p2.info.text.contains("DEF +1"), "public stat stages remain visible")
 	_expect(panel.cards.p3.hp.value == 75 and not panel._playing, "old damage is not replayed over reconnect snapshot")
+	_expect(not panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text.begins_with("Run")), "trainer view has no Run control")
+	service.view.legalActions.append({"type": "run"})
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Run — both Trainers leave"), "wild escape warns that both Trainers leave without a confirmation")
+	service.view.legalActions.pop_back()
+	panel._action_signature = ""
+	panel._update_actions()
 	var empty_snapshot: Dictionary = snapshot.duplicate(true)
 	empty_snapshot.positions.remove_at(3)
 	panel._apply_positions(empty_snapshot)
@@ -112,6 +120,11 @@ func _run() -> void:
 	activity.outcome = "win"
 	service.apply_state({"activity": activity, "view": snapshot})
 	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 1, "finished state replaces commands with shared victory and return control")
+	service.activity.outcome = "draw"
+	service.activity.escaped = true
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 1, "recovered escape receipt shows escape and a single return control")
 	var old_generation: int = effects.generation
 	effects.play_move({"actor": "p3", "target": "p2", "move": "Tackle"}, [], panel.cards)
 	await process_frame
