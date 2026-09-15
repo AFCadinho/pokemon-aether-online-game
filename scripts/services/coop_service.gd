@@ -147,6 +147,45 @@ func try_start(trainer_id: String) -> Dictionary:
 	return {"handled": true, "success": false, "code": result.get("code", "coop_start_pending")}
 
 
+func try_wild_step(encounter_type: String) -> Dictionary:
+	if OS.has_feature("web") or not AuthService.is_authenticated():
+		return {"handled": false}
+	var refreshed := await refresh()
+	if not refreshed.get("success", false):
+		return {"handled": not party.is_empty() or not activity.is_empty(), "success": false}
+	if party.is_empty():
+		return {"handled": false}
+	if encounter_type != "grass":
+		return {"handled": true, "success": false, "code": "coop_wild_method_unsupported"}
+	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
+		return {"handled": true, "success": true, "status": "miss"}
+	if not activity.is_empty():
+		if activity.get("reservationId") == pending_start.get("reservationId"):
+			pending_start = {}
+		return {"handled": true, "success": true}
+	var world := GameState.get_world()
+	if world == null:
+		return {"handled": true, "success": false}
+	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
+	if not position_result.get("success", false):
+		return {"handled": true, "success": false}
+	if pending_start.is_empty():
+		pending_start = {"reservationId": new_id(), "kind": "grass-step"}
+	elif pending_start.get("kind") != "grass-step":
+		return {"handled": true, "success": false, "code": "coop_start_pending"}
+	var result := await _request("grass-step", {"reservationId": pending_start["reservationId"]})
+	if result.get("success", false):
+		pending_start = {}
+	elif int(result.get("status", 0)) in [400, 401, 403, 404, 409, 422]:
+		pending_start = {}
+	elif result.get("code") == "coop_wild_gameplay_disabled":
+		pending_start = {}
+	await refresh()
+	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
+		pending_start = {}
+	return {"handled": true, "success": result.get("success", false), "code": result.get("code", "coop_start_pending")}
+
+
 func submit_action(action: Dictionary) -> Dictionary:
 	if view.is_empty() or view.get("locked", true) or not pending_command.is_empty():
 		return {"success": false}
