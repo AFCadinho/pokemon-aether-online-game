@@ -1,8 +1,9 @@
 # Pallet atlas — block 3 verification status
 
 Status: native rendered comparison and live browser atlas residency/battle checks
-pass. Real house map-transition check has not passed; comparable audit-off
-battle-latency checks remain pending. This document
+pass. The house doorway geometry was corrected and the real map-cycle check
+now passes. Paired audit-off control/candidate battle-latency checks remain
+pending. This document
 does not certify block 3 complete or authorize importer rollout.
 
 ## Native rendered check
@@ -119,8 +120,39 @@ account health payload still reports the local unconfigured transactional-email
 worker as degraded; this is not complete stack certification. Known fixture
 mail timeouts and gated peripheral HTTP 403s also remain outside this test.
 
-Next: diagnose the doorway without bypassing real authorization, prove a real
-map cycle, and obtain separate audit-off control/candidate timing evidence.
-Block 4 remains held. New test/diagnostic follow-ups remain committed in slot C
-pending a passing map-cycle check; they are not advertised as integrated or as
-completion of block 3. No production, promotion or full paired gate was run.
+### Doorway correction and successful candidate run
+
+The off-tree native geometry probe `tools/audit_pallet_door_geometry.gd`
+established that the old exit centre (656, 496) was on blocked tile (20, 15).
+The walkable doorway (20, 16), centre (656, 528), did not overlap that exit's
+32 × 32 rectangle with the real player's 32 × 30.5 detection rectangle at
+offset (0, -0.75): they only touched an edge. The probe explicitly reproduces
+that no-overlap regression. The house exit was moved one tile down to (656,
+528), keeping the hint's world position unchanged. No collision, atlas,
+authorization or spawn data was modified. The native check now verifies a
+walkable overlapping entrance and its connected body-entered signal. This
+scene correction applies to both browser and desktop.
+
+Clean candidate export `845c334b9cf2dbef4bf2729bbcd863a3e9f1cf01`, dirty=false;
+PCK SHA-256 `300959c546177721795a23b29c1b75f54f05f4252a20b1fbe58a812f59cb568e`.
+`pallet-compact-door-fixed-timing-report.json` records success=true,
+textureAudit=false, worldTextureAudit=false, timingComparable=true, three
+dev/wild starts, four resolved choices, three teardowns and zero page errors.
+Real presence maps: Pallet → Player's House → Pallet. Both transition-enter
+HTTP requests returned 200. Screenshots were reviewed for the house and return.
+Texture counter after all three battles and after returning to Pallet is
+270,817,666 bytes, with 854 resources and zero orphan nodes. The intervening
+house snapshot uses 312,298,257 bytes; returning releases its additional
+texture footprint. The atlas pixel/property/door-piece regression also passes.
+
+Candidate start-request → actions-ready durations: cold 11,785 ms, warm
+3,566 / 3,535 ms in this software-WebGL run. These are raw observed timings,
+not an accepted performance result. Historical runs are not a matched current
+control; do not claim faster battles, non-regression or an SLA from them.
+The remaining check requires an otherwise identical old-atlas build under
+the same runtime/hardware conditions, with audits disabled on both sides.
+
+Block 4 remains held until the paired comparison is reviewed. The doorway
+correction and diagnostic follow-ups are ready for local development integration
+after the successful focused checks. No production, promotion or full paired
+gate was run.
