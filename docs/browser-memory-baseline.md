@@ -582,6 +582,61 @@ uncached, private/traversal filtering and the 256-input bound. Both driver synta
 checks and the rendered login audit pass. Native scene UID fallback and editor
 Unown case-duplicate warnings remain visible. No full paired gate was run.
 
+### Live world/non-effect texture audit
+
+The separately approved disposable run used the same clean diagnostic export
+`4142a97ecc0aa811f05c3f06ed9ae43ce33b038c` and PCK
+`3f4dfd9e8a48036cee28044c9ad23b655313efd923b1b7617790490f3ce51432`,
+with driver source from `d31fe84f330f7987fc76a730b91f691085d2d048`.
+The 246-path non-effect/core-map whitelist was enabled, effect auditing disabled,
+and the existing guarded Grass fixture and three-battle command sequence reused.
+No real API/WebSocket routes were mocked. Three starts, four resolved choices,
+three teardown markers and zero JavaScript errors pass. This audit explicitly
+sets `timingComparable=false`: do not use these timings to judge entry latency.
+
+| Measurement | World before battles | Idle after each of three battles |
+| --- | ---: | ---: |
+| Overall engine texture counter | 378.35 MiB | 391.36 MiB |
+| Selected unique non-effect/map textures | 50 | 50 |
+| Selected base-RGBA estimate | 125.54 MiB | 125.54 MiB |
+| Selected portable Pallet map textures | 48.4375 MiB | 48.4375 MiB |
+| Selected battle platforms | 30 MiB | 30 MiB |
+| Selected UI textures | 8.11 MiB | 8.11 MiB |
+| Sprite cache entries | 1 | 11 |
+| Orphan nodes | 0 | 0 |
+
+The selected asset paths and dimensions match exactly before battles and after
+all three teardowns. The overall counter is stable across the three post-battle
+idle samples, while the sprite cache remains warm, with zero pending/queued
+prefetch work. This does not independently attribute the entire pre/post counter
+change to that sprite cache; the whitelist is intentionally not exhaustive.
+During the cold battle-ready snapshot the capture-ball sheet adds one selected
+texture (14 MiB base RGBA); it is absent again after teardown.
+
+Moon, the combo logo and the large legacy tileset candidates are absent from the
+selected cached set. Unlike the native login-release experiment, the live world
+does retain the text logo. `scripts/ui/loading_screen.gd` contains a const preload
+of that logo and the battle background; therefore the native release observation
+must not be extrapolated to full browser world lifecycle. This audit establishes
+presence, not the identity of every resource owner or a proven logo leak.
+
+Pallet's generated TileSet explicitly references thirteen portable atlas chunks:
+twelve 256 × 4096 textures and one 256 × 448 texture, totaling 48.4375 MiB base
+RGBA. This is not their compressed download size or a physical RAM measurement.
+The TileSet defines the full atlas grid, which motivates a focused follow-up to
+measure used tile regions and test lossless atlas compaction. Do not assume a
+particular saving before counting actual used tiles, animations and dependencies.
+Battle platforms remain expected prefetched resources; no delayed loading or
+image downscaling was introduced. This phase only records evidence.
+
+Raw report: this slot's ignored
+`builds/web-real-battle-memory/world-texture-audit-report.json`. The wrapper
+completed `restored=1 test_exit=0`; PostgreSQL is back on the normal Compose
+project's persistent volume. Five runtime guard/config tests pass. Unrelated
+gated-endpoint errors remain outside this battle-focused acceptance; this is not
+full gameplay certification. No source/backend runtime behavior, production,
+release or full paired verification changed.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
