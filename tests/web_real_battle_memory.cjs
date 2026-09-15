@@ -151,7 +151,15 @@ function provenance() {
       commandHash.update(line+'\n');
       const command=JSON.parse(line);
       assert(!runtimeLost,'Disposable runtime lost');attest();
+      const readyBefore=markers.filter(x=>x.label==='battle_actions_ready').length;
       if(command.click) await page.mouse.click(...command.click);
+      if(command.readyBattle) {
+        const deadline=Date.now()+120000;
+        while(markers.filter(x=>x.label==='battle_actions_ready').length<=readyBefore) {
+          assert(!runtimeLost && Date.now()<deadline,'Battle actions did not become ready');
+          await page.waitForTimeout(100);
+        }
+      }
       // Canvas TextEdit consumes keyboard events, not DOM insertText input.
       if(command.text) await page.keyboard.type(command.text);
       if(command.key) await page.keyboard.press(command.key);
