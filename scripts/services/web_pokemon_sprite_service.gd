@@ -1,6 +1,7 @@
 extends Node
 
 const IDLE_ANIMATION := "idle"
+const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const MAX_RESPONSE_BYTES := 4 * 1024 * 1024
 const CACHE_LIMIT := 96
 const DOWNLOAD_ATTEMPTS := 3
@@ -172,7 +173,7 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 	var result := {
 		"frames": frames,
 		"style": catalog_style,
-		"render_scale": maxf(float(metadata.get("render_scale", metadata.get("scale", 1.0))), 1.0),
+		"render_scale": BattleSpriteRenderScale.resolve(metadata, side_folder),
 		"frame_size": Vector2(float(metadata.get("frame_width", 0)), float(metadata.get("frame_height", 0))),
 		"visual_bounds": visual_bounds,
 	}

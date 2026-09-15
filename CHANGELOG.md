@@ -4,6 +4,12 @@
 
 - Co-op testing now sends grass steps to the server and enters the shared battle screen when an encounter starts. Partners no longer enter separate solo wild battles; wild co-op remains disabled pending catching and fleeing support.
 
+- The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.
+
+- Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.
+
+- Overworld Poké Ball item pickups now work in the browser and stay collected after logging in again.
+
 - Co-op testing now includes Liam and Sammy with their original single Pokémon. Their unused opponent position stays empty and cannot be selected as an attack target. Co-op remains disabled pending release acceptance.
 - Co-op testing now supports Zoe, Mason, Cale, Rick, Doug, Anthony, Flint and Stone with their original teams. Previously victorious Trainers can join as helpers without entering the solo rematch flow.
 - Co-op testing now plays move effects and battle sounds across all four Pokémon positions, including spread attacks and misses, with safe cancellation when leaving a battle.

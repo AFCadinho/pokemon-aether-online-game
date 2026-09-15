@@ -10,6 +10,11 @@ import import_mega_champions_sprite_assets as importer
 
 
 class ImportMegaChampionsSpriteAssetsTest(unittest.TestCase):
+    def test_static_pack_authored_resolution_is_explicit(self) -> None:
+        for dimension, expected in ((96, 1.0), (192, 2.0), (288, 3.0)):
+            metadata = importer.animation_metadata("test.png", dimension, dimension)
+            self.assertEqual(metadata["render_scale"], expected)
+
     def test_mapping_set_covers_missing_and_corrected_forms(self) -> None:
         mappings = {
             mapping.catalog_entry_id: mapping.source_stem

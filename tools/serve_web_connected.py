@@ -59,10 +59,12 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/wallet/rewards/wild-battle"), ("POST", "/auth/web/wallet/rewards/trainer-battle"),
     ("POST", "/auth/web/mail"),
     ("POST", "/auth/web/respawn"),
+    ("GET", "/auth/web/world-pickups"),
     ("POST", "/auth/web/world/teleport-ack"),
     ("POST", "/world/weather/developer"),
 }
 GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
+    ("POST", r"/auth/web/world-pickups/[a-z0-9_]+/claim"),
     ("GET", r"/auth/web/boxes/\d+"), ("PATCH", r"/auth/web/boxes/\d+"),
     ("DELETE", r"/auth/web/(?:pokemon|party)/\d+"),
     ("POST", r"/auth/web/pokemon/\d+/(?:nickname|held-item|evolution|evs/allocate|items/use|moves/(?:learn|delete|reorder))"),
