@@ -20,7 +20,9 @@ older experiments; its normal output is `modules/kanto-through-misty-maps.pck`.
 Focused evidence:
 
 - Normal module exports: Aether Clash approximately 7.9 MiB; Misty approximately
-  19.9 MiB. Required maps present, canonical outside maps absent.
+  19.9 MiB in slot C and 25.1 MiB in the integration checkout with its own import
+  cache/assets. Both remain within budget. Required maps present, canonical
+  outside maps absent. Initial integration build stays 300.9 MiB.
 - Module pipeline/scope tests, trial validation tests and release-packaging tests.
 - Browser HTTP tests cover Brock gating, Route 3 entry, saved Cerulean resume,
   all five permanent Cerulean exits, scoped transit and 22 ordinary pickups.
