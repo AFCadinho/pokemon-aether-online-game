@@ -161,7 +161,7 @@ func _build_gid_lookup(map_data: Dictionary) -> void:
 
 func _load_texture(path: String) -> Texture2D:
 	var localized := PathUtils.localize(path)
-	if localized.begins_with("res://"):
+	if localized.begins_with("res://") or localized.begins_with("user://"):
 		return ResourceLoader.load(localized, "Texture2D", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as Texture2D
 
 	var image := Image.new()

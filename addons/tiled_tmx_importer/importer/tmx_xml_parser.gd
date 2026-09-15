@@ -32,6 +32,7 @@ func parse_tmx(tmx_path: String) -> Dictionary:
 	var current_object_group: Dictionary = {}
 	var current_object: Dictionary = {}
 	var current_tileset: Dictionary = {}
+	var current_tile_id := -1
 	var properties_target: Dictionary = {}
 	var property_pending_target: Dictionary = {}
 	var pending_property_name := ""
@@ -72,7 +73,11 @@ func parse_tmx(tmx_path: String) -> Dictionary:
 					if in_data and not current_layer.is_empty():
 						current_layer["raw_gids"].append(int(attrs.get("gid", 0)))
 					elif not current_tileset.is_empty() and attrs.has("id"):
+						current_tile_id = int(attrs.get("id", -1))
 						current_tileset["tile_properties"][int(attrs.get("id", 0))] = {}
+				"animation":
+					if not current_tileset.is_empty() and current_tile_id >= 0:
+						current_tileset["animated_tile_ids"].append(current_tile_id)
 				"objectgroup":
 					current_object_group = _parse_object_group(attrs)
 					if parser.is_empty():
@@ -119,6 +124,8 @@ func parse_tmx(tmx_path: String) -> Dictionary:
 		elif node_type == XMLParser.NODE_ELEMENT_END:
 			var end_name := parser.get_node_name()
 			match end_name:
+				"tile":
+					current_tile_id = -1
 				"tileset":
 					_finish_tileset(map_data, current_tileset)
 					current_tileset = {}
@@ -194,6 +201,7 @@ func _parse_tileset_reference(attrs: Dictionary, tmx_path: String) -> Dictionary
 		"image": {},
 		"properties": {},
 		"tile_properties": {},
+		"animated_tile_ids": [],
 	}
 	var source := str(tileset["source"])
 	if source != "":
@@ -233,6 +241,7 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 		"image": {},
 		"properties": {},
 		"tile_properties": {},
+		"animated_tile_ids": [],
 	}
 	var in_properties := false
 	var properties_target: Dictionary = {}
@@ -258,6 +267,9 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 					current_tile_id = int(attrs.get("id", -1))
 					if current_tile_id >= 0 and not tileset["tile_properties"].has(current_tile_id):
 						tileset["tile_properties"][current_tile_id] = {}
+				"animation":
+					if current_tile_id >= 0:
+						tileset["animated_tile_ids"].append(current_tile_id)
 				"properties":
 					in_properties = true
 					properties_target = tileset["properties"]

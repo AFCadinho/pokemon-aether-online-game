@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Newly imported maps use compact lossless atlases while preserving their artwork in the browser and desktop client.
+
 - The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
 
 - Pallet Town uses a smaller lossless map atlas while keeping its tiles and gameplay unchanged.

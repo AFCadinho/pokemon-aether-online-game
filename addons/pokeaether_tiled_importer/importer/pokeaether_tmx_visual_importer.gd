@@ -23,7 +23,8 @@ func import_tmx(tmx_path: String, visual_id_override: String = "") -> Dictionary
 		}
 
 	var visual_scene_path := generated_dir.path_join("%s.visual.tscn" % visual_id)
-	_clean_generated_assets(generated_dir.path_join("assets"))
+	# The shared importer removes only its superseded files after a successful
+	# save. Never erase the previous assets before validating an incoming TMX.
 
 	var importer := TmxVisualImporter.new()
 	var result: Dictionary = importer.import_tmx(tmx_path, visual_scene_path)
@@ -64,28 +65,3 @@ func _sanitize_generated_id(value: String) -> String:
 	if output == "." or output == "..":
 		return ""
 	return output
-
-
-func _clean_generated_assets(assets_dir: String) -> void:
-	if not assets_dir.begins_with(GENERATED_VISUAL_ROOT + "/"):
-		return
-
-	var global_assets_dir := ProjectSettings.globalize_path(assets_dir)
-	if not DirAccess.dir_exists_absolute(global_assets_dir):
-		return
-
-	_remove_directory_contents(global_assets_dir)
-	DirAccess.remove_absolute(global_assets_dir)
-
-
-func _remove_directory_contents(global_dir: String) -> void:
-	var dir := DirAccess.open(global_dir)
-	if dir == null:
-		return
-
-	for file_name in dir.get_files():
-		DirAccess.remove_absolute(global_dir.path_join(file_name))
-	for child_dir in dir.get_directories():
-		var child_path := global_dir.path_join(child_dir)
-		_remove_directory_contents(child_path)
-		DirAccess.remove_absolute(child_path)

@@ -25,6 +25,8 @@ func _init() -> void:
 	_check_file_exists(GENERATED_SCENE, "visual scene exists")
 	_check_file_exists(GENERATED_TILESET, "visual tileset exists")
 	_check_generated_textures_are_lossless_compressed()
+	_check_equal(int(result.get("compact_atlas_version", 0)), 1, "compaction runs automatically")
+	_check_true(int(result.get("compact_base_rgba_bytes", 0)) < 32 * 32 * 30 * 4, "unused physical atlas rows are omitted")
 
 	var packed_scene := load(GENERATED_SCENE) as PackedScene
 	_check_true(packed_scene != null, "visual scene loads")
