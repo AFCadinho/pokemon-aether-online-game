@@ -24,16 +24,16 @@ func _run() -> void:
 	)
 	_check(PixelPerfectRenderingScript.validate_scale(-1) == 2.0, "invalid scale falls back to the 2x outdoor default")
 	_check(
-		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1600, 900)) == 1.0,
-		"windowed play up to 1600x900 defaults to the 1x outdoor overview"
+		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1600, 900)) == 1.25,
+		"automatic desktop view scales continuously at 1600x900"
 	)
 	_check(
-		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 1080)) == 2.0,
-		"larger viewports default to the 2x outdoor close view"
+		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 1080)) == 1.5,
+		"Full HD automatic view uses 1.5x for the reference world view"
 	)
 	_check(
-		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 900)) == 1.0,
-		"short ultrawide viewports retain the 1x outdoor overview"
+		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 900)) == 1.25,
+		"short ultrawide viewports add horizontal world"
 	)
 	var settings_manager := root.get_node_or_null("SettingsManager")
 	_check(settings_manager != null, "automatic outdoor zoom can access settings")
@@ -44,8 +44,9 @@ func _run() -> void:
 	var original_scale: Variant = settings_manager.get("world_pixel_scale")
 	settings_manager.set("world_pixel_scale_mode", "auto")
 	_check(
-		settings_manager.call("get_effective_world_pixel_scale", Vector2i(1600, 900)) == 1.0
-		and settings_manager.call("get_effective_world_pixel_scale", Vector2i(1920, 1080)) == 2.0,
+		settings_manager.call("get_effective_world_pixel_scale", Vector2i(1600, 900)) == 1.25
+		and settings_manager.call("get_effective_world_pixel_scale", Vector2i(1920, 1080)) == 1.5
+		and settings_manager.call("get_effective_world_pixel_scale", Vector2i(3840, 2160)) == 3.0,
 		"automatic outdoor zoom follows the current viewport size"
 	)
 	settings_manager.set("world_pixel_scale_mode", "fixed")
@@ -152,6 +153,8 @@ func _run() -> void:
 func _check_browser_view() -> void:
 	for size: Vector2i in [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(3840, 2160), Vector2i(960, 540)]:
 		var scale := PixelPerfectRenderingScript.resolve_player_output_scale(2.0, size, "exterior", true)
+		_check(is_equal_approx(scale, PixelPerfectRenderingScript.resolve_player_output_scale(2.0, size, "exterior", false, true)), "Automatic desktop matches browser outdoors at %s" % size)
+		_check(is_equal_approx(scale, PixelPerfectRenderingScript.resolve_player_output_scale(1.0, size, "interior", false, true)), "Automatic desktop matches browser indoors at %s" % size)
 		_check((Vector2(size) / scale).is_equal_approx(Vector2(1280, 720)), "Browser keeps the same world view at %s" % size)
 		_check(is_equal_approx(scale, PixelPerfectRenderingScript.resolve_player_output_scale(1.0, size, "interior", true)), "Browser ignores personal/indoor zoom at %s" % size)
 	var wide := Vector2i(2560, 1080)

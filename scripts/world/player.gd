@@ -1036,7 +1036,8 @@ func _apply_world_pixel_scale() -> void:
 		SettingsManager.get_effective_world_pixel_scale(window_size),
 		window_size,
 		_get_current_map_world_access_area_type(),
-		OS.has_feature("web")
+		OS.has_feature("web"),
+		SettingsManager.is_world_pixel_scale_auto()
 	)
 	var canvas_scale := viewport.get_screen_transform().get_scale()
 	var baseline_zoom := PixelPerfectRenderingScript.camera_zoom_for_output_scale(

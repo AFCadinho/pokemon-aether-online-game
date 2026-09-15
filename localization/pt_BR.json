@@ -1109,7 +1109,7 @@
   "ui.settings.world_pixel_scale_close": "2× — Próximo",
   "ui.settings.world_pixel_scale_arena": "Visão fixa da arena",
   "ui.settings.world_pixel_scale_arena_hint": "Todos veem a mesma área durante o Aether Clash. Use um Orbe de Espectador para uma visão mais ampla. Seu zoom normal retorna ao sair.",
-  "ui.settings.world_pixel_scale_hint": "O modo automático ajusta o zoom externo ao tamanho da janela. Interiores de edifícios sempre usam 1,5×.",
+  "ui.settings.world_pixel_scale_hint": "Automático mantém a mesma visão ao redimensionar a janela, como no navegador. O zoom externo manual permite 1×, 1,5× ou 2×; interiores usam 1,5× no modo manual.",
   "ui.settings.cursor_scale": "Tamanho do cursor",
   "ui.settings.audio": "Áudio",
   "ui.settings.master": "Geral",

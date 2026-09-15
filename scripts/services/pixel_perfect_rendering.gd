@@ -7,7 +7,6 @@ const SCALE_BALANCED := 1.5
 const SCALE_CLOSE := 2.0
 const DEFAULT_SCALE := SCALE_CLOSE
 const AVAILABLE_SCALES: Array[float] = [SCALE_OVERVIEW, SCALE_BALANCED, SCALE_CLOSE]
-const LARGE_VIEWPORT_THRESHOLD := Vector2i(1600, 900)
 const BROWSER_REFERENCE_SIZE := Vector2(1280, 720)
 
 
@@ -19,9 +18,10 @@ static func browser_output_scale(output_size: Vector2i) -> float:
 
 
 static func resolve_player_output_scale(
-	configured_scale: float, output_size: Vector2i, area_type: String, browser: bool
+	configured_scale: float, output_size: Vector2i, area_type: String, browser: bool,
+	automatic: bool = false
 ) -> float:
-	if browser:
+	if browser or automatic:
 		return browser_output_scale(output_size)
 	return resolve_world_scale_for_area(configured_scale, area_type)
 
@@ -35,12 +35,7 @@ static func validate_scale(value: Variant) -> float:
 
 
 static func default_scale_for_viewport(viewport_size: Vector2i) -> float:
-	if (
-		viewport_size.x > LARGE_VIEWPORT_THRESHOLD.x
-		and viewport_size.y > LARGE_VIEWPORT_THRESHOLD.y
-	):
-		return SCALE_CLOSE
-	return SCALE_OVERVIEW
+	return browser_output_scale(viewport_size)
 
 
 static func resolve_scale(configured_scale: Variant, _viewport_size: Vector2i) -> float:
