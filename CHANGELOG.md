@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Electric battle effects share an existing texture to reduce memory use without changing animation quality or battle preparation.
+
 - Latest download links now point to the current release without storing extra copies. Older desktop and browser downloads retain one previous version for rollback.
 
 - Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.

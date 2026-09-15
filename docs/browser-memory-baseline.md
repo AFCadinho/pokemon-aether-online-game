@@ -330,6 +330,63 @@ that candidate. The raw audited report is ignored at
 `builds/web-real-battle-memory/report.json`; the older fixed-run report was
 retained in the same checkout as `pre-texture-audit-report.json`.
 
+### First sharing candidate — paired rendered check
+
+Implemented the narrow candidate: nine move entries and `solar_beam_charge`
+now reference the existing Electric terrain texture. No bitmap, dimensions,
+animation data, sound, sprite prefetch or preparation code changed. Three tests
+check catalogue/preloaded-scene agreement, identical source bytes and identical
+import parameters. The Godot memory probe test confirms shared resource identity;
+the existing battle animation anchor check also passes.
+
+Two serial, audit-off runs replayed the same three-Magikarp/Pikachu sequence on
+8062, each using a fresh disposable PostgreSQL account/database and real APIs.
+Control: clean core `eb3df9bfcd44affae23fb2bbaaee0533331cde09`, PCK hash
+`660cf5f637fef796aa3e3097ef53e2b140f054a45f1a939da419099662e5cf59`.
+Candidate: clean core `27bddbdd593825680aceb4ecf5fdce91a3901d6c`, PCK hash
+`73e62b1b4a67a4d456fd3f78ed92207a60a7c623d3f9e38a102454d25afdb24b`.
+Both use Godot 4.6.2, Chromium 1440 × 900 software WebGL and the same backend
+source/images. The exported candidate PCK itself was checked for all ten new
+references, not only the working-tree JSON. Both runs pass three starts, four
+resolved turns and three teardowns without JavaScript page errors.
+
+| Case | Control start → actions | Candidate start → actions | Control textures at actions | Candidate textures at actions |
+| --- | ---: | ---: | ---: | ---: |
+| First battle | 4175 ms | 4149 ms | 432.53 MiB | 410.96 MiB |
+| Warm battle 1 | 1327 ms | 1260 ms | 442.36 MiB | 420.80 MiB |
+| Warm battle 2 | 1289 ms | 1287 ms | 442.36 MiB | 420.80 MiB |
+
+Each paired ready endpoint has approximately 21.56 MiB less engine texture
+allocation. This is a measured counter difference, not the 16.17 MiB base RGBA
+estimate, and neither number is a total physical-RAM saving. Sprite sheets are
+unchanged (4, 11, 11 at actions), with no outstanding prefetch/downloads. Warm
+post-idle texture counters are stable within each run: 423.55 MiB control versus
+401.99 MiB candidate; cold post-idle is 401.55 versus 395.92 MiB. Warm resource
+counts are 883 versus 882, and orphan counts stay zero. The repeated control also
+reproduces the higher warm idle counters without the cached-effect audit, so the
+older dirty-preview idle number is not a valid control for this candidate.
+
+No start-latency regression is observed in this small pair; it does not prove a
+hardware SLA, statistical speedup, all ten move animations end-to-end, or long
+session behavior. Source/import identity protects the other shared animations;
+the real rendered path exercised Thunderbolt, Quick Attack preparation and Run.
+The initial download remains about 261.6 MiB: unused source copies were retained,
+not removed from the pack. Desktop uses the same catalogues, with native focused
+checks but no separate desktop end-to-end battle run in this phase.
+
+Raw control is retained in `electric-sharing-control-report.json`; candidate is
+`report.json`, both under ignored `builds/web-real-battle-memory/`. Existing export
+UID warnings remain recorded; no full development certification, promotion,
+push or production operation is implied by these focused results.
+Both wrappers completed with `restored=1 test_exit=0`; PostgreSQL is back on the
+normal project's persistent volume and the temporary tmpfs databases are gone.
+Integration subsequently advanced with an independent battle-prewarm shutdown
+fix. Development was merged into this task to resolve only the changelog conflict,
+retaining all release and cleanup entries. Shared-sheet contract/probe tests and
+the incoming threaded-resource shutdown check pass together. The paired numbers
+above remain evidence for the exact identified builds, not a new combined-batch
+benchmark or a claim about post-shutdown-fix idle allocation.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
