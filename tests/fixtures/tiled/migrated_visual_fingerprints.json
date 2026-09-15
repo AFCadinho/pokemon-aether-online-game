@@ -1,0 +1,233 @@
+{
+  "aether_clash_battle_royale": {
+    "baseRGBABytes": 2248704.0,
+    "cells": 23915.0,
+    "fingerprint": "e567aed3528776f68dab791c574a88690107c722d4d6d06c68ce0a556f4dbbbd",
+    "layers": 6.0,
+    "usedTiles": 411.0
+  },
+  "aether_clash_duel": {
+    "baseRGBABytes": 2248704.0,
+    "cells": 23921.0,
+    "fingerprint": "c62f208787c2e5a0afd4a2df360593d0f3ee5fbd5eb0277854bcbab0b9737382",
+    "layers": 6.0,
+    "usedTiles": 411.0
+  },
+  "bills_house": {
+    "baseRGBABytes": 589824.0,
+    "cells": 585.0,
+    "fingerprint": "043dd183eb21d08a0900e4e4d0876fa22fd17b65d01ec2505f2c801701bb068d",
+    "layers": 4.0,
+    "usedTiles": 94.0
+  },
+  "cerulean_bike_shop": {
+    "baseRGBABytes": 589824.0,
+    "cells": 872.0,
+    "fingerprint": "b7e545deb3a33baa7ba91aa80bf0b3433880d6da9dd0adfca915762358d6b42e",
+    "layers": 4.0,
+    "usedTiles": 96.0
+  },
+  "cerulean_city": {
+    "baseRGBABytes": 3244032.0,
+    "cells": 10151.0,
+    "fingerprint": "63c1a649d142327ce6a5310ed873a40b22da2884e773283e8897e77d5806fda4",
+    "layers": 6.0,
+    "usedTiles": 590.0
+  },
+  "cerulean_gym": {
+    "baseRGBABytes": 755712.0,
+    "cells": 1986.0,
+    "fingerprint": "16206396e9f04dce9cf1ef7f0c1953bdc2e6ae8450f8eba715a921f03c7f7287",
+    "layers": 4.0,
+    "usedTiles": 119.0
+  },
+  "cerulean_house_template_blue": {
+    "baseRGBABytes": 663552.0,
+    "cells": 524.0,
+    "fingerprint": "f85d02461c4c3078a5b70d0ba96e2ddf88b8dfd1db1d89a5746fe4b96d45c304",
+    "layers": 4.0,
+    "usedTiles": 101.0
+  },
+  "kanto_route_2": {
+    "baseRGBABytes": 1585152.0,
+    "cells": 10586.0,
+    "fingerprint": "048df4973f8416bcd3b29fe4020bc5734a66dd8e0319b68fd95299bb1f5a1532",
+    "layers": 8.0,
+    "usedTiles": 282.0
+  },
+  "kanto_route_22": {
+    "baseRGBABytes": 1179648.0,
+    "cells": 7535.0,
+    "fingerprint": "b020c96eb2eed0b9cb8b271378c2b9fe8ecbe1174a90159369cbddf6f787068e",
+    "layers": 4.0,
+    "usedTiles": 219.0
+  },
+  "lobby": {
+    "baseRGBABytes": 1806336.0,
+    "cells": 8554.0,
+    "fingerprint": "9a5aa490ffc78a32e032db0d845c8138477c4ca31951efbef1eb149894abda12",
+    "layers": 5.0,
+    "usedTiles": 325.0
+  },
+  "mt_moon_1f": {
+    "baseRGBABytes": 1806336.0,
+    "cells": 12166.0,
+    "fingerprint": "234581c2b59bb087effd3ac63d8c7f6fb90bf84507421377f5038ae82d922c21",
+    "layers": 4.0,
+    "usedTiles": 341.0
+  },
+  "mt_moon_b1f": {
+    "baseRGBABytes": 1253376.0,
+    "cells": 8891.0,
+    "fingerprint": "42b3d9a08bbfdad4fcdbb28dfd999de9548f858b7fe84406068b1d4264646f17",
+    "layers": 4.0,
+    "usedTiles": 231.0
+  },
+  "mt_moon_b2f": {
+    "baseRGBABytes": 995328.0,
+    "cells": 12304.0,
+    "fingerprint": "a96af9306033c0eaa76079bafb877bf6b39b051e738098dbafe6ce531fdd361a",
+    "layers": 4.0,
+    "usedTiles": 189.0
+  },
+  "open_field": {
+    "baseRGBABytes": 110592.0,
+    "cells": 504.0,
+    "fingerprint": "a3eedb3b741ea6169fd5b19938387f769c24d1cdb0608e7f44b9c59fc13f464b",
+    "layers": 2.0,
+    "usedTiles": 20.0
+  },
+  "pallet_town": {
+    "baseRGBABytes": 1843200,
+    "cells": 4376,
+    "fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+    "layers": 5,
+    "usedTiles": 325
+  },
+  "pallet_town_compact": {
+    "baseRGBABytes": 1843200,
+    "cells": 4376,
+    "fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+    "layers": 5,
+    "usedTiles": 325
+  },
+  "pewter_city": {
+    "baseRGBABytes": 3907584.0,
+    "cells": 6862.0,
+    "fingerprint": "3442fb9ae5dc6252bcdce6d817bc0d22972925c52fe80640be5620fe798a09a2",
+    "layers": 6.0,
+    "usedTiles": 726.0
+  },
+  "pewter_gym": {
+    "baseRGBABytes": 663552.0,
+    "cells": 1568.0,
+    "fingerprint": "33d9701c2f4d6ff7ec2f5fa7e069c620da24221faae402fa590f66bef3cca53c",
+    "layers": 4.0,
+    "usedTiles": 123.0
+  },
+  "pewter_house": {
+    "baseRGBABytes": 589824.0,
+    "cells": 525.0,
+    "fingerprint": "2edcf3a435d0118db98e6264c814725ed22e6a5934807973648eb4c3a47872cd",
+    "layers": 4.0,
+    "usedTiles": 100.0
+  },
+  "pokemon_center": {
+    "baseRGBABytes": 1668096.0,
+    "cells": 1340.0,
+    "fingerprint": "21720bf5d6b888dbb6a5206dfa218d8c08595c769901dc6f3de941d6e5dba4a3",
+    "layers": 4.0,
+    "usedTiles": 306.0
+  },
+  "pokemon_school": {
+    "baseRGBABytes": 442368.0,
+    "cells": 848.0,
+    "fingerprint": "cb18dad9b60bed12bd05db674fc163072409473f11e14051885105b6e614775e",
+    "layers": 5.0,
+    "usedTiles": 72.0
+  },
+  "rivals_house": {
+    "baseRGBABytes": 792576.0,
+    "cells": 983.0,
+    "fingerprint": "ee7aea17f731fd6b94e91e3a6dee50336d34290e396892a68975621a5d4abded",
+    "layers": 4.0,
+    "usedTiles": 135.0
+  },
+  "route_1": {
+    "baseRGBABytes": 857088.0,
+    "cells": 8581.0,
+    "fingerprint": "5eb518ba0203f4b6d19b2b4f622effe8555189f130dd8f81c8f91e3e0aca2c5d",
+    "layers": 6.0,
+    "usedTiles": 150.0
+  },
+  "route_24": {
+    "baseRGBABytes": 921600.0,
+    "cells": 5770.0,
+    "fingerprint": "2e2e3b6c461c0ed42f126b9576a5557b665a30e3dea1a9675ccbe957daae1c4d",
+    "layers": 4.0,
+    "usedTiles": 159.0
+  },
+  "route_25": {
+    "baseRGBABytes": 1041408.0,
+    "cells": 6322.0,
+    "fingerprint": "72a34675b76d5867f3fb72d9da69a3999ed8c653c3399423befac7bc0ed976b1",
+    "layers": 6.0,
+    "usedTiles": 180.0
+  },
+  "route_3": {
+    "baseRGBABytes": 1511424.0,
+    "cells": 8569.0,
+    "fingerprint": "817e41038ee22fa96d731838901b115587c798b0dff78d4e1745213a8483fcc8",
+    "layers": 6.0,
+    "usedTiles": 270.0
+  },
+  "route_4": {
+    "baseRGBABytes": 1069056.0,
+    "cells": 8434.0,
+    "fingerprint": "8bcf453de6a98e31724e21914af8e40791c7d33a5610746091be8966e51f1e1a",
+    "layers": 4.0,
+    "usedTiles": 178.0
+  },
+  "transition_building_horizontal": {
+    "baseRGBABytes": 368640.0,
+    "cells": 503.0,
+    "fingerprint": "2c9fcc688f9230c2c95926c4c39f101c60b56f72ae1ff767bc87c92bb448fc03",
+    "layers": 4.0,
+    "usedTiles": 64.0
+  },
+  "transition_building_vertical": {
+    "baseRGBABytes": 313344.0,
+    "cells": 531.0,
+    "fingerprint": "f6d22b054e4cefb5680eda7350b1f7ff8bd4d4932522f2b1ff6e1390f34c8051",
+    "layers": 4.0,
+    "usedTiles": 56.0
+  },
+  "viridian_city": {
+    "baseRGBABytes": 2764800.0,
+    "cells": 9917.0,
+    "fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+    "layers": 7.0,
+    "usedTiles": 494.0
+  },
+  "viridian_forest": {
+    "baseRGBABytes": 774144.0,
+    "cells": 13842.0,
+    "fingerprint": "33c18d9ccf77b2914d52ffc1255c8a3757c2bfc52f51218eca2093013b5ff834",
+    "layers": 5.0,
+    "usedTiles": 140.0
+  },
+  "viridian_house_template": {
+    "baseRGBABytes": 700416.0,
+    "cells": 525.0,
+    "fingerprint": "49b43136feb36319ab4a1c5d3064bff909fc63bb2489451c86355653261eaf10",
+    "layers": 4.0,
+    "usedTiles": 112.0
+  },
+  "waiting_area": {
+    "baseRGBABytes": 442368.0,
+    "cells": 957.0,
+    "fingerprint": "6f9b04986baeb3db2672698251d58c57d9ef3fefd777c118d8da6bf29fef521a",
+    "layers": 5.0,
+    "usedTiles": 80.0
+  }
+}

@@ -19,6 +19,11 @@ func _run() -> void:
 	var layers: Array = []
 	_collect(root, layers)
 	var original: TileSet = layers[0].tile_set
+	if original.has_meta("tiled_compact_atlas_version"):
+		root.free()
+		push_error("Historical prototype builder requires the original dense atlas. Current maps already use the shared compact importer; do not rebuild the old prototype over them.")
+		quit(2)
+		return
 	assert(original.get_physics_layers_count() == 0 and original.get_navigation_layers_count() == 0)
 	assert(original.get_terrain_sets_count() == 0 and original.get_custom_data_layers_count() == 0)
 	var used := {}

@@ -11,6 +11,11 @@ on:
       - "tests/tmx_visual_importer_check.gd"
       - "tests/tmx_atlas_compactor_check.gd"
       - "tests/pallet_interiors_compact_check.gd"
+      - "tests/migrated_visuals_check.gd"
+      - "tools/migrate_remaining_visuals.gd"
+      - "tests/pallet_atlas_provenance_check.cjs"
+      - "tests/support/pallet_atlas_provenance.cjs"
+      - "tests/tmx_missing_dependency_check.gd"
       - "tests/support/visual_atlas_fingerprint.gd"
       - "tests/generated_map_atlas_layout_check.gd"
       - ".github/workflows/verify-generated-map-textures.yml"
@@ -27,6 +32,11 @@ on:
       - "tests/tmx_visual_importer_check.gd"
       - "tests/tmx_atlas_compactor_check.gd"
       - "tests/pallet_interiors_compact_check.gd"
+      - "tests/migrated_visuals_check.gd"
+      - "tools/migrate_remaining_visuals.gd"
+      - "tests/pallet_atlas_provenance_check.cjs"
+      - "tests/support/pallet_atlas_provenance.cjs"
+      - "tests/tmx_missing_dependency_check.gd"
       - "tests/support/visual_atlas_fingerprint.gd"
       - "tests/generated_map_atlas_layout_check.gd"
       - ".github/workflows/verify-generated-map-textures.yml"
@@ -54,8 +64,11 @@ jobs:
 
       - name: Verify importer output and generated texture storage
         run: |
+          node --test tests/pallet_atlas_provenance_check.cjs
           ./godot --headless --path . --script res://tests/tmx_visual_importer_check.gd
           ./godot --headless --path . --script res://tests/tmx_atlas_compactor_check.gd
           ./godot --headless --path . --script res://tests/pallet_interiors_compact_check.gd
+          ./godot --headless --path . --script res://tests/migrated_visuals_check.gd
+          ./godot --headless --path . --script res://tests/tmx_missing_dependency_check.gd
           ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd
           ./godot --headless --path . --script res://tests/generated_map_atlas_layout_check.gd

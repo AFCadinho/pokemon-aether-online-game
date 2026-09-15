@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.
+
 - Oak's lab entrance now triggers on the reachable doorway tile in browser and desktop.
 - Your house and Oak's lab use smaller lossless map atlases in both browser and desktop, with their artwork unchanged.
 

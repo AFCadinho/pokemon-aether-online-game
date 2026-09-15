@@ -7,6 +7,7 @@ const assert=require('node:assert/strict');
 const {execFileSync}=require('node:child_process');
 const {createHash}=require('node:crypto');
 const {attest}=require('./support/disposable_runtime_guard.cjs');
+const palletAtlas=require('./support/pallet_atlas_provenance.cjs');
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const frontend=path.resolve(__dirname,'..');
 const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim();
@@ -31,7 +32,8 @@ function provenance() {
   const backend=path.resolve(frontend,'../backend');
   const marked=interiorPaths.map(prefix=>fs.readFileSync(path.join(frontend,prefix,path.basename(prefix.slice(0,-1))+'.visual.tileset.tres'),'utf8').includes('metadata/tiled_compact_atlas_version = 1'));
   if(interiors) assert(marked.every(x=>x===marked[0]),'Both interior atlases must use the same variant');
-  return {scope:interiors?'pallet_interiors':'pallet_exterior',variant:interiors?(marked[0]?'compact':'original'):(text.includes(newVisual)?'compact':'original'),normalizedTreeSHA256:sha(index),
+  const originalTileSet=fs.readFileSync(path.join(frontend,'generated/tiled_visuals/pallet_town/pallet_town.visual.tileset.tres'),'utf8');
+  return {scope:interiors?'pallet_interiors':'pallet_exterior',variant:interiors?(marked[0]?'compact':'original'):palletAtlas.variant(text,originalTileSet),normalizedTreeSHA256:sha(index),
     sourceCommit:receipt.commit,pckSHA256:receipt.files.find(x=>x.name==='index.pck').sha256,
     godot:receipt.engine,driverSHA256:sha(fs.readFileSync(__filename)),
     backendCommit:git(backend,'rev-parse','HEAD'),
@@ -66,11 +68,10 @@ function provenance() {
     const prefixes=['assets/ui/','assets/tilesets/','assets/background/','assets/battles/capture/',
       'assets/battles/mechanics/','assets/battles/effect/','assets/sprites/battle_buttons/'];
     const visual='generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn';
-    const embedded=[...fs.readFileSync(path.resolve(__dirname,'../'+visual),'utf8')
-      .matchAll(/^\[sub_resource type="PortableCompressedTexture2D" id="([a-zA-Z0-9_]+)"\]$/gm)]
-      .map(match=>'res://'+visual+'::'+match[1]);
-    assert.equal(embedded.length,7,'Seven fixed candidate atlas subresources');
-    const mapPaths=[...embedded,...inventory.portableMapResources.map(x=>'res://'+x.source)];
+    const candidatePaths=palletAtlas.paths(fs.readFileSync(path.resolve(__dirname,'../'+visual),'utf8'),
+      fs.readFileSync(path.resolve(__dirname,'../'+visual.replace(/\.tscn$/,'.tileset.tres')),'utf8'),visual);
+    assert.equal(candidatePaths.length,7,'Seven fixed candidate atlas textures');
+    const mapPaths=[...new Set([...candidatePaths,...inventory.portableMapResources.map(x=>'res://'+x.source)])];
     const paths=[...new Set(inventory.textures.filter(x=>prefixes.some(prefix=>x.source.startsWith(prefix)))
       .map(x=>'res://'+x.source))].slice(0,96)
       .concat(mapPaths.slice(0,160));

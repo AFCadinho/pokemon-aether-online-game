@@ -295,6 +295,8 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/tmx_atlas_compactor_check.gd",
 	"res://tests/pallet_interiors_compact_check.gd",
+	"res://tests/migrated_visuals_check.gd",
+	"res://tests/tmx_missing_dependency_check.gd",
 	"res://tests/generated_map_atlas_layout_check.gd",
 	"res://tests/generated_map_texture_storage_check.gd",
 	"res://tests/viridian_visual_jail_check.gd",

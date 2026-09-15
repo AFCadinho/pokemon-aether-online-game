@@ -10,7 +10,7 @@ const AtlasCompactor := preload("res://addons/tiled_tmx_importer/importer/tmx_at
 const MAX_GENERATED_TEXTURE_SIZE := 4096
 
 
-func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
+func import_tmx(tmx_path: String, output_scene_path: String, missing_tileset_paths: Dictionary = {}) -> Dictionary:
 	var normalized_output := PathUtils.normalize_path(output_scene_path)
 	if normalized_output.contains("..") or not (normalized_output.begins_with("res://") or normalized_output.begins_with("user://")):
 		return {
@@ -20,7 +20,7 @@ func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
 
 	var previous_compact_paths := _owned_compact_paths(normalized_output)
 	var parser := TmxXmlParser.new()
-	var parse_result: Dictionary = parser.parse_tmx(tmx_path)
+	var parse_result: Dictionary = parser.parse_tmx(tmx_path, missing_tileset_paths)
 	if not bool(parse_result.get("success", false)):
 		return parse_result
 
