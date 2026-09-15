@@ -24,6 +24,7 @@ func _init() -> void:
 	_check_mimikyu_back_sprite_grounding_contract()
 	await _check_stage_scaling()
 	await _check_party_rail_interaction()
+	await _check_bag_item_styling()
 	_check_battle_selection_policy_contract()
 	quit(1 if failed else 0)
 
@@ -643,6 +644,36 @@ func _check_battle_selection_policy_contract() -> void:
 		'if active_species == "":',
 		"empty active species clears the sprite instead of loading an empty asset path"
 	)
+
+
+func _check_bag_item_styling() -> void:
+	var bag: MarginContainer = load("res://scripts/battle/battle_ui/bag_grid.gd").new()
+	get_root().add_child(bag)
+	await process_frame
+	bag.set_items([
+		{"itemId": "master-ball", "name": "Master Ball", "quantity": 99},
+		{"itemId": "poke-ball", "name": "Poké Ball", "quantity": 10},
+		{"itemId": "potion", "quantity": 5},
+	])
+	_check_true(bag.item_buttons.size() == 2, "styled Bag still filters capture items")
+	for button: Button in bag.item_buttons:
+		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+			_check_true(button.has_theme_stylebox_override(state), "Bag item has explicit %s styling" % state)
+		var padding := button.get_child(0) as MarginContainer
+		var row := padding.get_child(0) as HBoxContainer
+		_check_true(row.get_child(0) is TextureRect, "Bag item retains its icon")
+		_check_true(row.get_child(1) is Label, "Bag item has a separate localized name")
+		var badge := row.get_child(2) as PanelContainer
+		_check_true((badge.get_child(0) as Label).text.begins_with("×"), "Bag quantity is a separate badge")
+		_check_true(padding.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Bag row decoration does not intercept clicks")
+	bag.set_input_disabled(true)
+	for button: Button in bag.item_buttons:
+		_check_true(button.disabled, "Bag buttons stay disabled during capture requests")
+	bag.set_input_disabled(false)
+	for button: Button in bag.item_buttons:
+		_check_true(not button.disabled, "Bag buttons can be enabled again")
+	bag.queue_free()
+	await process_frame
 
 
 func _check_contains(source: String, expected: String, label: String) -> void:
