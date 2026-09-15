@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Login failure messages remain visible on Welcome Back, and the browser preserves your original Remember me choice when restoring a session.
+- Improved resource cleanup when closing the game and during battle-preview transitions.
 
 - Corrected missing tiles in the browser's Misty-region interiors by rebuilding their lossless texture atlases with browser-safe dimensions. Browser login no longer starts the placeholder house's NPCs while downloading your saved map.
 

@@ -54,6 +54,7 @@ func _run() -> void:
 	panel._action_signature = ""
 	panel._update_actions()
 	_expect(panel._prompt.text.contains("Your partner wants to flee") and panel._actions.find_children("*", "Button", true, false).size() == 2, "a partner with a previously selected attack sees only consent and refusal")
+	await _capture_visual("COOP_CONSENT_VISUAL_CAPTURE_PATH")
 	service.view.exitRequest.type = "forfeit"
 	service.view.legalActions = [{"type": "forfeit"}, {"type": "reject-exit"}]
 	panel._action_signature = ""
@@ -74,10 +75,12 @@ func _run() -> void:
 	panel._update_actions()
 	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Poke Ball ×2 — your target"), "co-op Bag uses server-owned ball options for only the assigned target")
 	_expect(panel._capture_status.text.contains("2 shakes"), "reconnect shows the last accepted throw result")
+	await _capture_visual("COOP_BAG_VISUAL_CAPTURE_PATH")
 	service.view.captureOptions.storageAvailable = false
 	panel._action_signature = ""
 	panel._update_actions()
 	_expect(panel._actions.find_children("*", "Label", true, false).any(func(label: Label) -> bool: return label.text.contains("party and PC are full")), "full storage explains why catching is unavailable without hiding other actions")
+	await _capture_visual("COOP_STORAGE_VISUAL_CAPTURE_PATH")
 	service.view.captureOptions = null
 	service.view.lastCapture = {"checkpointRevision": 2, "itemId": "poke-ball", "caught": true, "shakeCount": 3}
 	panel._bag_open = false
@@ -196,6 +199,15 @@ func _expect(condition: bool, message: String) -> void:
 	if not condition:
 		failed = true
 		push_error(message)
+
+
+func _capture_visual(environment_name: String) -> void:
+	var capture_path := OS.get_environment(environment_name)
+	if capture_path.is_empty():
+		return
+	await create_timer(0.2).timeout
+	await RenderingServer.frame_post_draw
+	_expect(root.get_texture().get_image().save_png(capture_path) == OK, "visual acceptance snapshot saved")
 
 
 func _wait_for_cursor(panel: Control, cursor: int) -> void:
