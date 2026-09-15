@@ -6,24 +6,32 @@ const fs=require('node:fs'), path=require('node:path'), readline=require('node:r
 const assert=require('node:assert/strict');
 const {execFileSync}=require('node:child_process');
 const {createHash}=require('node:crypto');
+const {attest}=require('./support/disposable_runtime_guard.cjs');
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const frontend=path.resolve(__dirname,'..');
 const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim();
 function provenance() {
+  const interiors=process.env.POKEAETHER_MEMORY_PALLET_INTERIORS==='1';
   const scene='scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn';
   const oldVisual='res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn';
   const newVisual='res://generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn';
   const text=fs.readFileSync(path.join(frontend,scene),'utf8');
   assert(text.includes(oldVisual)!==text.includes(newVisual),'One Pallet variant');
   const normalized=text.replace(newVisual,oldVisual);
-  const index=git(frontend,'ls-files','-s').split('\n').map(line=>
+  const interiorPaths=['generated/tiled_visuals/players_house/','generated/tiled_visuals/pokemon_laboratory/'];
+  const index=git(frontend,'ls-files','-s').split('\n').filter(line=>!interiors ||
+    !interiorPaths.some(prefix=>line.split('\t')[1]?.startsWith(prefix))).map(line=>
     line.endsWith('\t'+scene) ? 'NORMALIZED '+sha(normalized)+'\t'+scene : line).join('\n');
   const receipt=JSON.parse(fs.readFileSync(path.join(frontend,'builds/web/build-receipt.json'),'utf8'));
   assert.equal(receipt.dirty,false,'Clean export required for paired timing');
-  assert.equal(receipt.commit,git(frontend,'rev-parse','HEAD'),'Export must match current committed source');
+  const changed=git(frontend,'diff','--name-only',receipt.commit,'HEAD').split('\n').filter(Boolean);
+  assert(changed.every(p=>['tests/','tools/','docs/'].some(prefix=>p.startsWith(prefix))),
+    'Export must match gameplay source; only excluded test/tool/docs changes allowed');
   assert.equal(git(frontend,'status','--porcelain'),'','Clean task source required');
   const backend=path.resolve(frontend,'../backend');
-  return {variant:text.includes(newVisual)?'compact':'original',normalizedTreeSHA256:sha(index),
+  const marked=interiorPaths.map(prefix=>fs.readFileSync(path.join(frontend,prefix,path.basename(prefix.slice(0,-1))+'.visual.tileset.tres'),'utf8').includes('metadata/tiled_compact_atlas_version = 1'));
+  if(interiors) assert(marked.every(x=>x===marked[0]),'Both interior atlases must use the same variant');
+  return {scope:interiors?'pallet_interiors':'pallet_exterior',variant:interiors?(marked[0]?'compact':'original'):(text.includes(newVisual)?'compact':'original'),normalizedTreeSHA256:sha(index),
     sourceCommit:receipt.commit,pckSHA256:receipt.files.find(x=>x.name==='index.pck').sha256,
     godot:receipt.engine,driverSHA256:sha(fs.readFileSync(__filename)),
     backendCommit:git(backend,'rev-parse','HEAD'),
@@ -31,14 +39,23 @@ function provenance() {
 }
 (async()=>{
   assert.equal(process.env.POKEAETHER_WEB_MEMORY_DISPOSABLE_RUNTIME,'1','Disposable runtime required');
+  attest();
   const origin=process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
   assert(['127.0.0.1','localhost'].includes(new URL(origin).hostname),'Loopback only');
-  const output=path.resolve(__dirname,'../builds/web-real-battle-memory');
+  const tag=process.env.POKEAETHER_MEMORY_RUN_TAG || '';
+  assert(!tag || /^[a-z0-9_-]{1,80}$/.test(tag),'Safe local report tag');
+  const output=path.resolve(__dirname,'../builds/web-real-battle-memory',tag);
   const scenario=process.env.POKEAETHER_WEB_MEMORY_SCENARIO || 'electric';
   assert(['electric','grass'].includes(scenario),'Supported fixed scenario required');
   fs.mkdirSync(output,{recursive:true});
   const evidence=provenance(), commandHash=createHash('sha256');
+  const sourceTreeAtStart=git(frontend,'ls-files','-s');
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
+  let runtimeLost=false;
+  const runtimeWatch=setInterval(()=>{
+    if(runtimeLost) return;
+    try {attest();} catch {runtimeLost=true;browser.close().catch(()=>{});}
+  },1000);
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   evidence.chromium=browser.version();
   const textureAudit=process.env.POKEAETHER_MEMORY_TEXTURE_AUDIT==='1';
@@ -107,6 +124,7 @@ function provenance() {
     },100);
   });
   const snapshot=async label=>{
+    assert(!runtimeLost,'Disposable runtime lost');attest();
     await page.waitForTimeout(1500);
     snapshots.push({label,memory:await page.evaluate(()=>window.pokeaetherMemoryProbe?.samples.at(-1)),
       jsMetrics:(await cdp.send('Performance.getMetrics')).metrics.filter(x=>['JSHeapUsedSize','JSHeapTotalSize','Nodes'].includes(x.name))});
@@ -133,7 +151,16 @@ function provenance() {
     for await(const line of readline.createInterface({input:process.stdin})) {
       commandHash.update(line+'\n');
       const command=JSON.parse(line);
+      assert(!runtimeLost,'Disposable runtime lost');attest();
+      const readyBefore=markers.filter(x=>x.label==='battle_actions_ready').length;
       if(command.click) await page.mouse.click(...command.click);
+      if(command.readyBattle) {
+        const deadline=Date.now()+120000;
+        while(markers.filter(x=>x.label==='battle_actions_ready').length<=readyBefore) {
+          assert(!runtimeLost && Date.now()<deadline,'Battle actions did not become ready');
+          await page.waitForTimeout(100);
+        }
+      }
       // Canvas TextEdit consumes keyboard events, not DOM insertText input.
       if(command.text) await page.keyboard.type(command.text);
       if(command.key) await page.keyboard.press(command.key);
@@ -169,6 +196,8 @@ function provenance() {
         assert.equal(errors.length,0,'No page errors');
         if(command.mapCycle) assert(mapTransitions.join(',').includes(
           'kanto_pallet_town,kanto_players_house,kanto_pallet_town'),'Real house entry and return');
+        if(command.mapCycle && evidence.scope==='pallet_interiors') assert(mapTransitions.join(',').includes(
+          'kanto_players_house,kanto_pallet_town,kanto_oaks_lab,kanto_pallet_town'),'Real house and lab cycles');
         if(textureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
           x.cachedEffectTextures?.uniqueTextures>0),'Rendered cached-effect audit captured');
         if(worldTextureAudit && !mapOnly) assert(markers.some(x=>x.label==='battle_actions_ready' &&
@@ -179,8 +208,10 @@ function provenance() {
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
+    clearInterval(runtimeWatch);
+    const sourceUnchanged=git(frontend,'status','--porcelain')==='' && git(frontend,'ls-files','-s')===sourceTreeAtStart;
     evidence.commandsSHA256=commandHash.digest('hex');
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,evidence,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success:success&&!runtimeLost&&sourceUnchanged,runtimeLost,sourceUnchanged,evidence,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:sourceUnchanged&&!runtimeLost&&!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();

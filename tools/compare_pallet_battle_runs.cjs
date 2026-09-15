@@ -3,26 +3,37 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 function validate(run,variant) {
   assert.equal(run.success,true,'Run must have completed');
+  assert(run.sourceUnchanged!==false && !run.runtimeLost,'Source and disposable runtime must remain stable');
   assert.equal(run.evidence?.variant,variant,'Correct atlas variant');
   assert.equal(run.timingComparable,true,'Comparable timing required');
   assert(!run.textureAudit && !run.worldTextureAudit && !run.mapOnly,'Audits/map-only are not timing runs');
   assert.equal(run.battleStarts,3); assert(run.battleTurns>=1); assert.equal(run.errors.length,0);
-  assert.deepEqual(run.mapTransitions,['kanto_pallet_town','kanto_players_house','kanto_pallet_town']);
+  assert.deepEqual(run.mapTransitions,run.evidence.scope==='pallet_interiors' ?
+    ['kanto_pallet_town','kanto_players_house','kanto_pallet_town','kanto_oaks_lab','kanto_pallet_town'] :
+    ['kanto_pallet_town','kanto_players_house','kanto_pallet_town']);
   const events=run.markers.filter(x=>['battle_start_requested','battle_actions_ready','battle_teardown_begin'].includes(x.label));
   assert.deepEqual(events.map(x=>x.label),Array.from({length:3},()=>
     ['battle_start_requested','battle_actions_ready','battle_teardown_begin']).flat(),'Three ordered battle cycles');
   const timings=[0,3,6].map(i=>events[i+1].engineTicksMs-events[i].engineTicksMs);
   assert(timings.every(x=>Number.isFinite(x) && x>0),'Valid engine timestamps');
-  const post=['cold_post_idle','warm1_post_idle','warm2_post_idle','pallet_returned'].map(label=>{
+  const labels=['cold_post_idle','warm1_post_idle','warm2_post_idle','pallet_returned'];
+  const interiors=run.evidence.scope==='pallet_interiors';
+  if(interiors) labels.push('house_entered','lab_entered','lab_returned');
+  const post=labels.map(label=>{
     const sample=run.snapshots.find(x=>x.label===label)?.memory;
     assert(sample && Number.isFinite(sample.textureCounterBytes),'Complete post-idle samples');
     assert.equal(sample.orphanNodeCount,0); return sample;
   });
-  assert.equal(new Set(post.map(x=>x.textureCounterBytes)).size,1,'Stable texture counter after battles/map return');
-  return {timings,textureCounterBytes:post[0].textureCounterBytes};
+  // Different Pallet sectors expose additional NPC textures. Require a plateau
+  // at the unchanged battle-idle location, then compare matching map epochs.
+  const stable=interiors?post.slice(0,3):post;
+  assert.equal(new Set(stable.map(x=>x.textureCounterBytes)).size,1,'Stable texture counter after battles');
+  return {timings,textureCounterBytes:post[0].textureCounterBytes,
+    mapCounters:Object.fromEntries(labels.map((label,i)=>[label,post[i].textureCounterBytes]))};
 }
 function compare(control,candidate) {
   const old=validate(control,'original'), compact=validate(candidate,'compact');
+  assert.equal(control.evidence.scope,candidate.evidence.scope,'Matched map scope');
   for(const key of ['normalizedTreeSHA256','godot','driverSHA256','backendCommit','fixtureSHA256','chromium','commandsSHA256']) {
     assert(control.evidence[key],'Missing provenance '+key);
     assert.equal(control.evidence[key],candidate.evidence[key],'Matched '+key);
@@ -33,6 +44,10 @@ function compare(control,candidate) {
     reviewThresholdMs:Math.max(i===0?500:100,ms*.1)}));
   return {rows,noObservedMaterialSlowdown:rows.every(x=>x.deltaMs<=x.reviewThresholdMs),
     postIdleTextureCounterSavingBytes:old.textureCounterBytes-compact.textureCounterBytes,
+    mapTextureCounterSavings:control.evidence.scope==='pallet_interiors' ?
+      ['house_entered','pallet_returned','lab_entered','lab_returned'].map(label=>({label,
+        controlBytes:old.mapCounters[label],candidateBytes:compact.mapCounters[label],
+        savingBytes:old.mapCounters[label]-compact.mapCounters[label]})) : [],
     sampleSizePerVariant:3,softwareWebGL:control.softwareWebGL,
     limitation:'One fixed scenario; not an SLA, statistical proof or physical GPU/RAM measurement.'};
 }
