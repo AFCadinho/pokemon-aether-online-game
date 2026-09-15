@@ -8,6 +8,8 @@ const assert=require('node:assert/strict');
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const page=await browser.newPage({viewport:{width:1440,height:900}});
   const system=await browser.newBrowserCDPSession();
+  const metrics=await page.context().newCDPSession(page);
+  await metrics.send('Performance.enable');
   const output=path.resolve(__dirname,'../builds/web-memory-baseline');
   fs.mkdirSync(output,{recursive:true});
   await page.route('**/*',route=>{
@@ -32,7 +34,7 @@ const assert=require('node:assert/strict');
           return {type:p.type,residentBytes:Number(status.match(/^VmRSS:\s+(\d+) kB/m)?.[1]||0)*1024};
         }catch(_){return {type:p.type,residentBytes:null};}
       });
-      resident.push({timeMs:i*1000,processes:rss});
+      resident.push({timeMs:i*1000,processes:rss,jsMetrics:(await metrics.send('Performance.getMetrics')).metrics.filter(m=>['JSHeapUsedSize','JSHeapTotalSize'].includes(m.name))});
     }
     const samples=await page.evaluate(()=>window.pokeaetherMemoryProbe.samples);
     assert(samples.length>=5);
