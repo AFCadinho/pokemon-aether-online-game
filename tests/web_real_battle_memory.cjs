@@ -5,6 +5,30 @@ const {chromium}=require('playwright');
 const fs=require('node:fs'), path=require('node:path'), readline=require('node:readline');
 const assert=require('node:assert/strict');
 const {execFileSync}=require('node:child_process');
+const {createHash}=require('node:crypto');
+const sha=value=>createHash('sha256').update(value).digest('hex');
+const frontend=path.resolve(__dirname,'..');
+const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim();
+function provenance() {
+  const scene='scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn';
+  const oldVisual='res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn';
+  const newVisual='res://generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn';
+  const text=fs.readFileSync(path.join(frontend,scene),'utf8');
+  assert(text.includes(oldVisual)!==text.includes(newVisual),'One Pallet variant');
+  const normalized=text.replace(newVisual,oldVisual);
+  const index=git(frontend,'ls-files','-s').split('\n').map(line=>
+    line.endsWith('\t'+scene) ? 'NORMALIZED '+sha(normalized)+'\t'+scene : line).join('\n');
+  const receipt=JSON.parse(fs.readFileSync(path.join(frontend,'builds/web/build-receipt.json'),'utf8'));
+  assert.equal(receipt.dirty,false,'Clean export required for paired timing');
+  assert.equal(receipt.commit,git(frontend,'rev-parse','HEAD'),'Export must match current committed source');
+  assert.equal(git(frontend,'status','--porcelain'),'','Clean task source required');
+  const backend=path.resolve(frontend,'../backend');
+  return {variant:text.includes(newVisual)?'compact':'original',normalizedTreeSHA256:sha(index),
+    sourceCommit:receipt.commit,pckSHA256:receipt.files.find(x=>x.name==='index.pck').sha256,
+    godot:receipt.engine,driverSHA256:sha(fs.readFileSync(__filename)),
+    backendCommit:git(backend,'rev-parse','HEAD'),
+    fixtureSHA256:sha(fs.readFileSync(path.join(backend,'ops/web_battle_memory_fixture.py')))};
+}
 (async()=>{
   assert.equal(process.env.POKEAETHER_WEB_MEMORY_DISPOSABLE_RUNTIME,'1','Disposable runtime required');
   const origin=process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
@@ -13,8 +37,10 @@ const {execFileSync}=require('node:child_process');
   const scenario=process.env.POKEAETHER_WEB_MEMORY_SCENARIO || 'electric';
   assert(['electric','grass'].includes(scenario),'Supported fixed scenario required');
   fs.mkdirSync(output,{recursive:true});
+  const evidence=provenance(), commandHash=createHash('sha256');
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const context=await browser.newContext({viewport:{width:1440,height:900}});
+  evidence.chromium=browser.version();
   const textureAudit=process.env.POKEAETHER_MEMORY_TEXTURE_AUDIT==='1';
   const worldTextureAudit=process.env.POKEAETHER_MEMORY_WORLD_TEXTURE_AUDIT==='1';
   const mapOnly=process.env.POKEAETHER_MEMORY_MAP_ONLY==='1';
@@ -105,6 +131,7 @@ const {execFileSync}=require('node:child_process');
     await page.waitForTimeout(10000);
     await snapshot('world_idle');
     for await(const line of readline.createInterface({input:process.stdin})) {
+      commandHash.update(line+'\n');
       const command=JSON.parse(line);
       if(command.click) await page.mouse.click(...command.click);
       // Canvas TextEdit consumes keyboard events, not DOM insertText input.
@@ -152,7 +179,8 @@ const {execFileSync}=require('node:child_process');
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    evidence.commandsSHA256=commandHash.digest('hex');
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,evidence,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();
