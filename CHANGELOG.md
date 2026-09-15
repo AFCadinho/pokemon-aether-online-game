@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The browser demo now includes Mt. Moon, Cerulean City, Bill and Misty. These maps download separately when needed; Route 5, Route 9 and Cerulean Cave require the desktop client.
+
 - Completed the Clash Training Captain flow for independently sized Bot Guild practice with stationary [BOT] trainers and normal battle timers. Training remains disabled pending separate release activation.
 
 - Prepared compact numbered [BOT] labels so stationary training bots stay readable in crowded arenas, and checked unequal guild rosters through the training UI. Training remains unavailable until V1 is complete.

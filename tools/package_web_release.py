@@ -54,6 +54,7 @@ def main() -> None:
         "build-receipt.json",
         "modules/manifest.json",
         "modules/aether-clash-maps.pck",
+        "modules/kanto-through-misty-maps.pck",
     ):
         if not (export_dir / required).is_file():
             parser.error(f"web export is incomplete: missing {required}")
