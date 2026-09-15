@@ -12,6 +12,7 @@ var started := false
 var result_received := false
 var heartbeat := 0.0
 var session_id := ""
+var watchdog: Timer
 
 class AutomatedCaptain extends "res://scripts/world/npcs/aether_clash_bot_captain_npc.gd":
 	var acknowledged := false
@@ -32,7 +33,14 @@ func _ready() -> void:
 	if OS.get_environment("AETHER_CLASH_LIVE_TEST_DISPOSABLE_DB") != "true" or OS.get_environment("POKEAETHER_GATEWAY_URL") != "http://127.0.0.1:8000":
 		_fail("ISOLATION_GUARD")
 		return
-	get_tree().create_timer(300).timeout.connect(func(): _fail("LIVE_FLOW_TIMEOUT"))
+	# Unlike a long-lived SceneTreeTimer, this watchdog belongs to the driver
+	# and is destroyed when the completed driver leaves the tree.
+	watchdog = Timer.new()
+	watchdog.one_shot = true
+	watchdog.wait_time = 300.0
+	watchdog.timeout.connect(_fail.bind("LIVE_FLOW_TIMEOUT"))
+	add_child(watchdog)
+	watchdog.start()
 	var parser := JSON.new()
 	if parser.parse(OS.read_string_from_stdin()) != OK or not parser.data is Dictionary:
 		_fail("FIXTURE_INPUT")
@@ -138,14 +146,48 @@ func _ready() -> void:
 		return
 	while not result_received:
 		await get_tree().process_frame
-	print("LIVE_GODOT_FLOW_OK npc=true portal=true collision=true battle=true result=true")
+	# The real client keeps running after Continue. This short-lived driver must
+	# let the ordinary terminal party heal/save finish before destroying autoloads
+	# and clearing the in-memory session. Never cancel or bypass these requests.
+	print("LIVE_GODOT_STAGE party_housekeeping pending=", _pending_party_requests())
+	var drain_deadline := Time.get_ticks_msec() + 10000
+	while _pending_party_requests() > 0:
+		if Time.get_ticks_msec() >= drain_deadline:
+			_fail("PARTY_SHUTDOWN_TIMEOUT")
+			return
+		await get_tree().process_frame
 	_cleanup()
 	# Match the ordinary overlay's deferred scene teardown before engine shutdown.
 	battle.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	battle = null
-	get_tree().quit(0)
+	print("LIVE_GODOT_FLOW_OK npc=true portal=true collision=true battle=true result=true")
+	_finish(0)
+
+func _finish(exit_code: int) -> void:
+	# Destroy the completed driver, its watchdog and request children before
+	# engine shutdown. Use a tree-owned Timer, not a SceneTreeTimer whose
+	# timeout signal would still be on the stack when quit starts.
+	var tree := get_tree()
+	if watchdog != null:
+		watchdog.stop()
+	var shutdown_timer := Timer.new()
+	shutdown_timer.one_shot = true
+	shutdown_timer.autostart = true
+	shutdown_timer.wait_time = 0.25
+	shutdown_timer.timeout.connect(tree.quit.bind(exit_code))
+	# The isolation guard can fail while root is still mounting autoloads.
+	tree.root.add_child.call_deferred(shutdown_timer)
+	queue_free()
+
+func _pending_party_requests() -> int:
+	var count := 0
+	for service: Node in [PartyHealService, PlayerPartyStateService]:
+		for child: Node in service.get_children():
+			if child is HTTPRequest:
+				count += 1
+	return count
 
 func start_aether_clash_pvp_match(match_id: String, _engagement_id: String) -> bool:
 	var request := HTTPRequest.new()
@@ -176,4 +218,4 @@ func _cleanup() -> void:
 func _fail(code: String) -> void:
 	print("LIVE_GODOT_FAILURE code=", code)
 	_cleanup()
-	get_tree().quit(1)
+	_finish(1)

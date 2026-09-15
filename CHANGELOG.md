@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Improved resource cleanup when closing the game and during battle-preview transitions.
+
 - Corrected missing tiles in the browser's Misty-region interiors by rebuilding their lossless texture atlases with browser-safe dimensions. Browser login no longer starts the placeholder house's NPCs while downloading your saved map.
 
 - The browser demo now includes Mt. Moon, Cerulean City, Bill and Misty. These maps download separately when needed; Route 5, Route 9 and Cerulean Cave require the desktop client.
