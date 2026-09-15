@@ -10,7 +10,7 @@ const ROTATED_HEX_120 := 0x10000000
 const GID_CLEAR_MASK := ~(FLIP_H | FLIP_V | FLIP_D | ROTATED_HEX_120)
 
 
-func parse_tmx(tmx_path: String) -> Dictionary:
+func parse_tmx(tmx_path: String, missing_tileset_paths: Dictionary = {}) -> Dictionary:
 	var normalized_path := PathUtils.normalize_path(tmx_path)
 	var parser := XMLParser.new()
 	var open_error := parser.open(PathUtils.globalize(normalized_path))
@@ -51,7 +51,7 @@ func parse_tmx(tmx_path: String) -> Dictionary:
 				"map":
 					_apply_map_attributes(map_data, attrs)
 				"tileset":
-					current_tileset = _parse_tileset_reference(attrs, normalized_path)
+					current_tileset = _parse_tileset_reference(attrs, normalized_path, missing_tileset_paths)
 					if parser.is_empty():
 						_finish_tileset(map_data, current_tileset)
 						current_tileset = {}
@@ -186,7 +186,7 @@ func _apply_map_attributes(map_data: Dictionary, attrs: Dictionary) -> void:
 	map_data["infinite"] = int(attrs.get("infinite", 0)) == 1
 
 
-func _parse_tileset_reference(attrs: Dictionary, tmx_path: String) -> Dictionary:
+func _parse_tileset_reference(attrs: Dictionary, tmx_path: String, missing_tileset_paths: Dictionary = {}) -> Dictionary:
 	var tileset := {
 		"firstgid": int(attrs.get("firstgid", 1)),
 		"source": str(attrs.get("source", "")),
@@ -206,6 +206,10 @@ func _parse_tileset_reference(attrs: Dictionary, tmx_path: String) -> Dictionary
 	var source := str(tileset["source"])
 	if source != "":
 		var tsx_path := PathUtils.resolve_relative(tmx_path, source)
+		# Explicit repair only: never search arbitrary ancestors or replace a valid
+		# artist dependency. Images remain relative to the selected TSX itself.
+		if not FileAccess.file_exists(PathUtils.globalize(tsx_path)) and missing_tileset_paths.has(source):
+			tsx_path = PathUtils.normalize_path(str(missing_tileset_paths[source]))
 		var external_tileset := parse_tsx(tsx_path)
 		if bool(external_tileset.get("success", false)):
 			var external_data: Dictionary = external_tileset["tileset"]
