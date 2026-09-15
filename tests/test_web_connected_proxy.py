@@ -16,6 +16,21 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_module_manifest_is_available_without_opening_other_json(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "modules").mkdir()
+            (root / "modules/manifest.json").write_text('{"schemaVersion":1,"modules":{}}')
+            (root / "modules/private.json").write_text('{}')
+            (root / "private.json").write_text('{}')
+            client = TestClient(proxy.create_app("http://127.0.0.1:8000", build=root), base_url="http://localhost")
+            result = client.get("/modules/manifest.json")
+            self.assertEqual(result.status_code, 200)
+            self.assertEqual(result.json()["schemaVersion"], 1)
+            self.assertEqual(result.headers["content-type"], "application/json")
+            self.assertEqual(client.get("/modules/private.json").status_code, 404)
+            self.assertEqual(client.get("/private.json").status_code, 404)
+
     def test_upstream_websocket_keepalive_tolerates_local_development_stalls(self):
         self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["ping_interval"], 30)
         self.assertEqual(proxy.UPSTREAM_WEBSOCKET_OPTIONS["ping_timeout"], 120)

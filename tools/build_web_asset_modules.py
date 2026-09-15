@@ -1,96 +1,76 @@
 #!/usr/bin/env python3
-"""Build optional web asset modules; run through ops/worktrees/slot-env SLOT."""
+"""Build both optional browser map modules through ops/worktrees/slot-env."""
 from __future__ import annotations
-
 import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
 import subprocess
-
-from build_web_preview import pack_contains, run_export
-
+import tempfile
+from pathlib import Path
+from build_web_preview import run_export
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_NAME = "aether-clash-maps"
 MAX_MODULE_BYTES = 32 * 1024 * 1024
-REQUIRED_MARKERS = (
-    b"generated/tiled_visuals/waiting_area/waiting_area.visual.tscn",
-    b"generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn",
-    b"generated/tiled_visuals/aether_clash_battle_royale/aether_clash_battle_royale.visual.tscn",
-)
-FORBIDDEN_MARKERS = (
-    b"generated/tiled_visuals/lobby/lobby.visual.tscn",
-    b"generated/tiled_visuals/pewter_city/pewter_city.visual.tscn",
-    b"generated/tiled_visuals/route_3/route_3.visual.tscn",
-)
 
 
-def main() -> None:
+def build_module(godot, output, name, preset, scenes, required, forbidden):
+    pack = output / f"{name}.pck"
+    log = output.parent / f"{name}-export-console.log"
+    code = run_export([godot, "--headless", "--log-file", str(output.parent / f"{name}-export.log"),
+                       "--path", str(ROOT), "--export-pack", preset, str(pack)], log)
+    if code or not pack.is_file() or not 0 < pack.stat().st_size <= MAX_MODULE_BYTES:
+        raise RuntimeError(f"{name} export failed or exceeds 32 MiB; see {log}")
+    with tempfile.TemporaryDirectory(prefix="pokeaether-module-index-") as directory:
+        Path(directory, "project.godot").write_text('config_version=5\n')
+        probe = subprocess.run([godot, "--headless", "--path", directory, "--script",
+                                str(ROOT / "tests/web_module_files_probe.gd"), "--", str(pack)],
+                               capture_output=True, text=True, timeout=120, check=True)
+    files = set(json.loads(next(line.removeprefix("MODULE_FILES ") for line in probe.stdout.splitlines()
+                               if line.startswith("MODULE_FILES "))))
+    def contains(marker):
+        path = "res://" + marker.decode()
+        return path in files or path + ".remap" in files
+    for marker in required:
+        if not contains(marker):
+            raise RuntimeError(f"{name} misses required marker: {marker.decode()}")
+    for marker in forbidden:
+        if contains(marker):
+            raise RuntimeError(f"{name} contains outside-module marker: {marker.decode()}")
+    with pack.open("rb") as stream:
+        digest = hashlib.file_digest(stream, "sha256").hexdigest()
+    print(f"{name} exported: {pack.stat().st_size / 1048576:.1f} MiB.")
+    return {"file": pack.name, "bytes": pack.stat().st_size,
+            "sha256": digest, "version": digest[:16], "scenes": scenes}
+
+
+def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", default="godot")
     args = parser.parse_args()
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
-        parser.error("Run slot builds through ops/worktrees/slot-env SLOT -- COMMAND.")
-
+        parser.error("Run through ops/worktrees/slot-env SLOT -- COMMAND.")
     output = ROOT / "builds/web/modules"
     output.mkdir(parents=True, exist_ok=True)
-    pack_path = output / f"{MODULE_NAME}.pck"
-    console_log = output.parent / f"{MODULE_NAME}-export-console.log"
-    returncode = run_export(
-        [
-            args.godot,
-            "--headless",
-            "--log-file",
-            str(output.parent / f"{MODULE_NAME}-export.log"),
-            "--path",
-            str(ROOT),
-            "--export-pack",
-            "Web Aether Clash Maps",
-            str(pack_path),
-        ],
-        console_log,
-    )
-    if returncode != 0:
-        tail = console_log.read_text(errors="replace").splitlines()[-80:]
-        raise RuntimeError("Aether Clash module export failed:\n" + "\n".join(tail))
-    if not pack_path.is_file() or pack_path.stat().st_size == 0:
-        raise RuntimeError("Aether Clash module export did not produce a PCK.")
-
-    for marker in REQUIRED_MARKERS:
-        if not pack_contains(pack_path, marker):
-            raise RuntimeError(f"Aether Clash module misses required marker: {marker.decode()}")
-    for marker in FORBIDDEN_MARKERS:
-        if pack_contains(pack_path, marker):
-            raise RuntimeError(f"Aether Clash module contains core marker: {marker.decode()}")
-
-    module_bytes = pack_path.stat().st_size
-    if module_bytes > MAX_MODULE_BYTES:
-        raise RuntimeError(
-            f"Aether Clash module is {module_bytes / 1048576:.1f} MiB; "
-            f"the module budget is {MAX_MODULE_BYTES / 1048576:.0f} MiB."
-        )
-    with pack_path.open("rb") as stream:
-        digest = hashlib.file_digest(stream, "sha256").hexdigest()
-    manifest = {
-        "schemaVersion": 1,
-        "modules": {
-            MODULE_NAME: {
-                "file": pack_path.name,
-                "bytes": module_bytes,
-                "sha256": digest,
-                "version": digest[:16],
-                "scenes": [
-                    "res://scenes/overworld/aether_clash/waiting_area.tscn",
-                    "res://scenes/overworld/aether_clash/aether_clash_duel.tscn",
-                    "res://scenes/overworld/aether_clash/aether_clash_battle_royale.tscn",
-                ],
-            }
-        },
-    }
-    (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    print(f"Aether Clash web module exported: {module_bytes / 1048576:.1f} MiB.")
+    scope = json.loads((ROOT / "docs/browser-misty-scope.json").read_text())
+    catalog = json.loads((ROOT / "generated/world_access_catalog.json").read_text())
+    misty_scenes = [catalog["areas"][map_id]["scenePath"] for map_id in scope["additionalMapIds"]]
+    aether_scenes = ["res://scenes/overworld/aether_clash/" + name + ".tscn"
+                     for name in ("waiting_area", "aether_clash_duel", "aether_clash_battle_royale")]
+    modules = {}
+    modules["aether-clash-maps"] = build_module(
+        args.godot, output, "aether-clash-maps", "Web Aether Clash Maps", aether_scenes,
+        tuple(path.removeprefix("res://").encode() for path in aether_scenes),
+        (b"generated/tiled_visuals/lobby/lobby.visual.tscn",
+         b"generated/tiled_visuals/pewter_city/pewter_city.visual.tscn",
+         b"generated/tiled_visuals/route_3/route_3.visual.tscn"))
+    forbidden = tuple(area["scenePath"].removeprefix("res://").encode()
+                      for map_id, area in catalog["areas"].items() if map_id not in scope["additionalMapIds"])
+    modules["kanto-through-misty-maps"] = build_module(
+        args.godot, output, "kanto-through-misty-maps", "Web Misty Maps Trial", misty_scenes,
+        tuple(path.removeprefix("res://").encode() for path in misty_scenes), forbidden)
+    # Publish one manifest only after both packs pass validation.
+    (output / "manifest.json").write_text(json.dumps({"schemaVersion": 1, "modules": modules}, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

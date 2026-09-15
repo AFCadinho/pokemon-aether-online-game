@@ -195,7 +195,7 @@ def main():
         'phase': 7, 'accounts': True, 'onlineGameplay': True,
         'chat': True, 'aiSparring': True, 'ranked': False,
         'dynamicPokemonSprites': True,
-        'assetProfile': 'kanto-through-pewter-lobby-core',
+        'assetProfile': 'kanto-through-misty-lobby-modular',
         'maxInitialBytes': MAX_INITIAL_BYTES,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),

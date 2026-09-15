@@ -35,7 +35,9 @@ func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
 
 	var tileset_path := PathUtils.scene_to_tileset_path(normalized_output)
 	var tileset_builder := TmxTilesetBuilder.new()
-	var tileset_result: Dictionary = tileset_builder.build_tileset(map_data, tileset_path)
+	# Chunk resources have just been replaced. An older atlas may still refer to
+	# rows beyond their new height; never deserialize that stale atlas first.
+	var tileset_result: Dictionary = tileset_builder.build_tileset(map_data, tileset_path, false)
 	if not bool(tileset_result.get("success", false)):
 		return tileset_result
 

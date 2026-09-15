@@ -173,6 +173,27 @@ var map_transition_layer: CanvasLayer
 var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
+var web_player_process_mode_before_load := Node.PROCESS_MODE_INHERIT
+
+func _enter_tree() -> void:
+	if OS.has_feature("web"):
+		_discard_web_placeholder_map()
+
+
+func _discard_web_placeholder_map() -> void:
+	# Remove the editor's default map before child _ready callbacks can launch
+	# NPC requests or saves while a different saved map's module downloads.
+	var container := get_node_or_null("CurrentMap")
+	if container == null:
+		return
+	for map in container.get_children():
+		container.remove_child(map)
+		map.queue_free()
+	var initial_player := get_node_or_null("Player")
+	if initial_player != null:
+		web_player_process_mode_before_load = initial_player.process_mode
+		initial_player.process_mode = Node.PROCESS_MODE_DISABLED
+
 
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -192,6 +213,8 @@ func _ready() -> void:
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
+		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
+			player.process_mode = web_player_process_mode_before_load
 		if GameState.gameplay_reset_in_progress:
 			GameState.finish_gameplay_reset()
 		return
@@ -419,7 +442,7 @@ func _append_web_sprite_entry(
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if OS.has_feature("web"):
-		if is_loading_map:
+		if is_loading_map or not _has_active_world_map():
 			return
 		if not is_in_battle:
 			position_presence_elapsed += delta
@@ -2965,10 +2988,16 @@ func _is_remote_interaction_candidate_above(first: Dictionary, second: Dictionar
 	return int(_dictionary_from_value(first.get("player", {})).get("userId", 0)) > int(_dictionary_from_value(second.get("player", {})).get("userId", 0))
 
 
+func _has_active_world_map() -> bool:
+	return GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map)
+
+
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
 	if active_battle_kind == "coop":
 		return  # Co-op reservation/settlement owns both stored activity states.
 	if not AuthService.is_authenticated() or player == null:
+		return
+	if not _has_active_world_map():
 		return
 	if _is_player_position_save_blocked_by_teleport():
 		return
