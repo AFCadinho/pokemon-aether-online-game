@@ -9,6 +9,7 @@ const assert = require('node:assert/strict');
 (async () => {
   const frontend = path.resolve(__dirname, '..'), backend = path.resolve(frontend, '../backend');
   const origin = process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
+  const memoryProbe = process.env.POKEAETHER_MEMORY_PROBE === '1';
   assert.equal(new URL(origin).hostname, '127.0.0.1');
   const bridge = spawn(path.join(backend, 'ops/web_browser_test_python'), ['tests/web_browser_bridge.py', frontend], {
     env: {...process.env, POKEAETHER_WEB_BROWSER_TEST:'1', POKEAETHER_WEB_PREVIEW_ORIGIN:origin}, stdio:['pipe','pipe','pipe'],
@@ -71,7 +72,7 @@ const assert = require('node:assert/strict');
     assert.equal((await request({command:'prepare_misty_map',...scenario})).status,200);
     const apiStart=api.length;
     positions.length=0;
-    await page.goto(origin);
+    await page.goto(origin + (memoryProbe ? '/?memory-probe' : ''));
     await page.getByRole('button',{name:'Play now'}).click();
     await page.waitForFunction(()=>window.pokeaetherPreview?.loginReady,null,{timeout:120000});
     console.log('Browser login ready');
@@ -119,7 +120,8 @@ const assert = require('node:assert/strict');
       await wait(()=>positions.slice(beforeTeleport).some(row=>row.mapId===map.mapId),'Authorized map transition '+map.mapId,60000);
       await page.waitForTimeout(1800);
       await page.screenshot({path:path.join(output,map.mapId+'.png')});
-      samples.push({mapId:map.mapId,jsMetrics:(await cdp.send('Performance.getMetrics')).metrics.filter(
+      samples.push({mapId:map.mapId,memoryProbe:memoryProbe ? await page.evaluate(()=>window.pokeaetherMemoryProbe?.samples.at(-1)) : null,
+        jsMetrics:(await cdp.send('Performance.getMetrics')).metrics.filter(
         item=>['JSHeapUsedSize','JSHeapTotalSize','Nodes'].includes(item.name))});
       console.log('Active map ready '+map.mapId);
     }
