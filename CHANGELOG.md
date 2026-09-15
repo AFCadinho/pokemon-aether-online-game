@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser world zoom now adapts to the window size with a consistent view on laptop, Full HD and 4K screens, without letterboxing. Desktop zoom settings are unchanged.
+
 - The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.
 
 - Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.
