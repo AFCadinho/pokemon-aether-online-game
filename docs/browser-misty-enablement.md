@@ -21,7 +21,8 @@ Focused evidence:
 
 - Normal module exports: Aether Clash approximately 7.9 MiB; Misty approximately
   19.9 MiB in slot C and 25.1 MiB in the integration checkout with its own import
-  cache/assets. Both remain within budget. Required maps present, canonical
+  cache/assets before the active-review atlas rebuild. The rebuilt integration
+  Misty pack is approximately 24.6 MiB. Both remain within budget. Required maps present, canonical
   outside maps absent. Initial integration build stays 300.9 MiB.
 - Module pipeline/scope tests, trial validation tests and release-packaging tests.
 - Browser HTTP tests cover Brock gating, Route 3 entry, saved Cerulean resume,
@@ -31,8 +32,11 @@ Focused evidence:
 - Existing first-gym frontend contract check remains compatible.
 
 This is technical enablement, not complete browser playthrough acceptance.
-Active NPC/cutscene presentation, every door/ladder, encounters/capture, Bill's
-sequence, Misty's battle/rewards and lower-memory devices still require active
+The subsequent [active gameplay review](browser-misty-gameplay-results.md)
+confirms Bill's complete sequence and all sixteen active maps and records its
+remaining acceptance limits.
+Every door/ladder, encounters/capture, trainer battles, remaining cutscenes,
+Misty's battle/rewards and lower-memory devices still require active
 browser gameplay review. The previous construction-only WebGL probe is not
 evidence that those active gameplay paths have been played. No production or
 public release is authorized by this change.

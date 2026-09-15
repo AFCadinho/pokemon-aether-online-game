@@ -25,8 +25,14 @@ backend database are not changed.
 - `web_misty_gameplay_smoke.cjs`: Bill's meeting, computer/cell separator,
   restored human Bill, S.S. Ticket and 100 Aetherite complete through the browser
   UI. The quest advances to challenging Cerulean Gym.
+- The final repeat opens all sixteen added maps in the active world, including
+  NPC initialization, camera setup and acknowledged authorized travel. It
+  passes with no captured runtime errors/warnings or external HTTP traffic.
+  The Misty pack downloads once and is reused for subsequent map changes.
 - The scoped atlas probe checks all twelve visual maps, valid atlas cells,
   the 4096-pixel ceiling and disabled placeholder-player processing.
+  Autosave is unavailable without a map and becomes available with the owned
+  canonical map. The existing first-gym contract check also passes.
 - Texture storage validation passes for all 324 generated textures, using
   lossless `PortableCompressedTexture2D` storage.
 - TMX visual importer, Bill runtime transition and Cerulean gym trainer checks
