@@ -173,6 +173,7 @@ var map_transition_layer: CanvasLayer
 var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
+var web_player_process_mode_before_load := Node.PROCESS_MODE_INHERIT
 
 func _enter_tree() -> void:
 	if OS.has_feature("web"):
@@ -188,6 +189,10 @@ func _discard_web_placeholder_map() -> void:
 	for map in container.get_children():
 		container.remove_child(map)
 		map.queue_free()
+	var initial_player := get_node_or_null("Player")
+	if initial_player != null:
+		web_player_process_mode_before_load = initial_player.process_mode
+		initial_player.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func _exit_tree() -> void:
@@ -208,6 +213,8 @@ func _ready() -> void:
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
+		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
+			player.process_mode = web_player_process_mode_before_load
 		if GameState.gameplay_reset_in_progress:
 			GameState.finish_gameplay_reset()
 		return

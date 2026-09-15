@@ -25,6 +25,9 @@ func _run() -> void:
 		map.free()
 	var world: Node = load("res://scenes/world.tscn").instantiate()
 	world.call("_discard_web_placeholder_map")
+	if world.get_node("Player").process_mode != Node.PROCESS_MODE_DISABLED:
+		push_error("Browser player must wait for the canonical map")
+		failures += 1
 	if world.get_node("CurrentMap").get_child_count() != 0 or world.get_node_or_null("Player") == null:
 		push_error("Browser placeholder cleanup must preserve the player")
 		failures += 1
