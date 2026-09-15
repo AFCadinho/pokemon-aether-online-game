@@ -44,6 +44,8 @@ func _init() -> void:
 		quit(0 if candidates.size() >= 200 else 1)
 		return
 	var manifest_path := ProjectSettings.globalize_path("res://").path_join("../backend/account-service/data/aether_clash_bot_anchors.json")
+	if not FileAccess.file_exists(manifest_path):
+		manifest_path = ProjectSettings.globalize_path("res://").path_join("../pokemon-aether-backend/account-service/data/aether_clash_bot_anchors.json")
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
 	var positions: Array = manifest.get("positions", [])
 	var valid: bool = positions.size() == 200 and manifest.get("side") == "challenged" and collision.get_cell_source_id(start) == -1
