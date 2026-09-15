@@ -67,6 +67,7 @@ func _run() -> void:
 		var texture := source.texture as PortableCompressedTexture2D
 		_check(texture != null and texture.get_compression_mode() == PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS, "Portable lossless texture")
 		_check(texture.get_width() <= 4096 and texture.get_height() <= 4096, "Browser-safe dimensions")
+		_check(ResourceLoader.get_cached_ref(texture.resource_path) == texture, "Embedded compact texture is visible to cached-only diagnostics")
 		bytes += texture.get_width() * texture.get_height() * 4
 	_check(bytes < 2 * 1024 * 1024, "Compact RGBA estimate below 2 MiB")
 	_check_door_parts(old.get_node("Doors"), compact.get_node("Doors"))

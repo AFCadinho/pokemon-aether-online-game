@@ -21,9 +21,15 @@ const {execFileSync}=require('node:child_process');
     const inventory=JSON.parse(execFileSync('python3',[path.resolve(__dirname,'../tools/audit_web_texture_memory.py')],{maxBuffer:16*1024*1024}));
     const prefixes=['assets/ui/','assets/tilesets/','assets/background/','assets/battles/capture/',
       'assets/battles/mechanics/','assets/battles/effect/','assets/sprites/battle_buttons/'];
+    const visual='generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn';
+    const embedded=[...fs.readFileSync(path.resolve(__dirname,'../'+visual),'utf8')
+      .matchAll(/^\[sub_resource type="PortableCompressedTexture2D" id="([a-zA-Z0-9_]+)"\]$/gm)]
+      .map(match=>'res://'+visual+'::'+match[1]);
+    assert.equal(embedded.length,7,'Seven fixed candidate atlas subresources');
+    const mapPaths=[...embedded,...inventory.portableMapResources.map(x=>'res://'+x.source)];
     const paths=[...new Set(inventory.textures.filter(x=>prefixes.some(prefix=>x.source.startsWith(prefix)))
       .map(x=>'res://'+x.source))].slice(0,96)
-      .concat(inventory.portableMapResources.slice(0,160).map(x=>'res://'+x.source));
+      .concat(mapPaths.slice(0,160));
     assert(paths.length<=256,'Bounded world texture audit');
     await context.addInitScript(paths=>{window.pokeaetherMemoryWorldTexturePaths=paths;},paths);
   }

@@ -23,6 +23,7 @@
 {"click":[876,628],"wait":15000,"label":"warm2_battle_ready"}
 {"click":[1320,431],"wait":15000,"label":"warm2_run"}
 {"wait":10000,"label":"warm2_post_idle"}
+{"walk":{"key":"ArrowUp","axis":"y","limit":592,"direction":-1},"label":"pallet_walk_above_trees"}
 {"walk":{"key":"ArrowRight","axis":"x","limit":656,"direction":1},"label":"pallet_walk_right"}
 {"walk":{"key":"ArrowUp","mapId":"kanto_players_house"},"wait":5000,"label":"house_entered"}
 {"walk":{"key":"ArrowDown","mapId":"kanto_pallet_town"},"wait":5000,"label":"pallet_returned"}
