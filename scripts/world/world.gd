@@ -72,6 +72,7 @@ var replay_return_callback: Callable
 var coop_controls: Control
 var coop_world_ready := false
 var coop_finishing := false
+var coop_wild_step_pending := false
 
 func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bool:
 	if is_in_battle or wild_battle_resume_pending:
@@ -3570,6 +3571,22 @@ func start_triggered_wild_battle_for_area(
 	forced_species_id: String = "",
 	retry_after_expired_battle := true
 ) -> void:
+	if is_in_battle or wild_battle_resume_pending:
+		return
+	if coop_wild_step_pending:
+		return
+	coop_wild_step_pending = true
+	var step_input_lock := not CoopService.party.is_empty() and not GameState.is_overworld_input_locked()
+	if step_input_lock:
+		GameState.lock_overworld_input()
+	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
+	coop_wild_step_pending = false
+	if step_input_lock and not is_in_battle and CoopService.activity.is_empty():
+		GameState.unlock_overworld_input()
+	if coop_step.get("handled", false):
+		if not coop_step.get("success", false):
+			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
+		return
 	if is_in_battle or wild_battle_resume_pending:
 		return
 
