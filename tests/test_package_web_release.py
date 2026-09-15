@@ -62,6 +62,7 @@ class PackageWebReleaseTests(unittest.TestCase):
                 'build-receipt.json': b'{}',
                 'modules/manifest.json': b'{"schemaVersion":1,"modules":{}}',
                 'modules/aether-clash-maps.pck': b'module',
+                'modules/kanto-through-misty-maps.pck': b'misty module',
                 'modules/export.log': b'private build diagnostics',
             }.items():
                 path = export / name
@@ -101,6 +102,7 @@ class PackageWebReleaseTests(unittest.TestCase):
             self.assertTrue((pages / 'pokeaether-logo.webp').is_file())
             self.assertTrue((pages / 'pokeaether-world-preview.webp').is_file())
             self.assertTrue((pages / 'modules/aether-clash-maps.pck').is_file())
+            self.assertTrue((pages / 'modules/kanto-through-misty-maps.pck').is_file())
             self.assertFalse((pages / 'modules/export.log').exists())
             release = json.loads((r2 / 'web-release.json').read_text(encoding='utf-8'))
             self.assertEqual(release['objects'][0]['key'].split('/')[0:3], ['web', 'releases', 'build-123'])

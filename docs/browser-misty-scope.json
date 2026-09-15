@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "preparation-only",
+  "status": "enabled",
   "finalDemoBoundary": "kanto_route_5",
   "completionQuestId": "challenge_cerulean_gym",
   "completionEventId": "kanto_alpha_gym_misty_battle",
