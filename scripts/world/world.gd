@@ -795,6 +795,11 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		if player.has_method("get_active_land_mount_id") \
 		else ""
 	if changes_map:
+		if OS.has_feature("web"):
+			var assets := await WebAssetModuleService.ensure_scene_available(target_scene_path)
+			if not bool(assets.get("success", false)):
+				_mark_authorized_teleport_apply_failed()
+				return assets
 		if not ResourceLoader.exists(target_scene_path):
 			_mark_authorized_teleport_apply_failed()
 			return {
@@ -1727,6 +1732,10 @@ func _setup_web_demo_world() -> void:
 			return
 		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
+	var assets := await WebAssetModuleService.ensure_scene_available(saved_scene_path)
+	if not bool(assets.get("success", false)):
+		_return_web_demo_to_login(str(assets.get("error", "Could not download your map. Please try again.")))
+		return
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
 		_return_web_demo_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
@@ -1809,6 +1818,11 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "World player is not ready."}
 	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
+	var assets := await WebAssetModuleService.ensure_scene_available(target_scene_path)
+	if not bool(assets.get("success", false)):
+		cancel_authorized_teleport_effect()
+		is_loading_map = false
+		return assets
 	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
 		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "Browser demo map is unavailable."}

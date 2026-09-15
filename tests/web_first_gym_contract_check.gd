@@ -16,7 +16,7 @@ func _init() -> void:
 	_check(module.contains("waiting_area.tscn"), "the optional module selects Waiting Area")
 
 	var loader := FileAccess.get_file_as_string("res://scripts/services/web_asset_module_service.gd")
-	_check(loader.contains("HashingContext.HASH_SHA256"), "the browser verifies the module hash")
+	_check(loader.contains("FileAccess.get_sha256(pack_path)"), "the browser verifies the module hash")
 	_check(loader.contains("ProjectSettings.load_resource_pack(pack_path, false)"), "the browser mounts the verified pack without replacing core assets")
 	var guild_service := FileAccess.get_file_as_string("res://scripts/services/guild_service.gd")
 	_check(guild_service.contains('path.replace("/game/aether-clash", "/auth/web/aether-clash")'), "Aether Clash uses its narrow web API")
