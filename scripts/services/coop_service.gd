@@ -106,6 +106,10 @@ func apply_view(incoming: Dictionary) -> void:
 	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)
 		or (view.get("exitRequest") is Dictionary and not view.get("legalActions", []).has(pending_command.get("action")))):
 		pending_command = {}
+	var recovered: Dictionary = view.get("pendingCapture", {}) if view.get("pendingCapture") is Dictionary else {}
+	if pending_command.is_empty() and not recovered.is_empty() and recovered.get("decisionId") == view.get("decisionId") and not view.get("locked", true) and not view.get("exitRequest"):
+		pending_command = {"reservationId": activity["reservationId"], "decisionId": recovered["decisionId"],
+			"idempotencyKey": recovered["idempotencyKey"], "action": {"type": "capture", "itemId": recovered["itemId"]}}
 	state_changed.emit()
 
 
@@ -201,7 +205,12 @@ func submit_action(action: Dictionary) -> Dictionary:
 func retry_command() -> Dictionary:
 	if pending_command.is_empty():
 		return {"success": false}
-	var result := await _request("decision", pending_command)
+	var payload := pending_command.duplicate(true)
+	var capturing: bool = payload.get("action", {}).get("type") == "capture"
+	if capturing:
+		payload["itemId"] = payload["action"]["itemId"]
+		payload.erase("action")
+	var result := await _request("capture" if capturing else "decision", payload)
 	if result.get("success", false):
 		pending_command = {}
 		apply_view(result.get("body", {}).get("view", {}))
@@ -212,6 +221,18 @@ func retry_command() -> Dictionary:
 		request_failed.emit("Connection interrupted. Your choice will be checked before retrying.")
 	state_changed.emit()
 	return result
+
+
+func submit_capture(item_id: String) -> Dictionary:
+	var options: Dictionary = view.get("captureOptions", {}) if view.get("captureOptions") is Dictionary else {}
+	if view.get("locked", true) or not pending_command.is_empty() or not options.get("storageAvailable", false):
+		return {"success": false}
+	if not options.get("balls", []).any(func(ball: Dictionary) -> bool: return ball.get("itemId") == item_id and int(ball.get("quantity", 0)) > 0):
+		return {"success": false}
+	pending_command = {"reservationId": activity["reservationId"], "decisionId": view["decisionId"],
+		"idempotencyKey": new_id(), "action": {"type": "capture", "itemId": item_id}}
+	state_changed.emit()
+	return await retry_command()
 
 
 func party_action(action: String, payload: Dictionary = {}) -> Dictionary:
