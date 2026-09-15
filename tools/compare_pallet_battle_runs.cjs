@@ -7,7 +7,9 @@ function validate(run,variant) {
   assert.equal(run.timingComparable,true,'Comparable timing required');
   assert(!run.textureAudit && !run.worldTextureAudit && !run.mapOnly,'Audits/map-only are not timing runs');
   assert.equal(run.battleStarts,3); assert(run.battleTurns>=1); assert.equal(run.errors.length,0);
-  assert.deepEqual(run.mapTransitions,['kanto_pallet_town','kanto_players_house','kanto_pallet_town']);
+  assert.deepEqual(run.mapTransitions,run.evidence.scope==='pallet_interiors' ?
+    ['kanto_pallet_town','kanto_players_house','kanto_pallet_town','kanto_oaks_lab','kanto_pallet_town'] :
+    ['kanto_pallet_town','kanto_players_house','kanto_pallet_town']);
   const events=run.markers.filter(x=>['battle_start_requested','battle_actions_ready','battle_teardown_begin'].includes(x.label));
   assert.deepEqual(events.map(x=>x.label),Array.from({length:3},()=>
     ['battle_start_requested','battle_actions_ready','battle_teardown_begin']).flat(),'Three ordered battle cycles');
@@ -23,6 +25,7 @@ function validate(run,variant) {
 }
 function compare(control,candidate) {
   const old=validate(control,'original'), compact=validate(candidate,'compact');
+  assert.equal(control.evidence.scope,candidate.evidence.scope,'Matched map scope');
   for(const key of ['normalizedTreeSHA256','godot','driverSHA256','backendCommit','fixtureSHA256','chromium','commandsSHA256']) {
     assert(control.evidence[key],'Missing provenance '+key);
     assert.equal(control.evidence[key],candidate.evidence[key],'Matched '+key);
