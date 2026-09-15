@@ -1,5 +1,6 @@
 {
   "allowed": [
+    ["GET", "/auth/web/world-pickups"], ["POST", "/auth/web/world-pickups/kanto_viridian_city_potion/claim"],
     ["PUT", "/auth/web/appearance"],
     ["POST", "/pokemon/create-from-text"], ["POST", "/team/create-from-text"],
     ["GET", "/auth/web/boxes"], ["GET", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/31"],
@@ -33,6 +34,9 @@
     ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
   ],
   "denied": [
+    ["GET", "/game/world-pickups"], ["POST", "/game/world-pickups/kanto_viridian_city_potion/claim"],
+    ["POST", "/auth/web/world-pickups/kanto_viridian_city_potion/claim/escape"],
+    ["GET", "/auth/web/world-pickups-escape"],
     ["POST", "/auth/web/mail/5/claim"], ["POST", "/auth/web/mail/5/attachments/3/claim"],
     ["POST", "/game/mail/5/claim"], ["POST", "/game/trades"], ["POST", "/game/loans"],
     ["GET", "/game/guilds/me/bank"], ["POST", "/game/guilds/me/bank/deposit"],
