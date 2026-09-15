@@ -283,8 +283,52 @@ An audit run records `textureAudit=true` and `timingComparable=false`; use it
 to identify coexisting textures, not as a latency control. Timing comparisons
 must leave this whitelist unset. The focused Godot test covers existing shared
 textures, repeated paths, absent resources and refusal of non-effect paths.
-This tooling does not yet change sharing, eviction or prefetch. A real rendered
-audit must be collected before claiming resident-memory savings.
+This tooling does not change sharing, eviction or prefetch. A successful audit
+also requires a nonempty cached-effect sample at rendered battle readiness.
+
+### Rendered residency evidence, 2026-09-15
+
+With explicit approval, the disposable local stack ran the fixed three-battle
+command sequence against the new slot-C preview on 8062. The core receipt is
+`eb3df9bfcd44affae23fb2bbaaee0533331cde09`, **dirty=false**, Godot 4.6.2;
+PCK SHA-256
+`660cf5f637fef796aa3e3097ef53e2b140f054a45f1a939da419099662e5cf59`.
+Backend source is `55c7f22779c22abd0dfcd355f00677e2c24a119e`.
+The disposable database's Compose project/tmpfs were verified before fixture
+creation. The wrapper completed with `restored=1 test_exit=0`; normal services
+are running healthy and PostgreSQL is back on the original normal-project volume.
+The tmpfs test database was removed with its temporary container. No production access.
+
+The rendered audit passes: three successful starts, four resolved turn responses,
+three teardown markers and no JavaScript page errors. All three battle-ready
+snapshots contain both `charge/PRAS- Electric.png` and
+`electricterrain/PRAS- Electric.png`, each 960 × 4416. These are distinct cached
+textures, not repeated references to one RID: the sample contains seven paths
+and seven unique texture RIDs. The duplicate Electric copy represents 16.171875
+MiB estimated RGBA. Source PNG bytes, import parameters and packed CTEX payloads
+are identical. The move catalogue already shares the `charge` copy for nine
+moves; the effect catalogue also uses it for `solar_beam_charge`. The other
+copy is held by the preloaded battle terrain scene.
+
+The audited subset is three textures (24.33 MiB RGBA) before battles and seven
+(46.03 MiB) at each battle-ready snapshot. Post-idle subset counts are four,
+seven and seven; whole texture counters are 401.42, 423.42 and 423.42 MiB, with
+resource counts 878, 883 and 883, zero orphan nodes and eleven sprite sheets.
+The two warm endpoints are equal, but these idle figures are NOT interchangeable
+with the 391.67 MiB result from the older dirty preview. The binary differs and
+this probe obtains temporary strong cached references repeatedly. Run the same
+new binary without the effect audit before drawing lifetime/leak conclusions.
+This audit deliberately records `timingComparable=false`, so it supplies no new
+latency claim or measured optimization gain.
+
+The next narrow candidate is to make the ten catalogue references use the
+already-preloaded `electricterrain` texture, leaving assets, resolution, animation
+data and threaded preparation intact. Validate source/import identity and shared
+readiness, then compare an audit-off real battle control/candidate before claiming
+memory savings or unchanged latency. This evidence phase has not implemented
+that candidate. The raw audited report is ignored at
+`builds/web-real-battle-memory/report.json`; the older fixed-run report was
+retained in the same checkout as `pre-texture-audit-report.json`.
 
 ## Battle timing protocol for a future candidate
 
