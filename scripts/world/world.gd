@@ -174,6 +174,22 @@ var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
 
+func _enter_tree() -> void:
+	if OS.has_feature("web"):
+		_discard_web_placeholder_map()
+
+
+func _discard_web_placeholder_map() -> void:
+	# Remove the editor's default map before child _ready callbacks can launch
+	# NPC requests or saves while a different saved map's module downloads.
+	var container := get_node_or_null("CurrentMap")
+	if container == null:
+		return
+	for map in container.get_children():
+		container.remove_child(map)
+		map.queue_free()
+
+
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
 		GameState.clear_world_runtime_state()

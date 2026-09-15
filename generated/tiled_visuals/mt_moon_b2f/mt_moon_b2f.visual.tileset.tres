@@ -1,8 +1,8 @@
-[gd_resource type="TileSet" format=3 uid="uid://cdjj11panpcmh"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b2f/assets/5GEN_CAVE_TILESET_2392707819_000.texture.res" id="1_xl4el"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e71vg"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xl4el"]
 texture = ExtResource("1_xl4el")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -712,7 +712,7 @@ texture_region_size = Vector2i(32, 32)
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_e71vg")
+sources/1 = SubResource("TileSetAtlasSource_xl4el")
 metadata/tiled_source_signature = "32
 32
 |
