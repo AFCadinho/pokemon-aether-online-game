@@ -4,7 +4,8 @@ const fs=require('node:fs');
 const path=require('node:path');
 const assert=require('node:assert/strict');
 (async()=>{
-  const origin='http://127.0.0.1:8061';
+  const origin=process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
+  assert.equal(new URL(origin).hostname,'127.0.0.1','Local preview only');
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const page=await browser.newPage({viewport:{width:1440,height:900}});
   const system=await browser.newBrowserCDPSession();

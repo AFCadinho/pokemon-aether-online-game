@@ -188,6 +188,86 @@ interactive adjustments. Do not edit the runtime wrapper while it is running.
 `ops/test_web_battle_memory_runtime.py` checks fixture refusal guards and the
 resolved volume/env-file/version-gate configuration without runtime mutations.
 
+## Clean control and packed-texture inventory, 2026-09-15
+
+The slot-C core was rebuilt before editing the diagnostic tooling. Its receipt
+identifies `e06f548c5a6c2ee5efbc73aaa0461ba79ae26d0a`, **dirty=false**,
+Godot `4.6.2.stable.official.71f334935`, 261.6147 MiB initial files.
+Core PCK SHA-256:
+`3072ab86eb02accf075bdfa9ede14b62486e2ff24c5d75777be26dca0aeda8c7`.
+Both map modules were rebuilt in this same slot, not copied from another checkout.
+The Misty module PCK SHA-256 is
+`cd7af0e05028d521e715a4a66b13b9c911ac2fee7752703799e9956cc88b15f1`.
+
+The control is served separately on 8062, leaving the user's 8061 preview alone.
+Bill's complete meeting, cell separation and ticket reward, then authorized
+travel to `kanto_cerulean_city_pokemon_center` and
+`kanto_route_25_bills_house` pass with no captured runtime errors. This is one
+two-map cycle, not the earlier sixteen-map warm sequence or a real battle run.
+Texture counters at these indoor endpoints are 266.06 and 264.48 MiB; resources
+831 and 786, Wasm capacity 286.25 MiB, orphan counters zero, sprite cache empty.
+These areas/fixture do not exercise encounter prefetch. Do not compare the empty
+cache with the earlier 52-sheet route as an optimization gain.
+
+The first attempted map filter used invalid abbreviated IDs and was rejected
+after Bill's sequence; the valid rerun above passed. Its initial setup overlapped
+an exploratory login process, so only the later serial login rerun is retained
+as the login control. No shared backend interruption was needed for these
+SQLite-fixture checks. The serial login control has 13 samples, 54.69 MiB engine
+textures, 165.625 MiB Wasm capacity, 881 nodes, 227 resources and an empty sprite
+cache; its final CDP JS heap used is 11.60 MiB. No optimization gain is claimed.
+The export logs contain existing duplicate/invalid resource
+UID and nested-launcher-project warnings (no script/export errors found).
+These are not suppressed or described as warning-free/full certification.
+The clean core still needs a like-for-like real battle control before accepting
+a battle-memory or latency optimization; the older real-battle timings above
+do not automatically become timings for this newly built binary.
+
+`tools/audit_web_texture_memory.py` reads PCK directory entries and imported
+CTEX dimensions directly. It does not load, resize or evict game resources.
+The core contains 9,219 CTEX entries. Important findings:
+
+- The source combo/text logos are imported at 2048 × 1805 and 2048 × 686,
+  approximately 14.10 and 5.36 MiB RGBA respectively, not their larger source
+  dimensions. Existing importer size limits are respected by this audit.
+- `assets/ui/moon.png` is packed at 5000 × 5000 (95.37 MiB RGBA estimate), but
+  no explicit scene/script/data reference to that exact asset was found. Its
+  packed presence alone does not prove that it is loaded in the world.
+- There are 43 groups of byte-identical battle-effect CTEX payloads, covering
+  159 texture paths. Their duplicate packed payloads total only 1.99 MiB.
+  Nine Electric sheets each have the same 16.17 MiB RGBA estimate; sixteen
+  Strike sheets each have the same 4.22 MiB estimate. The simultaneous resident
+  subset is not measured here: multiplying all these entries is not live RAM.
+- Generated map textures use PortableCompressedTexture2D `.texture.res`, not
+  CTEX. They are reported separately with packed sizes only: 150 core resources
+  (11.40 MiB) and 150 Misty-module resources (8.29 MiB). No decoded atlas-size
+  inference is made from these compressed file sizes.
+
+World code preloads `battle.tscn`, including its terrain sheets. The animation
+router retains requested resources by path and prepares them through threaded
+requests. Byte-identical sheets at different paths are therefore a concrete
+sharing candidate. First measure which duplicates coexist (including terrain
+and move effects), then share canonical textures without postponing current
+preparation. Keep the sprite cache/prefetch unchanged. No sharing change or
+memory saving has been implemented or demonstrated in this phase.
+
+Reproduce the read-only inventory and control checks from slot-C frontend:
+
+```sh
+python3 tools/audit_web_texture_memory.py
+python3 tools/audit_web_texture_memory.py builds/web/modules/kanto-through-misty-maps.pck
+python3 tests/test_audit_web_texture_memory.py
+POKEAETHER_WEB_PREVIEW_URL=http://127.0.0.1:8062 \
+  NODE_PATH=/home/adinho/.npm-global/lib/node_modules node tests/web_memory_baseline.cjs
+POKEAETHER_WEB_PREVIEW_URL=http://127.0.0.1:8062 POKEAETHER_MEMORY_PROBE=1 \
+  POKEAETHER_MEMORY_MAP_FILTER=kanto_cerulean_city_pokemon_center,kanto_route_25_bills_house \
+  NODE_PATH=/home/adinho/.npm-global/lib/node_modules node tests/web_misty_gameplay_smoke.cjs
+```
+
+Run the browser checks serially. Seven auditor tests cover PCK versions/base
+offsets, imported dimensions, refusal of encryption/truncation/out-of-bounds
+payloads, invalid CTEX headers and read-only duplicate reporting.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
