@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op testing now sends grass steps to the server and enters the shared battle screen when an encounter starts. Partners no longer enter separate solo wild battles; wild co-op remains disabled pending catching and fleeing support.
+
 - The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.
 
 - Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.

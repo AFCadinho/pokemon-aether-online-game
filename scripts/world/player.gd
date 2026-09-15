@@ -2663,6 +2663,11 @@ func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = 
 		return
 
 	var resolved_type: String = str(encounter.get("encounter_type", encounter_type))
+	if CoopService.available and not CoopService.party.is_empty():
+		var coop_world := GameState.get_world()
+		if coop_world != null:
+			coop_world.start_triggered_wild_battle_for_area(str(encounter.get("area_id", "")), resolved_type)
+		return
 	if bool(encounter.get("use_map_trigger", false)):
 		if current_map.has_method("should_trigger_wild_encounter"):
 			if not bool(current_map.call("should_trigger_wild_encounter", resolved_type)):
