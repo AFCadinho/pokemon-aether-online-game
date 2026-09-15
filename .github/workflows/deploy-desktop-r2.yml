@@ -571,6 +571,7 @@ jobs:
       - name: Test R2 cleanup safeguards
         run: |
           python3 tools/test_prune_r2_release_objects.py
+          python3 tools/test_verify_latest_download_redirects.py
           node --test tests/update_download_worker_test.mjs
 
       - name: Test R2 upload retries
