@@ -1,5 +1,8 @@
 # Definitieve browserdemo tot Misty — voorbereiding
 
+De daaropvolgende proefexport is afgerond; zie `browser-misty-trial-results.md`
+voor daadwerkelijke pakketgrootte, browserprobe en resterende geheugencontroles.
+
 ## Afgesproken scope
 
 De laatste uitbreiding van de browserwereld eindigt na Misty. Route 5 blijft
