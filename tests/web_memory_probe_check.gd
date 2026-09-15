@@ -32,6 +32,13 @@ func _run() -> void:
 	passed = passed and audit.uniqueTextures == 1 and audit.estimatedRGBABytes == 64 * 32 * 4
 	passed = passed and audit.paths == [{"path": path, "width": 64, "height": 32}]
 	passed = passed and not ResourceLoader.has_cached(missing)
+	var electric_path := "res://assets/battles/animations/electricterrain/PRAS- Electric.png"
+	var electric := load(electric_path) as Texture2D
+	var reused := load(electric_path) as Texture2D
+	passed = passed and electric != null and electric == reused
+	var electric_audit: Dictionary = probe.diagnostic_cached_effect_textures([electric_path, electric_path])
+	passed = passed and electric_audit.uniqueTextures == 1
+	passed = passed and electric_audit.estimatedRGBABytes == 960 * 4416 * 4
 	diagnostic_root.free()
 	service.free()
 	print("web_memory_probe_check: %s" % ("PASS" if passed else "FAIL"))
