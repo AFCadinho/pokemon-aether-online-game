@@ -7,7 +7,7 @@ function validate(text) {
 }
 function attest() {
   const text=execFileSync('docker',['inspect','--format',
-    '{{index .Config.Labels "com.docker.compose.project"}}|{{if index .HostConfig.Tmpfs "/var/lib/postgresql/data"}}tmpfs{{end}}',
+    '{{index .Config.Labels "com.docker.compose.project"}}|{{range $path, $options := .HostConfig.Tmpfs}}{{if eq $path "/var/lib/postgresql/data"}}tmpfs{{end}}{{end}}',
     'pao-postgres','pao-account-service','pao-battle-orchestrator'],{encoding:'utf8',stdio:['ignore','pipe','ignore'],timeout:5000});
   validate(text);
 }
