@@ -67,6 +67,20 @@ func _run() -> void:
 	service.view.exitRequest = null
 	service.view.locked = false
 	service.view.legalActions = normal_actions
+	service.view.captureOptions = {"targetController": "p4", "storageAvailable": true, "balls": [{"itemId": "poke-ball", "quantity": 2}]}
+	service.view.lastCapture = {"checkpointRevision": 1, "itemId": "poke-ball", "caught": false, "shakeCount": 2}
+	panel._bag_open = true
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Poke Ball ×2 — your target"), "co-op Bag uses server-owned ball options for only the assigned target")
+	_expect(panel._capture_status.text.contains("2 shakes"), "reconnect shows the last accepted throw result")
+	service.view.captureOptions.storageAvailable = false
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._actions.find_children("*", "Label", true, false).any(func(label: Label) -> bool: return label.text.contains("party and PC are full")), "full storage explains why catching is unavailable without hiding other actions")
+	service.view.captureOptions = null
+	service.view.lastCapture = {"checkpointRevision": 2, "itemId": "poke-ball", "caught": true, "shakeCount": 3}
+	panel._bag_open = false
 	panel._action_signature = ""
 	panel._update_actions()
 	var empty_snapshot: Dictionary = snapshot.duplicate(true)
