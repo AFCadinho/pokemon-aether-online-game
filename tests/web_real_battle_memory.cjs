@@ -4,6 +4,7 @@
 const {chromium}=require('playwright');
 const fs=require('node:fs'), path=require('node:path'), readline=require('node:readline');
 const assert=require('node:assert/strict');
+const {execFileSync}=require('node:child_process');
 (async()=>{
   assert.equal(process.env.POKEAETHER_WEB_MEMORY_DISPOSABLE_RUNTIME,'1','Disposable runtime required');
   const origin=process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8061';
@@ -12,6 +13,13 @@ const assert=require('node:assert/strict');
   fs.mkdirSync(output,{recursive:true});
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const context=await browser.newContext({viewport:{width:1440,height:900}});
+  const textureAudit=process.env.POKEAETHER_MEMORY_TEXTURE_AUDIT==='1';
+  if(textureAudit) {
+    const inventory=JSON.parse(execFileSync('python3',[path.resolve(__dirname,'../tools/audit_web_texture_memory.py')],{maxBuffer:16*1024*1024}));
+    const paths=inventory.identicalBattleEffectPayloads.flatMap(group=>group.sources.map(source=>'res://'+source));
+    assert(paths.length<=256,'Bounded effect texture audit');
+    await context.addInitScript(paths=>{window.pokeaetherMemoryTexturePaths=paths;},paths);
+  }
   const page=await context.newPage(), cdp=await context.newCDPSession(page);
   await cdp.send('Performance.enable');
   const api=[], markers=[], snapshots=[], errors=[];
@@ -82,7 +90,7 @@ const assert=require('node:assert/strict');
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,textureAudit,timingComparable:!textureAudit,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();

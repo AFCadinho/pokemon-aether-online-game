@@ -268,6 +268,24 @@ Run the browser checks serially. Seven auditor tests cover PCK versions/base
 offsets, imported dimensions, refusal of encryption/truncation/out-of-bounds
 payloads, invalid CTEX headers and read-only duplicate reporting.
 
+### Cached-effect residency probe
+
+The real-battle driver accepts `POKEAETHER_MEMORY_TEXTURE_AUDIT=1`. It derives
+an explicit whitelist of at most 256 public battle-effect asset paths from the
+packed duplicate inventory and sets `window.pokeaetherMemoryTexturePaths`.
+The opt-in memory probe reports cached paths/dimensions and a RID-deduplicated
+RGBA estimate using only `ResourceLoader.get_cached_ref`, without resource
+loads or GPU/image readback. Uncached resources stay uncached. It holds no
+texture references in its output; no player/session/resource properties are
+read. Native gameplay and ordinary unprobed browser gameplay remain disabled.
+
+An audit run records `textureAudit=true` and `timingComparable=false`; use it
+to identify coexisting textures, not as a latency control. Timing comparisons
+must leave this whitelist unset. The focused Godot test covers existing shared
+textures, repeated paths, absent resources and refusal of non-effect paths.
+This tooling does not yet change sharing, eviction or prefetch. A real rendered
+audit must be collected before claiming resident-memory savings.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat

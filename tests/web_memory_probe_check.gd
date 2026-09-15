@@ -24,6 +24,14 @@ func _run() -> void:
 	diagnostic_root.add_child(Button.new())
 	var counts: Dictionary = get_root().get_node("WebMemoryProbe").diagnostic_scene_node_types(diagnostic_root)
 	passed = passed and counts == {"Node": 1, "Button": 2}
+	var probe := get_root().get_node("WebMemoryProbe")
+	var path := "res://assets/battles/animations/probe/sheet.png"
+	var missing := "res://assets/battles/animations/probe/not-loaded.png"
+	sheet.take_over_path(path)
+	var audit: Dictionary = probe.diagnostic_cached_effect_textures([path, path, missing, "res://private/session", 123])
+	passed = passed and audit.uniqueTextures == 1 and audit.estimatedRGBABytes == 64 * 32 * 4
+	passed = passed and audit.paths == [{"path": path, "width": 64, "height": 32}]
+	passed = passed and not ResourceLoader.has_cached(missing)
 	diagnostic_root.free()
 	service.free()
 	print("web_memory_probe_check: %s" % ("PASS" if passed else "FAIL"))
