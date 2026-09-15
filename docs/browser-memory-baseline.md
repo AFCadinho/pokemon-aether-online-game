@@ -525,6 +525,63 @@ live non-effect texture residency rather than assuming the remaining packed
 effect duplicates offer large RAM savings. Any packed-source cleanup must retain
 the normal animation import workflow and is separate from this sharing change.
 
+### Non-effect residency investigation
+
+Diagnostic source `4142a97ecc0aa811f05c3f06ed9ae43ce33b038c` adds a separate
+`window.pokeaetherMemoryWorldTexturePaths` whitelist. Samples include
+`cachedWorldTextures` only when that list is provided. The probe reads cached
+Texture2D references and dimensions, deduplicates RIDs and returns public asset
+paths only; it does not load missing assets, read back GPU images or retain the
+texture references. Allowed directories cover UI, tilesets, backgrounds, battle
+capture/mechanics/effects/buttons and generated portable map textures. Private
+paths, traversal, non-strings and duplicates are ignored; inspection is capped at
+256 inputs. The existing effect whitelist and field remain separate and compatible.
+
+The opt-in login and real-battle drivers now select the 96 largest eligible
+non-effect CTEX source paths plus up to 160 core portable map resource paths
+(246 paths for this pack). This is a bounded selection, not an exhaustive live
+texture inventory. In particular, separately downloaded map modules and small UI
+assets outside the selection are not covered. Portable texture dimensions are
+read from cached resources at runtime rather than guessed from packed byte sizes.
+Both drivers flag audited reports as unsuitable for latency comparison.
+
+Native `web_non_effect_texture_residency.gd` holds actual PackedScene dependencies
+without instantiating gameplay, authenticating or making account/backend writes.
+Its targeted 26-path review found both login logo textures (19.461 MiB estimated
+base RGBA) while holding the login scene, and neither after releasing that resource
+and waiting two frames. Loading world plus Pallet dependencies cached seven selected
+textures (44.583 MiB estimate): the tera icon, five battle-platform textures and
+the battle spikes icon. Moon and the largest legacy tilesets were absent from
+this selected cache inspection. This is native dependency evidence, not proof
+of release timing or allocation in an actual logged-in browser.
+
+Rendered browser login-only inspection uses the clean diagnostic export above,
+Godot 4.6.2 and PCK SHA-256
+`3f4dfd9e8a48036cee28044c9ad23b655313efd923b1b7617790490f3ce51432`.
+The expanded-list run recorded 13 samples, with the two logos and the 800 × 480
+battle background present in the selected list at idle: 20.926 MiB base-RGBA
+estimate, versus 54.690 MiB on the overall engine texture counter. Moon was not
+cached. Sprite cache entries/pending work and orphan nodes were all zero. The
+earlier 128-CTEX-only exploratory list also included the small trade SVG; its
+absence from the later report reflects the changed selection, not eviction.
+Raw reports remain ignored in this slot's `builds/web-memory-baseline/` as
+`login-ui-audit-128.json` and `login-idle.json`.
+
+These login runs use mocked health/news responses and blocked non-local requests;
+they do not authenticate, play a world or claim a healthy real backend. They
+needed no backend interruption. The source/native investigation suggests login
+textures are naturally releasable and prepared battle platforms are expected
+world dependencies; neither is justification to reduce sprite prefetch or
+downscale artwork. No memory-saving gameplay change was made in this phase.
+A separately approved disposable real-world/battle audit is required to confirm
+actual world cache residency before selecting a concrete optimization.
+
+Focused cache-probe and JS bridge checks pass, including the native-disabled
+probe, 96-entry sprite limit, unique-sheet counting, missing assets staying
+uncached, private/traversal filtering and the 256-input bound. Both driver syntax
+checks and the rendered login audit pass. Native scene UID fallback and editor
+Unown case-duplicate warnings remain visible. No full paired gate was run.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat

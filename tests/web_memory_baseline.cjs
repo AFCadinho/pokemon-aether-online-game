@@ -15,7 +15,9 @@ const {execFileSync}=require('node:child_process');
     const prefixes=['assets/ui/','assets/tilesets/','assets/background/','assets/battles/capture/',
       'assets/battles/mechanics/','assets/battles/effect/','assets/sprites/battle_buttons/'];
     const paths=[...new Set(inventory.textures.filter(x=>prefixes.some(prefix=>x.source.startsWith(prefix)))
-      .map(x=>'res://'+x.source))].slice(0,128);
+      .map(x=>'res://'+x.source))].slice(0,96)
+      .concat(inventory.portableMapResources.slice(0,160).map(x=>'res://'+x.source));
+    assert(paths.length<=256,'Bounded world texture audit');
     await page.addInitScript(paths=>{window.pokeaetherMemoryWorldTexturePaths=paths;},paths);
   }
   const system=await browser.newBrowserCDPSession();
