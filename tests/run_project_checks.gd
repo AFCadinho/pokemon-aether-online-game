@@ -294,6 +294,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokedex_sprite_scale_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/tmx_atlas_compactor_check.gd",
+	"res://tests/pallet_interiors_compact_check.gd",
 	"res://tests/generated_map_atlas_layout_check.gd",
 	"res://tests/generated_map_texture_storage_check.gd",
 	"res://tests/viridian_visual_jail_check.gd",

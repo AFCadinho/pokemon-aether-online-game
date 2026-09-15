@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your house and Oak's lab use smaller lossless map atlases in both browser and desktop, with their artwork unchanged.
+
 - Newly imported maps use compact lossless atlases while preserving their artwork in the browser and desktop client.
 
 - The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
