@@ -2493,7 +2493,7 @@ z_as_relative = false
 position = Vector2(800, 672)
 
 [node name="ToPlayersHouse" type="Area2D" parent="Exits" unique_id=2054942535]
-position = Vector2(656, 496)
+position = Vector2(656, 528)
 script = ExtResource("14_voysl")
 target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
 target_spawn_name = "FromPalletTown"
@@ -2503,7 +2503,7 @@ shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="DoorTransitionHint" parent="Exits/ToPlayersHouse" unique_id=228985460 instance=ExtResource("24_door_hint")]
 z_as_relative = false
-position = Vector2(0, 32)
+position = Vector2(0, 0)
 
 [node name="ToRivalsHouse" type="Area2D" parent="Exits" unique_id=858244795]
 position = Vector2(1136, 368)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
+
 - Pallet Town uses a smaller lossless map atlas while keeping its tiles and gameplay unchanged.
 
 - Battle effects reuse an identical background texture without changing visuals or preloading.
