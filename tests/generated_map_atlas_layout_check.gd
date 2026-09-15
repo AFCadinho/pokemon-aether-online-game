@@ -13,6 +13,10 @@ func _init() -> void:
 		push_error("Invalid explicit legacy atlas baseline.")
 		quit(1)
 		return
+	if not baseline.legacyTileSets.is_empty() or not baseline.legacyScenes.is_empty():
+		push_error("All legacy atlases have been migrated; new grandfathered exceptions are forbidden.")
+		quit(1)
+		return
 	_scan(ROOT, baseline.legacyTileSets, baseline.legacyScenes)
 	if checked + legacy == 0:
 		failures.append("No generated atlas TileSets found.")

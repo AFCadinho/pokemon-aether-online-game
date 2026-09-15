@@ -22,6 +22,12 @@ func _init() -> void:
 		valid = preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new().validate(node, scratch.path_join("test.visual.tileset.tres")).is_empty()
 		node.free()
 	_cleanup(scratch, scratch)
+	var wrapper_id := "missing_dependency_wrapper_%d" % OS.get_process_id()
+	var wrapper_dir := "res://generated/tiled_visuals/" + wrapper_id
+	assert(not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(wrapper_dir)))
+	var wrapper_code := OS.execute(OS.get_executable_path(), ["--headless", "--path", ProjectSettings.globalize_path("res://"), "--script", "res://addons/pokeaether_tiled_importer/import_pokeaether_tmx_cli.gd", "--", path, wrapper_id, "res://tests/fixtures/tiled/missing_tileset_paths.json"], output, true)
+	valid = valid and wrapper_code == 0 and FileAccess.file_exists(wrapper_dir.path_join(wrapper_id + ".visual.tscn"))
+	_cleanup(wrapper_dir, wrapper_dir)
 	if not valid:
 		push_error("CLI explicit dependency repair failed: " + str(output))
 		quit(1)
