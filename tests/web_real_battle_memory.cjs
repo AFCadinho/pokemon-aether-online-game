@@ -16,6 +16,17 @@ const {execFileSync}=require('node:child_process');
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   const textureAudit=process.env.POKEAETHER_MEMORY_TEXTURE_AUDIT==='1';
+  const worldTextureAudit=process.env.POKEAETHER_MEMORY_WORLD_TEXTURE_AUDIT==='1';
+  if(worldTextureAudit) {
+    const inventory=JSON.parse(execFileSync('python3',[path.resolve(__dirname,'../tools/audit_web_texture_memory.py')],{maxBuffer:16*1024*1024}));
+    const prefixes=['assets/ui/','assets/tilesets/','assets/background/','assets/battles/capture/',
+      'assets/battles/mechanics/','assets/battles/effect/','assets/sprites/battle_buttons/'];
+    const paths=[...new Set(inventory.textures.filter(x=>prefixes.some(prefix=>x.source.startsWith(prefix)))
+      .map(x=>'res://'+x.source))].slice(0,96)
+      .concat(inventory.portableMapResources.slice(0,160).map(x=>'res://'+x.source));
+    assert(paths.length<=256,'Bounded world texture audit');
+    await context.addInitScript(paths=>{window.pokeaetherMemoryWorldTexturePaths=paths;},paths);
+  }
   if(textureAudit) {
     const inventory=JSON.parse(execFileSync('python3',[path.resolve(__dirname,'../tools/audit_web_texture_memory.py')],{maxBuffer:16*1024*1024}));
     const paths=inventory.identicalBattleEffectPayloads.flatMap(group=>group.sources.map(source=>'res://'+source));
@@ -88,13 +99,15 @@ const {execFileSync}=require('node:child_process');
         assert.equal(errors.length,0,'No page errors');
         if(textureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
           x.cachedEffectTextures?.uniqueTextures>0),'Rendered cached-effect audit captured');
+        if(worldTextureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
+          x.cachedWorldTextures?.uniqueTextures>0),'Rendered world texture audit captured');
         success=true; break;
       }
       await snapshot(command.label || 'canvas_step');
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,textureAudit,timingComparable:!textureAudit,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,textureAudit,worldTextureAudit,timingComparable:!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();

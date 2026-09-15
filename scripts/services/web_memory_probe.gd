@@ -35,9 +35,21 @@ func mark(label: String) -> void:
 	var audit_paths = JSON.parse_string(str(audit_json))
 	if audit_paths is Array:
 		sample["cachedEffectTextures"] = diagnostic_cached_effect_textures(audit_paths)
+	var world_audit_json = JavaScriptBridge.eval("JSON.stringify(window.pokeaetherMemoryWorldTexturePaths || null)", true)
+	var world_audit_paths = JSON.parse_string(str(world_audit_json))
+	if world_audit_paths is Array:
+		sample["cachedWorldTextures"] = diagnostic_cached_world_textures(world_audit_paths)
 	JavaScriptBridge.eval("window.pokeaetherMemoryProbe.record(%s)" % JSON.stringify(sample), true)
 
 func diagnostic_cached_effect_textures(paths: Array) -> Dictionary:
+	return _diagnostic_cached_textures(paths, ["res://assets/battles/animations/"])
+
+func diagnostic_cached_world_textures(paths: Array) -> Dictionary:
+	return _diagnostic_cached_textures(paths, ["res://assets/ui/", "res://assets/tilesets/",
+		"res://assets/background/", "res://assets/battles/capture/", "res://assets/battles/mechanics/",
+		"res://assets/battles/effect/", "res://assets/sprites/battle_buttons/", "res://generated/tiled_visuals/"])
+
+func _diagnostic_cached_textures(paths: Array, prefixes: Array) -> Dictionary:
 	var rows: Array[Dictionary] = []
 	var seen_paths := {}
 	var seen_textures := {}
@@ -46,7 +58,12 @@ func diagnostic_cached_effect_textures(paths: Array) -> Dictionary:
 		if not value is String:
 			continue
 		var path: String = value
-		if not path.begins_with("res://assets/battles/animations/") or path.contains("..") or seen_paths.has(path):
+		var allowed := false
+		for prefix: String in prefixes:
+			if path.begins_with(prefix):
+				allowed = true
+				break
+		if not allowed or path.contains("..") or seen_paths.has(path):
 			continue
 		seen_paths[path] = true
 		var texture := ResourceLoader.get_cached_ref(path) as Texture2D
