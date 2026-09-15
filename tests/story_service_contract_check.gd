@@ -231,6 +231,13 @@ func _verify_integration_contract() -> void:
 		"first-gym side-quest services select browser-authorized endpoints in web exports"
 	)
 	_expect(
+		inventory.contains('const WEB_WORLD_PICKUPS_ENDPOINT := "/auth/web/world-pickups"')
+		and inventory.contains('const WEB_WORLD_PICKUP_CLAIM_ENDPOINT := "/auth/web/world-pickups/%s/claim"')
+		and inventory.contains("WEB_WORLD_PICKUPS_ENDPOINT if OS.has_feature(\"web\") else WORLD_PICKUPS_ENDPOINT")
+		and inventory.contains("WEB_WORLD_PICKUP_CLAIM_ENDPOINT if OS.has_feature(\"web\") else WORLD_PICKUP_CLAIM_ENDPOINT"),
+		"browser pickup collection and claims both use authorized web endpoints"
+	)
+	_expect(
 		inventory.contains('if bool(body.get("caught", false))')
 		and inventory.contains("PlayerGameStateService.refresh_story()")
 		and inventory.contains('"storyRefreshSuccess": story_refresh_success'),

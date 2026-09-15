@@ -15,6 +15,8 @@ const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
 const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"
 const WORLD_PICKUPS_ENDPOINT := "/game/world-pickups"
 const WORLD_PICKUP_CLAIM_ENDPOINT := "/game/world-pickups/%s/claim"
+const WEB_WORLD_PICKUPS_ENDPOINT := "/auth/web/world-pickups"
+const WEB_WORLD_PICKUP_CLAIM_ENDPOINT := "/auth/web/world-pickups/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
@@ -356,7 +358,7 @@ func load_collected_world_pickups(force_refresh := false) -> Dictionary:
 	world_pickup_request_active = true
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + WORLD_PICKUPS_ENDPOINT,
+		base_url + (WEB_WORLD_PICKUPS_ENDPOINT if OS.has_feature("web") else WORLD_PICKUPS_ENDPOINT),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -399,7 +401,7 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + WORLD_PICKUP_CLAIM_ENDPOINT % normalized_pickup_id.uri_encode(),
+		base_url + (WEB_WORLD_PICKUP_CLAIM_ENDPOINT if OS.has_feature("web") else WORLD_PICKUP_CLAIM_ENDPOINT) % normalized_pickup_id.uri_encode(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		""

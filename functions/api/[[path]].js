@@ -23,6 +23,7 @@ const HTTP_ROUTES = new Set([
   'POST /auth/web/wallet/rewards/wild-battle', 'POST /auth/web/wallet/rewards/trainer-battle',
   'POST /auth/web/mail',
   'POST /auth/web/respawn',
+  'GET /auth/web/world-pickups',
   'GET /auth/web/skills',
   'GET /auth/web/fishing/progression', 'PUT /auth/web/fishing/selection',
   'GET /auth/web/ev-training/session', 'POST /auth/web/ev-training/session',
@@ -66,6 +67,7 @@ const HTTP_PREFIXES = [
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle']);
 const GAMEPLAY_ROUTES = [
+  ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
   ['GET', /^\/auth\/web\/boxes\/\d+$/], ['PATCH', /^\/auth\/web\/boxes\/\d+$/],
   ['DELETE', /^\/auth\/web\/(?:pokemon|party)\/\d+$/],
   ['POST', /^\/auth\/web\/pokemon\/\d+\/(?:nickname|held-item|evolution|evs\/allocate|items\/use|moves\/(?:learn|delete|reorder))$/],
