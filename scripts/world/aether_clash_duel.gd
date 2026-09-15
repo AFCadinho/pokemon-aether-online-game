@@ -9,6 +9,7 @@ const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
 const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
+const BOT_ACTOR_SCRIPT := preload("res://scripts/world/aether_clash_bot_actor.gd")
 const BATTLE_INDICATOR_SCENE: PackedScene = preload("res://scenes/world/aether_clash_battle_indicator.tscn")
 const CAMERA_POLICY: Script = preload("res://scripts/services/aether_clash_camera_policy.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
@@ -42,6 +43,7 @@ var arena_state_timer: Timer
 var viewer_role := "spectator"
 var viewer_side := ""
 var arena_players: Dictionary = {}
+var bot_actors: Dictionary = {}
 var identified_enemy_user_ids: Dictionary = {}
 var visible_identity_user_ids: Dictionary = {}
 var engaged_player_ids: Dictionary = {}
@@ -140,6 +142,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	instance_session_id = session_id
 	_ensure_arena_framing()
 	arena_session.clear()
+	_clear_bot_actors()
 	arena_players.clear()
 	identified_enemy_user_ids.clear()
 	visible_identity_user_ids.clear()
@@ -295,10 +298,11 @@ func _refresh_arena_state() -> void:
 	if arena_state_request_active or instance_session_id.is_empty():
 		return
 	arena_state_request_active = true
+	var requested_session_id := instance_session_id
 	var guild_service := get_node_or_null("/root/GuildService")
 	var result: Dictionary = await guild_service.call("load_aether_clash_arena_state", instance_session_id) if guild_service != null else {}
 	arena_state_request_active = false
-	if instance_session_id.is_empty():
+	if instance_session_id.is_empty() or instance_session_id != requested_session_id:
 		return
 	if not bool(result.get("success", false)):
 		var error_code := _response_error_code(result)
@@ -383,6 +387,7 @@ func _apply_arena_state(payload: Dictionary) -> void:
 
 
 func _apply_arena_players(value: Variant) -> void:
+	_sync_bot_actors(value)
 	arena_players.clear()
 	engaged_player_ids.clear()
 	engaged_player_room_codes.clear()
@@ -419,6 +424,48 @@ func _apply_arena_players(value: Variant) -> void:
 					}
 	if not resumable_engagement.is_empty():
 		_begin_engagement_battle.call_deferred(resumable_engagement)
+
+
+func _sync_bot_actors(value: Variant) -> void:
+	var retained := {}
+	if value is Array and str(arena_session.get("status", "")) in ["entry_open", "roster_locked", "active", "finishing"]:
+		for item: Variant in value:
+			if not item is Dictionary or not item.get("bot") is Dictionary:
+				continue
+			var state := item as Dictionary
+			var bot := state["bot"] as Dictionary
+			var user_id := int(state.get("userId", 0))
+			var key := str(bot.get("actorKey", ""))
+			if user_id <= 0 or str(state.get("side", "")) != "red" or not key.begins_with("clash-bot:%s:" % instance_session_id):
+				continue
+			if str(bot.get("spriteId", "")) != "trainer_class_ace_trainer_m" or not bot.has("x") or not bot.has("y"):
+				continue
+			var position := Vector2(float(bot["x"]), float(bot["y"]))
+			if not position.is_finite():
+				continue
+			var actor: Node2D = bot_actors.get(user_id)
+			if actor == null:
+				actor = BOT_ACTOR_SCRIPT.new()
+				actor.name = "ClashBot_%d" % user_id
+				# Share the map's entity layer without joining player groups.
+				get_node("Entities").add_child(actor)
+				bot_actors[user_id] = actor
+			actor.call("apply_state", state)
+			retained[user_id] = true
+	for user_id: Variant in bot_actors.keys():
+		if not retained.has(user_id):
+			var actor := bot_actors[user_id] as Node2D
+			actor.get_parent().remove_child(actor)
+			actor.queue_free()
+			bot_actors.erase(user_id)
+
+
+func _clear_bot_actors() -> void:
+	for actor: Node2D in bot_actors.values():
+		if is_instance_valid(actor):
+			actor.get_parent().remove_child(actor)
+			actor.queue_free()
+	bot_actors.clear()
 
 
 func _user_id_set(value: Variant) -> Dictionary:
@@ -544,6 +591,9 @@ func _clear_identity_nameplate_overrides() -> void:
 
 func _all_player_actors() -> Array[Node2D]:
 	var actors: Array[Node2D] = []
+	for actor: Node2D in bot_actors.values():
+		if is_instance_valid(actor):
+			actors.append(actor)
 	for node: Node in get_tree().get_nodes_in_group("player"):
 		if node is Node2D:
 			actors.append(node as Node2D)
@@ -556,6 +606,8 @@ func _all_player_actors() -> Array[Node2D]:
 func _actor_for_user_id(user_id: int) -> Node2D:
 	if user_id <= 0:
 		return null
+	if bot_actors.has(user_id):
+		return bot_actors[user_id] as Node2D
 	if user_id == _local_user_id():
 		for node: Node in get_tree().get_nodes_in_group("player"):
 			if node is Node2D:
@@ -1222,7 +1274,7 @@ func _on_engagement_contact_requested(
 		"targetUserId": target_user_id,
 		"method": method,
 	})
-	var guild_service := get_node_or_null("/root/GuildService")
+	var guild_service := _engagement_service()
 	# Authoritative engagement operation: GuildService.create_aether_clash_engagement(
 	# instance_session_id, target_user_id, method).
 	var result: Dictionary = await guild_service.call("create_aether_clash_engagement", instance_session_id, target_user_id, method) if guild_service != null else {}
@@ -1251,6 +1303,10 @@ func _on_engagement_contact_requested(
 			_show_system_message(str(result.get("error", "The Aether Clash battle could not start.")))
 		return
 	await _begin_engagement_battle(result)
+
+
+func _engagement_service() -> Node:
+	return get_node_or_null("/root/GuildService")
 
 
 func _on_realtime_message_received(message: Dictionary) -> void:

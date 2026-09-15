@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/z_crystal_vendor_npc.tscn" id="9_z_crystal_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/mega_stone_vendor_npc.tscn" id="10_mega_stone_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_guide_npc.tscn" id="11_clash_guide"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_bot_captain_npc.tscn" id="12_bot_captain"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="13_o6lnf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
@@ -270,6 +271,10 @@ position = Vector2(1456, 944)
 [node name="ClashCoordinator" parent="Entities/NPCs" unique_id=1283508874 instance=ExtResource("11_clash_guide")]
 position = Vector2(784, 1360)
 npc_id = "aether_clash_lobby_clash_coordinator"
+
+[node name="ClashTrainingCaptain" parent="Entities/NPCs" instance=ExtResource("12_bot_captain")]
+position = Vector2(1168, 1360)
+npc_id = "aether_clash_lobby_training_captain"
 
 [node name="HealNPC" parent="Entities/NPCs" unique_id=581918462 instance=ExtResource("8_dpboj")]
 position = Vector2(880, 976)
