@@ -81,6 +81,40 @@
     </form>
   </dialog>
   <!-- POKEAETHER_RELEASE_CONFIG -->
+  <script id="pokeaether-memory-probe">
+    (() => {
+      if (!new URLSearchParams(location.search).has('memory-probe')) return;
+      const memories = new Set();
+      const remember = value => {
+        const exports = (value?.instance || value)?.exports || {};
+        for (const entry of Object.values(exports)) {
+          if (entry instanceof WebAssembly.Memory) memories.add(entry);
+        }
+      };
+      for (const method of ['instantiate', 'instantiateStreaming']) {
+        const original = WebAssembly[method];
+        if (!original) continue;
+        WebAssembly[method] = function(...args) {
+          for (const namespace of Object.values(args[1] || {})) {
+            for (const entry of Object.values(namespace || {})) {
+              if (entry instanceof WebAssembly.Memory) memories.add(entry);
+            }
+          }
+          return original.apply(this, args).then(result => { remember(result); return result; });
+        };
+      }
+      const samples = [];
+      window.pokeaetherMemoryProbe = {
+        samples,
+        record(sample) {
+          samples.push({...sample, browserTimeMs:performance.now(),
+            wasmCapacityBytes:memories.size ? [...memories].reduce((sum,m)=>sum+m.buffer.byteLength,0) : null,
+            jsHeapUsedBytes:performance.memory?.usedJSHeapSize ?? null});
+          if (samples.length > 240) samples.shift();
+        },
+      };
+    })();
+  </script>
   <script id="pokeaether-fullscreen">
     (() => {
       const canvas = document.getElementById('canvas');

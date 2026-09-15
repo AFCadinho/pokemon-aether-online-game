@@ -3512,6 +3512,7 @@ func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> 
 
 
 func _mount_battle_ui() -> bool:
+	WebMemoryProbe.mark("battle_ui_mount_begin")
 	if BATTLE_SCENE == null or battle_ui_host == null:
 		return false
 
@@ -3567,6 +3568,7 @@ func _clear_battle_ui_instance() -> void:
 		battle_ui_host.visible = false
 
 func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
+	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return
 		
@@ -3614,6 +3616,7 @@ func start_triggered_wild_battle_for_area(
 	forced_species_id: String = "",
 	retry_after_expired_battle := true
 ) -> void:
+	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return
 	if coop_wild_step_pending:
@@ -3781,6 +3784,7 @@ func _show_wild_encounter_start_error(response: Dictionary) -> void:
 				await GameErrorDialogService.show_response(response)
 
 func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
+	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return {
 			"success": false,
@@ -3936,6 +3940,7 @@ func _training_ai_battle_display_name(response: Dictionary) -> String:
 
 
 func start_training_ai_battle_from_response(response: Dictionary) -> bool:
+	WebMemoryProbe.mark("battle_response_received")
 	if is_in_battle or wild_battle_resume_pending or not bool(response.get("success", false)):
 		return false
 	var own_team_value: Variant = response.get("ownTeam", [])
@@ -4092,6 +4097,7 @@ func _forfeit_current_non_pvp_battle_for_pvp_match() -> void:
 		)
 	
 func end_wild_battle(keep_overworld_locked := false) -> void:
+	WebMemoryProbe.mark("battle_teardown_begin")
 	if battle_instance != null and battle_instance.has_signal("battle_ended"):
 		var ended_callback := Callable(self, "_on_battle_ended")
 		if battle_instance.is_connected("battle_ended", ended_callback):

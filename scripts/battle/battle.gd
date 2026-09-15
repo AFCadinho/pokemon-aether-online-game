@@ -4089,11 +4089,14 @@ func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> voi
 	pvp_presentation_schedule_token = ""
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
+	var was_ready := battle_actions_ready
 	if replay_mode:
 		is_ready = false
 	if _is_spectator_battle():
 		is_ready = false
 	battle_actions_ready = is_ready
+	if is_ready and not was_ready:
+		WebMemoryProbe.mark("battle_actions_ready")
 	_sync_party_rail_interaction()
 	_update_mechanic_button_states()
 	if battle_actions_ready:
