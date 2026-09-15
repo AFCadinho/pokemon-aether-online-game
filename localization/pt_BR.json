@@ -1101,6 +1101,8 @@
   "ui.settings.fullscreen": "Tela cheia",
   "ui.settings.window_resolution": "Resolução da janela",
   "ui.settings.world_pixel_scale": "Zoom externo",
+  "ui.settings.world_pixel_scale_browser": "Visão automática do navegador",
+  "ui.settings.world_pixel_scale_browser_hint": "O navegador mantém uma visão consistente ao redimensionar a janela. Janelas mais largas ou altas mostram mais arredores. O zoom do cliente desktop é preservado.",
   "ui.settings.world_pixel_scale_auto": "Automático — Ajustar à janela",
   "ui.settings.world_pixel_scale_overview": "1× — Visão ampla",
   "ui.settings.world_pixel_scale_balanced": "1.5× — Equilibrado",

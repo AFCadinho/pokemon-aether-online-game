@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser world zoom now adapts to the window size with a consistent view on laptop, Full HD and 4K screens, without letterboxing. Desktop zoom settings are unchanged.
+
 - Co-op testing: either Trainer can leave a wild battle for both using Run, without a partner confirmation. Trainer battles cannot be fled. Wild co-op remains disabled pending catching and release acceptance.
 
 - Co-op testing now sends grass steps to the server and enters the shared battle screen when an encounter starts. Partners no longer enter separate solo wild battles; wild co-op remains disabled pending catching and fleeing support.

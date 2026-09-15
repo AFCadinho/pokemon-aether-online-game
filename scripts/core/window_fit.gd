@@ -6,6 +6,8 @@ const WINDOWED_SAFE_MARGIN := Vector2i(80, 128)
 
 func _ready() -> void:
 	if OS.has_feature("web"):
+		# Fill the browser canvas while retaining a uniform UI/world transform.
+		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 		return
 
 	call_deferred("_fit_window_to_screen")

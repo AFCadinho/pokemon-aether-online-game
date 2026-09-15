@@ -1088,6 +1088,8 @@
   "ui.settings.fullscreen": "Fullscreen",
   "ui.settings.window_resolution": "Window Resolution",
   "ui.settings.world_pixel_scale": "Outdoor Zoom",
+  "ui.settings.world_pixel_scale_browser": "Automatic browser view",
+  "ui.settings.world_pixel_scale_browser_hint": "The browser keeps a consistent world view as the window resizes. Wider or taller windows show extra surroundings. Desktop zoom settings are preserved.",
   "ui.settings.world_pixel_scale_auto": "Auto — Fit to Window",
   "ui.settings.world_pixel_scale_overview": "1× — Overview",
   "ui.settings.world_pixel_scale_balanced": "1.5× — Balanced",

@@ -1101,6 +1101,8 @@
   "ui.settings.fullscreen": "全屏",
   "ui.settings.window_resolution": "窗口分辨率",
   "ui.settings.world_pixel_scale": "户外变焦",
+  "ui.settings.world_pixel_scale_browser": "浏览器自动视野",
+  "ui.settings.world_pixel_scale_browser_hint": "浏览器会在窗口大小变化时保持一致的基础视野。更宽或更高的窗口会显示更多周围区域。桌面客户端的缩放设置保持不变。",
   "ui.settings.world_pixel_scale_auto": "自动 — 适应窗口",
   "ui.settings.world_pixel_scale_overview": "1× — 概述",
   "ui.settings.world_pixel_scale_balanced": "1.5× — 平衡",

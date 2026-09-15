@@ -206,7 +206,7 @@ func open(context: String = "game") -> void:
 
 func _process(_delta: float) -> void:
 	if visible and world_pixel_scale_options_button != null:
-		if world_pixel_scale_options_button.disabled != ArenaCameraPolicy.is_locked(get_tree()):
+		if world_pixel_scale_options_button.disabled != (OS.has_feature("web") or ArenaCameraPolicy.is_locked(get_tree())):
 			_apply_world_pixel_scale_options_to_control()
 
 
@@ -1941,7 +1941,7 @@ func _on_resolution_selected(index: int) -> void:
 
 
 func _on_world_pixel_scale_selected(index: int) -> void:
-	if loading_controls or ArenaCameraPolicy.is_locked(get_tree()):
+	if loading_controls or OS.has_feature("web") or ArenaCameraPolicy.is_locked(get_tree()):
 		return
 
 	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
@@ -2841,6 +2841,12 @@ func _apply_world_pixel_scale_options_to_control() -> void:
 	loading_controls = true
 	world_pixel_scale_options_button.clear()
 	var arena_locked := ArenaCameraPolicy.is_locked(get_tree())
+	if OS.has_feature("web") and not arena_locked:
+		world_pixel_scale_options_button.disabled = true
+		world_pixel_scale_options_button.add_item(LocalizationManager.text("ui.settings.world_pixel_scale_browser"))
+		_set_localized_text(world_pixel_scale_hint_label, "ui.settings.world_pixel_scale_browser_hint")
+		loading_controls = was_loading_controls
+		return
 	world_pixel_scale_options_button.disabled = arena_locked
 	_set_localized_text(world_pixel_scale_hint_label,
 		"ui.settings.world_pixel_scale_arena_hint" if arena_locked else "ui.settings.world_pixel_scale_hint")
