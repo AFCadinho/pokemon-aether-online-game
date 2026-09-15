@@ -32,6 +32,39 @@ var active_animation_nodes: Array[Node] = []
 var active_actor_restore: Callable
 var playback_speed := 1.0
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		# RefCounted is already at zero here; invoking another instance method
+		# would attempt to retain an invalid self. Collect directly instead.
+		for path: String in threaded_resource_requests.keys():
+			if ResourceLoader.load_threaded_get_status(path) != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				ResourceLoader.load_threaded_get(path)
+		threaded_resource_requests.clear()
+
+
+func poll_threaded_resource_requests() -> void:
+	_collect_threaded_resource_requests(false)
+
+
+func release_threaded_resource_requests() -> void:
+	_collect_threaded_resource_requests(true)
+
+
+func _collect_threaded_resource_requests(wait_for_completion: bool) -> void:
+	# Every successful threaded request owns a user token, even when its
+	# animation is never played. Status polling alone does not release it.
+	for path: String in threaded_resource_requests.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS and not wait_for_completion:
+			continue
+		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			# On the frame hot path this only collects terminal loads. Teardown
+			# also completes outstanding local loads before dropping ownership.
+			var resource := ResourceLoader.load_threaded_get(path)
+			if resource != null:
+				resource_cache[path] = resource
+		threaded_resource_requests.erase(path)
+
 
 func cancel_render() -> void:
 	render_generation += 1
@@ -341,6 +374,7 @@ func has_effect_animation(effect_key: String) -> bool:
 
 
 func clear_move_animation_cache() -> void:
+	release_threaded_resource_requests()
 	move_animation_configs.clear()
 	loaded_move_animation_configs.clear()
 	effect_animation_configs.clear()
@@ -891,7 +925,11 @@ func _get_cached_resource(resource_path: String) -> Resource:
 				resource_cache[resource_path] = resource
 			threaded_resource_requests.erase(resource_path)
 			return resource
-		ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		ResourceLoader.THREAD_LOAD_FAILED:
+			# Failed requests still own a token until their result is collected.
+			ResourceLoader.load_threaded_get(resource_path)
+			threaded_resource_requests.erase(resource_path)
+		ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			threaded_resource_requests.erase(resource_path)
 
 	return null

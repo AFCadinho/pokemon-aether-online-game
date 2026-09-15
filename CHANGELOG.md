@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
+
 - Improved resource cleanup when closing the game and during battle-preview transitions.
 
 - Corrected missing tiles in the browser's Misty-region interiors by rebuilding their lossless texture atlases with browser-safe dimensions. Browser login no longer starts the placeholder house's NPCs while downloading your saved map.
