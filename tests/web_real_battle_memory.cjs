@@ -84,6 +84,8 @@ const {execFileSync}=require('node:child_process');
         assert(battleTurns>=1,'At least one real resolved turn');
         assert(markers.filter(x=>x.label==='battle_teardown_begin').length>=3,'Three teardowns');
         assert.equal(errors.length,0,'No page errors');
+        if(textureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
+          x.cachedEffectTextures?.uniqueTextures>0),'Rendered cached-effect audit captured');
         success=true; break;
       }
       await snapshot(command.label || 'canvas_step');
