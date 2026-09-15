@@ -487,6 +487,44 @@ sheet-identity tests, the distinct/shared native Grass prewarm checks and the
 threaded-resource shutdown regression pass. No full development gate, promotion,
 push, production operation or release is implied.
 
+### Remaining duplicate-effect review
+
+After Grass sharing, the current clean candidate PCK still contains 43 identical
+imported-payload groups (159 texture paths). Comparing those groups with current
+move/effect `sheet_path`, `background_path` and `foreground_path` references shows
+that the large Electric, Strike, Fire, Grass, Slash, Water, Ice, Status, Rock,
+Sound and other groups already each use a single catalogue texture path. Their
+packed duplicate files are not evidence of additional live texture allocation.
+Removing all duplicate imported payloads would only save approximately 1.99 MiB
+of packed bytes in this export, before considering source/import dependencies.
+No original files or importer metadata were removed and no export exclusions
+were introduced for that limited potential gain.
+
+The one remaining group using two catalogue paths was Baby-Doll Eyes' background
+and the common black background used by several moves. Their PNG file hashes
+differ, but decoded RGBA pixels (512 × 288), import parameters and exported CTEX
+payloads are identical. Baby-Doll Eyes now uses the existing black background.
+Only that catalogue path changed; timings, frames, sound, animation flags and
+resource preparation remain unchanged for desktop and browser.
+
+`shared_black_background_check.gd --expect-distinct` passed before the change
+with two resource RIDs and 1.125 MiB base-RGBA estimate. The default candidate
+check passes with one shared prepared background and 0.5625 MiB estimate. It
+decodes the original PNG buffers rather than relying on differing container
+hashes, checks matching import parameters, prewarms the real animation router for
+Thunderbolt and Baby-Doll Eyes, compares actual background identity/dimensions,
+and verifies threaded-request cleanup. Registered in the project checks for
+future CI/full verification; only this focused check was run here. This remains
+native logical-resource evidence, not a new rendered-browser memory or latency
+measurement. It yields a saving only when both backgrounds would otherwise be
+prepared concurrently, not a guaranteed reduction in world-idle RAM.
+
+Six existing Electric/Grass identity tests and the animation-anchor regression
+also pass. No backend interruption was needed. The next useful investigation is
+live non-effect texture residency rather than assuming the remaining packed
+effect duplicates offer large RAM savings. Any packed-source cleanup must retain
+the normal animation import workflow and is separate from this sharing change.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
