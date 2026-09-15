@@ -37,6 +37,18 @@ const {execFileSync}=require('node:child_process');
   await cdp.send('Performance.enable');
   const api=[], markers=[], snapshots=[], errors=[];
   let battleStarts=0, battleTurns=0, battleEnds=0, screenshot=0;
+  let latestPosition=null;
+  const mapTransitions=[];
+  page.on('websocket',socket=>socket.on('framesent',({payload})=>{
+    if(typeof payload!=='string' || payload.length>16384) return;
+    let message; try { message=JSON.parse(payload); } catch { return; }
+    if(message.type!=='position' || !/^kanto_[a-z0-9_]+$/.test(message.mapId || '') ||
+      !Number.isFinite(message.position?.x) || !Number.isFinite(message.position?.y)) return;
+    if(latestPosition?.mapId!==message.mapId) mapTransitions.push(message.mapId);
+    // Keep only the disposable player's public map/coordinates in memory.
+    // Never retain or report appearance, roles, followers or session payloads.
+    latestPosition={mapId:message.mapId,position:{x:message.position.x,y:message.position.y}};
+  }));
   const starts=new Map();
   page.on('request',req=>{if(req.url().startsWith(origin+'/api/')) starts.set(req,Date.now());});
   page.on('response',response=>{
@@ -91,12 +103,28 @@ const {execFileSync}=require('node:child_process');
       // Canvas TextEdit consumes keyboard events, not DOM insertText input.
       if(command.text) await page.keyboard.type(command.text);
       if(command.key) await page.keyboard.press(command.key);
+      if(command.walk) {
+        const {key,axis,limit,direction,mapId}=command.walk;
+        assert(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(key));
+        assert(mapId || (['x','y'].includes(axis) && Number.isFinite(limit) && [1,-1].includes(direction)));
+        const deadline=Date.now()+20000;
+        await page.keyboard.down(key);
+        try {
+          while(!(mapId ? latestPosition?.mapId===mapId :
+            latestPosition && direction*(latestPosition.position[axis]-limit)>=0)) {
+            assert(Date.now()<deadline,'Real map walk timed out');
+            await page.waitForTimeout(50);
+          }
+        } finally { await page.keyboard.up(key); }
+      }
       if(command.wait) await page.waitForTimeout(Math.min(command.wait,30000));
       if(command.finish) {
         assert(battleStarts>=3,'At least three real dev wild battles');
         assert(battleTurns>=1,'At least one real resolved turn');
         assert(markers.filter(x=>x.label==='battle_teardown_begin').length>=3,'Three teardowns');
         assert.equal(errors.length,0,'No page errors');
+        if(command.mapCycle) assert(mapTransitions.join(',').includes(
+          'kanto_pallet_town,kanto_players_house,kanto_pallet_town'),'Real house entry and return');
         if(textureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
           x.cachedEffectTextures?.uniqueTextures>0),'Rendered cached-effect audit captured');
         if(worldTextureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
@@ -107,7 +135,7 @@ const {execFileSync}=require('node:child_process');
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,textureAudit,worldTextureAudit,timingComparable:!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,textureAudit,worldTextureAudit,timingComparable:!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();
