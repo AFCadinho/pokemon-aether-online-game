@@ -1,0 +1,13 @@
+{
+  "name": "pokeaether-update-downloads",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-15",
+  "workers_dev": false,
+  "r2_buckets": [{ "binding": "UPDATES", "bucket_name": "pokemon-aether-updates" }],
+  "routes": [
+    { "pattern": "updates.pokeaether.com/game/latest/*", "zone_name": "pokeaether.com" },
+    { "pattern": "updates.pokeaether.com/launcher/latest/*", "zone_name": "pokeaether.com" },
+    { "pattern": "updates.pokemonaetheronline.com/game/latest/*", "zone_name": "pokemonaetheronline.com" },
+    { "pattern": "updates.pokemonaetheronline.com/launcher/latest/*", "zone_name": "pokemonaetheronline.com" }
+  ]
+}

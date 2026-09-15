@@ -459,6 +459,7 @@ var stat_stages_by_ident: Dictionary = {}
 
 
 func _exit_tree() -> void:
+	animation_router.release_threaded_resource_requests()
 	if pvp_render_progress_timer != null:
 		pvp_render_progress_timer.stop()
 	# Any non-standard teardown must also invalidate outstanding renderer
@@ -1024,6 +1025,7 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
+	animation_router.poll_threaded_resource_requests()
 	var calcdex_active := current_action_panel_mode == BattleActionsPanelMode.CALC
 	if not calcdex_active and hover_state.should_poll_sprite_hover():
 		_update_sprite_hover()
@@ -4805,6 +4807,13 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 		return
 	var request := HTTPRequest.new()
 	add_child(request)
+	# Result refresh can outlive an early Continue. A battle-owned retry timer
+	# is destroyed with the scene instead of leaving a SceneTreeTimer behind.
+	var retry_timer := Timer.new()
+	retry_timer.name = "PvpResultRefreshRetryTimer"
+	retry_timer.one_shot = true
+	retry_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(retry_timer)
 	for attempt in range(15):
 		var response: Dictionary = await BattleApiClient.get_pvp_match_summary(request, normalized_match_id)
 		if bool(response.get("success", false)):
@@ -4838,10 +4847,13 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 			var reward_expected := bool(result_summary.get("rewardsReady", false))
 			if rating_found and (not reward_expected or reward_found):
 				request.queue_free()
+				retry_timer.queue_free()
 				return
 		if attempt < 14:
-			await get_tree().create_timer(0.5).timeout
+			retry_timer.start(0.5)
+			await retry_timer.timeout
 	request.queue_free()
+	retry_timer.queue_free()
 
 
 func _format_battle_point_reward_amount(amount: int) -> String:
@@ -16528,6 +16540,7 @@ func _hold_opponent_response_message() -> void:
 	if OPPONENT_RESPONSE_HOLD_SECONDS <= 0.0:
 		return
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
+
 
 func _can_switch_to_slot(slot: int) -> bool:
 	var local_state_player_id := _get_local_state_player_id()

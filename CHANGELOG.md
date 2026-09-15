@@ -4,6 +4,10 @@
 
 - Electric battle effects share an existing texture to reduce memory use without changing animation quality or battle preparation.
 
+- Latest download links now point to the current release without storing extra copies. Older desktop and browser downloads retain one previous version for rollback.
+
+- Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
+
 - Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
 
 - Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
