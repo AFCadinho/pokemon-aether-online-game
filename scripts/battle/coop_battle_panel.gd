@@ -275,6 +275,9 @@ func _update_actions() -> void:
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "run":
 			_button(_actions, "Run — both Trainers leave", func() -> void: await CoopService.submit_action(action))
+		elif action.get("type") == "wait":
+			var wait_button := _button(_actions, "Wait — skip my action", func() -> void: await CoopService.submit_action(action))
+			wait_button.tooltip_text = "Use no PP and give your partner another catch attempt. Wild Pokémon still act."
 	var moves := GridContainer.new()
 	moves.columns = 2
 	_actions.add_child(moves)

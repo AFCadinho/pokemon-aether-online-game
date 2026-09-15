@@ -37,6 +37,12 @@ func _run() -> void:
 	_expect(panel.cards.p2.info.text.contains("DEF +1"), "public stat stages remain visible")
 	_expect(panel.cards.p3.hp.value == 75 and not panel._playing, "old damage is not replayed over reconnect snapshot")
 	_expect(not panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text.begins_with("Run")), "trainer view has no Run control")
+	_expect(not panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text.begins_with("Wait")), "trainer view has no Wait control")
+	service.view.legalActions.append({"type": "wait"})
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Wait — skip my action" and button.tooltip_text.contains("Wild Pokémon still act")), "wild wait explains no protection from enemy actions")
+	service.view.legalActions.pop_back()
 	service.view.legalActions.append({"type": "run"})
 	panel._action_signature = ""
 	panel._update_actions()
