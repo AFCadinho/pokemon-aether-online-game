@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.
+
 - Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.
 
 - Overworld Poké Ball item pickups now work in the browser and stay collected after logging in again.
