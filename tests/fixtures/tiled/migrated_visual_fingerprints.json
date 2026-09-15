@@ -14,11 +14,11 @@
     "usedTiles": 96.0
   },
   "cerulean_city": {
-    "baseRGBABytes": 3244032,
-    "cells": 10151,
+    "baseRGBABytes": 3244032.0,
+    "cells": 10151.0,
     "fingerprint": "63c1a649d142327ce6a5310ed873a40b22da2884e773283e8897e77d5806fda4",
-    "layers": 6,
-    "usedTiles": 590
+    "layers": 6.0,
+    "usedTiles": 590.0
   },
   "cerulean_gym": {
     "baseRGBABytes": 755712.0,
@@ -48,12 +48,33 @@
     "layers": 4.0,
     "usedTiles": 219.0
   },
+  "mt_moon_1f": {
+    "baseRGBABytes": 1806336,
+    "cells": 12166,
+    "fingerprint": "234581c2b59bb087effd3ac63d8c7f6fb90bf84507421377f5038ae82d922c21",
+    "layers": 4,
+    "usedTiles": 341
+  },
+  "mt_moon_b1f": {
+    "baseRGBABytes": 1253376,
+    "cells": 8891,
+    "fingerprint": "42b3d9a08bbfdad4fcdbb28dfd999de9548f858b7fe84406068b1d4264646f17",
+    "layers": 4,
+    "usedTiles": 231
+  },
+  "mt_moon_b2f": {
+    "baseRGBABytes": 995328,
+    "cells": 12304,
+    "fingerprint": "a96af9306033c0eaa76079bafb877bf6b39b051e738098dbafe6ce531fdd361a",
+    "layers": 4,
+    "usedTiles": 189
+  },
   "pewter_city": {
-    "baseRGBABytes": 3907584,
-    "cells": 6862,
+    "baseRGBABytes": 3907584.0,
+    "cells": 6862.0,
     "fingerprint": "3442fb9ae5dc6252bcdce6d817bc0d22972925c52fe80640be5620fe798a09a2",
-    "layers": 6,
-    "usedTiles": 726
+    "layers": 6.0,
+    "usedTiles": 726.0
   },
   "pewter_gym": {
     "baseRGBABytes": 663552.0,
@@ -140,18 +161,18 @@
     "usedTiles": 56.0
   },
   "viridian_city": {
-    "baseRGBABytes": 2764800,
-    "cells": 9917,
+    "baseRGBABytes": 2764800.0,
+    "cells": 9917.0,
     "fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
-    "layers": 7,
-    "usedTiles": 494
+    "layers": 7.0,
+    "usedTiles": 494.0
   },
   "viridian_forest": {
-    "baseRGBABytes": 774144,
-    "cells": 13842,
+    "baseRGBABytes": 774144.0,
+    "cells": 13842.0,
     "fingerprint": "33c18d9ccf77b2914d52ffc1255c8a3757c2bfc52f51218eca2093013b5ff834",
-    "layers": 5,
-    "usedTiles": 140
+    "layers": 5.0,
+    "usedTiles": 140.0
   },
   "viridian_house_template": {
     "baseRGBABytes": 700416.0,
