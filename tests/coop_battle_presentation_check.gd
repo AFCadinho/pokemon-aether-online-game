@@ -46,8 +46,27 @@ func _run() -> void:
 	service.view.legalActions.append({"type": "run"})
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Run — both Trainers leave"), "wild escape warns that both Trainers leave without a confirmation")
+	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Run — ask your partner"), "wild escape asks the partner for consent")
 	service.view.legalActions.pop_back()
+	var normal_actions: Array = service.view.legalActions.duplicate(true)
+	service.view.exitRequest = {"type": "run", "requestedBy": "p1"}
+	service.view.legalActions = [{"type": "run"}, {"type": "reject-exit"}]
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._prompt.text.contains("Your partner wants to flee") and panel._actions.find_children("*", "Button", true, false).size() == 2, "a partner with a previously selected attack sees only consent and refusal")
+	service.view.exitRequest.type = "forfeit"
+	service.view.legalActions = [{"type": "forfeit"}, {"type": "reject-exit"}]
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._prompt.text.contains("Both Trainers will lose") and panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Agree — forfeit together"), "forfeit confirmation explains the shared loss")
+	service.view.exitRequest.requestedBy = "p3"
+	service.view.locked = true
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._prompt.text.contains("Waiting for your partner") and panel._actions.find_children("*", "Button", true, false).is_empty(), "requester cannot answer their own request")
+	service.view.exitRequest = null
+	service.view.locked = false
+	service.view.legalActions = normal_actions
 	panel._action_signature = ""
 	panel._update_actions()
 	var empty_snapshot: Dictionary = snapshot.duplicate(true)
@@ -131,6 +150,12 @@ func _run() -> void:
 	panel._action_signature = ""
 	panel._update_actions()
 	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 1, "recovered escape receipt shows escape and a single return control")
+	service.activity.outcome = "loss"
+	service.activity.escaped = false
+	service.activity.forfeited = true
+	panel._action_signature = ""
+	panel._update_actions()
+	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 1, "recovered forfeit receipt identifies shared surrender rather than a natural knockout")
 	var old_generation: int = effects.generation
 	effects.play_move({"actor": "p3", "target": "p2", "move": "Tackle"}, [], panel.cards)
 	await process_frame

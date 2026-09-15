@@ -255,6 +255,8 @@ func _update_actions() -> void:
 		_prompt.text = "Battle start cancelled." if phase == "cancelled" else str(outcomes.get(CoopService.activity.get("outcome"), "Battle finished."))
 		if phase == "finished" and CoopService.activity.get("escaped", false):
 			_prompt.text = "Both Trainers fled from the wild battle."
+		elif phase == "finished" and CoopService.activity.get("forfeited", false):
+			_prompt.text = "Both Trainers forfeited the battle."
 		_button(_actions, "Return to the world", func() -> void:
 			var world := GameState.get_world()
 			if world != null: await world.call("finish_coop_activity"))
@@ -268,13 +270,27 @@ func _update_actions() -> void:
 		_prompt.text = "Checking your choice…"
 		_button(_actions, "Check / retry my choice", func() -> void: await CoopService.retry_command())
 		return
+	var exit_request: Dictionary = CoopService.view.get("exitRequest", {}) if CoopService.view.get("exitRequest") is Dictionary else {}
+	if not exit_request.is_empty() and not CoopService.view.get("ended", false):
+		var fleeing: bool = exit_request.get("type") == "run"
+		if exit_request.get("requestedBy") == CoopService.view.get("participant"):
+			_prompt.text = "Waiting for your partner to agree to flee…" if fleeing else "Waiting for your partner to agree to forfeit…"
+		else:
+			_prompt.text = "Your partner wants to flee. Do you agree?" if fleeing else "Your partner wants to forfeit. Both Trainers will lose. Do you agree?"
+			for action: Dictionary in CoopService.view.get("legalActions", []):
+				var label := "Stay — both choose again" if action.get("type") == "reject-exit" else "Agree — flee together" if fleeing else "Agree — forfeit together"
+				_button(_actions, label, func() -> void: await CoopService.submit_action(action))
+		return
 	if _playing or CoopService.view.get("ended", false) or CoopService.view.get("locked", true):
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else "Choose a move, then its target — or switch your Pokémon."
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "run":
-			_button(_actions, "Run — both Trainers leave", func() -> void: await CoopService.submit_action(action))
+			_button(_actions, "Run — ask your partner", func() -> void: await CoopService.submit_action(action))
+		elif action.get("type") == "forfeit":
+			var forfeit_button := _button(_actions, "Forfeit — ask your partner", func() -> void: await CoopService.submit_action(action))
+			forfeit_button.tooltip_text = "Both Trainers must agree. Forfeiting counts as a loss with the normal defeat penalty."
 		elif action.get("type") == "wait":
 			var wait_button := _button(_actions, "Wait — skip my action", func() -> void: await CoopService.submit_action(action))
 			wait_button.tooltip_text = "Use no PP and give your partner another catch attempt. Wild Pokémon still act."

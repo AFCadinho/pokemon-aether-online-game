@@ -103,7 +103,8 @@ func apply_view(incoming: Dictionary) -> void:
 	if not view.is_empty() and int(incoming.get("revision", -1)) < int(view.get("revision", -1)):
 		return
 	view = incoming.duplicate(true)
-	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)):
+	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)
+		or (view.get("exitRequest") is Dictionary and not view.get("legalActions", []).has(pending_command.get("action")))):
 		pending_command = {}
 	state_changed.emit()
 
