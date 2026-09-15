@@ -9153,7 +9153,7 @@
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/babydolleyes/babydolleyes.json",
       "sheet_path": "res://assets/battles/animations/babydolleyes/PRAS- Baby Doll Eyes.png",
-      "background_path": "res://assets/battles/animations/babydolleyes/PRAS- Baby Doll Eyes BG.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Baby Doll Eyes.wav": "res://assets/battles/animations/babydolleyes/PRSFX- Baby Doll Eyes.wav"

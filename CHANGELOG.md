@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle effects reuse an identical background texture without changing visuals or preloading.
+
 - Grass battle effects reuse the prepared terrain texture, keeping animation quality and battle preloading unchanged.
 
 - Electric battle effects share an existing texture to reduce memory use without changing animation quality or battle preparation.
