@@ -11,6 +11,16 @@ const GATEWAY_URL_ENV := "POKEAETHER_GATEWAY_URL"
 
 var cached_url := ""
 
+func wait_for_metadata_request_frame(is_web: bool = OS.has_feature("web")) -> void:
+	if not is_web:
+		return
+	# Map instantiation/first rendering can block the web main thread. Starting
+	# an HTTPRequest timer in that frame can consume its preceding long delta
+	# before the fast Fetch response is processed. Cross the render boundary
+	# first; keep the real network timeout unchanged.
+	await get_tree().process_frame
+	await get_tree().process_frame
+
 func get_base_url() -> String:
 	if cached_url != "":
 		return cached_url
