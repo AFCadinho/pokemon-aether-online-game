@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
+
 - Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
 
 - Login failure messages remain visible on Welcome Back, and the browser preserves your original Remember me choice when restoring a session.
