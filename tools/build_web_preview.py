@@ -10,12 +10,11 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import struct
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-# The browser client deliberately ships its reachable-map and PvE music rather
-# than silently failing dynamic ResourceLoader calls. Keep a tight ceiling for
-# that complete audio slice, instead of treating it as optional content.
+# Background music is external; effects/cries and core gameplay stay bundled.
 MAX_INITIAL_BYTES = 312 * 1024 * 1024
 WEB_AUDIO_SOURCE_DIRS = (
     ROOT / "assets/music",
@@ -108,6 +107,35 @@ def pack_contains(path: Path, marker: bytes) -> bool:
     return False
 
 
+def pack_entry_names(path: Path) -> list[str]:
+    """Read the unencrypted Godot PCK directory, not payload string references."""
+    with path.open('rb') as stream:
+        header = stream.read(40)
+        magic, version = struct.unpack_from('<II', header)
+        if magic != 0x43504447 or version not in (2, 3):
+            raise RuntimeError('Unsupported PCK directory')
+        if struct.unpack_from('<I', header, 20)[0] & 1:
+            raise RuntimeError('Encrypted PCK directory cannot be audited')
+        stream.seek(struct.unpack_from('<Q', header, 32)[0] if version == 3 else 96)
+        count, = struct.unpack('<I', stream.read(4))
+        names = []
+        for _ in range(count):
+            length, = struct.unpack('<I', stream.read(4))
+            names.append(stream.read(length).rstrip(b'\0').decode('utf-8').removeprefix('res://'))
+            stream.seek(36, 1)
+        return names
+
+
+def validate_external_music_pack(path: Path) -> None:
+    imported_music = set()
+    for metadata in (ROOT / 'assets/music').rglob('*.import'):
+        imported_music.update(re.findall(r'res://(\.godot/imported/[^"\n]+)', metadata.read_text()))
+    forbidden = [name for name in pack_entry_names(path)
+                 if name.startswith('assets/music/') or name in imported_music]
+    if forbidden:
+        raise RuntimeError(f'Web PCK embeds background music: {forbidden[:5]}')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--godot', default='godot')
@@ -162,12 +190,6 @@ def main():
         b'assets/fonts/DejaVuSans.ttf',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
         b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
-        b'lugia_theme_lofi.ogg-2fdce23a90553d794177dfc95f259e8f.oggvorbisstr',
-        b'assets/music/overworld/kanto/towns/pallet_town.ogg',
-        b'assets/music/overworld/kanto/routes/route1.ogg',
-        b'assets/music/overworld/kanto/towns/viridian_city.ogg',
-        b'assets/music/battle/wild/Kanto Wild Battle.ogg',
-        b'assets/music/battle/trainer/Kalos Trainer Battle.ogg',
     )
     forbidden_markers = (
         b'node_modules/playwright-core/',
@@ -186,6 +208,7 @@ def main():
             raise RuntimeError(f'Web pack contains excluded asset marker: {marker.decode()}')
 
     initial_bytes = sum(item['bytes'] for item in files)
+    validate_external_music_pack(pck_path)
     if initial_bytes > MAX_INITIAL_BYTES:
         raise RuntimeError(
             f'Web build is {initial_bytes / 1048576:.1f} MiB; '
