@@ -14,7 +14,7 @@ const assert = require('node:assert/strict');
     env: {...process.env, POKEAETHER_WEB_BROWSER_TEST:'1', POKEAETHER_WEB_PREVIEW_ORIGIN:origin}, stdio:['pipe','pipe','pipe'],
   });
   const pending = [], api = [], errors = [], external = [], positions = [], modules = [];
-  let stderr = '', closing = false;
+  let stderr = '', chatSocket;
   bridge.stderr.on('data', data => { stderr += data; });
   readline.createInterface({input:bridge.stdout}).on('line', line => pending.shift()?.resolve(JSON.parse(line)));
   bridge.on('exit', () => { for (const task of pending.splice(0)) task.reject(new Error('Fixture exited')); });
@@ -22,11 +22,14 @@ const assert = require('node:assert/strict');
   const output = path.join(frontend,'builds/web-misty-gameplay-qa'); fs.mkdirSync(output,{recursive:true});
   const browser = await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   const context = await browser.newContext({viewport:{width:1440,height:900}});
-  await context.routeWebSocket('**/api/ws/**', socket => socket.onMessage(raw => {
+  await context.routeWebSocket('**/api/ws/**', socket => {
+    if (socket.url().includes('/ws/chat')) chatSocket=socket;
+    socket.onMessage(raw => {
     const message = JSON.parse(raw);
     if (message.type === 'ping') socket.send(JSON.stringify({type:'pong'}));
     if (message.type === 'position') positions.push({mapId:message.mapId,position:message.position});
-  }));
+    });
+  });
   await context.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url());
     if (url.origin !== origin) { external.push(url.origin); return route.abort(); }
@@ -53,14 +56,18 @@ const assert = require('node:assert/strict');
   };
   const finishDialogue = async (suffix, start, count=40) => {
     for(let i=0;i<count && !api.slice(start).some(row=>row.path.endsWith(suffix) && row.status===200);i++) {
-      await page.waitForTimeout(450); await page.keyboard.press('Space');
+      await page.waitForTimeout(450);
+      if (api.slice(start).some(row=>row.path.endsWith(suffix) && row.status===200)) break;
+      await page.keyboard.press('Space');
     }
     assert(api.slice(start).some(row=>row.path.endsWith(suffix) && row.status===200),'Dialogue completes: '+suffix);
     await page.waitForTimeout(750);
   };
   const login = async scenario => {
     console.log('Preparing active browser map '+scenario.mapId);
+    await page.goto('about:blank');
     assert.equal((await request({command:'prepare_misty_map',...scenario})).status,200);
+    const apiStart=api.length;
     positions.length=0;
     await page.goto(origin);
     await page.getByRole('button',{name:'Play now'}).click();
@@ -71,7 +78,7 @@ const assert = require('node:assert/strict');
     await page.mouse.click(600,494);
     await page.keyboard.type('browsertrainer'); await page.keyboard.press('Enter');
     await page.keyboard.type('test-only correct horse'); await page.keyboard.press('Enter');
-    await wait(()=>api.some(row=>row.path==='/api/auth/web/login' && row.status===200),'Login response');
+    await wait(()=>api.slice(apiStart).some(row=>row.path==='/api/auth/web/login' && row.status===200),'Login response');
     for(let attempt=0;attempt<20 && !(await page.evaluate(()=>Boolean(window.pokeaetherPreview?.worldReady)));attempt++) {
       await page.mouse.click(850,524); await page.waitForTimeout(500);
     }
@@ -91,8 +98,8 @@ const assert = require('node:assert/strict');
     await page.screenshot({path:path.join(output,'bill-after-meeting.png')});
     assert(api.slice(before).some(row=>row.path.endsWith('/kanto_bills_house_meet_bill/complete') && row.status===200),'Bill meeting completes through browser UI');
     console.log('Bill meeting completed');
-    await walk('ArrowLeft',p=>p.x<=272);
-    await page.keyboard.down('ArrowUp'); await page.waitForTimeout(120); await page.keyboard.up('ArrowUp');
+    // The computer occupies tile (8, 9); approach its right-hand neighbour.
+    await walk('ArrowLeft',p=>p.x<=304);
     const computerStart=api.length;
     await page.keyboard.press('Space');
     await finishDialogue('/kanto_bills_house_activate_cell_separator/complete',computerStart,50);
@@ -100,12 +107,23 @@ const assert = require('node:assert/strict');
     await page.waitForTimeout(2000);
     await page.screenshot({path:path.join(output,'bill-restored-with-ticket.png')});
     console.log('Bill computer sequence and ticket completed');
+    const mapList=JSON.parse((await request({command:'misty_map_list'})).body);
+    assert(chatSocket,'Chat transport ready for isolated authorized teleport');
+    for(const map of mapList) {
+      const beforeTeleport=positions.length;
+      const prepared=await request({command:'prepare_misty_map',...map,suppressTrainers:true,teleport:true});
+      assert.equal(prepared.status,200);
+      chatSocket.send(JSON.stringify({type:'world.teleport.authorized',reason:'Isolated browser QA',state:JSON.parse(prepared.body)}));
+      await wait(()=>positions.slice(beforeTeleport).some(row=>row.mapId===map.mapId),'Authorized map transition '+map.mapId,60000);
+      await page.waitForTimeout(1800);
+      await page.screenshot({path:path.join(output,map.mapId+'.png')});
+      console.log('Active map ready '+map.mapId);
+    }
     assert.equal(external.length,0,'No external traffic');
     assert.equal(errors.length,0,'No runtime errors: '+errors.join('\n'));
     fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({success:true,api,errors,external,positions,modules},null,2));
     console.log('web_misty_gameplay_smoke: PASS (active Bill meeting, cell separation and ticket)');
   } finally {
-    closing=true;
     fs.writeFileSync(path.join(output,'api.json'),JSON.stringify(api,null,2));
     fs.writeFileSync(path.join(output,'errors.json'),JSON.stringify(errors,null,2));
     fs.writeFileSync(path.join(output,'fixture-stderr.log'),stderr);
