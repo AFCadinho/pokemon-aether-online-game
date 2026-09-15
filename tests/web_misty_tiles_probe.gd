@@ -34,6 +34,15 @@ func _run() -> void:
 	if world.get_node("CurrentMap").get_child_count() != 0 or world.get_node_or_null("Player") == null:
 		push_error("Browser placeholder cleanup must preserve the player")
 		failures += 1
+	var state := get_root().get_node("GameState")
+	var previous_map: Node = state.current_map
+	var ready_map := Node2D.new()
+	world.get_node("CurrentMap").add_child(ready_map)
+	state.current_map = ready_map
+	if not world.call("_has_active_world_map"):
+		push_error("The canonical map must allow autosave after initialization")
+		failures += 1
+	state.current_map = previous_map
 	world.free()
 	print("web_misty_tiles_probe: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)
