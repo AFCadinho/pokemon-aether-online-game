@@ -59,6 +59,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_animation_resource_shutdown_check.gd",
 	"res://tests/shared_grass_texture_check.gd",
 	"res://tests/shared_black_background_check.gd",
+	"res://tests/pallet_compact_atlas_check.gd",
 	"res://tests/pvp_result_refresh_shutdown_check.gd",
 	"res://tests/pvp_render_heartbeat_shutdown_check.gd",
 	"res://tests/pvp_privacy_render_resolution_check.gd",

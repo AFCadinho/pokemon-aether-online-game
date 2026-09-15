@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pallet Town uses a smaller lossless map atlas while keeping its tiles and gameplay unchanged.
+
 - Battle effects reuse an identical background texture without changing visuals or preloading.
 
 - Grass battle effects reuse the prepared terrain texture, keeping animation quality and battle preloading unchanged.
