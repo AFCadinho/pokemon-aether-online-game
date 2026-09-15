@@ -86,6 +86,33 @@ The diagnostic report is ignored at `builds/web-misty-gameplay-qa/memory-cycles.
 Cycles are bounded to 1–5 and repeats require the opt-in memory probe. Ordinary
 gameplay smoke still defaults to one round.
 
+### Follow-up node classification
+
+A freshly built slot preview on 8062 passed a three-round, two-map repeat
+(Cerulean Pokemon Center and Bill's house), including Bill's full sequence.
+The first attempt was rejected for stale asset-module resource UID warnings;
+both slot modules were rebuilt and the clean repeat passed. No warnings were
+silently filtered out.
+
+Final Bill endpoints: total/scene node counts 5618, 5624 and 5630; orphan counter
+zero. Between rounds one and three, only RichTextLabel (+4), Timer (+4) and
+VScrollBar (+4) counts increased. There was no increase in map script types.
+This matches four extra authorized-teleport system chat rows: the UI's
+`_on_authorized_teleport_received` adds a chat message after each successful
+fixture teleport, and `_add_chat_message` duplicates the RichTextLabel template.
+The earlier three-nodes-per-transition signal is therefore consistent with
+retained chat history, not unfreed old maps. Do not remove chat messages or
+change battle preparation as a supposed map-leak fix. Long-session chat
+retention/limits require a separate scoped evaluation.
+
+Use `POKEAETHER_MEMORY_NODE_COUNTS=1` with the memory probe to collect aggregate
+scene counts by script/type. This records no node names or private properties.
+Traversal has extra overhead and must stay **off** during battle-latency tests.
+`POKEAETHER_MEMORY_MAP_FILTER` accepts comma-separated fixture map IDs for a
+shorter diagnostic run. The clean report is `memory-node-cycles.json`; diagnostic
+samples are also retained on failures in `memory-node-diagnostics.json`, both
+under the ignored QA build directory.
+
 ## Battle timing protocol still to run
 
 Use a disposable local gameplay account with the real battle runtime. Repeat

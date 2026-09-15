@@ -18,6 +18,13 @@ func _run() -> void:
 	var stats: Dictionary = service.call("diagnostic_cache_stats")
 	var passed: bool = stats.entries == 96 and stats.uniqueSheets == 1 and stats.estimatedRGBABytes == 64 * 32 * 4
 	passed = passed and not get_root().get_node("WebMemoryProbe").enabled
+	var diagnostic_root := Node.new()
+	diagnostic_root.name = "PrivatePlayerNameMustNotBeRecorded"
+	diagnostic_root.add_child(Button.new())
+	diagnostic_root.add_child(Button.new())
+	var counts: Dictionary = get_root().get_node("WebMemoryProbe").diagnostic_scene_node_types(diagnostic_root)
+	passed = passed and counts == {"Node": 1, "Button": 2}
+	diagnostic_root.free()
 	service.free()
 	print("web_memory_probe_check: %s" % ("PASS" if passed else "FAIL"))
 	quit(0 if passed else 1)
