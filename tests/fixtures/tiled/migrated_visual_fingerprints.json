@@ -14,11 +14,11 @@
     "usedTiles": 96.0
   },
   "cerulean_gym": {
-    "baseRGBABytes": 755712,
-    "cells": 1986,
+    "baseRGBABytes": 755712.0,
+    "cells": 1986.0,
     "fingerprint": "16206396e9f04dce9cf1ef7f0c1953bdc2e6ae8450f8eba715a921f03c7f7287",
-    "layers": 4,
-    "usedTiles": 119
+    "layers": 4.0,
+    "usedTiles": 119.0
   },
   "cerulean_house_template_blue": {
     "baseRGBABytes": 663552.0,
@@ -27,12 +27,26 @@
     "layers": 4.0,
     "usedTiles": 101.0
   },
-  "pewter_gym": {
-    "baseRGBABytes": 663552,
-    "cells": 1568,
-    "fingerprint": "33d9701c2f4d6ff7ec2f5fa7e069c620da24221faae402fa590f66bef3cca53c",
+  "kanto_route_2": {
+    "baseRGBABytes": 1585152,
+    "cells": 10586,
+    "fingerprint": "048df4973f8416bcd3b29fe4020bc5734a66dd8e0319b68fd95299bb1f5a1532",
+    "layers": 8,
+    "usedTiles": 282
+  },
+  "kanto_route_22": {
+    "baseRGBABytes": 1179648,
+    "cells": 7535,
+    "fingerprint": "b020c96eb2eed0b9cb8b271378c2b9fe8ecbe1174a90159369cbddf6f787068e",
     "layers": 4,
-    "usedTiles": 123
+    "usedTiles": 219
+  },
+  "pewter_gym": {
+    "baseRGBABytes": 663552.0,
+    "cells": 1568.0,
+    "fingerprint": "33d9701c2f4d6ff7ec2f5fa7e069c620da24221faae402fa590f66bef3cca53c",
+    "layers": 4.0,
+    "usedTiles": 123.0
   },
   "pewter_house": {
     "baseRGBABytes": 589824.0,
@@ -62,19 +76,54 @@
     "layers": 4.0,
     "usedTiles": 135.0
   },
-  "transition_building_horizontal": {
-    "baseRGBABytes": 368640,
-    "cells": 503,
-    "fingerprint": "2c9fcc688f9230c2c95926c4c39f101c60b56f72ae1ff767bc87c92bb448fc03",
+  "route_1": {
+    "baseRGBABytes": 857088,
+    "cells": 8581,
+    "fingerprint": "5eb518ba0203f4b6d19b2b4f622effe8555189f130dd8f81c8f91e3e0aca2c5d",
+    "layers": 6,
+    "usedTiles": 150
+  },
+  "route_24": {
+    "baseRGBABytes": 921600,
+    "cells": 5770,
+    "fingerprint": "2e2e3b6c461c0ed42f126b9576a5557b665a30e3dea1a9675ccbe957daae1c4d",
     "layers": 4,
-    "usedTiles": 64
+    "usedTiles": 159
+  },
+  "route_25": {
+    "baseRGBABytes": 1041408,
+    "cells": 6322,
+    "fingerprint": "72a34675b76d5867f3fb72d9da69a3999ed8c653c3399423befac7bc0ed976b1",
+    "layers": 6,
+    "usedTiles": 180
+  },
+  "route_3": {
+    "baseRGBABytes": 1511424,
+    "cells": 8569,
+    "fingerprint": "817e41038ee22fa96d731838901b115587c798b0dff78d4e1745213a8483fcc8",
+    "layers": 6,
+    "usedTiles": 270
+  },
+  "route_4": {
+    "baseRGBABytes": 1069056,
+    "cells": 8434,
+    "fingerprint": "8bcf453de6a98e31724e21914af8e40791c7d33a5610746091be8966e51f1e1a",
+    "layers": 4,
+    "usedTiles": 178
+  },
+  "transition_building_horizontal": {
+    "baseRGBABytes": 368640.0,
+    "cells": 503.0,
+    "fingerprint": "2c9fcc688f9230c2c95926c4c39f101c60b56f72ae1ff767bc87c92bb448fc03",
+    "layers": 4.0,
+    "usedTiles": 64.0
   },
   "transition_building_vertical": {
-    "baseRGBABytes": 313344,
-    "cells": 531,
+    "baseRGBABytes": 313344.0,
+    "cells": 531.0,
     "fingerprint": "f6d22b054e4cefb5680eda7350b1f7ff8bd4d4932522f2b1ff6e1390f34c8051",
-    "layers": 4,
-    "usedTiles": 56
+    "layers": 4.0,
+    "usedTiles": 56.0
   },
   "viridian_house_template": {
     "baseRGBABytes": 700416.0,
