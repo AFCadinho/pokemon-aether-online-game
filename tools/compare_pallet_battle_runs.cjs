@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 function validate(run,variant) {
   assert.equal(run.success,true,'Run must have completed');
+  assert(run.sourceUnchanged!==false && !run.runtimeLost,'Source and disposable runtime must remain stable');
   assert.equal(run.evidence?.variant,variant,'Correct atlas variant');
   assert.equal(run.timingComparable,true,'Comparable timing required');
   assert(!run.textureAudit && !run.worldTextureAudit && !run.mapOnly,'Audits/map-only are not timing runs');

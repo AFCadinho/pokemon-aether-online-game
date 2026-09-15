@@ -49,6 +49,7 @@ function provenance() {
   assert(['electric','grass'].includes(scenario),'Supported fixed scenario required');
   fs.mkdirSync(output,{recursive:true});
   const evidence=provenance(), commandHash=createHash('sha256');
+  const sourceTreeAtStart=git(frontend,'ls-files','-s');
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--enable-unsafe-swiftshader']});
   let runtimeLost=false;
   const runtimeWatch=setInterval(()=>{
@@ -208,8 +209,9 @@ function provenance() {
     assert(success,'Finish and validate the real battle run');
   } finally {
     clearInterval(runtimeWatch);
+    const sourceUnchanged=git(frontend,'status','--porcelain')==='' && git(frontend,'ls-files','-s')===sourceTreeAtStart;
     evidence.commandsSHA256=commandHash.digest('hex');
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success:success&&!runtimeLost,runtimeLost,evidence,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:!runtimeLost&&!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success:success&&!runtimeLost&&sourceUnchanged,runtimeLost,sourceUnchanged,evidence,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:sourceUnchanged&&!runtimeLost&&!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();
