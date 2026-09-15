@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op testing: either Trainer can leave a wild battle for both using Run, without a partner confirmation. Trainer battles cannot be fled. Wild co-op remains disabled pending catching and release acceptance.
+
 - Co-op testing now sends grass steps to the server and enters the shared battle screen when an encounter starts. Partners no longer enter separate solo wild battles; wild co-op remains disabled pending catching and fleeing support.
 
 - The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.

@@ -253,6 +253,8 @@ func _update_actions() -> void:
 	if phase in ["finished", "cancelled"]:
 		var outcomes := {"win": "Victory — both Trainers won.", "loss": "Both teams were defeated.", "draw": "The battle ended in a draw."}
 		_prompt.text = "Battle start cancelled." if phase == "cancelled" else str(outcomes.get(CoopService.activity.get("outcome"), "Battle finished."))
+		if phase == "finished" and CoopService.activity.get("escaped", false):
+			_prompt.text = "Both Trainers fled from the wild battle."
 		_button(_actions, "Return to the world", func() -> void:
 			var world := GameState.get_world()
 			if world != null: await world.call("finish_coop_activity"))
@@ -270,6 +272,9 @@ func _update_actions() -> void:
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else "Choose a move, then its target — or switch your Pokémon."
+	for action: Dictionary in CoopService.view.get("legalActions", []):
+		if action.get("type") == "run":
+			_button(_actions, "Run — both Trainers leave", func() -> void: await CoopService.submit_action(action))
 	var moves := GridContainer.new()
 	moves.columns = 2
 	_actions.add_child(moves)
