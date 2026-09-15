@@ -1274,7 +1274,7 @@ func _on_engagement_contact_requested(
 		"targetUserId": target_user_id,
 		"method": method,
 	})
-	var guild_service := get_node_or_null("/root/GuildService")
+	var guild_service := _engagement_service()
 	# Authoritative engagement operation: GuildService.create_aether_clash_engagement(
 	# instance_session_id, target_user_id, method).
 	var result: Dictionary = await guild_service.call("create_aether_clash_engagement", instance_session_id, target_user_id, method) if guild_service != null else {}
@@ -1303,6 +1303,10 @@ func _on_engagement_contact_requested(
 			_show_system_message(str(result.get("error", "The Aether Clash battle could not start.")))
 		return
 	await _begin_engagement_battle(result)
+
+
+func _engagement_service() -> Node:
+	return get_node_or_null("/root/GuildService")
 
 
 func _on_realtime_message_received(message: Dictionary) -> void:

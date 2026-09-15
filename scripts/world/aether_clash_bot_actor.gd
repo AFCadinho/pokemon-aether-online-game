@@ -17,8 +17,8 @@ func _init() -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	nameplate = Label.new()
-	nameplate.position = Vector2(-110, -66)
-	nameplate.size = Vector2(220, 24)
+	nameplate.position = Vector2(-32, -66)
+	nameplate.size = Vector2(64, 24)
 	nameplate.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	nameplate.add_theme_font_size_override("font_size", 12)
@@ -34,6 +34,9 @@ func apply_state(player: Dictionary) -> void:
 	actor_key = str(bot["actorKey"])
 	global_position = Vector2(float(bot["x"]), float(bot["y"]))
 	z_index = clampi(floori(global_position.y), -4096, 4096)
-	nameplate.text = str(bot.get("displayName", "[BOT]"))
+	# Anchors can be only 64px apart. Full trainer names overlap at V1 capacity;
+	# keep full identity in the server/battle contract, and use a compact map label.
+	var ordinal := actor_key.get_slice(":", 2).to_int()
+	nameplate.text = "[BOT] %d" % ordinal if ordinal > 0 else "[BOT]"
 	var engaged: bool = player.get("engagementId") != null and not str(player.get("engagementId", "")).is_empty()
 	sprite.modulate = Color(1, 1, 1, 0.45) if engaged else Color.WHITE

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepared compact numbered [BOT] labels so stationary training bots stay readable in crowded arenas, and checked unequal guild rosters through the training UI. Training remains unavailable until V1 is complete.
+
 - Prepared stationary [BOT] trainers in the Clash arena, including busy indicators and removal after elimination. Bot Guild training remains unavailable until V1 is complete.
 
 - The Clash Training Captain reports team-preparation failures in your selected language. Bot Guild training remains unavailable while V1 is completed.

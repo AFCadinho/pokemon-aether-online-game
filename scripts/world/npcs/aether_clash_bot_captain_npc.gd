@@ -17,7 +17,7 @@ func interact_with_player(_player: Node2D) -> void:
 	if interaction_in_flight:
 		return
 	interaction_in_flight = true
-	var response := await GuildService.load_aether_clash_bot_options()
+	var response := await _load_training_options()
 	if not bool(response.get("success", false)):
 		await GameErrorDialogService.show_response(response, "ui.clash_bot.unavailable")
 		interaction_in_flight = false
@@ -27,7 +27,7 @@ func interact_with_player(_player: Node2D) -> void:
 	var settings: Dictionary = await menu.choose(response.get("options", {}))
 	menu.queue_free()
 	if not settings.is_empty():
-		var result := await GuildService.create_aether_clash_bot_challenge(
+		var result := await _create_training_challenge(
 			int(settings["botCount"]), str(settings["tierId"]), str(settings["spectatorAccess"])
 		)
 		if bool(result.get("success", false)):
@@ -35,3 +35,11 @@ func interact_with_player(_player: Node2D) -> void:
 		else:
 			await GameErrorDialogService.show_response(result, "ui.clash_bot.unavailable")
 	interaction_in_flight = false
+
+
+func _load_training_options() -> Dictionary:
+	return await GuildService.load_aether_clash_bot_options()
+
+
+func _create_training_challenge(count: int, tier_id: String, access: String) -> Dictionary:
+	return await GuildService.create_aether_clash_bot_challenge(count, tier_id, access)
