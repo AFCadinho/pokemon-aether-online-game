@@ -3,15 +3,33 @@ extends SceneTree
 const ORIGINAL := "res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn"
 const COMPACT := "res://generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn"
 var failures := 0
+var scratch := ""
 
 func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	var candidate := COMPACT
+	var args := OS.get_cmdline_user_args()
+	if args.size() == 2 and args[0] == "--import-source":
+		scratch = "user://pallet_import_check_%d" % OS.get_process_id()
+		if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(scratch)):
+			push_error("Refusing to overwrite a pre-existing test directory.")
+			quit(1)
+			return
+		candidate = scratch.path_join("pallet.visual.tscn")
+		var result := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_importer.gd").new().import_tmx(args[1], candidate)
+		_check(result.get("success", false), "Actual Pallet TMX imports: " + str(result.get("error", "")))
+		if not result.get("success", false):
+			_cleanup(scratch)
+			quit(1)
+			return
 	var old_scene: PackedScene = load(ORIGINAL)
-	var new_scene: PackedScene = load(COMPACT)
+	var new_scene: PackedScene = load(candidate)
 	_check(old_scene != null and new_scene != null, "Both visual scenes load")
 	if old_scene == null or new_scene == null:
+		if scratch != "":
+			_cleanup(scratch)
 		quit(1)
 		return
 	var old := old_scene.instantiate()
@@ -75,8 +93,10 @@ func _run() -> void:
 	_check(game_scene.contains(COMPACT) and not game_scene.contains(ORIGINAL), "Gameplay uses compact visual")
 	old.free()
 	compact.free()
+	if scratch != "":
+		_cleanup(scratch)
 	print("PALLET_COMPACT_CHECK ", JSON.stringify({"cells": cells_checked, "tiles": verified.size(),
-		"baseRGBABytes": bytes, "success": failures == 0, "realBrowserMeasurement": false}))
+		"baseRGBABytes": bytes, "success": failures == 0, "realBrowserMeasurement": false, "freshImport": scratch != ""}))
 	quit(0 if failures == 0 else 1)
 
 func _check_door_parts(before: TileMapLayer, after: TileMapLayer) -> void:
@@ -110,3 +130,13 @@ func _check(ok: bool, message: String) -> void:
 	if not ok:
 		failures += 1
 		push_error(message)
+
+func _cleanup(path: String) -> void:
+	assert(scratch != "" and (path == scratch or path.begins_with(scratch + "/")))
+	if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(path)):
+		return
+	for name in DirAccess.get_files_at(path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path.path_join(name)))
+	for name in DirAccess.get_directories_at(path):
+		_cleanup(path.path_join(name))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))

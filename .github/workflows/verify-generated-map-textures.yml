@@ -9,6 +9,8 @@ on:
       - "tests/fixtures/tiled/**"
       - "tests/generated_map_texture_storage_check.gd"
       - "tests/tmx_visual_importer_check.gd"
+      - "tests/tmx_atlas_compactor_check.gd"
+      - "tests/generated_map_atlas_layout_check.gd"
       - ".github/workflows/verify-generated-map-textures.yml"
   push:
     branches:
@@ -21,6 +23,8 @@ on:
       - "tests/fixtures/tiled/**"
       - "tests/generated_map_texture_storage_check.gd"
       - "tests/tmx_visual_importer_check.gd"
+      - "tests/tmx_atlas_compactor_check.gd"
+      - "tests/generated_map_atlas_layout_check.gd"
       - ".github/workflows/verify-generated-map-textures.yml"
 
 permissions:
@@ -47,4 +51,6 @@ jobs:
       - name: Verify importer output and generated texture storage
         run: |
           ./godot --headless --path . --script res://tests/tmx_visual_importer_check.gd
+          ./godot --headless --path . --script res://tests/tmx_atlas_compactor_check.gd
           ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd
+          ./godot --headless --path . --script res://tests/generated_map_atlas_layout_check.gd
