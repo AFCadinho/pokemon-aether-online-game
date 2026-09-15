@@ -14,6 +14,8 @@ var _latest: Dictionary = {}
 var _header: Label
 var _connection: Label
 var _prompt: Label
+var _capture_status: Label
+var _bag_open := false
 var _actions: VBoxContainer
 var _log: RichTextLabel
 var _clock_at := 0
@@ -50,6 +52,7 @@ func _ready() -> void:
 	for controller: String in SLOTS:
 		_create_card(field, controller)
 	_prompt = _label(layout, "Waiting for the battle…", 22)
+	_capture_status = _label(layout, "", 17)
 	var deck := HBoxContainer.new()
 	deck.add_theme_constant_override("separation", 24)
 	layout.add_child(deck)
@@ -135,6 +138,7 @@ func _sync() -> void:
 		_apply_positions(_latest)
 	if str(_latest.get("decisionId", "")) != _decision or _latest.get("locked", true):
 		selected_move = 0
+		_bag_open = false
 	_decision = str(_latest.get("decisionId", ""))
 	_update_actions()
 	if not _playing and _revision != int(_latest.get("revision", -1)):
@@ -239,10 +243,18 @@ func _set_details(controller: String, details: String, force := false) -> void:
 
 func _update_actions() -> void:
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
-		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing])
+		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open])
 	if signature == _action_signature:
 		return
 	_action_signature = signature
+	var last_capture: Dictionary = CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else {}
+	_capture_status.text = ""
+	if not last_capture.is_empty():
+		_capture_status.text = "Caught! Your Pokémon will be saved when the shared battle finishes." if last_capture.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(last_capture.get("shakeCount", 0))
+	var acquisitions: Array = CoopService.activity.get("captures", CoopService.view.get("captures", []))
+	if not acquisitions.is_empty():
+		var location: Dictionary = acquisitions[0].get("storageLocation", {})
+		_capture_status.text = "Caught Pokémon saved to your party." if location.get("type") == "party" else "Caught Pokémon saved to your PC."
 	for child in _actions.get_children():
 		_actions.remove_child(child)
 		child.queue_free()
@@ -285,6 +297,22 @@ func _update_actions() -> void:
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else "Choose a move, then its target — or switch your Pokémon."
+	var capture_options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
+	if not capture_options.is_empty():
+		var bag_button := _button(_actions, "Bag — catch your own target", func() -> void:
+			_bag_open = not _bag_open
+			selected_move = 0
+			_update_actions())
+		bag_button.tooltip_text = "Only your assigned wild Pokémon can be caught. Either Trainer can attack either target."
+		if _bag_open:
+			if not capture_options.get("storageAvailable", false):
+				_label(_actions, "Your party and PC are full. No ball will be used.", 17)
+			elif capture_options.get("balls", []).is_empty():
+				_label(_actions, "You have no available Poké Balls.", 17)
+			else:
+				for ball: Dictionary in capture_options.get("balls", []):
+					var item_id: String = str(ball.get("itemId", ""))
+					_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await CoopService.submit_capture(item_id))
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "run":
 			_button(_actions, "Run — ask your partner", func() -> void: await CoopService.submit_action(action))
