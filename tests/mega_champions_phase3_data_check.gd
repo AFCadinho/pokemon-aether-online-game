@@ -220,6 +220,36 @@ func _check_rendering_consumers() -> void:
 
 
 func _check_static_front_sprite_scale() -> void:
+	if external_sprite_assets_available:
+		var loader: Node = load("res://scripts/battle/battle_ui/sprite_box.gd").new()
+		var manifest := _read_dictionary(SPRITE_IMPORT_MANIFEST_PATH)
+		for form: Dictionary in manifest.get("forms", []):
+			var species := str(form.get("catalogEntryId", ""))
+			for side: String in ["front", "back", "shiny_front", "shiny_back"]:
+				var path := "res://assets/sprites/pokemon/%s/%s/animation.json" % [side, species]
+				var frames: SpriteFrames = loader.call("_load_sprite_frames_from_sheet_metadata", path, side, species)
+				_check(frames != null, "%s %s static battle frames load" % [species, side])
+				if frames == null:
+					continue
+				var render_scale := float(loader.call("_get_sprite_frames_render_scale", frames))
+				var frame_size: Vector2 = loader.call("_get_sprite_frames_frame_size", frames)
+				_check(
+					(frame_size / render_scale).is_equal_approx(Vector2(96, 96)),
+					"%s %s renders on the native 96 px battle canvas" % [species, side]
+				)
+		loader.free()
+	for dimension: int in [96, 192, 288]:
+		var old_pack_metadata := {
+			"source_pack": "Generation 9 Pack 3.3.6",
+			"frame_width": dimension,
+			"frame_height": dimension,
+		}
+		for side: String in ["front", "back", "shiny_front", "shiny_back"]:
+			_check(
+				is_equal_approx(BattleSpriteRenderScale.resolve(old_pack_metadata, side), dimension / 96.0),
+				"legacy static ZA metadata preserves authored resolution for %s %d px" % [side, dimension]
+			)
+	_check_old_pack_explicit_scale()
 	var metadata := {
 		"frame_width": 192,
 		"frame_height": 192,
@@ -238,6 +268,16 @@ func _check_static_front_sprite_scale() -> void:
 	_check(
 		is_equal_approx(BattleSpriteRenderScale.resolve(metadata, "showdown/front"), 1.0),
 		"animated front sprites keep their existing render scale"
+	)
+
+
+func _check_old_pack_explicit_scale() -> void:
+	_check(
+		is_equal_approx(BattleSpriteRenderScale.resolve({
+			"source_pack": "Generation 9 Pack 3.3.6", "frame_width": 288,
+			"frame_height": 288, "render_scale": 2.0,
+		}, "back"), 2.0),
+		"explicit render scale takes priority over the legacy source-pack fallback"
 	)
 
 

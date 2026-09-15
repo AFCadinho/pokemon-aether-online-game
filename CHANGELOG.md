@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.
+
 - Overworld Poké Ball item pickups now work in the browser and stay collected after logging in again.
 
 - Co-op testing now includes Liam and Sammy with their original single Pokémon. Their unused opponent position stays empty and cannot be selected as an attack target. Co-op remains disabled pending release acceptance.
