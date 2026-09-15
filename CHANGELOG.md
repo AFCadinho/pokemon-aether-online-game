@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
+
 - Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
 
 - Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
