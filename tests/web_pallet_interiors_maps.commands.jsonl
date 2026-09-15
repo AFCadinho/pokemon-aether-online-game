@@ -1,0 +1,10 @@
+{"steps":{"key":"ArrowUp","count":4},"label":"pallet_above_trees"}
+{"steps":{"key":"ArrowRight","count":7},"label":"pallet_door_column"}
+{"walk":{"key":"ArrowUp","mapId":"kanto_players_house"},"wait":5000,"label":"house_entered"}
+{"walk":{"key":"ArrowDown","mapId":"kanto_pallet_town"},"wait":5000,"label":"pallet_returned"}
+{"walk":{"key":"ArrowRight","axis":"x","limit":1392,"direction":1},"label":"pallet_east_path"}
+{"walk":{"key":"ArrowDown","axis":"y","limit":848,"direction":1},"label":"pallet_south_path"}
+{"walk":{"key":"ArrowLeft","axis":"x","limit":1296,"direction":-1},"label":"pallet_lab_column"}
+{"walk":{"key":"ArrowUp","mapId":"kanto_oaks_lab"},"wait":5000,"label":"lab_entered"}
+{"walk":{"key":"ArrowDown","mapId":"kanto_pallet_town"},"wait":5000,"label":"lab_returned"}
+{"finish":true,"mapCycle":true}
