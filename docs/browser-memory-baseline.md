@@ -1,7 +1,8 @@
 # Browser memory baseline — initial phase, 2026-09-15
 
-Status: login and repeated active-map baseline collected; repeated real-battle baseline
-is still outstanding. No caching, prefetch, texture quality or loading strategy
+Status: login, repeated active-map and repeated real dev-wild battle measurements
+collected. Trainer, Mega and other battle styles are not covered. No caching,
+prefetch, texture quality or loading strategy
 has been changed. This is not an optimization or a complete RAM certification.
 
 Open the local preview with `http://127.0.0.1:8061/?memory-probe` to enable
@@ -71,8 +72,8 @@ No cache clearing, eviction change or forced garbage collection is used.
 
 The large texture allocation is reproducible but not continually growing in
 this warm map sequence. Do not reduce battle-prefetch based on these results.
-Real battle creation, first playable actions and teardown still need their own
-measurement; the map repeat supplies no battle-start latency evidence.
+The map repeat supplies no battle-start latency evidence; see the separate real
+battle run below.
 
 Reproduce from the frontend task slot (with the connected preview on 8061):
 
@@ -113,7 +114,81 @@ shorter diagnostic run. The clean report is `memory-node-cycles.json`; diagnosti
 samples are also retained on failures in `memory-node-diagnostics.json`, both
 under the ignored QA build directory.
 
-## Battle timing protocol still to run
+## Real battle repeat, 2026-09-15
+
+Under slot C's shared runtime lock, the normal local Compose stack was paused.
+The slot stack used a PostgreSQL tmpfs with no database volume and no normal
+Gateway `.env`. Database project/storage were attested before provisioning a
+synthetic developer account. Account, orchestration and Showdown handlers and
+WebSockets were real; no API response fixtures were used. No production was
+accessed. The normal stack/database are restored by the wrapper's EXIT trap.
+
+The initial login was correctly rejected by the release-version gate (426).
+The existing preview is older than the server minimum, so that gate was disabled
+only in the disposable overlay. A dropped preview server was restarted before
+successful battle starts. These failed setup attempts are not successful battle
+samples. An interactive successful run was followed by the fixed command-sequence
+repeat in a new browser context, with no gameplay loading-policy change.
+
+Three Magikarp encounters (level 100) with the same single Pikachu party (level
+50) in Pallet: the first battle was won through two Thunderbolts, then the party
+was healed through the real dev tool; the next two battles ended through real
+Run choices. Generator gender/randomness and mechanical seeds were not fixed.
+
+The fixed-sequence repeat, Chromium 1440 × 900, software WebGL:
+
+| Case | Start request → first playable actions | UI mount → actions | Sprite cache at request → ready |
+| --- | ---: | ---: | ---: |
+| First encounter | 4010.7 ms | 458.3 ms | 1 → 4 |
+| Warm repeat 1 | 1378.9 ms | 350.3 ms | 11 → 11 |
+| Warm repeat 2 | 1362.3 ms | 359.9 ms | 11 → 11 |
+
+All ready samples have no outstanding sprite downloads/prefetch. This readiness
+timing begins in `start_dev_wild_battle`, after Pokémon text generation; it
+includes position sync, battle creation, battle sprite preparation and UI intro.
+It is not the complete Spawn-button-to-actions time.
+
+After ten-second post-battle idle waits, all three endpoints have the same
+391.67 MiB texture counter, 343.5 MiB Wasm capacity, 866 resources and 11-sheet
+sprite cache (8.89 MiB estimated RGBA). Warm battle-ready texture counters are
+442.23 MiB, returning to 391.67 MiB after teardown. CDP JS heap used at the three
+idle endpoints is 23.69, 23.21 and 21.46 MiB, with no forced GC. Small node-count
+growth (5765, 5774, 5782) is consistent with growing chat/UI history; this run
+does not classify every node's ownership. No JavaScript page errors were captured.
+Validation requires three real successful battle starts, at least one resolved
+turn and three teardown markers; the repeat has four successful turn responses.
+
+This supports retaining useful sprite prefetch and does not show continuing
+warm texture/resource growth for this encounter. It does not establish total
+physical RAM, a hardware-browser SLA, or an optimization gain. Other battle
+styles and longer sessions remain untested.
+
+Artifact provenance: existing preview receipt `982d0ce2803d93c0b7d34e6055804bd69ea2ac4a`,
+**dirty=true**, Godot 4.6.2; backend bind-mounted source base
+`b7b48bf5da624710e1160c298ba38a7d97343ed2`; existing Showdown worker image
+`sha256:6ce33533d633d62a2cdcd2740d4b57cf18c3ecebe35f7f575ce9b2fbe128eb6c`.
+The dirty build receipt prevents treating this exploratory run as an exact
+committed candidate/control artifact. Rebuild a clean, identified control before
+accepting any performance optimization. Both runs use the same existing preview
+binary; the raw reports remain ignored under `builds/web-real-battle-memory/`.
+
+Reproduce (after saving scenes and allowing the local backend interruption):
+
+```sh
+ops/worktrees/runtime-lock slot-c -- \
+  .worktrees/slot-c/backend/ops/run_web_battle_memory_runtime \
+  env NODE_PATH=/home/adinho/.npm-global/lib/node_modules \
+  node .worktrees/slot-c/frontend/tests/web_real_battle_memory.cjs \
+  < .worktrees/slot-c/frontend/tests/web_real_battle_memory.commands.jsonl
+```
+
+The preview must already be served on 8061. The command file is a viewport-specific
+canvas sequence; UI changes or a different generated battle outcome may require
+interactive adjustments. Do not edit the runtime wrapper while it is running.
+`ops/test_web_battle_memory_runtime.py` checks fixture refusal guards and the
+resolved volume/env-file/version-gate configuration without runtime mutations.
+
+## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
 the same encounter/side/species and map sequence, separating cold and warm
