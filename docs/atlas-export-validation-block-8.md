@@ -40,7 +40,9 @@ was extracted within that same output directory, not copied between checkouts.
 The exported Linux binary and Windows binary under Wine both started headlessly
 and exited successfully with `--quit-after 120`: engine banner present, no
 `ERROR`, `SCRIPT ERROR`, or missing-resource messages. Wine uses its own new
-slot-local prefix. This is startup coverage, not battle/UI coverage. Release
+slot-local prefix. The recorded final startup runs explicitly set
+`POKEAETHER_GATEWAY_URL=http://127.0.0.1:8000`; always override release defaults
+for local runtime tests. This is startup coverage, not battle/UI coverage. Release
 templates disable `--path` overrides; an exploratory Linux attempt with that
 flag was rejected and is not counted as a successful runtime test.
 
@@ -85,7 +87,22 @@ their timers in the long scene-initialization frame, rather than increasing the
 three-second timeout or suppressing errors. The new
 `map_metadata_request_timing_check.gd` passes: no desktop frame delay, two web
 boundaries, all three services defer before request creation and retain their
-bounded timeout. Browser verification against a rebuilt candidate is pending.
+bounded timeout. The NPC role-boundary and dialogue metadata checks passed too.
+
+The rebuilt browser candidate is clean frontend commit `0f0436cd2`, with PCK
+SHA-256 `5bb39bfb51ba7e0ab9a5599aa48e67e1335cf8beee832e533fa02802f25f01f0`
+(`219905704` bytes; total initial build still 246.2 MiB before HTTP compression).
+Its single-Cerulean regression run passed with no errors. A subsequent unfiltered
+run passed Bill's meeting, cell separator and ticket reward and all 16 active
+Misty-module gameplay maps, with no runtime errors or external traffic. Source
+checkouts remained clean throughout both candidate runs; the final report is
+slot-owned `builds/web-misty-gameplay-qa/result.json`.
+
+The paired failure/success supports the frame-timing correction on this rendered
+software-WebGL setup. It is not a browser performance SLA or a measured physical
+memory improvement. Desktop exports above validate the migrated atlas resources
+from before this browser-only correction; native unit checks verify that the new
+helper leaves desktop request scheduling immediate.
 
 ## Remaining coverage limits
 
