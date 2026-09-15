@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
+
 - Login failure messages remain visible on Welcome Back, and the browser preserves your original Remember me choice when restoring a session.
 - Improved resource cleanup when closing the game and during battle-preview transitions.
 
