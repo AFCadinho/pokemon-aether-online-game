@@ -1,5 +1,9 @@
 # Misty-mapmodule — proefexport 15 september 2026
 
+De daaropvolgende technische core-plus-moduleproef is vastgelegd in
+`browser-misty-core-integration.md`. De metingen hieronder blijven de resultaten
+van de oorspronkelijke visual-only proef, niet van actieve gameplay.
+
 ## Uitkomst
 
 Een afzonderlijke Misty-module is haalbaar qua download. De speelgrens is niet

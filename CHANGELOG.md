@@ -11,6 +11,8 @@
 - The Clash Training Captain reports team-preparation failures in your selected language. Bot Guild training remains unavailable while V1 is completed.
 
 - Added the Clash Training Captain and a training setup menu with an independent opposing bot count. Training stays unavailable until bot-guild V1 is ready.
+- Optional browser map downloads now stream to storage, verify integrity and support retry. Existing browser world boundaries remain unchanged.
+
 - Co-op testing: the battle Bag shows available Poké Balls for your own wild target. Interrupted throws reuse their saved request, and accepted catches/results recover after reconnect. Full storage is explained without consuming a ball. Co-op remains disabled pending V1 acceptance.
 
 - Co-op testing: Run and trainer Forfeit ask your partner for agreement, even after an attack was selected. Refusing lets both Trainers choose again without using a turn or PP. Forfeit warns that both Trainers lose; co-op remains disabled pending V1 acceptance.
