@@ -17,6 +17,7 @@ const {execFileSync}=require('node:child_process');
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   const textureAudit=process.env.POKEAETHER_MEMORY_TEXTURE_AUDIT==='1';
   const worldTextureAudit=process.env.POKEAETHER_MEMORY_WORLD_TEXTURE_AUDIT==='1';
+  const mapOnly=process.env.POKEAETHER_MEMORY_MAP_ONLY==='1';
   if(worldTextureAudit) {
     const inventory=JSON.parse(execFileSync('python3',[path.resolve(__dirname,'../tools/audit_web_texture_memory.py')],{maxBuffer:16*1024*1024}));
     const prefixes=['assets/ui/','assets/tilesets/','assets/background/','assets/battles/capture/',
@@ -109,6 +110,14 @@ const {execFileSync}=require('node:child_process');
       // Canvas TextEdit consumes keyboard events, not DOM insertText input.
       if(command.text) await page.keyboard.type(command.text);
       if(command.key) await page.keyboard.press(command.key);
+      if(command.steps) {
+        assert(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(command.steps.key));
+        assert(Number.isInteger(command.steps.count) && command.steps.count>0 && command.steps.count<=10);
+        for(let i=0;i<command.steps.count;i++) {
+          await page.keyboard.press(command.steps.key,{delay:80});
+          await page.waitForTimeout(900);
+        }
+      }
       if(command.walk) {
         const {key,axis,limit,direction,mapId}=command.walk;
         assert(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(key));
@@ -125,15 +134,17 @@ const {execFileSync}=require('node:child_process');
       }
       if(command.wait) await page.waitForTimeout(Math.min(command.wait,30000));
       if(command.finish) {
-        assert(battleStarts>=3,'At least three real dev wild battles');
-        assert(battleTurns>=1,'At least one real resolved turn');
-        assert(markers.filter(x=>x.label==='battle_teardown_begin').length>=3,'Three teardowns');
+        if(!mapOnly) {
+          assert(battleStarts>=3,'At least three real dev wild battles');
+          assert(battleTurns>=1,'At least one real resolved turn');
+          assert(markers.filter(x=>x.label==='battle_teardown_begin').length>=3,'Three teardowns');
+        } else assert(command.mapCycle,'Map-only run must validate a real cycle');
         assert.equal(errors.length,0,'No page errors');
         if(command.mapCycle) assert(mapTransitions.join(',').includes(
           'kanto_pallet_town,kanto_players_house,kanto_pallet_town'),'Real house entry and return');
         if(textureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
           x.cachedEffectTextures?.uniqueTextures>0),'Rendered cached-effect audit captured');
-        if(worldTextureAudit) assert(markers.some(x=>x.label==='battle_actions_ready' &&
+        if(worldTextureAudit && !mapOnly) assert(markers.some(x=>x.label==='battle_actions_ready' &&
           x.cachedWorldTextures?.uniqueTextures>0),'Rendered world texture audit captured');
         success=true; break;
       }
@@ -141,7 +152,7 @@ const {execFileSync}=require('node:child_process');
     }
     assert(success,'Finish and validate the real battle run');
   } finally {
-    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,textureAudit,worldTextureAudit,timingComparable:!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
+    fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success,scenario,mapOnly,textureAudit,worldTextureAudit,timingComparable:!mapOnly&&!textureAudit&&!worldTextureAudit,softwareWebGL:true,viewport:'1440x900',mapTransitions,api,markers,snapshots,errors,battleStarts,battleTurns,battleEnds},null,2));
     await page.screenshot({path:path.join(output,'last-state.png')}).catch(()=>{});
     await browser.close();
     process.stdin.pause();

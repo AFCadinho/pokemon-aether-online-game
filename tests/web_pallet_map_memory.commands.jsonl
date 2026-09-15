@@ -1,0 +1,5 @@
+{"steps":{"key":"ArrowUp","count":4},"label":"pallet_above_trees"}
+{"steps":{"key":"ArrowRight","count":7},"label":"pallet_door_column"}
+{"walk":{"key":"ArrowUp","mapId":"kanto_players_house"},"wait":5000,"label":"house_entered"}
+{"walk":{"key":"ArrowDown","mapId":"kanto_pallet_town"},"wait":5000,"label":"pallet_returned"}
+{"finish":true,"mapCycle":true}
