@@ -54,6 +54,18 @@ func _run() -> void:
 	menu.open()
 	var dropdown: OptionButton = menu.world_pixel_scale_options_button
 	_check(not dropdown.disabled, "Normal world settings allow personal zoom")
+	menu.call("_on_world_pixel_scale_selected", 0)
+	_check(settings.is_world_pixel_scale_auto(), "Desktop Settings can select automatic world view")
+	for resolution: Vector2i in RESOLUTIONS:
+		root.size = resolution
+		await process_frame
+		await process_frame
+		player.call("_apply_world_pixel_scale")
+		var expected_view := Vector2(root.size) / PIXELS.browser_output_scale(root.size)
+		_check((root.get_visible_rect().size / camera.zoom).is_equal_approx(expected_view), "Actual desktop player matches browser automatic view at %s" % resolution)
+	menu.call("_on_world_pixel_scale_selected", 2)
+	_check(not settings.is_world_pixel_scale_auto() and settings.world_pixel_scale == 1.5, "Desktop Settings can switch back to manual 1.5x")
+	_check(camera.zoom.is_equal_approx(PIXELS.camera_zoom_for_output_scale(1.5, root.get_screen_transform().get_scale())), "Selecting manual zoom immediately restores the chosen scale")
 	var photo = load("res://scenes/interface/content_creator_photo_mode.tscn").instantiate()
 	root.add_child(photo)
 	photo.open_photo_mode()
