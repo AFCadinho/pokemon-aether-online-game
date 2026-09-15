@@ -387,6 +387,47 @@ the incoming threaded-resource shutdown check pass together. The paired numbers
 above remain evidence for the exact identified builds, not a new combined-batch
 benchmark or a claim about post-shutdown-fix idle allocation.
 
+### Grass-sheet sharing — focused native prewarm check
+
+The next identical pair was `common/grassyterrain/PRAS- Grass.png` versus the
+Grass terrain texture already held by the battle scene. Source SHA-256 and all
+import parameters match. Five move entries (`grassyterrain`, `vinewhip`,
+`leafage`, `razorleaf`, `growth`) and `grassy_terrain_start` now share the latter.
+Only six sheet paths changed; frames, bitmap bytes, sound, animation options,
+threaded preparation and Pokémon sprite prefetch are unchanged.
+
+Before changing those entries, `shared_grass_texture_check.gd --expect-distinct`
+loaded the real battle scene and prewarmed all five moves plus the terrain-start
+effect through the current animation router. It passed with two unique sheet
+RIDs, 14.0625 MiB estimated base RGBA. The updated default check passed with one
+unique RID, 7.03125 MiB. All six prepared sheet references are the exact resource
+held by the terrain scene, and all threaded load tokens are collected. The check
+also compares source bytes/import parameters and is registered in the project
+check list so regressions are caught by future CI/full verification. Registration
+does not mean the complete project gate was run for this task.
+
+This is a **headless native resource/prewarm test**, not a new rendered browser
+benchmark. It proves elimination of one logical 960 × 1920 sheet copy when the
+Grass moves are prepared (7.03 MiB base RGBA estimate), not measured total RAM,
+GPU allocation or battle-start latency. Do not add this estimate to the measured
+Electric counter saving or claim a new browser idle target. Six Python identity
+checks cover both Electric and Grass. Existing scene UID fallback warnings remain
+visible in the native logs; editor scanning generated only the new test UID.
+The shared catalogues apply to desktop and browser; the backend was not changed
+or interrupted for this phase. A rendered Grass battle on a clean current build
+remains the next integration-level evidence, especially with the newer cleanup.
+
+Run the default regression from slot-C frontend through slot-env:
+
+```sh
+/home/adinho/Desktop/pokemonaetheronline/game/ops/worktrees/slot-env slot-c -- \
+  godot --headless --path . --script tests/shared_grass_texture_check.gd
+python3 tests/test_shared_electric_texture.py
+```
+
+The historical `--expect-distinct` mode is only for the pre-sharing catalogue;
+it is expected to fail against the new shared catalogue.
+
 ## Battle timing protocol for a future candidate
 
 Use a disposable local gameplay account with the real battle runtime. Repeat
