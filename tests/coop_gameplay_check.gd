@@ -390,6 +390,10 @@ func _run() -> void:
 		and left_wild.material == null and right_wild.material == null,
 		"Escape cancels target selection without submitting an action")
 	var capture_player: CaptureBallAnimationPlayer = mounted_battle.get_node("%CaptureBallAnimationPlayer")
+	_expect(not presenter._capture_round_ready({"partnerReady": false, "turn": 4, "ended": false}, 4)
+		and presenter._capture_round_ready({"partnerReady": true, "turn": 4, "ended": false}, 4)
+		and presenter._capture_round_ready({"partnerReady": false, "turn": 5, "ended": false}, 4),
+		"co-op capture preview waits for the partner's choice or the next resolved turn")
 	_expect(presenter.embedded_hosts.get("capture_player") == capture_player and presenter._capture_status == null,
 		"co-op uses the normal capture animation and has no feedback label below the party")
 	presenter._capture_target_controller = "p2"

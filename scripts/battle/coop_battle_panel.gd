@@ -817,6 +817,7 @@ func _show_capture_feedback_in_prompt() -> void:
 func _submit_capture_with_preview(item_id: String) -> void:
 	if _capture_animation_pending:
 		return
+	var chosen_turn := int(CoopService.view.get("turn", -1))
 	var options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
 	_capture_target_controller = str(options.get("targetController", "p2" if CoopService.view.get("participant") == "p1" else "p4"))
 	_capture_animation_pending = _native_mode
@@ -827,11 +828,16 @@ func _submit_capture_with_preview(item_id: String) -> void:
 		var capture_key := "%s:%s" % [str(CoopService.activity.get("reservationId", "")), str(accepted.get("checkpointRevision", ""))]
 		if capture_key != _played_capture_key:
 			_played_capture_key = capture_key
-			await _play_native_capture_preview(item_id, accepted)
-			_capture_feedback_text = "Caught! Your Pokémon will be saved when the shared battle finishes." if accepted.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(accepted.get("shakeCount", 0))
-			_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
-			if _native_log != null:
-				_native_log.add_message(_capture_feedback_text)
+			# Acceptance can arrive while the other Trainer is still choosing.
+			# Keep the throw and its outcome off-screen until that choice is in.
+			while is_inside_tree() and str(CoopService.view.get("battleId", "")) == displayed_battle and str(CoopService.activity.get("status", "")) == "active" and not _capture_round_ready(CoopService.view, chosen_turn):
+				await CoopService.state_changed
+			if is_inside_tree() and str(CoopService.view.get("battleId", "")) == displayed_battle and str(CoopService.activity.get("status", "")) != "cancelled":
+				await _play_native_capture_preview(item_id, accepted)
+				_capture_feedback_text = "Caught! Your Pokémon will be saved when the shared battle finishes." if accepted.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(accepted.get("shakeCount", 0))
+				_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
+				if _native_log != null:
+					_native_log.add_message(_capture_feedback_text)
 	if not is_inside_tree():
 		return
 	_capture_animation_pending = false
@@ -839,6 +845,10 @@ func _submit_capture_with_preview(item_id: String) -> void:
 	_update_actions()
 	if _revision != int(_latest.get("revision", -1)):
 		_present.call_deferred()
+
+
+func _capture_round_ready(view: Dictionary, chosen_turn: int) -> bool:
+	return bool(view.get("partnerReady", false)) or int(view.get("turn", -1)) > chosen_turn or bool(view.get("ended", false))
 
 
 func _play_native_capture_preview(item_id: String, accepted: Dictionary) -> void:
