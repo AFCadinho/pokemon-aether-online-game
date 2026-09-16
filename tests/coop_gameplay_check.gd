@@ -261,6 +261,9 @@ func _run() -> void:
 		and battle_log.log_buffer.contains("Defense fell for admin's Jigglypuff!")
 		and not battle_log.log_buffer.contains("→") and not battle_log.log_buffer.contains("DEF ↓"),
 		"co-op log describes moves and stat changes as readable battle narration")
+	presenter._append_event({"kind": "-damage", "actor": "p2", "hpPercent": 75, "damagePercent": 25})
+	_expect(battle_log.log_buffer.contains("Wild Pidgey (1) lost 25.0% of its health!"),
+		"co-op log reports the damage dealt by each hit instead of only remaining HP")
 	battle_log.clear_log()
 	presenter._latest = hover_view
 	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible

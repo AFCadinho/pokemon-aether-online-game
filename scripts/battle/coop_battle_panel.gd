@@ -1066,7 +1066,11 @@ func _append_event(event: Dictionary) -> void:
 		"coopcapture": text = "%s caught a wild Pokémon!" % _role(controller) if event.get("caught", false) else "The wild Pokémon escaped from %s's ball!" % _role(controller)
 		"switch", "drag", "replace": text = _send_out_message(controller, str(event.get("details", "")))
 		"faint": text = "%s fainted." % actor
-		"-damage": text = "%s is at %s%% HP." % [actor, str(event.get("hpPercent", 0))]
+		"-damage":
+			if event.has("damagePercent") and float(event.get("damagePercent", 0)) > 0.0:
+				text = "%s lost %.1f%% of its health!" % [actor, float(event.get("damagePercent", 0))]
+			else:
+				text = "%s is at %s%% HP." % [actor, str(event.get("hpPercent", 0))]
 		"-heal": text = "%s recovered health!" % actor
 		"-status": text = "%s is %s!" % [actor, _status_name(str(event.get("status", "")))]
 		"-curestatus": text = "%s recovered from its status!" % actor

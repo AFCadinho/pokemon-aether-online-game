@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op battle logs now show how much HP each hit took, as a percentage.
+
 - Co-op Pokémon hover cards now show possible abilities and speed tiers. Stat-change badges sit below the HP panels instead of inside them.
 
 - Co-op double battles now use readable battle-log messages, show the normal Pokémon and move hover cards, and display stat-stage badges under each Pokémon's HP bar.
