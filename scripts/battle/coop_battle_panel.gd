@@ -50,6 +50,7 @@ var _action_scroll: ScrollContainer
 var _decision_overlay: ColorRect
 var _decision_title: Label
 var _wait_button: Button
+var _cancel_target_button: Button
 var _native_turn: BattleStatusPanel
 var _native_vs: BattleVsPanelContainer
 var _native_party: PartyGrid
@@ -148,6 +149,12 @@ func _ready() -> void:
 		bag.get_parent().add_child(_wait_button)
 		bag.get_parent().move_child(_wait_button, 1)
 		_wait_button.pressed.connect(func() -> void: _on_native_utility_action("wait"))
+		_cancel_target_button = bag.duplicate(0) as Button
+		_cancel_target_button.name = "CoopCancelTargetButton"
+		_cancel_target_button.text = "Cancel"
+		_cancel_target_button.tooltip_text = "Cancel target selection and choose a move again."
+		bag.get_parent().add_child(_cancel_target_button)
+		_cancel_target_button.pressed.connect(_cancel_target_selection)
 		var utility: Control = stage.get_node("%UtilityActions")
 		utility.offset_left = -244
 		utility.offset_top = -240
@@ -588,10 +595,12 @@ func _update_actions() -> void:
 	_action_signature = signature
 	if _native_mode:
 		_sync_action_scroll.call_deferred()
+		_native_moves.set_input_disabled(false)
 		_native_moves.visible = false
 		_native_utility.set_action_visible("bag", false)
 		_native_utility.set_action_visible("run", false)
 		_wait_button.visible = false
+		_cancel_target_button.visible = false
 		_native_party.set_selection_enabled(false)
 	var last_capture: Dictionary = CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else {}
 	_capture_status.text = ""
@@ -660,6 +669,7 @@ func _update_actions() -> void:
 			prepared["disabled"] = bool(move.get("disabled", false)) or _move_actions(int(move.get("slot", 0))).is_empty()
 			display_moves.append(prepared)
 		_native_moves.set_moves(display_moves)
+		_native_moves.set_input_disabled(selected_move > 0)
 		_native_moves.visible = not display_moves.is_empty() and not CoopService.view.get("forceSwitch", false) and not _bag_open
 		_native_party.set_selection_enabled(true)
 		for slot_index in range(_native_party.get_child_count()):
@@ -727,7 +737,15 @@ func _update_actions() -> void:
 			button.disabled = choices.is_empty()
 			button.modulate = ACCENT if selected_move == slot else Color.WHITE
 	if selected_move > 0:
-		_prompt.text = "Choose a target: click a Pokémon or use arrows + Space."
+		_prompt.text = "Choose a target: click a Pokémon or use arrows + Space. Cancel to choose another move."
+		if _native_mode:
+			_native_utility.set_action_visible("bag", false)
+			_native_utility.set_action_visible("run", false)
+			_wait_button.visible = false
+			_cancel_target_button.visible = true
+			_native_party.set_selection_enabled(false)
+		else:
+			_button(_actions, "Cancel target selection", _cancel_target_selection)
 		var legal_targets: Array[String] = []
 		for action: Dictionary in _move_actions(selected_move):
 			for controller: String in SLOTS:
@@ -777,7 +795,7 @@ func _sync_action_scroll() -> void:
 
 
 func _select_switch(slot: int) -> void:
-	if _playing or CoopService.view.get("locked", true):
+	if _playing or selected_move > 0 or CoopService.view.get("locked", true):
 		return
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "switch" and int(action.get("slot", 0)) == slot:
@@ -786,7 +804,7 @@ func _select_switch(slot: int) -> void:
 
 
 func _on_native_utility_action(action: String) -> void:
-	if not _native_mode or _playing or CoopService.view.get("locked", true):
+	if not _native_mode or _playing or selected_move > 0 or CoopService.view.get("locked", true):
 		return
 	if action == "bag":
 		_bag_open = not _bag_open
@@ -800,12 +818,22 @@ func _on_native_utility_action(action: String) -> void:
 
 
 func _select_move(slot: int) -> void:
+	if selected_move > 0:
+		return
 	var actions := _move_actions(slot)
 	if actions.is_empty() or _playing: return
 	if actions.size() == 1 and not actions[0].has("target"):
 		await CoopService.submit_action(actions[0])
 		return
 	selected_move = slot
+	selected_target = ""
+	_update_actions()
+
+
+func _cancel_target_selection() -> void:
+	if selected_move <= 0 or not CoopService.pending_command.is_empty():
+		return
+	selected_move = 0
 	selected_target = ""
 	_update_actions()
 
@@ -844,9 +872,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			_select_target(selected_target)
 		KEY_ESCAPE:
-			selected_move = 0
-			selected_target = ""
-			_update_actions()
+			_cancel_target_selection()
 			get_viewport().set_input_as_handled()
 
 

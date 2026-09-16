@@ -312,8 +312,21 @@ func _run() -> void:
 	presenter._update_actions()
 	_expect(not presenter._wait_button.visible, "Wait cannot be selected while the decision is locked")
 	service.view.locked = false
+	service.view.moves.append({"slot": 2, "name": "Sing", "pp": 15, "maxPp": 15})
+	service.view.legalActions.append({"type": "move", "slot": 2, "target": 1})
 	presenter._action_signature = ""
 	presenter._update_actions()
+	presenter._select_move(1)
+	_expect(presenter._cancel_target_button.visible and presenter._native_moves.input_disabled
+		and not presenter._wait_button.visible,
+		"target mode disables moves and shows Cancel instead of other actions")
+	presenter._select_move(2)
+	_expect(presenter.get("selected_move") == 1,
+		"clicking another move cannot replace the pending move selection")
+	presenter._cancel_target_button.pressed.emit()
+	_expect(presenter.get("selected_move") == 0 and not presenter._cancel_target_button.visible
+		and not presenter._native_moves.input_disabled and presenter._native_moves.visible,
+		"Cancel returns to available moves without submitting an action")
 	presenter._select_move(1)
 	var target_cards: Dictionary = presenter.get("cards")
 	var left_enemy_target: Rect2 = target_cards["p2"].target.get_global_rect()
