@@ -39284,7 +39284,7 @@ func _create_coop_party_hud() -> void:
 	coop_party_hud.offset_left = -304.0
 	coop_party_hud.offset_right = -64.0
 	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
-	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 104.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
 	coop_party_hud.pressed.connect(_open_coop_party_popup)
 	root_control.add_child(coop_party_hud)
 	_position_coop_party_hud()
@@ -39293,12 +39293,44 @@ func _position_coop_party_hud() -> void:
 	if coop_party_hud == null or personal_buffs_panel == null:
 		return
 	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
-	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 104.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
 
 func _refresh_coop_party_hud() -> void:
 	if coop_party_hud == null:
 		return
-	coop_party_hud.call("set_members", CoopService.party if CoopService.available else {}, int(AuthService.current_user.get("id", 0)))
+	var own_id := int(AuthService.current_user.get("id", 0))
+	coop_party_hud.call("set_members", _coop_party_hud_data() if CoopService.available else {}, own_id)
+
+func _coop_party_hud_data() -> Dictionary:
+	var party := CoopService.party.duplicate(true)
+	var ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	if ids.size() != 2:
+		return party
+	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
+	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
+	var own_id := str(AuthService.current_user.get("id", ""))
+	if not own_id.is_empty():
+		if not names.has(own_id):
+			names[own_id] = str(AuthService.current_user.get("username", ""))
+		if not appearances.has(own_id) or appearances[own_id] is not Dictionary or str(appearances[own_id].get("body", "")).is_empty():
+			appearances[own_id] = PlayerSave.to_appearance_state()
+	var world := GameState.get_world()
+	var remote_players: Dictionary = world.get("remote_player_avatars") if world != null and world.get("remote_player_avatars") is Dictionary else {}
+	for member_id: Variant in ids:
+		var key := str(member_id)
+		if key == own_id:
+			continue
+		var avatar: Node = remote_players.get(key)
+		if avatar == null or not is_instance_valid(avatar):
+			continue
+		var presence: Dictionary = avatar.get("presence_state") if avatar.get("presence_state") is Dictionary else {}
+		if not names.has(key):
+			names[key] = str(presence.get("username", ""))
+		if not appearances.has(key) or appearances[key] is not Dictionary or str(appearances[key].get("body", "")).is_empty():
+			appearances[key] = presence.get("appearance", {}) if presence.get("appearance") is Dictionary else {}
+	party["memberUsernames"] = names
+	party["memberAppearances"] = appearances
+	return party
 
 func _open_coop_party_popup(recipient_name: String = "") -> void:
 	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():

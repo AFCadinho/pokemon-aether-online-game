@@ -40,27 +40,18 @@ func _ready() -> void:
 	title.add_theme_font_size_override("font_size", 11)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(title)
-	var members := HBoxContainer.new()
+	var members := VBoxContainer.new()
 	members.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	members.add_theme_constant_override("separation", 6)
+	members.add_theme_constant_override("separation", 4)
 	column.add_child(members)
 	for index in 2:
-		var slot := VBoxContainer.new()
+		var slot := HBoxContainer.new()
 		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		slot.add_theme_constant_override("separation", 2)
+		slot.add_theme_constant_override("separation", 8)
 		members.add_child(slot)
-		var name := Label.new()
-		name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name.clip_text = true
-		name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		name.add_theme_color_override("font_color", TEXT if index == 0 else MUTED)
-		name.add_theme_font_size_override("font_size", 11)
-		name.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		slot.add_child(name)
-		_names.append(name)
 		var frame := CenterContainer.new()
-		frame.custom_minimum_size.y = 44
+		frame.custom_minimum_size = Vector2(42, 42)
 		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot.add_child(frame)
 		var portrait := TrainerHeadPortrait.new()
@@ -75,6 +66,16 @@ func _ready() -> void:
 		fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		frame.add_child(fallback)
 		_fallbacks.append(fallback)
+		var name := Label.new()
+		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name.clip_text = true
+		name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name.add_theme_color_override("font_color", TEXT if index == 0 else MUTED)
+		name.add_theme_font_size_override("font_size", 12)
+		name.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(name)
+		_names.append(name)
 
 
 func set_members(party: Dictionary, own_id: int) -> void:
@@ -91,7 +92,9 @@ func set_members(party: Dictionary, own_id: int) -> void:
 	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
 	for index in 2:
 		var member_id := str(own_member if index == 0 else partner_member)
-		var name := str(names.get(member_id, "Trainer"))
+		var name := str(names.get(member_id, "")).strip_edges()
+		if name.is_empty():
+			name = "Trainer #%s" % member_id
 		_names[index].text = name
 		_names[index].tooltip_text = name
 		var appearance: Dictionary = appearances.get(member_id, {}) if appearances.get(member_id) is Dictionary else {}
@@ -99,6 +102,7 @@ func set_members(party: Dictionary, own_id: int) -> void:
 			_portraits[index].set_appearance_state(appearance)
 		_portraits[index].visible = not str(appearance.get("body", "")).is_empty()
 		_fallbacks[index].visible = not _portraits[index].visible
+		_fallbacks[index].text = name.substr(0, 1).to_upper()
 	tooltip_text = "Adventure Party: %s and %s" % [_names[0].text, _names[1].text]
 
 

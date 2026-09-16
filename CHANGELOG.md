@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
+
 - Bot difficulty names in Guild training no longer include the technical fallback note.
 
 - The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
