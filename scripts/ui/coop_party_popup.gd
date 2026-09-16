@@ -54,9 +54,9 @@ func _ready() -> void:
 	_refresh()
 
 
-func open(recipient_id: int = 0) -> void:
-	if recipient_id > 0:
-		_recipient_text = str(recipient_id)
+func open(recipient_name: String = "") -> void:
+	if not recipient_name.is_empty():
+		_recipient_text = recipient_name
 	_refresh()
 	visible = true
 	var viewport_size := get_viewport_rect().size
@@ -101,9 +101,9 @@ func _refresh() -> void:
 		child.queue_free()
 	_status = _label("Up to 3 Pokémon per Trainer", MUTED)
 	if CoopService.party.is_empty():
-		_label("Invite another Trainer using their Trainer ID.", TEXT)
+		_label("Invite a Trainer by username or Trainer name.", TEXT)
 		_recipient = LineEdit.new()
-		_recipient.placeholder_text = "Trainer ID"
+		_recipient.placeholder_text = "Username or Trainer name"
 		_recipient.text = _recipient_text
 		_recipient.text_changed.connect(func(value: String) -> void: _recipient_text = value)
 		_recipient.add_theme_stylebox_override("normal", _style(SURFACE, BORDER))
@@ -122,12 +122,17 @@ func _refresh() -> void:
 
 
 func _invite() -> void:
-	if not _recipient_text.is_valid_int() or int(_recipient_text) <= 0:
-		_show_error("Enter a valid Trainer ID.")
+	var name := _recipient_text.strip_edges()
+	if name.is_empty() or name.length() > 32:
+		_show_error("Enter a username or Trainer name (up to 32 characters).")
 		return
-	var result: Dictionary = await CoopService.party_action("invite", {"recipientId": int(_recipient_text)})
+	var result: Dictionary = await CoopService.party_action("invite", {"recipientName": name})
 	if result.get("success", false):
 		_status.text = "Invitation sent."
+	elif result.get("code") == "coop_recipient_name_ambiguous":
+		_show_error("Several Trainers use that name. Enter their unique username.")
+	elif result.get("code") == "coop_recipient_unavailable":
+		_show_error("No Trainer found with that name.")
 
 
 func _show_error(message: String) -> void:

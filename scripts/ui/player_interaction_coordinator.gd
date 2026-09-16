@@ -14,7 +14,7 @@ signal mail_requested(username: String)
 signal trainer_card_requested(player: Dictionary)
 signal chat_moderation_requested(action: String, player: Dictionary)
 signal social_overview_updated(overview: Dictionary)
-signal coop_invitation_requested(trainer_id: int)
+signal coop_invitation_requested(trainer_name: String)
 
 const CHAT_MUTE_PERMISSION := "chat:mute"
 
@@ -1047,11 +1047,11 @@ func _on_guild_invite_pressed() -> void:
 
 
 func _on_coop_invite_pressed() -> void:
-	var trainer_id := int(current_target.get("userId", 0))
-	if trainer_id <= 0 or not CoopService.available or not CoopService.party.is_empty():
+	var trainer_name := str(current_target.get("username", "")).strip_edges()
+	if trainer_name.is_empty() or not CoopService.available or not CoopService.party.is_empty():
 		return
 	close_context_menu()
-	coop_invitation_requested.emit(trainer_id)
+	coop_invitation_requested.emit(trainer_name)
 
 
 func _can_challenge_aether_clash() -> bool:
