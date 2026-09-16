@@ -15,6 +15,7 @@ const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_dep
 const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
 const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
 const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
+const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
