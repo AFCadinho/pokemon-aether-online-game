@@ -508,7 +508,8 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			continue
 		opponent_team[index] = {"species": str(position.get("details", "")).split(",")[0].strip_edges(),
 			"hp": int(position.get("hpPercent", 0)), "maxHp": 100,
-			"fainted": bool(position.get("fainted", false))}
+			"fainted": bool(position.get("fainted", false)),
+			"active": not bool(position.get("fainted", false)) and int(position.get("hpPercent", 0)) > 0}
 	_opponent_party.set_party(opponent_team)
 	_opponent_party.set_empty_slots_visible(false)
 	var active: Dictionary = {}

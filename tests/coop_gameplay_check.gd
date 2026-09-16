@@ -186,6 +186,12 @@ func _run() -> void:
 		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
+	var wild_party_rail: PartyGrid = mounted_battle.get_node("%OpponentPartyGrid")
+	_expect(wild_party_rail.current_party_data[0].get("active", false)
+		and wild_party_rail.current_party_data[1].get("active", false)
+		and ((wild_party_rail.get_child(0) as Button).get_theme_stylebox("normal") as StyleBoxFlat).border_color == Color("#62d7ff")
+		and ((wild_party_rail.get_child(1) as Button).get_theme_stylebox("normal") as StyleBoxFlat).border_color == Color("#62d7ff"),
+		"both present wild Pokémon glow as active in the opponent side rail")
 	var left_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
 	var right_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
 	var left_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
