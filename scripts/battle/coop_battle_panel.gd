@@ -25,6 +25,9 @@ var _epoch := 0
 var _action_signature := ""
 var _escape_return_started := false
 var _escape_return_retry_available := false
+var _loading_overlay: ColorRect
+var _loading_label: Label
+var _loading_cancel: Button
 var _effects: Node
 var _native_mode := false
 var _native_moves: MovesGrid
@@ -201,7 +204,60 @@ func _ready() -> void:
 			_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
 	CoopService.state_changed.connect(_sync)
 	CoopService.request_failed.connect(_show_error)
+	if _native_mode:
+		_setup_loading_overlay()
 	_sync()
+
+
+func _setup_loading_overlay() -> void:
+	_loading_overlay = ColorRect.new()
+	_loading_overlay.name = "CoopBattleLoadingOverlay"
+	_loading_overlay.color = Color(0.025, 0.07, 0.12, 1.0)
+	_loading_overlay.z_index = 100
+	_loading_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	get_parent().add_child(_loading_overlay)
+	_loading_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var center := CenterContainer.new()
+	_loading_overlay.add_child(center)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(400, 140)
+	var card_style := StyleBoxFlat.new()
+	card_style.bg_color = Color("101c2b")
+	card_style.border_color = Color("328dd4")
+	card_style.set_border_width_all(2)
+	card_style.set_corner_radius_all(14)
+	card_style.set_content_margin_all(22)
+	card.add_theme_stylebox_override("panel", card_style)
+	center.add_child(card)
+	var content := VBoxContainer.new()
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_theme_constant_override("separation", 12)
+	card.add_child(content)
+	_loading_label = Label.new()
+	_loading_label.text = "Starting co-op battle…"
+	_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loading_label.add_theme_font_size_override("font_size", 22)
+	_loading_label.add_theme_color_override("font_color", Color("d6f2ff"))
+	content.add_child(_loading_label)
+	var detail := Label.new()
+	detail.text = "Syncing both Trainers and Pokémon"
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.add_theme_font_size_override("font_size", 15)
+	detail.add_theme_color_override("font_color", Color("a8bed2"))
+	content.add_child(detail)
+	_loading_cancel = Button.new()
+	_loading_cancel.text = "Cancel"
+	_loading_cancel.custom_minimum_size.y = 36
+	var cancel_style := StyleBoxFlat.new()
+	cancel_style.bg_color = Color("132b41")
+	cancel_style.border_color = Color("456d94")
+	cancel_style.set_border_width_all(1)
+	cancel_style.set_corner_radius_all(8)
+	_loading_cancel.add_theme_stylebox_override("normal", cancel_style)
+	_loading_cancel.pressed.connect(func() -> void:
+		await CoopService.party_action("cancel", {"reservationId": CoopService.activity.get("reservationId", "")}))
+	content.add_child(_loading_cancel)
 
 
 func _create_card(parent: Control, controller: String) -> void:
@@ -262,6 +318,8 @@ func _position_native_targets() -> void:
 func _sync() -> void:
 	_latest = CoopService.view.duplicate(true)
 	if _native_mode:
+		_update_loading_overlay()
+	if _native_mode:
 		_sync_native_trainers()
 		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
@@ -292,10 +350,18 @@ func _sync() -> void:
 		_present.call_deferred()
 
 
+func _update_loading_overlay() -> void:
+	var starting: bool = CoopService.activity.get("status") == "starting"
+	_loading_overlay.visible = starting or (CoopService.activity.get("status") == "active" and CoopService.view.is_empty())
+	_loading_cancel.visible = starting and CoopService.activity.get("canCancel", false)
+
+
 func _process(_delta: float) -> void:
 	if _connection == null and not _native_mode:
 		return
 	if _native_mode:
+		if _loading_overlay.visible:
+			_loading_label.text = "Starting co-op battle" + ".".repeat(1 + int(Time.get_ticks_msec() / 500) % 3)
 		_native_turn.hide_timer()
 		return
 	_connection.text = "%s  ·  %s" % [
@@ -514,7 +580,7 @@ func _update_actions() -> void:
 
 	if phase == "starting" or CoopService.view.is_empty():
 		_prompt.text = "Connecting both Trainers…"
-		if CoopService.activity.get("canCancel", false):
+		if CoopService.activity.get("canCancel", false) and not _native_mode:
 			_button(_actions, "Cancel start", func() -> void: await CoopService.party_action("cancel", {"reservationId": CoopService.activity.reservationId}))
 		return
 	if not CoopService.pending_command.is_empty():

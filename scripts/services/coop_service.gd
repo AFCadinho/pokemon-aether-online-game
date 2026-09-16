@@ -60,7 +60,8 @@ func _process(delta: float) -> void:
 		_polling = true
 		await refresh()
 		_polling = false
-		_poll_after = 2.0 if available else 30.0
+		var awaiting_battle: bool = activity.get("status") == "starting" or (activity.get("status") == "active" and view.is_empty())
+		_poll_after = 0.5 if awaiting_battle else 2.0 if available else 30.0
 
 
 func reset() -> void:
