@@ -21,7 +21,6 @@ var embedded_hosts: Dictionary = {}
 var cards: Dictionary = {}
 var selected_move := 0
 var selected_target := ""
-var _target_selection_mouse_position := Vector2.ZERO
 var displayed_cursor := -1
 var displayed_battle := ""
 var _decision := ""
@@ -184,10 +183,12 @@ func _ready() -> void:
 			target.visible = false
 			target.z_index = 60
 			target.focus_mode = Control.FOCUS_NONE
-			target.mouse_entered.connect(func() -> void: _hover_native_target(controller))
+			target.gui_input.connect(func(event: InputEvent) -> void:
+				if event is InputEventMouseMotion and event.relative.length_squared() > 0.0:
+					_focus_native_target(controller))
 			# Keep adjacent targets separate: the two double sprites are only ~158 px apart.
-			target.custom_minimum_size = Vector2(126, 112)
-			target.size = Vector2(126, 112)
+			target.custom_minimum_size = Vector2(126, 152)
+			target.size = Vector2(126, 152)
 			var invisible_style := StyleBoxEmpty.new()
 			for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 				target.add_theme_stylebox_override(state, invisible_style)
@@ -367,7 +368,8 @@ func _position_native_targets() -> void:
 		var sprite := _native_sprite(controller)
 		if sprite != null:
 			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
-			target.position = center - Vector2(target.size.x * 0.5, target.size.y - 16.0)
+			# Keep the old top edge but include the Pokémon's feet below its origin.
+			target.position = center - Vector2(target.size.x * 0.5, target.size.y - 56.0)
 
 
 func _sync() -> void:
@@ -832,7 +834,6 @@ func _select_move(slot: int) -> void:
 		return
 	selected_move = slot
 	selected_target = ""
-	_target_selection_mouse_position = get_viewport().get_mouse_position()
 	_update_actions()
 
 
@@ -887,14 +888,6 @@ func _focus_native_target(controller: String) -> void:
 		return
 	selected_target = controller
 	_refresh_target_highlight()
-
-
-func _hover_native_target(controller: String) -> void:
-	# Showing a target under a stationary cursor can emit mouse_entered immediately.
-	# Keep the initial selection on the left opponent until the player actually moves.
-	if get_viewport().get_mouse_position().distance_to(_target_selection_mouse_position) < 2.0:
-		return
-	_focus_native_target(controller)
 
 
 func _refresh_target_highlight() -> void:

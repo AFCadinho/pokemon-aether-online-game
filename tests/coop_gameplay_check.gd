@@ -335,8 +335,10 @@ func _run() -> void:
 	var right_ally_target: Rect2 = target_cards["p3"].target.get_global_rect()
 	_expect(not left_enemy_target.intersects(right_enemy_target)
 		and not left_ally_target.intersects(right_ally_target)
+		and left_enemy_target.has_point(left_wild.global_position + Vector2(0, 40))
+		and right_enemy_target.has_point(right_wild.global_position + Vector2(0, 40))
 		and target_cards["p4"].target.visible,
-		"both sides have separate clickable targets for the right-hand Pokemon")
+		"separate Pokémon hitboxes reach the feet without overlapping")
 	_expect(presenter.get("cards")["p2"].target.visible
 		and presenter.get("cards")["p4"].target.visible
 		and presenter.get("selected_target") == "p2"
@@ -352,8 +354,9 @@ func _run() -> void:
 		await RenderingServer.frame_post_draw
 		_expect(root.get_texture().get_image().save_png(target_capture_path) == OK,
 			"co-op sprite target highlight capture saved")
-	presenter._target_selection_mouse_position = presenter.get_viewport().get_mouse_position() + Vector2(100, 0)
-	(target_cards["p4"].target as Button).mouse_entered.emit()
+	var foot_hover := InputEventMouseMotion.new()
+	foot_hover.relative = Vector2(0, 8)
+	(target_cards["p4"].target as Button).gui_input.emit(foot_hover)
 	_expect(presenter.get("selected_target") == "p4"
 		and right_wild.material is ShaderMaterial
 		and left_wild.material == null,
