@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
+
 - Adventure Party invitations now accept usernames or Trainer names instead of requiring numeric Trainer IDs. If a Trainer name is shared, use the unique username; right-click invitations prefill it.
 
 - Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.

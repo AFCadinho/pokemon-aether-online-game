@@ -785,6 +785,33 @@ func _apply_timer_contract_message(message_type: String, message: Dictionary) ->
 	return timer_projection.apply_event(message)
 
 
+static func _has_completed_match_end(response: Dictionary) -> bool:
+	if not bool(response.get("success", false)):
+		return false
+	var match_end_value: Variant = response.get("pvpMatchEnd", {})
+	if not (match_end_value is Dictionary):
+		return false
+	var match_end := match_end_value as Dictionary
+	return bool(match_end.get("success", false)) and str(match_end.get("status", "")).strip_edges().to_lower() == "completed"
+
+
+static func is_confirmed_opponent_forfeit(message: Dictionary, local_player_id: String) -> bool:
+	# A bare action or an ended engine projection is not proof that the match
+	# settlement committed. Closing the room before then can forfeit our own
+	# connection while the server still considers the battle active.
+	if str(message.get("type", "")).strip_edges().to_lower() != "pvp.battle_update":
+		return false
+	if str(message.get("action", "")).strip_edges().to_lower() != "forfeit":
+		return false
+	var actor := str(message.get("playerId", "")).strip_edges()
+	if actor not in ["p1", "p2"] or actor == local_player_id:
+		return false
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	return _has_completed_match_end(response_value as Dictionary)
+
+
 static func should_apply_terminal_action_immediately(message: Dictionary, _local_player_id: String) -> bool:
 	var response_value: Variant = message.get("response", {})
 	if not (response_value is Dictionary):
@@ -803,6 +830,9 @@ static func should_apply_terminal_action_immediately(message: Dictionary, _local
 	var message_player_id := str(message.get("playerId", "")).strip_edges()
 	if not (message_action in ["forfeit", "disconnect", "abandon", "timeout"]) or message_player_id == "":
 		return false
+	if message_action == "forfeit":
+		# A mechanically ended engine snapshot can precede durable PvP settlement.
+		return _has_completed_match_end(response)
 
 	# The action response and battle-update broadcast can race each other. Treat a
 	# mechanically terminal response as idempotent terminal confirmation even when

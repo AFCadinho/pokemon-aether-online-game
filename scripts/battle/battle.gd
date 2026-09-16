@@ -14331,6 +14331,9 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 				return false
 			return true
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
+			if not PvpBattleRealtimeService.is_confirmed_opponent_forfeit(message, action_flow.local_player_id):
+				attempt += 1
+				continue
 			if response.is_empty():
 				continue
 
@@ -14583,6 +14586,9 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 				continue
 			return true
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
+			if not PvpBattleRealtimeService.is_confirmed_opponent_forfeit(message, action_flow.local_player_id):
+				attempt += 1
+				continue
 			if not response.is_empty():
 				if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_during_force_switch", not action_flow._response_has_deferred_display_event(response)):
 					_finish_battle({
