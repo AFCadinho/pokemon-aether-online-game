@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Single-target moves in co-op battles now start on the left opposing Pokémon, even when a target appears under a stationary cursor.
+
 - In co-op battles, choosing a target now locks the move buttons until you pick a Pokémon or press Cancel. Cancel returns to move selection without using a turn.
 
 - Returning from a co-op wild battle after both Trainers agree to Run is faster. The game checks the exit more often and avoids reloading the map when the settled Trainer is already on the correct tile.
