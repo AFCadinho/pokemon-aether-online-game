@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Typing a Trainer name in the Adventure Party invite window is no longer interrupted by the background party-status refresh.
+
 - The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
 
 - Bot difficulty names in Guild training no longer include the technical fallback note.

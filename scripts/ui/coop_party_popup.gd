@@ -106,6 +106,11 @@ func _refresh() -> void:
 		if visible:
 			close()
 		return
+	# Party state is polled every two seconds. Rebuilding a focused LineEdit on
+	# every poll drops keyboard focus and makes a username impossible to finish.
+	if visible and _focused_invitation_id.is_empty() and CoopService.party.is_empty() \
+			and is_instance_valid(_recipient) and _recipient.has_focus():
+		return
 	for child in _content.get_children():
 		_content.remove_child(child)
 		child.queue_free()
