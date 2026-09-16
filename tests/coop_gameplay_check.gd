@@ -158,9 +158,11 @@ func _run() -> void:
 	var player_side_rail: Control = mounted_battle.get_node("%PlayerStagePartyRail")
 	var battle_prompt: Control = mounted_battle.get_node("%CurrentActionPanel")
 	_expect(player_side_rail.get_global_rect().end.y < battle_prompt.get_global_rect().position.y
-		and mounted_battle.get_node("%BattlePlatform").offset_top < -357.0
-		and mounted_battle.get_node("%BattlePlatform2").offset_top < -496.0,
-		"co-op platforms sit nearer the Pokemon and all side slots clear the battle prompt")
+		and mounted_battle.get_node("%BattlePlatform").offset_top > -357.0
+		and mounted_battle.get_node("%BattlePlatform2").offset_top > -496.0
+		and mounted_battle.get_node("%PlayerSpriteBox").offset_top > -394.0
+		and mounted_battle.get_node("%EnemySpriteBox").offset_top > -201.0,
+		"co-op platforms and Pokémon sit lower while all side slots clear the battle prompt")
 	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
