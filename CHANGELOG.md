@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot Guild practice no longer keeps Turn 1 moves disabled for the 30-second presentation fallback after a confirmed opening release.
+
 - Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
 
 - Adventure Party invitations now accept usernames or Trainer names instead of requiring numeric Trainer IDs. If a Trainer name is shared, use the unique username; right-click invitations prefill it.
