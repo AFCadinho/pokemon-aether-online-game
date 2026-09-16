@@ -133,6 +133,10 @@ func _run() -> void:
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
 	service.activity = {"status": "active"}
+	presenter._process(0.0)
+	_expect(not mounted_battle.get_node("%BattleStatusPanel").timer_label.visible
+		and not mounted_battle.get_node("%BattleStatusPanel").turn_separator_label.visible,
+		"co-op PvE keeps the turn label without a decision countdown")
 	service.view = {"battleId": "coop-fixture", "revision": 8, "turn": 1, "decisionId": "coop-4",
 		"locked": false, "participant": "p1", "moves": [{"slot": 1, "name": "Pound", "pp": 35, "maxPp": 35}],
 		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30},
