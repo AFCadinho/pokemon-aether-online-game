@@ -82,8 +82,25 @@ func _run() -> void:
 	saved_escape_tile["activityState"] = "battle"
 	_expect(not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0)),
 		"unsettled co-op battle never closes through the fast return path")
+	var music_manager := root.get_node("MusicManager")
+	var previous_music_path: String = music_manager.current_track_path
+	var activity_before_music_check: Dictionary = service.activity.duplicate(true)
+	service.activity = {"reservationId": "fixture", "battleId": "coop-fixture", "status": "active",
+		"activityId": "kanto_route_1_youngster_liam"}
 	mounted_world._on_coop_state_changed()
 	_expect(host.visible and mounted_world.active_battle_kind == "coop" and host.get_child_count() == 1, "co-op entry shows the normally hidden battle host")
+	_expect(music_manager.current_track_path == music_manager.get_music_track_path("battle.trainer.kalos"),
+		"trainer co-op battle replaces map music with trainer battle music")
+	service.activity["activityId"] = "wild_grass:kanto_route_1"
+	mounted_world._on_coop_state_changed()
+	_expect(music_manager.current_track_path == music_manager.get_music_track_path("battle.wild.kanto"),
+		"wild co-op battle uses wild battle music when its activity becomes known")
+	service.activity["activityId"] = "kanto_route_1_youngster_liam"
+	if previous_music_path.is_empty():
+		music_manager.stop_music()
+	else:
+		music_manager.play_music(previous_music_path)
+	service.activity = activity_before_music_check
 	var mounted_battle: Control = host.get_child(0)
 	_expect(bool(mounted_battle.get("coop_mode")) and mounted_battle.get("coop_presenter") != null,
 		"co-op uses the ordinary battle scene with its own server-driven presenter")

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now switch from map music to wild or Trainer battle music, then restore map music on return.
+
 - Co-op battle logs now show how much HP each hit took, as a percentage.
 
 - Co-op Pokémon hover cards now show possible abilities and speed tiers. Stat-change badges sit below the HP panels instead of inside them.

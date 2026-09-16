@@ -5216,7 +5216,18 @@ func _on_coop_state_changed() -> void:
 		active_battle_kind = "coop"
 		_lock_overworld_for_battle()
 	active_battle_id = str(CoopService.activity.get("battleId", ""))
+	if CoopService.activity.get("status") in ["starting", "active"]:
+		_play_coop_battle_music(str(CoopService.activity.get("activityId", "")))
 	_publish_world_presence(true)
+
+
+func _play_coop_battle_music(activity_id: String) -> void:
+	if activity_id.is_empty():
+		return
+	if activity_id.begins_with("wild_"):
+		MusicManager.play_wild_battle_music()
+	else:
+		MusicManager.play_trainer_battle_music()
 
 
 func finish_coop_activity() -> void:
