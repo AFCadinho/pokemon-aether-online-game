@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
+
 - Adventure Party invitations now show the current shared story level cap before you accept.
 
 - Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.
