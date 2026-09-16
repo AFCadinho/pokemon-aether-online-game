@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
+
 - Fixed the local browser preview and web gateway blocking the Route 3 Magikarp purchase before it reached the game server.
 
 - Bot Guild trainers now show their names on the arena map when there is room; very large rosters keep compact [BOT] labels to avoid overlap.

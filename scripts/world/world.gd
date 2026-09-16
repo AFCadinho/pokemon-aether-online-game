@@ -1755,10 +1755,13 @@ func _setup_web_demo_world() -> void:
 			return
 		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
-	var assets := await WebAssetModuleService.ensure_scene_available(saved_scene_path)
-	if not bool(assets.get("success", false)):
-		_return_web_demo_to_login(str(assets.get("error", "Could not download your map. Please try again.")))
-		return
+	if not ResourceLoader.exists(saved_scene_path):
+		# Login has already mounted the saved map. Only direct world-scene
+		# launches need the asynchronous recovery path here.
+		var assets := await WebAssetModuleService.ensure_scene_available(saved_scene_path)
+		if not bool(assets.get("success", false)):
+			_return_web_demo_to_login(str(assets.get("error", "Could not download your map. Please try again.")))
+			return
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
 		_return_web_demo_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
