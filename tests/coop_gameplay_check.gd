@@ -79,6 +79,30 @@ func _run() -> void:
 	service.reset()
 	_expect(service.party.is_empty() and service.view.is_empty() and service.pending_command.is_empty(), "logout drops another account's view and retry keys")
 	controls.queue_free()
+	var party_popup: Control = load("res://scripts/ui/coop_party_popup.gd").new()
+	root.add_child(party_popup)
+	service.available = true
+	service.activity = {}
+	party_popup.call("open", 42)
+	_expect(party_popup.visible and party_popup.get("_recipient").text == "42", "social and right-click entry reuse a prefilled popup")
+	var visual_path := OS.get_environment("COOP_PARTY_VISUAL_CAPTURE_PATH")
+	if not visual_path.is_empty():
+		await create_timer(0.2).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(visual_path) == OK, "styled party visual capture saved")
+	party_popup.call("_on_header_input", _mouse_button(true))
+	party_popup.call("_input", _mouse_motion(Vector2(24, 12)))
+	_expect(party_popup.position != ((party_popup.get_viewport_rect().size - party_popup.size) / 2.0).max(Vector2.ZERO), "party popup drags within the viewport")
+	party_popup.call("close")
+	_expect(not party_popup.visible, "party popup closes without a fixed world button")
+	party_popup.queue_free()
+	_expect(load("res://scripts/ui/ui_overlay.gd") != null, "Socials overlay compiles with the party launcher")
+	var overlay_scene: PackedScene = load("res://scenes/interface/ui_overlay.tscn")
+	var overlay_ui := overlay_scene.instantiate()
+	_expect(overlay_ui.get_node_or_null("Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton") != null, "Socials menu contains an Adventure Party launcher")
+	overlay_ui.free()
+	var interaction_script: Script = load("res://scripts/ui/player_interaction_coordinator.gd")
+	_expect(interaction_script != null and interaction_script.get_script_signal_list().any(func(entry: Dictionary) -> bool: return entry.get("name") == "coop_invitation_requested"), "nearby Trainer context offers party invitation routing")
 	var world = load("res://scripts/world/world.gd")
 	_expect(world != null and world.can_instantiate(), "world compiles with co-op entry and recovery hooks")
 	await process_frame
@@ -89,3 +113,16 @@ func _expect(condition: bool, message: String) -> void:
 	if not condition:
 		failed = true
 		push_error(message)
+
+
+func _mouse_button(pressed: bool) -> InputEventMouseButton:
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.pressed = pressed
+	return event
+
+
+func _mouse_motion(delta: Vector2) -> InputEventMouseMotion:
+	var event := InputEventMouseMotion.new()
+	event.relative = delta
+	return event
