@@ -5232,6 +5232,7 @@ func finish_coop_activity() -> void:
 	if coop_finishing or (not already_acknowledged and CoopService.activity.get("status") not in ["finished", "cancelled"]):
 		return
 	coop_finishing = true
+	var escaped_wild_battle: bool = bool(CoopService.activity.get("escaped", false))
 	var key := str(CoopService.activity.get("reservationId", ""))
 	var profile: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not profile.get("success", false):
@@ -5243,20 +5244,47 @@ func finish_coop_activity() -> void:
 	if already_acknowledged and profile.get("position", {}).get("state", {}).get("activityState", "battle") == "battle":
 		coop_finishing = false
 		return
-	var inventory: Dictionary = await InventoryService.load_inventory()
-	if not inventory.get("success", false):
-		coop_finishing = false
-		return
+	# The authoritative profile already includes inventory. Avoid a second HTTP
+	# request; keep the dedicated endpoint as a compatibility fallback.
+	if not InventoryService.apply_inventory_state(profile.get("inventory", {})):
+		var inventory: Dictionary = await InventoryService.load_inventory()
+		if not inventory.get("success", false):
+			coop_finishing = false
+			return
 	PlayerSave.replace_party_from_state(profile.get("party", {}).get("party", []))
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": profile.get("wallet", {}), "badges": profile.get("badges", {})})
 	StoryService.apply_story(profile.get("story", {}))
+	var saved_position: Dictionary = profile.get("position", {}).get("state", {})
+	var can_resume_in_place := escaped_wild_battle and _can_resume_coop_escape_in_place(
+		saved_position, _get_map_id(GameState.current_map), _get_current_player_persistent_position())
 	if not already_acknowledged:
 		var response: Dictionary = await CoopService.party_action("acknowledge", {"reservationId": key})
 		if not response.get("success", false) and not CoopService.activity.is_empty():
 			coop_finishing = false
 			return
+	if can_resume_in_place:
+		# The settled escape leaves the Trainer at the same saved tile. The battle
+		# can close in this world instead of loading the entire map a second time.
+		_abort_battle_start(true)
+		coop_finishing = false
+		return
 	GameState.set_prepared_world_state({"hasSavedState": true, "savedState": profile.get("position", {}).get("state", {})})
 	# Account settlement already applied any respawn. Re-enter at that saved
 	# position; do not invoke the solo reward/blackout path a second time.
 	_abort_battle_start(true)
 	get_tree().call_deferred("reload_current_scene")
+
+
+func _can_resume_coop_escape_in_place(saved_state: Dictionary, current_map_id: String, current_position: Vector2) -> bool:
+	if current_map_id.is_empty() or str(saved_state.get("mapId", "")) != current_map_id:
+		return false
+	if str(saved_state.get("activityState", "")) != "idle":
+		return false
+	if saved_state.get("pendingTeleportRevision") != null:
+		return false
+	var position: Variant = saved_state.get("position", {})
+	if not position is Dictionary or not position.has("x") or not position.has("y"):
+		return false
+	if typeof(position["x"]) not in [TYPE_INT, TYPE_FLOAT] or typeof(position["y"]) not in [TYPE_INT, TYPE_FLOAT]:
+		return false
+	return current_position.distance_to(Vector2(float(position["x"]), float(position["y"]))) <= 2.0

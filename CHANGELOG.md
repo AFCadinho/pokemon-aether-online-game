@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Returning from a co-op wild battle after both Trainers agree to Run is faster. The game checks the exit more often and avoids reloading the map when the settled Trainer is already on the correct tile.
+
 - Co-op move targeting now highlights the selected Pokémon sprite; hover or arrow keys move the glow without covering the field with target boxes.
 
 - Both wild Pokémon in a co-op battle now glow in the side rail while they are active.

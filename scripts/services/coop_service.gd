@@ -61,7 +61,9 @@ func _process(delta: float) -> void:
 		await refresh()
 		_polling = false
 		var awaiting_battle: bool = activity.get("status") == "starting" or (activity.get("status") == "active" and view.is_empty())
-		_poll_after = 0.5 if awaiting_battle else 2.0 if available else 30.0
+		var awaiting_exit: bool = activity.get("status") == "active" and (bool(view.get("ended", false))
+			or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()))
+		_poll_after = 0.5 if awaiting_battle or awaiting_exit else 2.0 if available else 30.0
 
 
 func reset() -> void:
@@ -162,6 +164,8 @@ func apply_view(incoming: Dictionary) -> void:
 	if not view.is_empty() and int(incoming.get("revision", -1)) < int(view.get("revision", -1)):
 		return
 	view = incoming.duplicate(true)
+	if bool(view.get("ended", false)) or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()):
+		_poll_after = 0.0
 	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)
 		or (view.get("exitRequest") is Dictionary and not view.get("legalActions", []).has(pending_command.get("action")))):
 		pending_command = {}
@@ -350,6 +354,17 @@ func party_action(action: String, payload: Dictionary = {}) -> Dictionary:
 			if not invitation_id.is_empty() and not _sent_invitations.has(invitation_id):
 				_sent_invitations[invitation_id] = true
 				invitation_sent.emit(str(receipt.get("recipientUsername", payload.get("recipientName", "Trainer"))))
+		if action == "acknowledge":
+			# The accepted acknowledgement is enough to release this local battle.
+			# Normal polling will refresh invitations without blocking the world return.
+			_sequence += 1
+			_applied_sequence = _sequence
+			activity = {}
+			view = {}
+			pending_command = {}
+			_poll_after = 0.0
+			state_changed.emit()
+			return result
 	await refresh()
 	return result
 
