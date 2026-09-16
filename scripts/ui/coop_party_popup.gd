@@ -211,7 +211,7 @@ func _invite() -> void:
 
 func _show_error(message: String) -> void:
 	if is_instance_valid(_status):
-		_status.text = message
+		_status.text = LocalizationManager.text("ui.coop.wild.partner_too_far") if message == "coop_partner_too_far" else message
 
 
 func _add_member_card(name: String, appearance: Dictionary, is_self: bool, is_leader: bool) -> void:
