@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op Pokémon stand closer together in double battles. Both Trainers stand together behind the left Pokémon in Trainer battles and stay hidden in wild battles.
+
 - Co-op wild battle logs now announce both wild Pokémon and each Trainer's sent-out Pokémon in plain battle language.
 
 - Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.

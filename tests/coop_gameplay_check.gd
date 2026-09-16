@@ -176,6 +176,35 @@ func _run() -> void:
 		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
+	var left_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
+	var right_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
+	var left_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
+	var right_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
+	var coop_stage: Control = mounted_battle.get_node("%BattleStage")
+	var left_ally_on_stage: Vector2 = coop_stage.get_global_transform().affine_inverse() * left_ally.global_position
+	_expect(absf(left_ally.global_position.x - right_ally.global_position.x) < 180.0
+		and absf(left_wild.global_position.x - right_wild.global_position.x) < 180.0
+		and absf(left_ally.global_position.y - right_ally.global_position.y) < 12.0
+		and presenter._first_trainer.position.x < presenter._second_trainer.position.x
+		and presenter._second_trainer.position.x < left_ally_on_stage.x
+		and presenter._second_trainer.position.x - presenter._first_trainer.position.x < 80.0,
+		"both pairs stand close together while the Trainers group behind the left ally")
+	service.activity.activityId = "wild_grass:kanto_route_1"
+	presenter._sync_native_trainers()
+	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and not presenter._second_trainer.visible,
+		"wild doubles hide both Trainer sprites")
+	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
+	if not wild_layout_capture.is_empty():
+		await process_frame
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(wild_layout_capture) == OK,
+			"wild battle without Trainers capture saved")
+	service.activity.activityId = "brock"
+	presenter._sync_native_trainers()
+	_expect(mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and presenter._second_trainer.visible,
+		"NPC doubles restore both Trainer sprites")
 	service.activity = {"status": "active"}
 	presenter._process(0.0)
 	_expect(not mounted_battle.get_node("%BattleStatusPanel").timer_label.visible

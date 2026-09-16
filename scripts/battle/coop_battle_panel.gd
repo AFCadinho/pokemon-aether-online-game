@@ -107,9 +107,13 @@ func _ready() -> void:
 		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
 		stage.add_child(_second_trainer)
 		_first_trainer.position = Vector2(124, 426)
-		_second_trainer.position = Vector2(338, 426)
+		_second_trainer.position = Vector2(184, 426)
 		_first_trainer.scale = Vector2.ONE * 0.75
 		_second_trainer.scale = Vector2.ONE * 0.75
+		for side: String in ["player", "enemy"]:
+			var sprite_box: Control = embedded_hosts[side + "_sprite"]
+			sprite_box.set_double_sprite_horizontal_positions(158.0, 92.0)
+		_position_native_targets.call_deferred()
 		_log = RichTextLabel.new()
 		_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_log.custom_minimum_size.y = 160
@@ -965,6 +969,12 @@ func _opponent_title() -> String:
 
 
 func _sync_native_trainers() -> void:
+	if str(CoopService.activity.get("activityId", "")).begins_with("wild_"):
+		if _trainer_identity != "wild":
+			_first_trainer.clear()
+			_second_trainer.clear()
+			_trainer_identity = "wild"
+		return
 	var appearances: Dictionary = CoopService.party.get("memberAppearances", {})
 	var first: Dictionary = appearances.get(str(_party_member_id("p1")), {})
 	var second: Dictionary = appearances.get(str(_party_member_id("p3")), {})

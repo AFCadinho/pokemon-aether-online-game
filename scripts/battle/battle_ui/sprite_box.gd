@@ -156,6 +156,17 @@ func _cache_base_sprite_positions() -> void:
 	for sprite in _get_all_sprites():
 		base_sprite_positions[_get_sprite_key(sprite)] = sprite.position
 
+
+func set_double_sprite_horizontal_positions(left_x: float, right_x: float) -> void:
+	# Co-op can tighten its two slots without changing the single battle scene.
+	for entry: Array in [[double_sprite_1, left_x], [double_sprite_2, right_x]]:
+		var sprite := entry[0] as AnimatedSprite2D
+		var position: Vector2 = _get_base_sprite_position(sprite)
+		position.x = float(entry[1])
+		base_sprite_positions[_get_sprite_key(sprite)] = position
+		sprite.position = position
+		_snap_sprite_to_pixel_grid(sprite)
+
 func _get_all_sprites() -> Array[AnimatedSprite2D]:
 	return [
 		single_sprite,
