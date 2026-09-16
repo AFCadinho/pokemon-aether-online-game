@@ -42,8 +42,6 @@ var _applied_sequence := 0
 var _seen_invitations: Dictionary = {}
 var _sent_invitations: Dictionary = {}
 var _reported_profile_source := ""
-var _debug_state_polls := 0
-var _debug_state_signature := ""
 
 
 func _process(delta: float) -> void:
@@ -79,8 +77,6 @@ func reset() -> void:
 	_seen_invitations.clear()
 	_sent_invitations.clear()
 	_reported_profile_source = ""
-	_debug_state_polls = 0
-	_debug_state_signature = ""
 	_poll_after = 0.0
 	state_changed.emit()
 
@@ -89,7 +85,6 @@ func refresh() -> Dictionary:
 	_sequence += 1
 	var sequence := _sequence
 	var result := await _request("state", {})
-	_debug_state_response(result)
 	if result.get("success", false) and sequence >= _applied_sequence:
 		_applied_sequence = sequence
 		available = true
@@ -99,13 +94,22 @@ func refresh() -> Dictionary:
 
 func apply_state(body: Dictionary) -> void:
 	party = body.get("party", {}) if body.get("party") is Dictionary else {}
+	# Godot parses JSON numbers as floats (e.g. 7.0), but the server's public
+	# member maps use canonical integer-string keys ("7").
+	if party.get("memberIds") is Array:
+		var normalized_ids: Array[int] = []
+		for member_id: Variant in party["memberIds"]:
+			normalized_ids.append(int(member_id))
+		party["memberIds"] = normalized_ids
+	if party.has("leaderId"):
+		party["leaderId"] = int(party["leaderId"])
 	var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
 	if member_ids.size() == 2:
 		var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
 		var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
 		var incomplete := false
 		for member_id: Variant in member_ids:
-			var key := str(member_id)
+			var key := str(int(member_id))
 			var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
 			if str(names.get(key, "")).is_empty() or str(appearance.get("body", "")).is_empty():
 				incomplete = true
@@ -149,32 +153,6 @@ func _diagnostic_gateway_source() -> String:
 	if gateway.begins_with("https://api.pokeaether.com"):
 		return "production"
 	return "custom/unknown"
-
-
-func _debug_state_response(result: Dictionary) -> void:
-	if not OS.is_debug_build():
-		return
-	var body: Dictionary = result.get("body", {}) if result.get("body") is Dictionary else {}
-	var incoming_party: Dictionary = body.get("party", {}) if body.get("party") is Dictionary else {}
-	var ids: Array = incoming_party.get("memberIds", []) if incoming_party.get("memberIds") is Array else []
-	var names: Dictionary = incoming_party.get("memberUsernames", {}) if incoming_party.get("memberUsernames") is Dictionary else {}
-	var appearances: Dictionary = incoming_party.get("memberAppearances", {}) if incoming_party.get("memberAppearances") is Dictionary else {}
-	var name_present: Array[bool] = []
-	var portrait_present: Array[bool] = []
-	for member_id: Variant in ids:
-		var key := str(member_id)
-		var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
-		name_present.append(not str(names.get(key, "")).is_empty())
-		portrait_present.append(not str(appearance.get("body", "")).is_empty())
-	var diagnostic := {"source": _diagnostic_gateway_source(), "http": int(result.get("status", 0)),
-		"success": bool(result.get("success", false)), "code": str(result.get("code", "")),
-		"bodyKeys": body.keys(), "partyKeys": incoming_party.keys(), "memberIds": ids,
-		"namesPresent": name_present, "portraitsPresent": portrait_present}
-	var signature := JSON.stringify(diagnostic)
-	_debug_state_polls += 1
-	if _debug_state_polls <= 10 or signature != _debug_state_signature:
-		print("COOP_DIAG state ", signature)
-	_debug_state_signature = signature
 
 
 func apply_view(incoming: Dictionary) -> void:

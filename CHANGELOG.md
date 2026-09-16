@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party names and portraits now resolve correctly when Godot parses numeric member IDs from the server's JSON response.
+
 - If a connected server omits party names or portraits, System chat now identifies whether the client is using the local, production or a custom API.
 
 - Typing a Trainer name in the Adventure Party invite window is no longer interrupted by the background party-status refresh.

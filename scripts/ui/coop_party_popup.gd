@@ -146,8 +146,8 @@ func _refresh() -> void:
 		var members: Array = CoopService.party.get("memberIds", []) if CoopService.party.get("memberIds") is Array else []
 		var display_names: Array[String] = []
 		for member_id: Variant in members:
-			display_names.append(str(names.get(str(member_id), "Trainer")))
-		var leader_name := str(names.get(str(CoopService.party.get("leaderId", "")), "Trainer"))
+			display_names.append(str(names.get(str(int(member_id)), "Trainer")))
+		var leader_name := str(names.get(str(int(CoopService.party.get("leaderId", 0))), "Trainer"))
 		_label("Members: %s\nLeader: %s" % [", ".join(display_names), leader_name], TEXT)
 		var level_cap := int(CoopService.party.get("sharedLevelCap", 0))
 		if level_cap > 0:
