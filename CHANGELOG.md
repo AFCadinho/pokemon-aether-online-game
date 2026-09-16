@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Both wild Pokémon in a co-op battle now glow in the side rail while they are active.
+
 - Co-op Pokémon and their platforms now sit lower on the field, nearer the battle text and moves. The combined party icons stay fully above the battle text.
 
 - In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
