@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now open in the regular battle window, with both Trainers' Pokémon, opponents, battle events and shared turn actions placed in its battle stage and panels.
+
 - Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
 
 - Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
