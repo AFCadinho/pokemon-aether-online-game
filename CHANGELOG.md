@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Single battles again show full-width Pokémon HP bars after the double-battle HUD changes.
+
 - After both Trainers agree to flee a co-op wild battle, they return to the world automatically. A retry button appears if returning fails.
 
 - Co-op PvE battles show the turn without a countdown timer.
