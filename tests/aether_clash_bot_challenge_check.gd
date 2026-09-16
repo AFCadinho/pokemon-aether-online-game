@@ -85,6 +85,7 @@ func _ready() -> void:
 		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
 		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
+		_check(not str(catalog.get("ui.clash_bot.ai5", "")).contains("("), "%s keeps the Hard label concise" % locale)
 	await get_tree().process_frame
 	get_tree().quit(1 if failed else 0)
 
