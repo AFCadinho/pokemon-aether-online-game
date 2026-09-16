@@ -21,8 +21,6 @@ var _capture_status: Label
 var _bag_open := false
 var _actions: VBoxContainer
 var _log: RichTextLabel
-var _clock_at := 0
-var _server_time := 0.0
 var _epoch := 0
 var _action_signature := ""
 var _effects: Node
@@ -260,10 +258,6 @@ func _position_native_targets() -> void:
 
 
 func _sync() -> void:
-	var server_time := float(CoopService.activity.get("serverTime", 0))
-	if server_time != _server_time:
-		_server_time = server_time
-		_clock_at = Time.get_ticks_msec()
 	_latest = CoopService.view.duplicate(true)
 	if _native_mode:
 		_sync_native_trainers()
@@ -297,15 +291,12 @@ func _sync() -> void:
 func _process(_delta: float) -> void:
 	if _connection == null and not _native_mode:
 		return
-	var remaining := maxi(0, int(ceil(float(CoopService.activity.get("decisionDeadline", 0)) - _server_time - (Time.get_ticks_msec() - _clock_at) / 1000.0)))
 	if _native_mode:
-		_native_turn.turn_separator_label.visible = CoopService.activity.get("status") == "active"
-		_native_turn.timer_label.visible = CoopService.activity.get("status") == "active"
-		_native_turn.timer_label.text = "%ds" % remaining
+		_native_turn.hide_timer()
 		return
-	_connection.text = "%s  ·  %s  ·  %ds remaining" % [
+	_connection.text = "%s  ·  %s" % [
 		"Partner connected" if CoopService.activity.get("partnerConnected", false) else "Partner disconnected — temporary AI after 30s",
-		"Partner ready" if CoopService.view.get("partnerReady", false) else "Partner choosing", remaining]
+		"Partner ready" if CoopService.view.get("partnerReady", false) else "Partner choosing"]
 	if CoopService.activity.get("status") != "active":
 		_connection.text = "Both Trainers share this battle. Progress and rewards are saved by the server."
 	else:
