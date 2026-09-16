@@ -34,7 +34,6 @@ var _capture_status: Label
 var _bag_open := false
 var _capture_animation_pending := false
 var _capture_target_controller := ""
-var _played_capture_key := ""
 var _capture_feedback_text := ""
 var _capture_feedback_until_msec := 0
 var _actions: VBoxContainer
@@ -466,6 +465,12 @@ func _present() -> void:
 		var cursor := int(snapshot.get("eventCursor", 0))
 		var events: Array = snapshot.get("events", [])
 		var fresh: Array = events.filter(func(event: Dictionary) -> bool: return int(event.get("seq", 0)) > displayed_cursor)
+		# A capture receipt may arrive before the other Trainer commits a choice.
+		# Do not consume its shared event cursor or freeze the chooser's controls.
+		if fresh.any(func(event: Dictionary) -> bool: return event.get("kind") == "coopcapture" and not _capture_round_ready(snapshot, int(event.get("turn", -1)))):
+			_playing = false
+			_update_actions()
+			return
 		# Initial/reconnected snapshots and long gaps snap directly to authority.
 		# Never replay old damage over current HP, or spend a minute catching up.
 		var animate := displayed_cursor >= 0 and fresh.size() <= 20
@@ -817,27 +822,10 @@ func _show_capture_feedback_in_prompt() -> void:
 func _submit_capture_with_preview(item_id: String) -> void:
 	if _capture_animation_pending:
 		return
-	var chosen_turn := int(CoopService.view.get("turn", -1))
 	var options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
 	_capture_target_controller = str(options.get("targetController", "p2" if CoopService.view.get("participant") == "p1" else "p4"))
 	_capture_animation_pending = _native_mode
-	var result: Dictionary = await CoopService.submit_capture(item_id)
-	var body: Dictionary = result.get("body", {}) if result.get("body") is Dictionary else {}
-	var accepted: Dictionary = body.get("accepted", {}) if body.get("accepted") is Dictionary else {}
-	if _native_mode and bool(result.get("success", false)) and not accepted.is_empty() and is_inside_tree():
-		var capture_key := "%s:%s" % [str(CoopService.activity.get("reservationId", "")), str(accepted.get("checkpointRevision", ""))]
-		if capture_key != _played_capture_key:
-			_played_capture_key = capture_key
-			# Acceptance can arrive while the other Trainer is still choosing.
-			# Keep the throw and its outcome off-screen until that choice is in.
-			while is_inside_tree() and str(CoopService.view.get("battleId", "")) == displayed_battle and str(CoopService.activity.get("status", "")) == "active" and not _capture_round_ready(CoopService.view, chosen_turn):
-				await CoopService.state_changed
-			if is_inside_tree() and str(CoopService.view.get("battleId", "")) == displayed_battle and str(CoopService.activity.get("status", "")) != "cancelled":
-				await _play_native_capture_preview(item_id, accepted)
-				_capture_feedback_text = "Caught! Your Pokémon will be saved when the shared battle finishes." if accepted.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(accepted.get("shakeCount", 0))
-				_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
-				if _native_log != null:
-					_native_log.add_message(_capture_feedback_text)
+	await CoopService.submit_capture(item_id)
 	if not is_inside_tree():
 		return
 	_capture_animation_pending = false
@@ -848,7 +836,7 @@ func _submit_capture_with_preview(item_id: String) -> void:
 
 
 func _capture_round_ready(view: Dictionary, chosen_turn: int) -> bool:
-	return bool(view.get("partnerReady", false)) or int(view.get("turn", -1)) > chosen_turn or bool(view.get("ended", false))
+	return (bool(view.get("locked", false)) and bool(view.get("partnerReady", false))) or int(view.get("turn", -1)) > chosen_turn or bool(view.get("ended", false))
 
 
 func _play_native_capture_preview(item_id: String, accepted: Dictionary) -> void:
@@ -1023,6 +1011,7 @@ func _append_event(event: Dictionary) -> void:
 	match str(event.get("kind", "")):
 		"turn": text = "— Turn %s —" % str(event.get("turn", ""))
 		"move": text = "%s used %s → %s" % [actor, str(event.get("move", "")), _role(str(event.get("target", "")))]
+		"coopcapture": text = "%s caught a wild Pokémon!" % actor if event.get("caught", false) else "%s's wild Pokémon escaped from the ball." % actor
 		"switch", "drag", "replace": text = _send_out_message(controller, str(event.get("details", "")))
 		"faint": text = "%s fainted." % actor
 		"-damage", "-heal": text = "%s: %s%% HP" % [actor, str(event.get("hpPercent", 0))]
@@ -1061,6 +1050,15 @@ func _send_out_message(controller: String, details: String) -> String:
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
 	if _native_mode:
 		match str(event.get("kind", "")):
+			"coopcapture":
+				_capture_target_controller = str(event.get("target", ""))
+				if SettingsManager.battle_animations:
+					await _play_native_capture_preview(str(event.get("itemId", "poke-ball")), event)
+				if event.get("actor") == CoopService.view.get("participant"):
+					_capture_feedback_text = "Caught! Your Pokémon will be saved when the shared battle finishes." if event.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(event.get("shakeCount", 0))
+				else:
+					_capture_feedback_text = "%s caught a wild Pokémon!" % _role(str(event.get("actor", ""))) if event.get("caught", false) else "%s's wild Pokémon escaped from the ball." % _role(str(event.get("actor", "")))
+				_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
 			"move":
 				if SettingsManager.battle_animations:
 					await _play_native_attack(str(event.get("actor", "")))
