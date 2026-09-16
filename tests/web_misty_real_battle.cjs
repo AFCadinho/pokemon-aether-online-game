@@ -40,11 +40,20 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
       latestPosition={mapId:message.mapId,x:message.position?.x,y:message.position?.y};
     }
   }));
-  page.on('response',response=>{
+  page.on('response',async response=>{
     const url=new URL(response.url());
     if(url.origin!==origin||!url.pathname.startsWith('/api/'))return;
-    if(/\/battle\/trainer|choice-and-resolve|trainer-battle|world\/story|\/trainers\/|\/dialogues\//.test(url.pathname))
-      api.push({path:url.pathname.replace(/\/battle\/[^/]+\//,'/battle/[id]/'),status:response.status()});
+    if(/\/battle\/trainer|choice-and-resolve|trainer-battle|world\/story|\/trainers\/|\/dialogues\//.test(url.pathname)){
+      const entry={path:url.pathname.replace(/\/battle\/[^/]+\//,'/battle/[id]/'),status:response.status()};
+      if(url.pathname==='/api/battle/trainer'&&response.status()!==200){
+        try{
+          const payload=await response.json();
+          const code=String(payload?.detail?.code||payload?.code||'unknown');
+          if(/^[A-Za-z0-9_]{1,80}$/.test(code))entry.code=code;
+        }catch{}
+      }
+      api.push(entry);
+    }
   });
   let success=false, battleStart=false, battleTeardown=false, moves=0;
   try{
@@ -65,7 +74,7 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
     assert(maps.includes('kanto_cerulean_city_gym'),'Misty gym rendered from disposable save');
     await page.screenshot({path:path.join(output,'gym-ready.png')});
     await page.screenshot({path:path.join(output,'before-interaction.png')});
-    for(let i=0;i<40&&!api.some(x=>x.path==='/api/battle/trainer'&&x.status===200);i++){
+    for(let i=0;i<40&&!api.some(x=>x.path==='/api/battle/trainer');i++){
       assert(!lost,'Disposable runtime changed during dialogue');attest();
       await page.keyboard.press('Space');await page.waitForTimeout(700);
     }
