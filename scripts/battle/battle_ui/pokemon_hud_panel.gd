@@ -34,6 +34,7 @@ func _ready() -> void:
 	for row_index in range(active_info_rows.size()):
 		_clear_active_info_row_data(row_index)
 		_set_active_info_row_visible(row_index, false)
+	set_double_layout(false)
 
 func set_pokemon_data(
 	species: String,
@@ -65,7 +66,7 @@ func set_double_layout(enabled: bool) -> void:
 	custom_minimum_size.x = DOUBLE_HUD_WIDTH if enabled else SINGLE_HUD_WIDTH
 	for row: Control in active_info_rows:
 		row.custom_minimum_size.x = 230.0 if enabled else 0.0
-		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL if enabled else Control.SIZE_FILL
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 func set_experience_bar_enabled(enabled: bool) -> void:
 	experience_bar_enabled = enabled
