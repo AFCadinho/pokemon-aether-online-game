@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
+
 - Bot Guild trainers now show their names on the arena map when there is room; very large rosters keep compact [BOT] labels to avoid overlap.
 
 - Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
