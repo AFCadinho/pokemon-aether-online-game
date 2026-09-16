@@ -24,6 +24,10 @@ var _server_time := 0.0
 var _epoch := 0
 var _action_signature := ""
 var _effects: Node
+var _native_mode := false
+var _native_moves: MovesGrid
+var _native_log: BattleLogPanel
+var _native_utility: Control
 
 
 func _ready() -> void:
@@ -70,25 +74,31 @@ func _ready() -> void:
 		effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		add_child(effect_layer)
 	else:
+		_native_mode = true
 		var stage: Control = embedded_hosts["stage"]
 		var dock: Control = embedded_hosts["dock"]
 		var rail: Control = embedded_hosts["rail"]
 		_header = _label(rail, "CO-OP  /  CONNECTING", 20)
 		_connection = _label(rail, "", 14)
+		rail.move_child(_header, 0)
+		rail.move_child(_connection, 1)
 		_log = RichTextLabel.new()
 		_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_log.custom_minimum_size.y = 160
 		rail.add_child(_log)
-		var field_margin := MarginContainer.new()
-		field_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		for side in ["left", "right", "top", "bottom"]:
-			field_margin.add_theme_constant_override("margin_" + side, 20)
-		stage.add_child(field_margin)
-		field = GridContainer.new()
-		field.columns = 2
-		field.add_theme_constant_override("h_separation", 16)
-		field.add_theme_constant_override("v_separation", 12)
-		field_margin.add_child(field)
+		_native_moves = embedded_hosts["moves"] as MovesGrid
+		_native_log = embedded_hosts["log"] as BattleLogPanel
+		_native_utility = embedded_hosts["utility"] as Control
+		_native_moves.move_selected.connect(_select_move)
+		_native_utility.action_selected.connect(_on_native_utility_action)
+		for controller: String in SLOTS:
+			var target := _button(stage, "Target " + _role(controller), func() -> void: _select_target(controller))
+			target.visible = false
+			target.z_index = 60
+			target.custom_minimum_size = Vector2(120, 36)
+			cards[controller] = {"target": target}
+		stage.resized.connect(_position_native_targets)
+		_position_native_targets()
 		_prompt = _label(dock, "Waiting for the battle…", 18)
 		_capture_status = _label(dock, "", 14)
 		var action_scroll := ScrollContainer.new()
@@ -100,18 +110,23 @@ func _ready() -> void:
 		effect_layer = Control.new()
 		effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		stage.add_child(effect_layer)
-	for controller: String in SLOTS:
-		_create_card(field, controller)
+	if not _native_mode:
+		for controller: String in SLOTS:
+			_create_card(field, controller)
 	effect_layer.move_to_front()
-	_log.scroll_following = true
-	_log.bbcode_enabled = false
-	_log.add_theme_font_size_override("normal_font_size", 14 if not embedded_hosts.is_empty() else 17)
+	if _native_mode:
+		_log.visible = false
+	else:
+		_log.scroll_following = true
+		_log.bbcode_enabled = false
+		_log.add_theme_font_size_override("normal_font_size", 17)
 	effect_layer.name = "CoopEffectsLayer"
 	effect_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_effects = load("res://scripts/battle/coop_battle_effects.gd").new()
 	effect_layer.add_child(_effects)
-	for controller: String in SLOTS:
-		_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
+	if not _native_mode:
+		for controller: String in SLOTS:
+			_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
 	CoopService.state_changed.connect(_sync)
 	CoopService.request_failed.connect(_show_error)
 	_sync()
@@ -160,6 +175,17 @@ func _create_card(parent: Control, controller: String) -> void:
 		"info": info, "target": target, "details": "", "canvas": canvas}
 
 
+func _position_native_targets() -> void:
+	if not _native_mode:
+		return
+	var stage: Control = embedded_hosts["stage"]
+	var positions := {"p1": Vector2(0.31, 0.26), "p3": Vector2(0.31, 0.34),
+		"p2": Vector2(0.61, 0.10), "p4": Vector2(0.61, 0.18)}
+	for controller: String in SLOTS:
+		var target: Button = cards[controller].target
+		target.position = stage.size * positions[controller]
+
+
 func _sync() -> void:
 	var server_time := float(CoopService.activity.get("serverTime", 0))
 	if server_time != _server_time:
@@ -174,8 +200,11 @@ func _sync() -> void:
 		displayed_cursor = -1
 		_revision = -1
 		selected_move = 0
-		_log.clear()
-		_log.add_text("Recent battle events\n")
+		if _native_mode:
+			_native_log.clear_log()
+		else:
+			_log.clear()
+			_log.add_text("Recent battle events\n")
 		_apply_positions(_latest)
 	if str(_latest.get("decisionId", "")) != _decision or _latest.get("locked", true):
 		selected_move = 0
@@ -235,6 +264,9 @@ func _present() -> void:
 
 
 func _apply_positions(snapshot: Dictionary) -> void:
+	if _native_mode:
+		_apply_native_positions(snapshot)
+		return
 	for controller: String in SLOTS:
 		var found := false
 		for position: Dictionary in snapshot.get("positions", []):
@@ -271,6 +303,50 @@ func _apply_positions(snapshot: Dictionary) -> void:
 			cards[controller].details = ""
 
 
+func _apply_native_positions(snapshot: Dictionary) -> void:
+	var active: Dictionary = {}
+	for position: Dictionary in snapshot.get("positions", []):
+		active[str(position.get("controller", ""))] = position
+	for side: String in ["player", "enemy"]:
+		var controllers := ["p1", "p3"] if side == "player" else ["p2", "p4"]
+		var sprite_box: Control = embedded_hosts[side + "_sprite"]
+		var hud: Control = embedded_hosts[side + "_hud"]
+		var species: Array[String] = []
+		var shiny: Array[bool] = []
+		for row_index in range(2):
+			var controller: String = controllers[row_index]
+			var position: Dictionary = active.get(controller, {})
+			var details := str(position.get("details", ""))
+			var name := details.split(",")[0].strip_edges() if not details.is_empty() else ""
+			var fainted := bool(position.get("fainted", false))
+			species.append("" if fainted else name)
+			shiny.append(details.to_lower().contains("shiny"))
+			if position.is_empty():
+				hud.set_double_position(row_index, {})
+				continue
+			var level := 0
+			var gender := ""
+			for detail: String in details.split(","):
+				var part := detail.strip_edges()
+				if part.begins_with("L") and part.substr(1).is_valid_int():
+					level = int(part.substr(1))
+				elif part in ["M", "F"]:
+					gender = part
+			var hp := int(round(float(position.get("hpPercent", 0))))
+			var max_hp := 100
+			if controller == snapshot.get("participant"):
+				for pokemon: Dictionary in snapshot.get("ownTeam", []):
+					if pokemon.get("active", false):
+						hp = int(pokemon.get("hp", hp))
+						max_hp = maxi(1, int(pokemon.get("maxHp", max_hp)))
+						break
+			hud.set_double_position(row_index, {"species": name, "level": level,
+				"gender": gender, "shiny": shiny[row_index], "hp": hp,
+				"maxHp": max_hp, "status": str(position.get("status", ""))})
+		sprite_box.set_double_pokemon_species(species[0], species[1],
+			"back" if side == "player" else "front", shiny[0], shiny[1])
+
+
 func _set_details(controller: String, details: String, force := false) -> void:
 	var card: Dictionary = cards[controller]
 	if details.is_empty() or (not force and card.details == details and not card.sprite.current_single_species.is_empty()):
@@ -288,6 +364,10 @@ func _update_actions() -> void:
 	if signature == _action_signature:
 		return
 	_action_signature = signature
+	if _native_mode:
+		_native_moves.visible = false
+		_native_utility.set_action_visible("bag", false)
+		_native_utility.set_action_visible("run", false)
 	var last_capture: Dictionary = CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else {}
 	_capture_status.text = ""
 	if not last_capture.is_empty():
@@ -338,13 +418,25 @@ func _update_actions() -> void:
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else "Choose a move, then its target — or switch your Pokémon."
+	if _native_mode:
+		var display_moves: Array = []
+		for move: Dictionary in CoopService.view.get("moves", []):
+			var prepared := move.duplicate()
+			prepared["disabled"] = bool(move.get("disabled", false)) or _move_actions(int(move.get("slot", 0))).is_empty()
+			display_moves.append(prepared)
+		_native_moves.set_moves(display_moves)
+		_native_moves.visible = not display_moves.is_empty() and not CoopService.view.get("forceSwitch", false) and not _bag_open
 	var capture_options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
 	if not capture_options.is_empty():
-		var bag_button := _button(_actions, "Bag — catch your own target", func() -> void:
-			_bag_open = not _bag_open
-			selected_move = 0
-			_update_actions())
-		bag_button.tooltip_text = "Only your assigned wild Pokémon can be caught. Either Trainer can attack either target."
+		if _native_mode:
+			_native_utility.set_action_visible("bag", true)
+			_native_utility.set_action_label("bag", "BAG")
+		else:
+			var bag_button := _button(_actions, "Bag — catch your own target", func() -> void:
+				_bag_open = not _bag_open
+				selected_move = 0
+				_update_actions())
+			bag_button.tooltip_text = "Only your assigned wild Pokémon can be caught. Either Trainer can attack either target."
 		if _bag_open:
 			if not capture_options.get("storageAvailable", false):
 				_label(_actions, "Your party and PC are full. No ball will be used.", 17)
@@ -356,22 +448,27 @@ func _update_actions() -> void:
 					_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await CoopService.submit_capture(item_id))
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "run":
-			_button(_actions, "Run — ask your partner", func() -> void: await CoopService.submit_action(action))
+			if _native_mode:
+				_native_utility.set_action_visible("run", true)
+				_native_utility.set_action_label("run", "Run")
+			else:
+				_button(_actions, "Run — ask your partner", func() -> void: await CoopService.submit_action(action))
 		elif action.get("type") == "forfeit":
 			var forfeit_button := _button(_actions, "Forfeit — ask your partner", func() -> void: await CoopService.submit_action(action))
 			forfeit_button.tooltip_text = "Both Trainers must agree. Forfeiting counts as a loss with the normal defeat penalty."
 		elif action.get("type") == "wait":
 			var wait_button := _button(_actions, "Wait — skip my action", func() -> void: await CoopService.submit_action(action))
 			wait_button.tooltip_text = "Use no PP and give your partner another catch attempt. Wild Pokémon still act."
-	var moves := GridContainer.new()
-	moves.columns = 2
-	_actions.add_child(moves)
-	for move: Dictionary in CoopService.view.get("moves", []):
-		var slot := int(move.get("slot", 0))
-		var choices := _move_actions(slot)
-		var button := _button(moves, "%s  ·  %s PP" % [str(move.get("name", "")), str(move.get("pp", 0))], func() -> void: _select_move(slot))
-		button.disabled = choices.is_empty()
-		button.modulate = ACCENT if selected_move == slot else Color.WHITE
+	if not _native_mode:
+		var moves := GridContainer.new()
+		moves.columns = 2
+		_actions.add_child(moves)
+		for move: Dictionary in CoopService.view.get("moves", []):
+			var slot := int(move.get("slot", 0))
+			var choices := _move_actions(slot)
+			var button := _button(moves, "%s  ·  %s PP" % [str(move.get("name", "")), str(move.get("pp", 0))], func() -> void: _select_move(slot))
+			button.disabled = choices.is_empty()
+			button.modulate = ACCENT if selected_move == slot else Color.WHITE
 	if selected_move > 0:
 		_prompt.text = "Select a highlighted target on the field."
 		for action: Dictionary in _move_actions(selected_move):
@@ -390,6 +487,20 @@ func _update_actions() -> void:
 
 func _move_actions(slot: int) -> Array:
 	return CoopService.view.get("legalActions", []).filter(func(action: Dictionary) -> bool: return action.get("type") == "move" and action.get("slot") == slot)
+
+
+func _on_native_utility_action(action: String) -> void:
+	if not _native_mode or _playing or CoopService.view.get("locked", true):
+		return
+	if action == "bag":
+		_bag_open = not _bag_open
+		selected_move = 0
+		_update_actions()
+	elif action == "run":
+		for choice: Dictionary in CoopService.view.get("legalActions", []):
+			if choice.get("type") == "run":
+				await CoopService.submit_action(choice)
+				return
 
 
 func _select_move(slot: int) -> void:
@@ -427,12 +538,20 @@ func _append_event(event: Dictionary) -> void:
 		"cant": text = "%s could not act." % actor
 		"win", "tie": text = "Battle ended."
 	if not text.is_empty():
-		_log.add_text(text + "\n")
-		if _log.get_line_count() > 220:
-			_log.remove_paragraph(0)
+		if _native_mode:
+			if event.get("kind") == "turn":
+				_native_log.add_turn_header(int(event.get("turn", 0)))
+			else:
+				_native_log.add_message(text)
+		else:
+			_log.add_text(text + "\n")
+			if _log.get_line_count() > 220:
+				_log.remove_paragraph(0)
 
 
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
+	if _native_mode:
+		return
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
 	var card: Dictionary = cards[actor]

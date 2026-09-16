@@ -79,8 +79,37 @@ func _run() -> void:
 	_expect(presenter.get("cards").size() == 4
 		and presenter.get("embedded_hosts").get("stage") == mounted_battle.get_node("%BattleStage")
 		and mounted_battle.get_node("%BattleBackground").visible
-		and not mounted_battle.get_node("%PlayerSpriteBox").visible,
-		"four co-op positions use the regular battle stage without overlapping single-battle sprites")
+		and mounted_battle.get_node("%PlayerSpriteBox").visible
+		and mounted_battle.get_node("%EnemySpriteBox").visible
+		and mounted_battle.get_node("%PlayerSpriteBox").get_node("DoubleBattleContainer").visible
+		and mounted_battle.get_node("%EnemySpriteBox").get_node("DoubleBattleContainer").visible,
+		"co-op reuses the native battle stage and two-sprite containers on both sides")
+	presenter._apply_positions({"participant": "p1", "positions": [
+		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
+		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
+		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100},
+		{"controller": "p4", "details": "Pidgey, L2, M", "hpPercent": 55}],
+		"ownTeam": [{"active": true, "hp": 23, "maxHp": 30}]})
+	_expect(mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
+		and mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
+		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
+		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
+		and mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2").visible,
+		"four co-op Pokemon and the second HP row render in the native presentation")
+	service.activity = {"status": "active"}
+	service.view = {"battleId": "coop-fixture", "revision": 8, "turn": 1, "decisionId": "coop-4",
+		"locked": false, "participant": "p1", "moves": [{"slot": 1, "name": "Pound", "pp": 35, "maxPp": 35}],
+		"legalActions": [{"type": "move", "slot": 1, "target": 1}, {"type": "run"}],
+		"captureOptions": {"balls": [{"itemId": "poke-ball", "quantity": 1}], "storageAvailable": true}}
+	presenter.set("_action_signature", "")
+	presenter._update_actions()
+	_expect(mounted_battle.get_node("%MovesGrid").visible
+		and mounted_battle.get_node("%BagButton").visible
+		and mounted_battle.get_node("%RunButton").visible,
+		"co-op legal moves, Bag and Run use the existing battle controls")
+	presenter._select_move(1)
+	_expect(presenter.get("cards")["p2"].target.visible,
+		"choosing a doubles move highlights its legal field target")
 	mounted_world._on_coop_state_changed()
 	_expect(host.get_child_count() == 1, "repeated snapshots do not mount duplicate battle scenes")
 	mounted_world.free()

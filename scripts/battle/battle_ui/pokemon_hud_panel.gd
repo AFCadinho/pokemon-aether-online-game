@@ -46,6 +46,16 @@ func set_pokemon_data(
 ) -> void:
 	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data, display_name)
 
+
+func set_double_position(row_index: int, data: Dictionary) -> void:
+	if data.is_empty():
+		_clear_active_info_row_data(row_index)
+		_set_active_info_row_visible(row_index, false)
+		return
+	_set_active_info_row_data(row_index, str(data.get("species", "")), int(data.get("level", 0)),
+		int(data.get("hp", 0)), maxi(1, int(data.get("maxHp", 100))), str(data.get("status", "")),
+		str(data.get("gender", "")), bool(data.get("shiny", false)), {}, str(data.get("name", "")))
+
 func set_experience_bar_enabled(enabled: bool) -> void:
 	experience_bar_enabled = enabled
 	for row_index in range(active_info_rows.size()):

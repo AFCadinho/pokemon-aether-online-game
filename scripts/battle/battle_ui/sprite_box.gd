@@ -1662,6 +1662,39 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 			pokemon_2.species, pokemon_2.shiny, side
 		)
 
+
+func set_double_pokemon_species(species_1: String, species_2: String, side: String,
+		shiny_1 := false, shiny_2 := false) -> void:
+	var identity := {"species_1": species_1, "shiny_1": shiny_1,
+		"species_2": species_2, "shiny_2": shiny_2, "side": side}
+	if double_container.visible and current_double_web_identity == identity:
+		return
+	web_sprite_request_generation += 1
+	var request_generation := web_sprite_request_generation
+	set_battle_type(true)
+	current_single_species = ""
+	current_double_web_identity = identity
+	for entry: Array in [[double_sprite_1, species_1, shiny_1], [double_sprite_2, species_2, shiny_2]]:
+		var sprite := entry[0] as AnimatedSprite2D
+		var species := str(entry[1])
+		sprite.visible = false
+		_reset_sprite_pose(sprite)
+		if species.is_empty():
+			continue
+		var frames := _load_sprite_frames(species, side, bool(entry[2]))
+		if frames == null:
+			continue
+		sprite.sprite_frames = frames
+		sprite.animation = IDLE_ANIMATION
+		sprite.frame = 0
+		_set_sprite_target_scale_from_frames(sprite, frames)
+		_snap_sprite_to_pixel_grid(sprite)
+		sprite.visible = true
+		_apply_sprite_playback_mode(sprite)
+	if web_sprite_upgrades_allowed and not species_1.is_empty() and not species_2.is_empty():
+		_upgrade_double_web_sprites.call_deferred(request_generation, species_1, shiny_1,
+			species_2, shiny_2, side)
+
 func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
 
