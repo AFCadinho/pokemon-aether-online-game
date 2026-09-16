@@ -30,17 +30,20 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   const page=await context.newPage();
   const api=[], errors=[], maps=[];
+  let latestPosition=null;
   page.on('pageerror',()=>errors.push('pageerror'));
   page.on('websocket',socket=>socket.on('framesent',({payload})=>{
     if(typeof payload!=='string'||payload.length>16384)return;
     let message;try{message=JSON.parse(payload);}catch{return;}
-    if(message.type==='position'&&/^kanto_[a-z0-9_]+$/.test(message.mapId||''))
+    if(message.type==='position'&&/^kanto_[a-z0-9_]+$/.test(message.mapId||'')){
       if(maps.at(-1)!==message.mapId)maps.push(message.mapId);
+      latestPosition={mapId:message.mapId,x:message.position?.x,y:message.position?.y};
+    }
   }));
   page.on('response',response=>{
     const url=new URL(response.url());
     if(url.origin!==origin||!url.pathname.startsWith('/api/'))return;
-    if(/\/battle\/trainer|choice-and-resolve|trainer-battle|world\/story/.test(url.pathname))
+    if(/\/battle\/trainer|choice-and-resolve|trainer-battle|world\/story|\/trainers\/|\/dialogues\//.test(url.pathname))
       api.push({path:url.pathname.replace(/\/battle\/[^/]+\//,'/battle/[id]/'),status:response.status()});
   });
   let success=false, battleStart=false, battleTeardown=false, moves=0;
@@ -61,13 +64,13 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
     await page.waitForTimeout(3000);
     assert(maps.includes('kanto_cerulean_city_gym'),'Misty gym rendered from disposable save');
     await page.screenshot({path:path.join(output,'gym-ready.png')});
-    await page.keyboard.press('ArrowUp',{delay:100});
-    await page.waitForTimeout(1500);
+    await page.screenshot({path:path.join(output,'before-interaction.png')});
     for(let i=0;i<40&&!api.some(x=>x.path==='/api/battle/trainer'&&x.status===200);i++){
       assert(!lost,'Disposable runtime changed during dialogue');attest();
       await page.keyboard.press('Space');await page.waitForTimeout(700);
     }
     battleStart=api.some(x=>x.path==='/api/battle/trainer'&&x.status===200);
+    if(!battleStart)await page.screenshot({path:path.join(output,'interaction-failed.png')});
     assert(battleStart,'Real Misty trainer battle did not start');
     await page.waitForFunction(()=>window.pokeaetherMemoryProbe?.samples.some(s=>s.label==='battle_actions_ready'),
       null,{timeout:120000});
@@ -89,7 +92,7 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
     clearInterval(watch);
     const sourceUnchanged=git('status','--porcelain')===''&&git('ls-files','-s')===sourceIndex;
     fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success:success&&!lost&&sourceUnchanged,
-      runtimeLost:lost,sourceUnchanged,battleStart,battleTeardown,moves,api,maps,errors,
+      runtimeLost:lost,sourceUnchanged,battleStart,battleTeardown,moves,api,maps,latestPosition,errors,
       sourceCommit:receipt.commit,pckSHA256:receipt.files.find(x=>x.name==='index.pck').sha256,
       fixture:'developer checkpoint challenge_misty; not a fresh-account playthrough'},null,2));
     await browser.close();
