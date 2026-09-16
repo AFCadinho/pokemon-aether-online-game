@@ -840,6 +840,12 @@ func setup_coop_battle() -> bool:
 	if not is_node_ready():
 		return false
 	coop_mode = true
+	# Only doubles uses this compact, uncropped logical canvas.
+	var coop_viewport := battle_stage.get_parent() as BattleStageViewport
+	coop_viewport.crop_to_fill = false
+	coop_viewport.design_size = Vector2(1152, 600)
+	battle_stage.custom_minimum_size = coop_viewport.design_size
+	coop_viewport.call_deferred("_update_stage_transform")
 	# The ordinary single-battle controller never receives co-op battle state.
 	# Keep its visual shell, but let the server-driven co-op presenter own input.
 	set_process(false)
@@ -889,12 +895,13 @@ func setup_coop_battle() -> bool:
 	var context_section := dock_content.get_node("ContextSection") as Control
 	context_section.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	context_hint.visible = false
-	player_party_grid.columns = 6
-	player_party_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	player_party_grid.columns = 3
+	player_party_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	player_party_grid.custom_minimum_size.x = 540.0
 	player_party_grid.set_empty_slots_visible(false)
 	player_party_grid.set_selection_enabled(false)
 	player_party_grid.visible = true
-	action_side_panel.custom_minimum_size.y = 144.0
+	action_side_panel.custom_minimum_size.y = 82.0
 	action_side_panel.visible = true
 	current_action_panel.visible = true
 	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
