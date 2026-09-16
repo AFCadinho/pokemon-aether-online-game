@@ -4468,6 +4468,7 @@
   "ui.storage.release.success": "宝可梦发布。",
   "ui.storage.move.saving": "正在保存动作...",
   "ui.storage.move.failed": "移动失败。",
+  "ui.storage.move.coop_party_full": "冒险队伍中每位训练家最多携带 3 只宝可梦。请先将一只移入盒子。",
   "ui.storage.move.success": "宝可梦移至 {location}。",
   "ui.storage.location.party": "聚会",
   "ui.storage.location.party_slot": "队伍槽 {number}",

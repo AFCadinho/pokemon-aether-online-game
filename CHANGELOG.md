@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Storage now explains the three-Pokémon Adventure Party limit when a fourth party Pokémon is rejected.
+
 - Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
 - The Route 3 Pokémon Center Magikarp purchase now works in the browser and shows its new ₽2,000 price.
 

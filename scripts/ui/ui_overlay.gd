@@ -41482,8 +41482,11 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
 	pc_move_in_progress = false
 	if not bool(result.get("success", false)):
-		_set_pc_status("ui.storage.move.failed")
-		_add_chat_message(LocalizationManager.text("ui.storage.move.failed"))
+		var failure_key := "ui.storage.move.coop_party_full" \
+			if BackendErrorLocalizationService.error_code(result) == "coop_party_size_invalid" \
+			else "ui.storage.move.failed"
+		_set_pc_status(failure_key)
+		_add_chat_message(LocalizationManager.text(failure_key))
 		_render_pc_party()
 		_render_pc_box()
 		return

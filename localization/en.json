@@ -4506,6 +4506,7 @@
   "ui.storage.release.success": "Pokémon released.",
   "ui.storage.move.saving": "Saving move...",
   "ui.storage.move.failed": "Move failed.",
+  "ui.storage.move.coop_party_full": "Adventure Party allows up to 3 Pokémon per Trainer. Move one to a box first.",
   "ui.storage.move.success": "Pokémon moved to {location}.",
   "ui.storage.location.party": "party",
   "ui.storage.location.party_slot": "party slot {number}",

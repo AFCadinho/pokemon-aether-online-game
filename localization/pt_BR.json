@@ -4471,6 +4471,7 @@
   "ui.storage.release.success": "Pokémon solto.",
   "ui.storage.move.saving": "Salvando movimento...",
   "ui.storage.move.failed": "Não foi possível mover.",
+  "ui.storage.move.coop_party_full": "Em uma Adventure Party, cada Treinador pode ter até 3 Pokémon na equipe. Mova um para uma Box primeiro.",
   "ui.storage.move.success": "Pokémon movido para {location}.",
   "ui.storage.location.party": "a equipe",
   "ui.storage.location.party_slot": "o espaço {number} da equipe",
