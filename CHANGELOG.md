@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The co-op battle screen no longer shows an empty party-rail border or a separate action dock; prompts use the normal battle field and extra co-op choices sit beside the battle log.
+
 - Co-op double battles show the two Pokémon HP panels side by side in a compact HUD; single battles keep their original HUD layout.
 
 - Co-op double battles now use the familiar battle field: two Pokémon sprites on each side, stacked native HP panels, standard move buttons and battle log, with Bag and Run in their usual place.

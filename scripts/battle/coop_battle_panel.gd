@@ -28,6 +28,7 @@ var _native_mode := false
 var _native_moves: MovesGrid
 var _native_log: BattleLogPanel
 var _native_utility: Control
+var _action_scroll: ScrollContainer
 
 
 func _ready() -> void:
@@ -76,7 +77,7 @@ func _ready() -> void:
 	else:
 		_native_mode = true
 		var stage: Control = embedded_hosts["stage"]
-		var dock: Control = embedded_hosts["dock"]
+		var prompt_panel: CurrentActionPanel = embedded_hosts["prompt"]
 		var rail: Control = embedded_hosts["rail"]
 		_header = _label(rail, "CO-OP  /  CONNECTING", 20)
 		_connection = _label(rail, "", 14)
@@ -99,11 +100,16 @@ func _ready() -> void:
 			cards[controller] = {"target": target}
 		stage.resized.connect(_position_native_targets)
 		_position_native_targets()
-		_prompt = _label(dock, "Waiting for the battle…", 18)
-		_capture_status = _label(dock, "", 14)
+		_prompt = prompt_panel.message_label
+		_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_prompt.add_theme_font_size_override("font_size", 18)
+		_capture_status = _label(rail, "", 14)
 		var action_scroll := ScrollContainer.new()
-		action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		dock.add_child(action_scroll)
+		action_scroll.custom_minimum_size.y = 120
+		action_scroll.size_flags_vertical = Control.SIZE_SHRINK_END
+		action_scroll.visible = false
+		rail.add_child(action_scroll)
+		_action_scroll = action_scroll
 		_actions = VBoxContainer.new()
 		_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		action_scroll.add_child(_actions)
@@ -365,6 +371,7 @@ func _update_actions() -> void:
 		return
 	_action_signature = signature
 	if _native_mode:
+		_sync_action_scroll.call_deferred()
 		_native_moves.visible = false
 		_native_utility.set_action_visible("bag", false)
 		_native_utility.set_action_visible("run", false)
@@ -487,6 +494,11 @@ func _update_actions() -> void:
 
 func _move_actions(slot: int) -> Array:
 	return CoopService.view.get("legalActions", []).filter(func(action: Dictionary) -> bool: return action.get("type") == "move" and action.get("slot") == slot)
+
+
+func _sync_action_scroll() -> void:
+	if _native_mode and is_instance_valid(_action_scroll):
+		_action_scroll.visible = _actions.get_child_count() > 0
 
 
 func _on_native_utility_action(action: String) -> void:
