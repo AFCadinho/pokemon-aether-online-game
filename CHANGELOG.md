@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.
+
 - The Adventure Party card is now as compact as the personal-buffs panel below it.
 
 - Adventure Party names and portraits now resolve correctly when Godot parses numeric member IDs from the server's JSON response.
