@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
+
 - Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
 
 - Pokémon Storage now explains the three-Pokémon Adventure Party limit when a fourth party Pokémon is rejected.

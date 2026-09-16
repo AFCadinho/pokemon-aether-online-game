@@ -88,6 +88,44 @@ var _counterattack_played := false
 var _future_self_spawn_global_position := Vector2.ZERO
 var _fainted_follower: PokemonFollower
 var _story_player: Node2D
+var _starter_options: Dictionary = {}
+
+
+func prepare_story_sequence() -> Dictionary:
+	if not _starter_options.is_empty():
+		return {"success": true}
+	var options: Dictionary = {}
+	for attempt in range(2):
+		options = await PlayerPartyStateService.get_starter_options()
+		if bool(options.get("success", false)) or not _retryable_starter_options_failure(options):
+			break
+		if attempt == 0:
+			await get_tree().create_timer(0.35).timeout
+	if not bool(options.get("success", false)) or not _has_starter_final_evolution(options):
+		push_warning("MtMoonAmbushController: future starter could not be prepared before the cinematic.")
+		return {"success": false}
+	_starter_options = options.duplicate(true)
+	return {"success": true}
+
+
+func _retryable_starter_options_failure(response: Dictionary) -> bool:
+	var status := int(response.get("status", 0))
+	return status == 0 or status in [408, 429] or status >= 500
+
+
+func _has_starter_final_evolution(options: Dictionary) -> bool:
+	var selected_species_id := str(options.get("selectedSpeciesId", "")).strip_edges().to_lower()
+	for choice_value in options.get("choices", []):
+		if not choice_value is Dictionary:
+			continue
+		var choice := choice_value as Dictionary
+		if str(choice.get("speciesId", "")).strip_edges().to_lower() != selected_species_id:
+			continue
+		var paths: Array = choice.get("evolutionPaths", []) as Array
+		if not paths.is_empty() and paths[0] is Array and not (paths[0] as Array).is_empty():
+			var final_stage: Variant = (paths[0] as Array)[-1]
+			return final_stage is Dictionary and not str((final_stage as Dictionary).get("speciesId", "")).is_empty()
+	return false
 
 
 func _ready() -> void:
@@ -276,7 +314,9 @@ func _reveal_rescuer() -> void:
 func _spawn_starter_final_evolution() -> void:
 	if is_instance_valid(_starter):
 		return
-	var options: Dictionary = await PlayerPartyStateService.get_starter_options()
+	var options: Dictionary = _starter_options
+	if options.is_empty():
+		options = await PlayerPartyStateService.get_starter_options()
 	var selected_species_id := str(options.get("selectedSpeciesId", PlayerSave.flags.get("starter_species", ""))).strip_edges().to_lower()
 	var species_id := ""
 	var species_name := ""
