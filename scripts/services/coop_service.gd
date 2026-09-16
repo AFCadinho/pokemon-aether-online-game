@@ -42,6 +42,8 @@ var _applied_sequence := 0
 var _seen_invitations: Dictionary = {}
 var _sent_invitations: Dictionary = {}
 var _reported_profile_source := ""
+var _debug_state_polls := 0
+var _debug_state_signature := ""
 
 
 func _process(delta: float) -> void:
@@ -77,6 +79,8 @@ func reset() -> void:
 	_seen_invitations.clear()
 	_sent_invitations.clear()
 	_reported_profile_source = ""
+	_debug_state_polls = 0
+	_debug_state_signature = ""
 	_poll_after = 0.0
 	state_changed.emit()
 
@@ -85,6 +89,7 @@ func refresh() -> Dictionary:
 	_sequence += 1
 	var sequence := _sequence
 	var result := await _request("state", {})
+	_debug_state_response(result)
 	if result.get("success", false) and sequence >= _applied_sequence:
 		_applied_sequence = sequence
 		available = true
@@ -105,9 +110,7 @@ func apply_state(body: Dictionary) -> void:
 			if str(names.get(key, "")).is_empty() or str(appearance.get("body", "")).is_empty():
 				incomplete = true
 		if incomplete:
-			var gateway := str(GatewayApiConfig.cached_url)
-			var source := "local development" if gateway.begins_with("http://localhost:8000") or gateway.begins_with("http://127.0.0.1:8000") else \
-				"production" if gateway.begins_with("https://api.pokeaether.com") else "custom/unknown"
+			var source := _diagnostic_gateway_source()
 			if source != _reported_profile_source:
 				_reported_profile_source = source
 				party_profile_missing.emit(source)
@@ -137,6 +140,41 @@ func apply_state(body: Dictionary) -> void:
 	if body.get("view") is Dictionary:
 		apply_view(body["view"])
 	state_changed.emit()
+
+
+func _diagnostic_gateway_source() -> String:
+	var gateway := str(GatewayApiConfig.cached_url)
+	if gateway.begins_with("http://localhost:8000") or gateway.begins_with("http://127.0.0.1:8000"):
+		return "local development"
+	if gateway.begins_with("https://api.pokeaether.com"):
+		return "production"
+	return "custom/unknown"
+
+
+func _debug_state_response(result: Dictionary) -> void:
+	if not OS.is_debug_build():
+		return
+	var body: Dictionary = result.get("body", {}) if result.get("body") is Dictionary else {}
+	var incoming_party: Dictionary = body.get("party", {}) if body.get("party") is Dictionary else {}
+	var ids: Array = incoming_party.get("memberIds", []) if incoming_party.get("memberIds") is Array else []
+	var names: Dictionary = incoming_party.get("memberUsernames", {}) if incoming_party.get("memberUsernames") is Dictionary else {}
+	var appearances: Dictionary = incoming_party.get("memberAppearances", {}) if incoming_party.get("memberAppearances") is Dictionary else {}
+	var name_present: Array[bool] = []
+	var portrait_present: Array[bool] = []
+	for member_id: Variant in ids:
+		var key := str(member_id)
+		var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
+		name_present.append(not str(names.get(key, "")).is_empty())
+		portrait_present.append(not str(appearance.get("body", "")).is_empty())
+	var diagnostic := {"source": _diagnostic_gateway_source(), "http": int(result.get("status", 0)),
+		"success": bool(result.get("success", false)), "code": str(result.get("code", "")),
+		"bodyKeys": body.keys(), "partyKeys": incoming_party.keys(), "memberIds": ids,
+		"namesPresent": name_present, "portraitsPresent": portrait_present}
+	var signature := JSON.stringify(diagnostic)
+	_debug_state_polls += 1
+	if _debug_state_polls <= 10 or signature != _debug_state_signature:
+		print("COOP_DIAG state ", signature)
+	_debug_state_signature = signature
 
 
 func apply_view(incoming: Dictionary) -> void:
