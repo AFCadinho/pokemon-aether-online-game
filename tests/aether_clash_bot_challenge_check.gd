@@ -15,14 +15,15 @@ class FakeGuildService extends GuildServiceNode:
 func _ready() -> void:
 	var menu := MENU.new()
 	add_child(menu)
-	menu.build({"available": false, "canChallenge": true, "maxBotCount": 20})
+	menu.build({"available": false, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai4", "ai5"]})
 	_check(menu.dialog.confirm_button.disabled, "Unavailable runtime cannot be started")
 	_check(menu.bot_count.max_value == 20, "Menu uses the server bot limit")
 	menu.bot_count.get_line_edit().text = "20"
 	menu.tier.select(1)
+	menu.difficulty.select(1)
 	menu.spectators.select(1)
 	var settings: Dictionary = menu.selected_settings()
-	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only"}, "Count, tier and spectator choice survive without a human-count field")
+	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5"}, "Count, tier, difficulty and spectator choice survive without a human-count field")
 	menu.bot_count.get_line_edit().text = "999"
 	_check(int(menu.selected_settings()["botCount"]) == 20, "Count is bounded")
 	menu.bot_count.get_line_edit().text = "0"
@@ -32,6 +33,7 @@ func _ready() -> void:
 	add_child(unauthorized)
 	unauthorized.build({"available": true, "canChallenge": false, "maxBotCount": 10})
 	_check(unauthorized.dialog.confirm_button.disabled, "Non-manager cannot submit")
+	_check(unauthorized.ai_policies == ["ai4"], "Older server options cannot advertise AI5")
 	unauthorized.queue_free()
 	var enabled := MENU.new()
 	add_child(enabled)
@@ -48,7 +50,7 @@ func _ready() -> void:
 	var uuid_pattern := RegEx.new()
 	uuid_pattern.compile("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
 	_check(uuid_pattern.search(str(first["requestId"])) != null, "Request key is a valid UUIDv4")
-	_check(first.size() == 4 and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
+	_check(first.size() == 5 and first["aiPolicy"] == "ai4" and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
 	service.succeed = true
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
 	_check(service.pending_bot_request.is_empty(), "Success clears the retry key")
@@ -76,7 +78,7 @@ func _ready() -> void:
 	lobby.free()
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
-		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
+		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "ai5", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
 	await get_tree().process_frame
 	get_tree().quit(1 if failed else 0)
