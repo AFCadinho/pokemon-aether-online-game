@@ -5179,10 +5179,6 @@ func _setup_coop_controls() -> void:
 	if coop_world_ready or OS.has_feature("web"):
 		return
 	coop_world_ready = true
-	var layer := CanvasLayer.new()
-	layer.layer = 30
-	add_child(layer)
-	layer.add_child(preload("res://scripts/battle/coop_controls.gd").new())
 	CoopService.state_changed.connect(_on_coop_state_changed)
 	_on_coop_state_changed()
 

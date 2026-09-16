@@ -4,6 +4,16 @@
 
 - Side-quest offers now have clearer reward cards and adapt to shorter browser and desktop windows while keeping Accept and Decline visible.
 
+- Guild training Captains can choose AI4 Beginner or AI5 Grandmaster Hard when challenging the bot Guild.
+
+- Bot Guild practice no longer keeps Turn 1 moves disabled for the 30-second presentation fallback after a confirmed opening release.
+
+- Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
+
+- Adventure Party invitations now accept usernames or Trainer names instead of requiring numeric Trainer IDs. If a Trainer name is shared, use the unique username; right-click invitations prefill it.
+
+- Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.
+
 - Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
 
 - Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.

@@ -67,6 +67,13 @@ var received_battle_event_count := 0
 var timer_projection := BattleTimerProjectionClass.new()
 var pending_render_ack_payload: Dictionary = {}
 
+func _trace_turn1_connection(stage: String, details: String = "") -> void:
+	if OS.get_environment("AETHER_CLASH_TURN1_TRACE") != "true":
+		return
+	print("TURN1_SOCKET t=%d stage=%s state=%d joined=%s connecting=%s %s" % [
+		Time.get_ticks_msec(), stage, websocket.get_ready_state(), joined, connecting, details,
+	])
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_IN and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN and joined:
 		websocket.send_text(JSON.stringify({"type":"timer_sync","timerContractVersions":[1]}))
@@ -145,6 +152,7 @@ func connect_room(
 	viewer_role: String = "participant",
 	target_user_id: int = 0
 ) -> void:
+	_trace_turn1_connection("connect_requested")
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s match_id=%s" % [room_code, player_id, battle_id, match_id])
 	var normalized_battle_id := battle_id.strip_edges()
@@ -192,6 +200,7 @@ func connect_room(
 
 
 func _connect_room_async(attempt_generation: int) -> void:
+	_trace_turn1_connection("connect_async_start")
 	var base_url: String = await _get_gateway_base_url()
 	if (
 		attempt_generation != connection_attempt_generation
@@ -219,6 +228,7 @@ func _connect_room_async(attempt_generation: int) -> void:
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("Connecting websocket", "url=%s" % websocket_url)
 	var error := websocket.connect_to_url(websocket_url)
+	_trace_turn1_connection("socket_connect_result", "ok=%s" % (error == OK))
 	if error != OK:
 		connecting = false
 		connected = false
@@ -697,6 +707,7 @@ func _handle_joined_message(message: Dictionary) -> bool:
 		return false
 
 	joined = true
+	_trace_turn1_connection("joined")
 	join_sent = false
 	join_sent_at_msec = 0
 	connection_heartbeat_timer = 0.0
@@ -785,6 +796,33 @@ func _apply_timer_contract_message(message_type: String, message: Dictionary) ->
 	return timer_projection.apply_event(message)
 
 
+static func _has_completed_match_end(response: Dictionary) -> bool:
+	if not bool(response.get("success", false)):
+		return false
+	var match_end_value: Variant = response.get("pvpMatchEnd", {})
+	if not (match_end_value is Dictionary):
+		return false
+	var match_end := match_end_value as Dictionary
+	return bool(match_end.get("success", false)) and str(match_end.get("status", "")).strip_edges().to_lower() == "completed"
+
+
+static func is_confirmed_opponent_forfeit(message: Dictionary, local_player_id: String) -> bool:
+	# A bare action or an ended engine projection is not proof that the match
+	# settlement committed. Closing the room before then can forfeit our own
+	# connection while the server still considers the battle active.
+	if str(message.get("type", "")).strip_edges().to_lower() != "pvp.battle_update":
+		return false
+	if str(message.get("action", "")).strip_edges().to_lower() != "forfeit":
+		return false
+	var actor := str(message.get("playerId", "")).strip_edges()
+	if actor not in ["p1", "p2"] or actor == local_player_id:
+		return false
+	var response_value: Variant = message.get("response", {})
+	if not (response_value is Dictionary):
+		return false
+	return _has_completed_match_end(response_value as Dictionary)
+
+
 static func should_apply_terminal_action_immediately(message: Dictionary, _local_player_id: String) -> bool:
 	var response_value: Variant = message.get("response", {})
 	if not (response_value is Dictionary):
@@ -803,6 +841,9 @@ static func should_apply_terminal_action_immediately(message: Dictionary, _local
 	var message_player_id := str(message.get("playerId", "")).strip_edges()
 	if not (message_action in ["forfeit", "disconnect", "abandon", "timeout"]) or message_player_id == "":
 		return false
+	if message_action == "forfeit":
+		# A mechanically ended engine snapshot can precede durable PvP settlement.
+		return _has_completed_match_end(response)
 
 	# The action response and battle-update broadcast can race each other. Treat a
 	# mechanically terminal response as idempotent terminal confirmation even when
@@ -1358,6 +1399,7 @@ func _invalidate_session(reason: String) -> void:
 
 
 func _restart_stalled_connection(reason: String) -> void:
+	_trace_turn1_connection("restart", "reason=%s" % reason)
 	connection_attempt_deadline_msec = 0
 	_reset_battle_event_buffer()
 	connection_attempt_generation += 1
@@ -1424,6 +1466,16 @@ func _handle_join_error(message: Dictionary) -> void:
 func _handle_battle_events_message(message: Dictionary) -> void:
 	var latest_seq := _nonnegative_int(message.get("battleEventLatestSeq", battle_event_latest_seq), battle_event_latest_seq)
 	var events_value: Variant = message.get("events", [])
+	if OS.get_environment("AETHER_CLASH_TURN1_TRACE") == "true":
+		var received_sequences: Array[int] = []
+		if events_value is Array:
+			for item in events_value:
+				if item is Dictionary:
+					received_sequences.append(_nonnegative_int((item as Dictionary).get("battleEventSeq", -1), -1))
+		print("TURN1_EVENTS t=%d after=%d latest=%d local=%d received=%s" % [
+			Time.get_ticks_msec(), _nonnegative_int(message.get("afterBattleEventSeq", 0), 0),
+			latest_seq, last_battle_event_seq, str(received_sequences),
+		])
 	var highest_received_seq := 0
 	var terminal_message: Dictionary = {}
 	if events_value is Array:
@@ -1529,6 +1581,9 @@ func _update_battle_event_gap_tracking(now_msec: int) -> void:
 	battle_event_gap_expected_seq = expected_seq
 	battle_event_gap_started_at_msec = now_msec
 	battle_event_gap_deadline_msec = now_msec + BATTLE_EVENT_GAP_TIMEOUT_MSEC
+	_trace_turn1_connection("durable_gap_started", "expected=%d latest=%d buffered=%d" % [
+		expected_seq, battle_event_latest_seq, pending_battle_events.size(),
+	])
 	if DEBUG_PVP_REALTIME:
 		_log_realtime(
 			"battle_event_gap_started",
@@ -1552,6 +1607,9 @@ func _process_battle_event_gap_timeout(now_msec: int) -> bool:
 		_resolve_battle_event_gap(now_msec)
 		return false
 	_report_battle_event_gap("timeout", now_msec)
+	_trace_turn1_connection("durable_gap_timeout", "expected=%d latest=%d buffered=%d" % [
+		last_battle_event_seq + 1, battle_event_latest_seq, pending_battle_events.size(),
+	])
 	_restart_stalled_connection("Durable PvP event catch-up timed out.")
 	return true
 
