@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot difficulty names in Guild training no longer include the technical fallback note.
+
 - The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
 
 - Adventure Party invitations now show the current shared story level cap before you accept.
