@@ -83,8 +83,8 @@ func _run() -> void:
 	root.add_child(party_popup)
 	service.available = true
 	service.activity = {}
-	party_popup.call("open", 42)
-	_expect(party_popup.visible and party_popup.get("_recipient").text == "42", "social and right-click entry reuse a prefilled popup")
+	party_popup.call("open", "TrainerTwo")
+	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
 	var visual_path := OS.get_environment("COOP_PARTY_VISUAL_CAPTURE_PATH")
 	if not visual_path.is_empty():
 		await create_timer(0.2).timeout

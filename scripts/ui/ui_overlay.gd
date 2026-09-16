@@ -39267,14 +39267,14 @@ func _on_socials_adventure_party_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_coop_party_popup()
 
-func _open_coop_party_popup(recipient_id: int = 0) -> void:
+func _open_coop_party_popup(recipient_name: String = "") -> void:
 	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
 		return
 	if coop_party_popup == null:
 		coop_party_popup = COOP_PARTY_POPUP_SCRIPT.new() as Control
 		$Control.add_child(coop_party_popup)
 		coop_party_popup.connect("closed", _on_coop_party_popup_closed)
-	coop_party_popup.call("open", recipient_id)
+	coop_party_popup.call("open", recipient_name)
 	_activate_ui_panel(coop_party_popup)
 
 func _hide_coop_party_popup() -> void:
