@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
+
 - The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
 
 - Your Adventure Party partner and shared level cap now appear in a compact in-game indicator above your personal buffs. Select it to open the party window.

@@ -146,6 +146,13 @@ func _run() -> void:
 		await create_timer(0.3).timeout
 		await RenderingServer.frame_post_draw
 		_expect(root.get_texture().get_image().save_png(hud_visual_path) == OK, "party HUD visual capture saved")
+	var auth_service := root.get_node("AuthService")
+	var previous_user: Dictionary = (auth_service.get("current_user") as Dictionary).duplicate(true)
+	auth_service.set("current_user", {"id": 1, "username": "SelfTrainer"})
+	service.party = {"memberIds": [1, 2]}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(hud_names[0].text == "SelfTrainer" and hud_names[1].text == "Trainer #2", "older party responses still show own name and identify the partner")
+	auth_service.set("current_user", previous_user)
 	service.party = {}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
