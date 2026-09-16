@@ -11,6 +11,20 @@ func _run() -> void:
 	var service := root.get_node("CoopService")
 	service.set_process(false)
 	service.reset()
+	var gateway_config := root.get_node("GatewayApiConfig")
+	var previous_gateway_url: String = gateway_config.get("cached_url")
+	gateway_config.set("cached_url", "http://localhost:8000")
+	var missing_profile_sources: Array[String] = []
+	service.party_profile_missing.connect(func(source: String) -> void: missing_profile_sources.append(source))
+	var incomplete_party := {"party": {"memberIds": [1, 2]}, "invitations": [], "activity": {}}
+	service.apply_state(incomplete_party)
+	service.apply_state(incomplete_party)
+	_expect(missing_profile_sources == ["local development"], "missing member profiles identify the connected server once")
+	var parsed_party: Dictionary = JSON.parse_string('{"party":{"leaderId":2,"memberIds":[2,7],"memberUsernames":{"2":"admin","7":"afc_adinho"},"memberAppearances":{"2":{"body":"Gen4_Base_v1"},"7":{"body":"Gen4_Base_F_v1"}}},"invitations":[],"activity":{}}')
+	service.apply_state(parsed_party)
+	_expect(typeof(service.party["memberIds"][0]) == TYPE_INT and service.party["memberIds"] == [2, 7], "JSON float member IDs normalize to integer IDs")
+	_expect(missing_profile_sources.size() == 1, "canonical member keys find both names and portraits after JSON parsing")
+	gateway_config.set("cached_url", previous_gateway_url)
 	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
@@ -85,14 +99,20 @@ func _run() -> void:
 	service.activity = {}
 	party_popup.call("open", "TrainerTwo")
 	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
+	var focused_recipient: LineEdit = party_popup.get("_recipient")
+	focused_recipient.grab_focus()
+	focused_recipient.text = "TrainerTwoMore"
+	party_popup.call("_refresh")
+	_expect(party_popup.get("_recipient") == focused_recipient and focused_recipient.has_focus() and focused_recipient.text == "TrainerTwoMore", "party polling keeps username input and focus while typing")
 	var observed_invitations: Array[Dictionary] = []
 	service.invitation_received.connect(func(invitation: Dictionary) -> void: observed_invitations.append(invitation))
-	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo"}
+	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo", "sharedLevelCap": 20}
 	service.apply_state({"party": {}, "invitations": [incoming], "activity": {}})
 	service.apply_state({"party": {}, "invitations": [incoming], "activity": {}})
 	_expect(observed_invitations.size() == 1, "incoming invitation notifies exactly once across polling")
 	party_popup.call("open_invitation", incoming)
 	_expect(party_popup.visible and party_popup.get("_focused_invitation_id") == "invite-one", "incoming invitation opens focused accept/decline popup")
+	_expect(party_popup.get("_content").get_children().any(func(child: Node) -> bool: return child is Label and child.text == "Shared level cap: Lv. 20"), "invitation shows the server-provided shared story cap")
 	var invitation_visual_path := OS.get_environment("COOP_INVITE_VISUAL_CAPTURE_PATH")
 	if not invitation_visual_path.is_empty():
 		await create_timer(0.2).timeout
@@ -116,6 +136,61 @@ func _run() -> void:
 	var overlay_scene: PackedScene = load("res://scenes/interface/ui_overlay.tscn")
 	var overlay_ui := overlay_scene.instantiate()
 	_expect(overlay_ui.get_node_or_null("Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton") != null, "Socials menu contains an Adventure Party launcher")
+	var party_hud: Button = load("res://scripts/ui/coop_party_hud.gd").new()
+	party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	party_hud.offset_left = -304.0
+	party_hud.offset_right = -64.0
+	party_hud.offset_top = -314.0
+	party_hud.offset_bottom = -210.0
+	root.add_child(party_hud)
+	overlay_ui.set("coop_party_hud", party_hud)
+	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
+	overlay_ui.set("personal_buffs_panel", buffs_panel)
+	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_left, buffs_panel.offset_left) and is_equal_approx(party_hud.offset_right, buffs_panel.offset_right), "party HUD matches personal-buffs width")
+	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD sits directly above personal buffs")
+	buffs_panel.offset_top -= 60.0
+	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
+	service.available = true
+	service.party = {"memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
+		"memberAppearances": {"1": {"body": "Gen4_Base_v1", "gender": "male"}, "2": {"body": "Gen4_Base_F_v1", "gender": "female"}},
+		"sharedLevelCap": 20}
+	overlay_ui.call("_refresh_coop_party_hud")
+	var hud_names: Array = party_hud.get("_names")
+	var hud_portraits: Array = party_hud.get("_portraits")
+	_expect(party_hud.visible and hud_names[0].text == "TrainerOne" and hud_names[1].text == "TrainerTwo", "party HUD shows both member names")
+	_expect(hud_portraits[0].visible and hud_portraits[1].visible and not party_hud.text.contains("cap"), "party HUD shows both portraits without a level cap")
+	var hud_visual_path := OS.get_environment("COOP_PARTY_HUD_VISUAL_CAPTURE_PATH")
+	if not hud_visual_path.is_empty():
+		await create_timer(0.3).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(hud_visual_path) == OK, "party HUD visual capture saved")
+	var auth_service := root.get_node("AuthService")
+	var previous_user: Dictionary = (auth_service.get("current_user") as Dictionary).duplicate(true)
+	auth_service.set("current_user", {"id": 1, "username": "SelfTrainer"})
+	var active_party_popup: Control = load("res://scripts/ui/coop_party_popup.gd").new()
+	root.add_child(active_party_popup)
+	active_party_popup.call("open")
+	var active_content: VBoxContainer = active_party_popup.get("_content")
+	var party_labels: Array = active_content.find_children("*", "Label", true, false)
+	_expect(active_content.get_child_count() == 5 and party_labels.any(func(label: Label) -> bool: return label.text == "TrainerOne")
+		and party_labels.any(func(label: Label) -> bool: return label.text == "TrainerTwo")
+		and party_labels.any(func(label: Label) -> bool: return label.text == "SHARED LEVEL CAP"), "active party popup separates both trainers and the shared cap")
+	var active_visual_path := OS.get_environment("COOP_PARTY_ACTIVE_VISUAL_CAPTURE_PATH")
+	if not active_visual_path.is_empty():
+		await create_timer(0.3).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(active_visual_path) == OK, "active party popup visual capture saved")
+	active_party_popup.free()
+	service.party = {"memberIds": [1, 2]}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(hud_names[0].text == "SelfTrainer" and hud_names[1].text == "Trainer #2", "older party responses still show own name and identify the partner")
+	auth_service.set("current_user", previous_user)
+	service.party = {}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
+	party_hud.free()
 	overlay_ui.free()
 	var interaction_script: Script = load("res://scripts/ui/player_interaction_coordinator.gd")
 	_expect(interaction_script != null and interaction_script.get_script_signal_list().any(func(entry: Dictionary) -> bool: return entry.get("name") == "coop_invitation_requested"), "nearby Trainer context offers party invitation routing")

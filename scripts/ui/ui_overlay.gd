@@ -254,6 +254,7 @@ const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interf
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
 const COOP_PARTY_POPUP_SCRIPT: Script = preload("res://scripts/ui/coop_party_popup.gd")
+const COOP_PARTY_HUD_SCRIPT: Script = preload("res://scripts/ui/coop_party_hud.gd")
 const QUEST_JOURNAL_VIEW_SCRIPT: Script = preload("res://scripts/ui/quest_journal_view.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
@@ -664,6 +665,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
 var coop_party_popup: Control
+var coop_party_hud: Button
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -1921,6 +1923,10 @@ func _ready() -> void:
 	CoopService.invitation_received.connect(_on_coop_invitation_received)
 	CoopService.invitation_sent.connect(_on_coop_invitation_sent)
 	CoopService.invitation_failed.connect(_on_coop_invitation_failed)
+	CoopService.party_profile_missing.connect(_on_coop_party_profile_missing)
+	CoopService.state_changed.connect(_refresh_coop_party_hud)
+	_create_coop_party_hud()
+	_refresh_coop_party_hud()
 	socials_loans_button.pressed.connect(_on_socials_loans_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
@@ -13653,6 +13659,7 @@ func _refresh_personal_buffs_compact_state() -> void:
 		)
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
+	_position_coop_party_hud()
 func _personal_buffs_summary_tooltip() -> String:
 	var lines: Array[String] = [LocalizationManager.plural(
 		"ui.buff.personal_active.one",
@@ -39270,6 +39277,65 @@ func _on_socials_adventure_party_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_coop_party_popup()
 
+func _create_coop_party_hud() -> void:
+	coop_party_hud = COOP_PARTY_HUD_SCRIPT.new() as Button
+	coop_party_hud.name = "AdventurePartyHud"
+	coop_party_hud.visible = false
+	coop_party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	coop_party_hud.offset_left = personal_buffs_panel.offset_left
+	coop_party_hud.offset_right = personal_buffs_panel.offset_right
+	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
+	coop_party_hud.pressed.connect(_open_coop_party_popup)
+	root_control.add_child(coop_party_hud)
+	_position_coop_party_hud()
+
+func _position_coop_party_hud() -> void:
+	if coop_party_hud == null or personal_buffs_panel == null:
+		return
+	coop_party_hud.offset_left = personal_buffs_panel.offset_left
+	coop_party_hud.offset_right = personal_buffs_panel.offset_right
+	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
+
+func _refresh_coop_party_hud() -> void:
+	if coop_party_hud == null:
+		return
+	var own_id := int(AuthService.current_user.get("id", 0))
+	var hud_party: Dictionary = _coop_party_hud_data() if CoopService.available else {}
+	coop_party_hud.call("set_members", hud_party, own_id)
+
+func _coop_party_hud_data() -> Dictionary:
+	var party := CoopService.party.duplicate(true)
+	var ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	if ids.size() != 2:
+		return party
+	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
+	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	if not own_id.is_empty():
+		if not names.has(own_id):
+			names[own_id] = str(AuthService.current_user.get("username", ""))
+		if not appearances.has(own_id) or appearances[own_id] is not Dictionary or str(appearances[own_id].get("body", "")).is_empty():
+			appearances[own_id] = PlayerSave.to_appearance_state()
+	var world := GameState.get_world()
+	var remote_players: Dictionary = world.get("remote_player_avatars") if world != null and world.get("remote_player_avatars") is Dictionary else {}
+	for member_id: Variant in ids:
+		var key := str(int(member_id))
+		if key == own_id:
+			continue
+		var avatar: Node = remote_players.get(key)
+		if avatar == null or not is_instance_valid(avatar):
+			continue
+		var presence: Dictionary = avatar.get("presence_state") if avatar.get("presence_state") is Dictionary else {}
+		if not names.has(key):
+			names[key] = str(presence.get("username", ""))
+		if not appearances.has(key) or appearances[key] is not Dictionary or str(appearances[key].get("body", "")).is_empty():
+			appearances[key] = presence.get("appearance", {}) if presence.get("appearance") is Dictionary else {}
+	party["memberUsernames"] = names
+	party["memberAppearances"] = appearances
+	return party
+
 func _open_coop_party_popup(recipient_name: String = "") -> void:
 	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
 		return
@@ -39295,6 +39361,9 @@ func _on_coop_invitation_sent(username: String) -> void:
 
 func _on_coop_invitation_failed(message: String) -> void:
 	add_system_message("Adventure Party invitation failed: %s" % message)
+
+func _on_coop_party_profile_missing(source: String) -> void:
+	add_system_message("Adventure Party details are missing from the connected %s API. Check that both clients use the development server." % source)
 
 func _hide_coop_party_popup() -> void:
 	if coop_party_popup != null:

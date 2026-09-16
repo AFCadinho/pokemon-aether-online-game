@@ -5,6 +5,7 @@ signal request_failed(message: String)
 signal invitation_received(invitation: Dictionary)
 signal invitation_sent(username: String)
 signal invitation_failed(message: String)
+signal party_profile_missing(source: String)
 
 const ORDINARY_TRAINERS := [
 	"kanto_route_1_youngster_liam",
@@ -40,6 +41,7 @@ var _sequence := 0
 var _applied_sequence := 0
 var _seen_invitations: Dictionary = {}
 var _sent_invitations: Dictionary = {}
+var _reported_profile_source := ""
 
 
 func _process(delta: float) -> void:
@@ -74,6 +76,7 @@ func reset() -> void:
 	_applied_sequence = _sequence
 	_seen_invitations.clear()
 	_sent_invitations.clear()
+	_reported_profile_source = ""
 	_poll_after = 0.0
 	state_changed.emit()
 
@@ -91,6 +94,34 @@ func refresh() -> Dictionary:
 
 func apply_state(body: Dictionary) -> void:
 	party = body.get("party", {}) if body.get("party") is Dictionary else {}
+	# Godot parses JSON numbers as floats (e.g. 7.0), but the server's public
+	# member maps use canonical integer-string keys ("7").
+	if party.get("memberIds") is Array:
+		var normalized_ids: Array[int] = []
+		for member_id: Variant in party["memberIds"]:
+			normalized_ids.append(int(member_id))
+		party["memberIds"] = normalized_ids
+	if party.has("leaderId"):
+		party["leaderId"] = int(party["leaderId"])
+	var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	if member_ids.size() == 2:
+		var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
+		var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
+		var incomplete := false
+		for member_id: Variant in member_ids:
+			var key := str(int(member_id))
+			var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
+			if str(names.get(key, "")).is_empty() or str(appearance.get("body", "")).is_empty():
+				incomplete = true
+		if incomplete:
+			var source := _diagnostic_gateway_source()
+			if source != _reported_profile_source:
+				_reported_profile_source = source
+				party_profile_missing.emit(source)
+		else:
+			_reported_profile_source = ""
+	else:
+		_reported_profile_source = ""
 	invitations = body.get("invitations", []) if body.get("invitations") is Array else []
 	var incoming: Dictionary = body.get("activity", {}) if body.get("activity") is Dictionary else {}
 	if incoming.get("reservationId", "") != activity.get("reservationId", ""):
@@ -113,6 +144,15 @@ func apply_state(body: Dictionary) -> void:
 	if body.get("view") is Dictionary:
 		apply_view(body["view"])
 	state_changed.emit()
+
+
+func _diagnostic_gateway_source() -> String:
+	var gateway := str(GatewayApiConfig.cached_url)
+	if gateway.begins_with("http://localhost:8000") or gateway.begins_with("http://127.0.0.1:8000"):
+		return "local development"
+	if gateway.begins_with("https://api.pokeaether.com"):
+		return "production"
+	return "custom/unknown"
 
 
 func apply_view(incoming: Dictionary) -> void:

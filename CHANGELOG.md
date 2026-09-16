@@ -4,6 +4,28 @@
 
 - The Route 3 Pokémon Center Magikarp purchase now works in the browser and shows its new ₽2,000 price.
 
+- The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.
+
+- The Adventure Party card is now as compact as the personal-buffs panel below it.
+
+- Adventure Party names and portraits now resolve correctly when Godot parses numeric member IDs from the server's JSON response.
+
+- If a connected server omits party names or portraits, System chat now identifies whether the client is using the local, production or a custom API.
+
+- Typing a Trainer name in the Adventure Party invite window is no longer interrupted by the background party-status refresh.
+
+- The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
+
+- Bot difficulty names in Guild training no longer include the technical fallback note.
+
+- The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
+
+- Your Adventure Party partner and shared level cap now appear in a compact in-game indicator above your personal buffs. Select it to open the party window.
+
+- The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
+
+- Adventure Party invitations now show the current shared story level cap before you accept.
+
 - Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.
 
 - Side-quest offers now have clearer reward cards, sit in the upper part of the screen, and adapt to shorter browser and desktop windows while keeping Accept and Decline visible. Their first opening in a session no longer stretches to nearly full-screen height.

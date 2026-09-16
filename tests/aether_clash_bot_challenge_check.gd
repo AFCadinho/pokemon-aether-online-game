@@ -15,15 +15,20 @@ class FakeGuildService extends GuildServiceNode:
 func _ready() -> void:
 	var menu := MENU.new()
 	add_child(menu)
-	menu.build({"available": false, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai4", "ai5"]})
+	menu.build({"available": false, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai4", "intermediate", "ai5", "mix_v1"]})
 	_check(menu.dialog.confirm_button.disabled, "Unavailable runtime cannot be started")
 	_check(menu.bot_count.max_value == 20, "Menu uses the server bot limit")
 	menu.bot_count.get_line_edit().text = "20"
 	menu.tier.select(1)
-	menu.difficulty.select(1)
+	menu.difficulty.select(2)
 	menu.spectators.select(1)
 	var settings: Dictionary = menu.selected_settings()
 	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5"}, "Count, tier, difficulty and spectator choice survive without a human-count field")
+	menu.difficulty.select(3)
+	_check(menu.selected_settings()["aiPolicy"] == "mix_v1", "Mix is a separate versioned challenge policy")
+	menu.bot_count.get_line_edit().text = "1"
+	_check(int(menu.selected_settings()["botCount"]) == 3, "Mix reserves at least one bot for each difficulty")
+	menu.difficulty.select(2)
 	menu.bot_count.get_line_edit().text = "999"
 	_check(int(menu.selected_settings()["botCount"]) == 20, "Count is bounded")
 	menu.bot_count.get_line_edit().text = "0"
@@ -78,8 +83,9 @@ func _ready() -> void:
 	lobby.free()
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
-		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "ai5", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
+		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
+		_check(not str(catalog.get("ui.clash_bot.ai5", "")).contains("("), "%s keeps the Hard label concise" % locale)
 	await get_tree().process_frame
 	get_tree().quit(1 if failed else 0)
 
