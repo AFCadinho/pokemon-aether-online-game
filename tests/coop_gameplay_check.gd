@@ -379,7 +379,22 @@ func _run() -> void:
 	var animation_setting: bool = settings_manager.battle_animations
 	settings_manager.battle_animations = true
 	presenter.set("_playing", true)
+	var left_enemy_hp: ProgressBar = mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud/MarginContainer/VBoxContainer/HPRow/HpBar")
+	var right_enemy_hp: ProgressBar = mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2/MarginContainer/VBoxContainer/HPRow/HpBar")
+	left_enemy_hp.value = 100
+	right_enemy_hp.value = 100
 	await presenter._animate_event({"kind": "move", "actor": "p1"})
+	_expect(left_enemy_hp.value == 100 and right_enemy_hp.value == 100,
+		"a move animation does not apply later damage early")
+	await presenter._animate_event({"kind": "-damage", "actor": "p2", "hpPercent": 62})
+	_expect(left_enemy_hp.value == 62 and right_enemy_hp.value == 100,
+		"the first target's HP changes before the next attack")
+	await presenter._animate_event({"kind": "move", "actor": "p3"})
+	_expect(left_enemy_hp.value == 62 and right_enemy_hp.value == 100,
+		"the next move leaves unrelated HP unchanged")
+	await presenter._animate_event({"kind": "-damage", "actor": "p4", "hpPercent": 74})
+	_expect(left_enemy_hp.value == 62 and right_enemy_hp.value == 74,
+		"the second target's HP changes after its own hit")
 	await presenter._animate_event({"kind": "-damage", "actor": "p1"})
 	presenter.set("_playing", false)
 	settings_manager.battle_animations = animation_setting

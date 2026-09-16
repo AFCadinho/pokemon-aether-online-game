@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now update each target's HP after its own move and hit animation, instead of changing all HP bars at the end of the turn.
+
 - Co-op target hover now also works around a Pokémon's feet and legs, without changing the initial target under a stationary cursor.
 
 - Single-target moves in co-op battles now start on the left opposing Pokémon, even when a target appears under a stationary cursor.
