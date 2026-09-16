@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
 - The Route 3 Pokémon Center Magikarp purchase now works in the browser and shows its new ₽2,000 price.
 
 - The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.
