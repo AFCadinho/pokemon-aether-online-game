@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Co-op battle platforms now sit under the Pokémon, and the combined party icons stay fully above the battle text.
+- Co-op Pokémon and their platforms now sit lower on the field, nearer the battle text and moves. The combined party icons stay fully above the battle text.
 
 - In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
 

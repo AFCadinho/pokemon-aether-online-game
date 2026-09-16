@@ -108,8 +108,8 @@ func _ready() -> void:
 		_native_party.party_selected.connect(_select_switch)
 		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
 		stage.add_child(_second_trainer)
-		_first_trainer.position = Vector2(124, 426)
-		_second_trainer.position = Vector2(184, 426)
+		_first_trainer.position = Vector2(124, 476)
+		_second_trainer.position = Vector2(184, 476)
 		_first_trainer.scale = Vector2.ONE * 0.75
 		_second_trainer.scale = Vector2.ONE * 0.75
 		for side: String in ["player", "enemy"]:
