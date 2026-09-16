@@ -49,6 +49,9 @@ var _effects: Node
 var _native_mode := false
 var _native_moves: MovesGrid
 var _native_log: BattleLogPanel
+var _native_pokemon_hover: PokemonHoverCard
+var _native_move_hover: MoveHoverCard
+var _hovered_controller := ""
 var _native_utility: Control
 var _action_scroll: ScrollContainer
 var _decision_overlay: ColorRect
@@ -144,8 +147,16 @@ func _ready() -> void:
 		rail.add_child(_log)
 		_native_moves = embedded_hosts["moves"] as MovesGrid
 		_native_log = embedded_hosts["log"] as BattleLogPanel
+		_native_pokemon_hover = embedded_hosts["pokemon_hover"] as PokemonHoverCard
+		_native_move_hover = embedded_hosts["move_hover"] as MoveHoverCard
 		_native_utility = embedded_hosts["utility"] as Control
 		_native_moves.move_selected.connect(_select_move)
+		_native_moves.move_hovered.connect(_show_coop_move_hover)
+		_native_moves.move_unhovered.connect(_hide_coop_move_hover)
+		for party_grid: PartyGrid in [_native_party, _allied_party, _opponent_party]:
+			party_grid.set_hover_enabled(true)
+			party_grid.pokemon_hovered.connect(_show_coop_party_hover)
+			party_grid.pokemon_unhovered.connect(_hide_coop_pokemon_hover)
 		_native_utility.action_selected.connect(_on_native_utility_action)
 		var bag: Button = stage.get_node("%BagButton")
 		_wait_button = bag.duplicate(0) as Button
@@ -180,6 +191,9 @@ func _ready() -> void:
 				owner_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 				row.add_child(owner_label)
 				row.move_child(owner_label, 0)
+				var stat_panel := preload("res://scenes/battle/stat_stage_panel.tscn").instantiate() as StatStagePanel
+				stat_panel.name = "CoopStatStages"
+				row.add_child(stat_panel)
 		var target_shader := Shader.new()
 		target_shader.code = TARGET_OUTLINE_SHADER
 		_target_glow_material = ShaderMaterial.new()
@@ -398,6 +412,10 @@ func _sync() -> void:
 		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
+		if _native_mode:
+			_native_pokemon_hover.hide_card()
+			_native_move_hover.hide_card()
+			_hovered_controller = ""
 		_finished_return_started = false
 		_finished_return_retry_available = false
 		_epoch += 1
@@ -419,6 +437,8 @@ func _sync() -> void:
 		selected_target = ""
 		_bag_open = false
 	_decision = str(_latest.get("decisionId", ""))
+	if _native_mode and not _hovered_controller.is_empty():
+		_show_coop_active_hover(_hovered_controller)
 	_update_actions()
 	if not _playing and _revision != int(_latest.get("revision", -1)):
 		_present.call_deferred()
@@ -441,6 +461,7 @@ func _process(_delta: float) -> void:
 		if _loading_overlay.visible:
 			_loading_label.text = "Starting co-op battle" + ".".repeat(1 + int(Time.get_ticks_msec() / 500) % 3)
 		_native_turn.hide_timer()
+		_update_coop_sprite_hover()
 		return
 	_connection.text = "%s  ·  %s" % [
 		"Partner connected" if CoopService.activity.get("partnerConnected", false) else "Partner disconnected — temporary AI after 30s",
@@ -557,9 +578,10 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			continue
 		opponent_team[index] = {"species": str(position.get("details", "")).split(",")[0].strip_edges(),
 			"hp": int(position.get("hpPercent", 0)), "maxHp": 100,
+			"types": position.get("types", []), "possibleAbilities": position.get("possibleAbilities", []),
 			"fainted": bool(position.get("fainted", false)),
 			"active": not bool(position.get("fainted", false)) and int(position.get("hpPercent", 0)) > 0}
-	_opponent_party.set_party(opponent_team)
+		_opponent_party.set_party(opponent_team)
 	_opponent_party.set_empty_slots_visible(false)
 	var active: Dictionary = {}
 	for position: Dictionary in snapshot.get("positions", []):
@@ -575,6 +597,8 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			var owner_label: Label = hud.active_info_rows[row_index].get_node("CoopOwnerLabel")
 			owner_label.text = (_trainer_name(controller) + (" · YOU" if controller == snapshot.get("participant") else "")) if side == "player" else "OPPONENT %s" % (row_index + 1)
 			var position: Dictionary = active.get(controller, {})
+			var stat_panel := hud.active_info_rows[row_index].get_node("CoopStatStages") as StatStagePanel
+			stat_panel.set_stat_stages(position.get("boosts", {}) if not position.get("fainted", false) else {})
 			var details := str(position.get("details", ""))
 			var name := details.split(",")[0].strip_edges() if not details.is_empty() else ""
 			var fainted := bool(position.get("fainted", false))
@@ -1006,21 +1030,23 @@ func _refresh_target_highlight() -> void:
 
 func _append_event(event: Dictionary) -> void:
 	var controller := str(event.get("actor", ""))
-	var actor := _role(controller)
+	var actor := _combatant_name(controller)
 	var text := ""
 	match str(event.get("kind", "")):
 		"turn": text = "— Turn %s —" % str(event.get("turn", ""))
-		"move": text = "%s used %s → %s" % [actor, str(event.get("move", "")), _role(str(event.get("target", "")))]
-		"coopcapture": text = "%s caught a wild Pokémon!" % actor if event.get("caught", false) else "%s's wild Pokémon escaped from the ball." % actor
+		"move": text = "%s used %s!" % [actor, str(event.get("move", ""))]
+		"coopcapture": text = "%s caught a wild Pokémon!" % _role(controller) if event.get("caught", false) else "The wild Pokémon escaped from %s's ball!" % _role(controller)
 		"switch", "drag", "replace": text = _send_out_message(controller, str(event.get("details", "")))
 		"faint": text = "%s fainted." % actor
-		"-damage", "-heal": text = "%s: %s%% HP" % [actor, str(event.get("hpPercent", 0))]
-		"-status": text = "%s: %s" % [actor, str(event.get("status", ""))]
-		"-curestatus": text = "%s recovered from its status." % actor
-		"-boost", "-unboost", "-setboost": text = "%s: %s %s %s" % [actor, str(event.get("stat", "")).to_upper(), "↓" if event.kind == "-unboost" else "→" if event.kind == "-setboost" else "↑", str(event.get("amount", 0))]
-		"-start", "-end": text = "%s: %s %s" % [actor, str(event.get("condition", "")), "ended" if event.kind == "-end" else "started"]
-		"-miss": text = "%s: the attack missed %s." % [actor, _role(str(event.get("target", "")))]
-		"cant": text = "%s could not act." % actor
+		"-damage": text = "%s is at %s%% HP." % [actor, str(event.get("hpPercent", 0))]
+		"-heal": text = "%s recovered health!" % actor
+		"-status": text = "%s is %s!" % [actor, _status_name(str(event.get("status", "")))]
+		"-curestatus": text = "%s recovered from its status!" % actor
+		"-boost", "-unboost": text = "%s %s for %s!" % [_stat_name(str(event.get("stat", ""))), "rose" if event.get("kind") == "-boost" else "fell", actor]
+		"-setboost": text = "%s changed for %s!" % [_stat_name(str(event.get("stat", ""))), actor]
+		"-start", "-end": text = "%s's %s %s." % [actor, str(event.get("condition", "")).capitalize(), "ended" if event.kind == "-end" else "started"]
+		"-miss": text = "%s's attack missed!" % actor
+		"cant": text = "%s couldn't move!" % actor
 		"win", "tie": text = "Battle ended."
 	if not text.is_empty():
 		if _native_mode:
@@ -1032,6 +1058,26 @@ func _append_event(event: Dictionary) -> void:
 			_log.add_text(text + "\n")
 			if _log.get_line_count() > 220:
 				_log.remove_paragraph(0)
+
+
+func _combatant_name(controller: String) -> String:
+	for position: Dictionary in _latest.get("positions", []):
+		if position.get("controller") != controller:
+			continue
+		var species := str(position.get("details", "")).split(",")[0].strip_edges()
+		if not species.is_empty():
+			if controller in ["p2", "p4"] and str(CoopService.activity.get("activityId", "")).begins_with("wild_"):
+				return "Wild %s (%s)" % [species, "1" if controller == "p2" else "2"]
+			return "%s's %s" % [_role(controller), species]
+	return _role(controller)
+
+
+func _stat_name(stat: String) -> String:
+	return {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def", "spe": "Speed", "accuracy": "accuracy", "evasion": "evasiveness"}.get(stat, stat)
+
+
+func _status_name(status: String) -> String:
+	return {"psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed", "brn": "burned", "slp": "asleep", "frz": "frozen"}.get(status, status)
 
 
 func _send_out_message(controller: String, details: String) -> String:
@@ -1103,6 +1149,92 @@ func _native_sprite(controller: String) -> AnimatedSprite2D:
 	var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
 	var sprite_path := "DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite" if controller in ["p1", "p2"] else "DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2"
 	return box.get_node_or_null(sprite_path) as AnimatedSprite2D
+
+
+func _update_coop_sprite_hover() -> void:
+	var hovered := ""
+	var mouse := get_global_mouse_position()
+	for controller: String in SLOTS:
+		var sprite := _native_sprite(controller)
+		if sprite == null or not sprite.visible:
+			continue
+		var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+		if (box.call("_get_sprite_hover_rect", sprite) as Rect2).has_point(mouse):
+			hovered = controller
+			break
+	if hovered != _hovered_controller:
+		_hovered_controller = hovered
+		if hovered.is_empty():
+			_hide_coop_pokemon_hover()
+		else:
+			_show_coop_active_hover(hovered)
+	elif not hovered.is_empty() and _native_pokemon_hover.visible:
+		_native_pokemon_hover.position_near_mouse(mouse, get_viewport_rect().size)
+
+
+func _show_coop_active_hover(controller: String) -> void:
+	for position: Dictionary in _latest.get("positions", []):
+		if position.get("controller") != controller or position.get("fainted", false):
+			continue
+		var details := str(position.get("details", ""))
+		var data := {"ident": controller + ": " + details.split(",")[0].strip_edges(),
+			"species": details.split(",")[0].strip_edges(), "types": position.get("types", []),
+			"limitedBattleView": true, "status": position.get("status", ""),
+			"hp": int(position.get("hpPercent", 0)), "maxHp": 100}
+		var own: bool = controller == _latest.get("participant")
+		var ability := ""
+		var item := ""
+		if own:
+			for pokemon: Dictionary in _latest.get("ownTeam", []):
+				if pokemon.get("active", false):
+					data["hp"] = pokemon.get("hp", 0)
+					data["maxHp"] = pokemon.get("maxHp", 1)
+					var owned := _owned_hover_details(int(pokemon.get("slot", 0)), str(data.get("species", "")))
+					data["possibleAbilities"] = owned.get("possibleAbilities", [])
+					ability = str(owned.get("ability", ""))
+					item = str(owned.get("item", ""))
+					break
+		_native_pokemon_hover.show_for_pokemon(data, _latest.get("moves", []) if own else [], item, ability)
+		_native_pokemon_hover.position_near_mouse(get_global_mouse_position(), get_viewport_rect().size)
+		return
+
+
+func _show_coop_party_hover(data: Dictionary, slot_rect: Rect2) -> void:
+	if data.get("unrevealed", false):
+		return
+	_hovered_controller = ""
+	var display := data.duplicate(true)
+	display["limitedBattleView"] = true
+	var owned := _owned_hover_details(int(data.get("slot", 0)), str(data.get("species", "")))
+	if not owned.is_empty():
+		display["types"] = owned.get("types", display.get("types", []))
+		display["possibleAbilities"] = owned.get("possibleAbilities", [])
+	_native_pokemon_hover.show_for_pokemon(display, owned.get("moves", []),
+		str(owned.get("item", "")), str(owned.get("ability", "")))
+	_native_pokemon_hover.position_near_mouse(slot_rect.get_center(), get_viewport_rect().size)
+
+
+func _owned_hover_details(slot: int, species: String) -> Dictionary:
+	if slot < 1 or slot > PlayerSave.party.size():
+		return {}
+	var saved := PlayerSave.party[slot - 1] as Pokemon
+	if saved == null or saved.species.to_lower() != species.to_lower():
+		return {}
+	return saved.to_battle_dict()
+
+
+func _hide_coop_pokemon_hover() -> void:
+	_hovered_controller = ""
+	_native_pokemon_hover.hide_card()
+
+
+func _show_coop_move_hover(data: Dictionary, slot_rect: Rect2) -> void:
+	_native_move_hover.show_for_move(data)
+	_native_move_hover.position_near_rect(slot_rect, get_viewport_rect().size)
+
+
+func _hide_coop_move_hover() -> void:
+	_native_move_hover.hide_card()
 
 
 func _cancel_native_attack_tween() -> void:

@@ -175,10 +175,10 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemySpriteBox").offset_top > -201.0,
 		"co-op platforms and Pokémon sit lower while all side slots clear the battle prompt")
 	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
-		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
+		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77, "boosts": {"def": -1}, "types": ["Normal"]},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
 		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100},
-		{"controller": "p4", "details": "Pidgey, L2, M", "hpPercent": 55}],
+		{"controller": "p4", "details": "Pidgey, L2, M", "hpPercent": 55, "boosts": {"atk": 1}, "types": ["Normal", "Flying"]}],
 		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30},
 			{"species": "Ekans", "active": false, "hp": 29, "maxHp": 29}],
 		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 20, "maxHp": 20}]})
@@ -188,6 +188,9 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2").visible,
 		"four co-op Pokemon and the second HP row render in the native presentation")
+	_expect(mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud/CoopStatStages").visible
+		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2/CoopStatStages").visible,
+		"each boosted co-op Pokémon shows singles-style stat badges under its own HP bar")
 	_expect(mounted_battle.get_node("%BattleStatusPanel").turn_label.text.contains("4")
 		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 3
 		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data.size() == 2
@@ -218,6 +221,39 @@ func _run() -> void:
 		"both pairs stand close together while the Trainers group behind the left ally")
 	service.activity.activityId = "wild_grass:kanto_route_1"
 	presenter._sync_native_trainers()
+	var hover_view: Dictionary = presenter._latest.duplicate(true)
+	presenter._latest = {"participant": "p1", "positions": [
+		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77, "types": ["Normal"]},
+		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100, "types": ["Normal", "Flying"]}],
+		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30}],
+		"moves": [{"name": "Pound", "pp": 35, "maxPp": 35}]}
+	presenter._show_coop_active_hover("p2")
+	_expect(presenter._native_pokemon_hover.visible
+		and presenter._native_pokemon_hover.name_label.text.contains("Pidgey")
+		and presenter._native_pokemon_hover.type_icon_1.visible,
+		"co-op sprite hover opens the regular Pokémon card with public type and HP")
+	var move_grid: MovesGrid = mounted_battle.get_node("%MovesGrid")
+	move_grid.move_hovered.emit({"name": "Pound", "type": "Normal", "category": "Physical",
+		"basePower": 40, "accuracy": 100}, Rect2(Vector2(100, 100), Vector2(40, 40)))
+	_expect(presenter._native_move_hover.visible and presenter._native_move_hover.name_label.text.contains("Pound"),
+		"co-op move hover signal opens the regular move detail card")
+	move_grid.move_unhovered.emit()
+	var allied_hover_grid: PartyGrid = mounted_battle.get_node("%PlayerStagePartyGrid")
+	allied_hover_grid.pokemon_hovered.emit({"species": "Squirtle", "hp": 20, "maxHp": 20},
+		Rect2(Vector2(100, 100), Vector2(40, 40)))
+	_expect(presenter._native_pokemon_hover.visible and presenter._native_pokemon_hover.name_label.text.contains("Squirtle"),
+		"co-op side rail hover signal opens the regular Pokémon card")
+	allied_hover_grid.pokemon_unhovered.emit()
+	presenter._hide_coop_pokemon_hover()
+	battle_log.clear_log()
+	presenter._append_event({"kind": "move", "actor": "p2", "move": "Tail Whip", "target": "p1"})
+	presenter._append_event({"kind": "-unboost", "actor": "p1", "stat": "def", "amount": 1})
+	_expect(battle_log.log_buffer.contains("Wild Pidgey (1) used Tail Whip!")
+		and battle_log.log_buffer.contains("Defense fell for admin's Jigglypuff!")
+		and not battle_log.log_buffer.contains("→") and not battle_log.log_buffer.contains("DEF ↓"),
+		"co-op log describes moves and stat changes as readable battle narration")
+	battle_log.clear_log()
+	presenter._latest = hover_view
 	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
 		and not presenter._second_trainer.visible,
 		"wild doubles hide both Trainer sprites")

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now use readable battle-log messages, show the normal Pokémon and move hover cards, and display stat-stage badges under each Pokémon's HP bar.
+
 - Both Trainers now see a co-op Poké Ball throw against the correct wild Pokémon after their shared choices are in.
 
 - Co-op Poké Ball animations now wait until the other Trainer has chosen an action, matching the shared turn's presentation.

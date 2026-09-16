@@ -888,10 +888,23 @@ func setup_coop_battle() -> bool:
 	enemy_hud_panel.offset_right = -80.0
 	if moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
 		moves_grid.move_selected.disconnect(_on_moves_grid_move_selected)
+	if moves_grid.move_hovered.is_connected(_show_move_hover):
+		moves_grid.move_hovered.disconnect(_show_move_hover)
+	if moves_grid.move_unhovered.is_connected(_hide_move_hover):
+		moves_grid.move_unhovered.disconnect(_hide_move_hover)
 	if action_buttons.action_selected.is_connected(_on_action_selected):
 		action_buttons.action_selected.disconnect(_on_action_selected)
 	if player_party_grid.party_selected.is_connected(_on_party_grid_party_selected):
 		player_party_grid.party_selected.disconnect(_on_party_grid_party_selected)
+	if player_party_grid.pokemon_hovered.is_connected(_show_party_hover):
+		player_party_grid.pokemon_hovered.disconnect(_show_party_hover)
+	if player_party_grid.pokemon_unhovered.is_connected(_hide_party_hover):
+		player_party_grid.pokemon_unhovered.disconnect(_hide_party_hover)
+	for rail_grid: PartyGrid in [player_stage_party_grid, opponent_party_grid]:
+		if rail_grid.pokemon_hovered.is_connected(_show_public_party_hover):
+			rail_grid.pokemon_hovered.disconnect(_show_public_party_hover)
+		if rail_grid.pokemon_unhovered.is_connected(_hide_hud_pokemon_hover):
+			rail_grid.pokemon_unhovered.disconnect(_hide_hud_pokemon_hover)
 	if player_party_grid.party_changed.is_connected(player_stage_party_grid.set_party):
 		player_party_grid.party_changed.disconnect(player_stage_party_grid.set_party)
 	battle_drawer_layer.visible = true
@@ -927,6 +940,8 @@ func setup_coop_battle() -> bool:
 		"turn": battle_status_panel, "vs": vs_panel_container,
 		"own_party": player_party_grid, "allied_party": player_stage_party_grid,
 		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite}
+	coop_presenter.embedded_hosts["pokemon_hover"] = pokemon_hover_card
+	coop_presenter.embedded_hosts["move_hover"] = move_hover_card
 	add_child(coop_presenter)
 	return true
 
