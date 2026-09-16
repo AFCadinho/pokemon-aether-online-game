@@ -36,8 +36,8 @@ var _actions: VBoxContainer
 var _log: RichTextLabel
 var _epoch := 0
 var _action_signature := ""
-var _escape_return_started := false
-var _escape_return_retry_available := false
+var _finished_return_started := false
+var _finished_return_retry_available := false
 var _loading_overlay: ColorRect
 var _loading_label: Label
 var _loading_cancel: Button
@@ -381,8 +381,8 @@ func _sync() -> void:
 		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
-		_escape_return_started = false
-		_escape_return_retry_available = false
+		_finished_return_started = false
+		_finished_return_retry_available = false
 		_epoch += 1
 		_effects.cancel()
 		_cancel_native_attack_tween()
@@ -629,12 +629,12 @@ func _update_actions() -> void:
 		_prompt.text = "Battle start cancelled." if phase == "cancelled" else str(outcomes.get(CoopService.activity.get("outcome"), "Battle finished."))
 		if phase == "finished" and CoopService.activity.get("escaped", false):
 			_prompt.text = "Both Trainers fled from the wild battle."
-			if not _escape_return_started:
-				_escape_return_started = true
-				_auto_return_after_escape.call_deferred()
 		elif phase == "finished" and CoopService.activity.get("forfeited", false):
 			_prompt.text = "Both Trainers forfeited the battle."
-		if not CoopService.activity.get("escaped", false) or _escape_return_retry_available:
+		if phase == "finished" and not _finished_return_started:
+			_finished_return_started = true
+			_auto_return_after_finish.call_deferred()
+		if phase == "cancelled" or _finished_return_retry_available:
 			_button(_actions, "Return to the world", func() -> void:
 				var world := GameState.get_world()
 				if world != null: await world.call("finish_coop_activity"))
@@ -776,14 +776,21 @@ func _update_actions() -> void:
 			_button(switches, "%s\n%s/%s HP" % [str(pokemon.get("species", "")), str(pokemon.get("hp", 0)), str(pokemon.get("maxHp", 0))], func() -> void: await CoopService.submit_action(action))
 
 
-func _auto_return_after_escape() -> void:
+func _auto_return_after_finish() -> void:
+	# A finished receipt can arrive before the last turn's event playback ends.
+	# Let the final move, damage and outcome reach the screen before closing it.
+	var playback_deadline := Time.get_ticks_msec() + 7000
+	while is_inside_tree() and (_playing or _revision != int(_latest.get("revision", -1))) and Time.get_ticks_msec() < playback_deadline:
+		await get_tree().process_frame
+	if not is_inside_tree():
+		return
 	var world := GameState.get_world()
 	if world != null:
 		await world.call("finish_coop_activity")
 	if not is_inside_tree():
 		return
 	if not is_instance_valid(world) or (CoopService.activity.get("status") == "finished" and not bool(world.get("coop_finishing"))):
-		_escape_return_retry_available = true
+		_finished_return_retry_available = true
 		_action_signature = ""
 		_update_actions()
 

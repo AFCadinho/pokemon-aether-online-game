@@ -4,9 +4,12 @@ class ReturnWorld:
 	extends Node
 	var coop_finishing := false
 	var finish_calls := 0
+	var complete_on_finish := true
 
 	func finish_coop_activity() -> void:
 		finish_calls += 1
+		if complete_on_finish:
+			coop_finishing = true
 
 var failed := false
 
@@ -188,35 +191,48 @@ func _run() -> void:
 	var activity: Dictionary = service.activity.duplicate(true)
 	activity.status = "finished"
 	activity.outcome = "win"
-	service.apply_state({"activity": activity, "view": snapshot})
-	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 1, "finished state replaces commands with shared victory and return control")
-	service.activity.outcome = "draw"
-	service.activity.escaped = true
 	var return_world := ReturnWorld.new()
-	return_world.coop_finishing = true
 	root.add_child(return_world)
 	return_world.add_to_group("world")
+	panel._playing = true
+	service.apply_state({"activity": activity, "view": snapshot})
+	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 0,
+		"victory starts returning without a separate confirmation button")
+	await process_frame
+	_expect(return_world.finish_calls == 0, "automatic return waits for final event playback")
+	panel._playing = false
+	await process_frame
+	_expect(return_world.finish_calls == 1, "victory invokes world return automatically")
+	service.activity.outcome = "draw"
+	service.activity.escaped = true
 	panel._action_signature = ""
 	panel._update_actions()
 	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 0,
-		"confirmed wild escape starts returning without a second confirmation")
+		"confirmed wild escape has no second confirmation")
 	await process_frame
 	_expect(return_world.finish_calls == 1 and panel._actions.get_child_count() == 0,
-		"confirmed escape invokes world return once without a second confirmation")
+		"finished snapshots do not invoke world return twice")
 	return_world.coop_finishing = false
-	panel._escape_return_started = false
+	return_world.complete_on_finish = false
+	panel._finished_return_started = false
 	panel._action_signature = ""
 	panel._update_actions()
 	await process_frame
 	_expect(return_world.finish_calls == 2 and panel._actions.get_child_count() == 1,
 		"a failed automatic return offers a manual retry")
-	return_world.queue_free()
+	return_world.complete_on_finish = true
+	panel._finished_return_started = false
+	panel._finished_return_retry_available = false
 	service.activity.outcome = "loss"
 	service.activity.escaped = false
 	service.activity.forfeited = true
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 1, "recovered forfeit receipt identifies shared surrender rather than a natural knockout")
+	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 0,
+		"forfeit receipt identifies shared surrender and returns without confirmation")
+	await process_frame
+	_expect(return_world.finish_calls == 3, "forfeit also invokes automatic world return")
+	return_world.queue_free()
 	var old_generation: int = effects.generation
 	effects.play_move({"actor": "p3", "target": "p2", "move": "Tackle"}, [], panel.cards)
 	await process_frame
