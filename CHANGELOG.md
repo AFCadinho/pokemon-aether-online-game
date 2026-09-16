@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Side-quest offers now have clearer reward cards and adapt to shorter browser and desktop windows while keeping Accept and Decline visible.
+
 - Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
 
 - Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.

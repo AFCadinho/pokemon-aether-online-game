@@ -189,7 +189,7 @@ theme_override_constants/margin_bottom = 18
 [node name="VBoxContainer" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer" unique_id=627441881]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 10
+theme_override_constants/separation = 12
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=1276683663]
 layout_mode = 2
@@ -200,24 +200,31 @@ text = "Leave some for me."
 fit_content = true
 scroll_active = false
 
-[node name="QuestOfferContent" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="QuestOfferScroll" type="ScrollContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
-theme_override_constants/separation = 6
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="QuestTypeLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="QuestOfferContent" type="VBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 9
+
+[node name="QuestTypeLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.82, 0.91, 1)
 theme_override_font_sizes/font_size = 13
 text = "SIDE QUEST"
 
-[node name="QuestTitleLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="QuestTitleLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.93, 0.76, 1)
 theme_override_font_sizes/font_size = 20
 text = "Dadinho's Training Challenge"
 autowrap_mode = 2
 
-[node name="QuestSummaryLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="QuestSummaryLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.86, 0.9, 1)
 theme_override_constants/line_spacing = 2
@@ -225,41 +232,41 @@ theme_override_font_sizes/font_size = 16
 text = "Train the partner Dadinho prepared for you to level 10."
 autowrap_mode = 2
 
-[node name="ObjectiveHeading" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="ObjectiveHeading" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.82, 0.91, 1)
 theme_override_font_sizes/font_size = 12
 text = "OBJECTIVES"
 
-[node name="ObjectiveLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="ObjectiveLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94, 0.95, 0.96, 1)
 theme_override_font_sizes/font_size = 16
 text = "Train your starter to level 10."
 autowrap_mode = 2
 
-[node name="RewardHeading" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="RewardHeading" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.73, 0.25, 1)
 theme_override_font_sizes/font_size = 12
 text = "REWARDS"
 
-[node name="RewardCard" type="PanelContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent"]
+[node name="RewardCard" type="PanelContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_reward_card")
 
-[node name="RewardMargin" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard"]
+[node name="RewardMargin" type="MarginContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/RewardCard"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 5
 
-[node name="RewardEntries" type="HFlowContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin"]
+[node name="RewardEntries" type="HFlowContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/RewardCard/RewardMargin"]
 layout_mode = 2
-theme_override_constants/h_separation = 14
-theme_override_constants/v_separation = 5
+theme_override_constants/h_separation = 7
+theme_override_constants/v_separation = 7
 
 [node name="QuestOfferStatus" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
