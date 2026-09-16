@@ -34,6 +34,8 @@ var _native_moves: MovesGrid
 var _native_log: BattleLogPanel
 var _native_utility: Control
 var _action_scroll: ScrollContainer
+var _decision_overlay: ColorRect
+var _decision_title: Label
 var _wait_button: Button
 var _native_turn: BattleStatusPanel
 var _native_vs: BattleVsPanelContainer
@@ -177,11 +179,39 @@ func _ready() -> void:
 		_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_prompt.add_theme_font_size_override("font_size", 18)
 		_capture_status = _label(dock_content, "", 14)
+		_capture_status.visible = false
+		_decision_overlay = ColorRect.new()
+		_decision_overlay.name = "CoopDecisionOverlay"
+		_decision_overlay.color = Color(0.02, 0.05, 0.09, 0.78)
+		_decision_overlay.z_index = 65
+		_decision_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+		stage.add_child(_decision_overlay)
+		_decision_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_decision_overlay.visible = false
+		var decision_center := CenterContainer.new()
+		_decision_overlay.add_child(decision_center)
+		decision_center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var decision_card := PanelContainer.new()
+		decision_card.custom_minimum_size.x = 400.0
+		var decision_style := StyleBoxFlat.new()
+		decision_style.bg_color = Color("101c2b")
+		decision_style.border_color = Color("328dd4")
+		decision_style.set_border_width_all(2)
+		decision_style.set_corner_radius_all(14)
+		decision_style.set_content_margin_all(20)
+		decision_card.add_theme_stylebox_override("panel", decision_style)
+		decision_center.add_child(decision_card)
+		var decision_content := VBoxContainer.new()
+		decision_content.add_theme_constant_override("separation", 12)
+		decision_card.add_child(decision_content)
+		_decision_title = Label.new()
+		_decision_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_decision_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_decision_title.add_theme_font_size_override("font_size", 17)
+		decision_content.add_child(_decision_title)
 		var action_scroll := ScrollContainer.new()
-		action_scroll.custom_minimum_size.y = 44
-		action_scroll.size_flags_vertical = Control.SIZE_SHRINK_END
-		action_scroll.visible = false
-		dock_content.add_child(action_scroll)
+		action_scroll.custom_minimum_size = Vector2(360, 44)
+		decision_content.add_child(action_scroll)
 		_action_scroll = action_scroll
 		_actions = VBoxContainer.new()
 		_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -557,6 +587,7 @@ func _update_actions() -> void:
 	if not acquisitions.is_empty():
 		var location: Dictionary = acquisitions[0].get("storageLocation", {})
 		_capture_status.text = "Caught Pokémon saved to your party." if location.get("type") == "party" else "Caught Pokémon saved to your PC."
+	_capture_status.visible = not _capture_status.text.is_empty()
 	for child in _actions.get_children():
 		_actions.remove_child(child)
 		child.queue_free()
@@ -636,6 +667,11 @@ func _update_actions() -> void:
 				_update_actions())
 			bag_button.tooltip_text = "Only your assigned wild Pokémon can be caught. Either Trainer can attack either target."
 		if _bag_open:
+			if _native_mode:
+				_button(_actions, "Back to battle", func() -> void:
+					_bag_open = false
+					_action_signature = ""
+					_update_actions())
 			if not capture_options.get("storageAvailable", false):
 				_label(_actions, "Your party and PC are full. No ball will be used.", 17)
 			elif capture_options.get("balls", []).is_empty():
@@ -717,7 +753,11 @@ func _move_actions(slot: int) -> Array:
 
 func _sync_action_scroll() -> void:
 	if _native_mode and is_instance_valid(_action_scroll):
-		_action_scroll.visible = _actions.get_child_count() > 0
+		var action_count := _actions.get_child_count()
+		_decision_overlay.visible = action_count > 0
+		_action_scroll.visible = action_count > 0
+		_action_scroll.custom_minimum_size.y = minf(220.0, maxf(44.0, float(action_count) * 48.0))
+		_decision_title.text = _prompt.text
 
 
 func _select_switch(slot: int) -> void:

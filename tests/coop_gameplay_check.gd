@@ -131,8 +131,9 @@ func _run() -> void:
 		"co-op keeps the single-battle log, calculator button and drawer shell")
 	_expect(party_grid.columns == 3 and party_grid.get_parent().name == "ContextStack"
 		and party_grid.size_flags_horizontal == Control.SIZE_SHRINK_BEGIN
-		and presenter._action_scroll.get_parent() == dock_content,
-		"co-op uses a three-slot own-party switch row outside the battle log")
+		and presenter._decision_overlay.get_parent() == mounted_battle.get_node("%BattleStage")
+		and presenter._action_scroll.get_parent() != dock_content,
+		"co-op keeps the three-slot switch row in its dock and temporary choices on the stage")
 	calc_button.pressed.emit()
 	_expect(mounted_battle.get_node("%CalcDrawer").visible, "co-op Damage Calc opens the normal battle drawer")
 	mounted_battle.get_node("%CalcDrawerCloseButton").pressed.emit()
@@ -247,6 +248,31 @@ func _run() -> void:
 		and presenter._wait_button.get_parent() == mounted_battle.get_node("%BagButton").get_parent()
 		and not presenter._action_scroll.visible,
 		"co-op Wait shares the Bag action strip without consuming dock height")
+	var dock: Control = mounted_battle.get_node("%ActionsDock")
+	var dock_height: float = dock.size.y
+	service.view.exitRequest = {"type": "run", "requestedBy": "p3"}
+	service.view.legalActions = [{"type": "accept-exit"}, {"type": "reject-exit"}]
+	presenter._action_signature = ""
+	presenter._update_actions()
+	await process_frame
+	await process_frame
+	var dock_rect: Rect2 = dock.get_global_rect()
+	var party_rect: Rect2 = party_grid.get_global_rect()
+	_expect(presenter._decision_overlay.visible and presenter._actions.get_child_count() == 2
+		and dock.size.y <= dock_height + 1.0
+		and party_rect.position.y >= dock_rect.position.y
+		and party_rect.end.y <= dock_rect.end.y,
+		"co-op exit confirmation stays on the stage while switch slots remain inside the fixed dock")
+	var decision_capture_path := OS.get_environment("COOP_BATTLE_DECISION_CAPTURE_PATH")
+	if not decision_capture_path.is_empty():
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(decision_capture_path) == OK,
+			"co-op exit confirmation layout capture saved")
+	service.view.erase("exitRequest")
+	service.view.legalActions = [{"type": "move", "slot": 1, "target": 1}, {"type": "move", "slot": 1, "target": 2},
+		{"type": "run"}, {"type": "switch", "slot": 2}, {"type": "wait"}]
+	presenter._action_signature = ""
+	presenter._update_actions()
 	var wait_capture_path := OS.get_environment("COOP_BATTLE_WAIT_LAYOUT_CAPTURE_PATH")
 	if not wait_capture_path.is_empty():
 		await RenderingServer.frame_post_draw
