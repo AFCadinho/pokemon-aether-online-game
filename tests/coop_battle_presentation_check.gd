@@ -1,5 +1,13 @@
 extends SceneTree
 
+class ReturnWorld:
+	extends Node
+	var coop_finishing := false
+	var finish_calls := 0
+
+	func finish_coop_activity() -> void:
+		finish_calls += 1
+
 var failed := false
 
 func _init() -> void:
@@ -164,9 +172,25 @@ func _run() -> void:
 	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 1, "finished state replaces commands with shared victory and return control")
 	service.activity.outcome = "draw"
 	service.activity.escaped = true
+	var return_world := ReturnWorld.new()
+	return_world.coop_finishing = true
+	root.add_child(return_world)
+	return_world.add_to_group("world")
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 1, "recovered escape receipt shows escape and a single return control")
+	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 0,
+		"confirmed wild escape starts returning without a second confirmation")
+	await process_frame
+	_expect(return_world.finish_calls == 1 and panel._actions.get_child_count() == 0,
+		"confirmed escape invokes world return once without a second confirmation")
+	return_world.coop_finishing = false
+	panel._escape_return_started = false
+	panel._action_signature = ""
+	panel._update_actions()
+	await process_frame
+	_expect(return_world.finish_calls == 2 and panel._actions.get_child_count() == 1,
+		"a failed automatic return offers a manual retry")
+	return_world.queue_free()
 	service.activity.outcome = "loss"
 	service.activity.escaped = false
 	service.activity.forfeited = true

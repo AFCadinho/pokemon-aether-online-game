@@ -23,6 +23,8 @@ var _actions: VBoxContainer
 var _log: RichTextLabel
 var _epoch := 0
 var _action_signature := ""
+var _escape_return_started := false
+var _escape_return_retry_available := false
 var _effects: Node
 var _native_mode := false
 var _native_moves: MovesGrid
@@ -264,6 +266,8 @@ func _sync() -> void:
 		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
+		_escape_return_started = false
+		_escape_return_retry_available = false
 		_epoch += 1
 		_effects.cancel()
 		_cancel_native_attack_tween()
@@ -496,12 +500,18 @@ func _update_actions() -> void:
 		_prompt.text = "Battle start cancelled." if phase == "cancelled" else str(outcomes.get(CoopService.activity.get("outcome"), "Battle finished."))
 		if phase == "finished" and CoopService.activity.get("escaped", false):
 			_prompt.text = "Both Trainers fled from the wild battle."
+			if not _escape_return_started:
+				_escape_return_started = true
+				_auto_return_after_escape.call_deferred()
 		elif phase == "finished" and CoopService.activity.get("forfeited", false):
 			_prompt.text = "Both Trainers forfeited the battle."
-		_button(_actions, "Return to the world", func() -> void:
-			var world := GameState.get_world()
-			if world != null: await world.call("finish_coop_activity"))
+		if not CoopService.activity.get("escaped", false) or _escape_return_retry_available:
+			_button(_actions, "Return to the world", func() -> void:
+				var world := GameState.get_world()
+				if world != null: await world.call("finish_coop_activity"))
 		return
+
+
 	if phase == "starting" or CoopService.view.is_empty():
 		_prompt.text = "Connecting both Trainers…"
 		if CoopService.activity.get("canCancel", false):
@@ -617,6 +627,18 @@ func _update_actions() -> void:
 			if action.get("type") != "switch": continue
 			var pokemon: Dictionary = CoopService.view.get("ownTeam", [])[int(action.slot) - 1]
 			_button(switches, "%s\n%s/%s HP" % [str(pokemon.get("species", "")), str(pokemon.get("hp", 0)), str(pokemon.get("maxHp", 0))], func() -> void: await CoopService.submit_action(action))
+
+
+func _auto_return_after_escape() -> void:
+	var world := GameState.get_world()
+	if world != null:
+		await world.call("finish_coop_activity")
+	if not is_inside_tree():
+		return
+	if not is_instance_valid(world) or (CoopService.activity.get("status") == "finished" and not bool(world.get("coop_finishing"))):
+		_escape_return_retry_available = true
+		_action_signature = ""
+		_update_actions()
 
 
 func _move_actions(slot: int) -> Array:

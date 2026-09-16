@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- After both Trainers agree to flee a co-op wild battle, they return to the world automatically. A retry button appears if returning fails.
+
 - Co-op PvE battles show the turn without a countdown timer.
 
 - Double battles have an uncropped compact battlefield, smaller Trainer sprites, a wider team title, and a three-Pokémon personal switch row. Wait now sits beside Bag and Run. Single-battle layouts are unchanged.
