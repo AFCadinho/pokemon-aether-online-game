@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op Poké Ball and partner-decision dialogs now have clearer titles, descriptions and styled choices; the bag's back action sits below the available balls.
+
 - Co-op capture attempts now play the Poké Ball throw and shake animation on the assigned wild Pokémon. Capture feedback appears in the battle prompt instead of under the party slots.
 
 - Finished co-op battles now return to the world automatically after victory, defeat, or forfeit. A retry button appears only if returning fails.

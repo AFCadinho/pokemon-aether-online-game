@@ -292,6 +292,12 @@ func _run() -> void:
 		and party_rect.position.y >= dock_rect.position.y
 		and party_rect.end.y <= dock_rect.end.y,
 		"co-op exit confirmation stays on the stage while switch slots remain inside the fixed dock")
+	_expect(presenter._decision_eyebrow.text.contains("PARTNER REQUEST")
+		and presenter._decision_title.text == "Flee together?"
+		and (presenter._actions.get_child(0) as Button).text == "Agree to flee"
+		and (presenter._actions.get_child(1) as Button).text == "Stay and choose again"
+		and (presenter._actions.get_child(0) as Button).get_theme_stylebox("normal") is StyleBoxFlat,
+		"partner exit request has a clear title and distinct styled choices")
 	var decision_capture_path := OS.get_environment("COOP_BATTLE_DECISION_CAPTURE_PATH")
 	if not decision_capture_path.is_empty():
 		await RenderingServer.frame_post_draw
@@ -300,6 +306,16 @@ func _run() -> void:
 	service.view.erase("exitRequest")
 	service.view.legalActions = [{"type": "move", "slot": 1, "target": 1}, {"type": "move", "slot": 1, "target": 2},
 		{"type": "run"}, {"type": "switch", "slot": 2}, {"type": "wait"}]
+	presenter._bag_open = true
+	presenter._action_signature = ""
+	presenter._update_actions()
+	await process_frame
+	_expect(presenter._decision_title.text == "Choose a Poké Ball"
+		and (presenter._actions.get_child(0) as Button).text.begins_with("Poke Ball")
+		and (presenter._actions.get_child(1) as Button).text == "Back to battle"
+		and (presenter._actions.get_child(0) as Button).get_theme_stylebox("hover") is StyleBoxFlat,
+		"Poké Ball choices are styled and precede the back action")
+	presenter._bag_open = false
 	presenter._action_signature = ""
 	presenter._update_actions()
 	var wait_capture_path := OS.get_environment("COOP_BATTLE_WAIT_LAYOUT_CAPTURE_PATH")

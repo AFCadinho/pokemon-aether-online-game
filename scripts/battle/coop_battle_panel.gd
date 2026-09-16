@@ -53,7 +53,9 @@ var _native_log: BattleLogPanel
 var _native_utility: Control
 var _action_scroll: ScrollContainer
 var _decision_overlay: ColorRect
+var _decision_eyebrow: Label
 var _decision_title: Label
+var _decision_subtitle: Label
 var _wait_button: Button
 var _cancel_target_button: Button
 var _native_turn: BattleStatusPanel
@@ -218,29 +220,41 @@ func _ready() -> void:
 		_decision_overlay.add_child(decision_center)
 		decision_center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		var decision_card := PanelContainer.new()
-		decision_card.custom_minimum_size.x = 400.0
+		decision_card.custom_minimum_size.x = 440.0
 		var decision_style := StyleBoxFlat.new()
-		decision_style.bg_color = Color("101c2b")
-		decision_style.border_color = Color("328dd4")
-		decision_style.set_border_width_all(2)
-		decision_style.set_corner_radius_all(14)
-		decision_style.set_content_margin_all(20)
+		decision_style.bg_color = Color("101d2d")
+		decision_style.border_color = Color("3f91bb")
+		decision_style.set_border_width_all(1)
+		decision_style.set_corner_radius_all(16)
+		decision_style.set_content_margin_all(22)
+		decision_style.shadow_color = Color(0, 0, 0, 0.45)
+		decision_style.shadow_size = 12
 		decision_card.add_theme_stylebox_override("panel", decision_style)
 		decision_center.add_child(decision_card)
 		var decision_content := VBoxContainer.new()
-		decision_content.add_theme_constant_override("separation", 12)
+		decision_content.add_theme_constant_override("separation", 9)
 		decision_card.add_child(decision_content)
+		_decision_eyebrow = Label.new()
+		_decision_eyebrow.add_theme_font_size_override("font_size", 12)
+		_decision_eyebrow.add_theme_color_override("font_color", Color("66d8ee"))
+		decision_content.add_child(_decision_eyebrow)
 		_decision_title = Label.new()
-		_decision_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_decision_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_decision_title.add_theme_font_size_override("font_size", 17)
+		_decision_title.add_theme_font_size_override("font_size", 22)
+		_decision_title.add_theme_color_override("font_color", Color("f4f8ff"))
 		decision_content.add_child(_decision_title)
+		_decision_subtitle = Label.new()
+		_decision_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_decision_subtitle.add_theme_font_size_override("font_size", 13)
+		_decision_subtitle.add_theme_color_override("font_color", Color("a8bacd"))
+		decision_content.add_child(_decision_subtitle)
 		var action_scroll := ScrollContainer.new()
-		action_scroll.custom_minimum_size = Vector2(360, 44)
+		action_scroll.custom_minimum_size = Vector2(394, 46)
 		decision_content.add_child(action_scroll)
 		_action_scroll = action_scroll
 		_actions = VBoxContainer.new()
 		_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_actions.add_theme_constant_override("separation", 8)
 		action_scroll.add_child(_actions)
 		effect_layer = Control.new()
 		effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -667,8 +681,11 @@ func _update_actions() -> void:
 		else:
 			_prompt.text = "Your partner wants to flee. Do you agree?" if fleeing else "Your partner wants to forfeit. Both Trainers will lose. Do you agree?"
 			for action: Dictionary in CoopService.view.get("legalActions", []):
-				var label := "Stay — both choose again" if action.get("type") == "reject-exit" else "Agree — flee together" if fleeing else "Agree — forfeit together"
-				_button(_actions, label, func() -> void: await CoopService.submit_action(action))
+				var staying: bool = action.get("type") == "reject-exit"
+				var label := "Stay and choose again" if staying else "Agree to flee" if fleeing else "Agree to forfeit"
+				if not _native_mode:
+					label = "Stay — both choose again" if staying else "Agree — flee together" if fleeing else "Agree — forfeit together"
+				_decision_button(label, "secondary" if staying else "primary", func() -> void: await CoopService.submit_action(action))
 		return
 	if _playing or CoopService.view.get("ended", false) or CoopService.view.get("locked", true):
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
@@ -706,11 +723,6 @@ func _update_actions() -> void:
 				_update_actions())
 			bag_button.tooltip_text = "Only your assigned wild Pokémon can be caught. Either Trainer can attack either target."
 		if _bag_open:
-			if _native_mode:
-				_button(_actions, "Back to battle", func() -> void:
-					_bag_open = false
-					_action_signature = ""
-					_update_actions())
 			if not capture_options.get("storageAvailable", false):
 				_label(_actions, "Your party and PC are full. No ball will be used.", 17)
 			elif capture_options.get("balls", []).is_empty():
@@ -718,7 +730,16 @@ func _update_actions() -> void:
 			else:
 				for ball: Dictionary in capture_options.get("balls", []):
 					var item_id: String = str(ball.get("itemId", ""))
-					_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await _submit_capture_with_preview(item_id))
+					var label := "%s    ×%s" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))]
+					if _native_mode:
+						_decision_button(label, "item", func() -> void: await _submit_capture_with_preview(item_id))
+					else:
+						_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await _submit_capture_with_preview(item_id))
+			if _native_mode:
+				_decision_button("Back to battle", "secondary", func() -> void:
+					_bag_open = false
+					_action_signature = ""
+					_update_actions())
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "run":
 			if _native_mode:
@@ -868,8 +889,22 @@ func _sync_action_scroll() -> void:
 		var action_count := _actions.get_child_count()
 		_decision_overlay.visible = action_count > 0
 		_action_scroll.visible = action_count > 0
-		_action_scroll.custom_minimum_size.y = minf(220.0, maxf(44.0, float(action_count) * 48.0))
-		_decision_title.text = _prompt.text
+		_action_scroll.custom_minimum_size.y = minf(224.0, maxf(46.0, float(action_count) * 56.0 + float(maxi(0, action_count - 1)) * 8.0))
+		var exit_request: Dictionary = CoopService.view.get("exitRequest", {}) if CoopService.view.get("exitRequest") is Dictionary else {}
+		var capture_options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
+		if _bag_open and not capture_options.is_empty():
+			_decision_eyebrow.text = "BAG  /  POKÉ BALLS"
+			_decision_title.text = "Choose a Poké Ball"
+			_decision_subtitle.text = "Catch your assigned wild Pokémon. Your partner's target stays theirs."
+		elif not exit_request.is_empty() and exit_request.get("requestedBy") != CoopService.view.get("participant"):
+			_decision_eyebrow.text = "CO-OP  /  PARTNER REQUEST"
+			_decision_title.text = "Flee together?" if exit_request.get("type") == "run" else "Forfeit together?"
+			_decision_subtitle.text = "Both Trainers leave the battle if you agree." if exit_request.get("type") == "run" else "Both Trainers will lose if you agree."
+		else:
+			_decision_eyebrow.text = "CO-OP  /  BATTLE"
+			_decision_title.text = _prompt.text
+			_decision_subtitle.text = ""
+		_decision_subtitle.visible = not _decision_subtitle.text.is_empty()
 
 
 func _select_switch(slot: int) -> void:
@@ -1190,3 +1225,32 @@ func _button(parent: Node, text: String, callback: Callable) -> Button:
 	button.pressed.connect(callback)
 	parent.add_child(button)
 	return button
+
+
+func _decision_button(text: String, variant: String, callback: Callable) -> Button:
+	var button := _button(_actions, text, callback)
+	if not _native_mode:
+		return button
+	button.custom_minimum_size.y = 50
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT if variant == "item" else HORIZONTAL_ALIGNMENT_CENTER
+	button.add_theme_font_size_override("font_size", 16)
+	button.add_theme_color_override("font_color", Color("eff8ff"))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	var base := Color("174f61") if variant == "primary" else Color("142637") if variant == "item" else Color("11202f")
+	var border := Color("65d9df") if variant == "primary" else Color("315d77") if variant == "item" else Color("29445b")
+	button.add_theme_stylebox_override("normal", _decision_button_style(base, border))
+	button.add_theme_stylebox_override("hover", _decision_button_style(base.lightened(0.16), Color("8ce7ee")))
+	button.add_theme_stylebox_override("pressed", _decision_button_style(base.darkened(0.15), Color("8ce7ee")))
+	button.add_theme_stylebox_override("focus", _decision_button_style(Color.TRANSPARENT, Color("b4f1ff")))
+	return button
+
+
+func _decision_button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(9)
+	style.set_content_margin_all(12)
+	return style
