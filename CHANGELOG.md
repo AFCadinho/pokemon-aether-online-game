@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Co-op battle platforms now sit under the Pokémon, and the combined party icons stay fully above the battle text.
+
+- In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
+
+- Co-op confirmation and return choices now open over the battlefield, leaving the bottom switch bar neatly reserved for your Pokémon.
+
+- Co-op Pokémon stand closer together in double battles. Both Trainers stand together behind the left Pokémon in Trainer battles and stay hidden in wild battles.
+
 - Co-op wild battle logs now announce both wild Pokémon and each Trainer's sent-out Pokémon in plain battle language.
 
 - Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.
@@ -14,7 +22,7 @@
 
 - Double battles have an uncropped compact battlefield, smaller Trainer sprites, a wider team title, and a three-Pokémon personal switch row. Wait now sits beside Bag and Run. Single-battle layouts are unchanged.
 
-- Co-op battles now keep the normal battle log and Damage Calc button, with six party slots in a horizontal row and extra co-op actions below them.
+- Co-op battles now keep the normal battle log and Damage Calc button, with the combined party shown in the field rails.
 
 - Co-op double battles use a simple per-Pokémon attack and hit animation while move-specific effects are adapted later. Choose single-target moves by clicking a Pokémon or using the arrow keys and Space; Escape cancels targeting.
 

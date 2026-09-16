@@ -131,8 +131,9 @@ func _run() -> void:
 		"co-op keeps the single-battle log, calculator button and drawer shell")
 	_expect(party_grid.columns == 3 and party_grid.get_parent().name == "ContextStack"
 		and party_grid.size_flags_horizontal == Control.SIZE_SHRINK_BEGIN
-		and presenter._action_scroll.get_parent() == dock_content,
-		"co-op uses a three-slot own-party switch row outside the battle log")
+		and presenter._decision_overlay.get_parent() == mounted_battle.get_node("%BattleStage")
+		and presenter._action_scroll.get_parent() != dock_content,
+		"co-op keeps the three-slot switch row in its dock and temporary choices on the stage")
 	calc_button.pressed.emit()
 	_expect(mounted_battle.get_node("%CalcDrawer").visible, "co-op Damage Calc opens the normal battle drawer")
 	mounted_battle.get_node("%CalcDrawerCloseButton").pressed.emit()
@@ -153,6 +154,13 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer").columns == 2
 		and mounted_battle.get_node("%PlayerHudPanel").custom_minimum_size.x == 520.0,
 		"double battles arrange two compact HP panels beside each other")
+	await process_frame
+	var player_side_rail: Control = mounted_battle.get_node("%PlayerStagePartyRail")
+	var battle_prompt: Control = mounted_battle.get_node("%CurrentActionPanel")
+	_expect(player_side_rail.get_global_rect().end.y < battle_prompt.get_global_rect().position.y
+		and mounted_battle.get_node("%BattlePlatform").offset_top < -357.0
+		and mounted_battle.get_node("%BattlePlatform2").offset_top < -496.0,
+		"co-op platforms sit nearer the Pokemon and all side slots clear the battle prompt")
 	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
@@ -176,6 +184,38 @@ func _run() -> void:
 		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
+	var left_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
+	var right_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
+	var left_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
+	var right_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
+	var coop_stage: Control = mounted_battle.get_node("%BattleStage")
+	var left_ally_on_stage: Vector2 = coop_stage.get_global_transform().affine_inverse() * left_ally.global_position
+	_expect(absf(left_ally.global_position.x - right_ally.global_position.x) < 180.0
+		and absf(left_wild.global_position.x - right_wild.global_position.x) < 180.0
+		and absf(left_ally.global_position.y - right_ally.global_position.y) < 12.0
+		and presenter._first_trainer.position.x < presenter._second_trainer.position.x
+		and presenter._second_trainer.position.x < left_ally_on_stage.x
+		and presenter._second_trainer.position.x - presenter._first_trainer.position.x < 80.0,
+		"both pairs stand close together while the Trainers group behind the left ally")
+	service.activity.activityId = "wild_grass:kanto_route_1"
+	presenter._sync_native_trainers()
+	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and not presenter._second_trainer.visible,
+		"wild doubles hide both Trainer sprites")
+	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
+	if not wild_layout_capture.is_empty():
+		var decision_was_visible: bool = presenter._decision_overlay.visible
+		presenter._decision_overlay.visible = false
+		await process_frame
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(wild_layout_capture) == OK,
+			"wild battle without Trainers capture saved")
+		presenter._decision_overlay.visible = decision_was_visible
+	service.activity.activityId = "brock"
+	presenter._sync_native_trainers()
+	_expect(mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and presenter._second_trainer.visible,
+		"NPC doubles restore both Trainer sprites")
 	service.activity = {"status": "active"}
 	presenter._process(0.0)
 	_expect(not mounted_battle.get_node("%BattleStatusPanel").timer_label.visible
@@ -218,6 +258,31 @@ func _run() -> void:
 		and presenter._wait_button.get_parent() == mounted_battle.get_node("%BagButton").get_parent()
 		and not presenter._action_scroll.visible,
 		"co-op Wait shares the Bag action strip without consuming dock height")
+	var dock: Control = mounted_battle.get_node("%ActionsDock")
+	var dock_height: float = dock.size.y
+	service.view.exitRequest = {"type": "run", "requestedBy": "p3"}
+	service.view.legalActions = [{"type": "accept-exit"}, {"type": "reject-exit"}]
+	presenter._action_signature = ""
+	presenter._update_actions()
+	await process_frame
+	await process_frame
+	var dock_rect: Rect2 = dock.get_global_rect()
+	var party_rect: Rect2 = party_grid.get_global_rect()
+	_expect(presenter._decision_overlay.visible and presenter._actions.get_child_count() == 2
+		and dock.size.y <= dock_height + 1.0
+		and party_rect.position.y >= dock_rect.position.y
+		and party_rect.end.y <= dock_rect.end.y,
+		"co-op exit confirmation stays on the stage while switch slots remain inside the fixed dock")
+	var decision_capture_path := OS.get_environment("COOP_BATTLE_DECISION_CAPTURE_PATH")
+	if not decision_capture_path.is_empty():
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(decision_capture_path) == OK,
+			"co-op exit confirmation layout capture saved")
+	service.view.erase("exitRequest")
+	service.view.legalActions = [{"type": "move", "slot": 1, "target": 1}, {"type": "move", "slot": 1, "target": 2},
+		{"type": "run"}, {"type": "switch", "slot": 2}, {"type": "wait"}]
+	presenter._action_signature = ""
+	presenter._update_actions()
 	var wait_capture_path := OS.get_environment("COOP_BATTLE_WAIT_LAYOUT_CAPTURE_PATH")
 	if not wait_capture_path.is_empty():
 		await RenderingServer.frame_post_draw
@@ -231,6 +296,15 @@ func _run() -> void:
 	presenter._action_signature = ""
 	presenter._update_actions()
 	presenter._select_move(1)
+	var target_cards: Dictionary = presenter.get("cards")
+	var left_enemy_target: Rect2 = target_cards["p2"].target.get_global_rect()
+	var right_enemy_target: Rect2 = target_cards["p4"].target.get_global_rect()
+	var left_ally_target: Rect2 = target_cards["p1"].target.get_global_rect()
+	var right_ally_target: Rect2 = target_cards["p3"].target.get_global_rect()
+	_expect(not left_enemy_target.intersects(right_enemy_target)
+		and not left_ally_target.intersects(right_ally_target)
+		and target_cards["p4"].target.visible,
+		"both sides have separate clickable targets for the right-hand Pokemon")
 	_expect(presenter.get("cards")["p2"].target.visible
 		and presenter.get("cards")["p4"].target.visible
 		and presenter.get("selected_target") == "p2",
