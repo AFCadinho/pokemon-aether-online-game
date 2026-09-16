@@ -77,6 +77,22 @@ func _run() -> void:
 	_expect(bool(mounted_battle.get("coop_mode")) and mounted_battle.get("coop_presenter") != null,
 		"co-op uses the ordinary battle scene with its own server-driven presenter")
 	var presenter: Control = mounted_battle.get("coop_presenter")
+	var dock_content: Control = mounted_battle.get_node("%DockContent")
+	var battle_log: Control = mounted_battle.get_node("%BattleLogPanel")
+	var calc_button: Button = mounted_battle.get_node("%CalcLogButton")
+	var party_grid: PartyGrid = mounted_battle.get_node("%PlayerPartyGrid")
+	_expect(battle_log.visible and calc_button.visible and calc_button.get_parent().get_parent().get_parent().get_parent() == battle_log.get_parent()
+		and mounted_battle.get_node("%BattleDrawerLayer").visible
+		and mounted_battle.get_node("%BattleLogButton").visible,
+		"co-op keeps the single-battle log, calculator button and drawer shell")
+	_expect(party_grid.columns == 6 and party_grid.get_parent().name == "ContextStack"
+		and party_grid.size_flags_horizontal == Control.SIZE_EXPAND_FILL
+		and presenter._action_scroll.get_parent() == dock_content,
+		"co-op keeps six horizontal party slots while extra actions stay outside the battle log")
+	calc_button.pressed.emit()
+	_expect(mounted_battle.get_node("%CalcDrawer").visible, "co-op Damage Calc opens the normal battle drawer")
+	mounted_battle.get_node("%CalcDrawerCloseButton").pressed.emit()
+	_expect(not mounted_battle.get_node("%CalcDrawer").visible, "co-op Damage Calc closes back to the battle")
 	_expect(presenter.get("cards").size() == 4
 		and presenter.get("embedded_hosts").get("stage") == mounted_battle.get_node("%BattleStage")
 		and mounted_battle.get_node("%BattleBackground").visible
@@ -119,6 +135,8 @@ func _run() -> void:
 	service.activity = {"status": "active"}
 	service.view = {"battleId": "coop-fixture", "revision": 8, "turn": 1, "decisionId": "coop-4",
 		"locked": false, "participant": "p1", "moves": [{"slot": 1, "name": "Pound", "pp": 35, "maxPp": 35}],
+		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30},
+			{"species": "Ekans", "active": false, "hp": 29, "maxHp": 29}],
 		"legalActions": [{"type": "move", "slot": 1, "target": 1}, {"type": "move", "slot": 1, "target": 2},
 			{"type": "run"}, {"type": "switch", "slot": 2}],
 		"captureOptions": {"balls": [{"itemId": "poke-ball", "quantity": 1}], "storageAvailable": true}}
@@ -130,6 +148,25 @@ func _run() -> void:
 		and mounted_battle.get_node("%PlayerPartyGrid").is_slot_selectable(2)
 		and not mounted_battle.get_node("%PlayerPartyGrid").is_slot_selectable(1),
 		"co-op legal moves, Bag and Run use the existing battle controls")
+	var layout_capture_path := OS.get_environment("COOP_BATTLE_LAYOUT_CAPTURE_PATH")
+	if not layout_capture_path.is_empty():
+		await create_timer(0.15).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(layout_capture_path) == OK, "co-op battle layout capture saved")
+	service.view.legalActions.append({"type": "wait"})
+	presenter._action_signature = ""
+	presenter._update_actions()
+	await process_frame
+	_expect(presenter._action_scroll.visible
+		and presenter._action_scroll.get_global_rect().end.y <= mounted_battle.get_node("%ActionsDock").get_global_rect().end.y,
+		"co-op Wait action stays inside the bottom dock instead of the battle log")
+	var wait_capture_path := OS.get_environment("COOP_BATTLE_WAIT_LAYOUT_CAPTURE_PATH")
+	if not wait_capture_path.is_empty():
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(wait_capture_path) == OK, "co-op Wait layout capture saved")
+	service.view.legalActions.pop_back()
+	presenter._action_signature = ""
+	presenter._update_actions()
 	presenter._select_move(1)
 	_expect(presenter.get("cards")["p2"].target.visible
 		and presenter.get("cards")["p4"].target.visible

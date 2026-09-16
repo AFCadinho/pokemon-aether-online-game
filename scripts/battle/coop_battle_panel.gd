@@ -92,6 +92,7 @@ func _ready() -> void:
 		var stage: Control = embedded_hosts["stage"]
 		var prompt_panel: CurrentActionPanel = embedded_hosts["prompt"]
 		var rail: Control = embedded_hosts["rail"]
+		var dock_content: Control = embedded_hosts["dock_content"]
 		_native_turn = embedded_hosts["turn"] as BattleStatusPanel
 		_native_vs = embedded_hosts["vs"] as BattleVsPanelContainer
 		_native_party = embedded_hosts["own_party"] as PartyGrid
@@ -138,12 +139,12 @@ func _ready() -> void:
 		_prompt = prompt_panel.message_label
 		_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_prompt.add_theme_font_size_override("font_size", 18)
-		_capture_status = _label(rail, "", 14)
+		_capture_status = _label(dock_content, "", 14)
 		var action_scroll := ScrollContainer.new()
-		action_scroll.custom_minimum_size.y = 120
+		action_scroll.custom_minimum_size.y = 44
 		action_scroll.size_flags_vertical = Control.SIZE_SHRINK_END
 		action_scroll.visible = false
-		rail.add_child(action_scroll)
+		dock_content.add_child(action_scroll)
 		_action_scroll = action_scroll
 		_actions = VBoxContainer.new()
 		_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL

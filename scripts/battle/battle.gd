@@ -875,29 +875,31 @@ func setup_coop_battle() -> bool:
 		player_party_grid.party_selected.disconnect(_on_party_grid_party_selected)
 	if player_party_grid.party_changed.is_connected(player_stage_party_grid.set_party):
 		player_party_grid.party_changed.disconnect(player_stage_party_grid.set_party)
-	battle_drawer_layer.visible = false
+	battle_drawer_layer.visible = true
 	battle_party_rail.visible = false
-	battle_log_toggle_button.visible = false
-	for child: CanvasItem in battle_log_rail.get_children():
-		child.visible = false
+	battle_log_toggle_button.visible = true
+	action_buttons.visible = true
+	calc_log_button.visible = true
 	battle_log_panel.visible = true
 	var dock_content := action_side_panel.get_node_or_null("MarginContainer/DockContent") as Control
 	if dock_content == null:
 		return false
 	for child: CanvasItem in dock_content.get_children():
-		child.visible = false
-	player_party_grid.reparent(dock_content)
-	player_party_grid.columns = 3
-	player_party_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		child.visible = child.name == "ContextSection"
+	var context_section := dock_content.get_node("ContextSection") as Control
+	context_section.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	context_hint.visible = false
+	player_party_grid.columns = 6
+	player_party_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	player_party_grid.set_empty_slots_visible(false)
 	player_party_grid.set_selection_enabled(false)
 	player_party_grid.visible = true
-	action_side_panel.custom_minimum_size.y = 82.0
+	action_side_panel.custom_minimum_size.y = 144.0
 	action_side_panel.visible = true
 	current_action_panel.visible = true
-	current_action_panel.custom_minimum_size = Vector2(760.0, 72.0)
 	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
 	coop_presenter.embedded_hosts = {"stage": battle_stage, "prompt": current_action_panel, "rail": battle_log_rail,
+		"dock_content": dock_content,
 		"player_sprite": player_sprite_box, "enemy_sprite": enemy_sprite_box,
 		"player_hud": player_hud_panel, "enemy_hud": enemy_hud_panel,
 		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,
