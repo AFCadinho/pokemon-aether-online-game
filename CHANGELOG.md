@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
+
 - Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
 
 - Adventure Party wild battles now explain when your partner is too far away, instead of silently missing every step.

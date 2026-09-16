@@ -80,6 +80,9 @@ func try_handle_interaction(host: Node, player: Node2D, trigger: String) -> Dict
 			"battleId": str(sequence_result.get("battleId", "")),
 		})
 	if not bool(sequence_result.get("success", false)):
+		push_warning("StoryHook: %s failed at action %d (%s)." % [
+			interaction_id, int(sequence_result.get("actionIndex", -1)), str(sequence_result.get("status", "unknown"))
+		])
 		await _show_sequence_error(sequence_result)
 		return _finish({
 			"success": false,
