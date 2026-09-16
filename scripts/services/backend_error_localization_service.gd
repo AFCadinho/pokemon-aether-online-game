@@ -119,6 +119,8 @@ const CODE_TO_KEY: Dictionary = {
 	"aether_clash_bot_unavailable": "ui.clash_bot.unavailable",
 	"aether_clash_bot_roster_unavailable": "ui.clash_bot.unavailable",
 	"aether_clash_bot_npc_required": "ui.clash_bot.npc_required",
+	"aether_clash_bot_npc_too_far": "ui.clash_bot.npc_too_far",
+	"aether_clash_bot_presence_unavailable": "ui.clash_bot.presence_unavailable",
 	"aether_clash_bot_count_limit": "ui.clash_bot.count_limit",
 	"aether_clash_bot_request_conflict": "ui.clash_bot.request_conflict",
 	"aether_clash_permission_required": "backend.error.aether_clash_permission",

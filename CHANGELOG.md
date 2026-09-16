@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.
+
 - Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
 
 - Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.

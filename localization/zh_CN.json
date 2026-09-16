@@ -18,6 +18,8 @@
   "ui.clash_bot.accepted": "训练已接受！请在入场时间结束前通过 Guild Duel 传送门进入。",
   "ui.clash_bot.pending": "正在处理你的训练请求。",
   "ui.clash_bot.npc_required": "请在大厅与 Clash Training Captain 交谈。",
+  "ui.clash_bot.npc_too_far": "请靠近 Clash Training Captain 后重试。",
+  "ui.clash_bot.presence_unavailable": "你的位置仍在同步，请稍后重试。",
   "ui.clash_bot.count_limit": "请选择当前训练上限内的机器人数量。",
   "ui.clash_bot.request_conflict": "此请求使用了不同的设置。请重新打开训练菜单。",
   "ui.pvp.ai_sparring.live.title": "实时对战",
