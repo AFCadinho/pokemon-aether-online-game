@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op wild battle logs now announce both wild Pokémon and each Trainer's sent-out Pokémon in plain battle language.
+
 - Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.
 
 - Single battles again show full-width Pokémon HP bars after the double-battle HUD changes.

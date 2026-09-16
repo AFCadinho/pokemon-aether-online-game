@@ -105,6 +105,24 @@ func _run() -> void:
 	_expect(not presenter._loading_overlay.visible, "battle interface replaces loading state when ready")
 	var dock_content: Control = mounted_battle.get_node("%DockContent")
 	var battle_log: Control = mounted_battle.get_node("%BattleLogPanel")
+	service.activity.activityId = "wild_grass:kanto_route_1"
+	service.view.participant = "p1"
+	for event: Dictionary in [
+		{"kind": "switch", "actor": "p2", "details": "Furret, L6, M"},
+		{"kind": "switch", "actor": "p4", "details": "Furret, L6, F"},
+		{"kind": "switch", "actor": "p1", "details": "Jigglypuff, L6, M"},
+		{"kind": "switch", "actor": "p3", "details": "Squirtle, L5, M"},
+	]:
+		presenter._append_event(event)
+	var native_opening: String = str(battle_log.get("log_buffer"))
+	_expect(native_opening.count("A wild Furret has appeared!") == 2
+		and native_opening.contains("Go! Jigglypuff!")
+		and native_opening.contains("afc_adinho sent out Squirtle!")
+		and not native_opening.contains("Wild Pokémon 1:"),
+		"native co-op battle log uses battle narration for the opening Pokémon")
+	battle_log.call("clear_log")
+	service.activity = original_activity
+	service.view = original_view
 	var calc_button: Button = mounted_battle.get_node("%CalcLogButton")
 	var party_grid: PartyGrid = mounted_battle.get_node("%PlayerPartyGrid")
 	_expect(battle_log.visible and calc_button.visible and calc_button.get_parent().get_parent().get_parent().get_parent() == battle_log.get_parent()
