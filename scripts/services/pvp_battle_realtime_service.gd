@@ -1466,6 +1466,16 @@ func _handle_join_error(message: Dictionary) -> void:
 func _handle_battle_events_message(message: Dictionary) -> void:
 	var latest_seq := _nonnegative_int(message.get("battleEventLatestSeq", battle_event_latest_seq), battle_event_latest_seq)
 	var events_value: Variant = message.get("events", [])
+	if OS.get_environment("AETHER_CLASH_TURN1_TRACE") == "true":
+		var received_sequences: Array[int] = []
+		if events_value is Array:
+			for item in events_value:
+				if item is Dictionary:
+					received_sequences.append(_nonnegative_int((item as Dictionary).get("battleEventSeq", -1), -1))
+		print("TURN1_EVENTS t=%d after=%d latest=%d local=%d received=%s" % [
+			Time.get_ticks_msec(), _nonnegative_int(message.get("afterBattleEventSeq", 0), 0),
+			latest_seq, last_battle_event_seq, str(received_sequences),
+		])
 	var highest_received_seq := 0
 	var terminal_message: Dictionary = {}
 	if events_value is Array:

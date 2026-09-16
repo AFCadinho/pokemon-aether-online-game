@@ -176,6 +176,10 @@ func _ready() -> void:
 		await get_tree().process_frame
 	print("TURN1_TEST t=", Time.get_ticks_msec(), " stage=controls_unlocked delay_ms=", Time.get_ticks_msec() - intro_finished_at)
 	print("LIVE_GODOT_STAGE auto_lead_turn1_controls_ready")
+	# The disposable verifier also checks that the bot submitted its first move.
+	# Controls now unlock before that independent server worker finishes, so do
+	# not end the battle in the same frame as the opening ACK release.
+	await get_tree().create_timer(7.0).timeout
 	await battle._on_forfeit_confirmed()
 	if not battle.battle_finished:
 		_fail("FORFEIT")
