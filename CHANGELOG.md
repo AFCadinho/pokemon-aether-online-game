@@ -4,13 +4,17 @@
 
 - Bot difficulty names in Guild training no longer include the technical fallback note.
 
+- The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
+
+- Your Adventure Party partner and shared level cap now appear in a compact in-game indicator above your personal buffs. Select it to open the party window.
+
 - The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
 
 - Adventure Party invitations now show the current shared story level cap before you accept.
 
 - Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.
 
-- Side-quest offers now have clearer reward cards, sit slightly above screen center, and adapt to shorter browser and desktop windows while keeping Accept and Decline visible. Their first opening in a session no longer stretches to nearly full-screen height.
+- Side-quest offers now have clearer reward cards, sit in the upper part of the screen, and adapt to shorter browser and desktop windows while keeping Accept and Decline visible. Their first opening in a session no longer stretches to nearly full-screen height.
 
 - Guild training Captains can choose AI4 Beginner or AI5 Grandmaster Hard when challenging the bot Guild.
 

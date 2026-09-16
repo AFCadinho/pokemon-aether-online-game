@@ -117,6 +117,39 @@ func _run() -> void:
 	var overlay_scene: PackedScene = load("res://scenes/interface/ui_overlay.tscn")
 	var overlay_ui := overlay_scene.instantiate()
 	_expect(overlay_ui.get_node_or_null("Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton") != null, "Socials menu contains an Adventure Party launcher")
+	var party_hud: Button = load("res://scripts/ui/coop_party_hud.gd").new()
+	party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	party_hud.offset_left = -304.0
+	party_hud.offset_right = -64.0
+	party_hud.offset_top = -314.0
+	party_hud.offset_bottom = -210.0
+	root.add_child(party_hud)
+	overlay_ui.set("coop_party_hud", party_hud)
+	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
+	overlay_ui.set("personal_buffs_panel", buffs_panel)
+	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD sits directly above personal buffs")
+	buffs_panel.offset_top -= 60.0
+	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
+	service.available = true
+	service.party = {"memberIds": [1, 2], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
+		"memberAppearances": {"1": {"body": "Gen4_Base_v1", "gender": "male"}, "2": {"body": "Gen4_Base_F_v1", "gender": "female"}},
+		"sharedLevelCap": 20}
+	overlay_ui.call("_refresh_coop_party_hud")
+	var hud_names: Array = party_hud.get("_names")
+	var hud_portraits: Array = party_hud.get("_portraits")
+	_expect(party_hud.visible and hud_names[0].text == "TrainerOne" and hud_names[1].text == "TrainerTwo", "party HUD shows both member names")
+	_expect(hud_portraits[0].visible and hud_portraits[1].visible and not party_hud.text.contains("cap"), "party HUD shows both portraits without a level cap")
+	var hud_visual_path := OS.get_environment("COOP_PARTY_HUD_VISUAL_CAPTURE_PATH")
+	if not hud_visual_path.is_empty():
+		await create_timer(0.3).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(hud_visual_path) == OK, "party HUD visual capture saved")
+	service.party = {}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
+	party_hud.free()
 	overlay_ui.free()
 	var interaction_script: Script = load("res://scripts/ui/player_interaction_coordinator.gd")
 	_expect(interaction_script != null and interaction_script.get_script_signal_list().any(func(entry: Dictionary) -> bool: return entry.get("name") == "coop_invitation_requested"), "nearby Trainer context offers party invitation routing")

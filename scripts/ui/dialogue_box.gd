@@ -9,7 +9,7 @@ const MONEY_REWARD_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.
 const GEMS_REWARD_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const AETHERITE_REWARD_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
 const BATTLE_POINTS_REWARD_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
-const QUEST_OFFER_VERTICAL_LIFT := 56.0
+const QUEST_OFFER_TOP_FRACTION := 0.25
 
 static var reward_move_type_index: Dictionary = {}
 static var reward_move_type_index_loaded := false
@@ -305,7 +305,7 @@ func _layout_quest_offer() -> void:
 	var panel_height := minf(desired_height, maxf(240.0, viewport_size.y - 24.0))
 	panel_container.offset_left = -panel_width / 2.0
 	panel_container.offset_right = panel_width / 2.0
-	panel_container.offset_top = maxf(12.0, (viewport_size.y - panel_height) / 2.0 - QUEST_OFFER_VERTICAL_LIFT)
+	panel_container.offset_top = maxf(12.0, (viewport_size.y - panel_height) * QUEST_OFFER_TOP_FRACTION)
 	panel_container.offset_bottom = panel_container.offset_top + panel_height
 
 
