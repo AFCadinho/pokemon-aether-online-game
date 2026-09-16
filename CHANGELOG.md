@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
+
 - Your Adventure Party partner and shared level cap now appear in a compact in-game indicator above your personal buffs. Select it to open the party window.
 
 - The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
