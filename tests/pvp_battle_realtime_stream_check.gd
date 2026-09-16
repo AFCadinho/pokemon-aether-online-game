@@ -30,7 +30,7 @@ func _init() -> void:
 	var connection_log_start := battle_source.find("func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:")
 	var local_connection_handler_start := battle_source.find("func _on_pvp_realtime_connection_changed(is_connected: bool) -> void:")
 	var local_room_ready_handler_start := battle_source.find("func _on_pvp_realtime_room_ready(room_code: String, battle_id: String) -> void:")
-	var forced_switch_diagnostic_start := battle_source.find("func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:")
+	var forced_switch_diagnostic_start := battle_source.find("func _report_pvp_forced_switch_selection_blocked(selection_gate: String, details: Dictionary = {}) -> void:")
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(
 		show_moves_decision_guard >= show_moves_start and show_moves_decision_guard < timer_control_start,
