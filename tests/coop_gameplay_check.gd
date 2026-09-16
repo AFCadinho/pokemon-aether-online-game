@@ -344,11 +344,15 @@ func _run() -> void:
 		and left_wild.material is ShaderMaterial
 		and right_wild.material == null,
 		"choosing a doubles move highlights the selected Pokémon sprite")
+	(target_cards["p1"].target as Button).mouse_entered.emit()
+	_expect(presenter.get("selected_target") == "p2",
+		"a target appearing under the stationary cursor does not select the player's own Pokémon")
 	var target_capture_path := OS.get_environment("COOP_BATTLE_TARGET_CAPTURE_PATH")
 	if not target_capture_path.is_empty():
 		await RenderingServer.frame_post_draw
 		_expect(root.get_texture().get_image().save_png(target_capture_path) == OK,
 			"co-op sprite target highlight capture saved")
+	presenter._target_selection_mouse_position = presenter.get_viewport().get_mouse_position() + Vector2(100, 0)
 	(target_cards["p4"].target as Button).mouse_entered.emit()
 	_expect(presenter.get("selected_target") == "p4"
 		and right_wild.material is ShaderMaterial

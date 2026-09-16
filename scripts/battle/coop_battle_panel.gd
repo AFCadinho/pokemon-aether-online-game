@@ -21,6 +21,7 @@ var embedded_hosts: Dictionary = {}
 var cards: Dictionary = {}
 var selected_move := 0
 var selected_target := ""
+var _target_selection_mouse_position := Vector2.ZERO
 var displayed_cursor := -1
 var displayed_battle := ""
 var _decision := ""
@@ -183,7 +184,7 @@ func _ready() -> void:
 			target.visible = false
 			target.z_index = 60
 			target.focus_mode = Control.FOCUS_NONE
-			target.mouse_entered.connect(func() -> void: _focus_native_target(controller))
+			target.mouse_entered.connect(func() -> void: _hover_native_target(controller))
 			# Keep adjacent targets separate: the two double sprites are only ~158 px apart.
 			target.custom_minimum_size = Vector2(126, 112)
 			target.size = Vector2(126, 112)
@@ -758,7 +759,11 @@ func _update_actions() -> void:
 					if not legal_targets.has(controller):
 						legal_targets.append(controller)
 		if not legal_targets.has(selected_target):
-			selected_target = legal_targets[0] if not legal_targets.is_empty() else ""
+			selected_target = ""
+			for controller: String in SLOTS:
+				if legal_targets.has(controller):
+					selected_target = controller
+					break
 		_refresh_target_highlight()
 	if not _native_mode:
 		var switches := HBoxContainer.new()
@@ -827,6 +832,7 @@ func _select_move(slot: int) -> void:
 		return
 	selected_move = slot
 	selected_target = ""
+	_target_selection_mouse_position = get_viewport().get_mouse_position()
 	_update_actions()
 
 
@@ -881,6 +887,14 @@ func _focus_native_target(controller: String) -> void:
 		return
 	selected_target = controller
 	_refresh_target_highlight()
+
+
+func _hover_native_target(controller: String) -> void:
+	# Showing a target under a stationary cursor can emit mouse_entered immediately.
+	# Keep the initial selection on the left opponent until the player actually moves.
+	if get_viewport().get_mouse_position().distance_to(_target_selection_mouse_position) < 2.0:
+		return
+	_focus_native_target(controller)
 
 
 func _refresh_target_highlight() -> void:
