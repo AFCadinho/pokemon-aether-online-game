@@ -18,9 +18,9 @@ func _run() -> void:
 	var dialogue := layer.get_node("Box")
 	var quest := {
 		"questId": "learn_to_pickpocket",
-		"titleKey": "quest.learn_to_pickpocket.title",
-		"summaryKey": "quest.learn_to_pickpocket.summary",
-		"steps": [{"stepId": "pickpocket", "objectiveKey": "quest.learn_to_pickpocket.objective"}],
+		"titleKey": "story.kanto.learn_to_pickpocket.title",
+		"summaryKey": "story.kanto.learn_to_pickpocket.summary",
+		"steps": [{"stepId": "pickpocket", "objectiveKey": "story.kanto.learn_to_pickpocket.child"}],
 		"rewardPreviews": [
 			{"type": "skill_experience", "skillId": "thieving", "experience": 500},
 			{"type": "item", "itemId": "tm-thief", "quantity": 1},
@@ -29,11 +29,14 @@ func _run() -> void:
 		],
 	}
 	var original_content_scale_size := root.content_scale_size
-	for viewport_size: Vector2i in [Vector2i(1280, 720), Vector2i(720, 340)]:
+	var first_large_panel_height := 0.0
+	for viewport_size: Vector2i in [Vector2i(1920, 1080), Vector2i(1920, 1080), Vector2i(1280, 720), Vector2i(720, 340)]:
 		root.content_scale_size = viewport_size
 		root.size = viewport_size
 		await process_frame
 		dialogue.call("start_quest_offer", quest, "Master Thief Rook")
+		if viewport_size.y == 1080:
+			_check((dialogue.get_node("PanelContainer") as Control).size.y < 650.0, "quest first frame does not fill the screen")
 		await process_frame
 		await process_frame
 		var panel := dialogue.get_node("PanelContainer") as Control
@@ -42,6 +45,12 @@ func _run() -> void:
 		var rewards := dialogue.get_node("PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/RewardCard/RewardMargin/RewardEntries") as HFlowContainer
 		_check(panel.global_position.x >= 0.0 and panel.global_position.y >= 0.0, "quest panel starts inside %s viewport" % viewport_size)
 		_check(panel.global_position.x + panel.size.x <= viewport_size.x + 1.0 and panel.global_position.y + panel.size.y <= viewport_size.y + 1.0, "quest panel fits %s viewport" % viewport_size)
+		if viewport_size.y == 1080:
+			_check(panel.size.y < 650.0, "quest panel stays content-sized on first and later openings")
+			if first_large_panel_height == 0.0:
+				first_large_panel_height = panel.size.y
+			else:
+				_check(absf(panel.size.y - first_large_panel_height) <= 24.0, "first and later quest openings use the same height")
 		_check(actions.global_position.y + actions.size.y <= panel.global_position.y + panel.size.y, "quest action buttons remain visible at %s" % viewport_size)
 		_check(scroll.visible and scroll.size.y >= 60.0, "quest details remain scrollable at %s" % viewport_size)
 		if viewport_size.y < 400:

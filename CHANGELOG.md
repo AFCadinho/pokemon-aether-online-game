@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Side-quest offers now have clearer reward cards and adapt to shorter browser and desktop windows while keeping Accept and Decline visible.
+- Side-quest offers now have clearer reward cards and adapt to shorter browser and desktop windows while keeping Accept and Decline visible. Their first opening in a session no longer stretches to nearly full-screen height.
 
 - Guild training Captains can choose AI4 Beginner or AI5 Grandmaster Hard when challenging the bot Guild.
 
