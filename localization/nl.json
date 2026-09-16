@@ -4506,6 +4506,7 @@
   "ui.storage.release.success": "Pokémon vrijgelaten.",
   "ui.storage.move.saving": "Verplaatsing opslaan...",
   "ui.storage.move.failed": "Verplaatsen mislukt.",
+  "ui.storage.move.coop_party_full": "In een Adventure Party mag je maximaal 3 Pokémon in je team hebben. Verplaats er eerst één naar een box.",
   "ui.storage.move.success": "Pokémon verplaatst naar {location}.",
   "ui.storage.location.party": "het team",
   "ui.storage.location.party_slot": "teamvak {number}",
