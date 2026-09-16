@@ -5213,13 +5213,16 @@ func _on_coop_state_changed() -> void:
 	if is_in_battle and active_battle_kind != "coop":
 		return
 	if active_battle_kind != "coop":
+		if not _mount_battle_ui():
+			CoopService.request_failed.emit("Could not open the shared battle. Retrying…")
+			return
+		if not battle_instance.setup_coop_battle():
+			_clear_battle_ui_instance()
+			CoopService.request_failed.emit("Could not prepare the shared battle. Retrying…")
+			return
 		is_in_battle = true
 		active_battle_kind = "coop"
 		_lock_overworld_for_battle()
-		coop_controls = preload("res://scripts/battle/coop_controls.gd").new()
-		coop_controls.battle_mode = true
-		battle_ui_host.add_child(coop_controls)
-		battle_ui_host.visible = true
 	active_battle_id = str(CoopService.activity.get("battleId", ""))
 	_publish_world_presence(true)
 

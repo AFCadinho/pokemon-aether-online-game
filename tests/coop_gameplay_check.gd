@@ -72,8 +72,17 @@ func _run() -> void:
 	mounted_world.coop_world_ready = true
 	mounted_world._on_coop_state_changed()
 	_expect(host.visible and mounted_world.active_battle_kind == "coop" and host.get_child_count() == 1, "co-op entry shows the normally hidden battle host")
+	var mounted_battle: Control = host.get_child(0)
+	_expect(bool(mounted_battle.get("coop_mode")) and mounted_battle.get("coop_presenter") != null,
+		"co-op uses the ordinary battle scene with its own server-driven presenter")
+	var presenter: Control = mounted_battle.get("coop_presenter")
+	_expect(presenter.get("cards").size() == 4
+		and presenter.get("embedded_hosts").get("stage") == mounted_battle.get_node("%BattleStage")
+		and mounted_battle.get_node("%BattleBackground").visible
+		and not mounted_battle.get_node("%PlayerSpriteBox").visible,
+		"four co-op positions use the regular battle stage without overlapping single-battle sprites")
 	mounted_world._on_coop_state_changed()
-	_expect(host.get_child_count() == 1, "repeated snapshots do not mount duplicate battle controls")
+	_expect(host.get_child_count() == 1, "repeated snapshots do not mount duplicate battle scenes")
 	mounted_world.free()
 	host.queue_free()
 	var story := root.get_node("StoryService")
@@ -220,7 +229,7 @@ func _run() -> void:
 		"co-op grass checks cannot freeze movement for network round trips")
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
 	var grass_request_source := service_source.get_slice("func try_wild_step(", 1).get_slice("\nfunc ", 0)
-	_expect(not grass_request_source.get_slice('var result := await _request("grass-step"', 0).contains("await refresh()")
+	_expect(not grass_request_source.get_slice('var world := GameState.get_world()', 1).get_slice('var result := await _request("grass-step"', 0).contains("await refresh()")
 		and grass_request_source.contains('result.get("body", {}).get("status") != "miss"'),
 		"grass misses avoid redundant status requests while starts still refresh")
 	await process_frame

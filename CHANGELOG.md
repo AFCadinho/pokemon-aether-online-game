@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now open in the regular battle window, with both Trainers' Pokémon, opponents, battle events and shared turn actions placed in its battle stage and panels.
+
 - Guild training challenges now recognize the Captain at her new lobby position.
 
 - Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.

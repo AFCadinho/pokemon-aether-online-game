@@ -556,6 +556,8 @@ var battle_ui_drag_offset := Vector2.ZERO
 #Active Pokemon
 var active_player_pokemon: Pokemon
 var active_enemy_pokemon: Pokemon
+var coop_mode := false
+var coop_presenter: Control
 var wild_owned_request_id := 0
 
 # Action Buttons
@@ -830,6 +832,37 @@ func _ready() -> void:
 
 func _t(key: String, replacements: Dictionary = {}) -> String:
 	return LocalizationManager.text(key, replacements)
+
+
+func setup_coop_battle() -> bool:
+	if coop_mode:
+		return true
+	if not is_node_ready():
+		return false
+	coop_mode = true
+	# The ordinary single-battle controller never receives co-op battle state.
+	# Keep its visual shell, but let the server-driven co-op presenter own input.
+	set_process(false)
+	for node: CanvasItem in [player_battle_platform, enemy_battle_platform,
+		player_sprite_box, enemy_sprite_box, player_trainer_sprite, enemy_trainer_sprite,
+		player_hud_panel, enemy_hud_panel, player_stage_party_grid, opponent_stage_party_rail,
+		battle_status_panel, vs_panel_container, mini_battle_feed]:
+		node.visible = false
+	battle_drawer_layer.visible = false
+	battle_party_rail.visible = false
+	battle_log_toggle_button.visible = false
+	for child: CanvasItem in battle_log_rail.get_children():
+		child.visible = false
+	var dock_content := action_side_panel.get_node_or_null("MarginContainer/DockContent") as Control
+	if dock_content == null:
+		return false
+	for child: CanvasItem in dock_content.get_children():
+		child.visible = false
+	action_side_panel.custom_minimum_size.y = 250.0
+	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
+	coop_presenter.embedded_hosts = {"stage": battle_stage, "dock": dock_content, "rail": battle_log_rail}
+	add_child(coop_presenter)
+	return true
 
 
 func _on_locale_changed(_locale: String) -> void:

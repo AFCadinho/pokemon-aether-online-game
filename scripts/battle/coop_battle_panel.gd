@@ -3,6 +3,7 @@ extends Control
 const SLOTS := ["p2", "p4", "p1", "p3"]
 const LOCATIONS := {"p1": -1, "p3": -2, "p2": 1, "p4": 2}
 const ACCENT := Color("67e8bf")
+var embedded_hosts: Dictionary = {}
 var cards: Dictionary = {}
 var selected_move := 0
 var displayed_cursor := -1
@@ -26,52 +27,87 @@ var _effects: Node
 
 
 func _ready() -> void:
-	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var background := ColorRect.new()
-	background.color = Color("101b29")
-	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(background)
-	var scroll := ScrollContainer.new()
-	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(scroll)
-	var margin := MarginContainer.new()
-	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 24)
-	scroll.add_child(margin)
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 14)
-	margin.add_child(layout)
-	_header = _label(layout, "CO-OP  /  CONNECTING", 28)
-	_connection = _label(layout, "", 16)
-	var field := GridContainer.new()
-	field.columns = 2
-	field.add_theme_constant_override("h_separation", 24)
-	field.add_theme_constant_override("v_separation", 12)
-	layout.add_child(field)
+	var field: GridContainer
+	var effect_layer: Control
+	if embedded_hosts.is_empty():
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var background := ColorRect.new()
+		background.color = Color("101b29")
+		background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		add_child(background)
+		var scroll := ScrollContainer.new()
+		scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		add_child(scroll)
+		var margin := MarginContainer.new()
+		margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		for side in ["left", "right", "top", "bottom"]:
+			margin.add_theme_constant_override("margin_" + side, 24)
+		scroll.add_child(margin)
+		var layout := VBoxContainer.new()
+		layout.add_theme_constant_override("separation", 14)
+		margin.add_child(layout)
+		_header = _label(layout, "CO-OP  /  CONNECTING", 28)
+		_connection = _label(layout, "", 16)
+		field = GridContainer.new()
+		field.columns = 2
+		field.add_theme_constant_override("h_separation", 24)
+		field.add_theme_constant_override("v_separation", 12)
+		layout.add_child(field)
+		_prompt = _label(layout, "Waiting for the battle…", 22)
+		_capture_status = _label(layout, "", 17)
+		var deck := HBoxContainer.new()
+		deck.add_theme_constant_override("separation", 24)
+		layout.add_child(deck)
+		_actions = VBoxContainer.new()
+		_actions.custom_minimum_size.x = 440
+		_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		deck.add_child(_actions)
+		_log = RichTextLabel.new()
+		_log.custom_minimum_size = Vector2(260, 190)
+		_log.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		deck.add_child(_log)
+		effect_layer = Control.new()
+		effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		add_child(effect_layer)
+	else:
+		var stage: Control = embedded_hosts["stage"]
+		var dock: Control = embedded_hosts["dock"]
+		var rail: Control = embedded_hosts["rail"]
+		_header = _label(rail, "CO-OP  /  CONNECTING", 20)
+		_connection = _label(rail, "", 14)
+		_log = RichTextLabel.new()
+		_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_log.custom_minimum_size.y = 160
+		rail.add_child(_log)
+		var field_margin := MarginContainer.new()
+		field_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		for side in ["left", "right", "top", "bottom"]:
+			field_margin.add_theme_constant_override("margin_" + side, 20)
+		stage.add_child(field_margin)
+		field = GridContainer.new()
+		field.columns = 2
+		field.add_theme_constant_override("h_separation", 16)
+		field.add_theme_constant_override("v_separation", 12)
+		field_margin.add_child(field)
+		_prompt = _label(dock, "Waiting for the battle…", 18)
+		_capture_status = _label(dock, "", 14)
+		var action_scroll := ScrollContainer.new()
+		action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		dock.add_child(action_scroll)
+		_actions = VBoxContainer.new()
+		_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		action_scroll.add_child(_actions)
+		effect_layer = Control.new()
+		effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		stage.add_child(effect_layer)
 	for controller: String in SLOTS:
 		_create_card(field, controller)
-	_prompt = _label(layout, "Waiting for the battle…", 22)
-	_capture_status = _label(layout, "", 17)
-	var deck := HBoxContainer.new()
-	deck.add_theme_constant_override("separation", 24)
-	layout.add_child(deck)
-	_actions = VBoxContainer.new()
-	_actions.custom_minimum_size.x = 440
-	_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	deck.add_child(_actions)
-	_log = RichTextLabel.new()
-	_log.custom_minimum_size = Vector2(260, 190)
-	_log.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	effect_layer.move_to_front()
 	_log.scroll_following = true
 	_log.bbcode_enabled = false
-	_log.add_theme_font_size_override("normal_font_size", 17)
-	deck.add_child(_log)
-	var effect_layer := Control.new()
+	_log.add_theme_font_size_override("normal_font_size", 14 if not embedded_hosts.is_empty() else 17)
 	effect_layer.name = "CoopEffectsLayer"
 	effect_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	effect_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(effect_layer)
 	_effects = load("res://scripts/battle/coop_battle_effects.gd").new()
 	effect_layer.add_child(_effects)
 	for controller: String in SLOTS:
@@ -84,8 +120,12 @@ func _ready() -> void:
 func _create_card(parent: Control, controller: String) -> void:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if not embedded_hosts.is_empty():
+		panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color("1c3040") if controller in ["p1", "p3"] else Color("302a3b")
+	if not embedded_hosts.is_empty():
+		style.bg_color.a = 0.78
 	style.set_corner_radius_all(12)
 	style.set_content_margin_all(12)
 	panel.add_theme_stylebox_override("panel", style)
@@ -95,6 +135,7 @@ func _create_card(parent: Control, controller: String) -> void:
 	var name_label := _label(column, controller, 20)
 	var canvas := Control.new()
 	canvas.custom_minimum_size.y = 110
+	canvas.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	canvas.clip_contents = true
 	column.add_child(canvas)
 	var sprite = load("res://scenes/battle/sprite_box.tscn").instantiate()
@@ -103,7 +144,7 @@ func _create_card(parent: Control, controller: String) -> void:
 	sprite.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	sprite.size = Vector2(450, 293)
 	sprite.scale = Vector2(0.62, 0.62)
-	canvas.resized.connect(func() -> void: sprite.position = Vector2(canvas.size.x * 0.5 - 152, -30))
+	canvas.resized.connect(func() -> void: sprite.position = Vector2(canvas.size.x * 0.5 - 152, canvas.size.y * 0.5 - 90))
 	var hp := ProgressBar.new()
 	hp.custom_minimum_size.y = 16
 	hp.show_percentage = false
