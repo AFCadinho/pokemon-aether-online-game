@@ -3086,8 +3086,12 @@ func _save_current_player_position(
 				"activeTeleportCommandId": active_remote_authorized_teleport_command_id,
 				"pendingTargetMapId": pending_target_map_id,
 			})
-		if not ThievingService.is_arrest_transfer_pending():
-			push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
+		# A position request can finish after co-op has taken ownership of both
+		# Trainers' stored positions. Its rejection is stale, not a new save to retry.
+		if not ThievingService.is_arrest_transfer_pending() and active_battle_kind != "coop" and not coop_finishing:
+			push_warning("World: player position save failed (HTTP %s, %s): %s" % [
+				str(result.get("status", 0)), BackendErrorLocalizationService.error_code(result),
+				str(result.get("error", "Unknown error"))])
 	is_saving_player_position = false
 	if has_pending_player_position_save:
 		has_pending_player_position_save = false

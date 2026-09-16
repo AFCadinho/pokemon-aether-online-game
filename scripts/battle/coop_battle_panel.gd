@@ -32,6 +32,11 @@ var _connection: Label
 var _prompt: Label
 var _capture_status: Label
 var _bag_open := false
+var _capture_animation_pending := false
+var _capture_target_controller := ""
+var _played_capture_key := ""
+var _capture_feedback_text := ""
+var _capture_feedback_until_msec := 0
 var _actions: VBoxContainer
 var _log: RichTextLabel
 var _epoch := 0
@@ -200,8 +205,7 @@ func _ready() -> void:
 		_prompt = prompt_panel.message_label
 		_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_prompt.add_theme_font_size_override("font_size", 18)
-		_capture_status = _label(dock_content, "", 14)
-		_capture_status.visible = false
+		# Capture feedback belongs in the battlefield prompt, not below the party slots.
 		_decision_overlay = ColorRect.new()
 		_decision_overlay.name = "CoopDecisionOverlay"
 		_decision_overlay.color = Color(0.02, 0.05, 0.09, 0.78)
@@ -414,6 +418,10 @@ func _update_loading_overlay() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _native_mode and not _capture_feedback_text.is_empty() and Time.get_ticks_msec() >= _capture_feedback_until_msec:
+		_capture_feedback_text = ""
+		_action_signature = ""
+		_update_actions()
 	if _connection == null and not _native_mode:
 		return
 	if _native_mode:
@@ -433,7 +441,7 @@ func _process(_delta: float) -> void:
 
 
 func _present() -> void:
-	if _playing:
+	if _playing or _capture_animation_pending:
 		return
 	_playing = true
 	_update_actions()
@@ -605,15 +613,16 @@ func _update_actions() -> void:
 		_wait_button.visible = false
 		_cancel_target_button.visible = false
 		_native_party.set_selection_enabled(false)
-	var last_capture: Dictionary = CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else {}
-	_capture_status.text = ""
-	if not last_capture.is_empty():
-		_capture_status.text = "Caught! Your Pokémon will be saved when the shared battle finishes." if last_capture.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(last_capture.get("shakeCount", 0))
-	var acquisitions: Array = CoopService.activity.get("captures", CoopService.view.get("captures", []))
-	if not acquisitions.is_empty():
-		var location: Dictionary = acquisitions[0].get("storageLocation", {})
-		_capture_status.text = "Caught Pokémon saved to your party." if location.get("type") == "party" else "Caught Pokémon saved to your PC."
-	_capture_status.visible = not _capture_status.text.is_empty()
+	if not _native_mode:
+		var last_capture: Dictionary = CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else {}
+		_capture_status.text = ""
+		if not last_capture.is_empty():
+			_capture_status.text = "Caught! Your Pokémon will be saved when the shared battle finishes." if last_capture.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(last_capture.get("shakeCount", 0))
+		var acquisitions: Array = CoopService.activity.get("captures", CoopService.view.get("captures", []))
+		if not acquisitions.is_empty():
+			var location: Dictionary = acquisitions[0].get("storageLocation", {})
+			_capture_status.text = "Caught Pokémon saved to your party." if location.get("type") == "party" else "Caught Pokémon saved to your PC."
+		_capture_status.visible = not _capture_status.text.is_empty()
 	for child in _actions.get_children():
 		_actions.remove_child(child)
 		child.queue_free()
@@ -663,6 +672,7 @@ func _update_actions() -> void:
 		return
 	if _playing or CoopService.view.get("ended", false) or CoopService.view.get("locked", true):
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
+		_show_capture_feedback_in_prompt()
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else "Choose a move, then its target — or switch your Pokémon."
 	if _native_mode:
@@ -708,7 +718,7 @@ func _update_actions() -> void:
 			else:
 				for ball: Dictionary in capture_options.get("balls", []):
 					var item_id: String = str(ball.get("itemId", ""))
-					_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await CoopService.submit_capture(item_id))
+					_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await _submit_capture_with_preview(item_id))
 	for action: Dictionary in CoopService.view.get("legalActions", []):
 		if action.get("type") == "run":
 			if _native_mode:
@@ -774,11 +784,65 @@ func _update_actions() -> void:
 			if action.get("type") != "switch": continue
 			var pokemon: Dictionary = CoopService.view.get("ownTeam", [])[int(action.slot) - 1]
 			_button(switches, "%s\n%s/%s HP" % [str(pokemon.get("species", "")), str(pokemon.get("hp", 0)), str(pokemon.get("maxHp", 0))], func() -> void: await CoopService.submit_action(action))
+	else:
+		_show_capture_feedback_in_prompt()
+
+
+func _show_capture_feedback_in_prompt() -> void:
+	if _native_mode and not _capture_feedback_text.is_empty():
+		_prompt.text = _capture_feedback_text
+
+
+func _submit_capture_with_preview(item_id: String) -> void:
+	if _capture_animation_pending:
+		return
+	var options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
+	_capture_target_controller = str(options.get("targetController", "p2" if CoopService.view.get("participant") == "p1" else "p4"))
+	_capture_animation_pending = _native_mode
+	var result: Dictionary = await CoopService.submit_capture(item_id)
+	var body: Dictionary = result.get("body", {}) if result.get("body") is Dictionary else {}
+	var accepted: Dictionary = body.get("accepted", {}) if body.get("accepted") is Dictionary else {}
+	if _native_mode and bool(result.get("success", false)) and not accepted.is_empty() and is_inside_tree():
+		var capture_key := "%s:%s" % [str(CoopService.activity.get("reservationId", "")), str(accepted.get("checkpointRevision", ""))]
+		if capture_key != _played_capture_key:
+			_played_capture_key = capture_key
+			await _play_native_capture_preview(item_id, accepted)
+			_capture_feedback_text = "Caught! Your Pokémon will be saved when the shared battle finishes." if accepted.get("caught", false) else "The Pokémon escaped from your ball (%s shakes)." % str(accepted.get("shakeCount", 0))
+			_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
+			if _native_log != null:
+				_native_log.add_message(_capture_feedback_text)
+	if not is_inside_tree():
+		return
+	_capture_animation_pending = false
+	_action_signature = ""
+	_update_actions()
+	if _revision != int(_latest.get("revision", -1)):
+		_present.call_deferred()
+
+
+func _play_native_capture_preview(item_id: String, accepted: Dictionary) -> void:
+	var target := _native_sprite(_capture_target_controller)
+	var capture_player: CaptureBallAnimationPlayer = embedded_hosts.get("capture_player") as CaptureBallAnimationPlayer
+	if target == null or capture_player == null:
+		return
+	var center := target.get_global_transform_with_canvas().origin
+	await capture_player.play_capture_preview(str(accepted.get("itemId", item_id)),
+		clampi(int(accepted.get("shakeCount", 0)), 0, 3), bool(accepted.get("caught", false)),
+		Rect2(center - Vector2(48, 48), Vector2(96, 96)))
+
+
+func set_capture_target_visible(is_visible: bool) -> void:
+	var target := _native_sprite(_capture_target_controller)
+	if target != null:
+		target.visible = is_visible
 
 
 func _auto_return_after_finish() -> void:
 	# A finished receipt can arrive before the last turn's event playback ends.
-	# Let the final move, damage and outcome reach the screen before closing it.
+	# Let a confirmed throw and the final events reach the screen first.
+	var capture_deadline := Time.get_ticks_msec() + 18000
+	while is_inside_tree() and _capture_animation_pending and Time.get_ticks_msec() < capture_deadline:
+		await get_tree().process_frame
 	var playback_deadline := Time.get_ticks_msec() + 7000
 	while is_inside_tree() and (_playing or _revision != int(_latest.get("revision", -1))) and Time.get_ticks_msec() < playback_deadline:
 		await get_tree().process_frame

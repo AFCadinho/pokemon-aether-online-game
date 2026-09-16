@@ -920,6 +920,7 @@ func setup_coop_battle() -> bool:
 	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
 	coop_presenter.embedded_hosts = {"stage": battle_stage, "prompt": current_action_panel, "rail": battle_log_rail,
 		"dock_content": dock_content,
+		"capture_player": capture_ball_animation_player,
 		"player_sprite": player_sprite_box, "enemy_sprite": enemy_sprite_box,
 		"player_hud": player_hud_panel, "enemy_hud": enemy_hud_panel,
 		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,
@@ -4499,9 +4500,15 @@ func _on_capture_succeeded() -> void:
 
 func _on_capture_target_absorbed() -> void:
 	SfxManager.play("capture_absorb")
+	if coop_mode and is_instance_valid(coop_presenter):
+		coop_presenter.call("set_capture_target_visible", false)
+		return
 	_fade_capture_target_to_alpha(0.0, 0.14, true)
 
 func _on_capture_target_released() -> void:
+	if coop_mode and is_instance_valid(coop_presenter):
+		coop_presenter.call("set_capture_target_visible", true)
+		return
 	_fade_capture_target_to_alpha(1.0, 0.18, false)
 
 func _reset_capture_target_visibility() -> void:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op capture attempts now play the Poké Ball throw and shake animation on the assigned wild Pokémon. Capture feedback appears in the battle prompt instead of under the party slots.
+
 - Finished co-op battles now return to the world automatically after victory, defeat, or forfeit. A retry button appears only if returning fails.
 
 - Co-op double battles now update each target's HP after its own move and hit animation, instead of changing all HP bars at the end of the turn.
