@@ -69,12 +69,14 @@ func _ready() -> void:
 	_check(not captain.call("_prefetches_dialogue_metadata_on_approach"), "Captain skips unrelated metadata")
 	_check(not captain.call("_loads_pickpocket_profile_from_npc_metadata"), "Captain cannot be pickpocketed")
 	_check(captain.get("mugshot") != null, "Captain resolves an existing portrait")
+	var captain_source := FileAccess.get_file_as_string("res://scripts/world/npcs/aether_clash_bot_captain_npc.gd")
+	_check(captain_source.contains('world.call("_publish_world_presence", true)'), "Captain refreshes gateway position before opening training")
 	captain.queue_free()
 	var lobby := load("res://scenes/overworld/aether_clash/aether_clash_lobby.tscn").instantiate() as Node2D
 	var placed := lobby.get_node("Entities/NPCs/ClashTrainingCaptain") as Node2D
-	_check(placed.position == Vector2(1168, 1360), "NPC agrees with server interaction position")
+	_check(placed.position == Vector2(528, 816), "NPC agrees with server interaction position")
 	var collision := lobby.get_node("Tiles/Collision") as TileMapLayer
-	var tile := Vector2i(36, 42)
+	var tile := Vector2i(16, 25)
 	_check(collision.get_cell_source_id(tile) == -1, "Captain stands on a walkable tile")
 	var reachable := false
 	for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
@@ -83,7 +85,7 @@ func _ready() -> void:
 	lobby.free()
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
-		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
+		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "npc_too_far", "presence_unavailable", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
 		_check(not str(catalog.get("ui.clash_bot.ai5", "")).contains("("), "%s keeps the Hard label concise" % locale)
 	await get_tree().process_frame

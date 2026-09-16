@@ -272,9 +272,10 @@ position = Vector2(1456, 944)
 position = Vector2(784, 1360)
 npc_id = "aether_clash_lobby_clash_coordinator"
 
-[node name="ClashTrainingCaptain" parent="Entities/NPCs" instance=ExtResource("12_bot_captain")]
-position = Vector2(1168, 1360)
+[node name="ClashTrainingCaptain" parent="Entities/NPCs" unique_id=433982054 instance=ExtResource("12_bot_captain")]
+position = Vector2(528, 816)
 npc_id = "aether_clash_lobby_training_captain"
+facing_direction = Vector2(0, 1)
 
 [node name="HealNPC" parent="Entities/NPCs" unique_id=581918462 instance=ExtResource("8_dpboj")]
 position = Vector2(880, 976)

@@ -17,6 +17,9 @@ func interact_with_player(_player: Node2D) -> void:
 	if interaction_in_flight:
 		return
 	interaction_in_flight = true
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("_publish_world_presence"):
+		world.call("_publish_world_presence", true)
 	var response := await _load_training_options()
 	if not bool(response.get("success", false)):
 		await GameErrorDialogService.show_response(response, "ui.clash_bot.unavailable")
