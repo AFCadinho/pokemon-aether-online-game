@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In co-op battles, choosing a target now locks the move buttons until you pick a Pokémon or press Cancel. Cancel returns to move selection without using a turn.
+
 - Returning from a co-op wild battle after both Trainers agree to Run is faster. The game checks the exit more often and avoids reloading the map when the settled Trainer is already on the correct tile.
 
 - Co-op move targeting now highlights the selected Pokémon sprite; hover or arrow keys move the glow without covering the field with target boxes.
