@@ -30,7 +30,7 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   const page=await context.newPage();
   const api=[], errors=[], maps=[];
-  let latestPosition=null;
+  let latestPosition=null, rewardSeen=false, badgeAwarded=false, mistyQuestStatus='';
   page.on('pageerror',()=>errors.push('pageerror'));
   page.on('websocket',socket=>socket.on('framesent',({payload})=>{
     if(typeof payload!=='string'||payload.length>16384)return;
@@ -50,6 +50,17 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
           const payload=await response.json();
           const code=String(payload?.detail?.code||payload?.code||'unknown');
           if(/^[A-Za-z0-9_]{1,80}$/.test(code))entry.code=code;
+        }catch{}
+      }
+      if(url.pathname.endsWith('/wallet/rewards/trainer-battle')&&response.status()===200){
+        rewardSeen=true;
+        try{badgeAwarded=(await response.json())?.gymBadgeAward?.awarded===true;}catch{}
+      }
+      if(url.pathname==='/api/auth/web/world/story'&&response.status()===200){
+        try{
+          const story=(await response.json())?.story;
+          const quest=story?.quests?.find(q=>q.questId==='challenge_cerulean_gym');
+          if(quest)mistyQuestStatus=String(quest.status||'');
         }catch{}
       }
       api.push(entry);
@@ -95,13 +106,18 @@ const {attest}=require('./support/disposable_runtime_guard.cjs');
     await page.screenshot({path:path.join(output,'after-battle.png')});
     assert(battleTeardown,'Misty battle did not reach teardown');
     assert(api.some(x=>x.path.includes('choice-and-resolve')&&x.status===200),'A real turn resolves');
+    await page.waitForTimeout(5000);
+    assert(rewardSeen&&badgeAwarded,'Misty victory must award the Cascade Badge');
+    assert.equal(mistyQuestStatus,'completed','Misty quest must complete after victory');
+    assert.equal(maps.at(-1),'kanto_cerulean_city_gym','Winning player remains in the gym');
     assert.equal(errors.length,0,'No page errors');
     success=true;
   }finally{
     clearInterval(watch);
     const sourceUnchanged=git('status','--porcelain')===''&&git('ls-files','-s')===sourceIndex;
     fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({success:success&&!lost&&sourceUnchanged,
-      runtimeLost:lost,sourceUnchanged,battleStart,battleTeardown,moves,api,maps,latestPosition,errors,
+      runtimeLost:lost,sourceUnchanged,battleStart,battleTeardown,moves,api,maps,latestPosition,
+      rewardSeen,badgeAwarded,mistyQuestStatus,errors,
       sourceCommit:receipt.commit,pckSHA256:receipt.files.find(x=>x.name==='index.pck').sha256,
       fixture:'developer checkpoint challenge_misty; not a fresh-account playthrough'},null,2));
     await browser.close();
