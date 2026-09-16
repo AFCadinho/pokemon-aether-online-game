@@ -31,6 +31,7 @@ var _native_moves: MovesGrid
 var _native_log: BattleLogPanel
 var _native_utility: Control
 var _action_scroll: ScrollContainer
+var _wait_button: Button
 var _native_turn: BattleStatusPanel
 var _native_vs: BattleVsPanelContainer
 var _native_party: PartyGrid
@@ -102,8 +103,10 @@ func _ready() -> void:
 		_native_party.party_selected.connect(_select_switch)
 		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
 		stage.add_child(_second_trainer)
-		_first_trainer.position = Vector2(124, 474)
-		_second_trainer.position = Vector2(336, 474)
+		_first_trainer.position = Vector2(124, 426)
+		_second_trainer.position = Vector2(338, 426)
+		_first_trainer.scale = Vector2.ONE * 0.75
+		_second_trainer.scale = Vector2.ONE * 0.75
 		_log = RichTextLabel.new()
 		_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_log.custom_minimum_size.y = 160
@@ -113,6 +116,33 @@ func _ready() -> void:
 		_native_utility = embedded_hosts["utility"] as Control
 		_native_moves.move_selected.connect(_select_move)
 		_native_utility.action_selected.connect(_on_native_utility_action)
+		var bag: Button = stage.get_node("%BagButton")
+		_wait_button = bag.duplicate(0) as Button
+		_wait_button.name = "CoopWaitButton"
+		_wait_button.text = "Wait"
+		_wait_button.tooltip_text = "Skip your action. Your partner and wild Pokémon still act."
+		bag.get_parent().add_child(_wait_button)
+		bag.get_parent().move_child(_wait_button, 1)
+		_wait_button.pressed.connect(func() -> void: _on_native_utility_action("wait"))
+		var utility: Control = stage.get_node("%UtilityActions")
+		utility.offset_left = -244
+		utility.offset_top = -240
+		utility.offset_bottom = -204
+		_native_moves.offset_top = -202
+		_native_moves.offset_bottom = -14
+		prompt_panel.offset_top = -70
+		prompt_panel.offset_bottom = -14
+		_native_vs.max_names_panel_width = 530.0
+		for side: String in ["player", "enemy"]:
+			var hud: Control = embedded_hosts[side + "_hud"]
+			for row: Control in hud.active_info_rows:
+				var owner_label := Label.new()
+				owner_label.name = "CoopOwnerLabel"
+				owner_label.add_theme_font_size_override("font_size", 12)
+				owner_label.add_theme_color_override("font_color", ACCENT)
+				owner_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+				row.add_child(owner_label)
+				row.move_child(owner_label, 0)
 		for controller: String in SLOTS:
 			var target := _button(stage, "", func() -> void: _select_target(controller))
 			target.visible = false
@@ -221,11 +251,12 @@ func _position_native_targets() -> void:
 	if not _native_mode:
 		return
 	var stage: Control = embedded_hosts["stage"]
-	var positions := {"p1": Vector2(0.20, 0.62), "p3": Vector2(0.43, 0.62),
-		"p2": Vector2(0.61, 0.39), "p4": Vector2(0.81, 0.39)}
 	for controller: String in SLOTS:
 		var target: Button = cards[controller].target
-		target.position = stage.size * positions[controller] - target.custom_minimum_size * 0.5
+		var sprite := _native_sprite(controller)
+		if sprite != null:
+			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
+			target.position = center - target.custom_minimum_size * 0.5
 
 
 func _sync() -> void:
@@ -361,6 +392,10 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 	var own_team: Array = snapshot.get("ownTeam", [])
 	_native_party.set_party(own_team)
 	_native_party.set_empty_slots_visible(false)
+	# Compact slots intentionally keep placeholders in singles. Doubles only
+	# exposes this Trainer's actual roster, never their partner's switches.
+	for index in range(_native_party.get_child_count()):
+		(_native_party.get_child(index) as Control).visible = index < own_team.size()
 	var partner_team: Array = snapshot.get("partnerTeam", [])
 	var allied_team: Array = own_team + partner_team if snapshot.get("participant") == "p1" else partner_team + own_team
 	_allied_party.set_party(allied_team)
@@ -391,6 +426,8 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 		var shiny: Array[bool] = []
 		for row_index in range(2):
 			var controller: String = controllers[row_index]
+			var owner_label: Label = hud.active_info_rows[row_index].get_node("CoopOwnerLabel")
+			owner_label.text = (_trainer_name(controller) + (" · YOU" if controller == snapshot.get("participant") else "")) if side == "player" else "OPPONENT %s" % (row_index + 1)
 			var position: Dictionary = active.get(controller, {})
 			var details := str(position.get("details", ""))
 			var name := details.split(",")[0].strip_edges() if not details.is_empty() else ""
@@ -445,6 +482,7 @@ func _update_actions() -> void:
 		_native_moves.visible = false
 		_native_utility.set_action_visible("bag", false)
 		_native_utility.set_action_visible("run", false)
+		_wait_button.visible = false
 		_native_party.set_selection_enabled(false)
 	var last_capture: Dictionary = CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else {}
 	_capture_status.text = ""
@@ -543,11 +581,18 @@ func _update_actions() -> void:
 			else:
 				_button(_actions, "Run — ask your partner", func() -> void: await CoopService.submit_action(action))
 		elif action.get("type") == "forfeit":
-			var forfeit_button := _button(_actions, "Forfeit — ask your partner", func() -> void: await CoopService.submit_action(action))
-			forfeit_button.tooltip_text = "Both Trainers must agree. Forfeiting counts as a loss with the normal defeat penalty."
+			if _native_mode:
+				_native_utility.set_action_visible("run", true)
+				_native_utility.set_action_label("run", "Forfeit")
+			else:
+				var forfeit_button := _button(_actions, "Forfeit — ask your partner", func() -> void: await CoopService.submit_action(action))
+				forfeit_button.tooltip_text = "Both Trainers must agree. Forfeiting counts as a loss with the normal defeat penalty."
 		elif action.get("type") == "wait":
-			var wait_button := _button(_actions, "Wait — skip my action", func() -> void: await CoopService.submit_action(action))
-			wait_button.tooltip_text = "Use no PP and give your partner another catch attempt. Wild Pokémon still act."
+			if _native_mode:
+				_wait_button.visible = true
+			else:
+				var wait_button := _button(_actions, "Wait — skip my action", func() -> void: await CoopService.submit_action(action))
+				wait_button.tooltip_text = "Use no PP and give your partner another catch attempt. Wild Pokémon still act."
 	if not _native_mode:
 		var moves := GridContainer.new()
 		moves.columns = 2
@@ -608,9 +653,9 @@ func _on_native_utility_action(action: String) -> void:
 		_bag_open = not _bag_open
 		selected_move = 0
 		_update_actions()
-	elif action == "run":
+	elif action in ["run", "wait"]:
 		for choice: Dictionary in CoopService.view.get("legalActions", []):
-			if choice.get("type") == "run":
+			if choice.get("type") == action or (action == "run" and choice.get("type") == "forfeit"):
 				await CoopService.submit_action(choice)
 				return
 

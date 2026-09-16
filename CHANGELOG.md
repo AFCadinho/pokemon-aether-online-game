@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Double battles have an uncropped compact battlefield, smaller Trainer sprites, a wider team title, and a three-Pokémon personal switch row. Wait now sits beside Bag and Run. Single-battle layouts are unchanged.
+
 - Co-op battles now keep the normal battle log and Damage Calc button, with six party slots in a horizontal row and extra co-op actions below them.
 
 - Co-op double battles use a simple per-Pokémon attack and hit animation while move-specific effects are adapted later. Choose single-target moves by clicking a Pokémon or using the arrow keys and Space; Escape cancels targeting.

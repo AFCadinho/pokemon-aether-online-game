@@ -6,6 +6,7 @@ const TRAINER_HEAD_PORTRAIT_SCRIPT := preload("res://scripts/ui/trainer_head_por
 
 const MIN_NAMES_PANEL_WIDTH := 150.0
 const MAX_NAMES_PANEL_WIDTH := 340.0
+var max_names_panel_width := MAX_NAMES_PANEL_WIDTH
 # Margins, HBox gaps, portraits when present, the VS label, and panel borders.
 const NAMES_PANEL_CHROME_WITH_PORTRAITS := 131.0
 const NAMES_PANEL_CHROME_WITHOUT_PORTRAITS := 63.0
@@ -120,7 +121,7 @@ func _refresh_names_panel_width() -> void:
 		if _show_player_portraits
 		else NAMES_PANEL_CHROME_WITHOUT_PORTRAITS
 	)
-	var maximum_names_width := MAX_NAMES_PANEL_WIDTH - names_panel_chrome_width
+	var maximum_names_width := max_names_panel_width - names_panel_chrome_width
 	var desired_names_width := player_1_width + player_2_width
 	if desired_names_width > maximum_names_width:
 		var flexible_width := maximum_names_width - (MIN_PLAYER_NAME_WIDTH * 2.0)
@@ -134,7 +135,7 @@ func _refresh_names_panel_width() -> void:
 	player_1_label.custom_minimum_size.x = ceilf(player_1_width)
 	player_2_label.custom_minimum_size.x = ceilf(player_2_width)
 	var content_width := player_1_label.custom_minimum_size.x + player_2_label.custom_minimum_size.x + names_panel_chrome_width
-	names_panel.custom_minimum_size.x = clampf(content_width, MIN_NAMES_PANEL_WIDTH, MAX_NAMES_PANEL_WIDTH)
+	names_panel.custom_minimum_size.x = clampf(content_width, MIN_NAMES_PANEL_WIDTH, max_names_panel_width)
 
 
 func configure_compact_timer_mode(enabled: bool, show_opponent: bool = true) -> void:

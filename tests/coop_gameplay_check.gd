@@ -85,10 +85,10 @@ func _run() -> void:
 		and mounted_battle.get_node("%BattleDrawerLayer").visible
 		and mounted_battle.get_node("%BattleLogButton").visible,
 		"co-op keeps the single-battle log, calculator button and drawer shell")
-	_expect(party_grid.columns == 6 and party_grid.get_parent().name == "ContextStack"
-		and party_grid.size_flags_horizontal == Control.SIZE_EXPAND_FILL
+	_expect(party_grid.columns == 3 and party_grid.get_parent().name == "ContextStack"
+		and party_grid.size_flags_horizontal == Control.SIZE_SHRINK_BEGIN
 		and presenter._action_scroll.get_parent() == dock_content,
-		"co-op keeps six horizontal party slots while extra actions stay outside the battle log")
+		"co-op uses a three-slot own-party switch row outside the battle log")
 	calc_button.pressed.emit()
 	_expect(mounted_battle.get_node("%CalcDrawer").visible, "co-op Damage Calc opens the normal battle drawer")
 	mounted_battle.get_node("%CalcDrawerCloseButton").pressed.emit()
@@ -157,14 +157,29 @@ func _run() -> void:
 	presenter._action_signature = ""
 	presenter._update_actions()
 	await process_frame
-	_expect(presenter._action_scroll.visible
-		and presenter._action_scroll.get_global_rect().end.y <= mounted_battle.get_node("%ActionsDock").get_global_rect().end.y,
-		"co-op Wait action stays inside the bottom dock instead of the battle log")
+	await process_frame
+	var stage: Control = mounted_battle.get_node("%BattleStage")
+	var moves: Control = mounted_battle.get_node("%MovesGrid")
+	_expect(moves.get_rect().end.y <= stage.size.y
+		and mounted_battle.get_node("%CurrentActionPanel").get_rect().end.y <= stage.size.y
+		and not stage.get_parent().crop_to_fill,
+		"doubles moves and prompt remain fully inside an uncropped stage")
+	_expect(not party_grid.get_child(2).visible and not party_grid.get_child(5).visible,
+		"doubles switch row hides empty slots")
+	_expect(presenter._wait_button.visible
+		and presenter._wait_button.get_parent() == mounted_battle.get_node("%BagButton").get_parent()
+		and not presenter._action_scroll.visible,
+		"co-op Wait shares the Bag action strip without consuming dock height")
 	var wait_capture_path := OS.get_environment("COOP_BATTLE_WAIT_LAYOUT_CAPTURE_PATH")
 	if not wait_capture_path.is_empty():
 		await RenderingServer.frame_post_draw
 		_expect(root.get_texture().get_image().save_png(wait_capture_path) == OK, "co-op Wait layout capture saved")
 	service.view.legalActions.pop_back()
+	service.view.locked = true
+	presenter._action_signature = ""
+	presenter._update_actions()
+	_expect(not presenter._wait_button.visible, "Wait cannot be selected while the decision is locked")
+	service.view.locked = false
 	presenter._action_signature = ""
 	presenter._update_actions()
 	presenter._select_move(1)
