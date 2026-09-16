@@ -2009,6 +2009,11 @@ custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 
+[node name="AdventurePartyButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+
 [node name="LoansButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2

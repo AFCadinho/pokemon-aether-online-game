@@ -208,6 +208,7 @@ const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg"
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
 const SOCIALS_LOANS_ICON: Texture2D = preload("res://assets/ui/player_trade.svg")
+const SOCIALS_PARTY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")
 const POKEDEX_OWNED_ICON: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
 const SHINY_TRACKER_ICON: Texture2D = preload("res://assets/items/icons/SHINYTRACKER.png")
@@ -252,6 +253,7 @@ const AETHER_EXCHANGE_POPUP_SCENE: PackedScene = preload("res://scenes/interface
 const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interface/dev_badge_progress_popup.tscn")
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
+const COOP_PARTY_POPUP_SCRIPT: Script = preload("res://scripts/ui/coop_party_popup.gd")
 const QUEST_JOURNAL_VIEW_SCRIPT: Script = preload("res://scripts/ui/quest_journal_view.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
@@ -656,10 +658,12 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_menu: PanelContainer = $Control/SocialsMenu
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_players_on_map_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/PlayersOnMapButton
+@onready var socials_adventure_party_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton
 @onready var socials_loans_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/LoansButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
+var coop_party_popup: Control
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -1913,6 +1917,7 @@ func _ready() -> void:
 	socials_button.pressed.connect(_on_socials_button_pressed)
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
 	socials_players_on_map_button.pressed.connect(_on_socials_players_on_map_button_pressed)
+	socials_adventure_party_button.pressed.connect(_on_socials_adventure_party_button_pressed)
 	socials_loans_button.pressed.connect(_on_socials_loans_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
@@ -30047,6 +30052,8 @@ func _apply_socials_menu_style() -> void:
 		SOCIALS_NEARBY_ICON,
 		Color("#60d3ff")
 	)
+	_configure_launcher_card_button(socials_adventure_party_button, "Adventure Party", "Play together with another Trainer.", SOCIALS_PARTY_ICON, Color("#79e49b"))
+	socials_adventure_party_button.visible = not OS.has_feature("web")
 	_configure_launcher_card_button(
 		socials_loans_button,
 		"ui.social.loans",
@@ -30486,6 +30493,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
 		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
+		{"panel": coop_party_popup, "close": Callable(self, "_hide_coop_party_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")},
 		{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")},
@@ -39239,6 +39247,8 @@ func _position_socials_menu() -> void:
 	if target_position.x + menu_size.x > viewport_size.x - 12.0:
 		target_position.x = viewport_size.x - menu_size.x - 12.0
 	target_position.x = max(target_position.x, 12.0)
+	if target_position.y + menu_size.y > viewport_size.y - 12.0:
+		target_position.y = max(12.0, viewport_size.y - menu_size.y - 12.0)
 	socials_menu.position = target_position
 
 func _hide_socials_menu() -> void:
@@ -39252,6 +39262,27 @@ func _on_socials_friend_list_button_pressed() -> void:
 func _on_socials_players_on_map_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_players_on_map()
+
+func _on_socials_adventure_party_button_pressed() -> void:
+	_hide_socials_menu()
+	_open_coop_party_popup()
+
+func _open_coop_party_popup(recipient_id: int = 0) -> void:
+	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
+		return
+	if coop_party_popup == null:
+		coop_party_popup = COOP_PARTY_POPUP_SCRIPT.new() as Control
+		$Control.add_child(coop_party_popup)
+		coop_party_popup.connect("closed", _on_coop_party_popup_closed)
+	coop_party_popup.call("open", recipient_id)
+	_activate_ui_panel(coop_party_popup)
+
+func _hide_coop_party_popup() -> void:
+	if coop_party_popup != null:
+		coop_party_popup.call("close")
+
+func _on_coop_party_popup_closed() -> void:
+	_deactivate_ui_panel(coop_party_popup)
 
 func _on_socials_loans_button_pressed() -> void:
 	_hide_socials_menu()
@@ -39284,6 +39315,7 @@ func _ensure_player_interaction_coordinator() -> bool:
 		player_interaction_coordinator.trainer_card_requested.connect(_on_player_interaction_trainer_card_requested)
 		player_interaction_coordinator.chat_moderation_requested.connect(_on_player_interaction_chat_moderation_requested)
 		player_interaction_coordinator.social_overview_updated.connect(_on_player_interaction_social_overview_updated)
+		player_interaction_coordinator.coop_invitation_requested.connect(_open_coop_party_popup)
 	return true
 
 func _on_player_interaction_private_message_requested(user: Dictionary) -> void:

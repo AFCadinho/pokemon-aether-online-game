@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.
+
 - Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
 
 - Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.
