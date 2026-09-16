@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
+
 - Guild training Captains can choose AI4 Beginner or AI5 Grandmaster Hard when challenging the bot Guild.
 
 - Bot Guild practice no longer keeps Turn 1 moves disabled for the 30-second presentation fallback after a confirmed opening release.

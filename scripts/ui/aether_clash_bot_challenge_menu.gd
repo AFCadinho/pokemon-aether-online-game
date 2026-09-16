@@ -5,7 +5,7 @@ signal choice_made(settings: Dictionary)
 const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TIERS := ["aether-ou", "aether-uu"]
 const SPECTATOR_OPTIONS := ["public", "guilds_only"]
-const AI_POLICIES := ["ai4", "ai5"]
+const AI_POLICIES := ["ai4", "intermediate", "ai5", "mix_v1"]
 
 var dialog: AetherConfirmationDialog
 var bot_count: SpinBox
@@ -51,12 +51,17 @@ func build(options: Dictionary) -> void:
 	difficulty.name = "Difficulty"
 	ai_policies.clear()
 	for policy: String in options.get("aiPolicies", ["ai4"]):
-		if AI_POLICIES.has(policy) and not ai_policies.has(policy):
+		if AI_POLICIES.has(policy) and not ai_policies.has(policy) and (policy != "mix_v1" or bot_count.max_value >= 3):
 			ai_policies.append(policy)
 	if ai_policies.is_empty():
 		ai_policies.append("ai4")
 	for policy: String in ai_policies:
 		difficulty.add_item(_t(policy))
+	difficulty.item_selected.connect(func(_index: int):
+		bot_count.min_value = 3 if ai_policies[difficulty.selected] == "mix_v1" else 1
+		if bot_count.value < bot_count.min_value:
+			bot_count.value = bot_count.min_value
+	)
 	_add_field(_t("difficulty"), difficulty)
 	dialog.style_option_button(difficulty)
 	spectators = OptionButton.new()
@@ -85,6 +90,8 @@ func _add_field(label_text: String, control: Control) -> void:
 
 func selected_settings() -> Dictionary:
 	bot_count.apply()
+	if ai_policies[difficulty.selected] == "mix_v1" and bot_count.value < 3:
+		bot_count.value = 3
 	return {"botCount": int(bot_count.value), "tierId": TIERS[tier.selected], "aiPolicy": ai_policies[difficulty.selected],
 		"spectatorAccess": SPECTATOR_OPTIONS[spectators.selected]}
 
