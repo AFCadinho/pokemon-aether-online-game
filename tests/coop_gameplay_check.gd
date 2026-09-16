@@ -147,6 +147,7 @@ func _run() -> void:
 	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
 	overlay_ui.set("personal_buffs_panel", buffs_panel)
 	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_left, buffs_panel.offset_left) and is_equal_approx(party_hud.offset_right, buffs_panel.offset_right), "party HUD matches personal-buffs width")
 	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD sits directly above personal buffs")
 	buffs_panel.offset_top -= 60.0
 	overlay_ui.call("_position_coop_party_hud")

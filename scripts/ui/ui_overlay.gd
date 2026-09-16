@@ -39282,8 +39282,8 @@ func _create_coop_party_hud() -> void:
 	coop_party_hud.name = "AdventurePartyHud"
 	coop_party_hud.visible = false
 	coop_party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	coop_party_hud.offset_left = -304.0
-	coop_party_hud.offset_right = -64.0
+	coop_party_hud.offset_left = personal_buffs_panel.offset_left
+	coop_party_hud.offset_right = personal_buffs_panel.offset_right
 	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
 	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
 	coop_party_hud.pressed.connect(_open_coop_party_popup)
@@ -39293,6 +39293,8 @@ func _create_coop_party_hud() -> void:
 func _position_coop_party_hud() -> void:
 	if coop_party_hud == null or personal_buffs_panel == null:
 		return
+	coop_party_hud.offset_left = personal_buffs_panel.offset_left
+	coop_party_hud.offset_right = personal_buffs_panel.offset_right
 	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
 	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
 

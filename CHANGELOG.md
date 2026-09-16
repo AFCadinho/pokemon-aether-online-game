@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Adventure Party card is now as compact as the personal-buffs panel below it.
+
 - Adventure Party names and portraits now resolve correctly when Godot parses numeric member IDs from the server's JSON response.
 
 - If a connected server omits party names or portraits, System chat now identifies whether the client is using the local, production or a custom API.
