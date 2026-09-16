@@ -91,7 +91,7 @@ func set_members(party: Dictionary, own_id: int) -> void:
 	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
 	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
 	for index in 2:
-		var member_id := str(own_member if index == 0 else partner_member)
+		var member_id := str(int(own_member if index == 0 else partner_member))
 		var name := str(names.get(member_id, "")).strip_edges()
 		if name.is_empty():
 			name = "Trainer #%s" % member_id

@@ -666,7 +666,6 @@ var donator_store_popup: DonatorStorePopup
 var friendlist_popup: FriendlistPopup
 var coop_party_popup: Control
 var coop_party_hud: Button
-var _coop_hud_diag_signature := ""
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -39303,27 +39302,6 @@ func _refresh_coop_party_hud() -> void:
 	var own_id := int(AuthService.current_user.get("id", 0))
 	var hud_party: Dictionary = _coop_party_hud_data() if CoopService.available else {}
 	coop_party_hud.call("set_members", hud_party, own_id)
-	if OS.is_debug_build():
-		var ids: Array = hud_party.get("memberIds", []) if hud_party.get("memberIds") is Array else []
-		if ids.size() == 2:
-			var names: Dictionary = hud_party.get("memberUsernames", {}) if hud_party.get("memberUsernames") is Dictionary else {}
-			var appearances: Dictionary = hud_party.get("memberAppearances", {}) if hud_party.get("memberAppearances") is Dictionary else {}
-			var name_present: Array[bool] = []
-			var portrait_present: Array[bool] = []
-			for member_id: Variant in ids:
-				var key := str(member_id)
-				var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
-				name_present.append(not str(names.get(key, "")).is_empty())
-				portrait_present.append(not str(appearance.get("body", "")).is_empty())
-			var diagnostic := {"rawPartyKeys": CoopService.party.keys(), "memberIds": ids,
-				"ownId": own_id, "hudNamesPresent": name_present,
-				"hudPortraitsPresent": portrait_present}
-			var signature := JSON.stringify(diagnostic)
-			if signature != _coop_hud_diag_signature:
-				print("COOP_DIAG hud ", signature)
-				_coop_hud_diag_signature = signature
-		else:
-			_coop_hud_diag_signature = ""
 
 func _coop_party_hud_data() -> Dictionary:
 	var party := CoopService.party.duplicate(true)
@@ -39332,7 +39310,7 @@ func _coop_party_hud_data() -> Dictionary:
 		return party
 	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
 	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
-	var own_id := str(AuthService.current_user.get("id", ""))
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
 	if not own_id.is_empty():
 		if not names.has(own_id):
 			names[own_id] = str(AuthService.current_user.get("username", ""))
@@ -39341,7 +39319,7 @@ func _coop_party_hud_data() -> Dictionary:
 	var world := GameState.get_world()
 	var remote_players: Dictionary = world.get("remote_player_avatars") if world != null and world.get("remote_player_avatars") is Dictionary else {}
 	for member_id: Variant in ids:
-		var key := str(member_id)
+		var key := str(int(member_id))
 		if key == own_id:
 			continue
 		var avatar: Node = remote_players.get(key)

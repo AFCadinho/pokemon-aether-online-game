@@ -20,6 +20,10 @@ func _run() -> void:
 	service.apply_state(incomplete_party)
 	service.apply_state(incomplete_party)
 	_expect(missing_profile_sources == ["local development"], "missing member profiles identify the connected server once")
+	var parsed_party: Dictionary = JSON.parse_string('{"party":{"leaderId":2,"memberIds":[2,7],"memberUsernames":{"2":"admin","7":"afc_adinho"},"memberAppearances":{"2":{"body":"Gen4_Base_v1"},"7":{"body":"Gen4_Base_F_v1"}}},"invitations":[],"activity":{}}')
+	service.apply_state(parsed_party)
+	_expect(typeof(service.party["memberIds"][0]) == TYPE_INT and service.party["memberIds"] == [2, 7], "JSON float member IDs normalize to integer IDs")
+	_expect(missing_profile_sources.size() == 1, "canonical member keys find both names and portraits after JSON parsing")
 	gateway_config.set("cached_url", previous_gateway_url)
 	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
 	for trainer: String in service.ORDINARY_TRAINERS:
@@ -148,7 +152,7 @@ func _run() -> void:
 	overlay_ui.call("_position_coop_party_hud")
 	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
 	service.available = true
-	service.party = {"memberIds": [1, 2], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
+	service.party = {"memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
 		"memberAppearances": {"1": {"body": "Gen4_Base_v1", "gender": "male"}, "2": {"body": "Gen4_Base_F_v1", "gender": "female"}},
 		"sharedLevelCap": 20}
 	overlay_ui.call("_refresh_coop_party_hud")
