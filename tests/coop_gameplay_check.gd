@@ -79,6 +79,8 @@ func _run() -> void:
 	_expect(presenter.get("cards").size() == 4
 		and presenter.get("embedded_hosts").get("stage") == mounted_battle.get_node("%BattleStage")
 		and mounted_battle.get_node("%BattleBackground").visible
+		and not mounted_battle.get_node("%ActionsDock").visible
+		and not mounted_battle.get_node("%PlayerStagePartyRail").visible
 		and mounted_battle.get_node("%PlayerSpriteBox").visible
 		and mounted_battle.get_node("%EnemySpriteBox").visible
 		and mounted_battle.get_node("%PlayerSpriteBox").get_node("DoubleBattleContainer").visible
