@@ -9,6 +9,7 @@ const MONEY_REWARD_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.
 const GEMS_REWARD_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const AETHERITE_REWARD_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
 const BATTLE_POINTS_REWARD_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
+const QUEST_OFFER_VERTICAL_LIFT := 56.0
 
 static var reward_move_type_index: Dictionary = {}
 static var reward_move_type_index_loaded := false
@@ -22,14 +23,15 @@ signal quest_offer_resolved(accepted: bool)
 @onready var portrait_panel: Panel = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel
 @onready var npc_sprite: TextureRect = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/PortraitPanel/PortraitMargin/NPCSprite
 @onready var text_label: RichTextLabel = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RichTextLabel
-@onready var quest_offer_content: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent
-@onready var quest_offer_type_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/QuestTypeLabel
-@onready var quest_offer_title_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/QuestTitleLabel
-@onready var quest_offer_summary_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/QuestSummaryLabel
-@onready var quest_offer_objective_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveHeading
-@onready var quest_offer_objective_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/ObjectiveLabel
-@onready var quest_offer_reward_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardHeading
-@onready var quest_offer_reward_entries: HFlowContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardEntries
+@onready var quest_offer_scroll: ScrollContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll
+@onready var quest_offer_content: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent
+@onready var quest_offer_type_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/QuestTypeLabel
+@onready var quest_offer_title_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/QuestTitleLabel
+@onready var quest_offer_summary_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/QuestSummaryLabel
+@onready var quest_offer_objective_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/ObjectiveHeading
+@onready var quest_offer_objective_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/ObjectiveLabel
+@onready var quest_offer_reward_heading: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/RewardHeading
+@onready var quest_offer_reward_entries: HFlowContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferScroll/QuestOfferContent/RewardCard/RewardMargin/RewardEntries
 @onready var quest_offer_status_label: Label = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferStatus
 @onready var quest_offer_actions: HBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions
 @onready var quest_offer_decline_button: Button = $PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferActions/DeclineButton
@@ -42,6 +44,8 @@ var is_open := false
 var just_started := false
 var quest_offer_open := false
 var quest_offer_pending := false
+var quest_offer_layout_ready := false
+var quest_offer_layout_generation := 0
 var offered_quest: Dictionary = {}
 var input_state_before_open: Dictionary = {}
 var has_captured_input_state := false
@@ -55,6 +59,7 @@ func _ready() -> void:
 	quest_offer_decline_button.pressed.connect(_on_quest_offer_declined)
 	quest_offer_accept_button.pressed.connect(_on_quest_offer_accepted)
 	quest_offer_close_button.pressed.connect(hide_dialogue)
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	hide_dialogue()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -114,6 +119,8 @@ func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = n
 
 func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D = null) -> void:
 	_capture_input_state_before_open()
+	quest_offer_layout_generation += 1
+	quest_offer_layout_ready = false
 	offered_quest = quest.duplicate(true)
 	quest_offer_open = true
 	quest_offer_pending = false
@@ -123,20 +130,21 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	_set_portrait_texture(_resolve_mugshot(speaker_name, mugshot))
 	_populate_quest_offer(offered_quest)
 	text_label.visible = false
-	quest_offer_content.visible = true
+	quest_offer_scroll.visible = true
+	quest_offer_scroll.scroll_vertical = 0
 	quest_offer_decline_button.text = _localized_text("common.decline", "Decline")
 	quest_offer_accept_button.text = _localized_text("common.accept", "Accept")
 	quest_offer_status_label.visible = false
 	quest_offer_actions.visible = true
 	quest_offer_close_button.visible = true
 	continue_arrow.visible = false
-	panel_container.offset_top = 36.0
-	panel_container.offset_bottom = 374.0
+	_layout_quest_offer()
 	is_open = true
 	just_started = false
 	visible = true
 	GameState.lock_input()
 	quest_offer_accept_button.grab_focus()
+	_settle_quest_offer_layout(quest_offer_layout_generation)
 
 
 func _set_portrait_texture(texture: Texture2D) -> void:
@@ -223,6 +231,8 @@ func _on_quest_offer_accepted() -> void:
 
 func _finish_quest_offer(accepted: bool) -> void:
 	var was_open := quest_offer_open
+	quest_offer_layout_generation += 1
+	quest_offer_layout_ready = false
 	quest_offer_open = false
 	quest_offer_pending = false
 	is_open = false
@@ -264,7 +274,7 @@ func _restore_input_state_after_close() -> void:
 
 func _reset_quest_offer_view() -> void:
 	text_label.visible = true
-	quest_offer_content.visible = false
+	quest_offer_scroll.visible = false
 	quest_offer_actions.visible = false
 	quest_offer_close_button.visible = false
 	quest_offer_status_label.visible = false
@@ -275,8 +285,37 @@ func _reset_quest_offer_view() -> void:
 
 
 func _restore_dialogue_size() -> void:
+	panel_container.offset_left = -380.0
+	panel_container.offset_right = 380.0
 	panel_container.offset_top = 92.0
 	panel_container.offset_bottom = 262.0
+
+
+func _on_viewport_size_changed() -> void:
+	if quest_offer_open:
+		_layout_quest_offer()
+
+
+func _layout_quest_offer() -> void:
+	var viewport_size := get_viewport_rect().size
+	var panel_width := minf(760.0, maxf(320.0, viewport_size.x - 24.0))
+	var desired_height := 420.0
+	if quest_offer_layout_ready:
+		desired_height = maxf(360.0, quest_offer_content.get_combined_minimum_size().y + 116.0)
+	var panel_height := minf(desired_height, maxf(240.0, viewport_size.y - 24.0))
+	panel_container.offset_left = -panel_width / 2.0
+	panel_container.offset_right = panel_width / 2.0
+	panel_container.offset_top = maxf(12.0, (viewport_size.y - panel_height) / 2.0 - QUEST_OFFER_VERTICAL_LIFT)
+	panel_container.offset_bottom = panel_container.offset_top + panel_height
+
+
+func _settle_quest_offer_layout(generation: int) -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not quest_offer_open or generation != quest_offer_layout_generation:
+		return
+	quest_offer_layout_ready = true
+	_layout_quest_offer()
 
 
 func _populate_quest_offer(quest: Dictionary) -> void:
@@ -321,10 +360,23 @@ func _populate_quest_reward_entries(rewards_value: Variant) -> void:
 		quest_offer_reward_entries.add_child(_create_quest_reward_label("—"))
 
 
-func _create_quest_reward_entry(reward: Dictionary, reward_text: String) -> HBoxContainer:
+func _create_quest_reward_entry(reward: Dictionary, reward_text: String) -> PanelContainer:
+	var chip := PanelContainer.new()
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#322919")
+	style.border_color = Color("#846329")
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(5)
+	style.content_margin_left = 6
+	style.content_margin_top = 3
+	style.content_margin_right = 7
+	style.content_margin_bottom = 3
+	chip.add_theme_stylebox_override("panel", style)
+	chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var entry := HBoxContainer.new()
 	entry.add_theme_constant_override("separation", 5)
 	entry.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chip.add_child(entry)
 	if str(reward.get("type", "")) == "item":
 		var item_id := str(reward.get("itemId", "")).strip_edges()
 		var icon_texture := _quest_reward_item_icon(item_id)
@@ -335,14 +387,14 @@ func _create_quest_reward_entry(reward: Dictionary, reward_text: String) -> HBox
 			_quest_reward_currency_icon(str(reward.get("currency", "")).strip_edges().to_lower())
 		)
 	entry.add_child(_create_quest_reward_label(reward_text))
-	return entry
+	return chip
 
 
 func _add_quest_reward_icon(entry: HBoxContainer, icon_texture: Texture2D) -> void:
 	if icon_texture == null:
 		return
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(28, 28)
+	icon.custom_minimum_size = Vector2(22, 22)
 	icon.texture = icon_texture
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -355,7 +407,7 @@ func _create_quest_reward_label(reward_text: String) -> Label:
 	var label := Label.new()
 	label.text = reward_text
 	label.add_theme_color_override("font_color", Color(1.0, 0.87, 0.48, 1.0))
-	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_font_size_override("font_size", 14)
 	label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return label
