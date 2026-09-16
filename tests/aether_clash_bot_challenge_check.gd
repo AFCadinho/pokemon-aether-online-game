@@ -74,9 +74,9 @@ func _ready() -> void:
 	captain.queue_free()
 	var lobby := load("res://scenes/overworld/aether_clash/aether_clash_lobby.tscn").instantiate() as Node2D
 	var placed := lobby.get_node("Entities/NPCs/ClashTrainingCaptain") as Node2D
-	_check(placed.position == Vector2(1168, 1360), "NPC agrees with server interaction position")
+	_check(placed.position == Vector2(528, 816), "NPC agrees with server interaction position")
 	var collision := lobby.get_node("Tiles/Collision") as TileMapLayer
-	var tile := Vector2i(36, 42)
+	var tile := Vector2i(16, 25)
 	_check(collision.get_cell_source_id(tile) == -1, "Captain stands on a walkable tile")
 	var reachable := false
 	for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:

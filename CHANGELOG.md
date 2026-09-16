@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild training challenges now recognize the Captain at her new lobby position.
+
 - Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.
 
 - Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
