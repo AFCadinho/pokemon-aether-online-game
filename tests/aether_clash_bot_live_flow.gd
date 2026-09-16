@@ -147,12 +147,18 @@ func _ready() -> void:
 			_fail("AUTO_LEAD_PREVIEW_MISSING")
 			return
 		await get_tree().process_frame
+	print("TURN1_TEST t=", Time.get_ticks_msec(), " stage=preview_visible")
 	var intro_deadline := Time.get_ticks_msec() + 45000
 	while battle.team_preview_lead_selection_active or not battle.battle_actions_ready:
 		if Time.get_ticks_msec() >= intro_deadline:
+			print("TURN1_TEST t=", Time.get_ticks_msec(), " stage=intro_timeout preview=", battle.team_preview_lead_selection_active,
+				" ready=", battle.battle_actions_ready, " phase=", battle.pvp_last_phase,
+				" next=", battle.pvp_last_next_phase, " fence=", not battle.pvp_pending_presentation_fence.is_empty())
 			_fail("AUTO_LEAD_INTRO_TIMEOUT")
 			return
 		await get_tree().process_frame
+	var intro_finished_at := Time.get_ticks_msec()
+	print("TURN1_TEST t=", intro_finished_at, " stage=intro_ready locked=", battle.battle_input_locked)
 	var controls_deadline := Time.get_ticks_msec() + 8000
 	while battle.battle_input_locked:
 		if Time.get_ticks_msec() >= controls_deadline:
@@ -168,6 +174,7 @@ func _ready() -> void:
 			_fail("TURN1_MOVES_LOCKED_AFTER_AUTO_LEAD")
 			return
 		await get_tree().process_frame
+	print("TURN1_TEST t=", Time.get_ticks_msec(), " stage=controls_unlocked delay_ms=", Time.get_ticks_msec() - intro_finished_at)
 	print("LIVE_GODOT_STAGE auto_lead_turn1_controls_ready")
 	await battle._on_forfeit_confirmed()
 	if not battle.battle_finished:

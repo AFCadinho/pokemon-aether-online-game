@@ -4021,6 +4021,8 @@ func _show_current_action_prompt() -> void:
 	current_action_panel.set_message(event_text_formatter.format_action_prompt(_get_active_display_name("p1")))
 
 func _set_battle_input_locked(is_locked: bool) -> void:
+	var requested_unlock := not is_locked
+	var was_locked := battle_input_locked
 	if not is_locked and not _is_pvp_battle() and action_flow.http_recovery_required and not non_pvp_opponent_force_switch_recovery_active and not non_pvp_recovery_failed:
 		_show_non_pvp_opponent_force_switch_wait.call_deferred()
 	if not _is_pvp_battle() and (action_flow.http_recovery_required or non_pvp_opponent_force_switch_recovery_active or non_pvp_recovery_failed):
@@ -4035,6 +4037,8 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 	if not is_locked and _is_pvp_presentation_hold_active() and not allows_local_prechoice:
 		is_locked = true
 	battle_input_locked = is_locked
+	if was_locked != is_locked or (requested_unlock and is_locked):
+		_trace_auto_lead_turn1("input_lock", "requested_unlock=%s" % requested_unlock)
 	if action_buttons.has_method("set_all_actions_disabled"):
 		action_buttons.set_all_actions_disabled(is_locked)
 	if moves_grid.has_method("set_input_disabled"):
@@ -4061,12 +4065,14 @@ func _update_pvp_presentation_schedule(response: Dictionary) -> void:
 	var decisions: Dictionary = presentation.get("decisions", {})
 	var schedule: Dictionary = decisions.get(_get_local_state_player_id(), decisions.get(action_flow.local_player_id, {}))
 	if schedule.is_empty() or str(schedule.get("status", "")) != "SCHEDULED":
+		_trace_auto_lead_turn1("schedule_clear")
 		pvp_presentation_actionable_local_msec = 0
 		pvp_presentation_schedule_token = ""
 		pvp_presentation_schedule_source_batch_id = ""
 		return
 	var source_batch_id := str(schedule.get("sourceEventBatchId", "")).strip_edges()
 	if _pvp_presentation_batch_was_released(source_batch_id):
+		_trace_auto_lead_turn1("schedule_already_released")
 		# A lead timeout can deliver turn_open before the preview completion
 		# response is applied. Never reinstall its already-released fallback hold.
 		pvp_presentation_actionable_local_msec = 0
@@ -4077,6 +4083,7 @@ func _update_pvp_presentation_schedule(response: Dictionary) -> void:
 	pvp_presentation_actionable_local_msec = Time.get_ticks_msec() + remaining
 	pvp_presentation_schedule_token = "%s:%s" % [schedule.get("decisionId", ""), schedule.get("decisionGeneration", 0)]
 	pvp_presentation_schedule_source_batch_id = source_batch_id
+	_trace_auto_lead_turn1("schedule_install", "remaining_ms=%d" % remaining)
 	_set_battle_input_locked(true)
 	_release_pvp_presentation_hold_after(remaining, pvp_presentation_schedule_token)
 
@@ -4088,6 +4095,7 @@ func _release_pvp_presentation_hold_after(remaining_msec: int, token: String) ->
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_schedule_source_batch_id = ""
+	_trace_auto_lead_turn1("schedule_fallback_expired")
 	_set_battle_input_locked(false)
 
 func _is_pvp_presentation_hold_active() -> bool:
@@ -4096,6 +4104,7 @@ func _is_pvp_presentation_hold_active() -> bool:
 func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> void:
 	if not bool(message.get("presentationReleased", false)):
 		return
+	_trace_auto_lead_turn1("presentation_release_received", "phase=%s" % str(message.get("phase", "")))
 	var released_batch_id := str(message.get("eventBatchId", "")).strip_edges()
 	if released_batch_id == "" or str(message.get("phase", "")) == "rendering_events":
 		return
@@ -4112,6 +4121,7 @@ func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> voi
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_schedule_source_batch_id = ""
+	_trace_auto_lead_turn1("presentation_hold_released")
 
 func _pvp_presentation_batch_was_released(source_batch_id: String) -> bool:
 	return (
@@ -8294,6 +8304,7 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	_debug_battle_start("initial.render.exit lastRenderedSeq=%d" % last_rendered_event_seq)
 
 func _show_battle_controls_after_initial_events() -> void:
+	_trace_auto_lead_turn1("intro_controls_start")
 	player_sprite_box.allow_web_sprite_upgrades()
 	enemy_sprite_box.allow_web_sprite_upgrades()
 	_update_battle_presentation("initial_setup")
@@ -8302,6 +8313,7 @@ func _show_battle_controls_after_initial_events() -> void:
 		return
 	_set_battle_input_locked(false)
 	_show_moves()
+	_trace_auto_lead_turn1("intro_controls_end")
 	if current_action_view == ActionView.MOVES and not battle_input_locked:
 		_show_current_action_prompt()
 
@@ -9100,6 +9112,7 @@ func _remember_spectator_canonical_response(response: Dictionary) -> void:
 
 
 func _finish_pvp_team_preview_selection(lead_response: Dictionary) -> Dictionary:
+	_trace_auto_lead_turn1("preview_finish", "response_phase=%s next=%s" % [str(lead_response.get("phase", "")), str(lead_response.get("nextPhase", ""))])
 	team_preview_lead_selection_active = false
 	pvp_team_preview_recovery_requested = false
 	pvp_pending_team_preview_completion.clear()
@@ -12607,6 +12620,7 @@ func _restore_pvp_ui_after_local_reconnect() -> void:
 		current_action_panel.set_message(_t("battle.prompt.waiting_opponent"))
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
+	_trace_auto_lead_turn1("render_completed", "success=%s" % bool(completion.get("success", false)))
 	_trace_pvp_flow("render_completed", {}, "completion=%s" % JSON.stringify(completion))
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
@@ -12644,6 +12658,7 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 	var event_seq_end := _get_int_from_variant(completion.get("event_seq_end", -1), -1)
 	var last_rendered_seq := _get_int_from_variant(completion.get("last_rendered_seq", -1), -1)
 	if event_batch_id == "" or event_seq_end < 0 or last_rendered_seq < 0:
+		_trace_auto_lead_turn1("ack_skip_metadata")
 		_trace_pvp_flow("ack.skip_missing_metadata", {}, "completion=%s" % JSON.stringify(completion))
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
@@ -12687,7 +12702,8 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 			]
 		)
 
-	PvpBattleRealtimeService.send_render_ack(
+	_trace_auto_lead_turn1("ack_send", "render_state=completed")
+	var ack_sent: bool = PvpBattleRealtimeService.send_render_ack(
 		battle_state.battle_id,
 		action_flow.local_player_id,
 		event_batch_id,
@@ -12699,6 +12715,11 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 		_get_int_from_variant(completion.get("total_event_count", -1), -1),
 		_get_int_from_variant(completion.get("observed_duration_ms", -1), -1)
 	)
+	_trace_auto_lead_turn1("ack_send_result", "sent=%s socket=%d joined=%s" % [
+		ack_sent,
+		PvpBattleRealtimeService.websocket.get_ready_state(),
+		PvpBattleRealtimeService.joined,
+	])
 
 func _retry_pending_pvp_render_ack() -> void:
 	if battle_finished or pvp_pending_render_ack_completion.is_empty():
@@ -13199,6 +13220,7 @@ func _get_pvp_connection_event_display_side(message: Dictionary) -> String:
 	return display_side
 
 func _apply_pvp_phase_update(message: Dictionary) -> void:
+	_trace_auto_lead_turn1("phase_update_received", "phase=%s released=%s" % [str(message.get("phase", "")), bool(message.get("presentationReleased", false))])
 	_trace_pvp_flow("phase_update.received", {}, "message=%s" % _describe_pvp_realtime_message(message))
 	var battle_id := str(message.get("battleId", "")).strip_edges()
 	if battle_state.battle_id != "" and battle_id != "" and battle_id != battle_state.battle_id:
@@ -13467,6 +13489,7 @@ func _apply_local_pvp_forced_switch_timeout(response: Dictionary) -> void:
 		_show_force_switch_if_needed()
 
 func _open_pvp_released_phase(phase: String) -> void:
+	_trace_auto_lead_turn1("phase_open", "phase=%s" % phase)
 	if battle_finished:
 		return
 	if _is_spectator_battle():
@@ -15000,6 +15023,16 @@ func _log_pvp_realtime(tag: String, details: String = "") -> void:
 		print("[PvPRealtime] %s" % tag)
 	else:
 		print("[PvPRealtime] %s | %s" % [tag, details])
+
+func _trace_auto_lead_turn1(stage: String, details: String = "") -> void:
+	if OS.get_environment("AETHER_CLASH_TURN1_TRACE") != "true" or not _is_pvp_battle():
+		return
+	print("TURN1_TRACE t=%d stage=%s preview=%s ready=%s locked=%s phase=%s next=%s rendering=%s fence=%s hold=%s ack_pending=%s %s" % [
+		Time.get_ticks_msec(), stage, team_preview_lead_selection_active,
+		battle_actions_ready, battle_input_locked, pvp_last_phase, pvp_last_next_phase,
+		pvp_event_queue.is_rendering, not pvp_pending_presentation_fence.is_empty(),
+		_is_pvp_presentation_hold_active(), not pvp_pending_render_ack_completion.is_empty(), details,
+	])
 
 func _trace_pvp_flow(tag: String, response: Dictionary = {}, details: String = "") -> void:
 	if not DEBUG_PVP_FLOW_TRACE:
