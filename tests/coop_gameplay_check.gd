@@ -101,6 +101,10 @@ func _run() -> void:
 	party_popup.call("_show_error", "coop_partner_too_far")
 	_expect((party_popup.get("_status") as Label).text == str(root.get_node("LocalizationManager").call("text", "ui.coop.wild.partner_too_far")),
 		"partner distance rejection is explained in the party popup")
+	service.party = {"sharedLevelCap": 20}
+	party_popup.call("_show_error", "coop_shared_level_cap_exceeded")
+	_expect((party_popup.get("_status") as Label).text.contains("20"), "shared level-cap rejection names the actual cap")
+	service.party = {}
 	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
 	var focused_recipient: LineEdit = party_popup.get("_recipient")
 	focused_recipient.grab_focus()
@@ -138,12 +142,15 @@ func _run() -> void:
 	_expect(load("res://scripts/ui/ui_overlay.gd") != null, "Socials overlay compiles with the party launcher")
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_expect(overlay_source.contains("CoopService.request_failed.connect(_on_coop_request_failed)")
-		and overlay_source.contains('add_system_message(LocalizationManager.text("ui.coop.wild.partner_too_far"))'),
-		"partner distance rejection reaches System chat")
+		and overlay_source.contains('key = "ui.coop.wild.partner_too_far"')
+		and overlay_source.contains('key = "ui.coop.wild.level_cap_exceeded"')
+		and overlay_source.contains("add_system_message(LocalizationManager.text(key,"),
+		"co-op admission rejection reaches System chat")
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var translations: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
-		_expect(translations is Dictionary and not str((translations as Dictionary).get("ui.coop.wild.partner_too_far", "")).is_empty(),
-			"partner distance notice has a %s translation" % locale)
+		_expect(translations is Dictionary and not str((translations as Dictionary).get("ui.coop.wild.partner_too_far", "")).is_empty()
+			and not str((translations as Dictionary).get("ui.coop.wild.level_cap_exceeded", "")).is_empty(),
+			"co-op admission notices have %s translations" % locale)
 	var overlay_scene: PackedScene = load("res://scenes/interface/ui_overlay.tscn")
 	var overlay_ui := overlay_scene.instantiate()
 	_expect(overlay_ui.get_node_or_null("Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton") != null, "Socials menu contains an Adventure Party launcher")

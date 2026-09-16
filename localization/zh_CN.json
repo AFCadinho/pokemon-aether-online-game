@@ -4470,6 +4470,7 @@
   "ui.storage.move.failed": "移动失败。",
   "ui.storage.move.coop_party_full": "冒险队伍中每位训练家最多携带 3 只宝可梦。请先将一只移入盒子。",
   "ui.coop.wild.partner_too_far": "冒险队伍的伙伴离得太远。请保持在 3 格以内，才能开始合作战斗。",
+  "ui.coop.wild.level_cap_exceeded": "队伍中有宝可梦超过共享的 {level} 级上限。请将其移入盒子，或换用等级更低的宝可梦。",
   "ui.storage.move.success": "宝可梦移至 {location}。",
   "ui.storage.location.party": "聚会",
   "ui.storage.location.party_slot": "队伍槽 {number}",
