@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
+
 - Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
 
 - Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
