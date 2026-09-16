@@ -2,9 +2,10 @@
 
 ## Unreleased
 
+- Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
+
 - Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
 
-- Adventure Party wild battles now explain when your partner is too far away, instead of silently missing every step.
 
 - Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
 

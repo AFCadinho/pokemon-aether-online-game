@@ -3643,6 +3643,15 @@ func start_triggered_wild_battle_for_area(
 		if not coop_step.get("success", false):
 			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
 		return
+	if coop_step.get("status", "") == "solo" and forced_species_id.is_empty():
+		var solo_encounter := WildEncounterProvider.resolve_wild_encounter(GameState.current_map, player.global_position, encounter_type)
+		if not bool(solo_encounter.get("available", false)):
+			return
+		if bool(solo_encounter.get("use_map_trigger", false)):
+			if not bool(GameState.current_map.call("should_trigger_wild_encounter", encounter_type)):
+				return
+		elif randf() > clampf(float(solo_encounter.get("chance", 0.0)), 0.0, 1.0):
+			return
 	if is_in_battle or wild_battle_resume_pending:
 		return
 
