@@ -240,7 +240,7 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 		return {"handled": true, "success": false, "code": "coop_start_pending"}
 	var result := await _request("grass-step", {"reservationId": pending_start["reservationId"]})
 	print("COOP_DIAG wild_server ", JSON.stringify({"success": bool(result.get("success", false)),
-		"http": int(result.get("status", 0)), "code": str(result.get("code", "")),
+		"http": int(result.get("status", 0)), "code": "" if result.get("success", false) else str(result.get("code", "")),
 		"status": str(result.get("body", {}).get("status", ""))}))
 	if result.get("success", false):
 		pending_start = {}
@@ -257,7 +257,8 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 			"http": int(refreshed.get("status", 0)), "activity": not activity.is_empty()}))
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
-	return {"handled": true, "success": result.get("success", false), "code": result.get("code", "coop_start_pending"),
+	return {"handled": true, "success": result.get("success", false),
+		"code": "" if result.get("success", false) else result.get("code", "coop_start_pending"),
 		"status": result.get("body", {}).get("status", "")}
 
 
