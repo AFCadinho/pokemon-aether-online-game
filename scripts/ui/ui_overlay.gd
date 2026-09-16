@@ -13657,6 +13657,7 @@ func _refresh_personal_buffs_compact_state() -> void:
 		)
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
+	_position_coop_party_hud()
 func _personal_buffs_summary_tooltip() -> String:
 	var lines: Array[String] = [LocalizationManager.plural(
 		"ui.buff.personal_active.one",
@@ -39278,11 +39279,11 @@ func _create_coop_party_hud() -> void:
 	coop_party_hud = Button.new()
 	coop_party_hud.name = "AdventurePartyHud"
 	coop_party_hud.visible = false
-	coop_party_hud.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	coop_party_hud.offset_left = -150.0
-	coop_party_hud.offset_top = 90.0
-	coop_party_hud.offset_right = 150.0
-	coop_party_hud.offset_bottom = 130.0
+	coop_party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	coop_party_hud.offset_left = -304.0
+	coop_party_hud.offset_right = -64.0
+	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 40.0
 	coop_party_hud.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	coop_party_hud.focus_mode = Control.FOCUS_NONE
 	coop_party_hud.add_theme_color_override("font_color", UI_TEXT)
@@ -39300,6 +39301,13 @@ func _create_coop_party_hud() -> void:
 	coop_party_hud.add_theme_stylebox_override("focus", hover)
 	coop_party_hud.pressed.connect(_open_coop_party_popup)
 	root_control.add_child(coop_party_hud)
+	_position_coop_party_hud()
+
+func _position_coop_party_hud() -> void:
+	if coop_party_hud == null or personal_buffs_panel == null:
+		return
+	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 40.0
 
 func _refresh_coop_party_hud() -> void:
 	if coop_party_hud == null:

@@ -119,6 +119,13 @@ func _run() -> void:
 	_expect(overlay_ui.get_node_or_null("Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton") != null, "Socials menu contains an Adventure Party launcher")
 	var party_hud := Button.new()
 	overlay_ui.set("coop_party_hud", party_hud)
+	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
+	overlay_ui.set("personal_buffs_panel", buffs_panel)
+	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD sits directly above personal buffs")
+	buffs_panel.offset_top -= 60.0
+	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
 	service.available = true
 	service.party = {"memberIds": [1, 2], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"}, "sharedLevelCap": 20}
 	overlay_ui.call("_refresh_coop_party_hud")
