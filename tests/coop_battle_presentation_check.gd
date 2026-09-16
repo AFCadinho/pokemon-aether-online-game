@@ -39,6 +39,26 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	await process_frame
+	var saved_party: Dictionary = service.party.duplicate(true)
+	var saved_activity: Dictionary = service.activity.duplicate(true)
+	service.party = {"leaderId": 1, "memberIds": [1, 2], "memberUsernames": {"1": "Adinho", "2": "Admin"}}
+	service.activity.activityId = "wild_grass:kanto_route_1"
+	panel._log.clear()
+	for event: Dictionary in [
+		{"kind": "switch", "actor": "p2", "details": "Furret, L6, M"},
+		{"kind": "switch", "actor": "p4", "details": "Furret, L6, F"},
+		{"kind": "switch", "actor": "p3", "details": "Pikachu, L12, F"},
+		{"kind": "switch", "actor": "p1", "details": "Pidgey, L12, M"},
+	]:
+		panel._append_event(event)
+	var opening_log: String = panel._log.get_parsed_text()
+	_expect(opening_log.count("A wild Furret has appeared!") == 2
+		and opening_log.contains("Go! Pikachu!")
+		and opening_log.contains("Adinho sent out Pidgey!")
+		and not opening_log.contains("L12") and not opening_log.contains("Wild Pokémon 1:"),
+		"wild doubles narrate both appearances and both Trainers without position summaries")
+	service.party = saved_party
+	service.activity = saved_activity
 	_expect(panel.cards.size() == 4 and panel.displayed_cursor == 20, "four slots mount and reconnect establishes event cursor")
 	_expect(panel.cards.p3.name.text.begins_with("YOU") and panel.cards.p1.name.text.begins_with("PARTNER"), "owner p3 is labelled independently from leader")
 	_expect(panel.cards.p3.info.text.contains("30 / 40") and panel.cards.p1.info.text.contains("80%"), "only own HP is exact")

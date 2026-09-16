@@ -801,12 +801,13 @@ func _refresh_target_highlight() -> void:
 
 
 func _append_event(event: Dictionary) -> void:
-	var actor := _role(str(event.get("actor", "")))
+	var controller := str(event.get("actor", ""))
+	var actor := _role(controller)
 	var text := ""
 	match str(event.get("kind", "")):
 		"turn": text = "— Turn %s —" % str(event.get("turn", ""))
 		"move": text = "%s used %s → %s" % [actor, str(event.get("move", "")), _role(str(event.get("target", "")))]
-		"switch", "drag", "replace", "detailschange": text = "%s: %s" % [actor, str(event.get("details", ""))]
+		"switch", "drag", "replace": text = _send_out_message(controller, str(event.get("details", "")))
 		"faint": text = "%s fainted." % actor
 		"-damage", "-heal": text = "%s: %s%% HP" % [actor, str(event.get("hpPercent", 0))]
 		"-status": text = "%s: %s" % [actor, str(event.get("status", ""))]
@@ -826,6 +827,19 @@ func _append_event(event: Dictionary) -> void:
 			_log.add_text(text + "\n")
 			if _log.get_line_count() > 220:
 				_log.remove_paragraph(0)
+
+
+func _send_out_message(controller: String, details: String) -> String:
+	var pokemon := details.split(",")[0].strip_edges()
+	if pokemon.is_empty():
+		return ""
+	if controller in ["p2", "p4"]:
+		return "A wild %s has appeared!" % pokemon if str(CoopService.activity.get("activityId", "")).begins_with("wild_") else "%s sent out %s!" % [_opponent_title(), pokemon]
+	if controller == CoopService.view.get("participant"):
+		return "Go! %s!" % pokemon
+	if controller in ["p1", "p3"]:
+		return "%s sent out %s!" % [_trainer_name(controller), pokemon]
+	return ""
 
 
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
