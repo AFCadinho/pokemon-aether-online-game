@@ -9,6 +9,7 @@ const MONEY_REWARD_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.
 const GEMS_REWARD_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const AETHERITE_REWARD_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
 const BATTLE_POINTS_REWARD_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
+const QUEST_OFFER_TOP_FRACTION := 0.25
 
 static var reward_move_type_index: Dictionary = {}
 static var reward_move_type_index_loaded := false
@@ -43,6 +44,8 @@ var is_open := false
 var just_started := false
 var quest_offer_open := false
 var quest_offer_pending := false
+var quest_offer_layout_ready := false
+var quest_offer_layout_generation := 0
 var offered_quest: Dictionary = {}
 var input_state_before_open: Dictionary = {}
 var has_captured_input_state := false
@@ -116,6 +119,8 @@ func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = n
 
 func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D = null) -> void:
 	_capture_input_state_before_open()
+	quest_offer_layout_generation += 1
+	quest_offer_layout_ready = false
 	offered_quest = quest.duplicate(true)
 	quest_offer_open = true
 	quest_offer_pending = false
@@ -139,7 +144,7 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	visible = true
 	GameState.lock_input()
 	quest_offer_accept_button.grab_focus()
-	_layout_quest_offer.call_deferred()
+	_settle_quest_offer_layout(quest_offer_layout_generation)
 
 
 func _set_portrait_texture(texture: Texture2D) -> void:
@@ -226,6 +231,8 @@ func _on_quest_offer_accepted() -> void:
 
 func _finish_quest_offer(accepted: bool) -> void:
 	var was_open := quest_offer_open
+	quest_offer_layout_generation += 1
+	quest_offer_layout_ready = false
 	quest_offer_open = false
 	quest_offer_pending = false
 	is_open = false
@@ -292,13 +299,23 @@ func _on_viewport_size_changed() -> void:
 func _layout_quest_offer() -> void:
 	var viewport_size := get_viewport_rect().size
 	var panel_width := minf(760.0, maxf(320.0, viewport_size.x - 24.0))
-	var content_height := quest_offer_content.get_combined_minimum_size().y
-	var desired_height := maxf(360.0, content_height + 116.0)
+	var desired_height := 420.0
+	if quest_offer_layout_ready:
+		desired_height = maxf(360.0, quest_offer_content.get_combined_minimum_size().y + 116.0)
 	var panel_height := minf(desired_height, maxf(240.0, viewport_size.y - 24.0))
 	panel_container.offset_left = -panel_width / 2.0
 	panel_container.offset_right = panel_width / 2.0
-	panel_container.offset_top = maxf(12.0, (viewport_size.y - panel_height) / 2.0)
+	panel_container.offset_top = maxf(12.0, (viewport_size.y - panel_height) * QUEST_OFFER_TOP_FRACTION)
 	panel_container.offset_bottom = panel_container.offset_top + panel_height
+
+
+func _settle_quest_offer_layout(generation: int) -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not quest_offer_open or generation != quest_offer_layout_generation:
+		return
+	quest_offer_layout_ready = true
+	_layout_quest_offer()
 
 
 func _populate_quest_offer(quest: Dictionary) -> void:
