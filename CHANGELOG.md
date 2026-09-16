@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your Adventure Party partner and shared level cap now appear in a compact in-game indicator below the location bar. Select it to open the party window.
+
 - Adventure Party invitations now show the current shared story level cap before you accept.
 
 - Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.

@@ -664,6 +664,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
 var coop_party_popup: Control
+var coop_party_hud: Button
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -1921,6 +1922,9 @@ func _ready() -> void:
 	CoopService.invitation_received.connect(_on_coop_invitation_received)
 	CoopService.invitation_sent.connect(_on_coop_invitation_sent)
 	CoopService.invitation_failed.connect(_on_coop_invitation_failed)
+	CoopService.state_changed.connect(_refresh_coop_party_hud)
+	_create_coop_party_hud()
+	_refresh_coop_party_hud()
 	socials_loans_button.pressed.connect(_on_socials_loans_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
@@ -39269,6 +39273,55 @@ func _on_socials_players_on_map_button_pressed() -> void:
 func _on_socials_adventure_party_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_coop_party_popup()
+
+func _create_coop_party_hud() -> void:
+	coop_party_hud = Button.new()
+	coop_party_hud.name = "AdventurePartyHud"
+	coop_party_hud.visible = false
+	coop_party_hud.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	coop_party_hud.offset_left = -150.0
+	coop_party_hud.offset_top = 90.0
+	coop_party_hud.offset_right = 150.0
+	coop_party_hud.offset_bottom = 130.0
+	coop_party_hud.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	coop_party_hud.focus_mode = Control.FOCUS_NONE
+	coop_party_hud.add_theme_color_override("font_color", UI_TEXT)
+	coop_party_hud.add_theme_color_override("font_hover_color", UI_TEXT)
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color("#0b1a2bea")
+	normal.border_color = Color("#315070")
+	normal.set_border_width_all(1)
+	normal.set_corner_radius_all(8)
+	coop_party_hud.add_theme_stylebox_override("normal", normal)
+	var hover := normal.duplicate() as StyleBoxFlat
+	hover.border_color = Color("#60d3ff")
+	coop_party_hud.add_theme_stylebox_override("hover", hover)
+	coop_party_hud.add_theme_stylebox_override("pressed", hover)
+	coop_party_hud.add_theme_stylebox_override("focus", hover)
+	coop_party_hud.pressed.connect(_open_coop_party_popup)
+	root_control.add_child(coop_party_hud)
+
+func _refresh_coop_party_hud() -> void:
+	if coop_party_hud == null:
+		return
+	var party: Dictionary = CoopService.party
+	var members: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	var own_id := int(AuthService.current_user.get("id", 0))
+	var partner_id := 0
+	for member_id: Variant in members:
+		if int(member_id) != own_id:
+			partner_id = int(member_id)
+			break
+	coop_party_hud.visible = CoopService.available and members.size() == 2 and partner_id > 0
+	if not coop_party_hud.visible:
+		return
+	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
+	var partner_name := str(names.get(str(partner_id), "Partner"))
+	var shared_cap := int(party.get("sharedLevelCap", 0))
+	coop_party_hud.text = "PARTY  •  %s" % partner_name
+	if shared_cap > 0:
+		coop_party_hud.text += "  •  Lv. %d cap" % shared_cap
+	coop_party_hud.tooltip_text = "Adventure Party with %s" % partner_name
 
 func _open_coop_party_popup(recipient_name: String = "") -> void:
 	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
