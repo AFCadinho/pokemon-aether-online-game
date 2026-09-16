@@ -85,6 +85,11 @@ func _run() -> void:
 	service.activity = {}
 	party_popup.call("open", "TrainerTwo")
 	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
+	var focused_recipient: LineEdit = party_popup.get("_recipient")
+	focused_recipient.grab_focus()
+	focused_recipient.text = "TrainerTwoMore"
+	party_popup.call("_refresh")
+	_expect(party_popup.get("_recipient") == focused_recipient and focused_recipient.has_focus() and focused_recipient.text == "TrainerTwoMore", "party polling keeps username input and focus while typing")
 	var observed_invitations: Array[Dictionary] = []
 	service.invitation_received.connect(func(invitation: Dictionary) -> void: observed_invitations.append(invitation))
 	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo", "sharedLevelCap": 20}
