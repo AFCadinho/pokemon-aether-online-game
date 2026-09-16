@@ -390,10 +390,11 @@ func _run() -> void:
 		and left_wild.material == null and right_wild.material == null,
 		"Escape cancels target selection without submitting an action")
 	var capture_player: CaptureBallAnimationPlayer = mounted_battle.get_node("%CaptureBallAnimationPlayer")
-	_expect(not presenter._capture_round_ready({"partnerReady": false, "turn": 4, "ended": false}, 4)
-		and presenter._capture_round_ready({"partnerReady": true, "turn": 4, "ended": false}, 4)
+	_expect(not presenter._capture_round_ready({"locked": true, "partnerReady": false, "turn": 4, "ended": false}, 4)
+		and not presenter._capture_round_ready({"locked": false, "partnerReady": true, "turn": 4, "ended": false}, 4)
+		and presenter._capture_round_ready({"locked": true, "partnerReady": true, "turn": 4, "ended": false}, 4)
 		and presenter._capture_round_ready({"partnerReady": false, "turn": 5, "ended": false}, 4),
-		"co-op capture preview waits for the partner's choice or the next resolved turn")
+		"shared co-op capture event waits until both choices are locked or the turn resolves")
 	_expect(presenter.embedded_hosts.get("capture_player") == capture_player and presenter._capture_status == null,
 		"co-op uses the normal capture animation and has no feedback label below the party")
 	presenter._capture_target_controller = "p2"
@@ -411,6 +412,15 @@ func _run() -> void:
 	_expect(thrown_balls.size() == 1 and ball_shakes.size() == 1
 		and left_wild.visible and right_wild.visible and not capture_player.visible,
 		"co-op catch preview throws and shakes the selected ball, then restores an escaped target")
+	var settings_manager := root.get_node("SettingsManager")
+	var capture_animations_enabled: bool = settings_manager.battle_animations
+	settings_manager.battle_animations = true
+	await presenter._animate_event({"kind": "coopcapture", "actor": "p3", "target": "p4",
+		"itemId": "poke-ball", "shakeCount": 1, "caught": false, "turn": 1})
+	_expect(thrown_balls.size() == 2 and ball_shakes.size() == 2 and right_wild.visible
+		and presenter._capture_target_controller == "p4",
+		"partner's shared capture event animates the partner's assigned wild Pokémon")
+	settings_manager.battle_animations = capture_animations_enabled
 	presenter._capture_feedback_text = "The Pokémon escaped from your ball."
 	presenter._capture_feedback_until_msec = Time.get_ticks_msec() + 4000
 	presenter._action_signature = ""
@@ -422,7 +432,6 @@ func _run() -> void:
 	presenter._update_actions()
 	var native_sprite := mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite") as AnimatedSprite2D
 	var native_origin := native_sprite.position
-	var settings_manager := root.get_node("SettingsManager")
 	var animation_setting: bool = settings_manager.battle_animations
 	settings_manager.battle_animations = true
 	presenter.set("_playing", true)

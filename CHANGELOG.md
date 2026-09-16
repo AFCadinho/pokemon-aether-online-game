@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Both Trainers now see a co-op Poké Ball throw against the correct wild Pokémon after their shared choices are in.
+
 - Co-op Poké Ball animations now wait until the other Trainer has chosen an action, matching the shared turn's presentation.
 
 - Co-op Poké Ball and partner-decision dialogs now have clearer titles, descriptions and styled choices; the bag's back action sits below the available balls.
