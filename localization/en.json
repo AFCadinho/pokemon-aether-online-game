@@ -4507,6 +4507,8 @@
   "ui.storage.move.saving": "Saving move...",
   "ui.storage.move.failed": "Move failed.",
   "ui.storage.move.coop_party_full": "Adventure Party allows up to 3 Pokémon per Trainer. Move one to a box first.",
+  "ui.coop.wild.partner_too_far": "Your Adventure Party partner is too far away. Stay within 3 tiles to start a co-op battle.",
+  "ui.coop.wild.level_cap_exceeded": "A party Pokémon exceeds the shared Lv. {level} cap. Move it to a box or use a lower-level Pokémon.",
   "ui.storage.move.success": "Pokémon moved to {location}.",
   "ui.storage.location.party": "party",
   "ui.storage.location.party_slot": "party slot {number}",
