@@ -39,9 +39,12 @@ func _run() -> void:
 	service.apply_view({"battleId": "coop-fixture", "revision": 3, "decisionId": "coop-1", "locked": true})
 	_expect(service.pending_command.is_empty(), "a locked own choice confirms an uncertain submission")
 	service.pending_command = {"decisionId": "coop-1", "idempotencyKey": "attack", "action": {"type": "move", "slot": 1, "target": 1}}
+	service.set("_poll_after", 10.0)
 	service.apply_view({"battleId": "coop-fixture", "revision": 4, "decisionId": "coop-1", "locked": false,
 		"exitRequest": {"type": "run", "requestedBy": "p3"}, "legalActions": [{"type": "run"}, {"type": "reject-exit"}]})
-	_expect(service.pending_command.is_empty() and service.view.exitRequest.type == "run", "reconnect replaces an ambiguous attack retry with the partner exit response")
+	_expect(service.pending_command.is_empty() and service.view.exitRequest.type == "run"
+		and float(service.get("_poll_after")) == 0.0,
+		"exit consent replaces an ambiguous attack retry and checks for the partner without normal poll delay")
 	service.apply_view({"battleId": "coop-fixture", "revision": 5, "decisionId": "coop-2", "locked": false, "exitRequest": null})
 	_expect(service.view.decisionId == "coop-2", "refusal reopens the same battle with a fresh decision ID")
 	service.apply_view({"battleId": "coop-fixture", "revision": 6, "decisionId": "coop-2", "locked": false,
@@ -71,6 +74,14 @@ func _run() -> void:
 	var mounted_world = load("res://tests/fixtures/coop_world_fixture.gd").new()
 	mounted_world.battle_ui_host = host
 	mounted_world.coop_world_ready = true
+	var saved_escape_tile := {"mapId": "kanto_route_1", "activityState": "idle", "position": {"x": 96.0, "y": 128.0}}
+	_expect(mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0))
+		and not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_2", Vector2(96.0, 128.0))
+		and not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(126.0, 128.0)),
+		"settled wild escape can resume in place only on the same saved tile")
+	saved_escape_tile["activityState"] = "battle"
+	_expect(not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0)),
+		"unsettled co-op battle never closes through the fast return path")
 	mounted_world._on_coop_state_changed()
 	_expect(host.visible and mounted_world.active_battle_kind == "coop" and host.get_child_count() == 1, "co-op entry shows the normally hidden battle host")
 	var mounted_battle: Control = host.get_child(0)
