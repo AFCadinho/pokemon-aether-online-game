@@ -32,6 +32,11 @@ func _run() -> void:
 	_check(bot.global_position == Vector2(336, 4112), "Bot renders at its fixed anchor")
 	_check(not bot.is_in_group("remote_player_avatar") and not bot.is_in_group("npc") and not bot.has_method("interact_with_player"), "Bot has no social/presence/NPC interactions")
 	_check(str(bot.nameplate.text).contains("[BOT]"), "Training bots are labelled")
+	_check(bot.nameplate.text == "Trainer 1 [BOT]", "Small training rosters show full bot names")
+	state.session.botCount = 21
+	duel.call("_apply_arena_state", state)
+	_check(bot.nameplate.text == "[BOT] 1", "Large training rosters retain compact bot labels")
+	state.session.botCount = 1
 	duel.call("_apply_arena_state", state)
 	_check(duel.bot_actors[2] == bot, "Repeated snapshots reuse the actor")
 	_check(not duel.call("is_world_actor_step_blocked", Vector2(240, 4112), Vector2(288, 4112)), "Entry phase cannot trigger contact battles")

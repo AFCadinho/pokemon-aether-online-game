@@ -196,6 +196,15 @@ func _run() -> void:
 	_expect(interaction_script != null and interaction_script.get_script_signal_list().any(func(entry: Dictionary) -> bool: return entry.get("name") == "coop_invitation_requested"), "nearby Trainer context offers party invitation routing")
 	var world = load("res://scripts/world/world.gd")
 	_expect(world != null and world.can_instantiate(), "world compiles with co-op entry and recovery hooks")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var wild_step_source := world_source.get_slice("func start_triggered_wild_battle_for_area(", 1).get_slice("\nfunc ", 0)
+	_expect(wild_step_source.contains("coop_wild_step_pending") and not wild_step_source.contains("GameState.lock_overworld_input()"),
+		"co-op grass checks cannot freeze movement for network round trips")
+	var service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
+	var grass_request_source := service_source.get_slice("func try_wild_step(", 1).get_slice("\nfunc ", 0)
+	_expect(not grass_request_source.contains("var refreshed := await refresh()")
+		and grass_request_source.contains('result.get("body", {}).get("status") != "miss"'),
+		"grass misses avoid redundant status requests while starts still refresh")
 	await process_frame
 	quit(1 if failed else 0)
 

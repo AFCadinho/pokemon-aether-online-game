@@ -4,6 +4,10 @@
 
 - Fixed the local browser preview and web gateway blocking the Route 3 Magikarp purchase before it reached the game server.
 
+- Bot Guild trainers now show their names on the arena map when there is room; very large rosters keep compact [BOT] labels to avoid overlap.
+
+- Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
+
 - The Route 3 Pokémon Center Magikarp purchase now works in the browser and shows its new ₽2,000 price.
 
 - The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.

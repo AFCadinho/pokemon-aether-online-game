@@ -31,8 +31,8 @@ class FixtureCaptain extends "res://scripts/world/npcs/aether_clash_bot_captain_
 	var confirmations := 0
 	func _load_training_options() -> Dictionary:
 		return await service.load_aether_clash_bot_options()
-	func _create_training_challenge(count: int, tier_id: String, access: String) -> Dictionary:
-		return await service.create_aether_clash_bot_challenge(count, tier_id, access)
+	func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String) -> Dictionary:
+		return await service.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy)
 	func show_dialogue(_lines: Array[String] = [], _speaker := "") -> bool:
 		confirmations += 1
 		return true
@@ -109,9 +109,9 @@ func _ready() -> void:
 			camera.make_current()
 			await _capture("arena")
 		_check(duel.bot_actors.size() == counts[1] and duel.arena_players.size() == counts[0] + counts[1], "Unequal rosters render without a fixed 6v6 limit")
-		_check(duel.bot_actors[100].nameplate.text == "[BOT] 1", "Compact labels preserve bot ordinal and BOT identification")
+		_check(duel.bot_actors[100].nameplate.text == "Trainer 1 [BOT]", "Well-spaced bots show their full names")
 		for actor: Node2D in duel.bot_actors.values():
-			_check(actor.nameplate.get_minimum_size().x <= 64, "Bot label fits minimum anchor spacing")
+			_check(actor.nameplate.get_minimum_size().x <= 144, "Named bot label fits the spaced anchors")
 		var anchor: Vector2 = duel.bot_actors[100].global_position
 		human.global_position = anchor - Vector2(96, 0)
 		_check(not duel.is_world_actor_step_blocked(human.global_position, anchor - Vector2(48, 0)), "Entry window does not start a battle")
