@@ -11,6 +11,16 @@ func _run() -> void:
 	var service := root.get_node("CoopService")
 	service.set_process(false)
 	service.reset()
+	var gateway_config := root.get_node("GatewayApiConfig")
+	var previous_gateway_url: String = gateway_config.get("cached_url")
+	gateway_config.set("cached_url", "http://localhost:8000")
+	var missing_profile_sources: Array[String] = []
+	service.party_profile_missing.connect(func(source: String) -> void: missing_profile_sources.append(source))
+	var incomplete_party := {"party": {"memberIds": [1, 2]}, "invitations": [], "activity": {}}
+	service.apply_state(incomplete_party)
+	service.apply_state(incomplete_party)
+	_expect(missing_profile_sources == ["local development"], "missing member profiles identify the connected server once")
+	gateway_config.set("cached_url", previous_gateway_url)
 	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")

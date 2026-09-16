@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- If a connected server omits party names or portraits, System chat now identifies whether the client is using the local, production or a custom API.
+
 - Typing a Trainer name in the Adventure Party invite window is no longer interrupted by the background party-status refresh.
 
 - The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
