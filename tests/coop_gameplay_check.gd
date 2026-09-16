@@ -119,7 +119,8 @@ func _run() -> void:
 	service.activity = {"status": "active"}
 	service.view = {"battleId": "coop-fixture", "revision": 8, "turn": 1, "decisionId": "coop-4",
 		"locked": false, "participant": "p1", "moves": [{"slot": 1, "name": "Pound", "pp": 35, "maxPp": 35}],
-		"legalActions": [{"type": "move", "slot": 1, "target": 1}, {"type": "run"}, {"type": "switch", "slot": 2}],
+		"legalActions": [{"type": "move", "slot": 1, "target": 1}, {"type": "move", "slot": 1, "target": 2},
+			{"type": "run"}, {"type": "switch", "slot": 2}],
 		"captureOptions": {"balls": [{"itemId": "poke-ball", "quantity": 1}], "storageAvailable": true}}
 	presenter.set("_action_signature", "")
 	presenter._update_actions()
@@ -130,8 +131,32 @@ func _run() -> void:
 		and not mounted_battle.get_node("%PlayerPartyGrid").is_slot_selectable(1),
 		"co-op legal moves, Bag and Run use the existing battle controls")
 	presenter._select_move(1)
-	_expect(presenter.get("cards")["p2"].target.visible,
-		"choosing a doubles move highlights its legal field target")
+	_expect(presenter.get("cards")["p2"].target.visible
+		and presenter.get("cards")["p4"].target.visible
+		and presenter.get("selected_target") == "p2",
+		"choosing a doubles move highlights its legal field targets")
+	var target_key := InputEventKey.new()
+	target_key.pressed = true
+	target_key.keycode = KEY_RIGHT
+	presenter._input(target_key)
+	_expect(presenter.get("selected_target") == "p4" and presenter.get("cards")["p4"].target.modulate.a == 1.0,
+		"arrow keys move the focused target before Space confirms it")
+	target_key.keycode = KEY_ESCAPE
+	presenter._input(target_key)
+	_expect(presenter.get("selected_move") == 0 and not presenter.get("cards")["p2"].target.visible,
+		"Escape cancels target selection without submitting an action")
+	var native_sprite := mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite") as AnimatedSprite2D
+	var native_origin := native_sprite.position
+	var settings_manager := root.get_node("SettingsManager")
+	var animation_setting: bool = settings_manager.battle_animations
+	settings_manager.battle_animations = true
+	presenter.set("_playing", true)
+	await presenter._animate_event({"kind": "move", "actor": "p1"})
+	await presenter._animate_event({"kind": "-damage", "actor": "p1"})
+	presenter.set("_playing", false)
+	settings_manager.battle_animations = animation_setting
+	_expect(native_sprite.position == native_origin and native_sprite.modulate == Color.WHITE,
+		"generic double attack and hit animation restore only the affected sprite")
 	mounted_world._on_coop_state_changed()
 	_expect(host.get_child_count() == 1, "repeated snapshots do not mount duplicate battle scenes")
 	mounted_world.free()

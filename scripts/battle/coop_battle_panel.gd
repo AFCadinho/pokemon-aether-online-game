@@ -3,9 +3,11 @@ extends Control
 const SLOTS := ["p2", "p4", "p1", "p3"]
 const LOCATIONS := {"p1": -1, "p3": -2, "p2": 1, "p4": 2}
 const ACCENT := Color("67e8bf")
+const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
 var embedded_hosts: Dictionary = {}
 var cards: Dictionary = {}
 var selected_move := 0
+var selected_target := ""
 var displayed_cursor := -1
 var displayed_battle := ""
 var _decision := ""
@@ -37,6 +39,9 @@ var _opponent_party: PartyGrid
 var _first_trainer: BattleTrainerSprite
 var _second_trainer: BattleTrainerSprite
 var _trainer_identity := ""
+var _native_attack_tween: Tween
+var _native_animation_sprite: AnimatedSprite2D
+var _native_animation_origin := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -108,11 +113,26 @@ func _ready() -> void:
 		_native_moves.move_selected.connect(_select_move)
 		_native_utility.action_selected.connect(_on_native_utility_action)
 		for controller: String in SLOTS:
-			var target := _button(stage, "Target " + _role(controller), func() -> void: _select_target(controller))
+			var target := _button(stage, "", func() -> void: _select_target(controller))
 			target.visible = false
 			target.z_index = 60
-			target.custom_minimum_size = Vector2(120, 36)
-			cards[controller] = {"target": target}
+			target.custom_minimum_size = Vector2(180, 170)
+			target.size = Vector2(180, 170)
+			var target_label := Label.new()
+			target_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+			target_label.offset_top = -28
+			target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			target_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			target.add_child(target_label)
+			var style := StyleBoxFlat.new()
+			style.bg_color = Color(0.02, 0.09, 0.16, 0.12)
+			style.border_color = ACCENT
+			style.set_border_width_all(2)
+			style.set_corner_radius_all(16)
+			target.add_theme_stylebox_override("normal", style)
+			target.add_theme_stylebox_override("hover", style)
+			target.add_theme_stylebox_override("pressed", style)
+			cards[controller] = {"target": target, "target_label": target_label}
 		stage.resized.connect(_position_native_targets)
 		_position_native_targets()
 		_prompt = prompt_panel.message_label
@@ -200,11 +220,11 @@ func _position_native_targets() -> void:
 	if not _native_mode:
 		return
 	var stage: Control = embedded_hosts["stage"]
-	var positions := {"p1": Vector2(0.31, 0.26), "p3": Vector2(0.31, 0.34),
-		"p2": Vector2(0.61, 0.10), "p4": Vector2(0.61, 0.18)}
+	var positions := {"p1": Vector2(0.20, 0.62), "p3": Vector2(0.43, 0.62),
+		"p2": Vector2(0.61, 0.39), "p4": Vector2(0.81, 0.39)}
 	for controller: String in SLOTS:
 		var target: Button = cards[controller].target
-		target.position = stage.size * positions[controller]
+		target.position = stage.size * positions[controller] - target.custom_minimum_size * 0.5
 
 
 func _sync() -> void:
@@ -220,10 +240,12 @@ func _sync() -> void:
 	if battle_id != displayed_battle:
 		_epoch += 1
 		_effects.cancel()
+		_cancel_native_attack_tween()
 		displayed_battle = battle_id
 		displayed_cursor = -1
 		_revision = -1
 		selected_move = 0
+		selected_target = ""
 		if _native_mode:
 			_native_log.clear_log()
 		else:
@@ -232,6 +254,7 @@ func _sync() -> void:
 		_apply_positions(_latest)
 	if str(_latest.get("decisionId", "")) != _decision or _latest.get("locked", true):
 		selected_move = 0
+		selected_target = ""
 		_bag_open = false
 	_decision = str(_latest.get("decisionId", ""))
 	_update_actions()
@@ -535,13 +558,21 @@ func _update_actions() -> void:
 			button.disabled = choices.is_empty()
 			button.modulate = ACCENT if selected_move == slot else Color.WHITE
 	if selected_move > 0:
-		_prompt.text = "Select a highlighted target on the field."
+		_prompt.text = "Choose a target: click a Pokémon or use arrows + Space."
+		var legal_targets: Array[String] = []
 		for action: Dictionary in _move_actions(selected_move):
 			for controller: String in SLOTS:
 				if action.get("target") == LOCATIONS[controller]:
 					cards[controller].target.visible = true
-					cards[controller].target.text = "Target " + _role(controller)
-					cards[controller].target.modulate = ACCENT
+					if _native_mode:
+						cards[controller].target_label.text = _role(controller)
+					else:
+						cards[controller].target.text = "Target " + _role(controller)
+					if not legal_targets.has(controller):
+						legal_targets.append(controller)
+		if not legal_targets.has(selected_target):
+			selected_target = legal_targets[0] if not legal_targets.is_empty() else ""
+		_refresh_target_highlight()
 	if not _native_mode:
 		var switches := HBoxContainer.new()
 		_actions.add_child(switches)
@@ -590,15 +621,58 @@ func _select_move(slot: int) -> void:
 		await CoopService.submit_action(actions[0])
 		return
 	selected_move = slot
+	selected_target = ""
 	_update_actions()
 
 
 func _select_target(controller: String) -> void:
-	if _playing: return
+	if _playing or not CoopService.pending_command.is_empty() or selected_move <= 0:
+		return
 	for action: Dictionary in _move_actions(selected_move):
 		if action.get("target") == LOCATIONS.get(controller):
+			selected_target = controller
 			await CoopService.submit_action(action)
 			return
+
+
+func _input(event: InputEvent) -> void:
+	if not _native_mode or selected_move <= 0 or _playing or not CoopService.pending_command.is_empty():
+		return
+	var focused_control := get_viewport().gui_get_focus_owner()
+	if focused_control is LineEdit or focused_control is TextEdit:
+		return
+	if not (event is InputEventKey) or not event.pressed or event.echo:
+		return
+	var targets: Array[String] = []
+	for controller: String in SLOTS:
+		if cards[controller].target.visible:
+			targets.append(controller)
+	if targets.is_empty():
+		return
+	match event.keycode:
+		KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN:
+			var direction := -1 if event.keycode in [KEY_LEFT, KEY_UP] else 1
+			selected_target = targets[posmod(targets.find(selected_target) + direction, targets.size())]
+			_refresh_target_highlight()
+			get_viewport().set_input_as_handled()
+		KEY_SPACE, KEY_ENTER:
+			get_viewport().set_input_as_handled()
+			_select_target(selected_target)
+		KEY_ESCAPE:
+			selected_move = 0
+			selected_target = ""
+			_update_actions()
+			get_viewport().set_input_as_handled()
+
+
+func _refresh_target_highlight() -> void:
+	if not _native_mode:
+		return
+	for controller: String in SLOTS:
+		var target: Button = cards[controller].target
+		var focused := controller == selected_target
+		target.modulate = Color.WHITE if focused else Color(0.75, 1.0, 0.91, 0.65)
+		target.add_theme_color_override("font_color", ACCENT if focused else Color.WHITE)
 
 
 func _append_event(event: Dictionary) -> void:
@@ -631,6 +705,11 @@ func _append_event(event: Dictionary) -> void:
 
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
 	if _native_mode:
+		if not SettingsManager.battle_animations:
+			return
+		match str(event.get("kind", "")):
+			"move": await _play_native_attack(str(event.get("actor", "")))
+			"-damage": await _play_native_hit(str(event.get("actor", "")))
 		return
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
@@ -649,6 +728,57 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 		"switch", "drag", "replace", "detailschange": _set_details(actor, str(event.get("details", "")), true)
 		_: return
 	await get_tree().create_timer(0.32 if event.get("kind") == "faint" else 0.22).timeout
+
+
+func _native_sprite(controller: String) -> AnimatedSprite2D:
+	if not _native_mode or controller not in SLOTS:
+		return null
+	var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+	var sprite_path := "DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite" if controller in ["p1", "p2"] else "DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2"
+	return box.get_node_or_null(sprite_path) as AnimatedSprite2D
+
+
+func _cancel_native_attack_tween() -> void:
+	if _native_attack_tween != null and _native_attack_tween.is_valid():
+		_native_attack_tween.kill()
+	if is_instance_valid(_native_animation_sprite):
+		_native_animation_sprite.position = _native_animation_origin
+		_native_animation_sprite.modulate = Color.WHITE
+	_native_attack_tween = null
+	_native_animation_sprite = null
+
+
+func _play_native_attack(controller: String) -> void:
+	var sprite := _native_sprite(controller)
+	if sprite == null or not sprite.visible:
+		return
+	_cancel_native_attack_tween()
+	_native_animation_sprite = sprite
+	_native_animation_origin = sprite.position
+	var direction := Vector2(-24.0, 0.0) if controller in ["p2", "p4"] else Vector2(24.0, 0.0)
+	_native_attack_tween = create_tween()
+	_native_attack_tween.tween_property(sprite, "position", _native_animation_origin + direction, 0.09)
+	_native_attack_tween.tween_property(sprite, "position", _native_animation_origin, 0.13)
+	await ANIMATION_WAIT.for_tween(self, _native_attack_tween, 1.0)
+	_cancel_native_attack_tween()
+
+
+func _play_native_hit(controller: String) -> void:
+	var sprite := _native_sprite(controller)
+	if sprite == null or not sprite.visible:
+		return
+	_cancel_native_attack_tween()
+	_native_animation_sprite = sprite
+	_native_animation_origin = sprite.position
+	_native_attack_tween = create_tween()
+	_native_attack_tween.tween_property(sprite, "modulate", Color(1.0, 0.35, 0.35, 1.0), 0.07)
+	_native_attack_tween.tween_property(sprite, "modulate", Color.WHITE, 0.12)
+	await ANIMATION_WAIT.for_tween(self, _native_attack_tween, 1.0)
+	_cancel_native_attack_tween()
+
+
+func _exit_tree() -> void:
+	_cancel_native_attack_tween()
 
 
 func _show_error(message: String) -> void:
