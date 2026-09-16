@@ -213,9 +213,6 @@ func try_start(trainer_id: String) -> Dictionary:
 func try_wild_step(encounter_type: String) -> Dictionary:
 	if OS.has_feature("web") or not AuthService.is_authenticated():
 		return {"handled": false}
-	var refreshed := await refresh()
-	if not refreshed.get("success", false):
-		return {"handled": not party.is_empty() or not activity.is_empty(), "success": false}
 	if party.is_empty():
 		return {"handled": false}
 	if encounter_type != "grass":
@@ -228,10 +225,10 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 		return {"handled": true, "success": true}
 	var world := GameState.get_world()
 	if world == null:
-		return {"handled": true, "success": false}
+		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
 	if not position_result.get("success", false):
-		return {"handled": true, "success": false}
+		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
 	if pending_start.is_empty():
 		pending_start = {"reservationId": new_id(), "kind": "grass-step"}
 	elif pending_start.get("kind") != "grass-step":
@@ -243,10 +240,15 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 		pending_start = {}
 	elif result.get("code") == "coop_wild_gameplay_disabled":
 		pending_start = {}
-	await refresh()
+	# The regular state poll already keeps membership current. A missed grass
+	# step is complete in its own response; fetching state before and after
+	# every step held movement input for three network round trips.
+	if not result.get("success", false) or result.get("body", {}).get("status") != "miss":
+		await refresh()
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
-	return {"handled": true, "success": result.get("success", false), "code": result.get("code", "coop_start_pending")}
+	return {"handled": true, "success": result.get("success", false), "code": result.get("code", "coop_start_pending"),
+		"status": result.get("body", {}).get("status", "")}
 
 
 func submit_action(action: Dictionary) -> Dictionary:

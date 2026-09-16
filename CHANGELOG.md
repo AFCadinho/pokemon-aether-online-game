@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
+
 - The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.
 
 - The Adventure Party card is now as compact as the personal-buffs panel below it.
