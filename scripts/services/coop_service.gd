@@ -2,6 +2,9 @@ extends Node
 
 signal state_changed
 signal request_failed(message: String)
+signal invitation_received(invitation: Dictionary)
+signal invitation_sent(username: String)
+signal invitation_failed(message: String)
 
 const ORDINARY_TRAINERS := [
 	"kanto_route_1_youngster_liam",
@@ -35,6 +38,8 @@ var _poll_after := 0.0
 var _session_identity := ""
 var _sequence := 0
 var _applied_sequence := 0
+var _seen_invitations: Dictionary = {}
+var _sent_invitations: Dictionary = {}
 
 
 func _process(delta: float) -> void:
@@ -67,6 +72,8 @@ func reset() -> void:
 	_session_identity = ""
 	_sequence += 1
 	_applied_sequence = _sequence
+	_seen_invitations.clear()
+	_sent_invitations.clear()
 	_poll_after = 0.0
 	state_changed.emit()
 
@@ -92,6 +99,17 @@ func apply_state(body: Dictionary) -> void:
 	elif activity.get("status") in ["finished", "cancelled"] and incoming.get("status") in ["starting", "active"]:
 		return
 	activity = incoming.duplicate(true)
+	var world := GameState.get_world()
+	if activity.is_empty() and (world == null or not bool(world.get("is_in_battle"))):
+		for invitation_value: Variant in invitations:
+			if invitation_value is not Dictionary:
+				continue
+			var invitation: Dictionary = invitation_value
+			var invitation_id := str(invitation.get("invitationId", ""))
+			if invitation_id.is_empty() or _seen_invitations.has(invitation_id):
+				continue
+			_seen_invitations[invitation_id] = true
+			invitation_received.emit(invitation.duplicate(true))
 	if body.get("view") is Dictionary:
 		apply_view(body["view"])
 	state_changed.emit()
@@ -239,6 +257,22 @@ func party_action(action: String, payload: Dictionary = {}) -> Dictionary:
 	var result := await _request(action, payload)
 	if not result.get("success", false):
 		request_failed.emit(str(result.get("error", "Co-op request could not be completed.")))
+		if action == "invite":
+			var reason := str(result.get("code", ""))
+			var feedback := "You or that Trainer is busy or in a battle." if reason == "coop_member_busy" else \
+				"That Trainer is offline." if reason == "coop_member_offline" else \
+				"That Trainer cannot join with their current party." if reason == "coop_party_size_invalid" else \
+				"That Trainer name is shared. Use their unique username." if reason == "coop_recipient_name_ambiguous" else \
+				"Trainer not found." if reason == "coop_recipient_unavailable" else \
+				str(result.get("error", "Invitation could not be sent."))
+			invitation_failed.emit(feedback)
+	else:
+		if action == "invite":
+			var receipt: Dictionary = result.get("body", {})
+			var invitation_id := str(receipt.get("invitationId", ""))
+			if not invitation_id.is_empty() and not _sent_invitations.has(invitation_id):
+				_sent_invitations[invitation_id] = true
+				invitation_sent.emit(str(receipt.get("recipientUsername", payload.get("recipientName", "Trainer"))))
 	await refresh()
 	return result
 

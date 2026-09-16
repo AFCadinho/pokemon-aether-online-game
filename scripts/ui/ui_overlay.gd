@@ -1918,6 +1918,9 @@ func _ready() -> void:
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
 	socials_players_on_map_button.pressed.connect(_on_socials_players_on_map_button_pressed)
 	socials_adventure_party_button.pressed.connect(_on_socials_adventure_party_button_pressed)
+	CoopService.invitation_received.connect(_on_coop_invitation_received)
+	CoopService.invitation_sent.connect(_on_coop_invitation_sent)
+	CoopService.invitation_failed.connect(_on_coop_invitation_failed)
 	socials_loans_button.pressed.connect(_on_socials_loans_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
@@ -39270,12 +39273,28 @@ func _on_socials_adventure_party_button_pressed() -> void:
 func _open_coop_party_popup(recipient_name: String = "") -> void:
 	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
 		return
+	_ensure_coop_party_popup()
+	coop_party_popup.call("open", recipient_name)
+	_activate_ui_panel(coop_party_popup)
+
+func _ensure_coop_party_popup() -> void:
 	if coop_party_popup == null:
 		coop_party_popup = COOP_PARTY_POPUP_SCRIPT.new() as Control
 		$Control.add_child(coop_party_popup)
 		coop_party_popup.connect("closed", _on_coop_party_popup_closed)
-	coop_party_popup.call("open", recipient_name)
+
+func _on_coop_invitation_received(invitation: Dictionary) -> void:
+	var sender := str(invitation.get("senderUsername", "a Trainer"))
+	add_system_message("%s invited you to an Adventure Party." % sender)
+	_ensure_coop_party_popup()
+	coop_party_popup.call("open_invitation", invitation)
 	_activate_ui_panel(coop_party_popup)
+
+func _on_coop_invitation_sent(username: String) -> void:
+	add_system_message("Adventure Party invitation sent to %s." % username)
+
+func _on_coop_invitation_failed(message: String) -> void:
+	add_system_message("Adventure Party invitation failed: %s" % message)
 
 func _hide_coop_party_popup() -> void:
 	if coop_party_popup != null:
