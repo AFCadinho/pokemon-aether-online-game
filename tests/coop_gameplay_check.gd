@@ -315,17 +315,32 @@ func _run() -> void:
 		"both sides have separate clickable targets for the right-hand Pokemon")
 	_expect(presenter.get("cards")["p2"].target.visible
 		and presenter.get("cards")["p4"].target.visible
-		and presenter.get("selected_target") == "p2",
-		"choosing a doubles move highlights its legal field targets")
+		and presenter.get("selected_target") == "p2"
+		and (target_cards["p2"].target as Button).get_theme_stylebox("normal") is StyleBoxEmpty
+		and left_wild.material is ShaderMaterial
+		and right_wild.material == null,
+		"choosing a doubles move highlights the selected Pokémon sprite")
+	var target_capture_path := OS.get_environment("COOP_BATTLE_TARGET_CAPTURE_PATH")
+	if not target_capture_path.is_empty():
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(target_capture_path) == OK,
+			"co-op sprite target highlight capture saved")
+	(target_cards["p4"].target as Button).mouse_entered.emit()
+	_expect(presenter.get("selected_target") == "p4"
+		and right_wild.material is ShaderMaterial
+		and left_wild.material == null,
+		"hovering another Pokémon moves the selection glow onto its sprite")
 	var target_key := InputEventKey.new()
 	target_key.pressed = true
-	target_key.keycode = KEY_RIGHT
+	target_key.keycode = KEY_LEFT
 	presenter._input(target_key)
-	_expect(presenter.get("selected_target") == "p4" and presenter.get("cards")["p4"].target.modulate.a == 1.0,
-		"arrow keys move the focused target before Space confirms it")
+	_expect(presenter.get("selected_target") == "p2" and left_wild.material is ShaderMaterial
+		and right_wild.material == null,
+		"arrow keys move the sprite glow before Space confirms the target")
 	target_key.keycode = KEY_ESCAPE
 	presenter._input(target_key)
-	_expect(presenter.get("selected_move") == 0 and not presenter.get("cards")["p2"].target.visible,
+	_expect(presenter.get("selected_move") == 0 and not presenter.get("cards")["p2"].target.visible
+		and left_wild.material == null and right_wild.material == null,
 		"Escape cancels target selection without submitting an action")
 	var native_sprite := mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite") as AnimatedSprite2D
 	var native_origin := native_sprite.position
