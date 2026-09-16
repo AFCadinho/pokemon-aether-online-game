@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op battles now keep the normal battle log and Damage Calc button, with six party slots in a horizontal row and extra co-op actions below them.
+
 - Co-op double battles use a simple per-Pokémon attack and hit animation while move-specific effects are adapted later. Choose single-target moves by clicking a Pokémon or using the arrow keys and Space; Escape cancels targeting.
 
 - Co-op battles show both Trainers behind their Pokémon, a turn counter and VS banner on the field, combined party icons at the sides, and only your own Pokémon in the switch bar. The battle log uses Trainer names instead of generic co-op labels.
