@@ -373,6 +373,33 @@ func _run() -> void:
 	_expect(presenter.get("selected_move") == 0 and not presenter.get("cards")["p2"].target.visible
 		and left_wild.material == null and right_wild.material == null,
 		"Escape cancels target selection without submitting an action")
+	var capture_player: CaptureBallAnimationPlayer = mounted_battle.get_node("%CaptureBallAnimationPlayer")
+	_expect(presenter.embedded_hosts.get("capture_player") == capture_player and presenter._capture_status == null,
+		"co-op uses the normal capture animation and has no feedback label below the party")
+	presenter._capture_target_controller = "p2"
+	capture_player.target_absorbed.emit()
+	_expect(not left_wild.visible and right_wild.visible,
+		"capture absorption hides only the Trainer's assigned wild target")
+	capture_player.target_released.emit()
+	_expect(left_wild.visible and right_wild.visible,
+		"an escaped wild target returns without hiding its partner")
+	var thrown_balls: Array = []
+	var ball_shakes: Array = []
+	capture_player.ball_thrown.connect(func() -> void: thrown_balls.append(true))
+	capture_player.ball_shook.connect(func() -> void: ball_shakes.append(true))
+	await presenter._play_native_capture_preview("poke-ball", {"shakeCount": 1, "caught": false})
+	_expect(thrown_balls.size() == 1 and ball_shakes.size() == 1
+		and left_wild.visible and right_wild.visible and not capture_player.visible,
+		"co-op catch preview throws and shakes the selected ball, then restores an escaped target")
+	presenter._capture_feedback_text = "The Pokémon escaped from your ball."
+	presenter._capture_feedback_until_msec = Time.get_ticks_msec() + 4000
+	presenter._action_signature = ""
+	presenter._update_actions()
+	_expect(presenter._prompt.text == presenter._capture_feedback_text,
+		"capture feedback appears in the battlefield prompt instead of below party slots")
+	presenter._capture_feedback_text = ""
+	presenter._action_signature = ""
+	presenter._update_actions()
 	var native_sprite := mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite") as AnimatedSprite2D
 	var native_origin := native_sprite.position
 	var settings_manager := root.get_node("SettingsManager")
