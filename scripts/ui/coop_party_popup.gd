@@ -211,7 +211,15 @@ func _invite() -> void:
 
 func _show_error(message: String) -> void:
 	if is_instance_valid(_status):
-		_status.text = message
+		_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		match message:
+			"coop_partner_too_far":
+				_status.text = LocalizationManager.text("ui.coop.wild.partner_too_far")
+			"coop_shared_level_cap_exceeded":
+				_status.text = LocalizationManager.text("ui.coop.wild.level_cap_exceeded",
+					{"level": int(CoopService.party.get("sharedLevelCap", 0))})
+			_:
+				_status.text = message
 
 
 func _add_member_card(name: String, appearance: Dictionary, is_self: bool, is_leader: bool) -> void:

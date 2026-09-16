@@ -666,6 +666,7 @@ var donator_store_popup: DonatorStorePopup
 var friendlist_popup: FriendlistPopup
 var coop_party_popup: Control
 var coop_party_hud: Button
+var coop_wild_notice_at_msec: Dictionary = {}
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -1923,6 +1924,7 @@ func _ready() -> void:
 	CoopService.invitation_received.connect(_on_coop_invitation_received)
 	CoopService.invitation_sent.connect(_on_coop_invitation_sent)
 	CoopService.invitation_failed.connect(_on_coop_invitation_failed)
+	CoopService.request_failed.connect(_on_coop_request_failed)
 	CoopService.party_profile_missing.connect(_on_coop_party_profile_missing)
 	CoopService.state_changed.connect(_refresh_coop_party_hud)
 	_create_coop_party_hud()
@@ -32817,6 +32819,7 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		return false
 
 	_add_chat_message("Starting wild encounter: %s Lv. %s." % [pokemon.species, pokemon.level])
+	print("COOP_DIAG dev_wild ", JSON.stringify({"mode": "pasted", "coopParty": not CoopService.party.is_empty()}))
 	await world.start_dev_wild_battle(pokemon)
 	return true
 
@@ -32838,6 +32841,8 @@ func _handle_start_map_encounter_command() -> bool:
 		_wild_encounter_method_label(encounter_type),
 		_format_identifier_display_name(species_id),
 	])
+	print("COOP_DIAG dev_wild ", JSON.stringify({"mode": "map", "encounterType": encounter_type,
+		"coopParty": not CoopService.party.is_empty()}))
 	await world.start_triggered_wild_battle_for_area(area_id, encounter_type, species_id)
 	return true
 
@@ -39362,6 +39367,21 @@ func _on_coop_invitation_sent(username: String) -> void:
 func _on_coop_invitation_failed(message: String) -> void:
 	add_system_message("Adventure Party invitation failed: %s" % message)
 
+func _on_coop_request_failed(message: String) -> void:
+	var key := ""
+	match message:
+		"coop_partner_too_far":
+			key = "ui.coop.wild.partner_too_far"
+		"coop_shared_level_cap_exceeded":
+			key = "ui.coop.wild.level_cap_exceeded"
+	if key.is_empty():
+		return
+	var now := Time.get_ticks_msec()
+	if now - int(coop_wild_notice_at_msec.get(message, -10000)) < 10000:
+		return
+	coop_wild_notice_at_msec[message] = now
+	add_system_message(LocalizationManager.text(key, {"level": int(CoopService.party.get("sharedLevelCap", 0))}))
+
 func _on_coop_party_profile_missing(source: String) -> void:
 	add_system_message("Adventure Party details are missing from the connected %s API. Check that both clients use the development server." % source)
 
@@ -41479,8 +41499,11 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
 	pc_move_in_progress = false
 	if not bool(result.get("success", false)):
-		_set_pc_status("ui.storage.move.failed")
-		_add_chat_message(LocalizationManager.text("ui.storage.move.failed"))
+		var failure_key := "ui.storage.move.coop_party_full" \
+			if BackendErrorLocalizationService.error_code(result) == "coop_party_size_invalid" \
+			else "ui.storage.move.failed"
+		_set_pc_status(failure_key)
+		_add_chat_message(LocalizationManager.text(failure_key))
 		_render_pc_party()
 		_render_pc_box()
 		return

@@ -107,6 +107,7 @@ func _run() -> void:
 	_expect("counterattack cannot start without the future starter" in controller_source, "a missing starter stops the sequence instead of silently skipping the attack")
 	_expect("_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, -16)" in controller_source, "the layered rescuer aligns visually beside the player")
 	_expect("_configure_future_self_appearance()" in controller_source and '"Mysterious_Mask"' in controller_source, "the rescuer is built from the player's model and Mysterious Outfit")
+	_expect("func prepare_story_sequence() -> Dictionary:" in controller_source and "_starter_options = options.duplicate(true)" in controller_source, "the future starter is prepared before the cinematic begins")
 	_expect("_set_future_self_animation(animation_name)" in controller_source, "every Future Self clothing layer follows the facing direction")
 	_expect('FUTURE_SELF_MUGSHOT := preload("res://assets/sprites/mugshots/future_self_mugshot.png")' in controller_source, "the revealed future self has a dedicated Mysterious Outfit mugshot")
 	_expect("DIALOGUE_STAGE_FUTURE_VOICE" not in controller_source.get_slice("const REVEALED_FUTURE_SELF_DIALOGUE_STAGES", 1).get_slice("]", 0), "the unseen future voice does not reveal its portrait")

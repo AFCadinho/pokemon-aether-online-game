@@ -211,6 +211,9 @@ func try_start(trainer_id: String) -> Dictionary:
 
 
 func try_wild_step(encounter_type: String) -> Dictionary:
+	print("COOP_DIAG wild_check ", JSON.stringify({"authenticated": AuthService.is_authenticated(),
+		"party": not party.is_empty(), "leader": int(party.get("leaderId", 0)) == int(AuthService.current_user.get("id", 0)),
+		"available": available, "activity": not activity.is_empty(), "encounterType": encounter_type}))
 	if OS.has_feature("web") or not AuthService.is_authenticated():
 		return {"handled": false}
 	if party.is_empty():
@@ -227,6 +230,8 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	if world == null:
 		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
+	print("COOP_DIAG wild_position ", JSON.stringify({"success": bool(position_result.get("success", false)),
+		"code": str(position_result.get("code", position_result.get("error", "")))}))
 	if not position_result.get("success", false):
 		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
 	if pending_start.is_empty():
@@ -234,6 +239,9 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	elif pending_start.get("kind") != "grass-step":
 		return {"handled": true, "success": false, "code": "coop_start_pending"}
 	var result := await _request("grass-step", {"reservationId": pending_start["reservationId"]})
+	print("COOP_DIAG wild_server ", JSON.stringify({"success": bool(result.get("success", false)),
+		"http": int(result.get("status", 0)), "code": "" if result.get("success", false) else str(result.get("code", "")),
+		"status": str(result.get("body", {}).get("status", ""))}))
 	if result.get("success", false):
 		pending_start = {}
 	elif int(result.get("status", 0)) in [400, 401, 403, 404, 409, 422]:
@@ -244,10 +252,13 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	# step is complete in its own response; fetching state before and after
 	# every step held movement input for three network round trips.
 	if not result.get("success", false) or result.get("body", {}).get("status") != "miss":
-		await refresh()
+		var refreshed := await refresh()
+		print("COOP_DIAG wild_refresh ", JSON.stringify({"success": bool(refreshed.get("success", false)),
+			"http": int(refreshed.get("status", 0)), "activity": not activity.is_empty()}))
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
-	return {"handled": true, "success": result.get("success", false), "code": result.get("code", "coop_start_pending"),
+	return {"handled": true, "success": result.get("success", false),
+		"code": "" if result.get("success", false) else result.get("code", "coop_start_pending"),
 		"status": result.get("body", {}).get("status", "")}
 
 
