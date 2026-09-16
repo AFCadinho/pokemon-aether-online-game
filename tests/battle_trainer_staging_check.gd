@@ -96,6 +96,7 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("_show_pvp_trainers(mapped_snapshot)"), "spectator side swaps rebuild side-owned trainer visuals")
 	_check(source.contains("# their attached command callouts cannot remain tied to the old side."), "spectator side swaps document callout reset ownership")
 	_check(source.contains("if appearance_state.is_empty():\n\t\treturn"), "missing opponent appearances stay hidden instead of using a false identity")
+	_check(source.contains('player_data.get("battleSpriteId", "")') and source.contains('"_battle_sprite_id": "showdown_acetrainer_gen6"'), "Bot Guild opponents use their explicit trainer battle sprite without a player appearance")
 	var switch_command_index := source.find("_show_switch_trainer_command(event_data, switch_player_id)")
 	var switch_recall_index := source.find("await _play_switch_recall_for_event(event_data, switch_player_id)", switch_command_index)
 	_check(switch_command_index >= 0, "switch events present a trainer command")
@@ -178,6 +179,9 @@ func _check_runtime_renderer() -> void:
 	_check(renderer.catalog_sprite.visible, "catalog trainer art is visible")
 	_check(not renderer.npc_sprite.visible, "catalog trainer art replaces the overworld-frame renderer")
 	_check(renderer.catalog_sprite.texture == catalog_texture, "catalog trainer art keeps the assigned Showdown texture")
+	var bot_texture := catalog.get_texture("showdown_acetrainer_gen6")
+	renderer.show_catalog_sprite(bot_texture, Vector2.LEFT)
+	_check(bot_texture != null and renderer.catalog_sprite.visible and renderer.catalog_sprite.texture == bot_texture, "Bot Guild ace-trainer battle art exists and renders")
 	_check(
 		renderer.catalog_sprite.position == Vector2(-24.0, -32.0),
 		"catalog trainer art aligns its feet and clears the opponent party rail"

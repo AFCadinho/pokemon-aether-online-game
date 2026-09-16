@@ -4,6 +4,10 @@
 
 - Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
 
+- Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
+
+- Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
+
 - Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
 
 

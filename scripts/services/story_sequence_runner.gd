@@ -2,6 +2,8 @@ extends Node
 
 class_name StorySequenceRunnerNode
 
+signal dialogue_preflight_progress
+
 const ALLOWED_ACTION_TYPES: Array[String] = [
 	"dialogue",
 	"wait",
@@ -14,6 +16,8 @@ const ALLOWED_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const MAX_ACTIONS := 64
 const MAX_WAIT_DURATION_MS := 10000
 const MAX_MOVE_PATH_STEPS := 32
+const STORY_DIALOGUE_TIMEOUT_SECONDS := 8.0
+const STORY_DIALOGUE_ATTEMPTS := 2
 
 var _is_running := false
 
@@ -70,6 +74,17 @@ func run_sequence(actions: Variant, host: Node, player: Node2D = null) -> Dictio
 	GameState.lock_input()
 
 	var action_list: Array = actions as Array
+	var preflight: Dictionary = await _preload_dialogues(action_list)
+	if not bool(preflight.get("success", false)):
+		_is_running = false
+		_restore_input_state(previous_input_state)
+		return preflight
+	if host.has_method("prepare_story_sequence"):
+		var host_preflight: Variant = await host.call("prepare_story_sequence")
+		if not (host_preflight is Dictionary) or not bool((host_preflight as Dictionary).get("success", false)):
+			_is_running = false
+			_restore_input_state(previous_input_state)
+			return {"success": false, "status": "host_preflight_failed", "actionIndex": -1}
 	for index: int in range(action_list.size()):
 		var action: Dictionary = action_list[index] as Dictionary
 		var action_result: Dictionary = await _run_action(action, host, resolved_player)
@@ -97,6 +112,63 @@ func run_sequence(actions: Variant, host: Node, player: Node2D = null) -> Dictio
 	_is_running = false
 	_restore_input_state(previous_input_state)
 	return {"success": true, "status": "completed"}
+
+
+func _preload_dialogues(actions: Array) -> Dictionary:
+	var dialogue_indices := {}
+	for index: int in range(actions.size()):
+		var action: Dictionary = actions[index] as Dictionary
+		if str(action.get("type", "")) == "dialogue":
+			var dialogue_id := str(action.get("dialogueId", ""))
+			if not dialogue_indices.has(dialogue_id):
+				dialogue_indices[dialogue_id] = index
+	if dialogue_indices.is_empty():
+		return {"success": true}
+
+	var state := {"pending": dialogue_indices.size(), "results": {}}
+	for dialogue_id: String in dialogue_indices:
+		_preload_one_dialogue.call_deferred(dialogue_id, state)
+	while int(state.get("pending", 0)) > 0:
+		await dialogue_preflight_progress
+	var results: Dictionary = state.get("results", {}) as Dictionary
+	for dialogue_id: String in dialogue_indices:
+		var result: Dictionary = results.get(dialogue_id, {}) as Dictionary
+		if not bool(result.get("success", false)):
+			var failed := result.duplicate(true)
+			failed["success"] = false
+			failed["actionIndex"] = int(dialogue_indices[dialogue_id])
+			failed["dialogueId"] = dialogue_id
+			return failed
+	return {"success": true}
+
+
+func _preload_one_dialogue(dialogue_id: String, state: Dictionary) -> void:
+	var response: Dictionary = {}
+	for attempt: int in range(STORY_DIALOGUE_ATTEMPTS):
+		response = await _fetch_story_dialogue(dialogue_id)
+		if bool(response.get("success", false)) or not _retryable_dialogue_failure(response):
+			break
+		if attempt + 1 < STORY_DIALOGUE_ATTEMPTS:
+			await get_tree().create_timer(0.35).timeout
+	var metadata: Dictionary = response.get("metadata", {}) as Dictionary
+	if bool(response.get("success", false)) and (
+		str(metadata.get("id", "")) != dialogue_id
+		or str(metadata.get("dialogueId", "")) != dialogue_id
+		or _string_array(metadata.get("lines", [])).is_empty()
+	):
+		response = {"success": false, "status": "dialogue_metadata_invalid"}
+	(state["results"] as Dictionary)[dialogue_id] = response
+	state["pending"] = int(state.get("pending", 0)) - 1
+	dialogue_preflight_progress.emit()
+
+
+func _fetch_story_dialogue(dialogue_id: String) -> Dictionary:
+	return await DialogueMetadataService.get_dialogue(dialogue_id, STORY_DIALOGUE_TIMEOUT_SECONDS)
+
+
+func _retryable_dialogue_failure(response: Dictionary) -> bool:
+	var status := int(response.get("status", 0))
+	return status == 0 or status in [408, 429] or status >= 500
 
 
 func _validate_action(action_type: String, action: Dictionary) -> String:

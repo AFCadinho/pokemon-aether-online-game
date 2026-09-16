@@ -8162,7 +8162,11 @@ func _show_response_player_trainer(
 ) -> void:
 	if trainer_sprite == null or not (player_data_value is Dictionary):
 		return
-	var appearance_state := _get_battle_player_appearance(player_data_value as Dictionary)
+	var player_data := player_data_value as Dictionary
+	if str(player_data.get("battleSpriteId", "")) == "showdown_acetrainer_gen6":
+		_show_npc_trainer(trainer_sprite, {"_battle_sprite_id": "showdown_acetrainer_gen6"}, facing_direction)
+		return
+	var appearance_state := _get_battle_player_appearance(player_data)
 	if appearance_state.is_empty():
 		return
 	trainer_sprite.show_player(appearance_state, facing_direction)
