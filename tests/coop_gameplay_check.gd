@@ -188,9 +188,14 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2").visible,
 		"four co-op Pokemon and the second HP row render in the native presentation")
-	_expect(mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud/CoopStatStages").visible
-		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2/CoopStatStages").visible,
-		"each boosted co-op Pokémon shows singles-style stat badges under its own HP bar")
+	presenter._position_coop_stat_overlays()
+	var player_stat_overlay: StatStagePanel = presenter._stat_overlays["p1"]
+	var enemy_stat_overlay: StatStagePanel = presenter._stat_overlays["p4"]
+	_expect(player_stat_overlay.visible and enemy_stat_overlay.visible
+		and player_stat_overlay.get_parent() == mounted_battle.get_node("%BattleStage")
+		and enemy_stat_overlay.get_parent() == mounted_battle.get_node("%BattleStage")
+		and player_stat_overlay.get_global_rect().position.y >= mounted_battle.get_node("%PlayerHudPanel").get_global_rect().end.y,
+		"stat badges sit outside and below the shared HP containers")
 	_expect(mounted_battle.get_node("%BattleStatusPanel").turn_label.text.contains("4")
 		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 3
 		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data.size() == 2
@@ -224,14 +229,18 @@ func _run() -> void:
 	var hover_view: Dictionary = presenter._latest.duplicate(true)
 	presenter._latest = {"participant": "p1", "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77, "types": ["Normal"]},
-		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100, "types": ["Normal", "Flying"]}],
+		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100, "types": ["Normal", "Flying"],
+			"possibleAbilities": ["Keen Eye", "Tangled Feet"],
+			"speed": {"min": 5, "minNeutral31Iv": 6, "maxNeutral31Iv": 7, "max": 8}}],
 		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30}],
 		"moves": [{"name": "Pound", "pp": 35, "maxPp": 35}]}
 	presenter._show_coop_active_hover("p2")
 	_expect(presenter._native_pokemon_hover.visible
 		and presenter._native_pokemon_hover.name_label.text.contains("Pidgey")
-		and presenter._native_pokemon_hover.type_icon_1.visible,
-		"co-op sprite hover opens the regular Pokémon card with public type and HP")
+		and presenter._native_pokemon_hover.type_icon_1.visible
+		and presenter._native_pokemon_hover.ability_value_label.text.contains("Keen Eye")
+		and presenter._native_pokemon_hover.speed_row.visible,
+		"co-op sprite hover shows public types, possible abilities and speed tiers")
 	var move_grid: MovesGrid = mounted_battle.get_node("%MovesGrid")
 	move_grid.move_hovered.emit({"name": "Pound", "type": "Normal", "category": "Physical",
 		"basePower": 40, "accuracy": 100}, Rect2(Vector2(100, 100), Vector2(40, 40)))

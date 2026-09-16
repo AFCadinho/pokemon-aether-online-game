@@ -52,6 +52,7 @@ var _native_log: BattleLogPanel
 var _native_pokemon_hover: PokemonHoverCard
 var _native_move_hover: MoveHoverCard
 var _hovered_controller := ""
+var _stat_overlays: Dictionary = {}
 var _native_utility: Control
 var _action_scroll: ScrollContainer
 var _decision_overlay: ColorRect
@@ -183,7 +184,9 @@ func _ready() -> void:
 		_native_vs.max_names_panel_width = 530.0
 		for side: String in ["player", "enemy"]:
 			var hud: Control = embedded_hosts[side + "_hud"]
-			for row: Control in hud.active_info_rows:
+			var controllers := ["p1", "p3"] if side == "player" else ["p2", "p4"]
+			for row_index in range(hud.active_info_rows.size()):
+				var row: Control = hud.active_info_rows[row_index]
 				var owner_label := Label.new()
 				owner_label.name = "CoopOwnerLabel"
 				owner_label.add_theme_font_size_override("font_size", 12)
@@ -192,8 +195,12 @@ func _ready() -> void:
 				row.add_child(owner_label)
 				row.move_child(owner_label, 0)
 				var stat_panel := preload("res://scenes/battle/stat_stage_panel.tscn").instantiate() as StatStagePanel
-				stat_panel.name = "CoopStatStages"
-				row.add_child(stat_panel)
+				stat_panel.name = "CoopStatStages" + controllers[row_index]
+				stage.add_child(stat_panel)
+				stat_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+				stat_panel.z_index = 30
+				_stat_overlays[controllers[row_index]] = stat_panel
+		stage.resized.connect(_position_coop_stat_overlays)
 		var target_shader := Shader.new()
 		target_shader.code = TARGET_OUTLINE_SHADER
 		_target_glow_material = ShaderMaterial.new()
@@ -579,6 +586,7 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 		opponent_team[index] = {"species": str(position.get("details", "")).split(",")[0].strip_edges(),
 			"hp": int(position.get("hpPercent", 0)), "maxHp": 100,
 			"types": position.get("types", []), "possibleAbilities": position.get("possibleAbilities", []),
+			"speed": position.get("speed", {}),
 			"fainted": bool(position.get("fainted", false)),
 			"active": not bool(position.get("fainted", false)) and int(position.get("hpPercent", 0)) > 0}
 		_opponent_party.set_party(opponent_team)
@@ -597,7 +605,7 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			var owner_label: Label = hud.active_info_rows[row_index].get_node("CoopOwnerLabel")
 			owner_label.text = (_trainer_name(controller) + (" · YOU" if controller == snapshot.get("participant") else "")) if side == "player" else "OPPONENT %s" % (row_index + 1)
 			var position: Dictionary = active.get(controller, {})
-			var stat_panel := hud.active_info_rows[row_index].get_node("CoopStatStages") as StatStagePanel
+			var stat_panel := _stat_overlays[controller] as StatStagePanel
 			stat_panel.set_stat_stages(position.get("boosts", {}) if not position.get("fainted", false) else {})
 			var details := str(position.get("details", ""))
 			var name := details.split(",")[0].strip_edges() if not details.is_empty() else ""
@@ -628,6 +636,26 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 				"maxHp": max_hp, "status": str(position.get("status", ""))})
 		sprite_box.set_double_pokemon_species(species[0], species[1],
 			"back" if side == "player" else "front", shiny[0], shiny[1])
+	_position_coop_stat_overlays.call_deferred()
+
+
+func _position_coop_stat_overlays() -> void:
+	if not _native_mode or _stat_overlays.is_empty():
+		return
+	var stage: Control = embedded_hosts["stage"]
+	var inverse := stage.get_global_transform().affine_inverse()
+	for controller: String in _stat_overlays:
+		var panel := _stat_overlays[controller] as StatStagePanel
+		if not panel.visible:
+			continue
+		var hud: Control = embedded_hosts["player_hud"] if controller in ["p1", "p3"] else embedded_hosts["enemy_hud"]
+		var row_index := 1 if controller in ["p3", "p4"] else 0
+		var row: Control = hud.active_info_rows[row_index]
+		panel.reset_size()
+		var row_rect := row.get_global_rect()
+		var hud_rect := hud.get_global_rect()
+		var center := inverse * Vector2(row_rect.get_center().x, hud_rect.end.y + 5.0)
+		panel.position = Vector2(center.x - panel.size.x * 0.5, center.y)
 
 
 func _set_details(controller: String, details: String, force := false) -> void:
@@ -1179,6 +1207,7 @@ func _show_coop_active_hover(controller: String) -> void:
 		var details := str(position.get("details", ""))
 		var data := {"ident": controller + ": " + details.split(",")[0].strip_edges(),
 			"species": details.split(",")[0].strip_edges(), "types": position.get("types", []),
+			"possibleAbilities": position.get("possibleAbilities", []), "speed": position.get("speed", {}),
 			"limitedBattleView": true, "status": position.get("status", ""),
 			"hp": int(position.get("hpPercent", 0)), "maxHp": 100}
 		var own: bool = controller == _latest.get("participant")
@@ -1190,11 +1219,12 @@ func _show_coop_active_hover(controller: String) -> void:
 					data["hp"] = pokemon.get("hp", 0)
 					data["maxHp"] = pokemon.get("maxHp", 1)
 					var owned := _owned_hover_details(int(pokemon.get("slot", 0)), str(data.get("species", "")))
-					data["possibleAbilities"] = owned.get("possibleAbilities", [])
+					data["possibleAbilities"] = owned.get("possibleAbilities", data.get("possibleAbilities", []))
 					ability = str(owned.get("ability", ""))
 					item = str(owned.get("item", ""))
 					break
-		_native_pokemon_hover.show_for_pokemon(data, _latest.get("moves", []) if own else [], item, ability)
+		_native_pokemon_hover.show_for_pokemon(data, _latest.get("moves", []) if own else [], item, ability,
+			{}, data.get("speed", {}))
 		_native_pokemon_hover.position_near_mouse(get_global_mouse_position(), get_viewport_rect().size)
 		return
 
@@ -1210,7 +1240,7 @@ func _show_coop_party_hover(data: Dictionary, slot_rect: Rect2) -> void:
 		display["types"] = owned.get("types", display.get("types", []))
 		display["possibleAbilities"] = owned.get("possibleAbilities", [])
 	_native_pokemon_hover.show_for_pokemon(display, owned.get("moves", []),
-		str(owned.get("item", "")), str(owned.get("ability", "")))
+		str(owned.get("item", "")), str(owned.get("ability", "")), {}, display.get("speed", {}))
 	_native_pokemon_hover.position_near_mouse(slot_rect.get_center(), get_viewport_rect().size)
 
 
