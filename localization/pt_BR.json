@@ -18,6 +18,8 @@
   "ui.clash_bot.accepted": "Treino aceito! Entre pelo portal Guild Duel antes de terminar o prazo de entrada.",
   "ui.clash_bot.pending": "Seu pedido de treino está sendo processado.",
   "ui.clash_bot.npc_required": "Fale com o Clash Training Captain no lobby.",
+  "ui.clash_bot.npc_too_far": "Aproxime-se do Clash Training Captain e tente novamente.",
+  "ui.clash_bot.presence_unavailable": "Sua posição ainda está sincronizando. Tente novamente em instantes.",
   "ui.clash_bot.count_limit": "Escolha uma quantidade de bots dentro do limite atual.",
   "ui.clash_bot.request_conflict": "Este pedido usava outras configurações. Reabra o menu de treino.",
   "ui.pvp.ai_sparring.live.title": "Batalhas ao vivo",
