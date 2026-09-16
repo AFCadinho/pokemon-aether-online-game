@@ -1,6 +1,7 @@
 {
   "allowed": [
     ["GET", "/auth/web/world-pickups"], ["POST", "/auth/web/world-pickups/kanto_viridian_city_potion/claim"],
+    ["GET", "/auth/web/npc-pokemon-sales/kanto_route_3_magikarp"], ["POST", "/auth/web/npc-pokemon-sales/kanto_route_3_magikarp/purchase"],
     ["PUT", "/auth/web/appearance"],
     ["POST", "/pokemon/create-from-text"], ["POST", "/team/create-from-text"],
     ["GET", "/auth/web/boxes"], ["GET", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/31"],
@@ -35,6 +36,8 @@
   ],
   "denied": [
     ["GET", "/game/world-pickups"], ["POST", "/game/world-pickups/kanto_viridian_city_potion/claim"],
+    ["GET", "/auth/web/npc-pokemon-sales/other_sale"], ["POST", "/auth/web/npc-pokemon-sales/other_sale/purchase"],
+    ["POST", "/auth/web/npc-pokemon-sales/kanto_route_3_magikarp"],
     ["POST", "/auth/web/world-pickups/kanto_viridian_city_potion/claim/escape"],
     ["GET", "/auth/web/world-pickups-escape"],
     ["POST", "/auth/web/mail/5/claim"], ["POST", "/auth/web/mail/5/attachments/3/claim"],

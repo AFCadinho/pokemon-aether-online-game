@@ -68,6 +68,8 @@ const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|ch
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle']);
 const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
+  ['GET', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp$/],
+  ['POST', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp\/purchase$/],
   ['GET', /^\/auth\/web\/boxes\/\d+$/], ['PATCH', /^\/auth\/web\/boxes\/\d+$/],
   ['DELETE', /^\/auth\/web\/(?:pokemon|party)\/\d+$/],
   ['POST', /^\/auth\/web\/pokemon\/\d+\/(?:nickname|held-item|evolution|evs\/allocate|items\/use|moves\/(?:learn|delete|reorder))$/],
