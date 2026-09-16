@@ -369,6 +369,7 @@ var pvp_render_ack_retry_active := false
 var pvp_render_ack_retry_generation := 0
 var pvp_active_render_progress: Dictionary = {}
 var pvp_render_progress_generation := 0
+var pvp_render_progress_timer: Timer
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_room_recovery_request_active := false
 var pvp_targeted_render_recovery_active := false
@@ -458,6 +459,9 @@ var stat_stages_by_ident: Dictionary = {}
 
 
 func _exit_tree() -> void:
+	animation_router.release_threaded_resource_requests()
+	if pvp_render_progress_timer != null:
+		pvp_render_progress_timer.stop()
 	# Any non-standard teardown must also invalidate outstanding renderer
 	# continuations before child controls leave the SceneTree.
 	if event_renderer != null:
@@ -1021,6 +1025,7 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
+	animation_router.poll_threaded_resource_requests()
 	var calcdex_active := current_action_panel_mode == BattleActionsPanelMode.CALC
 	if not calcdex_active and hover_state.should_poll_sprite_hover():
 		_update_sprite_hover()
@@ -4084,11 +4089,14 @@ func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> voi
 	pvp_presentation_schedule_token = ""
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
+	var was_ready := battle_actions_ready
 	if replay_mode:
 		is_ready = false
 	if _is_spectator_battle():
 		is_ready = false
 	battle_actions_ready = is_ready
+	if is_ready and not was_ready:
+		WebMemoryProbe.mark("battle_actions_ready")
 	_sync_party_rail_interaction()
 	_update_mechanic_button_states()
 	if battle_actions_ready:
@@ -4799,6 +4807,13 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 		return
 	var request := HTTPRequest.new()
 	add_child(request)
+	# Result refresh can outlive an early Continue. A battle-owned retry timer
+	# is destroyed with the scene instead of leaving a SceneTreeTimer behind.
+	var retry_timer := Timer.new()
+	retry_timer.name = "PvpResultRefreshRetryTimer"
+	retry_timer.one_shot = true
+	retry_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(retry_timer)
 	for attempt in range(15):
 		var response: Dictionary = await BattleApiClient.get_pvp_match_summary(request, normalized_match_id)
 		if bool(response.get("success", false)):
@@ -4832,10 +4847,13 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 			var reward_expected := bool(result_summary.get("rewardsReady", false))
 			if rating_found and (not reward_expected or reward_found):
 				request.queue_free()
+				retry_timer.queue_free()
 				return
 		if attempt < 14:
-			await get_tree().create_timer(0.5).timeout
+			retry_timer.start(0.5)
+			await retry_timer.timeout
 	request.queue_free()
+	retry_timer.queue_free()
 
 
 func _format_battle_point_reward_amount(amount: int) -> String:
@@ -9210,7 +9228,11 @@ func _prepare_team_preview_lead_summon_transition() -> void:
 	# frame_post_draw guarantees one complete frame with no preview Pokemon before
 	# the Pokeball throw signal, release sound, or cry can begin.
 	await get_tree().process_frame
-	await RenderingServer.frame_post_draw
+	# The dummy headless renderer never emits frame_post_draw. Awaiting it
+	# strands setup (and its Pokemon argument) until after renderer shutdown.
+	# Visible desktop/web clients still require the complete blank drawn frame.
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
 
 	# Close over any delayed preview redraw that arrived during the frame barrier.
 	_clear_team_preview_visuals()
@@ -9639,6 +9661,8 @@ func _send_pvp_received_render_status(response: Dictionary) -> void:
 func _begin_pvp_render_progress(batch_context: Dictionary, total_event_count: int) -> void:
 	if _is_spectator_battle():
 		return
+	if pvp_render_progress_timer != null:
+		pvp_render_progress_timer.stop()
 	pvp_render_progress_generation += 1
 	pvp_active_render_progress = batch_context.duplicate(true)
 	pvp_active_render_progress["rendered_event_count"] = 0
@@ -9657,11 +9681,23 @@ func _mark_pvp_render_event_completed(completed_event_count: int) -> void:
 	)
 
 func _run_pvp_render_progress_heartbeat(owned_generation: int) -> void:
-	while owned_generation == pvp_render_progress_generation and not pvp_active_render_progress.is_empty():
-		await get_tree().create_timer(PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS).timeout
-		if owned_generation != pvp_render_progress_generation or pvp_active_render_progress.is_empty():
-			return
-		_send_active_pvp_render_status("PROGRESS")
+	# A completed batch must not leave an awaited SceneTreeTimer alive after
+	# Battle teardown. Keep the same heartbeat interval, but own its lifetime.
+	if owned_generation != pvp_render_progress_generation or pvp_active_render_progress.is_empty():
+		return
+	if pvp_render_progress_timer == null:
+		pvp_render_progress_timer = Timer.new()
+		pvp_render_progress_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+		pvp_render_progress_timer.wait_time = PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS
+		pvp_render_progress_timer.timeout.connect(_on_pvp_render_progress_heartbeat)
+		add_child(pvp_render_progress_timer)
+	pvp_render_progress_timer.start()
+
+func _on_pvp_render_progress_heartbeat() -> void:
+	if pvp_active_render_progress.is_empty():
+		pvp_render_progress_timer.stop()
+		return
+	_send_active_pvp_render_status("PROGRESS")
 
 func _send_active_pvp_render_status(render_state: String) -> void:
 	if pvp_active_render_progress.is_empty() or _is_spectator_battle():
@@ -9699,6 +9735,8 @@ func _finish_pvp_render_progress(batch_context: Dictionary, success: bool) -> vo
 	)
 	pvp_render_progress_generation += 1
 	pvp_active_render_progress.clear()
+	if pvp_render_progress_timer != null:
+		pvp_render_progress_timer.stop()
 
 func _observe_pvp_realtime_render_batch_fence(response: Dictionary, batch_context: Dictionary) -> void:
 	if _is_spectator_battle() or not _is_authoritative_pvp_render_batch_response(response):
@@ -16502,6 +16540,7 @@ func _hold_opponent_response_message() -> void:
 	if OPPONENT_RESPONSE_HOLD_SECONDS <= 0.0:
 		return
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
+
 
 func _can_switch_to_slot(slot: int) -> bool:
 	var local_state_player_id := _get_local_state_player_id()

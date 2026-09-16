@@ -322,6 +322,28 @@ func _remember(key: String, value: Dictionary) -> void:
 	_cache[key] = value
 
 
+func diagnostic_cache_stats() -> Dictionary:
+	# Count shared sheets once, without get_image(), readback or eviction.
+	var sheets := {}
+	var estimated_bytes := 0
+	for value: Dictionary in _cache.values():
+		var frames: SpriteFrames = value.get("frames")
+		if frames == null:
+			continue
+		for animation in frames.get_animation_names():
+			for index in frames.get_frame_count(animation):
+				var texture := frames.get_frame_texture(animation, index)
+				while texture is AtlasTexture:
+					texture = texture.atlas
+				if texture == null or sheets.has(texture.get_instance_id()):
+					continue
+				sheets[texture.get_instance_id()] = true
+				estimated_bytes += texture.get_width() * texture.get_height() * 4
+	return {"entries": _cache.size(), "uniqueSheets": sheets.size(),
+		"estimatedRGBABytes": estimated_bytes, "inFlight": _in_flight.size(),
+		"prefetchQueued": _prefetch_queue.size(), "prefetchActive": _prefetch_active}
+
+
 func _normalize_segment(value: String) -> String:
 	var normalized := value.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
 	var safe := ""

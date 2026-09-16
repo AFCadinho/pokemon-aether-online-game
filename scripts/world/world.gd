@@ -173,6 +173,27 @@ var map_transition_layer: CanvasLayer
 var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
+var web_player_process_mode_before_load := Node.PROCESS_MODE_INHERIT
+
+func _enter_tree() -> void:
+	if OS.has_feature("web"):
+		_discard_web_placeholder_map()
+
+
+func _discard_web_placeholder_map() -> void:
+	# Remove the editor's default map before child _ready callbacks can launch
+	# NPC requests or saves while a different saved map's module downloads.
+	var container := get_node_or_null("CurrentMap")
+	if container == null:
+		return
+	for map in container.get_children():
+		container.remove_child(map)
+		map.queue_free()
+	var initial_player := get_node_or_null("Player")
+	if initial_player != null:
+		web_player_process_mode_before_load = initial_player.process_mode
+		initial_player.process_mode = Node.PROCESS_MODE_DISABLED
+
 
 func _exit_tree() -> void:
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -192,6 +213,8 @@ func _ready() -> void:
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
+		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
+			player.process_mode = web_player_process_mode_before_load
 		if GameState.gameplay_reset_in_progress:
 			GameState.finish_gameplay_reset()
 		return
@@ -419,7 +442,7 @@ func _append_web_sprite_entry(
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if OS.has_feature("web"):
-		if is_loading_map:
+		if is_loading_map or not _has_active_world_map():
 			return
 		if not is_in_battle:
 			position_presence_elapsed += delta
@@ -795,6 +818,11 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		if player.has_method("get_active_land_mount_id") \
 		else ""
 	if changes_map:
+		if OS.has_feature("web"):
+			var assets := await WebAssetModuleService.ensure_scene_available(target_scene_path)
+			if not bool(assets.get("success", false)):
+				_mark_authorized_teleport_apply_failed()
+				return assets
 		if not ResourceLoader.exists(target_scene_path):
 			_mark_authorized_teleport_apply_failed()
 			return {
@@ -1727,6 +1755,10 @@ func _setup_web_demo_world() -> void:
 			return
 		saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
+	var assets := await WebAssetModuleService.ensure_scene_available(saved_scene_path)
+	if not bool(assets.get("success", false)):
+		_return_web_demo_to_login(str(assets.get("error", "Could not download your map. Please try again.")))
+		return
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
 		_return_web_demo_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
@@ -1809,6 +1841,11 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "World player is not ready."}
 	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
+	var assets := await WebAssetModuleService.ensure_scene_available(target_scene_path)
+	if not bool(assets.get("success", false)):
+		cancel_authorized_teleport_effect()
+		is_loading_map = false
+		return assets
 	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
 		cancel_authorized_teleport_effect()
 		return {"success": false, "error": "Browser demo map is unavailable."}
@@ -2951,10 +2988,16 @@ func _is_remote_interaction_candidate_above(first: Dictionary, second: Dictionar
 	return int(_dictionary_from_value(first.get("player", {})).get("userId", 0)) > int(_dictionary_from_value(second.get("player", {})).get("userId", 0))
 
 
+func _has_active_world_map() -> bool:
+	return GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map)
+
+
 func _save_current_player_position_if_changed(force := false, spawn_marker := "") -> void:
 	if active_battle_kind == "coop":
 		return  # Co-op reservation/settlement owns both stored activity states.
 	if not AuthService.is_authenticated() or player == null:
+		return
+	if not _has_active_world_map():
 		return
 	if _is_player_position_save_blocked_by_teleport():
 		return
@@ -3469,6 +3512,7 @@ func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> 
 
 
 func _mount_battle_ui() -> bool:
+	WebMemoryProbe.mark("battle_ui_mount_begin")
 	if BATTLE_SCENE == null or battle_ui_host == null:
 		return false
 
@@ -3524,6 +3568,7 @@ func _clear_battle_ui_instance() -> void:
 		battle_ui_host.visible = false
 
 func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
+	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return
 		
@@ -3571,6 +3616,7 @@ func start_triggered_wild_battle_for_area(
 	forced_species_id: String = "",
 	retry_after_expired_battle := true
 ) -> void:
+	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return
 	if coop_wild_step_pending:
@@ -3738,6 +3784,7 @@ func _show_wild_encounter_start_error(response: Dictionary) -> void:
 				await GameErrorDialogService.show_response(response)
 
 func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
+	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return {
 			"success": false,
@@ -3893,6 +3940,7 @@ func _training_ai_battle_display_name(response: Dictionary) -> String:
 
 
 func start_training_ai_battle_from_response(response: Dictionary) -> bool:
+	WebMemoryProbe.mark("battle_response_received")
 	if is_in_battle or wild_battle_resume_pending or not bool(response.get("success", false)):
 		return false
 	var own_team_value: Variant = response.get("ownTeam", [])
@@ -4049,6 +4097,7 @@ func _forfeit_current_non_pvp_battle_for_pvp_match() -> void:
 		)
 	
 func end_wild_battle(keep_overworld_locked := false) -> void:
+	WebMemoryProbe.mark("battle_teardown_begin")
 	if battle_instance != null and battle_instance.has_signal("battle_ended"):
 		var ended_callback := Callable(self, "_on_battle_ended")
 		if battle_instance.is_connected("battle_ended", ended_callback):

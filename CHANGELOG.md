@@ -4,6 +4,51 @@
 
 - Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.
 
+- Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
+
+- Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.
+
+- Oak's lab entrance now triggers on the reachable doorway tile in browser and desktop.
+- Your house and Oak's lab use smaller lossless map atlases in both browser and desktop, with their artwork unchanged.
+
+- Newly imported maps use compact lossless atlases while preserving their artwork in the browser and desktop client.
+
+- The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
+
+- Pallet Town uses a smaller lossless map atlas while keeping its tiles and gameplay unchanged.
+
+- Battle effects reuse an identical background texture without changing visuals or preloading.
+
+- Grass battle effects reuse the prepared terrain texture, keeping animation quality and battle preloading unchanged.
+
+- Electric battle effects share an existing texture to reduce memory use without changing animation quality or battle preparation.
+
+- Latest download links now point to the current release without storing extra copies. Older desktop and browser downloads retain one previous version for rollback.
+
+- Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
+
+- Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
+
+- Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
+
+- Login failure messages remain visible on Welcome Back, and the browser preserves your original Remember me choice when restoring a session.
+- Improved resource cleanup when closing the game and during battle-preview transitions.
+
+- Corrected missing tiles in the browser's Misty-region interiors by rebuilding their lossless texture atlases with browser-safe dimensions. Browser login no longer starts the placeholder house's NPCs while downloading your saved map.
+
+- The browser demo now includes Mt. Moon, Cerulean City, Bill and Misty. These maps download separately when needed; Route 5, Route 9 and Cerulean Cave require the desktop client.
+
+- Completed the Clash Training Captain flow for independently sized Bot Guild practice with stationary [BOT] trainers and normal battle timers. Training remains disabled pending separate release activation.
+
+- Prepared compact numbered [BOT] labels so stationary training bots stay readable in crowded arenas, and checked unequal guild rosters through the training UI. Training remains unavailable until V1 is complete.
+
+- Prepared stationary [BOT] trainers in the Clash arena, including busy indicators and removal after elimination. Bot Guild training remains unavailable until V1 is complete.
+
+- The Clash Training Captain reports team-preparation failures in your selected language. Bot Guild training remains unavailable while V1 is completed.
+
+- Added the Clash Training Captain and a training setup menu with an independent opposing bot count. Training stays unavailable until bot-guild V1 is ready.
+- Optional browser map downloads now stream to storage, verify integrity and support retry. Existing browser world boundaries remain unchanged.
+
 - Co-op testing: the battle Bag shows available Poké Balls for your own wild target. Interrupted throws reuse their saved request, and accepted catches/results recover after reconnect. Full storage is explained without consuming a ball. Co-op remains disabled pending V1 acceptance.
 
 - Co-op testing: Run and trainer Forfeit ask your partner for agreement, even after an attack was selected. Refusing lets both Trainers choose again without using a turn or PP. Forfeit warns that both Trainers lose; co-op remains disabled pending V1 acceptance.

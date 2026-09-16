@@ -81,6 +81,85 @@
     </form>
   </dialog>
   <!-- POKEAETHER_RELEASE_CONFIG -->
+  <script id="pokeaether-memory-probe">
+    (() => {
+      if (!new URLSearchParams(location.search).has('memory-probe')) return;
+      const memories = new Set();
+      const remember = value => {
+        const exports = (value?.instance || value)?.exports || {};
+        for (const entry of Object.values(exports)) {
+          if (entry instanceof WebAssembly.Memory) memories.add(entry);
+        }
+      };
+      for (const method of ['instantiate', 'instantiateStreaming']) {
+        const original = WebAssembly[method];
+        if (!original) continue;
+        WebAssembly[method] = function(...args) {
+          for (const namespace of Object.values(args[1] || {})) {
+            for (const entry of Object.values(namespace || {})) {
+              if (entry instanceof WebAssembly.Memory) memories.add(entry);
+            }
+          }
+          return original.apply(this, args).then(result => { remember(result); return result; });
+        };
+      }
+      const samples = [];
+      window.pokeaetherMemoryProbe = {
+        samples,
+        record(sample) {
+          samples.push({...sample, browserTimeMs:performance.now(),
+            wasmCapacityBytes:memories.size ? [...memories].reduce((sum,m)=>sum+m.buffer.byteLength,0) : null,
+            jsHeapUsedBytes:performance.memory?.usedJSHeapSize ?? null});
+          if (samples.length > 240) samples.shift();
+        },
+      };
+    })();
+  </script>
+  <script id="pokeaether-fullscreen">
+    (() => {
+      const canvas = document.getElementById('canvas');
+      const retry = document.createElement('button');
+      retry.textContent = 'Enter fullscreen';
+      retry.hidden = true;
+      retry.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:auto;z-index:1000';
+      document.body.appendChild(retry);
+      let error = '';
+      const supported = () => Boolean(document.fullscreenEnabled && canvas.requestFullscreen);
+      const active = () => document.fullscreenElement === canvas;
+      const request = enabled => {
+        error = '';
+        retry.hidden = true;
+        if (enabled && !supported()) {
+          error = 'Fullscreen is not available in this browser.';
+          return;
+        }
+        if (enabled === active()) return;
+        if (enabled && navigator.userActivation && !navigator.userActivation.isActive) {
+          retry.hidden = false;
+          return;
+        }
+        // Call before any await: fullscreen requires a recent user gesture.
+        try {
+          const operation = enabled ? canvas.requestFullscreen() : document.exitFullscreen();
+          Promise.resolve(operation).catch(() => {
+            error = 'Fullscreen could not be enabled. Use the fullscreen button to retry.';
+            retry.hidden = !enabled;
+          });
+        } catch (_) {
+          error = 'Fullscreen could not be enabled.';
+          retry.hidden = !enabled;
+        }
+      };
+      retry.addEventListener('click', () => request(true));
+      document.addEventListener('fullscreenchange', () => {
+        retry.hidden = true;
+        error = '';
+        canvas.focus();
+        window.dispatchEvent(new Event('resize'));
+      });
+      window.pokeaetherFullscreen = {request, supported, active, error: () => error};
+    })();
+  </script>
   <script src="$GODOT_URL"></script>
   <script>
     const webRelease = window.POKEAETHER_WEB_RELEASE || null;

@@ -729,7 +729,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/thunderbolt/thunderbolt.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
@@ -1575,7 +1575,7 @@
       "template": "imported_sheet",
       "category": "projectile",
       "data_path": "res://assets/battles/animations/voltswitch/voltswitch.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -2080,7 +2080,7 @@
       "template": "imported_sheet",
       "category": "status_projectile",
       "data_path": "res://assets/battles/animations/thunderwave/thunderwave.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -5707,7 +5707,7 @@
       "overlay_fill_enabled": false,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/grassyterrain/grassyterrain.json",
-      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
       "background_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Giga Drain BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -5727,7 +5727,7 @@
       "overlay_fill_enabled": false,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/electricterrain/electricterrain.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "res://assets/battles/animations/electricterrain/PRAS- Electric Terrain BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -6707,7 +6707,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/gigavolthavoc/gigavolthavoc.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "res://assets/battles/animations/catastropika/PRAS- Thunder BG.png",
       "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
@@ -7051,7 +7051,7 @@
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/stokedsparksurfer/stokedsparksurfer.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "res://assets/battles/animations/electricterrain/PRAS- Electric Terrain BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -7889,7 +7889,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/vinewhip/vinewhip.json",
-      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7907,7 +7907,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/leafage/leafage.json",
-      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7982,7 +7982,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/thundershock/thundershock.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8019,7 +8019,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/razorleaf/razorleaf.json",
-      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8058,7 +8058,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/growth/growth.json",
-      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8395,7 +8395,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/charge/charge.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -9153,7 +9153,7 @@
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/babydolleyes/babydolleyes.json",
       "sheet_path": "res://assets/battles/animations/babydolleyes/PRAS- Baby Doll Eyes.png",
-      "background_path": "res://assets/battles/animations/babydolleyes/PRAS- Baby Doll Eyes BG.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Baby Doll Eyes.wav": "res://assets/battles/animations/babydolleyes/PRSFX- Baby Doll Eyes.wav"
@@ -9221,7 +9221,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/spark/spark.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {

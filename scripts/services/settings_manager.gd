@@ -98,6 +98,14 @@ func _ready() -> void:
 	_ensure_audio_buses()
 	load_settings()
 	_apply_runtime_settings()
+	set_process(OS.has_feature("web"))
+
+
+func _process(_delta: float) -> void:
+	var active := bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.active())", true))
+	if fullscreen != active:
+		fullscreen = active
+		settings_changed.emit()
 
 func load_settings() -> void:
 	if not FileAccess.file_exists(SETTINGS_PATH):
@@ -311,6 +319,9 @@ func set_show_performance(enabled: bool) -> void:
 
 
 func set_fullscreen(enabled: bool) -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherFullscreen?.request(%s)" % ("true" if enabled else "false"), true)
+		return
 	if fullscreen == enabled:
 		return
 
@@ -728,6 +739,8 @@ func _apply_audio_bus_volume(bus_name: String, volume: float) -> void:
 
 func _apply_display_settings() -> void:
 	if OS.has_feature("web"):
+		# Never enter fullscreen automatically from persisted settings.
+		fullscreen = bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.active())", true))
 		return
 
 	if fullscreen:

@@ -6,13 +6,13 @@ const PathUtils := preload("res://addons/tiled_tmx_importer/importer/tmx_path_ut
 var gid_lookup: Dictionary = {}
 
 
-func build_tileset(map_data: Dictionary, output_tileset_path: String) -> Dictionary:
+func build_tileset(map_data: Dictionary, output_tileset_path: String, reuse_existing := true) -> Dictionary:
 	gid_lookup.clear()
 	var normalized_output := PathUtils.normalize_path(output_tileset_path)
 	var signature := _build_signature(map_data)
 
 	var existing: TileSet = null
-	if ResourceLoader.exists(normalized_output):
+	if reuse_existing and ResourceLoader.exists(normalized_output):
 		existing = ResourceLoader.load(normalized_output, "TileSet", ResourceLoader.CACHE_MODE_IGNORE) as TileSet
 	if existing != null and str(existing.get_meta("tiled_source_signature", "")) == signature:
 		_build_gid_lookup(map_data)
@@ -47,7 +47,7 @@ func build_tileset(map_data: Dictionary, output_tileset_path: String) -> Diction
 			"error": "Could not save TileSet %s: %s" % [normalized_output, error_string(save_error)],
 		}
 
-	var saved_tileset := ResourceLoader.load(normalized_output, "TileSet", ResourceLoader.CACHE_MODE_IGNORE) as TileSet
+	var saved_tileset := ResourceLoader.load(normalized_output, "TileSet", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as TileSet
 	if saved_tileset == null:
 		saved_tileset = tile_set
 
@@ -161,8 +161,8 @@ func _build_gid_lookup(map_data: Dictionary) -> void:
 
 func _load_texture(path: String) -> Texture2D:
 	var localized := PathUtils.localize(path)
-	if localized.begins_with("res://"):
-		return load(localized) as Texture2D
+	if localized.begins_with("res://") or localized.begins_with("user://"):
+		return ResourceLoader.load(localized, "Texture2D", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as Texture2D
 
 	var image := Image.new()
 	var error := image.load(PathUtils.globalize(localized))

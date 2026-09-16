@@ -275,3 +275,19 @@ jobs:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: python3 tools/upload_web_release.py builds/web-r2 --manifest-only --publish-manifest
+
+      - name: Test and prune obsolete browser releases
+        if: inputs.publish_manifest
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+          WEB_URL: ${{ inputs.web_url }}
+        run: |
+          python3 tools/test_prune_r2_release_objects.py
+          python3 tools/prune_r2_release_objects.py builds/web-r2 \
+            --scope web --public-base-url "${ASSET_BASE_URL}" \
+            --active-web-url "${WEB_URL}" \
+            --retain-previous 1 --minimum-age-hours 24 --max-delete 20000 --apply

@@ -57,6 +57,7 @@ func clear_cache() -> void:
 
 
 func _fetch_npc_metadata(npc_id: String, locale: String) -> Dictionary:
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var url := base_url + NPC_METADATA_ENDPOINT % npc_id.uri_encode()
 	var request := HTTPRequest.new()
