@@ -254,6 +254,7 @@ const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interf
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
 const COOP_PARTY_POPUP_SCRIPT: Script = preload("res://scripts/ui/coop_party_popup.gd")
+const COOP_PARTY_HUD_SCRIPT: Script = preload("res://scripts/ui/coop_party_hud.gd")
 const QUEST_JOURNAL_VIEW_SCRIPT: Script = preload("res://scripts/ui/quest_journal_view.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
@@ -39276,29 +39277,14 @@ func _on_socials_adventure_party_button_pressed() -> void:
 	_open_coop_party_popup()
 
 func _create_coop_party_hud() -> void:
-	coop_party_hud = Button.new()
+	coop_party_hud = COOP_PARTY_HUD_SCRIPT.new() as Button
 	coop_party_hud.name = "AdventurePartyHud"
 	coop_party_hud.visible = false
 	coop_party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	coop_party_hud.offset_left = -304.0
 	coop_party_hud.offset_right = -64.0
 	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
-	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 40.0
-	coop_party_hud.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	coop_party_hud.focus_mode = Control.FOCUS_NONE
-	coop_party_hud.add_theme_color_override("font_color", UI_TEXT)
-	coop_party_hud.add_theme_color_override("font_hover_color", UI_TEXT)
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color("#0b1a2bea")
-	normal.border_color = Color("#315070")
-	normal.set_border_width_all(1)
-	normal.set_corner_radius_all(8)
-	coop_party_hud.add_theme_stylebox_override("normal", normal)
-	var hover := normal.duplicate() as StyleBoxFlat
-	hover.border_color = Color("#60d3ff")
-	coop_party_hud.add_theme_stylebox_override("hover", hover)
-	coop_party_hud.add_theme_stylebox_override("pressed", hover)
-	coop_party_hud.add_theme_stylebox_override("focus", hover)
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 104.0
 	coop_party_hud.pressed.connect(_open_coop_party_popup)
 	root_control.add_child(coop_party_hud)
 	_position_coop_party_hud()
@@ -39307,29 +39293,12 @@ func _position_coop_party_hud() -> void:
 	if coop_party_hud == null or personal_buffs_panel == null:
 		return
 	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
-	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 40.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 104.0
 
 func _refresh_coop_party_hud() -> void:
 	if coop_party_hud == null:
 		return
-	var party: Dictionary = CoopService.party
-	var members: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
-	var own_id := int(AuthService.current_user.get("id", 0))
-	var partner_id := 0
-	for member_id: Variant in members:
-		if int(member_id) != own_id:
-			partner_id = int(member_id)
-			break
-	coop_party_hud.visible = CoopService.available and members.size() == 2 and partner_id > 0
-	if not coop_party_hud.visible:
-		return
-	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
-	var partner_name := str(names.get(str(partner_id), "Partner"))
-	var shared_cap := int(party.get("sharedLevelCap", 0))
-	coop_party_hud.text = "PARTY  •  %s" % partner_name
-	if shared_cap > 0:
-		coop_party_hud.text += "  •  Lv. %d cap" % shared_cap
-	coop_party_hud.tooltip_text = "Adventure Party with %s" % partner_name
+	coop_party_hud.call("set_members", CoopService.party if CoopService.available else {}, int(AuthService.current_user.get("id", 0)))
 
 func _open_coop_party_popup(recipient_name: String = "") -> void:
 	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
