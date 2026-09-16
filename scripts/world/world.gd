@@ -3622,13 +3622,8 @@ func start_triggered_wild_battle_for_area(
 	if coop_wild_step_pending:
 		return
 	coop_wild_step_pending = true
-	var step_input_lock := not CoopService.party.is_empty() and not GameState.is_overworld_input_locked()
-	if step_input_lock:
-		GameState.lock_overworld_input()
 	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
 	coop_wild_step_pending = false
-	if step_input_lock and not is_in_battle and CoopService.activity.is_empty():
-		GameState.unlock_overworld_input()
 	if coop_step.get("handled", false):
 		if not coop_step.get("success", false):
 			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))

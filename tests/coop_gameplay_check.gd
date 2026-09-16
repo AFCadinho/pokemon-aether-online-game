@@ -11,6 +11,20 @@ func _run() -> void:
 	var service := root.get_node("CoopService")
 	service.set_process(false)
 	service.reset()
+	var gateway_config := root.get_node("GatewayApiConfig")
+	var previous_gateway_url: String = gateway_config.get("cached_url")
+	gateway_config.set("cached_url", "http://localhost:8000")
+	var missing_profile_sources: Array[String] = []
+	service.party_profile_missing.connect(func(source: String) -> void: missing_profile_sources.append(source))
+	var incomplete_party := {"party": {"memberIds": [1, 2]}, "invitations": [], "activity": {}}
+	service.apply_state(incomplete_party)
+	service.apply_state(incomplete_party)
+	_expect(missing_profile_sources == ["local development"], "missing member profiles identify the connected server once")
+	var parsed_party: Dictionary = JSON.parse_string('{"party":{"leaderId":2,"memberIds":[2,7],"memberUsernames":{"2":"admin","7":"afc_adinho"},"memberAppearances":{"2":{"body":"Gen4_Base_v1"},"7":{"body":"Gen4_Base_F_v1"}}},"invitations":[],"activity":{}}')
+	service.apply_state(parsed_party)
+	_expect(typeof(service.party["memberIds"][0]) == TYPE_INT and service.party["memberIds"] == [2, 7], "JSON float member IDs normalize to integer IDs")
+	_expect(missing_profile_sources.size() == 1, "canonical member keys find both names and portraits after JSON parsing")
+	gateway_config.set("cached_url", previous_gateway_url)
 	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
@@ -85,6 +99,11 @@ func _run() -> void:
 	service.activity = {}
 	party_popup.call("open", "TrainerTwo")
 	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
+	var focused_recipient: LineEdit = party_popup.get("_recipient")
+	focused_recipient.grab_focus()
+	focused_recipient.text = "TrainerTwoMore"
+	party_popup.call("_refresh")
+	_expect(party_popup.get("_recipient") == focused_recipient and focused_recipient.has_focus() and focused_recipient.text == "TrainerTwoMore", "party polling keeps username input and focus while typing")
 	var observed_invitations: Array[Dictionary] = []
 	service.invitation_received.connect(func(invitation: Dictionary) -> void: observed_invitations.append(invitation))
 	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo", "sharedLevelCap": 20}
@@ -128,12 +147,13 @@ func _run() -> void:
 	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
 	overlay_ui.set("personal_buffs_panel", buffs_panel)
 	overlay_ui.call("_position_coop_party_hud")
+	_expect(is_equal_approx(party_hud.offset_left, buffs_panel.offset_left) and is_equal_approx(party_hud.offset_right, buffs_panel.offset_right), "party HUD matches personal-buffs width")
 	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD sits directly above personal buffs")
 	buffs_panel.offset_top -= 60.0
 	overlay_ui.call("_position_coop_party_hud")
 	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
 	service.available = true
-	service.party = {"memberIds": [1, 2], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
+	service.party = {"memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
 		"memberAppearances": {"1": {"body": "Gen4_Base_v1", "gender": "male"}, "2": {"body": "Gen4_Base_F_v1", "gender": "female"}},
 		"sharedLevelCap": 20}
 	overlay_ui.call("_refresh_coop_party_hud")
@@ -146,6 +166,27 @@ func _run() -> void:
 		await create_timer(0.3).timeout
 		await RenderingServer.frame_post_draw
 		_expect(root.get_texture().get_image().save_png(hud_visual_path) == OK, "party HUD visual capture saved")
+	var auth_service := root.get_node("AuthService")
+	var previous_user: Dictionary = (auth_service.get("current_user") as Dictionary).duplicate(true)
+	auth_service.set("current_user", {"id": 1, "username": "SelfTrainer"})
+	var active_party_popup: Control = load("res://scripts/ui/coop_party_popup.gd").new()
+	root.add_child(active_party_popup)
+	active_party_popup.call("open")
+	var active_content: VBoxContainer = active_party_popup.get("_content")
+	var party_labels: Array = active_content.find_children("*", "Label", true, false)
+	_expect(active_content.get_child_count() == 5 and party_labels.any(func(label: Label) -> bool: return label.text == "TrainerOne")
+		and party_labels.any(func(label: Label) -> bool: return label.text == "TrainerTwo")
+		and party_labels.any(func(label: Label) -> bool: return label.text == "SHARED LEVEL CAP"), "active party popup separates both trainers and the shared cap")
+	var active_visual_path := OS.get_environment("COOP_PARTY_ACTIVE_VISUAL_CAPTURE_PATH")
+	if not active_visual_path.is_empty():
+		await create_timer(0.3).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(active_visual_path) == OK, "active party popup visual capture saved")
+	active_party_popup.free()
+	service.party = {"memberIds": [1, 2]}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(hud_names[0].text == "SelfTrainer" and hud_names[1].text == "Trainer #2", "older party responses still show own name and identify the partner")
+	auth_service.set("current_user", previous_user)
 	service.party = {}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
@@ -155,6 +196,15 @@ func _run() -> void:
 	_expect(interaction_script != null and interaction_script.get_script_signal_list().any(func(entry: Dictionary) -> bool: return entry.get("name") == "coop_invitation_requested"), "nearby Trainer context offers party invitation routing")
 	var world = load("res://scripts/world/world.gd")
 	_expect(world != null and world.can_instantiate(), "world compiles with co-op entry and recovery hooks")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var wild_step_source := world_source.get_slice("func start_triggered_wild_battle_for_area(", 1).get_slice("\nfunc ", 0)
+	_expect(wild_step_source.contains("coop_wild_step_pending") and not wild_step_source.contains("GameState.lock_overworld_input()"),
+		"co-op grass checks cannot freeze movement for network round trips")
+	var service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
+	var grass_request_source := service_source.get_slice("func try_wild_step(", 1).get_slice("\nfunc ", 0)
+	_expect(not grass_request_source.contains("var refreshed := await refresh()")
+		and grass_request_source.contains('result.get("body", {}).get("status") != "miss"'),
+		"grass misses avoid redundant status requests while starts still refresh")
 	await process_frame
 	quit(1 if failed else 0)
 

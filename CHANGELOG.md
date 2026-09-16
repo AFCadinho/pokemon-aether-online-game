@@ -4,6 +4,21 @@
 
 - Bot Guild trainers now show their names on the arena map when there is room; very large rosters keep compact [BOT] labels to avoid overlap.
 
+- Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
+- The Route 3 Pokémon Center Magikarp purchase now works in the browser and shows its new ₽2,000 price.
+
+- The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.
+
+- The Adventure Party card is now as compact as the personal-buffs panel below it.
+
+- Adventure Party names and portraits now resolve correctly when Godot parses numeric member IDs from the server's JSON response.
+
+- If a connected server omits party names or portraits, System chat now identifies whether the client is using the local, production or a custom API.
+
+- Typing a Trainer name in the Adventure Party invite window is no longer interrupted by the background party-status refresh.
+
+- The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
+
 - Bot difficulty names in Guild training no longer include the technical fallback note.
 
 - The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.

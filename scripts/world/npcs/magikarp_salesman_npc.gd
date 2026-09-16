@@ -41,7 +41,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	await show_dialogue()
-	if not await _confirm_purchase(int(sale.get("price", 5000)), int(sale.get("level", 5))):
+	if not await _confirm_purchase(int(sale.get("price", 2000)), int(sale.get("level", 5))):
 		_interaction_active = false
 		return
 
@@ -51,7 +51,7 @@ func interact_with_player(_player: Node2D) -> void:
 		if error_code in ["npc_pokemon_purchase_insufficient_funds", "not_enough_money"]:
 			await show_dialogue(await _resolve_lines(
 				insufficient_funds_dialogue_id,
-				["Future Champions know when to invest. Come back with ₽5,000 and secure your destiny!"]
+				["Future Champions know when to invest. Come back with ₽2,000 and secure your destiny!"]
 			))
 		else:
 			await GameErrorDialogService.show_response(result, "backend.error.npc_pokemon_sale")
@@ -59,7 +59,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	if bool(result.get("purchased", false)):
-		var paid_price := int(result.get("price", sale.get("price", 5000)))
+		var paid_price := int(result.get("price", sale.get("price", 2000)))
 		await show_dialogue(await _resolve_lines(
 			success_dialogue_id,
 			["Excellent choice! When it becomes unstoppable, remember who saw its potential first. No refunds!"]
