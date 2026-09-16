@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party invitations now show the current shared story level cap before you accept.
+
 - Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.
 
 - Side-quest offers now have clearer reward cards and adapt to shorter browser and desktop windows while keeping Accept and Decline visible. Their first opening in a session no longer stretches to nearly full-screen height.

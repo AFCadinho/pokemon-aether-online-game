@@ -116,6 +116,10 @@ func _refresh() -> void:
 				var sender := str(invitation_value.get("senderUsername", "Trainer"))
 				_label("%s invited you to an Adventure Party." % sender, TEXT)
 				_label("Play together with up to 3 Pokémon each.", MUTED)
+				var level_cap: Variant = invitation_value.get("sharedLevelCap")
+				if level_cap is int and level_cap > 0:
+					_label("Shared level cap: Lv. %d" % level_cap, TEXT)
+					_label("Based on the lower story cap; checked again before battle.", MUTED)
 				_content.add_child(_button("Accept invitation", func() -> void: await _respond("accept", _focused_invitation_id)))
 				_content.add_child(_button("Decline invitation", func() -> void: await _respond("close-invitation", _focused_invitation_id)))
 				return
@@ -137,6 +141,9 @@ func _refresh() -> void:
 		_content.add_child(_button("Leave party", func() -> void: await CoopService.party_action("leave")))
 	for invitation: Dictionary in CoopService.invitations:
 		_label("Invitation from %s" % str(invitation.get("senderUsername", "Trainer")), TEXT)
+		var level_cap: Variant = invitation.get("sharedLevelCap")
+		if level_cap is int and level_cap > 0:
+			_label("Shared level cap: Lv. %d" % level_cap, MUTED)
 		var invitation_id := str(invitation.get("invitationId", ""))
 		_content.add_child(_button("Accept", func() -> void: await _respond("accept", invitation_id)))
 		_content.add_child(_button("Decline", func() -> void: await _respond("close-invitation", invitation_id)))
