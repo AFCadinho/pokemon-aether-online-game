@@ -5,6 +5,7 @@ signal request_failed(message: String)
 signal invitation_received(invitation: Dictionary)
 signal invitation_sent(username: String)
 signal invitation_failed(message: String)
+signal party_profile_missing(source: String)
 
 const ORDINARY_TRAINERS := [
 	"kanto_route_1_youngster_liam",
@@ -40,6 +41,7 @@ var _sequence := 0
 var _applied_sequence := 0
 var _seen_invitations: Dictionary = {}
 var _sent_invitations: Dictionary = {}
+var _reported_profile_source := ""
 
 
 func _process(delta: float) -> void:
@@ -74,6 +76,7 @@ func reset() -> void:
 	_applied_sequence = _sequence
 	_seen_invitations.clear()
 	_sent_invitations.clear()
+	_reported_profile_source = ""
 	_poll_after = 0.0
 	state_changed.emit()
 
@@ -91,6 +94,27 @@ func refresh() -> Dictionary:
 
 func apply_state(body: Dictionary) -> void:
 	party = body.get("party", {}) if body.get("party") is Dictionary else {}
+	var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	if member_ids.size() == 2:
+		var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
+		var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
+		var incomplete := false
+		for member_id: Variant in member_ids:
+			var key := str(member_id)
+			var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
+			if str(names.get(key, "")).is_empty() or str(appearance.get("body", "")).is_empty():
+				incomplete = true
+		if incomplete:
+			var gateway := str(GatewayApiConfig.cached_url)
+			var source := "local development" if gateway.begins_with("http://localhost:8000") or gateway.begins_with("http://127.0.0.1:8000") else \
+				"production" if gateway.begins_with("https://api.pokeaether.com") else "custom/unknown"
+			if source != _reported_profile_source:
+				_reported_profile_source = source
+				party_profile_missing.emit(source)
+		else:
+			_reported_profile_source = ""
+	else:
+		_reported_profile_source = ""
 	invitations = body.get("invitations", []) if body.get("invitations") is Array else []
 	var incoming: Dictionary = body.get("activity", {}) if body.get("activity") is Dictionary else {}
 	if incoming.get("reservationId", "") != activity.get("reservationId", ""):
