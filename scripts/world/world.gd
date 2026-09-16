@@ -3573,8 +3573,6 @@ func _clear_battle_ui_instance() -> void:
 
 func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	WebMemoryProbe.mark("battle_start_requested")
-	print("COOP_DIAG dev_wild_entry ", JSON.stringify({"coopParty": not CoopService.party.is_empty(),
-		"inBattle": is_in_battle, "resumePending": wild_battle_resume_pending}))
 	if is_in_battle or wild_battle_resume_pending:
 		return
 		
@@ -3587,14 +3585,11 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	_lock_overworld_for_battle()
 	
 	var position_result := await sync_player_position_for_world_action()
-	print("COOP_DIAG dev_wild_position ", JSON.stringify({"success": bool(position_result.get("success", false))}))
 	if not bool(position_result.get("success", false)):
 		_abort_battle_start()
 		await GameErrorDialogService.show_response(position_result)
 		return
 	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
-	print("COOP_DIAG dev_wild_server ", JSON.stringify({"success": bool(response.get("success", false)),
-		"http": int(response.get("status", 0)), "code": str(response.get("code", ""))}))
 	if not response.get("success", false):
 		push_warning("World.start_dev_wild_battle failed: %s" % str(response.get("error", "Unknown error")))
 		_abort_battle_start()
@@ -3626,10 +3621,6 @@ func start_triggered_wild_battle_for_area(
 	retry_after_expired_battle := true
 ) -> void:
 	WebMemoryProbe.mark("battle_start_requested")
-	print("COOP_DIAG wild_entry ", JSON.stringify({"forced": not forced_species_id.is_empty(),
-		"encounterType": encounter_type, "coopParty": not CoopService.party.is_empty(),
-		"inBattle": is_in_battle, "resumePending": wild_battle_resume_pending,
-		"stepPending": coop_wild_step_pending}))
 	if is_in_battle or wild_battle_resume_pending:
 		return
 	if coop_wild_step_pending:
@@ -3637,9 +3628,6 @@ func start_triggered_wild_battle_for_area(
 	coop_wild_step_pending = true
 	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
 	coop_wild_step_pending = false
-	print("COOP_DIAG wild_result ", JSON.stringify({"handled": bool(coop_step.get("handled", false)),
-		"success": bool(coop_step.get("success", false)), "status": str(coop_step.get("status", "")),
-		"code": str(coop_step.get("code", "")), "activity": not CoopService.activity.is_empty()}))
 	if coop_step.get("handled", false):
 		if not coop_step.get("success", false):
 			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
