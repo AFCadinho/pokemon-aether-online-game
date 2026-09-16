@@ -944,11 +944,14 @@ func _send_out_message(controller: String, details: String) -> String:
 
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
 	if _native_mode:
-		if not SettingsManager.battle_animations:
-			return
 		match str(event.get("kind", "")):
-			"move": await _play_native_attack(str(event.get("actor", "")))
-			"-damage": await _play_native_hit(str(event.get("actor", "")))
+			"move":
+				if SettingsManager.battle_animations:
+					await _play_native_attack(str(event.get("actor", "")))
+			"-damage", "-heal":
+				if SettingsManager.battle_animations and event.get("kind") == "-damage":
+					await _play_native_hit(str(event.get("actor", "")))
+				_apply_native_event_hp(event)
 		return
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
@@ -967,6 +970,17 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 		"switch", "drag", "replace", "detailschange": _set_details(actor, str(event.get("details", "")), true)
 		_: return
 	await get_tree().create_timer(0.32 if event.get("kind") == "faint" else 0.22).timeout
+
+
+func _apply_native_event_hp(event: Dictionary) -> void:
+	var controller := str(event.get("actor", ""))
+	if not event.has("hpPercent") or controller not in SLOTS:
+		return
+	var hud: Control = embedded_hosts["player_hud"] if controller in ["p1", "p3"] else embedded_hosts["enemy_hud"]
+	var row_index := 1 if controller in ["p3", "p4"] else 0
+	var hp_bar: ProgressBar = hud.active_info_rows[row_index].get_node_or_null("MarginContainer/VBoxContainer/HPRow/HpBar") as ProgressBar
+	if hp_bar != null:
+		hp_bar.value = clampf(float(event.get("hpPercent", 0)), 0.0, 100.0)
 
 
 func _native_sprite(controller: String) -> AnimatedSprite2D:
