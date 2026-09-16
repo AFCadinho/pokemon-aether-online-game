@@ -85,6 +85,22 @@ func _run() -> void:
 	service.activity = {}
 	party_popup.call("open", "TrainerTwo")
 	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
+	var observed_invitations: Array[Dictionary] = []
+	service.invitation_received.connect(func(invitation: Dictionary) -> void: observed_invitations.append(invitation))
+	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo"}
+	service.apply_state({"party": {}, "invitations": [incoming], "activity": {}})
+	service.apply_state({"party": {}, "invitations": [incoming], "activity": {}})
+	_expect(observed_invitations.size() == 1, "incoming invitation notifies exactly once across polling")
+	party_popup.call("open_invitation", incoming)
+	_expect(party_popup.visible and party_popup.get("_focused_invitation_id") == "invite-one", "incoming invitation opens focused accept/decline popup")
+	var invitation_visual_path := OS.get_environment("COOP_INVITE_VISUAL_CAPTURE_PATH")
+	if not invitation_visual_path.is_empty():
+		await create_timer(0.2).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(invitation_visual_path) == OK, "invitation visual capture saved")
+	service.apply_state({"party": {}, "invitations": [], "activity": {}})
+	_expect(not party_popup.visible, "resolved invitation closes its focused popup")
+	party_popup.call("open", "TrainerTwo")
 	var visual_path := OS.get_environment("COOP_PARTY_VISUAL_CAPTURE_PATH")
 	if not visual_path.is_empty():
 		await create_timer(0.2).timeout

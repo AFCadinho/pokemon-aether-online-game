@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.
+
 - Adventure Party invitations now accept usernames or Trainer names instead of requiring numeric Trainer IDs. If a Trainer name is shared, use the unique username; right-click invitations prefill it.
 
 - Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.
