@@ -64,6 +64,7 @@ func _run() -> void:
 	_expect(controls.get_child_count() > 0, "functional battle controls mount")
 	service.view = {"positions": [{"controller": "p1", "details": "Leader"}, {"controller": "p3", "details": "Partner"}]}
 	_expect(controls._target_label(-1, "p3") == "Leader" and controls._target_label(-2, "p1") == "Partner", "target locations keep the same meaning for both players")
+	service.party = parsed_party.party
 	var host := Control.new()
 	host.visible = false
 	root.add_child(host)
@@ -79,8 +80,10 @@ func _run() -> void:
 	_expect(presenter.get("cards").size() == 4
 		and presenter.get("embedded_hosts").get("stage") == mounted_battle.get_node("%BattleStage")
 		and mounted_battle.get_node("%BattleBackground").visible
-		and not mounted_battle.get_node("%ActionsDock").visible
-		and not mounted_battle.get_node("%PlayerStagePartyRail").visible
+		and mounted_battle.get_node("%ActionsDock").visible
+		and mounted_battle.get_node("%PlayerStagePartyRail").visible
+		and mounted_battle.get_node("%BattleStatusPanel").visible
+		and mounted_battle.get_node("%VSPanelContainer").visible
 		and mounted_battle.get_node("%PlayerSpriteBox").visible
 		and mounted_battle.get_node("%EnemySpriteBox").visible
 		and mounted_battle.get_node("%PlayerSpriteBox").get_node("DoubleBattleContainer").visible
@@ -90,28 +93,41 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer").columns == 2
 		and mounted_battle.get_node("%PlayerHudPanel").custom_minimum_size.x == 520.0,
 		"double battles arrange two compact HP panels beside each other")
-	presenter._apply_positions({"participant": "p1", "positions": [
+	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
 		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100},
 		{"controller": "p4", "details": "Pidgey, L2, M", "hpPercent": 55}],
-		"ownTeam": [{"active": true, "hp": 23, "maxHp": 30}]})
+		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30},
+			{"species": "Ekans", "active": false, "hp": 29, "maxHp": 29}],
+		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 20, "maxHp": 20}]})
 	_expect(mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
 		and mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2").visible,
 		"four co-op Pokemon and the second HP row render in the native presentation")
+	_expect(mounted_battle.get_node("%BattleStatusPanel").turn_label.text.contains("4")
+		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 3
+		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data.size() == 2
+		and mounted_battle.get_node("%OpponentPartyGrid").current_party_data.size() == 2
+		and mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and presenter.get("_second_trainer").visible
+		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
+		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
+		"field rails combine both teams while the switch bar and log names stay player-specific")
 	service.activity = {"status": "active"}
 	service.view = {"battleId": "coop-fixture", "revision": 8, "turn": 1, "decisionId": "coop-4",
 		"locked": false, "participant": "p1", "moves": [{"slot": 1, "name": "Pound", "pp": 35, "maxPp": 35}],
-		"legalActions": [{"type": "move", "slot": 1, "target": 1}, {"type": "run"}],
+		"legalActions": [{"type": "move", "slot": 1, "target": 1}, {"type": "run"}, {"type": "switch", "slot": 2}],
 		"captureOptions": {"balls": [{"itemId": "poke-ball", "quantity": 1}], "storageAvailable": true}}
 	presenter.set("_action_signature", "")
 	presenter._update_actions()
 	_expect(mounted_battle.get_node("%MovesGrid").visible
 		and mounted_battle.get_node("%BagButton").visible
-		and mounted_battle.get_node("%RunButton").visible,
+		and mounted_battle.get_node("%RunButton").visible
+		and mounted_battle.get_node("%PlayerPartyGrid").is_slot_selectable(2)
+		and not mounted_battle.get_node("%PlayerPartyGrid").is_slot_selectable(1),
 		"co-op legal moves, Bag and Run use the existing battle controls")
 	presenter._select_move(1)
 	_expect(presenter.get("cards")["p2"].target.visible,

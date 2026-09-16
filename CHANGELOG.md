@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- The co-op battle screen no longer shows an empty party-rail border or a separate action dock; prompts use the normal battle field and extra co-op choices sit beside the battle log.
+- Co-op battles show both Trainers behind their Pokémon, a turn counter and VS banner on the field, combined party icons at the sides, and only your own Pokémon in the switch bar. The battle log uses Trainer names instead of generic co-op labels.
+
+- Co-op battle prompts use the normal battle field, with extra choices beside the battle log.
 
 - Co-op double battles show the two Pokémon HP panels side by side in a compact HUD; single battles keep their original HUD layout.
 
