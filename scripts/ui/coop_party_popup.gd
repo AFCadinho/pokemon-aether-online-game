@@ -9,6 +9,7 @@ const BORDER := Color("#315070")
 const ACCENT := Color("#60d3ff")
 const TEXT := Color("#f4f0de")
 const MUTED := Color("#aeb8c5")
+const DANGER := Color("#f1a9a9")
 
 var _content: VBoxContainer
 var _status: Label
@@ -17,6 +18,7 @@ var _recipient_text := ""
 var _dragging := false
 var _focused_invitation_id := ""
 var _response_pending := false
+var _rendered_party_signature := ""
 
 
 func _ready() -> void:
@@ -111,10 +113,21 @@ func _refresh() -> void:
 	if visible and _focused_invitation_id.is_empty() and CoopService.party.is_empty() \
 			and is_instance_valid(_recipient) and _recipient.has_focus():
 		return
+	var party_signature := JSON.stringify(CoopService.party) if _focused_invitation_id.is_empty() and not CoopService.party.is_empty() else ""
+	if visible and not party_signature.is_empty() and party_signature == _rendered_party_signature:
+		return
 	for child in _content.get_children():
 		_content.remove_child(child)
 		child.queue_free()
-	_status = _label("Up to 3 Pokémon per Trainer", MUTED)
+	_rendered_party_signature = party_signature
+	var party_mode := not CoopService.party.is_empty() and _focused_invitation_id.is_empty()
+	var target_size := Vector2(460, 370 if party_mode else 340)
+	if size != target_size:
+		custom_minimum_size = target_size
+		size = target_size
+		if visible:
+			position = ((get_viewport_rect().size - size) / 2.0).max(Vector2.ZERO)
+	_status = _label("2 Trainers · up to 3 Pokémon each" if party_mode else "Up to 3 Pokémon per Trainer", MUTED)
 	if not _focused_invitation_id.is_empty():
 		for invitation_value: Variant in CoopService.invitations:
 			if invitation_value is Dictionary and str(invitation_value.get("invitationId", "")) == _focused_invitation_id:
@@ -143,16 +156,25 @@ func _refresh() -> void:
 		_content.add_child(_button("Invite Trainer", _invite))
 	else:
 		var names: Dictionary = CoopService.party.get("memberUsernames", {}) if CoopService.party.get("memberUsernames") is Dictionary else {}
+		var appearances: Dictionary = CoopService.party.get("memberAppearances", {}) if CoopService.party.get("memberAppearances") is Dictionary else {}
 		var members: Array = CoopService.party.get("memberIds", []) if CoopService.party.get("memberIds") is Array else []
-		var display_names: Array[String] = []
+		var own_id := int(AuthService.current_user.get("id", 0))
+		if members.size() == 2 and int(members[1]) == own_id:
+			members = [members[1], members[0]]
+		var leader_id := int(CoopService.party.get("leaderId", 0))
 		for member_id: Variant in members:
-			display_names.append(str(names.get(str(int(member_id)), "Trainer")))
-		var leader_name := str(names.get(str(int(CoopService.party.get("leaderId", 0))), "Trainer"))
-		_label("Members: %s\nLeader: %s" % [", ".join(display_names), leader_name], TEXT)
+			var key := str(int(member_id))
+			var appearance: Dictionary = appearances.get(key, {}) if appearances.get(key) is Dictionary else {}
+			_add_member_card(str(names.get(key, "Trainer #%s" % key)), appearance,
+				int(member_id) == own_id, int(member_id) == leader_id)
 		var level_cap := int(CoopService.party.get("sharedLevelCap", 0))
-		if level_cap > 0:
-			_label("Shared level cap: Lv. %d" % level_cap, MUTED)
-		_content.add_child(_button("Leave party", func() -> void: await CoopService.party_action("leave")))
+		_add_level_cap_card(level_cap)
+		var leave_button := _button("Leave party", func() -> void: await CoopService.party_action("leave"))
+		leave_button.custom_minimum_size.y = 42
+		leave_button.add_theme_color_override("font_color", DANGER)
+		leave_button.add_theme_stylebox_override("normal", _style(SURFACE, Color("#8c4a55")))
+		leave_button.add_theme_stylebox_override("hover", _style(Color("#351b26"), DANGER))
+		_content.add_child(leave_button)
 	for invitation: Dictionary in CoopService.invitations:
 		_label("Invitation from %s" % str(invitation.get("senderUsername", "Trainer")), TEXT)
 		var level_cap: Variant = invitation.get("sharedLevelCap")
@@ -190,6 +212,62 @@ func _invite() -> void:
 func _show_error(message: String) -> void:
 	if is_instance_valid(_status):
 		_status.text = message
+
+
+func _add_member_card(name: String, appearance: Dictionary, is_self: bool, is_leader: bool) -> void:
+	var card := PanelContainer.new()
+	card.add_theme_stylebox_override("panel", _style(SURFACE, BORDER))
+	_content.add_child(card)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	card.add_child(row)
+	var frame := CenterContainer.new()
+	frame.custom_minimum_size = Vector2(48, 48)
+	row.add_child(frame)
+	var portrait := TrainerHeadPortrait.new()
+	portrait.custom_minimum_size = Vector2(48, 48)
+	portrait.appearance_state = appearance
+	frame.add_child(portrait)
+	if str(appearance.get("body", "")).is_empty():
+		var initial := Label.new()
+		initial.text = name.substr(0, 1).to_upper()
+		initial.add_theme_color_override("font_color", MUTED)
+		frame.add_child(initial)
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_theme_constant_override("separation", 2)
+	row.add_child(details)
+	var role := Label.new()
+	role.text = "YOU · LEADER" if is_self and is_leader else "YOU" if is_self else "PARTNER · LEADER" if is_leader else "PARTNER"
+	role.add_theme_color_override("font_color", ACCENT if is_self else MUTED)
+	role.add_theme_font_size_override("font_size", 10)
+	details.add_child(role)
+	var name_label := Label.new()
+	name_label.text = name
+	name_label.clip_text = true
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_color_override("font_color", TEXT)
+	name_label.add_theme_font_size_override("font_size", 16)
+	details.add_child(name_label)
+
+
+func _add_level_cap_card(level_cap: int) -> void:
+	var card := PanelContainer.new()
+	card.add_theme_stylebox_override("panel", _style(Color("#10263a"), BORDER))
+	_content.add_child(card)
+	var row := HBoxContainer.new()
+	card.add_child(row)
+	var label := Label.new()
+	label.text = "SHARED LEVEL CAP"
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_color_override("font_color", MUTED)
+	label.add_theme_font_size_override("font_size", 11)
+	row.add_child(label)
+	var value := Label.new()
+	value.text = "Lv. %d" % level_cap if level_cap > 0 else "—"
+	value.add_theme_color_override("font_color", ACCENT)
+	value.add_theme_font_size_override("font_size", 15)
+	row.add_child(value)
 
 
 func _label(value: String, color: Color) -> Label:

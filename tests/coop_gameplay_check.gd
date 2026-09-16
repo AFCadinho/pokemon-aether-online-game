@@ -169,6 +169,20 @@ func _run() -> void:
 	var auth_service := root.get_node("AuthService")
 	var previous_user: Dictionary = (auth_service.get("current_user") as Dictionary).duplicate(true)
 	auth_service.set("current_user", {"id": 1, "username": "SelfTrainer"})
+	var active_party_popup: Control = load("res://scripts/ui/coop_party_popup.gd").new()
+	root.add_child(active_party_popup)
+	active_party_popup.call("open")
+	var active_content: VBoxContainer = active_party_popup.get("_content")
+	var party_labels: Array = active_content.find_children("*", "Label", true, false)
+	_expect(active_content.get_child_count() == 5 and party_labels.any(func(label: Label) -> bool: return label.text == "TrainerOne")
+		and party_labels.any(func(label: Label) -> bool: return label.text == "TrainerTwo")
+		and party_labels.any(func(label: Label) -> bool: return label.text == "SHARED LEVEL CAP"), "active party popup separates both trainers and the shared cap")
+	var active_visual_path := OS.get_environment("COOP_PARTY_ACTIVE_VISUAL_CAPTURE_PATH")
+	if not active_visual_path.is_empty():
+		await create_timer(0.3).timeout
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(active_visual_path) == OK, "active party popup visual capture saved")
+	active_party_popup.free()
 	service.party = {"memberIds": [1, 2]}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(hud_names[0].text == "SelfTrainer" and hud_names[1].text == "Trainer #2", "older party responses still show own name and identify the partner")
