@@ -856,6 +856,15 @@ func setup_coop_battle() -> bool:
 		player_stage_party_grid.get_parent(), opponent_stage_party_rail,
 		battle_status_panel, vs_panel_container]:
 		node.visible = true
+	# The compact co-op sprites stand closer together than ordinary doubles.
+	# Bring their ground platforms under the feet without moving singles scenery.
+	player_battle_platform.offset_top -= 36.0
+	player_battle_platform.offset_bottom -= 36.0
+	enemy_battle_platform.offset_top -= 10.0
+	enemy_battle_platform.offset_bottom -= 10.0
+	# Leave the full six-slot side rail clear of the battle prompt below it.
+	var coop_player_rail := player_stage_party_grid.get_parent() as Control
+	coop_player_rail.position.y -= 40.0
 	battle_status_panel.hide_timer()
 	battle_status_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	battle_status_panel.offset_left = 12.0

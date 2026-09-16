@@ -154,6 +154,13 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer").columns == 2
 		and mounted_battle.get_node("%PlayerHudPanel").custom_minimum_size.x == 520.0,
 		"double battles arrange two compact HP panels beside each other")
+	await process_frame
+	var player_side_rail: Control = mounted_battle.get_node("%PlayerStagePartyRail")
+	var battle_prompt: Control = mounted_battle.get_node("%CurrentActionPanel")
+	_expect(player_side_rail.get_global_rect().end.y < battle_prompt.get_global_rect().position.y
+		and mounted_battle.get_node("%BattlePlatform").offset_top < -357.0
+		and mounted_battle.get_node("%BattlePlatform2").offset_top < -496.0,
+		"co-op platforms sit nearer the Pokemon and all side slots clear the battle prompt")
 	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
@@ -197,10 +204,13 @@ func _run() -> void:
 		"wild doubles hide both Trainer sprites")
 	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
 	if not wild_layout_capture.is_empty():
+		var decision_was_visible: bool = presenter._decision_overlay.visible
+		presenter._decision_overlay.visible = false
 		await process_frame
 		await RenderingServer.frame_post_draw
 		_expect(root.get_texture().get_image().save_png(wild_layout_capture) == OK,
 			"wild battle without Trainers capture saved")
+		presenter._decision_overlay.visible = decision_was_visible
 	service.activity.activityId = "brock"
 	presenter._sync_native_trainers()
 	_expect(mounted_battle.get_node("%PlayerTrainerSprite").visible
