@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.
+
 - Single battles again show full-width Pokémon HP bars after the double-battle HUD changes.
 
 - After both Trainers agree to flee a co-op wild battle, they return to the world automatically. A retry button appears if returning fails.

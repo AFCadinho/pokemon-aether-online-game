@@ -77,6 +77,32 @@ func _run() -> void:
 	_expect(bool(mounted_battle.get("coop_mode")) and mounted_battle.get("coop_presenter") != null,
 		"co-op uses the ordinary battle scene with its own server-driven presenter")
 	var presenter: Control = mounted_battle.get("coop_presenter")
+	var original_activity: Dictionary = service.activity.duplicate(true)
+	var original_view: Dictionary = service.view.duplicate(true)
+	service.view = {}
+	service.activity = {"status": "starting", "canCancel": true}
+	presenter._update_loading_overlay()
+	presenter._action_signature = ""
+	presenter._update_actions()
+	_expect(presenter._loading_overlay.visible and presenter._loading_cancel.visible,
+		"wild co-op start shows a clear loading state and cancel control")
+	_expect(not presenter._action_scroll.visible or presenter._actions.get_child_count() == 0,
+		"native loading state has no duplicate action below the battle")
+	var loading_capture_path := OS.get_environment("COOP_BATTLE_LOADING_CAPTURE_PATH")
+	if not loading_capture_path.is_empty():
+		await process_frame
+		await RenderingServer.frame_post_draw
+		_expect(root.get_texture().get_image().save_png(loading_capture_path) == OK,
+			"co-op loading state capture saved")
+	service.activity = {"status": "active"}
+	presenter._update_loading_overlay()
+	_expect(presenter._loading_overlay.visible, "loading state stays until the first battle snapshot")
+	service.activity = original_activity
+	service.view = original_view
+	presenter._update_loading_overlay()
+	presenter._action_signature = ""
+	presenter._update_actions()
+	_expect(not presenter._loading_overlay.visible, "battle interface replaces loading state when ready")
 	var dock_content: Control = mounted_battle.get_node("%DockContent")
 	var battle_log: Control = mounted_battle.get_node("%BattleLogPanel")
 	var calc_button: Button = mounted_battle.get_node("%CalcLogButton")
