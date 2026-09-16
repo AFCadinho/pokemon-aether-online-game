@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild training Captains can choose AI4 Beginner or AI5 Grandmaster Hard when challenging the bot Guild.
+
 - Bot Guild practice no longer keeps Turn 1 moves disabled for the 30-second presentation fallback after a confirmed opening release.
 
 - Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
