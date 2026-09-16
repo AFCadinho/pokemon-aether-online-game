@@ -843,24 +843,38 @@ func setup_coop_battle() -> bool:
 	# The ordinary single-battle controller never receives co-op battle state.
 	# Keep its visual shell, but let the server-driven co-op presenter own input.
 	set_process(false)
-	for node: CanvasItem in [player_battle_platform, enemy_battle_platform,
-		player_sprite_box, enemy_sprite_box, player_trainer_sprite, enemy_trainer_sprite,
-		player_hud_panel, enemy_hud_panel, player_stage_party_grid, opponent_stage_party_rail,
+	for node: CanvasItem in [player_trainer_sprite, enemy_trainer_sprite,
+		player_stage_party_grid, opponent_stage_party_rail,
 		battle_status_panel, vs_panel_container, mini_battle_feed]:
 		node.visible = false
+	for node: CanvasItem in [player_battle_platform, enemy_battle_platform,
+		player_sprite_box, enemy_sprite_box, player_hud_panel, enemy_hud_panel]:
+		node.visible = true
+	player_sprite_box.web_sprite_upgrades_allowed = false
+	enemy_sprite_box.web_sprite_upgrades_allowed = false
+	player_sprite_box.set_battle_type(true)
+	enemy_sprite_box.set_battle_type(true)
+	if moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
+		moves_grid.move_selected.disconnect(_on_moves_grid_move_selected)
+	if action_buttons.action_selected.is_connected(_on_action_selected):
+		action_buttons.action_selected.disconnect(_on_action_selected)
 	battle_drawer_layer.visible = false
 	battle_party_rail.visible = false
 	battle_log_toggle_button.visible = false
 	for child: CanvasItem in battle_log_rail.get_children():
 		child.visible = false
+	battle_log_panel.visible = true
 	var dock_content := action_side_panel.get_node_or_null("MarginContainer/DockContent") as Control
 	if dock_content == null:
 		return false
 	for child: CanvasItem in dock_content.get_children():
 		child.visible = false
-	action_side_panel.custom_minimum_size.y = 250.0
+	action_side_panel.custom_minimum_size.y = 150.0
 	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
-	coop_presenter.embedded_hosts = {"stage": battle_stage, "dock": dock_content, "rail": battle_log_rail}
+	coop_presenter.embedded_hosts = {"stage": battle_stage, "dock": dock_content, "rail": battle_log_rail,
+		"player_sprite": player_sprite_box, "enemy_sprite": enemy_sprite_box,
+		"player_hud": player_hud_panel, "enemy_hud": enemy_hud_panel,
+		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons}
 	add_child(coop_presenter)
 	return true
 

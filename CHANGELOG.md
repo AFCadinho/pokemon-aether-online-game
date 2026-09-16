@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now use the familiar battle field: two Pokémon sprites on each side, stacked native HP panels, standard move buttons and battle log, with Bag and Run in their usual place.
+
 - Co-op double battles now open in the regular battle window, with both Trainers' Pokémon, opponents, battle events and shared turn actions placed in its battle stage and panels.
 
 - Guild training challenges now recognize the Captain at her new lobby position.
