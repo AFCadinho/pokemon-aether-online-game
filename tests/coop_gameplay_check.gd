@@ -117,6 +117,16 @@ func _run() -> void:
 	var overlay_scene: PackedScene = load("res://scenes/interface/ui_overlay.tscn")
 	var overlay_ui := overlay_scene.instantiate()
 	_expect(overlay_ui.get_node_or_null("Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton") != null, "Socials menu contains an Adventure Party launcher")
+	var party_hud := Button.new()
+	overlay_ui.set("coop_party_hud", party_hud)
+	service.available = true
+	service.party = {"memberIds": [1, 2], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"}, "sharedLevelCap": 20}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(party_hud.visible and party_hud.text.contains("TrainerOne") and party_hud.text.contains("Lv. 20"), "party HUD shows partner name and server-provided cap")
+	service.party = {}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
+	party_hud.free()
 	overlay_ui.free()
 	var interaction_script: Script = load("res://scripts/ui/player_interaction_coordinator.gd")
 	_expect(interaction_script != null and interaction_script.get_script_signal_list().any(func(entry: Dictionary) -> bool: return entry.get("name") == "coop_invitation_requested"), "nearby Trainer context offers party invitation routing")

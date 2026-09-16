@@ -137,7 +137,16 @@ func _refresh() -> void:
 		_content.add_child(_recipient)
 		_content.add_child(_button("Invite Trainer", _invite))
 	else:
-		_label("Members: %s\nLeader: %s" % [str(CoopService.party.get("memberIds", [])), str(CoopService.party.get("leaderId", ""))], TEXT)
+		var names: Dictionary = CoopService.party.get("memberUsernames", {}) if CoopService.party.get("memberUsernames") is Dictionary else {}
+		var members: Array = CoopService.party.get("memberIds", []) if CoopService.party.get("memberIds") is Array else []
+		var display_names: Array[String] = []
+		for member_id: Variant in members:
+			display_names.append(str(names.get(str(member_id), "Trainer")))
+		var leader_name := str(names.get(str(CoopService.party.get("leaderId", "")), "Trainer"))
+		_label("Members: %s\nLeader: %s" % [", ".join(display_names), leader_name], TEXT)
+		var level_cap := int(CoopService.party.get("sharedLevelCap", 0))
+		if level_cap > 0:
+			_label("Shared level cap: Lv. %d" % level_cap, MUTED)
 		_content.add_child(_button("Leave party", func() -> void: await CoopService.party_action("leave")))
 	for invitation: Dictionary in CoopService.invitations:
 		_label("Invitation from %s" % str(invitation.get("senderUsername", "Trainer")), TEXT)

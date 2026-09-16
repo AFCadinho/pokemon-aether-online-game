@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your Adventure Party partner and shared level cap now appear in a compact in-game indicator below the location bar. Select it to open the party window.
+
 - The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
 
 - Adventure Party invitations now show the current shared story level cap before you accept.
