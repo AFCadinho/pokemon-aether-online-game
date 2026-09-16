@@ -29,6 +29,14 @@ var _native_moves: MovesGrid
 var _native_log: BattleLogPanel
 var _native_utility: Control
 var _action_scroll: ScrollContainer
+var _native_turn: BattleStatusPanel
+var _native_vs: BattleVsPanelContainer
+var _native_party: PartyGrid
+var _allied_party: PartyGrid
+var _opponent_party: PartyGrid
+var _first_trainer: BattleTrainerSprite
+var _second_trainer: BattleTrainerSprite
+var _trainer_identity := ""
 
 
 func _ready() -> void:
@@ -79,10 +87,17 @@ func _ready() -> void:
 		var stage: Control = embedded_hosts["stage"]
 		var prompt_panel: CurrentActionPanel = embedded_hosts["prompt"]
 		var rail: Control = embedded_hosts["rail"]
-		_header = _label(rail, "CO-OP  /  CONNECTING", 20)
-		_connection = _label(rail, "", 14)
-		rail.move_child(_header, 0)
-		rail.move_child(_connection, 1)
+		_native_turn = embedded_hosts["turn"] as BattleStatusPanel
+		_native_vs = embedded_hosts["vs"] as BattleVsPanelContainer
+		_native_party = embedded_hosts["own_party"] as PartyGrid
+		_allied_party = embedded_hosts["allied_party"] as PartyGrid
+		_opponent_party = embedded_hosts["opponent_party"] as PartyGrid
+		_first_trainer = embedded_hosts["trainer"] as BattleTrainerSprite
+		_native_party.party_selected.connect(_select_switch)
+		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
+		stage.add_child(_second_trainer)
+		_first_trainer.position = Vector2(124, 474)
+		_second_trainer.position = Vector2(336, 474)
 		_log = RichTextLabel.new()
 		_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_log.custom_minimum_size.y = 160
@@ -198,6 +213,9 @@ func _sync() -> void:
 		_server_time = server_time
 		_clock_at = Time.get_ticks_msec()
 	_latest = CoopService.view.duplicate(true)
+	if _native_mode:
+		_sync_native_trainers()
+		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
 		_epoch += 1
@@ -222,9 +240,14 @@ func _sync() -> void:
 
 
 func _process(_delta: float) -> void:
-	if _connection == null:
+	if _connection == null and not _native_mode:
 		return
 	var remaining := maxi(0, int(ceil(float(CoopService.activity.get("decisionDeadline", 0)) - _server_time - (Time.get_ticks_msec() - _clock_at) / 1000.0)))
+	if _native_mode:
+		_native_turn.turn_separator_label.visible = CoopService.activity.get("status") == "active"
+		_native_turn.timer_label.visible = CoopService.activity.get("status") == "active"
+		_native_turn.timer_label.text = "%ds" % remaining
+		return
 	_connection.text = "%s  ·  %s  ·  %ds remaining" % [
 		"Partner connected" if CoopService.activity.get("partnerConnected", false) else "Partner disconnected — temporary AI after 30s",
 		"Partner ready" if CoopService.view.get("partnerReady", false) else "Partner choosing", remaining]
@@ -310,6 +333,29 @@ func _apply_positions(snapshot: Dictionary) -> void:
 
 
 func _apply_native_positions(snapshot: Dictionary) -> void:
+	_native_turn.set_turn(int(snapshot.get("turn", 0)))
+	var own_team: Array = snapshot.get("ownTeam", [])
+	_native_party.set_party(own_team)
+	_native_party.set_empty_slots_visible(false)
+	var partner_team: Array = snapshot.get("partnerTeam", [])
+	var allied_team: Array = own_team + partner_team if snapshot.get("participant") == "p1" else partner_team + own_team
+	_allied_party.set_party(allied_team)
+	_allied_party.set_empty_slots_visible(true)
+	var opponent_team: Array = []
+	for index in range(mini(6, int(snapshot.get("opponentPartySize", 0)))):
+		opponent_team.append({"unrevealed": true})
+	for position: Dictionary in snapshot.get("positions", []):
+		var controller := str(position.get("controller", ""))
+		if controller not in ["p2", "p4"]:
+			continue
+		var index := 0 if controller == "p2" else 1
+		if index >= opponent_team.size():
+			continue
+		opponent_team[index] = {"species": str(position.get("details", "")).split(",")[0].strip_edges(),
+			"hp": int(position.get("hpPercent", 0)), "maxHp": 100,
+			"fainted": bool(position.get("fainted", false))}
+	_opponent_party.set_party(opponent_team)
+	_opponent_party.set_empty_slots_visible(false)
 	var active: Dictionary = {}
 	for position: Dictionary in snapshot.get("positions", []):
 		active[str(position.get("controller", ""))] = position
@@ -375,6 +421,7 @@ func _update_actions() -> void:
 		_native_moves.visible = false
 		_native_utility.set_action_visible("bag", false)
 		_native_utility.set_action_visible("run", false)
+		_native_party.set_selection_enabled(false)
 	var last_capture: Dictionary = CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else {}
 	_capture_status.text = ""
 	if not last_capture.is_empty():
@@ -389,7 +436,8 @@ func _update_actions() -> void:
 	for card: Dictionary in cards.values():
 		card.target.visible = false
 	var phase := str(CoopService.activity.get("status", "starting"))
-	_header.text = "CO-OP  /  TURN %s" % str(CoopService.view.get("turn", 1))
+	if not _native_mode:
+		_header.text = "CO-OP  /  TURN %s" % str(CoopService.view.get("turn", 1))
 	if phase in ["finished", "cancelled"]:
 		var outcomes := {"win": "Victory — both Trainers won.", "loss": "Both teams were defeated.", "draw": "The battle ended in a draw."}
 		_prompt.text = "Battle start cancelled." if phase == "cancelled" else str(outcomes.get(CoopService.activity.get("outcome"), "Battle finished."))
@@ -433,6 +481,16 @@ func _update_actions() -> void:
 			display_moves.append(prepared)
 		_native_moves.set_moves(display_moves)
 		_native_moves.visible = not display_moves.is_empty() and not CoopService.view.get("forceSwitch", false) and not _bag_open
+		_native_party.set_selection_enabled(true)
+		for slot_index in range(_native_party.get_child_count()):
+			var party_slot := _native_party.get_child(slot_index) as Button
+			if party_slot == null:
+				continue
+			var legal := false
+			for action: Dictionary in CoopService.view.get("legalActions", []):
+				if action.get("type") == "switch" and int(action.get("slot", 0)) == slot_index + 1:
+					legal = true
+			party_slot.disabled = not legal
 	var capture_options: Dictionary = CoopService.view.get("captureOptions", {}) if CoopService.view.get("captureOptions") is Dictionary else {}
 	if not capture_options.is_empty():
 		if _native_mode:
@@ -484,12 +542,13 @@ func _update_actions() -> void:
 					cards[controller].target.visible = true
 					cards[controller].target.text = "Target " + _role(controller)
 					cards[controller].target.modulate = ACCENT
-	var switches := HBoxContainer.new()
-	_actions.add_child(switches)
-	for action: Dictionary in CoopService.view.get("legalActions", []):
-		if action.get("type") != "switch": continue
-		var pokemon: Dictionary = CoopService.view.get("ownTeam", [])[int(action.slot) - 1]
-		_button(switches, "%s\n%s/%s HP" % [str(pokemon.get("species", "")), str(pokemon.get("hp", 0)), str(pokemon.get("maxHp", 0))], func() -> void: await CoopService.submit_action(action))
+	if not _native_mode:
+		var switches := HBoxContainer.new()
+		_actions.add_child(switches)
+		for action: Dictionary in CoopService.view.get("legalActions", []):
+			if action.get("type") != "switch": continue
+			var pokemon: Dictionary = CoopService.view.get("ownTeam", [])[int(action.slot) - 1]
+			_button(switches, "%s\n%s/%s HP" % [str(pokemon.get("species", "")), str(pokemon.get("hp", 0)), str(pokemon.get("maxHp", 0))], func() -> void: await CoopService.submit_action(action))
 
 
 func _move_actions(slot: int) -> Array:
@@ -499,6 +558,15 @@ func _move_actions(slot: int) -> Array:
 func _sync_action_scroll() -> void:
 	if _native_mode and is_instance_valid(_action_scroll):
 		_action_scroll.visible = _actions.get_child_count() > 0
+
+
+func _select_switch(slot: int) -> void:
+	if _playing or CoopService.view.get("locked", true):
+		return
+	for action: Dictionary in CoopService.view.get("legalActions", []):
+		if action.get("type") == "switch" and int(action.get("slot", 0)) == slot:
+			await CoopService.submit_action(action)
+			return
 
 
 func _on_native_utility_action(action: String) -> void:
@@ -588,11 +656,61 @@ func _show_error(message: String) -> void:
 
 
 func _role(controller: String) -> String:
+	if _native_mode:
+		if controller in ["p1", "p3"]:
+			return _trainer_name(controller)
+		if controller in ["p2", "p4"]:
+			return "%s %s" % [_opponent_title(), "1" if controller == "p2" else "2"]
 	if controller == CoopService.view.get("participant"): return "you"
 	if controller in ["p1", "p3"]: return "partner"
 	if controller == "p2": return "opponent 1"
 	if controller == "p4": return "opponent 2"
 	return "field"
+
+
+func _party_member_id(controller: String) -> int:
+	var leader_id := int(CoopService.party.get("leaderId", 0))
+	if controller == "p1":
+		return leader_id
+	for member_id: Variant in CoopService.party.get("memberIds", []):
+		if int(member_id) != leader_id:
+			return int(member_id)
+	return 0
+
+
+func _trainer_name(controller: String) -> String:
+	var names: Dictionary = CoopService.party.get("memberUsernames", {})
+	var name := str(names.get(str(_party_member_id(controller)), "")).strip_edges()
+	return name if not name.is_empty() else "Trainer %s" % ("1" if controller == "p1" else "2")
+
+
+func _opponent_title() -> String:
+	var activity_id := str(CoopService.activity.get("activityId", ""))
+	if activity_id.begins_with("wild_"):
+		return "Wild Pokémon"
+	if activity_id.contains("gary"):
+		return "Gary"
+	if activity_id.contains("brock"):
+		return "Brock"
+	return "Trainer"
+
+
+func _sync_native_trainers() -> void:
+	var appearances: Dictionary = CoopService.party.get("memberAppearances", {})
+	var first: Dictionary = appearances.get(str(_party_member_id("p1")), {})
+	var second: Dictionary = appearances.get(str(_party_member_id("p3")), {})
+	if CoopService.view.get("participant") == "p1" and first.is_empty():
+		first = PlayerSave.to_appearance_state()
+	elif CoopService.view.get("participant") == "p3" and second.is_empty():
+		second = PlayerSave.to_appearance_state()
+	var identity := JSON.stringify([first, second])
+	if identity == _trainer_identity:
+		return
+	_trainer_identity = identity
+	if not first.is_empty():
+		_first_trainer.show_player(first, Vector2.RIGHT)
+	if not second.is_empty():
+		_second_trainer.show_player(second, Vector2.RIGHT)
 
 
 func _label(parent: Node, text: String, font_size: int) -> Label:
