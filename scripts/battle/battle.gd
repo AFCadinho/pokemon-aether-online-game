@@ -395,6 +395,8 @@ var pvp_reconnect_grace_deadline_by_side: Dictionary = {}
 var pvp_forced_switch_diagnostic_keys: Dictionary = {}
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
+var pvp_presentation_schedule_source_batch_id := ""
+var pvp_last_released_presentation_batch_id := ""
 var pvp_presentation_acknowledgements_authoritative := false
 var pvp_waiting_observability_started_msec := 0
 var pvp_waiting_observability_reported := false
@@ -4061,10 +4063,20 @@ func _update_pvp_presentation_schedule(response: Dictionary) -> void:
 	if schedule.is_empty() or str(schedule.get("status", "")) != "SCHEDULED":
 		pvp_presentation_actionable_local_msec = 0
 		pvp_presentation_schedule_token = ""
+		pvp_presentation_schedule_source_batch_id = ""
+		return
+	var source_batch_id := str(schedule.get("sourceEventBatchId", "")).strip_edges()
+	if _pvp_presentation_batch_was_released(source_batch_id):
+		# A lead timeout can deliver turn_open before the preview completion
+		# response is applied. Never reinstall its already-released fallback hold.
+		pvp_presentation_actionable_local_msec = 0
+		pvp_presentation_schedule_token = ""
+		pvp_presentation_schedule_source_batch_id = ""
 		return
 	var remaining := maxi(0, int(schedule.get("actionableAtMs", 0)) - int(presentation.get("serverNowMs", 0)))
 	pvp_presentation_actionable_local_msec = Time.get_ticks_msec() + remaining
 	pvp_presentation_schedule_token = "%s:%s" % [schedule.get("decisionId", ""), schedule.get("decisionGeneration", 0)]
+	pvp_presentation_schedule_source_batch_id = source_batch_id
 	_set_battle_input_locked(true)
 	_release_pvp_presentation_hold_after(remaining, pvp_presentation_schedule_token)
 
@@ -4075,18 +4087,38 @@ func _release_pvp_presentation_hold_after(remaining_msec: int, token: String) ->
 		return
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
+	pvp_presentation_schedule_source_batch_id = ""
 	_set_battle_input_locked(false)
 
 func _is_pvp_presentation_hold_active() -> bool:
 	return _is_pvp_battle() and pvp_presentation_actionable_local_msec > Time.get_ticks_msec()
 
 func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> void:
+	if not bool(message.get("presentationReleased", false)):
+		return
+	var released_batch_id := str(message.get("eventBatchId", "")).strip_edges()
+	if released_batch_id == "" or str(message.get("phase", "")) == "rendering_events":
+		return
+	pvp_last_released_presentation_batch_id = released_batch_id
 	if not pvp_presentation_acknowledgements_authoritative:
 		return
-	if not bool(message.get("presentationReleased", false)):
+	var exact_schedule_release := pvp_presentation_schedule_source_batch_id == released_batch_id
+	var legacy_fence_release := (
+		pvp_presentation_schedule_source_batch_id == ""
+		and str(pvp_pending_presentation_fence.get("eventBatchId", "")).strip_edges() == released_batch_id
+	)
+	if not exact_schedule_release and not legacy_fence_release:
 		return
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
+	pvp_presentation_schedule_source_batch_id = ""
+
+func _pvp_presentation_batch_was_released(source_batch_id: String) -> bool:
+	return (
+		pvp_presentation_acknowledgements_authoritative
+		and source_batch_id != ""
+		and source_batch_id == pvp_last_released_presentation_batch_id
+	)
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
 	var was_ready := battle_actions_ready
@@ -13203,7 +13235,10 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 		)
 	if releases_presentation_fence:
 		released_presentation_fence = pvp_pending_presentation_fence.duplicate(true)
-		_release_pvp_presentation_hold_from_ack_barrier(message)
+	# The opening phase can be released while the preview picker is still being
+	# unwound and no local fence is installed yet. Its exact batch still proves
+	# that the server released the presentation schedule.
+	_release_pvp_presentation_hold_from_ack_barrier(message)
 
 	var server_seq := _get_pvp_message_server_seq(message)
 	var phase := str(message.get("phase", "")).strip_edges()

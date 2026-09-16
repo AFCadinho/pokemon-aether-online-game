@@ -50,6 +50,10 @@ func _init() -> void:
 		"the shared render barrier releases the local presentation hold"
 	)
 	_check(
+		battle_source.contains("\t_release_pvp_presentation_hold_from_ack_barrier(message)\n\n\tvar server_seq"),
+		"team-preview phase release is remembered even before a local render fence exists"
+	)
+	_check(
 		battle_source.contains("_try_open_pvp_local_prechoice_window.call_deferred(completion.duplicate(true))"),
 		"local controls may pre-open only after the completed render batch leaves the queue"
 	)
@@ -67,7 +71,19 @@ func _init() -> void:
 		"resynchronization discards an unsubmitted local prechoice"
 	)
 	_check_duplicate_batch_retries_until_render_cursor_advances()
+	_check_team_preview_release_ordering(battle_source)
 	quit(1 if failed else 0)
+
+func _check_team_preview_release_ordering(battle_source: String) -> void:
+	var schedule_index := battle_source.find("func _update_pvp_presentation_schedule(")
+	var schedule_source := battle_source.substr(schedule_index, battle_source.find("\nfunc ", schedule_index + 1) - schedule_index)
+	var release_index := battle_source.find("func _release_pvp_presentation_hold_from_ack_barrier(")
+	var release_source := battle_source.substr(release_index, battle_source.find("\nfunc ", release_index + 1) - release_index)
+	_check(schedule_source.contains("_pvp_presentation_batch_was_released(source_batch_id)"), "late preview completion cannot reinstall an already released hold")
+	_check(release_source.contains('if not bool(message.get("presentationReleased", false)):'), "unsuccessful timer release preserves the hold")
+	_check(release_source.contains('pvp_presentation_schedule_source_batch_id == released_batch_id'), "the matching schedule batch can release move controls")
+	_check(release_source.contains('pvp_pending_presentation_fence.get("eventBatchId", "")'), "legacy schedules still release against the exact local fence")
+	_check(battle_source.contains('source_batch_id == pvp_last_released_presentation_batch_id'), "early release is matched to the exact batch")
 
 func _check_duplicate_batch_retries_until_render_cursor_advances() -> void:
 	var queue = BattleEventQueueScript.new()
