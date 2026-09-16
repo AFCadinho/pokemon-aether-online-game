@@ -84,6 +84,10 @@ func _run() -> void:
 		and mounted_battle.get_node("%PlayerSpriteBox").get_node("DoubleBattleContainer").visible
 		and mounted_battle.get_node("%EnemySpriteBox").get_node("DoubleBattleContainer").visible,
 		"co-op reuses the native battle stage and two-sprite containers on both sides")
+	_expect(mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer").columns == 2
+		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer").columns == 2
+		and mounted_battle.get_node("%PlayerHudPanel").custom_minimum_size.x == 520.0,
+		"double battles arrange two compact HP panels beside each other")
 	presenter._apply_positions({"participant": "p1", "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
