@@ -28,15 +28,18 @@ func _init() -> void:
 	add_child(nameplate)
 
 
-func apply_state(player: Dictionary) -> void:
+func apply_state(player: Dictionary, compact_label: bool = false) -> void:
 	var bot: Dictionary = player["bot"]
 	user_id = int(player["userId"])
 	actor_key = str(bot["actorKey"])
 	global_position = Vector2(float(bot["x"]), float(bot["y"]))
 	z_index = clampi(floori(global_position.y), -4096, 4096)
-	# Anchors can be only 64px apart. Full trainer names overlap at V1 capacity;
-	# keep full identity in the server/battle contract, and use a compact map label.
+	# Large rosters can still have anchors only 64px apart. Show the full name
+	# for smaller, well-spaced rosters and retain compact labels at high capacity.
 	var ordinal := actor_key.get_slice(":", 2).to_int()
-	nameplate.text = "[BOT] %d" % ordinal if ordinal > 0 else "[BOT]"
+	var full_name := str(bot.get("displayName", "")).strip_edges()
+	nameplate.size.x = 64 if compact_label else 144
+	nameplate.position.x = -nameplate.size.x / 2.0
+	nameplate.text = ("[BOT] %d" % ordinal if ordinal > 0 else "[BOT]") if compact_label or full_name.is_empty() else full_name
 	var engaged: bool = player.get("engagementId") != null and not str(player.get("engagementId", "")).is_empty()
 	sprite.modulate = Color(1, 1, 1, 0.45) if engaged else Color.WHITE
