@@ -46,7 +46,7 @@ func _run() -> void:
 		_check(panel.global_position.x >= 0.0 and panel.global_position.y >= 0.0, "quest panel starts inside %s viewport" % viewport_size)
 		_check(panel.global_position.x + panel.size.x <= viewport_size.x + 1.0 and panel.global_position.y + panel.size.y <= viewport_size.y + 1.0, "quest panel fits %s viewport" % viewport_size)
 		if viewport_size.y >= 720:
-			_check(panel.global_position.y + panel.size.y / 2.0 < viewport_size.y / 2.0, "quest offer sits slightly above screen center")
+			_check(panel.global_position.y + panel.size.y / 2.0 < viewport_size.y * 0.42, "quest offer sits in the upper part of the screen")
 		if viewport_size.y == 1080:
 			_check(panel.size.y < 650.0, "quest panel stays content-sized on first and later openings")
 			if first_large_panel_height == 0.0:
