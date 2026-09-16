@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party wild battles now explain when your partner is too far away, instead of silently missing every step.
+
 - Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
 
 - Pokémon Storage now explains the three-Pokémon Adventure Party limit when a fourth party Pokémon is rejected.

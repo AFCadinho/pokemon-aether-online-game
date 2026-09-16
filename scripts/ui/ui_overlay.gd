@@ -666,6 +666,7 @@ var donator_store_popup: DonatorStorePopup
 var friendlist_popup: FriendlistPopup
 var coop_party_popup: Control
 var coop_party_hud: Button
+var coop_partner_distance_notice_at_msec := -10000
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -1923,6 +1924,7 @@ func _ready() -> void:
 	CoopService.invitation_received.connect(_on_coop_invitation_received)
 	CoopService.invitation_sent.connect(_on_coop_invitation_sent)
 	CoopService.invitation_failed.connect(_on_coop_invitation_failed)
+	CoopService.request_failed.connect(_on_coop_request_failed)
 	CoopService.party_profile_missing.connect(_on_coop_party_profile_missing)
 	CoopService.state_changed.connect(_refresh_coop_party_hud)
 	_create_coop_party_hud()
@@ -39364,6 +39366,15 @@ func _on_coop_invitation_sent(username: String) -> void:
 
 func _on_coop_invitation_failed(message: String) -> void:
 	add_system_message("Adventure Party invitation failed: %s" % message)
+
+func _on_coop_request_failed(message: String) -> void:
+	if message != "coop_partner_too_far":
+		return
+	var now := Time.get_ticks_msec()
+	if now - coop_partner_distance_notice_at_msec < 10000:
+		return
+	coop_partner_distance_notice_at_msec = now
+	add_system_message(LocalizationManager.text("ui.coop.wild.partner_too_far"))
 
 func _on_coop_party_profile_missing(source: String) -> void:
 	add_system_message("Adventure Party details are missing from the connected %s API. Check that both clients use the development server." % source)
