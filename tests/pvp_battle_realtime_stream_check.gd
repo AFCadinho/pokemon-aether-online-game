@@ -688,8 +688,16 @@ func _init() -> void:
 			{"action": "forfeit", "playerId": "p1", "response": {"success": true, "state": {"ended": true}}},
 			"p1"
 		),
+		false,
+		"an engine-only forfeit broadcast waits for durable settlement"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "forfeit", "playerId": "p1", "response": {"success": true, "state": {"ended": true}, "pvpMatchEnd": {"success": true, "status": "completed"}}},
+			"p1"
+		),
 		true,
-		"local manual forfeit terminal broadcast finishes even if its direct waiter loses the race"
+		"a server-settled manual forfeit finishes even if its direct waiter loses the race"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
@@ -706,6 +714,42 @@ func _init() -> void:
 		),
 		false,
 		"failed local forfeit cannot end the client battle"
+	)
+	var unconfirmed_opponent_forfeit := {
+		"type": "pvp.battle_update", "action": "forfeit", "playerId": "p2",
+		"response": {"success": true, "state": {"ended": true}},
+	}
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_confirmed_opponent_forfeit(unconfirmed_opponent_forfeit, "p1"),
+		false,
+		"even an ended engine projection is not a settled opponent forfeit"
+	)
+	var confirmed_opponent_forfeit := unconfirmed_opponent_forfeit.duplicate(true)
+	confirmed_opponent_forfeit["response"]["pvpMatchEnd"] = {"success": true, "status": "completed"}
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_confirmed_opponent_forfeit(confirmed_opponent_forfeit, "p1"),
+		true,
+		"a completed server match confirms the opponent's forfeit"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_confirmed_opponent_forfeit(confirmed_opponent_forfeit, "p2"),
+		false,
+		"the local player's own forfeit is not an opponent victory"
+	)
+	confirmed_opponent_forfeit["response"]["pvpMatchEnd"]["status"] = "active"
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_confirmed_opponent_forfeit(confirmed_opponent_forfeit, "p1"),
+		false,
+		"a match still active on the server cannot display an opponent-forfeit victory"
+	)
+	var choice_wait_start := battle_source.find("func _wait_for_pvp_opponent_choice_and_render(")
+	var choice_wait_end := battle_source.find("func _wait_for_pvp_opponent_force_switch_and_render()", choice_wait_start)
+	var force_wait_end := battle_source.find("\nfunc ", opponent_force_wait_start + 1)
+	_check_equal(
+		battle_source.substr(choice_wait_start, choice_wait_end - choice_wait_start).contains("is_confirmed_opponent_forfeit(message, action_flow.local_player_id)")
+			and battle_source.substr(opponent_force_wait_start, force_wait_end - opponent_force_wait_start).contains("is_confirmed_opponent_forfeit(message, action_flow.local_player_id)"),
+		true,
+		"both opponent waiters reject an unconfirmed forfeit before closing the battle"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(

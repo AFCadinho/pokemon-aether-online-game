@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
+
 - Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
 
 - Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
