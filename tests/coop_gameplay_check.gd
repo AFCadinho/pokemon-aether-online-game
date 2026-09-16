@@ -87,12 +87,13 @@ func _run() -> void:
 	_expect(party_popup.visible and party_popup.get("_recipient").text == "TrainerTwo", "social and right-click entry reuse a prefilled username popup")
 	var observed_invitations: Array[Dictionary] = []
 	service.invitation_received.connect(func(invitation: Dictionary) -> void: observed_invitations.append(invitation))
-	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo"}
+	var incoming := {"invitationId": "invite-one", "senderId": 2, "senderUsername": "TrainerTwo", "sharedLevelCap": 20}
 	service.apply_state({"party": {}, "invitations": [incoming], "activity": {}})
 	service.apply_state({"party": {}, "invitations": [incoming], "activity": {}})
 	_expect(observed_invitations.size() == 1, "incoming invitation notifies exactly once across polling")
 	party_popup.call("open_invitation", incoming)
 	_expect(party_popup.visible and party_popup.get("_focused_invitation_id") == "invite-one", "incoming invitation opens focused accept/decline popup")
+	_expect(party_popup.get("_content").get_children().any(func(child: Node) -> bool: return child is Label and child.text == "Shared level cap: Lv. 20"), "invitation shows the server-provided shared story cap")
 	var invitation_visual_path := OS.get_environment("COOP_INVITE_VISUAL_CAPTURE_PATH")
 	if not invitation_visual_path.is_empty():
 		await create_timer(0.2).timeout
