@@ -181,17 +181,24 @@ func try_start(trainer_id: String) -> Dictionary:
 		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
 	if party.is_empty():
 		return {"handled": false}
-	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
-		return {"handled": true, "success": false, "code": "coop_leader_required"}
-	var entity := trainer_entity(trainer_id)
-	if entity.is_empty():
-		return {"handled": true, "success": false, "code": "coop_interaction_unsupported"}
 	var world := GameState.get_world()
 	if world == null:
 		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
 	if not position_result.get("success", false):
 		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
+	state_result = await refresh()
+	if not state_result.get("success", false):
+		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
+	if party.is_empty():
+		return {"handled": false}
+	if _partner_is_on_another_map():
+		return {"handled": false}
+	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
+		return {"handled": true, "success": false, "code": "coop_leader_required"}
+	var entity := trainer_entity(trainer_id)
+	if entity.is_empty():
+		return {"handled": true, "success": false, "code": "coop_interaction_unsupported"}
 	if pending_start.is_empty():
 		pending_start = {"reservationId": new_id(), "entityId": entity}
 	elif pending_start.get("entityId") != entity:
@@ -219,9 +226,10 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	if party.is_empty():
 		return {"handled": false}
 	if encounter_type != "grass":
+		var refreshed := await refresh()
+		if refreshed.get("success", false) and _partner_is_on_another_map():
+			return {"handled": false, "status": "solo"}
 		return {"handled": true, "success": false, "code": "coop_wild_method_unsupported"}
-	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
-		return {"handled": true, "success": true, "status": "miss"}
 	if not activity.is_empty():
 		if activity.get("reservationId") == pending_start.get("reservationId"):
 			pending_start = {}
@@ -257,9 +265,24 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 			"http": int(refreshed.get("status", 0)), "activity": not activity.is_empty()}))
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
+	if result.get("success", false) and result.get("body", {}).get("status") == "solo":
+		return {"handled": false, "success": true, "status": "solo"}
 	return {"handled": true, "success": result.get("success", false),
 		"code": "" if result.get("success", false) else result.get("code", "coop_start_pending"),
 		"status": result.get("body", {}).get("status", "")}
+
+
+func _partner_is_on_another_map() -> bool:
+	var map_ids: Dictionary = party.get("memberMapIds", {})
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	var own_map := str(map_ids.get(own_id, ""))
+	if own_map.is_empty():
+		return false
+	for member_id in party.get("memberIds", []):
+		var key := str(int(member_id))
+		if key != own_id and not str(map_ids.get(key, "")).is_empty() and str(map_ids[key]) != own_map:
+			return true
+	return false
 
 
 func submit_action(action: Dictionary) -> Dictionary:

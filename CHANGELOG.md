@@ -4,13 +4,14 @@
 
 - Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.
 
+- Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
+
 - Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
 
 - Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
 
 - Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
 
-- Adventure Party wild battles now explain when your partner is too far away, instead of silently missing every step.
 
 - Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
 
