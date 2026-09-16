@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Finished co-op battles now return to the world automatically after victory, defeat, or forfeit. A retry button appears only if returning fails.
+
 - Co-op double battles now update each target's HP after its own move and hit animation, instead of changing all HP bars at the end of the turn.
 
 - Co-op target hover now also works around a Pokémon's feet and legs, without changing the initial target under a stationary cursor.
