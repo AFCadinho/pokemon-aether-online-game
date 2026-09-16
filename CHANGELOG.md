@@ -4,6 +4,8 @@
 
 - Adventure Party wild battles now explain when your partner is too far away, instead of silently missing every step.
 
+- Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
+
 - Pokémon Storage now explains the three-Pokémon Adventure Party limit when a fourth party Pokémon is rejected.
 
 - Fixed the local browser preview and web gateway blocking the Route 3 Magikarp purchase before it reached the game server.

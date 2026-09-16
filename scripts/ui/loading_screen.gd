@@ -3,6 +3,7 @@ extends Control
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
 const LOGO_TEXTURE := preload("res://assets/ui/pokeaether_text_logo.png")
 const BACKGROUND_TEXTURE := preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
 const UI_TEXT := Color("#eef4ff")
@@ -187,13 +188,26 @@ func _prepare_world() -> void:
 			thieving_response.get("error", "Unknown error")
 		))
 
+	_set_loading_status("ui.loading.opening_path", 2)
+	if OS.has_feature("web"):
+		var saved_scene_path: String = SavedMapScenePathResolver.resolve(str(saved_state.get("mapScenePath", "")))
+		if saved_scene_path.is_empty():
+			_return_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
+			return
+		var assets: Dictionary = await WebAssetModuleService.ensure_scene_available(saved_scene_path)
+		if not bool(assets.get("success", false)):
+			_return_to_login(str(assets.get("error", "Could not download your map. Please try again.")))
+			return
+		if not ResourceLoader.exists(saved_scene_path):
+			_return_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
+			return
+
 	GameState.set_prepared_world_state({
 		"savedState": saved_state,
 		"hasSavedState": not saved_state.is_empty(),
 		"blackoutLoss": int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)),
 	})
 
-	_set_loading_status("ui.loading.opening_path", 2)
 	var world_scene: PackedScene = await _load_world_scene_threaded()
 	if world_scene == null:
 		_return_to_login("Could not load the world. Please contact staff.")
