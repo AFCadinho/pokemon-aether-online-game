@@ -4,6 +4,19 @@ const SLOTS := ["p2", "p4", "p1", "p3"]
 const LOCATIONS := {"p1": -1, "p3": -2, "p2": 1, "p4": 2}
 const ACCENT := Color("67e8bf")
 const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
+const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
+uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
+void fragment() {
+	vec4 base = texture(TEXTURE, UV) * COLOR;
+	vec2 step_size = TEXTURE_PIXEL_SIZE * 2.0;
+	float neighbor = min(min(texture(TEXTURE, UV + vec2(step_size.x, 0.0)).a,
+		texture(TEXTURE, UV - vec2(step_size.x, 0.0)).a),
+		min(texture(TEXTURE, UV + vec2(0.0, step_size.y)).a,
+		texture(TEXTURE, UV - vec2(0.0, step_size.y)).a));
+	float edge = step(0.1, base.a) * (1.0 - neighbor);
+	COLOR = vec4(mix(base.rgb, glow_color.rgb, 0.12 + 0.88 * edge), base.a);
+}
+"""
 var embedded_hosts: Dictionary = {}
 var cards: Dictionary = {}
 var selected_move := 0
@@ -48,6 +61,8 @@ var _trainer_identity := ""
 var _native_attack_tween: Tween
 var _native_animation_sprite: AnimatedSprite2D
 var _native_animation_origin := Vector2.ZERO
+var _target_sprite_materials: Dictionary = {}
+var _target_glow_material: ShaderMaterial
 
 
 func _ready() -> void:
@@ -152,28 +167,25 @@ func _ready() -> void:
 				owner_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 				row.add_child(owner_label)
 				row.move_child(owner_label, 0)
+		var target_shader := Shader.new()
+		target_shader.code = TARGET_OUTLINE_SHADER
+		_target_glow_material = ShaderMaterial.new()
+		_target_glow_material.shader = target_shader
 		for controller: String in SLOTS:
 			var target := _button(stage, "", func() -> void: _select_target(controller))
 			target.visible = false
 			target.z_index = 60
+			target.focus_mode = Control.FOCUS_NONE
+			target.mouse_entered.connect(func() -> void: _focus_native_target(controller))
 			# Keep adjacent targets separate: the two double sprites are only ~158 px apart.
 			target.custom_minimum_size = Vector2(126, 112)
 			target.size = Vector2(126, 112)
-			var target_label := Label.new()
-			target_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-			target_label.offset_top = -28
-			target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			target_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			target.add_child(target_label)
-			var style := StyleBoxFlat.new()
-			style.bg_color = Color(0.02, 0.09, 0.16, 0.12)
-			style.border_color = ACCENT
-			style.set_border_width_all(2)
-			style.set_corner_radius_all(16)
-			target.add_theme_stylebox_override("normal", style)
-			target.add_theme_stylebox_override("hover", style)
-			target.add_theme_stylebox_override("pressed", style)
-			cards[controller] = {"target": target, "target_label": target_label}
+			var invisible_style := StyleBoxEmpty.new()
+			for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+				target.add_theme_stylebox_override(state, invisible_style)
+			cards[controller] = {"target": target}
+			var sprite := _native_sprite(controller)
+			_target_sprite_materials[controller] = sprite.material if sprite != null else null
 		stage.resized.connect(_position_native_targets)
 		_position_native_targets()
 		_prompt = prompt_panel.message_label
@@ -595,6 +607,8 @@ func _update_actions() -> void:
 		child.queue_free()
 	for card: Dictionary in cards.values():
 		card.target.visible = false
+	if _native_mode:
+		_refresh_target_highlight()
 	var phase := str(CoopService.activity.get("status", "starting"))
 	if not _native_mode:
 		_header.text = "CO-OP  /  TURN %s" % str(CoopService.view.get("turn", 1))
@@ -720,7 +734,7 @@ func _update_actions() -> void:
 				if action.get("target") == LOCATIONS[controller]:
 					cards[controller].target.visible = true
 					if _native_mode:
-						cards[controller].target_label.text = _role(controller)
+						cards[controller].target.tooltip_text = "Target " + _role(controller)
 					else:
 						cards[controller].target.text = "Target " + _role(controller)
 					if not legal_targets.has(controller):
@@ -802,6 +816,7 @@ func _select_target(controller: String) -> void:
 	for action: Dictionary in _move_actions(selected_move):
 		if action.get("target") == LOCATIONS.get(controller):
 			selected_target = controller
+			_refresh_target_highlight()
 			await CoopService.submit_action(action)
 			return
 
@@ -823,8 +838,7 @@ func _input(event: InputEvent) -> void:
 	match event.keycode:
 		KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN:
 			var direction := -1 if event.keycode in [KEY_LEFT, KEY_UP] else 1
-			selected_target = targets[posmod(targets.find(selected_target) + direction, targets.size())]
-			_refresh_target_highlight()
+			_focus_native_target(targets[posmod(targets.find(selected_target) + direction, targets.size())])
 			get_viewport().set_input_as_handled()
 		KEY_SPACE, KEY_ENTER:
 			get_viewport().set_input_as_handled()
@@ -836,14 +850,21 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 
+func _focus_native_target(controller: String) -> void:
+	if not _native_mode or selected_move <= 0 or not cards[controller].target.visible:
+		return
+	selected_target = controller
+	_refresh_target_highlight()
+
+
 func _refresh_target_highlight() -> void:
 	if not _native_mode:
 		return
 	for controller: String in SLOTS:
 		var target: Button = cards[controller].target
-		var focused := controller == selected_target
-		target.modulate = Color.WHITE if focused else Color(0.75, 1.0, 0.91, 0.65)
-		target.add_theme_color_override("font_color", ACCENT if focused else Color.WHITE)
+		var sprite := _native_sprite(controller)
+		if sprite != null:
+			sprite.material = _target_glow_material if target.visible and controller == selected_target else _target_sprite_materials.get(controller)
 
 
 func _append_event(event: Dictionary) -> void:

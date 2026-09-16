@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op move targeting now highlights the selected Pokémon sprite; hover or arrow keys move the glow without covering the field with target boxes.
+
 - Both wild Pokémon in a co-op battle now glow in the side rail while they are active.
 
 - Co-op Pokémon and their platforms now sit lower on the field, nearer the battle text and moves. The combined party icons stay fully above the battle text.
