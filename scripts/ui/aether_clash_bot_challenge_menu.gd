@@ -5,11 +5,14 @@ signal choice_made(settings: Dictionary)
 const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TIERS := ["aether-ou", "aether-uu"]
 const SPECTATOR_OPTIONS := ["public", "guilds_only"]
+const AI_POLICIES := ["ai4", "ai5"]
 
 var dialog: AetherConfirmationDialog
 var bot_count: SpinBox
 var tier: OptionButton
 var spectators: OptionButton
+var difficulty: OptionButton
+var ai_policies: Array[String] = ["ai4"]
 var can_start := false
 
 
@@ -44,6 +47,18 @@ func build(options: Dictionary) -> void:
 	tier.add_item("Aether UU")
 	_add_field(_t("format"), tier)
 	dialog.style_option_button(tier)
+	difficulty = OptionButton.new()
+	difficulty.name = "Difficulty"
+	ai_policies.clear()
+	for policy: String in options.get("aiPolicies", ["ai4"]):
+		if AI_POLICIES.has(policy) and not ai_policies.has(policy):
+			ai_policies.append(policy)
+	if ai_policies.is_empty():
+		ai_policies.append("ai4")
+	for policy: String in ai_policies:
+		difficulty.add_item(_t(policy))
+	_add_field(_t("difficulty"), difficulty)
+	dialog.style_option_button(difficulty)
 	spectators = OptionButton.new()
 	spectators.name = "Spectators"
 	spectators.add_item(_t("public"))
@@ -53,7 +68,7 @@ func build(options: Dictionary) -> void:
 	dialog.confirm_button.disabled = not can_start
 	dialog.confirmed.connect(_confirm)
 	dialog.canceled.connect(func(): choice_made.emit({}))
-	dialog.popup_centered(Vector2i(560, 440))
+	dialog.popup_centered(Vector2i(560, 500))
 
 
 func _add_field(label_text: String, control: Control) -> void:
@@ -70,7 +85,7 @@ func _add_field(label_text: String, control: Control) -> void:
 
 func selected_settings() -> Dictionary:
 	bot_count.apply()
-	return {"botCount": int(bot_count.value), "tierId": TIERS[tier.selected],
+	return {"botCount": int(bot_count.value), "tierId": TIERS[tier.selected], "aiPolicy": ai_policies[difficulty.selected],
 		"spectatorAccess": SPECTATOR_OPTIONS[spectators.selected]}
 
 
