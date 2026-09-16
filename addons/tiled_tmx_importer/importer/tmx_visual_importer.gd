@@ -5,20 +5,22 @@ const PathUtils := preload("res://addons/tiled_tmx_importer/importer/tmx_path_ut
 const TmxXmlParser := preload("res://addons/tiled_tmx_importer/importer/tmx_xml_parser.gd")
 const TmxTilesetBuilder := preload("res://addons/tiled_tmx_importer/importer/tmx_tileset_builder.gd")
 const TmxVisualSceneBuilder := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_scene_builder.gd")
+const AtlasCompactor := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_compactor.gd")
 
 const MAX_GENERATED_TEXTURE_SIZE := 4096
 
 
-func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
+func import_tmx(tmx_path: String, output_scene_path: String, missing_tileset_paths: Dictionary = {}) -> Dictionary:
 	var normalized_output := PathUtils.normalize_path(output_scene_path)
-	if not (normalized_output.begins_with("res://") or normalized_output.begins_with("user://")):
+	if normalized_output.contains("..") or not (normalized_output.begins_with("res://") or normalized_output.begins_with("user://")):
 		return {
 			"success": false,
 			"error": "Output scene path must be res:// or user://, got %s." % output_scene_path,
 		}
 
+	var previous_compact_paths := _owned_compact_paths(normalized_output)
 	var parser := TmxXmlParser.new()
-	var parse_result: Dictionary = parser.parse_tmx(tmx_path)
+	var parse_result: Dictionary = parser.parse_tmx(tmx_path, missing_tileset_paths)
 	if not bool(parse_result.get("success", false)):
 		return parse_result
 
@@ -43,6 +45,10 @@ func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
 
 	var scene_builder := TmxVisualSceneBuilder.new()
 	var root := scene_builder.build_scene(map_data, tileset_result["tileset"], tileset_builder)
+	var compact_result := AtlasCompactor.new().compact(root, tileset_path)
+	if not bool(compact_result.get("success", false)):
+		root.free()
+		return compact_result
 	var scene := PackedScene.new()
 	var pack_error := scene.pack(root)
 	if pack_error != OK:
@@ -67,6 +73,21 @@ func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
 			"success": false,
 			"error": "Could not save visual scene %s: %s" % [normalized_output, error_string(save_error)],
 		}
+	# Only remove full-grid files written by this import, after its scene saved.
+	# Never touch retained legacy maps/prototypes or arbitrary directory contents.
+	var cleanup_paths: Array = materialize_result.get("texture_paths", []).duplicate()
+	for path in previous_compact_paths:
+		if path not in compact_result.texture_paths:
+			cleanup_paths.append(path)
+	var cleaned := {}
+	for path: String in cleanup_paths:
+		if cleaned.has(path):
+			continue
+		cleaned[path] = true
+		if path.begins_with(normalized_output.get_base_dir().path_join("assets") + "/") and path.ends_with(".texture.res"):
+			var remove_error := DirAccess.remove_absolute(PathUtils.globalize(path))
+			if remove_error != OK:
+				push_warning("Could not remove superseded generated texture %s: %s" % [path, error_string(remove_error)])
 
 	return {
 		"success": true,
@@ -75,6 +96,8 @@ func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
 		"tileset_reused": bool(tileset_result.get("reused", false)),
 		"tile_layer_count": map_data.get("layers", []).size(),
 		"ignored_object_group_count": map_data.get("object_groups", []).size(),
+		"compact_atlas_version": compact_result.version,
+		"compact_base_rgba_bytes": compact_result.base_rgba_bytes,
 	}
 
 
@@ -82,6 +105,11 @@ func _materialize_tileset_images(map_data: Dictionary, output_scene_path: String
 	var output_dir := output_scene_path.get_base_dir()
 	var assets_dir := output_dir.path_join("assets")
 	var materialized_tilesets: Array = []
+	var paths: Array[String] = []
+	for tileset: Dictionary in map_data.get("tilesets", []):
+		for tile_id in tileset.get("animated_tile_ids", []):
+			if map_data.get("used_gids", {}).has(int(tileset.get("firstgid", 1)) + int(tile_id)):
+				return {"success": false, "error": "Used TMX tile animations are not supported; refusing a static/lossy import."}
 
 	for tileset: Dictionary in map_data.get("tilesets", []):
 		var image: Dictionary = tileset.get("image", {})
@@ -114,9 +142,10 @@ func _materialize_tileset_images(map_data: Dictionary, output_scene_path: String
 
 		for chunk_tileset: Dictionary in chunk_result.get("tilesets", []):
 			materialized_tilesets.append(chunk_tileset)
+			paths.append(str(chunk_tileset.image.path))
 
 	map_data["tilesets"] = materialized_tilesets
-	return {"success": true}
+	return {"success": true, "texture_paths": paths}
 
 
 func _materialize_tileset_image_chunks(
@@ -247,3 +276,18 @@ func _unique_materialized_texture_path(assets_dir: String, source_path: String, 
 	var source_hash := str(hash(source_path))
 	var base_name := file_name.get_basename()
 	return assets_dir.path_join("%s_%s_%03d.texture.res" % [base_name, source_hash, chunk_index])
+
+
+func _owned_compact_paths(output_scene_path: String) -> Array[String]:
+	var paths: Array[String] = []
+	var assets_dir := output_scene_path.get_base_dir().path_join("assets")
+	var prefix := PathUtils.scene_to_tileset_path(output_scene_path).get_file().get_basename() + ".compact_source_"
+	if not DirAccess.dir_exists_absolute(PathUtils.globalize(assets_dir)):
+		return paths
+	for name in DirAccess.get_files_at(assets_dir):
+		if not name.begins_with(prefix) or not name.ends_with(".texture.res"):
+			continue
+		var parts := name.trim_prefix(prefix).trim_suffix(".texture.res").split("_")
+		if parts.size() == 2 and parts[0].is_valid_int() and parts[1].is_valid_int():
+			paths.append(assets_dir.path_join(name))
+	return paths

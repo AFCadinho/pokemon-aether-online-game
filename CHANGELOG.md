@@ -4,6 +4,31 @@
 
 - Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
 
+- Adventure Party invitations now accept usernames or Trainer names instead of requiring numeric Trainer IDs. If a Trainer name is shared, use the unique username; right-click invitations prefill it.
+
+- Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.
+
+- Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
+
+- Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.
+
+- Oak's lab entrance now triggers on the reachable doorway tile in browser and desktop.
+- Your house and Oak's lab use smaller lossless map atlases in both browser and desktop, with their artwork unchanged.
+
+- Newly imported maps use compact lossless atlases while preserving their artwork in the browser and desktop client.
+
+- The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
+
+- Pallet Town uses a smaller lossless map atlas while keeping its tiles and gameplay unchanged.
+
+- Battle effects reuse an identical background texture without changing visuals or preloading.
+
+- Grass battle effects reuse the prepared terrain texture, keeping animation quality and battle preloading unchanged.
+
+- Electric battle effects share an existing texture to reduce memory use without changing animation quality or battle preparation.
+
+- Latest download links now point to the current release without storing extra copies. Older desktop and browser downloads retain one previous version for rollback.
+
 - Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
 
 - Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.

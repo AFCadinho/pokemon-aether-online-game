@@ -82,13 +82,12 @@ class R2ReleasePrunerTests(unittest.TestCase):
 
         self.assertEqual(
             [value.key for value in plan.retained_for_rollback],
-            ["assets/pokemon-back-scale1-128-recent.zip"],
+            ["assets/pokemon-back-scale1-128-previous.zip"],
         )
         self.assertEqual(
             [value.key for value in plan.delete],
             [
                 "assets/pokemon-back-scale1-128-old.zip",
-                "assets/pokemon-back-scale1-128-previous.zip",
             ],
         )
         self.assertEqual([value.key for value in plan.ignored], ["assets/unmanaged.zip"])
@@ -112,19 +111,19 @@ class R2ReleasePrunerTests(unittest.TestCase):
 
         self.assertEqual(
             [value.key for value in plan.retained_for_rollback],
-            ["game/game-uploading-windows.zip"],
+            ["game/game-previous-windows.zip"],
         )
         self.assertEqual(
             [value.key for value in plan.retained_recent],
-            ["game/game-unreferenced-windows.zip"],
+            ["game/game-unreferenced-windows.zip", "game/game-uploading-windows.zip"],
         )
         self.assertEqual(
             [value.key for value in plan.delete],
-            ["game/game-old-windows.zip", "game/game-previous-windows.zip"],
+            ["game/game-old-windows.zip"],
         )
 
     @patch("prune_r2_release_objects._signed_request")
-    def test_r2_listing_reads_only_asset_and_game_prefixes(self, signed_request) -> None:
+    def test_r2_listing_reads_only_desktop_release_prefixes(self, signed_request) -> None:
         signed_request.side_effect = [
             (
                 200,
@@ -153,6 +152,7 @@ class R2ReleasePrunerTests(unittest.TestCase):
                 </ListBucketResult>""",
             ),
         ]
+        signed_request.side_effect = list(signed_request.side_effect) + [(200, "OK", b"<ListBucketResult><IsTruncated>false</IsTruncated></ListBucketResult>")]
         config = R2Config("account", "bucket", "access", "secret", "https://example.com")
 
         objects = _list_release_objects(config)
@@ -170,6 +170,42 @@ class R2ReleasePrunerTests(unittest.TestCase):
             ("list-type", "2"),
             ("prefix", "game/"),
         ])
+
+    def test_web_rollback_keeps_complete_bundle_and_ignores_newer_failed_upload(self):
+        current = "a" * 40 + "-3-1"
+        previous = "b" * 40 + "-2-1"
+        old = "c" * 40 + "-1-1"
+        failed = "d" * 40 + "-4-1"
+        objects = [item(f"web/releases/{build}/{name}", age)
+                   for build, age in [(current, 2), (previous, 3), (old, 10), (failed, 1)]
+                   for name in ["index.pck", "maps/mt-moon.pck", "web-release.json"]]
+        plan = _build_prune_plan(objects, {f"web/releases/{current}/web-release.json"},
+                                 retain_previous=1, minimum_age=dt.timedelta(hours=24), now=NOW)
+        self.assertEqual(len(plan.retained_for_rollback), 3)
+        self.assertTrue(all(f"/{previous}/" in obj.key for obj in plan.retained_for_rollback))
+        self.assertEqual(len(plan.delete), 6)
+        self.assertFalse(any(f"/{current}/" in obj.key for obj in plan.delete))
+        self.assertIsNone(_object_family(f"web/releases/{old}/../manifest.json"))
+        self.assertIsNone(_object_family("web/assets/unmanaged/sheet.png"))
+
+    def test_launcher_manifest_protects_platform_and_retains_previous(self):
+        builds = ["0.3.78-" + "a" * 40 + "-3-1", "0.3.75-" + "b" * 40 + "-2-1", "0.3.65-" + "c" * 40 + "-1-1"]
+        objects = [item(f"launcher/{build}/PokeAetherLauncher-{platform}.zip", age)
+                   for build, age in zip(builds, [1, 3, 10]) for platform in ["windows", "linux", "macos"]]
+        manifests = [{"launcher": {"url": "https://updates.pokeaether.com/" + obj.key}} for obj in objects[:3]]
+        protected = _protected_keys_from_manifests(manifests, "https://updates.pokeaether.com")
+        plan = _build_prune_plan(objects, protected, retain_previous=1, minimum_age=dt.timedelta(hours=24), now=NOW)
+        self.assertEqual(len(plan.retained_for_rollback), 3)
+        self.assertEqual(len(plan.delete), 3)
+        self.assertTrue(all(builds[2] in obj.key for obj in plan.delete))
+        self.assertIsNone(_object_family("launcher/latest/PokeAetherLauncher-windows.zip"))
+
+    @patch("prune_r2_release_objects._signed_request")
+    def test_web_listing_never_lists_desktop_or_browser_asset_packs(self, signed_request):
+        signed_request.return_value = (200, "OK", b"<ListBucketResult><IsTruncated>false</IsTruncated></ListBucketResult>")
+        config = R2Config("account", "bucket", "access", "secret", "https://example.com")
+        self.assertEqual(_list_release_objects(config, "web"), [])
+        self.assertEqual(signed_request.call_args.kwargs["query"], [("list-type", "2"), ("prefix", "web/releases/")])
 
     @patch("prune_r2_release_objects._signed_request")
     def test_delete_rechecks_the_allowlist(self, signed_request) -> None:

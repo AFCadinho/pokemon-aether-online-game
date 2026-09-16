@@ -234,7 +234,7 @@
       "source": "Move:CHARGE",
       "category": "charge_up",
       "data_path": "res://assets/battles/animations/charge/charge.json",
-      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -330,7 +330,7 @@
       "source": "Common:GrassyTerrain",
       "category": "field_start",
       "data_path": "res://assets/battles/animations/common/grassyterrain/grassyterrain.json",
-      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
