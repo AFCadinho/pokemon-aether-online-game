@@ -14,6 +14,7 @@ func _init() -> void:
 
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/npc_pokemon_sale_service.gd")
 	_check(service_source.contains("/game/npc-pokemon-sales/%s/purchase"), "client calls the authoritative purchase endpoint")
+	_check(service_source.contains('endpoint.replace("/game/npc-pokemon-sales", "/auth/web/npc-pokemon-sales")'), "browser uses the scoped sale route")
 	_check(service_source.contains("PlayerPartyStateService.refresh_party()"), "successful purchase refreshes the party")
 
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/magikarp_salesman_npc.gd")
