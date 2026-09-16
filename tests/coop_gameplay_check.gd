@@ -286,6 +286,15 @@ func _run() -> void:
 	presenter._action_signature = ""
 	presenter._update_actions()
 	presenter._select_move(1)
+	var target_cards: Dictionary = presenter.get("cards")
+	var left_enemy_target: Rect2 = target_cards["p2"].target.get_global_rect()
+	var right_enemy_target: Rect2 = target_cards["p4"].target.get_global_rect()
+	var left_ally_target: Rect2 = target_cards["p1"].target.get_global_rect()
+	var right_ally_target: Rect2 = target_cards["p3"].target.get_global_rect()
+	_expect(not left_enemy_target.intersects(right_enemy_target)
+		and not left_ally_target.intersects(right_ally_target)
+		and target_cards["p4"].target.visible,
+		"both sides have separate clickable targets for the right-hand Pokemon")
 	_expect(presenter.get("cards")["p2"].target.visible
 		and presenter.get("cards")["p4"].target.visible
 		and presenter.get("selected_target") == "p2",

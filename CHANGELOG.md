@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
+
 - Co-op confirmation and return choices now open over the battlefield, leaving the bottom switch bar neatly reserved for your Pokémon.
 
 - Co-op Pokémon stand closer together in double battles. Both Trainers stand together behind the left Pokémon in Trainer battles and stay hidden in wild battles.

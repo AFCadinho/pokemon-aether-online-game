@@ -156,8 +156,9 @@ func _ready() -> void:
 			var target := _button(stage, "", func() -> void: _select_target(controller))
 			target.visible = false
 			target.z_index = 60
-			target.custom_minimum_size = Vector2(180, 170)
-			target.size = Vector2(180, 170)
+			# Keep adjacent targets separate: the two double sprites are only ~158 px apart.
+			target.custom_minimum_size = Vector2(126, 112)
+			target.size = Vector2(126, 112)
 			var target_label := Label.new()
 			target_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 			target_label.offset_top = -28
@@ -346,7 +347,7 @@ func _position_native_targets() -> void:
 		var sprite := _native_sprite(controller)
 		if sprite != null:
 			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
-			target.position = center - target.custom_minimum_size * 0.5
+			target.position = center - Vector2(target.size.x * 0.5, target.size.y - 16.0)
 
 
 func _sync() -> void:
