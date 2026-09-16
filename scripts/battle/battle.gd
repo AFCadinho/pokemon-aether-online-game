@@ -11820,7 +11820,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		return
 	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
 		if local_force_switch:
-			_report_pvp_forced_switch_selection_blocked("switch_ineligible")
+			_report_pvp_forced_switch_selection_blocked("switch_ineligible", _pvp_switch_eligibility_diagnostic(submit_slot))
 		if _is_pvp_battle():
 			_update_party_slots()
 			_refresh_pvp_switch_cards()
@@ -11944,18 +11944,39 @@ func _can_open_pvp_local_force_switch_ui() -> bool:
 	return pvp_last_phase == "rendering_events" and pvp_last_next_phase == "awaiting_force_switch"
 
 
-func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:
+func _pvp_switch_eligibility_diagnostic(canonical_slot: int) -> Dictionary:
+	var local_player_id := _get_local_state_player_id()
+	var request_team := _get_pvp_switch_request_team()
+	var candidate := BattleForceSwitchFlow.find_switch_candidate(canonical_slot, pvp_local_canonical_roster, request_team)
+	var reason := "other"
+	if force_switch_flow.is_player_trapped_outside_force_switch(local_player_id):
+		reason = "trapped"
+	elif candidate.is_empty():
+		reason = "candidate_missing"
+	elif bool(candidate.get("active", false)):
+		reason = "candidate_active"
+	elif bool(candidate.get("fainted", false)) or str(candidate.get("condition", "")).strip_edges().to_lower() == "fnt" or str(candidate.get("condition", "")).strip_edges().to_lower().ends_with(" fnt"):
+		reason = "candidate_fainted"
+	else:
+		reason = "candidate_health_zero"
+	return {
+		"eligibilityReason": reason,
+		"requestTeamPresent": not request_team.is_empty(),
+		"requestForceSwitchRequired": force_switch_flow.player_needs_force_switch(local_player_id),
+	}
+
+func _report_pvp_forced_switch_selection_blocked(selection_gate: String, details: Dictionary = {}) -> void:
 	if not _is_pvp_battle() or not _local_player_needs_force_switch_ui():
 		return
 	var local_player_id := _get_local_state_player_id()
 	var decision := battle_state.get_active_decision(local_player_id)
 	var decision_id := str(decision.get("decisionId", "")).strip_edges()
 	var decision_generation := _get_int_from_variant(decision.get("decisionGeneration", 0), 0)
-	var diagnostic_key := "%s:%d:%s" % [decision_id, decision_generation, selection_gate]
+	var diagnostic_key := "%s:%d:%s:%s" % [decision_id, decision_generation, selection_gate, str(details.get("eligibilityReason", ""))]
 	if pvp_forced_switch_diagnostic_keys.has(diagnostic_key):
 		return
 	pvp_forced_switch_diagnostic_keys[diagnostic_key] = true
-	PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked", {
+	var diagnostic := {
 		"decisionId": decision_id,
 		"decisionGeneration": max(decision_generation, 0),
 		"selectionGate": selection_gate,
@@ -11966,7 +11987,15 @@ func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void
 		"inputLocked": battle_input_locked,
 		"pendingAction": pvp_prechoice_buffer.has_choice(),
 		"forceSwitchRequired": true,
-	})
+	}
+	diagnostic.merge(details, true)
+	print("PvP forced-switch selection blocked: gate=%s reason=%s requestTeamPresent=%s requestForceSwitchRequired=%s" % [
+		selection_gate,
+		str(diagnostic.get("eligibilityReason", "unknown")),
+		str(diagnostic.get("requestTeamPresent", "unknown")),
+		str(diagnostic.get("requestForceSwitchRequired", "unknown")),
+	])
+	PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked", diagnostic)
 
 func _clear_force_switch_request_for_player(player_id: String) -> void:
 	var request := battle_state.get_player_request(player_id)
