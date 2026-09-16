@@ -450,7 +450,7 @@ func _sync_bot_actors(value: Variant) -> void:
 				# Share the map's entity layer without joining player groups.
 				get_node("Entities").add_child(actor)
 				bot_actors[user_id] = actor
-			actor.call("apply_state", state)
+			actor.call("apply_state", state, int(arena_session.get("botCount", 0)) > 20)
 			retained[user_id] = true
 	for user_id: Variant in bot_actors.keys():
 		if not retained.has(user_id):

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bot Guild trainers now show their names on the arena map when there is room; very large rosters keep compact [BOT] labels to avoid overlap.
+
 - Bot difficulty names in Guild training no longer include the technical fallback note.
 
 - The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
