@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
+
 - The overworld Adventure Party HUD now has a translucent background that becomes clearer on hover.
 
 - Co-op double-battle logs now use the same move, damage, status, stat-change, and result colors as single battles.

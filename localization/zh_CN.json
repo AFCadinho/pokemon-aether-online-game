@@ -1,6 +1,6 @@
 {
   "ui.clash_bot.title": "公会训练 [BOT]",
-  "ui.clash_bot.intro": "自由选择对方机器人的数量，不受参战公会成员人数限制。使用普通 Clash 规则和计时器。无赌注或奖励。",
+  "ui.clash_bot.intro": "自由选择对方机器人的数量，不受参战公会成员人数限制。使用普通 Clash 规则和计时器。无赌注。AI5 Grandmaster Hard 每天可获得一次公会奖励。",
   "ui.clash_bot.permission": "只有公会会长或队长可以发起训练。",
   "ui.clash_bot.unavailable": "机器人公会训练暂时不可用。",
   "ui.clash_bot.start": "开始训练",
