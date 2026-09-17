@@ -656,11 +656,11 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			if position.is_empty():
 				hud.set_double_position(row_index, {})
 				continue
-			var level := 0
+			var level := int(position.get("level", 0))
 			var gender := ""
 			for detail: String in details.split(","):
 				var part := detail.strip_edges()
-				if part.begins_with("L") and part.substr(1).is_valid_int():
+				if level <= 0 and part.begins_with("L") and part.substr(1).is_valid_int():
 					level = int(part.substr(1))
 				elif part in ["M", "F"]:
 					gender = part

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now receive the public active Pokémon level directly from the battle view, including Lv. 100 forms, and use slimmer two-Pokémon HP HUDs.
+
 - Co-op doubles now place both platforms and active Pokémon lower and closer to the centre, leaving a clearer left-side staging area for allied Trainer sprites.
 
 - Adventure Party HUDs now show each Trainer's live online/offline status. Wild encounters automatically use the normal single-battle flow when the partner is offline or on another map.

@@ -893,8 +893,8 @@ func setup_coop_battle() -> bool:
 	player_hud_panel.set_double_layout(true)
 	enemy_hud_panel.set_double_layout(true)
 	player_hud_panel.offset_left = 80.0
-	player_hud_panel.offset_right = 600.0
-	enemy_hud_panel.offset_left = -600.0
+	player_hud_panel.offset_right = 540.0
+	enemy_hud_panel.offset_left = -540.0
 	enemy_hud_panel.offset_right = -80.0
 	if moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
 		moves_grid.move_selected.disconnect(_on_moves_grid_move_selected)
