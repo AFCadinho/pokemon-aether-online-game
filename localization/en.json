@@ -3,7 +3,7 @@
   "ui.clash_bot.intro": "Choose the opposing bot count independently of Guild attendance. Standard Clash rules and timers apply. No stakes. AI5 Grandmaster Hard can earn one Guild reward per day.",
   "ui.clash_bot.reward": "Daily reward",
   "ui.clash_bot.reward_attempt": "Use this win for today's Guild reward",
-  "ui.clash_bot.reward_hint": "Only AI5 Grandmaster Hard, up to 20 bots. A loss does not use the daily reward.",
+  "ui.clash_bot.reward_hint": "Only AI5 Grandmaster Hard, up to 20 bots. A loss or bot AI fallback does not use the daily reward.",
   "ui.clash_bot.reward_claimed": "Your Guild already earned today's training reward.",
   "ui.clash_bot.permission": "Only a Guild Leader or Captain can start training.",
   "ui.clash_bot.unavailable": "Bot Guild training is temporarily unavailable.",
