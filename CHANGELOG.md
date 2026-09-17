@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Terapagos can be switched back into battle after changing to its Terastal or Stellar form.
+
 - Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.
 
 - Co-op battle cleanup no longer shows a false activity-save warning while the server is completing the shared settlement.
