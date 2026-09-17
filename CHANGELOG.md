@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party presence now refreshes faster. Co-op battles announce partner disconnects and reconnects in both the system feed and battle log, while AI takes over shortly after a genuine disconnect.
+
 - Co-op battles now keep both clients in the battle until the final shared move animation has played, even when the other Trainer locks the finishing turn first.
 
 - Co-op trainer battles now show the NPC Trainer behind the opposing Pokémon; wild battles remain trainer-free.
