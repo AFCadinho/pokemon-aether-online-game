@@ -858,14 +858,24 @@ func setup_coop_battle() -> bool:
 		node.visible = true
 	# Keep the compact doubles field low, toward the prompt and move controls.
 	# Move each platform and its Pokémon together; ordinary singles stay untouched.
-	player_battle_platform.offset_top += 14.0
-	player_battle_platform.offset_bottom += 14.0
-	player_sprite_box.offset_top += 50.0
-	player_sprite_box.offset_bottom += 50.0
-	enemy_battle_platform.offset_top += 40.0
-	enemy_battle_platform.offset_bottom += 40.0
-	enemy_sprite_box.offset_top += 50.0
-	enemy_sprite_box.offset_bottom += 50.0
+	# Give both doubles sides a lower, inward-facing field position. The extra
+	# centre clearance leaves room for the allied Trainer sprites behind p1/p3.
+	player_battle_platform.offset_left += 25.0
+	player_battle_platform.offset_right += 25.0
+	player_battle_platform.offset_top += 32.0
+	player_battle_platform.offset_bottom += 32.0
+	player_sprite_box.offset_left += 25.0
+	player_sprite_box.offset_right += 25.0
+	player_sprite_box.offset_top += 70.0
+	player_sprite_box.offset_bottom += 70.0
+	enemy_battle_platform.offset_left -= 25.0
+	enemy_battle_platform.offset_right -= 25.0
+	enemy_battle_platform.offset_top += 58.0
+	enemy_battle_platform.offset_bottom += 58.0
+	enemy_sprite_box.offset_left -= 25.0
+	enemy_sprite_box.offset_right -= 25.0
+	enemy_sprite_box.offset_top += 70.0
+	enemy_sprite_box.offset_bottom += 70.0
 	# Leave the full six-slot side rail clear of the battle prompt below it.
 	var coop_player_rail := player_stage_party_grid.get_parent() as Control
 	coop_player_rail.position.y -= 40.0
