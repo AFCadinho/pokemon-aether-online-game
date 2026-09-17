@@ -4,6 +4,7 @@ class_name BattlePartySlotResolver
 
 const FORM_SUFFIXES := [
 	"megax", "megay", "mega", "primal",
+	"terastal", "stellar",
 	"alola", "galar", "hisui", "paldea",
 	"therian", "incarnate", "origin", "altered",
 	"wellspring", "hearthflame", "cornerstone", "teal",

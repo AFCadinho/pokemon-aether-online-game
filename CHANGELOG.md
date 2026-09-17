@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Terapagos can be switched back into battle after changing to its Terastal or Stellar form.
+
 - The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.
 
 - Co-op double battles now play the existing single-target animations for Water Gun, Thunder Shock, Poison Sting, Thunder Wave, Toxic, Spore, Leafage, and Mud-Slap on the selected Pokémon.
