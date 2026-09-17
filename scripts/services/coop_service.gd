@@ -65,7 +65,8 @@ func _process(delta: float) -> void:
 		var awaiting_battle: bool = activity.get("status") == "starting" or (active_battle and view.is_empty())
 		var awaiting_exit: bool = activity.get("status") == "active" and (bool(view.get("ended", false))
 			or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()))
-		var tracking_party_presence: bool = party.get("memberIds", []) is Array and party["memberIds"].size() == 2
+		var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+		var tracking_party_presence: bool = member_ids.size() == 2
 		# Presence drives both the Adventure Party HUD and co-op AI takeover.
 		# Keep it responsive while a party exists, and especially during a battle.
 		_poll_after = 0.5 if awaiting_battle or awaiting_exit or active_battle else 1.0 if tracking_party_presence else 2.0 if available else 30.0

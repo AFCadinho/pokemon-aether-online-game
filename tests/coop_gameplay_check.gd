@@ -29,6 +29,9 @@ func _run() -> void:
 	var coop_service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
 	_expect(not coop_service_source.contains("COOP_DIAG") and coop_service_source.contains("func _partner_is_ready_for_coop()"),
 		"party grass encounters fall back to solo when the partner is unavailable without console diagnostics")
+	_expect(coop_service_source.contains('var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []')
+		and not coop_service_source.contains('party["memberIds"].size()'),
+		"co-op polling handles the empty party response immediately after leaving a party")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
 	_expect(service.trainer_entity("kanto_route_3_youngster").is_empty(), "later trainers remain unsupported")
