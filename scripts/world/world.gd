@@ -3190,7 +3190,10 @@ func _save_player_activity_state_deferred(activity_state: String, activity_conte
 
 
 func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
-	if active_battle_kind == "coop":
+	# The co-op settlement owns activity state until its acknowledgement and
+	# cleanup complete. A normal-world save in this small hand-off window is
+	# correctly rejected by the server, so do not retry or warn for it.
+	if active_battle_kind == "coop" or coop_finishing:
 		return
 	pending_activity_state_save = {
 		"state": activity_state,

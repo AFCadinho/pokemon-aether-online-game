@@ -15,7 +15,6 @@ var _portraits: Array[TrainerHeadPortrait] = []
 var _fallbacks: Array[Label] = []
 var _presence: Array[Label] = []
 var _badges: Array[Label] = []
-var _last_presence_diagnostic := ""
 
 
 func _ready() -> void:
@@ -114,7 +113,6 @@ func set_members(party: Dictionary, own_id: int) -> void:
 	# proves the partner is actively polling the same battle even if the general
 	# overworld presence lookup is briefly stale.
 	var coop_partner_connected := not CoopService.activity.is_empty() and bool(CoopService.activity.get("partnerConnected", false))
-	var resolved_presence: Array[Dictionary] = []
 	for index in 2:
 		var member_id := str(leader_id if index == 0 else partner_id)
 		var name := str(names.get(member_id, "")).strip_edges()
@@ -132,32 +130,9 @@ func set_members(party: Dictionary, own_id: int) -> void:
 		_fallbacks[index].text = name.substr(0, 1).to_upper()
 		var server_online := bool(online.get(member_id, online.get(int(member_id), false)))
 		var is_online := true if int(member_id) == own_id else (server_online or coop_partner_connected)
-		resolved_presence.append({
-			"memberId": member_id,
-			"isLocal": int(member_id) == own_id,
-			"serverOnline": server_online,
-			"resolvedOnline": is_online,
-		})
 		_presence[index].add_theme_color_override("font_color", ONLINE if is_online else OFFLINE)
 		_presence[index].tooltip_text = "Online" if is_online else "Offline"
-	_trace_presence(party, own_id, online, coop_partner_connected, resolved_presence)
 	tooltip_text = "Adventure Party: %s and %s" % [_names[0].text, _names[1].text]
-
-
-func _trace_presence(party: Dictionary, own_id: int, online: Dictionary, coop_partner_connected: bool, resolved: Array[Dictionary]) -> void:
-	var diagnostic := {
-		"ownId": own_id,
-		"memberIds": party.get("memberIds", []),
-		"memberOnline": online,
-		"activityStatus": str(CoopService.activity.get("status", "")),
-		"partnerConnected": coop_partner_connected,
-		"resolved": resolved,
-	}
-	var encoded := JSON.stringify(diagnostic)
-	if encoded == _last_presence_diagnostic:
-		return
-	_last_presence_diagnostic = encoded
-	print("COOP_DIAG party_hud_presence ", encoded)
 
 
 func _style(border: Color, background := BACKGROUND) -> StyleBoxFlat:
