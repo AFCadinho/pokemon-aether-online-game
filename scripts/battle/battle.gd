@@ -919,7 +919,9 @@ func setup_coop_battle() -> bool:
 	for child: CanvasItem in dock_content.get_children():
 		child.visible = child.name == "ContextSection"
 	var context_section := dock_content.get_node("ContextSection") as Control
-	context_section.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	# The co-op dock has only this visible section. Let it fill the dock so the
+	# party slots center vertically instead of leaving unused space below them.
+	context_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	context_hint.visible = false
 	player_party_grid.columns = 3
 	player_party_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
