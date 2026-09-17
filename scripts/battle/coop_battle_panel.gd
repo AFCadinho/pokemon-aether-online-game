@@ -169,10 +169,12 @@ func _ready() -> void:
 		_native_pokemon_hover = embedded_hosts["pokemon_hover"] as PokemonHoverCard
 		_native_move_hover = embedded_hosts["move_hover"] as MoveHoverCard
 		_native_utility = embedded_hosts["utility"] as Control
+		_native_mechanics = stage.get_node("%MechanicsPanel") as Control
 		# The compact doubles move grid sits lower than the singles menu. Lift the
 		# mechanics cluster so Mega/Z remains visually attached to that grid.
-		_native_mechanics.offset_top = 414.0
-		_native_mechanics.offset_bottom = 492.0
+		if _native_mechanics != null:
+			_native_mechanics.offset_top = 414.0
+			_native_mechanics.offset_bottom = 492.0
 		_native_moves.move_selected.connect(_select_move)
 		_native_moves.move_hovered.connect(_show_coop_move_hover)
 		_native_moves.move_unhovered.connect(_hide_coop_move_hover)
@@ -181,7 +183,6 @@ func _ready() -> void:
 			party_grid.pokemon_hovered.connect(_show_coop_party_hover)
 			party_grid.pokemon_unhovered.connect(_hide_coop_pokemon_hover)
 		_native_utility.action_selected.connect(_on_native_utility_action)
-		_native_mechanics = stage.get_node("%MechanicsPanel") as Control
 		_mega_evolution_button = stage.get_node("%MegaEvolutionIcon") as TextureButton
 		_z_move_button = stage.get_node("%ZMove") as TextureButton
 		if _mega_evolution_button != null:
@@ -439,7 +440,10 @@ func _position_native_targets() -> void:
 		return
 	var stage: Control = embedded_hosts["stage"]
 	for controller: String in SLOTS:
-		var target: Button = cards[controller].target
+		var card: Dictionary = cards.get(controller, {})
+		var target: Button = card.get("target") as Button
+		if target == null:
+			continue
 		var sprite := _native_sprite(controller)
 		if sprite != null:
 			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
