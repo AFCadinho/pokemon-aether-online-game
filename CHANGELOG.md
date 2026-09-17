@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now scale catalog move effects to cover the full battlefield, restoring full-size timing backgrounds such as Close Combat.
+
 - Co-op doubles now offer Mega Evolution and Z-Move controls whenever the current Pokémon has a simulator-legal move for that mechanic.
 
 - A cancelled co-op battle start now automatically returns both players to the overworld instead of leaving the loading overlay open.
