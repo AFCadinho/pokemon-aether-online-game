@@ -532,15 +532,15 @@ func _present() -> void:
 			_playing = false
 			_update_actions()
 			return
-		# Initial/reconnected snapshots and long gaps snap directly to authority.
-		# Never replay old damage over current HP, or spend a minute catching up.
-		var animate := displayed_cursor >= 0 and fresh.size() <= 20
-		var batch_started := Time.get_ticks_msec()
+		# Initial/reconnected snapshots snap directly to authority. Once this
+		# client has joined the event stream, preserve every received event in
+		# order; a slow client must not lose a final turn to a batch cap.
+		var animate := displayed_cursor >= 0
 		if displayed_cursor < 0:
 			_apply_positions(snapshot)
 		for event: Dictionary in fresh:
 			_append_event(event)
-			if animate and Time.get_ticks_msec() - batch_started < 6000:
+			if animate:
 				await _animate_event(event, fresh)
 				if epoch != _epoch:
 					_playing = false
@@ -976,11 +976,8 @@ func set_capture_target_visible(is_visible: bool) -> void:
 func _auto_return_after_finish() -> void:
 	# A finished receipt can arrive before the last turn's event playback ends.
 	# Let a confirmed throw and the final events reach the screen first.
-	var capture_deadline := Time.get_ticks_msec() + 18000
-	while is_inside_tree() and _capture_animation_pending and Time.get_ticks_msec() < capture_deadline:
-		await get_tree().process_frame
-	var playback_deadline := Time.get_ticks_msec() + 7000
-	while is_inside_tree() and (_playing or _revision != int(_latest.get("revision", -1))) and Time.get_ticks_msec() < playback_deadline:
+	var playback_deadline := Time.get_ticks_msec() + 30000
+	while is_inside_tree() and _final_event_playback_pending() and Time.get_ticks_msec() < playback_deadline:
 		await get_tree().process_frame
 	if not is_inside_tree():
 		return
@@ -993,6 +990,12 @@ func _auto_return_after_finish() -> void:
 		_finished_return_retry_available = true
 		_action_signature = ""
 		_update_actions()
+
+
+func _final_event_playback_pending() -> bool:
+	if _capture_animation_pending or _playing:
+		return true
+	return displayed_cursor < int(_latest.get("eventCursor", 0))
 
 
 func _move_actions(slot: int) -> Array:

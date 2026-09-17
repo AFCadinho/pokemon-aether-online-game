@@ -64,10 +64,10 @@ func _hide_move_actor_sprite_if_needed(config: Dictionary, actor_ident: String) 
 
 
 func _fit_animation_to_parent(animation_node: Node2D, parent_node: Node) -> void:
-	# Co-op uses smaller sprites than the single-battle canvas. Existing dynamic
-	# projectile/sheet anchors still resolve to the actual pair's sprite boxes.
-	animation_node.scale = Vector2(0.75, 0.75)
-	animation_node.position = (parent_node.size - Vector2(512, 384) * 0.75) * 0.5
+	# Keep the catalog's native scale. Dynamic projectile/sheet anchors then
+	# place the full-size animation at the actual doubles sprites.
+	animation_node.scale = Vector2.ONE
+	animation_node.position = (parent_node.size - Vector2(512, 384)) * 0.5
 
 
 func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}, reverse_battlefield: bool = false) -> MoveAnimationPlayer:
