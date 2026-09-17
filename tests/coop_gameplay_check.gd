@@ -191,20 +191,53 @@ func _run() -> void:
 		and mounted_battle.get_node("%PlayerSpriteBox").offset_top > -394.0
 		and mounted_battle.get_node("%EnemySpriteBox").offset_top > -201.0,
 		"co-op platforms and Pokémon sit lower while all side slots clear the battle prompt")
-	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
+	var baseline_snapshot: Dictionary = {"participant": "p1", "turn": 4, "opponentPartySize": 2, "positions": [
 		{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77, "boosts": {"def": -1}, "types": ["Normal"]},
 		{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100},
 		{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100},
 		{"controller": "p4", "details": "Pidgey, L2, M", "hpPercent": 55, "boosts": {"atk": 1}, "types": ["Normal", "Flying"]}],
 		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30},
 			{"species": "Ekans", "active": false, "hp": 29, "maxHp": 29}],
-		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 20, "maxHp": 20}]})
+		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 20, "maxHp": 20}]}
+	presenter._apply_positions(baseline_snapshot)
 	_expect(mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
 		and mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2").visible,
 		"four co-op Pokemon and the second HP row render in the native presentation")
+	var status_snapshot: Dictionary = presenter._latest.duplicate(true)
+	var status_positions: Dictionary = {"p1": "brn", "p3": "par", "p2": "psn", "p4": "slp"}
+	var status_test_snapshot: Dictionary = {"participant": "p1", "turn": 4, "opponentPartySize": 2,
+		"positions": [
+			{"controller": "p1", "details": "Jigglypuff, L6, M", "hpPercent": 77, "status": "brn"},
+			{"controller": "p3", "details": "Squirtle, L5, M", "hpPercent": 100, "status": "par"},
+			{"controller": "p2", "details": "Pidgey, L2, F", "hpPercent": 100, "status": "psn"},
+			{"controller": "p4", "details": "Pidgey, L2, M", "hpPercent": 55, "status": "slp"}],
+		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 23, "maxHp": 30}],
+		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 20, "maxHp": 20}]}
+	presenter._apply_positions(status_test_snapshot)
+	for controller: String in status_positions:
+		var overlay: StatusConditionOverlay = presenter._status_overlays[controller]
+		_expect(overlay.condition_key == {"brn": "burned", "par": "paralysis", "psn": "poisoned", "slp": "sleeping"}[status_positions[controller]]
+			and overlay.get_parent() == presenter._native_sprite(controller).get_parent(),
+			"co-op status overlay follows the correct " + controller + " sprite")
+	var burned_sprite: AnimatedSprite2D = presenter._native_sprite("p1")
+	presenter._status_overlays["p1"]._process(0.1)
+	_expect(burned_sprite.modulate != Color.WHITE, "burn visibly tints the affected co-op sprite")
+	presenter._animate_event({"kind": "-curestatus", "actor": "p1"})
+	_expect(presenter._status_overlays["p1"].condition_key.is_empty() and burned_sprite.modulate == Color.WHITE
+		and presenter._status_overlays["p3"].condition_key == "paralysis",
+		"curing one co-op Pokemon clears only its sprite effect")
+	presenter._animate_event({"kind": "-status", "actor": "p1", "status": "tox"})
+	_expect(presenter._status_overlays["p1"].condition_key == "badly_poisoned",
+		"new statuses appear on the target sprite during event playback")
+	presenter._apply_positions({"participant": "p1", "turn": 4, "opponentPartySize": 2,
+		"positions": [], "ownTeam": [], "partnerTeam": []})
+	_expect(presenter._status_overlays["p1"].condition_key.is_empty(), "empty positions remove stale co-op sprite effects")
+	presenter._apply_positions(status_test_snapshot)
+	presenter._latest = status_snapshot
+	presenter._apply_positions(baseline_snapshot)
 	var native_router: RefCounted = presenter._native_move_router
 	var native_stage: Control = mounted_battle.get_node("%BattleStage")
 	var all_native_anchors_match := true

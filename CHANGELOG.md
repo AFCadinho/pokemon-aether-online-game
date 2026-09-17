@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now show burn, poison, paralysis, freeze, and sleep effects on each affected Pokémon sprite, matching single battles.
+
 - Co-op doubles now have per-Pokémon animation anchors for all four positions. Ember and Will-O-Wisp use their existing move effects on a single target; other moves keep the safe standard animation while more effect types are checked.
 
 - Co-op party slots now sit centered in the bottom battle bar instead of being pushed against its top edge.
