@@ -29,6 +29,15 @@ func interact_with_player(_player: Node2D) -> void:
 	add_child(menu)
 	var settings: Dictionary = await menu.choose(response.get("options", {}))
 	menu.queue_free()
+	if bool(settings.get("resetReward", false)):
+		var reset_result := await _reset_training_reward()
+		if bool(reset_result.get("success", false)):
+			var reset_done := bool(reset_result.get("body", {}).get("reset", false))
+			await show_dialogue([LocalizationManager.text("ui.clash_bot.reset_done" if reset_done else "ui.clash_bot.reset_not_needed")], display_name)
+		else:
+			await GameErrorDialogService.show_response(reset_result, "ui.clash_bot.reset_unavailable")
+		interaction_in_flight = false
+		return
 	if not settings.is_empty():
 		var result := await _create_training_challenge(
 			int(settings["botCount"]), str(settings["tierId"]), str(settings["spectatorAccess"]),
@@ -43,6 +52,10 @@ func interact_with_player(_player: Node2D) -> void:
 
 func _load_training_options() -> Dictionary:
 	return await GuildService.load_aether_clash_bot_options()
+
+
+func _reset_training_reward() -> Dictionary:
+	return await GuildService.reset_aether_clash_bot_reward_for_development()
 
 
 func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String, reward_attempt: bool) -> Dictionary:
