@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The overworld Adventure Party HUD now has a translucent background that becomes clearer on hover.
+
 - Co-op double-battle logs now use the same move, damage, status, stat-change, and result colors as single battles.
 
 - Co-op double battles now group the left-side party rail into slots 1–3 for the first Trainer and 4–6 for the second, leaving empty slots in place when a roster is short.

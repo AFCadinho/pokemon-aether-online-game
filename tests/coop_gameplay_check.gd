@@ -713,6 +713,10 @@ func _run() -> void:
 	party_hud.offset_top = -314.0
 	party_hud.offset_bottom = -210.0
 	root.add_child(party_hud)
+	var normal_party_style := party_hud.get_theme_stylebox("normal") as StyleBoxFlat
+	var hovered_party_style := party_hud.get_theme_stylebox("hover") as StyleBoxFlat
+	_expect(normal_party_style.bg_color.a < 0.5 and hovered_party_style.bg_color.a > normal_party_style.bg_color.a,
+		"party HUD is translucent over the map and gains contrast on hover")
 	overlay_ui.set("coop_party_hud", party_hud)
 	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
 	overlay_ui.set("personal_buffs_panel", buffs_panel)
