@@ -5206,11 +5206,20 @@ func _on_coop_state_changed() -> void:
 		if active_battle_kind == "coop":
 			finish_coop_activity.call_deferred()
 		return
-	# A cancelled start has no battle view to dismiss.  Leaving it mounted made
+	# A cancelled start has no battle view to dismiss. Leaving it mounted made
 	# both clients remain behind the synchronisation overlay indefinitely after
 	# the server had already released the shared reservation.
-	if CoopService.activity.get("status") in ["finished", "cancelled"]:
+	if CoopService.activity.get("status") == "cancelled":
 		finish_coop_activity.call_deferred()
+		return
+	# A completed turn can settle between the two clients' polls. The client
+	# that did not submit the last choice receives `finished` before its terminal
+	# projection, so closing here would skip its finishing move animation. An
+	# active Co-opBattlePanel owns the final-event cursor and returns only after
+	# that projection has played. Still clean up immediately if no panel exists.
+	if CoopService.activity.get("status") == "finished":
+		if active_battle_kind != "coop" or battle_instance == null or not is_instance_valid(battle_instance):
+			finish_coop_activity.call_deferred()
 		return
 	if is_in_battle and active_battle_kind != "coop":
 		return

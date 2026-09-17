@@ -159,6 +159,7 @@ func _run() -> void:
 	_expect(panel.displayed_cursor == 22 and panel.cards.p2.hp.value == 64, "new move/damage events end at the authoritative snapshot")
 	var router_source := FileAccess.get_file_as_string("res://scripts/battle/coop_animation_router.gd")
 	var presenter_source := FileAccess.get_file_as_string("res://scripts/battle/coop_battle_panel.gd")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_expect(router_source.contains("var cover_scale: float = maxf(available_size.x / SOURCE_SIZE.x, available_size.y / SOURCE_SIZE.y)")
 		and router_source.contains("animation_node.scale = Vector2(cover_scale, cover_scale)")
 		and presenter_source.contains("var animate := displayed_cursor >= 0")
@@ -169,6 +170,10 @@ func _run() -> void:
 	_expect(presenter_source.contains("is_instance_valid(_loading_overlay) and _loading_overlay.visible")
 		and presenter_source.contains("if is_instance_valid(_native_turn):"),
 		"native co-op teardown does not process stale loading or turn controls")
+	_expect(world_source.contains('if CoopService.activity.get("status") == "finished":')
+		and world_source.contains("active_battle_kind != \"coop\" or battle_instance == null")
+		and world_source.contains("final-event cursor and returns only after"),
+		"the world leaves a completed active co-op battle mounted for its final shared playback")
 	_expect(presenter_source.contains('_native_mechanics = stage.get_node("%MechanicsPanel") as Control')
 		and presenter_source.contains("var card: Dictionary = cards.get(controller, {})"),
 		"native co-op setup initializes mechanics before positioning and tolerates an incomplete target mount")
