@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now group the left-side party rail into slots 1–3 for the first Trainer and 4–6 for the second, leaving empty slots in place when a roster is short.
+
 - Co-op double battles now show burn, poison, paralysis, freeze, and sleep effects on each affected Pokémon sprite, matching single battles.
 
 - Co-op doubles now have per-Pokémon animation anchors for all four positions. Ember and Will-O-Wisp use their existing move effects on a single target; other moves keep the safe standard animation while more effect types are checked.

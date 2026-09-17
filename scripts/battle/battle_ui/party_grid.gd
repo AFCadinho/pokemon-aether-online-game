@@ -41,7 +41,7 @@ func set_party(party: Array) -> void:
 	for idx in range(slots.size()):
 		var slot: Node = slots[idx]
 
-		if idx < party.size():
+		if idx < party.size() and party[idx] != null:
 			var pokemon = party[idx]
 			if pokemon is Dictionary and slot.has_method("set_pokemon_data"):
 				slot.set_pokemon_data(pokemon)
