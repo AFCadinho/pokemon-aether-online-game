@@ -32,7 +32,7 @@ func interact_with_player(_player: Node2D) -> void:
 	if not settings.is_empty():
 		var result := await _create_training_challenge(
 			int(settings["botCount"]), str(settings["tierId"]), str(settings["spectatorAccess"]),
-			str(settings["aiPolicy"])
+			str(settings["aiPolicy"]), bool(settings.get("rewardAttempt", false))
 		)
 		if bool(result.get("success", false)):
 			await show_dialogue([LocalizationManager.text("ui.clash_bot.accepted")], display_name)
@@ -45,5 +45,5 @@ func _load_training_options() -> Dictionary:
 	return await GuildService.load_aether_clash_bot_options()
 
 
-func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String) -> Dictionary:
-	return await GuildService.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy)
+func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String, reward_attempt: bool) -> Dictionary:
+	return await GuildService.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy, reward_attempt)

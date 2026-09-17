@@ -23,8 +23,14 @@ func _ready() -> void:
 	menu.difficulty.select(2)
 	menu.spectators.select(1)
 	var settings: Dictionary = menu.selected_settings()
-	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5"}, "Count, tier, difficulty and spectator choice survive without a human-count field")
+	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5", "rewardAttempt": false}, "Count, tier, difficulty and spectator choice survive without a human-count field")
+	menu._update_reward_choice()
+	_check(not menu.reward_attempt.disabled, "AI5 Hard can opt into the daily reward")
+	menu.reward_attempt.button_pressed = true
+	_check(menu.selected_settings().rewardAttempt, "Reward choice is included in the challenge")
 	menu.difficulty.select(3)
+	menu._update_reward_choice()
+	_check(menu.reward_attempt.disabled and not menu.selected_settings().rewardAttempt, "Mix cannot claim a daily reward")
 	_check(menu.selected_settings()["aiPolicy"] == "mix_v1", "Mix is a separate versioned challenge policy")
 	menu.bot_count.get_line_edit().text = "1"
 	_check(int(menu.selected_settings()["botCount"]) == 3, "Mix reserves at least one bot for each difficulty")
@@ -45,6 +51,11 @@ func _ready() -> void:
 	enabled.build({"available": true, "canChallenge": true, "maxBotCount": 10})
 	_check(not enabled.dialog.confirm_button.disabled, "Ready manager can submit")
 	enabled.queue_free()
+	var claimed := MENU.new()
+	add_child(claimed)
+	claimed.build({"available": true, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai5"], "rewardClaimedToday": true})
+	_check(claimed.reward_attempt.disabled and not claimed.selected_settings().rewardAttempt, "Claimed Guild reward cannot be selected again today")
+	claimed.queue_free()
 
 	var service := FakeGuildService.new()
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
@@ -55,7 +66,7 @@ func _ready() -> void:
 	var uuid_pattern := RegEx.new()
 	uuid_pattern.compile("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
 	_check(uuid_pattern.search(str(first["requestId"])) != null, "Request key is a valid UUIDv4")
-	_check(first.size() == 5 and first["aiPolicy"] == "ai4" and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
+	_check(first.size() == 6 and first["aiPolicy"] == "ai4" and first.rewardAttempt == false and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
 	service.succeed = true
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
 	_check(service.pending_bot_request.is_empty(), "Success clears the retry key")

@@ -42793,7 +42793,7 @@ func _format_reply_subject(subject: String) -> String:
 func _mail_can_reply(mail: Dictionary) -> bool:
 	if mail.is_empty():
 		return false
-	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin"]:
+	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin", "guild"]:
 		return false
 
 	var can_reply_as_sender: bool = str(mail.get("senderUsername", "")).strip_edges() != ""

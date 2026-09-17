@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
+
+
 - Guild training challenges now recognize the Captain at her new lobby position.
 
 - Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.

@@ -1,6 +1,10 @@
 {
   "ui.clash_bot.title": "Guildtraining [BOT]",
-  "ui.clash_bot.intro": "Kies het aantal bots los van hoeveel guildleden meedoen. De normale Clash-regels en timers gelden. Geen inzet of beloningen.",
+  "ui.clash_bot.intro": "Kies het aantal bots los van hoeveel guildleden meedoen. De normale Clash-regels en timers gelden. Geen inzet. AI5 Grandmaster Hard kan eenmaal per dag een guildbeloning opleveren.",
+  "ui.clash_bot.reward": "Dagbeloning",
+  "ui.clash_bot.reward_attempt": "Laat deze winst meetellen voor de dagbeloning",
+  "ui.clash_bot.reward_hint": "Alleen AI5 Grandmaster Hard, maximaal 20 bots. Bij verlies blijft de dagbeloning beschikbaar.",
+  "ui.clash_bot.reward_claimed": "Je guild heeft de trainingsbeloning van vandaag al verdiend.",
   "ui.clash_bot.permission": "Alleen een Guild Leader of Captain kan training starten.",
   "ui.clash_bot.unavailable": "Training tegen botguilds is tijdelijk niet beschikbaar.",
   "ui.clash_bot.start": "Training starten",
