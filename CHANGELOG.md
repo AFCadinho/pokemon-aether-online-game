@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op target selection now briefly confirms the chosen move and asks for a target; Cancel returns to the normal action prompt.
+
 - Co-op battles now ask “What will your Pokémon do?” with the active Pokémon's name, matching the singles prompt.
 
 - Settled co-op wild battles now return directly to the same map tile after a win or catch, avoiding a brief black reload screen.
