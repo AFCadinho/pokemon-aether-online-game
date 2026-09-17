@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now apply catalog movement, dodge, impact feedback, and temporary attacker-hide effects to the individual Pokémon involved, rather than an entire side of the field.
+
 - Co-op double-battle move effects now use their full catalog scale. Live clients play every received battle event in order, and the automatic return waits for the final shared event cursor before closing the battle.
 
 - The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.

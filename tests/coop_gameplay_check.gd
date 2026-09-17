@@ -275,6 +275,24 @@ func _run() -> void:
 				var actual: Vector2 = native_router.call("_get_effect_target_anchor_in_parent", alias, native_stage, "center")
 				all_native_anchors_match = all_native_anchors_match and actual.distance_to(expected) <= 1.0
 	_expect(all_native_anchors_match, "all 16 doubles actor-target pairs use the two actual sprite centers")
+	var motion_aliases: Dictionary = native_router.call("bind_native_pair", "p3", "p4",
+		{"p3": presenter._native_sprite("p3"), "p4": presenter._native_sprite("p4")},
+		{"p3": mounted_battle.get_node("%PlayerSpriteBox"), "p4": mounted_battle.get_node("%EnemySpriteBox")})
+	var moving_sprite: AnimatedSprite2D = presenter._native_sprite("p3")
+	var motion_origin := moving_sprite.position
+	var untouched_sprite_origin: Vector2 = presenter._native_sprite("p1").position
+	native_router.call("_play_move_actor_motion_if_needed", {"actor_motion": {"enabled": true, "duration": 0.08,
+		"points": [{"at": 0.0, "offset": [18, 0], "duration": 0.04}]}}, motion_aliases["actor"])
+	await create_timer(0.02).timeout
+	_expect(moving_sprite.position != motion_origin and presenter._native_sprite("p1").position == untouched_sprite_origin,
+		"catalog actor motion moves only the selected doubles attacker")
+	await create_timer(0.12).timeout
+	_expect(moving_sprite.position == motion_origin, "individual doubles actor motion restores its original pose")
+	var hidden_sprites: Array = native_router.call("_hide_move_actor_sprite_if_needed", {"hide_actor_sprite": true}, motion_aliases["actor"])
+	_expect(not moving_sprite.visible and hidden_sprites.size() == 1,
+		"catalog hide effects conceal only the selected doubles attacker")
+	native_router.call("_restore_move_actor_sprite_if_needed", {"hide_actor_sprite": true}, motion_aliases["actor"], hidden_sprites)
+	_expect(moving_sprite.visible, "catalog hide effects restore the selected doubles attacker")
 	var animation_catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/battle_move_animations.json"))
 	var all_catalog_moves_supported := true
 	for move_name: String in (animation_catalog.get("moves", {}) as Dictionary):
