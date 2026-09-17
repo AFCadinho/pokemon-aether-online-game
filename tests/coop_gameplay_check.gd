@@ -75,12 +75,12 @@ func _run() -> void:
 	mounted_world.battle_ui_host = host
 	mounted_world.coop_world_ready = true
 	var saved_escape_tile := {"mapId": "kanto_route_1", "activityState": "idle", "position": {"x": 96.0, "y": 128.0}}
-	_expect(mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0))
-		and not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_2", Vector2(96.0, 128.0))
-		and not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(126.0, 128.0)),
-		"settled wild escape can resume in place only on the same saved tile")
+	_expect(mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0))
+		and not mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_2", Vector2(96.0, 128.0))
+		and not mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_1", Vector2(126.0, 128.0)),
+		"settled wild battles resume in place only on the same saved tile")
 	saved_escape_tile["activityState"] = "battle"
-	_expect(not mounted_world._can_resume_coop_escape_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0)),
+	_expect(not mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0)),
 		"unsettled co-op battle never closes through the fast return path")
 	var music_manager := root.get_node("MusicManager")
 	var previous_music_path: String = music_manager.current_track_path

@@ -5235,7 +5235,7 @@ func finish_coop_activity() -> void:
 	if coop_finishing or (not already_acknowledged and CoopService.activity.get("status") not in ["finished", "cancelled"]):
 		return
 	coop_finishing = true
-	var escaped_wild_battle: bool = bool(CoopService.activity.get("escaped", false))
+	var wild_battle: bool = str(CoopService.activity.get("activityId", "")).begins_with("wild_")
 	var key := str(CoopService.activity.get("reservationId", ""))
 	var profile: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not profile.get("success", false):
@@ -5258,7 +5258,7 @@ func finish_coop_activity() -> void:
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": profile.get("wallet", {}), "badges": profile.get("badges", {})})
 	StoryService.apply_story(profile.get("story", {}))
 	var saved_position: Dictionary = profile.get("position", {}).get("state", {})
-	var can_resume_in_place := escaped_wild_battle and _can_resume_coop_escape_in_place(
+	var can_resume_in_place := wild_battle and _can_resume_coop_wild_battle_in_place(
 		saved_position, _get_map_id(GameState.current_map), _get_current_player_persistent_position())
 	if not already_acknowledged:
 		var response: Dictionary = await CoopService.party_action("acknowledge", {"reservationId": key})
@@ -5266,8 +5266,8 @@ func finish_coop_activity() -> void:
 			coop_finishing = false
 			return
 	if can_resume_in_place:
-		# The settled escape leaves the Trainer at the same saved tile. The battle
-		# can close in this world instead of loading the entire map a second time.
+		# A settled wild battle that leaves the Trainer on the same tile can close
+		# without reloading the map and briefly showing an empty screen.
 		_abort_battle_start(true)
 		coop_finishing = false
 		return
@@ -5278,7 +5278,7 @@ func finish_coop_activity() -> void:
 	get_tree().call_deferred("reload_current_scene")
 
 
-func _can_resume_coop_escape_in_place(saved_state: Dictionary, current_map_id: String, current_position: Vector2) -> bool:
+func _can_resume_coop_wild_battle_in_place(saved_state: Dictionary, current_map_id: String, current_position: Vector2) -> bool:
 	if current_map_id.is_empty() or str(saved_state.get("mapId", "")) != current_map_id:
 		return false
 	if str(saved_state.get("activityState", "")) != "idle":
