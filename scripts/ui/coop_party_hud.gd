@@ -109,6 +109,10 @@ func set_members(party: Dictionary, own_id: int) -> void:
 	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
 	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
 	var online: Dictionary = party.get("memberOnline", {}) if party.get("memberOnline") is Dictionary else {}
+	# During an active shared battle the runtime heartbeat is authoritative: it
+	# proves the partner is actively polling the same battle even if the general
+	# overworld presence lookup is briefly stale.
+	var coop_partner_connected := not CoopService.activity.is_empty() and bool(CoopService.activity.get("partnerConnected", false))
 	for index in 2:
 		var member_id := str(leader_id if index == 0 else partner_id)
 		var name := str(names.get(member_id, "")).strip_edges()
@@ -124,7 +128,7 @@ func set_members(party: Dictionary, own_id: int) -> void:
 		_portraits[index].visible = not str(appearance.get("body", "")).is_empty()
 		_fallbacks[index].visible = not _portraits[index].visible
 		_fallbacks[index].text = name.substr(0, 1).to_upper()
-		var is_online := true if int(member_id) == own_id else bool(online.get(member_id, false))
+		var is_online := true if int(member_id) == own_id else (bool(online.get(member_id, false)) or coop_partner_connected)
 		_presence[index].add_theme_color_override("font_color", ONLINE if is_online else OFFLINE)
 		_presence[index].tooltip_text = "Online" if is_online else "Offline"
 	tooltip_text = "Adventure Party: %s and %s" % [_names[0].text, _names[1].text]

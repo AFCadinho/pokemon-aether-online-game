@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2.
+- Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2; active co-op partners remain shown online through their live battle heartbeat.
 
 - Co-op battle setup now safely initializes its native mechanics and target overlays, preventing startup errors while a shared battle opens.
 
