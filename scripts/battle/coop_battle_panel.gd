@@ -676,6 +676,16 @@ func _own_active_species() -> String:
 	return ""
 
 
+func _target_prompt() -> String:
+	var species := _own_active_species()
+	for move: Dictionary in CoopService.view.get("moves", []):
+		if int(move.get("slot", 0)) == selected_move:
+			var move_name := str(move.get("name", "")).strip_edges()
+			if not species.is_empty() and not move_name.is_empty():
+				return "%s will use %s. Choose a target." % [species, move_name]
+	return "Choose a target."
+
+
 func _update_actions() -> void:
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
 		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open])
@@ -835,7 +845,7 @@ func _update_actions() -> void:
 			button.disabled = choices.is_empty()
 			button.modulate = ACCENT if selected_move == slot else Color.WHITE
 	if selected_move > 0:
-		_prompt.text = "Choose a target: click a Pokémon or use arrows + Space. Cancel to choose another move."
+		_prompt.text = _target_prompt()
 		if _native_mode:
 			_native_utility.set_action_visible("bag", false)
 			_native_utility.set_action_visible("run", false)

@@ -401,14 +401,16 @@ func _run() -> void:
 	presenter._update_actions()
 	presenter._select_move(1)
 	_expect(presenter._cancel_target_button.visible and presenter._native_moves.input_disabled
-		and not presenter._wait_button.visible,
+		and not presenter._wait_button.visible
+		and presenter._prompt.text == "Jigglypuff will use Pound. Choose a target.",
 		"target mode disables moves and shows Cancel instead of other actions")
 	presenter._select_move(2)
 	_expect(presenter.get("selected_move") == 1,
 		"clicking another move cannot replace the pending move selection")
 	presenter._cancel_target_button.pressed.emit()
 	_expect(presenter.get("selected_move") == 0 and not presenter._cancel_target_button.visible
-		and not presenter._native_moves.input_disabled and presenter._native_moves.visible,
+		and not presenter._native_moves.input_disabled and presenter._native_moves.visible
+		and presenter._prompt.text == "What will Jigglypuff do?",
 		"Cancel returns to available moves without submitting an action")
 	presenter._select_move(1)
 	var target_cards: Dictionary = presenter.get("cards")
