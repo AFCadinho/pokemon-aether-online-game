@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Settled co-op wild battles now return directly to the same map tile after a win or catch, avoiding a brief black reload screen.
+
 - Co-op double battles now switch from map music to wild or Trainer battle music, then restore map music on return.
 
 - Co-op battle logs now show how much HP each hit took, as a percentage.
