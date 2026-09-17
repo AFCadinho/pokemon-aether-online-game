@@ -669,6 +669,13 @@ func _set_details(controller: String, details: String, force := false) -> void:
 	card.sprite.set_single_pokemon_species(details.split(",")[0].strip_edges(), "back" if controller in ["p1", "p3"] else "front", details.contains(", shiny"))
 
 
+func _own_active_species() -> String:
+	for pokemon: Dictionary in CoopService.view.get("ownTeam", []):
+		if pokemon.get("active", false):
+			return str(pokemon.get("species", "")).strip_edges()
+	return ""
+
+
 func _update_actions() -> void:
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
 		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open])
@@ -748,7 +755,7 @@ func _update_actions() -> void:
 		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
 		_show_capture_feedback_in_prompt()
 		return
-	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else "Choose a move, then its target — or switch your Pokémon."
+	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else BattleEventTextFormatter.new().format_action_prompt(_own_active_species())
 	if _native_mode:
 		var display_moves: Array = []
 		for move: Dictionary in CoopService.view.get("moves", []):
