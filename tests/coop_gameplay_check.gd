@@ -205,6 +205,26 @@ func _run() -> void:
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer/PokemonInfoHud2").visible,
 		"four co-op Pokemon and the second HP row render in the native presentation")
+	var native_router: RefCounted = presenter._native_move_router
+	var native_stage: Control = mounted_battle.get_node("%BattleStage")
+	var all_native_anchors_match := true
+	for actor: String in ["p1", "p3", "p2", "p4"]:
+		for target: String in ["p1", "p3", "p2", "p4"]:
+			var pair_sprites := {actor: presenter._native_sprite(actor), target: presenter._native_sprite(target)}
+			var pair_boxes := {}
+			for controller: String in [actor, target]:
+				pair_boxes[controller] = mounted_battle.get_node("%PlayerSpriteBox") if controller in ["p1", "p3"] else mounted_battle.get_node("%EnemySpriteBox")
+			var aliases: Dictionary = native_router.call("bind_native_pair", actor, target, pair_sprites, pair_boxes)
+			if aliases.is_empty():
+				all_native_anchors_match = false
+				continue
+			for endpoint: String in [actor, target]:
+				var alias: String = aliases["actor"] if endpoint == actor else aliases["target"]
+				var visual_rect: Rect2 = pair_boxes[endpoint].call("_get_sprite_visual_rect_global", pair_sprites[endpoint])
+				var expected: Vector2 = native_stage.get_global_transform().affine_inverse() * visual_rect.get_center()
+				var actual: Vector2 = native_router.call("_get_effect_target_anchor_in_parent", alias, native_stage, "center")
+				all_native_anchors_match = all_native_anchors_match and actual.distance_to(expected) <= 1.0
+	_expect(all_native_anchors_match, "all 16 doubles actor-target pairs use the two actual sprite centers")
 	presenter._position_coop_stat_overlays()
 	var player_stat_overlay: StatStagePanel = presenter._stat_overlays["p1"]
 	var enemy_stat_overlay: StatStagePanel = presenter._stat_overlays["p4"]
@@ -523,6 +543,21 @@ func _run() -> void:
 	_expect(left_enemy_hp.value == 62 and right_enemy_hp.value == 74,
 		"the second target's HP changes after its own hit")
 	await presenter._animate_event({"kind": "-damage", "actor": "p1"})
+	var catalog_visuals: Array[Node] = []
+	var move_animation_script := load("res://scripts/battle/animations/move_animation_player.gd")
+	var visual_added := func(node: Node) -> void:
+		if node.get_script() == move_animation_script:
+			catalog_visuals.append(node)
+	node_added.connect(visual_added)
+	await presenter._animate_event({"kind": "move", "actor": "p1", "target": "p4", "move": "Ember", "seq": 201})
+	await presenter._animate_event({"kind": "move", "actor": "p3", "target": "p2", "move": "Will-O-Wisp", "seq": 202})
+	await presenter._play_native_catalog_move({"kind": "move", "actor": "p1", "move": "Ember",
+		"targets": ["p2", "p4"], "seq": 203}, [])
+	await presenter._play_native_catalog_move({"kind": "move", "actor": "p1", "target": "p4",
+		"move": "Ember", "seq": 204}, [{"kind": "-miss", "actor": "p1", "target": "p4", "seq": 205}])
+	node_added.disconnect(visual_added)
+	_expect(catalog_visuals.size() == 2,
+		"native doubles play the two supported catalog effects, while spread and missed moves keep the safe fallback")
 	presenter.set("_playing", false)
 	settings_manager.battle_animations = animation_setting
 	_expect(native_sprite.position == native_origin and native_sprite.modulate == Color.WHITE,

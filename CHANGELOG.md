@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now have per-Pokémon animation anchors for all four positions. Ember and Will-O-Wisp use their existing move effects on a single target; other moves keep the safe standard animation while more effect types are checked.
+
 - Co-op party slots now sit centered in the bottom battle bar instead of being pushed against its top edge.
 
 - Co-op target selection now briefly confirms the chosen move and asks for a target; Cancel returns to the normal action prompt.
