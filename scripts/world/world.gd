@@ -5202,6 +5202,12 @@ func _on_coop_state_changed() -> void:
 		if active_battle_kind == "coop":
 			finish_coop_activity.call_deferred()
 		return
+	# A cancelled start has no battle view to dismiss.  Leaving it mounted made
+	# both clients remain behind the synchronisation overlay indefinitely after
+	# the server had already released the shared reservation.
+	if CoopService.activity.get("status") in ["finished", "cancelled"]:
+		finish_coop_activity.call_deferred()
+		return
 	if is_in_battle and active_battle_kind != "coop":
 		return
 	if active_battle_kind != "coop":

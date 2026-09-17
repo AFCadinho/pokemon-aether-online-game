@@ -74,6 +74,10 @@ func _run() -> void:
 	var mounted_world = load("res://tests/fixtures/coop_world_fixture.gd").new()
 	mounted_world.battle_ui_host = host
 	mounted_world.coop_world_ready = true
+	var coop_world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_expect(coop_world_source.contains("CoopService.activity.get(\"status\") in [\"finished\", \"cancelled\"]")
+		and coop_world_source.contains("finish_coop_activity.call_deferred()"),
+		"a cancelled shared start automatically releases the battle overlay")
 	var saved_escape_tile := {"mapId": "kanto_route_1", "activityState": "idle", "position": {"x": 96.0, "y": 128.0}}
 	_expect(mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0))
 		and not mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_2", Vector2(96.0, 128.0))
