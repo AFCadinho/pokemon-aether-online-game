@@ -1,6 +1,6 @@
 {
   "ui.clash_bot.title": "Treino de Guilda [BOT]",
-  "ui.clash_bot.intro": "Escolha a quantidade de bots independentemente de quantos membros participem. Valem as regras e os tempos normais do Clash. Sem apostas ou recompensas.",
+  "ui.clash_bot.intro": "Escolha a quantidade de bots independentemente de quantos membros participem. Valem as regras e os tempos normais do Clash. Sem apostas. O AI5 Grandmaster Hard pode render uma recompensa diária à guilda.",
   "ui.clash_bot.permission": "Somente um Líder ou Capitão de Guilda pode iniciar o treino.",
   "ui.clash_bot.unavailable": "O treino contra Guildas de bots está temporariamente indisponível.",
   "ui.clash_bot.start": "Iniciar treino",
@@ -18,6 +18,8 @@
   "ui.clash_bot.accepted": "Treino aceito! Entre pelo portal Guild Duel antes de terminar o prazo de entrada.",
   "ui.clash_bot.pending": "Seu pedido de treino está sendo processado.",
   "ui.clash_bot.npc_required": "Fale com o Clash Training Captain no lobby.",
+  "ui.clash_bot.npc_too_far": "Aproxime-se do Clash Training Captain e tente novamente.",
+  "ui.clash_bot.presence_unavailable": "Sua posição ainda está sincronizando. Tente novamente em instantes.",
   "ui.clash_bot.count_limit": "Escolha uma quantidade de bots dentro do limite atual.",
   "ui.clash_bot.request_conflict": "Este pedido usava outras configurações. Reabra o menu de treino.",
   "ui.pvp.ai_sparring.live.title": "Batalhas ao vivo",

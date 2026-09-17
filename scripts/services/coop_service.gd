@@ -1,6 +1,7 @@
 extends Node
 
 signal state_changed
+signal partner_connection_changed(connected: bool)
 signal request_failed(message: String)
 signal invitation_received(invitation: Dictionary)
 signal invitation_sent(username: String)
@@ -60,7 +61,15 @@ func _process(delta: float) -> void:
 		_polling = true
 		await refresh()
 		_polling = false
-		_poll_after = 2.0 if available else 30.0
+		var active_battle: bool = activity.get("status") == "active"
+		var awaiting_battle: bool = activity.get("status") == "starting" or (active_battle and view.is_empty())
+		var awaiting_exit: bool = activity.get("status") == "active" and (bool(view.get("ended", false))
+			or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()))
+		var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+		var tracking_party_presence: bool = member_ids.size() == 2
+		# Presence drives both the Adventure Party HUD and co-op AI takeover.
+		# Keep it responsive while a party exists, and especially during a battle.
+		_poll_after = 0.5 if awaiting_battle or awaiting_exit or active_battle else 1.0 if tracking_party_presence else 2.0 if available else 30.0
 
 
 func reset() -> void:
@@ -93,6 +102,7 @@ func refresh() -> Dictionary:
 
 
 func apply_state(body: Dictionary) -> void:
+	var previous_activity: Dictionary = activity.duplicate(true)
 	party = body.get("party", {}) if body.get("party") is Dictionary else {}
 	# Godot parses JSON numbers as floats (e.g. 7.0), but the server's public
 	# member maps use canonical integer-string keys ("7").
@@ -144,6 +154,14 @@ func apply_state(body: Dictionary) -> void:
 	if body.get("view") is Dictionary:
 		apply_view(body["view"])
 	state_changed.emit()
+	var same_active_battle: bool = (
+		str(previous_activity.get("reservationId", "")) != ""
+		and previous_activity.get("reservationId") == activity.get("reservationId")
+		and previous_activity.get("status") == "active"
+		and activity.get("status") == "active"
+	)
+	if same_active_battle and bool(previous_activity.get("partnerConnected", true)) != bool(activity.get("partnerConnected", true)):
+		partner_connection_changed.emit(bool(activity.get("partnerConnected", false)))
 
 
 func _diagnostic_gateway_source() -> String:
@@ -161,6 +179,8 @@ func apply_view(incoming: Dictionary) -> void:
 	if not view.is_empty() and int(incoming.get("revision", -1)) < int(view.get("revision", -1)):
 		return
 	view = incoming.duplicate(true)
+	if bool(view.get("ended", false)) or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()):
+		_poll_after = 0.0
 	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)
 		or (view.get("exitRequest") is Dictionary and not view.get("legalActions", []).has(pending_command.get("action")))):
 		pending_command = {}
@@ -181,17 +201,24 @@ func try_start(trainer_id: String) -> Dictionary:
 		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
 	if party.is_empty():
 		return {"handled": false}
-	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
-		return {"handled": true, "success": false, "code": "coop_leader_required"}
-	var entity := trainer_entity(trainer_id)
-	if entity.is_empty():
-		return {"handled": true, "success": false, "code": "coop_interaction_unsupported"}
 	var world := GameState.get_world()
 	if world == null:
 		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
 	if not position_result.get("success", false):
 		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
+	state_result = await refresh()
+	if not state_result.get("success", false):
+		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
+	if party.is_empty():
+		return {"handled": false}
+	if not _partner_is_ready_for_coop():
+		return {"handled": false}
+	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
+		return {"handled": true, "success": false, "code": "coop_leader_required"}
+	var entity := trainer_entity(trainer_id)
+	if entity.is_empty():
+		return {"handled": true, "success": false, "code": "coop_interaction_unsupported"}
 	if pending_start.is_empty():
 		pending_start = {"reservationId": new_id(), "entityId": entity}
 	elif pending_start.get("entityId") != entity:
@@ -211,17 +238,17 @@ func try_start(trainer_id: String) -> Dictionary:
 
 
 func try_wild_step(encounter_type: String) -> Dictionary:
-	print("COOP_DIAG wild_check ", JSON.stringify({"authenticated": AuthService.is_authenticated(),
-		"party": not party.is_empty(), "leader": int(party.get("leaderId", 0)) == int(AuthService.current_user.get("id", 0)),
-		"available": available, "activity": not activity.is_empty(), "encounterType": encounter_type}))
 	if OS.has_feature("web") or not AuthService.is_authenticated():
 		return {"handled": false}
 	if party.is_empty():
 		return {"handled": false}
+	if not _partner_is_ready_for_coop():
+		return {"handled": false, "status": "solo"}
 	if encounter_type != "grass":
+		var refreshed := await refresh()
+		if refreshed.get("success", false) and not _partner_is_ready_for_coop():
+			return {"handled": false, "status": "solo"}
 		return {"handled": true, "success": false, "code": "coop_wild_method_unsupported"}
-	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
-		return {"handled": true, "success": true, "status": "miss"}
 	if not activity.is_empty():
 		if activity.get("reservationId") == pending_start.get("reservationId"):
 			pending_start = {}
@@ -230,8 +257,6 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	if world == null:
 		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
-	print("COOP_DIAG wild_position ", JSON.stringify({"success": bool(position_result.get("success", false)),
-		"code": str(position_result.get("code", position_result.get("error", "")))}))
 	if not position_result.get("success", false):
 		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
 	if pending_start.is_empty():
@@ -239,9 +264,6 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	elif pending_start.get("kind") != "grass-step":
 		return {"handled": true, "success": false, "code": "coop_start_pending"}
 	var result := await _request("grass-step", {"reservationId": pending_start["reservationId"]})
-	print("COOP_DIAG wild_server ", JSON.stringify({"success": bool(result.get("success", false)),
-		"http": int(result.get("status", 0)), "code": "" if result.get("success", false) else str(result.get("code", "")),
-		"status": str(result.get("body", {}).get("status", ""))}))
 	if result.get("success", false):
 		pending_start = {}
 	elif int(result.get("status", 0)) in [400, 401, 403, 404, 409, 422]:
@@ -252,14 +274,39 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	# step is complete in its own response; fetching state before and after
 	# every step held movement input for three network round trips.
 	if not result.get("success", false) or result.get("body", {}).get("status") != "miss":
-		var refreshed := await refresh()
-		print("COOP_DIAG wild_refresh ", JSON.stringify({"success": bool(refreshed.get("success", false)),
-			"http": int(refreshed.get("status", 0)), "activity": not activity.is_empty()}))
+		await refresh()
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
+	if result.get("success", false) and result.get("body", {}).get("status") == "solo":
+		return {"handled": false, "success": true, "status": "solo"}
 	return {"handled": true, "success": result.get("success", false),
 		"code": "" if result.get("success", false) else result.get("code", "coop_start_pending"),
 		"status": result.get("body", {}).get("status", "")}
+
+
+func _partner_is_on_another_map() -> bool:
+	var map_ids: Dictionary = party.get("memberMapIds", {})
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	var own_map := str(map_ids.get(own_id, ""))
+	if own_map.is_empty():
+		return false
+	for member_id in party.get("memberIds", []):
+		var key := str(int(member_id))
+		if key != own_id and not str(map_ids.get(key, "")).is_empty() and str(map_ids[key]) != own_map:
+			return true
+	return false
+
+
+func _partner_is_ready_for_coop() -> bool:
+	if _partner_is_on_another_map():
+		return false
+	var online: Dictionary = party.get("memberOnline", {}) if party.get("memberOnline") is Dictionary else {}
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	for member_id: Variant in party.get("memberIds", []):
+		var key := str(int(member_id))
+		if key != own_id and online.get(key) is bool and not bool(online[key]):
+			return false
+	return true
 
 
 func submit_action(action: Dictionary) -> Dictionary:
@@ -326,6 +373,17 @@ func party_action(action: String, payload: Dictionary = {}) -> Dictionary:
 			if not invitation_id.is_empty() and not _sent_invitations.has(invitation_id):
 				_sent_invitations[invitation_id] = true
 				invitation_sent.emit(str(receipt.get("recipientUsername", payload.get("recipientName", "Trainer"))))
+		if action == "acknowledge":
+			# The accepted acknowledgement is enough to release this local battle.
+			# Normal polling will refresh invitations without blocking the world return.
+			_sequence += 1
+			_applied_sequence = _sequence
+			activity = {}
+			view = {}
+			pending_command = {}
+			_poll_after = 0.0
+			state_changed.emit()
+			return result
 	await refresh()
 	return result
 

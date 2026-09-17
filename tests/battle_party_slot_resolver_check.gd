@@ -36,6 +36,9 @@ func _check_controller_reads_the_newer_request() -> void:
 	]}}}}
 	_check_equal(controller._can_switch_to_selected_pokemon(1, old_card), false, "actual controller rejects stale healthy card using the normalized p2 participant request")
 	_check_equal(controller._can_switch_to_selected_pokemon(2, {"species": "Iron Valiant", "partySlot": 1}), true, "actual controller allows a different living replacement immediately")
+	var diagnostic: Dictionary = controller._pvp_switch_eligibility_diagnostic(2)
+	_check_equal(diagnostic.get("eligibilityReason"), "candidate_missing", "missing request candidate has a safe diagnostic reason")
+	_check_equal(diagnostic.get("requestTeamPresent"), true, "diagnostic distinguishes an absent candidate from an absent team")
 	controller.free()
 
 

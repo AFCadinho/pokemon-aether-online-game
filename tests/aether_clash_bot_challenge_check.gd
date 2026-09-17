@@ -23,8 +23,14 @@ func _ready() -> void:
 	menu.difficulty.select(2)
 	menu.spectators.select(1)
 	var settings: Dictionary = menu.selected_settings()
-	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5"}, "Count, tier, difficulty and spectator choice survive without a human-count field")
+	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5", "rewardAttempt": false}, "Count, tier, difficulty and spectator choice survive without a human-count field")
+	menu._update_reward_choice()
+	_check(not menu.reward_attempt.disabled, "AI5 Hard can opt into the daily reward")
+	menu.reward_attempt.button_pressed = true
+	_check(menu.selected_settings().rewardAttempt, "Reward choice is included in the challenge")
 	menu.difficulty.select(3)
+	menu._update_reward_choice()
+	_check(menu.reward_attempt.disabled and not menu.selected_settings().rewardAttempt, "Mix cannot claim a daily reward")
 	_check(menu.selected_settings()["aiPolicy"] == "mix_v1", "Mix is a separate versioned challenge policy")
 	menu.bot_count.get_line_edit().text = "1"
 	_check(int(menu.selected_settings()["botCount"]) == 3, "Mix reserves at least one bot for each difficulty")
@@ -45,6 +51,19 @@ func _ready() -> void:
 	enabled.build({"available": true, "canChallenge": true, "maxBotCount": 10})
 	_check(not enabled.dialog.confirm_button.disabled, "Ready manager can submit")
 	enabled.queue_free()
+	var claimed := MENU.new()
+	add_child(claimed)
+	claimed.build({"available": true, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai5"], "rewardClaimedToday": true, "rewardResetAvailable": true})
+	_check(claimed.reward_attempt.disabled and not claimed.selected_settings().rewardAttempt, "Claimed Guild reward cannot be selected again today")
+	var reset_choices: Array[Dictionary] = []
+	claimed.choice_made.connect(func(choice: Dictionary): reset_choices.append(choice))
+	claimed.reward_reset_button.pressed.emit()
+	_check(reset_choices == [{"resetReward": true}], "Development reset button requests only a reward reset")
+	await get_tree().process_frame
+	_check(claimed.reward_reset_button.get_global_rect().intersects(claimed.dialog.panel.get_global_rect())
+		and claimed.dialog.panel.size.y <= get_viewport().get_visible_rect().size.y,
+		"Development reset button fits inside the training dialog")
+	claimed.queue_free()
 
 	var service := FakeGuildService.new()
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
@@ -55,13 +74,16 @@ func _ready() -> void:
 	var uuid_pattern := RegEx.new()
 	uuid_pattern.compile("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
 	_check(uuid_pattern.search(str(first["requestId"])) != null, "Request key is a valid UUIDv4")
-	_check(first.size() == 5 and first["aiPolicy"] == "ai4" and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
+	_check(first.size() == 6 and first["aiPolicy"] == "ai4" and first.rewardAttempt == false and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
 	service.succeed = true
+	await service.reset_aether_clash_bot_reward_for_development()
+	_check(service.requests.back().path.ends_with("/reward-reset") and service.requests.back().method == HTTPClient.METHOD_POST,
+		"Reset uses its authenticated development endpoint")
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
 	_check(service.pending_bot_request.is_empty(), "Success clears the retry key")
 	service.bot_request_in_flight = true
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
-	_check(service.requests.size() == 3, "Double click does not dispatch a second request")
+	_check(service.requests.size() == 4, "Double click does not dispatch a second request")
 	service.free()
 
 	var captain := CAPTAIN.instantiate()
@@ -69,12 +91,14 @@ func _ready() -> void:
 	_check(not captain.call("_prefetches_dialogue_metadata_on_approach"), "Captain skips unrelated metadata")
 	_check(not captain.call("_loads_pickpocket_profile_from_npc_metadata"), "Captain cannot be pickpocketed")
 	_check(captain.get("mugshot") != null, "Captain resolves an existing portrait")
+	var captain_source := FileAccess.get_file_as_string("res://scripts/world/npcs/aether_clash_bot_captain_npc.gd")
+	_check(captain_source.contains('world.call("_publish_world_presence", true)'), "Captain refreshes gateway position before opening training")
 	captain.queue_free()
 	var lobby := load("res://scenes/overworld/aether_clash/aether_clash_lobby.tscn").instantiate() as Node2D
 	var placed := lobby.get_node("Entities/NPCs/ClashTrainingCaptain") as Node2D
-	_check(placed.position == Vector2(1168, 1360), "NPC agrees with server interaction position")
+	_check(placed.position == Vector2(528, 816), "NPC agrees with server interaction position")
 	var collision := lobby.get_node("Tiles/Collision") as TileMapLayer
-	var tile := Vector2i(36, 42)
+	var tile := Vector2i(16, 25)
 	_check(collision.get_cell_source_id(tile) == -1, "Captain stands on a walkable tile")
 	var reachable := false
 	for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
@@ -83,7 +107,7 @@ func _ready() -> void:
 	lobby.free()
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
-		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "count_limit", "request_conflict"]:
+		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "npc_too_far", "presence_unavailable", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
 		_check(not str(catalog.get("ui.clash_bot.ai5", "")).contains("("), "%s keeps the Hard label concise" % locale)
 	await get_tree().process_frame

@@ -12,6 +12,9 @@ var bot_count: SpinBox
 var tier: OptionButton
 var spectators: OptionButton
 var difficulty: OptionButton
+var reward_attempt: CheckBox
+var reward_reset_button: Button
+var reward_claimed_today := false
 var ai_policies: Array[String] = ["ai4"]
 var can_start := false
 
@@ -26,6 +29,7 @@ func build(options: Dictionary) -> void:
 	dialog = CONFIRMATION.instantiate() as AetherConfirmationDialog
 	add_child(dialog)
 	can_start = bool(options.get("available", false)) and bool(options.get("canChallenge", false))
+	reward_claimed_today = bool(options.get("rewardClaimedToday", false))
 	var message := _t("intro")
 	if not bool(options.get("canChallenge", false)):
 		message += "\n" + _t("permission")
@@ -61,15 +65,31 @@ func build(options: Dictionary) -> void:
 		bot_count.min_value = 3 if ai_policies[difficulty.selected] == "mix_v1" else 1
 		if bot_count.value < bot_count.min_value:
 			bot_count.value = bot_count.min_value
+		_update_reward_choice()
 	)
 	_add_field(_t("difficulty"), difficulty)
 	dialog.style_option_button(difficulty)
+	reward_attempt = CheckBox.new()
+	reward_attempt.name = "RewardAttempt"
+	reward_attempt.text = _t("reward_attempt")
+	reward_attempt.tooltip_text = _t("reward_hint")
+	reward_attempt.button_pressed = false
+	_add_field(_t("reward"), reward_attempt)
+	bot_count.value_changed.connect(func(_value: float): _update_reward_choice())
+	_update_reward_choice()
 	spectators = OptionButton.new()
 	spectators.name = "Spectators"
 	spectators.add_item(_t("public"))
 	spectators.add_item(_t("guilds_only"))
 	_add_field(_t("spectators"), spectators)
 	dialog.style_option_button(spectators)
+	if bool(options.get("rewardResetAvailable", false)):
+		reward_reset_button = Button.new()
+		reward_reset_button.name = "RewardReset"
+		reward_reset_button.text = _t("reset_button")
+		reward_reset_button.tooltip_text = _t("reset_hint")
+		reward_reset_button.pressed.connect(func(): choice_made.emit({"resetReward": true}))
+		dialog.add_custom_control(reward_reset_button)
 	dialog.confirm_button.disabled = not can_start
 	dialog.confirmed.connect(_confirm)
 	dialog.canceled.connect(func(): choice_made.emit({}))
@@ -93,7 +113,16 @@ func selected_settings() -> Dictionary:
 	if ai_policies[difficulty.selected] == "mix_v1" and bot_count.value < 3:
 		bot_count.value = 3
 	return {"botCount": int(bot_count.value), "tierId": TIERS[tier.selected], "aiPolicy": ai_policies[difficulty.selected],
-		"spectatorAccess": SPECTATOR_OPTIONS[spectators.selected]}
+		"spectatorAccess": SPECTATOR_OPTIONS[spectators.selected], "rewardAttempt": reward_attempt.button_pressed}
+
+
+func _update_reward_choice() -> void:
+	if reward_attempt == null:
+		return
+	reward_attempt.disabled = reward_claimed_today or ai_policies[difficulty.selected] != "ai5" or bot_count.value > 20
+	if reward_attempt.disabled:
+		reward_attempt.button_pressed = false
+	reward_attempt.tooltip_text = _t("reward_claimed") if reward_claimed_today else _t("reward_hint")
 
 
 func _confirm() -> void:

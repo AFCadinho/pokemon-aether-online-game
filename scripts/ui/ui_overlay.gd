@@ -32819,7 +32819,6 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 		return false
 
 	_add_chat_message("Starting wild encounter: %s Lv. %s." % [pokemon.species, pokemon.level])
-	print("COOP_DIAG dev_wild ", JSON.stringify({"mode": "pasted", "coopParty": not CoopService.party.is_empty()}))
 	await world.start_dev_wild_battle(pokemon)
 	return true
 
@@ -32841,8 +32840,6 @@ func _handle_start_map_encounter_command() -> bool:
 		_wild_encounter_method_label(encounter_type),
 		_format_identifier_display_name(species_id),
 	])
-	print("COOP_DIAG dev_wild ", JSON.stringify({"mode": "map", "encounterType": encounter_type,
-		"coopParty": not CoopService.party.is_empty()}))
 	await world.start_triggered_wild_battle_for_area(area_id, encounter_type, species_id)
 	return true
 
@@ -42793,7 +42790,7 @@ func _format_reply_subject(subject: String) -> String:
 func _mail_can_reply(mail: Dictionary) -> bool:
 	if mail.is_empty():
 		return false
-	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin"]:
+	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin", "guild"]:
 		return false
 
 	var can_reply_as_sender: bool = str(mail.get("senderUsername", "")).strip_edges() != ""

@@ -10,11 +10,16 @@ var failed := false
 class FixtureService extends GuildServiceNode:
 	var state: Dictionary = {}
 	var requests: Array[Dictionary] = []
+	var reset_available := false
 	func _authenticated_request(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
 		requests.append({"path": path, "method": method, "body": {} if body.is_empty() else JSON.parse_string(body)})
 		var response: Dictionary = state.session
 		if path.ends_with("/options"):
-			response = {"available": true, "canChallenge": true, "maxBotCount": 20}
+			response = {"available": true, "canChallenge": true, "maxBotCount": 20,
+				"rewardClaimedToday": reset_available, "rewardResetAvailable": reset_available}
+		elif path.ends_with("/reward-reset"):
+			response = {"reset": true, "rewardClaimedToday": false}
+			reset_available = false
 		elif path.ends_with("/portal-sessions"):
 			response = {"sessions": [{"session": state.session, "role": "participant"}]}
 		elif path.ends_with("/enter"):
@@ -31,8 +36,10 @@ class FixtureCaptain extends "res://scripts/world/npcs/aether_clash_bot_captain_
 	var confirmations := 0
 	func _load_training_options() -> Dictionary:
 		return await service.load_aether_clash_bot_options()
-	func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String) -> Dictionary:
-		return await service.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy)
+	func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String, reward_attempt: bool) -> Dictionary:
+		return await service.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy, reward_attempt)
+	func _reset_training_reward() -> Dictionary:
+		return await service.reset_aether_clash_bot_reward_for_development()
 	func show_dialogue(_lines: Array[String] = [], _speaker := "") -> bool:
 		confirmations += 1
 		return true
@@ -88,6 +95,14 @@ func _ready() -> void:
 		cancel_menus[0].dialog.canceled.emit()
 		await get_tree().process_frame
 		_check(not captain.interaction_in_flight and captain.confirmations == 1, "Canceling setup releases the NPC without creating another training")
+		if counts[0] == 1:
+			service.reset_available = true
+			captain.interact_with_player(human)
+			var reset_menus: Array = captain.get_children().filter(func(n: Node): return n.get_script() == MENU)
+			reset_menus[0].reward_reset_button.pressed.emit()
+			await get_tree().process_frame
+			_check(service.requests.back().path.ends_with("/reward-reset") and captain.confirmations == 2
+				and not captain.interaction_in_flight, "Development reset returns through the Captain without starting another challenge")
 		var sessions := await service.load_aether_clash_portal_sessions()
 		_check(sessions.sessions.size() == 1 and sessions.sessions[0].session.opponentKind == "bot_guild", "Created training survives portal session normalization")
 		var entry := await service.enter_aether_clash_portal("flow-session")

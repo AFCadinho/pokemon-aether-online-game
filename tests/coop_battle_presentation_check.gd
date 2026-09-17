@@ -1,5 +1,16 @@
 extends SceneTree
 
+class ReturnWorld:
+	extends Node
+	var coop_finishing := false
+	var finish_calls := 0
+	var complete_on_finish := true
+
+	func finish_coop_activity() -> void:
+		finish_calls += 1
+		if complete_on_finish:
+			coop_finishing = true
+
 var failed := false
 
 func _init() -> void:
@@ -31,6 +42,26 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	await process_frame
+	var saved_party: Dictionary = service.party.duplicate(true)
+	var saved_activity: Dictionary = service.activity.duplicate(true)
+	service.party = {"leaderId": 1, "memberIds": [1, 2], "memberUsernames": {"1": "Adinho", "2": "Admin"}}
+	service.activity.activityId = "wild_grass:kanto_route_1"
+	panel._log.clear()
+	for event: Dictionary in [
+		{"kind": "switch", "actor": "p2", "details": "Furret, L6, M"},
+		{"kind": "switch", "actor": "p4", "details": "Furret, L6, F"},
+		{"kind": "switch", "actor": "p3", "details": "Pikachu, L12, F"},
+		{"kind": "switch", "actor": "p1", "details": "Pidgey, L12, M"},
+	]:
+		panel._append_event(event)
+	var opening_log: String = panel._log.get_parsed_text()
+	_expect(opening_log.count("A wild Furret has appeared!") == 2
+		and opening_log.contains("Go! Pikachu!")
+		and opening_log.contains("Adinho sent out Pidgey!")
+		and not opening_log.contains("L12") and not opening_log.contains("Wild Pokémon 1:"),
+		"wild doubles narrate both appearances and both Trainers without position summaries")
+	service.party = saved_party
+	service.activity = saved_activity
 	_expect(panel.cards.size() == 4 and panel.displayed_cursor == 20, "four slots mount and reconnect establishes event cursor")
 	_expect(panel.cards.p3.name.text.begins_with("YOU") and panel.cards.p1.name.text.begins_with("PARTNER"), "owner p3 is labelled independently from leader")
 	_expect(panel.cards.p3.info.text.contains("30 / 40") and panel.cards.p1.info.text.contains("80%"), "only own HP is exact")
@@ -126,6 +157,59 @@ func _run() -> void:
 		_expect(root.get_texture().get_image().save_png(effect_capture) == OK, "move effect capture saved")
 	await _wait_for_cursor(panel, 22)
 	_expect(panel.displayed_cursor == 22 and panel.cards.p2.hp.value == 64, "new move/damage events end at the authoritative snapshot")
+	var router_source := FileAccess.get_file_as_string("res://scripts/battle/coop_animation_router.gd")
+	var presenter_source := FileAccess.get_file_as_string("res://scripts/battle/coop_battle_panel.gd")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_expect(router_source.contains("var cover_scale: float = maxf(available_size.x / SOURCE_SIZE.x, available_size.y / SOURCE_SIZE.y)")
+		and router_source.contains("animation_node.scale = Vector2(cover_scale, cover_scale)")
+		and presenter_source.contains("var animate := displayed_cursor >= 0")
+		and not presenter_source.contains("fresh.size() <= 20")
+		and presenter_source.contains("func _final_event_playback_pending()")
+		and presenter_source.contains('not bool(_latest.get("ended", false))'),
+		"doubles cover the battlefield with catalog effects and never skip live event batches")
+	_expect(presenter_source.contains("is_instance_valid(_loading_overlay) and _loading_overlay.visible")
+		and presenter_source.contains("if is_instance_valid(_native_turn):"),
+		"native co-op teardown does not process stale loading or turn controls")
+	service.activity.partnerConnected = false
+	service.partner_connection_changed.emit(false)
+	_expect(panel._log.get_parsed_text().contains("AI is taking over their actions")
+		and presenter_source.contains("get_tree().call_group(\"ui_overlay\", \"add_system_message\", message)"),
+		"a partner disconnect is announced once in the co-op battle log and system feed")
+	service.activity.partnerConnected = true
+	service.partner_connection_changed.emit(true)
+	_expect(panel._log.get_parsed_text().contains("reconnected and can choose actions again"),
+		"a partner reconnect is announced in the co-op battle log")
+	_expect(world_source.contains('if CoopService.activity.get("status") == "finished":')
+		and world_source.contains("active_battle_kind != \"coop\" or battle_instance == null")
+		and world_source.contains("final-event cursor and returns only after"),
+		"the world leaves a completed active co-op battle mounted for its final shared playback")
+	_expect(world_source.contains('if active_battle_kind == "coop" or coop_finishing:')
+		and not FileAccess.get_file_as_string("res://scripts/ui/coop_party_hud.gd").contains("COOP_DIAG party_hud_presence"),
+		"co-op cleanup suppresses its expected activity-write race and removes temporary presence diagnostics")
+	_expect(presenter_source.contains('_native_mechanics = stage.get_node("%MechanicsPanel") as Control')
+		and presenter_source.contains("var card: Dictionary = cards.get(controller, {})"),
+		"native co-op setup initializes mechanics before positioning and tolerates an incomplete target mount")
+	_expect(presenter_source.contains("func _show_coop_opponent_trainer(")
+		and presenter_source.contains("_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)")
+		and FileAccess.get_file_as_string("res://scripts/battle/battle.gd").contains('"enemy_trainer": enemy_trainer_sprite'),
+		"trainer doubles mount the catalog opponent behind the enemy platform while wild battles keep it hidden")
+	_expect(presenter_source.contains("%MegaEvolutionIcon")
+		and presenter_source.contains("%ZMove")
+		and presenter_source.contains("func _toggle_mega_evolution()")
+		and presenter_source.contains("func _toggle_z_move()")
+		and presenter_source.contains("action.get(\"mega\", false)")
+		and presenter_source.contains("action.get(\"zMove\", false)"),
+		"native co-op mechanics use only the server-offered Mega and Z-Move action variants")
+	_expect(presenter_source.contains('"-boost", "-unboost"')
+		and presenter_source.contains("func _play_native_stat_change(")
+		and FileAccess.get_file_as_string("res://scripts/battle/coop_native_animation_router.gd").contains("func play_stat_change_tween_for_target("),
+		"native co-op stat changes animate only the affected doubles sprite")
+	_expect(presenter_source.contains('"-mega", "-primal"')
+		and presenter_source.contains('"-zpower"')
+		and presenter_source.contains("func _play_native_mechanic_effect(")
+		and presenter_source.contains('"mega_evolution"')
+		and presenter_source.contains('"z_power"'),
+		"native doubles play Mega, Primal, and Z-Power activation effects on their owning sprite")
 	var history: String = panel._log.get_parsed_text()
 	var action_node: Node = panel._actions.get_child(0)
 	service.apply_view(snapshot)
@@ -160,19 +244,52 @@ func _run() -> void:
 	var activity: Dictionary = service.activity.duplicate(true)
 	activity.status = "finished"
 	activity.outcome = "win"
+	snapshot.ended = true
+	var return_world := ReturnWorld.new()
+	root.add_child(return_world)
+	return_world.add_to_group("world")
+	panel._playing = true
 	service.apply_state({"activity": activity, "view": snapshot})
-	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 1, "finished state replaces commands with shared victory and return control")
+	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 0,
+		"victory starts returning without a separate confirmation button")
+	await process_frame
+	_expect(return_world.finish_calls == 0, "automatic return waits for final event playback")
+	panel._playing = false
+	await process_frame
+	_expect(return_world.finish_calls == 1, "victory invokes world return automatically")
+	panel._latest.eventCursor = panel.displayed_cursor + 1
+	_expect(panel._final_event_playback_pending(), "world return waits until the final shared event cursor is displayed")
+	panel._latest.eventCursor = panel.displayed_cursor
 	service.activity.outcome = "draw"
 	service.activity.escaped = true
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 1, "recovered escape receipt shows escape and a single return control")
+	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 0,
+		"confirmed wild escape has no second confirmation")
+	await process_frame
+	_expect(return_world.finish_calls == 1 and panel._actions.get_child_count() == 0,
+		"finished snapshots do not invoke world return twice")
+	return_world.coop_finishing = false
+	return_world.complete_on_finish = false
+	panel._finished_return_started = false
+	panel._action_signature = ""
+	panel._update_actions()
+	await process_frame
+	_expect(return_world.finish_calls == 2 and panel._actions.get_child_count() == 1,
+		"a failed automatic return offers a manual retry")
+	return_world.complete_on_finish = true
+	panel._finished_return_started = false
+	panel._finished_return_retry_available = false
 	service.activity.outcome = "loss"
 	service.activity.escaped = false
 	service.activity.forfeited = true
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 1, "recovered forfeit receipt identifies shared surrender rather than a natural knockout")
+	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 0,
+		"forfeit receipt identifies shared surrender and returns without confirmation")
+	await process_frame
+	_expect(return_world.finish_calls == 3, "forfeit also invokes automatic world return")
+	return_world.queue_free()
 	var old_generation: int = effects.generation
 	effects.play_move({"actor": "p3", "target": "p2", "move": "Tackle"}, [], panel.cards)
 	await process_frame

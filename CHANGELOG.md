@@ -2,11 +2,148 @@
 
 ## Unreleased
 
+- Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.
+
+- Co-op battle cleanup no longer shows a false activity-save warning while the server is completing the shared settlement.
+
+- Adventure Party presence now refreshes faster. Co-op battles announce partner disconnects and reconnects in both the system feed and battle log, while AI takes over shortly after a genuine disconnect.
+
+- Co-op battles now keep both clients in the battle until the final shared move animation has played, even when the other Trainer locks the finishing turn first.
+
+- Co-op trainer battles now show the NPC Trainer behind the opposing Pokémon; wild battles remain trainer-free.
+
+- Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2; active co-op partners remain shown online through their live battle heartbeat.
+
+- Co-op battle setup now safely initializes its native mechanics and target overlays, preventing startup errors while a shared battle opens.
+
+- Co-op battles no longer emit repeated UI errors while their native battle overlay closes.
+
+- Co-op doubles now wait for every participant's final battle projection before automatically returning to the overworld, so the finishing move animation plays for both Trainers.
+
+- Co-op doubles now align the opposing platform and Pokémon slightly higher with the move controls.
+
+- Co-op doubles now place Mega Evolution and Z-Move controls higher beside the compact move grid.
+
+- Co-op doubles now receive the public active Pokémon level directly from the battle view, including Lv. 100 forms, and use slimmer two-Pokémon HP HUDs.
+
+- Co-op doubles now place both platforms and active Pokémon lower and closer to the centre, leaving a clearer left-side staging area for allied Trainer sprites.
+
+- Adventure Party HUDs now show each Trainer's live online/offline status. Wild encounters automatically use the normal single-battle flow when the partner is offline or on another map.
+
+- Co-op doubles now play the native stat-drop/raise effect on the affected Pokémon, including Close Combat's self-inflicted drops.
+
+- Co-op doubles now scale catalog move effects to cover the full battlefield, restoring full-size timing backgrounds such as Close Combat.
+
+- Co-op doubles now offer Mega Evolution and Z-Move controls whenever the current Pokémon has a simulator-legal move for that mechanic.
+
+- A cancelled co-op battle start now automatically returns both players to the overworld instead of leaving the loading overlay open.
+
+- Co-op doubles now apply catalog movement, dodge, impact feedback, and temporary attacker-hide effects to the individual Pokémon involved, rather than an entire side of the field.
+
+- Co-op double-battle move effects now use their full catalog scale. Live clients play every received battle event in order, and the automatic return waits for the final shared event cursor before closing the battle.
+
+- The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.
+
+- Co-op double battles now use every existing move animation from the catalog, including self, field and spread moves, at the appropriate doubles sprites.
+
+- The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
+
+- The overworld Adventure Party HUD now has a translucent background that becomes clearer on hover.
+
+- Co-op double-battle logs now use the same move, damage, status, stat-change, and result colors as single battles.
+
+- Co-op double battles now group the left-side party rail into slots 1–3 for the first Trainer and 4–6 for the second, leaving empty slots in place when a roster is short.
+
+- Co-op double battles now show burn, poison, paralysis, freeze, and sleep effects on each affected Pokémon sprite, matching single battles.
+
+- Co-op doubles now have per-Pokémon animation anchors for all four positions. Ember and Will-O-Wisp use their existing move effects on a single target; other moves keep the safe standard animation while more effect types are checked.
+
+- Co-op party slots now sit centered in the bottom battle bar instead of being pushed against its top edge.
+
+- Co-op target selection now briefly confirms the chosen move and asks for a target; Cancel returns to the normal action prompt.
+
+- Co-op battles now ask “What will your Pokémon do?” with the active Pokémon's name, matching the singles prompt.
+
+- Settled co-op wild battles now return directly to the same map tile after a win or catch, avoiding a brief black reload screen.
+
+- Co-op double battles now switch from map music to wild or Trainer battle music, then restore map music on return.
+
+- Co-op battle logs now show how much HP each hit took, as a percentage.
+
+- Co-op Pokémon hover cards now show possible abilities and speed tiers. Stat-change badges sit below the HP panels instead of inside them.
+
+- Co-op double battles now use readable battle-log messages, show the normal Pokémon and move hover cards, and display stat-stage badges under each Pokémon's HP bar.
+
+- Both Trainers now see a co-op Poké Ball throw against the correct wild Pokémon after their shared choices are in.
+
+- Co-op Poké Ball animations now wait until the other Trainer has chosen an action, matching the shared turn's presentation.
+
+- Co-op Poké Ball and partner-decision dialogs now have clearer titles, descriptions and styled choices; the bag's back action sits below the available balls.
+
+- Co-op capture attempts now play the Poké Ball throw and shake animation on the assigned wild Pokémon. Capture feedback appears in the battle prompt instead of under the party slots.
+
+- Finished co-op battles now return to the world automatically after victory, defeat, or forfeit. A retry button appears only if returning fails.
+
+- Co-op double battles now update each target's HP after its own move and hit animation, instead of changing all HP bars at the end of the turn.
+
+- Co-op target hover now also works around a Pokémon's feet and legs, without changing the initial target under a stationary cursor.
+
+- Single-target moves in co-op battles now start on the left opposing Pokémon, even when a target appears under a stationary cursor.
+
+- In co-op battles, choosing a target now locks the move buttons until you pick a Pokémon or press Cancel. Cancel returns to move selection without using a turn.
+
+- Returning from a co-op wild battle after both Trainers agree to Run is faster. The game checks the exit more often and avoids reloading the map when the settled Trainer is already on the correct tile.
+
+- Co-op move targeting now highlights the selected Pokémon sprite; hover or arrow keys move the glow without covering the field with target boxes.
+
+- Both wild Pokémon in a co-op battle now glow in the side rail while they are active.
+
+- Co-op Pokémon and their platforms now sit lower on the field, nearer the battle text and moves. The combined party icons stay fully above the battle text.
+
+- In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
+
+- Co-op confirmation and return choices now open over the battlefield, leaving the bottom switch bar neatly reserved for your Pokémon.
+
+- Co-op Pokémon stand closer together in double battles. Both Trainers stand together behind the left Pokémon in Trainer battles and stay hidden in wild battles.
+
+- Co-op wild battle logs now announce both wild Pokémon and each Trainer's sent-out Pokémon in plain battle language.
+
+- Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.
+
+- Single battles again show full-width Pokémon HP bars after the double-battle HUD changes.
+
+- After both Trainers agree to flee a co-op wild battle, they return to the world automatically. A retry button appears if returning fails.
+
+- Co-op PvE battles show the turn without a countdown timer.
+
+- Double battles have an uncropped compact battlefield, smaller Trainer sprites, a wider team title, and a three-Pokémon personal switch row. Wait now sits beside Bag and Run. Single-battle layouts are unchanged.
+
+- Co-op battles now keep the normal battle log and Damage Calc button, with the combined party shown in the field rails.
+
+- Co-op double battles use a simple per-Pokémon attack and hit animation while move-specific effects are adapted later. Choose single-target moves by clicking a Pokémon or using the arrow keys and Space; Escape cancels targeting.
+
+- Co-op battles show both Trainers behind their Pokémon, a turn counter and VS banner on the field, combined party icons at the sides, and only your own Pokémon in the switch bar. The battle log uses Trainer names instead of generic co-op labels.
+
+- Co-op battle prompts use the normal battle field, with extra choices beside the battle log.
+
+- Co-op double battles show the two Pokémon HP panels side by side in a compact HUD; single battles keep their original HUD layout.
+
+- Co-op double battles now use the familiar battle field: two Pokémon sprites on each side, stacked native HP panels, standard move buttons and battle log, with Bag and Run in their usual place.
+
+- Co-op double battles now open in the regular battle window, with both Trainers' Pokémon, opponents, battle events and shared turn actions placed in its battle stage and panels.
+
+- Guild training challenges now recognize the Captain at her new lobby position.
+
+- Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.
+
+- Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
+
+- Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
+
 - Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
 
 - Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
 
-- Adventure Party wild battles now explain when your partner is too far away, instead of silently missing every step.
 
 - Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
 

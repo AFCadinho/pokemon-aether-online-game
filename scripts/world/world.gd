@@ -15,6 +15,7 @@ const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_dep
 const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
 const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
 const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
+const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -3085,8 +3086,16 @@ func _save_current_player_position(
 				"activeTeleportCommandId": active_remote_authorized_teleport_command_id,
 				"pendingTargetMapId": pending_target_map_id,
 			})
-		if not ThievingService.is_arrest_transfer_pending():
-			push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
+		# A position request can finish after co-op has taken ownership of both
+		# Trainers' stored positions. Its rejection is stale, not a new save to retry.
+		# These codes only fence an in-flight overworld save while the shared
+		# reservation owns the players' positions. They are not player-facing
+		# failures, including during the handoff where the local activity clears.
+		var co_op_position_lock := error_code in ["coop_activity_locked", "party_capacity_busy"]
+		if not ThievingService.is_arrest_transfer_pending() and active_battle_kind != "coop" and not coop_finishing and not co_op_position_lock:
+			push_warning("World: player position save failed (HTTP %s, %s): %s" % [
+				str(result.get("status", 0)), BackendErrorLocalizationService.error_code(result),
+				str(result.get("error", "Unknown error"))])
 	is_saving_player_position = false
 	if has_pending_player_position_save:
 		has_pending_player_position_save = false
@@ -3181,7 +3190,10 @@ func _save_player_activity_state_deferred(activity_state: String, activity_conte
 
 
 func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
-	if active_battle_kind == "coop":
+	# The co-op settlement owns activity state until its acknowledgement and
+	# cleanup complete. A normal-world save in this small hand-off window is
+	# correctly rejected by the server, so do not retry or warn for it.
+	if active_battle_kind == "coop" or coop_finishing:
 		return
 	pending_activity_state_save = {
 		"state": activity_state,
@@ -3572,8 +3584,6 @@ func _clear_battle_ui_instance() -> void:
 
 func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	WebMemoryProbe.mark("battle_start_requested")
-	print("COOP_DIAG dev_wild_entry ", JSON.stringify({"coopParty": not CoopService.party.is_empty(),
-		"inBattle": is_in_battle, "resumePending": wild_battle_resume_pending}))
 	if is_in_battle or wild_battle_resume_pending:
 		return
 		
@@ -3586,14 +3596,11 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	_lock_overworld_for_battle()
 	
 	var position_result := await sync_player_position_for_world_action()
-	print("COOP_DIAG dev_wild_position ", JSON.stringify({"success": bool(position_result.get("success", false))}))
 	if not bool(position_result.get("success", false)):
 		_abort_battle_start()
 		await GameErrorDialogService.show_response(position_result)
 		return
 	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
-	print("COOP_DIAG dev_wild_server ", JSON.stringify({"success": bool(response.get("success", false)),
-		"http": int(response.get("status", 0)), "code": str(response.get("code", ""))}))
 	if not response.get("success", false):
 		push_warning("World.start_dev_wild_battle failed: %s" % str(response.get("error", "Unknown error")))
 		_abort_battle_start()
@@ -3625,10 +3632,6 @@ func start_triggered_wild_battle_for_area(
 	retry_after_expired_battle := true
 ) -> void:
 	WebMemoryProbe.mark("battle_start_requested")
-	print("COOP_DIAG wild_entry ", JSON.stringify({"forced": not forced_species_id.is_empty(),
-		"encounterType": encounter_type, "coopParty": not CoopService.party.is_empty(),
-		"inBattle": is_in_battle, "resumePending": wild_battle_resume_pending,
-		"stepPending": coop_wild_step_pending}))
 	if is_in_battle or wild_battle_resume_pending:
 		return
 	if coop_wild_step_pending:
@@ -3636,13 +3639,19 @@ func start_triggered_wild_battle_for_area(
 	coop_wild_step_pending = true
 	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
 	coop_wild_step_pending = false
-	print("COOP_DIAG wild_result ", JSON.stringify({"handled": bool(coop_step.get("handled", false)),
-		"success": bool(coop_step.get("success", false)), "status": str(coop_step.get("status", "")),
-		"code": str(coop_step.get("code", "")), "activity": not CoopService.activity.is_empty()}))
 	if coop_step.get("handled", false):
 		if not coop_step.get("success", false):
 			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
 		return
+	if coop_step.get("status", "") == "solo" and forced_species_id.is_empty():
+		var solo_encounter := WildEncounterProvider.resolve_wild_encounter(GameState.current_map, player.global_position, encounter_type)
+		if not bool(solo_encounter.get("available", false)):
+			return
+		if bool(solo_encounter.get("use_map_trigger", false)):
+			if not bool(GameState.current_map.call("should_trigger_wild_encounter", encounter_type)):
+				return
+		elif randf() > clampf(float(solo_encounter.get("chance", 0.0)), 0.0, 1.0):
+			return
 	if is_in_battle or wild_battle_resume_pending:
 		return
 
@@ -5200,18 +5209,47 @@ func _on_coop_state_changed() -> void:
 		if active_battle_kind == "coop":
 			finish_coop_activity.call_deferred()
 		return
+	# A cancelled start has no battle view to dismiss. Leaving it mounted made
+	# both clients remain behind the synchronisation overlay indefinitely after
+	# the server had already released the shared reservation.
+	if CoopService.activity.get("status") == "cancelled":
+		finish_coop_activity.call_deferred()
+		return
+	# A completed turn can settle between the two clients' polls. The client
+	# that did not submit the last choice receives `finished` before its terminal
+	# projection, so closing here would skip its finishing move animation. An
+	# active Co-opBattlePanel owns the final-event cursor and returns only after
+	# that projection has played. Still clean up immediately if no panel exists.
+	if CoopService.activity.get("status") == "finished":
+		if active_battle_kind != "coop" or battle_instance == null or not is_instance_valid(battle_instance):
+			finish_coop_activity.call_deferred()
+		return
 	if is_in_battle and active_battle_kind != "coop":
 		return
 	if active_battle_kind != "coop":
+		if not _mount_battle_ui():
+			CoopService.request_failed.emit("Could not open the shared battle. Retrying…")
+			return
+		if not battle_instance.setup_coop_battle():
+			_clear_battle_ui_instance()
+			CoopService.request_failed.emit("Could not prepare the shared battle. Retrying…")
+			return
 		is_in_battle = true
 		active_battle_kind = "coop"
 		_lock_overworld_for_battle()
-		coop_controls = preload("res://scripts/battle/coop_controls.gd").new()
-		coop_controls.battle_mode = true
-		battle_ui_host.add_child(coop_controls)
-		battle_ui_host.visible = true
 	active_battle_id = str(CoopService.activity.get("battleId", ""))
+	if CoopService.activity.get("status") in ["starting", "active"]:
+		_play_coop_battle_music(str(CoopService.activity.get("activityId", "")))
 	_publish_world_presence(true)
+
+
+func _play_coop_battle_music(activity_id: String) -> void:
+	if activity_id.is_empty():
+		return
+	if activity_id.begins_with("wild_"):
+		MusicManager.play_wild_battle_music()
+	else:
+		MusicManager.play_trainer_battle_music()
 
 
 func finish_coop_activity() -> void:
@@ -5219,6 +5257,7 @@ func finish_coop_activity() -> void:
 	if coop_finishing or (not already_acknowledged and CoopService.activity.get("status") not in ["finished", "cancelled"]):
 		return
 	coop_finishing = true
+	var wild_battle: bool = str(CoopService.activity.get("activityId", "")).begins_with("wild_")
 	var key := str(CoopService.activity.get("reservationId", ""))
 	var profile: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not profile.get("success", false):
@@ -5230,20 +5269,47 @@ func finish_coop_activity() -> void:
 	if already_acknowledged and profile.get("position", {}).get("state", {}).get("activityState", "battle") == "battle":
 		coop_finishing = false
 		return
-	var inventory: Dictionary = await InventoryService.load_inventory()
-	if not inventory.get("success", false):
-		coop_finishing = false
-		return
+	# The authoritative profile already includes inventory. Avoid a second HTTP
+	# request; keep the dedicated endpoint as a compatibility fallback.
+	if not InventoryService.apply_inventory_state(profile.get("inventory", {})):
+		var inventory: Dictionary = await InventoryService.load_inventory()
+		if not inventory.get("success", false):
+			coop_finishing = false
+			return
 	PlayerSave.replace_party_from_state(profile.get("party", {}).get("party", []))
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": profile.get("wallet", {}), "badges": profile.get("badges", {})})
 	StoryService.apply_story(profile.get("story", {}))
+	var saved_position: Dictionary = profile.get("position", {}).get("state", {})
+	var can_resume_in_place := wild_battle and _can_resume_coop_wild_battle_in_place(
+		saved_position, _get_map_id(GameState.current_map), _get_current_player_persistent_position())
 	if not already_acknowledged:
 		var response: Dictionary = await CoopService.party_action("acknowledge", {"reservationId": key})
 		if not response.get("success", false) and not CoopService.activity.is_empty():
 			coop_finishing = false
 			return
+	if can_resume_in_place:
+		# A settled wild battle that leaves the Trainer on the same tile can close
+		# without reloading the map and briefly showing an empty screen.
+		_abort_battle_start(true)
+		coop_finishing = false
+		return
 	GameState.set_prepared_world_state({"hasSavedState": true, "savedState": profile.get("position", {}).get("state", {})})
 	# Account settlement already applied any respawn. Re-enter at that saved
 	# position; do not invoke the solo reward/blackout path a second time.
 	_abort_battle_start(true)
 	get_tree().call_deferred("reload_current_scene")
+
+
+func _can_resume_coop_wild_battle_in_place(saved_state: Dictionary, current_map_id: String, current_position: Vector2) -> bool:
+	if current_map_id.is_empty() or str(saved_state.get("mapId", "")) != current_map_id:
+		return false
+	if str(saved_state.get("activityState", "")) != "idle":
+		return false
+	if saved_state.get("pendingTeleportRevision") != null:
+		return false
+	var position: Variant = saved_state.get("position", {})
+	if not position is Dictionary or not position.has("x") or not position.has("y"):
+		return false
+	if typeof(position["x"]) not in [TYPE_INT, TYPE_FLOAT] or typeof(position["y"]) not in [TYPE_INT, TYPE_FLOAT]:
+		return false
+	return current_position.distance_to(Vector2(float(position["x"]), float(position["y"]))) <= 2.0
