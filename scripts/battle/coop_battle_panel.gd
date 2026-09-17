@@ -4,6 +4,9 @@ const SLOTS := ["p2", "p4", "p1", "p3"]
 const LOCATIONS := {"p1": -1, "p3": -2, "p2": 1, "p4": 2}
 const ACCENT := Color("67e8bf")
 const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
+const COOP_EFFECTS := preload("res://scripts/battle/coop_battle_effects.gd")
+const NATIVE_MOVE_ROUTER := preload("res://scripts/battle/coop_native_animation_router.gd")
+const NATIVE_ANIMATED_MOVES := {"ember": true, "will-o-wisp": true}
 const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
 uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
 void fragment() {
@@ -46,6 +49,7 @@ var _loading_overlay: ColorRect
 var _loading_label: Label
 var _loading_cancel: Button
 var _effects: Node
+var _native_move_router: RefCounted
 var _native_mode := false
 var _native_moves: MovesGrid
 var _native_log: BattleLogPanel
@@ -293,6 +297,10 @@ func _ready() -> void:
 	effect_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_effects = load("res://scripts/battle/coop_battle_effects.gd").new()
 	effect_layer.add_child(_effects)
+	if _native_mode:
+		_native_move_router = NATIVE_MOVE_ROUTER.new()
+		_native_move_router.call("setup", embedded_hosts["player_sprite"], embedded_hosts["enemy_sprite"], effect_layer,
+			Callable(self, "_native_animation_allowed"))
 	if not _native_mode:
 		for controller: String in SLOTS:
 			_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
@@ -427,6 +435,8 @@ func _sync() -> void:
 		_finished_return_retry_available = false
 		_epoch += 1
 		_effects.cancel()
+		if _native_move_router != null:
+			_native_move_router.call("cancel_render")
 		_cancel_native_attack_tween()
 		displayed_battle = battle_id
 		displayed_cursor = -1
@@ -1157,6 +1167,7 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 			"move":
 				if SettingsManager.battle_animations:
 					await _play_native_attack(str(event.get("actor", "")))
+					await _play_native_catalog_move(event, batch)
 			"-damage", "-heal":
 				if SettingsManager.battle_animations and event.get("kind") == "-damage":
 					await _play_native_hit(str(event.get("actor", "")))
@@ -1313,6 +1324,35 @@ func _play_native_attack(controller: String) -> void:
 	_cancel_native_attack_tween()
 
 
+func _native_animation_allowed(_source: String, _details: Dictionary) -> bool:
+	return is_inside_tree() and not is_queued_for_deletion()
+
+
+func _play_native_catalog_move(event: Dictionary, batch: Array) -> void:
+	if _native_move_router == null:
+		return
+	var move_name := str(event.get("move", ""))
+	if not NATIVE_ANIMATED_MOVES.has(move_name.to_lower()) or not _native_move_router.call("has_move_animation", move_name):
+		return
+	var plan: Dictionary = COOP_EFFECTS.move_targets(event, batch)
+	var targets: Array = plan.get("targets", [])
+	if targets.size() != 1 or (plan.get("misses", []) as Array).has(targets[0]):
+		return
+	var actor := str(event.get("actor", ""))
+	var target := str(targets[0])
+	if actor not in SLOTS or target not in SLOTS:
+		return
+	var sprites := {}
+	var boxes := {}
+	for controller: String in [actor, target]:
+		sprites[controller] = _native_sprite(controller)
+		boxes[controller] = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+	var aliases: Dictionary = _native_move_router.call("bind_native_pair", actor, target, sprites, boxes)
+	if aliases.is_empty():
+		return
+	await _native_move_router.call("play_move_animation", move_name, aliases["actor"], aliases["target"], {"result": "hit"})
+
+
 func _play_native_hit(controller: String) -> void:
 	var sprite := _native_sprite(controller)
 	if sprite == null or not sprite.visible:
@@ -1329,6 +1369,9 @@ func _play_native_hit(controller: String) -> void:
 
 func _exit_tree() -> void:
 	_cancel_native_attack_tween()
+	if _native_move_router != null:
+		_native_move_router.call("dispose")
+		_native_move_router = null
 
 
 func _show_error(message: String) -> void:
