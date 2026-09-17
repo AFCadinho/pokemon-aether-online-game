@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now place both platforms and active Pokémon lower and closer to the centre, leaving a clearer left-side staging area for allied Trainer sprites.
+
 - Adventure Party HUDs now show each Trainer's live online/offline status. Wild encounters automatically use the normal single-battle flow when the partner is offline or on another map.
 
 - Co-op doubles now play the native stat-drop/raise effect on the affected Pokémon, including Close Combat's self-inflicted drops.
