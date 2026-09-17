@@ -216,6 +216,7 @@ func _ready() -> void:
 		await _setup_web_demo_world()
 		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
 			player.process_mode = web_player_process_mode_before_load
+			_setup_coop_controls()
 		if GameState.gameplay_reset_in_progress:
 			GameState.finish_gameplay_reset()
 		return
@@ -3818,10 +3819,9 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"code": "trainer_battle_configuration_invalid",
 		}
 
-	if not OS.has_feature("web"):
-		var coop_result: Dictionary = await CoopService.try_start(trainer_id)
-		if coop_result.get("handled", false):
-			return coop_result
+	var coop_result: Dictionary = await CoopService.try_start(trainer_id)
+	if coop_result.get("handled", false):
+		return coop_result
 
 	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
 	if player_lead_slot <= 0:
@@ -5195,7 +5195,7 @@ func recover_failed_trainer_battle_start() -> void:
 
 
 func _setup_coop_controls() -> void:
-	if coop_world_ready or OS.has_feature("web"):
+	if coop_world_ready:
 		return
 	coop_world_ready = true
 	CoopService.state_changed.connect(_on_coop_state_changed)
@@ -5205,6 +5205,8 @@ func _setup_coop_controls() -> void:
 func _on_coop_state_changed() -> void:
 	if not coop_world_ready or coop_finishing:
 		return
+	if OS.has_feature("web") and not CoopService.view.is_empty():
+		_prefetch_coop_web_battle_sprites(CoopService.view)
 	if CoopService.activity.is_empty():
 		if active_battle_kind == "coop":
 			finish_coop_activity.call_deferred()
@@ -5241,6 +5243,23 @@ func _on_coop_state_changed() -> void:
 	if CoopService.activity.get("status") in ["starting", "active"]:
 		_play_coop_battle_music(str(CoopService.activity.get("activityId", "")))
 	_publish_world_presence(true)
+
+
+func _prefetch_coop_web_battle_sprites(view: Dictionary) -> void:
+	if not WebPokemonSpriteService.is_available():
+		return
+	var entries: Array = []
+	var seen: Dictionary = {}
+	for key: String in ["ownTeam", "partnerTeam"]:
+		_append_web_sprite_entries_from_value(view.get(key, []), ["back"], entries, seen)
+	for position_value: Variant in view.get("positions", []):
+		if not position_value is Dictionary:
+			continue
+		var position := position_value as Dictionary
+		var species := str(position.get("details", "")).split(",")[0].strip_edges()
+		var side := "back" if str(position.get("controller", "")) in ["p1", "p3"] else "front"
+		_append_web_sprite_entry(species, side, str(position.get("details", "")).to_lower().contains("shiny"), entries, seen)
+	WebPokemonSpriteService.prefetch(entries)
 
 
 func _play_coop_battle_music(activity_id: String) -> void:

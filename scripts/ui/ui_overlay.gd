@@ -30065,7 +30065,7 @@ func _apply_socials_menu_style() -> void:
 		Color("#60d3ff")
 	)
 	_configure_launcher_card_button(socials_adventure_party_button, "Adventure Party", "Play together with another Trainer.", SOCIALS_PARTY_ICON, Color("#79e49b"))
-	socials_adventure_party_button.visible = not OS.has_feature("web")
+	socials_adventure_party_button.visible = true
 	_configure_launcher_card_button(
 		socials_loans_button,
 		"ui.social.loans",
@@ -39339,7 +39339,7 @@ func _coop_party_hud_data() -> Dictionary:
 	return party
 
 func _open_coop_party_popup(recipient_name: String = "") -> void:
-	if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():
+	if not CoopService.available or not CoopService.activity.is_empty():
 		return
 	_ensure_coop_party_popup()
 	coop_party_popup.call("open", recipient_name)

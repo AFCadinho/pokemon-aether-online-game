@@ -1702,7 +1702,7 @@ func set_double_pokemon_species(species_1: String, species_2: String, side: Stri
 		_snap_sprite_to_pixel_grid(sprite)
 		sprite.visible = true
 		_apply_sprite_playback_mode(sprite)
-	if web_sprite_upgrades_allowed and not species_1.is_empty() and not species_2.is_empty():
+	if web_sprite_upgrades_allowed and (not species_1.is_empty() or not species_2.is_empty()):
 		_upgrade_double_web_sprites.call_deferred(request_generation, species_1, shiny_1,
 			species_2, shiny_2, side)
 
@@ -1838,8 +1838,8 @@ func _upgrade_double_web_sprites(
 	generation: int, species_1: String, shiny_1: bool,
 	species_2: String, shiny_2: bool, side: String
 ) -> void:
-	var frames_1 := await request_web_sprite_frames(species_1, side, shiny_1)
-	var frames_2 := await request_web_sprite_frames(species_2, side, shiny_2)
+	var frames_1: SpriteFrames = await request_web_sprite_frames(species_1, side, shiny_1) if not species_1.is_empty() else null
+	var frames_2: SpriteFrames = await request_web_sprite_frames(species_2, side, shiny_2) if not species_2.is_empty() else null
 	if generation != web_sprite_request_generation or not double_container.visible:
 		return
 	for entry: Array in [[double_sprite_1, frames_1], [double_sprite_2, frames_2]]:

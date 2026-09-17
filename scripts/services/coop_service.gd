@@ -46,7 +46,7 @@ var _reported_profile_source := ""
 
 
 func _process(delta: float) -> void:
-	if not AuthService.is_authenticated() or OS.has_feature("web"):
+	if not AuthService.is_authenticated():
 		if not _session_identity.is_empty():
 			reset()
 		return
@@ -192,7 +192,7 @@ func apply_view(incoming: Dictionary) -> void:
 
 
 func try_start(trainer_id: String) -> Dictionary:
-	if OS.has_feature("web") or not AuthService.is_authenticated():
+	if not AuthService.is_authenticated():
 		return {"handled": false}
 	var state_result := await refresh()
 	if not state_result.get("success", false):
@@ -238,7 +238,7 @@ func try_start(trainer_id: String) -> Dictionary:
 
 
 func try_wild_step(encounter_type: String) -> Dictionary:
-	if OS.has_feature("web") or not AuthService.is_authenticated():
+	if not AuthService.is_authenticated():
 		return {"handled": false}
 	if party.is_empty():
 		return {"handled": false}

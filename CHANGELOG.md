@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Parties can now be formed and played in the browser, including shared trainer and grass battles with desktop players in browser-available areas.
+
 - Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.
 
 - Co-op battle cleanup no longer shows a false activity-save warning while the server is completing the shared settlement.
