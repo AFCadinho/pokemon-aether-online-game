@@ -200,6 +200,23 @@ func _run() -> void:
 			{"species": "Ekans", "active": false, "hp": 29, "maxHp": 29}],
 		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 20, "maxHp": 20}]}
 	presenter._apply_positions(baseline_snapshot)
+	var allied_rail: PartyGrid = mounted_battle.get_node("%PlayerStagePartyGrid")
+	_expect(allied_rail.current_party_data.size() == 6
+		and allied_rail.current_party_data[0].species == "Jigglypuff"
+		and allied_rail.current_party_data[1].species == "Ekans"
+		and allied_rail.get_pokemon_data_for_visual_slot(3).is_empty()
+		and allied_rail.current_party_data[3].species == "Squirtle",
+		"leader party occupies slots 1–3 and partner party starts at slot 4")
+	var partner_view_snapshot: Dictionary = baseline_snapshot.duplicate(true)
+	partner_view_snapshot.participant = "p3"
+	partner_view_snapshot.ownTeam = baseline_snapshot.partnerTeam
+	partner_view_snapshot.partnerTeam = baseline_snapshot.ownTeam
+	presenter._apply_positions(partner_view_snapshot)
+	_expect(allied_rail.current_party_data[0].species == "Jigglypuff"
+		and allied_rail.current_party_data[3].species == "Squirtle"
+		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data[0].species == "Squirtle",
+		"both Trainers see the same side-rail order but only their own switch roster")
+	presenter._apply_positions(baseline_snapshot)
 	_expect(mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
 		and mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2").visible
 		and mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite").visible
@@ -267,7 +284,7 @@ func _run() -> void:
 		and player_stat_overlay.get_global_rect().position.y >= mounted_battle.get_node("%PlayerHudPanel").get_global_rect().end.y,
 		"stat badges sit outside and below the shared HP containers")
 	_expect(mounted_battle.get_node("%BattleStatusPanel").turn_label.text.contains("4")
-		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 3
+		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 6
 		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data.size() == 2
 		and mounted_battle.get_node("%OpponentPartyGrid").current_party_data.size() == 2
 		and mounted_battle.get_node("%PlayerTrainerSprite").visible

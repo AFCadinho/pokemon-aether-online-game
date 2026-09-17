@@ -589,7 +589,13 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 	for index in range(_native_party.get_child_count()):
 		(_native_party.get_child(index) as Control).visible = index < own_team.size()
 	var partner_team: Array = snapshot.get("partnerTeam", [])
-	var allied_team: Array = own_team + partner_team if snapshot.get("participant") == "p1" else partner_team + own_team
+	# Keep each Trainer's three party slots together even when one roster is short.
+	var first_team: Array = own_team if snapshot.get("participant") == "p1" else partner_team
+	var second_team: Array = partner_team if snapshot.get("participant") == "p1" else own_team
+	var allied_team: Array = []
+	for team: Array in [first_team, second_team]:
+		for index in range(3):
+			allied_team.append(team[index] if index < team.size() else null)
 	_allied_party.set_party(allied_team)
 	_allied_party.set_empty_slots_visible(true)
 	var opponent_team: Array = []
