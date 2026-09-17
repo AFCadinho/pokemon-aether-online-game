@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.
+
 - Co-op battle cleanup no longer shows a false activity-save warning while the server is completing the shared settlement.
 
 - Adventure Party presence now refreshes faster. Co-op battles announce partner disconnects and reconnects in both the system feed and battle log, while AI takes over shortly after a genuine disconnect.
