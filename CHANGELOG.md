@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op battles now ask “What will your Pokémon do?” with the active Pokémon's name, matching the singles prompt.
+
 - Settled co-op wild battles now return directly to the same map tile after a win or catch, avoiding a brief black reload screen.
 
 - Co-op double battles now switch from map music to wild or Trainer battle music, then restore map music on return.

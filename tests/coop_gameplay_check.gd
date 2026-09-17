@@ -314,6 +314,8 @@ func _run() -> void:
 		"captureOptions": {"balls": [{"itemId": "poke-ball", "quantity": 1}], "storageAvailable": true}}
 	presenter.set("_action_signature", "")
 	presenter._update_actions()
+	_expect(presenter._prompt.text == "What will Jigglypuff do?",
+		"co-op action prompt matches singles and names the active Pokémon")
 	_expect(mounted_battle.get_node("%MovesGrid").visible
 		and mounted_battle.get_node("%BagButton").visible
 		and mounted_battle.get_node("%RunButton").visible
