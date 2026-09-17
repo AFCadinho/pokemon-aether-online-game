@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now wait for every participant's final battle projection before automatically returning to the overworld, so the finishing move animation plays for both Trainers.
+
 - Co-op doubles now align the opposing platform and Pokémon slightly higher with the move controls.
 
 - Co-op doubles now place Mega Evolution and Z-Move controls higher beside the compact move grid.
