@@ -157,6 +157,13 @@ func _run() -> void:
 		_expect(root.get_texture().get_image().save_png(effect_capture) == OK, "move effect capture saved")
 	await _wait_for_cursor(panel, 22)
 	_expect(panel.displayed_cursor == 22 and panel.cards.p2.hp.value == 64, "new move/damage events end at the authoritative snapshot")
+	var router_source := FileAccess.get_file_as_string("res://scripts/battle/coop_animation_router.gd")
+	var presenter_source := FileAccess.get_file_as_string("res://scripts/battle/coop_battle_panel.gd")
+	_expect(router_source.contains("animation_node.scale = Vector2.ONE")
+		and presenter_source.contains("var animate := displayed_cursor >= 0")
+		and not presenter_source.contains("fresh.size() <= 20")
+		and presenter_source.contains("func _final_event_playback_pending()"),
+		"doubles keep full-size effects and never skip live event batches")
 	var history: String = panel._log.get_parsed_text()
 	var action_node: Node = panel._actions.get_child(0)
 	service.apply_view(snapshot)
@@ -203,6 +210,9 @@ func _run() -> void:
 	panel._playing = false
 	await process_frame
 	_expect(return_world.finish_calls == 1, "victory invokes world return automatically")
+	panel._latest.eventCursor = panel.displayed_cursor + 1
+	_expect(panel._final_event_playback_pending(), "world return waits until the final shared event cursor is displayed")
+	panel._latest.eventCursor = panel.displayed_cursor
 	service.activity.outcome = "draw"
 	service.activity.escaped = true
 	panel._action_signature = ""

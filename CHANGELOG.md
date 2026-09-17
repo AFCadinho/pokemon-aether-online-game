@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double-battle move effects now use their full catalog scale. Live clients play every received battle event in order, and the automatic return waits for the final shared event cursor before closing the battle.
+
 - Co-op double battles now play the existing single-target animations for Water Gun, Thunder Shock, Poison Sting, Thunder Wave, Toxic, Spore, Leafage, and Mud-Slap on the selected Pokémon.
 
 - The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
