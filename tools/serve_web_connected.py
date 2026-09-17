@@ -59,6 +59,12 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/wallet/rewards/wild-battle"), ("POST", "/auth/web/wallet/rewards/trainer-battle"),
     ("POST", "/auth/web/mail"),
     ("POST", "/auth/web/respawn"),
+    # Adventure Party uses the same account-authorized co-op contract on web
+    # and desktop. Keep the local proxy allowlist limited to its POST actions.
+    *(("POST", "/game/coop/" + action) for action in (
+        "state", "invite", "accept", "close-invitation", "leave", "start", "cancel",
+        "grass-step", "decision", "acknowledge", "capture",
+    )),
     ("GET", "/auth/web/world-pickups"),
     ("POST", "/auth/web/world/teleport-ack"),
     ("POST", "/world/weather/developer"),

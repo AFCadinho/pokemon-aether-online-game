@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Parties can now be formed and played in the browser, including shared trainer and grass battles with desktop players in browser-available areas.
+
 - Terapagos can be switched back into battle after changing to its Terastal or Stellar form.
 
 - Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.

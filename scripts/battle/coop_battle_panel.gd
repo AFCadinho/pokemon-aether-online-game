@@ -417,7 +417,7 @@ func _create_card(parent: Control, controller: String) -> void:
 	canvas.clip_contents = true
 	column.add_child(canvas)
 	var sprite = load("res://scenes/battle/sprite_box.tscn").instantiate()
-	sprite.web_sprite_upgrades_allowed = false
+	sprite.web_sprite_upgrades_allowed = OS.has_feature("web")
 	canvas.add_child(sprite)
 	sprite.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	sprite.size = Vector2(450, 293)

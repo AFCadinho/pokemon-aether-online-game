@@ -886,8 +886,8 @@ func setup_coop_battle() -> bool:
 	battle_status_panel.offset_right = 154.0
 	battle_status_panel.offset_bottom = 49.0
 	vs_panel_container.set_trainer_portraits_visible(false)
-	player_sprite_box.web_sprite_upgrades_allowed = false
-	enemy_sprite_box.web_sprite_upgrades_allowed = false
+	player_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")
+	enemy_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")
 	player_sprite_box.set_battle_type(true)
 	enemy_sprite_box.set_battle_type(true)
 	player_hud_panel.set_double_layout(true)

@@ -16,6 +16,19 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_adventure_party_uses_shared_browser_and_desktop_client_paths(self):
+        root = Path(__file__).resolve().parents[1]
+        service = (root / "scripts/services/coop_service.gd").read_text()
+        world = (root / "scripts/world/world.gd").read_text()
+        overlay = (root / "scripts/ui/ui_overlay.gd").read_text()
+        battle = (root / "scripts/battle/battle.gd").read_text()
+        self.assertNotIn('or OS.has_feature("web")', service)
+        self.assertIn('socials_adventure_party_button.visible = true', overlay)
+        self.assertIn('player.process_mode = web_player_process_mode_before_load\n\t\t\t_setup_coop_controls()', world)
+        self.assertNotIn('if coop_world_ready or OS.has_feature("web"):', world)
+        self.assertIn('func _prefetch_coop_web_battle_sprites(', world)
+        self.assertIn('player_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")', battle)
+
     def test_module_manifest_is_available_without_opening_other_json(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -111,6 +124,11 @@ class ConnectedProxyTests(unittest.TestCase):
             # limit. PvE battle creation keeps a bounded, larger allowance.
             self.assertEqual(client.post("/api/battle/wild-encounter", content="x" * 20000).status_code, 200)
             self.assertEqual(client.post("/api/battle/trainer", content="x" * 20000).status_code, 200)
+            for action in ("state", "invite", "accept", "close-invitation", "leave", "start", "cancel",
+                           "grass-step", "decision", "acknowledge", "capture"):
+                self.assertEqual(client.post("/api/game/coop/" + action, json={}).status_code, 200)
+            self.assertEqual(client.get("/api/game/coop/state").status_code, 403)
+            self.assertEqual(client.post("/api/game/coop/internal").status_code, 403)
             self.assertEqual(client.post("/api/battle/training-test/choice-and-resolve", json={}).status_code, 200)
             self.assertEqual(client.get("/api/battle/training-test/state").status_code, 200)
             self.assertEqual(client.get("/api/npcs/kanto_players_house_father").status_code, 200)
@@ -136,7 +154,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(world_preview.content, b"test-webp")
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 36)
+            self.assertEqual(len(calls), 47)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

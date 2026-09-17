@@ -812,6 +812,19 @@ func _run() -> void:
 	_expect(wild_step_source.contains("coop_wild_step_pending") and not wild_step_source.contains("GameState.lock_overworld_input()"),
 		"co-op grass checks cannot freeze movement for network round trips")
 	var service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
+	_expect(not service_source.contains('or OS.has_feature("web")')
+		and not service_source.contains('if OS.has_feature("web") or not AuthService.is_authenticated():'),
+		"browser and desktop share Adventure Party polling and encounter requests")
+	_expect(world_source.contains('player.process_mode = web_player_process_mode_before_load\n\t\t\t_setup_coop_controls()')
+		and not world_source.contains('if coop_world_ready or OS.has_feature("web"):')
+		and not world_source.contains('if not OS.has_feature("web"):\n\t\tvar coop_result:'),
+		"browser mounts the shared co-op battle controller after its saved map loads")
+	_expect(overlay_source.contains('socials_adventure_party_button.visible = true')
+		and not overlay_source.contains('if OS.has_feature("web") or not CoopService.available or not CoopService.activity.is_empty():'),
+		"browser can open the same Adventure Party interface")
+	_expect(world_source.contains('func _prefetch_coop_web_battle_sprites(')
+		and FileAccess.get_file_as_string("res://scripts/battle/battle.gd").contains('player_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")'),
+		"shared battles load browser battle sprites without adding every sprite to the base export")
 	var grass_request_source := service_source.get_slice("func try_wild_step(", 1).get_slice("\nfunc ", 0)
 	_expect(not grass_request_source.get_slice('var world := GameState.get_world()', 1).get_slice('var result := await _request("grass-step"', 0).contains("await refresh()")
 		and grass_request_source.contains('result.get("body", {}).get("status") != "miss"'),
