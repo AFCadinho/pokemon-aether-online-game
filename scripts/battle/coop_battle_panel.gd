@@ -1239,6 +1239,9 @@ func _append_event(event: Dictionary) -> void:
 		"-heal": text = "%s recovered health!" % actor
 		"-status": text = "%s is %s!" % [actor, _status_name(str(event.get("status", "")))]
 		"-curestatus": text = "%s recovered from its status!" % actor
+		"-mega": text = "%s Mega Evolved!" % actor
+		"-primal": text = "%s underwent Primal Reversion!" % actor
+		"-zpower": text = "%s surrounded itself with Z-Power!" % actor
 		"-boost", "-unboost": text = "%s %s for %s!" % [_stat_name(str(event.get("stat", ""))), "rose" if event.get("kind") == "-boost" else "fell", actor]
 		"-setboost": text = "%s changed for %s!" % [_stat_name(str(event.get("stat", ""))), actor]
 		"-start", "-end": text = "%s's %s %s." % [actor, str(event.get("condition", "")).capitalize(), "ended" if event.kind == "-end" else "started"]
@@ -1277,7 +1280,7 @@ func _battle_log_kind(event_kind: String) -> String:
 		"-damage": return "damage"
 		"-heal": return "heal"
 		"-status", "-curestatus": return "status"
-		"-boost", "-unboost", "-setboost", "-start", "-end": return "effect"
+		"-boost", "-unboost", "-setboost", "-start", "-end", "-mega", "-primal", "-zpower": return "effect"
 		"-miss", "cant": return "warning"
 		"faint": return "faint"
 		"coopcapture", "win", "tie": return "result"
@@ -1344,7 +1347,13 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 					await _play_native_stat_change(str(event.get("actor", "")), -1 if event.get("kind") == "-unboost" else 1)
 			"-curestatus", "faint", "switch", "drag", "replace":
 				_set_native_status(str(event.get("actor", "")), "")
-		return
+			"-mega", "-primal":
+				if SettingsManager.battle_animations:
+					await _play_native_mechanic_effect(str(event.get("actor", "")), "mega_evolution")
+			"-zpower":
+				if SettingsManager.battle_animations:
+					await _play_native_mechanic_effect(str(event.get("actor", "")), "z_power")
+	return
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
 	var card: Dictionary = cards[actor]
@@ -1559,6 +1568,20 @@ func _play_native_stat_change(controller: String, amount: int) -> void:
 	if aliases.is_empty():
 		return
 	await _native_move_router.call("play_stat_change_presentation_for_target", aliases["target"], amount)
+
+
+func _play_native_mechanic_effect(controller: String, effect_key: String) -> void:
+	if _native_move_router == null or controller not in SLOTS:
+		return
+	var sprite := _native_sprite(controller)
+	if sprite == null:
+		return
+	var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+	var aliases: Dictionary = _native_move_router.call("bind_native_pair", controller, controller,
+		{controller: sprite}, {controller: box})
+	if aliases.is_empty():
+		return
+	await _native_move_router.call("play_effect_animation", effect_key, aliases["target"])
 
 
 func _exit_tree() -> void:

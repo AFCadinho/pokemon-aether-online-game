@@ -204,6 +204,12 @@ func _run() -> void:
 		and presenter_source.contains("func _play_native_stat_change(")
 		and FileAccess.get_file_as_string("res://scripts/battle/coop_native_animation_router.gd").contains("func play_stat_change_tween_for_target("),
 		"native co-op stat changes animate only the affected doubles sprite")
+	_expect(presenter_source.contains('"-mega", "-primal"')
+		and presenter_source.contains('"-zpower"')
+		and presenter_source.contains("func _play_native_mechanic_effect(")
+		and presenter_source.contains('"mega_evolution"')
+		and presenter_source.contains('"z_power"'),
+		"native doubles play Mega, Primal, and Z-Power activation effects on their owning sprite")
 	var history: String = panel._log.get_parsed_text()
 	var action_node: Node = panel._actions.get_child(0)
 	service.apply_view(snapshot)
