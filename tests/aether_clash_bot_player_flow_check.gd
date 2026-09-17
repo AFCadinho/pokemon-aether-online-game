@@ -31,8 +31,8 @@ class FixtureCaptain extends "res://scripts/world/npcs/aether_clash_bot_captain_
 	var confirmations := 0
 	func _load_training_options() -> Dictionary:
 		return await service.load_aether_clash_bot_options()
-	func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String) -> Dictionary:
-		return await service.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy)
+	func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String, reward_attempt: bool) -> Dictionary:
+		return await service.create_aether_clash_bot_challenge(count, tier_id, access, ai_policy, reward_attempt)
 	func show_dialogue(_lines: Array[String] = [], _speaker := "") -> bool:
 		confirmations += 1
 		return true

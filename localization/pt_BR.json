@@ -1,6 +1,6 @@
 {
   "ui.clash_bot.title": "Treino de Guilda [BOT]",
-  "ui.clash_bot.intro": "Escolha a quantidade de bots independentemente de quantos membros participem. Valem as regras e os tempos normais do Clash. Sem apostas ou recompensas.",
+  "ui.clash_bot.intro": "Escolha a quantidade de bots independentemente de quantos membros participem. Valem as regras e os tempos normais do Clash. Sem apostas. O AI5 Grandmaster Hard pode render uma recompensa diária à guilda.",
   "ui.clash_bot.permission": "Somente um Líder ou Capitão de Guilda pode iniciar o treino.",
   "ui.clash_bot.unavailable": "O treino contra Guildas de bots está temporariamente indisponível.",
   "ui.clash_bot.start": "Iniciar treino",

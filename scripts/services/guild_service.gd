@@ -384,10 +384,10 @@ func load_aether_clash_bot_options() -> Dictionary:
 	return {"success": true, "options": _dictionary(response.get("body", {})).duplicate(true)}
 
 
-func create_aether_clash_bot_challenge(bot_count: int, tier_id: String, spectator_access: String, ai_policy: String = "ai4") -> Dictionary:
+func create_aether_clash_bot_challenge(bot_count: int, tier_id: String, spectator_access: String, ai_policy: String = "ai4", reward_attempt: bool = false) -> Dictionary:
 	if bot_request_in_flight:
 		return {"success": false, "error": LocalizationManager.text("ui.clash_bot.pending")}
-	var settings := {"botCount": bot_count, "tierId": tier_id, "spectatorAccess": spectator_access, "aiPolicy": ai_policy}
+	var settings := {"botCount": bot_count, "tierId": tier_id, "spectatorAccess": spectator_access, "aiPolicy": ai_policy, "rewardAttempt": reward_attempt}
 	if _dictionary(pending_bot_request.get("settings", {})) != settings:
 		pending_bot_request = {"settings": settings.duplicate(true), "requestId": _new_bot_request_id()}
 	var payload := settings.duplicate(true)

@@ -359,7 +359,7 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 		"requestId", "eventBatchId", "displayedPhase", "reasonCode",
 		"serverSeq", "phaseSeq", "lastRenderedSeq", "observedDurationMs",
 		"decisionGeneration", "inputLocked", "pendingAction", "forceSwitchRequired",
-		"decisionId", "selectionGate", "actionKind",
+		"decisionId", "selectionGate", "eligibilityReason", "requestTeamPresent", "requestForceSwitchRequired", "actionKind",
 	]:
 		if context.has(key):
 			payload[key] = context[key]
