@@ -1306,6 +1306,9 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 				_apply_native_event_hp(event)
 			"-status":
 				_set_native_status(str(event.get("actor", "")), str(event.get("status", "")))
+			"-boost", "-unboost":
+				if SettingsManager.battle_animations:
+					await _play_native_stat_change(str(event.get("actor", "")), -1 if event.get("kind") == "-unboost" else 1)
 			"-curestatus", "faint", "switch", "drag", "replace":
 				_set_native_status(str(event.get("actor", "")), "")
 		return
@@ -1511,6 +1514,18 @@ func _play_native_hit(controller: String) -> void:
 	_native_attack_tween.tween_property(sprite, "modulate", Color.WHITE, 0.12)
 	await ANIMATION_WAIT.for_tween(self, _native_attack_tween, 1.0)
 	_cancel_native_attack_tween()
+
+
+func _play_native_stat_change(controller: String, amount: int) -> void:
+	if _native_move_router == null or controller not in SLOTS or amount == 0:
+		return
+	var sprite := _native_sprite(controller)
+	var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+	var aliases: Dictionary = _native_move_router.call("bind_native_pair", controller, controller,
+		{controller: sprite}, {controller: box})
+	if aliases.is_empty():
+		return
+	await _native_move_router.call("play_stat_change_presentation_for_target", aliases["target"], amount)
 
 
 func _exit_tree() -> void:

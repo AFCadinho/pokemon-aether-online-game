@@ -7,10 +7,13 @@ const BORDER := Color("#31507099")
 const ACCENT := Color("#60d3ff")
 const TEXT := Color("#f4f0de")
 const MUTED := Color("#aeb8c5")
+const ONLINE := Color("#65e99a")
+const OFFLINE := Color("#ff6d7c")
 
 var _names: Array[Label] = []
 var _portraits: Array[TrainerHeadPortrait] = []
 var _fallbacks: Array[Label] = []
+var _presence: Array[Label] = []
 
 
 func _ready() -> void:
@@ -67,6 +70,14 @@ func _ready() -> void:
 		fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		frame.add_child(fallback)
 		_fallbacks.append(fallback)
+		var presence := Label.new()
+		presence.text = "●"
+		presence.tooltip_text = "Online"
+		presence.add_theme_font_size_override("font_size", 13)
+		presence.add_theme_color_override("font_color", ONLINE)
+		presence.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(presence)
+		_presence.append(presence)
 		var name := Label.new()
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -91,6 +102,7 @@ func set_members(party: Dictionary, own_id: int) -> void:
 		partner_member = ids[0]
 	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
 	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
+	var online: Dictionary = party.get("memberOnline", {}) if party.get("memberOnline") is Dictionary else {}
 	for index in 2:
 		var member_id := str(int(own_member if index == 0 else partner_member))
 		var name := str(names.get(member_id, "")).strip_edges()
@@ -104,6 +116,9 @@ func set_members(party: Dictionary, own_id: int) -> void:
 		_portraits[index].visible = not str(appearance.get("body", "")).is_empty()
 		_fallbacks[index].visible = not _portraits[index].visible
 		_fallbacks[index].text = name.substr(0, 1).to_upper()
+		var is_online := true if int(member_id) == own_id else bool(online.get(member_id, false))
+		_presence[index].add_theme_color_override("font_color", ONLINE if is_online else OFFLINE)
+		_presence[index].tooltip_text = "Online" if is_online else "Offline"
 	tooltip_text = "Adventure Party: %s and %s" % [_names[0].text, _names[1].text]
 
 

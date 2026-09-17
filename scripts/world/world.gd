@@ -3624,8 +3624,6 @@ func start_triggered_wild_battle_for_area(
 	forced_species_id: String = "",
 	retry_after_expired_battle := true
 ) -> void:
-	print("COOP_DIAG wild_world_entry %s" % JSON.stringify({"encounterType": encounter_type,
-		"inBattle": is_in_battle, "resumePending": wild_battle_resume_pending, "stepPending": coop_wild_step_pending}))
 	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Adventure Party HUDs now show each Trainer's live online/offline status. Wild encounters automatically use the normal single-battle flow when the partner is offline or on another map.
+
+- Co-op doubles now play the native stat-drop/raise effect on the affected Pokémon, including Close Combat's self-inflicted drops.
+
 - Co-op doubles now scale catalog move effects to cover the full battlefield, restoring full-size timing backgrounds such as Close Combat.
 
 - Co-op doubles now offer Mega Evolution and Z-Move controls whenever the current Pokémon has a simulator-legal move for that mechanic.
