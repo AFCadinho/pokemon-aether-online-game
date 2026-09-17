@@ -6,7 +6,7 @@ extends PanelContainer
 ]
 
 var experience_bar_enabled := false
-const DOUBLE_HUD_WIDTH := 520.0
+const DOUBLE_HUD_WIDTH := 460.0
 const SINGLE_HUD_WIDTH := 312.0
 
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
@@ -65,7 +65,7 @@ func set_double_layout(enabled: bool) -> void:
 	rows.columns = 2 if enabled else 1
 	custom_minimum_size.x = DOUBLE_HUD_WIDTH if enabled else SINGLE_HUD_WIDTH
 	for row: Control in active_info_rows:
-		row.custom_minimum_size.x = 230.0 if enabled else 0.0
+		row.custom_minimum_size.x = 200.0 if enabled else 0.0
 		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 func set_experience_bar_enabled(enabled: bool) -> void:
