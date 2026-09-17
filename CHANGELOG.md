@@ -4,6 +4,7 @@
 
 - The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.
 
+- Co-op double battles now play the existing single-target animations for Water Gun, Thunder Shock, Poison Sting, Thunder Wave, Toxic, Spore, Leafage, and Mud-Slap on the selected Pokémon.
 
 - The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
 
