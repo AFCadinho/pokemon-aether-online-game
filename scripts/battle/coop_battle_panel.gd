@@ -169,6 +169,10 @@ func _ready() -> void:
 		_native_pokemon_hover = embedded_hosts["pokemon_hover"] as PokemonHoverCard
 		_native_move_hover = embedded_hosts["move_hover"] as MoveHoverCard
 		_native_utility = embedded_hosts["utility"] as Control
+		# The compact doubles move grid sits lower than the singles menu. Lift the
+		# mechanics cluster so Mega/Z remains visually attached to that grid.
+		_native_mechanics.offset_top = 414.0
+		_native_mechanics.offset_bottom = 492.0
 		_native_moves.move_selected.connect(_select_move)
 		_native_moves.move_hovered.connect(_show_coop_move_hover)
 		_native_moves.move_unhovered.connect(_hide_coop_move_hover)
