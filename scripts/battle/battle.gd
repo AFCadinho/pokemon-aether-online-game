@@ -951,7 +951,8 @@ func setup_coop_battle() -> bool:
 		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,
 		"turn": battle_status_panel, "vs": vs_panel_container,
 		"own_party": player_party_grid, "allied_party": player_stage_party_grid,
-		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite}
+		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite,
+		"enemy_trainer": enemy_trainer_sprite}
 	coop_presenter.embedded_hosts["pokemon_hover"] = pokemon_hover_card
 	coop_presenter.embedded_hosts["move_hover"] = move_hover_card
 	add_child(coop_presenter)

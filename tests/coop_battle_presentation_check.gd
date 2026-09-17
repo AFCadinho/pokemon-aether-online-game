@@ -172,6 +172,10 @@ func _run() -> void:
 	_expect(presenter_source.contains('_native_mechanics = stage.get_node("%MechanicsPanel") as Control')
 		and presenter_source.contains("var card: Dictionary = cards.get(controller, {})"),
 		"native co-op setup initializes mechanics before positioning and tolerates an incomplete target mount")
+	_expect(presenter_source.contains("func _show_coop_opponent_trainer(")
+		and presenter_source.contains("_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)")
+		and FileAccess.get_file_as_string("res://scripts/battle/battle.gd").contains('"enemy_trainer": enemy_trainer_sprite'),
+		"trainer doubles mount the catalog opponent behind the enemy platform while wild battles keep it hidden")
 	_expect(presenter_source.contains("%MegaEvolutionIcon")
 		and presenter_source.contains("%ZMove")
 		and presenter_source.contains("func _toggle_mega_evolution()")
