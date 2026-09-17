@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op party slots now sit centered in the bottom battle bar instead of being pushed against its top edge.
+
 - Co-op target selection now briefly confirms the chosen move and asks for a target; Cancel returns to the normal action prompt.
 
 - Co-op battles now ask “What will your Pokémon do?” with the active Pokémon's name, matching the singles prompt.

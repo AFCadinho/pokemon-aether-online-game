@@ -345,6 +345,8 @@ func _run() -> void:
 		and not presenter._action_scroll.visible,
 		"co-op Wait shares the Bag action strip without consuming dock height")
 	var dock: Control = mounted_battle.get_node("%ActionsDock")
+	_expect(absf(party_grid.get_global_rect().get_center().y - dock.get_global_rect().get_center().y) <= 2.0,
+		"co-op party slots are vertically centered in the bottom dock")
 	var dock_height: float = dock.size.y
 	service.view.exitRequest = {"type": "run", "requestedBy": "p3"}
 	service.view.legalActions = [{"type": "accept-exit"}, {"type": "reject-exit"}]
