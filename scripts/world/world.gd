@@ -3088,7 +3088,11 @@ func _save_current_player_position(
 			})
 		# A position request can finish after co-op has taken ownership of both
 		# Trainers' stored positions. Its rejection is stale, not a new save to retry.
-		if not ThievingService.is_arrest_transfer_pending() and active_battle_kind != "coop" and not coop_finishing:
+		# These codes only fence an in-flight overworld save while the shared
+		# reservation owns the players' positions. They are not player-facing
+		# failures, including during the handoff where the local activity clears.
+		var co_op_position_lock := error_code in ["coop_activity_locked", "party_capacity_busy"]
+		if not ThievingService.is_arrest_transfer_pending() and active_battle_kind != "coop" and not coop_finishing and not co_op_position_lock:
 			push_warning("World: player position save failed (HTTP %s, %s): %s" % [
 				str(result.get("status", 0)), BackendErrorLocalizationService.error_code(result),
 				str(result.get("error", "Unknown error"))])

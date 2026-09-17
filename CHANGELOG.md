@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2.
+
+- Co-op battle setup now safely initializes its native mechanics and target overlays, preventing startup errors while a shared battle opens.
+
 - Co-op battles no longer emit repeated UI errors while their native battle overlay closes.
 
 - Co-op doubles now wait for every participant's final battle projection before automatically returning to the overworld, so the finishing move animation plays for both Trainers.

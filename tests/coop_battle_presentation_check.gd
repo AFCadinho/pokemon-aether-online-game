@@ -169,6 +169,9 @@ func _run() -> void:
 	_expect(presenter_source.contains("is_instance_valid(_loading_overlay) and _loading_overlay.visible")
 		and presenter_source.contains("if is_instance_valid(_native_turn):"),
 		"native co-op teardown does not process stale loading or turn controls")
+	_expect(presenter_source.contains('_native_mechanics = stage.get_node("%MechanicsPanel") as Control')
+		and presenter_source.contains("var card: Dictionary = cards.get(controller, {})"),
+		"native co-op setup initializes mechanics before positioning and tolerates an incomplete target mount")
 	_expect(presenter_source.contains("%MegaEvolutionIcon")
 		and presenter_source.contains("%ZMove")
 		and presenter_source.contains("func _toggle_mega_evolution()")

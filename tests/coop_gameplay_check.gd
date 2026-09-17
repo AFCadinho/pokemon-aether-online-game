@@ -758,13 +758,16 @@ func _run() -> void:
 	overlay_ui.call("_position_coop_party_hud")
 	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
 	service.available = true
-	service.party = {"memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
+	service.party = {"leaderId": 2, "memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
 		"memberAppearances": {"1": {"body": "Gen4_Base_v1", "gender": "male"}, "2": {"body": "Gen4_Base_F_v1", "gender": "female"}},
+		"memberOnline": {"1": true, "2": true},
 		"sharedLevelCap": 20}
 	overlay_ui.call("_refresh_coop_party_hud")
 	var hud_names: Array = party_hud.get("_names")
 	var hud_portraits: Array = party_hud.get("_portraits")
-	_expect(party_hud.visible and hud_names[0].text == "TrainerOne" and hud_names[1].text == "TrainerTwo", "party HUD shows both member names")
+	var hud_badges: Array = party_hud.get("_badges")
+	_expect(party_hud.visible and hud_names[0].text == "TrainerTwo" and hud_names[1].text == "TrainerOne"
+		and hud_badges[0].text == "LEADER · #1" and hud_badges[1].text == "#2", "party HUD keeps the leader first with stable member badges")
 	_expect(hud_portraits[0].visible and hud_portraits[1].visible and not party_hud.text.contains("cap"), "party HUD shows both portraits without a level cap")
 	var hud_visual_path := OS.get_environment("COOP_PARTY_HUD_VISUAL_CAPTURE_PATH")
 	if not hud_visual_path.is_empty():

@@ -14,6 +14,7 @@ var _names: Array[Label] = []
 var _portraits: Array[TrainerHeadPortrait] = []
 var _fallbacks: Array[Label] = []
 var _presence: Array[Label] = []
+var _badges: Array[Label] = []
 
 
 func _ready() -> void:
@@ -78,6 +79,12 @@ func _ready() -> void:
 		presence.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot.add_child(presence)
 		_presence.append(presence)
+		var badge := Label.new()
+		badge.add_theme_font_size_override("font_size", 9)
+		badge.add_theme_color_override("font_color", ACCENT)
+		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(badge)
+		_badges.append(badge)
 		var name := Label.new()
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -95,21 +102,22 @@ func set_members(party: Dictionary, own_id: int) -> void:
 	visible = ids.size() == 2
 	if not visible or _names.size() != 2:
 		return
-	var own_member: Variant = ids[0]
-	var partner_member: Variant = ids[1]
-	if int(ids[1]) == own_id:
-		own_member = ids[1]
-		partner_member = ids[0]
+	var leader_id := int(party.get("leaderId", 0))
+	if leader_id not in [int(ids[0]), int(ids[1])]:
+		leader_id = int(ids[0])
+	var partner_id := int(ids[1]) if int(ids[0]) == leader_id else int(ids[0])
 	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
 	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
 	var online: Dictionary = party.get("memberOnline", {}) if party.get("memberOnline") is Dictionary else {}
 	for index in 2:
-		var member_id := str(int(own_member if index == 0 else partner_member))
+		var member_id := str(leader_id if index == 0 else partner_id)
 		var name := str(names.get(member_id, "")).strip_edges()
 		if name.is_empty():
 			name = "Trainer #%s" % member_id
 		_names[index].text = name
 		_names[index].tooltip_text = name
+		_badges[index].text = "LEADER · #1" if index == 0 else "#2"
+		_badges[index].add_theme_color_override("font_color", ACCENT if index == 0 else MUTED)
 		var appearance: Dictionary = appearances.get(member_id, {}) if appearances.get(member_id) is Dictionary else {}
 		if appearance != _portraits[index].appearance_state:
 			_portraits[index].set_appearance_state(appearance)
