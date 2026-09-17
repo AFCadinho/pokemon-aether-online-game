@@ -164,6 +164,13 @@ func _run() -> void:
 		and not presenter_source.contains("fresh.size() <= 20")
 		and presenter_source.contains("func _final_event_playback_pending()"),
 		"doubles keep full-size effects and never skip live event batches")
+	_expect(presenter_source.contains("%MegaEvolutionIcon")
+		and presenter_source.contains("%ZMove")
+		and presenter_source.contains("func _toggle_mega_evolution()")
+		and presenter_source.contains("func _toggle_z_move()")
+		and presenter_source.contains("action.get(\"mega\", false)")
+		and presenter_source.contains("action.get(\"zMove\", false)"),
+		"native co-op mechanics use only the server-offered Mega and Z-Move action variants")
 	var history: String = panel._log.get_parsed_text()
 	var action_node: Node = panel._actions.get_child(0)
 	service.apply_view(snapshot)
