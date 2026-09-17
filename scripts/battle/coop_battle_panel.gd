@@ -78,6 +78,7 @@ var _allied_party: PartyGrid
 var _opponent_party: PartyGrid
 var _first_trainer: BattleTrainerSprite
 var _second_trainer: BattleTrainerSprite
+var _opponent_trainer: BattleTrainerSprite
 var _trainer_identity := ""
 var _native_attack_tween: Tween
 var _native_animation_sprite: AnimatedSprite2D
@@ -141,6 +142,7 @@ func _ready() -> void:
 		_allied_party = embedded_hosts["allied_party"] as PartyGrid
 		_opponent_party = embedded_hosts["opponent_party"] as PartyGrid
 		_first_trainer = embedded_hosts["trainer"] as BattleTrainerSprite
+		_opponent_trainer = embedded_hosts["enemy_trainer"] as BattleTrainerSprite
 		_native_party.party_selected.connect(_select_switch)
 		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
 		stage.add_child(_second_trainer)
@@ -1601,6 +1603,7 @@ func _sync_native_trainers() -> void:
 		if _trainer_identity != "wild":
 			_first_trainer.clear()
 			_second_trainer.clear()
+			_opponent_trainer.clear()
 			_trainer_identity = "wild"
 		return
 	var appearances: Dictionary = CoopService.party.get("memberAppearances", {})
@@ -1610,7 +1613,8 @@ func _sync_native_trainers() -> void:
 		first = PlayerSave.to_appearance_state()
 	elif CoopService.view.get("participant") == "p3" and second.is_empty():
 		second = PlayerSave.to_appearance_state()
-	var identity := JSON.stringify([first, second])
+	var opponent_sprite_id := _opponent_trainer_sprite_id()
+	var identity := JSON.stringify([first, second, opponent_sprite_id])
 	if identity == _trainer_identity:
 		return
 	_trainer_identity = identity
@@ -1618,6 +1622,29 @@ func _sync_native_trainers() -> void:
 		_first_trainer.show_player(first, Vector2.RIGHT)
 	if not second.is_empty():
 		_second_trainer.show_player(second, Vector2.RIGHT)
+	_show_coop_opponent_trainer(opponent_sprite_id)
+
+
+func _opponent_trainer_sprite_id() -> String:
+	var activity_id := str(CoopService.activity.get("activityId", ""))
+	if activity_id.contains("gary"):
+		return "showdown_blue_lgpe"
+	var npc_id := "kanto_alpha_gym_brock" if activity_id == "brock" else activity_id
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null or not catalog.has_method("resolve_battle_sprite_id"):
+		return ""
+	return str(catalog.call("resolve_battle_sprite_id", "", "", npc_id, ""))
+
+
+func _show_coop_opponent_trainer(sprite_id: String) -> void:
+	if _opponent_trainer == null:
+		return
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	var texture: Texture2D = catalog.call("get_texture", sprite_id) as Texture2D if catalog != null and catalog.has_method("get_texture") else null
+	if texture == null:
+		_opponent_trainer.clear()
+		return
+	_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)
 
 
 func _label(parent: Node, text: String, font_size: int) -> Label:
