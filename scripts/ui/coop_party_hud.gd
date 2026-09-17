@@ -1,8 +1,9 @@
 extends Button
 class_name CoopPartyHud
 
-const BACKGROUND := Color("#0b1a2bea")
-const BORDER := Color("#315070")
+const BACKGROUND := Color("#0b1a2b70")
+const HOVER_BACKGROUND := Color("#0b1a2ba8")
+const BORDER := Color("#31507099")
 const ACCENT := Color("#60d3ff")
 const TEXT := Color("#f4f0de")
 const MUTED := Color("#aeb8c5")
@@ -18,9 +19,9 @@ func _ready() -> void:
 	focus_mode = Control.FOCUS_NONE
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	add_theme_stylebox_override("normal", _style(BORDER))
-	add_theme_stylebox_override("hover", _style(ACCENT))
-	add_theme_stylebox_override("pressed", _style(ACCENT))
-	add_theme_stylebox_override("focus", _style(ACCENT))
+	add_theme_stylebox_override("hover", _style(ACCENT, HOVER_BACKGROUND))
+	add_theme_stylebox_override("pressed", _style(ACCENT, HOVER_BACKGROUND))
+	add_theme_stylebox_override("focus", _style(ACCENT, HOVER_BACKGROUND))
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -106,9 +107,9 @@ func set_members(party: Dictionary, own_id: int) -> void:
 	tooltip_text = "Adventure Party: %s and %s" % [_names[0].text, _names[1].text]
 
 
-func _style(border: Color) -> StyleBoxFlat:
+func _style(border: Color, background := BACKGROUND) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = BACKGROUND
+	style.bg_color = background
 	style.border_color = border
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(8)

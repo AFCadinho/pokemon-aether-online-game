@@ -1136,11 +1136,25 @@ func _append_event(event: Dictionary) -> void:
 			if event.get("kind") == "turn":
 				_native_log.add_turn_header(int(event.get("turn", 0)))
 			else:
-				_native_log.add_message(text)
+				_native_log.add_message(text, _battle_log_kind(str(event.get("kind", ""))))
 		else:
 			_log.add_text(text + "\n")
 			if _log.get_line_count() > 220:
 				_log.remove_paragraph(0)
+
+
+func _battle_log_kind(event_kind: String) -> String:
+	match event_kind:
+		"move": return "move"
+		"switch", "drag", "replace": return "switch"
+		"-damage": return "damage"
+		"-heal": return "heal"
+		"-status", "-curestatus": return "status"
+		"-boost", "-unboost", "-setboost", "-start", "-end": return "effect"
+		"-miss", "cant": return "warning"
+		"faint": return "faint"
+		"coopcapture", "win", "tie": return "result"
+	return ""
 
 
 func _combatant_name(controller: String) -> String:

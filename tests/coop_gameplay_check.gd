@@ -351,6 +351,18 @@ func _run() -> void:
 	presenter._append_event({"kind": "-damage", "actor": "p2", "hpPercent": 75, "damagePercent": 25})
 	_expect(battle_log.log_buffer.contains("Wild Pidgey (1) lost 25.0% of its health!"),
 		"co-op log reports the damage dealt by each hit instead of only remaining HP")
+	presenter._append_event({"kind": "-status", "actor": "p2", "status": "brn"})
+	presenter._append_event({"kind": "-heal", "actor": "p1", "hpPercent": 80})
+	presenter._append_event({"kind": "-miss", "actor": "p2"})
+	presenter._append_event({"kind": "faint", "actor": "p2"})
+	_expect(battle_log.log_buffer.contains("[color=%s]Wild Pidgey (1) used Tail Whip![/color]" % BattleLogPanel.COLOR_MOVE)
+		and battle_log.log_buffer.contains("[color=%s]Defense fell for admin's Jigglypuff![/color]" % BattleLogPanel.COLOR_EFFECT)
+		and battle_log.log_buffer.contains("[color=%s]Wild Pidgey (1) lost 25.0%% of its health![/color]" % BattleLogPanel.COLOR_DAMAGE)
+		and battle_log.log_buffer.contains("[color=%s]Wild Pidgey (1) is burned![/color]" % BattleLogPanel.COLOR_STATUS)
+		and battle_log.log_buffer.contains("[color=%s]admin's Jigglypuff recovered health![/color]" % BattleLogPanel.COLOR_HEAL)
+		and battle_log.log_buffer.contains("[color=%s]Wild Pidgey (1)'s attack missed![/color]" % BattleLogPanel.COLOR_WARNING)
+		and battle_log.log_buffer.contains("[color=%s]Wild Pidgey (1) fainted.[/color]" % BattleLogPanel.COLOR_FAINT),
+		"co-op events use the same battle-log colors as singles")
 	battle_log.clear_log()
 	presenter._latest = hover_view
 	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
@@ -701,6 +713,10 @@ func _run() -> void:
 	party_hud.offset_top = -314.0
 	party_hud.offset_bottom = -210.0
 	root.add_child(party_hud)
+	var normal_party_style := party_hud.get_theme_stylebox("normal") as StyleBoxFlat
+	var hovered_party_style := party_hud.get_theme_stylebox("hover") as StyleBoxFlat
+	_expect(normal_party_style.bg_color.a < 0.5 and hovered_party_style.bg_color.a > normal_party_style.bg_color.a,
+		"party HUD is translucent over the map and gains contrast on hover")
 	overlay_ui.set("coop_party_hud", party_hud)
 	var buffs_panel: PanelContainer = overlay_ui.get_node("Control/PersonalBuffsPanel")
 	overlay_ui.set("personal_buffs_panel", buffs_panel)
