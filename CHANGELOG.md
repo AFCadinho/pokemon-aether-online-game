@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op double battles now play the existing single-target animations for Water Gun, Thunder Shock, Poison Sting, Thunder Wave, Toxic, Spore, Leafage, and Mud-Slap on the selected Pokémon.
+
 - The overworld Adventure Party HUD now has a translucent background that becomes clearer on hover.
 
 - Co-op double-battle logs now use the same move, damage, status, stat-change, and result colors as single battles.

@@ -7,7 +7,21 @@ const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
 const COOP_EFFECTS := preload("res://scripts/battle/coop_battle_effects.gd")
 const NATIVE_MOVE_ROUTER := preload("res://scripts/battle/coop_native_animation_router.gd")
 const STATUS_CONDITION_OVERLAY := preload("res://scripts/battle/animations/status_condition_overlay.gd")
-const NATIVE_ANIMATED_MOVES := {"ember": true, "will-o-wisp": true}
+# Single-target effects that already use dynamic actor/target anchors and do
+# not move or hide a whole SpriteBox. Keep spread, self, and contact-movement
+# moves out until their doubles-specific presentation paths are implemented.
+const NATIVE_ANIMATED_MOVES := {
+	"ember": true,
+	"willowisp": true,
+	"watergun": true,
+	"thundershock": true,
+	"poisonsting": true,
+	"thunderwave": true,
+	"toxic": true,
+	"spore": true,
+	"leafage": true,
+	"mudslap": true,
+}
 const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
 uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
 void fragment() {
@@ -1374,7 +1388,7 @@ func _play_native_catalog_move(event: Dictionary, batch: Array) -> void:
 	if _native_move_router == null:
 		return
 	var move_name := str(event.get("move", ""))
-	if not NATIVE_ANIMATED_MOVES.has(move_name.to_lower()) or not _native_move_router.call("has_move_animation", move_name):
+	if not NATIVE_ANIMATED_MOVES.has(_native_move_animation_key(move_name)) or not _native_move_router.call("has_move_animation", move_name):
 		return
 	var plan: Dictionary = COOP_EFFECTS.move_targets(event, batch)
 	var targets: Array = plan.get("targets", [])
@@ -1393,6 +1407,10 @@ func _play_native_catalog_move(event: Dictionary, batch: Array) -> void:
 	if aliases.is_empty():
 		return
 	await _native_move_router.call("play_move_animation", move_name, aliases["actor"], aliases["target"], {"result": "hit"})
+
+
+func _native_move_animation_key(move_name: String) -> String:
+	return move_name.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace("’", "")
 
 
 func _play_native_hit(controller: String) -> void:

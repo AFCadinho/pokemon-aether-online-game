@@ -275,6 +275,13 @@ func _run() -> void:
 				var actual: Vector2 = native_router.call("_get_effect_target_anchor_in_parent", alias, native_stage, "center")
 				all_native_anchors_match = all_native_anchors_match and actual.distance_to(expected) <= 1.0
 	_expect(all_native_anchors_match, "all 16 doubles actor-target pairs use the two actual sprite centers")
+	var first_doubles_animation_group := ["Ember", "Will-O-Wisp", "Water Gun", "Thunder Shock", "Poison Sting", "Thunder Wave", "Toxic", "Spore", "Leafage", "Mud-Slap"]
+	var all_first_group_moves_supported := true
+	for move_name: String in first_doubles_animation_group:
+		all_first_group_moves_supported = all_first_group_moves_supported and presenter.NATIVE_ANIMATED_MOVES.has(presenter._native_move_animation_key(move_name))
+		all_first_group_moves_supported = all_first_group_moves_supported and native_router.call("has_move_animation", move_name)
+	_expect(all_first_group_moves_supported,
+		"first single-target doubles animation group uses the catalog for every actor-target pair")
 	presenter._position_coop_stat_overlays()
 	var player_stat_overlay: StatStagePanel = presenter._stat_overlays["p1"]
 	var enemy_stat_overlay: StatStagePanel = presenter._stat_overlays["p4"]
