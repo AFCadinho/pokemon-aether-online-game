@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op battles no longer emit repeated UI errors while their native battle overlay closes.
+
 - Co-op doubles now wait for every participant's final battle projection before automatically returning to the overworld, so the finishing move animation plays for both Trainers.
 
 - Co-op doubles now align the opposing platform and Pokémon slightly higher with the move controls.
