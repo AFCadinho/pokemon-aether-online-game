@@ -504,9 +504,12 @@ func _process(_delta: float) -> void:
 	if _connection == null and not _native_mode:
 		return
 	if _native_mode:
-		if _loading_overlay.visible:
+		# The panel can remain in the process list for one frame while its native
+		# overlay is being torn down during the automatic world return.
+		if is_instance_valid(_loading_overlay) and _loading_overlay.visible and is_instance_valid(_loading_label):
 			_loading_label.text = "Starting co-op battle" + ".".repeat(1 + int(Time.get_ticks_msec() / 500) % 3)
-		_native_turn.hide_timer()
+		if is_instance_valid(_native_turn):
+			_native_turn.hide_timer()
 		_update_coop_sprite_hover()
 		return
 	_connection.text = "%s  ·  %s" % [
