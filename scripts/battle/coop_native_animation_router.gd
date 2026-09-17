@@ -185,6 +185,26 @@ func _get_sprite_box_for_ident(_ident: String) -> Node:
 	return null
 
 
+func play_stat_change_tween_for_target(target_ident: String, amount: int) -> void:
+	if amount == 0 or not SettingsManager.battle_animations:
+		return
+	var sprite := _get_sprite_for_ident(target_ident)
+	if sprite == null:
+		return
+	var tween := _begin_sprite_tween(sprite)
+	if tween == null:
+		return
+	var base_pose: Dictionary = _sprite_poses.get(sprite.get_instance_id(), {})
+	var base_scale: Vector2 = base_pose.get("scale", sprite.scale)
+	var base_modulate: Color = base_pose.get("modulate", sprite.modulate)
+	var flash := Color("72e5a1") if amount > 0 else Color("ff6b76")
+	tween.tween_property(sprite, "modulate", Color(flash.r, flash.g, flash.b, base_modulate.a), 0.10)
+	tween.tween_property(sprite, "scale", base_scale * (1.10 if amount > 0 else 0.90), 0.10)
+	tween.tween_property(sprite, "modulate", base_modulate, 0.18).set_delay(0.10)
+	tween.tween_property(sprite, "scale", base_scale, 0.18).set_delay(0.10)
+	_finish_sprite_tween(tween, sprite)
+
+
 func cancel_render() -> void:
 	for sprite_value: Variant in _sprites_by_alias.values():
 		if sprite_value is AnimatedSprite2D and is_instance_valid(sprite_value):

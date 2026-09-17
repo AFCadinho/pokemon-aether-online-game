@@ -44,12 +44,6 @@ var _sent_invitations: Dictionary = {}
 var _reported_profile_source := ""
 
 
-func _wild_diag(event: String, details: Dictionary = {}) -> void:
-	# Client-side only. Keep this concise and free of tokens/rosters so grass
-	# encounter routing can be diagnosed from the Godot console.
-	print("COOP_DIAG %s %s" % [event, JSON.stringify(details)])
-
-
 func _process(delta: float) -> void:
 	if not AuthService.is_authenticated() or OS.has_feature("web"):
 		if not _session_identity.is_empty():
@@ -203,7 +197,7 @@ func try_start(trainer_id: String) -> Dictionary:
 		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
 	if party.is_empty():
 		return {"handled": false}
-	if _partner_is_on_another_map():
+	if not _partner_is_ready_for_coop():
 		return {"handled": false}
 	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
 		return {"handled": true, "success": false, "code": "coop_leader_required"}
@@ -229,44 +223,32 @@ func try_start(trainer_id: String) -> Dictionary:
 
 
 func try_wild_step(encounter_type: String) -> Dictionary:
-	_wild_diag("wild_entry", {"coopParty": not party.is_empty(), "encounterType": encounter_type,
-		"activity": not activity.is_empty(), "pending": not pending_start.is_empty()})
 	if OS.has_feature("web") or not AuthService.is_authenticated():
-		_wild_diag("wild_skip", {"code": "coop_client_unavailable"})
 		return {"handled": false}
 	if party.is_empty():
-		_wild_diag("wild_skip", {"code": "coop_party_missing"})
 		return {"handled": false}
-	_wild_diag("wild_check", {"available": available, "party": party.get("memberIds", []) is Array,
-		"leader": int(party.get("leaderId", 0)) == int(AuthService.current_user.get("id", 0)),
-		"encounterType": encounter_type})
+	if not _partner_is_ready_for_coop():
+		return {"handled": false, "status": "solo"}
 	if encounter_type != "grass":
 		var refreshed := await refresh()
-		_wild_diag("wild_non_grass", {"success": refreshed.get("success", false), "sameMap": not _partner_is_on_another_map()})
-		if refreshed.get("success", false) and _partner_is_on_another_map():
+		if refreshed.get("success", false) and not _partner_is_ready_for_coop():
 			return {"handled": false, "status": "solo"}
 		return {"handled": true, "success": false, "code": "coop_wild_method_unsupported"}
 	if not activity.is_empty():
 		if activity.get("reservationId") == pending_start.get("reservationId"):
 			pending_start = {}
-		_wild_diag("wild_existing_activity", {"status": activity.get("status", "")})
 		return {"handled": true, "success": true}
 	var world := GameState.get_world()
 	if world == null:
-		_wild_diag("wild_position", {"success": false, "code": "coop_world_unavailable"})
 		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
-	_wild_diag("wild_position", {"success": position_result.get("success", false), "code": position_result.get("code", "")})
 	if not position_result.get("success", false):
 		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
 	if pending_start.is_empty():
 		pending_start = {"reservationId": new_id(), "kind": "grass-step"}
 	elif pending_start.get("kind") != "grass-step":
-		_wild_diag("wild_pending", {"code": "coop_start_pending", "kind": pending_start.get("kind", "")})
 		return {"handled": true, "success": false, "code": "coop_start_pending"}
 	var result := await _request("grass-step", {"reservationId": pending_start["reservationId"]})
-	_wild_diag("wild_server", {"success": result.get("success", false), "http": result.get("status", 0),
-		"code": result.get("code", ""), "status": result.get("body", {}).get("status", "")})
 	if result.get("success", false):
 		pending_start = {}
 	elif int(result.get("status", 0)) in [400, 401, 403, 404, 409, 422]:
@@ -277,19 +259,14 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	# step is complete in its own response; fetching state before and after
 	# every step held movement input for three network round trips.
 	if not result.get("success", false) or result.get("body", {}).get("status") != "miss":
-		var refreshed := await refresh()
-		_wild_diag("wild_refresh", {"success": refreshed.get("success", false), "http": refreshed.get("status", 0),
-			"activity": not activity.is_empty(), "activityStatus": activity.get("status", "")})
+		await refresh()
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
 	if result.get("success", false) and result.get("body", {}).get("status") == "solo":
-		_wild_diag("wild_result", {"handled": false, "success": true, "status": "solo"})
 		return {"handled": false, "success": true, "status": "solo"}
-	var outcome := {"handled": true, "success": result.get("success", false),
+	return {"handled": true, "success": result.get("success", false),
 		"code": "" if result.get("success", false) else result.get("code", "coop_start_pending"),
 		"status": result.get("body", {}).get("status", "")}
-	_wild_diag("wild_result", outcome)
-	return outcome
 
 
 func _partner_is_on_another_map() -> bool:
@@ -303,6 +280,18 @@ func _partner_is_on_another_map() -> bool:
 		if key != own_id and not str(map_ids.get(key, "")).is_empty() and str(map_ids[key]) != own_map:
 			return true
 	return false
+
+
+func _partner_is_ready_for_coop() -> bool:
+	if _partner_is_on_another_map():
+		return false
+	var online: Dictionary = party.get("memberOnline", {}) if party.get("memberOnline") is Dictionary else {}
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	for member_id: Variant in party.get("memberIds", []):
+		var key := str(int(member_id))
+		if key != own_id and online.get(key) is bool and not bool(online[key]):
+			return false
+	return true
 
 
 func submit_action(action: Dictionary) -> Dictionary:

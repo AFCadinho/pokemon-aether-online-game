@@ -27,9 +27,8 @@ func _run() -> void:
 	gateway_config.set("cached_url", previous_gateway_url)
 	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
 	var coop_service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
-	_expect(coop_service_source.contains("_wild_diag(\"wild_entry\"") and coop_service_source.contains("_wild_diag(\"wild_server\"")
-		and coop_service_source.contains("_wild_diag(\"wild_result\""),
-		"party grass encounters emit client-side diagnostics for every routing stage")
+	_expect(not coop_service_source.contains("COOP_DIAG") and coop_service_source.contains("func _partner_is_ready_for_coop()"),
+		"party grass encounters fall back to solo when the partner is unavailable without console diagnostics")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
 	_expect(service.trainer_entity("kanto_route_3_youngster").is_empty(), "later trainers remain unsupported")

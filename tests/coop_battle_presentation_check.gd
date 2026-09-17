@@ -172,6 +172,10 @@ func _run() -> void:
 		and presenter_source.contains("action.get(\"mega\", false)")
 		and presenter_source.contains("action.get(\"zMove\", false)"),
 		"native co-op mechanics use only the server-offered Mega and Z-Move action variants")
+	_expect(presenter_source.contains('"-boost", "-unboost"')
+		and presenter_source.contains("func _play_native_stat_change(")
+		and FileAccess.get_file_as_string("res://scripts/battle/coop_native_animation_router.gd").contains("func play_stat_change_tween_for_target("),
+		"native co-op stat changes animate only the affected doubles sprite")
 	var history: String = panel._log.get_parsed_text()
 	var action_node: Node = panel._actions.get_child(0)
 	service.apply_view(snapshot)
