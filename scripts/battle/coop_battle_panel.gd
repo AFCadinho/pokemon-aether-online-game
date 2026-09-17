@@ -7,21 +7,6 @@ const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
 const COOP_EFFECTS := preload("res://scripts/battle/coop_battle_effects.gd")
 const NATIVE_MOVE_ROUTER := preload("res://scripts/battle/coop_native_animation_router.gd")
 const STATUS_CONDITION_OVERLAY := preload("res://scripts/battle/animations/status_condition_overlay.gd")
-# Single-target effects that already use dynamic actor/target anchors and do
-# not move or hide a whole SpriteBox. Keep spread, self, and contact-movement
-# moves out until their doubles-specific presentation paths are implemented.
-const NATIVE_ANIMATED_MOVES := {
-	"ember": true,
-	"willowisp": true,
-	"watergun": true,
-	"thundershock": true,
-	"poisonsting": true,
-	"thunderwave": true,
-	"toxic": true,
-	"spore": true,
-	"leafage": true,
-	"mudslap": true,
-}
 const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
 uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
 void fragment() {
@@ -81,6 +66,11 @@ var _decision_title: Label
 var _decision_subtitle: Label
 var _wait_button: Button
 var _cancel_target_button: Button
+var _native_mechanics: Control
+var _mega_evolution_button: TextureButton
+var _z_move_button: TextureButton
+var _mega_evolution_selected := false
+var _z_move_selected := false
 var _native_turn: BattleStatusPanel
 var _native_vs: BattleVsPanelContainer
 var _native_party: PartyGrid
@@ -88,6 +78,7 @@ var _allied_party: PartyGrid
 var _opponent_party: PartyGrid
 var _first_trainer: BattleTrainerSprite
 var _second_trainer: BattleTrainerSprite
+var _opponent_trainer: BattleTrainerSprite
 var _trainer_identity := ""
 var _native_attack_tween: Tween
 var _native_animation_sprite: AnimatedSprite2D
@@ -151,11 +142,13 @@ func _ready() -> void:
 		_allied_party = embedded_hosts["allied_party"] as PartyGrid
 		_opponent_party = embedded_hosts["opponent_party"] as PartyGrid
 		_first_trainer = embedded_hosts["trainer"] as BattleTrainerSprite
+		_opponent_trainer = embedded_hosts["enemy_trainer"] as BattleTrainerSprite
 		_native_party.party_selected.connect(_select_switch)
 		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
 		stage.add_child(_second_trainer)
-		_first_trainer.position = Vector2(124, 476)
-		_second_trainer.position = Vector2(184, 476)
+		# Keep both allied Trainers tucked behind the shifted left-side doubles.
+		_first_trainer.position = Vector2(146, 496)
+		_second_trainer.position = Vector2(206, 496)
 		_first_trainer.scale = Vector2.ONE * 0.75
 		_second_trainer.scale = Vector2.ONE * 0.75
 		for side: String in ["player", "enemy"]:
@@ -178,6 +171,12 @@ func _ready() -> void:
 		_native_pokemon_hover = embedded_hosts["pokemon_hover"] as PokemonHoverCard
 		_native_move_hover = embedded_hosts["move_hover"] as MoveHoverCard
 		_native_utility = embedded_hosts["utility"] as Control
+		_native_mechanics = stage.get_node("%MechanicsPanel") as Control
+		# The compact doubles move grid sits lower than the singles menu. Lift the
+		# mechanics cluster so Mega/Z remains visually attached to that grid.
+		if _native_mechanics != null:
+			_native_mechanics.offset_top = 414.0
+			_native_mechanics.offset_bottom = 492.0
 		_native_moves.move_selected.connect(_select_move)
 		_native_moves.move_hovered.connect(_show_coop_move_hover)
 		_native_moves.move_unhovered.connect(_hide_coop_move_hover)
@@ -186,6 +185,16 @@ func _ready() -> void:
 			party_grid.pokemon_hovered.connect(_show_coop_party_hover)
 			party_grid.pokemon_unhovered.connect(_hide_coop_pokemon_hover)
 		_native_utility.action_selected.connect(_on_native_utility_action)
+		_mega_evolution_button = stage.get_node("%MegaEvolutionIcon") as TextureButton
+		_z_move_button = stage.get_node("%ZMove") as TextureButton
+		if _mega_evolution_button != null:
+			_disconnect_mechanic_button(_mega_evolution_button)
+			_mega_evolution_button.pressed.connect(_toggle_mega_evolution)
+			_mega_evolution_button.tooltip_text = "Mega Evolve, then choose a move."
+		if _z_move_button != null:
+			_disconnect_mechanic_button(_z_move_button)
+			_z_move_button.pressed.connect(_toggle_z_move)
+			_z_move_button.tooltip_text = "Use a Z-Move, then choose a move."
 		var bag: Button = stage.get_node("%BagButton")
 		_wait_button = bag.duplicate(0) as Button
 		_wait_button.name = "CoopWaitButton"
@@ -328,6 +337,7 @@ func _ready() -> void:
 		for controller: String in SLOTS:
 			_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
 	CoopService.state_changed.connect(_sync)
+	CoopService.partner_connection_changed.connect(_on_partner_connection_changed)
 	CoopService.request_failed.connect(_show_error)
 	if _native_mode:
 		_setup_loading_overlay()
@@ -433,7 +443,10 @@ func _position_native_targets() -> void:
 		return
 	var stage: Control = embedded_hosts["stage"]
 	for controller: String in SLOTS:
-		var target: Button = cards[controller].target
+		var card: Dictionary = cards.get(controller, {})
+		var target: Button = card.get("target") as Button
+		if target == null:
+			continue
 		var sprite := _native_sprite(controller)
 		if sprite != null:
 			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
@@ -498,9 +511,12 @@ func _process(_delta: float) -> void:
 	if _connection == null and not _native_mode:
 		return
 	if _native_mode:
-		if _loading_overlay.visible:
+		# The panel can remain in the process list for one frame while its native
+		# overlay is being torn down during the automatic world return.
+		if is_instance_valid(_loading_overlay) and _loading_overlay.visible and is_instance_valid(_loading_label):
 			_loading_label.text = "Starting co-op battle" + ".".repeat(1 + int(Time.get_ticks_msec() / 500) % 3)
-		_native_turn.hide_timer()
+		if is_instance_valid(_native_turn):
+			_native_turn.hide_timer()
 		_update_coop_sprite_hover()
 		return
 	_connection.text = "%s  ·  %s" % [
@@ -532,15 +548,15 @@ func _present() -> void:
 			_playing = false
 			_update_actions()
 			return
-		# Initial/reconnected snapshots and long gaps snap directly to authority.
-		# Never replay old damage over current HP, or spend a minute catching up.
-		var animate := displayed_cursor >= 0 and fresh.size() <= 20
-		var batch_started := Time.get_ticks_msec()
+		# Initial/reconnected snapshots snap directly to authority. Once this
+		# client has joined the event stream, preserve every received event in
+		# order; a slow client must not lose a final turn to a batch cap.
+		var animate := displayed_cursor >= 0
 		if displayed_cursor < 0:
 			_apply_positions(snapshot)
 		for event: Dictionary in fresh:
 			_append_event(event)
-			if animate and Time.get_ticks_msec() - batch_started < 6000:
+			if animate:
 				await _animate_event(event, fresh)
 				if epoch != _epoch:
 					_playing = false
@@ -654,11 +670,11 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			if position.is_empty():
 				hud.set_double_position(row_index, {})
 				continue
-			var level := 0
+			var level := int(position.get("level", 0))
 			var gender := ""
 			for detail: String in details.split(","):
 				var part := detail.strip_edges()
-				if part.begins_with("L") and part.substr(1).is_valid_int():
+				if level <= 0 and part.begins_with("L") and part.substr(1).is_valid_int():
 					level = int(part.substr(1))
 				elif part in ["M", "F"]:
 					gender = part
@@ -730,13 +746,18 @@ func _target_prompt() -> String:
 		if int(move.get("slot", 0)) == selected_move:
 			var move_name := str(move.get("name", "")).strip_edges()
 			if not species.is_empty() and not move_name.is_empty():
+				if _mega_evolution_selected:
+					return "%s will Mega Evolve and use %s. Choose a target." % [species, move_name]
+				if _z_move_selected:
+					return "%s will use a Z-Move with %s. Choose a target." % [species, move_name]
 				return "%s will use %s. Choose a target." % [species, move_name]
 	return "Choose a target."
 
 
 func _update_actions() -> void:
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
-		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open])
+		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open,
+		_mega_evolution_selected, _z_move_selected])
 	if signature == _action_signature:
 		return
 	_action_signature = signature
@@ -748,6 +769,7 @@ func _update_actions() -> void:
 		_native_utility.set_action_visible("run", false)
 		_wait_button.visible = false
 		_cancel_target_button.visible = false
+		_set_native_mechanic_buttons(false, false)
 		_native_party.set_selection_enabled(false)
 	if not _native_mode:
 		var last_capture: Dictionary = CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else {}
@@ -815,10 +837,21 @@ func _update_actions() -> void:
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else BattleEventTextFormatter.new().format_action_prompt(_own_active_species())
 	if _native_mode:
+		var can_mega := _has_mechanic_action("mega")
+		var can_z_move := _has_mechanic_action("zMove")
+		if not can_mega:
+			_mega_evolution_selected = false
+		if not can_z_move:
+			_z_move_selected = false
+		_set_native_mechanic_buttons(can_mega, can_z_move)
 		var display_moves: Array = []
 		for move: Dictionary in CoopService.view.get("moves", []):
 			var prepared := move.duplicate()
 			prepared["disabled"] = bool(move.get("disabled", false)) or _move_actions(int(move.get("slot", 0))).is_empty()
+			if _mega_evolution_selected:
+				prepared["name"] = "MEGA · " + str(prepared.get("name", ""))
+			elif _z_move_selected:
+				prepared["name"] = "Z · " + str(prepared.get("name", ""))
 			display_moves.append(prepared)
 		_native_moves.set_moves(display_moves)
 		_native_moves.set_input_disabled(selected_move > 0)
@@ -976,11 +1009,8 @@ func set_capture_target_visible(is_visible: bool) -> void:
 func _auto_return_after_finish() -> void:
 	# A finished receipt can arrive before the last turn's event playback ends.
 	# Let a confirmed throw and the final events reach the screen first.
-	var capture_deadline := Time.get_ticks_msec() + 18000
-	while is_inside_tree() and _capture_animation_pending and Time.get_ticks_msec() < capture_deadline:
-		await get_tree().process_frame
-	var playback_deadline := Time.get_ticks_msec() + 7000
-	while is_inside_tree() and (_playing or _revision != int(_latest.get("revision", -1))) and Time.get_ticks_msec() < playback_deadline:
+	var playback_deadline := Time.get_ticks_msec() + 30000
+	while is_inside_tree() and _final_event_playback_pending() and Time.get_ticks_msec() < playback_deadline:
 		await get_tree().process_frame
 	if not is_inside_tree():
 		return
@@ -995,8 +1025,78 @@ func _auto_return_after_finish() -> void:
 		_update_actions()
 
 
+func _final_event_playback_pending() -> bool:
+	if _capture_animation_pending or _playing:
+		return true
+	# Settlement can reach this client before its poll receives the terminal
+	# projection.  Do not leave the scene with an older cursor: the other
+	# Trainer's finishing move must play on both clients.
+	if CoopService.activity.get("status") == "finished" and not bool(_latest.get("ended", false)):
+		return true
+	return displayed_cursor < int(_latest.get("eventCursor", 0))
+
+
 func _move_actions(slot: int) -> Array:
-	return CoopService.view.get("legalActions", []).filter(func(action: Dictionary) -> bool: return action.get("type") == "move" and action.get("slot") == slot)
+	return CoopService.view.get("legalActions", []).filter(func(action: Dictionary) -> bool:
+		if action.get("type") != "move" or action.get("slot") != slot:
+			return false
+		if _mega_evolution_selected:
+			return action.get("mega", false)
+		if _z_move_selected:
+			return action.get("zMove", false)
+		return not action.get("mega", false) and not action.get("zMove", false)
+	)
+
+
+func _has_mechanic_action(mechanic: String) -> bool:
+	for action: Dictionary in CoopService.view.get("legalActions", []):
+		if action.get("type") == "move" and action.get(mechanic, false):
+			return true
+	return false
+
+
+func _disconnect_mechanic_button(button: TextureButton) -> void:
+	# The single-battle controller owns these scene nodes normally. Co-op has no
+	# BattleState request, so replace that handler with the server-view action flow.
+	for connection: Dictionary in button.get_signal_connection_list("pressed"):
+		var callable: Callable = connection.get("callable") as Callable
+		if callable.is_valid():
+			button.pressed.disconnect(callable)
+
+
+func _set_native_mechanic_buttons(can_mega: bool, can_z_move: bool) -> void:
+	if _native_mechanics == null:
+		return
+	var available := (can_mega or can_z_move) and selected_move <= 0 and not _bag_open and not _playing
+	_native_mechanics.visible = available
+	if _mega_evolution_button != null:
+		_mega_evolution_button.visible = can_mega
+		_mega_evolution_button.disabled = not available or not can_mega
+		_mega_evolution_button.modulate = Color(1.0, 0.82, 0.2, 1.0) if _mega_evolution_selected else Color.WHITE
+	if _z_move_button != null:
+		_z_move_button.visible = can_z_move
+		_z_move_button.disabled = not available or not can_z_move
+		_z_move_button.modulate = Color(1.0, 0.72, 0.24, 1.0) if _z_move_selected else Color.WHITE
+
+
+func _toggle_mega_evolution() -> void:
+	if not _native_mode or _playing or selected_move > 0 or _bag_open or not _has_mechanic_action("mega"):
+		return
+	_mega_evolution_selected = not _mega_evolution_selected
+	if _mega_evolution_selected:
+		_z_move_selected = false
+	_action_signature = ""
+	_update_actions()
+
+
+func _toggle_z_move() -> void:
+	if not _native_mode or _playing or selected_move > 0 or _bag_open or not _has_mechanic_action("zMove"):
+		return
+	_z_move_selected = not _z_move_selected
+	if _z_move_selected:
+		_mega_evolution_selected = false
+	_action_signature = ""
+	_update_actions()
 
 
 func _sync_action_scroll() -> void:
@@ -1139,6 +1239,9 @@ func _append_event(event: Dictionary) -> void:
 		"-heal": text = "%s recovered health!" % actor
 		"-status": text = "%s is %s!" % [actor, _status_name(str(event.get("status", "")))]
 		"-curestatus": text = "%s recovered from its status!" % actor
+		"-mega": text = "%s Mega Evolved!" % actor
+		"-primal": text = "%s underwent Primal Reversion!" % actor
+		"-zpower": text = "%s surrounded itself with Z-Power!" % actor
 		"-boost", "-unboost": text = "%s %s for %s!" % [_stat_name(str(event.get("stat", ""))), "rose" if event.get("kind") == "-boost" else "fell", actor]
 		"-setboost": text = "%s changed for %s!" % [_stat_name(str(event.get("stat", ""))), actor]
 		"-start", "-end": text = "%s's %s %s." % [actor, str(event.get("condition", "")).capitalize(), "ended" if event.kind == "-end" else "started"]
@@ -1157,6 +1260,19 @@ func _append_event(event: Dictionary) -> void:
 				_log.remove_paragraph(0)
 
 
+func _on_partner_connection_changed(connected: bool) -> void:
+	if not is_inside_tree() or CoopService.activity.get("status") != "active":
+		return
+	var message := "Your partner reconnected and can choose actions again." if connected else "Your partner disconnected — AI is taking over their actions."
+	if _native_mode and _native_log != null:
+		_native_log.add_message(message, "warning")
+	elif _log != null:
+		_log.add_text(message + "\n")
+		if _log.get_line_count() > 220:
+			_log.remove_paragraph(0)
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+
 func _battle_log_kind(event_kind: String) -> String:
 	match event_kind:
 		"move": return "move"
@@ -1164,7 +1280,7 @@ func _battle_log_kind(event_kind: String) -> String:
 		"-damage": return "damage"
 		"-heal": return "heal"
 		"-status", "-curestatus": return "status"
-		"-boost", "-unboost", "-setboost", "-start", "-end": return "effect"
+		"-boost", "-unboost", "-setboost", "-start", "-end", "-mega", "-primal", "-zpower": return "effect"
 		"-miss", "cant": return "warning"
 		"faint": return "faint"
 		"coopcapture", "win", "tie": return "result"
@@ -1226,9 +1342,18 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 				_apply_native_event_hp(event)
 			"-status":
 				_set_native_status(str(event.get("actor", "")), str(event.get("status", "")))
+			"-boost", "-unboost":
+				if SettingsManager.battle_animations:
+					await _play_native_stat_change(str(event.get("actor", "")), -1 if event.get("kind") == "-unboost" else 1)
 			"-curestatus", "faint", "switch", "drag", "replace":
 				_set_native_status(str(event.get("actor", "")), "")
-		return
+			"-mega", "-primal":
+				if SettingsManager.battle_animations:
+					await _play_native_mechanic_effect(str(event.get("actor", "")), "mega_evolution")
+			"-zpower":
+				if SettingsManager.battle_animations:
+					await _play_native_mechanic_effect(str(event.get("actor", "")), "z_power")
+	return
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
 	var card: Dictionary = cards[actor]
@@ -1388,29 +1513,35 @@ func _play_native_catalog_move(event: Dictionary, batch: Array) -> void:
 	if _native_move_router == null:
 		return
 	var move_name := str(event.get("move", ""))
-	if not NATIVE_ANIMATED_MOVES.has(_native_move_animation_key(move_name)) or not _native_move_router.call("has_move_animation", move_name):
+	if not _native_move_router.call("has_move_animation", move_name):
 		return
 	var plan: Dictionary = COOP_EFFECTS.move_targets(event, batch)
 	var targets: Array = plan.get("targets", [])
-	if targets.size() != 1 or (plan.get("misses", []) as Array).has(targets[0]):
-		return
 	var actor := str(event.get("actor", ""))
-	var target := str(targets[0])
-	if actor not in SLOTS or target not in SLOTS:
+	if actor not in SLOTS:
 		return
-	var sprites := {}
-	var boxes := {}
-	for controller: String in [actor, target]:
-		sprites[controller] = _native_sprite(controller)
-		boxes[controller] = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
-	var aliases: Dictionary = _native_move_router.call("bind_native_pair", actor, target, sprites, boxes)
-	if aliases.is_empty():
-		return
-	await _native_move_router.call("play_move_animation", move_name, aliases["actor"], aliases["target"], {"result": "hit"})
-
-
-func _native_move_animation_key(move_name: String) -> String:
-	return move_name.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace("’", "")
+	# Move logs provide every affected slot for spread moves. Play each visual
+	# against its actual sprite in turn, while only the first target owns audio.
+	# Self and field moves fall back to the actor as their visual anchor.
+	if targets.is_empty():
+		targets.append(actor)
+	var misses: Array = plan.get("misses", [])
+	for target_index in range(targets.size()):
+		var target := str(targets[target_index])
+		if target not in SLOTS:
+			continue
+		var sprites := {actor: _native_sprite(actor), target: _native_sprite(target)}
+		var boxes := {
+			actor: embedded_hosts["player_sprite"] if actor in ["p1", "p3"] else embedded_hosts["enemy_sprite"],
+			target: embedded_hosts["player_sprite"] if target in ["p1", "p3"] else embedded_hosts["enemy_sprite"],
+		}
+		var aliases: Dictionary = _native_move_router.call("bind_native_pair", actor, target, sprites, boxes)
+		if aliases.is_empty():
+			continue
+		_native_move_router.set("audible", target_index == 0)
+		await _native_move_router.call("play_move_animation", move_name, aliases["actor"], aliases["target"],
+			{"result": "miss" if misses.has(target) else "hit"})
+	_native_move_router.set("audible", true)
 
 
 func _play_native_hit(controller: String) -> void:
@@ -1425,6 +1556,32 @@ func _play_native_hit(controller: String) -> void:
 	_native_attack_tween.tween_property(sprite, "modulate", Color.WHITE, 0.12)
 	await ANIMATION_WAIT.for_tween(self, _native_attack_tween, 1.0)
 	_cancel_native_attack_tween()
+
+
+func _play_native_stat_change(controller: String, amount: int) -> void:
+	if _native_move_router == null or controller not in SLOTS or amount == 0:
+		return
+	var sprite := _native_sprite(controller)
+	var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+	var aliases: Dictionary = _native_move_router.call("bind_native_pair", controller, controller,
+		{controller: sprite}, {controller: box})
+	if aliases.is_empty():
+		return
+	await _native_move_router.call("play_stat_change_presentation_for_target", aliases["target"], amount)
+
+
+func _play_native_mechanic_effect(controller: String, effect_key: String) -> void:
+	if _native_move_router == null or controller not in SLOTS:
+		return
+	var sprite := _native_sprite(controller)
+	if sprite == null:
+		return
+	var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
+	var aliases: Dictionary = _native_move_router.call("bind_native_pair", controller, controller,
+		{controller: sprite}, {controller: box})
+	if aliases.is_empty():
+		return
+	await _native_move_router.call("play_effect_animation", effect_key, aliases["target"])
 
 
 func _exit_tree() -> void:
@@ -1483,6 +1640,7 @@ func _sync_native_trainers() -> void:
 		if _trainer_identity != "wild":
 			_first_trainer.clear()
 			_second_trainer.clear()
+			_opponent_trainer.clear()
 			_trainer_identity = "wild"
 		return
 	var appearances: Dictionary = CoopService.party.get("memberAppearances", {})
@@ -1492,7 +1650,8 @@ func _sync_native_trainers() -> void:
 		first = PlayerSave.to_appearance_state()
 	elif CoopService.view.get("participant") == "p3" and second.is_empty():
 		second = PlayerSave.to_appearance_state()
-	var identity := JSON.stringify([first, second])
+	var opponent_sprite_id := _opponent_trainer_sprite_id()
+	var identity := JSON.stringify([first, second, opponent_sprite_id])
 	if identity == _trainer_identity:
 		return
 	_trainer_identity = identity
@@ -1500,6 +1659,29 @@ func _sync_native_trainers() -> void:
 		_first_trainer.show_player(first, Vector2.RIGHT)
 	if not second.is_empty():
 		_second_trainer.show_player(second, Vector2.RIGHT)
+	_show_coop_opponent_trainer(opponent_sprite_id)
+
+
+func _opponent_trainer_sprite_id() -> String:
+	var activity_id := str(CoopService.activity.get("activityId", ""))
+	if activity_id.contains("gary"):
+		return "showdown_blue_lgpe"
+	var npc_id := "kanto_alpha_gym_brock" if activity_id == "brock" else activity_id
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null or not catalog.has_method("resolve_battle_sprite_id"):
+		return ""
+	return str(catalog.call("resolve_battle_sprite_id", "", "", npc_id, ""))
+
+
+func _show_coop_opponent_trainer(sprite_id: String) -> void:
+	if _opponent_trainer == null:
+		return
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	var texture: Texture2D = catalog.call("get_texture", sprite_id) as Texture2D if catalog != null and catalog.has_method("get_texture") else null
+	if texture == null:
+		_opponent_trainer.clear()
+		return
+	_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)
 
 
 func _label(parent: Node, text: String, font_size: int) -> Label:

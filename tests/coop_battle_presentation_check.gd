@@ -157,6 +157,59 @@ func _run() -> void:
 		_expect(root.get_texture().get_image().save_png(effect_capture) == OK, "move effect capture saved")
 	await _wait_for_cursor(panel, 22)
 	_expect(panel.displayed_cursor == 22 and panel.cards.p2.hp.value == 64, "new move/damage events end at the authoritative snapshot")
+	var router_source := FileAccess.get_file_as_string("res://scripts/battle/coop_animation_router.gd")
+	var presenter_source := FileAccess.get_file_as_string("res://scripts/battle/coop_battle_panel.gd")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_expect(router_source.contains("var cover_scale: float = maxf(available_size.x / SOURCE_SIZE.x, available_size.y / SOURCE_SIZE.y)")
+		and router_source.contains("animation_node.scale = Vector2(cover_scale, cover_scale)")
+		and presenter_source.contains("var animate := displayed_cursor >= 0")
+		and not presenter_source.contains("fresh.size() <= 20")
+		and presenter_source.contains("func _final_event_playback_pending()")
+		and presenter_source.contains('not bool(_latest.get("ended", false))'),
+		"doubles cover the battlefield with catalog effects and never skip live event batches")
+	_expect(presenter_source.contains("is_instance_valid(_loading_overlay) and _loading_overlay.visible")
+		and presenter_source.contains("if is_instance_valid(_native_turn):"),
+		"native co-op teardown does not process stale loading or turn controls")
+	service.activity.partnerConnected = false
+	service.partner_connection_changed.emit(false)
+	_expect(panel._log.get_parsed_text().contains("AI is taking over their actions")
+		and presenter_source.contains("get_tree().call_group(\"ui_overlay\", \"add_system_message\", message)"),
+		"a partner disconnect is announced once in the co-op battle log and system feed")
+	service.activity.partnerConnected = true
+	service.partner_connection_changed.emit(true)
+	_expect(panel._log.get_parsed_text().contains("reconnected and can choose actions again"),
+		"a partner reconnect is announced in the co-op battle log")
+	_expect(world_source.contains('if CoopService.activity.get("status") == "finished":')
+		and world_source.contains("active_battle_kind != \"coop\" or battle_instance == null")
+		and world_source.contains("final-event cursor and returns only after"),
+		"the world leaves a completed active co-op battle mounted for its final shared playback")
+	_expect(world_source.contains('if active_battle_kind == "coop" or coop_finishing:')
+		and not FileAccess.get_file_as_string("res://scripts/ui/coop_party_hud.gd").contains("COOP_DIAG party_hud_presence"),
+		"co-op cleanup suppresses its expected activity-write race and removes temporary presence diagnostics")
+	_expect(presenter_source.contains('_native_mechanics = stage.get_node("%MechanicsPanel") as Control')
+		and presenter_source.contains("var card: Dictionary = cards.get(controller, {})"),
+		"native co-op setup initializes mechanics before positioning and tolerates an incomplete target mount")
+	_expect(presenter_source.contains("func _show_coop_opponent_trainer(")
+		and presenter_source.contains("_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)")
+		and FileAccess.get_file_as_string("res://scripts/battle/battle.gd").contains('"enemy_trainer": enemy_trainer_sprite'),
+		"trainer doubles mount the catalog opponent behind the enemy platform while wild battles keep it hidden")
+	_expect(presenter_source.contains("%MegaEvolutionIcon")
+		and presenter_source.contains("%ZMove")
+		and presenter_source.contains("func _toggle_mega_evolution()")
+		and presenter_source.contains("func _toggle_z_move()")
+		and presenter_source.contains("action.get(\"mega\", false)")
+		and presenter_source.contains("action.get(\"zMove\", false)"),
+		"native co-op mechanics use only the server-offered Mega and Z-Move action variants")
+	_expect(presenter_source.contains('"-boost", "-unboost"')
+		and presenter_source.contains("func _play_native_stat_change(")
+		and FileAccess.get_file_as_string("res://scripts/battle/coop_native_animation_router.gd").contains("func play_stat_change_tween_for_target("),
+		"native co-op stat changes animate only the affected doubles sprite")
+	_expect(presenter_source.contains('"-mega", "-primal"')
+		and presenter_source.contains('"-zpower"')
+		and presenter_source.contains("func _play_native_mechanic_effect(")
+		and presenter_source.contains('"mega_evolution"')
+		and presenter_source.contains('"z_power"'),
+		"native doubles play Mega, Primal, and Z-Power activation effects on their owning sprite")
 	var history: String = panel._log.get_parsed_text()
 	var action_node: Node = panel._actions.get_child(0)
 	service.apply_view(snapshot)
@@ -191,6 +244,7 @@ func _run() -> void:
 	var activity: Dictionary = service.activity.duplicate(true)
 	activity.status = "finished"
 	activity.outcome = "win"
+	snapshot.ended = true
 	var return_world := ReturnWorld.new()
 	root.add_child(return_world)
 	return_world.add_to_group("world")
@@ -203,6 +257,9 @@ func _run() -> void:
 	panel._playing = false
 	await process_frame
 	_expect(return_world.finish_calls == 1, "victory invokes world return automatically")
+	panel._latest.eventCursor = panel.displayed_cursor + 1
+	_expect(panel._final_event_playback_pending(), "world return waits until the final shared event cursor is displayed")
+	panel._latest.eventCursor = panel.displayed_cursor
 	service.activity.outcome = "draw"
 	service.activity.escaped = true
 	panel._action_signature = ""

@@ -26,6 +26,12 @@ func _run() -> void:
 	_expect(missing_profile_sources.size() == 1, "canonical member keys find both names and portraits after JSON parsing")
 	gateway_config.set("cached_url", previous_gateway_url)
 	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
+	var coop_service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
+	_expect(not coop_service_source.contains("COOP_DIAG") and coop_service_source.contains("func _partner_is_ready_for_coop()"),
+		"party grass encounters fall back to solo when the partner is unavailable without console diagnostics")
+	_expect(coop_service_source.contains('var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []')
+		and not coop_service_source.contains('party["memberIds"].size()'),
+		"co-op polling handles the empty party response immediately after leaving a party")
 	for trainer: String in service.ORDINARY_TRAINERS:
 		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
 	_expect(service.trainer_entity("kanto_route_3_youngster").is_empty(), "later trainers remain unsupported")
@@ -74,6 +80,10 @@ func _run() -> void:
 	var mounted_world = load("res://tests/fixtures/coop_world_fixture.gd").new()
 	mounted_world.battle_ui_host = host
 	mounted_world.coop_world_ready = true
+	var coop_world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_expect(coop_world_source.contains("CoopService.activity.get(\"status\") in [\"finished\", \"cancelled\"]")
+		and coop_world_source.contains("finish_coop_activity.call_deferred()"),
+		"a cancelled shared start automatically releases the battle overlay")
 	var saved_escape_tile := {"mapId": "kanto_route_1", "activityState": "idle", "position": {"x": 96.0, "y": 128.0}}
 	_expect(mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_1", Vector2(96.0, 128.0))
 		and not mounted_world._can_resume_coop_wild_battle_in_place(saved_escape_tile, "kanto_route_2", Vector2(96.0, 128.0))
@@ -275,13 +285,30 @@ func _run() -> void:
 				var actual: Vector2 = native_router.call("_get_effect_target_anchor_in_parent", alias, native_stage, "center")
 				all_native_anchors_match = all_native_anchors_match and actual.distance_to(expected) <= 1.0
 	_expect(all_native_anchors_match, "all 16 doubles actor-target pairs use the two actual sprite centers")
-	var first_doubles_animation_group := ["Ember", "Will-O-Wisp", "Water Gun", "Thunder Shock", "Poison Sting", "Thunder Wave", "Toxic", "Spore", "Leafage", "Mud-Slap"]
-	var all_first_group_moves_supported := true
-	for move_name: String in first_doubles_animation_group:
-		all_first_group_moves_supported = all_first_group_moves_supported and presenter.NATIVE_ANIMATED_MOVES.has(presenter._native_move_animation_key(move_name))
-		all_first_group_moves_supported = all_first_group_moves_supported and native_router.call("has_move_animation", move_name)
-	_expect(all_first_group_moves_supported,
-		"first single-target doubles animation group uses the catalog for every actor-target pair")
+	var motion_aliases: Dictionary = native_router.call("bind_native_pair", "p3", "p4",
+		{"p3": presenter._native_sprite("p3"), "p4": presenter._native_sprite("p4")},
+		{"p3": mounted_battle.get_node("%PlayerSpriteBox"), "p4": mounted_battle.get_node("%EnemySpriteBox")})
+	var moving_sprite: AnimatedSprite2D = presenter._native_sprite("p3")
+	var motion_origin := moving_sprite.position
+	var untouched_sprite_origin: Vector2 = presenter._native_sprite("p1").position
+	native_router.call("_play_move_actor_motion_if_needed", {"actor_motion": {"enabled": true, "duration": 0.08,
+		"points": [{"at": 0.0, "offset": [18, 0], "duration": 0.04}]}}, motion_aliases["actor"])
+	await create_timer(0.02).timeout
+	_expect(moving_sprite.position != motion_origin and presenter._native_sprite("p1").position == untouched_sprite_origin,
+		"catalog actor motion moves only the selected doubles attacker")
+	await create_timer(0.12).timeout
+	_expect(moving_sprite.position == motion_origin, "individual doubles actor motion restores its original pose")
+	var hidden_sprites: Array = native_router.call("_hide_move_actor_sprite_if_needed", {"hide_actor_sprite": true}, motion_aliases["actor"])
+	_expect(not moving_sprite.visible and hidden_sprites.size() == 1,
+		"catalog hide effects conceal only the selected doubles attacker")
+	native_router.call("_restore_move_actor_sprite_if_needed", {"hide_actor_sprite": true}, motion_aliases["actor"], hidden_sprites)
+	_expect(moving_sprite.visible, "catalog hide effects restore the selected doubles attacker")
+	var animation_catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/battle_move_animations.json"))
+	var all_catalog_moves_supported := true
+	for move_name: String in (animation_catalog.get("moves", {}) as Dictionary):
+		all_catalog_moves_supported = all_catalog_moves_supported and native_router.call("has_move_animation", move_name)
+	_expect(all_catalog_moves_supported,
+		"every catalog move is available to the doubles actor-target router")
 	presenter._position_coop_stat_overlays()
 	var player_stat_overlay: StatStagePanel = presenter._stat_overlays["p1"]
 	var enemy_stat_overlay: StatStagePanel = presenter._stat_overlays["p4"]
@@ -625,8 +652,8 @@ func _run() -> void:
 	await presenter._play_native_catalog_move({"kind": "move", "actor": "p1", "target": "p4",
 		"move": "Ember", "seq": 204}, [{"kind": "-miss", "actor": "p1", "target": "p4", "seq": 205}])
 	node_added.disconnect(visual_added)
-	_expect(catalog_visuals.size() == 2,
-		"native doubles play the two supported catalog effects, while spread and missed moves keep the safe fallback")
+	_expect(catalog_visuals.size() == 5,
+		"native doubles play catalog effects for both spread targets and a missed target")
 	presenter.set("_playing", false)
 	settings_manager.battle_animations = animation_setting
 	_expect(native_sprite.position == native_origin and native_sprite.modulate == Color.WHITE,
@@ -734,13 +761,16 @@ func _run() -> void:
 	overlay_ui.call("_position_coop_party_hud")
 	_expect(is_equal_approx(party_hud.offset_bottom, buffs_panel.offset_top - 8.0), "party HUD follows expanded buffs")
 	service.available = true
-	service.party = {"memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
+	service.party = {"leaderId": 2, "memberIds": [1.0, 2.0], "memberUsernames": {"1": "TrainerOne", "2": "TrainerTwo"},
 		"memberAppearances": {"1": {"body": "Gen4_Base_v1", "gender": "male"}, "2": {"body": "Gen4_Base_F_v1", "gender": "female"}},
+		"memberOnline": {"1": true, "2": true},
 		"sharedLevelCap": 20}
 	overlay_ui.call("_refresh_coop_party_hud")
 	var hud_names: Array = party_hud.get("_names")
 	var hud_portraits: Array = party_hud.get("_portraits")
-	_expect(party_hud.visible and hud_names[0].text == "TrainerOne" and hud_names[1].text == "TrainerTwo", "party HUD shows both member names")
+	var hud_badges: Array = party_hud.get("_badges")
+	_expect(party_hud.visible and hud_names[0].text == "TrainerTwo" and hud_names[1].text == "TrainerOne"
+		and hud_badges[0].text == "LEADER · #1" and hud_badges[1].text == "#2", "party HUD keeps the leader first with stable member badges")
 	_expect(hud_portraits[0].visible and hud_portraits[1].visible and not party_hud.text.contains("cap"), "party HUD shows both portraits without a level cap")
 	var hud_visual_path := OS.get_environment("COOP_PARTY_HUD_VISUAL_CAPTURE_PATH")
 	if not hud_visual_path.is_empty():

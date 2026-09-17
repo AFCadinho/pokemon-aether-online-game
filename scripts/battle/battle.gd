@@ -858,14 +858,24 @@ func setup_coop_battle() -> bool:
 		node.visible = true
 	# Keep the compact doubles field low, toward the prompt and move controls.
 	# Move each platform and its Pokémon together; ordinary singles stay untouched.
-	player_battle_platform.offset_top += 14.0
-	player_battle_platform.offset_bottom += 14.0
-	player_sprite_box.offset_top += 50.0
-	player_sprite_box.offset_bottom += 50.0
-	enemy_battle_platform.offset_top += 40.0
-	enemy_battle_platform.offset_bottom += 40.0
-	enemy_sprite_box.offset_top += 50.0
-	enemy_sprite_box.offset_bottom += 50.0
+	# Give both doubles sides a lower, inward-facing field position. The extra
+	# centre clearance leaves room for the allied Trainer sprites behind p1/p3.
+	player_battle_platform.offset_left += 25.0
+	player_battle_platform.offset_right += 25.0
+	player_battle_platform.offset_top += 32.0
+	player_battle_platform.offset_bottom += 32.0
+	player_sprite_box.offset_left += 25.0
+	player_sprite_box.offset_right += 25.0
+	player_sprite_box.offset_top += 70.0
+	player_sprite_box.offset_bottom += 70.0
+	enemy_battle_platform.offset_left -= 25.0
+	enemy_battle_platform.offset_right -= 25.0
+	enemy_battle_platform.offset_top += 42.0
+	enemy_battle_platform.offset_bottom += 42.0
+	enemy_sprite_box.offset_left -= 25.0
+	enemy_sprite_box.offset_right -= 25.0
+	enemy_sprite_box.offset_top += 54.0
+	enemy_sprite_box.offset_bottom += 54.0
 	# Leave the full six-slot side rail clear of the battle prompt below it.
 	var coop_player_rail := player_stage_party_grid.get_parent() as Control
 	coop_player_rail.position.y -= 40.0
@@ -883,8 +893,8 @@ func setup_coop_battle() -> bool:
 	player_hud_panel.set_double_layout(true)
 	enemy_hud_panel.set_double_layout(true)
 	player_hud_panel.offset_left = 80.0
-	player_hud_panel.offset_right = 600.0
-	enemy_hud_panel.offset_left = -600.0
+	player_hud_panel.offset_right = 540.0
+	enemy_hud_panel.offset_left = -540.0
 	enemy_hud_panel.offset_right = -80.0
 	if moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
 		moves_grid.move_selected.disconnect(_on_moves_grid_move_selected)
@@ -941,7 +951,8 @@ func setup_coop_battle() -> bool:
 		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,
 		"turn": battle_status_panel, "vs": vs_panel_container,
 		"own_party": player_party_grid, "allied_party": player_stage_party_grid,
-		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite}
+		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite,
+		"enemy_trainer": enemy_trainer_sprite}
 	coop_presenter.embedded_hosts["pokemon_hover"] = pokemon_hover_card
 	coop_presenter.embedded_hosts["move_hover"] = move_hover_card
 	add_child(coop_presenter)

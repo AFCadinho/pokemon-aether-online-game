@@ -4,9 +4,49 @@
 
 - Terapagos can be switched back into battle after changing to its Terastal or Stellar form.
 
+- Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.
+
+- Co-op battle cleanup no longer shows a false activity-save warning while the server is completing the shared settlement.
+
+- Adventure Party presence now refreshes faster. Co-op battles announce partner disconnects and reconnects in both the system feed and battle log, while AI takes over shortly after a genuine disconnect.
+
+- Co-op battles now keep both clients in the battle until the final shared move animation has played, even when the other Trainer locks the finishing turn first.
+
+- Co-op trainer battles now show the NPC Trainer behind the opposing Pokémon; wild battles remain trainer-free.
+
+- Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2; active co-op partners remain shown online through their live battle heartbeat.
+
+- Co-op battle setup now safely initializes its native mechanics and target overlays, preventing startup errors while a shared battle opens.
+
+- Co-op battles no longer emit repeated UI errors while their native battle overlay closes.
+
+- Co-op doubles now wait for every participant's final battle projection before automatically returning to the overworld, so the finishing move animation plays for both Trainers.
+
+- Co-op doubles now align the opposing platform and Pokémon slightly higher with the move controls.
+
+- Co-op doubles now place Mega Evolution and Z-Move controls higher beside the compact move grid.
+
+- Co-op doubles now receive the public active Pokémon level directly from the battle view, including Lv. 100 forms, and use slimmer two-Pokémon HP HUDs.
+
+- Co-op doubles now place both platforms and active Pokémon lower and closer to the centre, leaving a clearer left-side staging area for allied Trainer sprites.
+
+- Adventure Party HUDs now show each Trainer's live online/offline status. Wild encounters automatically use the normal single-battle flow when the partner is offline or on another map.
+
+- Co-op doubles now play the native stat-drop/raise effect on the affected Pokémon, including Close Combat's self-inflicted drops.
+
+- Co-op doubles now scale catalog move effects to cover the full battlefield, restoring full-size timing backgrounds such as Close Combat.
+
+- Co-op doubles now offer Mega Evolution and Z-Move controls whenever the current Pokémon has a simulator-legal move for that mechanic.
+
+- A cancelled co-op battle start now automatically returns both players to the overworld instead of leaving the loading overlay open.
+
+- Co-op doubles now apply catalog movement, dodge, impact feedback, and temporary attacker-hide effects to the individual Pokémon involved, rather than an entire side of the field.
+
+- Co-op double-battle move effects now use their full catalog scale. Live clients play every received battle event in order, and the automatic return waits for the final shared event cursor before closing the battle.
+
 - The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.
 
-- Co-op double battles now play the existing single-target animations for Water Gun, Thunder Shock, Poison Sting, Thunder Wave, Toxic, Spore, Leafage, and Mud-Slap on the selected Pokémon.
+- Co-op double battles now use every existing move animation from the catalog, including self, field and spread moves, at the appropriate doubles sprites.
 
 - The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
 

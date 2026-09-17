@@ -3088,7 +3088,11 @@ func _save_current_player_position(
 			})
 		# A position request can finish after co-op has taken ownership of both
 		# Trainers' stored positions. Its rejection is stale, not a new save to retry.
-		if not ThievingService.is_arrest_transfer_pending() and active_battle_kind != "coop" and not coop_finishing:
+		# These codes only fence an in-flight overworld save while the shared
+		# reservation owns the players' positions. They are not player-facing
+		# failures, including during the handoff where the local activity clears.
+		var co_op_position_lock := error_code in ["coop_activity_locked", "party_capacity_busy"]
+		if not ThievingService.is_arrest_transfer_pending() and active_battle_kind != "coop" and not coop_finishing and not co_op_position_lock:
 			push_warning("World: player position save failed (HTTP %s, %s): %s" % [
 				str(result.get("status", 0)), BackendErrorLocalizationService.error_code(result),
 				str(result.get("error", "Unknown error"))])
@@ -3186,7 +3190,10 @@ func _save_player_activity_state_deferred(activity_state: String, activity_conte
 
 
 func _save_player_activity_state(activity_state: String, activity_context: Dictionary = {}) -> void:
-	if active_battle_kind == "coop":
+	# The co-op settlement owns activity state until its acknowledgement and
+	# cleanup complete. A normal-world save in this small hand-off window is
+	# correctly rejected by the server, so do not retry or warn for it.
+	if active_battle_kind == "coop" or coop_finishing:
 		return
 	pending_activity_state_save = {
 		"state": activity_state,
@@ -5200,6 +5207,21 @@ func _on_coop_state_changed() -> void:
 		return
 	if CoopService.activity.is_empty():
 		if active_battle_kind == "coop":
+			finish_coop_activity.call_deferred()
+		return
+	# A cancelled start has no battle view to dismiss. Leaving it mounted made
+	# both clients remain behind the synchronisation overlay indefinitely after
+	# the server had already released the shared reservation.
+	if CoopService.activity.get("status") == "cancelled":
+		finish_coop_activity.call_deferred()
+		return
+	# A completed turn can settle between the two clients' polls. The client
+	# that did not submit the last choice receives `finished` before its terminal
+	# projection, so closing here would skip its finishing move animation. An
+	# active Co-opBattlePanel owns the final-event cursor and returns only after
+	# that projection has played. Still clean up immediately if no panel exists.
+	if CoopService.activity.get("status") == "finished":
+		if active_battle_kind != "coop" or battle_instance == null or not is_instance_valid(battle_instance):
 			finish_coop_activity.call_deferred()
 		return
 	if is_in_battle and active_battle_kind != "coop":

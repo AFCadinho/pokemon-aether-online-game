@@ -1,6 +1,7 @@
 extends Node
 
 signal state_changed
+signal partner_connection_changed(connected: bool)
 signal request_failed(message: String)
 signal invitation_received(invitation: Dictionary)
 signal invitation_sent(username: String)
@@ -60,10 +61,15 @@ func _process(delta: float) -> void:
 		_polling = true
 		await refresh()
 		_polling = false
-		var awaiting_battle: bool = activity.get("status") == "starting" or (activity.get("status") == "active" and view.is_empty())
+		var active_battle: bool = activity.get("status") == "active"
+		var awaiting_battle: bool = activity.get("status") == "starting" or (active_battle and view.is_empty())
 		var awaiting_exit: bool = activity.get("status") == "active" and (bool(view.get("ended", false))
 			or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()))
-		_poll_after = 0.5 if awaiting_battle or awaiting_exit else 2.0 if available else 30.0
+		var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+		var tracking_party_presence: bool = member_ids.size() == 2
+		# Presence drives both the Adventure Party HUD and co-op AI takeover.
+		# Keep it responsive while a party exists, and especially during a battle.
+		_poll_after = 0.5 if awaiting_battle or awaiting_exit or active_battle else 1.0 if tracking_party_presence else 2.0 if available else 30.0
 
 
 func reset() -> void:
@@ -96,6 +102,7 @@ func refresh() -> Dictionary:
 
 
 func apply_state(body: Dictionary) -> void:
+	var previous_activity: Dictionary = activity.duplicate(true)
 	party = body.get("party", {}) if body.get("party") is Dictionary else {}
 	# Godot parses JSON numbers as floats (e.g. 7.0), but the server's public
 	# member maps use canonical integer-string keys ("7").
@@ -147,6 +154,14 @@ func apply_state(body: Dictionary) -> void:
 	if body.get("view") is Dictionary:
 		apply_view(body["view"])
 	state_changed.emit()
+	var same_active_battle: bool = (
+		str(previous_activity.get("reservationId", "")) != ""
+		and previous_activity.get("reservationId") == activity.get("reservationId")
+		and previous_activity.get("status") == "active"
+		and activity.get("status") == "active"
+	)
+	if same_active_battle and bool(previous_activity.get("partnerConnected", true)) != bool(activity.get("partnerConnected", true)):
+		partner_connection_changed.emit(bool(activity.get("partnerConnected", false)))
 
 
 func _diagnostic_gateway_source() -> String:
@@ -197,7 +212,7 @@ func try_start(trainer_id: String) -> Dictionary:
 		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
 	if party.is_empty():
 		return {"handled": false}
-	if _partner_is_on_another_map():
+	if not _partner_is_ready_for_coop():
 		return {"handled": false}
 	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
 		return {"handled": true, "success": false, "code": "coop_leader_required"}
@@ -227,9 +242,11 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 		return {"handled": false}
 	if party.is_empty():
 		return {"handled": false}
+	if not _partner_is_ready_for_coop():
+		return {"handled": false, "status": "solo"}
 	if encounter_type != "grass":
 		var refreshed := await refresh()
-		if refreshed.get("success", false) and _partner_is_on_another_map():
+		if refreshed.get("success", false) and not _partner_is_ready_for_coop():
 			return {"handled": false, "status": "solo"}
 		return {"handled": true, "success": false, "code": "coop_wild_method_unsupported"}
 	if not activity.is_empty():
@@ -278,6 +295,18 @@ func _partner_is_on_another_map() -> bool:
 		if key != own_id and not str(map_ids.get(key, "")).is_empty() and str(map_ids[key]) != own_map:
 			return true
 	return false
+
+
+func _partner_is_ready_for_coop() -> bool:
+	if _partner_is_on_another_map():
+		return false
+	var online: Dictionary = party.get("memberOnline", {}) if party.get("memberOnline") is Dictionary else {}
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	for member_id: Variant in party.get("memberIds", []):
+		var key := str(int(member_id))
+		if key != own_id and online.get(key) is bool and not bool(online[key]):
+			return false
+	return true
 
 
 func submit_action(action: Dictionary) -> Dictionary:
