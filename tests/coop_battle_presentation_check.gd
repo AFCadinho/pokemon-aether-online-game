@@ -183,6 +183,9 @@ func _run() -> void:
 		and world_source.contains("active_battle_kind != \"coop\" or battle_instance == null")
 		and world_source.contains("final-event cursor and returns only after"),
 		"the world leaves a completed active co-op battle mounted for its final shared playback")
+	_expect(world_source.contains('if active_battle_kind == "coop" or coop_finishing:')
+		and not FileAccess.get_file_as_string("res://scripts/ui/coop_party_hud.gd").contains("COOP_DIAG party_hud_presence"),
+		"co-op cleanup suppresses its expected activity-write race and removes temporary presence diagnostics")
 	_expect(presenter_source.contains('_native_mechanics = stage.get_node("%MechanicsPanel") as Control')
 		and presenter_source.contains("var card: Dictionary = cards.get(controller, {})"),
 		"native co-op setup initializes mechanics before positioning and tolerates an incomplete target mount")
