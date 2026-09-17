@@ -547,7 +547,7 @@ func _render_context_primary_actions() -> void:
 func _render_context_secondary_actions() -> void:
 	_add_context_back_button()
 	context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
-	if not OS.has_feature("web") and CoopService.available and CoopService.activity.is_empty():
+	if CoopService.available and CoopService.activity.is_empty():
 		_add_context_action("Invite to Adventure Party", "Invite this Trainer to play together.", _on_coop_invite_pressed, "default", not CoopService.party.is_empty(), true)
 	_add_context_action(
 		"View Trainer Card",
