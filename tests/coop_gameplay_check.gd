@@ -275,13 +275,12 @@ func _run() -> void:
 				var actual: Vector2 = native_router.call("_get_effect_target_anchor_in_parent", alias, native_stage, "center")
 				all_native_anchors_match = all_native_anchors_match and actual.distance_to(expected) <= 1.0
 	_expect(all_native_anchors_match, "all 16 doubles actor-target pairs use the two actual sprite centers")
-	var first_doubles_animation_group := ["Ember", "Will-O-Wisp", "Water Gun", "Thunder Shock", "Poison Sting", "Thunder Wave", "Toxic", "Spore", "Leafage", "Mud-Slap"]
-	var all_first_group_moves_supported := true
-	for move_name: String in first_doubles_animation_group:
-		all_first_group_moves_supported = all_first_group_moves_supported and presenter.NATIVE_ANIMATED_MOVES.has(presenter._native_move_animation_key(move_name))
-		all_first_group_moves_supported = all_first_group_moves_supported and native_router.call("has_move_animation", move_name)
-	_expect(all_first_group_moves_supported,
-		"first single-target doubles animation group uses the catalog for every actor-target pair")
+	var animation_catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/battle_move_animations.json"))
+	var all_catalog_moves_supported := true
+	for move_name: String in (animation_catalog.get("moves", {}) as Dictionary):
+		all_catalog_moves_supported = all_catalog_moves_supported and native_router.call("has_move_animation", move_name)
+	_expect(all_catalog_moves_supported,
+		"every catalog move is available to the doubles actor-target router")
 	presenter._position_coop_stat_overlays()
 	var player_stat_overlay: StatStagePanel = presenter._stat_overlays["p1"]
 	var enemy_stat_overlay: StatStagePanel = presenter._stat_overlays["p4"]
@@ -625,8 +624,8 @@ func _run() -> void:
 	await presenter._play_native_catalog_move({"kind": "move", "actor": "p1", "target": "p4",
 		"move": "Ember", "seq": 204}, [{"kind": "-miss", "actor": "p1", "target": "p4", "seq": 205}])
 	node_added.disconnect(visual_added)
-	_expect(catalog_visuals.size() == 2,
-		"native doubles play the two supported catalog effects, while spread and missed moves keep the safe fallback")
+	_expect(catalog_visuals.size() == 5,
+		"native doubles play catalog effects for both spread targets and a missed target")
 	presenter.set("_playing", false)
 	settings_manager.battle_animations = animation_setting
 	_expect(native_sprite.position == native_origin and native_sprite.modulate == Color.WHITE,

@@ -7,21 +7,6 @@ const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
 const COOP_EFFECTS := preload("res://scripts/battle/coop_battle_effects.gd")
 const NATIVE_MOVE_ROUTER := preload("res://scripts/battle/coop_native_animation_router.gd")
 const STATUS_CONDITION_OVERLAY := preload("res://scripts/battle/animations/status_condition_overlay.gd")
-# Single-target effects that already use dynamic actor/target anchors and do
-# not move or hide a whole SpriteBox. Keep spread, self, and contact-movement
-# moves out until their doubles-specific presentation paths are implemented.
-const NATIVE_ANIMATED_MOVES := {
-	"ember": true,
-	"willowisp": true,
-	"watergun": true,
-	"thundershock": true,
-	"poisonsting": true,
-	"thunderwave": true,
-	"toxic": true,
-	"spore": true,
-	"leafage": true,
-	"mudslap": true,
-}
 const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
 uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
 void fragment() {
@@ -1391,29 +1376,35 @@ func _play_native_catalog_move(event: Dictionary, batch: Array) -> void:
 	if _native_move_router == null:
 		return
 	var move_name := str(event.get("move", ""))
-	if not NATIVE_ANIMATED_MOVES.has(_native_move_animation_key(move_name)) or not _native_move_router.call("has_move_animation", move_name):
+	if not _native_move_router.call("has_move_animation", move_name):
 		return
 	var plan: Dictionary = COOP_EFFECTS.move_targets(event, batch)
 	var targets: Array = plan.get("targets", [])
-	if targets.size() != 1 or (plan.get("misses", []) as Array).has(targets[0]):
-		return
 	var actor := str(event.get("actor", ""))
-	var target := str(targets[0])
-	if actor not in SLOTS or target not in SLOTS:
+	if actor not in SLOTS:
 		return
-	var sprites := {}
-	var boxes := {}
-	for controller: String in [actor, target]:
-		sprites[controller] = _native_sprite(controller)
-		boxes[controller] = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
-	var aliases: Dictionary = _native_move_router.call("bind_native_pair", actor, target, sprites, boxes)
-	if aliases.is_empty():
-		return
-	await _native_move_router.call("play_move_animation", move_name, aliases["actor"], aliases["target"], {"result": "hit"})
-
-
-func _native_move_animation_key(move_name: String) -> String:
-	return move_name.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace("'", "").replace("’", "")
+	# Move logs provide every affected slot for spread moves. Play each visual
+	# against its actual sprite in turn, while only the first target owns audio.
+	# Self and field moves fall back to the actor as their visual anchor.
+	if targets.is_empty():
+		targets.append(actor)
+	var misses: Array = plan.get("misses", [])
+	for target_index in range(targets.size()):
+		var target := str(targets[target_index])
+		if target not in SLOTS:
+			continue
+		var sprites := {actor: _native_sprite(actor), target: _native_sprite(target)}
+		var boxes := {
+			actor: embedded_hosts["player_sprite"] if actor in ["p1", "p3"] else embedded_hosts["enemy_sprite"],
+			target: embedded_hosts["player_sprite"] if target in ["p1", "p3"] else embedded_hosts["enemy_sprite"],
+		}
+		var aliases: Dictionary = _native_move_router.call("bind_native_pair", actor, target, sprites, boxes)
+		if aliases.is_empty():
+			continue
+		_native_move_router.set("audible", target_index == 0)
+		await _native_move_router.call("play_move_animation", move_name, aliases["actor"], aliases["target"],
+			{"result": "miss" if misses.has(target) else "hit"})
+	_native_move_router.set("audible", true)
 
 
 func _play_native_hit(controller: String) -> void:
