@@ -13,6 +13,7 @@ var tier: OptionButton
 var spectators: OptionButton
 var difficulty: OptionButton
 var reward_attempt: CheckBox
+var reward_reset_button: Button
 var reward_claimed_today := false
 var ai_policies: Array[String] = ["ai4"]
 var can_start := false
@@ -82,6 +83,13 @@ func build(options: Dictionary) -> void:
 	spectators.add_item(_t("guilds_only"))
 	_add_field(_t("spectators"), spectators)
 	dialog.style_option_button(spectators)
+	if bool(options.get("rewardResetAvailable", false)):
+		reward_reset_button = Button.new()
+		reward_reset_button.name = "RewardReset"
+		reward_reset_button.text = _t("reset_button")
+		reward_reset_button.tooltip_text = _t("reset_hint")
+		reward_reset_button.pressed.connect(func(): choice_made.emit({"resetReward": true}))
+		dialog.add_custom_control(reward_reset_button)
 	dialog.confirm_button.disabled = not can_start
 	dialog.confirmed.connect(_confirm)
 	dialog.canceled.connect(func(): choice_made.emit({}))
