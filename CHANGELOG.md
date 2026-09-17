@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.
+
+
 - The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
 
 - The overworld Adventure Party HUD now has a translucent background that becomes clearer on hover.

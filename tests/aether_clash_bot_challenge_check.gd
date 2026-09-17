@@ -53,8 +53,16 @@ func _ready() -> void:
 	enabled.queue_free()
 	var claimed := MENU.new()
 	add_child(claimed)
-	claimed.build({"available": true, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai5"], "rewardClaimedToday": true})
+	claimed.build({"available": true, "canChallenge": true, "maxBotCount": 20, "aiPolicies": ["ai5"], "rewardClaimedToday": true, "rewardResetAvailable": true})
 	_check(claimed.reward_attempt.disabled and not claimed.selected_settings().rewardAttempt, "Claimed Guild reward cannot be selected again today")
+	var reset_choices: Array[Dictionary] = []
+	claimed.choice_made.connect(func(choice: Dictionary): reset_choices.append(choice))
+	claimed.reward_reset_button.pressed.emit()
+	_check(reset_choices == [{"resetReward": true}], "Development reset button requests only a reward reset")
+	await get_tree().process_frame
+	_check(claimed.reward_reset_button.get_global_rect().intersects(claimed.dialog.panel.get_global_rect())
+		and claimed.dialog.panel.size.y <= get_viewport().get_visible_rect().size.y,
+		"Development reset button fits inside the training dialog")
 	claimed.queue_free()
 
 	var service := FakeGuildService.new()
@@ -68,11 +76,14 @@ func _ready() -> void:
 	_check(uuid_pattern.search(str(first["requestId"])) != null, "Request key is a valid UUIDv4")
 	_check(first.size() == 6 and first["aiPolicy"] == "ai4" and first.rewardAttempt == false and not first.has("stakeAmount"), "No stakes, human count or client bot identity")
 	service.succeed = true
+	await service.reset_aether_clash_bot_reward_for_development()
+	_check(service.requests.back().path.ends_with("/reward-reset") and service.requests.back().method == HTTPClient.METHOD_POST,
+		"Reset uses its authenticated development endpoint")
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
 	_check(service.pending_bot_request.is_empty(), "Success clears the retry key")
 	service.bot_request_in_flight = true
 	await service.create_aether_clash_bot_challenge(20, "aether-ou", "public")
-	_check(service.requests.size() == 3, "Double click does not dispatch a second request")
+	_check(service.requests.size() == 4, "Double click does not dispatch a second request")
 	service.free()
 
 	var captain := CAPTAIN.instantiate()
