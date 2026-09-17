@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op battles now keep both clients in the battle until the final shared move animation has played, even when the other Trainer locks the finishing turn first.
+
 - Co-op trainer battles now show the NPC Trainer behind the opposing Pokémon; wild battles remain trainer-free.
 
 - Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2; active co-op partners remain shown online through their live battle heartbeat.
