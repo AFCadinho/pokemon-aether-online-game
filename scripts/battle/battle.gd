@@ -556,6 +556,8 @@ var battle_ui_drag_offset := Vector2.ZERO
 #Active Pokemon
 var active_player_pokemon: Pokemon
 var active_enemy_pokemon: Pokemon
+var coop_mode := false
+var coop_presenter: Control
 var wild_owned_request_id := 0
 
 # Action Buttons
@@ -830,6 +832,120 @@ func _ready() -> void:
 
 func _t(key: String, replacements: Dictionary = {}) -> String:
 	return LocalizationManager.text(key, replacements)
+
+
+func setup_coop_battle() -> bool:
+	if coop_mode:
+		return true
+	if not is_node_ready():
+		return false
+	coop_mode = true
+	# Only doubles uses this compact, uncropped logical canvas.
+	var coop_viewport := battle_stage.get_parent() as BattleStageViewport
+	coop_viewport.crop_to_fill = false
+	coop_viewport.design_size = Vector2(1152, 600)
+	battle_stage.custom_minimum_size = coop_viewport.design_size
+	coop_viewport.call_deferred("_update_stage_transform")
+	# The ordinary single-battle controller never receives co-op battle state.
+	# Keep its visual shell, but let the server-driven co-op presenter own input.
+	set_process(false)
+	for node: CanvasItem in [enemy_trainer_sprite, mini_battle_feed]:
+		node.visible = false
+	for node: CanvasItem in [player_battle_platform, enemy_battle_platform,
+		player_sprite_box, enemy_sprite_box, player_hud_panel, enemy_hud_panel,
+		player_stage_party_grid.get_parent(), opponent_stage_party_rail,
+		battle_status_panel, vs_panel_container]:
+		node.visible = true
+	# Keep the compact doubles field low, toward the prompt and move controls.
+	# Move each platform and its Pokémon together; ordinary singles stay untouched.
+	player_battle_platform.offset_top += 14.0
+	player_battle_platform.offset_bottom += 14.0
+	player_sprite_box.offset_top += 50.0
+	player_sprite_box.offset_bottom += 50.0
+	enemy_battle_platform.offset_top += 40.0
+	enemy_battle_platform.offset_bottom += 40.0
+	enemy_sprite_box.offset_top += 50.0
+	enemy_sprite_box.offset_bottom += 50.0
+	# Leave the full six-slot side rail clear of the battle prompt below it.
+	var coop_player_rail := player_stage_party_grid.get_parent() as Control
+	coop_player_rail.position.y -= 40.0
+	battle_status_panel.hide_timer()
+	battle_status_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	battle_status_panel.offset_left = 12.0
+	battle_status_panel.offset_top = 12.0
+	battle_status_panel.offset_right = 154.0
+	battle_status_panel.offset_bottom = 49.0
+	vs_panel_container.set_trainer_portraits_visible(false)
+	player_sprite_box.web_sprite_upgrades_allowed = false
+	enemy_sprite_box.web_sprite_upgrades_allowed = false
+	player_sprite_box.set_battle_type(true)
+	enemy_sprite_box.set_battle_type(true)
+	player_hud_panel.set_double_layout(true)
+	enemy_hud_panel.set_double_layout(true)
+	player_hud_panel.offset_left = 80.0
+	player_hud_panel.offset_right = 600.0
+	enemy_hud_panel.offset_left = -600.0
+	enemy_hud_panel.offset_right = -80.0
+	if moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
+		moves_grid.move_selected.disconnect(_on_moves_grid_move_selected)
+	if moves_grid.move_hovered.is_connected(_show_move_hover):
+		moves_grid.move_hovered.disconnect(_show_move_hover)
+	if moves_grid.move_unhovered.is_connected(_hide_move_hover):
+		moves_grid.move_unhovered.disconnect(_hide_move_hover)
+	if action_buttons.action_selected.is_connected(_on_action_selected):
+		action_buttons.action_selected.disconnect(_on_action_selected)
+	if player_party_grid.party_selected.is_connected(_on_party_grid_party_selected):
+		player_party_grid.party_selected.disconnect(_on_party_grid_party_selected)
+	if player_party_grid.pokemon_hovered.is_connected(_show_party_hover):
+		player_party_grid.pokemon_hovered.disconnect(_show_party_hover)
+	if player_party_grid.pokemon_unhovered.is_connected(_hide_party_hover):
+		player_party_grid.pokemon_unhovered.disconnect(_hide_party_hover)
+	for rail_grid: PartyGrid in [player_stage_party_grid, opponent_party_grid]:
+		if rail_grid.pokemon_hovered.is_connected(_show_public_party_hover):
+			rail_grid.pokemon_hovered.disconnect(_show_public_party_hover)
+		if rail_grid.pokemon_unhovered.is_connected(_hide_hud_pokemon_hover):
+			rail_grid.pokemon_unhovered.disconnect(_hide_hud_pokemon_hover)
+	if player_party_grid.party_changed.is_connected(player_stage_party_grid.set_party):
+		player_party_grid.party_changed.disconnect(player_stage_party_grid.set_party)
+	battle_drawer_layer.visible = true
+	battle_party_rail.visible = false
+	battle_log_toggle_button.visible = true
+	action_buttons.visible = true
+	calc_log_button.visible = true
+	battle_log_panel.visible = true
+	var dock_content := action_side_panel.get_node_or_null("MarginContainer/DockContent") as Control
+	if dock_content == null:
+		return false
+	for child: CanvasItem in dock_content.get_children():
+		child.visible = child.name == "ContextSection"
+	var context_section := dock_content.get_node("ContextSection") as Control
+	# The co-op dock has only this visible section. Let it fill the dock so the
+	# party slots center vertically instead of leaving unused space below them.
+	context_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	context_hint.visible = false
+	player_party_grid.columns = 3
+	player_party_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	player_party_grid.custom_minimum_size.x = 540.0
+	player_party_grid.set_empty_slots_visible(false)
+	player_party_grid.set_selection_enabled(false)
+	player_party_grid.visible = true
+	action_side_panel.custom_minimum_size.y = 82.0
+	action_side_panel.visible = true
+	current_action_panel.visible = true
+	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
+	coop_presenter.embedded_hosts = {"stage": battle_stage, "prompt": current_action_panel, "rail": battle_log_rail,
+		"dock_content": dock_content,
+		"capture_player": capture_ball_animation_player,
+		"player_sprite": player_sprite_box, "enemy_sprite": enemy_sprite_box,
+		"player_hud": player_hud_panel, "enemy_hud": enemy_hud_panel,
+		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,
+		"turn": battle_status_panel, "vs": vs_panel_container,
+		"own_party": player_party_grid, "allied_party": player_stage_party_grid,
+		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite}
+	coop_presenter.embedded_hosts["pokemon_hover"] = pokemon_hover_card
+	coop_presenter.embedded_hosts["move_hover"] = move_hover_card
+	add_child(coop_presenter)
+	return true
 
 
 func _on_locale_changed(_locale: String) -> void:
@@ -4401,9 +4517,15 @@ func _on_capture_succeeded() -> void:
 
 func _on_capture_target_absorbed() -> void:
 	SfxManager.play("capture_absorb")
+	if coop_mode and is_instance_valid(coop_presenter):
+		coop_presenter.call("set_capture_target_visible", false)
+		return
 	_fade_capture_target_to_alpha(0.0, 0.14, true)
 
 func _on_capture_target_released() -> void:
+	if coop_mode and is_instance_valid(coop_presenter):
+		coop_presenter.call("set_capture_target_visible", true)
+		return
 	_fade_capture_target_to_alpha(1.0, 0.18, false)
 
 func _reset_capture_target_visibility() -> void:

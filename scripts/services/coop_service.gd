@@ -60,7 +60,10 @@ func _process(delta: float) -> void:
 		_polling = true
 		await refresh()
 		_polling = false
-		_poll_after = 2.0 if available else 30.0
+		var awaiting_battle: bool = activity.get("status") == "starting" or (activity.get("status") == "active" and view.is_empty())
+		var awaiting_exit: bool = activity.get("status") == "active" and (bool(view.get("ended", false))
+			or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()))
+		_poll_after = 0.5 if awaiting_battle or awaiting_exit else 2.0 if available else 30.0
 
 
 func reset() -> void:
@@ -161,6 +164,8 @@ func apply_view(incoming: Dictionary) -> void:
 	if not view.is_empty() and int(incoming.get("revision", -1)) < int(view.get("revision", -1)):
 		return
 	view = incoming.duplicate(true)
+	if bool(view.get("ended", false)) or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()):
+		_poll_after = 0.0
 	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)
 		or (view.get("exitRequest") is Dictionary and not view.get("legalActions", []).has(pending_command.get("action")))):
 		pending_command = {}
@@ -218,9 +223,6 @@ func try_start(trainer_id: String) -> Dictionary:
 
 
 func try_wild_step(encounter_type: String) -> Dictionary:
-	print("COOP_DIAG wild_check ", JSON.stringify({"authenticated": AuthService.is_authenticated(),
-		"party": not party.is_empty(), "leader": int(party.get("leaderId", 0)) == int(AuthService.current_user.get("id", 0)),
-		"available": available, "activity": not activity.is_empty(), "encounterType": encounter_type}))
 	if OS.has_feature("web") or not AuthService.is_authenticated():
 		return {"handled": false}
 	if party.is_empty():
@@ -238,8 +240,6 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	if world == null:
 		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
 	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
-	print("COOP_DIAG wild_position ", JSON.stringify({"success": bool(position_result.get("success", false)),
-		"code": str(position_result.get("code", position_result.get("error", "")))}))
 	if not position_result.get("success", false):
 		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
 	if pending_start.is_empty():
@@ -247,9 +247,6 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	elif pending_start.get("kind") != "grass-step":
 		return {"handled": true, "success": false, "code": "coop_start_pending"}
 	var result := await _request("grass-step", {"reservationId": pending_start["reservationId"]})
-	print("COOP_DIAG wild_server ", JSON.stringify({"success": bool(result.get("success", false)),
-		"http": int(result.get("status", 0)), "code": "" if result.get("success", false) else str(result.get("code", "")),
-		"status": str(result.get("body", {}).get("status", ""))}))
 	if result.get("success", false):
 		pending_start = {}
 	elif int(result.get("status", 0)) in [400, 401, 403, 404, 409, 422]:
@@ -260,9 +257,7 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 	# step is complete in its own response; fetching state before and after
 	# every step held movement input for three network round trips.
 	if not result.get("success", false) or result.get("body", {}).get("status") != "miss":
-		var refreshed := await refresh()
-		print("COOP_DIAG wild_refresh ", JSON.stringify({"success": bool(refreshed.get("success", false)),
-			"http": int(refreshed.get("status", 0)), "activity": not activity.is_empty()}))
+		await refresh()
 	if not pending_start.is_empty() and activity.get("reservationId") == pending_start.get("reservationId"):
 		pending_start = {}
 	if result.get("success", false) and result.get("body", {}).get("status") == "solo":
@@ -349,6 +344,17 @@ func party_action(action: String, payload: Dictionary = {}) -> Dictionary:
 			if not invitation_id.is_empty() and not _sent_invitations.has(invitation_id):
 				_sent_invitations[invitation_id] = true
 				invitation_sent.emit(str(receipt.get("recipientUsername", payload.get("recipientName", "Trainer"))))
+		if action == "acknowledge":
+			# The accepted acknowledgement is enough to release this local battle.
+			# Normal polling will refresh invitations without blocking the world return.
+			_sequence += 1
+			_applied_sequence = _sequence
+			activity = {}
+			view = {}
+			pending_command = {}
+			_poll_after = 0.0
+			state_changed.emit()
+			return result
 	await refresh()
 	return result
 

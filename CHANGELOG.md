@@ -4,6 +4,85 @@
 
 - The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
 
+- Co-op double battles now group the left-side party rail into slots 1–3 for the first Trainer and 4–6 for the second, leaving empty slots in place when a roster is short.
+
+- Co-op double battles now show burn, poison, paralysis, freeze, and sleep effects on each affected Pokémon sprite, matching single battles.
+
+- Co-op doubles now have per-Pokémon animation anchors for all four positions. Ember and Will-O-Wisp use their existing move effects on a single target; other moves keep the safe standard animation while more effect types are checked.
+
+- Co-op party slots now sit centered in the bottom battle bar instead of being pushed against its top edge.
+
+- Co-op target selection now briefly confirms the chosen move and asks for a target; Cancel returns to the normal action prompt.
+
+- Co-op battles now ask “What will your Pokémon do?” with the active Pokémon's name, matching the singles prompt.
+
+- Settled co-op wild battles now return directly to the same map tile after a win or catch, avoiding a brief black reload screen.
+
+- Co-op double battles now switch from map music to wild or Trainer battle music, then restore map music on return.
+
+- Co-op battle logs now show how much HP each hit took, as a percentage.
+
+- Co-op Pokémon hover cards now show possible abilities and speed tiers. Stat-change badges sit below the HP panels instead of inside them.
+
+- Co-op double battles now use readable battle-log messages, show the normal Pokémon and move hover cards, and display stat-stage badges under each Pokémon's HP bar.
+
+- Both Trainers now see a co-op Poké Ball throw against the correct wild Pokémon after their shared choices are in.
+
+- Co-op Poké Ball animations now wait until the other Trainer has chosen an action, matching the shared turn's presentation.
+
+- Co-op Poké Ball and partner-decision dialogs now have clearer titles, descriptions and styled choices; the bag's back action sits below the available balls.
+
+- Co-op capture attempts now play the Poké Ball throw and shake animation on the assigned wild Pokémon. Capture feedback appears in the battle prompt instead of under the party slots.
+
+- Finished co-op battles now return to the world automatically after victory, defeat, or forfeit. A retry button appears only if returning fails.
+
+- Co-op double battles now update each target's HP after its own move and hit animation, instead of changing all HP bars at the end of the turn.
+
+- Co-op target hover now also works around a Pokémon's feet and legs, without changing the initial target under a stationary cursor.
+
+- Single-target moves in co-op battles now start on the left opposing Pokémon, even when a target appears under a stationary cursor.
+
+- In co-op battles, choosing a target now locks the move buttons until you pick a Pokémon or press Cancel. Cancel returns to move selection without using a turn.
+
+- Returning from a co-op wild battle after both Trainers agree to Run is faster. The game checks the exit more often and avoids reloading the map when the settled Trainer is already on the correct tile.
+
+- Co-op move targeting now highlights the selected Pokémon sprite; hover or arrow keys move the glow without covering the field with target boxes.
+
+- Both wild Pokémon in a co-op battle now glow in the side rail while they are active.
+
+- Co-op Pokémon and their platforms now sit lower on the field, nearer the battle text and moves. The combined party icons stay fully above the battle text.
+
+- In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
+
+- Co-op confirmation and return choices now open over the battlefield, leaving the bottom switch bar neatly reserved for your Pokémon.
+
+- Co-op Pokémon stand closer together in double battles. Both Trainers stand together behind the left Pokémon in Trainer battles and stay hidden in wild battles.
+
+- Co-op wild battle logs now announce both wild Pokémon and each Trainer's sent-out Pokémon in plain battle language.
+
+- Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.
+
+- Single battles again show full-width Pokémon HP bars after the double-battle HUD changes.
+
+- After both Trainers agree to flee a co-op wild battle, they return to the world automatically. A retry button appears if returning fails.
+
+- Co-op PvE battles show the turn without a countdown timer.
+
+- Double battles have an uncropped compact battlefield, smaller Trainer sprites, a wider team title, and a three-Pokémon personal switch row. Wait now sits beside Bag and Run. Single-battle layouts are unchanged.
+
+- Co-op battles now keep the normal battle log and Damage Calc button, with the combined party shown in the field rails.
+
+- Co-op double battles use a simple per-Pokémon attack and hit animation while move-specific effects are adapted later. Choose single-target moves by clicking a Pokémon or using the arrow keys and Space; Escape cancels targeting.
+
+- Co-op battles show both Trainers behind their Pokémon, a turn counter and VS banner on the field, combined party icons at the sides, and only your own Pokémon in the switch bar. The battle log uses Trainer names instead of generic co-op labels.
+
+- Co-op battle prompts use the normal battle field, with extra choices beside the battle log.
+
+- Co-op double battles show the two Pokémon HP panels side by side in a compact HUD; single battles keep their original HUD layout.
+
+- Co-op double battles now use the familiar battle field: two Pokémon sprites on each side, stacked native HP panels, standard move buttons and battle log, with Bag and Run in their usual place.
+
+- Co-op double battles now open in the regular battle window, with both Trainers' Pokémon, opponents, battle events and shared turn actions placed in its battle stage and panels.
 
 - Guild training challenges now recognize the Captain at her new lobby position.
 

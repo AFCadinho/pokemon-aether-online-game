@@ -70,6 +70,7 @@ func load_player_profile() -> Dictionary:
 			"hasParty": bool(party.get("hasParty", false)),
 			"party": _array_from_value(party.get("party", [])),
 		},
+		"inventory": _dictionary_from_value(body.get("inventory", {})),
 		"preferences": _dictionary_from_value(preferences.get("preferences", {})),
 		"wallet": _dictionary_from_value(wallet.get("wallet", {})),
 		"stats": {

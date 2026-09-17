@@ -1,5 +1,16 @@
 extends SceneTree
 
+class ReturnWorld:
+	extends Node
+	var coop_finishing := false
+	var finish_calls := 0
+	var complete_on_finish := true
+
+	func finish_coop_activity() -> void:
+		finish_calls += 1
+		if complete_on_finish:
+			coop_finishing = true
+
 var failed := false
 
 func _init() -> void:
@@ -31,6 +42,26 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	await process_frame
+	var saved_party: Dictionary = service.party.duplicate(true)
+	var saved_activity: Dictionary = service.activity.duplicate(true)
+	service.party = {"leaderId": 1, "memberIds": [1, 2], "memberUsernames": {"1": "Adinho", "2": "Admin"}}
+	service.activity.activityId = "wild_grass:kanto_route_1"
+	panel._log.clear()
+	for event: Dictionary in [
+		{"kind": "switch", "actor": "p2", "details": "Furret, L6, M"},
+		{"kind": "switch", "actor": "p4", "details": "Furret, L6, F"},
+		{"kind": "switch", "actor": "p3", "details": "Pikachu, L12, F"},
+		{"kind": "switch", "actor": "p1", "details": "Pidgey, L12, M"},
+	]:
+		panel._append_event(event)
+	var opening_log: String = panel._log.get_parsed_text()
+	_expect(opening_log.count("A wild Furret has appeared!") == 2
+		and opening_log.contains("Go! Pikachu!")
+		and opening_log.contains("Adinho sent out Pidgey!")
+		and not opening_log.contains("L12") and not opening_log.contains("Wild Pokémon 1:"),
+		"wild doubles narrate both appearances and both Trainers without position summaries")
+	service.party = saved_party
+	service.activity = saved_activity
 	_expect(panel.cards.size() == 4 and panel.displayed_cursor == 20, "four slots mount and reconnect establishes event cursor")
 	_expect(panel.cards.p3.name.text.begins_with("YOU") and panel.cards.p1.name.text.begins_with("PARTNER"), "owner p3 is labelled independently from leader")
 	_expect(panel.cards.p3.info.text.contains("30 / 40") and panel.cards.p1.info.text.contains("80%"), "only own HP is exact")
@@ -160,19 +191,48 @@ func _run() -> void:
 	var activity: Dictionary = service.activity.duplicate(true)
 	activity.status = "finished"
 	activity.outcome = "win"
+	var return_world := ReturnWorld.new()
+	root.add_child(return_world)
+	return_world.add_to_group("world")
+	panel._playing = true
 	service.apply_state({"activity": activity, "view": snapshot})
-	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 1, "finished state replaces commands with shared victory and return control")
+	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 0,
+		"victory starts returning without a separate confirmation button")
+	await process_frame
+	_expect(return_world.finish_calls == 0, "automatic return waits for final event playback")
+	panel._playing = false
+	await process_frame
+	_expect(return_world.finish_calls == 1, "victory invokes world return automatically")
 	service.activity.outcome = "draw"
 	service.activity.escaped = true
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 1, "recovered escape receipt shows escape and a single return control")
+	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 0,
+		"confirmed wild escape has no second confirmation")
+	await process_frame
+	_expect(return_world.finish_calls == 1 and panel._actions.get_child_count() == 0,
+		"finished snapshots do not invoke world return twice")
+	return_world.coop_finishing = false
+	return_world.complete_on_finish = false
+	panel._finished_return_started = false
+	panel._action_signature = ""
+	panel._update_actions()
+	await process_frame
+	_expect(return_world.finish_calls == 2 and panel._actions.get_child_count() == 1,
+		"a failed automatic return offers a manual retry")
+	return_world.complete_on_finish = true
+	panel._finished_return_started = false
+	panel._finished_return_retry_available = false
 	service.activity.outcome = "loss"
 	service.activity.escaped = false
 	service.activity.forfeited = true
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 1, "recovered forfeit receipt identifies shared surrender rather than a natural knockout")
+	_expect(panel._prompt.text.contains("forfeited") and panel._actions.get_child_count() == 0,
+		"forfeit receipt identifies shared surrender and returns without confirmation")
+	await process_frame
+	_expect(return_world.finish_calls == 3, "forfeit also invokes automatic world return")
+	return_world.queue_free()
 	var old_generation: int = effects.generation
 	effects.play_move({"actor": "p3", "target": "p2", "move": "Tackle"}, [], panel.cards)
 	await process_frame

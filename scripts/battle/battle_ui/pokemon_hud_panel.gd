@@ -6,6 +6,8 @@ extends PanelContainer
 ]
 
 var experience_bar_enabled := false
+const DOUBLE_HUD_WIDTH := 520.0
+const SINGLE_HUD_WIDTH := 312.0
 
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const STATUS_ICON_WIDTH := 44
@@ -32,6 +34,7 @@ func _ready() -> void:
 	for row_index in range(active_info_rows.size()):
 		_clear_active_info_row_data(row_index)
 		_set_active_info_row_visible(row_index, false)
+	set_double_layout(false)
 
 func set_pokemon_data(
 	species: String,
@@ -45,6 +48,25 @@ func set_pokemon_data(
 	display_name: String = ""
 ) -> void:
 	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data, display_name)
+
+
+func set_double_position(row_index: int, data: Dictionary) -> void:
+	if data.is_empty():
+		_clear_active_info_row_data(row_index)
+		_set_active_info_row_visible(row_index, false)
+		return
+	_set_active_info_row_data(row_index, str(data.get("species", "")), int(data.get("level", 0)),
+		int(data.get("hp", 0)), maxi(1, int(data.get("maxHp", 100))), str(data.get("status", "")),
+		str(data.get("gender", "")), bool(data.get("shiny", false)), {}, str(data.get("name", "")))
+
+
+func set_double_layout(enabled: bool) -> void:
+	var rows := $MarginContainer/VBoxContainer as GridContainer
+	rows.columns = 2 if enabled else 1
+	custom_minimum_size.x = DOUBLE_HUD_WIDTH if enabled else SINGLE_HUD_WIDTH
+	for row: Control in active_info_rows:
+		row.custom_minimum_size.x = 230.0 if enabled else 0.0
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 func set_experience_bar_enabled(enabled: bool) -> void:
 	experience_bar_enabled = enabled
