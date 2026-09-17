@@ -163,7 +163,8 @@ func _run() -> void:
 		and router_source.contains("animation_node.scale = Vector2(cover_scale, cover_scale)")
 		and presenter_source.contains("var animate := displayed_cursor >= 0")
 		and not presenter_source.contains("fresh.size() <= 20")
-		and presenter_source.contains("func _final_event_playback_pending()"),
+		and presenter_source.contains("func _final_event_playback_pending()")
+		and presenter_source.contains('not bool(_latest.get("ended", false))'),
 		"doubles cover the battlefield with catalog effects and never skip live event batches")
 	_expect(presenter_source.contains("%MegaEvolutionIcon")
 		and presenter_source.contains("%ZMove")
@@ -210,6 +211,7 @@ func _run() -> void:
 	var activity: Dictionary = service.activity.duplicate(true)
 	activity.status = "finished"
 	activity.outcome = "win"
+	snapshot.ended = true
 	var return_world := ReturnWorld.new()
 	root.add_child(return_world)
 	return_world.add_to_group("world")

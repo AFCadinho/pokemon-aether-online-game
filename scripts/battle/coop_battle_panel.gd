@@ -1018,6 +1018,11 @@ func _auto_return_after_finish() -> void:
 func _final_event_playback_pending() -> bool:
 	if _capture_animation_pending or _playing:
 		return true
+	# Settlement can reach this client before its poll receives the terminal
+	# projection.  Do not leave the scene with an older cursor: the other
+	# Trainer's finishing move must play on both clients.
+	if CoopService.activity.get("status") == "finished" and not bool(_latest.get("ended", false)):
+		return true
 	return displayed_cursor < int(_latest.get("eventCursor", 0))
 
 
