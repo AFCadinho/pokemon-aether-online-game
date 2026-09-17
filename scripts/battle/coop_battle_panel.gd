@@ -6,6 +6,7 @@ const ACCENT := Color("67e8bf")
 const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
 const COOP_EFFECTS := preload("res://scripts/battle/coop_battle_effects.gd")
 const NATIVE_MOVE_ROUTER := preload("res://scripts/battle/coop_native_animation_router.gd")
+const STATUS_CONDITION_OVERLAY := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 const NATIVE_ANIMATED_MOVES := {"ember": true, "will-o-wisp": true}
 const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
 uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
@@ -57,6 +58,7 @@ var _native_pokemon_hover: PokemonHoverCard
 var _native_move_hover: MoveHoverCard
 var _hovered_controller := ""
 var _stat_overlays: Dictionary = {}
+var _status_overlays: Dictionary = {}
 var _native_utility: Control
 var _action_scroll: ScrollContainer
 var _decision_overlay: ColorRect
@@ -145,6 +147,13 @@ func _ready() -> void:
 		for side: String in ["player", "enemy"]:
 			var sprite_box: Control = embedded_hosts[side + "_sprite"]
 			sprite_box.set_double_sprite_horizontal_positions(158.0, 92.0)
+		for controller: String in SLOTS:
+			var sprite := _native_sprite(controller)
+			var overlay := STATUS_CONDITION_OVERLAY.new() as StatusConditionOverlay
+			overlay.name = "CoopStatusOverlay" + controller
+			overlay.z_index = 80
+			sprite.get_parent().add_child(overlay)
+			_status_overlays[controller] = overlay
 		_position_native_targets.call_deferred()
 		_log = RichTextLabel.new()
 		_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -646,7 +655,16 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 				"maxHp": max_hp, "status": str(position.get("status", ""))})
 		sprite_box.set_double_pokemon_species(species[0], species[1],
 			"back" if side == "player" else "front", shiny[0], shiny[1])
+		for controller: String in controllers:
+			var position: Dictionary = active.get(controller, {})
+			_set_native_status(controller, str(position.get("status", "")) if not position.get("fainted", false) else "")
 	_position_coop_stat_overlays.call_deferred()
+
+
+func _set_native_status(controller: String, status: String) -> void:
+	var overlay: StatusConditionOverlay = _status_overlays.get(controller) as StatusConditionOverlay
+	if overlay != null:
+		overlay.set_condition(status if SettingsManager.battle_animations else "")
 
 
 func _position_coop_stat_overlays() -> void:
@@ -1172,6 +1190,10 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 				if SettingsManager.battle_animations and event.get("kind") == "-damage":
 					await _play_native_hit(str(event.get("actor", "")))
 				_apply_native_event_hp(event)
+			"-status":
+				_set_native_status(str(event.get("actor", "")), str(event.get("status", "")))
+			"-curestatus", "faint", "switch", "drag", "replace":
+				_set_native_status(str(event.get("actor", "")), "")
 		return
 	var actor := str(event.get("actor", ""))
 	if not cards.has(actor): return
