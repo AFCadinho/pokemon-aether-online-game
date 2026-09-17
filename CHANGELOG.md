@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op doubles now align the opposing platform and Pokémon slightly higher with the move controls.
+
 - Co-op doubles now place Mega Evolution and Z-Move controls higher beside the compact move grid.
 
 - Co-op doubles now receive the public active Pokémon level directly from the battle view, including Lv. 100 forms, and use slimmer two-Pokémon HP HUDs.
