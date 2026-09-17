@@ -66,6 +66,11 @@ var _decision_title: Label
 var _decision_subtitle: Label
 var _wait_button: Button
 var _cancel_target_button: Button
+var _native_mechanics: Control
+var _mega_evolution_button: TextureButton
+var _z_move_button: TextureButton
+var _mega_evolution_selected := false
+var _z_move_selected := false
 var _native_turn: BattleStatusPanel
 var _native_vs: BattleVsPanelContainer
 var _native_party: PartyGrid
@@ -171,6 +176,17 @@ func _ready() -> void:
 			party_grid.pokemon_hovered.connect(_show_coop_party_hover)
 			party_grid.pokemon_unhovered.connect(_hide_coop_pokemon_hover)
 		_native_utility.action_selected.connect(_on_native_utility_action)
+		_native_mechanics = stage.get_node("%MechanicsPanel") as Control
+		_mega_evolution_button = stage.get_node("%MegaEvolutionIcon") as TextureButton
+		_z_move_button = stage.get_node("%ZMove") as TextureButton
+		if _mega_evolution_button != null:
+			_disconnect_mechanic_button(_mega_evolution_button)
+			_mega_evolution_button.pressed.connect(_toggle_mega_evolution)
+			_mega_evolution_button.tooltip_text = "Mega Evolve, then choose a move."
+		if _z_move_button != null:
+			_disconnect_mechanic_button(_z_move_button)
+			_z_move_button.pressed.connect(_toggle_z_move)
+			_z_move_button.tooltip_text = "Use a Z-Move, then choose a move."
 		var bag: Button = stage.get_node("%BagButton")
 		_wait_button = bag.duplicate(0) as Button
 		_wait_button.name = "CoopWaitButton"
@@ -715,13 +731,18 @@ func _target_prompt() -> String:
 		if int(move.get("slot", 0)) == selected_move:
 			var move_name := str(move.get("name", "")).strip_edges()
 			if not species.is_empty() and not move_name.is_empty():
+				if _mega_evolution_selected:
+					return "%s will Mega Evolve and use %s. Choose a target." % [species, move_name]
+				if _z_move_selected:
+					return "%s will use a Z-Move with %s. Choose a target." % [species, move_name]
 				return "%s will use %s. Choose a target." % [species, move_name]
 	return "Choose a target."
 
 
 func _update_actions() -> void:
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
-		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open])
+		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open,
+		_mega_evolution_selected, _z_move_selected])
 	if signature == _action_signature:
 		return
 	_action_signature = signature
@@ -733,6 +754,7 @@ func _update_actions() -> void:
 		_native_utility.set_action_visible("run", false)
 		_wait_button.visible = false
 		_cancel_target_button.visible = false
+		_set_native_mechanic_buttons(false, false)
 		_native_party.set_selection_enabled(false)
 	if not _native_mode:
 		var last_capture: Dictionary = CoopService.view.get("lastCapture", {}) if CoopService.view.get("lastCapture") is Dictionary else CoopService.activity.get("lastCapture", {}) if CoopService.activity.get("lastCapture") is Dictionary else {}
@@ -800,10 +822,21 @@ func _update_actions() -> void:
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else BattleEventTextFormatter.new().format_action_prompt(_own_active_species())
 	if _native_mode:
+		var can_mega := _has_mechanic_action("mega")
+		var can_z_move := _has_mechanic_action("zMove")
+		if not can_mega:
+			_mega_evolution_selected = false
+		if not can_z_move:
+			_z_move_selected = false
+		_set_native_mechanic_buttons(can_mega, can_z_move)
 		var display_moves: Array = []
 		for move: Dictionary in CoopService.view.get("moves", []):
 			var prepared := move.duplicate()
 			prepared["disabled"] = bool(move.get("disabled", false)) or _move_actions(int(move.get("slot", 0))).is_empty()
+			if _mega_evolution_selected:
+				prepared["name"] = "MEGA · " + str(prepared.get("name", ""))
+			elif _z_move_selected:
+				prepared["name"] = "Z · " + str(prepared.get("name", ""))
 			display_moves.append(prepared)
 		_native_moves.set_moves(display_moves)
 		_native_moves.set_input_disabled(selected_move > 0)
@@ -984,7 +1017,66 @@ func _final_event_playback_pending() -> bool:
 
 
 func _move_actions(slot: int) -> Array:
-	return CoopService.view.get("legalActions", []).filter(func(action: Dictionary) -> bool: return action.get("type") == "move" and action.get("slot") == slot)
+	return CoopService.view.get("legalActions", []).filter(func(action: Dictionary) -> bool:
+		if action.get("type") != "move" or action.get("slot") != slot:
+			return false
+		if _mega_evolution_selected:
+			return action.get("mega", false)
+		if _z_move_selected:
+			return action.get("zMove", false)
+		return not action.get("mega", false) and not action.get("zMove", false)
+	)
+
+
+func _has_mechanic_action(mechanic: String) -> bool:
+	for action: Dictionary in CoopService.view.get("legalActions", []):
+		if action.get("type") == "move" and action.get(mechanic, false):
+			return true
+	return false
+
+
+func _disconnect_mechanic_button(button: TextureButton) -> void:
+	# The single-battle controller owns these scene nodes normally. Co-op has no
+	# BattleState request, so replace that handler with the server-view action flow.
+	for connection: Dictionary in button.get_signal_connection_list("pressed"):
+		var callable: Callable = connection.get("callable") as Callable
+		if callable.is_valid():
+			button.pressed.disconnect(callable)
+
+
+func _set_native_mechanic_buttons(can_mega: bool, can_z_move: bool) -> void:
+	if _native_mechanics == null:
+		return
+	var available := (can_mega or can_z_move) and selected_move <= 0 and not _bag_open and not _playing
+	_native_mechanics.visible = available
+	if _mega_evolution_button != null:
+		_mega_evolution_button.visible = can_mega
+		_mega_evolution_button.disabled = not available or not can_mega
+		_mega_evolution_button.modulate = Color(1.0, 0.82, 0.2, 1.0) if _mega_evolution_selected else Color.WHITE
+	if _z_move_button != null:
+		_z_move_button.visible = can_z_move
+		_z_move_button.disabled = not available or not can_z_move
+		_z_move_button.modulate = Color(1.0, 0.72, 0.24, 1.0) if _z_move_selected else Color.WHITE
+
+
+func _toggle_mega_evolution() -> void:
+	if not _native_mode or _playing or selected_move > 0 or _bag_open or not _has_mechanic_action("mega"):
+		return
+	_mega_evolution_selected = not _mega_evolution_selected
+	if _mega_evolution_selected:
+		_z_move_selected = false
+	_action_signature = ""
+	_update_actions()
+
+
+func _toggle_z_move() -> void:
+	if not _native_mode or _playing or selected_move > 0 or _bag_open or not _has_mechanic_action("zMove"):
+		return
+	_z_move_selected = not _z_move_selected
+	if _z_move_selected:
+		_mega_evolution_selected = false
+	_action_signature = ""
+	_update_actions()
 
 
 func _sync_action_scroll() -> void:
