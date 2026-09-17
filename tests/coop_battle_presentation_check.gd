@@ -170,6 +170,15 @@ func _run() -> void:
 	_expect(presenter_source.contains("is_instance_valid(_loading_overlay) and _loading_overlay.visible")
 		and presenter_source.contains("if is_instance_valid(_native_turn):"),
 		"native co-op teardown does not process stale loading or turn controls")
+	service.activity.partnerConnected = false
+	service.partner_connection_changed.emit(false)
+	_expect(panel._log.get_parsed_text().contains("AI is taking over their actions")
+		and presenter_source.contains("get_tree().call_group(\"ui_overlay\", \"add_system_message\", message)"),
+		"a partner disconnect is announced once in the co-op battle log and system feed")
+	service.activity.partnerConnected = true
+	service.partner_connection_changed.emit(true)
+	_expect(panel._log.get_parsed_text().contains("reconnected and can choose actions again"),
+		"a partner reconnect is announced in the co-op battle log")
 	_expect(world_source.contains('if CoopService.activity.get("status") == "finished":')
 		and world_source.contains("active_battle_kind != \"coop\" or battle_instance == null")
 		and world_source.contains("final-event cursor and returns only after"),

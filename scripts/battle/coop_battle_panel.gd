@@ -337,6 +337,7 @@ func _ready() -> void:
 		for controller: String in SLOTS:
 			_effects.bind_pair(controller, controller, cards).prewarm_common_battle_sounds()
 	CoopService.state_changed.connect(_sync)
+	CoopService.partner_connection_changed.connect(_on_partner_connection_changed)
 	CoopService.request_failed.connect(_show_error)
 	if _native_mode:
 		_setup_loading_overlay()
@@ -1254,6 +1255,19 @@ func _append_event(event: Dictionary) -> void:
 			_log.add_text(text + "\n")
 			if _log.get_line_count() > 220:
 				_log.remove_paragraph(0)
+
+
+func _on_partner_connection_changed(connected: bool) -> void:
+	if not is_inside_tree() or CoopService.activity.get("status") != "active":
+		return
+	var message := "Your partner reconnected and can choose actions again." if connected else "Your partner disconnected — AI is taking over their actions."
+	if _native_mode and _native_log != null:
+		_native_log.add_message(message, "warning")
+	elif _log != null:
+		_log.add_text(message + "\n")
+		if _log.get_line_count() > 220:
+			_log.remove_paragraph(0)
+	get_tree().call_group("ui_overlay", "add_system_message", message)
 
 
 func _battle_log_kind(event_kind: String) -> String:
