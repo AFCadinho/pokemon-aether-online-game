@@ -101,7 +101,11 @@ client supplies them. There is no implicit base-form substitution.
   faint_loop. `null` means deliberately unavailable. Exact action name, explicit
   ordered source frames, source timeline FPS, loop, playback multiplier, review
   status. Frames may be fractional to sample a source timeline at 24 FPS. No
-  action is selected solely because its name matches a heuristic.
+  action is selected solely because its name matches a heuristic. Optional
+  `neutral_bones` names explicitly restore selected pose bones to their rest
+  transforms after each source frame is evaluated. Use only for a documented
+  source-layer problem, such as an idle with permanently closed eyelids; it
+  does not synthesize blinking or repair facial/material animation.
 - `variants`: normal/shiny share geometry, rig, cameras, actions and timing;
   explicit material replacements are supported. Missing shiny sources are
   `available:false`. No automatic recolouring. Additional variant names are
@@ -123,14 +127,18 @@ is intentional because it reproduces the accepted POC. A faster in-game idle
 Inspection inventories objects/material assignments, packed/external images,
 actions/ranges/slots, object NLA, source FPS, evaluated bounds, embedded texts,
 drivers on objects/materials/node trees/shape keys and variant-name candidates.
+Disconnected active material outputs and empty/missing image nodes are flagged.
 The shader dependency check handles inactive emission branches, but is not a
 general-purpose shader correctness proof.
 
 Post-render checks cover exact dimensions/mode/frame count, empty alpha, clipping
 at image edges, safe margins, full evaluated mesh bounds outside the camera at
 every selected frame, tiny bounds, sudden bounds jumps, duplicate loop endpoints,
-static actions, unique pixel hashes, action duration, playback duration and union
-bounds. Source/action/range/version errors stop rendering. QC errors prevent
+static actions, unique pixel hashes, action duration, playback duration, union
+bounds and alpha-weighted luminance. A nearly black/white entire render and an
+unoverridden, persistent eyelid rotation in idle produce advisory warnings;
+these signals cannot decide whether a dark-colored species or facial expression
+is artistically correct. Source/action/range/version errors stop rendering. QC errors prevent
 approval; warnings require explicit acknowledgement. Checks do not trim or drop
 frames. Duplicate information is diagnostic only.
 

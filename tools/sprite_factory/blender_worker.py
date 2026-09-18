@@ -75,6 +75,9 @@ def inspect():
         return False
     for mat in bpy.data.materials:
         if mat.node_tree:
+            outputs = [n for n in mat.node_tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output]
+            if not outputs or not outputs[0].inputs['Surface'].is_linked:
+                warnings.append('disconnected_material_output:' + mat.name)
             for node in mat.node_tree.nodes:
                 if node.type == 'TEX_IMAGE' and node.image is None:
                     connected = reaches_output(node)
@@ -85,6 +88,7 @@ def inspect():
         warnings.append('linked_libraries')
     report = dict(blender=bpy.app.version_string, blender_build=bpy.app.build_hash.decode(), fps=scene.render.fps / scene.render.fps_base,
                   objects=objects, armatures=[o.name for o in scene.objects if o.type == 'ARMATURE'],
+                  armature_bones={o.name: [b.name for b in o.data.bones] for o in scene.objects if o.type == 'ARMATURE'},
                   actions=[dict(name=a.name, range=list(a.frame_range),
                                 slots=[s.identifier for s in a.slots]) for a in bpy.data.actions],
                   materials=[m.name for m in bpy.data.materials], images=images,
@@ -146,6 +150,7 @@ def render(job):
                 if slot.material and slot.material.name == old:
                     slot.material = bpy.data.materials[new]
     geometry = {}
+    facial_warnings = []
     for view, cam in cfg['cameras'].items():
         camera.location, data.ortho_scale = cam['position'], cam['ortho_scale']
         aim(camera, cam['target'])
@@ -161,11 +166,22 @@ def render(job):
             elif len(action.slots) == 1:
                 rig.animation_data.action_slot = action.slots[0]
             frames = spec['frames']
+            neutral_bones = [rig.pose.bones[name] for name in spec.get('neutral_bones', [])]
             destination = output / 'masters' / view / category
             destination.mkdir(parents=True, exist_ok=True)
             records = []
+            eyelid_angles = {bone.name: [] for bone in rig.pose.bones if 'eyelid' in bone.name.lower() and 'sub' not in bone.name.lower()} if category == 'idle' else {}
             for index, frame in enumerate(frames):
                 scene.frame_set(int(frame), subframe=frame - int(frame))
+                for name, values in eyelid_angles.items():
+                    values.append(rig.pose.bones[name].matrix_basis.to_quaternion().angle)
+                # Some source actions include a persistent facial pose (for example closed
+                # eyelids in battle idle). Explicit manifest overrides restore only the
+                # named bones to their rest transforms, after evaluating every frame.
+                for bone in neutral_bones:
+                    bone.matrix_basis.identity()
+                if neutral_bones:
+                    bpy.context.view_layer.update()
                 # Full evaluated vertex bounds at EVERY rendered frame, including alpha-invisible meshes.
                 graph = bpy.context.evaluated_depsgraph_get()
                 coords = []
@@ -182,8 +198,12 @@ def render(job):
                 scene.render.filepath = str(destination / f'{index:04}.png')
                 bpy.ops.render.render(write_still=True)
             geometry[view][category] = records
+            for name, angles in eyelid_angles.items():
+                if name not in spec.get('neutral_bones', []) and min(angles) > 0.35 and max(angles) - min(angles) < 0.05:
+                    facial_warnings.append(view + '/' + category + ':persistent_eyelid_pose:' + name)
     return dict(blender=bpy.app.version_string, blender_build=bpy.app.build_hash.decode(), geometry=geometry,
-                engine=scene.render.engine, fps=cfg['render']['fps'], resolution=[512, 512])
+                engine=scene.render.engine, fps=cfg['render']['fps'], resolution=[512, 512],
+                facial_warnings=facial_warnings)
 
 
 if __name__ == '__main__':

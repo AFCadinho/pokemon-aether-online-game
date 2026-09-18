@@ -48,6 +48,21 @@ class FactoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'timeline'):
             f.validate(self.cfg, 'normal')
 
+    def test_explicit_neutral_bones_require_existing_unique_bone_names(self):
+        self.cfg['actions']['idle']['neutral_bones'] = ['left_upper_eyelid']
+        f.validate(self.cfg, 'normal')
+        report = dict(source_sha256=self.cfg['source']['sha256'], blender=self.cfg['source']['blender'],
+                      armatures=[self.cfg['rig']], armature_bones={self.cfg['rig']: ['left_upper_eyelid']},
+                      warnings=[], images=[], actions=[dict(name=a['action'], range=[0, 200], slots=['slot'])
+                                                      for a in self.cfg['actions'].values() if a])
+        f.check_source(self.cfg, report)
+        report['armature_bones'][self.cfg['rig']] = []
+        with self.assertRaisesRegex(ValueError, 'Unknown neutral_bones'):
+            f.check_source(self.cfg, report)
+        self.cfg['actions']['idle']['neutral_bones'] *= 2
+        with self.assertRaisesRegex(ValueError, 'Invalid neutral_bones'):
+            f.validate(self.cfg, 'normal')
+
     def test_recovery_and_ambiguous_timing_rejected(self):
         self.cfg['actions']['faint_start']['action'] = 'down01_end'
         with self.assertRaisesRegex(ValueError, 'Recovery'):
@@ -80,7 +95,7 @@ class FactoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'hash mismatch'):
             f.check_source(self.cfg, report)
 
-    def fixture(self, root):
+    def fixture(self, root, facial_warnings=()):
         cfg = copy.deepcopy(self.cfg)
         cfg['actions'] = {'idle': dict(action='idle', frames=[0, 1], source_fps=24, loop=True, speed=1, review='needs_review')}
         geometry = {}
@@ -95,16 +110,24 @@ class FactoryTests(unittest.TestCase):
             frame.save(folder / '0000.png'); frame.save(folder / '0001.png')
             geometry[view] = {'idle': [dict(outside=False), dict(outside=False)]}
         f.write(root / 'provenance.json', {'build_id': 'test-build'})
-        qc = f.quality(root, cfg, {'geometry': geometry})
+        qc = f.quality(root, cfg, {'geometry': geometry, 'facial_warnings': list(facial_warnings)})
         f.write(root / 'qc.json', qc)
         f.package(root, cfg, 'normal')
         return qc
+
+    def test_facial_pose_warning_is_advisory(self):
+        with tempfile.TemporaryDirectory() as temp:
+            warning = 'front/idle:persistent_eyelid_pose:left_upper_eyelid'
+            qc = self.fixture(Path(temp), facial_warnings=[warning])
+            self.assertEqual(qc['errors'], [])
+            self.assertIn(warning, qc['warnings'])
 
     def test_lossless_gate_and_tamper_detection(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             qc = self.fixture(root)
             self.assertTrue(any('duplicate_loop_end' in w for w in qc['warnings']))
+            self.assertIn('alpha_weighted_luminance', qc['actions']['front/idle'])
             f.verify(root)
             args = argparse.Namespace(build=[str(root)], output=str(root/'catalog.json'), preview=False)
             with self.assertRaises(OSError):

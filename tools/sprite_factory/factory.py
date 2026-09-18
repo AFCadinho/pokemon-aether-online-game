@@ -13,7 +13,7 @@ import sys
 import struct
 import zlib
 from pathlib import Path
-from PIL import Image, ImageChops, ImageDraw, __version__ as PIL_VERSION
+from PIL import Image, ImageChops, ImageDraw, ImageStat, __version__ as PIL_VERSION
 
 HERE = Path(__file__).resolve().parent
 VERSION = 1
@@ -111,6 +111,9 @@ def validate(cfg, variant):
             require(not any(x in action['action'].lower() for x in ('down01_end', 'recovery', 'sleepend')),
                     'Recovery action cannot be selected as faint')
         require(action['review'] in ('needs_review', 'approved', 'rejected'), 'Invalid action review state')
+        neutral_bones = action.get('neutral_bones', [])
+        require(isinstance(neutral_bones, list) and all(isinstance(x, str) and x for x in neutral_bones)
+                and len(set(neutral_bones)) == len(neutral_bones), 'Invalid neutral_bones')
 
 
 def worker(blender, source, job, path):
@@ -149,6 +152,9 @@ def check_source(cfg, report):
         info = actions[action['action']]
         require(min(action['frames']) >= info['range'][0] and max(action['frames']) <= info['range'][1], 'Action frame range outside source')
         require(len(info['slots']) == 1 or action.get('slot') in info['slots'], 'Ambiguous action slot')
+        if action.get('neutral_bones'):
+            bones = report.get('armature_bones', {}).get(cfg['rig'], [])
+            require(set(action['neutral_bones']) <= set(bones), 'Unknown neutral_bones')
     # External texture dependencies must be pinned too; packed inputs are covered by the .blend hash.
     for image in report['images']:
         if not image['embedded'] and image['source'] == 'FILE':
@@ -234,6 +240,7 @@ def finalize(args):
 
 def quality(root, cfg, render):
     result = dict(errors=[], warnings=[], actions={}, files={})
+    result['warnings'].extend(render.get('facial_warnings', []))
     fps = cfg['render']['fps']
     previews = root / 'previews'
     previews.mkdir()
@@ -246,7 +253,7 @@ def quality(root, cfg, render):
             spec = cfg['actions'][action]
             paths = sorted((root / 'masters' / view / action).glob('*.png'))
             key = view + '/' + action
-            hashes, boxes, frames, margins = [], [], [], []
+            hashes, boxes, frames, margins, luminance = [], [], [], [], []
             require(len(paths) == len(spec['frames']), 'Incomplete master action: ' + key)
             for path in paths:
                 with Image.open(path) as im:
@@ -255,6 +262,12 @@ def quality(root, cfg, render):
                 result['files'][str(path.relative_to(root))] = digest(path.read_bytes())
                 frames.append(frame)
                 hashes.append(digest(frame.tobytes()))
+                # Alpha-weighted luminance is diagnostic, never an artistic approval.
+                # Transparent background pixels must not bias a small species dark.
+                rgb = frame.convert('RGB')
+                weight = frame.getchannel('A')
+                means = ImageStat.Stat(rgb, weight).mean
+                luminance.append(round((0.2126 * means[0] + 0.7152 * means[1] + 0.0722 * means[2]) / 255, 4))
                 box = frame.getchannel('A').getbbox()
                 boxes.append(box)
                 if box is None:
@@ -280,6 +293,10 @@ def quality(root, cfg, render):
                 result['warnings'].append(key + ':duplicate_loop_end')
             if len(set(hashes)) == 1 and len(hashes) > 1:
                 result['warnings'].append(key + ':static_action')
+            if luminance and max(luminance) < 0.06:
+                result['warnings'].append(key + ':extremely_dark_render')
+            if luminance and min(luminance) > 0.94:
+                result['warnings'].append(key + ':extremely_bright_render')
             if union and (union[2]-union[0] < 8 or union[3]-union[1] < 8):
                 result['errors'].append(key + ':extreme_small_bounds')
             if union and action == 'idle':
@@ -291,7 +308,9 @@ def quality(root, cfg, render):
                 overview.paste(frames[0], (vi * 512, 32), frames[0])
             result['actions'][key] = dict(count=len(paths), unique_frames=len(set(hashes)), pixel_hashes=hashes,
                 bounds=boxes, union=union, min_margin=min(margins), duration=len(paths)/fps,
-                playback_duration=len(paths)/fps/spec['speed'], loop=spec['loop'])
+                playback_duration=len(paths)/fps/spec['speed'], loop=spec['loop'],
+                alpha_weighted_luminance=dict(min=min(luminance), max=max(luminance),
+                                              mean=round(sum(luminance) / len(luminance), 4)))
             for col, index in enumerate([0, len(frames)//3, 2*len(frames)//3, len(frames)-1]):
                 thumb = frames[index].resize((256, 256), Image.Resampling.LANCZOS)
                 contact.paste(thumb, (col*256, row*280+24), thumb)
