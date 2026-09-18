@@ -102,6 +102,8 @@ var current_single_side := ""
 var current_single_is_shiny := false
 var dratini_poc_sleeping := false
 var dratini_poc_action_generation := 0
+var dratini_poc_shadow: Sprite2D
+var dratini_poc_hidden_platform_image: CanvasItem
 var current_double_web_identity: Dictionary = {}
 var web_sprite_request_generation := 0
 var web_sprite_upgrades_allowed := false
@@ -117,6 +119,8 @@ func _ready() -> void:
 	_set_sprite_filter(double_sprite_2)
 	_cache_base_sprite_positions()
 	_create_substitute_sprite()
+	if OS.get_environment("POKEAETHER_DRATINI_HD") == "1" and DratiniHdPoc.stage_variant() == "clean":
+		_create_dratini_poc_shadow()
 	set_battle_type(default_is_double_battle)
 	clear_stat_stages()
 	_snap_all_sprites_to_pixel_grid.call_deferred()
@@ -223,6 +227,9 @@ func reset_battle_pose() -> void:
 	_update_stat_stage_panel_positions()
 
 func clear_pokemon() -> void:
+	_restore_dratini_poc_platform()
+	if dratini_poc_shadow != null:
+		dratini_poc_shadow.visible = false
 	dratini_poc_action_generation += 1
 	dratini_poc_sleeping = false
 	web_sprite_request_generation += 1
@@ -689,6 +696,48 @@ func _has_dratini_poc_sprite() -> bool:
 	)
 
 
+func _create_dratini_poc_shadow() -> void:
+	var image := Image.create(96, 32, false, Image.FORMAT_RGBA8)
+	for y: int in 32:
+		for x: int in 96:
+			var dx := (float(x) - 47.5) / 47.5
+			var dy := (float(y) - 15.5) / 15.5
+			var radius_squared := dx * dx + dy * dy
+			image.set_pixel(x, y, Color(0.0, 0.0, 0.0, 0.38 * pow(maxf(0.0, 1.0 - radius_squared), 2.0)))
+	dratini_poc_shadow = Sprite2D.new()
+	dratini_poc_shadow.name = "DratiniPocGroundShadow"
+	dratini_poc_shadow.texture = ImageTexture.create_from_image(image)
+	dratini_poc_shadow.z_index = -1
+	dratini_poc_shadow.visible = false
+	single_sprite_slot.add_child(dratini_poc_shadow)
+
+
+func _restore_dratini_poc_platform() -> void:
+	if is_instance_valid(dratini_poc_hidden_platform_image):
+		dratini_poc_hidden_platform_image.visible = true
+	dratini_poc_hidden_platform_image = null
+
+
+func _sync_dratini_poc_stage_decor() -> void:
+	_restore_dratini_poc_platform()
+	if dratini_poc_shadow != null:
+		dratini_poc_shadow.visible = false
+	if not _has_dratini_poc_sprite() or DratiniHdPoc.stage_variant() != "clean":
+		return
+	var platform_name := "BattlePlatform" if current_single_side == "back" else "BattlePlatform2"
+	var parent_node := get_parent()
+	var platform: Node = parent_node.get_node_or_null(platform_name) if parent_node != null else null
+	var platform_image: CanvasItem = platform.get_node_or_null("PlatformImage") if platform != null else null
+	if platform_image != null:
+		platform_image.visible = false
+		dratini_poc_hidden_platform_image = platform_image
+	if dratini_poc_shadow != null:
+		var bottom_from_center := 73.0 if current_single_side == "back" else 85.0
+		dratini_poc_shadow.position = single_sprite.position + Vector2(0.0, bottom_from_center * single_sprite.scale.y + 7.0)
+		dratini_poc_shadow.scale = Vector2(1.35, 0.85) if current_single_side == "back" else Vector2(1.1, 0.65)
+		dratini_poc_shadow.visible = true
+
+
 func _play_dratini_poc_action(action: String) -> void:
 	if not _has_dratini_poc_sprite():
 		return
@@ -1152,8 +1201,9 @@ func _load_sprite_frames(
 	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
 		var poc_frames := DratiniHdPoc.load_frames(side)
 		if poc_frames != null:
-			_set_sprite_frames_render_scale(poc_frames, 2.0)
+			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(side))
 			_set_sprite_frames_anchor(poc_frames, Vector2(96, 96), Vector2(192, 192))
+			_set_sprite_frames_position_offset(poc_frames, DratiniHdPoc.position_offset_for(side))
 			return poc_frames
 	var cache_key := _sprite_cache_key(species, side, is_shiny)
 	# Map/team prefetching stores the real web sheet in the global service. Read
@@ -1803,6 +1853,9 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	web_sprite_request_generation += 1
 	dratini_poc_action_generation += 1
 	dratini_poc_sleeping = false
+	_restore_dratini_poc_platform()
+	if dratini_poc_shadow != null:
+		dratini_poc_shadow.visible = false
 	var request_generation := web_sprite_request_generation
 
 	single_sprite.visible = false
@@ -1825,6 +1878,7 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	_snap_sprite_to_pixel_grid(single_sprite)
 	single_sprite.visible = true
 	_apply_sprite_playback_mode(single_sprite)
+	_sync_dratini_poc_stage_decor()
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 	if substitute_active:
 		_sync_substitute_idle_pose()
