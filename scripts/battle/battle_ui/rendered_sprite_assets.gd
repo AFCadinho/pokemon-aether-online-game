@@ -28,7 +28,8 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 		return null
 	if not _allowed(str(manifest.get("status", "")), preview):
 		return null
-	if int(manifest.get("cell_size", 0)) != 512 or float(manifest.get("fps", 0)) != 24.0:
+	var fps := float(manifest.get("fps", 0))
+	if int(manifest.get("cell_size", 0)) != 512 or fps not in [24.0, 60.0]:
 		return null
 	var cache_key := path + ":" + str(entry.get("sha256")) + ":" + side + ":" + str(preview)
 	if _cache.has(cache_key):
@@ -46,7 +47,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("rendered_root", path.get_base_dir())
 	frames.set_meta("rendered_preview", preview)
 	frames.set_meta("rendered_presentation", present)
-	frames.set_meta("hd_poc_fps", 24.0)
+	frames.set_meta("hd_poc_fps", fps)
 	if not ensure_action_loaded(frames, "idle"):
 		return null
 	_cache[cache_key] = frames
@@ -104,7 +105,7 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 		return false
 	# Commit only after every page passed; a broken action cannot poison fallback.
 	frames.add_animation(action)
-	frames.set_animation_speed(action, 24.0)
+	frames.set_animation_speed(action, float(frames.get_meta("hd_poc_fps", 24.0)))
 	frames.set_animation_loop(action, bool(entry.get("loop", false)))
 	for texture: AtlasTexture in textures:
 		frames.add_frame(action, texture)

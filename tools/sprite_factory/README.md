@@ -1,6 +1,8 @@
 # Pokémon sprite factory V1
 
-Local offline toolchain for human-reviewed 512×512 RGBA / 24 FPS battle sprites.
+Local offline toolchain for human-reviewed 512×512 RGBA battle sprites.
+The established Gen 1–8 baseline is 24 FPS; a source with native 60 FPS may
+explicitly select 60 in its manifest without reducing source motion quality.
 Python 3 with Pillow and Blender CLI are required. Reference manifests pin Blender
 5.2.0 LTS and the exact input SHA-256. Default Blender command is
 `flatpak run org.blender.Blender`; override `--blender` for another installation.
@@ -104,7 +106,7 @@ client supplies them. There is no implicit base-form substitution.
   explicit material replacements are supported. Missing shiny sources are
   `available:false`. No automatic recolouring. Additional variant names are
   possible in the offline schema, but the current runtime selects normal/shiny.
-- `render`: pinned 512px/24 FPS, Standard/Medium High Contrast and explicit area
+- `render`: pinned 512px and explicit 24 or 60 FPS, Standard/Medium High Contrast and explicit area
   lights. The source hash pins retained world/shader/Eevee source settings;
   camera/lights are replaced, and rig NLA is muted. Add explicit overrides only
   after review if a future source needs different settings.

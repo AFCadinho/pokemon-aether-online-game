@@ -113,7 +113,7 @@ def render(job):
     scene.render.engine = 'BLENDER_EEVEE'
     scene.render.resolution_x = scene.render.resolution_y = 512
     scene.render.resolution_percentage = 100
-    scene.render.fps, scene.render.fps_base = 24, 1.0
+    scene.render.fps, scene.render.fps_base = cfg['render']['fps'], 1.0
     scene.render.film_transparent = True
     scene.render.image_settings.file_format = 'PNG'
     scene.render.image_settings.color_mode = 'RGBA'
@@ -183,7 +183,7 @@ def render(job):
                 bpy.ops.render.render(write_still=True)
             geometry[view][category] = records
     return dict(blender=bpy.app.version_string, blender_build=bpy.app.build_hash.decode(), geometry=geometry,
-                engine=scene.render.engine, fps=24, resolution=[512, 512])
+                engine=scene.render.engine, fps=cfg['render']['fps'], resolution=[512, 512])
 
 
 if __name__ == '__main__':

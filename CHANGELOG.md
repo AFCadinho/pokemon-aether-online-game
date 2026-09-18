@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local battle-sprite previews can now retain native 60 FPS for source animations that need it; existing 24 FPS sprites and fallbacks are unchanged.
+
 - Local battle-sprite review can now preview five more body shapes—Articuno, Machamp, Abra, Onix, and Parasect—without changing the default sprites or shiny fallback.
 
 - Local battle-sprite review now supports reproducible high-quality Dragonite and Rattata builds, with explicit approval and existing sprites as fallback.
