@@ -18,8 +18,11 @@ const ACTION_SPEED := {
 }
 const RENDER_SCALE := {
 	"dratini": {"front": 1.74, "back": 1.67},
-	"dragonite": {"front": 1.2, "back": 1.2},
+	"dragonite": {"front": 1.0, "back": 1.0},
 	"gyarados": {"front": 1.0, "back": 1.0},
+}
+const DISPLAY_SCALE_MULTIPLIER := {
+	"gyarados": 1.3,
 }
 const POSITION_OFFSET := {
 	"dratini": {"front": Vector2(-10, 8), "back": Vector2(-12, 12)},
@@ -121,6 +124,10 @@ static func stage_variant() -> String:
 static func render_scale_for(species: String, side: String) -> float:
 	var species_scale: Dictionary = RENDER_SCALE.get(species.strip_edges().to_lower(), {})
 	return float(species_scale.get(side, 1.0))
+
+
+static func display_scale_multiplier_for(species: String) -> float:
+	return float(DISPLAY_SCALE_MULTIPLIER.get(species.strip_edges().to_lower(), 1.0))
 
 
 static func position_offset_for(species: String, side: String) -> Vector2:
