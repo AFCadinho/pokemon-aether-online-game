@@ -86,7 +86,8 @@ def validate(cfg, variant):
     require(safe_id(cfg['species']) and safe_id(variant), 'Invalid species/form or variant ID')
     require(cfg['review']['status'] in ('configured', 'approved'), 'Manifest mapping must be explicitly configured')
     require(cfg['variants'].get(variant, {}).get('available') is True, 'Variant source unavailable; use existing fallback')
-    require(cfg['render']['resolution'] == [512, 512] and cfg['render']['fps'] == 24, 'V1 baseline is 512px / 24 FPS')
+    require(cfg['render']['resolution'] == [512, 512] and cfg['render']['fps'] in (24, 60),
+            'Supported quality baselines are 512px / 24 or native 60 FPS')
     require(set(cfg['cameras']) == {'front', 'back'}, 'Both explicit cameras required')
     require(cfg['actions'].get('idle') is not None, 'Idle mapping required')
     require(set(cfg['actions']) <= CATEGORIES, 'Unknown action category')
@@ -104,8 +105,8 @@ def validate(cfg, variant):
         require(all(b > a for a, b in zip(frames, frames[1:])), 'Frames must be increasing')
         require(action['source_fps'] > 0 and action['speed'] > 0, 'Invalid timing')
         if len(frames) > 1:
-            require(all(abs((b - a) - action['source_fps'] / 24) < 1e-5 for a, b in zip(frames, frames[1:])),
-                    'Sample source timeline at 24 FPS, or explicitly declare frame timing at 24 FPS')
+            require(all(abs((b - a) - action['source_fps'] / cfg['render']['fps']) < 1e-5 for a, b in zip(frames, frames[1:])),
+                    'Sample source timeline at the configured render FPS')
         if name.startswith('faint'):
             require(not any(x in action['action'].lower() for x in ('down01_end', 'recovery', 'sleepend')),
                     'Recovery action cannot be selected as faint')
@@ -233,6 +234,7 @@ def finalize(args):
 
 def quality(root, cfg, render):
     result = dict(errors=[], warnings=[], actions={}, files={})
+    fps = cfg['render']['fps']
     previews = root / 'previews'
     previews.mkdir()
     overview = Image.new('RGB', (1024, 560), '#252735')
@@ -288,21 +290,21 @@ def quality(root, cfg, render):
                     result['warnings'].append(key + ':presentation_height:' + str(round(height, 2)))
                 overview.paste(frames[0], (vi * 512, 32), frames[0])
             result['actions'][key] = dict(count=len(paths), unique_frames=len(set(hashes)), pixel_hashes=hashes,
-                bounds=boxes, union=union, min_margin=min(margins), duration=len(paths)/24,
-                playback_duration=len(paths)/24/spec['speed'], loop=spec['loop'])
+                bounds=boxes, union=union, min_margin=min(margins), duration=len(paths)/fps,
+                playback_duration=len(paths)/fps/spec['speed'], loop=spec['loop'])
             for col, index in enumerate([0, len(frames)//3, 2*len(frames)//3, len(frames)-1]):
                 thumb = frames[index].resize((256, 256), Image.Resampling.LANCZOS)
                 contact.paste(thumb, (col*256, row*280+24), thumb)
             draw.text((8, row*280+4), key + '  ' + str(len(paths)) + ' frames', fill='white')
-            # Millisecond rounding alternates 41/42ms to preserve the 24 FPS cycle duration.
-            durations = [round((i+1)*1000/24)-round(i*1000/24) for i in range(len(frames))]
+            # Rounded cumulative timestamps preserve either source cadence without drift.
+            durations = [round((i+1)*1000/fps)-round(i*1000/fps) for i in range(len(frames))]
             frames[0].save(previews / (view + '-' + action + '.webp'), save_all=True,
                 append_images=frames[1:], duration=durations, loop=0 if spec['loop'] else 1, lossless=True, method=4)
         contact.save(previews / (view + '-contact.png'))
     ImageDraw.Draw(overview).text((12, 8), cfg['species'] + ' / normal or configured variant / front + back', fill='white')
     overview.save(previews / 'overview.png')
     (previews / 'index.html').write_text('<!doctype html><meta charset="utf-8"><title>Sprite review</title><style>body{background:#252735;color:white;font:16px sans-serif}img{max-width:100%}</style>'
-        + '<h1>' + cfg['species'] + '</h1><p>Source-timing previews: 24 FPS. Review eyes, loop seams, actions, faint hold and in-game placement.</p>'
+        + '<h1>' + cfg['species'] + '</h1><p>Source-timing previews: ' + str(fps) + ' FPS. Review eyes, loop seams, actions, faint hold and in-game placement.</p>'
         + ''.join('<h2>' + p.stem + '</h2><img src="' + p.name + '">' for p in sorted(previews.glob('*.png')))
         + ''.join('<h2>' + p.stem + '</h2><img src="' + p.name + '">' for p in sorted(previews.glob('*.webp')))
         + '<h2>Technical warnings</h2><pre>' + json.dumps(dict(errors=result['errors'], warnings=result['warnings']), indent=2) + '</pre>')
@@ -313,7 +315,7 @@ def package(root, cfg, variant):
     provenance = read(root / 'provenance.json')
     runtime = root / 'runtime'
     meta = dict(schema=VERSION, species=cfg['species'], variant=variant, build_id=provenance['build_id'],
-                cell_size=512, fps=24, status='needs_review', presentation=cfg['presentation'], views={}, faint_policy='hold_until_recall')
+                cell_size=512, fps=cfg['render']['fps'], status='needs_review', presentation=cfg['presentation'], views={}, faint_policy='hold_until_recall')
     for view in ('front', 'back'):
         meta['views'][view] = {}
         for action, spec in cfg['actions'].items():

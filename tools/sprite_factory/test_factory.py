@@ -38,6 +38,16 @@ class FactoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'baseline'):
             f.validate(self.cfg, 'normal')
 
+    def test_native_60_fps_timing_is_supported_without_resampling(self):
+        self.cfg['render']['fps'] = 60
+        self.cfg['actions'] = {'idle': dict(action='source_idle', frames=[0, 1, 2],
+                                            source_fps=60, loop=True, speed=1,
+                                            review='needs_review')}
+        f.validate(self.cfg, 'normal')
+        self.cfg['actions']['idle']['frames'] = [0, 2, 4]
+        with self.assertRaisesRegex(ValueError, 'timeline'):
+            f.validate(self.cfg, 'normal')
+
     def test_recovery_and_ambiguous_timing_rejected(self):
         self.cfg['actions']['faint_start']['action'] = 'down01_end'
         with self.assertRaisesRegex(ValueError, 'Recovery'):
