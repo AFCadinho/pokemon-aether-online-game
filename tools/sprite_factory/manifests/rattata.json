@@ -1,0 +1,442 @@
+{
+  "schema": 1,
+  "species": "rattata",
+  "form": "base",
+  "source": {
+    "filename": "pm0019_00.blend",
+    "sha256": "c3e5e9c40f445dae6253d643bf5f58dedb6e53c1a8f5d477ecc894337bb53555",
+    "version": "local-reviewed-poc",
+    "blender": "5.2.0 LTS",
+    "accepted_warnings": [
+      "embedded_text_blocks"
+    ],
+    "inspection_note": "SMDBatchImport text is stored but never executed; source geometry/materials reviewed in local POC."
+  },
+  "rig": "pm0019_00",
+  "review": {
+    "status": "configured"
+  },
+  "variants": {
+    "normal": {
+      "available": true,
+      "material_overrides": {}
+    },
+    "shiny": {
+      "available": false,
+      "reason": "Correct shiny materials not verified"
+    }
+  },
+  "render": {
+    "resolution": [
+      512,
+      512
+    ],
+    "fps": 24,
+    "view_transform": "Standard",
+    "look": "Medium High Contrast",
+    "light_target": [
+      0,
+      0,
+      0.45
+    ],
+    "lights": [
+      {
+        "position": [
+          2.5,
+          -4,
+          4.5
+        ],
+        "energy": 500,
+        "size": 4
+      },
+      {
+        "position": [
+          -3,
+          2.5,
+          3
+        ],
+        "energy": 250,
+        "size": 4
+      },
+      {
+        "position": [
+          2,
+          3,
+          4
+        ],
+        "energy": 350,
+        "size": 3
+      }
+    ]
+  },
+  "cameras": {
+    "front": {
+      "position": [
+        2.5,
+        -6,
+        2.3
+      ],
+      "target": [
+        0,
+        0,
+        0.44999998807907104
+      ],
+      "ortho_scale": 1.3252607583999634
+    },
+    "back": {
+      "position": [
+        -2.5,
+        6,
+        2.3
+      ],
+      "target": [
+        0,
+        0,
+        0.44999998807907104
+      ],
+      "ortho_scale": 1.1107059717178345
+    }
+  },
+  "presentation": {
+    "front": {
+      "render_scale": 4.3999999999999995,
+      "anchor": [
+        256,
+        256
+      ],
+      "ground_point": [
+        0,
+        0,
+        0
+      ],
+      "position_offset": [
+        -10,
+        16
+      ],
+      "min_visible_height": 35,
+      "max_visible_height": 160
+    },
+    "back": {
+      "render_scale": 4.3999999999999995,
+      "anchor": [
+        256,
+        256
+      ],
+      "ground_point": [
+        0,
+        0,
+        0
+      ],
+      "position_offset": [
+        -12,
+        18
+      ],
+      "min_visible_height": 35,
+      "max_visible_height": 160
+    }
+  },
+  "actions": {
+    "idle": {
+      "action": "pm0019_00_ba10_waitA01.gfbanm",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "source_fps": 24,
+      "loop": true,
+      "speed": 1,
+      "review": "needs_review"
+    },
+    "physical_attack": {
+      "action": "pm0019_00_ba20_buturi01.gfbanm",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ],
+      "source_fps": 24,
+      "loop": false,
+      "speed": 3,
+      "review": "needs_review"
+    },
+    "special_attack": {
+      "action": "pm0019_00_ba21_tokusyu01.gfbanm",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73
+      ],
+      "source_fps": 24,
+      "loop": false,
+      "speed": 3,
+      "review": "needs_review"
+    },
+    "damage": {
+      "action": "pm0019_00_ba30_damageS01.gfbanm",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "source_fps": 24,
+      "loop": false,
+      "speed": 2,
+      "review": "needs_review"
+    },
+    "faint_start": {
+      "action": "pm0019_00_ba41_down01.gfbanm",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "source_fps": 24,
+      "loop": false,
+      "speed": 3,
+      "review": "needs_review"
+    },
+    "sleep": null,
+    "faint_loop": {
+      "action": "pm0019_00_ba41_down01.gfbanm",
+      "frames": [
+        55
+      ],
+      "source_fps": 24,
+      "loop": true,
+      "speed": 1,
+      "review": "needs_review"
+    }
+  },
+  "qc": {
+    "safe_margin": 8,
+    "bounds_jump": 80
+  },
+  "exceptions": [
+    "Source scene says 25 FPS; explicit 24 FPS interpretation preserves the human-reviewed POC timing.",
+    "Sleep unavailable: existing idle/status presentation is fallback."
+  ]
+}
