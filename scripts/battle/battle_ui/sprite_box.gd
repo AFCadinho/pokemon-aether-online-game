@@ -1201,9 +1201,14 @@ func _load_sprite_frames(
 	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
 		var poc_frames := DratiniHdPoc.load_frames(species, side)
 		if poc_frames != null:
-			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(species, side))
+			var poc_cell_size := float(poc_frames.get_meta("hd_poc_cell_size", 192))
+			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(species, side, poc_cell_size))
 			_set_sprite_frames_display_scale_multiplier(poc_frames, DratiniHdPoc.display_scale_multiplier_for(species))
-			_set_sprite_frames_anchor(poc_frames, Vector2(96, 96), Vector2(192, 192))
+			_set_sprite_frames_anchor(
+				poc_frames,
+				Vector2(poc_cell_size * 0.5, poc_cell_size * 0.5),
+				Vector2(poc_cell_size, poc_cell_size)
+			)
 			_set_sprite_frames_position_offset(poc_frames, DratiniHdPoc.position_offset_for(species, side))
 			return poc_frames
 	var cache_key := _sprite_cache_key(species, side, is_shiny)
