@@ -17,7 +17,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	var catalog := _json(catalog_path)
 	if int(catalog.get("schema", 0)) != 1 or str(catalog.get("mode", "")) != ("preview" if preview else "approved"):
 		return null
-	var key := species.strip_edges().to_lower() + (":shiny" if shiny else ":normal")
+	var key := _catalog_key(species, shiny)
 	var entries: Dictionary = catalog.get("entries", {})
 	var entry: Dictionary = entries.get(key, {})
 	var path := str(entry.get("path", ""))
@@ -52,6 +52,10 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 		return null
 	_cache[cache_key] = frames
 	return frames
+
+
+static func _catalog_key(species: String, shiny: bool) -> String:
+	return species.strip_edges().to_lower().replace(" ", "-").replace("_", "-") + (":shiny" if shiny else ":normal")
 
 
 static func _allowed(status: String, preview: bool) -> bool:

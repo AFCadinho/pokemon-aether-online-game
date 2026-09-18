@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local Roaring Moon battle previews now recognize the in-game species name with a space, including normal/shiny front and back views.
+
 - Local battle-sprite previews can now retain native 60 FPS for source animations that need it; existing 24 FPS sprites and fallbacks are unchanged.
 
 - Local battle-sprite review can now preview five more body shapes—Articuno, Machamp, Abra, Onix, and Parasect—without changing the default sprites or shiny fallback.
