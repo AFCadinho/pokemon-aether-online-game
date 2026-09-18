@@ -22,6 +22,8 @@ static func resolve(context: Dictionary) -> StringName:
 	var battle_kind := str(context.get("battle_kind", "")).strip_edges().to_lower()
 	if battle_kind == "pvp":
 		return Catalog.PVP_STADIUM_ENVIRONMENT_ID
+	if battle_kind == "wild" and str(context.get("map_id", "")).strip_edges() == "aether_clash_lobby":
+		return Catalog.PVP_STADIUM_ENVIRONMENT_ID
 
 	if battle_kind == "wild":
 		var encounter_type := _normalize_key(context.get("encounter_type", ""))

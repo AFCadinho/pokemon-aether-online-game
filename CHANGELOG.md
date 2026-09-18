@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wild battles triggered in the Aether Clash lobby now use the animated PvP stadium background.
+
 - Local visual test: Dratini can use pre-rendered HD battle animations when launched with the developer-only comparison flag; the regular sprites remain the default.
 
 - Adventure Parties can now be formed and played in the browser, including shared trainer and grass battles with desktop players in browser-available areas.
