@@ -78,6 +78,14 @@ scale and corrected front/back offsets. The final battle-scene screenshots show
 its lower body on the platforms, with the head clear of the HP UI. Onix remains
 substantially larger than the small reference Pokémon.
 
+During in-game review Articuno appeared too high above both platforms. A
+follow-up presentation-only correction moves its front view 25 px and back view
+10 px lower. The manifest and full build were regenerated at the same quality;
+the former build remains available for comparison. Battle-scene composition
+checks show the corrected front view hovering just above the opponent platform
+and the back view's tail meeting the player platform. This remains subject to
+the player's visual approval.
+
 Parasect's complete 574-frame render survived an interruption during WebP
 preview generation. Canonical and raw PNGs were verified frame-by-frame, the
 partial previews were archived, and postprocessing/atlas verification was
