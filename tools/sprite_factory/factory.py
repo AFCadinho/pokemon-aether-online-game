@@ -91,6 +91,8 @@ def validate(cfg, variant):
     require(set(cfg['cameras']) == {'front', 'back'}, 'Both explicit cameras required')
     require(cfg['actions'].get('idle') is not None, 'Idle mapping required')
     require(set(cfg['actions']) <= CATEGORIES, 'Unknown action category')
+    require(isinstance(cfg.get('qc'), dict) and cfg['qc'].get('safe_margin', -1) >= 0
+            and cfg['qc'].get('bounds_jump', 0) > 0, 'Missing or invalid quality-check settings')
     for view, camera in cfg['cameras'].items():
         require(camera['ortho_scale'] > 0, 'Invalid camera scale')
         present = cfg['presentation'][view]
