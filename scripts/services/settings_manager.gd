@@ -77,6 +77,7 @@ var master_volume := 80.0
 var music_volume := 55.0
 var sfx_volume := 75.0
 var pokemon_cry_volume := 75.0
+var anime_pokemon_cries := false
 var ui_volume := 75.0
 var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
@@ -159,6 +160,7 @@ func load_settings() -> void:
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
 	sfx_volume = _validated_volume(data.get("sfx_volume", sfx_volume))
 	pokemon_cry_volume = _validated_volume(data.get("pokemon_cry_volume", pokemon_cry_volume))
+	anime_pokemon_cries = bool(data.get("anime_pokemon_cries", anime_pokemon_cries))
 	ui_volume = _validated_volume(data.get("ui_volume", ui_volume))
 	notification_volume = _validated_volume(data.get("notification_volume", notification_volume))
 	battle_music_track = str(data.get("battle_music_track", battle_music_track)).strip_edges()
@@ -230,6 +232,7 @@ func save_settings() -> void:
 		"music_volume": music_volume,
 		"sfx_volume": sfx_volume,
 		"pokemon_cry_volume": pokemon_cry_volume,
+		"anime_pokemon_cries": anime_pokemon_cries,
 		"ui_volume": ui_volume,
 		"notification_volume": notification_volume,
 		"battle_music_track": battle_music_track,
@@ -520,6 +523,14 @@ func set_pokemon_cry_volume(volume: float) -> void:
 
 	pokemon_cry_volume = validated_volume
 	_apply_audio_bus_volume(POKEMON_CRY_BUS, pokemon_cry_volume)
+	_save_and_emit()
+
+
+func set_anime_pokemon_cries(enabled: bool) -> void:
+	if anime_pokemon_cries == enabled:
+		return
+
+	anime_pokemon_cries = enabled
 	_save_and_emit()
 
 

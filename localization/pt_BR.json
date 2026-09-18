@@ -1140,6 +1140,7 @@
   "ui.settings.battle_music": "Música de batalha",
   "ui.settings.sfx": "Efeitos sonoros",
   "ui.settings.pokemon_cries": "Sons dos Pokémon",
+  "ui.settings.anime_pokemon_cries": "Usar sons de anime dos Pokémon quando disponíveis",
   "ui.settings.ui_volume": "Interface",
   "ui.settings.notifications": "Notificações",
   "ui.settings.account.edit": "Editar dados da conta",

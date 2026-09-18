@@ -1136,6 +1136,7 @@
   "ui.settings.battle_music": "Battle Music",
   "ui.settings.sfx": "SFX",
   "ui.settings.pokemon_cries": "Pokémon Cries",
+  "ui.settings.anime_pokemon_cries": "Use anime Pokémon cries when available",
   "ui.settings.ui_volume": "UI",
   "ui.settings.notifications": "Notifications",
   "ui.settings.account.edit": "Edit Account Details",

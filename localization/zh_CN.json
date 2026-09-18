@@ -1140,6 +1140,7 @@
   "ui.settings.battle_music": "战斗音乐",
   "ui.settings.sfx": "特效",
   "ui.settings.pokemon_cries": "宝可梦哭泣",
+  "ui.settings.anime_pokemon_cries": "可用时使用动画版宝可梦叫声",
   "ui.settings.ui_volume": "用户界面",
   "ui.settings.notifications": "通知",
   "ui.settings.account.edit": "编辑帐户详细信息",
