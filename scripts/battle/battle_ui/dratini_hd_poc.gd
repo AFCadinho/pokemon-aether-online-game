@@ -95,6 +95,7 @@ static func load_frames(species: String, side: String) -> SpriteFrames:
 			atlas.filter_clip = true
 			frames.add_frame(action, atlas)
 	frames.set_meta("dratini_hd_poc", true)
+	frames.set_meta("hd_poc_cell_size", cell_size)
 	_frames_by_side[cache_key] = frames
 	return frames
 
@@ -121,9 +122,11 @@ static func stage_variant() -> String:
 	return "clean" if OS.get_environment("POKEAETHER_DRATINI_STAGE") == "clean" else "platform"
 
 
-static func render_scale_for(species: String, side: String) -> float:
+static func render_scale_for(species: String, side: String, cell_size: float = 192.0) -> float:
 	var species_scale: Dictionary = RENDER_SCALE.get(species.strip_edges().to_lower(), {})
-	return float(species_scale.get(side, 1.0))
+	# The original POC scale values target 192px cells. Higher-resolution
+	# sheets should preserve the same on-screen size, not become larger.
+	return float(species_scale.get(side, 1.0)) * (cell_size / 192.0)
 
 
 static func display_scale_multiplier_for(species: String) -> float:
