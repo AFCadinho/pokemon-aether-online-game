@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon cries can now use the available anime versions from Generations 1–7. Enable them from Sound Settings; every unavailable cry continues to use the existing game cry.
+
 - Local Roaring Moon battle previews now recognize the in-game species name with a space, including normal/shiny front and back views.
 
 - Local battle-sprite previews can now retain native 60 FPS for source animations that need it; existing 24 FPS sprites and fallbacks are unchanged.

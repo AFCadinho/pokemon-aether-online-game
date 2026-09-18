@@ -1136,6 +1136,7 @@
   "ui.settings.battle_music": "Gevechtsmuziek",
   "ui.settings.sfx": "Geluidseffecten",
   "ui.settings.pokemon_cries": "Pokémon-geluiden",
+  "ui.settings.anime_pokemon_cries": "Gebruik anime-Pokémon-geluiden wanneer beschikbaar",
   "ui.settings.ui_volume": "Interface",
   "ui.settings.notifications": "Meldingen",
   "ui.settings.account.edit": "Accountgegevens bewerken",

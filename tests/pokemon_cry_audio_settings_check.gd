@@ -17,8 +17,13 @@ func _init() -> void:
 	_check_contains(settings_source, 'const POKEMON_CRY_BUS := "Pokemon Cries"', "settings define a Pokémon cry audio bus")
 	_check_contains(settings_source, '"pokemon_cry_volume": pokemon_cry_volume', "cry volume is persisted")
 	_check_contains(settings_source, "func set_pokemon_cry_volume", "cry volume has a setter")
+	_check_contains(settings_source, '"anime_pokemon_cries": anime_pokemon_cries', "anime cry preference is persisted")
+	_check_contains(settings_source, "func set_anime_pokemon_cries", "anime cry preference has a setter")
 	_check_contains(scene_source, '[node name="PokemonCryVolumeSlider"', "settings scene has a cry volume slider")
+	_check_contains(scene_source, '[node name="AnimePokemonCriesCheckBox"', "settings scene has an anime cry toggle")
 	_check_contains(menu_source, "SettingsManager.set_pokemon_cry_volume(value)", "cry slider updates settings")
+	_check_contains(menu_source, "SettingsManager.set_anime_pokemon_cries(enabled)", "anime cry toggle updates settings")
+	_check_contains(sfx_source, "get_cry_path(species, SettingsManager.anime_pokemon_cries)", "cry playback follows the anime cry preference")
 	_check_contains(sfx_source, "SettingsManager.get_audio_output_bus(SettingsManager.POKEMON_CRY_BUS)", "Pokémon cries retain their own bus on desktop and route safely on web")
 
 	quit(1 if failed else 0)
