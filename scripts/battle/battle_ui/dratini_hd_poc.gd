@@ -15,6 +15,8 @@ const ACTION_SPEED := {
 	"faint_start": 3.0,
 	"faint_hold": 1.0,
 }
+const RENDER_SCALE := {"front": 1.74, "back": 1.67}
+const POSITION_OFFSET := {"front": Vector2(-10, 8), "back": Vector2(-12, 12)}
 
 static var _move_index: Dictionary = {}
 static var _frames_by_side: Dictionary = {}
@@ -86,3 +88,15 @@ static func attack_action(move_name: String) -> String:
 
 static func speed_for(action: String) -> float:
 	return float(ACTION_SPEED.get(action, 1.0))
+
+
+static func stage_variant() -> String:
+	return "clean" if OS.get_environment("POKEAETHER_DRATINI_STAGE") == "clean" else "platform"
+
+
+static func render_scale_for(side: String) -> float:
+	return float(RENDER_SCALE.get(side, 2.0))
+
+
+static func position_offset_for(side: String) -> Vector2:
+	return POSITION_OFFSET.get(side, Vector2.ZERO)
