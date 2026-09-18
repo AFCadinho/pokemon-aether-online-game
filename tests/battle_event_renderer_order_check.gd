@@ -59,7 +59,7 @@ func _check_trainer_command_is_before_move_animation() -> void:
 	var source := FileAccess.get_file_as_string(RENDERER_PATH)
 	var command_index := source.find("await _show_trainer_move_commands(")
 	var dodge_index := source.find('"kind": "dodge"', command_index)
-	var attack_index := source.find("await animation_router.play_attack_tween_for_actor(attack_actor_ident)")
+	var attack_index := source.find("await animation_router.play_attack_tween_for_actor(attack_actor_ident, move_animation_name)")
 	var move_index := source.find("await animation_router.play_move_animation(move_animation_name")
 
 	_check_equal(command_index >= 0, true, "trainer move command presentation exists")
