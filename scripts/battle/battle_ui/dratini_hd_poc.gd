@@ -1,8 +1,9 @@
 extends RefCounted
 
-# Deliberately local and Dratini-only. The rendered derivatives live outside
-# res:// and are never part of a release asset pack.
+# Deliberately local and limited to three visual-test species. The rendered
+# derivatives live outside res:// and are never part of a release asset pack.
 const OUTPUT_ROOT := "res://../.tmp/dratini-hd-battle-poc"
+const DUEL_OUTPUT_ROOT := "res://../.tmp/dragonite-gyarados-poc/runtime"
 const MOVE_INDEX_PATH := "res://data/move_summary_index.json"
 const ACTIONS := ["idle", "physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_hold"]
 const LOOP_ACTIONS := ["idle", "sleep"]
@@ -15,30 +16,49 @@ const ACTION_SPEED := {
 	"faint_start": 3.0,
 	"faint_hold": 1.0,
 }
-const RENDER_SCALE := {"front": 1.74, "back": 1.67}
-const POSITION_OFFSET := {"front": Vector2(-10, 8), "back": Vector2(-12, 12)}
+const RENDER_SCALE := {
+	"dratini": {"front": 1.74, "back": 1.67},
+	"dragonite": {"front": 1.2, "back": 1.2},
+	"gyarados": {"front": 1.0, "back": 1.0},
+}
+const POSITION_OFFSET := {
+	"dratini": {"front": Vector2(-10, 8), "back": Vector2(-12, 12)},
+	"dragonite": {"front": Vector2(-10, 7), "back": Vector2(-12, 0)},
+	"gyarados": {"front": Vector2(4, 21), "back": Vector2(-27, 18)},
+}
 
 static var _move_index: Dictionary = {}
 static var _frames_by_side: Dictionary = {}
 
 static func is_enabled_for(species: String, side: String, shiny: bool) -> bool:
+	var species_key := species.strip_edges().to_lower()
 	return (
-		OS.get_environment("POKEAETHER_DRATINI_HD") == "1"
-		and species.strip_edges().to_lower() == "dratini"
+		(
+			(species_key == "dratini" and OS.get_environment("POKEAETHER_DRATINI_HD") == "1")
+			or (species_key in ["dragonite", "gyarados"] and OS.get_environment("POKEAETHER_HD_DUEL_POC") == "1")
+		)
 		and side in ["front", "back"]
 		and not shiny
 	)
 
 
-static func load_frames(side: String) -> SpriteFrames:
-	if _frames_by_side.has(side):
-		return _frames_by_side[side] as SpriteFrames
-	var root := OS.get_environment("POKEAETHER_DRATINI_HD_DIR").strip_edges()
+static func load_frames(species: String, side: String) -> SpriteFrames:
+	var species_key := species.strip_edges().to_lower()
+	var cache_key := "%s:%s" % [species_key, side]
+	if _frames_by_side.has(cache_key):
+		return _frames_by_side[cache_key] as SpriteFrames
+	var root := ""
+	if species_key == "dratini":
+		root = OS.get_environment("POKEAETHER_DRATINI_HD_DIR").strip_edges()
+	else:
+		root = OS.get_environment("POKEAETHER_HD_DUEL_POC_DIR").strip_edges()
 	if root.is_empty():
-		root = ProjectSettings.globalize_path(OUTPUT_ROOT)
+		root = ProjectSettings.globalize_path(OUTPUT_ROOT if species_key == "dratini" else DUEL_OUTPUT_ROOT)
+	if species_key != "dratini":
+		root = root.path_join(species_key)
 	var manifest_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(root.path_join("manifest.json")))
 	if not manifest_value is Dictionary:
-		push_warning("Dratini HD POC: missing local manifest; using the normal sprite.")
+		push_warning("HD battle POC: missing local manifest for %s; using the normal sprite." % species_key)
 		return null
 	var manifest: Dictionary = manifest_value
 	var views: Dictionary = manifest.get("views", {})
@@ -59,7 +79,7 @@ static func load_frames(side: String) -> SpriteFrames:
 		var image := Image.new()
 		var image_path := root.path_join(side).path_join(str(entry.get("file", "")))
 		if image.load(image_path) != OK:
-			push_warning("Dratini HD POC: could not read %s; using the normal sprite." % image_path)
+			push_warning("HD battle POC: could not read %s; using the normal sprite." % image_path)
 			return null
 		var texture := ImageTexture.create_from_image(image)
 		frames.add_animation(action)
@@ -72,7 +92,7 @@ static func load_frames(side: String) -> SpriteFrames:
 			atlas.filter_clip = true
 			frames.add_frame(action, atlas)
 	frames.set_meta("dratini_hd_poc", true)
-	_frames_by_side[side] = frames
+	_frames_by_side[cache_key] = frames
 	return frames
 
 
@@ -85,8 +105,12 @@ static func attack_action(move_name: String) -> String:
 	var move_data: Dictionary = _move_index.get(key, {})
 	return "physical_attack" if str(move_data.get("category", "")).to_lower() == "physical" else "special_attack"
 
-
-static func speed_for(action: String) -> float:
+static func speed_for(action: String, species: String = "dratini") -> float:
+	if species.strip_edges().to_lower() == "gyarados":
+		return float({
+			"idle": 1.0, "physical_attack": 1.4, "special_attack": 1.4,
+			"damage": 1.0, "sleep": 1.0, "faint_start": 1.4, "faint_hold": 1.0,
+		}.get(action, 1.0))
 	return float(ACTION_SPEED.get(action, 1.0))
 
 
@@ -94,9 +118,11 @@ static func stage_variant() -> String:
 	return "clean" if OS.get_environment("POKEAETHER_DRATINI_STAGE") == "clean" else "platform"
 
 
-static func render_scale_for(side: String) -> float:
-	return float(RENDER_SCALE.get(side, 2.0))
+static func render_scale_for(species: String, side: String) -> float:
+	var species_scale: Dictionary = RENDER_SCALE.get(species.strip_edges().to_lower(), {})
+	return float(species_scale.get(side, 1.0))
 
 
-static func position_offset_for(side: String) -> Vector2:
-	return POSITION_OFFSET.get(side, Vector2.ZERO)
+static func position_offset_for(species: String, side: String) -> Vector2:
+	var species_offset: Dictionary = POSITION_OFFSET.get(species.strip_edges().to_lower(), {})
+	return species_offset.get(side, Vector2.ZERO)
