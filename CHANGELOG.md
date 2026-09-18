@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local battle-sprite review can now preview five more body shapes—Articuno, Machamp, Abra, Onix, and Parasect—without changing the default sprites or shiny fallback.
+
 - Local battle-sprite review now supports reproducible high-quality Dragonite and Rattata builds, with explicit approval and existing sprites as fallback.
 
 - Local visual test: Dragonite can also use a master-quality 512px, 24 FPS pre-rendered HD set with lazy action loading and a livelier idle cadence; the earlier Dragonite/Gyarados test and all regular sprites remain available for comparison.

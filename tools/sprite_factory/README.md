@@ -207,6 +207,8 @@ pixel reproduction is checked on this machine; GPU drivers/hardware and Blender
 changes can alter rendering. Do not promise cross-GPU bit identity. Preserve the
 evidence and re-review outputs when the environment changes.
 
-Next validation candidates: a flying bird (Pidgeot), humanoid (Machamp), floating
-body (Gastly), long body (Onix), broad low body (Venusaur). No bulk conversion until
-those behaviors and a trustworthy shiny source strategy have been reviewed.
+The local Gen 1 body-shape validation used Articuno, Machamp, Abra, Onix, and
+Parasect where the originally proposed sources were unavailable. Its manifests,
+render evidence, caveats, and local review instructions are in
+[SHAPE_VALIDATION.md](SHAPE_VALIDATION.md). These remain `needs_review`; no bulk
+conversion or production approval follows from the technical checks.
