@@ -4,6 +4,8 @@
 
 - Local visual test: Dragonite can also use a master-quality 512px, 24 FPS pre-rendered HD set with lazy action loading and a livelier idle cadence; the earlier Dragonite/Gyarados test and all regular sprites remain available for comparison.
 
+- Local visual test: Rattata can use a separate master-quality 512px, 24 FPS HD battle set to evaluate small-body camera framing, platform placement, and scaling; the regular sprite remains the default.
+
 - Wild battles triggered in the Aether Clash lobby now use the animated PvP stadium background.
 
 - Local visual test: Dratini can use pre-rendered HD battle animations when launched with the developer-only comparison flag; the regular sprites remain the default.

@@ -1,10 +1,11 @@
 extends RefCounted
 
-# Deliberately local and limited to three visual-test species. The rendered
+# Deliberately local and limited to visual-test species. The rendered
 # derivatives live outside res:// and are never part of a release asset pack.
 const OUTPUT_ROOT := "res://../.tmp/dratini-hd-battle-poc"
 const DUEL_OUTPUT_ROOT := "res://../.tmp/dragonite-gyarados-poc/runtime"
 const DRAGONITE_HQ_OUTPUT_ROOT := "res://../.tmp/dragonite-hq-poc/runtime"
+const RATTATA_HQ_OUTPUT_ROOT := "res://../.tmp/rattata-hq-poc/runtime"
 const MOVE_INDEX_PATH := "res://data/move_summary_index.json"
 const ACTIONS := ["idle", "physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_hold"]
 const LOOP_ACTIONS := ["idle", "sleep"]
@@ -20,6 +21,7 @@ const ACTION_SPEED := {
 const RENDER_SCALE := {
 	"dratini": {"front": 1.74, "back": 1.67},
 	"dragonite": {"front": 1.0, "back": 1.0},
+	"rattata": {"front": 1.65, "back": 1.65},
 	"gyarados": {"front": 1.0, "back": 1.0},
 }
 const DISPLAY_SCALE_MULTIPLIER := {
@@ -28,6 +30,7 @@ const DISPLAY_SCALE_MULTIPLIER := {
 const POSITION_OFFSET := {
 	"dratini": {"front": Vector2(-10, 8), "back": Vector2(-12, 12)},
 	"dragonite": {"front": Vector2(-10, 7), "back": Vector2(-12, 0)},
+	"rattata": {"front": Vector2(-10, 16), "back": Vector2(-12, 18)},
 	"gyarados": {"front": Vector2(4, 21), "back": Vector2(-27, 18)},
 }
 
@@ -40,6 +43,7 @@ static func is_enabled_for(species: String, side: String, shiny: bool) -> bool:
 		(
 			(species_key == "dratini" and OS.get_environment("POKEAETHER_DRATINI_HD") == "1")
 			or (species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1")
+			or (species_key == "rattata" and OS.get_environment("POKEAETHER_RATTATA_HQ_POC") == "1")
 			or (species_key in ["dragonite", "gyarados"] and OS.get_environment("POKEAETHER_HD_DUEL_POC") == "1")
 		)
 		and side in ["front", "back"]
@@ -57,15 +61,22 @@ static func load_frames(species: String, side: String) -> SpriteFrames:
 		root = OS.get_environment("POKEAETHER_DRATINI_HD_DIR").strip_edges()
 	elif species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1":
 		root = OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC_DIR").strip_edges()
+	elif species_key == "rattata" and OS.get_environment("POKEAETHER_RATTATA_HQ_POC") == "1":
+		root = OS.get_environment("POKEAETHER_RATTATA_HQ_POC_DIR").strip_edges()
 	else:
 		root = OS.get_environment("POKEAETHER_HD_DUEL_POC_DIR").strip_edges()
 	if root.is_empty():
 		root = ProjectSettings.globalize_path(
 			OUTPUT_ROOT if species_key == "dratini"
 			else DRAGONITE_HQ_OUTPUT_ROOT if species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1"
+			else RATTATA_HQ_OUTPUT_ROOT if species_key == "rattata" and OS.get_environment("POKEAETHER_RATTATA_HQ_POC") == "1"
 			else DUEL_OUTPUT_ROOT
 		)
-	if species_key != "dratini" and not (species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1"):
+	var is_hq_poc := (
+		(species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1")
+		or (species_key == "rattata" and OS.get_environment("POKEAETHER_RATTATA_HQ_POC") == "1")
+	)
+	if species_key != "dratini" and not is_hq_poc:
 		root = root.path_join(species_key)
 	var manifest_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(root.path_join("manifest.json")))
 	if not manifest_value is Dictionary:
@@ -83,7 +94,7 @@ static func load_frames(species: String, side: String) -> SpriteFrames:
 		frames.remove_animation("default")
 	var lazy_action_data: Dictionary = {}
 	var actions_to_load: Array = ACTIONS
-	if species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1":
+	if is_hq_poc:
 		actions_to_load = ["idle"]
 		lazy_action_data = action_data.duplicate(true)
 	for action_value: Variant in actions_to_load:
