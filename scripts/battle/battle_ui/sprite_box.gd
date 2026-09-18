@@ -1202,6 +1202,7 @@ func _load_sprite_frames(
 		var poc_frames := DratiniHdPoc.load_frames(species, side)
 		if poc_frames != null:
 			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(species, side))
+			_set_sprite_frames_display_scale_multiplier(poc_frames, DratiniHdPoc.display_scale_multiplier_for(species))
 			_set_sprite_frames_anchor(poc_frames, Vector2(96, 96), Vector2(192, 192))
 			_set_sprite_frames_position_offset(poc_frames, DratiniHdPoc.position_offset_for(species, side))
 			return poc_frames

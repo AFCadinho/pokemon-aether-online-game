@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Local visual test: Dragonite and Gyarados can use pre-rendered HD battle animations on the existing platforms with a developer-only flag; their regular sprites remain the default.
+- Local visual test: Dragonite and Gyarados can use larger pre-rendered HD battle animations on the existing platforms with a developer-only flag; Gyarados has a clearer angled back view, and their regular sprites remain the default.
 
 - Wild battles triggered in the Aether Clash lobby now use the animated PvP stadium background.
 
