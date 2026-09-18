@@ -4,6 +4,7 @@ extends RefCounted
 # derivatives live outside res:// and are never part of a release asset pack.
 const OUTPUT_ROOT := "res://../.tmp/dratini-hd-battle-poc"
 const DUEL_OUTPUT_ROOT := "res://../.tmp/dragonite-gyarados-poc/runtime"
+const DRAGONITE_HQ_OUTPUT_ROOT := "res://../.tmp/dragonite-hq-poc/runtime"
 const MOVE_INDEX_PATH := "res://data/move_summary_index.json"
 const ACTIONS := ["idle", "physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_hold"]
 const LOOP_ACTIONS := ["idle", "sleep"]
@@ -38,6 +39,7 @@ static func is_enabled_for(species: String, side: String, shiny: bool) -> bool:
 	return (
 		(
 			(species_key == "dratini" and OS.get_environment("POKEAETHER_DRATINI_HD") == "1")
+			or (species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1")
 			or (species_key in ["dragonite", "gyarados"] and OS.get_environment("POKEAETHER_HD_DUEL_POC") == "1")
 		)
 		and side in ["front", "back"]
@@ -53,11 +55,17 @@ static func load_frames(species: String, side: String) -> SpriteFrames:
 	var root := ""
 	if species_key == "dratini":
 		root = OS.get_environment("POKEAETHER_DRATINI_HD_DIR").strip_edges()
+	elif species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1":
+		root = OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC_DIR").strip_edges()
 	else:
 		root = OS.get_environment("POKEAETHER_HD_DUEL_POC_DIR").strip_edges()
 	if root.is_empty():
-		root = ProjectSettings.globalize_path(OUTPUT_ROOT if species_key == "dratini" else DUEL_OUTPUT_ROOT)
-	if species_key != "dratini":
+		root = ProjectSettings.globalize_path(
+			OUTPUT_ROOT if species_key == "dratini"
+			else DRAGONITE_HQ_OUTPUT_ROOT if species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1"
+			else DUEL_OUTPUT_ROOT
+		)
+	if species_key != "dratini" and not (species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1"):
 		root = root.path_join(species_key)
 	var manifest_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(root.path_join("manifest.json")))
 	if not manifest_value is Dictionary:
@@ -73,31 +81,78 @@ static func load_frames(species: String, side: String) -> SpriteFrames:
 	var frames := SpriteFrames.new()
 	if frames.has_animation("default"):
 		frames.remove_animation("default")
-	for action: String in ACTIONS:
-		var entry: Dictionary = action_data.get(action, {})
-		var count := int(entry.get("count", 0))
-		var columns := int(entry.get("columns", 0))
-		if count <= 0 or columns <= 0:
+	var lazy_action_data: Dictionary = {}
+	var actions_to_load: Array = ACTIONS
+	if species_key == "dragonite" and OS.get_environment("POKEAETHER_DRAGONITE_HQ_POC") == "1":
+		actions_to_load = ["idle"]
+		lazy_action_data = action_data.duplicate(true)
+	for action_value: Variant in actions_to_load:
+		var action := str(action_value)
+		if not _add_action_frames(frames, action, action_data.get(action, {}), root.path_join(side), cell_size, fps):
 			return null
+	frames.set_meta("dratini_hd_poc", true)
+	frames.set_meta("hd_poc_cell_size", cell_size)
+	frames.set_meta("hd_poc_fps", fps)
+	if not lazy_action_data.is_empty():
+		frames.set_meta("hd_poc_lazy_action_data", lazy_action_data)
+		frames.set_meta("hd_poc_root", root.path_join(side))
+	_frames_by_side[cache_key] = frames
+	return frames
+
+
+static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
+	if frames == null:
+		return false
+	if frames.has_animation(action):
+		return true
+	var action_data_value: Variant = frames.get_meta("hd_poc_lazy_action_data", {})
+	if not action_data_value is Dictionary:
+		return false
+	var action_data: Dictionary = action_data_value
+	var root := str(frames.get_meta("hd_poc_root", ""))
+	var cell_size := int(frames.get_meta("hd_poc_cell_size", 0))
+	var fps := float(frames.get_meta("hd_poc_fps", 0.0))
+	return _add_action_frames(frames, action, action_data.get(action, {}), root, cell_size, fps)
+
+
+static func _add_action_frames(
+	frames: SpriteFrames,
+	action: String,
+	entry_value: Variant,
+	root: String,
+	cell_size: int,
+	fps: float
+) -> bool:
+	if not entry_value is Dictionary or cell_size <= 0 or fps <= 0.0:
+		return false
+	var entry: Dictionary = entry_value
+	var pages: Array = entry.get("pages", [])
+	if pages.is_empty():
+		pages = [{"file": entry.get("file", ""), "count": entry.get("count", 0), "columns": entry.get("columns", 0)}]
+	frames.add_animation(action)
+	frames.set_animation_speed(action, fps)
+	frames.set_animation_loop(action, action in LOOP_ACTIONS)
+	for page_value: Variant in pages:
+		if not page_value is Dictionary:
+			return false
+		var page: Dictionary = page_value
+		var count := int(page.get("count", 0))
+		var columns := int(page.get("columns", 0))
+		if count <= 0 or columns <= 0:
+			return false
 		var image := Image.new()
-		var image_path := root.path_join(side).path_join(str(entry.get("file", "")))
+		var image_path := root.path_join(str(page.get("file", "")))
 		if image.load(image_path) != OK:
 			push_warning("HD battle POC: could not read %s; using the normal sprite." % image_path)
-			return null
+			return false
 		var texture := ImageTexture.create_from_image(image)
-		frames.add_animation(action)
-		frames.set_animation_speed(action, fps)
-		frames.set_animation_loop(action, action in LOOP_ACTIONS)
 		for index: int in count:
 			var atlas := AtlasTexture.new()
 			atlas.atlas = texture
 			atlas.region = Rect2i((index % columns) * cell_size, int(index / columns) * cell_size, cell_size, cell_size)
 			atlas.filter_clip = true
 			frames.add_frame(action, atlas)
-	frames.set_meta("dratini_hd_poc", true)
-	frames.set_meta("hd_poc_cell_size", cell_size)
-	_frames_by_side[cache_key] = frames
-	return frames
+	return true
 
 
 static func attack_action(move_name: String) -> String:

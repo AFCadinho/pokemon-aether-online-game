@@ -741,12 +741,14 @@ func _sync_dratini_poc_stage_decor() -> void:
 func _play_dratini_poc_action(action: String) -> void:
 	if not _has_dratini_poc_sprite():
 		return
+	if not _ensure_dratini_poc_action(action):
+		return
 	dratini_poc_action_generation += 1
 	var generation := dratini_poc_action_generation
 	var speed: float = DratiniHdPoc.speed_for(action, current_single_species) * playback_speed
 	single_sprite.frame = 0
 	single_sprite.play(action, speed)
-	var duration: float = float(single_sprite.sprite_frames.get_frame_count(action)) / (12.0 * speed)
+	var duration: float = float(single_sprite.sprite_frames.get_frame_count(action)) / (_dratini_poc_fps() * speed)
 	await get_tree().create_timer(duration).timeout
 	if generation == dratini_poc_action_generation and _has_dratini_poc_sprite():
 		_play_dratini_poc_resting_animation()
@@ -756,6 +758,8 @@ func _play_dratini_poc_resting_animation() -> void:
 	if not _has_dratini_poc_sprite():
 		return
 	var action := "sleep" if dratini_poc_sleeping else "idle"
+	if not _ensure_dratini_poc_action(action):
+		return
 	single_sprite.frame = 0
 	single_sprite.play(action, DratiniHdPoc.speed_for(action, current_single_species) * playback_speed)
 
@@ -770,13 +774,17 @@ func set_dratini_poc_sleeping(sleeping: bool) -> void:
 
 func _play_dratini_poc_faint() -> void:
 	dratini_poc_action_generation += 1
+	if not _ensure_dratini_poc_action("faint_start"):
+		return
 	var generation := dratini_poc_action_generation
 	var speed: float = DratiniHdPoc.speed_for("faint_start", current_single_species) * playback_speed
 	single_sprite.frame = 0
 	single_sprite.play("faint_start", speed)
-	var duration: float = float(single_sprite.sprite_frames.get_frame_count("faint_start")) / (12.0 * speed)
+	var duration: float = float(single_sprite.sprite_frames.get_frame_count("faint_start")) / (_dratini_poc_fps() * speed)
 	await get_tree().create_timer(duration).timeout
 	if generation != dratini_poc_action_generation or not _has_dratini_poc_sprite():
+		return
+	if not _ensure_dratini_poc_action("faint_hold"):
 		return
 	single_sprite.play("faint_hold")
 	await get_tree().create_timer(0.18 / playback_speed).timeout
@@ -788,6 +796,19 @@ func _play_dratini_poc_faint() -> void:
 	if not await AnimationWait.for_tween(self, active_tween):
 		return
 	clear_pokemon()
+
+
+func _ensure_dratini_poc_action(action: String) -> bool:
+	return (
+		_has_dratini_poc_sprite()
+		and DratiniHdPoc.ensure_action_loaded(single_sprite.sprite_frames, action)
+	)
+
+
+func _dratini_poc_fps() -> float:
+	if single_sprite != null and single_sprite.sprite_frames != null:
+		return maxf(float(single_sprite.sprite_frames.get_meta("hd_poc_fps", 12.0)), 1.0)
+	return 12.0
 
 func _stop_active_tween() -> void:
 	if active_tween != null and active_tween.is_valid():
