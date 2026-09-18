@@ -4922,6 +4922,7 @@ func _resolve_battle_environment_id(
 			player_on_tall_grass = bool(player.call("is_standing_on_tall_grass"))
 	return BattleEnvironmentResolverScript.resolve({
 		"battle_kind": battle_kind,
+		"map_id": _get_map_id(GameState.current_map),
 		"explicit_environment_id": _get_battle_environment_override(battle_metadata),
 		"encounter_type": encounter_type,
 		"player_on_water": player_on_water,
