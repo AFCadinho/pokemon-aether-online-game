@@ -5,6 +5,7 @@ extends Control
 const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const AnimationWait := preload("res://scripts/battle/battle_animation_wait.gd")
 const DratiniHdPoc := preload("res://scripts/battle/battle_ui/dratini_hd_poc.gd")
+const RenderedSpriteAssets := preload("res://scripts/battle/battle_ui/rendered_sprite_assets.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
 const MIN_SHEET_FRAME_SIZE := Vector2i(16, 16)
@@ -247,7 +248,7 @@ func clear_pokemon() -> void:
 		sprite.visible = false
 
 func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET, move_name: String = "") -> void:
-	if _has_dratini_poc_sprite():
+	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action(DratiniHdPoc.attack_action(move_name)):
 		# Start beside the existing move VFX rather than delaying it by the full
 		# source action. The 0.2-second lunge tween would double the model motion.
 		_play_dratini_poc_action(DratiniHdPoc.attack_action(move_name))
@@ -485,7 +486,7 @@ func play_damage_tween() -> void:
 	if substitute_active and not substitute_revealed_for_move:
 		await play_substitute_damage_tween()
 		return
-	if _has_dratini_poc_sprite():
+	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action("damage"):
 		await _play_dratini_poc_action("damage")
 		return
 
@@ -665,7 +666,7 @@ func _get_stat_change_scale_multiplier(multiplier: float, motion_scale: float) -
 	return 1.0 + (multiplier - 1.0) * motion_scale
 
 func play_faint_tween() -> void:
-	if _has_dratini_poc_sprite():
+	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action("faint_start"):
 		await _play_dratini_poc_faint()
 		return
 	var sprites := _get_visible_sprites()
@@ -692,7 +693,7 @@ func _has_dratini_poc_sprite() -> bool:
 		single_container.visible
 		and single_sprite.visible
 		and single_sprite.sprite_frames != null
-		and single_sprite.sprite_frames.has_meta("dratini_hd_poc")
+		and (single_sprite.sprite_frames.has_meta("dratini_hd_poc") or single_sprite.sprite_frames.has_meta("rendered_asset"))
 	)
 
 
@@ -722,7 +723,7 @@ func _sync_dratini_poc_stage_decor() -> void:
 	_restore_dratini_poc_platform()
 	if dratini_poc_shadow != null:
 		dratini_poc_shadow.visible = false
-	if not _has_dratini_poc_sprite() or DratiniHdPoc.stage_variant() != "clean":
+	if not _has_dratini_poc_sprite() or single_sprite.sprite_frames.has_meta("rendered_asset") or DratiniHdPoc.stage_variant() != "clean":
 		return
 	var platform_name := "BattlePlatform" if current_single_side == "back" else "BattlePlatform2"
 	var parent_node := get_parent()
@@ -745,7 +746,7 @@ func _play_dratini_poc_action(action: String) -> void:
 		return
 	dratini_poc_action_generation += 1
 	var generation := dratini_poc_action_generation
-	var speed: float = DratiniHdPoc.speed_for(action, current_single_species) * playback_speed
+	var speed: float = _rendered_action_speed(action) * playback_speed
 	single_sprite.frame = 0
 	single_sprite.play(action, speed)
 	var duration: float = float(single_sprite.sprite_frames.get_frame_count(action)) / (_dratini_poc_fps() * speed)
@@ -759,9 +760,12 @@ func _play_dratini_poc_resting_animation() -> void:
 		return
 	var action := "sleep" if dratini_poc_sleeping else "idle"
 	if not _ensure_dratini_poc_action(action):
-		return
+		# Legacy sprites only have idle; existing status VFX remain active.
+		action = "idle"
+		if not _ensure_dratini_poc_action(action):
+			return
 	single_sprite.frame = 0
-	single_sprite.play(action, DratiniHdPoc.speed_for(action, current_single_species) * playback_speed)
+	single_sprite.play(action, _rendered_action_speed(action) * playback_speed)
 
 
 func set_dratini_poc_sleeping(sleeping: bool) -> void:
@@ -777,12 +781,20 @@ func _play_dratini_poc_faint() -> void:
 	if not _ensure_dratini_poc_action("faint_start"):
 		return
 	var generation := dratini_poc_action_generation
-	var speed: float = DratiniHdPoc.speed_for("faint_start", current_single_species) * playback_speed
+	var speed: float = _rendered_action_speed("faint_start") * playback_speed
 	single_sprite.frame = 0
 	single_sprite.play("faint_start", speed)
 	var duration: float = float(single_sprite.sprite_frames.get_frame_count("faint_start")) / (_dratini_poc_fps() * speed)
 	await get_tree().create_timer(duration).timeout
 	if generation != dratini_poc_action_generation or not _has_dratini_poc_sprite():
+		return
+	if single_sprite.sprite_frames.has_meta("rendered_asset"):
+		if _ensure_dratini_poc_action("faint_loop"):
+			single_sprite.play("faint_loop", _rendered_action_speed("faint_loop") * playback_speed)
+		else:
+			single_sprite.stop()
+			single_sprite.frame = single_sprite.sprite_frames.get_frame_count("faint_start") - 1
+		# Scene/roster clearing still owns removal. No recovery, recall or long wait.
 		return
 	if not _ensure_dratini_poc_action("faint_hold"):
 		return
@@ -799,10 +811,18 @@ func _play_dratini_poc_faint() -> void:
 
 
 func _ensure_dratini_poc_action(action: String) -> bool:
+	if _has_dratini_poc_sprite() and single_sprite.sprite_frames.has_meta("rendered_asset"):
+		return RenderedSpriteAssets.ensure_action_loaded(single_sprite.sprite_frames, action)
 	return (
 		_has_dratini_poc_sprite()
 		and DratiniHdPoc.ensure_action_loaded(single_sprite.sprite_frames, action)
 	)
+
+
+func _rendered_action_speed(action: String) -> float:
+	if single_sprite.sprite_frames.has_meta("rendered_asset"):
+		return RenderedSpriteAssets.speed_for(single_sprite.sprite_frames, action)
+	return DratiniHdPoc.speed_for(action, current_single_species)
 
 
 func _dratini_poc_fps() -> float:
@@ -1219,6 +1239,15 @@ func _load_sprite_frames(
 	is_shiny: bool = false,
 	report_missing: bool = true
 ) -> SpriteFrames:
+	var rendered := RenderedSpriteAssets.load_frames(species, side, is_shiny)
+	if rendered != null:
+		var present: Dictionary = rendered.get_meta("rendered_presentation", {})
+		var anchor: Array = present.get("anchor", [256, 256])
+		var offset: Array = present.get("position_offset", [0, 0])
+		_set_sprite_frames_render_scale(rendered, float(present.get("render_scale", 1.0)))
+		_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
+		_set_sprite_frames_position_offset(rendered, Vector2(float(offset[0]), float(offset[1])))
+		return rendered
 	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
 		var poc_frames := DratiniHdPoc.load_frames(species, side)
 		if poc_frames != null:
