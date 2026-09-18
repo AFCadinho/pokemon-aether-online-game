@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "purpose": "First local SCVI-first quality review; candidates are not approvals",
+  "entries": [
+    {"species": "charizard", "pm": 6, "target_game_height_px": 175},
+    {"species": "pikachu", "pm": 25, "target_game_height_px": 75,
+      "review_warning": "Defaultwait eyes remain closed; alternate 10000 also closed. Facial import unresolved."},
+    {"species": "psyduck", "pm": 54, "target_game_height_px": 90,
+      "review_warning": "Defaultwait eyes remain closed; 10000 candidate pending facial import review."},
+    {"species": "meowth", "pm": 52, "target_game_height_px": 100,
+      "disabled_actions": ["sleep"],
+      "idle_neutral_bones": ["left_upper_eyelid", "left_upper_eyelid_sub", "left_lower_eyelid", "left_lower_eyelid_sub", "right_upper_eyelid", "right_upper_eyelid_sub", "right_lower_eyelid", "right_lower_eyelid_sub"],
+      "camera_override": {
+        "front": {"position": [3, -7, 2], "target": [0, 0, 0.2], "ortho_scale": 0.95},
+        "back": {"position": [-3, 7, 2.06], "target": [0, 0, 0.26], "ortho_scale": 0.95}
+      },
+      "presentation_override": {
+        "front": {"render_scale": 4, "anchor": [256, 289], "ground_point": [0, 0, 0], "position_offset": [-10, 52], "min_visible_height": 80, "max_visible_height": 260},
+        "back": {"render_scale": 4, "anchor": [256, 285], "ground_point": [0, 0, 0], "position_offset": [-12, 64], "min_visible_height": 80, "max_visible_height": 260}
+      },
+      "light_override": {"target": [0, 0, 0.12], "fill_position": [-4, -3, 3.5], "fill_energy": 180}
+    },
+    {"species": "arcanine", "pm": 59, "target_game_height_px": 170,
+      "review_warning": "Battlewait appears closed-eyed; neutralizing eyelid bones did not alter it."},
+    {"species": "gengar", "pm": 94, "target_game_height_px": 140,
+      "review_warning": "Battlewait eyes remain closed throughout sampled idle frames."},
+    {"species": "scyther", "pm": 123, "target_game_height_px": 160},
+    {"species": "gyarados", "pm": 130, "target_game_height_px": 175,
+      "review_warning": "Eye/facial presentation is suspect; compare against prior Gyarados correction before full render."},
+    {"species": "eevee", "pm": 133, "target_game_height_px": 72},
+    {"species": "articuno", "pm": 144, "target_game_height_px": 165},
+    {"species": "dragonite", "pm": 149, "target_game_height_px": 180,
+      "camera_override": {
+        "front": {"position": [3, -7, 3], "target": [0, 0, 1.15], "ortho_scale": 4.8},
+        "back": {"position": [-3, 7, 3], "target": [0, 0, 1.15], "ortho_scale": 4.8}
+      },
+      "presentation_override": {
+        "front": {"render_scale": 2.9, "anchor": [256, 256], "ground_point": [0, 0, 0], "position_offset": [-10, 7], "min_visible_height": 80, "max_visible_height": 260},
+        "back": {"render_scale": 2.9, "anchor": [256, 256], "ground_point": [0, 0, 0], "position_offset": [-12, 0], "min_visible_height": 80, "max_visible_height": 260}
+      },
+      "light_override": {"target": [0, 0, 1.15]}
+    },
+    {"species": "mewtwo", "pm": 150, "target_game_height_px": 170,
+      "review_warning": "Front pose/camera hides the face; framing needs battle-scene review."},
+    {"species": "lucario", "pm": 448, "target_game_height_px": 145},
+    {"species": "gardevoir", "pm": 282, "target_game_height_px": 145,
+      "review_warning": "Front camera shows mostly side of face; adjust before full idle/action render."},
+    {"species": "roaring-moon", "pm": 1089, "target_game_height_px": 190,
+      "camera_override": {
+        "front": {"position": [6, -6, 4], "target": [0, 0, 1], "ortho_scale": 11.6},
+        "back": {"position": [-4, 7, 4], "target": [0, 0, 1], "ortho_scale": 11.6}
+      },
+      "presentation_override": {
+        "front": {"render_scale": 2.3, "anchor": [256, 256], "ground_point": [0, 0, 0], "ground_policy": "floating", "position_offset": [-10, -10], "min_visible_height": 55, "max_visible_height": 290},
+        "back": {"render_scale": 2.3, "anchor": [256, 256], "ground_point": [0, 0, 0], "ground_policy": "floating", "position_offset": [-12, -25], "min_visible_height": 55, "max_visible_height": 290}
+      },
+      "light_override": {"target": [0, 0, 1], "key_position": [-4, -5, 7], "fill_position": [4, 3, 6], "rim_position": [1, -3, 5]}
+    }
+  ]
+}

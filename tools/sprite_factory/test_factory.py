@@ -32,6 +32,10 @@ class FactoryTests(unittest.TestCase):
 
     def test_baseline_and_variant_are_enforced(self):
         f.validate(self.cfg, 'normal')
+        without_qc = copy.deepcopy(self.cfg)
+        without_qc.pop('qc')
+        with self.assertRaisesRegex(ValueError, 'quality-check settings'):
+            f.validate(without_qc, 'normal')
         with self.assertRaisesRegex(ValueError, 'unavailable'):
             f.validate(self.cfg, 'shiny')
         self.cfg['render']['fps'] = 12
