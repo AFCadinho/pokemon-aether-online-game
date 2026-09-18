@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local visual test: Dratini can use pre-rendered HD battle animations when launched with the developer-only comparison flag; the regular sprites remain the default.
+
 - Adventure Parties can now be formed and played in the browser, including shared trainer and grass battles with desktop players in browser-available areas.
 
 - Terapagos can be switched back into battle after changing to its Terastal or Stellar form.

@@ -4,6 +4,7 @@ extends Control
 
 const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const AnimationWait := preload("res://scripts/battle/battle_animation_wait.gd")
+const DratiniHdPoc := preload("res://scripts/battle/battle_ui/dratini_hd_poc.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
 const MIN_SHEET_FRAME_SIZE := Vector2i(16, 16)
@@ -99,6 +100,8 @@ var sprite_frames_cache: Dictionary = {}
 var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
+var dratini_poc_sleeping := false
+var dratini_poc_action_generation := 0
 var current_double_web_identity: Dictionary = {}
 var web_sprite_request_generation := 0
 var web_sprite_upgrades_allowed := false
@@ -220,6 +223,8 @@ func reset_battle_pose() -> void:
 	_update_stat_stage_panel_positions()
 
 func clear_pokemon() -> void:
+	dratini_poc_action_generation += 1
+	dratini_poc_sleeping = false
 	web_sprite_request_generation += 1
 	web_sprite_upgrades_allowed = false
 	_stop_active_tween()
@@ -234,7 +239,12 @@ func clear_pokemon() -> void:
 		_reset_sprite_pose(sprite)
 		sprite.visible = false
 
-func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
+func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET, move_name: String = "") -> void:
+	if _has_dratini_poc_sprite():
+		# Start beside the existing move VFX rather than delaying it by the full
+		# source action. The 0.2-second lunge tween would double the model motion.
+		_play_dratini_poc_action(DratiniHdPoc.attack_action(move_name))
+		return
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -468,6 +478,9 @@ func play_damage_tween() -> void:
 	if substitute_active and not substitute_revealed_for_move:
 		await play_substitute_damage_tween()
 		return
+	if _has_dratini_poc_sprite():
+		await _play_dratini_poc_action("damage")
+		return
 
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
@@ -645,6 +658,9 @@ func _get_stat_change_scale_multiplier(multiplier: float, motion_scale: float) -
 	return 1.0 + (multiplier - 1.0) * motion_scale
 
 func play_faint_tween() -> void:
+	if _has_dratini_poc_sprite():
+		await _play_dratini_poc_faint()
+		return
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -659,6 +675,67 @@ func play_faint_tween() -> void:
 		active_tween.tween_property(sprite, "position", base_position + FAINT_TWEEN_OFFSET, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		active_tween.tween_property(sprite, "modulate:a", 0.0, 0.28)
 
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
+	clear_pokemon()
+
+
+func _has_dratini_poc_sprite() -> bool:
+	return (
+		single_container.visible
+		and single_sprite.visible
+		and single_sprite.sprite_frames != null
+		and single_sprite.sprite_frames.has_meta("dratini_hd_poc")
+	)
+
+
+func _play_dratini_poc_action(action: String) -> void:
+	if not _has_dratini_poc_sprite():
+		return
+	dratini_poc_action_generation += 1
+	var generation := dratini_poc_action_generation
+	var speed: float = DratiniHdPoc.speed_for(action) * playback_speed
+	single_sprite.frame = 0
+	single_sprite.play(action, speed)
+	var duration: float = float(single_sprite.sprite_frames.get_frame_count(action)) / (12.0 * speed)
+	await get_tree().create_timer(duration).timeout
+	if generation == dratini_poc_action_generation and _has_dratini_poc_sprite():
+		_play_dratini_poc_resting_animation()
+
+
+func _play_dratini_poc_resting_animation() -> void:
+	if not _has_dratini_poc_sprite():
+		return
+	var action := "sleep" if dratini_poc_sleeping else "idle"
+	single_sprite.frame = 0
+	single_sprite.play(action, DratiniHdPoc.speed_for(action) * playback_speed)
+
+
+func set_dratini_poc_sleeping(sleeping: bool) -> void:
+	if not _has_dratini_poc_sprite() or dratini_poc_sleeping == sleeping:
+		return
+	dratini_poc_sleeping = sleeping
+	dratini_poc_action_generation += 1
+	_play_dratini_poc_resting_animation()
+
+
+func _play_dratini_poc_faint() -> void:
+	dratini_poc_action_generation += 1
+	var generation := dratini_poc_action_generation
+	var speed: float = DratiniHdPoc.speed_for("faint_start") * playback_speed
+	single_sprite.frame = 0
+	single_sprite.play("faint_start", speed)
+	var duration: float = float(single_sprite.sprite_frames.get_frame_count("faint_start")) / (12.0 * speed)
+	await get_tree().create_timer(duration).timeout
+	if generation != dratini_poc_action_generation or not _has_dratini_poc_sprite():
+		return
+	single_sprite.play("faint_hold")
+	await get_tree().create_timer(0.18 / playback_speed).timeout
+	if generation != dratini_poc_action_generation or not _has_dratini_poc_sprite():
+		return
+	_stop_active_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
+	active_tween.tween_property(single_sprite, "modulate:a", 0.0, 0.28)
 	if not await AnimationWait.for_tween(self, active_tween):
 		return
 	clear_pokemon()
@@ -1072,6 +1149,12 @@ func _load_sprite_frames(
 	is_shiny: bool = false,
 	report_missing: bool = true
 ) -> SpriteFrames:
+	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
+		var poc_frames := DratiniHdPoc.load_frames(side)
+		if poc_frames != null:
+			_set_sprite_frames_render_scale(poc_frames, 2.0)
+			_set_sprite_frames_anchor(poc_frames, Vector2(96, 96), Vector2(192, 192))
+			return poc_frames
 	var cache_key := _sprite_cache_key(species, side, is_shiny)
 	# Map/team prefetching stores the real web sheet in the global service. Read
 	# that cache before a SpriteBox-local HOME fallback so a newly mounted battle
@@ -1718,6 +1801,8 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 		_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 		return
 	web_sprite_request_generation += 1
+	dratini_poc_action_generation += 1
+	dratini_poc_sleeping = false
 	var request_generation := web_sprite_request_generation
 
 	single_sprite.visible = false
@@ -1743,7 +1828,7 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 	if substitute_active:
 		_sync_substitute_idle_pose()
-	if web_sprite_upgrades_allowed:
+	if web_sprite_upgrades_allowed and not _has_dratini_poc_sprite():
 		_upgrade_single_web_sprite.call_deferred(request_generation, species, side, is_shiny)
 
 
@@ -1796,6 +1881,8 @@ func _apply_web_sprite_result_metadata(
 
 
 func _upgrade_single_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	if _has_dratini_poc_sprite():
+		return
 	var frames := await request_web_sprite_frames(species, side, is_shiny)
 	if (
 		frames == null or generation != web_sprite_request_generation
@@ -1808,7 +1895,7 @@ func _upgrade_single_web_sprite(generation: int, species: String, side: String, 
 
 func allow_web_sprite_upgrades() -> void:
 	web_sprite_upgrades_allowed = true
-	if current_single_species != "" and single_container.visible:
+	if current_single_species != "" and single_container.visible and not _has_dratini_poc_sprite():
 		_upgrade_single_web_sprite.call_deferred(
 			web_sprite_request_generation, current_single_species,
 			current_single_side, current_single_is_shiny
@@ -1855,6 +1942,9 @@ func _upgrade_double_web_sprites(
 		_apply_sprite_playback_mode(sprite)
 
 func _apply_sprite_playback_mode(sprite: AnimatedSprite2D) -> void:
+	if sprite == single_sprite and _has_dratini_poc_sprite():
+		_play_dratini_poc_resting_animation()
+		return
 	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_STATIC:
 		sprite.stop()
 		sprite.frame = 0
