@@ -128,6 +128,10 @@ func _check_resolution_priority() -> void:
 func _check_world_integration_contract() -> void:
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
 	_check_true(world_source.contains('_resolve_battle_environment_id("wild", response, encounter_type)'), "wild battles resolve tile and map context")
+	_check_true(
+		world_source.contains('response,\n\t\t_resolve_battle_environment_id("wild", response)\n\t)'),
+		"developer-triggered wild battles resolve their battle environment"
+	)
 	_check_true(world_source.contains('_resolve_battle_environment_id("trainer", battle_trainer_data)'), "trainer battles resolve override and map context")
 	_check_true(world_source.contains('_resolve_battle_environment_id("pvp", response)'), "PvP resolves its explicit stadium context")
 	_check_true(world_source.contains('"map_id": _get_map_id(GameState.current_map)'), "world supplies the current map to the battle environment resolver")
