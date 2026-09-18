@@ -3623,7 +3623,8 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	await battle_instance.setup_wild_battle_from_response(
 		PlayerSave.party[0],
 		wild_pokemon,
-		response
+		response,
+		_resolve_battle_environment_id("wild", response)
 	)
 
 func start_triggered_wild_battle_for_area(
