@@ -31,7 +31,9 @@ static func is_enabled_for(species: String, side: String, shiny: bool) -> bool:
 static func load_frames(side: String) -> SpriteFrames:
 	if _frames_by_side.has(side):
 		return _frames_by_side[side] as SpriteFrames
-	var root := ProjectSettings.globalize_path(OUTPUT_ROOT)
+	var root := OS.get_environment("POKEAETHER_DRATINI_HD_DIR").strip_edges()
+	if root.is_empty():
+		root = ProjectSettings.globalize_path(OUTPUT_ROOT)
 	var manifest_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(root.path_join("manifest.json")))
 	if not manifest_value is Dictionary:
 		push_warning("Dratini HD POC: missing local manifest; using the normal sprite.")
