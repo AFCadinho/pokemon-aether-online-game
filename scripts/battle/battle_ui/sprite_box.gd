@@ -743,7 +743,7 @@ func _play_dratini_poc_action(action: String) -> void:
 		return
 	dratini_poc_action_generation += 1
 	var generation := dratini_poc_action_generation
-	var speed: float = DratiniHdPoc.speed_for(action) * playback_speed
+	var speed: float = DratiniHdPoc.speed_for(action, current_single_species) * playback_speed
 	single_sprite.frame = 0
 	single_sprite.play(action, speed)
 	var duration: float = float(single_sprite.sprite_frames.get_frame_count(action)) / (12.0 * speed)
@@ -757,7 +757,7 @@ func _play_dratini_poc_resting_animation() -> void:
 		return
 	var action := "sleep" if dratini_poc_sleeping else "idle"
 	single_sprite.frame = 0
-	single_sprite.play(action, DratiniHdPoc.speed_for(action) * playback_speed)
+	single_sprite.play(action, DratiniHdPoc.speed_for(action, current_single_species) * playback_speed)
 
 
 func set_dratini_poc_sleeping(sleeping: bool) -> void:
@@ -771,7 +771,7 @@ func set_dratini_poc_sleeping(sleeping: bool) -> void:
 func _play_dratini_poc_faint() -> void:
 	dratini_poc_action_generation += 1
 	var generation := dratini_poc_action_generation
-	var speed: float = DratiniHdPoc.speed_for("faint_start") * playback_speed
+	var speed: float = DratiniHdPoc.speed_for("faint_start", current_single_species) * playback_speed
 	single_sprite.frame = 0
 	single_sprite.play("faint_start", speed)
 	var duration: float = float(single_sprite.sprite_frames.get_frame_count("faint_start")) / (12.0 * speed)
@@ -1199,11 +1199,11 @@ func _load_sprite_frames(
 	report_missing: bool = true
 ) -> SpriteFrames:
 	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
-		var poc_frames := DratiniHdPoc.load_frames(side)
+		var poc_frames := DratiniHdPoc.load_frames(species, side)
 		if poc_frames != null:
-			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(side))
+			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(species, side))
 			_set_sprite_frames_anchor(poc_frames, Vector2(96, 96), Vector2(192, 192))
-			_set_sprite_frames_position_offset(poc_frames, DratiniHdPoc.position_offset_for(side))
+			_set_sprite_frames_position_offset(poc_frames, DratiniHdPoc.position_offset_for(species, side))
 			return poc_frames
 	var cache_key := _sprite_cache_key(species, side, is_shiny)
 	# Map/team prefetching stores the real web sheet in the global service. Read
