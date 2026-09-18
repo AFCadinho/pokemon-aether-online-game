@@ -178,7 +178,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 			substitute_revealed = await animation_router.reveal_pokemon_from_substitute_for_move(attack_actor_ident)
 			if owned_generation != render_generation:
 				return
-			await animation_router.play_attack_tween_for_actor(attack_actor_ident)
+			await animation_router.play_attack_tween_for_actor(attack_actor_ident, move_animation_name)
 			if owned_generation != render_generation:
 				return
 		if animations_allowed and move_animation_name != "":

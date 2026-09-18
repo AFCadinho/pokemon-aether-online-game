@@ -6324,6 +6324,11 @@ func _sync_status_condition_overlay_for_player(player_id: String) -> void:
 
 	if overlay.has_method("set_condition"):
 		overlay.call("set_condition", condition_key)
+	# Local Dratini HD visual POC: keep its sleeping pose aligned with the
+	# already-resolved battle status. Other Pokémon use their existing sprites.
+	var sprite_box: Node = player_sprite_box if player_id == "p1" else enemy_sprite_box
+	if sprite_box != null and sprite_box.has_method("set_dratini_poc_sleeping"):
+		sprite_box.call("set_dratini_poc_sleeping", condition_key == "sleeping")
 
 func _prepare_pending_status_condition_overlays(events: Array) -> void:
 	pending_status_condition_overlay_players.clear()

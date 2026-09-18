@@ -130,7 +130,7 @@ func clear_all_substitutes() -> void:
 			sprite_box.call("clear_substitute_immediately")
 
 
-func play_attack_tween_for_actor(actor_ident: String) -> void:
+func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.attack_tween", {"actor": actor_ident}):
@@ -138,9 +138,9 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 
 	match _get_player_id_from_ident(actor_ident):
 		"p1":
-			await player_sprite_box.play_attack_tween(Vector2(28, -6))
+			await player_sprite_box.play_attack_tween(Vector2(28, -6), move_name)
 		"p2":
-			await enemy_sprite_box.play_attack_tween(Vector2(-28, 6))
+			await enemy_sprite_box.play_attack_tween(Vector2(-28, 6), move_name)
 
 
 func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "", options: Dictionary = {}) -> void:
