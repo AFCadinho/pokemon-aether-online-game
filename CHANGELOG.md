@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Local visual test: Dragonite can also use a master-quality 512px, 24 FPS pre-rendered HD set with lazy action loading; the earlier Dragonite/Gyarados test and all regular sprites remain available for comparison.
+- Local visual test: Dragonite can also use a master-quality 512px, 24 FPS pre-rendered HD set with lazy action loading and a livelier idle cadence; the earlier Dragonite/Gyarados test and all regular sprites remain available for comparison.
 
 - Wild battles triggered in the Aether Clash lobby now use the animated PvP stadium background.
 

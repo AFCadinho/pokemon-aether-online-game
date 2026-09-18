@@ -165,7 +165,12 @@ static func attack_action(move_name: String) -> String:
 	return "physical_attack" if str(move_data.get("category", "")).to_lower() == "physical" else "special_attack"
 
 static func speed_for(action: String, species: String = "dratini") -> float:
-	if species.strip_edges().to_lower() == "gyarados":
+	var species_key := species.strip_edges().to_lower()
+	if species_key == "dragonite" and action == "idle":
+		# Preserve every 24 FPS source frame, while giving Dragonite's long
+		# battle-wait wing cycle a livelier cadence in the visual POC.
+		return 1.3
+	if species_key == "gyarados":
 		return float({
 			"idle": 1.0, "physical_attack": 1.4, "special_attack": 1.4,
 			"damage": 1.0, "sleep": 1.0, "faint_start": 1.4, "faint_hold": 1.0,
