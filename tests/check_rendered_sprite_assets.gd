@@ -6,6 +6,9 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	assert(Assets._catalog_key("Roaring Moon", false) == "roaring-moon:normal")
+	assert(Assets._catalog_key(" Roaring_Moon ", true) == "roaring-moon:shiny")
+	assert(Assets._catalog_key("Rattata-Alola", false) == "rattata-alola:normal")
 	assert(Assets.load_frames("rattata-alola", "front", false) == null)
 	assert(Assets.load_frames("rattata", "front", true) == null)
 	assert(Assets.load_frames("pikachu", "front", false) == null)
