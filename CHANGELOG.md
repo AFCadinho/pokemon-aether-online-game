@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Cards now feature a full-body trainer portrait with your outfit and Chroma colours, a matching passport design for public profiles, and a clearer overview of your trainer information.
+
 - Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield, use every available matching outfit layer, and temporarily use the Starter Kit shirt and trousers when those two battle layers are still being made. The unisex Mysterious Outfit now has its complete battle look for male and female Trainers, while the Adinho Outfit supports its original palette and saved Chroma colours.
 
 - Local editor runs now reuse the selected launcher mod packs for cosmetic testing.

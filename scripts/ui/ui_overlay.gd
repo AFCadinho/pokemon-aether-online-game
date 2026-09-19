@@ -15364,6 +15364,9 @@ func _populate_avatar_preview(viewport: SubViewport, preview_position: Vector2, 
 func _refresh_avatar_previews() -> void:
 	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
 	for viewport: SubViewport in trainer_card_avatar_viewports:
+		if bool(viewport.get_meta("trainer_card_battle_art", false)):
+			_populate_trainer_card_battle_art(viewport, PlayerSave.to_appearance_state())
+			continue
 		var preview_position: Vector2 = viewport.get_meta("preview_position", TRAINER_CARD_AVATAR_POSITION) as Vector2
 		var preview_scale: Vector2 = viewport.get_meta("preview_scale", TRAINER_CARD_AVATAR_SCALE) as Vector2
 		_populate_avatar_preview(viewport, preview_position, preview_scale)
@@ -15610,7 +15613,7 @@ func _refresh_player_status_card() -> void:
 	_refresh_aether_blessing_membership_status()
 
 func _make_trainer_card_outer_style() -> StyleBoxFlat:
-	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
+	var style := _make_panel_style(Color("#0b1526"), Color("#427e91"), 16, 1)
 	style.border_width_top = 2
 	style.shadow_color = Color(0, 0, 0, 0.48)
 	style.shadow_size = 16
@@ -16157,6 +16160,47 @@ func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> C
 	icon_center.add_child(texture_rect)
 	return icon_center
 
+func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictionary, preview_name: String = "TrainerCardBattlePreview") -> void:
+	for child: Node in viewport.get_children():
+		child.free()
+	var backdrop := Node2D.new()
+	viewport.add_child(backdrop)
+	backdrop.draw.connect(func() -> void:
+		var center := Vector2(viewport.size) * Vector2(0.5, 0.46)
+		backdrop.draw_circle(center, 82.0, Color("#102f42"))
+		backdrop.draw_arc(center, 78.0, 0.0, TAU, 96, Color("#356173"), 1.0, true)
+		backdrop.draw_line(center - Vector2(78, 0), center + Vector2(78, 0), Color("#356173"), 1.0, true)
+		backdrop.draw_circle(center, 22.0, Color("#102f42"))
+		backdrop.draw_arc(center, 22.0, 0.0, TAU, 48, Color("#356173"), 1.0, true)
+		backdrop.draw_line(Vector2(24, 254), Vector2(160, 254), Color("#65c9c0"), 2.0, true)
+	)
+	var art := Node2D.new()
+	art.name = preview_name
+	viewport.add_child(art)
+	var layers := BattlePlayerTrainerCatalog.build_layers(appearance)
+	var bounds := Rect2()
+	for layer: Dictionary in layers:
+		var texture := layer.get("texture") as Texture2D
+		if texture == null:
+			continue
+		var sprite := Sprite2D.new()
+		sprite.name = str(layer.get("category", "layer")).to_pascal_case()
+		sprite.texture = texture
+		sprite.flip_h = true
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprite.scale = Vector2.ONE * float(layer.get("scale", 1.0))
+		art.add_child(sprite)
+		var used := texture.get_image().get_used_rect()
+		var visible_rect := Rect2((Vector2(used.position) - texture.get_size() * 0.5) * sprite.scale, Vector2(used.size) * sprite.scale)
+		visible_rect.position.x = -visible_rect.end.x
+		bounds = visible_rect if bounds.size == Vector2.ZERO else bounds.merge(visible_rect)
+	if bounds.has_area():
+		var factor := minf(144.0 / bounds.size.x, 222.0 / bounds.size.y)
+		art.scale = Vector2.ONE * factor
+		art.position = Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * factor
+	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+
 func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "PublicTrainerAvatarPanel"
@@ -16180,29 +16224,18 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(preview_label)
 	var viewport_container := SubViewportContainer.new()
-	viewport_container.custom_minimum_size = Vector2(TRAINER_CARD_AVATAR_VIEWPORT_SIZE)
+	viewport_container.custom_minimum_size = Vector2(184, 272)
 	viewport_container.stretch = false
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.add_child(viewport_container)
 	var viewport := SubViewport.new()
 	viewport.transparent_bg = true
-	viewport.size = TRAINER_CARD_AVATAR_VIEWPORT_SIZE
+	viewport.size = Vector2i(184, 272)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(viewport)
-	var avatar_value: Variant = REMOTE_PLAYER_AVATAR_SCRIPT.new()
-	if avatar_value is RemotePlayerAvatar:
-		var avatar := avatar_value as RemotePlayerAvatar
-		avatar.name = "PublicTrainerAvatarPreview"
-		viewport.add_child(avatar)
-		var state := card.duplicate(true)
-		state["position"] = {"x": 0.0, "y": 0.0}
-		state["facingDirection"] = "down"
-		state["follower"] = {}
-		state["movement"] = {}
-		state["mountId"] = ""
-		avatar.apply_state(state)
-		_finalize_public_trainer_avatar_preview(avatar)
-		call_deferred("_finalize_public_trainer_avatar_preview", avatar)
+	var appearance := _dictionary_from_value(card.get("appearance", {})).duplicate(true)
+	appearance["gender"] = card.get("gender", appearance.get("gender", "male"))
+	_populate_trainer_card_battle_art(viewport, appearance, "PublicTrainerAvatarPreview")
 	return panel
 
 
@@ -16399,6 +16432,8 @@ func _create_trainer_card_avatar_panel(
 	viewport_size: Vector2i = TRAINER_CARD_AVATAR_VIEWPORT_SIZE,
 	panel_minimum_size: Vector2 = Vector2(210, 198)
 ) -> Control:
+	if show_name:
+		viewport_size = Vector2i(184, 272)
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = panel_minimum_size
 	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
@@ -16441,7 +16476,11 @@ func _create_trainer_card_avatar_panel(
 	trainer_card_avatar_viewport.set_meta("preview_scale", preview_scale)
 	viewport_container.add_child(trainer_card_avatar_viewport)
 	trainer_card_avatar_viewports.append(trainer_card_avatar_viewport)
-	_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
+	trainer_card_avatar_viewport.set_meta("trainer_card_battle_art", show_name)
+	if show_name:
+		_populate_trainer_card_battle_art(trainer_card_avatar_viewport, PlayerSave.to_appearance_state())
+	else:
+		_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
 
 	return panel
 
@@ -16454,18 +16493,23 @@ func _create_trainer_card_stats_tab() -> Control:
 	tab.add_theme_constant_override("margin_right", 8)
 	tab.add_theme_constant_override("margin_bottom", 8)
 
+	var body := HBoxContainer.new()
+	body.add_theme_constant_override("separation", 14)
+	tab.add_child(body)
+	var portrait := _create_trainer_card_avatar_panel()
+	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_child(portrait)
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
-	tab.add_child(layout)
+	body.add_child(layout)
 
 	var top_row := HBoxContainer.new()
 	top_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_row.add_theme_constant_override("separation", 12)
 	layout.add_child(top_row)
 
-	top_row.add_child(_create_trainer_card_avatar_panel())
 	var profile_stack := VBoxContainer.new()
 	profile_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	profile_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -17210,8 +17254,8 @@ func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary])
 		row_stack.add_child(_create_trainer_card_stat_row(
 			label_key,
 			value_text,
-			130,
-			15,
+			80,
+			13,
 			value_color,
 			str(row_value.get("id", ""))
 		))
