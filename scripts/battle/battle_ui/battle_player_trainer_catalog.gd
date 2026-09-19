@@ -1,0 +1,154 @@
+extends RefCounted
+
+class_name BattlePlayerTrainerCatalog
+
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
+const MANIFEST_PATH := "res://assets/battles/trainers/player/manifest.json"
+const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "shoes", "top"]
+const OPTIONAL_CATEGORIES: Array[String] = ["hair", "headgear"]
+
+static var _manifest: Dictionary = {}
+static var _texture_cache: Dictionary = {}
+static var _variant_cache: Dictionary = {}
+
+
+static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
+	var manifest := _get_manifest()
+	var gender := CharacterAppearanceService.normalize_gender(str(appearance_state.get("gender", "")))
+	if gender != "female":
+		gender = "male"
+	var gender_value: Variant = manifest.get("genders", {}).get(gender, {})
+	if not (gender_value is Dictionary):
+		return []
+	var gender_data := gender_value as Dictionary
+	var layers: Array[Dictionary] = []
+	var base_path := str(gender_data.get("base", ""))
+	var base_texture := _load_texture(base_path)
+	if base_texture == null:
+		return []
+	var skin_tone := CharacterAppearanceService.resolve_skin_tone(
+		str(appearance_state.get("body", "")),
+		str(appearance_state.get("skin_tone", "")),
+		gender
+	)
+	layers.append({
+		"category": "body",
+		"part_id": str(appearance_state.get("body", "")),
+		"texture": _skin_variant(base_path, base_texture, skin_tone),
+		"scale": 1.0,
+		"fallback": false,
+	})
+
+	var layer_order_value: Variant = manifest.get(
+		"layerOrder",
+		["bottom", "shoes", "top", "hair", "headgear"]
+	)
+	if not (layer_order_value is Array):
+		return layers
+	for category_value: Variant in layer_order_value as Array:
+		var category := str(category_value)
+		if category not in REQUIRED_CLOTHING_CATEGORIES and category not in OPTIONAL_CATEGORIES:
+			continue
+		var layer := _resolve_part_layer(gender_data, appearance_state, gender, category)
+		if not layer.is_empty():
+			layers.append(layer)
+	return layers
+
+
+static func _resolve_part_layer(
+	gender_data: Dictionary,
+	appearance_state: Dictionary,
+	gender: String,
+	category: String
+) -> Dictionary:
+	var selected_id := CharacterAppearanceService.deserialize_part_id(
+		str(appearance_state.get(category, ""))
+	)
+	var is_required := category in REQUIRED_CLOTHING_CATEGORIES
+	if selected_id.is_empty() and not is_required:
+		return {}
+	var categories_value: Variant = gender_data.get("categories", {})
+	if not (categories_value is Dictionary):
+		return {}
+	var category_value: Variant = (categories_value as Dictionary).get(category, {})
+	if not (category_value is Dictionary):
+		return {}
+	var category_data := category_value as Dictionary
+	var parts_value: Variant = category_data.get("parts", {})
+	if not (parts_value is Dictionary):
+		return {}
+	var parts := parts_value as Dictionary
+	var resolved_id := selected_id
+	var used_fallback := false
+	if not parts.has(resolved_id):
+		resolved_id = str(category_data.get("fallback", ""))
+		used_fallback = not selected_id.is_empty()
+	if resolved_id.is_empty() or not parts.has(resolved_id):
+		return {}
+	var part_value: Variant = parts.get(resolved_id, {})
+	if not (part_value is Dictionary):
+		return {}
+	var part := part_value as Dictionary
+	var path := str(part.get("path", ""))
+	var texture := _load_texture(path)
+	if texture == null:
+		return {}
+	if category == "hair" and CharacterAppearanceService.is_tintable_part(category, resolved_id):
+		var hair_color := CharacterAppearanceService.resolve_hair_color(
+			str(appearance_state.get("hair_color", "")),
+			gender
+		)
+		texture = _colour_variant(path, texture, hair_color)
+	return {
+		"category": category,
+		"part_id": resolved_id,
+		"requested_part_id": selected_id,
+		"texture": texture,
+		"scale": float(part.get("scale", 1.0)),
+		"fallback": used_fallback,
+	}
+
+
+static func _get_manifest() -> Dictionary:
+	if not _manifest.is_empty():
+		return _manifest
+	if not FileAccess.file_exists(MANIFEST_PATH):
+		push_warning("BattlePlayerTrainerCatalog: missing %s" % MANIFEST_PATH)
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
+	if parsed is Dictionary:
+		_manifest = parsed as Dictionary
+	else:
+		push_warning("BattlePlayerTrainerCatalog: invalid player battle trainer manifest")
+	return _manifest
+
+
+static func _load_texture(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+	if _texture_cache.has(path):
+		return _texture_cache.get(path) as Texture2D
+	var texture := ResourceLoader.load(path) as Texture2D
+	_texture_cache[path] = texture
+	return texture
+
+
+static func _skin_variant(path: String, texture: Texture2D, skin_tone: String) -> Texture2D:
+	var key := "skin:%s:%s" % [path, skin_tone.to_lower()]
+	if not _variant_cache.has(key):
+		_variant_cache[key] = CharacterAppearanceService.tint_skin_texture(
+			texture,
+			Color.from_string(skin_tone, Color(CharacterAppearanceService.DEFAULT_SKIN_TONE))
+		)
+	return _variant_cache.get(key) as Texture2D
+
+
+static func _colour_variant(path: String, texture: Texture2D, colour: String) -> Texture2D:
+	var key := "colour:%s:%s" % [path, colour.to_lower()]
+	if not _variant_cache.has(key):
+		_variant_cache[key] = CharacterAppearanceService.tint_texture(
+			texture,
+			Color.from_string(colour, Color.WHITE),
+			true
+		)
+	return _variant_cache.get(key) as Texture2D

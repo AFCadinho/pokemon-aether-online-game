@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. Starter outfits are shown while matching battle art for other cosmetics is still being added.
+
 - Local editor runs now reuse the selected launcher mod packs for cosmetic testing.
 
 - Mod category selectors now match the launcher styling instead of the default Godot dropdowns.

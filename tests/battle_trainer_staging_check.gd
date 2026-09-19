@@ -31,8 +31,8 @@ func _check_scene_staging() -> void:
 	var player_start := source.find('[node name="PlayerTrainerSprite"')
 	var enemy_start := source.find('[node name="EnemyTrainerSprite"')
 	var platform_start := source.find('[node name="BattlePlatform"')
-	_check(player_start >= 0, "player overworld trainer marker exists")
-	_check(enemy_start >= 0, "opponent overworld trainer marker exists")
+	_check(player_start >= 0, "player battle trainer marker exists")
+	_check(enemy_start >= 0, "opponent battle trainer marker exists")
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
 	_check(source.contains("position = Vector2(124, 474)"), "player trainer stands slightly above the player platform baseline")
 	_check(source.contains("position = Vector2(1028, 316)"), "opponent trainer mirrors the raised staging")
@@ -103,9 +103,14 @@ func _check_battle_setup_contract() -> void:
 	_check(switch_recall_index > switch_command_index, "switch commands appear immediately before recall animation")
 	_check(source.contains("if battle_type != BattleType.TRAINER:"), "wild battles do not show trainer command callouts")
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
-	_check(renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player staging reuses the overworld avatar renderer lazily")
-	_check(renderer_source.contains('"facingDirection": _direction_name(facing_direction)'), "player staging selects an inward-facing overworld pose")
-	_check(renderer_source.contains("Node.PROCESS_MODE_DISABLED"), "player staging disables overworld processing")
+	_check(renderer_source.contains("BattlePlayerTrainerCatalog.build_layers"), "player staging uses the dedicated layered battle-art catalog")
+	_check(renderer_source.contains("sprite.flip_h = facing_direction.x < 0.0"), "player battle art mirrors toward the battlefield")
+	_check(not renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player staging no longer instantiates the overworld avatar renderer")
+	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
+	_check(
+		export_presets.count("assets/battles/trainers/player/**/*") == 5,
+		"all distributable builds include the dynamically loaded player battle art"
+	)
 	var router_source := FileAccess.get_file_as_string(BATTLE_ANIMATION_ROUTER_PATH)
 	_check(
 		router_source.contains("BattleRenderLayers.MOVE_FOREGROUND"),
@@ -190,16 +195,36 @@ func _check_runtime_renderer() -> void:
 	renderer.show_player({
 		"gender": "male",
 		"body": "Gen4_Base_v1",
-		"hair": "Adinho_Hair",
-		"facial_hair": "Adinho_Beard",
+		"hair": "Hair",
+		"headgear": "Cap",
+		"top": "Shirt",
+		"bottom": "Trousers",
+		"shoes": "Shoes",
 	}, Vector2.RIGHT)
-	_check(renderer.player_avatar != null, "player trainer avatar is composed for battle")
-	var body := renderer.player_avatar.find_child("BodySprite", true, false) as AnimatedSprite2D
-	_check(body != null and body.animation == &"idle_right", "hidden trainer initialization applies the actual right-facing animation before processing stops")
+	_check(renderer.player_battle_art.visible, "player trainer battle art is composed")
+	var body := renderer.player_battle_art.get_node_or_null("Body") as Sprite2D
+	_check(body != null and body.texture != null, "player trainer uses the dedicated battle base model")
 	_check(
-		renderer.player_avatar != null and renderer.player_avatar.z_as_relative,
-		"layered player trainer art inherits the protected trainer render band"
+		renderer.player_battle_art.get_child_count() == 6,
+		"player trainer composes the base and complete Starter Kit"
 	)
+	_check(not body.flip_h, "left-side player battle art faces right")
+	renderer.show_player({
+		"gender": "female",
+		"body": "Gen4_Base_F_v1",
+		"hair": "Aether_Female_Hair_01",
+		"headgear": "__none__",
+		"top": "Aether_Blossom_Dress",
+		"bottom": "Mysterious_Trousers",
+		"shoes": "Aether_Blossom_Shoes",
+	}, Vector2.LEFT)
+	_check(renderer.player_battle_art.get_node_or_null("Headgear") == null, "serialized unequipped headgear stays absent")
+	_check(
+		renderer.player_layer_metadata.any(func(layer: Dictionary) -> bool: return layer.get("category") == "top" and layer.get("fallback")),
+		"unfinished outfit art falls back to the Starter Kit per category"
+	)
+	var female_body := renderer.player_battle_art.get_node_or_null("Body") as Sprite2D
+	_check(female_body != null and female_body.flip_h, "right-side female battle art mirrors toward the field")
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
@@ -240,16 +265,16 @@ func _render_player_trainer_skin(skin_tone: String) -> Image:
 	renderer.show_player({
 		"gender": "male",
 		"body": "Gen4_Base_v1",
-		"hair": "Adinho_Hair",
-		"facial_hair": "Adinho_Beard",
+		"hair": "Hair",
+		"top": "Shirt",
+		"bottom": "Trousers",
+		"shoes": "Shoes",
 		"skin_tone": skin_tone,
 	}, Vector2.RIGHT)
-	var body_sprite := renderer.player_avatar.find_child("BodySprite", true, false) as AnimatedSprite2D
+	var body_sprite := renderer.player_battle_art.get_node_or_null("Body") as Sprite2D
 	var image: Image
-	if body_sprite != null and body_sprite.sprite_frames != null:
-		var texture := body_sprite.sprite_frames.get_frame_texture(body_sprite.animation, body_sprite.frame)
-		if texture != null:
-			image = texture.get_image()
+	if body_sprite != null and body_sprite.texture != null:
+		image = body_sprite.texture.get_image()
 	renderer.free()
 	return image
 

@@ -1400,6 +1400,16 @@ static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve
 	return ImageTexture.create_from_image(tinted_image)
 
 
+## Applies the same palette-safe colour treatment used by overworld cosmetics
+## to a standalone texture, such as a layered battle trainer pose.
+static func tint_texture(
+	texture: Texture2D,
+	tint_color: Color,
+	preserve_luminance := false
+) -> Texture2D:
+	return _make_tinted_texture(texture, tint_color, preserve_luminance)
+
+
 static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> Texture2D:
 	if texture == null:
 		return null
@@ -1451,6 +1461,12 @@ static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> T
 			)
 
 	return ImageTexture.create_from_image(tinted_image)
+
+
+## Recolours only skin-palette pixels while retaining outlines and highlights.
+## Kept public so alternate player renderers stay visually consistent.
+static func tint_skin_texture(texture: Texture2D, skin_tone: Color) -> Texture2D:
+	return _make_skin_tinted_texture(texture, skin_tone)
 
 
 static func _is_skin_palette_pixel(color: Color) -> bool:

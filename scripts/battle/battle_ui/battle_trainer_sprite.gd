@@ -3,8 +3,9 @@ extends Node2D
 class_name BattleTrainerSprite
 
 const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
-const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
+const BattlePlayerTrainerCatalog := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
 const DEFAULT_DISPLAY_SCALE := 2.0
+const PLAYER_BATTLE_ART_SCALE := 0.5
 ## Catalog sprites are 80px-square poses, while the legacy overworld frames
 ## are 64px-square. Preserve their shared foot baseline and leave clearance
 ## between the opponent pose and the right-side party rail.
@@ -14,9 +15,11 @@ const CATALOG_SPRITE_OFFSET := Vector2(-24.0, -16.0)
 
 @onready var npc_sprite: AnimatedSprite2D = $NpcSprite
 @onready var catalog_sprite: Sprite2D = $CatalogSprite
+@onready var player_battle_art: Node2D = $PlayerBattleArt
 @onready var command_callout: Control = $TrainerCommandCallout
 
-var player_avatar: Node2D
+var player_appearance_state: Dictionary = {}
+var player_layer_metadata: Array[Dictionary] = []
 var facing_direction := Vector2.RIGHT
 
 
@@ -34,9 +37,12 @@ func clear() -> void:
 	if command_callout != null:
 		command_callout.call("clear_command")
 	visible = false
-	if player_avatar != null and is_instance_valid(player_avatar):
-		player_avatar.free()
-	player_avatar = null
+	player_appearance_state.clear()
+	player_layer_metadata.clear()
+	if player_battle_art != null:
+		for child: Node in player_battle_art.get_children():
+			child.free()
+		player_battle_art.visible = false
 	if npc_sprite != null:
 		npc_sprite.visible = false
 		npc_sprite.sprite_frames = null
@@ -48,33 +54,31 @@ func clear() -> void:
 func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> void:
 	clear()
 	self.facing_direction = facing_direction
-	var avatar_script := load(REMOTE_PLAYER_AVATAR_SCRIPT_PATH) as Script
-	if avatar_script == null:
+	if player_battle_art == null:
 		return
-	player_avatar = avatar_script.new() as Node2D
-	if player_avatar == null:
+	var layers := BattlePlayerTrainerCatalog.build_layers(appearance_state)
+	if layers.is_empty():
 		return
-
-	add_child(player_avatar)
-	# Avatar animation updates are skipped while hidden. Show this staging
-	# marker before applying the pose, since processing is disabled below.
-	visible = true
-	player_avatar.call("apply_state", {
-		"appearance": appearance_state.duplicate(true),
-		"facingDirection": _direction_name(facing_direction),
-		"position": {"x": 0.0, "y": 0.0},
-	})
-	# RemotePlayerAvatar accepts world coordinates. Battle staging owns the final
-	# local position, so restore the avatar to this marker after applying state.
-	player_avatar.position = Vector2.ZERO
-	player_avatar.scale = Vector2.ONE * display_scale
-	# RemotePlayerAvatar is absolute in the overworld. In battle it must inherit
-	# this trainer's render band or its layered body parts fall back below moves.
-	player_avatar.z_as_relative = true
-	player_avatar.z_index = 0
-	player_avatar.call("set_interaction_enabled", false)
-	player_avatar.call("set_creator_nameplate_visible", false)
-	player_avatar.process_mode = Node.PROCESS_MODE_DISABLED
+	player_appearance_state = appearance_state.duplicate(true)
+	for layer: Dictionary in layers:
+		var texture := layer.get("texture") as Texture2D
+		if texture == null:
+			continue
+		var sprite := Sprite2D.new()
+		sprite.name = str(layer.get("category", "Layer")).capitalize().replace(" ", "")
+		sprite.texture = texture
+		var layer_scale := float(layer.get("scale", 1.0)) * display_scale * PLAYER_BATTLE_ART_SCALE
+		sprite.scale = Vector2.ONE * layer_scale
+		sprite.flip_h = facing_direction.x < 0.0
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		player_battle_art.add_child(sprite)
+		player_layer_metadata.append({
+			"category": str(layer.get("category", "")),
+			"part_id": str(layer.get("part_id", "")),
+			"requested_part_id": str(layer.get("requested_part_id", "")),
+			"fallback": bool(layer.get("fallback", false)),
+		})
+	player_battle_art.visible = player_battle_art.get_child_count() > 0
 	visible = true
 
 
