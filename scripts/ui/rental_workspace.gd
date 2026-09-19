@@ -16,6 +16,7 @@ var duration: OptionButton
 var status: Label
 var balance: Label
 var rent_button: Button
+var close_button: Button
 var active_list: VBoxContainer
 var search: LineEdit
 var team_catalog: RentalTeamCatalog
@@ -34,6 +35,7 @@ var selected_build: Dictionary = {}
 func _ready() -> void:
 	hide()
 	title = "Aether Rentals"
+	borderless = true
 	size = Vector2i(940, 670)
 	min_size = Vector2i(800, 600)
 	close_requested.connect(_close)
@@ -51,11 +53,23 @@ func _ready() -> void:
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 12)
 	panel.add_child(root)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	root.add_child(header)
 	var heading := Label.new()
 	heading.text = "AETHER RENTALS  /  " + ("TEAMS" if kind == "team" else "POKÉMON")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_theme_font_size_override("font_size", 24)
 	heading.add_theme_color_override("font_color", Color("62d7ff"))
-	root.add_child(heading)
+	header.add_child(heading)
+	var header_close := Button.new()
+	header_close.text = "×"
+	header_close.tooltip_text = "Close"
+	header_close.custom_minimum_size = Vector2(38, 34)
+	header_close.add_theme_font_size_override("font_size", 21)
+	header_close.pressed.connect(_close)
+	_style_button(header_close, false)
+	header.add_child(header_close)
 	balance = Label.new()
 	root.add_child(balance)
 	var note := Label.new()
@@ -94,9 +108,10 @@ func _ready() -> void:
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(status)
-	var close_button := Button.new()
+	close_button = Button.new()
 	close_button.text = "Close"
 	close_button.pressed.connect(_close)
+	_style_button(close_button, false)
 	root.add_child(close_button)
 
 func _build_individual_catalog(browse: HBoxContainer) -> void:
@@ -142,6 +157,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	for gender_option: String in ["Unspecified", "Male", "Female", "Genderless"]:
 		pokemon_gender.add_item(gender_option)
 	pokemon_gender.item_selected.connect(func(_index: int): _invalidate_pokemon_quote())
+	_style_option(pokemon_gender)
 	manual.add_child(pokemon_gender)
 	var happiness_label := Label.new()
 	happiness_label.text = "Happiness"
@@ -165,15 +181,71 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	quote_button = Button.new()
 	quote_button.text = "Validate set & calculate price"
 	quote_button.pressed.connect(_quote_pokemon)
+	_style_button(quote_button, false)
 	right.add_child(quote_button)
 	duration = OptionButton.new()
 	duration.disabled = true
+	_style_option(duration)
 	right.add_child(duration)
 	rent_button = Button.new()
 	rent_button.text = "Rent quoted Pokémon"
 	rent_button.disabled = true
 	rent_button.pressed.connect(_rent)
+	_style_button(rent_button, true)
 	right.add_child(rent_button)
+
+func _style_option(control: OptionButton) -> void:
+	control.focus_mode = Control.FOCUS_ALL
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	for state: String in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		control.add_theme_color_override(state, Color("#eef6ff"))
+	control.add_theme_color_override("font_disabled_color", Color("#596d80"))
+	control.add_theme_stylebox_override("normal", _control_style(Color("#101829"), Color("#41698d")))
+	control.add_theme_stylebox_override("hover", _control_style(Color("#172b49"), Color("#62d5ff")))
+	control.add_theme_stylebox_override("pressed", _control_style(Color("#0a1321"), Color("#62d5ff")))
+	control.add_theme_stylebox_override("focus", _control_style(Color("#101829"), Color("#62d5ff")))
+	control.add_theme_stylebox_override("disabled", _control_style(Color("#0b111d"), Color("#293b50")))
+	var popup := control.get_popup()
+	popup.transparent_bg = true
+	popup.add_theme_color_override("font_color", Color("#eef6ff"))
+	popup.add_theme_color_override("font_hover_color", Color("#eef6ff"))
+	popup.add_theme_color_override("font_disabled_color", Color("#596d80"))
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	var popup_panel := _control_style(Color("#0a1422"), Color("#41698d"))
+	popup_panel.shadow_color = Color(0, 0, 0, 0.55)
+	popup_panel.shadow_size = 14
+	popup_panel.shadow_offset = Vector2(0, 5)
+	popup.add_theme_stylebox_override("panel", popup_panel)
+	popup.add_theme_stylebox_override("hover", _control_style(Color("#193753"), Color("#62d5ff")))
+
+func _style_button(control: Button, primary: bool) -> void:
+	control.focus_mode = Control.FOCUS_ALL
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	for state: String in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		control.add_theme_color_override(state, Color("#eef6ff"))
+	control.add_theme_color_override("font_disabled_color", Color("#596d80"))
+	var normal_bg := Color("#5d4aa4") if primary else Color("#13243a")
+	var hover_bg := Color("#725dbe") if primary else Color("#1a3550")
+	var border := Color("#d4c9ff") if primary else Color("#41698d")
+	control.add_theme_stylebox_override("normal", _control_style(normal_bg, border))
+	control.add_theme_stylebox_override("hover", _control_style(hover_bg, Color("#62d5ff")))
+	control.add_theme_stylebox_override("pressed", _control_style(normal_bg.darkened(0.18), Color("#62d5ff")))
+	control.add_theme_stylebox_override("focus", _control_style(normal_bg, Color("#62d5ff")))
+	control.add_theme_stylebox_override("disabled", _control_style(Color("#0b111d"), Color("#293b50")))
+
+func _control_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(8)
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = 6
+	style.content_margin_bottom = 6
+	return style
 
 func _add_pokemon_text_field(parent: VBoxContainer, key: String, label_text: String, placeholder: String, required := false, initial := "") -> void:
 	var label := Label.new()

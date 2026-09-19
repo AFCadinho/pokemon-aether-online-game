@@ -20,6 +20,8 @@ func _initialize() -> void:
 func _run() -> void:
 	var team_workspace := WORKSPACE.new()
 	root.add_child(team_workspace)
+	assert(team_workspace.borderless)
+	assert(team_workspace.close_button.has_theme_stylebox_override("normal"))
 	team_workspace.service.queue_free()
 	team_workspace.service = FakeRentalService.new()
 	team_workspace.add_child(team_workspace.service)
@@ -31,6 +33,8 @@ func _run() -> void:
 	assert(team_workspace.team_catalog.archetype_filter.item_count == 2)
 	assert(team_workspace.team_catalog.tier_filter.item_count == 2)
 	assert(team_workspace.team_catalog.action_bar.get_child_count() == 2)
+	assert(team_workspace.team_catalog.archetype_filter.get_popup().has_theme_stylebox_override("panel"))
+	assert(team_workspace.duration.get_popup().has_theme_stylebox_override("panel"))
 	assert(team_workspace._duration_label(604800) == "7 days")
 	assert(team_workspace.team_catalog.results.get_child(0).find_children("*", "TextureRect", true, false).size() == 6)
 	await team_workspace._select_team_offer(team_offer)
@@ -49,6 +53,8 @@ func _run() -> void:
 	var pokemon_workspace := WORKSPACE.new()
 	pokemon_workspace.kind = "pokemon"
 	root.add_child(pokemon_workspace)
+	assert(pokemon_workspace.pokemon_gender.get_popup().has_theme_stylebox_override("panel"))
+	assert(pokemon_workspace.duration.get_popup().has_theme_stylebox_override("panel"))
 	pokemon_workspace.service.queue_free()
 	pokemon_workspace.service = FakeRentalService.new()
 	pokemon_workspace.add_child(pokemon_workspace.service)
