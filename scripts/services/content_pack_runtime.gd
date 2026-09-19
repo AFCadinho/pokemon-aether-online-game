@@ -23,8 +23,7 @@ static func initialize() -> void:
 	_loaded = true
 	if OS.has_feature("web"):
 		return
-	var directory := OS.get_environment("POKEAETHER_MODS_DIR")
-	var store := Store.new(directory if not directory.is_empty() else "user://mods")
+	var store := Store.new(_mods_directory())
 	_pokemon_sprite_roots = store.sprite_collection_directories()
 	var packs: Dictionary = {}
 	for pack in store.installed():
@@ -46,6 +45,22 @@ static func initialize() -> void:
 			if entry.path.is_empty():
 				continue
 			_entries[category + "/" + key] = [entry]
+
+
+static func _mods_directory() -> String:
+	var launcher_directory := OS.get_environment("POKEAETHER_MODS_DIR").strip_edges()
+	if not launcher_directory.is_empty():
+		return launcher_directory
+	var game_mods := ProjectSettings.globalize_path("user://mods")
+	# A direct Godot editor run has PokeAether's user:// root, while the local
+	# launcher stores packs under its own root. Reuse that selection for local
+	# cosmetic review; released games still receive the explicit environment path.
+	var launcher_mods := ProjectSettings.globalize_path("user://").get_base_dir().path_join("PokeAether Launcher/mods")
+	if FileAccess.file_exists(launcher_mods.path_join("enabled.json")):
+		return launcher_mods
+	if FileAccess.file_exists(game_mods.path_join("enabled.json")):
+		return game_mods
+	return game_mods
 
 
 static func cry(species: String) -> AudioStream:

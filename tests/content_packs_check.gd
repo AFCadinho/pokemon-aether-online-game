@@ -131,6 +131,17 @@ func run() -> void:
 	file.close()
 	check(not store.import_zip(path).is_empty(), "oversized declared decompression rejected")
 	OS.unset_environment("POKEAETHER_MODS_DIR")
+	var launcher_mods := ProjectSettings.globalize_path("user://").get_base_dir().path_join("PokeAether Launcher/mods")
+	var had_launcher_selection := FileAccess.file_exists(launcher_mods.path_join("enabled.json"))
+	if not had_launcher_selection:
+		DirAccess.make_dir_recursive_absolute(launcher_mods)
+		var selection_file := FileAccess.open(launcher_mods.path_join("enabled.json"), FileAccess.WRITE)
+		selection_file.store_string("{\"selected\": {\"cries\": \"valid\"}}")
+		selection_file.close()
+	check(Runtime._mods_directory() == launcher_mods, "editor reuses the launcher selection")
+	if not had_launcher_selection:
+		remove_tree(launcher_mods)
+		check(Runtime._mods_directory() == ProjectSettings.globalize_path("user://mods"), "editor falls back to its own mods root without a launcher selection")
 	remove_tree(ProjectSettings.globalize_path(test_root))
 	print("Content pack checks: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
