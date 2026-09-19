@@ -16,7 +16,6 @@ var duration: OptionButton
 var status: Label
 var balance: Label
 var rent_button: Button
-var close_button: Button
 var active_list: VBoxContainer
 var search: LineEdit
 var team_catalog: RentalTeamCatalog
@@ -62,6 +61,10 @@ func _ready() -> void:
 	heading.add_theme_font_size_override("font_size", 24)
 	heading.add_theme_color_override("font_color", Color("62d7ff"))
 	header.add_child(heading)
+	balance = Label.new()
+	balance.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	balance.add_theme_color_override("font_color", Color("#f5df9a"))
+	header.add_child(balance)
 	var header_close := Button.new()
 	header_close.text = "×"
 	header_close.tooltip_text = "Close"
@@ -70,12 +73,6 @@ func _ready() -> void:
 	header_close.pressed.connect(_close)
 	_style_button(header_close, false)
 	header.add_child(header_close)
-	balance = Label.new()
-	root.add_child(balance)
-	var note := Label.new()
-	note.text = "Level 100 • NPC Original Trainer • No caught credit • Real time, including offline"
-	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	root.add_child(note)
 	var tabs := TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_style_tabs(tabs, false)
@@ -109,11 +106,6 @@ func _ready() -> void:
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(status)
-	close_button = Button.new()
-	close_button.text = "Close"
-	close_button.pressed.connect(_close)
-	_style_button(close_button, false)
-	root.add_child(close_button)
 
 func _build_individual_catalog(browse: HBoxContainer) -> void:
 	var builder := VBoxContainer.new()
@@ -442,7 +434,7 @@ func refresh() -> void:
 		status.text = str(result.get("error", "Unavailable"))
 		return
 	catalog = result["body"]
-	balance.text = "Balance: %d Aetherite  •  Limit: %d team + %d individual Pokémon" % [int(catalog.get("aetherite", 0)), int(catalog.get("maxTeams", 1)), int(catalog.get("maxPokemon", 6))]
+	balance.text = "%d Aetherite" % int(catalog.get("aetherite", 0))
 	duration.clear()
 	for price: Dictionary in catalog.get("prices", []):
 		duration.add_item("%s — %d Aetherite" % [_duration_label(int(price["durationSeconds"])), int(price["amount"])])
@@ -452,7 +444,7 @@ func refresh() -> void:
 	else:
 		_invalidate_pokemon_quote()
 	_render_active()
-	status.text = "Rentals arrive in your PC (or free Party slots if the PC is full). Early returns are not refunded."
+	status.text = ""
 
 func _filter() -> void:
 	if listing == null:
