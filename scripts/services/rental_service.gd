@@ -31,7 +31,20 @@ func request(path: String, payload: Dictionary = {}, mutate := false, post := fa
 		return {"success": false, "error": "Invalid rental response."}
 	if int(result[1]) < 200 or int(result[1]) >= 300:
 		var detail: Variant = parsed.get("detail", {})
-		return {"success": false, "error": str(detail.get("message", "Rental request failed.")) if detail is Dictionary else str(detail)}
+		return {"success": false, "error": _error_message(detail)}
 	if mutate:
 		pending_requests.erase(key)
 	return {"success": true, "body": parsed}
+
+func _error_message(detail: Variant) -> String:
+	if detail is Dictionary:
+		return str((detail as Dictionary).get("message", "Rental request failed."))
+	if detail is Array:
+		for entry: Variant in detail:
+			if entry is Dictionary:
+				var message := str((entry as Dictionary).get("msg", "")).strip_edges()
+				if message.begins_with("Value error, "):
+					message = message.trim_prefix("Value error, ")
+				if not message.is_empty():
+					return message
+	return "Rental request failed."
