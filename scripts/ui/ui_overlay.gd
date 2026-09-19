@@ -16460,10 +16460,12 @@ func _apply_trainer_card_companion_list_style(list: ItemList) -> void:
 	list.add_theme_stylebox_override("selected", _make_panel_style(Color("#16445e"), TRAINER_CARD_CYAN, 5, 1))
 	list.add_theme_stylebox_override("selected_focus", _make_panel_style(Color("#1a5778"), Color("#b6ecff"), 5, 1))
 	var scroll_bar := list.get_v_scroll_bar()
-	scroll_bar.add_theme_stylebox_override("scroll", _make_panel_style(Color("#07111e"), Color.TRANSPARENT, 4, 0))
-	scroll_bar.add_theme_stylebox_override("grabber", _make_panel_style(Color("#36566f"), Color.TRANSPARENT, 4, 0))
-	scroll_bar.add_theme_stylebox_override("grabber_highlight", _make_panel_style(Color("#5b91ae"), Color.TRANSPARENT, 4, 0))
-	scroll_bar.add_theme_stylebox_override("grabber_pressed", _make_panel_style(TRAINER_CARD_CYAN, Color.TRANSPARENT, 4, 0))
+	scroll_bar.custom_minimum_size.x = 10
+	scroll_bar.add_theme_constant_override("grabber_min_size", 28)
+	scroll_bar.add_theme_stylebox_override("scroll", _make_panel_style(Color("#102538"), Color("#31556d"), 4, 1))
+	scroll_bar.add_theme_stylebox_override("grabber", _make_panel_style(Color("#48738b"), Color("#6b9bb5"), 4, 1))
+	scroll_bar.add_theme_stylebox_override("grabber_highlight", _make_panel_style(Color("#6ca9c8"), Color("#b6ecff"), 4, 1))
+	scroll_bar.add_theme_stylebox_override("grabber_pressed", _make_panel_style(TRAINER_CARD_CYAN, Color("#e0f8ff"), 4, 1))
 
 
 func _fill_trainer_card_companions(list: ItemList, query: String) -> void:

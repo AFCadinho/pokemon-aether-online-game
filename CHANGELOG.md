@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Favorite Pokémon picker now keeps a visible, styled scrollbar for longer owned-Pokémon lists.
+
 - Trainer Card companions now have calmer, correctly layered portrait sizing, and their picker matches the Passport’s dark visual style.
 
 - Trainer Card PvP ratings now use individual wrapping tier cards, leaving room for additional Ranked formats.
