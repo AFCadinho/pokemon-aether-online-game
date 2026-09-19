@@ -138,6 +138,12 @@ func _run() -> void:
 		_check(displayed_frames != null and displayed_frames.has_meta("rendered_asset"), "Summary keeps the rendered Dragonite after deferred fallback work")
 		_check(displayed_frames != null and bool(displayed_frames.get_meta("rendered_static_preview", false)), "Summary uses a lightweight lossless rendered still")
 		_check(displayed_frames != null and displayed_frames.get_frame_count("idle") == 1, "Summary does not decode the full 60 FPS idle atlas")
+		var animation_deadline := Time.get_ticks_msec() + 5000
+		while displayed_frames != null and bool(displayed_frames.get_meta("rendered_static_preview", false)) and Time.get_ticks_msec() < animation_deadline:
+			await process_frame
+			displayed_frames = (overlay.get("pokemon_summary_animated_sprite") as AnimatedSprite2D).sprite_frames
+		_check(displayed_frames != null and not bool(displayed_frames.get_meta("rendered_static_preview", false)), "Summary upgrades its still to the streamed rendered animation")
+		_check(displayed_frames != null and displayed_frames.get_frame_count("idle") > 1, "Summary rendered preview moves at source cadence")
 	var sprite_click := InputEventMouseButton.new()
 	sprite_click.button_index = MOUSE_BUTTON_LEFT
 	sprite_click.pressed = true

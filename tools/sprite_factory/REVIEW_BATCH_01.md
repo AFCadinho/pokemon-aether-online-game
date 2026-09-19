@@ -180,9 +180,12 @@ fit the actual Pokémon instead of the transparent 512×512 canvas. Older local
 review builds without this optional metadata derive and cache the idle bounds
 once while loading. The Pokédex list remains icon-only, while a selected
 rendered Pokémon uses a dedicated lossless 512×512 still copied from idle
-master frame zero. Its opposite still is warmed after first display, so
-Summary and Pokédex review never decode the complete native-60-FPS atlas.
-Battles continue to use the complete animation unchanged. Existing local
+master frame zero. Its opposite still is warmed after first display. The
+selected view then decodes its complete native-60-FPS idle pages on a worker
+thread and uploads four lossless frames per display tick before replacing the
+still, keeping the UI responsive while preserving animation. Only two full
+animated views are retained by the LRU cache; still previews have a separate
+sixteen-view cache. Battles continue to use the complete animation unchanged. Existing local
 review builds without packaged still metadata securely read the same hashed
 master frame from their build directory. The shared rendered-view cache is
 LRU-bounded to eight views.
