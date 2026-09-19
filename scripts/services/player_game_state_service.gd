@@ -890,6 +890,7 @@ func load_player_preferences() -> Dictionary:
 	return {
 		"success": true,
 		"preferences": _dictionary_from_value(body.get("preferences", {})),
+		"favoritePokemonOptions": body.get("favoritePokemonOptions", []),
 	}
 
 

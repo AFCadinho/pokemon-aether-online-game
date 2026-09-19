@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card companions must now be Pokémon you currently own. Shiny choices use the actual owned variant; borrowed, released or traded-away Pokémon cannot be shown as your own.
+
 - Both Trainer Card views now show Pokédex progress and a favorite Pokémon's HOME portrait beside the trainer. Choose your companion from registered Pokémon, see lifetime PvP ratings by format, and add friends from public cards. Battle totals now display as whole numbers.
 
 - Summary and Pokédex give rendered Pokémon a closer, stable portrait framing, so wide wings and long tails have less influence on the visible body size.

@@ -16248,6 +16248,7 @@ func _refresh_trainer_card_friend_button(card: Dictionary, button: Button) -> vo
 
 func _open_trainer_card_companion_picker() -> void:
 	var dialog := ConfirmationDialog.new()
+	dialog.name = "TrainerCardCompanionPicker"
 	dialog.title = LocalizationManager.text("ui.trainer_card.companion.choose")
 	dialog.min_size = Vector2i(400, 440)
 	dialog.size = Vector2i(400, 440)
@@ -16270,11 +16271,8 @@ func _open_trainer_card_companion_picker() -> void:
 	search.placeholder_text = LocalizationManager.text("ui.trainer_card.companion.search")
 	_apply_line_edit_style(search)
 	stack.add_child(search)
-	var shiny := CheckButton.new()
-	shiny.text = "Shiny"
-	shiny.button_pressed = bool(own_trainer_card_data.get("favoritePokemonShiny", false))
-	stack.add_child(shiny)
 	var list := ItemList.new()
+	list.name = "OwnedCompanions"
 	list.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
 	list.add_theme_color_override("font_color", UI_TEXT)
 	list.custom_minimum_size = Vector2(340, 220)
@@ -16285,16 +16283,16 @@ func _open_trainer_card_companion_picker() -> void:
 	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stack.add_child(feedback)
 	var refill := func(_unused: Variant = null) -> void:
-		_fill_trainer_card_companions(list, search.text, shiny.button_pressed)
+		_fill_trainer_card_companions(list, search.text)
 	search.text_changed.connect(refill)
-	shiny.toggled.connect(refill)
 	dialog.confirmed.connect(func() -> void:
 		if trainer_card_companion_saving or list.get_selected_items().is_empty():
 			return
 		trainer_card_companion_saving = true
 		dialog.get_ok_button().disabled = true
-		var species := str(list.get_item_metadata(list.get_selected_items()[0]))
-		var selected_shiny := shiny.button_pressed
+		var choice := _dictionary_from_value(list.get_item_metadata(list.get_selected_items()[0]))
+		var species := str(choice.get("species", ""))
+		var selected_shiny := bool(choice.get("shiny", false))
 		var loaded: Dictionary = await PlayerGameStateService.load_player_preferences()
 		var result := loaded
 		if bool(loaded.get("success", false)):
@@ -16320,26 +16318,33 @@ func _open_trainer_card_companion_picker() -> void:
 	)
 	dialog.canceled.connect(dialog.queue_free)
 	dialog.popup_centered(Vector2i(400, 440))
-	_fill_trainer_card_companions(list, "", shiny.button_pressed)
-
-
-func _fill_trainer_card_companions(list: ItemList, query: String, shiny: bool) -> void:
-	var generation := int(list.get_meta("generation", 0)) + 1
-	list.set_meta("generation", generation)
-	var species: Array = await PokedexService.get_owned_species_ids(shiny)
-	if not is_instance_valid(list) or int(list.get_meta("generation", 0)) != generation:
+	dialog.get_ok_button().disabled = true
+	var owned: Dictionary = await PlayerGameStateService.load_player_preferences()
+	if not is_instance_valid(dialog):
 		return
+	if not bool(owned.get("success", false)) or not owned.has("favoritePokemonOptions"):
+		feedback.text = str(owned.get("error", LocalizationManager.text("ui.trainer_card.companion.unavailable")))
+		return
+	list.set_meta("owned_companions", owned.get("favoritePokemonOptions", []))
+	_fill_trainer_card_companions(list, search.text)
+	dialog.get_ok_button().disabled = false
+
+
+func _fill_trainer_card_companions(list: ItemList, query: String) -> void:
 	list.clear()
 	list.add_item(LocalizationManager.text("ui.trainer_card.companion.none"))
-	list.set_item_metadata(0, "")
-	species.sort()
-	for value: Variant in species:
-		var id := str(value)
+	list.set_item_metadata(0, {"species": "", "shiny": false})
+	for value: Variant in list.get_meta("owned_companions", []):
+		if not value is Dictionary:
+			continue
+		var choice := value as Dictionary
+		var id := str(choice.get("species", ""))
+		var shiny := bool(choice.get("shiny", false))
 		if not query.is_empty() and not id.to_lower().contains(query.to_lower()):
 			continue
-		var index := list.add_item(id.capitalize())
-		list.set_item_metadata(index, id)
-		if id == str(own_trainer_card_data.get("favoritePokemon", "")):
+		var index := list.add_item(("★ Shiny · " if shiny else "") + id.capitalize())
+		list.set_item_metadata(index, choice)
+		if id == str(own_trainer_card_data.get("favoritePokemon", "")) and shiny == bool(own_trainer_card_data.get("favoritePokemonShiny", false)):
 			list.select(index)
 
 
