@@ -135,9 +135,11 @@ func _run() -> void:
 		and public_companion.get_parent().get_children().find(public_companion) < public_companion.get_parent().get_children().find(public_art)
 		and public_companion.flip_h
 		and public_art.z_index > public_companion.z_index
+		and is_equal_approx(public_art.scale.x / 0.5, roundf(public_art.scale.x / 0.5))
+		and public_art.position == public_art.position.round()
 		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 139.0
 		and public_companion.position.y < 250.0,
-		"companions face right and sit behind the unobscured foreground trainer"
+		"companions face right behind a pixel-aligned foreground trainer"
 	)
 	for field: String in ["seen", "caught", "shinyCaught"]:
 		var tile := popup.find_child("Dex_%s" % field, true, false)
