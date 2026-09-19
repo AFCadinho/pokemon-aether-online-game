@@ -34,9 +34,10 @@ func _check_scene_staging() -> void:
 	_check(player_start >= 0, "player battle trainer marker exists")
 	_check(enemy_start >= 0, "opponent battle trainer marker exists")
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
-	_check(source.contains("position = Vector2(124, 474)"), "player trainer stands slightly above the player platform baseline")
+	_check(source.contains("position = Vector2(124, 438)"), "player trainer is raised clear of the command dock")
 	_check(source.contains("position = Vector2(1028, 316)"), "opponent trainer mirrors the raised staging")
 	_check(source.contains('[node name="EnemySpriteBox"') and source.contains("z_index = 2"), "active Pokemon render above trainer art")
+	_check(source.contains("offset_top = 178.0") and source.contains("offset_bottom = 178.0"), "player-side party rail is raised with the player trainer")
 	_check(source.contains("position = Vector2(300, 412)"), "player team preview remains in its original position")
 	_check(source.contains("position = Vector2(850, 268)"), "opponent team preview remains in its original position")
 
