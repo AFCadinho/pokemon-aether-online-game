@@ -49,6 +49,31 @@ func _run() -> void:
 	_check((detail_hover.find_children("*", "Label", true, false)[0] as Label).text == "Volt Absorb", "normal Summary ability hover shows the selected value")
 	overlay.call("_hide_readonly_summary_detail_hover", nodes)
 
+	var location_card := overlay.call(
+		"_create_summary_field_card",
+		"Location",
+		"Aether Clash - Aetherion Championship Arena",
+		Color("#62d7ff"),
+		false,
+		148.0,
+		Color(0, 0, 0, 0),
+		Color(0, 0, 0, 0),
+		"",
+		true
+	) as Control
+	(overlay.get("pokemon_summary_content_stack") as VBoxContainer).add_child(location_card)
+	_check(location_card.mouse_entered.has_connections(), "long Location values open the shared hover card")
+	_check(_descendants_ignore_mouse(location_card), "the complete Location value remains hoverable after clipping")
+	overlay.call("_show_readonly_summary_detail_hover", location_card, nodes)
+	var location_hover_labels := detail_hover.find_children("*", "Label", true, false)
+	_check(
+		location_hover_labels.size() >= 2
+		and (location_hover_labels[0] as Label).text == "Location"
+		and (location_hover_labels[1] as Label).text == "Aether Clash - Aetherion Championship Arena",
+		"Location hover reveals the complete unclipped value"
+	)
+	overlay.call("_hide_readonly_summary_detail_hover", nodes)
+
 	var pokemon := Pokemon.new(
 		"Zeraora", 100, "", "volt-absorb", "Jolly", {}, {},
 		{"hp": 186, "atk": 180, "def": 140, "spa": 160, "spd": 140, "spe": 220},

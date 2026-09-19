@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Hovering a shortened Pokémon Summary location now reveals its complete name.
+
 - Pokémon Summary portrait zoom keeps its fixed lower-left position while the optional Hidden Ability badge appears beside it.
 
 - Official mod packs now show their latest publication date in Discover and Installed.
