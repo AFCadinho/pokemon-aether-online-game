@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed an error that could occur after installing an official mod pack from Discover.
+
 - Cosmetic choices now live in the launcher Mods panel. Enabled sprite and cry packs apply automatically when the game starts.
 
 - The desktop launcher can now show and install official Anime Cries and Gen 5 Animated Sprites packs from the Mods catalog once they are published. Downloads verify size and checksum before installation.

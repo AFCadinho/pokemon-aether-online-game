@@ -31,7 +31,9 @@ func run() -> void:
 	check(PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog validates a checksum-backed pack")
 	panel.official_packs = [valid_catalog.packs[0].duplicate(true)]
 	panel._render_catalog()
-	check(panel.discover_rows.get_child_count() == 1, "official pack is rendered in Discover")
+	check(panel.discover_rows.get_child_count() == 2, "official pack and its status row are rendered in Discover")
+	panel._set_catalog_status("Installing")
+	check(panel.catalog_status.text == "Installing", "catalog status remains valid after a catalog refresh")
 	panel.tabs.current_tab = 0
 	valid_catalog.packs[0].download.sha256 = "invalid"
 	check(not PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog rejects invalid checksums")

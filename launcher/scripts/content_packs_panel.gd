@@ -100,10 +100,7 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 	discover_rows.add_theme_constant_override("separation", 8)
 	discover_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	discover.add_child(discover_rows)
-	catalog_status = Label.new()
-	catalog_status.custom_minimum_size.x = 600
-	catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	discover_rows.add_child(catalog_status)
+	_create_catalog_status()
 	var scroll := ScrollContainer.new()
 	scroll.name = "Installed"
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -194,25 +191,25 @@ static func validate_catalog(candidate: Dictionary) -> String:
 func _load_catalog(url: String) -> void:
 	var normalized_url := url.strip_edges()
 	if normalized_url.is_empty():
-		catalog_status.text = translate.call("The official pack catalog is not available yet. You can already import community packs in Installed.")
+		_set_catalog_status(translate.call("The official pack catalog is not available yet. You can already import community packs in Installed."))
 		return
-	catalog_status.text = translate.call("Loading official packs...")
+	_set_catalog_status(translate.call("Loading official packs..."))
 	var error := catalog_request.request(normalized_url, PackedStringArray(["Cache-Control: no-cache"]))
 	if error != OK:
-		catalog_status.text = translate.call("Official packs are unavailable. You can still import a local pack.")
+		_set_catalog_status(translate.call("Official packs are unavailable. You can still import a local pack."))
 
 
 func _on_catalog_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
-		catalog_status.text = translate.call("Official packs are unavailable. You can still import a local pack.")
+		_set_catalog_status(translate.call("Official packs are unavailable. You can still import a local pack."))
 		return
 	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
 	if not parsed is Dictionary:
-		catalog_status.text = translate.call("Official pack catalog is invalid.")
+		_set_catalog_status(translate.call("Official pack catalog is invalid."))
 		return
 	var error := validate_catalog(parsed as Dictionary)
 	if not error.is_empty():
-		catalog_status.text = error
+		_set_catalog_status(error)
 		return
 	official_packs.clear()
 	for pack_value: Variant in (parsed as Dictionary).packs:
@@ -220,18 +217,30 @@ func _on_catalog_request_completed(result: int, response_code: int, _headers: Pa
 	_render_catalog()
 
 
+func _create_catalog_status(message: String = "") -> void:
+	catalog_status = Label.new()
+	catalog_status.custom_minimum_size.x = 600
+	catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	catalog_status.text = message
+	discover_rows.add_child(catalog_status)
+
+
+func _set_catalog_status(message: String) -> void:
+	if not is_instance_valid(catalog_status):
+		_create_catalog_status()
+	catalog_status.text = message
+
+
 func _render_catalog() -> void:
 	for child in discover_rows.get_children():
 		discover_rows.remove_child(child)
 		child.queue_free()
+	_create_catalog_status()
 	var installed: Dictionary = {}
 	for pack in store.installed():
 		installed[pack.id] = pack
 	if official_packs.is_empty():
-		catalog_status = Label.new()
-		catalog_status.text = translate.call("No official packs are available yet.")
-		catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		discover_rows.add_child(catalog_status)
+		_set_catalog_status(translate.call("No official packs are available yet."))
 		return
 	for pack in official_packs:
 		var card := PanelContainer.new()
@@ -268,7 +277,7 @@ func _download_official_pack(pack: Dictionary) -> void:
 		return
 	active_official_pack = pack.duplicate(true)
 	var download: Dictionary = pack.download
-	catalog_status.text = translate.call("Downloading {name}...").format({"name": str(pack.name)})
+	_set_catalog_status(translate.call("Downloading {name}...").format({"name": str(pack.name)}))
 	var error := download_service.start_download({
 		"type": "content_pack",
 		"id": str(pack.id),
@@ -280,25 +289,25 @@ func _download_official_pack(pack: Dictionary) -> void:
 	})
 	if error != OK:
 		active_official_pack.clear()
-		catalog_status.text = translate.call("Could not start the pack download.")
+		_set_catalog_status(translate.call("Could not start the pack download."))
 
 
 func _on_official_pack_downloaded(path: String, _summary: Dictionary) -> void:
 	var error := store.import_zip(path, true)
 	DirAccess.remove_absolute(path)
-	if error.is_empty():
-		catalog_status.text = translate.call("Pack installed. Enable it from Installed and restart the game.")
-		refresh()
-	else:
-		catalog_status.text = translate.call("Could not install pack:") + " " + error
+	refresh()
 	active_official_pack.clear()
 	_render_catalog()
+	if error.is_empty():
+		_set_catalog_status(translate.call("Pack installed. Enable it from Installed and restart the game."))
+	else:
+		_set_catalog_status(translate.call("Could not install pack:") + " " + error)
 
 
 func _on_official_pack_download_failed(_message: String, _summary: Dictionary) -> void:
 	active_official_pack.clear()
-	catalog_status.text = translate.call("Pack download failed. Try again later.")
 	_render_catalog()
+	_set_catalog_status(translate.call("Pack download failed. Try again later."))
 
 func refresh() -> void:
 	for child in rows.get_children():
