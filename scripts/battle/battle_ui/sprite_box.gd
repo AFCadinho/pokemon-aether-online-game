@@ -1240,6 +1240,11 @@ func _load_sprite_frames(
 	is_shiny: bool = false,
 	report_missing: bool = true
 ) -> SpriteFrames:
+	var rendered := RenderedSpriteAssets.load_frames(species, side, is_shiny)
+	# An explicitly selected local review catalog must show the asset under review,
+	# even when the player's normal profile has a sprite content pack enabled.
+	if rendered != null and bool(rendered.get_meta("rendered_preview", false)):
+		return _prepare_rendered_sprite_frames(rendered)
 	var mod_frames := ContentPacks.battle_frames(species, side, is_shiny)
 	if mod_frames != null:
 		var mod_scale := float(mod_frames.get_meta("content_pack_scale", 1.0))
@@ -1248,26 +1253,8 @@ func _load_sprite_frames(
 		_set_sprite_frames_anchor(mod_frames, mod_frames.get_meta("content_pack_anchor"), mod_frames.get_meta("content_pack_cell"))
 		_set_sprite_frames_position_offset(mod_frames, mod_frames.get_meta("content_pack_offset"))
 		return mod_frames
-	var rendered := RenderedSpriteAssets.load_frames(species, side, is_shiny)
 	if rendered != null:
-		var present: Dictionary = rendered.get_meta("rendered_presentation", {})
-		var anchor: Array = present.get("anchor", [256, 256])
-		var offset: Array = present.get("position_offset", [0, 0])
-		_set_sprite_frames_render_scale(rendered, float(present.get("render_scale", 1.0)))
-		_set_sprite_frames_display_scale_multiplier(
-			rendered,
-			float(rendered.get_meta("rendered_display_scale_multiplier", 1.0))
-		)
-		_set_sprite_frames_frame_size(
-			rendered,
-			rendered.get_meta("rendered_frame_size", Vector2(512, 512)) as Vector2
-		)
-		var rendered_bounds: Variant = rendered.get_meta("rendered_visual_bounds", Rect2())
-		if rendered_bounds is Rect2 and (rendered_bounds as Rect2).has_area():
-			_set_sprite_frames_visual_bounds(rendered, rendered_bounds as Rect2)
-		_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
-		_set_sprite_frames_position_offset(rendered, Vector2(float(offset[0]), float(offset[1])))
-		return rendered
+		return _prepare_rendered_sprite_frames(rendered)
 	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
 		var poc_frames := DratiniHdPoc.load_frames(species, side)
 		if poc_frames != null:
@@ -1333,6 +1320,27 @@ func _load_cached_web_sprite_frames(
 		_remember_shared_sprite_frames(cache_key, frames)
 		return frames
 	return null
+
+
+func _prepare_rendered_sprite_frames(rendered: SpriteFrames) -> SpriteFrames:
+	var present: Dictionary = rendered.get_meta("rendered_presentation", {})
+	var anchor: Array = present.get("anchor", [256, 256])
+	var offset: Array = present.get("position_offset", [0, 0])
+	_set_sprite_frames_render_scale(rendered, float(present.get("render_scale", 1.0)))
+	_set_sprite_frames_display_scale_multiplier(
+		rendered,
+		float(rendered.get_meta("rendered_display_scale_multiplier", 1.0))
+	)
+	_set_sprite_frames_frame_size(
+		rendered,
+		rendered.get_meta("rendered_frame_size", Vector2(512, 512)) as Vector2
+	)
+	var rendered_bounds: Variant = rendered.get_meta("rendered_visual_bounds", Rect2())
+	if rendered_bounds is Rect2 and (rendered_bounds as Rect2).has_area():
+		_set_sprite_frames_visual_bounds(rendered, rendered_bounds as Rect2)
+	_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
+	_set_sprite_frames_position_offset(rendered, Vector2(float(offset[0]), float(offset[1])))
+	return rendered
 
 func _remember_shared_sprite_frames(cache_key: String, frames: SpriteFrames) -> void:
 	var metadata := {}

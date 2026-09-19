@@ -190,3 +190,7 @@ preview catalog. Debug builds use it when the explicit
 `POKEAETHER_RENDERED_PREVIEW_CATALOG` environment variable is not set, so
 `godot .` remains sufficient on a configured checkout. Release builds and
 machines without that file retain the approved-catalog/fallback behavior.
+While this explicit local review catalog is active, its `needs_review` entries
+take priority over enabled sprite content packs so the reviewer cannot
+accidentally inspect a pack fallback. Outside review, player-selected content
+packs retain their normal priority over approved built-in renders.
