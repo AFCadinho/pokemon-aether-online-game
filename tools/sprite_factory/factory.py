@@ -117,6 +117,11 @@ def validate(cfg, variant):
     require(cfg['variants'].get(variant, {}).get('available') is True, 'Variant source unavailable; use existing fallback')
     require(cfg['render']['resolution'] == [512, 512] and cfg['render']['fps'] in (24, 60),
             'Supported quality baselines are 512px / 24 or native 60 FPS')
+    require(cfg['render'].get('taa_render_samples', 64) in (16, 32, 64),
+            'EEVEE render samples must use a reviewed quality tier')
+    require(isinstance(cfg['render'].get('geometry_scan', True), bool)
+            and isinstance(cfg['render'].get('batch_animation', False), bool),
+            'Invalid render execution settings')
     require(set(cfg['cameras']) == {'front', 'back'}, 'Both explicit cameras required')
     require(cfg['actions'].get('idle') is not None, 'Idle mapping required')
     require(set(cfg['actions']) <= CATEGORIES, 'Unknown action category')
@@ -328,8 +333,8 @@ def quality(root, cfg, render):
                     result['errors'].append(key + ':clipping:' + path.name)
                 elif margin < cfg['qc']['safe_margin']:
                     result['warnings'].append(key + ':safe_margin:' + path.name)
-            geometry = render['geometry'][view][action]
-            if any(x['outside'] for x in geometry):
+            geometry = render.get('geometry', {}).get(view, {}).get(action, [])
+            if any(x.get('outside', False) for x in geometry):
                 result['errors'].append(key + ':geometry_outside_camera')
             visible = [b for b in boxes if b]
             union = [min(b[0] for b in visible), min(b[1] for b in visible), max(b[2] for b in visible), max(b[3] for b in visible)] if visible else None

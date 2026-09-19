@@ -68,7 +68,8 @@ for disconnected empty image nodes only; any other warning still blocks.
 `--jobs` permits one through four independent species builds in parallel. Each
 worker owns a separate build directory and log; only the parent process updates
 the resumable status catalog. Start conservatively because Blender render
-workers are memory-heavy.
+workers are memory-heavy. The local RTX 3070 benchmark makes two workers the
+default: one produced 2.23 frames/s, two 3.00 frames/s, and four 2.96 frames/s.
 `run-probes` creates a separate, non-catalogued front/back one-frame triage
 index before spending time on full 60-FPS animations. An already complete idle
 build can be reused there without altering it. Examine
@@ -265,3 +266,38 @@ Python factory/import suite completed 16 focused tests. Motion semantics,
 facial presentation, clipping during the flagged attacks and faint transitions
 still require human review in a real battle; none of these results changes the
 default source or approves an asset.
+
+## Quality-preserving render throughput
+
+The first full batch exposed that the original 64-sample, per-frame renderer
+was not viable for catalog production. New SCVI draft manifests use native
+60 FPS and 512×512 unchanged, but select the reviewed 16-sample EEVEE tier,
+render a contiguous action in one Blender animation operation, and rely on the
+existing alpha-image clipping/margin QC instead of evaluating every deformed
+mesh a second time before every frame. The generic factory still accepts 32 or
+64 samples as an explicit manifest override; older manifests retain their old
+64-sample/per-frame behavior.
+
+Short source-matched benchmarks compared decoded RGBA output against archived
+64-sample masters. Thirty Charizard idle frames rendered 2.47× faster with a
+mean visible channel delta of 0.34/255. Roaring Moon physical attack and
+Articuno's feathered idle rendered 2.21× and 2.20× faster, with mean deltas of
+0.32/255 and 0.50/255. Side-by-side 512×512 inspection showed no visible loss;
+the differences are subpixel antialiasing samples, so the result is deliberately
+described as visually equivalent rather than pixel-identical. A species can be
+raised to 32 or 64 samples if human review exposes a fringe or material issue.
+
+`benchmark_render.py` repeats this check against any archived build without
+changing that build or its approval state. A five-frame/two-view optimized
+Charizard build passed the complete factory render, canonical-master, alpha
+clipping, runtime-atlas, preview and verification path with zero errors or
+warnings. At the measured local throughput, a batch comparable to the initial
+5.5-hour run should take roughly 2–2.5 hours. Scaling hundreds of species still
+needs an unattended/distributed render queue; local renderer tuning alone does
+not make millions of 60-FPS frames instantaneous.
+
+```sh
+python tools/sprite_factory/benchmark_render.py \
+  --source "$source_blend" --reference-build "$archived_build" \
+  --output-parent "$output" --action idle --frames 30 --samples 16
+```

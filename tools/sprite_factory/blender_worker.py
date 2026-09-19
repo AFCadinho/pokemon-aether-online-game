@@ -6,6 +6,7 @@ import bpy
 import json
 import math
 import sys
+import time
 from pathlib import Path
 from mathutils import Vector
 
@@ -122,7 +123,13 @@ def render(job):
     scene.render.image_settings.file_format = 'PNG'
     scene.render.image_settings.color_mode = 'RGBA'
     scene.render.image_settings.color_depth = '8'
-    scene.render.image_settings.compression = 15
+    scene.render.image_settings.compression = int(job.get(
+        'png_compression', cfg['render'].get('png_compression', 15)))
+    if hasattr(scene, 'eevee'):
+        scene.eevee.taa_render_samples = int(job.get(
+            'taa_render_samples', cfg['render'].get(
+                'taa_render_samples', scene.eevee.taa_render_samples)))
+    taa_render_samples = int(scene.eevee.taa_render_samples) if hasattr(scene, 'eevee') else None
     scene.view_settings.view_transform = cfg['render']['view_transform']
     scene.view_settings.look = cfg['render']['look']
     scene.view_settings.exposure = 0
@@ -151,6 +158,9 @@ def render(job):
                     slot.material = bpy.data.materials[new]
     geometry = {}
     facial_warnings = []
+    timings = dict(frame_setup_seconds=0.0, geometry_seconds=0.0, render_seconds=0.0)
+    geometry_scan = bool(job.get('geometry_scan', cfg['render'].get('geometry_scan', True)))
+    batch_animation = bool(job.get('batch_animation', cfg['render'].get('batch_animation', False)))
     for view, cam in cfg['cameras'].items():
         camera.location, data.ortho_scale = cam['position'], cam['ortho_scale']
         aim(camera, cam['target'])
@@ -171,7 +181,45 @@ def render(job):
             destination.mkdir(parents=True, exist_ok=True)
             records = []
             eyelid_angles = {bone.name: [] for bone in rig.pose.bones if 'eyelid' in bone.name.lower() and 'sub' not in bone.name.lower()} if category == 'idle' else {}
+            can_batch = (batch_animation and not geometry_scan and frames and
+                         all(float(frame).is_integer() for frame in frames) and
+                         frames == list(range(int(frames[0]), int(frames[0]) + len(frames))))
+            if can_batch:
+                batch_destination = destination / '_batch'
+                batch_destination.mkdir()
+
+                def prepare_frame(_scene, _depsgraph):
+                    for name, values in eyelid_angles.items():
+                        values.append(rig.pose.bones[name].matrix_basis.to_quaternion().angle)
+                    for bone in neutral_bones:
+                        bone.matrix_basis.identity()
+                    if neutral_bones:
+                        bpy.context.view_layer.update()
+
+                bpy.app.handlers.frame_change_post.append(prepare_frame)
+                scene.frame_start = int(frames[0])
+                scene.frame_end = int(frames[-1])
+                scene.render.filepath = str(batch_destination) + '/'
+                started = time.perf_counter()
+                try:
+                    bpy.ops.render.render(animation=True)
+                finally:
+                    bpy.app.handlers.frame_change_post.remove(prepare_frame)
+                timings['render_seconds'] += time.perf_counter() - started
+                for index, frame in enumerate(frames):
+                    source = batch_destination / f'{int(frame):04}.png'
+                    if not source.is_file():
+                        raise RuntimeError('Batch render did not produce ' + str(source))
+                    source.replace(destination / f'{index:04}.png')
+                    records.append(dict(source_frame=frame))
+                batch_destination.rmdir()
+                geometry[view][category] = records
+                for name, angles in eyelid_angles.items():
+                    if name not in spec.get('neutral_bones', []) and min(angles) > 0.35 and max(angles) - min(angles) < 0.05:
+                        facial_warnings.append(view + '/' + category + ':persistent_eyelid_pose:' + name)
+                continue
             for index, frame in enumerate(frames):
+                started = time.perf_counter()
                 scene.frame_set(int(frame), subframe=frame - int(frame))
                 for name, values in eyelid_angles.items():
                     values.append(rig.pose.bones[name].matrix_basis.to_quaternion().angle)
@@ -182,28 +230,36 @@ def render(job):
                     bone.matrix_basis.identity()
                 if neutral_bones:
                     bpy.context.view_layer.update()
+                timings['frame_setup_seconds'] += time.perf_counter() - started
                 # Full evaluated vertex bounds at EVERY rendered frame, including alpha-invisible meshes.
-                graph = bpy.context.evaluated_depsgraph_get()
-                coords = []
-                for obj in scene.objects:
-                    if obj.type != 'MESH' or obj.hide_render:
-                        continue
-                    ev = obj.evaluated_get(graph)
-                    mesh = ev.to_mesh()
-                    coords.extend(inverse @ (ev.matrix_world @ v.co - Vector(cam['target'])) for v in mesh.vertices)
-                    ev.to_mesh_clear()
-                extent = max((max(abs(p.x), abs(p.y)) for p in coords), default=0)
-                records.append(dict(source_frame=frame, extent=extent,
-                                    outside=extent > data.ortho_scale * 0.5))
+                started = time.perf_counter()
+                if geometry_scan:
+                    graph = bpy.context.evaluated_depsgraph_get()
+                    coords = []
+                    for obj in scene.objects:
+                        if obj.type != 'MESH' or obj.hide_render:
+                            continue
+                        ev = obj.evaluated_get(graph)
+                        mesh = ev.to_mesh()
+                        coords.extend(inverse @ (ev.matrix_world @ v.co - Vector(cam['target'])) for v in mesh.vertices)
+                        ev.to_mesh_clear()
+                    extent = max((max(abs(p.x), abs(p.y)) for p in coords), default=0)
+                    records.append(dict(source_frame=frame, extent=extent,
+                                        outside=extent > data.ortho_scale * 0.5))
+                timings['geometry_seconds'] += time.perf_counter() - started
                 scene.render.filepath = str(destination / f'{index:04}.png')
+                started = time.perf_counter()
                 bpy.ops.render.render(write_still=True)
+                timings['render_seconds'] += time.perf_counter() - started
             geometry[view][category] = records
             for name, angles in eyelid_angles.items():
                 if name not in spec.get('neutral_bones', []) and min(angles) > 0.35 and max(angles) - min(angles) < 0.05:
                     facial_warnings.append(view + '/' + category + ':persistent_eyelid_pose:' + name)
     return dict(blender=bpy.app.version_string, blender_build=bpy.app.build_hash.decode(), geometry=geometry,
                 engine=scene.render.engine, fps=cfg['render']['fps'], resolution=[512, 512],
-                facial_warnings=facial_warnings)
+                facial_warnings=facial_warnings, geometry_scan=geometry_scan,
+                batch_animation=batch_animation, taa_render_samples=taa_render_samples,
+                timings=timings)
 
 
 if __name__ == '__main__':
