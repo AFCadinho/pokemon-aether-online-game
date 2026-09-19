@@ -24,7 +24,7 @@
 
 - Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; rendered Pokémon are also consistently larger beside a compact, higher HP HUD while keeping their species-size differences and reviewed platform placement.
 
-- High-quality rendered Pokémon now use their visible artwork bounds in Summary and Pokédex previews without being replaced by web fallbacks, with a neutral Summary backdrop, lightweight Pokédex list icons, and cached front/back views for quicker comparison.
+- High-quality rendered Pokémon now use their visible artwork bounds in Summary and Pokédex previews without being replaced by web fallbacks, with a neutral Summary backdrop, lightweight Pokédex list icons, cached front/back views, and an optional local development review catalog.
 
 - Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.
 

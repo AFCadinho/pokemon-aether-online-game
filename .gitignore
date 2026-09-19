@@ -32,6 +32,9 @@ Thumbs.db
 .env
 .env.*
 
+# Machine-local rendered sprite review selection. Never ship review catalogs.
+.pokeaether/
+
 .import/
 *.import
 !assets/ui/pokeaether_combo_logo.png.import
