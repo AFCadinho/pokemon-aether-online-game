@@ -156,3 +156,10 @@ its native 60 FPS timing remain unchanged. Their vertical presentation offsets
 were lowered, and Charizard's runtime scale was increased. Full idle masters
 for both views were rebuilt at 512×512/native 60 FPS with zero QC errors or
 warnings. They remain `needs_review`.
+
+The following platform review lowered both views of Eevee, Lucario, Charizard,
+Pikachu and Articuno again. Grounded Pokémon now use the visible platform as
+their baseline. Charizard and Articuno retain a deliberate airborne gap, but
+no longer hover as far above it. This is a data-only runtime presentation
+adjustment: master pixels, lighting, scale, resolution and native 60 FPS remain
+unchanged. All five still require in-game review.

@@ -52,6 +52,14 @@ class FactoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'timeline'):
             f.validate(self.cfg, 'normal')
 
+    def test_finalize_retune_allows_only_runtime_presentation_changes(self):
+        updated = copy.deepcopy(self.cfg)
+        updated['presentation']['front']['position_offset'][1] += 20
+        f.require_presentation_only_retune(self.cfg, updated)
+        updated['render']['fps'] = 60
+        with self.assertRaisesRegex(ValueError, 'only change presentation'):
+            f.require_presentation_only_retune(self.cfg, updated)
+
     def test_explicit_neutral_bones_require_existing_unique_bone_names(self):
         self.cfg['actions']['idle']['neutral_bones'] = ['left_upper_eyelid']
         f.validate(self.cfg, 'normal')
