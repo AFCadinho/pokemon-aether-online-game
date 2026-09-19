@@ -12016,7 +12016,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
-	_add_preview_animation_button(pokedex_sprite_panel, pokedex_animated_sprite, pokedex_sprite_loader, 40.0)
+	_add_preview_animation_button(pokedex_sprite_panel, pokedex_animated_sprite, pokedex_sprite_loader, "bottom_right")
 
 	var stats_panel := PanelContainer.new()
 	stats_panel.custom_minimum_size = Vector2(220, 0)
@@ -21012,7 +21012,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	# Zoom is always available, so keep it in the fixed lower-left slot. The
 	# conditional HA badge appears beside it without leaving a visual gap.
 	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52)
-	_add_preview_animation_button(sprite_frame, pokemon_summary_animated_sprite, pokemon_summary_sprite_loader, 88.0)
+	_add_preview_animation_button(sprite_frame, pokemon_summary_animated_sprite, pokemon_summary_sprite_loader, "above_level")
 
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
@@ -36789,7 +36789,7 @@ func _add_preview_animation_button(
 	parent: Control,
 	animated_sprite: AnimatedSprite2D,
 	loader: Node,
-	left_offset: float
+	placement: String
 ) -> MenuButton:
 	var overlay := Control.new()
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -36800,23 +36800,86 @@ func _add_preview_animation_button(
 	button.visible = false
 	button.text = "▶"
 	button.tooltip_text = "Animations are loading…"
-	button.custom_minimum_size = Vector2(28, 28)
+	button.custom_minimum_size = Vector2(30, 30)
 	button.mouse_filter = Control.MOUSE_FILTER_STOP
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.add_theme_font_size_override("font_size", 12)
-	button.add_theme_color_override("font_color", Color("#8ce7ff"))
-	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#06111fe8"), UI_BORDER_SUBTLE, 5, 1))
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_color_override("font_color", Color("#bdf5ff"))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color("#638294"))
+	button.add_theme_stylebox_override("normal", _make_preview_animation_button_style(Color("#071827f2"), Color("#3f7d98")))
+	button.add_theme_stylebox_override("hover", _make_preview_animation_button_style(Color("#10344bf7"), Color("#8ce7ff"), 2))
+	button.add_theme_stylebox_override("pressed", _make_preview_animation_button_style(Color("#15516bf9"), Color("#bdf5ff"), 2))
+	button.add_theme_stylebox_override("focus", _make_preview_animation_button_style(Color("#10344bf7"), Color("#8ce7ff"), 2))
+	button.add_theme_stylebox_override("disabled", _make_preview_animation_button_style(Color("#07131dcc"), Color("#294351")))
 	overlay.add_child(button)
-	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	button.offset_left = left_offset
-	button.offset_top = -34
-	button.offset_right = left_offset + 28.0
-	button.offset_bottom = -6
+	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	if placement == "above_level":
+		# Center over the 54px level badge without covering the Pokémon.
+		button.offset_left = -48.0
+		button.offset_top = -66.0
+		button.offset_right = -18.0
+		button.offset_bottom = -36.0
+	else:
+		button.offset_left = -36.0
+		button.offset_top = -36.0
+		button.offset_right = -6.0
+		button.offset_bottom = -6.0
+	_style_preview_animation_popup(button.get_popup())
 	animated_sprite.set_meta("preview_animation_button", button)
 	button.get_popup().id_pressed.connect(
 		_on_preview_animation_selected.bind(button, animated_sprite, loader)
 	)
 	return button
+
+
+func _make_preview_animation_button_style(
+	background: Color,
+	border: Color,
+	border_width: int = 1
+) -> StyleBoxFlat:
+	var style := _make_button_style(background, border, 7, border_width)
+	style.content_margin_left = 0
+	style.content_margin_top = 0
+	style.content_margin_right = 0
+	style.content_margin_bottom = 0
+	style.shadow_color = Color("#00000088")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+func _style_preview_animation_popup(popup: PopupMenu) -> void:
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.min_size = Vector2i(172, 0)
+	var panel := _make_panel_style(Color("#050f1bfc"), Color("#4aa3c7e6"), 9, 1)
+	panel.content_margin_left = 5
+	panel.content_margin_top = 6
+	panel.content_margin_right = 5
+	panel.content_margin_bottom = 6
+	panel.shadow_color = Color("#000000aa")
+	panel.shadow_size = 12
+	panel.shadow_offset = Vector2(0, 5)
+	popup.add_theme_stylebox_override("panel", panel)
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_panel_style(Color("#123b55f7"), Color("#8ce7ff"), 6, 1)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_panel_style(Color.TRANSPARENT, Color("#31566a88"), 0, 0)
+	)
+	popup.add_theme_color_override("font_color", Color("#dcecf7"))
+	popup.add_theme_color_override("font_hover_color", Color.WHITE)
+	popup.add_theme_color_override("font_disabled_color", Color("#718999"))
+	popup.add_theme_color_override("font_outline_color", Color("#02070c"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 14)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_font_size_override("font_size", 13)
 
 
 func _configure_preview_animation_button(
