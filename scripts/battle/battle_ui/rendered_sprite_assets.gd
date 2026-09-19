@@ -5,8 +5,10 @@ extends RefCounted
 
 static var _cache: Dictionary = {}
 static var _cache_order: Array[String] = []
+static var _preview_cache_order: Array[String] = []
 const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
-const CACHE_LIMIT := 8
+const CACHE_LIMIT := 2
+const PREVIEW_CACHE_LIMIT := 16
 const LOCAL_PREVIEW_CATALOG_POINTER := "res://.pokeaether/rendered-preview-catalog"
 
 
@@ -21,7 +23,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	var preview := bool(resolved.preview)
 	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated"
 	if _cache.has(cache_key):
-		_touch_cache_key(cache_key)
+		_touch_cache_key(cache_key, false)
 		return _cache[cache_key] as SpriteFrames
 	var views: Dictionary = manifest.get("views", {})
 	var actions: Dictionary = views.get(side, {})
@@ -41,7 +43,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
 	if not ensure_action_loaded(frames, "idle"):
 		return null
-	_remember_frames(cache_key, frames)
+	_remember_frames(cache_key, frames, false)
 	return frames
 
 
@@ -56,7 +58,7 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	var preview := bool(resolved.preview)
 	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":still"
 	if _cache.has(cache_key):
-		_touch_cache_key(cache_key)
+		_touch_cache_key(cache_key, true)
 		return _cache[cache_key] as SpriteFrames
 	var actions: Dictionary = (manifest.get("views", {}) as Dictionary).get(side, {})
 	var idle: Dictionary = actions.get("idle", {})
@@ -72,7 +74,11 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	var im := Image.load_from_file(image_path)
 	if im == null or im.get_size() != Vector2i(512, 512) or im.get_format() not in [Image.FORMAT_RGBA8, Image.FORMAT_RGBAF, Image.FORMAT_RGBAH]:
 		return null
-	var visual_bounds := _rect_from_array(source.get("visual_bounds", []))
+	# Use the complete idle union when available so the still-to-animation swap
+	# does not change scale or center once streaming finishes.
+	var visual_bounds := _rect_from_array(idle.get("visual_bounds", []))
+	if not visual_bounds.has_area():
+		visual_bounds = _rect_from_array(source.get("visual_bounds", []))
 	if not visual_bounds.has_area():
 		visual_bounds = Rect2(im.get_used_rect())
 	if not visual_bounds.has_area():
@@ -93,8 +99,106 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	frames.set_meta("rendered_frame_size", Vector2(512, 512))
 	frames.set_meta("rendered_visual_bounds", visual_bounds)
 	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
-	_remember_frames(cache_key, frames)
+	_remember_frames(cache_key, frames, true)
 	return frames
+
+
+static func load_frames_async(species: String, side: String, shiny: bool) -> SpriteFrames:
+	if side not in ["front", "back"]:
+		return null
+	var resolved := _resolve_asset(species, shiny)
+	if resolved.is_empty():
+		return null
+	var path := str(resolved.path)
+	var manifest: Dictionary = resolved.manifest
+	var preview := bool(resolved.preview)
+	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated"
+	if _cache.has(cache_key):
+		_touch_cache_key(cache_key, false)
+		return _cache[cache_key] as SpriteFrames
+	var actions: Dictionary = (manifest.get("views", {}) as Dictionary).get(side, {})
+	var idle: Dictionary = actions.get("idle", {})
+	var present: Dictionary = (manifest.get("presentation", {}) as Dictionary).get(side, {})
+	if idle.is_empty() or present.is_empty() or not _allowed(str(idle.get("status", "")), preview):
+		return null
+	var thread := Thread.new()
+	if thread.start(_decode_action_pages.bind(path.get_base_dir(), idle)) != OK:
+		return null
+	var tree := Engine.get_main_loop() as SceneTree
+	while thread.is_alive():
+		await tree.process_frame
+	var decoded_value: Variant = thread.wait_to_finish()
+	if not decoded_value is Dictionary:
+		return null
+	var decoded := decoded_value as Dictionary
+	var page_images: Array = decoded.get("images", [])
+	var pages: Array = idle.get("pages", [])
+	if page_images.size() != pages.size():
+		return null
+	var frames := SpriteFrames.new()
+	frames.remove_animation("default")
+	frames.set_meta("rendered_asset", true)
+	frames.set_meta("rendered_actions", actions)
+	frames.set_meta("rendered_root", path.get_base_dir())
+	frames.set_meta("rendered_preview", preview)
+	frames.set_meta("rendered_presentation", present)
+	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
+	frames.set_meta("rendered_frame_size", Vector2(512, 512))
+	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
+	frames.add_animation("idle")
+	frames.set_animation_speed("idle", float(manifest.get("fps", 0)))
+	frames.set_animation_loop("idle", bool(idle.get("loop", false)))
+	var visual_bounds := _rect_from_array(idle.get("visual_bounds", []))
+	var uploaded := 0
+	for page_index: int in pages.size():
+		var page: Dictionary = pages[page_index]
+		var page_image := page_images[page_index] as Image
+		var columns := int(page.get("columns", 0))
+		var count := int(page.get("count", 0))
+		for frame_index: int in count:
+			var cell := page_image.get_region(Rect2i(
+				(frame_index % columns) * 512,
+				int(frame_index / columns) * 512,
+				512,
+				512
+			))
+			if not visual_bounds.has_area():
+				var used := cell.get_used_rect()
+				if used.has_area():
+					visual_bounds = Rect2(used)
+			frames.add_frame("idle", ImageTexture.create_from_image(cell))
+			uploaded += 1
+			if uploaded % 4 == 0:
+				await tree.process_frame
+	if uploaded != int(idle.get("count", 0)) or not visual_bounds.has_area():
+		return null
+	frames.set_meta("rendered_visual_bounds", visual_bounds)
+	_remember_frames(cache_key, frames, false)
+	return frames
+
+
+static func _decode_action_pages(root: String, action: Dictionary) -> Dictionary:
+	var images: Array[Image] = []
+	var pages: Array = action.get("pages", [])
+	for value: Variant in pages:
+		if not value is Dictionary:
+			return {}
+		var page := value as Dictionary
+		var file := str(page.get("file", ""))
+		if file.is_absolute_path() or ".." in file or not file.ends_with(".png"):
+			return {}
+		var page_path := root.path_join(file)
+		if not FileAccess.file_exists(page_path) or FileAccess.get_sha256(page_path) != str(page.get("sha256", "")):
+			return {}
+		var columns := int(page.get("columns", 0))
+		var count := int(page.get("count", 0))
+		if columns < 1 or columns > 8 or count < 1 or count > 64:
+			return {}
+		var im := Image.load_from_file(page_path)
+		if im == null or im.get_width() != columns * 512 or im.get_height() != int(ceil(float(count) / columns)) * 512:
+			return {}
+		images.append(im)
+	return {"images": images}
 
 
 static func _resolve_asset(species: String, shiny: bool) -> Dictionary:
@@ -159,20 +263,23 @@ static func _preview_catalog_path() -> String:
 	return FileAccess.get_file_as_string(LOCAL_PREVIEW_CATALOG_POINTER).strip_edges()
 
 
-static func _remember_frames(cache_key: String, frames: SpriteFrames) -> void:
+static func _remember_frames(cache_key: String, frames: SpriteFrames, static_preview: bool = false) -> void:
+	var order := _preview_cache_order if static_preview else _cache_order
+	var limit := PREVIEW_CACHE_LIMIT if static_preview else CACHE_LIMIT
 	if _cache.has(cache_key):
 		_cache.erase(cache_key)
-		_cache_order.erase(cache_key)
-	while _cache_order.size() >= CACHE_LIMIT:
-		var oldest: String = _cache_order.pop_front()
+		order.erase(cache_key)
+	while order.size() >= limit:
+		var oldest: String = order.pop_front()
 		_cache.erase(oldest)
 	_cache[cache_key] = frames
-	_cache_order.append(cache_key)
+	order.append(cache_key)
 
 
-static func _touch_cache_key(cache_key: String) -> void:
-	_cache_order.erase(cache_key)
-	_cache_order.append(cache_key)
+static func _touch_cache_key(cache_key: String, static_preview: bool = false) -> void:
+	var order := _preview_cache_order if static_preview else _cache_order
+	order.erase(cache_key)
+	order.append(cache_key)
 
 
 static func _catalog_key(species: String, shiny: bool) -> String:

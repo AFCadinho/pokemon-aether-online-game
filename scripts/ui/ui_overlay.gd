@@ -26334,6 +26334,13 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 				"back" if sprite_side == "front" else "front",
 				pokemon.shiny
 			)
+			if bool(frames.get_meta("rendered_static_preview", false)):
+				_upgrade_pokemon_summary_rendered_animation.call_deferred(
+					web_generation,
+					pokemon.species,
+					sprite_side,
+					pokemon.shiny
+				)
 		else:
 			_prefetch_pokemon_summary_web_sprites(pokemon)
 			_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
@@ -26367,6 +26374,27 @@ func _prefetch_pokemon_summary_rendered_view(species: String, side: String, is_s
 	if pokemon_summary_sprite_loader == null:
 		return
 	pokemon_summary_sprite_loader.call("_load_preview_sprite_frames", species, side, is_shiny, false)
+
+
+func _upgrade_pokemon_summary_rendered_animation(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	await tree.create_timer(0.12).timeout
+	if generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite == null:
+		return
+	var frames: SpriteFrames = await pokemon_summary_sprite_loader.call(
+		"request_rendered_sprite_frames", species, side, is_shiny
+	)
+	if frames == null or generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite == null:
+		return
+	pokemon_summary_sprite.visible = false
+	pokemon_summary_animated_sprite.visible = true
+	pokemon_summary_animated_sprite.sprite_frames = frames
+	pokemon_summary_animated_sprite.animation = "idle"
+	pokemon_summary_animated_sprite.frame = 0
+	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
+	pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
+	_apply_pokemon_summary_sprite_center_offset(frames, "idle")
+	pokemon_summary_animated_sprite.play()
 
 
 func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -35851,6 +35879,13 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 				"back" if _get_pokedex_sprite_side() == "front" else "front",
 				pokedex_shiny_mode
 			)
+			if bool(loaded_frames.get_meta("rendered_static_preview", false)):
+				_upgrade_pokedex_rendered_animation.call_deferred(
+					web_generation,
+					species.duplicate(true),
+					_get_pokedex_sprite_side(),
+					pokedex_shiny_mode
+				)
 	else:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.visible = false
@@ -35879,6 +35914,31 @@ func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny
 		)
 		if frames_value is SpriteFrames:
 			return
+
+
+func _upgrade_pokedex_rendered_animation(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	await tree.create_timer(0.12).timeout
+	if generation != pokedex_web_sprite_generation or pokedex_animated_sprite == null:
+		return
+	var loaded_frames: SpriteFrames = null
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		loaded_frames = await pokedex_sprite_loader.call(
+			"request_rendered_sprite_frames", candidate, side, is_shiny
+		)
+		if loaded_frames != null:
+			break
+	if loaded_frames == null or generation != pokedex_web_sprite_generation or pokedex_animated_sprite == null:
+		return
+	pokedex_sprite.visible = false
+	pokedex_animated_sprite.visible = true
+	pokedex_animated_sprite.sprite_frames = loaded_frames
+	pokedex_animated_sprite.animation = "idle"
+	pokedex_animated_sprite.frame = 0
+	pokedex_animated_sprite.position = _get_pokedex_sprite_position()
+	pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
+	_apply_pokedex_sprite_center_offset(loaded_frames, "idle")
+	pokedex_animated_sprite.play()
 
 
 func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:

@@ -95,6 +95,14 @@ func _run() -> void:
 				"rendered Summary art uses the visible silhouette instead of the 512px canvas")
 			_check(pokedex_size.y >= 80.0 and pokedex_size.y <= 104.01,
 				"rendered Pokédex art fills its detail stage without clipping")
+			var animated_value: Variant = await sprite_loader.call(
+				"request_rendered_sprite_frames",
+				"dragonite",
+				"front",
+				false
+			)
+			_check(animated_value is SpriteFrames and (animated_value as SpriteFrames).get_frame_count("idle") > 1,
+				"rendered Pokédex still upgrades to the streamed 60 FPS idle animation")
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
