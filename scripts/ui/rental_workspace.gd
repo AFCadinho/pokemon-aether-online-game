@@ -4,6 +4,7 @@ signal finished
 
 const SERVICE := preload("res://scripts/services/rental_service.gd")
 const CONFIRM := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const TEAM_CATALOG := preload("res://scripts/ui/rental_team_catalog.gd")
 var service: Node
 var kind := "team"
 var catalog: Dictionary = {}
@@ -17,6 +18,7 @@ var balance: Label
 var rent_button: Button
 var active_list: VBoxContainer
 var search: LineEdit
+var team_catalog: RentalTeamCatalog
 var busy := false
 var detail_generation := 0
 
@@ -58,6 +60,37 @@ func _ready() -> void:
 	browse.name = "Catalog"
 	browse.add_theme_constant_override("separation", 16)
 	tabs.add_child(browse)
+	if kind == "team":
+		team_catalog = TEAM_CATALOG.new()
+		team_catalog.offer_selected.connect(_select_team_offer)
+		browse.add_child(team_catalog)
+		duration = OptionButton.new()
+		duration.custom_minimum_size = Vector2(205, 36)
+		team_catalog.add_rental_control(duration)
+		rent_button = Button.new()
+		rent_button.text = "Rent complete team"
+		rent_button.custom_minimum_size = Vector2(210, 36)
+		rent_button.disabled = true
+		rent_button.pressed.connect(_rent)
+		team_catalog.add_rental_control(rent_button)
+	else:
+		_build_individual_catalog(browse)
+	var scroll := ScrollContainer.new()
+	scroll.name = "My rentals"
+	tabs.add_child(scroll)
+	active_list = VBoxContainer.new()
+	active_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	active_list.add_theme_constant_override("separation", 12)
+	scroll.add_child(active_list)
+	status = Label.new()
+	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	root.add_child(status)
+	var close_button := Button.new()
+	close_button.text = "Close"
+	close_button.pressed.connect(_close)
+	root.add_child(close_button)
+
+func _build_individual_catalog(browse: HBoxContainer) -> void:
 	var left := VBoxContainer.new()
 	left.custom_minimum_size.x = 280
 	browse.add_child(left)
@@ -83,20 +116,6 @@ func _ready() -> void:
 	rent_button.disabled = true
 	rent_button.pressed.connect(_rent)
 	right.add_child(rent_button)
-	var scroll := ScrollContainer.new()
-	scroll.name = "My rentals"
-	tabs.add_child(scroll)
-	active_list = VBoxContainer.new()
-	active_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	active_list.add_theme_constant_override("separation", 12)
-	scroll.add_child(active_list)
-	status = Label.new()
-	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	root.add_child(status)
-	var close_button := Button.new()
-	close_button.text = "Close"
-	close_button.pressed.connect(_close)
-	root.add_child(close_button)
 
 func open_vendor() -> void:
 	popup_centered(size)
@@ -114,13 +133,18 @@ func refresh() -> void:
 	balance.text = "Balance: %d Aetherite  •  Limit: %d team + %d individual Pokémon" % [int(catalog.get("aetherite", 0)), int(catalog.get("maxTeams", 1)), int(catalog.get("maxPokemon", 6))]
 	duration.clear()
 	for price: Dictionary in catalog.get("prices", []):
-		duration.add_item("%d hours — %d Aetherite" % [int(price["durationSeconds"]) / 3600, int(price["amount"])])
+		duration.add_item("%s — %d Aetherite" % [_duration_label(int(price["durationSeconds"])), int(price["amount"])])
 		duration.set_item_metadata(duration.item_count - 1, price)
-	_filter()
+	if kind == "team":
+		team_catalog.set_offers(catalog.get("offers", []))
+	else:
+		_filter()
 	_render_active()
 	status.text = "Rentals arrive in your PC (or free Party slots if the PC is full). Early returns are not refunded."
 
 func _filter() -> void:
+	if listing == null:
+		return
 	listing.clear()
 	offers.clear()
 	selected = {}
@@ -157,11 +181,47 @@ func _select(index: int) -> void:
 	description.text = text
 	rent_button.disabled = false
 
+func _select_team_offer(offer: Dictionary) -> void:
+	if busy:
+		return
+	detail_generation += 1
+	var generation := detail_generation
+	selected = {}
+	rent_button.disabled = true
+	team_catalog.show_loading(offer)
+	var result: Dictionary = await service.request("/catalog/team/%s" % str(offer["offerId"]).uri_encode())
+	if generation != detail_generation:
+		return
+	if not bool(result.get("success", false)):
+		team_catalog.clear_selection()
+		status.text = str(result.get("error", "Unavailable"))
+		return
+	selected = result["body"]
+	team_catalog.show_detail(selected)
+	var limit_reached := _rental_limit_reached()
+	rent_button.disabled = limit_reached
+	rent_button.text = "Team rental limit reached" if limit_reached else "Rent complete team"
+
 func _rent() -> void:
 	if busy or selected.is_empty():
 		return
 	var price: Dictionary = duration.get_selected_metadata()
 	await _mutate("", {"kind": kind, "offerId": selected["offerId"], "durationSeconds": price["durationSeconds"]}, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
+
+func _rental_limit_reached() -> bool:
+	var context := "npc_" + kind
+	var count := 0
+	for loan: Dictionary in catalog.get("rentals", []):
+		if str(loan.get("context", "")) == context and str(loan.get("status", "")) in ["active", "return_pending"]:
+			count += 1
+	return count >= int(catalog.get("maxTeams", 1) if kind == "team" else catalog.get("maxPokemon", 6))
+
+func _duration_label(seconds: int) -> String:
+	if seconds % 86400 == 0:
+		var days := seconds / 86400
+		return "%d day%s" % [days, "" if days == 1 else "s"]
+	var hours := seconds / 3600
+	return "%d hour%s" % [hours, "" if hours == 1 else "s"]
 
 func _render_active() -> void:
 	for child: Node in active_list.get_children():
