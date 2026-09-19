@@ -20812,9 +20812,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_hidden_ability_badge.anchor_top = 1.0
 	pokemon_summary_hidden_ability_badge.anchor_right = 0.0
 	pokemon_summary_hidden_ability_badge.anchor_bottom = 1.0
-	pokemon_summary_hidden_ability_badge.offset_left = 6.0
+	pokemon_summary_hidden_ability_badge.offset_left = 40.0
 	pokemon_summary_hidden_ability_badge.offset_top = -30.0
-	pokemon_summary_hidden_ability_badge.offset_right = 50.0
+	pokemon_summary_hidden_ability_badge.offset_right = 84.0
 	pokemon_summary_hidden_ability_badge.offset_bottom = -6.0
 	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_PASS
 	pokemon_summary_hidden_ability_badge.mouse_default_cursor_shape = Control.CURSOR_HELP
@@ -20906,8 +20906,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_y", 1)
 	level_badge_margin.add_child(pokemon_summary_level_badge_label)
-	# Keep the lower-left HA badge unobstructed; the zoom action sits beside it.
-	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52, 56.0)
+	# Zoom is always available, so keep it in the fixed lower-left slot. The
+	# conditional HA badge appears beside it without leaving a visual gap.
+	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52)
 
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
