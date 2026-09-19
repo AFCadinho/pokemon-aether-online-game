@@ -4,6 +4,8 @@
 
 - Rendered Pokémon in Summary and Pokédex now offer an on-demand animation menu for reviewing attacks, damage, sleep and fainting without entering battle.
 
+- Active team and Pokémon rentals can now be extended by 24 hours for 100 Aetherite from My rentals; new rentals use the simplified 24-hour pricing model.
+
 - Rendered Pokémon now sit lower on battle platforms, while Summary cards preserve the natural size difference between small and large species.
 
 - Every player who can reach the Aether Clash Lobby can use level-100 rentals in Clash and Ranked play, while the lobby explains when an above-cap party member must be stored or returned before leaving.
