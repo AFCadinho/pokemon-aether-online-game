@@ -22,6 +22,7 @@ func _init() -> void:
 	_check(source.contains("func _on_pokedex_variant_selected") and source.contains("pokedex_shiny_mode"), "Changing sprite variant refreshes the Pokédex")
 	_check(source.contains('"shiny" if pokedex_shiny_mode else "normal"'), "Normal and shiny species icons use separate cache entries")
 	_check(source.contains("func _prefetch_pokedex_rendered_view"), "Selected rendered species warm the opposite view before a front/back switch")
+	_check(source.contains('"_load_preview_sprite_frames"'), "Selected Pokédex species use lightweight lossless rendered stills")
 	_check(not source.contains("func _load_first_pokedex_sprite_frame"), "Pokédex list icons never decode full rendered animation atlases")
 	_check(source.contains('if loaded_frames == null or not loaded_frames.has_meta("rendered_asset"):'), "Pokédex web sprites never replace a selected rendered asset")
 	_check(source.contains('candidate,\n\t\t\t_get_pokedex_sprite_side(),\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'), "Selected species loads its requested battle sprite without reporting expected candidate misses")

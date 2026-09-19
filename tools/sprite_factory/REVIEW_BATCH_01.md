@@ -179,10 +179,13 @@ measured during factory QC. Summary and Pokédex previews use those bounds to
 fit the actual Pokémon instead of the transparent 512×512 canvas. Older local
 review builds without this optional metadata derive and cache the idle bounds
 once while loading. The Pokédex list remains icon-only, while a selected
-rendered Pokémon warms its opposite view after first display so front/back
-review does not repeatedly decode lossless atlases. The shared rendered-view
-cache is LRU-bounded to eight views, preventing long Pokédex sessions from
-retaining an unbounded number of full-quality atlases.
+rendered Pokémon uses a dedicated lossless 512×512 still copied from idle
+master frame zero. Its opposite still is warmed after first display, so
+Summary and Pokédex review never decode the complete native-60-FPS atlas.
+Battles continue to use the complete animation unchanged. Existing local
+review builds without packaged still metadata securely read the same hashed
+master frame from their build directory. The shared rendered-view cache is
+LRU-bounded to eight views.
 
 For local development review, a machine-local ignored file at
 `.pokeaether/rendered-preview-catalog` may contain the absolute path of the

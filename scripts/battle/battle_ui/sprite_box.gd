@@ -1234,6 +1234,24 @@ func prewarm_species(species: String, side: String, is_shiny: bool = false) -> v
 		return
 	_load_sprite_frames(species, side, is_shiny)
 
+
+func _load_preview_sprite_frames(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	report_missing: bool = true
+) -> SpriteFrames:
+	var rendered := RenderedSpriteAssets.load_preview_frames(species, side, is_shiny)
+	if rendered != null and bool(rendered.get_meta("rendered_preview", false)):
+		return _prepare_rendered_sprite_frames(rendered)
+	# Outside an explicit local review, player-selected content packs retain their
+	# normal priority. The regular loader applies all pack metadata consistently.
+	if ContentPacks.battle_frames(species, side, is_shiny) != null:
+		return _load_sprite_frames(species, side, is_shiny, report_missing)
+	if rendered != null:
+		return _prepare_rendered_sprite_frames(rendered)
+	return _load_sprite_frames(species, side, is_shiny, report_missing)
+
 func _load_sprite_frames(
 	species: String,
 	side: String,

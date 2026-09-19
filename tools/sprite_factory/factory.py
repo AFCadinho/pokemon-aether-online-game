@@ -378,9 +378,22 @@ def package(root, cfg, variant):
             union = qc_actions.get(f'{view}/{action}', {}).get('union')
             visual_bounds = ([union[0], union[1], union[2] - union[0], union[3] - union[1]]
                              if union else None)
-            meta['views'][view][action] = dict(pages=pages, count=len(paths), loop=spec['loop'], speed=spec['speed'],
+            runtime_action = dict(pages=pages, count=len(paths), loop=spec['loop'], speed=spec['speed'],
                 status='needs_review' if spec['review'] != 'rejected' else 'rejected', source_action=spec['action'],
                 visual_bounds=visual_bounds)
+            if action == 'idle':
+                preview_name = f'{view}/idle-preview.png'
+                preview_destination = runtime / preview_name
+                preview_destination.write_bytes(canonical_png(paths[0].read_bytes()))
+                with Image.open(preview_destination) as preview_image:
+                    preview_box = preview_image.getchannel('A').getbbox()
+                runtime_action['preview_frame'] = dict(
+                    file=preview_name,
+                    sha256=digest(preview_destination.read_bytes()),
+                    visual_bounds=([preview_box[0], preview_box[1], preview_box[2] - preview_box[0],
+                                    preview_box[3] - preview_box[1]] if preview_box else None),
+                )
+            meta['views'][view][action] = runtime_action
     write(runtime / 'manifest.json', meta)
 
 
@@ -396,6 +409,13 @@ def verify(root):
         require(digest((root / path).read_bytes()) == expected, 'Master altered: ' + path)
     for view, actions in meta['views'].items():
         for action, spec in actions.items():
+            preview = spec.get('preview_frame')
+            if preview:
+                preview_path = root / 'runtime' / preview['file']
+                require(digest(preview_path.read_bytes()) == preview['sha256'], 'Preview frame altered')
+                with Image.open(preview_path) as still, Image.open(root / 'masters' / view / action / '0000.png') as master:
+                    require(still.mode == 'RGBA' and still.size == (512, 512), 'Invalid preview frame')
+                    require(still.tobytes() == master.tobytes(), 'Preview frame differs from master')
             index = 0
             for page in spec['pages']:
                 path = root / 'runtime' / page['file']

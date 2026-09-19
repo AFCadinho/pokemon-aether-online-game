@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
+const RENDERED_ASSETS := preload("res://scripts/battle/battle_ui/rendered_sprite_assets.gd")
 
 var failed := false
 
@@ -64,9 +65,9 @@ func _run() -> void:
 			"Squirtle uses the compact Pokédex baseline scale"
 		)
 
-	if not OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").is_empty():
+	if not RENDERED_ASSETS._preview_catalog_path().is_empty():
 		var dragonite_value: Variant = sprite_loader.call(
-			"_load_sprite_frames",
+			"_load_preview_sprite_frames",
 			"dragonite",
 			"front",
 			false,
@@ -75,6 +76,8 @@ func _run() -> void:
 		_check(dragonite_value is SpriteFrames, "rendered Dragonite loads for non-battle preview checks")
 		if dragonite_value is SpriteFrames:
 			var dragonite_frames := dragonite_value as SpriteFrames
+			_check(bool(dragonite_frames.get_meta("rendered_static_preview", false)), "non-battle Dragonite uses a lightweight lossless still")
+			_check(dragonite_frames.get_frame_count("idle") == 1, "non-battle Dragonite does not decode its 60 FPS atlas")
 			var visual_bounds_value: Variant = sprite_loader.call(
 				"_get_sprite_frames_visual_bounds",
 				dragonite_frames

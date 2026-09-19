@@ -142,6 +142,9 @@ class FactoryTests(unittest.TestCase):
             self.assertIn('alpha_weighted_luminance', qc['actions']['front/idle'])
             runtime = f.read(root / 'runtime/manifest.json')
             self.assertEqual(runtime['views']['front']['idle']['visual_bounds'], [200, 200, 50, 100])
+            preview = runtime['views']['front']['idle']['preview_frame']
+            self.assertEqual(preview['visual_bounds'], [200, 200, 50, 100])
+            self.assertTrue((root / 'runtime' / preview['file']).is_file())
             f.verify(root)
             args = argparse.Namespace(build=[str(root)], output=str(root/'catalog.json'), preview=False)
             with self.assertRaises(OSError):

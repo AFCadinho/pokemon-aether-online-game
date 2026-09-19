@@ -43,8 +43,16 @@ func _run() -> void:
 		"pikachu": {"front": 67, "back": 70},
 		"articuno": {"front": 32, "back": 22},
 	}
+	var preview_load_msec := 0
 	for species: String in reviewed_species:
 		for side: String in ["front", "back"]:
+			var preview_started := Time.get_ticks_msec()
+			var preview_frames := Assets.load_preview_frames(species, side, false)
+			preview_load_msec += Time.get_ticks_msec() - preview_started
+			assert(preview_frames != null)
+			assert(bool(preview_frames.get_meta("rendered_static_preview", false)))
+			assert(preview_frames.get_frame_count("idle") == 1)
+			assert((preview_frames.get_meta("rendered_visual_bounds", Rect2()) as Rect2).has_area())
 			var frames := Assets.load_frames(species, side, false)
 			assert(frames != null)
 			assert(float(frames.get_meta("hd_poc_fps")) == 60.0)
@@ -65,6 +73,9 @@ func _run() -> void:
 	assert(Assets.load_frames("gardevoir", "front", false) == null)
 	var shiny := Assets.load_frames("eevee", "front", true)
 	assert(shiny != null and shiny.get_frame_count("idle") > 1)
+	var shiny_preview := Assets.load_preview_frames("eevee", "front", true)
+	assert(shiny_preview != null and shiny_preview.get_frame_count("idle") == 1)
 	assert(Assets.load_frames("meowth", "front", true) == null)
+	print("Lossless non-battle previews loaded in %d ms" % preview_load_msec)
 	print("SCVI review batch preview/fallback checks PASS")
 	quit()

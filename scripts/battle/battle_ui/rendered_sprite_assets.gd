@@ -11,31 +11,15 @@ const LOCAL_PREVIEW_CATALOG_POINTER := "res://.pokeaether/rendered-preview-catal
 
 
 static func load_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
-	var catalog_path := OS.get_environment("POKEAETHER_RENDERED_CATALOG")
-	var preview_path := _preview_catalog_path()
-	var preview := not preview_path.is_empty()
-	if preview:
-		catalog_path = preview_path
-	if catalog_path.is_empty() or side not in ["front", "back"]:
+	if side not in ["front", "back"]:
 		return null
-	var catalog := _json(catalog_path)
-	if int(catalog.get("schema", 0)) != 1 or str(catalog.get("mode", "")) != ("preview" if preview else "approved"):
+	var resolved := _resolve_asset(species, shiny)
+	if resolved.is_empty():
 		return null
-	var key := _catalog_key(species, shiny)
-	var entries: Dictionary = catalog.get("entries", {})
-	var entry: Dictionary = entries.get(key, {})
-	var path := str(entry.get("path", ""))
-	if path.is_empty() or not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != str(entry.get("sha256", "")):
-		return null
-	var manifest := _json(path)
-	if int(manifest.get("schema", 0)) != 1 or str(manifest.get("species", "")) + ":" + str(manifest.get("variant", "")) != key:
-		return null
-	if not _allowed(str(manifest.get("status", "")), preview):
-		return null
-	var fps := float(manifest.get("fps", 0))
-	if int(manifest.get("cell_size", 0)) != 512 or fps not in [24.0, 60.0]:
-		return null
-	var cache_key := path + ":" + str(entry.get("sha256")) + ":" + side + ":" + str(preview)
+	var path := str(resolved.path)
+	var manifest: Dictionary = resolved.manifest
+	var preview := bool(resolved.preview)
+	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated"
 	if _cache.has(cache_key):
 		_touch_cache_key(cache_key)
 		return _cache[cache_key] as SpriteFrames
@@ -54,11 +38,116 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("rendered_presentation", present)
 	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
 	frames.set_meta("rendered_frame_size", Vector2(512, 512))
-	frames.set_meta("hd_poc_fps", fps)
+	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
 	if not ensure_action_loaded(frames, "idle"):
 		return null
 	_remember_frames(cache_key, frames)
 	return frames
+
+
+static func load_preview_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
+	if side not in ["front", "back"]:
+		return null
+	var resolved := _resolve_asset(species, shiny)
+	if resolved.is_empty():
+		return null
+	var path := str(resolved.path)
+	var manifest: Dictionary = resolved.manifest
+	var preview := bool(resolved.preview)
+	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":still"
+	if _cache.has(cache_key):
+		_touch_cache_key(cache_key)
+		return _cache[cache_key] as SpriteFrames
+	var actions: Dictionary = (manifest.get("views", {}) as Dictionary).get(side, {})
+	var idle: Dictionary = actions.get("idle", {})
+	var present: Dictionary = (manifest.get("presentation", {}) as Dictionary).get(side, {})
+	if idle.is_empty() or present.is_empty() or not _allowed(str(idle.get("status", "")), preview):
+		return null
+	var source := _preview_frame_source(path, side, idle, preview)
+	if source.is_empty():
+		return null
+	var image_path := str(source.path)
+	if not FileAccess.file_exists(image_path) or FileAccess.get_sha256(image_path) != str(source.sha256):
+		return null
+	var im := Image.load_from_file(image_path)
+	if im == null or im.get_size() != Vector2i(512, 512) or im.get_format() not in [Image.FORMAT_RGBA8, Image.FORMAT_RGBAF, Image.FORMAT_RGBAH]:
+		return null
+	var visual_bounds := _rect_from_array(source.get("visual_bounds", []))
+	if not visual_bounds.has_area():
+		visual_bounds = Rect2(im.get_used_rect())
+	if not visual_bounds.has_area():
+		return null
+	var frames := SpriteFrames.new()
+	frames.remove_animation("default")
+	frames.add_animation("idle")
+	frames.set_animation_loop("idle", true)
+	frames.set_animation_speed("idle", 1.0)
+	frames.add_frame("idle", ImageTexture.create_from_image(im))
+	frames.set_meta("rendered_asset", true)
+	frames.set_meta("rendered_static_preview", true)
+	frames.set_meta("rendered_actions", {})
+	frames.set_meta("rendered_root", path.get_base_dir())
+	frames.set_meta("rendered_preview", preview)
+	frames.set_meta("rendered_presentation", present)
+	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
+	frames.set_meta("rendered_frame_size", Vector2(512, 512))
+	frames.set_meta("rendered_visual_bounds", visual_bounds)
+	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
+	_remember_frames(cache_key, frames)
+	return frames
+
+
+static func _resolve_asset(species: String, shiny: bool) -> Dictionary:
+	var catalog_path := OS.get_environment("POKEAETHER_RENDERED_CATALOG")
+	var preview_path := _preview_catalog_path()
+	var preview := not preview_path.is_empty()
+	if preview:
+		catalog_path = preview_path
+	if catalog_path.is_empty():
+		return {}
+	var catalog := _json(catalog_path)
+	if int(catalog.get("schema", 0)) != 1 or str(catalog.get("mode", "")) != ("preview" if preview else "approved"):
+		return {}
+	var key := _catalog_key(species, shiny)
+	var entries: Dictionary = catalog.get("entries", {})
+	var entry: Dictionary = entries.get(key, {})
+	var path := str(entry.get("path", ""))
+	var manifest_hash := str(entry.get("sha256", ""))
+	if path.is_empty() or not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != manifest_hash:
+		return {}
+	var manifest := _json(path)
+	if int(manifest.get("schema", 0)) != 1 or str(manifest.get("species", "")) + ":" + str(manifest.get("variant", "")) != key:
+		return {}
+	if not _allowed(str(manifest.get("status", "")), preview):
+		return {}
+	var fps := float(manifest.get("fps", 0))
+	if int(manifest.get("cell_size", 0)) != 512 or fps not in [24.0, 60.0]:
+		return {}
+	return {"path": path, "sha256": manifest_hash, "manifest": manifest, "preview": preview}
+
+
+static func _preview_frame_source(manifest_path: String, side: String, idle: Dictionary, preview: bool) -> Dictionary:
+	var packaged: Dictionary = idle.get("preview_frame", {})
+	if not packaged.is_empty():
+		var file := str(packaged.get("file", ""))
+		if file.is_absolute_path() or ".." in file or not file.ends_with(".png"):
+			return {}
+		return {
+			"path": manifest_path.get_base_dir().path_join(file),
+			"sha256": str(packaged.get("sha256", "")),
+			"visual_bounds": packaged.get("visual_bounds", []),
+		}
+	if not preview:
+		return {}
+	# Compatibility for existing local review builds. Masters stay separate from
+	# runtime packaging and are only consulted in explicit debug preview mode.
+	var build_root := manifest_path.get_base_dir().get_base_dir()
+	var relative := "masters/%s/idle/0000.png" % side
+	var qc := _json(build_root.path_join("qc.json"))
+	var expected := str((qc.get("files", {}) as Dictionary).get(relative, ""))
+	if expected.is_empty():
+		return {}
+	return {"path": build_root.path_join(relative), "sha256": expected, "visual_bounds": []}
 
 
 static func _preview_catalog_path() -> String:
