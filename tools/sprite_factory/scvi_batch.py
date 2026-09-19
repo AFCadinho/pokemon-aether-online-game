@@ -152,7 +152,7 @@ def source_entry(entry, model_root, motion_root):
         ))
         override = entry.get("motion_overrides", {}).get(category)
         if override:
-            exact = [file for file in matches if file.name == identity + "_" + override + ".tranm"]
+            exact = [file for file in files if file.name == identity + "_" + override + ".tranm"]
             if len(exact) != 1:
                 raise ValueError(f"Configured motion override missing: {identity} {category} {override}")
             chosen[category] = str(exact[0])
@@ -403,8 +403,10 @@ def run_intake(args):
                                 "inspect", "--source", str(blend), "--output", str(inspection)],
                                check=True)
             inspected = json.loads(inspection.read_text())
+            imported = json.loads((source_dir / "import.json").read_text())
             state = {"status": "configured_needs_review", "blend": str(blend),
-                     "inspection": str(inspection), "warnings": inspected["warnings"]}
+                     "inspection": str(inspection), "warnings": inspected["warnings"],
+                     "facial_warnings": imported.get("facial_inheritance_warnings", [])}
         except Exception as exc:
             state = {"status": "blocked", "error": str(exc),
                      "traceback": traceback.format_exc(limit=3)}
@@ -703,6 +705,13 @@ def evaluate_gates(args):
         probe_state = probes.get(species, {})
         build_state = builds.get(species)
         decision = decisions.get(species)
+        build_is_current = False
+        if build_state and build_state.get("build"):
+            provenance = Path(build_state["build"]) / "provenance.json"
+            manifest = args.output / "sources" / species / args.variant / "draft-manifest.json"
+            if provenance.is_file() and manifest.is_file():
+                build_is_current = (json.loads(provenance.read_text())["identity"]["manifest"] ==
+                                    json.loads(manifest.read_text()))
         reasons = []
         if intake_state.get("status") != "configured_needs_review":
             reasons.append("intake_not_ready")
@@ -710,8 +719,13 @@ def evaluate_gates(args):
             reasons.append("probe_not_ready")
         if probe_state.get("qc_errors"):
             reasons.append("probe_qc_errors")
-        if build_state and build_state.get("status") == "needs_review":
+        if build_state and build_state.get("status") == "needs_review" and build_is_current:
             gate_status = "full_render_needs_review"
+        elif (build_state and build_state.get("status") == "needs_review" and
+              decision and decision.get("decision") == "approved_for_full_render"):
+            gate_status = "eligible_for_full_render"
+        elif build_state and build_state.get("status") == "needs_review":
+            gate_status = "stale_full_render"
         elif build_state and build_state.get("status") in ("qc_failed", "blocked"):
             gate_status = "full_render_" + build_state["status"]
         elif reasons:
@@ -725,7 +739,8 @@ def evaluate_gates(args):
         gates[species] = {
             "status": gate_status,
             "reasons": reasons,
-            "automatic_warnings": probe_state.get("automatic_warnings", []),
+            "automatic_warnings": (probe_state.get("automatic_warnings", []) +
+                                   intake_state.get("facial_warnings", [])),
             "batch_review_warning": item.get("review_warning"),
             "human_decision": decision,
             "intake": intake_state.get("status", "not_started"),

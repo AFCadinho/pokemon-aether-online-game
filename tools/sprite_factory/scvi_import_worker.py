@@ -143,6 +143,17 @@ def main(job):
     actions = {action.name: action for action in bpy.data.actions}
     facial_baseline = apply_facial_baseline(rig, actions, job, AnimationT)
     actions = {action.name: action for action in bpy.data.actions}
+    eyelid_names = {bone.name for bone in rig.pose.bones if "eyelid" in bone.name.lower()}
+    facial_inheritance_warnings = []
+    for category, motion in job["motions"].items():
+        if not motion or not eyelid_names:
+            continue
+        missing = eyelid_names - tranm_bone_names(motion, AnimationT)
+        injected = set(facial_baseline.get("injected", {}).get(category, []))
+        unresolved = sorted(missing - injected)
+        if unresolved:
+            facial_inheritance_warnings.append(
+                "inherited_eyelid_pose:" + category + ":" + ",".join(unresolved))
     for action in bpy.data.actions:
         action.use_fake_user = True
     images = []
@@ -197,6 +208,7 @@ def main(job):
               "materials": [mat.name for mat in bpy.data.materials],
               "actions": mapping, "projected_bounds": bounds, "images": images,
               "facial_baseline": facial_baseline,
+              "facial_inheritance_warnings": facial_inheritance_warnings,
               "channel_animations": channel_animations,
               "channel_warnings": channel_warnings,
               "source_files": job["source_files"], "importer_commit": job["importer_commit"],

@@ -44,6 +44,8 @@
       },
       "light_override": {"key_energy": 800, "fill_energy": 450, "rim_energy": 500, "world_color": [0.18, 0.18, 0.18]}},
     {"species": "articuno", "pm": 144, "target_game_height_px": 165,
+      "facial_baseline_motion": "00010_defaultidle01",
+      "review_warning": "SCVI battle idle omits all eight eyelid tracks; defaultidle01 frame 0 supplies the explicit official open-eye baseline. Articuno's eyes remain naturally narrow and require visual review.",
       "presentation_override": {
         "front": {"render_scale": 2.15, "anchor": [272, 389], "ground_point": [0, 0, 0], "position_offset": [-10, 32], "min_visible_height": 115.5, "max_visible_height": 260},
         "back": {"render_scale": 2.35, "anchor": [238, 376], "ground_point": [0, 0, 0], "position_offset": [-12, 22], "min_visible_height": 115.5, "max_visible_height": 260}
