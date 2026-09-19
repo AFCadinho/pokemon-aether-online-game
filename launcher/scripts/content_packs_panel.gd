@@ -1,6 +1,7 @@
 extends AcceptDialog
 const Store := preload("res://scripts/content_pack_store.gd")
 const DownloadService := preload("res://scripts/resumable_download_service.gd")
+const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
 var store := Store.new()
 var rows: VBoxContainer
 var configuration_rows: VBoxContainer
@@ -406,7 +407,7 @@ func _refresh_configuration(packs: Array[Dictionary]) -> void:
 			choice.set_item_metadata(choice.item_count - 1, str(pack.id))
 			if str(selected.get(category, "")) == str(pack.id): selected_index = choice.item_count - 1
 		choice.select(selected_index)
-		_apply_button_style(choice)
+		LauncherLanguageSelectorStyle.configure(choice)
 		row.add_child(choice)
 		var help := Button.new()
 		help.text = translate.call("How to make one")
