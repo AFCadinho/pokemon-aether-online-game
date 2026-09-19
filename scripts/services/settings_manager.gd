@@ -7,12 +7,11 @@ signal input_binding_changed(action: String, keycode: Key)
 
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 
 const SETTINGS_PATH := "user://settings.json"
 const SPRITE_STYLE_ANIMATED := "animated"
-const SPRITE_STYLE_STATIC := "static"
 const SPRITE_STYLE_PIXEL := "pixel"
-const SPRITE_STYLE_GEN5_ANIMATED := SPRITE_STYLE_PIXEL
 const BATTLE_MUSIC_DEFAULT := "lysandre_remix_pokemon_legends_z_a_zame"
 const MASTER_BUS := "Master"
 const MUSIC_BUS := "Music"
@@ -63,7 +62,6 @@ var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
 var hide_other_players := false
-var sprite_style := SPRITE_STYLE_ANIMATED
 var performance_details := false
 var show_performance := false
 var fullscreen := false
@@ -77,7 +75,6 @@ var master_volume := 80.0
 var music_volume := 55.0
 var sfx_volume := 75.0
 var pokemon_cry_volume := 75.0
-var anime_pokemon_cries := false
 var ui_volume := 75.0
 var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
@@ -129,7 +126,6 @@ func load_settings() -> void:
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
 	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
-	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	performance_details = bool(data.get("performance_details", false))
 	show_performance = bool(data.get("show_performance", false))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
@@ -160,7 +156,6 @@ func load_settings() -> void:
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
 	sfx_volume = _validated_volume(data.get("sfx_volume", sfx_volume))
 	pokemon_cry_volume = _validated_volume(data.get("pokemon_cry_volume", pokemon_cry_volume))
-	anime_pokemon_cries = bool(data.get("anime_pokemon_cries", anime_pokemon_cries))
 	ui_volume = _validated_volume(data.get("ui_volume", ui_volume))
 	notification_volume = _validated_volume(data.get("notification_volume", notification_volume))
 	battle_music_track = str(data.get("battle_music_track", battle_music_track)).strip_edges()
@@ -170,6 +165,7 @@ func load_settings() -> void:
 		str(data.get("locale", LocalizationManager.get_preferred_system_locale()))
 	)
 	var has_content_name_language := data.has("content_name_language")
+	var has_legacy_cosmetic_selection := data.has("sprite_style") or data.has("anime_pokemon_cries")
 	content_name_language = _validated_content_name_language(
 		str(data.get("content_name_language", _default_content_name_language(locale)))
 	)
@@ -193,6 +189,7 @@ func load_settings() -> void:
 		or input_bindings_migrated
 		or not has_content_name_language
 		or not has_world_pixel_scale_mode
+		or has_legacy_cosmetic_selection
 	):
 		save_settings()
 	_apply_runtime_settings()
@@ -215,7 +212,6 @@ func save_settings() -> void:
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
 		"hide_other_players": hide_other_players,
-		"sprite_style": sprite_style,
 		"performance_details": performance_details,
 		"show_performance": show_performance,
 		"fullscreen": fullscreen,
@@ -232,7 +228,6 @@ func save_settings() -> void:
 		"music_volume": music_volume,
 		"sfx_volume": sfx_volume,
 		"pokemon_cry_volume": pokemon_cry_volume,
-		"anime_pokemon_cries": anime_pokemon_cries,
 		"ui_volume": ui_volume,
 		"notification_volume": notification_volume,
 		"battle_music_track": battle_music_track,
@@ -290,21 +285,8 @@ func set_hide_other_players(enabled: bool) -> void:
 	_save_and_emit()
 
 
-func set_sprite_style(style: String) -> bool:
-	var validated_style: String = _validated_sprite_style(style)
-	if style == SPRITE_STYLE_GEN5_ANIMATED and validated_style != SPRITE_STYLE_GEN5_ANIMATED:
-		return false
-	if sprite_style == validated_style:
-		return true
-
-	sprite_style = validated_style
-	_save_and_emit()
-	return true
-
-
-func is_gen5_animated_sprites_installed() -> bool:
-	# Browser builds stream this optional catalog from R2 on demand.
-	return OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()
+func get_active_sprite_style() -> String:
+	return SPRITE_STYLE_PIXEL if ContentPacks.has_sprite_collection_style("gen5") else SPRITE_STYLE_ANIMATED
 
 
 func set_performance_details(enabled: bool) -> void:
@@ -526,14 +508,6 @@ func set_pokemon_cry_volume(volume: float) -> void:
 	_save_and_emit()
 
 
-func set_anime_pokemon_cries(enabled: bool) -> void:
-	if anime_pokemon_cries == enabled:
-		return
-
-	anime_pokemon_cries = enabled
-	_save_and_emit()
-
-
 func set_ui_volume(volume: float) -> void:
 	var validated_volume: float = _validated_volume(volume)
 	if is_equal_approx(ui_volume, validated_volume):
@@ -581,18 +555,6 @@ func reset_enabled_language_chats() -> void:
 func _save_and_emit() -> void:
 	save_settings()
 	settings_changed.emit()
-
-
-func _validated_sprite_style(style: String) -> String:
-	match style:
-		SPRITE_STYLE_ANIMATED, SPRITE_STYLE_STATIC:
-			return style
-		SPRITE_STYLE_GEN5_ANIMATED:
-			if is_gen5_animated_sprites_installed():
-				return style
-			return SPRITE_STYLE_ANIMATED
-		_:
-			return SPRITE_STYLE_ANIMATED
 
 
 func _validated_content_name_language(value: String) -> String:

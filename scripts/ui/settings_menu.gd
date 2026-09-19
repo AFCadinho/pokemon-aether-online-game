@@ -6,17 +6,6 @@ signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
-const SPRITE_STYLE_BY_OPTION_ID: Dictionary = {
-	0: "animated",
-	1: "static",
-	2: "pixel",
-}
-const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
-	"animated": 0,
-	"static": 1,
-	"pixel": 2,
-}
-const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const MINIMUM_MENU_SIZE := Vector2(900, 680)
@@ -55,8 +44,6 @@ var terminology_options_button: OptionButton
 var terminology_hint_label: Label
 var input_binding_buttons: Dictionary = {}
 var input_binding_capture_action := ""
-@onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
-@onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
 @onready var resolution_options_button: OptionButton = $MarginContainer/VBoxContainer/ResolutionOptionsButton
 var world_pixel_scale_label: Label
@@ -74,7 +61,6 @@ var cursor_scale_value_label: Label
 @onready var sfx_volume_value_label: Label = $MarginContainer/VBoxContainer/SfxVolumeRow/SfxVolumeValueLabel
 @onready var pokemon_cry_volume_slider: HSlider = $MarginContainer/VBoxContainer/PokemonCryVolumeRow/PokemonCryVolumeSlider
 @onready var pokemon_cry_volume_value_label: Label = $MarginContainer/VBoxContainer/PokemonCryVolumeRow/PokemonCryVolumeValueLabel
-@onready var anime_pokemon_cries_check_box: CheckBox = $MarginContainer/VBoxContainer/AnimePokemonCriesCheckBox
 @onready var ui_volume_slider: HSlider = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeSlider
 @onready var ui_volume_value_label: Label = $MarginContainer/VBoxContainer/UiVolumeRow/UiVolumeValueLabel
 @onready var notification_volume_slider: HSlider = $MarginContainer/VBoxContainer/NotificationVolumeRow/NotificationVolumeSlider
@@ -157,7 +143,6 @@ func _ready() -> void:
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
 	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
 	hide_other_players_check_box.toggled.connect(_on_hide_other_players_toggled)
-	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
 	performance_details_check_box.toggled.connect(_on_performance_details_toggled)
 	performance_check_box.toggled.connect(_on_performance_toggled)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
@@ -169,7 +154,6 @@ func _ready() -> void:
 	battle_music_options_button.item_selected.connect(_on_battle_music_selected)
 	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
 	pokemon_cry_volume_slider.value_changed.connect(_on_pokemon_cry_volume_changed)
-	anime_pokemon_cries_check_box.toggled.connect(_on_anime_pokemon_cries_toggled)
 	ui_volume_slider.value_changed.connect(_on_ui_volume_changed)
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	language_options_button.item_selected.connect(_on_language_selected)
@@ -190,7 +174,6 @@ func _ready() -> void:
 
 func _configure_graphics_dropdowns() -> void:
 	for dropdown: OptionButton in [
-		sprite_style_options_button,
 		resolution_options_button,
 		world_pixel_scale_options_button,
 	]:
@@ -283,12 +266,6 @@ func _apply_settings_to_controls() -> void:
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
 
-	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
-	_apply_sprite_style_option_labels()
-	var option_index: int = sprite_style_options_button.get_item_index(option_id)
-	if option_index >= 0:
-		sprite_style_options_button.select(option_index)
-	_update_sprite_style_status_label("")
 
 	performance_details_check_box.button_pressed = SettingsManager.performance_details
 	performance_check_box.button_pressed = SettingsManager.show_performance
@@ -303,7 +280,6 @@ func _apply_settings_to_controls() -> void:
 	_apply_battle_music_options_to_control()
 	_set_volume_control(sfx_volume_slider, sfx_volume_value_label, SettingsManager.sfx_volume)
 	_set_volume_control(pokemon_cry_volume_slider, pokemon_cry_volume_value_label, SettingsManager.pokemon_cry_volume)
-	anime_pokemon_cries_check_box.button_pressed = SettingsManager.anime_pokemon_cries
 	_set_volume_control(ui_volume_slider, ui_volume_value_label, SettingsManager.ui_volume)
 	_set_volume_control(notification_volume_slider, notification_volume_value_label, SettingsManager.notification_volume)
 	_refresh_input_binding_buttons()
@@ -429,12 +405,8 @@ func _setup_tabs() -> void:
 		"",
 		language_tab.get_children()
 	)
-	var sprite_style_label := sprite_style_options_button.get_node("../SpriteStyleLabel") as Label
 	var display_label := fullscreen_check_box.get_node("../DisplayLabel") as Label
 	var resolution_label := resolution_options_button.get_node("../ResolutionLabel") as Label
-	var sprite_style_row := _create_labeled_control_row(
-		sprite_style_label, sprite_style_options_button
-	)
 	performance_check_box = CheckBox.new()
 	performance_check_box.name = "PerformanceCheckBox"
 	performance_check_box.focus_mode = Control.FOCUS_ALL
@@ -468,8 +440,6 @@ func _setup_tabs() -> void:
 		display_label.get_parent().remove_child(display_label)
 		display_label.queue_free()
 	_move_nodes_to_container(graphics_tab, [
-		sprite_style_row,
-		sprite_style_status_label,
 		fullscreen_row,
 		resolution_row,
 		world_scale_row,
@@ -478,10 +448,6 @@ func _setup_tabs() -> void:
 		performance_hint,
 		performance_details_row,
 		performance_details_hint,
-	])
-	_wrap_settings_section(graphics_tab, "ui.settings.section.sprites", "ui.settings.section.sprites_subtitle", [
-		sprite_style_row,
-		sprite_style_status_label,
 	])
 	_wrap_settings_section(graphics_tab, "ui.settings.section.display", "", [
 		fullscreen_row,
@@ -516,7 +482,6 @@ func _setup_tabs() -> void:
 		battle_music_row,
 		sfx_volume_slider.get_node(".."),
 		pokemon_cry_volume_slider.get_node(".."),
-		anime_pokemon_cries_check_box,
 		ui_volume_slider.get_node(".."),
 		notification_volume_slider.get_node(".."),
 	])
@@ -1489,11 +1454,9 @@ func _refresh_localized_content() -> void:
 	_refresh_tab_titles()
 	_refresh_navigation_state()
 	_update_about_version_label()
-	_apply_sprite_style_option_labels()
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
 	_apply_world_pixel_scale_options_to_control()
-	_update_sprite_style_status_label("")
 	_refresh_impersonation_account_controls()
 	if account_user_label != null and account_tab_root != null and account_tab_root.visible:
 		_refresh_account_tab()
@@ -1610,7 +1573,6 @@ func _apply_label_style(label: Label) -> void:
 		return
 	var localization_key := str(label.get_meta("i18n_text_key", ""))
 	if label.name in [
-		"SpriteStyleLabel",
 		"DisplayLabel",
 		"ResolutionLabel",
 		"WorldPixelScaleLabel",
@@ -1907,20 +1869,6 @@ func _on_hide_other_players_toggled(enabled: bool) -> void:
 	SettingsManager.set_hide_other_players(enabled)
 
 
-func _on_sprite_style_selected(index: int) -> void:
-	if loading_controls:
-		return
-
-	var option_id: int = sprite_style_options_button.get_item_id(index)
-	var sprite_style: String = str(SPRITE_STYLE_BY_OPTION_ID.get(option_id, "animated"))
-	if not SettingsManager.set_sprite_style(sprite_style):
-		_select_current_sprite_style()
-		_update_sprite_style_status_label(GEN5_SPRITE_MISSING_KEY)
-		return
-
-	_update_sprite_style_status_label("")
-
-
 func _on_performance_details_toggled(enabled: bool) -> void:
 	if not loading_controls:
 		SettingsManager.set_performance_details(enabled)
@@ -2010,13 +1958,6 @@ func _on_pokemon_cry_volume_changed(value: float) -> void:
 		return
 
 	SettingsManager.set_pokemon_cry_volume(value)
-
-
-func _on_anime_pokemon_cries_toggled(enabled: bool) -> void:
-	if loading_controls:
-		return
-
-	SettingsManager.set_anime_pokemon_cries(enabled)
 
 
 func _on_ui_volume_changed(value: float) -> void:
@@ -2729,42 +2670,6 @@ func _set_percentage_value_label(label: Label, value: float) -> void:
 
 func _set_volume_value_label(label: Label, value: float) -> void:
 	label.text = "%d%%" % int(roundf(value))
-
-
-func _select_current_sprite_style() -> void:
-	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
-	var option_index: int = sprite_style_options_button.get_item_index(option_id)
-	if option_index >= 0:
-		sprite_style_options_button.select(option_index)
-
-
-func _update_sprite_style_status_label(message_key: String) -> void:
-	if sprite_style_status_label == null:
-		return
-
-	if (
-		message_key.is_empty() and not OS.has_feature("web")
-		and not SettingsManager.is_gen5_animated_sprites_installed()
-	):
-		message_key = "ui.settings.sprite.download_available"
-
-	sprite_style_status_label.text = LocalizationManager.text(message_key) if not message_key.is_empty() else ""
-	sprite_style_status_label.visible = not message_key.is_empty()
-
-
-func _apply_sprite_style_option_labels() -> void:
-	if sprite_style_options_button == null:
-		return
-	var translation_key_by_id: Dictionary = {
-		0: "ui.settings.sprite.animated",
-		1: "ui.settings.sprite.static",
-		2: "ui.settings.sprite.gen5",
-	}
-	for index: int in range(sprite_style_options_button.item_count):
-		var option_id := sprite_style_options_button.get_item_id(index)
-		var key := str(translation_key_by_id.get(option_id, ""))
-		if not key.is_empty():
-			sprite_style_options_button.set_item_text(index, LocalizationManager.text(key))
 
 
 func _apply_language_options_to_control() -> void:

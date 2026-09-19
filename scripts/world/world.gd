@@ -435,7 +435,7 @@ func _append_web_sprite_entry(
 		"species": normalized_species,
 		"side": side,
 		"shiny": shiny,
-		"style": SettingsManager.sprite_style,
+		"style": SettingsManager.get_active_sprite_style(),
 	})
 	var alias := str(WEB_BATTLE_SPRITE_PREFETCH_ALIASES.get(normalized_species.to_lower(), ""))
 	if alias != "":

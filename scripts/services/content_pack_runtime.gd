@@ -5,6 +5,7 @@ const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver
 static var _entries: Dictionary = {}
 static var _cache: Dictionary = {}
 static var _pokemon_sprite_roots: Array[String] = []
+static var _sprite_collection_styles: Dictionary = {}
 static var _loaded := false
 const CACHE_LIMIT := 96
 
@@ -29,7 +30,14 @@ static func initialize() -> void:
 	for pack in store.installed():
 		packs[pack.id] = pack
 	for pack_id in store.enabled_ids():
-		for category: String in packs.get(pack_id, {}).get("assets", {}):
+		var pack: Dictionary = packs.get(pack_id, {})
+		var pack_assets: Dictionary = pack.get("assets", {})
+		for collection: Dictionary in pack_assets.get("sprite_collections", {}).values():
+			var style := str(collection.get("style", ""))
+			var collection_directory := store.asset_directory(pack_id, str(collection.get("directory", "")))
+			if not style.is_empty() and not collection_directory.is_empty():
+				_sprite_collection_styles[style] = true
+		for category: String in pack_assets:
 			if category == "sprite_collections":
 				continue
 			for key: String in packs[pack_id].assets[category]:
@@ -68,6 +76,11 @@ static func cry(species: String) -> AudioStream:
 static func get_pokemon_sprite_roots() -> Array[String]:
 	initialize()
 	return _pokemon_sprite_roots.duplicate()
+
+
+static func has_sprite_collection_style(style: String) -> bool:
+	initialize()
+	return _sprite_collection_styles.has(style)
 
 static func _texture(path: String) -> Texture2D:
 	var file := FileAccess.open(path, FileAccess.READ)

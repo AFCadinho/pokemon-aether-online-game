@@ -71,16 +71,19 @@ func run() -> void:
 	Runtime._entries.clear()
 	Runtime._cache.clear()
 	Runtime._pokemon_sprite_roots.clear()
+	Runtime._sprite_collection_styles.clear()
 	OS.set_environment("POKEAETHER_MODS_DIR", store.root)
 	var frames := Runtime.battle_frames("Pikachu", "front", false)
 	check(frames != null and frames.get_frame_count("idle") == 2, "broken higher priority sprite falls back to next pack")
 	if frames != null:
 		check(frames.get_animation_speed("idle") == 12, "sprite animation timing loaded")
 		check(frames.get_frame_texture("idle", 1).get_width() == 4, "sprite grid sliced")
+	check(Runtime.has_sprite_collection_style("gen5"), "enabled Gen 5 pack selects its sprite style")
 	var sprite_scene := load("res://scenes/battle/sprite_box.tscn") as PackedScene
 	check(sprite_scene != null, "battle sprite scene compiles")
 	if sprite_scene != null:
 		var box := sprite_scene.instantiate()
+		check(box._get_sprite_asset_roots("front", false)[0] == "gen5/front", "battle widget prioritizes enabled Gen 5 collections")
 		check(box._load_sprite_frames("Pikachu", "front", false) == frames, "battle widget uses pack frames")
 		check(box._load_sprite_frames("pikachu", "back", false, false) != null, "battle widget retains standard back sprite fallback")
 		box.free()
@@ -98,6 +101,7 @@ func run() -> void:
 	Runtime._entries.clear()
 	Runtime._cache.clear()
 	Runtime._pokemon_sprite_roots.clear()
+	Runtime._sprite_collection_styles.clear()
 	check(Runtime.battle_frames("Pikachu", "front", false) == null, "next session respects disabled pack")
 
 	var unsafe := manifest("unsafe")
