@@ -26303,7 +26303,6 @@ func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> vo
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
-	_prefetch_pokemon_summary_web_sprites(pokemon)
 	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	pokemon_summary_web_sprite_generation += 1
 	var web_generation := pokemon_summary_web_sprite_generation
@@ -26335,7 +26334,9 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 				"back" if sprite_side == "front" else "front",
 				pokemon.shiny
 			)
-		_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+		else:
+			_prefetch_pokemon_summary_web_sprites(pokemon)
+			_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 		return
 
 	pokemon_summary_animated_sprite.stop()
@@ -26344,6 +26345,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	pokemon_summary_sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	_prefetch_pokemon_summary_web_sprites(pokemon)
 	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 
 
@@ -35860,7 +35862,8 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
 			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
 		})
-	_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+	if loaded_frames == null or not loaded_frames.has_meta("rendered_asset"):
+		_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
 
 
 func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny: bool) -> void:

@@ -123,6 +123,7 @@ func _run() -> void:
 	_check(str(overlay.get("pokemon_summary_sprite_side")) == "front", "read-only Summary starts with the front sprite")
 	_check(overlay_source.contains("func _prefetch_pokemon_summary_rendered_view"), "rendered Summary sprites warm the opposite view")
 	_check(overlay_source.contains('Color("#14171eff")'), "Summary sprite colors use a neutral review backdrop")
+	_check(overlay_source.contains('else:\n\t\t\t_prefetch_pokemon_summary_web_sprites(pokemon)\n\t\t\t_upgrade_pokemon_summary_web_sprite.call_deferred'), "Summary web sprites never replace a rendered asset")
 	var sprite_click := InputEventMouseButton.new()
 	sprite_click.button_index = MOUSE_BUTTON_LEFT
 	sprite_click.pressed = true
