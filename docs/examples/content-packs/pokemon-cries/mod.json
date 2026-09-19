@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "id": "my-pokemon-cries",
+  "name": "My Pokémon Cries",
+  "version": "1.0.0",
+  "author": "Your name",
+  "description": "Custom cries for selected Pokémon.",
+  "assets": {
+    "cries": {
+      "pikachu": { "file": "cries/PIKACHU.ogg" }
+    }
+  }
+}

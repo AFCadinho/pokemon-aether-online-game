@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Community mod creators can now start from copyable Pokémon cries, battle sprites and follower sprites pack templates.
+
 - Mods can now be selected independently for Pokémon cries, battle sprites and follower sprites in the launcher.
 
 - Installed mods now use clear Enable and Disable actions instead of an unlabeled checkbox.
