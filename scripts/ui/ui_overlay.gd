@@ -16529,20 +16529,24 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 	if not species.is_empty():
 		var home := PokemonAssets.load_party_icon(species, bool(profile.get("favoritePokemonShiny", false)))
 		if home != null:
-			art.scale *= 0.75
-			art.position = Vector2(54, 248) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
+			art.scale *= 0.78
+			art.position = Vector2(48, 238) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
+			art.z_index = 1
 			var companion := Sprite2D.new()
 			companion.name = "FavoritePokemon"
 			companion.texture = home
+			companion.flip_h = true
 			companion.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 			var used := home.get_image().get_used_rect()
 			if used.has_area():
-				# Stage the companion across the portrait, behind the foreground trainer.
-				# A narrow side-icon box shrinks wide poses regardless of area scaling.
-				var fit_scale := minf((float(viewport.size.x) - 12.0) / used.size.x, 176.0 / used.size.y)
+				# Offset the pair diagonally: reserve the upper left for the trainer's
+				# face, and keep the companion lower/right and behind the trainer.
+				var fit_scale := minf(140.0 / used.size.x, 148.0 / used.size.y)
 				companion.scale = Vector2.ONE * fit_scale
-				var right_foot := Vector2(float(viewport.size.x) - 6.0, 238.0)
-				companion.position = right_foot - (Vector2(used.end) - home.get_size() * 0.5) * fit_scale
+				var visible_rect := Rect2(Vector2(used.position) - home.get_size() * 0.5, Vector2(used.size))
+				visible_rect.position.x = -visible_rect.end.x
+				var right_foot := Vector2(float(viewport.size.x) - 6.0, 250.0)
+				companion.position = right_foot - visible_rect.end * fit_scale
 			viewport.add_child(companion)
 			viewport.move_child(companion, viewport.get_children().find(art))
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
