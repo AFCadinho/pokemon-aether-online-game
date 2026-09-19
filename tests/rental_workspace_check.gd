@@ -149,15 +149,18 @@ func _run() -> void:
 		{"loanId": "loan-2", "context": "npc_pokemon", "status": "active", "dueAt": "2026-09-22T12:00:00Z", "assets": [{"assetType": "pokemon", "snapshot": second_snapshot}], "rental": {"displayName": "Garchomp", "rarity": "rare", "buyoutPrice": 1800}},
 	]
 	pokemon_workspace._render_active()
-	assert(pokemon_workspace.active_list.get_node("ActivePokemonRentalCard-loan-1") != null)
-	assert(pokemon_workspace.active_list.get_node("ActivePokemonRentalCard-loan-2") != null)
-	var first_set_details := pokemon_workspace.active_list.get_node("ActivePokemonRentalCard-loan-1").find_child("RentalSetDetails", true, false) as RichTextLabel
+	var rental_grid := pokemon_workspace.active_list.get_node("ActivePokemonRentalGrid") as GridContainer
+	assert(rental_grid.columns == 3)
+	assert(rental_grid.get_child_count() == 2)
+	assert(rental_grid.get_node("ActivePokemonRentalCard-loan-1") != null)
+	assert(rental_grid.get_node("ActivePokemonRentalCard-loan-2") != null)
+	var first_set_details := rental_grid.get_node("ActivePokemonRentalCard-loan-1").find_child("RentalSetDetails", true, false) as RichTextLabel
 	assert(first_set_details.text.contains("Bullet Punch"))
 	assert(first_set_details.text.contains("EVs:[/color] 252 Atk"))
-	var active_buttons := pokemon_workspace.active_list.find_children("*", "Button", true, false)
-	assert(active_buttons.filter(func(button: Button): return button.text == "Extend — 100 Aetherite").size() == 2)
-	assert(active_buttons.filter(func(button: Button): return button.text.begins_with("Keep —") and button.text.ends_with("Aetherite")).size() == 2)
-	assert(active_buttons.filter(func(button: Button): return button.text == "Return Pokémon").size() == 2)
+	var active_buttons := rental_grid.find_children("*", "Button", true, false)
+	assert(active_buttons.filter(func(button: Button): return button.text == "+24h • 100").size() == 2)
+	assert(active_buttons.filter(func(button: Button): return button.text.begins_with("Keep •") and button.text.ends_with("Aetherite")).size() == 2)
+	assert(active_buttons.filter(func(button: Button): return button.text == "Return").size() == 2)
 	pokemon_workspace._show_pokemon_review(false)
 	assert(pokemon_workspace.pokemon_edit_step.visible)
 	assert(not pokemon_workspace.pokemon_review_step.visible)
