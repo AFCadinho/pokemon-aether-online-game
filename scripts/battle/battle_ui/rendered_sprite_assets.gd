@@ -4,6 +4,7 @@ extends RefCounted
 ## Local preview requires a separate explicit environment variable.
 
 static var _cache: Dictionary = {}
+const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.2
 
 
 static func load_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
@@ -47,6 +48,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("rendered_root", path.get_base_dir())
 	frames.set_meta("rendered_preview", preview)
 	frames.set_meta("rendered_presentation", present)
+	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
 	frames.set_meta("hd_poc_fps", fps)
 	if not ensure_action_loaded(frames, "idle"):
 		return null

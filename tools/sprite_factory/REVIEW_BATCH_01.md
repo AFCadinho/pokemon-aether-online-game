@@ -163,3 +163,11 @@ their baseline. Charizard and Articuno retain a deliberate airborne gap, but
 no longer hover as far above it. This is a data-only runtime presentation
 adjustment: master pixels, lighting, scale, resolution and native 60 FPS remain
 unchanged. All five still require in-game review.
+
+The battle client applies one shared `1.20` display multiplier to every asset
+loaded through the rendered-sprite resolver. Species/form scale ratios and
+front/back manifest differences remain intact, while the whole rendered cast
+has more visual weight relative to the HUD. Scaling uses the existing
+per-view anchor, so reviewed ground and hover positions remain the pivot. This
+review-only route does not resize legacy, Showdown, HOME or content-pack
+fallbacks.
