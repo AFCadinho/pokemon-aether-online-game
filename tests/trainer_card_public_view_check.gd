@@ -128,6 +128,31 @@ func _run() -> void:
 	var profile_grid := popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
 	var follower_preview := avatar_preview.find_child("RemotePokemonFollower", true, false) as Node2D if avatar_preview != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
+	var public_drag_handle := popup.find_child("PublicTrainerCardDragHandle", true, false) as Control if popup != null else null
+	_check(
+		public_drag_handle != null
+		and public_drag_handle.tooltip_text == "Drag to move this Trainer Card",
+		"public Trainer Card exposes a draggable title bar"
+	)
+	if popup != null:
+		var drag_start := popup.global_position
+		var press := InputEventMouseButton.new()
+		press.button_index = MOUSE_BUTTON_LEFT
+		press.pressed = true
+		press.global_position = drag_start + Vector2(24, 18)
+		overlay.call("_on_trainer_card_header_gui_input", press, popup)
+		var motion := InputEventMouseMotion.new()
+		motion.global_position = press.global_position + Vector2(36, 22)
+		overlay.call("_handle_trainer_card_drag_input", motion)
+		_check(popup.global_position != drag_start, "public Trainer Card preview moves when its title bar is dragged")
+		var release := InputEventMouseButton.new()
+		release.button_index = MOUSE_BUTTON_LEFT
+		release.pressed = false
+		overlay.call("_handle_trainer_card_drag_input", release)
+		_check(not bool(overlay.get("trainer_card_dragging")), "public Trainer Card drag ends on mouse release")
+		# Reset the preview so its layout measurements are deterministic below.
+		popup.position = drag_start
+		popup.size = Vector2(720, 500)
 	var public_companion := popup.find_child("FavoritePokemon", true, false) as Sprite2D
 	var public_art := public_companion.get_parent().find_child("PublicTrainerAvatarPreview", false, false) if public_companion != null else null
 	_check(public_companion != null, "public card renders only the explicitly selected HOME companion")
@@ -175,12 +200,27 @@ func _run() -> void:
 		_check(_find_label(legacy.find_child("Dex_%s" % field, true, false), "—") != null, "missing %s is not presented as zero" % field)
 	legacy.free()
 	_check(own_card.get_combined_minimum_size().x <= 720.0 and own_card.get_combined_minimum_size().y <= 500.0, "own counters fit the designed popup bounds")
+	var own_tabs := overlay.get("trainer_card_tabs") as TabContainer
+	for tab_index in range(own_tabs.get_tab_count()):
+		own_tabs.current_tab = tab_index
+		await process_frame
+		await process_frame
+		_check(own_card.size == Vector2(720, 500), "own Trainer Card stays 720×500 on tab %s (got %s)" % [tab_index, own_card.size])
 	localization_manager.call("set_locale", "nl")
 	var dutch_dex := overlay.call("_create_trainer_card_dex_panel", {"pokedex": {"seen": 1025, "caught": 1025, "shinyCaught": 1025}}) as Control
 	_check(_find_label(dutch_dex, "Shiny verkregen") != null, "Dutch shiny counter is localized")
 	_check(dutch_dex.get_combined_minimum_size().x <= 412.0, "Dutch counters fit with four-digit totals")
 	dutch_dex.free()
 	localization_manager.call("set_locale", "en")
+	popup = overlay.get("public_trainer_card_popup") as PanelContainer
+	tabs = popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
+	overview_tab = tabs.get_node_or_null("Overview") as Control if tabs != null else null
+	badges_tab = tabs.get_node_or_null("Badges") as Control if tabs != null else null
+	pvp_tab = tabs.get_node_or_null("Pvp") as Control if tabs != null else null
+	avatar_panel = popup.find_child("PublicTrainerAvatarPanel", true, false) as PanelContainer if popup != null else null
+	avatar_preview = popup.find_child("PublicTrainerAvatarPreview", true, false) as Node2D if popup != null else null
+	profile_panel = popup.find_child("PublicTrainerProfilePanel", true, false) as PanelContainer if popup != null else null
+	profile_grid = popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
 	_check(own_card.find_child("FavoritePokemon", true, false) is Sprite2D, "own card refresh renders the saved HOME companion")
 	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 5, "own details refresh keeps exactly one PvP tab")
 	var choices := ItemList.new()
@@ -196,6 +236,13 @@ func _run() -> void:
 		and popup.get_combined_minimum_size().y <= 500.0,
 		"public Trainer Card fits the designed popup bounds"
 	)
+	for tab_index in range(tabs.get_tab_count()):
+		tabs.current_tab = tab_index
+		await process_frame
+		await process_frame
+		_check(popup.size == Vector2(720, 500), "public Trainer Card stays 720×500 on tab %s (got %s)" % [tab_index, popup.size])
+	tabs.current_tab = 0
+	await process_frame
 	_check(
 		tabs != null
 		and tabs.get_tab_count() == 3
