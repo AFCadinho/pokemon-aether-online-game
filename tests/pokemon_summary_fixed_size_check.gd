@@ -94,6 +94,13 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	var fixed_summary_size := popup.size
+	var zoom_button := popup.find_child("PreviewZoomButton", true, false) as Button
+	_check(
+		zoom_button != null
+		and hidden_ability_badge != null
+		and not zoom_button.get_global_rect().intersects(hidden_ability_badge.get_global_rect()),
+		"portrait zoom action leaves the Hidden Ability badge unobstructed"
+	)
 
 	if title_label != null and gender_label != null and nickname_button != null:
 		title_label.text = "Crabominable"
