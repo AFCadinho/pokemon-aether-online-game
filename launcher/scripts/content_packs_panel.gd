@@ -125,7 +125,7 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 	actions.add_theme_constant_override("separation", 8)
 	layout.add_child(actions)
 	var import_button := Button.new()
-	import_button.text = translate.call("Import pack")
+	import_button.text = translate.call("Import .zip pack")
 	_apply_button_style(import_button, true)
 	actions.add_child(import_button)
 	var folder_button := Button.new()
@@ -142,7 +142,7 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 			OS.shell_open(store.root)
 	)
 	var note := Label.new()
-	note.text = translate.call("Changes apply at the next game start. Choose a pack for each category in Customize.")
+	note.text = translate.call("Import a .zip pack that contains mod.json, or install an official pack from Discover.")
 	note.custom_minimum_size.x = 600
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(note)
@@ -154,7 +154,8 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 	picker = FileDialog.new()
 	picker.access = FileDialog.ACCESS_FILESYSTEM
 	picker.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	picker.filters = PackedStringArray(["*.zip ; Mod pack"])
+	picker.title = translate.call("Choose a mod pack .zip file")
+	picker.filters = PackedStringArray(["*.zip ; Mod pack (.zip)"])
 	add_child(picker)
 	import_button.pressed.connect(func() -> void: picker.popup_centered_ratio(0.75))
 	picker.file_selected.connect(_import)
