@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Level-100 rentals can be used inside Aether Clash after all eight Kanto badges, while the lobby now explains when an above-cap party member must be stored or returned before leaving.
+- Every player who can reach the Aether Clash Lobby can use level-100 rentals in Clash and Ranked play, while the lobby explains when an above-cap party member must be stored or returned before leaving.
 
 - The Pokémon rental editor now places inputs beside a live team-style Pokémon set preview.
 
