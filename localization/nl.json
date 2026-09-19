@@ -329,6 +329,7 @@
   "backend.error.no_usable_pokemon": "Geen van je Pokémon kan vechten. Heel eerst je team in een Pokémon Center.",
   "backend.error.pokemon_level_cap_reached": "Deze Pokémon heeft je huidige levellimiet van {levelCap} bereikt.",
   "backend.error.pokemon_level_cap_party_ineligible": "Je team bevat een Pokémon boven de huidige levellimiet van {levelCap}.",
+  "backend.error.aether_clash_exit_party_level_cap_exceeded": "Je team bevat een Pokémon boven de huidige levellimiet van {levelCap}. Plaats deze in je PC of lever de actieve rental in voordat je Aether Clash verlaat.",
   "backend.error.trade_pokemon_level_cap_exceeded": "Deze Pokémon is level {pokemonLevel} en komt boven de trade-levellimiet van de ontvanger ({tradeLevelCap}).",
   "backend.error.reward_unavailable": "Die beloning is niet meer beschikbaar.",
   "backend.error.field_move_unavailable": "Die field move kan nu niet worden gebruikt.",

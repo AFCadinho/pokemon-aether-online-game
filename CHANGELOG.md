@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Level-100 rentals can be used inside Aether Clash after all eight Kanto badges, while the lobby now explains when an above-cap party member must be stored or returned before leaving.
+
 - The Pokémon rental editor now places inputs beside a live team-style Pokémon set preview.
 
 - Pokémon rentals now separate set creation from the validated review-and-rent screen.
