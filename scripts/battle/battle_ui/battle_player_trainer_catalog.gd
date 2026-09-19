@@ -5,7 +5,8 @@ class_name BattlePlayerTrainerCatalog
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const MANIFEST_PATH := "res://assets/battles/trainers/player/manifest.json"
 const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "top"]
-const OPTIONAL_CATEGORIES: Array[String] = ["shoes", "hair", "headgear"]
+const OPTIONAL_CATEGORIES: Array[String] = ["shoes", "top_accessory", "hair", "headgear", "facegear"]
+const APPEARANCE_CATEGORY_ALIASES := {"top_accessory": "top"}
 
 static var _manifest: Dictionary = {}
 static var _texture_cache: Dictionary = {}
@@ -107,10 +108,11 @@ static func _resolve_part_layer(
 	}
 
 static func _selected_part_id(appearance_state: Dictionary, category: String) -> String:
-	var value: Variant = appearance_state.get(category, "")
-	if category == "bottom" and str(value).strip_edges().is_empty():
+	var appearance_category := str(APPEARANCE_CATEGORY_ALIASES.get(category, category))
+	var value: Variant = appearance_state.get(appearance_category, "")
+	if appearance_category == "bottom" and str(value).strip_edges().is_empty():
 		value = appearance_state.get("legs", "")
-	elif category == "shoes" and str(value).strip_edges().is_empty():
+	elif appearance_category == "shoes" and str(value).strip_edges().is_empty():
 		value = appearance_state.get("feet", "")
 	return CharacterAppearanceService.deserialize_part_id(str(value))
 

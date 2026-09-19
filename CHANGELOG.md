@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield, use every available matching outfit layer, and temporarily use the Starter Kit shirt and trousers when those two battle layers are still being made.
+- Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield, use every available matching outfit layer, and temporarily use the Starter Kit shirt and trousers when those two battle layers are still being made. The unisex Mysterious Outfit now has its complete battle look for male and female Trainers.
 
 - Local editor runs now reuse the selected launcher mod packs for cosmetic testing.
 

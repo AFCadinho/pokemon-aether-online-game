@@ -1,7 +1,7 @@
 {
   "version": 1,
   "canvasSize": 160,
-  "layerOrder": ["bottom", "shoes", "top", "hair", "headgear"],
+  "layerOrder": ["bottom", "shoes", "top", "top_accessory", "hair", "headgear", "facegear"],
   "genders": {
     "male": {
       "base": "res://assets/battles/trainers/player/male/base.png",
@@ -9,19 +9,27 @@
         "bottom": {
           "fallback": "Trousers",
           "parts": {
-            "Trousers": {"path": "res://assets/battles/trainers/player/male/starter_kit/trousers.png", "scale": 2.0}
+            "Trousers": {"path": "res://assets/battles/trainers/player/male/starter_kit/trousers.png", "scale": 2.0},
+            "Mysterious_Trousers": {"path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png", "scale": 1.0}
           }
         },
         "shoes": {
           "fallback": "Shoes",
           "parts": {
-            "Shoes": {"path": "res://assets/battles/trainers/player/male/starter_kit/shoes.png", "scale": 2.0}
+            "Shoes": {"path": "res://assets/battles/trainers/player/male/starter_kit/shoes.png", "scale": 2.0},
+            "Mysterious_Shoes": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shoes.png", "scale": 1.0}
           }
         },
         "top": {
           "fallback": "Shirt",
           "parts": {
-            "Shirt": {"path": "res://assets/battles/trainers/player/male/starter_kit/shirt.png", "scale": 1.0}
+            "Shirt": {"path": "res://assets/battles/trainers/player/male/starter_kit/shirt.png", "scale": 1.0},
+            "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shirt.png", "scale": 1.0}
+          }
+        },
+        "top_accessory": {
+          "parts": {
+            "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/gloves.png", "scale": 1.0}
           }
         },
         "hair": {
@@ -34,6 +42,11 @@
           "parts": {
             "Cap": {"path": "res://assets/battles/trainers/player/male/starter_kit/cap.png", "scale": 1.0}
           }
+        },
+        "facegear": {
+          "parts": {
+            "Mysterious_Mask": {"path": "res://assets/battles/trainers/player/mysterious_outfit/mask.png", "scale": 1.0}
+          }
         }
       }
     },
@@ -43,19 +56,27 @@
         "bottom": {
           "fallback": "Trousers",
           "parts": {
-            "Trousers": {"path": "res://assets/battles/trainers/player/female/starter_kit/trousers.png", "scale": 2.0}
+            "Trousers": {"path": "res://assets/battles/trainers/player/female/starter_kit/trousers.png", "scale": 2.0},
+            "Mysterious_Trousers": {"path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png", "scale": 1.0}
           }
         },
         "shoes": {
           "fallback": "Shoes",
           "parts": {
-            "Shoes": {"path": "res://assets/battles/trainers/player/female/starter_kit/shoes.png", "scale": 2.0}
+            "Shoes": {"path": "res://assets/battles/trainers/player/female/starter_kit/shoes.png", "scale": 2.0},
+            "Mysterious_Shoes": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shoes.png", "scale": 1.0}
           }
         },
         "top": {
           "fallback": "Shirt",
           "parts": {
-            "Shirt": {"path": "res://assets/battles/trainers/player/female/starter_kit/shirt.png", "scale": 1.0}
+            "Shirt": {"path": "res://assets/battles/trainers/player/female/starter_kit/shirt.png", "scale": 1.0},
+            "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shirt.png", "scale": 1.0}
+          }
+        },
+        "top_accessory": {
+          "parts": {
+            "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/gloves.png", "scale": 1.0}
           }
         },
         "hair": {
@@ -67,6 +88,11 @@
         "headgear": {
           "parts": {
             "Cap": {"path": "res://assets/battles/trainers/player/female/starter_kit/cap.png", "scale": 1.0}
+          }
+        },
+        "facegear": {
+          "parts": {
+            "Mysterious_Mask": {"path": "res://assets/battles/trainers/player/mysterious_outfit/mask.png", "scale": 1.0}
           }
         }
       }
