@@ -30,6 +30,8 @@ var pokemon_gender: OptionButton
 var pokemon_happiness: SpinBox
 var quote_button: Button
 var selected_build: Dictionary = {}
+var pokemon_edit_step: VBoxContainer
+var pokemon_review_step: VBoxContainer
 
 func _ready() -> void:
 	hide()
@@ -113,21 +115,25 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	builder.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	builder.add_theme_constant_override("separation", 8)
 	browse.add_child(builder)
+	pokemon_edit_step = VBoxContainer.new()
+	pokemon_edit_step.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_edit_step.add_theme_constant_override("separation", 8)
+	builder.add_child(pokemon_edit_step)
 	var intro := Label.new()
-	intro.text = "1  Create your level-100 Pokémon"
+	intro.text = "Create your level-100 Pokémon"
 	intro.add_theme_font_size_override("font_size", 18)
 	intro.add_theme_color_override("font_color", Color("#eef6ff"))
-	builder.add_child(intro)
+	pokemon_edit_step.add_child(intro)
 	var intro_hint := Label.new()
 	intro_hint.text = "Paste one competitive set, or switch to Manual to fill in the fields yourself."
 	intro_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
-	builder.add_child(intro_hint)
+	pokemon_edit_step.add_child(intro_hint)
 	pokemon_source = TabContainer.new()
 	pokemon_source.custom_minimum_size.y = 190
 	pokemon_source.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_source.tab_changed.connect(func(_tab: int): _invalidate_pokemon_quote())
 	_style_tabs(pokemon_source, true)
-	builder.add_child(pokemon_source)
+	pokemon_edit_step.add_child(pokemon_source)
 	var paste_panel := VBoxContainer.new()
 	paste_panel.name = "Paste a set"
 	pokemon_source.add_child(paste_panel)
@@ -175,26 +181,47 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	_add_pokemon_text_field(manual, "moves", "Moves", "Comma-separated, up to four")
 	_add_stat_fields(manual, "EVs", pokemon_evs, 0, 252)
 	_add_stat_fields(manual, "IVs", pokemon_ivs, 31, 31)
+	var quote_actions := HBoxContainer.new()
+	quote_actions.alignment = BoxContainer.ALIGNMENT_END
+	pokemon_edit_step.add_child(quote_actions)
+	quote_button = Button.new()
+	quote_button.text = "Review Pokémon & price  →"
+	quote_button.custom_minimum_size = Vector2(260, 40)
+	quote_button.pressed.connect(_quote_pokemon)
+	_style_button(quote_button, true)
+	quote_actions.add_child(quote_button)
+	pokemon_review_step = VBoxContainer.new()
+	pokemon_review_step.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_review_step.add_theme_constant_override("separation", 10)
+	builder.add_child(pokemon_review_step)
+	var review_header := HBoxContainer.new()
+	review_header.add_theme_constant_override("separation", 8)
+	pokemon_review_step.add_child(review_header)
 	var review_heading := Label.new()
-	review_heading.text = "2  Validate and review the price"
-	review_heading.add_theme_font_size_override("font_size", 16)
+	review_heading.text = "Review your Pokémon"
+	review_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	review_heading.add_theme_font_size_override("font_size", 18)
 	review_heading.add_theme_color_override("font_color", Color("#eef6ff"))
-	builder.add_child(review_heading)
+	review_header.add_child(review_heading)
+	var edit_button := Button.new()
+	edit_button.text = "← Edit set"
+	edit_button.pressed.connect(func(): _show_pokemon_review(false))
+	_style_button(edit_button, false)
+	review_header.add_child(edit_button)
 	description = RichTextLabel.new()
-	description.custom_minimum_size.y = 76
-	description.text = "Add a Pokémon above. We will check the set and calculate its rarity-based price.\nAll rentals are level 100, keep the rental NPC as OT and never count as caught."
+	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	description.text = "Your validated Pokémon and price will appear here."
 	description.add_theme_color_override("default_color", Color("#eef6ff"))
 	description.add_theme_stylebox_override("normal", _control_style(Color("#0a1422"), Color("#315070")))
-	builder.add_child(description)
+	pokemon_review_step.add_child(description)
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
-	builder.add_child(actions)
-	quote_button = Button.new()
-	quote_button.text = "Validate set & calculate price"
-	quote_button.custom_minimum_size.x = 250
-	quote_button.pressed.connect(_quote_pokemon)
-	_style_button(quote_button, false)
-	actions.add_child(quote_button)
+	pokemon_review_step.add_child(actions)
+	var duration_label := Label.new()
+	duration_label.text = "Rental period"
+	duration_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	duration_label.add_theme_color_override("font_color", Color("#8ea8bd"))
+	actions.add_child(duration_label)
 	duration = OptionButton.new()
 	duration.disabled = true
 	duration.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -208,6 +235,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	rent_button.pressed.connect(_rent)
 	_style_button(rent_button, true)
 	actions.add_child(rent_button)
+	_show_pokemon_review(false)
 	_refresh_builder_actions()
 
 func _style_option(control: OptionButton) -> void:
@@ -352,7 +380,16 @@ func _invalidate_pokemon_quote() -> void:
 	if rent_button != null:
 		rent_button.disabled = true
 		rent_button.text = "Rent quoted Pokémon"
+	if status != null:
+		status.text = ""
+	_show_pokemon_review(false)
 	_refresh_builder_actions()
+
+func _show_pokemon_review(show_review: bool) -> void:
+	if pokemon_edit_step != null:
+		pokemon_edit_step.visible = not show_review
+	if pokemon_review_step != null:
+		pokemon_review_step.visible = show_review
 
 func _pokemon_input_ready() -> bool:
 	if pokemon_source == null:
@@ -419,6 +456,7 @@ func _quote_pokemon() -> void:
 	var limit_reached := _rental_limit_reached()
 	rent_button.disabled = limit_reached
 	rent_button.text = "Pokémon rental limit reached" if limit_reached else "Rent quoted Pokémon"
+	_show_pokemon_review(true)
 	status.text = "Quote ready. Changing the set will require a new quote."
 
 func open_vendor() -> void:
