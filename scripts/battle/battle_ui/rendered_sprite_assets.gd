@@ -4,7 +4,7 @@ extends RefCounted
 ## Local preview requires a separate explicit environment variable.
 
 static var _cache: Dictionary = {}
-const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.2
+const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
 
 
 static func load_frames(species: String, side: String, shiny: bool) -> SpriteFrames:

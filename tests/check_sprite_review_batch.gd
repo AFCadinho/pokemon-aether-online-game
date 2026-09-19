@@ -32,7 +32,7 @@ func _run() -> void:
 			assert(frames.get_animation_loop("idle"))
 			assert(is_equal_approx(
 				float(frames.get_meta("rendered_display_scale_multiplier", 0.0)),
-				1.2
+				1.3
 			))
 			assert(not Assets.ensure_action_loaded(frames, "physical_attack"))
 			if expected_y_offsets.has(species):

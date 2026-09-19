@@ -18,7 +18,7 @@ func _run() -> void:
 	_check(first._get_sprite_frames_render_scale(frames) == second._get_sprite_frames_render_scale(shared), "shared render scale is restored")
 	if frames.has_meta("rendered_asset"):
 		_check(
-			is_equal_approx(first._get_sprite_frames_display_scale_multiplier(frames), 1.2),
+			is_equal_approx(first._get_sprite_frames_display_scale_multiplier(frames), 1.3),
 			"rendered battle sprites apply the shared review-size multiplier"
 		)
 	var cached_web_bounds := Rect2(2, 3, 4, 5)

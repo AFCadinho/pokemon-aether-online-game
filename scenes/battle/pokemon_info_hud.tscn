@@ -46,7 +46,7 @@ layout_mode = 2
 theme_override_constants/separation = 3
 
 [node name="TopRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1393396218]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 theme_override_constants/separation = 6
 
@@ -105,7 +105,7 @@ theme_override_font_sizes/font_size = 13
 text = "battle.hud.level_unknown"
 
 [node name="HPRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1866931360]
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 theme_override_constants/separation = 5
 
@@ -117,11 +117,11 @@ theme_override_font_sizes/font_size = 11
 text = "battle.hover.hp"
 
 [node name="HpBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HPRow" unique_id=769804269]
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 theme_override_styles/background = SubResource("StyleBoxFlat_h0kxc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fh7rg")
 value = 100.0

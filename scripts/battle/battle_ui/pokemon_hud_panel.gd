@@ -7,7 +7,7 @@ extends PanelContainer
 
 var experience_bar_enabled := false
 const DOUBLE_HUD_WIDTH := 460.0
-const SINGLE_HUD_WIDTH := 312.0
+const SINGLE_HUD_WIDTH := 280.0
 
 const STATUS_ICON_SHEET: Texture2D = preload("res://assets/battles/status/icon_statuses.png")
 const STATUS_ICON_WIDTH := 44
