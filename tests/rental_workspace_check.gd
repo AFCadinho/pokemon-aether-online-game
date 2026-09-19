@@ -53,6 +53,10 @@ func _run() -> void:
 	var pokemon_workspace := WORKSPACE.new()
 	pokemon_workspace.kind = "pokemon"
 	root.add_child(pokemon_workspace)
+	assert(pokemon_workspace.pokemon_source.has_theme_stylebox_override("tab_selected"))
+	assert(pokemon_workspace.pokemon_paste.has_theme_stylebox_override("normal"))
+	assert((pokemon_workspace.pokemon_fields["species"] as LineEdit).has_theme_stylebox_override("normal"))
+	assert((pokemon_workspace.pokemon_evs["atk"] as SpinBox).get_line_edit().has_theme_stylebox_override("normal"))
 	assert(pokemon_workspace.pokemon_gender.get_popup().has_theme_stylebox_override("panel"))
 	assert(pokemon_workspace.duration.get_popup().has_theme_stylebox_override("panel"))
 	pokemon_workspace.service.queue_free()

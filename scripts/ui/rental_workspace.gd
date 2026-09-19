@@ -78,6 +78,7 @@ func _ready() -> void:
 	root.add_child(note)
 	var tabs := TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_style_tabs(tabs, false)
 	root.add_child(tabs)
 	var browse := HBoxContainer.new()
 	browse.name = "Catalog"
@@ -126,6 +127,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_source = TabContainer.new()
 	pokemon_source.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_source.tab_changed.connect(func(_tab: int): _invalidate_pokemon_quote())
+	_style_tabs(pokemon_source, true)
 	left.add_child(pokemon_source)
 	var paste_panel := VBoxContainer.new()
 	paste_panel.name = "PokéPaste"
@@ -138,6 +140,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_paste.placeholder_text = "Dragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed\n- Earthquake\n- Dragon Claw"
 	pokemon_paste.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_paste.text_changed.connect(_invalidate_pokemon_quote)
+	_style_text_edit(pokemon_paste)
 	paste_panel.add_child(pokemon_paste)
 	var manual_scroll := ScrollContainer.new()
 	manual_scroll.name = "Manual"
@@ -167,6 +170,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_happiness.max_value = 255
 	pokemon_happiness.value = 255
 	pokemon_happiness.value_changed.connect(func(_value: float): _invalidate_pokemon_quote())
+	_style_spinbox(pokemon_happiness)
 	manual.add_child(pokemon_happiness)
 	_add_pokemon_text_field(manual, "moves", "Moves", "Comma-separated, up to four")
 	_add_stat_fields(manual, "EVs", pokemon_evs, 0, 252)
@@ -177,6 +181,8 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	description = RichTextLabel.new()
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	description.text = "Create a set, then request a quote.\n\nThe server validates the complete build and determines its rarity and Aetherite price. All rentals are level 100, keep the rental NPC as OT and never count as caught."
+	description.add_theme_color_override("default_color", Color("#eef6ff"))
+	description.add_theme_stylebox_override("normal", _control_style(Color("#0a1422"), Color("#315070")))
 	right.add_child(description)
 	quote_button = Button.new()
 	quote_button.text = "Validate set & calculate price"
@@ -220,6 +226,49 @@ func _style_option(control: OptionButton) -> void:
 	popup.add_theme_stylebox_override("panel", popup_panel)
 	popup.add_theme_stylebox_override("hover", _control_style(Color("#193753"), Color("#62d5ff")))
 
+func _style_tabs(control: TabContainer, compact: bool) -> void:
+	control.get_tab_bar().mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	control.add_theme_constant_override("side_margin", 0)
+	control.add_theme_constant_override("tab_separation", 4)
+	control.add_theme_color_override("font_selected_color", Color("#eef6ff"))
+	control.add_theme_color_override("font_unselected_color", Color("#8ea8bd"))
+	control.add_theme_color_override("font_hovered_color", Color("#eef6ff"))
+	var selected_style := _control_style(Color("#17324a"), Color("#62d5ff"))
+	selected_style.border_width_left = 0
+	selected_style.border_width_top = 0
+	selected_style.border_width_right = 0
+	selected_style.border_width_bottom = 2
+	var vertical_padding := 5 if compact else 7
+	selected_style.content_margin_top = vertical_padding
+	selected_style.content_margin_bottom = vertical_padding
+	var normal_style := _control_style(Color("#0b1421"), Color("#263e54"))
+	normal_style.content_margin_top = vertical_padding
+	normal_style.content_margin_bottom = vertical_padding
+	control.add_theme_stylebox_override("tab_selected", selected_style)
+	control.add_theme_stylebox_override("tab_unselected", normal_style)
+	control.add_theme_stylebox_override("tab_hovered", _control_style(Color("#142b42"), Color("#4e89ad")))
+	control.add_theme_stylebox_override("tab_focus", _control_style(Color("#17324a"), Color("#62d5ff")))
+	control.add_theme_stylebox_override("panel", _control_style(Color("#081321"), Color("#263e54")))
+
+func _style_line_edit(control: LineEdit) -> void:
+	control.add_theme_color_override("font_color", Color("#eef6ff"))
+	control.add_theme_color_override("font_placeholder_color", Color("#657d91"))
+	control.add_theme_color_override("caret_color", Color("#62d5ff"))
+	control.add_theme_stylebox_override("normal", _control_style(Color("#091524"), Color("#315070")))
+	control.add_theme_stylebox_override("focus", _control_style(Color("#0c1d2e"), Color("#62d5ff")))
+	control.add_theme_stylebox_override("read_only", _control_style(Color("#0b111d"), Color("#293b50")))
+
+func _style_text_edit(control: TextEdit) -> void:
+	control.add_theme_color_override("font_color", Color("#eef6ff"))
+	control.add_theme_color_override("font_placeholder_color", Color("#657d91"))
+	control.add_theme_color_override("caret_color", Color("#62d5ff"))
+	control.add_theme_color_override("selection_color", Color("#245776"))
+	control.add_theme_stylebox_override("normal", _control_style(Color("#091524"), Color("#315070")))
+	control.add_theme_stylebox_override("focus", _control_style(Color("#0c1d2e"), Color("#62d5ff")))
+
+func _style_spinbox(control: SpinBox) -> void:
+	_style_line_edit(control.get_line_edit())
+
 func _style_button(control: Button, primary: bool) -> void:
 	control.focus_mode = Control.FOCUS_ALL
 	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -255,6 +304,7 @@ func _add_pokemon_text_field(parent: VBoxContainer, key: String, label_text: Str
 	field.placeholder_text = placeholder
 	field.text = initial
 	field.text_changed.connect(func(_value: String): _invalidate_pokemon_quote())
+	_style_line_edit(field)
 	parent.add_child(field)
 	pokemon_fields[key] = field
 
@@ -277,6 +327,7 @@ func _add_stat_fields(parent: VBoxContainer, heading_text: String, target: Dicti
 		value.max_value = max_value
 		value.value = default_value
 		value.value_changed.connect(func(_number: float): _invalidate_pokemon_quote())
+		_style_spinbox(value)
 		column.add_child(value)
 		target[stat] = value
 
