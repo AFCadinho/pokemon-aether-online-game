@@ -22,14 +22,19 @@ class ScviBatchTest(unittest.TestCase):
             (model / (identity + "_body_rare_alb.png")).touch()
             for suffix in ("00001_battlewait01_loop", "20001_battlewait01_loop",
                            "20000_defaultwait01_loop", "20400_attack01",
-                           "00400_attack01", "20500_damage01"):
+                           "00400_attack01", "20500_damage01", "20010_defaultidle01"):
                 (motion / (identity + "_" + suffix + ".tranm")).touch()
+            (motion / (identity + "_20001_battlewait01_loop.tracm")).touch()
             result = source_entry({"species": "dragonite", "pm": 149,
-                                   "target_game_height_px": 180},
+                                   "target_game_height_px": 180,
+                                   "facial_baseline_motion": "20010_defaultidle01"},
                                   root / "models", root / "motions")
             self.assertEqual(result["identity"], identity)
             self.assertTrue(result["motions"]["idle"].endswith("20001_battlewait01_loop.tranm"))
             self.assertTrue(result["motions"]["physical_attack"].endswith("20400_attack01.tranm"))
+            self.assertTrue(result["motion_channels"]["idle"].endswith(
+                "20001_battlewait01_loop.tracm"))
+            self.assertTrue(result["facial_baseline"].endswith("20010_defaultidle01.tranm"))
             self.assertIsNone(result["motions"]["sleep"])
             self.assertIn("missing_action:sleep", result["warnings"])
             self.assertNotIn("missing_official_rare_albedo", result["warnings"])
@@ -41,6 +46,10 @@ class ScviBatchTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "motion override missing"):
                 source_entry({"species": "dragonite", "pm": 149,
                               "motion_overrides": {"idle": "99999_nonexistent"}},
+                             root / "models", root / "motions")
+            with self.assertRaisesRegex(ValueError, "facial baseline motion missing"):
+                source_entry({"species": "dragonite", "pm": 149,
+                              "facial_baseline_motion": "99999_nonexistent"},
                              root / "models", root / "motions")
 
     def test_shiny_requires_material_and_texture(self):

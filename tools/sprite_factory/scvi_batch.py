@@ -80,10 +80,22 @@ def source_entry(entry, model_root, motion_root):
     if not rare or not (model / (identity + "_rare.trmtr")).is_file():
         warnings.append("missing_official_rare_albedo")
     warnings += ["missing_action:" + name for name, value in chosen.items() if value is None]
+    channels = {}
+    for category, value in chosen.items():
+        companion = Path(value).with_suffix(".tracm") if value else None
+        channels[category] = str(companion) if companion and companion.is_file() else None
+    baseline = None
+    baseline_suffix = entry.get("facial_baseline_motion")
+    if baseline_suffix:
+        candidate = motion / (identity + "_" + baseline_suffix + ".tranm")
+        if not candidate.is_file():
+            raise ValueError(f"Configured facial baseline motion missing: {candidate}")
+        baseline = str(candidate)
     return {**entry, "identity": identity, "model_dir": str(model),
             "motion_dir": str(motion), "motions_available": len(files),
             "identity_icon": str(icon_file),
-            "motions": chosen, "alternatives": alternatives,
+            "motions": chosen, "motion_channels": channels,
+            "facial_baseline": baseline, "alternatives": alternatives,
             "rare_albedo_count": len(rare), "warnings": warnings,
             "status": "candidate_needs_action_and_camera_review"}
 
@@ -123,6 +135,10 @@ def import_one(args):
         if {key: value["name"] if value else None for key, value in previous["actions"].items()} != {
                 key: Path(value).stem if value else None for key, value in item["motions"].items()}:
             raise ValueError("Existing import action selection differs; archive it before reimport")
+        previous_baseline = previous.get("facial_baseline", {})
+        if previous_baseline.get("source") != item["facial_baseline"]:
+            if previous_baseline.get("configured") or item["facial_baseline"] is not None:
+                raise ValueError("Existing facial baseline differs; archive it before reimport")
         for path, expected in previous.get("source_files", {}).items():
             if not Path(path).is_file() or digest(Path(path)) != expected:
                 raise ValueError("Existing imported source no longer matches raw input")
@@ -135,8 +151,22 @@ def import_one(args):
     for path in item["motions"].values():
         if path is not None:
             source_files[path] = digest(Path(path))
+    for path in item["motion_channels"].values():
+        if path is not None:
+            source_files[path] = digest(Path(path))
+    if item["facial_baseline"] is not None:
+        source_files[item["facial_baseline"]] = digest(Path(item["facial_baseline"]))
+        companion = Path(item["facial_baseline"]).with_suffix(".tracm")
+        if companion.is_file():
+            source_files[str(companion)] = digest(companion)
     job = {"species": item["species"], "identity": item["identity"],
            "model_dir": item["model_dir"], "motions": item["motions"],
+           "motion_channels": item["motion_channels"],
+           "facial_baseline": item["facial_baseline"],
+           "facial_baseline_frame": item.get("facial_baseline_frame", 0),
+           "facial_baseline_categories": item.get(
+               "facial_baseline_categories",
+               ["idle", "physical_attack", "special_attack", "damage"]),
            "variant": args.variant, "output": str(blend), "report": str(report),
            "importer": str(args.importer), "python_deps": str(args.python_deps),
            "importer_commit": EXPECTED_IMPORTER,
@@ -233,10 +263,10 @@ def draft_one(args):
                 "render": {"resolution": [512, 512], "fps": 60,
                            "view_transform": "Standard", "look": "Medium High Contrast",
                            "light_target": lighting.get("target", [0, 0, cameras["front"]["target"][2]]),
-                           "lights": [{"position": lighting.get("key_position", [3.5, -4.5, 5.5]), "energy": 650, "size": 5},
+                           "lights": [{"position": lighting.get("key_position", [3.5, -4.5, 5.5]), "energy": lighting.get("key_energy", 650), "size": 5},
                                       {"position": lighting.get("fill_position", [-4, 3, 3.5]), "energy": lighting.get("fill_energy", 350), "size": 5},
-                                      {"position": lighting.get("rim_position", [2, 4, 5]), "energy": 450, "size": 4}],
-                           "world_color": [0.14, 0.14, 0.14]},
+                                      {"position": lighting.get("rim_position", [2, 4, 5]), "energy": lighting.get("rim_energy", 450), "size": 4}],
+                           "world_color": lighting.get("world_color", [0.14, 0.14, 0.14])},
                 "cameras": cameras, "presentation": presentation, "actions": actions,
                 "qc": {"safe_margin": 8, "bounds_jump": 80}}
     path = destination / ("draft-idle-manifest.json" if args.idle_only else "draft-manifest.json")
