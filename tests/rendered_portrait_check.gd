@@ -7,6 +7,23 @@ func _initialize() -> void:
 func _run() -> void:
 	var overlay: Node = load("res://scenes/interface/ui_overlay.tscn").instantiate()
 	root.size = Vector2i(1000, 420)
+	var zoom_stage := Control.new()
+	zoom_stage.size = Vector2(235, 155)
+	root.add_child(zoom_stage)
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(235, 155)
+	zoom_stage.add_child(viewport)
+	var fallback := TextureRect.new()
+	zoom_stage.add_child(fallback)
+	var zoom: Button = overlay.call("_add_preview_zoom_button", zoom_stage, viewport, fallback, 0.52)
+	zoom.button_pressed = true
+	assert(viewport.canvas_transform.get_scale().is_equal_approx(Vector2(2, 2)))
+	assert(fallback.scale.is_equal_approx(Vector2(2, 2)))
+	zoom.button_pressed = false
+	assert(viewport.canvas_transform == Transform2D.IDENTITY)
+	assert(fallback.scale == Vector2.ONE)
+	assert(zoom.mouse_filter == Control.MOUSE_FILTER_STOP)
+	zoom_stage.queue_free()
 	var index := 0
 	for species: String in ["charizard", "articuno", "dragonite", "pikachu"]:
 		var frames := Assets.load_preview_frames(species, "front", false)
@@ -16,7 +33,7 @@ func _run() -> void:
 		assert(portrait.has_area())
 		var old_scale: float = min(235.0 / full.size.x, 155.0 / full.size.y)
 		var new_scale := 235.0 / portrait.size.x
-		assert(new_scale <= old_scale * 1.2201)
+		assert(is_equal_approx(new_scale, old_scale), "Normal view must fit the full animation")
 		print("%s summary portrait enlargement %.2fx" % [species, new_scale / old_scale])
 		for row in 2:
 			var label := Label.new()

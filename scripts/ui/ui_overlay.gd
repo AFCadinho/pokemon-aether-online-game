@@ -11999,6 +11999,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
 
 	var stats_panel := PanelContainer.new()
 	stats_panel.custom_minimum_size = Vector2(220, 0)
@@ -20711,6 +20712,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_y", 1)
 	level_badge_margin.add_child(pokemon_summary_level_badge_label)
+	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52)
 
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
@@ -36389,31 +36391,53 @@ func _rendered_portrait_rect(frames: SpriteFrames, stage: Vector2) -> Rect2:
 	if frames == null:
 		return Rect2()
 	var full: Rect2 = frames.get_meta("rendered_visual_bounds", Rect2())
-	var focus: Rect2 = frames.get_meta("rendered_portrait_bounds", Rect2())
-	# Explicit per-form/view review overrides are data, never species checks.
-	var presentation: Dictionary = frames.get_meta("rendered_presentation", {})
-	var override: Array = presentation.get("portrait_bounds", [])
-	if override.size() == 4:
-		focus = Rect2(float(override[0]), float(override[1]), float(override[2]), float(override[3]))
-	if not full.has_area() or not focus.has_area():
+	if not full.has_area():
 		return Rect2()
-	focus = focus.intersection(full)
-	if not focus.has_area():
-		return Rect2()
-	var body_fit: float = min(stage.x * 0.78 / focus.size.x, stage.y * 0.78 / focus.size.y)
-	# Up to 22% closer than full-envelope fitting. Thin wing/tail tips can
-	# approach/cross the portrait edge; no per-frame zoom or recentering.
-	var envelope_fit: float = min(stage.x / full.size.x, stage.y / full.size.y)
-	# Dense silhouettes already fill the portrait: do not crop feet/ears just
-	# to make every species larger. Extra zoom is reserved for sparse envelopes.
-	var focus_ratio := focus.get_area() / full.get_area()
-	var sparse_weight := clampf((0.17 - focus_ratio) / 0.05, 0.0, 1.0)
-	var scale_value: float = min(body_fit, envelope_fit * (1.0 + 0.22 * sparse_weight))
+	# Normal view fits the complete idle. Closer inspection is an explicit toggle.
+	var scale_value: float = min(stage.x / full.size.x, stage.y / full.size.y)
 	var visible_size := stage / scale_value
-	var center := full.get_center().lerp(focus.get_center(), 0.65)
-	var travel := (full.size - visible_size).max(Vector2.ZERO) * 0.5
-	center = center.clamp(full.get_center() - travel, full.get_center() + travel)
-	return Rect2(center - visible_size * 0.5, visible_size)
+	return Rect2(full.get_center() - visible_size * 0.5, visible_size)
+
+
+func _add_preview_zoom_button(parent: Control, viewport: SubViewport, fallback: TextureRect, center_y: float) -> Button:
+	parent.clip_contents = true
+	# An overlay Control prevents PanelContainer from stretching the button.
+	var overlay := Control.new()
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(overlay)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var button := Button.new()
+	button.name = "PreviewZoomButton"
+	button.toggle_mode = true
+	button.mouse_filter = Control.MOUSE_FILTER_STOP
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = "Zoom in (2×)"
+	button.custom_minimum_size = Vector2(28, 28)
+	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#06111fe8"), UI_BORDER_SUBTLE, 5, 1))
+	overlay.add_child(button)
+	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	button.offset_left = 6
+	button.offset_top = -34
+	button.offset_right = 34
+	button.offset_bottom = -6
+	button.draw.connect(func() -> void:
+		var ink := Color("#8ce7ff")
+		button.draw_arc(Vector2(11, 11), 6.5, 0, TAU, 24, ink, 1.5, true)
+		button.draw_line(Vector2(16, 16), Vector2(22, 22), ink, 2, true)
+		button.draw_line(Vector2(8, 11), Vector2(14, 11), ink, 1.5, true)
+		if not button.button_pressed:
+			button.draw_line(Vector2(11, 8), Vector2(11, 14), ink, 1.5, true)
+	)
+	button.toggled.connect(func(zoomed: bool) -> void:
+		var factor := 2.0 if zoomed else 1.0
+		var center := Vector2(viewport.size) * Vector2(0.5, center_y)
+		viewport.canvas_transform = Transform2D(Vector2(factor, 0), Vector2(0, factor), center * (1.0 - factor))
+		fallback.pivot_offset = fallback.size * 0.5
+		fallback.scale = Vector2.ONE * factor
+		button.tooltip_text = "Zoom out (normal view)" if zoomed else "Zoom in (2×)"
+		button.queue_redraw()
+	)
+	return button
 
 
 func _on_pokedex_sprite_panel_gui_input(event: InputEvent) -> void:
