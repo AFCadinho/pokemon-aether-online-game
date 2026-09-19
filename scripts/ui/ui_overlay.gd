@@ -1210,6 +1210,7 @@ var public_trainer_card_data: Dictionary = {}
 var own_trainer_card_data: Dictionary = {}
 var trainer_card_dex_panel: Control
 var trainer_card_pvp_tab: Control
+var trainer_card_showcase_tab: Control
 var trainer_card_companion_saving := false
 var trainer_card_tabs: TabContainer
 var trainer_card_subtitle_label: Label
@@ -15793,6 +15794,8 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	trainer_card_tabs.add_theme_font_size_override("font_size", 13)
 	trainer_card_tabs.add_child(_create_trainer_card_stats_tab())
+	trainer_card_showcase_tab = _create_public_trainer_showcase_tab(own_trainer_card_data)
+	trainer_card_tabs.add_child(trainer_card_showcase_tab)
 	trainer_card_tabs.add_child(_create_trainer_card_badges_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
@@ -15875,12 +15878,14 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.add_theme_font_size_override("font_size", 13)
 	tabs.add_child(_create_public_trainer_overview_tab(card))
+	tabs.add_child(_create_public_trainer_showcase_tab(card))
 	tabs.add_child(_create_public_trainer_badges_tab(card))
 	tabs.add_child(_create_public_trainer_pvp_tab(card))
 	_apply_trainer_card_tabs_style(tabs)
 	tabs.set_tab_title(0, LocalizationManager.text("ui.trainer_card.tab.overview"))
-	tabs.set_tab_title(1, LocalizationManager.text("ui.trainer_card.tab.badges"))
-	tabs.set_tab_title(2, LocalizationManager.text("ui.trainer_card.tab.pvp"))
+	tabs.set_tab_title(1, LocalizationManager.text("ui.trainer_card.tab.showcase"))
+	tabs.set_tab_title(2, LocalizationManager.text("ui.trainer_card.tab.badges"))
+	tabs.set_tab_title(3, LocalizationManager.text("ui.trainer_card.tab.pvp"))
 	tabs.get_tab_bar().focus_mode = Control.FOCUS_ALL
 	root.add_child(tabs)
 
@@ -15943,6 +15948,271 @@ func _create_public_trainer_overview_tab(card: Dictionary) -> Control:
 	body.add_child(_create_public_trainer_avatar_panel(card))
 	body.add_child(_create_public_trainer_profile_panel(card))
 	return tab
+
+
+func _create_public_trainer_showcase_tab(card: Dictionary) -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Showcase"
+	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.showcase")
+	tab.add_theme_constant_override("margin_left", 10)
+	tab.add_theme_constant_override("margin_top", 10)
+	tab.add_theme_constant_override("margin_right", 10)
+	tab.add_theme_constant_override("margin_bottom", 10)
+	var body := HBoxContainer.new()
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 12)
+	tab.add_child(body)
+	body.add_child(_create_trainer_card_signature_panel(card))
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	details.add_theme_constant_override("separation", 10)
+	body.add_child(details)
+	details.add_child(_create_trainer_card_collection_panel(card))
+	details.add_child(_create_trainer_card_milestones_panel(card))
+	return tab
+
+
+func _create_trainer_card_signature_panel(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "TrainerCardSignaturePokemon"
+	panel.custom_minimum_size.x = 220
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style(true))
+	var margin := MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 12)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 6)
+	margin.add_child(stack)
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.showcase.signature")
+	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	heading.add_theme_font_size_override("font_size", 11)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	stack.add_child(heading)
+	var species := str(card.get("favoritePokemon", "")).strip_edges()
+	var shiny := bool(card.get("favoritePokemonShiny", false))
+	var portrait := TextureRect.new()
+	portrait.name = "ShowcasePokemonPortrait"
+	portrait.custom_minimum_size = Vector2(184, 174)
+	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	if not species.is_empty():
+		portrait.texture = PokemonAssets.load_party_icon(species, shiny)
+	stack.add_child(portrait)
+	var name_label := Label.new()
+	name_label.name = "ShowcasePokemonName"
+	name_label.text = ("★ " if shiny else "") + (
+		species.capitalize() if not species.is_empty()
+		else LocalizationManager.text("ui.trainer_card.showcase.no_favorite")
+	)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 17)
+	name_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT if shiny else TRAINER_CARD_CYAN)
+	stack.add_child(name_label)
+	stack.add_child(_create_trainer_card_badge_spotlight(card))
+	return panel
+
+
+func _create_trainer_card_badge_spotlight(card: Dictionary) -> Control:
+	var inset := PanelContainer.new()
+	inset.name = "ShowcaseBadgeSpotlight"
+	inset.custom_minimum_size = Vector2(0, 58)
+	inset.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inset.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	inset.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var badge := _trainer_card_latest_badge(card)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(42, 42)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var texture_path := str(badge.get("texture", ""))
+	if ResourceLoader.exists(texture_path):
+		icon.texture = load(texture_path) as Texture2D
+	row.add_child(icon)
+	var labels := VBoxContainer.new()
+	labels.alignment = BoxContainer.ALIGNMENT_CENTER
+	labels.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(labels)
+	var caption := Label.new()
+	_set_localized_control_property(caption, "text", "ui.trainer_card.showcase.latest_badge")
+	caption.add_theme_font_size_override("font_size", 9)
+	caption.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	labels.add_child(caption)
+	var badge_name := Label.new()
+	badge_name.text = str(badge.get("name", LocalizationManager.text("ui.trainer_card.showcase.no_badges")))
+	badge_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	badge_name.add_theme_font_size_override("font_size", 12)
+	badge_name.add_theme_color_override("font_color", UI_TEXT)
+	labels.add_child(badge_name)
+	return inset
+
+
+func _trainer_card_latest_badge(card: Dictionary) -> Dictionary:
+	var latest := {}
+	var latest_at := ""
+	var badge_state := _dictionary_from_value(card.get("badges", {}))
+	for value: Variant in badge_state.get("badges", []):
+		if not value is Dictionary or not bool((value as Dictionary).get("earned", false)):
+			continue
+		var earned := value as Dictionary
+		var earned_at := str(earned.get("earnedAt", ""))
+		if not latest.is_empty() and earned_at <= latest_at:
+			continue
+		for definition_value: Variant in KANTO_BADGES:
+			var definition := definition_value as Dictionary
+			if str(definition.get("id", "")) == str(earned.get("badgeId", "")):
+				latest = definition.duplicate(true)
+				latest["name"] = str(earned.get("name", definition.get("name", "")))
+				latest_at = earned_at
+				break
+	return latest
+
+
+func _create_trainer_card_collection_panel(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "TrainerCardCollectionShowcase"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+	var margin := MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 12)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	margin.add_child(stack)
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.showcase.collection")
+	heading.add_theme_font_size_override("font_size", 11)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	stack.add_child(heading)
+	var dex := _dictionary_from_value(card.get("pokedex", {}))
+	var total := maxi(0, int(dex.get("total", 0)))
+	for field: String in ["seen", "caught"]:
+		stack.add_child(_create_trainer_card_collection_progress(
+			"ui.trainer_card.dex.%s" % field,
+			maxi(0, int(dex.get(field, 0))),
+			total
+		))
+	var shiny_row := HBoxContainer.new()
+	shiny_row.add_theme_constant_override("separation", 8)
+	stack.add_child(shiny_row)
+	var shiny_label := Label.new()
+	_set_localized_control_property(shiny_label, "text", "ui.trainer_card.dex.shinyCaught")
+	shiny_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	shiny_label.add_theme_font_size_override("font_size", 12)
+	shiny_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	shiny_row.add_child(shiny_label)
+	var shiny_value := Label.new()
+	shiny_value.text = str(maxi(0, int(dex.get("shinyCaught", 0))))
+	shiny_value.add_theme_font_size_override("font_size", 18)
+	shiny_value.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	shiny_row.add_child(shiny_value)
+	return panel
+
+
+func _create_trainer_card_collection_progress(label_key: String, current: int, total: int) -> Control:
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 3)
+	var row := HBoxContainer.new()
+	stack.add_child(row)
+	var label := Label.new()
+	_set_localized_control_property(label, "text", label_key)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(label)
+	var percent := (float(current) / float(total) * 100.0) if total > 0 else 0.0
+	var value := Label.new()
+	value.text = "%d / %d · %s%%" % [current, total, ("%.1f" % percent).trim_suffix(".0")]
+	value.add_theme_font_size_override("font_size", 11)
+	value.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	row.add_child(value)
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size.y = 8
+	bar.max_value = 100.0
+	bar.value = percent
+	bar.show_percentage = false
+	bar.add_theme_stylebox_override("background", _make_panel_style(Color("#07131f"), UI_BORDER_SUBTLE, 4, 1))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(TRAINER_CARD_CYAN, TRAINER_CARD_CYAN, 4, 0))
+	stack.add_child(bar)
+	return stack
+
+
+func _create_trainer_card_milestones_panel(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "TrainerCardMilestones"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+	var margin := MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 12)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	margin.add_child(stack)
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.showcase.milestones")
+	heading.add_theme_font_size_override("font_size", 11)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	stack.add_child(heading)
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	stack.add_child(grid)
+	var badge_count := int(_dictionary_from_value(card.get("badges", {})).get("earnedCount", 0))
+	var pvp := _dictionary_from_value(card.get("pvp", {}))
+	var joined := _format_join_date_text(str(card.get("createdAt", "")), "—")
+	var milestones: Array[Dictionary] = [
+		{"key": "ui.trainer_card.showcase.badges", "value": str(badge_count)},
+		{"key": "ui.trainer_card.showcase.battles", "value": str(int(pvp.get("gamesPlayed", 0)))},
+		{"key": "ui.trainer_card.field.playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
+		{"key": "ui.trainer_card.showcase.trainer_since", "value": joined},
+	]
+	for milestone: Dictionary in milestones:
+		grid.add_child(_create_trainer_card_milestone_tile(str(milestone["key"]), str(milestone["value"])))
+	return panel
+
+
+func _create_trainer_card_milestone_tile(label_key: String, value_text: String) -> Control:
+	var tile := PanelContainer.new()
+	tile.custom_minimum_size.y = 52
+	tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tile.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	tile.add_child(row)
+	var label := Label.new()
+	_set_localized_control_property(label, "text", label_key)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	row.add_child(label)
+	var value := Label.new()
+	value.text = value_text
+	value.add_theme_font_size_override("font_size", 13)
+	value.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	row.add_child(value)
+	return tile
 
 
 func _create_public_trainer_badges_tab(card: Dictionary) -> Control:
@@ -16110,7 +16380,9 @@ func _create_public_trainer_ranked_ratings(card: Dictionary) -> Control:
 				tiers.add_child(_create_public_trainer_rating_tier(
 					_format_trainer_card_ranked_tier_name(format_name),
 					int(entry.get("rating", 0)),
-					format_name
+					format_name,
+					int(entry.get("peakRating", entry.get("rating", 0))),
+					int(entry.get("gamesPlayed", 0))
 				))
 				added = true
 	if not added:
@@ -16119,7 +16391,9 @@ func _create_public_trainer_ranked_ratings(card: Dictionary) -> Control:
 		tiers.add_child(_create_public_trainer_rating_tier(
 			LocalizationManager.text("ui.trainer_card.pvp.unranked"),
 			-1,
-			LocalizationManager.text("ui.trainer_card.pvp.rating")
+			LocalizationManager.text("ui.trainer_card.pvp.rating"),
+			-1,
+			0
 		))
 	return panel
 
@@ -16130,7 +16404,13 @@ func _format_trainer_card_ranked_tier_name(format_name: String) -> String:
 	return format_name.trim_prefix("AETHER ")
 
 
-func _create_public_trainer_rating_tier(tier_name: String, rating: int, full_format_name: String) -> Control:
+func _create_public_trainer_rating_tier(
+	tier_name: String,
+	rating: int,
+	full_format_name: String,
+	peak_rating: int,
+	games_played: int
+) -> Control:
 	var tier := PanelContainer.new()
 	tier.name = "RankedTier_%s" % tier_name.to_pascal_case()
 	tier.custom_minimum_size.x = 120
@@ -16142,9 +16422,12 @@ func _create_public_trainer_rating_tier(tier_name: String, rating: int, full_for
 	margin.add_theme_constant_override("margin_right", 8)
 	margin.add_theme_constant_override("margin_bottom", 4)
 	tier.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 2)
+	margin.add_child(stack)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 7)
-	margin.add_child(row)
+	stack.add_child(row)
 	var format_label := Label.new()
 	format_label.text = tier_name
 	format_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -16159,6 +16442,16 @@ func _create_public_trainer_rating_tier(tier_name: String, rating: int, full_for
 	rating_label.add_theme_font_size_override("font_size", 14)
 	rating_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
 	row.add_child(rating_label)
+	if rating >= 0:
+		var detail := Label.new()
+		detail.text = LocalizationManager.text("ui.trainer_card.pvp.tier_summary", {
+			"peak": peak_rating,
+			"battles": games_played,
+		})
+		detail.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		detail.add_theme_font_size_override("font_size", 9)
+		detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		stack.add_child(detail)
 	return tier
 
 
@@ -16431,6 +16724,7 @@ func _open_trainer_card_companion_picker() -> void:
 			own_trainer_card_data["favoritePokemon"] = species
 			own_trainer_card_data["favoritePokemonShiny"] = selected_shiny
 			_refresh_avatar_previews()
+			_refresh_own_trainer_card_showcase()
 			if is_instance_valid(dialog):
 				dialog.queue_free()
 		elif is_instance_valid(dialog):
@@ -19104,6 +19398,7 @@ func _refresh_own_trainer_card_pvp() -> void:
 func _apply_own_trainer_card_details(card: Dictionary) -> void:
 	own_trainer_card_data = card.duplicate(true)
 	_refresh_avatar_previews()
+	_refresh_own_trainer_card_showcase()
 	if is_instance_valid(trainer_card_dex_panel):
 		var parent := trainer_card_dex_panel.get_parent()
 		var index := trainer_card_dex_panel.get_index()
@@ -19120,6 +19415,17 @@ func _apply_own_trainer_card_details(card: Dictionary) -> void:
 		_refresh_trainer_card_tab_titles()
 		trainer_card_tabs.current_tab = selected
 	_apply_own_trainer_card_pvp(_dictionary_from_value(card.get("pvp", {})))
+
+
+func _refresh_own_trainer_card_showcase() -> void:
+	if not is_instance_valid(trainer_card_showcase_tab):
+		return
+	var showcase_parent := trainer_card_showcase_tab.get_parent()
+	var showcase_index := trainer_card_showcase_tab.get_index()
+	trainer_card_showcase_tab.free()
+	trainer_card_showcase_tab = _create_public_trainer_showcase_tab(own_trainer_card_data)
+	showcase_parent.add_child(trainer_card_showcase_tab)
+	showcase_parent.move_child(trainer_card_showcase_tab, showcase_index)
 
 
 func _apply_own_trainer_card_pvp(pvp: Dictionary) -> void:
