@@ -142,10 +142,22 @@ func _run() -> void:
 	assert(typeof(pokemon_rent_payload["durationSeconds"]) == TYPE_INT)
 	assert(pokemon_rent_payload["durationSeconds"] == 86400)
 	assert(pokemon_rent_payload["pokemonBuild"] == pokemon_workspace.selected_build)
-	pokemon_workspace.catalog["rentals"] = [{"loanId": "loan-1", "context": "npc_pokemon", "status": "active", "dueAt": "2026-09-21T12:00:00Z", "rental": {"displayName": "Scizor", "buyoutPrice": 1400}}]
+	var rental_snapshot := {"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "leftovers", "teraType": "Steel", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}
+	var second_snapshot := {"species": "Garchomp", "nature": "Jolly", "ability": "Rough Skin", "item": "rocky-helmet", "moves": ["Earthquake", "Dragon Claw"], "evs": {"atk": 252, "spe": 252}, "ivs": {}}
+	pokemon_workspace.catalog["rentals"] = [
+		{"loanId": "loan-1", "context": "npc_pokemon", "status": "active", "dueAt": "2026-09-21T12:00:00Z", "assets": [{"assetType": "pokemon", "snapshot": rental_snapshot}], "rental": {"displayName": "Scizor", "rarity": "uncommon", "buyoutPrice": 1400}},
+		{"loanId": "loan-2", "context": "npc_pokemon", "status": "active", "dueAt": "2026-09-22T12:00:00Z", "assets": [{"assetType": "pokemon", "snapshot": second_snapshot}], "rental": {"displayName": "Garchomp", "rarity": "rare", "buyoutPrice": 1800}},
+	]
 	pokemon_workspace._render_active()
+	assert(pokemon_workspace.active_list.get_node("ActivePokemonRentalCard-loan-1") != null)
+	assert(pokemon_workspace.active_list.get_node("ActivePokemonRentalCard-loan-2") != null)
+	var first_set_details := pokemon_workspace.active_list.get_node("ActivePokemonRentalCard-loan-1").find_child("RentalSetDetails", true, false) as RichTextLabel
+	assert(first_set_details.text.contains("Bullet Punch"))
+	assert(first_set_details.text.contains("EVs:[/color] 252 Atk"))
 	var active_buttons := pokemon_workspace.active_list.find_children("*", "Button", true, false)
-	assert(active_buttons.any(func(button: Button): return button.text == "Extend 24 hours — 100 Aetherite"))
+	assert(active_buttons.filter(func(button: Button): return button.text == "Extend — 100 Aetherite").size() == 2)
+	assert(active_buttons.filter(func(button: Button): return button.text.begins_with("Keep —") and button.text.ends_with("Aetherite")).size() == 2)
+	assert(active_buttons.filter(func(button: Button): return button.text == "Return Pokémon").size() == 2)
 	pokemon_workspace._show_pokemon_review(false)
 	assert(pokemon_workspace.pokemon_edit_step.visible)
 	assert(not pokemon_workspace.pokemon_review_step.visible)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Active individual Pokémon rentals now appear as separate detailed cards, each with its own set preview, expiry and styled extend, return and permanent-purchase actions.
+
 - The single active team rental now gets a full-detail card with all six sets, clear expiry information and styled extension and return actions.
 
 - Rental team cards now appear in small batches, keeping the catalog responsive while its Pokémon icons finish loading.
