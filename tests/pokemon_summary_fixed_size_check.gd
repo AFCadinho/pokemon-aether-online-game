@@ -98,8 +98,9 @@ func _run() -> void:
 	_check(
 		zoom_button != null
 		and hidden_ability_badge != null
-		and not zoom_button.get_global_rect().intersects(hidden_ability_badge.get_global_rect()),
-		"portrait zoom action leaves the Hidden Ability badge unobstructed"
+		and not zoom_button.get_global_rect().intersects(hidden_ability_badge.get_global_rect())
+		and zoom_button.get_global_rect().end.x < hidden_ability_badge.get_global_rect().position.x,
+		"portrait zoom keeps the permanent left slot before the optional Hidden Ability badge"
 	)
 
 	if title_label != null and gender_label != null and nickname_button != null:
