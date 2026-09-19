@@ -24,11 +24,20 @@ func _run() -> void:
 		quit(1)
 		return
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
+	overlay.set("own_trainer_card_data", {
+		"favoritePokemon": "charizard", "favoritePokemonShiny": false,
+		"pokedex": {"registered": 83, "total": 1025},
+		"ratings": [{"format": "aether-ou", "rating": 1234, "period": "all_time"}],
+	})
 	root.add_child(overlay)
 	overlay.call("_show_public_trainer_card", {
 		"userId": 42.0,
 		"username": "misty",
 		"displayName": "Misty",
+		"favoritePokemon": "charizard",
+		"favoritePokemonShiny": false,
+		"pokedex": {"registered": 83, "total": 1025},
+		"ratings": [{"format": "aether-ou", "rating": 1234, "period": "all_time"}],
 		"createdAt": "2026-05-04T12:00:00Z",
 		"guildName": "Cerulean Waves",
 		"mapId": "private_internal_map_id",
@@ -42,9 +51,9 @@ func _run() -> void:
 		},
 		"playtimeSeconds": 7200,
 		"pvp": {
-			"gamesPlayed": 5,
-			"wins": 4,
-			"losses": 1,
+			"gamesPlayed": 5.0,
+			"wins": 4.0,
+			"losses": 1.0,
 			"winRate": 80.0,
 			"ranked": {"gamesPlayed": 3, "wins": 2, "losses": 1, "winRate": 66.7},
 			"aetherClash": {"gamesPlayed": 2, "wins": 2, "losses": 0, "winRate": 100.0},
@@ -57,6 +66,12 @@ func _run() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(capture_dir.path_join("public.png"))
+		var public_tabs := (overlay.get("public_trainer_card_popup") as Control).find_child("PublicTrainerCardTabs", true, false) as TabContainer
+		public_tabs.current_tab = 2
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("pvp.png"))
 		overlay.call("_hide_public_trainer_card")
 		var own := overlay.get("trainer_card_popup") as Control
 		own.show()
@@ -64,6 +79,12 @@ func _run() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(capture_dir.path_join("own.png"))
+		root.get_node("PokedexService").set("_owned_species_cache", {"normal": ["charizard", "pikachu", "scizor"], "shiny": ["pikachu"]})
+		overlay.call("_open_trainer_card_companion_picker")
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("picker.png"))
 		print("Trainer card captures saved; own card size: ", own.size)
 		overlay.queue_free()
 		quit(0)
@@ -80,6 +101,14 @@ func _run() -> void:
 	var profile_grid := popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
 	var follower_preview := avatar_preview.find_child("RemotePokemonFollower", true, false) as Node2D if avatar_preview != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
+	_check(popup.find_child("FavoritePokemon", true, false) is Sprite2D, "public card renders only the explicitly selected HOME companion")
+	_check(_find_label(popup, "Pokédex · 83 / 1025 registered") != null, "public card displays registered Pokédex progress")
+	_check(_find_label(popup, "Ranked rating: AETHER OU  1234") != null, "public PvP view labels the format and rating")
+	_check(_find_label(popup, "5.0") == null, "JSON float battle counters render as whole numbers")
+	overlay.call("_apply_own_trainer_card_details", overlay.get("public_trainer_card_data"))
+	var own_card := overlay.get("trainer_card_popup") as Control
+	_check(own_card.find_child("FavoritePokemon", true, false) is Sprite2D, "own card refresh renders the saved HOME companion")
+	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 5, "own details refresh keeps exactly one PvP tab")
 	_check(
 		popup != null
 		and popup.get_combined_minimum_size().x <= 720.0
