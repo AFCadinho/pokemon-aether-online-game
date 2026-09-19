@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; Lucario, Charizard, and Pikachu also have corrected local review positioning and scale.
+- Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; Eevee, Lucario, Charizard, Pikachu, and Articuno also sit more naturally against their battle platforms during local review.
 
 - Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.
 

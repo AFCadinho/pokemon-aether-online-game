@@ -14,8 +14,15 @@ func _run() -> void:
 	assert(catalog.get("mode") == "preview")
 	assert((catalog.get("entries") as Dictionary).size() == 15)
 	var reviewed_species := [
-		"dragonite", "eevee", "roaring-moon", "lucario", "charizard", "pikachu",
+		"dragonite", "eevee", "roaring-moon", "lucario", "charizard", "pikachu", "articuno",
 	]
+	var expected_y_offsets := {
+		"eevee": {"front": 62, "back": 62},
+		"lucario": {"front": 64, "back": 73},
+		"charizard": {"front": 85, "back": 83},
+		"pikachu": {"front": 67, "back": 70},
+		"articuno": {"front": 32, "back": 22},
+	}
 	for species: String in reviewed_species:
 		for side: String in ["front", "back"]:
 			var frames := Assets.load_frames(species, side, false)
@@ -24,6 +31,11 @@ func _run() -> void:
 			assert(frames.get_frame_count("idle") > 1)
 			assert(frames.get_animation_loop("idle"))
 			assert(not Assets.ensure_action_loaded(frames, "physical_attack"))
+			if expected_y_offsets.has(species):
+				var presentation: Dictionary = frames.get_meta("rendered_presentation")
+				var offset: Array = presentation.get("position_offset", [])
+				assert(offset.size() == 2)
+				assert(int(offset[1]) == int(expected_y_offsets[species][side]))
 	assert(Assets.load_frames("gardevoir", "front", false) == null)
 	var shiny := Assets.load_frames("eevee", "front", true)
 	assert(shiny != null and shiny.get_frame_count("idle") > 1)

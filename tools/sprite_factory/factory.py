@@ -201,6 +201,18 @@ def build(args):
     return target
 
 
+def require_presentation_only_retune(previous, updated):
+    """Accept metadata-only placement changes without re-rendering master pixels."""
+    previous_without_presentation = {
+        key: value for key, value in previous.items() if key != 'presentation'
+    }
+    updated_without_presentation = {
+        key: value for key, value in updated.items() if key != 'presentation'
+    }
+    require(previous_without_presentation == updated_without_presentation,
+            'Finalize manifest may only change presentation')
+
+
 def finalize(args):
     """Re-run postprocessing from verified renders without another 3D render.
 
@@ -213,6 +225,11 @@ def finalize(args):
     require((previous/'blender_worker.py').read_bytes() == (HERE/'blender_worker.py').read_bytes(), 'Renderer changed: fresh .blend build required')
     identity = old['identity']
     cfg, variant = identity['manifest'], identity['variant']
+    if args.manifest:
+        updated = read(args.manifest)
+        require_presentation_only_retune(cfg, updated)
+        cfg = updated
+        identity['manifest'] = cfg
     validate(cfg, variant)
     identity['code_sha256'] = digest((HERE/'factory.py').read_bytes() + (HERE/'blender_worker.py').read_bytes())
     identity['pillow'] = PIL_VERSION
@@ -225,7 +242,7 @@ def finalize(args):
     for name in ('factory.py', 'blender_worker.py'):
         (target/name).write_bytes((HERE/name).read_bytes())
     write(target/'provenance.json', dict(identity=identity, build_id=build_id,
-          source_sha256=old['source_sha256'], manifest_sha256=old['manifest_sha256'],
+          source_sha256=old['source_sha256'], manifest_sha256=digest(canonical(cfg)),
           rendered_from=str(previous), rendered_build_id=old['build_id']))
     write(target/'inspection.json', read(previous/'inspection.json'))
     write(target/'render.json', read(previous/'render.json'))
@@ -443,6 +460,7 @@ def main():
     p.add_argument('--blender', default='flatpak run org.blender.Blender')
     p = sub.add_parser('verify'); p.add_argument('build')
     p = sub.add_parser('finalize'); p.add_argument('build'); p.add_argument('--output', required=True)
+    p.add_argument('--manifest', help='Updated manifest; only presentation may differ from the rendered build')
     p = sub.add_parser('review'); p.add_argument('build')
     p.add_argument('--status', choices=['approved', 'rejected'], required=True)
     p.add_argument('--reviewer', required=True); p.add_argument('--note', required=True)
