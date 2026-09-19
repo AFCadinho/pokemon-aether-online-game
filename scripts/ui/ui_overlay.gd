@@ -16114,11 +16114,13 @@ func _create_public_trainer_ranked_ratings(card: Dictionary) -> Control:
 				))
 				added = true
 	if not added:
-		var unranked := Label.new()
-		_set_localized_control_property(unranked, "text", "ui.trainer_card.pvp.unranked")
-		unranked.add_theme_font_size_override("font_size", 14)
-		unranked.add_theme_color_override("font_color", UI_TEXT)
-		tiers.add_child(unranked)
+		# Keep the empty state in the same responsive tier layout. Once a player
+		# establishes ratings, each ruleset simply replaces this with its own card.
+		tiers.add_child(_create_public_trainer_rating_tier(
+			LocalizationManager.text("ui.trainer_card.pvp.unranked"),
+			-1,
+			LocalizationManager.text("ui.trainer_card.pvp.rating")
+		))
 	return panel
 
 
@@ -16132,7 +16134,7 @@ func _create_public_trainer_rating_tier(tier_name: String, rating: int, full_for
 	var tier := PanelContainer.new()
 	tier.name = "RankedTier_%s" % tier_name.to_pascal_case()
 	tier.custom_minimum_size.x = 120
-	tier.tooltip_text = "%s · %s" % [full_format_name, str(rating)]
+	tier.tooltip_text = "%s · %s" % [full_format_name, "—" if rating < 0 else str(rating)]
 	tier.add_theme_stylebox_override("panel", _make_panel_style(Color("#13263d"), TRAINER_CARD_ACCENT_SOFT, 6, 1))
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 8)
@@ -16153,7 +16155,7 @@ func _create_public_trainer_rating_tier(tier_name: String, rating: int, full_for
 	row.add_child(format_label)
 	var rating_label := Label.new()
 	rating_label.name = "Rating"
-	rating_label.text = str(rating)
+	rating_label.text = "—" if rating < 0 else str(rating)
 	rating_label.add_theme_font_size_override("font_size", 14)
 	rating_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
 	row.add_child(rating_label)
@@ -19076,7 +19078,13 @@ func _show_trainer_card() -> void:
 func _refresh_own_trainer_card_pvp() -> void:
 	trainer_card_pvp_request_generation += 1
 	var request_generation := trainer_card_pvp_request_generation
-	_apply_own_trainer_card_pvp({})
+	# A second refresh can be cancelled or fail after the PvP tab has already
+	# loaded. Keep that verified record visible instead of replacing Overview
+	# with zeroes while the request is in flight.
+	if own_trainer_card_data.has("pvp"):
+		_apply_own_trainer_card_pvp(_dictionary_from_value(own_trainer_card_data.get("pvp", {})))
+	else:
+		_apply_own_trainer_card_pvp({})
 	var user_id := int(str(PlayerSave.player_id).strip_edges())
 	if user_id <= 0:
 		return

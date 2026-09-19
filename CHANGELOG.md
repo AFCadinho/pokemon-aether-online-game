@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card Overview now keeps verified all-time PvP totals visible during refreshes, while Ranked ratings use responsive tier cards that wrap as formats are added.
+
 - Trainer Card Pokémon now face right and sit lower beside the trainer, keeping the trainer visible in front of larger companions.
 
 - Favorite Pokémon now share the full Trainer Card portrait with the trainer, giving broad poses more room instead of shrinking them into a small side icon.
