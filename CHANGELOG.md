@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Stats now shows Region clears at zero, introducing the future region replay progression stat.
+
 - Trainer Card trainer portraits now use pixel-aligned scaling, keeping their pixel art crisp beside Favorite Pokémon.
 
 - Ranked Trainer Card tiers now also show peak rating and battles played without adding another tab.

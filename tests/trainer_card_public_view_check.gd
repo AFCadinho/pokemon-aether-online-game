@@ -63,6 +63,7 @@ func _run() -> void:
 			],
 		},
 		"playtimeSeconds": 7200,
+		"regionClears": 0,
 		"pvp": {
 			"gamesPlayed": 5.0,
 			"wins": 4.0,
@@ -154,6 +155,8 @@ func _run() -> void:
 	_check(_find_label(popup, "5.0") == null, "JSON float battle counters render as whole numbers")
 	overlay.call("_apply_own_trainer_card_details", overlay.get("public_trainer_card_data"))
 	var own_card := overlay.get("trainer_card_popup") as Control
+	var region_clears := own_card.find_child("TrainerCardValue_region_clears", true, false) as Label
+	_check(region_clears != null and region_clears.text == "0", "own Adventure Stats teases future Region clears from the server value")
 	_check(
 		_find_label(own_card, "5") != null and _find_label(own_card, "4") != null,
 		"own Overview receives the same all-time PvP totals as the PvP tab"

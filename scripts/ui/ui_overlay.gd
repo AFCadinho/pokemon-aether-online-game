@@ -16916,6 +16916,7 @@ func _create_trainer_card_stats_tab() -> Control:
 	var adventure_rows: Array[Dictionary] = [
 		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
 		{"id": "playtime", "label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
+		{"id": "region_clears", "label_key": "ui.trainer_card.field.region_clears", "value": str(maxi(0, int(own_trainer_card_data.get("regionClears", 0))))},
 	]
 	var stats_row := HBoxContainer.new()
 	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -19138,6 +19139,11 @@ func _refresh_own_trainer_card_pvp() -> void:
 func _apply_own_trainer_card_details(card: Dictionary) -> void:
 	own_trainer_card_data = card.duplicate(true)
 	_refresh_avatar_previews()
+	var region_clears_label := trainer_card_popup.find_child(
+		"TrainerCardValue_region_clears", true, false
+	) as Label if is_instance_valid(trainer_card_popup) else null
+	if is_instance_valid(region_clears_label):
+		region_clears_label.text = str(maxi(0, int(card.get("regionClears", 0))))
 	if is_instance_valid(trainer_card_dex_panel):
 		var parent := trainer_card_dex_panel.get_parent()
 		var index := trainer_card_dex_panel.get_index()

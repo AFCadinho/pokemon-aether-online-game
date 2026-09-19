@@ -5073,6 +5073,7 @@
   "ui.trainer_card.field.trainer_id": "Trainer ID",
   "ui.trainer_card.field.guild": "Guild",
   "ui.trainer_card.field.join_date": "Join Date",
+  "ui.trainer_card.field.region_clears": "Region clears",
   "ui.trainer_card.field.pokemon_caught": "Pokémon Caught",
   "ui.trainer_card.field.pokemon_seen": "Pokémon Seen",
   "ui.trainer_card.field.victories": "Victories",
