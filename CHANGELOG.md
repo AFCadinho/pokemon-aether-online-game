@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Summary and Pokédex give rendered Pokémon a closer, stable portrait framing, so wide wings and long tails have less influence on the visible body size.
+- Summary and Pokédex previews now have a magnifying-glass button that toggles 2× zoom. Normal view fits the full Pokémon; clicking the Pokémon still switches front/back.
 
 - Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
 
