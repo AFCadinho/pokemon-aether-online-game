@@ -6,6 +6,17 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	Assets._cache.clear()
+	Assets._cache_order.clear()
+	for index: int in Assets.CACHE_LIMIT + 2:
+		Assets._remember_frames("cache-test-%d" % index, SpriteFrames.new())
+	assert(Assets._cache.size() == Assets.CACHE_LIMIT)
+	assert(not Assets._cache.has("cache-test-0") and not Assets._cache.has("cache-test-1"))
+	Assets._touch_cache_key("cache-test-2")
+	Assets._remember_frames("cache-test-new", SpriteFrames.new())
+	assert(Assets._cache.has("cache-test-2"))
+	Assets._cache.clear()
+	Assets._cache_order.clear()
 	assert(Assets._catalog_key("Roaring Moon", false) == "roaring-moon:normal")
 	assert(Assets._catalog_key(" Roaring_Moon ", true) == "roaring-moon:shiny")
 	assert(Assets._catalog_key("Rattata-Alola", false) == "rattata-alola:normal")

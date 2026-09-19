@@ -173,3 +173,13 @@ review-only route does not resize legacy, Showdown, HOME or content-pack
 fallbacks. The single-battle HP panels are correspondingly narrower and
 shorter, with reduced padding and a thinner HP bar, while retaining the
 existing text sizes needed for names and levels.
+
+Runtime action metadata now carries the alpha-derived visible bounds already
+measured during factory QC. Summary and Pokédex previews use those bounds to
+fit the actual Pokémon instead of the transparent 512×512 canvas. Older local
+review builds without this optional metadata derive and cache the idle bounds
+once while loading. The Pokédex list remains icon-only, while a selected
+rendered Pokémon warms its opposite view after first display so front/back
+review does not repeatedly decode lossless atlases. The shared rendered-view
+cache is LRU-bounded to eight views, preventing long Pokédex sessions from
+retaining an unbounded number of full-quality atlases.

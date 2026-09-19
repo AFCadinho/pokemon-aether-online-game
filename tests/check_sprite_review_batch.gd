@@ -8,6 +8,18 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	Assets._cache.clear()
+	Assets._cache_order.clear()
+	for index: int in Assets.CACHE_LIMIT + 2:
+		Assets._remember_frames("review-cache-test-%d" % index, SpriteFrames.new())
+	assert(Assets._cache.size() == Assets.CACHE_LIMIT)
+	assert(not Assets._cache.has("review-cache-test-0"))
+	assert(not Assets._cache.has("review-cache-test-1"))
+	Assets._touch_cache_key("review-cache-test-2")
+	Assets._remember_frames("review-cache-test-new", SpriteFrames.new())
+	assert(Assets._cache.has("review-cache-test-2"))
+	Assets._cache.clear()
+	Assets._cache_order.clear()
 	var path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG")
 	assert(not path.is_empty())
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
@@ -34,6 +46,8 @@ func _run() -> void:
 				float(frames.get_meta("rendered_display_scale_multiplier", 0.0)),
 				1.3
 			))
+			var visual_bounds: Variant = frames.get_meta("rendered_visual_bounds", Rect2())
+			assert(visual_bounds is Rect2 and (visual_bounds as Rect2).has_area())
 			assert(not Assets.ensure_action_loaded(frames, "physical_attack"))
 			if expected_y_offsets.has(species):
 				var presentation: Dictionary = frames.get_meta("rendered_presentation")

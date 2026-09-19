@@ -140,6 +140,8 @@ class FactoryTests(unittest.TestCase):
             qc = self.fixture(root)
             self.assertTrue(any('duplicate_loop_end' in w for w in qc['warnings']))
             self.assertIn('alpha_weighted_luminance', qc['actions']['front/idle'])
+            runtime = f.read(root / 'runtime/manifest.json')
+            self.assertEqual(runtime['views']['front']['idle']['visual_bounds'], [200, 200, 50, 100])
             f.verify(root)
             args = argparse.Namespace(build=[str(root)], output=str(root/'catalog.json'), preview=False)
             with self.assertRaises(OSError):

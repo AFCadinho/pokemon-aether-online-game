@@ -4,7 +4,9 @@ extends RefCounted
 ## Local preview requires a separate explicit environment variable.
 
 static var _cache: Dictionary = {}
+static var _cache_order: Array[String] = []
 const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
+const CACHE_LIMIT := 8
 
 
 static func load_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
@@ -34,6 +36,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 		return null
 	var cache_key := path + ":" + str(entry.get("sha256")) + ":" + side + ":" + str(preview)
 	if _cache.has(cache_key):
+		_touch_cache_key(cache_key)
 		return _cache[cache_key] as SpriteFrames
 	var views: Dictionary = manifest.get("views", {})
 	var actions: Dictionary = views.get(side, {})
@@ -49,11 +52,28 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("rendered_preview", preview)
 	frames.set_meta("rendered_presentation", present)
 	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
+	frames.set_meta("rendered_frame_size", Vector2(512, 512))
 	frames.set_meta("hd_poc_fps", fps)
 	if not ensure_action_loaded(frames, "idle"):
 		return null
-	_cache[cache_key] = frames
+	_remember_frames(cache_key, frames)
 	return frames
+
+
+static func _remember_frames(cache_key: String, frames: SpriteFrames) -> void:
+	if _cache.has(cache_key):
+		_cache.erase(cache_key)
+		_cache_order.erase(cache_key)
+	while _cache_order.size() >= CACHE_LIMIT:
+		var oldest: String = _cache_order.pop_front()
+		_cache.erase(oldest)
+	_cache[cache_key] = frames
+	_cache_order.append(cache_key)
+
+
+static func _touch_cache_key(cache_key: String) -> void:
+	_cache_order.erase(cache_key)
+	_cache_order.append(cache_key)
 
 
 static func _catalog_key(species: String, shiny: bool) -> String:
@@ -83,6 +103,8 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 	var pages: Array = entry.get("pages", [])
 	var textures: Array[AtlasTexture] = []
 	var root := str(frames.get_meta("rendered_root", ""))
+	var visual_bounds := _rect_from_array(entry.get("visual_bounds", []))
+	var calculate_visual_bounds := action == "idle" and not visual_bounds.has_area()
 	for value: Variant in pages:
 		if not value is Dictionary:
 			return false
@@ -102,6 +124,17 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 			return false
 		var texture := ImageTexture.create_from_image(im)
 		for index: int in count:
+			if calculate_visual_bounds:
+				var cell := im.get_region(Rect2i(
+					(index % columns) * 512,
+					int(index / columns) * 512,
+					512,
+					512
+				))
+				var used := cell.get_used_rect()
+				if used.has_area():
+					var used_rect := Rect2(used)
+					visual_bounds = used_rect if not visual_bounds.has_area() else visual_bounds.merge(used_rect)
 			var atlas := AtlasTexture.new()
 			atlas.atlas = texture
 			atlas.region = Rect2((index % columns)*512, int(index / columns)*512, 512, 512)
@@ -115,7 +148,19 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 	frames.set_animation_loop(action, bool(entry.get("loop", false)))
 	for texture: AtlasTexture in textures:
 		frames.add_frame(action, texture)
+	if action == "idle" and visual_bounds.has_area():
+		frames.set_meta("rendered_visual_bounds", visual_bounds)
 	return true
+
+
+static func _rect_from_array(value: Variant) -> Rect2:
+	if not value is Array:
+		return Rect2()
+	var values := value as Array
+	if values.size() != 4:
+		return Rect2()
+	var rect := Rect2(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
+	return rect if rect.has_area() else Rect2()
 
 
 static func speed_for(frames: SpriteFrames, action: String) -> float:

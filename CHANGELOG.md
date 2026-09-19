@@ -6,6 +6,8 @@
 
 - Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; rendered Pokémon are also consistently larger beside a compact, higher HP HUD while keeping their species-size differences and reviewed platform placement.
 
+- High-quality rendered Pokémon now use their visible artwork bounds in Summary and Pokédex previews, with a neutral Summary backdrop, lightweight Pokédex list icons, and cached front/back views for quicker comparison.
+
 - Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.
 
 - Pokémon cries can now use the available anime versions from Generations 1–7. Enable them from Sound Settings; every unavailable cry continues to use the existing game cry.
