@@ -146,7 +146,16 @@ static func _load_texture(path: String) -> Texture2D:
 		return null
 	if _texture_cache.has(path):
 		return _texture_cache.get(path) as Texture2D
-	var texture := ResourceLoader.load(path) as Texture2D
+	# Fresh battle-art PNGs may exist on disk before Godot's editor importer has
+	# generated their .import resource.  Read those directly so a newly added
+	# outfit never renders as an empty layer during that window.
+	var texture: Texture2D = null
+	if ResourceLoader.exists(path, "Texture2D"):
+		texture = ResourceLoader.load(path, "Texture2D") as Texture2D
+	if texture == null and FileAccess.file_exists(path):
+		var image := Image.load_from_file(path)
+		if image != null and not image.is_empty():
+			texture = ImageTexture.create_from_image(image)
 	_texture_cache[path] = texture
 	return texture
 

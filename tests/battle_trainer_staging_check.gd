@@ -34,9 +34,10 @@ func _check_scene_staging() -> void:
 	_check(player_start >= 0, "player battle trainer marker exists")
 	_check(enemy_start >= 0, "opponent battle trainer marker exists")
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
-	_check(source.contains("position = Vector2(124, 474)"), "player trainer stands slightly above the player platform baseline")
+	_check(source.contains("position = Vector2(124, 438)"), "player trainer is raised clear of the command dock")
 	_check(source.contains("position = Vector2(1028, 316)"), "opponent trainer mirrors the raised staging")
 	_check(source.contains('[node name="EnemySpriteBox"') and source.contains("z_index = 2"), "active Pokemon render above trainer art")
+	_check(source.contains("offset_top = 178.0") and source.contains("offset_bottom = 178.0"), "player-side party rail is raised with the player trainer")
 	_check(source.contains("position = Vector2(300, 412)"), "player team preview remains in its original position")
 	_check(source.contains("position = Vector2(850, 268)"), "opponent team preview remains in its original position")
 
@@ -103,9 +104,11 @@ func _check_battle_setup_contract() -> void:
 	_check(switch_recall_index > switch_command_index, "switch commands appear immediately before recall animation")
 	_check(source.contains("if battle_type != BattleType.TRAINER:"), "wild battles do not show trainer command callouts")
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
+	var player_catalog_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
 	_check(renderer_source.contains("BattlePlayerTrainerCatalog.build_layers"), "player staging uses the dedicated layered battle-art catalog")
 	_check(renderer_source.contains("sprite.flip_h = facing_direction.x > 0.0"), "authored left-facing art mirrors only for the allied trainer")
 	_check(not renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player battles no longer fall back to the overworld renderer")
+	_check(player_catalog_source.contains("Image.load_from_file(path)"), "new battle-art PNGs render before the editor importer catches up")
 	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
 	_check(
 		export_presets.count("assets/battles/trainers/player/**/*") == 5,
@@ -132,6 +135,8 @@ func _check_npc_metadata_contract() -> void:
 
 
 func _check_runtime_renderer() -> void:
+	var raw_outfit_image := Image.load_from_file("res://assets/battles/trainers/player/mysterious_outfit/shirt.png")
+	_check(raw_outfit_image != null and not raw_outfit_image.is_empty(), "battle outfit PNGs remain directly readable without an imported texture resource")
 	var catalog := PortraitCatalogScript.new()
 	root.add_child(catalog)
 	var npc := _create_base_npc_harness()
