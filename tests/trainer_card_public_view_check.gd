@@ -27,7 +27,12 @@ func _run() -> void:
 	overlay.set("own_trainer_card_data", {
 		"favoritePokemon": "charizard", "favoritePokemonShiny": false,
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
-		"ratings": [{"format": "aether-ou", "rating": 1234, "period": "all_time"}],
+		"ratings": [
+			{"format": "aether-ou", "rating": 1234, "period": "all_time"},
+			{"format": "aether-uu", "rating": 1198, "period": "all_time"},
+			{"format": "aether-randbats", "rating": 1092, "period": "all_time"},
+			{"format": "aether-doubles", "rating": 1260, "period": "all_time"},
+		],
 	})
 	root.add_child(overlay)
 	overlay.call("_show_public_trainer_card", {
@@ -37,7 +42,12 @@ func _run() -> void:
 		"favoritePokemon": "charizard",
 		"favoritePokemonShiny": false,
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
-		"ratings": [{"format": "aether-ou", "rating": 1234, "period": "all_time"}],
+		"ratings": [
+			{"format": "aether-ou", "rating": 1234, "period": "all_time"},
+			{"format": "aether-uu", "rating": 1198, "period": "all_time"},
+			{"format": "aether-randbats", "rating": 1092, "period": "all_time"},
+			{"format": "aether-doubles", "rating": 1260, "period": "all_time"},
+		],
 		"createdAt": "2026-05-04T12:00:00Z",
 		"guildName": "Cerulean Waves",
 		"mapId": "private_internal_map_id",
@@ -109,7 +119,10 @@ func _run() -> void:
 		_check(tile != null, "public card displays %s counter" % field)
 		var expected := {"seen": "126", "caught": "83", "shinyCaught": "7"}
 		_check(_find_label(tile, expected[field]) != null, "public %s counter has its server value" % field)
-	_check(_find_label(popup, "Ranked rating: AETHER OU  1234") != null, "public PvP view labels the format and rating")
+	var ranked_tiers := popup.find_child("RankedRatingTiers", true, false) as HFlowContainer
+	_check(ranked_tiers != null and ranked_tiers.get_child_count() == 4, "public PvP gives each ranked tier its own flexible card")
+	_check(_find_label(ranked_tiers, "OU") != null and _find_label(ranked_tiers, "1234") != null, "public PvP tier cards show a compact format and rating")
+	_check(ranked_tiers != null and ranked_tiers.get_combined_minimum_size().x <= 520.0, "ranked tiers wrap instead of widening the Trainer Card")
 	_check(_find_label(popup, "5.0") == null, "JSON float battle counters render as whole numbers")
 	overlay.call("_apply_own_trainer_card_details", overlay.get("public_trainer_card_data"))
 	var own_card := overlay.get("trainer_card_popup") as Control

@@ -16047,16 +16047,7 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	period.add_theme_font_size_override("font_size", 12)
 	period.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	layout.add_child(period)
-	var rating_text := Label.new()
-	rating_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	rating_text.add_theme_font_size_override("font_size", 14)
-	var rating_parts := PackedStringArray()
-	for value: Variant in card.get("ratings", []):
-		if value is Dictionary:
-			var entry := value as Dictionary
-			rating_parts.append("%s  %s" % [str(entry.get("format", "")).replace("-", " ").to_upper(), str(int(entry.get("rating", 0)))])
-	rating_text.text = LocalizationManager.text("ui.trainer_card.pvp.rating") + ": " + ("  ·  ".join(rating_parts) if not rating_parts.is_empty() else LocalizationManager.text("ui.trainer_card.pvp.unranked"))
-	layout.add_child(rating_text)
+	layout.add_child(_create_public_trainer_ranked_ratings(card))
 	layout.add_child(_create_public_trainer_pvp_summary(pvp))
 
 	var source_row := HBoxContainer.new()
@@ -16083,6 +16074,90 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 		]
 		source_row.add_child(_create_public_trainer_info_panel(str(source.get("title_key", "")), rows))
 	return tab
+
+
+func _create_public_trainer_ranked_ratings(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "PublicTrainerRankedRatings"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	margin.add_child(stack)
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.trainer_card.pvp.rating")
+	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(title)
+	var tiers := HFlowContainer.new()
+	tiers.name = "RankedRatingTiers"
+	tiers.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tiers.add_theme_constant_override("h_separation", 6)
+	tiers.add_theme_constant_override("v_separation", 6)
+	stack.add_child(tiers)
+	var added := false
+	for value: Variant in card.get("ratings", []):
+		if value is Dictionary:
+			var entry := value as Dictionary
+			var format_name := str(entry.get("format", "")).replace("-", " ").to_upper().strip_edges()
+			if not format_name.is_empty():
+				tiers.add_child(_create_public_trainer_rating_tier(
+					_format_trainer_card_ranked_tier_name(format_name),
+					int(entry.get("rating", 0)),
+					format_name
+				))
+				added = true
+	if not added:
+		var unranked := Label.new()
+		_set_localized_control_property(unranked, "text", "ui.trainer_card.pvp.unranked")
+		unranked.add_theme_font_size_override("font_size", 14)
+		unranked.add_theme_color_override("font_color", UI_TEXT)
+		tiers.add_child(unranked)
+	return panel
+
+
+func _format_trainer_card_ranked_tier_name(format_name: String) -> String:
+	# The PvP card already identifies Aether ranked play; repeating the brand in
+	# every chip leaves too little room for tier names as the ladder grows.
+	return format_name.trim_prefix("AETHER ")
+
+
+func _create_public_trainer_rating_tier(tier_name: String, rating: int, full_format_name: String) -> Control:
+	var tier := PanelContainer.new()
+	tier.name = "RankedTier_%s" % tier_name.to_pascal_case()
+	tier.custom_minimum_size.x = 120
+	tier.tooltip_text = "%s · %s" % [full_format_name, str(rating)]
+	tier.add_theme_stylebox_override("panel", _make_panel_style(Color("#13263d"), TRAINER_CARD_ACCENT_SOFT, 6, 1))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	tier.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 7)
+	margin.add_child(row)
+	var format_label := Label.new()
+	format_label.text = tier_name
+	format_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	format_label.clip_text = true
+	format_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	format_label.add_theme_font_size_override("font_size", 11)
+	format_label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(format_label)
+	var rating_label := Label.new()
+	rating_label.name = "Rating"
+	rating_label.text = str(rating)
+	rating_label.add_theme_font_size_override("font_size", 14)
+	rating_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	row.add_child(rating_label)
+	return tier
 
 
 func _create_public_trainer_pvp_summary(pvp: Dictionary) -> Control:

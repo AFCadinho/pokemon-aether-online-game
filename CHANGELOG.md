@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card PvP ratings now use individual wrapping tier cards, leaving room for additional Ranked formats.
+
 - Both Trainer Card views now show separate Seen, Caught and Shiny caught species counters, with explanations and a gold shiny accent.
 
 - Summary and Pokédex previews now have a magnifying-glass button that toggles 2× zoom. Normal view fits the full Pokémon; clicking the Pokémon still switches front/back.
