@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mod category selectors now match the launcher styling instead of the default Godot dropdowns.
+
 - Installed mods can now be removed locally and installed again later from Discover.
 
 - The Mods window now clearly explains how to import a community `.zip` pack.
