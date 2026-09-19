@@ -244,6 +244,13 @@ probe cannot silently hide this class of facial-state problem. The corrected
 normal full-action build contains 1,770 frames, passed factory QC with zero
 errors/warnings, and remains `needs_review`.
 
+A later close-up review established that the donor itself is correct: all 121
+frames of the official default-idle study show Articuno's brown irises. The
+original elevated, angled front camera reduced them to indistinct dark pixels
+at gameplay size. Articuno therefore has a data-only lower, near-frontal front
+camera override which keeps both eyes visible without changing its model,
+eyelid pose, 512x512 resolution, native 60 FPS, back camera or gameplay scale.
+
 A wider closed-eye review then identified Arcanine, Charmander, Diglett,
 Gengar, Jigglypuff, Psyduck, Roaring Moon, Scizor, Scyther, Tauros,
 Typhlosion and Voltorb. This was not accidental use of their sleep actions:
