@@ -1267,6 +1267,7 @@ var trainer_card_appearance_message_key := ""
 var trainer_card_appearance_message_values: Dictionary = {}
 var trainer_card_dragging: bool = false
 var trainer_card_drag_offset := Vector2.ZERO
+var trainer_card_drag_popup: PanelContainer
 var bag_popup: PanelContainer
 var bag_item_grid: GridContainer
 var bag_search_input: LineEdit
@@ -15656,6 +15657,9 @@ func _make_trainer_card_tab_style(background: Color, border: Color, selected: bo
 	return style
 
 func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
+	# Individual pages may have different minimum content sizes. The card itself
+	# remains a fixed window; pages that need more room provide their own scroll.
+	tabs.clip_contents = true
 	var tab_bar := tabs.get_tab_bar()
 	tab_bar.focus_mode = Control.FOCUS_ALL
 	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -15682,6 +15686,24 @@ func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
 		_make_trainer_card_tab_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, false)
 	)
 	tabs.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+
+
+func _keep_trainer_card_popup_size(popup: PanelContainer) -> void:
+	if not is_instance_valid(popup):
+		return
+	popup.custom_minimum_size = TRAINER_CARD_SIZE
+	popup.size = TRAINER_CARD_SIZE
+	popup.offset_right = popup.offset_left + TRAINER_CARD_SIZE.x
+	popup.offset_bottom = popup.offset_top + TRAINER_CARD_SIZE.y
+
+
+func _deferred_keep_trainer_card_popup_size(popup: PanelContainer) -> void:
+	await get_tree().process_frame
+	_keep_trainer_card_popup_size(popup)
+	# Container layout can publish a late minimum-size update on the same tab
+	# change. Lock once more after that layout pass so no page can grow the card.
+	await get_tree().process_frame
+	_keep_trainer_card_popup_size(popup)
 
 func _refresh_trainer_card_tab_titles() -> void:
 	if trainer_card_tabs == null:
@@ -15738,6 +15760,7 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
 	trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
 	trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
+	_keep_trainer_card_popup_size(trainer_card_popup)
 	trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(trainer_card_popup)
 
@@ -15753,10 +15776,13 @@ func _setup_trainer_card_popup() -> void:
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
+	header.name = "TrainerCardDragHandle"
 	header.custom_minimum_size = Vector2(0, 46)
 	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
-	header.gui_input.connect(_on_trainer_card_header_gui_input)
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	header.tooltip_text = "Drag to move this Trainer Card"
+	header.gui_input.connect(_on_trainer_card_header_gui_input.bind(trainer_card_popup))
 	layout.add_child(header)
 
 	var title_stack := VBoxContainer.new()
@@ -15806,6 +15832,14 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_pvp_tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.pvp")
 	trainer_card_tabs.add_child(trainer_card_pvp_tab)
 	_apply_trainer_card_tabs_style(trainer_card_tabs)
+	trainer_card_tabs.tab_changed.connect(
+		func(_tab_index: int) -> void:
+			_deferred_keep_trainer_card_popup_size(trainer_card_popup)
+	)
+	trainer_card_tabs.minimum_size_changed.connect(
+		func() -> void:
+			_deferred_keep_trainer_card_popup_size(trainer_card_popup)
+	)
 	_refresh_trainer_card_tab_titles()
 	layout.add_child(trainer_card_tabs)
 
@@ -15826,6 +15860,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	public_trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
 	public_trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
 	public_trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
+	_keep_trainer_card_popup_size(public_trainer_card_popup)
 	public_trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(public_trainer_card_popup)
 
@@ -15841,16 +15876,23 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	margin.add_child(root)
 
 	var header := HBoxContainer.new()
+	header.name = "PublicTrainerCardDragHandle"
 	header.custom_minimum_size = Vector2(0, 46)
 	header.add_theme_constant_override("separation", 10)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	header.tooltip_text = "Drag to move this Trainer Card"
+	header.gui_input.connect(_on_trainer_card_header_gui_input.bind(public_trainer_card_popup))
 	root.add_child(header)
 	var title_stack := VBoxContainer.new()
 	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	title_stack.add_theme_constant_override("separation", 0)
+	title_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(title_stack)
 	var title := Label.new()
 	title.text = str(card.get("displayName", card.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(title)
@@ -15859,6 +15901,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 		"ui.trainer_card.passport",
 		{"id": _format_trainer_id_text(card.get("userId", "-"))}
 	)
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	title_stack.add_child(subtitle)
@@ -15884,6 +15927,14 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	tabs.add_child(_create_public_trainer_badges_tab(card))
 	tabs.add_child(_create_public_trainer_pvp_tab(card))
 	_apply_trainer_card_tabs_style(tabs)
+	tabs.tab_changed.connect(
+		func(_tab_index: int) -> void:
+			_deferred_keep_trainer_card_popup_size(public_trainer_card_popup)
+	)
+	tabs.minimum_size_changed.connect(
+		func() -> void:
+			_deferred_keep_trainer_card_popup_size(public_trainer_card_popup)
+	)
 	tabs.set_tab_title(0, LocalizationManager.text("ui.trainer_card.tab.overview"))
 	tabs.set_tab_title(1, LocalizationManager.text("ui.trainer_card.tab.badges"))
 	tabs.set_tab_title(2, LocalizationManager.text("ui.trainer_card.tab.pvp"))
@@ -16036,18 +16087,26 @@ func _create_public_trainer_badge_card(badge: Dictionary, earned: bool) -> Contr
 
 
 func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
-	var tab := MarginContainer.new()
+	# Keep ranked histories inside the fixed-size Trainer Card. The outer plain
+	# Control deliberately does not inherit the content's minimum height.
+	var tab := Control.new()
 	tab.name = "Pvp"
-	tab.add_theme_constant_override("margin_left", 10)
-	tab.add_theme_constant_override("margin_top", 10)
-	tab.add_theme_constant_override("margin_right", 10)
-	tab.add_theme_constant_override("margin_bottom", 10)
+	var scroll := ScrollContainer.new()
+	scroll.name = "TrainerCardPvpScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tab.add_child(scroll)
+	var content := MarginContainer.new()
+	content.add_theme_constant_override("margin_left", 10)
+	content.add_theme_constant_override("margin_top", 10)
+	content.add_theme_constant_override("margin_right", 10)
+	content.add_theme_constant_override("margin_bottom", 10)
+	scroll.add_child(content)
 	var pvp := _dictionary_from_value(card.get("pvp", {}))
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
-	tab.add_child(layout)
+	content.add_child(layout)
 	var period := Label.new()
 	_set_localized_control_property(period, "text", "ui.trainer_card.pvp.all_time")
 	period.add_theme_font_size_override("font_size", 12)
@@ -16809,6 +16868,9 @@ func _get_public_trainer_badge_text(card: Dictionary) -> String:
 func _hide_public_trainer_card() -> void:
 	if public_trainer_card_popup == null:
 		return
+	if trainer_card_drag_popup == public_trainer_card_popup:
+		trainer_card_dragging = false
+		trainer_card_drag_popup = null
 	_deactivate_ui_panel(public_trainer_card_popup)
 	public_trainer_card_popup.queue_free()
 	public_trainer_card_popup = null
@@ -16942,19 +17004,28 @@ func _create_trainer_card_stats_tab() -> Control:
 
 
 func _create_trainer_card_wallet_tab() -> Control:
-	var tab := MarginContainer.new()
+	# Currency descriptions can wrap on narrow displays. Keep the Passport fixed
+	# and let this page scroll rather than expanding the surrounding card.
+	var tab := Control.new()
 	tab.name = "Wallet"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.wallet")
-	tab.add_theme_constant_override("margin_left", 12)
-	tab.add_theme_constant_override("margin_top", 12)
-	tab.add_theme_constant_override("margin_right", 12)
-	tab.add_theme_constant_override("margin_bottom", 12)
+	var scroll := ScrollContainer.new()
+	scroll.name = "WalletTabScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tab.add_child(scroll)
+	var content := MarginContainer.new()
+	content.add_theme_constant_override("margin_left", 12)
+	content.add_theme_constant_override("margin_top", 12)
+	content.add_theme_constant_override("margin_right", 12)
+	content.add_theme_constant_override("margin_bottom", 12)
+	scroll.add_child(content)
 
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 12)
-	tab.add_child(layout)
+	content.add_child(layout)
 
 	var heading_row := HBoxContainer.new()
 	heading_row.add_theme_constant_override("separation", 10)
@@ -17701,19 +17772,27 @@ func _create_trainer_card_appearance_tab() -> Control:
 	trainer_card_appearance_capacity_label = null
 	trainer_card_appearance_unequip_button = null
 	trainer_card_appearance_return_button = null
-	var tab := MarginContainer.new()
+	# Appearance inventories may be much taller than the Passport. Keep that
+	# overflow scrollable instead of allowing this tab to resize the whole card.
+	var tab := Control.new()
 	tab.name = "Appearance"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.appearance")
-	tab.add_theme_constant_override("margin_left", 8)
-	tab.add_theme_constant_override("margin_top", 8)
-	tab.add_theme_constant_override("margin_right", 8)
-	tab.add_theme_constant_override("margin_bottom", 8)
+	var scroll := ScrollContainer.new()
+	scroll.name = "AppearanceTabScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	tab.add_child(scroll)
+	var content := MarginContainer.new()
+	content.add_theme_constant_override("margin_left", 8)
+	content.add_theme_constant_override("margin_top", 8)
+	content.add_theme_constant_override("margin_right", 8)
+	content.add_theme_constant_override("margin_bottom", 8)
+	scroll.add_child(content)
 
 	var layout := HBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
-	tab.add_child(layout)
+	content.add_child(layout)
 
 	var preview_column := VBoxContainer.new()
 	preview_column.custom_minimum_size = Vector2(214, 0)
@@ -19041,8 +19120,12 @@ func _apply_player_status_panel_hover_style(hovered: bool) -> void:
 
 	player_status_panel.add_theme_stylebox_override("panel", _make_player_status_panel_style(hovered))
 
-func _on_trainer_card_header_gui_input(event: InputEvent) -> void:
+func _on_trainer_card_header_gui_input(event: InputEvent, popup: PanelContainer = null) -> void:
+	if popup == null:
+		popup = trainer_card_popup
 	if not (event is InputEventMouseButton):
+		return
+	if popup == null or not is_instance_valid(popup):
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
@@ -19051,8 +19134,9 @@ func _on_trainer_card_header_gui_input(event: InputEvent) -> void:
 
 	if mouse_event.pressed:
 		trainer_card_dragging = true
-		trainer_card_drag_offset = mouse_event.global_position - trainer_card_popup.global_position
-		_activate_ui_panel(trainer_card_popup)
+		trainer_card_drag_popup = popup
+		trainer_card_drag_offset = mouse_event.global_position - popup.global_position
+		_activate_ui_panel(popup)
 		get_viewport().set_input_as_handled()
 
 func _handle_trainer_card_drag_input(event: InputEvent) -> void:
@@ -19060,6 +19144,7 @@ func _handle_trainer_card_drag_input(event: InputEvent) -> void:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
 			trainer_card_dragging = false
+			trainer_card_drag_popup = null
 			get_viewport().set_input_as_handled()
 		return
 
@@ -19067,32 +19152,37 @@ func _handle_trainer_card_drag_input(event: InputEvent) -> void:
 		return
 
 	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
-	_move_trainer_card_to_global_position(motion_event.global_position - trainer_card_drag_offset)
+	_move_trainer_card_to_global_position(
+		motion_event.global_position - trainer_card_drag_offset,
+		trainer_card_drag_popup
+	)
 	get_viewport().set_input_as_handled()
 
-func _move_trainer_card_to_global_position(global_top_left: Vector2) -> void:
-	if trainer_card_popup == null:
+func _move_trainer_card_to_global_position(global_top_left: Vector2, popup: PanelContainer = null) -> void:
+	if popup == null:
+		popup = trainer_card_popup
+	if popup == null or not is_instance_valid(popup):
 		return
 
-	var parent_control: Control = trainer_card_popup.get_parent_control()
+	var parent_control: Control = popup.get_parent_control()
 	if parent_control == null:
 		return
 
-	var card_size: Vector2 = trainer_card_popup.size
+	var card_size: Vector2 = popup.size
 	var parent_size: Vector2 = parent_control.size
 	var clamped_position := Vector2(
 		clamp(global_top_left.x, 0.0, max(parent_size.x - card_size.x, 0.0)),
 		clamp(global_top_left.y, 0.0, max(parent_size.y - card_size.y, 0.0))
 	)
 	var anchor_point := Vector2(
-		parent_size.x * trainer_card_popup.anchor_left,
-		parent_size.y * trainer_card_popup.anchor_top
+		parent_size.x * popup.anchor_left,
+		parent_size.y * popup.anchor_top
 	)
 	var local_offset: Vector2 = clamped_position - anchor_point
-	trainer_card_popup.offset_left = local_offset.x
-	trainer_card_popup.offset_top = local_offset.y
-	trainer_card_popup.offset_right = local_offset.x + card_size.x
-	trainer_card_popup.offset_bottom = local_offset.y + card_size.y
+	popup.offset_left = local_offset.x
+	popup.offset_top = local_offset.y
+	popup.offset_right = local_offset.x + card_size.x
+	popup.offset_bottom = local_offset.y + card_size.y
 
 func _show_trainer_card() -> void:
 	if trainer_card_popup == null:
@@ -19431,6 +19521,9 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 
 func _hide_trainer_card() -> void:
 	if trainer_card_popup != null:
+		if trainer_card_drag_popup == trainer_card_popup:
+			trainer_card_dragging = false
+			trainer_card_drag_popup = null
 		trainer_card_popup.visible = false
 
 func _on_trainer_card_body_selected(body_id: String) -> void:
