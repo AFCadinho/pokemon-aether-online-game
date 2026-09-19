@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local editor runs now reuse the selected launcher mod packs for cosmetic testing.
+
 - Mod category selectors now match the launcher styling instead of the default Godot dropdowns.
 
 - Installed mods can now be removed locally and installed again later from Discover.
