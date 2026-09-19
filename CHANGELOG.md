@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Trainer Cards now have a separate Showcase tab for the signature Pokémon, collection progress, latest Gym Badge and milestones; Ranked tier cards include peak rating and battles played.
+- Ranked Trainer Card tiers now also show peak rating and battles played without adding another tab.
 
 - Trainer Card Overview now keeps verified all-time PvP totals visible during refreshes, while Ranked ratings use responsive tier cards that wrap as formats are added.
 

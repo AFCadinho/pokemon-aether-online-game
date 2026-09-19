@@ -55,9 +55,8 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(
 		tabs != null
 		and tabs.get_tab_title(0) == "Overzicht"
-		and tabs.get_tab_title(1) == "Showcase"
-		and tabs.get_tab_title(2) == "Badges"
-		and tabs.get_tab_title(4) == "Portemonnee",
+		and tabs.get_tab_title(1) == "Badges"
+		and tabs.get_tab_title(3) == "Portemonnee",
 		"Trainer Card navigation renders in the intended Dutch order"
 	)
 	_check(subtitle != null and subtitle.text.begins_with("TRAINERPASPOORT"), "Trainer Card passport renders in Dutch")
@@ -255,9 +254,8 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(
 		tabs != null
 		and tabs.get_tab_title(0) == "Visão geral"
-		and tabs.get_tab_title(1) == "Destaques"
-		and tabs.get_tab_title(2) == "Insígnias"
-		and tabs.get_tab_title(4) == "Carteira",
+		and tabs.get_tab_title(1) == "Insígnias"
+		and tabs.get_tab_title(3) == "Carteira",
 		"Trainer Card navigation updates to Portuguese"
 	)
 	_check(subtitle != null and subtitle.text.begins_with("PASSAPORTE DE TREINADOR"), "Trainer Card passport updates to Portuguese")
