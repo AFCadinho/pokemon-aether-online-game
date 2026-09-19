@@ -262,7 +262,7 @@ rental_kind = "team"
 [node name="PokemonRentalNPC" parent="Entities/NPCs" unique_id=4411246 instance=ExtResource("rental_vendor")]
 position = Vector2(1008, 176)
 rental_kind = "pokemon"
-display_name = "Pokémon Rental Specialist"
+display_name = "Pokémon Rental"
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1798118896 instance=ExtResource("5_transit_keeper")]
 position = Vector2(1040, 1424)
