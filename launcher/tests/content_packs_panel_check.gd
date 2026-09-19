@@ -27,7 +27,7 @@ func run() -> void:
 	check(panel.tabs.get_tab_title(0) == "Ontdekken", "discover localized")
 	check(panel.tabs.get_tab_title(1) == "Geïnstalleerd", "installed localized")
 	check(panel.rows.get_child_count() == 1, "installed pack shown")
-	var toggle := panel.rows.get_child(0).get_child(0) as CheckBox
+	var toggle := panel.rows.get_child(0).get_child(0).get_child(0) as CheckBox
 	check(toggle != null and not toggle.button_pressed, "pack initially disabled")
 	toggle.button_pressed = true
 	await process_frame
