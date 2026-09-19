@@ -40,11 +40,12 @@ func run() -> void:
 	check(panel.tabs.get_tab_title(0) == "Ontdekken", "discover localized")
 	check(panel.tabs.get_tab_title(1) == "Geïnstalleerd", "installed localized")
 	check(panel.rows.get_child_count() == 1, "installed pack shown")
-	var toggle := panel.rows.get_child(0).get_child(0).get_child(0) as CheckBox
-	check(toggle != null and not toggle.button_pressed, "pack initially disabled")
-	toggle.button_pressed = true
+	var selection := panel.rows.get_child(0).find_child("PackSelectionButton", true, false) as Button
+	check(selection != null and selection.text == "Inschakelen", "disabled pack has an explicit enable action")
+	if selection != null:
+		selection.pressed.emit()
 	await process_frame
-	check(store.enabled_ids() == ["sample"], "toggle persists selection")
+	check(store.enabled_ids() == ["sample"], "explicit selection persists enabled pack")
 	panel.popup_centered()
 	await process_frame
 	check(panel.size.y <= 600, "dialog fits within launcher height")

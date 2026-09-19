@@ -328,27 +328,39 @@ func refresh() -> void:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 8)
 		card.add_child(row)
-		var toggle := CheckBox.new()
-		toggle.text = "%s · %s · %s" % [pack.name, pack.version, pack.author]
-		toggle.clip_text = true
-		toggle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		toggle.tooltip_text = str(pack.get("description", ""))
-		toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		toggle.button_pressed = pack.id in enabled
-		toggle.add_theme_color_override("font_color", Color(0.92, 0.93, 1.0, 1.0))
-		toggle.add_theme_color_override("font_hover_color", Color.WHITE)
-		row.add_child(toggle)
-		toggle.toggled.connect(func(active: bool) -> void:
+		var active: bool = str(pack.id) in enabled
+		var details := VBoxContainer.new()
+		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		details.tooltip_text = str(pack.get("description", ""))
+		row.add_child(details)
+		var name := Label.new()
+		name.text = str(pack.name)
+		name.clip_text = true
+		name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name.add_theme_color_override("font_color", Color(0.92, 0.93, 1.0, 1.0))
+		details.add_child(name)
+		var metadata := Label.new()
+		metadata.text = "%s · %s" % [pack.version, pack.author]
+		metadata.add_theme_font_size_override("font_size", 12)
+		metadata.add_theme_color_override("font_color", Color(0.59, 0.66, 0.80, 1.0))
+		details.add_child(metadata)
+		var selection := Button.new()
+		selection.name = "PackSelectionButton"
+		selection.text = translate.call("Disable") if active else translate.call("Enable")
+		selection.tooltip_text = translate.call("Disable this pack at the next game start.") if active else translate.call("Enable this pack at the next game start.")
+		_apply_button_style(selection, not active)
+		row.add_child(selection)
+		selection.pressed.connect(func() -> void:
 			var ids := store.enabled_ids()
 			ids.erase(pack.id)
-			if active:
+			if not active:
 				ids.append(pack.id)
 			_save(ids)
 		)
 		var priority := Button.new()
 		priority.text = translate.call("Move up")
 		_apply_button_style(priority)
-		priority.disabled = enabled.find(pack.id) <= 0
+		priority.disabled = not active or enabled.find(pack.id) <= 0
 		row.add_child(priority)
 		priority.pressed.connect(func() -> void:
 			var ids := store.enabled_ids()
