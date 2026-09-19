@@ -1253,8 +1253,11 @@ func _load_preview_sprite_frames(
 	return _load_sprite_frames(species, side, is_shiny, report_missing)
 
 
-func request_rendered_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
-	var rendered: SpriteFrames = await RenderedSpriteAssets.load_frames_async(species, side, is_shiny)
+func request_rendered_sprite_frames(species: String, side: String, is_shiny: bool = false, on_ready: Callable = Callable(), is_current: Callable = Callable()) -> SpriteFrames:
+	var prepared_ready := func(frames: SpriteFrames) -> void:
+		if on_ready.is_valid():
+			on_ready.call(_prepare_rendered_sprite_frames(frames))
+	var rendered: SpriteFrames = await RenderedSpriteAssets.load_frames_async(species, side, is_shiny, prepared_ready, is_current)
 	return _prepare_rendered_sprite_frames(rendered) if rendered != null else null
 
 func _load_sprite_frames(

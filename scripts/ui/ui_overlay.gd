@@ -26420,14 +26420,28 @@ func _prefetch_pokemon_summary_rendered_view(species: String, side: String, is_s
 
 
 func _upgrade_pokemon_summary_rendered_animation(generation: int, species: String, side: String, is_shiny: bool) -> void:
-	var tree := Engine.get_main_loop() as SceneTree
-	await tree.create_timer(0.12).timeout
-	if generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite == null:
+	if not _summary_render_request_current(generation):
 		return
 	var frames: SpriteFrames = await pokemon_summary_sprite_loader.call(
-		"request_rendered_sprite_frames", species, side, is_shiny
+		"request_rendered_sprite_frames", species, side, is_shiny,
+		_show_summary_rendered_frames.bind(generation), _summary_render_request_current.bind(generation)
 	)
-	if frames == null or generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite == null:
+	_show_summary_rendered_frames(frames, generation)
+
+
+func _summary_render_request_current(generation: int) -> bool:
+	return generation == pokemon_summary_web_sprite_generation and is_instance_valid(pokemon_summary_animated_sprite)
+
+
+func _show_summary_rendered_frames(frames: SpriteFrames, generation: int) -> void:
+	if frames == null or not _summary_render_request_current(generation):
+		return
+	if pokemon_summary_animated_sprite.sprite_frames == frames:
+		if not pokemon_summary_animated_sprite.is_playing():
+			var resume_frame := pokemon_summary_animated_sprite.frame
+			var resume_progress := pokemon_summary_animated_sprite.frame_progress
+			pokemon_summary_animated_sprite.play()
+			pokemon_summary_animated_sprite.set_frame_and_progress(resume_frame, resume_progress)
 		return
 	pokemon_summary_sprite.visible = false
 	pokemon_summary_animated_sprite.visible = true
@@ -35960,18 +35974,32 @@ func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny
 
 
 func _upgrade_pokedex_rendered_animation(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
-	var tree := Engine.get_main_loop() as SceneTree
-	await tree.create_timer(0.12).timeout
-	if generation != pokedex_web_sprite_generation or pokedex_animated_sprite == null:
+	if not _pokedex_render_request_current(generation):
 		return
 	var loaded_frames: SpriteFrames = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
 		loaded_frames = await pokedex_sprite_loader.call(
-			"request_rendered_sprite_frames", candidate, side, is_shiny
+			"request_rendered_sprite_frames", candidate, side, is_shiny,
+			_show_pokedex_rendered_frames.bind(generation), _pokedex_render_request_current.bind(generation)
 		)
 		if loaded_frames != null:
 			break
-	if loaded_frames == null or generation != pokedex_web_sprite_generation or pokedex_animated_sprite == null:
+	_show_pokedex_rendered_frames(loaded_frames, generation)
+
+
+func _pokedex_render_request_current(generation: int) -> bool:
+	return generation == pokedex_web_sprite_generation and is_instance_valid(pokedex_animated_sprite)
+
+
+func _show_pokedex_rendered_frames(loaded_frames: SpriteFrames, generation: int) -> void:
+	if loaded_frames == null or not _pokedex_render_request_current(generation):
+		return
+	if pokedex_animated_sprite.sprite_frames == loaded_frames:
+		if not pokedex_animated_sprite.is_playing():
+			var resume_frame := pokedex_animated_sprite.frame
+			var resume_progress := pokedex_animated_sprite.frame_progress
+			pokedex_animated_sprite.play()
+			pokedex_animated_sprite.set_frame_and_progress(resume_frame, resume_progress)
 		return
 	pokedex_sprite.visible = false
 	pokedex_animated_sprite.visible = true
@@ -36084,6 +36112,10 @@ func _apply_pokedex_sprite_center_offset(frames: SpriteFrames, animation_name: S
 func _get_pokedex_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
+	if animation_name == "idle" and frames.has_meta("rendered_visual_bounds"):
+		var bounds: Rect2 = frames.get_meta("rendered_visual_bounds")
+		if bounds.has_area():
+			return bounds
 
 	var has_rect := false
 	var combined_rect := Rect2()

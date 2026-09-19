@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
+
 - The Trainer Card overview now fills its lower space neatly and aligns the Trainer Title selector with the other profile values.
 
 - Trainer Cards now feature a full-body trainer portrait with your outfit and Chroma colours, a matching passport design for public profiles, and a clearer overview of your trainer information.

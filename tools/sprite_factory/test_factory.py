@@ -134,6 +134,34 @@ class FactoryTests(unittest.TestCase):
             self.assertEqual(qc['errors'], [])
             self.assertIn(warning, qc['warnings'])
 
+    def test_stream_pages_preserve_order_pixels_and_tail(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            cfg = copy.deepcopy(self.cfg)
+            cfg['render']['fps'] = 60
+            cfg['actions'] = {'idle': dict(action='idle', loop=True, speed=1, review='needs_review')}
+            f.write(root / 'provenance.json', {'build_id': 'stream-test'})
+            f.write(root / 'qc.json', {'actions': {}})
+            for view in ('front', 'back'):
+                folder = root / 'masters' / view / 'idle'
+                folder.mkdir(parents=True)
+                for i in range(17):
+                    Image.new('RGBA', (512, 512), (i, 40, 60, 0 if i % 2 else 255)).save(folder / f'{i:04}.png')
+            f.package(root, cfg, 'normal')
+            meta = f.read(root / 'runtime/manifest.json')
+            self.assertEqual(meta['fps'], 60)
+            for view in ('front', 'back'):
+                pages = meta['views'][view]['idle']['pages']
+                self.assertEqual([p['count'] for p in pages], [8, 8, 1])
+                index = 0
+                for page in pages:
+                    with Image.open(root / 'runtime' / page['file']) as atlas:
+                        for i in range(page['count']):
+                            x, y = i % page['columns'] * 512, i // page['columns'] * 512
+                            with Image.open(root / 'masters' / view / 'idle' / f'{index:04}.png') as master:
+                                self.assertEqual(atlas.crop((x, y, x + 512, y + 512)).tobytes(), master.tobytes())
+                            index += 1
+
     def test_lossless_gate_and_tamper_detection(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
