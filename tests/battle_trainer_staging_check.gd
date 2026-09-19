@@ -272,6 +272,54 @@ func _check_runtime_renderer() -> void:
 			).is_empty(),
 			"%s Mysterious Outfit uses authored battle art without fallback" % gender
 		)
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"top": "Adinho_Shirt",
+		"bottom": "Adinho_Trousers",
+		"shoes": "Adinho_Shoes",
+		"hair": "Adinho_Hair",
+		"facial_hair": "Adinho_Beard",
+		"facegear": "Adinho_Glasses",
+		"hair_color": "#5a3728",
+		"facial_hair_color": "#5a3728",
+	}, Vector2.RIGHT)
+	var original_adinho_layers: Dictionary = {}
+	for layer_name: String in ["Top", "Bottom", "Shoes", "Eyebrows", "Hair", "FacialHair", "Facegear"]:
+		var layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		_check(layer != null and layer.texture != null, "Adinho original palette renders its %s layer" % layer_name)
+		if layer != null:
+			original_adinho_layers[layer_name] = layer.texture
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"top": "Adinho_Shirt_Chroma",
+		"bottom": "Adinho_Trousers_Chroma",
+		"shoes": "Adinho_Shoes_Chroma",
+		"hair": "Adinho_Hair",
+		"facial_hair": "Adinho_Beard",
+		"facegear": "Adinho_Glasses_Chroma",
+		"hair_color": "#a64f70",
+		"facial_hair_color": "#a64f70",
+		"top_color": "#3f6fb2",
+		"bottom_color": "#8c4fa3",
+		"shoes_color": "#e77ba8",
+		"facegear_color": "#aeb6c2",
+	}, Vector2.RIGHT)
+	for layer_name: String in ["Top", "Bottom", "Shoes", "Facegear"]:
+		var chroma_layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		var original_texture := original_adinho_layers.get(layer_name) as Texture2D
+		_check(
+			chroma_layer != null
+			and original_texture != null
+			and _count_changed_opaque_pixels(original_texture.get_image(), chroma_layer.texture.get_image()) > 12,
+			"Adinho Chroma %s uses its saved colour" % layer_name.to_lower()
+		)
+	for layer_name: String in ["Eyebrows", "Hair", "FacialHair"]:
+		_check(
+			renderer.player_battle_art.get_node_or_null(layer_name) != null,
+			"Adinho Chroma appearance keeps its %s layer" % layer_name.to_lower()
+		)
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
