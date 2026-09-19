@@ -6,6 +6,15 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var battle_scene_source := FileAccess.get_file_as_string("res://scenes/battle/battle.tscn")
+	_check(
+		battle_scene_source.contains("offset_top = 158.0\noffset_right = 444.0\noffset_bottom = 228.0"),
+		"player HP HUD uses the higher compact bounds"
+	)
+	_check(
+		battle_scene_source.contains("offset_top = 58.0\noffset_right = -164.0\noffset_bottom = 128.0"),
+		"enemy HP HUD uses the higher compact bounds"
+	)
 	var hud: PanelContainer = load("res://scenes/battle/pokemon_hud_panel.tscn").instantiate()
 	root.add_child(hud)
 	hud.set_pokemon_data("Jigglypuff", 6, 26, 30)
