@@ -208,16 +208,15 @@ Repack verified all 2,554 frames of the 15 existing variant entries. Resident
 memory for a fully loaded animation remains roughly one MiB per frame; this
 change reduces startup latency and decode working memory, not final fidelity.
 
-Summary/Pokédex portraits use optional idle `portrait_bounds`: 15–85% alpha
-mass quantiles averaged across all idle frames. This is a silhouette-density
-heuristic, not anatomical detection. Runtime packages compute it offline;
-still and streamed frames share the same fixed focus. Sparse silhouettes can
-zoom up to 22% beyond whole-envelope fitting; dense ones retain full-envelope
-fit. Pokédex uses more of its existing preview panel (170×112). Thin extremity
-tips may cross the portrait edge at maximum extension; human review remains
-necessary. A view's `presentation.portrait_bounds` is an explicit review
-override when the generic focus is unsuitable. Battle positioning/scaling
-does not consume this field. No species-name checks were added.
+Summary/Pokédex normal view fits the complete idle envelope at a fixed scale.
+The magnifying-glass button toggles 2× inspection zoom, independently for each
+Summary card and the Pokédex. It transforms the existing preview without
+reloading or restarting the animation. Front/back changes retain zoom. Clicking
+the button does not trigger front/back; keyboard activation also works.
+Zoom is clipped to the preview area and a second click restores normal view.
+Pokédex uses its existing 170×112 portrait area. The previously generated
+`portrait_bounds` density metadata is retained for compatibility but no longer
+drives automatic zoom or centering. Battle presentation is unaffected.
 The current local catalog points at `portrait-runtime-v1`; its
 `previous-catalog.json` preserves the preceding streaming catalog for rollback.
 
