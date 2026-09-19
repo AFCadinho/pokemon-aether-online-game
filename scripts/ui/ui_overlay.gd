@@ -16527,7 +16527,7 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 	var profile := own_trainer_card_data if preview_name == "TrainerCardBattlePreview" else card
 	var species := str(profile.get("favoritePokemon", ""))
 	if not species.is_empty():
-		var home := PokemonAssets.load_home_sprite(species, bool(profile.get("favoritePokemonShiny", false)))
+		var home := PokemonAssets.load_party_icon(species, bool(profile.get("favoritePokemonShiny", false)))
 		if home != null:
 			art.scale *= 0.9
 			art.position = Vector2(72, 248) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
@@ -16537,8 +16537,14 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 			companion.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 			var used := home.get_image().get_used_rect()
 			if used.has_area():
-				companion.scale = Vector2.ONE * minf(76.0 / used.size.x, 88.0 / used.size.y)
-				companion.position = Vector2(136, 240) - (Vector2(used.position) + Vector2(used.size) * Vector2(0.5, 1) - home.get_size() * 0.5) * companion.scale
+				# Match perceived visual mass instead of forcing every silhouette into
+				# the same narrow box. Wide poses such as Greninja's tongue otherwise
+				# make the actual body look much smaller than upright companions.
+				var visible_area := maxf(1.0, float(used.size.x * used.size.y))
+				var area_scale := sqrt(8000.0 / visible_area)
+				var fit_scale := minf(112.0 / used.size.x, 94.0 / used.size.y)
+				companion.scale = Vector2.ONE * minf(area_scale, fit_scale)
+				companion.position = Vector2(128, 240) - (Vector2(used.position) + Vector2(used.size) * Vector2(0.5, 1) - home.get_size() * 0.5) * companion.scale
 			viewport.add_child(companion)
 			viewport.move_child(companion, viewport.get_children().find(art))
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
