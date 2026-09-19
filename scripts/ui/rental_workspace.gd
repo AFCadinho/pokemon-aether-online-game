@@ -5,6 +5,7 @@ signal finished
 const SERVICE := preload("res://scripts/services/rental_service.gd")
 const CONFIRM := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TEAM_CATALOG := preload("res://scripts/ui/rental_team_catalog.gd")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 var service: Node
 var kind := "team"
 var catalog: Dictionary = {}
@@ -35,12 +36,16 @@ var pokemon_review_step: VBoxContainer
 var pokemon_preview_icon: TextureRect
 var pokemon_preview_species: Label
 var pokemon_preview_details: RichTextLabel
+var pokemon_preview_item_icon: TextureRect
+var pokemon_preview_item_name: Label
 var pokemon_review_icon: TextureRect
 var pokemon_review_species: Label
 var pokemon_review_rarity: Label
 var pokemon_review_rental_price: Label
 var pokemon_review_buyout_price: Label
 var pokemon_review_terms: Label
+var pokemon_review_item_icon: TextureRect
+var pokemon_review_item_name: Label
 
 func _ready() -> void:
 	hide()
@@ -155,7 +160,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	paste_panel.name = "Paste a set"
 	pokemon_source.add_child(paste_panel)
 	var paste_hint := Label.new()
-	paste_hint.text = "Paste your Showdown / PokéPaste set below. Held items are ignored."
+	paste_hint.text = "Paste your Showdown / PokéPaste set below. Its held item is included during the rental."
 	paste_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	paste_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
 	paste_panel.add_child(paste_hint)
@@ -174,6 +179,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	_add_pokemon_text_field(manual, "species", "Pokémon", "e.g. Garchomp", true)
 	_add_pokemon_text_field(manual, "nickname", "Nickname", "Optional")
 	_add_pokemon_text_field(manual, "ability", "Ability", "e.g. Rough Skin")
+	_add_pokemon_text_field(manual, "item", "Held item", "Optional, e.g. Leftovers")
 	_add_pokemon_text_field(manual, "nature", "Nature", "e.g. Jolly", false, "Hardy")
 	_add_pokemon_text_field(manual, "tera_type", "Tera type", "Optional, e.g. Steel")
 	var gender_label := Label.new()
@@ -263,11 +269,14 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_review_rarity.add_theme_color_override("font_color", Color("#f5df9a"))
 	identity.add_child(pokemon_review_rarity)
 	var fixed_rules := Label.new()
-	fixed_rules.text = "LEVEL 100  •  NO HELD ITEM"
+	fixed_rules.text = "LEVEL 100"
 	fixed_rules.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	fixed_rules.add_theme_font_size_override("font_size", 10)
 	fixed_rules.add_theme_color_override("font_color", Color("#8ea8bd"))
 	identity.add_child(fixed_rules)
+	var review_item := _create_preview_item_row(identity)
+	pokemon_review_item_icon = review_item["icon"]
+	pokemon_review_item_name = review_item["label"]
 	var details_column := VBoxContainer.new()
 	details_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details_column.add_theme_constant_override("separation", 10)
@@ -275,6 +284,8 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	description = RichTextLabel.new()
 	description.bbcode_enabled = true
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	description.fit_content = true
+	description.scroll_active = false
 	description.text = "Your validated set will appear here."
 	description.add_theme_color_override("default_color", Color("#eef6ff"))
 	description.add_theme_stylebox_override("normal", _control_style(Color("#0a1422"), Color("#315070")))
@@ -288,7 +299,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
 	pokemon_review_terms = Label.new()
-	pokemon_review_terms.text = "24 hours of real time • Timer continues while offline"
+	pokemon_review_terms.text = "24 hours real time • Rental item is temporary • Timer runs offline"
 	pokemon_review_terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_review_terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_review_terms.add_theme_color_override("font_color", Color("#8ea8bd"))
@@ -371,10 +382,13 @@ func _create_pokemon_preview() -> Control:
 	pokemon_preview_species.add_theme_color_override("font_color", Color("#62d5ff"))
 	identity.add_child(pokemon_preview_species)
 	var fixed_meta := Label.new()
-	fixed_meta.text = "LEVEL 100\nNO HELD ITEM"
+	fixed_meta.text = "LEVEL 100"
 	fixed_meta.add_theme_font_size_override("font_size", 10)
 	fixed_meta.add_theme_color_override("font_color", Color("#f5df9a"))
 	identity.add_child(fixed_meta)
+	var preview_item := _create_preview_item_row(identity)
+	pokemon_preview_item_icon = preview_item["icon"]
+	pokemon_preview_item_name = preview_item["label"]
 	var divider := HSeparator.new()
 	divider.add_theme_constant_override("separation", 6)
 	layout.add_child(divider)
@@ -389,6 +403,24 @@ func _create_pokemon_preview() -> Control:
 	pokemon_preview_details.add_theme_color_override("default_color", Color("#eef6ff"))
 	layout.add_child(pokemon_preview_details)
 	return card
+
+func _create_preview_item_row(parent: VBoxContainer) -> Dictionary:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 5)
+	parent.add_child(row)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(24, 24)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	row.add_child(icon)
+	var label := Label.new()
+	label.text = "No held item"
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", Color("#f5df9a"))
+	row.add_child(label)
+	return {"icon": icon, "label": label}
 
 func _style_option(control: OptionButton) -> void:
 	control.focus_mode = Control.FOCUS_ALL
@@ -546,39 +578,52 @@ func _update_pokemon_preview() -> void:
 	if species.is_empty():
 		pokemon_preview_species.text = "Your Pokémon"
 		pokemon_preview_icon.texture = PokemonAssets.load_unknown_icon() if pokemon_preview_icon != null else null
-		pokemon_preview_details.text = "[color=#8ea8bd]Your ability, nature, moves and training spread will appear here while you build.[/color]"
+		_set_preview_item(pokemon_preview_item_icon, pokemon_preview_item_name, "")
+		pokemon_preview_details.text = "[color=#8ea8bd]Your PokéPaste-formatted set will appear here while you build.[/color]"
 		return
 	pokemon_preview_species.text = species
 	if pokemon_preview_icon != null:
 		pokemon_preview_icon.texture = PokemonAssets.load_party_icon(species)
-	var lines: Array[String] = ["[font_size=10][color=#8ea8bd]BUILD[/color][/font_size]"]
-	var ability := str(preview.get("ability", "")).strip_edges()
-	if not ability.is_empty():
-		lines.append("[color=#8ea8bd]ABILITY[/color]  %s" % ability)
-	var nature := str(preview.get("nature", "")).strip_edges()
-	var tera := str(preview.get("tera", "")).strip_edges()
-	var temperament: Array[String] = []
-	if not nature.is_empty(): temperament.append("[color=#8ea8bd]NATURE[/color]  %s" % nature)
-	if not tera.is_empty(): temperament.append("[color=#8ea8bd]TERA[/color]  %s" % tera)
-	if not temperament.is_empty(): lines.append("    ".join(temperament))
-	var moves: Array = preview.get("moves", []) if preview.get("moves", []) is Array else []
-	if not moves.is_empty():
-		lines.append("\n[font_size=10][color=#8ea8bd]MOVES[/color][/font_size]")
-		for index: int in range(0, moves.size(), 2):
-			var move_row: Array[String] = []
-			for move_index: int in range(index, mini(index + 2, moves.size())):
-				move_row.append("[color=#c9beff]%02d[/color] %s" % [move_index + 1, str(moves[move_index])])
-			lines.append("    ".join(move_row))
-	var evs := str(preview.get("evs", "")).strip_edges()
-	var ivs := str(preview.get("ivs", "")).strip_edges()
-	if not evs.is_empty() or not ivs.is_empty():
-		lines.append("\n[font_size=10][color=#8ea8bd]TRAINING[/color][/font_size]")
-		if not evs.is_empty(): lines.append("[color=#8ea8bd]EVs[/color]  %s" % evs)
-		if not ivs.is_empty(): lines.append("[color=#8ea8bd]IVs[/color]  %s" % ivs)
-	pokemon_preview_details.text = "\n".join(lines)
+	_set_preview_item(pokemon_preview_item_icon, pokemon_preview_item_name, str(preview.get("item", "")))
+	pokemon_preview_details.text = _pokepaste_text(preview, false)
+
+func _item_display_name(item_id: String) -> String:
+	var value := item_id.strip_edges()
+	if value.is_empty():
+		return "No held item"
+	var fallback := value if value != value.to_lower() else value.replace("-", " ").capitalize()
+	var localizer := get_node_or_null("/root/ItemLocalization")
+	return str(localizer.call("display_name", value, fallback)) if localizer != null else fallback
+
+func _set_preview_item(icon: TextureRect, label: Label, item_id: String) -> void:
+	var value := item_id.strip_edges()
+	icon.texture = ITEM_ICON_RESOLVER.load_icon(value) if not value.is_empty() else null
+	icon.visible = not value.is_empty()
+	label.text = _item_display_name(value)
+
+func _pokepaste_text(data: Dictionary, include_species: bool) -> String:
+	var lines: Array[String] = []
+	var species := str(data.get("species", "Pokémon")).strip_edges()
+	var item := str(data.get("item", "")).strip_edges()
+	if include_species:
+		lines.append("[color=#62d5ff]%s[/color]%s" % [species, " @ " + _item_display_name(item) if not item.is_empty() else ""])
+	var ability := str(data.get("ability", "")).strip_edges()
+	if not ability.is_empty(): lines.append("[color=#8ea8bd]Ability:[/color] %s" % ability)
+	var tera := str(data.get("tera", data.get("teraType", ""))).strip_edges()
+	if not tera.is_empty(): lines.append("[color=#8ea8bd]Tera Type:[/color] %s" % tera)
+	var evs := str(data.get("evs", "")).strip_edges()
+	if not evs.is_empty() and evs != "No EV investment": lines.append("[color=#8ea8bd]EVs:[/color] %s" % evs)
+	var ivs := str(data.get("ivs", "")).strip_edges()
+	if not ivs.is_empty() and ivs not in ["All 31", "All stats 31"]: lines.append("[color=#8ea8bd]IVs:[/color] %s" % ivs)
+	var nature := str(data.get("nature", "")).strip_edges()
+	if not nature.is_empty(): lines.append("%s Nature" % nature)
+	var moves: Array = data.get("moves", []) if data.get("moves", []) is Array else []
+	for move: Variant in moves:
+		lines.append("[color=#c9beff]-[/color] %s" % str(move))
+	return "\n".join(lines)
 
 func _paste_preview_data() -> Dictionary:
-	var result := {"species": "", "ability": "", "tera": "", "evs": "", "ivs": "", "nature": "", "moves": []}
+	var result := {"species": "", "item": "", "ability": "", "tera": "", "evs": "", "ivs": "", "nature": "", "moves": []}
 	if pokemon_paste == null:
 		return result
 	for raw_line: String in pokemon_paste.text.split("\n"):
@@ -586,7 +631,10 @@ func _paste_preview_data() -> Dictionary:
 		if line.is_empty():
 			continue
 		if str(result["species"]).is_empty() and not line.begins_with("-") and ":" not in line and not line.ends_with(" Nature"):
-			var heading := line.split("@", false, 1)[0].strip_edges()
+			var heading_parts := line.split("@", false, 1)
+			var heading := heading_parts[0].strip_edges()
+			if heading_parts.size() > 1:
+				result["item"] = heading_parts[1].strip_edges()
 			if heading.ends_with(" (M)") or heading.ends_with(" (F)"):
 				heading = heading.substr(0, heading.length() - 4).strip_edges()
 			var open := heading.rfind("(")
@@ -608,11 +656,12 @@ func _paste_preview_data() -> Dictionary:
 	return result
 
 func _manual_preview_data() -> Dictionary:
-	var result := {"species": "", "ability": "", "tera": "", "evs": "", "ivs": "", "nature": "", "moves": []}
+	var result := {"species": "", "item": "", "ability": "", "tera": "", "evs": "", "ivs": "", "nature": "", "moves": []}
 	if pokemon_fields.is_empty():
 		return result
 	result["species"] = (pokemon_fields["species"] as LineEdit).text.strip_edges()
 	result["ability"] = (pokemon_fields["ability"] as LineEdit).text.strip_edges()
+	result["item"] = (pokemon_fields["item"] as LineEdit).text.strip_edges()
 	result["tera"] = (pokemon_fields["tera_type"] as LineEdit).text.strip_edges()
 	result["nature"] = (pokemon_fields["nature"] as LineEdit).text.strip_edges()
 	result["evs"] = _preview_stat_spread(pokemon_evs, 0, false)
@@ -642,7 +691,7 @@ func _format_quote_stat_spread(values: Dictionary, default_value: int, all_defau
 		var value := int(values.get(str(pair[0]), default_value))
 		if value != default_value:
 			parts.append("%d %s" % [value, str(pair[1])])
-	return all_default_label if parts.is_empty() else "  /  ".join(parts)
+	return all_default_label if parts.is_empty() else " / ".join(parts)
 
 func _show_pokemon_review(show_review: bool) -> void:
 	if pokemon_edit_step != null:
@@ -679,6 +728,7 @@ func _pokemon_build() -> Dictionary:
 		"species": (pokemon_fields["species"] as LineEdit).text.strip_edges(),
 		"nickname": (pokemon_fields["nickname"] as LineEdit).text.strip_edges(),
 		"ability": (pokemon_fields["ability"] as LineEdit).text.strip_edges(),
+		"item": (pokemon_fields["item"] as LineEdit).text.strip_edges(),
 		"nature": (pokemon_fields["nature"] as LineEdit).text.strip_edges(),
 		"happiness": int(pokemon_happiness.value), "gender": gender_values[pokemon_gender.selected],
 		"teraType": (pokemon_fields["tera_type"] as LineEdit).text.strip_edges(), "moves": moves, "evs": evs, "ivs": ivs,
@@ -716,12 +766,15 @@ func _quote_pokemon() -> void:
 	pokemon_review_icon.texture = PokemonAssets.load_party_icon(species)
 	pokemon_review_species.text = species
 	pokemon_review_rarity.text = rarity.to_upper()
-	var move_lines: Array[String] = []
-	for move: String in moves:
-		move_lines.append("•  %s" % move)
+	var item := str(pokemon.get("item", pokemon.get("heldItemId", "")))
+	_set_preview_item(pokemon_review_item_icon, pokemon_review_item_name, item)
 	var ev_text := _format_quote_stat_spread(pokemon.get("evs", {}), 0, "No EV investment")
 	var iv_text := _format_quote_stat_spread(pokemon.get("ivs", {}), 31, "All stats 31")
-	description.text = "[font_size=11][color=#8ea8bd]COMPETITIVE SET[/color][/font_size]\n[font_size=16][color=#c9beff]%s nature[/color]  •  %s[/font_size]\n\n[font_size=11][color=#8ea8bd]MOVES[/color][/font_size]\n%s\n\n[font_size=11][color=#8ea8bd]EV SPREAD[/color][/font_size]\n%s\n\n[font_size=11][color=#8ea8bd]IV SPREAD[/color][/font_size]\n%s" % [str(pokemon.get("nature", "Hardy")), str(pokemon.get("ability", "No ability")), "\n".join(move_lines), ev_text, iv_text]
+	description.text = _pokepaste_text({
+		"species": species, "item": item, "ability": pokemon.get("ability", ""),
+		"teraType": pokemon.get("teraType", ""), "evs": ev_text, "ivs": iv_text,
+		"nature": pokemon.get("nature", "Hardy"), "moves": moves,
+	}, true)
 	var rental_price := int((selected.get("prices", [{}])[0] as Dictionary).get("amount", 0))
 	var buyout_total := int(selected.get("buyoutTotal", 0))
 	pokemon_review_rental_price.text = "%d Aetherite" % rental_price
