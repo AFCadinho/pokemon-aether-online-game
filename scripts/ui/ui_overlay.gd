@@ -27110,9 +27110,6 @@ func _get_pokemon_summary_sprite_position() -> Vector2:
 	)
 
 func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
-	var portrait := _rendered_portrait_rect(frames, POKEMON_SUMMARY_SPRITE_MAX_SIZE)
-	if portrait.has_area():
-		return Vector2.ONE * (POKEMON_SUMMARY_SPRITE_MAX_SIZE.x / portrait.size.x)
 	var render_scale := 1.0
 	if pokemon_summary_sprite_loader.has_method("_get_sprite_frames_render_scale"):
 		var render_scale_value: Variant = pokemon_summary_sprite_loader.call("_get_sprite_frames_render_scale", frames)
@@ -27173,10 +27170,6 @@ func _apply_pokemon_summary_sprite_center_offset(frames: SpriteFrames, animation
 func _get_pokemon_summary_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
-	if animation_name == "idle":
-		var portrait := _rendered_portrait_rect(frames, POKEMON_SUMMARY_SPRITE_MAX_SIZE)
-		if portrait.has_area():
-			return portrait
 	if animation_name == "idle" and pokemon_summary_sprite_loader.has_method("_get_sprite_frames_visual_bounds"):
 		var cached_bounds: Variant = pokemon_summary_sprite_loader.call("_get_sprite_frames_visual_bounds", frames)
 		if cached_bounds is Rect2 and (cached_bounds as Rect2).has_area():

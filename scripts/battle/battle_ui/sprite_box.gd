@@ -15,6 +15,7 @@ const FRAME_ANIMATION_SPEED := 3.0
 const SHEET_ANIMATION_SPEED := 10.0
 const BATTLE_SPRITE_SCALE := Vector2(2, 2)
 const BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 0.85
+const RENDERED_BATTLE_PLATFORM_Y_OFFSET := 12.0
 const GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 1.25
 const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
@@ -1365,7 +1366,12 @@ func _prepare_rendered_sprite_frames(rendered: SpriteFrames) -> SpriteFrames:
 	if rendered_bounds is Rect2 and (rendered_bounds as Rect2).has_area():
 		_set_sprite_frames_visual_bounds(rendered, rendered_bounds as Rect2)
 	_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
-	_set_sprite_frames_position_offset(rendered, Vector2(float(offset[0]), float(offset[1])))
+	# Rendered sprites share the same battle-stage baseline. Keep this correction
+	# in the presentation layer so individual species manifests remain portable.
+	_set_sprite_frames_position_offset(
+		rendered,
+		Vector2(float(offset[0]), float(offset[1]) + RENDERED_BATTLE_PLATFORM_Y_OFFSET)
+	)
 	return rendered
 
 func _remember_shared_sprite_frames(cache_key: String, frames: SpriteFrames) -> void:

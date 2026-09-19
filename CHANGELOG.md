@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rendered Pokémon now sit lower on battle platforms, while Summary cards preserve the natural size difference between small and large species.
+
 - Every player who can reach the Aether Clash Lobby can use level-100 rentals in Clash and Ranked play, while the lobby explains when an above-cap party member must be stored or returned before leaving.
 
 - The Pokémon rental editor now places inputs beside a live team-style Pokémon set preview.
