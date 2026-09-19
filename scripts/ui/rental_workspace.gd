@@ -21,6 +21,15 @@ var search: LineEdit
 var team_catalog: RentalTeamCatalog
 var busy := false
 var detail_generation := 0
+var pokemon_source: TabContainer
+var pokemon_paste: TextEdit
+var pokemon_fields: Dictionary = {}
+var pokemon_evs: Dictionary = {}
+var pokemon_ivs: Dictionary = {}
+var pokemon_gender: OptionButton
+var pokemon_happiness: SpinBox
+var quote_button: Button
+var selected_build: Dictionary = {}
 
 func _ready() -> void:
 	hide()
@@ -92,30 +101,177 @@ func _ready() -> void:
 
 func _build_individual_catalog(browse: HBoxContainer) -> void:
 	var left := VBoxContainer.new()
-	left.custom_minimum_size.x = 280
+	left.custom_minimum_size.x = 470
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	browse.add_child(left)
-	search = LineEdit.new()
-	search.placeholder_text = "Search name, Pokémon or tier…"
-	search.text_changed.connect(func(_value: String): _filter())
-	left.add_child(search)
-	listing = ItemList.new()
-	listing.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	listing.item_selected.connect(_select)
-	left.add_child(listing)
+	var intro := Label.new()
+	intro.text = "Build any legal Pokémon set"
+	intro.add_theme_font_size_override("font_size", 18)
+	left.add_child(intro)
+	pokemon_source = TabContainer.new()
+	pokemon_source.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_source.tab_changed.connect(func(_tab: int): _invalidate_pokemon_quote())
+	left.add_child(pokemon_source)
+	var paste_panel := VBoxContainer.new()
+	paste_panel.name = "PokéPaste"
+	pokemon_source.add_child(paste_panel)
+	var paste_hint := Label.new()
+	paste_hint.text = "Paste one Showdown / PokéPaste set. Held items are ignored."
+	paste_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	paste_panel.add_child(paste_hint)
+	pokemon_paste = TextEdit.new()
+	pokemon_paste.placeholder_text = "Dragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed\n- Earthquake\n- Dragon Claw"
+	pokemon_paste.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pokemon_paste.text_changed.connect(_invalidate_pokemon_quote)
+	paste_panel.add_child(pokemon_paste)
+	var manual_scroll := ScrollContainer.new()
+	manual_scroll.name = "Manual"
+	pokemon_source.add_child(manual_scroll)
+	var manual := VBoxContainer.new()
+	manual.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	manual_scroll.add_child(manual)
+	_add_pokemon_text_field(manual, "species", "Pokémon", "e.g. Garchomp", true)
+	_add_pokemon_text_field(manual, "nickname", "Nickname", "Optional")
+	_add_pokemon_text_field(manual, "ability", "Ability", "e.g. Rough Skin")
+	_add_pokemon_text_field(manual, "nature", "Nature", "e.g. Jolly", false, "Hardy")
+	_add_pokemon_text_field(manual, "tera_type", "Tera type", "Optional, e.g. Steel")
+	var gender_label := Label.new()
+	gender_label.text = "Gender"
+	manual.add_child(gender_label)
+	pokemon_gender = OptionButton.new()
+	for gender_option: String in ["Unspecified", "Male", "Female", "Genderless"]:
+		pokemon_gender.add_item(gender_option)
+	pokemon_gender.item_selected.connect(func(_index: int): _invalidate_pokemon_quote())
+	manual.add_child(pokemon_gender)
+	var happiness_label := Label.new()
+	happiness_label.text = "Happiness"
+	manual.add_child(happiness_label)
+	pokemon_happiness = SpinBox.new()
+	pokemon_happiness.min_value = 0
+	pokemon_happiness.max_value = 255
+	pokemon_happiness.value = 255
+	pokemon_happiness.value_changed.connect(func(_value: float): _invalidate_pokemon_quote())
+	manual.add_child(pokemon_happiness)
+	_add_pokemon_text_field(manual, "moves", "Moves", "Comma-separated, up to four")
+	_add_stat_fields(manual, "EVs", pokemon_evs, 0, 252)
+	_add_stat_fields(manual, "IVs", pokemon_ivs, 31, 31)
 	var right := VBoxContainer.new()
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	browse.add_child(right)
 	description = RichTextLabel.new()
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	description.text = "Select an offer to inspect its complete set."
+	description.text = "Create a set, then request a quote.\n\nThe server validates the complete build and determines its rarity and Aetherite price. All rentals are level 100, keep the rental NPC as OT and never count as caught."
 	right.add_child(description)
+	quote_button = Button.new()
+	quote_button.text = "Validate set & calculate price"
+	quote_button.pressed.connect(_quote_pokemon)
+	right.add_child(quote_button)
 	duration = OptionButton.new()
+	duration.disabled = true
 	right.add_child(duration)
 	rent_button = Button.new()
-	rent_button.text = "Rent with Aetherite"
+	rent_button.text = "Rent quoted Pokémon"
 	rent_button.disabled = true
 	rent_button.pressed.connect(_rent)
 	right.add_child(rent_button)
+
+func _add_pokemon_text_field(parent: VBoxContainer, key: String, label_text: String, placeholder: String, required := false, initial := "") -> void:
+	var label := Label.new()
+	label.text = label_text + (" *" if required else "")
+	parent.add_child(label)
+	var field := LineEdit.new()
+	field.placeholder_text = placeholder
+	field.text = initial
+	field.text_changed.connect(func(_value: String): _invalidate_pokemon_quote())
+	parent.add_child(field)
+	pokemon_fields[key] = field
+
+func _add_stat_fields(parent: VBoxContainer, heading_text: String, target: Dictionary, default_value: int, max_value: int) -> void:
+	var heading := Label.new()
+	heading.text = heading_text
+	parent.add_child(heading)
+	var row := HBoxContainer.new()
+	parent.add_child(row)
+	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		var column := VBoxContainer.new()
+		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(column)
+		var label := Label.new()
+		label.text = stat.to_upper()
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(label)
+		var value := SpinBox.new()
+		value.min_value = 0
+		value.max_value = max_value
+		value.value = default_value
+		value.value_changed.connect(func(_number: float): _invalidate_pokemon_quote())
+		column.add_child(value)
+		target[stat] = value
+
+func _invalidate_pokemon_quote() -> void:
+	if kind != "pokemon":
+		return
+	selected = {}
+	selected_build = {}
+	if duration != null:
+		duration.clear()
+		duration.disabled = true
+	if rent_button != null:
+		rent_button.disabled = true
+		rent_button.text = "Rent quoted Pokémon"
+
+func _pokemon_build() -> Dictionary:
+	if pokemon_source.current_tab == 0:
+		return {"source": "paste", "pasteText": pokemon_paste.text.strip_edges()}
+	var moves: Array[String] = []
+	for raw_move: String in str((pokemon_fields["moves"] as LineEdit).text).split(","):
+		var move := raw_move.strip_edges()
+		if not move.is_empty():
+			moves.append(move)
+	var evs := {}
+	var ivs := {}
+	for stat: String in pokemon_evs:
+		evs[stat] = int((pokemon_evs[stat] as SpinBox).value)
+		ivs[stat] = int((pokemon_ivs[stat] as SpinBox).value)
+	var gender_values: Array[String] = ["", "M", "F", "N"]
+	return {"source": "manual", "pokemon": {
+		"species": (pokemon_fields["species"] as LineEdit).text.strip_edges(),
+		"nickname": (pokemon_fields["nickname"] as LineEdit).text.strip_edges(),
+		"ability": (pokemon_fields["ability"] as LineEdit).text.strip_edges(),
+		"nature": (pokemon_fields["nature"] as LineEdit).text.strip_edges(),
+		"happiness": int(pokemon_happiness.value), "gender": gender_values[pokemon_gender.selected],
+		"teraType": (pokemon_fields["tera_type"] as LineEdit).text.strip_edges(), "moves": moves, "evs": evs, "ivs": ivs,
+	}}
+
+func _quote_pokemon() -> void:
+	if busy:
+		return
+	var build := _pokemon_build()
+	busy = true
+	quote_button.disabled = true
+	status.text = "Validating set and calculating its rarity…"
+	var result: Dictionary = await service.request("/pokemon/quote", {"pokemonBuild": build}, false, true)
+	busy = false
+	quote_button.disabled = false
+	if not bool(result.get("success", false)):
+		status.text = str(result.get("error", "This set is not valid."))
+		return
+	selected = result["body"]
+	selected_build = build
+	duration.clear()
+	for price: Dictionary in selected.get("prices", []):
+		duration.add_item("%s — %d Aetherite" % [_duration_label(int(price["durationSeconds"])), int(price["amount"])])
+		duration.set_item_metadata(duration.item_count - 1, price)
+	duration.disabled = false
+	var pokemon: Dictionary = selected.get("pokemon", [{}])[0]
+	var moves: Array[String] = []
+	for move: Variant in pokemon.get("moves", []):
+		moves.append(str(move.get("name", move.get("id", ""))) if move is Dictionary else str(move))
+	description.text = "%s • Lv.100\nRarity: %s\n%s nature • %s\nMoves: %s\nEVs: %s\nIVs: %s\n\nPermanent price: %d Aetherite total (rental fee is deducted).\nHeld items are not included." % [str(pokemon.get("species", "")), str(selected.get("rarity", "common")).replace("_", " ").capitalize(), str(pokemon.get("nature", "")), str(pokemon.get("ability", "")), ", ".join(moves), JSON.stringify(pokemon.get("evs", {})), JSON.stringify(pokemon.get("ivs", {})), int(selected.get("buyoutTotal", 0))]
+	var limit_reached := _rental_limit_reached()
+	rent_button.disabled = limit_reached
+	rent_button.text = "Pokémon rental limit reached" if limit_reached else "Rent quoted Pokémon"
+	status.text = "Quote ready. Changing the set will require a new quote."
 
 func open_vendor() -> void:
 	popup_centered(size)
@@ -138,7 +294,7 @@ func refresh() -> void:
 	if kind == "team":
 		team_catalog.set_offers(catalog.get("offers", []))
 	else:
-		_filter()
+		_invalidate_pokemon_quote()
 	_render_active()
 	status.text = "Rentals arrive in your PC (or free Party slots if the PC is full). Early returns are not refunded."
 
@@ -206,7 +362,10 @@ func _rent() -> void:
 	if busy or selected.is_empty():
 		return
 	var price: Dictionary = duration.get_selected_metadata()
-	await _mutate("", {"kind": kind, "offerId": selected["offerId"], "durationSeconds": price["durationSeconds"]}, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
+	var payload := {"kind": kind, "offerId": selected["offerId"], "durationSeconds": price["durationSeconds"]}
+	if kind == "pokemon":
+		payload["pokemonBuild"] = selected_build
+	await _mutate("", payload, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
 
 func _rental_limit_reached() -> bool:
 	var context := "npc_" + kind

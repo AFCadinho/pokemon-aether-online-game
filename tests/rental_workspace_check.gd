@@ -3,10 +3,10 @@ extends SceneTree
 const WORKSPACE := preload("res://scripts/ui/rental_workspace.gd")
 
 class FakeRentalService extends Node:
-	func request(path: String, _payload: Dictionary = {}, _mutate := false) -> Dictionary:
+	func request(path: String, _payload: Dictionary = {}, _mutate := false, _post := false) -> Dictionary:
 		if path.begins_with("/catalog/team/"):
 			return {"success": true, "body": _team(true)}
-		return {"success": true, "body": {"displayName": "Scizor", "buyoutTotal": 1000, "pokemon": [{"speciesId": "scizor", "nature": "Adamant", "ability": "technician", "item": "", "moves": ["bullet-punch"], "ivs": {"atk": 31}}]}}
+		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1250, "prices": [{"durationSeconds": 3600, "amount": 25}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
 
 	func _team(detail := false) -> Dictionary:
 		var pokemon: Array = []
@@ -49,18 +49,28 @@ func _run() -> void:
 	var pokemon_workspace := WORKSPACE.new()
 	pokemon_workspace.kind = "pokemon"
 	root.add_child(pokemon_workspace)
-	pokemon_workspace.catalog = {"offers": [{"offerId": "test", "displayName": "Test Pokémon", "pokemon": []}], "rentals": []}
-	pokemon_workspace._filter()
-	assert(pokemon_workspace.listing.item_count == 1)
 	pokemon_workspace.service.queue_free()
 	pokemon_workspace.service = FakeRentalService.new()
 	pokemon_workspace.add_child(pokemon_workspace.service)
-	await pokemon_workspace._select(0)
+	pokemon_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
+	pokemon_workspace.pokemon_paste.text = "Scizor\nAbility: Technician\n- Bullet Punch"
+	await pokemon_workspace._quote_pokemon()
 	assert(not pokemon_workspace.rent_button.disabled)
-	assert(pokemon_workspace.description.text.contains("No item"))
-	assert(pokemon_workspace.description.text.contains("bullet-punch"))
+	assert(pokemon_workspace.description.text.contains("Uncommon"))
+	assert(pokemon_workspace.description.text.contains("Bullet Punch"))
+	assert(pokemon_workspace.duration.get_item_text(0).contains("25 Aetherite"))
+	assert(pokemon_workspace.selected_build["source"] == "paste")
+	pokemon_workspace.pokemon_paste.text += "\nJolly Nature"
+	pokemon_workspace._invalidate_pokemon_quote()
+	assert(pokemon_workspace.rent_button.disabled)
+	pokemon_workspace.pokemon_source.current_tab = 1
+	(pokemon_workspace.pokemon_fields["species"] as LineEdit).text = "Garchomp"
+	var manual_build: Dictionary = pokemon_workspace._pokemon_build()
+	assert(manual_build["source"] == "manual")
+	assert(manual_build["pokemon"]["species"] == "Garchomp")
+	assert(manual_build["pokemon"]["ivs"]["spe"] == 31)
 	pokemon_workspace.queue_free()
 	var npc: PackedScene = load("res://scenes/npcs/rental_npc.tscn")
 	assert(npc != null)
-	print("PASS rental team catalog mirrors AI Sparring cards, filters and six-set detail")
+	print("PASS rental team catalog and custom Pokemon builder")
 	quit(0)
