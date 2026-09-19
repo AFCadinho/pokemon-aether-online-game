@@ -44,7 +44,7 @@ python tools/sprite_factory/scvi_batch.py run-probes --idle-only \
   --accept-unused-nodes --model-root "$model_root" --motion-root "$motion_root" \
   --importer "$importer" --python-deps "$deps" --output "$output"
 python tools/sprite_factory/scvi_batch.py run-builds --idle-only \
-  --accept-unused-nodes \
+  --accept-unused-nodes --jobs 2 \
   --model-root "$model_root" --motion-root "$motion_root" \
   --importer "$importer" --python-deps "$deps" --output "$output"
 python tools/sprite_factory/scvi_batch.py preview-catalog \
@@ -60,8 +60,15 @@ overwritten. `run-builds` independently verifies existing completed builds and
 only includes zero-error, `needs_review` results in a preview-only catalog.
 `preview-catalog` combines available normal/shiny and idle/full review builds,
 preferring full builds, and writes `review-index.html` for quick inspection.
+It also writes `action-mappings.json` with the exact source action, frame count,
+source FPS, loop/speed metadata, missing actions and QC result for every chosen
+variant. Missing mappings continue through the existing runtime fallback.
 `--accept-unused-nodes` is an explicit acknowledgement of factory warnings
 for disconnected empty image nodes only; any other warning still blocks.
+`--jobs` permits one through four independent species builds in parallel. Each
+worker owns a separate build directory and log; only the parent process updates
+the resumable status catalog. Start conservatively because Blender render
+workers are memory-heavy.
 `run-probes` creates a separate, non-catalogued front/back one-frame triage
 index before spending time on full 60-FPS animations. An already complete idle
 build can be reused there without altering it. Examine
@@ -230,3 +237,31 @@ While this explicit local review catalog is active, its `needs_review` entries
 take priority over enabled sprite content packs so the reviewer cannot
 accidentally inspect a pack fallback. Outside review, player-selected content
 packs retain their normal priority over approved built-in renders.
+
+## Full action review pass (2026-09-19)
+
+The 12 selected normal variants and three official shiny variants now have
+full front/back renders for every mapped action at 512×512 RGBA and native
+60 FPS. This pass produced 23,428 canonical master frames. The master PNGs use
+approximately 4.2 GiB and the lossless runtime pages approximately 1.8 GiB;
+the complete recoverable `builds-full` workspace, including raw renders and
+review output, uses approximately 11 GiB. No quality, FPS, texture or action
+was reduced to reach those sizes.
+
+All 15 variants passed factory verification with zero technical errors and
+remain `needs_review`. Meowth deliberately has no sleep mapping and uses the
+existing fallback. Pikachu has `back/physical_attack:abrupt_bounds_change`;
+Lucario has the same warning for both front and back physical attack. These are
+visual-review flags, not automatic failures. Exact `.tranm`/Blender action
+names, frame counts, source FPS, loop/speed values, missing actions and QC are
+in the generated `$output/action-mappings.json`. Animated front/back previews
+and overview sheets are linked from `$output/review-index.html`.
+
+The combined `$output/preview-batch.json` contains 12 normal plus official
+shiny Eevee, Dragonite and Roaring Moon. A focused headless client check loaded
+the complete catalog, verified lazy action metadata and Meowth's missing-sleep
+fallback, and decoded Dragonite's 131-frame physical attack successfully. The
+Python factory/import suite completed 16 focused tests. Motion semantics,
+facial presentation, clipping during the flagged attacks and faint transitions
+still require human review in a real battle; none of these results changes the
+default source or approves an asset.

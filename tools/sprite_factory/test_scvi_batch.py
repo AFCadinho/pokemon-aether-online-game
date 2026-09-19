@@ -4,10 +4,32 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scvi_batch import source_entry
+from scvi_batch import compact_action_report, source_entry
 
 
 class ScviBatchTest(unittest.TestCase):
+    def test_compact_action_report_preserves_review_metadata(self):
+        result = compact_action_report({
+            "idle": {
+                "action": "pm0001_00_00_20001_battlewait01_loop",
+                "frames": list(range(91)),
+                "source_fps": 60,
+                "loop": True,
+                "speed": 1.0,
+                "review": "needs_review",
+            },
+            "sleep": None,
+        })
+        self.assertEqual(result["idle"], {
+            "source_action": "pm0001_00_00_20001_battlewait01_loop",
+            "frame_count": 91,
+            "source_fps": 60,
+            "loop": True,
+            "speed": 1.0,
+            "review": "needs_review",
+        })
+        self.assertNotIn("sleep", result)
+
     def test_explicit_identity_and_review_candidates(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
