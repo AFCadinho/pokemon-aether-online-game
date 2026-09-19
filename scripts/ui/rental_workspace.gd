@@ -602,7 +602,7 @@ func _quote_pokemon() -> void:
 	var moves: Array[String] = []
 	for move: Variant in pokemon.get("moves", []):
 		moves.append(str(move.get("name", move.get("id", ""))) if move is Dictionary else str(move))
-	description.text = "%s • Lv.100\nRarity: %s\n%s nature • %s\nMoves: %s\nEVs: %s\nIVs: %s\n\nPermanent price: %d Aetherite total (rental fee is deducted).\nHeld items are not included." % [str(pokemon.get("species", "")), str(selected.get("rarity", "common")).replace("_", " ").capitalize(), str(pokemon.get("nature", "")), str(pokemon.get("ability", "")), ", ".join(moves), JSON.stringify(pokemon.get("evs", {})), JSON.stringify(pokemon.get("ivs", {})), int(selected.get("buyoutTotal", 0))]
+	description.text = "%s • Lv.100\nRarity: %s\n%s nature • %s\nMoves: %s\nEVs: %s\nIVs: %s\n\nPermanent price: %d Aetherite total (the initial rental fee is deducted).\nHeld items are not included." % [str(pokemon.get("species", "")), str(selected.get("rarity", "common")).replace("_", " ").capitalize(), str(pokemon.get("nature", "")), str(pokemon.get("ability", "")), ", ".join(moves), JSON.stringify(pokemon.get("evs", {})), JSON.stringify(pokemon.get("ivs", {})), int(selected.get("buyoutTotal", 0))]
 	var limit_reached := _rental_limit_reached()
 	rent_button.disabled = limit_reached
 	rent_button.text = "Pokémon rental limit reached" if limit_reached else "Rent quoted Pokémon"
@@ -669,7 +669,7 @@ func _select(index: int) -> void:
 		var held_item := str(pokemon.get("item", ""))
 		text += "%s • Lv.100\n%s / %s / %s\n" % [str(pokemon.get("species", pokemon.get("speciesId", ""))), str(pokemon.get("nature", "")), str(pokemon.get("ability", "")), "No item" if held_item.is_empty() else held_item]
 		text += "Moves: %s\nEVs: %s\nIVs: %s\n\n" % [", ".join(pokemon.get("moves", [])), JSON.stringify(pokemon.get("evs", {})), JSON.stringify(pokemon.get("ivs", {}))]
-	text += "Full rental team: fixed sets and items; no permanent purchase. Use all six together in Aether Clash." if kind == "team" else "Permanent purchase: %d Aetherite total, minus this rental fee. NPC OT stays; no caught credit." % int(selected.get("buyoutTotal", 0))
+	text += "Full rental team: fixed sets and items; no permanent purchase. Use all six together in Aether Clash." if kind == "team" else "Permanent purchase: %d Aetherite total, minus the initial rental fee. Extensions do not reduce this price. NPC OT stays; no caught credit." % int(selected.get("buyoutTotal", 0))
 	description.text = text
 	rent_button.disabled = false
 
@@ -732,6 +732,11 @@ func _render_active() -> void:
 		active_list.add_child(label)
 		var actions := HBoxContainer.new()
 		active_list.add_child(actions)
+		if loan.get("status") == "active":
+			var extend_button := Button.new()
+			extend_button.text = "Extend 24 hours — 100 Aetherite"
+			extend_button.pressed.connect(func(): await _mutate("/%s/extend" % loan["loanId"], {}, "Extend this rental by 24 hours for 100 Aetherite?\nThe extra time starts at the current expiry time."))
+			actions.add_child(extend_button)
 		var return_button := Button.new()
 		return_button.text = "Return rental"
 		return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this rental now? No Aetherite will be refunded."))

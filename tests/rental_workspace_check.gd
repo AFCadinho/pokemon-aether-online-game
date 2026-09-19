@@ -6,7 +6,7 @@ class FakeRentalService extends Node:
 	func request(path: String, _payload: Dictionary = {}, _mutate := false, _post := false) -> Dictionary:
 		if path.begins_with("/catalog/team/"):
 			return {"success": true, "body": _team(true)}
-		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1250, "prices": [{"durationSeconds": 3600, "amount": 25}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
+		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1500, "prices": [{"durationSeconds": 86400, "amount": 100}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
 
 	func _team(detail := false) -> Dictionary:
 		var pokemon: Array = []
@@ -87,8 +87,12 @@ func _run() -> void:
 	assert(pokemon_workspace.pokemon_review_step.visible)
 	assert(pokemon_workspace.description.text.contains("Uncommon"))
 	assert(pokemon_workspace.description.text.contains("Bullet Punch"))
-	assert(pokemon_workspace.duration.get_item_text(0).contains("25 Aetherite"))
+	assert(pokemon_workspace.duration.get_item_text(0).contains("100 Aetherite"))
 	assert(pokemon_workspace.selected_build["source"] == "paste")
+	pokemon_workspace.catalog["rentals"] = [{"loanId": "loan-1", "context": "npc_pokemon", "status": "active", "dueAt": "2026-09-21T12:00:00Z", "rental": {"displayName": "Scizor", "buyoutPrice": 1400}}]
+	pokemon_workspace._render_active()
+	var active_buttons := pokemon_workspace.active_list.find_children("*", "Button", true, false)
+	assert(active_buttons.any(func(button: Button): return button.text == "Extend 24 hours — 100 Aetherite"))
 	pokemon_workspace._show_pokemon_review(false)
 	assert(pokemon_workspace.pokemon_edit_step.visible)
 	assert(not pokemon_workspace.pokemon_review_step.visible)
