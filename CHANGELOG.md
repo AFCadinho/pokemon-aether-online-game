@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card trainer portraits now use pixel-aligned scaling, keeping their pixel art crisp beside Favorite Pokémon.
+
 - Ranked Trainer Card tiers now also show peak rating and battles played without adding another tab.
 
 - Trainer Card Overview now keeps verified all-time PvP totals visible during refreshes, while Ranked ratings use responsive tier cards that wrap as formats are added.

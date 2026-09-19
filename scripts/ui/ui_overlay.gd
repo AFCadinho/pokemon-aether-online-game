@@ -300,6 +300,12 @@ const TRAINER_CARD_SIZE := Vector2(720, 500)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
+## Battle trainer art is authored on a half-resolution pixel grid: most 160px
+## layers contain 2x2 logical pixels, while legacy 80px parts use layer scale
+## 2. Keep the final transform on half steps so every logical pixel occupies a
+## whole number of display pixels instead of alternating widths.
+const TRAINER_CARD_ART_SCALE_STEP := 0.5
+const TRAINER_CARD_ART_WITH_COMPANION_SCALE := 1.0
 const TRAINER_CARD_APPEARANCE_VIEWPORT_SIZE := Vector2i(194, 248)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(97, 142)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(3.0, 3.0)
@@ -16547,15 +16553,20 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 		bounds = visible_rect if bounds.size == Vector2.ZERO else bounds.merge(visible_rect)
 	if bounds.has_area():
 		var factor := minf(144.0 / bounds.size.x, 222.0 / bounds.size.y)
-		art.scale = Vector2.ONE * factor
-		art.position = Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * factor
+		var pixel_scale := maxf(
+			TRAINER_CARD_ART_SCALE_STEP,
+			floorf(factor / TRAINER_CARD_ART_SCALE_STEP) * TRAINER_CARD_ART_SCALE_STEP
+		)
+		art.scale = Vector2.ONE * pixel_scale
+		art.position = (Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * pixel_scale).round()
 	var profile := own_trainer_card_data if preview_name == "TrainerCardBattlePreview" else card
 	var species := str(profile.get("favoritePokemon", ""))
 	if not species.is_empty():
 		var home := PokemonAssets.load_party_icon(species, bool(profile.get("favoritePokemonShiny", false)))
 		if home != null:
-			art.scale *= 0.78
-			art.position = Vector2(48, 238) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
+			var trainer_scale := minf(art.scale.x, TRAINER_CARD_ART_WITH_COMPANION_SCALE)
+			art.scale = Vector2.ONE * trainer_scale
+			art.position = (Vector2(48, 238) - Vector2(bounds.get_center().x, bounds.end.y) * trainer_scale).round()
 			art.z_index = 1
 			var companion := Sprite2D.new()
 			companion.name = "FavoritePokemon"
