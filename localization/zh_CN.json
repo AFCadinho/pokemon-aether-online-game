@@ -4980,6 +4980,7 @@
   "ui.trainer_card.field.trainer_id": "教练 ID",
   "ui.trainer_card.field.guild": "公会",
   "ui.trainer_card.field.join_date": "加入日期",
+  "ui.trainer_card.field.region_clears": "地区通关",
   "ui.trainer_card.field.pokemon_caught": "宝可梦被捕获",
   "ui.trainer_card.field.pokemon_seen": "看到宝可梦",
   "ui.trainer_card.field.victories": "胜利",
