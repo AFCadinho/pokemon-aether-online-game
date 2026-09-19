@@ -24,6 +24,7 @@ func _init() -> void:
 	_check(source.contains("func _prefetch_pokedex_rendered_view"), "Selected rendered species warm the opposite view before a front/back switch")
 	_check(source.contains('"_load_preview_sprite_frames"'), "Selected Pokédex species use lightweight lossless rendered stills")
 	_check(source.contains("func _upgrade_pokedex_rendered_animation"), "Selected rendered species upgrade to a non-blocking animated Pokédex preview")
+	_check(source.contains("_add_preview_animation_button(pokedex_sprite_panel"), "Rendered Pokédex previews expose the animation review menu")
 	_check(not source.contains("func _load_first_pokedex_sprite_frame"), "Pokédex list icons never decode full rendered animation atlases")
 	_check(source.contains('if loaded_frames == null or not loaded_frames.has_meta("rendered_asset"):'), "Pokédex web sprites never replace a selected rendered asset")
 	_check(source.contains('candidate,\n\t\t\t_get_pokedex_sprite_side(),\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'), "Selected species loads its requested battle sprite without reporting expected candidate misses")

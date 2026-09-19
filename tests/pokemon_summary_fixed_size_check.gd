@@ -95,6 +95,7 @@ func _run() -> void:
 	await process_frame
 	var fixed_summary_size := popup.size
 	var zoom_button := popup.find_child("PreviewZoomButton", true, false) as Button
+	var animation_button := popup.find_child("PreviewAnimationButton", true, false) as MenuButton
 	_check(
 		zoom_button != null
 		and hidden_ability_badge != null
@@ -102,6 +103,28 @@ func _run() -> void:
 		and zoom_button.get_global_rect().end.x < hidden_ability_badge.get_global_rect().position.x,
 		"portrait zoom keeps the permanent left slot before the optional Hidden Ability badge"
 	)
+	_check(animation_button != null, "Summary creates the rendered-animation review menu")
+	if animation_button != null:
+		_check(not animation_button.visible, "legacy Summary sprites do not expose rendered animation controls")
+		var rendered_frames := SpriteFrames.new()
+		rendered_frames.set_meta("rendered_asset", true)
+		rendered_frames.set_meta("rendered_actions", {
+			"physical_attack": {"status": "needs_review"},
+			"damage": {"status": "needs_review"},
+		})
+		overlay.call(
+			"_configure_preview_animation_button",
+			overlay.get("pokemon_summary_animated_sprite"),
+			rendered_frames
+		)
+		_check(animation_button.visible and not animation_button.disabled, "rendered Summary sprites expose animation controls")
+		_check(animation_button.get_popup().item_count == 3, "animation menu lists idle and only available rendered actions")
+		overlay.call(
+			"_configure_preview_animation_button",
+			overlay.get("pokemon_summary_animated_sprite"),
+			SpriteFrames.new()
+		)
+		_check(not animation_button.visible, "animation controls hide again for a legacy sprite")
 
 	if title_label != null and gender_label != null and nickname_button != null:
 		title_label.text = "Crabominable"

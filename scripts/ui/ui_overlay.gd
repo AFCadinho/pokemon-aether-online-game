@@ -381,6 +381,15 @@ const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_BASE_SCALE := 1.7
 const POKEDEX_SPRITE_MAX_SIZE := Vector2(126, 104)
 const POKEDEX_SPRITE_BASE_SCALE := 1.5
+const RENDERED_PREVIEW_ANIMATIONS := [
+	{"action": "idle", "label": "Idle"},
+	{"action": "physical_attack", "label": "Physical Attack"},
+	{"action": "special_attack", "label": "Special Attack"},
+	{"action": "damage", "label": "Damage"},
+	{"action": "sleep", "label": "Sleep"},
+	{"action": "faint_start", "label": "Faint Start"},
+	{"action": "faint_loop", "label": "Faint Loop"},
+]
 const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
 const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
 const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
@@ -12007,6 +12016,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
+	_add_preview_animation_button(pokedex_sprite_panel, pokedex_animated_sprite, pokedex_sprite_loader, 40.0)
 
 	var stats_panel := PanelContainer.new()
 	stats_panel.custom_minimum_size = Vector2(220, 0)
@@ -21002,6 +21012,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	# Zoom is always available, so keep it in the fixed lower-left slot. The
 	# conditional HA badge appears beside it without leaving a visual gap.
 	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52)
+	_add_preview_animation_button(sprite_frame, pokemon_summary_animated_sprite, pokemon_summary_sprite_loader, 88.0)
 
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
@@ -26885,6 +26896,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 		pokemon_summary_sprite.visible = false
 		pokemon_summary_animated_sprite.visible = true
 		pokemon_summary_animated_sprite.sprite_frames = frames
+		_configure_preview_animation_button(pokemon_summary_animated_sprite, frames)
 		var animation_names: PackedStringArray = frames.get_animation_names()
 		if frames.has_animation("idle"):
 			pokemon_summary_animated_sprite.animation = "idle"
@@ -26915,6 +26927,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 
 	pokemon_summary_animated_sprite.stop()
 	pokemon_summary_animated_sprite.visible = false
+	_configure_preview_animation_button(pokemon_summary_animated_sprite, null)
 	pokemon_summary_sprite.visible = true
 	pokemon_summary_sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if pokemon_summary_sprite.texture == null:
@@ -26960,6 +26973,7 @@ func _summary_render_request_current(generation: int) -> bool:
 func _show_summary_rendered_frames(frames: SpriteFrames, generation: int) -> void:
 	if frames == null or not _summary_render_request_current(generation):
 		return
+	_configure_preview_animation_button(pokemon_summary_animated_sprite, frames)
 	if pokemon_summary_animated_sprite.sprite_frames == frames:
 		if not pokemon_summary_animated_sprite.is_playing():
 			var resume_frame := pokemon_summary_animated_sprite.frame
@@ -26985,6 +26999,7 @@ func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side:
 	pokemon_summary_sprite.visible = false
 	pokemon_summary_animated_sprite.visible = true
 	pokemon_summary_animated_sprite.sprite_frames = frames
+	_configure_preview_animation_button(pokemon_summary_animated_sprite, null)
 	pokemon_summary_animated_sprite.animation = "idle"
 	pokemon_summary_animated_sprite.frame = 0
 	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
@@ -36452,6 +36467,7 @@ func _clear_pokedex_species_sprite() -> void:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.sprite_frames = null
 		pokedex_animated_sprite.visible = false
+		_configure_preview_animation_button(pokedex_animated_sprite, null)
 	if pokedex_sprite != null:
 		pokedex_sprite.texture = null
 		pokedex_sprite.visible = true
@@ -36481,6 +36497,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite.visible = false
 		pokedex_animated_sprite.visible = true
 		pokedex_animated_sprite.sprite_frames = loaded_frames
+		_configure_preview_animation_button(pokedex_animated_sprite, loaded_frames)
 		var animation_names: PackedStringArray = loaded_frames.get_animation_names()
 		if loaded_frames.has_animation("idle"):
 			pokedex_animated_sprite.animation = "idle"
@@ -36507,6 +36524,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	else:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.visible = false
+		_configure_preview_animation_button(pokedex_animated_sprite, null)
 		pokedex_sprite.visible = true
 		pokedex_sprite.texture = _load_pokedex_species_texture(species)
 
@@ -36555,6 +36573,7 @@ func _pokedex_render_request_current(generation: int) -> bool:
 func _show_pokedex_rendered_frames(loaded_frames: SpriteFrames, generation: int) -> void:
 	if loaded_frames == null or not _pokedex_render_request_current(generation):
 		return
+	_configure_preview_animation_button(pokedex_animated_sprite, loaded_frames)
 	if pokedex_animated_sprite.sprite_frames == loaded_frames:
 		if not pokedex_animated_sprite.is_playing():
 			var resume_frame := pokedex_animated_sprite.frame
@@ -36584,6 +36603,7 @@ func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: Str
 	pokedex_sprite.visible = false
 	pokedex_animated_sprite.visible = true
 	pokedex_animated_sprite.sprite_frames = loaded_frames
+	_configure_preview_animation_button(pokedex_animated_sprite, null)
 	pokedex_animated_sprite.animation = "idle"
 	pokedex_animated_sprite.frame = 0
 	pokedex_animated_sprite.position = _get_pokedex_sprite_position()
@@ -36763,6 +36783,111 @@ func _add_preview_zoom_button(
 		button.queue_redraw()
 	)
 	return button
+
+
+func _add_preview_animation_button(
+	parent: Control,
+	animated_sprite: AnimatedSprite2D,
+	loader: Node,
+	left_offset: float
+) -> MenuButton:
+	var overlay := Control.new()
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(overlay)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var button := MenuButton.new()
+	button.name = "PreviewAnimationButton"
+	button.visible = false
+	button.text = "▶"
+	button.tooltip_text = "Animations are loading…"
+	button.custom_minimum_size = Vector2(28, 28)
+	button.mouse_filter = Control.MOUSE_FILTER_STOP
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_color_override("font_color", Color("#8ce7ff"))
+	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#06111fe8"), UI_BORDER_SUBTLE, 5, 1))
+	overlay.add_child(button)
+	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	button.offset_left = left_offset
+	button.offset_top = -34
+	button.offset_right = left_offset + 28.0
+	button.offset_bottom = -6
+	animated_sprite.set_meta("preview_animation_button", button)
+	button.get_popup().id_pressed.connect(
+		_on_preview_animation_selected.bind(button, animated_sprite, loader)
+	)
+	return button
+
+
+func _configure_preview_animation_button(
+	animated_sprite: AnimatedSprite2D,
+	frames: SpriteFrames
+) -> void:
+	if animated_sprite == null or not animated_sprite.has_meta("preview_animation_button"):
+		return
+	var button := animated_sprite.get_meta("preview_animation_button") as MenuButton
+	if button == null:
+		return
+	var rendered := frames != null and frames.has_meta("rendered_asset")
+	button.visible = rendered
+	var popup := button.get_popup()
+	popup.clear()
+	if not rendered:
+		return
+	var actions: Dictionary = frames.get_meta("rendered_actions", {})
+	for option_value: Variant in RENDERED_PREVIEW_ANIMATIONS:
+		var option := option_value as Dictionary
+		var action := str(option.get("action", ""))
+		if action != "idle" and not actions.has(action):
+			continue
+		var item_id := popup.item_count
+		popup.add_item(str(option.get("label", action)), item_id)
+		popup.set_item_metadata(popup.item_count - 1, action)
+	button.disabled = actions.is_empty()
+	button.tooltip_text = (
+		"Animations are loading…"
+		if button.disabled
+		else "Preview rendered animation"
+	)
+
+
+func _on_preview_animation_selected(
+	item_id: int,
+	button: MenuButton,
+	animated_sprite: AnimatedSprite2D,
+	loader: Node
+) -> void:
+	if button == null or animated_sprite == null or loader == null:
+		return
+	var popup := button.get_popup()
+	var item_index := popup.get_item_index(item_id)
+	if item_index < 0:
+		return
+	var action := str(popup.get_item_metadata(item_index))
+	var label := popup.get_item_text(item_index)
+	var frames := animated_sprite.sprite_frames
+	if frames == null or not frames.has_meta("rendered_asset"):
+		_configure_preview_animation_button(animated_sprite, null)
+		return
+	button.disabled = true
+	var still_current := func() -> bool:
+		return is_instance_valid(animated_sprite) and animated_sprite.sprite_frames == frames
+	var loaded := action == "idle"
+	if not loaded:
+		loaded = await loader.call(
+			"request_rendered_sprite_action", frames, action, still_current
+		)
+	if not still_current.call():
+		return
+	button.disabled = false
+	if not loaded or not frames.has_animation(action):
+		button.tooltip_text = "%s is unavailable" % label
+		return
+	animated_sprite.animation = action
+	animated_sprite.frame = 0
+	var action_entry: Dictionary = (frames.get_meta("rendered_actions", {}) as Dictionary).get(action, {})
+	animated_sprite.play(action, maxf(float(action_entry.get("speed", 1.0)), 0.01))
+	button.tooltip_text = "Playing: %s" % label
 
 
 func _on_pokedex_sprite_panel_gui_input(event: InputEvent) -> void:
