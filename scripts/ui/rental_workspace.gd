@@ -944,26 +944,7 @@ func _render_active() -> void:
 		if kind == "team":
 			_render_active_team(loan)
 			continue
-		var data: Dictionary = loan.get("rental", {})
-		var label := Label.new()
-		label.text = "%s\nExpires: %s UTC • %s" % [data.get("displayName", "Rental"), str(loan.get("dueAt", "")).replace("T", " ").left(19), loan.get("status", "")]
-		active_list.add_child(label)
-		var actions := HBoxContainer.new()
-		active_list.add_child(actions)
-		if loan.get("status") == "active":
-			var extend_button := Button.new()
-			extend_button.text = "Extend 24 hours — 100 Aetherite"
-			extend_button.pressed.connect(func(): await _mutate("/%s/extend" % loan["loanId"], {}, "Extend this rental by 24 hours for 100 Aetherite?\nThe extra time starts at the current expiry time."))
-			actions.add_child(extend_button)
-		var return_button := Button.new()
-		return_button.text = "Return rental"
-		return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this rental now? No Aetherite will be refunded."))
-		actions.add_child(return_button)
-		if kind == "pokemon" and loan.get("status") == "active":
-			var buy := Button.new()
-			buy.text = "Keep permanently — %d Aetherite" % int(data.get("buyoutPrice", 0))
-			buy.pressed.connect(func(): await _mutate("/%s/buyout" % loan["loanId"], {}, "Pay %d Aetherite to keep this Pokémon?\nOT stays Aether Rental Service. This does not count as caught." % int(data.get("buyoutPrice", 0))))
-			actions.add_child(buy)
+		_render_active_pokemon(loan)
 	if count == 0:
 		var empty := Label.new()
 		empty.text = "No active rentals from this vendor."
@@ -1061,6 +1042,144 @@ func _render_active_team(loan: Dictionary) -> void:
 	return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this rental now? No Aetherite will be refunded."))
 	_style_button(return_button, false)
 	footer.add_child(return_button)
+
+func _render_active_pokemon(loan: Dictionary) -> void:
+	var data: Dictionary = loan.get("rental", {})
+	var snapshot := _active_pokemon_snapshot(loan)
+	var species := str(snapshot.get("species", snapshot.get("speciesId", data.get("displayName", "Pokémon"))))
+	var panel := PanelContainer.new()
+	panel.name = "ActivePokemonRentalCard-%s" % str(loan.get("loanId", "rental"))
+	panel.custom_minimum_size.y = 225
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var panel_style := _control_style(Color("#0b1726"), Color("#41698d"))
+	panel_style.content_margin_left = 12
+	panel_style.content_margin_right = 12
+	panel_style.content_margin_top = 12
+	panel_style.content_margin_bottom = 12
+	panel.add_theme_stylebox_override("panel", panel_style)
+	active_list.add_child(panel)
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 12)
+	panel.add_child(columns)
+	var identity := VBoxContainer.new()
+	identity.custom_minimum_size.x = 175
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	identity.add_theme_constant_override("separation", 4)
+	columns.add_child(identity)
+	var sprite_center := CenterContainer.new()
+	sprite_center.custom_minimum_size.y = 104
+	identity.add_child(sprite_center)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(100, 100)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.texture = PokemonAssets.load_party_icon(species)
+	sprite_center.add_child(icon)
+	var name_label := Label.new()
+	name_label.text = species
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 19)
+	name_label.add_theme_color_override("font_color", Color("#62d5ff"))
+	identity.add_child(name_label)
+	var rarity := Label.new()
+	rarity.text = str(data.get("rarity", "rental")).replace("_", " ").to_upper()
+	rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	rarity.add_theme_font_size_override("font_size", 10)
+	rarity.add_theme_color_override("font_color", Color("#f5df9a"))
+	identity.add_child(rarity)
+	var item_row := HBoxContainer.new()
+	item_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	item_row.add_theme_constant_override("separation", 5)
+	identity.add_child(item_row)
+	var item_id := str(snapshot.get("item", snapshot.get("heldItemId", "")))
+	var item_icon := TextureRect.new()
+	item_icon.custom_minimum_size = Vector2(22, 22)
+	item_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	item_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	item_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	item_icon.texture = ITEM_ICON_RESOLVER.load_icon(item_id) if not item_id.is_empty() else null
+	item_icon.visible = not item_id.is_empty()
+	item_row.add_child(item_icon)
+	var item_label := Label.new()
+	item_label.text = _item_display_name(item_id)
+	item_label.add_theme_font_size_override("font_size", 10)
+	item_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	item_row.add_child(item_label)
+	var set_panel := PanelContainer.new()
+	set_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	set_panel.add_theme_stylebox_override("panel", _control_style(Color("#091524"), Color("#315070")))
+	columns.add_child(set_panel)
+	var set_text := RichTextLabel.new()
+	set_text.name = "RentalSetDetails"
+	set_text.bbcode_enabled = true
+	set_text.fit_content = true
+	set_text.scroll_active = false
+	set_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	set_text.add_theme_font_size_override("normal_font_size", 12)
+	set_text.text = _active_pokemon_pokepaste(snapshot)
+	set_panel.add_child(set_text)
+	var summary := VBoxContainer.new()
+	summary.custom_minimum_size.x = 238
+	summary.add_theme_constant_override("separation", 7)
+	columns.add_child(summary)
+	var state := Label.new()
+	state.text = str(loan.get("status", "active")).replace("_", " ").to_upper()
+	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	state.add_theme_font_size_override("font_size", 10)
+	state.add_theme_color_override("font_color", Color("#a9f0cb"))
+	state.add_theme_stylebox_override("normal", _control_style(Color("#102c26"), Color("#3c8b70")))
+	summary.add_child(state)
+	var expiry := Label.new()
+	expiry.text = "Expires\n%s UTC" % str(loan.get("dueAt", "")).replace("T", " ").left(19)
+	expiry.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	expiry.add_theme_font_size_override("font_size", 11)
+	expiry.add_theme_color_override("font_color", Color("#eef6ff"))
+	summary.add_child(expiry)
+	if loan.get("status") == "active":
+		var buy := Button.new()
+		buy.text = "Keep — %d Aetherite" % int(data.get("buyoutPrice", 0))
+		buy.tooltip_text = "Pay %d Aetherite to keep this Pokémon" % int(data.get("buyoutPrice", 0))
+		buy.custom_minimum_size.y = 36
+		buy.pressed.connect(func(): await _mutate("/%s/buyout" % loan["loanId"], {}, "Pay %d Aetherite to keep this Pokémon?\nOT stays Aether Rental Service. This does not count as caught." % int(data.get("buyoutPrice", 0))))
+		_style_button(buy, true)
+		summary.add_child(buy)
+		var extend_button := Button.new()
+		extend_button.text = "Extend — 100 Aetherite"
+		extend_button.tooltip_text = "Extend this rental for 100 Aetherite"
+		extend_button.custom_minimum_size.y = 36
+		extend_button.pressed.connect(func(): await _mutate("/%s/extend" % loan["loanId"], {}, "Extend this rental by 24 hours for 100 Aetherite?\nThe extra time starts at the current expiry time."))
+		_style_button(extend_button, false)
+		summary.add_child(extend_button)
+	var return_button := Button.new()
+	return_button.text = "Return Pokémon"
+	return_button.custom_minimum_size.y = 36
+	return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this rental now? No Aetherite will be refunded."))
+	_style_button(return_button, false)
+	return_button.add_theme_stylebox_override("normal", _control_style(Color("#291820"), Color("#8f5261")))
+	return_button.add_theme_stylebox_override("hover", _control_style(Color("#3a202a"), Color("#d57b8e")))
+	summary.add_child(return_button)
+
+func _active_pokemon_snapshot(loan: Dictionary) -> Dictionary:
+	for asset_value: Variant in loan.get("assets", []):
+		if asset_value is Dictionary:
+			var asset := asset_value as Dictionary
+			if str(asset.get("assetType", "")) == "pokemon" and asset.get("snapshot", {}) is Dictionary:
+				return (asset.get("snapshot", {}) as Dictionary).duplicate(true)
+	return {}
+
+func _active_pokemon_pokepaste(snapshot: Dictionary) -> String:
+	var moves: Array[String] = []
+	for move: Variant in snapshot.get("moves", []):
+		moves.append(str((move as Dictionary).get("name", (move as Dictionary).get("id", ""))) if move is Dictionary else str(move))
+	return _pokepaste_text({
+		"ability": snapshot.get("ability", ""),
+		"teraType": snapshot.get("teraType", snapshot.get("tera", "")),
+		"evs": _format_quote_stat_spread(snapshot.get("evs", {}), 0, "No EV investment"),
+		"ivs": _format_quote_stat_spread(snapshot.get("ivs", {}), 31, "All stats 31"),
+		"nature": snapshot.get("nature", "Hardy"),
+		"moves": moves,
+	}, false)
 
 func _mutate(path: String, payload: Dictionary, message: String) -> void:
 	if busy:
