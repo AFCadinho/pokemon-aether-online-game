@@ -71,7 +71,10 @@ func _run() -> void:
 			))
 			var visual_bounds: Variant = frames.get_meta("rendered_visual_bounds", Rect2())
 			assert(visual_bounds is Rect2 and (visual_bounds as Rect2).has_area())
-			assert(not Assets.ensure_action_loaded(frames, "physical_attack"))
+			var rendered_actions: Dictionary = frames.get_meta("rendered_actions", {})
+			for action: String in ["physical_attack", "special_attack", "damage", "faint_start", "faint_loop"]:
+				assert(rendered_actions.has(action))
+			assert(rendered_actions.has("sleep") == (species != "meowth"))
 			if expected_y_offsets.has(species):
 				var presentation: Dictionary = frames.get_meta("rendered_presentation")
 				var offset: Array = presentation.get("position_offset", [])
@@ -80,6 +83,7 @@ func _run() -> void:
 	assert(Assets.load_frames("gardevoir", "front", false) == null)
 	var shiny := Assets.load_frames("eevee", "front", true)
 	assert(shiny != null and shiny.get_frame_count("idle") > 1)
+	assert((shiny.get_meta("rendered_actions", {}) as Dictionary).has("physical_attack"))
 	var shiny_preview := Assets.load_preview_frames("eevee", "front", true)
 	assert(shiny_preview != null and shiny_preview.get_frame_count("idle") == 1)
 	assert(Assets.load_frames("meowth", "front", true) == null)
@@ -88,6 +92,8 @@ func _run() -> void:
 	assert(animated_dragonite != null)
 	assert(not bool(animated_dragonite.get_meta("rendered_static_preview", false)))
 	assert(animated_dragonite.get_frame_count("idle") == 91)
+	assert(Assets.ensure_action_loaded(animated_dragonite, "physical_attack"))
+	assert(animated_dragonite.get_frame_count("physical_attack") == 131)
 	print("Animated Dragonite streamed in %d ms without blocking frames" % (Time.get_ticks_msec() - async_started))
 	print("Lossless non-battle previews loaded in %d ms" % preview_load_msec)
 	print("SCVI review batch preview/fallback checks PASS")

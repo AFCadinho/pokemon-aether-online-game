@@ -5,6 +5,7 @@ approval gate. It never downloads assets, approves builds, or changes defaults.
 """
 
 import argparse
+import concurrent.futures
 import hashlib
 import html
 import json
@@ -41,6 +42,21 @@ def digest(path):
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+
+
+def compact_action_report(actions):
+    """Keep review-relevant action provenance without duplicating frame arrays."""
+    return {
+        name: {
+            "source_action": action["action"],
+            "frame_count": len(action["frames"]),
+            "source_fps": action["source_fps"],
+            "loop": action["loop"],
+            "speed": action["speed"],
+            "review": action["review"],
+        }
+        for name, action in actions.items() if action is not None
+    }
 
 
 def source_entry(entry, model_root, motion_root):
@@ -329,14 +345,12 @@ def run_builds(args):
     if selected and not selected <= {item["species"] for item in entries}:
         raise ValueError("--only includes a species outside the explicit batch")
     factory = Path(__file__).with_name("factory.py")
-    for item in entries:
+
+    def build_one(item):
         species = item["species"]
-        if selected and species not in selected:
-            continue
         intake_state = source_status["entries"].get(species, {})
         if intake_state.get("status") != "configured_needs_review":
-            status["entries"][species] = {"status": "blocked_intake"}
-            continue
+            return species, {"status": "blocked_intake"}
         source_dir = args.output / "sources" / species / args.variant
         blend = source_dir / (item["identity"] + "-ready.blend")
         manifest = source_dir / ("draft-idle-manifest.json" if args.idle_only else "draft-manifest.json")
@@ -388,8 +402,17 @@ def run_builds(args):
         except Exception as exc:
             state = {"status": "blocked", "error": str(exc)}
             print("BLOCKED", species, exc, flush=True)
-        status["entries"][species] = state
-        write_json(status_path, status)
+        return species, state
+
+    pending = [item for item in entries if not selected or item["species"] in selected]
+    # Each worker owns a distinct species directory/log. The parent alone
+    # updates the shared resumable status file after a completed result.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
+        futures = [executor.submit(build_one, item) for item in pending]
+        for future in concurrent.futures.as_completed(futures):
+            species, state = future.result()
+            status["entries"][species] = state
+            write_json(status_path, status)
     builds = [value["build"] for value in status["entries"].values()
               if value["status"] == "needs_review" and not value["qc_errors"]]
     if builds:
@@ -427,23 +450,50 @@ def preview_catalog(args):
     subprocess.run(["python", str(factory), "catalog", *builds, "--preview",
                     "--output", str(catalog)], check=True)
     rows = []
+    action_report = {"schema": 1, "catalog": str(catalog), "entries": {}}
+    expected_actions = ("idle", "physical_attack", "special_attack", "damage",
+                        "sleep", "faint_start", "faint_loop")
     for (species, variant), build in sorted(chosen.items()):
         qc = json.loads((Path(build) / "qc.json").read_text())
+        manifest = json.loads((Path(build) / "provenance.json").read_text())["identity"]["manifest"]
+        actions = manifest["actions"]
+        compact_actions = compact_action_report(actions)
+        missing = [name for name in expected_actions if not actions.get(name)]
+        action_report["entries"][f"{species}:{variant}"] = {
+            "species": species,
+            "variant": variant,
+            "status": "needs_review",
+            "build": str(build),
+            "actions": compact_actions,
+            "missing_actions": missing,
+            "qc_errors": qc["errors"],
+            "qc_warnings": qc["warnings"],
+        }
         preview = Path(build) / "previews" / "index.html"
         overview = Path(build) / "previews" / "overview.png"
+        mapping = "<br>".join(
+            html.escape(f"{name}: {value['source_action']} ({value['frame_count']}f @ "
+                        f"{value['source_fps']} FPS)")
+            for name, value in compact_actions.items())
+        if missing:
+            mapping += "<br><strong>fallback:</strong> " + html.escape(", ".join(missing))
         rows.append("<tr><td>" + html.escape(species) + "</td><td>" + variant +
                     "</td><td><a href='" + html.escape(str(preview)) + "'><img src='" +
                     html.escape(str(overview)) + "' alt='front/back overzicht' width='360'></a><br>" +
                     "<a href='" + html.escape(str(preview)) + "'>Bekijk animaties</a></td>" +
+                    "<td>" + mapping + "</td>" +
                     "<td>" + html.escape("; ".join(filter(None, [batch_entries[species].get("review_warning", ""),
                                                        ", ".join(qc["warnings"])])) or "geen") + "</td></tr>")
+    write_json(args.output / "action-mappings.json", action_report)
     page = ("<!doctype html><html lang='nl'><meta charset='utf-8'><title>Pokémon reviewbatch 01</title>"
             "<style>body{font:16px system-ui;background:#141722;color:#eee;margin:2rem}"
             "a{color:#8bd4ff}td,th{padding:.6rem;border:1px solid #555}table{border-collapse:collapse}</style>"
             "<h1>Pokémon reviewbatch 01</h1><p>Alleen lokale needs_review-assets. "
             "Open PokeAether met POKEAETHER_RENDERED_PREVIEW_CATALOG=preview-batch.json. "
             "Geen asset is hiermee goedgekeurd of gepubliceerd.</p>"
-            "<table><tr><th>Pokémon</th><th>Variant</th><th>Previews</th><th>QC-waarschuwingen</th></tr>" +
+            "<p><a href='action-mappings.json'>Machineleesbare action mappings</a></p>"
+            "<table><tr><th>Pokémon</th><th>Variant</th><th>Previews</th><th>Action mapping</th>"
+            "<th>QC-waarschuwingen</th></tr>" +
             "".join(rows) + "</table></html>")
     (args.output / "review-index.html").write_text(page)
     print("PREVIEW CATALOG", catalog)
@@ -538,6 +588,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--species")
     parser.add_argument("--only", help="Comma-separated explicit subset for run-builds; preserves other build statuses")
+    parser.add_argument("--jobs", type=int, default=1,
+                        help="Independent species builds to run concurrently (1-4)")
     parser.add_argument("--variant", choices=["normal", "shiny"], default="normal")
     parser.add_argument("--idle-only", action="store_true",
                         help="Build a first composition review without rendering other actions")
@@ -549,6 +601,8 @@ def main():
     args.motion_root = args.motion_root.resolve()
     args.importer = args.importer.resolve()
     args.python_deps = args.python_deps.resolve()
+    if not 1 <= args.jobs <= 4:
+        parser.error("--jobs must be between 1 and 4")
     if args.command not in ("inventory", "run-intake", "run-builds", "run-probes", "preview-catalog") and not args.species:
         parser.error("--species is required")
     {"inventory": inventory, "import-one": import_one, "draft-one": draft_one,
