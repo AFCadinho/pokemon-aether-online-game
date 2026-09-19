@@ -120,17 +120,6 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 	configuration_rows.add_theme_constant_override("separation", 10)
 	configuration_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	configure.add_child(configuration_rows)
-	var create := ScrollContainer.new()
-	create.name = "Create"
-	create.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	tabs.add_child(create)
-	tabs.set_tab_title(3, translate.call("Create"))
-	var guide := Label.new()
-	guide.text = translate.call("Create a pack guide")
-	guide.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	guide.custom_minimum_size.x = 600
-	guide.add_theme_color_override("font_color", Color(0.79, 0.83, 0.93, 1.0))
-	create.add_child(guide)
 	tabs.current_tab = 1
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)

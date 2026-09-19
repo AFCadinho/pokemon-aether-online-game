@@ -2,8 +2,6 @@
 
 ## Unreleased
 
-- The launcher Mods window now includes a localized guide for creating community packs.
-
 - Mods can now be selected independently for Pokémon cries, battle sprites and follower sprites in the launcher.
 
 - Installed mods now use clear Enable and Disable actions instead of an unlabeled checkbox.
