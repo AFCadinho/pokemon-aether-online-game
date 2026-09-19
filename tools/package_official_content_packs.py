@@ -12,6 +12,7 @@ import hashlib
 import json
 import sys
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
@@ -55,6 +56,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--catalog-output", type=Path)
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--version-label", default="", help="Optional shared version suffix, e.g. v1.")
+    parser.add_argument("--updated-at", default=date.today().isoformat(), help="Catalog update date in YYYY-MM-DD format.")
     parser.add_argument("--upload", action="store_true", help="Upload immutable zips and catalog to configured R2.")
     return parser.parse_args()
 
@@ -125,7 +127,7 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def build_pack(pack: ContentPack, output_dir: Path, base_url: str, version_label: str) -> dict[str, object]:
+def build_pack(pack: ContentPack, output_dir: Path, base_url: str, version_label: str, updated_at: str) -> dict[str, object]:
     files = source_files(pack)
     suffix = version_label.strip() or content_hash(pack, files)[:12]
     version = f"{pack.pack_id}-{suffix}"
@@ -144,6 +146,7 @@ def build_pack(pack: ContentPack, output_dir: Path, base_url: str, version_label
         "version": version,
         "author": "PokeAether",
         "description": pack.description,
+        "updated_at": updated_at,
         "categories": list(manifest["assets"].keys()),
         "download": {
             "url": f"{base_url.rstrip('/')}/mods/{output.name}",
@@ -166,6 +169,10 @@ def upload(output_dir: Path, catalog_path: Path, catalog: dict[str, object]) -> 
 
 def main() -> None:
     args = parse_args()
+    try:
+        updated_at = date.fromisoformat(args.updated_at).isoformat()
+    except ValueError as error:
+        raise SystemExit("--updated-at must be a valid YYYY-MM-DD date.") from error
     selected = [pack for pack in PACKS if pack.pack_id in set(args.pack or [item.pack_id for item in PACKS])]
     if args.upload and len(selected) != len(PACKS):
         raise SystemExit("R2 catalog publication requires building every official pack.")
@@ -173,7 +180,7 @@ def main() -> None:
     catalog_path = (args.catalog_output or output_dir / "content-packs.json").resolve()
     catalog = {
         "format_version": 1,
-        "packs": [build_pack(pack, output_dir, args.base_url, args.version_label) for pack in selected],
+        "packs": [build_pack(pack, output_dir, args.base_url, args.version_label, updated_at) for pack in selected],
     }
     catalog_path.parent.mkdir(parents=True, exist_ok=True)
     catalog_path.write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

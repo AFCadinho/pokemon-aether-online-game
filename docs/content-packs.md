@@ -115,6 +115,7 @@ Keep it separate from required game-update assets. Entries have this shape:
   "version": "1.0.0",
   "author": "PokeAether",
   "description": "Anime cries for available Pokémon from generations 1–7.",
+  "updated_at": "2026-09-19",
   "categories": ["cries"],
   "download": {
     "url": "https://updates.pokeaether.com/mods/anime-cries-1.0.0.zip",
@@ -132,7 +133,9 @@ python3 tools/package_official_content_packs.py --output-dir builds/content-pack
 
 This produces `anime-cries-*.zip`, `gen5-animated-sprites-*.zip` and
 `content-packs.json`. It uses content hashes as immutable versions and does not
-publish anything. With configured R2 credentials, the explicit command below
+publish anything. The catalog records the build date as `updated_at`; pass
+`--updated-at YYYY-MM-DD` to reproduce or backdate a publication. With configured
+R2 credentials, the explicit command below
 uploads immutable zips under `mods/` and the catalog as `data/content-packs.json`:
 
 ```sh

@@ -193,6 +193,8 @@ static func validate_catalog(candidate: Dictionary) -> String:
 				return "Catalog pack is missing " + field + "."
 		if not Store.valid_id(str(pack.id)):
 			return "Catalog contains an invalid pack ID."
+		if pack.has("updated_at") and not _valid_catalog_date(pack.updated_at):
+			return "Catalog pack has an invalid update date."
 		var download: Variant = pack.get("download", {})
 		if not download is Dictionary:
 			return "Catalog pack has no download."
@@ -205,6 +207,28 @@ static func validate_catalog(candidate: Dictionary) -> String:
 		if sha256.length() != 64 or not sha256.is_valid_hex_number():
 			return "Catalog pack has an invalid checksum."
 	return ""
+
+
+static func _valid_catalog_date(value: Variant) -> bool:
+	if not value is String:
+		return false
+	var date := str(value)
+	if date.length() != 10 or date[4] != "-" or date[7] != "-":
+		return false
+	var year_text := date.substr(0, 4)
+	var month_text := date.substr(5, 2)
+	var day_text := date.substr(8, 2)
+	if not year_text.is_valid_int() or not month_text.is_valid_int() or not day_text.is_valid_int():
+		return false
+	var year := int(year_text)
+	var month := int(month_text)
+	var day := int(day_text)
+	if year < 2000 or month < 1 or month > 12:
+		return false
+	var month_days := [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	if month == 2 and (year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)):
+		month_days[1] = 29
+	return day >= 1 and day <= month_days[month - 1]
 
 
 func _load_catalog(url: String) -> void:
@@ -233,6 +257,7 @@ func _on_catalog_request_completed(result: int, response_code: int, _headers: Pa
 	official_packs.clear()
 	for pack_value: Variant in (parsed as Dictionary).packs:
 		official_packs.append((pack_value as Dictionary).duplicate(true))
+	refresh()
 	_render_catalog()
 
 
@@ -281,6 +306,7 @@ func _render_catalog() -> void:
 		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		description.add_theme_color_override("font_color", Color(0.68, 0.73, 0.86, 1.0))
 		text.add_child(description)
+		_add_updated_label(text, str(pack.get("updated_at", "")))
 		var install := Button.new()
 		var installed_pack: Dictionary = installed.get(pack.id, {})
 		var installed_version := str(installed_pack.get("version", ""))
@@ -349,6 +375,8 @@ func refresh() -> void:
 		metadata.add_theme_font_size_override("font_size", 12)
 		metadata.add_theme_color_override("font_color", Color(0.59, 0.66, 0.80, 1.0))
 		details.add_child(metadata)
+		var official_pack := _official_pack(str(pack.id))
+		_add_updated_label(details, str(official_pack.get("updated_at", "")))
 		var uninstall := Button.new()
 		uninstall.text = translate.call("Uninstall")
 		_apply_button_style(uninstall)
@@ -361,6 +389,23 @@ func refresh() -> void:
 		rows.add_child(empty)
 	_refresh_configuration(packs)
 	status.text = "\n".join(store.errors)
+
+
+func _official_pack(pack_id: String) -> Dictionary:
+	for pack in official_packs:
+		if str(pack.get("id", "")) == pack_id:
+			return pack
+	return {}
+
+
+func _add_updated_label(parent: Control, updated_at: String) -> void:
+	if updated_at.is_empty():
+		return
+	var updated := Label.new()
+	updated.text = translate.call("Updated {date}").format({"date": updated_at})
+	updated.add_theme_font_size_override("font_size", 12)
+	updated.add_theme_color_override("font_color", Color(0.52, 0.61, 0.76, 1.0))
+	parent.add_child(updated)
 
 
 func _confirm_uninstall(pack_id: String, pack_name: String) -> void:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Official mod packs now show their latest publication date in Discover and Installed.
+
 - Adventure Stats now shows Region clears at zero, introducing the future region replay progression stat.
 
 - Trainer Card trainer portraits now use pixel-aligned scaling, keeping their pixel art crisp beside Favorite Pokémon.

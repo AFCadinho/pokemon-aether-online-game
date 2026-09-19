@@ -25,18 +25,24 @@ func run() -> void:
 	root.add_child(panel)
 	panel.setup(manager.text)
 	var valid_catalog := {"format_version": 1, "packs": [{
-		"id": "anime-cries", "name": "Anime Cries", "version": "1", "author": "PokeAether",
+		"id": "sample", "name": "Voorbeeldpack", "version": "2.0", "author": "PokeAether", "updated_at": "2026-09-19",
 		"download": {"url": "https://updates.example/anime.zip", "size_bytes": 123, "sha256": "a".repeat(64)},
 	}]}
 	check(PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog validates a checksum-backed pack")
 	panel.official_packs = [valid_catalog.packs[0].duplicate(true)]
 	panel._render_catalog()
 	check(panel.discover_rows.get_child_count() == 2, "official pack and its status row are rendered in Discover")
+	check(_tree_contains_text(panel.discover_rows, "Bijgewerkt 2026-09-19"), "Discover shows the official pack update date")
+	panel.refresh()
+	check(_tree_contains_text(panel.rows, "Bijgewerkt 2026-09-19"), "Installed shows the latest official pack date")
 	panel._set_catalog_status("Installing")
 	check(panel.catalog_status.text == "Installing", "catalog status remains valid after a catalog refresh")
 	panel.tabs.current_tab = 0
 	valid_catalog.packs[0].download.sha256 = "invalid"
 	check(not PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog rejects invalid checksums")
+	valid_catalog.packs[0].download.sha256 = "a".repeat(64)
+	valid_catalog.packs[0].updated_at = "2026-02-30"
+	check(not PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog rejects invalid update dates")
 	check(panel.tabs.get_tab_title(0) == "Ontdekken", "discover localized")
 	check(panel.tabs.get_tab_title(1) == "Geïnstalleerd", "installed localized")
 	check(panel.rows.get_child_count() == 1, "installed pack shown")
@@ -63,3 +69,12 @@ func run() -> void:
 	DirAccess.remove_absolute(store.root)
 	print("Content packs panel: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
+
+
+func _tree_contains_text(parent: Node, expected: String) -> bool:
+	for child in parent.get_children():
+		if child is Label and (child as Label).text == expected:
+			return true
+		if _tree_contains_text(child, expected):
+			return true
+	return false

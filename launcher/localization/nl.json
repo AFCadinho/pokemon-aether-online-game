@@ -195,6 +195,7 @@
 	"No official packs are available yet.": "Er zijn nog geen officiële packs beschikbaar.",
 	"Install": "Installeren",
 	"Update": "Bijwerken",
+	"Updated {date}": "Bijgewerkt {date}",
 	"Downloading {name}...": "{name} downloaden...",
 	"Could not start the pack download.": "Kon het pack niet downloaden.",
 	"Pack installed. Enable it from Installed and restart the game.": "Pack geïnstalleerd. Schakel het in bij Geïnstalleerd en herstart de game.",
