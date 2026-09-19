@@ -116,34 +116,42 @@ func _ready() -> void:
 	root.add_child(close_button)
 
 func _build_individual_catalog(browse: HBoxContainer) -> void:
-	var left := VBoxContainer.new()
-	left.custom_minimum_size.x = 470
-	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	browse.add_child(left)
+	var builder := VBoxContainer.new()
+	builder.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	builder.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	builder.add_theme_constant_override("separation", 8)
+	browse.add_child(builder)
 	var intro := Label.new()
-	intro.text = "Build any legal Pokémon set"
+	intro.text = "1  Create your level-100 Pokémon"
 	intro.add_theme_font_size_override("font_size", 18)
-	left.add_child(intro)
+	intro.add_theme_color_override("font_color", Color("#eef6ff"))
+	builder.add_child(intro)
+	var intro_hint := Label.new()
+	intro_hint.text = "Paste one competitive set, or switch to Manual to fill in the fields yourself."
+	intro_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
+	builder.add_child(intro_hint)
 	pokemon_source = TabContainer.new()
+	pokemon_source.custom_minimum_size.y = 190
 	pokemon_source.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_source.tab_changed.connect(func(_tab: int): _invalidate_pokemon_quote())
 	_style_tabs(pokemon_source, true)
-	left.add_child(pokemon_source)
+	builder.add_child(pokemon_source)
 	var paste_panel := VBoxContainer.new()
-	paste_panel.name = "PokéPaste"
+	paste_panel.name = "Paste a set"
 	pokemon_source.add_child(paste_panel)
 	var paste_hint := Label.new()
-	paste_hint.text = "Paste one Showdown / PokéPaste set. Held items are ignored."
+	paste_hint.text = "Paste your Showdown / PokéPaste set below. Held items are ignored."
 	paste_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	paste_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
 	paste_panel.add_child(paste_hint)
 	pokemon_paste = TextEdit.new()
-	pokemon_paste.placeholder_text = "Dragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed\n- Earthquake\n- Dragon Claw"
+	pokemon_paste.placeholder_text = "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed"
 	pokemon_paste.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_paste.text_changed.connect(_invalidate_pokemon_quote)
 	_style_text_edit(pokemon_paste)
 	paste_panel.add_child(pokemon_paste)
 	var manual_scroll := ScrollContainer.new()
-	manual_scroll.name = "Manual"
+	manual_scroll.name = "Build manually"
 	pokemon_source.add_child(manual_scroll)
 	var manual := VBoxContainer.new()
 	manual.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -175,30 +183,40 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	_add_pokemon_text_field(manual, "moves", "Moves", "Comma-separated, up to four")
 	_add_stat_fields(manual, "EVs", pokemon_evs, 0, 252)
 	_add_stat_fields(manual, "IVs", pokemon_ivs, 31, 31)
-	var right := VBoxContainer.new()
-	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	browse.add_child(right)
+	var review_heading := Label.new()
+	review_heading.text = "2  Validate and review the price"
+	review_heading.add_theme_font_size_override("font_size", 16)
+	review_heading.add_theme_color_override("font_color", Color("#eef6ff"))
+	builder.add_child(review_heading)
 	description = RichTextLabel.new()
-	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	description.text = "Create a set, then request a quote.\n\nThe server validates the complete build and determines its rarity and Aetherite price. All rentals are level 100, keep the rental NPC as OT and never count as caught."
+	description.custom_minimum_size.y = 76
+	description.text = "Add a Pokémon above. We will check the set and calculate its rarity-based price.\nAll rentals are level 100, keep the rental NPC as OT and never count as caught."
 	description.add_theme_color_override("default_color", Color("#eef6ff"))
 	description.add_theme_stylebox_override("normal", _control_style(Color("#0a1422"), Color("#315070")))
-	right.add_child(description)
+	builder.add_child(description)
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
+	builder.add_child(actions)
 	quote_button = Button.new()
 	quote_button.text = "Validate set & calculate price"
+	quote_button.custom_minimum_size.x = 250
 	quote_button.pressed.connect(_quote_pokemon)
 	_style_button(quote_button, false)
-	right.add_child(quote_button)
+	actions.add_child(quote_button)
 	duration = OptionButton.new()
 	duration.disabled = true
+	duration.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	duration.tooltip_text = "3  Choose how long you want to rent this Pokémon"
 	_style_option(duration)
-	right.add_child(duration)
+	actions.add_child(duration)
 	rent_button = Button.new()
 	rent_button.text = "Rent quoted Pokémon"
+	rent_button.custom_minimum_size.x = 210
 	rent_button.disabled = true
 	rent_button.pressed.connect(_rent)
 	_style_button(rent_button, true)
-	right.add_child(rent_button)
+	actions.add_child(rent_button)
+	_refresh_builder_actions()
 
 func _style_option(control: OptionButton) -> void:
 	control.focus_mode = Control.FOCUS_ALL
@@ -342,6 +360,18 @@ func _invalidate_pokemon_quote() -> void:
 	if rent_button != null:
 		rent_button.disabled = true
 		rent_button.text = "Rent quoted Pokémon"
+	_refresh_builder_actions()
+
+func _pokemon_input_ready() -> bool:
+	if pokemon_source == null:
+		return false
+	if pokemon_source.current_tab == 0:
+		return pokemon_paste != null and not pokemon_paste.text.strip_edges().is_empty()
+	return pokemon_fields.has("species") and not (pokemon_fields["species"] as LineEdit).text.strip_edges().is_empty()
+
+func _refresh_builder_actions() -> void:
+	if quote_button != null:
+		quote_button.disabled = busy or not _pokemon_input_ready()
 
 func _pokemon_build() -> Dictionary:
 	if pokemon_source.current_tab == 0:
@@ -369,13 +399,16 @@ func _pokemon_build() -> Dictionary:
 func _quote_pokemon() -> void:
 	if busy:
 		return
+	if not _pokemon_input_ready():
+		status.text = "Paste a Pokémon set or enter a Pokémon species first."
+		return
 	var build := _pokemon_build()
 	busy = true
 	quote_button.disabled = true
 	status.text = "Validating set and calculating its rarity…"
 	var result: Dictionary = await service.request("/pokemon/quote", {"pokemonBuild": build}, false, true)
 	busy = false
-	quote_button.disabled = false
+	_refresh_builder_actions()
 	if not bool(result.get("success", false)):
 		status.text = str(result.get("error", "This set is not valid."))
 		return

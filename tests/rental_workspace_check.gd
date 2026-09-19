@@ -57,6 +57,9 @@ func _run() -> void:
 	var pokemon_workspace := WORKSPACE.new()
 	pokemon_workspace.kind = "pokemon"
 	root.add_child(pokemon_workspace)
+	assert(pokemon_workspace.quote_button.disabled)
+	assert(pokemon_workspace.pokemon_source.get_tab_title(0) == "Paste a set")
+	assert(pokemon_workspace.pokemon_source.get_tab_title(1) == "Build manually")
 	assert(pokemon_workspace.pokemon_source.has_theme_stylebox_override("tab_selected"))
 	assert(pokemon_workspace.pokemon_paste.has_theme_stylebox_override("normal"))
 	assert((pokemon_workspace.pokemon_fields["species"] as LineEdit).has_theme_stylebox_override("normal"))
@@ -68,6 +71,8 @@ func _run() -> void:
 	pokemon_workspace.add_child(pokemon_workspace.service)
 	pokemon_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
 	pokemon_workspace.pokemon_paste.text = "Scizor\nAbility: Technician\n- Bullet Punch"
+	pokemon_workspace._refresh_builder_actions()
+	assert(not pokemon_workspace.quote_button.disabled)
 	await pokemon_workspace._quote_pokemon()
 	assert(not pokemon_workspace.rent_button.disabled)
 	assert(pokemon_workspace.description.text.contains("Uncommon"))
@@ -84,6 +89,9 @@ func _run() -> void:
 	assert(manual_build["pokemon"]["species"] == "Garchomp")
 	assert(manual_build["pokemon"]["ivs"]["spe"] == 31)
 	pokemon_workspace.queue_free()
+	var rental_service := preload("res://scripts/services/rental_service.gd").new()
+	assert(rental_service._error_message([{"msg": "Value error, Paste a Pokémon set first."}]) == "Paste a Pokémon set first.")
+	rental_service.queue_free()
 	var npc: PackedScene = load("res://scenes/npcs/rental_npc.tscn")
 	assert(npc != null)
 	print("PASS rental team catalog and custom Pokemon builder")

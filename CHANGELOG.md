@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokémon rental builder now follows a clear create, validate and rent flow with friendlier input guidance and errors.
+
 - Team rental tier filtering is limited to Aether OU and Aether UU.
 
 - Rental windows, tabs, builder fields, dropdown menus and close controls now consistently use the Aether interface styling.
