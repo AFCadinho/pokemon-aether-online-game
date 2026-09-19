@@ -1,7 +1,7 @@
 {
   "version": 1,
   "canvasSize": 160,
-  "layerOrder": ["bottom", "shoes", "top", "top_accessory", "hair", "headgear", "facegear"],
+  "layerOrder": ["bottom", "shoes", "top", "top_accessory", "eyebrows", "hair", "facial_hair", "headgear", "facegear"],
   "genders": {
     "male": {
       "base": "res://assets/battles/trainers/player/male/base.png",
@@ -10,21 +10,27 @@
           "fallback": "Trousers",
           "parts": {
             "Trousers": {"path": "res://assets/battles/trainers/player/male/starter_kit/trousers.png", "scale": 2.0},
-            "Mysterious_Trousers": {"path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png", "scale": 1.0}
+            "Mysterious_Trousers": {"path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png", "scale": 1.0},
+            "Adinho_Trousers": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/trousers.png", "scale": 1.0},
+            "Adinho_Trousers_Chroma": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/trousers.png", "scale": 1.0, "tint": "bottom_color"}
           }
         },
         "shoes": {
           "fallback": "Shoes",
           "parts": {
             "Shoes": {"path": "res://assets/battles/trainers/player/male/starter_kit/shoes.png", "scale": 2.0},
-            "Mysterious_Shoes": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shoes.png", "scale": 1.0}
+            "Mysterious_Shoes": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shoes.png", "scale": 1.0},
+            "Adinho_Shoes": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/shoes.png", "scale": 1.0},
+            "Adinho_Shoes_Chroma": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/shoes.png", "scale": 1.0, "tint": "shoes_color"}
           }
         },
         "top": {
           "fallback": "Shirt",
           "parts": {
             "Shirt": {"path": "res://assets/battles/trainers/player/male/starter_kit/shirt.png", "scale": 1.0},
-            "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shirt.png", "scale": 1.0}
+            "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/shirt.png", "scale": 1.0},
+            "Adinho_Shirt": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/og_palette/shirt.png", "scale": 1.0},
+            "Adinho_Shirt_Chroma": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/shirt.png", "scale": 1.0, "tint": "top_color"}
           }
         },
         "top_accessory": {
@@ -32,10 +38,21 @@
             "Mysterious_Shirt": {"path": "res://assets/battles/trainers/player/mysterious_outfit/gloves.png", "scale": 1.0}
           }
         },
+        "eyebrows": {
+          "parts": {
+            "Adinho_Hair": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/eyebrows.png", "scale": 1.0, "tint": "hair_color"}
+          }
+        },
         "hair": {
           "fallback": "Hair",
           "parts": {
-            "Hair": {"path": "res://assets/battles/trainers/player/male/starter_kit/hair.png", "scale": 1.0}
+            "Hair": {"path": "res://assets/battles/trainers/player/male/starter_kit/hair.png", "scale": 1.0},
+            "Adinho_Hair": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/hair.png", "scale": 1.0, "tint": "hair_color"}
+          }
+        },
+        "facial_hair": {
+          "parts": {
+            "Adinho_Beard": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/beard.png", "scale": 1.0, "tint": "facial_hair_color"}
           }
         },
         "headgear": {
@@ -45,7 +62,9 @@
         },
         "facegear": {
           "parts": {
-            "Mysterious_Mask": {"path": "res://assets/battles/trainers/player/mysterious_outfit/mask.png", "scale": 1.0}
+            "Mysterious_Mask": {"path": "res://assets/battles/trainers/player/mysterious_outfit/mask.png", "scale": 1.0},
+            "Adinho_Glasses": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/og_palette/glasses.png", "scale": 1.0},
+            "Adinho_Glasses_Chroma": {"path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/glasses.png", "scale": 1.0, "tint": "facegear_color"}
           }
         }
       }

@@ -5,8 +5,10 @@ class_name BattlePlayerTrainerCatalog
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const MANIFEST_PATH := "res://assets/battles/trainers/player/manifest.json"
 const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "top"]
-const OPTIONAL_CATEGORIES: Array[String] = ["shoes", "top_accessory", "hair", "headgear", "facegear"]
-const APPEARANCE_CATEGORY_ALIASES := {"top_accessory": "top"}
+const OPTIONAL_CATEGORIES: Array[String] = [
+	"shoes", "top_accessory", "eyebrows", "hair", "facial_hair", "headgear", "facegear"
+]
+const APPEARANCE_CATEGORY_ALIASES := {"top_accessory": "top", "eyebrows": "hair"}
 
 static var _manifest: Dictionary = {}
 static var _texture_cache: Dictionary = {}
@@ -92,12 +94,13 @@ static func _resolve_part_layer(
 	var texture := _load_texture(path)
 	if texture == null:
 		return {}
-	if category == "hair" and CharacterAppearanceService.is_tintable_part(category, resolved_id):
-		var hair_color := CharacterAppearanceService.resolve_hair_color(
-			str(appearance_state.get("hair_color", "")),
-			gender
-		)
-		texture = _colour_variant(path, texture, hair_color)
+	var tint_key := str(part.get("tint", "")).strip_edges()
+	if tint_key.is_empty() and category == "hair" and CharacterAppearanceService.is_tintable_part(category, resolved_id):
+		tint_key = "hair_color"
+	if not tint_key.is_empty():
+		var tint_colour := _appearance_tint(appearance_state, tint_key, gender)
+		if not tint_colour.is_empty():
+			texture = _colour_variant(path, texture, tint_colour)
 	return {
 		"category": category,
 		"part_id": resolved_id,
@@ -106,6 +109,13 @@ static func _resolve_part_layer(
 		"scale": float(part.get("scale", 1.0)),
 		"fallback": used_fallback,
 	}
+
+
+static func _appearance_tint(appearance_state: Dictionary, tint_key: String, gender: String) -> String:
+	var colour := str(appearance_state.get(tint_key, "")).strip_edges()
+	if tint_key == "hair_color":
+		return CharacterAppearanceService.resolve_hair_color(colour, gender)
+	return CharacterAppearanceService.normalize_hex_color_code(colour)
 
 static func _selected_part_id(appearance_state: Dictionary, category: String) -> String:
 	var appearance_category := str(APPEARANCE_CATEGORY_ALIASES.get(category, category))
