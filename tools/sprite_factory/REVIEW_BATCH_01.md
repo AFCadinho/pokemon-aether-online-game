@@ -208,6 +208,19 @@ Repack verified all 2,554 frames of the 15 existing variant entries. Resident
 memory for a fully loaded animation remains roughly one MiB per frame; this
 change reduces startup latency and decode working memory, not final fidelity.
 
+Summary/Pokédex portraits use optional idle `portrait_bounds`: 15–85% alpha
+mass quantiles averaged across all idle frames. This is a silhouette-density
+heuristic, not anatomical detection. Runtime packages compute it offline;
+still and streamed frames share the same fixed focus. Sparse silhouettes can
+zoom up to 22% beyond whole-envelope fitting; dense ones retain full-envelope
+fit. Pokédex uses more of its existing preview panel (170×112). Thin extremity
+tips may cross the portrait edge at maximum extension; human review remains
+necessary. A view's `presentation.portrait_bounds` is an explicit review
+override when the generic focus is unsuitable. Battle positioning/scaling
+does not consume this field. No species-name checks were added.
+The current local catalog points at `portrait-runtime-v1`; its
+`previous-catalog.json` preserves the preceding streaming catalog for rollback.
+
 For local development review, a machine-local ignored file at
 `.pokeaether/rendered-preview-catalog` may contain the absolute path of the
 preview catalog. Debug builds use it when the explicit
