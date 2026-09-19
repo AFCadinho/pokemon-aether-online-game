@@ -29,26 +29,24 @@ static func initialize() -> void:
 	var packs: Dictionary = {}
 	for pack in store.installed():
 		packs[pack.id] = pack
-	for pack_id in store.enabled_ids():
+	var selected := store.selected_by_category()
+	for category: String in Store.SELECTABLE_CATEGORIES:
+		var pack_id := str(selected.get(category, ""))
 		var pack: Dictionary = packs.get(pack_id, {})
 		var pack_assets: Dictionary = pack.get("assets", {})
-		for collection: Dictionary in pack_assets.get("sprite_collections", {}).values():
-			var style := str(collection.get("style", ""))
-			var collection_directory := store.asset_directory(pack_id, str(collection.get("directory", "")))
-			if not style.is_empty() and not collection_directory.is_empty():
-				_sprite_collection_styles[style] = true
-		for category: String in pack_assets:
-			if category == "sprite_collections":
+		if category == "battle_sprites":
+			for collection: Dictionary in pack_assets.get("sprite_collections", {}).values():
+				var style := str(collection.get("style", ""))
+				var collection_directory := store.asset_directory(pack_id, str(collection.get("directory", "")))
+				if not style.is_empty() and not collection_directory.is_empty():
+					_sprite_collection_styles[style] = true
+		for key: String in pack_assets.get(category, {}):
+			var entry: Dictionary = pack_assets[category][key].duplicate(true)
+			entry["path"] = store.asset_path(pack_id, entry.file)
+			if entry.path.is_empty():
 				continue
-			for key: String in packs[pack_id].assets[category]:
-				var entry: Dictionary = packs[pack_id].assets[category][key].duplicate(true)
-				entry["path"] = store.asset_path(pack_id, entry.file)
-				if entry.path.is_empty():
-					continue
-				var lookup := category + "/" + key
-				if not _entries.has(lookup):
-					_entries[lookup] = []
-				_entries[lookup].append(entry)
+			_entries[category + "/" + key] = [entry]
+
 
 static func cry(species: String) -> AudioStream:
 	initialize()
