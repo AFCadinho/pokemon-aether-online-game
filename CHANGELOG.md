@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card Pokémon now face right and sit lower beside the trainer, keeping the trainer visible in front of larger companions.
+
 - Favorite Pokémon now share the full Trainer Card portrait with the trainer, giving broad poses more room instead of shrinking them into a small side icon.
 
 - Favorite Pokémon portraits now scale by visible visual mass, so wide poses such as Greninja no longer appear implausibly tiny beside the Trainer.

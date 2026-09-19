@@ -24,8 +24,11 @@ func _run() -> void:
 		quit(1)
 		return
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
+	var portrait_species := OS.get_environment("POKEAETHER_TRAINER_CARD_SPECIES")
+	if portrait_species.is_empty():
+		portrait_species = "greninja"
 	overlay.set("own_trainer_card_data", {
-		"favoritePokemon": "greninja", "favoritePokemonShiny": false,
+		"favoritePokemon": portrait_species, "favoritePokemonShiny": false,
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [
 			{"format": "aether-ou", "rating": 1234, "period": "all_time"},
@@ -39,7 +42,7 @@ func _run() -> void:
 		"userId": 42.0,
 		"username": "misty",
 		"displayName": "Misty",
-		"favoritePokemon": "greninja",
+		"favoritePokemon": portrait_species,
 		"favoritePokemonShiny": false,
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [
@@ -130,9 +133,11 @@ func _run() -> void:
 	_check(
 		public_companion != null
 		and public_companion.get_parent().get_children().find(public_companion) < public_companion.get_parent().get_children().find(public_art)
-		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 170.0
+		and public_companion.flip_h
+		and public_art.z_index > public_companion.z_index
+		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 139.0
 		and public_companion.position.y < 250.0,
-		"wide companions use the portrait width behind the foreground trainer"
+		"companions face right and sit behind the unobscured foreground trainer"
 	)
 	for field: String in ["seen", "caught", "shinyCaught"]:
 		var tile := popup.find_child("Dex_%s" % field, true, false)
