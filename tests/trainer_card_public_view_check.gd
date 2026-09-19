@@ -151,6 +151,15 @@ func _run() -> void:
 	_check(_find_label(popup, "5.0") == null, "JSON float battle counters render as whole numbers")
 	overlay.call("_apply_own_trainer_card_details", overlay.get("public_trainer_card_data"))
 	var own_card := overlay.get("trainer_card_popup") as Control
+	_check(
+		_find_label(own_card, "5") != null and _find_label(own_card, "4") != null,
+		"own Overview receives the same all-time PvP totals as the PvP tab"
+	)
+	overlay.call("_refresh_own_trainer_card_pvp")
+	_check(
+		_find_label(own_card, "5") != null and _find_label(own_card, "4") != null,
+		"an in-flight own PvP refresh keeps the last verified Overview totals visible"
+	)
 	for field: String in ["seen", "caught", "shinyCaught"]:
 		var tile := own_card.find_child("Dex_%s" % field, true, false)
 		var expected := {"seen": "126", "caught": "83", "shinyCaught": "7"}
