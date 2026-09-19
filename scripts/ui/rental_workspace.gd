@@ -263,15 +263,27 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_review_species.add_theme_font_size_override("font_size", 22)
 	pokemon_review_species.add_theme_color_override("font_color", Color("#62d5ff"))
 	identity.add_child(pokemon_review_species)
+	var rarity_center := CenterContainer.new()
+	rarity_center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_child(rarity_center)
+	var rarity_badge := PanelContainer.new()
+	rarity_badge.name = "RarityBadge"
+	var rarity_style := _control_style(Color("#211d12"), Color("#8c793b"))
+	rarity_style.content_margin_left = 12
+	rarity_style.content_margin_right = 12
+	rarity_style.content_margin_top = 3
+	rarity_style.content_margin_bottom = 3
+	rarity_badge.add_theme_stylebox_override("panel", rarity_style)
+	rarity_center.add_child(rarity_badge)
 	pokemon_review_rarity = Label.new()
 	pokemon_review_rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pokemon_review_rarity.add_theme_font_size_override("font_size", 12)
+	pokemon_review_rarity.add_theme_font_size_override("font_size", 11)
 	pokemon_review_rarity.add_theme_color_override("font_color", Color("#f5df9a"))
-	identity.add_child(pokemon_review_rarity)
+	rarity_badge.add_child(pokemon_review_rarity)
 	var fixed_rules := Label.new()
-	fixed_rules.text = "LEVEL 100"
+	fixed_rules.text = "LV. 100"
 	fixed_rules.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	fixed_rules.add_theme_font_size_override("font_size", 10)
+	fixed_rules.add_theme_font_size_override("font_size", 11)
 	fixed_rules.add_theme_color_override("font_color", Color("#8ea8bd"))
 	identity.add_child(fixed_rules)
 	var review_item := _create_preview_item_row(identity)
@@ -405,11 +417,25 @@ func _create_pokemon_preview() -> Control:
 	return card
 
 func _create_preview_item_row(parent: VBoxContainer) -> Dictionary:
+	var center := CenterContainer.new()
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(center)
+	var chip := PanelContainer.new()
+	chip.name = "HeldItemChip"
+	chip.custom_minimum_size = Vector2(190, 36)
+	var chip_style := _control_style(Color("#0d1b2a"), Color("#315070"))
+	chip_style.content_margin_left = 9
+	chip_style.content_margin_right = 9
+	chip_style.content_margin_top = 3
+	chip_style.content_margin_bottom = 3
+	chip.add_theme_stylebox_override("panel", chip_style)
+	center.add_child(chip)
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 5)
-	parent.add_child(row)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 7)
+	chip.add_child(row)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(24, 24)
+	icon.custom_minimum_size = Vector2(28, 28)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -417,7 +443,7 @@ func _create_preview_item_row(parent: VBoxContainer) -> Dictionary:
 	var label := Label.new()
 	label.text = "No held item"
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", 11)
 	label.add_theme_color_override("font_color", Color("#f5df9a"))
 	row.add_child(label)
 	return {"icon": icon, "label": label}
