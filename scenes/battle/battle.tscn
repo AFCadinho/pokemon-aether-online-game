@@ -1363,7 +1363,7 @@ process_material = SubResource("ParticleProcessMaterial_sandstorm_swirl")
 
 [node name="PlayerTrainerSprite" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" instance=ExtResource("50_trainer_sprite")]
 unique_name_in_owner = true
-position = Vector2(124, 474)
+position = Vector2(124, 438)
 
 [node name="EnemyTrainerSprite" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage" instance=ExtResource("50_trainer_sprite")]
 unique_name_in_owner = true
@@ -1587,9 +1587,9 @@ mouse_filter = 2
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 18.0
-offset_top = 214.0
+offset_top = 178.0
 offset_right = 74.0
-offset_bottom = 214.0
+offset_bottom = 178.0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_kd6yx")
 

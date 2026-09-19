@@ -4,7 +4,11 @@
 
 - Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
 
-- Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield and match the equipped outfit; appearances whose matching battle art is still being made keep their exact overworld look in battle.
+- The Trainer Card overview now fills its lower space neatly and aligns the Trainer Title selector with the other profile values.
+
+- Trainer Cards now feature a full-body trainer portrait with your outfit and Chroma colours, a matching passport design for public profiles, and a clearer overview of your trainer information.
+
+- Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield, use every available matching outfit layer, and temporarily use the Starter Kit shirt and trousers when those two battle layers are still being made. The unisex Mysterious Outfit now has its complete battle look for male and female Trainers, while the Adinho Outfit supports its original palette and saved Chroma colours.
 
 - Local editor runs now reuse the selected launcher mod packs for cosmetic testing.
 

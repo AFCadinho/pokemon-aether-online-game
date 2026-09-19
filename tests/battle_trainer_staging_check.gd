@@ -34,9 +34,10 @@ func _check_scene_staging() -> void:
 	_check(player_start >= 0, "player battle trainer marker exists")
 	_check(enemy_start >= 0, "opponent battle trainer marker exists")
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
-	_check(source.contains("position = Vector2(124, 474)"), "player trainer stands slightly above the player platform baseline")
+	_check(source.contains("position = Vector2(124, 438)"), "player trainer is raised clear of the command dock")
 	_check(source.contains("position = Vector2(1028, 316)"), "opponent trainer mirrors the raised staging")
 	_check(source.contains('[node name="EnemySpriteBox"') and source.contains("z_index = 2"), "active Pokemon render above trainer art")
+	_check(source.contains("offset_top = 178.0") and source.contains("offset_bottom = 178.0"), "player-side party rail is raised with the player trainer")
 	_check(source.contains("position = Vector2(300, 412)"), "player team preview remains in its original position")
 	_check(source.contains("position = Vector2(850, 268)"), "opponent team preview remains in its original position")
 
@@ -103,9 +104,11 @@ func _check_battle_setup_contract() -> void:
 	_check(switch_recall_index > switch_command_index, "switch commands appear immediately before recall animation")
 	_check(source.contains("if battle_type != BattleType.TRAINER:"), "wild battles do not show trainer command callouts")
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
+	var player_catalog_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
 	_check(renderer_source.contains("BattlePlayerTrainerCatalog.build_layers"), "player staging uses the dedicated layered battle-art catalog")
 	_check(renderer_source.contains("sprite.flip_h = facing_direction.x > 0.0"), "authored left-facing art mirrors only for the allied trainer")
-	_check(renderer_source.contains("_show_overworld_player_fallback"), "unavailable battle outfits preserve the exact overworld appearance")
+	_check(not renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player battles no longer fall back to the overworld renderer")
+	_check(player_catalog_source.contains("Image.load_from_file(path)"), "new battle-art PNGs render before the editor importer catches up")
 	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
 	_check(
 		export_presets.count("assets/battles/trainers/player/**/*") == 5,
@@ -132,6 +135,8 @@ func _check_npc_metadata_contract() -> void:
 
 
 func _check_runtime_renderer() -> void:
+	var raw_outfit_image := Image.load_from_file("res://assets/battles/trainers/player/mysterious_outfit/shirt.png")
+	_check(raw_outfit_image != null and not raw_outfit_image.is_empty(), "battle outfit PNGs remain directly readable without an imported texture resource")
 	var catalog := PortraitCatalogScript.new()
 	root.add_child(catalog)
 	var npc := _create_base_npc_harness()
@@ -227,13 +232,99 @@ func _check_runtime_renderer() -> void:
 		"hair": "Aether_Female_Hair_01",
 		"headgear": "__none__",
 		"top": "Aether_Blossom_Dress",
-		"bottom": "Mysterious_Trousers",
+		"bottom": "Aether_Blossom_Trousers",
 		"shoes": "Aether_Blossom_Shoes",
 	}, Vector2.LEFT)
 	_check(
-		renderer.player_avatar != null and not renderer.player_battle_art.visible,
-		"an outfit without complete battle art keeps its exact overworld renderer"
+		renderer.player_battle_art.visible
+		and renderer.player_battle_art.get_node_or_null("Body") != null,
+		"an outfit without complete battle art keeps the dedicated base body"
 	)
+	_check(
+		renderer.player_battle_art.get_node_or_null("Top") != null
+		and renderer.player_battle_art.get_node_or_null("Bottom") != null,
+		"missing top and bottom battle art use their Starter Kit layers"
+	)
+	_check(
+		renderer.player_battle_art.get_node_or_null("Hair") == null
+		and renderer.player_battle_art.get_node_or_null("Shoes") == null
+		and renderer.player_battle_art.get_node_or_null("Headgear") == null,
+		"other unavailable outfit layers stay empty"
+	)
+	_check(
+		renderer.player_layer_metadata.filter(
+			func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
+		).size() == 2,
+		"only top and bottom report Starter Kit fallback layers"
+	)
+	for gender: String in ["male", "female"]:
+		renderer.show_player({
+			"gender": gender,
+			"body": "Gen4_Base_F_v1" if gender == "female" else "Gen4_Base_v1",
+			"top": "Mysterious_Shirt",
+			"bottom": "Mysterious_Trousers",
+			"shoes": "Mysterious_Shoes",
+			"facegear": "Mysterious_Mask",
+		}, Vector2.RIGHT)
+		for layer_name: String in ["Top", "Bottom", "Shoes", "TopAccessory", "Facegear"]:
+			_check(
+				renderer.player_battle_art.get_node_or_null(layer_name) != null,
+				"%s Mysterious Outfit renders its %s battle layer" % [gender, layer_name]
+			)
+		_check(
+			renderer.player_layer_metadata.filter(
+				func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
+			).is_empty(),
+			"%s Mysterious Outfit uses authored battle art without fallback" % gender
+		)
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"top": "Adinho_Shirt",
+		"bottom": "Adinho_Trousers",
+		"shoes": "Adinho_Shoes",
+		"hair": "Adinho_Hair",
+		"facial_hair": "Adinho_Beard",
+		"facegear": "Adinho_Glasses",
+		"hair_color": "#5a3728",
+		"facial_hair_color": "#5a3728",
+	}, Vector2.RIGHT)
+	var original_adinho_layers: Dictionary = {}
+	for layer_name: String in ["Top", "Bottom", "Shoes", "Eyebrows", "Hair", "FacialHair", "Facegear"]:
+		var layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		_check(layer != null and layer.texture != null, "Adinho original palette renders its %s layer" % layer_name)
+		if layer != null:
+			original_adinho_layers[layer_name] = layer.texture
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"top": "Adinho_Shirt_Chroma",
+		"bottom": "Adinho_Trousers_Chroma",
+		"shoes": "Adinho_Shoes_Chroma",
+		"hair": "Adinho_Hair",
+		"facial_hair": "Adinho_Beard",
+		"facegear": "Adinho_Glasses_Chroma",
+		"hair_color": "#a64f70",
+		"facial_hair_color": "#a64f70",
+		"top_color": "#3f6fb2",
+		"bottom_color": "#8c4fa3",
+		"shoes_color": "#e77ba8",
+		"facegear_color": "#aeb6c2",
+	}, Vector2.RIGHT)
+	for layer_name: String in ["Top", "Bottom", "Shoes", "Facegear"]:
+		var chroma_layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		var original_texture := original_adinho_layers.get(layer_name) as Texture2D
+		_check(
+			chroma_layer != null
+			and original_texture != null
+			and _count_changed_opaque_pixels(original_texture.get_image(), chroma_layer.texture.get_image()) > 12,
+			"Adinho Chroma %s uses its saved colour" % layer_name.to_lower()
+		)
+	for layer_name: String in ["Eyebrows", "Hair", "FacialHair"]:
+		_check(
+			renderer.player_battle_art.get_node_or_null(layer_name) != null,
+			"Adinho Chroma appearance keeps its %s layer" % layer_name.to_lower()
+		)
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")

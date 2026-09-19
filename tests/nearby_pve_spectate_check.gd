@@ -118,10 +118,9 @@ func _check_trainer_spectator_presentation() -> void:
 	await process_frame
 
 	_check(
-		(battle.player_trainer_sprite.player_battle_art.visible
-		or battle.player_trainer_sprite.player_avatar != null)
+		battle.player_trainer_sprite.player_battle_art.visible
 		and battle.player_trainer_sprite.visible,
-		"nearby trainer spectating stages the observed player's matching appearance"
+		"nearby trainer spectating stages the observed player's battle art"
 	)
 	_check(
 		battle.enemy_trainer_sprite.catalog_sprite.visible
@@ -146,8 +145,7 @@ func _check_trainer_spectator_presentation() -> void:
 	await process_frame
 	_check(
 		battle.player_trainer_sprite.catalog_sprite.visible
-		and (battle.enemy_trainer_sprite.player_battle_art.visible
-		or battle.enemy_trainer_sprite.player_avatar != null),
+		and battle.enemy_trainer_sprite.player_battle_art.visible,
 		"switching spectator view keeps the NPC and player trainer art on their owning sides"
 	)
 	_check(
