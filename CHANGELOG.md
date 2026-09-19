@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Rental team set cards are wider and show each Pokémon's complete move list as one readable block.
+- Rental specialists now offer rent-or-explanation dialogue choices, while the catalog uses a compact balance-only header.
 
 - The Pokémon rental builder now follows a clear create, validate and rent flow with friendlier input guidance and errors.
 

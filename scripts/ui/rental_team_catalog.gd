@@ -105,13 +105,12 @@ func _ready() -> void:
 	detail_hint.add_theme_color_override("font_color", MUTED)
 	detail_layout.add_child(detail_hint)
 	var sets_scroll := ScrollContainer.new()
-	sets_scroll.custom_minimum_size.y = 168
 	sets_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sets_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sets_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	detail_layout.add_child(sets_scroll)
 	team_grid = GridContainer.new()
-	team_grid.columns = 2
+	team_grid.columns = 3
 	team_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	team_grid.add_theme_constant_override("h_separation", 7)
 	team_grid.add_theme_constant_override("v_separation", 7)
@@ -269,7 +268,7 @@ func _team_card(offer: Dictionary) -> Control:
 func _set_card(set_data: Dictionary) -> Control:
 	var species := str(set_data.get("species", set_data.get("speciesId", "")))
 	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(0, 152)
+	card.custom_minimum_size = Vector2(0, 180)
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.add_theme_stylebox_override("panel", _panel_style(Color("#0a1321e8"), Color("#315070cc"), 8, 1))
 	var margin := MarginContainer.new()
@@ -314,13 +313,9 @@ func _set_card(set_data: Dictionary) -> Control:
 	var ivs := _stat_spread(set_data.get("ivs", {}), 31)
 	if not ivs.is_empty():
 		lines.append("IVs: %s" % ivs)
-	var moves: Array[String] = []
 	for move: Variant in _array(set_data.get("moves", [])):
-		moves.append(_content_name("moves", str(move)))
-	if not moves.is_empty():
-		lines.append("[color=#c9beff]Moves:[/color] %s" % " / ".join(moves))
+		lines.append("[color=#c9beff]– %s[/color]" % _content_name("moves", str(move)))
 	var details := RichTextLabel.new()
-	details.name = "SetDetails"
 	details.bbcode_enabled = true
 	details.fit_content = true
 	details.scroll_active = false
