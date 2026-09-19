@@ -105,6 +105,24 @@ func _run() -> void:
 	)
 	_check(animation_button != null, "Summary creates the rendered-animation review menu")
 	if animation_button != null:
+		_check(
+			animation_button.anchor_left == 1.0
+				and animation_button.anchor_right == 1.0
+				and is_equal_approx(animation_button.offset_top, -66.0)
+				and is_equal_approx(animation_button.offset_bottom, -36.0),
+			"animation control sits above the fixed level badge"
+		)
+		_check(
+			animation_button.get_theme_stylebox("normal") is StyleBoxFlat
+				and animation_button.get_theme_stylebox("hover") is StyleBoxFlat
+				and animation_button.get_theme_stylebox("pressed") is StyleBoxFlat,
+			"animation control uses complete Aether button states"
+		)
+		_check(
+			animation_button.get_popup().get_theme_stylebox("panel") is StyleBoxFlat
+				and animation_button.get_popup().get_theme_stylebox("hover") is StyleBoxFlat,
+			"animation menu uses the Aether popup surface and hover styling"
+		)
 		_check(not animation_button.visible, "legacy Summary sprites do not expose rendered animation controls")
 		var rendered_frames := SpriteFrames.new()
 		rendered_frames.set_meta("rendered_asset", true)
