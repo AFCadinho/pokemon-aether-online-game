@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_guide_npc.tscn" id="11_clash_guide"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_bot_captain_npc.tscn" id="12_bot_captain"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="13_o6lnf"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/rental_npc.tscn" id="rental_vendor"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -253,6 +254,15 @@ position = Vector2(1072, 1008)
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=331639728]
+
+[node name="TeamRentalNPC" parent="Entities/NPCs" unique_id=220831213 instance=ExtResource("rental_vendor")]
+position = Vector2(944, 176)
+rental_kind = "team"
+
+[node name="PokemonRentalNPC" parent="Entities/NPCs" unique_id=4411246 instance=ExtResource("rental_vendor")]
+position = Vector2(1008, 176)
+rental_kind = "pokemon"
+display_name = "Pokémon Rental Specialist"
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1798118896 instance=ExtResource("5_transit_keeper")]
 position = Vector2(1040, 1424)

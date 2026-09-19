@@ -248,6 +248,7 @@ const CODE_TO_KEY: Dictionary = {
 	"no_usable_pokemon": "backend.error.no_usable_pokemon",
 	"pokemon_level_cap_reached": "backend.error.pokemon_level_cap_reached",
 	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
+	"aether_clash_exit_party_level_cap_exceeded": "backend.error.aether_clash_exit_party_level_cap_exceeded",
 	"pokemon_level_cap_authentication_required": "backend.error.auth_required",
 	"pokemon_level_cap_validation_unavailable": "backend.error.unavailable",
 	"pokemon_party_changed_refresh_required": "backend.error.party_changed_refresh",

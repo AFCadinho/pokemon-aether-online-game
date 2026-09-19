@@ -311,6 +311,7 @@
   "backend.error.no_usable_pokemon": "Nenhum dos seus Pokémon pode batalhar. Cure sua equipe em um Centro Pokémon primeiro.",
   "backend.error.pokemon_level_cap_reached": "Este Pokémon atingiu seu limite de nível atual de {levelCap}.",
   "backend.error.pokemon_level_cap_party_ineligible": "Sua equipe contém um Pokémon acima do limite de nível atual de {levelCap}.",
+  "backend.error.aether_clash_exit_party_level_cap_exceeded": "Sua equipe contém um Pokémon acima do limite de nível atual de {levelCap}. Guarde-o no PC ou devolva o aluguel ativo antes de sair do Aether Clash.",
   "backend.error.trade_pokemon_level_cap_exceeded": "Este Pokémon está no nível {pokemonLevel}, acima do limite de troca do destinatário de nível {tradeLevelCap}.",
   "backend.error.reward_unavailable": "Essa recompensa não está mais disponível.",
   "backend.error.field_move_unavailable": "Esse movimento de campo não pode ser usado agora.",

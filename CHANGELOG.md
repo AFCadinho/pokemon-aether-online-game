@@ -4,6 +4,26 @@
 
 - Rendered Pokémon now sit lower on battle platforms, while Summary cards preserve the natural size difference between small and large species.
 
+- Every player who can reach the Aether Clash Lobby can use level-100 rentals in Clash and Ranked play, while the lobby explains when an above-cap party member must be stored or returned before leaving.
+
+- The Pokémon rental editor now places inputs beside a live team-style Pokémon set preview.
+
+- Pokémon rentals now separate set creation from the validated review-and-rent screen.
+
+- Rental specialists now offer rent-or-explanation dialogue choices, while the catalog uses a compact balance-only header.
+
+- The Pokémon rental builder now follows a clear create, validate and rent flow with friendlier input guidance and errors.
+
+- Team rental tier filtering is limited to Aether OU and Aether UU.
+
+- Rental windows, tabs, builder fields, dropdown menus and close controls now consistently use the Aether interface styling.
+
+- Pokémon rentals can now be built from a PokéPaste set or manual fields, with server-validated rarity pricing.
+
+- Team rentals now use the familiar AI Sparring catalog layout, including team filters, six-Pokémon previews and complete set cards before choosing a rental duration.
+
+- Two rental specialists in the Aether Clash Lobby now offer level-100 teams and individual Pokémon for Aetherite, with catalog previews, duration choices, early returns and permanent purchase for individual rentals.
+
 - Trainer Cards now stay at one consistent size while switching tabs, and public previews can be moved by dragging their title bar.
 
 - Hovering a shortened Pokémon Summary location now reveals its complete name.

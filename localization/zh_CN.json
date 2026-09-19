@@ -311,6 +311,7 @@
   "backend.error.no_usable_pokemon": "你的宝可梦都不能战斗。首先在宝可梦中心治愈你的队伍。",
   "backend.error.pokemon_level_cap_reached": "该宝可梦已达到你当前的等级上限 {levelCap}。",
   "backend.error.pokemon_level_cap_party_ineligible": "你的队伍中包含一只高于当前等级上限 {levelCap} 的宝可梦。",
+  "backend.error.aether_clash_exit_party_level_cap_exceeded": "你的队伍中有宝可梦超过当前等级上限 {levelCap}。离开以太冲突前，请将其存入电脑或归还仍在租赁中的宝可梦。",
   "backend.error.trade_pokemon_level_cap_exceeded": "该宝可梦的等级为 {pokemonLevel}，高于接收者的交易等级上限 {tradeLevelCap}。",
   "backend.error.reward_unavailable": "该奖励不再可用。",
   "backend.error.field_move_unavailable": "该字段移动现在无法使用。",

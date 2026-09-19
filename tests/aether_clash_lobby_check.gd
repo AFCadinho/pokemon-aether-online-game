@@ -41,6 +41,9 @@ func _run() -> void:
 		"Guild arrival marker is centered on a map tile"
 	)
 	var battle_point_vendor := lobby.get_node_or_null("Entities/NPCs/BattlePointVendor")
+	for rental: Array in [["TeamRentalNPC", "team", Vector2(624, 944)], ["PokemonRentalNPC", "pokemon", Vector2(752, 944)]]:
+		var vendor := lobby.get_node_or_null("Entities/NPCs/" + str(rental[0]))
+		_check(vendor != null and vendor.rental_kind == rental[1] and vendor.position == rental[2], "Rental vendor matches server location and catalog: " + str(rental[0]))
 	_check(battle_point_vendor != null, "Lobby places the Battle Point vendor")
 	_check(
 		battle_point_vendor != null
@@ -112,6 +115,8 @@ func _run() -> void:
 	)
 	var collision := lobby.get_node_or_null("Tiles/Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
+	for tile: Vector2i in [Vector2i(19, 29), Vector2i(23, 29), Vector2i(19, 30), Vector2i(23, 30)]:
+		_check(collision.get_cell_source_id(tile) == -1, "Rental vendor or approach tile is walkable: " + str(tile))
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
 		"Guild arrival tile is walkable"
