@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Changing your trainer's skin tone now preserves the Pokéball's original red colours in battles and on Trainer Cards.
+
 - Trainer Card companions must now be Pokémon you currently own. Shiny choices use the actual owned variant; borrowed, released or traded-away Pokémon cannot be shown as your own.
 
 - Both Trainer Card views now show Pokédex progress and a favorite Pokémon's HOME portrait beside the trainer. Choose your companion from registered Pokémon, see lifetime PvP ratings by format, and add friends from public cards. Battle totals now display as whole numbers.
