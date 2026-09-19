@@ -379,6 +379,17 @@ func _refresh_configuration(packs: Array[Dictionary]) -> void:
 		choice.select(selected_index)
 		_apply_button_style(choice)
 		row.add_child(choice)
+		var help := Button.new()
+		help.text = translate.call("How to make one")
+		_apply_button_style(help)
+		row.add_child(help)
+		var tutorial := Label.new()
+		tutorial.text = translate.call(_tutorial_key(category))
+		tutorial.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		tutorial.add_theme_color_override("font_color", Color(0.66, 0.72, 0.84, 1.0))
+		tutorial.visible = false
+		configuration_rows.add_child(tutorial)
+		help.pressed.connect(func() -> void: tutorial.visible = not tutorial.visible)
 		choice.item_selected.connect(func(index: int) -> void:
 			var next := store.selected_by_category()
 			var pack_id := str(choice.get_item_metadata(index)) if index > 0 else ""
@@ -386,6 +397,14 @@ func _refresh_configuration(packs: Array[Dictionary]) -> void:
 			else: next[category] = pack_id
 			_save_selection(next)
 		)
+
+
+func _tutorial_key(category: String) -> String:
+	match category:
+		"cries": return "Tutorial: Pokémon cries"
+		"battle_sprites": return "Tutorial: Battle sprites"
+		"followers": return "Tutorial: Follower sprites"
+	return ""
 
 
 func _save_selection(selected: Dictionary) -> void:
