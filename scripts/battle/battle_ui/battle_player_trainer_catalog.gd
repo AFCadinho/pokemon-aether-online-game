@@ -4,9 +4,8 @@ class_name BattlePlayerTrainerCatalog
 
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const MANIFEST_PATH := "res://assets/battles/trainers/player/manifest.json"
-const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "shoes", "top"]
-const OPTIONAL_CATEGORIES: Array[String] = ["hair", "headgear"]
-const UNAVAILABLE_DETAIL_CATEGORIES: Array[String] = ["facial_hair", "facegear"]
+const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "top"]
+const OPTIONAL_CATEGORIES: Array[String] = ["shoes", "hair", "headgear"]
 
 static var _manifest: Dictionary = {}
 static var _texture_cache: Dictionary = {}
@@ -22,8 +21,6 @@ static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
 	if not (gender_value is Dictionary):
 		return []
 	var gender_data := gender_value as Dictionary
-	if not _appearance_has_complete_battle_art(gender_data, appearance_state, gender):
-		return []
 	var layers: Array[Dictionary] = []
 	var base_path := str(gender_data.get("base", ""))
 	var base_texture := _load_texture(base_path)
@@ -81,7 +78,7 @@ static func _resolve_part_layer(
 	var parts := parts_value as Dictionary
 	var resolved_id := selected_id
 	var used_fallback := false
-	if not parts.has(resolved_id):
+	if not parts.has(resolved_id) and is_required:
 		resolved_id = str(category_data.get("fallback", ""))
 		used_fallback = not selected_id.is_empty()
 	if resolved_id.is_empty() or not parts.has(resolved_id):
@@ -108,38 +105,6 @@ static func _resolve_part_layer(
 		"scale": float(part.get("scale", 1.0)),
 		"fallback": used_fallback,
 	}
-
-
-static func _appearance_has_complete_battle_art(
-	gender_data: Dictionary,
-	appearance_state: Dictionary,
-	gender: String
-) -> bool:
-	var body_id := str(appearance_state.get("body", "")).strip_edges()
-	if (
-		not body_id.is_empty()
-		and not CharacterAppearanceService.body_supports_layered_parts(body_id, gender)
-	):
-		return false
-	var categories_value: Variant = gender_data.get("categories", {})
-	if not (categories_value is Dictionary):
-		return false
-	var categories := categories_value as Dictionary
-	for category: String in REQUIRED_CLOTHING_CATEGORIES + OPTIONAL_CATEGORIES:
-		var selected_id := _selected_part_id(appearance_state, category)
-		if selected_id.is_empty():
-			continue
-		var category_value: Variant = categories.get(category, {})
-		if not (category_value is Dictionary):
-			return false
-		var parts_value: Variant = (category_value as Dictionary).get("parts", {})
-		if not (parts_value is Dictionary) or not (parts_value as Dictionary).has(selected_id):
-			return false
-	for category: String in UNAVAILABLE_DETAIL_CATEGORIES:
-		if not _selected_part_id(appearance_state, category).is_empty():
-			return false
-	return true
-
 
 static func _selected_part_id(appearance_state: Dictionary, category: String) -> String:
 	var value: Variant = appearance_state.get(category, "")

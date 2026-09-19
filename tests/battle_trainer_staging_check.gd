@@ -105,7 +105,7 @@ func _check_battle_setup_contract() -> void:
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
 	_check(renderer_source.contains("BattlePlayerTrainerCatalog.build_layers"), "player staging uses the dedicated layered battle-art catalog")
 	_check(renderer_source.contains("sprite.flip_h = facing_direction.x > 0.0"), "authored left-facing art mirrors only for the allied trainer")
-	_check(renderer_source.contains("_show_overworld_player_fallback"), "unavailable battle outfits preserve the exact overworld appearance")
+	_check(not renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player battles no longer fall back to the overworld renderer")
 	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
 	_check(
 		export_presets.count("assets/battles/trainers/player/**/*") == 5,
@@ -231,8 +231,26 @@ func _check_runtime_renderer() -> void:
 		"shoes": "Aether_Blossom_Shoes",
 	}, Vector2.LEFT)
 	_check(
-		renderer.player_avatar != null and not renderer.player_battle_art.visible,
-		"an outfit without complete battle art keeps its exact overworld renderer"
+		renderer.player_battle_art.visible
+		and renderer.player_battle_art.get_node_or_null("Body") != null,
+		"an outfit without complete battle art keeps the dedicated base body"
+	)
+	_check(
+		renderer.player_battle_art.get_node_or_null("Top") != null
+		and renderer.player_battle_art.get_node_or_null("Bottom") != null,
+		"missing top and bottom battle art use their Starter Kit layers"
+	)
+	_check(
+		renderer.player_battle_art.get_node_or_null("Hair") == null
+		and renderer.player_battle_art.get_node_or_null("Shoes") == null
+		and renderer.player_battle_art.get_node_or_null("Headgear") == null,
+		"other unavailable outfit layers stay empty"
+	)
+	_check(
+		renderer.player_layer_metadata.filter(
+			func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
+		).size() == 2,
+		"only top and bottom report Starter Kit fallback layers"
 	)
 
 	renderer.clear()
