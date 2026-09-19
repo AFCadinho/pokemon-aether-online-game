@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokémon rental editor now places inputs beside a live team-style Pokémon set preview.
+
 - Pokémon rentals now separate set creation from the validated review-and-rent screen.
 
 - Rental specialists now offer rent-or-explanation dialogue choices, while the catalog uses a compact balance-only header.

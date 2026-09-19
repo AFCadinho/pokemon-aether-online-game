@@ -75,6 +75,10 @@ func _run() -> void:
 	pokemon_workspace.add_child(pokemon_workspace.service)
 	pokemon_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
 	pokemon_workspace.pokemon_paste.text = "Scizor\nAbility: Technician\n- Bullet Punch"
+	pokemon_workspace._update_pokemon_preview()
+	assert(pokemon_workspace.pokemon_preview_species.text == "Scizor")
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("Ability:[/color] Technician"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("Bullet Punch"))
 	pokemon_workspace._refresh_builder_actions()
 	assert(not pokemon_workspace.quote_button.disabled)
 	await pokemon_workspace._quote_pokemon()
@@ -93,6 +97,10 @@ func _run() -> void:
 	assert(pokemon_workspace.rent_button.disabled)
 	pokemon_workspace.pokemon_source.current_tab = 1
 	(pokemon_workspace.pokemon_fields["species"] as LineEdit).text = "Garchomp"
+	(pokemon_workspace.pokemon_fields["moves"] as LineEdit).text = "Earthquake, Dragon Claw"
+	pokemon_workspace._update_pokemon_preview()
+	assert(pokemon_workspace.pokemon_preview_species.text == "Garchomp")
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("Earthquake"))
 	var manual_build: Dictionary = pokemon_workspace._pokemon_build()
 	assert(manual_build["source"] == "manual")
 	assert(manual_build["pokemon"]["species"] == "Garchomp")
