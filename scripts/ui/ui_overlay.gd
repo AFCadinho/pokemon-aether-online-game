@@ -27173,7 +27173,17 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		Color(0, 0, 0, 0),
 		_get_pokemon_summary_nature_tooltip(pokemon.nature)
 	))
-	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.location"), _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(
+		LocalizationManager.text("ui.pokemon_summary.location"),
+		_get_pokemon_summary_location_text(pokemon),
+		Color("#62d7ff"),
+		false,
+		148.0,
+		Color(0, 0, 0, 0),
+		Color(0, 0, 0, 0),
+		"",
+		true
+	))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_date"), _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_level"), _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
 
@@ -27314,9 +27324,14 @@ func _create_summary_field_card(
 	min_width: float = 96.0,
 	value_color: Color = Color(0, 0, 0, 0),
 	border_color: Color = Color(0, 0, 0, 0),
-	tooltip_text: String = ""
+	tooltip_text: String = "",
+	show_full_value_hover: bool = false
 ) -> Control:
 	var resolved_tooltip: String = tooltip_text.strip_edges()
+	var full_value_text := _default_text(value_text)
+	var hover_description := resolved_tooltip
+	if hover_description == "" and show_full_value_hover:
+		hover_description = full_value_text
 	var stack := VBoxContainer.new()
 	stack.custom_minimum_size = Vector2(min_width, 41)
 	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -27349,16 +27364,17 @@ func _create_summary_field_card(
 	value_panel.add_child(value_margin)
 
 	var value := Label.new()
-	value.text = _default_text(value_text)
-	value.tooltip_text = resolved_tooltip if resolved_tooltip != "" else value.text
+	value.text = full_value_text
+	value.tooltip_text = hover_description if hover_description != "" else value.text
 	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_make_label_clip_width(value)
 	value.add_theme_font_size_override("font_size", 13 if emphasize_value else 12)
 	var resolved_value_color: Color = value_color if value_color.a > 0.0 else (Color("#f4f7ff") if emphasize_value else Color("#e8f0ff"))
 	value.add_theme_color_override("font_color", resolved_value_color)
 	value_margin.add_child(value)
-	if resolved_tooltip != "" and not _get_pokemon_summary_hover_nodes().is_empty():
-		_configure_pokemon_summary_detail_hover(stack, _default_text(value_text), resolved_tooltip, accent_color)
+	if hover_description != "" and not _get_pokemon_summary_hover_nodes().is_empty():
+		var hover_title := label_text if show_full_value_hover and resolved_tooltip == "" else full_value_text
+		_configure_pokemon_summary_detail_hover(stack, hover_title, hover_description, accent_color)
 	return stack
 
 func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
