@@ -941,6 +941,9 @@ func _render_active() -> void:
 		if str(loan.get("context", "")) != "npc_" + kind or str(loan.get("status", "")) not in ["active", "return_pending"]:
 			continue
 		count += 1
+		if kind == "team":
+			_render_active_team(loan)
+			continue
 		var data: Dictionary = loan.get("rental", {})
 		var label := Label.new()
 		label.text = "%s\nExpires: %s UTC • %s" % [data.get("displayName", "Rental"), str(loan.get("dueAt", "")).replace("T", " ").left(19), loan.get("status", "")]
@@ -965,6 +968,99 @@ func _render_active() -> void:
 		var empty := Label.new()
 		empty.text = "No active rentals from this vendor."
 		active_list.add_child(empty)
+
+func _render_active_team(loan: Dictionary) -> void:
+	var data: Dictionary = loan.get("rental", {})
+	var panel := PanelContainer.new()
+	panel.name = "ActiveTeamRentalCard"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var panel_style := _control_style(Color("#0b1726"), Color("#41698d"))
+	panel_style.content_margin_left = 14
+	panel_style.content_margin_right = 14
+	panel_style.content_margin_top = 12
+	panel_style.content_margin_bottom = 12
+	panel.add_theme_stylebox_override("panel", panel_style)
+	active_list.add_child(panel)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	panel.add_child(layout)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	layout.add_child(header)
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_theme_constant_override("separation", 3)
+	header.add_child(identity)
+	var title := Label.new()
+	title.text = str(data.get("displayName", "Rental team"))
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", Color("#62d5ff"))
+	identity.add_child(title)
+	var meta := Label.new()
+	meta.text = "FULL LEVEL-100 TEAM  •  6 POKÉMON  •  TIMER RUNS OFFLINE"
+	meta.add_theme_font_size_override("font_size", 10)
+	meta.add_theme_color_override("font_color", Color("#8ea8bd"))
+	identity.add_child(meta)
+	var timing := VBoxContainer.new()
+	timing.alignment = BoxContainer.ALIGNMENT_CENTER
+	header.add_child(timing)
+	var state := Label.new()
+	state.text = str(loan.get("status", "active")).replace("_", " ").to_upper()
+	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	state.add_theme_font_size_override("font_size", 10)
+	state.add_theme_color_override("font_color", Color("#a9f0cb"))
+	state.add_theme_stylebox_override("normal", _control_style(Color("#102c26"), Color("#3c8b70")))
+	timing.add_child(state)
+	var expiry := Label.new()
+	expiry.text = "Expires %s UTC" % str(loan.get("dueAt", "")).replace("T", " ").left(19)
+	expiry.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	expiry.add_theme_font_size_override("font_size", 11)
+	expiry.add_theme_color_override("font_color", Color("#eef6ff"))
+	timing.add_child(expiry)
+	var grid := GridContainer.new()
+	grid.name = "ActiveTeamSets"
+	grid.columns = 3
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	layout.add_child(grid)
+	for asset_value: Variant in loan.get("assets", []):
+		if not asset_value is Dictionary:
+			continue
+		var asset := asset_value as Dictionary
+		if str(asset.get("assetType", "")) != "pokemon":
+			continue
+		var snapshot: Variant = asset.get("snapshot", {})
+		if snapshot is Dictionary:
+			grid.add_child(team_catalog.create_set_card(snapshot as Dictionary, true))
+	if grid.get_child_count() == 0:
+		var unavailable := Label.new()
+		unavailable.text = "Team set details are unavailable. Refresh the rental screen."
+		unavailable.add_theme_color_override("font_color", Color("#8ea8bd"))
+		grid.add_child(unavailable)
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 10)
+	layout.add_child(footer)
+	var terms := Label.new()
+	terms.text = "Extensions add 24 hours from the current expiry time."
+	terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	terms.add_theme_font_size_override("font_size", 11)
+	terms.add_theme_color_override("font_color", Color("#8ea8bd"))
+	footer.add_child(terms)
+	if loan.get("status") == "active":
+		var extend_button := Button.new()
+		extend_button.text = "Extend 24 hours — 100 Aetherite"
+		extend_button.custom_minimum_size = Vector2(245, 38)
+		extend_button.pressed.connect(func(): await _mutate("/%s/extend" % loan["loanId"], {}, "Extend this rental by 24 hours for 100 Aetherite?\nThe extra time starts at the current expiry time."))
+		_style_button(extend_button, true)
+		footer.add_child(extend_button)
+	var return_button := Button.new()
+	return_button.text = "Return team"
+	return_button.custom_minimum_size = Vector2(135, 38)
+	return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this rental now? No Aetherite will be refunded."))
+	_style_button(return_button, false)
+	footer.add_child(return_button)
 
 func _mutate(path: String, payload: Dictionary, message: String) -> void:
 	if busy:

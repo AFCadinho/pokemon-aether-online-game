@@ -75,6 +75,19 @@ func _run() -> void:
 	await team_workspace.team_catalog.results_rendered
 	assert(team_workspace.team_catalog.results.get_child_count() == 9)
 	assert(team_workspace.team_catalog.result_status.text == "9 rental teams")
+	var active_assets: Array = []
+	for set_data: Dictionary in team_workspace.service._team(true)["pokemon"]:
+		active_assets.append({"assetType": "pokemon", "snapshot": set_data})
+	team_workspace.catalog["rentals"] = [{"loanId": "team-loan", "context": "npc_team", "status": "active", "dueAt": "2026-09-21T12:00:00Z", "assets": active_assets, "rental": {"displayName": "Test Balance"}}]
+	team_workspace._render_active()
+	var active_team_card := team_workspace.active_list.get_node("ActiveTeamRentalCard")
+	var active_team_sets := active_team_card.find_child("ActiveTeamSets", true, false)
+	assert(active_team_sets.get_child_count() == 6)
+	assert((active_team_sets.get_child(0) as Control).custom_minimum_size.y == 160)
+	assert(active_team_sets.get_child(0).find_children("*", "TextureRect", true, false).size() == 1)
+	var active_team_buttons := active_team_card.find_children("*", "Button", true, false)
+	assert(active_team_buttons.any(func(button: Button): return button.text == "Extend 24 hours — 100 Aetherite" and button.has_theme_stylebox_override("normal")))
+	assert(active_team_buttons.any(func(button: Button): return button.text == "Return team" and button.has_theme_stylebox_override("normal")))
 	team_workspace.queue_free()
 	var pokemon_workspace := WORKSPACE.new()
 	pokemon_workspace.kind = "pokemon"
