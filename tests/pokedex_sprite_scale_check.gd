@@ -108,6 +108,44 @@ func _run() -> void:
 			var animated_scale: Vector2 = overlay.call("_get_pokedex_sprite_scale", animated_value)
 			_check(animated_scale.is_equal_approx(pokedex_size / visual_bounds.size), "portrait scale remains fixed after streaming")
 
+			var rendered_summary_heights := {}
+			for species: String in ["diglett", "jigglypuff", "dragonite"]:
+				var species_frames_value: Variant = sprite_loader.call(
+					"_load_preview_sprite_frames", species, "front", false, false
+				)
+				_check(species_frames_value is SpriteFrames, "rendered %s loads for natural Summary scale checks" % species)
+				if not species_frames_value is SpriteFrames:
+					continue
+				var species_frames := species_frames_value as SpriteFrames
+				(overlay.get("pokemon_summary_sprite_loader") as Node).call(
+					"_prepare_rendered_sprite_frames", species_frames
+				)
+				var species_bounds := species_frames.get_meta("rendered_visual_bounds", Rect2()) as Rect2
+				var species_summary_scale: Vector2 = overlay.call(
+					"_get_pokemon_summary_sprite_scale", species_frames
+				)
+				rendered_summary_heights[species] = species_bounds.size.y * species_summary_scale.y
+				if species == "diglett":
+					var presentation := species_frames.get_meta("rendered_presentation", {}) as Dictionary
+					var source_offset := presentation.get("position_offset", [0, 0]) as Array
+					var prepared_offset: Vector2 = sprite_loader.call(
+						"_get_sprite_frames_position_offset", species_frames
+					)
+					_check(
+						is_equal_approx(
+							prepared_offset.y,
+							float(source_offset[1]) + 12.0
+						),
+						"rendered battle sprites share the lower platform baseline"
+					)
+			_check(
+				float(rendered_summary_heights.get("diglett", 0.0))
+					< float(rendered_summary_heights.get("jigglypuff", 0.0))
+					and float(rendered_summary_heights.get("jigglypuff", 0.0))
+					< float(rendered_summary_heights.get("dragonite", 0.0)),
+				"rendered Summary preserves compact-to-large species size differences"
+			)
+
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:

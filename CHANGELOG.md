@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rendered Pokémon now sit lower on battle platforms, while Summary cards preserve the natural size difference between small and large species.
+
 - Trainer Cards now stay at one consistent size while switching tabs, and public previews can be moved by dragging their title bar.
 
 - Hovering a shortened Pokémon Summary location now reveals its complete name.
