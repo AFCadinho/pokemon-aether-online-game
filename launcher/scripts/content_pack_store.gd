@@ -239,6 +239,36 @@ func sprite_collection_directories() -> Array[String]:
 		return result
 	return []
 
+func uninstall(pack_id: String) -> String:
+	if not valid_id(pack_id):
+		return "Invalid pack ID."
+	var directory := DirAccess.open(root)
+	if directory == null or not directory.dir_exists(pack_id) or directory.is_link(pack_id):
+		return "Pack is unavailable."
+	var path := root.path_join(pack_id)
+	if not _remove_pack_tree(path):
+		return "Could not remove pack files."
+	var selected := selected_by_category()
+	for category: String in selected.keys():
+		if str(selected[category]) == pack_id:
+			selected.erase(category)
+	var save_error := save_selected_by_category(selected)
+	return "" if save_error == OK else "Could not update pack selection."
+
+
+func _remove_pack_tree(path: String) -> bool:
+	var directory := DirAccess.open(path)
+	if directory == null:
+		return false
+	for file_name in directory.get_files():
+		if directory.is_link(file_name) or DirAccess.remove_absolute(path.path_join(file_name)) != OK:
+			return false
+	for child_name in directory.get_directories():
+		if directory.is_link(child_name) or not _remove_pack_tree(path.path_join(child_name)):
+			return false
+	return DirAccess.remove_absolute(path) == OK
+
+
 func import_zip(path: String, replace_existing: bool = false) -> String:
 	var zip_error := _check_zip_sizes(path)
 	if not zip_error.is_empty():

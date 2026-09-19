@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Installed mods can now be removed locally and installed again later from Discover.
+
 - The Mods window now clearly explains how to import a community `.zip` pack.
 
 - Community mod creators can now start from copyable Pokémon cries, battle sprites and follower sprites pack templates.
