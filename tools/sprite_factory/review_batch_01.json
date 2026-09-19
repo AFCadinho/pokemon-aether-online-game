@@ -2,9 +2,19 @@
   "schema": 1,
   "purpose": "First local SCVI-first quality review; candidates are not approvals",
   "entries": [
-    {"species": "charizard", "pm": 6, "target_game_height_px": 175},
+    {"species": "charizard", "pm": 6, "target_game_height_px": 175,
+      "facial_baseline_motion": "00010_defaultidle01",
+      "presentation_override": {
+        "front": {"render_scale": 2.1, "anchor": [254, 414], "ground_point": [0, 0, 0], "position_offset": [-10, 55], "min_visible_height": 122.5, "max_visible_height": 260},
+        "back": {"render_scale": 2.42, "anchor": [258, 397], "ground_point": [0, 0, 0], "position_offset": [-12, 48], "min_visible_height": 122.5, "max_visible_height": 260}
+      }},
     {"species": "pikachu", "pm": 25, "target_game_height_px": 75,
-      "review_warning": "Defaultwait eyes remain closed; alternate 10000 also closed. Facial import unresolved."},
+      "facial_baseline_motion": "00010_defaultidle01",
+      "presentation_override": {
+        "front": {"render_scale": 5.36861, "anchor": [234, 424], "ground_point": [0, 0, 0], "position_offset": [-10, 57], "min_visible_height": 52.5, "max_visible_height": 105},
+        "back": {"render_scale": 4.75841, "anchor": [277, 417], "ground_point": [0, 0, 0], "position_offset": [-12, 50], "min_visible_height": 52.5, "max_visible_height": 105}
+      },
+      "review_warning": "SCVI partial facial tracks use defaultidle01 as an explicit open-eye baseline; still requires visual review."},
     {"species": "psyduck", "pm": 54, "target_game_height_px": 90,
       "review_warning": "Defaultwait eyes remain closed; 10000 candidate pending facial import review."},
     {"species": "meowth", "pm": 52, "target_game_height_px": 100,
@@ -27,8 +37,17 @@
     {"species": "scyther", "pm": 123, "target_game_height_px": 160},
     {"species": "gyarados", "pm": 130, "target_game_height_px": 175,
       "review_warning": "Eye/facial presentation is suspect; compare against prior Gyarados correction before full render."},
-    {"species": "eevee", "pm": 133, "target_game_height_px": 72},
-    {"species": "articuno", "pm": 144, "target_game_height_px": 165},
+    {"species": "eevee", "pm": 133, "target_game_height_px": 72,
+      "presentation_override": {
+        "front": {"render_scale": 6.10781, "anchor": [273, 373], "ground_point": [0, 0, 0], "position_offset": [-10, 42], "min_visible_height": 50.4, "max_visible_height": 100.8},
+        "back": {"render_scale": 6.33689, "anchor": [239, 390], "ground_point": [0, 0, 0], "position_offset": [-12, 32], "min_visible_height": 50.4, "max_visible_height": 100.8}
+      },
+      "light_override": {"key_energy": 800, "fill_energy": 450, "rim_energy": 500, "world_color": [0.18, 0.18, 0.18]}},
+    {"species": "articuno", "pm": 144, "target_game_height_px": 165,
+      "presentation_override": {
+        "front": {"render_scale": 2.15, "anchor": [272, 389], "ground_point": [0, 0, 0], "position_offset": [-10, 7], "min_visible_height": 115.5, "max_visible_height": 260},
+        "back": {"render_scale": 2.35, "anchor": [238, 376], "ground_point": [0, 0, 0], "position_offset": [-12, 0], "min_visible_height": 115.5, "max_visible_height": 260}
+      }},
     {"species": "dragonite", "pm": 149, "target_game_height_px": 180,
       "camera_override": {
         "front": {"position": [3, -7, 3], "target": [0, 0, 1.15], "ortho_scale": 4.8},
@@ -42,7 +61,12 @@
     },
     {"species": "mewtwo", "pm": 150, "target_game_height_px": 170,
       "review_warning": "Front pose/camera hides the face; framing needs battle-scene review."},
-    {"species": "lucario", "pm": 448, "target_game_height_px": 145},
+    {"species": "lucario", "pm": 448, "target_game_height_px": 145,
+      "facial_baseline_motion": "00010_defaultidle01",
+      "presentation_override": {
+        "front": {"render_scale": 3.45175, "anchor": [242, 394], "ground_point": [0, 0, 0], "position_offset": [-10, 54], "min_visible_height": 101.5, "max_visible_height": 203},
+        "back": {"render_scale": 3.47683, "anchor": [270, 395], "ground_point": [0, 0, 0], "position_offset": [-12, 48], "min_visible_height": 101.5, "max_visible_height": 203}
+      }},
     {"species": "gardevoir", "pm": 282, "target_game_height_px": 145,
       "review_warning": "Front camera shows mostly side of face; adjust before full idle/action render."},
     {"species": "roaring-moon", "pm": 1089, "target_game_height_px": 190,

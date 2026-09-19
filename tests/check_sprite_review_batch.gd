@@ -13,7 +13,10 @@ func _run() -> void:
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
 	assert(catalog.get("mode") == "preview")
 	assert((catalog.get("entries") as Dictionary).size() == 15)
-	for species: String in ["dragonite", "eevee", "roaring-moon"]:
+	var reviewed_species := [
+		"dragonite", "eevee", "roaring-moon", "lucario", "charizard", "pikachu",
+	]
+	for species: String in reviewed_species:
 		for side: String in ["front", "back"]:
 			var frames := Assets.load_frames(species, side, false)
 			assert(frames != null)

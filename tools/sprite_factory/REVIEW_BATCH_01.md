@@ -130,3 +130,29 @@ to publish them.
   manifests are candidates only; run the full-action pass on chosen species
   after reviewing the idle batch in-game and correcting any facial/camera
   problems. This is deliberately not a bulk-production success claim.
+
+### First in-game tuning feedback
+
+The first development battle review found Dragonite and Roaring Moon visually
+good. Articuno was too small; its data override now uses front/back runtime
+render scales `2.15`/`2.35` instead of the automatically proposed
+`2.70543`/`2.96432`. Eevee floated above both platforms and read too dark; its
+front/back offsets now move it down by 35/32 pixels, and its data-defined key,
+fill, rim and world lighting are moderately brighter. Normal Eevee, shiny Eevee
+and normal Articuno were rebuilt at the unchanged 512×512/native-60-FPS
+baseline and passed technical QC. The previous builds remain recoverably
+quarantined for comparison. These variants remain `needs_review` until the
+corrected in-game presentation is accepted.
+
+The next battle review found Lucario, Charizard and Pikachu too high. Charizard
+was also too small, and all three appeared closed-eyed. The SCVI channel files
+showed normal visibility and eye UV offsets; the skeletal sources instead use
+partial facial actions which inherit an existing pose in-game. Blender had
+been evaluating omitted eyelid tracks from the closed bind pose. The adapter
+can now make that inherited state explicit from a reviewed facial donor action
+and records every injected eyelid bone in `import.json`. Lucario, Charizard and
+Pikachu use `defaultidle01` as their open-eye donor, while the battle idle and
+its native 60 FPS timing remain unchanged. Their vertical presentation offsets
+were lowered, and Charizard's runtime scale was increased. Full idle masters
+for both views were rebuilt at 512×512/native 60 FPS with zero QC errors or
+warnings. They remain `needs_review`.

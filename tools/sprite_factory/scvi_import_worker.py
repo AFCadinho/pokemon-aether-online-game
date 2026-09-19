@@ -51,12 +51,73 @@ def projected_extent(rig, action, direction, frames):
     return extent
 
 
+def tranm_bone_names(path, animation_type):
+    data = animation_type.InitFromPackedBuf(bytearray(Path(path).read_bytes()), 0)
+    if data.skeleton is None or data.skeleton.tracks is None:
+        return set()
+    return {track.name for track in data.skeleton.tracks if track and track.name}
+
+
+def apply_facial_baseline(rig, actions, job, animation_type):
+    """Supply SCVI's inherited open-eye pose to partial skeletal actions.
+
+    SCVI can omit unchanged eyelid tracks and inherit the previous pose. Blender
+    evaluates omitted tracks from the bind pose instead, which is closed for
+    several species. A reviewed donor action makes that inherited state explicit.
+    """
+    baseline_path = job.get("facial_baseline")
+    if not baseline_path:
+        return {"configured": False, "injected": {}}
+    donor_name = Path(baseline_path).stem
+    donor = actions[donor_name]
+    rig.animation_data.action = donor
+    if len(donor.slots) == 1:
+        rig.animation_data.action_slot = donor.slots[0]
+    bpy.context.scene.frame_set(job.get("facial_baseline_frame", 0))
+    eyelids = [bone for bone in rig.pose.bones if "eyelid" in bone.name.lower()]
+    donor_tracks = tranm_bone_names(baseline_path, animation_type)
+    baseline = {bone.name: bone.matrix_basis.copy() for bone in eyelids
+                if bone.name in donor_tracks}
+    if not baseline:
+        raise ValueError("Configured facial donor has no matching eyelid tracks")
+    injected = {}
+    for category in job.get("facial_baseline_categories", []):
+        motion = job["motions"].get(category)
+        if not motion:
+            continue
+        action = actions[Path(motion).stem]
+        target_tracks = tranm_bone_names(motion, animation_type)
+        missing = sorted(set(baseline) - target_tracks)
+        if not missing:
+            continue
+        rig.animation_data.action = action
+        if len(action.slots) == 1:
+            rig.animation_data.action_slot = action.slots[0]
+        frame = int(round(action.frame_range[0]))
+        bpy.context.scene.frame_set(frame)
+        for name in missing:
+            bone = rig.pose.bones[name]
+            bone.matrix_basis = baseline[name]
+            bone.keyframe_insert(data_path="location", frame=frame, group=name)
+            bone.keyframe_insert(data_path="rotation_quaternion", frame=frame, group=name)
+            bone.keyframe_insert(data_path="scale", frame=frame, group=name)
+        injected[category] = missing
+    if donor_name not in {Path(path).stem for path in job["motions"].values() if path}:
+        bpy.data.actions.remove(donor)
+    return {"configured": True, "source": baseline_path,
+            "frame": job.get("facial_baseline_frame", 0),
+            "available_bones": sorted(baseline), "injected": injected}
+
+
 def main(job):
     importer = Path(job["importer"])
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
     sys.path.insert(0, job["python_deps"])
     load_importer(importer)
     from pokeaether_scvi_importer.PokemonSwitch import from_trmdlsv
     from pokeaether_scvi_importer.gfbanm_importer import import_animation
+    from pokeaether_scvi_importer.GFLib.Anim.Animation import AnimationT
+    from scvi_tracm import inspect_tracm
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.context.scene.world = bpy.data.worlds.new("PokeAether SCVI review")
@@ -74,9 +135,14 @@ def main(job):
     rig.select_set(True)
     bpy.context.view_layer.objects.active = rig
     rig.animation_data_create()
+    if job.get("facial_baseline"):
+        import_animation(bpy.context, job["facial_baseline"], False, 0, False, False)
     for category, path in job["motions"].items():
         if path is not None:
             import_animation(bpy.context, path, False, 0, False, False)
+    actions = {action.name: action for action in bpy.data.actions}
+    facial_baseline = apply_facial_baseline(rig, actions, job, AnimationT)
+    actions = {action.name: action for action in bpy.data.actions}
     for action in bpy.data.actions:
         action.use_fake_user = True
     images = []
@@ -90,7 +156,6 @@ def main(job):
     assert not missing, f"Missing textures: {missing}"
     bpy.ops.file.pack_all()
     assert all(item.packed_file is not None for item in bpy.data.images if item.source == "FILE")
-    actions = {action.name: action for action in bpy.data.actions}
     mapping = {}
     for category, path in job["motions"].items():
         if path is None:
@@ -115,11 +180,25 @@ def main(job):
     output = Path(job["output"])
     output.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(output), check_existing=False)
+    channel_animations = {}
+    channel_warnings = []
+    for category, path in job.get("motion_channels", {}).items():
+        channel_animations[category] = inspect_tracm(path) if path else None
+        summary = channel_animations[category]
+        if summary and summary["material_tracks"]:
+            channel_warnings.append(
+                f"unapplied_tracm_material:{category}:{summary['material_tracks']}")
+        if summary and summary["blendshape_tracks"]:
+            channel_warnings.append(
+                f"unapplied_tracm_blendshape:{category}:{summary['blendshape_tracks']}")
     report = {"species": job["species"], "identity": identity, "variant": job["variant"],
               "blender": bpy.app.version_string, "rig": rig.name,
               "meshes": [obj.name for obj in bpy.data.objects if obj.type == "MESH"],
               "materials": [mat.name for mat in bpy.data.materials],
               "actions": mapping, "projected_bounds": bounds, "images": images,
+              "facial_baseline": facial_baseline,
+              "channel_animations": channel_animations,
+              "channel_warnings": channel_warnings,
               "source_files": job["source_files"], "importer_commit": job["importer_commit"],
               "shader_sha256": job["shader_sha256"]}
     Path(job["report"]).write_text(json.dumps(report, indent=2) + "\n")
