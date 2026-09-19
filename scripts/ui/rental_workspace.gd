@@ -35,6 +35,12 @@ var pokemon_review_step: VBoxContainer
 var pokemon_preview_icon: TextureRect
 var pokemon_preview_species: Label
 var pokemon_preview_details: RichTextLabel
+var pokemon_review_icon: TextureRect
+var pokemon_review_species: Label
+var pokemon_review_rarity: Label
+var pokemon_review_rental_price: Label
+var pokemon_review_buyout_price: Label
+var pokemon_review_terms: Label
 
 func _ready() -> void:
 	hide()
@@ -220,23 +226,76 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	edit_button.pressed.connect(func(): _show_pokemon_review(false))
 	_style_button(edit_button, false)
 	review_header.add_child(edit_button)
+	var review_content := HBoxContainer.new()
+	review_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	review_content.add_theme_constant_override("separation", 12)
+	pokemon_review_step.add_child(review_content)
+	var identity_card := PanelContainer.new()
+	identity_card.custom_minimum_size.x = 230
+	identity_card.add_theme_stylebox_override("panel", _control_style(Color("#0a1726"), Color("#41698d")))
+	review_content.add_child(identity_card)
+	var identity := VBoxContainer.new()
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	identity.add_theme_constant_override("separation", 8)
+	identity_card.add_child(identity)
+	var validated := Label.new()
+	validated.text = "VALIDATED RENTAL"
+	validated.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	validated.add_theme_font_size_override("font_size", 11)
+	validated.add_theme_color_override("font_color", Color("#8ea8bd"))
+	identity.add_child(validated)
+	var review_sprite_center := CenterContainer.new()
+	review_sprite_center.custom_minimum_size.y = 140
+	identity.add_child(review_sprite_center)
+	pokemon_review_icon = TextureRect.new()
+	pokemon_review_icon.custom_minimum_size = Vector2(132, 132)
+	pokemon_review_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pokemon_review_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	review_sprite_center.add_child(pokemon_review_icon)
+	pokemon_review_species = Label.new()
+	pokemon_review_species.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_review_species.add_theme_font_size_override("font_size", 22)
+	pokemon_review_species.add_theme_color_override("font_color", Color("#62d5ff"))
+	identity.add_child(pokemon_review_species)
+	pokemon_review_rarity = Label.new()
+	pokemon_review_rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_review_rarity.add_theme_font_size_override("font_size", 12)
+	pokemon_review_rarity.add_theme_color_override("font_color", Color("#f5df9a"))
+	identity.add_child(pokemon_review_rarity)
+	var fixed_rules := Label.new()
+	fixed_rules.text = "LEVEL 100  •  NO HELD ITEM"
+	fixed_rules.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fixed_rules.add_theme_font_size_override("font_size", 10)
+	fixed_rules.add_theme_color_override("font_color", Color("#8ea8bd"))
+	identity.add_child(fixed_rules)
+	var details_column := VBoxContainer.new()
+	details_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details_column.add_theme_constant_override("separation", 10)
+	review_content.add_child(details_column)
 	description = RichTextLabel.new()
+	description.bbcode_enabled = true
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	description.text = "Your validated Pokémon and price will appear here."
+	description.text = "Your validated set will appear here."
 	description.add_theme_color_override("default_color", Color("#eef6ff"))
 	description.add_theme_stylebox_override("normal", _control_style(Color("#0a1422"), Color("#315070")))
-	pokemon_review_step.add_child(description)
+	details_column.add_child(description)
+	var price_row := HBoxContainer.new()
+	price_row.add_theme_constant_override("separation", 10)
+	details_column.add_child(price_row)
+	pokemon_review_rental_price = _review_price_card(price_row, "24-HOUR RENTAL", Color("#62d5ff"))
+	pokemon_review_buyout_price = _review_price_card(price_row, "KEEP PERMANENTLY LATER", Color("#f5df9a"))
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
-	var duration_label := Label.new()
-	duration_label.text = "Rental period"
-	duration_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	duration_label.add_theme_color_override("font_color", Color("#8ea8bd"))
-	actions.add_child(duration_label)
+	pokemon_review_terms = Label.new()
+	pokemon_review_terms.text = "24 hours of real time • Timer continues while offline"
+	pokemon_review_terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_review_terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_review_terms.add_theme_color_override("font_color", Color("#8ea8bd"))
+	actions.add_child(pokemon_review_terms)
 	duration = OptionButton.new()
 	duration.disabled = true
-	duration.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	duration.visible = false
 	duration.tooltip_text = "3  Choose how long you want to rent this Pokémon"
 	_style_option(duration)
 	actions.add_child(duration)
@@ -250,6 +309,25 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	_show_pokemon_review(false)
 	_update_pokemon_preview()
 	_refresh_builder_actions()
+
+func _review_price_card(parent: HBoxContainer, heading_text: String, accent: Color) -> Label:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _control_style(Color("#101829"), accent.darkened(0.35)))
+	parent.add_child(card)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 3)
+	card.add_child(content)
+	var heading := Label.new()
+	heading.text = heading_text
+	heading.add_theme_font_size_override("font_size", 10)
+	heading.add_theme_color_override("font_color", accent)
+	content.add_child(heading)
+	var value := Label.new()
+	value.add_theme_font_size_override("font_size", 17)
+	value.add_theme_color_override("font_color", Color("#eef6ff"))
+	content.add_child(value)
+	return value
 
 func _create_pokemon_preview() -> Control:
 	var card := PanelContainer.new()
@@ -535,6 +613,14 @@ func _preview_stat_spread(inputs: Dictionary, default_value: int, show_default_s
 		return "All 31"
 	return " / ".join(parts)
 
+func _format_quote_stat_spread(values: Dictionary, default_value: int, all_default_label: String) -> String:
+	var parts: Array[String] = []
+	for pair: Array in [["hp", "HP"], ["atk", "Atk"], ["def", "Def"], ["spa", "SpA"], ["spd", "SpD"], ["spe", "Spe"]]:
+		var value := int(values.get(str(pair[0]), default_value))
+		if value != default_value:
+			parts.append("%d %s" % [value, str(pair[1])])
+	return all_default_label if parts.is_empty() else "  /  ".join(parts)
+
 func _show_pokemon_review(show_review: bool) -> void:
 	if pokemon_edit_step != null:
 		pokemon_edit_step.visible = not show_review
@@ -602,10 +688,26 @@ func _quote_pokemon() -> void:
 	var moves: Array[String] = []
 	for move: Variant in pokemon.get("moves", []):
 		moves.append(str(move.get("name", move.get("id", ""))) if move is Dictionary else str(move))
-	description.text = "%s • Lv.100\nRarity: %s\n%s nature • %s\nMoves: %s\nEVs: %s\nIVs: %s\n\nPermanent price: %d Aetherite total (the initial rental fee is deducted).\nHeld items are not included." % [str(pokemon.get("species", "")), str(selected.get("rarity", "common")).replace("_", " ").capitalize(), str(pokemon.get("nature", "")), str(pokemon.get("ability", "")), ", ".join(moves), JSON.stringify(pokemon.get("evs", {})), JSON.stringify(pokemon.get("ivs", {})), int(selected.get("buyoutTotal", 0))]
+	var species := str(pokemon.get("species", pokemon.get("speciesId", "Pokémon")))
+	var rarity := str(selected.get("rarity", "common")).replace("_", " ").capitalize()
+	pokemon_review_icon.texture = PokemonAssets.load_party_icon(species)
+	pokemon_review_species.text = species
+	pokemon_review_rarity.text = rarity.to_upper()
+	var move_lines: Array[String] = []
+	for move: String in moves:
+		move_lines.append("•  %s" % move)
+	var ev_text := _format_quote_stat_spread(pokemon.get("evs", {}), 0, "No EV investment")
+	var iv_text := _format_quote_stat_spread(pokemon.get("ivs", {}), 31, "All stats 31")
+	description.text = "[font_size=11][color=#8ea8bd]COMPETITIVE SET[/color][/font_size]\n[font_size=16][color=#c9beff]%s nature[/color]  •  %s[/font_size]\n\n[font_size=11][color=#8ea8bd]MOVES[/color][/font_size]\n%s\n\n[font_size=11][color=#8ea8bd]EV SPREAD[/color][/font_size]\n%s\n\n[font_size=11][color=#8ea8bd]IV SPREAD[/color][/font_size]\n%s" % [str(pokemon.get("nature", "Hardy")), str(pokemon.get("ability", "No ability")), "\n".join(move_lines), ev_text, iv_text]
+	var rental_price := int((selected.get("prices", [{}])[0] as Dictionary).get("amount", 0))
+	var buyout_total := int(selected.get("buyoutTotal", 0))
+	pokemon_review_rental_price.text = "%d Aetherite" % rental_price
+	pokemon_review_buyout_price.text = "%d Aetherite after rental\n%d total" % [maxi(0, buyout_total - rental_price), buyout_total]
+	rent_button.text = "Rent for 24 hours — %d Aetherite" % rental_price
 	var limit_reached := _rental_limit_reached()
 	rent_button.disabled = limit_reached
-	rent_button.text = "Pokémon rental limit reached" if limit_reached else "Rent quoted Pokémon"
+	if limit_reached:
+		rent_button.text = "Pokémon rental limit reached"
 	_show_pokemon_review(true)
 	status.text = "Quote ready. Changing the set will require a new quote."
 

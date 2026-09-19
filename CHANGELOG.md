@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon rental quotes now use a structured review card with a sprite, rarity, readable moves and stat spreads, and separate rental and permanent-price summaries.
+
 - The Team Rental and Pokémon Rental attendants now have shorter labels and can be spoken to normally from across their lobby counter.
 
 - Rendered Pokémon in Summary and Pokédex now offer an on-demand animation menu for reviewing attacks, damage, sleep and fainting without entering battle.
