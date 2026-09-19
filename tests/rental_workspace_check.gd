@@ -30,6 +30,7 @@ func _run() -> void:
 	team_workspace.team_catalog.set_offers([team_offer])
 	team_workspace._render_active()
 	assert(team_workspace.team_catalog.results.get_child_count() == 1)
+	assert(team_workspace.team_catalog.result_status.text == "1 rental team")
 	assert(team_workspace.team_catalog.archetype_filter.item_count == 2)
 	assert(team_workspace.team_catalog.tier_filter.item_count == 3)
 	assert(team_workspace.team_catalog.tier_filter.get_item_text(1) == "AETHER OU")
@@ -59,6 +60,21 @@ func _run() -> void:
 	team_workspace.team_catalog.search.text = "missing"
 	team_workspace.team_catalog._refresh_results()
 	assert(team_workspace.team_catalog.results.get_child_count() == 0)
+	assert(team_workspace.team_catalog.result_status.text == "0 rental teams")
+	var batched_offers: Array = []
+	for index: int in range(9):
+		var batched_offer := team_offer.duplicate(true)
+		batched_offer["offerId"] = "batch-%d" % index
+		batched_offer["teamId"] = "batch-%d" % index
+		batched_offer["displayName"] = "Batch %d" % index
+		batched_offers.append(batched_offer)
+	team_workspace.team_catalog.search.text = ""
+	team_workspace.team_catalog.set_offers(batched_offers)
+	assert(team_workspace.team_catalog.results.get_child_count() == 4)
+	assert(team_workspace.team_catalog.result_status.text == "Loading teams… 4/9")
+	await team_workspace.team_catalog.results_rendered
+	assert(team_workspace.team_catalog.results.get_child_count() == 9)
+	assert(team_workspace.team_catalog.result_status.text == "9 rental teams")
 	team_workspace.queue_free()
 	var pokemon_workspace := WORKSPACE.new()
 	pokemon_workspace.kind = "pokemon"
