@@ -48,6 +48,10 @@ func _run() -> void:
 	assert(team_workspace.team_catalog.detail_title.text == "Test Balance")
 	assert(team_workspace.team_catalog.detail_meta.text.contains("AETHER OU"))
 	assert(not team_workspace.rent_button.disabled)
+	var team_rent_payload := team_workspace._build_rent_payload({"durationSeconds": 86400.0})
+	assert(typeof(team_rent_payload["durationSeconds"]) == TYPE_INT)
+	assert(team_rent_payload["durationSeconds"] == 86400)
+	assert(not team_rent_payload.has("pokemonBuild"))
 	team_workspace.catalog["rentals"] = [{"context": "npc_team", "status": "return_pending"}]
 	await team_workspace._select_team_offer(team_offer)
 	assert(team_workspace.rent_button.disabled)
@@ -105,6 +109,10 @@ func _run() -> void:
 	assert(not pokemon_workspace.duration.visible)
 	assert(pokemon_workspace.rent_button.text == "Rent for 24 hours — 100 Aetherite")
 	assert(pokemon_workspace.selected_build["source"] == "paste")
+	var pokemon_rent_payload := pokemon_workspace._build_rent_payload({"durationSeconds": 86400.0})
+	assert(typeof(pokemon_rent_payload["durationSeconds"]) == TYPE_INT)
+	assert(pokemon_rent_payload["durationSeconds"] == 86400)
+	assert(pokemon_rent_payload["pokemonBuild"] == pokemon_workspace.selected_build)
 	pokemon_workspace.catalog["rentals"] = [{"loanId": "loan-1", "context": "npc_pokemon", "status": "active", "dueAt": "2026-09-21T12:00:00Z", "rental": {"displayName": "Scizor", "buyoutPrice": 1400}}]
 	pokemon_workspace._render_active()
 	var active_buttons := pokemon_workspace.active_list.find_children("*", "Button", true, false)
