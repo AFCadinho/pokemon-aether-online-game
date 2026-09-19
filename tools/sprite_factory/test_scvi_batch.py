@@ -1,13 +1,85 @@
 """Focused safety checks for review-batch source selection."""
 
+import argparse
+import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from scvi_batch import compact_action_report, source_entry
+from PIL import Image, ImageDraw
+
+from scvi_batch import (automatic_probe_warnings, compact_action_report,
+                        evaluate_gates, load_batch, probe_image_metrics, record_probe_review,
+                        selected_entries, source_entry)
 
 
 class ScviBatchTest(unittest.TestCase):
+    def test_pilot_batch_contains_25_unique_candidates(self):
+        entries = load_batch(Path(__file__).with_name("pilot_batch_25.json"))
+        self.assertEqual(len(entries), 25)
+        self.assertEqual(len({item["species"] for item in entries}), 25)
+
+    def test_batch_composition_is_explicit_and_duplicate_safe(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "base.json").write_text(json.dumps({
+                "entries": [{"species": "eevee", "pm": 133}]}))
+            composed = root / "pilot.json"
+            composed.write_text(json.dumps({
+                "include": ["base.json"],
+                "entries": [{"species": "dragonite", "pm": 149}]}))
+            self.assertEqual([item["species"] for item in load_batch(composed)],
+                             ["eevee", "dragonite"])
+            composed.write_text(json.dumps({
+                "include": ["base.json"],
+                "entries": [{"species": "eevee", "pm": 133}]}))
+            with self.assertRaisesRegex(ValueError, "Duplicate species"):
+                load_batch(composed)
+
+    def test_explicit_subset_rejects_unknown_species(self):
+        entries = [{"species": "eevee"}, {"species": "dragonite"}]
+        self.assertEqual(selected_entries(entries, "dragonite"), [entries[1]])
+        with self.assertRaisesRegex(ValueError, "outside the explicit batch"):
+            selected_entries(entries, "missingno")
+
+    def test_probe_metrics_warn_without_claiming_artistic_approval(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "dark.png"
+            image = Image.new("RGBA", (512, 512))
+            ImageDraw.Draw(image).rectangle((0, 100, 20, 120), fill=(5, 5, 5, 255))
+            image.save(path)
+            metrics = probe_image_metrics(path)
+            warnings = automatic_probe_warnings({"front": metrics})
+            self.assertIn("front:clipping_risk", warnings)
+            self.assertIn("front:suspiciously_dark", warnings)
+            self.assertIn("front:very_small_silhouette", warnings)
+
+    def test_full_render_gate_requires_explicit_human_probe_decision(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            batch = root / "batch.json"
+            batch.write_text(json.dumps({"entries": [{"species": "eevee"}]}))
+            (root / "intake.json").write_text(batch.read_text())
+            (root / "intake-status-normal.json").write_text(json.dumps({
+                "entries": {"eevee": {"status": "configured_needs_review"}}}))
+            probe = root / "probes" / "normal"
+            probe.mkdir(parents=True)
+            (probe / "status.json").write_text(json.dumps({"entries": {
+                "eevee": {"status": "needs_review", "qc_errors": [],
+                          "automatic_warnings": ["front:suspiciously_dark"]}}}))
+            args = argparse.Namespace(output=root, variant="normal", only=None,
+                                      species="eevee", reviewer="Ada", note="visual probe checked",
+                                      decision="approved_for_full_render")
+            report = evaluate_gates(args)
+            self.assertEqual(report["entries"]["eevee"]["status"],
+                             "awaiting_human_probe_review")
+            record_probe_review(args)
+            report = evaluate_gates(args)
+            self.assertEqual(report["entries"]["eevee"]["status"],
+                             "eligible_for_full_render")
+            self.assertEqual(report["entries"]["eevee"]["automatic_warnings"],
+                             ["front:suspiciously_dark"])
+
     def test_compact_action_report_preserves_review_metadata(self):
         result = compact_action_report({
             "idle": {
