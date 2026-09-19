@@ -515,8 +515,11 @@ def preview_catalog(args):
                 continue
             report = json.loads(path.read_text())
             for species, item in report["entries"].items():
-                if item["status"] == "needs_review" and not item["qc_errors"]:
-                    chosen[(species, variant)] = item["build"]
+                build = Path(item.get("build", ""))
+                if (item["status"] == "needs_review" and not item["qc_errors"]
+                        and (build / "provenance.json").is_file()
+                        and (build / "qc.json").is_file()):
+                    chosen[(species, variant)] = str(build)
     if not chosen:
         raise ValueError("No verified review builds are available")
     for species in {key[0] for key in chosen}:

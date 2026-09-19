@@ -4,13 +4,14 @@ import argparse
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
 from scvi_batch import (automatic_probe_warnings, compact_action_report,
                         evaluate_gates, load_batch, probe_image_metrics, record_probe_review,
-                        selected_entries, source_entry)
+                        preview_catalog, selected_entries, source_entry)
 
 
 class ScviBatchTest(unittest.TestCase):
@@ -102,6 +103,33 @@ class ScviBatchTest(unittest.TestCase):
             "review": "needs_review",
         })
         self.assertNotIn("sleep", result)
+
+    def test_preview_catalog_ignores_incomplete_stale_build(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            batch = root / "batch.json"
+            batch.write_text(json.dumps({"entries": [{"species": "eevee"}]}))
+            complete = root / "complete"
+            complete.mkdir()
+            manifest = {"actions": {}, "cameras": {}, "presentation": {}}
+            (complete / "provenance.json").write_text(json.dumps({
+                "identity": {"manifest": manifest}}))
+            (complete / "qc.json").write_text(json.dumps({
+                "errors": [], "warnings": []}))
+            incomplete = root / "incomplete"
+            incomplete.mkdir()
+            (root / "build-status-normal-full.json").write_text(json.dumps({
+                "entries": {"eevee": {"status": "needs_review", "qc_errors": [],
+                                        "build": str(complete)}}}))
+            (root / "build-status-shiny-full.json").write_text(json.dumps({
+                "entries": {"eevee": {"status": "needs_review", "qc_errors": [],
+                                        "build": str(incomplete)}}}))
+            args = argparse.Namespace(output=root, batch=batch)
+            with patch("scvi_batch.subprocess.run") as run:
+                preview_catalog(args)
+            catalog_args = run.call_args_list[0].args[0]
+            self.assertIn(str(complete), catalog_args)
+            self.assertNotIn(str(incomplete), catalog_args)
 
     def test_explicit_identity_and_review_candidates(self):
         with tempfile.TemporaryDirectory() as temp:
