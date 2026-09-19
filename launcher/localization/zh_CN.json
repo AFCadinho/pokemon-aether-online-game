@@ -164,5 +164,6 @@
   "No packs installed. Import a zip or place a pack in the mods folder.": "尚未安装资源包。请导入 zip 文件或将资源包放入模组文件夹。",
   "Could not save pack selection.": "无法保存资源包选择。",
   "Pack imported. Enable it to use it on the next game start.": "资源包已导入。启用后将在下次启动游戏时使用。",
-  "Could not import pack:": "无法导入资源包："
+  "Could not import pack:": "无法导入资源包：",
+  "Close": "关闭"
 }

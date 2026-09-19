@@ -164,5 +164,6 @@
 	"No packs installed. Import a zip or place a pack in the mods folder.": "Geen packs geïnstalleerd. Importeer een zip of plaats een pack in de mods-map.",
 	"Could not save pack selection.": "Kon de packkeuze niet opslaan.",
 	"Pack imported. Enable it to use it on the next game start.": "Pack geïmporteerd. Schakel het in om het bij de volgende gamestart te gebruiken.",
-	"Could not import pack:": "Kon het pack niet importeren:"
+	"Could not import pack:": "Kon het pack niet importeren:",
+	"Close": "Sluiten"
 }
