@@ -6,7 +6,7 @@ class FakeRentalService extends Node:
 	func request(path: String, _payload: Dictionary = {}, _mutate := false, _post := false) -> Dictionary:
 		if path.begins_with("/catalog/team/"):
 			return {"success": true, "body": _team(true)}
-		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1500, "prices": [{"durationSeconds": 86400, "amount": 100}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
+		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1500, "prices": [{"durationSeconds": 86400, "amount": 100}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "leftovers", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
 
 	func _team(detail := false) -> Dictionary:
 		var pokemon: Array = []
@@ -74,13 +74,14 @@ func _run() -> void:
 	pokemon_workspace.service = FakeRentalService.new()
 	pokemon_workspace.add_child(pokemon_workspace.service)
 	pokemon_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
-	pokemon_workspace.pokemon_paste.text = "Scizor\nAbility: Technician\nEVs: 252 Atk / 4 SpD / 252 Spe\n- Bullet Punch"
+	pokemon_workspace.pokemon_paste.text = "Scizor @ Leftovers\nAbility: Technician\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Bullet Punch"
 	pokemon_workspace._update_pokemon_preview()
 	assert(pokemon_workspace.pokemon_preview_species.text == "Scizor")
-	assert(pokemon_workspace.pokemon_preview_details.text.contains("BUILD"))
-	assert(pokemon_workspace.pokemon_preview_details.text.contains("ABILITY[/color]  Technician"))
-	assert(pokemon_workspace.pokemon_preview_details.text.contains("MOVES"))
-	assert(pokemon_workspace.pokemon_preview_details.text.contains("TRAINING"))
+	assert(pokemon_workspace.pokemon_preview_item_name.text == "Leftovers")
+	assert(pokemon_workspace.pokemon_preview_item_icon.texture != null)
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("Ability:[/color] Technician"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("EVs:[/color] 252 Atk / 4 SpD / 252 Spe"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("Adamant Nature"))
 	assert(pokemon_workspace.pokemon_preview_details.text.contains("Bullet Punch"))
 	pokemon_workspace._refresh_builder_actions()
 	assert(not pokemon_workspace.quote_button.disabled)
@@ -90,11 +91,14 @@ func _run() -> void:
 	assert(pokemon_workspace.pokemon_review_step.visible)
 	assert(pokemon_workspace.pokemon_review_species.text == "Scizor")
 	assert(pokemon_workspace.pokemon_review_rarity.text == "UNCOMMON")
+	assert(pokemon_workspace.pokemon_review_item_name.text == "Leftovers")
+	assert(pokemon_workspace.pokemon_review_item_icon.texture != null)
 	assert(pokemon_workspace.pokemon_review_rental_price.text == "100 Aetherite")
 	assert(pokemon_workspace.pokemon_review_buyout_price.text.contains("1400 Aetherite after rental"))
-	assert(pokemon_workspace.description.text.contains("COMPETITIVE SET"))
+	assert(pokemon_workspace.description.text.contains("Scizor[/color] @ Leftovers"))
+	assert(not pokemon_workspace.description.scroll_active)
 	assert(pokemon_workspace.description.text.contains("Bullet Punch"))
-	assert(pokemon_workspace.description.text.contains("All stats 31"))
+	assert(not pokemon_workspace.description.text.contains("IVs:"))
 	assert(pokemon_workspace.duration.get_item_text(0).contains("100 Aetherite"))
 	assert(not pokemon_workspace.duration.visible)
 	assert(pokemon_workspace.rent_button.text == "Rent for 24 hours — 100 Aetherite")
@@ -111,6 +115,7 @@ func _run() -> void:
 	assert(pokemon_workspace.rent_button.disabled)
 	pokemon_workspace.pokemon_source.current_tab = 1
 	(pokemon_workspace.pokemon_fields["species"] as LineEdit).text = "Garchomp"
+	(pokemon_workspace.pokemon_fields["item"] as LineEdit).text = "Rocky Helmet"
 	(pokemon_workspace.pokemon_fields["moves"] as LineEdit).text = "Earthquake, Dragon Claw"
 	pokemon_workspace._update_pokemon_preview()
 	assert(pokemon_workspace.pokemon_preview_species.text == "Garchomp")
@@ -118,6 +123,7 @@ func _run() -> void:
 	var manual_build: Dictionary = pokemon_workspace._pokemon_build()
 	assert(manual_build["source"] == "manual")
 	assert(manual_build["pokemon"]["species"] == "Garchomp")
+	assert(manual_build["pokemon"]["item"] == "Rocky Helmet")
 	assert(manual_build["pokemon"]["ivs"]["spe"] == 31)
 	pokemon_workspace.queue_free()
 	var rental_service := preload("res://scripts/services/rental_service.gd").new()
