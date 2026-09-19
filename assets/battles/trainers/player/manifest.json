@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "canvasSize": 160,
+  "layerOrder": ["bottom", "shoes", "top", "hair", "headgear"],
+  "genders": {
+    "male": {
+      "base": "res://assets/battles/trainers/player/male/base.png",
+      "categories": {
+        "bottom": {
+          "fallback": "Trousers",
+          "parts": {
+            "Trousers": {"path": "res://assets/battles/trainers/player/male/starter_kit/trousers.png", "scale": 2.0}
+          }
+        },
+        "shoes": {
+          "fallback": "Shoes",
+          "parts": {
+            "Shoes": {"path": "res://assets/battles/trainers/player/male/starter_kit/shoes.png", "scale": 2.0}
+          }
+        },
+        "top": {
+          "fallback": "Shirt",
+          "parts": {
+            "Shirt": {"path": "res://assets/battles/trainers/player/male/starter_kit/shirt.png", "scale": 1.0}
+          }
+        },
+        "hair": {
+          "fallback": "Hair",
+          "parts": {
+            "Hair": {"path": "res://assets/battles/trainers/player/male/starter_kit/hair.png", "scale": 1.0}
+          }
+        },
+        "headgear": {
+          "parts": {
+            "Cap": {"path": "res://assets/battles/trainers/player/male/starter_kit/cap.png", "scale": 1.0}
+          }
+        }
+      }
+    },
+    "female": {
+      "base": "res://assets/battles/trainers/player/female/base.png",
+      "categories": {
+        "bottom": {
+          "fallback": "Trousers",
+          "parts": {
+            "Trousers": {"path": "res://assets/battles/trainers/player/female/starter_kit/trousers.png", "scale": 2.0}
+          }
+        },
+        "shoes": {
+          "fallback": "Shoes",
+          "parts": {
+            "Shoes": {"path": "res://assets/battles/trainers/player/female/starter_kit/shoes.png", "scale": 2.0}
+          }
+        },
+        "top": {
+          "fallback": "Shirt",
+          "parts": {
+            "Shirt": {"path": "res://assets/battles/trainers/player/female/starter_kit/shirt.png", "scale": 1.0}
+          }
+        },
+        "hair": {
+          "fallback": "Hair",
+          "parts": {
+            "Hair": {"path": "res://assets/battles/trainers/player/female/starter_kit/hair.png", "scale": 1.0}
+          }
+        },
+        "headgear": {
+          "parts": {
+            "Cap": {"path": "res://assets/battles/trainers/player/female/starter_kit/cap.png", "scale": 1.0}
+          }
+        }
+      }
+    }
+  }
+}

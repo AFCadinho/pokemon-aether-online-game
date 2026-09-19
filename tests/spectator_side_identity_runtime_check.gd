@@ -193,10 +193,9 @@ func _portrait_avatar_appearance(portrait: TrainerHeadPortrait) -> Dictionary:
 
 
 func _stage_appearance(trainer_sprite: BattleTrainerSprite) -> Dictionary:
-	if trainer_sprite == null or trainer_sprite.player_avatar == null:
+	if trainer_sprite == null:
 		return {}
-	var appearance_value: Variant = trainer_sprite.player_avatar.get("current_appearance_state")
-	return appearance_value as Dictionary if appearance_value is Dictionary else {}
+	return trainer_sprite.player_appearance_state
 
 
 func _check(condition: bool, label: String) -> void:
