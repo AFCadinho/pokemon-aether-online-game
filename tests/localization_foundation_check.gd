@@ -189,7 +189,6 @@ func _check_settings_scene_translation() -> void:
 	var title := menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/TitleLabel") as Label
 	var language_options := menu.find_child("LanguageOptionsButton", true, false) as OptionButton
 	var terminology_options := menu.find_child("TerminologyOptionsButton", true, false) as OptionButton
-	var sprite_style_options := menu.find_child("SpriteStyleOptionsButton", true, false) as OptionButton
 	var resolution_options := menu.find_child("ResolutionOptionsButton", true, false) as OptionButton
 	var world_pixel_scale_options := menu.find_child("WorldPixelScaleOptionsButton", true, false) as OptionButton
 	var tabs := menu.find_child("SettingsTabs", true, false) as TabContainer
@@ -220,7 +219,6 @@ func _check_settings_scene_translation() -> void:
 		"settings language selector displays flags"
 	)
 	for styled_dropdown: OptionButton in [
-		sprite_style_options,
 		resolution_options,
 		world_pixel_scale_options,
 	]:

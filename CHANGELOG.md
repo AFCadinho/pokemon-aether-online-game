@@ -2,13 +2,14 @@
 
 ## Unreleased
 
+- Cosmetic choices now live in the launcher Mods panel. Enabled sprite and cry packs apply automatically when the game starts.
+
 - The desktop launcher can now show and install official Anime Cries and Gen 5 Animated Sprites packs from the Mods catalog once they are published. Downloads verify size and checksum before installation.
 
 - Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; Eevee, Lucario, Charizard, Pikachu, and Articuno also sit more naturally against their battle platforms during local review.
 
 - Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.
 
-- Pokémon cries can now use the available anime versions from Generations 1–7. Enable them from Sound Settings; every unavailable cry continues to use the existing game cry.
 
 - Local Roaring Moon battle previews now recognize the in-game species name with a space, including normal/shiny front and back views.
 

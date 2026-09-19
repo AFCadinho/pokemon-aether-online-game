@@ -19,18 +19,28 @@ func _init() -> void:
 	_check_contains(settings_source, 'const POKEMON_CRY_BUS := "Pokemon Cries"', "settings define a Pokémon cry audio bus")
 	_check_contains(settings_source, '"pokemon_cry_volume": pokemon_cry_volume', "cry volume is persisted")
 	_check_contains(settings_source, "func set_pokemon_cry_volume", "cry volume has a setter")
-	_check_contains(settings_source, '"anime_pokemon_cries": anime_pokemon_cries', "anime cry preference is persisted")
-	_check_contains(settings_source, "func set_anime_pokemon_cries", "anime cry preference has a setter")
+	_check(not settings_source.contains("\"anime_pokemon_cries\": anime_pokemon_cries"), "anime cry selection is no longer persisted in settings")
+	_check(not settings_source.contains("\"sprite_style\": sprite_style"), "sprite selection is no longer persisted in settings")
 	_check_contains(scene_source, '[node name="PokemonCryVolumeSlider"', "settings scene has a cry volume slider")
-	_check_contains(scene_source, '[node name="AnimePokemonCriesCheckBox"', "settings scene has an anime cry toggle")
+	_check(not scene_source.contains("AnimePokemonCriesCheckBox"), "settings scene has no anime cry toggle")
+	_check(not scene_source.contains("SpriteStyleOptionsButton"), "settings scene has no sprite selector")
 	_check_contains(menu_source, "SettingsManager.set_pokemon_cry_volume(value)", "cry slider updates settings")
-	_check_contains(menu_source, "SettingsManager.set_anime_pokemon_cries(enabled)", "anime cry toggle updates settings")
-	_check_contains(sfx_source, "get_cry_path(species, SettingsManager.anime_pokemon_cries)", "cry playback follows the anime cry preference")
+	_check(not menu_source.contains("anime_pokemon_cries"), "settings menu has no anime cry preference")
+	_check(not menu_source.contains("sprite_style_options_button"), "settings menu has no sprite selector")
+	_check_contains(sfx_source, "get_cry_path(species, false)", "base cry path remains available when no mod is enabled")
+	_check_contains(sfx_source, "ContentPacks.cry(species)", "enabled cry packs override the base cry")
 	_check_contains(sfx_source, "SettingsManager.get_audio_output_bus(SettingsManager.POKEMON_CRY_BUS)", "Pokémon cries retain their own bus on desktop and route safely on web")
 	_check_contains(importer_source, "mean_loudness", "anime cry import measures loudness")
 	_check_contains(importer_source, "alimiter=limit={PEAK_LIMIT}", "anime cry import limits normalized peaks")
 
 	quit(1 if failed else 0)
+
+
+func _check(condition: bool, label: String) -> void:
+	if condition:
+		return
+	failed = true
+	push_error(label)
 
 
 func _check_contains(source: String, expected: String, label: String) -> void:

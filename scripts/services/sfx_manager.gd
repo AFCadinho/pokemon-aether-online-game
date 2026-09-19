@@ -150,7 +150,7 @@ func play_field_move(move_id: String) -> void:
 
 
 func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:
-	var sound_path := pokemon_cry_resolver.get_cry_path(species, SettingsManager.anime_pokemon_cries)
+	var sound_path := pokemon_cry_resolver.get_cry_path(species, false)
 	if OS.has_feature("web") and (sound_path == "" or not ResourceLoader.exists(sound_path)):
 		return
 	if OS.has_feature("web"):

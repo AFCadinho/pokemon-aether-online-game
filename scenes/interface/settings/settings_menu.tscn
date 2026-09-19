@@ -79,28 +79,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
 text = "ui.settings.enable_terrain_effects"
 
-[node name="SpriteStyleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1195442675]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7058824, 0.41568628, 1)
-text = "ui.settings.sprite_style"
-
-[node name="SpriteStyleOptionsButton" type="OptionButton" parent="MarginContainer/VBoxContainer" unique_id=788772248]
-layout_mode = 2
-item_count = 3
-popup/item_0/text = "ui.settings.sprite.animated"
-popup/item_0/id = 0
-popup/item_1/text = "ui.settings.sprite.static"
-popup/item_1/id = 1
-popup/item_2/text = "ui.settings.sprite.gen5"
-popup/item_2/id = 2
-
-[node name="SpriteStyleStatusLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=267852424]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.94, 0.72, 0.36, 1)
-theme_override_font_sizes/font_size = 12
-text = "ui.settings.sprite.download_available"
-autowrap_mode = 3
 
 [node name="DisplayLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=911169061]
 layout_mode = 2
@@ -232,10 +210,6 @@ theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
 text = "75%"
 horizontal_alignment = 2
 
-[node name="AnimePokemonCriesCheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
-text = "ui.settings.anime_pokemon_cries"
 
 [node name="UiVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1228045151]
 layout_mode = 2

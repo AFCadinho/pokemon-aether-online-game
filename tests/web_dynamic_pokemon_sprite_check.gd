@@ -66,8 +66,8 @@ func _init() -> void:
 	_check(sprite_source.contains('if str(result.get("style", "animated")) == "pixel"'),
 		"Gen 5 display scaling is limited to the optional pixel style")
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
-	_check(settings_source.contains('OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()'),
-		"browser players can select the remotely hosted Gen 5 style")
+	_check(settings_source.contains("func get_active_sprite_style") and settings_source.contains('ContentPacks.has_sprite_collection_style("gen5")'),
+		"desktop content packs select the active Gen 5 sprite style")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(world_source.contains("_prefetch_current_map_wild_sprites") and world_source.contains("encounterTypes"),
 		"browser maps prefetch their wild encounter pool")

@@ -1302,7 +1302,7 @@ func _sprite_cache_key(species: String, side: String, is_shiny: bool) -> String:
 		_normalize_species_asset_id(species),
 		side.strip_edges().to_lower(),
 		str(is_shiny),
-		str(SettingsManager.sprite_style),
+		str(SettingsManager.get_active_sprite_style()),
 	]
 
 func _load_cached_web_sprite_frames(
@@ -1312,7 +1312,7 @@ func _load_cached_web_sprite_frames(
 		return null
 	for asset_id: String in _get_species_asset_id_candidates(species):
 		var result: Dictionary = WebPokemonSpriteService.get_cached_frames(
-			asset_id, side, is_shiny, SettingsManager.sprite_style
+			asset_id, side, is_shiny, SettingsManager.get_active_sprite_style()
 		)
 		var frames := result.get("frames") as SpriteFrames
 		if frames == null:
@@ -1408,10 +1408,7 @@ func _is_gen5_sprite_path(source_path: String) -> bool:
 func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
 	var roots: Array[String] = []
 	var style_order: Array[String] = BATTLE_SPRITE_STYLE_ORDER
-	if (
-		SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_GEN5_ANIMATED
-		and SettingsManager.is_gen5_animated_sprites_installed()
-	):
+	if ContentPacks.has_sprite_collection_style("gen5"):
 		style_order = PIXEL_SPRITE_STYLE_ORDER
 
 	for style in style_order:
@@ -1956,7 +1953,7 @@ func request_web_sprite_frames(species: String, side: String, is_shiny: bool = f
 		return null
 	for asset_id: String in _get_species_asset_id_candidates(species):
 		var result: Dictionary = await WebPokemonSpriteService.load_frames(
-			asset_id, side, is_shiny, SettingsManager.sprite_style
+			asset_id, side, is_shiny, SettingsManager.get_active_sprite_style()
 		)
 		var frames := result.get("frames") as SpriteFrames
 		if frames == null:
@@ -2063,10 +2060,6 @@ func _upgrade_double_web_sprites(
 func _apply_sprite_playback_mode(sprite: AnimatedSprite2D) -> void:
 	if sprite == single_sprite and _has_dratini_poc_sprite():
 		_play_dratini_poc_resting_animation()
-		return
-	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_STATIC:
-		sprite.stop()
-		sprite.frame = 0
 		return
 
 	sprite.play()

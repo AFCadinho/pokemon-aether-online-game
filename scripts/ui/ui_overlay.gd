@@ -9240,7 +9240,7 @@ func _prefetch_web_team_sprites(team_value: Variant, side: String) -> void:
 			"species": species,
 			"side": side,
 			"shiny": shiny,
-			"style": SettingsManager.sprite_style,
+			"style": SettingsManager.get_active_sprite_style(),
 		})
 	WebPokemonSpriteService.prefetch(entries)
 
@@ -26350,7 +26350,7 @@ func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
 			"species": pokemon.species,
 			"side": side,
 			"shiny": pokemon.shiny,
-			"style": SettingsManager.sprite_style,
+			"style": SettingsManager.get_active_sprite_style(),
 		})
 	WebPokemonSpriteService.prefetch(entries)
 
