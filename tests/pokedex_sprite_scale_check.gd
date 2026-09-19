@@ -105,6 +105,15 @@ func _run() -> void:
 			)
 			_check(animated_value is SpriteFrames and (animated_value as SpriteFrames).get_frame_count("idle") > 1,
 				"rendered Pokédex still upgrades to the streamed 60 FPS idle animation")
+			if animated_value is SpriteFrames:
+				var animated_frames := animated_value as SpriteFrames
+				_check(
+					await sprite_loader.call(
+						"request_rendered_sprite_action", animated_frames, "damage", Callable()
+					),
+					"rendered preview actions decode asynchronously on demand"
+				)
+				_check(animated_frames.has_animation("damage"), "decoded preview action is ready for direct playback")
 			var animated_scale: Vector2 = overlay.call("_get_pokedex_sprite_scale", animated_value)
 			_check(animated_scale.is_equal_approx(pokedex_size / visual_bounds.size), "portrait scale remains fixed after streaming")
 

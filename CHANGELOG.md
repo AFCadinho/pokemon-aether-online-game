@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rendered Pokémon in Summary and Pokédex now offer an on-demand animation menu for reviewing attacks, damage, sleep and fainting without entering battle.
+
 - Rendered Pokémon now sit lower on battle platforms, while Summary cards preserve the natural size difference between small and large species.
 
 - Every player who can reach the Aether Clash Lobby can use level-100 rentals in Clash and Ranked play, while the lobby explains when an above-cap party member must be stored or returned before leaving.

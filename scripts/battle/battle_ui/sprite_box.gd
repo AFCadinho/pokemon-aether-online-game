@@ -1261,6 +1261,14 @@ func request_rendered_sprite_frames(species: String, side: String, is_shiny: boo
 	var rendered: SpriteFrames = await RenderedSpriteAssets.load_frames_async(species, side, is_shiny, prepared_ready, is_current)
 	return _prepare_rendered_sprite_frames(rendered) if rendered != null else null
 
+
+func request_rendered_sprite_action(
+	frames: SpriteFrames,
+	action: String,
+	is_current: Callable = Callable()
+) -> bool:
+	return await RenderedSpriteAssets.ensure_action_loaded_async(frames, action, is_current)
+
 func _load_sprite_frames(
 	species: String,
 	side: String,

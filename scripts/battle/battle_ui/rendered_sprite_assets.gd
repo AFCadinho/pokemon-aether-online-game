@@ -7,6 +7,7 @@ static var _cache: Dictionary = {}
 static var _cache_order: Array[String] = []
 static var _preview_cache_order: Array[String] = []
 static var _active_preview_decodes := 0
+static var _active_action_decodes := 0
 const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
 const CACHE_LIMIT := 2
 const PREVIEW_CACHE_LIMIT := 16
@@ -378,6 +379,72 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 		frames.add_frame(action, texture)
 	if action == "idle" and visual_bounds.has_area():
 		frames.set_meta("rendered_visual_bounds", visual_bounds)
+	return true
+
+
+static func ensure_action_loaded_async(
+	frames: SpriteFrames,
+	action: String,
+	is_current: Callable = Callable()
+) -> bool:
+	if frames == null or not frames.has_meta("rendered_asset"):
+		return false
+	if frames.has_animation(action):
+		return frames.get_frame_count(action) > 0
+	var actions: Dictionary = frames.get_meta("rendered_actions", {})
+	var entry: Dictionary = actions.get(action, {})
+	if not _allowed(str(entry.get("status", "")), bool(frames.get_meta("rendered_preview", false))):
+		return false
+	var tree := Engine.get_main_loop() as SceneTree
+	while _active_action_decodes >= 2:
+		if is_current.is_valid() and not is_current.call():
+			return false
+		await tree.process_frame
+	if is_current.is_valid() and not is_current.call():
+		return false
+	var thread := Thread.new()
+	if thread.start(_decode_action_pages.bind(str(frames.get_meta("rendered_root", "")), entry)) != OK:
+		return false
+	_active_action_decodes += 1
+	while thread.is_alive():
+		if is_current.is_valid() and not is_current.call():
+			# The thread must still be joined, but no UI state is changed afterwards.
+			await tree.process_frame
+			continue
+		await tree.process_frame
+	var decoded: Dictionary = thread.wait_to_finish()
+	_active_action_decodes -= 1
+	if (is_current.is_valid() and not is_current.call()) or frames.has_animation(action):
+		return frames.has_animation(action) and frames.get_frame_count(action) > 0
+	var images: Array = decoded.get("images", [])
+	var pages: Array = entry.get("pages", [])
+	if images.size() != pages.size():
+		return false
+	var textures: Array[AtlasTexture] = []
+	for page_index: int in pages.size():
+		var page := pages[page_index] as Dictionary
+		var image := images[page_index] as Image
+		var columns := int(page.get("columns", 0))
+		var count := int(page.get("count", 0))
+		var texture := ImageTexture.create_from_image(image)
+		for frame_index: int in count:
+			var atlas := AtlasTexture.new()
+			atlas.atlas = texture
+			atlas.region = Rect2(
+				(frame_index % columns) * 512,
+				int(frame_index / columns) * 512,
+				512,
+				512
+			)
+			atlas.filter_clip = true
+			textures.append(atlas)
+	if textures.is_empty() or textures.size() != int(entry.get("count", 0)):
+		return false
+	frames.add_animation(action)
+	frames.set_animation_speed(action, float(frames.get_meta("hd_poc_fps", 24.0)))
+	frames.set_animation_loop(action, bool(entry.get("loop", false)))
+	for texture: AtlasTexture in textures:
+		frames.add_frame(action, texture)
 	return true
 
 
