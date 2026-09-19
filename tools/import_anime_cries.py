@@ -14,6 +14,8 @@ from pathlib import Path
 
 SPECIAL_SOURCE_FILES = {720: "720U.wav"}
 NIDORAN_CRY_KEYS = {"nidoranf": "NIDORANfE", "nidoranm": "NIDORANmA"}
+TARGET_LOUDNESS_LUFS = -10.0
+PEAK_LIMIT = 0.84
 
 
 def parse_args() -> argparse.Namespace:
@@ -22,6 +24,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--species-dir", required=True, type=Path)
     parser.add_argument("--fallback-cry-dir", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
 
 
@@ -64,6 +67,19 @@ def indexed_species(species_dir: Path, fallback_cry_dir: Path) -> dict[int, str]
     }
 
 
+def mean_loudness(ffmpeg: str, source: Path) -> float:
+    analysis = subprocess.run(
+        [ffmpeg, "-v", "info", "-i", str(source), "-af", "volumedetect", "-f", "null", "-"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    match = re.search(r"mean_volume: (-?[0-9.]+) dB", analysis.stderr)
+    if match is None:
+        raise RuntimeError(f"Could not measure mean loudness: {source}")
+    return float(match.group(1))
+
+
 def main() -> None:
     args = parse_args()
     ffmpeg = shutil.which("ffmpeg")
@@ -80,10 +96,27 @@ def main() -> None:
         if key is None:
             continue
         destination = args.output_dir / f"{key}.ogg"
-        if destination.exists():
+        if destination.exists() and not args.overwrite:
             raise SystemExit(f"Refusing to overwrite existing asset: {destination}")
+        gain_db = max(0.0, min(15.0, TARGET_LOUDNESS_LUFS - mean_loudness(ffmpeg, source)))
         subprocess.run(
-            [ffmpeg, "-v", "error", "-i", str(source), "-c:a", "libvorbis", "-q:a", "4", str(destination)],
+            [
+                ffmpeg,
+                "-v",
+                "error",
+                "-y" if args.overwrite else "-n",
+                "-i",
+                str(source),
+                "-af",
+                f"volume={gain_db}dB,alimiter=limit={PEAK_LIMIT}:attack=5:release=50",
+                "-ar",
+                "44100",
+                "-c:a",
+                "libvorbis",
+                "-q:a",
+                "4",
+                str(destination),
+            ],
             check=True,
         )
         converted += 1
