@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rental windows, tabs, builder fields, dropdown menus and close controls now consistently use the Aether interface styling.
+
 - Pokémon rentals can now be built from a PokéPaste set or manual fields, with server-validated rarity pricing.
 
 - Team rentals now use the familiar AI Sparring catalog layout, including team filters, six-Pokémon previews and complete set cards before choosing a rental duration.

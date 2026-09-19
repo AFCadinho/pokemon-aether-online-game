@@ -435,10 +435,32 @@ func _style_line_edit(control: LineEdit) -> void:
 
 
 func _style_option(control: OptionButton) -> void:
+	control.focus_mode = Control.FOCUS_ALL
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	control.add_theme_color_override("font_color", TEXT)
+	control.add_theme_color_override("font_hover_color", TEXT)
+	control.add_theme_color_override("font_pressed_color", TEXT)
+	control.add_theme_color_override("font_focus_color", TEXT)
+	control.add_theme_color_override("font_disabled_color", Color(MUTED.r, MUTED.g, MUTED.b, 0.48))
 	control.add_theme_stylebox_override("normal", _input_style(Color("#101829"), Color("#41698d")))
 	control.add_theme_stylebox_override("hover", _input_style(Color("#172b49"), CYAN))
 	control.add_theme_stylebox_override("pressed", _input_style(Color("#0a1321"), CYAN))
+	control.add_theme_stylebox_override("focus", _input_style(Color("#101829"), CYAN))
+	control.add_theme_stylebox_override("disabled", _input_style(Color("#0b111d"), Color("#293b50")))
+	var popup := control.get_popup()
+	popup.transparent_bg = true
+	popup.add_theme_color_override("font_color", TEXT)
+	popup.add_theme_color_override("font_hover_color", TEXT)
+	popup.add_theme_color_override("font_disabled_color", Color(MUTED.r, MUTED.g, MUTED.b, 0.48))
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	var popup_panel := _input_style(Color("#0a1422"), Color("#41698d"))
+	popup_panel.shadow_color = Color(0, 0, 0, 0.55)
+	popup_panel.shadow_size = 14
+	popup_panel.shadow_offset = Vector2(0, 5)
+	popup.add_theme_stylebox_override("panel", popup_panel)
+	popup.add_theme_stylebox_override("hover", _input_style(Color("#193753"), CYAN))
 
 
 func _style_rent_button(control: Button) -> void:
