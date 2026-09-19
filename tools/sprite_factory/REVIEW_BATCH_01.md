@@ -79,6 +79,68 @@ The full action pass uses the same commands without `--idle-only`, and shiny
 uses `--variant shiny` only when official `_rare.trmtr` plus rare albedo are
 present. Neither command approves, pushes, deploys or switches a default.
 
+## Resumable production queue
+
+`pilot_batch_25.json` composes this reviewed 15-species set with ten additional
+body shapes. Run its inexpensive intake and one-frame probes as one resumable
+queue:
+
+```sh
+python tools/sprite_factory/scvi_batch.py run-pipeline --through probes \
+  --batch tools/sprite_factory/pilot_batch_25.json --jobs 2 \
+  --accept-unused-nodes --model-root "$model_root" --motion-root "$motion_root" \
+  --importer "$importer" --python-deps "$deps" --output "$output"
+```
+
+The queue preserves per-species intake and probe results. `--only` can safely
+resume an explicit comma-separated subset and rejects unknown names. Probe QC
+records visible alpha bounds, minimum margin, coverage, mean luminance and
+contrast for both views. Conservative warnings identify empty/clipped, very
+small, unusually dark/bright or low-contrast renders. They are review signals,
+not artistic decisions; in particular, the tool does not claim that generic
+image statistics can reliably recognize open eyes.
+
+Every technically sound probe stops at `awaiting_human_probe_review`. Record a
+human decision before allowing that species into the expensive full-action
+stage:
+
+```sh
+python tools/sprite_factory/scvi_batch.py record-probe-review \
+  --output "$output" --species charmander --variant normal \
+  --decision approved_for_full_render --reviewer NAME \
+  --note "Front/back probe checked for face, material, framing and platform"
+python tools/sprite_factory/scvi_batch.py run-pipeline --through full \
+  --batch tools/sprite_factory/pilot_batch_25.json --only charmander --jobs 2 \
+  --accept-unused-nodes --model-root "$model_root" --motion-root "$motion_root" \
+  --importer "$importer" --python-deps "$deps" --output "$output"
+```
+
+`pipeline-gates-normal.json` is the machine-readable queue dashboard. A human
+probe decision only permits a full render; the resulting assets still remain
+`needs_review` and still need battle/action review through the Sprite Factory.
+At most two render workers are used by default. No queue command approves,
+publishes, changes the runtime default, or silently substitutes a missing SCVI
+source.
+
+### 25-species pilot intake
+
+The ten additions are Typhlosion `pm0157`, Charmander `pm0004`, Umbreon
+`pm0197`, Scizor `pm0212`, Jigglypuff `pm0039`, Diglett `pm0050`, Slowpoke
+`pm0079`, Magnemite `pm0081`, Voltorb `pm0100` and Tauros `pm0128`. Their local
+identity icons were visually checked before inclusion; the `pm` values were not
+accepted from Pokédex numbering alone. All ten have local model, motion and
+official rare-material data. Together with the original fifteen this gives 25
+candidates.
+
+The first normal probe run completed all ten additions with zero technical QC
+errors. All ten correctly stopped at `awaiting_human_probe_review`; no full
+action render started. Umbreon's back view triggered the conservative dark
+render warning. Diglett and Magnemite carry explicit ground/floating review
+notes. Visual inspection also demonstrates why the human gate is required:
+several source idle poses look closed-eyed even though geometry, alpha bounds
+and brightness pass technical QC. The review page is
+`$output/probes/normal/index.html`.
+
 The initial action mappings are filename-ranked **candidates**, not evidence
 of the correct artistic motion. Within an action type, `200xx` candidates
 are preferred where available; the exact selection and alternatives are in `intake.json`. The

@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "include": ["review_batch_01.json"],
+  "entries": [
+    {"species": "typhlosion", "pm": 157, "target_game_height_px": 145},
+    {"species": "charmander", "pm": 4, "target_game_height_px": 82},
+    {"species": "umbreon", "pm": 197, "target_game_height_px": 92},
+    {"species": "scizor", "pm": 212, "target_game_height_px": 150},
+    {"species": "jigglypuff", "pm": 39, "target_game_height_px": 78},
+    {"species": "diglett", "pm": 50, "target_game_height_px": 55,
+      "review_warning": "Ground intersection and attack displacement need explicit platform review."},
+    {"species": "slowpoke", "pm": 79, "target_game_height_px": 105},
+    {"species": "magnemite", "pm": 81, "target_game_height_px": 78,
+      "review_warning": "Floating height needs explicit platform review."},
+    {"species": "voltorb", "pm": 100, "target_game_height_px": 72},
+    {"species": "tauros", "pm": 128, "target_game_height_px": 150}
+  ]
+}

@@ -14,6 +14,8 @@ import subprocess
 import traceback
 from pathlib import Path
 
+from PIL import Image, ImageStat
+
 
 CATEGORIES = {
     "idle": ("battlewait01_loop", "defaultwait01_loop"),
@@ -42,6 +44,80 @@ def digest(path):
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+
+
+def load_batch(path, seen=None):
+    """Load a batch with optional local includes and reject duplicate identities."""
+    path = path.resolve()
+    seen = set() if seen is None else seen
+    if path in seen:
+        raise ValueError("Recursive batch include: " + str(path))
+    seen.add(path)
+    data = json.loads(path.read_text())
+    entries = []
+    for include in data.get("include", []):
+        entries.extend(load_batch(path.parent / include, seen))
+    entries.extend(data.get("entries", []))
+    species = [item["species"] for item in entries]
+    if len(species) != len(set(species)):
+        raise ValueError("Duplicate species in batch composition")
+    return entries
+
+
+def selected_entries(entries, only):
+    """Return an explicit subset without allowing silent spelling mistakes."""
+    if not only:
+        return entries
+    selected = {value.strip() for value in only.split(",") if value.strip()}
+    known = {item["species"] for item in entries}
+    unknown = selected - known
+    if unknown:
+        raise ValueError("--only includes species outside the explicit batch: " +
+                         ", ".join(sorted(unknown)))
+    return [item for item in entries if item["species"] in selected]
+
+
+def probe_image_metrics(path):
+    """Measure presentation symptoms without pretending to judge artwork."""
+    with Image.open(path) as source:
+        image = source.convert("RGBA")
+    alpha = image.getchannel("A")
+    bounds = alpha.getbbox()
+    if bounds is None:
+        return {"visible": False, "bounds": None, "coverage": 0.0}
+    pixels = image.crop(bounds)
+    mask = alpha.crop(bounds)
+    luminance = pixels.convert("RGB").convert("L")
+    stats = ImageStat.Stat(luminance, mask=mask)
+    width, height = image.size
+    return {
+        "visible": True,
+        "bounds": [bounds[0], bounds[1], bounds[2] - bounds[0], bounds[3] - bounds[1]],
+        "coverage": round(sum(alpha.histogram()[1:]) / (width * height), 6),
+        "mean_luminance": round(stats.mean[0], 2),
+        "luminance_stddev": round(stats.stddev[0], 2),
+        "minimum_margin": min(bounds[0], bounds[1], width - bounds[2], height - bounds[3]),
+    }
+
+
+def automatic_probe_warnings(metrics):
+    """Conservative warning signals; none constitute artistic approval."""
+    warnings = []
+    for view, values in metrics.items():
+        if not values.get("visible"):
+            warnings.append(f"{view}:empty_render")
+            continue
+        if values["minimum_margin"] < 8:
+            warnings.append(f"{view}:clipping_risk")
+        if values["mean_luminance"] < 45:
+            warnings.append(f"{view}:suspiciously_dark")
+        if values["mean_luminance"] > 230:
+            warnings.append(f"{view}:suspiciously_bright")
+        if values["luminance_stddev"] < 8:
+            warnings.append(f"{view}:low_contrast")
+        if values["coverage"] < 0.005:
+            warnings.append(f"{view}:very_small_silhouette")
+    return warnings
 
 
 def compact_action_report(actions):
@@ -117,7 +193,7 @@ def source_entry(entry, model_root, motion_root):
 
 
 def inventory(args):
-    entries = json.loads(args.batch.read_text())["entries"]
+    entries = load_batch(args.batch)
     report = [source_entry(item, args.model_root, args.motion_root) for item in entries]
     write_json(args.output / "intake.json", {"schema": 1, "entries": report})
     for item in report:
@@ -309,9 +385,12 @@ def draft_one(args):
 
 def run_intake(args):
     entries = json.loads((args.output / "intake.json").read_text())["entries"]
-    status = {"schema": 1, "variant": args.variant, "idle_only": args.idle_only,
-              "entries": {}}
-    for item in entries:
+    status_path = args.output / ("intake-status-" + args.variant + ".json")
+    status = json.loads(status_path.read_text()) if status_path.exists() else {
+        "schema": 1, "variant": args.variant, "idle_only": args.idle_only, "entries": {}}
+    status["idle_only"] = args.idle_only
+    pending = selected_entries(entries, args.only)
+    for item in pending:
         args.species = item["species"]
         try:
             import_one(args)
@@ -331,7 +410,7 @@ def run_intake(args):
                      "traceback": traceback.format_exc(limit=3)}
             print("BLOCKED", item["species"], exc, flush=True)
         status["entries"][args.species] = state
-        write_json(args.output / ("intake-status-" + args.variant + ".json"), status)
+        write_json(status_path, status)
     print("INTAKE COMPLETE", sum(value["status"] == "configured_needs_review"
                                  for value in status["entries"].values()), "/", len(entries))
 
@@ -344,9 +423,7 @@ def run_builds(args):
                                  ("-idle" if args.idle_only else "-full") + ".json")
     status = json.loads(status_path.read_text()) if status_path.exists() else {
         "schema": 1, "variant": args.variant, "idle_only": args.idle_only, "entries": {}}
-    selected = set(args.only.split(",")) if args.only else None
-    if selected and not selected <= {item["species"] for item in entries}:
-        raise ValueError("--only includes a species outside the explicit batch")
+    pending = selected_entries(entries, args.only)
     factory = Path(__file__).with_name("factory.py")
 
     def build_one(item):
@@ -407,7 +484,6 @@ def run_builds(args):
             print("BLOCKED", species, exc, flush=True)
         return species, state
 
-    pending = [item for item in entries if not selected or item["species"] in selected]
     # Each worker owns a distinct species directory/log. The parent alone
     # updates the shared resumable status file after a completed result.
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
@@ -428,7 +504,7 @@ def run_builds(args):
 
 def preview_catalog(args):
     factory = Path(__file__).with_name("factory.py")
-    batch_entries = {entry["species"]: entry for entry in json.loads(args.batch.read_text())["entries"]}
+    batch_entries = {entry["species"]: entry for entry in load_batch(args.batch)}
     chosen = {}
     for variant in ("normal", "shiny"):
         for stage in ("idle", "full"):
@@ -512,63 +588,87 @@ def run_probes(args):
     entries = json.loads((args.output / "intake.json").read_text())["entries"]
     factory = Path(__file__).with_name("factory.py")
     probe_root = args.output / "probes" / args.variant
-    results = {}
-    rows = []
-    for item in entries:
+    status_path = probe_root / "status.json"
+    results = json.loads(status_path.read_text()).get("entries", {}) if status_path.exists() else {}
+    for item in selected_entries(entries, args.only):
         species = item["species"]
         try:
             if status["entries"][species]["status"] != "configured_needs_review":
                 raise ValueError("Intake is blocked")
-            complete = [p.parent for p in (args.output / "builds-idle" / species / args.variant).glob("*/state.json")
-                        if json.loads(p.read_text()).get("status") == "needs_review"]
-            if len(complete) > 1:
-                raise ValueError("Ambiguous full idle builds")
-            if complete:
-                build = complete[0]
+            previous = results.get(species, {})
+            previous_build = Path(previous["build"]) if previous.get("build") else None
+            if previous_build and previous_build.is_dir():
+                subprocess.run(["python", str(factory), "verify", str(previous_build)], check=True,
+                               stdout=subprocess.DEVNULL)
+                build = previous_build
             else:
-                source_dir = args.output / "sources" / species / args.variant
-                draft = json.loads((source_dir / "draft-idle-manifest.json").read_text())
-                warnings = status["entries"][species]["warnings"]
-                if warnings:
-                    if not args.accept_unused_nodes or not all(
-                            w.startswith("unused_empty_texture_node:") for w in warnings):
-                        raise ValueError("Source warnings require explicit review: " + str(warnings))
-                    draft["source"]["accepted_warnings"] = warnings
-                    draft["source"]["inspection_note"] += " Single-frame probe: disconnected image nodes acknowledged for review."
-                draft["actions"]["idle"]["frames"] = draft["actions"]["idle"]["frames"][:1]
-                manifest = probe_root / "manifests" / (species + ".json")
-                write_json(manifest, draft)
-                source = source_dir / (item["identity"] + "-ready.blend")
-                log = probe_root / "logs" / (species + ".log")
-                log.parent.mkdir(parents=True, exist_ok=True)
-                with log.open("w") as stream:
-                    process = subprocess.run(["python", str(factory), "build", "--manifest", str(manifest),
-                                              "--source", str(source), "--output", str(probe_root / "builds"),
-                                              "--variant", args.variant], stdout=stream, stderr=subprocess.STDOUT)
-                if process.returncode:
-                    raise RuntimeError("Probe failed: " + str(log))
-                builds = list((probe_root / "builds" / species / args.variant).glob("*/state.json"))
-                if len(builds) != 1:
-                    raise ValueError("Expected exactly one probe build")
-                build = builds[0].parent
+                complete = [p.parent for p in (args.output / "builds-idle" / species / args.variant).glob("*/state.json")
+                            if json.loads(p.read_text()).get("status") == "needs_review"]
+                if len(complete) > 1:
+                    raise ValueError("Ambiguous full idle builds")
+                if complete:
+                    build = complete[0]
+                else:
+                    source_dir = args.output / "sources" / species / args.variant
+                    draft = json.loads((source_dir / "draft-idle-manifest.json").read_text())
+                    warnings = status["entries"][species]["warnings"]
+                    if warnings:
+                        if not args.accept_unused_nodes or not all(
+                                w.startswith("unused_empty_texture_node:") for w in warnings):
+                            raise ValueError("Source warnings require explicit review: " + str(warnings))
+                        draft["source"]["accepted_warnings"] = warnings
+                        draft["source"]["inspection_note"] += " Single-frame probe: disconnected image nodes acknowledged for review."
+                    draft["actions"]["idle"]["frames"] = draft["actions"]["idle"]["frames"][:1]
+                    manifest = probe_root / "manifests" / (species + ".json")
+                    write_json(manifest, draft)
+                    source = source_dir / (item["identity"] + "-ready.blend")
+                    log = probe_root / "logs" / (species + ".log")
+                    log.parent.mkdir(parents=True, exist_ok=True)
+                    with log.open("w") as stream:
+                        process = subprocess.run(["python", str(factory), "build", "--manifest", str(manifest),
+                                                  "--source", str(source), "--output", str(probe_root / "builds"),
+                                                  "--variant", args.variant], stdout=stream, stderr=subprocess.STDOUT)
+                    if process.returncode:
+                        raise RuntimeError("Probe failed: " + str(log))
+                    builds = list((probe_root / "builds" / species / args.variant).glob("*/state.json"))
+                    if len(builds) != 1:
+                        raise ValueError("Expected exactly one probe build")
+                    build = builds[0].parent
             subprocess.run(["python", str(factory), "verify", str(build)], check=True,
                            stdout=subprocess.DEVNULL)
             qc = json.loads((build / "qc.json").read_text())
+            image_metrics = {}
+            for view in ("front", "back"):
+                frame = build / "masters" / view / "idle" / "0000.png"
+                image_metrics[view] = probe_image_metrics(frame)
+            automatic_warnings = automatic_probe_warnings(image_metrics)
             results[species] = {"status": "needs_review" if not qc["errors"] else "qc_failed",
                                 "build": str(build), "qc_errors": qc["errors"],
-                                "qc_warnings": qc["warnings"]}
-            overview = build / "previews" / "overview.png"
-            note = item.get("review_warning", "")
-            rows.append("<tr><td>" + html.escape(species) + "</td><td><a href='" +
-                        html.escape(str(overview)) + "'><img src='" + html.escape(str(overview)) +
-                        "' width='480' alt='front and back'></a></td><td>" +
-                        html.escape(note or "; ".join(qc["warnings"]) or "Geen waarschuwing; visueel beoordelen") +
-                        "</td></tr>")
+                                "qc_warnings": qc["warnings"],
+                                "image_metrics": image_metrics,
+                                "automatic_warnings": automatic_warnings}
             print("PROBED", species, "errors", len(qc["errors"]), flush=True)
         except Exception as exc:
             results[species] = {"status": "blocked", "error": str(exc)}
             print("PROBE BLOCKED", species, exc, flush=True)
-        write_json(probe_root / "status.json", {"schema": 1, "entries": results})
+        write_json(status_path, {"schema": 2, "entries": results})
+    rows = []
+    by_species = {item["species"]: item for item in entries}
+    for species, result in sorted(results.items()):
+        build = result.get("build")
+        if not build:
+            rows.append("<tr><td>" + html.escape(species) + "</td><td>geblokkeerd</td><td>" +
+                        html.escape(result.get("error", "onbekende fout")) + "</td></tr>")
+            continue
+        overview = Path(build) / "previews" / "overview.png"
+        note = by_species.get(species, {}).get("review_warning", "")
+        warnings = [*result.get("qc_warnings", []), *result.get("automatic_warnings", [])]
+        rows.append("<tr><td>" + html.escape(species) + "</td><td><a href='" +
+                    html.escape(str(overview)) + "'><img src='" + html.escape(str(overview)) +
+                    "' width='480' alt='front and back'></a></td><td>" +
+                    html.escape("; ".join(filter(None, [note, *warnings])) or
+                                "Geen automatische waarschuwing; visueel beoordelen") +
+                    "</td></tr>")
     page = ("<!doctype html><html lang='nl'><meta charset='utf-8'><title>Pokémon compositieproeven</title>"
             "<style>body{font:16px system-ui;background:#141722;color:#eee;margin:2rem}"
             "a{color:#8bd4ff}td,th{padding:.6rem;border:1px solid #555}table{border-collapse:collapse}</style>"
@@ -580,14 +680,125 @@ def run_probes(args):
     print("PROBE INDEX", probe_root / "index.html")
 
 
+def evaluate_gates(args):
+    """Combine technical evidence and explicit human probe decisions.
+
+    This gate controls expensive full rendering only. It never approves an
+    asset for production or changes the runtime default.
+    """
+    entries = json.loads((args.output / "intake.json").read_text())["entries"]
+    intake_path = args.output / ("intake-status-" + args.variant + ".json")
+    probe_path = args.output / "probes" / args.variant / "status.json"
+    build_path = args.output / ("build-status-" + args.variant + "-full.json")
+    intake = json.loads(intake_path.read_text()).get("entries", {}) if intake_path.exists() else {}
+    probes = json.loads(probe_path.read_text()).get("entries", {}) if probe_path.exists() else {}
+    builds = json.loads(build_path.read_text()).get("entries", {}) if build_path.exists() else {}
+    decisions_path = args.output / ("probe-decisions-" + args.variant + ".json")
+    decisions = json.loads(decisions_path.read_text()).get("entries", {}) if decisions_path.exists() else {}
+    report_path = args.output / ("pipeline-gates-" + args.variant + ".json")
+    gates = json.loads(report_path.read_text()).get("entries", {}) if report_path.exists() else {}
+    for item in selected_entries(entries, args.only):
+        species = item["species"]
+        intake_state = intake.get(species, {})
+        probe_state = probes.get(species, {})
+        build_state = builds.get(species)
+        decision = decisions.get(species)
+        reasons = []
+        if intake_state.get("status") != "configured_needs_review":
+            reasons.append("intake_not_ready")
+        if probe_state.get("status") not in ("needs_review",):
+            reasons.append("probe_not_ready")
+        if probe_state.get("qc_errors"):
+            reasons.append("probe_qc_errors")
+        if build_state and build_state.get("status") == "needs_review":
+            gate_status = "full_render_needs_review"
+        elif build_state and build_state.get("status") in ("qc_failed", "blocked"):
+            gate_status = "full_render_" + build_state["status"]
+        elif reasons:
+            gate_status = "blocked"
+        elif not decision:
+            gate_status = "awaiting_human_probe_review"
+        elif decision.get("decision") == "approved_for_full_render":
+            gate_status = "eligible_for_full_render"
+        else:
+            gate_status = decision.get("decision", "held_for_review")
+        gates[species] = {
+            "status": gate_status,
+            "reasons": reasons,
+            "automatic_warnings": probe_state.get("automatic_warnings", []),
+            "batch_review_warning": item.get("review_warning"),
+            "human_decision": decision,
+            "intake": intake_state.get("status", "not_started"),
+            "probe": probe_state.get("status", "not_started"),
+            "full_build": build_state,
+        }
+    report = {"schema": 1, "variant": args.variant, "entries": gates}
+    write_json(report_path, report)
+    counts = {}
+    for value in gates.values():
+        counts[value["status"]] = counts.get(value["status"], 0) + 1
+    print("PIPELINE GATES", json.dumps(counts, sort_keys=True))
+    return report
+
+
+def record_probe_review(args):
+    if not args.species:
+        raise ValueError("--species is required for record-probe-review")
+    if not args.reviewer or not args.note:
+        raise ValueError("--reviewer and --note are required for a human probe decision")
+    entries = json.loads((args.output / "intake.json").read_text())["entries"]
+    selected_entries(entries, args.species)
+    path = args.output / ("probe-decisions-" + args.variant + ".json")
+    report = json.loads(path.read_text()) if path.exists() else {
+        "schema": 1, "variant": args.variant, "entries": {}}
+    report["entries"][args.species] = {
+        "decision": args.decision,
+        "reviewer": args.reviewer.strip(),
+        "note": args.note.strip(),
+    }
+    write_json(path, report)
+    print("PROBE DECISION", args.species, args.decision)
+
+
+def run_pipeline(args):
+    """Resume the safe queue through probes or explicitly reviewed full builds."""
+    if not (args.output / "intake.json").exists():
+        inventory(args)
+    # Full manifests are prepared now, but no full frame is rendered before the
+    # cheap probe has been reviewed.
+    original_idle_only = args.idle_only
+    args.idle_only = False
+    run_intake(args)
+    args.idle_only = True
+    run_intake(args)
+    run_probes(args)
+    gates = evaluate_gates(args)
+    if args.through == "full":
+        intake_entries = json.loads((args.output / "intake.json").read_text())["entries"]
+        allowed = {item["species"] for item in selected_entries(intake_entries, args.only)}
+        eligible = [species for species, value in gates["entries"].items()
+                    if species in allowed and value["status"] == "eligible_for_full_render"]
+        if eligible:
+            args.only = ",".join(eligible)
+            args.idle_only = False
+            run_builds(args)
+            evaluate_gates(args)
+        else:
+            print("NO FULL BUILDS: review probes and record explicit decisions first")
+    args.idle_only = original_idle_only
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["inventory", "import-one", "draft-one", "run-intake", "run-builds", "run-probes", "preview-catalog"])
+    parser.add_argument("command", choices=["inventory", "import-one", "draft-one", "run-intake",
+                                                   "run-builds", "run-probes", "evaluate-gates",
+                                                   "record-probe-review", "run-pipeline",
+                                                   "preview-catalog"])
     parser.add_argument("--batch", type=Path, default=Path(__file__).with_name("review_batch_01.json"))
-    parser.add_argument("--model-root", type=Path, required=True)
-    parser.add_argument("--motion-root", type=Path, required=True)
-    parser.add_argument("--importer", type=Path, required=True)
-    parser.add_argument("--python-deps", type=Path, required=True)
+    parser.add_argument("--model-root", type=Path)
+    parser.add_argument("--motion-root", type=Path)
+    parser.add_argument("--importer", type=Path)
+    parser.add_argument("--python-deps", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--species")
     parser.add_argument("--only", help="Comma-separated explicit subset for run-builds; preserves other build statuses")
@@ -598,19 +809,39 @@ def main():
                         help="Build a first composition review without rendering other actions")
     parser.add_argument("--accept-unused-nodes", action="store_true",
                         help="Explicitly acknowledge only disconnected empty texture nodes")
+    parser.add_argument("--through", choices=["probes", "full"], default="probes",
+                        help="run-pipeline stops after probes unless human-reviewed entries may render fully")
+    parser.add_argument("--decision", choices=["approved_for_full_render", "held_for_review", "rejected"],
+                        help="Human decision for record-probe-review")
+    parser.add_argument("--reviewer", help="Human reviewer name for record-probe-review")
+    parser.add_argument("--note", help="Human rationale for record-probe-review")
     args = parser.parse_args()
     args.output = args.output.resolve()
-    args.model_root = args.model_root.resolve()
-    args.motion_root = args.motion_root.resolve()
-    args.importer = args.importer.resolve()
-    args.python_deps = args.python_deps.resolve()
+    source_commands = {"inventory", "import-one", "draft-one", "run-intake",
+                       "run-builds", "run-probes", "run-pipeline"}
+    if args.command in source_commands:
+        missing = [name for name in ("model_root", "motion_root", "importer", "python_deps")
+                   if getattr(args, name) is None]
+        if missing:
+            parser.error("source commands require " + ", ".join("--" + name.replace("_", "-")
+                                                                 for name in missing))
+    for name in ("model_root", "motion_root", "importer", "python_deps"):
+        value = getattr(args, name)
+        if value is not None:
+            setattr(args, name, value.resolve())
     if not 1 <= args.jobs <= 4:
         parser.error("--jobs must be between 1 and 4")
-    if args.command not in ("inventory", "run-intake", "run-builds", "run-probes", "preview-catalog") and not args.species:
+    if args.command not in ("inventory", "run-intake", "run-builds", "run-probes",
+                            "evaluate-gates", "run-pipeline", "preview-catalog") and not args.species:
         parser.error("--species is required")
+    if args.command == "record-probe-review" and not args.decision:
+        parser.error("--decision is required for record-probe-review")
     {"inventory": inventory, "import-one": import_one, "draft-one": draft_one,
      "run-intake": run_intake, "run-builds": run_builds,
      "run-probes": run_probes,
+     "evaluate-gates": evaluate_gates,
+     "record-probe-review": record_probe_review,
+     "run-pipeline": run_pipeline,
      "preview-catalog": preview_catalog}[args.command](args)
 
 
