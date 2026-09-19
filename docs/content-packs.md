@@ -3,8 +3,7 @@
 ## Available in this foundation
 
 The desktop launcher has a **Mods** button. **Installed** imports local zip
-packs, enables/disables them and moves enabled packs up in priority. The first
-enabled pack providing a usable asset wins. Changes apply at the next game start.
+packs. **Customize** selects one installed pack per supported category, so each category uses either its selected pack or the game default. Changes apply at the next game start.
 **Discover** loads the configured HTTPS catalog and installs official packs with
 the launcher's resumable downloader, verified size and SHA-256 checksum.
 
@@ -73,7 +72,7 @@ folder. **Open mods folder** opens the correct location. The launcher passes its
 absolute path to the child game through `POKEAETHER_MODS_DIR`, then restores its
 own previous environment value. The game and launcher share the same pack parser.
 
-`enabled.json` contains `{"enabled": ["first-pack", "second-pack"]}`. The launcher
+`enabled.json` contains the selected pack ID for each category. The launcher
 writes it via a temporary file. Newly imported packs are disabled. Manual imports
 reject an existing ID. Official catalog updates stage the new pack first, replace
 the old folder only after a valid import, and restore the old folder if replacement

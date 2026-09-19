@@ -40,12 +40,12 @@ func run() -> void:
 	check(panel.tabs.get_tab_title(0) == "Ontdekken", "discover localized")
 	check(panel.tabs.get_tab_title(1) == "Geïnstalleerd", "installed localized")
 	check(panel.rows.get_child_count() == 1, "installed pack shown")
-	var selection := panel.rows.get_child(0).find_child("PackSelectionButton", true, false) as Button
-	check(selection != null and selection.text == "Inschakelen", "disabled pack has an explicit enable action")
-	if selection != null:
-		selection.pressed.emit()
+	var choice := panel.configuration_rows.get_child(0).get_child(1) as OptionButton
+	check(choice != null and choice.item_count == 2, "cries have an explicit default-or-pack selection")
+	if choice != null:
+		choice.item_selected.emit(1)
 	await process_frame
-	check(store.enabled_ids() == ["sample"], "explicit selection persists enabled pack")
+	check(store.selected_pack_id("cries") == "sample", "category selection persists the selected pack")
 	panel.popup_centered()
 	await process_frame
 	check(panel.size.y <= 600, "dialog fits within launcher height")

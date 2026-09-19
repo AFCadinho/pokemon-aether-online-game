@@ -127,24 +127,53 @@ func installed() -> Array[Dictionary]:
 		result.append(manifest)
 	return result
 
-func enabled_ids() -> Array[String]:
-	var result: Array[String] = []
-	var values: Variant = read_json(root.path_join("enabled.json")).get("enabled", [])
-	if values is Array:
-		for value: Variant in values:
-			if value is String and valid_id(value) and not value in result:
-				result.append(value)
-	return result
+const SELECTABLE_CATEGORIES: Array[String] = ["cries", "battle_sprites", "followers"]
 
-func save_enabled(ids: Array[String]) -> Error:
+func selected_by_category() -> Dictionary:
+	var stored: Dictionary = read_json(root.path_join("enabled.json"))
+	var selected: Dictionary = {}
+	var values: Variant = stored.get("selected", {})
+	if values is Dictionary:
+		for category: String in SELECTABLE_CATEGORIES:
+			var pack_id := str((values as Dictionary).get(category, ""))
+			if valid_id(pack_id):
+				selected[category] = pack_id
+		return selected
+	# Migrate the old priority list by selecting its first compatible pack per category.
+	var legacy: Variant = stored.get("enabled", [])
+	if not legacy is Array:
+		return selected
+	var packs: Dictionary = {}
+	for pack in installed():
+		packs[pack.id] = pack
+	for category: String in SELECTABLE_CATEGORIES:
+		for value: Variant in legacy:
+			var pack_id := str(value)
+			var assets: Dictionary = packs.get(pack_id, {}).get("assets", {})
+			if category == "battle_sprites":
+				if assets.has("battle_sprites") or assets.has("sprite_collections"):
+					selected[category] = pack_id
+					break
+			elif assets.has(category):
+				selected[category] = pack_id
+				break
+	return selected
+
+
+func save_selected_by_category(selected: Dictionary) -> Error:
 	var error := DirAccess.make_dir_recursive_absolute(root)
 	if error != OK:
 		return error
+	var clean: Dictionary = {}
+	for category: String in SELECTABLE_CATEGORIES:
+		var pack_id := str(selected.get(category, ""))
+		if valid_id(pack_id):
+			clean[category] = pack_id
 	var path := root.path_join("enabled.json")
 	var file := FileAccess.open(path + ".tmp", FileAccess.WRITE)
 	if file == null:
 		return FileAccess.get_open_error()
-	file.store_string(JSON.stringify({"enabled": ids}, "\t"))
+	file.store_string(JSON.stringify({"selected": clean}, "\t"))
 	var write_error := file.get_error()
 	file.close()
 	if write_error != OK:
@@ -152,39 +181,63 @@ func save_enabled(ids: Array[String]) -> Error:
 		return write_error
 	return DirAccess.rename_absolute(path + ".tmp", path)
 
-func candidates(category: String, key: String) -> Array[Dictionary]:
+
+func save_enabled(ids: Array[String]) -> Error:
+	var selected: Dictionary = {}
 	var packs: Dictionary = {}
-	for pack in installed():
-		packs[pack.id] = pack
-	var result: Array[Dictionary] = []
-	for pack_id in enabled_ids():
-		var entry: Variant = packs.get(pack_id, {}).get("assets", {}).get(category, {}).get(key)
-		if entry is Dictionary:
-			var path := asset_path(pack_id, entry.file)
-			if not path.is_empty():
-				var candidate: Dictionary = entry.duplicate(true)
-				candidate["path"] = path
-				result.append(candidate)
+	for pack in installed(): packs[pack.id] = pack
+	for category: String in SELECTABLE_CATEGORIES:
+		for pack_id: String in ids:
+			var assets: Dictionary = packs.get(pack_id, {}).get("assets", {})
+			if assets.has(category) or (category == "battle_sprites" and assets.has("sprite_collections")):
+				selected[category] = pack_id
+				break
+	return save_selected_by_category(selected)
+
+
+func enabled_ids() -> Array[String]:
+	var result: Array[String] = []
+	for pack_id: String in selected_by_category().values():
+		if not pack_id in result:
+			result.append(pack_id)
 	return result
+
+
+func selected_pack_id(category: String) -> String:
+	return str(selected_by_category().get(category, ""))
+
+
+func candidates(category: String, key: String) -> Array[Dictionary]:
+	var pack_id := selected_pack_id(category)
+	if pack_id.is_empty():
+		return []
+	for pack in installed():
+		if str(pack.id) != pack_id:
+			continue
+		var entry: Variant = pack.get("assets", {}).get(category, {}).get(key)
+		if entry is Dictionary:
+			var path := asset_path(pack_id, str((entry as Dictionary).file))
+			if not path.is_empty():
+				var candidate: Dictionary = (entry as Dictionary).duplicate(true)
+				candidate["path"] = path
+				return [candidate]
+	return []
 
 
 func sprite_collection_directories() -> Array[String]:
-	var packs: Dictionary = {}
+	var selected_id := selected_pack_id("battle_sprites")
+	if selected_id.is_empty():
+		return []
 	for pack in installed():
-		packs[pack.id] = pack
-	var result: Array[String] = []
-	for pack_id in enabled_ids():
-		var collections: Variant = packs.get(pack_id, {}).get("assets", {}).get("sprite_collections", {})
-		if not collections is Dictionary:
+		if str(pack.id) != selected_id:
 			continue
-		for entry_value: Variant in collections.values():
-			if not entry_value is Dictionary:
-				continue
-			var entry := entry_value as Dictionary
-			var directory := asset_directory(pack_id, str(entry.get("directory", "")))
-			if not directory.is_empty() and not directory in result:
-				result.append(directory)
-	return result
+		var result: Array[String] = []
+		for entry_value: Variant in pack.get("assets", {}).get("sprite_collections", {}).values():
+			if entry_value is Dictionary:
+				var directory := asset_directory(selected_id, str((entry_value as Dictionary).get("directory", "")))
+				if not directory.is_empty(): result.append(directory)
+		return result
+	return []
 
 func import_zip(path: String, replace_existing: bool = false) -> String:
 	var zip_error := _check_zip_sizes(path)

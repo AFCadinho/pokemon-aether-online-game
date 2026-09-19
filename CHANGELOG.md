@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mods can now be selected independently for Pokémon cries, battle sprites and follower sprites in the launcher.
+
 - Installed mods now use clear Enable and Disable actions instead of an unlabeled checkbox.
 
 - Fixed an error that could occur after installing an official mod pack from Discover.

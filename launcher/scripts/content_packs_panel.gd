@@ -3,6 +3,7 @@ const Store := preload("res://scripts/content_pack_store.gd")
 const DownloadService := preload("res://scripts/resumable_download_service.gd")
 var store := Store.new()
 var rows: VBoxContainer
+var configuration_rows: VBoxContainer
 var discover_rows: VBoxContainer
 var status: Label
 var catalog_status: Label
@@ -110,6 +111,15 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 	rows.add_theme_constant_override("separation", 8)
 	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(rows)
+	var configure := ScrollContainer.new()
+	configure.name = "Customize"
+	configure.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(configure)
+	tabs.set_tab_title(2, translate.call("Customize"))
+	configuration_rows = VBoxContainer.new()
+	configuration_rows.add_theme_constant_override("separation", 10)
+	configuration_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	configure.add_child(configuration_rows)
 	tabs.current_tab = 1
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
@@ -132,7 +142,7 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 			OS.shell_open(store.root)
 	)
 	var note := Label.new()
-	note.text = translate.call("Changes apply at the next game start. The first enabled pack has priority.")
+	note.text = translate.call("Changes apply at the next game start. Choose a pack for each category in Customize.")
 	note.custom_minimum_size.x = 600
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(note)
@@ -299,7 +309,7 @@ func _on_official_pack_downloaded(path: String, _summary: Dictionary) -> void:
 	active_official_pack.clear()
 	_render_catalog()
 	if error.is_empty():
-		_set_catalog_status(translate.call("Pack installed. Enable it from Installed and restart the game."))
+		_set_catalog_status(translate.call("Pack installed. Choose it in Customize and restart the game."))
 	else:
 		_set_catalog_status(translate.call("Could not install pack:") + " " + error)
 
@@ -313,30 +323,16 @@ func refresh() -> void:
 	for child in rows.get_children():
 		rows.remove_child(child)
 		child.queue_free()
-	var enabled := store.enabled_ids()
 	var packs := store.installed()
-	# Active packs appear in their actual priority order.
-	packs.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var left := enabled.find(a.id)
-		var right := enabled.find(b.id)
-		return (left if left >= 0 else 100000) < (right if right >= 0 else 100000)
-	)
 	for pack in packs:
 		var card := PanelContainer.new()
 		card.add_theme_stylebox_override("panel", _style(Color(0.045, 0.07, 0.12, 0.92), Color(0.16, 0.25, 0.39, 0.9), 10, 1))
 		rows.add_child(card)
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 8)
-		card.add_child(row)
-		var active: bool = str(pack.id) in enabled
 		var details := VBoxContainer.new()
-		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		details.tooltip_text = str(pack.get("description", ""))
-		row.add_child(details)
+		card.add_child(details)
 		var name := Label.new()
 		name.text = str(pack.name)
-		name.clip_text = true
-		name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		name.add_theme_color_override("font_color", Color(0.92, 0.93, 1.0, 1.0))
 		details.add_child(name)
 		var metadata := Label.new()
@@ -344,42 +340,56 @@ func refresh() -> void:
 		metadata.add_theme_font_size_override("font_size", 12)
 		metadata.add_theme_color_override("font_color", Color(0.59, 0.66, 0.80, 1.0))
 		details.add_child(metadata)
-		var selection := Button.new()
-		selection.name = "PackSelectionButton"
-		selection.text = translate.call("Disable") if active else translate.call("Enable")
-		selection.tooltip_text = translate.call("Disable this pack at the next game start.") if active else translate.call("Enable this pack at the next game start.")
-		_apply_button_style(selection, not active)
-		row.add_child(selection)
-		selection.pressed.connect(func() -> void:
-			var ids := store.enabled_ids()
-			ids.erase(pack.id)
-			if not active:
-				ids.append(pack.id)
-			_save(ids)
-		)
-		var priority := Button.new()
-		priority.text = translate.call("Move up")
-		_apply_button_style(priority)
-		priority.disabled = not active or enabled.find(pack.id) <= 0
-		row.add_child(priority)
-		priority.pressed.connect(func() -> void:
-			var ids := store.enabled_ids()
-			var index := ids.find(pack.id)
-			if index > 0:
-				ids[index] = ids[index - 1]
-				ids[index - 1] = pack.id
-				_save(ids)
-		)
 	if packs.is_empty():
 		var empty := Label.new()
 		empty.text = translate.call("No packs installed. Import a zip or place a pack in the mods folder.")
-		empty.custom_minimum_size.x = 600
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		rows.add_child(empty)
+	_refresh_configuration(packs)
 	status.text = "\n".join(store.errors)
 
-func _save(ids: Array[String]) -> void:
-	var error := store.save_enabled(ids)
+
+func _refresh_configuration(packs: Array[Dictionary]) -> void:
+	for child in configuration_rows.get_children():
+		configuration_rows.remove_child(child)
+		child.queue_free()
+	var selected := store.selected_by_category()
+	var categories := {"cries": "Pokémon cries", "battle_sprites": "Battle sprites", "followers": "Follower sprites"}
+	for category: String in Store.SELECTABLE_CATEGORIES:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		configuration_rows.add_child(row)
+		var label := Label.new()
+		label.text = translate.call(str(categories[category]))
+		label.custom_minimum_size.x = 150
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		row.add_child(label)
+		var choice := OptionButton.new()
+		choice.name = category.capitalize() + "PackChoice"
+		choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		choice.add_item(translate.call("Default"), 0)
+		var selected_index := 0
+		for pack in packs:
+			var assets: Dictionary = pack.get("assets", {})
+			var supported := assets.has(category) or (category == "battle_sprites" and assets.has("sprite_collections"))
+			if not supported: continue
+			choice.add_item(str(pack.name), choice.item_count)
+			choice.set_item_metadata(choice.item_count - 1, str(pack.id))
+			if str(selected.get(category, "")) == str(pack.id): selected_index = choice.item_count - 1
+		choice.select(selected_index)
+		_apply_button_style(choice)
+		row.add_child(choice)
+		choice.item_selected.connect(func(index: int) -> void:
+			var next := store.selected_by_category()
+			var pack_id := str(choice.get_item_metadata(index)) if index > 0 else ""
+			if pack_id.is_empty(): next.erase(category)
+			else: next[category] = pack_id
+			_save_selection(next)
+		)
+
+
+func _save_selection(selected: Dictionary) -> void:
+	var error := store.save_selected_by_category(selected)
 	if error == OK:
 		refresh.call_deferred()
 	else:
@@ -388,4 +398,4 @@ func _save(ids: Array[String]) -> void:
 func _import(path: String) -> void:
 	var error := store.import_zip(path)
 	refresh()
-	status.text = translate.call("Pack imported. Enable it to use it on the next game start.") if error.is_empty() else translate.call("Could not import pack:") + " " + error
+	status.text = translate.call("Pack imported. Choose it in Customize to use it at the next game start.") if error.is_empty() else translate.call("Could not import pack:") + " " + error
