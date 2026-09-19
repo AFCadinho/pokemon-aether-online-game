@@ -4,6 +4,10 @@ class_name BattlePlayerTrainerCatalog
 
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const MANIFEST_PATH := "res://assets/battles/trainers/player/manifest.json"
+# Authored male/female battle bases share these three skin shades. The ball's
+# red and dark red also satisfy the overworld skin heuristic, so keep all other
+# pixels out of both the recolour mask and its luminance calculation.
+const BASE_SKIN_PALETTE: Array[Color] = [Color("#f8d0b8"), Color("#d8a078"), Color("#b87860")]
 const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "top"]
 const OPTIONAL_CATEGORIES: Array[String] = [
 	"shoes", "top_accessory", "eyebrows", "hair", "facial_hair", "headgear", "facegear"
@@ -163,10 +167,24 @@ static func _load_texture(path: String) -> Texture2D:
 static func _skin_variant(path: String, texture: Texture2D, skin_tone: String) -> Texture2D:
 	var key := "skin:%s:%s" % [path, skin_tone.to_lower()]
 	if not _variant_cache.has(key):
-		_variant_cache[key] = CharacterAppearanceService.tint_skin_texture(
-			texture,
+		var source := texture.get_image()
+		var mask := Image.create(source.get_width(), source.get_height(), false, Image.FORMAT_RGBA8)
+		var used := source.get_used_rect()
+		for y: int in range(used.position.y, used.end.y):
+			for x: int in range(used.position.x, used.end.x):
+				var pixel := source.get_pixel(x, y)
+				if pixel in BASE_SKIN_PALETTE:
+					mask.set_pixel(x, y, pixel)
+		var tinted := CharacterAppearanceService.tint_skin_texture(
+			ImageTexture.create_from_image(mask),
 			Color.from_string(skin_tone, Color(CharacterAppearanceService.DEFAULT_SKIN_TONE))
-		)
+		).get_image()
+		var result := source.duplicate() as Image
+		for y: int in range(used.position.y, used.end.y):
+			for x: int in range(used.position.x, used.end.x):
+				if mask.get_pixel(x, y).a > 0.0:
+					result.set_pixel(x, y, tinted.get_pixel(x, y))
+		_variant_cache[key] = ImageTexture.create_from_image(result)
 	return _variant_cache.get(key) as Texture2D
 
 

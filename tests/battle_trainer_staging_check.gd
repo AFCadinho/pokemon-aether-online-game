@@ -19,11 +19,37 @@ func _init() -> void:
 
 
 func _run_checks() -> void:
+	_check_trainer_base_palette()
 	_check_scene_staging()
 	_check_battle_setup_contract()
 	_check_npc_metadata_contract()
 	await _check_runtime_renderer()
 	quit(1 if failed else 0)
+
+
+func _check_trainer_base_palette() -> void:
+	for gender: String in ["male", "female"]:
+		var path := "res://assets/battles/trainers/player/%s/base.png" % gender
+		var original := (load(path) as Texture2D).get_image()
+		for tone: String in ["#f8d0b8", "#c58a5c", "#3f271f"]:
+			var layers := BattlePlayerTrainerCatalog.build_layers({"gender": gender, "skin_tone": tone})
+			var rendered := (layers[0].get("texture") as Texture2D).get_image()
+			var ball_pixels := 0
+			var changed_skin := 0
+			var unchanged_details := true
+			for y in range(original.get_height()):
+				for x in range(original.get_width()):
+					var before := original.get_pixel(x, y)
+					var after := rendered.get_pixel(x, y)
+					if before in [Color("#b83030"), Color("#884038")]:
+						ball_pixels += 1
+					if before in [Color("#f8d0b8"), Color("#d8a078"), Color("#b87860")]:
+						if before != after:
+							changed_skin += 1
+					elif before != after:
+						unchanged_details = false
+			_check(ball_pixels == 32 and unchanged_details, "%s %s keeps both Pokéball reds and every non-skin pixel unchanged" % [gender, tone])
+			_check(changed_skin > 12, "%s %s still recolours the body skin" % [gender, tone])
 
 
 func _check_scene_staging() -> void:
