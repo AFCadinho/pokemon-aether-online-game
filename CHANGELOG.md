@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Mods window now clearly explains how to import a community `.zip` pack.
+
 - Community mod creators can now start from copyable Pokémon cries, battle sprites and follower sprites pack templates.
 
 - Mods can now be selected independently for Pokémon cries, battle sprites and follower sprites in the launcher.
