@@ -254,7 +254,7 @@ perspective or changing its model, eyelid pose, 512x512 resolution, native
 
 A wider closed-eye review then identified Arcanine, Charmander, Diglett,
 Gengar, Jigglypuff, Psyduck, Roaring Moon, Scizor, Scyther, Tauros,
-Typhlosion and Voltorb. This was not accidental use of their sleep actions:
+Typhlosion, Voltorb and later Umbreon. This was not accidental use of their sleep actions:
 the selected battle/default-wait actions are distinct from `sleep01_loop`, but
 omit eyelid tracks and therefore exposed the same closed bind-pose inheritance.
 The batch configuration now assigns reviewed official open-eye donors. Most use
