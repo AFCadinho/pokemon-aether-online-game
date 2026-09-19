@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokémon rental review card now centers its level, rarity badge and held-item chip around the Pokémon artwork for a cleaner identity summary.
+
 - Custom Pokémon rentals now preview their full set in familiar PokéPaste order, including the temporary held item and its icon, without an internal set-info scrollbar.
 
 - The Pokémon rental builder's live preview now groups identity, build details, moves and training into a compact, scan-friendly card.
