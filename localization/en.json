@@ -329,6 +329,7 @@
   "backend.error.no_usable_pokemon": "None of your Pokémon can battle. Heal your party at a Pokémon Center first.",
   "backend.error.pokemon_level_cap_reached": "This Pokémon has reached your current level cap of {levelCap}.",
   "backend.error.pokemon_level_cap_party_ineligible": "Your party contains a Pokémon above the current level cap of {levelCap}.",
+  "backend.error.aether_clash_exit_party_level_cap_exceeded": "Your party contains a Pokémon above the current level cap of {levelCap}. Store it in your PC or return the active rental before leaving Aether Clash.",
   "backend.error.trade_pokemon_level_cap_exceeded": "This Pokémon is level {pokemonLevel}, above the recipient's trade level cap of {tradeLevelCap}.",
   "backend.error.reward_unavailable": "That reward is no longer available.",
   "backend.error.field_move_unavailable": "That field move cannot be used right now.",
