@@ -16542,10 +16542,6 @@ func _create_trainer_card_stats_tab() -> Control:
 	]
 	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.title", pvp_rows))
 
-	var spacer := Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_child(spacer)
-
 	return tab
 
 
@@ -17059,6 +17055,9 @@ func _create_trainer_card_badge_row() -> Control:
 	trainer_card_badge_status_label.add_theme_font_size_override("font_size", 12)
 	trainer_card_badge_status_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
 	option_wrap.add_child(trainer_card_badge_status_label)
+	# Keep save feedback before the selector so its right edge aligns with
+	# the other profile values, even when the status label is empty.
+	option_wrap.move_child(trainer_card_badge_status_label, 0)
 
 	_populate_trainer_card_badge_option()
 	if not trainer_card_badge_option.item_selected.is_connected(_on_trainer_card_badge_selected):
@@ -17243,7 +17242,7 @@ func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary])
 
 	var row_stack := VBoxContainer.new()
 	row_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	row_stack.alignment = BoxContainer.ALIGNMENT_END
+	row_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	row_stack.add_theme_constant_override("separation", 2)
 	layout.add_child(row_stack)
 
