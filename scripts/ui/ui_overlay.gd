@@ -26308,7 +26308,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	var web_generation := pokemon_summary_web_sprite_generation
 
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
-		"_load_sprite_frames",
+		"_load_preview_sprite_frames",
 		pokemon.species,
 		sprite_side,
 		pokemon.shiny
@@ -26366,7 +26366,7 @@ func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
 func _prefetch_pokemon_summary_rendered_view(species: String, side: String, is_shiny: bool) -> void:
 	if pokemon_summary_sprite_loader == null:
 		return
-	pokemon_summary_sprite_loader.call("_load_sprite_frames", species, side, is_shiny, false)
+	pokemon_summary_sprite_loader.call("_load_preview_sprite_frames", species, side, is_shiny, false)
 
 
 func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -35821,7 +35821,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	var loaded_frames: SpriteFrames = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
 		var frames_value: Variant = pokedex_sprite_loader.call(
-			"_load_sprite_frames",
+			"_load_preview_sprite_frames",
 			candidate,
 			_get_pokedex_sprite_side(),
 			pokedex_shiny_mode,
@@ -35871,7 +35871,7 @@ func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny
 		return
 	for candidate: String in _pokedex_species_sprite_candidates(species):
 		var frames_value: Variant = pokedex_sprite_loader.call(
-			"_load_sprite_frames",
+			"_load_preview_sprite_frames",
 			candidate,
 			side,
 			is_shiny,
