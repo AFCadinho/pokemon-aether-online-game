@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon rentals now separate set creation from the validated review-and-rent screen.
+
 - Rental specialists now offer rent-or-explanation dialogue choices, while the catalog uses a compact balance-only header.
 
 - The Pokémon rental builder now follows a clear create, validate and rent flow with friendlier input guidance and errors.
