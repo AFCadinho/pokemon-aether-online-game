@@ -170,6 +170,8 @@
   "Changes apply at the next game start. Choose a pack for each category in Customize.": "更改会在下次启动游戏时生效。请在“自定义”中为每个类别选择一个包。",
   "Pack installed. Choose it in Customize and restart the game.": "包已安装。请在“自定义”中选择它并重启游戏。",
   "Pack imported. Choose it in Customize to use it at the next game start.": "包已导入。请在“自定义”中选择它，以便在下次启动游戏时使用。",
+  "Create": "创建模组包指南",
+  "Create a pack guide": "一个模组包是 mods 文件夹中的一个文件夹。先创建 mod.json：它明确声明该包提供的类别，启动器便会在宝可梦叫声、战斗精灵图或跟随精灵图中显示它。将 Ogg 或 PNG 文件放入 cries/ 或 battle-sprites/ 等子文件夹，并在 mod.json 中列出每个文件。请从 docs/examples/content-pack/mod.json 和 docs/content-packs.md 的完整示例开始。",
   "Move up": "上移",
   "The official pack catalog is not available yet. You can already import community packs in Installed.": "官方资源包目录尚未开放。你可以在“已安装”中导入社区资源包。",
   "Changes apply at the next game start. The first enabled pack has priority.": "更改将在下次启动游戏时生效。最上方启用的资源包优先。",

@@ -170,6 +170,8 @@
 	"Changes apply at the next game start. Choose a pack for each category in Customize.": "As alterações entram em vigor no próximo início do jogo. Escolha um pacote por categoria em Personalizar.",
 	"Pack installed. Choose it in Customize and restart the game.": "Pacote instalado. Escolha-o em Personalizar e reinicie o jogo.",
 	"Pack imported. Choose it in Customize to use it at the next game start.": "Pacote importado. Escolha-o em Personalizar para usá-lo no próximo início do jogo.",
+	"Create": "Guia para criar um pacote",
+	"Create a pack guide": "Um pacote é uma pasta na pasta de mods. Crie primeiro mod.json: ele declara as categorias fornecidas pelo pacote. Assim o launcher o mostra em Sons dos Pokémon, Sprites de batalha ou Sprites de seguidor. Coloque arquivos Ogg ou PNG em subpastas como cries/ ou battle-sprites/ e liste cada arquivo em mod.json. Use docs/examples/content-pack/mod.json e docs/content-packs.md como exemplos completos.",
 	"Move up": "Mover para cima",
 	"The official pack catalog is not available yet. You can already import community packs in Installed.": "O catálogo oficial ainda não está disponível. Você já pode importar pacotes da comunidade em Instalados.",
 	"Changes apply at the next game start. The first enabled pack has priority.": "As alterações serão aplicadas ao iniciar o jogo novamente. O primeiro pacote ativo tem prioridade.",
