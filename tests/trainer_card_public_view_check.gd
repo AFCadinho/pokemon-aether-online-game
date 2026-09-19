@@ -25,7 +25,7 @@ func _run() -> void:
 		return
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
 	overlay.set("own_trainer_card_data", {
-		"favoritePokemon": "charizard", "favoritePokemonShiny": false,
+		"favoritePokemon": "greninja", "favoritePokemonShiny": false,
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [
 			{"format": "aether-ou", "rating": 1234, "period": "all_time"},
@@ -39,7 +39,7 @@ func _run() -> void:
 		"userId": 42.0,
 		"username": "misty",
 		"displayName": "Misty",
-		"favoritePokemon": "charizard",
+		"favoritePokemon": "greninja",
 		"favoritePokemonShiny": false,
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [
@@ -130,6 +130,7 @@ func _run() -> void:
 	_check(
 		public_companion != null
 		and public_companion.get_parent().get_children().find(public_companion) < public_companion.get_parent().get_children().find(public_art)
+		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 100.0
 		and public_companion.position.x > 110.0
 		and public_companion.position.y < 250.0,
 		"public companion stays compact beside and behind the Trainer portrait"
