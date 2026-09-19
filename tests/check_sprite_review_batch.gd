@@ -8,6 +8,10 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var sprite_box_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
+	var preview_priority := sprite_box_source.find('if rendered != null and bool(rendered.get_meta("rendered_preview", false)):')
+	var content_pack_lookup := sprite_box_source.find("var mod_frames := ContentPacks.battle_frames")
+	assert(preview_priority >= 0 and preview_priority < content_pack_lookup)
 	var expected_preview_path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").strip_edges()
 	if expected_preview_path.is_empty() and FileAccess.file_exists(Assets.LOCAL_PREVIEW_CATALOG_POINTER):
 		expected_preview_path = FileAccess.get_file_as_string(Assets.LOCAL_PREVIEW_CATALOG_POINTER).strip_edges()

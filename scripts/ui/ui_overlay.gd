@@ -29456,7 +29456,7 @@ func _make_pokemon_summary_header_frame_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_sprite_stage_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#14171eff"), POKEMON_SUMMARY_ACCENT_FAINT, 4, 1)
+	var style := _make_panel_style(Color("#00000000"), POKEMON_SUMMARY_ACCENT_FAINT, 4, 1)
 	style.shadow_color = Color("#00000000")
 	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
