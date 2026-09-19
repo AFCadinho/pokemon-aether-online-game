@@ -14,6 +14,8 @@ var catalog_request: HTTPRequest
 var download_service: ResumableDownloadService
 var official_packs: Array[Dictionary] = []
 var active_official_pack: Dictionary = {}
+var uninstall_dialog: ConfirmationDialog
+var pending_uninstall_id := ""
 
 
 func _style(color: Color, border: Color = Color(0, 0, 0, 0), radius: int = 8, width: int = 0) -> StyleBoxFlat:
@@ -159,6 +161,11 @@ func setup(translator: Callable, catalog_url: String = "") -> void:
 	add_child(picker)
 	import_button.pressed.connect(func() -> void: picker.popup_centered_ratio(0.75))
 	picker.file_selected.connect(_import)
+	uninstall_dialog = ConfirmationDialog.new()
+	uninstall_dialog.title = translate.call("Uninstall mod")
+	uninstall_dialog.ok_button_text = translate.call("Uninstall")
+	add_child(uninstall_dialog)
+	uninstall_dialog.confirmed.connect(_uninstall_pending)
 	catalog_request = HTTPRequest.new()
 	add_child(catalog_request)
 	catalog_request.request_completed.connect(_on_catalog_request_completed)
@@ -341,6 +348,11 @@ func refresh() -> void:
 		metadata.add_theme_font_size_override("font_size", 12)
 		metadata.add_theme_color_override("font_color", Color(0.59, 0.66, 0.80, 1.0))
 		details.add_child(metadata)
+		var uninstall := Button.new()
+		uninstall.text = translate.call("Uninstall")
+		_apply_button_style(uninstall)
+		details.add_child(uninstall)
+		uninstall.pressed.connect(func() -> void: _confirm_uninstall(str(pack.id), str(pack.name)))
 	if packs.is_empty():
 		var empty := Label.new()
 		empty.text = translate.call("No packs installed. Import a zip or place a pack in the mods folder.")
@@ -348,6 +360,22 @@ func refresh() -> void:
 		rows.add_child(empty)
 	_refresh_configuration(packs)
 	status.text = "\n".join(store.errors)
+
+
+func _confirm_uninstall(pack_id: String, pack_name: String) -> void:
+	pending_uninstall_id = pack_id
+	uninstall_dialog.dialog_text = translate.call("Remove {name} from this computer? You can install it again later.").format({"name": pack_name})
+	uninstall_dialog.popup_centered(Vector2i(460, 170))
+
+
+func _uninstall_pending() -> void:
+	if pending_uninstall_id.is_empty():
+		return
+	var error := store.uninstall(pending_uninstall_id)
+	pending_uninstall_id = ""
+	refresh()
+	_render_catalog()
+	status.text = translate.call("Mod removed.") if error.is_empty() else translate.call("Could not remove mod:") + " " + error
 
 
 func _refresh_configuration(packs: Array[Dictionary]) -> void:
