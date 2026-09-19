@@ -26814,6 +26814,9 @@ func _get_pokemon_summary_sprite_position() -> Vector2:
 	)
 
 func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
+	var portrait := _rendered_portrait_rect(frames, POKEMON_SUMMARY_SPRITE_MAX_SIZE)
+	if portrait.has_area():
+		return Vector2.ONE * (POKEMON_SUMMARY_SPRITE_MAX_SIZE.x / portrait.size.x)
 	var render_scale := 1.0
 	if pokemon_summary_sprite_loader.has_method("_get_sprite_frames_render_scale"):
 		var render_scale_value: Variant = pokemon_summary_sprite_loader.call("_get_sprite_frames_render_scale", frames)
@@ -26874,6 +26877,10 @@ func _apply_pokemon_summary_sprite_center_offset(frames: SpriteFrames, animation
 func _get_pokemon_summary_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
+	if animation_name == "idle":
+		var portrait := _rendered_portrait_rect(frames, POKEMON_SUMMARY_SPRITE_MAX_SIZE)
+		if portrait.has_area():
+			return portrait
 	if animation_name == "idle" and pokemon_summary_sprite_loader.has_method("_get_sprite_frames_visual_bounds"):
 		var cached_bounds: Variant = pokemon_summary_sprite_loader.call("_get_sprite_frames_visual_bounds", frames)
 		if cached_bounds is Rect2 and (cached_bounds as Rect2).has_area():
@@ -36282,6 +36289,9 @@ func _get_pokedex_sprite_position() -> Vector2:
 	)
 
 func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
+	var portrait := _rendered_portrait_rect(frames, Vector2(170, 112))
+	if portrait.has_area():
+		return Vector2.ONE * (170.0 / portrait.size.x)
 	var render_scale := 1.0
 	if pokedex_sprite_loader.has_method("_get_sprite_frames_render_scale"):
 		var render_scale_value: Variant = pokedex_sprite_loader.call("_get_sprite_frames_render_scale", frames)
@@ -36340,6 +36350,10 @@ func _apply_pokedex_sprite_center_offset(frames: SpriteFrames, animation_name: S
 func _get_pokedex_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
+	if animation_name == "idle":
+		var portrait := _rendered_portrait_rect(frames, Vector2(170, 112))
+		if portrait.has_area():
+			return portrait
 	if animation_name == "idle" and frames.has_meta("rendered_visual_bounds"):
 		var bounds: Rect2 = frames.get_meta("rendered_visual_bounds")
 		if bounds.has_area():
@@ -36365,6 +36379,37 @@ func _get_pokedex_sprite_visual_rect(frames: SpriteFrames, animation_name: Strin
 			combined_rect = combined_rect.merge(used_rect)
 
 	return combined_rect if has_rect else Rect2()
+
+func _rendered_portrait_rect(frames: SpriteFrames, stage: Vector2) -> Rect2:
+	if frames == null:
+		return Rect2()
+	var full: Rect2 = frames.get_meta("rendered_visual_bounds", Rect2())
+	var focus: Rect2 = frames.get_meta("rendered_portrait_bounds", Rect2())
+	# Explicit per-form/view review overrides are data, never species checks.
+	var presentation: Dictionary = frames.get_meta("rendered_presentation", {})
+	var override: Array = presentation.get("portrait_bounds", [])
+	if override.size() == 4:
+		focus = Rect2(float(override[0]), float(override[1]), float(override[2]), float(override[3]))
+	if not full.has_area() or not focus.has_area():
+		return Rect2()
+	focus = focus.intersection(full)
+	if not focus.has_area():
+		return Rect2()
+	var body_fit: float = min(stage.x * 0.78 / focus.size.x, stage.y * 0.78 / focus.size.y)
+	# Up to 22% closer than full-envelope fitting. Thin wing/tail tips can
+	# approach/cross the portrait edge; no per-frame zoom or recentering.
+	var envelope_fit: float = min(stage.x / full.size.x, stage.y / full.size.y)
+	# Dense silhouettes already fill the portrait: do not crop feet/ears just
+	# to make every species larger. Extra zoom is reserved for sparse envelopes.
+	var focus_ratio := focus.get_area() / full.get_area()
+	var sparse_weight := clampf((0.17 - focus_ratio) / 0.05, 0.0, 1.0)
+	var scale_value: float = min(body_fit, envelope_fit * (1.0 + 0.22 * sparse_weight))
+	var visible_size := stage / scale_value
+	var center := full.get_center().lerp(focus.get_center(), 0.65)
+	var travel := (full.size - visible_size).max(Vector2.ZERO) * 0.5
+	center = center.clamp(full.get_center() - travel, full.get_center() + travel)
+	return Rect2(center - visible_size * 0.5, visible_size)
+
 
 func _on_pokedex_sprite_panel_gui_input(event: InputEvent) -> void:
 	if pokedex_selected_species.is_empty():

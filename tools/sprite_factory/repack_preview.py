@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 from PIL import Image
+from factory import portrait_bounds
 
 
 def sha(path):
@@ -79,6 +80,7 @@ def repack(catalog_path, output, activate=False):
                 spec['pages'] = pages
                 spec['visual_bounds'] = [union[0], union[1], union[2] - union[0], union[3] - union[1]]
                 if action == 'idle':
+                    spec['portrait_bounds'] = portrait_bounds(cells)
                     name = f'{view}/idle-preview.png'
                     cells[0].save(target / name)
                     spec['preview_frame'] = dict(file=name, sha256=sha(target / name), visual_bounds=spec['visual_bounds'])

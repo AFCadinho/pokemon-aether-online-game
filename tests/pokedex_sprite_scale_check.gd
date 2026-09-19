@@ -93,10 +93,10 @@ func _run() -> void:
 				dragonite_frames
 			)
 			print("Rendered bounds=%s Summary=%s Pokedex=%s" % [visual_bounds, summary_size, pokedex_size])
-			_check(summary_size.y >= 120.0 and summary_size.y <= 155.01,
+			_check(summary_size.y >= 120.0 and summary_size.y <= 155.0 * 1.22 + 0.01,
 				"rendered Summary art uses the visible silhouette instead of the 512px canvas")
-			_check(pokedex_size.y >= 80.0 and pokedex_size.y <= 104.01,
-				"rendered Pokédex art fills its detail stage without clipping")
+			_check(pokedex_size.y >= 80.0 and pokedex_size.y <= 112.0 * 1.22 + 0.01,
+				"rendered Pokédex portrait stays inside the bounded enlargement budget")
 			var animated_value: Variant = await sprite_loader.call(
 				"request_rendered_sprite_frames",
 				"dragonite",
@@ -105,6 +105,8 @@ func _run() -> void:
 			)
 			_check(animated_value is SpriteFrames and (animated_value as SpriteFrames).get_frame_count("idle") > 1,
 				"rendered Pokédex still upgrades to the streamed 60 FPS idle animation")
+			var animated_scale: Vector2 = overlay.call("_get_pokedex_sprite_scale", animated_value)
+			_check(animated_scale.is_equal_approx(pokedex_size / visual_bounds.size), "portrait scale remains fixed after streaming")
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
