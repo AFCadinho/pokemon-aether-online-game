@@ -130,10 +130,9 @@ func _run() -> void:
 	_check(
 		public_companion != null
 		and public_companion.get_parent().get_children().find(public_companion) < public_companion.get_parent().get_children().find(public_art)
-		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 100.0
-		and public_companion.position.x > 110.0
+		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 170.0
 		and public_companion.position.y < 250.0,
-		"public companion stays compact beside and behind the Trainer portrait"
+		"wide companions use the portrait width behind the foreground trainer"
 	)
 	for field: String in ["seen", "caught", "shinyCaught"]:
 		var tile := popup.find_child("Dex_%s" % field, true, false)
