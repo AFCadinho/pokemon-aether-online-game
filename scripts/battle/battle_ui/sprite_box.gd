@@ -1254,6 +1254,10 @@ func _load_sprite_frames(
 		var anchor: Array = present.get("anchor", [256, 256])
 		var offset: Array = present.get("position_offset", [0, 0])
 		_set_sprite_frames_render_scale(rendered, float(present.get("render_scale", 1.0)))
+		_set_sprite_frames_display_scale_multiplier(
+			rendered,
+			float(rendered.get_meta("rendered_display_scale_multiplier", 1.0))
+		)
 		_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
 		_set_sprite_frames_position_offset(rendered, Vector2(float(offset[0]), float(offset[1])))
 		return rendered
