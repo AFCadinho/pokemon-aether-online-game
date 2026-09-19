@@ -234,6 +234,16 @@ no longer hover as far above it. This is a data-only runtime presentation
 adjustment: master pixels, lighting, scale, resolution and native 60 FPS remain
 unchanged. All five still require in-game review.
 
+Articuno's battle idle was later confirmed to omit all eight eyelid-bone
+tracks. Its eyes are naturally narrow, but relying on Blender's bind pose made
+their state ambiguous. The source adapter now uses frame zero of Articuno's
+official `00010_defaultidle01` as an explicit open-eye donor for actions which
+omit those tracks. The importer also records unresolved inherited eyelid poses
+as automatic queue warnings for every species/action, so a technically clean
+probe cannot silently hide this class of facial-state problem. The corrected
+normal full-action build contains 1,770 frames, passed factory QC with zero
+errors/warnings, and remains `needs_review`.
+
 The battle client applies one shared `1.30` display multiplier to every asset
 loaded through the rendered-sprite resolver. Species/form scale ratios and
 front/back manifest differences remain intact, while the whole rendered cast

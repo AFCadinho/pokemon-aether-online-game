@@ -61,7 +61,8 @@ class ScviBatchTest(unittest.TestCase):
             batch.write_text(json.dumps({"entries": [{"species": "eevee"}]}))
             (root / "intake.json").write_text(batch.read_text())
             (root / "intake-status-normal.json").write_text(json.dumps({
-                "entries": {"eevee": {"status": "configured_needs_review"}}}))
+                "entries": {"eevee": {"status": "configured_needs_review",
+                                        "facial_warnings": ["inherited_eyelid_pose:idle:left"]}}}))
             probe = root / "probes" / "normal"
             probe.mkdir(parents=True)
             (probe / "status.json").write_text(json.dumps({"entries": {
@@ -78,7 +79,7 @@ class ScviBatchTest(unittest.TestCase):
             self.assertEqual(report["entries"]["eevee"]["status"],
                              "eligible_for_full_render")
             self.assertEqual(report["entries"]["eevee"]["automatic_warnings"],
-                             ["front:suspiciously_dark"])
+                             ["front:suspiciously_dark", "inherited_eyelid_pose:idle:left"])
 
     def test_compact_action_report_preserves_review_metadata(self):
         result = compact_action_report({
@@ -116,7 +117,8 @@ class ScviBatchTest(unittest.TestCase):
             (model / (identity + "_body_rare_alb.png")).touch()
             for suffix in ("00001_battlewait01_loop", "20001_battlewait01_loop",
                            "20000_defaultwait01_loop", "20400_attack01",
-                           "00400_attack01", "20500_damage01", "20010_defaultidle01"):
+                           "00400_attack01", "20500_damage01", "20010_defaultidle01",
+                           "28000_eye01"):
                 (motion / (identity + "_" + suffix + ".tranm")).touch()
             (motion / (identity + "_20001_battlewait01_loop.tracm")).touch()
             result = source_entry({"species": "dragonite", "pm": 149,
@@ -132,6 +134,11 @@ class ScviBatchTest(unittest.TestCase):
             self.assertIsNone(result["motions"]["sleep"])
             self.assertIn("missing_action:sleep", result["warnings"])
             self.assertNotIn("missing_official_rare_albedo", result["warnings"])
+            result = source_entry({"species": "dragonite", "pm": 149,
+                                   "target_game_height_px": 180,
+                                   "motion_overrides": {"idle": "28000_eye01"}},
+                                  root / "models", root / "motions")
+            self.assertTrue(result["motions"]["idle"].endswith("28000_eye01.tranm"))
             (motion / (identity + "_20001_battlewait01_loop.tranm")).unlink()
             result = source_entry({"species": "dragonite", "pm": 149,
                                    "target_game_height_px": 180},
