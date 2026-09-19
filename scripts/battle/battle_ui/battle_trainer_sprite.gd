@@ -4,6 +4,7 @@ class_name BattleTrainerSprite
 
 const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const BattlePlayerTrainerCatalog := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
+const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const DEFAULT_DISPLAY_SCALE := 2.0
 const PLAYER_BATTLE_ART_SCALE := 0.5
 ## Catalog sprites are 80px-square poses, while the legacy overworld frames
@@ -20,6 +21,7 @@ const CATALOG_SPRITE_OFFSET := Vector2(-24.0, -16.0)
 
 var player_appearance_state: Dictionary = {}
 var player_layer_metadata: Array[Dictionary] = []
+var player_avatar: Node2D
 var facing_direction := Vector2.RIGHT
 
 
@@ -39,6 +41,9 @@ func clear() -> void:
 	visible = false
 	player_appearance_state.clear()
 	player_layer_metadata.clear()
+	if player_avatar != null and is_instance_valid(player_avatar):
+		player_avatar.free()
+	player_avatar = null
 	if player_battle_art != null:
 		for child: Node in player_battle_art.get_children():
 			child.free()
@@ -58,6 +63,7 @@ func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> voi
 		return
 	var layers := BattlePlayerTrainerCatalog.build_layers(appearance_state)
 	if layers.is_empty():
+		_show_overworld_player_fallback(appearance_state, facing_direction)
 		return
 	player_appearance_state = appearance_state.duplicate(true)
 	for layer: Dictionary in layers:
@@ -69,7 +75,9 @@ func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> voi
 		sprite.texture = texture
 		var layer_scale := float(layer.get("scale", 1.0)) * display_scale * PLAYER_BATTLE_ART_SCALE
 		sprite.scale = Vector2.ONE * layer_scale
-		sprite.flip_h = facing_direction.x < 0.0
+		# Authored player battle poses face left. Mirror only the allied side,
+		# which stands left of the field and must look right at its opponent.
+		sprite.flip_h = facing_direction.x > 0.0
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		player_battle_art.add_child(sprite)
 		player_layer_metadata.append({
@@ -80,6 +88,33 @@ func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> voi
 		})
 	player_battle_art.visible = player_battle_art.get_child_count() > 0
 	visible = true
+
+
+func _show_overworld_player_fallback(
+	appearance_state: Dictionary,
+	facing_direction: Vector2
+) -> void:
+	var avatar_script := load(REMOTE_PLAYER_AVATAR_SCRIPT_PATH) as Script
+	if avatar_script == null:
+		return
+	player_avatar = avatar_script.new() as Node2D
+	if player_avatar == null:
+		return
+	add_child(player_avatar)
+	visible = true
+	player_appearance_state = appearance_state.duplicate(true)
+	player_avatar.call("apply_state", {
+		"appearance": player_appearance_state,
+		"facingDirection": _direction_name(facing_direction),
+		"position": {"x": 0.0, "y": 0.0},
+	})
+	player_avatar.position = Vector2.ZERO
+	player_avatar.scale = Vector2.ONE * display_scale
+	player_avatar.z_as_relative = true
+	player_avatar.z_index = 0
+	player_avatar.call("set_interaction_enabled", false)
+	player_avatar.call("set_creator_nameplate_visible", false)
+	player_avatar.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func show_npc(
