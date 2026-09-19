@@ -7,11 +7,12 @@ static var _cache: Dictionary = {}
 static var _cache_order: Array[String] = []
 const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
 const CACHE_LIMIT := 8
+const LOCAL_PREVIEW_CATALOG_POINTER := "res://.pokeaether/rendered-preview-catalog"
 
 
 static func load_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
 	var catalog_path := OS.get_environment("POKEAETHER_RENDERED_CATALOG")
-	var preview_path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG")
+	var preview_path := _preview_catalog_path()
 	var preview := not preview_path.is_empty()
 	if preview:
 		catalog_path = preview_path
@@ -58,6 +59,15 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 		return null
 	_remember_frames(cache_key, frames)
 	return frames
+
+
+static func _preview_catalog_path() -> String:
+	var preview_path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").strip_edges()
+	if not preview_path.is_empty() or not OS.is_debug_build():
+		return preview_path
+	if not FileAccess.file_exists(LOCAL_PREVIEW_CATALOG_POINTER):
+		return ""
+	return FileAccess.get_file_as_string(LOCAL_PREVIEW_CATALOG_POINTER).strip_edges()
 
 
 static func _remember_frames(cache_key: String, frames: SpriteFrames) -> void:

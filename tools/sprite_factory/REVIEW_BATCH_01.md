@@ -183,3 +183,10 @@ rendered Pokémon warms its opposite view after first display so front/back
 review does not repeatedly decode lossless atlases. The shared rendered-view
 cache is LRU-bounded to eight views, preventing long Pokédex sessions from
 retaining an unbounded number of full-quality atlases.
+
+For local development review, a machine-local ignored file at
+`.pokeaether/rendered-preview-catalog` may contain the absolute path of the
+preview catalog. Debug builds use it when the explicit
+`POKEAETHER_RENDERED_PREVIEW_CATALOG` environment variable is not set, so
+`godot .` remains sufficient on a configured checkout. Release builds and
+machines without that file retain the approved-catalog/fallback behavior.

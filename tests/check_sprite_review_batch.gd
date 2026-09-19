@@ -8,6 +8,10 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var expected_preview_path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").strip_edges()
+	if expected_preview_path.is_empty() and FileAccess.file_exists(Assets.LOCAL_PREVIEW_CATALOG_POINTER):
+		expected_preview_path = FileAccess.get_file_as_string(Assets.LOCAL_PREVIEW_CATALOG_POINTER).strip_edges()
+	assert(Assets._preview_catalog_path() == expected_preview_path)
 	Assets._cache.clear()
 	Assets._cache_order.clear()
 	for index: int in Assets.CACHE_LIMIT + 2:
@@ -20,7 +24,7 @@ func _run() -> void:
 	assert(Assets._cache.has("review-cache-test-2"))
 	Assets._cache.clear()
 	Assets._cache_order.clear()
-	var path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG")
+	var path := Assets._preview_catalog_path()
 	assert(not path.is_empty())
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
 	assert(catalog.get("mode") == "preview")
