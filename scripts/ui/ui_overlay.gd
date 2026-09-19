@@ -20906,7 +20906,8 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_y", 1)
 	level_badge_margin.add_child(pokemon_summary_level_badge_label)
-	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52)
+	# Keep the lower-left HA badge unobstructed; the zoom action sits beside it.
+	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52, 56.0)
 
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
@@ -36614,7 +36615,13 @@ func _rendered_portrait_rect(frames: SpriteFrames, stage: Vector2) -> Rect2:
 	return Rect2(full.get_center() - visible_size * 0.5, visible_size)
 
 
-func _add_preview_zoom_button(parent: Control, viewport: SubViewport, fallback: TextureRect, center_y: float) -> Button:
+func _add_preview_zoom_button(
+	parent: Control,
+	viewport: SubViewport,
+	fallback: TextureRect,
+	center_y: float,
+	left_offset: float = 6.0
+) -> Button:
 	parent.clip_contents = true
 	# An overlay Control prevents PanelContainer from stretching the button.
 	var overlay := Control.new()
@@ -36631,9 +36638,9 @@ func _add_preview_zoom_button(parent: Control, viewport: SubViewport, fallback: 
 	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#06111fe8"), UI_BORDER_SUBTLE, 5, 1))
 	overlay.add_child(button)
 	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	button.offset_left = 6
+	button.offset_left = left_offset
 	button.offset_top = -34
-	button.offset_right = 34
+	button.offset_right = left_offset + 28.0
 	button.offset_bottom = -6
 	button.draw.connect(func() -> void:
 		var ink := Color("#8ce7ff")

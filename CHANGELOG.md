@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Summary portrait zoom no longer overlaps the Hidden Ability badge.
+
 - Official mod packs now show their latest publication date in Discover and Installed.
 
 - Adventure Stats now shows Region clears at zero, introducing the future region replay progression stat.
