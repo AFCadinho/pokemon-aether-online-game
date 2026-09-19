@@ -32,9 +32,9 @@ func _run() -> void:
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [
 			{"format": "aether-ou", "rating": 1234, "peakRating": 1301, "gamesPlayed": 18, "period": "all_time"},
-			{"format": "aether-uu", "rating": 1198, "peakRating": 1210, "gamesPlayed": 9, "period": "all_time"},
-			{"format": "aether-randbats", "rating": 1092, "peakRating": 1144, "gamesPlayed": 7, "period": "all_time"},
-			{"format": "aether-doubles", "rating": 1260, "peakRating": 1290, "gamesPlayed": 12, "period": "all_time"},
+			{"format": "aether-uu", "rating": 1198, "peakRating": 1220, "gamesPlayed": 9, "period": "all_time"},
+			{"format": "aether-randbats", "rating": 1092, "peakRating": 1110, "gamesPlayed": 6, "period": "all_time"},
+			{"format": "aether-doubles", "rating": 1260, "peakRating": 1260, "gamesPlayed": 4, "period": "all_time"},
 		],
 	})
 	root.add_child(overlay)
@@ -47,9 +47,9 @@ func _run() -> void:
 		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [
 			{"format": "aether-ou", "rating": 1234, "peakRating": 1301, "gamesPlayed": 18, "period": "all_time"},
-			{"format": "aether-uu", "rating": 1198, "peakRating": 1210, "gamesPlayed": 9, "period": "all_time"},
-			{"format": "aether-randbats", "rating": 1092, "peakRating": 1144, "gamesPlayed": 7, "period": "all_time"},
-			{"format": "aether-doubles", "rating": 1260, "peakRating": 1290, "gamesPlayed": 12, "period": "all_time"},
+			{"format": "aether-uu", "rating": 1198, "peakRating": 1220, "gamesPlayed": 9, "period": "all_time"},
+			{"format": "aether-randbats", "rating": 1092, "peakRating": 1110, "gamesPlayed": 6, "period": "all_time"},
+			{"format": "aether-doubles", "rating": 1260, "peakRating": 1260, "gamesPlayed": 4, "period": "all_time"},
 		],
 		"createdAt": "2026-05-04T12:00:00Z",
 		"guildName": "Cerulean Waves",
@@ -57,10 +57,9 @@ func _run() -> void:
 		"appearance": {},
 		"follower": {"visible": true, "species": "rattata", "shiny": false},
 		"badges": {
-			"earnedCount": 2,
 			"badges": [
-				{"region": "kanto", "badgeId": "boulder", "name": "Boulder Badge", "earned": true, "earnedAt": "2026-05-05T12:00:00Z"},
-				{"region": "kanto", "badgeId": "cascade", "name": "Cascade Badge", "earned": true, "earnedAt": "2026-06-05T12:00:00Z"},
+				{"region": "kanto", "badgeId": "boulder", "earned": true},
+				{"region": "kanto", "badgeId": "cascade", "earned": true},
 			],
 		},
 		"playtimeSeconds": 7200,
@@ -81,12 +80,7 @@ func _run() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(capture_dir.path_join("public.png"))
 		var public_tabs := (overlay.get("public_trainer_card_popup") as Control).find_child("PublicTrainerCardTabs", true, false) as TabContainer
-		public_tabs.current_tab = 1
-		for frame in range(5):
-			await process_frame
-		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png(capture_dir.path_join("showcase.png"))
-		public_tabs.current_tab = 3
+		public_tabs.current_tab = 2
 		for frame in range(5):
 			await process_frame
 		await RenderingServer.frame_post_draw
@@ -125,7 +119,6 @@ func _run() -> void:
 	var popup := overlay.get("public_trainer_card_popup") as PanelContainer
 	var tabs := popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
 	var overview_tab := tabs.get_node_or_null("Overview") as Control if tabs != null else null
-	var showcase_tab := tabs.get_node_or_null("Showcase") as Control if tabs != null else null
 	var badges_tab := tabs.get_node_or_null("Badges") as Control if tabs != null else null
 	var pvp_tab := tabs.get_node_or_null("Pvp") as Control if tabs != null else null
 	var avatar_panel := popup.find_child("PublicTrainerAvatarPanel", true, false) as PanelContainer if popup != null else null
@@ -184,8 +177,7 @@ func _run() -> void:
 	dutch_dex.free()
 	localization_manager.call("set_locale", "en")
 	_check(own_card.find_child("FavoritePokemon", true, false) is Sprite2D, "own card refresh renders the saved HOME companion")
-	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 6, "own details refresh keeps one Showcase and one PvP tab")
-	_check(own_card.find_child("TrainerCardSignaturePokemon", true, false) != null, "own card refreshes its Showcase")
+	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 5, "own details refresh keeps exactly one PvP tab")
 	var choices := ItemList.new()
 	choices.set_meta("owned_companions", [{"species": "pikachu", "shiny": true}, {"species": "scizor", "shiny": false}])
 	overlay.call("_fill_trainer_card_companions", choices, "")
@@ -201,20 +193,11 @@ func _run() -> void:
 	)
 	_check(
 		tabs != null
-		and tabs.get_tab_count() == 4
-		and showcase_tab != null
+		and tabs.get_tab_count() == 3
 		and tabs.get_tab_title(0) == "Overview"
-		and tabs.get_tab_title(1) == "Showcase"
-		and tabs.get_tab_title(2) == "Badges"
-		and tabs.get_tab_title(3) == "PvP",
-		"public Trainer Card keeps Showcase content outside Overview"
-	)
-	_check(
-		showcase_tab.find_child("ShowcasePokemonPortrait", true, false) is TextureRect
-		and _find_label(showcase_tab, "Greninja") != null
-		and _find_label(showcase_tab, "126 / 1025 · 12.3%") != null
-		and _find_label(showcase_tab, "Cascade Badge") != null,
-		"public Showcase presents the signature Pokémon, collection progress and latest badge"
+		and tabs.get_tab_title(1) == "Badges"
+		and tabs.get_tab_title(2) == "PvP",
+		"public Trainer Card exposes simple Overview, Badges and PvP navigation"
 	)
 	_check(
 		tabs != null and tabs.get_tab_bar().focus_mode == Control.FOCUS_ALL,
