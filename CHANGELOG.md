@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The desktop launcher can now show and install official Anime Cries and Gen 5 Animated Sprites packs from the Mods catalog once they are published. Downloads verify size and checksum before installation.
+
 - Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; Lucario, Charizard, and Pikachu also have corrected local review positioning and scale.
 
 - Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.

@@ -17,6 +17,7 @@ func manifest(pack_id: String) -> Dictionary:
 	return {"format_version": 1, "id": pack_id, "name": "Test", "version": "1", "author": "Test",
 		"assets": {"battle_sprites": {"pikachu:front:normal": {"file": "sheet.png", "columns": 2, "frames": 2, "fps": 12}},
 		"followers": {"pikachu:normal": {"file": "follower.png"}},
+		"sprite_collections": {"gen5": {"directory": "sprites", "style": "gen5"}},
 		"cries": {"pikachu": {"file": "cry.ogg"}}}}
 
 func archive(path: String, data: Dictionary, assets: Dictionary) -> void:
@@ -39,6 +40,8 @@ func run() -> void:
 	var cry_bytes := FileAccess.get_file_as_bytes("res://assets/audio/sfx/pokemon_cries/PIKACHU.ogg")
 	check(not cry_bytes.is_empty(), "cry fixture exists")
 	var assets := {"sheet.png": img.save_png_to_buffer(), "follower.png": img.save_png_to_buffer(), "cry.ogg": cry_bytes,
+		"sprites/gen5/front/pikachu/sheet.png": img.save_png_to_buffer(),
+		"sprites/gen5/front/pikachu/animation.json": "{\"frame_width\": 4, \"frame_height\": 4, \"frames\": []}".to_utf8_buffer(),
 		"ignored.gd": "extends Node".to_utf8_buffer()}
 	var path := test_root.path_join("valid.zip")
 	archive(path, manifest("valid"), assets)
@@ -46,10 +49,17 @@ func run() -> void:
 	check(store.installed().size() == 1, "installed pack discovered")
 	check(not FileAccess.file_exists(store.root.path_join("valid/ignored.gd")), "scripts are not extracted")
 	check(not store.import_zip(path).is_empty(), "existing pack is not overwritten")
+	var update := manifest("valid")
+	update.version = "2"
+	archive(path, update, assets)
+	check(store.import_zip(path, true).is_empty(), "official pack update atomically replaces an installed pack")
+	check(str(store.installed()[0].version) == "2", "updated manifest becomes active")
 	check(store.enabled_ids().is_empty(), "import does not implicitly enable")
 	check(store.save_enabled(["valid"]) == OK, "enable pack")
 	check(store.save_enabled(["valid"]) == OK, "selection can be replaced")
 	check(store.candidates("cries", "pikachu").size() == 1, "enabled asset resolves")
+	check(store.sprite_collection_directories().size() == 1, "enabled Gen 5 collection resolves")
+	check(FileAccess.file_exists(store.root.path_join("valid/sprites/gen5/front/pikachu/animation.json")), "declared sprite collection is extracted")
 
 	var broken := manifest("broken")
 	assets["sheet.png"] = "bad image".to_utf8_buffer()
@@ -60,6 +70,7 @@ func run() -> void:
 	Runtime._loaded = false
 	Runtime._entries.clear()
 	Runtime._cache.clear()
+	Runtime._pokemon_sprite_roots.clear()
 	OS.set_environment("POKEAETHER_MODS_DIR", store.root)
 	var frames := Runtime.battle_frames("Pikachu", "front", false)
 	check(frames != null and frames.get_frame_count("idle") == 2, "broken higher priority sprite falls back to next pack")
@@ -77,13 +88,16 @@ func run() -> void:
 	check(Runtime.battle_frames("Pikachu", "front", true) == null, "normal pack does not replace shiny")
 	check(Runtime.battle_frames("Pikachu-Alola", "front", false) == null, "form identity stays distinct")
 	check(Runtime.cry("Pikachu") != null, "external Ogg loaded with corrupt priority fallback")
+	check(Runtime.cry("Pikachu-Mega") != null, "cry pack falls back through the base cry key")
 	check(Runtime.cry("missing") == null, "missing cry preserves game fallback")
+	check(Runtime.get_pokemon_sprite_roots().size() == 2, "both enabled collection roots load in priority order")
 	check(Followers.get_sprite_frames("Pikachu", false) != null, "follower service consumes pack texture")
 	check(store.save_enabled([]) == OK, "disable all")
 	check(Runtime.battle_frames("Pikachu", "front", false) == frames, "selection frozen during game session")
 	Runtime._loaded = false
 	Runtime._entries.clear()
 	Runtime._cache.clear()
+	Runtime._pokemon_sprite_roots.clear()
 	check(Runtime.battle_frames("Pikachu", "front", false) == null, "next session respects disabled pack")
 
 	var unsafe := manifest("unsafe")

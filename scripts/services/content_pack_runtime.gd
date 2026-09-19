@@ -1,8 +1,10 @@
 extends RefCounted
 ## Desktop cosmetics only. Pack selection is frozen until the next game start.
 const Store := preload("res://launcher/scripts/content_pack_store.gd")
+const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
 static var _entries: Dictionary = {}
 static var _cache: Dictionary = {}
+static var _pokemon_sprite_roots: Array[String] = []
 static var _loaded := false
 const CACHE_LIMIT := 96
 
@@ -22,11 +24,14 @@ static func initialize() -> void:
 		return
 	var directory := OS.get_environment("POKEAETHER_MODS_DIR")
 	var store := Store.new(directory if not directory.is_empty() else "user://mods")
+	_pokemon_sprite_roots = store.sprite_collection_directories()
 	var packs: Dictionary = {}
 	for pack in store.installed():
 		packs[pack.id] = pack
 	for pack_id in store.enabled_ids():
 		for category: String in packs.get(pack_id, {}).get("assets", {}):
+			if category == "sprite_collections":
+				continue
 			for key: String in packs[pack_id].assets[category]:
 				var entry: Dictionary = packs[pack_id].assets[category][key].duplicate(true)
 				entry["path"] = store.asset_path(pack_id, entry.file)
@@ -39,22 +44,30 @@ static func initialize() -> void:
 
 static func cry(species: String) -> AudioStream:
 	initialize()
-	var key := "cries/" + species_key(species)
-	if _cache.has(key):
-		return _cache[key] as AudioStream
-	for entry: Dictionary in _entries.get(key, []):
-		var file := FileAccess.open(entry.path, FileAccess.READ)
-		if file == null or file.get_length() > Store.MAX_FILE_BYTES:
-			continue
-		var bytes := file.get_buffer(file.get_length())
-		if bytes.size() < 4 or bytes.slice(0, 4).get_string_from_ascii() != "OggS":
-			continue
-		var stream := AudioStreamOggVorbis.load_from_buffer(bytes)
-		if stream != null:
-			_remember(key, stream)
-			return stream
-	_remember(key, null)
+	var direct_key := species_key(species)
+	var resolved_key := PokemonCryResolver.new().get_cry_key(species)
+	var cache_key := "cries/" + direct_key + ":" + resolved_key
+	if _cache.has(cache_key):
+		return _cache[cache_key] as AudioStream
+	for key in [direct_key, resolved_key, resolved_key.to_lower(), direct_key.to_upper().replace("-", "")]:
+		for entry: Dictionary in _entries.get("cries/" + key, []):
+			var file := FileAccess.open(entry.path, FileAccess.READ)
+			if file == null or file.get_length() > Store.MAX_FILE_BYTES:
+				continue
+			var bytes := file.get_buffer(file.get_length())
+			if bytes.size() < 4 or bytes.slice(0, 4).get_string_from_ascii() != "OggS":
+				continue
+			var stream := AudioStreamOggVorbis.load_from_buffer(bytes)
+			if stream != null:
+				_remember(cache_key, stream)
+				return stream
+	_remember(cache_key, null)
 	return null
+
+
+static func get_pokemon_sprite_roots() -> Array[String]:
+	initialize()
+	return _pokemon_sprite_roots.duplicate()
 
 static func _texture(path: String) -> Texture2D:
 	var file := FileAccess.open(path, FileAccess.READ)

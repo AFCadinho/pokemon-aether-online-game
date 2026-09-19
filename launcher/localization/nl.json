@@ -165,5 +165,16 @@
 	"Could not save pack selection.": "Kon de packkeuze niet opslaan.",
 	"Pack imported. Enable it to use it on the next game start.": "Pack geïmporteerd. Schakel het in om het bij de volgende gamestart te gebruiken.",
 	"Could not import pack:": "Kon het pack niet importeren:",
-	"Close": "Sluiten"
+	"Close": "Sluiten",
+	"Loading official packs...": "Officiële packs laden...",
+	"Official packs are unavailable. You can still import a local pack.": "Officiële packs zijn niet beschikbaar. Je kunt wel een lokaal pack importeren.",
+	"Official pack catalog is invalid.": "De officiële packcatalogus is ongeldig.",
+	"No official packs are available yet.": "Er zijn nog geen officiële packs beschikbaar.",
+	"Install": "Installeren",
+	"Update": "Bijwerken",
+	"Downloading {name}...": "{name} downloaden...",
+	"Could not start the pack download.": "Kon het pack niet downloaden.",
+	"Pack installed. Enable it from Installed and restart the game.": "Pack geïnstalleerd. Schakel het in bij Geïnstalleerd en herstart de game.",
+	"Could not install pack:": "Kon het pack niet installeren:",
+	"Pack download failed. Try again later.": "Pack downloaden mislukt. Probeer het later opnieuw."
 }

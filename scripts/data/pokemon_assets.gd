@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name PokemonAssets
 
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 const HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home/%s.png"
 const SHINY_HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home_shiny/%s.png"
 const FRONT_FRAME_PATH := "res://assets/sprites/pokemon/front/%s/frame_000.png"
@@ -68,7 +69,8 @@ static var party_icon_cache: Dictionary = {}
 static var external_sprite_root := ""
 
 static func get_pokemon_sprite_roots() -> Array[String]:
-	var roots: Array[String] = [POKEMON_SPRITE_RES_ROOT]
+	var roots: Array[String] = ContentPacks.get_pokemon_sprite_roots()
+	roots.append(POKEMON_SPRITE_RES_ROOT)
 	var external_root := get_external_pokemon_sprite_root()
 	if not external_root.is_empty():
 		roots.append(external_root)
