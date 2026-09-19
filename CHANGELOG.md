@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Installed mods now use clear Enable and Disable actions instead of an unlabeled checkbox.
+
 - Fixed an error that could occur after installing an official mod pack from Discover.
 
 - Cosmetic choices now live in the launcher Mods panel. Enabled sprite and cry packs apply automatically when the game starts.
