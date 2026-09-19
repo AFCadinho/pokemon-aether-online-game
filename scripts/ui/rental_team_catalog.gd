@@ -3,6 +3,7 @@ extends VBoxContainer
 class_name RentalTeamCatalog
 
 signal offer_selected(offer: Dictionary)
+signal results_rendered
 
 const TEXT := Color("#eef6ff")
 const MUTED := Color("#8ea8bd")
@@ -10,6 +11,8 @@ const CYAN := Color("#62d5ff")
 const GOLD := Color("#f5df9a")
 const PURPLE := Color("#c9beff")
 const FILTER_TIER_IDS: Array[String] = ["aether-ou", "aether-uu"]
+const INITIAL_RESULT_BATCH := 4
+const RESULT_BATCH_SIZE := 4
 
 var offers: Array[Dictionary] = []
 var selected_offer_id := ""
@@ -23,6 +26,7 @@ var detail_meta: Label
 var detail_hint: Label
 var team_grid: GridContainer
 var action_bar: HBoxContainer
+var result_render_generation := 0
 
 
 func _ready() -> void:
@@ -197,11 +201,13 @@ func _rebuild_filters() -> void:
 func _refresh_results() -> void:
 	if results == null:
 		return
+	result_render_generation += 1
+	var generation := result_render_generation
 	_clear(results)
 	var query := search.text.strip_edges().to_lower()
 	var archetype := str(archetype_filter.get_selected_metadata()) if archetype_filter.item_count > 0 else "all"
 	var tier := str(tier_filter.get_selected_metadata()) if tier_filter.item_count > 0 else "all"
-	var count := 0
+	var matching_offers: Array[Dictionary] = []
 	for offer: Dictionary in offers:
 		if archetype != "all" and str(offer.get("archetype", "balance")) != archetype:
 			continue
@@ -209,8 +215,34 @@ func _refresh_results() -> void:
 			continue
 		if not query.is_empty() and query not in _search_text(offer):
 			continue
-		results.add_child(_team_card(offer))
-		count += 1
+		matching_offers.append(offer)
+	var initial_count := mini(INITIAL_RESULT_BATCH, matching_offers.size())
+	for index: int in range(initial_count):
+		results.add_child(_team_card(matching_offers[index]))
+	if initial_count >= matching_offers.size():
+		_set_result_count(matching_offers.size())
+		results_rendered.emit()
+		return
+	result_status.text = "Loading teams… %d/%d" % [initial_count, matching_offers.size()]
+	_continue_render_results.call_deferred(generation, matching_offers, initial_count)
+
+
+func _continue_render_results(generation: int, matching_offers: Array[Dictionary], next_index: int) -> void:
+	var index := next_index
+	while index < matching_offers.size():
+		await get_tree().process_frame
+		if generation != result_render_generation or not is_instance_valid(results):
+			return
+		var batch_end := mini(index + RESULT_BATCH_SIZE, matching_offers.size())
+		while index < batch_end:
+			results.add_child(_team_card(matching_offers[index]))
+			index += 1
+		result_status.text = "Loading teams… %d/%d" % [index, matching_offers.size()]
+	_set_result_count(matching_offers.size())
+	results_rendered.emit()
+
+
+func _set_result_count(count: int) -> void:
 	result_status.text = "%d rental team%s" % [count, "" if count == 1 else "s"]
 
 

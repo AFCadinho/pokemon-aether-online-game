@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rental team cards now appear in small batches, keeping the catalog responsive while its Pokémon icons finish loading.
+
 - Team and Pokémon rentals now submit their catalog duration in the integer format required by the server, so confirming a rental no longer fails validation.
 
 - The Pokémon rental review card now centers its level, rarity badge and held-item chip around the Pokémon artwork for a cleaner identity summary.
