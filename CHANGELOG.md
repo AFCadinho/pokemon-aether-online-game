@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
+
 - Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield and match the equipped outfit; appearances whose matching battle art is still being made keep their exact overworld look in battle.
 
 - Local editor runs now reuse the selected launcher mod packs for cosmetic testing.

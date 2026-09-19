@@ -6,6 +6,7 @@ extends RefCounted
 static var _cache: Dictionary = {}
 static var _cache_order: Array[String] = []
 static var _preview_cache_order: Array[String] = []
+static var _active_preview_decodes := 0
 const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
 const CACHE_LIMIT := 2
 const PREVIEW_CACHE_LIMIT := 16
@@ -103,7 +104,7 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	return frames
 
 
-static func load_frames_async(species: String, side: String, shiny: bool) -> SpriteFrames:
+static func load_frames_async(species: String, side: String, shiny: bool, on_ready: Callable = Callable(), is_current: Callable = Callable()) -> SpriteFrames:
 	if side not in ["front", "back"]:
 		return null
 	var resolved := _resolve_asset(species, shiny)
@@ -121,19 +122,9 @@ static func load_frames_async(species: String, side: String, shiny: bool) -> Spr
 	var present: Dictionary = (manifest.get("presentation", {}) as Dictionary).get(side, {})
 	if idle.is_empty() or present.is_empty() or not _allowed(str(idle.get("status", "")), preview):
 		return null
-	var thread := Thread.new()
-	if thread.start(_decode_action_pages.bind(path.get_base_dir(), idle)) != OK:
-		return null
 	var tree := Engine.get_main_loop() as SceneTree
-	while thread.is_alive():
-		await tree.process_frame
-	var decoded_value: Variant = thread.wait_to_finish()
-	if not decoded_value is Dictionary:
-		return null
-	var decoded := decoded_value as Dictionary
-	var page_images: Array = decoded.get("images", [])
 	var pages: Array = idle.get("pages", [])
-	if page_images.size() != pages.size():
+	if pages.is_empty():
 		return null
 	var frames := SpriteFrames.new()
 	frames.remove_animation("default")
@@ -147,12 +138,34 @@ static func load_frames_async(species: String, side: String, shiny: bool) -> Spr
 	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
 	frames.add_animation("idle")
 	frames.set_animation_speed("idle", float(manifest.get("fps", 0)))
-	frames.set_animation_loop("idle", bool(idle.get("loop", false)))
+	# A partial sequence must never loop back to frame zero.
+	frames.set_animation_loop("idle", false)
 	var visual_bounds := _rect_from_array(idle.get("visual_bounds", []))
+	var has_declared_bounds := visual_bounds.has_area()
 	var uploaded := 0
 	for page_index: int in pages.size():
+		while _active_preview_decodes >= 2:
+			if is_current.is_valid() and not is_current.call():
+				return null
+			await tree.process_frame
+		if is_current.is_valid() and not is_current.call():
+			return null
 		var page: Dictionary = pages[page_index]
-		var page_image := page_images[page_index] as Image
+		var thread := Thread.new()
+		if thread.start(_decode_action_pages.bind(path.get_base_dir(), {"pages": [page]})) != OK:
+			return null
+		_active_preview_decodes += 1
+		while thread.is_alive():
+			await tree.process_frame
+		var decoded: Dictionary = thread.wait_to_finish()
+		_active_preview_decodes -= 1
+		if is_current.is_valid() and not is_current.call():
+			return null
+		var images: Array = decoded.get("images", [])
+		if images.size() != 1:
+			push_warning("Rendered preview page failed validation: " + str(page.get("file", "")))
+			return null
+		var page_image := images[0] as Image
 		var columns := int(page.get("columns", 0))
 		var count := int(page.get("count", 0))
 		for frame_index: int in count:
@@ -162,17 +175,23 @@ static func load_frames_async(species: String, side: String, shiny: bool) -> Spr
 				512,
 				512
 			))
-			if not visual_bounds.has_area():
+			if not has_declared_bounds:
 				var used := cell.get_used_rect()
 				if used.has_area():
-					visual_bounds = Rect2(used)
+					visual_bounds = visual_bounds.merge(Rect2(used)) if visual_bounds.has_area() else Rect2(used)
 			frames.add_frame("idle", ImageTexture.create_from_image(cell))
 			uploaded += 1
 			if uploaded % 4 == 0:
 				await tree.process_frame
+		# Old manifests without union bounds wait until complete to avoid resizing
+		# mid-animation. New packages provide stable whole-action bounds.
+		if has_declared_bounds and on_ready.is_valid() and (not is_current.is_valid() or is_current.call()):
+			frames.set_meta("rendered_visual_bounds", visual_bounds)
+			on_ready.call(frames)
 	if uploaded != int(idle.get("count", 0)) or not visual_bounds.has_area():
 		return null
 	frames.set_meta("rendered_visual_bounds", visual_bounds)
+	frames.set_animation_loop("idle", bool(idle.get("loop", false)))
 	_remember_frames(cache_key, frames, false)
 	return frames
 

@@ -362,15 +362,15 @@ def package(root, cfg, variant):
                 continue
             paths = sorted((root / 'masters' / view / action).glob('*.png'))
             pages = []
-            for start in range(0, len(paths), 64):
-                batch = paths[start:start+64]
-                columns = min(8, len(batch))
+            for start in range(0, len(paths), 8):
+                batch = paths[start:start+8]
+                columns = min(4, len(batch))
                 sheet = Image.new('RGBA', (columns*512, math.ceil(len(batch)/columns)*512))
                 for i, path in enumerate(batch):
                     with Image.open(path) as frame:
                         # Exact RGBA copy, including RGB beneath transparent pixels.
                         sheet.paste(frame, ((i % columns)*512, (i//columns)*512))
-                name = f'{view}/{action}-{start//64:02}.png'
+                name = f'{view}/{action}-{start//8:03}.png'
                 destination = runtime / name
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 sheet.save(destination, compress_level=6)

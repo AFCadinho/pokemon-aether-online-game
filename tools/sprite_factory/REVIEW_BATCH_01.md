@@ -181,14 +181,32 @@ review builds without this optional metadata derive and cache the idle bounds
 once while loading. The Pokédex list remains icon-only, while a selected
 rendered Pokémon uses a dedicated lossless 512×512 still copied from idle
 master frame zero. Its opposite still is warmed after first display. The
-selected view then decodes its complete native-60-FPS idle pages on a worker
-thread and uploads four lossless frames per display tick before replacing the
-still, keeping the UI responsive while preserving animation. Only two full
+selected view decodes eight-frame lossless pages on workers (at most two
+decodes concurrently) and uploads four frames per display tick. Playback
+starts after the first page and the remaining pages append in order. Partial
+sequences do not loop; an exhausted buffer resumes when another page arrives.
+There is no fixed startup delay. Selection generations cancel obsolete work
+after the current decode and prevent it replacing the current preview.
+Only complete sequences enter the animation cache. Only two full
 animated views are retained by the LRU cache; still previews have a separate
 sixteen-view cache. Battles continue to use the complete animation unchanged. Existing local
 review builds without packaged still metadata securely read the same hashed
-master frame from their build directory. The shared rendered-view cache is
-LRU-bounded to eight views.
+master frame from their build directory.
+
+`repack_preview.py CATALOG OUTPUT --activate` regenerates small runtime pages
+from an existing local review catalog without rerendering or touching masters.
+Every cell is compared byte-for-byte after PNG encoding. FPS, presentation,
+actions and review status are preserved. It saves `OUTPUT/previous-catalog.json`
+before atomically activating the derived catalog; restoring that catalog rolls
+back packaging. Original runtime files also remain available. The first review
+batch uses `.tmp/sprite-review-batch-01/stream-runtime-v1` for these derivatives.
+The focused headless Dragonite check measured 36 ms to the first eight-frame
+block, 404 ms to complete, and a maximum process-frame gap of 7 ms. It checks
+playback position against elapsed source time, cancellation and cache safety.
+These figures exclude scene construction and are not a GPU/in-game benchmark.
+Repack verified all 2,554 frames of the 15 existing variant entries. Resident
+memory for a fully loaded animation remains roughly one MiB per frame; this
+change reduces startup latency and decode working memory, not final fidelity.
 
 For local development review, a machine-local ignored file at
 `.pokeaether/rendered-preview-catalog` may contain the absolute path of the

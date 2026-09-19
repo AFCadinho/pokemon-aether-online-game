@@ -83,6 +83,7 @@ func _run() -> void:
 				dragonite_frames
 			)
 			var visual_bounds := visual_bounds_value as Rect2
+			(overlay.get("pokemon_summary_sprite_loader") as Node).call("_prepare_rendered_sprite_frames", dragonite_frames)
 			var summary_size: Vector2 = visual_bounds.size * overlay.call(
 				"_get_pokemon_summary_sprite_scale",
 				dragonite_frames
@@ -91,6 +92,7 @@ func _run() -> void:
 				"_get_pokedex_sprite_scale",
 				dragonite_frames
 			)
+			print("Rendered bounds=%s Summary=%s Pokedex=%s" % [visual_bounds, summary_size, pokedex_size])
 			_check(summary_size.y >= 120.0 and summary_size.y <= 155.01,
 				"rendered Summary art uses the visible silhouette instead of the 512px canvas")
 			_check(pokedex_size.y >= 80.0 and pokedex_size.y <= 104.01,
