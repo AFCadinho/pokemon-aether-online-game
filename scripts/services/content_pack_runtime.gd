@@ -55,7 +55,8 @@ static func _mods_directory() -> String:
 	# A direct Godot editor run has PokeAether's user:// root, while the local
 	# launcher stores packs under its own root. Reuse that selection for local
 	# cosmetic review; released games still receive the explicit environment path.
-	var launcher_mods := ProjectSettings.globalize_path("user://").get_base_dir().path_join("PokeAether Launcher/mods")
+	var launcher_userdata := ProjectSettings.globalize_path("user://").trim_suffix("/").get_base_dir()
+	var launcher_mods := launcher_userdata.path_join("PokeAether Launcher/mods")
 	if FileAccess.file_exists(launcher_mods.path_join("enabled.json")):
 		return launcher_mods
 	if FileAccess.file_exists(game_mods.path_join("enabled.json")):
