@@ -262,9 +262,11 @@ The batch configuration now assigns reviewed official open-eye donors. Most use
 `10010_defaultidle01`, and Gengar uses frame zero of `08000_eye01` because its
 default-idle actions contain no eyelid tracks. Fresh isolated front/back probes
 show all twelve with open/alert eyes and zero factory QC errors. Gengar,
-Jigglypuff and Diglett also use the same moderate data-defined lighting lift as
-the accepted SCVI presentation reference; their faces and body volume remain
-readable without changing textures or shader code. Diglett retains a
+Jigglypuff and Diglett also use data-defined lighting lifts based on the
+accepted SCVI presentation reference. Gengar receives a slightly stronger key,
+fill and ambient lift because its lower body otherwise collapsed into
+near-black; its official purple material remains intact. Their faces and body
+volume remain readable without changing textures or shader code. Diglett retains a
 conservative inherited-root-eyelid diagnostic for non-idle actions even though
 the visible child-eyelid pose is open, so its complete action render still
 requires human review. No complete 512x512 action render was started from this
