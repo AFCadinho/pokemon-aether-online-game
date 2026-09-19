@@ -131,7 +131,8 @@ func run() -> void:
 	file.close()
 	check(not store.import_zip(path).is_empty(), "oversized declared decompression rejected")
 	OS.unset_environment("POKEAETHER_MODS_DIR")
-	var launcher_mods := ProjectSettings.globalize_path("user://").get_base_dir().path_join("PokeAether Launcher/mods")
+	var launcher_userdata := ProjectSettings.globalize_path("user://").trim_suffix("/").get_base_dir()
+	var launcher_mods := launcher_userdata.path_join("PokeAether Launcher/mods")
 	var had_launcher_selection := FileAccess.file_exists(launcher_mods.path_join("enabled.json"))
 	if not had_launcher_selection:
 		DirAccess.make_dir_recursive_absolute(launcher_mods)
