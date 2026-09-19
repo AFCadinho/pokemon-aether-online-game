@@ -26,7 +26,7 @@ func _run() -> void:
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
 	overlay.set("own_trainer_card_data", {
 		"favoritePokemon": "charizard", "favoritePokemonShiny": false,
-		"pokedex": {"registered": 83, "total": 1025},
+		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [{"format": "aether-ou", "rating": 1234, "period": "all_time"}],
 	})
 	root.add_child(overlay)
@@ -36,7 +36,7 @@ func _run() -> void:
 		"displayName": "Misty",
 		"favoritePokemon": "charizard",
 		"favoritePokemonShiny": false,
-		"pokedex": {"registered": 83, "total": 1025},
+		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
 		"ratings": [{"format": "aether-ou", "rating": 1234, "period": "all_time"}],
 		"createdAt": "2026-05-04T12:00:00Z",
 		"guildName": "Cerulean Waves",
@@ -104,11 +104,30 @@ func _run() -> void:
 	var follower_preview := avatar_preview.find_child("RemotePokemonFollower", true, false) as Node2D if avatar_preview != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
 	_check(popup.find_child("FavoritePokemon", true, false) is Sprite2D, "public card renders only the explicitly selected HOME companion")
-	_check(_find_label(popup, "Pokédex · 83 / 1025 registered") != null, "public card displays registered Pokédex progress")
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		var tile := popup.find_child("Dex_%s" % field, true, false)
+		_check(tile != null, "public card displays %s counter" % field)
+		var expected := {"seen": "126", "caught": "83", "shinyCaught": "7"}
+		_check(_find_label(tile, expected[field]) != null, "public %s counter has its server value" % field)
 	_check(_find_label(popup, "Ranked rating: AETHER OU  1234") != null, "public PvP view labels the format and rating")
 	_check(_find_label(popup, "5.0") == null, "JSON float battle counters render as whole numbers")
 	overlay.call("_apply_own_trainer_card_details", overlay.get("public_trainer_card_data"))
 	var own_card := overlay.get("trainer_card_popup") as Control
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		var tile := own_card.find_child("Dex_%s" % field, true, false)
+		var expected := {"seen": "126", "caught": "83", "shinyCaught": "7"}
+		_check(tile != null and _find_label(tile, expected[field]) != null, "own %s counter refreshes" % field)
+	var legacy := overlay.call("_create_trainer_card_dex_panel", {"pokedex": {"registered": 83}}) as Control
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		_check(_find_label(legacy.find_child("Dex_%s" % field, true, false), "—") != null, "missing %s is not presented as zero" % field)
+	legacy.free()
+	_check(own_card.get_combined_minimum_size().x <= 720.0 and own_card.get_combined_minimum_size().y <= 500.0, "own counters fit the designed popup bounds")
+	localization_manager.call("set_locale", "nl")
+	var dutch_dex := overlay.call("_create_trainer_card_dex_panel", {"pokedex": {"seen": 1025, "caught": 1025, "shinyCaught": 1025}}) as Control
+	_check(_find_label(dutch_dex, "Shiny verkregen") != null, "Dutch shiny counter is localized")
+	_check(dutch_dex.get_combined_minimum_size().x <= 412.0, "Dutch counters fit with four-digit totals")
+	dutch_dex.free()
+	localization_manager.call("set_locale", "en")
 	_check(own_card.find_child("FavoritePokemon", true, false) is Sprite2D, "own card refresh renders the saved HOME companion")
 	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 5, "own details refresh keeps exactly one PvP tab")
 	var choices := ItemList.new()
@@ -201,6 +220,9 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	localization_manager.call("set_locale", original_locale)
+	# Locale refresh schedules chat layout updates across two frames.
+	for frame in range(3):
+		await process_frame
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:

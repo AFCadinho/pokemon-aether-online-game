@@ -16190,26 +16190,37 @@ func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> C
 	return icon_center
 
 func _create_trainer_card_dex_panel(card: Dictionary) -> Control:
-	var panel := VBoxContainer.new()
+	var panel := HBoxContainer.new()
 	panel.name = "TrainerCardPokedex"
-	panel.add_theme_constant_override("separation", 3)
+	panel.add_theme_constant_override("separation", 8)
 	var dex := _dictionary_from_value(card.get("pokedex", {}))
-	var label := Label.new()
-	label.add_theme_font_size_override("font_size", 12)
-	label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
-	label.text = LocalizationManager.text("ui.trainer_card.dex.progress", {
-		"caught": str(int(dex.get("registered", 0))) if dex.has("registered") else "—",
-		"total": str(int(dex.get("total", 0))) if dex.has("total") else "—",
-	})
-	panel.add_child(label)
-	var bar := ProgressBar.new()
-	bar.custom_minimum_size.y = 5
-	bar.show_percentage = false
-	bar.max_value = maxi(1, int(dex.get("total", 1)))
-	bar.value = int(dex.get("registered", 0))
-	bar.add_theme_stylebox_override("background", _make_panel_style(UI_SURFACE_INSET, Color.TRANSPARENT, 3, 0))
-	bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#65c9c0"), Color.TRANSPARENT, 3, 0))
-	panel.add_child(bar)
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		var tile := PanelContainer.new()
+		tile.name = "Dex_%s" % field
+		tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		tile.custom_minimum_size.y = 32
+		tile.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+		tile.tooltip_text = LocalizationManager.text("ui.trainer_card.dex.%s_hint" % field)
+		panel.add_child(tile)
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 8)
+		margin.add_theme_constant_override("margin_right", 8)
+		tile.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+		margin.add_child(row)
+		var label := Label.new()
+		label.text = LocalizationManager.text("ui.trainer_card.dex.%s" % field)
+		label.add_theme_font_size_override("font_size", 11)
+		label.add_theme_color_override("font_color", Color("#b5c0cc"))
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(label)
+		var value := Label.new()
+		value.name = "Value"
+		value.text = str(maxi(0, int(dex[field]))) if dex.has(field) and dex[field] != null else "—"
+		value.add_theme_font_size_override("font_size", 16)
+		value.add_theme_color_override("font_color", TRAINER_CARD_ACCENT if field == "shinyCaught" else TRAINER_CARD_CYAN)
+		row.add_child(value)
 	return panel
 
 
