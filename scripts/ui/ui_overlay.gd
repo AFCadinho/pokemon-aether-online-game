@@ -16337,37 +16337,69 @@ func _open_trainer_card_companion_picker() -> void:
 	var dialog := ConfirmationDialog.new()
 	dialog.name = "TrainerCardCompanionPicker"
 	dialog.title = LocalizationManager.text("ui.trainer_card.companion.choose")
-	dialog.min_size = Vector2i(400, 440)
-	dialog.size = Vector2i(400, 440)
-	dialog.theme = Theme.new()
-	dialog.theme.set_stylebox("panel", "AcceptDialog", _make_trainer_card_outer_style())
+	dialog.min_size = Vector2i(460, 500)
+	dialog.size = Vector2i(460, 500)
+	dialog.borderless = true
+	dialog.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	dialog.dialog_hide_on_ok = false
 	root_control.add_child(dialog)
 	_apply_button_style(dialog.get_ok_button(), "primary")
 	_apply_button_style(dialog.get_cancel_button())
+	dialog.get_ok_button().custom_minimum_size = Vector2(96, 34)
+	dialog.get_cancel_button().custom_minimum_size = Vector2(96, 34)
+	var content_margin := MarginContainer.new()
+	content_margin.add_theme_constant_override("margin_left", 14)
+	content_margin.add_theme_constant_override("margin_top", 4)
+	content_margin.add_theme_constant_override("margin_right", 14)
+	content_margin.add_theme_constant_override("margin_bottom", 8)
+	dialog.add_child(content_margin)
 	var stack := VBoxContainer.new()
-	stack.custom_minimum_size.x = 360
+	stack.custom_minimum_size.x = 404
 	stack.add_theme_constant_override("separation", 8)
-	dialog.add_child(stack)
+	content_margin.add_child(stack)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	stack.add_child(header)
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.companion.choose")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_font_size_override("font_size", 16)
+	heading.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(heading)
+	var close := Button.new()
+	close.text = "×"
+	close.tooltip_text = LocalizationManager.text("ui.trainer_card.companion.close")
+	close.custom_minimum_size = Vector2(30, 28)
+	close.add_theme_font_size_override("font_size", 22)
+	close.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	close.add_theme_color_override("font_hover_color", UI_TEXT)
+	close.add_theme_stylebox_override("normal", _make_button_style(Color.TRANSPARENT, Color.TRANSPARENT, 6, 0))
+	close.add_theme_stylebox_override("hover", _make_button_style(Color("#1c344b"), Color("#638da5"), 6, 1))
+	close.add_theme_stylebox_override("pressed", _make_button_style(Color("#0a1724"), TRAINER_CARD_CYAN, 6, 1))
+	close.pressed.connect(dialog.queue_free)
+	header.add_child(close)
 	var hint := Label.new()
-	hint.custom_minimum_size.x = 360
+	hint.custom_minimum_size.x = 404
 	hint.text = LocalizationManager.text("ui.trainer_card.companion.hint")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 13)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	stack.add_child(hint)
 	var search := LineEdit.new()
 	search.placeholder_text = LocalizationManager.text("ui.trainer_card.companion.search")
 	_apply_line_edit_style(search)
+	search.custom_minimum_size.y = 34
 	stack.add_child(search)
 	var list := ItemList.new()
 	list.name = "OwnedCompanions"
-	list.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
-	list.add_theme_color_override("font_color", UI_TEXT)
-	list.custom_minimum_size = Vector2(340, 220)
+	_apply_trainer_card_companion_list_style(list)
+	list.custom_minimum_size = Vector2(404, 260)
 	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stack.add_child(list)
 	var feedback := Label.new()
-	feedback.custom_minimum_size.x = 360
+	feedback.custom_minimum_size.x = 404
 	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback.add_theme_color_override("font_color", UI_DANGER)
 	stack.add_child(feedback)
 	var refill := func(_unused: Variant = null) -> void:
 		_fill_trainer_card_companions(list, search.text)
@@ -16404,7 +16436,7 @@ func _open_trainer_card_companion_picker() -> void:
 			feedback.text = str(result.get("error", ""))
 	)
 	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(400, 440))
+	dialog.popup_centered(Vector2i(460, 500))
 	dialog.get_ok_button().disabled = true
 	var owned: Dictionary = await PlayerGameStateService.load_player_preferences()
 	if not is_instance_valid(dialog):
@@ -16415,6 +16447,23 @@ func _open_trainer_card_companion_picker() -> void:
 	list.set_meta("owned_companions", owned.get("favoritePokemonOptions", []))
 	_fill_trainer_card_companions(list, search.text)
 	dialog.get_ok_button().disabled = false
+
+
+func _apply_trainer_card_companion_list_style(list: ItemList) -> void:
+	list.select_mode = ItemList.SELECT_SINGLE
+	list.add_theme_constant_override("v_separation", 5)
+	list.add_theme_font_size_override("font_size", 13)
+	list.add_theme_color_override("font_color", UI_TEXT)
+	list.add_theme_color_override("font_selected_color", Color("#f5fbff"))
+	list.add_theme_color_override("guide_color", Color("#2d4b6688"))
+	list.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	list.add_theme_stylebox_override("selected", _make_panel_style(Color("#16445e"), TRAINER_CARD_CYAN, 5, 1))
+	list.add_theme_stylebox_override("selected_focus", _make_panel_style(Color("#1a5778"), Color("#b6ecff"), 5, 1))
+	var scroll_bar := list.get_v_scroll_bar()
+	scroll_bar.add_theme_stylebox_override("scroll", _make_panel_style(Color("#07111e"), Color.TRANSPARENT, 4, 0))
+	scroll_bar.add_theme_stylebox_override("grabber", _make_panel_style(Color("#36566f"), Color.TRANSPARENT, 4, 0))
+	scroll_bar.add_theme_stylebox_override("grabber_highlight", _make_panel_style(Color("#5b91ae"), Color.TRANSPARENT, 4, 0))
+	scroll_bar.add_theme_stylebox_override("grabber_pressed", _make_panel_style(TRAINER_CARD_CYAN, Color.TRANSPARENT, 4, 0))
 
 
 func _fill_trainer_card_companions(list: ItemList, query: String) -> void:
@@ -16478,17 +16527,18 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 	if not species.is_empty():
 		var home := PokemonAssets.load_home_sprite(species, bool(profile.get("favoritePokemonShiny", false)))
 		if home != null:
-			art.scale *= 0.86
-			art.position = Vector2(65, 248) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
+			art.scale *= 0.9
+			art.position = Vector2(72, 248) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
 			var companion := Sprite2D.new()
 			companion.name = "FavoritePokemon"
 			companion.texture = home
 			companion.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 			var used := home.get_image().get_used_rect()
 			if used.has_area():
-				companion.scale = Vector2.ONE * minf(112.0 / used.size.x, 124.0 / used.size.y)
-				companion.position = Vector2(128, 248) - (Vector2(used.position) + Vector2(used.size) * Vector2(0.5, 1) - home.get_size() * 0.5) * companion.scale
+				companion.scale = Vector2.ONE * minf(76.0 / used.size.x, 88.0 / used.size.y)
+				companion.position = Vector2(136, 240) - (Vector2(used.position) + Vector2(used.size) * Vector2(0.5, 1) - home.get_size() * 0.5) * companion.scale
 			viewport.add_child(companion)
+			viewport.move_child(companion, viewport.get_children().find(art))
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
@@ -16773,7 +16823,7 @@ func _create_trainer_card_avatar_panel(
 		_populate_trainer_card_battle_art(trainer_card_avatar_viewport, PlayerSave.to_appearance_state())
 		var choose := Button.new()
 		_set_localized_control_property(choose, "text", "ui.trainer_card.companion.choose")
-		_apply_button_style(choose)
+		_apply_trainer_card_companion_button_style(choose)
 		choose.pressed.connect(_open_trainer_card_companion_picker)
 		layout.add_child(choose)
 	else:
@@ -30131,6 +30181,27 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("hover", _make_button_style(hover_bg, hover_border))
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
 	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, hover_border, 8, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _apply_trainer_card_companion_button_style(button: Button) -> void:
+	button.custom_minimum_size.y = 34
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_color", Color("#fff5ca"))
+	button.add_theme_color_override("font_pressed_color", Color("#fff5ca"))
+	button.add_theme_stylebox_override(
+		"normal", _make_button_style(Color("#102638"), Color("#466c83"), 7, 1)
+	)
+	button.add_theme_stylebox_override(
+		"hover", _make_button_style(Color("#183a50"), TRAINER_CARD_ACCENT, 7, 1)
+	)
+	button.add_theme_stylebox_override(
+		"pressed", _make_button_style(Color("#0a1928"), Color("#f0d27a"), 7, 1)
+	)
+	button.add_theme_stylebox_override(
+		"focus", _make_button_style(Color("#183a50"), Color("#b6ecff"), 7, 1)
+	)
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
