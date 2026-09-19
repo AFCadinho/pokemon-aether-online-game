@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card companions now have calmer, correctly layered portrait sizing, and their picker matches the Passport’s dark visual style.
+
 - Trainer Card PvP ratings now use individual wrapping tier cards, leaving room for additional Ranked formats.
 
 - Both Trainer Card views now show separate Seen, Caught and Shiny caught species counters, with explanations and a gold shiny accent.

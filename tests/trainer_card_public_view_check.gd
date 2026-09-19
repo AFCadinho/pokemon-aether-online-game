@@ -90,6 +90,8 @@ func _run() -> void:
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(capture_dir.path_join("own.png"))
 		overlay.call("_open_trainer_card_companion_picker")
+		var companion_dialog := overlay.find_child("TrainerCardCompanionPicker", true, false) as ConfirmationDialog
+		_check(companion_dialog != null and companion_dialog.borderless, "companion picker uses the Trainer Card shell instead of the default dialog title bar")
 		var picker := overlay.find_child("OwnedCompanions", true, false) as ItemList
 		picker.set_meta("owned_companions", [{"species": "charizard", "shiny": false}, {"species": "pikachu", "shiny": true}])
 		overlay.call("_fill_trainer_card_companions", picker, "")
@@ -113,7 +115,16 @@ func _run() -> void:
 	var profile_grid := popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
 	var follower_preview := avatar_preview.find_child("RemotePokemonFollower", true, false) as Node2D if avatar_preview != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
-	_check(popup.find_child("FavoritePokemon", true, false) is Sprite2D, "public card renders only the explicitly selected HOME companion")
+	var public_companion := popup.find_child("FavoritePokemon", true, false) as Sprite2D
+	var public_art := public_companion.get_parent().find_child("PublicTrainerAvatarPreview", false, false) if public_companion != null else null
+	_check(public_companion != null, "public card renders only the explicitly selected HOME companion")
+	_check(
+		public_companion != null
+		and public_companion.get_parent().get_children().find(public_companion) < public_companion.get_parent().get_children().find(public_art)
+		and public_companion.position.x > 110.0
+		and public_companion.position.y < 250.0,
+		"public companion stays compact beside and behind the Trainer portrait"
+	)
 	for field: String in ["seen", "caught", "shinyCaught"]:
 		var tile := popup.find_child("Dex_%s" % field, true, false)
 		_check(tile != null, "public card displays %s counter" % field)

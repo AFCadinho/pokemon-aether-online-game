@@ -12,6 +12,8 @@
   "ui.trainer_card.dex.caught_hint": "Pokédex: unique species obtained, including trades, gifts and evolutions. Registrations remain after trading or releasing.",
   "ui.trainer_card.dex.shinyCaught_hint": "Unique species obtained as shiny. These also count towards Caught. Forms and duplicates count once.",
   "ui.trainer_card.companion.choose": "Favorite Pokémon",
+
+  "ui.trainer_card.companion.close": "Close",
   "ui.trainer_card.companion.hint": "Choose a Pokémon you own. Its actual normal or shiny appearance will be shown on your public Trainer Card.",
   "ui.trainer_card.companion.search": "Search your owned Pokémon…",
   "ui.trainer_card.companion.none": "No companion",

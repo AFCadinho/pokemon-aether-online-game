@@ -12,6 +12,8 @@
   "ui.trainer_card.dex.caught_hint": "Pokédex: unieke verkregen soorten, inclusief ruilen, cadeaus en evoluties. Registraties blijven na ruilen of vrijlaten bestaan.",
   "ui.trainer_card.dex.shinyCaught_hint": "Unieke soorten verkregen als shiny. Deze tellen ook mee bij Verkregen. Vormen en duplicaten tellen één keer.",
   "ui.trainer_card.companion.choose": "Favoriete Pokémon",
+
+  "ui.trainer_card.companion.close": "Sluiten",
   "ui.trainer_card.companion.hint": "Kies een Pokémon die je bezit. De echte normale of shiny-variant verschijnt op je openbare Trainer Card.",
   "ui.trainer_card.companion.search": "Zoek je eigen Pokémon…",
   "ui.trainer_card.companion.none": "Geen metgezel",
