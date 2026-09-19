@@ -21,6 +21,8 @@ func _init() -> void:
 	_check(source.contains('"ui.pokedex.variant.normal"') and source.contains('"ui.pokedex.variant.shiny"'), "Each Pokédex has a localized normal and shiny view")
 	_check(source.contains("func _on_pokedex_variant_selected") and source.contains("pokedex_shiny_mode"), "Changing sprite variant refreshes the Pokédex")
 	_check(source.contains('"shiny" if pokedex_shiny_mode else "normal"'), "Normal and shiny species icons use separate cache entries")
+	_check(source.contains("func _prefetch_pokedex_rendered_view"), "Selected rendered species warm the opposite view before a front/back switch")
+	_check(not source.contains("func _load_first_pokedex_sprite_frame"), "Pokédex list icons never decode full rendered animation atlases")
 	_check(source.contains('candidate,\n\t\t\t_get_pokedex_sprite_side(),\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'), "Selected species loads its requested battle sprite without reporting expected candidate misses")
 	_check(source.contains('species.get("id", ""),\n\t\tspecies.get("showdownId", ""),\n\t\tspecies.get("name", "")'), "Selected species prefers canonical sprite IDs over display names")
 	_check(source.contains('"ui.pokedex.owned_count"'), "Each Pokédex variant shows localized owned-over-total progress")

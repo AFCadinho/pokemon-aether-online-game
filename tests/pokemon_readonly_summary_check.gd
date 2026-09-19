@@ -121,6 +121,8 @@ func _run() -> void:
 	_check(sprite_stage.tooltip_text != "", "read-only sprite explains the front/back interaction")
 	_check(sprite_stage.gui_input.has_connections(), "read-only sprite is connected to the shared front/back handler")
 	_check(str(overlay.get("pokemon_summary_sprite_side")) == "front", "read-only Summary starts with the front sprite")
+	_check(overlay_source.contains("func _prefetch_pokemon_summary_rendered_view"), "rendered Summary sprites warm the opposite view")
+	_check(overlay_source.contains('Color("#14171eff")'), "Summary sprite colors use a neutral review backdrop")
 	var sprite_click := InputEventMouseButton.new()
 	sprite_click.button_index = MOUSE_BUTTON_LEFT
 	sprite_click.pressed = true

@@ -1258,6 +1258,13 @@ func _load_sprite_frames(
 			rendered,
 			float(rendered.get_meta("rendered_display_scale_multiplier", 1.0))
 		)
+		_set_sprite_frames_frame_size(
+			rendered,
+			rendered.get_meta("rendered_frame_size", Vector2(512, 512)) as Vector2
+		)
+		var rendered_bounds: Variant = rendered.get_meta("rendered_visual_bounds", Rect2())
+		if rendered_bounds is Rect2 and (rendered_bounds as Rect2).has_area():
+			_set_sprite_frames_visual_bounds(rendered, rendered_bounds as Rect2)
 		_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
 		_set_sprite_frames_position_offset(rendered, Vector2(float(offset[0]), float(offset[1])))
 		return rendered

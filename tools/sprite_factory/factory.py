@@ -351,6 +351,7 @@ def quality(root, cfg, render):
 
 def package(root, cfg, variant):
     provenance = read(root / 'provenance.json')
+    qc_actions = read(root / 'qc.json').get('actions', {})
     runtime = root / 'runtime'
     meta = dict(schema=VERSION, species=cfg['species'], variant=variant, build_id=provenance['build_id'],
                 cell_size=512, fps=cfg['render']['fps'], status='needs_review', presentation=cfg['presentation'], views={}, faint_policy='hold_until_recall')
@@ -374,8 +375,12 @@ def package(root, cfg, variant):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 sheet.save(destination, compress_level=6)
                 pages.append(dict(file=name, count=len(batch), columns=columns, sha256=digest(destination.read_bytes())))
+            union = qc_actions.get(f'{view}/{action}', {}).get('union')
+            visual_bounds = ([union[0], union[1], union[2] - union[0], union[3] - union[1]]
+                             if union else None)
             meta['views'][view][action] = dict(pages=pages, count=len(paths), loop=spec['loop'], speed=spec['speed'],
-                status='needs_review' if spec['review'] != 'rejected' else 'rejected', source_action=spec['action'])
+                status='needs_review' if spec['review'] != 'rejected' else 'rejected', source_action=spec['action'],
+                visual_bounds=visual_bounds)
     write(runtime / 'manifest.json', meta)
 
 

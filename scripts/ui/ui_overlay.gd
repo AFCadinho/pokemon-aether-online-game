@@ -26329,6 +26329,12 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 		pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
 		_apply_pokemon_summary_sprite_center_offset(frames, pokemon_summary_animated_sprite.animation)
 		pokemon_summary_animated_sprite.play()
+		if frames.has_meta("rendered_asset"):
+			_prefetch_pokemon_summary_rendered_view.call_deferred(
+				pokemon.species,
+				"back" if sprite_side == "front" else "front",
+				pokemon.shiny
+			)
 		_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 		return
 
@@ -26353,6 +26359,12 @@ func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
 			"style": SettingsManager.get_active_sprite_style(),
 		})
 	WebPokemonSpriteService.prefetch(entries)
+
+
+func _prefetch_pokemon_summary_rendered_view(species: String, side: String, is_shiny: bool) -> void:
+	if pokemon_summary_sprite_loader == null:
+		return
+	pokemon_summary_sprite_loader.call("_load_sprite_frames", species, side, is_shiny, false)
 
 
 func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -29442,7 +29454,7 @@ func _make_pokemon_summary_header_frame_style() -> StyleBoxFlat:
 	return style
 
 func _make_pokemon_summary_sprite_stage_style() -> StyleBoxFlat:
-	var style := _make_panel_style(Color("#00000000"), POKEMON_SUMMARY_ACCENT_FAINT, 4, 1)
+	var style := _make_panel_style(Color("#14171eff"), POKEMON_SUMMARY_ACCENT_FAINT, 4, 1)
 	style.shadow_color = Color("#00000000")
 	style.shadow_size = 0
 	style.shadow_offset = Vector2.ZERO
@@ -35831,6 +35843,12 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
 		_apply_pokedex_sprite_center_offset(loaded_frames, pokedex_animated_sprite.animation)
 		pokedex_animated_sprite.play()
+		if loaded_frames.has_meta("rendered_asset"):
+			_prefetch_pokedex_rendered_view.call_deferred(
+				species.duplicate(true),
+				"back" if _get_pokedex_sprite_side() == "front" else "front",
+				pokedex_shiny_mode
+			)
 	else:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.visible = false
@@ -35843,6 +35861,21 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
 		})
 	_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+
+
+func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny: bool) -> void:
+	if pokedex_sprite_loader == null:
+		return
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		var frames_value: Variant = pokedex_sprite_loader.call(
+			"_load_sprite_frames",
+			candidate,
+			side,
+			is_shiny,
+			false
+		)
+		if frames_value is SpriteFrames:
+			return
 
 
 func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
@@ -36000,14 +36033,15 @@ func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
 
 	var texture: Texture2D = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
-		if PokemonAssets.load_home_sprite(candidate, pokedex_shiny_mode) != null:
-			texture = PokemonAssets.load_party_icon(candidate, pokedex_shiny_mode)
+		texture = PokemonAssets.load_party_icon(candidate, pokedex_shiny_mode)
+		if texture != null:
 			break
 
 	if texture == null:
-		var sprite_frame := _load_first_pokedex_sprite_frame(species)
-		if sprite_frame != null:
-			texture = sprite_frame
+		for candidate: String in _pokedex_species_sprite_candidates(species):
+			texture = PokemonAssets.load_home_sprite(candidate, pokedex_shiny_mode)
+			if texture != null:
+				break
 
 	if texture == null:
 		texture = PokemonAssets.load_unknown_icon()
@@ -36015,31 +36049,6 @@ func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
 	if cache_key != "":
 		pokedex_species_list_icon_cache[cache_key] = texture
 	return texture
-
-func _load_first_pokedex_sprite_frame(species: Dictionary) -> Texture2D:
-	for candidate: String in _pokedex_species_sprite_candidates(species):
-		var frames_value: Variant = pokedex_sprite_loader.call(
-			"_load_sprite_frames",
-			candidate,
-			"front",
-			pokedex_shiny_mode,
-			false
-		)
-		var frames := frames_value as SpriteFrames
-		if frames == null:
-			continue
-
-		var animation_name := "idle"
-		if not frames.has_animation(animation_name):
-			var animation_names := frames.get_animation_names()
-			if animation_names.is_empty():
-				continue
-			animation_name = animation_names[0]
-
-		if frames.get_frame_count(animation_name) > 0:
-			return frames.get_frame_texture(animation_name, 0)
-
-	return null
 
 func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 	if pokedex_header_stats_stack == null:

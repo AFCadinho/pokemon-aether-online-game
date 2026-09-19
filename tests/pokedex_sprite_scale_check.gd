@@ -64,6 +64,35 @@ func _run() -> void:
 			"Squirtle uses the compact Pokédex baseline scale"
 		)
 
+	if not OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").is_empty():
+		var dragonite_value: Variant = sprite_loader.call(
+			"_load_sprite_frames",
+			"dragonite",
+			"front",
+			false,
+			false
+		)
+		_check(dragonite_value is SpriteFrames, "rendered Dragonite loads for non-battle preview checks")
+		if dragonite_value is SpriteFrames:
+			var dragonite_frames := dragonite_value as SpriteFrames
+			var visual_bounds_value: Variant = sprite_loader.call(
+				"_get_sprite_frames_visual_bounds",
+				dragonite_frames
+			)
+			var visual_bounds := visual_bounds_value as Rect2
+			var summary_size: Vector2 = visual_bounds.size * overlay.call(
+				"_get_pokemon_summary_sprite_scale",
+				dragonite_frames
+			)
+			var pokedex_size: Vector2 = visual_bounds.size * overlay.call(
+				"_get_pokedex_sprite_scale",
+				dragonite_frames
+			)
+			_check(summary_size.y >= 120.0 and summary_size.y <= 155.01,
+				"rendered Summary art uses the visible silhouette instead of the 512px canvas")
+			_check(pokedex_size.y >= 80.0 and pokedex_size.y <= 104.01,
+				"rendered Pokédex art fills its detail stage without clipping")
+
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
