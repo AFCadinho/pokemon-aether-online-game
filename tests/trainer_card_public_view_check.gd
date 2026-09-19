@@ -79,8 +79,10 @@ func _run() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(capture_dir.path_join("own.png"))
-		root.get_node("PokedexService").set("_owned_species_cache", {"normal": ["charizard", "pikachu", "scizor"], "shiny": ["pikachu"]})
 		overlay.call("_open_trainer_card_companion_picker")
+		var picker := overlay.find_child("OwnedCompanions", true, false) as ItemList
+		picker.set_meta("owned_companions", [{"species": "charizard", "shiny": false}, {"species": "pikachu", "shiny": true}])
+		overlay.call("_fill_trainer_card_companions", picker, "")
 		for frame in range(5):
 			await process_frame
 		await RenderingServer.frame_post_draw
@@ -109,6 +111,13 @@ func _run() -> void:
 	var own_card := overlay.get("trainer_card_popup") as Control
 	_check(own_card.find_child("FavoritePokemon", true, false) is Sprite2D, "own card refresh renders the saved HOME companion")
 	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 5, "own details refresh keeps exactly one PvP tab")
+	var choices := ItemList.new()
+	choices.set_meta("owned_companions", [{"species": "pikachu", "shiny": true}, {"species": "scizor", "shiny": false}])
+	overlay.call("_fill_trainer_card_companions", choices, "")
+	_check(choices.item_count == 3 and bool(choices.get_item_metadata(1).get("shiny")), "companion choices preserve the server-owned shiny variant")
+	overlay.call("_fill_trainer_card_companions", choices, "pika")
+	_check(choices.item_count == 2 and choices.get_item_metadata(1).get("species") == "pikachu", "companion search only filters owned choices")
+	choices.free()
 	_check(
 		popup != null
 		and popup.get_combined_minimum_size().x <= 720.0
