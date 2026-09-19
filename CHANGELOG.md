@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rental team set cards are wider and show each Pokémon's complete move list as one readable block.
+
 - The Pokémon rental builder now follows a clear create, validate and rent flow with friendlier input guidance and errors.
 
 - Team rental tier filtering is limited to Aether OU and Aether UU.

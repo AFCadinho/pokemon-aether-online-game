@@ -43,6 +43,13 @@ func _run() -> void:
 	assert(team_workspace.team_catalog.results.get_child(0).find_children("*", "TextureRect", true, false).size() == 6)
 	await team_workspace._select_team_offer(team_offer)
 	assert(team_workspace.team_catalog.team_grid.get_child_count() == 6)
+	assert(team_workspace.team_catalog.team_grid.columns == 2)
+	var first_set_card: Control = team_workspace.team_catalog.team_grid.get_child(0)
+	assert(first_set_card.custom_minimum_size.y == 152)
+	var first_set_details := first_set_card.find_child("SetDetails", true, false) as RichTextLabel
+	assert(first_set_details != null)
+	assert(first_set_details.text.contains("Moves:"))
+	assert(first_set_details.text.contains("Protect / Substitute / Toxic / Earthquake"))
 	assert(team_workspace.team_catalog.detail_title.text == "Test Balance")
 	assert(team_workspace.team_catalog.detail_meta.text.contains("AETHER OU"))
 	assert(not team_workspace.rent_button.disabled)
