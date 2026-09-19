@@ -43,6 +43,14 @@ class FactoryTests(unittest.TestCase):
 
     def test_baseline_and_variant_are_enforced(self):
         f.validate(self.cfg, 'normal')
+        self.cfg['render']['taa_render_samples'] = 16
+        self.cfg['render']['geometry_scan'] = False
+        self.cfg['render']['batch_animation'] = True
+        f.validate(self.cfg, 'normal')
+        self.cfg['render']['taa_render_samples'] = 8
+        with self.assertRaisesRegex(ValueError, 'quality tier'):
+            f.validate(self.cfg, 'normal')
+        self.cfg['render'].pop('taa_render_samples')
         without_qc = copy.deepcopy(self.cfg)
         without_qc.pop('qc')
         with self.assertRaisesRegex(ValueError, 'quality-check settings'):
@@ -118,7 +126,7 @@ class FactoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'hash mismatch'):
             f.check_source(self.cfg, report)
 
-    def fixture(self, root, facial_warnings=()):
+    def fixture(self, root, facial_warnings=(), include_geometry=True):
         cfg = copy.deepcopy(self.cfg)
         cfg['actions'] = {'idle': dict(action='idle', frames=[0, 1], source_fps=24, loop=True, speed=1, review='needs_review')}
         geometry = {}
@@ -133,7 +141,10 @@ class FactoryTests(unittest.TestCase):
             frame.save(folder / '0000.png'); frame.save(folder / '0001.png')
             geometry[view] = {'idle': [dict(outside=False), dict(outside=False)]}
         f.write(root / 'provenance.json', {'build_id': 'test-build'})
-        qc = f.quality(root, cfg, {'geometry': geometry, 'facial_warnings': list(facial_warnings)})
+        render = {'facial_warnings': list(facial_warnings)}
+        if include_geometry:
+            render['geometry'] = geometry
+        qc = f.quality(root, cfg, render)
         f.write(root / 'qc.json', qc)
         f.package(root, cfg, 'normal')
         return qc
@@ -144,6 +155,11 @@ class FactoryTests(unittest.TestCase):
             qc = self.fixture(Path(temp), facial_warnings=[warning])
             self.assertEqual(qc['errors'], [])
             self.assertIn(warning, qc['warnings'])
+
+    def test_alpha_clipping_qc_does_not_require_duplicate_geometry_scan(self):
+        with tempfile.TemporaryDirectory() as temp:
+            qc = self.fixture(Path(temp), include_geometry=False)
+            self.assertEqual(qc['errors'], [])
 
     def test_stream_pages_preserve_order_pixels_and_tail(self):
         with tempfile.TemporaryDirectory() as temp:

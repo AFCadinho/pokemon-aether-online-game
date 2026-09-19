@@ -277,6 +277,9 @@ def draft_one(args):
                 "variants": {"normal": {"available": args.variant == "normal", "material_overrides": {}},
                              "shiny": {"available": args.variant == "shiny", "material_overrides": {}}},
                 "render": {"resolution": [512, 512], "fps": 60,
+                           "taa_render_samples": 16,
+                           "geometry_scan": False,
+                           "batch_animation": True,
                            "view_transform": "Standard", "look": "Medium High Contrast",
                            "light_target": lighting.get("target", [0, 0, cameras["front"]["target"][2]]),
                            "lights": [{"position": lighting.get("key_position", [3.5, -4.5, 5.5]), "energy": lighting.get("key_energy", 650), "size": 5},
@@ -588,7 +591,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--species")
     parser.add_argument("--only", help="Comma-separated explicit subset for run-builds; preserves other build statuses")
-    parser.add_argument("--jobs", type=int, default=1,
+    parser.add_argument("--jobs", type=int, default=2,
                         help="Independent species builds to run concurrently (1-4)")
     parser.add_argument("--variant", choices=["normal", "shiny"], default="normal")
     parser.add_argument("--idle-only", action="store_true",
