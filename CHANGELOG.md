@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Both Trainer Card views now show Pokédex progress and a favorite Pokémon's HOME portrait beside the trainer. Choose your companion from registered Pokémon, see lifetime PvP ratings by format, and add friends from public cards. Battle totals now display as whole numbers.
+
 - Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
 
 - The Trainer Card overview now fills its lower space neatly and aligns the Trainer Title selector with the other profile values.

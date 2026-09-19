@@ -1207,6 +1207,10 @@ var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
 var public_trainer_card_popup: PanelContainer
 var public_trainer_card_data: Dictionary = {}
+var own_trainer_card_data: Dictionary = {}
+var trainer_card_dex_panel: Control
+var trainer_card_pvp_tab: Control
+var trainer_card_companion_saving := false
 var trainer_card_tabs: TabContainer
 var trainer_card_subtitle_label: Label
 var trainer_card_avatar_viewports: Array[SubViewport] = []
@@ -15686,6 +15690,8 @@ func _refresh_trainer_card_tab_titles() -> void:
 func _refresh_trainer_card_localized_ui() -> void:
 	if trainer_card_popup != null:
 		LocalizationManager.localize_tree(trainer_card_popup)
+		if not own_trainer_card_data.is_empty():
+			_apply_own_trainer_card_details(own_trainer_card_data)
 	if trainer_card_subtitle_label != null:
 		trainer_card_subtitle_label.text = LocalizationManager.text(
 			"ui.trainer_card.passport",
@@ -15789,6 +15795,9 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_tabs.add_child(_create_trainer_card_badges_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
+	trainer_card_pvp_tab = _create_public_trainer_pvp_tab(own_trainer_card_data)
+	trainer_card_pvp_tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.pvp")
+	trainer_card_tabs.add_child(trainer_card_pvp_tab)
 	_apply_trainer_card_tabs_style(trainer_card_tabs)
 	_refresh_trainer_card_tab_titles()
 	layout.add_child(trainer_card_tabs)
@@ -15878,6 +15887,13 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	root.add_child(actions)
+	if int(card.get("userId", 0)) != int(str(PlayerSave.player_id)):
+		var friend_button := Button.new()
+		_set_localized_control_property(friend_button, "text", "ui.friends.add")
+		_apply_button_style(friend_button)
+		friend_button.pressed.connect(_trainer_card_add_friend.bind(card, friend_button))
+		actions.add_child(friend_button)
+		_refresh_trainer_card_friend_button(card, friend_button)
 	var message_button := Button.new()
 	_set_localized_control_property(message_button, "text", "ui.trainer_card.action.message")
 	message_button.focus_mode = Control.FOCUS_ALL
@@ -16020,14 +16036,26 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	tab.add_theme_constant_override("margin_right", 10)
 	tab.add_theme_constant_override("margin_bottom", 10)
 	var pvp := _dictionary_from_value(card.get("pvp", {}))
-	if pvp.is_empty():
-		tab.add_child(_create_public_trainer_empty_pvp_panel())
-		return tab
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
 	tab.add_child(layout)
+	var period := Label.new()
+	_set_localized_control_property(period, "text", "ui.trainer_card.pvp.all_time")
+	period.add_theme_font_size_override("font_size", 12)
+	period.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(period)
+	var rating_text := Label.new()
+	rating_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rating_text.add_theme_font_size_override("font_size", 14)
+	var rating_parts := PackedStringArray()
+	for value: Variant in card.get("ratings", []):
+		if value is Dictionary:
+			var entry := value as Dictionary
+			rating_parts.append("%s  %s" % [str(entry.get("format", "")).replace("-", " ").to_upper(), str(int(entry.get("rating", 0)))])
+	rating_text.text = LocalizationManager.text("ui.trainer_card.pvp.rating") + ": " + ("  ·  ".join(rating_parts) if not rating_parts.is_empty() else LocalizationManager.text("ui.trainer_card.pvp.unranked"))
+	layout.add_child(rating_text)
 	layout.add_child(_create_public_trainer_pvp_summary(pvp))
 
 	var source_row := HBoxContainer.new()
@@ -16048,9 +16076,9 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	for source: Dictionary in sources:
 		var record := _dictionary_from_value(source.get("record", {}))
 		var rows: Array[Dictionary] = [
-			{"label_key": "ui.trainer_card.pvp.games", "value": str(record.get("gamesPlayed", 0))},
-			{"label_key": "ui.trainer_card.pvp.wins", "value": str(record.get("wins", 0))},
-			{"label_key": "ui.trainer_card.pvp.losses", "value": str(record.get("losses", 0))},
+			{"label_key": "ui.trainer_card.pvp.games", "value": str(int(record.get("gamesPlayed", 0)))},
+			{"label_key": "ui.trainer_card.pvp.wins", "value": str(int(record.get("wins", 0)))},
+			{"label_key": "ui.trainer_card.pvp.losses", "value": str(int(record.get("losses", 0)))},
 		]
 		source_row.add_child(_create_public_trainer_info_panel(str(source.get("title_key", "")), rows))
 	return tab
@@ -16081,9 +16109,9 @@ func _create_public_trainer_pvp_summary(pvp: Dictionary) -> Control:
 	stats.add_theme_constant_override("h_separation", 8)
 	stack.add_child(stats)
 	var values: Array[Dictionary] = [
-		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": str(pvp.get("gamesPlayed", 0))},
-		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": str(pvp.get("wins", 0))},
-		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": str(pvp.get("losses", 0))},
+		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": str(int(pvp.get("gamesPlayed", 0)))},
+		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": str(int(pvp.get("wins", 0)))},
+		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": str(int(pvp.get("losses", 0)))},
 		{
 			"id": "pvp_win_rate",
 			"label_key": "ui.trainer_card.pvp.win_rate",
@@ -16160,7 +16188,162 @@ func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> C
 	icon_center.add_child(texture_rect)
 	return icon_center
 
-func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictionary, preview_name: String = "TrainerCardBattlePreview") -> void:
+func _create_trainer_card_dex_panel(card: Dictionary) -> Control:
+	var panel := VBoxContainer.new()
+	panel.name = "TrainerCardPokedex"
+	panel.add_theme_constant_override("separation", 3)
+	var dex := _dictionary_from_value(card.get("pokedex", {}))
+	var label := Label.new()
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	label.text = LocalizationManager.text("ui.trainer_card.dex.progress", {
+		"caught": str(int(dex.get("registered", 0))) if dex.has("registered") else "—",
+		"total": str(int(dex.get("total", 0))) if dex.has("total") else "—",
+	})
+	panel.add_child(label)
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size.y = 5
+	bar.show_percentage = false
+	bar.max_value = maxi(1, int(dex.get("total", 1)))
+	bar.value = int(dex.get("registered", 0))
+	bar.add_theme_stylebox_override("background", _make_panel_style(UI_SURFACE_INSET, Color.TRANSPARENT, 3, 0))
+	bar.add_theme_stylebox_override("fill", _make_panel_style(Color("#65c9c0"), Color.TRANSPARENT, 3, 0))
+	panel.add_child(bar)
+	return panel
+
+
+func _trainer_card_add_friend(card: Dictionary, button: Button) -> void:
+	button.disabled = true
+	var result: Dictionary = await SocialService.send_friend_request(str(card.get("username", "")))
+	if not is_instance_valid(button):
+		return
+	if bool(result.get("success", false)):
+		button.text = LocalizationManager.text("ui.friends.success.request_sent")
+	else:
+		button.disabled = false
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.friends.error.action"))))
+	_refresh_friend_request_attention_from_socials.call_deferred()
+
+
+func _refresh_trainer_card_friend_button(card: Dictionary, button: Button) -> void:
+	button.disabled = true
+	var result: Dictionary = await SocialService.load_socials()
+	if not is_instance_valid(button):
+		return
+	button.disabled = false
+	var overview := _dictionary_from_value(result.get("overview", {}))
+	var username := str(card.get("username", "")).to_lower()
+	for group: String in ["friends", "incomingFriendRequests", "outgoingFriendRequests", "blockedUsers"]:
+		for value: Variant in overview.get(group, []):
+			if not value is Dictionary:
+				continue
+			var entry := value as Dictionary
+			var field := "requester" if group == "incomingFriendRequests" else ("addressee" if group == "outgoingFriendRequests" else "user")
+			var user := _dictionary_from_value(entry.get(field, {}))
+			if str(user.get("username", "")).to_lower() == username:
+				button.disabled = true
+				button.text = LocalizationManager.text("ui.trainer_card.friend." + group)
+				return
+
+
+func _open_trainer_card_companion_picker() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = LocalizationManager.text("ui.trainer_card.companion.choose")
+	dialog.min_size = Vector2i(400, 440)
+	dialog.size = Vector2i(400, 440)
+	dialog.theme = Theme.new()
+	dialog.theme.set_stylebox("panel", "AcceptDialog", _make_trainer_card_outer_style())
+	dialog.dialog_hide_on_ok = false
+	root_control.add_child(dialog)
+	_apply_button_style(dialog.get_ok_button(), "primary")
+	_apply_button_style(dialog.get_cancel_button())
+	var stack := VBoxContainer.new()
+	stack.custom_minimum_size.x = 360
+	stack.add_theme_constant_override("separation", 8)
+	dialog.add_child(stack)
+	var hint := Label.new()
+	hint.custom_minimum_size.x = 360
+	hint.text = LocalizationManager.text("ui.trainer_card.companion.hint")
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stack.add_child(hint)
+	var search := LineEdit.new()
+	search.placeholder_text = LocalizationManager.text("ui.trainer_card.companion.search")
+	_apply_line_edit_style(search)
+	stack.add_child(search)
+	var shiny := CheckButton.new()
+	shiny.text = "Shiny"
+	shiny.button_pressed = bool(own_trainer_card_data.get("favoritePokemonShiny", false))
+	stack.add_child(shiny)
+	var list := ItemList.new()
+	list.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	list.add_theme_color_override("font_color", UI_TEXT)
+	list.custom_minimum_size = Vector2(340, 220)
+	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stack.add_child(list)
+	var feedback := Label.new()
+	feedback.custom_minimum_size.x = 360
+	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stack.add_child(feedback)
+	var refill := func(_unused: Variant = null) -> void:
+		_fill_trainer_card_companions(list, search.text, shiny.button_pressed)
+	search.text_changed.connect(refill)
+	shiny.toggled.connect(refill)
+	dialog.confirmed.connect(func() -> void:
+		if trainer_card_companion_saving or list.get_selected_items().is_empty():
+			return
+		trainer_card_companion_saving = true
+		dialog.get_ok_button().disabled = true
+		var species := str(list.get_item_metadata(list.get_selected_items()[0]))
+		var selected_shiny := shiny.button_pressed
+		var loaded: Dictionary = await PlayerGameStateService.load_player_preferences()
+		var result := loaded
+		if bool(loaded.get("success", false)):
+			var preferences := _dictionary_from_value(loaded.get("preferences", {}))
+			preferences["favoritePokemon"] = species
+			preferences["favoritePokemonShiny"] = selected_shiny
+			result = await PlayerGameStateService.save_player_preferences(preferences)
+			if bool(result.get("success", false)):
+				var saved := _dictionary_from_value(result.get("preferences", {}))
+				if not saved.has("favoritePokemon") or str(saved.get("favoritePokemon", "")) != species:
+					result = {"success": false, "error": LocalizationManager.text("ui.trainer_card.companion.unavailable")}
+		trainer_card_companion_saving = false
+		if bool(result.get("success", false)):
+			trainer_card_pvp_request_generation += 1
+			own_trainer_card_data["favoritePokemon"] = species
+			own_trainer_card_data["favoritePokemonShiny"] = selected_shiny
+			_refresh_avatar_previews()
+			if is_instance_valid(dialog):
+				dialog.queue_free()
+		elif is_instance_valid(dialog):
+			dialog.get_ok_button().disabled = false
+			feedback.text = str(result.get("error", ""))
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(400, 440))
+	_fill_trainer_card_companions(list, "", shiny.button_pressed)
+
+
+func _fill_trainer_card_companions(list: ItemList, query: String, shiny: bool) -> void:
+	var generation := int(list.get_meta("generation", 0)) + 1
+	list.set_meta("generation", generation)
+	var species: Array = await PokedexService.get_owned_species_ids(shiny)
+	if not is_instance_valid(list) or int(list.get_meta("generation", 0)) != generation:
+		return
+	list.clear()
+	list.add_item(LocalizationManager.text("ui.trainer_card.companion.none"))
+	list.set_item_metadata(0, "")
+	species.sort()
+	for value: Variant in species:
+		var id := str(value)
+		if not query.is_empty() and not id.to_lower().contains(query.to_lower()):
+			continue
+		var index := list.add_item(id.capitalize())
+		list.set_item_metadata(index, id)
+		if id == str(own_trainer_card_data.get("favoritePokemon", "")):
+			list.select(index)
+
+
+func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictionary, preview_name: String = "TrainerCardBattlePreview", card: Dictionary = {}) -> void:
 	for child: Node in viewport.get_children():
 		child.free()
 	var backdrop := Node2D.new()
@@ -16198,6 +16381,22 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 		var factor := minf(144.0 / bounds.size.x, 222.0 / bounds.size.y)
 		art.scale = Vector2.ONE * factor
 		art.position = Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * factor
+	var profile := own_trainer_card_data if preview_name == "TrainerCardBattlePreview" else card
+	var species := str(profile.get("favoritePokemon", ""))
+	if not species.is_empty():
+		var home := PokemonAssets.load_home_sprite(species, bool(profile.get("favoritePokemonShiny", false)))
+		if home != null:
+			art.scale *= 0.86
+			art.position = Vector2(65, 248) - Vector2(bounds.get_center().x, bounds.end.y) * art.scale.x
+			var companion := Sprite2D.new()
+			companion.name = "FavoritePokemon"
+			companion.texture = home
+			companion.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			var used := home.get_image().get_used_rect()
+			if used.has_area():
+				companion.scale = Vector2.ONE * minf(112.0 / used.size.x, 124.0 / used.size.y)
+				companion.position = Vector2(128, 248) - (Vector2(used.position) + Vector2(used.size) * Vector2(0.5, 1) - home.get_size() * 0.5) * companion.scale
+			viewport.add_child(companion)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
@@ -16235,7 +16434,7 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	viewport_container.add_child(viewport)
 	var appearance := _dictionary_from_value(card.get("appearance", {})).duplicate(true)
 	appearance["gender"] = card.get("gender", appearance.get("gender", "male"))
-	_populate_trainer_card_battle_art(viewport, appearance, "PublicTrainerAvatarPreview")
+	_populate_trainer_card_battle_art(viewport, appearance, "PublicTrainerAvatarPreview", card)
 	return panel
 
 
@@ -16316,6 +16515,7 @@ func _create_public_trainer_profile_panel(card: Dictionary) -> Control:
 	layout.add_child(grid)
 	for profile_value: Dictionary in profile_values:
 		grid.add_child(_create_public_trainer_profile_tile(profile_value))
+	layout.add_child(_create_trainer_card_dex_panel(card))
 	return panel
 
 
@@ -16479,6 +16679,11 @@ func _create_trainer_card_avatar_panel(
 	trainer_card_avatar_viewport.set_meta("trainer_card_battle_art", show_name)
 	if show_name:
 		_populate_trainer_card_battle_art(trainer_card_avatar_viewport, PlayerSave.to_appearance_state())
+		var choose := Button.new()
+		_set_localized_control_property(choose, "text", "ui.trainer_card.companion.choose")
+		_apply_button_style(choose)
+		choose.pressed.connect(_open_trainer_card_companion_picker)
+		layout.add_child(choose)
 	else:
 		_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
 
@@ -16517,6 +16722,8 @@ func _create_trainer_card_stats_tab() -> Control:
 	profile_stack.add_child(_create_trainer_card_identity_panel())
 	profile_stack.add_child(_create_trainer_card_caps_panel())
 	top_row.add_child(profile_stack)
+	trainer_card_dex_panel = _create_trainer_card_dex_panel(own_trainer_card_data)
+	layout.add_child(trainer_card_dex_panel)
 
 	var adventure_rows: Array[Dictionary] = [
 		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
@@ -16540,7 +16747,7 @@ func _create_trainer_card_stats_tab() -> Control:
 		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": "0"},
 		{"id": "pvp_win_rate", "label_key": "ui.trainer_card.pvp.win_rate", "value": "0%"},
 	]
-	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.title", pvp_rows))
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.overview_title", pvp_rows))
 
 	return tab
 
@@ -18731,14 +18938,35 @@ func _refresh_own_trainer_card_pvp() -> void:
 		)
 		return
 	var card := _dictionary_from_value(result.get("card", {}))
+	_apply_own_trainer_card_details(card)
+
+
+func _apply_own_trainer_card_details(card: Dictionary) -> void:
+	own_trainer_card_data = card.duplicate(true)
+	_refresh_avatar_previews()
+	if is_instance_valid(trainer_card_dex_panel):
+		var parent := trainer_card_dex_panel.get_parent()
+		var index := trainer_card_dex_panel.get_index()
+		trainer_card_dex_panel.free()
+		trainer_card_dex_panel = _create_trainer_card_dex_panel(card)
+		parent.add_child(trainer_card_dex_panel)
+		parent.move_child(trainer_card_dex_panel, index)
+	if is_instance_valid(trainer_card_pvp_tab):
+		var selected := trainer_card_tabs.current_tab
+		trainer_card_pvp_tab.free()
+		trainer_card_pvp_tab = _create_public_trainer_pvp_tab(card)
+		trainer_card_pvp_tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.pvp")
+		trainer_card_tabs.add_child(trainer_card_pvp_tab)
+		_refresh_trainer_card_tab_titles()
+		trainer_card_tabs.current_tab = selected
 	_apply_own_trainer_card_pvp(_dictionary_from_value(card.get("pvp", {})))
 
 
 func _apply_own_trainer_card_pvp(pvp: Dictionary) -> void:
 	var values := {
-		"pvp_games": str(pvp.get("gamesPlayed", 0)),
-		"pvp_wins": str(pvp.get("wins", 0)),
-		"pvp_losses": str(pvp.get("losses", 0)),
+		"pvp_games": str(int(pvp.get("gamesPlayed", 0))),
+		"pvp_wins": str(int(pvp.get("wins", 0))),
+		"pvp_losses": str(int(pvp.get("losses", 0))),
 		"pvp_win_rate": "%s%%" % (
 			("%.1f" % float(pvp.get("winRate", 0.0))).trim_suffix(".0")
 		),
