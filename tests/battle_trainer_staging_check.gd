@@ -227,7 +227,7 @@ func _check_runtime_renderer() -> void:
 		"hair": "Aether_Female_Hair_01",
 		"headgear": "__none__",
 		"top": "Aether_Blossom_Dress",
-		"bottom": "Mysterious_Trousers",
+		"bottom": "Aether_Blossom_Trousers",
 		"shoes": "Aether_Blossom_Shoes",
 	}, Vector2.LEFT)
 	_check(
@@ -252,6 +252,26 @@ func _check_runtime_renderer() -> void:
 		).size() == 2,
 		"only top and bottom report Starter Kit fallback layers"
 	)
+	for gender: String in ["male", "female"]:
+		renderer.show_player({
+			"gender": gender,
+			"body": "Gen4_Base_F_v1" if gender == "female" else "Gen4_Base_v1",
+			"top": "Mysterious_Shirt",
+			"bottom": "Mysterious_Trousers",
+			"shoes": "Mysterious_Shoes",
+			"facegear": "Mysterious_Mask",
+		}, Vector2.RIGHT)
+		for layer_name: String in ["Top", "Bottom", "Shoes", "TopAccessory", "Facegear"]:
+			_check(
+				renderer.player_battle_art.get_node_or_null(layer_name) != null,
+				"%s Mysterious Outfit renders its %s battle layer" % [gender, layer_name]
+			)
+		_check(
+			renderer.player_layer_metadata.filter(
+				func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
+			).is_empty(),
+			"%s Mysterious Outfit uses authored battle art without fallback" % gender
+		)
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
