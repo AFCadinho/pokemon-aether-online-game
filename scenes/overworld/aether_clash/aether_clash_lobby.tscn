@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_tauxp"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
 [ext_resource type="Script" uid="uid://tdsytwlj3n04" path="res://scripts/world/aether_clash_lobby.gd" id="4_map_meta"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/rental_npc.tscn" id="rental_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
@@ -253,6 +254,16 @@ position = Vector2(1072, 1008)
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=331639728]
+
+[node name="TeamRentalNPC" parent="Entities/NPCs" instance=ExtResource("rental_vendor")]
+position = Vector2(624, 944)
+display_name = "Team Rental Specialist"
+rental_kind = "team"
+
+[node name="PokemonRentalNPC" parent="Entities/NPCs" instance=ExtResource("rental_vendor")]
+position = Vector2(752, 944)
+display_name = "Pokémon Rental Specialist"
+rental_kind = "pokemon"
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1798118896 instance=ExtResource("5_transit_keeper")]
 position = Vector2(1040, 1424)
