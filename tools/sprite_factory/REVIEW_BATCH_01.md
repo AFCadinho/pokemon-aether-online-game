@@ -246,10 +246,11 @@ errors/warnings, and remains `needs_review`.
 
 A later close-up review established that the donor itself is correct: all 121
 frames of the official default-idle study show Articuno's brown irises. The
-original elevated, angled front camera reduced them to indistinct dark pixels
-at gameplay size. Articuno therefore has a data-only lower, near-frontal front
-camera override which keeps both eyes visible without changing its model,
-eyelid pose, 512x512 resolution, native 60 FPS, back camera or gameplay scale.
+original elevated front camera reduced them to indistinct dark pixels at
+gameplay size. Articuno therefore has a data-only lower angled front-camera
+override which keeps the visible eye readable without flattening the battle
+perspective or changing its model, eyelid pose, 512x512 resolution, native
+60 FPS, back camera or gameplay scale.
 
 A wider closed-eye review then identified Arcanine, Charmander, Diglett,
 Gengar, Jigglypuff, Psyduck, Roaring Moon, Scizor, Scyther, Tauros,
