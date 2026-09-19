@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Two rental specialists in the Aether Clash Lobby now offer level-100 teams and individual Pokémon for Aetherite, with catalog previews, duration choices, early returns and permanent purchase for individual rentals.
+
 - Trainer Cards now stay at one consistent size while switching tabs, and public previews can be moved by dragging their title bar.
 
 - Hovering a shortened Pokémon Summary location now reveals its complete name.
