@@ -331,7 +331,7 @@ func _review_price_card(parent: HBoxContainer, heading_text: String, accent: Col
 
 func _create_pokemon_preview() -> Control:
 	var card := PanelContainer.new()
-	card.custom_minimum_size.x = 300
+	card.custom_minimum_size.x = 310
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_stretch_ratio = 1.0
 	card.add_theme_stylebox_override("panel", _control_style(Color("#0a1321"), Color("#41698d")))
@@ -343,30 +343,41 @@ func _create_pokemon_preview() -> Control:
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 	var eyebrow := Label.new()
-	eyebrow.text = "LIVE PREVIEW"
+	eyebrow.text = "LIVE BUILD PREVIEW"
 	eyebrow.add_theme_font_size_override("font_size", 11)
 	eyebrow.add_theme_color_override("font_color", Color("#8ea8bd"))
 	layout.add_child(eyebrow)
+	var hero := HBoxContainer.new()
+	hero.custom_minimum_size.y = 104
+	hero.add_theme_constant_override("separation", 10)
+	layout.add_child(hero)
 	var sprite_center := CenterContainer.new()
-	sprite_center.custom_minimum_size.y = 92
-	layout.add_child(sprite_center)
+	sprite_center.custom_minimum_size.x = 106
+	hero.add_child(sprite_center)
 	pokemon_preview_icon = TextureRect.new()
-	pokemon_preview_icon.custom_minimum_size = Vector2(88, 88)
+	pokemon_preview_icon.custom_minimum_size = Vector2(100, 100)
 	pokemon_preview_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pokemon_preview_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	sprite_center.add_child(pokemon_preview_icon)
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	identity.add_theme_constant_override("separation", 5)
+	hero.add_child(identity)
 	pokemon_preview_species = Label.new()
 	pokemon_preview_species.text = "Your Pokémon"
-	pokemon_preview_species.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_preview_species.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pokemon_preview_species.add_theme_font_size_override("font_size", 19)
 	pokemon_preview_species.add_theme_color_override("font_color", Color("#62d5ff"))
-	layout.add_child(pokemon_preview_species)
+	identity.add_child(pokemon_preview_species)
 	var fixed_meta := Label.new()
-	fixed_meta.text = "LEVEL 100  •  NO HELD ITEM"
-	fixed_meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fixed_meta.text = "LEVEL 100\nNO HELD ITEM"
 	fixed_meta.add_theme_font_size_override("font_size", 10)
 	fixed_meta.add_theme_color_override("font_color", Color("#f5df9a"))
-	layout.add_child(fixed_meta)
+	identity.add_child(fixed_meta)
+	var divider := HSeparator.new()
+	divider.add_theme_constant_override("separation", 6)
+	layout.add_child(divider)
 	pokemon_preview_details = RichTextLabel.new()
 	pokemon_preview_details.name = "PokemonBuilderPreviewDetails"
 	pokemon_preview_details.bbcode_enabled = true
@@ -374,6 +385,7 @@ func _create_pokemon_preview() -> Control:
 	pokemon_preview_details.scroll_active = false
 	pokemon_preview_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_preview_details.add_theme_font_size_override("normal_font_size", 11)
+	pokemon_preview_details.add_theme_constant_override("line_separation", 2)
 	pokemon_preview_details.add_theme_color_override("default_color", Color("#eef6ff"))
 	layout.add_child(pokemon_preview_details)
 	return card
@@ -534,25 +546,36 @@ func _update_pokemon_preview() -> void:
 	if species.is_empty():
 		pokemon_preview_species.text = "Your Pokémon"
 		pokemon_preview_icon.texture = PokemonAssets.load_unknown_icon() if pokemon_preview_icon != null else null
-		pokemon_preview_details.text = "[color=#8ea8bd]Your species, set details and moves will appear here while you build.[/color]"
+		pokemon_preview_details.text = "[color=#8ea8bd]Your ability, nature, moves and training spread will appear here while you build.[/color]"
 		return
 	pokemon_preview_species.text = species
 	if pokemon_preview_icon != null:
 		pokemon_preview_icon.texture = PokemonAssets.load_party_icon(species)
-	var lines: Array[String] = []
-	for pair: Array in [["ability", "Ability"], ["tera", "Tera Type"], ["evs", "EVs"], ["ivs", "IVs"]]:
-		var value := str(preview.get(str(pair[0]), "")).strip_edges()
-		if not value.is_empty():
-			lines.append("[color=#8ea8bd]%s:[/color] %s" % [str(pair[1]), value])
+	var lines: Array[String] = ["[font_size=10][color=#8ea8bd]BUILD[/color][/font_size]"]
+	var ability := str(preview.get("ability", "")).strip_edges()
+	if not ability.is_empty():
+		lines.append("[color=#8ea8bd]ABILITY[/color]  %s" % ability)
 	var nature := str(preview.get("nature", "")).strip_edges()
-	if not nature.is_empty():
-		lines.append("[color=#8ea8bd]Nature:[/color] %s" % nature)
+	var tera := str(preview.get("tera", "")).strip_edges()
+	var temperament: Array[String] = []
+	if not nature.is_empty(): temperament.append("[color=#8ea8bd]NATURE[/color]  %s" % nature)
+	if not tera.is_empty(): temperament.append("[color=#8ea8bd]TERA[/color]  %s" % tera)
+	if not temperament.is_empty(): lines.append("    ".join(temperament))
 	var moves: Array = preview.get("moves", []) if preview.get("moves", []) is Array else []
 	if not moves.is_empty():
-		lines.append("[color=#c9beff]Moves[/color]")
-		for move: Variant in moves:
-			lines.append("  – %s" % str(move))
-	pokemon_preview_details.text = "\n".join(lines) if not lines.is_empty() else "[color=#8ea8bd]Add ability, stats and moves to complete the preview.[/color]"
+		lines.append("\n[font_size=10][color=#8ea8bd]MOVES[/color][/font_size]")
+		for index: int in range(0, moves.size(), 2):
+			var move_row: Array[String] = []
+			for move_index: int in range(index, mini(index + 2, moves.size())):
+				move_row.append("[color=#c9beff]%02d[/color] %s" % [move_index + 1, str(moves[move_index])])
+			lines.append("    ".join(move_row))
+	var evs := str(preview.get("evs", "")).strip_edges()
+	var ivs := str(preview.get("ivs", "")).strip_edges()
+	if not evs.is_empty() or not ivs.is_empty():
+		lines.append("\n[font_size=10][color=#8ea8bd]TRAINING[/color][/font_size]")
+		if not evs.is_empty(): lines.append("[color=#8ea8bd]EVs[/color]  %s" % evs)
+		if not ivs.is_empty(): lines.append("[color=#8ea8bd]IVs[/color]  %s" % ivs)
+	pokemon_preview_details.text = "\n".join(lines)
 
 func _paste_preview_data() -> Dictionary:
 	var result := {"species": "", "ability": "", "tera": "", "evs": "", "ivs": "", "nature": "", "moves": []}

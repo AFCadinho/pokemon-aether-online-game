@@ -74,10 +74,13 @@ func _run() -> void:
 	pokemon_workspace.service = FakeRentalService.new()
 	pokemon_workspace.add_child(pokemon_workspace.service)
 	pokemon_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
-	pokemon_workspace.pokemon_paste.text = "Scizor\nAbility: Technician\n- Bullet Punch"
+	pokemon_workspace.pokemon_paste.text = "Scizor\nAbility: Technician\nEVs: 252 Atk / 4 SpD / 252 Spe\n- Bullet Punch"
 	pokemon_workspace._update_pokemon_preview()
 	assert(pokemon_workspace.pokemon_preview_species.text == "Scizor")
-	assert(pokemon_workspace.pokemon_preview_details.text.contains("Ability:[/color] Technician"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("BUILD"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("ABILITY[/color]  Technician"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("MOVES"))
+	assert(pokemon_workspace.pokemon_preview_details.text.contains("TRAINING"))
 	assert(pokemon_workspace.pokemon_preview_details.text.contains("Bullet Punch"))
 	pokemon_workspace._refresh_builder_actions()
 	assert(not pokemon_workspace.quote_button.disabled)

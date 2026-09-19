@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokémon rental builder's live preview now groups identity, build details, moves and training into a compact, scan-friendly card.
+
 - Pokémon rental quotes now use a structured review card with a sprite, rarity, readable moves and stat spreads, and separate rental and permanent-price summaries.
 
 - The Team Rental and Pokémon Rental attendants now have shorter labels and can be spoken to normally from across their lobby counter.
