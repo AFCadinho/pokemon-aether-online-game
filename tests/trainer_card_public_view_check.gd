@@ -93,8 +93,17 @@ func _run() -> void:
 		var companion_dialog := overlay.find_child("TrainerCardCompanionPicker", true, false) as ConfirmationDialog
 		_check(companion_dialog != null and companion_dialog.borderless, "companion picker uses the Trainer Card shell instead of the default dialog title bar")
 		var picker := overlay.find_child("OwnedCompanions", true, false) as ItemList
-		picker.set_meta("owned_companions", [{"species": "charizard", "shiny": false}, {"species": "pikachu", "shiny": true}])
+		picker.set_meta("owned_companions", [
+			{"species": "articuno", "shiny": false}, {"species": "charizard", "shiny": false},
+			{"species": "dragonite", "shiny": false}, {"species": "garchomp", "shiny": false},
+			{"species": "lucario", "shiny": false}, {"species": "magikarp", "shiny": false},
+			{"species": "mew", "shiny": false}, {"species": "pikachu", "shiny": false},
+			{"species": "rattata", "shiny": false}, {"species": "scizor", "shiny": false},
+			{"species": "starly", "shiny": false}, {"species": "tyranitar", "shiny": false},
+			{"species": "zapdos", "shiny": false}, {"species": "greninja", "shiny": true},
+		])
 		overlay.call("_fill_trainer_card_companions", picker, "")
+		_check(picker.get_v_scroll_bar().custom_minimum_size.x >= 10.0, "companion picker reserves a visible scrollbar rail")
 		for frame in range(5):
 			await process_frame
 		await RenderingServer.frame_post_draw
