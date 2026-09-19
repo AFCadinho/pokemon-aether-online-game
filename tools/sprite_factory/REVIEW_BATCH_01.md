@@ -244,6 +244,24 @@ probe cannot silently hide this class of facial-state problem. The corrected
 normal full-action build contains 1,770 frames, passed factory QC with zero
 errors/warnings, and remains `needs_review`.
 
+A wider closed-eye review then identified Arcanine, Charmander, Diglett,
+Gengar, Jigglypuff, Psyduck, Roaring Moon, Scizor, Scyther, Tauros,
+Typhlosion and Voltorb. This was not accidental use of their sleep actions:
+the selected battle/default-wait actions are distinct from `sleep01_loop`, but
+omit eyelid tracks and therefore exposed the same closed bind-pose inheritance.
+The batch configuration now assigns reviewed official open-eye donors. Most use
+`00010_defaultidle01`; Roaring Moon uses `20010_defaultidle01`, Psyduck uses
+`10010_defaultidle01`, and Gengar uses frame zero of `08000_eye01` because its
+default-idle actions contain no eyelid tracks. Fresh isolated front/back probes
+show all twelve with open/alert eyes and zero factory QC errors. Gengar,
+Jigglypuff and Diglett also use the same moderate data-defined lighting lift as
+the accepted SCVI presentation reference; their faces and body volume remain
+readable without changing textures or shader code. Diglett retains a
+conservative inherited-root-eyelid diagnostic for non-idle actions even though
+the visible child-eyelid pose is open, so its complete action render still
+requires human review. No complete 512x512 action render was started from this
+probe pass, and all affected variants remain `needs_review`.
+
 The battle client applies one shared `1.30` display multiplier to every asset
 loaded through the rendered-sprite resolver. Species/form scale ratios and
 front/back manifest differences remain intact, while the whole rendered cast
