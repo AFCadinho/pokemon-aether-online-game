@@ -231,6 +231,14 @@ func _ready() -> void:
 	_apply_visual_style()
 	_apply_locale()
 	_populate_language_options()
+	var mods_button := Button.new()
+	mods_button.text = LauncherLocalization.text("Mods")
+	game_folder_button.get_parent().add_child(mods_button)
+	_apply_button_style(mods_button, false)
+	mods_button.pressed.connect(_open_content_packs)
+	LauncherLocalization.locale_changed.connect(func(_new_locale: String) -> void:
+		mods_button.text = LauncherLocalization.text("Mods")
+	)
 	home_button.pressed.connect(_show_home)
 	diagnostics_button.pressed.connect(_show_diagnostics)
 	diagnostics_back_button.pressed.connect(_show_home)
@@ -817,6 +825,30 @@ func _on_install_folder_selected(selected_path: String) -> void:
 
 
 func _create_game_process(absolute_executable_path: String) -> int:
+	# The launcher and game have different user:// roots. Share one explicit path.
+	var had_value := OS.has_environment("POKEAETHER_MODS_DIR")
+	var previous := OS.get_environment("POKEAETHER_MODS_DIR")
+	OS.set_environment("POKEAETHER_MODS_DIR", ProjectSettings.globalize_path("user://mods"))
+	var process_id := _create_game_process_with_mods(absolute_executable_path)
+	if had_value:
+		OS.set_environment("POKEAETHER_MODS_DIR", previous)
+	else:
+		OS.unset_environment("POKEAETHER_MODS_DIR")
+	return process_id
+
+
+func _open_content_packs() -> void:
+	var panel := preload("res://scripts/content_packs_panel.gd").new()
+	add_child(panel)
+	panel.setup(LauncherLocalization.text)
+	panel.popup_centered()
+	panel.visibility_changed.connect(func() -> void:
+		if not panel.visible:
+			panel.queue_free()
+	)
+
+
+func _create_game_process_with_mods(absolute_executable_path: String) -> int:
 	var game_dir: String = absolute_executable_path.get_base_dir()
 	var executable_name: String = absolute_executable_path.get_file()
 	var os_name: String = OS.get_name()

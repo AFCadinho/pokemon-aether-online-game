@@ -5,6 +5,7 @@ extends Control
 const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const AnimationWait := preload("res://scripts/battle/battle_animation_wait.gd")
 const DratiniHdPoc := preload("res://scripts/battle/battle_ui/dratini_hd_poc.gd")
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 const RenderedSpriteAssets := preload("res://scripts/battle/battle_ui/rendered_sprite_assets.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
@@ -1239,6 +1240,14 @@ func _load_sprite_frames(
 	is_shiny: bool = false,
 	report_missing: bool = true
 ) -> SpriteFrames:
+	var mod_frames := ContentPacks.battle_frames(species, side, is_shiny)
+	if mod_frames != null:
+		var mod_scale := float(mod_frames.get_meta("content_pack_scale", 1.0))
+		_set_sprite_frames_render_scale(mod_frames, 1.0 / mod_scale)
+		_set_sprite_frames_display_scale_multiplier(mod_frames, mod_scale)
+		_set_sprite_frames_anchor(mod_frames, mod_frames.get_meta("content_pack_anchor"), mod_frames.get_meta("content_pack_cell"))
+		_set_sprite_frames_position_offset(mod_frames, mod_frames.get_meta("content_pack_offset"))
+		return mod_frames
 	var rendered := RenderedSpriteAssets.load_frames(species, side, is_shiny)
 	if rendered != null:
 		var present: Dictionary = rendered.get_meta("rendered_presentation", {})

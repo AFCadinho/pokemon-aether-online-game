@@ -151,5 +151,18 @@
 	"Could not start launcher updater script.": "Não foi possível iniciar o script de atualização.",
 	"Downloaded launcher file could not be opened.": "Não foi possível abrir o arquivo baixado do inicializador.",
 	"Launcher update file path is missing.": "O caminho do arquivo de atualização está ausente.",
-	"Launcher updater stopped before applying the update.": "O atualizador parou antes de aplicar a atualização."
+	"Launcher updater stopped before applying the update.": "O atualizador parou antes de aplicar a atualização.",
+	"Mods": "Mods",
+	"Discover": "Descobrir",
+	"Installed": "Instalados",
+	"Import pack": "Importar pacote",
+	"Open mods folder": "Abrir pasta de mods",
+	"Refresh": "Atualizar",
+	"Move up": "Mover para cima",
+	"The official pack catalog is not available yet. You can already import community packs in Installed.": "O catálogo oficial ainda não está disponível. Você já pode importar pacotes da comunidade em Instalados.",
+	"Changes apply at the next game start. The first enabled pack has priority.": "As alterações serão aplicadas ao iniciar o jogo novamente. O primeiro pacote ativo tem prioridade.",
+	"No packs installed. Import a zip or place a pack in the mods folder.": "Nenhum pacote instalado. Importe um zip ou coloque um pacote na pasta de mods.",
+	"Could not save pack selection.": "Não foi possível salvar a seleção.",
+	"Pack imported. Enable it to use it on the next game start.": "Pacote importado. Ative-o para usar ao iniciar o jogo novamente.",
+	"Could not import pack:": "Não foi possível importar o pacote:"
 }

@@ -1,0 +1,27 @@
+{
+  "format_version": 1,
+  "id": "my-pikachu-pack",
+  "name": "My Pikachu Pack",
+  "version": "1.0.0",
+  "author": "Your name",
+  "description": "Custom Pikachu artwork and voice.",
+  "assets": {
+    "battle_sprites": {
+      "pikachu:front:normal": {
+        "file": "sprites/pikachu-front.png",
+        "columns": 4,
+        "rows": 1,
+        "frames": 4,
+        "fps": 10,
+        "scale": 1,
+        "offset": [0, 0]
+      }
+    },
+    "followers": {
+      "pikachu:normal": {"file": "followers/pikachu.png"}
+    },
+    "cries": {
+      "pikachu": {"file": "cries/pikachu.ogg"}
+    }
+  }
+}

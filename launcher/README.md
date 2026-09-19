@@ -4,6 +4,10 @@ Small Godot launcher project for PokeAether.
 
 ## Current flow
 
+Local cosmetic packs are managed through the **Mods** button. See
+[Content packs v1](../docs/content-packs.md) for the format, player instructions,
+and the planned official catalog. The Discover tab is not connected to a feed yet.
+
 1. Downloads `manifest.json`.
 2. Compares remote versions with `user://versions.json`.
 3. Downloads files of at least 8 MiB over four bounded HTTP byte ranges in parallel.

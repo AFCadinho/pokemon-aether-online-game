@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name FollowerSpriteService
 
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const IDLE_ANIMATION_SPEED := 4.0
@@ -58,6 +59,9 @@ static func get_sprite_frames(species: String, shiny: bool) -> SpriteFrames:
 	return sprite_frames
 
 static func _load_texture_for_species(species: String, shiny: bool) -> Texture2D:
+	var mod_texture := ContentPacks.follower_texture(species, shiny)
+	if mod_texture != null:
+		return mod_texture
 	var candidates: Array[String] = _get_species_file_candidates(species)
 	var directories: Array[String] = []
 	if shiny:
