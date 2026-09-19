@@ -194,7 +194,11 @@ take precedence and require no per-species code. Cached actions currently remain
 resident for the process lifetime. PNG decoding is synchronous on first use and
 can hitch. These are known V1 optimization follow-ups, not reasons to reduce
 quality. Desktop local review is validated here; Android/web packaging and
-memory budgets need separate work before distribution.
+memory budgets need separate work before distribution. The four-species
+distribution-format measurements, tooling, visual comparisons, and guarded
+recommendation are documented in
+[DISTRIBUTION_FORMAT_BENCHMARK.md](DISTRIBUTION_FORMAT_BENCHMARK.md); that
+benchmark does not change the runtime default.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.
