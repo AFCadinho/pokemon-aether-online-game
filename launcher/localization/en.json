@@ -164,5 +164,6 @@
 	"No packs installed. Import a zip or place a pack in the mods folder.": "No packs installed. Import a zip or place a pack in the mods folder.",
 	"Could not save pack selection.": "Could not save pack selection.",
 	"Pack imported. Enable it to use it on the next game start.": "Pack imported. Enable it to use it on the next game start.",
-	"Could not import pack:": "Could not import pack:"
+	"Could not import pack:": "Could not import pack:",
+	"Close": "Close"
 }

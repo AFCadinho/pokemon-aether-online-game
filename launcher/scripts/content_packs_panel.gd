@@ -36,8 +36,6 @@ func _apply_button_style(button: Button, primary: bool = false) -> void:
 
 func _apply_style() -> void:
 	add_theme_stylebox_override("panel", _style(Color(0.025, 0.04, 0.078, 0.99), Color(0.41, 0.25, 0.76, 0.95), 16, 1))
-	add_theme_color_override("title_color", Color(0.96, 0.93, 1.0, 1.0))
-	add_theme_font_size_override("title_font_size", 20)
 
 	tabs.add_theme_stylebox_override("panel", _style(Color(0.017, 0.027, 0.052, 0.95), Color(0.15, 0.24, 0.38, 0.95), 12, 1))
 	tabs.add_theme_stylebox_override("tab_selected", _style(Color(0.27, 0.14, 0.54, 1.0), Color(0.66, 0.42, 1.0, 0.95), 8, 1))
@@ -52,13 +50,34 @@ func _apply_style() -> void:
 
 func setup(translator: Callable) -> void:
 	translate = translator
-	title = translate.call("Mods")
+	# AcceptDialog's built-in title bar is Godot-themed and cannot be styled.
+	# Use a borderless window and render the launcher-styled header ourselves.
+	borderless = true
+	title = ""
 	size = Vector2i(740, 520)
 	min_size = Vector2i(640, 440)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 12)
 	layout.custom_minimum_size = Vector2(680, 420)
 	add_child(layout)
+	var header := HBoxContainer.new()
+	header.custom_minimum_size.y = 34
+	layout.add_child(header)
+	var heading := Label.new()
+	heading.text = translate.call("Mods")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading.add_theme_font_size_override("font_size", 20)
+	heading.add_theme_color_override("font_color", Color(0.96, 0.93, 1.0, 1.0))
+	header.add_child(heading)
+	var close_button := Button.new()
+	close_button.text = "×"
+	close_button.tooltip_text = translate.call("Close")
+	close_button.custom_minimum_size = Vector2(36, 34)
+	close_button.add_theme_font_size_override("font_size", 24)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+	close_button.pressed.connect(hide)
 	tabs = TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(tabs)
