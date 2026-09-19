@@ -12,7 +12,7 @@ class FakeRentalService extends Node:
 		var pokemon: Array = []
 		for species: String in ["garchomp", "rotom-wash", "scizor", "dragonite", "gengar", "tyranitar"]:
 			pokemon.append({"species": species, "nature": "Jolly", "ability": "pressure", "item": "leftovers", "moves": ["protect", "substitute", "toxic", "earthquake"], "evs": {"hp": 252, "spe": 252}, "ivs": {"hp": 31}} if detail else {"species": species})
-		return {"offerId": "test", "teamId": "test", "displayName": "Test Balance", "archetype": "balance", "eligibleTierIds": ["aether-ou"], "pokemon": pokemon}
+		return {"offerId": "test", "teamId": "test", "displayName": "Test Balance", "archetype": "balance", "eligibleTierIds": ["aether-ou", "aether-uu", "aether-ubers"], "pokemon": pokemon}
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -31,7 +31,11 @@ func _run() -> void:
 	team_workspace._render_active()
 	assert(team_workspace.team_catalog.results.get_child_count() == 1)
 	assert(team_workspace.team_catalog.archetype_filter.item_count == 2)
-	assert(team_workspace.team_catalog.tier_filter.item_count == 2)
+	assert(team_workspace.team_catalog.tier_filter.item_count == 3)
+	assert(team_workspace.team_catalog.tier_filter.get_item_text(1) == "AETHER OU")
+	assert(team_workspace.team_catalog.tier_filter.get_item_text(2) == "AETHER UU")
+	for index: int in range(team_workspace.team_catalog.tier_filter.item_count):
+		assert(team_workspace.team_catalog.tier_filter.get_item_text(index) != "AETHER UBERS")
 	assert(team_workspace.team_catalog.action_bar.get_child_count() == 2)
 	assert(team_workspace.team_catalog.archetype_filter.get_popup().has_theme_stylebox_override("panel"))
 	assert(team_workspace.duration.get_popup().has_theme_stylebox_override("panel"))

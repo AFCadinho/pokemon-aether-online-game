@@ -9,6 +9,7 @@ const MUTED := Color("#8ea8bd")
 const CYAN := Color("#62d5ff")
 const GOLD := Color("#f5df9a")
 const PURPLE := Color("#c9beff")
+const FILTER_TIER_IDS: Array[String] = ["aether-ou", "aether-uu"]
 
 var offers: Array[Dictionary] = []
 var selected_offer_id := ""
@@ -179,7 +180,7 @@ func _rebuild_filters() -> void:
 			archetypes.append(archetype)
 		for tier_value: Variant in _array(offer.get("eligibleTierIds", [])):
 			var tier := str(tier_value)
-			if tier not in tiers:
+			if tier in FILTER_TIER_IDS and tier not in tiers:
 				tiers.append(tier)
 	archetypes.sort()
 	tiers.sort()

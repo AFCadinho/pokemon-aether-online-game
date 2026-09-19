@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Team rental tier filtering is limited to Aether OU and Aether UU.
+
 - Rental windows, tabs, builder fields, dropdown menus and close controls now consistently use the Aether interface styling.
 
 - Pokémon rentals can now be built from a PokéPaste set or manual fields, with server-validated rarity pricing.
