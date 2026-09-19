@@ -7,9 +7,20 @@ import io
 from pathlib import Path
 from PIL import Image, PngImagePlugin
 import factory as f
+from factory import portrait_bounds
 
 
 class FactoryTests(unittest.TestCase):
+    def test_portrait_focus_ignores_sparse_extremities_and_transparent_rgb(self):
+        im = Image.new('RGBA', (512, 512), (240, 180, 80, 0))
+        im.paste((30, 80, 150, 255), (210, 180, 310, 330))
+        im.paste((30, 80, 150, 255), (20, 200, 492, 204))
+        focus = portrait_bounds([im, im])
+        self.assertGreater(focus[0], 210)
+        self.assertLess(focus[0] + focus[2], 310)
+        self.assertEqual(focus, portrait_bounds([im]))
+        self.assertIsNone(portrait_bounds([Image.new('RGBA', (512, 512))]))
+
     def setUp(self):
         self.cfg = f.read(f.HERE / 'manifests/rattata.json')
 

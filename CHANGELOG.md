@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Summary and Pokédex give rendered Pokémon a closer, stable portrait framing, so wide wings and long tails have less influence on the visible body size.
+
 - Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
 
 - The Trainer Card overview now fills its lower space neatly and aligns the Trainer Title selector with the other profile values.

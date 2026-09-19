@@ -20,6 +20,35 @@ VERSION = 1
 CATEGORIES = {'idle', 'physical_attack', 'special_attack', 'damage', 'sleep', 'faint_start', 'faint_loop'}
 
 
+def portrait_bounds(images):
+    """Fixed 15–85% alpha-mass focus over idle; a heuristic, not anatomy."""
+    axes = [[0.0] * 512, [0.0] * 512]
+    for image in images:
+        alpha = image.getchannel('A')
+        for axis, size in enumerate(((512, 1), (1, 512))):
+            projection = list(alpha.resize(size, Image.Resampling.BOX).tobytes())
+            total = sum(projection)
+            if total:
+                for index, value in enumerate(projection):
+                    axes[axis][index] += value / total
+    bounds = []
+    for projection in axes:
+        total = sum(projection)
+        if not total:
+            return None
+        cumulative = 0.0
+        low = high = None
+        for index, value in enumerate(projection):
+            cumulative += value
+            if low is None and cumulative >= total * 0.15:
+                low = index
+            if cumulative >= total * 0.85:
+                high = index + 1
+                break
+        bounds.append((low, high))
+    return [bounds[0][0], bounds[1][0], bounds[0][1] - bounds[0][0], bounds[1][1] - bounds[1][0]]
+
+
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -382,6 +411,11 @@ def package(root, cfg, variant):
                 status='needs_review' if spec['review'] != 'rejected' else 'rejected', source_action=spec['action'],
                 visual_bounds=visual_bounds)
             if action == 'idle':
+                def idle_images():
+                    for path in paths:
+                        with Image.open(path) as image:
+                            yield image
+                runtime_action['portrait_bounds'] = portrait_bounds(idle_images())
                 preview_name = f'{view}/idle-preview.png'
                 preview_destination = runtime / preview_name
                 preview_destination.write_bytes(canonical_png(paths[0].read_bytes()))

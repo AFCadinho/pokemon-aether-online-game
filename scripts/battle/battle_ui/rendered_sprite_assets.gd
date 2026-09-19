@@ -44,6 +44,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("hd_poc_fps", float(manifest.get("fps", 0)))
 	if not ensure_action_loaded(frames, "idle"):
 		return null
+	frames.set_meta("rendered_portrait_bounds", _rect_from_array((actions.get("idle", {}) as Dictionary).get("portrait_bounds", [])))
 	_remember_frames(cache_key, frames, false)
 	return frames
 
@@ -92,6 +93,7 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	frames.add_frame("idle", ImageTexture.create_from_image(im))
 	frames.set_meta("rendered_asset", true)
 	frames.set_meta("rendered_static_preview", true)
+	frames.set_meta("rendered_portrait_bounds", _rect_from_array(idle.get("portrait_bounds", [])))
 	frames.set_meta("rendered_actions", {})
 	frames.set_meta("rendered_root", path.get_base_dir())
 	frames.set_meta("rendered_preview", preview)
@@ -142,6 +144,7 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 	frames.set_animation_loop("idle", false)
 	var visual_bounds := _rect_from_array(idle.get("visual_bounds", []))
 	var has_declared_bounds := visual_bounds.has_area()
+	frames.set_meta("rendered_portrait_bounds", _rect_from_array(idle.get("portrait_bounds", [])))
 	var uploaded := 0
 	for page_index: int in pages.size():
 		while _active_preview_decodes >= 2:
