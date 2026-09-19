@@ -164,5 +164,17 @@
   "No packs installed. Import a zip or place a pack in the mods folder.": "尚未安装资源包。请导入 zip 文件或将资源包放入模组文件夹。",
   "Could not save pack selection.": "无法保存资源包选择。",
   "Pack imported. Enable it to use it on the next game start.": "资源包已导入。启用后将在下次启动游戏时使用。",
-  "Could not import pack:": "无法导入资源包："
+  "Could not import pack:": "无法导入资源包：",
+  "Close": "关闭",
+  "Loading official packs...": "正在加载官方资源包…",
+  "Official packs are unavailable. You can still import a local pack.": "官方资源包暂不可用。你仍可导入本地资源包。",
+  "Official pack catalog is invalid.": "官方资源包目录无效。",
+  "No official packs are available yet.": "暂时没有可用的官方资源包。",
+  "Install": "安装",
+  "Update": "更新",
+  "Downloading {name}...": "正在下载 {name}…",
+  "Could not start the pack download.": "无法开始下载资源包。",
+  "Pack installed. Enable it from Installed and restart the game.": "资源包已安装。请在“已安装”中启用并重启游戏。",
+  "Could not install pack:": "无法安装资源包：",
+  "Pack download failed. Try again later.": "资源包下载失败，请稍后重试。"
 }

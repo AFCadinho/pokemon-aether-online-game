@@ -164,5 +164,17 @@
 	"No packs installed. Import a zip or place a pack in the mods folder.": "Nenhum pacote instalado. Importe um zip ou coloque um pacote na pasta de mods.",
 	"Could not save pack selection.": "Não foi possível salvar a seleção.",
 	"Pack imported. Enable it to use it on the next game start.": "Pacote importado. Ative-o para usar ao iniciar o jogo novamente.",
-	"Could not import pack:": "Não foi possível importar o pacote:"
+	"Could not import pack:": "Não foi possível importar o pacote:",
+	"Close": "Fechar",
+	"Loading official packs...": "Carregando pacotes oficiais...",
+	"Official packs are unavailable. You can still import a local pack.": "Os pacotes oficiais estão indisponíveis. Você ainda pode importar um pacote local.",
+	"Official pack catalog is invalid.": "O catálogo oficial de pacotes é inválido.",
+	"No official packs are available yet.": "Ainda não há pacotes oficiais disponíveis.",
+	"Install": "Instalar",
+	"Update": "Atualizar",
+	"Downloading {name}...": "Baixando {name}...",
+	"Could not start the pack download.": "Não foi possível iniciar o download do pacote.",
+	"Pack installed. Enable it from Installed and restart the game.": "Pacote instalado. Ative-o em Instalados e reinicie o jogo.",
+	"Could not install pack:": "Não foi possível instalar o pacote:",
+	"Pack download failed. Try again later.": "Falha no download do pacote. Tente novamente mais tarde."
 }

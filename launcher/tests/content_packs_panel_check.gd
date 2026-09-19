@@ -24,10 +24,21 @@ func run() -> void:
 	panel.store = store
 	root.add_child(panel)
 	panel.setup(manager.text)
+	var valid_catalog := {"format_version": 1, "packs": [{
+		"id": "anime-cries", "name": "Anime Cries", "version": "1", "author": "PokeAether",
+		"download": {"url": "https://updates.example/anime.zip", "size_bytes": 123, "sha256": "a".repeat(64)},
+	}]}
+	check(PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog validates a checksum-backed pack")
+	panel.official_packs = [valid_catalog.packs[0].duplicate(true)]
+	panel._render_catalog()
+	check(panel.discover_rows.get_child_count() == 1, "official pack is rendered in Discover")
+	panel.tabs.current_tab = 0
+	valid_catalog.packs[0].download.sha256 = "invalid"
+	check(not PacksPanel.validate_catalog(valid_catalog).is_empty(), "official catalog rejects invalid checksums")
 	check(panel.tabs.get_tab_title(0) == "Ontdekken", "discover localized")
 	check(panel.tabs.get_tab_title(1) == "Geïnstalleerd", "installed localized")
 	check(panel.rows.get_child_count() == 1, "installed pack shown")
-	var toggle := panel.rows.get_child(0).get_child(0) as CheckBox
+	var toggle := panel.rows.get_child(0).get_child(0).get_child(0) as CheckBox
 	check(toggle != null and not toggle.button_pressed, "pack initially disabled")
 	toggle.button_pressed = true
 	await process_frame

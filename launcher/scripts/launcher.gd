@@ -8,6 +8,7 @@ const LauncherAssetPackIntegrity := preload("res://scripts/asset_pack_integrity.
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
+const DEFAULT_CONTENT_PACK_CATALOG_URL := "https://updates.pokeaether.com/data/content-packs.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
@@ -128,6 +129,7 @@ var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
+var content_pack_catalog_url := DEFAULT_CONTENT_PACK_CATALOG_URL
 var server_status_url := LauncherServerHealthService.DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
@@ -840,7 +842,7 @@ func _create_game_process(absolute_executable_path: String) -> int:
 func _open_content_packs() -> void:
 	var panel := preload("res://scripts/content_packs_panel.gd").new()
 	add_child(panel)
-	panel.setup(LauncherLocalization.text)
+	panel.setup(LauncherLocalization.text, content_pack_catalog_url)
 	panel.popup_centered()
 	panel.visibility_changed.connect(func() -> void:
 		if not panel.visible:
@@ -2471,6 +2473,9 @@ func _load_launcher_config() -> void:
 	var configured_news_url := str(config.get("newsUrl", ""))
 	if not configured_news_url.is_empty():
 		news_url = configured_news_url
+	var configured_content_pack_catalog_url := str(config.get("contentPackCatalogUrl", ""))
+	if not configured_content_pack_catalog_url.is_empty():
+		content_pack_catalog_url = configured_content_pack_catalog_url
 	var configured_status_url := str(config.get("statusUrl", config.get("healthUrl", "")))
 	if not configured_status_url.is_empty():
 		server_status_url = configured_status_url
@@ -2479,6 +2484,7 @@ func _load_launcher_config() -> void:
 		presence_url = configured_presence_url
 	manifest_url = _normalize_url(manifest_url)
 	news_url = _normalize_url(news_url)
+	content_pack_catalog_url = _normalize_url(content_pack_catalog_url)
 	server_status_url = _normalize_url(server_status_url)
 	presence_url = _normalize_url(presence_url)
 	if manifest_url.is_empty():

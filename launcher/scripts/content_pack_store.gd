@@ -3,8 +3,8 @@ extends RefCounted
 const FORMAT_VERSION := 1
 const MAX_JSON_BYTES := 2 * 1024 * 1024
 const MAX_FILE_BYTES := 64 * 1024 * 1024
-const MAX_PACK_BYTES := 512 * 1024 * 1024
-const CATEGORIES := ["cries", "battle_sprites", "followers"]
+const MAX_PACK_BYTES := 2 * 1024 * 1024 * 1024
+const CATEGORIES := ["cries", "battle_sprites", "followers", "sprite_collections"]
 var root: String
 var errors: PackedStringArray = []
 
@@ -49,9 +49,15 @@ static func validate(manifest: Dictionary) -> String:
 			return "Unsupported asset category."
 		for key: String in manifest.assets[category]:
 			var entry: Variant = manifest.assets[category][key]
-			if not entry is Dictionary or not entry.get("file") is String:
+			if not entry is Dictionary:
 				return "Invalid asset entry."
-			if not safe_relative(entry.file):
+			if category == "sprite_collections":
+				if not entry.get("directory") is String or not safe_relative(entry.directory):
+					return "Invalid sprite collection directory."
+				if str(entry.get("style", "")) != "gen5":
+					return "Unsupported sprite collection style."
+				continue
+			if not entry.get("file") is String or not safe_relative(entry.file):
 				return "Unsafe asset path."
 			if str(entry.file).get_extension() != ("ogg" if category == "cries" else "png"):
 				return "Unsupported asset file type."
@@ -86,6 +92,18 @@ func asset_path(pack_id: String, relative: String) -> String:
 			return ""
 		current = current.path_join(part)
 	return current if FileAccess.file_exists(current) else ""
+
+
+func asset_directory(pack_id: String, relative: String) -> String:
+	if not valid_id(pack_id) or not safe_relative(relative):
+		return ""
+	var current := root
+	for part in (pack_id + "/" + relative).split("/"):
+		var directory := DirAccess.open(current)
+		if directory == null or directory.is_link(part):
+			return ""
+		current = current.path_join(part)
+	return current if DirAccess.dir_exists_absolute(current) else ""
 
 func installed() -> Array[Dictionary]:
 	errors.clear()
@@ -149,7 +167,26 @@ func candidates(category: String, key: String) -> Array[Dictionary]:
 				result.append(candidate)
 	return result
 
-func import_zip(path: String) -> String:
+
+func sprite_collection_directories() -> Array[String]:
+	var packs: Dictionary = {}
+	for pack in installed():
+		packs[pack.id] = pack
+	var result: Array[String] = []
+	for pack_id in enabled_ids():
+		var collections: Variant = packs.get(pack_id, {}).get("assets", {}).get("sprite_collections", {})
+		if not collections is Dictionary:
+			continue
+		for entry_value: Variant in collections.values():
+			if not entry_value is Dictionary:
+				continue
+			var entry := entry_value as Dictionary
+			var directory := asset_directory(pack_id, str(entry.get("directory", "")))
+			if not directory.is_empty() and not directory in result:
+				result.append(directory)
+	return result
+
+func import_zip(path: String, replace_existing: bool = false) -> String:
 	var zip_error := _check_zip_sizes(path)
 	if not zip_error.is_empty():
 		return zip_error
@@ -171,14 +208,19 @@ func import_zip(path: String) -> String:
 		reader.close()
 		return error
 	var destination := root.path_join(manifest.id)
-	if DirAccess.dir_exists_absolute(destination) or FileAccess.file_exists(destination):
+	var destination_exists := DirAccess.dir_exists_absolute(destination) or FileAccess.file_exists(destination)
+	if destination_exists and not replace_existing:
 		reader.close()
 		return "This pack ID is already installed."
 	var payloads: Dictionary = {"mod.json": true}
+	var collection_directories: Array[String] = []
 	var total := 0
 	# Only declared PNG/Ogg assets are extracted; scripts and other zip entries are ignored.
 	for category: String in manifest.assets:
 		for entry: Dictionary in manifest.assets[category].values():
+			if category == "sprite_collections":
+				collection_directories.append(str(entry.directory) + "/")
+				continue
 			var relative: String = entry.file
 			if payloads.has(relative):
 				continue
@@ -186,6 +228,13 @@ func import_zip(path: String) -> String:
 				reader.close()
 				return "Missing asset: " + relative
 			payloads[relative] = true
+	for archived_path: String in files:
+		if archived_path == "mod.json" or payloads.has(archived_path):
+			continue
+		for directory: String in collection_directories:
+			if archived_path.begins_with(directory) and archived_path.get_extension() in ["png", "json"]:
+				payloads[archived_path] = true
+				break
 	if DirAccess.make_dir_recursive_absolute(root) != OK:
 		reader.close()
 		return "Cannot create mods folder."
@@ -215,9 +264,19 @@ func import_zip(path: String) -> String:
 			reader.close()
 			return "Cannot finish writing pack."
 	reader.close()
+	var backup := ""
+	if destination_exists:
+		backup = destination + ".backup-" + str(Time.get_ticks_usec())
+		if DirAccess.rename_absolute(destination, backup) != OK:
+			_remove_staging(staging, payloads)
+			return "Cannot prepare pack update."
 	if DirAccess.rename_absolute(staging, destination) != OK:
+		if not backup.is_empty():
+			DirAccess.rename_absolute(backup, destination)
 		_remove_staging(staging, payloads)
 		return "Cannot install pack."
+	if not backup.is_empty():
+		_remove_tree(backup)
 	return ""
 
 func _remove_staging(staging: String, payloads: Dictionary) -> void:
@@ -229,6 +288,17 @@ func _remove_staging(staging: String, payloads: Dictionary) -> void:
 			DirAccess.remove_absolute(parent)
 			parent = parent.get_base_dir()
 	DirAccess.remove_absolute(staging)
+
+
+func _remove_tree(path: String) -> void:
+	var directory := DirAccess.open(path)
+	if directory == null:
+		return
+	for file in directory.get_files():
+		DirAccess.remove_absolute(path.path_join(file))
+	for child in directory.get_directories():
+		_remove_tree(path.path_join(child))
+	DirAccess.remove_absolute(path)
 
 # Inspect central-directory sizes before ZIPReader allocates decompressed buffers.
 # ZIP64, multipart and encrypted archives are deliberately outside format v1.

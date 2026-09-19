@@ -164,5 +164,17 @@
 	"No packs installed. Import a zip or place a pack in the mods folder.": "No packs installed. Import a zip or place a pack in the mods folder.",
 	"Could not save pack selection.": "Could not save pack selection.",
 	"Pack imported. Enable it to use it on the next game start.": "Pack imported. Enable it to use it on the next game start.",
-	"Could not import pack:": "Could not import pack:"
+	"Could not import pack:": "Could not import pack:",
+	"Close": "Close",
+	"Loading official packs...": "Loading official packs...",
+	"Official packs are unavailable. You can still import a local pack.": "Official packs are unavailable. You can still import a local pack.",
+	"Official pack catalog is invalid.": "Official pack catalog is invalid.",
+	"No official packs are available yet.": "No official packs are available yet.",
+	"Install": "Install",
+	"Update": "Update",
+	"Downloading {name}...": "Downloading {name}...",
+	"Could not start the pack download.": "Could not start the pack download.",
+	"Pack installed. Enable it from Installed and restart the game.": "Pack installed. Enable it from Installed and restart the game.",
+	"Could not install pack:": "Could not install pack:",
+	"Pack download failed. Try again later.": "Pack download failed. Try again later."
 }

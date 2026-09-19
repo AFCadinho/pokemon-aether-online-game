@@ -1,50 +1,133 @@
 extends AcceptDialog
 const Store := preload("res://scripts/content_pack_store.gd")
+const DownloadService := preload("res://scripts/resumable_download_service.gd")
 var store := Store.new()
 var rows: VBoxContainer
+var discover_rows: VBoxContainer
 var status: Label
+var catalog_status: Label
 var picker: FileDialog
 var tabs: TabContainer
 var translate: Callable
+var catalog_request: HTTPRequest
+var download_service: ResumableDownloadService
+var official_packs: Array[Dictionary] = []
+var active_official_pack: Dictionary = {}
 
-func setup(translator: Callable) -> void:
+
+func _style(color: Color, border: Color = Color(0, 0, 0, 0), radius: int = 8, width: int = 0) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = color
+	box.border_color = border
+	box.set_border_width_all(width)
+	box.set_corner_radius_all(radius)
+	box.content_margin_left = 12
+	box.content_margin_right = 12
+	box.content_margin_top = 8
+	box.content_margin_bottom = 8
+	return box
+
+
+func _apply_button_style(button: Button, primary: bool = false) -> void:
+	var normal := Color(0.42, 0.20, 0.82, 1.0) if primary else Color(0.075, 0.10, 0.17, 1.0)
+	var hover := Color(0.55, 0.27, 0.98, 1.0) if primary else Color(0.14, 0.10, 0.27, 1.0)
+	var border := Color(0.68, 0.42, 1.0, 0.9) if primary else Color(0.24, 0.32, 0.48, 0.9)
+	button.add_theme_stylebox_override("normal", _style(normal, border, 8, 1))
+	button.add_theme_stylebox_override("hover", _style(hover, Color(0.68, 0.42, 1.0, 1.0), 8, 1))
+	button.add_theme_stylebox_override("pressed", _style(Color(0.08, 0.055, 0.16, 1.0), Color(0.76, 0.52, 1.0, 1.0), 8, 1))
+	button.add_theme_stylebox_override("disabled", _style(Color(0.055, 0.07, 0.12, 0.72), Color(0.16, 0.21, 0.33, 0.7), 8, 1))
+	button.add_theme_color_override("font_color", Color(0.94, 0.94, 1.0))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color(0.45, 0.48, 0.58, 1.0))
+
+
+func _apply_style() -> void:
+	add_theme_stylebox_override("panel", _style(Color(0.025, 0.04, 0.078, 0.99), Color(0.41, 0.25, 0.76, 0.95), 16, 1))
+
+	tabs.add_theme_stylebox_override("panel", _style(Color(0.017, 0.027, 0.052, 0.95), Color(0.15, 0.24, 0.38, 0.95), 12, 1))
+	tabs.add_theme_stylebox_override("tab_selected", _style(Color(0.27, 0.14, 0.54, 1.0), Color(0.66, 0.42, 1.0, 0.95), 8, 1))
+	tabs.add_theme_stylebox_override("tab_unselected", _style(Color(0.055, 0.075, 0.13, 1.0), Color(0.16, 0.22, 0.35, 0.9), 8, 1))
+	tabs.add_theme_stylebox_override("tab_hovered", _style(Color(0.14, 0.095, 0.27, 1.0), Color(0.52, 0.30, 0.96, 0.95), 8, 1))
+	tabs.add_theme_color_override("font_selected_color", Color(0.98, 0.96, 1.0, 1.0))
+	tabs.add_theme_color_override("font_unselected_color", Color(0.65, 0.69, 0.81, 1.0))
+	tabs.add_theme_color_override("font_hovered_color", Color(0.94, 0.90, 1.0, 1.0))
+
+	for control in [rows, discover_rows, status, catalog_status]:
+		if control == null:
+			continue
+		control.add_theme_color_override("font_color", Color(0.79, 0.83, 0.93, 1.0))
+
+
+func setup(translator: Callable, catalog_url: String = "") -> void:
 	translate = translator
-	title = translate.call("Mods")
+	# AcceptDialog's built-in title bar is Godot-themed and cannot be styled.
+	# Use a borderless window and render the launcher-styled header ourselves.
+	borderless = true
+	title = ""
 	size = Vector2i(740, 520)
+	min_size = Vector2i(640, 440)
 	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
 	layout.custom_minimum_size = Vector2(680, 420)
 	add_child(layout)
+	var header := HBoxContainer.new()
+	header.custom_minimum_size.y = 34
+	layout.add_child(header)
+	var heading := Label.new()
+	heading.text = translate.call("Mods")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading.add_theme_font_size_override("font_size", 20)
+	heading.add_theme_color_override("font_color", Color(0.96, 0.93, 1.0, 1.0))
+	header.add_child(heading)
+	var close_button := Button.new()
+	close_button.text = "×"
+	close_button.tooltip_text = translate.call("Close")
+	close_button.custom_minimum_size = Vector2(36, 34)
+	close_button.add_theme_font_size_override("font_size", 24)
+	_apply_button_style(close_button)
+	header.add_child(close_button)
+	close_button.pressed.connect(hide)
 	tabs = TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(tabs)
-	var discover := VBoxContainer.new()
+	var discover := ScrollContainer.new()
 	discover.name = "Discover"
+	discover.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tabs.add_child(discover)
 	tabs.set_tab_title(0, translate.call("Discover"))
-	var explanation := Label.new()
-	explanation.text = translate.call("The official pack catalog is not available yet. You can already import community packs in Installed.")
-	explanation.custom_minimum_size.x = 600
-	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	discover.add_child(explanation)
+	discover_rows = VBoxContainer.new()
+	discover_rows.add_theme_constant_override("separation", 8)
+	discover_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	discover.add_child(discover_rows)
+	catalog_status = Label.new()
+	catalog_status.custom_minimum_size.x = 600
+	catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	discover_rows.add_child(catalog_status)
 	var scroll := ScrollContainer.new()
 	scroll.name = "Installed"
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tabs.add_child(scroll)
 	tabs.set_tab_title(1, translate.call("Installed"))
 	rows = VBoxContainer.new()
+	rows.add_theme_constant_override("separation", 8)
 	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(rows)
 	tabs.current_tab = 1
 	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
 	layout.add_child(actions)
 	var import_button := Button.new()
 	import_button.text = translate.call("Import pack")
+	_apply_button_style(import_button, true)
 	actions.add_child(import_button)
 	var folder_button := Button.new()
 	folder_button.text = translate.call("Open mods folder")
+	_apply_button_style(folder_button)
 	actions.add_child(folder_button)
 	var refresh_button := Button.new()
 	refresh_button.text = translate.call("Refresh")
+	_apply_button_style(refresh_button)
 	actions.add_child(refresh_button)
 	refresh_button.pressed.connect(refresh)
 	folder_button.pressed.connect(func() -> void:
@@ -60,6 +143,7 @@ func setup(translator: Callable) -> void:
 	status.custom_minimum_size.x = 600
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(status)
+	_apply_style()
 	picker = FileDialog.new()
 	picker.access = FileDialog.ACCESS_FILESYSTEM
 	picker.file_mode = FileDialog.FILE_MODE_OPEN_FILE
@@ -67,7 +151,154 @@ func setup(translator: Callable) -> void:
 	add_child(picker)
 	import_button.pressed.connect(func() -> void: picker.popup_centered_ratio(0.75))
 	picker.file_selected.connect(_import)
+	catalog_request = HTTPRequest.new()
+	add_child(catalog_request)
+	catalog_request.request_completed.connect(_on_catalog_request_completed)
+	download_service = DownloadService.new()
+	add_child(download_service)
+	download_service.download_completed.connect(_on_official_pack_downloaded)
+	download_service.download_failed.connect(_on_official_pack_download_failed)
 	refresh()
+	_load_catalog(catalog_url)
+
+
+static func validate_catalog(candidate: Dictionary) -> String:
+	if int(candidate.get("format_version", 0)) != 1:
+		return "Unsupported content pack catalog."
+	var packs: Variant = candidate.get("packs", [])
+	if not packs is Array:
+		return "Catalog packs must be an array."
+	for pack_value: Variant in packs:
+		if not pack_value is Dictionary:
+			return "Catalog contains an invalid pack."
+		var pack := pack_value as Dictionary
+		for field in ["id", "name", "version", "author"]:
+			if not pack.get(field) is String or str(pack[field]).strip_edges().is_empty():
+				return "Catalog pack is missing " + field + "."
+		if not Store.valid_id(str(pack.id)):
+			return "Catalog contains an invalid pack ID."
+		var download: Variant = pack.get("download", {})
+		if not download is Dictionary:
+			return "Catalog pack has no download."
+		var item := download as Dictionary
+		if not bool(DownloadService.parse_http_url(str(item.get("url", ""))).get("valid", false)):
+			return "Catalog pack has an invalid download URL."
+		if int(item.get("size_bytes", 0)) <= 0 or int(item.get("size_bytes", 0)) > Store.MAX_PACK_BYTES:
+			return "Catalog pack has an invalid size."
+		var sha256 := str(item.get("sha256", "")).to_lower()
+		if sha256.length() != 64 or not sha256.is_valid_hex_number():
+			return "Catalog pack has an invalid checksum."
+	return ""
+
+
+func _load_catalog(url: String) -> void:
+	var normalized_url := url.strip_edges()
+	if normalized_url.is_empty():
+		catalog_status.text = translate.call("The official pack catalog is not available yet. You can already import community packs in Installed.")
+		return
+	catalog_status.text = translate.call("Loading official packs...")
+	var error := catalog_request.request(normalized_url, PackedStringArray(["Cache-Control: no-cache"]))
+	if error != OK:
+		catalog_status.text = translate.call("Official packs are unavailable. You can still import a local pack.")
+
+
+func _on_catalog_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		catalog_status.text = translate.call("Official packs are unavailable. You can still import a local pack.")
+		return
+	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if not parsed is Dictionary:
+		catalog_status.text = translate.call("Official pack catalog is invalid.")
+		return
+	var error := validate_catalog(parsed as Dictionary)
+	if not error.is_empty():
+		catalog_status.text = error
+		return
+	official_packs.clear()
+	for pack_value: Variant in (parsed as Dictionary).packs:
+		official_packs.append((pack_value as Dictionary).duplicate(true))
+	_render_catalog()
+
+
+func _render_catalog() -> void:
+	for child in discover_rows.get_children():
+		discover_rows.remove_child(child)
+		child.queue_free()
+	var installed: Dictionary = {}
+	for pack in store.installed():
+		installed[pack.id] = pack
+	if official_packs.is_empty():
+		catalog_status = Label.new()
+		catalog_status.text = translate.call("No official packs are available yet.")
+		catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		discover_rows.add_child(catalog_status)
+		return
+	for pack in official_packs:
+		var card := PanelContainer.new()
+		card.add_theme_stylebox_override("panel", _style(Color(0.045, 0.07, 0.12, 0.92), Color(0.16, 0.25, 0.39, 0.9), 10, 1))
+		discover_rows.add_child(card)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		card.add_child(row)
+		var text := VBoxContainer.new()
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		var name := Label.new()
+		name.text = "%s · %s" % [pack.name, pack.version]
+		name.add_theme_color_override("font_color", Color(0.95, 0.94, 1.0, 1.0))
+		name.add_theme_font_size_override("font_size", 17)
+		text.add_child(name)
+		var description := Label.new()
+		description.text = str(pack.get("description", ""))
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.add_theme_color_override("font_color", Color(0.68, 0.73, 0.86, 1.0))
+		text.add_child(description)
+		var install := Button.new()
+		var installed_pack: Dictionary = installed.get(pack.id, {})
+		var installed_version := str(installed_pack.get("version", ""))
+		install.text = translate.call("Installed") if installed_version == str(pack.version) else (translate.call("Update") if not installed_version.is_empty() else translate.call("Install"))
+		install.disabled = installed_version == str(pack.version) or (download_service != null and download_service.is_active())
+		_apply_button_style(install, true)
+		row.add_child(install)
+		install.pressed.connect(func() -> void: _download_official_pack(pack))
+
+
+func _download_official_pack(pack: Dictionary) -> void:
+	if download_service.is_active():
+		return
+	active_official_pack = pack.duplicate(true)
+	var download: Dictionary = pack.download
+	catalog_status.text = translate.call("Downloading {name}...").format({"name": str(pack.name)})
+	var error := download_service.start_download({
+		"type": "content_pack",
+		"id": str(pack.id),
+		"version": str(pack.version),
+		"url": str(download.url),
+		"sha256": str(download.sha256),
+		"size_bytes": int(download.size_bytes),
+		"download_dir": "user://content-pack-downloads",
+	})
+	if error != OK:
+		active_official_pack.clear()
+		catalog_status.text = translate.call("Could not start the pack download.")
+
+
+func _on_official_pack_downloaded(path: String, _summary: Dictionary) -> void:
+	var error := store.import_zip(path, true)
+	DirAccess.remove_absolute(path)
+	if error.is_empty():
+		catalog_status.text = translate.call("Pack installed. Enable it from Installed and restart the game.")
+		refresh()
+	else:
+		catalog_status.text = translate.call("Could not install pack:") + " " + error
+	active_official_pack.clear()
+	_render_catalog()
+
+
+func _on_official_pack_download_failed(_message: String, _summary: Dictionary) -> void:
+	active_official_pack.clear()
+	catalog_status.text = translate.call("Pack download failed. Try again later.")
+	_render_catalog()
 
 func refresh() -> void:
 	for child in rows.get_children():
@@ -82,8 +313,12 @@ func refresh() -> void:
 		return (left if left >= 0 else 100000) < (right if right >= 0 else 100000)
 	)
 	for pack in packs:
+		var card := PanelContainer.new()
+		card.add_theme_stylebox_override("panel", _style(Color(0.045, 0.07, 0.12, 0.92), Color(0.16, 0.25, 0.39, 0.9), 10, 1))
+		rows.add_child(card)
 		var row := HBoxContainer.new()
-		rows.add_child(row)
+		row.add_theme_constant_override("separation", 8)
+		card.add_child(row)
 		var toggle := CheckBox.new()
 		toggle.text = "%s · %s · %s" % [pack.name, pack.version, pack.author]
 		toggle.clip_text = true
@@ -91,6 +326,8 @@ func refresh() -> void:
 		toggle.tooltip_text = str(pack.get("description", ""))
 		toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		toggle.button_pressed = pack.id in enabled
+		toggle.add_theme_color_override("font_color", Color(0.92, 0.93, 1.0, 1.0))
+		toggle.add_theme_color_override("font_hover_color", Color.WHITE)
 		row.add_child(toggle)
 		toggle.toggled.connect(func(active: bool) -> void:
 			var ids := store.enabled_ids()
@@ -101,6 +338,7 @@ func refresh() -> void:
 		)
 		var priority := Button.new()
 		priority.text = translate.call("Move up")
+		_apply_button_style(priority)
 		priority.disabled = enabled.find(pack.id) <= 0
 		row.add_child(priority)
 		priority.pressed.connect(func() -> void:
