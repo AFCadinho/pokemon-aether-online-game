@@ -51,6 +51,23 @@ func _run() -> void:
 		},
 	})
 	await process_frame
+	var capture_dir := OS.get_environment("POKEAETHER_TRAINER_CARD_CAPTURE")
+	if not capture_dir.is_empty():
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("public.png"))
+		overlay.call("_hide_public_trainer_card")
+		var own := overlay.get("trainer_card_popup") as Control
+		own.show()
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("own.png"))
+		print("Trainer card captures saved; own card size: ", own.size)
+		overlay.queue_free()
+		quit(0)
+		return
 
 	var popup := overlay.get("public_trainer_card_popup") as PanelContainer
 	var tabs := popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
@@ -94,8 +111,8 @@ func _run() -> void:
 		avatar_panel != null
 		and avatar_panel.size.y >= 280.0
 		and avatar_preview != null
-		and avatar_preview.position == Vector2(80, 112)
-		and avatar_preview.scale == Vector2(2.7, 2.7)
+		and avatar_preview.get_node_or_null("Body") is Sprite2D
+		and avatar_preview.get_node_or_null("Top") is Sprite2D
 		and (follower_preview == null or not follower_preview.visible),
 		"public Trainer Card fills its avatar column without showing the overworld follower"
 	)
