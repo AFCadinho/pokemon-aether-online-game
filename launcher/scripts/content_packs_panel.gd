@@ -1,11 +1,18 @@
 extends AcceptDialog
 const Store := preload("res://scripts/content_pack_store.gd")
+const DownloadService := preload("res://scripts/resumable_download_service.gd")
 var store := Store.new()
 var rows: VBoxContainer
+var discover_rows: VBoxContainer
 var status: Label
+var catalog_status: Label
 var picker: FileDialog
 var tabs: TabContainer
 var translate: Callable
+var catalog_request: HTTPRequest
+var download_service: ResumableDownloadService
+var official_packs: Array[Dictionary] = []
+var active_official_pack: Dictionary = {}
 
 
 func _style(color: Color, border: Color = Color(0, 0, 0, 0), radius: int = 8, width: int = 0) -> StyleBoxFlat:
@@ -45,10 +52,13 @@ func _apply_style() -> void:
 	tabs.add_theme_color_override("font_unselected_color", Color(0.65, 0.69, 0.81, 1.0))
 	tabs.add_theme_color_override("font_hovered_color", Color(0.94, 0.90, 1.0, 1.0))
 
-	for control in [rows, status]:
+	for control in [rows, discover_rows, status, catalog_status]:
+		if control == null:
+			continue
 		control.add_theme_color_override("font_color", Color(0.79, 0.83, 0.93, 1.0))
 
-func setup(translator: Callable) -> void:
+
+func setup(translator: Callable, catalog_url: String = "") -> void:
 	translate = translator
 	# AcceptDialog's built-in title bar is Godot-themed and cannot be styled.
 	# Use a borderless window and render the launcher-styled header ourselves.
@@ -81,15 +91,19 @@ func setup(translator: Callable) -> void:
 	tabs = TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(tabs)
-	var discover := VBoxContainer.new()
+	var discover := ScrollContainer.new()
 	discover.name = "Discover"
+	discover.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tabs.add_child(discover)
 	tabs.set_tab_title(0, translate.call("Discover"))
-	var explanation := Label.new()
-	explanation.text = translate.call("The official pack catalog is not available yet. You can already import community packs in Installed.")
-	explanation.custom_minimum_size.x = 600
-	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	discover.add_child(explanation)
+	discover_rows = VBoxContainer.new()
+	discover_rows.add_theme_constant_override("separation", 8)
+	discover_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	discover.add_child(discover_rows)
+	catalog_status = Label.new()
+	catalog_status.custom_minimum_size.x = 600
+	catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	discover_rows.add_child(catalog_status)
 	var scroll := ScrollContainer.new()
 	scroll.name = "Installed"
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -137,7 +151,154 @@ func setup(translator: Callable) -> void:
 	add_child(picker)
 	import_button.pressed.connect(func() -> void: picker.popup_centered_ratio(0.75))
 	picker.file_selected.connect(_import)
+	catalog_request = HTTPRequest.new()
+	add_child(catalog_request)
+	catalog_request.request_completed.connect(_on_catalog_request_completed)
+	download_service = DownloadService.new()
+	add_child(download_service)
+	download_service.download_completed.connect(_on_official_pack_downloaded)
+	download_service.download_failed.connect(_on_official_pack_download_failed)
 	refresh()
+	_load_catalog(catalog_url)
+
+
+static func validate_catalog(candidate: Dictionary) -> String:
+	if int(candidate.get("format_version", 0)) != 1:
+		return "Unsupported content pack catalog."
+	var packs: Variant = candidate.get("packs", [])
+	if not packs is Array:
+		return "Catalog packs must be an array."
+	for pack_value: Variant in packs:
+		if not pack_value is Dictionary:
+			return "Catalog contains an invalid pack."
+		var pack := pack_value as Dictionary
+		for field in ["id", "name", "version", "author"]:
+			if not pack.get(field) is String or str(pack[field]).strip_edges().is_empty():
+				return "Catalog pack is missing " + field + "."
+		if not Store.valid_id(str(pack.id)):
+			return "Catalog contains an invalid pack ID."
+		var download: Variant = pack.get("download", {})
+		if not download is Dictionary:
+			return "Catalog pack has no download."
+		var item := download as Dictionary
+		if not bool(DownloadService.parse_http_url(str(item.get("url", ""))).get("valid", false)):
+			return "Catalog pack has an invalid download URL."
+		if int(item.get("size_bytes", 0)) <= 0 or int(item.get("size_bytes", 0)) > Store.MAX_PACK_BYTES:
+			return "Catalog pack has an invalid size."
+		var sha256 := str(item.get("sha256", "")).to_lower()
+		if sha256.length() != 64 or not sha256.is_valid_hex_number():
+			return "Catalog pack has an invalid checksum."
+	return ""
+
+
+func _load_catalog(url: String) -> void:
+	var normalized_url := url.strip_edges()
+	if normalized_url.is_empty():
+		catalog_status.text = translate.call("The official pack catalog is not available yet. You can already import community packs in Installed.")
+		return
+	catalog_status.text = translate.call("Loading official packs...")
+	var error := catalog_request.request(normalized_url, PackedStringArray(["Cache-Control: no-cache"]))
+	if error != OK:
+		catalog_status.text = translate.call("Official packs are unavailable. You can still import a local pack.")
+
+
+func _on_catalog_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		catalog_status.text = translate.call("Official packs are unavailable. You can still import a local pack.")
+		return
+	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if not parsed is Dictionary:
+		catalog_status.text = translate.call("Official pack catalog is invalid.")
+		return
+	var error := validate_catalog(parsed as Dictionary)
+	if not error.is_empty():
+		catalog_status.text = error
+		return
+	official_packs.clear()
+	for pack_value: Variant in (parsed as Dictionary).packs:
+		official_packs.append((pack_value as Dictionary).duplicate(true))
+	_render_catalog()
+
+
+func _render_catalog() -> void:
+	for child in discover_rows.get_children():
+		discover_rows.remove_child(child)
+		child.queue_free()
+	var installed: Dictionary = {}
+	for pack in store.installed():
+		installed[pack.id] = pack
+	if official_packs.is_empty():
+		catalog_status = Label.new()
+		catalog_status.text = translate.call("No official packs are available yet.")
+		catalog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		discover_rows.add_child(catalog_status)
+		return
+	for pack in official_packs:
+		var card := PanelContainer.new()
+		card.add_theme_stylebox_override("panel", _style(Color(0.045, 0.07, 0.12, 0.92), Color(0.16, 0.25, 0.39, 0.9), 10, 1))
+		discover_rows.add_child(card)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		card.add_child(row)
+		var text := VBoxContainer.new()
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		var name := Label.new()
+		name.text = "%s · %s" % [pack.name, pack.version]
+		name.add_theme_color_override("font_color", Color(0.95, 0.94, 1.0, 1.0))
+		name.add_theme_font_size_override("font_size", 17)
+		text.add_child(name)
+		var description := Label.new()
+		description.text = str(pack.get("description", ""))
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.add_theme_color_override("font_color", Color(0.68, 0.73, 0.86, 1.0))
+		text.add_child(description)
+		var install := Button.new()
+		var installed_pack: Dictionary = installed.get(pack.id, {})
+		var installed_version := str(installed_pack.get("version", ""))
+		install.text = translate.call("Installed") if installed_version == str(pack.version) else (translate.call("Update") if not installed_version.is_empty() else translate.call("Install"))
+		install.disabled = installed_version == str(pack.version) or (download_service != null and download_service.is_active())
+		_apply_button_style(install, true)
+		row.add_child(install)
+		install.pressed.connect(func() -> void: _download_official_pack(pack))
+
+
+func _download_official_pack(pack: Dictionary) -> void:
+	if download_service.is_active():
+		return
+	active_official_pack = pack.duplicate(true)
+	var download: Dictionary = pack.download
+	catalog_status.text = translate.call("Downloading {name}...").format({"name": str(pack.name)})
+	var error := download_service.start_download({
+		"type": "content_pack",
+		"id": str(pack.id),
+		"version": str(pack.version),
+		"url": str(download.url),
+		"sha256": str(download.sha256),
+		"size_bytes": int(download.size_bytes),
+		"download_dir": "user://content-pack-downloads",
+	})
+	if error != OK:
+		active_official_pack.clear()
+		catalog_status.text = translate.call("Could not start the pack download.")
+
+
+func _on_official_pack_downloaded(path: String, _summary: Dictionary) -> void:
+	var error := store.import_zip(path, true)
+	DirAccess.remove_absolute(path)
+	if error.is_empty():
+		catalog_status.text = translate.call("Pack installed. Enable it from Installed and restart the game.")
+		refresh()
+	else:
+		catalog_status.text = translate.call("Could not install pack:") + " " + error
+	active_official_pack.clear()
+	_render_catalog()
+
+
+func _on_official_pack_download_failed(_message: String, _summary: Dictionary) -> void:
+	active_official_pack.clear()
+	catalog_status.text = translate.call("Pack download failed. Try again later.")
+	_render_catalog()
 
 func refresh() -> void:
 	for child in rows.get_children():

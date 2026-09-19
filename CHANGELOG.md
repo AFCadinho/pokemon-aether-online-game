@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The desktop launcher can now show and install official Anime Cries and Gen 5 Animated Sprites packs from the Mods catalog once they are published. Downloads verify size and checksum before installation.
+
 - Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.
 
 - Pokémon cries can now use the available anime versions from Generations 1–7. Enable them from Sound Settings; every unavailable cry continues to use the existing game cry.
