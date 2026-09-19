@@ -170,8 +170,6 @@
 	"Changes apply at the next game start. Choose a pack for each category in Customize.": "Wijzigingen gelden bij de volgende gamestart. Kies bij Aanpassen per categorie een pack.",
 	"Pack installed. Choose it in Customize and restart the game.": "Pack geïnstalleerd. Kies hem bij Aanpassen en herstart de game.",
 	"Pack imported. Choose it in Customize to use it at the next game start.": "Pack geïmporteerd. Kies hem bij Aanpassen om hem bij de volgende gamestart te gebruiken.",
-	"Create": "Een modpack maken",
-	"Create a pack guide": "Een pack is één map in de modsmap. Maak eerst mod.json: daarin staat precies welke categorieën jouw pack levert. Daardoor kan de launcher hem tonen bij Pokémon-geluiden, Battle-sprites of Volger-sprites. Plaats je Ogg- of PNG-bestanden in submappen zoals cries/ of battle-sprites/ en vermeld ieder bestand in mod.json. Begin met docs/examples/content-pack/mod.json en docs/content-packs.md voor volledige kopieerbare voorbeelden.",
 	"Move up": "Omhoog",
 	"The official pack catalog is not available yet. You can already import community packs in Installed.": "De officiële packcatalogus is nog niet beschikbaar. Je kunt al wel spelerspacks importeren bij Geïnstalleerd.",
 	"Changes apply at the next game start. The first enabled pack has priority.": "Wijzigingen gelden bij de volgende gamestart. Het bovenste ingeschakelde pack heeft voorrang.",

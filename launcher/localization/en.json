@@ -170,8 +170,6 @@
 	"Changes apply at the next game start. Choose a pack for each category in Customize.": "Changes apply at the next game start. Choose a pack for each category in Customize.",
 	"Pack installed. Choose it in Customize and restart the game.": "Pack installed. Choose it in Customize and restart the game.",
 	"Pack imported. Choose it in Customize to use it at the next game start.": "Pack imported. Choose it in Customize to use it at the next game start.",
-	"Create": "Create",
-	"Create a pack guide": "A pack is one folder in the mods directory. Add mod.json first: it declares exactly which categories your pack provides, so the launcher can show it under Pokémon cries, Battle sprites or Follower sprites. Put your Ogg or PNG files in subfolders such as cries/ or battle-sprites/, then list every file in mod.json. Start with docs/examples/content-pack/mod.json and docs/content-packs.md for complete copyable examples.",
 	"Move up": "Move up",
 	"The official pack catalog is not available yet. You can already import community packs in Installed.": "The official pack catalog is not available yet. You can already import community packs in Installed.",
 	"Changes apply at the next game start. The first enabled pack has priority.": "Changes apply at the next game start. The first enabled pack has priority.",
