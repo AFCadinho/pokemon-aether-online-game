@@ -2,7 +2,7 @@ extends Node
 
 var pending_requests: Dictionary = {}
 
-func request(path: String, payload: Dictionary = {}, mutate := false) -> Dictionary:
+func request(path: String, payload: Dictionary = {}, mutate := false, post := false) -> Dictionary:
 	var auth := get_node_or_null("/root/AuthService")
 	var gateway := get_node_or_null("/root/GatewayApiConfig")
 	if auth == null or gateway == null or not bool(auth.call("is_authenticated")):
@@ -17,7 +17,8 @@ func request(path: String, payload: Dictionary = {}, mutate := false) -> Diction
 	http.timeout = 30.0
 	add_child(http)
 	var url: String = str(await gateway.call("get_base_url")) + "/game/rentals" + path
-	var error := http.request(url, gateway.call("get_json_headers"), HTTPClient.METHOD_POST if mutate else HTTPClient.METHOD_GET, JSON.stringify(body) if mutate else "")
+	var use_post := mutate or post
+	var error := http.request(url, gateway.call("get_json_headers"), HTTPClient.METHOD_POST if use_post else HTTPClient.METHOD_GET, JSON.stringify(body) if use_post else "")
 	if error != OK:
 		http.queue_free()
 		return {"success": false, "error": "Could not reach the rental service. Please retry."}

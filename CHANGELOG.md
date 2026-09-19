@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon rentals can now be built from a PokéPaste set or manual fields, with server-validated rarity pricing.
+
 - Team rentals now use the familiar AI Sparring catalog layout, including team filters, six-Pokémon previews and complete set cards before choosing a rental duration.
 
 - Two rental specialists in the Aether Clash Lobby now offer level-100 teams and individual Pokémon for Aetherite, with catalog previews, duration choices, early returns and permanent purchase for individual rentals.
