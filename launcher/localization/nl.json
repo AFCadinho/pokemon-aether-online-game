@@ -151,5 +151,18 @@
 	"Could not start launcher updater script.": "Kon het script voor de launcher-update niet starten.",
 	"Downloaded launcher file could not be opened.": "Kon het gedownloade launcherbestand niet openen.",
 	"Launcher update file path is missing.": "Het bestandspad van de launcher-update ontbreekt.",
-	"Launcher updater stopped before applying the update.": "Het launcher-updateprogramma stopte voordat de update werd toegepast."
+	"Launcher updater stopped before applying the update.": "Het launcher-updateprogramma stopte voordat de update werd toegepast.",
+	"Mods": "Mods",
+	"Discover": "Ontdekken",
+	"Installed": "Geïnstalleerd",
+	"Import pack": "Pack importeren",
+	"Open mods folder": "Mods-map openen",
+	"Refresh": "Vernieuwen",
+	"Move up": "Omhoog",
+	"The official pack catalog is not available yet. You can already import community packs in Installed.": "De officiële packcatalogus is nog niet beschikbaar. Je kunt al wel spelerspacks importeren bij Geïnstalleerd.",
+	"Changes apply at the next game start. The first enabled pack has priority.": "Wijzigingen gelden bij de volgende gamestart. Het bovenste ingeschakelde pack heeft voorrang.",
+	"No packs installed. Import a zip or place a pack in the mods folder.": "Geen packs geïnstalleerd. Importeer een zip of plaats een pack in de mods-map.",
+	"Could not save pack selection.": "Kon de packkeuze niet opslaan.",
+	"Pack imported. Enable it to use it on the next game start.": "Pack geïmporteerd. Schakel het in om het bij de volgende gamestart te gebruiken.",
+	"Could not import pack:": "Kon het pack niet importeren:"
 }

@@ -151,5 +151,18 @@
   "Could not start launcher updater script.": "无法启动启动器更新程序脚本。",
   "Downloaded launcher file could not be opened.": "无法打开下载的启动器文件。",
   "Launcher update file path is missing.": "启动器更新文件路径丢失。",
-  "Launcher updater stopped before applying the update.": "启动器更新程序在应用更新之前停止。"
+  "Launcher updater stopped before applying the update.": "启动器更新程序在应用更新之前停止。",
+  "Mods": "模组",
+  "Discover": "发现",
+  "Installed": "已安装",
+  "Import pack": "导入资源包",
+  "Open mods folder": "打开模组文件夹",
+  "Refresh": "刷新",
+  "Move up": "上移",
+  "The official pack catalog is not available yet. You can already import community packs in Installed.": "官方资源包目录尚未开放。你可以在“已安装”中导入社区资源包。",
+  "Changes apply at the next game start. The first enabled pack has priority.": "更改将在下次启动游戏时生效。最上方启用的资源包优先。",
+  "No packs installed. Import a zip or place a pack in the mods folder.": "尚未安装资源包。请导入 zip 文件或将资源包放入模组文件夹。",
+  "Could not save pack selection.": "无法保存资源包选择。",
+  "Pack imported. Enable it to use it on the next game start.": "资源包已导入。启用后将在下次启动游戏时使用。",
+  "Could not import pack:": "无法导入资源包："
 }
