@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The single active team rental now gets a full-detail card with all six sets, clear expiry information and styled extension and return actions.
+
 - Rental team cards now appear in small batches, keeping the catalog responsive while its Pokémon icons finish loading.
 
 - Team and Pokémon rentals now submit their catalog duration in the integer format required by the server, so confirming a rental no longer fails validation.

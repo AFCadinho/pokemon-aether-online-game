@@ -162,7 +162,11 @@ func show_detail(detail: Dictionary) -> void:
 	detail_hint.visible = pokemon.is_empty()
 	for value: Variant in pokemon:
 		if value is Dictionary:
-			team_grid.add_child(_set_card(value as Dictionary))
+			team_grid.add_child(create_set_card(value as Dictionary))
+
+
+func create_set_card(set_data: Dictionary, compact := false) -> Control:
+	return _set_card(set_data, 160 if compact else 180)
 
 
 func clear_selection() -> void:
@@ -297,10 +301,10 @@ func _team_card(offer: Dictionary) -> Control:
 	return panel
 
 
-func _set_card(set_data: Dictionary) -> Control:
+func _set_card(set_data: Dictionary, minimum_height := 180) -> Control:
 	var species := str(set_data.get("species", set_data.get("speciesId", "")))
 	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(0, 180)
+	card.custom_minimum_size = Vector2(0, minimum_height)
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.add_theme_stylebox_override("panel", _panel_style(Color("#0a1321e8"), Color("#315070cc"), 8, 1))
 	var margin := MarginContainer.new()
@@ -346,7 +350,8 @@ func _set_card(set_data: Dictionary) -> Control:
 	if not ivs.is_empty():
 		lines.append("IVs: %s" % ivs)
 	for move: Variant in _array(set_data.get("moves", [])):
-		lines.append("[color=#c9beff]– %s[/color]" % _content_name("moves", str(move)))
+		var move_id := str((move as Dictionary).get("id", (move as Dictionary).get("name", ""))) if move is Dictionary else str(move)
+		lines.append("[color=#c9beff]– %s[/color]" % _content_name("moves", move_id))
 	var details := RichTextLabel.new()
 	details.bbcode_enabled = true
 	details.fit_content = true
