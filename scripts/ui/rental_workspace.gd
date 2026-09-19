@@ -902,10 +902,21 @@ func _rent() -> void:
 	if busy or selected.is_empty():
 		return
 	var price: Dictionary = duration.get_selected_metadata()
-	var payload := {"kind": kind, "offerId": selected["offerId"], "durationSeconds": price["durationSeconds"]}
+	var payload := _build_rent_payload(price)
+	await _mutate("", payload, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
+
+func _build_rent_payload(price: Dictionary) -> Dictionary:
+	# Godot decodes JSON numbers as floats. The rentals API deliberately uses a
+	# strict integer contract for durations, so normalize catalog metadata before
+	# serializing it back into a mutation request.
+	var payload := {
+		"kind": kind,
+		"offerId": str(selected.get("offerId", "")),
+		"durationSeconds": int(price.get("durationSeconds", 0)),
+	}
 	if kind == "pokemon":
 		payload["pokemonBuild"] = selected_build
-	await _mutate("", payload, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
+	return payload
 
 func _rental_limit_reached() -> bool:
 	var context := "npc_" + kind

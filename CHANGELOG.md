@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Team and Pokémon rentals now submit their catalog duration in the integer format required by the server, so confirming a rental no longer fails validation.
+
 - The Pokémon rental review card now centers its level, rarity badge and held-item chip around the Pokémon artwork for a cleaner identity summary.
 
 - Custom Pokémon rentals now preview their full set in familiar PokéPaste order, including the temporary held item and its icon, without an internal set-info scrollbar.
