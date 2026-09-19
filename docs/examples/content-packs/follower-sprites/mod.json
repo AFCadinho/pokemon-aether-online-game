@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "id": "my-follower-sprites",
+  "name": "My Follower Sprites",
+  "version": "1.0.0",
+  "author": "Your name",
+  "description": "Custom follower sprites for selected Pokémon.",
+  "assets": {
+    "followers": {
+      "pikachu:normal": { "file": "followers/pikachu.png" }
+    }
+  }
+}

@@ -17,6 +17,17 @@ The existing Anime Cries setting still works as the cry fallback. Converting it
 into an official downloadable pack and removing that setting is a later migration.
 Game volume controls continue to apply to modded cries.
 
+## Copyable category templates
+
+Start by copying one of these folders. Their `mod.json` files and asset paths
+show the exact names the launcher and game expect. Replace the named asset with
+your own file, keep its path synchronized with `mod.json`, then zip the folder
+contents so `mod.json` is at the archive root.
+
+- [Pokémon cries](examples/content-packs/pokemon-cries/)
+- [Battle sprites](examples/content-packs/battle-sprites/)
+- [Follower sprites](examples/content-packs/follower-sprites/)
+
 ## Make a pack
 
 Create a folder with `mod.json` at its root and your PNG/Ogg files alongside it.
