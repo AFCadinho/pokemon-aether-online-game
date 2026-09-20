@@ -76,6 +76,6 @@ func _rental_explanation() -> Array[String]:
 	return [
 		"Create any legal level-100 Pokémon from a PokéPaste set or with the manual builder. Its rarity determines the Aetherite price.",
 		"You may rent up to six Pokémon. An active rental can be purchased permanently, with its rental fee deducted from the total price.",
-		"The submitted held item is included and locked during the rental, but is not transferred by permanent purchase. The rental specialist remains the Original Trainer and it never counts as caught.",
+		"The submitted held item is included and locked during the rental, but is not transferred by permanent purchase. The rental specialist remains the Original Trainer, it never counts as caught, and a permanently purchased rental can never be traded.",
 		"The rental timer also runs while you are offline.",
 	]

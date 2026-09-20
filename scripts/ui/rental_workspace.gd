@@ -311,7 +311,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
 	pokemon_review_terms = Label.new()
-	pokemon_review_terms.text = "24 hours real time • Rental item is temporary • Timer runs offline"
+	pokemon_review_terms.text = "24 hours real time • Rental item is temporary • Permanent purchases are untradeable"
 	pokemon_review_terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_review_terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_review_terms.add_theme_color_override("font_color", Color("#8ea8bd"))
@@ -873,7 +873,7 @@ func _select(index: int) -> void:
 		var held_item := str(pokemon.get("item", ""))
 		text += "%s • Lv.100\n%s / %s / %s\n" % [str(pokemon.get("species", pokemon.get("speciesId", ""))), str(pokemon.get("nature", "")), str(pokemon.get("ability", "")), "No item" if held_item.is_empty() else held_item]
 		text += "Moves: %s\nEVs: %s\nIVs: %s\n\n" % [", ".join(pokemon.get("moves", [])), JSON.stringify(pokemon.get("evs", {})), JSON.stringify(pokemon.get("ivs", {}))]
-	text += "Full rental team: fixed sets and items; no permanent purchase. Use all six together in Aether Clash." if kind == "team" else "Permanent purchase: %d Aetherite total, minus the initial rental fee. Extensions do not reduce this price. NPC OT stays; no caught credit." % int(selected.get("buyoutTotal", 0))
+	text += "Full rental team: fixed sets and items; no permanent purchase. Use all six together in Aether Clash." if kind == "team" else "Permanent purchase: %d Aetherite total, minus the initial rental fee. Extensions do not reduce this price. NPC OT stays; no caught credit; permanently untradeable." % int(selected.get("buyoutTotal", 0))
 	description.text = text
 	rent_button.disabled = false
 
@@ -1156,7 +1156,7 @@ func _create_active_pokemon_card(loan: Dictionary) -> PanelContainer:
 		buy.text = "Make Permanent"
 		buy.tooltip_text = "Pay %d Aetherite to keep this Pokémon" % int(data.get("buyoutPrice", 0))
 		buy.custom_minimum_size.y = 30
-		buy.pressed.connect(func(): await _mutate("/%s/buyout" % loan["loanId"], {}, "Make this Pokémon permanent?\n\nCost: %d Aetherite\nOT stays Aether Rental Service. This does not count as caught." % int(data.get("buyoutPrice", 0))))
+		buy.pressed.connect(func(): await _mutate("/%s/buyout" % loan["loanId"], {}, "Make this Pokémon permanent?\n\nCost: %d Aetherite\nOT stays Aether Rental Service. This does not count as caught and the Pokémon can never be traded." % int(data.get("buyoutPrice", 0))))
 		_style_button(buy, true)
 		layout.add_child(buy)
 	var actions := HBoxContainer.new()
