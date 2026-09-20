@@ -1376,6 +1376,7 @@
   "ui.pokemon_summary.held_item.none_in_bag": "Geen vast te houden items in je Bag.",
   "ui.pokemon_summary.held_item.search_hint": "Zoek om de lijst met vastgehouden items te verfijnen.",
   "ui.pokemon_summary.held_item.take_failed": "Item kon niet worden afgenomen: {error}",
+  "ui.pokemon_summary.held_item.rental_locked": "Dit item hoort bij de gehuurde Pokémon en kan niet worden afgenomen of vervangen.",
   "ui.pokemon_summary.held_item.give_failed": "Item kon niet worden gegeven: {error}",
   "ui.bag.title": "Bag",
   "ui.bag.inventory": "Inventaris",

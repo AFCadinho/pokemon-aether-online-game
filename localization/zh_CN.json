@@ -1358,6 +1358,7 @@
   "ui.pokemon_summary.held_item.none_in_bag": "您的包中没有任何物品。",
   "ui.pokemon_summary.held_item.search_hint": "搜索以缩小持有的项目范围。",
   "ui.pokemon_summary.held_item.take_failed": "无法获取物品：{error}",
+  "ui.pokemon_summary.held_item.rental_locked": "该道具属于租借宝可梦，无法取下或替换。",
   "ui.pokemon_summary.held_item.give_failed": "无法提供项目：{error}",
   "ui.bag.title": "包",
   "ui.bag.inventory": "库存",

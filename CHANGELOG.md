@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rental Pokémon now explain clearly that their included held item cannot be removed or replaced.
+
 - Read-only Pokémon summaries now show a single colored gender icon instead of duplicating it with a second symbol.
 
 - Individual Pokémon rentals now use a compact three-column card grid with simple permanent, extend and return actions; pricing is kept concise and appears where it is needed.
