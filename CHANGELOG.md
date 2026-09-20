@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Immersive desktop battles now retain the existing chat at bottom-left alongside a separate battle log. Enter focuses chat, Escape leaves typing, and the log's open/closed preference is saved.
 - Restored the left team preview in Immersive battles and centered the switch controls and battle message, leaving the bottom-left area free for future chat.
 - Refined Immersive battles with smaller Pokémon-following HP panels, compact move controls, one player team row and smaller battle messages.
 - Added an Immersive desktop battle UI with a fullscreen arena, floating controls and collapsible battle log; the Classic layout remains selectable in Settings.

@@ -2747,6 +2747,8 @@ func _input(event: InputEvent) -> void:
 		return
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _is_ui_typing():
+		return
 	if event.is_action_pressed("ui_cancel") and _close_visible_battle_drawer():
 		get_viewport().set_input_as_handled()
 		return
@@ -3961,12 +3963,17 @@ func _on_action_selected(action: String) -> void:
 func _on_battle_log_toggle_pressed() -> void:
 	_focus_battle_ui_layer()
 	var requested_open := not _get_requested_battle_log_open()
+	if has_meta("immersive_battle_ui"):
+		SettingsManager.set_immersive_battle_log_open(requested_open)
 	remembered_battle_log_open = 1 if requested_open else 0
 	_set_battle_log_open(requested_open)
 	_update_battle_log_toggle_button()
 
 ## Zet de battle log bij battle start op de sessiekeuze, of anders op basis van viewport-breedte.
 func _setup_battle_log_initial_visibility() -> void:
+	if has_meta("immersive_battle_ui"):
+		_set_battle_log_open(SettingsManager.immersive_battle_log_open)
+		return
 	var should_open := (
 		remembered_battle_log_open == 1
 		if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET
@@ -3976,6 +3983,8 @@ func _setup_battle_log_initial_visibility() -> void:
 
 ## Geeft de door speler of responsive default gewenste log-state terug.
 func _get_requested_battle_log_open() -> bool:
+	if has_meta("immersive_battle_ui"):
+		return battle_log_rail.visible
 	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
 		return remembered_battle_log_open == 1
 	return battle_log_rail.visible
