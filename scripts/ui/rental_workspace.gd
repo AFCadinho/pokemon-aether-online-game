@@ -306,7 +306,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	price_row.add_theme_constant_override("separation", 10)
 	details_column.add_child(price_row)
 	pokemon_review_rental_price = _review_price_card(price_row, "24-HOUR RENTAL", Color("#62d5ff"))
-	pokemon_review_buyout_price = _review_price_card(price_row, "KEEP PERMANENTLY LATER", Color("#f5df9a"))
+	pokemon_review_buyout_price = _review_price_card(price_row, "MAKE PERMANENT LATER", Color("#f5df9a"))
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
@@ -804,7 +804,7 @@ func _quote_pokemon() -> void:
 	var rental_price := int((selected.get("prices", [{}])[0] as Dictionary).get("amount", 0))
 	var buyout_total := int(selected.get("buyoutTotal", 0))
 	pokemon_review_rental_price.text = "%d Aetherite" % rental_price
-	pokemon_review_buyout_price.text = "%d Aetherite after rental\n%d total" % [maxi(0, buyout_total - rental_price), buyout_total]
+	pokemon_review_buyout_price.text = "%d Aetherite" % maxi(0, buyout_total - rental_price)
 	rent_button.text = "Rent for 24 hours — %d Aetherite" % rental_price
 	var limit_reached := _rental_limit_reached()
 	rent_button.disabled = limit_reached
