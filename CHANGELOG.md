@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added a separate Temperate Forest battle preview with a flat, vegetation-free clearing for reviewing Pokémon animations and camera angles.
+- Added a separate Temperate Forest battle preview with a sunny, circular clearing for both Pokémon and tall grass retained around the arena.
 
 - Added a separate full-window forest preview for reviewing Dragonite and Roaring Moon before changing the battle arena or interface.
 
