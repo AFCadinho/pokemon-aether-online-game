@@ -125,6 +125,12 @@ func style_spin_box(input: SpinBox) -> void:
 	)
 
 
+func style_checkbox(checkbox: CheckBox) -> void:
+	if checkbox == null:
+		return
+	_style_checkbox(checkbox)
+
+
 func focus_spin_box(input: SpinBox) -> void:
 	if input == null:
 		return
@@ -228,6 +234,8 @@ func _style_checkbox(checkbox: CheckBox) -> void:
 	checkbox.add_theme_color_override("font_color", COLOR_TEXT)
 	checkbox.add_theme_color_override("font_hover_color", COLOR_TEXT)
 	checkbox.add_theme_color_override("font_pressed_color", COLOR_TEXT)
+	checkbox.add_theme_color_override("font_focus_color", COLOR_TEXT)
+	checkbox.add_theme_color_override("font_disabled_color", Color(COLOR_MUTED, 0.55))
 	checkbox.add_theme_font_size_override("font_size", 14)
 	checkbox.add_theme_icon_override("unchecked", _checkbox_icon(false, false))
 	checkbox.add_theme_icon_override("unchecked_hover", _checkbox_icon(false, true))
@@ -235,27 +243,45 @@ func _style_checkbox(checkbox: CheckBox) -> void:
 	checkbox.add_theme_icon_override("checked", _checkbox_icon(true, false))
 	checkbox.add_theme_icon_override("checked_hover", _checkbox_icon(true, true))
 	checkbox.add_theme_icon_override("checked_pressed", _checkbox_icon(true, true))
+	checkbox.add_theme_icon_override("unchecked_disabled", _checkbox_icon(false, false, true))
+	checkbox.add_theme_icon_override("checked_disabled", _checkbox_icon(true, false, true))
+	checkbox.add_theme_stylebox_override("focus", _checkbox_focus_style())
 
 
-func _checkbox_icon(checked: bool, highlighted: bool) -> ImageTexture:
-	var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
+func _checkbox_icon(checked: bool, highlighted: bool, disabled := false) -> ImageTexture:
+	var image := Image.create(22, 22, false, Image.FORMAT_RGBA8)
 	var border := COLOR_ACCENT if highlighted or checked else COLOR_BORDER
 	var fill := COLOR_ACCENT_DARK if checked else COLOR_SURFACE
-	for y: int in range(20):
-		for x: int in range(20):
-			var is_border := x < 2 or x > 17 or y < 2 or y > 17
+	if disabled:
+		border.a = 0.5
+		fill.a = 0.45
+	for y: int in range(22):
+		for x: int in range(22):
+			var is_border := x < 2 or x > 19 or y < 2 or y > 19
 			image.set_pixel(x, y, border if is_border else fill)
 	if checked:
 		var check_pixels := [
-			Vector2i(5, 10), Vector2i(6, 11), Vector2i(7, 12), Vector2i(8, 13),
-			Vector2i(9, 12), Vector2i(10, 11), Vector2i(11, 10), Vector2i(12, 9),
-			Vector2i(13, 8), Vector2i(14, 7),
+			Vector2i(5, 11), Vector2i(6, 12), Vector2i(7, 13), Vector2i(8, 14),
+			Vector2i(9, 13), Vector2i(10, 12), Vector2i(11, 11), Vector2i(12, 10),
+			Vector2i(13, 9), Vector2i(14, 8), Vector2i(15, 7),
 		]
+		var check_color := COLOR_TEXT
+		if disabled:
+			check_color.a = 0.6
 		for point: Vector2i in check_pixels:
-			image.set_pixelv(point, COLOR_TEXT)
-			if point.y + 1 < 18:
-				image.set_pixel(point.x, point.y + 1, COLOR_TEXT)
+			image.set_pixelv(point, check_color)
+			if point.y + 1 < 20:
+				image.set_pixel(point.x, point.y + 1, check_color)
 	return ImageTexture.create_from_image(image)
+
+
+func _checkbox_focus_style() -> StyleBoxFlat:
+	var style := _make_style(Color("0c182600"), COLOR_ACCENT, 6, 1)
+	style.content_margin_left = 3
+	style.content_margin_right = 3
+	style.content_margin_top = 3
+	style.content_margin_bottom = 3
+	return style
 
 
 func _button_style(background: Color, border: Color) -> StyleBoxFlat:
