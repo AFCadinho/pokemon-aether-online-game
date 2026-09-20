@@ -29,6 +29,7 @@ static func apply(battle: Control) -> void:
 	var dock: Control = battle.get_node("%ActionsDock")
 	_move(dock, battle)
 	dock.z_index = 70
+	dock.scale = Vector2.ONE * 0.8
 	dock.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var rail: Control = battle.get_node("%BattleLogRail")
 	_move(rail, battle)
@@ -54,7 +55,7 @@ static func apply(battle: Control) -> void:
 		var width := battle.size.x
 		var height := battle.size.y
 		dock.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		dock.position = Vector2(16, height - 122)
+		dock.position = Vector2(width * 0.25, height - 108)
 		dock.size = Vector2(width * 0.55 - 28, 106)
 		rail.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		rail.position = Vector2(18, 150)
