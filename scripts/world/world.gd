@@ -198,6 +198,9 @@ func _discard_web_placeholder_map() -> void:
 
 
 func _exit_tree() -> void:
+	if forest_preparation_input_owned:
+		GameState.release_overworld_input_lock(&"forest_preparation")
+		forest_preparation_input_owned = false
 	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
 		GameState.clear_world_runtime_state()
 
@@ -278,13 +281,34 @@ func _schedule_current_map_web_sprite_prefetch() -> void:
 	if area_id != "":
 		_prefetch_current_map_wild_sprites.call_deferred(area_id)
 
-func _prefetch_current_map_desktop_arena() -> void:
+func _prefetch_current_map_desktop_arena() -> Node:
 	if SettingsManager.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
-		return
+		return null
 	var arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
 	if arenas.resolve(SettingsManager.battle_3d_arena, _resolve_battle_environment_id("wild")) == "forest":
-		# Resource preparation only: never cache a battle, combatants or network state.
-		arenas.prepare_forest(SettingsManager.get_battle_3d_forest_manifest())
+		# Session-bounded environment only: never cache combatants/network state.
+		return preload("res://scripts/battle/arenas/forest_environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),Vector2i(get_viewport().get_visible_rect().size))
+	return null
+
+var forest_preparation_input_owned := false
+
+func _await_current_map_desktop_arena() -> void:
+	var pool := _prefetch_current_map_desktop_arena()
+	if pool == null or pool.ready_for_battle or pool.failed:
+		return
+	var owns_cover := not is_loading_map and not is_in_battle
+	if owns_cover:
+		if not GameState.overworld_input_locked:
+			GameState.acquire_overworld_input_lock(&"forest_preparation")
+			forest_preparation_input_owned = true
+		await _fade_map_transition(1.0,0.0)
+	while is_instance_valid(pool) and not pool.ready_for_battle and not pool.failed:
+		await get_tree().process_frame
+	if owns_cover and not is_loading_map and not is_in_battle:
+		await _fade_map_transition(0.0,MAP_FADE_IN_SECONDS)
+	if forest_preparation_input_owned:
+		GameState.release_overworld_input_lock(&"forest_preparation")
+		forest_preparation_input_owned = false
 
 
 func _prefetch_current_map_wild_sprites(area_id: String) -> void:
@@ -892,6 +916,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		player.call("restore_land_mount", land_mount_id_to_restore)
 	await _refresh_fishing_progression()
 	if changes_map:
+		await _await_current_map_desktop_arena()
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 	last_presence_position_signature = ""
 	has_pending_player_position_save = false
@@ -1249,7 +1274,9 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		# exterior arrivals stay mounted while interior arrivals remain on foot.
 		player.call("restore_land_mount", land_mount_id_to_restore)
 	_apply_camera_limits_for_map(new_map)
+	_prefetch_current_map_desktop_arena()
 	await _refresh_fishing_progression()
+	await _await_current_map_desktop_arena()
 
 	await get_tree().physics_frame
 	await _save_current_player_position_if_changed(true, target_spawn_name)
@@ -1733,6 +1760,7 @@ func _setup_initial_world_state() -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.world.blackout.money_lost", {"amount": recovered_blackout_loss})
 		)
+	await _await_current_map_desktop_arena()
 	var wild_resume := await _resume_saved_wild_battle(saved_state)
 	# Preserve a live or temporarily unreachable wild battle binding. Only a
 	# confirmed absent/expired battle may cross into the fresh overworld boundary.
@@ -2653,6 +2681,8 @@ func _get_remote_players_parent(map: Node = null) -> Node:
 func _on_settings_changed() -> void:
 	_sync_remote_players_visibility()
 	_sync_local_player_nameplate_visibility()
+	if not OS.has_feature("web"):
+		_prefetch_current_map_desktop_arena.call_deferred()
 	if OS.has_feature("web"):
 		_schedule_current_map_web_sprite_prefetch()
 

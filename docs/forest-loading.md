@@ -45,8 +45,48 @@ Focused regression entry points:
 - `tests/battle_arena_integration_check.gd`: forest actions, recall/send-out,
   switching, repeat battle and release of both viewports.
 
-Remaining performance work: terrain instantiation and clearing/path preparation
+Remaining performance work after the first fix: terrain instantiation and clearing/path preparation
 still run on the main thread, twice for the two render passes. The previously
 observed synchronous hitch is not eliminated by earlier resource loading.
 Cold installations and slower hardware need separate timing. Replacing the
 approved environment is not warranted by these results.
+
+## Session-owned prepared environment (follow-up)
+
+The earlier web-prefetch hook did not cover ordinary desktop startup/map entry.
+Desktop initial state, normal map changes and authorized desktop teleports now
+explicitly prepare the selected forest before revealing the map. Startup owns an
+input lock only when input was previously unlocked; map transitions retain their
+existing cover/lock ownership. Teardown releases the preparation-owned lock.
+Changing settings can also request background preparation. Missing packs do not
+block map entry. A battle racing an in-progress pool waits rather than assembling
+a second copy. There is still an initial load, now paid on map entry.
+
+`forest_environment_pool.gd` retains exactly one main/light-pass pair per world
+session, never a battle screen, actor, animation player or server state. Prepared
+viewports remain in their original tree: Terrain3D is not detached/re-entered or
+flattened again. They stop rendering and processing while idle. An exclusive
+weak borrower prevents concurrent battles sharing actors. Release removes every
+non-environment world child; mode changes also release the lease. Leaving the
+world frees both passes. Other arenas and non-pooled tools keep their previous
+ownership. No new assets, cache copies or resolution reductions are involved.
+
+Two fresh-process diagnostic runs with existing disk/driver caches:
+
+- One-time environment preparation: 3055 / 2605 ms.
+- First battle after preparation: 667 / 617 ms.
+- Second battle: 650 / 616 ms.
+- After both battle releases: 5165 total test-process nodes and 317241184 bytes
+  reported render video memory in each cycle (about 303 MiB, not incremental
+  per-battle usage). The warmup monitor delta was 469562720 bytes; this includes
+  transient allocations and is not an isolated retained-pool measurement.
+
+These are local 1152×648 render-target measurements, not a guarantee of instant
+startup on all hardware. Fullscreen targets can retain more GPU memory. Terrain
+assembly still occupies the main thread during the map-loading cover. Models
+and model-specific material warmup are still per battle.
+
+`POKEAETHER_TEST_FOREST_POOL=1` on `forest_cold_start_check.gd` checks exact viewport
+reuse, recall/send-out, physical/special/damage/faint, switching, mode change,
+stable idle child counts and teardown. `forest_map_preparation_check.gd` checks
+desktop call sites, preparation gating and input/cover ownership with no network.

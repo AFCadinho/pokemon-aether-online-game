@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 	_place(mechanics, Vector2(area.x - 332, area.y - 233), mechanics.size, minf(0.5,120.0 / maxf(1,mechanics.size.x)))
 	var center_left := area.x * 0.25
 	var center_width := area.x - 354 - center_left
-	_place(battle.get_node("%CurrentActionPanel"), Vector2(center_left, area.y - 155), Vector2(center_width / 0.7, 56), 0.7)
+	_place(battle.get_node("%CurrentActionPanel"), Vector2(center_left, area.y - 125), Vector2(center_width / 0.7, 44), 0.7)
 	# Stage and root HUD have distinct logical coordinate systems.
 	var to_battle := battle.get_global_transform().affine_inverse() * stage.get_global_transform()
 	var dock: Control = battle.get_node("%ActionsDock")

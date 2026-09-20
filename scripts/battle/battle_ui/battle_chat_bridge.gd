@@ -15,7 +15,14 @@ var log_tab: Button
 var log_view: RichTextLabel
 var last_log := ""
 var tab_connections: Array[Dictionary] = []
-const ALLOWED := ["ChatPanel", "ChatTabsPanel", "BattleChatLog", "ChatTabsBackground", "ChatContextPopup", "ChatSettingsPopup", "ChatModerationPopup"]
+var primary_tabs: HBoxContainer
+var chat_tab: Button
+var resize_handle: Button
+var resizing := false
+var preferred_height := 420.0
+var drag_start_y := 0.0
+var drag_start_height := 0.0
+const ALLOWED := ["ChatPanel", "ChatTabsPanel", "BattleChatLog", "BattleChatPrimaryTabs", "BattleChatResize", "ChatTabsBackground", "ChatContextPopup", "ChatSettingsPopup", "ChatModerationPopup"]
 
 func setup(source: CanvasLayer, screen: Control) -> void:
 	overlay = source
@@ -34,6 +41,12 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 	overlay.set_meta("battle_chat_active",true)
 	host.battle.set_meta("battle_chat_bridge",self)
 	host.battle.battle_log_rail.hide()
+	preferred_height = get_node("/root/SettingsManager").immersive_chat_height
+	primary_tabs = HBoxContainer.new()
+	primary_tabs.name = "BattleChatPrimaryTabs"
+	primary_tabs.add_theme_constant_override("separation",4)
+	primary_tabs.z_index = panel.z_index + 2
+	overlay.get_node("Control").add_child(primary_tabs)
 	log_tab = Button.new()
 	log_tab.name = "BattleLogTab"
 	log_tab.text = "Battle Log"
@@ -50,15 +63,56 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 			var callback := func(): select_log(false)
 			child.pressed.connect(callback)
 			tab_connections.append({"button":child,"callback":callback})
-	row.add_child(log_tab)
+	primary_tabs.add_child(log_tab)
+	log_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	chat_tab = Button.new()
+	chat_tab.text = "Chat"
+	chat_tab.toggle_mode = true
+	chat_tab.button_pressed = true
+	chat_tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	primary_tabs.add_child(chat_tab)
+	for button in [log_tab,chat_tab]:
+		button.custom_minimum_size.y = 32
+		button.add_theme_font_size_override("font_size",16)
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color("071323f5")
+		style.border_color = Color("329bdf")
+		style.set_border_width_all(1)
+		style.set_corner_radius_all(6)
+		button.add_theme_stylebox_override("normal",style)
+		var selected := style.duplicate()
+		selected.bg_color = Color("123e60")
+		button.add_theme_stylebox_override("pressed",selected)
+		button.add_theme_stylebox_override("hover",selected)
+	chat_tab.pressed.connect(func(): select_log(false))
 	log_tab.pressed.connect(func(): select_log(true))
+	resize_handle = Button.new()
+	resize_handle.name = "BattleChatResize"
+	resize_handle.text = "-----"
+	resize_handle.tooltip_text = "Drag to resize chat / battle log"
+	resize_handle.mouse_default_cursor_shape = Control.CURSOR_VSIZE
+	resize_handle.focus_mode = Control.FOCUS_NONE
+	resize_handle.z_index = panel.z_index + 3
+	resize_handle.add_theme_font_size_override("font_size",10)
+	resize_handle.add_theme_stylebox_override("normal",StyleBoxEmpty.new())
+	resize_handle.add_theme_stylebox_override("hover",StyleBoxEmpty.new())
+	resize_handle.add_theme_stylebox_override("pressed",StyleBoxEmpty.new())
+	overlay.get_node("Control").add_child(resize_handle)
+	resize_handle.gui_input.connect(_resize_input)
 	log_view = RichTextLabel.new()
 	log_view.name = "BattleChatLog"
 	log_view.bbcode_enabled = true
 	log_view.scroll_following = true
 	log_view.selection_enabled = true
 	log_view.z_index = panel.z_index + 1
-	log_view.add_theme_stylebox_override("normal",panel.get_theme_stylebox("panel"))
+	var log_style := StyleBoxFlat.new()
+	log_style.bg_color = Color("071323f0")
+	log_style.border_color = Color("329bdf88")
+	log_style.set_border_width_all(1)
+	log_style.set_corner_radius_all(6)
+	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
+		log_style.set_content_margin(side,10)
+	log_view.add_theme_stylebox_override("normal",log_style)
 	log_view.add_theme_font_size_override("normal_font_size",16)
 	overlay.get_node("Control").add_child(log_view)
 	process_priority = 100
@@ -67,6 +121,7 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 func select_log(selected: bool) -> void:
 	log_selected = selected
 	log_tab.set_pressed_no_signal(selected)
+	chat_tab.set_pressed_no_signal(not selected)
 	if selected:
 		entry.release_focus()
 		log_tab.text = "Battle Log"
@@ -95,18 +150,26 @@ func _refresh() -> void:
 	var width := minf(440, screen.x * 0.23)
 	var row := tabs.get_node_or_null("TabRow") as Control
 	var natural_width := maxf(420, row.get_combined_minimum_size().x if row != null else tabs.get_combined_minimum_size().x)
-	var factor := width / natural_width
+	var factor := minf(1.0,width / 420.0)
+	var top_limit := screen.y * 0.49
+	var height := clampf(preferred_height,220,maxf(220,screen.y - top_limit - 14))
+	var header_y := screen.y - height - 14
+	var channels_height := 36.0 if not log_selected else 0.0
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	panel.size = Vector2(natural_width, minf(340, screen.y * 0.38 / factor))
+	panel.size = Vector2(width / factor,(height - 50 - channels_height) / factor)
 	panel.scale = Vector2.ONE * factor
-	panel.position = Vector2(12, screen.y - panel.size.y * factor - 14)
+	panel.position = Vector2(12,header_y + 50 + channels_height)
 	panel.visible = not log_selected
 	panel.modulate.a = 1.0 if entry.has_focus() else 0.88
 	tabs.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	tabs.size.x = natural_width
-	tabs.scale = panel.scale
-	tabs.position = panel.position - Vector2(0,tabs.size.y * factor + 5)
-	tabs.show()
+	tabs.scale = Vector2.ONE * minf(1,width / natural_width)
+	tabs.position = Vector2(12,header_y + 50)
+	tabs.visible = not log_selected
+	primary_tabs.position = Vector2(12,header_y + 14)
+	primary_tabs.size = Vector2(width,32)
+	resize_handle.position = Vector2(12,header_y)
+	resize_handle.size = Vector2(width,12)
 	log_view.position = panel.position
 	log_view.size = panel.size
 	log_view.scale = panel.scale
@@ -122,7 +185,30 @@ func _refresh() -> void:
 	if background != null:
 		background.hide()
 
+func contains_pointer(point: Vector2) -> bool:
+	for control in [panel,tabs,log_view,primary_tabs,resize_handle]:
+		if is_instance_valid(control) and control.is_visible_in_tree() and control.get_global_rect().has_point(point):
+			return true
+	return false
+
+func _resize_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		resizing = true
+		drag_start_y = overlay.get_node("Control").get_global_mouse_position().y
+		drag_start_height = minf(preferred_height,overlay.get_node("Control").size.y * 0.51 - 14)
+		resize_handle.accept_event()
+
 func _input(event: InputEvent) -> void:
+	if resizing and event is InputEventMouseMotion:
+		preferred_height = clampf(drag_start_height + drag_start_y - event.position.y,220,800)
+		_refresh()
+		get_viewport().set_input_as_handled()
+		return
+	if resizing and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		resizing = false
+		get_node("/root/SettingsManager").set_immersive_chat_height(preferred_height)
+		get_viewport().set_input_as_handled()
+		return
 	if not stopped and is_instance_valid(entry) and entry.has_focus() and event is InputEventMouseButton and event.pressed:
 		if not panel.get_global_rect().has_point(event.position) and not tabs.get_global_rect().has_point(event.position):
 			entry.release_focus()
@@ -156,6 +242,10 @@ func release() -> void:
 		log_tab.queue_free()
 	if is_instance_valid(log_view):
 		log_view.queue_free()
+	if is_instance_valid(primary_tabs):
+		primary_tabs.queue_free()
+	if is_instance_valid(resize_handle):
+		resize_handle.queue_free()
 	if not is_instance_valid(overlay):
 		return
 	entry.release_focus()

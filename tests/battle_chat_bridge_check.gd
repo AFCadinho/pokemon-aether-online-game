@@ -82,15 +82,43 @@ func _run() -> void:
 	battle._set_battle_log_open(true)
 	await process_frame
 	assert(bridge.log_selected and bridge.log_view.visible and not panel.visible)
+	assert(not tabs.visible and bridge.primary_tabs.visible)
+	assert(bridge.log_tab.get_parent() == bridge.primary_tabs)
 	assert(bridge.log_view.text == battle.battle_log_panel.log_buffer)
 	assert(bridge.log_tab.text == "Battle Log")
 	general.pressed.emit()
 	await process_frame
 	assert(not bridge.log_selected and panel.visible and not bridge.log_view.visible)
+	assert(tabs.visible)
+	var original_scale: Vector2 = panel.scale
+	var original_height: float = panel.size.y
+	bridge.preferred_height = 500
+	bridge._refresh()
+	assert(panel.size.y > original_height and panel.scale == original_scale,"Height adjustment must not shrink text")
+	assert(bridge.contains_pointer(bridge.resize_handle.get_global_rect().get_center()))
+	var saved_height: float = settings.immersive_chat_height
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	bridge._resize_input(press)
+	assert(bridge.resizing)
+	var motion := InputEventMouseMotion.new()
+	motion.position.y = bridge.drag_start_y + 60
+	bridge._input(motion)
+	press.pressed = false
+	bridge._input(press)
+	assert(not bridge.resizing and settings.immersive_chat_height == bridge.preferred_height)
+	assert(panel.scale == original_scale)
+	settings.set_immersive_chat_height(saved_height)
 	assert(entry.text == "test draft")
 	bridge.select_log(true)
 	await key(KEY_ENTER)
 	assert(not bridge.log_selected and entry.has_focus())
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	if not output.is_empty() and DisplayServer.get_name() != "headless":
+		bridge.select_log(true)
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("chat-log.png"))
 	host.release()
 	host.release()
 	assert(other.visible and panel.get_rect()==original)

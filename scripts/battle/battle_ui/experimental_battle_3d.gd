@@ -5,6 +5,24 @@ extends Control
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
+const ForestPool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
+var forest_lease := {}
+var forest_pool: Node
+var user_camera_yaw := 0.0
+var user_camera_pitch := 0.0
+
+func reset_user_camera() -> void:
+	user_camera_yaw = 0.0
+	user_camera_pitch = 0.0
+
+func _release_forest() -> void:
+	if forest_lease.is_empty():
+		return
+	if is_instance_valid(material_response):
+		material_response._drop()
+	if is_instance_valid(forest_pool):
+		forest_pool.release(self)
+	forest_lease.clear()
 var arena_id := "classic"
 var environment_id: StringName = &"grass"
 var arena_root: Node3D
@@ -72,7 +90,8 @@ func _preparation_progress() -> Array:
 		preparation_phase = "Loading forest terrain and textures"
 	elif active:
 		preparation_phase = "Preparing lighting and shaders"
-	return [loaded_path,pending_entries.size(),loading_path,progress,ArenaCatalog.forest_progress(),active,identities.duplicate(),_blocking_pipelines()]
+	var pool := ForestPool.get_current()
+	return [loaded_path,pending_entries.size(),loading_path,progress,ArenaCatalog.forest_progress(),pool.phase if pool != null else -1,active,identities.duplicate(),_blocking_pipelines()]
 
 func cancel_preparation() -> void:
 	preparation_cancelled = true
@@ -307,6 +326,21 @@ func _requested_arena() -> String:
 	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id)
 
 func _build_world() -> void:
+	if _requested_arena() == "forest" and ground_offsets.size() >= packed.size():
+		forest_pool = ForestPool.get_current()
+		if forest_pool != null:
+			forest_lease = forest_pool.acquire(self)
+		if not forest_lease.is_empty():
+			arena_id = "forest"
+			viewport = forest_lease.main.viewport
+			world = forest_lease.main.world
+			camera = forest_lease.main.camera
+			arena_root = forest_lease.main.arena
+			camera.position = ArenaCatalog.camera_home(arena_id)
+			camera.look_at(ArenaCatalog.camera_target(arena_id))
+			_sync_render_size()
+			render_surface.texture = viewport.get_texture()
+			return
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
 	viewport.msaa_3d = Viewport.MSAA_4X
@@ -489,7 +523,7 @@ func _set_active(value: bool) -> void:
 		for i in 2:
 			_stop_transition(i)
 			action_generation[i] += 1
-			if players[i] != null:
+			if is_instance_valid(players[i]):
 				players[i].stop()
 				resting[i] = true
 				current_actions[i] = "idle"
@@ -584,7 +618,13 @@ func _update_camera(delta: float) -> void:
 		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"] and lifecycle[0] in ["idle", "empty", "hidden"] and lifecycle[1] in ["idle", "empty", "hidden"]:
 			camera_phase += delta * 0.22
 		camera.position = ArenaCatalog.camera_home(arena_id).rotated(Vector3.UP, sin(camera_phase) * 0.10)
-	camera.look_at(ArenaCatalog.camera_target(arena_id))
+	var target := ArenaCatalog.camera_target(arena_id)
+	var offset := camera.position - target
+	offset = offset.rotated(Vector3.UP,user_camera_yaw)
+	var right := offset.cross(Vector3.UP).normalized()
+	offset = offset.rotated(right,user_camera_pitch)
+	camera.position = target + offset
+	camera.look_at(target)
 
 func _process(delta: float) -> void:
 	_sync_render_size()
@@ -609,7 +649,10 @@ func _process(delta: float) -> void:
 			entries.clear()
 			if viewport != null:
 				render_surface.texture = null
-				viewport.queue_free()
+				if forest_lease.is_empty():
+					viewport.queue_free()
+				else:
+					_release_forest()
 				viewport = null
 				world = null
 				camera = null
@@ -662,6 +705,9 @@ func _process(delta: float) -> void:
 		if _requested_arena() == "forest":
 			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
 			arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
+			var pool := ForestPool.get_current()
+			if pool != null and not pool.ready_for_battle and not pool.failed:
+				arena_preparing = true
 			if arena_preparing:
 				reason = "Preparing forest assets…"
 				return
@@ -715,3 +761,4 @@ func _exit_tree() -> void:
 	_clear_actors()
 	if is_instance_valid(mode_label):
 		mode_label.queue_free()
+	_release_forest()

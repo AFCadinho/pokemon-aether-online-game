@@ -49,6 +49,23 @@ addressed by this layout change.
 
 ## Focused checks
 
+### Resizable chat and user camera
+
+Battle Log and Chat are now primary tabs; channel tabs only appear under Chat.
+The top grip changes panel height (saved in `immersive_chat_height`), constrained
+to the lower-left area below the team rail. Height changes never scale the text.
+Channel-tab fitting is independent of content font scaling. Small windows retain
+the existing proportional UI fit. Chat drafts and original send handlers survive
+tab changes. The central prompt now sits directly above the switch slots.
+
+Left-button dragging over the free arena orbits the 3D camera, with bounded pitch
+and unrestricted yaw. HUD/chat/resize controls do not initiate a drag. Release
+or focus loss stops dragging; `Reset camera` in the tools menu restores baseline.
+Attack/switch animation shots temporarily block orbit input because existing
+screen-space effects capture anchors. Gentle motion remains the baseline and
+the material-response camera follows the same transform. Camera input is only
+installed for Immersive and only operates with an active 3D presenter.
+
 The Immersive refinement adds corner portraits from existing appearance state
 (NPCs use existing trainer art), mirroring the existing timed trainer commands.
 Wild opponents have no trainer portrait. Spectator/replay identities never fall
