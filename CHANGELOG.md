@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Corrected transparent Pokémon edges in Summary and Pokédex previews.
+
 - Animated Pokémon remain crisp and stable while moving in the smaller Summary and Pokédex previews.
 
 - The Team and Pokémon Rental attendants now use distinct wealthy merchant overworld sprites and matching dialogue portraits.
