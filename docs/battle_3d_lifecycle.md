@@ -4,6 +4,24 @@ Active development targets desktop 3D only. The existing sprite renderer stays
 in the repository, but feature parity is not a requirement for this milestone.
 Battle state, rules, networking and recorded events remain shared.
 
+## Desktop raster quality
+
+The renderer uses a Control with a linearly filtered TextureRect and an
+independently sized SubViewport. Its raster size follows the transformed
+on-screen dimensions (including window stretch), rather than inheriting the
+1152×648 HUD design resolution. Four-times MSAA remains enabled. Camera
+projections are converted from raster pixels back into UI coordinates before
+exposing anchors, so changing resolution does not move HUD/effect targets.
+The local arena uses a 25-unit orthogonal directional shadow region instead
+of the default 100-unit cascaded setup. Materials, lighting energy, model size
+and camera framing are unchanged; matching the sprite lighting remains separate.
+
+The acceptance test checks raster sizing and anchor stability at 0.75×, 1×
+and 1.37× presentation scale, along with its normal three lifecycle rounds.
+Higher-resolution displays require more GPU work; this is not a 4K or low-end
+hardware certification. See Godot's
+[screen transform API](https://docs.godotengine.org/en/4.6/classes/class_canvasitem.html#class-canvasitem-method-get-screen-transform).
+
 ## Ownership
 
 - The battle host projects the displayed combatant and sleep status, including
