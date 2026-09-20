@@ -217,6 +217,26 @@ builds.
 An approved package also receives a lightweight `preview-catalog.json` alias,
 so local debug review can reuse the exact same files without duplicating the
 packaged assets.
+
+The catalog compaction benchmark is deliberately separate from packaging and
+cannot activate a candidate:
+
+```sh
+python tools/sprite_factory/catalog_compaction_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG OUTPUT_DIRECTORY
+python tools/sprite_factory/video_alpha_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG VIDEO_OUTPUT_DIRECTORY
+python tools/sprite_factory/tight_frame_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG OUTPUT_REPORT
+python tools/sprite_factory/webp_quality_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG OUTPUT_REPORT
+```
+
+These tools retain 512×512 logical framing and native 60 FPS. They measure
+temporal redundancy, transparent area, source quality, normal/shiny overlap,
+decode/seek cost and representative alternative encodings. Their outputs are
+benchmark evidence only; human visual approval and platform runtime support
+remain separate gates.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.
