@@ -5,6 +5,7 @@ func _init() -> void:
 func _run() -> void:
 	var settings = root.get_node("SettingsManager")
 	settings.battle_presentation_mode = "3d"
+	settings.battle_animations = true
 	settings.battle_3d_catalog_path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	settings.battle_3d_forest_manifest = OS.get_environment("POKEAETHER_FOREST_MANIFEST")
 	assert(not settings.battle_3d_catalog_path.is_empty())
@@ -37,6 +38,13 @@ func _run() -> void:
 			assert(stage.ground_offsets.size()==2)
 			assert(await stage.recall("p1"))
 			assert(await stage.send_out("p1"))
+			var router = load("res://scripts/battle/battle_animation_router.gd").new()
+			router.model_presenter = stage
+			for move in ["Outrage", "Flamethrower"]:
+				await router.play_attack_tween_for_actor("p1", move)
+				assert(stage.current_actions[0] == stage.attack_action_for(move))
+				await router.play_move_animation(move, "p1", "p2")
+			assert(router.move_animation_configs.is_empty() and router.active_animation_nodes.is_empty())
 			for action in ["physical_attack","special_attack","damage","faint_start"]:
 				await stage.play_action("p2",action)
 			stage.set_combatant(0,"Roaring Moon")
@@ -54,6 +62,7 @@ func _run() -> void:
 				await RenderingServer.frame_post_draw
 				root.get_texture().get_image().save_png(output.path_join(id+"-client.png"))
 			var main_view: WeakRef = weakref(stage.viewport)
+			router.cancel_render()
 			var light_view: WeakRef = weakref(stage.material_response.viewport)
 			stage.queue_free()
 			for frame in 5:
