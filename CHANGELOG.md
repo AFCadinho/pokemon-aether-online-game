@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a winding background trail to the forest battle preview and corrected model grounding using the full idle animation.
+
 - Added a separate Temperate Forest battle preview with a sunny, circular clearing for both Pokémon and tall grass retained around the arena.
 
 - Added a separate full-window forest preview for reviewing Dragonite and Roaring Moon before changing the battle arena or interface.

@@ -96,6 +96,9 @@ func _ground_position(pos: Vector3) -> Vector3:
 		pos.y = hit.position.y
 	return pos
 
+func _place_actor(_actor: Node3D, _animation_player: AnimationPlayer) -> void:
+	pass
+
 func _make_forest() -> Node3D:
 	var scene: Node3D = load("res://scenes/levels/forest.tscn").instantiate()
 	scene.position = Vector3(-12, 0, -8)
@@ -171,6 +174,7 @@ func _run() -> void:
 		var facing := -actor.position
 		actor.rotation.y = atan2(facing.x, facing.z)
 		players.append(_player(actor))
+		await _place_actor(actor, players[-1])
 	response = ForestResponse.new()
 	response.forest_factory = _make_forest
 	response.stage = stage
