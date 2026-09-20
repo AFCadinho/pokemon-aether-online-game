@@ -58,6 +58,8 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 ]
 
 var battle_animations := true
+var battle_presentation_mode := "2.5d"
+var battle_3d_catalog_path := ""
 var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
@@ -122,6 +124,8 @@ func load_settings() -> void:
 
 	var data: Dictionary = parsed_data as Dictionary
 	battle_animations = bool(data.get("battle_animations", battle_animations))
+	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
+	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
@@ -208,6 +212,8 @@ func _apply_launcher_locale_argument() -> bool:
 func save_settings() -> void:
 	var data: Dictionary = {
 		"battle_animations": battle_animations,
+		"battle_presentation_mode": battle_presentation_mode,
+		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
@@ -250,6 +256,19 @@ func set_battle_animations(enabled: bool) -> void:
 		return
 
 	battle_animations = enabled
+	_save_and_emit()
+
+func set_battle_presentation_mode(mode: String) -> void:
+	var validated := "3d" if mode == "3d" else "2.5d"
+	if battle_presentation_mode == validated:
+		return
+	battle_presentation_mode = validated
+	_save_and_emit()
+
+func set_battle_3d_catalog_path(path: String) -> void:
+	if battle_3d_catalog_path == path:
+		return
+	battle_3d_catalog_path = path
 	_save_and_emit()
 
 

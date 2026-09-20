@@ -1,5 +1,10 @@
 extends Control
 
+## Presentation-only seam. The battle state/event queue remains authoritative.
+signal presentation_action(action: String)
+var presentation_anchor: Callable
+var presentation_visual_rect: Callable
+
 @export var default_is_double_battle := false
 
 const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
@@ -139,6 +144,8 @@ func is_mouse_over_single_sprite(mouse_position: Vector2) -> bool:
 	return get_single_sprite_hover_rect().has_point(mouse_position)
 
 func get_single_sprite_hover_rect() -> Rect2:
+	if presentation_visual_rect.is_valid():
+		return presentation_visual_rect.call()
 	return _get_sprite_hover_rect(single_sprite)
 
 func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
@@ -221,6 +228,7 @@ func _snap_sprite_to_pixel_grid(sprite: AnimatedSprite2D) -> void:
 	_apply_sprite_anchor(sprite)
 
 func reset_battle_pose() -> void:
+	presentation_action.emit("reset")
 	_stop_active_tween()
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
@@ -250,6 +258,7 @@ func clear_pokemon() -> void:
 		sprite.visible = false
 
 func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET, move_name: String = "") -> void:
+	presentation_action.emit(DratiniHdPoc.attack_action(move_name))
 	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action(DratiniHdPoc.attack_action(move_name)):
 		# Start beside the existing move VFX rather than delaying it by the full
 		# source action. The 0.2-second lunge tween would double the model motion.
@@ -485,6 +494,7 @@ func play_move_actor_motion(motion_config: Dictionary = {}, motion_direction: Ve
 	_reset_sprites_pose(sprites)
 
 func play_damage_tween() -> void:
+	presentation_action.emit("damage")
 	if substitute_active and not substitute_revealed_for_move:
 		await play_substitute_damage_tween()
 		return
@@ -668,6 +678,7 @@ func _get_stat_change_scale_multiplier(multiplier: float, motion_scale: float) -
 	return 1.0 + (multiplier - 1.0) * motion_scale
 
 func play_faint_tween() -> void:
+	presentation_action.emit("faint_start")
 	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action("faint_start"):
 		await _play_dratini_poc_faint()
 		return
@@ -771,6 +782,7 @@ func _play_dratini_poc_resting_animation() -> void:
 
 
 func set_dratini_poc_sleeping(sleeping: bool) -> void:
+	presentation_action.emit("sleep" if sleeping else "idle")
 	if not _has_dratini_poc_sprite() or dratini_poc_sleeping == sleeping:
 		return
 	dratini_poc_sleeping = sleeping
@@ -1171,9 +1183,13 @@ func _apply_sprite_anchor(sprite: AnimatedSprite2D) -> void:
 	sprite.offset = (frame_size * 0.5) - anchor
 
 func get_single_battle_anchor_global_position() -> Vector2:
+	if presentation_anchor.is_valid():
+		return presentation_anchor.call(false)
 	return _get_sprite_battle_anchor_global_position(single_sprite)
 
 func get_single_animation_anchor_global_position() -> Vector2:
+	if presentation_anchor.is_valid():
+		return presentation_anchor.call(true)
 	return _get_sprite_animation_anchor_global_position(single_sprite)
 
 func _get_sprite_battle_anchor_global_position(sprite: AnimatedSprite2D) -> Vector2:
@@ -1218,7 +1234,7 @@ func get_single_animation_visual_rect_in_node(target_node: CanvasItem) -> Rect2:
 	if target_node == null or single_sprite == null or not single_sprite.visible:
 		return Rect2()
 
-	var visual_rect := _get_sprite_visual_rect_global(single_sprite)
+	var visual_rect: Rect2 = presentation_visual_rect.call() if presentation_visual_rect.is_valid() else _get_sprite_visual_rect_global(single_sprite)
 	var transform := target_node.get_global_transform().affine_inverse()
 	var top_left := transform * visual_rect.position
 	var bottom_right := transform * visual_rect.end

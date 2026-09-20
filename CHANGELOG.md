@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Desktop players can keep 2.5D battles or opt into an experimental 3D preview using local Dragonite and Roaring Moon models. Unsupported Pokémon and battle situations fall back to 2.5D.
+
 - Approved animated Pokémon catalogs can now be packaged into validated, size-efficient 512×512/60 FPS runtime data without changing their review or activation state.
 
 - Animated Pokémon previews no longer develop moving block patterns when the game window uses fractional scaling.

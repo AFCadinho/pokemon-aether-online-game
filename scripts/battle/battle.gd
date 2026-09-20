@@ -776,6 +776,11 @@ func _ready() -> void:
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
+	# Optional presentation only; no assets or network requests in default 2.5D.
+	var desktop_3d := preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd").new()
+	battle_stage.add_child(desktop_3d)
+	battle_stage.move_child(desktop_3d, battle_background_video.get_index() + 1)
+	desktop_3d.setup([player_sprite_box, enemy_sprite_box], [player_battle_platform, enemy_battle_platform])
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
 	force_switch_flow.setup(battle_state)

@@ -39,6 +39,7 @@ var display_own_name_check_box: CheckBox
 var hide_other_players_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
+var battle_presentation_options: OptionButton
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
@@ -258,6 +259,8 @@ func _input(event: InputEvent) -> void:
 
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
+	if battle_presentation_options != null:
+		battle_presentation_options.select(1 if SettingsManager.battle_presentation_mode == "3d" else 0)
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
@@ -388,6 +391,30 @@ func _setup_tabs() -> void:
 		_create_toggle_setting(hide_other_players_check_box, "ui.settings.hide_other_players"),
 	]
 	_move_nodes_to_container(general_tab, gameplay_rows)
+	if not OS.has_feature("web") and not OS.has_feature("mobile"):
+		var presentation_label := Label.new()
+		presentation_label.text = "Battle presentation"
+		battle_presentation_options = OptionButton.new()
+		battle_presentation_options.name = "BattlePresentationOptions"
+		battle_presentation_options.add_item("2.5D — sprites")
+		battle_presentation_options.add_item("3D — experimental desktop")
+		battle_presentation_options.item_selected.connect(func(index):
+			if not loading_controls:
+				SettingsManager.set_battle_presentation_mode("3d" if index == 1 else "2.5d"))
+		var presentation_hint := Label.new()
+		presentation_hint.text = "Local preview models only. Unsupported Pokémon use 2.5D. No downloads."
+		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
+		var choose_catalog := Button.new()
+		choose_catalog.text = "Choose local 3D preview report…"
+		var catalog_dialog := FileDialog.new()
+		catalog_dialog.access = FileDialog.ACCESS_FILESYSTEM
+		catalog_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+		catalog_dialog.filters = PackedStringArray(["*.json ; 3D export report"])
+		add_child(catalog_dialog)
+		catalog_dialog.file_selected.connect(SettingsManager.set_battle_3d_catalog_path)
+		choose_catalog.pressed.connect(func(): catalog_dialog.popup_centered_ratio(0.7))
+		general_tab.add_child(choose_catalog)
 	_wrap_settings_section(
 		general_tab,
 		"",
