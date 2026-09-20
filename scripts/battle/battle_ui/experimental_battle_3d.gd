@@ -6,6 +6,7 @@ const SUPPORTED := ["dragonite", "roaring-moon"]
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 var arena_id := "classic"
+var environment_id: StringName = &"grass"
 var arena_root: Node3D
 var arena_problem := ""
 var ground_offsets := {}
@@ -281,6 +282,9 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 static func supported(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
 	return species.to_lower().replace(" ", "-") in SUPPORTED and not shiny and not double and not substitute
 
+func _requested_arena() -> String:
+	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id)
+
 func _build_world() -> void:
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
@@ -301,7 +305,7 @@ func _build_world() -> void:
 	for light in world.get_children():
 		if light is DirectionalLight3D:
 			light.shadow_blur = 2.0/3.0
-	arena_id = ArenaCatalog.validate(get_tree().root.get_node("SettingsManager").battle_3d_arena)
+	arena_id = _requested_arena()
 	if arena_id != "classic" and ground_offsets.size() < packed.size():
 		arena_problem = "Arena ground calibration missing or outdated; regenerate the local catalog grounding file"
 		arena_id = "classic"
@@ -630,7 +634,7 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		return
 	if viewport == null:
-		if get_tree().root.get_node("SettingsManager").battle_3d_arena == "forest":
+		if _requested_arena() == "forest":
 			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").battle_3d_forest_manifest)
 			arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
 			if arena_preparing:

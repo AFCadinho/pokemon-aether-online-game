@@ -2,9 +2,12 @@
 
 Forest, cave, sea (sandbar) and stadium now connect to ExperimentalBattle3D.
 In Settings, choose **3D — experimental desktop**, then **3D arena — development
-override (next battle)**. Classic test stage remains the default. The choice is
-captured at world creation; it does not replace an arena mid-action. Automatic
-map/PvP selection, fullscreen UI and attack cameras are deliberately not added.
+override (next battle)**. Automatic is the default and follows the existing 2D
+environment profile: grass → forest, water → sea, cave → cave, pvp_stadium → stadium.
+Gym leaders, PvP and lobby encounters retain their existing environment resolution.
+Previously saved manual selections remain overrides; select Automatic to reset.
+The choice is captured at world creation; it does not replace an arena mid-action.
+Fullscreen UI and attack cameras are deliberately not added.
 Only the existing supported local Dragonite/Roaring Moon catalog is supported.
 
 ## Local setup on this workstation
@@ -63,7 +66,9 @@ Godot's normal resource export, not cache synchronization. The pack is local onl
 
 `tests/battle_arena_integration_check.gd` exercises every available arena twice,
 send-out, recall, physical/special attacks, damage, faint and replacement. Both
-viewports must be freed after every cycle. `POKEAETHER_TEST_ARENAS` can select a
+arena selection and the forest loading gate use the shared environment profile
+in automatic mode, exercised by this check.
+Both viewports must be freed after every cycle. `POKEAETHER_TEST_ARENAS` can select a
 comma-separated slice. Forest requires `POKEAETHER_FOREST_MANIFEST`.
 The existing `battle_3d_presentation_check.gd` also supports
 `POKEAETHER_TEST_ARENA=forest` for the full battle/replay/host regression.

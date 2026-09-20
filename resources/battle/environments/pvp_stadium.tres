@@ -9,6 +9,7 @@
 resource_name = "PvP Stadium Battle Environment"
 script = ExtResource("1_profile")
 environment_id = &"pvp_stadium"
+arena_3d_id = "stadium"
 background_texture = ExtResource("2_background")
 background_video = ExtResource("3_video")
 platform_texture = ExtResource("4_platform")

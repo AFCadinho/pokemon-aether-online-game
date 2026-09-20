@@ -420,8 +420,8 @@ func _setup_tabs() -> void:
 		general_tab.add_child(choose_catalog)
 		var arena_options := OptionButton.new()
 		arena_options.name = "BattleArenaOptions"
-		var arena_ids: Array = preload("res://scripts/battle/arenas/arena_catalog.gd").IDS
-		for label in ["Classic test stage", "Forest (local pack)", "Cave", "Sea / sandbar", "PvP stadium"]:
+		var arena_ids: Array = preload("res://scripts/battle/arenas/arena_catalog.gd").SELECTION_IDS
+		for label in ["Automatic — same environment as 2D", "Classic test stage", "Forest (local pack)", "Cave", "Sea / sandbar", "PvP stadium"]:
 			arena_options.add_item(label)
 		arena_options.select(arena_ids.find(SettingsManager.battle_3d_arena))
 		arena_options.item_selected.connect(func(index): SettingsManager.set_battle_3d_arena(arena_ids[index]))

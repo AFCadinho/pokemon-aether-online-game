@@ -1134,6 +1134,8 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		push_error("Battle environment profile is invalid: %s" % environment_id)
 		return
 	active_battle_environment_id = profile.environment_id
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.environment_id = profile.environment_id
 	active_battle_environment_loops_video = profile.loop_background_video
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true

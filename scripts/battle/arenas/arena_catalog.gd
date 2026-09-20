@@ -1,6 +1,15 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
 const IDS := ["classic", "forest", "cave", "sea", "stadium"]
+const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
+
+static func validate_selection(id: String) -> String:
+	return id if id in SELECTION_IDS else "auto"
+
+static func resolve(selection: String, environment_id: StringName) -> String:
+	if validate_selection(selection) != "auto":
+		return validate(selection)
+	return validate(preload("res://scripts/battle/battle_environment_catalog.gd").get_profile(environment_id).arena_3d_id)
 static var mounted_forest := ""
 static var forest_scene: PackedScene
 static var forest_loading := false

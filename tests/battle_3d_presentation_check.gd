@@ -83,7 +83,8 @@ func _run() -> void:
 		round_evidence.load_p95_ms = loading_frames[int(loading_frames.size()*0.95)]
 		assert(stage.active and stage.packed.size() == 2)
 		if not OS.get_environment("POKEAETHER_TEST_ARENA").is_empty():
-			assert(stage.arena_id == settings.battle_3d_arena,stage.arena_problem)
+			var expected := preload("res://scripts/battle/arenas/arena_catalog.gd").resolve(settings.battle_3d_arena, battle.active_battle_environment_id)
+			assert(stage.arena_id == expected,stage.arena_problem)
 		if stage.entries.dragonite.get("material_response_schema", 0) == 1:
 			for entry in stage.entries.values():
 				assert(ResourceLoader.get_dependencies(entry.runtime_path).is_empty(), "Prepared response must be self-contained")
