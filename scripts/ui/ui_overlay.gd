@@ -11990,6 +11990,7 @@ func _setup_pokedex_popup() -> void:
 
 	var sprite_viewport_container := SubViewportContainer.new()
 	sprite_viewport_container.stretch = true
+	sprite_viewport_container.material = _make_preview_composite_material()
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(sprite_viewport_container)
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -19966,6 +19967,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var viewport_container := SubViewportContainer.new()
 	viewport_container.stretch = false
 	viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	viewport_container.material = _make_preview_composite_material()
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_stage.add_child(viewport_container)
 	viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -20820,6 +20822,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	var sprite_viewport_container := SubViewportContainer.new()
 	sprite_viewport_container.stretch = false
 	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite_viewport_container.material = _make_preview_composite_material()
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(sprite_viewport_container)
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -36745,6 +36748,16 @@ func _rendered_portrait_rect(frames: SpriteFrames, stage: Vector2) -> Rect2:
 	var scale_value: float = min(stage.x / full.size.x, stage.y / full.size.y)
 	var visible_size := stage / scale_value
 	return Rect2(full.get_center() - visible_size * 0.5, visible_size)
+
+
+func _make_preview_composite_material() -> ShaderMaterial:
+	# Transparent SubViewport output already contains RGB multiplied by alpha.
+	# Default blending would multiply the edges by alpha a second time.
+	var shader := Shader.new()
+	shader.code = "shader_type canvas_item; render_mode blend_premul_alpha;"
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	return material
 
 
 func _add_preview_zoom_button(
