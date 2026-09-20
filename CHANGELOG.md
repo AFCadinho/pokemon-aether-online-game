@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local debug builds offer an F8 preview-surface check in Summary and Pokédex to help investigate visual artifacts; Shift+F8 restores the normal view.
+
 - Corrected transparent Pokémon edges in Summary and Pokédex previews.
 
 - The Guild training daily-reward checkbox now has clear Aether-styled borders and visible checked, hover, disabled and keyboard-focus states.
