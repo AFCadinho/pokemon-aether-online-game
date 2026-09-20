@@ -6,6 +6,9 @@ var initialized := [false, false]
 func _process(delta: float) -> void:
 	var stage: Control = battle.battle_stage
 	var area := stage.size
+	# Legacy visibility refreshes still run; the floating rail owns its bounds.
+	battle.get_node("%ActionChoices").hide()
+	_place(battle.battle_log_rail, Vector2(18,150), Vector2(310,maxf(180,battle.size.y - 420)), 1.0)
 	var team_preview: Control = battle.get_node("%PlayerStagePartyRail")
 	_place(team_preview, Vector2(18, 145), team_preview.size, 0.85)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)

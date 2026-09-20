@@ -9,10 +9,24 @@ Immersive gives the arena the full screen, places smaller HP panels above the Po
 moves on the bottom right and the existing party controls near the bottom center.
 Battle log is a collapsible floating panel, with a separate calculator button.
 The player team preview stays on the left; switch controls sit below the centered
-battle message, reserving bottom-left space for future chat. The opponent team
+battle message, with the existing chat in the bottom-left space. The opponent team
 stays visible at the edge. Compact moves and mechanics share the bottom-right area. HP panels
 smoothly follow projected actor bounds with screen-edge clamping; 2D fallback
 uses the sprite hover bounds. These are presentation-only positions, not combat state.
+
+The dedicated screen temporarily exposes only chat controls from the existing
+UIOverlay in place, so channels, PMs, mute rules, history and submission callbacks
+remain the same. It creates no socket and does not replay received messages.
+Other overworld panels and shortcuts remain suspended. Enter focuses chat when
+not already typing; Enter in the input follows the existing send handler once.
+Escape or a click outside chat releases typing; battle hotkeys ignore text focus.
+Battle log stays independent and its open/closed preference is saved. Its scroll
+area is compact enough not to cover chat. Release restores panel geometry,
+visibility, opacity, layer and input processing without clearing the draft.
+
+`battle_chat_bridge_check.gd` exercises the real screen and battle with a synthetic
+chat UI: focus, one submission signal, battle-shortcut isolation, simultaneous
+log/chat bounds and idempotent restore. It does not send live chat messages.
 Classic retains its original scene hierarchy and framed layout. Changes apply
 on the next battle, not during an action. Rendering, switching, move signals,
 network authority and the overworld return flow remain shared.

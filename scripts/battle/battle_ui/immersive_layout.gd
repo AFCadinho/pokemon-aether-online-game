@@ -35,6 +35,7 @@ static func apply(battle: Control) -> void:
 	_move(rail, battle)
 	rail.z_index = 90
 	rail.hide()
+	battle.get_node("%BattleLogPanel/MarginContainer/VBoxContainer/BattleLogText").custom_minimum_size.y = 100
 	var calc: Control = battle.get_node("%CalcLogButton")
 	_move(calc, battle)
 	calc.custom_minimum_size = Vector2(130, 36)
@@ -59,7 +60,7 @@ static func apply(battle: Control) -> void:
 		dock.size = Vector2(width * 0.55 - 28, 106)
 		rail.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		rail.position = Vector2(18, 150)
-		rail.size = Vector2(310, maxf(220, height - 340))
+		rail.size = Vector2(310, maxf(180, height - 420))
 		log_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		log_button.position = Vector2(18, 100)
 		log_button.size = Vector2(95, 32)

@@ -9,6 +9,7 @@ var saved_input: Array[Dictionary] = []
 var released := false
 var generation := 0
 var reveal_tween: Tween
+var chat_bridge: Node
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null) -> void:
 	battle = instance
@@ -26,6 +27,10 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null) -> void:
 	$Content.add_child(battle)
 	resized.connect(_fit_battle)
 	_fit_battle()
+	if battle.has_meta("immersive_battle_ui") and is_instance_valid(overlay) and overlay.has_node("Control/ChatPanel") and overlay.has_node("Control/ChatTabsPanel"):
+		chat_bridge = preload("res://scripts/battle/battle_ui/battle_chat_bridge.gd").new()
+		add_child(chat_bridge)
+		chat_bridge.setup(overlay,self)
 	_reveal_when_prepared.call_deferred(generation)
 
 func _suspend_ui_input(node: Node) -> void:
@@ -71,6 +76,8 @@ func release() -> void:
 	if released:
 		return
 	released = true
+	if is_instance_valid(chat_bridge):
+		chat_bridge.release()
 	generation += 1
 	if is_instance_valid(battle):
 		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")

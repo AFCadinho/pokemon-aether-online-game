@@ -12329,6 +12329,10 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	if has_meta("battle_chat_active"):
+		_refresh_session_logout_countdown()
+		_refresh_chat_mute_countdown()
+		return
 	_refresh_aether_clash_arena_ui_mode_if_needed()
 	_refresh_ui_input_mouse_blocker()
 	if _collapsible_layout_dirty:
@@ -31091,6 +31095,8 @@ func _position_chat_resize_button() -> void:
 	chat_resize_button.size = COLLAPSE_BUTTON_SIZE
 
 func _position_chat_tabs_panel() -> void:
+	if has_meta("battle_chat_active"):
+		return
 	if chat_tabs_panel == null or chat_panel == null:
 		return
 
