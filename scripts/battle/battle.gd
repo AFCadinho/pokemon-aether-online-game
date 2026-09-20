@@ -2747,6 +2747,8 @@ func _input(event: InputEvent) -> void:
 		return
 
 func _unhandled_input(event: InputEvent) -> void:
+	if has_meta("battle_screen_preparing"):
+		return
 	if _is_ui_typing():
 		return
 	if event.is_action_pressed("ui_cancel") and _close_visible_battle_drawer():

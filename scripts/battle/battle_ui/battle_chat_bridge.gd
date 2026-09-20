@@ -149,6 +149,11 @@ func _process(_delta: float) -> void:
 func _refresh() -> void:
 	if not is_instance_valid(overlay):
 		return
+	if host.get_node("Cover").visible:
+		# The warm-up cover is on the battle canvas; this separate higher
+		# canvas must remain hidden until that cover has finished fading.
+		overlay.hide()
+		return
 	overlay.show()
 	var layer := host.get_canvas_layer_node()
 	overlay.layer = layer.layer + 1 if layer != null else 30
@@ -223,6 +228,8 @@ func _resize_input(event: InputEvent) -> void:
 		resize_handle.accept_event()
 
 func _input(event: InputEvent) -> void:
+	if host.get_node("Cover").visible:
+		return
 	if resizing and event is InputEventMouseMotion:
 		preferred_height = clampf(drag_start_height + drag_start_y - event.position.y,220,800)
 		_refresh()
