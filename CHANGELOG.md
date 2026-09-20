@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed the forest preview's ground-height calibration missing animated poses, which could leave Roaring Moon's tail underground.
+
 - Added a winding background trail to the forest battle preview and corrected model grounding using the full idle animation.
 
 - Added a separate Temperate Forest battle preview with a sunny, circular clearing for both Pokémon and tall grass retained around the arena.
