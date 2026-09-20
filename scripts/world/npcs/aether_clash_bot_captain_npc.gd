@@ -2,7 +2,9 @@
 extends DialogueNPC
 
 const CHALLENGE_MENU := preload("res://scripts/ui/aether_clash_bot_challenge_menu.gd")
+const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 var interaction_in_flight := false
+signal training_choice_resolved(action: String)
 
 
 func _prefetches_dialogue_metadata_on_approach() -> bool:
@@ -17,6 +19,18 @@ func interact_with_player(_player: Node2D) -> void:
 	if interaction_in_flight:
 		return
 	interaction_in_flight = true
+	while true:
+		var action := await _show_training_choice()
+		if action == "explain":
+			await show_dialogue(_training_explanation(), display_name)
+			continue
+		if action == "money_reward":
+			await show_dialogue(_money_reward_explanation(), display_name)
+			continue
+		if action != "challenge":
+			interaction_in_flight = false
+			return
+		break
 	var world := get_tree().get_first_node_in_group("world")
 	if world != null and world.has_method("_publish_world_presence"):
 		world.call("_publish_world_presence", true)
@@ -48,6 +62,53 @@ func interact_with_player(_player: Node2D) -> void:
 		else:
 			await GameErrorDialogService.show_response(result, "ui.clash_bot.unavailable")
 	interaction_in_flight = false
+
+
+func _show_training_choice() -> String:
+	var layer := CanvasLayer.new()
+	layer.layer = 120
+	get_tree().current_scene.add_child(layer)
+	var dialog := CONFIRMATION.instantiate() as AetherConfirmationDialog
+	layer.add_child(dialog)
+	var choice := OptionButton.new()
+	choice.add_item(LocalizationManager.text("ui.clash_bot.choice_challenge"))
+	choice.add_item(LocalizationManager.text("ui.clash_bot.choice_explain"))
+	choice.add_item(LocalizationManager.text("ui.clash_bot.choice_money_reward"))
+	choice.custom_minimum_size = Vector2(0, 42)
+	dialog.add_custom_control(choice)
+	dialog.style_option_button(choice)
+	dialog.configure(
+		display_name,
+		LocalizationManager.text("ui.clash_bot.choice_prompt"),
+		LocalizationManager.text("ui.clash_bot.choice_continue"),
+		LocalizationManager.text("ui.clash_bot.choice_close")
+	)
+	dialog.confirmed.connect(func(): training_choice_resolved.emit([
+		"challenge", "explain", "money_reward"
+	][clampi(choice.selected, 0, 2)]), CONNECT_ONE_SHOT)
+	dialog.canceled.connect(func(): training_choice_resolved.emit("close"), CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(540, 300))
+	var action: String = await training_choice_resolved
+	layer.queue_free()
+	return action
+
+
+func _training_explanation() -> Array[String]:
+	return [
+		LocalizationManager.text("ui.clash_bot.explain_1"),
+		LocalizationManager.text("ui.clash_bot.explain_2"),
+		LocalizationManager.text("ui.clash_bot.explain_3"),
+		LocalizationManager.text("ui.clash_bot.explain_4"),
+	]
+
+
+func _money_reward_explanation() -> Array[String]:
+	return [
+		LocalizationManager.text("ui.clash_bot.money_explain_1"),
+		LocalizationManager.text("ui.clash_bot.money_explain_2"),
+		LocalizationManager.text("ui.clash_bot.money_explain_3"),
+		LocalizationManager.text("ui.clash_bot.money_explain_4"),
+	]
 
 
 func _load_training_options() -> Dictionary:
