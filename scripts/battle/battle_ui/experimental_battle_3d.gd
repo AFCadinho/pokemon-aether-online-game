@@ -18,6 +18,7 @@ var loaded_path := "!unloaded"
 var active := false
 var saved_colors := {}
 var reason := "2.5D selected"
+var catalog_problem := ""
 var current_actions := ["idle", "idle"]
 var resting := [true, true]
 var mode_label: Label
@@ -272,12 +273,18 @@ func _load_catalog(path: String) -> void:
 	loaded_path = path
 	pending_entries.clear()
 	import_times_ms.clear()
-	reason = "Invalid 3D report; using 2.5D"
+	catalog_problem = "Invalid 3D catalog; choose a prepared preview report in Settings"
+	reason = catalog_problem
 	entries.clear()
 	packed.clear()
 	_clear_actors()
+	if path.strip_edges().is_empty():
+		catalog_problem = "No 3D catalog selected — choose a local 3D preview report in Settings"
+		reason = catalog_problem
+		return
 	if not FileAccess.file_exists(path):
-		reason = "3D report missing; using 2.5D"
+		catalog_problem = "Selected 3D catalog not found — choose it again in Settings"
+		reason = catalog_problem
 		return
 	var prepared_path := path + ".runtime.json" if FileAccess.file_exists(path + ".runtime.json") else path
 	var file := FileAccess.open(prepared_path, FileAccess.READ)
@@ -306,7 +313,11 @@ func _load_catalog(path: String) -> void:
 		if not pending_entries.any(func(item): return item.species == entry.species):
 			pending_entries.append(entry)
 	if not pending_entries.is_empty():
+		catalog_problem = ""
 		reason = "Preparing local 3D models…"
+	else:
+		catalog_problem = "Catalog has no valid prepared Dragonite/Roaring Moon models"
+		reason = catalog_problem
 
 func _import_next_model() -> void:
 	if loading_path.is_empty():
@@ -316,6 +327,7 @@ func _import_next_model() -> void:
 		loading_path = loading_entry.runtime_path
 		loading_started = Time.get_ticks_usec()
 		if ResourceLoader.load_threaded_request(loading_path, "PackedScene", false, ResourceLoader.CACHE_MODE_IGNORE) != OK:
+			catalog_problem = "Could not load prepared 3D model: " + str(loading_entry.species)
 			loading_path = ""
 			loading_entry.clear()
 		return
@@ -329,6 +341,7 @@ func _import_next_model() -> void:
 			entries[loading_entry.species] = loading_entry.duplicate(true)
 			import_times_ms[loading_entry.species] = (Time.get_ticks_usec() - loading_started) / 1000.0
 	elif status == ResourceLoader.THREAD_LOAD_FAILED:
+		catalog_problem = "Could not load prepared 3D model: " + str(loading_entry.species)
 		ResourceLoader.load_threaded_get(loading_path)
 	loading_path = ""
 	loading_entry.clear()
@@ -434,7 +447,7 @@ func _update_camera(delta: float) -> void:
 func _process(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
-	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · 3D preview unavailable")
+	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
 	mode_label.tooltip_text = reason
 	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 		_set_active(false)
@@ -461,6 +474,10 @@ func _process(delta: float) -> void:
 	if not pending_entries.is_empty() or not loading_path.is_empty():
 		_import_next_model()
 		return
+	if packed.is_empty() and not catalog_problem.is_empty():
+		reason = catalog_problem
+		_set_active(false)
+		return
 	var desired := []
 	for platform in platforms:
 		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
@@ -475,8 +492,12 @@ func _process(delta: float) -> void:
 		if species.is_empty() and not double and not substitute:
 			desired.append("")
 			continue
-		if not supported(species, combatants[index].shiny, double, substitute) or not packed.has(species):
-			reason = "Unsupported active Pokémon/situation; using 2.5D"
+		if not supported(species, combatants[index].shiny, double, substitute):
+			reason = "Unsupported active Pokémon/form, doubles or substitute: " + species
+			_set_active(false)
+			return
+		if not packed.has(species):
+			reason = "Prepared 3D model unavailable: " + species
 			_set_active(false)
 			return
 		desired.append(species)

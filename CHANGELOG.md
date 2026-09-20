@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The experimental 3D battle preview now explains missing model catalogs and other fallback reasons directly on screen.
+
 - Pokémon hover cards no longer intercept clicks on battle team buttons and now position correctly when the battle interface is scaled.
 
 - Experimental desktop 3D battles open in a dedicated full-screen presentation. The overworld interface returns when the battle closes, while the world connection stays active.
