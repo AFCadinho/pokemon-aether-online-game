@@ -60,6 +60,7 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 var battle_animations := true
 var battle_presentation_mode := "2.5d"
 var battle_3d_catalog_path := ""
+var battle_3d_camera_motion := false
 var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
@@ -126,6 +127,7 @@ func load_settings() -> void:
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
+	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
@@ -214,6 +216,7 @@ func save_settings() -> void:
 		"battle_animations": battle_animations,
 		"battle_presentation_mode": battle_presentation_mode,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
+		"battle_3d_camera_motion": battle_3d_camera_motion,
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
@@ -269,6 +272,12 @@ func set_battle_3d_catalog_path(path: String) -> void:
 	if battle_3d_catalog_path == path:
 		return
 	battle_3d_catalog_path = path
+	_save_and_emit()
+
+func set_battle_3d_camera_motion(enabled: bool) -> void:
+	if battle_3d_camera_motion == enabled:
+		return
+	battle_3d_camera_motion = enabled
 	_save_and_emit()
 
 

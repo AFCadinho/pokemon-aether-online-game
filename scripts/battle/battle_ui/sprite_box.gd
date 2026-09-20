@@ -4,6 +4,7 @@ extends Control
 signal presentation_action(action: String)
 var presentation_anchor: Callable
 var presentation_visual_rect: Callable
+var presentation_faint: Callable
 
 @export var default_is_double_battle := false
 
@@ -678,6 +679,10 @@ func _get_stat_change_scale_multiplier(multiplier: float, motion_scale: float) -
 	return 1.0 + (multiplier - 1.0) * motion_scale
 
 func play_faint_tween() -> void:
+	if presentation_faint.is_valid():
+		if await presentation_faint.call():
+			clear_pokemon()
+		return
 	presentation_action.emit("faint_start")
 	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action("faint_start"):
 		await _play_dratini_poc_faint()

@@ -18,9 +18,14 @@ var loaded_path := "!unloaded"
 var active := false
 var saved_colors := {}
 var reason := "2.5D selected"
-var elapsed := [0.0, 0.0]
+var current_actions := ["idle", "idle"]
 var resting := [true, true]
 var mode_label: Label
+var pending_entries: Array = []
+var import_times_ms := {}
+var action_generation := [0, 0]
+var camera_phase := 0.0
+const CAMERA_HOME := Vector3(4, 5.5, 12)
 
 func setup(sprite_boxes: Array, stage_platforms: Array) -> void:
 	boxes = sprite_boxes
@@ -39,6 +44,8 @@ func setup(sprite_boxes: Array, stage_platforms: Array) -> void:
 	for i in 2:
 		boxes[i].presentation_action.connect(_action.bind(i))
 	set_process(true)
+	# Observe before rendering but after SpriteBox state changes.
+	process_priority = 10
 
 static func supported(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
 	return species.to_lower().replace(" ", "-") in SUPPORTED and not shiny and not double and not substitute
@@ -74,7 +81,7 @@ func _build_world() -> void:
 		_mesh(cylinder, _position(i) - Vector3(0, 0.05, 0), Color("879b8a"))
 	camera = Camera3D.new()
 	world.add_child(camera)
-	camera.position = Vector3(4, 5.5, 12)
+	camera.position = CAMERA_HOME
 	camera.fov = 48
 	camera.look_at(Vector3(0, 1.3, 0))
 	camera.current = true
@@ -103,6 +110,9 @@ func _find_player(node: Node) -> AnimationPlayer:
 
 func _load_catalog(path: String) -> void:
 	loaded_path = path
+	pending_entries.clear()
+	import_times_ms.clear()
+	reason = "Invalid 3D report; using 2.5D"
 	entries.clear()
 	packed.clear()
 	_clear_actors()
@@ -132,29 +142,49 @@ func _load_catalog(path: String) -> void:
 				valid = false
 		if not valid:
 			continue
-		var document := GLTFDocument.new()
-		var state := GLTFState.new()
-		if document.append_from_file(model_path, state) != OK:
-			continue
-		var model := document.generate_scene(state, 60)
-		if model == null:
-			continue
-		var player := _find_player(model)
-		if player == null:
-			model.free()
-			continue
-		for action in timing:
-			if not player.has_animation(action):
-				valid = false
-		if valid:
-			var scene := PackedScene.new()
-			if scene.pack(model) == OK:
-				packed[entry.species] = scene
-				entries[entry.species] = entry
+		if not pending_entries.any(func(item): return item.species == entry.species):
+			pending_entries.append(entry)
+	if not pending_entries.is_empty():
+		reason = "Preparing local 3D models…"
+
+func _import_next_model() -> void:
+	# One bounded local model per frame; no whole-catalog import in one frame.
+	# GLTF scene generation still runs on the main thread (not hitch-free).
+	if pending_entries.is_empty():
+		return
+	var entry: Dictionary = pending_entries.pop_front()
+	var model_path: String = entry.path
+	var timing: Dictionary = entry.action_timing
+	var started := Time.get_ticks_usec()
+	var valid := true
+	_import_model(entry, model_path, timing, valid)
+	import_times_ms[entry.species] = (Time.get_ticks_usec() - started) / 1000.0
+
+func _import_model(entry: Dictionary, model_path: String, timing: Dictionary, valid: bool) -> void:
+	var document := GLTFDocument.new()
+	var state := GLTFState.new()
+	if document.append_from_file(model_path, state) != OK:
+		return
+	var model := document.generate_scene(state, 60)
+	if model == null:
+		return
+	var player := _find_player(model)
+	if player == null:
 		model.free()
+		return
+	for action in timing:
+		if not player.has_animation(action):
+			valid = false
+	if valid:
+		var scene := PackedScene.new()
+		if scene.pack(model) == OK:
+			packed[entry.species] = scene
+			entries[entry.species] = entry
+	model.free()
 
 func _clear_actors() -> void:
 	for i in 2:
+		action_generation[i] += 1
 		if is_instance_valid(actors[i]):
 			actors[i].queue_free()
 		actors[i] = null
@@ -162,6 +192,14 @@ func _clear_actors() -> void:
 		identities[i] = ""
 
 func _set_active(value: bool) -> void:
+	if active and not value:
+		camera_phase = 0.0
+		for i in 2:
+			action_generation[i] += 1
+			if players[i] != null:
+				players[i].stop()
+				resting[i] = true
+				current_actions[i] = "idle"
 	active = value
 	visible = value
 	if viewport != null:
@@ -174,6 +212,7 @@ func _set_active(value: bool) -> void:
 	for i in boxes.size():
 		boxes[i].presentation_anchor = _anchor.bind(i) if value else Callable()
 		boxes[i].presentation_visual_rect = _visual_rect.bind(i) if value else Callable()
+		boxes[i].presentation_faint = _play_faint.bind(i) if value else Callable()
 	if value:
 		var hidden: Array = []
 		for platform in platforms:
@@ -218,28 +257,59 @@ func _action(action: String, index: int) -> void:
 			return
 	if not players[index].has_animation(action):
 		return
+	action_generation[index] += 1
+	current_actions[index] = action
 	var spec: Dictionary = entries[identities[index]].action_timing[action]
 	var animation: Animation = players[index].get_animation(action)
 	animation.length = float(spec.frames) / 60.0
 	animation.loop_mode = Animation.LOOP_LINEAR if spec.get("loop", false) else Animation.LOOP_NONE
-	players[index].play(action, -1, float(spec.speed) * boxes[index].playback_speed)
-	elapsed[index] = animation.length / (float(spec.speed) * boxes[index].playback_speed)
+	players[index].speed_scale = boxes[index].playback_speed
+	players[index].play(action, -1, float(spec.speed))
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
+
+func _play_faint(index: int) -> bool:
+	_action("faint_start", index)
+	var generation: int = action_generation[index]
+	var actor: Node = actors[index]
+	while is_inside_tree() and active and actors[index] == actor and action_generation[index] == generation:
+		if not players[index].is_playing():
+			return true
+		await get_tree().process_frame
+	return false
+
+func _update_camera(delta: float) -> void:
+	var settings := get_tree().root.get_node("SettingsManager")
+	if not settings.battle_3d_camera_motion:
+		camera_phase = 0.0
+		camera.position = CAMERA_HOME
+	else:
+		# Small arc, never crosses the combat axis; both actors remain in frame.
+		# Hold framing during actions: existing 2D effects capture screen anchors.
+		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"]:
+			camera_phase += delta * 0.22
+		camera.position = CAMERA_HOME.rotated(Vector3.UP, sin(camera_phase) * 0.10)
+	camera.look_at(Vector3(0, 1.3, 0))
 
 func _process(delta: float) -> void:
 	if boxes.size() != 2:
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
-	mode_label.visible = settings.battle_presentation_mode == "3d"
-	mode_label.text = "3D preview" if active else "2.5D · 3D preview unavailable"
+	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
+	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() else "2.5D · 3D preview unavailable")
 	mode_label.tooltip_text = reason
 	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 		_set_active(false)
-		if not packed.is_empty():
+		pending_entries.clear()
+		loaded_path = "!unloaded"
+		if not packed.is_empty() or viewport != null:
 			_clear_actors()
 			packed.clear()
 			entries.clear()
-			loaded_path = "!unloaded"
+			if viewport != null:
+				viewport.queue_free()
+				viewport = null
+				world = null
+				camera = null
 		return
 	var path: String = settings.battle_3d_catalog_path
 	if path.is_empty():
@@ -247,6 +317,10 @@ func _process(delta: float) -> void:
 	if path != loaded_path:
 		_set_active(false)
 		_load_catalog(path)
+		return
+	if not pending_entries.is_empty():
+		_import_next_model()
+		return
 	var desired := []
 	for platform in platforms:
 		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
@@ -269,9 +343,11 @@ func _process(delta: float) -> void:
 	if viewport == null:
 		_build_world()
 	_set_active(true)
+	_update_camera(delta)
 	reason = "Experimental 3D active"
 	for i in 2:
 		if desired[i].is_empty():
+			action_generation[i] += 1
 			if is_instance_valid(actors[i]):
 				actors[i].queue_free()
 			actors[i] = null
@@ -292,14 +368,19 @@ func _process(delta: float) -> void:
 			restoring[i] = "idle"
 			resting[i] = true
 			_action("idle", i)
+		players[i].speed_scale = boxes[i].playback_speed
+		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
+			_action(restoring[i], i)
 		actors[i].visible = boxes[i].single_sprite.is_visible_in_tree() and boxes[i].modulate.a > 0.05 and boxes[i].single_sprite.modulate.a > 0.05
-		if not resting[i]:
-			elapsed[i] -= delta
-			if elapsed[i] <= 0:
-				resting[i] = true
-				_action(restoring[i], i)
+		if not resting[i] and not players[i].is_playing():
+			resting[i] = true
+			_action(restoring[i], i)
 
 func _exit_tree() -> void:
 	_set_active(false)
+	pending_entries.clear()
+	packed.clear()
+	entries.clear()
+	_clear_actors()
 	if is_instance_valid(mode_label):
 		mode_label.queue_free()
