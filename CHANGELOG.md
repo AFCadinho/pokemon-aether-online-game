@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon kept permanently after an Aether Rental are permanently untradeable.
+
 - Local debug builds offer an F8 preview-surface check in Summary and Pokédex to help investigate visual artifacts; Shift+F8 restores the normal view.
 
 - The Aether Vanguard Leader now explains how the Guild training money pool and participant shares are calculated.
