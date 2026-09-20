@@ -22,12 +22,19 @@ var resizing := false
 var preferred_height := 420.0
 var drag_start_y := 0.0
 var drag_start_height := 0.0
+var original_panel_style: StyleBox
 const ALLOWED := ["ChatPanel", "ChatTabsPanel", "BattleChatLog", "BattleChatPrimaryTabs", "BattleChatResize", "ChatTabsBackground", "ChatContextPopup", "ChatSettingsPopup", "ChatModerationPopup"]
 
 func setup(source: CanvasLayer, screen: Control) -> void:
 	overlay = source
 	host = screen
 	panel = overlay.get_node("Control/ChatPanel")
+	original_panel_style = panel.get_theme_stylebox("panel") if panel.has_theme_stylebox_override("panel") else null
+	var chat_style := StyleBoxFlat.new()
+	chat_style.bg_color = Color("071323a8")
+	chat_style.border_color = Color("329bdf88")
+	chat_style.set_border_width_all(1)
+	chat_style.set_corner_radius_all(6)
 	tabs = overlay.get_node("Control/ChatTabsPanel")
 	entry = panel.get_node("MarginContainer/VBoxContainer/InputRow/ChatInput") if panel.has_node("MarginContainer/VBoxContainer/InputRow/ChatInput") else overlay.get("chat_input")
 	old_layer = overlay.layer
@@ -38,6 +45,7 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 	for control in [panel, tabs]:
 		states.append({"node":control,"position":control.position,"size":control.size,"scale":control.scale,"modulate":control.modulate,"visible":control.visible,
 			"anchors":[control.anchor_left,control.anchor_top,control.anchor_right,control.anchor_bottom]})
+	panel.add_theme_stylebox_override("panel",chat_style)
 	overlay.set_meta("battle_chat_active",true)
 	host.battle.set_meta("battle_chat_bridge",self)
 	host.battle.battle_log_rail.hide()
@@ -106,7 +114,7 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 	log_view.selection_enabled = true
 	log_view.z_index = panel.z_index + 1
 	var log_style := StyleBoxFlat.new()
-	log_style.bg_color = Color("071323f0")
+	log_style.bg_color = Color("071323a8")
 	log_style.border_color = Color("329bdf88")
 	log_style.set_border_width_all(1)
 	log_style.set_corner_radius_all(6)
@@ -160,7 +168,7 @@ func _refresh() -> void:
 	panel.scale = Vector2.ONE * factor
 	panel.position = Vector2(12,header_y + 50 + channels_height)
 	panel.visible = not log_selected
-	panel.modulate.a = 1.0 if entry.has_focus() else 0.88
+	panel.modulate.a = 1.0 # Only backgrounds are translucent; text remains crisp.
 	tabs.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	tabs.size.x = natural_width
 	tabs.scale = Vector2.ONE * minf(1,width / natural_width)
@@ -231,6 +239,11 @@ func release() -> void:
 	if stopped:
 		return
 	stopped = true
+	if is_instance_valid(panel):
+		if original_panel_style != null:
+			panel.add_theme_stylebox_override("panel", original_panel_style)
+		else:
+			panel.remove_theme_stylebox_override("panel")
 	set_process_input(false)
 	if is_instance_valid(host.battle):
 		var typography: Node = host.battle.get_node_or_null("ImmersiveTypography")

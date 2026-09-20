@@ -9,6 +9,19 @@ func _run() -> void:
 	root.add_child(host)
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	host.mount(battle)
+	var prompt_style = battle.current_action_panel.get_theme_stylebox("panel")
+	assert(prompt_style.border_width_left == 3 and prompt_style.border_width_top == 1)
+	var cave_world := Node3D.new()
+	var cave = load("res://scripts/battle/arenas/cave_arena.gd").new(cave_world).build()
+	var found_ceiling := false
+	for child in cave.get_children():
+		if child is MeshInstance3D and child.mesh is PlaneMesh and child.position.y == 10:
+			found_ceiling = true
+			assert(child.material_override.cull_mode == BaseMaterial3D.CULL_FRONT)
+			assert(child.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
+	assert(found_ceiling)
+	cave.free()
+	cave_world.free()
 	host.get_node("Cover").hide()
 	battle.current_action_panel.set_message("What will Dragonite do?")
 	battle.moves_grid.set_moves([{"move":"Earthquake","type":"ground","pp":9,"maxpp":10}])
