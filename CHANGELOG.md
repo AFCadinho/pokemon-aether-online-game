@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Updated the 3D stadium preview boards and screen to use the official PokeAether wordmark.
+
 - Added a separate 3D stadium preview with illuminated stands, PokeAether screens and a reflective battle floor.
 
 - Added a separate coastal battle preview with a sandbar, animated sea and distant rocky shoreline.

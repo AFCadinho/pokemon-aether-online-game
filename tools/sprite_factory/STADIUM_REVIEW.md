@@ -22,7 +22,7 @@ python tools/sprite_factory/prepare_stadium_review.py ../.worktrees/slot-c/.tmp/
 bash tools/sprite_factory/open_stadium_review.sh
 ```
 
-Preparation copies only ten explicit source/shader files and one tracked logo;
+Preparation copies only ten explicit source/shader files and two tracked logos;
 never caches, userdata or machine configuration. The existing prepared local
 Dragonite/Roaring Moon runtime catalog is required. Right-drag orbits, wheel
 zooms, Tab hides controls and Play both tests the selected animation.
@@ -58,3 +58,8 @@ Short sampled p95 frame time 17.221 ms, max 17.473 ms on RTX 3070 Laptop.
 This is not a broad hardware benchmark. Preparation tests (3), shell syntax
 and diff whitespace checks passed. The main screen framing, distant crowd,
 architectural detailing and light shafts remain first-pass art for user review.
+
+Branding: the emblem and wordmark are byte-identical to the user's Documents/logo
+files `43327 05 1024x1024.png` and `43327 02.png`. Reuse the existing tracked
+assets rather than importing duplicates. Wordmarks replace plain-font fascia and
+screen branding; original alpha and aspect ratio are preserved.

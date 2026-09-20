@@ -32,17 +32,17 @@ func _box(parent: Node3D, material: Material, pos: Vector3, size: Vector3) -> Me
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return node
 
-func _sign(parent: Node3D, text: String, pos: Vector3, rotation_y: float, size := 0.018) -> void:
-	var label := Label3D.new()
-	label.text = text
-	label.font_size = 96
-	label.pixel_size = size
-	label.modulate = Color("cbb5ff")
-	label.outline_size = 0
-	label.no_depth_test = false
-	label.position = pos
-	label.rotation.y = rotation_y
-	parent.add_child(label)
+func _wordmark(parent: Node3D, pos: Vector3, width: float) -> void:
+	var texture: Texture2D = load("res://assets/ui/pokeaether_text_logo.png")
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.albedo_texture = texture
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	var quad := QuadMesh.new()
+	quad.size = Vector2(width, width*texture.get_height()/float(texture.get_width()))
+	var node := _put(parent, quad, material, pos, Vector3.ONE)
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 	var panel := Node3D.new()
@@ -62,7 +62,7 @@ func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 	var logo_quad := QuadMesh.new()
 	logo_quad.size = Vector2(6.5, 6.5)
 	_put(panel, logo_quad, logo, Vector3(0, 0.3, 0.35), Vector3.ONE)
-	_sign(panel, "POKEAETHER  •  BATTLE ARENA", Vector3(0, -3.45, 0.4), 0.0, 0.007)
+	_wordmark(panel, Vector3(0, -3.0, 0.4), 7.0)
 	var neon := _finish(Color("8d42ed"), 2.0)
 	for side in [-1, 1]:
 		_box(panel, neon, Vector3(side*8.4, 0, 0.4), Vector3(0.08, 9, 0.08))
@@ -153,7 +153,7 @@ func _make_forest() -> Node3D:
 		for y in [1.9, 8.1, 11.5]:
 			_box(stand, purple, Vector3(0,y,-19 if y<2 else -29), Vector3(47,0.055,0.08))
 		for x in [-14,0,14]:
-			_sign(stand, "PokeAether", Vector3(x,1.25,-18.03),0.0,0.006)
+			_wordmark(stand, Vector3(x,1.15,-18.03),5.6)
 		_box(stand, dark, Vector3(0,9.5,-30),Vector3(64,20,0.6))
 		for x in [-26,-13,13,26]:
 			_box(stand,dark,Vector3(x,10,-28),Vector3(0.5,18,0.7))
