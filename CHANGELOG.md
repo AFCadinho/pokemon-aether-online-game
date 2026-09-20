@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Corrected transparent Pokémon edges in Summary and Pokédex previews.
+
 - The Guild training daily-reward checkbox now has clear Aether-styled borders and visible checked, hover, disabled and keyboard-focus states.
 
 - The Clash Training Captain is now the Aether Vanguard Leader with Veteran artwork, and the daily AI5 Hard reward clearly advertises 200 Aetherite for each participating Trainer.
