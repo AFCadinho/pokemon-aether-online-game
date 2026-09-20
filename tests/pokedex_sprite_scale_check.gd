@@ -18,6 +18,13 @@ func _run() -> void:
 		return
 
 	var overlay := packed.instantiate()
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(
+		overlay_source.contains(
+			"pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS"
+		),
+		"rendered Pokédex animation uses mipmapped filtering while downscaled"
+	)
 	var compact_frames := _create_frames(Vector2i(128, 128), Rect2i(48, 48, 32, 32))
 	var compact_scale: Vector2 = overlay.call("_get_pokedex_sprite_scale", compact_frames)
 	_check(
@@ -71,12 +78,14 @@ func _run() -> void:
 			"dragonite",
 			"front",
 			false,
-			false
+			false,
+			true
 		)
 		_check(dragonite_value is SpriteFrames, "rendered Dragonite loads for non-battle preview checks")
 		if dragonite_value is SpriteFrames:
 			var dragonite_frames := dragonite_value as SpriteFrames
 			_check(bool(dragonite_frames.get_meta("rendered_static_preview", false)), "non-battle Dragonite uses a lightweight lossless still")
+			_check(bool(dragonite_frames.get_meta("rendered_mipmaps", false)), "non-battle Dragonite still includes mipmaps")
 			_check(dragonite_frames.get_frame_count("idle") == 1, "non-battle Dragonite does not decode its 60 FPS atlas")
 			var visual_bounds_value: Variant = sprite_loader.call(
 				"_get_sprite_frames_visual_bounds",
@@ -101,12 +110,16 @@ func _run() -> void:
 				"request_rendered_sprite_frames",
 				"dragonite",
 				"front",
-				false
+				false,
+				Callable(),
+				Callable(),
+				true
 			)
 			_check(animated_value is SpriteFrames and (animated_value as SpriteFrames).get_frame_count("idle") > 1,
 				"rendered Pokédex still upgrades to the streamed 60 FPS idle animation")
 			if animated_value is SpriteFrames:
 				var animated_frames := animated_value as SpriteFrames
+				_check(bool(animated_frames.get_meta("rendered_mipmaps", false)), "streamed Pokédex animation includes mipmaps")
 				_check(
 					await sprite_loader.call(
 						"request_rendered_sprite_action", animated_frames, "damage", Callable()
@@ -120,7 +133,7 @@ func _run() -> void:
 			var rendered_summary_heights := {}
 			for species: String in ["diglett", "jigglypuff", "dragonite"]:
 				var species_frames_value: Variant = sprite_loader.call(
-					"_load_preview_sprite_frames", species, "front", false, false
+					"_load_preview_sprite_frames", species, "front", false, false, true
 				)
 				_check(species_frames_value is SpriteFrames, "rendered %s loads for natural Summary scale checks" % species)
 				if not species_frames_value is SpriteFrames:
