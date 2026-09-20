@@ -129,7 +129,7 @@ func _run() -> void:
 	assert(pokemon_workspace.pokemon_review_item_name.get_parent().get_parent().name == "HeldItemChip")
 	assert(pokemon_workspace.pokemon_review_item_icon.texture != null)
 	assert(pokemon_workspace.pokemon_review_rental_price.text == "100 Aetherite")
-	assert(pokemon_workspace.pokemon_review_buyout_price.text.contains("1400 Aetherite after rental"))
+	assert(pokemon_workspace.pokemon_review_buyout_price.text == "1400 Aetherite")
 	assert(pokemon_workspace.description.text.contains("Scizor[/color] @ Leftovers"))
 	assert(not pokemon_workspace.description.scroll_active)
 	assert(pokemon_workspace.description.text.contains("Bullet Punch"))
