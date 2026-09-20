@@ -14,7 +14,7 @@ bash tools/sprite_factory/open_cave_review.sh
 ```
 
 The preparation destination must be outside the frontend checkout and empty or
-marked as our review project. Only six explicit code/shader files are packaged;
+marked as our review project. Only allowlisted code/shader files are packaged;
 no caches, userdata, source assets or machine settings are copied.
 Launcher uses slot-c's existing catalog and slot-env isolation. No normal client
 settings, battle flow, forest project or production arena is replaced.

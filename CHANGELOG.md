@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added a desktop development arena selector for forest, cave, sea and stadium battles, sharing the existing 3D animation and switching flow.
+- Added local Terrain3D forest-pack support and precomputed model grounding for the new battle arenas.
+
 - Made stadium logo highlights more visible and added individually timed cheering and waving spectators.
 
 - Added gentle logo animation and light sweeps across the 3D stadium branding.

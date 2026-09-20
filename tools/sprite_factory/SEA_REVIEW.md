@@ -21,7 +21,7 @@ Pokémon retain neutral direct/ambient lighting, material response and High shad
 filtering. Sky is background only, with sky reflections disabled. Cave and forest
 previews are untouched. Cave geometry helpers are reused without building a cave.
 
-Preparation packages eight explicit source/shader files, not caches or userdata.
+Preparation packages allowlisted source/shader files, not caches or userdata.
 Run `python tools/sprite_factory/test_prepare_sea_review.py` for preparation checks.
 The existing review smoke checks both lighting passes, idle ground clearance,
 four camera angles, seven action starts and viewport cleanup. Visual acceptance

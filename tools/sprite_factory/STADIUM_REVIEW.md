@@ -22,7 +22,7 @@ python tools/sprite_factory/prepare_stadium_review.py ../.worktrees/slot-c/.tmp/
 bash tools/sprite_factory/open_stadium_review.sh
 ```
 
-Preparation copies only twelve explicit source/shader files and two tracked logos;
+Preparation copies only allowlisted source/shader files and two tracked logos;
 never caches, userdata or machine configuration. The existing prepared local
 Dragonite/Roaring Moon runtime catalog is required. Right-drag orbits, wheel
 zooms, Tab hides controls and Play both tests the selected animation.

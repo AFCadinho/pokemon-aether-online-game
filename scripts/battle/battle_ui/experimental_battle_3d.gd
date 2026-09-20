@@ -4,6 +4,12 @@ extends Control
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
+const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
+var arena_id := "classic"
+var arena_root: Node3D
+var arena_problem := ""
+var ground_offsets := {}
+var arena_preparing := false
 var material_response: Node
 var boxes: Array = []
 var platforms: Array = []
@@ -87,7 +93,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		var requested: String = settings.battle_3d_catalog_path
 		if requested.is_empty():
 			requested = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
-		if loaded_path == requested and pending_entries.is_empty() and loading_path.is_empty():
+		if loaded_path == requested and pending_entries.is_empty() and loading_path.is_empty() and not arena_preparing:
 			if not render_under_cover and not warming_render:
 				await get_tree().process_frame
 				await get_tree().process_frame
@@ -291,6 +297,32 @@ func _build_world() -> void:
 	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	world.add_child(environment)
 	MaterialResponse.apply_neutral_lighting(world)
+	RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_HIGH)
+	for light in world.get_children():
+		if light is DirectionalLight3D:
+			light.shadow_blur = 2.0/3.0
+	arena_id = ArenaCatalog.validate(get_tree().root.get_node("SettingsManager").battle_3d_arena)
+	if arena_id != "classic" and ground_offsets.size() < packed.size():
+		arena_problem = "Arena ground calibration missing or outdated; regenerate the local catalog grounding file"
+		arena_id = "classic"
+	if arena_id == "forest":
+		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").battle_3d_forest_manifest)
+		if not arena_problem.is_empty():
+			arena_id = "classic"
+	camera = Camera3D.new()
+	world.add_child(camera)
+	camera.current = true
+	arena_root = ArenaCatalog.build(arena_id, world, camera)
+	if arena_root != null:
+		world.add_child(arena_root)
+	else:
+		_build_classic_ground()
+	camera.position = ArenaCatalog.camera_home(arena_id)
+	camera.fov = 48
+	camera.look_at(ArenaCatalog.camera_target(arena_id))
+	camera.current = true
+
+func _build_classic_ground() -> void:
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(80, 80)
 	_mesh(plane, Vector3(0, -0.1, 0), Color("405651"))
@@ -300,15 +332,15 @@ func _build_world() -> void:
 		cylinder.bottom_radius = 2.4
 		cylinder.height = 0.1
 		_mesh(cylinder, _position(i) - Vector3(0, 0.05, 0), Color("879b8a"))
-	camera = Camera3D.new()
-	world.add_child(camera)
-	camera.position = CAMERA_HOME
-	camera.fov = 48
-	camera.look_at(Vector3(0, 1.3, 0))
-	camera.current = true
 
 func _position(index: int) -> Vector3:
-	return Vector3(-2.8, 0, 1.5) if index == 0 else Vector3(2.8, 0, -1.5)
+	var point := ArenaCatalog.spawn(index)
+	if is_instance_valid(arena_root):
+		point.y = float(arena_root.get_meta("surface_height",0.0))
+	return point
+
+func build_response_arena(response_world: Node3D, response_camera: Camera3D) -> Node3D:
+	return ArenaCatalog.build(arena_id, response_world, response_camera)
 
 func _mesh(shape: Mesh, point: Vector3, color: Color) -> void:
 	var node := MeshInstance3D.new()
@@ -348,6 +380,12 @@ func _load_catalog(path: String) -> void:
 		reason = catalog_problem
 		return
 	var prepared_path := path + ".runtime.json" if FileAccess.file_exists(path + ".runtime.json") else path
+	ground_offsets.clear()
+	var calibration := {}
+	if FileAccess.file_exists(prepared_path+".grounding.json"):
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(prepared_path+".grounding.json"))
+		if parsed is Dictionary and parsed.get("schema",0)==1 and parsed.get("entries") is Dictionary:
+			calibration = parsed.entries
 	var file := FileAccess.open(prepared_path, FileAccess.READ)
 	if file == null or file.get_length() > 1048576:
 		return
@@ -372,6 +410,10 @@ func _load_catalog(path: String) -> void:
 		if not valid:
 			continue
 		if not pending_entries.any(func(item): return item.species == entry.species):
+			var ground: Dictionary = calibration.get(entry.species,{})
+			var expected_scale := 1.0 if entry.species == "dragonite" else 0.65
+			if ground.get("sha256","") == FileAccess.get_sha256(model_path) and is_equal_approx(float(ground.get("scale",0)),expected_scale) and is_finite(float(ground.get("lift",NAN))) and float(ground.get("lift",-1)) >= 0:
+				ground_offsets[entry.species] = ground
 			pending_entries.append(entry)
 	if not pending_entries.is_empty():
 		catalog_problem = ""
@@ -468,7 +510,7 @@ func _project_to_ui(point: Vector3) -> Vector2:
 func _anchor(body: bool, index: int) -> Vector2:
 	if actors[index] == null:
 		return Vector2.ZERO
-	var point := _position(index) + (Vector3(0, 1.2, 0) if body else Vector3.ZERO)
+	var point: Vector3 = actors[index].position + Vector3(0,1.2,0) if body else _position(index)
 	return _project_to_ui(point)
 
 func _visual_rect(index: int) -> Rect2:
@@ -476,7 +518,7 @@ func _visual_rect(index: int) -> Rect2:
 		return Rect2()
 	# Conservative presentation bounds; source skeletal mesh AABBs include rest pose.
 	var bottom := _anchor(false, index)
-	var top := _project_to_ui(_position(index) + Vector3(0, 3, 0))
+	var top := _project_to_ui(actors[index].position + Vector3(0, 3, 0))
 	var extent := absf(bottom.y - top.y)
 	return Rect2(Vector2(bottom.x - extent * 0.7, top.y), Vector2(extent * 1.4, extent))
 
@@ -510,14 +552,14 @@ func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
 	if not settings.battle_3d_camera_motion:
 		camera_phase = 0.0
-		camera.position = CAMERA_HOME
+		camera.position = ArenaCatalog.camera_home(arena_id)
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
 		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"] and lifecycle[0] in ["idle", "empty", "hidden"] and lifecycle[1] in ["idle", "empty", "hidden"]:
 			camera_phase += delta * 0.22
-		camera.position = CAMERA_HOME.rotated(Vector3.UP, sin(camera_phase) * 0.10)
-	camera.look_at(Vector3(0, 1.3, 0))
+		camera.position = ArenaCatalog.camera_home(arena_id).rotated(Vector3.UP, sin(camera_phase) * 0.10)
+	camera.look_at(ArenaCatalog.camera_target(arena_id))
 
 func _process(delta: float) -> void:
 	_sync_render_size()
@@ -529,8 +571,8 @@ func _process(delta: float) -> void:
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
-	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
-	mode_label.tooltip_text = reason
+	mode_label.text = ("3D · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
+	mode_label.tooltip_text = reason + (" · " + arena_problem if not arena_problem.is_empty() else "")
 	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 		_set_active(false)
 		_cancel_load()
@@ -588,6 +630,12 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		return
 	if viewport == null:
+		if get_tree().root.get_node("SettingsManager").battle_3d_arena == "forest":
+			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").battle_3d_forest_manifest)
+			arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
+			if arena_preparing:
+				reason = "Preparing forest assets…"
+				return
 		_build_world()
 	_set_active(true)
 	_update_camera(delta)
@@ -607,6 +655,8 @@ func _process(delta: float) -> void:
 			actors[i] = packed[desired[i]].instantiate()
 			world.add_child(actors[i])
 			actors[i].position = _position(i)
+			if ground_offsets.has(desired[i]):
+				actors[i].position.y += float(ground_offsets[desired[i]].lift)
 			actors[i].scale = Vector3.ONE * (1.0 if desired[i] == "dragonite" else 0.65)
 			var direction := _position(1-i) - _position(i)
 			actors[i].rotation.y = atan2(direction.x, direction.z)
