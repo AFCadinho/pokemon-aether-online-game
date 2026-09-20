@@ -107,7 +107,13 @@ func _build() -> void:
 	for child in stage.world.get_children():
 		if child == stage.camera or child in stage.actors:
 			continue
+		if stage.has_method("build_response_arena") and child == stage.arena_root:
+			continue
 		var copy: Node = child.duplicate()
+		if copy is WorldEnvironment:
+			copy.environment = copy.environment.duplicate()
+			copy.environment.ssr_enabled = false
+			copy.environment.glow_enabled = false
 		world.add_child(copy)
 		if copy is MeshInstance3D:
 			copy.material_override = StandardMaterial3D.new()
@@ -115,6 +121,14 @@ func _build() -> void:
 			copy.material_override.metallic_specular = 0.0
 	camera = Camera3D.new()
 	world.add_child(camera)
+	if stage.has_method("build_response_arena"):
+		var arena: Node3D = stage.build_response_arena(world,camera)
+		if arena != null:
+			world.add_child(arena)
+		for child in world.get_children():
+			if child is WorldEnvironment:
+				child.environment.ssr_enabled = false
+				child.environment.glow_enabled = false
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(stage.world):

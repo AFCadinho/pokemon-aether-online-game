@@ -15,6 +15,7 @@ def main():
     if project.is_relative_to(source) or not (project / 'scenes/world/test_world.res').is_file():
         raise ValueError('Expected an isolated extracted Temperate Forest project')
     for relative in ['scripts/battle/battle_ui/material_response.gd',
+                     'scripts/battle/arenas/forest_arena.gd',
                      'scripts/battle/battle_ui/material_response.gdshader',
                      'scripts/battle/battle_ui/material_irradiance.gdshader',
                      'tools/sprite_factory/forest_battle_review.gd',

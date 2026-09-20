@@ -60,6 +60,8 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 var battle_animations := true
 var battle_presentation_mode := "2.5d"
 var battle_3d_catalog_path := ""
+var battle_3d_arena := "classic"
+var battle_3d_forest_manifest := ""
 var battle_3d_camera_motion := false
 var weather_effects := true
 var terrain_effects := true
@@ -127,6 +129,8 @@ func load_settings() -> void:
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
+	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
+	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate(str(data.get("battle_3d_arena", "classic")))
 	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
@@ -216,6 +220,8 @@ func save_settings() -> void:
 		"battle_animations": battle_animations,
 		"battle_presentation_mode": battle_presentation_mode,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
+		"battle_3d_arena": battle_3d_arena,
+		"battle_3d_forest_manifest": battle_3d_forest_manifest,
 		"battle_3d_camera_motion": battle_3d_camera_motion,
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
@@ -272,6 +278,14 @@ func set_battle_3d_catalog_path(path: String) -> void:
 	if battle_3d_catalog_path == path:
 		return
 	battle_3d_catalog_path = path
+	_save_and_emit()
+
+func set_battle_3d_arena(id: String) -> void:
+	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate(id)
+	_save_and_emit()
+
+func set_battle_3d_forest_manifest(path: String) -> void:
+	battle_3d_forest_manifest = path
 	_save_and_emit()
 
 func set_battle_3d_camera_motion(enabled: bool) -> void:

@@ -418,6 +418,26 @@ func _setup_tabs() -> void:
 		catalog_dialog.file_selected.connect(SettingsManager.set_battle_3d_catalog_path)
 		choose_catalog.pressed.connect(func(): catalog_dialog.popup_centered_ratio(0.7))
 		general_tab.add_child(choose_catalog)
+		var arena_options := OptionButton.new()
+		arena_options.name = "BattleArenaOptions"
+		var arena_ids: Array = preload("res://scripts/battle/arenas/arena_catalog.gd").IDS
+		for label in ["Classic test stage", "Forest (local pack)", "Cave", "Sea / sandbar", "PvP stadium"]:
+			arena_options.add_item(label)
+		arena_options.select(arena_ids.find(SettingsManager.battle_3d_arena))
+		arena_options.item_selected.connect(func(index): SettingsManager.set_battle_3d_arena(arena_ids[index]))
+		var arena_label := Label.new()
+		arena_label.text = "3D arena — development override (next battle)"
+		general_tab.add_child(_create_labeled_control_row(arena_label, arena_options))
+		var forest_button := Button.new()
+		forest_button.text = "Choose trusted local forest pack manifest…"
+		var forest_dialog := FileDialog.new()
+		forest_dialog.access = FileDialog.ACCESS_FILESYSTEM
+		forest_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+		forest_dialog.filters = PackedStringArray(["*.json ; Forest pack manifest"])
+		add_child(forest_dialog)
+		forest_dialog.file_selected.connect(SettingsManager.set_battle_3d_forest_manifest)
+		forest_button.pressed.connect(func(): forest_dialog.popup_centered_ratio(0.7))
+		general_tab.add_child(forest_button)
 		battle_camera_motion_toggle = CheckBox.new()
 		battle_camera_motion_toggle.text = "Gentle 3D camera movement"
 		battle_camera_motion_toggle.toggled.connect(func(enabled):

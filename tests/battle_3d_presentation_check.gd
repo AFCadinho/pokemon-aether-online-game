@@ -23,6 +23,11 @@ func _run() -> void:
 	var old_mode: String = settings.battle_presentation_mode
 	var old_path: String = settings.battle_3d_catalog_path
 	var old_camera: bool = settings.battle_3d_camera_motion
+	var old_arena: String = settings.battle_3d_arena
+	var old_forest: String = settings.battle_3d_forest_manifest
+	if not OS.get_environment("POKEAETHER_TEST_ARENA").is_empty():
+		settings.battle_3d_arena = OS.get_environment("POKEAETHER_TEST_ARENA")
+		settings.battle_3d_forest_manifest = OS.get_environment("POKEAETHER_FOREST_MANIFEST")
 	var round_evidence := {}
 	settings.battle_3d_camera_motion = false
 	settings.battle_presentation_mode = "2.5d"
@@ -32,6 +37,8 @@ func _run() -> void:
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	var screen_host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	root.add_child(screen_host)
+	if current_scene == null:
+		current_scene = screen_host
 	screen_host.mount(battle)
 	await process_frame
 	var stage = battle.battle_stage.get_node("ExperimentalBattle3D")
@@ -75,6 +82,8 @@ func _run() -> void:
 		round_evidence.load_max_ms = loading_frames[-1]
 		round_evidence.load_p95_ms = loading_frames[int(loading_frames.size()*0.95)]
 		assert(stage.active and stage.packed.size() == 2)
+		if not OS.get_environment("POKEAETHER_TEST_ARENA").is_empty():
+			assert(stage.arena_id == settings.battle_3d_arena,stage.arena_problem)
 		if stage.entries.dragonite.get("material_response_schema", 0) == 1:
 			for entry in stage.entries.values():
 				assert(ResourceLoader.get_dependencies(entry.runtime_path).is_empty(), "Prepared response must be self-contained")
@@ -336,6 +345,8 @@ func _run() -> void:
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_path
 	settings.battle_3d_camera_motion = old_camera
+	settings.battle_3d_arena = old_arena
+	settings.battle_3d_forest_manifest = old_forest
 	screen_host.release()
 	screen_host.queue_free()
 	await process_frame

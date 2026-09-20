@@ -16,6 +16,10 @@ def main():
         raise ValueError('Refusing to overwrite a non-review directory')
     project.mkdir(parents=True, exist_ok=True)
     for relative in [
+        'scripts/battle/arenas/forest_arena.gd',
+        'tools/sprite_factory/export_arena_grounding.gd',
+        'scripts/battle/arenas/arena_geometry.gd',
+        'scripts/battle/arenas/cave_arena.gd',
         'scripts/battle/battle_ui/material_response.gd',
         'scripts/battle/battle_ui/material_response.gdshader',
         'scripts/battle/battle_ui/material_irradiance.gdshader',
