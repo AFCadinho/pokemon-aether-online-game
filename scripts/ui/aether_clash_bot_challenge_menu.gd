@@ -75,6 +75,7 @@ func build(options: Dictionary) -> void:
 	reward_attempt.tooltip_text = _t("reward_hint")
 	reward_attempt.button_pressed = false
 	_add_field(_t("reward"), reward_attempt)
+	dialog.style_checkbox(reward_attempt)
 	bot_count.value_changed.connect(func(_value: float): _update_reward_choice())
 	_update_reward_choice()
 	spectators = OptionButton.new()
