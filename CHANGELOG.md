@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon hover cards no longer intercept clicks on battle team buttons and now position correctly when the battle interface is scaled.
+
 - Experimental desktop 3D battles open in a dedicated full-screen presentation. The overworld interface returns when the battle closes, while the world connection stays active.
 
 - Experimental 3D battles now have their own send-out, recall, attack, damage and faint transitions instead of following hidden sprite animations.
