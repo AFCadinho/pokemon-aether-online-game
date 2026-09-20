@@ -12001,6 +12001,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_viewport.disable_3d = true
 	pokedex_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	sprite_viewport_container.add_child(pokedex_sprite_viewport)
+	load("res://scripts/ui/preview_surface_diagnostic.gd").attach(pokedex_sprite_panel, sprite_viewport_container)
 
 	pokedex_animated_sprite = AnimatedSprite2D.new()
 	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -19977,6 +19978,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	pokemon_summary_sprite_viewport.disable_3d = true
 	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(pokemon_summary_sprite_viewport)
+	load("res://scripts/ui/preview_surface_diagnostic.gd").attach(sprite_stage, viewport_container)
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
 	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
@@ -20833,6 +20835,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_sprite_viewport.disable_3d = true
 	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	sprite_viewport_container.add_child(pokemon_summary_sprite_viewport)
+	load("res://scripts/ui/preview_surface_diagnostic.gd").attach(sprite_frame, sprite_viewport_container)
 
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
 	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
