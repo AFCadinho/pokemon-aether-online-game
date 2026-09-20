@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a separate coastal battle preview with a sandbar, animated sea and distant rocky shoreline.
+
 - Added a separate cave battle preview with a clear stone floor, natural rock walls and recessed tunnels.
 
 - Reduced grainy, blotchy Pokémon shadows in the desktop forest preview while preserving the approved lighting and material colors.
