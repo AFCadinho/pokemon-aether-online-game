@@ -70,6 +70,12 @@ authority or input-lock ownership into the renderer.
 three screen sizes, UI input restoration, repeated cleanup, cancellation during
 entry and tree-exit cleanup without starting a backend. It also checks that
 the host never overwrites a changed player position or map camera.
+The hover regression also places the real party rail in an isolated scaled
+screen, checks tooltip placement at 0.75/1/1.5 scale, and injects mouse clicks
+through an overlapping tooltip. Selection is observed without a network submit:
+healthy reserves emit a choice, active/fainted slots are disabled, and turn/input
+locks block selection until reopened. The tooltip and all its children ignore
+pointer input; placement uses global scaled dimensions rather than local size.
 
 `battle_3d_presentation_check.gd` now runs through the full-screen host and exercises three full replay sequences,
 send-out/recall completion and cancellation, same-species replacement, native
@@ -90,3 +96,8 @@ sampled loading interval 38.659 ms, action interval 36.453 ms, replay setup
 owned viewport/actor weak references were released. These are local regression
 observations, not a guaranteed 60 FPS budget or proof of flat driver VRAM use;
 the global video-memory counter rose from about 179 MB to 213 MB in this run.
+
+Hover-fix follow-up: all three GPU replay rounds passed again (loading maximum
+29.830 ms, action maximum 46.013 ms). Static memory did not grow across rounds;
+the global video-memory sample was 178,953,600 bytes after each round. This still
+does not replace a live battle review or establish a universal frame budget.
