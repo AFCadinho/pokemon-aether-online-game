@@ -1,5 +1,7 @@
 # Shared 3D battle stage — 2026-09-20
 
+Follow-up: [prebuilt outdoor environment with free perspective camera](OUTDOOR_REVIEW.md).
+
 Research only: Dragonite and Roaring Moon share one viewport with platforms,
 shadows, existing battle HUD scenes and scripted attack/damage moments. No
 production catalog, routing, downloads or overworld changes. The projectile
