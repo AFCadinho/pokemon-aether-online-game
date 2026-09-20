@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_bot_captain_npc.tscn" id="12_bot_captain"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="13_o6lnf"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/rental_npc.tscn" id="rental_vendor"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/socialite_frames.tres" id="rental_socialite_frames"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -263,6 +264,8 @@ rental_kind = "team"
 position = Vector2(1008, 176)
 rental_kind = "pokemon"
 display_name = "Pokémon Rental"
+npc_sprite_frames = ExtResource("rental_socialite_frames")
+portrait_id = "showdown_lady_gen6"
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1798118896 instance=ExtResource("5_transit_keeper")]
 position = Vector2(1040, 1424)
