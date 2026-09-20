@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Experimental desktop 3D battles open in a dedicated full-screen presentation. The overworld interface returns when the battle closes, while the world connection stays active.
+
 - Experimental 3D battles now have their own send-out, recall, attack, damage and faint transitions instead of following hidden sprite animations.
 
 - Experimental 3D battles load prepared models in the background instead of converting them during play. Hidden trainer portraits no longer cause unnecessary work when opening wild battles.

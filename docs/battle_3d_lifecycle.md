@@ -37,23 +37,41 @@ host route works without a sprite box or the old Poké Ball player, including
 in the focused tests. Rendering does not decide whether a switch is legal,
 whether a Pokémon faints, or what the server state becomes.
 
-## Separate battle-scene direction
+## Dedicated battle screen
 
-The intended next host is a dedicated full-screen battle presentation, with
-an entry transition from the overworld and an exit transition back. This change
-does **not** implement that screen transition or unload maps yet.
+Desktop battles opened with 3D selected now mount `battle_screen_host.tscn`
+inside the screen-space battle layer, instead of the draggable map overlay.
+This is a separate presentation scene, **not** `change_scene_to_file`: the
+overworld instance, connection and map services remain alive. The renderer
+already owns its SubViewport/World3D/Camera3D; the map Camera2D is not mutated.
 
-Prefer retaining the overworld instance initially, transferring local input
-and camera ownership to the battle host and restoring them exactly once on
-exit/cancellation. Keep networking alive; do not pause the entire SceneTree.
-The battle host owns and releases its viewport/world, resources and transitions.
-It must not own overworld movement state or assume it is embedded in a map.
-Server-driven teleports/disconnects during battle will need explicit handling
-when the host transition is implemented.
+The host covers the overworld with an opaque backdrop, hides its UI and
+suspends UI input callbacks (not processing or network services). It scales
+the HUD uniformly to fit and expands the logical canvas for different aspect
+ratios. A loading cover yields while prepared models load, then fades away.
+The existing encounter cover can finish independently without resizing the
+full-screen battle. Unsupported model situations retain the current fallback
+inside this same screen; changing renderer settings does not reparent a battle.
+
+World remains the sole owner of player input/activity locks. Normal end,
+failed setup, replay close and replacement use its central cleanup method.
+Host release and tree exit restore the UI once, cancel entry work and free the
+screen. Return is currently immediate, not a cinematic exit animation. No
+cached player/map transform is restored, so relocation/blackout state is not
+overwritten. Connection loss that removes World also removes its battle host;
+reconnect/reward/teleport rules themselves are unchanged.
+
+The next visual iteration can add exit choreography without moving battle
+authority or input-lock ownership into the renderer.
 
 ## Verification and remaining scope
 
-`battle_3d_presentation_check.gd` exercises three full replay sequences,
+`battle_screen_host_check.tscn` exercises the real World mount/clear methods,
+three screen sizes, UI input restoration, repeated cleanup, cancellation during
+entry and tree-exit cleanup without starting a backend. It also checks that
+the host never overwrites a changed player position or map camera.
+
+`battle_3d_presentation_check.gd` now runs through the full-screen host and exercises three full replay sequences,
 send-out/recall completion and cancellation, same-species replacement, native
 clip completion, speed changes, and an independent presenter with no sprite
 boxes. Another check removes hidden sprite frames and visibility and removes
@@ -65,3 +83,10 @@ Human in-client review is still required. No new species, attack camera shots,
 final 3D Poké Balls, map unloading, or network/progression changes are included.
 Existing screen-space move effects and fallback sprite assets remain; this is
 not yet a full 3D VFX replacement or a zero-sprite-memory claim.
+
+Local GPU check (RTX 3070 Laptop, 2026-09-20): three rounds passed; highest
+sampled loading interval 38.659 ms, action interval 36.453 ms, replay setup
+45.962 ms. Static memory differed by less than 7 KiB after three rounds and
+owned viewport/actor weak references were released. These are local regression
+observations, not a guaranteed 60 FPS budget or proof of flat driver VRAM use;
+the global video-memory counter rose from about 179 MB to 213 MB in this run.
