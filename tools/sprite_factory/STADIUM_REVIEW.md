@@ -22,7 +22,7 @@ python tools/sprite_factory/prepare_stadium_review.py ../.worktrees/slot-c/.tmp/
 bash tools/sprite_factory/open_stadium_review.sh
 ```
 
-Preparation copies only ten explicit source/shader files and two tracked logos;
+Preparation copies only twelve explicit source/shader files and two tracked logos;
 never caches, userdata or machine configuration. The existing prepared local
 Dragonite/Roaring Moon runtime catalog is required. Right-drag orbits, wheel
 zooms, Tab hides controls and Play both tests the selected animation.
@@ -37,7 +37,7 @@ glowing lighting data and unsupported SSR with a transparent background.
 SSR is view-dependent and can lose off-screen reflections; it is not ray tracing.
 The floor glow and translucent overhead beams are art-directed, not bounced
 lighting or volumetric scattering. The crowd is a deterministic
-MultiMesh of inexpensive silhouettes, not detailed animated spectators.
+MultiMesh of inexpensive swaying silhouettes, not detailed character animations.
 
 This is a desktop visual candidate, not a wired PvP arena. No authority, battle
 flow, existing arena selection or client defaults change. Production integration,
@@ -63,3 +63,21 @@ Branding: the emblem and wordmark are byte-identical to the user's Documents/log
 files `43327 05 1024x1024.png` and `43327 02.png`. Reuse the existing tracked
 assets rather than importing duplicates. Wordmarks replace plain-font fascia and
 screen branding; original alpha and aspect ratio are preserved.
+
+## Animated ambience follow-up
+
+Six open, soft-edged beam meshes sweep slowly from fixed ceiling fixtures.
+Their shader phases match six art-directed floor highlights, outside the central
+fighting area. Extra mid-tier strips, subtly swaying crowd silhouettes and a second
+MultiMesh of supporter lights add movement without thousands of light nodes.
+These are visual shader effects, not additional lights affecting Pokémon materials.
+The existing screen background remains animated. Original emblem texture floats
+by 0.075 world units; emblem and wordmarks receive a restrained diagonal sheen,
+with a pause between sweeps. Wordmarks do not move or distort; alpha is preserved.
+
+Local evidence: `stadium-live-run-03.log` / `stadium-live-capture-03` in slot-c/.tmp.
+Fixed-camera captures with paused actors differ across 120 frames, independently
+confirming animated ambience. Full idle clearance, seven action starts and viewport
+teardown also passed, with no logged errors/warnings. Short-run p95 17.226 ms,
+max 23.682 ms on RTX 3070 Laptop; not a broad hardware benchmark. Three preparation
+tests pass. Visual before/after images and orbit images remain available for review.

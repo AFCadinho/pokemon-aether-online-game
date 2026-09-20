@@ -18,6 +18,8 @@ class StadiumPreparationTests(unittest.TestCase):
             self.assertTrue((project / 'assets/ui/pokeaether_text_logo.png').is_file())
             self.assertTrue((project / 'tools/sprite_factory/stadium_floor.gdshader').is_file())
             self.assertTrue((project / 'tools/sprite_factory/stadium_screen.gdshader').is_file())
+            self.assertTrue((project / 'tools/sprite_factory/stadium_crowd.gdshader').is_file())
+            self.assertTrue((project / 'tools/sprite_factory/stadium_brand.gdshader').is_file())
             self.assertFalse((project / 'scenes/world/test_world.res').exists())
             self.assertNotIn('autoload', (project / 'project.godot').read_text())
 

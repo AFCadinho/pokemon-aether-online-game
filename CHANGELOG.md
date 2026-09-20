@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added gentle logo animation and light sweeps across the 3D stadium branding.
+
+- Brought the 3D stadium preview to life with slowly sweeping light beams, matching floor highlights and animated supporter lights.
+
 - Updated the 3D stadium preview boards and screen to use the official PokeAether wordmark.
 
 - Added a separate 3D stadium preview with illuminated stands, PokeAether screens and a reflective battle floor.
