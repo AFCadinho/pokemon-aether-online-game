@@ -27,6 +27,9 @@ func _run() -> void:
 	assert(atlas.get_size() == Vector2(512, 512))
 	assert(atlas.region == Rect2(0, 0, 160, 240))
 	assert(atlas.margin == Rect2(120, 80, 352, 272))
+	var mipmapped := Assets._mipmapped_frame(image, 0, 1, Rect2(120, 80, 160, 240))
+	assert(mipmapped.get_size() == Vector2(512, 512))
+	assert((mipmapped.atlas as ImageTexture).get_image().has_mipmaps())
 
 	var catalog_path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG")
 	if not catalog_path.is_empty():
@@ -34,8 +37,10 @@ func _run() -> void:
 		assert((catalog.get("entries", {}) as Dictionary).size() == 4)
 		for species: String in ["diglett", "jigglypuff", "dragonite", "roaring-moon"]:
 			for side: String in ["front", "back"]:
-				var preview := Assets.load_preview_frames(species, side, false)
+				var preview := Assets.load_preview_frames(species, side, false, true)
 				assert(preview != null and preview.get_frame_count("idle") == 1)
+				assert(bool(preview.get_meta("rendered_mipmaps", false)))
+				assert((preview.get_frame_texture("idle", 0) as ImageTexture).get_image().has_mipmaps())
 				var frames := Assets.load_frames(species, side, false)
 				assert(frames != null and frames.get_frame_count("idle") > 1)
 				var texture := frames.get_frame_texture("idle", 0) as AtlasTexture
@@ -50,9 +55,16 @@ func _run() -> void:
 			assert(dragonite.get_frame_count(action) > 0)
 		Assets._cache.clear()
 		Assets._cache_order.clear()
-		var streamed: SpriteFrames = await Assets.load_frames_async("dragonite", "front", false)
+		var streamed: SpriteFrames = await Assets.load_frames_async(
+			"dragonite", "front", false, Callable(), Callable(), true
+		)
 		assert(streamed != null and streamed.get_frame_count("idle") == 91)
+		assert(bool(streamed.get_meta("rendered_mipmaps", false)))
+		var streamed_texture := streamed.get_frame_texture("idle", 0) as AtlasTexture
+		assert((streamed_texture.atlas as ImageTexture).get_image().has_mipmaps())
 		assert(await Assets.ensure_action_loaded_async(streamed, "physical_attack"))
 		assert(streamed.get_frame_count("physical_attack") == 131)
+		var action_texture := streamed.get_frame_texture("physical_attack", 0) as AtlasTexture
+		assert((action_texture.atlas as ImageTexture).get_image().has_mipmaps())
 	print("Trimmed WebP rendered sprite geometry checks PASS")
 	quit()
