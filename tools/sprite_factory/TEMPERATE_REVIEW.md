@@ -60,9 +60,12 @@ only along the narrow trail; source resources are never saved.
 
 The preview calibrates actor elevation from posed mesh vertices over the complete
 idle clip, sampled at 60 Hz after scale/facing placement. A fixed upward correction
-keeps the lowest sampled point 0.025 units above the flat ground, without per-frame
-bobbing correction or species overrides. Roaring Moon previously reached -0.163
-units below ground; measured lift is 0.188. Dragonite gets only the 0.025 clearance.
+keeps the lowest sampled point 0.025 units above the terrain directly beneath it,
+without per-frame bobbing correction or species overrides. Sampling must wait for
+`RenderingServer.frame_post_draw`: forcing CPU bone transforms alone left the skin
+transforms read by `bake_mesh_from_current_skeleton_pose` stale. The previous
+-0.163 / 0.188 Roaring Moon measurements were therefore invalid. Correct sampling
+finds -1.447 clearance and applies 1.472 lift; Dragonite needs only 0.019.
 This is review-only startup calibration, not a production loading strategy: bake
 and cache grounding metadata in asset preparation before integration. Other action
 contact/trajectory semantics and future ground-walking models need separate checks;
@@ -76,11 +79,14 @@ shipping. Native caches/resources and purchase assets remain local.
 ## Focused evidence
 
 Godot 4.6.2 Forward+, RTX 3070 Laptop GPU, 1280x720 MSAA4. Final smoke run:
-`slot-c/.tmp/temperate-route-03`: four orbit captures, seven action-start checks,
+`slot-c/.tmp/temperate-ground-03`: four orbit captures, seven action-start checks,
 height assertions for the clearing and both spawns, both viewports freed on exit.
 The default view confirms tall grass around the shared circle, a separate background
-trail, and the raised Roaring Moon. Idle minimum-height and route texture assertions
-pass. Preparation unit tests: 2 passed; `git diff --check` passed.
+trail, and the raised Roaring Moon. A second full idle sweep at half-frame offsets
+remeasures final rendered geometry after correction and lighting-pass setup:
+minimum clearance Dragonite 0.02501, Roaring Moon 0.02549. This is an independent
+post-placement assertion, not arithmetic on the pre-placement minimum.
+Route texture assertions, preparation unit tests (2), and `git diff --check` pass.
 No script/runtime errors; bundled Terrain3D emits deprecation and editor-texture
 warnings. See the capture directory's metrics for this run.
 This short run is not a 60-FPS acceptance or first-load benchmark.
