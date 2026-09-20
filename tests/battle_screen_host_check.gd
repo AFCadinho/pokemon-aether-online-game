@@ -58,13 +58,25 @@ func _run() -> void:
 		world._prepare_battle_instance_reveal()
 		assert(battle.modulate.a == 1.0)
 		if round_index == 0:
-			assert(await _check_party_clicks(battle))
 			var presenter = battle.battle_stage.get_node("ExperimentalBattle3D")
 			presenter.set_combatant(0, "Dragonite")
 			presenter.set_combatant(1, "Roaring Moon")
+			presenter.set_actor_shown(0, false)
+			presenter.set_actor_shown(1, false)
+			assert(host.get_node("Cover").visible)
 			await presenter.await_prepared()
+			assert(not presenter.warming_render)
+			if not settings.battle_3d_catalog_path.is_empty():
+				assert(presenter.active and not presenter.preparation_failed)
+			var prepared_viewport = presenter.viewport
 			await get_tree().create_timer(0.3).timeout
 			assert(not host.get_node("Cover").visible)
+			assert(presenter.viewport == prepared_viewport, "Reveal replaced the prepared viewport")
+			if presenter.active:
+				assert(not presenter.actors[0].visible and not presenter.actors[1].visible)
+				await presenter.send_out("p1")
+				assert(presenter.actors[0].visible)
+			assert(await _check_party_clicks(battle))
 			var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 			if not output.is_empty() and DisplayServer.get_name() != "headless":
 				await RenderingServer.frame_post_draw
@@ -90,10 +102,31 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(not overlay.visible and overlay.is_processing_input())
 	overlay.free()
+	await _check_preparation_guards(settings)
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_path
 	print("battle_screen_host_check: PASS")
 	get_tree().quit()
+
+func _check_preparation_guards(settings: Node) -> void:
+	var renderer = load("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
+	var stage = renderer.new()
+	add_child(stage)
+	stage.set_process(false)
+	# A stalled loader must not later activate 3D after the cover has gone.
+	settings.battle_presentation_mode = "3d"
+	await stage.await_prepared(true, 0)
+	assert(stage.preparation_failed and not stage.active and not stage.warming_render)
+	stage._process(0.0)
+	assert(not stage.active)
+	stage.free()
+	stage = renderer.new()
+	add_child(stage)
+	stage.set_process(false)
+	stage.cancel_preparation()
+	await stage.await_prepared(true)
+	assert(stage.preparation_cancelled and not stage.warming_render)
+	stage.free()
 
 func _check_party_clicks(battle: Control) -> bool:
 	var grid: PartyGrid = battle.player_party_grid

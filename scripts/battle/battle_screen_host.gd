@@ -56,7 +56,7 @@ func _reveal_when_prepared(token: int) -> void:
 		return
 	var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
 	if presenter != null:
-		await presenter.await_prepared()
+		await presenter.await_prepared(true)
 	if released or token != generation or not is_inside_tree():
 		return
 	reveal_tween = create_tween()
@@ -70,6 +70,10 @@ func release() -> void:
 		return
 	released = true
 	generation += 1
+	if is_instance_valid(battle):
+		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
+		if presenter != null:
+			presenter.cancel_preparation()
 	if reveal_tween != null:
 		reveal_tween.kill()
 	# Restore UI immediately, exactly once, before any new screen can acquire it.
