@@ -214,6 +214,9 @@ alpha, records visible RGB PSNR, and writes a new catalog plus
 and page for human review; this warning does not make an artistic decision.
 The command refuses to overwrite an existing output and never mutates source
 builds.
+An approved package also receives a lightweight `preview-catalog.json` alias,
+so local debug review can reuse the exact same files without duplicating the
+packaged assets.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.

@@ -50,6 +50,16 @@ class PackageCatalogTests(unittest.TestCase):
             self.assertEqual(report["entries"]["fixture:normal"]["worst_page"]["action"], "idle")
             self.assertEqual(report["warnings"], [])
 
+    def test_approved_package_gets_zero_copy_preview_alias(self):
+        with tempfile.TemporaryDirectory() as scratch_text:
+            scratch = Path(scratch_text)
+            approved = scratch / "catalog.json"
+            approved.write_text(json.dumps({"schema": 1, "mode": "approved", "entries": {"fixture:normal": {"path": "/same/manifest.json", "sha256": "abc"}}}))
+            from package_catalog import write_preview_alias
+            preview = json.loads(write_preview_alias(approved).read_text())
+            self.assertEqual(preview["mode"], "preview")
+            self.assertEqual(preview["entries"], json.loads(approved.read_text())["entries"])
+
 
 if __name__ == "__main__":
     unittest.main()
