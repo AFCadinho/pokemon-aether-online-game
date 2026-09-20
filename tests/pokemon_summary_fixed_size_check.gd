@@ -46,7 +46,17 @@ func _run() -> void:
 	var gender_label := overlay.get("pokemon_summary_gender_label") as Label
 	var id_label := overlay.get("pokemon_summary_id_label") as Label
 	var nickname_button := overlay.get("pokemon_summary_nickname_button") as Button
+	var summary_sprite := overlay.get("pokemon_summary_animated_sprite") as AnimatedSprite2D
 	_check(popup != null, "Pokémon Summary popup is created")
+	_check(
+		summary_sprite != null
+			and summary_sprite.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS,
+		"rendered Summary animation uses mipmapped filtering while downscaled"
+	)
+	_check(
+		overlay.call("_get_pokemon_summary_sprite_position") == Vector2(132, 94),
+		"rendered Summary animation uses a stable pixel-aligned anchor"
+	)
 	_check(
 		popup != null and popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat,
 		"all standard Summary hover hints use the styled tooltip card"

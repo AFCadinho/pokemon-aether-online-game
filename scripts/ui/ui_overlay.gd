@@ -12002,7 +12002,7 @@ func _setup_pokedex_popup() -> void:
 	sprite_viewport_container.add_child(pokedex_sprite_viewport)
 
 	pokedex_animated_sprite = AnimatedSprite2D.new()
-	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokedex_animated_sprite.position = Vector2(95, 73)
 	pokedex_animated_sprite.visible = false
 	pokedex_sprite_viewport.add_child(pokedex_animated_sprite)
@@ -19976,7 +19976,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(pokemon_summary_sprite_viewport)
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
-	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
 	pokemon_summary_sprite_viewport.add_child(pokemon_summary_animated_sprite)
 	pokemon_summary_sprite = TextureRect.new()
@@ -20841,7 +20841,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	sprite_viewport_container.add_child(pokemon_summary_sprite_viewport)
 
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
-	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokemon_summary_animated_sprite.position = Vector2(
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
@@ -26889,7 +26889,9 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 		"_load_preview_sprite_frames",
 		pokemon.species,
 		sprite_side,
-		pokemon.shiny
+		pokemon.shiny,
+		true,
+		true
 	)
 	var frames: SpriteFrames = loaded_frames as SpriteFrames
 	if frames != null:
@@ -26953,7 +26955,7 @@ func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
 func _prefetch_pokemon_summary_rendered_view(species: String, side: String, is_shiny: bool) -> void:
 	if pokemon_summary_sprite_loader == null:
 		return
-	pokemon_summary_sprite_loader.call("_load_preview_sprite_frames", species, side, is_shiny, false)
+	pokemon_summary_sprite_loader.call("_load_preview_sprite_frames", species, side, is_shiny, false, true)
 
 
 func _upgrade_pokemon_summary_rendered_animation(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -26961,7 +26963,7 @@ func _upgrade_pokemon_summary_rendered_animation(generation: int, species: Strin
 		return
 	var frames: SpriteFrames = await pokemon_summary_sprite_loader.call(
 		"request_rendered_sprite_frames", species, side, is_shiny,
-		_show_summary_rendered_frames.bind(generation), _summary_render_request_current.bind(generation)
+		_show_summary_rendered_frames.bind(generation), _summary_render_request_current.bind(generation), true
 	)
 	_show_summary_rendered_frames(frames, generation)
 
@@ -27122,7 +27124,7 @@ func _get_pokemon_summary_sprite_position() -> Vector2:
 	return Vector2(
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
-	)
+	).round()
 
 func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 	var render_scale := 1.0
@@ -36487,7 +36489,8 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			candidate,
 			_get_pokedex_sprite_side(),
 			pokedex_shiny_mode,
-			false
+			false,
+			true
 		)
 		loaded_frames = frames_value as SpriteFrames
 		if loaded_frames != null:
@@ -36546,7 +36549,8 @@ func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny
 			candidate,
 			side,
 			is_shiny,
-			false
+			false,
+			true
 		)
 		if frames_value is SpriteFrames:
 			return
@@ -36559,7 +36563,7 @@ func _upgrade_pokedex_rendered_animation(generation: int, species: Dictionary, s
 	for candidate: String in _pokedex_species_sprite_candidates(species):
 		loaded_frames = await pokedex_sprite_loader.call(
 			"request_rendered_sprite_frames", candidate, side, is_shiny,
-			_show_pokedex_rendered_frames.bind(generation), _pokedex_render_request_current.bind(generation)
+			_show_pokedex_rendered_frames.bind(generation), _pokedex_render_request_current.bind(generation), true
 		)
 		if loaded_frames != null:
 			break
@@ -36632,7 +36636,7 @@ func _get_pokedex_sprite_position() -> Vector2:
 	return Vector2(
 		float(pokedex_sprite_viewport.size.x) * 0.5,
 		float(pokedex_sprite_viewport.size.y) * 0.55
-	)
+	).round()
 
 func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
 	var portrait := _rendered_portrait_rect(frames, Vector2(170, 112))

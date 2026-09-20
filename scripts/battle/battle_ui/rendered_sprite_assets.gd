@@ -23,7 +23,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	var path := str(resolved.path)
 	var manifest: Dictionary = resolved.manifest
 	var preview := bool(resolved.preview)
-	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated"
+	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated:false"
 	if _cache.has(cache_key):
 		_touch_cache_key(cache_key, false)
 		return _cache[cache_key] as SpriteFrames
@@ -39,6 +39,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	frames.set_meta("rendered_actions", actions)
 	frames.set_meta("rendered_root", path.get_base_dir())
 	frames.set_meta("rendered_preview", preview)
+	frames.set_meta("rendered_mipmaps", false)
 	frames.set_meta("rendered_presentation", present)
 	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
 	frames.set_meta("rendered_frame_size", Vector2(512, 512))
@@ -50,7 +51,7 @@ static func load_frames(species: String, side: String, shiny: bool) -> SpriteFra
 	return frames
 
 
-static func load_preview_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
+static func load_preview_frames(species: String, side: String, shiny: bool, mipmaps: bool = false) -> SpriteFrames:
 	if side not in ["front", "back"]:
 		return null
 	var resolved := _resolve_asset(species, shiny)
@@ -59,7 +60,7 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	var path := str(resolved.path)
 	var manifest: Dictionary = resolved.manifest
 	var preview := bool(resolved.preview)
-	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":still"
+	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":still:" + str(mipmaps)
 	if _cache.has(cache_key):
 		_touch_cache_key(cache_key, true)
 		return _cache[cache_key] as SpriteFrames
@@ -91,9 +92,12 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	frames.add_animation("idle")
 	frames.set_animation_loop("idle", true)
 	frames.set_animation_speed("idle", 1.0)
+	if mipmaps:
+		im.generate_mipmaps()
 	frames.add_frame("idle", ImageTexture.create_from_image(im))
 	frames.set_meta("rendered_asset", true)
 	frames.set_meta("rendered_static_preview", true)
+	frames.set_meta("rendered_mipmaps", mipmaps)
 	frames.set_meta("rendered_portrait_bounds", _rect_from_array(idle.get("portrait_bounds", [])))
 	frames.set_meta("rendered_actions", {})
 	frames.set_meta("rendered_root", path.get_base_dir())
@@ -107,7 +111,14 @@ static func load_preview_frames(species: String, side: String, shiny: bool) -> S
 	return frames
 
 
-static func load_frames_async(species: String, side: String, shiny: bool, on_ready: Callable = Callable(), is_current: Callable = Callable()) -> SpriteFrames:
+static func load_frames_async(
+	species: String,
+	side: String,
+	shiny: bool,
+	on_ready: Callable = Callable(),
+	is_current: Callable = Callable(),
+	mipmaps: bool = false
+) -> SpriteFrames:
 	if side not in ["front", "back"]:
 		return null
 	var resolved := _resolve_asset(species, shiny)
@@ -116,7 +127,7 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 	var path := str(resolved.path)
 	var manifest: Dictionary = resolved.manifest
 	var preview := bool(resolved.preview)
-	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated"
+	var cache_key := path + ":" + str(resolved.sha256) + ":" + side + ":" + str(preview) + ":animated:" + str(mipmaps)
 	if _cache.has(cache_key):
 		_touch_cache_key(cache_key, false)
 		return _cache[cache_key] as SpriteFrames
@@ -135,6 +146,7 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 	frames.set_meta("rendered_actions", actions)
 	frames.set_meta("rendered_root", path.get_base_dir())
 	frames.set_meta("rendered_preview", preview)
+	frames.set_meta("rendered_mipmaps", mipmaps)
 	frames.set_meta("rendered_presentation", present)
 	frames.set_meta("rendered_display_scale_multiplier", BATTLE_DISPLAY_SCALE_MULTIPLIER)
 	frames.set_meta("rendered_frame_size", Vector2(512, 512))
@@ -178,7 +190,7 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 		var page_image := images[0] as Image
 		var columns := int(page.get("columns", 0))
 		var count := int(page.get("count", 0))
-		var page_texture := ImageTexture.create_from_image(page_image)
+		var page_texture: ImageTexture = null if mipmaps else ImageTexture.create_from_image(page_image)
 		for frame_index: int in count:
 			if not has_declared_bounds:
 				var cell := page_image.get_region(Rect2i(
@@ -191,7 +203,11 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 				if used.has_area():
 					var used_rect := Rect2(used.position + Vector2i(stored_cell_rect.position), used.size)
 					visual_bounds = visual_bounds.merge(used_rect) if visual_bounds.has_area() else used_rect
-			frames.add_frame("idle", _atlas_frame(page_texture, frame_index, columns, stored_cell_rect))
+			frames.add_frame(
+				"idle",
+				_mipmapped_frame(page_image, frame_index, columns, stored_cell_rect)
+				if mipmaps else _atlas_frame(page_texture, frame_index, columns, stored_cell_rect)
+			)
 			uploaded += 1
 			if uploaded % 4 == 0:
 				await tree.process_frame
@@ -343,6 +359,7 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 	var pages: Array = entry.get("pages", [])
 	var textures: Array[AtlasTexture] = []
 	var root := str(frames.get_meta("rendered_root", ""))
+	var mipmaps := bool(frames.get_meta("rendered_mipmaps", false))
 	var stored_cell_rect := _stored_cell_rect(entry)
 	if not stored_cell_rect.has_area():
 		return false
@@ -365,7 +382,7 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 		var im := Image.load_from_file(path)
 		if im == null or im.get_width() != columns * int(stored_cell_rect.size.x) or im.get_height() != int(ceil(float(count) / columns)) * int(stored_cell_rect.size.y):
 			return false
-		var texture := ImageTexture.create_from_image(im)
+		var texture: ImageTexture = null if mipmaps else ImageTexture.create_from_image(im)
 		for index: int in count:
 			if calculate_visual_bounds:
 				var cell := im.get_region(Rect2i(
@@ -378,7 +395,10 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 				if used.has_area():
 					var used_rect := Rect2(used.position + Vector2i(stored_cell_rect.position), used.size)
 					visual_bounds = used_rect if not visual_bounds.has_area() else visual_bounds.merge(used_rect)
-			textures.append(_atlas_frame(texture, index, columns, stored_cell_rect))
+			textures.append(
+				_mipmapped_frame(im, index, columns, stored_cell_rect)
+				if mipmaps else _atlas_frame(texture, index, columns, stored_cell_rect)
+			)
 	if textures.is_empty() or textures.size() != int(entry.get("count", 0)):
 		return false
 	# Commit only after every page passed; a broken action cannot poison fallback.
@@ -434,14 +454,18 @@ static func ensure_action_loaded_async(
 	if not stored_cell_rect.has_area():
 		return false
 	var textures: Array[AtlasTexture] = []
+	var mipmaps := bool(frames.get_meta("rendered_mipmaps", false))
 	for page_index: int in pages.size():
 		var page := pages[page_index] as Dictionary
 		var image := images[page_index] as Image
 		var columns := int(page.get("columns", 0))
 		var count := int(page.get("count", 0))
-		var texture := ImageTexture.create_from_image(image)
+		var texture: ImageTexture = null if mipmaps else ImageTexture.create_from_image(image)
 		for frame_index: int in count:
-			textures.append(_atlas_frame(texture, frame_index, columns, stored_cell_rect))
+			textures.append(
+				_mipmapped_frame(image, frame_index, columns, stored_cell_rect)
+				if mipmaps else _atlas_frame(texture, frame_index, columns, stored_cell_rect)
+			)
 	if textures.is_empty() or textures.size() != int(entry.get("count", 0)):
 		return false
 	frames.add_animation(action)
@@ -495,6 +519,17 @@ static func _atlas_frame(texture: Texture2D, index: int, columns: int, stored_ce
 	)
 	atlas.filter_clip = true
 	return atlas
+
+
+static func _mipmapped_frame(image: Image, index: int, columns: int, stored_cell_rect: Rect2) -> AtlasTexture:
+	var cell := image.get_region(Rect2i(
+		(index % columns) * int(stored_cell_rect.size.x),
+		int(index / columns) * int(stored_cell_rect.size.y),
+		int(stored_cell_rect.size.x),
+		int(stored_cell_rect.size.y)
+	))
+	cell.generate_mipmaps()
+	return _atlas_frame(ImageTexture.create_from_image(cell), 0, 1, stored_cell_rect)
 
 
 static func speed_for(frames: SpriteFrames, action: String) -> float:
