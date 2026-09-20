@@ -25,6 +25,12 @@ func _run() -> void:
 		),
 		"rendered Pokédex animation uses mipmapped filtering while downscaled"
 	)
+	_check(
+		overlay_source.contains(
+			"sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR"
+		),
+		"completed Pokédex preview uses linear filtering at fractional window scales"
+	)
 	var compact_frames := _create_frames(Vector2i(128, 128), Rect2i(48, 48, 32, 32))
 	var compact_scale: Vector2 = overlay.call("_get_pokedex_sprite_scale", compact_frames)
 	_check(

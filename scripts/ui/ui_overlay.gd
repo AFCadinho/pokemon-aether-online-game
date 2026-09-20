@@ -11990,6 +11990,7 @@ func _setup_pokedex_popup() -> void:
 
 	var sprite_viewport_container := SubViewportContainer.new()
 	sprite_viewport_container.stretch = true
+	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	sprite_viewport_container.material = _make_preview_composite_material()
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(sprite_viewport_container)
@@ -19967,7 +19968,10 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 
 	var viewport_container := SubViewportContainer.new()
 	viewport_container.stretch = false
-	viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# This texture is the already-rendered preview surface, not pixel art. The
+	# whole UI is commonly presented at a fractional window scale, where nearest
+	# sampling creates moving block boundaries across the Pokémon.
+	viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	viewport_container.material = _make_preview_composite_material()
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_stage.add_child(viewport_container)
@@ -20823,7 +20827,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	var sprite_viewport_container := SubViewportContainer.new()
 	sprite_viewport_container.stretch = false
-	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# Avoid re-sampling the completed preview surface with nearest filtering when
+	# the game window applies a fractional canvas scale.
+	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	sprite_viewport_container.material = _make_preview_composite_material()
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(sprite_viewport_container)

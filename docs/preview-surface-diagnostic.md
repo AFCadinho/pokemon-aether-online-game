@@ -34,3 +34,11 @@ idle master frames and their PNG atlas cells. Correct premultiplied-alpha
 composition removed a measurable edge error, but did not resolve the user's
 reported symptom. Fixed-size offscreen comparisons cannot rule out a problem
 in final window scaling or presentation.
+
+The flat-background capture supplied on 2026-09-20 showed a clean flat layer
+while the moving Pokémon retained the block pattern. Summary had been applying
+nearest filtering to its completed 263x180 SubViewport texture before the
+fractionally scaled canvas presentation. Summary (read-only and interactive)
+and Pokédex now explicitly use linear filtering for this final composition
+step. The animated sprite itself keeps mipmapped linear filtering; source
+dimensions, native 60 FPS playback and atlas data are unchanged.
