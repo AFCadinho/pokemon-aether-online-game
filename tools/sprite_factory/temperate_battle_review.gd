@@ -6,6 +6,9 @@ const PATCH_RADIUS := 6.0
 var ground_height := 0.0
 var battle_terrain: Node3D
 
+func _surface_height(pos: Vector3) -> float:
+	return battle_terrain.data.get_height(pos)
+
 func _posed_clearance(meshes: Array) -> float:
 	var minimum := INF
 	for mesh: MeshInstance3D in meshes:
@@ -15,7 +18,7 @@ func _posed_clearance(meshes: Array) -> float:
 		for surface in posed.get_surface_count():
 			for vertex: Vector3 in posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
 				var world_vertex: Vector3 = mesh.global_transform * vertex
-				var surface_height: float = battle_terrain.data.get_height(world_vertex)
+				var surface_height: float = _surface_height(world_vertex)
 				assert(is_finite(surface_height))
 				minimum = minf(minimum, world_vertex.y - surface_height)
 	return minimum
