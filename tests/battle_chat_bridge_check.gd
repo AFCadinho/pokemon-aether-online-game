@@ -51,11 +51,21 @@ func _run() -> void:
 	var original := panel.get_rect()
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	host.mount(battle,overlay)
+	assert(host.get_node("Cover").z_index == RenderingServer.CANVAS_ITEM_Z_MAX)
+	assert(not overlay.visible, "Chat canvas must remain hidden under the preparation cover")
+	var loading_shortcut := InputEventAction.new()
+	loading_shortcut.action = "battle_run"
+	loading_shortcut.pressed = true
+	var before_loading_input = battle.queued_battle_action.duplicate(true)
+	battle._unhandled_input(loading_shortcut)
+	assert(battle.queued_battle_action == before_loading_input,"Loading must not queue battle shortcuts")
 	host.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	host.size = ui.size
 	host._fit_battle()
 	host.get_node("Cover").hide()
+	battle.remove_meta("battle_screen_preparing")
 	var bridge = host.chat_bridge
+	bridge._refresh()
 	await process_frame
 	assert(not other.visible and not panel.visible and not tabs.visible)
 	assert(bridge.log_selected and bridge.log_view.visible,"Every battle must initially show Battle Log")

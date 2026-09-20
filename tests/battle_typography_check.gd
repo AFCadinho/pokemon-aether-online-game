@@ -9,6 +9,18 @@ func _run() -> void:
 	root.add_child(host)
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	host.mount(battle)
+	host.generation += 1 # Hold preparation for the cover's rendered regression check.
+	for frame in 3:
+		await process_frame
+	assert(host.get_node("Cover").visible)
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+		var cover_image := root.get_texture().get_image()
+		var corner := cover_image.get_pixel(10,10)
+		for point in [Vector2(0.05,0.3),Vector2(0.3,0.5),Vector2(0.85,0.85)]:
+			var sample := cover_image.get_pixel(int(cover_image.get_width()*point.x),int(cover_image.get_height()*point.y))
+			assert(sample.is_equal_approx(corner),"Battle controls or sprites leaked through the loading cover")
+	print("BATTLE_PREPARATION_COVER_OK")
 	var prompt_style = battle.current_action_panel.get_theme_stylebox("panel")
 	assert(prompt_style.border_width_left == 3 and prompt_style.border_width_top == 1)
 	var cave_world := Node3D.new()
@@ -23,6 +35,7 @@ func _run() -> void:
 	cave.free()
 	cave_world.free()
 	host.get_node("Cover").hide()
+	battle.remove_meta("battle_screen_preparing")
 	battle.current_action_panel.set_message("What will Dragonite do?")
 	battle.moves_grid.set_moves([{"move":"Earthquake","type":"ground","pp":9,"maxpp":10}])
 	battle.moves_grid.show()

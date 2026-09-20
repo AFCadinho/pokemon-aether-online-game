@@ -49,6 +49,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null) -> void:
 	if focus != null:
 		focus.release_focus()
 	battle.set_meta("dedicated_battle_screen", true)
+	battle.set_meta("battle_screen_preparing", true)
 	if get_node("/root/SettingsManager").battle_ui_layout == "immersive":
 		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	$Content.add_child(battle)
@@ -107,6 +108,8 @@ func _reveal_cover() -> void:
 	await reveal_tween.finished
 	if not released:
 		$Cover.hide()
+		if is_instance_valid(battle):
+			battle.remove_meta("battle_screen_preparing")
 
 func release() -> void:
 	if released:
