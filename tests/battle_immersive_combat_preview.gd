@@ -23,6 +23,7 @@ func _run() -> void:
 	for species in ["Dragonite","Typhlosion","Scizor","Arcanine","Charizard","Roaring Moon"]:
 		party.append({"species":species,"hp":100,"max_hp":100,"active":species=="Dragonite"})
 	battle.player_party_grid.set_party(party)
+	battle.get_node("%PlayerStagePartyGrid").set_party(party)
 	var parent: Control = battle.player_party_grid
 	while parent != battle:
 		parent.show()
@@ -41,7 +42,11 @@ func _run() -> void:
 	var moves: Rect2 = battle.moves_grid.get_global_rect()
 	assert(not moves.intersects(battle.player_party_grid.get_global_rect()))
 	assert(not moves.intersects(battle.current_action_panel.get_global_rect()))
-	assert(not battle.get_node("%PlayerStagePartyRail").visible)
+	assert(battle.get_node("%PlayerStagePartyRail").visible)
+	var chat_space := Rect2(Vector2(0,battle.size.y - 160),Vector2(battle.size.x * 0.23,160))
+	var inverse: Transform2D = battle.get_global_transform().affine_inverse()
+	assert(not chat_space.intersects(inverse * battle.player_party_grid.get_global_rect()))
+	assert(not chat_space.intersects(inverse * battle.current_action_panel.get_global_rect()))
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	if not output.is_empty():
 		DirAccess.make_dir_recursive_absolute(output)

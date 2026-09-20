@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Restored the left team preview in Immersive battles and centered the switch controls and battle message, leaving the bottom-left area free for future chat.
 - Refined Immersive battles with smaller Pokémon-following HP panels, compact move controls, one player team row and smaller battle messages.
 - Added an Immersive desktop battle UI with a fullscreen arena, floating controls and collapsible battle log; the Classic layout remains selectable in Settings.
 - Local developer forest previews now find their existing forest pack beside the selected model catalog when no forest manifest is explicitly configured.

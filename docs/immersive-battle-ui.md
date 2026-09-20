@@ -6,10 +6,11 @@ uses the dedicated battle screen even for 2D fallback. Browser/mobile retain
 their existing embedded layout.
 
 Immersive gives the arena the full screen, places smaller HP panels above the Pokémon, keeps
-moves on the bottom right and the existing party controls on the bottom left.
+moves on the bottom right and the existing party controls near the bottom center.
 Battle log is a collapsible floating panel, with a separate calculator button.
-The player team appears only once, at the bottom; the opponent team stays visible
-at the edge. Compact moves and mechanics share the bottom-right area. HP panels
+The player team preview stays on the left; switch controls sit below the centered
+battle message, reserving bottom-left space for future chat. The opponent team
+stays visible at the edge. Compact moves and mechanics share the bottom-right area. HP panels
 smoothly follow projected actor bounds with screen-edge clamping; 2D fallback
 uses the sprite hover bounds. These are presentation-only positions, not combat state.
 Classic retains its original scene hierarchy and framed layout. Changes apply

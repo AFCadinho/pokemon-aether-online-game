@@ -6,12 +6,13 @@ var initialized := [false, false]
 func _process(delta: float) -> void:
 	var stage: Control = battle.battle_stage
 	var area := stage.size
-	battle.get_node("%PlayerStagePartyRail").hide()
+	var team_preview: Control = battle.get_node("%PlayerStagePartyRail")
+	_place(team_preview, Vector2(18, 145), team_preview.size, 0.85)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
 	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 162, area.y - 210), Vector2(178, 34), 0.8)
 	var mechanics: Control = battle.get_node("%MechanicsPanel")
 	_place(mechanics, Vector2(area.x - 410, area.y - 95), mechanics.size, 0.65)
-	_place(battle.get_node("%CurrentActionPanel"), Vector2(20, area.y - 143), Vector2(630, 56), 0.7)
+	_place(battle.get_node("%CurrentActionPanel"), Vector2(area.x * 0.25, area.y - 143), Vector2(630, 56), 0.7)
 	var header: Control = battle.get_node("%VSPanelContainer")
 	_place(header, Vector2((area.x - header.size.x * 0.65) * 0.5, 12), header.size, 0.65)
 	var turn: Control = battle.get_node("%BattleStatusPanel")
