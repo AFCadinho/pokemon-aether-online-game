@@ -13,6 +13,7 @@ import hashlib
 import json
 import math
 import os
+import shutil
 import statistics
 import time
 from collections import defaultdict
@@ -101,6 +102,82 @@ def _save_webp(image: Image.Image, path: Path, lossless: bool) -> None:
         method=4,
         exact=True,
     )
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _link_or_copy(source: Path, target: Path) -> None:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.unlink(missing_ok=True)
+    try:
+        os.link(source, target)
+    except OSError:
+        shutil.copy2(source, target)
+
+
+def _write_review_catalog(args) -> Path:
+    """Build an opt-in runtime catalog from the existing trimmed Q95 output."""
+    output = args.output.resolve()
+    selected = _load_catalog(args.catalog.resolve(), tuple(args.species))
+    review_root = output / "game-review-trimmed-webp-q95"
+    entries = {}
+    for species, source_manifest_path in selected:
+        manifest = json.loads(source_manifest_path.read_text())
+        source_root = source_manifest_path.parent
+        species_root = review_root / species
+        for view in ("front", "back"):
+            for action in ACTIONS:
+                action_data = manifest["views"][view][action]
+                x, y, width, height = map(int, action_data["visual_bounds"])
+                x0 = max(0, x - args.padding)
+                y0 = max(0, y - args.padding)
+                x1 = min(512, x + width + args.padding)
+                y1 = min(512, y + height + args.padding)
+                action_data["stored_cell_rect"] = [x0, y0, x1 - x0, y1 - y0]
+                for page_index, page in enumerate(action_data["pages"]):
+                    source = output / "trimmed-webp-q95" / species / view / action / f"{page_index:03d}.webp"
+                    if not source.is_file():
+                        raise ValueError(f"Missing trimmed Q95 page; run the benchmark first: {source}")
+                    relative = Path(view) / f"{action}-{page_index:03d}.webp"
+                    target = species_root / relative
+                    _link_or_copy(source, target)
+                    page["file"] = relative.as_posix()
+                    page["sha256"] = _sha256(target)
+
+            preview = manifest["views"][view]["idle"].get("preview_frame", {})
+            preview_source = source_root / preview.get("file", "")
+            if not preview_source.is_file():
+                raise ValueError(f"Missing preview frame: {preview_source}")
+            preview_target = species_root / view / "idle-preview.webp"
+            with Image.open(preview_source) as opened:
+                _save_webp(opened.convert("RGBA"), preview_target, False)
+            preview["file"] = f"{view}/idle-preview.webp"
+            preview["sha256"] = _sha256(preview_target)
+
+        manifest["runtime_packaging"] = {
+            "version": 2,
+            "format": "trimmed-webp-q95",
+            "quality": 95,
+            "trim_padding": args.padding,
+            "review_only": True,
+            "source_manifest": str(source_manifest_path),
+            "source_sha256": _sha256(source_manifest_path),
+        }
+        target_manifest = species_root / "manifest.json"
+        target_manifest.parent.mkdir(parents=True, exist_ok=True)
+        target_manifest.write_text(json.dumps(manifest, indent=2) + "\n")
+        entries[f"{species}:normal"] = {
+            "path": str(target_manifest.resolve()),
+            "sha256": _sha256(target_manifest),
+        }
+
+    catalog_path = review_root / "preview-catalog.json"
+    catalog_path.parent.mkdir(parents=True, exist_ok=True)
+    catalog_path.write_text(json.dumps({"schema": 1, "mode": "preview", "entries": entries}, indent=2) + "\n")
+    print(catalog_path)
+    return catalog_path
 
 
 def _trim_page(image: Image.Image, record: dict) -> Image.Image:
@@ -626,8 +703,11 @@ def main() -> None:
     parser.add_argument("--finalize-godot", action="store_true")
     parser.add_argument("--refresh-preview", action="store_true")
     parser.add_argument("--merge-runtime", action="store_true")
+    parser.add_argument("--write-review-catalog", action="store_true")
     args = parser.parse_args()
-    if args.merge_runtime:
+    if args.write_review_catalog:
+        _write_review_catalog(args)
+    elif args.merge_runtime:
         _merge_runtime_results(args)
     elif args.refresh_preview:
         _refresh_preview(args)
