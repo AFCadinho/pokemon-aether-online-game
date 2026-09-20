@@ -10,6 +10,9 @@ static func apply(battle: Control) -> void:
 	var hud_tracker := preload("res://scripts/battle/battle_ui/immersive_hud.gd").new()
 	hud_tracker.battle = battle
 	battle.add_child(hud_tracker)
+	var portraits := preload("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
+	portraits.battle = battle
+	battle.add_child(portraits)
 	battle.get_node("%MovesGrid").custom_minimum_size = Vector2(400, 188)
 	var frame: Control = battle.get_node("%BattleFrame")
 	_move(frame, battle)
@@ -31,6 +34,7 @@ static func apply(battle: Control) -> void:
 	dock.z_index = 70
 	dock.scale = Vector2.ONE * 0.8
 	dock.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	battle.get_node("%ContextPanel").add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	var rail: Control = battle.get_node("%BattleLogRail")
 	_move(rail, battle)
 	rail.z_index = 90
@@ -40,6 +44,30 @@ static func apply(battle: Control) -> void:
 	_move(calc, battle)
 	calc.custom_minimum_size = Vector2(130, 36)
 	calc.z_index = 90
+	calc.hide()
+	var menu := MenuButton.new()
+	menu.name = "ImmersiveBattleMenu"
+	menu.text = "•••"
+	menu.tooltip_text = "Battle tools"
+	menu.theme = calc.theme
+	menu.add_theme_stylebox_override("normal", calc.get_theme_stylebox("normal"))
+	battle.get_node("%BattleStage").add_child(menu)
+	menu.get_popup().add_item("Damage Calc", 0)
+	menu.get_popup().add_item("Battle Log", 1)
+	var popup_style := StyleBoxFlat.new()
+	popup_style.bg_color = Color("071323fa")
+	popup_style.border_color = Color("329bdf")
+	popup_style.set_border_width_all(1)
+	popup_style.set_corner_radius_all(8)
+	popup_style.content_margin_left = 12
+	popup_style.content_margin_right = 12
+	menu.get_popup().add_theme_stylebox_override("panel",popup_style)
+	menu.get_popup().add_theme_font_size_override("font_size",16)
+	menu.get_popup().id_pressed.connect(func(id: int):
+		if id == 0:
+			battle._on_calc_mode_button_pressed()
+		else:
+			battle._on_battle_log_toggle_pressed())
 	battle.get_node("%ActionChoices").hide()
 	battle.get_node("%HBoxContainer").hide()
 	battle.get_node("BattleBackdrop").hide()
@@ -56,8 +84,10 @@ static func apply(battle: Control) -> void:
 		var width := battle.size.x
 		var height := battle.size.y
 		dock.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		dock.position = Vector2(width * 0.25, height - 108)
-		dock.size = Vector2(width * 0.55 - 28, 106)
+		var center_left := width * 0.25
+		var center_right := width - 354
+		dock.position = Vector2(center_left, height - 105)
+		dock.size = Vector2((center_right - center_left) / 0.8, 106)
 		rail.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		rail.position = Vector2(18, 150)
 		rail.size = Vector2(310, maxf(180, height - 420))

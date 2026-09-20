@@ -30,6 +30,8 @@ func _run() -> void:
 				assert(battle.get_node("%PlayerStagePartyRail").visible)
 				assert(battle.player_hud_panel.scale.is_equal_approx(Vector2.ONE * 0.65))
 				assert(battle.moves_grid.scale.is_equal_approx(Vector2.ONE * 0.8))
+				assert(not battle.battle_log_toggle_button.visible and not battle.calc_log_button.visible)
+				assert(not battle.battle_stage.get_node("TrainerPortrait1").visible,"Wild encounters must not invent an opponent avatar")
 				var bounds: Rect2 = battle.get_global_rect()
 				assert(battle.battle_frame.get_global_rect().is_equal_approx(bounds))
 				var viewport = battle.get_node("%BattleStageViewport")

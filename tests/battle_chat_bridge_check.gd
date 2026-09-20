@@ -37,6 +37,12 @@ func _run() -> void:
 	tabs.name = "ChatTabsPanel"
 	tabs.size = Vector2(400,32)
 	ui.add_child(tabs)
+	var row := HBoxContainer.new()
+	row.name = "TabRow"
+	tabs.add_child(row)
+	var general := Button.new()
+	general.text = "General"
+	row.add_child(general)
 	var settings = root.get_node("SettingsManager")
 	settings.battle_ui_layout = "immersive"
 	settings.battle_presentation_mode = "2.5d"
@@ -61,10 +67,11 @@ func _run() -> void:
 	var queued = battle.queued_battle_action.duplicate(true)
 	battle._unhandled_input(shortcut)
 	assert(battle.queued_battle_action == queued,"Typing queued a battle action")
-	battle._set_battle_log_open(true)
+	battle.battle_log_panel.add_message("Dragonite used Outrage")
 	for frame in 4:
 		await process_frame
-	assert(not battle.battle_log_rail.get_global_rect().intersects(panel.get_global_rect()),str("Log overlaps chat ",battle.battle_log_rail.get_global_rect()," ",panel.get_global_rect()))
+	assert(not battle.battle_log_rail.visible)
+	assert(bridge.log_tab.text.contains("•"))
 	assert(entry.has_focus(),"Log updates stole chat focus")
 	entry.text = "test draft"
 	await key(KEY_ENTER)
@@ -72,10 +79,23 @@ func _run() -> void:
 	await key(KEY_ESCAPE)
 	assert(not entry.has_focus())
 	assert(entry.text == "test draft","Bridge must not clear or resend drafts")
+	battle._set_battle_log_open(true)
+	await process_frame
+	assert(bridge.log_selected and bridge.log_view.visible and not panel.visible)
+	assert(bridge.log_view.text == battle.battle_log_panel.log_buffer)
+	assert(bridge.log_tab.text == "Battle Log")
+	general.pressed.emit()
+	await process_frame
+	assert(not bridge.log_selected and panel.visible and not bridge.log_view.visible)
+	assert(entry.text == "test draft")
+	bridge.select_log(true)
+	await key(KEY_ENTER)
+	assert(not bridge.log_selected and entry.has_focus())
 	host.release()
 	host.release()
 	assert(other.visible and panel.get_rect()==original)
 	assert(not overlay.has_meta("battle_chat_active"))
+	assert(not row.has_node("BattleLogTab"))
 	host.queue_free()
 	overlay.queue_free()
 	await process_frame

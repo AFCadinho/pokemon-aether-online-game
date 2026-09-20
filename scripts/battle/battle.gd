@@ -3983,6 +3983,8 @@ func _setup_battle_log_initial_visibility() -> void:
 
 ## Geeft de door speler of responsive default gewenste log-state terug.
 func _get_requested_battle_log_open() -> bool:
+	if has_meta("battle_chat_bridge"):
+		return get_meta("battle_chat_bridge").log_selected
 	if has_meta("immersive_battle_ui"):
 		return battle_log_rail.visible
 	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
@@ -4001,6 +4003,10 @@ func _can_show_full_battle_log() -> bool:
 
 ## Past de log-state toe zonder de sessiekeuze te overschrijven.
 func _set_battle_log_open(open: bool) -> void:
+	if has_meta("battle_chat_bridge"):
+		get_meta("battle_chat_bridge").select_log(open)
+		battle_log_rail.hide()
+		return
 	battle_log_rail.visible = open
 	if has_meta("immersive_battle_ui"):
 		return
