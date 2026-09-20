@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Refined Immersive battles with smaller Pokémon-following HP panels, compact move controls, one player team row and smaller battle messages.
 - Added an Immersive desktop battle UI with a fullscreen arena, floating controls and collapsible battle log; the Classic layout remains selectable in Settings.
 - Local developer forest previews now find their existing forest pack beside the selected model catalog when no forest manifest is explicitly configured.
 - 3D battles now automatically follow the same grass, water, cave and stadium environment selection as 2D battles, including gym leaders, PvP and Aether Clash lobby encounters.
