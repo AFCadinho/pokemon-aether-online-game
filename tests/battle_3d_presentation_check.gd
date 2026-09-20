@@ -9,6 +9,8 @@ func _run() -> void:
 	var settings = root.get_node("SettingsManager")
 	var old_mode: String = settings.battle_presentation_mode
 	var old_path: String = settings.battle_3d_catalog_path
+	var old_camera: bool = settings.battle_3d_camera_motion
+	settings.battle_3d_camera_motion = false
 	settings.battle_presentation_mode = "2.5d"
 	assert(Renderer.supported("Dragonite", false, false, false))
 	for args in [["Eevee", false, false, false], ["Dragonite", true, false, false], ["Dragonite", false, true, false], ["Dragonite", false, false, true]]:
@@ -31,6 +33,15 @@ func _run() -> void:
 		for frame in 5:
 			await process_frame
 		assert(stage.active and stage.packed.size() == 2)
+		print("3D_IMPORT_MS ", stage.import_times_ms)
+		assert(stage.pending_entries.is_empty())
+		assert(stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
+		settings.battle_3d_camera_motion = true
+		stage._update_camera(2.0)
+		assert(not stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
+		settings.battle_3d_camera_motion = false
+		stage._update_camera(0.0)
+		assert(stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
 		battle.enemy_sprite_box.current_single_species = ""
 		await process_frame
 		await process_frame
@@ -44,11 +55,39 @@ func _run() -> void:
 		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Pulse")
 		await process_frame
 		assert(stage.players[0].current_animation == "special_attack")
+		settings.battle_3d_camera_motion = true
+		var held_phase: float = stage.camera_phase
+		stage._update_camera(2.0)
+		assert(stage.camera_phase == held_phase)
+		settings.battle_3d_camera_motion = false
+		battle.player_sprite_box.playback_speed = 4.0
+		await process_frame
+		await process_frame
+		assert(stage.players[0].speed_scale == 4.0)
+		battle.player_sprite_box.playback_speed = 1.0
 		battle.enemy_sprite_box.presentation_action.emit("damage")
 		assert(stage.players[1].current_animation == "damage")
 		battle.player_sprite_box.presentation_action.emit("sleep")
 		battle.player_sprite_box.reset_battle_pose()
 		assert(stage.players[0].current_animation == "sleep")
+		# Cancellation must not let an old faint clear a current Pokémon.
+		battle.player_sprite_box.play_faint_tween()
+		assert(stage.players[0].current_animation == "faint_start")
+		battle.player_sprite_box.reset_battle_pose()
+		await process_frame
+		await process_frame
+		assert(battle.player_sprite_box.current_single_species == "Dragonite")
+		# Actual SpriteBox faint waits for the full source clip, then clears.
+		battle.enemy_sprite_box.play_faint_tween()
+		assert(battle.enemy_sprite_box.current_single_species == "Roaring Moon")
+		stage.players[1].advance(100.0)
+		for frame in 3:
+			await process_frame
+		assert(battle.enemy_sprite_box.current_single_species.is_empty())
+		assert(stage.actors[1] == null and stage.active)
+		battle.enemy_sprite_box.set_single_pokemon_species("Roaring Moon", "front", false)
+		for frame in 3:
+			await process_frame
 		battle.enemy_sprite_box.current_single_is_shiny = true
 		await process_frame
 		await process_frame
@@ -94,13 +133,17 @@ func _run() -> void:
 			root.get_texture().get_image().save_png(output.path_join("client-3d.png"))
 		await battle.stop_battle_replay()
 		settings.battle_presentation_mode = "2.5d"
+		var old_viewport: WeakRef = weakref(stage.viewport)
 		await process_frame
 		await process_frame
 		assert(not stage.active and stage.packed.is_empty())
+		assert(stage.viewport == null and old_viewport.get_ref() == null)
+		assert(stage.actors == [null, null] and stage.pending_entries.is_empty())
 		assert(not battle.player_sprite_box.presentation_anchor.is_valid())
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 1)
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_path
+	settings.battle_3d_camera_motion = old_camera
 	battle.queue_free()
 	await process_frame
 	await process_frame

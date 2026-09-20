@@ -40,6 +40,7 @@ var hide_other_players_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
 var battle_presentation_options: OptionButton
+var battle_camera_motion_toggle: CheckBox
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
@@ -261,6 +262,8 @@ func _apply_settings_to_controls() -> void:
 	loading_controls = true
 	if battle_presentation_options != null:
 		battle_presentation_options.select(1 if SettingsManager.battle_presentation_mode == "3d" else 0)
+	if battle_camera_motion_toggle != null:
+		battle_camera_motion_toggle.button_pressed = SettingsManager.battle_3d_camera_motion
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
@@ -415,6 +418,12 @@ func _setup_tabs() -> void:
 		catalog_dialog.file_selected.connect(SettingsManager.set_battle_3d_catalog_path)
 		choose_catalog.pressed.connect(func(): catalog_dialog.popup_centered_ratio(0.7))
 		general_tab.add_child(choose_catalog)
+		battle_camera_motion_toggle = CheckBox.new()
+		battle_camera_motion_toggle.text = "Gentle 3D camera movement"
+		battle_camera_motion_toggle.toggled.connect(func(enabled):
+			if not loading_controls:
+				SettingsManager.set_battle_3d_camera_motion(enabled))
+		general_tab.add_child(battle_camera_motion_toggle)
 	_wrap_settings_section(
 		general_tab,
 		"",

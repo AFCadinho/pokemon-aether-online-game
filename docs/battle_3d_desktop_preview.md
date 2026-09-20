@@ -16,6 +16,11 @@ PBR GLB `report.json`. The file chooser saves its path, so subsequent client
 launches need no environment variable. For developer testing only,
 `POKEAETHER_3D_STAGE_REPORT` supplies a fallback path when no path is configured.
 
+Enable **Gentle 3D camera movement** in the same settings section for a small
+idle camera arc. It defaults off, stays on the same side of the battle, and
+holds during attacks/damage/faint so existing screen-space effects keep their
+framing. Turning it off restores the fixed camera.
+
 The current local study report is:
 `/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/.tmp/battle-stage-pbr-01/glb/report.json`
 
@@ -29,16 +34,24 @@ sides. A temporarily empty slot during a switch can remain in 3D. Selecting
 
 - This is a desktop opt-in prototype, not the production catalog or delivery
   system. It performs no downloads and bundles no GLBs or outdoor demo assets.
-- The integrated arena is original simple geometry with a fixed perspective
-  camera. The separate outdoor camera study remains available; it is not the
-  production arena. Camera choreography and 3D move VFX are future work.
-- Models are imported synchronously on first use of a selected report. A
-  first-use loading hitch remains possible. At most the two supported species
-  are retained. Existing sprite resources remain available underneath for
+- The integrated arena is original simple geometry with an optional gentle
+  camera arc. The separate outdoor camera study remains available; it is not
+  the production arena. Attack camera choreography and 3D move VFX are future work.
+- Models are imported one per frame after a preparation status, rather than
+  importing both in one frame. GLTF import is still synchronous per model;
+  this is not hitch-free background loading. A headless local sample measured
+  109 ms for Dragonite and 193 ms for Roaring Moon, excluding GPU upload costs.
+  A Forward+ run on the RTX 3070 Laptop measured 276/225 ms for the same import
+  calls; these are single samples, not a frame-time or VRAM benchmark.
+  At most the two supported species are retained. Existing sprite resources remain available underneath for
   fallback; this prototype is not a final memory or download optimization.
+- Returning to 2.5D clears queued imports, actors, model references and the
+  viewport/world. Actions follow AnimationPlayer completion and live playback
+  speed. Faint awaits the source animation instead of the legacy sprite fade;
+  resetting the pose or losing the active presentation cancels that wait.
 - Current source material translation is not a visual-parity guarantee.
-  Hover bounds are conservative projected bounds, and existing battle event
-  waits still control transitions. Faint/capture/switch polish needs live review.
+  Hover bounds are conservative projected bounds. Capture/summon polish and
+  live switch/faint review remain necessary.
 - Android and web keep 2.5D. No support or performance claim is made for 3D on
   those platforms.
 
@@ -47,7 +60,8 @@ sides. A temporarily empty slot during a switch can remain in 3D. Selecting
 Run `tests/battle_3d_presentation_check.gd` through `ops/worktrees/slot-env`.
 Without a report it checks the default and missing-report fallback. With
 `POKEAETHER_3D_STAGE_REPORT` it also checks model loading, actions, an empty
-slot, shiny/substitute fallback, projected anchors, teardown and a recorded
+slot, shiny/substitute fallback, projected anchors, camera enable/disable and
+action hold, speed changes, faint completion/cancellation, viewport release and a recorded
 Dragon Pulse/damage response through the real replay renderer. This is a
 synthetic replay fixture, not a live backend battle test.
 
