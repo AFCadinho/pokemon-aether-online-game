@@ -25,6 +25,10 @@ func _scan(node: Node) -> void:
 
 func _target(control: Control) -> int:
 	var path := str(battle.get_path_to(control))
+	if "StatStage" in path:
+		return 12
+	if "CalcPanel" in path:
+		return 14
 	if "PartyGrid" in path and not "Hover" in path:
 		return 12 if control is ProgressBar else 13
 	if "Hover" in path:
@@ -51,7 +55,7 @@ func _process(delta: float) -> void:
 		_scan(battle) # Picks up generated Bag rows, badges and popups.
 		scan_due = 0.2
 	for control in labels:
-		if is_instance_valid(control):
+		if is_instance_valid(control) and control.is_inside_tree():
 			apply_text(control,font,_target(control))
 	if battle.has_meta("battle_chat_bridge"):
 		var bridge = battle.get_meta("battle_chat_bridge")
@@ -59,6 +63,7 @@ func _process(delta: float) -> void:
 		apply_text(bridge.log_view,font,16)
 		apply_text(bridge.log_tab,font,16)
 		apply_text(bridge.chat_tab,font,16)
+		apply_text(bridge.calculator_button,font,16)
 
 func _apply_chat(node: Node) -> void:
 	if node is Label or node is RichTextLabel or node is BaseButton or node is LineEdit:

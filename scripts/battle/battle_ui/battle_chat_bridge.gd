@@ -18,12 +18,13 @@ var tab_connections: Array[Dictionary] = []
 var primary_tabs: HBoxContainer
 var chat_tab: Button
 var resize_handle: Button
+var calculator_button: Button
 var resizing := false
 var preferred_height := 420.0
 var drag_start_y := 0.0
 var drag_start_height := 0.0
 var original_panel_style: StyleBox
-const ALLOWED := ["ChatPanel", "ChatTabsPanel", "BattleChatLog", "BattleChatPrimaryTabs", "BattleChatResize", "ChatTabsBackground", "ChatContextPopup", "ChatSettingsPopup", "ChatModerationPopup"]
+const ALLOWED := ["ChatPanel", "ChatTabsPanel", "BattleChatLog", "BattleChatPrimaryTabs", "BattleChatResize", "BattleCalculatorButton", "ChatTabsBackground", "ChatContextPopup", "ChatSettingsPopup", "ChatModerationPopup"]
 
 func setup(source: CanvasLayer, screen: Control) -> void:
 	overlay = source
@@ -124,6 +125,12 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 	log_view.add_theme_font_size_override("normal_font_size",16)
 	overlay.get_node("Control").add_child(log_view)
 	process_priority = 100
+	calculator_button = Button.new()
+	calculator_button.name = "BattleCalculatorButton"
+	calculator_button.text = "Damage Calculator"
+	calculator_button.add_theme_stylebox_override("normal", log_style.duplicate())
+	calculator_button.pressed.connect(func(): host.battle._on_calc_mode_button_pressed())
+	overlay.get_node("Control").add_child(calculator_button)
 	select_log(true)
 
 func select_log(selected: bool) -> void:
@@ -178,6 +185,8 @@ func _refresh() -> void:
 	primary_tabs.size = Vector2(width,32)
 	resize_handle.position = Vector2(12,header_y)
 	resize_handle.size = Vector2(width,12)
+	calculator_button.position = Vector2(12,header_y - 36)
+	calculator_button.size = Vector2(width,32)
 	log_view.position = panel.position
 	log_view.size = panel.size
 	log_view.scale = panel.scale
@@ -189,12 +198,19 @@ func _refresh() -> void:
 		if not log_selected:
 			log_tab.text = "Battle Log •"
 	host.battle.battle_log_rail.hide()
+	var calculator_open: bool = host.battle.calc_drawer.visible
+	for control in [panel,tabs,log_view,primary_tabs,resize_handle,calculator_button]:
+		if calculator_open:
+			control.hide()
+	primary_tabs.visible = not calculator_open
+	resize_handle.visible = not calculator_open
+	calculator_button.visible = not calculator_open
 	var background = root.get_node_or_null("ChatTabsBackground")
 	if background != null:
 		background.hide()
 
 func contains_pointer(point: Vector2) -> bool:
-	for control in [panel,tabs,log_view,primary_tabs,resize_handle]:
+	for control in [panel,tabs,log_view,primary_tabs,resize_handle,calculator_button]:
 		if is_instance_valid(control) and control.is_visible_in_tree() and control.get_global_rect().has_point(point):
 			return true
 	return false
@@ -262,6 +278,8 @@ func release() -> void:
 		primary_tabs.queue_free()
 	if is_instance_valid(resize_handle):
 		resize_handle.queue_free()
+	if is_instance_valid(calculator_button):
+		calculator_button.queue_free()
 	if not is_instance_valid(overlay):
 		return
 	entry.release_focus()

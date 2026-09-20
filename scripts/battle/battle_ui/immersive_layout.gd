@@ -7,6 +7,10 @@ static func _move(node: Node, battle: Node) -> void:
 
 static func apply(battle: Control) -> void:
 	battle.set_meta("immersive_battle_ui", true)
+	battle.get_node("%CalcPanel").set_meta("immersive_calculator", true)
+	var calc_scroll: ScrollContainer = battle.get_node("%CalcPanel/CalcScroll")
+	calc_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	calc_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	var typography := preload("res://scripts/battle/battle_ui/immersive_typography.gd").new()
 	typography.name = "ImmersiveTypography"
 	typography.battle = battle
@@ -53,16 +57,13 @@ static func apply(battle: Control) -> void:
 	calc.custom_minimum_size = Vector2(130, 36)
 	calc.z_index = 90
 	calc.hide()
-	var menu := MenuButton.new()
-	menu.name = "ImmersiveBattleMenu"
-	menu.text = "•••"
-	menu.tooltip_text = "Battle tools"
+	var menu := Button.new()
+	menu.name = "ResetCameraButton"
+	menu.text = "↺"
+	menu.tooltip_text = "Reset camera"
 	menu.theme = calc.theme
 	menu.add_theme_stylebox_override("normal", calc.get_theme_stylebox("normal"))
 	battle.get_node("%BattleStage").add_child(menu)
-	menu.get_popup().add_item("Damage Calc", 0)
-	menu.get_popup().add_item("Battle Log", 1)
-	menu.get_popup().add_item("Reset camera", 2)
 	var popup_style := StyleBoxFlat.new()
 	popup_style.bg_color = Color("071323fa")
 	popup_style.border_color = Color("329bdf")
@@ -70,17 +71,11 @@ static func apply(battle: Control) -> void:
 	popup_style.set_corner_radius_all(8)
 	popup_style.content_margin_left = 12
 	popup_style.content_margin_right = 12
-	menu.get_popup().add_theme_stylebox_override("panel",popup_style)
-	menu.get_popup().add_theme_font_size_override("font_size",16)
-	menu.get_popup().id_pressed.connect(func(id: int):
-		if id == 0:
-			battle._on_calc_mode_button_pressed()
-		elif id == 1:
-			battle._on_battle_log_toggle_pressed()
-		else:
-			var presenter = battle.animation_router.model_presenter
-			if is_instance_valid(presenter):
-				presenter.reset_user_camera())
+	menu.add_theme_stylebox_override("normal",popup_style)
+	menu.pressed.connect(func():
+		var presenter = battle.animation_router.model_presenter
+		if is_instance_valid(presenter):
+			presenter.reset_user_camera())
 	battle.get_node("%ActionChoices").hide()
 	battle.get_node("%HBoxContainer").hide()
 	battle.get_node("BattleBackdrop").hide()

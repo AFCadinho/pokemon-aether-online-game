@@ -7,7 +7,8 @@ their existing embedded layout.
 
 Immersive gives the arena the full screen, places smaller HP panels above the Pokémon, keeps
 moves on the bottom right and the existing party controls near the bottom center.
-Battle Log and Chat share a resizable bottom-left panel; Damage Calc lives in the tools menu.
+Battle Log and Chat share a resizable bottom-left panel. Damage Calculator has
+its own button above the tabs; Reset camera is a separate top-right button.
 The player team preview stays on the left; switch controls sit below the centered
 battle message, with the existing chat in the bottom-left space. The opponent team
 stays visible at the edge. Compact moves and mechanics share the bottom-right area. HP panels
@@ -39,6 +40,14 @@ instead of cropping controls. The host preserves uniform scaling.
 
 ## Immersive typography
 
+The calculator uses frame bounds converted into drawer-local coordinates, with
+scrolling for overflow. Its overview precedes collapsible advanced settings;
+the existing calculation, selections and requests are unchanged. Chat/log is
+temporarily hidden while the calculator is open. Classic keeps its two columns.
+Stat/ability badges are positioned after the moving HP panels by the Immersive
+HUD controller, not the legacy sprite-position helper. Side effects follow below.
+Overlapping HP panels are separated vertically.
+
 `immersive_typography.gd` uses a private MSDF font with a CJK fallback, and
 compensates font sizes for inherited screen transforms. Existing layout geometry
 and render targets are unchanged. Main text uses 16 screen pixels, move names and
@@ -48,6 +57,11 @@ release; Classic does not install this helper.
 
 `battle_typography_check.gd` checks effective text sizes and hover bounds at
 1280×720, 1920×1080 and 2560×1440, with optional rendered screenshots.
+It also checks badge tracking, HP-panel separation, calculator frame bounds and
+advanced-settings expansion. The chat bridge test checks calculator occlusion.
+The existing `battle_calcdex_matchup_check.gd` still reports two SampleSetField
+assertions: both were reproduced with the calculator script reverted to the
+pre-change version. HP-scale and stat-stage operation checks pass separately.
 
 ## Local forest setup
 

@@ -2174,6 +2174,8 @@ func _update_stat_stage_panel_positions() -> void:
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 
 func _position_stat_stage_panel(sprite: AnimatedSprite2D, panel: Control) -> void:
+	if is_instance_valid(panel) and panel.has_meta("immersive_positioned"):
+		return
 	if sprite == null or panel == null:
 		return
 	if not sprite.visible:
