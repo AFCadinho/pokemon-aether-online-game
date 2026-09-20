@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Realtime 3D battles now use model attack animations independently of the 2D/2.5D move effects. Existing sprite effects remain available in 2D; unsupported 3D effects no longer insert flat animations into the arena.
 - Immersive battles now have a visible Damage Calculator button above Chat/Battle Log and a separate camera-reset button. Smaller status badges follow the HP panels, which separate when they overlap. The calculator fits the screen, offers collapsible advanced settings and temporarily hides chat/log.
 - Looking down from above the cave no longer hides the battle behind its ceiling. Immersive battle messages have a custom framed style, and chat/log backgrounds are more transparent without fading text.
 - Immersive battles now open on Battle Log by default, with sharper, consistently sized text and more readable chat/log text. Hover cards no longer grow with fullscreen scaling.

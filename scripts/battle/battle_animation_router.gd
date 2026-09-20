@@ -36,6 +36,10 @@ var playback_speed := 1.0:
 		if is_instance_valid(model_presenter):
 			model_presenter.playback_speed = value
 var model_presenter: Node
+var move_presentation_3d := preload("res://scripts/battle/battle_move_presentation_3d.gd").new()
+
+func uses_realtime_3d() -> bool:
+	return is_instance_valid(model_presenter) and bool(model_presenter.get("active"))
 
 func _has_model_actor(ident: String) -> bool:
 	if not is_instance_valid(model_presenter):
@@ -79,6 +83,7 @@ func _collect_threaded_resource_requests(wait_for_completion: bool) -> void:
 
 func cancel_render() -> void:
 	render_generation += 1
+	move_presentation_3d.cancel()
 	if is_instance_valid(model_presenter):
 		model_presenter.cancel_actions()
 	for node in active_animation_nodes:
@@ -148,9 +153,9 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 		return
 	if not _can_start_battle_animation("router.attack_tween", {"actor": actor_ident}):
 		return
-	if _has_model_actor(actor_ident):
-		var action: String = model_presenter.attack_action_for(move_name)
-		model_presenter.start_action(actor_ident, action)
+	if uses_realtime_3d():
+		model_presenter.playback_speed = playback_speed
+		move_presentation_3d.begin_attack(model_presenter, actor_ident, move_name)
 		return
 
 	match _get_player_id_from_ident(actor_ident):
@@ -173,6 +178,11 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 	}):
 		return
 
+	if uses_realtime_3d():
+		model_presenter.playback_speed = playback_speed
+		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, options)
+		return
+
 	var move_key: String = _normalize_move_name(move_name)
 	var config: Dictionary = _get_move_animation_config(move_key)
 	var owned_generation := render_generation
@@ -180,8 +190,6 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 	playback_options["dodge_started"] = false
 	if not config.is_empty():
 		await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident, playback_options)
-	if owned_generation == render_generation and _has_model_actor(actor_ident):
-		await model_presenter.wait_action(actor_ident)
 	if owned_generation != render_generation or not _is_miss_animation(playback_options):
 		return
 	# Even moves without available visual assets receive the standard dodge.
@@ -200,6 +208,9 @@ func play_effect_animation(effect_key: String, target_ident: String = "") -> voi
 	}):
 		return
 
+	if uses_realtime_3d():
+		await move_presentation_3d.play_effect(model_presenter, effect_key, target_ident)
+		return
 	var config: Dictionary = _get_effect_animation_config(_normalize_animation_key(effect_key))
 	if config.is_empty():
 		return
@@ -349,7 +360,7 @@ func _create_dark_pulse_underlay_if_needed(
 
 
 func prewarm_move_animations(move_names: Array) -> void:
-	if not SettingsManager.battle_animations:
+	if not SettingsManager.battle_animations or uses_realtime_3d():
 		return
 
 	for move_name_value: Variant in move_names:
@@ -363,7 +374,7 @@ func prewarm_move_animations(move_names: Array) -> void:
 
 
 func prewarm_effect_animations(effect_keys: Array) -> void:
-	if not SettingsManager.battle_animations:
+	if not SettingsManager.battle_animations or uses_realtime_3d():
 		return
 
 	for effect_key_value: Variant in effect_keys:
@@ -1563,8 +1574,9 @@ func play_damage_tween_for_target(target_ident: String, sound_variant: String = 
 
 	var sound_path := get_damage_sound_path(sound_variant)
 	_play_one_shot_sound(sound_path)
-	if _has_model_actor(target_ident):
-		await model_presenter.play_action(target_ident, "damage")
+	if uses_realtime_3d():
+		if _has_model_actor(target_ident):
+			await model_presenter.play_action(target_ident, "damage")
 		return
 	match _get_player_id_from_ident(target_ident):
 		"p1":
@@ -1620,6 +1632,8 @@ func _get_cached_sound_stream(sound_path: String) -> AudioStream:
 
 
 func play_heal_tween_for_target(target_ident: String, event_data: Dictionary = {}) -> void:
+	if uses_realtime_3d():
+		return
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.heal_tween", {"target": target_ident}):
@@ -1650,8 +1664,9 @@ func play_faint_tween_for_target(target_ident: String) -> void:
 		return
 	if not _can_start_battle_animation("router.faint_tween", {"target": target_ident}):
 		return
-	if _has_model_actor(target_ident):
-		await model_presenter.play_action(target_ident, "faint_start")
+	if uses_realtime_3d():
+		if _has_model_actor(target_ident):
+			await model_presenter.play_action(target_ident, "faint_start")
 		return
 
 	match _get_player_id_from_ident(target_ident):
@@ -1662,6 +1677,8 @@ func play_faint_tween_for_target(target_ident: String) -> void:
 
 
 func play_stat_change_tween_for_target(target_ident: String, amount: int) -> void:
+	if uses_realtime_3d():
+		return
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.stat_change_tween", {

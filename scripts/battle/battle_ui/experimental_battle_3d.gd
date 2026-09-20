@@ -596,7 +596,12 @@ func _action(action: String, index: int) -> void:
 		if not changed and players[index].current_animation in ["idle", "sleep", "faint_start", "faint_loop"]:
 			return
 	if not players[index].has_animation(action):
-		return
+		if action not in ["physical_attack", "special_attack"]:
+			return
+		var alternate := "special_attack" if action == "physical_attack" else "physical_attack"
+		if not players[index].has_animation(alternate):
+			return # Keep the current idle; never fall back to a sprite effect.
+		action = alternate
 	action_generation[index] += 1
 	current_actions[index] = action
 	var spec: Dictionary = entries[identities[index]].action_timing[action]
