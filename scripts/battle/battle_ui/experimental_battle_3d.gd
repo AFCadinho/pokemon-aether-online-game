@@ -1,4 +1,4 @@
-extends SubViewportContainer
+extends Control
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
 ## Missing models/forms/doubles/substitute fall back as a pair, never guessing art.
 
@@ -6,6 +6,7 @@ const SUPPORTED := ["dragonite", "roaring-moon"]
 var boxes: Array = []
 var platforms: Array = []
 var viewport: SubViewport
+var render_surface: TextureRect
 var world: Node3D
 var camera: Camera3D
 var entries := {}
@@ -195,7 +196,12 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	name = "ExperimentalBattle3D"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stretch = true
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	render_surface = TextureRect.new()
+	render_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	render_surface.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	add_child(render_surface)
+	render_surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	visible = false
 	mode_label = Label.new()
 	mode_label.position = Vector2(16, 55)
@@ -215,6 +221,8 @@ func _build_world() -> void:
 	viewport.own_world_3d = true
 	viewport.msaa_3d = Viewport.MSAA_4X
 	add_child(viewport)
+	_sync_render_size()
+	render_surface.texture = viewport.get_texture()
 	world = Node3D.new()
 	viewport.add_child(world)
 	var environment := WorldEnvironment.new()
@@ -229,6 +237,8 @@ func _build_world() -> void:
 	sun.rotation_degrees = Vector3(-50, -30, 0)
 	sun.light_energy = 0.9
 	sun.shadow_enabled = true
+	sun.directional_shadow_max_distance = 25.0
+	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	world.add_child(sun)
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(80, 80)
@@ -390,18 +400,32 @@ func _set_active(value: bool) -> void:
 				saved_colors[node] = node.self_modulate
 			node.self_modulate.a = 0.0
 
+func _sync_render_size() -> void:
+	if viewport == null:
+		return
+	# Include both the battlefield/UI scale and the window's stretch transform.
+	# The texture's raster size is independent of the HUD's design coordinates.
+	var screen := get_screen_transform()
+	var target := Vector2i(maxi(2, ceili(size.x * screen.x.length())), maxi(2, ceili(size.y * screen.y.length())))
+	if viewport.size != target:
+		viewport.size = target
+
+func _project_to_ui(point: Vector3) -> Vector2:
+	var local_point := camera.unproject_position(point) * size / Vector2(viewport.size)
+	return get_global_transform() * local_point
+
 func _anchor(body: bool, index: int) -> Vector2:
 	if actors[index] == null:
 		return Vector2.ZERO
 	var point := _position(index) + (Vector3(0, 1.2, 0) if body else Vector3.ZERO)
-	return get_global_transform() * camera.unproject_position(point)
+	return _project_to_ui(point)
 
 func _visual_rect(index: int) -> Rect2:
 	if actors[index] == null or not actors[index].visible:
 		return Rect2()
 	# Conservative presentation bounds; source skeletal mesh AABBs include rest pose.
 	var bottom := _anchor(false, index)
-	var top := get_global_transform() * camera.unproject_position(_position(index) + Vector3(0, 3, 0))
+	var top := _project_to_ui(_position(index) + Vector3(0, 3, 0))
 	var extent := absf(bottom.y - top.y)
 	return Rect2(Vector2(bottom.x - extent * 0.7, top.y), Vector2(extent * 1.4, extent))
 
@@ -445,6 +469,7 @@ func _update_camera(delta: float) -> void:
 	camera.look_at(Vector3(0, 1.3, 0))
 
 func _process(delta: float) -> void:
+	_sync_render_size()
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
 	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
@@ -459,6 +484,7 @@ func _process(delta: float) -> void:
 			packed.clear()
 			entries.clear()
 			if viewport != null:
+				render_surface.texture = null
 				viewport.queue_free()
 				viewport = null
 				world = null

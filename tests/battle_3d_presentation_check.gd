@@ -77,6 +77,21 @@ func _run() -> void:
 		assert(stage.active and stage.packed.size() == 2)
 		print("3D_IMPORT_MS ", stage.import_times_ms)
 		assert(stage.pending_entries.is_empty())
+		assert(stage.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR)
+		assert(stage.render_surface.texture == stage.viewport.get_texture())
+		var original_scale: Vector2 = stage.scale
+		var anchor_before: Vector2 = stage.get_global_transform().affine_inverse() * stage._anchor(true, 0)
+		for factor in [0.75, 1.37, 1.0]:
+			stage.scale = original_scale * factor
+			stage._sync_render_size()
+			var screen: Transform2D = stage.get_screen_transform()
+			var expected := Vector2i(ceili(stage.size.x * screen.x.length()), ceili(stage.size.y * screen.y.length()))
+			assert(stage.viewport.size == expected)
+			var anchor_after: Vector2 = stage.get_global_transform().affine_inverse() * stage._anchor(true, 0)
+			assert(anchor_before.distance_to(anchor_after) < 1.0, "Raster resizing shifted a HUD/effect anchor")
+		stage.scale = original_scale
+		stage._sync_render_size()
+		print("3D_NATIVE_RASTER ", stage.viewport.size, " logical=", stage.size)
 		assert(stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
 		settings.battle_3d_camera_motion = true
 		stage._update_camera(2.0)

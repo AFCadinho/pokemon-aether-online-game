@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Desktop 3D battles render at their on-screen resolution with smooth filtering and more focused shadows, instead of enlarging the low-resolution battle canvas.
+
 - The experimental 3D battle preview now explains missing model catalogs and other fallback reasons directly on screen.
 
 - Pokémon hover cards no longer intercept clicks on battle team buttons and now position correctly when the battle interface is scaled.
