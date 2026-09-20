@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Aether Vanguard Leader now offers a choice to challenge a Guild or read how Guild training and its daily reward work.
+
 - The Guild training daily-reward checkbox now has clear Aether-styled borders and visible checked, hover, disabled and keyboard-focus states.
 
 - The Clash Training Captain is now the Aether Vanguard Leader with Veteran artwork, and the daily AI5 Hard reward clearly advertises 200 Aetherite for each participating Trainer.
