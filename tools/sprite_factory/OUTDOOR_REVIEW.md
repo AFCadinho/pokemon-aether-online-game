@@ -66,3 +66,25 @@ This is not a performance benchmark or Android/web certification. The camera
 does not implement full environment collision avoidance; extreme zoom/orbit can
 intersect scenery, and foliage hiding may visibly pop. No production assets,
 delivery format or overworld behavior changed.
+
+## Scripted outdoor battle follow-up
+
+The viewer now includes fixed screen-space HP panels and two demo attack
+buttons. Dragonite plays its special-attack clip with a placeholder projectile;
+Roaring Moon plays its physical clip. Impact triggers the defender's damage
+clip, a brief ring and 18 points of local HP loss. At zero HP the defender plays
+faint-start and further attacks are blocked until Reset HP. There is no move
+accuracy, type calculation, turn authority, backend or source-game VFX here.
+
+Attack camera eases to the attacker, then impact, and returns to the user's
+previous framing. Toggle it off for a fixed camera. Manual drag/zoom/focus/reset
+takes priority immediately and cancels later camera cues for that attack.
+Free animation inspection remains available outside an active scripted attack.
+Controls are guarded against reentrant attacks; transient effects are freed.
+
+Focused runtime test: `POKEAETHER_OUTDOOR_BATTLE_SMOKE=1` with
+`POKEAETHER_STAGE_OUTPUT=OUTPUT_DIRECTORY`. Checks HP, both attacks, duplicate
+input guard, effect cleanup, camera return/disabled/manual takeover, faint and
+reset. Local initial evidence: `.worktrees/slot-c/.tmp/outdoor-battle-01/`;
+extended KO regression: `.worktrees/slot-c/.tmp/outdoor-battle-02/`.
+This remains a desktop visual prototype, not a completed migration.
