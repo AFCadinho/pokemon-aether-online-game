@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a separate full-window forest preview for reviewing Dragonite and Roaring Moon before changing the battle arena or interface.
+
 - Prepared desktop 3D Pokémon can now use the reviewed richer material colors and highlights with fixed neutral lighting, including during attacks and switching.
 
 - Desktop 3D battles prepare their first rendered models behind the opening screen before revealing the arena, with safe cancellation and a timeout fallback.
