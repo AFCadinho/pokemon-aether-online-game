@@ -26,6 +26,9 @@ func _ready() -> void:
 	_check(settings == {"botCount": 20, "tierId": "aether-uu", "spectatorAccess": "guilds_only", "aiPolicy": "ai5", "rewardAttempt": false}, "Count, tier, difficulty and spectator choice survive without a human-count field")
 	menu._update_reward_choice()
 	_check(not menu.reward_attempt.disabled, "AI5 Hard can opt into the daily reward")
+	for state: String in ["unchecked", "unchecked_hover", "checked", "checked_hover", "unchecked_disabled", "checked_disabled"]:
+		_check(menu.reward_attempt.has_theme_icon_override(state), "Daily reward checkbox styles %s" % state)
+	_check(menu.reward_attempt.get_theme_stylebox("focus") is StyleBoxFlat, "Daily reward checkbox has a visible keyboard focus border")
 	menu.reward_attempt.button_pressed = true
 	_check(menu.selected_settings().rewardAttempt, "Reward choice is included in the challenge")
 	menu.difficulty.select(3)
