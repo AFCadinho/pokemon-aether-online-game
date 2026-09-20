@@ -66,3 +66,22 @@ metrics/screenshots, checks HP/reset/side swapping, then exits.
 
 Next: user review of materials/eyes/movement from both sides, then actual
 Android and browser profiling before any migration decision.
+
+## Camera choreography follow-up
+
+`Dragon Pulse · demo` now eases toward Dragonite for 0.3 seconds, tracks toward
+the target over the 0.5-second projectile flight, holds the impact framing,
+then returns to the fixed overview over 0.65 seconds. Only this special attack
+uses camera motion. HUD controls remain outside the 3D viewport and stationary.
+Focus follows model positions after swapping sides; this is a restrained camera
+move, not a continuous orbit. Close-ups may crop the non-focused combatant.
+
+The `Camera motion` switch is enabled by default for review. Switching it off
+immediately restores the overview, even mid-attack. Turning it on applies to
+the next attack. The choice is session-local; no user settings are written.
+
+Focused test: launch with `POKEAETHER_CAMERA_SMOKE=1` and an absolute
+`POKEAETHER_STAGE_OUTPUT`. It checks both sides, stationary HUDs, overview return,
+mid-attack disable, a complete disabled attack and reset; it captures attacker
+and impact views. Local evidence: `.worktrees/slot-c/.tmp/battle-stage-camera-01/`.
+This does not change production battle behavior or establish mobile performance.
