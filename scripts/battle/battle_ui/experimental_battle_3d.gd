@@ -48,25 +48,79 @@ func _cancel_load() -> void:
 		loading_path = ""
 		loading_entry.clear()
 
-func await_prepared() -> void:
-	# Presentation boundary only; keep pumping frames while assets prepare.
-	var deadline := Time.get_ticks_msec() + 10000
+var preparation_cancelled := false
+var preparation_failed := false
+var warming_render := false
+
+func cancel_preparation() -> void:
+	preparation_cancelled = true
+	warming_render = false
+	_cancel_load()
+	pending_entries.clear()
+
+func _blocking_pipelines() -> Array:
+	# Specialization compiles in the background and is not a blocking gate.
+	return [Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_CANVAS),
+		Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_MESH),
+		Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_SURFACE),
+		Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_DRAW)]
+
+func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
+	# Only the opaque screen host may temporarily expose hidden summon actors.
+	# Reuse these exact viewports/materials after reveal; do not rebuild them.
+	if render_under_cover:
+		warming_render = true
+	var deadline := Time.get_ticks_msec() + timeout_ms
+	var last_sample: Array = []
+	var quiet_frames := 0
+	var last_draw := -1
 	while is_inside_tree():
+		if preparation_cancelled or preparation_failed:
+			warming_render = false
+			return
 		var settings := get_tree().root.get_node("SettingsManager")
 		if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+			warming_render = false
 			return
 		var requested: String = settings.battle_3d_catalog_path
 		if requested.is_empty():
 			requested = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 		if loaded_path == requested and pending_entries.is_empty() and loading_path.is_empty():
-			# Allow actor creation/first render before summon anchors are captured.
-			await get_tree().process_frame
-			await get_tree().process_frame
-			return
+			if not render_under_cover and not warming_render:
+				await get_tree().process_frame
+				await get_tree().process_frame
+				return
+			if render_under_cover:
+				var has_combatants: bool = not combatants[0].species.is_empty() or not combatants[1].species.is_empty()
+				if not catalog_problem.is_empty() or (not active and has_combatants):
+					# Give _process time to resolve combatants before accepting fallback.
+					quiet_frames += 1
+					if quiet_frames >= 5:
+						warming_render = false
+						return
+				elif active:
+					var sample := _blocking_pipelines()
+					sample.append(viewport.size)
+					sample.append(identities.duplicate())
+					var drawn := Engine.get_frames_drawn()
+					if sample != last_sample:
+						quiet_frames = 0
+					elif drawn != last_draw or DisplayServer.get_name() == "headless":
+						quiet_frames += 1
+					last_draw = drawn
+					last_sample = sample
+					if quiet_frames >= 5:
+						warming_render = false
+						# Restore actual send-out visibility before fading the cover.
+						await get_tree().process_frame
+						return
 		if Time.get_ticks_msec() >= deadline:
 			_cancel_load()
 			pending_entries.clear()
+			preparation_failed = true
+			warming_render = false
 			reason = "3D preparation timed out; using 2.5D"
+			_set_active(false)
 			return
 		await get_tree().process_frame
 var action_generation := [0, 0]
@@ -470,6 +524,12 @@ func _update_camera(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_sync_render_size()
+	if preparation_failed or preparation_cancelled:
+		_set_active(false)
+		if is_instance_valid(mode_label):
+			mode_label.text = "2.5D · " + reason
+			mode_label.tooltip_text = reason
+		return
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
 	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
@@ -562,8 +622,8 @@ func _process(delta: float) -> void:
 			transition_tweens[i].set_speed_scale(playback_speed)
 		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
 			_action(restoring[i], i)
-		actors[i].visible = actor_shown[i]
-		actors[i].scale = Vector3.ONE * actor_scale[i] * (1.0 if identities[i] == "dragonite" else 0.65)
+		actors[i].visible = warming_render or actor_shown[i]
+		actors[i].scale = Vector3.ONE * (1.0 if warming_render else actor_scale[i]) * (1.0 if identities[i] == "dragonite" else 0.65)
 		if not resting[i] and not players[i].is_playing():
 			resting[i] = true
 			_action(restoring[i], i)
