@@ -1,5 +1,5 @@
 extends SubViewportContainer
-## Optional local desktop renderer, driven by the existing SpriteBox presentation.
+## Desktop presentation: explicit combatants/actions/transitions from battle host.
 ## Missing models/forms/doubles/substitute fall back as a pair, never guessing art.
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
@@ -69,9 +69,126 @@ func await_prepared() -> void:
 		await get_tree().process_frame
 var action_generation := [0, 0]
 var camera_phase := 0.0
+var combatants := [{"species": "", "shiny": false}, {"species": "", "shiny": false}]
+var actor_shown := [true, true]
+var actor_scale := [1.0, 1.0]
+var transition_tweens: Array = [null, null]
+var transition_generation := [0, 0]
+var lifecycle := ["empty", "empty"]
+var playback_speed := 1.0
+var move_categories := {}
 const CAMERA_HOME := Vector3(4, 5.5, 12)
 
-func setup(sprite_boxes: Array, stage_platforms: Array) -> void:
+func attack_action_for(move_name: String) -> String:
+	if move_categories.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/move_summary_index.json"))
+		if parsed is Dictionary:
+			move_categories = parsed
+	var key := move_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
+	return "physical_attack" if str(move_categories.get(key, {}).get("category", "")).to_lower() == "physical" else "special_attack"
+
+func set_combatant(index: int, species: String, shiny := false, force := false) -> void:
+	var normalized := species.to_lower().replace(" ", "-")
+	if not force and combatants[index].species == normalized and combatants[index].shiny == shiny:
+		return
+	action_generation[index] += 1
+	_stop_transition(index)
+	combatants[index] = {"species": normalized, "shiny": shiny}
+	actor_shown[index] = true
+	actor_scale[index] = 1.0
+	restoring[index] = "idle"
+	lifecycle[index] = "empty" if normalized.is_empty() else "idle"
+	if active and identities[index] == normalized and players[index] != null:
+		_action("reset", index)
+
+func actor_index(ident: String) -> int:
+	return 0 if ident.begins_with("p1") else (1 if ident.begins_with("p2") else -1)
+
+func handles(ident: String) -> bool:
+	var index := actor_index(ident)
+	return active and index >= 0 and is_instance_valid(actors[index])
+
+func set_sleeping(index: int, sleeping: bool) -> void:
+	var desired := "sleep" if sleeping else "idle"
+	if restoring[index] == desired:
+		return
+	restoring[index] = desired
+	if active and players[index] != null and resting[index]:
+		_action("reset", index)
+
+func cancel_actions() -> void:
+	for index in 2:
+		_stop_transition(index)
+		actor_scale[index] = 1.0
+		actor_shown[index] = not combatants[index].species.is_empty()
+		lifecycle[index] = "idle" if actor_shown[index] else "empty"
+		_action("reset", index)
+
+func start_action(ident: String, action: String) -> void:
+	if handles(ident):
+		_action(action, actor_index(ident))
+
+func wait_action(ident: String) -> void:
+	if not handles(ident):
+		return
+	var index := actor_index(ident)
+	var generation: int = action_generation[index]
+	while is_inside_tree() and handles(ident) and generation == action_generation[index]:
+		if current_actions[index] in ["idle", "sleep"] or not players[index].is_playing():
+			return
+		await get_tree().process_frame
+
+func play_action(ident: String, action: String) -> void:
+	start_action(ident, action)
+	if not handles(ident):
+		return
+	var generation: int = action_generation[actor_index(ident)]
+	await wait_action(ident)
+	if action == "faint_start" and handles(ident) and generation == action_generation[actor_index(ident)] and current_actions[actor_index(ident)] == "faint_start":
+		actor_shown[actor_index(ident)] = false
+		lifecycle[actor_index(ident)] = "fainted"
+
+func _stop_transition(index: int) -> void:
+	transition_generation[index] += 1
+	if transition_tweens[index] != null and transition_tweens[index].is_valid():
+		transition_tweens[index].kill()
+	transition_tweens[index] = null
+
+func set_actor_shown(index: int, shown: bool) -> void:
+	_stop_transition(index)
+	actor_shown[index] = shown
+	actor_scale[index] = 1.0
+	lifecycle[index] = "idle" if shown else "hidden"
+
+func send_out(ident: String) -> bool:
+	if not handles(ident):
+		return false
+	return await _transition_actor(actor_index(ident), true, 0.32)
+
+func recall(ident: String) -> bool:
+	if not handles(ident):
+		return false
+	return await _transition_actor(actor_index(ident), false, 0.26)
+
+func _transition_actor(index: int, entering: bool, duration: float) -> bool:
+	_stop_transition(index)
+	var generation: int = transition_generation[index]
+	lifecycle[index] = "send_out" if entering else "recall"
+	actor_shown[index] = true
+	actor_scale[index] = 0.05 if entering else 1.0
+	var tween := create_tween().set_speed_scale(playback_speed)
+	transition_tweens[index] = tween
+	tween.tween_method(func(value: float): actor_scale[index] = value,
+		actor_scale[index], 1.0 if entering else 0.05, duration).set_trans(Tween.TRANS_SINE)
+	tween.tween_callback(func():
+		actor_shown[index] = entering
+		lifecycle[index] = "idle" if entering else "hidden"
+		transition_tweens[index] = null)
+	while is_inside_tree() and active and generation == transition_generation[index] and tween.is_valid() and tween.is_running():
+		await get_tree().process_frame
+	return is_inside_tree() and active and generation == transition_generation[index]
+
+func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	boxes = sprite_boxes
 	platforms = stage_platforms
 	name = "ExperimentalBattle3D"
@@ -85,8 +202,6 @@ func setup(sprite_boxes: Array, stage_platforms: Array) -> void:
 	mode_label.add_theme_font_size_override("font_size", 12)
 	mode_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	get_parent().add_child(mode_label)
-	for i in 2:
-		boxes[i].presentation_action.connect(_action.bind(i))
 	set_process(true)
 	# Observe before rendering but after SpriteBox state changes.
 	process_priority = 10
@@ -231,6 +346,7 @@ func _set_active(value: bool) -> void:
 	if active and not value:
 		camera_phase = 0.0
 		for i in 2:
+			_stop_transition(i)
 			action_generation[i] += 1
 			if players[i] != null:
 				players[i].stop()
@@ -248,7 +364,6 @@ func _set_active(value: bool) -> void:
 	for i in boxes.size():
 		boxes[i].presentation_anchor = _anchor.bind(i) if value else Callable()
 		boxes[i].presentation_visual_rect = _visual_rect.bind(i) if value else Callable()
-		boxes[i].presentation_faint = _play_faint.bind(i) if value else Callable()
 	if value:
 		var hidden: Array = []
 		for platform in platforms:
@@ -299,19 +414,9 @@ func _action(action: String, index: int) -> void:
 	var animation: Animation = players[index].get_animation(action)
 	animation.length = float(spec.frames) / 60.0
 	animation.loop_mode = Animation.LOOP_LINEAR if spec.get("loop", false) else Animation.LOOP_NONE
-	players[index].speed_scale = boxes[index].playback_speed
+	players[index].speed_scale = playback_speed
 	players[index].play(action, -1, float(spec.speed))
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
-
-func _play_faint(index: int) -> bool:
-	_action("faint_start", index)
-	var generation: int = action_generation[index]
-	var actor: Node = actors[index]
-	while is_inside_tree() and active and actors[index] == actor and action_generation[index] == generation:
-		if not players[index].is_playing():
-			return true
-		await get_tree().process_frame
-	return false
 
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
@@ -321,14 +426,12 @@ func _update_camera(delta: float) -> void:
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
-		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"]:
+		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"] and lifecycle[0] in ["idle", "empty", "hidden"] and lifecycle[1] in ["idle", "empty", "hidden"]:
 			camera_phase += delta * 0.22
 		camera.position = CAMERA_HOME.rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	camera.look_at(Vector3(0, 1.3, 0))
 
 func _process(delta: float) -> void:
-	if boxes.size() != 2:
-		return
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
 	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · 3D preview unavailable")
@@ -364,12 +467,15 @@ func _process(delta: float) -> void:
 			reason = "Field hazard/screen presentation uses 2.5D"
 			_set_active(false)
 			return
-	for box in boxes:
-		var species: String = box.current_single_species.to_lower().replace(" ", "-")
-		if species.is_empty() and not box.double_container.visible and not box.substitute_active:
+	for index in 2:
+		var box: Node = boxes[index] if index < boxes.size() else null
+		var double: bool = box != null and box.double_container.visible
+		var substitute: bool = box != null and box.substitute_active
+		var species: String = combatants[index].species
+		if species.is_empty() and not double and not substitute:
 			desired.append("")
 			continue
-		if not supported(species, box.current_single_is_shiny, box.double_container.visible, box.substitute_active) or not packed.has(species):
+		if not supported(species, combatants[index].shiny, double, substitute) or not packed.has(species):
 			reason = "Unsupported active Pokémon/situation; using 2.5D"
 			_set_active(false)
 			return
@@ -402,18 +508,22 @@ func _process(delta: float) -> void:
 			actors[i].rotation.y = atan2(direction.x, direction.z)
 			players[i] = _find_player(actors[i])
 			identities[i] = desired[i]
-			restoring[i] = "idle"
 			resting[i] = true
-			_action("idle", i)
-		players[i].speed_scale = boxes[i].playback_speed
+			_action(restoring[i], i)
+		players[i].speed_scale = playback_speed
+		if transition_tweens[i] != null and transition_tweens[i].is_valid():
+			transition_tweens[i].set_speed_scale(playback_speed)
 		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
 			_action(restoring[i], i)
-		actors[i].visible = boxes[i].single_sprite.is_visible_in_tree() and boxes[i].modulate.a > 0.05 and boxes[i].single_sprite.modulate.a > 0.05
+		actors[i].visible = actor_shown[i]
+		actors[i].scale = Vector3.ONE * actor_scale[i] * (1.0 if identities[i] == "dragonite" else 0.65)
 		if not resting[i] and not players[i].is_playing():
 			resting[i] = true
 			_action(restoring[i], i)
 
 func _exit_tree() -> void:
+	for index in 2:
+		_stop_transition(index)
 	_cancel_load()
 	_set_active(false)
 	pending_entries.clear()

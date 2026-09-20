@@ -5,8 +5,9 @@ Full 3D targets desktop only; browser and Android retain sprite-based battles,
 and desktop retains the 2.5D player option.
 
 The default remains **2.5D — sprites**. The overworld, battle rules, networking,
-HP state and replay event renderer are unchanged. The experimental 3D layer
-observes SpriteBox presentation actions and provides projected effect anchors.
+HP state and replay event semantics are unchanged. The 3D presenter receives
+actor state and actions from the battle host/router and owns its transitions.
+See [independent lifecycle and future battle-scene host](battle_3d_lifecycle.md).
 
 ## Try it
 
@@ -57,7 +58,7 @@ sides. A temporarily empty slot during a switch can remain in 3D. Selecting
 - Returning to 2.5D clears queued imports, actors, model references and the
   viewport/world. Actions follow AnimationPlayer completion and live playback
   speed. Faint awaits the source animation instead of the legacy sprite fade;
-  resetting the pose or losing the active presentation cancels that wait.
+  router cancellation or losing the active presentation cancels that wait.
 - Current source material translation is not a visual-parity guarantee.
   Hover bounds are conservative projected bounds. Capture/summon polish and
   live switch/faint review remain necessary.

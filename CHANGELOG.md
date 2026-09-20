@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Experimental 3D battles now have their own send-out, recall, attack, damage and faint transitions instead of following hidden sprite animations.
+
 - Experimental 3D battles load prepared models in the background instead of converting them during play. Hidden trainer portraits no longer cause unnecessary work when opening wild battles.
 
 - Experimental desktop 3D battles now offer optional gentle camera movement, respect animation speed changes, and play the full faint animation. Returning to 2.5D releases the 3D scene.

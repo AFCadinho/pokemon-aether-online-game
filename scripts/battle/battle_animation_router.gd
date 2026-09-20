@@ -30,7 +30,18 @@ var animation_guard: Callable
 var render_generation := 0
 var active_animation_nodes: Array[Node] = []
 var active_actor_restore: Callable
-var playback_speed := 1.0
+var playback_speed := 1.0:
+	set(value):
+		playback_speed = value
+		if is_instance_valid(model_presenter):
+			model_presenter.playback_speed = value
+var model_presenter: Node
+
+func _has_model_actor(ident: String) -> bool:
+	if not is_instance_valid(model_presenter):
+		return false
+	model_presenter.playback_speed = playback_speed
+	return model_presenter.handles(ident)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
@@ -68,6 +79,8 @@ func _collect_threaded_resource_requests(wait_for_completion: bool) -> void:
 
 func cancel_render() -> void:
 	render_generation += 1
+	if is_instance_valid(model_presenter):
+		model_presenter.cancel_actions()
 	for node in active_animation_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -135,6 +148,10 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 		return
 	if not _can_start_battle_animation("router.attack_tween", {"actor": actor_ident}):
 		return
+	if _has_model_actor(actor_ident):
+		var action: String = model_presenter.attack_action_for(move_name)
+		model_presenter.start_action(actor_ident, action)
+		return
 
 	match _get_player_id_from_ident(actor_ident):
 		"p1":
@@ -163,6 +180,8 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 	playback_options["dodge_started"] = false
 	if not config.is_empty():
 		await _play_animation_config(config, "", _get_player_id_from_ident(actor_ident) == "p2", actor_ident, _target_ident, playback_options)
+	if owned_generation == render_generation and _has_model_actor(actor_ident):
+		await model_presenter.wait_action(actor_ident)
 	if owned_generation != render_generation or not _is_miss_animation(playback_options):
 		return
 	# Even moves without available visual assets receive the standard dodge.
@@ -1544,6 +1563,9 @@ func play_damage_tween_for_target(target_ident: String, sound_variant: String = 
 
 	var sound_path := get_damage_sound_path(sound_variant)
 	_play_one_shot_sound(sound_path)
+	if _has_model_actor(target_ident):
+		await model_presenter.play_action(target_ident, "damage")
+		return
 	match _get_player_id_from_ident(target_ident):
 		"p1":
 			await player_sprite_box.play_damage_tween()
@@ -1627,6 +1649,9 @@ func play_faint_tween_for_target(target_ident: String) -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.faint_tween", {"target": target_ident}):
+		return
+	if _has_model_actor(target_ident):
+		await model_presenter.play_action(target_ident, "faint_start")
 		return
 
 	match _get_player_id_from_ident(target_ident):

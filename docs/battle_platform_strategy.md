@@ -2,6 +2,11 @@
 
 Accepted product direction — 2026-09-20.
 
+Development sequencing update: focus exclusively on desktop 3D until the model
+catalog and 3D experience are stable/production-ready. Preserve architectural
+room for 2.5D but defer its development and platform rollout. Do not require
+2.5D feature parity for new 3D work. See [3D lifecycle](battle_3d_lifecycle.md).
+
 ## Platform roles
 
 | Platform | Battle presentation | Role |

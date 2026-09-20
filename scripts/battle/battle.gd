@@ -781,6 +781,7 @@ func _ready() -> void:
 	battle_stage.add_child(desktop_3d)
 	battle_stage.move_child(desktop_3d, battle_background_video.get_index() + 1)
 	desktop_3d.setup([player_sprite_box, enemy_sprite_box], [player_battle_platform, enemy_battle_platform])
+	animation_router.model_presenter = desktop_3d
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
 	force_switch_flow.setup(battle_state)
@@ -6334,6 +6335,8 @@ func _sync_status_condition_overlay_for_player(player_id: String) -> void:
 	var sprite_box: Node = player_sprite_box if player_id == "p1" else enemy_sprite_box
 	if sprite_box != null and sprite_box.has_method("set_dratini_poc_sleeping"):
 		sprite_box.call("set_dratini_poc_sleeping", condition_key == "sleeping")
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_sleeping(0 if player_id == "p1" else 1, condition_key == "sleeping")
 
 func _prepare_pending_status_condition_overlays(events: Array) -> void:
 	pending_status_condition_overlay_players.clear()
@@ -8483,13 +8486,18 @@ func _show_original_player_lead_before_initial_events(species: String, fallback_
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon), _get_active_display_name("p1"))
 
 func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
-	if sprite_box == null:
-		return
-	if pokeball_summon_animation_player == null:
-		return
 	var desktop_stage := battle_stage.get_node_or_null("ExperimentalBattle3D")
 	if desktop_stage != null:
+		desktop_stage.set_actor_shown(0 if side == "back" else 1, false)
 		await desktop_stage.await_prepared()
+		var actor_ident := "p1" if side == "back" else "p2"
+		if desktop_stage.handles(actor_ident):
+			SfxManager.play("summon_release")
+			SfxManager.play_pokemon_cry(cry_species)
+			await desktop_stage.send_out(actor_ident)
+			return
+	if sprite_box == null or pokeball_summon_animation_player == null:
+		return
 
 	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
 	var arena_rect: Rect2 = _get_battle_arena_global_rect()
@@ -8528,9 +8536,12 @@ func _play_summon_release_cry() -> void:
 	SfxManager.play_pokemon_cry(summon_release_cry_species)
 
 func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String) -> void:
-	if sprite_box == null:
+	var actor_ident := "p1" if side == "back" else "p2"
+	if is_instance_valid(animation_router.model_presenter) and animation_router.model_presenter.handles(actor_ident):
+		SfxManager.play("summon_release")
+		await animation_router.model_presenter.recall(actor_ident)
 		return
-	if pokeball_summon_animation_player == null:
+	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
 
 	var original_z_index := sprite_box.z_index
@@ -8564,9 +8575,15 @@ func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String
 	sprite_box.z_as_relative = original_z_as_relative
 
 func _play_switch_release(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
-	if sprite_box == null:
-		return
-	if pokeball_summon_animation_player == null:
+	var actor_ident := "p1" if side == "back" else "p2"
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_actor_shown(0 if side == "back" else 1, false)
+		await animation_router.model_presenter.await_prepared()
+		if animation_router.model_presenter.handles(actor_ident):
+			SfxManager.play_pokemon_cry(cry_species)
+			await animation_router.model_presenter.send_out(actor_ident)
+			return
+	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
 
 	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
@@ -10047,6 +10064,8 @@ func _set_single_pokemon_species_with_pvp_warning(
 		_get_sprite_box_debug_species(sprite_box),
 	])
 	_warn_if_pvp_species_change_outside_batch(sprite_box, species, context)
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_combatant(0 if sprite_box == player_sprite_box else 1, species, is_shiny, context == "switch_event")
 	sprite_box.set_single_pokemon_species(species, side, is_shiny)
 
 func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String, context: String) -> void:
@@ -17201,11 +17220,15 @@ func _update_active_sprite_box(
 	if active_species == "":
 		active_species = _get_active_display_species(player_id).strip_edges()
 	if field_slot_empty or force_switch_hidden:
+		if is_instance_valid(animation_router.model_presenter):
+			animation_router.model_presenter.set_combatant(0 if player_id == "p1" else 1, "")
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
 
 	if active_species == "":
+		if is_instance_valid(animation_router.model_presenter):
+			animation_router.model_presenter.set_combatant(0 if player_id == "p1" else 1, "")
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
