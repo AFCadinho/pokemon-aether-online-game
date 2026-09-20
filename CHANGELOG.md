@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Experimental 3D battles load prepared models in the background instead of converting them during play. Hidden trainer portraits no longer cause unnecessary work when opening wild battles.
+
 - Experimental desktop 3D battles now offer optional gentle camera movement, respect animation speed changes, and play the full faint animation. Returning to 2.5D releases the 3D scene.
 
 - Desktop players can keep 2.5D battles or opt into an experimental 3D preview using local Dragonite and Roaring Moon models. Unsupported Pokémon and battle situations fall back to 2.5D.
