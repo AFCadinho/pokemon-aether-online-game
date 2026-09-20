@@ -22,6 +22,43 @@ var load_ms := 0.0
 var root_path := ""
 var last_tick := 0
 var swapped := false
+const CAMERA_HOME := Vector3(5, 5.3, 11)
+const CAMERA_FOCUS := Vector3(0, 1, 0)
+const CAMERA_SIZE := 7.8
+var camera_motion := true
+var camera_focus := CAMERA_FOCUS
+var camera_tween: Tween
+var camera_button: CheckButton
+
+func _camera_pose(weight: float, origin: Vector3, focus: Vector3, size_from: float,
+		destination: Vector3, target: Vector3, size_to: float) -> void:
+	camera.position = origin.lerp(destination, weight)
+	camera_focus = focus.lerp(target, weight)
+	camera.size = lerpf(size_from, size_to, weight)
+	camera.look_at(camera_focus)
+
+func _camera_shot(destination: Vector3, target: Vector3, size_to: float, duration: float) -> void:
+	if not camera_motion:
+		return
+	if camera_tween != null:
+		camera_tween.kill()
+	camera_tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	camera_tween.tween_method(_camera_pose.bind(camera.position, camera_focus, camera.size,
+		destination, target, size_to), 0.0, 1.0, duration)
+
+func _camera_reset() -> void:
+	if camera_tween != null:
+		camera_tween.kill()
+	camera.position = CAMERA_HOME
+	camera_focus = CAMERA_FOCUS
+	camera.size = CAMERA_SIZE
+	camera.look_at(camera_focus)
+
+func _set_camera_motion(enabled: bool) -> void:
+	camera_motion = enabled
+	if not enabled:
+		# Reduced-motion choice takes effect immediately, including mid-attack.
+		_camera_reset()
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -121,6 +158,12 @@ func _controls() -> void:
 	swap_button.position = Vector2(780, 25)
 	swap_button.pressed.connect(_swap_sides)
 	root.add_child(swap_button)
+	camera_button = CheckButton.new()
+	camera_button.text = "Camera motion"
+	camera_button.position = Vector2(570, 24)
+	camera_button.button_pressed = true
+	camera_button.toggled.connect(_set_camera_motion)
+	root.add_child(camera_button)
 
 func _swap_sides() -> void:
 	if busy:
@@ -138,6 +181,7 @@ func _trigger(action: String) -> void:
 	if busy:
 		return
 	if action == "reset":
+		_camera_reset()
 		hp = [100, 100]
 		_refresh_hud()
 		for i in 2:
@@ -156,8 +200,14 @@ func _attack(attacker: int, action: String) -> void:
 	_play(attacker, action)
 	var start := models[attacker].position + Vector3(0, 1.3, 0)
 	var end := models[target].position + Vector3(0, 1.1, 0)
+	var cinematic := attacker == 0 and action == "special_attack" and camera_motion
+	if cinematic:
+		# Stay on the same side of the action axis; focus follows swapped positions.
+		_camera_shot(start + Vector3(5, 3.2, 8), start, 5.8, 0.3)
 	await create_timer(0.3).timeout
 	if action == "special_attack":
+		if cinematic:
+			_camera_shot(end + Vector3(3.5, 3.2, 9), end, 6.2, 0.5)
 		var ball := SphereMesh.new()
 		ball.radius = 0.22
 		ball.height = 0.44
@@ -180,6 +230,10 @@ func _attack(attacker: int, action: String) -> void:
 	await create_timer(maxf(0.0, players[attacker].get_animation(action).length - 1.0)).timeout
 	for i in 2:
 		_play(i, "idle")
+	if cinematic and camera_motion:
+		_camera_shot(CAMERA_HOME, CAMERA_FOCUS, CAMERA_SIZE, 0.65)
+		await create_timer(0.65).timeout
+		_camera_reset()
 	busy = false
 	phase = "idle"
 	status.text = "Choose an animation to review"
@@ -271,12 +325,14 @@ func _run() -> void:
 	camera = Camera3D.new()
 	world.add_child(camera)
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	camera.size = 7.8
-	camera.position = Vector3(5, 5.3, 11)
-	camera.look_at(Vector3(0, 1.0, 0))
+	_camera_reset()
 	camera.current = true
 	_controls()
 	phase = "idle"
+	if OS.get_environment("POKEAETHER_CAMERA_SMOKE") == "1":
+		await _camera_smoke()
+		quit()
+		return
 	if OS.get_environment("POKEAETHER_STAGE_MEASURE") == "1":
 		for frame in 90:
 			await process_frame
@@ -323,6 +379,45 @@ func _run() -> void:
 		assert(not swapped and models[0].position == places[0])
 		print("STAGE_REVIEW_OK ", hp)
 		quit()
+
+func _camera_smoke() -> void:
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	assert(not output.is_empty())
+	DirAccess.make_dir_recursive_absolute(output)
+	var hud_positions := [huds[0].position, huds[1].position]
+	for reverse in [false, true]:
+		if reverse:
+			_swap_sides()
+		var fixed_huds := [huds[0].position, huds[1].position]
+		_attack(0, "special_attack")
+		await create_timer(0.27).timeout
+		assert(not camera.position.is_equal_approx(CAMERA_HOME))
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("attacker-%s.png" % reverse))
+		await create_timer(0.55).timeout
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("impact-%s.png" % reverse))
+		while busy:
+			assert(huds[0].position == fixed_huds[0] and huds[1].position == fixed_huds[1])
+			await process_frame
+		assert(camera.position.is_equal_approx(CAMERA_HOME) and is_equal_approx(camera.size, CAMERA_SIZE))
+	_swap_sides()
+	assert(huds[0].position == hud_positions[0] and huds[1].position == hud_positions[1])
+	# Disable in flight, then verify a whole disabled attack stays fixed.
+	_attack(0, "special_attack")
+	await create_timer(0.15).timeout
+	camera_button.button_pressed = false
+	while busy:
+		assert(camera.position.is_equal_approx(CAMERA_HOME))
+		await process_frame
+	_attack(0, "special_attack")
+	while busy:
+		assert(camera.position.is_equal_approx(CAMERA_HOME))
+		await process_frame
+	camera_button.button_pressed = true
+	await _trigger("reset")
+	assert(hp == [100, 100] and camera_focus.is_equal_approx(CAMERA_FOCUS))
+	print("CAMERA_SMOKE_OK: both sides, return, mid-attack off, disabled attack, reset")
 
 func _process(_delta: float) -> bool:
 	var now := Time.get_ticks_usec()
