@@ -235,6 +235,8 @@ python tools/sprite_factory/dual_plane_video_benchmark.py \
 python tools/sprite_factory/alpha_plane_benchmark.py \
   PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG \
   VIDEO_OUTPUT_DIRECTORY/report.json ALPHA_OUTPUT_DIRECTORY
+python tools/sprite_factory/resolution_tier_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG RESOLUTION_OUTPUT_DIRECTORY
 ```
 
 These tools retain 512×512 logical framing and native 60 FPS. They measure
@@ -245,6 +247,10 @@ also measures renderer-produced normal/shiny material IDs and colour LUTs; it
 must be launched against a reviewed source with Blender's auto-execution
 disabled. All outputs are benchmark evidence only; human visual approval and
 platform runtime support remain separate gates.
+The controlled 384 px/Q95/Q90 experiment, including measurements at the actual
+battle, Summary and Pokédex display sizes, is documented in
+[RESOLUTION_TIER_BENCHMARK.md](RESOLUTION_TIER_BENCHMARK.md). It preserves the
+512 px masters and does not produce a runtime-compatible catalog.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.
