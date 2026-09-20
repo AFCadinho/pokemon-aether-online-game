@@ -47,11 +47,20 @@ func _run() -> void:
 	var id_label := overlay.get("pokemon_summary_id_label") as Label
 	var nickname_button := overlay.get("pokemon_summary_nickname_button") as Button
 	var summary_sprite := overlay.get("pokemon_summary_animated_sprite") as AnimatedSprite2D
+	var summary_viewport := overlay.get("pokemon_summary_sprite_viewport") as SubViewport
 	_check(popup != null, "Pokémon Summary popup is created")
 	_check(
 		summary_sprite != null
 			and summary_sprite.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS,
 		"rendered Summary animation uses mipmapped filtering while downscaled"
+	)
+	var summary_viewport_container: SubViewportContainer = null
+	if summary_viewport != null:
+		summary_viewport_container = summary_viewport.get_parent() as SubViewportContainer
+	_check(
+		summary_viewport_container != null
+			and summary_viewport_container.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR,
+		"completed Summary preview uses linear filtering at fractional window scales"
 	)
 	_check(
 		overlay.call("_get_pokemon_summary_sprite_position") == Vector2(132, 94),
