@@ -57,7 +57,8 @@ func _run() -> void:
 	host.get_node("Cover").hide()
 	var bridge = host.chat_bridge
 	await process_frame
-	assert(not other.visible and panel.visible and tabs.visible)
+	assert(not other.visible and not panel.visible and not tabs.visible)
+	assert(bridge.log_selected and bridge.log_view.visible,"Every battle must initially show Battle Log")
 	assert(not entry.has_focus(),"Showing chat must not steal focus")
 	await key(KEY_ENTER)
 	assert(entry.has_focus())
@@ -123,7 +124,19 @@ func _run() -> void:
 	host.release()
 	assert(other.visible and panel.get_rect()==original)
 	assert(not overlay.has_meta("battle_chat_active"))
+	assert(not entry.has_theme_font_override("font") and not entry.has_theme_font_size_override("font_size"),"Overworld chat typography must be restored")
 	assert(not row.has_node("BattleLogTab"))
+	# A previous battle ending on Chat must not change the next battle's default.
+	host.queue_free()
+	await process_frame
+	host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	root.add_child(host)
+	var next_battle = load("res://scenes/battle/battle.tscn").instantiate()
+	host.mount(next_battle,overlay)
+	await process_frame
+	assert(host.chat_bridge.log_selected and host.chat_bridge.log_view.visible)
+	assert(entry.text == "test draft")
+	host.release()
 	host.queue_free()
 	overlay.queue_free()
 	await process_frame

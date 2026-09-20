@@ -7,6 +7,10 @@ static func _move(node: Node, battle: Node) -> void:
 
 static func apply(battle: Control) -> void:
 	battle.set_meta("immersive_battle_ui", true)
+	var typography := preload("res://scripts/battle/battle_ui/immersive_typography.gd").new()
+	typography.name = "ImmersiveTypography"
+	typography.battle = battle
+	battle.add_child(typography)
 	var hud_tracker := preload("res://scripts/battle/battle_ui/immersive_hud.gd").new()
 	hud_tracker.battle = battle
 	battle.add_child(hud_tracker)
