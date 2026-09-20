@@ -116,7 +116,7 @@ func setup(source: CanvasLayer, screen: Control) -> void:
 	log_view.add_theme_font_size_override("normal_font_size",16)
 	overlay.get_node("Control").add_child(log_view)
 	process_priority = 100
-	_refresh()
+	select_log(true)
 
 func select_log(selected: bool) -> void:
 	log_selected = selected
@@ -233,6 +233,9 @@ func release() -> void:
 	stopped = true
 	set_process_input(false)
 	if is_instance_valid(host.battle):
+		var typography: Node = host.battle.get_node_or_null("ImmersiveTypography")
+		if typography != null:
+			typography.restore_chat()
 		host.battle.remove_meta("battle_chat_bridge")
 	for connection in tab_connections:
 		if is_instance_valid(connection.button):

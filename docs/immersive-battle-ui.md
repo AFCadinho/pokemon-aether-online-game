@@ -7,7 +7,7 @@ their existing embedded layout.
 
 Immersive gives the arena the full screen, places smaller HP panels above the Pokémon, keeps
 moves on the bottom right and the existing party controls near the bottom center.
-Battle log is a collapsible floating panel, with a separate calculator button.
+Battle Log and Chat share a resizable bottom-left panel; Damage Calc lives in the tools menu.
 The player team preview stays on the left; switch controls sit below the centered
 battle message, with the existing chat in the bottom-left space. The opponent team
 stays visible at the edge. Compact moves and mechanics share the bottom-right area. HP panels
@@ -20,8 +20,9 @@ remain the same. It creates no socket and does not replay received messages.
 Other overworld panels and shortcuts remain suspended. Enter focuses chat when
 not already typing; Enter in the input follows the existing send handler once.
 Escape or a click outside chat releases typing; battle hotkeys ignore text focus.
-Battle log stays independent and its open/closed preference is saved. Its scroll
-area is compact enough not to cover chat. Release restores panel geometry,
+Each new battle selects Battle Log, regardless of the previous battle's tab.
+Chat retains its channel tabs and draft; Enter switches to Chat and focuses input.
+Release restores panel geometry,
 visibility, opacity, layer and input processing without clearing the draft.
 
 `battle_chat_bridge_check.gd` exercises the real screen and battle with a synthetic
@@ -35,6 +36,18 @@ The layout is applied before the battle enters the tree: moving an already-live
 renderer would invoke its teardown hooks. No duplicate battle or model views
 are created. The stage expands its logical width/height on unusual aspect ratios
 instead of cropping controls. The host preserves uniform scaling.
+
+## Immersive typography
+
+`immersive_typography.gd` uses a private MSDF font with a CJK fallback, and
+compensates font sizes for inherited screen transforms. Existing layout geometry
+and render targets are unchanged. Main text uses 16 screen pixels, move names and
+the current message 18, secondary details 14, and switch slots 12–13. Hover cards
+also cancel their inherited scale. Overworld chat font overrides are restored on
+release; Classic does not install this helper.
+
+`battle_typography_check.gd` checks effective text sizes and hover bounds at
+1280×720, 1920×1080 and 2560×1440, with optional rendered screenshots.
 
 ## Local forest setup
 
