@@ -1,5 +1,9 @@
 # Pokémon sprite factory V1
 
+The four-species compact-sprite versus runtime-3D prototype, GPU measurements
+and moving comparison tool are documented in
+[BATTLE_REPRESENTATION_STUDY.md](BATTLE_REPRESENTATION_STUDY.md).
+
 The current-quality idle-only Pokédex inventory, full-catalog size projections
 and local decode measurements are in [POKEDEX_IDLE_BUDGET.md](POKEDEX_IDLE_BUDGET.md).
 Reproduce with `python3 tools/sprite_factory/pokedex_idle_budget.py PACKAGED_CATALOG OUTPUT_DIRECTORY`.
