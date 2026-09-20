@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a separate cave battle preview with a clear stone floor, natural rock walls and recessed tunnels.
+
 - Reduced grainy, blotchy Pokémon shadows in the desktop forest preview while preserving the approved lighting and material colors.
 
 - Fixed the forest preview's ground-height calibration missing animated poses, which could leave Roaring Moon's tail underground.
