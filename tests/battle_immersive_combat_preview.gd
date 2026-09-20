@@ -66,6 +66,28 @@ func _run() -> void:
 		DirAccess.make_dir_recursive_absolute(output)
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(output.path_join("combat.png"))
+	var camera_input = battle.get_node("ImmersiveCameraInput")
+	assert(not camera_input._can_start(battle.moves_grid.get_global_rect().get_center()))
+	var point: Vector2 = battle.battle_stage.get_global_rect().position + battle.battle_stage.get_global_rect().size * Vector2(0.45,0.25)
+	assert(camera_input._can_start(point))
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.position = point
+	press.pressed = true
+	Input.parse_input_event(press)
+	await process_frame
+	var motion := InputEventMouseMotion.new()
+	motion.position = point + Vector2(90,20)
+	motion.relative = Vector2(90,20)
+	Input.parse_input_event(motion)
+	await process_frame
+	assert(absf(renderer.user_camera_yaw) > 0.1,"Left-drag must orbit the camera")
+	press.pressed = false
+	Input.parse_input_event(press)
+	await process_frame
+	assert(not camera_input.dragging)
+	renderer.reset_user_camera()
+	assert(renderer.user_camera_yaw == 0 and renderer.user_camera_pitch == 0)
 	host.release()
 	host.queue_free()
 	await process_frame

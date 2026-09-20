@@ -13,6 +13,10 @@ static func apply(battle: Control) -> void:
 	var portraits := preload("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
 	portraits.battle = battle
 	battle.add_child(portraits)
+	var camera_input := preload("res://scripts/battle/battle_ui/immersive_camera_input.gd").new()
+	camera_input.name = "ImmersiveCameraInput"
+	camera_input.battle = battle
+	battle.add_child(camera_input)
 	battle.get_node("%MovesGrid").custom_minimum_size = Vector2(400, 188)
 	var frame: Control = battle.get_node("%BattleFrame")
 	_move(frame, battle)
@@ -54,6 +58,7 @@ static func apply(battle: Control) -> void:
 	battle.get_node("%BattleStage").add_child(menu)
 	menu.get_popup().add_item("Damage Calc", 0)
 	menu.get_popup().add_item("Battle Log", 1)
+	menu.get_popup().add_item("Reset camera", 2)
 	var popup_style := StyleBoxFlat.new()
 	popup_style.bg_color = Color("071323fa")
 	popup_style.border_color = Color("329bdf")
@@ -66,8 +71,12 @@ static func apply(battle: Control) -> void:
 	menu.get_popup().id_pressed.connect(func(id: int):
 		if id == 0:
 			battle._on_calc_mode_button_pressed()
+		elif id == 1:
+			battle._on_battle_log_toggle_pressed()
 		else:
-			battle._on_battle_log_toggle_pressed())
+			var presenter = battle.animation_router.model_presenter
+			if is_instance_valid(presenter):
+				presenter.reset_user_camera())
 	battle.get_node("%ActionChoices").hide()
 	battle.get_node("%HBoxContainer").hide()
 	battle.get_node("BattleBackdrop").hide()
@@ -78,6 +87,12 @@ static func apply(battle: Control) -> void:
 	var hud: Control = battle.get_node("%PlayerHudPanel")
 	hud.position = Vector2(80, 58)
 	var prompt: Control = battle.get_node("%CurrentActionPanel")
+	var prompt_style := StyleBoxFlat.new()
+	prompt_style.bg_color = Color("071323cc")
+	prompt_style.border_color = Color("329bdf99")
+	prompt_style.border_width_bottom = 1
+	prompt_style.set_corner_radius_all(8)
+	prompt.add_theme_stylebox_override("panel",prompt_style)
 	prompt.offset_top = -155
 	prompt.offset_bottom = -99
 	var update := func():

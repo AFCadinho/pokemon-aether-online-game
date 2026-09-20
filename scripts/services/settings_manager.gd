@@ -63,6 +63,7 @@ var battle_3d_catalog_path := ""
 var battle_3d_arena := "auto"
 var battle_ui_layout := "immersive"
 var immersive_battle_log_open := false
+var immersive_chat_height := 420.0
 var battle_3d_forest_manifest := ""
 var battle_3d_camera_motion := false
 var weather_effects := true
@@ -133,6 +134,7 @@ func load_settings() -> void:
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
 	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
+	immersive_chat_height = clampf(float(data.get("immersive_chat_height",420.0)),220,800)
 	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
 	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(str(data.get("battle_3d_arena", "auto")))
 	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
@@ -227,6 +229,7 @@ func save_settings() -> void:
 		"battle_3d_arena": battle_3d_arena,
 		"battle_ui_layout": battle_ui_layout,
 		"immersive_battle_log_open": immersive_battle_log_open,
+		"immersive_chat_height": immersive_chat_height,
 		"battle_3d_forest_manifest": battle_3d_forest_manifest,
 		"battle_3d_camera_motion": battle_3d_camera_motion,
 		"weather_effects": weather_effects,
@@ -296,6 +299,10 @@ func set_battle_ui_layout(value: String) -> void:
 
 func set_immersive_battle_log_open(value: bool) -> void:
 	immersive_battle_log_open = value
+	_save_and_emit()
+
+func set_immersive_chat_height(value: float) -> void:
+	immersive_chat_height = clampf(value,220,800)
 	_save_and_emit()
 
 func set_battle_3d_forest_manifest(path: String) -> void:

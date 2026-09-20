@@ -85,7 +85,12 @@ func _pair(source: Node, copy: Node, list: Array) -> void:
 
 func _drop() -> void:
 	if is_instance_valid(viewport):
-		viewport.queue_free()
+		if viewport.has_meta("pooled_forest_environment"):
+			for copy in copies:
+				if is_instance_valid(copy):
+					copy.free()
+		else:
+			viewport.queue_free()
 	viewport = null
 	world = null
 	camera = null
@@ -96,6 +101,11 @@ func _drop() -> void:
 
 func _build() -> void:
 	source_world_id = stage.world.get_instance_id()
+	if stage.get("forest_lease") is Dictionary and not stage.forest_lease.is_empty():
+		viewport = stage.forest_lease.response.viewport
+		world = stage.forest_lease.response.world
+		camera = stage.forest_lease.response.camera
+		return
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
 	viewport.use_hdr_2d = true
