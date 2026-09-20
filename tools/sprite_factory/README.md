@@ -1,5 +1,9 @@
 # Pokémon sprite factory V1
 
+The current-quality idle-only Pokédex inventory, full-catalog size projections
+and local decode measurements are in [POKEDEX_IDLE_BUDGET.md](POKEDEX_IDLE_BUDGET.md).
+Reproduce with `python3 tools/sprite_factory/pokedex_idle_budget.py PACKAGED_CATALOG OUTPUT_DIRECTORY`.
+
 Local offline toolchain for human-reviewed 512×512 RGBA battle sprites.
 The established Gen 1–8 baseline is 24 FPS; a source with native 60 FPS may
 explicitly select 60 in its manifest without reducing source motion quality.
