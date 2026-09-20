@@ -7,6 +7,10 @@ static func _move(node: Node, battle: Node) -> void:
 
 static func apply(battle: Control) -> void:
 	battle.set_meta("immersive_battle_ui", true)
+	var hud_tracker := preload("res://scripts/battle/battle_ui/immersive_hud.gd").new()
+	hud_tracker.battle = battle
+	battle.add_child(hud_tracker)
+	battle.get_node("%MovesGrid").custom_minimum_size = Vector2(400, 188)
 	var frame: Control = battle.get_node("%BattleFrame")
 	_move(frame, battle)
 	battle.move_child(frame, 0)
@@ -38,7 +42,8 @@ static func apply(battle: Control) -> void:
 	battle.get_node("%HBoxContainer").hide()
 	battle.get_node("BattleBackdrop").hide()
 	var log_button: Button = battle.get_node("%BattleLogButton")
-	log_button.custom_minimum_size = Vector2(105, 36)
+	log_button.custom_minimum_size = Vector2(95, 32)
+	log_button.add_theme_font_size_override("font_size", 16)
 	log_button.text = "Battle log"
 	var hud: Control = battle.get_node("%PlayerHudPanel")
 	hud.position = Vector2(80, 58)
@@ -52,12 +57,12 @@ static func apply(battle: Control) -> void:
 		dock.position = Vector2(16, height - 122)
 		dock.size = Vector2(width * 0.55 - 28, 106)
 		rail.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		rail.position = Vector2(18, 210)
-		rail.size = Vector2(310, maxf(220, height - 400))
+		rail.position = Vector2(18, 150)
+		rail.size = Vector2(310, maxf(220, height - 340))
 		log_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		log_button.position = Vector2(18, 158)
-		log_button.size = Vector2(105, 36)
-		calc.position = Vector2(132, 158)
+		log_button.position = Vector2(18, 100)
+		log_button.size = Vector2(95, 32)
+		calc.position = Vector2(120, 100)
 		calc.size = Vector2(130, 36)
 	battle.resized.connect(update)
 	update.call()

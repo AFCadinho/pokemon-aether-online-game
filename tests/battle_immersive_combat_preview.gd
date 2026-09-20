@@ -1,0 +1,54 @@
+extends SceneTree
+## Offline visual fixture: real controls, no battle requests submitted.
+func _init() -> void:
+	_run.call_deferred()
+func _run() -> void:
+	var settings = root.get_node("SettingsManager")
+	settings.battle_ui_layout = "immersive"
+	settings.battle_presentation_mode = "3d"
+	settings.battle_3d_arena = "stadium"
+	settings.battle_3d_catalog_path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
+	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	root.add_child(host)
+	current_scene = host
+	var battle = load("res://scenes/battle/battle.tscn").instantiate()
+	host.mount(battle)
+	var renderer = battle.animation_router.model_presenter
+	renderer.set_combatant(0,"Dragonite")
+	renderer.set_combatant(1,"Roaring Moon")
+	await renderer.await_prepared(true,30000)
+	renderer.set_actor_shown(0,true)
+	renderer.set_actor_shown(1,true)
+	var party := []
+	for species in ["Dragonite","Typhlosion","Scizor","Arcanine","Charizard","Roaring Moon"]:
+		party.append({"species":species,"hp":100,"max_hp":100,"active":species=="Dragonite"})
+	battle.player_party_grid.set_party(party)
+	var parent: Control = battle.player_party_grid
+	while parent != battle:
+		parent.show()
+		parent = parent.get_parent() as Control
+	battle.moves_grid.set_moves([
+		{"move":"Outrage","type":"dragon","pp":8,"maxpp":10},
+		{"move":"Earthquake","type":"ground","pp":9,"maxpp":10},
+		{"move":"Fire Punch","type":"fire","pp":15,"maxpp":15},
+		{"move":"Dragon Dance","type":"dragon","pp":19,"maxpp":20}])
+	battle.moves_grid.show()
+	battle.get_node("%UtilityActions").show()
+	battle.current_action_panel.set_message("Choose a move")
+	for frame in 90:
+		await process_frame
+	host.get_node("Cover").hide()
+	var moves: Rect2 = battle.moves_grid.get_global_rect()
+	assert(not moves.intersects(battle.player_party_grid.get_global_rect()))
+	assert(not moves.intersects(battle.current_action_panel.get_global_rect()))
+	assert(not battle.get_node("%PlayerStagePartyRail").visible)
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	if not output.is_empty():
+		DirAccess.make_dir_recursive_absolute(output)
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("combat.png"))
+	host.release()
+	host.queue_free()
+	await process_frame
+	print("IMMERSIVE_COMBAT_LAYOUT_OK")
+	quit()
