@@ -267,6 +267,7 @@ func _on_web_party_changed() -> void:
 
 
 func _schedule_current_map_web_sprite_prefetch() -> void:
+	_prefetch_current_map_desktop_arena.call_deferred()
 	if not WebPokemonSpriteService.is_available():
 		return
 	var party_entries: Array = []
@@ -276,6 +277,14 @@ func _schedule_current_map_web_sprite_prefetch() -> void:
 	var area_id := _current_fishing_area_id()
 	if area_id != "":
 		_prefetch_current_map_wild_sprites.call_deferred(area_id)
+
+func _prefetch_current_map_desktop_arena() -> void:
+	if SettingsManager.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+		return
+	var arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
+	if arenas.resolve(SettingsManager.battle_3d_arena, _resolve_battle_environment_id("wild")) == "forest":
+		# Resource preparation only: never cache a battle, combatants or network state.
+		arenas.prepare_forest(SettingsManager.get_battle_3d_forest_manifest())
 
 
 func _prefetch_current_map_wild_sprites(area_id: String) -> void:
