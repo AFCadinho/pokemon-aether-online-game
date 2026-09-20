@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Made stadium logo highlights more visible and added individually timed cheering and waving spectators.
+
 - Added gentle logo animation and light sweeps across the 3D stadium branding.
 
 - Brought the 3D stadium preview to life with slowly sweeping light beams, matching floor highlights and animated supporter lights.
