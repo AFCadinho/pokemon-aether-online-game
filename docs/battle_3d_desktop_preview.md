@@ -1,5 +1,9 @@
 # Optional desktop battle presentation
 
+Product direction: [battle platform strategy](battle_platform_strategy.md).
+Full 3D targets desktop only; browser and Android retain sprite-based battles,
+and desktop retains the 2.5D player option.
+
 The default remains **2.5D — sprites**. The overworld, battle rules, networking,
 HP state and replay event renderer are unchanged. The experimental 3D layer
 observes SpriteBox presentation actions and provides projected effect anchors.
