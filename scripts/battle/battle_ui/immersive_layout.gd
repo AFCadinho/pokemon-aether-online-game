@@ -92,10 +92,13 @@ static func apply(battle: Control) -> void:
 	hud.position = Vector2(80, 58)
 	var prompt: Control = battle.get_node("%CurrentActionPanel")
 	var prompt_style := StyleBoxFlat.new()
-	prompt_style.bg_color = Color("071323cc")
-	prompt_style.border_color = Color("329bdf99")
-	prompt_style.border_width_bottom = 1
-	prompt_style.set_corner_radius_all(8)
+	prompt_style.bg_color = Color("061222c7")
+	prompt_style.border_color = Color("329bdfb0")
+	prompt_style.set_border_width_all(1)
+	prompt_style.border_width_left = 3
+	prompt_style.set_corner_radius_all(12)
+	prompt_style.shadow_color = Color("02081155")
+	prompt_style.shadow_size = 5
 	prompt.add_theme_stylebox_override("panel",prompt_style)
 	prompt.offset_top = -155
 	prompt.offset_bottom = -99

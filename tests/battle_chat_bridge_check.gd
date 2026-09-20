@@ -59,6 +59,8 @@ func _run() -> void:
 	await process_frame
 	assert(not other.visible and not panel.visible and not tabs.visible)
 	assert(bridge.log_selected and bridge.log_view.visible,"Every battle must initially show Battle Log")
+	assert(bridge.log_view.get_theme_stylebox("normal").bg_color.a < 0.7)
+	assert(panel.get_theme_stylebox("panel").bg_color.a < 0.7)
 	assert(not entry.has_focus(),"Showing chat must not steal focus")
 	await key(KEY_ENTER)
 	assert(entry.has_focus())
@@ -126,6 +128,7 @@ func _run() -> void:
 	assert(not overlay.has_meta("battle_chat_active"))
 	assert(not entry.has_theme_font_override("font") and not entry.has_theme_font_size_override("font_size"),"Overworld chat typography must be restored")
 	assert(not row.has_node("BattleLogTab"))
+	assert(not panel.has_theme_stylebox_override("panel"),"Restore overworld panel styling")
 	# A previous battle ending on Chat must not change the next battle's default.
 	host.queue_free()
 	await process_frame

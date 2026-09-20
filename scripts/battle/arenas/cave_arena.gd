@@ -59,7 +59,9 @@ func build() -> Node3D:
 	var ceiling := PlaneMesh.new()
 	ceiling.size = Vector2(70, 70)
 	var ceiling_material := _stone(Color("383431"))
-	ceiling_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	# Interior-only ceiling: an orbit camera above the roof must see the battle,
+	# while cameras inside the chamber still see its underside.
+	ceiling_material.cull_mode = BaseMaterial3D.CULL_FRONT
 	var roof := _put(chamber, ceiling, ceiling_material, Vector3(0, 10, 0), Vector3.ONE)
 	roof.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	# Receding stone arches surround dark, genuinely recessed tunnel ends.
