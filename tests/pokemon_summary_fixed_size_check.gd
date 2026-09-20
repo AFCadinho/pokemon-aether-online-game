@@ -43,7 +43,7 @@ func _run() -> void:
 	var copy_button := overlay.get("pokemon_summary_copy_button") as Button
 	var hidden_ability_badge := overlay.get("pokemon_summary_hidden_ability_badge") as PanelContainer
 	var title_label := overlay.get("pokemon_summary_title_label") as Label
-	var gender_label := overlay.get("pokemon_summary_gender_label") as Label
+	var gender_icon := overlay.get("pokemon_summary_gender_label") as TextureRect
 	var id_label := overlay.get("pokemon_summary_id_label") as Label
 	var nickname_button := overlay.get("pokemon_summary_nickname_button") as Button
 	_check(popup != null, "Pokémon Summary popup is created")
@@ -144,20 +144,19 @@ func _run() -> void:
 		)
 		_check(not animation_button.visible, "animation controls hide again for a legacy sprite")
 
-	if title_label != null and gender_label != null and nickname_button != null:
+	if title_label != null and gender_icon != null and nickname_button != null:
 		title_label.text = "Crabominable"
-		gender_label.text = "♀"
-		gender_label.visible = true
+		overlay.call("_apply_pokemon_summary_gender_icon", gender_icon, "female")
 		overlay.call("_fit_pokemon_summary_title_label")
 		await process_frame
 		await process_frame
 		_check(title_label.size.x > 80.0, "Pokémon name keeps its readable content width")
 		_check(
-			gender_label.global_position.x - (title_label.global_position.x + title_label.size.x) <= 5.0,
+			gender_icon.global_position.x - (title_label.global_position.x + title_label.size.x) <= 5.0,
 			"gender sits directly after the Pokémon name"
 		)
 		_check(
-			nickname_button.global_position.x - (gender_label.global_position.x + gender_label.size.x) <= 5.0,
+			nickname_button.global_position.x - (gender_icon.global_position.x + gender_icon.size.x) <= 5.0,
 			"nickname edit action sits directly after gender"
 		)
 
