@@ -150,6 +150,8 @@ It intentionally reloads assets synchronously on selection for review only.
 Set `POKEAETHER_REVIEW_SMOKE=1` for the 56-case load check, or
 `POKEAETHER_REVIEW_CAPTURE=ABSOLUTE_PNG_PATH` for a screenshot and automatic exit.
 
+Follow-up: [shared 3D battle stage and PBR materials](BATTLE_3D_STAGE_STUDY.md).
+
 Local evidence:
 
 - `.worktrees/slot-c/.tmp/battle-representation-01/compact/report.json`

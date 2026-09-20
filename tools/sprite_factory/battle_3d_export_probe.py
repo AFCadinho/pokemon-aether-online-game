@@ -1,6 +1,6 @@
 """Disposable glTF probe. Launch Blender with --factory-startup --disable-autoexec.
 
-Only the four reviewed source files in the supplied job are opened. Never saves
+Only the reviewed source files in the supplied job are opened. Never saves
 blend files or changes source assets. Direct export exposes unsupported material
 translation; the optional color bake is an explicitly simplified prototype.
 """
@@ -14,11 +14,12 @@ from pathlib import Path
 import bpy
 
 
-def bake_color_materials():
+def bake_color_materials(pbr=False):
     """Extract the imported shader's color/mask/eyelid chain, then plain PBR.
 
-    This prototype retains albedo detail/resolution, but does not translate the
-    original roughness/normal/emission shader. It is not visual parity.
+    This prototype retains albedo detail/resolution. Optional PBR baking also
+    extracts normal and roughness inputs, not the full original lighting,
+    emission or alpha shader. It is not visual parity.
     """
     scene = bpy.context.scene
     scene.render.engine = 'CYCLES'
@@ -30,6 +31,7 @@ def bake_color_materials():
     scene.render.bake.margin = 8
     records = []
     prepared = {}
+    auxiliary = {}
     meshes = [obj for obj in scene.objects if obj.type == 'MESH']
     for obj in meshes:
         for material in obj.data.materials:
@@ -59,6 +61,11 @@ def bake_color_materials():
             tree.links.new(group.outputs['ProbeAlbedo'], emission.inputs['Color'])
             tree.links.new(emission.outputs['Emission'], output_node.inputs['Surface'])
             prepared[material.name] = (material, image)
+            auxiliary[material.name] = {}
+            if pbr:
+                for channel, socket_name in (('normal', 'NormalMap'), ('roughness', 'Roughness')):
+                    socket = group.inputs[socket_name]
+                    auxiliary[material.name][channel] = {'socket': socket, 'size': size}
     # Bake the entire UV-domain shader on a plane so mesh UV coverage,
     # overlapping faces and active bake UV selection cannot discard regions.
     for material, _image in prepared.values():
@@ -67,6 +74,31 @@ def bake_color_materials():
         plane = bpy.context.object
         plane.data.materials.append(material)
         bpy.ops.object.bake(type='EMIT')
+        tree = material.node_tree
+        emission = next(n for n in tree.nodes if n.type == 'EMISSION')
+        for channel, record in auxiliary[material.name].items():
+            image = bpy.data.images.new('Probe_' + channel + '_' + material.name,
+                width=record['size'], height=record['size'], alpha=False, is_data=True)
+            target = tree.nodes.new('ShaderNodeTexImage')
+            target.image = image
+            tree.nodes.active = target
+            for link in list(emission.inputs['Color'].links):
+                tree.links.remove(link)
+            source = record['socket']
+            if source.is_linked:
+                output_socket = source.links[0].from_socket
+                if channel == 'roughness':
+                    scalar = tree.nodes.new('ShaderNodeMath')
+                    scalar.operation = 'ADD'
+                    scalar.inputs[1].default_value = 0.0
+                    tree.links.new(output_socket, scalar.inputs[0])
+                    output_socket = scalar.outputs[0]
+                tree.links.new(output_socket, emission.inputs['Color'])
+            else:
+                value = source.default_value
+                emission.inputs['Color'].default_value = tuple(value) if channel == 'normal' else (value, value, value, 1)
+            bpy.ops.object.bake(type='EMIT')
+            record['image'] = image
         mesh = plane.data
         bpy.data.objects.remove(plane, do_unlink=True)
         bpy.data.meshes.remove(mesh)
@@ -79,8 +111,17 @@ def bake_color_materials():
         texture = tree.nodes.new('ShaderNodeTexImage')
         texture.image = image
         tree.links.new(texture.outputs['Color'], bsdf.inputs['Base Color'])
+        for channel, record in auxiliary[material.name].items():
+            node = tree.nodes.new('ShaderNodeTexImage')
+            node.image = record['image']
+            if channel == 'normal':
+                normal = tree.nodes.new('ShaderNodeNormalMap')
+                tree.links.new(node.outputs['Color'], normal.inputs['Color'])
+                tree.links.new(normal.outputs['Normal'], bsdf.inputs['Normal'])
+            else:
+                tree.links.new(node.outputs['Color'], bsdf.inputs['Roughness'])
         tree.links.new(bsdf.outputs['BSDF'], out.inputs['Surface'])
-        records.append(dict(material=material.name, albedo_size=list(image.size)))
+        records.append(dict(material=material.name, albedo_size=list(image.size), maps=list(auxiliary[material.name])))
     return records
 
 
@@ -127,7 +168,7 @@ def export_entry(entry, output):
             obj.select_set(True)
     bpy.context.view_layer.objects.active = rig
     scene.frame_set(0)
-    baked = bake_color_materials() if job.get('bake_colors') else []
+    baked = bake_color_materials(bool(job.get('pbr_maps'))) if job.get('bake_colors') else []
     bpy.ops.object.select_all(action='DESELECT')
     for obj in scene.objects:
         if obj.type in ('MESH', 'ARMATURE'):
@@ -140,7 +181,7 @@ def export_entry(entry, output):
         export_frame_range=False, export_force_sampling=True, export_frame_step=1,
         export_optimize_animation_size=True, export_materials='EXPORT',
         export_image_format='AUTO', export_cameras=False, export_lights=False,
-        export_yup=True, export_skins=True, export_morph=True)
+        export_yup=True, export_skins=True, export_morph=True, export_tangents=bool(job.get('pbr_maps')))
     data = path.read_bytes()
     length = struct.unpack_from('<I', data, 12)[0]
     gltf = json.loads(data[20:20 + length])
@@ -156,7 +197,8 @@ def export_entry(entry, output):
         animations=animations, export_seconds=time.perf_counter()-started,
         cameras=cfg['cameras'], extensions=gltf.get('extensionsUsed', []),
         source_sha256=cfg['source']['sha256'], baked_albedo=baked,
-        material_limitations='Simplified PBR: original normals, roughness, emission and alpha not translated' if baked else 'Direct exporter translation, requires inspection')
+        action_timing={name: dict(frames=len(spec['frames']), loop=spec['loop'], speed=spec.get('speed', 1.0)) for name, spec in cfg['actions'].items() if spec},
+        material_limitations=('PBR albedo/normal/roughness translated; source emission, alpha and stylized lighting remain unported' if job.get('pbr_maps') else 'Simplified PBR: original normals, roughness, emission and alpha not translated') if baked else 'Direct exporter translation, requires inspection')
 
 
 job = json.loads(Path(sys.argv[sys.argv.index('--') + 1]).read_text())
