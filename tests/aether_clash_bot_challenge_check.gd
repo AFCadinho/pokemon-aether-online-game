@@ -88,6 +88,9 @@ func _ready() -> void:
 
 	var captain := CAPTAIN.instantiate()
 	add_child(captain)
+	_check(captain.display_name == "Aether Vanguard Leader", "Training NPC uses its Vanguard Leader title")
+	_check(captain.portrait_id == "showdown_veteran_gen6", "Vanguard Leader uses the Veteran dialogue portrait")
+	_check(captain.npc_sprite_frames.resource_path.ends_with("veteran_m_frames.tres"), "Vanguard Leader uses the Veteran overworld sprite")
 	_check(not captain.call("_prefetches_dialogue_metadata_on_approach"), "Captain skips unrelated metadata")
 	_check(not captain.call("_loads_pickpocket_profile_from_npc_metadata"), "Captain cannot be pickpocketed")
 	_check(captain.get("mugshot") != null, "Captain resolves an existing portrait")
@@ -110,6 +113,7 @@ func _ready() -> void:
 		for key: String in ["title", "intro", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "npc_too_far", "presence_unavailable", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
 		_check(not str(catalog.get("ui.clash_bot.ai5", "")).contains("("), "%s keeps the Hard label concise" % locale)
+		_check(str(catalog.get("ui.clash_bot.reward_hint", "")).contains("200"), "%s explains the participant Aetherite reward" % locale)
 	await get_tree().process_frame
 	get_tree().quit(1 if failed else 0)
 

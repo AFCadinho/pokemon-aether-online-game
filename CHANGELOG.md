@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Clash Training Captain is now the Aether Vanguard Leader with Veteran artwork, and the daily AI5 Hard reward clearly advertises 200 Aetherite for each participating Trainer.
+
 - The Team and Pokémon Rental attendants now use distinct wealthy merchant overworld sprites and matching dialogue portraits.
 
 - Rental Pokémon now explain clearly that their included held item cannot be removed or replaced.
