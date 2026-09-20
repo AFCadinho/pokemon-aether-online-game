@@ -13,6 +13,9 @@ func _run() -> void:
 	current_scene = host
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	host.mount(battle)
+	battle._show_local_player_trainer()
+	battle.enemy_trainer_sprite.show_player({"gender":"female","skin_tone":"#f8d0b8"},Vector2.LEFT)
+	battle.vs_panel_container.set_names("Admin","Rival")
 	var renderer = battle.animation_router.model_presenter
 	renderer.set_combatant(0,"Dragonite")
 	renderer.set_combatant(1,"Roaring Moon")
@@ -36,11 +39,22 @@ func _run() -> void:
 	battle.moves_grid.show()
 	battle.get_node("%UtilityActions").show()
 	battle.current_action_panel.set_message("Choose a move")
+	battle.get_node("%MechanicsPanel").show()
+	battle.get_node("%ZMove").show()
+	battle.get_node("%MegaEvolutionIcon").hide()
 	for frame in 90:
 		await process_frame
 	host.get_node("Cover").hide()
+	assert(battle._show_trainer_command_text("p1","Dragonite, use Outrage!",10.0))
+	assert(battle._show_trainer_command_text("p2","Roaring Moon, attack!",10.0))
+	for frame in 15:
+		await process_frame
+	assert(battle.battle_stage.get_node("TrainerPortrait0").visible)
+	assert(battle.battle_stage.get_node("TrainerPortrait1").visible)
+	assert(not renderer.mode_label.visible)
+	assert(not battle.battle_log_toggle_button.visible and not battle.calc_log_button.visible)
 	var moves: Rect2 = battle.moves_grid.get_global_rect()
-	assert(not moves.intersects(battle.player_party_grid.get_global_rect()))
+	assert(not moves.intersects(battle.player_party_grid.get_global_rect()),str("moves=",moves," party=",battle.player_party_grid.get_global_rect()," dock=",battle.get_node("%ActionsDock").get_global_rect()))
 	assert(not moves.intersects(battle.current_action_panel.get_global_rect()))
 	assert(battle.get_node("%PlayerStagePartyRail").visible)
 	var chat_space := Rect2(Vector2(0,battle.size.y - 160),Vector2(battle.size.x * 0.23,160))

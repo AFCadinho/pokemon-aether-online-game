@@ -49,6 +49,24 @@ addressed by this layout change.
 
 ## Focused checks
 
+The Immersive refinement adds corner portraits from existing appearance state
+(NPCs use existing trainer art), mirroring the existing timed trainer commands.
+Wild opponents have no trainer portrait. Spectator/replay identities never fall
+back to the local player's avatar. Original command routing is unchanged.
+
+The temporary Battle Log chat tab mirrors the authoritative formatted log buffer,
+marks unseen updates and preserves the original chat draft/history/send path.
+Selecting another chat tab returns to chat; Enter from the log returns to typing.
+Release removes the temporary controls and connections and restores chat bounds.
+Without an overworld chat (offline fixtures), Battle Log remains in the tools menu.
+Damage Calc is also available there. The old debug arena label is hidden only in
+Immersive. Central battle messages remain visible independently of the log tab.
+
+- `battle_chat_bridge_check.gd`: draft preservation, one send, unread indicator,
+  tab switching, keyboard focus, temporary tab cleanup and restored chat bounds.
+- `battle_immersive_combat_preview.gd`: real 3D offline visual fixture with corner
+  portraits, command callouts, moves, modifier and non-overlapping switch controls.
+
 - `battle_immersive_layout_check.gd`: Classic/Immersive, four aspect/resolution
   cases, log toggle stability, control bounds and forest discovery/explicit priority.
 - Existing `battle_ui_layout_check.gd`: unchanged Classic contracts and controls.

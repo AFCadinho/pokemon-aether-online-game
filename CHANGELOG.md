@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Refined Immersive battles with corner avatar portraits and trainer callouts, a taller chat with a battle-only log tab, centered switch controls, and Mega/Z/Tera beside the moves. Damage Calc now lives in the battle tools menu; Classic is unchanged.
 - Desktop forest battles prepare terrain earlier and alongside Pokémon loading. Loading progress now extends the preparation window, with a visible loading message and an explicit fallback option if preparation stalls.
 - Immersive desktop battles now retain the existing chat at bottom-left alongside a separate battle log. Enter focuses chat, Escape leaves typing, and the log's open/closed preference is saved.
 - Restored the left team preview in Immersive battles and centered the switch controls and battle message, leaving the bottom-left area free for future chat.
