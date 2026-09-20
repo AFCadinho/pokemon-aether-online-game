@@ -20110,15 +20110,6 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var gender_icon := _create_pokemon_summary_gender_icon()
 	title_row.add_child(gender_icon)
 	nodes["gender_icon"] = gender_icon
-	var gender_label := Label.new()
-	gender_label.custom_minimum_size = Vector2(16, 16)
-	gender_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	gender_label.add_theme_font_size_override("font_size", 13)
-	gender_label.add_theme_color_override("font_color", Color("#f49ac2"))
-	gender_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title_row.add_child(gender_label)
-	nodes["gender_label"] = gender_label
 	var id_label := Label.new()
 	id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	id_label.add_theme_font_size_override("font_size", 9)
@@ -26368,11 +26359,6 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	name_label.tooltip_text = localized_species_name if display_name != localized_species_name else display_name
 	var gender_icon := nodes.get("gender_icon") as TextureRect
 	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
-	var gender_label := nodes.get("gender_label") as Label
-	if gender_label != null:
-		var normalized_gender := str(pokemon.gender).strip_edges().to_lower()
-		gender_label.text = "♂" if normalized_gender in ["male", "m", "man"] else "♀"
-		gender_label.visible = normalized_gender not in ["", "genderless", "none", "unknown"]
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
 	var shiny_icon := nodes.get("shiny_icon") as TextureRect

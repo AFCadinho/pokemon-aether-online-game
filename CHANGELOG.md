@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Read-only Pokémon summaries now show a single colored gender icon instead of duplicating it with a second symbol.
+
 - Individual Pokémon rentals now use a compact three-column card grid with simple permanent, extend and return actions; pricing is kept concise and appears where it is needed.
 
 - Active individual Pokémon rentals now appear as separate detailed cards, each with its own set preview, expiry and styled extend, return and permanent-purchase actions.
