@@ -1376,6 +1376,7 @@
   "ui.pokemon_summary.held_item.none_in_bag": "No held items in your Bag.",
   "ui.pokemon_summary.held_item.search_hint": "Search to narrow held items.",
   "ui.pokemon_summary.held_item.take_failed": "Could not take item: {error}",
+  "ui.pokemon_summary.held_item.rental_locked": "This item belongs to the rental and cannot be removed or replaced.",
   "ui.pokemon_summary.held_item.give_failed": "Could not give item: {error}",
   "ui.bag.title": "Bag",
   "ui.bag.inventory": "Inventory",

@@ -1,5 +1,7 @@
 extends SceneTree
 
+const POKEMON_FACTORY := preload("res://scripts/data/pokemon_factory.gd")
+
 var failures := 0
 
 
@@ -27,6 +29,30 @@ func _run() -> void:
 		_check(overlay_source.contains(action_name), "party context menu exposes %s" % action_name)
 	_check(overlay_source.contains("_open_pokemon_summary_held_item_picker"), "give and change item open the held-item picker")
 	_check(overlay_source.contains("_take_pokemon_held_item"), "take item uses the existing held-item service flow")
+	_check(
+		overlay_source.contains("_is_rental_held_item_locked(pokemon)")
+			and overlay_source.contains("ui.pokemon_summary.held_item.rental_locked"),
+		"locked rental items show a dedicated explanation before mutation"
+	)
+	var rental := POKEMON_FACTORY.create_pokemon_from_backend_payload({
+		"species": "Scizor",
+		"level": 100,
+		"item": "leftovers",
+		"heldItemLocked": true,
+		"rentalActive": true,
+		"rentalKind": "pokemon",
+	})
+	_check(
+		rental != null and rental.held_item_locked and rental.rental_active and rental.rental_kind == "pokemon",
+		"rental held-item lock metadata survives backend payload parsing"
+	)
+	var english: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/en.json"))
+	_check(
+		english is Dictionary
+			and str((english as Dictionary).get("ui.pokemon_summary.held_item.rental_locked", ""))
+			== "This item belongs to the rental and cannot be removed or replaced.",
+		"rental held-item lock has a clear player-facing message"
+	)
 
 	slot.free()
 	quit(1 if failures > 0 else 0)

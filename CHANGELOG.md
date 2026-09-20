@@ -4,7 +4,13 @@
 
 - Animated Pokémon remain crisp and stable while moving in the smaller Summary and Pokédex previews.
 
-- Individual Pokémon rentals now use a compact three-column card grid, fitting up to six active rentals into a clear 3×2 overview.
+- The Team and Pokémon Rental attendants now use distinct wealthy merchant overworld sprites and matching dialogue portraits.
+
+- Rental Pokémon now explain clearly that their included held item cannot be removed or replaced.
+
+- Read-only Pokémon summaries now show a single colored gender icon instead of duplicating it with a second symbol.
+
+- Individual Pokémon rentals now use a compact three-column card grid with simple permanent, extend and return actions; pricing is kept concise and appears where it is needed.
 
 - Active individual Pokémon rentals now appear as separate detailed cards, each with its own set preview, expiry and styled extend, return and permanent-purchase actions.
 

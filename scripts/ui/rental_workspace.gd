@@ -306,7 +306,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	price_row.add_theme_constant_override("separation", 10)
 	details_column.add_child(price_row)
 	pokemon_review_rental_price = _review_price_card(price_row, "24-HOUR RENTAL", Color("#62d5ff"))
-	pokemon_review_buyout_price = _review_price_card(price_row, "KEEP PERMANENTLY LATER", Color("#f5df9a"))
+	pokemon_review_buyout_price = _review_price_card(price_row, "MAKE PERMANENT LATER", Color("#f5df9a"))
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
@@ -804,7 +804,7 @@ func _quote_pokemon() -> void:
 	var rental_price := int((selected.get("prices", [{}])[0] as Dictionary).get("amount", 0))
 	var buyout_total := int(selected.get("buyoutTotal", 0))
 	pokemon_review_rental_price.text = "%d Aetherite" % rental_price
-	pokemon_review_buyout_price.text = "%d Aetherite after rental\n%d total" % [maxi(0, buyout_total - rental_price), buyout_total]
+	pokemon_review_buyout_price.text = "%d Aetherite" % maxi(0, buyout_total - rental_price)
 	rent_button.text = "Rent for 24 hours — %d Aetherite" % rental_price
 	var limit_reached := _rental_limit_reached()
 	rent_button.disabled = limit_reached
@@ -1153,10 +1153,10 @@ func _create_active_pokemon_card(loan: Dictionary) -> PanelContainer:
 	timing.add_child(expiry)
 	if loan.get("status") == "active":
 		var buy := Button.new()
-		buy.text = "Keep • %d Aetherite" % int(data.get("buyoutPrice", 0))
+		buy.text = "Make Permanent"
 		buy.tooltip_text = "Pay %d Aetherite to keep this Pokémon" % int(data.get("buyoutPrice", 0))
 		buy.custom_minimum_size.y = 30
-		buy.pressed.connect(func(): await _mutate("/%s/buyout" % loan["loanId"], {}, "Pay %d Aetherite to keep this Pokémon?\nOT stays Aether Rental Service. This does not count as caught." % int(data.get("buyoutPrice", 0))))
+		buy.pressed.connect(func(): await _mutate("/%s/buyout" % loan["loanId"], {}, "Make this Pokémon permanent?\n\nCost: %d Aetherite\nOT stays Aether Rental Service. This does not count as caught." % int(data.get("buyoutPrice", 0))))
 		_style_button(buy, true)
 		layout.add_child(buy)
 	var actions := HBoxContainer.new()
@@ -1164,11 +1164,11 @@ func _create_active_pokemon_card(loan: Dictionary) -> PanelContainer:
 	layout.add_child(actions)
 	if loan.get("status") == "active":
 		var extend_button := Button.new()
-		extend_button.text = "+24h • 100"
+		extend_button.text = "Extend"
 		extend_button.tooltip_text = "Extend this rental by 24 hours for 100 Aetherite"
 		extend_button.custom_minimum_size.y = 30
 		extend_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		extend_button.pressed.connect(func(): await _mutate("/%s/extend" % loan["loanId"], {}, "Extend this rental by 24 hours for 100 Aetherite?\nThe extra time starts at the current expiry time."))
+		extend_button.pressed.connect(func(): await _mutate("/%s/extend" % loan["loanId"], {}, "Extend this rental by 24 hours?\n\nCost: 100 Aetherite\nThe extra time starts at the current expiry time."))
 		_style_button(extend_button, false)
 		actions.add_child(extend_button)
 	var return_button := Button.new()
@@ -1176,7 +1176,7 @@ func _create_active_pokemon_card(loan: Dictionary) -> PanelContainer:
 	return_button.tooltip_text = "Return this Pokémon without a refund"
 	return_button.custom_minimum_size.y = 30
 	return_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this rental now? No Aetherite will be refunded."))
+	return_button.pressed.connect(func(): await _mutate("/%s/return" % loan["loanId"], {}, "Return this Pokémon now?\n\nCost: 0 Aetherite\nNo Aetherite will be refunded."))
 	_style_button(return_button, false)
 	return_button.add_theme_stylebox_override("normal", _control_style(Color("#291820"), Color("#8f5261")))
 	return_button.add_theme_stylebox_override("hover", _control_style(Color("#3a202a"), Color("#d57b8e")))

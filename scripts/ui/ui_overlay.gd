@@ -20110,15 +20110,6 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var gender_icon := _create_pokemon_summary_gender_icon()
 	title_row.add_child(gender_icon)
 	nodes["gender_icon"] = gender_icon
-	var gender_label := Label.new()
-	gender_label.custom_minimum_size = Vector2(16, 16)
-	gender_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	gender_label.add_theme_font_size_override("font_size", 13)
-	gender_label.add_theme_color_override("font_color", Color("#f49ac2"))
-	gender_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title_row.add_child(gender_label)
-	nodes["gender_label"] = gender_label
 	var id_label := Label.new()
 	id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	id_label.add_theme_font_size_override("font_size", 9)
@@ -26368,11 +26359,6 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	name_label.tooltip_text = localized_species_name if display_name != localized_species_name else display_name
 	var gender_icon := nodes.get("gender_icon") as TextureRect
 	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
-	var gender_label := nodes.get("gender_label") as Label
-	if gender_label != null:
-		var normalized_gender := str(pokemon.gender).strip_edges().to_lower()
-		gender_label.text = "♂" if normalized_gender in ["male", "m", "man"] else "♀"
-		gender_label.visible = normalized_gender not in ["", "genderless", "none", "unknown"]
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
 	var shiny_icon := nodes.get("shiny_icon") as TextureRect
@@ -28963,10 +28949,14 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 
 
 func _open_pokemon_summary_held_item_picker(card_key: String = "", force_open := false) -> void:
-	await _ensure_bag_inventory_loaded()
 	_apply_pokemon_summary_card_context(card_key)
 	if _is_pokemon_summary_readonly() or pokemon_summary_item_picker == null:
 		return
+	var pokemon_value: Variant = _get_selected_summary_pokemon()
+	if pokemon_value is Pokemon and _is_rental_held_item_locked(pokemon_value as Pokemon):
+		_show_rental_held_item_locked_message()
+		return
+	await _ensure_bag_inventory_loaded()
 	var picker_was_visible := pokemon_summary_item_picker.visible
 	if pokemon_summary_item_search_input != null:
 		pokemon_summary_item_search_input.text = ""
@@ -28981,6 +28971,9 @@ func _open_pokemon_summary_held_item_picker(card_key: String = "", force_open :=
 
 func _take_pokemon_held_item(pokemon: Pokemon) -> void:
 	if pokemon.owned_pokemon_id <= 0 or _get_pokemon_held_item_id(pokemon) == "":
+		return
+	if _is_rental_held_item_locked(pokemon):
+		_show_rental_held_item_locked_message()
 		return
 	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
 	if not bool(result.get("success", false)):
@@ -29018,6 +29011,9 @@ func _on_pokemon_summary_held_item_drop_highlight_changed(highlighted: bool, slo
 
 func _give_dropped_held_item(pokemon: Pokemon, item: Dictionary) -> void:
 	if pokemon.owned_pokemon_id <= 0 or not _is_holdable_bag_item(item):
+		return
+	if _is_rental_held_item_locked(pokemon):
+		_show_rental_held_item_locked_message()
 		return
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "":
@@ -29157,6 +29153,9 @@ func _on_pokemon_summary_item_selected(item_id: String, card_key: String = "") -
 	if pokemon.owned_pokemon_id <= 0:
 		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
+	if _is_rental_held_item_locked(pokemon):
+		_show_rental_held_item_locked_message()
+		return
 
 	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(pokemon.owned_pokemon_id, item_id)
 	if not bool(result.get("success", false)):
@@ -29189,6 +29188,12 @@ func _is_pokemon_summary_readonly() -> bool:
 func _get_pokemon_held_item_id(pokemon: Pokemon) -> String:
 	var item_id: String = pokemon.item.strip_edges().to_lower()
 	return item_id
+
+func _is_rental_held_item_locked(pokemon: Pokemon) -> bool:
+	return pokemon != null and pokemon.rental_active and pokemon.held_item_locked
+
+func _show_rental_held_item_locked_message() -> void:
+	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.rental_locked"))
 
 func _is_holdable_bag_item(item: Dictionary) -> bool:
 	if bool(item.get("isHoldable", false)):
@@ -41467,6 +41472,11 @@ func _pc_payload_held_item_id(payload: Dictionary) -> String:
 			return value
 	return ""
 
+func _is_rental_held_item_payload_locked(payload: Dictionary) -> bool:
+	var rental_active := bool(payload.get("rentalActive", payload.get("rental_active", false)))
+	var held_item_locked := bool(payload.get("heldItemLocked", payload.get("held_item_locked", false)))
+	return rental_active and held_item_locked
+
 
 func _pc_payload_types(payload: Dictionary) -> Array[String]:
 	var types: Array[String] = []
@@ -42032,6 +42042,10 @@ func _take_pc_box_pokemon_held_item(source: Dictionary, payload: Dictionary) -> 
 	if pokemon_id <= 0 or held_item_id == "" or pc_move_in_progress:
 		return
 	var item_name := _item_name_from_id(held_item_id)
+	if _is_rental_held_item_payload_locked(payload):
+		_set_pc_status("ui.pokemon_summary.held_item.rental_locked")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.rental_locked"))
+		return
 	pc_move_in_progress = true
 	_set_pc_status("ui.storage.item.taking", {"item": item_name})
 	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon_id)
