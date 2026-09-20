@@ -27,6 +27,7 @@ def main():
         'tools/sprite_factory/stadium_screen.gdshader',
         'tools/sprite_factory/stadium_beam.gdshader',
         'assets/ui/logo.png',
+        'assets/ui/pokeaether_text_logo.png',
     ]:
         target = project / relative
         target.parent.mkdir(parents=True, exist_ok=True)

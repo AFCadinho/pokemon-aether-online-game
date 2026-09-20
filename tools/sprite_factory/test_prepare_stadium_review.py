@@ -15,6 +15,7 @@ class StadiumPreparationTests(unittest.TestCase):
             self.assertTrue((project / '.pokeaether-stadium-review').is_file())
             self.assertTrue((project / 'tools/sprite_factory/stadium_battle_review.gd').is_file())
             self.assertTrue((project / 'assets/ui/logo.png').is_file())
+            self.assertTrue((project / 'assets/ui/pokeaether_text_logo.png').is_file())
             self.assertTrue((project / 'tools/sprite_factory/stadium_floor.gdshader').is_file())
             self.assertTrue((project / 'tools/sprite_factory/stadium_screen.gdshader').is_file())
             self.assertFalse((project / 'scenes/world/test_world.res').exists())
