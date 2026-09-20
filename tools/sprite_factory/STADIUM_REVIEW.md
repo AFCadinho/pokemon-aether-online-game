@@ -72,8 +72,18 @@ fighting area. Extra mid-tier strips, subtly swaying crowd silhouettes and a sec
 MultiMesh of supporter lights add movement without thousands of light nodes.
 These are visual shader effects, not additional lights affecting Pokémon materials.
 The existing screen background remains animated. Original emblem texture floats
-by 0.075 world units; emblem and wordmarks receive a restrained diagonal sheen,
+by 0.16 world units with a 2.5% scale pulse; emblem and wordmarks receive a broader diagonal sheen,
 with a pause between sweeps. Wordmarks do not move or distort; alpha is preserved.
+
+Visibility follow-up: highlight sweeps recur about every four seconds instead of
+the previous long quiet interval. Crowd geometry now combines a head, torso and
+two shader-articulated arms in one instanced mesh. Each instance supplies its own
+phase and enthusiasm via custom data, avoiding synchronized crowd motion. Supporter
+lights use the same individual phases; there are still no per-spectator light nodes.
+This remains stylized distant crowd art, not fully rigged character animation.
+Follow-up smoke: `stadium-cheer-run-02.log` and `stadium-cheer-capture-02/` in
+slot-c/.tmp. Per-instance data and arm tags asserted; animation, idle clearance,
+seven action starts and teardown passed. Sampled p95 17.85 ms, max 17.983 ms.
 
 Local evidence: `stadium-live-run-03.log` / `stadium-live-capture-03` in slot-c/.tmp.
 Fixed-camera captures with paused actors differ across 120 frames, independently

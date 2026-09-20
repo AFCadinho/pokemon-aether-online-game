@@ -79,7 +79,7 @@ func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 	var logo := ShaderMaterial.new()
 	logo.shader = load("res://tools/sprite_factory/stadium_brand.gdshader")
 	logo.set_shader_parameter("brand_texture", load("res://assets/ui/logo.png"))
-	logo.set_shader_parameter("float_amount", 0.075)
+	logo.set_shader_parameter("float_amount", 0.16)
 	var logo_quad := QuadMesh.new()
 	logo_quad.size = Vector2(6.5, 6.5)
 	_put(panel, logo_quad, logo, Vector3(0, 0.3, 0.35), Vector3.ONE)
@@ -89,16 +89,39 @@ func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 		_box(panel, neon, Vector3(side*8.4, 0, 0.4), Vector3(0.08, 9, 0.08))
 		_box(panel, neon, Vector3(0, side*4.4, 0.4), Vector3(17, 0.08, 0.08))
 
+func _spectator_mesh() -> ArrayMesh:
+	var combined := SurfaceTool.new()
+	var torso := CapsuleMesh.new()
+	torso.radius = 0.13
+	torso.height = 0.40
+	torso.radial_segments = 6
+	torso.rings = 2
+	var head := SphereMesh.new()
+	head.radius = 0.115
+	head.height = 0.23
+	head.radial_segments = 8
+	head.rings = 4
+	var arm := BoxMesh.new()
+	arm.size = Vector3(0.085,0.33,0.085)
+	for part in [[torso,Vector3.ZERO,0.0],[head,Vector3(0,0.29,0),0.0],
+		[arm,Vector3(-0.20,0.01,0),-1.0],[arm,Vector3(0.20,0.01,0),1.0]]:
+		var primitive: PrimitiveMesh = part[0]
+		var arrays := primitive.get_mesh_arrays()
+		var tags := PackedVector2Array()
+		tags.resize(arrays[Mesh.ARRAY_VERTEX].size())
+		tags.fill(Vector2(part[2],0))
+		arrays[Mesh.ARRAY_TEX_UV2] = tags
+		var piece := ArrayMesh.new()
+		piece.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+		combined.append_from(piece,0,Transform3D(Basis.IDENTITY,part[1]))
+	return combined.commit()
+
 func _crowd(parent: Node3D) -> void:
 	var batch := MultiMesh.new()
 	batch.transform_format = MultiMesh.TRANSFORM_3D
 	batch.use_colors = true
-	var person := CapsuleMesh.new()
-	person.radius = 0.13
-	person.height = 0.58
-	person.radial_segments = 6
-	person.rings = 2
-	batch.mesh = person
+	batch.use_custom_data = true
+	batch.mesh = _spectator_mesh()
 	batch.instance_count = 4*9*65
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 77912
@@ -113,12 +136,15 @@ func _crowd(parent: Node3D) -> void:
 				if absf(fposmod(x+4.5,9.0)-4.5)<0.6 or rng.randf()<0.12:
 					transform.basis = Basis.from_scale(Vector3.ONE*0.001)
 				batch.set_instance_transform(index, transform)
-				var tint := Color.from_hsv(rng.randf_range(0.55,0.8), 0.4, rng.randf_range(0.004,0.035))
+				batch.set_instance_custom_data(index,Color(rng.randf(),rng.randf(),0,1))
+				var tint := Color.from_hsv(rng.randf_range(0.55,0.8), 0.4, rng.randf_range(0.008,0.065))
 				if rng.randf() < 0.08:
 					tint = Color("50436d")
 				batch.set_instance_color(index, tint)
 				index += 1
 	var crowd := MultiMeshInstance3D.new()
+	assert(batch.use_custom_data and batch.get_instance_custom_data(0) != batch.get_instance_custom_data(1))
+	assert(batch.mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV2].size() > 0)
 	crowd.multimesh = batch
 	var mat := ShaderMaterial.new()
 	mat.shader = load("res://tools/sprite_factory/stadium_crowd.gdshader")
