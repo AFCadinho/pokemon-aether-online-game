@@ -42,6 +42,9 @@ var happiness: int
 var special_lineage: String = ""
 var borrowed := false
 var loan: Dictionary = {}
+var held_item_locked := false
+var rental_active := false
+var rental_kind := ""
 
 var current_hp: int
 var max_hp: int

@@ -62,6 +62,9 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 	pokemon.borrowed = _get_bool_option(data, ["borrowed", "isBorrowed", "is_borrowed"])
 	var loan_value: Variant = data.get("loan", {})
 	pokemon.loan = (loan_value as Dictionary).duplicate(true) if loan_value is Dictionary else {}
+	pokemon.held_item_locked = _get_bool_option(data, ["heldItemLocked", "held_item_locked"])
+	pokemon.rental_active = _get_bool_option(data, ["rentalActive", "rental_active"])
+	pokemon.rental_kind = _get_string_option(data, ["rentalKind", "rental_kind"]).strip_edges().to_lower()
 	return pokemon
 
 

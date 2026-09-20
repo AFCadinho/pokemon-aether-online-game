@@ -1358,6 +1358,7 @@
   "ui.pokemon_summary.held_item.none_in_bag": "Nenhum item para segurar na sua Bolsa.",
   "ui.pokemon_summary.held_item.search_hint": "Busque para filtrar os itens segurados.",
   "ui.pokemon_summary.held_item.take_failed": "Não foi possível retirar o item: {error}",
+  "ui.pokemon_summary.held_item.rental_locked": "Este item pertence ao Pokémon alugado e não pode ser retirado nem substituído.",
   "ui.pokemon_summary.held_item.give_failed": "Não foi possível dar o item: {error}",
   "ui.bag.title": "Bolsa",
   "ui.bag.inventory": "Inventário",
