@@ -209,8 +209,11 @@ python tools/sprite_factory/package_catalog.py INPUT_CATALOG OUTPUT_DIRECTORY --
 
 The command requires 512x512/native-60-FPS manifests, verifies every source
 hash, trims each action to its padded union bounds, encodes WebP Q95 with exact
-alpha, records RGB PSNR, and writes a new catalog plus `quality-report.json`.
-It refuses to overwrite an existing output and never mutates source builds.
+alpha, records visible RGB PSNR, and writes a new catalog plus
+`quality-report.json`. Pages below 40 dB are identified by entry, view, action
+and page for human review; this warning does not make an artistic decision.
+The command refuses to overwrite an existing output and never mutates source
+builds.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.

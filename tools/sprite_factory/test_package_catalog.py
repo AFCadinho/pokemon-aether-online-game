@@ -47,6 +47,8 @@ class PackageCatalogTests(unittest.TestCase):
             self.assertEqual(packaged["fps"], 60)
             report = json.loads((output / "quality-report.json").read_text())
             self.assertGreater(report["entries"]["fixture:normal"]["minimum_rgb_psnr_db"], 40)
+            self.assertEqual(report["entries"]["fixture:normal"]["worst_page"]["action"], "idle")
+            self.assertEqual(report["warnings"], [])
 
 
 if __name__ == "__main__":
