@@ -14,12 +14,22 @@ static var mounted_forest := ""
 static var forest_scene: PackedScene
 static var forest_loading := false
 static var forest_error := ""
+static var forest_load_started_ms := 0
+static var forest_load_ms := 0
+
+static func forest_progress() -> Array:
+	var progress: Array = []
+	var status := ResourceLoader.THREAD_LOAD_LOADED if forest_scene != null else ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+	if forest_loading:
+		status = ResourceLoader.load_threaded_get_status("res://pokeaether_forest.tscn",progress)
+	return [status,progress,forest_error]
 
 static func forest_ready() -> bool:
 	if forest_scene != null:
 		return true
 	if forest_loading and ResourceLoader.load_threaded_get_status("res://pokeaether_forest.tscn") == ResourceLoader.THREAD_LOAD_LOADED:
 		forest_scene = ResourceLoader.load_threaded_get("res://pokeaether_forest.tscn")
+		forest_load_ms = Time.get_ticks_msec() - forest_load_started_ms
 		forest_loading = false
 	elif forest_loading and ResourceLoader.load_threaded_get_status("res://pokeaether_forest.tscn") == ResourceLoader.THREAD_LOAD_FAILED:
 		ResourceLoader.load_threaded_get("res://pokeaether_forest.tscn")
@@ -59,9 +69,11 @@ static func prepare_forest(manifest_path: String) -> String:
 		if not ProjectSettings.has_setting("shader_globals/"+spec[0]):
 			RenderingServer.global_shader_parameter_add(spec[0],spec[1],spec[2])
 	mounted_forest = manifest_path
+	forest_load_started_ms = Time.get_ticks_msec()
 	forest_loading = ResourceLoader.load_threaded_request("res://pokeaether_forest.tscn","PackedScene")==OK
 	if not forest_loading:
-		return "Could not request forest assets"
+		forest_error = "Could not request forest assets"
+		return forest_error
 	return ""
 const BUILDERS := {
 	"cave": preload("res://scripts/battle/arenas/cave_arena.gd"),

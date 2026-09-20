@@ -60,6 +60,19 @@ func _cancel_load() -> void:
 var preparation_cancelled := false
 var preparation_failed := false
 var warming_render := false
+var preparation_phase := "Loading model catalog"
+var preparation_metrics := {}
+
+func _preparation_progress() -> Array:
+	var progress: Array = []
+	if not loading_path.is_empty():
+		ResourceLoader.load_threaded_get_status(loading_path,progress)
+	preparation_phase = "Loading Pokémon models"
+	if arena_preparing:
+		preparation_phase = "Loading forest terrain and textures"
+	elif active:
+		preparation_phase = "Preparing lighting and shaders"
+	return [loaded_path,pending_entries.size(),loading_path,progress,ArenaCatalog.forest_progress(),active,identities.duplicate(),_blocking_pipelines()]
 
 func cancel_preparation() -> void:
 	preparation_cancelled = true
@@ -80,10 +93,18 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	if render_under_cover:
 		warming_render = true
 	var deadline := Time.get_ticks_msec() + timeout_ms
+	var started := Time.get_ticks_msec()
+	var hard_deadline := started + maxi(timeout_ms,120000)
+	var last_progress: Array = []
 	var last_sample: Array = []
 	var quiet_frames := 0
 	var last_draw := -1
 	while is_inside_tree():
+		var progress := _preparation_progress()
+		if progress != last_progress and timeout_ms > 0:
+			deadline = Time.get_ticks_msec() + timeout_ms
+			last_progress = progress.duplicate(true)
+		preparation_metrics = {"elapsed_ms":Time.get_ticks_msec()-started,"phase":preparation_phase,"forest_load_ms":ArenaCatalog.forest_load_ms}
 		if preparation_cancelled or preparation_failed:
 			warming_render = false
 			return
@@ -123,12 +144,12 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 						# Restore actual send-out visibility before fading the cover.
 						await get_tree().process_frame
 						return
-		if Time.get_ticks_msec() >= deadline:
+		if Time.get_ticks_msec() >= deadline or Time.get_ticks_msec() >= hard_deadline:
 			_cancel_load()
 			pending_entries.clear()
 			preparation_failed = true
 			warming_render = false
-			reason = "3D preparation timed out; using 2.5D"
+			reason = "3D preparation stalled: " + preparation_phase
 			_set_active(false)
 			return
 		await get_tree().process_frame
@@ -596,6 +617,10 @@ func _process(delta: float) -> void:
 	var path: String = settings.battle_3d_catalog_path
 	if path.is_empty():
 		path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
+	# Start independent terrain I/O alongside model loading, not after it.
+	if viewport == null and _requested_arena() == "forest":
+		arena_problem = ArenaCatalog.prepare_forest(settings.get_battle_3d_forest_manifest())
+		arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
 	if path != loaded_path:
 		_set_active(false)
 		_load_catalog(path)

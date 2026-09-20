@@ -10,6 +10,33 @@ var released := false
 var generation := 0
 var reveal_tween: Tween
 var chat_bridge: Node
+var loading_label: Label
+var fallback_button: Button
+
+func _ready() -> void:
+	var stack := VBoxContainer.new()
+	stack.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	stack.position = Vector2(-260,-55)
+	stack.size = Vector2(520,110)
+	$Cover.add_child(stack)
+	loading_label = Label.new()
+	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	loading_label.custom_minimum_size = Vector2(520,60)
+	loading_label.text = "Preparing battle…"
+	stack.add_child(loading_label)
+	fallback_button = Button.new()
+	fallback_button.text = "Continue this battle in 2.5D"
+	fallback_button.hide()
+	stack.add_child(fallback_button)
+	fallback_button.pressed.connect(_reveal_cover)
+
+func _process(_delta: float) -> void:
+	if released or not is_instance_valid(battle) or not $Cover.visible:
+		return
+	var presenter = battle.animation_router.model_presenter
+	if is_instance_valid(presenter) and not presenter.preparation_failed:
+		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null) -> void:
 	battle = instance
@@ -65,6 +92,15 @@ func _reveal_when_prepared(token: int) -> void:
 	if presenter != null:
 		await presenter.await_prepared(true)
 	if released or token != generation or not is_inside_tree():
+		return
+	if presenter != null and presenter.preparation_failed:
+		loading_label.text = presenter.reason + "\nYou can continue this battle in 2.5D."
+		fallback_button.show()
+		return
+	_reveal_cover()
+
+func _reveal_cover() -> void:
+	if released or reveal_tween != null:
 		return
 	reveal_tween = create_tween()
 	reveal_tween.tween_property($Cover, "modulate:a", 0.0, 0.2)
