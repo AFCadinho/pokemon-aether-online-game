@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 3D battles now automatically follow the same grass, water, cave and stadium environment selection as 2D battles, including gym leaders, PvP and Aether Clash lobby encounters.
 - Added a desktop development arena selector for forest, cave, sea and stadium battles, sharing the existing 3D animation and switching flow.
 - Added local Terrain3D forest-pack support and precomputed model grounding for the new battle arenas.
 

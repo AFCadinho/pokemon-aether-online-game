@@ -8,5 +8,6 @@
 resource_name = "Grass Battle Environment"
 script = ExtResource("1_profile")
 environment_id = &"grass"
+arena_3d_id = "forest"
 background_texture = ExtResource("2_background")
 platform_texture = ExtResource("3_platform")

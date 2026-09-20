@@ -18,8 +18,9 @@ func _run() -> void:
 		ids = Array(OS.get_environment("POKEAETHER_TEST_ARENAS").split(","))
 	for id in ids:
 		for cycle in 2:
-			settings.battle_3d_arena = id
+			settings.battle_3d_arena = "auto"
 			var stage := Renderer.new()
+			stage.environment_id = StringName({"forest":"grass","sea":"water","cave":"cave","stadium":"pvp_stadium"}[id])
 			host.add_child(stage)
 			stage.size = Vector2(1152,648)
 			stage.setup()
