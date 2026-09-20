@@ -90,3 +90,28 @@ Route texture assertions, preparation unit tests (2), and `git diff --check` pas
 No script/runtime errors; bundled Terrain3D emits deprecation and editor-texture
 warnings. See the capture directory's metrics for this run.
 This short run is not a 60-FPS acceptance or first-load benchmark.
+
+## Shadow filtering correction
+
+The isolated Temperate review now selects directional `SOFT_HIGH` filtering and
+`shadow_blur = 2/3` in both passes. Godot applies a 1.5 multiplier at High, so the
+effective radius is 1 instead of the old Low/radius-2 combination. No changes to
+sun direction/energy, ambient light, material endpoints, normals, texture quality,
+shadow-map size or actor geometry. Cast/self shadows remain enabled. This is a
+renderer-quality choice local to the separate review process, not a change to the
+shared neutral-light rig or the live client quality settings.
+
+Reference: https://docs.godotengine.org/en/4.6/classes/class_projectsettings.html#class-projectsettings-property-rendering-lights-and-shadows-directional-shadow-soft-shadow-filter-quality
+
+Evidence: `slot-c/.tmp/shadow-quality-01`, identical pose/camera for baseline,
+Medium/radius-1 and High/effective-radius-1, plus 120 animated frames per variant
+at each of two angles. High visibly reduces the mottled shadow pattern on Roaring
+Moon and cleans up ground-shadow edges. Shadows are naturally somewhat crisper.
+Frame wait p95: baseline 17.165/17.223 ms, High 17.105/17.269 ms. These are short,
+vsync-limited frame measurements, not isolated GPU timings or proof of zero cost.
+More filtering samples do have a cost; lower-end hardware still needs validation.
+
+Final integrated smoke: `slot-c/.tmp/temperate-shadow-fixed-02`; checks both passes
+retain three neutral lights and one shadow caster with matched blur, rechecks idle
+clearance, captures four moving viewpoints, starts seven actions and frees both
+viewports. The existing material-response unit check also passes.
