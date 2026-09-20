@@ -145,6 +145,9 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 	frames.set_animation_loop("idle", false)
 	var visual_bounds := _rect_from_array(idle.get("visual_bounds", []))
 	var has_declared_bounds := visual_bounds.has_area()
+	var stored_cell_rect := _stored_cell_rect(idle)
+	if not stored_cell_rect.has_area():
+		return null
 	frames.set_meta("rendered_portrait_bounds", _rect_from_array(idle.get("portrait_bounds", [])))
 	var uploaded := 0
 	for page_index: int in pages.size():
@@ -156,7 +159,10 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 			return null
 		var page: Dictionary = pages[page_index]
 		var thread := Thread.new()
-		if thread.start(_decode_action_pages.bind(path.get_base_dir(), {"pages": [page]})) != OK:
+		if thread.start(_decode_action_pages.bind(path.get_base_dir(), {
+			"pages": [page],
+			"stored_cell_rect": idle.get("stored_cell_rect", [0, 0, 512, 512]),
+		})) != OK:
 			return null
 		_active_preview_decodes += 1
 		while thread.is_alive():
@@ -172,18 +178,20 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 		var page_image := images[0] as Image
 		var columns := int(page.get("columns", 0))
 		var count := int(page.get("count", 0))
+		var page_texture := ImageTexture.create_from_image(page_image)
 		for frame_index: int in count:
-			var cell := page_image.get_region(Rect2i(
-				(frame_index % columns) * 512,
-				int(frame_index / columns) * 512,
-				512,
-				512
-			))
 			if not has_declared_bounds:
+				var cell := page_image.get_region(Rect2i(
+					(frame_index % columns) * int(stored_cell_rect.size.x),
+					int(frame_index / columns) * int(stored_cell_rect.size.y),
+					int(stored_cell_rect.size.x),
+					int(stored_cell_rect.size.y)
+				))
 				var used := cell.get_used_rect()
 				if used.has_area():
-					visual_bounds = visual_bounds.merge(Rect2(used)) if visual_bounds.has_area() else Rect2(used)
-			frames.add_frame("idle", ImageTexture.create_from_image(cell))
+					var used_rect := Rect2(used.position + Vector2i(stored_cell_rect.position), used.size)
+					visual_bounds = visual_bounds.merge(used_rect) if visual_bounds.has_area() else used_rect
+			frames.add_frame("idle", _atlas_frame(page_texture, frame_index, columns, stored_cell_rect))
 			uploaded += 1
 			if uploaded % 4 == 0:
 				await tree.process_frame
@@ -203,12 +211,15 @@ static func load_frames_async(species: String, side: String, shiny: bool, on_rea
 static func _decode_action_pages(root: String, action: Dictionary) -> Dictionary:
 	var images: Array[Image] = []
 	var pages: Array = action.get("pages", [])
+	var stored_cell_rect := _stored_cell_rect(action)
+	if not stored_cell_rect.has_area():
+		return {}
 	for value: Variant in pages:
 		if not value is Dictionary:
 			return {}
 		var page := value as Dictionary
 		var file := str(page.get("file", ""))
-		if file.is_absolute_path() or ".." in file or not file.ends_with(".png"):
+		if not _safe_image_file(file):
 			return {}
 		var page_path := root.path_join(file)
 		if not FileAccess.file_exists(page_path) or FileAccess.get_sha256(page_path) != str(page.get("sha256", "")):
@@ -218,7 +229,7 @@ static func _decode_action_pages(root: String, action: Dictionary) -> Dictionary
 		if columns < 1 or columns > 8 or count < 1 or count > 64:
 			return {}
 		var im := Image.load_from_file(page_path)
-		if im == null or im.get_width() != columns * 512 or im.get_height() != int(ceil(float(count) / columns)) * 512:
+		if im == null or im.get_width() != columns * int(stored_cell_rect.size.x) or im.get_height() != int(ceil(float(count) / columns)) * int(stored_cell_rect.size.y):
 			return {}
 		images.append(im)
 	return {"images": images}
@@ -257,7 +268,7 @@ static func _preview_frame_source(manifest_path: String, side: String, idle: Dic
 	var packaged: Dictionary = idle.get("preview_frame", {})
 	if not packaged.is_empty():
 		var file := str(packaged.get("file", ""))
-		if file.is_absolute_path() or ".." in file or not file.ends_with(".png"):
+		if not _safe_image_file(file):
 			return {}
 		return {
 			"path": manifest_path.get_base_dir().path_join(file),
@@ -332,6 +343,9 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 	var pages: Array = entry.get("pages", [])
 	var textures: Array[AtlasTexture] = []
 	var root := str(frames.get_meta("rendered_root", ""))
+	var stored_cell_rect := _stored_cell_rect(entry)
+	if not stored_cell_rect.has_area():
+		return false
 	var visual_bounds := _rect_from_array(entry.get("visual_bounds", []))
 	var calculate_visual_bounds := action == "idle" and not visual_bounds.has_area()
 	for value: Variant in pages:
@@ -339,7 +353,7 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 			return false
 		var page: Dictionary = value
 		var file := str(page.get("file", ""))
-		if file.is_absolute_path() or ".." in file or not file.ends_with(".png"):
+		if not _safe_image_file(file):
 			return false
 		var path := root.path_join(file)
 		if not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != str(page.get("sha256", "")):
@@ -349,26 +363,22 @@ static func ensure_action_loaded(frames: SpriteFrames, action: String) -> bool:
 		if columns < 1 or columns > 8 or count < 1 or count > 64:
 			return false
 		var im := Image.load_from_file(path)
-		if im == null or im.get_width() != columns * 512 or im.get_height() != int(ceil(float(count) / columns)) * 512:
+		if im == null or im.get_width() != columns * int(stored_cell_rect.size.x) or im.get_height() != int(ceil(float(count) / columns)) * int(stored_cell_rect.size.y):
 			return false
 		var texture := ImageTexture.create_from_image(im)
 		for index: int in count:
 			if calculate_visual_bounds:
 				var cell := im.get_region(Rect2i(
-					(index % columns) * 512,
-					int(index / columns) * 512,
-					512,
-					512
+					(index % columns) * int(stored_cell_rect.size.x),
+					int(index / columns) * int(stored_cell_rect.size.y),
+					int(stored_cell_rect.size.x),
+					int(stored_cell_rect.size.y)
 				))
 				var used := cell.get_used_rect()
 				if used.has_area():
-					var used_rect := Rect2(used)
+					var used_rect := Rect2(used.position + Vector2i(stored_cell_rect.position), used.size)
 					visual_bounds = used_rect if not visual_bounds.has_area() else visual_bounds.merge(used_rect)
-			var atlas := AtlasTexture.new()
-			atlas.atlas = texture
-			atlas.region = Rect2((index % columns)*512, int(index / columns)*512, 512, 512)
-			atlas.filter_clip = true
-			textures.append(atlas)
+			textures.append(_atlas_frame(texture, index, columns, stored_cell_rect))
 	if textures.is_empty() or textures.size() != int(entry.get("count", 0)):
 		return false
 	# Commit only after every page passed; a broken action cannot poison fallback.
@@ -420,6 +430,9 @@ static func ensure_action_loaded_async(
 	var pages: Array = entry.get("pages", [])
 	if images.size() != pages.size():
 		return false
+	var stored_cell_rect := _stored_cell_rect(entry)
+	if not stored_cell_rect.has_area():
+		return false
 	var textures: Array[AtlasTexture] = []
 	for page_index: int in pages.size():
 		var page := pages[page_index] as Dictionary
@@ -428,16 +441,7 @@ static func ensure_action_loaded_async(
 		var count := int(page.get("count", 0))
 		var texture := ImageTexture.create_from_image(image)
 		for frame_index: int in count:
-			var atlas := AtlasTexture.new()
-			atlas.atlas = texture
-			atlas.region = Rect2(
-				(frame_index % columns) * 512,
-				int(frame_index / columns) * 512,
-				512,
-				512
-			)
-			atlas.filter_clip = true
-			textures.append(atlas)
+			textures.append(_atlas_frame(texture, frame_index, columns, stored_cell_rect))
 	if textures.is_empty() or textures.size() != int(entry.get("count", 0)):
 		return false
 	frames.add_animation(action)
@@ -456,6 +460,41 @@ static func _rect_from_array(value: Variant) -> Rect2:
 		return Rect2()
 	var rect := Rect2(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
 	return rect if rect.has_area() else Rect2()
+
+
+static func _stored_cell_rect(action: Dictionary) -> Rect2:
+	var rect := _rect_from_array(action.get("stored_cell_rect", [0, 0, 512, 512]))
+	if not rect.has_area() or rect.position.x < 0 or rect.position.y < 0 or rect.end.x > 512 or rect.end.y > 512:
+		return Rect2()
+	return rect
+
+
+static func _safe_image_file(file: String) -> bool:
+	return (
+		not file.is_empty()
+		and not file.is_absolute_path()
+		and ".." not in file
+		and (file.ends_with(".png") or file.ends_with(".webp"))
+	)
+
+
+static func _atlas_frame(texture: Texture2D, index: int, columns: int, stored_cell_rect: Rect2) -> AtlasTexture:
+	var atlas := AtlasTexture.new()
+	atlas.atlas = texture
+	atlas.region = Rect2(
+		(index % columns) * stored_cell_rect.size.x,
+		int(index / columns) * stored_cell_rect.size.y,
+		stored_cell_rect.size.x,
+		stored_cell_rect.size.y
+	)
+	# Restore the trimmed cell to its original logical 512x512 canvas without
+	# allocating those transparent pixels in RAM or VRAM.
+	atlas.margin = Rect2(
+		stored_cell_rect.position,
+		Vector2(512, 512) - stored_cell_rect.size
+	)
+	atlas.filter_clip = true
+	return atlas
 
 
 static func speed_for(frames: SpriteFrames, action: String) -> float:
