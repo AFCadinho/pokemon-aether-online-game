@@ -3,6 +3,8 @@ extends Control
 ## Missing models/forms/doubles/substitute fall back as a pair, never guessing art.
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
+const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
+var material_response: Node
 var boxes: Array = []
 var platforms: Array = []
 var viewport: SubViewport
@@ -263,6 +265,9 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	mode_label.add_theme_font_size_override("font_size", 12)
 	mode_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	get_parent().add_child(mode_label)
+	material_response = MaterialResponse.new()
+	material_response.stage = self
+	add_child(material_response)
 	set_process(true)
 	# Observe before rendering but after SpriteBox state changes.
 	process_priority = 10
@@ -284,16 +289,8 @@ func _build_world() -> void:
 	environment.environment.background_mode = Environment.BG_COLOR
 	environment.environment.background_color = Color("23364b")
 	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.environment.ambient_light_color = Color("c3d8e6")
-	environment.environment.ambient_light_energy = 0.5
 	world.add_child(environment)
-	var sun := DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-50, -30, 0)
-	sun.light_energy = 0.9
-	sun.shadow_enabled = true
-	sun.directional_shadow_max_distance = 25.0
-	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
-	world.add_child(sun)
+	MaterialResponse.apply_neutral_lighting(world)
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(80, 80)
 	_mesh(plane, Vector3(0, -0.1, 0), Color("405651"))

@@ -74,8 +74,12 @@ func _run() -> void:
 			assert(presenter.viewport == prepared_viewport, "Reveal replaced the prepared viewport")
 			if presenter.active:
 				assert(not presenter.actors[0].visible and not presenter.actors[1].visible)
+				var pipelines: Array = presenter._blocking_pipelines()
+				var response_viewport = presenter.material_response.viewport
 				await presenter.send_out("p1")
 				assert(presenter.actors[0].visible)
+				assert(presenter.material_response.viewport == response_viewport)
+				assert(presenter._blocking_pipelines() == pipelines, "Send-out compiled a new blocking pipeline after preparation")
 			assert(await _check_party_clicks(battle))
 			var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 			if not output.is_empty() and DisplayServer.get_name() != "headless":

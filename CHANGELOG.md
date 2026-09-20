@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepared desktop 3D Pokémon can now use the reviewed richer material colors and highlights with fixed neutral lighting, including during attacks and switching.
+
 - Desktop 3D battles prepare their first rendered models behind the opening screen before revealing the arena, with safe cancellation and a timeout fallback.
 
 - Desktop 3D battles render at their on-screen resolution with smooth filtering and more focused shadows, instead of enlarging the low-resolution battle canvas.
