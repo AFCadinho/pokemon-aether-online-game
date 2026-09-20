@@ -31,6 +31,17 @@ def write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
 
 
+def write_preview_alias(approved_catalog_path: Path) -> Path:
+    catalog = json.loads(approved_catalog_path.read_text())
+    if catalog.get("mode") != "approved":
+        raise ValueError("Preview aliases can only be made from an approved catalog")
+    preview = copy.deepcopy(catalog)
+    preview["mode"] = "preview"
+    target = approved_catalog_path.with_name("preview-catalog.json")
+    write_json(target, preview)
+    return target
+
+
 def crop_rect(bounds: list[int], padding: int) -> tuple[int, int, int, int]:
     x, y, width, height = map(int, bounds)
     if width <= 0 or height <= 0:
@@ -151,6 +162,8 @@ def package_catalog(catalog_path: Path, output: Path, padding: int = 4, workers:
                 report["warnings"].append({"entry": key, "pages_below_psnr_threshold": len(warnings)})
         result["packaging"] = {"profile": "trimmed-webp-q95", "quality": 95, "trim_padding": padding}
         write_json(staging / "catalog.json", result)
+        if result["mode"] == "approved":
+            write_preview_alias(staging / "catalog.json")
         write_json(staging / "quality-report.json", report)
         os.replace(staging, output)
     except Exception:
