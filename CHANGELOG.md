@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduced grainy, blotchy Pokémon shadows in the desktop forest preview while preserving the approved lighting and material colors.
+
 - Fixed the forest preview's ground-height calibration missing animated poses, which could leave Roaring Moon's tail underground.
 
 - Added a winding background trail to the forest battle preview and corrected model grounding using the full idle animation.

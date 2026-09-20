@@ -21,6 +21,22 @@ func _posed_clearance(meshes: Array) -> float:
 	return minimum
 
 func _smoke() -> void:
+	for frame in 30:
+		await process_frame
+	assert(response.world != null and response.sync_count > 0)
+	for world in [stage.world, response.world]:
+		var light_count := 0
+		var shadow_count := 0
+		for child in world.get_children():
+			if child is DirectionalLight3D:
+				light_count += 1
+				shadow_count += int(child.shadow_enabled)
+				assert(is_equal_approx(child.shadow_blur, 2.0 / 3.0))
+				assert(child.light_color == Color.WHITE)
+				assert(is_zero_approx(child.light_angular_distance))
+				if child.shadow_enabled:
+					assert(is_equal_approx(child.light_energy, 1.15))
+		assert(light_count == 3 and shadow_count == 1)
 	# Independently remeasure the corrected actors at half-frame offsets, after
 	# the lighting pass exists. This would fail with the old stale-pose bake.
 	for index in 2:
@@ -105,6 +121,13 @@ func _ground_position(pos: Vector3) -> Vector3:
 	return pos
 
 func _make_forest() -> Node3D:
+	# Isolated desktop review quality, shared by both rendering passes. High
+	# filtering multiplies blur by 1.5; compensate to keep effective radius 1.
+	# Do not change the approved rig's energy, direction, colors or materials.
+	RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_HIGH)
+	for child in stage.world.get_children():
+		if child is DirectionalLight3D:
+			child.shadow_blur = 2.0 / 3.0
 	# Terrain3D expects a current scene even in this SceneTree-script harness.
 	current_scene = stage
 	var scene: Node3D = load("res://scenes/world/test_world.res").instantiate()
