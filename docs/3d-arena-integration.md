@@ -7,7 +7,8 @@ environment profile: grass → forest, water → sea, cave → cave, pvp_stadium
 Gym leaders, PvP and lobby encounters retain their existing environment resolution.
 Previously saved manual selections remain overrides; select Automatic to reset.
 The choice is captured at world creation; it does not replace an arena mid-action.
-Fullscreen UI and attack cameras are deliberately not added.
+Fullscreen UI is selectable separately; see `immersive-battle-ui.md`. Dynamic
+attack cameras are not added by arena integration.
 Only the existing supported local Dragonite/Roaring Moon catalog is supported.
 
 ## Local setup on this workstation

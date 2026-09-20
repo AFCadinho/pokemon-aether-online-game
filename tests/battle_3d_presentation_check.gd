@@ -24,6 +24,8 @@ func _run() -> void:
 	var old_path: String = settings.battle_3d_catalog_path
 	var old_camera: bool = settings.battle_3d_camera_motion
 	var old_arena: String = settings.battle_3d_arena
+	var old_layout: String = settings.battle_ui_layout
+	settings.battle_ui_layout = OS.get_environment("POKEAETHER_TEST_UI_LAYOUT") if not OS.get_environment("POKEAETHER_TEST_UI_LAYOUT").is_empty() else "classic"
 	var old_forest: String = settings.battle_3d_forest_manifest
 	if not OS.get_environment("POKEAETHER_TEST_ARENA").is_empty():
 		settings.battle_3d_arena = OS.get_environment("POKEAETHER_TEST_ARENA")
@@ -117,13 +119,14 @@ func _run() -> void:
 		stage.scale = original_scale
 		stage._sync_render_size()
 		print("3D_NATIVE_RASTER ", stage.viewport.size, " logical=", stage.size)
-		assert(stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
+		var camera_home := preload("res://scripts/battle/arenas/arena_catalog.gd").camera_home(stage.arena_id)
+		assert(stage.camera.position.is_equal_approx(camera_home))
 		settings.battle_3d_camera_motion = true
 		stage._update_camera(2.0)
-		assert(not stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
+		assert(not stage.camera.position.is_equal_approx(camera_home))
 		settings.battle_3d_camera_motion = false
 		stage._update_camera(0.0)
-		assert(stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
+		assert(stage.camera.position.is_equal_approx(camera_home))
 		stage.set_combatant(1, "")
 		await process_frame
 		await process_frame
@@ -347,6 +350,7 @@ func _run() -> void:
 	settings.battle_3d_catalog_path = old_path
 	settings.battle_3d_camera_motion = old_camera
 	settings.battle_3d_arena = old_arena
+	settings.battle_ui_layout = old_layout
 	settings.battle_3d_forest_manifest = old_forest
 	screen_host.release()
 	screen_host.queue_free()

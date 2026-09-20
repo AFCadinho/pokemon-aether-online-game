@@ -6,6 +6,7 @@ const DEFAULT_DESIGN_SIZE := Vector2(1152.0, 648.0)
 
 @export var design_size := DEFAULT_DESIGN_SIZE
 @export var crop_to_fill := true
+var expand_design := false
 @onready var battle_stage: Control = %BattleStage
 
 
@@ -40,6 +41,11 @@ func _update_stage_transform() -> void:
 
 	var width_scale := available_size.x / safe_design_size.x
 	var height_scale := available_size.y / safe_design_size.y
+	if expand_design:
+		var fit := minf(width_scale, height_scale)
+		safe_design_size = available_size / fit
+		width_scale = fit
+		height_scale = fit
 	var uniform_scale := maxf(width_scale, height_scale) if crop_to_fill else minf(width_scale, height_scale)
 	var rendered_size := safe_design_size * uniform_scale
 

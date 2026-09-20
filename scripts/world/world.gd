@@ -3571,7 +3571,7 @@ func _mount_battle_ui() -> bool:
 			]
 		)
 		return false
-	if SettingsManager.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if (SettingsManager.battle_presentation_mode == "3d" or SettingsManager.battle_ui_layout == "immersive") and not OS.has_feature("web") and not OS.has_feature("mobile"):
 		battle_screen_host = preload("res://scenes/battle/battle_screen_host.tscn").instantiate()
 		battle_ui_host.add_child(battle_screen_host)
 		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"))

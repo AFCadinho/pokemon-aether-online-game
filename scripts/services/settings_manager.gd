@@ -61,6 +61,7 @@ var battle_animations := true
 var battle_presentation_mode := "2.5d"
 var battle_3d_catalog_path := ""
 var battle_3d_arena := "auto"
+var battle_ui_layout := "immersive"
 var battle_3d_forest_manifest := ""
 var battle_3d_camera_motion := false
 var weather_effects := true
@@ -129,6 +130,7 @@ func load_settings() -> void:
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
+	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
 	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
 	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(str(data.get("battle_3d_arena", "auto")))
 	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
@@ -221,6 +223,7 @@ func save_settings() -> void:
 		"battle_presentation_mode": battle_presentation_mode,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"battle_3d_arena": battle_3d_arena,
+		"battle_ui_layout": battle_ui_layout,
 		"battle_3d_forest_manifest": battle_3d_forest_manifest,
 		"battle_3d_camera_motion": battle_3d_camera_motion,
 		"weather_effects": weather_effects,
@@ -284,9 +287,24 @@ func set_battle_3d_arena(id: String) -> void:
 	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(id)
 	_save_and_emit()
 
+func set_battle_ui_layout(value: String) -> void:
+	battle_ui_layout = "classic" if value == "classic" else "immersive"
+	_save_and_emit()
+
 func set_battle_3d_forest_manifest(path: String) -> void:
 	battle_3d_forest_manifest = path
 	_save_and_emit()
+
+func get_battle_3d_forest_manifest() -> String:
+	if not battle_3d_forest_manifest.is_empty():
+		return battle_3d_forest_manifest
+	# Local review artifacts only, rooted at the explicitly selected model report.
+	# Never scan Downloads or auto-load native code in exported player builds.
+	if OS.has_feature("editor") and not battle_3d_catalog_path.is_empty():
+		var candidate := battle_3d_catalog_path.get_base_dir().get_base_dir().get_base_dir().path_join("forest-runtime/forest.json")
+		if FileAccess.file_exists(candidate):
+			return candidate
+	return ""
 
 func set_battle_3d_camera_motion(enabled: bool) -> void:
 	if battle_3d_camera_motion == enabled:
