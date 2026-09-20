@@ -16,6 +16,28 @@ func _camera() -> void:
 func _credit_text() -> String:
 	return "PokeAether · 3D stadium study\nOriginal arena · neutral Pokémon rig · isolated PvP visual preview"
 
+func _smoke() -> void:
+	for frame in 30:
+		await process_frame
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	DirAccess.make_dir_recursive_absolute(output)
+	for player: AnimationPlayer in players:
+		player.pause()
+	ui.hide()
+	await RenderingServer.frame_post_draw
+	var before := root.get_texture().get_image()
+	before.save_png(output.path_join("ambience-before.png"))
+	for frame in 120:
+		await process_frame
+	await RenderingServer.frame_post_draw
+	var after := root.get_texture().get_image()
+	after.save_png(output.path_join("ambience-after.png"))
+	assert(before.get_data() != after.get_data(), "Stadium ambience must animate independently of actors")
+	print("STADIUM_AMBIENCE_OK fixed_camera_paused_actors")
+	for player: AnimationPlayer in players:
+		player.play()
+	await super._smoke()
+
 func _finish(color: Color, glow := 0.0) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
@@ -34,11 +56,10 @@ func _box(parent: Node3D, material: Material, pos: Vector3, size: Vector3) -> Me
 
 func _wordmark(parent: Node3D, pos: Vector3, width: float) -> void:
 	var texture: Texture2D = load("res://assets/ui/pokeaether_text_logo.png")
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.albedo_texture = texture
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	var material := ShaderMaterial.new()
+	material.shader = load("res://tools/sprite_factory/stadium_brand.gdshader")
+	material.set_shader_parameter("brand_texture", texture)
+	material.set_shader_parameter("phase", pos.x*0.05)
 	var quad := QuadMesh.new()
 	quad.size = Vector2(width, width*texture.get_height()/float(texture.get_width()))
 	var node := _put(parent, quad, material, pos, Vector3.ONE)
@@ -55,10 +76,10 @@ func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 	var quad := QuadMesh.new()
 	quad.size = Vector2(16.4, 8.4)
 	_put(panel, quad, screen, Vector3(0, 0, 0.32), Vector3.ONE)
-	var logo := StandardMaterial3D.new()
-	logo.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	logo.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	logo.albedo_texture = load("res://assets/ui/logo.png")
+	var logo := ShaderMaterial.new()
+	logo.shader = load("res://tools/sprite_factory/stadium_brand.gdshader")
+	logo.set_shader_parameter("brand_texture", load("res://assets/ui/logo.png"))
+	logo.set_shader_parameter("float_amount", 0.075)
 	var logo_quad := QuadMesh.new()
 	logo_quad.size = Vector2(6.5, 6.5)
 	_put(panel, logo_quad, logo, Vector3(0, 0.3, 0.35), Vector3.ONE)
@@ -99,15 +120,32 @@ func _crowd(parent: Node3D) -> void:
 				index += 1
 	var crowd := MultiMeshInstance3D.new()
 	crowd.multimesh = batch
-	var mat := _finish(Color.WHITE)
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.vertex_color_use_as_albedo = true
-	mat.emission_enabled = true
-	mat.emission = Color("3a2359")
-	mat.emission_energy_multiplier = 0.2
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://tools/sprite_factory/stadium_crowd.gdshader")
 	crowd.material_override = mat
 	crowd.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	parent.add_child(crowd)
+	# Tiny supporter lights share the crowd transforms; no individual light nodes.
+	var lights: MultiMesh = batch.duplicate()
+	var bulb := SphereMesh.new()
+	bulb.radius = 0.035
+	bulb.height = 0.07
+	bulb.radial_segments = 6
+	bulb.rings = 2
+	lights.mesh = bulb
+	for i in lights.instance_count:
+		var pose := lights.get_instance_transform(i)
+		pose.origin.y += 0.3
+		if i % 4 != 0:
+			pose.basis = Basis.from_scale(Vector3.ONE*0.001)
+		lights.set_instance_transform(i, pose)
+	var points := MultiMeshInstance3D.new()
+	points.multimesh = lights
+	var sparkle: ShaderMaterial = mat.duplicate()
+	sparkle.set_shader_parameter("supporter_light", true)
+	points.material_override = sparkle
+	points.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	parent.add_child(points)
 
 func _make_forest() -> Node3D:
 	# The auxiliary irradiance pass must not inherit display post-processing.
@@ -150,6 +188,7 @@ func _make_forest() -> Node3D:
 				_box(stand, dark, Vector3(x, 1.9+row*0.325, -19.7-row*0.525), Vector3(0.85, 0.16, 0.54))
 		for i in 15:
 			_box(stand, cyan if i%3==0 else purple, Vector3((i-7)*3.05, 0.6, -18.04), Vector3(1.7, 0.07, 0.04))
+			_box(stand, cyan if i%3==1 else purple, Vector3((i-7)*3.05, 5.0, -24.0), Vector3(1.8, 0.09, 0.06))
 		for y in [1.9, 8.1, 11.5]:
 			_box(stand, purple, Vector3(0,y,-19 if y<2 else -29), Vector3(47,0.055,0.08))
 		for x in [-14,0,14]:
@@ -166,12 +205,16 @@ func _make_forest() -> Node3D:
 	beam_material.shader = load("res://tools/sprite_factory/stadium_beam.gdshader")
 	for x in [-12,12]:
 		for z in [-15,0,15]:
+			var moving_beam: ShaderMaterial = beam_material.duplicate()
+			moving_beam.set_shader_parameter("phase",float(x)*0.17+float(z)*0.11)
 			var beam := CylinderMesh.new()
 			beam.top_radius = 0.12
-			beam.bottom_radius = 2.0
-			beam.height = 9.0
+			beam.bottom_radius = 2.8
+			beam.height = 16.4
+			beam.cap_top = false
+			beam.cap_bottom = false
 			beam.radial_segments = 24
-			var shaft := _put(arena,beam,beam_material,Vector3(x,12,z),Vector3.ONE)
+			var shaft := _put(arena,beam,moving_beam,Vector3(x,8.3,z),Vector3.ONE)
 			shaft.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			_box(arena,cyan,Vector3(x,16.6,z),Vector3(0.5,0.1,0.5))
 	_screen(arena,Vector3(0,11,-28.5),0.0)

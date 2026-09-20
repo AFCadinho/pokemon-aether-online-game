@@ -26,6 +26,8 @@ def main():
         'tools/sprite_factory/stadium_floor.gdshader',
         'tools/sprite_factory/stadium_screen.gdshader',
         'tools/sprite_factory/stadium_beam.gdshader',
+        'tools/sprite_factory/stadium_crowd.gdshader',
+        'tools/sprite_factory/stadium_brand.gdshader',
         'assets/ui/logo.png',
         'assets/ui/pokeaether_text_logo.png',
     ]:
