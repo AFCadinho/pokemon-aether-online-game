@@ -75,6 +75,21 @@ func _run() -> void:
 		round_evidence.load_max_ms = loading_frames[-1]
 		round_evidence.load_p95_ms = loading_frames[int(loading_frames.size()*0.95)]
 		assert(stage.active and stage.packed.size() == 2)
+		if stage.entries.dragonite.get("material_response_schema", 0) == 1:
+			for entry in stage.entries.values():
+				assert(ResourceLoader.get_dependencies(entry.runtime_path).is_empty(), "Prepared response must be self-contained")
+			var response = stage.material_response
+			assert(response.viewport != null and response.sync_count > 0)
+			assert(response.viewport.use_hdr_2d)
+			assert(response.viewport.size == stage.viewport.size)
+			assert(response.viewport.msaa_3d == stage.viewport.msaa_3d)
+			assert(response.copies[0] != null and response.copies[1] != null)
+			for list in response.pairs:
+				for pair in list:
+					if pair[0] is MeshInstance3D:
+						for surface in pair[0].mesh.get_surface_count():
+							assert(pair[0].get_active_material(surface).shader == response.RESPONSE)
+			print("BATTLE_3D_MATERIAL_RESPONSE_OK")
 		print("3D_IMPORT_MS ", stage.import_times_ms)
 		assert(stage.pending_entries.is_empty())
 		assert(stage.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR)
@@ -264,6 +279,7 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		assert(stage.identities[0] == "dragonite")
+		_check_response_sync(stage)
 		assert(battle.battle_state.get_active_player_pokemon("p1").species == "Dragonite")
 		var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 		if not output.is_empty() and DisplayServer.get_name() != "headless":
@@ -304,6 +320,7 @@ func _run() -> void:
 		await process_frame
 		assert(not stage.active and stage.packed.is_empty())
 		assert(stage.viewport == null and old_viewport.get_ref() == null)
+		assert(stage.material_response.viewport == null and stage.material_response.pairs == [[], []])
 		assert(stage.actors == [null, null] and stage.pending_entries.is_empty())
 		assert(not battle.player_sprite_box.presentation_anchor.is_valid())
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 1)
@@ -345,3 +362,21 @@ func _run() -> void:
 		for item: Dictionary in evidence:
 			assert(item.load_max_ms < budget and item.actions_max_ms < budget and item.replay_setup_ms < budget, "Desktop frame budget exceeded; see acceptance report")
 	quit()
+
+func _check_response_sync(stage: Control) -> void:
+	var response = stage.material_response
+	if response.viewport == null:
+		return
+	response._sync()
+	assert(response.camera.transform.is_equal_approx(stage.camera.transform))
+	for list in response.pairs:
+		for pair in list:
+			if pair[0] is Node3D:
+				assert(pair[0].transform.is_equal_approx(pair[1].transform))
+				assert(pair[0].visible == pair[1].visible)
+			if pair[0] is Skeleton3D:
+				for bone in pair[0].get_bone_count():
+					assert(pair[0].get_bone_pose(bone).is_equal_approx(pair[1].get_bone_pose(bone)))
+			if pair[0] is MeshInstance3D:
+				for shape in pair[0].get_blend_shape_count():
+					assert(is_equal_approx(pair[0].get_blend_shape_value(shape), pair[1].get_blend_shape_value(shape)))
