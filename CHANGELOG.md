@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a separate 3D stadium preview with illuminated stands, PokeAether screens and a reflective battle floor.
+
 - Added a separate coastal battle preview with a sandbar, animated sea and distant rocky shoreline.
 
 - Added a separate cave battle preview with a clear stone floor, natural rock walls and recessed tunnels.
