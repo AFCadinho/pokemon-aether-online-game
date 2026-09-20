@@ -19,6 +19,8 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageStat
 
+QUALITY_WARNING_PSNR_DB = 40.0
+
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -87,7 +89,8 @@ def package_catalog(catalog_path: Path, output: Path, padding: int = 4, workers:
         raise ValueError(f"Output already exists: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=output.name + ".staging-", dir=output.parent))
-    report = {"profile": "trimmed-webp-q95", "quality": 95, "padding": padding, "entries": {}}
+    report = {"profile": "trimmed-webp-q95", "quality": 95, "padding": padding,
+              "quality_warning_psnr_db": QUALITY_WARNING_PSNR_DB, "entries": {}, "warnings": []}
     result = copy.deepcopy(catalog)
     try:
         for key, entry in sorted(catalog["entries"].items()):
@@ -134,10 +137,18 @@ def package_catalog(catalog_path: Path, output: Path, padding: int = 4, workers:
             target_manifest = target_root / "manifest.json"
             write_json(target_manifest, manifest)
             result["entries"][key] = {"path": str((output / target_manifest.relative_to(staging)).resolve()), "sha256": sha256(target_manifest)}
+            worst = min(measurements, key=lambda item: item["rgb_psnr_db"])
+            warnings = [dict(view=item["view"], action=item["action"], page=item["page"],
+                             rgb_psnr_db=item["rgb_psnr_db"])
+                        for item in measurements if item["rgb_psnr_db"] < QUALITY_WARNING_PSNR_DB]
             report["entries"][key] = {
                 "pages": len(measurements), "bytes": sum(x["bytes"] for x in measurements),
-                "minimum_rgb_psnr_db": min(x["rgb_psnr_db"] for x in measurements),
+                "minimum_rgb_psnr_db": worst["rgb_psnr_db"],
+                "worst_page": {name: worst[name] for name in ("view", "action", "page", "rgb_psnr_db")},
+                "warnings": warnings,
             }
+            if warnings:
+                report["warnings"].append({"entry": key, "pages_below_psnr_threshold": len(warnings)})
         result["packaging"] = {"profile": "trimmed-webp-q95", "quality": 95, "trim_padding": padding}
         write_json(staging / "catalog.json", result)
         write_json(staging / "quality-report.json", report)
