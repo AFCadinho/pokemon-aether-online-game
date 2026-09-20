@@ -3982,6 +3982,8 @@ func _get_requested_battle_log_open() -> bool:
 
 ## Bepaalt alleen de eerste default voor deze client-sessie.
 func _should_open_battle_log_by_default() -> bool:
+	if has_meta("immersive_battle_ui"):
+		return false
 	return _can_show_full_battle_log()
 
 ## Bepaalt of de grote battle log op dit scherm mag worden getoond.
@@ -3991,6 +3993,8 @@ func _can_show_full_battle_log() -> bool:
 ## Past de log-state toe zonder de sessiekeuze te overschrijven.
 func _set_battle_log_open(open: bool) -> void:
 	battle_log_rail.visible = open
+	if has_meta("immersive_battle_ui"):
+		return
 	var target_size := BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE
 	var previous_center := position + size * 0.5
 	custom_minimum_size = target_size
@@ -4004,6 +4008,8 @@ func _update_battle_log_toggle_button() -> void:
 	var is_open := battle_log_rail.visible
 	battle_log_toggle_button.visible = true
 	battle_log_toggle_button.text = "»" if is_open else "«"
+	if has_meta("immersive_battle_ui"):
+		battle_log_toggle_button.text = "Close log" if is_open else "Battle log"
 	battle_log_toggle_button.tooltip_text = (
 		_t("battle.log.collapse")
 		if is_open

@@ -419,6 +419,14 @@ func _setup_tabs() -> void:
 		choose_catalog.pressed.connect(func(): catalog_dialog.popup_centered_ratio(0.7))
 		general_tab.add_child(choose_catalog)
 		var arena_options := OptionButton.new()
+		var layout_options := OptionButton.new()
+		layout_options.add_item("Immersive — fullscreen arena")
+		layout_options.add_item("Classic — framed panels")
+		layout_options.select(1 if SettingsManager.battle_ui_layout == "classic" else 0)
+		layout_options.item_selected.connect(func(index): SettingsManager.set_battle_ui_layout("classic" if index == 1 else "immersive"))
+		var layout_label := Label.new()
+		layout_label.text = "Battle UI (next battle)"
+		general_tab.add_child(_create_labeled_control_row(layout_label, layout_options))
 		arena_options.name = "BattleArenaOptions"
 		var arena_ids: Array = preload("res://scripts/battle/arenas/arena_catalog.gd").SELECTION_IDS
 		for label in ["Automatic — same environment as 2D", "Classic test stage", "Forest (local pack)", "Cave", "Sea / sandbar", "PvP stadium"]:

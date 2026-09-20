@@ -21,6 +21,8 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null) -> void:
 	if focus != null:
 		focus.release_focus()
 	battle.set_meta("dedicated_battle_screen", true)
+	if get_node("/root/SettingsManager").battle_ui_layout == "immersive":
+		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	$Content.add_child(battle)
 	resized.connect(_fit_battle)
 	_fit_battle()

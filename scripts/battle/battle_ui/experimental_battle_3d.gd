@@ -310,7 +310,7 @@ func _build_world() -> void:
 		arena_problem = "Arena ground calibration missing or outdated; regenerate the local catalog grounding file"
 		arena_id = "classic"
 	if arena_id == "forest":
-		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").battle_3d_forest_manifest)
+		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
 		if not arena_problem.is_empty():
 			arena_id = "classic"
 	camera = Camera3D.new()
@@ -635,7 +635,7 @@ func _process(delta: float) -> void:
 		return
 	if viewport == null:
 		if _requested_arena() == "forest":
-			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").battle_3d_forest_manifest)
+			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
 			arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
 			if arena_preparing:
 				reason = "Preparing forest assets…"
