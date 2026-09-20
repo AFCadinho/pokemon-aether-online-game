@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Approved animated Pokémon catalogs can now be packaged into validated, size-efficient 512×512/60 FPS runtime data without changing their review or activation state.
+
 - Animated Pokémon previews no longer develop moving block patterns when the game window uses fractional scaling.
 
 - Pokémon kept permanently after an Aether Rental are permanently untradeable.

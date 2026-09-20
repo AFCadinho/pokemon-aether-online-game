@@ -199,6 +199,18 @@ distribution-format measurements, tooling, visual comparisons, and accepted
 trimmed-WebP-Q95 distribution input are documented in
 [DISTRIBUTION_FORMAT_BENCHMARK.md](DISTRIBUTION_FORMAT_BENCHMARK.md); that
 benchmark does not change the runtime default.
+
+After human approval, package any schema-1 preview or approved catalog into the
+accepted distribution input without changing its review mode or activating it:
+
+```sh
+python tools/sprite_factory/package_catalog.py INPUT_CATALOG OUTPUT_DIRECTORY --workers 8
+```
+
+The command requires 512x512/native-60-FPS manifests, verifies every source
+hash, trims each action to its padded union bounds, encodes WebP Q95 with exact
+alpha, records RGB PSNR, and writes a new catalog plus `quality-report.json`.
+It refuses to overwrite an existing output and never mutates source builds.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.
