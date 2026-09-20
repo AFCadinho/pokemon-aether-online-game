@@ -44,6 +44,8 @@ func _run() -> void:
 		settings.battle_3d_catalog_path = report
 		battle.player_sprite_box.set_single_pokemon_species("Dragonite", "back", false)
 		battle.enemy_sprite_box.set_single_pokemon_species("Roaring Moon", "front", false)
+		stage.set_combatant(0, "Dragonite")
+		stage.set_combatant(1, "Roaring Moon")
 		var waits := 0
 		var loading_frames: Array[float] = []
 		while not stage.active and waits < 2000:
@@ -69,16 +71,47 @@ func _run() -> void:
 		settings.battle_3d_camera_motion = false
 		stage._update_camera(0.0)
 		assert(stage.camera.position.is_equal_approx(Renderer.CAMERA_HOME))
-		battle.enemy_sprite_box.current_single_species = ""
+		stage.set_combatant(1, "")
 		await process_frame
 		await process_frame
 		assert(stage.active and stage.actors[1] == null)
-		battle.enemy_sprite_box.current_single_species = "Roaring Moon"
+		stage.set_combatant(1, "Roaring Moon")
 		await process_frame
 		await process_frame
 		assert(stage.active and stage.actors[1] != null)
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 0)
 		assert(battle.player_sprite_box.presentation_anchor.is_valid())
+		# No hidden-sprite frames, visibility, scale or playback may drive 3D.
+		var old_frames: SpriteFrames = battle.player_sprite_box.single_sprite.sprite_frames
+		battle.player_sprite_box.single_sprite.stop()
+		battle.player_sprite_box.single_sprite.sprite_frames = null
+		battle.player_sprite_box.single_sprite.visible = false
+		await process_frame
+		await process_frame
+		assert(stage.actors[0].visible)
+		assert(battle.player_sprite_box.get_single_animation_visual_rect_in_node(battle.battle_stage).has_area())
+		stage.set_actor_shown(0, false)
+		assert(await stage.send_out("p1"))
+		assert(stage.lifecycle[0] == "idle" and stage.actor_shown[0])
+		assert(await stage.recall("p1"))
+		assert(stage.lifecycle[0] == "hidden" and not stage.actor_shown[0])
+		stage.send_out("p1")
+		assert(stage.lifecycle[0] == "send_out")
+		stage.cancel_actions()
+		await process_frame
+		assert(stage.lifecycle[0] == "idle" and stage.actor_scale[0] == 1.0)
+		var old_ball_player: Node = battle.pokeball_summon_animation_player
+		battle.pokeball_summon_animation_player = null
+		await battle._play_lead_summon("poke-ball", "Dragonite", null, "back")
+		await battle._play_switch_recall("poke-ball", null, "back")
+		assert(stage.lifecycle[0] == "hidden")
+		await battle._play_switch_release("poke-ball", "Dragonite", null, "back")
+		assert(stage.lifecycle[0] == "idle")
+		battle.pokeball_summon_animation_player = old_ball_player
+		stage.recall("p1")
+		stage.set_combatant(0, "Dragonite", false, true)
+		await process_frame
+		assert(stage.lifecycle[0] == "idle" and stage.actor_shown[0])
 		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Claw")
 		assert(stage.players[0].current_animation == "physical_attack")
 		stage.players[0].advance(100.0)
@@ -87,44 +120,48 @@ func _run() -> void:
 		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Pulse")
 		await process_frame
 		assert(stage.players[0].current_animation == "special_attack")
+		assert(battle.player_sprite_box.single_sprite.sprite_frames == null)
+		battle.player_sprite_box.single_sprite.sprite_frames = old_frames
+		battle.player_sprite_box.single_sprite.visible = true
 		settings.battle_3d_camera_motion = true
 		var held_phase: float = stage.camera_phase
 		stage._update_camera(2.0)
 		assert(stage.camera_phase == held_phase)
 		settings.battle_3d_camera_motion = false
-		battle.player_sprite_box.playback_speed = 4.0
+		battle.animation_router.playback_speed = 4.0
 		await process_frame
 		await process_frame
 		assert(stage.players[0].speed_scale == 4.0)
-		battle.player_sprite_box.playback_speed = 1.0
-		battle.enemy_sprite_box.presentation_action.emit("damage")
+		battle.animation_router.playback_speed = 1.0
+		battle.animation_router.play_damage_tween_for_target("p2: Roaring Moon")
 		assert(stage.players[1].current_animation == "damage")
-		battle.player_sprite_box.presentation_action.emit("sleep")
-		battle.player_sprite_box.reset_battle_pose()
+		stage.set_sleeping(0, true)
+		stage.cancel_actions()
 		assert(stage.players[0].current_animation == "sleep")
 		# Cancellation must not let an old faint clear a current Pokémon.
-		battle.player_sprite_box.play_faint_tween()
+		battle.animation_router.play_faint_tween_for_target("p1: Dragonite")
 		assert(stage.players[0].current_animation == "faint_start")
-		battle.player_sprite_box.reset_battle_pose()
+		battle.animation_router.cancel_render()
 		await process_frame
 		await process_frame
 		assert(battle.player_sprite_box.current_single_species == "Dragonite")
-		# Actual SpriteBox faint waits for the full source clip, then clears.
-		battle.enemy_sprite_box.play_faint_tween()
+		# The 3D lifecycle completes independently of the hidden sprite.
+		battle.animation_router.play_faint_tween_for_target("p2: Roaring Moon")
 		assert(battle.enemy_sprite_box.current_single_species == "Roaring Moon")
 		stage.players[1].advance(100.0)
 		for frame in 3:
 			await process_frame
-		assert(battle.enemy_sprite_box.current_single_species.is_empty())
-		assert(stage.actors[1] == null and stage.active)
-		battle.enemy_sprite_box.set_single_pokemon_species("Roaring Moon", "front", false)
+		assert(stage.lifecycle[1] == "fainted" and not stage.actor_shown[1])
+		assert(battle.enemy_sprite_box.current_single_species == "Roaring Moon")
+		stage.set_actor_shown(1, true)
+		stage.cancel_actions()
 		for frame in 3:
 			await process_frame
-		battle.enemy_sprite_box.current_single_is_shiny = true
+		stage.set_combatant(1, "Roaring Moon", true)
 		await process_frame
 		await process_frame
 		assert(not stage.active and battle.player_sprite_box.single_sprite.self_modulate.a == 1)
-		battle.enemy_sprite_box.current_single_is_shiny = false
+		stage.set_combatant(1, "Roaring Moon", false)
 		await process_frame
 		await process_frame
 		assert(stage.active)
@@ -134,17 +171,20 @@ func _run() -> void:
 		await process_frame
 		assert(not stage.active)
 		battle.enemy_sprite_box.substitute_active = false
-		battle.player_sprite_box.presentation_action.emit("idle")
+		stage.set_sleeping(0, false)
 		await process_frame
 		await process_frame
 		# Drive an actual recorded response through the client's existing renderer.
 		var p1 := {"ident": "p1a: Dragonite", "details": "Dragonite, L100", "species": "Dragonite", "condition": "100/100", "hp": 100, "maxHp": 100, "active": true}
 		var p2 := {"ident": "p2a: Roaring Moon", "details": "Roaring Moon, L100", "species": "Roaring Moon", "condition": "100/100", "hp": 100, "maxHp": 100, "active": true}
+		p1.pokemonKey = "acceptance-p1-dragonite"
+		p2.pokemonKey = "acceptance-p2-moon"
 		var first := {"success": true, "battleId": "3d-fixture", "replayKind": "wild", "formatId": "gen9nationaldex", "players": {"p1": {"name": "Player"}, "p2": {"name": "Wild"}},
 			"ownTeam": [{"species": "Dragonite", "level": 100}], "trainerTeam": [{"species": "Roaring Moon", "level": 100}],
 			"requests": {"p1": {"side": {"pokemon": [p1]}}, "p2": {"side": {"pokemon": [p2]}}},
 			"state": {"turn": 1, "ended": false}, "events": [{"type": "turn", "turn": 1, "eventSeq": 0}]}
 		var bench := {"ident": "p1: Roaring Moon", "details": "Roaring Moon, L100", "species": "Roaring Moon", "condition": "100/100", "hp": 100, "maxHp": 100, "active": false}
+		bench.pokemonKey = "acceptance-p1-moon"
 		first.ownTeam = [p1.duplicate(true), bench.duplicate(true)]
 		first.requests.p1.side.pokemon.append(bench.duplicate(true))
 		var second := first.duplicate(true)
@@ -155,15 +195,19 @@ func _run() -> void:
 		var physical := second.duplicate(true)
 		physical.events = [{"type": "move", "actor": "p1a: Dragonite", "target": "p2a: Roaring Moon", "move": "Dragon Claw", "eventSeq": 3}]
 		var switched := physical.duplicate(true)
-		switched.requests.p1.side.pokemon = [{"ident": "p1a: Roaring Moon", "details": "Roaring Moon, L100", "species": "Roaring Moon", "condition": "100/100", "hp": 100, "maxHp": 100, "active": true}]
+		switched.requests.p1.side.pokemon[0].active = false
+		switched.requests.p1.side.pokemon[1].active = true
+		switched.requests.p1.side.pokemon[1].ident = "p1a: Roaring Moon"
 		switched.ownTeam[0].active = false
 		switched.ownTeam[1].active = true
 		switched.ownTeam[1].ident = "p1a: Roaring Moon"
 		switched.events = [{"type": "switch", "pokemon": "p1a: Roaring Moon", "playerId": "p1", "details": "Roaring Moon, L100", "condition": "100/100", "eventSeq": 4}]
-		switched.events[0].toRef = {"species": "Roaring Moon", "displaySpecies": "Roaring Moon", "ident": "p1a: Roaring Moon"}
+		switched.events[0].toRef = {"species": "Roaring Moon", "displaySpecies": "Roaring Moon", "ident": "p1a: Roaring Moon", "pokemonKey": "acceptance-p1-moon"}
+		switched.events[0].species = "Roaring Moon"
 		var returned := physical.duplicate(true)
 		returned.events = [{"type": "switch", "pokemon": "p1a: Dragonite", "playerId": "p1", "details": "Dragonite, L100", "condition": "100/100", "eventSeq": 5}]
-		returned.events[0].toRef = {"species": "Dragonite", "displaySpecies": "Dragonite", "ident": "p1a: Dragonite"}
+		returned.events[0].toRef = {"species": "Dragonite", "displaySpecies": "Dragonite", "ident": "p1a: Dragonite", "pokemonKey": "acceptance-p1-dragonite"}
+		returned.events[0].species = "Dragonite"
 		var fainted := returned.duplicate(true)
 		fainted.requests.p2.side.pokemon[0].hp = 0
 		fainted.requests.p2.side.pokemon[0].condition = "0 fnt"
@@ -192,11 +236,15 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		assert(stage.identities[0] == "dragonite")
+		assert(battle.battle_state.get_active_player_pokemon("p1").species == "Dragonite")
 		var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 		if not output.is_empty() and DisplayServer.get_name() != "headless":
+			sampling = false # Explicit screenshot GPU readback is not gameplay work.
 			DirAccess.make_dir_recursive_absolute(output)
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("client-3d.png"))
+			sample_tick = Time.get_ticks_usec()
+			sampling = true
 		await battle.play_replay_frame(battle.replay_controls.timeline, 5)
 		await battle.play_replay_frame(battle.replay_controls.timeline, 6)
 		await battle.stop_battle_replay()
@@ -205,6 +253,23 @@ func _run() -> void:
 		round_evidence.actions_max_ms = action_frames[-1]
 		round_evidence.actions_p95_ms = action_frames[int(action_frames.size()*0.95)]
 		print("3D_ACTION_FRAME_MS max=", round_evidence.actions_max_ms, " p95=", round_evidence.actions_p95_ms)
+		if runs == 0:
+			# A new battle-scene host can use the presenter with no sprite boxes.
+			var standalone := Renderer.new()
+			root.add_child(standalone)
+			standalone.setup()
+			standalone.set_combatant(0, "Dragonite")
+			standalone.set_combatant(1, "Roaring Moon")
+			for frame in 2000:
+				if standalone.active:
+					break
+				await process_frame
+			assert(standalone.active and standalone.boxes.is_empty())
+			assert(await standalone.send_out("p1"))
+			assert(await standalone.recall("p1"))
+			standalone.queue_free()
+			await process_frame
+			await process_frame
 		settings.battle_presentation_mode = "2.5d"
 		var old_viewport: WeakRef = weakref(stage.viewport)
 		await process_frame
