@@ -230,13 +230,21 @@ python tools/sprite_factory/tight_frame_benchmark.py \
   PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG OUTPUT_REPORT
 python tools/sprite_factory/webp_quality_benchmark.py \
   PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG OUTPUT_REPORT
+python tools/sprite_factory/dual_plane_video_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG VIDEO_OUTPUT_DIRECTORY
+python tools/sprite_factory/alpha_plane_benchmark.py \
+  PACKAGED_CATALOG LOSSLESS_SOURCE_CATALOG \
+  VIDEO_OUTPUT_DIRECTORY/report.json ALPHA_OUTPUT_DIRECTORY
 ```
 
 These tools retain 512×512 logical framing and native 60 FPS. They measure
 temporal redundancy, transparent area, source quality, normal/shiny overlap,
-decode/seek cost and representative alternative encodings. Their outputs are
-benchmark evidence only; human visual approval and platform runtime support
-remain separate gates.
+decode/seek cost and representative alternative encodings. The optional
+`variant_material_probe_blender.py` plus `variant_material_benchmark.py` pair
+also measures renderer-produced normal/shiny material IDs and colour LUTs; it
+must be launched against a reviewed source with Blender's auto-execution
+disabled. All outputs are benchmark evidence only; human visual approval and
+platform runtime support remain separate gates.
 The action-routing checks exercise the single-battle SpriteBox path used by the
 POCs. Other battle modes still need their own visual/action validation before
 general release; they are not certified by these two species tests.
