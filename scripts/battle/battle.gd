@@ -978,6 +978,9 @@ func _on_locale_changed(_locale: String) -> void:
 
 
 func _setup_battle_ui_position() -> void:
+	if has_meta("dedicated_battle_screen"):
+		battle_drag_handle.hide()
+		return
 	battle_drag_handle.move_to_front()
 	if not battle_drag_handle.gui_input.is_connected(_on_battle_drag_handle_gui_input):
 		battle_drag_handle.gui_input.connect(_on_battle_drag_handle_gui_input)
@@ -1047,6 +1050,8 @@ func _save_battle_ui_position() -> void:
 		file.store_string(JSON.stringify({"position": [position.x, position.y]}))
 
 func _focus_battle_ui_layer() -> void:
+	if has_meta("dedicated_battle_screen"):
+		return
 	get_tree().call_group("ui_overlay", "focus_battle_ui_layer")
 
 func _setup_battle_focus_surfaces() -> void:

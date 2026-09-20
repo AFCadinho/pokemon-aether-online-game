@@ -30,7 +30,9 @@ func _run() -> void:
 	for args in [["Eevee", false, false, false], ["Dragonite", true, false, false], ["Dragonite", false, true, false], ["Dragonite", false, false, true]]:
 		assert(not Renderer.supported.callv(args))
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
-	root.add_child(battle)
+	var screen_host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	root.add_child(screen_host)
+	screen_host.mount(battle)
 	await process_frame
 	var stage = battle.battle_stage.get_node("ExperimentalBattle3D")
 	assert(stage.packed.is_empty() and stage.viewport == null and not stage.active)
@@ -291,7 +293,8 @@ func _run() -> void:
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_path
 	settings.battle_3d_camera_motion = old_camera
-	battle.queue_free()
+	screen_host.release()
+	screen_host.queue_free()
 	await process_frame
 	await process_frame
 	print("BATTLE_3D_PRESENTATION_OK")

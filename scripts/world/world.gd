@@ -69,6 +69,7 @@ const WEB_BATTLE_SPRITE_PREFETCH_ALIASES := {
 
 var is_in_battle := false
 var battle_instance: Node
+var battle_screen_host: Control
 var replay_return_callback: Callable
 var coop_controls: Control
 var coop_world_ready := false
@@ -1496,6 +1497,8 @@ func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
 
 
 func _prepare_battle_instance_reveal() -> void:
+	if is_instance_valid(battle_screen_host):
+		return # The dedicated screen owns layout and its loading cover.
 	if battle_instance == null or not (battle_instance is Control):
 		return
 	var battle_control := battle_instance as Control
@@ -1505,6 +1508,9 @@ func _prepare_battle_instance_reveal() -> void:
 
 
 func _reveal_prepared_wild_battle() -> void:
+	if is_instance_valid(battle_screen_host):
+		await wild_encounter_transition.reveal()
+		return
 	if battle_instance == null or not (battle_instance is Control):
 		await wild_encounter_transition.reveal()
 		return
@@ -3565,7 +3571,12 @@ func _mount_battle_ui() -> bool:
 			]
 		)
 		return false
-	battle_ui_host.add_child(battle_instance)
+	if SettingsManager.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile"):
+		battle_screen_host = preload("res://scenes/battle/battle_screen_host.tscn").instantiate()
+		battle_ui_host.add_child(battle_screen_host)
+		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"))
+	else:
+		battle_ui_host.add_child(battle_instance)
 	battle_ui_host.visible = true
 
 	if battle_instance.has_signal("battle_ended"):
@@ -3575,6 +3586,11 @@ func _mount_battle_ui() -> bool:
 
 
 func _clear_battle_ui_instance() -> void:
+	if is_instance_valid(battle_screen_host):
+		battle_screen_host.release()
+		battle_screen_host.get_parent().remove_child(battle_screen_host)
+		battle_screen_host.queue_free()
+	battle_screen_host = null
 	if battle_instance != null and is_instance_valid(battle_instance):
 		if battle_instance.get_parent() != null:
 			battle_instance.get_parent().remove_child(battle_instance)
