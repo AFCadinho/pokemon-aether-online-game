@@ -23,6 +23,50 @@ var resting := [true, true]
 var mode_label: Label
 var pending_entries: Array = []
 var import_times_ms := {}
+var loading_path := ""
+var loading_entry := {}
+var loading_started := 0
+
+class LoadDrain extends Node:
+	var path: String
+	func _process(_delta: float) -> void:
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			return
+		if status in [ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			ResourceLoader.load_threaded_get(path)
+		queue_free()
+
+func _cancel_load() -> void:
+	if not loading_path.is_empty():
+		# ResourceLoader has no cancellation API. Drain without joining/blocking.
+		var drain := LoadDrain.new()
+		drain.path = loading_path
+		get_tree().root.add_child.call_deferred(drain)
+		loading_path = ""
+		loading_entry.clear()
+
+func await_prepared() -> void:
+	# Presentation boundary only; keep pumping frames while assets prepare.
+	var deadline := Time.get_ticks_msec() + 10000
+	while is_inside_tree():
+		var settings := get_tree().root.get_node("SettingsManager")
+		if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+			return
+		var requested: String = settings.battle_3d_catalog_path
+		if requested.is_empty():
+			requested = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
+		if loaded_path == requested and pending_entries.is_empty() and loading_path.is_empty():
+			# Allow actor creation/first render before summon anchors are captured.
+			await get_tree().process_frame
+			await get_tree().process_frame
+			return
+		if Time.get_ticks_msec() >= deadline:
+			_cancel_load()
+			pending_entries.clear()
+			reason = "3D preparation timed out; using 2.5D"
+			return
+		await get_tree().process_frame
 var action_generation := [0, 0]
 var camera_phase := 0.0
 const CAMERA_HOME := Vector3(4, 5.5, 12)
@@ -109,6 +153,7 @@ func _find_player(node: Node) -> AnimationPlayer:
 	return null
 
 func _load_catalog(path: String) -> void:
+	_cancel_load()
 	loaded_path = path
 	pending_entries.clear()
 	import_times_ms.clear()
@@ -119,7 +164,8 @@ func _load_catalog(path: String) -> void:
 	if not FileAccess.file_exists(path):
 		reason = "3D report missing; using 2.5D"
 		return
-	var file := FileAccess.open(path, FileAccess.READ)
+	var prepared_path := path + ".runtime.json" if FileAccess.file_exists(path + ".runtime.json") else path
+	var file := FileAccess.open(prepared_path, FileAccess.READ)
 	if file == null or file.get_length() > 1048576:
 		return
 	var data: Variant = JSON.parse_string(file.get_as_text())
@@ -128,12 +174,12 @@ func _load_catalog(path: String) -> void:
 	for entry in data:
 		if not entry is Dictionary or not entry.get("species", "") in SUPPORTED:
 			continue
-		var model_path := str(entry.get("path", ""))
+		var model_path := str(entry.get("runtime_path", ""))
 		var timing: Variant = entry.get("action_timing", {})
-		if not timing is Dictionary or not model_path.ends_with(".glb") or not FileAccess.file_exists(model_path):
+		if entry.get("runtime_schema", 0) != 1 or not timing is Dictionary or not model_path.ends_with(".scn") or not FileAccess.file_exists(model_path):
 			continue
 		var model_file := FileAccess.open(model_path, FileAccess.READ)
-		if model_file == null or model_file.get_length() > 33554432:
+		if model_file == null or model_file.get_length() > 134217728:
 			continue
 		var valid := true
 		for action in ["idle", "physical_attack", "special_attack", "damage", "sleep", "faint_start"]:
@@ -148,39 +194,29 @@ func _load_catalog(path: String) -> void:
 		reason = "Preparing local 3D models…"
 
 func _import_next_model() -> void:
-	# One bounded local model per frame; no whole-catalog import in one frame.
-	# GLTF scene generation still runs on the main thread (not hitch-free).
-	if pending_entries.is_empty():
+	if loading_path.is_empty():
+		if pending_entries.is_empty():
+			return
+		loading_entry = pending_entries.pop_front()
+		loading_path = loading_entry.runtime_path
+		loading_started = Time.get_ticks_usec()
+		if ResourceLoader.load_threaded_request(loading_path, "PackedScene", false, ResourceLoader.CACHE_MODE_IGNORE) != OK:
+			loading_path = ""
+			loading_entry.clear()
 		return
-	var entry: Dictionary = pending_entries.pop_front()
-	var model_path: String = entry.path
-	var timing: Dictionary = entry.action_timing
-	var started := Time.get_ticks_usec()
-	var valid := true
-	_import_model(entry, model_path, timing, valid)
-	import_times_ms[entry.species] = (Time.get_ticks_usec() - started) / 1000.0
-
-func _import_model(entry: Dictionary, model_path: String, timing: Dictionary, valid: bool) -> void:
-	var document := GLTFDocument.new()
-	var state := GLTFState.new()
-	if document.append_from_file(model_path, state) != OK:
+	var status := ResourceLoader.load_threaded_get_status(loading_path)
+	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		return
-	var model := document.generate_scene(state, 60)
-	if model == null:
-		return
-	var player := _find_player(model)
-	if player == null:
-		model.free()
-		return
-	for action in timing:
-		if not player.has_animation(action):
-			valid = false
-	if valid:
-		var scene := PackedScene.new()
-		if scene.pack(model) == OK:
-			packed[entry.species] = scene
-			entries[entry.species] = entry
-	model.free()
+	if status == ResourceLoader.THREAD_LOAD_LOADED:
+		var scene := ResourceLoader.load_threaded_get(loading_path) as PackedScene
+		if scene != null:
+			packed[loading_entry.species] = scene
+			entries[loading_entry.species] = loading_entry.duplicate(true)
+			import_times_ms[loading_entry.species] = (Time.get_ticks_usec() - loading_started) / 1000.0
+	elif status == ResourceLoader.THREAD_LOAD_FAILED:
+		ResourceLoader.load_threaded_get(loading_path)
+	loading_path = ""
+	loading_entry.clear()
 
 func _clear_actors() -> void:
 	for i in 2:
@@ -295,10 +331,11 @@ func _process(delta: float) -> void:
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
-	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() else "2.5D · 3D preview unavailable")
+	mode_label.text = "3D preview" if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · 3D preview unavailable")
 	mode_label.tooltip_text = reason
 	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 		_set_active(false)
+		_cancel_load()
 		pending_entries.clear()
 		loaded_path = "!unloaded"
 		if not packed.is_empty() or viewport != null:
@@ -318,7 +355,7 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		_load_catalog(path)
 		return
-	if not pending_entries.is_empty():
+	if not pending_entries.is_empty() or not loading_path.is_empty():
 		_import_next_model()
 		return
 	var desired := []
@@ -377,6 +414,7 @@ func _process(delta: float) -> void:
 			_action(restoring[i], i)
 
 func _exit_tree() -> void:
+	_cancel_load()
 	_set_active(false)
 	pending_entries.clear()
 	packed.clear()

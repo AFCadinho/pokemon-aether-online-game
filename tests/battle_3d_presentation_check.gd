@@ -1,8 +1,21 @@
 extends SceneTree
 
 const Renderer = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
+var runs := 0
+var after_memory: Array[int] = []
+var evidence := []
+var action_frames: Array[float] = []
+var sampling := false
+var sample_tick := 0
+
+func _sample_frame() -> void:
+	var now := Time.get_ticks_usec()
+	if sampling and sample_tick > 0:
+		action_frames.append((now - sample_tick) / 1000.0)
+	sample_tick = now
 
 func _init() -> void:
+	process_frame.connect(_sample_frame)
 	_run.call_deferred()
 
 func _run() -> void:
@@ -10,6 +23,7 @@ func _run() -> void:
 	var old_mode: String = settings.battle_presentation_mode
 	var old_path: String = settings.battle_3d_catalog_path
 	var old_camera: bool = settings.battle_3d_camera_motion
+	var round_evidence := {}
 	settings.battle_3d_camera_motion = false
 	settings.battle_presentation_mode = "2.5d"
 	assert(Renderer.supported("Dragonite", false, false, false))
@@ -30,8 +44,21 @@ func _run() -> void:
 		settings.battle_3d_catalog_path = report
 		battle.player_sprite_box.set_single_pokemon_species("Dragonite", "back", false)
 		battle.enemy_sprite_box.set_single_pokemon_species("Roaring Moon", "front", false)
-		for frame in 5:
+		var waits := 0
+		var loading_frames: Array[float] = []
+		while not stage.active and waits < 2000:
+			var before := Time.get_ticks_usec()
 			await process_frame
+			loading_frames.append((Time.get_ticks_usec() - before) / 1000.0)
+			waits += 1
+		for frame in 10:
+			var before := Time.get_ticks_usec()
+			await process_frame
+			loading_frames.append((Time.get_ticks_usec() - before) / 1000.0)
+		loading_frames.sort()
+		print("3D_LOAD_FRAME_MS max=", loading_frames[-1], " p95=", loading_frames[int(loading_frames.size()*0.95)])
+		round_evidence.load_max_ms = loading_frames[-1]
+		round_evidence.load_p95_ms = loading_frames[int(loading_frames.size()*0.95)]
 		assert(stage.active and stage.packed.size() == 2)
 		print("3D_IMPORT_MS ", stage.import_times_ms)
 		assert(stage.pending_entries.is_empty())
@@ -52,6 +79,11 @@ func _run() -> void:
 		assert(stage.active and stage.actors[1] != null)
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 0)
 		assert(battle.player_sprite_box.presentation_anchor.is_valid())
+		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Claw")
+		assert(stage.players[0].current_animation == "physical_attack")
+		stage.players[0].advance(100.0)
+		await process_frame
+		await process_frame
 		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Pulse")
 		await process_frame
 		assert(stage.players[0].current_animation == "special_attack")
@@ -112,26 +144,67 @@ func _run() -> void:
 			"ownTeam": [{"species": "Dragonite", "level": 100}], "trainerTeam": [{"species": "Roaring Moon", "level": 100}],
 			"requests": {"p1": {"side": {"pokemon": [p1]}}, "p2": {"side": {"pokemon": [p2]}}},
 			"state": {"turn": 1, "ended": false}, "events": [{"type": "turn", "turn": 1, "eventSeq": 0}]}
+		var bench := {"ident": "p1: Roaring Moon", "details": "Roaring Moon, L100", "species": "Roaring Moon", "condition": "100/100", "hp": 100, "maxHp": 100, "active": false}
+		first.ownTeam = [p1.duplicate(true), bench.duplicate(true)]
+		first.requests.p1.side.pokemon.append(bench.duplicate(true))
 		var second := first.duplicate(true)
 		second.requests.p2.side.pokemon[0].hp = 82
 		second.requests.p2.side.pokemon[0].condition = "82/100"
 		second.events = [{"type": "move", "actor": "p1a: Dragonite", "target": "p2a: Roaring Moon", "move": "Dragon Pulse", "eventSeq": 1},
 			{"type": "damage", "target": "p2a: Roaring Moon", "condition": "82/100", "eventSeq": 2}]
-		var terminal := second.duplicate(true)
+		var physical := second.duplicate(true)
+		physical.events = [{"type": "move", "actor": "p1a: Dragonite", "target": "p2a: Roaring Moon", "move": "Dragon Claw", "eventSeq": 3}]
+		var switched := physical.duplicate(true)
+		switched.requests.p1.side.pokemon = [{"ident": "p1a: Roaring Moon", "details": "Roaring Moon, L100", "species": "Roaring Moon", "condition": "100/100", "hp": 100, "maxHp": 100, "active": true}]
+		switched.ownTeam[0].active = false
+		switched.ownTeam[1].active = true
+		switched.ownTeam[1].ident = "p1a: Roaring Moon"
+		switched.events = [{"type": "switch", "pokemon": "p1a: Roaring Moon", "playerId": "p1", "details": "Roaring Moon, L100", "condition": "100/100", "eventSeq": 4}]
+		switched.events[0].toRef = {"species": "Roaring Moon", "displaySpecies": "Roaring Moon", "ident": "p1a: Roaring Moon"}
+		var returned := physical.duplicate(true)
+		returned.events = [{"type": "switch", "pokemon": "p1a: Dragonite", "playerId": "p1", "details": "Dragonite, L100", "condition": "100/100", "eventSeq": 5}]
+		returned.events[0].toRef = {"species": "Dragonite", "displaySpecies": "Dragonite", "ident": "p1a: Dragonite"}
+		var fainted := returned.duplicate(true)
+		fainted.requests.p2.side.pokemon[0].hp = 0
+		fainted.requests.p2.side.pokemon[0].condition = "0 fnt"
+		fainted.events = [{"type": "faint", "target": "p2a: Roaring Moon", "condition": "0 fnt", "eventSeq": 6}]
+		var terminal := fainted.duplicate(true)
 		terminal.state = {"turn": 2, "ended": true, "winner": "Player"}
-		terminal.events = [{"type": "win", "winner": "Player", "eventSeq": 3}]
-		assert(battle.setup_battle_replay({"schemaVersion": 1, "frames": [first, second, terminal]}))
+		terminal.events = [{"type": "win", "winner": "Player", "eventSeq": 7}]
+		var setup_started := Time.get_ticks_usec()
+		assert(battle.setup_battle_replay({"schemaVersion": 1, "frames": [first, second, physical, switched, returned, fainted, terminal]}))
+		round_evidence.replay_setup_ms = (Time.get_ticks_usec() - setup_started) / 1000.0
+		assert(battle.vs_panel_container.player_1_portrait.appearance_state.is_empty(), "Wild battles must not build hidden player portraits")
 		battle.replay_paused = false
+		action_frames.clear()
+		sample_tick = Time.get_ticks_usec()
+		sampling = true
 		await battle.play_replay_frame(battle.replay_controls.timeline, 1)
 		assert(battle.battle_state.get_active_player_pokemon("p2").hp == 82)
 		await process_frame
 		assert(stage.active)
+		await battle.play_replay_frame(battle.replay_controls.timeline, 2)
+		await battle.play_replay_frame(battle.replay_controls.timeline, 3)
+		await process_frame
+		await process_frame
+		assert(stage.identities[0] == "roaring-moon")
+		await battle.play_replay_frame(battle.replay_controls.timeline, 4)
+		await process_frame
+		await process_frame
+		assert(stage.identities[0] == "dragonite")
 		var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 		if not output.is_empty() and DisplayServer.get_name() != "headless":
 			DirAccess.make_dir_recursive_absolute(output)
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("client-3d.png"))
+		await battle.play_replay_frame(battle.replay_controls.timeline, 5)
+		await battle.play_replay_frame(battle.replay_controls.timeline, 6)
 		await battle.stop_battle_replay()
+		sampling = false
+		action_frames.sort()
+		round_evidence.actions_max_ms = action_frames[-1]
+		round_evidence.actions_p95_ms = action_frames[int(action_frames.size()*0.95)]
+		print("3D_ACTION_FRAME_MS max=", round_evidence.actions_max_ms, " p95=", round_evidence.actions_p95_ms)
 		settings.battle_presentation_mode = "2.5d"
 		var old_viewport: WeakRef = weakref(stage.viewport)
 		await process_frame
@@ -141,6 +214,15 @@ func _run() -> void:
 		assert(stage.actors == [null, null] and stage.pending_entries.is_empty())
 		assert(not battle.player_sprite_box.presentation_anchor.is_valid())
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 1)
+		# Cancel a fresh in-flight request, then let the detached drain finish.
+		stage._load_catalog(report)
+		stage._import_next_model()
+		assert(not stage.loading_path.is_empty())
+		stage._process(0.0)
+		assert(stage.loading_path.is_empty() and stage.pending_entries.is_empty())
+		for frame in 30:
+			await process_frame
+		assert(stage.packed.is_empty() and stage.viewport == null)
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_path
 	settings.battle_3d_camera_motion = old_camera
@@ -148,4 +230,24 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	print("BATTLE_3D_PRESENTATION_OK")
+	after_memory.append(OS.get_static_memory_usage())
+	round_evidence.static_bytes = OS.get_static_memory_usage()
+	round_evidence.video_bytes = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
+	evidence.append(round_evidence)
+	print("3D_AFTER_BATTLE_MEMORY ", after_memory)
+	runs += 1
+	if runs < 3 and not report.is_empty():
+		_run.call_deferred()
+		return
+	if after_memory.size() == 3:
+		assert(after_memory[2] - after_memory[1] < 1024 * 1024, "Repeated battle retained more than 1 MiB static memory")
+	var evidence_path := OS.get_environment("POKEAETHER_3D_ACCEPTANCE_REPORT")
+	if not evidence_path.is_empty():
+		var file := FileAccess.open(evidence_path, FileAccess.WRITE)
+		file.store_string(JSON.stringify(evidence, "\t"))
+		file.close()
+	var budget := OS.get_environment("POKEAETHER_3D_ACCEPTANCE_MAX_FRAME_MS").to_float()
+	if budget > 0 and DisplayServer.get_name() != "headless":
+		for item: Dictionary in evidence:
+			assert(item.load_max_ms < budget and item.actions_max_ms < budget and item.replay_setup_ms < budget, "Desktop frame budget exceeded; see acceptance report")
 	quit()

@@ -8487,6 +8487,9 @@ func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Co
 		return
 	if pokeball_summon_animation_player == null:
 		return
+	var desktop_stage := battle_stage.get_node_or_null("ExperimentalBattle3D")
+	if desktop_stage != null:
+		await desktop_stage.await_prepared()
 
 	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
 	var arena_rect: Rect2 = _get_battle_arena_global_rect()
@@ -17259,11 +17262,14 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 func _update_vs_panel_names() -> void:
 	if vs_panel_container != null:
 		_vs_panel_call("set_names", [_get_vs_player_name("p1"), _get_vs_player_name("p2")])
-		_vs_panel_call("set_player_appearances", [
-			_get_vs_player_appearance("p1"),
-			_get_vs_player_appearance("p2")
-		])
-		_vs_panel_call("set_trainer_portraits_visible", [_vs_panel_uses_player_portraits()])
+		var show_portraits := _vs_panel_uses_player_portraits()
+		_vs_panel_call("set_trainer_portraits_visible", [show_portraits])
+		# Hidden heads must not synchronously construct the world-avatar assets.
+		if show_portraits:
+			_vs_panel_call("set_player_appearances", [
+				_get_vs_player_appearance("p1"),
+				_get_vs_player_appearance("p2")
+			])
 
 
 func _vs_panel_uses_player_portraits() -> bool:
