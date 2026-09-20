@@ -17,6 +17,13 @@ PBR GLB `report.json`. The file chooser saves its path, so subsequent client
 launches need no environment variable. For developer testing only,
 `POKEAETHER_3D_STAGE_REPORT` supplies a fallback path when no path is configured.
 
+Selecting 3D alone does not select a model catalog. The battle now displays
+the actual fallback reason (no catalog selected, missing report, missing prepared
+model or unsupported battle situation), rather than only “preview unavailable”.
+Catalog errors remain visible even when supported Pokémon become active.
+If a developer test works but a normal launch does not, check the saved catalog
+path: tests may supply an environment variable that the regular client lacks.
+
 The report now needs a prepared companion (`report.json.runtime.json`). Run
 `tools/sprite_factory/prepare_battle_3d_runtime.gd` once through slot-env with
 `POKEAETHER_3D_STAGE_REPORT` pointing to the source report. It writes compressed

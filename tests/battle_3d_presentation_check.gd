@@ -37,11 +37,22 @@ func _run() -> void:
 	var stage = battle.battle_stage.get_node("ExperimentalBattle3D")
 	assert(stage.packed.is_empty() and stage.viewport == null and not stage.active)
 	settings.battle_presentation_mode = "3d"
+	var report := OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
+	OS.unset_environment("POKEAETHER_3D_STAGE_REPORT")
+	settings.battle_3d_catalog_path = ""
+	stage.set_combatant(0, "Dragonite")
+	stage.set_combatant(1, "Roaring Moon")
+	for frame in 4:
+		await process_frame
+	assert(not stage.active and stage.reason.contains("No 3D catalog selected"))
+	assert(stage.mode_label.text.contains("No 3D catalog selected"))
+	if not report.is_empty():
+		OS.set_environment("POKEAETHER_3D_STAGE_REPORT", report)
 	settings.battle_3d_catalog_path = "user://missing-battle-model-report.json"
 	await process_frame
 	await process_frame
 	assert(not stage.active and stage.packed.is_empty())
-	var report := OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
+	assert(stage.reason.contains("catalog not found"))
 	if not report.is_empty():
 		settings.battle_3d_catalog_path = report
 		battle.player_sprite_box.set_single_pokemon_species("Dragonite", "back", false)
