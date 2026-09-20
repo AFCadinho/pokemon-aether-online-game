@@ -61,6 +61,13 @@ func _run() -> void:
 	assert(bridge.log_selected and bridge.log_view.visible,"Every battle must initially show Battle Log")
 	assert(bridge.log_view.get_theme_stylebox("normal").bg_color.a < 0.7)
 	assert(panel.get_theme_stylebox("panel").bg_color.a < 0.7)
+	assert(bridge.calculator_button.get_global_rect().end.y <= bridge.primary_tabs.get_global_rect().position.y)
+	battle.calc_drawer.show()
+	await process_frame
+	assert(not bridge.primary_tabs.visible and not bridge.log_view.visible and not panel.visible)
+	battle.calc_drawer.hide()
+	await process_frame
+	assert(bridge.log_view.visible)
 	assert(not entry.has_focus(),"Showing chat must not steal focus")
 	await key(KEY_ENTER)
 	assert(entry.has_focus())

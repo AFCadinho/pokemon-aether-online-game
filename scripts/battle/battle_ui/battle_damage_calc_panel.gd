@@ -226,6 +226,7 @@ var species_scenarios: Dictionary = {}
 var forme_catalogs: Dictionary = {}
 var forme_menu_buttons: Dictionary = {}
 var active_inspector_tab := INSPECTOR_SET
+var immersive_details_open := false
 var selected_move_index := 0
 var move_scenarios: Dictionary = {}
 var pending_move_index := -1
@@ -592,7 +593,8 @@ func _render_your_damage_response(response: Dictionary) -> void:
 
 
 func _make_workspace_columns() -> Dictionary:
-	var workspace := HBoxContainer.new()
+	var immersive := has_meta("immersive_calculator")
+	var workspace: BoxContainer = VBoxContainer.new() if immersive else HBoxContainer.new()
 	workspace.name = "CalcdexWorkspace"
 	workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -604,6 +606,8 @@ func _make_workspace_columns() -> Dictionary:
 	overview.name = "CalcdexOverview"
 	overview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	overview.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if immersive:
+		overview.size_flags_vertical = Control.SIZE_FILL
 	overview.size_flags_stretch_ratio = 1.38
 	overview.clip_contents = true
 	overview.add_theme_constant_override("separation", 9)
@@ -613,6 +617,8 @@ func _make_workspace_columns() -> Dictionary:
 	inspector_panel.name = "CalcdexInspectorPanel"
 	inspector_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inspector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if immersive:
+		inspector_panel.size_flags_vertical = Control.SIZE_FILL
 	inspector_panel.size_flags_stretch_ratio = 1.0
 	inspector_panel.clip_contents = true
 	inspector_panel.add_theme_stylebox_override(
@@ -620,6 +626,22 @@ func _make_workspace_columns() -> Dictionary:
 		_make_stylebox(Color(SURFACE_CANVAS, 0.92), Color(BORDER_NEUTRAL, 0.92), 9, 12.0, 10.0)
 	)
 	workspace.add_child(inspector_panel)
+	if immersive:
+		var toggle := Button.new()
+		toggle.text = "Advanced settings ▾" if immersive_details_open else "Advanced settings ▸"
+		toggle.toggle_mode = true
+		toggle.button_pressed = immersive_details_open
+		toggle.custom_minimum_size.y = 34
+		toggle.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_RAISED, INTERACTION_ACCENT, 6, 10.0, 6.0))
+		toggle.add_theme_stylebox_override("hover", _make_stylebox(PROFILE_BG, INTERACTION_ACCENT, 6, 10.0, 6.0))
+		toggle.add_theme_stylebox_override("pressed", _make_stylebox(PROFILE_BG, INTERACTION_ACCENT, 6, 10.0, 6.0))
+		workspace.add_child(toggle)
+		workspace.move_child(toggle, inspector_panel.get_index())
+		inspector_panel.visible = immersive_details_open
+		toggle.toggled.connect(func(open: bool):
+			immersive_details_open = open
+			inspector_panel.visible = open
+			toggle.text = "Advanced settings ▾" if open else "Advanced settings ▸")
 	var inspector := VBoxContainer.new()
 	inspector.name = "CalcdexInspector"
 	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL

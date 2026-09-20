@@ -2911,6 +2911,10 @@ func _sync_action_panel_mode_visibility() -> void:
 	else:
 		_update_side_condition_ui(_get_display_field_effects())
 	if is_calc_mode:
+		if has_meta("immersive_battle_ui"):
+			_hide_party_hover()
+			_hide_move_hover()
+			_hide_pokemon_hover_card()
 		_update_calc_drawer_layout()
 	if is_calc_mode or is_bag_view:
 		battle_drawer_layer.move_to_front()
@@ -3017,6 +3021,15 @@ func _queue_calc_drawer_layout_update() -> void:
 
 func _update_calc_drawer_layout() -> void:
 	if not is_instance_valid(calc_drawer) or not is_instance_valid(battle_frame):
+		return
+	if has_meta("immersive_battle_ui"):
+		var frame_bounds := battle_frame.get_global_rect()
+		var inverse := battle_drawer_layer.get_global_transform().affine_inverse()
+		var top_left := inverse * frame_bounds.position
+		var bottom_right := inverse * frame_bounds.end
+		calc_drawer.position = top_left + Vector2(16,16)
+		calc_drawer.size = bottom_right - top_left - Vector2(32,32)
+		_update_calc_timer_dock_layout()
 		return
 	var frame_rect: Rect2 = battle_frame.get_global_rect()
 	var drawer_layer_inverse: Transform2D = battle_drawer_layer.get_global_transform().affine_inverse()
