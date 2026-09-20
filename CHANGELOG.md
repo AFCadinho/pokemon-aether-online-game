@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Aether Vanguard Leader now explains how the Guild training money pool and participant shares are calculated.
+
 - The Aether Vanguard Leader now offers a choice to challenge a Guild or read how Guild training and its daily reward work.
 
 - Corrected transparent Pokémon edges in Summary and Pokédex previews.
