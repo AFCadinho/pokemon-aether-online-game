@@ -52,6 +52,23 @@ trees and Pokémon retain their shadows. Shadow projection assumes this fixed
 neutral sun direction; revisit the scenery selection if that rig ever changes.
 This is a review adaptation, not final art direction.
 
+A winding dirt trail runs behind the clearing (`z = -18 + 2.3*sin(0.12*x)`).
+It does not connect to the arena: a broad band of tall grass separates them.
+The trail uses a second in-memory terrain texture asset, reusing purchased ground
+detail with a dirt tint and feathered control-map blending. Vegetation is removed
+only along the narrow trail; source resources are never saved.
+
+The preview calibrates actor elevation from posed mesh vertices over the complete
+idle clip, sampled at 60 Hz after scale/facing placement. A fixed upward correction
+keeps the lowest sampled point 0.025 units above the flat ground, without per-frame
+bobbing correction or species overrides. Roaring Moon previously reached -0.163
+units below ground; measured lift is 0.188. Dragonite gets only the 0.025 clearance.
+This is review-only startup calibration, not a production loading strategy: bake
+and cache grounding metadata in asset preparation before integration. Other action
+contact/trajectory semantics and future ground-walking models need separate checks;
+idle clearance does not prove every attack/faint pose is free from penetration.
+The generic base review exposes an optional placement hook, otherwise unchanged.
+
 This reuses the isolated review's double-environment HDR pass, not a production
 arena architecture. Resolve its bounded terrain/occluder representation before
 shipping. Native caches/resources and purchase assets remain local.
@@ -59,9 +76,11 @@ shipping. Native caches/resources and purchase assets remain local.
 ## Focused evidence
 
 Godot 4.6.2 Forward+, RTX 3070 Laptop GPU, 1280x720 MSAA4. Final smoke run:
-`slot-c/.tmp/temperate-capture-06`: four orbit captures, seven action-start checks,
+`slot-c/.tmp/temperate-route-03`: four orbit captures, seven action-start checks,
 height assertions for the clearing and both spawns, both viewports freed on exit.
-The default view is reviewed for visible tall grass surrounding the shared circle.
+The default view confirms tall grass around the shared circle, a separate background
+trail, and the raised Roaring Moon. Idle minimum-height and route texture assertions
+pass. Preparation unit tests: 2 passed; `git diff --check` passed.
 No script/runtime errors; bundled Terrain3D emits deprecation and editor-texture
 warnings. See the capture directory's metrics for this run.
 This short run is not a 60-FPS acceptance or first-load benchmark.

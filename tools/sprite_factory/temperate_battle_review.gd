@@ -5,6 +5,68 @@ const BLEND_RADIUS := 9.0
 const PATCH_RADIUS := 6.0
 var ground_height := 0.0
 
+func _place_actor(actor: Node3D, animation_player: AnimationPlayer) -> void:
+	# Review-only calibration. Sample posed geometry once, not the bind-pose
+	# AABB or model origin. Production should cache this during asset preparation.
+	assert(animation_player.has_animation("idle"))
+	var meshes := actor.find_children("*", "MeshInstance3D", true, false)
+	var skeletons := actor.find_children("*", "Skeleton3D", true, false)
+	var duration := animation_player.get_animation("idle").length
+	var frames := maxi(1, ceili(duration * 60.0))
+	var minimum := INF
+	animation_player.play("idle")
+	animation_player.pause()
+	for frame in range(frames + 1):
+		animation_player.seek(minf(frame / 60.0, duration), true)
+		for skeleton: Skeleton3D in skeletons:
+			skeleton.force_update_all_bone_transforms()
+		for mesh: MeshInstance3D in meshes:
+			if mesh.mesh == null or not mesh.is_visible_in_tree():
+				continue
+			var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
+			for surface in posed.get_surface_count():
+				for vertex: Vector3 in posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
+					minimum = minf(minimum, (mesh.global_transform * vertex).y)
+	assert(is_finite(minimum))
+	var lift := maxf(0.0, ground_height + 0.025 - minimum)
+	actor.position.y += lift
+	animation_player.seek(0.0, true)
+	assert(minimum + lift >= ground_height + 0.024)
+	print("TEMPERATE_GROUND_OK actor=", actor.name, " idle_min=", minimum - ground_height, " lift=", lift)
+
+func _route_z(x: float) -> float:
+	return -18.0 + 2.3 * sin(x * 0.12)
+
+func _paint_route(terrain) -> void:
+	# Reuse the purchased ground detail with a warm dirt tint, no new bitmap.
+	var dirt = terrain.assets.get_texture(0).duplicate()
+	dirt.name = "Review route dirt"
+	dirt.albedo_color = Color("b59b70")
+	terrain.assets.set_texture(1, dirt)
+	for x in range(-45, 46):
+		for z in range(-23, -12):
+			var pos := Vector3(x, 0, z)
+			var route_distance := absf(z - _route_z(x))
+			var blend := 1.0 - smoothstep(0.8, 1.8, route_distance)
+			if blend <= 0.0 or not is_finite(terrain.data.get_height(pos)):
+				continue
+			terrain.data.set_control_base_id(pos, 0)
+			terrain.data.set_control_overlay_id(pos, 1)
+			terrain.data.set_control_blend(pos, blend)
+			terrain.data.set_control_auto(pos, false)
+	for step in range(-90, 91):
+		var x := step * 0.5
+		_clear_grass(terrain, Vector3(x, 0, _route_z(x)), 1.65)
+	terrain.data.update_maps()
+	assert(terrain.data.get_control_overlay_id(Vector3(0, 0, -18)) == 1)
+	print("TEMPERATE_ROUTE_OK")
+
+func _clear_grass(terrain, pos: Vector3, radius: float) -> void:
+	terrain.instancer.remove_instances(pos, {
+		"asset_id": 0, "modifier_shift": true, "modifier_alt": false,
+		"size": radius / 0.4,
+		"strength": 100.0, "slope": Vector2(0, 90)})
+
 func _credit_text() -> String:
 	return "FancifulCrow · Temperate Forest · isolated battle review\nFlat clearing · neutral Pokémon lighting · no gameplay changes"
 
@@ -77,10 +139,8 @@ func _flatten(terrain) -> void:
 	terrain.data.update_maps()
 	# Terrain3D 1.0.1 uses 0.4 * size as removal radius, not size / 2.
 	# One shared circular arena: retain all grass outside its boundary.
-	terrain.instancer.remove_instances(Vector3.ZERO, {
-		"asset_id": 0, "modifier_shift": true, "modifier_alt": false,
-		"size": PATCH_RADIUS / 0.4,
-		"strength": 100.0, "slope": Vector2(0, 90)})
+	_clear_grass(terrain, Vector3.ZERO, PATCH_RADIUS)
+	_paint_route(terrain)
 	terrain.instancer.update_transforms(AABB(Vector3(-9, -100, -9), Vector3(18, 200, 18)))
 	for pos in [Vector3.ZERO, Vector3(-2.8, 0, 1.5), Vector3(2.8, 0, -1.5)]:
 		assert(absf(terrain.data.get_height(pos) - ground_height) < 0.001)
