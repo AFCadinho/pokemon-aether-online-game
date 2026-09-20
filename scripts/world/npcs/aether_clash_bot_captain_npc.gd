@@ -24,6 +24,9 @@ func interact_with_player(_player: Node2D) -> void:
 		if action == "explain":
 			await show_dialogue(_training_explanation(), display_name)
 			continue
+		if action == "money_reward":
+			await show_dialogue(_money_reward_explanation(), display_name)
+			continue
 		if action != "challenge":
 			interaction_in_flight = false
 			return
@@ -70,6 +73,7 @@ func _show_training_choice() -> String:
 	var choice := OptionButton.new()
 	choice.add_item(LocalizationManager.text("ui.clash_bot.choice_challenge"))
 	choice.add_item(LocalizationManager.text("ui.clash_bot.choice_explain"))
+	choice.add_item(LocalizationManager.text("ui.clash_bot.choice_money_reward"))
 	choice.custom_minimum_size = Vector2(0, 42)
 	dialog.add_custom_control(choice)
 	dialog.style_option_button(choice)
@@ -79,7 +83,9 @@ func _show_training_choice() -> String:
 		LocalizationManager.text("ui.clash_bot.choice_continue"),
 		LocalizationManager.text("ui.clash_bot.choice_close")
 	)
-	dialog.confirmed.connect(func(): training_choice_resolved.emit("challenge" if choice.selected == 0 else "explain"), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(func(): training_choice_resolved.emit([
+		"challenge", "explain", "money_reward"
+	][clampi(choice.selected, 0, 2)]), CONNECT_ONE_SHOT)
 	dialog.canceled.connect(func(): training_choice_resolved.emit("close"), CONNECT_ONE_SHOT)
 	dialog.popup_centered(Vector2i(540, 300))
 	var action: String = await training_choice_resolved
@@ -93,6 +99,15 @@ func _training_explanation() -> Array[String]:
 		LocalizationManager.text("ui.clash_bot.explain_2"),
 		LocalizationManager.text("ui.clash_bot.explain_3"),
 		LocalizationManager.text("ui.clash_bot.explain_4"),
+	]
+
+
+func _money_reward_explanation() -> Array[String]:
+	return [
+		LocalizationManager.text("ui.clash_bot.money_explain_1"),
+		LocalizationManager.text("ui.clash_bot.money_explain_2"),
+		LocalizationManager.text("ui.clash_bot.money_explain_3"),
+		LocalizationManager.text("ui.clash_bot.money_explain_4"),
 	]
 
 

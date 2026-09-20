@@ -95,8 +95,10 @@ func _ready() -> void:
 	_check(captain.portrait_id == "showdown_veteran_gen6", "Vanguard Leader uses the Veteran dialogue portrait")
 	_check(captain.npc_sprite_frames.resource_path.ends_with("veteran_m_frames.tres"), "Vanguard Leader uses the Veteran overworld sprite")
 	var explanation: Array = captain.call("_training_explanation")
+	var money_explanation: Array = captain.call("_money_reward_explanation")
 	_check(captain.has_signal("training_choice_resolved"), "Vanguard Leader offers a training action choice")
 	_check(explanation.size() == 4 and not explanation.has(""), "Vanguard Leader explains training in four clear steps")
+	_check(money_explanation.size() == 4 and not money_explanation.has(""), "Vanguard Leader explains money rewards in four clear steps")
 	_check(not captain.call("_prefetches_dialogue_metadata_on_approach"), "Captain skips unrelated metadata")
 	_check(not captain.call("_loads_pickpocket_profile_from_npc_metadata"), "Captain cannot be pickpocketed")
 	_check(captain.get("mugshot") != null, "Captain resolves an existing portrait")
@@ -116,7 +118,7 @@ func _ready() -> void:
 	lobby.free()
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
-		for key: String in ["title", "intro", "choice_prompt", "choice_challenge", "choice_explain", "choice_continue", "choice_close", "explain_1", "explain_2", "explain_3", "explain_4", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "npc_too_far", "presence_unavailable", "count_limit", "request_conflict"]:
+		for key: String in ["title", "intro", "choice_prompt", "choice_challenge", "choice_explain", "choice_money_reward", "choice_continue", "choice_close", "explain_1", "explain_2", "explain_3", "explain_4", "money_explain_1", "money_explain_2", "money_explain_3", "money_explain_4", "permission", "unavailable", "start", "close", "count", "format", "difficulty", "ai4", "intermediate", "ai5", "mix_v1", "spectators", "public", "guilds_only", "accepted", "pending", "npc_required", "npc_too_far", "presence_unavailable", "count_limit", "request_conflict"]:
 			_check(not str(catalog.get("ui.clash_bot." + key, "")).is_empty(), "%s translates %s" % [locale, key])
 		_check(not str(catalog.get("ui.clash_bot.ai5", "")).contains("("), "%s keeps the Hard label concise" % locale)
 		_check(str(catalog.get("ui.clash_bot.reward_hint", "")).contains("200"), "%s explains the participant Aetherite reward" % locale)
