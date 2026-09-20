@@ -137,15 +137,20 @@ only VRAM-compressed/Basis modes reduce GPU memory. It also warns that VRAM
 compression can show noticeable 2D artifacts. Those documented tradeoffs match
 the measurements here.
 
-## Recommended next step
+## Review decision (2026-09-20)
 
-Create one human review build for **trimmed WebP Q95 only**, using the existing
-four species and all actions at 1:1 playback in the actual battle, Summary, and
-Pokédex views. Do not change the default. If that review finds no visible color,
-edge, or alpha regression, use this representation as the input to the later
-pack/delivery design. If it fails review, adopt trimmed lossless WebP and accept
-that distribution still needs a separate packaging strategy because lossless
-format work alone does not reach 5x.
+The in-game human review accepted **trimmed WebP Q95** as the representation to
+feed into later pack/delivery work. Battle playback showed no visible
+regression. A moving block pattern initially seen in Summary was reproduced
+with the original PNG catalog too and was traced to nearest sampling of the
+completed preview SubViewport at fractional window scales. After that separate
+composition bug was corrected, the pattern disappeared without changing the
+Q95 assets.
+
+This accepts a distribution input format, not a runtime default or delivery
+architecture. The source masters remain 512x512 RGBA at native 60 FPS, human
+artistic approval remains required, and the current fallback/default selection
+is unchanged.
 
 ## Reproduction
 

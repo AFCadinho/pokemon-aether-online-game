@@ -195,8 +195,8 @@ resident for the process lifetime. PNG decoding is synchronous on first use and
 can hitch. These are known V1 optimization follow-ups, not reasons to reduce
 quality. Desktop local review is validated here; Android/web packaging and
 memory budgets need separate work before distribution. The four-species
-distribution-format measurements, tooling, visual comparisons, and guarded
-recommendation are documented in
+distribution-format measurements, tooling, visual comparisons, and accepted
+trimmed-WebP-Q95 distribution input are documented in
 [DISTRIBUTION_FORMAT_BENCHMARK.md](DISTRIBUTION_FORMAT_BENCHMARK.md); that
 benchmark does not change the runtime default.
 The action-routing checks exercise the single-battle SpriteBox path used by the
