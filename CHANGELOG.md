@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a separate Temperate Forest battle preview with a flat, vegetation-free clearing for reviewing Pokémon animations and camera angles.
+
 - Added a separate full-window forest preview for reviewing Dragonite and Roaring Moon before changing the battle arena or interface.
 
 - Prepared desktop 3D Pokémon can now use the reviewed richer material colors and highlights with fixed neutral lighting, including during attacks and switching.

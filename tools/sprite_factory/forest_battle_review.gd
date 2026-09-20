@@ -86,6 +86,16 @@ func _resize() -> void:
 	if is_instance_valid(stage):
 		stage.viewport.size = Vector2i(root.size)
 
+func _credit_text() -> String:
+	return "Forest: Jonnie Gieringer (MIT) · rocks: Michael Hooper (CC BY 4.0)\nNeutral lighting + approved Pokémon materials · isolated review, no gameplay"
+
+func _ground_position(pos: Vector3) -> Vector3:
+	var query := PhysicsRayQueryParameters3D.create(pos+Vector3.UP*100, pos-Vector3.UP*100)
+	var hit := stage.world.get_world_3d().direct_space_state.intersect_ray(query)
+	if not hit.is_empty():
+		pos.y = hit.position.y
+	return pos
+
 func _make_forest() -> Node3D:
 	var scene: Node3D = load("res://scenes/levels/forest.tscn").instantiate()
 	scene.position = Vector3(-12, 0, -8)
@@ -156,10 +166,7 @@ func _run() -> void:
 		stage.actors[index] = actor
 		stage.world.add_child(actor)
 		actor.position = Vector3(-2.8, 0, 1.5) if index == 0 else Vector3(2.8, 0, -1.5)
-		var query := PhysicsRayQueryParameters3D.create(actor.position+Vector3.UP*100, actor.position-Vector3.UP*100)
-		var hit := stage.world.get_world_3d().direct_space_state.intersect_ray(query)
-		if not hit.is_empty():
-			actor.position.y = hit.position.y
+		actor.position = _ground_position(actor.position)
 		actor.scale = Vector3.ONE*(1.0 if index == 0 else 0.65)
 		var facing := -actor.position
 		actor.rotation.y = atan2(facing.x, facing.z)
@@ -192,7 +199,7 @@ func _run() -> void:
 	row.add_child(reset)
 	reset.pressed.connect(func(): angle=0.55; elevation=0.28; distance=12; _camera())
 	var credit := Label.new()
-	credit.text = "Forest: Jonnie Gieringer (MIT) · rocks: Michael Hooper (CC BY 4.0)\nNeutral lighting + approved Pokémon materials · isolated review, no gameplay"
+	credit.text = _credit_text()
 	box.add_child(credit)
 	var relay := InputRelay.new()
 	relay.callback = _input_event
