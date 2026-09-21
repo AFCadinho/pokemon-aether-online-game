@@ -190,6 +190,26 @@ class IdentityTests(unittest.TestCase):
         self.assertEqual('verified', validate_entry(row)['status'])
         self.assertFalse(row['review_approved'])
 
+    def test_unselected_rare_material_is_bound_but_not_normal_input(self):
+        row = self.inventory()
+        rare = Path(row['model_dir']) / (row['identity'] + '_rare.trmtr')
+        rare.write_bytes(b'unselected rare material from another revision')
+        catalog = read_catalog(self.catalog)
+        row['identity_evidence'] = bind(row, row['identity_evidence']['identity'], catalog,
+                                       self.models, self.motions, self.species / 'mareanie.json')
+        self.assertEqual('verified', validate_entry(row)['status'])
+        rare.write_bytes(b'changed since inventory')
+        with self.assertRaisesRegex(ValueError, 'changed'):
+            validate_entry(row)
+
+    def test_selected_material_mismatch_still_fails_before_import(self):
+        row = self.inventory()
+        material = Path(row['model_dir']) / (row['identity'] + '.trmtr')
+        material.write_bytes(b'mixed normal material')
+        with self.assertRaisesRegex(ValueError, 'differs from ROMFS'):
+            bind(row, row['identity_evidence']['identity'], read_catalog(self.catalog),
+                 self.models, self.motions, self.species / 'mareanie.json')
+
     def test_stale_and_relabelled_proof_fail(self):
         row = self.inventory()
         for key, value in [('species', 'magearna'), ('form', 9), ('gender_code', 1),

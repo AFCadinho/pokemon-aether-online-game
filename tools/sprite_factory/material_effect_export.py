@@ -1,11 +1,11 @@
-"""Export source-driven affine UV/displacement effect profiles, no species rules."""
+"""Export source-driven UV/displacement effect profiles, no species rules."""
 import hashlib
 import json
 import math
 from pathlib import Path
-from material_profiles import classify, LAYERED, UNLIT
+from material_profiles import classify, LAYERED, UNLIT_UV2
 from scvi_material_probe import inspect_materials
-from scvi_uv_probe import read_uv_tracks, validate_loop, affine_channel
+from scvi_uv_probe import read_uv_tracks, validate_loop
 
 
 def prepare(job):
@@ -27,20 +27,28 @@ def prepare(job):
             data['tracks'] = [t for t in data['tracks'] if t['material'] == material['name']]
             if not data['tracks']:
                 continue
-            validate_loop(data)
-            tracks = {t['parameter']: [affine_channel(c, data['frames']-1) for c in t['channels']] for t in data['tracks']}
+            from effect_uv_samples import sample_tracks
+            samples = sample_tracks(data)
+            tracks = {name: [[frames[0][i], frames[-1][i]] for i in range(4)] for name, frames in samples.items()}
             if set(tracks) != {'UVScaleOffset', 'UVScaleOffset3'}:
                 raise ValueError('Effect needs both reviewed UV tracks')
             for values in tracks.values():
                 # Constant scale and integer offset cycles ensure a seamless repeat.
                 if any(a != b or a <= 0 for a,b in values[:2]) or any(abs((b-a)-round(b-a)) > 1e-5 for a,b in values[2:]):
                     raise ValueError('Nonperiodic effect UV loop')
-            candidates.append((path, {'loop_seconds': (data['frames']-1)/data['fps'], 'tracks': tracks}))
+            payload = {'loop_seconds': (data['frames']-1)/data['fps'], 'tracks': tracks}
+            try:
+                validate_loop(data)
+            except ValueError:
+                # Keep existing affine exports on the exact v1 shader. Dense
+                # source-key playback has its own versioned runtime shader.
+                payload['uv_samples'] = samples
+            candidates.append((path, payload))
         if not candidates or len({json.dumps(c[1], sort_keys=True) for c in candidates}) != 1:
             raise ValueError('Missing or ambiguous auxiliary effect loop: ' + material['name'])
         record = {'material': material['name'], 'profile': profile['profile'], **candidates[0][1],
                   'motion_sources': [{'path': str(p), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p,_ in candidates],
-                  'use_uv2': profile['profile'] == LAYERED,
+                  'use_uv2': profile['profile'] in (LAYERED, UNLIT_UV2),
                   'height': material['floats']['DisplacementHeight'],
                   'intensity': material['floats']['EmissionIntensity'],
                   'alpha_cutoff': material['floats']['DiscardValue'] if profile['alpha_test'] else 0.0}

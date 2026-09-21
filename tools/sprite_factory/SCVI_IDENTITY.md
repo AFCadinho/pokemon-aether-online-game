@@ -16,8 +16,10 @@ Dex number. The first 100-model batch made that mistake for some entries.
    is guessed from resource filenames. Unknown ID coverage fails.
 3. The requested species slug and National Dex number come from the local backend
    species JSON. That exact file and its hash are attached to the evidence.
-4. Model/config/material-table and binary mesh/skeleton/material resources must
-   match the selected ROMFS resources byte-for-byte. Texture PNGs and the complete
+4. Model/config/material-table, binary mesh/skeleton and the selected normal
+   material resources must match ROMFS byte-for-byte. Unselected sibling material
+   files are hash-bound but not treated as inputs to the normal importer.
+   Texture PNGs and the complete
    selected model directory are hash-bound for reproducibility; PNG/BNTX pixel
    parity is a separate visual/material question.
    TRMDL mesh, skeleton and default-material references are also parsed and must
@@ -85,6 +87,9 @@ another resource ID, or may be unavailable in this catalog. Counts from the
 first run therefore cannot be treated as counts of correctly identified species.
 
 ## Completed same-cohort run
+
+These are the original gated-run results. The subsequent incremental repair
+results and remaining holds are in [SCVI_IDENTITY_HARDENING.md](SCVI_IDENTITY_HARDENING.md).
 
 The local catalog has 680 non-sentinel form/gender rows covering 478 National
 Dex species. Its SHA-256 is

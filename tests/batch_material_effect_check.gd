@@ -49,6 +49,33 @@ func _init() -> void:
 	response.free()
 	copy.free()
 	restored.free()
+	var sampled := manifest.duplicate(true)
+	sampled.records[0].profile = "scvi_unlit_layered_displacement_uv2_v1"
+	sampled.records[0].use_uv2 = true
+	sampled.records[0].uv_samples = {"UVScaleOffset": [[1,1,0,0],[1,1,0.75,0],[1,1,-1,0]],
+		"UVScaleOffset3": [[1,1,0,0],[1,1,0.25,0.5],[1,1,2,2]]}
+	node = actor()
+	assert(pack.apply(node, sampled, "fixture"), pack.failure)
+	assert(Effect.valid(node.get_active_material(0)))
+	assert(node.get_active_material(0).get_shader_parameter("uv_samples").get_image().get_pixel(1, 0).b == 0.75)
+	saved = PackedScene.new()
+	assert(saved.pack(node) == OK)
+	assert(ResourceSaver.save(saved, scene_path, ResourceSaver.FLAG_COMPRESS) == OK)
+	assert(ResourceLoader.get_dependencies(scene_path).is_empty())
+	node.free()
+	restored = ResourceLoader.load(scene_path, "", ResourceLoader.CACHE_MODE_REPLACE).instantiate()
+	assert(Effect.valid(restored.get_active_material(0)))
+	restored.free()
+	for kind in ["length", "nan", "endpoint", "scale"]:
+		var invalid := sampled.duplicate(true)
+		match kind:
+			"length": invalid.records[0].uv_samples.UVScaleOffset.pop_back()
+			"nan": invalid.records[0].uv_samples.UVScaleOffset[1][2] = NAN
+			"endpoint": invalid.records[0].uv_samples.UVScaleOffset[2][2] = 0
+			"scale": invalid.records[0].uv_samples.UVScaleOffset[1][0] = 2
+		node = actor()
+		assert(not pack.apply(node, invalid, "fixture"), kind)
+		node.free()
 	for kind in ["glb", "texture", "duplicate", "profile", "uv_set", "nan", "zero_loop", "tracks", "endpoint", "cycle", "scale", "material"]:
 		var bad := manifest.duplicate(true)
 		match kind:

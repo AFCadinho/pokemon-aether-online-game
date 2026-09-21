@@ -138,6 +138,14 @@ def main(job):
         if path is not None:
             import_animation(bpy.context, path, False, 0, False, False)
     actions = {action.name: action for action in bpy.data.actions}
+    from source_clip_timing import preserve_constant_pose
+    fixed_pose_durations = []
+    for category, path in job['motions'].items():
+        if path:
+            native = AnimationT.InitFromPackedBuf(bytearray(Path(path).read_bytes()), 0)
+            if preserve_constant_pose(actions[Path(path).stem], native.info,
+                                      bpy.context.scene.render.fps / bpy.context.scene.render.fps_base):
+                fixed_pose_durations.append(category)
     facial_baseline = apply_facial_baseline(rig, actions, job, AnimationT)
     actions = {action.name: action for action in bpy.data.actions}
     eyelid_names = {bone.name for bone in rig.pose.bones if "eyelid" in bone.name.lower()}
@@ -202,6 +210,7 @@ def main(job):
     import hashlib
     report = {"species": job["species"], "identity": identity, "variant": job["variant"],
               "prepared_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+              "native_fixed_pose_durations": fixed_pose_durations,
               "blender": bpy.app.version_string, "rig": rig.name,
               "meshes": [obj.name for obj in bpy.data.objects if obj.type == "MESH"],
               "materials": [mat.name for mat in bpy.data.materials],
