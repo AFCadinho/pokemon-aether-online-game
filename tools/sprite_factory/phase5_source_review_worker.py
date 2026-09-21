@@ -19,8 +19,14 @@ def run(job):
         raise ValueError('Source changed before review')
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
     report = inspect()
+    if job.get('material_probe_policy'):
+        from scvi_material_probe import POLICY, apply_probe
+        if job['material_probe_policy'] != POLICY:
+            raise ValueError('Unknown material probe policy')
+        report['material_probe'] = apply_probe(job['material_probe_metadata'], job.get('displacement_probe', False))
     report.update(species=job['species'], source_sha256=job['source_sha256'],
-                  scope='source_only_not_runtime_approval',
+                  scope=('experimental_opacity_probe_not_runtime_approval' if job.get('material_probe_policy')
+                         else 'source_only_not_runtime_approval'),
                   pose_initialization='rest_before_each_clip', poses=[])
     output = Path(job['output'])
     rigs = [obj for obj in bpy.context.scene.objects if obj.type == 'ARMATURE']

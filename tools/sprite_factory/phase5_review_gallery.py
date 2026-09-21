@@ -21,8 +21,9 @@ def build(output):
         draw = ImageDraw.Draw(sheet)
         y = (index % 5) * 230 + 10
         draw.text((10, y), entry['species'], fill='white')
-        draw.text((10, y + 22), 'SOURCE ONLY\nNot battle approved', fill='#ffd27b')
-        row = '<tr><th>' + html.escape(entry['species']) + '<br>SOURCE ONLY</th>'
+        label = 'EXPERIMENTAL PROBE' if catalog.get('material_probe') else 'SOURCE ONLY'
+        draw.text((10, y + 22), label + '\nNot battle approved', fill='#ffd27b')
+        row = '<tr><th>' + html.escape(entry['species']) + '<br>' + label + '</th>'
         report = json.loads(Path(entry['report']).read_text()) if entry.get('report') else {}
         if report:
             dimensions = [round(b - a, 3) for a, b in zip(*report['review_bounds'])]
@@ -44,7 +45,9 @@ def build(output):
         sheet.save(output / f'contact-{index + 1}.png')
     (output / 'index.html').write_text('<!doctype html><meta charset="utf-8"><title>Phase 5 source review</title>'
         '<style>body{background:#101822;color:#eee;font:16px sans-serif}td,th{padding:8px;border:1px solid #456}a{color:#8df}</style>'
-        '<h1>Phase 5 — source-only review</h1><p>Normal variants. Auto-fit cameras; images do not show relative battle scale. '
+        '<h1>Phase 5 — source-only review</h1>' +
+        ('<p>EXPERIMENTAL MATERIAL PROBE. Not original source shading. Displacement, UV motion and shader parity remain unapproved.</p>'
+         if catalog.get('material_probe') else '') + '<p>Normal variants. Auto-fit cameras; images do not show relative battle scale. '
         'Original coordinates preserved. No grounding correction. Source materials, not Godot material conversion. '
         'No model is approved by this report.</p><table>' + ''.join(rows) + '</table>')
 
