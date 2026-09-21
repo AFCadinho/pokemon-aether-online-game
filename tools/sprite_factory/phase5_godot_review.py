@@ -39,9 +39,6 @@ def prepare_entries(catalog):
     result = []
     for entry in catalog['entries']:
         name = entry['species']
-        if name == 'gastly':
-            result.append({'species': name, 'status': 'held', 'reason': 'Unresolved smoke shader'})
-            continue
         if entry['status'] != 'source_review_only':
             raise ValueError('Source review unavailable: ' + name)
         report_path = Path(entry['report'])
@@ -54,11 +51,21 @@ def prepare_entries(catalog):
         digest = hashlib.sha256(Path(job['source']).read_bytes()).hexdigest()
         if digest != job['source_sha256'] or digest != review['source_sha256']:
             raise ValueError('Stale source: ' + name)
+        from material_profiles import read_profiles, unsupported
+        if job.get('material_source'):
+            profiles = read_profiles(job['material_source'], job['material_source_sha256'])
+            if unsupported(profiles):
+                result.append({'species': name, 'status': 'held',
+                               'reason': 'Unsupported material profiles', 'material_profiles': profiles})
+                continue
+        elif Path(job['source']).with_name('import.json').exists():
+            raise ValueError('Imported source needs material provenance; rerun source review')
         actions = review['review_mapping']
         if not actions.get('idle') or set(actions) - REQUIRED:
             raise ValueError('Invalid review action mapping')
         result.append({'species': name, 'status': 'pending', 'source': job['source'],
                        'source_sha256': digest, 'actions': actions,
+                       **{k: job[k] for k in ('material_source', 'material_source_sha256') if k in job},
                        'missing_actions': sorted(REQUIRED - actions.keys())})
     return result
 
@@ -93,6 +100,8 @@ def main():
                    '--filesystem=' + str(Path(entry['source']).parent) + ':ro',
                    'org.blender.Blender', '--background', '--factory-startup', '--disable-autoexec',
                    '--python-exit-code', '1', '--python', str(worker), '--', str(job_path)]
+        if entry.get('material_source'):
+            command.insert(5, '--filesystem=' + str(Path(entry['material_source']).parent) + ':ro')
         try:
             with (directory / 'export.log').open('w') as log:
                 subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=600, check=True)

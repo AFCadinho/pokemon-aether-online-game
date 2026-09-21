@@ -49,6 +49,12 @@ def run_entry(entry, args):
             raise ValueError('No source candidate')
         job = {'species': species, 'source': str(source), 'output': str(directory),
                'actions': actions, 'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest()}
+        if getattr(args, 'animation_bank', None) is not None:
+            job['animation_bank'] = args.animation_bank
+        if entry['review_route'] == 'scvi_candidate':
+            material_path = Path(entry['model_dir']) / (entry['identity'] + '.trmtr')
+            job['material_source'] = str(material_path)
+            job['material_source_sha256'] = hashlib.sha256(material_path.read_bytes()).hexdigest()
         if getattr(args, 'layer_mask_probe', False):
             from scvi_material_probe import inspect_materials, eligible, POLICY
             job['material_probe_policy'] = POLICY
@@ -110,6 +116,8 @@ def main():
     for name in ('inventory', 'model-root', 'motion-root', 'importer', 'python-deps', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--prepared-from', type=Path, help='Read-only reuse of this tool\'s existing imports')
+    parser.add_argument('--animation-bank', type=int, choices=range(10),
+                        help='Explicit numeric legacy action bank for the whole review (no cross-bank fallback)')
     parser.add_argument('--layer-mask-probe', action='store_true',
                         help='Experimental opacity-only A/B review; never approves shader parity')
     parser.add_argument('--displacement-probe', action='store_true',

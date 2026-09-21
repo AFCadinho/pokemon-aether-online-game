@@ -92,11 +92,15 @@ def main():
         directory.mkdir()
         job = json.loads((args.normal / species / 'job.json').read_text())
         job.update(source=str(shiny), source_sha256=hashlib.sha256(shiny.read_bytes()).hexdigest(), output=str(directory))
+        rare_material = Path(original['model_dir']) / (original['identity'] + '_rare.trmtr')
+        job.update(material_source=str(rare_material),
+                   material_source_sha256=hashlib.sha256(rare_material.read_bytes()).hexdigest())
         job_path = directory / 'job.json'
         job_path.write_text(json.dumps(job, indent=2))
         worker = Path(__file__).with_name('phase5_godot_export_worker.py').resolve()
         command = ['flatpak', 'run', '--unshare=network', '--nofilesystem=host',
             '--filesystem=' + str(output), '--filesystem=' + str(worker.parent) + ':ro',
+            '--filesystem=' + str(rare_material.parent) + ':ro',
             'org.blender.Blender', '--background', '--factory-startup', '--disable-autoexec',
             '--python-exit-code', '1', '--python', str(worker), '--', str(job_path)]
         with (directory / 'export.log').open('w') as log:
