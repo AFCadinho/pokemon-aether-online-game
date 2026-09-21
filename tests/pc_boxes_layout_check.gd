@@ -84,6 +84,7 @@ func _init() -> void:
 		_check(values is Dictionary and not str((values as Dictionary).get("ui.storage.move.coop_party_full", "")).is_empty(),
 			"Co-op storage limit has a %s translation" % locale)
 	_check(source.contains("PokemonStorageService.release_pokemon("), "Storage revamp preserves releasing Pokémon")
+	_check(source.contains('{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")}'), "Escape closes Pokémon Storage before opening Settings")
 	_check(source.contains('BackendErrorLocalizationService.error_code(result) == "starter_pokemon_protected"'), "Storage recognizes a protected starter release rejection")
 	_check(source.contains('BackendErrorLocalizationService.message(\n\t\t\tresult,\n\t\t\t"ui.storage.release.failed"'), "Storage shows the localized backend reason when release is rejected")
 	_check(source.contains("_open_pc_box_pokemon_summary("), "Storage revamp preserves Pokémon summaries")
