@@ -60,6 +60,7 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 var battle_animations := true
 var battle_presentation_mode := "2.5d"
 var battle_3d_catalog_path := ""
+var _manual_model_catalog_this_session := false
 var battle_3d_arena := "auto"
 var battle_ui_layout := "immersive"
 var immersive_battle_log_open := false
@@ -284,10 +285,19 @@ func set_battle_presentation_mode(mode: String) -> void:
 	_save_and_emit()
 
 func set_battle_3d_catalog_path(path: String) -> void:
-	if battle_3d_catalog_path == path:
+	var previous := get_battle_3d_catalog_path()
+	_manual_model_catalog_this_session = true
+	if battle_3d_catalog_path == path and previous == path:
 		return
 	battle_3d_catalog_path = path
 	_save_and_emit()
+
+func get_battle_3d_catalog_path() -> String:
+	if not OS.has_feature("web") and not _manual_model_catalog_this_session:
+		var selected := OS.get_environment("POKEAETHER_MODEL_CATALOG")
+		if selected.is_absolute_path() and not selected.is_empty():
+			return selected
+	return battle_3d_catalog_path
 
 func set_battle_3d_arena(id: String) -> void:
 	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(id)

@@ -3,9 +3,36 @@
 This desktop-only packaging boundary installs the fourteen phase-5D reviewed
 normal/shiny models without references to the source worktree, `.tmp`, Blender,
 Godot import caches or review sidecars. It does not install arbitrary 3D art,
-alter Settings, download content, publish a release or extend launcher Mods.
+alter saved game settings, download content, publish a release or extend launcher Mods.
 Launcher content packs currently support different asset types; do not import
 this archive through the launcher's Mods panel.
+
+## Install through the launcher
+
+1. Open **3D Models** (Dutch: **3D-modellen**) in the launcher sidebar.
+2. Choose **Import model ZIP…** and select the reviewed ZIP. Installation and
+   hash checks run in a worker; the panel remains responsive. Existing packs
+   are never overwritten, and failed imports do not change the selection.
+3. Pick the installed fourteen-variant pack and press **Use selected models**.
+4. Start/restart the game from that launcher. Enable **3D (experimental)** in
+   the game's Settings if you have not already done so.
+
+This flow requires no Python or manual catalog picker. Importing alone does not
+enable a pack. **Game settings (no launcher override)** restores the game's
+saved local-catalog choice, not necessarily 2.5D mode. Changes take effect at the
+next game launch, never halfway through a running battle.
+
+Packs live in the launcher's `user://model-packs/<catalog-sha256>`; **Open model
+folder** opens this persistent location outside the game update directory.
+`selection.json` is atomically replaced only after the selected scenes pass
+hash checks. The launcher passes `POKEAETHER_MODEL_CATALOG` to its child game
+and restores its own environment afterward, including process-launch failures.
+The game uses this as a session-only override; it does not save it over your
+manual path or force 3D presentation. Choosing a local catalog in game Settings
+takes priority for that session. Browser builds ignore the launcher override.
+Missing/incompatible launcher selections produce no override; the existing
+game catalog/fallback remains available. Modified model bytes are rejected on
+selection and again by the real presenter's integrity checks.
 
 ## Build and install
 
@@ -32,8 +59,8 @@ installed directory, then reselect its catalog. Moving only `catalog.json`
 without its `models` subdirectory will not work. Missing models retain the
 existing 2.5D fallback. Legacy absolute-path catalogs remain supported.
 
-This is a local developer installer, not yet a one-click player/launcher
-download flow. Keep the archive and installed folder outside a checkout's
+The CLI remains available for development. Neither installer downloads or
+publishes a pack. Keep the archive and installed folder outside a checkout's
 temporary directories. Do not copy caches, credentials or user settings.
 
 ## Portable format and checks
@@ -61,6 +88,16 @@ Files are extracted only into a private staging directory and published after
 verification. On a handled failure staging is removed; a process killed during
 installation may leave a hidden staging directory, never a selected catalog.
 An existing destination is refused rather than updated or deleted.
+
+The native launcher additionally checks local headers against central-directory
+headers before ZIPReader allocates buffers. ZIP64, multipart, encryption and
+data descriptors are not accepted by this first launcher format; the supplied
+deterministic builder does not use them. Only the declared approved models are
+written. The launcher has its own checked-in manifest validator/approval snapshot
+because its standalone export cannot access files outside its project root,
+while browser game exports exclude `launcher/**`. The
+`test_launcher_model_registry.py` checks require exact equality with the game
+copies (apart from the preload path); update both when approval data changes.
 
 ## Local handoff artifact
 
@@ -109,3 +146,22 @@ After merging the concurrent immersive Escape/Settings change into the task,
 the rendered `battle_screen_host_check.tscn` also passed with the installed
 pack (`phase5-pack-host.log`). The original two-model cache regression passed
 separately (`phase5-pack-legacy-cache.log`). Neither log contains script errors.
+
+Launcher integration checks: `launcher/tests/model_packs_check.gd` installs the
+real 129-MiB archive in isolated test storage, exercises the worker-backed Dutch
+panel and persistent selection, validates environment forwarding/restoration
+using a process stub, and rejects corrupt payloads, traversal, extra scripts,
+incompatible metadata, links, oversized/mismatched headers and truncated ZIPs.
+It confirms failed actions preserve selection and remove their own staging.
+Its installed scene is deliberately corrupted at the end to test revalidation;
+that test directory is not the user handoff pack. The visual review is
+`.tmp/launcher-model-test-05/model-packs-panel.png` (720×450).
+
+`tests/launcher_model_selection_check.gd` checks session-only precedence,
+manual overrides and a real rendered shiny-Pikachu/Dragonite pair loaded from
+the forwarded catalog. Final logs: `launcher-model-test-05.log` and
+`launcher-model-game-rendered.log`. 79 related Python checks pass, including
+snapshot parity. The launcher localization regression also passes; its deliberate
+invalid-executable rollback fixture logs `STG-001 staged_install_failed`, which
+is an expected negative test, not a model-install failure. No launcher export,
+publication, full release certification or production mutation was performed.

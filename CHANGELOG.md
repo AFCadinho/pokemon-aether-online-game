@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De launcher heeft nu een apart venster voor 3D-modellen: importeer een gecontroleerd modelpakket en selecteer het voor de volgende gamestart. Installeren gebeurt op de achtergrond en verandert je opgeslagen game-instellingen niet.
+
 - Gecontroleerde 3D-modellen kunnen nu als lokaal, verplaatsbaar pakket worden geïnstalleerd. De catalogus blijft werken wanneer de hele modelmap wordt verplaatst en opnieuw gekozen, zonder afhankelijkheid van tijdelijke reviewbestanden.
 
 - Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.

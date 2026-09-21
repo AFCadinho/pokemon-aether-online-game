@@ -238,8 +238,14 @@ func _ready() -> void:
 	game_folder_button.get_parent().add_child(mods_button)
 	_apply_button_style(mods_button, false)
 	mods_button.pressed.connect(_open_content_packs)
+	var models_button := Button.new()
+	models_button.text = LauncherLocalization.text("3D Models")
+	game_folder_button.get_parent().add_child(models_button)
+	_apply_button_style(models_button, false)
+	models_button.pressed.connect(_open_model_packs)
 	LauncherLocalization.locale_changed.connect(func(_new_locale: String) -> void:
 		mods_button.text = LauncherLocalization.text("Mods")
+		models_button.text = LauncherLocalization.text("3D Models")
 	)
 	home_button.pressed.connect(_show_home)
 	diagnostics_button.pressed.connect(_show_diagnostics)
@@ -831,7 +837,14 @@ func _create_game_process(absolute_executable_path: String) -> int:
 	var had_value := OS.has_environment("POKEAETHER_MODS_DIR")
 	var previous := OS.get_environment("POKEAETHER_MODS_DIR")
 	OS.set_environment("POKEAETHER_MODS_DIR", ProjectSettings.globalize_path("user://mods"))
+	var had_models := OS.has_environment("POKEAETHER_MODEL_CATALOG")
+	var previous_models := OS.get_environment("POKEAETHER_MODEL_CATALOG")
+	OS.set_environment("POKEAETHER_MODEL_CATALOG", _selected_model_catalog())
 	var process_id := _create_game_process_with_mods(absolute_executable_path)
+	if had_models:
+		OS.set_environment("POKEAETHER_MODEL_CATALOG", previous_models)
+	else:
+		OS.unset_environment("POKEAETHER_MODEL_CATALOG")
 	if had_value:
 		OS.set_environment("POKEAETHER_MODS_DIR", previous)
 	else:
@@ -848,6 +861,18 @@ func _open_content_packs() -> void:
 		if not panel.visible:
 			panel.queue_free()
 	)
+
+func _selected_model_catalog() -> String:
+	return preload("res://scripts/model_pack_store.gd").new().selected_catalog()
+
+func _open_model_packs() -> void:
+	var panel := preload("res://scripts/model_packs_panel.gd").new()
+	add_child(panel)
+	panel.setup(LauncherLocalization.text)
+	panel.popup_centered()
+	panel.visibility_changed.connect(func():
+		if not panel.visible:
+			panel.queue_free())
 
 
 func _create_game_process_with_mods(absolute_executable_path: String) -> int:
