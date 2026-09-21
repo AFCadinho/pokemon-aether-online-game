@@ -1196,3 +1196,15 @@ See [3d-model-packs.md](3d-model-packs.md) for build/install commands, limits,
 engine compatibility, local artifact hashes and Settings selection. This step
 does not add downloads, publication or launcher Mods integration. Those are
 separate distribution work; no new species or variant is approved here.
+
+### Launcher selection of local reviewed packs
+
+The launcher now has a dedicated **3D Models** panel, separate from Mods. It
+imports reviewed ZIPs on a worker thread, stages/verifies approved scene bytes,
+keeps existing versions intact and saves selection independently of import.
+The next launched game receives a session-only catalog override. Saved manual
+catalog paths and 2D/2.5D/3D presentation preferences remain unchanged; manual
+selection in game takes priority for that session. The installed catalog's
+content hash is its immutable directory ID. See the model-pack guide for
+storage, precedence, validation and focused test evidence. No downloads or
+release/deployment operation is added or performed by this step.

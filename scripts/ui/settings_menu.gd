@@ -415,7 +415,7 @@ func _setup_tabs() -> void:
 			if not loading_controls:
 				SettingsManager.set_battle_presentation_mode("3d" if index == 1 else "2.5d"))
 		var presentation_hint := Label.new()
-		presentation_hint.text = "Local reviewed models: Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite and Roaring Moon (normal/shiny). Missing models and unsupported forms use 2.5D. No downloads."
+		presentation_hint.text = "Local reviewed models: Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite and Roaring Moon (normal/shiny). Missing models and unsupported forms use 2.5D. The launcher selection applies at startup; choosing a local catalog overrides it for this session. No downloads."
 		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
 		var choose_catalog := Button.new()

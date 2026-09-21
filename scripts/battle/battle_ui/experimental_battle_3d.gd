@@ -214,7 +214,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 			warming_render = false
 			return
-		var requested: String = settings.battle_3d_catalog_path
+		var requested: String = settings.get_battle_3d_catalog_path()
 		if requested.is_empty():
 			requested = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 		if loaded_path == requested and not _models_pending() and not arena_preparing:
@@ -949,7 +949,7 @@ func _process(delta: float) -> void:
 				world = null
 				camera = null
 		return
-	var path: String = settings.battle_3d_catalog_path
+	var path: String = settings.get_battle_3d_catalog_path()
 	if path.is_empty():
 		path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	# Start independent terrain I/O alongside model loading, not after it.
