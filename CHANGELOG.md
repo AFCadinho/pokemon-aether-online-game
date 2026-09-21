@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.
+
 - Immersive replays houden de berichtbalk, afspeelknoppen en replaybediening nu netjes van elkaar gescheiden.
 
 - 3D Pokémon-modelbestanden worden nu op de achtergrond gecontroleerd, zodat deze controles het beeld tijdens laden en wisselen niet blokkeren.
