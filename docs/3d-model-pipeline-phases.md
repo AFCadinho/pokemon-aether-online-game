@@ -1008,3 +1008,124 @@ the memory guard pass again, with no script errors. Frame p95 is
 17.34 / 17.33 / 16.94 ms and maxima are 554.26 / 188.93 / 148.06 ms; the same
 performance caveat remains. Final-two-round retained static growth is 4,180
 bytes. The archived JSON above remains the instrumented `-05` baseline.
+
+### Phase 5C — variant qualification and asynchronous integrity checks
+
+The closing matrix extends the eligible cohort to **seven normal/shiny pairs**.
+The six SCVI shiny sources are imported using the same pinned importer and
+official rare materials, then exported through the same limited PBR path.
+Snorlax retains its reviewed Biochao rig and animations: its embedded normal
+albedo is compared pixel-for-pixel with the official normal image before the
+official rare albedo is bound. Normal/rare material metadata must otherwise
+match. Source Blend files are never saved or recoloured.
+
+`phase5_variant_parity.py` requires exact equality of scene transforms, meshes,
+skin data and every geometry/animation accessor payload. Material/image changes
+alone may differ. All seven pairs pass, allowing the existing measured bounds,
+placement and motion corrections to transfer with a new runtime-file hash.
+`phase5_variant_runtime.gd` creates separate, self-contained candidate scenes;
+the production allowlist still admits only its original normal controls.
+The candidate presenter uses a separate resource identity for shiny without
+changing the gameplay species or sharing an actor/AnimationPlayer.
+
+The extended stress matrix checks both normal→shiny and shiny→normal swaps,
+independent simultaneous actors, shiny faint→replacement, invalidated faint
+callbacks, actual eviction of both variants followed by reload, and three
+successive battles. It retains the normal mixed teams, real immersive HUD,
+recorded move/damage/duplicate-slot/faint/replacement/end sequence and bounded
+two-entry/64-MiB-source LRU checks. This is offline client qualification, not
+live-network/PvP authority certification or a release of the candidate art.
+
+Load profiling identified synchronous integrity reads on the main thread:
+initial demand validation and the post-threaded-load hash check. Both now run
+in a WorkerThreadPool job that accesses only files, never scene/UI objects.
+The main thread polls, joins only completed tasks and publishes resources only
+after the second hash matches. Cancellation detaches a drain; no cancelled job
+can publish into its old presenter/cache. Preparation readiness includes the
+preflight job, not just the ResourceLoader request. File limits, hash checks,
+motion/placement validation, cache size and native animation timings remain.
+`model_validation_ms` now measures worker elapsed time, not a main-thread block.
+
+The actual screen-host preparation fence is retained in the stress adapter
+(`ExperimentalBattle3D` node name). Covered arena/UI construction is recorded
+separately from gameplay. Replay setup and first-event playback also have
+separate frame boundaries: the old harness labelled their combined cost as a
+first-move hitch. Screenshot runs remain visual evidence, not final performance
+evidence; GPU readback can perturb a later frame even after PNG writing stops.
+Use `POKEAETHER_PHASE5_CAPTURE=0` for the independent performance run.
+
+`phase5c_acceptance.py` checks a complete seven-pair matrix, clean runtime log,
+35 shiny review poses, exact geometry/motion proofs, memory retention and the
+runtime catalog hash. Its explicit local regression guards are p95 ≤20 ms,
+main-thread model dispatch/collection ≤one 60-Hz frame, and no uncovered
+gameplay interval >100 ms. Covered entry and replay construction remain in the
+report, rather than being represented as smooth gameplay. These guards do not
+promise hitch-free rendering, instant startup or a decoded RAM/VRAM ceiling.
+
+Retained source/visual evidence in slot-c:
+
+- `.tmp/phase5-shiny-01`: seven source exports, exact texture provenance,
+  Godot review with no pose errors, and 35 images. Front views were visually
+  inspected for colour, face/eyes and intact anatomy. Geometry and motion use
+  the stronger exact-data comparison rather than another approximate fit.
+- `.tmp/phase5-variant-runtime-02`: fourteen candidate scenes/catalog entries,
+  calibration and all seven parity proofs. Normal scenes are referenced in
+  place; no caches or unrelated ignored assets were copied.
+- `.tmp/phase5-stress-07`: diagnostic spans, recorded while source export was
+  also running; not an isolated performance baseline.
+- `.tmp/phase5-stress-08` and `-09`: normal/shiny lifecycle and replay-context
+  diagnosis. `-10` adds explicit normal+shiny eviction/reload and screenshots;
+  it retains a large uncovered outlier and is not the no-readback acceptance run.
+
+Reproduce after preparing the normal 5C catalog: run `phase5_shiny_review.py`
+with `--normal` and a new `--output`, then its `--legacy-model` Snorlax step.
+Render `phase5_godot_review.gd` against that output. Run
+`phase5_variant_runtime.gd` with the normal report, shiny review directory and
+new runtime output. Run the stress script against the combined report, with
+capture disabled for performance. All Godot commands use the assigned slot
+wrapper, explicit slot-local log paths and bounded process timeouts.
+
+The headless demand test is unsuitable for stadium shader assertions (dummy
+renderer errors); the rendered demand test is the relevant regression, including
+empty preview, warm reuse, cancellation during hashing/loading and stale-hash
+rejection. Do not treat an OK marker accompanied by script errors as a pass.
+
+**5C is closed for these seven normal/shiny pairs**, with the original three
+5B holds unchanged. [phase5c-qualification.json](phase5c-qualification.json)
+is the closing decision and retains hashes of the complete evidence. Raw stress
+reports deliberately do not self-approve the phase; the separate acceptance
+step combines lifecycle, variant review and performance evidence.
+
+Final no-readback run: `.tmp/phase5-stress-11`, Godot 4.6.2 Forward+ on the
+RTX 3070 Laptop GPU, without purging driver caches:
+
+- Three battles; 36 mixed-team switches; 21 normal duplicate/faint checks;
+  21 normal/shiny swap/faint/eviction/reload sequences; three recorded replays.
+- Frame p95 **17.38 / 17.33 / 17.42 ms**. Main-thread load dispatch/collection
+  maxima **1.97 / 1.93 / 2.16 ms**, down from repeated tens-of-ms synchronous
+  integrity work. This is a callback measurement, not total load latency.
+- Total frame maxima **450.06 / 135.75 / 97.97 ms**, all during covered entry.
+  One uncovered Arcanine loading interval still reaches **98.15 ms**; first
+  replay construction takes 78.28 ms (94.63 ms whole frame). These residuals
+  are retained explicitly: this is not a claim that all startup/UI/GPU hitches
+  are solved. The prior screenshot run's 824.69 ms outlier is not erased or
+  used as performance acceptance evidence; readback-free qualification is
+  intentionally a separate run.
+- Final-two-battle static growth **85,076 bytes**, under the 1 MiB guard.
+  Shared retained source bytes remain **19,143,466**; cache limits unchanged.
+- The final rendered log has no script errors. All seven shiny diagnostic
+  reviews have no pose errors; exact normal/shiny geometry/motion parity passes.
+
+Focused regression evidence also includes the real approved-pair cache test,
+rendered demand/cancellation/stale-hash tests, and 56 Python checks covering
+review, parity, source intake and fail-closed qualification. Candidate assets
+remain outside normal Settings/runtime admission. Next is **5D**, separately
+selecting and enabling qualified models; Abra, Onix and Gastly remain disabled.
+No full paired verification, main promotion, push or deployment was performed.
+
+The rendered approved-pair immersive presentation regression also passes all
+three cycles (`phase5-async-presentation.log`, final action p95 17.40 ms),
+including material response and mode-exit cleanup. Motion placement passes,
+and the preparation watchdog rejects the deliberate stall after 304 ms
+(`phase5-final-motion.log`, `phase5-async-progress.log`). Existing UID fallback
+warnings remain; none of these final logs contain script errors.

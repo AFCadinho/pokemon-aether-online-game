@@ -18,6 +18,33 @@ def run(job):
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source hash changed')
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
+    replacements = []
+    for replacement in job.get('verified_texture_replacements', []):
+        from array import array
+        normal, rare = Path(replacement['normal']), Path(replacement['rare'])
+        for path, key in ((normal, 'normal_sha256'), (rare, 'rare_sha256')):
+            if hashlib.sha256(path.read_bytes()).hexdigest() != replacement[key]:
+                raise ValueError('Variant texture source changed')
+        matches = [image for image in bpy.data.images if image.name == normal.name]
+        if len(matches) != 1:
+            raise ValueError('Ambiguous embedded normal texture')
+        existing = matches[0]
+        reference = bpy.data.images.load(str(normal), check_existing=False)
+        reference.colorspace_settings.name = existing.colorspace_settings.name
+        if tuple(existing.size) != tuple(reference.size):
+            raise ValueError('Embedded normal dimensions differ')
+        a, b = array('f', [0]) * len(existing.pixels), array('f', [0]) * len(reference.pixels)
+        existing.pixels.foreach_get(a)
+        reference.pixels.foreach_get(b)
+        if a != b:
+            raise ValueError('Embedded normal pixels differ from official source; UV binding not proven')
+        shiny = bpy.data.images.load(str(rare), check_existing=False)
+        shiny.colorspace_settings.name = existing.colorspace_settings.name
+        if tuple(shiny.size) != tuple(existing.size):
+            raise ValueError('Rare texture dimensions differ')
+        existing.user_remap(shiny)
+        shiny.pack()
+        replacements.append(replacement)
     inspection = inspect()
     if inspection['libraries'] or any(w.startswith('missing_texture:') for w in inspection['warnings']):
         raise ValueError('Source is not self-contained')
@@ -86,7 +113,7 @@ def run(job):
         raise ValueError('Source modified during export')
     report = {'status': 'exported_for_review', 'path': str(path),
         'glb_sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload),
-        'animations': timing, 'source_warnings': inspection['warnings'],
+        'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
         'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
         'material_limitations': ('Simplified PBR bake at idle; source alpha, emission, lighting and material animation remain unported'
             if baked else 'Direct glTF translation: source shader graphs and material animation are not certified')}

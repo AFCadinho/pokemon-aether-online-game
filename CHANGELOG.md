@@ -4,6 +4,8 @@
 
 - Immersive replays houden de berichtbalk, afspeelknoppen en replaybediening nu netjes van elkaar gescheiden.
 
+- 3D Pokémon-modelbestanden worden nu op de achtergrond gecontroleerd, zodat deze controles het beeld tijdens laden en wisselen niet blokkeren.
+
 - Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
 
 - Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
