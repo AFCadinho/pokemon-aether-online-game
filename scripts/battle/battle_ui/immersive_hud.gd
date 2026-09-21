@@ -18,9 +18,15 @@ func _process(delta: float) -> void:
 	_place(team_preview, Vector2(18, 90), team_preview.size, 0.75)
 	var opponent_rail: Control = battle.get_node("%OpponentStagePartyRail")
 	_place(opponent_rail, Vector2(area.x - 62, 90), opponent_rail.size, 0.75)
+	var player_portrait := stage.get_node_or_null("TrainerPortrait0") as Control
+	var opponent_portrait := stage.get_node_or_null("TrainerPortrait1") as Control
+	var field_indicators: Control = battle.field_timers_panel
+	var field_anchor := Vector2(94, 12)
+	if player_portrait != null:
+		field_anchor = Vector2(player_portrait.position.x + player_portrait.size.x + 12, player_portrait.position.y)
+	_place(field_indicators, field_anchor, field_indicators.size, 0.65)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
 	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 204, area.y - 210), Vector2(178, 34), 0.8)
-	_place(stage.get_node("ResetCameraButton"), Vector2(area.x - 110, 16), Vector2(32, 28), 1.0)
 	var mechanics: Control = battle.get_node("%MechanicsPanel")
 	_place(mechanics, Vector2(area.x - 332, area.y - 233), mechanics.size, minf(0.5,120.0 / maxf(1,mechanics.size.x)))
 	var center_left := area.x * 0.25
@@ -33,8 +39,12 @@ func _process(delta: float) -> void:
 	_place(dock, to_battle * Vector2(center_left,area.y - 95), Vector2(center_width * stage.scale.x / dock_factor,106),dock_factor)
 	var header: Control = battle.get_node("%VSPanelContainer")
 	_place(header, Vector2((area.x - header.size.x * 0.65) * 0.5, 12), header.size, 0.65)
+	_place(stage.get_node("ResetCameraButton"), Vector2(header.position.x + header.size.x * header.scale.x + 12, 16), Vector2(32, 28), 1.0)
 	var turn: Control = battle.get_node("%BattleStatusPanel")
-	_place(turn, Vector2(94, 14), turn.size, 0.6)
+	var turn_scale := 0.6
+	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null else area.x - 82
+	var turn_x := opponent_portrait_left - turn.size.x * turn_scale - 12
+	_place(turn, Vector2(maxf(16, turn_x), 14), turn.size, turn_scale)
 	var presenter = battle.animation_router.model_presenter
 	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active
 	stage.get_node("ResetCameraButton").visible = realtime_3d
@@ -88,16 +98,12 @@ func _process(delta: float) -> void:
 			var badge_scale := 0.5 * stage.get_global_transform().get_scale().y / maxf(0.01, (badges.get_parent() as CanvasItem).get_global_transform().get_scale().y)
 			_place(badges, parent_inverse * (stage.get_global_transform() * (hud.position + Vector2(0, extent.y + 3))), badges.size, badge_scale)
 		var effects: Control = battle.get_node("%SideFieldEffectsPanel" if index == 0 else "%SideFieldEffectsPanel2")
-		if realtime_3d:
-			_place(effects, hud.position + Vector2(0, extent.y + badge_height + 6), effects.size, 0.5)
-		else:
-			# Side-wide conditions are separate from the active Pokémon's own
-			# indicators. Keep them beside the HP panel, toward the screen edge.
-			var effects_extent := effects.size * 0.5
-			var effects_x := hud.position.x - effects_extent.x - 8 if index == 0 else hud.position.x + extent.x + 8
-			effects_x = clampf(effects_x, 16, area.x - effects_extent.x - 16)
-			var effects_y := hud.position.y + maxf(0, (extent.y - effects_extent.y) * 0.5)
-			_place(effects, Vector2(effects_x, effects_y), effects.size, 0.5)
+		var side_rail: Control = team_preview if index == 0 else opponent_rail
+		var effects_extent := effects.size * 0.5
+		var rail_extent := side_rail.size * side_rail.scale
+		var effects_x := side_rail.position.x + rail_extent.x + 8 if index == 0 else side_rail.position.x - effects_extent.x - 8
+		effects_x = clampf(effects_x, 16, area.x - effects_extent.x - 16)
+		_place(effects, Vector2(effects_x, side_rail.position.y), effects.size, 0.5)
 
 func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float) -> void:
 	control.set_anchors_preset(Control.PRESET_TOP_LEFT)
