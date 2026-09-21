@@ -73,6 +73,15 @@ class ModelPackTests(unittest.TestCase):
             pack.install(self.archive, self.destination, self.registry)
         self.assertEqual(marker.read_text(), 'keep')
 
+    def test_explicit_previous_revision_remains_installable(self):
+        registry = pack.read_json(self.registry)
+        registry['models']['pikachu'] = dict(sha256='b' * 64, previous_sha256=[self.digest])
+        self.registry.write_bytes(pack.encode(registry))
+        pack.install(self.archive, self.destination, self.registry)
+        pack.verify(self.destination, self.registry)
+        pack.build(self.catalog, self.root / 'old-revision.zip', self.registry)
+        self.assertFalse(pack.approved_digest(registry['models']['pikachu'], 'c' * 64))
+
     def test_changed_source(self):
         self.scene.write_bytes(b'changed')
         with self.assertRaisesRegex(ValueError, 'hash mismatch'):

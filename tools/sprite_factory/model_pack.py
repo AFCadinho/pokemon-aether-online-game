@@ -49,6 +49,10 @@ def identity(entry):
     return species + ('@shiny' if variant == 'shiny' else '')
 
 
+def approved_digest(model, digest):
+    return bool(model) and (digest == model['sha256'] or digest in model.get('previous_sha256', []))
+
+
 def validate_manifest(manifest, registry):
     if (not isinstance(manifest, dict) or manifest.get('schema') != 1
             or manifest.get('kind') != KIND or manifest.get('godot') != '4.6'
@@ -64,9 +68,9 @@ def validate_manifest(manifest, registry):
         key = identity(entry)
         approved = registry['models'].get(key)
         size = entry.get('bytes')
-        if (key in seen or not approved or entry.get('runtime_sha256') != approved['sha256']
+        if (key in seen or not approved_digest(approved, entry.get('runtime_sha256'))
                 or entry.get('runtime_schema') != 1
-                or entry.get('runtime_path') != 'models/' + approved['sha256'] + '.scn'
+                or entry.get('runtime_path') != 'models/' + str(entry.get('runtime_sha256')) + '.scn'
                 or type(size) is not int or not 0 < size <= MAX_FILE):
             raise ValueError('Unapproved, duplicate or invalid model entry')
         seen.add(key)
@@ -97,7 +101,7 @@ def build(catalog, output, registry_path=REGISTRY):
             raise ValueError('Invalid source entry')
         key = identity(item)
         approved = registry['models'].get(key)
-        if not approved or item.get('runtime_sha256') != approved['sha256']:
+        if not approved_digest(approved, item.get('runtime_sha256')):
             raise ValueError('Source is not approved')
         path = Path(item['runtime_path'])
         if not path.is_absolute():
@@ -106,7 +110,7 @@ def build(catalog, output, registry_path=REGISTRY):
             raise ValueError('Source must be a regular scene')
         with path.open('rb') as stream:
             digest, size = digest_stream(stream)
-        if digest != approved['sha256']:
+        if digest != item['runtime_sha256']:
             raise ValueError('Source scene hash mismatch')
         entry = dict(species=item['species'], variant=item.get('variant', 'normal'),
                      runtime_schema=1, runtime_sha256=digest,

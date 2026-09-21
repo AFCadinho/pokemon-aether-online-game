@@ -24,6 +24,12 @@ func _run() -> void:
 		entry.species = str(normal.species) + "@shiny"
 		entry.path = variant.path
 		entry["variant"] = "shiny"
+		# Never carry normal endpoint colours into a shiny conversion.
+		if normal.has("material_response"):
+			assert(variant.has("material_response"), "Shiny export is missing its own material response")
+		entry.erase("material_response")
+		if variant.has("material_response"):
+			entry.material_response = variant.material_response
 		var prepared := _convert(entry, output)
 		assert(not prepared.is_empty() and errors.is_empty(), str(errors))
 		prepared._review_motion.sha256 = prepared.runtime_sha256

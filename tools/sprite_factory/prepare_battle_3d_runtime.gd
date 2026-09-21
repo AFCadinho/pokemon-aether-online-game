@@ -121,6 +121,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 	if errors.size() != before:
 		node.free()
 		return {}
+	if entry.has("material_response"):
+		var response := preload("material_response_pack.gd").new()
+		if not entry.material_response is Dictionary or not response.apply(node, entry.material_response, glb_hash):
+			errors.append(species + ": " + response.failure)
+			node.free()
+			return {}
 	var packed := PackedScene.new()
 	var signature := _signature(node)
 	code = packed.pack(node)
@@ -141,6 +147,10 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 		return {}
 	if _signature(verified) != signature:
 		errors.append(species + ": scene structure, mesh counts or animation tracks changed on reload")
+		verified.free()
+		return {}
+	if entry.has("material_response") and (verified.get_meta("pokeaether_material_response", 0) != 1 or not preload("res://scripts/battle/battle_ui/material_response.gd").supported_actor(verified)):
+		errors.append(species + ": response lost on reload")
 		verified.free()
 		return {}
 	verified.free()
