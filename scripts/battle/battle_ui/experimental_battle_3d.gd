@@ -369,6 +369,17 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 static func supported(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
 	return species.to_lower().replace(" ", "-") in SUPPORTED and not shiny and not double and not substitute
 
+# Narrow override points for the offline candidate harness. The production
+# renderer never reads candidate allowlists or motion profiles from Settings.
+func _supports_combatant(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
+	return supported(species, shiny, double, substitute)
+
+func _catalog_species_allowed(species: String) -> bool:
+	return species in SUPPORTED
+
+func _motion_profile(species: String) -> Dictionary:
+	return MOTION_PROFILES.data.get(species, {})
+
 func _requested_arena() -> String:
 	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id)
 
@@ -508,7 +519,7 @@ func _load_catalog(path: String) -> void:
 	if not data is Array:
 		return
 	for entry in data:
-		if not entry is Dictionary or not entry.get("species", "") in SUPPORTED:
+		if not entry is Dictionary or not _catalog_species_allowed(str(entry.get("species", ""))):
 			continue
 		var model_path := str(entry.get("runtime_path", ""))
 		var timing: Variant = entry.get("action_timing", {})
@@ -547,7 +558,7 @@ func _needed_species() -> Array[String]:
 		var species: String = combatants[index].species
 		if species.is_empty() and not double and not substitute:
 			continue
-		if not supported(species, combatants[index].shiny, double, substitute):
+		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
 			return [] # Pair fallback must not import unused art.
 		if species not in needed:
 			needed.append(species)
@@ -591,7 +602,7 @@ func _queue_needed_models() -> void:
 		ground_offsets.erase(species)
 		if placement.calibrated:
 			ground_offsets[species] = placement
-		motion_clips[species] = MotionPlacement.resolve(MOTION_PROFILES.data.get(species, {}), placement, runtime_hash, entry.action_timing)
+		motion_clips[species] = MotionPlacement.resolve(_motion_profile(species), placement, runtime_hash, entry.action_timing)
 		entry["_verified_runtime_hash"] = runtime_hash
 		entry["_source_bytes"] = model_file.get_length()
 		entry["_resource_cache_key"] = ModelCache.key(model_path, runtime_hash, entry.action_timing) if ResourceLoader.get_dependencies(model_path).is_empty() else ""
@@ -849,7 +860,7 @@ func _process(delta: float) -> void:
 		if species.is_empty() and not double and not substitute:
 			desired.append("")
 			continue
-		if not supported(species, combatants[index].shiny, double, substitute):
+		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
 			reason = "Unsupported active Pokémon/form, doubles or substitute: " + species
 			_set_active(false)
 			return

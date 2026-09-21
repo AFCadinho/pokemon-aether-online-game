@@ -906,3 +906,105 @@ reload, successive battles and available shiny variants. Held models do not
 block testing the eligible group, but must not be counted as certified. No
 complete development gate, runtime rollout, promotion or deployment is part
 of this 5B closure.
+
+### Phase 5C — normal-cohort runtime and replay stress baseline
+
+The first 5C block brings the seven eligible normal candidates into the actual
+immersive battle scene. This is **not yet complete 5C or permission for 5D**:
+normal/shiny variant certification and frame-stall acceptance remain open.
+
+`phase5_runtime_prepare.gd` requires the exact committed 5B decisions and
+hash-matching source catalog, corrected measurements and motion candidates.
+It reuses the existing SCN converter, preserving native tracks and verifying
+the saved/reloaded scene signature and self-contained dependencies. Only the
+seven eligible entries are published into a new external review directory.
+Grounding/motion profiles are rebound to the verified SCN hashes. Cached
+per-action envelopes are converted to local space once; no skinned vertex
+baking is performed during the battle test.
+
+The production presenter has three narrow virtual override points for species
+support, catalog admission and motion profiles. Defaults retain exactly the
+existing two-species normal-only allowlist and shipped motion data. The
+test-only `phase5_candidate_stage.gd` overrides these from the 5B decisions,
+projects cached envelope corners for the real HUD, and is never selected by
+Settings or instantiated by normal battle code. No new models are released.
+
+`phase5_battle_stress_check.gd` mounts the real battle screen/UI and swaps only
+the presenter. It exercises:
+
+- Three successive battles (Classic, stadium, Classic), with two mixed teams
+  of six including duplicates and 36 switch iterations.
+- All seven species as independent actors on both sides: 21 duplicate checks,
+  21 faint-loop/same-species replacement checks, plus stale faint cancellation.
+- Actual two-entry shared LRU eviction followed by disk reload, actor resource
+  independence, warm reuse, bounded presenter resources and weak-reference
+  teardown checks. Cache capacity remains two entries / 64 MiB source bytes.
+- The actual immersive HP HUD using candidate bounds, with settling and
+  overlap assertions for both combatants and screenshots of both arena types.
+- Three recorded event sequences through `setup_battle_replay` and
+  `play_replay_frame`: move/damage, Pikachu slot 0 → Pikachu slot 5, faint loop,
+  Arcanine replacement, and battle end. Pokemon keys, health and presenter
+  lifecycle are asserted. No live server or player/session data is used.
+- Safe pair fallback for unreviewed shiny models. This is **not** shiny art or
+  normal/shiny cache-key certification; the source inventory finds rare albedo
+  for the eligible cohort, but reviewed shiny GLBs are still needed.
+
+The replay exposed a real typed-array error in `immersive_portraits.gd` when
+appearance state is empty. Initializing the typed array separately fixes both
+fallback-art rebuilding and clearing; a focused regression covers both cases.
+
+Retained slot-c evidence: `.tmp/phase5-runtime-01` (prepared scenes/catalog),
+`.tmp/phase5-stress-01` (direct lifecycle baseline), `-02` (replay exposed the
+portrait error), `-03` (corrected replay), `-04` (frame metrics), and `-05`
+(final context-labelled frame metrics). The final log has no script errors.
+[phase5c-normal-stress.json](phase5c-normal-stress.json) retains the final report.
+Godot 4.6.2 Forward+ ran on the RTX 3070 Laptop GPU; no driver/cache purge was
+performed. Existing scene UID fallback warnings remain, using valid paths.
+
+Final measured normal-core results:
+
+- All lifecycle, real-HUD, eviction and replay assertions pass.
+- Frame p95: 17.38 / 17.37 / 17.41 ms; maxima: **549.61 / 185.27 / 144.59 ms**.
+  Peaks are labelled in the report, principally initial pair loading, with a
+  96 ms first replay-frame peak. Screenshot readback is excluded. These are
+  whole-client intervals, not proof of a model-import-only or GPU-only cause.
+  Actor construction totals are only 15–17 ms per round; stadium construction
+  totals about 111 ms. Further causal profiling is required before acceptance.
+- Shared retained source bytes: 19,143,466 after each direct stress sequence.
+  After-teardown static memory grows only 7,404 bytes between the final two
+  rounds, passing the 1 MiB guard. This is not a total RAM/VRAM budget claim.
+- The existing approved-pair cache regression passes (cold then two warm
+  cycles), as do motion placement and the two focused empty-appearance checks.
+  The 48 relevant Python checks pass. The legacy full trainer-staging script
+  has an already-existing source-text assertion expecting the old VS portrait
+  call spelling; both the old test and changed call predate this task. Its
+  unrelated failure was not suppressed or used as a passing result. Run the
+  new regression alone with `POKEAETHER_TEST_IMMERSIVE_EMPTY_ONLY=1`.
+
+Reproduction, always through `ops/worktrees/slot-env slot-c --`:
+
+1. Run Godot headless with `--script res://tools/sprite_factory/phase5_runtime_prepare.gd`;
+   set `POKEAETHER_PHASE5_REVIEW` to the 5B GLB directory,
+   `POKEAETHER_PHASE5_MEASURED` to its closing battle-review JSON,
+   `POKEAETHER_PHASE5_CANDIDATES` to its candidate JSON, and
+   `POKEAETHER_PHASE5_RUNTIME_OUTPUT` to a new directory.
+2. Run rendered Godot with `--script res://tests/phase5_battle_stress_check.gd`;
+   set `POKEAETHER_PHASE5_RUNTIME_REPORT` to the prepared `report.json` and
+   `POKEAETHER_PHASE5_STRESS_OUTPUT` to a new directory. Use an explicit slot-local
+   `--log-file` and a 240-second process timeout. Check exit status, the
+   completion marker/report **and** absence of `SCRIPT ERROR` / `ERROR:` in
+   the log; Godot can otherwise continue after an assertion or callback error.
+
+Next 5C work is to isolate the first-use/replay frame peaks, review and prepare
+available shiny variants, and then test normal/shiny identity and cache
+separation. Gastly/Abra/Onix remain held at 5B. No full paired certification,
+allowlist expansion, promotion, push or deployment was performed.
+
+Compatibility follow-up: development advanced with immersive HUD changes.
+It was merged into the task (only the changelog required conflict resolution,
+preserving both sets of entries), and the full focused normal stress/replay
+run was repeated as `.tmp/phase5-stress-06`. All functional assertions and
+the memory guard pass again, with no script errors. Frame p95 is
+17.34 / 17.33 / 16.94 ms and maxima are 554.26 / 188.93 / 148.06 ms; the same
+performance caveat remains. Final-two-round retained static growth is 4,180
+bytes. The archived JSON above remains the instrumented `-05` baseline.

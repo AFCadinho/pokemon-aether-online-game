@@ -4,6 +4,8 @@
 
 - Spelers kunnen voor 2D- en 2.5D-gevechten kiezen tussen de oorspronkelijke achtergronden, vaste-camera arena-loops of automatische fallback.
 
+- Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
+
 - Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
 
 - Immersive 2D-gevechten houden de HP-balken en Pokémon-indicatoren zonder overlap boven de sprites.
