@@ -19,11 +19,20 @@ def run(job):
         raise ValueError('Source changed before review')
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
     report = inspect()
+    evaluate_material = None
     if job.get('material_probe_policy'):
         from scvi_material_probe import POLICY, apply_probe
         if job['material_probe_policy'] != POLICY:
             raise ValueError('Unknown material probe policy')
         report['material_probe'] = apply_probe(job['material_probe_metadata'], job.get('displacement_probe', False))
+        if job.get('ambient_material_probe'):
+            from blender_ambient_probe import prepare
+            evaluate_material = prepare(job['material_probe_metadata'], job['ambient_material_probe'])
+            report['ambient_material_probe'] = {
+                'source': job['ambient_source'], 'sha256': job['ambient_sha256'],
+                'duration_seconds': (job['ambient_material_probe']['frames'] - 1) / job['ambient_material_probe']['fps'],
+                'hypotheses': ['unlit source base colour', 'UVScaleOffset to UV1; UVScaleOffset3 to displacement UV2'],
+                'runtime_approved': False}
     report.update(species=job['species'], source_sha256=job['source_sha256'],
                   scope=('experimental_opacity_probe_not_runtime_approval' if job.get('material_probe_policy')
                          else 'source_only_not_runtime_approval'),
@@ -53,6 +62,8 @@ def run(job):
         select_action(rig, action)
         frame = action.frame_range[0] + fraction * (action.frame_range[1] - action.frame_range[0])
         bpy.context.scene.frame_set(int(frame), subframe=frame % 1)
+        if evaluate_material:
+            evaluate_material(frame / report['fps'])
         box = bounds()
         poses.append((category, view, action, frame, box))
     if not poses:
@@ -94,6 +105,8 @@ def run(job):
     for category, view, action, frame, box in poses:
         select_action(rig, action)
         scene.frame_set(int(frame), subframe=frame % 1)
+        if evaluate_material:
+            evaluate_material(frame / report['fps'])
         direction = Vector((3, -7, 2) if view == 'front' else (-3, 7, 2)).normalized()
         camera.location = target + direction * size * 3
         camera.rotation_euler = (target - camera.location).to_track_quat('-Z', 'Y').to_euler()
@@ -102,6 +115,19 @@ def run(job):
         bpy.ops.render.render(write_still=True)
         report['poses'].append({'category': category, 'view': view, 'action': action.name,
                                 'frame': frame, 'bounds': box, 'image': filename, 'status': 'rendered'})
+    if evaluate_material:
+        # Freeze the skeleton: image changes must come from material motion alone.
+        select_action(rig, bpy.data.actions[mapping['idle']])
+        scene.frame_set(0)
+        report['ambient_frames'] = []
+        duration = report['ambient_material_probe']['duration_seconds']
+        for index in range(12):
+            seconds = duration * index / 12
+            values = evaluate_material(seconds)
+            filename = f'ambient-{index:02d}.png'
+            scene.render.filepath = str(output / filename)
+            bpy.ops.render.render(write_still=True)
+            report['ambient_frames'].append({'seconds': seconds, 'uv': values, 'image': filename})
     (output / 'review.json').write_text(json.dumps(report, indent=2))
 
 
