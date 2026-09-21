@@ -31214,6 +31214,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": bank_popup, "close": Callable(self, "_hide_bank")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
+		{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
 		{"panel": trainer_card_popup, "close": Callable(self, "_hide_trainer_card_for_escape")},

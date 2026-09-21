@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pressing Escape while Pokémon Storage is open now closes Storage instead of opening Settings over it, preventing browser instability.
+
 - Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
 
 - Fixed browser battles sometimes showing an empty platform for Pokémon whose sprite catalog uses a compact species name, including Roaring Moon.
