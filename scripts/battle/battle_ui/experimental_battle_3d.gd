@@ -45,6 +45,10 @@ var render_surface: TextureRect
 var world: Node3D
 var camera: Camera3D
 var entries := {}
+var catalog_entries := {}
+var catalog_calibration := {}
+var validated_entries := {}
+var failed_models := {}
 var packed := {}
 var actors: Array = [null, null]
 var players: Array = [null, null]
@@ -62,6 +66,9 @@ var pending_entries: Array = []
 var import_times_ms := {}
 var model_cache_hits := 0
 var catalog_read_ms := 0.0
+var model_validation_ms := 0.0
+var arena_build_ms := 0.0
+var actor_build_ms := 0.0
 var loading_path := ""
 var loading_entry := {}
 var loading_started := 0
@@ -128,13 +135,32 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	var last_sample: Array = []
 	var quiet_frames := 0
 	var last_draw := -1
+	var pipeline_start := _blocking_pipelines()
+	var warm_started := 0
+	var warm_max_frame_ms := 0.0
+	var frame_tick := Time.get_ticks_usec()
+	_queue_needed_models()
 	while is_inside_tree():
+		var now := Time.get_ticks_usec()
+		if active and pending_entries.is_empty() and loading_path.is_empty() and _actors_resolved():
+			if warm_started == 0:
+				warm_started = now
+			else:
+				warm_max_frame_ms = maxf(warm_max_frame_ms, (now - frame_tick) / 1000.0)
+		frame_tick = now
 		var progress := _preparation_progress()
 		if progress != last_progress and timeout_ms > 0:
 			deadline = Time.get_ticks_msec() + timeout_ms
 			last_progress = progress.duplicate(true)
 		preparation_metrics = {"elapsed_ms":Time.get_ticks_msec()-started,"phase":preparation_phase,"forest_load_ms":ArenaCatalog.forest_load_ms,
-			"model_cache_hits": model_cache_hits, "catalog_read_ms": catalog_read_ms, "model_import_ms": import_times_ms.duplicate()}
+			"model_cache_hits": model_cache_hits, "catalog_read_ms": catalog_read_ms, "model_validation_ms": model_validation_ms,
+			"arena_build_ms": arena_build_ms, "actor_build_ms": actor_build_ms, "model_import_ms": import_times_ms.duplicate()}
+		var pipeline_delta := _blocking_pipelines()
+		for index in pipeline_delta.size():
+			pipeline_delta[index] -= pipeline_start[index]
+		preparation_metrics["blocking_pipeline_delta"] = pipeline_delta
+		preparation_metrics["render_warm_ms"] = (now - warm_started) / 1000.0 if warm_started > 0 else 0.0
+		preparation_metrics["render_warm_max_frame_ms"] = warm_max_frame_ms
 		if preparation_cancelled or preparation_failed:
 			warming_render = false
 			return
@@ -149,7 +175,8 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			if not render_under_cover and not warming_render:
 				await get_tree().process_frame
 				await get_tree().process_frame
-				return
+				if pending_entries.is_empty() and loading_path.is_empty() and _actors_resolved():
+					return
 			if render_under_cover:
 				var has_combatants: bool = not combatants[0].species.is_empty() or not combatants[1].species.is_empty()
 				if not catalog_problem.is_empty() or (not active and has_combatants):
@@ -215,6 +242,9 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 	motion_offsets[index] = 0.0
 	restoring[index] = "idle"
 	lifecycle[index] = "empty" if normalized.is_empty() else "idle"
+	if is_instance_valid(actors[index]) and identities[index] != normalized:
+		actors[index].visible = false
+	_queue_needed_models()
 	if active and identities[index] == normalized and players[index] != null:
 		_action("reset", index)
 
@@ -223,7 +253,7 @@ func actor_index(ident: String) -> int:
 
 func handles(ident: String) -> bool:
 	var index := actor_index(ident)
-	return active and index >= 0 and is_instance_valid(actors[index])
+	return active and index >= 0 and identities[index] == combatants[index].species and is_instance_valid(actors[index])
 
 func set_sleeping(index: int, sleeping: bool) -> void:
 	if lifecycle[index] == "fainted":
@@ -445,6 +475,11 @@ func _load_catalog(path: String) -> void:
 	import_times_ms.clear()
 	model_cache_hits = 0
 	catalog_read_ms = 0.0
+	model_validation_ms = 0.0
+	catalog_entries.clear()
+	catalog_calibration.clear()
+	validated_entries.clear()
+	failed_models.clear()
 	catalog_problem = "Invalid 3D catalog; choose a prepared preview report in Settings"
 	reason = catalog_problem
 	entries.clear()
@@ -462,11 +497,10 @@ func _load_catalog(path: String) -> void:
 	ground_offsets.clear()
 	placements.clear()
 	motion_clips.clear()
-	var calibration := {}
 	if FileAccess.file_exists(prepared_path+".grounding.json"):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(prepared_path+".grounding.json"))
 		if parsed is Dictionary and parsed.get("schema",0)==1 and parsed.get("entries") is Dictionary:
-			calibration = parsed.entries
+			catalog_calibration = parsed.entries
 	var file := FileAccess.open(prepared_path, FileAccess.READ)
 	if file == null or file.get_length() > 1048576:
 		return
@@ -490,29 +524,89 @@ func _load_catalog(path: String) -> void:
 				valid = false
 		if not valid:
 			continue
-		if not pending_entries.any(func(item): return item.species == entry.species):
-			var ground: Dictionary = calibration.get(entry.species,{})
-			var runtime_hash := FileAccess.get_sha256(model_path)
-			var placement := ModelPlacement.resolve(entry, ground, runtime_hash)
-			if placement.is_empty():
-				catalog_problem = "Invalid model placement: " + str(entry.species)
-				continue
-			placements[entry.species] = placement
-			motion_clips[entry.species] = MotionPlacement.resolve(MOTION_PROFILES.data.get(entry.species, {}), placement, runtime_hash, timing)
-			entry["_verified_runtime_hash"] = runtime_hash
-			entry["_source_bytes"] = model_file.get_length()
-			# External dependencies are not covered by a scene-file hash.
-			entry["_resource_cache_key"] = ModelCache.key(model_path, runtime_hash, timing) if ResourceLoader.get_dependencies(model_path).is_empty() else ""
-			if placement.calibrated:
-				ground_offsets[entry.species] = placement
-			pending_entries.append(entry)
+		if not catalog_entries.has(entry.species):
+			catalog_entries[entry.species] = entry.duplicate(true)
 	catalog_read_ms = (Time.get_ticks_usec() - catalog_started) / 1000.0
-	if not pending_entries.is_empty():
+	if not catalog_entries.is_empty():
 		catalog_problem = ""
 		reason = "Preparing local 3D models…"
+		_queue_needed_models()
 	else:
 		catalog_problem = "Catalog has no valid prepared Dragonite/Roaring Moon models"
 		reason = catalog_problem
+
+func _needed_species() -> Array[String]:
+	var needed: Array[String] = []
+	for platform in platforms:
+		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
+			return []
+	for index in 2:
+		var box: Node = boxes[index] if index < boxes.size() else null
+		var double: bool = box != null and box.double_container.visible
+		var substitute: bool = box != null and box.substitute_active
+		var species: String = combatants[index].species
+		if species.is_empty() and not double and not substitute:
+			continue
+		if not supported(species, combatants[index].shiny, double, substitute):
+			return [] # Pair fallback must not import unused art.
+		if species not in needed:
+			needed.append(species)
+	return needed
+
+func _actors_resolved() -> bool:
+	if not active:
+		return true # The process loop has resolved a fallback.
+	for index in 2:
+		if identities[index] != combatants[index].species:
+			return false
+	return true
+
+func _queue_needed_models() -> void:
+	if preparation_cancelled or preparation_failed:
+		return
+	if is_inside_tree() and get_tree().root.get_node("SettingsManager").battle_presentation_mode != "3d":
+		return
+	var needed := _needed_species()
+	pending_entries = pending_entries.filter(func(entry): return entry.species in needed)
+	for species in needed:
+		if packed.has(species) or failed_models.has(species) or not catalog_entries.has(species):
+			continue
+		if loading_entry.get("species", "") == species or pending_entries.any(func(entry): return entry.species == species):
+			continue
+		# A catalog is a battle-local resource snapshot, just like packed actors.
+		# Revalidate on catalog reload/new battle, not on every switch back.
+		if validated_entries.has(species):
+			pending_entries.append(validated_entries[species].duplicate(true))
+			continue
+		var started := Time.get_ticks_usec()
+		var entry: Dictionary = catalog_entries[species].duplicate(true)
+		var model_path: String = entry.runtime_path
+		var runtime_hash := FileAccess.get_sha256(model_path)
+		var model_file := FileAccess.open(model_path, FileAccess.READ)
+		var placement := ModelPlacement.resolve(entry, catalog_calibration.get(species, {}), runtime_hash)
+		if runtime_hash.is_empty() or model_file == null or model_file.get_length() > 134217728 or placement.is_empty():
+			failed_models[species] = true
+			continue
+		placements[species] = placement
+		ground_offsets.erase(species)
+		if placement.calibrated:
+			ground_offsets[species] = placement
+		motion_clips[species] = MotionPlacement.resolve(MOTION_PROFILES.data.get(species, {}), placement, runtime_hash, entry.action_timing)
+		entry["_verified_runtime_hash"] = runtime_hash
+		entry["_source_bytes"] = model_file.get_length()
+		entry["_resource_cache_key"] = ModelCache.key(model_path, runtime_hash, entry.action_timing) if ResourceLoader.get_dependencies(model_path).is_empty() else ""
+		validated_entries[species] = entry.duplicate(true)
+		pending_entries.append(entry)
+		model_validation_ms += (Time.get_ticks_usec() - started) / 1000.0
+
+func _prune_models() -> void:
+	# Active and retiring actors own their resources independently. Keep only
+	# current demand in this presenter; the bounded shared LRU owns warm reuse.
+	var needed := _needed_species()
+	for species in packed.keys():
+		if species not in needed:
+			packed.erase(species)
+			entries.erase(species)
 
 func _import_next_model() -> void:
 	if loading_path.is_empty():
@@ -531,6 +625,7 @@ func _import_next_model() -> void:
 		loading_path = loading_entry.runtime_path
 		loading_started = Time.get_ticks_usec()
 		if ResourceLoader.load_threaded_request(loading_path, "PackedScene", false, ResourceLoader.CACHE_MODE_IGNORE) != OK:
+			failed_models[loading_entry.species] = true
 			catalog_problem = "Could not load prepared 3D model: " + str(loading_entry.species)
 			loading_path = ""
 			loading_entry.clear()
@@ -540,8 +635,12 @@ func _import_next_model() -> void:
 		return
 	if status == ResourceLoader.THREAD_LOAD_LOADED:
 		var scene := ResourceLoader.load_threaded_get(loading_path) as PackedScene
-		if scene != null:
+		if scene == null:
+			failed_models[loading_entry.species] = true
+			catalog_problem = "Invalid prepared 3D scene: " + str(loading_entry.species)
+		else:
 			if FileAccess.get_sha256(loading_path) != str(loading_entry.get("_verified_runtime_hash", "")):
+				failed_models[loading_entry.species] = true
 				catalog_problem = "Prepared 3D model changed during loading; select the catalog again"
 				loading_path = ""
 				loading_entry.clear()
@@ -553,6 +652,7 @@ func _import_next_model() -> void:
 			if not cache_key.is_empty():
 				ModelCache.retain(cache_key, scene, int(loading_entry._source_bytes))
 	elif status == ResourceLoader.THREAD_LOAD_FAILED:
+		failed_models[loading_entry.species] = true
 		catalog_problem = "Could not load prepared 3D model: " + str(loading_entry.species)
 		ResourceLoader.load_threaded_get(loading_path)
 	loading_path = ""
@@ -696,6 +796,10 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		_cancel_load()
 		pending_entries.clear()
+		catalog_entries.clear()
+		catalog_calibration.clear()
+		validated_entries.clear()
+		failed_models.clear()
 		loaded_path = "!unloaded"
 		if not packed.is_empty() or viewport != null:
 			_clear_actors()
@@ -722,9 +826,11 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		_load_catalog(path)
 		return
+	_queue_needed_models()
 	if not pending_entries.is_empty() or not loading_path.is_empty():
 		_import_next_model()
-		return
+		if not pending_entries.is_empty() or not loading_path.is_empty():
+			return
 	if packed.is_empty() and not catalog_problem.is_empty():
 		reason = catalog_problem
 		_set_active(false)
@@ -765,7 +871,9 @@ func _process(delta: float) -> void:
 			if arena_preparing:
 				reason = "Preparing forest assets…"
 				return
+		var arena_started := Time.get_ticks_usec()
 		_build_world()
+		arena_build_ms += (Time.get_ticks_usec() - arena_started) / 1000.0
 	_set_active(true)
 	_update_camera(delta)
 	reason = "Experimental 3D active"
@@ -779,6 +887,7 @@ func _process(delta: float) -> void:
 			identities[i] = ""
 			continue
 		if identities[i] != desired[i]:
+			var actor_started := Time.get_ticks_usec()
 			if is_instance_valid(actors[i]):
 				actors[i].queue_free()
 			actors[i] = packed[desired[i]].instantiate()
@@ -794,6 +903,7 @@ func _process(delta: float) -> void:
 			identities[i] = desired[i]
 			resting[i] = true
 			_action(restoring[i], i)
+			actor_build_ms += (Time.get_ticks_usec() - actor_started) / 1000.0
 		players[i].speed_scale = playback_speed
 		if transition_tweens[i] != null and transition_tweens[i].is_valid():
 			transition_tweens[i].set_speed_scale(playback_speed)
@@ -807,6 +917,7 @@ func _process(delta: float) -> void:
 		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
 		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
 		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
+	_prune_models()
 
 func _exit_tree() -> void:
 	for index in 2:

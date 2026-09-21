@@ -353,9 +353,11 @@ func _run() -> void:
 		assert(not battle.player_sprite_box.presentation_anchor.is_valid())
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 1)
 		# Cancel a fresh in-flight request, then let the detached drain finish.
+		settings.battle_presentation_mode = "3d"
 		stage._load_catalog(report)
 		stage._import_next_model()
 		assert(not stage.loading_path.is_empty())
+		settings.battle_presentation_mode = "2.5d"
 		stage._process(0.0)
 		assert(stage.loading_path.is_empty() and stage.pending_entries.is_empty())
 		for frame in 30:

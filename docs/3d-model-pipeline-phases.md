@@ -345,10 +345,70 @@ This checkpoint still loads the entire approved two-model catalog. Demand loadin
 larger-catalog policy and first-use CPU/GPU/shader performance remain below; it
 does not promise instant first battles or eliminate arena reconstruction.
 
-Demand-driven preparation/cache, bounded eviction, first-use shader measurements,
-and repeated switch tests. Preserve arena-only Team Preview and fallback behavior.
-Measure CPU/GPU first-use separately from disk loading; no quality reduction by
-default.
+### Phase 4B — demand loading and acceptance (approved pair)
+
+Catalog indexing now reads metadata only. Model hashing, calibration, motion
+validation and scene requests happen only for the eligible active pair. Empty
+Team Preview requires no model import/hash work; unsupported pairs request no
+new scenes. Duplicate species share one resource but instantiate separate actors.
+Requests not yet started are removed when demand changes; a running threaded
+request is collected safely. Cancelled preparation drains without publishing.
+Failed imports or a file changing during import are rejected once per catalog,
+not retried every frame.
+
+Each presenter retains only currently needed packed resources after resolving
+its actors. The shared two-entry/64 MiB **serialized-source** admission policy
+remains; active actors and an in-flight import can hold additional resources.
+This is not a whole-process RAM/VRAM cap. Battle-local validated entries form a
+snapshot: switching back neither rehashes nor changes the model version halfway
+through battle. A new battle/catalog reload validates source bytes again.
+
+Existing lead/switch release routes already await preparation. The await now
+rechecks pending work and resolved actor identities before allowing release, and
+retiring actors cannot handle actions for a newly selected species. Hidden
+summon models stay hidden. No networking, battle authority, sound timing,
+native tracks, art quality, or supported-species allowlist was changed.
+
+Preparation diagnostics separate catalog indexing, model validation, threaded
+scene loading, arena construction, actor construction and render warmup.
+Blocking pipeline deltas are ordered canvas/mesh/surface/draw; background
+specialization is deliberately not a readiness blocker. The existing opaque-cover
+warmup requires five drawn frames with stable pipeline counts/viewport/actors
+and reuses the same viewport after reveal. Wall-clock warmup is not GPU time.
+
+Focused acceptance (`tests/battle_model_demand_check.gd`, slot-c
+`.tmp/phase4-demand-final.log`, Godot 4.6.2 Forward+, RTX 3070 Laptop):
+
+- Three stadium lifecycles, each starting with empty Team Preview, then a
+  supported single lead, the pair, and three round trips between duplicate
+  Roaring Moon actors and Dragonite/Roaring Moon. Hidden summon, recall,
+  resource reuse, unused-resource pruning and weak-reference cleanup asserted.
+- Empty previews: zero imports/validation; index below 1 ms. First observed
+  preview approximately 270 ms versus approximately 170 ms repeats. These are
+  observed timings, not budgets or a cleared-driver-cache benchmark.
+- Repeated switches perform no new scene import or hash validation. The warmed
+  pair reports zero new blocking pipelines during its final readiness sample.
+- Separate engine viewport measurements after warmup: main-pass GPU maxima
+  around 2.7–3.3 ms, response-pass GPU maxima around 1.4–1.6 ms. CPU timings are
+  reported independently. Viewport measurements exclude other UI/world work;
+  do not sum their maxima into a total-frame claim.
+- Video memory stayed at 775,901,376 bytes at the same checkpoint. Post-teardown
+  static memory was 160,768,542 → 160,802,526 → 160,812,334 bytes with the shared
+  model cache deliberately retained (well below the 1 MiB growth guard).
+- Cancellation and simulated stale validation reject without cache publication;
+  original assets were not modified. The bounded-cache test and progress
+  watchdog remain separate regression checks.
+- `phase4-final-client-02.log`: three full battle-presentation cycles including
+  forest, native actions/faint, substitute fallback and mode-exit cleanup pass.
+  Final action p95 was 17.3 ms; first-load frame spikes still reached 1.44 s.
+  Post-cleanup static memory was 387,818,136 → 387,849,772 → 387,857,832 bytes.
+
+Phase 4's loading/cache/measurement baseline is complete for the approved pair.
+First arena construction and first-use validation still take time; this is not
+an instant-first-battle promise or low-end hardware certification. Driver/Godot
+caches were not deleted or copied. Phase 5 must repeat resource/performance
+acceptance for representative new models before increasing the allowlist or
+changing cache capacity. A large-catalog preload strategy is not enabled.
 
 ## Phase 5 — representative acceptance
 
