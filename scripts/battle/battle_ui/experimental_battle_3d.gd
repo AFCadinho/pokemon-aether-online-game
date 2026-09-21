@@ -4,6 +4,7 @@ extends Control
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
+const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
 const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_placement.gd")
 const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
@@ -616,23 +617,17 @@ func _action(action: String, index: int) -> void:
 			return
 		if not changed and players[index].current_animation in ["idle", "sleep", "faint_start", "faint_loop"]:
 			return
-	if not players[index].has_animation(action):
-		if action not in ["physical_attack", "special_attack"]:
-			return
-		var alternate := "special_attack" if action == "physical_attack" else "physical_attack"
-		if not players[index].has_animation(alternate):
-			return # Keep the current idle; never fall back to a sprite effect.
-		action = alternate
+	var mapped := ActionMap.resolve(action, players[index].get_animation_list(), entries[identities[index]].action_timing)
+	if mapped.is_empty():
+		return # Keep the current pose; never fall back to a sprite effect.
+	action = mapped.action
 	action_generation[index] += 1
 	current_actions[index] = action
-	var spec: Dictionary = entries[identities[index]].action_timing[action]
-	var animation: Animation = players[index].get_animation(action)
-	animation.length = float(spec.frames) / 60.0
-	animation.loop_mode = Animation.LOOP_LINEAR if spec.get("loop", false) else Animation.LOOP_NONE
-	if action == "faint_loop":
-		animation.loop_mode = Animation.LOOP_LINEAR
+	var animation: Animation = players[index].get_animation(mapped.clip)
+	animation.length = mapped.duration
+	animation.loop_mode = Animation.LOOP_LINEAR if mapped.loop else Animation.LOOP_NONE
 	players[index].speed_scale = playback_speed
-	players[index].play(action, -1, float(spec.speed))
+	players[index].play(mapped.clip, -1, mapped.speed)
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
 
 func _update_camera(delta: float) -> void:

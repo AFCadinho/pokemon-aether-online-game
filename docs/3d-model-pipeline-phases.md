@@ -246,6 +246,35 @@ own measurements and visual review; phase 5 still owns broader model acceptance.
 
 ## Phase 3 — animation mapping
 
+### Phase 3A — shared contracts implemented
+
+`animations/model_action_map.gd` now owns native clip selection, native duration
+and speed metadata, forced faint-loop repetition and the explicit physical ↔
+special fallback. Other missing actions keep the current pose; unknown actions
+never select arbitrary clips. The existing realtime presenter uses this map.
+No asset-name alias schema or new source clips are introduced.
+
+`animations/battle_sound_timeline.gd` extracts source/custom audio cues without
+textures, nodes or audio playback. `take_frame` preserves legacy duplicate keys,
+custom defaults/order, source-event disabling, volume and pitch. The existing
+2D/2.5D MoveAnimationPlayer now uses it. `compile` exposes one traversal's source
+duration and cue timestamps, respecting start/end frames and FPS; timestamps
+are unscaled, for a future playback-speed-aware driver.
+
+Focused checks: `tests/battle_animation_contract_check.tscn` verifies selection,
+invalid metadata, cue dedup/reset, cropped frame ranges and actual legacy-player
+parity for Outrage, Dragon Dance, Roost, stat up/down and health up (nine cues).
+The routing fixture still confirms no sprite-catalog/VFX access in 3D, correct
+miss callbacks and cancellation. Three real-client 3D battle cycles pass.
+Evidence: slot-c `.tmp/phase3-parity.log`, `phase3-routes.log`, `phase3-client.log`.
+
+**Phase 3 is not complete:** 3D does not yet play this shared audio timeline.
+Phase 3B must connect an audio-only driver with generation-scoped cancellation,
+speed/pause handling, single event ownership (no duplicate audio), sound-only
+resource preparation and tests for differing native clip/source durations.
+Preserve the native model clip timing rather than silently stretching it to a
+sprite sheet. No shared clock or 3D sound playback is claimed by phase 3A.
+
 Explicit clip mappings and fallbacks for idle, physical/special attack, damage,
 sleep and faint. Preserve source timing; extract shared audio/event timing
 separately from 2D versus 3D visual drivers. Test cancellation and playback speed.
