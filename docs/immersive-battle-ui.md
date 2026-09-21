@@ -47,10 +47,12 @@ offsets, local animation motion and hazard children are preserved. HP panels
 track the sprite bounds. Camera reset is visible only for an active 3D presenter.
 Classic is unchanged; this does not modify native 3D camera or actor placement.
 
-The calculator uses frame bounds converted into drawer-local coordinates, with
-scrolling for overflow. Its overview precedes collapsible advanced settings;
-the existing calculation, selections and requests are unchanged. Chat/log is
-temporarily hidden while the calculator is open. Classic keeps its two columns.
+The calculator uses frame bounds converted into drawer-local coordinates.
+Immersive uses a 60/40 results/settings workspace with independent scroll areas.
+Below 1500 pixels it switches to Results/Settings tabs. Recalculation preserves
+the selected workspace tab and scroll positions. Existing calculations and
+requests are unchanged. Chat/log is temporarily hidden while the calculator is
+open. Classic keeps its original two columns.
 Stat/ability badges are positioned after the moving HP panels by the Immersive
 HUD controller, not the legacy sprite-position helper. Side effects follow below.
 Overlapping HP panels are separated vertically.
@@ -65,7 +67,8 @@ release; Classic does not install this helper.
 `battle_typography_check.gd` checks effective text sizes and hover bounds at
 1280×720, 1920×1080 and 2560×1440, with optional rendered screenshots.
 It also checks badge tracking, HP-panel separation, calculator frame bounds and
-advanced-settings expansion. The chat bridge test checks calculator occlusion.
+four-move results, independent panes and compact-tab persistence. The chat bridge
+test checks calculator occlusion.
 The existing `battle_calcdex_matchup_check.gd` still reports two SampleSetField
 assertions: both were reproduced with the calculator script reverted to the
 pre-change version. HP-scale and stat-stage operation checks pass separately.

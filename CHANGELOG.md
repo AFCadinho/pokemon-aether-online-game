@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive Damage Calculator now places results and settings side by side, with independent scrolling. Smaller windows use Results/Settings tabs, and recalculation preserves your settings tab and scroll position.
+
 - Immersive 2D/2.5D battles now use a more compact, centered Pokémon/platform layout, leaving room for the shared battle controls. Camera reset is shown only for realtime 3D.
 - Fixed 2D sprites, battle controls and chat appearing over the loading screen while a 3D battle prepares. The prepared arena is revealed only after the loading cover fades.
 - Realtime 3D battles now use model attack animations independently of the 2D/2.5D move effects. Existing sprite effects remain available in 2D; unsupported 3D effects no longer insert flat animations into the arena.
