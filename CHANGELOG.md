@@ -4,6 +4,8 @@
 
 - De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
 
+- Desktop-builds bevatten nu de benodigde battle-UI-afbeeldingen en contentpakket-helper, zodat gevechten ook zonder losse 2D-spritepakketten kunnen openen.
+
 - De launcher heeft nu een apart venster voor 3D-modellen: importeer een gecontroleerd modelpakket en selecteer het voor de volgende gamestart. Installeren gebeurt op de achtergrond en verandert je opgeslagen game-instellingen niet.
 
 - De bericht- en spectatorbalken blijven in immersive gevechten nu met duidelijke tussenruimte van elkaar gescheiden.

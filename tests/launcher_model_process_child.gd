@@ -4,6 +4,8 @@ extends "res://tests/phase5_battle_stress_check.gd"
 func _run() -> void:
 	var directory := OS.get_environment("POKEAETHER_E2E_OUTPUT")
 	var phase := OS.get_environment("POKEAETHER_E2E_PHASE")
+	if not OS.get_environment("POKEAETHER_E2E_GAME_BINARY").is_empty():
+		assert(not OS.has_feature("editor"), "Export smoke test accidentally used the editor engine")
 	var settings = root.get_node("SettingsManager")
 	var selected := OS.get_environment("POKEAETHER_MODEL_CATALOG")
 	assert(selected.is_absolute_path() and FileAccess.file_exists(selected))
@@ -18,6 +20,7 @@ func _run() -> void:
 		OS.set_environment("POKEAETHER_PHASE5_CAPTURE", "0")
 		OS.set_environment("POKEAETHER_PHASE5_STRESS_OUTPUT", directory.path_join("battles"))
 		await super._run()
+		assert(evidence.get("complete", false) and evidence.rounds.size() == 3, "Battle matrix did not finish")
 	else:
 		# New process means a cold in-memory model cache; no manual catalog assignment.
 		settings.battle_presentation_mode = "3d"
@@ -37,7 +40,7 @@ func _run() -> void:
 		Cache.clear()
 	assert(FileAccess.get_sha256(settings.SETTINGS_PATH) == settings_hash, "Battle tests changed saved settings")
 	var file := FileAccess.open(directory.path_join(phase + "-result.json"), FileAccess.WRITE)
-	file.store_string(JSON.stringify({"complete": true, "pid": OS.get_process_id(), "launcher_pid": OS.get_environment("POKEAETHER_E2E_PARENT_PID").to_int(), "catalog_sha256": FileAccess.get_sha256(selected), "settings_unchanged": true}))
+	file.store_string(JSON.stringify({"complete": true, "pid": OS.get_process_id(), "launcher_pid": OS.get_environment("POKEAETHER_E2E_PARENT_PID").to_int(), "catalog_sha256": FileAccess.get_sha256(selected), "settings_unchanged": true, "standalone_runtime": not OS.has_feature("editor")}))
 	file.close()
 	print("MODEL_PROCESS_CHILD_OK phase=", phase)
 	quit()

@@ -1,7 +1,7 @@
 extends RefCounted
 ## Desktop cosmetics only. Pack selection is frozen until the next game start.
 const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
-const STORE_SCRIPT_PATH := "res://launcher/scripts/content_pack_store.gd"
+const STORE_SCRIPT_PATH := "res://scripts/services/content_pack_store.gd"
 const STORE_MAX_FILE_BYTES := 64 * 1024 * 1024
 const STORE_SELECTABLE_CATEGORIES: Array[String] = ["cries", "battle_sprites", "followers"]
 static var _entries: Dictionary = {}
@@ -25,9 +25,8 @@ static func initialize() -> void:
 	_loaded = true
 	if OS.has_feature("web") or OS.has_feature("web_preview"):
 		return
-	# The browser export intentionally excludes launcher/. Load the desktop-only
-	# store after the web guard so shared callers such as PokemonAssets still
-	# compile and can provide the bundled HOME icons in browser builds.
+	# Launcher is a separate Godot project and is excluded by game exports.
+	# Keep a parity-tested game-local store; retain the web guard for cosmetics.
 	var store_script := load(STORE_SCRIPT_PATH) as Script
 	if store_script == null:
 		return

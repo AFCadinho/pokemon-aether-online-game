@@ -204,3 +204,46 @@ performance guards pass (p95 17.70 / 17.26 / 17.27 ms), but covered entry has
 a **1.43-second** frame: no instant-loading claim. Existing UID fallbacks remain;
 no script errors or shutdown leak warning occurred. 21 focused Python checks
 also pass. See [process evidence](launcher-model-process-validation.json).
+
+### Standalone exported runtime check
+
+The official 4.6.2 Linux debug template disables command-line project/script
+overrides (see [Godot's startup handling](https://github.com/godotengine/godot/blob/4.6/main/main.cpp)).
+Do not run the preceding `--script` command against that binary: it starts the
+ordinary main scene instead. An initial attempt did this and briefly ran the
+launcher's public update check; it was stopped without login or applying updates.
+
+For offline export testing, temporarily set each **task-slot** project's
+`application/run/main_scene` to its own
+`res://tests/model_export_bootstrap.tscn`, export its PCK with the existing
+Linux preset, then restore both original main scenes immediately. No other
+project settings or export filters are replaced for this test. Assemble each
+PCK beside the official `linux_debug.x86_64` template with matching basenames
+(`launcher.x86_64`/`launcher.pck`, `game.x86_64`/`game.pck`). These bootstraps
+attach the existing offline checks to the running SceneTree after autoloads;
+neither is wired into normal application startup.
+
+Use the same isolated environment described above, plus
+`POKEAETHER_E2E_GAME_BINARY` (absolute exported game executable) and
+`POKEAETHER_E2E_ENTRY` (absolute path to the test shell fixture). Start the
+exported launcher directly, without `--path`, `--main-pack` or `--script`.
+Run `install` then `restart` in separate processes. Both sides verify they
+are using the standalone runtime, and the parent rejects child log errors.
+
+The initial offline export reproduced two release-only failures: the game
+referenced a store under the excluded standalone `launcher/` project, and
+desktop filters removed HOME icon dependencies of `sprite_box.tscn` and
+`team_preview_layer.tscn`. The game-local parity-tested content store and
+narrowed desktop sprite exclusions fix these dependencies. Windows/macOS
+filter coverage is static only; executable testing here is Linux only.
+
+After those fixes, the exported install/start and separate launcher/game restart
+both pass. The first game completes all three battles and existing 5C performance
+guards; the second loads empty Team Preview and shiny Pikachu/Snorlax from a
+cold model cache. Saved game settings remain unchanged. No script/resource
+errors or leak warnings occur in the final runtime logs. P95 is
+17.42 / 17.38 / 17.33 ms, but covered entry still reaches **1.66 seconds**.
+The content-pack regression, web sprite contract and 23 Python checks pass.
+See [export evidence](launcher-model-export-validation.json) for hashes,
+measurements, failure history and scope. Test-only main-scene overrides are
+restored; these artifacts are not intended for players or publication.
