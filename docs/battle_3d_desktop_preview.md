@@ -24,11 +24,17 @@ Catalog errors remain visible even when supported Pokémon become active.
 If a developer test works but a normal launch does not, check the saved catalog
 path: tests may supply an environment variable that the regular client lacks.
 
-The report now needs a prepared companion (`report.json.runtime.json`). Run
+Existing reports may use a prepared companion (`report.json.runtime.json`). Run
 `tools/sprite_factory/prepare_battle_3d_runtime.gd` once through slot-env with
-`POKEAETHER_3D_STAGE_REPORT` pointing to the source report. It writes compressed
-native scenes into `prepared-runtime/` beside that report, preserving meshes,
-materials and all native 60 Hz animation tracks. It records source hashes.
+`POKEAETHER_3D_STAGE_REPORT` pointing to the source report and
+`POKEAETHER_3D_RUNTIME_OUTPUT` naming a NEW absolute output directory. Python 3
+must be available for preflight. The converter writes native `.scn` files and
+publishes `report.json` inside that new directory only after every model passes.
+It never replaces the selected catalog. Existing output directories are refused.
+It preserves meshes, materials and native 60 Hz animation tracks, and records
+separate original-source, GLB and runtime hashes. See
+[phased pipeline](3d-model-pipeline-phases.md) for remaining material-response,
+grounding and visual-acceptance steps before switching a catalog.
 Re-run preparation after changing a source GLB; this is developer tooling,
 not a player-side import, download service or finalized distribution format.
 The current local pair is already prepared. The existing selected report path

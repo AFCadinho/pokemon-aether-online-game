@@ -16,7 +16,7 @@ The current path is source catalog/manifest → explicit Blender export job → 
 GLB/report → offline Godot `.scn` conversion → separate grounding sidecar →
 background runtime loading. Existing tools are reused, not replaced wholesale.
 
-Evidence and remaining gaps:
+Evidence at the start of Phase 1A (converter gaps addressed in 1B below):
 
 - `prepare_battle_3d_probe.py` selects from the study's species catalog, pins
   reviewed source metadata, and creates an explicit export job.
@@ -51,14 +51,36 @@ reports all detected errors. It does not import scenes, inspect embedded texture
 references, verify Blender source hashes, or certify visual quality. A valid
 preflight alone does not qualify a model for the game.
 
-### Phase 1B — next implementation checkpoint
+### Phase 1B — converter implemented
 
-Generalize the offline converter, integrate preflight, replace assertions and
-silent skips with per-model failures, preserve distinct provenance hashes, and
-publish complete output only after successful validation. Validate actual meshes,
-material support and AnimationPlayer clips in Godot. Rebuild the approved pair
-into a NEW output directory and compare before switching any configured catalog.
-Do not overwrite the currently selected approved artifacts.
+The offline converter now accepts all validated species IDs. It runs the Python
+preflight before creating output, reports per-model failures instead of assertions
+or silent skips, and requires a new absolute `POKEAETHER_3D_RUNTIME_OUTPUT` directory.
+Godot checks mesh surfaces, StandardMaterial3D compatibility, one AnimationPlayer,
+and non-empty clips. Reloaded scenes must retain scene structure, mesh counts,
+clip lengths/loops and track paths/types/key counts. This is structural validation,
+not a pixel-parity certificate or exhaustive shader/texture validation.
+
+`source_sha256` preserves the exporter-provided Blender hash; `glb_sha256` and
+`runtime_sha256` identify subsequent stages. `provenance_schema: 1` and converter
+version 2 describe the extra metadata; `runtime_schema: 1` stays compatible with
+the existing reader. The material-response embedding step refreshes the runtime
+hash when it produces a new scene. Older catalogs remain readable unchanged.
+
+All entries must succeed before a pending report is renamed to `report.json`.
+Failed runs retain diagnostic JSON and any completed scenes in the new directory,
+but publish no catalog. Do not select these diagnostic directories. Re-run into
+a new directory; the converter never overwrites an earlier run.
+
+The approved pair has been rebuilt separately, without selecting the output.
+The GLB-to-scene output still needs material-response embedding, grounding and
+visual review before it can replace the approved in-game artifacts. The runtime
+allowlist and lighting are unchanged. An integration fixture renames existing
+art only to prove the converter has no species filter; it does not add a Pokémon.
+
+Run focused integration checks through slot-env with `POKEAETHER_3D_STAGE_REPORT`
+set to an existing GLB report:
+`python3 tools/sprite_factory/test_prepare_battle_3d_runtime.py`.
 
 ## Phase 2 — placement
 
