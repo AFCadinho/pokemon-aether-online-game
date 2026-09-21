@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive battles are now the default in the browser as well as the desktop client, with Classic still selectable in Settings. Team Preview Pokémon now stay anchored to the fullscreen arena across browser and desktop window sizes.
+
 - 3D battles now prepare only the active Pokémon instead of the entire model catalog. PvP Team Preview can open with just the arena; switching reuses checked model resources, and failed model loads do not retry endlessly.
 
 - Repeated 3D battles can reuse the prepared Pokémon model resources in memory, avoiding repeated scene imports. The cache is bounded and checks model contents and animation metadata before reuse.

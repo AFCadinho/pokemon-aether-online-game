@@ -18,6 +18,11 @@ func _process(delta: float) -> void:
 	_place(team_preview, Vector2(18, 90), team_preview.size, 0.75)
 	var opponent_rail: Control = battle.get_node("%OpponentStagePartyRail")
 	_place(opponent_rail, Vector2(area.x - 62, 90), opponent_rail.size, 0.75)
+	# The six-Pokemon Team Preview groups used fixed Classic-stage coordinates.
+	# Anchor both groups to the live arena so fullscreen and browser sizes retain
+	# the same mirrored composition as the active 2.5D combatants.
+	battle.player_team_preview_layer.position = Vector2(area.x * 0.30, area.y * 0.63)
+	battle.enemy_team_preview_layer.position = Vector2(area.x * 0.70, area.y * 0.39)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
 	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 204, area.y - 210), Vector2(178, 34), 0.8)
 	_place(stage.get_node("ResetCameraButton"), Vector2(area.x - 110, 16), Vector2(32, 28), 1.0)

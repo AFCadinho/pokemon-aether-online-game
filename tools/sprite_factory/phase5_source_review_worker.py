@@ -9,6 +9,7 @@ from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).parent))
 from blender_worker import bounds, inspect
+from phase5_review_actions import candidates
 
 
 def run(job):
@@ -29,8 +30,9 @@ def run(job):
         track.mute = True
     mapping = dict(job['actions'])
     if not mapping:
-        mapping = {name: candidates[0] for name, candidates in report['action_candidates'].items()
-                   if len(candidates) == 1}
+        report['review_action_candidates'] = candidates([action.name for action in bpy.data.actions])
+        mapping = {name: matches[0] for name, matches in report['review_action_candidates'].items()
+                   if len(matches) == 1}
     report['review_mapping'] = mapping
     poses = []
     for category, fraction, view in [('idle', 0.0, 'front'), ('idle', 0.5, 'back'),
