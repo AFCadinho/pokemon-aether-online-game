@@ -3610,7 +3610,16 @@ func _mount_battle_ui() -> bool:
 			]
 		)
 		return false
-	if (SettingsManager.battle_presentation_mode == "3d" or SettingsManager.battle_ui_layout == "immersive") and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	var use_immersive_screen := (
+		SettingsManager.battle_ui_layout == "immersive"
+		and not OS.has_feature("mobile")
+	)
+	var use_desktop_3d_screen := (
+		SettingsManager.battle_presentation_mode == "3d"
+		and not OS.has_feature("web")
+		and not OS.has_feature("mobile")
+	)
+	if use_immersive_screen or use_desktop_3d_screen:
 		battle_screen_host = preload("res://scenes/battle/battle_screen_host.tscn").instantiate()
 		battle_ui_host.add_child(battle_screen_host)
 		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) else WildEncounterTransition.STYLE_WILD

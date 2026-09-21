@@ -1,9 +1,10 @@
-# Desktop Battle UI
+# Immersive Battle UI
 
 Settings → Battle UI (next battle) selects Immersive (default) or Classic.
-This is independent of 2D/3D presentation and arena selection. Desktop Immersive
-uses the dedicated battle screen even for 2D fallback. Browser/mobile retain
-their existing embedded layout.
+This is independent of 2D/3D presentation and arena selection. Desktop and
+browser Immersive use the dedicated battle screen with the shared 2.5D fallback.
+Mobile retains the existing embedded layout until its touch and safe-area work
+is complete.
 
 Immersive gives the arena the full screen, places smaller HP panels above the Pokémon, keeps
 moves on the bottom right and the existing party controls near the bottom center.
