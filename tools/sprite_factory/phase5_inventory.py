@@ -13,7 +13,11 @@ def inventory(batch, model_root, motion_root, legacy_archive):
     results = []
     for candidate in load_batch(batch):
         entry = source_entry(candidate, model_root, motion_root)
-        member = f"Gen1/pm{candidate['pm']:04d}_00.blend"
+        filename = f"pm{candidate['pm']:04d}_00.blend"
+        matches = [name for name in (filename, 'Gen1/' + filename) if name in members]
+        if len(matches) > 1:
+            raise ValueError('Ambiguous legacy archive members: ' + filename)
+        member = matches[0] if matches else filename
         legacy = members.get(member)
         entry['legacy_candidate'] = ({'archive': str(legacy_archive.resolve()),
                                       'member': member, 'bytes': legacy.file_size,

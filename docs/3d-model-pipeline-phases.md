@@ -514,3 +514,41 @@ approval before expanding the runtime allowlist. Phase 5B–5D are not complete.
 
 Each checkpoint uses focused tests and local development integration only.
 No new model support, deployment or full-batch certification is implied.
+
+### Phase 5B — recovered Gen1 sources
+
+The replacement Biochao archive, now at
+`/home/adinho/Documents/3d_models/Biochao/Gen1.zip`, passes ZIP integrity checks.
+The inventory/review tools accept either exact root-level `pmNNNN_00.blend`
+members or the earlier `Gen1/` layout, reject ambiguous layouts, and compare
+inventoried CRC and size before extraction. No source archive is rewritten.
+
+Evidence: slot-c `.tmp/phase5-inventory-03/inventory.json` and
+`.tmp/phase5-source-review-04/index.html`, its two contact sheets and per-species
+reports. All ten cases now produce source review reports: 48 pose images total.
+The earlier `-03` run retains diagnostics from the coarse action-name matcher.
+The final `-04` run uses token-delimited primary action names, preventing
+`attack01` from selecting `rangeattack01` and `down01` from selecting `jumpdown01`.
+Sleep uses the loop rather than arbitrarily choosing among start/loop/end clips.
+Ambiguous or absent matches remain explicit; this is not a runtime mapping change.
+
+- Abra: 16 actions, one rig, packed texture, readable sampled front/back,
+  special attack and faint endpoint. Idle retains its floating source height.
+  No identified physical attack, sleep or faint-loop clip; one hashed action
+  still needs motion review before concluding that those behaviors are absent.
+- Onix: 23 actions, one rig and five packed textures. Sampled long-body poses
+  remain visible with the auto-fit review camera; this does not certify battle
+  camera/HUD fit. No identified sleep/faint-loop clip; four hashed actions need
+  review. Sampled bounds extend slightly below source zero (faint about -0.091).
+- Snorlax: 48 actions, one rig, four packed textures, all seven primary action
+  categories identified, including true faint start/loop. Five sample poses
+  render successfully. The sampled sleep minimum is about -0.102 source units;
+  floor/contact handling still needs the animation-placement gate. An unused
+  empty texture node is reported, not a missing active texture.
+
+Embedded text blocks remain disabled. No missing external textures or linked
+libraries were reported for these three. Facing/shape/materials were visually
+inspected in the neutral source renders, not certified for Godot. No source
+geometry, floor offsets or species overrides were changed. Existing Gastly
+material and SCVI eyelid/TRACM issues remain, as do shiny, full-motion and battle
+reviews. The source-file blocker is resolved; phase 5B and 5C/5D are not complete.

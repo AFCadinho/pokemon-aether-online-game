@@ -30,14 +30,17 @@ def run_entry(entry, args):
             actions = {name: value['name'] for name, value in imported['actions'].items() if value}
         elif entry['legacy_candidate']:
             legacy = entry['legacy_candidate']
-            expected = f"Gen1/pm{entry['pm']:04d}_00.blend"
-            if legacy['member'] != expected:
+            filename = f"pm{entry['pm']:04d}_00.blend"
+            expected = legacy['member']
+            if expected not in (filename, 'Gen1/' + filename):
                 raise ValueError('Unexpected legacy archive member')
             source = directory / Path(expected).name
             with zipfile.ZipFile(legacy['archive']) as archive:
                 info = archive.getinfo(expected)
                 if info.file_size > 536870912 or info.file_size != legacy['bytes']:
                     raise ValueError('Legacy candidate size changed or exceeds review limit')
+                if 'crc32' in legacy and f'{info.CRC:08x}' != legacy['crc32']:
+                    raise ValueError('Legacy candidate CRC changed since inventory')
                 payload = archive.read(expected) # Validate CRC before creating a source file.
                 with source.open('xb') as target:
                     target.write(payload)
