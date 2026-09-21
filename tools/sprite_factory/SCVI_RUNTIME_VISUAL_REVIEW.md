@@ -1,5 +1,9 @@
 # Fixed 100 — standardized runtime visual screening
 
+> Follow-up diagnosis: `SCVI_VISUAL_FOLLOWUP.md` identifies missing visibility
+> playback with isolated A/B captures and compares Dugtrio's source scale track.
+> The screening counts and approval states below remain unchanged.
+
 ## Outcome
 
 The same **88 technically converted SCNs** were recaptured through the corrected

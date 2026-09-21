@@ -114,7 +114,7 @@ def main(job):
     from pokeaether_scvi_importer.PokemonSwitch import from_trmdlsv
     from pokeaether_scvi_importer.gfbanm_importer import import_animation
     from pokeaether_scvi_importer.GFLib.Anim.Animation import AnimationT
-    from scvi_tracm import inspect_tracm
+    from scvi_tracm import inspect_tracm, unapplied_channel_warnings
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.context.scene.world = bpy.data.worlds.new("PokeAether SCVI review")
@@ -201,12 +201,7 @@ def main(job):
     for category, path in job.get("motion_channels", {}).items():
         channel_animations[category] = inspect_tracm(path) if path else None
         summary = channel_animations[category]
-        if summary and summary["material_tracks"]:
-            channel_warnings.append(
-                f"unapplied_tracm_material:{category}:{summary['material_tracks']}")
-        if summary and summary["blendshape_tracks"]:
-            channel_warnings.append(
-                f"unapplied_tracm_blendshape:{category}:{summary['blendshape_tracks']}")
+        channel_warnings.extend(unapplied_channel_warnings(category, summary))
     import hashlib
     report = {"species": job["species"], "identity": identity, "variant": job["variant"],
               "prepared_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
