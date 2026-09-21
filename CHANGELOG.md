@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added an offline developer preview for trainer dialogue with Dragonite and Roaring Moon, repeatable left/right callouts, custom text and optional 3D arenas.
+
 - 3D and Immersive battles now reveal the prepared arena with the existing wild, trainer or PvP transition effect instead of a plain loading-screen fade.
 
 - In Immersive battles, full trainer-card artwork now appears beside the party previews while trainers speak, then fades away with their speech bubble. Corner portraits remain visible.
