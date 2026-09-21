@@ -15,6 +15,7 @@ func _run() -> void:
 	var settings := get_node("/root/SettingsManager")
 	var old_mode: String = settings.battle_presentation_mode
 	var old_path: String = settings.battle_3d_catalog_path
+	settings.battle_3d_arena = "stadium"
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_catalog_path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	# Use the real World's mount/clear paths, without startup network requests.
@@ -59,27 +60,36 @@ func _run() -> void:
 		assert(battle.modulate.a == 1.0)
 		if round_index == 0:
 			var presenter = battle.battle_stage.get_node("ExperimentalBattle3D")
+			# PvP Team Preview must reveal an empty arena before leads exist.
+			await presenter.await_prepared(true)
+			assert(not presenter.preparation_failed)
+			var empty_viewport = presenter.viewport
+			if not settings.battle_3d_catalog_path.is_empty():
+				assert(presenter.active and empty_viewport != null)
+				assert(presenter.actors[0] == null and presenter.actors[1] == null)
+			await get_tree().create_timer(0.3).timeout
+			assert(not host.get_node("Cover").visible, "Team Preview must not wait for selected leads")
 			presenter.set_combatant(0, "Dragonite")
 			presenter.set_combatant(1, "Roaring Moon")
 			presenter.set_actor_shown(0, false)
 			presenter.set_actor_shown(1, false)
-			assert(host.get_node("Cover").visible)
 			await presenter.await_prepared()
 			assert(not presenter.warming_render)
 			if not settings.battle_3d_catalog_path.is_empty():
 				assert(presenter.active and not presenter.preparation_failed)
 			var prepared_viewport = presenter.viewport
+			assert(prepared_viewport == empty_viewport, "Lead selection must reuse the prepared arena")
 			await get_tree().create_timer(0.3).timeout
 			assert(not host.get_node("Cover").visible)
 			assert(presenter.viewport == prepared_viewport, "Reveal replaced the prepared viewport")
 			if presenter.active:
 				assert(not presenter.actors[0].visible and not presenter.actors[1].visible)
-				var pipelines: Array = presenter._blocking_pipelines()
 				var response_viewport = presenter.material_response.viewport
 				await presenter.send_out("p1")
 				assert(presenter.actors[0].visible)
 				assert(presenter.material_response.viewport == response_viewport)
-				assert(presenter._blocking_pipelines() == pipelines, "Send-out compiled a new blocking pipeline after preparation")
+				# Arena-only preparation cannot precompile unknown lead materials.
+				assert(presenter.active and not presenter.preparation_failed)
 			assert(await _check_party_clicks(battle))
 			var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 			if not output.is_empty() and DisplayServer.get_name() != "headless":
