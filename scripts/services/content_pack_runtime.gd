@@ -1,7 +1,9 @@
 extends RefCounted
 ## Desktop cosmetics only. Pack selection is frozen until the next game start.
-const Store := preload("res://launcher/scripts/content_pack_store.gd")
 const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
+const STORE_SCRIPT_PATH := "res://launcher/scripts/content_pack_store.gd"
+const STORE_MAX_FILE_BYTES := 64 * 1024 * 1024
+const STORE_SELECTABLE_CATEGORIES: Array[String] = ["cries", "battle_sprites", "followers"]
 static var _entries: Dictionary = {}
 static var _cache: Dictionary = {}
 static var _pokemon_sprite_roots: Array[String] = []
@@ -21,22 +23,30 @@ static func initialize() -> void:
 	if _loaded:
 		return
 	_loaded = true
-	if OS.has_feature("web"):
+	if OS.has_feature("web") or OS.has_feature("web_preview"):
 		return
-	var store := Store.new(_mods_directory())
+	# The browser export intentionally excludes launcher/. Load the desktop-only
+	# store after the web guard so shared callers such as PokemonAssets still
+	# compile and can provide the bundled HOME icons in browser builds.
+	var store_script := load(STORE_SCRIPT_PATH) as Script
+	if store_script == null:
+		return
+	var store: Variant = store_script.new(_mods_directory())
 	_pokemon_sprite_roots = store.sprite_collection_directories()
 	var packs: Dictionary = {}
 	for pack in store.installed():
 		packs[pack.id] = pack
-	var selected := store.selected_by_category()
-	for category: String in Store.SELECTABLE_CATEGORIES:
+	var selected: Dictionary = store.selected_by_category()
+	for category: String in STORE_SELECTABLE_CATEGORIES:
 		var pack_id := str(selected.get(category, ""))
 		var pack: Dictionary = packs.get(pack_id, {})
 		var pack_assets: Dictionary = pack.get("assets", {})
 		if category == "battle_sprites":
 			for collection: Dictionary in pack_assets.get("sprite_collections", {}).values():
 				var style := str(collection.get("style", ""))
-				var collection_directory := store.asset_directory(pack_id, str(collection.get("directory", "")))
+				var collection_directory: String = store.asset_directory(
+					pack_id, str(collection.get("directory", ""))
+				)
 				if not style.is_empty() and not collection_directory.is_empty():
 					_sprite_collection_styles[style] = true
 		for key: String in pack_assets.get(category, {}):
@@ -74,7 +84,7 @@ static func cry(species: String) -> AudioStream:
 	for key in [direct_key, resolved_key, resolved_key.to_lower(), direct_key.to_upper().replace("-", "")]:
 		for entry: Dictionary in _entries.get("cries/" + key, []):
 			var file := FileAccess.open(entry.path, FileAccess.READ)
-			if file == null or file.get_length() > Store.MAX_FILE_BYTES:
+			if file == null or file.get_length() > STORE_MAX_FILE_BYTES:
 				continue
 			var bytes := file.get_buffer(file.get_length())
 			if bytes.size() < 4 or bytes.slice(0, 4).get_string_from_ascii() != "OggS":
@@ -98,7 +108,7 @@ static func has_sprite_collection_style(style: String) -> bool:
 
 static func _texture(path: String) -> Texture2D:
 	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null or file.get_length() < 24 or file.get_length() > Store.MAX_FILE_BYTES:
+	if file == null or file.get_length() < 24 or file.get_length() > STORE_MAX_FILE_BYTES:
 		return null
 	var bytes := file.get_buffer(file.get_length())
 	if bytes.slice(0, 8) != PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10]):

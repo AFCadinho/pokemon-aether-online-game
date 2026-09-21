@@ -49,12 +49,34 @@ def run_entry(entry, args):
             raise ValueError('No source candidate')
         job = {'species': species, 'source': str(source), 'output': str(directory),
                'actions': actions, 'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest()}
+        if getattr(args, 'layer_mask_probe', False):
+            from scvi_material_probe import inspect_materials, eligible, POLICY
+            job['material_probe_policy'] = POLICY
+            job['displacement_probe'] = getattr(args, 'displacement_probe', False)
+            if entry['review_route'] == 'scvi_candidate':
+                material_path = Path(entry['model_dir']) / (entry['identity'] + '.trmtr')
+                job['material_probe_source'] = str(material_path)
+                job['material_probe_sha256'] = hashlib.sha256(material_path.read_bytes()).hexdigest()
+                job['material_probe_metadata'] = inspect_materials(material_path)
+                if job['displacement_probe']:
+                    for material in job['material_probe_metadata']:
+                        if not eligible(material):
+                            continue
+                        name = material['textures']['DisplacementMap']
+                        if Path(name).name != name:
+                            raise ValueError('Unexpected displacement texture path')
+                        path = material_path.parent / Path(name).with_suffix('.png')
+                        material['displacement_image'] = str(path)
+                        material['displacement_sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+            else:
+                job['material_probe_metadata'] = []
         job_path = directory / 'job.json'
         job_path.write_text(json.dumps(job, indent=2))
         worker = Path(__file__).with_name('phase5_source_review_worker.py').resolve()
         command = ['flatpak', 'run', '--unshare=network', '--nofilesystem=host',
                    '--filesystem=' + str(args.output), '--filesystem=' + str(worker.parent) + ':ro',
                    '--filesystem=' + str(source) + ':ro',
+                   '--filesystem=' + str(args.model_root) + ':ro',
                    'org.blender.Blender', '--background', '--factory-startup', '--disable-autoexec',
                    '--python-exit-code', '1', '--python', str(worker), '--', str(job_path)]
         with (directory / 'review.log').open('w') as log:
@@ -71,9 +93,15 @@ def main():
     for name in ('inventory', 'model-root', 'motion-root', 'importer', 'python-deps', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--prepared-from', type=Path, help='Read-only reuse of this tool\'s existing imports')
+    parser.add_argument('--layer-mask-probe', action='store_true',
+                        help='Experimental opacity-only A/B review; never approves shader parity')
+    parser.add_argument('--displacement-probe', action='store_true',
+                        help='Also test native displacement texture with UV2 and centered height (unverified hypothesis)')
     args = parser.parse_args()
+    if args.displacement_probe and not args.layer_mask_probe:
+        parser.error('--displacement-probe requires --layer-mask-probe')
     for name, value in vars(args).items():
-        if value is not None:
+        if isinstance(value, Path):
             setattr(args, name, value.resolve())
     entries = json.loads(args.inventory.read_text())['entries']
     names = [entry['species'] for entry in entries]
@@ -84,6 +112,8 @@ def main():
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(lambda entry: run_entry(entry, args), entries))
     (args.output / 'catalog.json').write_text(json.dumps({'schema': 1, 'approval': False,
+        'material_probe': args.layer_mask_probe,
+        'displacement_probe': args.displacement_probe,
         'scope': 'source_materials_not_godot_conversion', 'entries': results}, indent=2))
     from phase5_review_gallery import build
     build(args.output)

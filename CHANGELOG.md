@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
+
 - Fixed browser battles sometimes showing an empty platform for Pokémon whose sprite catalog uses a compact species name, including Roaring Moon.
 
 - Immersive battles are now the default in the browser as well as the desktop client, with Classic still selectable in Settings. Team Preview Pokémon now stay anchored to the fullscreen arena across browser and desktop window sizes.

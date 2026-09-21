@@ -71,6 +71,9 @@ func _init() -> void:
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	_check(settings_source.contains("func get_active_sprite_style") and settings_source.contains('ContentPacks.has_sprite_collection_style("gen5")'),
 		"desktop content packs select the active Gen 5 sprite style")
+	var content_pack_source := FileAccess.get_file_as_string("res://scripts/services/content_pack_runtime.gd")
+	_check(not content_pack_source.contains('preload("res://launcher/') and content_pack_source.contains('OS.has_feature("web_preview")'),
+		"browser HOME icons do not depend on the launcher scripts excluded from the web pack")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(world_source.contains("_prefetch_current_map_wild_sprites") and world_source.contains("encounterTypes"),
 		"browser maps prefetch their wild encounter pool")

@@ -589,3 +589,49 @@ The rendered shell still hides the readable face/smoke silhouette. Shader and
 TRACM interpretation need a separate causal correction; no smoke mesh has been
 deleted or hidden. Abra/Onix hashed clips, Godot conversion review, shiny and
 phase 5C/5D remain outstanding. No runtime allowlist or battle UI changes.
+
+### Phase 5B — layered material causal probes (not a finished Gastly shader)
+
+The raw Gastly TRMTR specifies `NonDirectional`, five material layers, two UVs,
+`EnableDisplacementMap=True`, texture `pm0092_00_00_smoke_msk` and height about
+0.3. The pinned importer reads these values but does not wire displacement.
+Its generic shader only uses albedo alpha for surface opacity; the layer-mask
+alpha contributes to colour, not smoke transparency.
+
+An isolated, scripts-disabled inspection of the Biochao Gen1 Gastly reference
+shows a surface/transparent mix driven by layer-mask alpha (surface at 0,
+transparent at 1), plus animated procedural geometry nodes. That authored
+reference is evidence for a useful opacity hypothesis, not proof of exact
+SCVI displacement semantics. No reference scripts were executed or materials
+copied into game assets. Diagnostic extraction remains at slot-c
+`.tmp/gastly-shader-tT1Li6/`.
+
+`scvi_material_probe.py` reads the relevant TRMTR metadata and offers an
+explicit opt-in probe for this shader signature, not a species-name override.
+`phase5_source_review.py --layer-mask-probe` adds the mask-alpha transparent
+mix in memory, retaining the original shader nodes and all meshes. With
+`--displacement-probe` it additionally tests a static UV2 normal displacement
+using the original texture and height, with an explicitly unverified 0.5
+midlevel. Texture SHA checks, dedicated two-UV mesh checks and duplicate-apply
+rejection guard the probe. No Blend saves, source rewrites, runtime enables or
+automatic visual approvals occur. Ordinary review without flags is unchanged.
+
+Evidence against `.tmp/phase5-source-review-05/`:
+
+- `.tmp/phase5-material-probe-01/`: opacity-only, face becomes visible through
+  the remaining spherical shell.
+- `.tmp/phase5-material-probe-02/`: opacity + displacement hypothesis, shell
+  develops a non-round outline but remains too dark/static for approval.
+- Both runs render all ten models / 48 samples. Only Gastly's five images
+  differ; the other 43 images are pixel-identical to the baseline.
+- Focused tests cover signature rejection, malformed input and explicit probe
+  gallery labelling. `check_scvi_material_probe.py` runs inside Blender for
+  both actual Gastly jobs and verifies preserved native vertices, polygons,
+  visibility and original nodes, unchanged unrelated materials, correct mask
+  socket wiring, duplicate rejection and unchanged source hashes.
+
+The gallery labels these as experimental, not native source shading. This
+checkpoint establishes a causal opacity correction and a displacement probe,
+not the final shader. NonDirectional lighting, animated UV/TRACM interpretation,
+verified displacement behaviour and Godot representation remain unresolved.
+Do not promote this probe to the runtime converter based on these stills.
