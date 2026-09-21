@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De vrouwelijke Wishmaker Outfit is toegevoegd aan de overworld-customization, met jurk, haar, oorbellen en schoenen.
+
 - De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
 
 - Desktop-builds bevatten nu de benodigde battle-UI-afbeeldingen en contentpakket-helper, zodat gevechten ook zonder losse 2D-spritepakketten kunnen openen.
