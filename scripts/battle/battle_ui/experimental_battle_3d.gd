@@ -3,6 +3,7 @@ extends Control
 ## Missing models/forms/doubles/substitute fall back as a pair, never guessing art.
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
+const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const ForestPool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
@@ -28,6 +29,7 @@ var environment_id: StringName = &"grass"
 var arena_root: Node3D
 var arena_problem := ""
 var ground_offsets := {}
+var placements := {}
 var arena_preparing := false
 var material_response: Node
 var boxes: Array = []
@@ -440,6 +442,7 @@ func _load_catalog(path: String) -> void:
 		return
 	var prepared_path := path + ".runtime.json" if FileAccess.file_exists(path + ".runtime.json") else path
 	ground_offsets.clear()
+	placements.clear()
 	var calibration := {}
 	if FileAccess.file_exists(prepared_path+".grounding.json"):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(prepared_path+".grounding.json"))
@@ -470,9 +473,13 @@ func _load_catalog(path: String) -> void:
 			continue
 		if not pending_entries.any(func(item): return item.species == entry.species):
 			var ground: Dictionary = calibration.get(entry.species,{})
-			var expected_scale := 1.0 if entry.species == "dragonite" else 0.65
-			if ground.get("sha256","") == FileAccess.get_sha256(model_path) and is_equal_approx(float(ground.get("scale",0)),expected_scale) and is_finite(float(ground.get("lift",NAN))) and float(ground.get("lift",-1)) >= 0:
-				ground_offsets[entry.species] = ground
+			var placement := ModelPlacement.resolve(entry, ground, FileAccess.get_sha256(model_path))
+			if placement.is_empty():
+				catalog_problem = "Invalid model placement: " + str(entry.species)
+				continue
+			placements[entry.species] = placement
+			if placement.calibrated:
+				ground_offsets[entry.species] = placement
 			pending_entries.append(entry)
 	if not pending_entries.is_empty():
 		catalog_problem = ""
@@ -737,9 +744,9 @@ func _process(delta: float) -> void:
 			actors[i].position = _position(i)
 			if ground_offsets.has(desired[i]):
 				actors[i].position.y += float(ground_offsets[desired[i]].lift)
-			actors[i].scale = Vector3.ONE * (1.0 if desired[i] == "dragonite" else 0.65)
+			actors[i].scale = Vector3.ONE * float(placements[desired[i]].scale)
 			var direction := _position(1-i) - _position(i)
-			actors[i].rotation.y = atan2(direction.x, direction.z)
+			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[desired[i]].yaw_degrees))
 			players[i] = _find_player(actors[i])
 			identities[i] = desired[i]
 			resting[i] = true
@@ -750,7 +757,7 @@ func _process(delta: float) -> void:
 		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
 			_action(restoring[i], i)
 		actors[i].visible = warming_render or actor_shown[i]
-		actors[i].scale = Vector3.ONE * (1.0 if warming_render else actor_scale[i]) * (1.0 if identities[i] == "dragonite" else 0.65)
+		actors[i].scale = Vector3.ONE * (1.0 if warming_render else actor_scale[i]) * float(placements[identities[i]].scale)
 		if not resting[i] and not players[i].is_playing():
 			resting[i] = true
 			_action(restoring[i], i)

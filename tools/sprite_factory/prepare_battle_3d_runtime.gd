@@ -83,6 +83,10 @@ func _inspect(node: Node, species: String, players: Array) -> int:
 
 func _convert(entry: Dictionary, output: String) -> Dictionary:
 	var species: String = entry.species
+	var placement := preload("res://scripts/battle/battle_ui/model_placement.gd").resolve(entry, {}, "")
+	if placement.is_empty():
+		errors.append(species + ": invalid placement metadata")
+		return {}
 	var before := errors.size()
 	var glb_hash := FileAccess.get_sha256(entry.path)
 	var document := GLTFDocument.new()
@@ -143,6 +147,7 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 	var prepared := entry.duplicate(true)
 	prepared.runtime_path = target
 	prepared.runtime_schema = 1
+	prepared.placement = {"scale": placement.scale, "yaw_degrees": placement.yaw_degrees}
 	prepared.provenance_schema = 1
 	prepared.glb_sha256 = glb_hash
 	prepared.runtime_sha256 = FileAccess.get_sha256(target)

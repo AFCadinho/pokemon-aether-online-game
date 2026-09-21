@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 3D model placement now supports asset-defined scale and facing, with grounding checks tied to the exact model and placement. Existing approved models retain their current appearance.
+
 - Fixed 3D PvP loading getting stuck before Team Preview: the empty arena can now prepare before leads are selected. Trainer speech bubbles now sit closer to their trainer sprites.
 
 - Added an offline developer preview for trainer dialogue with Dragonite and Roaring Moon, repeatable left/right callouts, custom text and optional 3D arenas.
