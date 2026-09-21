@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De bericht- en spectatorbalken blijven in immersive gevechten nu met duidelijke tussenruimte van elkaar gescheiden.
+
 - Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.
 
 - De lokale 3D-modelcatalogus ondersteunt nu de gecontroleerde normale en shiny versies van Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite en Roaring Moon, met passende animaties en HP-balkposities. Ontbrekende of niet-goedgekeurde modellen blijven op 2.5D terugvallen.
