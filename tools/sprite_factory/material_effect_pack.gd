@@ -2,6 +2,40 @@ extends RefCounted
 const Effect = preload("res://scripts/battle/battle_ui/material_effect.gd")
 var failure := ""
 
+func _samples(raw: Dictionary, material: ShaderMaterial) -> bool:
+	if not raw.has("uv_samples"):
+		return true # Existing affine manifests remain compatible.
+	if not raw.uv_samples is Dictionary:
+		failure = "Invalid effect UV samples"
+		return false
+	var rows := [raw.uv_samples.get("UVScaleOffset"), raw.uv_samples.get("UVScaleOffset3")]
+	if not rows[0] is Array or not rows[1] is Array or rows[0].size() < 2 or rows[0].size() > 4096 or rows[1].size() != rows[0].size():
+		failure = "Invalid effect sample dimensions"
+		return false
+	var image := Image.create(rows[0].size(), 2, false, Image.FORMAT_RGBAF)
+	for row in 2:
+		for frame in rows[row].size():
+			var values: Variant = rows[row][frame]
+			if not values is Array or values.size() != 4:
+				failure = "Invalid effect sample channels"
+				return false
+			for value in values:
+				if not (value is int or value is float) or not is_finite(float(value)):
+					failure = "Nonfinite effect sample"
+					return false
+			if values[0] <= 0 or values[1] <= 0 or values[0] != rows[row][0][0] or values[1] != rows[row][0][1]:
+				failure = "Invalid sampled UV scale"
+				return false
+			image.set_pixel(frame, row, Color(values[0], values[1], values[2], values[3]))
+		var parameter: String = ["UVScaleOffset", "UVScaleOffset3"][row]
+		for channel in 4:
+			if rows[row][0][channel] != raw.tracks[parameter][channel][0] or rows[row][-1][channel] != raw.tracks[parameter][channel][1]:
+				failure = "Sample endpoints differ from validated loop"
+				return false
+	material.set_shader_parameter("uv_samples", ImageTexture.create_from_image(image))
+	material.set_shader_parameter("sampled_uv", true)
+	return true
+
 func _texture(record: Dictionary) -> Texture2D:
 	var path := str(record.get("path", ""))
 	if not path.is_absolute_path() or FileAccess.get_sha256(path) != record.get("sha256", "") or str(record.get("sha256", "")).length() != 64:
@@ -31,12 +65,12 @@ func apply(node: Node, manifest: Dictionary, glb_hash: String) -> bool:
 		return false
 	var materials := {}
 	for raw in manifest.records:
-		if not raw is Dictionary or not raw.get("material") is String or materials.has(raw.material) or raw.get("profile") not in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_v1"]:
+		if not raw is Dictionary or not raw.get("material") is String or materials.has(raw.material) or raw.get("profile") not in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_v1", "scvi_unlit_layered_displacement_uv2_v1"]:
 			failure = "Unknown or duplicate effect profile"
 			return false
 		var material := ShaderMaterial.new()
 		material.shader = Shader.new()
-		material.shader.code = Effect.SHADER.code # Embed; no external runtime shader dependency.
+		material.shader.code = Effect.SAMPLED_SHADER.code if raw.has("uv_samples") else Effect.SHADER.code
 		material.set_meta(Effect.META, 1)
 		for key in ["loop_seconds", "height", "intensity", "alpha_cutoff"]:
 			var value: Variant = raw.get(key)
@@ -44,7 +78,7 @@ func apply(node: Node, manifest: Dictionary, glb_hash: String) -> bool:
 				failure = "Invalid effect scalar"
 				return false
 			material.set_shader_parameter(key, float(value))
-		if raw.get("use_uv2") != (raw.profile == "scvi_nondirectional_layered_displacement_v1"):
+		if raw.get("use_uv2") != (raw.profile in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_uv2_v1"]):
 			failure = "Invalid effect UV binding"
 			return false
 		material.set_shader_parameter("use_uv2", raw.use_uv2)
@@ -81,6 +115,8 @@ func apply(node: Node, manifest: Dictionary, glb_hash: String) -> bool:
 				return false
 			material.set_shader_parameter(mapping[1] + "_start", start)
 			material.set_shader_parameter(mapping[1] + "_end", end)
+		if not _samples(raw, material):
+			return false
 		materials[raw.material] = material
 	var used := {}
 	_bind(node, materials, used)

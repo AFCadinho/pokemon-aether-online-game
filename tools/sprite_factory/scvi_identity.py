@@ -216,7 +216,11 @@ def bind(entry, identity, catalog, model_root, motion_root, species_path):
     for p in sorted(model_dir.iterdir()):
         if p.is_file():
             files[str(p)] = sha(p)
-            if p.suffix in ('.trskl', '.trmsh', '.trmbf', '.trmtr'):
+            # The pinned importer reads TRMDL.Materials(0) for normal imports,
+            # never the sibling _rare.trmtr. Still hash-bind every sibling, but
+            # compare only the selected variant's material to ROMFS. This is
+            # not permission to import shiny using a normal identity proof.
+            if p.suffix in ('.trskl', '.trmsh', '.trmbf') or (p.suffix == '.trmtr' and p.name in materials):
                 original = motion_dir / p.name
                 if not original.is_file() or sha(original) != files[str(p)]:
                     raise ValueError('Mesh/material/skeleton differs from ROMFS: ' + p.name)
@@ -264,6 +268,10 @@ def validate_entry(entry):
 
 def validate_prepared_source(source, imported):
     source = Path(source)
+    for action in imported.get('actions', {}).values():
+        span = action.get('range', []) if action else []
+        if len(span) == 2 and span[1] <= span[0]:
+            raise ValueError('Cached clip has no duration; reimport from native source timing')
     expected = imported.get('prepared_sha256')
     if expected is None:
         # Read-only migration for existing reviewed imports. Never bless the
