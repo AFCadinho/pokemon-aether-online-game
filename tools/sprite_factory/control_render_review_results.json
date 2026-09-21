@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "scope": "four_model_runtime_render_order_diagnosis_and_fix",
+  "models_modified": false,
+  "reexported": false,
+  "runtime_approvals_changed": false,
+  "full_cohort_visual_yield": null,
+  "runs": [
+    {
+      "directory": "frontend/.tmp/control-render-02",
+      "report_sha256": "401d41bc52add26b7fc5f4697dba52f298a830c0115bc0179f8a321bc5c3306f",
+      "models": [
+        {
+          "species": "jigglypuff",
+          "runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 304,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 25,
+          "max_changed_pixels": 44502,
+          "equal_light_readbacks": null
+        },
+        {
+          "species": "eevee",
+          "runtime_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 296,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 24,
+          "max_changed_pixels": 33673,
+          "equal_light_readbacks": null
+        },
+        {
+          "species": "dragonite",
+          "runtime_sha256": "725ada339cef7100669b50b879a1b210bd9e51e7cff665f936f6cdb54f0ed155",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 333,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 22,
+          "max_changed_pixels": 31075,
+          "equal_light_readbacks": null
+        },
+        {
+          "species": "ditto",
+          "runtime_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 285,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 24,
+          "max_changed_pixels": 35303,
+          "equal_light_readbacks": null
+        }
+      ]
+    },
+    {
+      "directory": "frontend/.tmp/control-render-forward-01",
+      "report_sha256": "2470201aeab6aedde14ec0ef19793a71f0c7819e7a9fcbe8d46cefd258eb1160",
+      "models": [
+        {
+          "species": "jigglypuff",
+          "runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 304,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 24,
+          "max_changed_pixels": 74274,
+          "equal_light_readbacks": null
+        },
+        {
+          "species": "eevee",
+          "runtime_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 296,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 24,
+          "max_changed_pixels": 56167,
+          "equal_light_readbacks": null
+        },
+        {
+          "species": "dragonite",
+          "runtime_sha256": "725ada339cef7100669b50b879a1b210bd9e51e7cff665f936f6cdb54f0ed155",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 333,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 22,
+          "max_changed_pixels": 34107,
+          "equal_light_readbacks": null
+        },
+        {
+          "species": "ditto",
+          "runtime_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 285,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 24,
+          "max_changed_pixels": 67377,
+          "equal_light_readbacks": null
+        }
+      ]
+    },
+    {
+      "directory": "frontend/.tmp/control-light-order-01",
+      "report_sha256": "316d81f11ed5982fe37c54ba25a8718d4fb946595cc10e0a14679e2258fc0528",
+      "models": [
+        {
+          "species": "jigglypuff",
+          "runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 304,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 24,
+          "max_changed_pixels": 74274,
+          "equal_light_readbacks": 25
+        }
+      ]
+    },
+    {
+      "directory": "frontend/.tmp/control-light-parent-01",
+      "report_sha256": "1b458385ddb69c20a878697135f3291689c6e3806112d9facbca23ae6466881e",
+      "models": [
+        {
+          "species": "jigglypuff",
+          "runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 304,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        }
+      ]
+    },
+    {
+      "directory": "frontend/.tmp/control-render-fixed-forward-01",
+      "report_sha256": "12db1bfdad6f3087437542e14a02cc3850982d200cba8a7dce281e79a6a2d519",
+      "models": [
+        {
+          "species": "jigglypuff",
+          "runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 304,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        },
+        {
+          "species": "eevee",
+          "runtime_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 296,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        },
+        {
+          "species": "dragonite",
+          "runtime_sha256": "725ada339cef7100669b50b879a1b210bd9e51e7cff665f936f6cdb54f0ed155",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 333,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        },
+        {
+          "species": "ditto",
+          "runtime_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 285,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        }
+      ]
+    },
+    {
+      "directory": "frontend/.tmp/control-render-fixed-gl-01",
+      "report_sha256": "12db1bfdad6f3087437542e14a02cc3850982d200cba8a7dce281e79a6a2d519",
+      "models": [
+        {
+          "species": "jigglypuff",
+          "runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 304,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        },
+        {
+          "species": "eevee",
+          "runtime_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 296,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        },
+        {
+          "species": "dragonite",
+          "runtime_sha256": "725ada339cef7100669b50b879a1b210bd9e51e7cff665f936f6cdb54f0ed155",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 333,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        },
+        {
+          "species": "ditto",
+          "runtime_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+          "legacy_mismatched_pose_samples": 12,
+          "runtime_mismatched_pose_samples": 0,
+          "motion_frames": 285,
+          "motion_bone_mismatch_frames": 0,
+          "settled_checkpoints": 25,
+          "changed_checkpoints_over_0_05": 0,
+          "max_changed_pixels": 0,
+          "equal_light_readbacks": 25
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "path": "frontend/.tmp/control-render-forward-01/jigglypuff-special_attack-0.5-legacy.png",
+      "sha256": "6c3b79fb6ed955b56c19c669396019783e079d632ad0a53d477bb851b2e8a533"
+    },
+    {
+      "path": "frontend/.tmp/control-render-forward-01/jigglypuff-special_attack-0.5-runtime.png",
+      "sha256": "71c26a41b175539b9e88c6c0f71612436f9bbb8c3de8800a37d247288c9b5c11"
+    },
+    {
+      "path": "frontend/.tmp/control-render-forward-01/jigglypuff-motion-sleep-0000.png",
+      "sha256": "cb867cf8f63bb9923b6373a0c0e73ba84910c2ace82181f5a6f6ea1e6db6b766"
+    },
+    {
+      "path": "frontend/.tmp/control-render-forward-01/jigglypuff-settled-sleep-0000.png",
+      "sha256": "b703f1a694fbbc15429d16c624ea527c50c2901a475cb11297749c6ffec4666c"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/jigglypuff-motion-sleep-0000.png",
+      "sha256": "b703f1a694fbbc15429d16c624ea527c50c2901a475cb11297749c6ffec4666c"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/jigglypuff-settled-sleep-0000.png",
+      "sha256": "b703f1a694fbbc15429d16c624ea527c50c2901a475cb11297749c6ffec4666c"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/dragonite-motion-sheet.png",
+      "sha256": "690b41ffd6cb236238ba4918f895bf568a6956da69c272f5013222e333e57580"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/ditto-motion-sheet.png",
+      "sha256": "171dc6b34ef50b3927f95412c7cf077b445be8e3c6561d5943a8b30b60c0be9d"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/eevee-motion-sheet.png",
+      "sha256": "fd33ff87acb38564c4ba5decb9ad80deb15fa052cc6ce3f3f6fe1a4cf5c87930"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/jigglypuff-motion-sheet.png",
+      "sha256": "33764da58360d11f9c49a9bc1e6dececfa2e886442b046fd71179afb18298c40"
+    },
+    {
+      "path": "frontend/.tmp/control-render-fixed-forward-01/jigglypuff-motion-special_attack.mp4",
+      "sha256": "d3bd0ba49efcac7ab512d82b4666fa8131cc90323357534494ab16fdbbf1558b"
+    }
+  ]
+}
