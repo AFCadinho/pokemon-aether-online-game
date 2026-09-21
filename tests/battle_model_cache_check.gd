@@ -37,6 +37,8 @@ func _run() -> void:
 	var retained_bytes := 0
 	for cycle in 3:
 		var stage := Renderer.new()
+		stage.set_combatant(0, "Dragonite")
+		stage.set_combatant(1, "Roaring Moon")
 		var started := Time.get_ticks_usec()
 		stage._load_catalog(report)
 		var deadline := Time.get_ticks_msec() + 15000
