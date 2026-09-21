@@ -36,6 +36,10 @@ func _process(delta: float) -> void:
 	var turn: Control = battle.get_node("%BattleStatusPanel")
 	_place(turn, Vector2(94, 14), turn.size, 0.6)
 	var presenter = battle.animation_router.model_presenter
+	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active
+	stage.get_node("ResetCameraButton").visible = realtime_3d
+	if not realtime_3d:
+		_compose_sprite_battle(stage)
 	if is_instance_valid(presenter) and is_instance_valid(presenter.mode_label):
 		presenter.mode_label.hide()
 	var occupied := Rect2()
@@ -80,3 +84,17 @@ func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float
 	control.size = dimensions
 	control.position = point
 	control.scale = Vector2.ONE * factor
+
+func _compose_sprite_battle(stage: Control) -> void:
+	# Move/scale each complete sprite box and platform together. Sprite-local
+	# grounding, attack motion, substitutes and platform hazards stay unchanged.
+	var factor := 0.82
+	for index in 2:
+		var center := Vector2(stage.size.x * (0.38 if index == 0 else 0.65), stage.size.y * (0.59 if index == 0 else 0.46))
+		var platform: Control = battle.player_battle_platform if index == 0 else battle.enemy_battle_platform
+		var box: Control = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
+		var platform_origin := center - Vector2(250,150) * factor
+		# Offsets between the original 1152×648 platform and sprite-box origins.
+		var sprite_offset := Vector2(11,-37) if index == 0 else Vector2(23,-29)
+		_place(platform, platform_origin, Vector2(600,250), factor)
+		_place(box, platform_origin + sprite_offset * factor, Vector2(450,293), factor)

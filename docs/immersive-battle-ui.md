@@ -40,6 +40,13 @@ instead of cropping controls. The host preserves uniform scaling.
 
 ## Immersive typography
 
+Immersive also supports the sprite renderer. While realtime 3D is inactive, its
+sprite/platform groups are composed at 82% of the original size, centered at
+38%/65% of stage width and 59%/46% of stage height. Relative platform/sprite-box
+offsets, local animation motion and hazard children are preserved. HP panels
+track the sprite bounds. Camera reset is visible only for an active 3D presenter.
+Classic is unchanged; this does not modify native 3D camera or actor placement.
+
 The calculator uses frame bounds converted into drawer-local coordinates, with
 scrolling for overflow. Its overview precedes collapsible advanced settings;
 the existing calculation, selections and requests are unchanged. Chat/log is
