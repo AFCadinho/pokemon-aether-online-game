@@ -84,6 +84,27 @@ set to an existing GLB report:
 
 ## Phase 2 — placement
 
+### Phase 2A — runtime metadata checkpoint
+
+New converter output includes `placement: {scale, yaw_degrees}`. Runtime
+placement and summon scaling consume these fields rather than species branches.
+The two legacy asset defaults are isolated in `model_placement.gd` solely for
+backward compatibility. No currently selected artifact has been rewritten.
+
+Grounding sidecars still use schema 1. Each entry binds `sha256`, `scale`, `lift`
+and optionally `yaw_degrees` (legacy default zero). Hash, scale and yaw must all
+match before lift is accepted; stale calibration retains the existing fallback
+behavior. Invalid authored placement is rejected. This checkpoint does not
+recalibrate the approved pair or expand the runtime model allowlist.
+
+### Phase 2B — next: generic pose-sweep calibration
+
+Replace the two-model review-harness exporter with a model-independent offline
+measurement pass. Distinguish resting ground contact from intentional flight or
+attack movement, record sampled clips/poses, and visually inspect both models
+from multiple angles before selecting new calibration. Current idle-sweep
+grounding remains in use until this passes.
+
 Define per-asset scale/orientation/ground or flight metadata; remove hardcoded
 species scales. Calibrate across relevant animation poses, not just idle. Verify
 feet/tails, surfaces, both sides and camera angles without lighting changes.
