@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In Immersive battles, full trainer-card artwork now appears beside the party previews while trainers speak, then fades away with their speech bubble. Corner portraits remain visible.
+
 - Immersive Damage Calculator now places results and settings side by side, with independent scrolling. Smaller windows use Results/Settings tabs, and recalculation preserves your settings tab and scroll position.
 
 - Immersive 2D/2.5D battles now use a more compact, centered Pokémon/platform layout, leaving room for the shared battle controls. Camera reset is shown only for realtime 3D.
