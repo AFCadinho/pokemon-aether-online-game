@@ -1,6 +1,8 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
 const IDS := ["classic", "forest", "cave", "sea", "stadium"]
+const Framing = preload("res://scripts/battle/arenas/arena_framing.gd")
+const CAMERA_FOV := Framing.CAMERA_FOV
 const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
 
 static func validate_selection(id: String) -> String:
@@ -85,13 +87,13 @@ static func validate(id: String) -> String:
 	return id if id in IDS else "classic"
 
 static func spawn(index: int) -> Vector3:
-	return Vector3(-2.8,0,1.5) if index == 0 else Vector3(2.8,0,-1.5)
+	return Framing.spawn(index)
 
 static func camera_home(id: String) -> Vector3:
-	return Vector3(2.5,5.0,16.0) if id == "stadium" else Vector3(4,5.5,12)
+	return Framing.camera_home(id)
 
 static func camera_target(id: String) -> Vector3:
-	return Vector3(0,2.8,0) if id == "stadium" else Vector3(0,1.3,0)
+	return Framing.camera_target(id)
 
 static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 	if id == "forest" and not mounted_forest.is_empty():

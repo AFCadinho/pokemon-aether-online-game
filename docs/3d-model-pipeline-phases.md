@@ -753,3 +753,67 @@ SOURCE_REVIEW/catalog.json NEW_OUTPUT --scvi-pbr-probe`; then run Godot with
 `--path NEW_OUTPUT --script ABSOLUTE_PATH/phase5_godot_review.gd` via slot-env.
 Build the HTML with the same Python command plus `--gallery-only` after Godot
 has written `godot-review.json` (omit `--scvi-pbr-probe` for the direct baseline).
+
+### Phase 5B — battle-scale, floor and camera measurements
+
+`arena_framing.gd` now owns the existing spawn positions, two camera presets
+and 48-degree FOV. The runtime arena catalog delegates to it without changing
+values. The standalone `phase5_battle_review.gd` loads that same small contract
+and `model_placement.gd` in the autoload-free diagnostic project; no arena
+assets, game sessions or production services are loaded. The arena contract
+test checks all previous positions, targets and FOV explicitly.
+
+Evidence: slot-c `.tmp/phase5-battle-review-03/battle-review.json`, `summary.json`
+and `index.html`. The first `-01` run has equivalent measurements but lacks the
+final completion/provenance fields. The `-02` repeat stalled waiting for a
+normal render-frame signal and was terminated without deleting its evidence.
+The diagnostic now explicitly draws frames after processing pose updates,
+rather than waiting indefinitely when ordinary window draws pause. Its engine
+log is explicitly slot-local. Reports are marked unapproved and partial
+runs remain incomplete. Source catalog, framing script, placement script and
+GLBs are hash-identified. `phase5_battle_summary.py` refuses partial runs and
+inconsistent sample counts/clearance, and never writes runtime calibration.
+
+All 58 available clips across nine models were sampled at 60 Hz (8,184 pose
+samples including clip endpoints). Candidate lift is derived only from the
+lowest idle geometry, with 0.025 clearance, never by moving floating models
+down. Scale remains the current defaults: 1.0, or 0.65 for the Roaring Moon
+control. There are no species-specific new scale or offset overrides.
+
+There are 136 representative screenshots: both sides, both shared camera
+presets, idle/attack/sleep/faint where available, against a Dragonite control.
+The stage is a flat floor, not the real forest/cave/sea/stadium geometry. Cyan
+labels and conservative projected bounds approximate the current fixed-height
+HP anchor; this does not certify the actual HUD, its collision resolution,
+camera orbit or terrain/ceiling occlusion.
+
+Findings at 1152×648:
+
+- Sampled shots stay inside the viewport, but Pikachu is only about 22–32 px
+  tall. Its current HUD proxy sits 114–146 px above its bounds. Native scale
+  alone therefore does not establish readable battle presentation.
+- Onix overlaps the fixed-height HUD proxy in all four idle and all four
+  attack views. Roaring Moon also overlaps it slightly in two classic idle
+  views. Use model-derived presentation bounds rather than one three-unit
+  height for every species; do not solve this with arbitrary HUD offsets.
+- Abra retains its native floating motion: candidate lift 0, lowest idle
+  geometry about 0.065 above the floor. Articuno's full idle loop needs a
+  candidate lift about 0.531, which the earlier three-pose sample missed.
+- An idle-only lift is insufficient during other clips for every case. For
+  example Snorlax sleep still reaches about -0.095; Onix faint about -0.108;
+  Articuno damage about -0.450. Reuse and validate the existing per-clip motion
+  clearance pipeline before runtime acceptance, with sleep intent reviewed
+  explicitly. The fresh control exports have no approved runtime motion
+  profiles applied, so their penetrations are not a regression claim about
+  currently approved in-game assets.
+
+Focused arena-contract and placement tests pass, as do 36 relevant Python
+tests and the rendered measurement run. Phase 5B remains open: next address
+model-derived HUD bounds and readable small-model scale, then bake/review
+motion clearance. Gastly, missing Abra/Onix mappings, shiny and 5C remain held.
+
+Run via slot-env in the generated Godot project with `--script
+ABSOLUTE_PATH/phase5_battle_review.gd`, `POKEAETHER_PHASE5_REVIEW` pointing to the
+conversion output, `POKEAETHER_PHASE5_FRONTEND` to the task frontend and
+`POKEAETHER_PHASE5_BATTLE_OUTPUT` to a new directory. Then run
+`python3 tools/sprite_factory/phase5_battle_summary.py NEW_DIRECTORY`.
