@@ -4,10 +4,13 @@ var failures := 0
 
 func _init() -> void:
 	var service := FileAccess.get_file_as_string("res://scripts/services/player_hotbar_service.gd")
+	var action_service := FileAccess.get_file_as_string("res://scripts/services/player_action_service.gd")
 	var ui := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	var drag_source := FileAccess.get_file_as_string("res://scripts/ui/hotbar_bag_item_slot.gd")
 	var sidebar := FileAccess.get_file_as_string("res://scenes/interface/hotkey_sidebar.tscn")
 	_check(service.contains("/game/hotbar"), "generic hotbar endpoint")
+	_check(service.contains("WebRuntime.gameplay_url(base_url + HOTBAR_ENDPOINT)"), "browser hotbar uses the scoped web route")
+	_check(action_service.contains("WebRuntime.gameplay_url(base_url + endpoint)"), "browser hotkey actions use the scoped web route")
 	_check(service.contains("func assign("), "persistent slot assignment")
 	_check(ui.contains("func _setup_player_hotbar"), "existing hotkey sidebar integration")
 	_check(ui.contains("range(8)"), "eight hotbar slots")

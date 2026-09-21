@@ -4,6 +4,16 @@
 
 - Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
 
+- Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
+
+- Immersive 2D-gevechten houden de HP-balken en Pokémon-indicatoren zonder overlap boven de sprites.
+
+- De immersive HUD groepeert weather en terrain bij het spelersportret, de beurt bij het tegenstanderportret en side conditions bij de bijbehorende teamiconen.
+
+- The browser client now loads, saves and activates the same eight-slot hotkey bar as the desktop client, including Ctrl+1 through Ctrl+8 shortcuts.
+
+- Pressing Escape while Pokémon Storage is open now closes Storage instead of opening Settings over it, preventing browser instability.
+
 - Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
 
 - Fixed browser battles sometimes showing an empty platform for Pokémon whose sprite catalog uses a compact species name, including Roaring Moon.

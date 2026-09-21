@@ -81,7 +81,7 @@ func _request_json(method: HTTPClient.Method, body: String) -> Dictionary:
 	add_child(request)
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var headers := GatewayApiConfig.get_accept_headers() if method == HTTPClient.METHOD_GET else GatewayApiConfig.get_json_headers()
-	var error := request.request(base_url + HOTBAR_ENDPOINT, headers, method, body)
+	var error := request.request(WebRuntime.gameplay_url(base_url + HOTBAR_ENDPOINT), headers, method, body)
 	if error != OK:
 		request.queue_free()
 		return {
