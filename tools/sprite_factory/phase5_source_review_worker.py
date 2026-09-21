@@ -57,6 +57,8 @@ def run(job, material_intervention=None, camera_bounds=None):
         mapping = {name: matches[0] for name, matches in report['review_action_candidates'].items()
                    if len(matches) == 1}
     report['review_mapping'] = mapping
+    from source_repairs import apply as apply_repair
+    report['source_repair'] = apply_repair(job['source_sha256'], mapping.values())
     poses = []
     for category, fraction, view in [('idle', 0.0, 'front'), ('idle', 0.5, 'back'),
                                       ('special_attack', 0.5, 'front'), ('sleep', 0.5, 'front'),

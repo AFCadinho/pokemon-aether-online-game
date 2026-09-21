@@ -5,6 +5,7 @@ extends Node
 const RESPONSE = preload("res://scripts/battle/battle_ui/material_response.gdshader")
 const IRRADIANCE = preload("res://scripts/battle/battle_ui/material_irradiance.gdshader")
 const META := "pokeaether_material_response"
+const Effect = preload("res://scripts/battle/battle_ui/material_effect.gd")
 var stage: Control
 var viewport: SubViewport
 var world: Node3D
@@ -33,6 +34,8 @@ static func apply_neutral_lighting(target: Node3D) -> void:
 		light.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 
 static func valid_material(original: Material) -> bool:
+	if Effect.valid(original):
+		return true
 	if not original is StandardMaterial3D:
 		return false
 	var data: Variant = original.get_meta(META, {})
@@ -77,7 +80,14 @@ func _pair(source: Node, copy: Node, list: Array) -> void:
 		copy.active = false
 	if source is MeshInstance3D and source.mesh != null:
 		for surface in source.mesh.get_surface_count():
-			var original: StandardMaterial3D = source.get_active_material(surface)
+			var original: Material = source.get_active_material(surface)
+			if Effect.valid(original):
+				# Effect shells are unlit and must not occlude the irradiance pass.
+				var hidden := ShaderMaterial.new()
+				hidden.shader = Shader.new()
+				hidden.shader.code = "shader_type spatial; void fragment() { discard; }"
+				copy.set_surface_override_material(surface, hidden)
+				continue
 			copy.set_surface_override_material(surface, _material(original, true))
 			source.set_surface_override_material(surface, _material(original, false))
 	for index in source.get_child_count():

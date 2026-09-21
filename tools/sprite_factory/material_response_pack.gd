@@ -55,6 +55,8 @@ func _embed(node: Node, materials: Dictionary) -> bool:
 	if node is MeshInstance3D and node.mesh != null:
 		for surface in node.mesh.get_surface_count():
 			var original: Material = node.get_active_material(surface)
+			if Response.Effect.valid(original):
+				continue # Independently validated unlit effect profile.
 			if not original is StandardMaterial3D or not materials.has(original.resource_name):
 				failure = "No reviewed response for a model surface"
 				return false

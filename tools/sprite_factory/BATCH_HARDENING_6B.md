@@ -1,4 +1,100 @@
-# 6B — batch hardening, first correction pass
+# 6B — batch hardening
+
+## Completion pass
+
+The engineering/retest pass is complete. Diagnosed failures now have generic
+fixes or explicit source/visual dispositions. This does **not** mean all 30 models
+are battle-approved. No catalog activation, admission relaxation, synthetic clips,
+or source-file edits were made. The first-pass record below is historical.
+
+### Legacy mapping disposition
+
+The second pass examined older hash-named clips and drowse families, including
+20 five-pose diagnostic reviews. Recurring 166-frame hashes show rest/calibration
+to battle movement, not established sleep. Other sampled hashes show movement,
+attacks or uncertain stationary poses. Their semantics remain unproven; no hash
+alias or generic `loop01` mapping was added.
+
+`kw20_drowseB01` maps to sleep only with matching A-entry and C-exit clips.
+Butterfree, Raticate and Parasect have that complete family. Real-source Blender
+bone-matrix checks show zero first/last-pose difference and nonzero midpoint
+movement for all three loops. Rendered resting poses were reviewed. This is one
+naming-family rule, not three species manifests.
+
+Native coverage limits after retest:
+
+- Butterfree, Raticate, Parasect: `faint_loop` missing.
+- Beedrill, Pidgeot, Machamp, Onix, Alakazam: `sleep`, `faint_loop` missing.
+- Abra: additionally no identified `physical_attack`.
+
+All nine have faint-start. The existing final-faint-pose hold is a runtime fallback,
+not a native loop. The six missing sleeps and Abra's attack require additional
+motion evidence/assets; admission rules remain unchanged.
+
+### Effect profiles implemented, visual limits retained
+
+The completion adds `scvi_unlit_layered_displacement_v1` (one UV, fire) alongside
+the recognized NonDirectional two-UV smoke profile. These use TRMTR provenance,
+source mask/displacement PNGs, native intensity/height and auxiliary TRACM loops.
+The exporter requires both affine UV tracks, constant positive scales and whole
+repeat cycles. Multiple banks must agree; missing/ambiguous data stays blocked.
+Color-domain texture baking feeds the reconstructed unlit alpha/displacement
+shader. Shader/textures are embedded in SCN with GLB/texture hash validation;
+effect shells are excluded from the opaque irradiance pass. No species branches.
+Normal/shiny job generation carries the auxiliary motion directory.
+
+Fixed-pose checks at 0, 0.5 and 2 seconds show motion: Gastly changes 37,999 pixels,
+Charizard's back view 219 at 0.5 seconds. Both return to **zero pixel difference**
+at their two-second boundary. Event timing/audio is unchanged.
+
+This is reconstruction, **not proven original-game shader parity**. Gastly is no
+longer an opaque export, but smoke faceting and mask/body overlap remain visible:
+its final visual quality is **not approved**. Charizard's fire is visible and
+animated but also needs final art review. Baked color-domain and inferred
+mask/displacement semantics are explicit limits, not recovered official shader
+code. Legacy Blend shaders remain uncertified. No full shiny batch was run.
+
+### Bulbasaur disposition
+
+The dedicated `tuta` meshes are visible in the source; the seven selected base
+clips have no retracting scale/visibility tracks. A separate vine-attack family
+exists but is not selected. No Bulbasaur auxiliary-motion directory was found
+in the supplied SCVI motion dump, so official visibility semantics remain unknown.
+
+The correction is therefore explicitly **authored**, not a generic importer
+heuristic: `reviewed_source_repairs.json` binds removal of only those two meshes
+to the exact Blend SHA-256 and seven-action allowlist. Both workers apply it in
+memory. Changed sources do not inherit it; new actions fail for explicit review.
+Future vine attacks need visibility handling. Source files remain intact. Final
+idle/back/attack/sleep/faint images show the base set without protruding vines.
+
+### Completion results and evidence
+
+- Exact same 30: **30 GLB exports, 30 successful Godot pose/timing checks and
+  30 standalone SCN reloads without external dependencies**; zero export holds.
+- **21 seven-native-clip mappings**, nine partial as listed above. Three of those
+  nine now have all six core clips and lack only a native faint-loop.
+- **144 captures**, all six contact sheets visually inspected. Dragonite and
+  Roaring Moon's ten images are pixel-identical to the original cohort.
+- **44 focused Python tests**, three real-source Blender seam checks, Godot
+  `batch_material_effect_check`, `batch_material_response_check` and
+  `battle_material_response_check` pass. Effect tests include invalid payloads,
+  standalone roundtrip and irradiance exclusion; both temporal-loop checks pass.
+- All original source hashes unchanged. No installed assets replaced.
+
+Artifacts in slot-b `.tmp/`: `catalog-30-6b-final/` (reviews/exports),
+`catalog-30-6b-final-runtime/report.json`, and
+`catalog-30-6b-final-results/index.html` (gallery plus observations JSON).
+Legacy evidence: `6b-legacy-clip-review/` and
+`6b-final-diagnostics/drowse-loops.json`; temporal results:
+`6b-effect-temporal-check.json`. Older artifacts are retained.
+
+Auto-fit views do not certify battle scale, facing or grounding. No full gate,
+live-battle stress, performance certification or activation was performed. The
+next decision is visual acceptance/correction and per-model battle admission:
+**30 conversions are not 30 approved models**.
+
+## Historical first correction pass
 
 This pass diagnoses the fixed 30-model cohort, implements evidenced generic
 corrections, and reruns source review, GLB export, Godot checks and SCN conversion.
@@ -102,7 +198,7 @@ artifacts remain unchanged. `catalog-30-hardening-results/index.html` is the new
 gallery, with per-species JSON alongside it. Source hashes match the earlier
 cohort. Baseline: `512450ac011b5a84bc559d15b3913d94178d6bc7`.
 
-## Remaining 6B work
+## Work left at the first-pass checkpoint (disposition above)
 
 1. Identify unknown legacy motions without relabeling unrelated loops as faint.
 2. Implement and visually validate the recognized effect profiles; recognition

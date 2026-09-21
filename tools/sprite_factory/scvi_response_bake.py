@@ -3,7 +3,7 @@ import hashlib
 from pathlib import Path
 
 
-def bake(output):
+def bake(output, exclude=()):
     import bpy
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
@@ -11,7 +11,7 @@ def bake(output):
     scene.render.engine = 'CYCLES'
     scene.cycles.device = 'CPU'
     scene.cycles.samples = 1
-    materials = {m.name: m for o in scene.objects if o.type == 'MESH' for m in o.data.materials if m}
+    materials = {m.name: m for o in scene.objects if o.type == 'MESH' for m in o.data.materials if m and m.name not in exclude}
     maps, inputs = [], []
     for index, (name, original) in enumerate(sorted(materials.items())):
         # Work on a material copy; PBR export still sees the untouched graph.

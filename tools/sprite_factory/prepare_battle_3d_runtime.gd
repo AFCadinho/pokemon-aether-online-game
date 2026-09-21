@@ -121,6 +121,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 	if errors.size() != before:
 		node.free()
 		return {}
+	if entry.has("material_effects"):
+		var effect := preload("material_effect_pack.gd").new()
+		if not entry.material_effects is Dictionary or not effect.apply(node, entry.material_effects, glb_hash):
+			errors.append("Effect binding failed: " + effect.failure)
+			node.free()
+			return {}
 	if entry.has("material_response"):
 		var response := preload("material_response_pack.gd").new()
 		if not entry.material_response is Dictionary or not response.apply(node, entry.material_response, glb_hash):
