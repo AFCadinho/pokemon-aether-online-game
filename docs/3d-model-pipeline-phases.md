@@ -699,3 +699,57 @@ No runtime models or source Blend files are changed. Gastly remains held:
 further shader work needs a trusted visual target and verification of opacity,
 UV and displacement semantics. Continue the other cohort reviews independently
 rather than treating this unresolved material as permission to guess a fix.
+
+### Phase 5B — nine-model Godot conversion review
+
+`phase5_godot_review.py` consumes the complete hash-pinned source-review catalog,
+holds Gastly explicitly, and exports the other nine into a new disposable
+directory. It rejects changed sources, duplicate/incomplete cohorts and material
+probe inputs. Export failures stay per-entry blockers, and return a failing
+exit status without erasing successful cases. No source Blend is saved.
+
+`phase5_godot_export_worker.py` exports only identified canonical clips at the
+source frame rate, with bone resets during glTF sampling. Missing actions are
+never invented: Abra lacks identified physical attack/sleep/faint-loop; Onix
+lacks identified sleep/faint-loop. Each GLB has its own hash and limitations.
+
+The generated Godot project has no game autoloads or runtime registry. Run the
+standalone `phase5_godot_review.gd` through `ops/worktrees/slot-env slot-c --`,
+with `POKEAETHER_PHASE5_REVIEW` pointing to that project. It verifies GLB hashes,
+imports scenes, checks durations, samples start/middle/end geometry, and checks
+midpoint skeletal poses again in reverse clip order. Before each clip it stops
+playback and resets skeleton poses, avoiding unkeyed eye/mouth pose inheritance.
+Screenshots preserve native coordinates, using an auto-fit camera; they do not
+certify battle scale, floor contact, floating height, HUD or battle-camera fit.
+
+Evidence in slot-c:
+
+- `.tmp/phase5-godot-review-01/`: direct-export baseline. All nine load, but the
+  SCVI complex shader graphs translate incorrectly (purple/normal-map-like
+  surface colours). Baseline pose switching also exposes stale eye/mouth state.
+- `.tmp/phase5-godot-review-02/`: optional `--scvi-pbr-probe` reuses the existing
+  albedo/normal/roughness bake for all six matching SCVI importer graphs. Three
+  Biochao models retain direct translation. Mixed supported/unsupported graphs
+  fail instead of silently applying partial material conversion.
+- Godot 4.6.2 Compatibility on AMD Radeon Graphics: nine models, 58 clips,
+  174 geometry samples and 58 reverse-order midpoint checks, zero reported
+  import/timing/geometry/order errors. Every clip changes skeletal pose between
+  the sampled start and midpoint. Forty-three pose PNGs and `index.html` support
+  visual review. All nine idle front views were inspected: recognisable colours
+  return, Pikachu has open idle eyes, and Snorlax no longer inherits an open mouth.
+- 31 focused Python tests pass; Godot script check and rendered batch pass.
+  The existing export-probe module is now import-safe so its bake can be reused;
+  its standalone CLI remains available.
+
+This is still diagnostic conversion, not material parity: the SCVI bake samples
+idle colour and does not port animated material channels, source alpha/emission
+or stylised lighting. Controls are fresh comparison exports, not replacements
+for approved Dragonite/Roaring Moon assets. Normal variants only; no runtime
+allowlist, placement calibration or production assets changed. Next review
+battle placement/framing and unresolved mappings before phase 5C stress tests.
+
+Reproduce export with `python3 tools/sprite_factory/phase5_godot_review.py
+SOURCE_REVIEW/catalog.json NEW_OUTPUT --scvi-pbr-probe`; then run Godot with
+`--path NEW_OUTPUT --script ABSOLUTE_PATH/phase5_godot_review.gd` via slot-env.
+Build the HTML with the same Python command plus `--gallery-only` after Godot
+has written `godot-review.json` (omit `--scvi-pbr-probe` for the direct baseline).

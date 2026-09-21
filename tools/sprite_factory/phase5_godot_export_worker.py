@@ -1,0 +1,97 @@
+"""Direct GLB diagnostic export. Trusted worker, never saves source Blend files."""
+import hashlib
+import json
+from pathlib import Path
+import struct
+import sys
+
+import bpy
+from mathutils import Matrix
+
+sys.path.insert(0, str(Path(__file__).parent))
+from blender_worker import inspect
+from blender_action_state import select_action
+
+
+def run(job):
+    source = Path(job['source'])
+    if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
+        raise ValueError('Source hash changed')
+    bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
+    inspection = inspect()
+    if inspection['libraries'] or any(w.startswith('missing_texture:') for w in inspection['warnings']):
+        raise ValueError('Source is not self-contained')
+    rigs = [o for o in bpy.context.scene.objects if o.type == 'ARMATURE']
+    if len(rigs) != 1:
+        raise ValueError('Expected one rig')
+    rig = rigs[0]
+    baked = []
+    if job.get('scvi_pbr_probe'):
+        materials = {m for o in bpy.context.scene.objects if o.type == 'MESH' for m in o.data.materials}
+        matching = [m for m in materials if m.node_tree and any(
+            n.type == 'GROUP' and 'BaseColorBake' in n.outputs for n in m.node_tree.nodes)]
+        if matching and len(matching) != len(materials):
+            raise ValueError('Mixed importer graphs require explicit review')
+        if matching:
+            # Bake at deterministic idle, not the pose left in the saved source.
+            select_action(rig, bpy.data.actions[job['actions']['idle']])
+            for track in rig.animation_data.nla_tracks:
+                track.mute = True
+            bpy.context.scene.frame_set(int(rig.animation_data.action.frame_range[0]))
+            from battle_3d_export_probe import bake_color_materials
+            baked = bake_color_materials(pbr=True)
+    rig.animation_data_create()
+    rig.animation_data.action = None
+    for bone in rig.pose.bones:
+        bone.matrix_basis = Matrix.Identity(4)
+    for track in list(rig.animation_data.nla_tracks):
+        rig.animation_data.nla_tracks.remove(track)
+    timing = {}
+    fps = bpy.context.scene.render.fps / bpy.context.scene.render.fps_base
+    for name, original in job['actions'].items():
+        action = bpy.data.actions[original]
+        start, end = action.frame_range
+        if end <= start:
+            raise ValueError('Empty action: ' + name)
+        track = rig.animation_data.nla_tracks.new()
+        track.name = name
+        strip = track.strips.new(name, 0, action)
+        if len(action.slots) != 1:
+            raise ValueError('Ambiguous action slot')
+        strip.action_slot = action.slots[0]
+        strip.action_frame_start, strip.action_frame_end = start, end
+        strip.frame_start, strip.frame_end = 0, end - start
+        track.mute = True
+        timing[name] = {'source_action': original, 'duration': (end - start) / fps,
+                        'fps': fps, 'loop': name in ('idle', 'sleep', 'faint_loop')}
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in bpy.context.scene.objects:
+        if obj.type in ('MESH', 'ARMATURE'):
+            obj.select_set(True)
+    bpy.context.view_layer.objects.active = rig
+    bpy.context.scene.frame_set(0)
+    path = Path(job['output']) / 'model.glb'
+    bpy.ops.export_scene.gltf(filepath=str(path), export_format='GLB', use_selection=True,
+        export_animation_mode='NLA_TRACKS', export_animations=True, export_force_sampling=True,
+        export_frame_range=False, export_reset_pose_bones=True, export_frame_step=1,
+        export_cameras=False, export_lights=False, export_materials='EXPORT', export_yup=True,
+        export_tangents=bool(baked))
+    payload = path.read_bytes()
+    length = struct.unpack_from('<I', payload, 12)[0]
+    gltf = json.loads(payload[20:20 + length])
+    actual = {a['name'] for a in gltf.get('animations', [])}
+    if actual != set(timing):
+        raise ValueError('Exported clips differ: ' + str(actual))
+    if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
+        raise ValueError('Source modified during export')
+    report = {'status': 'exported_for_review', 'path': str(path),
+        'glb_sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload),
+        'animations': timing, 'source_warnings': inspection['warnings'],
+        'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
+        'material_limitations': ('Simplified PBR bake at idle; source alpha, emission, lighting and material animation remain unported'
+            if baked else 'Direct glTF translation: source shader graphs and material animation are not certified')}
+    (Path(job['output']) / 'export.json').write_text(json.dumps(report, indent=2))
+
+
+if __name__ == '__main__':
+    run(json.loads(Path(sys.argv[sys.argv.index('--') + 1]).read_text()))
