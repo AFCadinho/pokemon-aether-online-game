@@ -424,7 +424,7 @@ func _build_world() -> void:
 	else:
 		_build_classic_ground()
 	camera.position = ArenaCatalog.camera_home(arena_id)
-	camera.fov = 48
+	camera.fov = ArenaCatalog.CAMERA_FOV
 	camera.look_at(ArenaCatalog.camera_target(arena_id))
 	camera.current = true
 

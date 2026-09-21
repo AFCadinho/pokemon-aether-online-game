@@ -11,7 +11,11 @@ func _init() -> void:
 		assert(Arenas.resolve("auto",resolver.resolve(context))=="stadium")
 	for id in Arenas.IDS:
 		assert(Arenas.validate(id)==id)
-		assert(Arenas.camera_home(id).y>0)
+		assert(Arenas.camera_home(id) == (Vector3(2.5, 5, 16) if id == "stadium" else Vector3(4, 5.5, 12)))
+		assert(Arenas.camera_target(id) == (Vector3(0, 2.8, 0) if id == "stadium" else Vector3(0, 1.3, 0)))
+	assert(Arenas.CAMERA_FOV == 48.0)
+	assert(Arenas.spawn(0) == Vector3(-2.8, 0, 1.5))
+	assert(Arenas.spawn(1) == Vector3(2.8, 0, -1.5))
 	assert(Arenas.spawn(0)!=Arenas.spawn(1))
 	assert(not Arenas.prepare_forest("").is_empty())
 	assert(not ClassDB.class_exists("Terrain3D"),"Ordinary client startup must not load the native forest addon")
