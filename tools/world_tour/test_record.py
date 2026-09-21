@@ -4,6 +4,7 @@ from pathlib import Path
 import unittest
 
 from record import validate
+from catalog import coverage, check_coverage
 
 
 class RouteValidationTests(unittest.TestCase):
@@ -42,6 +43,52 @@ class RouteValidationTests(unittest.TestCase):
         self.route["shots"] = self.route["shots"][:1]
         with self.assertRaises(ValueError):
             validate(self.route)
+
+    def test_every_outdoor_catalog_map_is_represented(self):
+        groups, unbuilt = coverage()
+        self.assertEqual(set(groups) - set(self.route.get("excluded_visuals", {})), {s["scene"] for s in self.route["shots"]})
+        self.assertEqual(unbuilt, self.route["unbuilt_areas"])
+        for scene, area_ids in groups.items():
+            if scene in self.route.get("excluded_visuals", {}):
+                continue
+            recorded = set().union(*(set(s["areas"]) for s in self.route["shots"] if s["scene"] == scene))
+            self.assertEqual(recorded, set(area_ids))
+
+    def test_removed_map_is_reported(self):
+        self.route["shots"] = self.route["shots"][1:]
+        with self.assertRaisesRegex(ValueError, "missing map visuals"):
+            check_coverage(self.route)
+
+    def test_rejects_interiors_in_outdoor_tour(self):
+        extra = self.route["shots"][0].copy()
+        extra["scene"] = "res://generated/tiled_visuals/pokemon_center/pokemon_center.visual.tscn"
+        self.route["shots"].append(extra)
+        with self.assertRaisesRegex(ValueError, "non-outdoor"):
+            check_coverage(self.route)
+
+    def test_caves_and_buildings_are_excluded(self):
+        groups, _ = coverage()
+        ids = set().union(*map(set, groups.values()))
+        self.assertIn("kanto_viridian_forest", ids)
+        self.assertIn("kanto_route_9", ids)
+        self.assertNotIn("kanto_mt_moon_1f", ids)
+        self.assertNotIn("kanto_cerulean_cave", ids)
+        self.assertNotIn("kanto_players_house", ids)
+
+    def test_open_field_is_intentionally_omitted(self):
+        scene = "res://generated/tiled_visuals/open_field/open_field.visual.tscn"
+        self.assertIn(scene, self.route["excluded_visuals"])
+        self.assertNotIn(scene, {s["scene"] for s in self.route["shots"]})
+        self.route["excluded_visuals"].clear()
+        with self.assertRaisesRegex(ValueError, "missing map visuals"):
+            check_coverage(self.route)
+
+    def test_excluded_visual_cannot_accidentally_return(self):
+        extra = self.route["shots"][0].copy()
+        extra["scene"] = next(iter(self.route["excluded_visuals"]))
+        self.route["shots"].append(extra)
+        with self.assertRaisesRegex(ValueError, "still present"):
+            check_coverage(self.route)
 
 
 if __name__ == "__main__":

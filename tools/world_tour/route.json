@@ -5,10 +5,267 @@
   "shot_seconds": 8,
   "transition_seconds": 1.5,
   "shots": [
-    {"name": "Pallet Town", "scene": "res://generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn", "from": [680, 480], "to": [1000, 720], "view_width": 960},
-    {"name": "Route 1", "scene": "res://generated/tiled_visuals/route_1/route_1.visual.tscn", "from": [850, 1600], "to": [880, 1050], "view_width": 960},
-    {"name": "Viridian City", "scene": "res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn", "from": [920, 1250], "to": [1260, 900], "view_width": 1100},
-    {"name": "Viridian Forest", "scene": "res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn", "from": [1100, 1700], "to": [1400, 1200], "view_width": 960},
-    {"name": "Pewter City", "scene": "res://generated/tiled_visuals/pewter_city/pewter_city.visual.tscn", "from": [780, 1050], "to": [1180, 700], "view_width": 1100}
-  ]
+    {
+      "name": "Pallet Town",
+      "scene": "res://generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn",
+      "from": [
+        680,
+        480
+      ],
+      "to": [
+        1000,
+        720
+      ],
+      "view_width": 960,
+      "areas": [
+        "kanto_pallet_town"
+      ]
+    },
+    {
+      "name": "Route 1",
+      "scene": "res://generated/tiled_visuals/route_1/route_1.visual.tscn",
+      "from": [
+        850,
+        1600
+      ],
+      "to": [
+        880,
+        1050
+      ],
+      "view_width": 960,
+      "areas": [
+        "kanto_route_1"
+      ]
+    },
+    {
+      "name": "Viridian City",
+      "scene": "res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn",
+      "from": [
+        920,
+        1250
+      ],
+      "to": [
+        1260,
+        900
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_viridian_city"
+      ]
+    },
+    {
+      "name": "Kanto Route 22",
+      "scene": "res://generated/tiled_visuals/kanto_route_22/kanto_route_22.visual.tscn",
+      "from": [
+        1224.0,
+        800.0
+      ],
+      "to": [
+        1496.0000000000002,
+        800.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_route_22"
+      ]
+    },
+    {
+      "name": "Kanto Route 2",
+      "scene": "res://generated/tiled_visuals/kanto_route_2/kanto_route_2.visual.tscn",
+      "from": [
+        864.0,
+        1200.0
+      ],
+      "to": [
+        1056.0,
+        1200.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_route_2"
+      ]
+    },
+    {
+      "name": "Viridian Forest",
+      "scene": "res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn",
+      "from": [
+        1100,
+        1700
+      ],
+      "to": [
+        1400,
+        1200
+      ],
+      "view_width": 960,
+      "areas": [
+        "kanto_viridian_forest"
+      ]
+    },
+    {
+      "name": "Pewter City",
+      "scene": "res://generated/tiled_visuals/pewter_city/pewter_city.visual.tscn",
+      "from": [
+        780,
+        1050
+      ],
+      "to": [
+        1180,
+        700
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_pewter_city"
+      ]
+    },
+    {
+      "name": "Route 3",
+      "scene": "res://generated/tiled_visuals/route_3/route_3.visual.tscn",
+      "from": [
+        1440.0,
+        800.0
+      ],
+      "to": [
+        1760.0000000000002,
+        800.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_route_3"
+      ]
+    },
+    {
+      "name": "Route 4",
+      "scene": "res://generated/tiled_visuals/route_4/route_4.visual.tscn",
+      "from": [
+        1440.0,
+        800.0
+      ],
+      "to": [
+        1760.0000000000002,
+        800.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_route_4"
+      ]
+    },
+    {
+      "name": "Cerulean City",
+      "scene": "res://generated/tiled_visuals/cerulean_city/cerulean_city.visual.tscn",
+      "from": [
+        1080.0,
+        1120.0
+      ],
+      "to": [
+        1320.0,
+        1120.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_cerulean_city"
+      ]
+    },
+    {
+      "name": "Route 24",
+      "scene": "res://generated/tiled_visuals/route_24/route_24.visual.tscn",
+      "from": [
+        864.0,
+        960.0
+      ],
+      "to": [
+        1056.0,
+        960.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_route_24"
+      ]
+    },
+    {
+      "name": "Route 25",
+      "scene": "res://generated/tiled_visuals/route_25/route_25.visual.tscn",
+      "from": [
+        1152.0,
+        800.0
+      ],
+      "to": [
+        1408.0,
+        800.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "kanto_route_25"
+      ]
+    },
+    {
+      "name": "Lobby",
+      "scene": "res://generated/tiled_visuals/lobby/lobby.visual.tscn",
+      "from": [
+        849.6,
+        944.0
+      ],
+      "to": [
+        1038.4,
+        944.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "aether_clash_lobby"
+      ]
+    },
+    {
+      "name": "Waiting Area",
+      "scene": "res://generated/tiled_visuals/waiting_area/waiting_area.visual.tscn",
+      "from": [
+        400.0,
+        352.0
+      ],
+      "to": [
+        400.0,
+        448.00000000000006
+      ],
+      "view_width": 520.0,
+      "areas": [
+        "aether_clash_waiting_area_preview"
+      ]
+    },
+    {
+      "name": "Aether Clash Duel",
+      "scene": "res://generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn",
+      "from": [
+        1152.0,
+        2560.0
+      ],
+      "to": [
+        1408.0,
+        2560.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "aether_clash_duel",
+        "aether_clash_duel_preview"
+      ]
+    },
+    {
+      "name": "Aether Clash Battle Royale",
+      "scene": "res://generated/tiled_visuals/aether_clash_battle_royale/aether_clash_battle_royale.visual.tscn",
+      "from": [
+        1152.0,
+        2560.0
+      ],
+      "to": [
+        1408.0,
+        2560.0
+      ],
+      "view_width": 1100,
+      "areas": [
+        "aether_clash_battle_royale_preview"
+      ]
+    }
+  ],
+  "coverage": "all_outdoor_maps",
+  "unbuilt_areas": {},
+  "excluded_visuals": {
+    "res://generated/tiled_visuals/open_field/open_field.visual.tscn": "Temporary open field omitted from the login tour."
+  }
 }

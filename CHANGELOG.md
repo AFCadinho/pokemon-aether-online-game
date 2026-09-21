@@ -4,7 +4,7 @@
 
 - Nieuwe 3D-modelpakketten kunnen stilstaande animatieposes met hun oorspronkelijke duur behouden en complexere bewegende vuureffecten afspelen. Bestaande pakketten blijven ongewijzigd.
 
-- Het inlogscherm toont een rustige cameratocht door Pallet Town, Route 1, Viridian City, Viridian Forest en Pewter City, met vloeiende overgangen die blijven herhalen.
+- Het inlogscherm toont een rustige cameratocht door alle uitgewerkte buitenkaartdecors: steden, routes, Viridian Forest en Aether Clash, met vloeiende overgangen die blijven herhalen.
 
 - Nieuwe gecontroleerde 3D-modelpakketten kunnen nu bewegende rook- en vuureffecten tonen met transparantie. Bestaande modelpakketten worden niet automatisch vervangen.
 
