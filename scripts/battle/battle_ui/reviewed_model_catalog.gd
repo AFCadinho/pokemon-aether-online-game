@@ -21,6 +21,44 @@ static func entry_key(entry: Dictionary) -> String:
 static func supports(identity: String) -> bool:
 	return DATA.data.models.has(identity)
 
+static func pack_entries(manifest: Dictionary, directory: String) -> Array:
+	# Portable packs are stricter than the historical two-model local catalog.
+	var engine := Engine.get_version_info()
+	if engine.major != 4 or engine.minor != 6 or manifest.get("godot") != "4.6":
+		return []
+	if manifest.get("schema") != 1 or manifest.get("kind") != "pokeaether-reviewed-model-pack" or manifest.get("qualification_sha256") != DATA.data.qualification_sha256:
+		return []
+	var entries: Variant = manifest.get("entries")
+	if not entries is Array or entries.is_empty() or entries.size() > DATA.data.models.size():
+		return []
+	var result := []
+	var seen := {}
+	var total := 0
+	var folder := DirAccess.open(directory)
+	if folder == null or folder.is_link("models"):
+		return []
+	for raw: Variant in entries:
+		if not raw is Dictionary or not raw.get("species") is String or "@" in raw.species:
+			return []
+		var identity := entry_key(raw)
+		var model: Dictionary = DATA.data.models.get(identity, {})
+		if model.is_empty() or seen.has(identity) or raw.get("runtime_schema") != 1 or raw.get("runtime_sha256") != model.sha256:
+			return []
+		var expected: String = "models/" + model.sha256 + ".scn"
+		var bytes: Variant = raw.get("bytes")
+		if raw.get("runtime_path") != expected or folder.is_link(expected) or not (bytes is int or bytes is float):
+			return []
+		if not is_finite(float(bytes)) or bytes != floor(float(bytes)) or bytes <= 0 or bytes > 134217728:
+			return []
+		total += int(bytes)
+		if total > 536870912:
+			return []
+		seen[identity] = true
+		var entry: Dictionary = raw.duplicate(true)
+		entry.runtime_path = directory.path_join(expected)
+		result.append(entry)
+	return result
+
 static func resolve(identity: String, digest: String) -> Dictionary:
 	var model: Dictionary = DATA.data.models.get(identity, {})
 	if model.is_empty() or digest != model.sha256:

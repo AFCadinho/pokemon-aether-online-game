@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gecontroleerde 3D-modellen kunnen nu als lokaal, verplaatsbaar pakket worden geïnstalleerd. De catalogus blijft werken wanneer de hele modelmap wordt verplaatst en opnieuw gekozen, zonder afhankelijkheid van tijdelijke reviewbestanden.
+
 - Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.
 
 - De lokale 3D-modelcatalogus ondersteunt nu de gecontroleerde normale en shiny versies van Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite en Roaring Moon, met passende animaties en HP-balkposities. Ontbrekende of niet-goedgekeurde modellen blijven op 2.5D terugvallen.

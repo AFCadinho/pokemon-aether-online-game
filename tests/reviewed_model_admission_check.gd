@@ -19,7 +19,29 @@ func _run() -> void:
 	output = OS.get_environment("POKEAETHER_ADMISSION_TEST_OUTPUT")
 	assert(path.is_absolute_path() and output.is_absolute_path() and not DirAccess.dir_exists_absolute(output))
 	assert(DirAccess.make_dir_recursive_absolute(output) == OK)
-	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var raw_catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var catalog: Array = Registry.pack_entries(raw_catalog, path.get_base_dir()) if raw_catalog is Dictionary else raw_catalog
+	if raw_catalog is Dictionary:
+		for entry: Dictionary in catalog:
+			assert(entry.runtime_path.begins_with(path.get_base_dir() + "/models/"))
+			assert(FileAccess.get_sha256(entry.runtime_path) == entry.runtime_sha256)
+			assert(ResourceLoader.get_dependencies(entry.runtime_path).is_empty())
+		for bad_path in ["../outside.scn", "/outside.scn", "C:/outside.scn", "models\\outside.scn"]:
+			var bad: Dictionary = raw_catalog.duplicate(true)
+			bad.entries[0].runtime_path = bad_path
+			assert(Registry.pack_entries(bad, path.get_base_dir()).is_empty())
+		for field in ["godot", "qualification_sha256", "kind"]:
+			var bad: Dictionary = raw_catalog.duplicate(true)
+			bad[field] = "invalid"
+			assert(Registry.pack_entries(bad, path.get_base_dir()).is_empty())
+		for bytes: Variant in [-1, 0, 1.5, true, 134217729, "12"]:
+			var bad: Dictionary = raw_catalog.duplicate(true)
+			bad.entries[0].bytes = bytes
+			assert(Registry.pack_entries(bad, path.get_base_dir()).is_empty())
+		var duplicate: Dictionary = raw_catalog.duplicate(true)
+		duplicate.entries[1] = duplicate.entries[0].duplicate(true)
+		assert(Registry.pack_entries(duplicate, path.get_base_dir()).is_empty())
+		print("PORTABLE_MODEL_PACK_OK self_contained=14 unsafe_paths/engine/qualification/size/duplicates rejected")
 	assert(catalog.size() == 14 and Registry.DATA.data.models.size() == 14)
 	for species in ["pikachu", "arcanine", "lucario", "snorlax", "articuno", "dragonite", "roaring-moon"]:
 		assert(Renderer.supported(species, false, false, false))
