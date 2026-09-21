@@ -66,17 +66,19 @@ func _measure(entry: Dictionary, scene: Node3D) -> Dictionary:
 		var minimum := INF
 		var minimum_time := 0.0
 		var count := ceili(duration * 60.0)
+		var minima: Array[float] = []
 		for sample in count + 1:
 			var time := minf(sample / 60.0, duration)
 			await _pose(player, skeletons, time)
 			var value := _minimum(meshes)
+			minima.append(value)
 			if not is_finite(value):
 				failures.append(str(entry.species) + ": invalid posed geometry " + action)
 				break
 			if value < minimum:
 				minimum = value
 				minimum_time = time
-		clips[action] = {"minimum_y": minimum, "minimum_time": minimum_time, "samples": count + 1, "duration": duration}
+		clips[action] = {"minimum_y": minimum, "minimum_time": minimum_time, "samples": count + 1, "duration": duration, "minimum_y_samples": minima}
 	var record := {}
 	if clips.has("idle") and is_finite(float(clips.idle.minimum_y)):
 		var lift := maxf(0.0, 0.025 - float(clips.idle.minimum_y))
