@@ -356,10 +356,10 @@ func _run() -> void:
 		settings.battle_presentation_mode = "3d"
 		stage._load_catalog(report)
 		stage._import_next_model()
-		assert(not stage.loading_path.is_empty())
+		assert(stage._models_pending() and stage.integrity_read != null)
 		settings.battle_presentation_mode = "2.5d"
 		stage._process(0.0)
-		assert(stage.loading_path.is_empty() and stage.pending_entries.is_empty())
+		assert(not stage._models_pending() and stage.integrity_read == null)
 		for frame in 30:
 			await process_frame
 		assert(stage.packed.is_empty() and stage.viewport == null)

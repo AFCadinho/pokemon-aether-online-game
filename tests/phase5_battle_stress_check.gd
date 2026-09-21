@@ -9,11 +9,14 @@ var evidence := {"complete": false, "runtime_approved": false, "rounds": [], "sh
 var output: String
 var stage: Control
 var battle: Control
+var screen_host: Control
 var frame_samples: Array[float] = []
 var frame_tick := 0
 var sample_frames := false
 var sample_context := ""
 var frame_stalls: Array[Dictionary] = []
+var replay_setup_ms := 0.0
+var capture_images := true
 
 func _sample_frame() -> void:
 	var now := Time.get_ticks_usec()
@@ -21,7 +24,9 @@ func _sample_frame() -> void:
 		var elapsed := (now - frame_tick) / 1000.0
 		frame_samples.append(elapsed)
 		if elapsed > 50.0:
-			frame_stalls.append({"ms": elapsed, "context": sample_context})
+			frame_stalls.append({"ms": elapsed, "context": sample_context,
+				"frame": Engine.get_process_frames(), "pipelines": stage._blocking_pipelines(),
+				"covered": screen_host.get_node("Cover").visible})
 	frame_tick = now
 
 func _init() -> void:
@@ -32,26 +37,27 @@ func _frames(count: int) -> void:
 	for frame in count:
 		await process_frame
 
-func _ready_pair(left: String, right: String, force := false) -> float:
+func _ready_pair(left: String, right: String, force := false, left_shiny := false, right_shiny := false) -> float:
 	sample_context = "load " + left + " / " + right
 	var start := Time.get_ticks_usec()
-	stage.set_combatant(0, left, false, force)
-	stage.set_combatant(1, right, false, force)
+	stage.set_combatant(0, left, left_shiny, force)
+	stage.set_combatant(1, right, right_shiny, force)
+	var keys := [left + ("@shiny" if left_shiny else ""), right + ("@shiny" if right_shiny else "")]
 	var deadline := Time.get_ticks_msec() + 20000
-	while not stage.active or stage.identities != [left, right] or not stage.pending_entries.is_empty() or not stage.loading_path.is_empty():
+	while not stage.active or stage.identities != keys or stage._models_pending():
 		assert(Time.get_ticks_msec() < deadline, stage.reason)
 		await process_frame
 	await _frames(3)
 	assert(stage.packed.size() <= 2 and Cache.items.size() <= Cache.MAX_ENTRIES)
 	assert(Cache.source_bytes <= Cache.MAX_SOURCE_BYTES and stage.failed_models.is_empty())
-	for species in [left, right]:
+	for species in keys:
 		assert(stage.placements[species].calibrated)
 		assert(not stage.motion_clips[species].is_empty())
 	battle.player_hud_panel.set_pokemon_data(left.capitalize(), 100, 100, 100)
 	battle.enemy_hud_panel.set_pokemon_data(right.capitalize(), 100, 100, 100)
 	return (Time.get_ticks_usec() - start) / 1000.0
 
-func _faint_and_replace(species: String) -> void:
+func _faint_and_replace(species: String, shiny := false) -> void:
 	stage.play_action("p1", "faint_start")
 	assert(stage.current_actions[0] == "faint_start")
 	stage.players[0].advance(100.0)
@@ -61,12 +67,12 @@ func _faint_and_replace(species: String) -> void:
 	await _frames(3)
 	assert(stage.actors[0].visible and stage.actor_shown[0] and stage.players[0].is_playing())
 	assert(stage.current_actions[1] == "idle", "Duplicate on opposite side inherited faint")
-	stage.set_combatant(0, species, false, true)
+	stage.set_combatant(0, species, shiny, true)
 	await _frames(3)
 	assert(stage.lifecycle[0] == "idle" and stage.current_actions[0] == "idle")
 	# An old asynchronous faint must not complete against a replacement.
 	stage.play_action("p1", "faint_start")
-	stage.set_combatant(0, species, false, true)
+	stage.set_combatant(0, species, shiny, true)
 	await _frames(4)
 	assert(stage.lifecycle[0] == "idle" and stage.current_actions[0] == "idle")
 
@@ -124,7 +130,12 @@ func _replay_check() -> void:
 	var terminal := replacement.duplicate(true)
 	terminal.state = {"turn": 2, "ended": true, "winner": "Control"}
 	terminal.events = [{"type": "win", "winner": "Control", "eventSeq": 6}]
+	var setup_started := Time.get_ticks_usec()
 	assert(battle.setup_battle_replay({"schemaVersion": 1, "frames": [first, attack, duplicate, faint, replacement, terminal]}))
+	replay_setup_ms = (Time.get_ticks_usec() - setup_started) / 1000.0
+	# Setup and the first event used to run in the same frame, mislabelling
+	# the entire UI reconstruction as a first-move stall. Keep both measured.
+	await _frames(3)
 	battle.replay_paused = false
 	for frame in range(1, 6):
 		sample_context = "replay frame " + str(frame)
@@ -147,12 +158,15 @@ func _replay_check() -> void:
 	print("PHASE5_REPLAY_DUPLICATE_REPLACEMENT_OK")
 
 func _run() -> void:
+	capture_images = OS.get_environment("POKEAETHER_PHASE5_CAPTURE") != "0"
+	evidence["screenshots_enabled"] = capture_images
 	var report := OS.get_environment("POKEAETHER_PHASE5_RUNTIME_REPORT")
 	output = OS.get_environment("POKEAETHER_PHASE5_STRESS_OUTPUT")
 	assert(report.is_absolute_path() and output.is_absolute_path() and not DirAccess.dir_exists_absolute(output))
 	assert(DirAccess.make_dir_recursive_absolute(output) == OK)
 	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string(report))
-	assert(catalog.size() == 7)
+	var variants: Array = catalog.filter(func(e): return str(e.species).ends_with("@shiny"))
+	assert(catalog.size() == 7 or (catalog.size() == 14 and variants.size() == 7))
 	for entry: Dictionary in catalog:
 		assert(entry._review_only and FileAccess.get_sha256(entry.runtime_path) == entry.runtime_sha256)
 	var settings = root.get_node("SettingsManager")
@@ -173,6 +187,7 @@ func _run() -> void:
 		settings.battle_presentation_mode = "2.5d" if cycle == 0 else "3d"
 		settings.battle_3d_arena = "classic" if cycle != 1 else "stadium"
 		var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+		screen_host = host
 		battle = load("res://scenes/battle/battle.tscn").instantiate()
 		root.add_child(host)
 		host.mount(battle)
@@ -181,6 +196,7 @@ func _run() -> void:
 		var position: int = old_stage.get_index()
 		old_stage.free()
 		stage = Candidate.new()
+		stage.name = "ExperimentalBattle3D" # Keep the real host's preparation fence.
 		battle.battle_stage.add_child(stage)
 		battle.battle_stage.move_child(stage, position)
 		stage.setup([battle.player_sprite_box, battle.enemy_sprite_box], [battle.player_battle_platform, battle.enemy_battle_platform])
@@ -222,14 +238,14 @@ func _run() -> void:
 			assert(await stage.send_out("p1"))
 			if turn < 6:
 				await _check_hud()
-			if turn == 4 and DisplayServer.get_name() != "headless":
+			if capture_images and turn == 4 and DisplayServer.get_name() != "headless":
 				sample_frames = false
 				RenderingServer.force_draw(false)
 				assert(root.get_texture().get_image().save_png(output.path_join("battle-%d.png" % cycle)) == OK)
 				frame_tick = Time.get_ticks_usec()
 				sample_frames = true
 		# Every eligible species is checked as two independent simultaneous actors.
-		for entry: Dictionary in catalog:
+		for entry: Dictionary in catalog.filter(func(e): return not str(e.species).ends_with("@shiny")):
 			await _ready_pair(entry.species, entry.species, true)
 			sample_context = "duplicate faint " + str(entry.species)
 			assert(stage.actors[0] != stage.actors[1] and stage.players[0] != stage.players[1])
@@ -237,7 +253,34 @@ func _run() -> void:
 			await _faint_and_replace(entry.species)
 			round_data.duplicate_checks += 1
 			round_data.faint_replacements += 1
-		stage.set_combatant(1, "pikachu", true)
+		round_data["variant_checks"] = 0
+		for entry: Dictionary in variants:
+			var species: String = str(entry.species).trim_suffix("@shiny")
+			await _ready_pair(species, species, true, false, true)
+			var normal_id: int = stage.packed[species].get_instance_id()
+			var shiny_id: int = stage.packed[entry.species].get_instance_id()
+			assert(normal_id != shiny_id)
+			assert(stage.validated_entries[species]._resource_cache_key != stage.validated_entries[entry.species]._resource_cache_key)
+			await _ready_pair(species, species, true, true, false)
+			assert(stage.packed[species].get_instance_id() == normal_id and stage.packed[entry.species].get_instance_id() == shiny_id)
+			assert(stage.handles("p1") and stage.handles("p2"))
+			await _faint_and_replace(species, true)
+			await _check_hud()
+			if capture_images and cycle == 0 and DisplayServer.get_name() != "headless":
+				sample_frames = false
+				RenderingServer.force_draw(false)
+				assert(root.get_texture().get_image().save_png(output.path_join(species + "-variants.png")) == OK)
+				frame_tick = Time.get_ticks_usec()
+				sample_frames = true
+			var evictors: Array = ["pikachu", "arcanine", "lucario"].filter(func(name): return name != species)
+			var shiny_key: String = stage.validated_entries[entry.species]._resource_cache_key
+			await _ready_pair(evictors[0], evictors[1], true)
+			assert(Cache.fetch(shiny_key) == null)
+			await _ready_pair(species, species, true, false, true)
+			assert(stage.packed[species].get_instance_id() != normal_id)
+			assert(stage.packed[entry.species].get_instance_id() != shiny_id)
+			round_data.variant_checks += 1
+		stage.set_combatant(1, "gastly" if not variants.is_empty() else "pikachu", true)
 		await _frames(4)
 		assert(not stage.active, "Unreviewed shiny must fall back")
 		await _ready_pair("pikachu", "dragonite", true)
@@ -245,6 +288,7 @@ func _run() -> void:
 		round_data.retained_source_bytes = Cache.source_bytes
 		await _replay_check()
 		round_data["replay_duplicate_faint_replacement"] = true
+		round_data["replay_setup_ms"] = replay_setup_ms
 		sample_frames = false
 		frame_samples.sort()
 		round_data["frame_max_ms"] = frame_samples[-1]
@@ -253,6 +297,8 @@ func _run() -> void:
 		round_data["stalls_over_50ms"] = frame_stalls.duplicate(true)
 		round_data["actor_build_ms"] = stage.actor_build_ms
 		round_data["arena_build_ms"] = stage.arena_build_ms
+		round_data["load_spans"] = stage.load_spans.duplicate(true)
+		round_data["model_validation_ms"] = stage.model_validation_ms
 		var actor_ref: WeakRef = weakref(stage.actors[0])
 		var viewport_ref: WeakRef = weakref(stage.viewport)
 		host.release()
@@ -266,8 +312,10 @@ func _run() -> void:
 	Cache.clear()
 	assert(Cache.items.is_empty() and Cache.source_bytes == 0)
 	evidence.complete = true
+	if not variants.is_empty():
+		evidence.shiny = "seven paired variants, bidirectional switches, separate cache keys, faint/replacement, repeated across three battles"
 	evidence["phase5c_complete"] = false
-	evidence["remaining"] = ["Reviewed shiny variants and normal/shiny identity tests", "Load/replay frame-stall investigation and performance acceptance"]
+	evidence["remaining"] = ["Separate closing review of this report, visual source review and performance evidence"]
 	evidence["catalog_sha256"] = FileAccess.get_sha256(report)
 	evidence["scope"] = "real immersive UI, presenter and recorded battle events; normal candidates, no live server"
 	assert(evidence.rounds[2].static_bytes - evidence.rounds[1].static_bytes < 1048576, "Repeated battle static retention exceeded 1 MiB")

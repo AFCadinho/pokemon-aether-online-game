@@ -42,7 +42,7 @@ func _run() -> void:
 		var started := Time.get_ticks_usec()
 		stage._load_catalog(report)
 		var deadline := Time.get_ticks_msec() + 15000
-		while not stage.pending_entries.is_empty() or not stage.loading_path.is_empty():
+		while stage._models_pending():
 			stage._import_next_model()
 			assert(Time.get_ticks_msec() < deadline)
 			await process_frame
