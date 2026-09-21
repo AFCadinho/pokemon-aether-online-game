@@ -13,8 +13,20 @@ var chat_bridge: Node
 var loading_label: Label
 var fallback_button: Button
 var entry_transition: WildEncounterTransition
+var battle_unhandled_input_before_settings := true
+var battle_settings_menu: PanelContainer
+@onready var settings_overlay: ColorRect = $SettingsOverlay
+@onready var settings_center: CenterContainer = $SettingsOverlay/CenterContainer
 
 func _ready() -> void:
+	var settings_scene := load("res://scenes/interface/settings/settings_menu.tscn") as PackedScene
+	if settings_scene != null:
+		battle_settings_menu = settings_scene.instantiate() as PanelContainer
+		battle_settings_menu.name = "BattleSettingsMenu"
+		battle_settings_menu.hide()
+		settings_center.add_child(battle_settings_menu)
+	if battle_settings_menu != null and battle_settings_menu.has_signal("closed"):
+		battle_settings_menu.closed.connect(_on_battle_settings_closed)
 	entry_transition = WildEncounterTransition.new()
 	entry_transition.name = "EntryTransition"
 	$Cover.add_child(entry_transition)
@@ -34,6 +46,41 @@ func _ready() -> void:
 	fallback_button.hide()
 	stack.add_child(fallback_button)
 	fallback_button.pressed.connect(_reveal_cover)
+
+func _input(event: InputEvent) -> void:
+	if released or not is_instance_valid(battle) or $Cover.visible:
+		return
+	if battle_settings_menu != null and battle_settings_menu.visible:
+		# The menu owns Escape while open, including cancelling key binding
+		# capture and closing its confirmation dialogs before the menu itself.
+		return
+	if not event.is_action_pressed("ui_cancel"):
+		return
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner is LineEdit or focus_owner is TextEdit:
+		return
+	if battle.has_method("_close_visible_battle_drawer") and battle.call("_close_visible_battle_drawer"):
+		get_viewport().set_input_as_handled()
+		return
+	_open_battle_settings()
+	get_viewport().set_input_as_handled()
+
+func _open_battle_settings() -> void:
+	if battle_settings_menu == null:
+		return
+	settings_overlay.show()
+	if battle_settings_menu.has_method("open"):
+		battle_settings_menu.call("open", "game")
+	else:
+		battle_settings_menu.show()
+	if is_instance_valid(battle):
+		battle_unhandled_input_before_settings = battle.is_processing_unhandled_input()
+		battle.set_process_unhandled_input(false)
+
+func _on_battle_settings_closed() -> void:
+	settings_overlay.hide()
+	if is_instance_valid(battle):
+		battle.set_process_unhandled_input(battle_unhandled_input_before_settings)
 
 func _process(_delta: float) -> void:
 	if released or not is_instance_valid(battle) or not $Cover.visible:
@@ -131,6 +178,7 @@ func release() -> void:
 	released = true
 	if is_instance_valid(chat_bridge):
 		chat_bridge.release()
+	settings_overlay.hide()
 	generation += 1
 	if is_instance_valid(battle):
 		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
