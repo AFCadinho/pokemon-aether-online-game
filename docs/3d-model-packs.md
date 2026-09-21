@@ -165,3 +165,42 @@ snapshot parity. The launcher localization regression also passes; its deliberat
 invalid-executable rollback fixture logs `STG-001 staged_install_failed`, which
 is an expected negative test, not a model-install failure. No launcher export,
 publication, full release certification or production mutation was performed.
+
+### Actual launcher-to-game process regression (Linux)
+
+`launcher/tests/model_process_check.gd` exercises the panel's import/select
+signals and the launcher's unmodified `_create_game_process` function. A small
+executable fixture (deliberately named with spaces) starts the real Godot game
+project with `tests/launcher_model_process_child.gd`. The launcher receives a
+real process ID, forwards the selected catalog and locale, and restores its own
+environment. It checks the child's result and log after the process exits.
+This is not a stubbed process, but also not an exported shipping executable.
+Launcher startup/update networking is intentionally not run.
+
+Run through `ops/worktrees/slot-env SLOT -- env ... timeout 260s godot`, using
+the slot's launcher project, an explicit slot-local log and
+`--script res://tests/model_process_check.gd`. Required environment:
+
+- `POKEAETHER_E2E_DATA_HOME` and `XDG_DATA_HOME`: the same **fresh**, absolute
+  slot-local test data directory (not ordinary slot/player userdata).
+- `XDG_CONFIG_HOME` / `XDG_CACHE_HOME`: fresh sibling test directories.
+- `POKEAETHER_E2E_OUTPUT`: fresh absolute evidence directory.
+- `POKEAETHER_E2E_GAME_ROOT`: the slot's frontend project directory.
+- `POKEAETHER_MODEL_PACK_ZIP`: the reviewed ZIP artifact.
+- `POKEAETHER_E2E_PHASE`: first `install`, then a separate invocation with
+  `restart`, retaining the same isolated directories.
+
+The first child runs the existing three-battle lifecycle matrix. The second
+starts with an empty model cache and tests empty Team Preview followed by a
+shiny Pikachu/Snorlax pair, without assigning a manual catalog. Both check that
+the launcher does not force 3D or modify saved game settings. No accounts,
+live PvP, production, or normal user profiles are used.
+
+Local result: both process runs pass (`.tmp/model-process-01`), with unchanged
+saved game settings and the same selected catalog after restart. The first
+child completes 36 mixed switches, 21 duplicate/faint checks, 21 variant
+checks and three recorded event replays across three battles. Existing 5C
+performance guards pass (p95 17.70 / 17.26 / 17.27 ms), but covered entry has
+a **1.43-second** frame: no instant-loading claim. Existing UID fallbacks remain;
+no script errors or shutdown leak warning occurred. 21 focused Python checks
+also pass. See [process evidence](launcher-model-process-validation.json).

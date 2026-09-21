@@ -329,4 +329,7 @@ func _run() -> void:
 	var file := FileAccess.open(output.path_join("stress.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(evidence, "  "))
 	print("PHASE5_BATTLE_STRESS_OK")
+	_finish_run()
+
+func _finish_run() -> void:
 	quit()
