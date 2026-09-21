@@ -27,14 +27,29 @@ bestaande loginvideo staan. Met `--install` wordt alleen de video in het eigen
 slot vervangen, nadat opname en encoding zijn geslaagd. Review, commit en merge
 naar development volgen de normale workflow; dit publiceert niets.
 
-De standaardtour duurt 40 seconden, op 1280×720 bij 30 fps. Het bestaande
-inlogscherm speelt `assets/video/login_background.ogv` af en start deze opnieuw
-aan het einde. De laatste scène mengt al terug naar de eerste; de camerabeweging
-loopt daarbij door over de lusgrens. Er is geen audio.
+De standaardtour bevat alle 16 geselecteerde buitenkaartdecors uit de
+wereldcatalogus en duurt 2 minuten en 8 seconden, op 1280×720 bij 30 fps.
+Dit omvat steden, routes, Viridian Forest en de buitengebieden van Aether Clash.
+Gebouwen, doorgangen binnen gebouwen, grotten en het tijdelijke open-field-decor
+van Route 5 en Route 9 zijn uitgesloten. De duel-preview wordt niet dubbel
+gefilmd; `areas` vermeldt alle vertegenwoordigde locaties. Zie [COVERAGE.md](COVERAGE.md).
+Het bestaande inlogscherm speelt `assets/video/login_background.ogv` af en start
+deze opnieuw aan het einde. De laatste scène mengt al terug naar de eerste;
+de camerabeweging loopt daarbij door over de lusgrens. Er is geen audio.
 
 ## Nieuwe mappen of een andere route
 
-Bewerk `route.json`, of gebruik `--route pad/naar/andere-route.json`:
+Bewerk `route.json`, of gebruik `--route pad/naar/andere-route.json`.
+
+De standaardroute gebruikt `coverage: "all_outdoor_maps"`. Bij een nieuwe buitenmap
+controleert de tool via `generated/world_access_catalog.json` ook geneste
+scène-templates. Ontbrekende buitendecors en ongewenste interieurs blokkeren de
+opname. Voeg bij een nieuw buitendecor een shot toe en werk `areas` bij. `python tools/world_tour/catalog.py` toont de actuele
+koppeling. Laat `coverage` weg voor een bewust geselecteerde deelroute. Locaties
+zonder mapscène staan apart in `unbuilt_areas`; ze zijn nog niet te filmen.
+Bewuste uitzonderingen staan met reden in `excluded_visuals`. De uitsluiting
+van open field geldt alleen voor dat tijdelijke decor: zodra Route 5 of Route 9
+een eigen decor krijgt, meldt de controle dat de nieuwe map moet worden toegevoegd.
 
 - `shots`: de gewenste volgorde; minimaal twee scènes.
 - `scene`: de bijbehorende `res://generated/tiled_visuals/.../*.visual.tscn`.
