@@ -33,6 +33,8 @@ const HTTP_ROUTES = new Set([
   'POST /auth/web/thieving/public-service', 'POST /auth/web/thieving/jail/release',
   'GET /auth/web/rock-smash', 'GET /auth/web/rock-smash/rewards',
   'POST /auth/web/rock-smash/smash',
+  'GET /auth/web/hotbar', 'PUT /auth/web/hotbar',
+  'GET /auth/web/player-actions',
   'POST /world/weather/developer',
 ]);
 
@@ -84,6 +86,7 @@ const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/trainers\/[a-zA-Z0-9_-]+\/rematch$/],
   ['POST', /^\/auth\/web\/mail\/\d+\/read$/],
   ['DELETE', /^\/auth\/web\/mail\/\d+$/],
+  ['POST', /^\/auth\/web\/player-actions\/[a-z0-9-]+\/execute$/],
 ];
 
 export function isAllowedApiRoute(method, path) {

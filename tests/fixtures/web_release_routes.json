@@ -21,6 +21,8 @@
     ["GET", "/auth/web/guilds/me"],
     ["GET", "/auth/web/pokedex/species"], ["GET", "/auth/web/pokedex/species/pidgey"],
     ["GET", "/auth/web/items/search"],
+	["GET", "/auth/web/hotbar"], ["PUT", "/auth/web/hotbar"],
+	["GET", "/auth/web/player-actions"], ["POST", "/auth/web/player-actions/escape-rope/execute"],
     ["POST", "/auth/web/world/story/quests/train_starter_to_level_10/accept"],
     ["GET", "/auth/web/skills"], ["GET", "/auth/web/fishing/progression"], ["PUT", "/auth/web/fishing/selection"],
     ["GET", "/auth/web/ev-training/session"], ["POST", "/auth/web/ev-training/session"], ["POST", "/auth/web/ev-training/session/end"],
