@@ -456,6 +456,59 @@ whole cohort first; only anatomical exceptions belong in manifest data.
 six, duplicates, faint/replacement, repeated switches, real cache eviction/reload
 and multiple battles. 5D enables only separately approved models/variants.
 
+### Phase 5B — first breadth-first source review
+
+`phase5_source_review.py` imports the seven available SCVI candidates with the
+existing pinned importer and renders five representative samples each: idle
+front/back, special-attack midpoint, sleep midpoint and faint-start endpoint.
+Two Blender subprocesses run at most; per-entry failures do not erase other
+results. It extracts only each explicitly inventoried legacy member into new
+review output, checks ZIP CRC before creating a Blend file, and never rewrites
+source archives. Blender opens sources with scripts disabled and read-only file
+access, no network, and does not save modified sources. Fresh output is required;
+`--prepared-from` validates and reuses this tool's earlier imports read-only.
+
+Evidence: slot-c `.tmp/phase5-source-review-02/index.html`, `catalog.json`,
+`contact-1.png`, `contact-2.png`, per-species `review.json` and 35 pose images.
+The initial `-01` attempt retained import artifacts and failed review diagnostics;
+the corrected `-02` render reuses those imports without copying them.
+`phase5_review_gallery.py` can regenerate the static gallery. No new model is
+enabled in the game. This is a **source-material Blender review**, not the
+Godot material conversion, battle framing/HUD or full motion-grounding gate.
+The known controls are freshly imported diagnostic references, not replacements
+for their approved runtime resources.
+
+All cases use the same neutral lights, view directions and native coordinates.
+Cameras auto-fit a common per-model bound across the sampled poses; this does
+not establish relative battle scale. XYZ extents and per-pose minimum heights
+are recorded, without moving floating models onto an assumed floor. These five
+samples do not prove full-cycle contact or mapping correctness.
+
+Observed issues before any per-model polish:
+
+- Pikachu's idle visibly has closed eyes while the sampled attack opens them.
+  Import diagnostics also flag inherited idle eyelid tracks for Arcanine,
+  Lucario, Articuno and the raw Roaring Moon import. Solve inheritance through
+  the common import contract; do not introduce arbitrary species eye rotations.
+- Gastly renders as an opaque dark sphere with no readable face/gas silhouette.
+  Its source import contains body, eye and smoke meshes. Transparency/shader
+  interpretation needs investigation; the image alone does not establish which
+  material node is responsible. No smoke deletion or species workaround applied.
+- Every imported case reports unapplied TRACM material channels. Material and
+  facial animation parity therefore remains unapproved even when a static pose
+  looks reasonable. No conversion was silently certified.
+- Abra, Onix and Snorlax are explicit blocked rows. Python ZIP reading fails
+  with bad local headers; `unzip -t` confirms bad offsets for the exact three
+  members, and `7z t` reports unexpected archive end. Listing the central
+  directory in 5A was not evidence of extractability. An intact archive or
+  alternate explicit sources are required. Snorlax's SCVI model/material source
+  remains available, but its motions are missing from the current motion dump.
+
+The source review tools have focused failure/isolation/gallery tests. Generic
+material/eye corrections, the three missing source reviews, Godot review scenes,
+shiny review, and phase 5C/5D remain outstanding. No player-facing change is made
+by this tooling checkpoint.
+
 Require import, placement, animation and repeated-battle checks plus human visual
 approval before expanding the runtime allowlist. Phase 5B–5D are not complete.
 
