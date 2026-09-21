@@ -703,9 +703,9 @@ func _process(delta: float) -> void:
 			_set_active(false)
 			return
 		desired.append(species)
-	if desired == ["", ""]:
-		_set_active(false)
-		return
+	# Team Preview has no active combatants yet. Build and warm the empty
+	# arena anyway so the loading cover can release the lead-selection UI.
+	# Empty actor slots are cleared below; no placeholder Pokémon are needed.
 	if viewport == null:
 		if _requested_arena() == "forest":
 			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())

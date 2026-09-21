@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed 3D PvP loading getting stuck before Team Preview: the empty arena can now prepare before leads are selected. Trainer speech bubbles now sit closer to their trainer sprites.
+
 - Added an offline developer preview for trainer dialogue with Dragonite and Roaring Moon, repeatable left/right callouts, custom text and optional 3D arenas.
 
 - 3D and Immersive battles now reveal the prepared arena with the existing wild, trainer or PvP transition effect instead of a plain loading-screen fade.

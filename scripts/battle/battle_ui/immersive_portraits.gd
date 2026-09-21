@@ -101,8 +101,9 @@ func _process(_delta: float) -> void:
 		var slide: float = (1.0 - callout.modulate.a) * 18.0
 		speakers[index].position = Vector2(88.0 - slide if index == 0 else stage.size.x - 88.0 - width + slide, 150.0)
 		figures[index].position.x = 60.0 if index == 0 else width - 60.0
-		commands[index].position = Vector2(126.0 if index == 0 else 0.0, -76.0)
-		commands[index].size = Vector2(maxf(100.0, width - 126.0), 64.0)
+		var bubble_width := minf(200.0, maxf(100.0, width - 100.0))
+		commands[index].position = Vector2(56.0 if index == 0 else width - 56.0 - bubble_width, -58.0)
+		commands[index].size = Vector2(bubble_width, 64.0)
 		if source != null:
 			source.hide()
 
