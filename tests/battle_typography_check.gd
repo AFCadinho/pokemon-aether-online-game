@@ -159,6 +159,22 @@ func _run() -> void:
 	assert(not portraits.speakers[0].visible and not portraits.speakers[1].visible)
 	assert(portraits.cards[0].visible and portraits.cards[1].visible)
 	print("IMMERSIVE_SPEAKING_TRAINERS_OK")
+	for style in ["wild", "trainer", "ranked", "special_trainer"]:
+		host.reveal_tween = null
+		host.entry_transition.transition_style = style
+		host.get_node("Cover").show()
+		host.get_node("Cover").color.a = 1.0
+		battle.set_meta("battle_screen_preparing", true)
+		host._reveal_cover()
+		assert(host.entry_transition.visible and host.entry_transition.cover_progress == 1.0)
+		assert(battle.has_meta("battle_screen_preparing"))
+		await create_timer(0.1).timeout
+		assert(host.entry_transition.cover_progress > 0.0 and host.entry_transition.cover_progress < 1.0)
+		assert(host.get_node("Cover").visible)
+		await create_timer(0.2).timeout
+		assert(not host.get_node("Cover").visible and not host.entry_transition.visible)
+		assert(not battle.has_meta("battle_screen_preparing"))
+	print("PREPARED_BATTLE_TRANSITION_OK")
 	host.release()
 	host.queue_free()
 	await process_frame

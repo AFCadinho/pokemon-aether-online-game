@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 3D and Immersive battles now reveal the prepared arena with the existing wild, trainer or PvP transition effect instead of a plain loading-screen fade.
+
 - In Immersive battles, full trainer-card artwork now appears beside the party previews while trainers speak, then fades away with their speech bubble. Corner portraits remain visible.
 
 - Immersive Damage Calculator now places results and settings side by side, with independent scrolling. Smaller windows use Results/Settings tabs, and recalculation preserves your settings tab and scroll position.
