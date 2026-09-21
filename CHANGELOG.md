@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Repeated 3D battles can reuse the prepared Pokémon model resources in memory, avoiding repeated scene imports. The cache is bounded and checks model contents and animation metadata before reuse.
+
 - Realtime 3D moves and catalogued battle effects now play the same sound cues as 2D/2.5D, without loading flat visual effects. Audio follows battle playback speed and stops on cancellation; native model animations keep their original timing.
 
 - Corrected 3D faint floor clearance for the reviewed Dragonite and Roaring Moon models, with a matching transition into a steady faint loop. Existing animation poses and timing are preserved.

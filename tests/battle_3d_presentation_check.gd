@@ -332,6 +332,10 @@ func _run() -> void:
 					break
 				await process_frame
 			assert(standalone.active and standalone.boxes.is_empty())
+			assert(standalone.model_cache_hits == 2)
+			for species in standalone.packed:
+				assert(standalone.packed[species] == stage.packed[species])
+				assert(standalone.import_times_ms[species] == 0.0)
 			assert(await standalone.send_out("p1"))
 			assert(await standalone.recall("p1"))
 			standalone.queue_free()
@@ -342,6 +346,7 @@ func _run() -> void:
 		await process_frame
 		await process_frame
 		assert(not stage.active and stage.packed.is_empty())
+		assert(Renderer.ModelCache.items.is_empty() and Renderer.ModelCache.source_bytes == 0)
 		assert(stage.viewport == null and old_viewport.get_ref() == null)
 		assert(stage.material_response.viewport == null and stage.material_response.pairs == [[], []])
 		assert(stage.actors == [null, null] and stage.pending_entries.is_empty())

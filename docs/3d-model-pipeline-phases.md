@@ -313,6 +313,38 @@ performance remains phase 4; bespoke 3D move VFX remain separate work.
 
 ## Phase 4 — loading and memory
 
+### Phase 4A — bounded prepared-resource reuse
+
+An in-process LRU retains at most two self-contained PackedScenes, admitted
+within a 64 MiB serialized-source budget. This is **not** a decoded RAM/VRAM
+ceiling. It holds no actors, battle nodes, viewports or UI. Normal battle teardown
+can reuse the resources; a running presenter leaving 3D clears the cache.
+Eviction releases only the cache's reference, not resources owned by active actors.
+
+Each catalog read hashes the actual scene bytes once for both placement checks
+and cache identity. Identity includes path and canonical animation timing metadata
+because native animation lengths/loop flags are configured at runtime. Scenes
+with external dependencies are not admitted. A cold threaded load rechecks the
+hash before publication to reject files changed during loading.
+
+The real prepared pair cache test measured 475 ms cold versus 118 ms on each of
+two repeated resource preparations (headless, excluding arena, shader warmup and
+rendering). Repeated imports were zero; fresh catalog/hash validation still cost
+about 117 ms. Retained serialized source size stayed at 37,713,540 bytes.
+`tests/battle_model_cache_check.gd` covers identity, LRU/admission limits, resource
+ownership and three actual pair loads. The presentation check also asserts warm
+reuse between presenters and cache release on mode exit.
+
+Focused evidence: slot-c `.tmp/phase4-cache.log`, `phase4-client-final.log`
+(three rendered battle cycles, final action p95 17.3 ms; post-cleanup static
+memory 387,769,568 → 387,799,524 → 387,806,496 bytes), and
+`phase4-progress.log` (progress watchdog still rejects a true stall). First-load
+frame spikes up to about 1.4 s remain; no whole-battle latency gate is claimed.
+
+This checkpoint still loads the entire approved two-model catalog. Demand loading,
+larger-catalog policy and first-use CPU/GPU/shader performance remain below; it
+does not promise instant first battles or eliminate arena reconstruction.
+
 Demand-driven preparation/cache, bounded eviction, first-use shader measurements,
 and repeated switch tests. Preserve arena-only Team Preview and fallback behavior.
 Measure CPU/GPU first-use separately from disk loading; no quality reduction by
