@@ -1,5 +1,8 @@
 {
   "schema": 1,
+  "followup_report": "SCVI_CONTROL_RENDER_REVIEW.md",
+  "counts_are_model_quality_estimates": false,
+  "followup_note": "Control A/B reproduces stale/unsynchronized render-layer artifacts without changing models. Retain these old-image observations as historical evidence, not current model rejection decisions.",
   "scope": "visual_only_static_evidence_triage_not_full_visual_approval",
   "cohort_size": 100,
   "technical_candidates": 88,

@@ -1,5 +1,10 @@
 # Fixed 100 — visual evidence triage
 
+> Follow-up: `SCVI_CONTROL_RENDER_REVIEW.md` reproduces two render-layer faults
+> with unchanged control models and records a generic runtime render-order fix.
+> The counts below describe the old images only; they must not be used as model
+> defect counts or production yield. Fresh standardized review is still required.
+
 ## Outcome
 
 All **88 technically converted candidates** were inspected across **440 existing

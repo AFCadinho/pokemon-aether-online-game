@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De materiaalbelichting van 3D-Pokémon loopt niet meer een frame achter op hun animatie, waardoor dubbele contouren bij bewegen en posewissels verdwijnen.
+
 - Nieuwe 3D-modelpakketten ondersteunen nu meerdere gelijktijdige materiaalanimaties zonder de afspeelsnelheid te veranderen. Bestaande modelpakketten worden niet automatisch vervangen.
 
 - Nieuwe 3D-modelpakketten kunnen stilstaande animatieposes met hun oorspronkelijke duur behouden en complexere bewegende vuureffecten afspelen. Bestaande pakketten blijven ongewijzigd.
