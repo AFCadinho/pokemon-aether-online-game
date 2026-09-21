@@ -34,3 +34,16 @@ class EffectUVSamplesTests(unittest.TestCase):
         self.assertEqual(classify(material)['profile'],UNLIT_UV2)
         material['shaders'][0]['name']='Standard'
         self.assertFalse(classify(material)['export_supported'])
+
+    def test_multiple_timelines_are_counts_not_speed_changes(self):
+        data=fixture()
+        second=copy.deepcopy(data['tracks'][0]);second['parameter']='UVScaleOffset3'
+        data['tracks'].append(second)
+        expected=sample_tracks(data)
+        data.update(multiplier=3,declared_timeline_counts=[3,5,0],actual_timeline_counts=[3,5,0],nested_timing=[])
+        self.assertEqual(sample_tracks(data),expected)
+        data['actual_timeline_counts']=[2,5,0]
+        with self.assertRaisesRegex(ValueError,'count mismatch'):sample_tracks(data)
+        data['actual_timeline_counts']=[3,5,0]
+        data['nested_timing']=[[1,61,30]]
+        with self.assertRaisesRegex(ValueError,'Independent'):sample_tracks(data)
