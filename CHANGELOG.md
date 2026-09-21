@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Realtime 3D moves and catalogued battle effects now play the same sound cues as 2D/2.5D, without loading flat visual effects. Audio follows battle playback speed and stops on cancellation; native model animations keep their original timing.
+
 - Corrected 3D faint floor clearance for the reviewed Dragonite and Roaring Moon models, with a matching transition into a steady faint loop. Existing animation poses and timing are preserved.
 
 - Reviewed 3D Dragonite and Roaring Moon models now use animation-specific floor clearance and grounded sleeping poses. Their idle placement and animation timing remain unchanged.

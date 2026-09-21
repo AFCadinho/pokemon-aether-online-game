@@ -11,7 +11,7 @@ func begin_attack(presenter: Node, actor: String, move: String) -> void:
 	started[actor] = move
 	presenter.start_action(actor, presenter.attack_action_for(move))
 
-func play_move(presenter: Node, move: String, actor: String, _target: String, options: Dictionary) -> void:
+func play_move(presenter: Node, move: String, actor: String, _target: String, options: Dictionary, audio: Node = null) -> void:
 	var owned_generation := generation
 	if not is_instance_valid(presenter):
 		return
@@ -19,6 +19,10 @@ func play_move(presenter: Node, move: String, actor: String, _target: String, op
 		if not started.has(actor) or started[actor] != move:
 			begin_attack(presenter, actor, move)
 		await presenter.wait_action(actor)
+	# Native clip speed is unchanged. The move beat lasts until both native
+	# motion and shared audio/source timing finish, never their summed duration.
+	while owned_generation == generation and is_instance_valid(audio) and not audio.done:
+		await audio.get_tree().process_frame
 	if owned_generation != generation or not is_instance_valid(presenter) or not presenter.active:
 		return
 	started.erase(actor)
