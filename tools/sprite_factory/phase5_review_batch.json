@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "purpose": "3D phase 5 breadth-first review candidates; no battle approval or 2D presentation overrides",
+  "entries": [
+    {"species": "pikachu", "pm": 25, "case": "small_biped"},
+    {"species": "arcanine", "pm": 59, "case": "quadruped"},
+    {"species": "lucario", "pm": 448, "case": "humanoid_biped"},
+    {"species": "snorlax", "pm": 143, "case": "large_heavy"},
+    {"species": "onix", "pm": 95, "case": "extreme_length"},
+    {"species": "articuno", "pm": 144, "case": "flight_large_wings"},
+    {"species": "abra", "pm": 63, "case": "levitation"},
+    {"species": "gastly", "pm": 92, "case": "floating_unusual_anatomy"},
+    {"species": "dragonite", "pm": 149, "case": "approved_control", "control": true},
+    {"species": "roaring-moon", "pm": 1089, "case": "approved_control", "control": true}
+  ]
+}
