@@ -136,6 +136,44 @@ Local evidence: slot-c `.tmp/grounding-phase2b-01.json` (rebuilt scenes),
 `.tmp/grounding-phase2b-02.json` (approved scenes) and adjacent PNGs.
 Focused rendered check: `tests/model_grounding_measurement_check.gd`.
 
+### Phase 2C — problem-pose review and correction policy
+
+`review_grounding_poses.gd` reproduces each negative-clearance pose and sleep,
+checks its minimum against the sweep (0.002 world-unit tolerance), and captures
+current versus diagnostic constant-per-clip placement at 0/90/180 degrees.
+The approved pair reproduced all eight selected poses with no errors; 48 images
+were produced in slot-c `.tmp/pose-review-phase2-01`, with a machine-readable
+`review.json`. Side comparisons of Dragonite physical attack/faint and Roaring
+Moon damage/sleep were inspected. These images isolate placement, not final
+material-response quality or transition smoothness.
+
+Conclusions and next implementation contract:
+
+- Idle: retain approved placement exactly.
+- Attack/damage: preserve authored flight/motion; propose a nonnegative,
+  time-dependent floor-clearance correction only where posed geometry requires
+  it. A constant whole-clip offset is diagnostic only. Do not lower airborne
+  attacks onto the ground. Blend/transition behavior requires motion testing.
+- Sleep: require explicit per-clip ground/flight intent in asset metadata,
+  with independent resting calibration. Roaring Moon's inspected sleep pose is
+  lying down; reusing idle flight lift leaves it suspended about 1.44 units too
+  high relative to a ground-resting interpretation. Do not infer all sleep
+  clips are grounded merely from the action name.
+- Faint: define continuity between faint_start and faint_loop, retaining authored
+  descent. Dragonite's problematic foot is visible after diagnostic lifting,
+  but this does not certify a natural landing. Treat as its own transition,
+  not a damage clip or instant global height replacement.
+
+No corrective offsets were enabled in the game. Next checkpoint is baking
+reviewable per-action clearance curves and explicit resting intent, followed by
+animated before/after tests (including sleep entry/wake and faint transitions).
+Keep shared sound/timing and neutral lighting unchanged.
+
+To reproduce through slot-env, set `POKEAETHER_3D_STAGE_REPORT` to the prepared
+catalog, `POKEAETHER_GROUNDING_REVIEW_INPUT` to its measurement JSON and
+`POKEAETHER_POSE_REVIEW_OUTPUT` to a NEW absolute directory, then run
+`godot --path FRONTEND --script res://tools/sprite_factory/review_grounding_poses.gd`.
+
 Define per-asset scale/orientation/ground or flight metadata; remove hardcoded
 species scales. Calibrate across relevant animation poses, not just idle. Verify
 feet/tails, surfaces, both sides and camera angles without lighting changes.
