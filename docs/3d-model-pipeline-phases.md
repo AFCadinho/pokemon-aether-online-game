@@ -97,13 +97,44 @@ match before lift is accepted; stale calibration retains the existing fallback
 behavior. Invalid authored placement is rejected. This checkpoint does not
 recalibrate the approved pair or expand the runtime model allowlist.
 
-### Phase 2B — next: generic pose-sweep calibration
+### Phase 2B — pose-sweep measurement completed; action placement review remains
 
-Replace the two-model review-harness exporter with a model-independent offline
-measurement pass. Distinguish resting ground contact from intentional flight or
-attack movement, record sampled clips/poses, and visually inspect both models
-from multiple angles before selecting new calibration. Current idle-sweep
-grounding remains in use until this passes.
+`tools/sprite_factory/measure_model_grounding.gd` is a model-independent offline
+measurement pass. It reads a prepared runtime catalog, samples every declared
+clip at 60 Hz after rendered skin transforms update, and reports minimum world Y
+and time per clip. It proposes a nonnegative resting lift from idle only, keeping
+existing authored flight height, then verifies idle at half-frame offsets.
+It records hashes/scale/yaw and writes three candidate idle views per model.
+It refuses headless execution and an existing report target. It never writes a
+runtime grounding sidecar or changes the selected catalog.
+
+Through slot-env, set `POKEAETHER_3D_STAGE_REPORT` to the prepared runtime report
+(not the source GLB report), and `POKEAETHER_GROUNDING_REVIEW_OUTPUT` to a new
+absolute JSON filename in an existing review directory. Run:
+`godot --path FRONTEND --script res://tools/sprite_factory/measure_model_grounding.gd`.
+Screenshots are geometry/placement reviews with neutral lighting, not a complete
+material-response render or visual-quality acceptance test.
+
+Measured the approved pair and independently rebuilt pair: seven clips per model.
+Candidate idle lifts reproduce the existing approved sidecar within 0.000001:
+Dragonite 0.019324 and Roaring Moon 1.472313 (world units). Half-frame minimum
+clearance is 0.025011 / 0.025489, respectively. Candidate idle front/side/rear
+views were generated; front Dragonite and side Roaring Moon were visually checked.
+The analytic animated-box test checks world scale/yaw, a known minimum, the idle
+lift and exclusion of attack motion from resting lift.
+
+The report also finds below-floor poses with idle-only placement: Dragonite's
+faint minimum is about -0.371, physical attack -0.060 and sleep -0.077; Roaring
+Moon damage -0.044 and physical attack -0.032. Roaring Moon sleep has a very
+different root-height regime. These are measurements, not automatic corrections.
+Next: inspect the implicated poses and define generic per-action/root-motion
+placement semantics before adopting corrections. A single larger global lift
+would make other poses float. Fainting may intentionally settle onto the ground;
+this requires action-aware treatment. The approved idle calibration remains active.
+
+Local evidence: slot-c `.tmp/grounding-phase2b-01.json` (rebuilt scenes),
+`.tmp/grounding-phase2b-02.json` (approved scenes) and adjacent PNGs.
+Focused rendered check: `tests/model_grounding_measurement_check.gd`.
 
 Define per-asset scale/orientation/ground or flight metadata; remove hardcoded
 species scales. Calibrate across relevant animation poses, not just idle. Verify
