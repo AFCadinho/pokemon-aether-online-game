@@ -104,3 +104,8 @@ The verbose repeat had no script errors or leak warning and passed the guards.
 The warning's cause is unconfirmed; it is not claimed fixed. Both runs and their
 hashes are retained in [3d-model-pack-validation.json](3d-model-pack-validation.json).
 Other existing asset-UID fallback and verbose RGB8 conversion warnings remain.
+
+After merging the concurrent immersive Escape/Settings change into the task,
+the rendered `battle_screen_host_check.tscn` also passed with the installed
+pack (`phase5-pack-host.log`). The original two-model cache regression passed
+separately (`phase5-pack-legacy-cache.log`). Neither log contains script errors.
