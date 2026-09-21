@@ -79,10 +79,21 @@ func _run() -> void:
 		var badges: Control = battle.player_sprite_box.single_stat_stage_panel
 		badges.set_badges([{"label":"Atk","value":"▲2","line":"stage"},{"label":"Spe","value":"▲2","line":"stage"},{"label":"Taunt","line":"modifier"}])
 		badges.show()
+		battle.player_side_effects_panel.set_side_effects([
+			{"effect": "Spikes", "layers": 1},
+			{"effect": "Stealth Rock"},
+		])
 		for frame in 10:
 			await process_frame
 			var hud_bottom: Vector2 = battle.player_hud_panel.get_global_rect().end
 			assert(absf(badges.global_position.y - hud_bottom.y) < 12,"Badges must track moving HP HUD")
+		var player_hud_rect: Rect2 = battle.player_hud_panel.get_global_rect()
+		var player_effects_rect: Rect2 = battle.player_side_effects_panel.get_global_rect()
+		assert(player_effects_rect.end.x <= player_hud_rect.position.x, "Player side conditions must sit beside the HP HUD")
+		assert(not player_effects_rect.intersects(badges.get_global_rect()), "Side conditions must not stack under Pokémon indicators")
+		if not output.is_empty() and DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output.path_join("immersive-hud-statuses-" + str(dimensions.x) + ".png"))
 		battle.party_hover_card.hide()
 		battle.player_hud_panel.position = battle.enemy_hud_panel.position
 		await process_frame
