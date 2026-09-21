@@ -83,14 +83,27 @@ func _run() -> void:
 			{"effect": "Spikes", "layers": 1},
 			{"effect": "Stealth Rock"},
 		])
+		battle.enemy_side_effects_panel.set_side_effects([
+			{"effect": "Reflect", "remainingTurns": 3},
+		])
+		battle.field_timers_panel.set_effects([
+			{"effect": "RainDance", "effectType": "weather", "minRemainingTurns": 3, "maxRemainingTurns": 3},
+			{"effect": "move: Grassy Terrain", "effectId": "grassyterrain", "effectType": "fieldCondition", "effectGroup": "terrain"},
+		], 1)
+		battle.battle_status_panel.set_turn(3)
 		for frame in 10:
 			await process_frame
 			var hud_bottom: Vector2 = battle.player_hud_panel.get_global_rect().end
 			assert(absf(badges.global_position.y - hud_bottom.y) < 12,"Badges must track moving HP HUD")
-		var player_hud_rect: Rect2 = battle.player_hud_panel.get_global_rect()
 		var player_effects_rect: Rect2 = battle.player_side_effects_panel.get_global_rect()
-		assert(player_effects_rect.end.x <= player_hud_rect.position.x, "Player side conditions must sit beside the HP HUD")
+		var player_rail_rect: Rect2 = battle.get_node("%PlayerStagePartyRail").get_global_rect()
+		assert(player_effects_rect.position.x >= player_rail_rect.end.x, "Player side conditions must sit beside the party rail")
 		assert(not player_effects_rect.intersects(badges.get_global_rect()), "Side conditions must not stack under Pokémon indicators")
+		var opponent_effects_rect: Rect2 = battle.enemy_side_effects_panel.get_global_rect()
+		var opponent_rail_rect: Rect2 = battle.get_node("%OpponentStagePartyRail").get_global_rect()
+		assert(opponent_effects_rect.end.x <= opponent_rail_rect.position.x, "Opponent side conditions must sit beside the party rail")
+		var player_portrait_rect: Rect2 = battle.battle_stage.get_node("TrainerPortrait0").get_global_rect()
+		assert(battle.field_timers_panel.get_global_rect().position.x >= player_portrait_rect.end.x, "Field indicators must stack beside the player portrait")
 		if not output.is_empty() and DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("immersive-hud-statuses-" + str(dimensions.x) + ".png"))

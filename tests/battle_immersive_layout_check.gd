@@ -40,6 +40,10 @@ func _run() -> void:
 				var enemy_platform_center: Vector2 = battle.enemy_battle_platform.position + Vector2(250, 150) * battle.enemy_battle_platform.scale
 				assert(battle.player_team_preview_layer.position.is_equal_approx(player_platform_center + Vector2(-40, -29) * battle.player_battle_platform.scale))
 				assert(battle.enemy_team_preview_layer.position.is_equal_approx(enemy_platform_center + Vector2(28.5, -34) * battle.enemy_battle_platform.scale))
+				var player_portrait: Control = battle.battle_stage.get_node("TrainerPortrait0")
+				var opponent_portrait: Control = battle.battle_stage.get_node("TrainerPortrait1")
+				assert(battle.field_timers_panel.position.is_equal_approx(Vector2(player_portrait.position.x + player_portrait.size.x + 12, player_portrait.position.y)))
+				assert(battle.battle_status_panel.position.x + battle.battle_status_panel.size.x * battle.battle_status_panel.scale.x <= opponent_portrait.position.x - 10)
 				assert(battle.get_node("%PlayerStagePartyRail").visible)
 				assert(battle.player_hud_panel.scale.is_equal_approx(Vector2.ONE * 0.65))
 				assert(battle.moves_grid.scale.is_equal_approx(Vector2.ONE * 0.8))
