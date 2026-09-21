@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het inlogscherm toont een rustige cameratocht door Pallet Town, Route 1, Viridian City, Viridian Forest en Pewter City, met vloeiende overgangen die blijven herhalen.
+
 - Nieuwe gecontroleerde 3D-modelpakketten kunnen nu bewegende rook- en vuureffecten tonen met transparantie. Bestaande modelpakketten worden niet automatisch vervangen.
 
 - Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
