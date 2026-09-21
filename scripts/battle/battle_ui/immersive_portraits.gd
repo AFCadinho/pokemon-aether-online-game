@@ -111,7 +111,9 @@ func _rebuild_figure(index: int, state: Dictionary, fallback: Texture2D) -> void
 	var figure := figures[index]
 	for child in figure.get_children():
 		child.free()
-	var layers: Array[Dictionary] = BattlePlayerTrainerCatalog.build_layers(state) if not state.is_empty() else []
+	var layers: Array[Dictionary] = []
+	if not state.is_empty():
+		layers.assign(BattlePlayerTrainerCatalog.build_layers(state))
 	if layers.is_empty() and fallback != null:
 		layers.append({"texture": fallback, "scale": 1.0})
 	var bounds := Rect2()

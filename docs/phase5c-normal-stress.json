@@ -1,0 +1,160 @@
+{
+  "catalog_sha256": "609649f7f85becc186f8e3934ca5a0a54460be4a5f340be1708e8ecff345ea15",
+  "complete": true,
+  "phase5c_complete": false,
+  "remaining": [
+    "Reviewed shiny variants and normal/shiny identity tests",
+    "Load/replay frame-stall investigation and performance acceptance"
+  ],
+  "rounds": [
+    {
+      "actor_build_ms": 16.62,
+      "arena": "classic",
+      "arena_build_ms": 14.56,
+      "cache_hits": 0,
+      "duplicate_checks": 7,
+      "faint_replacements": 7,
+      "frame_max_ms": 549.606,
+      "frame_p95_ms": 17.381,
+      "frame_samples": 1479,
+      "replay_duplicate_faint_replacement": true,
+      "retained_source_bytes": 19143466,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / dragonite",
+          "ms": 549.606
+        },
+        {
+          "context": "load pikachu / dragonite",
+          "ms": 88.533
+        },
+        {
+          "context": "load pikachu / dragonite",
+          "ms": 51.055
+        },
+        {
+          "context": "load arcanine / roaring-moon",
+          "ms": 79.629
+        },
+        {
+          "context": "load arcanine / roaring-moon",
+          "ms": 52.707
+        },
+        {
+          "context": "load lucario / snorlax",
+          "ms": 58.68
+        },
+        {
+          "context": "load arcanine / roaring-moon",
+          "ms": 50.757
+        },
+        {
+          "context": "replay frame 1",
+          "ms": 96.237
+        }
+      ],
+      "static_bytes": 192411796,
+      "switch_ms": [
+        951.838,
+        368.019,
+        330.201,
+        79.754,
+        263.776,
+        283.294,
+        46.584,
+        270.991,
+        266.655,
+        66.516,
+        233.53,
+        266.971
+      ]
+    },
+    {
+      "actor_build_ms": 14.98,
+      "arena": "stadium",
+      "arena_build_ms": 111.406,
+      "cache_hits": 2,
+      "duplicate_checks": 7,
+      "faint_replacements": 7,
+      "frame_max_ms": 185.267,
+      "frame_p95_ms": 17.371,
+      "frame_samples": 1463,
+      "replay_duplicate_faint_replacement": true,
+      "retained_source_bytes": 19143466,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / roaring-moon",
+          "ms": 185.267
+        },
+        {
+          "context": "load pikachu / roaring-moon",
+          "ms": 183.001
+        },
+        {
+          "context": "load arcanine / snorlax",
+          "ms": 52.864
+        },
+        {
+          "context": "load articuno / dragonite",
+          "ms": 54.068
+        }
+      ],
+      "static_bytes": 193678813,
+      "switch_ms": [
+        683.216,
+        262.514,
+        195.844,
+        163.87,
+        263.676,
+        165.452,
+        195.27,
+        217.338,
+        166.292,
+        150.777,
+        217.237,
+        183.569
+      ]
+    },
+    {
+      "actor_build_ms": 15.79,
+      "arena": "classic",
+      "arena_build_ms": 12.501,
+      "cache_hits": 0,
+      "duplicate_checks": 7,
+      "faint_replacements": 7,
+      "frame_max_ms": 144.59,
+      "frame_p95_ms": 17.408,
+      "frame_samples": 1466,
+      "replay_duplicate_faint_replacement": true,
+      "retained_source_bytes": 19143466,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / snorlax",
+          "ms": 144.59
+        },
+        {
+          "context": "load arcanine / lucario",
+          "ms": 74.806
+        }
+      ],
+      "static_bytes": 193686217,
+      "switch_ms": [
+        420.52,
+        345.876,
+        79.839,
+        230.579,
+        163.358,
+        373.16,
+        128.727,
+        266.918,
+        67.139,
+        217.349,
+        133.402,
+        316.805
+      ]
+    }
+  ],
+  "runtime_approved": false,
+  "scope": "real immersive UI, presenter and recorded battle events; normal candidates, no live server",
+  "shiny": "not certified; normal-only candidates, fallback checked"
+}
