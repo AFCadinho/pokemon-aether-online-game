@@ -189,6 +189,7 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	if (
 		normalized_item_id.begins_with("aether-blossom-")
 		or normalized_item_id.begins_with("aether-female-")
+		or normalized_item_id.begins_with("wishmaker-")
 	):
 		return ["female"]
 	if (
@@ -278,6 +279,16 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_EYE_COLOR)},
 				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair"},
 				{"category": FACEGEAR_CATEGORY, "id": "Aether_Blossom_Earrings"},
+			]
+		"wishmaker-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": get_default_part_id(BOTTOM_CATEGORY, normalized_gender)},
+				{"category": SHOES_CATEGORY, "id": "Wishmaker_Shoes"},
+				{"category": TOP_CATEGORY, "id": "Wishmaker_Dress"},
+				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_EYE_COLOR)},
+				{"category": HAIR_CATEGORY, "id": "Wishmaker_Hair"},
+				{"category": FACEGEAR_CATEGORY, "id": "Wishmaker_Earrings"},
 			]
 		"aether-blossom-hair":
 			layers = [
@@ -635,7 +646,7 @@ static func is_tintable_part(category: String, part_id: String) -> bool:
 	var normalized_category: String = normalize_part_category(category)
 	var normalized_part_id: String = part_id.strip_edges()
 	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
-		return normalized_part_id != "Aether_Blossom_Hair"
+		return normalized_part_id not in ["Aether_Blossom_Hair", "Wishmaker_Hair"]
 	if normalized_category == FACEGEAR_CATEGORY:
 		return normalized_part_id in ["Adinho_Glasses_Chroma", "Aether_Blossom_Earrings_Chroma"]
 	if normalized_category == TOP_CATEGORY:
@@ -671,6 +682,7 @@ static func get_directional_part_z_index(
 		and part_id.strip_edges() in [
 			"Aether_Blossom_Earrings",
 			"Aether_Blossom_Earrings_Chroma",
+			"Wishmaker_Earrings",
 		]
 		and direction.strip_edges().to_lower() == "up"
 	):
