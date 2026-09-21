@@ -35,6 +35,11 @@ var playback_speed := 1.0:
 		playback_speed = value
 		if is_instance_valid(model_presenter):
 			model_presenter.playback_speed = value
+		for node in active_audio_nodes:
+			if is_instance_valid(node):
+				node.speed = value * float(node.plan.get("speed_scale", 1.0))
+var audio_catalog := preload("res://scripts/battle/animations/battle_audio_catalog.gd").new()
+var active_audio_nodes: Array[Node] = []
 var model_presenter: Node
 var move_presentation_3d := preload("res://scripts/battle/battle_move_presentation_3d.gd").new()
 
@@ -83,6 +88,11 @@ func _collect_threaded_resource_requests(wait_for_completion: bool) -> void:
 
 func cancel_render() -> void:
 	render_generation += 1
+	for node in active_audio_nodes:
+		if is_instance_valid(node):
+			node.cancel()
+			node.queue_free()
+	active_audio_nodes.clear()
 	move_presentation_3d.cancel()
 	if is_instance_valid(model_presenter):
 		model_presenter.cancel_actions()
@@ -180,7 +190,13 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 
 	if uses_realtime_3d():
 		model_presenter.playback_speed = playback_speed
-		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, options)
+		var audio_generation := render_generation
+		var audio := await _start_3d_audio("move", _normalize_move_name(move_name))
+		if audio_generation != render_generation or not uses_realtime_3d():
+			_release_3d_audio(audio)
+			return
+		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, options, audio)
+		_release_3d_audio(audio)
 		return
 
 	var move_key: String = _normalize_move_name(move_name)
@@ -209,7 +225,10 @@ func play_effect_animation(effect_key: String, target_ident: String = "") -> voi
 		return
 
 	if uses_realtime_3d():
-		await move_presentation_3d.play_effect(model_presenter, effect_key, target_ident)
+		var audio := await _start_3d_audio("effect", _normalize_animation_key(effect_key))
+		while is_instance_valid(audio) and not audio.done:
+			await audio.get_tree().process_frame
+		_release_3d_audio(audio)
 		return
 	var config: Dictionary = _get_effect_animation_config(_normalize_animation_key(effect_key))
 	if config.is_empty():
@@ -416,6 +435,51 @@ func clear_move_animation_cache() -> void:
 	threaded_resource_requests.clear()
 	sound_stream_cache.clear()
 
+
+func _start_3d_audio(kind: String, key: String) -> Node:
+	var plan: Dictionary = audio_catalog.get_plan(kind, key)
+	if plan.is_empty() or not is_instance_valid(model_presenter):
+		return null
+	var generation := render_generation
+	# Request only sound files and await their first-use imports before frame 0.
+	# Missing sounds are optional; never wait for sheets or block indefinitely.
+	var paths: Array[String] = []
+	for path_value in plan.sound_paths.values():
+		var path := str(path_value)
+		if ResourceLoader.exists(path):
+			paths.append(path)
+			if not resource_cache.has(path):
+				_request_threaded_resource(path)
+	var started := Time.get_ticks_msec()
+	while generation == render_generation and uses_realtime_3d():
+		var pending := false
+		for path in paths:
+			if not resource_cache.has(path) and threaded_resource_requests.has(path) and ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				pending = true
+		if not pending or Time.get_ticks_msec() - started >= 1500:
+			break
+		await model_presenter.get_tree().process_frame
+	if generation != render_generation or not uses_realtime_3d():
+		return null
+	var node := preload("res://scripts/battle/animations/battle_audio_player.gd").new()
+	node.plan = plan
+	node.speed = playback_speed * float(plan.get("speed_scale", 1.0))
+	node.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
+	node.valid = func(): return generation == render_generation and uses_realtime_3d()
+	for name in plan.sound_paths:
+		var stream := _get_cached_sound_stream(str(plan.sound_paths[name]))
+		if stream != null:
+			node.streams[name] = stream
+	model_presenter.add_child(node)
+	active_audio_nodes.append(node)
+	node.begin()
+	return node
+
+func _release_3d_audio(node: Node) -> void:
+	active_audio_nodes.erase(node)
+	if is_instance_valid(node):
+		node.cancel()
+		node.queue_free()
 
 func _get_move_animation_config(move_key: String) -> Dictionary:
 	if loaded_move_animation_configs.has(move_key):

@@ -268,8 +268,8 @@ The routing fixture still confirms no sprite-catalog/VFX access in 3D, correct
 miss callbacks and cancellation. Three real-client 3D battle cycles pass.
 Evidence: slot-c `.tmp/phase3-parity.log`, `phase3-routes.log`, `phase3-client.log`.
 
-**Phase 3 is not complete:** 3D does not yet play this shared audio timeline.
-Phase 3B must connect an audio-only driver with generation-scoped cancellation,
+**At the phase-3A checkpoint**, 3D did not yet play this shared audio timeline.
+Phase 3B below connects an audio-only driver with generation-scoped cancellation,
 speed/pause handling, single event ownership (no duplicate audio), sound-only
 resource preparation and tests for differing native clip/source durations.
 Preserve the native model clip timing rather than silently stretching it to a
@@ -278,6 +278,38 @@ sprite sheet. No shared clock or 3D sound playback is claimed by phase 3A.
 Explicit clip mappings and fallbacks for idle, physical/special attack, damage,
 sleep and faint. Preserve source timing; extract shared audio/event timing
 separately from 2D versus 3D visual drivers. Test cancellation and playback speed.
+
+### Phase 3B — audio-only realtime driver connected
+
+`battle_audio_catalog.gd` compiles shared catalog source/custom cues into cached
+audio-only plans (including effect aliases and configured speed). It reads JSON
+metadata only; no sprite sheets, backgrounds or foreground resources are loaded.
+`battle_audio_player.gd` owns each timeline and its AudioStreamPlayers. It
+dispatches frame-zero/overdue cues once, handles speed changes and zero-speed
+pause/resume, and keeps source pitch/volume independent of replay speed.
+
+The router prepares only audio streams through its existing threaded cache.
+First-use preparation precedes cue dispatch, is generation-checked, and has a
+1.5-second ceiling; unavailable sounds remain optional and do not block battle
+progress. Cancel invalidates pending preparation, stops active streams, clears
+ownership and releases waiters. Presenter fallback/teardown also invalidates the
+audio lifetime. Global scene pause uses inherited Node processing.
+
+3D moves start the audio timeline alongside native motion. The beat waits for
+**both**, not one after the other. Its length is the maximum of remaining native
+motion and source audio duration: source cue timestamps are identical, but total
+3D move duration need not equal 2D when the native clip is longer. Native clips
+are neither stretched nor truncated. Miss callbacks follow completion and stay
+suppressed on cancellation. Effects (including stat and healing catalogs) use
+audio only until native visuals are added. Unknown entries remain silent.
+
+Focused evidence under slot-c `.tmp`: `phase3b-audio-final.log` (clock, pitch,
+pause/cancel and unequal lifetimes), `phase3b-cold.log` (real first-use streams,
+no visual loader calls, routing/cancellation), `phase3b-contract.log` (legacy cue
+parity), and `phase3b-client-ready.log` (three client battle cycles). Audio mixer
+teardown is allowed to drain before isolated tests quit. No source animation,
+2D/2.5D driver timing or damage authority was changed. Broader first-use/cache
+performance remains phase 4; bespoke 3D move VFX remain separate work.
 
 ## Phase 4 — loading and memory
 
