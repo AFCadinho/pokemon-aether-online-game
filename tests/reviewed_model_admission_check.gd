@@ -43,6 +43,12 @@ func _run() -> void:
 		assert(Registry.pack_entries(duplicate, path.get_base_dir()).is_empty())
 		print("PORTABLE_MODEL_PACK_OK self_contained=14 unsafe_paths/engine/qualification/size/duplicates rejected")
 	assert(catalog.size() == 14 and Registry.DATA.data.models.size() == 14)
+	for identity: String in Registry.DATA.data.models:
+		var model: Dictionary = Registry.DATA.data.models[identity]
+		for digest: String in [model.sha256] + model.get("previous_sha256", []):
+			var profile := Registry.resolve(identity, digest)
+			assert(not profile.is_empty() and profile.motion.sha256 == digest and profile.grounding.sha256 == digest)
+		assert(Registry.resolve(identity, "unapproved").is_empty())
 	for species in ["pikachu", "arcanine", "lucario", "snorlax", "articuno", "dragonite", "roaring-moon"]:
 		assert(Renderer.supported(species, false, false, false))
 		assert(Renderer.supported(species, true, false, false))

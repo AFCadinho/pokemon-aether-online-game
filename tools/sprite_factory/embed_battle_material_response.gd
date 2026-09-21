@@ -12,56 +12,17 @@ func _read(path: String) -> Variant:
 		return null
 	return JSON.parse_string(FileAccess.get_file_as_string(path))
 
+var packer := preload("material_response_pack.gd").new()
+
 func _endpoints(records: Array, inputs: Array) -> Dictionary:
-	var result := {}
-	for record in records:
-		# Schema 1 intentionally supports only the audited EASE white-to-black
-		# ramp. Reject unimplemented graphs instead of guessing a similar look.
-		if record.get("interpolation") != "EASE" or record.get("ramp") != [[0.5, [1.0, 1.0, 1.0, 1.0]], [1.0, [0.0, 0.0, 0.0, 1.0]]]:
-			failure = "Unsupported source ramp"
-			return {}
-		var source := {}
-		for input in inputs:
-			if input.material == record.material:
-				source = input.inputs
-		if not source.has("IOR") or not source.has("SpecularMaskMap") or not source.IOR.links.is_empty() or not source.SpecularMaskMap.links.is_empty():
-			failure = "Missing or nonconstant source IOR/specular input"
-			return {}
-		var ior := float(source.IOR.value)
-		var level := float(source.SpecularMaskMap.value)
-		var specular := sqrt(pow((ior - 1.0) / (ior + 1.0), 2.0) * 2.0 * level / 0.16)
-		if not is_finite(specular) or specular < 0.0 or specular > 1.0:
-			failure = "Source specular outside supported range"
-			return {}
-		var data := {"schema": 1, "specular": specular}
-		for endpoint in [0, 1]:
-			var image := Image.load_from_file(str(record.get(str(endpoint), "")))
-			if image == null or image.is_empty():
-				failure = "Missing endpoint image"
-				return {}
-			image.generate_mipmaps()
-			data["endpoint_" + str(endpoint)] = ImageTexture.create_from_image(image)
-		result[record.material] = data
+	var result := packer._endpoints(records, inputs)
+	failure = packer.failure
 	return result
 
 func _embed(node: Node, materials: Dictionary) -> bool:
-	if node is MeshInstance3D and node.mesh != null:
-		for surface in node.mesh.get_surface_count():
-			var original: Material = node.get_active_material(surface)
-			if not original is StandardMaterial3D or not materials.has(original.resource_name):
-				failure = "No reviewed response for a model surface"
-				return false
-			# Schema 1 reproduces the audited opaque, nonmetallic surfaces only.
-			if original.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED or original.metallic != 0.0 or original.emission_enabled:
-				failure = "Unsupported metallic/emissive/transparent source surface"
-				return false
-			var material := original.duplicate() as StandardMaterial3D
-			material.set_meta(Response.META, materials[original.resource_name])
-			node.set_surface_override_material(surface, material)
-	for child in node.get_children():
-		if not _embed(child, materials):
-			return false
-	return true
+	var result := packer._embed(node, materials)
+	failure = packer.failure
+	return result
 
 func _run() -> void:
 	var source_path := OS.get_environment("POKEAETHER_3D_STAGE_REPORT")

@@ -21,6 +21,9 @@ static func entry_key(entry: Dictionary) -> String:
 static func supports(identity: String) -> bool:
 	return DATA.data.models.has(identity)
 
+static func approved_digest(model: Dictionary, digest: String) -> bool:
+	return not model.is_empty() and (digest == model.get("sha256", "") or digest in model.get("previous_sha256", []))
+
 static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 	# Portable packs are stricter than the historical two-model local catalog.
 	var engine := Engine.get_version_info()
@@ -42,9 +45,9 @@ static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 			return []
 		var identity := entry_key(raw)
 		var model: Dictionary = DATA.data.models.get(identity, {})
-		if model.is_empty() or seen.has(identity) or raw.get("runtime_schema") != 1 or raw.get("runtime_sha256") != model.sha256:
+		if seen.has(identity) or raw.get("runtime_schema") != 1 or not approved_digest(model, str(raw.get("runtime_sha256", ""))):
 			return []
-		var expected: String = "models/" + model.sha256 + ".scn"
+		var expected: String = "models/" + str(raw.runtime_sha256) + ".scn"
 		var bytes: Variant = raw.get("bytes")
 		if raw.get("runtime_path") != expected or folder.is_link(expected) or not (bytes is int or bytes is float):
 			return []
@@ -61,7 +64,7 @@ static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 
 static func resolve(identity: String, digest: String) -> Dictionary:
 	var model: Dictionary = DATA.data.models.get(identity, {})
-	if model.is_empty() or digest != model.sha256:
+	if not approved_digest(model, digest):
 		return {}
 	var profile: Dictionary = DATA.data.profiles[model.profile].duplicate(true)
 	profile.grounding["sha256"] = digest

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
+
 - Desktop-builds bevatten nu de benodigde battle-UI-afbeeldingen en contentpakket-helper, zodat gevechten ook zonder losse 2D-spritepakketten kunnen openen.
 
 - De launcher heeft nu een apart venster voor 3D-modellen: importeer een gecontroleerd modelpakket en selecteer het voor de volgende gamestart. Installeren gebeurt op de achtergrond en verandert je opgeslagen game-instellingen niet.

@@ -53,6 +53,7 @@ def run(job):
         raise ValueError('Expected one rig')
     rig = rigs[0]
     baked = []
+    response = None
     if job.get('scvi_pbr_probe'):
         materials = {m for o in bpy.context.scene.objects if o.type == 'MESH' for m in o.data.materials}
         matching = [m for m in materials if m.node_tree and any(
@@ -65,6 +66,8 @@ def run(job):
             for track in rig.animation_data.nla_tracks:
                 track.mute = True
             bpy.context.scene.frame_set(int(rig.animation_data.action.frame_range[0]))
+            from scvi_response_bake import bake
+            response = bake(Path(job['output']) / 'response')
             from battle_3d_export_probe import bake_color_materials
             baked = bake_color_materials(pbr=True)
     rig.animation_data_create()
@@ -115,8 +118,12 @@ def run(job):
         'glb_sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload),
         'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
         'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
-        'material_limitations': ('Simplified PBR bake at idle; source alpha, emission, lighting and material animation remain unported'
+        'material_limitations': ('PBR plus supported shadow-colour response baked at idle; alpha, emission and material animation remain unported'
             if baked else 'Direct glTF translation: source shader graphs and material animation are not certified')}
+    if response is not None:
+        response['glb_sha256'] = report['glb_sha256']
+        response['source_sha256'] = job['source_sha256']
+        report['material_response'] = response
     (Path(job['output']) / 'export.json').write_text(json.dumps(report, indent=2))
 
 

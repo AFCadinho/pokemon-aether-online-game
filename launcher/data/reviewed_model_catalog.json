@@ -23,12 +23,14 @@
     "dragonite": {
       "glb_sha256": "b9a3d2202f445225ecf124af2d01dea7e2661c106e353e4a6a7cf2a4fc4baf58",
       "profile": "dragonite",
-      "sha256": "468621e4efe5b0b21fdc6d2db79b09af9a868af29108f922a592c9c74bc5e0ec"
+      "previous_sha256": ["468621e4efe5b0b21fdc6d2db79b09af9a868af29108f922a592c9c74bc5e0ec"],
+      "sha256": "caf3905fecb163920bb620ed925216729a43e7202d4d27963c85ae146545d4b9"
     },
     "dragonite@shiny": {
       "glb_sha256": "c743f13215ddb2dcceae249af8ea3256a7ac382f7d1febe134536304d5608d84",
       "profile": "dragonite",
-      "sha256": "49d37283aa2dd9aef3281d3e7b05b088fa17bdb990942d80827ebb102a7037d3"
+      "previous_sha256": ["49d37283aa2dd9aef3281d3e7b05b088fa17bdb990942d80827ebb102a7037d3"],
+      "sha256": "cecba49b71cf83f37d92d510503f6dd19f4487e3dec827a104c8b85897148e47"
     },
     "lucario": {
       "glb_sha256": "5dbe46a618e8680b1c877744a3bbf9c5414d448b0a6b0a4f75e64d76de60e547",
@@ -53,12 +55,14 @@
     "roaring-moon": {
       "glb_sha256": "b292c22d28580222167c7dd5f720d9ff4d368e535d28ecee3b09a71a4e94438f",
       "profile": "roaring-moon",
-      "sha256": "8b99e9b7f2ee540a06fd04d4a1e51ab76602d4dc513bf228e21c08f2512d5e9f"
+      "previous_sha256": ["8b99e9b7f2ee540a06fd04d4a1e51ab76602d4dc513bf228e21c08f2512d5e9f"],
+      "sha256": "e6abb71e192cf5715b8efa21ad55ac73f709c69ff46c79942e570fea1ff937be"
     },
     "roaring-moon@shiny": {
       "glb_sha256": "c6c2eaa41038d549b539f6c60a1a50194b3eb298cff58e6b2bbce88b9a85c357",
       "profile": "roaring-moon",
-      "sha256": "6e226358ef6cdebc04582fcf387c1e217449832d9fdd032279912b52272bcf88"
+      "previous_sha256": ["6e226358ef6cdebc04582fcf387c1e217449832d9fdd032279912b52272bcf88"],
+      "sha256": "03c5955b0967a5dc5eda1bd189852d3f179930800cd8c48d36e19a8594d0f449"
     },
     "snorlax": {
       "glb_sha256": "1a5a10d49b3c655826965991e04a03b6e3b43bfbaff34e25939b71318de7b3f8",
