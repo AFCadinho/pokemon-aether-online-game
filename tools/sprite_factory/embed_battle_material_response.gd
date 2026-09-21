@@ -99,6 +99,8 @@ func _run() -> void:
 		node.free()
 		var record: Dictionary = entry.duplicate(true)
 		record.runtime_path = target
+		if record.get("provenance_schema", 0) == 1:
+			record.runtime_sha256 = FileAccess.get_sha256(target)
 		record.material_response_schema = 1
 		result.append(record)
 		print("RESPONSE_PACKED ", entry.species, " bytes=", FileAccess.open(target, FileAccess.READ).get_length())
