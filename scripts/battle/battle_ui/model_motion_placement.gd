@@ -1,7 +1,7 @@
 extends RefCounted
 ## Baked world-space clearance, sampled using the AnimationPlayer clip clock.
 ## No animation tracks, sound events, or playback durations are modified.
-const Placement = preload("res://scripts/battle/battle_ui/model_placement.gd")
+const Placement = preload("model_placement.gd")
 const ACTIONS := ["physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_loop"]
 
 static func resolve(profile: Dictionary, placement: Dictionary, hash: String, timing: Dictionary) -> Dictionary:
