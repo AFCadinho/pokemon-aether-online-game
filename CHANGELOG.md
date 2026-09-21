@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed browser battles sometimes showing an empty platform for Pokémon whose sprite catalog uses a compact species name, including Roaring Moon.
+
 - Immersive battles are now the default in the browser as well as the desktop client, with Classic still selectable in Settings. Team Preview Pokémon now stay anchored to the fullscreen arena across browser and desktop window sizes.
 
 - 3D battles now prepare only the active Pokémon instead of the entire model catalog. PvP Team Preview can open with just the arena; switching reuses checked model resources, and failed model loads do not retry endlessly.
