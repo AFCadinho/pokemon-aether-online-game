@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from blender_worker import bounds, inspect
 from phase5_review_actions import candidates
 from blender_action_state import select_action
+from source_review_rigs import isolate, equivalent_action_names
 
 
 def run(job, material_intervention=None, camera_bounds=None):
@@ -18,7 +19,12 @@ def run(job, material_intervention=None, camera_bounds=None):
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source changed before review')
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
+    rig, rig_selection = isolate(source)
     report = inspect()
+    report['rig_selection'] = rig_selection
+    if job.get('material_source'):
+        from material_profiles import read_profiles
+        report['material_profiles'] = read_profiles(job['material_source'], job['material_source_sha256'])
     evaluate_material = None
     if job.get('material_probe_policy'):
         from scvi_material_probe import POLICY, apply_probe
@@ -40,16 +46,14 @@ def run(job, material_intervention=None, camera_bounds=None):
                          else 'source_only_not_runtime_approval'),
                   pose_initialization='rest_before_each_clip', poses=[])
     output = Path(job['output'])
-    rigs = [obj for obj in bpy.context.scene.objects if obj.type == 'ARMATURE']
-    if len(rigs) != 1 or report['libraries']:
-        raise ValueError('Expected one self-contained rig')
-    rig = rigs[0]
     rig.animation_data_create()
     for track in rig.animation_data.nla_tracks:
         track.mute = True
     mapping = dict(job['actions'])
     if not mapping:
-        report['review_action_candidates'] = candidates([action.name for action in bpy.data.actions])
+        names = equivalent_action_names(bpy.data.actions)
+        report['animation_bank'] = job.get('animation_bank')
+        report['review_action_candidates'] = candidates(names, bank=job.get('animation_bank'))
         mapping = {name: matches[0] for name, matches in report['review_action_candidates'].items()
                    if len(matches) == 1}
     report['review_mapping'] = mapping

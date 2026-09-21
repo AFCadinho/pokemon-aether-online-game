@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from phase5_godot_review import prepare_entries, build_gallery
 
@@ -25,12 +26,31 @@ class GodotReviewTests(unittest.TestCase):
             entries.append({'species': species, 'status': 'source_review_only', 'report': str(report)})
         return {'entries': entries}
 
-    def test_gastly_held_and_missing_clips_not_invented(self):
+    def test_names_do_not_decide_material_support_and_clips_not_invented(self):
         with TemporaryDirectory() as tmp:
             entries = prepare_entries(self.fixture(Path(tmp)))
-            self.assertEqual(sum(e['status'] == 'pending' for e in entries), 9)
-            self.assertEqual(next(e for e in entries if e['species'] == 'gastly')['status'], 'held')
+            self.assertEqual(sum(e['status'] == 'pending' for e in entries), 10)
+            self.assertEqual(next(e for e in entries if e['species'] == 'gastly')['status'], 'pending')
             self.assertIn('faint_loop', entries[0]['missing_actions'])
+
+    def test_unsupported_profile_holds_any_species(self):
+        with TemporaryDirectory() as tmp:
+            catalog = self.fixture(Path(tmp))
+            path = Path(tmp) / 'pikachu/job.json'
+            job = json.loads(path.read_text())
+            job.update(material_source='fixture.trmtr', material_source_sha256='fixture')
+            path.write_text(json.dumps(job))
+            with patch('material_profiles.read_profiles', return_value=[{'export_supported':False}]) as reader:
+                entries = prepare_entries(catalog)
+            reader.assert_called_once_with('fixture.trmtr','fixture')
+            self.assertEqual(next(e for e in entries if e['species']=='pikachu')['status'],'held')
+
+    def test_import_without_material_provenance_rejected(self):
+        with TemporaryDirectory() as tmp:
+            catalog = self.fixture(Path(tmp))
+            (Path(tmp)/'pikachu/import.json').write_text('{}')
+            with self.assertRaisesRegex(ValueError, 'material provenance'):
+                prepare_entries(catalog)
 
     def test_duplicate_cohort_and_stale_source_rejected(self):
         with TemporaryDirectory() as tmp:

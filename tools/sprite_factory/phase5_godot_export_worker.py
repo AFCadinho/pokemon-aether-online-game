@@ -11,13 +11,23 @@ from mathutils import Matrix
 sys.path.insert(0, str(Path(__file__).parent))
 from blender_worker import inspect
 from blender_action_state import select_action
+from source_review_rigs import isolate
 
 
 def run(job):
     source = Path(job['source'])
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source hash changed')
+    profiles = []
+    if source.with_name('import.json').exists() and not job.get('material_source'):
+        raise ValueError('Imported source needs material provenance; rerun source review')
+    if job.get('material_source'):
+        from material_profiles import read_profiles, unsupported
+        profiles = read_profiles(job['material_source'], job['material_source_sha256'])
+        if unsupported(profiles):
+            raise ValueError('Unsupported material profiles: ' + repr(unsupported(profiles)))
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
+    rig, rig_selection = isolate(source)
     replacements = []
     for replacement in job.get('verified_texture_replacements', []):
         from array import array
@@ -48,10 +58,6 @@ def run(job):
     inspection = inspect()
     if inspection['libraries'] or any(w.startswith('missing_texture:') for w in inspection['warnings']):
         raise ValueError('Source is not self-contained')
-    rigs = [o for o in bpy.context.scene.objects if o.type == 'ARMATURE']
-    if len(rigs) != 1:
-        raise ValueError('Expected one rig')
-    rig = rigs[0]
     baked = []
     response = None
     if job.get('scvi_pbr_probe'):
@@ -117,6 +123,8 @@ def run(job):
     report = {'status': 'exported_for_review', 'path': str(path),
         'glb_sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload),
         'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
+        'rig_selection': rig_selection,
+        'material_profiles': profiles,
         'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
         'material_limitations': ('PBR plus supported shadow-colour response baked at idle; alpha, emission and material animation remain unported'
             if baked else 'Direct glTF translation: source shader graphs and material animation are not certified')}
