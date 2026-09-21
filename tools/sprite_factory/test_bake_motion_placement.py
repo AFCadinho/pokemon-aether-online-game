@@ -31,6 +31,18 @@ class BakeMotionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             bake(self.report(), ["unknown"])
 
+    def test_faint_seam_and_stationary_loop(self):
+        report = self.report()
+        clips = report["entries"]["fixture"]["clips"]
+        clips["faint_start"] = {"duration": 2 / 60, "minimum_y_samples": [.1, -.1, -.2]}
+        clips["faint_loop"] = {"duration": 2 / 60, "minimum_y_samples": [-.2, -.25, -.2]}
+        baked = bake(report, [])["fixture"]["clips"]
+        self.assertEqual(baked["faint_start"]["offsets"][-1], baked["faint_loop"]["offsets"][0])
+        self.assertEqual(len(set(baked["faint_loop"]["offsets"])), 1)
+        clips["faint_loop"]["minimum_y_samples"][0] = -.3
+        with self.assertRaises(ValueError):
+            bake(report, [])
+
 
 if __name__ == "__main__":
     unittest.main()

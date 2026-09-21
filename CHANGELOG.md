@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Corrected 3D faint floor clearance for the reviewed Dragonite and Roaring Moon models, with a matching transition into a steady faint loop. Existing animation poses and timing are preserved.
+
 - Reviewed 3D Dragonite and Roaring Moon models now use animation-specific floor clearance and grounded sleeping poses. Their idle placement and animation timing remain unchanged.
 - Fainted 3D Pokémon remain visible in their faint loop until replaced or the battle ends, instead of disappearing. 2D/2.5D faint effects are unchanged.
 

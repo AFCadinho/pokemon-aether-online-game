@@ -211,6 +211,39 @@ actor; explicit replacement, including the same species, resets the lifecycle.
 Faint **placement/landing** is not recalibrated in this checkpoint and still
 needs moving visual review. Shared audio extraction remains future work.
 
+### Phase 2 completion — reviewed pair
+
+Phase 2 is complete for the exact reviewed Dragonite/Roaring Moon runtime
+assets. The same hash/scale/yaw checks apply to the added faint profiles.
+`faint_start` now receives conservative floor clearance; its last 0.2 seconds
+approach the fixed `faint_loop` correction. The root stays steady throughout
+the loop, including wrap. The source's drooping/flying faint poses are retained:
+this is not a newly authored belly-on-ground animation.
+
+Final evidence (slot-c `.tmp`):
+
+- `motion-final-seams.log`: all 12 corrected clips pass independent half-frame
+  skinning checks (minimum clearance >= 0.02980 units). Whole-mesh faint joins
+  differ by <= 0.000038 units. Chronological idle/sleep/wake/attack/faint/repeated
+  loop sweeps pass at 30 Hz, both 1x and 4x playback with runtime settling.
+- `motion-final-review-03/` and `motion-final-review-04/`: visual pose sheets, both models, eight sequences,
+  five moments each from front, side and raised rear cameras. Inspected feet,
+  tail clearance, sleeping rest and faint join/loop. Dragonite sleeps seated;
+  Roaring Moon uses its flattened resting pose. Wake restores native idle
+  directly; a new authored wake-up clip or crossfade is phase-3 animation work,
+  not required for calibrated placement.
+- `motion-final-client.log`: real battle presentation regression, including
+  persistent faint, cancellation, same-species replacement, replay, material
+  synchronization and repeated teardown. This is not a performance certificate;
+  concurrent diagnostic GPU readbacks can inflate recorded frame times.
+
+The visual-sheet tool is `tools/sprite_factory/review_motion_sequence.gd` and
+requires the reviewed catalog plus a NEW `POKEAETHER_POSE_REVIEW_OUTPUT` folder.
+Earlier review attempts 01/02 contained capture-format/crop errors and are not
+acceptance evidence. No lighting, sound, clip duration, 2D/2.5D behavior or
+runtime species allowlist changes are included. Other assets must get their
+own measurements and visual review; phase 5 still owns broader model acceptance.
+
 ## Phase 3 — animation mapping
 
 Explicit clip mappings and fallbacks for idle, physical/special attack, damage,
