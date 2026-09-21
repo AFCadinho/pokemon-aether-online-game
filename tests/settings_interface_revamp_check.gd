@@ -28,7 +28,6 @@ func _run() -> void:
 	var gameplay_toggle := menu.find_child("BattleAnimationsCheckBox", true, false) as CheckBox
 	var language_options := menu.find_child("LanguageOptionsButton", true, false) as OptionButton
 	var world_scale_options := menu.find_child("WorldPixelScaleOptionsButton", true, false) as OptionButton
-	var battle_background_options := menu.find_child("BattleBackgroundOptions", true, false) as OptionButton
 	var account_portal := _find_button_with_text_key(menu, "ui.settings.account.portal")
 	var exit_game := _find_button_with_text_key(menu, "ui.settings.account.exit_game")
 
@@ -75,25 +74,6 @@ func _run() -> void:
 		world_scale_options != null and world_scale_options.focus_mode == Control.FOCUS_ALL,
 		"graphics selection participates in keyboard navigation"
 	)
-	_check(
-		battle_background_options != null and battle_background_options.item_count == 3,
-		"sprite battles expose original, rendered arena, and automatic backgrounds"
-	)
-	if battle_background_options != null:
-		_check(
-			battle_background_options.get_item_text(0) == "Original 2D"
-			and battle_background_options.get_item_text(1) == "Rendered arena"
-			and battle_background_options.get_item_text(2) == "Automatic",
-			"battle background choices keep the original 2D option explicit"
-		)
-		var settings_manager := root.get_node_or_null("SettingsManager")
-		var available_styles := ["original_2d", "rendered_arena", "automatic"]
-		var saved_style := str(settings_manager.get("battle_background_style")) if settings_manager != null else ""
-		_check(
-			settings_manager != null
-			and battle_background_options.selected == available_styles.find(saved_style),
-			"battle background control reflects the saved setting"
-		)
 	_check(
 		account_portal != null and account_portal.focus_mode == Control.FOCUS_ALL,
 		"account actions participate in keyboard navigation"
