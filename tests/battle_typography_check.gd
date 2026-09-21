@@ -39,6 +39,8 @@ func _run() -> void:
 	battle.current_action_panel.set_message("What will Dragonite do?")
 	battle.moves_grid.set_moves([{"move":"Earthquake","type":"ground","pp":9,"maxpp":10}])
 	battle.moves_grid.show()
+	battle.player_sprite_box.set_single_pokemon_species("Roaring Moon", "back")
+	battle.enemy_sprite_box.set_single_pokemon_species("Dragonite", "front")
 	var pokemon := {"species":"Arcanine","level":100,"hp":321,"max_hp":321,"ability":"Intimidate","nature":"Hardy","stats":{"atk":256,"def":196,"spa":236,"spd":196,"spe":226},"moves":[{"move":"Flamethrower","pp":15,"maxpp":15}, {"move":"Extreme Speed","pp":5,"maxpp":5}]}
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	for dimensions in [Vector2i(1280,720),Vector2i(1920,1080),Vector2i(2560,1440)]:
@@ -65,6 +67,14 @@ func _run() -> void:
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("typography-"+str(dimensions.x)+".png"))
 		print("TYPOGRAPHY_OK ",dimensions)
+		assert(not battle.battle_stage.get_node("ResetCameraButton").visible)
+		assert(battle.player_sprite_box.scale == battle.player_battle_platform.scale)
+		assert(battle.enemy_sprite_box.scale == battle.enemy_battle_platform.scale)
+		assert((battle.player_sprite_box.position - battle.player_battle_platform.position).is_equal_approx(Vector2(11,-37)*0.82))
+		assert((battle.enemy_sprite_box.position - battle.enemy_battle_platform.position).is_equal_approx(Vector2(23,-29)*0.82))
+		var platform_gap: float = battle.enemy_battle_platform.position.x - battle.player_battle_platform.position.x
+		assert(is_equal_approx(platform_gap,battle.battle_stage.size.x*0.27))
+		print("IMMERSIVE_SPRITE_COMPOSITION_OK ",dimensions)
 		var badges: Control = battle.player_sprite_box.single_stat_stage_panel
 		badges.set_badges([{"label":"Atk","value":"▲2","line":"stage"},{"label":"Spe","value":"▲2","line":"stage"},{"label":"Taunt","line":"modifier"}])
 		badges.show()
