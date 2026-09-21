@@ -70,7 +70,7 @@ func _request_json(endpoint: String, method: HTTPClient.Method, body: String) ->
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	add_child(request)
 	var headers: PackedStringArray = GatewayApiConfig.get_accept_headers() if method == HTTPClient.METHOD_GET else GatewayApiConfig.get_json_headers()
-	var error: Error = request.request(base_url + endpoint, headers, method, body)
+	var error: Error = request.request(WebRuntime.gameplay_url(base_url + endpoint), headers, method, body)
 	if error != OK:
 		request.queue_free()
 		return {

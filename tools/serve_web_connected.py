@@ -87,6 +87,7 @@ GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
     ("POST", r"/auth/web/trainers/[a-zA-Z0-9_-]+/rematch"),
     ("POST", r"/auth/web/mail/\d+/read"),
     ("DELETE", r"/auth/web/mail/\d+"),
+    ("POST", r"/auth/web/player-actions/[a-z0-9-]+/execute"),
 ))
 AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
@@ -101,6 +102,8 @@ HTTP_ROUTE_PREFIXES = (
 	("POST", "/auth/web/ev-training/tutorial/focus"), ("POST", "/auth/web/ev-training/tutorial/session"),
 	("GET", "/auth/web/thieving"), ("POST", "/auth/web/thieving/"),
 	("GET", "/auth/web/rock-smash"), ("POST", "/auth/web/rock-smash/smash"),
+	("GET", "/auth/web/hotbar"), ("PUT", "/auth/web/hotbar"),
+	("GET", "/auth/web/player-actions"),
 	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
 	("GET", "/battle/pvp/training/ai/live/"),
 	("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),

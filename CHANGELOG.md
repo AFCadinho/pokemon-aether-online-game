@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The browser client now loads, saves and activates the same eight-slot hotkey bar as the desktop client, including Ctrl+1 through Ctrl+8 shortcuts.
+
 - Pressing Escape while Pokémon Storage is open now closes Storage instead of opening Settings over it, preventing browser instability.
 
 - Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
