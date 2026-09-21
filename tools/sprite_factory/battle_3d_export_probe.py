@@ -125,7 +125,7 @@ def bake_color_materials(pbr=False):
     return records
 
 
-def export_entry(entry, output):
+def export_entry(entry, output, job):
     source = Path(entry['source'])
     cfg = entry['manifest']
     if hashlib.sha256(source.read_bytes()).hexdigest() != cfg['source']['sha256']:
@@ -201,10 +201,11 @@ def export_entry(entry, output):
         material_limitations=('PBR albedo/normal/roughness translated; source emission, alpha and stylized lighting remain unported' if job.get('pbr_maps') else 'Simplified PBR: original normals, roughness, emission and alpha not translated') if baked else 'Direct exporter translation, requires inspection')
 
 
-job = json.loads(Path(sys.argv[sys.argv.index('--') + 1]).read_text())
-output = Path(job['output'])
-output.mkdir(parents=True, exist_ok=False)
-results = []
-for entry in job['entries']:
-    results.append(export_entry(entry, output))
-    (output / 'report.json').write_text(json.dumps(results, indent=2) + '\n')
+if __name__ == '__main__':
+    job = json.loads(Path(sys.argv[sys.argv.index('--') + 1]).read_text())
+    output = Path(job['output'])
+    output.mkdir(parents=True, exist_ok=False)
+    results = []
+    for entry in job['entries']:
+        results.append(export_entry(entry, output, job))
+        (output / 'report.json').write_text(json.dumps(results, indent=2) + '\n')
