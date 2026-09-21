@@ -412,10 +412,52 @@ changing cache capacity. A large-catalog preload strategy is not enabled.
 
 ## Phase 5 — representative acceptance
 
-Keep Dragonite and Roaring Moon as visual controls. Add reviewed assets covering
-grounded biped, quadruped, small and large bodies. Select actual available models
-at that checkpoint. Require import, placement, animation and repeated-battle
-checks plus human visual approval before expanding the runtime allowlist.
+### Phase 5A — explicit ten-case source inventory
+
+The agreed cohort is committed in `tools/sprite_factory/phase5_review_batch.json`:
+Pikachu, Arcanine, Lucario, Snorlax, Onix, Articuno, Abra and Gastly, plus the
+unchanged Dragonite/Roaring Moon controls. Model IDs are source IDs, not Pokédex
+numbers (Roaring Moon uses pm1089). No 2D camera/light/scale overrides are inherited.
+
+Read-only local inventory evidence: slot-c `.tmp/phase5-inventory-02/inventory.json`.
+
+| Candidate | Source result | Required action candidates | Shiny source |
+| --- | --- | --- | --- |
+| Pikachu | SCVI | 7/7 | material files present |
+| Arcanine | SCVI | 7/7 | material files present |
+| Lucario | SCVI | 7/7 | material files present |
+| Snorlax | SCVI model; motions absent from current dump; Gen1 Blend candidate | unverified | SCVI material files present |
+| Onix | Gen1 Blend candidate; no current SCVI model/motions | unverified | unverified |
+| Articuno | SCVI | 7/7 | material files present |
+| Abra | Gen1 Blend candidate; no current SCVI model/motions | unverified | unverified |
+| Gastly | SCVI | 7/7 | material files present |
+| Dragonite (control) | SCVI | 7/7 | material files present |
+| Roaring Moon (control) | SCVI | 7/7 | material files present |
+
+Presence is not visual or animation-semantic approval. The report records exact
+motion candidates, alternatives, material-channel companions and archive member
+identities. Archive listing does not verify Blender contents, textures, rig or
+clips. No source extraction, substitutions, rendering, runtime model registration,
+variant approval or modifications to approved controls occurred in 5A.
+
+Reproduce with `phase5_inventory.py --model-root MODEL_DUMP --motion-root
+ROMFS/pokemon/data --legacy-archive Gen1.zip --output NEW_DIRECTORY`.
+Output must be new. Unit checks cover the explicit cohort/source ID and ensure
+archive membership cannot grant animation/shiny/visual approval.
+
+Next, 5B must inspect both source routes and create the cheap review catalog for
+all available candidates before refining any individual model. Missing motions
+stay explicit blockers, never invented mappings. Compare idle and representative
+poses, eyes/materials, facing/scale, grounded versus intentional floating, long
+bodies/wings, battle camera and HUD framing. Fix generic failures across the
+whole cohort first; only anatomical exceptions belong in manifest data.
+
+5C then covers approved normal/shiny variants where available, mixed teams of
+six, duplicates, faint/replacement, repeated switches, real cache eviction/reload
+and multiple battles. 5D enables only separately approved models/variants.
+
+Require import, placement, animation and repeated-battle checks plus human visual
+approval before expanding the runtime allowlist. Phase 5B–5D are not complete.
 
 Each checkpoint uses focused tests and local development integration only.
 No new model support, deployment or full-batch certification is implied.
