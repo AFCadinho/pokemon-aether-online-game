@@ -4,6 +4,10 @@
 
 - Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
 
+- De vrouwelijke Wishmaker Outfit verschijnt nu correct op Trainer Cards en bij trainertekst in battles.
+
+- De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
+
 - Desktop-builds bevatten nu de benodigde battle-UI-afbeeldingen en contentpakket-helper, zodat gevechten ook zonder losse 2D-spritepakketten kunnen openen.
 
 - De launcher heeft nu een apart venster voor 3D-modellen: importeer een gecontroleerd modelpakket en selecteer het voor de volgende gamestart. Installeren gebeurt op de achtergrond en verandert je opgeslagen game-instellingen niet.

@@ -189,6 +189,7 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	if (
 		normalized_item_id.begins_with("aether-blossom-")
 		or normalized_item_id.begins_with("aether-female-")
+		or normalized_item_id.begins_with("wishmaker-")
 	):
 		return ["female"]
 	if (
@@ -635,7 +636,7 @@ static func is_tintable_part(category: String, part_id: String) -> bool:
 	var normalized_category: String = normalize_part_category(category)
 	var normalized_part_id: String = part_id.strip_edges()
 	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
-		return normalized_part_id != "Aether_Blossom_Hair"
+		return normalized_part_id not in ["Aether_Blossom_Hair", "Wishmaker_Hair"]
 	if normalized_category == FACEGEAR_CATEGORY:
 		return normalized_part_id in ["Adinho_Glasses_Chroma", "Aether_Blossom_Earrings_Chroma"]
 	if normalized_category == TOP_CATEGORY:

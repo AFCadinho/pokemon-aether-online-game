@@ -147,6 +147,26 @@ func get_single_sprite_hover_rect() -> Rect2:
 		return presentation_visual_rect.call()
 	return _get_sprite_hover_rect(single_sprite)
 
+
+func get_double_animation_visual_rect_in_node(target_node: CanvasItem) -> Rect2:
+	if target_node == null or double_container == null or not double_container.visible:
+		return Rect2()
+	var combined := Rect2()
+	var has_bounds := false
+	var inverse := target_node.get_global_transform().affine_inverse()
+	for sprite: AnimatedSprite2D in [double_sprite_1, double_sprite_2]:
+		if sprite == null or not sprite.visible or not sprite.is_visible_in_tree():
+			continue
+		var global_rect := _get_sprite_visual_rect_global(sprite)
+		if not global_rect.has_area():
+			continue
+		var top_left := inverse * global_rect.position
+		var bottom_right := inverse * global_rect.end
+		var local_rect := Rect2(top_left, bottom_right - top_left)
+		combined = combined.merge(local_rect) if has_bounds else local_rect
+		has_bounds = true
+	return combined
+
 func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
 	sprite.texture_filter = BATTLE_SPRITE_TEXTURE_FILTER
 	sprite.scale = BATTLE_SPRITE_SCALE
