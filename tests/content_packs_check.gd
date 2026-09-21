@@ -1,5 +1,5 @@
 extends SceneTree
-const Store := preload("res://launcher/scripts/content_pack_store.gd")
+const Store := preload("res://scripts/services/content_pack_store.gd")
 const Runtime := preload("res://scripts/services/content_pack_runtime.gd")
 const Followers := preload("res://scripts/services/follower_sprite_service.gd")
 var failed := false

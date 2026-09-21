@@ -49,7 +49,11 @@ func _run() -> void:
 	assert(not FileAccess.file_exists(output.path_join(phase + "-result.json")), "Use a fresh result path")
 	# Parent sentinel must be restored, while the child receives the selected catalog.
 	OS.set_environment("POKEAETHER_MODEL_CATALOG", "parent-sentinel")
-	child_pid = launcher._create_game_process(ProjectSettings.globalize_path("res://tests/fixtures/model game entry.sh"))
+	var executable := OS.get_environment("POKEAETHER_E2E_ENTRY")
+	if executable.is_empty():
+		executable = ProjectSettings.globalize_path("res://tests/fixtures/model game entry.sh")
+	assert(executable.is_absolute_path() and FileAccess.file_exists(executable))
+	child_pid = launcher._create_game_process(executable)
 	assert(child_pid > 0, "Actual child process did not start")
 	assert(OS.get_environment("POKEAETHER_MODEL_CATALOG") == "parent-sentinel")
 	launcher.free()
@@ -65,6 +69,8 @@ func _run() -> void:
 	var log := FileAccess.get_file_as_string(output.path_join(phase + "-game.log"))
 	assert(report.get("complete", false) and report.get("catalog_sha256") == FileAccess.get_sha256(catalog))
 	assert(report.get("pid") == child_pid and report.get("launcher_pid") == OS.get_process_id())
+	if not OS.get_environment("POKEAETHER_E2E_GAME_BINARY").is_empty():
+		assert(not OS.has_feature("editor") and report.get("standalone_runtime", false))
 	assert(not log.contains("SCRIPT ERROR") and not log.contains("ERROR:"), "Child log contains an error")
 	assert(log.contains("MODEL_PROCESS_CHILD_OK"))
 	print("MODEL_PROCESS_PARENT_OK phase=", phase, " separate_process=true selection_persisted=true")
