@@ -1183,3 +1183,16 @@ three-cycle immersive presentation test also pass (`phase5d-cache.log`,
 `phase5d-demand.log`, `phase5d-presentation.log`). All final logs have no script
 errors; the existing asset UID path-fallback warnings remain. Development
 integration does not certify the full release batch or authorize deployment.
+
+### After 5D — portable local model packaging
+
+The seven normal/shiny pairs now have a reproducible ZIP pack and a staged,
+hash-verified local installer. The game reads its portable catalog relative to
+the selected file, but takes approval, motion and placement exclusively from
+the checked-in registry. The installed scenes no longer reference the temporary
+review/export directories. Legacy catalogs remain compatible.
+
+See [3d-model-packs.md](3d-model-packs.md) for build/install commands, limits,
+engine compatibility, local artifact hashes and Settings selection. This step
+does not add downloads, publication or launcher Mods integration. Those are
+separate distribution work; no new species or variant is approved here.

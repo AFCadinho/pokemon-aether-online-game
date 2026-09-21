@@ -544,13 +544,13 @@ func _load_catalog(path: String) -> void:
 	catalog_calibration.clear()
 	validated_entries.clear()
 	failed_models.clear()
-	catalog_problem = "Invalid 3D catalog; choose a prepared preview report in Settings"
+	catalog_problem = "Invalid 3D catalog; choose a compatible installed model catalog in Settings"
 	reason = catalog_problem
 	entries.clear()
 	packed.clear()
 	_clear_actors()
 	if path.strip_edges().is_empty():
-		catalog_problem = "No 3D catalog selected — choose a local 3D preview report in Settings"
+		catalog_problem = "No 3D catalog selected — choose a local model catalog in Settings"
 		reason = catalog_problem
 		return
 	if not FileAccess.file_exists(path):
@@ -570,6 +570,9 @@ func _load_catalog(path: String) -> void:
 	if file == null or file.get_length() > 1048576:
 		return
 	var data: Variant = JSON.parse_string(file.get_as_text())
+	var portable_pack := data is Dictionary
+	if portable_pack:
+		data = ReviewedModels.pack_entries(data, prepared_path.get_base_dir())
 	if not data is Array:
 		return
 	var seen := {}
@@ -600,6 +603,8 @@ func _load_catalog(path: String) -> void:
 			continue
 		var model_file := FileAccess.open(model_path, FileAccess.READ)
 		if model_file == null or model_file.get_length() > 134217728:
+			continue
+		if portable_pack and model_file.get_length() != int(entry.bytes):
 			continue
 		var valid := true
 		for action in ["idle", "physical_attack", "special_attack", "damage", "sleep", "faint_start"]:

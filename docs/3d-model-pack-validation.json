@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "scope": "Local portable pack and installer, Godot 4.6.2 Forward+, no publication or live PvP certification",
+  "models": 14,
+  "python_tests_passed": 77,
+  "runtime_guard_passed": true,
+  "checks": {
+    "battles": 3,
+    "mixed_team_switches": 36,
+    "normal_duplicate_faint_replacements": 21,
+    "variant_swap_faint_eviction_reload_checks": 21,
+    "recorded_event_sequences": 3,
+    "shiny_review_images": 35,
+    "exact_geometry_motion_pairs": 7
+  },
+  "rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.317,
+      "frame_max_ms": 521.24,
+      "replay_setup_ms": 79.764,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / dragonite",
+          "covered": true,
+          "frame": 1,
+          "ms": 521.24,
+          "pipelines": [
+            3.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "context": "load pikachu / dragonite",
+          "covered": true,
+          "frame": 2,
+          "ms": 89.818,
+          "pipelines": [
+            3.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "context": "replay setup",
+          "covered": false,
+          "frame": 1913,
+          "ms": 94.318,
+          "pipelines": [
+            4.0,
+            20.0,
+            4.0,
+            15.0
+          ]
+        }
+      ],
+      "static_bytes": 193033971,
+      "retained_source_bytes": 19143466,
+      "load_callback_max_ms": 2.099
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 17.357,
+      "frame_max_ms": 151.944,
+      "replay_setup_ms": 17.332,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / roaring-moon",
+          "covered": true,
+          "frame": 2374,
+          "ms": 113.366,
+          "pipelines": [
+            4.0,
+            20.0,
+            4.0,
+            15.0
+          ]
+        },
+        {
+          "context": "load pikachu / roaring-moon",
+          "covered": true,
+          "frame": 2402,
+          "ms": 151.944,
+          "pipelines": [
+            4.0,
+            20.0,
+            26.0,
+            31.0
+          ]
+        }
+      ],
+      "static_bytes": 194388123,
+      "retained_source_bytes": 19143466,
+      "load_callback_max_ms": 2.023
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.348,
+      "frame_max_ms": 91.647,
+      "replay_setup_ms": 18.738,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / snorlax",
+          "covered": true,
+          "frame": 4721,
+          "ms": 91.647,
+          "pipelines": [
+            4.0,
+            44.0,
+            26.0,
+            45.0
+          ]
+        }
+      ],
+      "static_bytes": 194437763,
+      "retained_source_bytes": 19143466,
+      "load_callback_max_ms": 1.628
+    }
+  ],
+  "static_growth_bytes": 49640,
+  "first_run": {
+    "functional_matrix_passed": true,
+    "runtime_guard_passed": false,
+    "p95_ms": [
+      22.813,
+      17.376,
+      17.338
+    ],
+    "warning": "ObjectDB instances leaked at exit; not reproduced by the verbose repeat. Cause unconfirmed; not claimed fixed."
+  },
+  "archive_bytes": 135610772,
+  "sha256": {
+    "archive": "9122a6a6ec238c6709d02647b9bffaf3333307c81d3f1649c88cb270afefc2fe",
+    "catalog": "5078fd43b7695ccad5d738e4ba1bdeffa90eeae163c5e424217555f4b976f160",
+    "stress": "686658876a20d02aefa6f78393dbbe62eef55017240e7e1ec32f49f94e7ed90e",
+    "log": "21d268e1d59406a3b167056d27a25e38f5fd9f80348cc5b983efd7ef23864ce0",
+    "first_stress": "0f4454bc3a6ff19cc055c3af9e9e24d681fde24db6c764c29b68d59c0da3f943",
+    "first_log": "08f3e32f97998e61cf5a555a769249371006bb6c040c3990d1a0d32e93c75609"
+  }
+}
