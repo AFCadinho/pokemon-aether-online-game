@@ -165,22 +165,27 @@ func _run() -> void:
 	assert(report.is_absolute_path() and output.is_absolute_path() and not DirAccess.dir_exists_absolute(output))
 	assert(DirAccess.make_dir_recursive_absolute(output) == OK)
 	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string(report))
+	var runtime_registry := OS.get_environment("POKEAETHER_PHASE5_PRODUCTION") == "1"
+	evidence["production_registry"] = runtime_registry
+	for entry: Dictionary in catalog:
+		entry.species = Renderer.ReviewedModels.entry_key(entry)
 	var variants: Array = catalog.filter(func(e): return str(e.species).ends_with("@shiny"))
 	assert(catalog.size() == 7 or (catalog.size() == 14 and variants.size() == 7))
 	for entry: Dictionary in catalog:
-		assert(entry._review_only and FileAccess.get_sha256(entry.runtime_path) == entry.runtime_sha256)
+		assert((runtime_registry or entry.get("_review_only", false)) and FileAccess.get_sha256(entry.runtime_path) == entry.runtime_sha256)
 	var settings = root.get_node("SettingsManager")
 	settings.battle_presentation_mode = "2.5d"
 	settings.battle_ui_layout = "immersive"
 	settings.battle_3d_catalog_path = report
 	settings.battle_3d_camera_motion = false
 	root.size = Vector2i(1280, 720)
-	# Production renderer must still reject new candidates and shiny variants.
+	# Admission is explicit: held species remain unsupported, including shiny.
 	var production := Renderer.new()
-	for species in ["pikachu", "gastly", "abra", "onix"]:
+	for species in ["gastly", "abra", "onix"]:
 		assert(not production._catalog_species_allowed(species))
 		assert(not production._supports_combatant(species, false, false, false))
-	assert(not production._supports_combatant("dragonite", true, false, false))
+	assert(production._supports_combatant("dragonite", true, false, false))
+	assert(production._supports_combatant("pikachu", false, false, false))
 	production.free()
 	Cache.clear()
 	for cycle in 3:
@@ -196,6 +201,7 @@ func _run() -> void:
 		var position: int = old_stage.get_index()
 		old_stage.free()
 		stage = Candidate.new()
+		stage.use_runtime_registry = runtime_registry
 		stage.name = "ExperimentalBattle3D" # Keep the real host's preparation fence.
 		battle.battle_stage.add_child(stage)
 		battle.battle_stage.move_child(stage, position)
