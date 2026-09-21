@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- De vrouwelijke Wishmaker Outfit is toegevoegd aan de overworld-customization, met jurk, haar, oorbellen en schoenen.
+- De vrouwelijke Wishmaker Outfit verschijnt nu correct op Trainer Cards en bij trainertekst in battles.
 
 - De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
 
