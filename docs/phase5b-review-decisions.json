@@ -1,0 +1,218 @@
+{
+  "phase": "5B",
+  "review_complete": true,
+  "runtime_approved": false,
+  "catalog_sha256": "559b25e4e17802b62df93df838b59782bb472c626f633ca7418dc65be45fe4d5",
+  "candidates_sha256": "8a6ec02b914f166862e98a8767f4ac0631e3051ea392773ed35d1d8f2df5d9ed",
+  "scope": "Normal review GLBs; flat floor, two default cameras, HUD proxy. Not battle certification.",
+  "entries": [
+    {
+      "species": "pikachu",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "6f05bef549bd908bb457833912111b924e869056f0f0fefb0fad23420cb8879f",
+      "candidate_scale": 2.97717035780756,
+      "candidate_lift": 0.0263204291462898,
+      "minimum_idle_pixels": 65.59,
+      "minimum_clearance": 0.0222513154149055,
+      "independent_pose_samples": 1558,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "arcanine",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "329e2cc40ed47b2abd84214d14e6d09cf8d4929b3177c9a03485bc4f13466550",
+      "candidate_scale": 1.0,
+      "candidate_lift": 0.0265794634819031,
+      "minimum_idle_pixels": 108.59,
+      "minimum_clearance": 0.025000000372529,
+      "independent_pose_samples": 1421,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "lucario",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "5dbe46a618e8680b1c877744a3bbf9c5414d448b0a6b0a4f75e64d76de60e547",
+      "candidate_scale": 1.11770576272588,
+      "candidate_lift": 0.0227590709459037,
+      "minimum_idle_pixels": 65.79,
+      "minimum_clearance": 0.025000000372529,
+      "independent_pose_samples": 1504,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "snorlax",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "1a5a10d49b3c655826965991e04a03b6e3b43bfbaff34e25939b71318de7b3f8",
+      "candidate_scale": 1.0,
+      "candidate_lift": 0.0341345459222794,
+      "minimum_idle_pixels": 104.67,
+      "minimum_clearance": 0.0249998793005943,
+      "independent_pose_samples": 3984,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "onix",
+      "status": "held",
+      "reasons": [
+        "Sleep and faint loop not identified",
+        "Missing canonical actions: faint_loop, sleep"
+      ],
+      "runtime_approved": false,
+      "glb_sha256": "7e197e99d9dd993ae7225e9943312042cba7d24eb913bd42f35c6e0d4f749b0b",
+      "candidate_scale": 1.0,
+      "candidate_lift": 0.0484826654195786,
+      "minimum_idle_pixels": 207.76,
+      "minimum_clearance": 0.0249999985098839,
+      "independent_pose_samples": 1341,
+      "reviewed_shots": 12,
+      "mapped_actions": [
+        "damage",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "articuno",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "ad972fab72b4cf48126816df200bead44fef596dac5ec804682bf483c2b73540",
+      "candidate_scale": 1.0,
+      "candidate_lift": 0.530997598171234,
+      "minimum_idle_pixels": 121.75,
+      "minimum_clearance": 0.0249999761581421,
+      "independent_pose_samples": 1765,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "abra",
+      "status": "held",
+      "reasons": [
+        "Physical attack, sleep and faint loop not identified",
+        "Missing canonical actions: faint_loop, physical_attack, sleep"
+      ],
+      "runtime_approved": false,
+      "glb_sha256": "b02dc11acb291ba04120cf3f6f1c50787095d40d602fc7346152aa2862865d7e",
+      "candidate_scale": 1.66547917735176,
+      "candidate_lift": 0.0,
+      "minimum_idle_pixels": 65.64,
+      "minimum_clearance": 0.029954619705677,
+      "independent_pose_samples": 1056,
+      "reviewed_shots": 12,
+      "mapped_actions": [
+        "damage",
+        "faint_start",
+        "idle",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "gastly",
+      "status": "held",
+      "reasons": [
+        "Layered smoke/material semantics unresolved"
+      ],
+      "runtime_approved": false
+    },
+    {
+      "species": "dragonite",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "b9a3d2202f445225ecf124af2d01dea7e2661c106e353e4a6a7cf2a4fc4baf58",
+      "candidate_scale": 1.0,
+      "candidate_lift": 0.0193239092826843,
+      "minimum_idle_pixels": 122.41,
+      "minimum_clearance": 0.025000000372529,
+      "independent_pose_samples": 1655,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    },
+    {
+      "species": "roaring-moon",
+      "status": "eligible_for_5c_normal",
+      "reasons": [],
+      "runtime_approved": false,
+      "glb_sha256": "b292c22d28580222167c7dd5f720d9ff4d368e535d28ecee3b09a71a4e94438f",
+      "candidate_scale": 0.65,
+      "candidate_lift": 1.47114827632904,
+      "minimum_idle_pixels": 220.29,
+      "minimum_clearance": 0.0249061584472656,
+      "independent_pose_samples": 1994,
+      "reviewed_shots": 16,
+      "mapped_actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ]
+    }
+  ],
+  "source_report_sha256": "8181080c9fe3e3c4bd270dbaf916e7566a9e2ae80fac49fdac563409121b1620"
+}

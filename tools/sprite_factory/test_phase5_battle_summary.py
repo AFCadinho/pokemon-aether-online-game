@@ -50,6 +50,17 @@ class BattleSummaryTests(unittest.TestCase):
         entry['clips'] = {'idle': {'duration': 1, 'samples': 61, 'minimum_y': 0.4, 'clearance_with_idle_lift': 0.4}}
         self.assertEqual(summarize(data)['entries'][0]['idle_clearance'], 0.4)
 
+    def test_corrected_summary_retains_raw_baseline_findings(self):
+        data = self.fixture()
+        data['entries'][0]['bounds_hud_proxy'] = True
+        data['entries'][0]['corrected_clearance_120hz'] = {
+            'idle': {'minimum_y': .025}, 'sleep': {'minimum_y': .03}}
+        entry = summarize(data)['entries'][0]
+        self.assertEqual(entry['floor_penetrating_clips'], ['sleep'])
+        self.assertEqual(entry['corrected_floor_penetrating_clips'], [])
+        self.assertEqual(entry['corrected_minimum_clearance'], .025)
+        self.assertEqual(entry['hud_proxy'], 'posed_model_bounds')
+
 
 if __name__ == '__main__':
     unittest.main()

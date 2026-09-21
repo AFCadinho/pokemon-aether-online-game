@@ -817,3 +817,92 @@ ABSOLUTE_PATH/phase5_battle_review.gd`, `POKEAETHER_PHASE5_REVIEW` pointing to t
 conversion output, `POKEAETHER_PHASE5_FRONTEND` to the task frontend and
 `POKEAETHER_PHASE5_BATTLE_OUTPUT` to a new directory. Then run
 `python3 tools/sprite_factory/phase5_battle_summary.py NEW_DIRECTORY`.
+
+### Phase 5B — closing review and 5C handoff
+
+5B is the breadth-first **review gate**, not runtime certification. The closing
+pass applies review-only presentation candidates and records an explicit
+eligible/held decision for every member of the ten-model cohort. A held model
+is not silently substituted or approved. Runtime enablement remains phase 5D.
+
+`phase5_candidates.py` provides three reproducible stages:
+
+1. `prepare BASELINE_REPORT NEW_READABILITY_JSON`: derives one minimum-size
+   rule from all four idle views (both sides of both shared cameras). Models
+   below 66 pixels receive a proportional multiplier, capped at 4; larger
+   models keep their previous scale. This is a readability floor, not a rule
+   making all species equally tall. The closing gate requires at least 60 px
+   after perspective is measured again at 1152×648.
+2. Run `phase5_battle_review.gd` with the same inputs as above and
+   `POKEAETHER_PHASE5_CANDIDATES=NEW_READABILITY_JSON`. It records every raw
+   60 Hz minimum and uses posed geometry for the HUD proxy instead of the
+   fixed three-unit anchor. Then `bake SCALED_REPORT NEW_CANDIDATES_JSON
+   --candidates NEW_READABILITY_JSON` reuses `bake_motion_placement.py`.
+   Pikachu, Arcanine, Lucario, Snorlax and Dragonite have explicitly reviewed
+   grounded sleep intent; flying models retain native sleep elevation. Idle
+   floating height is never lowered automatically. A faint endpoint mismatch
+   becomes a per-model blocker instead of being hidden by an offset.
+3. Run the Godot review again with `NEW_CANDIDATES_JSON`. It verifies model,
+   scale, yaw, lift and clip duration against the **actual runtime motion
+   resolver**, and evaluates its interpolated offsets at 120 Hz, including
+   the half-frames absent from the bake input. `close CORRECTED_REPORT
+   NEW_DECISIONS_JSON --candidates NEW_CANDIDATES_JSON` checks provenance,
+   complete cohort/view/sample coverage, clearance, readability and HUD-proxy
+   overlap. Missing data cannot become an eligible decision.
+
+All Python subcommands take positional `stage report output`; outputs are
+exclusive-create. Render directories must also be new. Candidate files and
+reports remain `runtime_approved: false`. Sources, action tracks, playback
+duration, sounds, approved control assets and runtime allowlists are unchanged.
+The motion helper now uses a relative sibling preload so exactly the same
+resolver can run in the autoload-free review project; its behavior is unchanged.
+
+This resolves the **review candidates**, not the game HUD: posed vertex baking
+is intentionally an offline measurement, never a proposed per-frame gameplay
+operation. 5C must bring approved candidate profiles and cached presentation
+bounds into its isolated battle harness and test the real HUD, lifecycle and
+cache paths before anything can be enabled. No full UI, camera-orbit, arena
+geometry, material parity or shiny certification is implied by this flat-floor
+normal-variant review. Animated material channels still need their own visual
+acceptance; the SCVI PBR export remains an explicitly limited conversion.
+
+#### Recorded closing result
+
+The retained evidence is slot-c `.tmp/phase5-battle-review-04` (resized baseline),
+`.tmp/phase5-readability-01.json`, `.tmp/phase5-candidates-01.json`, and
+`.tmp/phase5-battle-review-05` (corrected report, decisions, summary, HTML and
+136 PNGs). [phase5b-review-decisions.json](phase5b-review-decisions.json) preserves
+the closing decisions, model hashes, candidate/report provenance and metrics
+in the repository; it is not a runtime manifest.
+
+- All 58 available clips on nine models pass the independent 120 Hz check:
+  **16,278 poses, no measured floor penetration**. The lowest clearance is
+  about 0.02225. All 136 representative views fit the viewport and avoid their
+  own HUD proxy; all four idle views have a 12 px HUD gap.
+- Pikachu's candidate scale is 2.97717, Lucario's 1.11771 and Abra's 1.66548.
+  Their smallest measured idle heights are 65.59, 65.79 and 65.64 px. Other
+  scales are unchanged. These are reproducible outputs of the shared rule,
+  not new hard-coded species offsets. Abra keeps lift zero and native float.
+- Representative corrected images were visually inspected across the cohort,
+  including the resized small models, sleeping quadruped/large models, long
+  Onix, flying Articuno and faint/sleep control poses. This supplements the
+  earlier source/eyes/material/order review; it does not certify every frame
+  aesthetically or remove the documented material limitations.
+- **Eligible for normal-variant 5C:** Pikachu, Arcanine, Lucario, Snorlax,
+  Articuno, Dragonite and Roaring Moon. The last two are comparison exports;
+  their existing approved runtime assets are untouched.
+- **Held:** Gastly (layered smoke obscures the face; shader semantics unresolved),
+  Abra (physical attack, sleep and faint loop unidentified), Onix (sleep and
+  faint loop unidentified). Their blockers remain required follow-ups before
+  they can join certification; no invented action aliases or hidden meshes.
+- 48 focused Python tests pass, as do `model_placement_check.gd`,
+  `model_motion_placement_check.gd`, `battle_arena_contract_check.gd`, both
+  rendered review runs, UID-sidecar checks and `git diff --check`.
+
+**5B is closed with explicit holds.** Next is 5C: integrate the eligible review
+candidates into the isolated battle test path, then exercise mixed teams of
+six, duplicates, repeated switches, faint-to-replacement, cache eviction and
+reload, successive battles and available shiny variants. Held models do not
+block testing the eligible group, but must not be counted as certified. No
+complete development gate, runtime rollout, promotion or deployment is part
+of this 5B closure.

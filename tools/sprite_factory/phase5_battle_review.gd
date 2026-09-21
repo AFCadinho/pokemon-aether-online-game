@@ -2,8 +2,15 @@ extends "phase5_godot_review.gd"
 ## Native/default placement measurements. No runtime calibration or approvals.
 var framing: Script
 var placement_rules: Script
+var motion_rules: Script
 var output_dir: String
 var overlays: Array[Label] = []
+var readability: Dictionary = {}
+var corrections: Dictionary = {}
+var corrected_hud := false
+
+func _motion_offset(species: String, action: String, time: float) -> float:
+	return motion_rules.offset(corrections.get(species, {}).get("clips", {}), action, time)
 
 func _render_frame() -> void:
 	# Explicit draws keep offline measurements progressing if the window is hidden.
@@ -33,6 +40,7 @@ func _load_actor(entry: Dictionary) -> Node3D:
 
 func _measure(entry: Dictionary, model: Node3D, player: AnimationPlayer) -> Dictionary:
 	var placement: Dictionary = placement_rules.resolve(entry, {}, entry.glb_sha256)
+	placement.scale *= float(readability.get(entry.species, 1.0))
 	model.scale = Vector3.ONE * float(placement.scale)
 	var clips := {}
 	var idle_min := INF
@@ -42,13 +50,15 @@ func _measure(entry: Dictionary, model: Node3D, player: AnimationPlayer) -> Dict
 		var maximum := -INF
 		var envelope := AABB()
 		var count := ceili(duration * 60.0)
+		var minima := []
 		for sample in count + 1:
 			var box: AABB = await _sample(model, player, action, minf(sample / 60.0, duration) / duration)
 			assert(box.position.is_finite() and box.size.is_finite() and box.size.length() > 0)
 			minimum = minf(minimum, box.position.y)
+			minima.append(box.position.y)
 			maximum = maxf(maximum, box.position.y)
 			envelope = box if sample == 0 else envelope.merge(box)
-		clips[action] = {"duration": duration, "samples": count + 1, "minimum_y": minimum,
+		clips[action] = {"duration": duration, "samples": count + 1, "minimum_y": minimum, "minimum_y_samples": minima,
 			"maximum_minimum_y": maximum, "envelope_min": [envelope.position.x, envelope.position.y, envelope.position.z],
 			"envelope_size": [envelope.size.x, envelope.size.y, envelope.size.z]}
 		if action == "idle":
@@ -73,11 +83,30 @@ func _draw_hud(index: int, name: String, actor: Node3D, side: int) -> Rect2:
 	var top := camera.unproject_position(actor.position + Vector3(0, 3, 0))
 	var bottom := camera.unproject_position(framing.spawn(side))
 	var point := Vector2(bottom.x - 90, top.y - 57)
+	if corrected_hud:
+		var bounds := _screen_box(_bounds(actor))
+		point = Vector2(bounds.get_center().x - 90, bounds.position.y - 57)
 	point.x = clampf(point.x, 16, root.size.x - 196)
 	point.y = clampf(point.y, 62, root.size.y - 275)
 	overlays[index].position = point
 	overlays[index].text = name + " · HUD anchor proxy"
 	return Rect2(point, Vector2(180, 45))
+
+func _validate_motion(entry: Dictionary, model: Node3D, player: AnimationPlayer, measured: Dictionary) -> Dictionary:
+	# Independent half-frame samples, not the 60 Hz samples supplied to the baker.
+	var result := {}
+	for action: String in entry.animations:
+		var duration := player.get_animation(action).length
+		var minimum := INF
+		var count := ceili(duration * 120.0)
+		for sample in count + 1:
+			var time := minf(sample / 120.0, duration)
+			model.position.y = measured.candidate_lift + _motion_offset(entry.species, action, time)
+			var box := await _sample(model, player, action, time / duration)
+			minimum = minf(minimum, box.position.y)
+		result[action] = {"samples": count + 1, "minimum_y": minimum}
+	model.position = Vector3.ZERO
+	return result
 
 func _shots(entry: Dictionary, model: Node3D, player: AnimationPlayer, measured: Dictionary,
 		control: Node3D, control_player: AnimationPlayer, control_measure: Dictionary) -> Array:
@@ -96,6 +125,7 @@ func _shots(entry: Dictionary, model: Node3D, player: AnimationPlayer, measured:
 			for pose in poses:
 				if not player.has_animation(pose[0]):
 					continue
+				model.position.y = measured.candidate_lift + _motion_offset(entry.species, pose[0], player.get_animation(pose[0]).length * pose[1])
 				var box: AABB = await _sample(model, player, pose[0], pose[1])
 				var screen := _screen_box(box)
 				var hud := _draw_hud(0, entry.species, model, side)
@@ -120,7 +150,16 @@ func _run() -> void:
 	assert(DirAccess.make_dir_recursive_absolute(output_dir) == OK)
 	framing = load(frontend.path_join("scripts/battle/arenas/arena_framing.gd"))
 	placement_rules = load(frontend.path_join("scripts/battle/battle_ui/model_placement.gd"))
+	motion_rules = load(frontend.path_join("scripts/battle/battle_ui/model_motion_placement.gd"))
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(source_dir.path_join("catalog.json")))
+	var candidates_path := OS.get_environment("POKEAETHER_PHASE5_CANDIDATES")
+	if not candidates_path.is_empty():
+		var candidates: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(candidates_path))
+		assert(candidates.catalog_sha256 == FileAccess.get_sha256(source_dir.path_join("catalog.json")))
+		assert(candidates.runtime_approved == false)
+		readability = candidates.readability
+		corrections = candidates.get("motion", {})
+		corrected_hud = true
 	root.size = Vector2i(1152, 648)
 	Engine.max_fps = 120
 	world = Node3D.new()
@@ -155,6 +194,7 @@ func _run() -> void:
 		"catalog_sha256": FileAccess.get_sha256(source_dir.path_join("catalog.json")),
 		"framing_sha256": FileAccess.get_sha256(framing.resource_path),
 		"placement_sha256": FileAccess.get_sha256(placement_rules.resource_path),
+		"motion_rules_sha256": FileAccess.get_sha256(motion_rules.resource_path),
 		"camera_fov": camera.fov, "viewport": [root.size.x, root.size.y],
 		"godot": Engine.get_version_info().string, "renderer": RenderingServer.get_current_rendering_method(),
 		"scope": "flat_floor_two_runtime_camera_presets; HUD proxy only; not full UI or arena collision certification", "entries": []}
@@ -177,6 +217,18 @@ func _run() -> void:
 		world.add_child(model)
 		var player: AnimationPlayer = model.find_children("*", "AnimationPlayer", true, false)[0]
 		var measured: Dictionary = await _measure(entry, model, player)
+		if corrections.has(entry.species):
+			var profile: Dictionary = corrections[entry.species]
+			assert(profile.sha256 == entry.glb_sha256 and is_equal_approx(profile.scale, measured.scale))
+			assert(is_equal_approx(profile.lift, measured.candidate_lift) and is_equal_approx(profile.yaw_degrees, measured.yaw_degrees))
+			var timing := {}
+			for action in measured.clips:
+				timing[action] = {"frames": measured.clips[action].duration * 60.0}
+			var placement := {"scale": measured.scale, "yaw_degrees": measured.yaw_degrees,
+				"lift": measured.candidate_lift, "calibrated": true}
+			assert(motion_rules.resolve(profile, placement, entry.glb_sha256, timing) == profile.clips)
+			measured["corrected_clearance_120hz"] = await _validate_motion(entry, model, player, measured)
+		measured["bounds_hud_proxy"] = corrected_hud
 		control.visible = true
 		measured["shots"] = await _shots(entry, model, player, measured, control, control_player, control_measure)
 		measured["species"] = entry.species
@@ -189,6 +241,7 @@ func _run() -> void:
 		file.store_string(JSON.stringify(report, "  "))
 		file.close()
 	report.complete = true
+	report["candidates_sha256"] = FileAccess.get_sha256(candidates_path) if not candidates_path.is_empty() else ""
 	var completed_file := FileAccess.open(output_dir.path_join("battle-review.json"), FileAccess.WRITE)
 	completed_file.store_string(JSON.stringify(report, "  "))
 	completed_file.close()

@@ -32,13 +32,19 @@ def summarize(report):
                 raise ValueError('Incomplete clip sampling')
             if abs(clip['clearance_with_idle_lift'] - clip['minimum_y'] - lift) > 1e-5:
                 raise ValueError('Inconsistent clearance')
-        results.append({'species': name, 'status': 'measured_not_approved',
+        result = {'species': name, 'status': 'measured_not_approved',
             'scale': entry['scale'], 'candidate_lift': lift,
             'idle_clearance': clips['idle']['clearance_with_idle_lift'],
             'floor_penetrating_clips': [name for name, clip in clips.items() if clip['clearance_with_idle_lift'] < -0.001],
             'out_of_frame_shots': [s['image'] for s in entry['shots'] if not s['in_view']],
             'hud_proxy_overlap_shots': [s['image'] for s in entry['shots'] if s['model_overlaps_hud_proxy']],
-            'idle_hud_gap_pixels': [round(s['hud_gap_pixels'], 1) for s in entry['shots'] if s['action'] == 'idle']})
+            'idle_hud_gap_pixels': [round(s['hud_gap_pixels'], 1) for s in entry['shots'] if s['action'] == 'idle']}
+        if 'corrected_clearance_120hz' in entry:
+            result['corrected_floor_penetrating_clips'] = [action for action, clip in entry['corrected_clearance_120hz'].items()
+                                                          if clip['minimum_y'] < -0.001]
+            result['corrected_minimum_clearance'] = min(clip['minimum_y'] for clip in entry['corrected_clearance_120hz'].values())
+            result['hud_proxy'] = 'posed_model_bounds' if entry.get('bounds_hud_proxy') else 'fixed_height'
+        results.append(result)
     return {'runtime_approved': False, 'entries': results}
 
 
@@ -59,7 +65,8 @@ def build(directory):
         '<style>body{background:#18202a;color:white;font:16px sans-serif}a{color:#8df}</style>'
         '<h1>Placement diagnostics — NOT runtime approved</h1>'
         '<p>Actual shared spawn/camera rules on a flat floor. Dragonite comparison on the opposite side. '
-        'Text labels approximate current HP-HUD anchors, not the full battle UI. '
+        'Text labels are HUD proxies, not the full battle UI. Candidate runs use posed model bounds. '
+        'floor_penetrating_clips describes the raw idle-only baseline; corrected_* fields describe baked motion validation. '
         'Projected AABB overlap is conservative; arena geometry and camera orbit are not certified.</p>' + ''.join(rows))
     for entry in summary['entries']:
         print(json.dumps(entry))
