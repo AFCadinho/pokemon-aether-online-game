@@ -36,9 +36,10 @@ func _run() -> void:
 				await process_frame
 			if layout == "immersive":
 				assert(battle.has_meta("immersive_battle_ui"))
-				var stage_size: Vector2 = battle.battle_stage.size
-				assert(battle.player_team_preview_layer.position.is_equal_approx(Vector2(stage_size.x * 0.30, stage_size.y * 0.63)))
-				assert(battle.enemy_team_preview_layer.position.is_equal_approx(Vector2(stage_size.x * 0.70, stage_size.y * 0.39)))
+				var player_platform_center: Vector2 = battle.player_battle_platform.position + Vector2(250, 150) * battle.player_battle_platform.scale
+				var enemy_platform_center: Vector2 = battle.enemy_battle_platform.position + Vector2(250, 150) * battle.enemy_battle_platform.scale
+				assert(battle.player_team_preview_layer.position.is_equal_approx(player_platform_center + Vector2(-40, -29) * battle.player_battle_platform.scale))
+				assert(battle.enemy_team_preview_layer.position.is_equal_approx(enemy_platform_center + Vector2(28.5, -34) * battle.enemy_battle_platform.scale))
 				assert(battle.get_node("%PlayerStagePartyRail").visible)
 				assert(battle.player_hud_panel.scale.is_equal_approx(Vector2.ONE * 0.65))
 				assert(battle.moves_grid.scale.is_equal_approx(Vector2.ONE * 0.8))

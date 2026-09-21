@@ -18,11 +18,6 @@ func _process(delta: float) -> void:
 	_place(team_preview, Vector2(18, 90), team_preview.size, 0.75)
 	var opponent_rail: Control = battle.get_node("%OpponentStagePartyRail")
 	_place(opponent_rail, Vector2(area.x - 62, 90), opponent_rail.size, 0.75)
-	# The six-Pokemon Team Preview groups used fixed Classic-stage coordinates.
-	# Anchor both groups to the live arena so fullscreen and browser sizes retain
-	# the same mirrored composition as the active 2.5D combatants.
-	battle.player_team_preview_layer.position = Vector2(area.x * 0.30, area.y * 0.63)
-	battle.enemy_team_preview_layer.position = Vector2(area.x * 0.70, area.y * 0.39)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
 	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 204, area.y - 210), Vector2(178, 34), 0.8)
 	_place(stage.get_node("ResetCameraButton"), Vector2(area.x - 110, 16), Vector2(32, 28), 1.0)
@@ -45,24 +40,38 @@ func _process(delta: float) -> void:
 	stage.get_node("ResetCameraButton").visible = realtime_3d
 	if not realtime_3d:
 		_compose_sprite_battle(stage)
+		_compose_2d_team_preview()
+	else:
+		# The 3D presenter retains its existing compact overlay composition.
+		battle.player_team_preview_layer.position = Vector2(area.x * 0.30, area.y * 0.63)
+		battle.enemy_team_preview_layer.position = Vector2(area.x * 0.70, area.y * 0.39)
 	if is_instance_valid(presenter) and is_instance_valid(presenter.mode_label):
 		presenter.mode_label.hide()
 	var occupied := Rect2()
 	for index in 2:
 		var hud: Control = battle.player_hud_panel if index == 0 else battle.enemy_hud_panel
+		var sprite_box = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
+		var badges: Control = sprite_box.single_stat_stage_panel
 		var extent := hud.size * 0.65
+		var badge_height := badges.size.y * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
 		var target := Vector2(area.x * (0.27 if index == 0 else 0.73) - extent.x * 0.5, 160)
+		var anchored_to_sprite := false
 		if is_instance_valid(presenter) and presenter.active:
 			var bounds: Rect2 = presenter._visual_rect(index)
 			if bounds.has_area():
 				var top := stage.get_global_transform().affine_inverse() * Vector2(bounds.get_center().x, bounds.position.y)
 				target = top - Vector2(extent.x * 0.5, extent.y + 12)
+				anchored_to_sprite = true
 		elif is_instance_valid(presenter):
-			var box = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
-			var bounds: Rect2 = box.get_single_sprite_hover_rect()
+			var bounds: Rect2 = sprite_box.get_single_sprite_hover_rect()
 			if bounds.has_area():
 				var top := stage.get_global_transform().affine_inverse() * Vector2(bounds.get_center().x, bounds.position.y)
-				target = top - Vector2(extent.x * 0.5, extent.y + 12)
+				# In 2D the indicator badges live below the HP panel. Reserve their
+				# complete height so neither row covers the Pokémon sprite.
+				target = top - Vector2(extent.x * 0.5, extent.y + badge_height + 18)
+				anchored_to_sprite = true
+		if not realtime_3d and badge_height > 0.0 and not anchored_to_sprite:
+			target.y -= badge_height + 6
 		target.x = clampf(target.x, 16, area.x - extent.x - 16)
 		target.y = clampf(target.y, 62, area.y - 230 - extent.y)
 		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] else target
@@ -73,16 +82,22 @@ func _process(delta: float) -> void:
 		_place(hud, position_next, hud.size, 0.65)
 		occupied = Rect2(position_next, extent + Vector2(0, 48))
 		initialized[index] = true
-		var sprite_box = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
-		var badges: Control = sprite_box.single_stat_stage_panel
 		if is_instance_valid(badges):
 			badges.set_meta("immersive_positioned", true)
 			var parent_inverse := (badges.get_parent() as CanvasItem).get_global_transform().affine_inverse()
 			var badge_scale := 0.5 * stage.get_global_transform().get_scale().y / maxf(0.01, (badges.get_parent() as CanvasItem).get_global_transform().get_scale().y)
 			_place(badges, parent_inverse * (stage.get_global_transform() * (hud.position + Vector2(0, extent.y + 3))), badges.size, badge_scale)
 		var effects: Control = battle.get_node("%SideFieldEffectsPanel" if index == 0 else "%SideFieldEffectsPanel2")
-		var badge_height := badges.size.y * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
-		_place(effects, hud.position + Vector2(0, extent.y + badge_height + 6), effects.size, 0.5)
+		if realtime_3d:
+			_place(effects, hud.position + Vector2(0, extent.y + badge_height + 6), effects.size, 0.5)
+		else:
+			# Side-wide conditions are separate from the active Pokémon's own
+			# indicators. Keep them beside the HP panel, toward the screen edge.
+			var effects_extent := effects.size * 0.5
+			var effects_x := hud.position.x - effects_extent.x - 8 if index == 0 else hud.position.x + extent.x + 8
+			effects_x = clampf(effects_x, 16, area.x - effects_extent.x - 16)
+			var effects_y := hud.position.y + maxf(0, (extent.y - effects_extent.y) * 0.5)
+			_place(effects, Vector2(effects_x, effects_y), effects.size, 0.5)
 
 func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float) -> void:
 	control.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -103,3 +118,14 @@ func _compose_sprite_battle(stage: Control) -> void:
 		var sprite_offset := Vector2(11,-37) if index == 0 else Vector2(23,-29)
 		_place(platform, platform_origin, Vector2(600,250), factor)
 		_place(box, platform_origin + sprite_offset * factor, Vector2(450,293), factor)
+
+func _compose_2d_team_preview() -> void:
+	# Keep the established compact formation, but anchor it to the same platform
+	# surface used by the active 2D combatant. Each side retains the small offset
+	# used by the Classic composition to account for the sprite perspective.
+	for index in 2:
+		var platform: Control = battle.player_battle_platform if index == 0 else battle.enemy_battle_platform
+		var preview: Node2D = battle.player_team_preview_layer if index == 0 else battle.enemy_team_preview_layer
+		var platform_center := platform.position + Vector2(250, 150) * platform.scale
+		var perspective_offset := Vector2(-40, -29) if index == 0 else Vector2(28.5, -34)
+		preview.position = platform_center + perspective_offset * platform.scale

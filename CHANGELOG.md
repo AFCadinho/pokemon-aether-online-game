@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
+
+- Immersive 2D-gevechten houden de HP-balken en Pokémon-indicatoren boven de sprites, met side field conditions apart naast de HP-balk.
+
 - The browser client now loads, saves and activates the same eight-slot hotkey bar as the desktop client, including Ctrl+1 through Ctrl+8 shortcuts.
 
 - Pressing Escape while Pokémon Storage is open now closes Storage instead of opening Settings over it, preventing browser instability.
