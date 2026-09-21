@@ -999,3 +999,12 @@ Next 5C work is to isolate the first-use/replay frame peaks, review and prepare
 available shiny variants, and then test normal/shiny identity and cache
 separation. Gastly/Abra/Onix remain held at 5B. No full paired certification,
 allowlist expansion, promotion, push or deployment was performed.
+
+Compatibility follow-up: development advanced with immersive HUD changes.
+It was merged into the task (only the changelog required conflict resolution,
+preserving both sets of entries), and the full focused normal stress/replay
+run was repeated as `.tmp/phase5-stress-06`. All functional assertions and
+the memory guard pass again, with no script errors. Frame p95 is
+17.34 / 17.33 / 16.94 ms and maxima are 554.26 / 188.93 / 148.06 ms; the same
+performance caveat remains. Final-two-round retained static growth is 4,180
+bytes. The archived JSON above remains the instrumented `-05` baseline.
