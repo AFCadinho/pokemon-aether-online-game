@@ -164,7 +164,8 @@ func _run() -> void:
 	output = OS.get_environment("POKEAETHER_PHASE5_STRESS_OUTPUT")
 	assert(report.is_absolute_path() and output.is_absolute_path() and not DirAccess.dir_exists_absolute(output))
 	assert(DirAccess.make_dir_recursive_absolute(output) == OK)
-	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string(report))
+	var raw_catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string(report))
+	var catalog: Array = Renderer.ReviewedModels.pack_entries(raw_catalog, report.get_base_dir()) if raw_catalog is Dictionary else raw_catalog
 	var runtime_registry := OS.get_environment("POKEAETHER_PHASE5_PRODUCTION") == "1"
 	evidence["production_registry"] = runtime_registry
 	for entry: Dictionary in catalog:
