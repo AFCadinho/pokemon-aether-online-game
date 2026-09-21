@@ -19,12 +19,28 @@ func _init() -> void:
 
 
 func _run_checks() -> void:
+	_check_immersive_empty_appearance()
+	if OS.get_environment("POKEAETHER_TEST_IMMERSIVE_EMPTY_ONLY") == "1":
+		quit(1 if failed else 0)
+		return
 	_check_trainer_base_palette()
 	_check_scene_staging()
 	_check_battle_setup_contract()
 	_check_npc_metadata_contract()
 	await _check_runtime_renderer()
 	quit(1 if failed else 0)
+
+func _check_immersive_empty_appearance() -> void:
+	var portraits = load("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
+	var figure := Node2D.new()
+	portraits.figures.append(figure)
+	var fallback: Texture2D = load("res://assets/battles/trainers/player/male/base.png")
+	portraits._rebuild_figure(0, {}, fallback)
+	_check(figure.get_child_count() == 1, "Empty appearance builds fallback trainer figure without typed-array errors")
+	portraits._rebuild_figure(0, {}, null)
+	_check(figure.get_child_count() == 0, "Empty appearance without fallback clears trainer figure")
+	figure.free()
+	portraits.free()
 
 
 func _check_trainer_base_palette() -> void:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
+
 - Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
 
 - Fixed browser battles sometimes showing an empty platform for Pokémon whose sprite catalog uses a compact species name, including Roaring Moon.
