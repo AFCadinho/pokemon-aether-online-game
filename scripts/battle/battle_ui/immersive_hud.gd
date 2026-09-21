@@ -35,7 +35,11 @@ func _process(delta: float) -> void:
 	var prompt_y := area.y - 125.0
 	var prompt_width := center_width
 	var replay_transport: Control = null
-	if battle.replay_mode and is_instance_valid(battle.replay_controls):
+	if battle.spectator_action_panel.visible:
+		# The spectator card is taller than the normal action row. Reserve a
+		# distinct message row above it, including after a browser resize.
+		prompt_y = area.y - 141.0
+	elif battle.replay_mode and is_instance_valid(battle.replay_controls):
 		var transport_value: Variant = battle.replay_controls.get("transport_overlay")
 		if is_instance_valid(transport_value):
 			replay_transport = transport_value as Control
