@@ -12,8 +12,12 @@ var reveal_tween: Tween
 var chat_bridge: Node
 var loading_label: Label
 var fallback_button: Button
+var entry_transition: WildEncounterTransition
 
 func _ready() -> void:
+	entry_transition = WildEncounterTransition.new()
+	entry_transition.name = "EntryTransition"
+	$Cover.add_child(entry_transition)
 	var stack := VBoxContainer.new()
 	stack.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	stack.position = Vector2(-260,-55)
@@ -38,7 +42,8 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(presenter) and not presenter.preparation_failed:
 		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
 
-func mount(instance: Control, overworld_overlay: CanvasLayer = null) -> void:
+func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD) -> void:
+	entry_transition.transition_style = transition_style
 	battle = instance
 	overlay = overworld_overlay
 	if is_instance_valid(overlay):
@@ -103,10 +108,19 @@ func _reveal_when_prepared(token: int) -> void:
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
+	# Keep the opaque loading cover until preparation succeeds (or the player
+	# explicitly chooses fallback). Then open the same shutters/bands as 2D.
+	loading_label.get_parent().hide()
+	entry_transition.cover_progress = 1.0
+	entry_transition.show()
+	entry_transition.set_process(true)
+	$Cover.color.a = 0.0
 	reveal_tween = create_tween()
-	reveal_tween.tween_property($Cover, "modulate:a", 0.0, 0.2)
+	reveal_tween.tween_property(entry_transition, "cover_progress", 0.0, WildEncounterTransition.REVEAL_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await reveal_tween.finished
 	if not released:
+		entry_transition.hide()
+		entry_transition.set_process(false)
 		$Cover.hide()
 		if is_instance_valid(battle):
 			battle.remove_meta("battle_screen_preparing")
