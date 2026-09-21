@@ -207,8 +207,18 @@ func _run() -> void:
 		stage.players[1].advance(100.0)
 		for frame in 3:
 			await process_frame
-		assert(stage.lifecycle[1] == "fainted" and not stage.actor_shown[1])
+		assert(stage.lifecycle[1] == "fainted" and stage.actor_shown[1])
+		assert(stage.players[1].current_animation == "faint_loop")
+		stage.players[1].advance(100.0)
+		stage.set_sleeping(1, true)
+		stage.start_action("p2", "idle")
+		for frame in 3:
+			await process_frame
+		assert(stage.players[1].current_animation == "faint_loop" and stage.players[1].is_playing())
+		assert(stage.actors[1].visible)
 		assert(battle.enemy_sprite_box.current_single_species == "Roaring Moon")
+		stage.set_combatant(1, "Roaring Moon", false, true)
+		assert(stage.players[1].current_animation == "idle", "Same-species replacement resets faint")
 		stage.set_actor_shown(1, true)
 		stage.cancel_actions()
 		for frame in 3:

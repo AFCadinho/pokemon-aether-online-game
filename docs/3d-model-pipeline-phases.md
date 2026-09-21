@@ -178,6 +178,39 @@ Define per-asset scale/orientation/ground or flight metadata; remove hardcoded
 species scales. Calibrate across relevant animation poses, not just idle. Verify
 feet/tails, surfaces, both sides and camera angles without lighting changes.
 
+### Phase 2D — runtime action clearance and resting intent
+
+Implemented in `model_motion_placement.gd`, with baked profiles in
+`reviewed_motion_placement.json`. Profiles bind to the exact runtime SHA-256,
+calibrated idle lift, scale, yaw and clip durations. Mismatches safely retain
+existing placement. No runtime geometry readbacks are introduced.
+
+Physical/special attacks and damage use nonnegative, 60 Hz clearance envelopes;
+the animation player's own clock selects the offset, including playback speed.
+Idle remains unchanged. Explicit `grounded_rest` sleep intent is approved for
+these two reviewed lying poses. Downward changes ease to the resting height;
+upward corrections cannot lag below floor clearance. No clip timing, sound,
+lighting, source model or 2D/2.5D animation changes are made.
+
+Rebuild only from a successful rendered measurement containing
+`minimum_y_samples`, using `tools/sprite_factory/bake_motion_placement.py REPORT
+NEW_OUTPUT --grounded-sleep dragonite roaring-moon`. The baker refuses overwrite;
+review and independently test the resulting profiles before replacing tracked
+data. The sleep list is explicit, not inferred for newly imported species.
+
+Evidence: slot-c `.tmp/grounding-motion-01.json`, `motion-render.log` and
+`motion-presentation.log`. Independent half-frame rendering checks all eight
+affected clips (minimum clearance 0.02980 world units). Focused helper and baker
+tests cover interpolation, provenance rejection, invalid samples and settling.
+The real client presentation test passes three battle/switch cycles.
+
+Per user request, 3D faint now retains the actor: `faint_start` transitions to a
+looping `faint_loop` until replacement/teardown. An older catalog without that
+clip holds the final faint-start pose. Idle/status updates cannot wake a fainted
+actor; explicit replacement, including the same species, resets the lifecycle.
+Faint **placement/landing** is not recalibrated in this checkpoint and still
+needs moving visual review. Shared audio extraction remains future work.
+
 ## Phase 3 — animation mapping
 
 Explicit clip mappings and fallbacks for idle, physical/special attack, damage,

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Reviewed 3D Dragonite and Roaring Moon models now use animation-specific floor clearance and grounded sleeping poses. Their idle placement and animation timing remain unchanged.
+- Fainted 3D Pokémon remain visible in their faint loop until replaced or the battle ends, instead of disappearing. 2D/2.5D faint effects are unchanged.
+
 - 3D model placement now supports asset-defined scale and facing, with grounding checks tied to the exact model and placement. Existing approved models retain their current appearance.
 
 - Fixed 3D PvP loading getting stuck before Team Preview: the empty arena can now prepare before leads are selected. Trainer speech bubbles now sit closer to their trainer sprites.

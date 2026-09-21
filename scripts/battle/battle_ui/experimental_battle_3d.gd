@@ -4,6 +4,8 @@ extends Control
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
+const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_placement.gd")
+const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const ForestPool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
@@ -30,6 +32,8 @@ var arena_root: Node3D
 var arena_problem := ""
 var ground_offsets := {}
 var placements := {}
+var motion_clips := {}
+var motion_offsets := [0.0, 0.0]
 var arena_preparing := false
 var material_response: Node
 var boxes: Array = []
@@ -203,6 +207,7 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 	combatants[index] = {"species": normalized, "shiny": shiny}
 	actor_shown[index] = true
 	actor_scale[index] = 1.0
+	motion_offsets[index] = 0.0
 	restoring[index] = "idle"
 	lifecycle[index] = "empty" if normalized.is_empty() else "idle"
 	if active and identities[index] == normalized and players[index] != null:
@@ -216,6 +221,8 @@ func handles(ident: String) -> bool:
 	return active and index >= 0 and is_instance_valid(actors[index])
 
 func set_sleeping(index: int, sleeping: bool) -> void:
+	if lifecycle[index] == "fainted":
+		return
 	var desired := "sleep" if sleeping else "idle"
 	if restoring[index] == desired:
 		return
@@ -241,7 +248,7 @@ func wait_action(ident: String) -> void:
 	var index := actor_index(ident)
 	var generation: int = action_generation[index]
 	while is_inside_tree() and handles(ident) and generation == action_generation[index]:
-		if current_actions[index] in ["idle", "sleep"] or not players[index].is_playing():
+		if current_actions[index] in ["idle", "sleep", "faint_loop"] or not players[index].is_playing():
 			return
 		await get_tree().process_frame
 
@@ -252,8 +259,11 @@ func play_action(ident: String, action: String) -> void:
 	var generation: int = action_generation[actor_index(ident)]
 	await wait_action(ident)
 	if action == "faint_start" and handles(ident) and generation == action_generation[actor_index(ident)] and current_actions[actor_index(ident)] == "faint_start":
-		actor_shown[actor_index(ident)] = false
 		lifecycle[actor_index(ident)] = "fainted"
+		# Keep the final pose if a legacy catalog has no faint_loop.
+		# Never hide a fainted 3D actor while the player chooses a replacement.
+		if players[actor_index(ident)].has_animation("faint_loop") and entries[identities[actor_index(ident)]].action_timing.has("faint_loop"):
+			_action("faint_loop", actor_index(ident))
 
 func _stop_transition(index: int) -> void:
 	transition_generation[index] += 1
@@ -443,6 +453,7 @@ func _load_catalog(path: String) -> void:
 	var prepared_path := path + ".runtime.json" if FileAccess.file_exists(path + ".runtime.json") else path
 	ground_offsets.clear()
 	placements.clear()
+	motion_clips.clear()
 	var calibration := {}
 	if FileAccess.file_exists(prepared_path+".grounding.json"):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(prepared_path+".grounding.json"))
@@ -478,6 +489,7 @@ func _load_catalog(path: String) -> void:
 				catalog_problem = "Invalid model placement: " + str(entry.species)
 				continue
 			placements[entry.species] = placement
+			motion_clips[entry.species] = MotionPlacement.resolve(MOTION_PROFILES.data.get(entry.species, {}), placement, FileAccess.get_sha256(model_path), timing)
 			if placement.calibrated:
 				ground_offsets[entry.species] = placement
 			pending_entries.append(entry)
@@ -591,6 +603,8 @@ func _visual_rect(index: int) -> Rect2:
 func _action(action: String, index: int) -> void:
 	if not active or players[index] == null:
 		return
+	if lifecycle[index] == "fainted" and action != "faint_loop":
+		return
 	var forced := action == "reset"
 	if forced:
 		resting[index] = true
@@ -615,6 +629,8 @@ func _action(action: String, index: int) -> void:
 	var animation: Animation = players[index].get_animation(action)
 	animation.length = float(spec.frames) / 60.0
 	animation.loop_mode = Animation.LOOP_LINEAR if spec.get("loop", false) else Animation.LOOP_NONE
+	if action == "faint_loop":
+		animation.loop_mode = Animation.LOOP_LINEAR
 	players[index].speed_scale = playback_speed
 	players[index].play(action, -1, float(spec.speed))
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
@@ -740,6 +756,7 @@ func _process(delta: float) -> void:
 			if is_instance_valid(actors[i]):
 				actors[i].queue_free()
 			actors[i] = packed[desired[i]].instantiate()
+			motion_offsets[i] = 0.0
 			world.add_child(actors[i])
 			actors[i].position = _position(i)
 			if ground_offsets.has(desired[i]):
@@ -761,6 +778,9 @@ func _process(delta: float) -> void:
 		if not resting[i] and not players[i].is_playing():
 			resting[i] = true
 			_action(restoring[i], i)
+		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
+		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
+		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
 
 func _exit_tree() -> void:
 	for index in 2:
