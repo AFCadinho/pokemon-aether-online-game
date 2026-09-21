@@ -280,16 +280,6 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair"},
 				{"category": FACEGEAR_CATEGORY, "id": "Aether_Blossom_Earrings"},
 			]
-		"wishmaker-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": BOTTOM_CATEGORY, "id": get_default_part_id(BOTTOM_CATEGORY, normalized_gender)},
-				{"category": SHOES_CATEGORY, "id": "Wishmaker_Shoes"},
-				{"category": TOP_CATEGORY, "id": "Wishmaker_Dress"},
-				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_FEMALE_EYE_COLOR)},
-				{"category": HAIR_CATEGORY, "id": "Wishmaker_Hair"},
-				{"category": FACEGEAR_CATEGORY, "id": "Wishmaker_Earrings"},
-			]
 		"aether-blossom-hair":
 			layers = [
 				{"category": HAIR_CATEGORY, "id": "Aether_Blossom_Hair"},
@@ -682,7 +672,6 @@ static func get_directional_part_z_index(
 		and part_id.strip_edges() in [
 			"Aether_Blossom_Earrings",
 			"Aether_Blossom_Earrings_Chroma",
-			"Wishmaker_Earrings",
 		]
 		and direction.strip_edges().to_lower() == "up"
 	):
