@@ -31,7 +31,31 @@ func _process(delta: float) -> void:
 	_place(mechanics, Vector2(area.x - 332, area.y - 233), mechanics.size, minf(0.5,120.0 / maxf(1,mechanics.size.x)))
 	var center_left := area.x * 0.25
 	var center_width := area.x - 354 - center_left
-	_place(battle.get_node("%CurrentActionPanel"), Vector2(center_left, area.y - 125), Vector2(center_width / 0.7, 44), 0.7)
+	var prompt: Control = battle.get_node("%CurrentActionPanel")
+	var prompt_y := area.y - 125.0
+	var prompt_width := center_width
+	var replay_transport: Control = null
+	if battle.replay_mode and is_instance_valid(battle.replay_controls):
+		var transport_value: Variant = battle.replay_controls.get("transport_overlay")
+		if is_instance_valid(transport_value):
+			replay_transport = transport_value as Control
+			# Replays add a second command surface. Keep transport beside the
+			# message and reserve a clear row above the replay dock.
+			var transport_size := replay_transport.get_combined_minimum_size()
+			transport_size.x = maxf(transport_size.x, replay_transport.size.x)
+			transport_size.y = maxf(transport_size.y, replay_transport.size.y)
+			prompt_width = minf(
+				prompt_width,
+				maxf(180.0, area.x - transport_size.x - 40.0 - center_left)
+			)
+			prompt_y = area.y - 145.0
+			replay_transport.set_anchors_preset(Control.PRESET_TOP_LEFT)
+			replay_transport.size = transport_size
+			replay_transport.position = Vector2(
+				area.x - transport_size.x - 24.0,
+				area.y - transport_size.y - 105.0
+			)
+	_place(prompt, Vector2(center_left, prompt_y), Vector2(prompt_width / 0.7, 44), 0.7)
 	# Stage and root HUD have distinct logical coordinate systems.
 	var to_battle := battle.get_global_transform().affine_inverse() * stage.get_global_transform()
 	var dock: Control = battle.get_node("%ActionsDock")

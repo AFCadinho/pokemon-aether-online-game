@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive replays houden de berichtbalk, afspeelknoppen en replaybediening nu netjes van elkaar gescheiden.
+
 - Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
 
 - Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
