@@ -131,6 +131,34 @@ func _run() -> void:
 			root.get_texture().get_image().save_png(output.path_join("calculator-"+str(dimensions.x)+".png"))
 		battle.calc_drawer.hide()
 		print("IMMERSIVE_CALCULATOR_OK ",dimensions)
+	var portraits: Node
+	for child in battle.get_children():
+		if child.get_script() == load("res://scripts/battle/battle_ui/immersive_portraits.gd"):
+			portraits = child
+	assert(portraits != null)
+	var appearance: Dictionary = root.get_node("PlayerSave").to_appearance_state()
+	battle.player_trainer_sprite.show_player(appearance, Vector2.RIGHT)
+	battle.enemy_trainer_sprite.show_player(appearance, Vector2.LEFT)
+	for frame in 3:
+		await process_frame
+	assert(not portraits.speakers[0].visible and not portraits.speakers[1].visible)
+	battle.player_trainer_sprite.show_command("Dragonite, use Dragon Dance!", 0.6)
+	battle.enemy_trainer_sprite.show_command("We are ready for you!", 0.6)
+	await create_timer(0.25).timeout
+	for index in 2:
+		assert(portraits.speakers[index].visible)
+		assert(portraits.figures[index].get_child_count() > 0)
+		assert(portraits.cards[index].visible)
+		assert(portraits.figures[index].get_child(0).flip_h == (index == 0))
+		assert(portraits.speakers[index].mouse_filter == Control.MOUSE_FILTER_IGNORE)
+		assert(portraits.figures[index].get_child_count() == BattlePlayerTrainerCatalog.build_layers(appearance).size())
+	if not output.is_empty() and DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("speaking-trainers.png"))
+	await create_timer(0.8).timeout
+	assert(not portraits.speakers[0].visible and not portraits.speakers[1].visible)
+	assert(portraits.cards[0].visible and portraits.cards[1].visible)
+	print("IMMERSIVE_SPEAKING_TRAINERS_OK")
 	host.release()
 	host.queue_free()
 	await process_frame
