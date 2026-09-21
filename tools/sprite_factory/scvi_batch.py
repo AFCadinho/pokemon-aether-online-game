@@ -10,6 +10,7 @@ import hashlib
 import html
 import json
 import math
+import re
 import subprocess
 import traceback
 from pathlib import Path
@@ -136,7 +137,9 @@ def compact_action_report(actions):
 
 
 def source_entry(entry, model_root, motion_root):
-    identity = f"pm{entry['pm']:04d}_00_00"
+    identity = entry.get('resource_id', f"pm{entry['pm']:04d}_00_00")
+    if not re.fullmatch(r'pm\d{4}_\d{2}_\d{2}', identity) or identity[:6] != f"pm{entry['pm']:04d}":
+        raise ValueError('Invalid explicit resource identity')
     model = model_root / f"pm{entry['pm']:04d}" / identity
     motion = motion_root / f"pm{entry['pm']:04d}" / identity
     files = sorted(motion.glob(identity + "_*.tranm"))
@@ -206,10 +209,15 @@ def import_one(args):
     if subprocess.check_output(["git", "-C", str(args.importer), "rev-parse", "HEAD"],
                                text=True).strip() != EXPECTED_IMPORTER:
         raise ValueError("Importer commit does not match the reviewed pin")
-    entries = json.loads((args.output / "intake.json").read_text())["entries"]
+    entries = ([args.identity_entry] if getattr(args, 'identity_entry', None) is not None else
+               json.loads((args.output / "intake.json").read_text())["entries"])
     item = next((value for value in entries if value["species"] == args.species), None)
     if item is None:
         raise ValueError("Species not present in explicit review batch")
+    from scvi_identity import validate_entry
+    validate_entry(item)
+    if args.variant != 'normal':
+        raise ValueError('Shiny SCVI intake requires separate variant identity verification')
     if any(value in item["warnings"] for value in
            ("missing_model", "missing_identity_icon", "missing_all_motions")):
         raise ValueError("Model, identity icon, or motions missing; no source substitution")
@@ -222,6 +230,8 @@ def import_one(args):
         if not blend.is_file() or not report.is_file():
             raise ValueError("Partial source output; inspect it before retrying")
         previous = json.loads(report.read_text())
+        from scvi_identity import validate_prepared_source
+        validate_prepared_source(blend, previous)
         if previous.get("importer_commit") != EXPECTED_IMPORTER or previous.get("variant") != args.variant:
             raise ValueError("Existing import identity differs")
         if {key: value["name"] if value else None for key, value in previous["actions"].items()} != {

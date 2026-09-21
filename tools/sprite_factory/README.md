@@ -1,5 +1,9 @@
 # Pokémon sprite factory V1
 
+New SCVI imports require [catalog-backed identity evidence](SCVI_IDENTITY.md).
+Use `scvi_identity.py` before source review; model resource numbers are not
+National Dex numbers. `identity_batch_review.py` reruns a fixed gated cohort.
+
 The four-species compact-sprite versus runtime-3D prototype, GPU measurements
 and moving comparison tool are documented in
 [BATTLE_REPRESENTATION_STUDY.md](BATTLE_REPRESENTATION_STUDY.md).

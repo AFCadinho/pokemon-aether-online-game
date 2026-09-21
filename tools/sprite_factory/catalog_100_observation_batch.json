@@ -1,5 +1,7 @@
 {
   "schema": 1,
+  "identity_gate": "scvi-resource-identity-v1",
+  "pm_policy": "Historical unverified hints retained for comparison; resolve resources from the catalog before import",
   "purpose": "100-model source-to-review scale observation; no automatic approval, activation, correction, or fallback change",
   "entries": [
     {"species": "charizard", "pm": 6},

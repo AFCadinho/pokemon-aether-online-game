@@ -23,6 +23,8 @@ def run(job):
     if source.with_name('import.json').exists() and not job.get('material_source'):
         raise ValueError('Imported source needs material provenance; rerun source review')
     if job.get('material_source'):
+        from scvi_identity import validate_export_job
+        validate_export_job(job)
         from material_profiles import read_profiles, unsupported
         profiles = read_profiles(job['material_source'], job['material_source_sha256'])
         if unsupported(profiles):
@@ -143,6 +145,8 @@ def run(job):
         response['glb_sha256'] = report['glb_sha256']
         response['source_sha256'] = job['source_sha256']
         report['material_response'] = response
+    if job.get('identity_intake'):
+        report['identity_evidence'] = job['identity_intake']['identity_evidence']
     if effect_payload is not None:
         effect_payload['glb_sha256'] = report['glb_sha256']
         report['material_effects'] = effect_payload
