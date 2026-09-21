@@ -107,6 +107,17 @@ func _run() -> void:
 	cancelled.set_combatant(0, "Dragonite")
 	cancelled._load_catalog(settings.battle_3d_catalog_path)
 	cancelled._import_next_model()
+	assert(cancelled.integrity_read != null and cancelled._models_pending())
+	cancelled.cancel_preparation()
+	await process_frame
+	assert(cancelled.integrity_read == null and cancelled.packed.is_empty())
+	cancelled.preparation_cancelled = false
+	cancelled._load_catalog(settings.battle_3d_catalog_path)
+	var cancel_deadline := Time.get_ticks_msec() + 10000
+	while cancelled.loading_path.is_empty():
+		cancelled._import_next_model()
+		assert(Time.get_ticks_msec() < cancel_deadline)
+		await process_frame
 	assert(not cancelled.loading_path.is_empty())
 	cancelled.cancel_preparation()
 	await cancelled.await_prepared(true)

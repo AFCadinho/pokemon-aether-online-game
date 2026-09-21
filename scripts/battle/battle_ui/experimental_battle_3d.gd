@@ -72,6 +72,43 @@ var actor_build_ms := 0.0
 var loading_path := ""
 var loading_entry := {}
 var loading_started := 0
+var integrity_read: IntegrityRead
+var loading_scene: PackedScene
+
+func _models_pending() -> bool:
+	return not pending_entries.is_empty() or not loading_entry.is_empty() or not loading_path.is_empty()
+
+class IntegrityRead extends RefCounted:
+	var task := -1
+	var path: String
+	var digest := ""
+	var bytes := 0
+	var elapsed_ms := 0.0
+	func start(source: String) -> void:
+		path = source
+		task = WorkerThreadPool.add_task(_read)
+	func _read() -> void:
+		var started := Time.get_ticks_usec()
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file != null:
+			bytes = file.get_length()
+			if bytes <= 134217728:
+				digest = FileAccess.get_sha256(path)
+		elapsed_ms = (Time.get_ticks_usec() - started) / 1000.0
+	func ready() -> bool:
+		if task < 0:
+			return true
+		if not WorkerThreadPool.is_task_completed(task):
+			return false
+		WorkerThreadPool.wait_for_task_completion(task) # Completed only: never joins pending I/O.
+		task = -1
+		return true
+
+class IntegrityDrain extends Node:
+	var job: IntegrityRead
+	func _process(_delta: float) -> void:
+		if job.ready():
+			queue_free()
 
 class LoadDrain extends Node:
 	var path: String
@@ -84,13 +121,20 @@ class LoadDrain extends Node:
 		queue_free()
 
 func _cancel_load() -> void:
+	if integrity_read != null:
+		var drain := IntegrityDrain.new()
+		drain.job = integrity_read
+		get_tree().root.add_child.call_deferred(drain)
+		integrity_read = null
 	if not loading_path.is_empty():
 		# ResourceLoader has no cancellation API. Drain without joining/blocking.
-		var drain := LoadDrain.new()
-		drain.path = loading_path
-		get_tree().root.add_child.call_deferred(drain)
+		if loading_scene == null:
+			var drain := LoadDrain.new()
+			drain.path = loading_path
+			get_tree().root.add_child.call_deferred(drain)
 		loading_path = ""
-		loading_entry.clear()
+	loading_entry.clear()
+	loading_scene = null
 
 var preparation_cancelled := false
 var preparation_failed := false
@@ -100,7 +144,7 @@ var preparation_metrics := {}
 
 func _preparation_progress() -> Array:
 	var progress: Array = []
-	if not loading_path.is_empty():
+	if not loading_path.is_empty() and loading_scene == null:
 		ResourceLoader.load_threaded_get_status(loading_path,progress)
 	preparation_phase = "Loading Pokémon models"
 	if arena_preparing:
@@ -142,7 +186,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	_queue_needed_models()
 	while is_inside_tree():
 		var now := Time.get_ticks_usec()
-		if active and pending_entries.is_empty() and loading_path.is_empty() and _actors_resolved():
+		if active and not _models_pending() and _actors_resolved():
 			if warm_started == 0:
 				warm_started = now
 			else:
@@ -171,11 +215,11 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		var requested: String = settings.battle_3d_catalog_path
 		if requested.is_empty():
 			requested = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
-		if loaded_path == requested and pending_entries.is_empty() and loading_path.is_empty() and not arena_preparing:
+		if loaded_path == requested and not _models_pending() and not arena_preparing:
 			if not render_under_cover and not warming_render:
 				await get_tree().process_frame
 				await get_tree().process_frame
-				if pending_entries.is_empty() and loading_path.is_empty() and _actors_resolved():
+				if not _models_pending() and _actors_resolved():
 					return
 			if render_under_cover:
 				var has_combatants: bool = not combatants[0].species.is_empty() or not combatants[1].species.is_empty()
@@ -242,10 +286,10 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 	motion_offsets[index] = 0.0
 	restoring[index] = "idle"
 	lifecycle[index] = "empty" if normalized.is_empty() else "idle"
-	if is_instance_valid(actors[index]) and identities[index] != normalized:
+	if is_instance_valid(actors[index]) and identities[index] != _combatant_key(index):
 		actors[index].visible = false
 	_queue_needed_models()
-	if active and identities[index] == normalized and players[index] != null:
+	if active and identities[index] == _combatant_key(index) and players[index] != null:
 		_action("reset", index)
 
 func actor_index(ident: String) -> int:
@@ -253,7 +297,12 @@ func actor_index(ident: String) -> int:
 
 func handles(ident: String) -> bool:
 	var index := actor_index(ident)
-	return active and index >= 0 and identities[index] == combatants[index].species and is_instance_valid(actors[index])
+	return active and index >= 0 and identities[index] == _combatant_key(index) and is_instance_valid(actors[index])
+
+func _combatant_key(index: int) -> String:
+	# Normal-only production admission is unchanged. Review adapters can keep
+	# variant resources distinct without changing the gameplay species identity.
+	return combatants[index].species
 
 func set_sleeping(index: int, sleeping: bool) -> void:
 	if lifecycle[index] == "fainted":
@@ -560,15 +609,16 @@ func _needed_species() -> Array[String]:
 			continue
 		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
 			return [] # Pair fallback must not import unused art.
-		if species not in needed:
-			needed.append(species)
+		var key := _combatant_key(index)
+		if key not in needed:
+			needed.append(key)
 	return needed
 
 func _actors_resolved() -> bool:
 	if not active:
 		return true # The process loop has resolved a fallback.
 	for index in 2:
-		if identities[index] != combatants[index].species:
+		if identities[index] != _combatant_key(index):
 			return false
 	return true
 
@@ -589,26 +639,25 @@ func _queue_needed_models() -> void:
 		if validated_entries.has(species):
 			pending_entries.append(validated_entries[species].duplicate(true))
 			continue
-		var started := Time.get_ticks_usec()
-		var entry: Dictionary = catalog_entries[species].duplicate(true)
-		var model_path: String = entry.runtime_path
-		var runtime_hash := FileAccess.get_sha256(model_path)
-		var model_file := FileAccess.open(model_path, FileAccess.READ)
-		var placement := ModelPlacement.resolve(entry, catalog_calibration.get(species, {}), runtime_hash)
-		if runtime_hash.is_empty() or model_file == null or model_file.get_length() > 134217728 or placement.is_empty():
-			failed_models[species] = true
-			continue
-		placements[species] = placement
-		ground_offsets.erase(species)
-		if placement.calibrated:
-			ground_offsets[species] = placement
-		motion_clips[species] = MotionPlacement.resolve(_motion_profile(species), placement, runtime_hash, entry.action_timing)
-		entry["_verified_runtime_hash"] = runtime_hash
-		entry["_source_bytes"] = model_file.get_length()
-		entry["_resource_cache_key"] = ModelCache.key(model_path, runtime_hash, entry.action_timing) if ResourceLoader.get_dependencies(model_path).is_empty() else ""
-		validated_entries[species] = entry.duplicate(true)
-		pending_entries.append(entry)
-		model_validation_ms += (Time.get_ticks_usec() - started) / 1000.0
+		pending_entries.append(catalog_entries[species].duplicate(true))
+
+func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
+	var species: String = entry.species
+	var placement := ModelPlacement.resolve(entry, catalog_calibration.get(species, {}), check.digest)
+	model_validation_ms += check.elapsed_ms
+	if check.digest.is_empty() or check.bytes > 134217728 or placement.is_empty():
+		failed_models[species] = true
+		return false
+	placements[species] = placement
+	ground_offsets.erase(species)
+	if placement.calibrated:
+		ground_offsets[species] = placement
+	motion_clips[species] = MotionPlacement.resolve(_motion_profile(species), placement, check.digest, entry.action_timing)
+	entry["_verified_runtime_hash"] = check.digest
+	entry["_source_bytes"] = check.bytes
+	entry["_resource_cache_key"] = ModelCache.key(entry.runtime_path, check.digest, entry.action_timing) if ResourceLoader.get_dependencies(entry.runtime_path).is_empty() else ""
+	validated_entries[species] = entry.duplicate(true)
+	return true
 
 func _prune_models() -> void:
 	# Active and retiring actors own their resources independently. Keep only
@@ -621,9 +670,22 @@ func _prune_models() -> void:
 
 func _import_next_model() -> void:
 	if loading_path.is_empty():
-		if pending_entries.is_empty():
-			return
-		loading_entry = pending_entries.pop_front()
+		if loading_entry.is_empty():
+			if pending_entries.is_empty():
+				return
+			loading_entry = pending_entries.pop_front()
+		if not loading_entry.has("_verified_runtime_hash"):
+			if integrity_read == null:
+				integrity_read = IntegrityRead.new()
+				integrity_read.start(loading_entry.runtime_path)
+				return
+			if not integrity_read.ready():
+				return
+			var valid := _finish_validation(loading_entry, integrity_read)
+			integrity_read = null
+			if not valid:
+				loading_entry.clear()
+				return
 		var cache_key := str(loading_entry.get("_resource_cache_key", ""))
 		var cached: PackedScene = ModelCache.fetch(cache_key) if not cache_key.is_empty() else null
 		if cached != null:
@@ -641,20 +703,31 @@ func _import_next_model() -> void:
 			loading_path = ""
 			loading_entry.clear()
 		return
-	var status := ResourceLoader.load_threaded_get_status(loading_path)
+	var status := ResourceLoader.THREAD_LOAD_LOADED if loading_scene != null else ResourceLoader.load_threaded_get_status(loading_path)
 	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		return
 	if status == ResourceLoader.THREAD_LOAD_LOADED:
-		var scene := ResourceLoader.load_threaded_get(loading_path) as PackedScene
+		if loading_scene == null:
+			loading_scene = ResourceLoader.load_threaded_get(loading_path) as PackedScene
+		var scene := loading_scene
 		if scene == null:
 			failed_models[loading_entry.species] = true
 			catalog_problem = "Invalid prepared 3D scene: " + str(loading_entry.species)
 		else:
-			if FileAccess.get_sha256(loading_path) != str(loading_entry.get("_verified_runtime_hash", "")):
+			if integrity_read == null:
+				integrity_read = IntegrityRead.new()
+				integrity_read.start(loading_path)
+				return
+			if not integrity_read.ready():
+				return
+			var digest := integrity_read.digest
+			integrity_read = null
+			if digest != str(loading_entry.get("_verified_runtime_hash", "")):
 				failed_models[loading_entry.species] = true
 				catalog_problem = "Prepared 3D model changed during loading; select the catalog again"
 				loading_path = ""
 				loading_entry.clear()
+				loading_scene = null
 				return
 			packed[loading_entry.species] = scene
 			entries[loading_entry.species] = loading_entry.duplicate(true)
@@ -668,6 +741,7 @@ func _import_next_model() -> void:
 		ResourceLoader.load_threaded_get(loading_path)
 	loading_path = ""
 	loading_entry.clear()
+	loading_scene = null
 
 func _clear_actors() -> void:
 	for i in 2:
@@ -800,7 +874,7 @@ func _process(delta: float) -> void:
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
 	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
-	mode_label.text = ("3D · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
+	mode_label.text = ("3D · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if _models_pending() else "2.5D · " + reason)
 	mode_label.tooltip_text = reason + (" · " + arena_problem if not arena_problem.is_empty() else "")
 	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 		ModelCache.clear() # Explicitly leaving 3D releases retained resources.
@@ -838,9 +912,9 @@ func _process(delta: float) -> void:
 		_load_catalog(path)
 		return
 	_queue_needed_models()
-	if not pending_entries.is_empty() or not loading_path.is_empty():
+	if _models_pending():
 		_import_next_model()
-		if not pending_entries.is_empty() or not loading_path.is_empty():
+		if _models_pending():
 			return
 	if packed.is_empty() and not catalog_problem.is_empty():
 		reason = catalog_problem
@@ -864,11 +938,12 @@ func _process(delta: float) -> void:
 			reason = "Unsupported active Pokémon/form, doubles or substitute: " + species
 			_set_active(false)
 			return
-		if not packed.has(species):
+		var key := _combatant_key(index)
+		if not packed.has(key):
 			reason = "Prepared 3D model unavailable: " + species
 			_set_active(false)
 			return
-		desired.append(species)
+		desired.append(key)
 	# Team Preview has no active combatants yet. Build and warm the empty
 	# arena anyway so the loading cover can release the lead-selection UI.
 	# Empty actor slots are cleared below; no placeholder Pokémon are needed.
