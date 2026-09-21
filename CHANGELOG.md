@@ -4,6 +4,8 @@
 
 - Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.
 
+- De lokale 3D-modelcatalogus ondersteunt nu de gecontroleerde normale en shiny versies van Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite en Roaring Moon, met passende animaties en HP-balkposities. Ontbrekende of niet-goedgekeurde modellen blijven op 2.5D terugvallen.
+
 - Immersive replays houden de berichtbalk, afspeelknoppen en replaybediening nu netjes van elkaar gescheiden.
 
 - 3D Pokémon-modelbestanden worden nu op de achtergrond gecontroleerd, zodat deze controles het beeld tijdens laden en wisselen niet blokkeren.

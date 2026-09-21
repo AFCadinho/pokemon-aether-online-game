@@ -1129,3 +1129,57 @@ including material response and mode-exit cleanup. Motion placement passes,
 and the preparation watchdog rejects the deliberate stall after 304 ms
 (`phase5-final-motion.log`, `phase5-async-progress.log`). Existing UID fallback
 warnings remain; none of these final logs contain script errors.
+
+### Phase 5D — qualified models in the regular presenter
+
+The regular desktop 3D presenter now admits the seven qualified **normal/shiny
+pairs**: Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite and Roaring Moon.
+Abra and Onix remain held for animation mapping; Gastly remains held for its
+material/shader requirements. Unreviewed forms, doubles, substitutes and the
+existing unsupported field presentations retain their 2.5D fallback.
+
+`reviewed_model_catalog.json` is checked-in approval data: exact runtime hashes,
+deduplicated placement/grounding, motion corrections, action timing and visual
+bounds. The presenter validates the actual bytes asynchronously before scene
+import. External catalogs cannot override these profiles or forge validation
+and cache state. Duplicate identities fail closed. Normal and shiny identities
+have distinct resources; HP/HUD placement uses the reviewed pose bounds.
+The original two-normal-model catalog remains supported for compatibility.
+No sound, native animation timing, cache budget or personal Settings change is
+part of this admission.
+
+Generate the registry or a selectable catalog using
+`tools/sprite_factory/phase5_runtime_admission.py QUALIFIED_REPORT` (add
+`--catalog-only` for the catalog). The tool requires the exact catalog pinned
+by `phase5c-qualification.json`, verifies scene/grounding/motion hash agreement
+and equal normal/shiny profiles, and prints JSON without copying assets.
+
+Local review setup: in Settings choose **3D (experimental)** and use
+**Choose local 3D model catalog…** to select slot-c's
+`.tmp/phase5d-model-catalog.json`. This points to the existing scenes under
+`.tmp/phase5-runtime-01` and `.tmp/phase5-variant-runtime-02`; retain those
+directories. It is an explicitly selected local catalog, not bundled game art,
+an automatic download, a release, or a change to another user's settings.
+Packaging/installation of model assets is still a separate next step.
+
+The stress harness's `POKEAETHER_PHASE5_PRODUCTION=1` mode delegates admission,
+identity, motion and bounds to the real presenter, without candidate overrides.
+Final no-readback run `.tmp/phase5d-stress-02` passes the same 5C lifecycle and
+performance guards: three battles, 36 mixed-team switches, 21 normal duplicate/
+faint checks, 21 variant swap/faint/eviction/reload checks and three replays.
+P95 frame times are **17.91 / 17.31 / 17.31 ms**; main-thread load callbacks peak
+at **2.44 / 2.03 / 1.82 ms**. Final-two-round static growth is **51,500 bytes**.
+Covered entry still reaches **500.62 ms**, and replay construction has a
+**98.53 ms** whole-frame interval. This is not an instant-start or hitch-free
+guarantee, nor live PvP network certification. See
+[phase5d-runtime-admission.json](phase5d-runtime-admission.json) for evidence
+hashes and measurements. Prior 5C evidence remains unchanged and historical.
+
+Focused regressions: 62 Python tests pass, including the new admission-builder
+tests. `reviewed_model_admission_check.gd` verifies all fourteen identities and
+rejects held/forms, duplicates, missing files, wrong hashes and forged cache
+state. The original-pair real cache test, rendered demand/cancellation test and
+three-cycle immersive presentation test also pass (`phase5d-cache.log`,
+`phase5d-demand.log`, `phase5d-presentation.log`). All final logs have no script
+errors; the existing asset UID path-fallback warnings remain. Development
+integration does not certify the full release batch or authorize deployment.

@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "scope": "Offline real battle UI/presenter and recorded events, seven normal/shiny pairs; no live PvP certification",
+  "qualified_candidate_species": [
+    "arcanine",
+    "articuno",
+    "dragonite",
+    "lucario",
+    "pikachu",
+    "roaring-moon",
+    "snorlax"
+  ],
+  "held_species": [
+    "abra",
+    "gastly",
+    "onix"
+  ],
+  "checks": {
+    "battles": 3,
+    "mixed_team_switches": 36,
+    "normal_duplicate_faint_replacements": 21,
+    "variant_swap_faint_eviction_reload_checks": 21,
+    "recorded_event_sequences": 3,
+    "shiny_review_images": 35,
+    "exact_geometry_motion_pairs": 7
+  },
+  "performance_scope": "Separate no-readback run: p95 <=20ms, main-thread load callbacks <=one 60Hz frame, no uncovered gameplay interval >100ms. Covered entry and explicitly measured replay construction retained separately; not a no-hitch or total RAM/VRAM guarantee",
+  "final_two_round_static_growth_bytes": 51500,
+  "rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.911,
+      "frame_max_ms": 500.62,
+      "replay_setup_ms": 81.47,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / dragonite",
+          "covered": true,
+          "frame": 1,
+          "ms": 500.62,
+          "pipelines": [
+            3.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "context": "load pikachu / dragonite",
+          "covered": true,
+          "frame": 2,
+          "ms": 88.193,
+          "pipelines": [
+            3.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "context": "replay setup",
+          "covered": false,
+          "frame": 1920,
+          "ms": 98.534,
+          "pipelines": [
+            4.0,
+            20.0,
+            4.0,
+            15.0
+          ]
+        }
+      ],
+      "static_bytes": 193079060,
+      "retained_source_bytes": 19143466,
+      "load_callback_max_ms": 2.44
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 17.31,
+      "frame_max_ms": 155.632,
+      "replay_setup_ms": 19.621,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / roaring-moon",
+          "covered": true,
+          "frame": 2380,
+          "ms": 103.198,
+          "pipelines": [
+            4.0,
+            20.0,
+            4.0,
+            15.0
+          ]
+        },
+        {
+          "context": "load pikachu / roaring-moon",
+          "covered": true,
+          "frame": 2409,
+          "ms": 155.632,
+          "pipelines": [
+            4.0,
+            20.0,
+            26.0,
+            31.0
+          ]
+        }
+      ],
+      "static_bytes": 194392133,
+      "retained_source_bytes": 19143466,
+      "load_callback_max_ms": 2.034
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.313,
+      "frame_max_ms": 99.88,
+      "replay_setup_ms": 20.332,
+      "stalls_over_50ms": [
+        {
+          "context": "load pikachu / snorlax",
+          "covered": true,
+          "frame": 4740,
+          "ms": 99.88,
+          "pipelines": [
+            4.0,
+            44.0,
+            26.0,
+            45.0
+          ]
+        }
+      ],
+      "static_bytes": 194443633,
+      "retained_source_bytes": 19143466,
+      "load_callback_max_ms": 1.818
+    }
+  ],
+  "parity": [
+    {
+      "geometry_motion_sha256": "9a2ea0cffd25dbd701081db73f1a4bec753a65ccb56f05c71bb4790ec9d23201",
+      "normal_glb_sha256": "6f05bef549bd908bb457833912111b924e869056f0f0fefb0fad23420cb8879f",
+      "shiny_glb_sha256": "c6efca3172a3bd6ef5cfd1acd4b77f6e198ac7f6180512be11d93bc8963110d7",
+      "species": "pikachu"
+    },
+    {
+      "geometry_motion_sha256": "34dd434beef231c1fbba907ed418d69b37ca6ff169d130530c23097be168d0b4",
+      "normal_glb_sha256": "329e2cc40ed47b2abd84214d14e6d09cf8d4929b3177c9a03485bc4f13466550",
+      "shiny_glb_sha256": "f3811d0d123a7706799f385c302b833af0d16f6459dcbebb88cef13b7467a156",
+      "species": "arcanine"
+    },
+    {
+      "geometry_motion_sha256": "b0a3aaae25f212799e88ec690a5de879a57b0517be8573a4d711f7610b4b5ac5",
+      "normal_glb_sha256": "5dbe46a618e8680b1c877744a3bbf9c5414d448b0a6b0a4f75e64d76de60e547",
+      "shiny_glb_sha256": "a66f7ce64f0082f2df20d2452c225b141674bf2db95a10358f51186a475d2ec9",
+      "species": "lucario"
+    },
+    {
+      "geometry_motion_sha256": "78aa799119744ef558af651ecf7bb50ad17d9af8ae5ddd0fa0dcc026ade17cad",
+      "normal_glb_sha256": "1a5a10d49b3c655826965991e04a03b6e3b43bfbaff34e25939b71318de7b3f8",
+      "shiny_glb_sha256": "c8522d29675ce6f4c1daf371cb3a9e4336666c3103ca76b994d4f2780f94e11f",
+      "species": "snorlax"
+    },
+    {
+      "geometry_motion_sha256": "35a4f8438c2e7826c7fffe1fe099d35fbbc3128bfe25b4c170f6fa59c35dcdd6",
+      "normal_glb_sha256": "ad972fab72b4cf48126816df200bead44fef596dac5ec804682bf483c2b73540",
+      "shiny_glb_sha256": "5ce289b8ee1e19d375ba5dab500266634779d93c6962d9664936857b5201d77e",
+      "species": "articuno"
+    },
+    {
+      "geometry_motion_sha256": "05fa88d294410921d35dbe57a45b9f5d87044c381547685258c591f79bd8dbe0",
+      "normal_glb_sha256": "b9a3d2202f445225ecf124af2d01dea7e2661c106e353e4a6a7cf2a4fc4baf58",
+      "shiny_glb_sha256": "c743f13215ddb2dcceae249af8ea3256a7ac382f7d1febe134536304d5608d84",
+      "species": "dragonite"
+    },
+    {
+      "geometry_motion_sha256": "4dc03dae701cd0403bb33dc4ae2e91fc5b23d0599a87a71f5e6fb8b29eca19c7",
+      "normal_glb_sha256": "b292c22d28580222167c7dd5f720d9ff4d368e535d28ecee3b09a71a4e94438f",
+      "shiny_glb_sha256": "c6c2eaa41038d549b539f6c60a1a50194b3eb298cff58e6b2bbce88b9a85c357",
+      "species": "roaring-moon"
+    }
+  ],
+  "phase5d_complete": true,
+  "admission": "Exact reviewed normal/shiny hashes in regular desktop presenter, explicit local catalog selection",
+  "release_or_live_pvp_certification": false,
+  "evidence_sha256": {
+    "stress": "e27732ced1d41e54dc903cffb325deaa51e9e972add6fb51c2fdae7664aecc75",
+    "review": "1af517129a9df4581e6f23aaa0206702c1a570bb74e6c7b0e33263cee89e621c",
+    "parity": "bf0d19b190756892e0ddce3ab8670d0eaaf9fc021ce2aa1b68d75bc5b99c740d",
+    "log": "838383ab976a22581cd78d8e6fe24af3986f2a31d39e2343faefb66901626e69",
+    "catalog": "c8892bb5758200fac14e38d9e1d1533a28c7835a4e2ff6a3062af2b8613814b5",
+    "registry": "1f24bea0998ec05b817d45a21e3725897ab2ec3a85fd0e53da1b0662de8524c5",
+    "qualification": "0e3328b25b495fd359921e80a9166f00340e2c19c4e89eb7f64f5614eee4a610"
+  }
+}
