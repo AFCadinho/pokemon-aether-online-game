@@ -3,7 +3,9 @@
 > Follow-up: `SCVI_CONTROL_RENDER_REVIEW.md` reproduces two render-layer faults
 > with unchanged control models and records a generic runtime render-order fix.
 > The counts below describe the old images only; they must not be used as model
-> defect counts or production yield. Fresh standardized review is still required.
+> defect counts or production yield. The fresh standardized screening is now
+> recorded in `SCVI_RUNTIME_VISUAL_REVIEW.md`: 79 sampled-clip passes, nine visual
+> holds, twelve unchanged technical/source holds; no production approvals.
 
 ## Outcome
 

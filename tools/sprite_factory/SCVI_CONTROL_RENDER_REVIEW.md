@@ -1,5 +1,8 @@
 # Four-model control: render-layer synchronization
 
+> Follow-up: `SCVI_RUNTIME_VISUAL_REVIEW.md` records the completed standardized
+> screening of all 88 unchanged technically converted SCNs through this fix.
+
 ## Conclusion
 
 Dragonite, Jigglypuff, Ditto and Eevee were loaded from the **unchanged, hash-bound
