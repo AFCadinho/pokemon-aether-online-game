@@ -40,6 +40,9 @@ func _init() -> void:
 		"downloaded sheets calculate reusable visual bounds before GPU upload"
 	)
 	_check(str(service.call("_normalize_segment", "Mr. Mime_Form")) == "mr-mime-form", "asset paths are normalized safely")
+	var roaring_moon_identity := service.call("_sprite_identity", "Roaring Moon", "back", false, "animated") as Dictionary
+	_check(roaring_moon_identity.get("candidate_ids", []) == ["roaring-moon", "roaringmoon"],
+		"web sprites try the compact catalog id used by forms such as Roaring Moon")
 	_check(str(service.call("_catalog_style", "animated")) == "animated", "normal animated sprites are the browser default")
 	_check(str(service.call("_catalog_style", "pixel")) == "pixel", "Gen 5 remains available as the pixel style")
 	_check(str(service.call("_catalog_style", "static")) == "", "static style does not request a battle catalog")
