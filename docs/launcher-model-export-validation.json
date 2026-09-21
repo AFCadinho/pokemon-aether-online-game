@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "scope": "Offline Linux PCK exports with official Godot 4.6.2 debug template, test-only main scenes; not live PvP or release certification",
+  "launcher_pack": "slot-c/.tmp/model-export-02/launcher.pck",
+  "game_pack": "slot-c/.tmp/model-export-03/game.pck",
+  "evidence_directory": "slot-c/.tmp/model-export-03/results",
+  "launcher_pack_bytes": 28351316,
+  "game_pack_bytes": 241645688,
+  "standalone_runtime_verified": true,
+  "install_select_and_child_process_passed": true,
+  "launcher_and_game_restart_passed": true,
+  "saved_game_settings_unchanged": true,
+  "pack_directory_dependencies_present": true,
+  "checks": {
+    "battles": 3,
+    "mixed_team_switches": 36,
+    "normal_duplicate_faint_replacements": 21,
+    "variant_swap_faint_eviction_reload_checks": 21,
+    "recorded_event_sequences": 3,
+    "python_tests": 23,
+    "content_pack_regression": "PASS",
+    "web_dynamic_sprite_contract": "PASS"
+  },
+  "existing_5c_performance_guards_passed": true,
+  "frame_p95_ms": [17.416, 17.381, 17.329],
+  "covered_entry_max_frame_ms": 1662.237,
+  "load_callback_max_ms": 2.039,
+  "final_two_round_static_growth_bytes": 86292,
+  "fixed_export_failures": [
+    "Game referenced content_pack_store.gd inside the excluded standalone launcher project",
+    "Desktop sprite exclusion removed Pikachu/Eevee HOME image dependencies of battle scenes"
+  ],
+  "remaining": [
+    "Cold entry still has a 1.66-second covered frame; not instant loading",
+    "Windows/macOS preset checks are static only; executable test is Linux only",
+    "No live accounts or server PvP battle tested",
+    "Export warns about existing Unown filename UID collision and nested launcher project"
+  ],
+  "earlier_attempts": [
+    "model-export-01: official template rejects --main-pack; --script is ignored and briefly starts the ordinary launcher update check, stopped without applying updates or login",
+    "model-export-02/results: offline child reproduces missing dependencies, parent rejects its error log; retained as failing evidence"
+  ],
+  "sha256": {
+    "launcher_pack": "2c97e4d69f68aa108ec76b7af2254a7dc478b6bf0e121f89b65e02fb6d58d481",
+    "game_pack": "976d7527add6b6658881d268d740b307f36d8fb9e6d0f43d73519b6e672b7817",
+    "stress": "b4f21948877f1ec7b793ecc99d7d08d317ed0163a32404974ce32d4777704b23",
+    "install_game_log": "603cd585dbe42ed3ab1368dadd91f2ade3149bb38c5bc61e70d4301dcab82882",
+    "restart_game_log": "276934ae5c58da33867016ed8663c0d88afc436da9a64e89df08c2a206e3a237"
+  }
+}

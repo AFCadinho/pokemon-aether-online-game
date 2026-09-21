@@ -17,6 +17,19 @@ The existing Anime Cries setting still works as the cry fallback. Converting it
 into an official downloadable pack and removing that setting is a later migration.
 Game volume controls continue to apply to modded cries.
 
+## Separate launcher/game exports
+
+The game uses `scripts/services/content_pack_store.gd`, an exact checked-in
+copy of `launcher/scripts/content_pack_store.gd`. Keep both in sync; the parity
+test in `tools/sprite_factory/test_launcher_model_registry.py` enforces this.
+The launcher is a separate Godot project, so the game's export cannot depend
+on scripts inside it. `content_packs_check.gd` exercises the game-local copy.
+The browser guard remains in `content_pack_runtime.gd`.
+
+Desktop exports retain the HOME icon directories for battle placeholders and
+party icons. Animated front/back/shiny/Gen5 sprite directories and music stay
+external; a missing optional sprite pack must not prevent loading battle scenes.
+
 ## Copyable category templates
 
 Start by copying one of these folders. Their `mod.json` files and asset paths
