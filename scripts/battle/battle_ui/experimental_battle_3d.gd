@@ -5,6 +5,7 @@ extends Control
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
 const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
+const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
 const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_placement.gd")
 const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
@@ -35,6 +36,7 @@ var arena_problem := ""
 var ground_offsets := {}
 var placements := {}
 var motion_clips := {}
+var visual_bounds := {}
 var motion_offsets := [0.0, 0.0]
 var arena_preparing := false
 var material_response: Node
@@ -300,9 +302,7 @@ func handles(ident: String) -> bool:
 	return active and index >= 0 and identities[index] == _combatant_key(index) and is_instance_valid(actors[index])
 
 func _combatant_key(index: int) -> String:
-	# Normal-only production admission is unchanged. Review adapters can keep
-	# variant resources distinct without changing the gameplay species identity.
-	return combatants[index].species
+	return ReviewedModels.key(combatants[index].species, combatants[index].shiny)
 
 func set_sleeping(index: int, sleeping: bool) -> void:
 	if lifecycle[index] == "fainted":
@@ -416,7 +416,7 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	process_priority = 10
 
 static func supported(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
-	return species.to_lower().replace(" ", "-") in SUPPORTED and not shiny and not double and not substitute
+	return ReviewedModels.supports(ReviewedModels.key(species, shiny)) and not double and not substitute
 
 # Narrow override points for the offline candidate harness. The production
 # renderer never reads candidate allowlists or motion profiles from Settings.
@@ -424,9 +424,13 @@ func _supports_combatant(species: String, shiny: bool, double: bool, substitute:
 	return supported(species, shiny, double, substitute)
 
 func _catalog_species_allowed(species: String) -> bool:
-	return species in SUPPORTED
+	return ReviewedModels.supports(species)
 
 func _motion_profile(species: String) -> Dictionary:
+	var entry: Dictionary = catalog_entries.get(species, {})
+	var reviewed := ReviewedModels.resolve(species, str(entry.get("runtime_sha256", "")))
+	if not reviewed.is_empty():
+		return reviewed.motion
 	return MOTION_PROFILES.data.get(species, {})
 
 func _requested_arena() -> String:
@@ -557,6 +561,7 @@ func _load_catalog(path: String) -> void:
 	ground_offsets.clear()
 	placements.clear()
 	motion_clips.clear()
+	visual_bounds.clear()
 	if FileAccess.file_exists(prepared_path+".grounding.json"):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(prepared_path+".grounding.json"))
 		if parsed is Dictionary and parsed.get("schema",0)==1 and parsed.get("entries") is Dictionary:
@@ -567,9 +572,28 @@ func _load_catalog(path: String) -> void:
 	var data: Variant = JSON.parse_string(file.get_as_text())
 	if not data is Array:
 		return
-	for entry in data:
-		if not entry is Dictionary or not _catalog_species_allowed(str(entry.get("species", ""))):
+	var seen := {}
+	for raw in data:
+		if not raw is Dictionary:
 			continue
+		var entry: Dictionary = raw.duplicate(true)
+		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_resource_cache_key", "_reviewed_model"]:
+			entry.erase(internal_key) # Local catalogs cannot forge loader/cache state.
+		var identity := ReviewedModels.entry_key(entry)
+		if not _catalog_species_allowed(identity):
+			continue
+		if seen.has(identity):
+			catalog_entries.erase(identity) # Ambiguous variants fail closed.
+			continue
+		seen[identity] = true
+		entry.species = identity
+		var reviewed := ReviewedModels.resolve(identity, str(entry.get("runtime_sha256", "")))
+		if not reviewed.is_empty():
+			entry.placement = reviewed.placement
+			entry.action_timing = reviewed.action_timing
+			entry["_reviewed_model"] = true
+		elif identity not in SUPPORTED:
+			continue # Only the two legacy normal controls retain compatibility.
 		var model_path := str(entry.get("runtime_path", ""))
 		var timing: Variant = entry.get("action_timing", {})
 		if entry.get("runtime_schema", 0) != 1 or not timing is Dictionary or not model_path.ends_with(".scn") or not FileAccess.file_exists(model_path):
@@ -592,7 +616,7 @@ func _load_catalog(path: String) -> void:
 		reason = "Preparing local 3D models…"
 		_queue_needed_models()
 	else:
-		catalog_problem = "Catalog has no valid prepared Dragonite/Roaring Moon models"
+		catalog_problem = "Catalog has no valid reviewed 3D models"
 		reason = catalog_problem
 
 func _needed_species() -> Array[String]:
@@ -643,7 +667,16 @@ func _queue_needed_models() -> void:
 
 func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 	var species: String = entry.species
-	var placement := ModelPlacement.resolve(entry, catalog_calibration.get(species, {}), check.digest)
+	var reviewed := ReviewedModels.resolve(species, check.digest)
+	if entry.get("_reviewed_model", false) and reviewed.is_empty():
+		failed_models[species] = true
+		catalog_problem = "Reviewed 3D model hash mismatch: " + species
+		return false
+	if not reviewed.is_empty():
+		entry.placement = reviewed.placement
+		entry.action_timing = reviewed.action_timing
+	var calibration: Dictionary = reviewed.grounding if not reviewed.is_empty() else catalog_calibration.get(species, {})
+	var placement := ModelPlacement.resolve(entry, calibration, check.digest)
 	model_validation_ms += check.elapsed_ms
 	if check.digest.is_empty() or check.bytes > 134217728 or placement.is_empty():
 		failed_models[species] = true
@@ -652,7 +685,10 @@ func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 	ground_offsets.erase(species)
 	if placement.calibrated:
 		ground_offsets[species] = placement
-	motion_clips[species] = MotionPlacement.resolve(_motion_profile(species), placement, check.digest, entry.action_timing)
+	var motion: Dictionary = reviewed.motion if not reviewed.is_empty() else _motion_profile(species)
+	motion_clips[species] = MotionPlacement.resolve(motion, placement, check.digest, entry.action_timing)
+	if not reviewed.is_empty():
+		visual_bounds[species] = reviewed.bounds
 	entry["_verified_runtime_hash"] = check.digest
 	entry["_source_bytes"] = check.bytes
 	entry["_resource_cache_key"] = ModelCache.key(entry.runtime_path, check.digest, entry.action_timing) if ResourceLoader.get_dependencies(entry.runtime_path).is_empty() else ""
@@ -810,6 +846,14 @@ func _anchor(body: bool, index: int) -> Vector2:
 func _visual_rect(index: int) -> Rect2:
 	if actors[index] == null or not actors[index].visible:
 		return Rect2()
+	var data: Dictionary = visual_bounds.get(identities[index], {}).get(current_actions[index], {})
+	if not data.is_empty():
+		var box := AABB(Vector3(data.min[0], data.min[1], data.min[2]), Vector3(data.size[0], data.size[1], data.size[2]))
+		var rect := Rect2()
+		for corner in 8:
+			var point := _project_to_ui(actors[index].global_transform * box.get_endpoint(corner))
+			rect = Rect2(point, Vector2.ZERO) if corner == 0 else rect.expand(point)
+		return rect
 	# Conservative presentation bounds; source skeletal mesh AABBs include rest pose.
 	var bottom := _anchor(false, index)
 	var top := _project_to_ui(actors[index].position + Vector3(0, 3, 0))

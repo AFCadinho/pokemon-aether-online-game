@@ -34,7 +34,8 @@ func _run() -> void:
 	settings.battle_3d_camera_motion = false
 	settings.battle_presentation_mode = "2.5d"
 	assert(Renderer.supported("Dragonite", false, false, false))
-	for args in [["Eevee", false, false, false], ["Dragonite", true, false, false], ["Dragonite", false, true, false], ["Dragonite", false, false, true]]:
+	assert(Renderer.supported("Dragonite", true, false, false))
+	for args in [["Eevee", false, false, false], ["Gastly", true, false, false], ["Dragonite", false, true, false], ["Dragonite", false, false, true]]:
 		assert(not Renderer.supported.callv(args))
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	var screen_host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()

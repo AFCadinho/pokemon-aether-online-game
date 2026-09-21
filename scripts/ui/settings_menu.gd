@@ -415,15 +415,15 @@ func _setup_tabs() -> void:
 			if not loading_controls:
 				SettingsManager.set_battle_presentation_mode("3d" if index == 1 else "2.5d"))
 		var presentation_hint := Label.new()
-		presentation_hint.text = "Local preview models only. Unsupported Pokémon use 2.5D. No downloads."
+		presentation_hint.text = "Local reviewed models: Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite and Roaring Moon (normal/shiny). Missing models and unsupported forms use 2.5D. No downloads."
 		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
 		var choose_catalog := Button.new()
-		choose_catalog.text = "Choose local 3D preview report…"
+		choose_catalog.text = "Choose local 3D model catalog…"
 		var catalog_dialog := FileDialog.new()
 		catalog_dialog.access = FileDialog.ACCESS_FILESYSTEM
 		catalog_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		catalog_dialog.filters = PackedStringArray(["*.json ; 3D export report"])
+		catalog_dialog.filters = PackedStringArray(["*.json ; 3D model catalog"])
 		add_child(catalog_dialog)
 		catalog_dialog.file_selected.connect(SettingsManager.set_battle_3d_catalog_path)
 		choose_catalog.pressed.connect(func(): catalog_dialog.popup_centered_ratio(0.7))
