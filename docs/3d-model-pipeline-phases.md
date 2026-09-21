@@ -552,3 +552,40 @@ inspected in the neutral source renders, not certified for Godot. No source
 geometry, floor offsets or species overrides were changed. Existing Gastly
 material and SCVI eyelid/TRACM issues remain, as do shiny, full-motion and battle
 reviews. The source-file blocker is resolved; phase 5B and 5C/5D are not complete.
+
+### Phase 5B — deterministic skeletal pose evaluation
+
+Evidence in `.tmp/phase5-source-review-05/` supersedes the closed-eye conclusions
+from the earlier sample sheets. Blender retains values from the previous action
+when the next action omits a bone/channel. The saved imports ended on faint
+loops; assigning idle alone therefore leaked closed eyelids into Pikachu's idle.
+The Biochao Snorlax also retained an open mouth from previously evaluated clips.
+Resetting all pose bones to rest before selecting each clip fixes both visible
+cases without species overrides, donor motions or changes to source files.
+Explicit sleep/faint tracks still evaluate normally; this is not an eyes-open
+override. Omitted source tracks alone are not proof of closed bind-pose eyes.
+
+`blender_action_state.select_action` now supplies that deterministic setup for
+the source-review pose/bounds passes and fresh SCVI import bound measurements
+and configured donor sampling. Existing prepared imports, 2D sprite renders,
+GLB exports and approved runtime artifacts are not rewritten. Cached older
+import reports still contain their old bound measurements; do not treat them
+as regenerated evidence. New reports identify the rest-before-clip policy.
+
+Focused Blender regression `check_blender_action_state.py` reproduces the stale
+unkeyed-track bug, verifies that reset removes it and preserves explicitly keyed
+motion, and evaluates the ten-model cohort in reverse order after poisoning the
+pose. All 195 start/mid/end samples have zero matrix difference against the
+forward pass. This proves order independence of sampled skeletal transforms,
+not material animation parity or full-cycle grounding. The 48 rendered poses
+were visually checked in the two new contact sheets. A fresh Pikachu source
+import in `.tmp/phase5-rest-import-01/` also passes with the corrected bound pass.
+
+Gastly remains held, not cosmetically patched. Its raw TRMTR declares `body`
+as `Standard/Opaque`, eyes as `EyeClearCoat` + `Eye/BlendPreMultiAlpha`, and
+`smoke` as `NonDirectional/Opaque`. The pinned importer uses a common shader
+group; merely forcing alpha blend is not justified by this source metadata.
+The rendered shell still hides the readable face/smoke silhouette. Shader and
+TRACM interpretation need a separate causal correction; no smoke mesh has been
+deleted or hidden. Abra/Onix hashed clips, Godot conversion review, shiny and
+phase 5C/5D remain outstanding. No runtime allowlist or battle UI changes.

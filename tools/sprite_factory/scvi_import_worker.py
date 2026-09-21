@@ -13,6 +13,9 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from blender_action_state import select_action
+
 
 def load_importer(path):
     spec = importlib.util.spec_from_file_location(
@@ -26,9 +29,7 @@ def load_importer(path):
 
 
 def projected_extent(rig, action, direction, frames):
-    rig.animation_data.action = action
-    if len(action.slots) == 1:
-        rig.animation_data.action_slot = action.slots[0]
+    select_action(rig, action)
     # The factory uses these same orthographic front/back directions.
     look = Vector([-value for value in direction]).to_track_quat("-Z", "Y")
     inverse = look.to_matrix().inverted()
@@ -61,18 +62,16 @@ def tranm_bone_names(path, animation_type):
 def apply_facial_baseline(rig, actions, job, animation_type):
     """Supply SCVI's inherited open-eye pose to partial skeletal actions.
 
-    SCVI can omit unchanged eyelid tracks and inherit the previous pose. Blender
-    evaluates omitted tracks from the bind pose instead, which is closed for
-    several species. A reviewed donor action makes that inherited state explicit.
+    A source clip can omit eyelid tracks. Start from rest, never a previously
+    evaluated clip. Where explicitly configured, a reviewed donor supplies a
+    different baseline; omitted tracks alone do not prove closed bind-pose eyes.
     """
     baseline_path = job.get("facial_baseline")
     if not baseline_path:
         return {"configured": False, "injected": {}}
     donor_name = Path(baseline_path).stem
     donor = actions[donor_name]
-    rig.animation_data.action = donor
-    if len(donor.slots) == 1:
-        rig.animation_data.action_slot = donor.slots[0]
+    select_action(rig, donor)
     bpy.context.scene.frame_set(job.get("facial_baseline_frame", 0))
     eyelids = [bone for bone in rig.pose.bones if "eyelid" in bone.name.lower()]
     donor_tracks = tranm_bone_names(baseline_path, animation_type)
@@ -90,9 +89,7 @@ def apply_facial_baseline(rig, actions, job, animation_type):
         missing = sorted(set(baseline) - target_tracks)
         if not missing:
             continue
-        rig.animation_data.action = action
-        if len(action.slots) == 1:
-            rig.animation_data.action_slot = action.slots[0]
+        select_action(rig, action)
         frame = int(round(action.frame_range[0]))
         bpy.context.scene.frame_set(frame)
         for name in missing:
@@ -208,6 +205,7 @@ def main(job):
               "materials": [mat.name for mat in bpy.data.materials],
               "actions": mapping, "projected_bounds": bounds, "images": images,
               "facial_baseline": facial_baseline,
+              "pose_initialization": "rest_before_each_clip",
               "facial_inheritance_warnings": facial_inheritance_warnings,
               "channel_animations": channel_animations,
               "channel_warnings": channel_warnings,

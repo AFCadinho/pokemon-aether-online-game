@@ -10,6 +10,7 @@ from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).parent))
 from blender_worker import bounds, inspect
 from phase5_review_actions import candidates
+from blender_action_state import select_action
 
 
 def run(job):
@@ -19,7 +20,8 @@ def run(job):
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
     report = inspect()
     report.update(species=job['species'], source_sha256=job['source_sha256'],
-                  scope='source_only_not_runtime_approval', poses=[])
+                  scope='source_only_not_runtime_approval',
+                  pose_initialization='rest_before_each_clip', poses=[])
     output = Path(job['output'])
     rigs = [obj for obj in bpy.context.scene.objects if obj.type == 'ARMATURE']
     if len(rigs) != 1 or report['libraries']:
@@ -42,9 +44,7 @@ def run(job):
         if action is None:
             report['poses'].append({'category': category, 'view': view, 'status': 'missing_or_ambiguous'})
             continue
-        rig.animation_data.action = action
-        if len(action.slots) == 1:
-            rig.animation_data.action_slot = action.slots[0]
+        select_action(rig, action)
         frame = action.frame_range[0] + fraction * (action.frame_range[1] - action.frame_range[0])
         bpy.context.scene.frame_set(int(frame), subframe=frame % 1)
         box = bounds()
@@ -86,9 +86,7 @@ def run(job):
     data.ortho_scale = size
     data.clip_end = max(1000, size * 20)
     for category, view, action, frame, box in poses:
-        rig.animation_data.action = action
-        if len(action.slots) == 1:
-            rig.animation_data.action_slot = action.slots[0]
+        select_action(rig, action)
         scene.frame_set(int(frame), subframe=frame % 1)
         direction = Vector((3, -7, 2) if view == 'front' else (-3, 7, 2)).normalized()
         camera.location = target + direction * size * 3
