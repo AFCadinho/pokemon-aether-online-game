@@ -45,6 +45,20 @@ if job.get('ambient_material_probe'):
                             for layer in list(obj.data.uv_layers)[:len(original)]], 'Native UVs changed'
     print('PASS auxiliary UV loop: motion, wrap, repeat evaluation, native UV preservation')
 names = {m['name'] for m in job['material_probe_metadata'] if eligible(m)}
+if '--ablation' in sys.argv:
+    from review_smoke_ablation import intervene
+    previous_culling = {m.name: m.use_backface_culling for m in bpy.data.materials}
+    for cull, displace in ((False, True), (True, True), (False, False), (True, False)):
+        result = intervene(job, cull, displace)
+        assert not result['runtime_approved']
+        assert geometry() == before_geometry
+        for mat in bpy.data.materials:
+            assert mat.use_backface_culling == (cull if mat.name in names else previous_culling[mat.name])
+        for obj in bpy.context.scene.objects:
+            for modifier in obj.modifiers:
+                if modifier.name == 'SourceDisplacementProbe':
+                    assert modifier.show_render == displace and modifier.show_viewport == displace
+    print('PASS all four ablations: intended state only, native geometry and visibility unchanged')
 assert names == {item['material'] for item in report['applied']}
 assert geometry() == before_geometry, 'Source meshes/visibility changed'
 for mat in bpy.data.materials:

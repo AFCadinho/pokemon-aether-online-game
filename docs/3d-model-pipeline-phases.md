@@ -668,3 +668,34 @@ does not yet establish the intended smoke appearance. This is reproducible
 diagnostic evidence, not a finished shader. Next resolve mask/UV/displacement
 semantics before Godot conversion and battle certification. Phase 5B remains
 open; the runtime allowlist is unchanged.
+
+### Phase 5B — smoke occlusion isolation
+
+`review_smoke_ablation.py` compares the four combinations of culling on/off
+and displacement on/off. All use the same source, loop samples, lighting and
+camera bounds (fitted once from the baseline). Each variant starts by reopening
+the source; no mesh is removed or hidden. Reports retain the actual pose bounds
+separately from the fixed diagnostic camera bounds. The ordinary review path
+still fits its camera as before.
+
+Evidence in slot-c `.tmp/phase5-smoke-ablation-02/`: 68 images, consisting of
+five poses and twelve material-loop samples per variant. Culling changes pixels,
+but is not a sufficient visual correction. Disabling displacement also leaves
+the face obscured by the shell. Neither hypothesis is promoted to the converter.
+All seventeen culling-on/displacement-on images match the previous material-loop
+probe exactly: culling was already active there. It is not a missing switch.
+
+An untouched, scripts-disabled Biochao Gastly reference is rendered separately
+in `.tmp/phase5-smoke-reference-01/` (five matching named poses). It too shows
+smoke obscuring the face in this review setup. Its framing is independently
+auto-fitted, so this is a qualitative source comparison, not a pixel-parity
+test. The authored reference therefore cannot serve as an automatically
+approved replacement or proof of the desired final appearance.
+
+`check_scvi_material_probe.py --ablation` verifies all four intervention states,
+unchanged native geometry/visibility and unrelated materials, in addition to
+the loop and source-hash checks. The 27 focused Python tests remain passing.
+No runtime models or source Blend files are changed. Gastly remains held:
+further shader work needs a trusted visual target and verification of opacity,
+UV and displacement semantics. Continue the other cohort reviews independently
+rather than treating this unresolved material as permission to guess a fix.
