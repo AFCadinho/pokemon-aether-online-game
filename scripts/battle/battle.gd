@@ -1136,16 +1136,18 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 	active_battle_environment_id = profile.environment_id
 	if is_instance_valid(animation_router.model_presenter):
 		animation_router.model_presenter.environment_id = profile.environment_id
-	active_battle_environment_loops_video = profile.loop_background_video
-	battle_background.texture = profile.background_texture
+	var background: Dictionary = profile.resolve_background(SettingsManager.battle_background_style)
+	active_battle_environment_loops_video = bool(background.get("loop_video", true))
+	battle_background.texture = background.get("texture") as Texture2D
 	battle_background.visible = true
 	battle_background_video.stop()
-	battle_background_video.stream = profile.background_video
-	battle_background_video.visible = profile.background_video != null
+	battle_background_video.stream = background.get("video") as VideoStream
+	battle_background_video.visible = battle_background_video.stream != null
+	var platform_texture := background.get("platform_texture") as Texture2D
 	if player_battle_platform.has_method("set_platform_texture"):
-		player_battle_platform.call("set_platform_texture", profile.platform_texture)
+		player_battle_platform.call("set_platform_texture", platform_texture)
 	if enemy_battle_platform.has_method("set_platform_texture"):
-		enemy_battle_platform.call("set_platform_texture", profile.platform_texture)
+		enemy_battle_platform.call("set_platform_texture", platform_texture)
 	if battle_background_video.visible:
 		battle_background_video.play()
 

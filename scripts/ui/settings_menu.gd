@@ -40,6 +40,7 @@ var hide_other_players_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
 var battle_presentation_options: OptionButton
+var battle_background_options: OptionButton
 var battle_camera_motion_toggle: CheckBox
 var terminology_label: Label
 var terminology_options_button: OptionButton
@@ -262,6 +263,8 @@ func _apply_settings_to_controls() -> void:
 	loading_controls = true
 	if battle_presentation_options != null:
 		battle_presentation_options.select(1 if SettingsManager.battle_presentation_mode == "3d" else 0)
+	if battle_background_options != null:
+		battle_background_options.select(SettingsManager.AVAILABLE_BATTLE_BACKGROUND_STYLES.find(SettingsManager.battle_background_style))
 	if battle_camera_motion_toggle != null:
 		battle_camera_motion_toggle.button_pressed = SettingsManager.battle_3d_camera_motion
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
@@ -404,6 +407,21 @@ func _setup_tabs() -> void:
 		var layout_label := Label.new()
 		layout_label.text = "Battle UI (next battle)"
 		general_tab.add_child(_create_labeled_control_row(layout_label, layout_options))
+	var background_label := Label.new()
+	background_label.text = "2D battle background (next battle)"
+	battle_background_options = OptionButton.new()
+	battle_background_options.name = "BattleBackgroundOptions"
+	battle_background_options.add_item("Original 2D")
+	battle_background_options.add_item("Rendered arena")
+	battle_background_options.add_item("Automatic")
+	battle_background_options.select(SettingsManager.AVAILABLE_BATTLE_BACKGROUND_STYLES.find(SettingsManager.battle_background_style))
+	battle_background_options.item_selected.connect(func(index):
+		if not loading_controls:
+			SettingsManager.set_battle_background_style(SettingsManager.AVAILABLE_BATTLE_BACKGROUND_STYLES[index]))
+	var background_hint := Label.new()
+	background_hint.text = "Rendered arenas use a fixed-camera loop when available. Missing loops fall back to Original 2D."
+	background_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	general_tab.add_child(_create_labeled_control_row(background_label, battle_background_options, background_hint))
 	if not OS.has_feature("web") and not OS.has_feature("mobile"):
 		var presentation_label := Label.new()
 		presentation_label.text = "Battle presentation"

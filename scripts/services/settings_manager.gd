@@ -13,6 +13,14 @@ const SETTINGS_PATH := "user://settings.json"
 const SPRITE_STYLE_ANIMATED := "animated"
 const SPRITE_STYLE_PIXEL := "pixel"
 const BATTLE_MUSIC_DEFAULT := "lysandre_remix_pokemon_legends_z_a_zame"
+const BATTLE_BACKGROUND_ORIGINAL := "original_2d"
+const BATTLE_BACKGROUND_RENDERED_ARENA := "rendered_arena"
+const BATTLE_BACKGROUND_AUTOMATIC := "automatic"
+const AVAILABLE_BATTLE_BACKGROUND_STYLES: Array[String] = [
+	BATTLE_BACKGROUND_ORIGINAL,
+	BATTLE_BACKGROUND_RENDERED_ARENA,
+	BATTLE_BACKGROUND_AUTOMATIC,
+]
 const MASTER_BUS := "Master"
 const MUSIC_BUS := "Music"
 const SFX_BUS := "SFX"
@@ -62,6 +70,7 @@ var battle_presentation_mode := "2.5d"
 var battle_3d_catalog_path := ""
 var battle_3d_arena := "auto"
 var battle_ui_layout := "immersive"
+var battle_background_style := BATTLE_BACKGROUND_ORIGINAL
 var immersive_battle_log_open := false
 var immersive_chat_height := 420.0
 var battle_3d_forest_manifest := ""
@@ -133,6 +142,7 @@ func load_settings() -> void:
 	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
+	battle_background_style = _validated_battle_background_style(data.get("battle_background_style", BATTLE_BACKGROUND_ORIGINAL))
 	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
 	immersive_chat_height = clampf(float(data.get("immersive_chat_height",420.0)),220,800)
 	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
@@ -228,6 +238,7 @@ func save_settings() -> void:
 		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"battle_3d_arena": battle_3d_arena,
 		"battle_ui_layout": battle_ui_layout,
+		"battle_background_style": battle_background_style,
 		"immersive_battle_log_open": immersive_battle_log_open,
 		"immersive_chat_height": immersive_chat_height,
 		"battle_3d_forest_manifest": battle_3d_forest_manifest,
@@ -296,6 +307,17 @@ func set_battle_3d_arena(id: String) -> void:
 func set_battle_ui_layout(value: String) -> void:
 	battle_ui_layout = "classic" if value == "classic" else "immersive"
 	_save_and_emit()
+
+func set_battle_background_style(value: String) -> void:
+	var validated := _validated_battle_background_style(value)
+	if battle_background_style == validated:
+		return
+	battle_background_style = validated
+	_save_and_emit()
+
+func _validated_battle_background_style(value: Variant) -> String:
+	var style := str(value)
+	return style if style in AVAILABLE_BATTLE_BACKGROUND_STYLES else BATTLE_BACKGROUND_ORIGINAL
 
 func set_immersive_battle_log_open(value: bool) -> void:
 	immersive_battle_log_open = value
