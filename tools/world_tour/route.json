@@ -1,0 +1,14 @@
+{
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "shot_seconds": 8,
+  "transition_seconds": 1.5,
+  "shots": [
+    {"name": "Pallet Town", "scene": "res://generated/tiled_visuals/pallet_town_compact/pallet_town_compact.visual.tscn", "from": [680, 480], "to": [1000, 720], "view_width": 960},
+    {"name": "Route 1", "scene": "res://generated/tiled_visuals/route_1/route_1.visual.tscn", "from": [850, 1600], "to": [880, 1050], "view_width": 960},
+    {"name": "Viridian City", "scene": "res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn", "from": [920, 1250], "to": [1260, 900], "view_width": 1100},
+    {"name": "Viridian Forest", "scene": "res://generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn", "from": [1100, 1700], "to": [1400, 1200], "view_width": 960},
+    {"name": "Pewter City", "scene": "res://generated/tiled_visuals/pewter_city/pewter_city.visual.tscn", "from": [780, 1050], "to": [1180, 700], "view_width": 1100}
+  ]
+}
