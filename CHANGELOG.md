@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe 3D-modelpakketten ondersteunen nu meerdere gelijktijdige materiaalanimaties zonder de afspeelsnelheid te veranderen. Bestaande modelpakketten worden niet automatisch vervangen.
+
 - Nieuwe 3D-modelpakketten kunnen stilstaande animatieposes met hun oorspronkelijke duur behouden en complexere bewegende vuureffecten afspelen. Bestaande pakketten blijven ongewijzigd.
 
 - Het inlogscherm toont een rustige cameratocht door alle uitgewerkte buitenkaartdecors: steden, routes, Viridian Forest en Aether Clash, met vloeiende overgangen die blijven herhalen.

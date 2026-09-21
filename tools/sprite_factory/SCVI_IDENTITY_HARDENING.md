@@ -1,5 +1,8 @@
 # Identity follow-up: targeted repairs, not complete catalog approval
 
+For the subsequent fixed-cohort skeleton A/B investigation and corrected
+multi-material handling, see [SCVI_COHORT_REVIEW.md](SCVI_COHORT_REVIEW.md).
+
 This step repairs three conversion holds and diagnoses the remaining cases. It
 does **not** claim that every hold is solved or that the complete 100-model
 conversion was repeated again. No source assets or installed models were changed.

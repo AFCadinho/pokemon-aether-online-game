@@ -29,7 +29,15 @@ def channel_samples(keys, endpoint):
 
 
 def sample_tracks(data):
-    if data['config_flag'] != 1 or data['multiplier'] != 1 or not 1 <= data['fps'] <= 240:
+    if 'declared_timeline_counts' in data:
+        counts = data['declared_timeline_counts']
+        if counts != data.get('actual_timeline_counts') or len(counts) != 3 or not counts[0] or counts[0] != data['multiplier']:
+            raise ValueError('Effect timeline count mismatch')
+        if any(c != [data['config_flag'], data['frames'], data['fps']] for c in data.get('nested_timing', [])):
+            raise ValueError('Independent material timeline requires review')
+    elif data['multiplier'] != 1:
+        raise ValueError('Missing evidence for multiple material timelines')
+    if data['config_flag'] != 1 or not 1 <= data['fps'] <= 240:
         raise ValueError('Unreviewed effect loop config')
     result = {}
     for track in data['tracks']:

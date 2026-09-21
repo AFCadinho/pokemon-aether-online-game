@@ -1,0 +1,838 @@
+{
+  "schema": 1,
+  "scope": "fixed_100_incremental_source_audit_not_production_approval",
+  "cohort_size": 100,
+  "identity_verified": 92,
+  "cumulative_technical_conversions": 88,
+  "fresh_conversions": 1,
+  "material_preflight_pass": 88,
+  "python_tests": 57,
+  "timeline_audit": {
+    "tracm_files": 5308,
+    "count_matches": 5308
+  },
+  "visibility_families": {
+    "fixed_bool": 18957,
+    "framed8_bool": 179,
+    "dynamic_bool": 210,
+    "framed16_bool": 1
+  },
+  "pikachu": {
+    "rest_equal": true,
+    "mesh_equal": true,
+    "clips_equal": true,
+    "sampled_frames_per_source": 781,
+    "source_model_sha256": "b86c9985dd81c7d4672f005ae811214b7bf0768f024e1a38aaeb313cf4f717f9",
+    "source_romfs_sha256": "fd7719d4f63907dfc3d77e888a2b9a5438d345fdba3e81702f0428bd18274c75",
+    "importer_consumer_sha256": "6a1766ab1f29d0a1b055e162d025a6a25ed1bb0963fd69751a9b235785cc9ede",
+    "identity_gate_waived": false
+  },
+  "moltres": {
+    "glb_sha256": "250186fa792e9dc747374bcd51ac51ba3f317ff0961c8c4574303b988d62b234",
+    "runtime_sha256": "3cbea39cde57fd2080a2b50b5cf24e21a33725a6736f797132dbd6ef27923e93",
+    "native_clips": 7,
+    "visual_note": "Conspicuous flame faceting; not visually approved."
+  },
+  "entries": [
+    {
+      "species": "charizard",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "pikachu",
+      "skeleton_check": "source_review_required",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "raichu",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "jigglypuff",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "arcanine",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "gastly",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "gengar",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "gyarados",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "eevee",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "vaporeon",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "jolteon",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "flareon",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "articuno",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "dragonite",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "lucario",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "charmander",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "wigglytuff",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "venonat",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "diglett",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "dugtrio",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "meowth",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "psyduck",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "golduck",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "mankey",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "primeape",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "growlithe",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "slowpoke",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "magnemite",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "magneton",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "grimer",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "muk",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "shellder",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "cloyster",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "haunter",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "drowzee",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "hypno",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "voltorb",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "electrode",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "chansey",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "scyther",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "tauros",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "magikarp",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "ditto",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "zapdos",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "moltres",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "current_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "dratini",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "dragonair",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "mewtwo",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "mew",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "typhlosion",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "pichu",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "marill",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "azumarill",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "sudowoodo",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "hoppip",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "jumpluff",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "wooper",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "quagsire",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "espeon",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "umbreon",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "murkrow",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "misdreavus",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "forretress",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "qwilfish",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "scizor",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "heracross",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "delibird",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "donphan",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "blissey",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "tyranitar",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "gardevoir",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "slaking",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "hariyama",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "seviper",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "rayquaza",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "staraptor",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "drifblim",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "spiritomb",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "garchomp",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "magnezone",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "silvally",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "blacephalon",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "rillaboom",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "volcarona",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "hydreigon",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "flapple",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "hoopa",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "decidueye",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "oricorio",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "orthworm",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "magearna",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "marshadow",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "stakataka",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "cinderace",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "corviknight",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "alcremie",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "hydrapple",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "ceruledge",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "dondozo",
+      "skeleton_check": "byte_equal",
+      "technical_conversion_evidence": "prior_run",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    },
+    {
+      "species": "terapagos",
+      "skeleton_check": "identity_absent",
+      "technical_conversion_evidence": "blocked",
+      "visual_approval": "pending",
+      "battle_qualification": "not_performed_for_this_cohort",
+      "runtime_approved": false
+    }
+  ]
+}
