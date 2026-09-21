@@ -9,10 +9,14 @@ import shutil
 import subprocess
 import tempfile
 
+from catalog import check_coverage
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def validate(route):
+    if route.get("coverage") == "all_outdoor_maps":
+        check_coverage(route)
     for key in ("width", "height", "fps"):
         value = route.get(key)
         if type(value) is not int or value <= 0:
