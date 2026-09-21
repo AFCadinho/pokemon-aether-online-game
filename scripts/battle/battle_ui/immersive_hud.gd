@@ -101,12 +101,20 @@ func _process(delta: float) -> void:
 				target = top - Vector2(extent.x * 0.5, extent.y + 12)
 				anchored_to_sprite = true
 		elif is_instance_valid(presenter):
-			var bounds: Rect2 = sprite_box.get_single_sprite_hover_rect()
+			var bounds := Rect2()
+			if battle.coop_mode and sprite_box.has_method("get_double_animation_visual_rect_in_node"):
+				bounds = sprite_box.get_double_animation_visual_rect_in_node(stage)
+			else:
+				var global_bounds: Rect2 = sprite_box.get_single_sprite_hover_rect()
+				if global_bounds.has_area():
+					var inverse := stage.get_global_transform().affine_inverse()
+					bounds = Rect2(inverse * global_bounds.position, inverse * global_bounds.end - inverse * global_bounds.position)
 			if bounds.has_area():
-				var top := stage.get_global_transform().affine_inverse() * Vector2(bounds.get_center().x, bounds.position.y)
+				var top := Vector2(bounds.get_center().x, bounds.position.y)
 				# In 2D the indicator badges live below the HP panel. Reserve their
 				# complete height so neither row covers the Pokémon sprite.
-				target = top - Vector2(extent.x * 0.5, extent.y + badge_height + 18)
+				var doubles_indicator_clearance := 26.0 if battle.coop_mode else 0.0
+				target = top - Vector2(extent.x * 0.5, extent.y + badge_height + doubles_indicator_clearance + 18)
 				anchored_to_sprite = true
 		if not realtime_3d and badge_height > 0.0 and not anchored_to_sprite:
 			target.y -= badge_height + 6
