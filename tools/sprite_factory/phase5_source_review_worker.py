@@ -13,7 +13,7 @@ from phase5_review_actions import candidates
 from blender_action_state import select_action
 
 
-def run(job):
+def run(job, material_intervention=None, camera_bounds=None):
     source = Path(job['source'])
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source changed before review')
@@ -33,6 +33,8 @@ def run(job):
                 'duration_seconds': (job['ambient_material_probe']['frames'] - 1) / job['ambient_material_probe']['fps'],
                 'hypotheses': ['unlit source base colour', 'UVScaleOffset to UV1; UVScaleOffset3 to displacement UV2'],
                 'runtime_approved': False}
+    if material_intervention is not None:
+        report['diagnostic_intervention'] = material_intervention(job)
     report.update(species=job['species'], source_sha256=job['source_sha256'],
                   scope=('experimental_opacity_probe_not_runtime_approval' if job.get('material_probe_policy')
                          else 'source_only_not_runtime_approval'),
@@ -70,9 +72,12 @@ def run(job):
         raise ValueError('No unambiguous representative actions')
     low = Vector([min(pose[4][axis][0] for pose in poses) for axis in range(3)])
     high = Vector([max(pose[4][axis][1] for pose in poses) for axis in range(3)])
+    report['review_bounds'] = [list(low), list(high)]
+    if camera_bounds is not None:
+        low, high = map(Vector, camera_bounds)
+    report['camera_bounds'] = [list(low), list(high)]
     target = (low + high) / 2
     size = max((high - low).length * 1.12, 0.1)
-    report['review_bounds'] = [list(low), list(high)]
     report['camera_ortho_scale'] = size
     scene = bpy.context.scene
     for obj in list(scene.objects):
