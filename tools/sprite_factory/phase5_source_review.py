@@ -55,6 +55,7 @@ def run_entry(entry, args):
             material_path = Path(entry['model_dir']) / (entry['identity'] + '.trmtr')
             job['material_source'] = str(material_path)
             job['material_source_sha256'] = hashlib.sha256(material_path.read_bytes()).hexdigest()
+            job['effect_motion_dir'] = entry['motion_dir']
         if getattr(args, 'layer_mask_probe', False):
             from scvi_material_probe import inspect_materials, eligible, POLICY
             job['material_probe_policy'] = POLICY

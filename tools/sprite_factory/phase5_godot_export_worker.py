@@ -19,6 +19,7 @@ def run(job):
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source hash changed')
     profiles = []
+    effects = []
     if source.with_name('import.json').exists() and not job.get('material_source'):
         raise ValueError('Imported source needs material provenance; rerun source review')
     if job.get('material_source'):
@@ -26,8 +27,13 @@ def run(job):
         profiles = read_profiles(job['material_source'], job['material_source_sha256'])
         if unsupported(profiles):
             raise ValueError('Unsupported material profiles: ' + repr(unsupported(profiles)))
+        if any(p.get('requires_effect_payload') for p in profiles):
+            from material_effect_export import prepare
+            effects = prepare(job)
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
     rig, rig_selection = isolate(source)
+    from source_repairs import apply as apply_repair
+    source_repair = apply_repair(job['source_sha256'], job['actions'].values())
     replacements = []
     for replacement in job.get('verified_texture_replacements', []):
         from array import array
@@ -73,9 +79,13 @@ def run(job):
                 track.mute = True
             bpy.context.scene.frame_set(int(rig.animation_data.action.frame_range[0]))
             from scvi_response_bake import bake
-            response = bake(Path(job['output']) / 'response')
+            response = bake(Path(job['output']) / 'response', exclude={e['material'] for e in effects})
             from battle_3d_export_probe import bake_color_materials
             baked = bake_color_materials(pbr=True)
+    effect_payload = None
+    if effects:
+        from material_effect_export import finish
+        effect_payload = finish(effects, Path(job['output']) / 'effects')
     rig.animation_data_create()
     rig.animation_data.action = None
     for bone in rig.pose.bones:
@@ -124,6 +134,7 @@ def run(job):
         'glb_sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload),
         'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
         'rig_selection': rig_selection,
+        'source_repair': source_repair,
         'material_profiles': profiles,
         'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
         'material_limitations': ('PBR plus supported shadow-colour response baked at idle; alpha, emission and material animation remain unported'
@@ -132,6 +143,11 @@ def run(job):
         response['glb_sha256'] = report['glb_sha256']
         response['source_sha256'] = job['source_sha256']
         report['material_response'] = response
+    if effect_payload is not None:
+        effect_payload['glb_sha256'] = report['glb_sha256']
+        report['material_effects'] = effect_payload
+        report['material_limitations'] = ('PBR response plus source-driven layered smoke/fire reconstruction; '
+            'colour-domain baking and mask/displacement semantics are not bit-exact original-game shader parity')
     (Path(job['output']) / 'export.json').write_text(json.dumps(report, indent=2))
 
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe gecontroleerde 3D-modelpakketten kunnen nu bewegende rook- en vuureffecten tonen met transparantie. Bestaande modelpakketten worden niet automatisch vervangen.
+
 - Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
 
 - De vrouwelijke Wishmaker Outfit verschijnt nu correct op Trainer Cards en bij trainertekst in battles.

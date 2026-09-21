@@ -38,12 +38,20 @@ class BatchHardeningTests(unittest.TestCase):
              'textures':dict.fromkeys(['BaseColorMap','LayerMaskMap','DisplacementMap'],'any.bntx')}
         p=classify(m)
         self.assertEqual(p['profile'],LAYERED)
-        self.assertFalse(p['export_supported'])
+        self.assertTrue(p['export_supported'])
+        self.assertTrue(p['requires_effect_payload'])
         m['name']='other';m['shaders'][0]['values']['EnableAlphaTest']='True'
         self.assertTrue(classify(m)['alpha_test'])
         del m['textures']['LayerMaskMap']
         self.assertEqual(classify(m)['profile'],'unreviewed_source_shader')
         self.assertFalse(classify(m)['export_supported'])
+
+    def test_drowse_requires_complete_enter_loop_exit_family(self):
+        names=['pm0999_00_kw20_drowse'+phase+'01.gfbanm' for phase in 'ABC']
+        self.assertEqual(candidates(names)['sleep'],[names[1]])
+        self.assertEqual(candidates(names[1:])['sleep'],[])
+        self.assertEqual(candidates(names[:2])['sleep'],[])
+        self.assertEqual(candidates([names[1]])['sleep'],[])
 
 
 if __name__ == '__main__': unittest.main()
