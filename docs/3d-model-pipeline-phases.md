@@ -635,3 +635,36 @@ checkpoint establishes a causal opacity correction and a displacement probe,
 not the final shader. NonDirectional lighting, animated UV/TRACM interpretation,
 verified displacement behaviour and Godot representation remain unresolved.
 Do not promote this probe to the runtime converter based on these stills.
+
+### Phase 5B — auxiliary material-loop probe
+
+The battle-idle TRACM animates eyes, not smoke. The separate SCVI file
+`pm0092_00_00_28201_loop01_loop.tracm` supplies smoke `UVScaleOffset` and
+`UVScaleOffset3`: 121 frames at 60 fps, with matching endpoint keys for a
+two-second texture cycle. The narrow `scvi_uv_probe.py` reader follows the
+[TRACM schema](https://github.com/pkZukan/PokeDocs/blob/master/SV/Flatbuffers/animation/tracm.fbs).
+It accepts only reviewed constant/affine channels and rejects unsupported
+interpolation metadata, ambiguous tracks and incomplete endpoints.
+
+`--ambient-material-probe` requires the previous displacement probe and adds
+an explicitly experimental unlit source-colour shader. The UV1 mask / UV2
+displacement association remains a hypothesis, not established game parity.
+The source UVs remain unchanged: displacement uses a third local UV layer.
+No source files are saved and nothing is enabled in the runtime converter.
+
+Evidence in slot-c `.tmp/phase5-material-probe-03/`:
+
+- All ten models render; the 43 non-Gastly stills are pixel-identical to
+  `.tmp/phase5-source-review-05/`.
+- Twelve distinct Gastly frames isolate material motion with the skeleton
+  frozen. The gallery includes a looping WebP preview.
+- Blender checks pass for movement, wrap/repeat evaluation, native UV and
+  geometry preservation, unrelated materials and unchanged source hashes.
+- 27 focused Python tests cover the decoder, probe guards, animated gallery
+  labelling and existing source-review/import tooling.
+
+Visual review still rejects Gastly: the moving shell obscures the face and
+does not yet establish the intended smoke appearance. This is reproducible
+diagnostic evidence, not a finished shader. Next resolve mask/UV/displacement
+semantics before Godot conversion and battle certification. Phase 5B remains
+open; the runtime allowlist is unchanged.

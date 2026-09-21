@@ -68,6 +68,23 @@ def run_entry(entry, args):
                         path = material_path.parent / Path(name).with_suffix('.png')
                         material['displacement_image'] = str(path)
                         material['displacement_sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+                if getattr(args, 'ambient_material_probe', False):
+                    from scvi_uv_probe import read_uv_tracks, validate_loop
+                    names = {m['name'] for m in job['material_probe_metadata'] if eligible(m)}
+                    matches = []
+                    if names:
+                        for path in sorted(Path(entry['motion_dir']).glob('*loop01_loop.tracm')):
+                            data = read_uv_tracks(path)
+                            data['tracks'] = [t for t in data['tracks'] if t['material'] in names]
+                            if data['tracks']:
+                                validate_loop(data)
+                                matches.append((path, data))
+                        if len(matches) != 1:
+                            raise ValueError('Auxiliary material loop missing or ambiguous')
+                        path, data = matches[0]
+                        job['ambient_material_probe'] = data
+                        job['ambient_source'] = str(path)
+                        job['ambient_sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
             else:
                 job['material_probe_metadata'] = []
         job_path = directory / 'job.json'
@@ -97,9 +114,13 @@ def main():
                         help='Experimental opacity-only A/B review; never approves shader parity')
     parser.add_argument('--displacement-probe', action='store_true',
                         help='Also test native displacement texture with UV2 and centered height (unverified hypothesis)')
+    parser.add_argument('--ambient-material-probe', action='store_true',
+                        help='Also test source auxiliary UV loop and NonDirectional lighting hypothesis')
     args = parser.parse_args()
     if args.displacement_probe and not args.layer_mask_probe:
         parser.error('--displacement-probe requires --layer-mask-probe')
+    if args.ambient_material_probe and not args.displacement_probe:
+        parser.error('--ambient-material-probe requires --displacement-probe')
     for name, value in vars(args).items():
         if isinstance(value, Path):
             setattr(args, name, value.resolve())
@@ -114,6 +135,7 @@ def main():
     (args.output / 'catalog.json').write_text(json.dumps({'schema': 1, 'approval': False,
         'material_probe': args.layer_mask_probe,
         'displacement_probe': args.displacement_probe,
+        'ambient_material_probe': args.ambient_material_probe,
         'scope': 'source_materials_not_godot_conversion', 'entries': results}, indent=2))
     from phase5_review_gallery import build
     build(args.output)

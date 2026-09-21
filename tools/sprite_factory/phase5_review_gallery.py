@@ -14,6 +14,7 @@ def build(output):
     catalog = json.loads((output / 'catalog.json').read_text())
     rows = []
     sheets = []
+    motion_previews = []
     for index, entry in enumerate(catalog['entries']):
         if index % 5 == 0:
             sheet = Image.new('RGB', (1200, 1160), '#101822')
@@ -25,6 +26,19 @@ def build(output):
         draw.text((10, y + 22), label + '\nNot battle approved', fill='#ffd27b')
         row = '<tr><th>' + html.escape(entry['species']) + '<br>' + label + '</th>'
         report = json.loads(Path(entry['report']).read_text()) if entry.get('report') else {}
+        if report.get('ambient_frames'):
+            frames = []
+            for frame in report['ambient_frames']:
+                with Image.open(output / 'review' / entry['species'] / frame['image']) as im:
+                    frames.append(im.convert('RGB'))
+            relative = Path('review') / entry['species'] / 'ambient.webp'
+            duration = report['ambient_material_probe']['duration_seconds']
+            frames[0].save(output / relative, format='WEBP', save_all=True,
+                           append_images=frames[1:], lossless=True, loop=0,
+                           duration=round(duration * 1000 / len(frames)))
+            motion_previews.append('<h2>' + html.escape(entry['species']) +
+                ' — auxiliary material loop</h2><p>Skeleton frozen. Experimental shader, not runtime approved.</p>' +
+                '<img width="320" src="' + relative.as_posix() + '">')
         if report:
             dimensions = [round(b - a, 3) for a, b in zip(*report['review_bounds'])]
             draw.text((10, y + 65), 'XYZ units\n' + '\n'.join(map(str, dimensions)), fill='white')
@@ -49,7 +63,7 @@ def build(output):
         ('<p>EXPERIMENTAL MATERIAL PROBE. Not original source shading. Displacement, UV motion and shader parity remain unapproved.</p>'
          if catalog.get('material_probe') else '') + '<p>Normal variants. Auto-fit cameras; images do not show relative battle scale. '
         'Original coordinates preserved. No grounding correction. Source materials, not Godot material conversion. '
-        'No model is approved by this report.</p><table>' + ''.join(rows) + '</table>')
+        'No model is approved by this report.</p>' + ''.join(motion_previews) + '<table>' + ''.join(rows) + '</table>')
 
 
 if __name__ == '__main__':
