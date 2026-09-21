@@ -199,7 +199,9 @@ def main(job):
         if summary and summary["blendshape_tracks"]:
             channel_warnings.append(
                 f"unapplied_tracm_blendshape:{category}:{summary['blendshape_tracks']}")
+    import hashlib
     report = {"species": job["species"], "identity": identity, "variant": job["variant"],
+              "prepared_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
               "blender": bpy.app.version_string, "rig": rig.name,
               "meshes": [obj.name for obj in bpy.data.objects if obj.type == "MESH"],
               "materials": [mat.name for mat in bpy.data.materials],

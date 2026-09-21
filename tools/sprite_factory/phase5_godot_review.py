@@ -65,7 +65,7 @@ def prepare_entries(catalog):
             raise ValueError('Invalid review action mapping')
         result.append({'species': name, 'status': 'pending', 'source': job['source'],
                        'source_sha256': digest, 'actions': actions,
-                       **{k: job[k] for k in ('material_source', 'material_source_sha256', 'effect_motion_dir') if k in job},
+                       **{k: job[k] for k in ('material_source', 'material_source_sha256', 'effect_motion_dir', 'identity_intake') if k in job},
                        'missing_actions': sorted(REQUIRED - actions.keys())})
     return result
 
@@ -104,6 +104,10 @@ def main():
             command.insert(5, '--filesystem=' + str(Path(entry['material_source']).parent) + ':ro')
         if entry.get('effect_motion_dir'):
             command.insert(5, '--filesystem=' + entry['effect_motion_dir'] + ':ro')
+        if entry.get('identity_intake'):
+            from scvi_identity import export_read_paths
+            for path in export_read_paths(entry):
+                command.insert(5, '--filesystem=' + path + ':ro')
         try:
             with (directory / 'export.log').open('w') as log:
                 subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=600, check=True)

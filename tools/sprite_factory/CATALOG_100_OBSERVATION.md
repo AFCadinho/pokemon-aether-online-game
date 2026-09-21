@@ -33,6 +33,13 @@ the next hardening candidates only after their source semantics are established.
 
 ## Important source-identity finding
 
+**Follow-up correction:** the supplied resource catalog explicitly identifies
+these models. Our batch incorrectly treated several resource IDs as National
+Dex IDs. For example, `pm0801` maps to internal species 747 (Mareanie), not
+Magearna. The original visual description below was provisional and incorrectly
+called it Cursola-like. There is no evidence here of a corrupt/mislabelled dump.
+See [SCVI_IDENTITY.md](SCVI_IDENTITY.md) for the verified lookup and hard gate.
+
 The technical 92/100 result is **not** a 92-model approval result. The static
 gallery exposed a separate source-integrity boundary: some supplied SCVI-dump
 directories cannot currently be trusted to mean the National Pokédex number we
