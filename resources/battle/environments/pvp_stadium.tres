@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/battle/battle_environment_profile.gd" id="1_profile"]
 [ext_resource type="Texture2D" path="res://assets/background/battle/pvp_stadium_fallback.jpg" id="2_background"]
 [ext_resource type="VideoStream" path="res://assets/video/battle/pvp_stadium.ogv" id="3_video"]
 [ext_resource type="Texture2D" path="res://assets/background/platform/pvp_stadium_platform.png" id="4_platform"]
+[ext_resource type="Texture2D" path="res://assets/background/battle/pvp_stadium_rendered_fallback.jpg" id="5_rendered_background"]
+[ext_resource type="VideoStream" path="res://assets/video/battle/pvp_stadium_rendered.ogv" id="6_rendered_video"]
 
 [resource]
 resource_name = "PvP Stadium Battle Environment"
@@ -13,3 +15,5 @@ arena_3d_id = "stadium"
 background_texture = ExtResource("2_background")
 background_video = ExtResource("3_video")
 platform_texture = ExtResource("4_platform")
+rendered_arena_background_texture = ExtResource("5_rendered_background")
+rendered_arena_background_video = ExtResource("6_rendered_video")
