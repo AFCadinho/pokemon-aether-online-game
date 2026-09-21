@@ -9,8 +9,8 @@ static func apply(battle: Control) -> void:
 	battle.set_meta("immersive_battle_ui", true)
 	battle.get_node("%CalcPanel").set_meta("immersive_calculator", true)
 	var calc_scroll: ScrollContainer = battle.get_node("%CalcPanel/CalcScroll")
-	calc_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	calc_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	calc_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	calc_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var typography := preload("res://scripts/battle/battle_ui/immersive_typography.gd").new()
 	typography.name = "ImmersiveTypography"
 	typography.battle = battle

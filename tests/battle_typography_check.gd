@@ -43,6 +43,7 @@ func _run() -> void:
 	battle.enemy_sprite_box.set_single_pokemon_species("Dragonite", "front")
 	var pokemon := {"species":"Arcanine","level":100,"hp":321,"max_hp":321,"ability":"Intimidate","nature":"Hardy","stats":{"atk":256,"def":196,"spa":236,"spd":196,"spe":226},"moves":[{"move":"Flamethrower","pp":15,"maxpp":15}, {"move":"Extreme Speed","pp":5,"maxpp":5}]}
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	root.mode = Window.MODE_WINDOWED
 	for dimensions in [Vector2i(1280,720),Vector2i(1920,1080),Vector2i(2560,1440)]:
 		root.size = dimensions
 		for frame in 5:
@@ -91,23 +92,44 @@ func _run() -> void:
 		battle.calc_panel.show()
 		battle.calc_panel.show_response({"success":true,"direction":battle.calc_panel.get_matchup_selection().direction,"attacker":{"species":"Dragonite","level":100,"relation":"viewer"},"defender":{"species":"Roaring Moon","level":100,"relation":"opponent","hp":351,"maxHp":351},"results":[{"move":{"name":"Outrage","type":"Dragon","category":"Physical"},"minPercent":40.0,"maxPercent":50.0,"shortLabel":"40–50%","hkoLabel":"2HKO"}]})
 		battle._update_calc_drawer_layout()
+		var four_moves: Dictionary = battle.calc_panel.last_response.duplicate(true)
+		for move_name in ["Earthquake", "Fire Punch", "Dragon Dance"]:
+			var row: Dictionary = four_moves.results[0].duplicate(true)
+			row.move.name = move_name
+			four_moves.results.append(row)
+		battle.calc_panel.show_response(four_moves)
 		for frame in 20:
 			await process_frame
 		var frame_rect: Rect2 = battle.battle_frame.get_global_rect()
 		assert(frame_rect.encloses(battle.calc_drawer.get_global_rect()),"Calculator must remain inside battle frame")
 		var workspace = battle.calc_panel.content.get_node("CalcdexWorkspace")
-		assert(workspace is VBoxContainer)
-		var inspector = workspace.get_node("CalcdexInspectorPanel")
-		assert(not inspector.visible)
-		for child in workspace.get_children():
-			if child is Button:
-				child.button_pressed = true
-		assert(inspector.visible)
+		assert(workspace.has_node("ResultsScroll") and workspace.has_node("SettingsScroll"))
+		assert(workspace.overview_scroll.visible)
+		if dimensions.x == 1280:
+			assert(workspace.compact, "Small windows must use Results/Settings navigation")
+		assert(workspace.overview_scroll.get_v_scroll_bar().max_value <= workspace.overview_scroll.size.y + 2,"Four move results must fit without vertical scrolling")
+		if workspace.compact:
+			assert(not workspace.inspector_scroll.visible)
+			workspace.settings_button.pressed.emit()
+			for frame in 3:
+				await process_frame
+			assert(workspace.inspector_scroll.visible and not workspace.overview_scroll.visible)
+			battle.calc_panel.show_response(four_moves)
+			for frame in 5:
+				await process_frame
+			workspace = battle.calc_panel.content.get_node("CalcdexWorkspace")
+			assert(workspace.settings_selected,"Recalculation must preserve Settings navigation")
+			workspace.results_button.pressed.emit()
+			for frame in 3:
+				await process_frame
+		else:
+			assert(workspace.inspector_scroll.visible)
+			assert(not workspace.overview_scroll.get_global_rect().intersects(workspace.inspector_scroll.get_global_rect()))
+		assert(battle.calc_panel.get_node("CalcScroll").vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED)
 		if not output.is_empty() and DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("calculator-"+str(dimensions.x)+".png"))
 		battle.calc_drawer.hide()
-		battle.calc_panel.immersive_details_open = false
 		print("IMMERSIVE_CALCULATOR_OK ",dimensions)
 	host.release()
 	host.queue_free()
