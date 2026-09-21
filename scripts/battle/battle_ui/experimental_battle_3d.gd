@@ -4,6 +4,7 @@ extends Control
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
+const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
 const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_placement.gd")
 const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
@@ -59,6 +60,8 @@ var resting := [true, true]
 var mode_label: Label
 var pending_entries: Array = []
 var import_times_ms := {}
+var model_cache_hits := 0
+var catalog_read_ms := 0.0
 var loading_path := ""
 var loading_entry := {}
 var loading_started := 0
@@ -130,7 +133,8 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		if progress != last_progress and timeout_ms > 0:
 			deadline = Time.get_ticks_msec() + timeout_ms
 			last_progress = progress.duplicate(true)
-		preparation_metrics = {"elapsed_ms":Time.get_ticks_msec()-started,"phase":preparation_phase,"forest_load_ms":ArenaCatalog.forest_load_ms}
+		preparation_metrics = {"elapsed_ms":Time.get_ticks_msec()-started,"phase":preparation_phase,"forest_load_ms":ArenaCatalog.forest_load_ms,
+			"model_cache_hits": model_cache_hits, "catalog_read_ms": catalog_read_ms, "model_import_ms": import_times_ms.duplicate()}
 		if preparation_cancelled or preparation_failed:
 			warming_render = false
 			return
@@ -434,10 +438,13 @@ func _find_player(node: Node) -> AnimationPlayer:
 	return null
 
 func _load_catalog(path: String) -> void:
+	var catalog_started := Time.get_ticks_usec()
 	_cancel_load()
 	loaded_path = path
 	pending_entries.clear()
 	import_times_ms.clear()
+	model_cache_hits = 0
+	catalog_read_ms = 0.0
 	catalog_problem = "Invalid 3D catalog; choose a prepared preview report in Settings"
 	reason = catalog_problem
 	entries.clear()
@@ -485,15 +492,21 @@ func _load_catalog(path: String) -> void:
 			continue
 		if not pending_entries.any(func(item): return item.species == entry.species):
 			var ground: Dictionary = calibration.get(entry.species,{})
-			var placement := ModelPlacement.resolve(entry, ground, FileAccess.get_sha256(model_path))
+			var runtime_hash := FileAccess.get_sha256(model_path)
+			var placement := ModelPlacement.resolve(entry, ground, runtime_hash)
 			if placement.is_empty():
 				catalog_problem = "Invalid model placement: " + str(entry.species)
 				continue
 			placements[entry.species] = placement
-			motion_clips[entry.species] = MotionPlacement.resolve(MOTION_PROFILES.data.get(entry.species, {}), placement, FileAccess.get_sha256(model_path), timing)
+			motion_clips[entry.species] = MotionPlacement.resolve(MOTION_PROFILES.data.get(entry.species, {}), placement, runtime_hash, timing)
+			entry["_verified_runtime_hash"] = runtime_hash
+			entry["_source_bytes"] = model_file.get_length()
+			# External dependencies are not covered by a scene-file hash.
+			entry["_resource_cache_key"] = ModelCache.key(model_path, runtime_hash, timing) if ResourceLoader.get_dependencies(model_path).is_empty() else ""
 			if placement.calibrated:
 				ground_offsets[entry.species] = placement
 			pending_entries.append(entry)
+	catalog_read_ms = (Time.get_ticks_usec() - catalog_started) / 1000.0
 	if not pending_entries.is_empty():
 		catalog_problem = ""
 		reason = "Preparing local 3D models…"
@@ -506,6 +519,15 @@ func _import_next_model() -> void:
 		if pending_entries.is_empty():
 			return
 		loading_entry = pending_entries.pop_front()
+		var cache_key := str(loading_entry.get("_resource_cache_key", ""))
+		var cached: PackedScene = ModelCache.fetch(cache_key) if not cache_key.is_empty() else null
+		if cached != null:
+			packed[loading_entry.species] = cached
+			entries[loading_entry.species] = loading_entry.duplicate(true)
+			import_times_ms[loading_entry.species] = 0.0
+			model_cache_hits += 1
+			loading_entry.clear()
+			return
 		loading_path = loading_entry.runtime_path
 		loading_started = Time.get_ticks_usec()
 		if ResourceLoader.load_threaded_request(loading_path, "PackedScene", false, ResourceLoader.CACHE_MODE_IGNORE) != OK:
@@ -519,9 +541,17 @@ func _import_next_model() -> void:
 	if status == ResourceLoader.THREAD_LOAD_LOADED:
 		var scene := ResourceLoader.load_threaded_get(loading_path) as PackedScene
 		if scene != null:
+			if FileAccess.get_sha256(loading_path) != str(loading_entry.get("_verified_runtime_hash", "")):
+				catalog_problem = "Prepared 3D model changed during loading; select the catalog again"
+				loading_path = ""
+				loading_entry.clear()
+				return
 			packed[loading_entry.species] = scene
 			entries[loading_entry.species] = loading_entry.duplicate(true)
 			import_times_ms[loading_entry.species] = (Time.get_ticks_usec() - loading_started) / 1000.0
+			var cache_key := str(loading_entry.get("_resource_cache_key", ""))
+			if not cache_key.is_empty():
+				ModelCache.retain(cache_key, scene, int(loading_entry._source_bytes))
 	elif status == ResourceLoader.THREAD_LOAD_FAILED:
 		catalog_problem = "Could not load prepared 3D model: " + str(loading_entry.species)
 		ResourceLoader.load_threaded_get(loading_path)
@@ -662,6 +692,7 @@ func _process(delta: float) -> void:
 	mode_label.text = ("3D · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if not pending_entries.is_empty() or not loading_path.is_empty() else "2.5D · " + reason)
 	mode_label.tooltip_text = reason + (" · " + arena_problem if not arena_problem.is_empty() else "")
 	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+		ModelCache.clear() # Explicitly leaving 3D releases retained resources.
 		_set_active(false)
 		_cancel_load()
 		pending_entries.clear()
