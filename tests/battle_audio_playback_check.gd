@@ -13,7 +13,7 @@ class Presenter extends Node:
 	var delayed := false
 	func handles(_ident: String) -> bool:
 		return true
-	func attack_action_for(_move: String) -> String:
+	func attack_action_for(_move: String, _actor: String = "") -> String:
 		return "physical_attack"
 	func start_action(_actor: String, _action: String) -> void:
 		pass

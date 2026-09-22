@@ -7,6 +7,7 @@ const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.g
 const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
+const AttackSelection = preload("res://scripts/battle/animations/model_attack_selection.gd")
 const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_placement.gd")
 const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
@@ -272,13 +273,19 @@ var playback_speed := 1.0
 var move_categories := {}
 const CAMERA_HOME := Vector3(4, 5.5, 12)
 
-func attack_action_for(move_name: String) -> String:
+func attack_action_for(move_name: String, actor: String = "") -> String:
 	if move_categories.is_empty():
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/move_summary_index.json"))
 		if parsed is Dictionary:
 			move_categories = parsed
-	var key := move_name.strip_edges().to_lower().replace(" ", "-").replace("_", "-")
-	return "physical_attack" if str(move_categories.get(key, {}).get("category", "")).to_lower() == "physical" else "special_attack"
+	var key := AttackSelection.move_key(move_name)
+	if str(move_categories.get(key, {}).get("category", "")).to_lower() != "physical":
+		return "special_attack"
+	var family_actions := {}
+	var index := actor_index(actor)
+	if index >= 0 and index < identities.size() and entries.has(identities[index]):
+		family_actions = entries[identities[index]].get("attack_family_actions", {})
+	return AttackSelection.request_for(key, family_actions)
 
 func set_combatant(index: int, species: String, shiny := false, force := false) -> void:
 	var normalized := species.to_lower().replace(" ", "-")
@@ -615,6 +622,7 @@ func _load_catalog(path: String) -> void:
 		if not reviewed.is_empty():
 			entry.placement = reviewed.placement
 			entry.action_timing = reviewed.action_timing
+			entry.attack_family_actions = reviewed.get("attack_family_actions", {})
 			if ReviewedModels.is_screened(identity, str(entry.get("runtime_sha256", ""))):
 				entry["_screened_model"] = true
 			else:

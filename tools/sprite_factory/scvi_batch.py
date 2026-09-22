@@ -21,15 +21,21 @@ from PIL import Image, ImageStat
 CATEGORIES = {
     "idle": ("battlewait01_loop", "defaultwait01_loop"),
     "physical_attack": ("attack01",),
+    # SCVI commonly authors a second physical motion in the same posture bank.
+    # Its semantic meaning is species-specific and must be reviewed separately;
+    # intake preserves it without guessing that it means bite/claw/etc.
+    "physical_attack_2": ("attack02",),
     "special_attack": ("rangeattack01",),
     "damage": ("damage01",),
     "sleep": ("sleep01_loop",),
     "faint_start": ("down01_start",),
     "faint_loop": ("down01_loop",),
 }
+OPTIONAL_CATEGORIES = {"physical_attack_2"}
 PREFIX_PRIORITY = ("2", "0", "1")
 LOOPS = {"idle", "sleep", "faint_loop"}
-SPEED = {"idle": 1.0, "physical_attack": 1.5, "special_attack": 1.5,
+SPEED = {"idle": 1.0, "physical_attack": 1.5, "physical_attack_2": 1.5,
+         "special_attack": 1.5,
          "damage": 1.0, "sleep": 1.0, "faint_start": 2.0, "faint_loop": 1.0}
 EXPECTED_IMPORTER = "b0c98d9fcaab85a04ad35e2d111bae4cad6c1e04"
 
@@ -181,6 +187,8 @@ def source_entry(entry, model_root, motion_root):
                 raise ValueError(f'Motion override crosses idle bank: {identity} {category}')
         elif len(matches) == 1:
             chosen[category] = str(matches[0])
+        elif category in OPTIONAL_CATEGORIES and not matches:
+            chosen[category] = None
         else:
             chosen[category] = None
             selection_holds.append('motion_bank_hold:' + category + ':' +
@@ -197,7 +205,8 @@ def source_entry(entry, model_root, motion_root):
         warnings.append("missing_all_motions")
     if not rare or not (model / (identity + "_rare.trmtr")).is_file():
         warnings.append("missing_official_rare_albedo")
-    warnings += ["missing_action:" + name for name, value in chosen.items() if value is None]
+    warnings += ["missing_action:" + name for name, value in chosen.items()
+                 if value is None and name not in OPTIONAL_CATEGORIES]
     channels = {}
     for category, value in chosen.items():
         companion = Path(value).with_suffix(".tracm") if value else None
@@ -294,7 +303,7 @@ def import_one(args):
            "facial_baseline_frame": item.get("facial_baseline_frame", 0),
            "facial_baseline_categories": item.get(
                "facial_baseline_categories",
-               ["idle", "physical_attack", "special_attack", "damage"]),
+               ["idle", "physical_attack", "physical_attack_2", "special_attack", "damage"]),
            "variant": args.variant, "output": str(blend), "report": str(report),
            "importer": str(args.importer), "python_deps": str(args.python_deps),
            "importer_commit": EXPECTED_IMPORTER,

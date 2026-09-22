@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De 3D-modelpipeline kan een tweede gereviewde fysieke aanval bewaren, zonder die vóór classificatie automatisch aan moves toe te wijzen.
+
 - Wilde immersive battles tonen nu rechtsboven de Pokémon HOME-afbeelding van de tegenstander in plaats van een leeg trainerportret.
 
 - Het menu-icoon van immersive battles staat nu linksboven op je trainerportret, vrij van de side field indicators.

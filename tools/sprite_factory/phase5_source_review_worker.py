@@ -60,9 +60,16 @@ def run(job, material_intervention=None, camera_bounds=None):
     from source_repairs import apply as apply_repair
     report['source_repair'] = apply_repair(job['source_sha256'], mapping.values())
     poses = []
-    for category, fraction, view in [('idle', 0.0, 'front'), ('idle', 0.5, 'back'),
-                                      ('special_attack', 0.5, 'front'), ('sleep', 0.5, 'front'),
-                                      ('faint_start', 1.0, 'front')]:
+    pose_specs = [('idle', 0.0, 'front', ''), ('idle', 0.5, 'back', ''),
+                  ('physical_attack', 0.25, 'front', 'early'),
+                  ('physical_attack', 0.5, 'front', ''),
+                  ('physical_attack', 0.75, 'front', 'late'),
+                  ('physical_attack_2', 0.25, 'front', 'early'),
+                  ('physical_attack_2', 0.5, 'front', ''),
+                  ('physical_attack_2', 0.75, 'front', 'late'),
+                  ('special_attack', 0.5, 'front', ''), ('sleep', 0.5, 'front', ''),
+                  ('faint_start', 1.0, 'front', '')]
+    for category, fraction, view, sample in pose_specs:
         action = bpy.data.actions.get(mapping.get(category, ''))
         if action is None:
             report['poses'].append({'category': category, 'view': view, 'status': 'missing_or_ambiguous'})
@@ -73,7 +80,7 @@ def run(job, material_intervention=None, camera_bounds=None):
         if evaluate_material:
             evaluate_material(frame / report['fps'])
         box = bounds()
-        poses.append((category, view, action, frame, box))
+        poses.append((category, view, action, frame, box, sample))
     if not poses:
         raise ValueError('No unambiguous representative actions')
     low = Vector([min(pose[4][axis][0] for pose in poses) for axis in range(3)])
@@ -113,7 +120,7 @@ def run(job, material_intervention=None, camera_bounds=None):
     data.type = 'ORTHO'
     data.ortho_scale = size
     data.clip_end = max(1000, size * 20)
-    for category, view, action, frame, box in poses:
+    for category, view, action, frame, box, sample in poses:
         select_action(rig, action)
         scene.frame_set(int(frame), subframe=frame % 1)
         if evaluate_material:
@@ -121,10 +128,10 @@ def run(job, material_intervention=None, camera_bounds=None):
         direction = Vector((3, -7, 2) if view == 'front' else (-3, 7, 2)).normalized()
         camera.location = target + direction * size * 3
         camera.rotation_euler = (target - camera.location).to_track_quat('-Z', 'Y').to_euler()
-        filename = category + '-' + view + '.png'
+        filename = category + ('-' + sample if sample else '') + '-' + view + '.png'
         scene.render.filepath = str(output / filename)
         bpy.ops.render.render(write_still=True)
-        report['poses'].append({'category': category, 'view': view, 'action': action.name,
+        report['poses'].append({'category': category, 'sample': sample, 'view': view, 'action': action.name,
                                 'frame': frame, 'bounds': box, 'image': filename, 'status': 'rendered'})
     if evaluate_material:
         # Freeze the skeleton: image changes must come from material motion alone.

@@ -8,7 +8,7 @@ class Presenter extends Node:
 	var delayed := false
 	func handles(ident: String) -> bool:
 		return active and ident in ["p1", "p2"]
-	func attack_action_for(move: String) -> String:
+	func attack_action_for(move: String, _actor: String = "") -> String:
 		return "physical_attack" if move == "Outrage" else "special_attack"
 	func start_action(actor: String, action: String) -> void:
 		calls.append([actor, action])

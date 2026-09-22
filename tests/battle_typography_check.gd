@@ -68,7 +68,14 @@ func _run() -> void:
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("typography-"+str(dimensions.x)+".png"))
 		print("TYPOGRAPHY_OK ",dimensions)
-		assert(not battle.battle_stage.get_node("ResetCameraButton").visible)
+		var reset_camera: Control = battle.battle_stage.get_node("ResetCameraButton")
+		var turn_panel: Control = battle.battle_status_panel
+		assert(not reset_camera.visible)
+		assert(reset_camera.position.y >= turn_panel.position.y + turn_panel.size.y * turn_panel.scale.y,
+			"Camera reset must sit below the turn label")
+		assert(absf(reset_camera.position.x + reset_camera.size.x * 0.5 -
+			(turn_panel.position.x + turn_panel.size.x * turn_panel.scale.x * 0.5)) < 1.0,
+			"Camera reset must be centered under the turn label")
 		assert(battle.player_sprite_box.scale == battle.player_battle_platform.scale)
 		assert(battle.enemy_sprite_box.scale == battle.enemy_battle_platform.scale)
 		assert((battle.player_sprite_box.position - battle.player_battle_platform.position).is_equal_approx(Vector2(11,-37)*0.82))

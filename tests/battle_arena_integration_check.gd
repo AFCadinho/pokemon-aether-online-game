@@ -42,7 +42,7 @@ func _run() -> void:
 			router.model_presenter = stage
 			for move in ["Outrage", "Flamethrower"]:
 				await router.play_attack_tween_for_actor("p1", move)
-				assert(stage.current_actions[0] == stage.attack_action_for(move))
+				assert(stage.current_actions[0] == stage.attack_action_for(move, "p1"))
 				await router.play_move_animation(move, "p1", "p2")
 			assert(router.move_animation_configs.is_empty() and router.active_animation_nodes.is_empty())
 			for action in ["physical_attack","special_attack","damage","faint_start"]:

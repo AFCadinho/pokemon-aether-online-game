@@ -9,7 +9,7 @@ func begin_attack(presenter: Node, actor: String, move: String) -> void:
 	if not is_instance_valid(presenter) or not presenter.handles(actor):
 		return
 	started[actor] = move
-	presenter.start_action(actor, presenter.attack_action_for(move))
+	presenter.start_action(actor, presenter.attack_action_for(move, actor))
 
 func play_move(presenter: Node, move: String, actor: String, _target: String, options: Dictionary, audio: Node = null) -> void:
 	var owned_generation := generation

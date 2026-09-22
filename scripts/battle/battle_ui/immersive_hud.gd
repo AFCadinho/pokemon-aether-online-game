@@ -72,10 +72,15 @@ func _process(delta: float) -> void:
 	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null else area.x - 82
 	var turn_x := opponent_portrait_left - turn.size.x * turn_scale - 12
 	_place(turn, Vector2(maxf(16, turn_x), 14), turn.size, turn_scale)
-	_place(stage.get_node("ResetCameraButton"), Vector2(turn.position.x + turn.size.x * turn.scale.x - 32, turn.position.y + turn.size.y * turn.scale.y + 8), Vector2(32, 28), 1.0)
+	var reset_camera: Control = stage.get_node("ResetCameraButton")
+	var turn_extent := turn.size * turn_scale
+	_place(reset_camera, Vector2(
+		turn.position.x + (turn_extent.x - 32.0) * 0.5,
+		turn.position.y + turn_extent.y + 6.0
+	), Vector2(32, 28), 1.0)
 	var presenter = battle.animation_router.model_presenter
 	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active
-	stage.get_node("ResetCameraButton").visible = realtime_3d
+	reset_camera.visible = realtime_3d
 	if not realtime_3d:
 		_compose_sprite_battle(stage)
 		_compose_2d_team_preview()
