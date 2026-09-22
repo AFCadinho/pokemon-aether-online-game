@@ -89,9 +89,16 @@ func _request_developer_setting(endpoint: String, method: HTTPClient.Method, bod
 
 	var result: Array = await request.request_completed
 	request.queue_free()
+	var request_result := int(result[0])
 	var response_code := int(result[1])
 	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
-	var parsed: Variant = JSON.parse_string(response_text)
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": BackendErrorLocalizationService.transport_message(request_result),
+		}
+	var parsed: Variant = JSON.parse_string(response_text) if not response_text.is_empty() else null
 	if response_code < 200 or response_code >= 300:
 		var message := "%s request failed with status %s" % [label, response_code]
 		if parsed is Dictionary:
@@ -126,6 +133,10 @@ func _request_progress(trainer_id: String, begin_daily_rematch: bool) -> Diction
 			"error": "Not authenticated.",
 		}
 
+	# Trainer NPCs request their progress while a map is still assembling. Wait
+	# until the initial render work has crossed two frame boundaries so the
+	# HTTPRequest timeout does not expire during a blocked loading frame.
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
@@ -147,9 +158,16 @@ func _request_progress(trainer_id: String, begin_daily_rematch: bool) -> Diction
 
 	var result: Array = await request.request_completed
 	request.queue_free()
+	var request_result := int(result[0])
 	var response_code := int(result[1])
 	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
-	var parsed: Variant = JSON.parse_string(response_text)
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": BackendErrorLocalizationService.transport_message(request_result),
+		}
+	var parsed: Variant = JSON.parse_string(response_text) if not response_text.is_empty() else null
 	if response_code < 200 or response_code >= 300:
 		var message := "Trainer progress request failed with status %s" % response_code
 		if parsed is Dictionary:
