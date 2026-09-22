@@ -173,6 +173,8 @@ func _init() -> void:
 
 func _check_received_sound_after(source: String, dialogue_marker: String, label: String) -> void:
 	var sound_index := source.find('SfxManager.play("item_received")')
+	if sound_index < 0:
+		sound_index = source.find('call("play", "item_received")')
 	var dialogue_index := source.rfind(dialogue_marker, sound_index)
 	var dialogue_call_index := source.rfind("await show_dialogue", dialogue_index)
 	_check(
