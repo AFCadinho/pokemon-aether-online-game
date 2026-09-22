@@ -24,6 +24,7 @@ func _init() -> void:
 	_check_mimikyu_back_sprite_grounding_contract()
 	await _check_stage_scaling()
 	await _check_party_rail_interaction()
+	await _check_bag_item_styling()
 	_check_battle_selection_policy_contract()
 	quit(1 if failed else 0)
 
@@ -106,17 +107,17 @@ func _check_scene_structure() -> void:
 	var player_hud_start := scene_source.find("[node name=\"PlayerHudPanel\"")
 	var player_hud_end := scene_source.find("\n\n", player_hud_start)
 	var player_hud_block := scene_source.substr(player_hud_start, player_hud_end - player_hud_start)
-	_check_contains(player_hud_block, "offset_left = 148.0", "player HP HUD moves inward with its Pokemon")
-	_check_contains(player_hud_block, "offset_right = 460.0", "player HP HUD preserves its width after moving inward")
-	_check_contains(player_hud_block, "offset_top = 164.0", "player HP HUD follows the raised sprite box")
-	_check_contains(player_hud_block, "offset_bottom = 246.0", "player HP HUD clears the raised sprite box with a small gap")
+	_check_contains(player_hud_block, "offset_left = 164.0", "player HP HUD keeps its centered compact width")
+	_check_contains(player_hud_block, "offset_right = 444.0", "player HP HUD keeps its centered compact width")
+	_check_contains(player_hud_block, "offset_top = 158.0", "player HP HUD uses the open space above the battlefield")
+	_check_contains(player_hud_block, "offset_bottom = 228.0", "player HP HUD preserves its compact height after moving up")
 	var enemy_hud_start := scene_source.find("[node name=\"EnemyHudPanel\"")
 	var enemy_hud_end := scene_source.find("\n\n", enemy_hud_start)
 	var enemy_hud_block := scene_source.substr(enemy_hud_start, enemy_hud_end - enemy_hud_start)
-	_check_contains(enemy_hud_block, "offset_left = -460.0", "enemy HP HUD moves inward with its Pokemon")
-	_check_contains(enemy_hud_block, "offset_right = -148.0", "enemy HP HUD preserves its width after moving inward")
-	_check_contains(enemy_hud_block, "offset_top = 64.0", "enemy HP HUD sits higher to clear persistent stat badges")
-	_check_contains(enemy_hud_block, "offset_bottom = 146.0", "enemy HP HUD keeps its pill dimensions after moving up")
+	_check_contains(enemy_hud_block, "offset_left = -444.0", "enemy HP HUD keeps its centered compact width")
+	_check_contains(enemy_hud_block, "offset_right = -164.0", "enemy HP HUD keeps its centered compact width")
+	_check_contains(enemy_hud_block, "offset_top = 58.0", "enemy HP HUD uses the open space above the battlefield")
+	_check_contains(enemy_hud_block, "offset_bottom = 128.0", "enemy HP HUD preserves its compact height after moving up")
 	var sprite_box_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
 	_check_contains(sprite_box_source, "func anchor_stat_stage_panel_below", "stat badges support a HUD-relative anchor")
 	_check_contains(sprite_box_source, '"mimikyu-disguised": ["mimikyu"]', "Mimikyu Disguised resolves to its battle-sheet asset before the HOME-icon fallback")
@@ -378,9 +379,9 @@ func _check_hp_hud_structure() -> void:
 	var hud_scene_source := FileAccess.get_file_as_string(BATTLE_HUD_SCENE_PATH)
 	_check_true(not hud_scene_source.contains("PlayerTeamPanel"), "HP HUD no longer owns party indicators")
 	_check_true(not hud_scene_source.contains("PokemonSheetSlot"), "HP HUD contains only active Pokemon information")
-	_check_contains(hud_scene_source, "custom_minimum_size = Vector2(312, 82)", "both sides share the compact HUD dimensions")
-	_check_contains(hud_scene_source, "corner_radius_top_left = 36", "HP HUD uses a pill-shaped outer panel")
-	_check_contains(hud_scene_source, "corner_radius_bottom_right = 36", "HP HUD pill is rounded on every side")
+	_check_contains(hud_scene_source, "custom_minimum_size = Vector2(280, 70)", "both sides share the compact HUD dimensions")
+	_check_contains(hud_scene_source, "corner_radius_top_left = 30", "HP HUD uses a pill-shaped outer panel")
+	_check_contains(hud_scene_source, "corner_radius_bottom_right = 30", "HP HUD pill is rounded on every side")
 
 
 func _check_mimikyu_disguise_indicator_contract() -> void:
@@ -515,7 +516,8 @@ func _check_battle_selection_policy_contract() -> void:
 	_check_contains(source, "PartyGrid.should_allow_selection(", "battle delegates party interaction to tested policy")
 	_check_contains(source, "current_action_view == ActionView.PARTY", "party view drives rail selection")
 	_check_contains(source, "battle_actions_ready", "an open normal turn enables direct rail switching")
-	_check_contains(source, "battle_actions_ready = is_ready\n\t_sync_party_rail_interaction()", "opening or closing a turn immediately refreshes rail selectability")
+	var ready_method := source.get_slice("func _set_battle_actions_ready(is_ready: bool) -> void:", 1).get_slice("\nfunc ", 0)
+	_check_true(ready_method.find("_sync_party_rail_interaction()") > ready_method.find("battle_actions_ready = is_ready"), "opening or closing a turn refreshes rail selectability after updating readiness")
 	_check_contains(source, "current_action_view != ActionView.BAG", "Bag blocks direct rail switching")
 	_check_contains(source, "current_action_panel_mode == BattleActionsPanelMode.BATTLE", "Calc mode cannot select party")
 	_check_contains(source, "func _show_pvp_switch_confirmation", "accepted PvP switches replace the party row with a confirmation")
@@ -643,6 +645,36 @@ func _check_battle_selection_policy_contract() -> void:
 		'if active_species == "":',
 		"empty active species clears the sprite instead of loading an empty asset path"
 	)
+
+
+func _check_bag_item_styling() -> void:
+	var bag: MarginContainer = load("res://scripts/battle/battle_ui/bag_grid.gd").new()
+	get_root().add_child(bag)
+	await process_frame
+	bag.set_items([
+		{"itemId": "master-ball", "name": "Master Ball", "quantity": 99},
+		{"itemId": "poke-ball", "name": "Poké Ball", "quantity": 10},
+		{"itemId": "potion", "quantity": 5},
+	])
+	_check_true(bag.item_buttons.size() == 2, "styled Bag still filters capture items")
+	for button: Button in bag.item_buttons:
+		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+			_check_true(button.has_theme_stylebox_override(state), "Bag item has explicit %s styling" % state)
+		var padding := button.get_child(0) as MarginContainer
+		var row := padding.get_child(0) as HBoxContainer
+		_check_true(row.get_child(0) is TextureRect, "Bag item retains its icon")
+		_check_true(row.get_child(1) is Label, "Bag item has a separate localized name")
+		var badge := row.get_child(2) as PanelContainer
+		_check_true((badge.get_child(0) as Label).text.begins_with("×"), "Bag quantity is a separate badge")
+		_check_true(padding.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Bag row decoration does not intercept clicks")
+	bag.set_input_disabled(true)
+	for button: Button in bag.item_buttons:
+		_check_true(button.disabled, "Bag buttons stay disabled during capture requests")
+	bag.set_input_disabled(false)
+	for button: Button in bag.item_buttons:
+		_check_true(not button.disabled, "Bag buttons can be enabled again")
+	bag.queue_free()
+	await process_frame
 
 
 func _check_contains(source: String, expected: String, label: String) -> void:

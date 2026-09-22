@@ -1,0 +1,755 @@
+{
+  "schema": 1,
+  "scope": "normal_variant_identity_and_conversion_observation",
+  "summary": {
+    "requested": 100,
+    "identity_verified": 91,
+    "identity_blocked": 9,
+    "corrected_resources": [
+      "rillaboom",
+      "flapple",
+      "hoopa",
+      "decidueye",
+      "oricorio",
+      "orthworm",
+      "magearna",
+      "cinderace",
+      "corviknight",
+      "ceruledge",
+      "dondozo"
+    ],
+    "exported": 84,
+    "runtime_converted": 84,
+    "godot_error_entries": 0,
+    "rendered_frames": 420,
+    "catalog_sha256": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+    "runtime_approved": false
+  },
+  "visual_review": {
+    "scope": "All exported idle front/back contact sheets scanned; all five poses scanned for corrected identities. No detailed art or battle approval.",
+    "notes": {
+      "magearna": "Bouquet remains visible across sampled poses; source visibility needs review.",
+      "decidueye": "Arrow-like accessory remains visible across sampled poses; source visibility needs review.",
+      "cinderace": "Black effect geometry remains near the feet; visibility/material semantics need review.",
+      "gastly": "Previously documented smoke faceting/overlap remains unapproved."
+    }
+  },
+  "entries": [
+    {
+      "species": "charizard",
+      "national_dex_id": 6,
+      "resource_id": "pm0006_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "pikachu",
+      "national_dex_id": 25,
+      "resource_id": "pm0025_00_00",
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Mesh/material/skeleton differs from ROMFS: pm0025_00_00.trskl"
+    },
+    {
+      "species": "raichu",
+      "national_dex_id": 26,
+      "resource_id": "pm0026_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "jigglypuff",
+      "national_dex_id": 39,
+      "resource_id": "pm0039_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "arcanine",
+      "national_dex_id": 59,
+      "resource_id": "pm0059_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "gastly",
+      "national_dex_id": 92,
+      "resource_id": "pm0092_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "gengar",
+      "national_dex_id": 94,
+      "resource_id": "pm0094_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "gyarados",
+      "national_dex_id": 130,
+      "resource_id": "pm0130_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "eevee",
+      "national_dex_id": 133,
+      "resource_id": "pm0133_00_00",
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Mesh/material/skeleton differs from ROMFS: pm0133_00_00_rare.trmtr"
+    },
+    {
+      "species": "vaporeon",
+      "national_dex_id": 134,
+      "resource_id": "pm0134_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "jolteon",
+      "national_dex_id": 135,
+      "resource_id": "pm0135_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "flareon",
+      "national_dex_id": 136,
+      "resource_id": "pm0136_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "articuno",
+      "national_dex_id": 144,
+      "resource_id": "pm0144_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "dragonite",
+      "national_dex_id": 149,
+      "resource_id": "pm0149_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "lucario",
+      "national_dex_id": 448,
+      "resource_id": "pm0448_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "charmander",
+      "national_dex_id": 4,
+      "resource_id": "pm0004_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: UV probe only supports constant or affine channels"
+    },
+    {
+      "species": "wigglytuff",
+      "national_dex_id": 40,
+      "resource_id": "pm0040_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "venonat",
+      "national_dex_id": 48,
+      "resource_id": "pm0048_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "diglett",
+      "national_dex_id": 50,
+      "resource_id": "pm0050_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "dugtrio",
+      "national_dex_id": 51,
+      "resource_id": "pm0051_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "meowth",
+      "national_dex_id": 52,
+      "resource_id": "pm0052_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "psyduck",
+      "national_dex_id": 54,
+      "resource_id": "pm0054_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "golduck",
+      "national_dex_id": 55,
+      "resource_id": "pm0055_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "mankey",
+      "national_dex_id": 56,
+      "resource_id": "pm0056_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "primeape",
+      "national_dex_id": 57,
+      "resource_id": "pm0057_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "growlithe",
+      "national_dex_id": 58,
+      "resource_id": "pm0058_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "slowpoke",
+      "national_dex_id": 79,
+      "resource_id": "pm0079_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "magnemite",
+      "national_dex_id": 81,
+      "resource_id": "pm0081_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "magneton",
+      "national_dex_id": 82,
+      "resource_id": "pm0082_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "grimer",
+      "national_dex_id": 88,
+      "resource_id": "pm0088_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: Unsupported material profiles: [{'material': 'body', 'profile': 'unreviewed_source_shader', 'export_supported': False}]"
+    },
+    {
+      "species": "muk",
+      "national_dex_id": 89,
+      "resource_id": "pm0089_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: Unsupported material profiles: [{'material': 'body', 'profile': 'unreviewed_source_shader', 'export_supported': False}]"
+    },
+    {
+      "species": "shellder",
+      "national_dex_id": 90,
+      "resource_id": "pm0090_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "cloyster",
+      "national_dex_id": 91,
+      "resource_id": "pm0091_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "haunter",
+      "national_dex_id": 93,
+      "resource_id": "pm0093_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "drowzee",
+      "national_dex_id": 96,
+      "resource_id": "pm0096_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "hypno",
+      "national_dex_id": 97,
+      "resource_id": "pm0097_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "voltorb",
+      "national_dex_id": 100,
+      "resource_id": "pm0100_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "electrode",
+      "national_dex_id": 101,
+      "resource_id": "pm0101_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "chansey",
+      "national_dex_id": 113,
+      "resource_id": "pm0113_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "scyther",
+      "national_dex_id": 123,
+      "resource_id": "pm0123_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "tauros",
+      "national_dex_id": 128,
+      "resource_id": "pm0128_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "magikarp",
+      "national_dex_id": 129,
+      "resource_id": "pm0129_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "ditto",
+      "national_dex_id": 132,
+      "resource_id": "pm0132_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "zapdos",
+      "national_dex_id": 145,
+      "resource_id": "pm0145_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "moltres",
+      "national_dex_id": 146,
+      "resource_id": "pm0146_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: Unsupported material profiles: [{'material': 'fire_a_00', 'profile': 'unreviewed_source_shader', 'export_supported': False}, {'material': 'fire_a_01', 'profile': 'unreviewed_source_shader', 'export_supported': False}, {'material': 'fire_b', 'profile': 'unreviewed_source_shader', 'export_supported': False}]"
+    },
+    {
+      "species": "dratini",
+      "national_dex_id": 147,
+      "resource_id": "pm0147_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "dragonair",
+      "national_dex_id": 148,
+      "resource_id": "pm0148_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "mewtwo",
+      "national_dex_id": 150,
+      "resource_id": "pm0150_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "mew",
+      "national_dex_id": 151,
+      "resource_id": "pm0151_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "typhlosion",
+      "national_dex_id": 157,
+      "resource_id": "pm0157_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: Missing or ambiguous auxiliary effect loop: body_b"
+    },
+    {
+      "species": "pichu",
+      "national_dex_id": 172,
+      "resource_id": "pm0172_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "marill",
+      "national_dex_id": 183,
+      "resource_id": "pm0183_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "azumarill",
+      "national_dex_id": 184,
+      "resource_id": "pm0184_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "sudowoodo",
+      "national_dex_id": 185,
+      "resource_id": "pm0185_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "hoppip",
+      "national_dex_id": 187,
+      "resource_id": "pm0187_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "jumpluff",
+      "national_dex_id": 189,
+      "resource_id": "pm0189_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "wooper",
+      "national_dex_id": 194,
+      "resource_id": "pm0194_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "quagsire",
+      "national_dex_id": 195,
+      "resource_id": "pm0195_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "espeon",
+      "national_dex_id": 196,
+      "resource_id": "pm0196_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "umbreon",
+      "national_dex_id": 197,
+      "resource_id": "pm0197_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "murkrow",
+      "national_dex_id": 198,
+      "resource_id": "pm0198_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "misdreavus",
+      "national_dex_id": 200,
+      "resource_id": "pm0200_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "forretress",
+      "national_dex_id": 205,
+      "resource_id": "pm0205_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "qwilfish",
+      "national_dex_id": 211,
+      "resource_id": "pm0211_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "scizor",
+      "national_dex_id": 212,
+      "resource_id": "pm0212_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "heracross",
+      "national_dex_id": 214,
+      "resource_id": "pm0214_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "delibird",
+      "national_dex_id": 225,
+      "resource_id": "pm0225_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "donphan",
+      "national_dex_id": 232,
+      "resource_id": "pm0232_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "blissey",
+      "national_dex_id": 242,
+      "resource_id": "pm0242_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "tyranitar",
+      "national_dex_id": 248,
+      "resource_id": "pm0248_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "gardevoir",
+      "national_dex_id": 282,
+      "resource_id": "pm0282_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "slaking",
+      "national_dex_id": 289,
+      "resource_id": "pm0289_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "hariyama",
+      "national_dex_id": 297,
+      "resource_id": "pm0297_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "seviper",
+      "national_dex_id": 336,
+      "resource_id": "pm0336_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "rayquaza",
+      "national_dex_id": 384,
+      "resource_id": "pm0384_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "staraptor",
+      "national_dex_id": 398,
+      "resource_id": "pm0398_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "drifblim",
+      "national_dex_id": 426,
+      "resource_id": "pm0426_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "spiritomb",
+      "national_dex_id": 442,
+      "resource_id": "pm0442_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: Empty action: sleep"
+    },
+    {
+      "species": "garchomp",
+      "national_dex_id": 445,
+      "resource_id": "pm0445_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "magnezone",
+      "national_dex_id": 462,
+      "resource_id": "pm0462_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "silvally",
+      "national_dex_id": 773,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: silvally"
+    },
+    {
+      "species": "blacephalon",
+      "national_dex_id": 806,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: blacephalon"
+    },
+    {
+      "species": "rillaboom",
+      "national_dex_id": 812,
+      "resource_id": "pm0950_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "volcarona",
+      "national_dex_id": 637,
+      "resource_id": "pm0637_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "hydreigon",
+      "national_dex_id": 635,
+      "resource_id": "pm0635_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "flapple",
+      "national_dex_id": 841,
+      "resource_id": "pm0967_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "hoopa",
+      "national_dex_id": 720,
+      "resource_id": "pm0774_11_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "decidueye",
+      "national_dex_id": 724,
+      "resource_id": "pm0843_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "oricorio",
+      "national_dex_id": 741,
+      "resource_id": "pm0825_11_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "orthworm",
+      "national_dex_id": 968,
+      "resource_id": "pm1048_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "magearna",
+      "national_dex_id": 801,
+      "resource_id": "pm0882_11_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "marshadow",
+      "national_dex_id": 802,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: marshadow"
+    },
+    {
+      "species": "stakataka",
+      "national_dex_id": 805,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: stakataka"
+    },
+    {
+      "species": "cinderace",
+      "national_dex_id": 815,
+      "resource_id": "pm0956_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "corviknight",
+      "national_dex_id": 823,
+      "resource_id": "pm0920_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "alcremie",
+      "national_dex_id": 869,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: alcremie"
+    },
+    {
+      "species": "hydrapple",
+      "national_dex_id": 1019,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: hydrapple"
+    },
+    {
+      "species": "ceruledge",
+      "national_dex_id": 937,
+      "resource_id": "pm1109_00_00",
+      "identity_verified": true,
+      "exported": false,
+      "hold": "ValueError: Unsupported material profiles: [{'material': 'body_a', 'profile': 'unreviewed_source_shader', 'export_supported': False}, {'material': 'fire', 'profile': 'unreviewed_source_shader', 'export_supported': False}]"
+    },
+    {
+      "species": "dondozo",
+      "national_dex_id": 977,
+      "resource_id": "pm1035_00_00",
+      "identity_verified": true,
+      "exported": true
+    },
+    {
+      "species": "terapagos",
+      "national_dex_id": 1024,
+      "resource_id": null,
+      "identity_verified": false,
+      "exported": false,
+      "hold": "Identity absent or ambiguous in supplied catalog: terapagos"
+    }
+  ]
+}

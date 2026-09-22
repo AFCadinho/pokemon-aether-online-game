@@ -11,7 +11,7 @@ var dialogue_metadata_cache: Dictionary = {}
 var pending_dialogue_metadata_requests: Dictionary = {}
 
 
-func get_dialogue(dialogue_id: String) -> Dictionary:
+func get_dialogue(dialogue_id: String, timeout_seconds: float = 3.0) -> Dictionary:
 	var normalized_dialogue_id := dialogue_id.strip_edges()
 	if normalized_dialogue_id.is_empty():
 		return {
@@ -35,7 +35,7 @@ func get_dialogue(dialogue_id: String) -> Dictionary:
 
 	var pending := PendingRequest.new()
 	pending_dialogue_metadata_requests[cache_key] = pending
-	var response := await _fetch_dialogue_metadata(normalized_dialogue_id, locale)
+	var response := await _fetch_dialogue_metadata(normalized_dialogue_id, locale, timeout_seconds)
 	var result: Dictionary = response
 	if response.get("success", false):
 		var normalized_metadata := _normalize_dialogue_metadata(
@@ -70,12 +70,12 @@ func clear_cache() -> void:
 	dialogue_metadata_cache.clear()
 
 
-func _fetch_dialogue_metadata(dialogue_id: String, locale: String) -> Dictionary:
+func _fetch_dialogue_metadata(dialogue_id: String, locale: String, timeout_seconds: float) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var url := base_url + DIALOGUE_METADATA_ENDPOINT % dialogue_id.uri_encode()
 	var request := HTTPRequest.new()
 	add_child(request)
-	request.timeout = 3.0
+	request.timeout = timeout_seconds
 
 	var error := request.request(url, GatewayApiConfig.get_accept_headers(locale))
 	if error != OK:

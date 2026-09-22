@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "repairs": [{
+    "id": "retracted-vines-base-battle-set-v1",
+    "source_sha256": "796a83d2d0c831febccc63cf7dbe4922ac2c9b7ebfde484481977fa45b1231a1",
+    "reason": "This authored source leaves its two retractable vine meshes visible at rest. Omit them only for the reviewed base battle set, which does not include the separate rangeattack02 vine sequence. This is an explicit asset-authoring correction, not inferred native visibility metadata.",
+    "exclude_meshes": ["pm0001_00_00_right_tuta_mesh_shape", "pm0001_00_00_left_tuta_mesh_shape"],
+    "allowed_actions": [
+      "pm0001_00_00_00001_battlewait01_loop.gfbanm",
+      "pm0001_00_00_00400_attack01.gfbanm",
+      "pm0001_00_00_00450_rangeattack01.gfbanm",
+      "pm0001_00_00_00500_damage01.gfbanm",
+      "pm0001_00_00_00281_sleep01_loop.gfbanm",
+      "pm0001_00_00_00520_down01_start.gfbanm",
+      "pm0001_00_00_00521_down01_loop.gfbanm"
+    ]
+  }]
+}

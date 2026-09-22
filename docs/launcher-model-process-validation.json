@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "scope": "Linux real launcher process creation into the Godot game project; offline renderer/UI, not an exported binary or live PvP",
+  "engine": "Godot 4.6.2 Forward+",
+  "evidence_directory": "slot-c/.tmp/model-process-01",
+  "launcher_processes": 2,
+  "game_processes": 2,
+  "install_and_selection_passed": true,
+  "restart_persistence_passed": true,
+  "cold_cache_empty_preview_and_pair_passed": true,
+  "saved_game_settings_unchanged": true,
+  "catalog_sha256": "5078fd43b7695ccad5d738e4ba1bdeffa90eeae163c5e424217555f4b976f160",
+  "checks": {
+    "battles": 3,
+    "mixed_team_switches": 36,
+    "normal_duplicate_faint_replacements": 21,
+    "variant_swap_faint_eviction_reload_checks": 21,
+    "recorded_event_sequences": 3,
+    "python_tests": 21
+  },
+  "existing_5c_performance_guards_passed": true,
+  "frame_p95_ms": [17.697, 17.259, 17.274],
+  "covered_entry_max_frame_ms": 1428.034,
+  "load_callback_max_ms": 2.299,
+  "final_two_round_static_growth_bytes": 49060,
+  "warnings": ["Existing asset UID path-fallback warnings remain", "Covered first-entry frame reached 1.43 seconds; not instant or hitch-free loading"],
+  "evidence_sha256": {
+    "battles/stress.json": "4d177962c9bee59c3b4d6ea8fbc777bdf4c09567db0c69180749aa329255defd",
+    "install-result.json": "ef1dd45452d56498c4a08b532c89b9802067b70bc11aae681318704cf6492bc5",
+    "restart-result.json": "3c14ac1bfbc6550bf43fa9fe7ba3ba74b30098f79e7e698bc88e40dc26deb499",
+    "install-game.log": "b46c2261037715e0a43b2c5a58e55c9bb87a5e563f0c78fb0a7d902da128cec5",
+    "restart-game.log": "276934ae5c58da33867016ed8663c0d88afc436da9a64e89df08c2a206e3a237"
+  }
+}

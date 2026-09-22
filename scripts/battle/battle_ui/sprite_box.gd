@@ -1,9 +1,16 @@
 extends Control
 
+## Presentation-only seam. The battle state/event queue remains authoritative.
+var presentation_anchor: Callable
+var presentation_visual_rect: Callable
+
 @export var default_is_double_battle := false
 
 const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const AnimationWait := preload("res://scripts/battle/battle_animation_wait.gd")
+const DratiniHdPoc := preload("res://scripts/battle/battle_ui/dratini_hd_poc.gd")
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
+const RenderedSpriteAssets := preload("res://scripts/battle/battle_ui/rendered_sprite_assets.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
 const MIN_SHEET_FRAME_SIZE := Vector2i(16, 16)
@@ -12,6 +19,7 @@ const FRAME_ANIMATION_SPEED := 3.0
 const SHEET_ANIMATION_SPEED := 10.0
 const BATTLE_SPRITE_SCALE := Vector2(2, 2)
 const BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 0.85
+const RENDERED_BATTLE_PLATFORM_Y_OFFSET := 12.0
 const GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 1.25
 const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
@@ -99,6 +107,10 @@ var sprite_frames_cache: Dictionary = {}
 var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
+var dratini_poc_sleeping := false
+var dratini_poc_action_generation := 0
+var dratini_poc_shadow: Sprite2D
+var dratini_poc_hidden_platform_image: CanvasItem
 var current_double_web_identity: Dictionary = {}
 var web_sprite_request_generation := 0
 var web_sprite_upgrades_allowed := false
@@ -114,6 +126,8 @@ func _ready() -> void:
 	_set_sprite_filter(double_sprite_2)
 	_cache_base_sprite_positions()
 	_create_substitute_sprite()
+	if OS.get_environment("POKEAETHER_DRATINI_HD") == "1" and DratiniHdPoc.stage_variant() == "clean":
+		_create_dratini_poc_shadow()
 	set_battle_type(default_is_double_battle)
 	clear_stat_stages()
 	_snap_all_sprites_to_pixel_grid.call_deferred()
@@ -129,7 +143,29 @@ func is_mouse_over_single_sprite(mouse_position: Vector2) -> bool:
 	return get_single_sprite_hover_rect().has_point(mouse_position)
 
 func get_single_sprite_hover_rect() -> Rect2:
+	if presentation_visual_rect.is_valid():
+		return presentation_visual_rect.call()
 	return _get_sprite_hover_rect(single_sprite)
+
+
+func get_double_animation_visual_rect_in_node(target_node: CanvasItem) -> Rect2:
+	if target_node == null or double_container == null or not double_container.visible:
+		return Rect2()
+	var combined := Rect2()
+	var has_bounds := false
+	var inverse := target_node.get_global_transform().affine_inverse()
+	for sprite: AnimatedSprite2D in [double_sprite_1, double_sprite_2]:
+		if sprite == null or not sprite.visible or not sprite.is_visible_in_tree():
+			continue
+		var global_rect := _get_sprite_visual_rect_global(sprite)
+		if not global_rect.has_area():
+			continue
+		var top_left := inverse * global_rect.position
+		var bottom_right := inverse * global_rect.end
+		var local_rect := Rect2(top_left, bottom_right - top_left)
+		combined = combined.merge(local_rect) if has_bounds else local_rect
+		has_bounds = true
+	return combined
 
 func _set_sprite_filter(sprite: AnimatedSprite2D) -> void:
 	sprite.texture_filter = BATTLE_SPRITE_TEXTURE_FILTER
@@ -155,6 +191,17 @@ func _get_current_sprite_texture(sprite: AnimatedSprite2D) -> Texture2D:
 func _cache_base_sprite_positions() -> void:
 	for sprite in _get_all_sprites():
 		base_sprite_positions[_get_sprite_key(sprite)] = sprite.position
+
+
+func set_double_sprite_horizontal_positions(left_x: float, right_x: float) -> void:
+	# Co-op can tighten its two slots without changing the single battle scene.
+	for entry: Array in [[double_sprite_1, left_x], [double_sprite_2, right_x]]:
+		var sprite := entry[0] as AnimatedSprite2D
+		var position: Vector2 = _get_base_sprite_position(sprite)
+		position.x = float(entry[1])
+		base_sprite_positions[_get_sprite_key(sprite)] = position
+		sprite.position = position
+		_snap_sprite_to_pixel_grid(sprite)
 
 func _get_all_sprites() -> Array[AnimatedSprite2D]:
 	return [
@@ -209,6 +256,11 @@ func reset_battle_pose() -> void:
 	_update_stat_stage_panel_positions()
 
 func clear_pokemon() -> void:
+	_restore_dratini_poc_platform()
+	if dratini_poc_shadow != null:
+		dratini_poc_shadow.visible = false
+	dratini_poc_action_generation += 1
+	dratini_poc_sleeping = false
 	web_sprite_request_generation += 1
 	web_sprite_upgrades_allowed = false
 	_stop_active_tween()
@@ -223,7 +275,12 @@ func clear_pokemon() -> void:
 		_reset_sprite_pose(sprite)
 		sprite.visible = false
 
-func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
+func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET, move_name: String = "") -> void:
+	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action(DratiniHdPoc.attack_action(move_name)):
+		# Start beside the existing move VFX rather than delaying it by the full
+		# source action. The 0.2-second lunge tween would double the model motion.
+		_play_dratini_poc_action(DratiniHdPoc.attack_action(move_name))
+		return
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -457,6 +514,9 @@ func play_damage_tween() -> void:
 	if substitute_active and not substitute_revealed_for_move:
 		await play_substitute_damage_tween()
 		return
+	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action("damage"):
+		await _play_dratini_poc_action("damage")
+		return
 
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
@@ -634,6 +694,9 @@ func _get_stat_change_scale_multiplier(multiplier: float, motion_scale: float) -
 	return 1.0 + (multiplier - 1.0) * motion_scale
 
 func play_faint_tween() -> void:
+	if _has_dratini_poc_sprite() and _ensure_dratini_poc_action("faint_start"):
+		await _play_dratini_poc_faint()
+		return
 	var sprites := _get_visible_sprites()
 	if sprites.is_empty():
 		return
@@ -651,6 +714,149 @@ func play_faint_tween() -> void:
 	if not await AnimationWait.for_tween(self, active_tween):
 		return
 	clear_pokemon()
+
+
+func _has_dratini_poc_sprite() -> bool:
+	return (
+		single_container.visible
+		and single_sprite.visible
+		and single_sprite.sprite_frames != null
+		and (single_sprite.sprite_frames.has_meta("dratini_hd_poc") or single_sprite.sprite_frames.has_meta("rendered_asset"))
+	)
+
+
+func _create_dratini_poc_shadow() -> void:
+	var image := Image.create(96, 32, false, Image.FORMAT_RGBA8)
+	for y: int in 32:
+		for x: int in 96:
+			var dx := (float(x) - 47.5) / 47.5
+			var dy := (float(y) - 15.5) / 15.5
+			var radius_squared := dx * dx + dy * dy
+			image.set_pixel(x, y, Color(0.0, 0.0, 0.0, 0.38 * pow(maxf(0.0, 1.0 - radius_squared), 2.0)))
+	dratini_poc_shadow = Sprite2D.new()
+	dratini_poc_shadow.name = "DratiniPocGroundShadow"
+	dratini_poc_shadow.texture = ImageTexture.create_from_image(image)
+	dratini_poc_shadow.z_index = -1
+	dratini_poc_shadow.visible = false
+	single_sprite_slot.add_child(dratini_poc_shadow)
+
+
+func _restore_dratini_poc_platform() -> void:
+	if is_instance_valid(dratini_poc_hidden_platform_image):
+		dratini_poc_hidden_platform_image.visible = true
+	dratini_poc_hidden_platform_image = null
+
+
+func _sync_dratini_poc_stage_decor() -> void:
+	_restore_dratini_poc_platform()
+	if dratini_poc_shadow != null:
+		dratini_poc_shadow.visible = false
+	if not _has_dratini_poc_sprite() or single_sprite.sprite_frames.has_meta("rendered_asset") or DratiniHdPoc.stage_variant() != "clean":
+		return
+	var platform_name := "BattlePlatform" if current_single_side == "back" else "BattlePlatform2"
+	var parent_node := get_parent()
+	var platform: Node = parent_node.get_node_or_null(platform_name) if parent_node != null else null
+	var platform_image: CanvasItem = platform.get_node_or_null("PlatformImage") if platform != null else null
+	if platform_image != null:
+		platform_image.visible = false
+		dratini_poc_hidden_platform_image = platform_image
+	if dratini_poc_shadow != null:
+		var bottom_from_center := 73.0 if current_single_side == "back" else 85.0
+		dratini_poc_shadow.position = single_sprite.position + Vector2(0.0, bottom_from_center * single_sprite.scale.y + 7.0)
+		dratini_poc_shadow.scale = Vector2(1.35, 0.85) if current_single_side == "back" else Vector2(1.1, 0.65)
+		dratini_poc_shadow.visible = true
+
+
+func _play_dratini_poc_action(action: String) -> void:
+	if not _has_dratini_poc_sprite():
+		return
+	if not _ensure_dratini_poc_action(action):
+		return
+	dratini_poc_action_generation += 1
+	var generation := dratini_poc_action_generation
+	var speed: float = _rendered_action_speed(action) * playback_speed
+	single_sprite.frame = 0
+	single_sprite.play(action, speed)
+	var duration: float = float(single_sprite.sprite_frames.get_frame_count(action)) / (_dratini_poc_fps() * speed)
+	await get_tree().create_timer(duration).timeout
+	if generation == dratini_poc_action_generation and _has_dratini_poc_sprite():
+		_play_dratini_poc_resting_animation()
+
+
+func _play_dratini_poc_resting_animation() -> void:
+	if not _has_dratini_poc_sprite():
+		return
+	var action := "sleep" if dratini_poc_sleeping else "idle"
+	if not _ensure_dratini_poc_action(action):
+		# Legacy sprites only have idle; existing status VFX remain active.
+		action = "idle"
+		if not _ensure_dratini_poc_action(action):
+			return
+	single_sprite.frame = 0
+	single_sprite.play(action, _rendered_action_speed(action) * playback_speed)
+
+
+func set_dratini_poc_sleeping(sleeping: bool) -> void:
+	if not _has_dratini_poc_sprite() or dratini_poc_sleeping == sleeping:
+		return
+	dratini_poc_sleeping = sleeping
+	dratini_poc_action_generation += 1
+	_play_dratini_poc_resting_animation()
+
+
+func _play_dratini_poc_faint() -> void:
+	dratini_poc_action_generation += 1
+	if not _ensure_dratini_poc_action("faint_start"):
+		return
+	var generation := dratini_poc_action_generation
+	var speed: float = _rendered_action_speed("faint_start") * playback_speed
+	single_sprite.frame = 0
+	single_sprite.play("faint_start", speed)
+	var duration: float = float(single_sprite.sprite_frames.get_frame_count("faint_start")) / (_dratini_poc_fps() * speed)
+	await get_tree().create_timer(duration).timeout
+	if generation != dratini_poc_action_generation or not _has_dratini_poc_sprite():
+		return
+	if single_sprite.sprite_frames.has_meta("rendered_asset"):
+		if _ensure_dratini_poc_action("faint_loop"):
+			single_sprite.play("faint_loop", _rendered_action_speed("faint_loop") * playback_speed)
+		else:
+			single_sprite.stop()
+			single_sprite.frame = single_sprite.sprite_frames.get_frame_count("faint_start") - 1
+		# Scene/roster clearing still owns removal. No recovery, recall or long wait.
+		return
+	if not _ensure_dratini_poc_action("faint_hold"):
+		return
+	single_sprite.play("faint_hold")
+	await get_tree().create_timer(0.18 / playback_speed).timeout
+	if generation != dratini_poc_action_generation or not _has_dratini_poc_sprite():
+		return
+	_stop_active_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
+	active_tween.tween_property(single_sprite, "modulate:a", 0.0, 0.28)
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
+	clear_pokemon()
+
+
+func _ensure_dratini_poc_action(action: String) -> bool:
+	if _has_dratini_poc_sprite() and single_sprite.sprite_frames.has_meta("rendered_asset"):
+		return RenderedSpriteAssets.ensure_action_loaded(single_sprite.sprite_frames, action)
+	return (
+		_has_dratini_poc_sprite()
+		and DratiniHdPoc.ensure_action_loaded(single_sprite.sprite_frames, action)
+	)
+
+
+func _rendered_action_speed(action: String) -> float:
+	if single_sprite.sprite_frames.has_meta("rendered_asset"):
+		return RenderedSpriteAssets.speed_for(single_sprite.sprite_frames, action)
+	return DratiniHdPoc.speed_for(action, current_single_species)
+
+
+func _dratini_poc_fps() -> float:
+	if single_sprite != null and single_sprite.sprite_frames != null:
+		return maxf(float(single_sprite.sprite_frames.get_meta("hd_poc_fps", 12.0)), 1.0)
+	return 12.0
 
 func _stop_active_tween() -> void:
 	if active_tween != null and active_tween.is_valid():
@@ -991,9 +1197,13 @@ func _apply_sprite_anchor(sprite: AnimatedSprite2D) -> void:
 	sprite.offset = (frame_size * 0.5) - anchor
 
 func get_single_battle_anchor_global_position() -> Vector2:
+	if presentation_anchor.is_valid():
+		return presentation_anchor.call(false)
 	return _get_sprite_battle_anchor_global_position(single_sprite)
 
 func get_single_animation_anchor_global_position() -> Vector2:
+	if presentation_anchor.is_valid():
+		return presentation_anchor.call(true)
 	return _get_sprite_animation_anchor_global_position(single_sprite)
 
 func _get_sprite_battle_anchor_global_position(sprite: AnimatedSprite2D) -> Vector2:
@@ -1035,10 +1245,12 @@ func get_single_animation_anchor_in_node(target_node: CanvasItem) -> Vector2:
 	return target_node.get_global_transform().affine_inverse() * global_anchor
 
 func get_single_animation_visual_rect_in_node(target_node: CanvasItem) -> Rect2:
-	if target_node == null or single_sprite == null or not single_sprite.visible:
+	if target_node == null:
+		return Rect2()
+	if not presentation_visual_rect.is_valid() and (single_sprite == null or not single_sprite.visible):
 		return Rect2()
 
-	var visual_rect := _get_sprite_visual_rect_global(single_sprite)
+	var visual_rect: Rect2 = presentation_visual_rect.call() if presentation_visual_rect.is_valid() else _get_sprite_visual_rect_global(single_sprite)
 	var transform := target_node.get_global_transform().affine_inverse()
 	var top_left := transform * visual_rect.position
 	var bottom_right := transform * visual_rect.end
@@ -1055,12 +1267,84 @@ func prewarm_species(species: String, side: String, is_shiny: bool = false) -> v
 		return
 	_load_sprite_frames(species, side, is_shiny)
 
+
+func _load_preview_sprite_frames(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	report_missing: bool = true,
+	mipmaps: bool = false
+) -> SpriteFrames:
+	var rendered := RenderedSpriteAssets.load_preview_frames(species, side, is_shiny, mipmaps)
+	if rendered != null and bool(rendered.get_meta("rendered_preview", false)):
+		return _prepare_rendered_sprite_frames(rendered)
+	# Outside an explicit local review, player-selected content packs retain their
+	# normal priority. The regular loader applies all pack metadata consistently.
+	if ContentPacks.battle_frames(species, side, is_shiny) != null:
+		return _load_sprite_frames(species, side, is_shiny, report_missing)
+	if rendered != null:
+		return _prepare_rendered_sprite_frames(rendered)
+	return _load_sprite_frames(species, side, is_shiny, report_missing)
+
+
+func request_rendered_sprite_frames(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	on_ready: Callable = Callable(),
+	is_current: Callable = Callable(),
+	mipmaps: bool = false
+) -> SpriteFrames:
+	var prepared_ready := func(frames: SpriteFrames) -> void:
+		if on_ready.is_valid():
+			on_ready.call(_prepare_rendered_sprite_frames(frames))
+	var rendered: SpriteFrames = await RenderedSpriteAssets.load_frames_async(
+		species, side, is_shiny, prepared_ready, is_current, mipmaps
+	)
+	return _prepare_rendered_sprite_frames(rendered) if rendered != null else null
+
+
+func request_rendered_sprite_action(
+	frames: SpriteFrames,
+	action: String,
+	is_current: Callable = Callable()
+) -> bool:
+	return await RenderedSpriteAssets.ensure_action_loaded_async(frames, action, is_current)
+
 func _load_sprite_frames(
 	species: String,
 	side: String,
 	is_shiny: bool = false,
 	report_missing: bool = true
 ) -> SpriteFrames:
+	var rendered := RenderedSpriteAssets.load_frames(species, side, is_shiny)
+	# An explicitly selected local review catalog must show the asset under review,
+	# even when the player's normal profile has a sprite content pack enabled.
+	if rendered != null and bool(rendered.get_meta("rendered_preview", false)):
+		return _prepare_rendered_sprite_frames(rendered)
+	var mod_frames := ContentPacks.battle_frames(species, side, is_shiny)
+	if mod_frames != null:
+		var mod_scale := float(mod_frames.get_meta("content_pack_scale", 1.0))
+		_set_sprite_frames_render_scale(mod_frames, 1.0 / mod_scale)
+		_set_sprite_frames_display_scale_multiplier(mod_frames, mod_scale)
+		_set_sprite_frames_anchor(mod_frames, mod_frames.get_meta("content_pack_anchor"), mod_frames.get_meta("content_pack_cell"))
+		_set_sprite_frames_position_offset(mod_frames, mod_frames.get_meta("content_pack_offset"))
+		return mod_frames
+	if rendered != null:
+		return _prepare_rendered_sprite_frames(rendered)
+	if DratiniHdPoc.is_enabled_for(species, side, is_shiny):
+		var poc_frames := DratiniHdPoc.load_frames(species, side)
+		if poc_frames != null:
+			var poc_cell_size := float(poc_frames.get_meta("hd_poc_cell_size", 192))
+			_set_sprite_frames_render_scale(poc_frames, DratiniHdPoc.render_scale_for(species, side, poc_cell_size))
+			_set_sprite_frames_display_scale_multiplier(poc_frames, DratiniHdPoc.display_scale_multiplier_for(species))
+			_set_sprite_frames_anchor(
+				poc_frames,
+				Vector2(poc_cell_size * 0.5, poc_cell_size * 0.5),
+				Vector2(poc_cell_size, poc_cell_size)
+			)
+			_set_sprite_frames_position_offset(poc_frames, DratiniHdPoc.position_offset_for(species, side))
+			return poc_frames
 	var cache_key := _sprite_cache_key(species, side, is_shiny)
 	# Map/team prefetching stores the real web sheet in the global service. Read
 	# that cache before a SpriteBox-local HOME fallback so a newly mounted battle
@@ -1093,7 +1377,7 @@ func _sprite_cache_key(species: String, side: String, is_shiny: bool) -> String:
 		_normalize_species_asset_id(species),
 		side.strip_edges().to_lower(),
 		str(is_shiny),
-		str(SettingsManager.sprite_style),
+		str(SettingsManager.get_active_sprite_style()),
 	]
 
 func _load_cached_web_sprite_frames(
@@ -1103,7 +1387,7 @@ func _load_cached_web_sprite_frames(
 		return null
 	for asset_id: String in _get_species_asset_id_candidates(species):
 		var result: Dictionary = WebPokemonSpriteService.get_cached_frames(
-			asset_id, side, is_shiny, SettingsManager.sprite_style
+			asset_id, side, is_shiny, SettingsManager.get_active_sprite_style()
 		)
 		var frames := result.get("frames") as SpriteFrames
 		if frames == null:
@@ -1113,6 +1397,32 @@ func _load_cached_web_sprite_frames(
 		_remember_shared_sprite_frames(cache_key, frames)
 		return frames
 	return null
+
+
+func _prepare_rendered_sprite_frames(rendered: SpriteFrames) -> SpriteFrames:
+	var present: Dictionary = rendered.get_meta("rendered_presentation", {})
+	var anchor: Array = present.get("anchor", [256, 256])
+	var offset: Array = present.get("position_offset", [0, 0])
+	_set_sprite_frames_render_scale(rendered, float(present.get("render_scale", 1.0)))
+	_set_sprite_frames_display_scale_multiplier(
+		rendered,
+		float(rendered.get_meta("rendered_display_scale_multiplier", 1.0))
+	)
+	_set_sprite_frames_frame_size(
+		rendered,
+		rendered.get_meta("rendered_frame_size", Vector2(512, 512)) as Vector2
+	)
+	var rendered_bounds: Variant = rendered.get_meta("rendered_visual_bounds", Rect2())
+	if rendered_bounds is Rect2 and (rendered_bounds as Rect2).has_area():
+		_set_sprite_frames_visual_bounds(rendered, rendered_bounds as Rect2)
+	_set_sprite_frames_anchor(rendered, Vector2(float(anchor[0]), float(anchor[1])), Vector2(512, 512))
+	# Rendered sprites share the same battle-stage baseline. Keep this correction
+	# in the presentation layer so individual species manifests remain portable.
+	_set_sprite_frames_position_offset(
+		rendered,
+		Vector2(float(offset[0]), float(offset[1]) + RENDERED_BATTLE_PLATFORM_Y_OFFSET)
+	)
+	return rendered
 
 func _remember_shared_sprite_frames(cache_key: String, frames: SpriteFrames) -> void:
 	var metadata := {}
@@ -1199,10 +1509,7 @@ func _is_gen5_sprite_path(source_path: String) -> bool:
 func _get_sprite_asset_roots(side: String, is_shiny: bool) -> Array[String]:
 	var roots: Array[String] = []
 	var style_order: Array[String] = BATTLE_SPRITE_STYLE_ORDER
-	if (
-		SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_GEN5_ANIMATED
-		and SettingsManager.is_gen5_animated_sprites_installed()
-	):
+	if ContentPacks.has_sprite_collection_style("gen5"):
 		style_order = PIXEL_SPRITE_STYLE_ORDER
 
 	for style in style_order:
@@ -1662,6 +1969,39 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 			pokemon_2.species, pokemon_2.shiny, side
 		)
 
+
+func set_double_pokemon_species(species_1: String, species_2: String, side: String,
+		shiny_1 := false, shiny_2 := false) -> void:
+	var identity := {"species_1": species_1, "shiny_1": shiny_1,
+		"species_2": species_2, "shiny_2": shiny_2, "side": side}
+	if double_container.visible and current_double_web_identity == identity:
+		return
+	web_sprite_request_generation += 1
+	var request_generation := web_sprite_request_generation
+	set_battle_type(true)
+	current_single_species = ""
+	current_double_web_identity = identity
+	for entry: Array in [[double_sprite_1, species_1, shiny_1], [double_sprite_2, species_2, shiny_2]]:
+		var sprite := entry[0] as AnimatedSprite2D
+		var species := str(entry[1])
+		sprite.visible = false
+		_reset_sprite_pose(sprite)
+		if species.is_empty():
+			continue
+		var frames := _load_sprite_frames(species, side, bool(entry[2]))
+		if frames == null:
+			continue
+		sprite.sprite_frames = frames
+		sprite.animation = IDLE_ANIMATION
+		sprite.frame = 0
+		_set_sprite_target_scale_from_frames(sprite, frames)
+		_snap_sprite_to_pixel_grid(sprite)
+		sprite.visible = true
+		_apply_sprite_playback_mode(sprite)
+	if web_sprite_upgrades_allowed and (not species_1.is_empty() or not species_2.is_empty()):
+		_upgrade_double_web_sprites.call_deferred(request_generation, species_1, shiny_1,
+			species_2, shiny_2, side)
+
 func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
 
@@ -1674,6 +2014,11 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 		_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 		return
 	web_sprite_request_generation += 1
+	dratini_poc_action_generation += 1
+	dratini_poc_sleeping = false
+	_restore_dratini_poc_platform()
+	if dratini_poc_shadow != null:
+		dratini_poc_shadow.visible = false
 	var request_generation := web_sprite_request_generation
 
 	single_sprite.visible = false
@@ -1696,10 +2041,11 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	_snap_sprite_to_pixel_grid(single_sprite)
 	single_sprite.visible = true
 	_apply_sprite_playback_mode(single_sprite)
+	_sync_dratini_poc_stage_decor()
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 	if substitute_active:
 		_sync_substitute_idle_pose()
-	if web_sprite_upgrades_allowed:
+	if web_sprite_upgrades_allowed and not _has_dratini_poc_sprite():
 		_upgrade_single_web_sprite.call_deferred(request_generation, species, side, is_shiny)
 
 
@@ -1708,7 +2054,7 @@ func request_web_sprite_frames(species: String, side: String, is_shiny: bool = f
 		return null
 	for asset_id: String in _get_species_asset_id_candidates(species):
 		var result: Dictionary = await WebPokemonSpriteService.load_frames(
-			asset_id, side, is_shiny, SettingsManager.sprite_style
+			asset_id, side, is_shiny, SettingsManager.get_active_sprite_style()
 		)
 		var frames := result.get("frames") as SpriteFrames
 		if frames == null:
@@ -1752,6 +2098,8 @@ func _apply_web_sprite_result_metadata(
 
 
 func _upgrade_single_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	if _has_dratini_poc_sprite():
+		return
 	var frames := await request_web_sprite_frames(species, side, is_shiny)
 	if (
 		frames == null or generation != web_sprite_request_generation
@@ -1764,7 +2112,7 @@ func _upgrade_single_web_sprite(generation: int, species: String, side: String, 
 
 func allow_web_sprite_upgrades() -> void:
 	web_sprite_upgrades_allowed = true
-	if current_single_species != "" and single_container.visible:
+	if current_single_species != "" and single_container.visible and not _has_dratini_poc_sprite():
 		_upgrade_single_web_sprite.call_deferred(
 			web_sprite_request_generation, current_single_species,
 			current_single_side, current_single_is_shiny
@@ -1794,8 +2142,8 @@ func _upgrade_double_web_sprites(
 	generation: int, species_1: String, shiny_1: bool,
 	species_2: String, shiny_2: bool, side: String
 ) -> void:
-	var frames_1 := await request_web_sprite_frames(species_1, side, shiny_1)
-	var frames_2 := await request_web_sprite_frames(species_2, side, shiny_2)
+	var frames_1: SpriteFrames = await request_web_sprite_frames(species_1, side, shiny_1) if not species_1.is_empty() else null
+	var frames_2: SpriteFrames = await request_web_sprite_frames(species_2, side, shiny_2) if not species_2.is_empty() else null
 	if generation != web_sprite_request_generation or not double_container.visible:
 		return
 	for entry: Array in [[double_sprite_1, frames_1], [double_sprite_2, frames_2]]:
@@ -1811,9 +2159,8 @@ func _upgrade_double_web_sprites(
 		_apply_sprite_playback_mode(sprite)
 
 func _apply_sprite_playback_mode(sprite: AnimatedSprite2D) -> void:
-	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_STATIC:
-		sprite.stop()
-		sprite.frame = 0
+	if sprite == single_sprite and _has_dratini_poc_sprite():
+		_play_dratini_poc_resting_animation()
 		return
 
 	sprite.play()
@@ -1847,6 +2194,8 @@ func _update_stat_stage_panel_positions() -> void:
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 
 func _position_stat_stage_panel(sprite: AnimatedSprite2D, panel: Control) -> void:
+	if is_instance_valid(panel) and panel.has_meta("immersive_positioned"):
+		return
 	if sprite == null or panel == null:
 		return
 	if not sprite.visible:

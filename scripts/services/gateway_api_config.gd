@@ -11,6 +11,14 @@ const GATEWAY_URL_ENV := "POKEAETHER_GATEWAY_URL"
 
 var cached_url := ""
 
+func wait_for_metadata_request_frame(_is_web: bool = OS.has_feature("web")) -> void:
+	# Map instantiation and the first render can block either runtime while the
+	# scene builds its visual environment. Starting an HTTPRequest timer in that
+	# frame can consume the delay before the fast response is processed. Cross
+	# the render boundary first; keep the real network timeout unchanged.
+	await get_tree().process_frame
+	await get_tree().process_frame
+
 func get_base_url() -> String:
 	if cached_url != "":
 		return cached_url
@@ -23,7 +31,10 @@ func get_base_url() -> String:
 		cached_url = env_url.rstrip("/")
 		return cached_url
 	
-	if OS.has_feature("editor"):
+	# Running a project from Godot uses a debug build but does not necessarily
+	# expose the editor feature to the game process. Keep those local developer
+	# runs on the local gateway; exported release builds still use production.
+	if OS.has_feature("editor") or OS.is_debug_build():
 		cached_url = LOCAL_GATEWAY_URL
 		return cached_url
 	

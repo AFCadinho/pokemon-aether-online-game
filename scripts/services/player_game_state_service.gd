@@ -4,6 +4,7 @@ class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
 const WEB_PLAYER_POSITION_ENDPOINT := "/auth/web/world"
+const WEB_PLAYER_APPEARANCE_ENDPOINT := "/auth/web/appearance"
 const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
 const WEB_PLAYER_TELEPORT_ACK_ENDPOINT := "/auth/web/world/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
@@ -22,6 +23,7 @@ const WEB_STORY_BOOTSTRAP_ENDPOINT := "/auth/web/world/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const WEB_STORY_INTERACTION_ENDPOINT := "/auth/web/world/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
+const WEB_STORY_QUEST_ACCEPT_ENDPOINT := "/auth/web/world/story/quests/%s/accept"
 const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const DEV_SIDE_QUEST_PROGRESS_ENDPOINT := "/game/dev/progression/side-quest"
 const DEV_ROCK_SMASH_RESPAWN_ENDPOINT := "/game/dev/overworld/rock-smash-respawn"
@@ -68,6 +70,7 @@ func load_player_profile() -> Dictionary:
 			"hasParty": bool(party.get("hasParty", false)),
 			"party": _array_from_value(party.get("party", [])),
 		},
+		"inventory": _dictionary_from_value(body.get("inventory", {})),
 		"preferences": _dictionary_from_value(preferences.get("preferences", {})),
 		"wallet": _dictionary_from_value(wallet.get("wallet", {})),
 		"stats": {
@@ -269,7 +272,7 @@ func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + (STORY_QUEST_ACCEPT_ENDPOINT % normalized_quest_id.uri_encode()),
+		base_url + (_story_quest_accept_endpoint() % normalized_quest_id.uri_encode()),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({
@@ -402,6 +405,10 @@ func _story_bootstrap_endpoint() -> String:
 
 func _story_interaction_endpoint() -> String:
 	return WEB_STORY_INTERACTION_ENDPOINT if OS.has_feature("web") else STORY_INTERACTION_ENDPOINT
+
+
+func _story_quest_accept_endpoint() -> String:
+	return WEB_STORY_QUEST_ACCEPT_ENDPOINT if OS.has_feature("web") else STORY_QUEST_ACCEPT_ENDPOINT
 
 
 func _is_valid_story_complete_body(
@@ -657,6 +664,35 @@ func save_player_position(state: Dictionary) -> Dictionary:
 	}
 
 
+func save_player_appearance(appearance: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if not OS.has_feature("web"):
+		return {
+			"success": false,
+			"error": "The dedicated appearance endpoint is only used by the browser client.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + WEB_PLAYER_APPEARANCE_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(appearance)
+	)
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"appearance": _dictionary_from_value(body.get("appearance", {})),
+	}
+
+
 func _player_position_endpoint() -> String:
 	return WEB_PLAYER_POSITION_ENDPOINT if OS.has_feature("web") else PLAYER_POSITION_ENDPOINT
 
@@ -854,6 +890,7 @@ func load_player_preferences() -> Dictionary:
 	return {
 		"success": true,
 		"preferences": _dictionary_from_value(body.get("preferences", {})),
+		"favoritePokemonOptions": body.get("favoritePokemonOptions", []),
 	}
 
 

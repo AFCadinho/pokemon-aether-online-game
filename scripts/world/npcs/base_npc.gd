@@ -3,6 +3,24 @@ extends Node2D
 
 class_name BaseNPC
 
+# Service references are resolved from the scene tree at runtime. Keeping them
+# as members also lets isolated resource checks parse this script without
+# relying on autoload class-name registration.
+var CharacterAppearanceService: Node
+var CoopService: Node
+var GameErrorDialogService: Node
+var GameState: Node
+var ItemLocalization: Node
+var LocalizationManager: Node
+var NpcMetadataService: Node
+var PlayerGameStateService: Node
+var SettingsManager: Node
+var ThievingService: Node
+
+
+func _init() -> void:
+	_bind_services()
+
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
 const TrainerBattleMusicResolverScript := preload(
 	"res://scripts/world/npcs/trainer_battle_music_resolver.gd"
@@ -145,6 +163,24 @@ var _sorting_player: Node2D
 
 
 func _ready_base_npc() -> void:
+	_initialize_base_npc()
+
+
+func _bind_services() -> void:
+	CharacterAppearanceService = _root_service("CharacterAppearanceService")
+	CoopService = _root_service("CoopService")
+	GameErrorDialogService = _root_service("GameErrorDialogService")
+	GameState = _root_service("GameState")
+	ItemLocalization = _root_service("ItemLocalization")
+	LocalizationManager = _root_service("LocalizationManager")
+	NpcMetadataService = _root_service("NpcMetadataService")
+	PlayerGameStateService = _root_service("PlayerGameStateService")
+	SettingsManager = _root_service("SettingsManager")
+	ThievingService = _root_service("ThievingService")
+
+
+func _initialize_base_npc() -> void:
+	_bind_services()
 	_apply_npc_profile()
 	if Engine.is_editor_hint():
 		_refresh_npc_profile_preview()
@@ -171,10 +207,15 @@ func _ready_base_npc() -> void:
 	var story_service := get_node_or_null("/root/StoryService")
 	if story_service != null and not story_service.story_changed.is_connected(_on_story_changed):
 		story_service.story_changed.connect(_on_story_changed)
-	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
-		LocalizationManager.locale_changed.connect(_on_locale_changed)
-	if not SettingsManager.input_binding_changed.is_connected(_on_input_binding_changed):
-		SettingsManager.input_binding_changed.connect(_on_input_binding_changed)
+	var coop_service := get_node_or_null("/root/CoopService")
+	if npc_id == "kanto_route_22_gary_oak" and coop_service != null and not coop_service.state_changed.is_connected(_on_coop_party_changed):
+		coop_service.state_changed.connect(_on_coop_party_changed)
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
+		localization_manager.locale_changed.connect(_on_locale_changed)
+	var settings_manager := get_node_or_null("/root/SettingsManager")
+	if settings_manager != null and not settings_manager.input_binding_changed.is_connected(_on_input_binding_changed):
+		settings_manager.input_binding_changed.connect(_on_input_binding_changed)
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
 	_apply_story_visibility()
@@ -298,11 +339,24 @@ func _resolve_battle_sprite_id() -> String:
 
 
 func is_story_requirement_met() -> bool:
-	return StoryService.is_requirement_met(
+	return _story_requirement_met(
 		required_quest_id,
 		required_quest_step_id,
 		required_quest_status
 	)
+
+
+func _story_requirement_met(quest_id: String, quest_step_id: String, quest_status: String) -> bool:
+	var story_service := _root_service("StoryService")
+	return story_service != null and bool(story_service.call(
+		"is_requirement_met", quest_id, quest_step_id, quest_status
+	))
+
+
+func _root_service(service_name: String) -> Node:
+	var main_loop := Engine.get_main_loop()
+	var tree := main_loop as SceneTree
+	return tree.root.get_node_or_null(service_name) if tree != null and tree.root != null else null
 
 
 func _to_tile(world_position: Vector2) -> Vector2i:
@@ -623,7 +677,7 @@ func _quest_marker_binding_matches(binding: Dictionary, quest: Dictionary) -> bo
 	var visibility_quest_id := str(binding.get("visibilityQuestId", "")).strip_edges()
 	if (
 		not visibility_quest_id.is_empty()
-		and not StoryService.is_requirement_met(
+			and not _story_requirement_met(
 			visibility_quest_id,
 			str(binding.get("visibilityQuestStepId", "")).strip_edges(),
 			str(binding.get("visibilityQuestStatus", "completed")).strip_edges()
@@ -1334,6 +1388,15 @@ func _start_manual_interaction(body: Node2D) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	if (npc_id in ["kanto_route_22_gary_oak", "kanto_alpha_gym_brock"] or npc_id in CoopService.ORDINARY_TRAINERS) and not CoopService.party.is_empty():
+		# Completed helpers bypass solo rematch dialogue/fees, not server admission.
+		var trainer := "kanto_route_22_gary_rival" if npc_id == "kanto_route_22_gary_oak" else npc_id
+		var coop_result: Dictionary = await CoopService.try_start(trainer)
+		if coop_result.get("handled", false):
+			if coop_result.get("success", false):
+				return {"success": false, "handled": true, "status": "pending_battle", "battleId": coop_result.get("battleId", "")}
+			await GameErrorDialogService.show_response(coop_result)
+			return {"success": false, "handled": true, "status": "coop_start_failed"}
 	var story_hook := _find_story_hook()
 	if story_hook == null or not bool(story_hook.call("is_configured")):
 		await interact_with_player(body)
@@ -1533,6 +1596,10 @@ func _on_story_changed(_revision: int) -> void:
 		_prefetch_nearby_npc_content.call_deferred()
 
 
+func _on_coop_party_changed() -> void:
+	_apply_story_visibility()
+
+
 func _apply_story_visibility(allow_deferred_hide := false) -> void:
 	var next_visibility := _is_story_visibility_active()
 	if (
@@ -1559,7 +1626,7 @@ func _is_story_visibility_active() -> bool:
 	var required_id := visibility_required_quest_id.strip_edges()
 	if (
 		not required_id.is_empty()
-		and not StoryService.is_requirement_met(
+		and not _story_requirement_met(
 			required_id,
 			visibility_required_quest_step_id,
 			visibility_required_quest_status
@@ -1567,9 +1634,14 @@ func _is_story_visibility_active() -> bool:
 	):
 		return false
 	var hidden_id := visibility_hidden_quest_id.strip_edges()
+	# A progressed party leader must still be able to help at Gary's first
+	# battle. Actual activity eligibility and helper rewards stay server-owned.
+	var coop_service := _root_service("CoopService")
+	if npc_id == "kanto_route_22_gary_oak" and coop_service != null and not coop_service.party.is_empty():
+			return true
 	if (
 		not hidden_id.is_empty()
-		and StoryService.is_requirement_met(
+		and _story_requirement_met(
 			hidden_id,
 			visibility_hidden_quest_step_id,
 			visibility_hidden_quest_status
@@ -1700,7 +1772,7 @@ func _update_sort_z() -> void:
 				sort_z = mini(sort_z, player_sort_z - 1)
 
 	sort_z = maxi(sort_z, minimum_sort_z)
-	var current_map := GameState.current_map
+	var current_map: Node = GameState.current_map if GameState != null else null
 	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
 		sort_z = maxi(
 			sort_z,

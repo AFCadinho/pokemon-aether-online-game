@@ -24,11 +24,33 @@ func _run() -> void:
 		quit(1)
 		return
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
+	var portrait_species := OS.get_environment("POKEAETHER_TRAINER_CARD_SPECIES")
+	if portrait_species.is_empty():
+		portrait_species = "greninja"
+	overlay.set("own_trainer_card_data", {
+		"favoritePokemon": portrait_species, "favoritePokemonShiny": false,
+		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
+		"ratings": [
+			{"format": "aether-ou", "rating": 1234, "peakRating": 1301, "gamesPlayed": 18, "period": "all_time"},
+			{"format": "aether-uu", "rating": 1198, "peakRating": 1220, "gamesPlayed": 9, "period": "all_time"},
+			{"format": "aether-randbats", "rating": 1092, "peakRating": 1110, "gamesPlayed": 6, "period": "all_time"},
+			{"format": "aether-doubles", "rating": 1260, "peakRating": 1260, "gamesPlayed": 4, "period": "all_time"},
+		],
+	})
 	root.add_child(overlay)
 	overlay.call("_show_public_trainer_card", {
 		"userId": 42.0,
 		"username": "misty",
 		"displayName": "Misty",
+		"favoritePokemon": portrait_species,
+		"favoritePokemonShiny": false,
+		"pokedex": {"seen": 126, "caught": 83, "shinyCaught": 7, "registered": 83, "total": 1025},
+		"ratings": [
+			{"format": "aether-ou", "rating": 1234, "peakRating": 1301, "gamesPlayed": 18, "period": "all_time"},
+			{"format": "aether-uu", "rating": 1198, "peakRating": 1220, "gamesPlayed": 9, "period": "all_time"},
+			{"format": "aether-randbats", "rating": 1092, "peakRating": 1110, "gamesPlayed": 6, "period": "all_time"},
+			{"format": "aether-doubles", "rating": 1260, "peakRating": 1260, "gamesPlayed": 4, "period": "all_time"},
+		],
 		"createdAt": "2026-05-04T12:00:00Z",
 		"guildName": "Cerulean Waves",
 		"mapId": "private_internal_map_id",
@@ -41,16 +63,59 @@ func _run() -> void:
 			],
 		},
 		"playtimeSeconds": 7200,
+		"regionClears": 0,
 		"pvp": {
-			"gamesPlayed": 5,
-			"wins": 4,
-			"losses": 1,
+			"gamesPlayed": 5.0,
+			"wins": 4.0,
+			"losses": 1.0,
 			"winRate": 80.0,
 			"ranked": {"gamesPlayed": 3, "wins": 2, "losses": 1, "winRate": 66.7},
 			"aetherClash": {"gamesPlayed": 2, "wins": 2, "losses": 0, "winRate": 100.0},
 		},
 	})
 	await process_frame
+	var capture_dir := OS.get_environment("POKEAETHER_TRAINER_CARD_CAPTURE")
+	if not capture_dir.is_empty():
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("public.png"))
+		var public_tabs := (overlay.get("public_trainer_card_popup") as Control).find_child("PublicTrainerCardTabs", true, false) as TabContainer
+		public_tabs.current_tab = 2
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("pvp.png"))
+		overlay.call("_hide_public_trainer_card")
+		var own := overlay.get("trainer_card_popup") as Control
+		own.show()
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("own.png"))
+		overlay.call("_open_trainer_card_companion_picker")
+		var companion_dialog := overlay.find_child("TrainerCardCompanionPicker", true, false) as ConfirmationDialog
+		_check(companion_dialog != null and companion_dialog.borderless, "companion picker uses the Trainer Card shell instead of the default dialog title bar")
+		var picker := overlay.find_child("OwnedCompanions", true, false) as ItemList
+		picker.set_meta("owned_companions", [
+			{"species": "articuno", "shiny": false}, {"species": "charizard", "shiny": false},
+			{"species": "dragonite", "shiny": false}, {"species": "garchomp", "shiny": false},
+			{"species": "lucario", "shiny": false}, {"species": "magikarp", "shiny": false},
+			{"species": "mew", "shiny": false}, {"species": "pikachu", "shiny": false},
+			{"species": "rattata", "shiny": false}, {"species": "scizor", "shiny": false},
+			{"species": "starly", "shiny": false}, {"species": "tyranitar", "shiny": false},
+			{"species": "zapdos", "shiny": false}, {"species": "greninja", "shiny": true},
+		])
+		overlay.call("_fill_trainer_card_companions", picker, "")
+		_check(picker.get_v_scroll_bar().custom_minimum_size.x >= 10.0, "companion picker reserves a visible scrollbar rail")
+		for frame in range(5):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(capture_dir.path_join("picker.png"))
+		print("Trainer card captures saved; own card size: ", own.size)
+		overlay.queue_free()
+		quit(0)
+		return
 
 	var popup := overlay.get("public_trainer_card_popup") as PanelContainer
 	var tabs := popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
@@ -63,12 +128,121 @@ func _run() -> void:
 	var profile_grid := popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
 	var follower_preview := avatar_preview.find_child("RemotePokemonFollower", true, false) as Node2D if avatar_preview != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
+	var public_drag_handle := popup.find_child("PublicTrainerCardDragHandle", true, false) as Control if popup != null else null
+	_check(
+		public_drag_handle != null
+		and public_drag_handle.tooltip_text == "Drag to move this Trainer Card",
+		"public Trainer Card exposes a draggable title bar"
+	)
+	if popup != null:
+		var drag_start := popup.global_position
+		var press := InputEventMouseButton.new()
+		press.button_index = MOUSE_BUTTON_LEFT
+		press.pressed = true
+		press.global_position = drag_start + Vector2(24, 18)
+		overlay.call("_on_trainer_card_header_gui_input", press, popup)
+		var motion := InputEventMouseMotion.new()
+		motion.global_position = press.global_position + Vector2(36, 22)
+		overlay.call("_handle_trainer_card_drag_input", motion)
+		_check(popup.global_position != drag_start, "public Trainer Card preview moves when its title bar is dragged")
+		var release := InputEventMouseButton.new()
+		release.button_index = MOUSE_BUTTON_LEFT
+		release.pressed = false
+		overlay.call("_handle_trainer_card_drag_input", release)
+		_check(not bool(overlay.get("trainer_card_dragging")), "public Trainer Card drag ends on mouse release")
+		# Reset the preview so its layout measurements are deterministic below.
+		popup.position = drag_start
+		popup.size = Vector2(720, 500)
+	var public_companion := popup.find_child("FavoritePokemon", true, false) as Sprite2D
+	var public_art := public_companion.get_parent().find_child("PublicTrainerAvatarPreview", false, false) if public_companion != null else null
+	_check(public_companion != null, "public card renders only the explicitly selected HOME companion")
+	_check(
+		public_companion != null
+		and public_companion.get_parent().get_children().find(public_companion) < public_companion.get_parent().get_children().find(public_art)
+		and public_companion.flip_h
+		and public_art.z_index > public_companion.z_index
+		and is_equal_approx(public_art.scale.x / 0.5, roundf(public_art.scale.x / 0.5))
+		and public_art.position == public_art.position.round()
+		and public_companion.texture.get_image().get_used_rect().size.x * public_companion.scale.x >= 139.0
+		and public_companion.position.y < 250.0,
+		"companions face right behind a pixel-aligned foreground trainer"
+	)
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		var tile := popup.find_child("Dex_%s" % field, true, false)
+		_check(tile != null, "public card displays %s counter" % field)
+		var expected := {"seen": "126", "caught": "83", "shinyCaught": "7"}
+		_check(_find_label(tile, expected[field]) != null, "public %s counter has its server value" % field)
+	var ranked_tiers := popup.find_child("RankedRatingTiers", true, false) as HFlowContainer
+	_check(ranked_tiers != null and ranked_tiers.get_child_count() == 4, "public PvP gives each ranked tier its own flexible card")
+	_check(_find_label(ranked_tiers, "OU") != null and _find_label(ranked_tiers, "1234") != null, "public PvP tier cards show a compact format and rating")
+	_check(_find_label(ranked_tiers, "Peak 1301 · 18 battles") != null, "public PvP tier cards show peak rating and battles")
+	_check(ranked_tiers != null and ranked_tiers.get_combined_minimum_size().x <= 520.0, "ranked tiers wrap instead of widening the Trainer Card")
+	_check(_find_label(popup, "5.0") == null, "JSON float battle counters render as whole numbers")
+	overlay.call("_apply_own_trainer_card_details", overlay.get("public_trainer_card_data"))
+	var own_card := overlay.get("trainer_card_popup") as Control
+	var region_clears := own_card.find_child("TrainerCardValue_region_clears", true, false) as Label
+	_check(region_clears != null and region_clears.text == "0", "own Adventure Stats teases future Region clears from the server value")
+	_check(
+		_find_label(own_card, "5") != null and _find_label(own_card, "4") != null,
+		"own Overview receives the same all-time PvP totals as the PvP tab"
+	)
+	overlay.call("_refresh_own_trainer_card_pvp")
+	_check(
+		_find_label(own_card, "5") != null and _find_label(own_card, "4") != null,
+		"an in-flight own PvP refresh keeps the last verified Overview totals visible"
+	)
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		var tile := own_card.find_child("Dex_%s" % field, true, false)
+		var expected := {"seen": "126", "caught": "83", "shinyCaught": "7"}
+		_check(tile != null and _find_label(tile, expected[field]) != null, "own %s counter refreshes" % field)
+	var legacy := overlay.call("_create_trainer_card_dex_panel", {"pokedex": {"registered": 83}}) as Control
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		_check(_find_label(legacy.find_child("Dex_%s" % field, true, false), "—") != null, "missing %s is not presented as zero" % field)
+	legacy.free()
+	_check(own_card.get_combined_minimum_size().x <= 720.0 and own_card.get_combined_minimum_size().y <= 500.0, "own counters fit the designed popup bounds")
+	var own_tabs := overlay.get("trainer_card_tabs") as TabContainer
+	for tab_index in range(own_tabs.get_tab_count()):
+		own_tabs.current_tab = tab_index
+		await process_frame
+		await process_frame
+		_check(own_card.size == Vector2(720, 500), "own Trainer Card stays 720×500 on tab %s (got %s)" % [tab_index, own_card.size])
+	localization_manager.call("set_locale", "nl")
+	var dutch_dex := overlay.call("_create_trainer_card_dex_panel", {"pokedex": {"seen": 1025, "caught": 1025, "shinyCaught": 1025}}) as Control
+	_check(_find_label(dutch_dex, "Shiny verkregen") != null, "Dutch shiny counter is localized")
+	_check(dutch_dex.get_combined_minimum_size().x <= 412.0, "Dutch counters fit with four-digit totals")
+	dutch_dex.free()
+	localization_manager.call("set_locale", "en")
+	popup = overlay.get("public_trainer_card_popup") as PanelContainer
+	tabs = popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
+	overview_tab = tabs.get_node_or_null("Overview") as Control if tabs != null else null
+	badges_tab = tabs.get_node_or_null("Badges") as Control if tabs != null else null
+	pvp_tab = tabs.get_node_or_null("Pvp") as Control if tabs != null else null
+	avatar_panel = popup.find_child("PublicTrainerAvatarPanel", true, false) as PanelContainer if popup != null else null
+	avatar_preview = popup.find_child("PublicTrainerAvatarPreview", true, false) as Node2D if popup != null else null
+	profile_panel = popup.find_child("PublicTrainerProfilePanel", true, false) as PanelContainer if popup != null else null
+	profile_grid = popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
+	_check(own_card.find_child("FavoritePokemon", true, false) is Sprite2D, "own card refresh renders the saved HOME companion")
+	_check((overlay.get("trainer_card_tabs") as TabContainer).get_tab_count() == 5, "own details refresh keeps exactly one PvP tab")
+	var choices := ItemList.new()
+	choices.set_meta("owned_companions", [{"species": "pikachu", "shiny": true}, {"species": "scizor", "shiny": false}])
+	overlay.call("_fill_trainer_card_companions", choices, "")
+	_check(choices.item_count == 3 and bool(choices.get_item_metadata(1).get("shiny")), "companion choices preserve the server-owned shiny variant")
+	overlay.call("_fill_trainer_card_companions", choices, "pika")
+	_check(choices.item_count == 2 and choices.get_item_metadata(1).get("species") == "pikachu", "companion search only filters owned choices")
+	choices.free()
 	_check(
 		popup != null
 		and popup.get_combined_minimum_size().x <= 720.0
 		and popup.get_combined_minimum_size().y <= 500.0,
 		"public Trainer Card fits the designed popup bounds"
 	)
+	for tab_index in range(tabs.get_tab_count()):
+		tabs.current_tab = tab_index
+		await process_frame
+		await process_frame
+		_check(popup.size == Vector2(720, 500), "public Trainer Card stays 720×500 on tab %s (got %s)" % [tab_index, popup.size])
+	tabs.current_tab = 0
+	await process_frame
 	_check(
 		tabs != null
 		and tabs.get_tab_count() == 3
@@ -94,8 +268,8 @@ func _run() -> void:
 		avatar_panel != null
 		and avatar_panel.size.y >= 280.0
 		and avatar_preview != null
-		and avatar_preview.position == Vector2(80, 112)
-		and avatar_preview.scale == Vector2(2.7, 2.7)
+		and avatar_preview.get_node_or_null("Body") is Sprite2D
+		and avatar_preview.get_node_or_null("Top") is Sprite2D
 		and (follower_preview == null or not follower_preview.visible),
 		"public Trainer Card fills its avatar column without showing the overworld follower"
 	)
@@ -146,6 +320,9 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	localization_manager.call("set_locale", original_locale)
+	# Locale refresh schedules chat layout updates across two frames.
+	for frame in range(3):
+		await process_frame
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:

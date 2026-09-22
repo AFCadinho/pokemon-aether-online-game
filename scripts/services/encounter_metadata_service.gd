@@ -20,6 +20,7 @@ func clear_cache() -> void:
 	encounter_area_cache.clear()
 
 func _fetch_encounter_area_metadata(area_id: String) -> Dictionary:
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
 	add_child(request)

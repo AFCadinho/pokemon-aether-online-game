@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "identity_gate": "scvi-resource-identity-v1",
+  "purpose": "Resumed standalone-model catalog production; identity and visual gates remain mandatory; no automatic activation",
+  "entries": [
+    {"species": "charmeleon"},
+    {"species": "venomoth"},
+    {"species": "persian"},
+    {"species": "slowbro"},
+    {"species": "cyndaquil"},
+    {"species": "quilava"},
+    {"species": "igglybuff"},
+    {"species": "mareep"},
+    {"species": "flaaffy"},
+    {"species": "ampharos"},
+    {"species": "skiploom"},
+    {"species": "sunkern"},
+    {"species": "sunflora"},
+    {"species": "slowking"},
+    {"species": "girafarig"},
+    {"species": "pineco"},
+    {"species": "dunsparce"},
+    {"species": "sneasel"},
+    {"species": "teddiursa"},
+    {"species": "ursaring"},
+    {"species": "houndour"},
+    {"species": "houndoom"},
+    {"species": "phanpy"},
+    {"species": "stantler"},
+    {"species": "larvitar"}
+  ]
+}

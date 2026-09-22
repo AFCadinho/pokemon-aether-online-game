@@ -1,0 +1,16 @@
+{
+  "players_house": {
+    "fingerprint": "17e993fa1714c3f4db380a7edc21a3968a4e498b91d1555c9c3e919212ec8059",
+    "cells": 968,
+    "usedTiles": 139,
+    "layers": 4,
+    "baseRGBABytes": 811008
+  },
+  "pokemon_laboratory": {
+    "fingerprint": "d1d09ee4a471e91de1d07de3aa09792ed09a61c1780c134bbffb22bb0eddc055",
+    "cells": 1067,
+    "usedTiles": 137,
+    "layers": 4,
+    "baseRGBABytes": 774144
+  }
+}

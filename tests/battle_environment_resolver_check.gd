@@ -33,6 +33,31 @@ func _check_resolution_priority() -> void:
 		Catalog.PVP_STADIUM_ENVIRONMENT_ID,
 		"PvP defaults to its stadium"
 	)
+	_check_equal(
+		Resolver.resolve({"battle_kind": "wild", "map_id": "aether_clash_lobby"}),
+		Catalog.PVP_STADIUM_ENVIRONMENT_ID,
+		"wild battles in the Aether Clash lobby use the stadium"
+	)
+	_check_equal(
+		Resolver.resolve({"battle_kind": "wild", "map_id": "aether_clash_lobby", "encounter_type": "surf"}),
+		Catalog.PVP_STADIUM_ENVIRONMENT_ID,
+		"lobby wild battles retain the stadium for dev-triggered encounter types"
+	)
+	_check_equal(
+		Resolver.resolve({"battle_kind": "wild", "map_id": "aether_clash_lobby", "explicit_environment_id": "cave"}),
+		Catalog.CAVE_ENVIRONMENT_ID,
+		"explicit battle environment overrides still win in the lobby"
+	)
+	_check_equal(
+		Resolver.resolve({"battle_kind": "trainer", "map_id": "aether_clash_lobby"}),
+		Catalog.DEFAULT_ENVIRONMENT_ID,
+		"lobby trainer battles keep their existing background"
+	)
+	_check_equal(
+		Resolver.resolve({"battle_kind": "wild", "map_id": "kanto_pallet_town"}),
+		Catalog.DEFAULT_ENVIRONMENT_ID,
+		"wild battles outside the lobby keep their existing background"
+	)
 	for encounter_type: String in ["surf", "fish", "old-rod", "good_rod", "super rod"]:
 		_check_equal(
 			Resolver.resolve({
@@ -103,8 +128,13 @@ func _check_resolution_priority() -> void:
 func _check_world_integration_contract() -> void:
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
 	_check_true(world_source.contains('_resolve_battle_environment_id("wild", response, encounter_type)'), "wild battles resolve tile and map context")
+	_check_true(
+		world_source.contains('response,\n\t\t_resolve_battle_environment_id("wild", response)\n\t)'),
+		"developer-triggered wild battles resolve their battle environment"
+	)
 	_check_true(world_source.contains('_resolve_battle_environment_id("trainer", battle_trainer_data)'), "trainer battles resolve override and map context")
 	_check_true(world_source.contains('_resolve_battle_environment_id("pvp", response)'), "PvP resolves its explicit stadium context")
+	_check_true(world_source.contains('"map_id": _get_map_id(GameState.current_map)'), "world supplies the current map to the battle environment resolver")
 	_check_true(world_source.contains('player.call("is_standing_on_water")'), "world samples the player water tile before wild battles")
 	_check_true(world_source.contains('player.call("is_standing_on_tall_grass")'), "world samples the player tall-grass tile before wild battles")
 

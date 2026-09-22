@@ -8,5 +8,6 @@
 resource_name = "Water Battle Environment"
 script = ExtResource("1_profile")
 environment_id = &"water"
+arena_3d_id = "sea"
 background_texture = ExtResource("2_background")
 platform_texture = ExtResource("3_platform")

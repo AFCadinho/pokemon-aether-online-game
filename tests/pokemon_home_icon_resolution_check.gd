@@ -136,9 +136,6 @@ func _init() -> void:
 		failed = true
 		push_error("Battle sprite loader cannot suppress expected Pokédex fallback misses")
 	var pokedex_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
-	if not pokedex_source.contains('"front",\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'):
-		failed = true
-		push_error("Pokédex list fallback does not suppress expected missing-form errors")
 	if not pokedex_source.contains('_get_pokedex_sprite_side(),\n\t\t\tpokedex_shiny_mode,\n\t\t\tfalse'):
 		failed = true
 		push_error("Pokédex detail sprite probing does not suppress expected candidate misses")

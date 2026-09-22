@@ -1,6 +1,8 @@
 extends Node
 
 const IDLE_ANIMATION := "idle"
+const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
+const PokemonAssets := preload("res://scripts/data/pokemon_assets.gd")
 const MAX_RESPONSE_BYTES := 4 * 1024 * 1024
 const CACHE_LIMIT := 96
 const DOWNLOAD_ATTEMPTS := 3
@@ -122,10 +124,18 @@ func _sprite_identity(
 	var normalized_id := _normalize_segment(asset_id)
 	if catalog_style == "" or normalized_id == "":
 		return {}
+	var candidate_ids: Array[String] = []
+	for candidate: String in PokemonAssets.get_battle_sprite_ids(asset_id):
+		var normalized_candidate := _normalize_segment(candidate)
+		if normalized_candidate != "" and not candidate_ids.has(normalized_candidate):
+			candidate_ids.append(normalized_candidate)
+	if candidate_ids.is_empty():
+		candidate_ids.append(normalized_id)
 	var side_folder := ("shiny_" if is_shiny else "") + ("back" if side == "back" else "front")
 	return {
 		"catalog_style": catalog_style,
 		"normalized_id": normalized_id,
+		"candidate_ids": candidate_ids,
 		"side_folder": side_folder,
 		"cache_key": "%s/%s/%s" % [catalog_style, side_folder, normalized_id],
 	}
@@ -134,6 +144,15 @@ func _sprite_identity(
 func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 	var catalog_style := str(identity.get("catalog_style", ""))
 	var normalized_id := str(identity.get("normalized_id", ""))
+	var candidate_ids: Array[String] = []
+	var candidate_values: Variant = identity.get("candidate_ids", [normalized_id])
+	if candidate_values is Array:
+		for candidate_value: Variant in candidate_values as Array:
+			var candidate_id := _normalize_segment(str(candidate_value))
+			if candidate_id != "" and not candidate_ids.has(candidate_id):
+				candidate_ids.append(candidate_id)
+	if candidate_ids.is_empty() and normalized_id != "":
+		candidate_ids.append(normalized_id)
 	var side_folder := str(identity.get("side_folder", ""))
 
 	var release := await _get_release_config()
@@ -148,7 +167,17 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 		base_root = WebRuntime.api_base_url().trim_suffix("/api") + route + "/" + side_folder
 	if base_root == "":
 		return {}
-	var base_url := "%s/%s" % [base_root, normalized_id]
+	for candidate_id: String in candidate_ids:
+		var result := await _load_candidate_frames(base_root, candidate_id, side_folder, catalog_style)
+		if not result.is_empty():
+			return result
+	return {}
+
+
+func _load_candidate_frames(
+	base_root: String, candidate_id: String, side_folder: String, catalog_style: String
+) -> Dictionary:
+	var base_url := "%s/%s" % [base_root, candidate_id]
 	var metadata_result := await _download(base_url + "/animation.json")
 	if metadata_result.is_empty():
 		return {}
@@ -172,7 +201,8 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 	var result := {
 		"frames": frames,
 		"style": catalog_style,
-		"render_scale": maxf(float(metadata.get("render_scale", metadata.get("scale", 1.0))), 1.0),
+		"asset_id": candidate_id,
+		"render_scale": BattleSpriteRenderScale.resolve(metadata, side_folder),
 		"frame_size": Vector2(float(metadata.get("frame_width", 0)), float(metadata.get("frame_height", 0))),
 		"visual_bounds": visual_bounds,
 	}
@@ -319,6 +349,28 @@ func _remember(key: String, value: Dictionary) -> void:
 	if _cache.size() >= CACHE_LIMIT:
 		_cache.erase(_cache.keys()[0])
 	_cache[key] = value
+
+
+func diagnostic_cache_stats() -> Dictionary:
+	# Count shared sheets once, without get_image(), readback or eviction.
+	var sheets := {}
+	var estimated_bytes := 0
+	for value: Dictionary in _cache.values():
+		var frames: SpriteFrames = value.get("frames")
+		if frames == null:
+			continue
+		for animation in frames.get_animation_names():
+			for index in frames.get_frame_count(animation):
+				var texture := frames.get_frame_texture(animation, index)
+				while texture is AtlasTexture:
+					texture = texture.atlas
+				if texture == null or sheets.has(texture.get_instance_id()):
+					continue
+				sheets[texture.get_instance_id()] = true
+				estimated_bytes += texture.get_width() * texture.get_height() * 4
+	return {"entries": _cache.size(), "uniqueSheets": sheets.size(),
+		"estimatedRGBABytes": estimated_bytes, "inFlight": _in_flight.size(),
+		"prefetchQueued": _prefetch_queue.size(), "prefetchActive": _prefetch_active}
 
 
 func _normalize_segment(value: String) -> String:

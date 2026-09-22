@@ -1,0 +1,105 @@
+{
+  "species": "garchomp",
+  "runtime_approved": false,
+  "activated": false,
+  "policy": "same-idle-bank-v1",
+  "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/frontend/.tmp/garchomp-bank-runtime/garchomp.scn",
+  "runtime_sha256": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+  "glb_sha256": "f8046bee84c4f093aaff0a06cadf061492b45da5d72045fc5eb3e6ce35e2ecb9",
+  "action_timing": {
+    "damage": {
+      "frames": 40,
+      "loop": false,
+      "speed": 1
+    },
+    "faint_loop": {
+      "frames": 120,
+      "loop": true,
+      "speed": 1
+    },
+    "faint_start": {
+      "frames": 100,
+      "loop": false,
+      "speed": 1
+    },
+    "idle": {
+      "frames": 120,
+      "loop": true,
+      "speed": 1
+    },
+    "physical_attack": {
+      "frames": 130,
+      "loop": false,
+      "speed": 1
+    },
+    "sleep": {
+      "frames": 120,
+      "loop": true,
+      "speed": 1
+    },
+    "special_attack": {
+      "frames": 120,
+      "loop": false,
+      "speed": 1
+    }
+  },
+  "source_actions": {
+    "idle": {
+      "source_action": "pm0445_00_00_00001_battlewait01_loop",
+      "duration": 2,
+      "fps": 60,
+      "loop": true
+    },
+    "physical_attack": {
+      "source_action": "pm0445_00_00_00400_attack01",
+      "duration": 2.1666666666666665,
+      "fps": 60,
+      "loop": false
+    },
+    "special_attack": {
+      "source_action": "pm0445_00_00_00450_rangeattack01",
+      "duration": 2,
+      "fps": 60,
+      "loop": false
+    },
+    "damage": {
+      "source_action": "pm0445_00_00_00500_damage01",
+      "duration": 0.6666666666666666,
+      "fps": 60,
+      "loop": false
+    },
+    "sleep": {
+      "source_action": "pm0445_00_00_00281_sleep01_loop",
+      "duration": 2,
+      "fps": 60,
+      "loop": true
+    },
+    "faint_start": {
+      "source_action": "pm0445_00_00_00520_down01_start",
+      "duration": 1.6666666666666667,
+      "fps": 60,
+      "loop": false
+    },
+    "faint_loop": {
+      "source_action": "pm0445_00_00_00521_down01_loop",
+      "duration": 2,
+      "fps": 60,
+      "loop": true
+    }
+  },
+  "tests": {
+    "summary_comparisons": 21,
+    "battle_nonterminal_comparisons": 15,
+    "fresh_replacements": 3,
+    "damage_end_delta_per_idle_height": 0.00013820601164,
+    "faint_duration_seconds": 1.6666666666666667,
+    "faint_loop_persists": true,
+    "python_tests": 34,
+    "python_skipped": 1
+  },
+  "limitations": [
+    "Isolated real summary/action code; not full networked/arena battle certification",
+    "Forcing damage during faint_start without replacement retained geometry state (0.0800134 height); not fixed or treated as a supported lifecycle transition",
+    "No automatic catalog replacement or approval"
+  ]
+}

@@ -5,9 +5,11 @@ const LauncherNewsLocalizationService := preload("res://scripts/news_localizatio
 const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
 const LauncherResumableDownloadService := preload("res://scripts/resumable_download_service.gd")
 const LauncherAssetPackIntegrity := preload("res://scripts/asset_pack_integrity.gd")
+const LauncherReleaseAssetBundles := preload("res://scripts/release_asset_bundles.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
+const DEFAULT_CONTENT_PACK_CATALOG_URL := "https://updates.pokeaether.com/data/content-packs.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
@@ -30,7 +32,9 @@ const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
 const GEN5_SPRITES_FOLDER_PATH := "assets/sprites/pokemon/gen5"
+const FOREST_MANIFEST_ENV := "POKEAETHER_FOREST_MANIFEST"
 const ASSET_PACK_REQUIRED_PATHS := {
+	"battle-environment-forest": "forest-runtime",
 	"music": "assets/music",
 	"pokemon-home": "assets/sprites/pokemon/pokemon_home",
 	"pokemon-home-shiny": "assets/sprites/pokemon/pokemon_home_shiny",
@@ -44,6 +48,10 @@ const ASSET_PACK_REQUIRED_PATHS := {
 	"pokemon-gen5-shiny-back": "assets/sprites/pokemon/gen5/shiny_back",
 }
 const ASSET_PACK_REQUIRED_FILES := {
+	"battle-environment-forest": [
+		"forest-runtime/forest.json",
+		"forest-runtime/forest.pck",
+	],
 	"music": [
 		"assets/music/login/lugia_theme_lofi.ogg",
 		"assets/music/overworld/kanto/towns/pallet_town.ogg",
@@ -128,6 +136,7 @@ var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
+var content_pack_catalog_url := DEFAULT_CONTENT_PACK_CATALOG_URL
 var server_status_url := LauncherServerHealthService.DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
@@ -148,6 +157,7 @@ var current_asset_pack_download_index := 0
 var has_unseen_diagnostics_error := false
 var last_check_datetime: Dictionary = {}
 var download_service: ResumableDownloadService
+var release_asset_bundles: RefCounted
 var download_progress_snapshot: Dictionary = {}
 var active_resumable_download_kind := ""
 var manifest_retry_count := 0
@@ -231,6 +241,20 @@ func _ready() -> void:
 	_apply_visual_style()
 	_apply_locale()
 	_populate_language_options()
+	var mods_button := Button.new()
+	mods_button.text = LauncherLocalization.text("Mods")
+	game_folder_button.get_parent().add_child(mods_button)
+	_apply_button_style(mods_button, false)
+	mods_button.pressed.connect(_open_content_packs)
+	var models_button := Button.new()
+	models_button.text = LauncherLocalization.text("3D Models")
+	game_folder_button.get_parent().add_child(models_button)
+	_apply_button_style(models_button, false)
+	models_button.pressed.connect(_open_model_packs)
+	LauncherLocalization.locale_changed.connect(func(_new_locale: String) -> void:
+		mods_button.text = LauncherLocalization.text("Mods")
+		models_button.text = LauncherLocalization.text("3D Models")
+	)
 	home_button.pressed.connect(_show_home)
 	diagnostics_button.pressed.connect(_show_diagnostics)
 	diagnostics_back_button.pressed.connect(_show_home)
@@ -255,6 +279,7 @@ func _ready() -> void:
 	http_request.request_completed.connect(_on_request_completed)
 	http_request.timeout = 30.0
 	download_service = LauncherResumableDownloadService.new()
+	release_asset_bundles = LauncherReleaseAssetBundles.new()
 	add_child(download_service)
 	server_health_refresh_timer = Timer.new()
 	server_health_refresh_timer.wait_time = SERVER_HEALTH_REFRESH_SECONDS
@@ -817,6 +842,63 @@ func _on_install_folder_selected(selected_path: String) -> void:
 
 
 func _create_game_process(absolute_executable_path: String) -> int:
+	# The launcher and game have different user:// roots. Share one explicit path.
+	var had_value := OS.has_environment("POKEAETHER_MODS_DIR")
+	var previous := OS.get_environment("POKEAETHER_MODS_DIR")
+	OS.set_environment("POKEAETHER_MODS_DIR", ProjectSettings.globalize_path("user://mods"))
+	var had_models := OS.has_environment("POKEAETHER_MODEL_CATALOG")
+	var previous_models := OS.get_environment("POKEAETHER_MODEL_CATALOG")
+	OS.set_environment("POKEAETHER_MODEL_CATALOG", _selected_model_catalog())
+	var had_forest := OS.has_environment(FOREST_MANIFEST_ENV)
+	var previous_forest := OS.get_environment(FOREST_MANIFEST_ENV)
+	OS.set_environment(
+		FOREST_MANIFEST_ENV,
+		_globalize_storage_path(install_dir.path_join("forest-runtime/forest.json"))
+	)
+	var process_id := _create_game_process_with_mods(absolute_executable_path)
+	if had_forest:
+		OS.set_environment(FOREST_MANIFEST_ENV, previous_forest)
+	else:
+		OS.unset_environment(FOREST_MANIFEST_ENV)
+	if had_models:
+		OS.set_environment("POKEAETHER_MODEL_CATALOG", previous_models)
+	else:
+		OS.unset_environment("POKEAETHER_MODEL_CATALOG")
+	if had_value:
+		OS.set_environment("POKEAETHER_MODS_DIR", previous)
+	else:
+		OS.unset_environment("POKEAETHER_MODS_DIR")
+	return process_id
+
+
+func _open_content_packs() -> void:
+	var panel := preload("res://scripts/content_packs_panel.gd").new()
+	add_child(panel)
+	panel.setup(LauncherLocalization.text, content_pack_catalog_url)
+	panel.popup_centered()
+	panel.visibility_changed.connect(func() -> void:
+		if not panel.visible:
+			panel.queue_free()
+	)
+
+func _selected_model_catalog() -> String:
+	if release_asset_bundles != null:
+		var release_catalog: String = release_asset_bundles.catalog_path()
+		if not release_catalog.is_empty():
+			return release_catalog
+	return preload("res://scripts/model_pack_store.gd").new().selected_catalog()
+
+func _open_model_packs() -> void:
+	var panel := preload("res://scripts/model_packs_panel.gd").new()
+	add_child(panel)
+	panel.setup(LauncherLocalization.text)
+	panel.popup_centered()
+	panel.visibility_changed.connect(func():
+		if not panel.visible:
+			panel.queue_free())
+
+
+func _create_game_process_with_mods(absolute_executable_path: String) -> int:
 	var game_dir: String = absolute_executable_path.get_base_dir()
 	var executable_name: String = absolute_executable_path.get_file()
 	var os_name: String = OS.get_name()
@@ -1028,6 +1110,13 @@ func _validate_download_manifest(candidate: Dictionary) -> String:
 		var sha256 := str(value.get("sha256", "")).strip_edges().to_lower()
 		if sha256.length() != 64 or not sha256.is_valid_hex_number():
 			return "%s has no valid SHA-256" % label
+	var bundle_descriptor: Variant = candidate.get("assetBundleIndex", {})
+	if bundle_descriptor is Dictionary and not bundle_descriptor.is_empty():
+		var bundle_error := LauncherReleaseAssetBundles.descriptor_error(bundle_descriptor)
+		if not bundle_error.is_empty():
+			return bundle_error
+	elif not bundle_descriptor is Dictionary:
+		return "assetBundleIndex must be an object"
 	return ""
 
 
@@ -1677,6 +1766,29 @@ func _handle_download_response() -> void:
 	var download_label: String = _get_current_download_display_label()
 	if int(current_download.get("checksum_retry_count", 0)) > 0:
 		_log("CHK-001 retry passed integrity verification. id=%s" % str(current_download.get("id", "")))
+	var download_type := str(current_download.get("type", ""))
+	if download_type in ["asset_bundle_index", "asset_bundle"]:
+		var descriptor: Dictionary = _get_dictionary(manifest, "assetBundleIndex")
+		var result: Dictionary
+		if download_type == "asset_bundle_index":
+			result = release_asset_bundles.accept_index(descriptor, file_path)
+		else:
+			var index: Dictionary = release_asset_bundles.cached_index(descriptor)
+			result = release_asset_bundles.accept_bundle(index, str(current_download.get("id", "")), file_path)
+		if not str(result.get("error", "")).is_empty():
+			_set_busy(false)
+			_set_status("Could not install approved 3D models.", "error")
+			_log_error("Asset bundle install failed. id=%s error=%s" % [current_download.get("id", ""), result.error])
+			_delete_existing_download(file_path)
+			current_download.clear()
+			return
+		_delete_existing_download(file_path)
+		if download_type == "asset_bundle_index":
+			for job: Dictionary in result.get("jobs", []):
+				pending_downloads.append(job)
+		current_download.clear()
+		_start_next_download()
+		return
 	_set_status(_t("Extracting {label}...", {"label": download_label}), "updating")
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
@@ -1930,6 +2042,15 @@ func _build_download_queue() -> void:
 			"file_name": "%s-%s.zip" % [pack_id, pack_version],
 			"label": pack_id,
 		})
+
+	var bundle_descriptor := _get_dictionary(manifest, "assetBundleIndex")
+	if not bundle_descriptor.is_empty() and release_asset_bundles != null:
+		var bundle_plan: Dictionary = release_asset_bundles.jobs(bundle_descriptor)
+		if not str(bundle_plan.get("error", "")).is_empty():
+			_log_error("Approved 3D bundle planning failed: %s" % bundle_plan.error)
+		else:
+			for job: Dictionary in bundle_plan.get("jobs", []):
+				pending_downloads.append(job)
 
 	var filtered_downloads: Array[Dictionary] = []
 	for download: Dictionary in pending_downloads:
@@ -2439,6 +2560,9 @@ func _load_launcher_config() -> void:
 	var configured_news_url := str(config.get("newsUrl", ""))
 	if not configured_news_url.is_empty():
 		news_url = configured_news_url
+	var configured_content_pack_catalog_url := str(config.get("contentPackCatalogUrl", ""))
+	if not configured_content_pack_catalog_url.is_empty():
+		content_pack_catalog_url = configured_content_pack_catalog_url
 	var configured_status_url := str(config.get("statusUrl", config.get("healthUrl", "")))
 	if not configured_status_url.is_empty():
 		server_status_url = configured_status_url
@@ -2447,6 +2571,7 @@ func _load_launcher_config() -> void:
 		presence_url = configured_presence_url
 	manifest_url = _normalize_url(manifest_url)
 	news_url = _normalize_url(news_url)
+	content_pack_catalog_url = _normalize_url(content_pack_catalog_url)
 	server_status_url = _normalize_url(server_status_url)
 	presence_url = _normalize_url(presence_url)
 	if manifest_url.is_empty():

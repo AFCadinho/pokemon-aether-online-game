@@ -8,5 +8,6 @@
 resource_name = "Cave Battle Environment"
 script = ExtResource("1_profile")
 environment_id = &"cave"
+arena_3d_id = "cave"
 background_texture = ExtResource("2_background")
 platform_texture = ExtResource("3_platform")

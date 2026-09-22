@@ -14,6 +14,7 @@ Visual import scope:
 - support visual render hints through tile layer properties
 - support CSV tile data
 - preserve Tiled flip flags through Godot alternative tiles
+- automatically compact used tile regions without resizing or quality loss
 - ignore object layers and gameplay properties
 - write generated files only under `res://generated/tiled_visuals/<visual_id>/`
 
@@ -21,8 +22,17 @@ Generated visual files:
 
 - `<visual_id>.visual.tscn`
 - `<visual_id>.visual.tileset.tres`
+- `assets/*.texture.res` atlas chunks using portable lossless compression
 
 These files are safe to delete/regenerate. Do not put gameplay nodes in generated visual scenes.
+The generated-map texture check runs in CI and release workflows so a future
+map import cannot silently add raw multi-MiB texture resources to either the
+desktop or browser client.
+The additional atlas-layout CI check rejects oversized canvases, unused atlas
+sources/tiles, missing cell alternatives and non-lossless compact output. Existing
+visuals are immutable hash-baselined migration exceptions; new or edited imports
+must pass. Used TMX/TSX animations are explicitly rejected before replacing output
+until an animation-aware compaction path exists.
 
 Visual render hints:
 

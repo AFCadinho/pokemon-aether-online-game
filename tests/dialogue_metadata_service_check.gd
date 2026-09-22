@@ -42,7 +42,7 @@ func _check_service_is_autoloaded() -> void:
 func _check_service_api() -> void:
 	var text := _read_text(DIALOGUE_METADATA_SERVICE_SCRIPT)
 	_check_true(text.contains("class_name DialogueMetadataServiceNode"), "DialogueMetadataService class exists")
-	_check_true(text.contains("func get_dialogue(dialogue_id: String) -> Dictionary:"), "get_dialogue API exists")
+	_check_true(text.contains("func get_dialogue(dialogue_id: String, timeout_seconds: float = 3.0) -> Dictionary:"), "get_dialogue API exists")
 	_check_true(text.contains("func get_lines(dialogue_id: String) -> Array[String]:"), "get_lines API exists")
 	_check_true(text.contains("func has_dialogue(dialogue_id: String) -> bool:"), "has_dialogue API exists")
 	var resolver_text := _read_text(NPC_DIALOGUE_SERVICE_SCRIPT)
@@ -77,13 +77,14 @@ func _check_service_locale_contract() -> void:
 	var text := _read_text(DIALOGUE_METADATA_SERVICE_SCRIPT)
 	_check_true(text.contains("var cache_key := _get_cache_key(locale, normalized_dialogue_id)"), "dialogue cache is isolated by locale")
 	_check_true(text.contains("GatewayApiConfig.get_accept_headers(locale)"), "dialogue request sends its resolved locale")
+	_check_true(text.contains("request.timeout = timeout_seconds"), "story dialogue can use a longer bounded timeout")
 	_check_true(text.contains("func _get_http_locale() -> String:"), "dialogue service resolves the current HTTP locale")
 
 
 func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 	var text := _read_text(DIALOGUE_NPC_SCRIPT)
 	_check_true(text.contains("func _get_dialogue_metadata_lines() -> Array[String]:"), "DialogueNPC has dialogue metadata resolver")
-	_check_true(text.contains("NpcDialogueService.resolve_default_dialogue("), "DialogueNPC uses the central NPC resolver")
+	_check_true(text.contains("resolve_default_dialogue") and text.contains("dialogue_service"), "DialogueNPC uses the central NPC resolver")
 	_check_true(text.contains("metadata_dialogue_id"), "DialogueNPC prefers NPC metadata dialogue")
 	_check_true(
 		text.contains('result.get("speakerName", "")')

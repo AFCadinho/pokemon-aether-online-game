@@ -40,6 +40,9 @@ func _init() -> void:
 		"downloaded sheets calculate reusable visual bounds before GPU upload"
 	)
 	_check(str(service.call("_normalize_segment", "Mr. Mime_Form")) == "mr-mime-form", "asset paths are normalized safely")
+	var roaring_moon_identity := service.call("_sprite_identity", "Roaring Moon", "back", false, "animated") as Dictionary
+	_check(roaring_moon_identity.get("candidate_ids", []) == ["roaring-moon", "roaringmoon"],
+		"web sprites try the compact catalog id used by forms such as Roaring Moon")
 	_check(str(service.call("_catalog_style", "animated")) == "animated", "normal animated sprites are the browser default")
 	_check(str(service.call("_catalog_style", "pixel")) == "pixel", "Gen 5 remains available as the pixel style")
 	_check(str(service.call("_catalog_style", "static")) == "", "static style does not request a battle catalog")
@@ -66,8 +69,11 @@ func _init() -> void:
 	_check(sprite_source.contains('if str(result.get("style", "animated")) == "pixel"'),
 		"Gen 5 display scaling is limited to the optional pixel style")
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
-	_check(settings_source.contains('OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()'),
-		"browser players can select the remotely hosted Gen 5 style")
+	_check(settings_source.contains("func get_active_sprite_style") and settings_source.contains('ContentPacks.has_sprite_collection_style("gen5")'),
+		"desktop content packs select the active Gen 5 sprite style")
+	var content_pack_source := FileAccess.get_file_as_string("res://scripts/services/content_pack_runtime.gd")
+	_check(not content_pack_source.contains('preload("res://launcher/') and content_pack_source.contains('OS.has_feature("web_preview")'),
+		"browser HOME icons do not depend on the launcher scripts excluded from the web pack")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(world_source.contains("_prefetch_current_map_wild_sprites") and world_source.contains("encounterTypes"),
 		"browser maps prefetch their wild encounter pool")

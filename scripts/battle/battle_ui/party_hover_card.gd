@@ -82,6 +82,7 @@ func _ready() -> void:
 	ev_value_label.visible = show_evs
 	iv_details_container.visible = show_ivs
 	stats_container.visible = not replace_stats_with_ivs
+	_ignore_pointer_input(self)
 	if storage_visuals:
 		_apply_storage_visuals()
 	hide_card()
@@ -90,6 +91,22 @@ func _ready() -> void:
 func show_for_pokemon(pokemon_data: Dictionary) -> void:
 	_set_pokemon_data(pokemon_data)
 	visible = true
+	_ignore_pointer_input(self)
+
+
+func _ignore_pointer_input(node: Node) -> void:
+	# IGNORE on the root alone does not make nested containers/textures inert.
+	if node is Control:
+		node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		_ignore_pointer_input(child)
+
+
+func _positioning_size(available_width: float) -> Vector2:
+	# Anchors and viewport bounds are global; Control.size is unscaled local UI.
+	var scale_x := maxf(absf(get_global_transform().get_scale().x), 0.001)
+	size.x = minf(CARD_WIDTH, maxf(1.0, available_width / scale_x))
+	return get_global_rect().size
 
 
 func set_show_ivs(enabled: bool) -> void:
@@ -245,8 +262,7 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 	custom_minimum_size.y = _configured_card_height() if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
-	size.x = minf(CARD_WIDTH, maxf(1.0, viewport_size.x - padding * 2.0))
-	var card_size: Vector2 = size
+	var card_size := _positioning_size(viewport_size.x - padding * 2.0)
 	var target_position := mouse_position + Vector2(padding, padding)
 
 	if target_position.x + card_size.x > viewport_size.x:
@@ -265,8 +281,7 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	reset_size()
 	# Long move/item labels can otherwise expand this root-level card to the
 	# width of the calculator behind it.
-	size.x = minf(CARD_WIDTH, maxf(1.0, viewport_size.x - padding * 2.0))
-	var card_size: Vector2 = size
+	var card_size := _positioning_size(viewport_size.x - padding * 2.0)
 	var target_position: Vector2
 	if anchor_rect.get_center().x > viewport_size.x * 0.65:
 		target_position = Vector2(
@@ -293,8 +308,7 @@ func position_beside_rect_within(anchor_rect: Rect2, bounds_rect: Rect2) -> void
 	custom_minimum_size.y = _configured_card_height() if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
-	size.x = minf(CARD_WIDTH, maxf(1.0, bounds_rect.size.x - padding * 2.0))
-	var card_size := size
+	var card_size := _positioning_size(bounds_rect.size.x - padding * 2.0)
 	var target_position := Vector2(
 		anchor_rect.end.x + padding,
 		anchor_rect.get_center().y - card_size.y * 0.5

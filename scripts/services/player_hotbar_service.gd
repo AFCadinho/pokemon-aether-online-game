@@ -81,7 +81,7 @@ func _request_json(method: HTTPClient.Method, body: String) -> Dictionary:
 	add_child(request)
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var headers := GatewayApiConfig.get_accept_headers() if method == HTTPClient.METHOD_GET else GatewayApiConfig.get_json_headers()
-	var error := request.request(base_url + HOTBAR_ENDPOINT, headers, method, body)
+	var error := request.request(WebRuntime.gameplay_url(base_url + HOTBAR_ENDPOINT), headers, method, body)
 	if error != OK:
 		request.queue_free()
 		return {
@@ -91,20 +91,5 @@ func _request_json(method: HTTPClient.Method, body: String) -> Dictionary:
 		}
 	var completed: Array = await request.request_completed
 	request.queue_free()
-	var parsed: Variant = JSON.parse_string((completed[3] as PackedByteArray).get_string_from_utf8())
-	var parsed_body: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
-	var status := int(completed[1])
-	var request_result := int(completed[0])
-	if request_result != HTTPRequest.RESULT_SUCCESS:
-		return {
-			"success": false,
-			"status": status,
-			"error": BackendErrorLocalizationService.transport_message(request_result),
-		}
-	if status < 200 or status >= 300:
-		return BackendErrorLocalizationService.decorate({
-			"success": false,
-			"status": status,
-			"body": parsed_body,
-		})
-	return {"success": true, "body": parsed_body}
+	return preload("res://scripts/services/service_json_response.gd").decode(
+		int(completed[0]), int(completed[1]), completed[3] as PackedByteArray)

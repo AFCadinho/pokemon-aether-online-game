@@ -1,0 +1,608 @@
+{
+  "schema": 1,
+  "scope": "visual_review_candidates_not_runtime_mapping",
+  "runtime_approved": false,
+  "reviewed_action": "physical_attack_2",
+  "entries": {
+    "azumarill": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "blissey": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "chansey": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "1 is meer een slap"
+    },
+    "charizard": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review."
+    },
+    "cloyster": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "explicit_user_followup",
+      "primary_family": "unclear",
+      "note": "Confirmed in animated review."
+    },
+    "corviknight": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "delibird": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review."
+    },
+    "diglett": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "ditto": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "dondozo": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "tail",
+      "note": "Confirmed in animated review."
+    },
+    "donphan": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "2: Doet een voorwaartse koprol"
+    },
+    "dragonair": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "tail",
+      "note": "Confirmed in animated review."
+    },
+    "dratini": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "drifblim": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "drowzee": {
+      "family": "kick",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "eevee": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "1: is meer een stomp op de grond met rechterpoot."
+    },
+    "electrode": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "espeon": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review."
+    },
+    "flapple": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "Confirmed in animated review."
+    },
+    "flareon": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "forretress": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack draait Forretress terwijl die body charged"
+    },
+    "garchomp": {
+      "family": "claw_slash",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "bite",
+      "note": "Confirmed in animated review."
+    },
+    "gardevoir": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "gengar": {
+      "family": "claw_slash",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "generic",
+      "note": "Lick"
+    },
+    "golduck": {
+      "family": "claw_slash",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "tweede is met 2 claws tegelijk."
+    },
+    "growlithe": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "gyarados": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "bite",
+      "note": "Confirmed in animated review."
+    },
+    "hariyama": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "1: slap, 2: Palm"
+    },
+    "haunter": {
+      "family": "claw_slash",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "heracross": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "hoopa": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "2 maakt een terugwaartse draai"
+    },
+    "hoppip": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack maakt die een achterwaatse koprol na de body charge"
+    },
+    "hydreigon": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "hypno": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "jigglypuff": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "jolteon": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "jumpluff": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "magikarp": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "Confirmed in animated review."
+    },
+    "magnemite": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "magneton": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "magnezone": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "mankey": {
+      "family": "kick",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "marill": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "explicit_user_followup",
+      "primary_family": "unclear",
+      "note": "Confirmed in animated review."
+    },
+    "meowth": {
+      "family": "claw_slash",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "mew": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "mewtwo": {
+      "family": "kick",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "misdreavus": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack maak misdreavus een achterwaatse salto."
+    },
+    "murkrow": {
+      "family": "wing",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "oricorio": {
+      "family": "wing",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "Confirmed in animated review."
+    },
+    "orthworm": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "pichu": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "primeape": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "2 is meer een stomp"
+    },
+    "psyduck": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review."
+    },
+    "quagsire": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "qwilfish": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "tail",
+      "note": "Confirmed in animated review."
+    },
+    "raichu": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "2 heeft een sprongetje"
+    },
+    "rayquaza": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "scizor": {
+      "family": "claw_slash",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "2: is meer een grab"
+    },
+    "scyther": {
+      "family": "wing",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "1: 1 wing, 2: 2 wings."
+    },
+    "seviper": {
+      "family": "bite",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "shellder": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "physical attack 2 maakt shelder een sprongetje"
+    },
+    "slaking": {
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "1 is meer een grab"
+    },
+    "slowpoke": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "1 headbutt, 2 body slam"
+    },
+    "staraptor": {
+      "family": "wing",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "sudowoodo": {
+      "family": "kick",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "tauros": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "1 is van onder, 2 is van boven tackle"
+    },
+    "tyranitar": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "bite",
+      "note": "Confirmed in animated review."
+    },
+    "umbreon": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "vaporeon": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "venonat": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack 2 maakt Venonat een sprongetje"
+    },
+    "volcarona": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "voltorb": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack 2 maakte voltorb een achterwaatse koprol na de body charge"
+    },
+    "wigglytuff": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review."
+    },
+    "wooper": {
+      "family": "tail",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    },
+    "zapdos": {
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "confirmation_source": "explicit_user_followup",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review."
+    }
+  }
+}

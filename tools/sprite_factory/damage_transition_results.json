@@ -1,0 +1,128 @@
+{
+  "entries": [
+    {
+      "damage_length": 0.666666686534882,
+      "damage_start_min_y_delta_per_idle_height": 0.017033032804397,
+      "entry_max_vertex_delta_per_idle_height": 1.19210094468218,
+      "exit_max_vertex_delta_per_idle_height": 1.21140090319509,
+      "max_history_vertex_delta": 0,
+      "species": "garchomp",
+      "runtime_sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8",
+      "history_comparisons": 84,
+      "previous_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ],
+      "classification": "pose_family_mismatch"
+    },
+    {
+      "damage_length": 0.666666686534882,
+      "damage_start_min_y_delta_per_idle_height": -0.00379481906199761,
+      "entry_max_vertex_delta_per_idle_height": 0.183164289542026,
+      "exit_max_vertex_delta_per_idle_height": 0.000759351877138382,
+      "max_history_vertex_delta": 0,
+      "species": "azumarill",
+      "runtime_sha256": "a45144b6ac33ead2300942131161ce641cd8536b0d5a0469c10f6bf4f42f0006",
+      "history_comparisons": 84,
+      "previous_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ],
+      "classification": "entry_recoil_with_near_idle_return"
+    },
+    {
+      "damage_length": 0.833333313465118,
+      "damage_start_min_y_delta_per_idle_height": -0.00000356155046316189,
+      "entry_max_vertex_delta_per_idle_height": 0.201268828119346,
+      "exit_max_vertex_delta_per_idle_height": 0.000264898591506996,
+      "max_history_vertex_delta": 0,
+      "species": "flareon",
+      "runtime_sha256": "039480eee56bd385d7b777c6ed89885dbdc1c6df151ecb6f293452ca0e108a29",
+      "history_comparisons": 84,
+      "previous_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ],
+      "classification": "entry_recoil_with_near_idle_return"
+    },
+    {
+      "damage_length": 0.666666686534882,
+      "damage_start_min_y_delta_per_idle_height": -0.00223433992193805,
+      "entry_max_vertex_delta_per_idle_height": 0.275294370140797,
+      "exit_max_vertex_delta_per_idle_height": 0.000134751531747949,
+      "max_history_vertex_delta": 0,
+      "species": "gardevoir",
+      "runtime_sha256": "b2c0b3127b11bdb25262dd7139997fcc77cfcaeb35fc1e35d7b404f58b2dc2fa",
+      "history_comparisons": 84,
+      "previous_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ],
+      "classification": "entry_recoil_with_near_idle_return"
+    },
+    {
+      "damage_length": 0.666666686534882,
+      "damage_start_min_y_delta_per_idle_height": -0.00989118242886349,
+      "entry_max_vertex_delta_per_idle_height": 0.384012976151888,
+      "exit_max_vertex_delta_per_idle_height": 0.000183314624280023,
+      "max_history_vertex_delta": 0,
+      "species": "forretress",
+      "runtime_sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b",
+      "history_comparisons": 84,
+      "previous_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ],
+      "classification": "entry_recoil_with_near_idle_return"
+    },
+    {
+      "damage_length": 0.666666686534882,
+      "damage_start_min_y_delta_per_idle_height": -0.136447918744901,
+      "entry_max_vertex_delta_per_idle_height": 0.437814523262971,
+      "exit_max_vertex_delta_per_idle_height": 0.000576033713711161,
+      "max_history_vertex_delta": 0,
+      "species": "gyarados",
+      "runtime_sha256": "6c2f24d7bc71446102e3df895d0aafd1c80eccbf5e1a7bb3116fd6e483a17edf",
+      "history_comparisons": 84,
+      "previous_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "sleep",
+        "special_attack"
+      ],
+      "classification": "entry_recoil_with_near_idle_return"
+    }
+  ],
+  "scope": "summary preview standalone models; no asset or runtime changes",
+  "renderer": "Godot 4.6.2 Forward+ / NVIDIA RTX 3070 Laptop",
+  "frames": "idle(0), damage(0,.25,.5,.999), idle(0); fixed idle camera",
+  "limitations": "Geometry/history diagnostic through summary path only; not full battle/material/visibility certification. Entry difference is not automatically a defect."
+}

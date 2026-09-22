@@ -26,6 +26,20 @@ func _init() -> void:
 		"loading screen localizes its three preparation stages"
 	)
 	_check(source.contains("_set_loading_status"), "loading flow updates stage and status together")
+	_check(
+		source.contains("await WebAssetModuleService.ensure_scene_available(saved_scene_path)")
+		and source.find("await WebAssetModuleService.ensure_scene_available(saved_scene_path)")
+			< source.find("GameState.set_prepared_world_state({")
+		and source.find("GameState.set_prepared_world_state({")
+			< source.find("change_scene_to_packed(world_scene)"),
+		"browser map module is ready before the loading screen opens the world"
+	)
+	_check(source.contains("SavedMapScenePathResolver.resolve"), "loading and world use the same saved-map path")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_check(
+		world_source.contains("if not ResourceLoader.exists(saved_scene_path):\n\t\t# Login has already mounted the saved map."),
+		"browser world places a preloaded map without yielding for a second download"
+	)
 	_check(source.contains("func _on_locale_changed"), "loading screen refreshes during a locale change")
 	quit(1 if failed else 0)
 

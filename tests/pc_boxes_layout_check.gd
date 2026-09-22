@@ -75,7 +75,16 @@ func _init() -> void:
 	_check(not source.contains("pc_box_tab_bar"), "Storage avoids a duplicate row of box tabs")
 	_check(source.contains("button.focus_mode = Control.FOCUS_NONE"), "Storage controls cannot become stale Spacebar targets")
 	_check(source.contains("PokemonStorageService.move_pokemon("), "Storage revamp preserves moving Pokémon")
+	_check(source.contains('BackendErrorLocalizationService.error_code(result) == "coop_party_size_invalid"')
+		and source.contains('"ui.storage.move.coop_party_full"'), "Storage explains the co-op three-Pokémon limit")
+	_check(BackendErrorLocalizationService.error_code({"status": 409, "body": {"detail": {"code": "coop_party_size_invalid"}}}) == "coop_party_size_invalid",
+		"Storage can identify the server's co-op capacity rejection")
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		var values: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
+		_check(values is Dictionary and not str((values as Dictionary).get("ui.storage.move.coop_party_full", "")).is_empty(),
+			"Co-op storage limit has a %s translation" % locale)
 	_check(source.contains("PokemonStorageService.release_pokemon("), "Storage revamp preserves releasing Pokémon")
+	_check(source.contains('{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")}'), "Escape closes Pokémon Storage before opening Settings")
 	_check(source.contains('BackendErrorLocalizationService.error_code(result) == "starter_pokemon_protected"'), "Storage recognizes a protected starter release rejection")
 	_check(source.contains('BackendErrorLocalizationService.message(\n\t\t\tresult,\n\t\t\t"ui.storage.release.failed"'), "Storage shows the localized backend reason when release is rejected")
 	_check(source.contains("_open_pc_box_pokemon_summary("), "Storage revamp preserves Pokémon summaries")

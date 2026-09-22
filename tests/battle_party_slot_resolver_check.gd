@@ -17,6 +17,7 @@ func _run() -> void:
 	_check_duplicate_species_requires_stable_identity()
 	_check_valid_declared_slot_is_preserved()
 	_check_mimikyu_battle_form_resolves_to_canonical_slot()
+	_check_terapagos_battle_forms_keep_switch_slot()
 	_check_switch_eligibility_uses_current_pokemon_not_old_card()
 	_check_controller_reads_the_newer_request()
 	quit(1 if failed else 0)
@@ -36,6 +37,9 @@ func _check_controller_reads_the_newer_request() -> void:
 	]}}}}
 	_check_equal(controller._can_switch_to_selected_pokemon(1, old_card), false, "actual controller rejects stale healthy card using the normalized p2 participant request")
 	_check_equal(controller._can_switch_to_selected_pokemon(2, {"species": "Iron Valiant", "partySlot": 1}), true, "actual controller allows a different living replacement immediately")
+	var diagnostic: Dictionary = controller._pvp_switch_eligibility_diagnostic(2)
+	_check_equal(diagnostic.get("eligibilityReason"), "candidate_missing", "missing request candidate has a safe diagnostic reason")
+	_check_equal(diagnostic.get("requestTeamPresent"), true, "diagnostic distinguishes an absent candidate from an absent team")
 	controller.free()
 
 
@@ -136,6 +140,30 @@ func _check_mimikyu_battle_form_resolves_to_canonical_slot() -> void:
 		3,
 		"Mimikyu's in-battle busted form keeps the same canonical slot"
 	)
+
+
+func _check_terapagos_battle_forms_keep_switch_slot() -> void:
+	var roster := [{"species": "Terapagos", "instanceId": "terapagos", "canonicalPartySlot": 3}]
+	var card := {"species": "Terapagos", "instanceId": "terapagos", "partySlot": 3, "condition": "4/100"}
+	for form in ["Terapagos-Terastal", "Terapagos-Stellar"]:
+		var request_team := [
+			{"species": form, "instanceId": "terapagos", "partySlot": 3, "condition": "4/100", "active": false},
+			{"species": "Gholdengo", "partySlot": 5, "condition": "87/100", "active": true},
+		]
+		_check_equal(Resolver.resolve_selected_slot(request_team[0], roster), 3, "%s keeps Terapagos's canonical party slot" % form)
+		_check_equal(
+			SwitchFlow.is_available_switch_candidate(SwitchFlow.find_switch_candidate(3, roster, request_team)),
+			true,
+			"%s can switch back in after changing form" % form
+		)
+		_check_equal(SwitchFlow.refresh_switch_card(card, roster, request_team).get("condition"), "4/100", "%s refreshes the switch card" % form)
+		var controller: Variant = load("res://scripts/battle/battle.gd").new()
+		controller.pvp_room_code = "fixture"
+		controller.pvp_local_canonical_roster = roster
+		controller.force_switch_flow.setup(controller.battle_state)
+		controller.pvp_response_order.latest_response = {"requests": {"p1": {"side": {"pokemon": request_team}}}}
+		_check_equal(controller._can_switch_to_selected_pokemon(3, card), true, "%s is selectable in the PvP battle UI" % form)
+		controller.free()
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

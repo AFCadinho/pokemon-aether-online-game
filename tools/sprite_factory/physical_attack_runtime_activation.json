@@ -1,0 +1,572 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "runtime_activated": true,
+  "policy": "append-only GLB verification plus confirmed human semantics",
+  "counts": {
+    "activated_models": 74,
+    "profiles_selecting_alternate": 47,
+    "blocked_models": 1
+  },
+  "activated": [
+    {
+      "species": "azumarill",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "debc9617ad98b5365dbdc4ff12ba419084552c15dd9d7813c1009e480a02643a"
+    },
+    {
+      "species": "blissey",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "fdaacb49737d8e289598afd370537e813bdcd3ad06cf9f382ebdf27ec1c28af0"
+    },
+    {
+      "species": "chansey",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "0b9f55469da084e0f94d110a8793a3578a356b7e5f217a952cdc586ec0437d7f"
+    },
+    {
+      "species": "charizard",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "bb610eb2d81ea3963756cca4f0dda3ded856af5efb5853758e55a76d33c3b33f"
+    },
+    {
+      "species": "cloyster",
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "de89635b685866740dedef001831a0ffbf1ea7054d4c930b8f2f9ec6473aa5e9"
+    },
+    {
+      "species": "corviknight",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "abda53659dd0e2f7d1f35d379f1d4e95af96d28f5d51ae1dc229cacf8e0d0ef2"
+    },
+    {
+      "species": "delibird",
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "9ba2b4160b5e20097823c4d2ee7fb94ac7f1037698526871ddf7612734a1a976"
+    },
+    {
+      "species": "diglett",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "28bc757093aec871c0ccadee8086285f1aeac7bf29330e0e1065cedd845c0239"
+    },
+    {
+      "species": "ditto",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "43d19e70e94c72e0796d351665ed14454d0a31da70e8c12756773fa1fcde2700"
+    },
+    {
+      "species": "dondozo",
+      "attack_family_actions": {
+        "tail": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "c89c88d63312dc6881a7059b241d618c1221f103e47542d9c61f43d51499069c"
+    },
+    {
+      "species": "donphan",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "46747dd8c415ddf55b75437da462d500224918464b67d640aefb1335af86304d"
+    },
+    {
+      "species": "dragonair",
+      "attack_family_actions": {
+        "tail": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "b926a64546ef7aa48929f2d0397a9f64bae065179a8e10a2aba5c98c90d598b4"
+    },
+    {
+      "species": "dratini",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "5244a67b57f5f778fab1f5bccd9c804235be9ed96cb370749dc9f272fd244088"
+    },
+    {
+      "species": "drifblim",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "59fbfddf611fac8196a8a019a9e0662093f4089cbc61aad5a5688ae7908f1095"
+    },
+    {
+      "species": "drowzee",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "kick": "physical_attack_2"
+      },
+      "runtime_sha256": "790d6dcaa02f99ce77cf3aabc7bb0edcfd0c20fbf173cc3b204d5bc0c4dbbdfa"
+    },
+    {
+      "species": "eevee",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "87347bfa0fab10c1cf9050dfdddda47e56a18036d9ef8664e2f8670c91ea9cb5"
+    },
+    {
+      "species": "electrode",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "fc4e7ab564fe1fb2f86ac6bfe4c6f7e90f52051b2646c817909bede8618b500d"
+    },
+    {
+      "species": "espeon",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "4c944fa866427e9b689bc6d32378581ae6c0b71cb7330614021dca33950adc8e"
+    },
+    {
+      "species": "flapple",
+      "attack_family_actions": {
+        "wing": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "34bbc116fa1d809ca6c87bcb0c6f8b33244258e126c42b481cc340620d18e8cf"
+    },
+    {
+      "species": "flareon",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "a0079cc6a5d334dbf6ab57a073766aca02ce1034feba8ced5a9a27652c6af7af"
+    },
+    {
+      "species": "forretress",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "d4280fe578e2f93ea9b83ddd6f850845ae85701d433861b13b5421df28fcd649"
+    },
+    {
+      "species": "garchomp",
+      "attack_family_actions": {
+        "bite": "physical_attack",
+        "claw_slash": "physical_attack_2"
+      },
+      "runtime_sha256": "63981135aef04a3b7403c0d49d61e9dac6e950df9f63fec186402c55208b8af3"
+    },
+    {
+      "species": "gardevoir",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "243a682b37c82d8731eec6252c9bca0786e63f9fce9a00724b9e9864aa77941b"
+    },
+    {
+      "species": "gengar",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack_2"
+      },
+      "runtime_sha256": "f0674ebc6e1c7599a18ad82b9c9ff62c2b75cbf0ab521b485e8ad186030cd0af"
+    },
+    {
+      "species": "golduck",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack"
+      },
+      "runtime_sha256": "9c5855c7a652188fe356bb7c37170dfe7b1ae3dba465be14ea88d4d17604a0e1"
+    },
+    {
+      "species": "growlithe",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "punch": "physical_attack_2"
+      },
+      "runtime_sha256": "c241a3b14f71a350f9118aced9d6ddddd32831e39b9dc200337012c314544ec1"
+    },
+    {
+      "species": "gyarados",
+      "attack_family_actions": {
+        "bite": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "14793b5b522bd9cb8f3826b61de188ac99688b2264df20941e82ed2bb0243027"
+    },
+    {
+      "species": "hariyama",
+      "attack_family_actions": {
+        "punch": "physical_attack"
+      },
+      "runtime_sha256": "c8a6b898026a8f4efd78601eb6ae3d616b32eef9e48aa5756d75922fd0526acc"
+    },
+    {
+      "species": "haunter",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "claw_slash": "physical_attack_2"
+      },
+      "runtime_sha256": "2984a3c700969b10d62cf00ac65bbc53b0cf54d075825158b31efbfa31080b35"
+    },
+    {
+      "species": "heracross",
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "fcd63b2534b2a02db5614408af53390179e9e2f57767ad1ee3163b77cd2aff52"
+    },
+    {
+      "species": "hoopa",
+      "attack_family_actions": {
+        "punch": "physical_attack"
+      },
+      "runtime_sha256": "0c8290592826ab1d664c188caa46d1448d3e47e97cdf54207f836ce1bdf5ee8a"
+    },
+    {
+      "species": "hoppip",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "22084945a1a4e475622ab53e3de4d3a82e6b520d7ec1347d5acb4850ff2fbeb7"
+    },
+    {
+      "species": "hydreigon",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "6bff795c082b16253744c142c89b319eb11c73916859b4b6ab7b7f9dc2d3636e"
+    },
+    {
+      "species": "hypno",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "67e86d40cd51ad17ffb92155a4003b1e2d84a26e5e87b56011468fafee5e3a1c"
+    },
+    {
+      "species": "jigglypuff",
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "5100d8abc6a86fe4fd4cc2cfd6c20f72f522b4672b9f47ac1a46934aa3fa4294"
+    },
+    {
+      "species": "jolteon",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "33e86e0cb200a880d0498ad220949908acacf406b09ae2adadf8f6a914ab5dcf"
+    },
+    {
+      "species": "jumpluff",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "punch": "physical_attack_2"
+      },
+      "runtime_sha256": "e0709bc6d56fd2727df1e7b3cde2ff85fe7e982aa8d7e4cdc4f0443ff731ade9"
+    },
+    {
+      "species": "magikarp",
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "e7c282900c4029b1ed9613efd9044e3328a26d65c7f4fdf2f75ae7886e61a579"
+    },
+    {
+      "species": "magnemite",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "b65e8d75dfef8de94265f454a675ded6e5803110b25752cec95025663eac1ff8"
+    },
+    {
+      "species": "magneton",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "447bd31ca942ab95616edbee123ea4aea7fc5baec46f2b168f9338474e0e1616"
+    },
+    {
+      "species": "magnezone",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "b1a20514b6cd4af1b8820992489e5a4a96c3b793689f46b9d5fc6eff20438621"
+    },
+    {
+      "species": "mankey",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "kick": "physical_attack_2"
+      },
+      "runtime_sha256": "08a42542e674de765fb43db6a5f2ec7fc5a0ef877eb23efb2d0fa6e61dc1a579"
+    },
+    {
+      "species": "marill",
+      "attack_family_actions": {
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "c8cec3e8862ccb21768bd74f9b798fe553d9ee84c7f3f772867bc448ae912e50"
+    },
+    {
+      "species": "mew",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "59b42a9a786553f15e772af0a2d3eec40e7052f83ea0713038c07a5ecc74bdaa"
+    },
+    {
+      "species": "mewtwo",
+      "attack_family_actions": {
+        "kick": "physical_attack_2"
+      },
+      "runtime_sha256": "9adbe54a97d008b1d58e80d9419b18f15d2c5a40cc1347eba59c70ec6d513126"
+    },
+    {
+      "species": "misdreavus",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "6a024fda29e22988e8cfc171413ec6a86f3f43f924d62b9fde16c17c810a9e6b"
+    },
+    {
+      "species": "murkrow",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "wing": "physical_attack_2"
+      },
+      "runtime_sha256": "53a2a3752db729346e64cbb7fc801e11f609543837990f73cde877c48e675c1c"
+    },
+    {
+      "species": "oricorio",
+      "attack_family_actions": {
+        "wing": "physical_attack_2"
+      },
+      "runtime_sha256": "fcc8348e2502ef96b23424789fc2e1a2eb3a341e4a88eee89edd90076b68fe0d"
+    },
+    {
+      "species": "orthworm",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "d637ed8b77396d74fa03d71342833e624009bb42ada8accae864b5b7f167f869"
+    },
+    {
+      "species": "pichu",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "e08fa8d1443bdc2c71dc32b7b7274651c0a10d76389cc87bcc5419dbbf4c304f"
+    },
+    {
+      "species": "primeape",
+      "attack_family_actions": {
+        "punch": "physical_attack"
+      },
+      "runtime_sha256": "e51e8c3cd42b1e1d9f2955f3cf2f06961957503a76d341e39ec39b091a984729"
+    },
+    {
+      "species": "psyduck",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "31361b117694d7aa93105c34376406b170bd03101b751ff96b502fdc413f9036"
+    },
+    {
+      "species": "quagsire",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "f1aa3020e696304283b5ffd0188edfa8bd8d3c6a6f86fbe8bd551984c62075f0"
+    },
+    {
+      "species": "qwilfish",
+      "attack_family_actions": {
+        "tail": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "baeed98857c86e313beec7dafa62c3d37371e1abf99be58112377355cb26b523"
+    },
+    {
+      "species": "raichu",
+      "attack_family_actions": {
+        "punch": "physical_attack"
+      },
+      "runtime_sha256": "9c4f531346100f0505a3c5f4d68e0f61281e26979fc1145c1b0c1d2bfd78c34f"
+    },
+    {
+      "species": "rayquaza",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "54e37c47c8a89dedb905e97e58403be3883775d45bb0ab839e613900cec8b2b2"
+    },
+    {
+      "species": "scizor",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack_2"
+      },
+      "runtime_sha256": "998656b43df16e785a4b833a41876d0f66a334f14abdb2ba42a1f0df60abdaa4"
+    },
+    {
+      "species": "scyther",
+      "attack_family_actions": {
+        "wing": "physical_attack_2"
+      },
+      "runtime_sha256": "396759bdf5dc8ba4391b9d951ffe12ed1ca40767752bdedeb0326fbcf5b32399"
+    },
+    {
+      "species": "seviper",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "bite": "physical_attack_2"
+      },
+      "runtime_sha256": "9e9fabdd6e5790659474cde0d54e2c98b0a3df3ccd3eeda121b240a79635e06c"
+    },
+    {
+      "species": "shellder",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "1256ea3917e712cfe82a49df03175ee24dcbc7f71335e11378276b7938f1173b"
+    },
+    {
+      "species": "slaking",
+      "attack_family_actions": {
+        "claw_slash": "physical_attack",
+        "punch": "physical_attack_2"
+      },
+      "runtime_sha256": "1b86c7e63d2d1f635979c61c5e1ac49314fa166e40e1768b559686af1019324b"
+    },
+    {
+      "species": "slowpoke",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "07361814dff9868bbd35af36d20afe004e9819c16b7fe89e559e0e9815a9476e"
+    },
+    {
+      "species": "staraptor",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "wing": "physical_attack_2"
+      },
+      "runtime_sha256": "bc178d48fe80011cf3730675de6ca59437e9c2484d2dce711df2000c1290c2c4"
+    },
+    {
+      "species": "sudowoodo",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "kick": "physical_attack_2"
+      },
+      "runtime_sha256": "48f984baef40fc8b1e491f6600ecd36f05de2e742c53cf447c6786a98dec6a1f"
+    },
+    {
+      "species": "tauros",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "958018f9414907e558add1e7ffccf13b7fcdb870f0e321a02ff87747aa631c4b"
+    },
+    {
+      "species": "tyranitar",
+      "attack_family_actions": {
+        "bite": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "d4c043845d9e0aad77091351fb17d58af925e96d5b9fcb484bb87a0226d585e3"
+    },
+    {
+      "species": "umbreon",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "f72339c99e68e5f6f6de03f26eabcac17282791728dfc5725d84bd4d3afee18b"
+    },
+    {
+      "species": "vaporeon",
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "03ea8f8f5e20bb343f2916ce999596af1a925b66beaf577f089b460f5c0c6edf"
+    },
+    {
+      "species": "venonat",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "4516986d5a05e2bac6447978e1ae55854f3ef141080b9473f3d2302b13468348"
+    },
+    {
+      "species": "volcarona",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "aa89b64b533bb737e47173cc843af34dd01aa6a575356b28f3aae20af333ac75"
+    },
+    {
+      "species": "voltorb",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "699fc96e116f28a5df948c7a45be4b886a7752001be09a6ee4c7c4f521f3dffd"
+    },
+    {
+      "species": "wigglytuff",
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
+      },
+      "runtime_sha256": "56d1d64e2d2099743dd4e53e43d7daa05779212d0dd3d5a51d24cc9e393d822b"
+    },
+    {
+      "species": "wooper",
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
+      },
+      "runtime_sha256": "b5b589820f571f31a922713d7335cef5b98948f97f889968e85685bc22dc1b67"
+    },
+    {
+      "species": "zapdos",
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
+      },
+      "runtime_sha256": "8751fa2e0f23dd809c8150ffcc67ce6fe8962ab153ea79476d6a547e56b41adc"
+    }
+  ],
+  "blocked": [
+    {
+      "species": "meowth",
+      "reason": "alternate_runtime_not_certified"
+    }
+  ]
+}

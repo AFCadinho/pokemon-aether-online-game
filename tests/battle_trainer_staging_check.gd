@@ -19,11 +19,53 @@ func _init() -> void:
 
 
 func _run_checks() -> void:
+	_check_immersive_empty_appearance()
+	if OS.get_environment("POKEAETHER_TEST_IMMERSIVE_EMPTY_ONLY") == "1":
+		quit(1 if failed else 0)
+		return
+	_check_trainer_base_palette()
 	_check_scene_staging()
 	_check_battle_setup_contract()
 	_check_npc_metadata_contract()
 	await _check_runtime_renderer()
 	quit(1 if failed else 0)
+
+func _check_immersive_empty_appearance() -> void:
+	var portraits = load("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
+	var figure := Node2D.new()
+	portraits.figures.append(figure)
+	var fallback: Texture2D = load("res://assets/battles/trainers/player/male/base.png")
+	portraits._rebuild_figure(0, {}, fallback)
+	_check(figure.get_child_count() == 1, "Empty appearance builds fallback trainer figure without typed-array errors")
+	portraits._rebuild_figure(0, {}, null)
+	_check(figure.get_child_count() == 0, "Empty appearance without fallback clears trainer figure")
+	figure.free()
+	portraits.free()
+
+
+func _check_trainer_base_palette() -> void:
+	for gender: String in ["male", "female"]:
+		var path := "res://assets/battles/trainers/player/%s/base.png" % gender
+		var original := (load(path) as Texture2D).get_image()
+		for tone: String in ["#f8d0b8", "#c58a5c", "#3f271f"]:
+			var layers := BattlePlayerTrainerCatalog.build_layers({"gender": gender, "skin_tone": tone})
+			var rendered := (layers[0].get("texture") as Texture2D).get_image()
+			var ball_pixels := 0
+			var changed_skin := 0
+			var unchanged_details := true
+			for y in range(original.get_height()):
+				for x in range(original.get_width()):
+					var before := original.get_pixel(x, y)
+					var after := rendered.get_pixel(x, y)
+					if before in [Color("#b83030"), Color("#884038")]:
+						ball_pixels += 1
+					if before in [Color("#f8d0b8"), Color("#d8a078"), Color("#b87860")]:
+						if before != after:
+							changed_skin += 1
+					elif before != after:
+						unchanged_details = false
+			_check(ball_pixels == 32 and unchanged_details, "%s %s keeps both Pokéball reds and every non-skin pixel unchanged" % [gender, tone])
+			_check(changed_skin > 12, "%s %s still recolours the body skin" % [gender, tone])
 
 
 func _check_scene_staging() -> void:
@@ -31,12 +73,13 @@ func _check_scene_staging() -> void:
 	var player_start := source.find('[node name="PlayerTrainerSprite"')
 	var enemy_start := source.find('[node name="EnemyTrainerSprite"')
 	var platform_start := source.find('[node name="BattlePlatform"')
-	_check(player_start >= 0, "player overworld trainer marker exists")
-	_check(enemy_start >= 0, "opponent overworld trainer marker exists")
+	_check(player_start >= 0, "player battle trainer marker exists")
+	_check(enemy_start >= 0, "opponent battle trainer marker exists")
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
-	_check(source.contains("position = Vector2(124, 474)"), "player trainer stands slightly above the player platform baseline")
+	_check(source.contains("position = Vector2(124, 438)"), "player trainer is raised clear of the command dock")
 	_check(source.contains("position = Vector2(1028, 316)"), "opponent trainer mirrors the raised staging")
 	_check(source.contains('[node name="EnemySpriteBox"') and source.contains("z_index = 2"), "active Pokemon render above trainer art")
+	_check(source.contains("offset_top = 178.0") and source.contains("offset_bottom = 178.0"), "player-side party rail is raised with the player trainer")
 	_check(source.contains("position = Vector2(300, 412)"), "player team preview remains in its original position")
 	_check(source.contains("position = Vector2(850, 268)"), "opponent team preview remains in its original position")
 
@@ -74,11 +117,26 @@ func _check_battle_setup_contract() -> void:
 	var pvp_show_index := source.find("_show_pvp_trainers(display_response)", pvp_setup_start)
 	_check(
 		trainer_show_index > trainer_setup_start and trainer_show_index < pvp_setup_start,
-		"NPC and story trainer battles keep the local trainer visible"
+		"NPC and story trainer battles stage the local trainer"
 	)
 	_check(
 		pvp_show_index > pvp_setup_start,
-		"PvP battles keep both trainers visible"
+		"PvP battles stage both trainers"
+	)
+	_check(
+		source.contains("func _hide_trainer_between_non_immersive_callouts")
+		and source.contains("not has_meta(\"immersive_battle_ui\")"),
+		"non-immersive trainer art stays hidden between callouts"
+	)
+	_check(
+		source.contains("func _hide_non_immersive_trainer_after_callout")
+		and source.contains("trainer_sprite.hide_after_command()"),
+		"non-immersive trainer art hides with its command bubble"
+	)
+	_check(
+		FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd").contains("func reveal_for_command()")
+		and FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd").contains("CALLOUT_ENTRY_OFFSET"),
+		"callouts use a directional trainer transition"
 	)
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains('npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")'), "trainer setup retains the NPC display name for later battle events")
@@ -86,7 +144,7 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("npc_trainer_display_name = \"\""), "every battle setup clears the prior NPC trainer name")
 	_check(source.contains("_show_pvp_trainers(display_response)"), "PvP consumes appearances only from its projected response")
 	_check(
-		source.contains('_vs_panel_call("set_trainer_portraits_visible", [_vs_panel_uses_player_portraits()])'),
+		source.contains('_vs_panel_call("set_trainer_portraits_visible", [show_portraits])'),
 		"VS panel hides player heads when full trainer art is staged"
 	)
 	_check(
@@ -96,15 +154,23 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("_show_pvp_trainers(mapped_snapshot)"), "spectator side swaps rebuild side-owned trainer visuals")
 	_check(source.contains("# their attached command callouts cannot remain tied to the old side."), "spectator side swaps document callout reset ownership")
 	_check(source.contains("if appearance_state.is_empty():\n\t\treturn"), "missing opponent appearances stay hidden instead of using a false identity")
+	_check(source.contains('player_data.get("battleSpriteId", "")') and source.contains('"_battle_sprite_id": "showdown_acetrainer_gen6"'), "Bot Guild opponents use their explicit trainer battle sprite without a player appearance")
 	var switch_command_index := source.find("_show_switch_trainer_command(event_data, switch_player_id)")
 	var switch_recall_index := source.find("await _play_switch_recall_for_event(event_data, switch_player_id)", switch_command_index)
 	_check(switch_command_index >= 0, "switch events present a trainer command")
 	_check(switch_recall_index > switch_command_index, "switch commands appear immediately before recall animation")
 	_check(source.contains("if battle_type != BattleType.TRAINER:"), "wild battles do not show trainer command callouts")
 	var renderer_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd")
-	_check(renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player staging reuses the overworld avatar renderer lazily")
-	_check(renderer_source.contains('"facingDirection": _direction_name(facing_direction)'), "player staging selects an inward-facing overworld pose")
-	_check(renderer_source.contains("Node.PROCESS_MODE_DISABLED"), "player staging disables overworld processing")
+	var player_catalog_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
+	_check(renderer_source.contains("BattlePlayerTrainerCatalog.build_layers"), "player staging uses the dedicated layered battle-art catalog")
+	_check(renderer_source.contains("sprite.flip_h = facing_direction.x > 0.0"), "authored left-facing art mirrors only for the allied trainer")
+	_check(not renderer_source.contains("REMOTE_PLAYER_AVATAR_SCRIPT_PATH"), "player battles no longer fall back to the overworld renderer")
+	_check(player_catalog_source.contains("Image.load_from_file(path)"), "new battle-art PNGs render before the editor importer catches up")
+	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
+	_check(
+		export_presets.count("assets/battles/trainers/player/**/*") == 5,
+		"all distributable builds include the dynamically loaded player battle art"
+	)
 	var router_source := FileAccess.get_file_as_string(BATTLE_ANIMATION_ROUTER_PATH)
 	_check(
 		router_source.contains("BattleRenderLayers.MOVE_FOREGROUND"),
@@ -126,6 +192,8 @@ func _check_npc_metadata_contract() -> void:
 
 
 func _check_runtime_renderer() -> void:
+	var raw_outfit_image := Image.load_from_file("res://assets/battles/trainers/player/mysterious_outfit/shirt.png")
+	_check(raw_outfit_image != null and not raw_outfit_image.is_empty(), "battle outfit PNGs remain directly readable without an imported texture resource")
 	var catalog := PortraitCatalogScript.new()
 	root.add_child(catalog)
 	var npc := _create_base_npc_harness()
@@ -178,6 +246,9 @@ func _check_runtime_renderer() -> void:
 	_check(renderer.catalog_sprite.visible, "catalog trainer art is visible")
 	_check(not renderer.npc_sprite.visible, "catalog trainer art replaces the overworld-frame renderer")
 	_check(renderer.catalog_sprite.texture == catalog_texture, "catalog trainer art keeps the assigned Showdown texture")
+	var bot_texture := catalog.get_texture("showdown_acetrainer_gen6")
+	renderer.show_catalog_sprite(bot_texture, Vector2.LEFT)
+	_check(bot_texture != null and renderer.catalog_sprite.visible and renderer.catalog_sprite.texture == bot_texture, "Bot Guild ace-trainer battle art exists and renders")
 	_check(
 		renderer.catalog_sprite.position == Vector2(-24.0, -32.0),
 		"catalog trainer art aligns its feet and clears the opponent party rail"
@@ -186,16 +257,140 @@ func _check_runtime_renderer() -> void:
 	renderer.show_player({
 		"gender": "male",
 		"body": "Gen4_Base_v1",
+		"hair": "Hair",
+		"headgear": "Cap",
+		"top": "Shirt",
+		"bottom": "Trousers",
+		"shoes": "Shoes",
+	}, Vector2.RIGHT)
+	_check(renderer.player_battle_art.visible, "player trainer battle art is composed")
+	var body := renderer.player_battle_art.get_node_or_null("Body") as Sprite2D
+	_check(body != null and body.texture != null, "player trainer uses the dedicated battle base model")
+	_check(
+		renderer.player_battle_art.get_child_count() == 6,
+		"player trainer composes the base and complete Starter Kit"
+	)
+	_check(body.flip_h, "left-side player battle art is mirrored to face right")
+	renderer.show_player({
+		"gender": "female",
+		"body": "Gen4_Base_F_v1",
+		"hair": "Hair",
+		"headgear": "__none__",
+		"top": "Shirt",
+		"bottom": "Trousers",
+		"shoes": "Shoes",
+	}, Vector2.LEFT)
+	_check(renderer.player_battle_art.get_node_or_null("Headgear") == null, "serialized unequipped headgear stays absent")
+	var female_body := renderer.player_battle_art.get_node_or_null("Body") as Sprite2D
+	_check(female_body != null and not female_body.flip_h, "right-side opponent battle art keeps its authored left-facing pose")
+	renderer.show_player({
+		"gender": "female",
+		"body": "Gen4_Base_F_v1",
+		"hair": "Aether_Blossom_Hair",
+		"headgear": "__none__",
+		"top": "Aether_Blossom_Dress",
+		"bottom": "Aether_Blossom_Trousers",
+		"shoes": "Aether_Blossom_Shoes",
+		"facegear": "Aether_Blossom_Earrings",
+	}, Vector2.LEFT)
+	_check(
+		renderer.player_battle_art.visible
+		and renderer.player_battle_art.get_node_or_null("Body") != null,
+		"Aether Blossom keeps the dedicated battle base body"
+	)
+	_check(
+		renderer.player_battle_art.get_node_or_null("Top") != null
+		and renderer.player_battle_art.get_node_or_null("Bottom") != null
+		and renderer.player_battle_art.get_node_or_null("Hair") != null
+		and renderer.player_battle_art.get_node_or_null("Shoes") != null
+		and renderer.player_battle_art.get_node_or_null("Facegear") != null,
+		"Aether Blossom uses every authored Wishmaker battle layer"
+	)
+	_check(
+		renderer.player_battle_art.get_node_or_null("Headgear") == null,
+		"Aether Blossom leaves unequipped headgear absent"
+	)
+	for layer_name: String in ["Top", "Shoes", "Hair", "Facegear"]:
+		var wishmaker_layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		_check(
+			wishmaker_layer != null
+			and wishmaker_layer.texture.get_size() * wishmaker_layer.scale == Vector2(160.0, 160.0),
+			"Aether Blossom %s aligns to the 160px trainer canvas" % layer_name.to_lower()
+		)
+	_check(
+		renderer.player_layer_metadata.filter(
+			func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
+		).size() == 1,
+		"only Aether Blossom's trousers use the Starter Kit fallback"
+	)
+	for gender: String in ["male", "female"]:
+		renderer.show_player({
+			"gender": gender,
+			"body": "Gen4_Base_F_v1" if gender == "female" else "Gen4_Base_v1",
+			"top": "Mysterious_Shirt",
+			"bottom": "Mysterious_Trousers",
+			"shoes": "Mysterious_Shoes",
+			"facegear": "Mysterious_Mask",
+		}, Vector2.RIGHT)
+		for layer_name: String in ["Top", "Bottom", "Shoes", "TopAccessory", "Facegear"]:
+			_check(
+				renderer.player_battle_art.get_node_or_null(layer_name) != null,
+				"%s Mysterious Outfit renders its %s battle layer" % [gender, layer_name]
+			)
+		_check(
+			renderer.player_layer_metadata.filter(
+				func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
+			).is_empty(),
+			"%s Mysterious Outfit uses authored battle art without fallback" % gender
+		)
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"top": "Adinho_Shirt",
+		"bottom": "Adinho_Trousers",
+		"shoes": "Adinho_Shoes",
 		"hair": "Adinho_Hair",
 		"facial_hair": "Adinho_Beard",
+		"facegear": "Adinho_Glasses",
+		"hair_color": "#5a3728",
+		"facial_hair_color": "#5a3728",
 	}, Vector2.RIGHT)
-	_check(renderer.player_avatar != null, "player trainer avatar is composed for battle")
-	var body := renderer.player_avatar.find_child("BodySprite", true, false) as AnimatedSprite2D
-	_check(body != null and body.animation == &"idle_right", "hidden trainer initialization applies the actual right-facing animation before processing stops")
-	_check(
-		renderer.player_avatar != null and renderer.player_avatar.z_as_relative,
-		"layered player trainer art inherits the protected trainer render band"
-	)
+	var original_adinho_layers: Dictionary = {}
+	for layer_name: String in ["Top", "Bottom", "Shoes", "Eyebrows", "Hair", "FacialHair", "Facegear"]:
+		var layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		_check(layer != null and layer.texture != null, "Adinho original palette renders its %s layer" % layer_name)
+		if layer != null:
+			original_adinho_layers[layer_name] = layer.texture
+	renderer.show_player({
+		"gender": "male",
+		"body": "Gen4_Base_v1",
+		"top": "Adinho_Shirt_Chroma",
+		"bottom": "Adinho_Trousers_Chroma",
+		"shoes": "Adinho_Shoes_Chroma",
+		"hair": "Adinho_Hair",
+		"facial_hair": "Adinho_Beard",
+		"facegear": "Adinho_Glasses_Chroma",
+		"hair_color": "#a64f70",
+		"facial_hair_color": "#a64f70",
+		"top_color": "#3f6fb2",
+		"bottom_color": "#8c4fa3",
+		"shoes_color": "#e77ba8",
+		"facegear_color": "#aeb6c2",
+	}, Vector2.RIGHT)
+	for layer_name: String in ["Top", "Bottom", "Shoes", "Facegear"]:
+		var chroma_layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		var original_texture := original_adinho_layers.get(layer_name) as Texture2D
+		_check(
+			chroma_layer != null
+			and original_texture != null
+			and _count_changed_opaque_pixels(original_texture.get_image(), chroma_layer.texture.get_image()) > 12,
+			"Adinho Chroma %s uses its saved colour" % layer_name.to_lower()
+		)
+	for layer_name: String in ["Eyebrows", "Hair", "FacialHair"]:
+		_check(
+			renderer.player_battle_art.get_node_or_null(layer_name) != null,
+			"Adinho Chroma appearance keeps its %s layer" % layer_name.to_lower()
+		)
 
 	renderer.clear()
 	_check(not renderer.visible, "clearing a trainer removes its battle visual")
@@ -236,16 +431,16 @@ func _render_player_trainer_skin(skin_tone: String) -> Image:
 	renderer.show_player({
 		"gender": "male",
 		"body": "Gen4_Base_v1",
-		"hair": "Adinho_Hair",
-		"facial_hair": "Adinho_Beard",
+		"hair": "Hair",
+		"top": "Shirt",
+		"bottom": "Trousers",
+		"shoes": "Shoes",
 		"skin_tone": skin_tone,
 	}, Vector2.RIGHT)
-	var body_sprite := renderer.player_avatar.find_child("BodySprite", true, false) as AnimatedSprite2D
+	var body_sprite := renderer.player_battle_art.get_node_or_null("Body") as Sprite2D
 	var image: Image
-	if body_sprite != null and body_sprite.sprite_frames != null:
-		var texture := body_sprite.sprite_frames.get_frame_texture(body_sprite.animation, body_sprite.frame)
-		if texture != null:
-			image = texture.get_image()
+	if body_sprite != null and body_sprite.texture != null:
+		image = body_sprite.texture.get_image()
 	renderer.free()
 	return image
 

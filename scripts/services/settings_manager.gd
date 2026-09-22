@@ -7,12 +7,11 @@ signal input_binding_changed(action: String, keycode: Key)
 
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 
 const SETTINGS_PATH := "user://settings.json"
 const SPRITE_STYLE_ANIMATED := "animated"
-const SPRITE_STYLE_STATIC := "static"
 const SPRITE_STYLE_PIXEL := "pixel"
-const SPRITE_STYLE_GEN5_ANIMATED := SPRITE_STYLE_PIXEL
 const BATTLE_MUSIC_DEFAULT := "lysandre_remix_pokemon_legends_z_a_zame"
 const MASTER_BUS := "Master"
 const MUSIC_BUS := "Music"
@@ -59,11 +58,19 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 ]
 
 var battle_animations := true
+var battle_presentation_mode := "2.5d"
+var battle_3d_catalog_path := ""
+var _manual_model_catalog_this_session := false
+var battle_3d_arena := "auto"
+var battle_ui_layout := "immersive"
+var immersive_battle_log_open := false
+var immersive_chat_height := 420.0
+var battle_3d_forest_manifest := ""
+var battle_3d_camera_motion := false
 var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
 var hide_other_players := false
-var sprite_style := SPRITE_STYLE_ANIMATED
 var performance_details := false
 var show_performance := false
 var fullscreen := false
@@ -98,6 +105,14 @@ func _ready() -> void:
 	_ensure_audio_buses()
 	load_settings()
 	_apply_runtime_settings()
+	set_process(OS.has_feature("web"))
+
+
+func _process(_delta: float) -> void:
+	var active := bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.active())", true))
+	if fullscreen != active:
+		fullscreen = active
+		settings_changed.emit()
 
 func load_settings() -> void:
 	if not FileAccess.file_exists(SETTINGS_PATH):
@@ -116,11 +131,20 @@ func load_settings() -> void:
 
 	var data: Dictionary = parsed_data as Dictionary
 	battle_animations = bool(data.get("battle_animations", battle_animations))
+	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
+	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
+	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
+	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
+	immersive_chat_height = clampf(float(data.get("immersive_chat_height",420.0)),220,800)
+	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
+	# General settings no longer exposes development arena overrides. Do not
+	# restore a hidden override from an older client; tools can set one per run.
+	battle_3d_arena = "auto"
+	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
 	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
-	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	performance_details = bool(data.get("performance_details", false))
 	show_performance = bool(data.get("show_performance", false))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
@@ -160,6 +184,7 @@ func load_settings() -> void:
 		str(data.get("locale", LocalizationManager.get_preferred_system_locale()))
 	)
 	var has_content_name_language := data.has("content_name_language")
+	var has_legacy_cosmetic_selection := data.has("sprite_style") or data.has("anime_pokemon_cries")
 	content_name_language = _validated_content_name_language(
 		str(data.get("content_name_language", _default_content_name_language(locale)))
 	)
@@ -183,6 +208,7 @@ func load_settings() -> void:
 		or input_bindings_migrated
 		or not has_content_name_language
 		or not has_world_pixel_scale_mode
+		or has_legacy_cosmetic_selection
 	):
 		save_settings()
 	_apply_runtime_settings()
@@ -201,11 +227,17 @@ func _apply_launcher_locale_argument() -> bool:
 func save_settings() -> void:
 	var data: Dictionary = {
 		"battle_animations": battle_animations,
+		"battle_presentation_mode": battle_presentation_mode,
+		"battle_3d_catalog_path": battle_3d_catalog_path,
+		"battle_ui_layout": battle_ui_layout,
+		"immersive_battle_log_open": immersive_battle_log_open,
+		"immersive_chat_height": immersive_chat_height,
+		"battle_3d_forest_manifest": battle_3d_forest_manifest,
+		"battle_3d_camera_motion": battle_3d_camera_motion,
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
 		"hide_other_players": hide_other_players,
-		"sprite_style": sprite_style,
 		"performance_details": performance_details,
 		"show_performance": show_performance,
 		"fullscreen": fullscreen,
@@ -246,6 +278,69 @@ func set_battle_animations(enabled: bool) -> void:
 	battle_animations = enabled
 	_save_and_emit()
 
+func set_battle_presentation_mode(mode: String) -> void:
+	var validated := "3d" if mode == "3d" else "2.5d"
+	if battle_presentation_mode == validated:
+		return
+	battle_presentation_mode = validated
+	_save_and_emit()
+
+func set_battle_3d_catalog_path(path: String) -> void:
+	var previous := get_battle_3d_catalog_path()
+	_manual_model_catalog_this_session = true
+	if battle_3d_catalog_path == path and previous == path:
+		return
+	battle_3d_catalog_path = path
+	_save_and_emit()
+
+func get_battle_3d_catalog_path() -> String:
+	if not OS.has_feature("web") and not _manual_model_catalog_this_session:
+		var selected := OS.get_environment("POKEAETHER_MODEL_CATALOG")
+		if selected.is_absolute_path() and not selected.is_empty():
+			return selected
+	return battle_3d_catalog_path
+
+func set_battle_3d_arena(id: String) -> void:
+	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(id)
+	_save_and_emit()
+
+func set_battle_ui_layout(value: String) -> void:
+	battle_ui_layout = "classic" if value == "classic" else "immersive"
+	_save_and_emit()
+
+func set_immersive_battle_log_open(value: bool) -> void:
+	immersive_battle_log_open = value
+	_save_and_emit()
+
+func set_immersive_chat_height(value: float) -> void:
+	immersive_chat_height = clampf(value,220,800)
+	_save_and_emit()
+
+func set_battle_3d_forest_manifest(path: String) -> void:
+	battle_3d_forest_manifest = path
+	_save_and_emit()
+
+func get_battle_3d_forest_manifest() -> String:
+	if not battle_3d_forest_manifest.is_empty():
+		return battle_3d_forest_manifest
+	if not OS.has_feature("web") and not OS.has_feature("mobile"):
+		var installed := OS.get_environment("POKEAETHER_FOREST_MANIFEST")
+		if installed.is_absolute_path() and FileAccess.file_exists(installed):
+			return installed
+	# Developer installs made before the required launcher pack keep their
+	# deterministic forest runtime beside the explicitly selected local catalog.
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and not battle_3d_catalog_path.is_empty():
+		var candidate := battle_3d_catalog_path.get_base_dir().get_base_dir().get_base_dir().path_join("forest-runtime/forest.json")
+		if FileAccess.file_exists(candidate):
+			return candidate
+	return ""
+
+func set_battle_3d_camera_motion(enabled: bool) -> void:
+	if battle_3d_camera_motion == enabled:
+		return
+	battle_3d_camera_motion = enabled
+	_save_and_emit()
+
 
 func set_weather_effects(enabled: bool) -> void:
 	if weather_effects == enabled:
@@ -279,21 +374,8 @@ func set_hide_other_players(enabled: bool) -> void:
 	_save_and_emit()
 
 
-func set_sprite_style(style: String) -> bool:
-	var validated_style: String = _validated_sprite_style(style)
-	if style == SPRITE_STYLE_GEN5_ANIMATED and validated_style != SPRITE_STYLE_GEN5_ANIMATED:
-		return false
-	if sprite_style == validated_style:
-		return true
-
-	sprite_style = validated_style
-	_save_and_emit()
-	return true
-
-
-func is_gen5_animated_sprites_installed() -> bool:
-	# Browser builds stream this optional catalog from R2 on demand.
-	return OS.has_feature("web") or PokemonAssets.has_optional_gen5_animated_sprites()
+func get_active_sprite_style() -> String:
+	return SPRITE_STYLE_PIXEL if ContentPacks.has_sprite_collection_style("gen5") else SPRITE_STYLE_ANIMATED
 
 
 func set_performance_details(enabled: bool) -> void:
@@ -311,6 +393,9 @@ func set_show_performance(enabled: bool) -> void:
 
 
 func set_fullscreen(enabled: bool) -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherFullscreen?.request(%s)" % ("true" if enabled else "false"), true)
+		return
 	if fullscreen == enabled:
 		return
 
@@ -561,18 +646,6 @@ func _save_and_emit() -> void:
 	settings_changed.emit()
 
 
-func _validated_sprite_style(style: String) -> String:
-	match style:
-		SPRITE_STYLE_ANIMATED, SPRITE_STYLE_STATIC:
-			return style
-		SPRITE_STYLE_GEN5_ANIMATED:
-			if is_gen5_animated_sprites_installed():
-				return style
-			return SPRITE_STYLE_ANIMATED
-		_:
-			return SPRITE_STYLE_ANIMATED
-
-
 func _validated_content_name_language(value: String) -> String:
 	return (
 		CONTENT_NAME_LANGUAGE_LOCALIZED
@@ -728,6 +801,8 @@ func _apply_audio_bus_volume(bus_name: String, volume: float) -> void:
 
 func _apply_display_settings() -> void:
 	if OS.has_feature("web"):
+		# Never enter fullscreen automatically from persisted settings.
+		fullscreen = bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.active())", true))
 		return
 
 	if fullscreen:

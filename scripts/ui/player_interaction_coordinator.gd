@@ -14,6 +14,7 @@ signal mail_requested(username: String)
 signal trainer_card_requested(player: Dictionary)
 signal chat_moderation_requested(action: String, player: Dictionary)
 signal social_overview_updated(overview: Dictionary)
+signal coop_invitation_requested(trainer_name: String)
 
 const CHAT_MUTE_PERMISSION := "chat:mute"
 
@@ -546,6 +547,9 @@ func _render_context_primary_actions() -> void:
 func _render_context_secondary_actions() -> void:
 	_add_context_back_button()
 	context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
+	var coop_service := get_node_or_null("/root/CoopService")
+	if coop_service != null and bool(coop_service.get("available")) and _service_dictionary(coop_service.get("activity")).is_empty():
+		_add_context_action("Invite to Adventure Party", "Invite this Trainer to play together.", _on_coop_invite_pressed, "default", not _service_array(coop_service.get("party")).is_empty(), true)
 	_add_context_action(
 		"View Trainer Card",
 		_t("ui.nearby.action.trainer_card.description"),
@@ -1041,6 +1045,23 @@ func _on_guild_invite_pressed() -> void:
 	)
 	if context_menu != null and context_menu.visible:
 		_render_context_menu()
+
+
+func _on_coop_invite_pressed() -> void:
+	var trainer_name := str(current_target.get("username", "")).strip_edges()
+	var coop_service := get_node_or_null("/root/CoopService")
+	if trainer_name.is_empty() or coop_service == null or not bool(coop_service.get("available")) or not _service_array(coop_service.get("party")).is_empty():
+		return
+	close_context_menu()
+	coop_invitation_requested.emit(trainer_name)
+
+
+func _service_dictionary(value: Variant) -> Dictionary:
+	return value as Dictionary if value is Dictionary else {}
+
+
+func _service_array(value: Variant) -> Array:
+	return value as Array if value is Array else []
 
 
 func _can_challenge_aether_clash() -> bool:
@@ -1548,6 +1569,7 @@ func _context_action_icon(label_text: String) -> String:
 		"View Trainer Card": "▣",
 		"Send Mail": "✉",
 		"Invite to Guild": "+",
+		"Invite to Adventure Party": "+",
 		"Remove Friend": "−",
 		"Add Friend": "+",
 		"Unblock": "○",

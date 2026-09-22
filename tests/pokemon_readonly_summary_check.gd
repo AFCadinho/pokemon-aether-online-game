@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
+const RENDERED_ASSETS := preload("res://scripts/battle/battle_ui/rendered_sprite_assets.gd")
 const EXPECTED_SIZE := Vector2(620, 380)
 
 var failed := false
@@ -121,6 +122,28 @@ func _run() -> void:
 	_check(sprite_stage.tooltip_text != "", "read-only sprite explains the front/back interaction")
 	_check(sprite_stage.gui_input.has_connections(), "read-only sprite is connected to the shared front/back handler")
 	_check(str(overlay.get("pokemon_summary_sprite_side")) == "front", "read-only Summary starts with the front sprite")
+	_check(overlay_source.contains("func _prefetch_pokemon_summary_rendered_view"), "rendered Summary sprites warm the opposite view")
+	_check(overlay_source.contains('func _make_pokemon_summary_sprite_stage_style() -> StyleBoxFlat:\n\tvar style := _make_panel_style(Color("#00000000")'), "Summary keeps its existing illustrated sprite background")
+	_check(overlay_source.contains('else:\n\t\t\t_prefetch_pokemon_summary_web_sprites(pokemon)\n\t\t\t_upgrade_pokemon_summary_web_sprite.call_deferred'), "Summary web sprites never replace a rendered asset")
+	if not RENDERED_ASSETS._preview_catalog_path().is_empty():
+		var dragonite_payload := _sample_pokemon()
+		dragonite_payload["species"] = "Dragonite"
+		dragonite_payload["nickname"] = ""
+		dragonite_payload["shiny"] = false
+		var dragonite := PokemonFactory.create_pokemon_from_backend_payload(dragonite_payload)
+		overlay.call("_set_pokemon_summary_sprite", dragonite)
+		await process_frame
+		await process_frame
+		var displayed_frames := (overlay.get("pokemon_summary_animated_sprite") as AnimatedSprite2D).sprite_frames
+		_check(displayed_frames != null and displayed_frames.has_meta("rendered_asset"), "Summary keeps the rendered Dragonite after deferred fallback work")
+		_check(displayed_frames != null and bool(displayed_frames.get_meta("rendered_static_preview", false)), "Summary uses a lightweight lossless rendered still")
+		_check(displayed_frames != null and displayed_frames.get_frame_count("idle") == 1, "Summary does not decode the full 60 FPS idle atlas")
+		var animation_deadline := Time.get_ticks_msec() + 5000
+		while displayed_frames != null and bool(displayed_frames.get_meta("rendered_static_preview", false)) and Time.get_ticks_msec() < animation_deadline:
+			await process_frame
+			displayed_frames = (overlay.get("pokemon_summary_animated_sprite") as AnimatedSprite2D).sprite_frames
+		_check(displayed_frames != null and not bool(displayed_frames.get_meta("rendered_static_preview", false)), "Summary upgrades its still to the streamed rendered animation")
+		_check(displayed_frames != null and displayed_frames.get_frame_count("idle") > 1, "Summary rendered preview moves at source cadence")
 	var sprite_click := InputEventMouseButton.new()
 	sprite_click.button_index = MOUSE_BUTTON_LEFT
 	sprite_click.pressed = true
@@ -158,7 +181,8 @@ func _run() -> void:
 	)
 	_check(fallback_id_label.text == "#807", "Zeraora renders its National Dex number instead of a database id")
 	fallback_id_label.free()
-	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
+	var gender_icon := nodes.get("gender_icon") as TextureRect
+	_check(gender_icon != null and gender_icon.texture != null and gender_icon.visible, "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
 	_check((nodes.get("ability_stack") as VBoxContainer).tooltip_text == "", "ability uses the compact hover card instead of a native tooltip")
 	_check((nodes.get("nature_stack") as VBoxContainer).tooltip_text == "", "nature uses the compact hover card instead of a native tooltip")

@@ -9,10 +9,14 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for path: String in ["boxes/0", "pokemon/storage/move", "party/heal", "party/battle-state", "wallet/rewards/trainer-battle", "markets/standard", "trainers/zoe/progress", "pokedex/species", "pokedex/species/pidgey", "items/search"]:
+	for path: String in ["boxes/0", "pokemon/storage/move", "party/heal", "party/battle-state", "wallet/rewards/trainer-battle", "markets/standard", "trainers/zoe/progress", "pokedex/species", "pokedex/species/pidgey", "items/search", "hotbar", "player-actions", "player-actions/escape-rope/execute"]:
 		_check(Runtime.browser_gameplay_url("http://localhost/api/game/" + path) == "http://localhost/api/auth/web/" + path, "browser route: " + path)
 	var pokedex_service_source := FileAccess.get_file_as_string("res://scripts/services/pokedex_service.gd")
 	_check(_function(pokedex_service_source, "_request_json").contains("WebRuntime.gameplay_url(url)"), "Pokédex requests use the scoped browser transport")
+	var hotbar_service_source := FileAccess.get_file_as_string("res://scripts/services/player_hotbar_service.gd")
+	_check(_function(hotbar_service_source, "_request_json").contains("WebRuntime.gameplay_url(base_url + HOTBAR_ENDPOINT)"), "hotbar requests use the scoped browser transport")
+	var action_service_source := FileAccess.get_file_as_string("res://scripts/services/player_action_service.gd")
+	_check(_function(action_service_source, "_request_json").contains("WebRuntime.gameplay_url(base_url + endpoint)"), "hotbar player actions use the scoped browser transport")
 	for path: String in ["trades", "loans", "guilds/me/bank", "aether-clash/challenges", "dev/pokemon", "party-escape"]:
 		_check(Runtime.browser_gameplay_url("/game/" + path) == "/game/" + path, "restricted route is not remapped: " + path)
 	var source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
@@ -20,6 +24,16 @@ func _run() -> void:
 	_check(ready.find("_connect_world_presence_signals()") < ready.find('if OS.has_feature("web")'), "both platforms connect the visible roster before branching")
 	var setup := _function(source, "_setup_web_demo_world")
 	_check(setup.contains('_return_web_demo_to_login(str(saved_state_response.get("error"'), "browser position failures preserve their player-facing reason")
+	_check(
+		setup.find("if GameState.has_prepared_world_state()")
+			< setup.find("await PlayerGameStateService.bootstrap_story()"),
+		"browser consumes the loading screen position before any fallback request"
+	)
+	_check(
+		setup.find("$CurrentMap.add_child(initial_map)")
+			< setup.find("await PlayerGameStateService.refresh_story()"),
+		"browser installs the saved map before asynchronous story refresh"
+	)
 	var return_to_login := _function(source, "_return_web_demo_to_login")
 	_check(return_to_login.find("AuthService.set_pending_login_notice(message)") < return_to_login.find("change_scene_to_file(LOGIN_SCENE_PATH)"), "browser world failures retain their notice before returning to login")
 	_check(setup.contains("await _resume_saved_wild_battle(saved_state)"), "browser restores wild AND trainer activity on entry")

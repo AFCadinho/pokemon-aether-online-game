@@ -1,0 +1,113 @@
+extends SceneTree
+
+var failed := false
+
+
+func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	var settings := root.get_node("SettingsManager")
+	settings.battle_ui_layout = "immersive"
+	settings.battle_presentation_mode = "2.5d"
+	var host: Control = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	var battle: Control = load("res://scenes/battle/battle.tscn").instantiate()
+	root.add_child(host)
+	host.mount(battle)
+	_expect(battle.setup_coop_battle(), "immersive doubles setup succeeds")
+	var presenter: Control = battle.coop_presenter
+	presenter._apply_positions({
+		"participant": "p1",
+		"turn": 4,
+		"opponentPartySize": 2,
+		"positions": [
+			{"controller": "p1", "details": "Jigglypuff, L50, F", "hpPercent": 77},
+			{"controller": "p3", "details": "Squirtle, L50, M", "hpPercent": 100},
+			{"controller": "p2", "details": "Pidgey, L50, F", "hpPercent": 100},
+			{"controller": "p4", "details": "Furret, L50, M", "hpPercent": 55},
+		],
+		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 77, "maxHp": 100}],
+		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 100, "maxHp": 100}],
+	})
+	for dimensions: Vector2i in [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(960, 540)]:
+		host.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		host.size = Vector2(dimensions)
+		host._fit_battle()
+		for frame in 8:
+			await process_frame
+		_settle_immersive_hud(battle)
+		_check_hud_clearance(battle)
+		_check_concrete_anchors(battle, presenter)
+		var output := OS.get_environment("POKEAETHER_DOUBLES_OUTPUT")
+		if not output.is_empty() and DisplayServer.get_name() != "headless":
+			DirAccess.make_dir_recursive_absolute(output)
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output.path_join("immersive-doubles-%sx%s.png" % [dimensions.x, dimensions.y]))
+	host.release()
+	host.queue_free()
+	await process_frame
+	if failed:
+		quit(1)
+	print("IMMERSIVE_DOUBLES_LAYOUT_OK")
+	quit()
+
+
+func _settle_immersive_hud(battle: Control) -> void:
+	var hud_script := load("res://scripts/battle/battle_ui/immersive_hud.gd")
+	for child: Node in battle.get_children():
+		if child.get_script() == hud_script:
+			child.call("_process", 1.0)
+			return
+	_expect(false, "immersive HUD tracker is mounted")
+
+
+func _check_concrete_anchors(battle: Control, presenter: Control) -> void:
+	var router: RefCounted = presenter._native_move_router
+	var stage: Control = battle.battle_stage
+	for actor: String in ["p1", "p3", "p2", "p4"]:
+		for target: String in ["p1", "p3", "p2", "p4"]:
+			var actor_sprite: AnimatedSprite2D = presenter._native_sprite(actor)
+			var target_sprite: AnimatedSprite2D = presenter._native_sprite(target)
+			var actor_box: Control = battle.player_sprite_box if actor in ["p1", "p3"] else battle.enemy_sprite_box
+			var target_box: Control = battle.player_sprite_box if target in ["p1", "p3"] else battle.enemy_sprite_box
+			var aliases: Dictionary = router.call("bind_native_pair", actor, target,
+				{actor: actor_sprite, target: target_sprite}, {actor: actor_box, target: target_box})
+			_expect(not aliases.is_empty(), "%s to %s binds concrete sprites" % [actor, target])
+			if aliases.is_empty():
+				continue
+			for endpoint: String in [actor, target]:
+				var sprite: AnimatedSprite2D = actor_sprite if endpoint == actor else target_sprite
+				var box: Control = actor_box if endpoint == actor else target_box
+				var alias: String = aliases.actor if endpoint == actor else aliases.target
+				var visual_rect: Rect2 = box.call("_get_sprite_visual_rect_global", sprite)
+				var inverse := stage.get_global_transform().affine_inverse()
+				var rect := Rect2(inverse * visual_rect.position, inverse * visual_rect.end - inverse * visual_rect.position)
+				var facing := -1.0 if endpoint in ["p2", "p4"] else 1.0
+				var expected := {
+					"center": rect.get_center(),
+					"feet": Vector2(rect.get_center().x, rect.end.y),
+					"mouth": rect.position + rect.size * Vector2(0.5 + facing * 0.38, 0.38),
+				}
+				for anchor_point: String in expected:
+					var actual: Vector2 = router.call("_get_effect_target_anchor_in_parent", alias, stage, anchor_point)
+					_expect(actual.distance_to(expected[anchor_point]) <= 1.0,
+						"%s %s anchor follows its immersive sprite after resize" % [endpoint, anchor_point])
+
+
+func _check_hud_clearance(battle: Control) -> void:
+	for index in 2:
+		var box: Control = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
+		var hud: Control = battle.player_hud_panel if index == 0 else battle.enemy_hud_panel
+		var sprite_bounds: Rect2 = box.call("get_double_animation_visual_rect_in_node", battle.battle_stage)
+		var hud_bounds := Rect2(hud.position, hud.size * hud.scale)
+		_expect(sprite_bounds.has_area(), "immersive doubles exposes a combined sprite boundary")
+		_expect(hud_bounds.end.y <= sprite_bounds.position.y - 8.0,
+			"immersive doubles HP panel stays clear above both sprites: hud=%s sprites=%s" % [hud_bounds, sprite_bounds])
+
+
+func _expect(condition: bool, message: String) -> void:
+	if condition:
+		return
+	failed = true
+	push_error(message)

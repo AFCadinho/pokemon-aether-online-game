@@ -1,0 +1,301 @@
+{
+  "version": 1,
+  "canvasSize": 160,
+  "layerOrder": [
+    "bottom",
+    "shoes",
+    "top",
+    "top_accessory",
+    "eyebrows",
+    "hair",
+    "facial_hair",
+    "headgear",
+    "facegear"
+  ],
+  "genders": {
+    "male": {
+      "base": "res://assets/battles/trainers/player/male/base.png",
+      "categories": {
+        "bottom": {
+          "fallback": "Trousers",
+          "parts": {
+            "Trousers": {
+              "path": "res://assets/battles/trainers/player/male/starter_kit/trousers.png",
+              "scale": 2.0
+            },
+            "Mysterious_Trousers": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png",
+              "scale": 1.0
+            },
+            "Adinho_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/trousers.png",
+              "scale": 1.0
+            },
+            "Adinho_Trousers_Chroma": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/trousers.png",
+              "scale": 1.0,
+              "tint": "bottom_color"
+            }
+          }
+        },
+        "shoes": {
+          "fallback": "Shoes",
+          "parts": {
+            "Shoes": {
+              "path": "res://assets/battles/trainers/player/male/starter_kit/shoes.png",
+              "scale": 2.0
+            },
+            "Mysterious_Shoes": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/shoes.png",
+              "scale": 1.0
+            },
+            "Adinho_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/shoes.png",
+              "scale": 1.0
+            },
+            "Adinho_Shoes_Chroma": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/shoes.png",
+              "scale": 1.0,
+              "tint": "shoes_color"
+            }
+          }
+        },
+        "top": {
+          "fallback": "Shirt",
+          "parts": {
+            "Shirt": {
+              "path": "res://assets/battles/trainers/player/male/starter_kit/shirt.png",
+              "scale": 1.0
+            },
+            "Mysterious_Shirt": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "Adinho_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/og_palette/shirt.png",
+              "scale": 1.0
+            },
+            "Adinho_Shirt_Chroma": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/shirt.png",
+              "scale": 1.0,
+              "tint": "top_color"
+            }
+          }
+        },
+        "top_accessory": {
+          "parts": {
+            "Mysterious_Shirt": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/gloves.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "eyebrows": {
+          "parts": {
+            "Adinho_Hair": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/eyebrows.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            }
+          }
+        },
+        "hair": {
+          "fallback": "Hair",
+          "parts": {
+            "Hair": {
+              "path": "res://assets/battles/trainers/player/male/starter_kit/hair.png",
+              "scale": 1.0
+            },
+            "Adinho_Hair": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/hair.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Male_Hair_01": {
+              "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_01.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Male_Hair_02": {
+              "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_02.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Male_Hair_03": {
+              "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_03.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            }
+          }
+        },
+        "facial_hair": {
+          "parts": {
+            "Adinho_Beard": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/beard.png",
+              "scale": 1.0,
+              "tint": "facial_hair_color"
+            }
+          }
+        },
+        "headgear": {
+          "parts": {
+            "Cap": {
+              "path": "res://assets/battles/trainers/player/male/starter_kit/cap.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "facegear": {
+          "parts": {
+            "Mysterious_Mask": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/mask.png",
+              "scale": 1.0
+            },
+            "Adinho_Glasses": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/og_palette/glasses.png",
+              "scale": 1.0
+            },
+            "Adinho_Glasses_Chroma": {
+              "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/glasses.png",
+              "scale": 1.0,
+              "tint": "facegear_color"
+            }
+          }
+        }
+      }
+    },
+    "female": {
+      "base": "res://assets/battles/trainers/player/female/base.png",
+      "categories": {
+        "bottom": {
+          "fallback": "Trousers",
+          "parts": {
+            "Trousers": {
+              "path": "res://assets/battles/trainers/player/female/starter_kit/trousers.png",
+              "scale": 2.0
+            },
+            "Mysterious_Trousers": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "shoes": {
+          "fallback": "Shoes",
+          "parts": {
+            "Shoes": {
+              "path": "res://assets/battles/trainers/player/female/starter_kit/shoes.png",
+              "scale": 2.0
+            },
+            "Mysterious_Shoes": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/shoes.png",
+              "scale": 1.0
+            },
+            "Wishmaker_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Shoes_Chroma": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
+              "scale": 2.0,
+              "tint": "shoes_color"
+            }
+          }
+        },
+        "top": {
+          "fallback": "Shirt",
+          "parts": {
+            "Shirt": {
+              "path": "res://assets/battles/trainers/player/female/starter_kit/shirt.png",
+              "scale": 1.0
+            },
+            "Mysterious_Shirt": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "Wishmaker_Dress": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/dress.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Dress": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/dress.png",
+              "scale": 2.0
+            }
+          }
+        },
+        "top_accessory": {
+          "parts": {
+            "Mysterious_Shirt": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/gloves.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "hair": {
+          "fallback": "Hair",
+          "parts": {
+            "Hair": {
+              "path": "res://assets/battles/trainers/player/female/starter_kit/hair.png",
+              "scale": 1.0
+            },
+            "Wishmaker_Hair": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Hair": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Hair_Chroma": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
+              "scale": 2.0
+            },
+            "Aether_Female_Hair_01": {
+              "path": "res://assets/battles/trainers/player/female/hairstyle_batch_1/aether_female_hair_01.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Female_Hair_02": {
+              "path": "res://assets/battles/trainers/player/female/hairstyle_batch_1/aether_female_hair_02.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            }
+          }
+        },
+        "headgear": {
+          "parts": {
+            "Cap": {
+              "path": "res://assets/battles/trainers/player/female/starter_kit/cap.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "facegear": {
+          "parts": {
+            "Mysterious_Mask": {
+              "path": "res://assets/battles/trainers/player/mysterious_outfit/mask.png",
+              "scale": 1.0
+            },
+            "Wishmaker_Earrings": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Earrings": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
+              "scale": 2.0
+            },
+            "Aether_Blossom_Earrings_Chroma": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
+              "scale": 2.0,
+              "tint": "facegear_color"
+            }
+          }
+        }
+      }
+    }
+  }
+}

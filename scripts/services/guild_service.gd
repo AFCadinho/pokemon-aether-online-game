@@ -13,15 +13,19 @@ const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
+const WEB_GUILD_LOBBY_TELEPORT_ENDPOINT := "/auth/web/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
 const AETHER_CLASH_HISTORY_ENDPOINT := "/game/aether-clash/history"
 const AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT := "/game/aether-clash/player-challenges"
 const AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT := "/game/aether-clash/portal-sessions"
 const AETHER_CLASH_SESSIONS_ENDPOINT := "/game/aether-clash/sessions"
+const AETHER_CLASH_BOTS_ENDPOINT := "/game/aether-clash/bot-guild"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
+var pending_bot_request: Dictionary = {}
+var bot_request_in_flight := false
 var current_membership: Dictionary = {}
 var current_guild: Dictionary = {}
 var membership_loaded := false
@@ -314,7 +318,7 @@ func force_return_bank_loan_asset(asset_id: String) -> Dictionary:
 
 func teleport_to_lobby() -> Dictionary:
 	var response := await _authenticated_request(
-		GUILD_LOBBY_TELEPORT_ENDPOINT,
+		WEB_GUILD_LOBBY_TELEPORT_ENDPOINT if OS.has_feature("web") else GUILD_LOBBY_TELEPORT_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		"{}"
 	)
@@ -373,12 +377,53 @@ func load_aether_clash_history_detail(challenge_id: String) -> Dictionary:
 	}
 
 
+func load_aether_clash_bot_options() -> Dictionary:
+	var response := await _authenticated_request(AETHER_CLASH_BOTS_ENDPOINT + "/options", HTTPClient.METHOD_GET, "")
+	if not bool(response.get("success", false)):
+		return response
+	return {"success": true, "options": _dictionary(response.get("body", {})).duplicate(true)}
+
+
+func reset_aether_clash_bot_reward_for_development() -> Dictionary:
+	return await _authenticated_request(AETHER_CLASH_BOTS_ENDPOINT + "/reward-reset", HTTPClient.METHOD_POST, "{}")
+
+
+func create_aether_clash_bot_challenge(bot_count: int, tier_id: String, spectator_access: String, ai_policy: String = "ai4", reward_attempt: bool = false) -> Dictionary:
+	if bot_request_in_flight:
+		return {"success": false, "error": LocalizationManager.text("ui.clash_bot.pending")}
+	var settings := {"botCount": bot_count, "tierId": tier_id, "spectatorAccess": spectator_access, "aiPolicy": ai_policy, "rewardAttempt": reward_attempt}
+	if _dictionary(pending_bot_request.get("settings", {})) != settings:
+		pending_bot_request = {"settings": settings.duplicate(true), "requestId": _new_bot_request_id()}
+	var payload := settings.duplicate(true)
+	payload["requestId"] = str(pending_bot_request["requestId"])
+	bot_request_in_flight = true
+	var response := await _authenticated_request(
+		AETHER_CLASH_BOTS_ENDPOINT + "/challenges", HTTPClient.METHOD_POST, JSON.stringify(payload)
+	)
+	bot_request_in_flight = false
+	# Keep the same key after an ambiguous timeout; a retry recovers the session.
+	if bool(response.get("success", false)):
+		pending_bot_request.clear()
+	return _aether_clash_action_result(response)
+
+
+func _new_bot_request_id() -> String:
+	var bytes := Crypto.new().generate_random_bytes(16)
+	bytes[6] = (bytes[6] & 0x0f) | 0x40
+	bytes[8] = (bytes[8] & 0x3f) | 0x80
+	var hex := bytes.hex_encode()
+	return "%s-%s-%s-%s-%s" % [hex.substr(0, 8), hex.substr(8, 4), hex.substr(12, 4), hex.substr(16, 4), hex.substr(20, 12)]
+
+
 func create_aether_clash_challenge(
 	challenged_guild_id: int,
 	spectator_access := "public",
 	tier_id := "aether-ou",
 	stake_amount := 0
 ) -> Dictionary:
+	var module_result := await _ensure_web_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 	var response := await _authenticated_request(
 		AETHER_CLASH_CHALLENGES_ENDPOINT,
 		HTTPClient.METHOD_POST,
@@ -400,6 +445,9 @@ func create_aether_clash_player_challenge(
 ) -> Dictionary:
 	if target_user_id <= 0:
 		return {"success": false, "error": "Aether Clash target was missing."}
+	var module_result := await _ensure_web_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 	var response := await _authenticated_request(
 		AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT,
 		HTTPClient.METHOD_POST,
@@ -525,6 +573,9 @@ func leave_aether_clash_arena(challenge_id: String) -> Dictionary:
 
 
 func accept_aether_clash_challenge(challenge_id: String) -> Dictionary:
+	var module_result := await _ensure_web_aether_clash_maps()
+	if not bool(module_result.get("success", false)):
+		return module_result
 	return await _aether_clash_action(challenge_id, "accept")
 
 
@@ -534,6 +585,12 @@ func decline_aether_clash_challenge(challenge_id: String) -> Dictionary:
 
 func cancel_aether_clash_challenge(challenge_id: String) -> Dictionary:
 	return await _aether_clash_action(challenge_id, "cancel")
+
+
+func _ensure_web_aether_clash_maps() -> Dictionary:
+	if not OS.has_feature("web"):
+		return {"success": true, "alreadyAvailable": true}
+	return await WebAssetModuleService.ensure_aether_clash_maps()
 
 
 static func normalize_aether_clash_champion(value: Variant) -> Dictionary:
@@ -935,8 +992,11 @@ func _normalize_guild(value: Variant) -> Dictionary:
 
 
 func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
-	if OS.has_feature("web") and path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT]:
-		return {"success": false, "error": "Guild gameplay requires the game client."}
+	if OS.has_feature("web"):
+		if path.begins_with("/game/aether-clash"):
+			path = path.replace("/game/aether-clash", "/auth/web/aether-clash")
+		elif path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT, WEB_GUILD_LOBBY_TELEPORT_ENDPOINT]:
+			return {"success": false, "error": "Guild gameplay requires the game client."}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
@@ -948,21 +1008,8 @@ func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dic
 		return {"success": false, "error": "Could not start request: %s" % error_string(error)}
 	var completed: Array = await request.request_completed
 	request.queue_free()
-	var request_result := int(completed[0])
-	var response_code := int(completed[1])
-	var response_text := (completed[3] as PackedByteArray).get_string_from_utf8()
-	var parsed: Variant = JSON.parse_string(response_text)
-	var response_body := _dictionary(parsed)
-	if request_result != HTTPRequest.RESULT_SUCCESS:
-		return {"success": false, "status": response_code, "error": _request_result_message(request_result)}
-	if response_code < 200 or response_code >= 300:
-		return {
-			"success": false,
-			"status": response_code,
-			"error": _error_message(response_body, response_code),
-			"body": response_body,
-		}
-	return {"success": true, "status": response_code, "body": response_body}
+	return preload("res://scripts/services/service_json_response.gd").decode(
+		int(completed[0]), int(completed[1]), completed[3] as PackedByteArray, true)
 
 
 func _error_message(body: Dictionary, response_code: int) -> String:

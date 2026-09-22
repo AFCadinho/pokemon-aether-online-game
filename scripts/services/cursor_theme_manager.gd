@@ -21,6 +21,15 @@ func _ready() -> void:
 	apply_cursor_theme()
 
 
+func _exit_tree() -> void:
+	# Input outlives RenderingServer at engine shutdown. Release its generated
+	# ImageTextures while the renderer still exists, rather than from Input's
+	# later singleton destructor.
+	for shape: int in [Input.CURSOR_ARROW, Input.CURSOR_POINTING_HAND,
+		Input.CURSOR_DRAG, Input.CURSOR_MOVE, Input.CURSOR_CAN_DROP, Input.CURSOR_FORBIDDEN]:
+		Input.set_custom_mouse_cursor(null, shape)
+
+
 func apply_cursor_theme() -> void:
 	var arrow_cursor := load(ARROW_CURSOR_PATH) as Texture2D
 	var pointer_cursor := load(POINTER_CURSOR_PATH) as Texture2D

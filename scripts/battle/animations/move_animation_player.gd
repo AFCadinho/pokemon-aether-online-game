@@ -3,6 +3,7 @@ extends Node2D
 class_name MoveAnimationPlayer
 
 const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
+const SoundTimeline = preload("res://scripts/battle/animations/battle_sound_timeline.gd")
 
 signal animation_finished
 
@@ -3400,6 +3401,8 @@ func _update_pink_visual(index: int) -> void:
 
 func _apply_timing_events(index: int) -> void:
 	var timings: Array = data["timings"] as Array
+	for sound_event in SoundTimeline.take_frame(timings, [], index, disable_data_sound_events, played_events):
+		_play_sound_event(sound_event)
 	for event_value: Variant in timings:
 		if not event_value is Dictionary:
 			continue
@@ -3414,10 +3417,6 @@ func _apply_timing_events(index: int) -> void:
 		played_events[event_key] = true
 
 		match int(event["type"]):
-			0:
-				if disable_data_sound_events:
-					continue
-				_play_sound_event(event)
 			1:
 				if show_timing_backgrounds:
 					bg.modulate.a = 1.0
@@ -3442,24 +3441,8 @@ func _apply_timing_events(index: int) -> void:
 
 
 func _apply_custom_sound_events(index: int) -> void:
-	for event_value: Variant in custom_sound_events:
-		if not event_value is Dictionary:
-			continue
-		var event := event_value as Dictionary
-		if int(event.get("frame", -1)) != index:
-			continue
-		var sound_name := str(event.get("name", "")).strip_edges()
-		if sound_name == "":
-			continue
-		var event_key := "custom:%s:%s" % [index, sound_name]
-		if played_events.has(event_key):
-			continue
-		played_events[event_key] = true
-		_play_sound_event({
-			"name": sound_name,
-			"volume": float(event.get("volume", 100.0)),
-			"pitch": float(event.get("pitch", 100.0)),
-		})
+	for event in SoundTimeline.take_frame([], custom_sound_events, index, true, played_events):
+		_play_sound_event(event)
 
 
 func _expire_timing_layers(index: int) -> void:

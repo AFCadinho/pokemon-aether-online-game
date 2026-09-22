@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "id": "my-battle-sprites",
+  "name": "My Battle Sprites",
+  "version": "1.0.0",
+  "author": "Your name",
+  "description": "Custom battle sprites for selected Pokémon.",
+  "assets": {
+    "battle_sprites": {
+      "pikachu:front:normal": {
+        "file": "battle-sprites/pikachu-front.png",
+        "columns": 1,
+        "rows": 1,
+        "frames": 1,
+        "fps": 10
+      }
+    }
+  }
+}

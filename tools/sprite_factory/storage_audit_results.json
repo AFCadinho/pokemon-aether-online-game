@@ -1,0 +1,583 @@
+{
+  "catalog_sha256": "e3f7f36ff5b8ad51a586afca2e6043251ab43e590f5bf1a3b767b4f295214733",
+  "count": 75,
+  "disk_bytes": 929435076,
+  "resaved_compressed_bytes": 929467244,
+  "outer_zstd_bytes": 914790580,
+  "headers": [
+    "RSCC"
+  ],
+  "texture_roles": {
+    "albedo_texture": {
+      "payload_bytes": 505872384,
+      "independent_zstd_bytes": 94849884,
+      "count": 299
+    },
+    "roughness_texture": {
+      "payload_bytes": 505872384,
+      "independent_zstd_bytes": 76174356,
+      "count": 299
+    },
+    "normal_texture": {
+      "payload_bytes": 505872384,
+      "independent_zstd_bytes": 137374285,
+      "count": 299
+    },
+    "endpoint_0": {
+      "payload_bytes": 674234070,
+      "independent_zstd_bytes": 147344463,
+      "count": 298
+    },
+    "endpoint_1": {
+      "payload_bytes": 674234070,
+      "independent_zstd_bytes": 140525945,
+      "count": 298
+    },
+    "other": {
+      "payload_bytes": 961191,
+      "independent_zstd_bytes": 130766,
+      "count": 3
+    }
+  },
+  "component_standalone_compressed_bytes": {
+    "mesh": 9189397,
+    "skin": 220999,
+    "animation": 43243338
+  },
+  "skeleton_serialized_bytes": 436232,
+  "texture_unique_payload_bytes": 2422057215,
+  "texture_within_model_duplicate_zstd_bytes": 76689441,
+  "texture_between_model_duplicate_zstd_bytes": 4568,
+  "texture_global_unique_zstd_bytes": 519705690,
+  "shiny_pairs": [
+    {
+      "species": "articuno",
+      "normal_disk_bytes": 8126776,
+      "shiny_disk_bytes": 7839082,
+      "normal_unique_texture_zstd_bytes": 4987734,
+      "incremental_unique_texture_zstd_bytes": 1347449,
+      "components": {
+        "mesh": {
+          "normal_count": 2,
+          "shiny_count": 2,
+          "shared_count": 2
+        },
+        "animation": {
+          "normal_count": 7,
+          "shiny_count": 7,
+          "shared_count": 0
+        },
+        "skin": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 0
+        }
+      }
+    },
+    {
+      "species": "dragonite",
+      "normal_disk_bytes": 12294801,
+      "shiny_disk_bytes": 12264455,
+      "normal_unique_texture_zstd_bytes": 7301467,
+      "incremental_unique_texture_zstd_bytes": 3864155,
+      "components": {
+        "mesh": {
+          "normal_count": 2,
+          "shiny_count": 2,
+          "shared_count": 2
+        },
+        "animation": {
+          "normal_count": 7,
+          "shiny_count": 7,
+          "shared_count": 0
+        },
+        "skin": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 0
+        }
+      }
+    },
+    {
+      "species": "lucario",
+      "normal_disk_bytes": 12059925,
+      "shiny_disk_bytes": 11761982,
+      "normal_unique_texture_zstd_bytes": 5469137,
+      "incremental_unique_texture_zstd_bytes": 1986085,
+      "components": {
+        "mesh": {
+          "normal_count": 2,
+          "shiny_count": 2,
+          "shared_count": 2
+        },
+        "animation": {
+          "normal_count": 7,
+          "shiny_count": 7,
+          "shared_count": 0
+        },
+        "skin": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 0
+        }
+      }
+    },
+    {
+      "species": "pikachu",
+      "normal_disk_bytes": 12256179,
+      "shiny_disk_bytes": 12418429,
+      "normal_unique_texture_zstd_bytes": 7788982,
+      "incremental_unique_texture_zstd_bytes": 3009716,
+      "components": {
+        "mesh": {
+          "normal_count": 5,
+          "shiny_count": 5,
+          "shared_count": 5
+        },
+        "animation": {
+          "normal_count": 7,
+          "shiny_count": 7,
+          "shared_count": 0
+        },
+        "skin": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 0
+        }
+      }
+    },
+    {
+      "species": "roaring-moon",
+      "normal_disk_bytes": 25419303,
+      "shiny_disk_bytes": 24452549,
+      "normal_unique_texture_zstd_bytes": 11502855,
+      "incremental_unique_texture_zstd_bytes": 6781644,
+      "components": {
+        "mesh": {
+          "normal_count": 6,
+          "shiny_count": 6,
+          "shared_count": 6
+        },
+        "animation": {
+          "normal_count": 7,
+          "shiny_count": 7,
+          "shared_count": 0
+        },
+        "skin": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 0
+        }
+      }
+    },
+    {
+      "species": "snorlax",
+      "normal_disk_bytes": 4732227,
+      "shiny_disk_bytes": 4646062,
+      "normal_unique_texture_zstd_bytes": 2547735,
+      "incremental_unique_texture_zstd_bytes": 768072,
+      "components": {
+        "mesh": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 1
+        },
+        "animation": {
+          "normal_count": 7,
+          "shiny_count": 7,
+          "shared_count": 0
+        },
+        "skin": {
+          "normal_count": 1,
+          "shiny_count": 1,
+          "shared_count": 0
+        }
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "reason": "source_hash_mismatch",
+      "species": "arcanine",
+      "variant": "normal"
+    }
+  ],
+  "models": [
+    {
+      "species": "azumarill",
+      "source_sha256": "a45144b6ac33ead2300942131161ce641cd8536b0d5a0469c10f6bf4f42f0006",
+      "disk_bytes": 14753443
+    },
+    {
+      "species": "blissey",
+      "source_sha256": "e86499f58c398baff39993833d48845d652ce47c81ad6724025c5497573bb896",
+      "disk_bytes": 13158396
+    },
+    {
+      "species": "chansey",
+      "source_sha256": "3d2c142d5d3e42994a64637277b94bc91d53f38e95c96e3566c798f4ff447d4f",
+      "disk_bytes": 7743796
+    },
+    {
+      "species": "charizard",
+      "source_sha256": "efda7151ac8a5d30594e87e1ef5a1f7feab9cb5c91adc37ed171b44470be3149",
+      "disk_bytes": 14675512
+    },
+    {
+      "species": "cloyster",
+      "source_sha256": "887bfd934834e221b16acdad59dd3e0916aca606221954674201b5d3611f036f",
+      "disk_bytes": 10403812
+    },
+    {
+      "species": "corviknight",
+      "source_sha256": "344f7e2f0e068a5b3934031cfda19363d452c3210005d57509a33a4134633f75",
+      "disk_bytes": 24575649
+    },
+    {
+      "species": "delibird",
+      "source_sha256": "5a9e40dfcb9ed473f8697bc589845d21bd292fcdac83ec1153e89a3dafcfea63",
+      "disk_bytes": 14461456
+    },
+    {
+      "species": "diglett",
+      "source_sha256": "fc78fd4d78536f31b2cc1a945d42f8b271e85120a7ee99a384a35d7a2c107863",
+      "disk_bytes": 22739021
+    },
+    {
+      "species": "ditto",
+      "source_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+      "disk_bytes": 3551511
+    },
+    {
+      "species": "dondozo",
+      "source_sha256": "8e63f37c80d16d845dddf41e329adffdeb40aee5557815f367bd2218c05b5015",
+      "disk_bytes": 11047106
+    },
+    {
+      "species": "donphan",
+      "source_sha256": "d4d4b46b364b0c6bea97bc2699fed1393f8b20e8e0aaff03b350c4325097ba3c",
+      "disk_bytes": 15759444
+    },
+    {
+      "species": "dragonair",
+      "source_sha256": "94c76f01fb87def5b66311f2556bc5d6bbc384d563555495d8c09d11787a802e",
+      "disk_bytes": 6696604
+    },
+    {
+      "species": "dratini",
+      "source_sha256": "890ea9bb6b0c7e84d6699119895ef7131856972700ded0696377495497fef8be",
+      "disk_bytes": 4257242
+    },
+    {
+      "species": "drifblim",
+      "source_sha256": "621750d76787c7c853fcd5dea5cffaaf96783e72fd03e1f8ba7a818bb4daa245",
+      "disk_bytes": 10956875
+    },
+    {
+      "species": "drowzee",
+      "source_sha256": "78c05aa98801da4e05e252e0f6d8ff8872f4d4a7c0426380a9a60a9a652358df",
+      "disk_bytes": 8488665
+    },
+    {
+      "species": "eevee",
+      "source_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+      "disk_bytes": 9217665
+    },
+    {
+      "species": "electrode",
+      "source_sha256": "9cfc1352b82602fc6ea36f55889401f8ef155ba118ab26aa3fe0c1dd7e1aa896",
+      "disk_bytes": 4515162
+    },
+    {
+      "species": "espeon",
+      "source_sha256": "9e7f35aba795f3864fe89d26a63579afa9af89ebc7060afbfc0b26fed0b41481",
+      "disk_bytes": 24069099
+    },
+    {
+      "species": "flapple",
+      "source_sha256": "9d264ac46014de6ac6d4e6b6b4968b7e67a4ff7adaa9114bcb07f50804643e0c",
+      "disk_bytes": 11647060
+    },
+    {
+      "species": "flareon",
+      "source_sha256": "039480eee56bd385d7b777c6ed89885dbdc1c6df151ecb6f293452ca0e108a29",
+      "disk_bytes": 17975820
+    },
+    {
+      "species": "forretress",
+      "source_sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b",
+      "disk_bytes": 6019052
+    },
+    {
+      "species": "garchomp",
+      "source_sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8",
+      "disk_bytes": 12058808
+    },
+    {
+      "species": "gardevoir",
+      "source_sha256": "b2c0b3127b11bdb25262dd7139997fcc77cfcaeb35fc1e35d7b404f58b2dc2fa",
+      "disk_bytes": 11604721
+    },
+    {
+      "species": "gengar",
+      "source_sha256": "78b3953637349def0c9048c5b92078aa8e6c6746f821d77eb71ce58b8b96f7ca",
+      "disk_bytes": 4792945
+    },
+    {
+      "species": "golduck",
+      "source_sha256": "47247c6be71d222f84673f7e15c4a4e2c5cd7b88c49fd9fdde5b5b4cf7088638",
+      "disk_bytes": 16307061
+    },
+    {
+      "species": "growlithe",
+      "source_sha256": "694a75efd26a91b073491f38fea23be54d122983325cf0ee04399058acc9ff9c",
+      "disk_bytes": 27310526
+    },
+    {
+      "species": "gyarados",
+      "source_sha256": "6c2f24d7bc71446102e3df895d0aafd1c80eccbf5e1a7bb3116fd6e483a17edf",
+      "disk_bytes": 14694345
+    },
+    {
+      "species": "hariyama",
+      "source_sha256": "8cc2630961bf21fab5ae7a60a8785086c171978bb5d2e9c51e8e6c89474b35f4",
+      "disk_bytes": 10024925
+    },
+    {
+      "species": "haunter",
+      "source_sha256": "1545c90daee6e79f661b9a815916a2daec0d8171ffb5a87c1fc536a73d1edd0b",
+      "disk_bytes": 5149685
+    },
+    {
+      "species": "heracross",
+      "source_sha256": "20dd4a894dc396eac85c52ba65a65d5ef9ec82b78e880f9fa09a300cbd2f57b9",
+      "disk_bytes": 16023041
+    },
+    {
+      "species": "hoopa",
+      "source_sha256": "04c14ad1901a2e29fd9cc9dd6c348d6a13b2afb5571a333b965c9e4ba176180a",
+      "disk_bytes": 12924617
+    },
+    {
+      "species": "hoppip",
+      "source_sha256": "3466776b082f8192c51de942c82a52a6d5f20a0de7ab5bf55e9c6331a60a85e1",
+      "disk_bytes": 7520454
+    },
+    {
+      "species": "hydreigon",
+      "source_sha256": "1f0c5a95b825932f5a9c8abb559315d5b8ee4c1e56bbd7f67a264005c8dac022",
+      "disk_bytes": 14826657
+    },
+    {
+      "species": "hypno",
+      "source_sha256": "577a5ddc810581380e559af777cd48bf8035d194c884172a5fe5279a9f73ff9f",
+      "disk_bytes": 14784633
+    },
+    {
+      "species": "jigglypuff",
+      "source_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+      "disk_bytes": 8418015
+    },
+    {
+      "species": "jolteon",
+      "source_sha256": "2e9848fff483a33c54f92ef0c433d212c6cebb49810d0a6eb471a5b703ee97c6",
+      "disk_bytes": 17856779
+    },
+    {
+      "species": "jumpluff",
+      "source_sha256": "1707109601e912578a25e96b8ba37def059014927be469442b83f9941bcb1d64",
+      "disk_bytes": 18789990
+    },
+    {
+      "species": "magikarp",
+      "source_sha256": "f595951be64491bffc83c733fc1ba67af5818533c33657a18c0a550172ce57df",
+      "disk_bytes": 5488777
+    },
+    {
+      "species": "magnemite",
+      "source_sha256": "4ca65cf8e4d78020e9fc42a2c92a625f636dbd36031f7f5db107df7887297201",
+      "disk_bytes": 3416569
+    },
+    {
+      "species": "magneton",
+      "source_sha256": "f335d0a906bccbf81af8817230412363c21b2bbcbc6a108a1b291175a82162a0",
+      "disk_bytes": 4200701
+    },
+    {
+      "species": "magnezone",
+      "source_sha256": "adbc50f123c8d091016efb6e2c54bb07a3fd7c7b88f54665d395f0311036cac4",
+      "disk_bytes": 10750839
+    },
+    {
+      "species": "mankey",
+      "source_sha256": "8bc2a5c9d9cbe6c26fbbe2fe709ff52a2ffd037210106b822372630c21cf7fd7",
+      "disk_bytes": 8460744
+    },
+    {
+      "species": "marill",
+      "source_sha256": "4b339138a62f788968c81574daa53f6a0e9b55d0e609348ce794544a219ffd7f",
+      "disk_bytes": 16129466
+    },
+    {
+      "species": "meowth",
+      "source_sha256": "e5ee0b7b90538581dabdd333586979f635a31722afa70e89c0fdbee8012a05c0",
+      "disk_bytes": 23640754
+    },
+    {
+      "species": "mew",
+      "source_sha256": "ca73a5e9fc6df3ff237cfc7bb65bcf08390517b5fead695394fb273c3f5e7076",
+      "disk_bytes": 6427910
+    },
+    {
+      "species": "mewtwo",
+      "source_sha256": "6b35ac7fef08624c8434c0862a4919d3cbfa6ba1b03e83d785d809ee3488c73e",
+      "disk_bytes": 10162664
+    },
+    {
+      "species": "misdreavus",
+      "source_sha256": "5c4a9a143f38b44b6d95364a2aaaae6e62e3c3b88c068fbc3de04f4476009200",
+      "disk_bytes": 7897859
+    },
+    {
+      "species": "murkrow",
+      "source_sha256": "3f0e940cdca08763670ed285844834f8cce9392d77bfdb13b2e56d61448f0fb6",
+      "disk_bytes": 21199292
+    },
+    {
+      "species": "oricorio",
+      "source_sha256": "00557d7b34478559c364b572695a3f3b5aeab6e7297941e2b4708262f68619b8",
+      "disk_bytes": 13847509
+    },
+    {
+      "species": "orthworm",
+      "source_sha256": "997e5fcf6c5b2d21fc205225df316d9831281441f11dc67f04279d4243ec3990",
+      "disk_bytes": 10429022
+    },
+    {
+      "species": "pichu",
+      "source_sha256": "48b05e4d33053df3219fa0c5a42c6f3f741c4fe70cbd8cdc58ecab739be7e744",
+      "disk_bytes": 8978440
+    },
+    {
+      "species": "primeape",
+      "source_sha256": "76d4c1ea23dde1a329e1e81af3e6693ee319b60f2b5708a48fb60c723e634ffb",
+      "disk_bytes": 19257682
+    },
+    {
+      "species": "psyduck",
+      "source_sha256": "437f896285dcd44a0d84cc3ff6e30b28aa3e66699e41df2933108862ddfa1097",
+      "disk_bytes": 8412742
+    },
+    {
+      "species": "quagsire",
+      "source_sha256": "29d1c5207e26f73912007398cbb04f99a8c882104374cfdeef14c55f3de9a092",
+      "disk_bytes": 7851300
+    },
+    {
+      "species": "qwilfish",
+      "source_sha256": "8c0a838b9d729f60894e9601128de59eb9b934e373450bfb2a8806e4175cae5c",
+      "disk_bytes": 6336142
+    },
+    {
+      "species": "raichu",
+      "source_sha256": "37d5d601f06b521ab4771b8e422f349202748a49d83ec295c8566a2436a65790",
+      "disk_bytes": 23766157
+    },
+    {
+      "species": "rayquaza",
+      "source_sha256": "5f24d27cc88817710e9756e30e44093fe46b4a5c7f3e345b1c9ba08fc2f213f9",
+      "disk_bytes": 10505383
+    },
+    {
+      "species": "scizor",
+      "source_sha256": "f2b0c217da35bad43ab86179e409566757d798b513299a1c1d0bcf451015a3f1",
+      "disk_bytes": 15705443
+    },
+    {
+      "species": "scyther",
+      "source_sha256": "abc9041dd4c36b3d2f557bace83b194c7052d168f8e0f2d3b243e1a5cacae92a",
+      "disk_bytes": 12808216
+    },
+    {
+      "species": "seviper",
+      "source_sha256": "3b3def8bc44626d08f7255c3f66b75501d1796d1f28170f76b5ec3be8b473bba",
+      "disk_bytes": 7533666
+    },
+    {
+      "species": "shellder",
+      "source_sha256": "407a51e73421d8a0ffe6cacaba670d90898eedd18d7e5ec694f6ea1fee03fa8d",
+      "disk_bytes": 7489197
+    },
+    {
+      "species": "slaking",
+      "source_sha256": "5ff9c2b3b249b3c5859aedf3830494fd93c0a5291a3c54fbffb50e6da5acdb10",
+      "disk_bytes": 15057774
+    },
+    {
+      "species": "slowpoke",
+      "source_sha256": "96fbf13543b1fc54cc0e281a86e4de24366a3b97d00be8e93606d0e869eb74c8",
+      "disk_bytes": 4894210
+    },
+    {
+      "species": "staraptor",
+      "source_sha256": "ab74c7e7fb6233f4d3ee773d0ab155c5555cdb40f1d236ff651134665748c136",
+      "disk_bytes": 11998301
+    },
+    {
+      "species": "sudowoodo",
+      "source_sha256": "f6fcaab6f325baa161e0807071684e34ac3cb88a83464ab1150020fa48509b7b",
+      "disk_bytes": 8545670
+    },
+    {
+      "species": "tauros",
+      "source_sha256": "54cd4c2c3d6c2a96394a3c7c924a6525913331746bfd3b1be5106a086170680a",
+      "disk_bytes": 19447851
+    },
+    {
+      "species": "tyranitar",
+      "source_sha256": "e2bcd8e99b96b6a28590c2f84f21db1e107849ba4f2e0417cc4554613d73cfac",
+      "disk_bytes": 13748819
+    },
+    {
+      "species": "umbreon",
+      "source_sha256": "477a885eba3c9c6286bf189501aa87e76e450cbc6fe621c3e6a8d138182b44f4",
+      "disk_bytes": 13041262
+    },
+    {
+      "species": "vaporeon",
+      "source_sha256": "c4595d7ae21e41213f26fd1f6542f71d1d8a34121aa870b246cdc35055bcdecd",
+      "disk_bytes": 15353865
+    },
+    {
+      "species": "venonat",
+      "source_sha256": "d2d4aa3b8a8b1a409e222e492ca501ad50fa86b39ef33136a622c7728bd407fb",
+      "disk_bytes": 19384083
+    },
+    {
+      "species": "volcarona",
+      "source_sha256": "fa505ca1320593d5bf8c97dbc1cb62e003b8bd9f52e8d151ffabc4cecb70eb15",
+      "disk_bytes": 23655764
+    },
+    {
+      "species": "voltorb",
+      "source_sha256": "6b69dc255dbbe1cccc15ce6cfc26ef07d267f1857b75bd9ff1ee56c8a115dd70",
+      "disk_bytes": 5278044
+    },
+    {
+      "species": "wigglytuff",
+      "source_sha256": "37f63c58217f0e8055c5625783553ee2fb1470a86ecc07d32057956154a90736",
+      "disk_bytes": 7072314
+    },
+    {
+      "species": "wooper",
+      "source_sha256": "cb8b3869e57f58b0b26945413253904d6779844211d9de47581e931f6daa3f0e",
+      "disk_bytes": 8921184
+    },
+    {
+      "species": "zapdos",
+      "source_sha256": "6ee811fc4cc9969b3c056b53474e8f185f6813d7e9aea934072ec3b54f15293b",
+      "disk_bytes": 22539869
+    }
+  ],
+  "pck_bytes": 929440916
+}

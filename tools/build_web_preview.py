@@ -10,12 +10,11 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import struct
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-# The browser demo deliberately ships its reachable-map and PvE music rather
-# than silently failing dynamic ResourceLoader calls. Keep a tight ceiling for
-# that complete audio slice, instead of treating it as optional content.
+# Background music is external; effects/cries and core gameplay stay bundled.
 MAX_INITIAL_BYTES = 312 * 1024 * 1024
 WEB_AUDIO_SOURCE_DIRS = (
     ROOT / "assets/music",
@@ -108,6 +107,35 @@ def pack_contains(path: Path, marker: bytes) -> bool:
     return False
 
 
+def pack_entry_names(path: Path) -> list[str]:
+    """Read the unencrypted Godot PCK directory, not payload string references."""
+    with path.open('rb') as stream:
+        header = stream.read(40)
+        magic, version = struct.unpack_from('<II', header)
+        if magic != 0x43504447 or version not in (2, 3):
+            raise RuntimeError('Unsupported PCK directory')
+        if struct.unpack_from('<I', header, 20)[0] & 1:
+            raise RuntimeError('Encrypted PCK directory cannot be audited')
+        stream.seek(struct.unpack_from('<Q', header, 32)[0] if version == 3 else 96)
+        count, = struct.unpack('<I', stream.read(4))
+        names = []
+        for _ in range(count):
+            length, = struct.unpack('<I', stream.read(4))
+            names.append(stream.read(length).rstrip(b'\0').decode('utf-8').removeprefix('res://'))
+            stream.seek(36, 1)
+        return names
+
+
+def validate_external_music_pack(path: Path) -> None:
+    imported_music = set()
+    for metadata in (ROOT / 'assets/music').rglob('*.import'):
+        imported_music.update(re.findall(r'res://(\.godot/imported/[^"\n]+)', metadata.read_text()))
+    forbidden = [name for name in pack_entry_names(path)
+                 if name.startswith('assets/music/') or name in imported_music]
+    if forbidden:
+        raise RuntimeError(f'Web PCK embeds background music: {forbidden[:5]}')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--godot', default='godot')
@@ -153,21 +181,24 @@ def main():
     pck_path = output / 'index.pck'
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
+        b'generated/tiled_visuals/kanto_route_22/kanto_route_22.visual.tscn',
+        b'generated/tiled_visuals/kanto_route_2/kanto_route_2.visual.tscn',
+        b'generated/tiled_visuals/viridian_forest/viridian_forest.visual.tscn',
+        b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn',
+        b'generated/tiled_visuals/pewter_gym/pewter_gym.visual.tscn',
+        b'generated/tiled_visuals/lobby/lobby.visual.tscn',
         b'assets/fonts/DejaVuSans.ttf',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
         b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
-        b'lugia_theme_lofi.ogg-2fdce23a90553d794177dfc95f259e8f.oggvorbisstr',
-        b'assets/music/overworld/kanto/towns/pallet_town.ogg',
-        b'assets/music/overworld/kanto/routes/route1.ogg',
-        b'assets/music/overworld/kanto/towns/viridian_city.ogg',
-        b'assets/music/battle/wild/Kanto Wild Battle.ogg',
-        b'assets/music/battle/trainer/Kalos Trainer Battle.ogg',
     )
     forbidden_markers = (
         b'node_modules/playwright-core/',
         b'assets/sprites/pokemon/front/pikachu/sheet.png.import',
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',
-        b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn.remap',
+        b'generated/tiled_visuals/route_3/route_3.visual.tscn',
+        b'generated/tiled_visuals/waiting_area/waiting_area.visual.tscn',
+        b'generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn',
+        b'generated/tiled_visuals/aether_clash_battle_royale/aether_clash_battle_royale.visual.tscn',
     )
     for marker in required_markers:
         if not pack_contains(pck_path, marker):
@@ -177,6 +208,7 @@ def main():
             raise RuntimeError(f'Web pack contains excluded asset marker: {marker.decode()}')
 
     initial_bytes = sum(item['bytes'] for item in files)
+    validate_external_music_pack(pck_path)
     if initial_bytes > MAX_INITIAL_BYTES:
         raise RuntimeError(
             f'Web build is {initial_bytes / 1048576:.1f} MiB; '
@@ -186,7 +218,7 @@ def main():
         'phase': 7, 'accounts': True, 'onlineGameplay': True,
         'chat': True, 'aiSparring': True, 'ranked': False,
         'dynamicPokemonSprites': True,
-        'assetProfile': 'demo-maps-full-player-static-home-battle',
+        'assetProfile': 'kanto-through-misty-lobby-modular',
         'maxInitialBytes': MAX_INITIAL_BYTES,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),

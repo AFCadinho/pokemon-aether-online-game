@@ -90,7 +90,7 @@ func _check_base_npc_story_requirement() -> void:
 	_check_true(text.contains("@export var required_quest_id := \"\""), "BaseNPC exposes an optional quest requirement")
 	_check_true(text.contains("@export var required_quest_step_id := \"\""), "BaseNPC can target one quest step")
 	_check_true(text.contains("func is_story_requirement_met() -> bool:"), "BaseNPC evaluates the projected story requirement")
-	_check_true(text.contains("StoryService.is_requirement_met("), "BaseNPC delegates to authoritative projected story state")
+	_check_true(text.contains('"is_requirement_met"') and text.contains("_story_requirement_met"), "BaseNPC delegates to authoritative projected story state")
 	_check_true(
 		text.contains("visibility_required_quest_id")
 		and text.contains("visibility_hidden_quest_id")
@@ -171,7 +171,7 @@ func _check_npc_metadata_locale_contract() -> void:
 	_check_true(service_text.contains("GatewayApiConfig.get_accept_headers(locale)"), "NPC metadata request sends its resolved locale")
 
 	var base_npc_text := _read_text(BASE_NPC_SCRIPT)
-	_check_true(base_npc_text.contains("LocalizationManager.locale_changed.connect(_on_locale_changed)"), "NPCs observe runtime locale changes")
+	_check_true(base_npc_text.contains("locale_changed.connect(_on_locale_changed)"), "NPCs observe runtime locale changes")
 	_check_true(base_npc_text.contains("func _on_locale_changed(_locale: String) -> void:"), "NPCs reset metadata state after a locale change")
 
 
@@ -195,10 +195,10 @@ func _check_base_npc_movement_behavior() -> void:
 
 func _check_existing_npc_behavior_entrypoints() -> void:
 	var dialogue_text := _read_text(DIALOGUE_NPC_SCRIPT)
-	_check_true(dialogue_text.contains("extends BaseNPC"), "DialogueNPC still extends BaseNPC")
+	_check_true(dialogue_text.contains("extends BaseNPC") or dialogue_text.contains('extends "res://scripts/world/npcs/base_npc.gd"'), "DialogueNPC still extends BaseNPC")
 	_check_true(dialogue_text.contains("_ready_base_npc()"), "DialogueNPC still initializes BaseNPC")
 	_check_true(
-		dialogue_text.contains("NpcDialogueService.resolve_default_dialogue("),
+		dialogue_text.contains("resolve_default_dialogue") and dialogue_text.contains("dialogue_service"),
 		"DialogueNPC delegates default dialogue selection to NpcDialogueService"
 	)
 

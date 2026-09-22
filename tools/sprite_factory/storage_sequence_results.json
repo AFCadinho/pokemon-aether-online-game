@@ -1,0 +1,1638 @@
+{
+  "diagnosis_only": true,
+  "qualified": false,
+  "runs": {
+    "sequence-baseline": {
+      "complete": false,
+      "engine_errors": null,
+      "failure": "Pixel mismatch: dragonite faint_start:0.999",
+      "failures": {
+        "dragonite standard faint_start:0.999": 1
+      },
+      "flags": null,
+      "groups": {
+        "articuno standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "articuno@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite standard": {
+          "exact": 8,
+          "total": 9
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "be340bae7cc974eba3e388fb99805807e063df8cf1d128ee5eb478bf4a1ff7af",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-lease-probe": {
+      "complete": true,
+      "engine_errors": [
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_casts_shadows",
+          "kind": 0,
+          "line": 2404,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_is_animated",
+          "kind": 0,
+          "line": 2391,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_get_instance_shader_parameters",
+          "kind": 0,
+          "line": 2435,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_update_dependency",
+          "kind": 0,
+          "line": 2447,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_casts_shadows",
+          "kind": 0,
+          "line": 2404,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_is_animated",
+          "kind": 0,
+          "line": 2391,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_get_instance_shader_parameters",
+          "kind": 0,
+          "line": 2435,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_update_dependency",
+          "kind": 0,
+          "line": 2447,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_casts_shadows",
+          "kind": 0,
+          "line": 2404,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_is_animated",
+          "kind": 0,
+          "line": 2391,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_get_instance_shader_parameters",
+          "kind": 0,
+          "line": 2435,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_update_dependency",
+          "kind": 0,
+          "line": 2447,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_casts_shadows",
+          "kind": 0,
+          "line": 2404,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_is_animated",
+          "kind": 0,
+          "line": 2391,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_get_instance_shader_parameters",
+          "kind": 0,
+          "line": 2435,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_update_dependency",
+          "kind": 0,
+          "line": 2447,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_casts_shadows",
+          "kind": 0,
+          "line": 2404,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_is_animated",
+          "kind": 0,
+          "line": 2391,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_get_instance_shader_parameters",
+          "kind": 0,
+          "line": 2435,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_update_dependency",
+          "kind": 0,
+          "line": 2447,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_casts_shadows",
+          "kind": 0,
+          "line": 2404,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_is_animated",
+          "kind": 0,
+          "line": 2391,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_get_instance_shader_parameters",
+          "kind": 0,
+          "line": 2435,
+          "rationale": ""
+        },
+        {
+          "code": "Parameter \"material\" is null.",
+          "file": "servers/rendering/renderer_rd/storage_rd/material_storage.cpp",
+          "function": "material_update_dependency",
+          "kind": 0,
+          "line": 2447,
+          "rationale": ""
+        }
+      ],
+      "failure": null,
+      "failures": {},
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PIN_MATERIALS": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": ""
+      },
+      "groups": {},
+      "lease_probe": [
+        {
+          "engine_errors": 0,
+          "kind": "original",
+          "materials_alive_after_node_free": 4
+        },
+        {
+          "engine_errors": 8,
+          "kind": "private_unpinned",
+          "materials_alive_after_node_free": 0
+        },
+        {
+          "engine_errors": 0,
+          "kind": "private_pinned",
+          "materials_alive_after_node_free": 4
+        },
+        {
+          "engine_errors": 0,
+          "kind": "private_detached",
+          "materials_alive_after_node_free": 0
+        },
+        {
+          "engine_errors": 0,
+          "kind": "original",
+          "materials_alive_after_node_free": 4
+        },
+        {
+          "engine_errors": 8,
+          "kind": "private_unpinned",
+          "materials_alive_after_node_free": 0
+        },
+        {
+          "engine_errors": 0,
+          "kind": "private_pinned",
+          "materials_alive_after_node_free": 4
+        },
+        {
+          "engine_errors": 0,
+          "kind": "private_detached",
+          "materials_alive_after_node_free": 0
+        },
+        {
+          "engine_errors": 0,
+          "kind": "original",
+          "materials_alive_after_node_free": 4
+        },
+        {
+          "engine_errors": 8,
+          "kind": "private_unpinned",
+          "materials_alive_after_node_free": 0
+        },
+        {
+          "engine_errors": 0,
+          "kind": "private_pinned",
+          "materials_alive_after_node_free": 4
+        },
+        {
+          "engine_errors": 0,
+          "kind": "private_detached",
+          "materials_alive_after_node_free": 0
+        }
+      ],
+      "report_sha256": "3ed88af034d0844634209ada336246053af118a04a23d544cde8e634bc6b614a",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-original-only": {
+      "complete": false,
+      "engine_errors": null,
+      "failure": "Pixel mismatch: dragonite faint_start:0.999",
+      "failures": {
+        "dragonite response faint_start:0.999": 1
+      },
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "1",
+        "TRACE_SKIP_RESPONSE": ""
+      },
+      "groups": {
+        "articuno standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "articuno@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite response": {
+          "exact": 8,
+          "total": 9
+        },
+        "dragonite standard": {
+          "exact": 21,
+          "total": 21
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "0603facb1540877177e20e9c128afd29133a2c70bb194c32d58cd557c28bfb7a",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-persistent-stage": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch roaring-moon@shiny damage:0.0",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "1",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": ""
+      },
+      "groups": {
+        "articuno standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "articuno@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite response": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite@shiny response": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "lucario standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "lucario@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "pikachu standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "pikachu@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 0,
+          "total": 1
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "16bc8f8af17a1d2057bb08f18225e8e57d7d43bc926faf7eecc3d80fa80fd1bd",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-pinned-no-msaa": {
+      "complete": false,
+      "engine_errors": null,
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "1",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_SKIP_RESPONSE": ""
+      },
+      "groups": {
+        "articuno standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "articuno@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite response": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite@shiny response": {
+          "exact": 21,
+          "total": 21
+        },
+        "dragonite@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "lucario standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "lucario@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "pikachu standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "pikachu@shiny standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 0,
+          "total": 1
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "e4283c04f0842978446e0fbb53e7be8cee631ee1ddf172b479a03ccfa4ef3ab6",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-no-response": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch roaring-moon@shiny damage:0.0",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "1",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_SKIP_RESPONSE": "1",
+        "TRACE_STABLE_ORDER": ""
+      },
+      "groups": {
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 0,
+          "total": 1
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "204754bb6ce9b091905ba0b6632c698833323bde078ba71a899cba0e63a3dd48",
+      "resource_mutations": 0,
+      "resource_snapshots": 4,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-no-shadows": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch roaring-moon@shiny damage:0.0",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "1",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHARE_MESH": ""
+      },
+      "groups": {
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 0,
+          "total": 1
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "ec908fa0342c593c605a33b9294737869121b2752cccdb95423abd15cfae9206",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-original-only": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch roaring-moon@shiny damage:0.0",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny response damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "1",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHARE_MESH": ""
+      },
+      "groups": {
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny response": {
+          "exact": 0,
+          "total": 1
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 21,
+          "total": 21
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "fe6d70b5d0a258e000809731c6def84223e849dcadaa78b4adf8e9931cc6b34a",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-private-mesh": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch roaring-moon@shiny damage:0.0",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHARE_MESH": "1"
+      },
+      "groups": {
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 0,
+          "total": 1
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "06b50ee91ef7a42079c6c52b57d2c8351cbdaa96d74ca5ac888cc8686f194672",
+      "resource_mutations": 0,
+      "resource_snapshots": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-retained": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch roaring-moon@shiny damage:0.0",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: roaring-moon@shiny damage:0.0",
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 1
+      },
+      "flags": {
+        "TRACE_HASH": "1",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RETAIN_SHARED": "1",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": ""
+      },
+      "groups": {
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 0,
+          "total": 1
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "49d9f41266218a4d054f5e55e3f762737aece4aa1965bb64f5c98b7d36096216",
+      "resource_mutations": 0,
+      "resource_snapshots": 6,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-shiny-isolated": {
+      "complete": true,
+      "engine_errors": [],
+      "failure": null,
+      "failures": {},
+      "flags": {
+        "TRACE_HASH": "1",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": ""
+      },
+      "groups": {
+        "roaring-moon@shiny response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 21,
+          "total": 21
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "7366f35683ef31e2b055a076a9a4c43045fbc9efb2d7299e7c32cbf6643449d7",
+      "resource_mutations": 0,
+      "resource_snapshots": 4,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-roaring-single-wing": {
+      "complete": true,
+      "engine_errors": [],
+      "failure": null,
+      "failures": {},
+      "flags": {
+        "TRACE_GEOMETRY": "",
+        "TRACE_HASH": "1",
+        "TRACE_HIDE_NODE": "pm1089_00_00_wing_b_mesh",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "roaring-moon,roaring-moon@shiny",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": ""
+      },
+      "groups": {
+        "roaring-moon response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon standard": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny response": {
+          "exact": 21,
+          "total": 21
+        },
+        "roaring-moon@shiny standard": {
+          "exact": 21,
+          "total": 21
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "f71ed3b9aad00d5effc1d22f20dd376ac15841859c5f305e427c5314b5962ee4",
+      "resource_mutations": 0,
+      "resource_snapshots": 8,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null
+    },
+    "sequence-runtime-stable-order": {
+      "complete": false,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch dragonite faint_start:0.999",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "failure": "Pixel mismatch: dragonite faint_start:0.999",
+      "failures": {
+        "dragonite response faint_start:0.999": 1
+      },
+      "flags": {
+        "TRACE_GEOMETRY": "",
+        "TRACE_HASH": "1",
+        "TRACE_HIDE_NODE": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "dragonite,dragonite@shiny,roaring-moon,roaring-moon@shiny",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_RUNTIME": "1",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "1",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": ""
+      },
+      "groups": {
+        "dragonite response": {
+          "exact": 8,
+          "total": 9
+        },
+        "dragonite standard": {
+          "exact": 21,
+          "total": 21
+        }
+      },
+      "lease_probe": null,
+      "report_sha256": "cf22198da83a2f8b37f4711790c07cc4e8183c2c92f198711a2c4d5ec7e2bf0a",
+      "resource_mutations": 0,
+      "resource_snapshots": 4,
+      "runtime_capture_pairs": 2,
+      "runtime_pairs_equal": true
+    },
+    "sequence-golden-warm-cycles": {
+      "report_sha256": "ceccf7a3b5769abe69a32bd7f5f9ac81767f10428766c43d74f305972df52676",
+      "complete": false,
+      "all_samples_collected": true,
+      "failure": "Pixel mismatch: roaring-moon@shiny special_attack:0.999",
+      "flags": {
+        "TRACE_COLLECT": "1",
+        "TRACE_GEOMETRY": "",
+        "TRACE_HASH": "1",
+        "TRACE_HIDE_NODE": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "dragonite,dragonite@shiny,roaring-moon,roaring-moon@shiny",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RAYS": "1",
+        "TRACE_REPEAT": "3",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_RUNTIME": "1",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": "",
+        "TRACE_WARM_CACHE": "1"
+      },
+      "groups": {
+        "dragonite standard": {
+          "total": 63,
+          "exact": 61
+        },
+        "dragonite response": {
+          "total": 63,
+          "exact": 63
+        },
+        "dragonite@shiny standard": {
+          "total": 63,
+          "exact": 63
+        },
+        "dragonite@shiny response": {
+          "total": 63,
+          "exact": 62
+        },
+        "roaring-moon standard": {
+          "total": 63,
+          "exact": 63
+        },
+        "roaring-moon response": {
+          "total": 63,
+          "exact": 21
+        },
+        "roaring-moon@shiny standard": {
+          "total": 63,
+          "exact": 0
+        },
+        "roaring-moon@shiny response": {
+          "total": 63,
+          "exact": 0
+        }
+      },
+      "failures": {
+        "roaring-moon@shiny standard damage:0.0": 3,
+        "roaring-moon@shiny standard damage:0.5": 3,
+        "roaring-moon@shiny standard damage:0.999": 3,
+        "roaring-moon@shiny standard faint_loop:0.0": 3,
+        "roaring-moon@shiny standard faint_loop:0.5": 3,
+        "roaring-moon@shiny standard faint_loop:0.999": 3,
+        "roaring-moon@shiny standard faint_start:0.0": 3,
+        "roaring-moon@shiny standard faint_start:0.5": 3,
+        "roaring-moon@shiny standard faint_start:0.999": 3,
+        "roaring-moon@shiny standard idle:0.0": 3,
+        "roaring-moon@shiny standard idle:0.5": 3,
+        "roaring-moon@shiny standard idle:0.999": 3,
+        "roaring-moon@shiny standard physical_attack:0.0": 3,
+        "roaring-moon@shiny standard physical_attack:0.5": 3,
+        "roaring-moon@shiny standard physical_attack:0.999": 3,
+        "roaring-moon@shiny standard sleep:0.0": 3,
+        "roaring-moon@shiny standard sleep:0.5": 3,
+        "roaring-moon@shiny standard sleep:0.999": 3,
+        "roaring-moon@shiny standard special_attack:0.0": 3,
+        "roaring-moon@shiny standard special_attack:0.5": 3,
+        "roaring-moon@shiny standard special_attack:0.999": 3,
+        "roaring-moon@shiny response damage:0.0": 3,
+        "roaring-moon@shiny response damage:0.5": 3,
+        "roaring-moon@shiny response damage:0.999": 3,
+        "roaring-moon@shiny response faint_loop:0.0": 3,
+        "roaring-moon@shiny response faint_loop:0.5": 3,
+        "roaring-moon@shiny response faint_loop:0.999": 3,
+        "roaring-moon@shiny response faint_start:0.0": 3,
+        "roaring-moon@shiny response faint_start:0.5": 3,
+        "roaring-moon@shiny response faint_start:0.999": 3,
+        "roaring-moon@shiny response idle:0.0": 3,
+        "roaring-moon@shiny response idle:0.5": 3,
+        "roaring-moon@shiny response idle:0.999": 3,
+        "roaring-moon@shiny response physical_attack:0.0": 3,
+        "roaring-moon@shiny response physical_attack:0.5": 3,
+        "roaring-moon@shiny response physical_attack:0.999": 3,
+        "roaring-moon@shiny response sleep:0.0": 3,
+        "roaring-moon@shiny response sleep:0.5": 3,
+        "roaring-moon@shiny response sleep:0.999": 3,
+        "roaring-moon@shiny response special_attack:0.0": 3,
+        "roaring-moon@shiny response special_attack:0.5": 3,
+        "roaring-moon@shiny response special_attack:0.999": 3,
+        "dragonite standard faint_start:0.999": 2,
+        "dragonite@shiny response faint_start:0.999": 1,
+        "roaring-moon response damage:0.0": 2,
+        "roaring-moon response damage:0.5": 2,
+        "roaring-moon response damage:0.999": 2,
+        "roaring-moon response faint_loop:0.0": 2,
+        "roaring-moon response faint_loop:0.5": 2,
+        "roaring-moon response faint_loop:0.999": 2,
+        "roaring-moon response faint_start:0.0": 2,
+        "roaring-moon response faint_start:0.5": 2,
+        "roaring-moon response faint_start:0.999": 2,
+        "roaring-moon response idle:0.0": 2,
+        "roaring-moon response idle:0.5": 2,
+        "roaring-moon response idle:0.999": 2,
+        "roaring-moon response physical_attack:0.0": 2,
+        "roaring-moon response physical_attack:0.5": 2,
+        "roaring-moon response physical_attack:0.999": 2,
+        "roaring-moon response sleep:0.0": 2,
+        "roaring-moon response sleep:0.5": 2,
+        "roaring-moon response sleep:0.999": 2,
+        "roaring-moon response special_attack:0.0": 2,
+        "roaring-moon response special_attack:0.5": 2,
+        "roaring-moon response special_attack:0.999": 2
+      },
+      "resource_snapshots": 48,
+      "resource_mutations": 0,
+      "runtime_capture_pairs": 24,
+      "runtime_pairs_equal": true,
+      "engine_errors": [],
+      "resources_alive_after_final_clear": [],
+      "load_count": 48,
+      "cache_hits": 24,
+      "diagnostic": null,
+      "geometry_overlaps": null,
+      "pixel_rays_first_capture": []
+    },
+    "sequence-dragonite-isolated-final": {
+      "report_sha256": "b51d82817f53c81a6802166fab86660807d5957689e2768f7b05e8fea02cee07",
+      "complete": true,
+      "all_samples_collected": null,
+      "failure": null,
+      "flags": {
+        "TRACE_CAMERA_NEAR": "",
+        "TRACE_COLLECT": "",
+        "TRACE_GEOMETRY": "",
+        "TRACE_HASH": "",
+        "TRACE_HIDE_NODE": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "",
+        "TRACE_RAYS": "",
+        "TRACE_REPEAT": "",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_RUNTIME": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": "",
+        "TRACE_WARM_CACHE": ""
+      },
+      "groups": {},
+      "failures": {},
+      "resource_snapshots": 0,
+      "resource_mutations": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null,
+      "engine_errors": [],
+      "resources_alive_after_final_clear": null,
+      "load_count": 0,
+      "cache_hits": 0,
+      "diagnostic": [
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "damage:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "damage:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "damage:0.999"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "faint_loop:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "faint_loop:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "faint_loop:0.999"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "faint_start:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "faint_start:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "faint_start:0.999"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "idle:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "idle:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "idle:0.999"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "physical_attack:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "physical_attack:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "physical_attack:0.999"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "sleep:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "sleep:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "sleep:0.999"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "special_attack:0.0"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "special_attack:0.5"
+        },
+        {
+          "original_vs_components_pixels": 0,
+          "original_vs_original_pixels": 0,
+          "pose": "special_attack:0.999"
+        }
+      ],
+      "geometry_overlaps": null,
+      "pixel_rays_first_capture": []
+    },
+    "sequence-dragonite-near": {
+      "report_sha256": "c3be7b4255a0530908f4eb187ab7f6a6c15ad8c41cf119447a204342810f99d1",
+      "complete": true,
+      "all_samples_collected": true,
+      "failure": null,
+      "flags": {
+        "TRACE_CAMERA_NEAR": "0.5",
+        "TRACE_COLLECT": "",
+        "TRACE_GEOMETRY": "",
+        "TRACE_HASH": "",
+        "TRACE_HIDE_NODE": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "dragonite",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RAYS": "1",
+        "TRACE_REPEAT": "",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_RUNTIME": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "1",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": "",
+        "TRACE_WARM_CACHE": ""
+      },
+      "groups": {
+        "dragonite standard": {
+          "total": 21,
+          "exact": 21
+        },
+        "dragonite response": {
+          "total": 21,
+          "exact": 21
+        }
+      },
+      "failures": {},
+      "resource_snapshots": 0,
+      "resource_mutations": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null,
+      "engine_errors": [],
+      "resources_alive_after_final_clear": [],
+      "load_count": 4,
+      "cache_hits": 0,
+      "diagnostic": null,
+      "geometry_overlaps": null,
+      "pixel_rays_first_capture": [
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.15745115280151,
+              "facing": 0.000258307176409289,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2515
+            },
+            {
+              "distance": 6.1601243019104,
+              "facing": 0.00238545099273324,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.46845006942749,
+              "facing": -0.00174056808464229,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            },
+            {
+              "distance": 6.46977376937866,
+              "facing": 0.00159923615865409,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 3017
+            }
+          ],
+          "sample": "(0.375, 0.125)"
+        },
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.16215181350708,
+              "facing": 0.00238466588780284,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.16780614852905,
+              "facing": 0.000257873529335484,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2515
+            },
+            {
+              "distance": 6.18089532852173,
+              "facing": -0.000262598536210135,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2517
+            },
+            {
+              "distance": 6.46833467483521,
+              "facing": -0.0017405990511179,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            }
+          ],
+          "sample": "(0.875, 0.375)"
+        },
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.16016483306885,
+              "facing": 0.00238543492741883,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.16018152236938,
+              "facing": 0.000280222651781514,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2512
+            },
+            {
+              "distance": 6.4660849571228,
+              "facing": -0.00174120476003736,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            },
+            {
+              "distance": 6.46805715560913,
+              "facing": 0.00159966049250215,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 3017
+            }
+          ],
+          "sample": "(0.125, 0.625)"
+        },
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.162193775177,
+              "facing": 0.00238465005531907,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.17010164260864,
+              "facing": 0.000279772153589875,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2512
+            },
+            {
+              "distance": 6.46596956253052,
+              "facing": -0.00174123584292829,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            },
+            {
+              "distance": 6.46875429153442,
+              "facing": 0.0013469842961058,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 3020
+            }
+          ],
+          "sample": "(0.625, 0.875)"
+        }
+      ]
+    },
+    "sequence-dragonite-near-control": {
+      "report_sha256": "5cfeb27f60691316a1f913ae646070d8abda8e14a195e618171a3ce3d90f06de",
+      "complete": false,
+      "all_samples_collected": false,
+      "failure": "Pixel mismatch: dragonite faint_start:0.999",
+      "flags": {
+        "TRACE_CAMERA_NEAR": "0.05",
+        "TRACE_COLLECT": "",
+        "TRACE_GEOMETRY": "",
+        "TRACE_HASH": "",
+        "TRACE_HIDE_NODE": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "dragonite",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RAYS": "1",
+        "TRACE_REPEAT": "",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_RUNTIME": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "1",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": "",
+        "TRACE_WARM_CACHE": ""
+      },
+      "groups": {
+        "dragonite standard": {
+          "total": 21,
+          "exact": 21
+        },
+        "dragonite response": {
+          "total": 9,
+          "exact": 8
+        }
+      },
+      "failures": {
+        "dragonite response faint_start:0.999": 1
+      },
+      "resource_snapshots": 0,
+      "resource_mutations": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null,
+      "engine_errors": [
+        {
+          "code": "STOP: Pixel mismatch dragonite faint_start:0.999",
+          "file": "core/variant/variant_utility.cpp",
+          "function": "push_error",
+          "kind": 0,
+          "line": 1024,
+          "rationale": ""
+        }
+      ],
+      "resources_alive_after_final_clear": [],
+      "load_count": 4,
+      "cache_hits": 0,
+      "diagnostic": null,
+      "geometry_overlaps": null,
+      "pixel_rays_first_capture": [
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.15745115280151,
+              "facing": 0.000258307176409289,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2515
+            },
+            {
+              "distance": 6.1601243019104,
+              "facing": 0.00238545099273324,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.46845006942749,
+              "facing": -0.00174056808464229,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            },
+            {
+              "distance": 6.46977376937866,
+              "facing": 0.00159923615865409,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 3017
+            }
+          ],
+          "sample": "(0.375, 0.125)"
+        },
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.16215181350708,
+              "facing": 0.00238466588780284,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.16780710220337,
+              "facing": 0.000257873529335484,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2515
+            },
+            {
+              "distance": 6.18089532852173,
+              "facing": -0.000262598507106304,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2517
+            },
+            {
+              "distance": 6.46833467483521,
+              "facing": -0.0017405990511179,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            }
+          ],
+          "sample": "(0.875, 0.375)"
+        },
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.16016483306885,
+              "facing": 0.00238543492741883,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.16018152236938,
+              "facing": 0.000280222651781514,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2512
+            },
+            {
+              "distance": 6.4660849571228,
+              "facing": -0.00174120476003736,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            },
+            {
+              "distance": 6.46805715560913,
+              "facing": 0.00159966049250215,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 3017
+            }
+          ],
+          "sample": "(0.125, 0.625)"
+        },
+        {
+          "capture": {
+            "components": false,
+            "identity": "dragonite",
+            "response": false
+          },
+          "hits": [
+            {
+              "distance": 6.162193775177,
+              "facing": 0.00238465005531907,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 2184
+            },
+            {
+              "distance": 6.17010164260864,
+              "facing": 0.000279772153589875,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 0,
+              "triangle": 2512
+            },
+            {
+              "distance": 6.46596956253052,
+              "facing": -0.00174123584292829,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 109
+            },
+            {
+              "distance": 6.46875429153442,
+              "facing": 0.0013469842961058,
+              "mesh": "pm0149_00_00_body_mesh",
+              "surface": 1,
+              "triangle": 3020
+            }
+          ],
+          "sample": "(0.625, 0.875)"
+        }
+      ]
+    },
+    "sequence-geometry-exact": {
+      "report_sha256": "aa826621fc76d6705f8fea3b7d057c898520385c4f954ecd115a8a68e5a69025",
+      "complete": true,
+      "all_samples_collected": null,
+      "failure": null,
+      "flags": {
+        "TRACE_CAMERA_NEAR": "",
+        "TRACE_COLLECT": "",
+        "TRACE_GEOMETRY": "1",
+        "TRACE_HASH": "",
+        "TRACE_HIDE_NODE": "",
+        "TRACE_NO_MSAA": "",
+        "TRACE_NO_SHADOWS": "",
+        "TRACE_ONLY": "dragonite,roaring-moon",
+        "TRACE_ORIGINAL_ONLY": "",
+        "TRACE_PERSISTENT_STAGE": "",
+        "TRACE_PIN_MATERIALS": "1",
+        "TRACE_RAYS": "",
+        "TRACE_REPEAT": "",
+        "TRACE_RETAIN_SHARED": "",
+        "TRACE_RUNTIME": "",
+        "TRACE_SKIP_RESPONSE": "",
+        "TRACE_STABLE_ORDER": "",
+        "TRACE_UNSHADED": "",
+        "TRACE_UNSHARE_MESH": "",
+        "TRACE_WARM_CACHE": ""
+      },
+      "groups": {},
+      "failures": {},
+      "resource_snapshots": 0,
+      "resource_mutations": 0,
+      "runtime_capture_pairs": 0,
+      "runtime_pairs_equal": null,
+      "engine_errors": [],
+      "resources_alive_after_final_clear": null,
+      "load_count": 0,
+      "cache_hits": 0,
+      "diagnostic": null,
+      "geometry_overlaps": [
+        {
+          "exact_posed_triangle_overlaps": {},
+          "identity": "dragonite"
+        },
+        {
+          "exact_posed_triangle_overlaps": {
+            "pm1089_00_00/Skeleton3D/pm1089_00_00_wing_a_mesh:0 -> pm1089_00_00/Skeleton3D/pm1089_00_00_wing_b_mesh:0": 184,
+            "pm1089_00_00/Skeleton3D/pm1089_00_00_wing_a_mesh:1 -> pm1089_00_00/Skeleton3D/pm1089_00_00_wing_b_mesh:1": 332
+          },
+          "identity": "roaring-moon"
+        }
+      ],
+      "pixel_rays_first_capture": []
+    }
+  }
+}

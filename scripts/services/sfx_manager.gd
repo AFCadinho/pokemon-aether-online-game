@@ -1,5 +1,6 @@
 extends Node
 
+const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
 const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
 const DEFAULT_BUS := SettingsManager.SFX_BUS
@@ -110,6 +111,10 @@ var stream_cache: Dictionary = {}
 var pokemon_cry_resolver := PokemonCryResolver.new()
 
 
+func _ready() -> void:
+	ContentPacks.initialize()
+
+
 func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:
 	var sound_key := sound_id.strip_edges()
 	if sound_key.is_empty():
@@ -145,20 +150,16 @@ func play_field_move(move_id: String) -> void:
 
 
 func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:
-	var cry_key := _get_pokemon_cry_key(species)
-	if cry_key == "":
-		return
-
-	var sound_path := "%s/%s.ogg" % [PokemonCryResolver.POKEMON_CRY_DIR, cry_key]
-	if not ResourceLoader.exists(sound_path):
+	var sound_path := pokemon_cry_resolver.get_cry_path(species, false)
+	if OS.has_feature("web") and (sound_path == "" or not ResourceLoader.exists(sound_path)):
 		return
 	if OS.has_feature("web"):
 		WebAudioBridge.play_sfx(sound_path, _web_cry_volume(volume_offset_db), pitch_scale)
 		return
 
-	var stream := _get_stream("pokemon_cry:%s" % cry_key, {
-		"path": sound_path,
-	})
+	var stream := ContentPacks.cry(species)
+	if stream == null:
+		stream = _get_stream("pokemon_cry:%s" % sound_path, {"path": sound_path})
 	if stream == null:
 		return
 
@@ -186,10 +187,6 @@ func _get_stream(sound_key: String, sound_data: Dictionary) -> AudioStream:
 	if stream != null:
 		stream_cache[sound_key] = stream
 	return stream
-
-
-func _get_pokemon_cry_key(species: String) -> String:
-	return pokemon_cry_resolver.get_cry_key(species)
 
 
 func _web_sfx_volume(volume_db: float) -> float:

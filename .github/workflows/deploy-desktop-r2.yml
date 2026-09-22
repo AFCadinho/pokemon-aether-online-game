@@ -19,7 +19,7 @@ on:
         type: boolean
         default: false
       cleanup_r2:
-        description: Remove obsolete immutable game and asset objects after publication.
+        description: Remove obsolete immutable game, launcher and asset objects after publication.
         required: false
         type: boolean
         default: true
@@ -78,6 +78,9 @@ env:
   MUSIC_ASSET_VERSION: music-3f2a6df18793
   MUSIC_ASSET_SIZE: 49402952
   MUSIC_ASSET_SHA256: 0b1a376bd7d93e31a72b8b6a49116415f8ec0c6316bf5e1a71f766857119e31a
+  FOREST_ASSET_VERSION: battle-environment-forest-4f960d69d4b8
+  FOREST_ASSET_SIZE: 71337990
+  FOREST_ASSET_SHA256: b997e73492fda256b6a0e64a0228c57bdd2284f482a50be377cacb6dfd856e8f
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
   R2_RELEASE_RETENTION_PREVIOUS: 1
@@ -251,6 +254,9 @@ jobs:
       - name: Verify client crash reporting
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
 
+      - name: Verify generated map texture storage
+        run: ./godot --headless --path . --script res://tests/generated_map_texture_storage_check.gd
+
       - name: Verify Simplified Chinese Pokémon terminology
         run: node tools/check_localization_terminology.mjs
 
@@ -408,6 +414,41 @@ jobs:
           register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SHA256}" "true"
           register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SHA256}" "true"
           register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}" "${MUSIC_ASSET_SHA256}"
+          register_external_pack "battle-environment-forest" "${FOREST_ASSET_VERSION}" "${FOREST_ASSET_SIZE}" "${FOREST_ASSET_SHA256}"
+
+      - name: Register approved 3D Pokemon bundle index
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          metadata = json.loads(Path("release/approved_3d_bundles_v1.json").read_text(encoding="utf-8"))
+          if metadata.get("schema") != 1 or metadata.get("kind") != "pokeaether-approved-3d-release":
+              raise SystemExit("invalid approved 3D release metadata")
+          entries = [metadata["index"], *metadata.get("bundles", [])]
+          if len(entries) != 8:
+              raise SystemExit("approved 3D release must contain one index and seven bundles")
+          for entry in entries:
+              url = f"{os.environ['UPDATE_BASE_URL'].rstrip('/')}/{entry['object_key']}"
+              request = Request(url, method="HEAD", headers={"Cache-Control": "no-cache"})
+              with urlopen(request, timeout=60) as response:
+                  if response.status < 200 or response.status >= 300:
+                      raise SystemExit(f"missing approved 3D release object: {url}")
+                  if int(response.headers.get("Content-Length", "0")) != int(entry["size_bytes"]):
+                      raise SystemExit(f"approved 3D release size mismatch: {url}")
+          index = metadata["index"]
+          values = {
+              "APPROVED_3D_REVISION": metadata["revision"],
+              "APPROVED_3D_INDEX_KEY": index["object_key"],
+              "APPROVED_3D_INDEX_SIZE": index["size_bytes"],
+              "APPROVED_3D_INDEX_SHA256": index["sha256"],
+          }
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+              for key, value in values.items():
+                  output.write(f"{key}={value}\n")
+          PY
 
       - name: Package launcher release
         run: |
@@ -426,6 +467,7 @@ jobs:
             --output-dir builds/launcher \
             --default-platform windows \
             --platform "${PACKAGE_PLATFORMS}" \
+            --asset-bundle-index "${APPROVED_3D_REVISION}:${APPROVED_3D_INDEX_KEY}:${APPROVED_3D_INDEX_SIZE}:${APPROVED_3D_INDEX_SHA256}" \
             "${launcher_args[@]}" \
             $(cat /tmp/asset_pack_args.txt)
 
@@ -497,6 +539,7 @@ jobs:
               "pokemon-shiny-front",
               "pokemon-shiny-back",
               "music",
+              "battle-environment-forest",
           }
           required_gen5_ids = {
               "pokemon-gen5-front",
@@ -551,6 +594,16 @@ jobs:
                   if pack.get("autoUpdateIfInstalled") is not True:
                       raise SystemExit(f"{manifest_path} gen5 pack must auto-update when installed: {pack_id}")
 
+              bundle_index = manifest.get("assetBundleIndex")
+              if not isinstance(bundle_index, dict):
+                  raise SystemExit(f"{manifest_path} missing approved 3D bundle index")
+              if bundle_index.get("revision") != os.environ["APPROVED_3D_REVISION"]:
+                  raise SystemExit(f"{manifest_path} has the wrong approved 3D revision")
+              if bundle_index.get("sha256") != os.environ["APPROVED_3D_INDEX_SHA256"]:
+                  raise SystemExit(f"{manifest_path} has the wrong approved 3D index digest")
+              if int(bundle_index.get("sizeBytes", 0)) != int(os.environ["APPROVED_3D_INDEX_SIZE"]):
+                  raise SystemExit(f"{manifest_path} has the wrong approved 3D index size")
+
               print(f"Verified {manifest_path}")
           PY
 
@@ -566,7 +619,10 @@ jobs:
           done
 
       - name: Test R2 cleanup safeguards
-        run: python3 tools/test_prune_r2_release_objects.py
+        run: |
+          python3 tools/test_prune_r2_release_objects.py
+          python3 tools/test_verify_latest_download_redirects.py
+          node --test tests/update_download_worker_test.mjs
 
       - name: Test R2 upload retries
         run: python3 tools/test_upload_launcher_release.py
@@ -584,6 +640,7 @@ jobs:
             echo "published=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
+          python3 tools/verify_latest_download_redirects.py --remote --public-base-url "${UPDATE_BASE_URL}"
           game_artifact_id="${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}"
           game_upload_args=(
             --file "game-${game_artifact_id}-windows.zip"
@@ -596,20 +653,6 @@ jobs:
             --layout updates \
             "${game_upload_args[@]}"
 
-          cp "builds/launcher/game-${game_artifact_id}-windows.zip" builds/launcher/PokeAether-windows.zip
-          cp "builds/launcher/game-${game_artifact_id}-linux.zip" builds/launcher/PokeAether-linux.zip
-          if [ "${BUILD_MACOS}" = "true" ]; then
-            cp "builds/launcher/game-${game_artifact_id}-macos.zip" builds/launcher/PokeAether-macos.zip
-          fi
-          python3 tools/upload_launcher_release.py builds/launcher \
-            --prefix "game/latest" \
-            --file PokeAether-windows.zip \
-            --file PokeAether-linux.zip
-          if [ "${BUILD_MACOS}" = "true" ]; then
-            python3 tools/upload_launcher_release.py builds/launcher \
-              --prefix "game/latest" \
-              --file PokeAether-macos.zip
-          fi
           if [ "${BUILD_LAUNCHER}" = "true" ]; then
             python3 tools/upload_launcher_release.py builds/launcher \
               --prefix "launcher/${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}" \
@@ -618,15 +661,6 @@ jobs:
             if [ "${BUILD_MACOS}" = "true" ]; then
               python3 tools/upload_launcher_release.py builds/launcher \
                 --prefix "launcher/${LAUNCHER_RELEASE_VERSION}-${CLIENT_BUILD_ID}" \
-                --file PokeAetherLauncher-macos.zip
-            fi
-            python3 tools/upload_launcher_release.py builds/launcher \
-              --prefix "launcher/latest" \
-              --file PokeAetherLauncher-windows.zip \
-              --file PokeAetherLauncher-linux.zip
-            if [ "${BUILD_MACOS}" = "true" ]; then
-              python3 tools/upload_launcher_release.py builds/launcher \
-                --prefix "launcher/latest" \
                 --file PokeAetherLauncher-macos.zip
             fi
           else
@@ -648,9 +682,10 @@ jobs:
             manifest_upload_args+=(--file manifest-macos.json)
           fi
           python3 tools/upload_launcher_release.py builds/launcher "${manifest_upload_args[@]}"
+          python3 tools/verify_latest_download_redirects.py builds/launcher --public-base-url "${UPDATE_BASE_URL}"
           echo "published=true" >> "${GITHUB_OUTPUT}"
 
-      - name: Prune obsolete R2 game and asset objects
+      - name: Prune obsolete R2 game, launcher and asset objects
         if: steps.upload_r2.outputs.published == 'true' && inputs.cleanup_r2
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}

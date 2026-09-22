@@ -189,6 +189,7 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	if (
 		normalized_item_id.begins_with("aether-blossom-")
 		or normalized_item_id.begins_with("aether-female-")
+		or normalized_item_id.begins_with("wishmaker-")
 	):
 		return ["female"]
 	if (
@@ -635,7 +636,7 @@ static func is_tintable_part(category: String, part_id: String) -> bool:
 	var normalized_category: String = normalize_part_category(category)
 	var normalized_part_id: String = part_id.strip_edges()
 	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
-		return normalized_part_id != "Aether_Blossom_Hair"
+		return normalized_part_id not in ["Aether_Blossom_Hair", "Wishmaker_Hair"]
 	if normalized_category == FACEGEAR_CATEGORY:
 		return normalized_part_id in ["Adinho_Glasses_Chroma", "Aether_Blossom_Earrings_Chroma"]
 	if normalized_category == TOP_CATEGORY:
@@ -1400,6 +1401,16 @@ static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve
 	return ImageTexture.create_from_image(tinted_image)
 
 
+## Applies the same palette-safe colour treatment used by overworld cosmetics
+## to a standalone texture, such as a layered battle trainer pose.
+static func tint_texture(
+	texture: Texture2D,
+	tint_color: Color,
+	preserve_luminance := false
+) -> Texture2D:
+	return _make_tinted_texture(texture, tint_color, preserve_luminance)
+
+
 static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> Texture2D:
 	if texture == null:
 		return null
@@ -1451,6 +1462,12 @@ static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> T
 			)
 
 	return ImageTexture.create_from_image(tinted_image)
+
+
+## Recolours only skin-palette pixels while retaining outlines and highlights.
+## Kept public so alternate player renderers stay visually consistent.
+static func tint_skin_texture(texture: Texture2D, skin_tone: Color) -> Texture2D:
+	return _make_skin_tinted_texture(texture, skin_tone)
 
 
 static func _is_skin_palette_pixel(color: Color) -> bool:

@@ -6,17 +6,6 @@ signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
-const SPRITE_STYLE_BY_OPTION_ID: Dictionary = {
-	0: "animated",
-	1: "static",
-	2: "pixel",
-}
-const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
-	"animated": 0,
-	"static": 1,
-	"pixel": 2,
-}
-const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const MINIMUM_MENU_SIZE := Vector2(900, 680)
@@ -50,13 +39,13 @@ var display_own_name_check_box: CheckBox
 var hide_other_players_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
+var battle_presentation_options: OptionButton
+var battle_camera_motion_toggle: CheckBox
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
 var input_binding_buttons: Dictionary = {}
 var input_binding_capture_action := ""
-@onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
-@onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
 @onready var resolution_options_button: OptionButton = $MarginContainer/VBoxContainer/ResolutionOptionsButton
 var world_pixel_scale_label: Label
@@ -156,7 +145,6 @@ func _ready() -> void:
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
 	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
 	hide_other_players_check_box.toggled.connect(_on_hide_other_players_toggled)
-	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
 	performance_details_check_box.toggled.connect(_on_performance_details_toggled)
 	performance_check_box.toggled.connect(_on_performance_toggled)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
@@ -188,7 +176,6 @@ func _ready() -> void:
 
 func _configure_graphics_dropdowns() -> void:
 	for dropdown: OptionButton in [
-		sprite_style_options_button,
 		resolution_options_button,
 		world_pixel_scale_options_button,
 	]:
@@ -205,8 +192,14 @@ func open(context: String = "game") -> void:
 
 
 func _process(_delta: float) -> void:
+	if OS.has_feature("web") and visible and fullscreen_check_box != null:
+		fullscreen_check_box.set_pressed_no_signal(SettingsManager.fullscreen)
+		fullscreen_check_box.disabled = not bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.supported())", true))
+		var error: Variant = JavaScriptBridge.eval("window.pokeaetherFullscreen?.error() || ''", true)
+		fullscreen_check_box.tooltip_text = str(error) if error != null else ""
+		resolution_options_button.disabled = true
 	if visible and world_pixel_scale_options_button != null:
-		if world_pixel_scale_options_button.disabled != ArenaCameraPolicy.is_locked(get_tree()):
+		if world_pixel_scale_options_button.disabled != (OS.has_feature("web") or ArenaCameraPolicy.is_locked(get_tree())):
 			_apply_world_pixel_scale_options_to_control()
 
 
@@ -267,6 +260,10 @@ func _input(event: InputEvent) -> void:
 
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
+	if battle_presentation_options != null:
+		battle_presentation_options.select(1 if SettingsManager.battle_presentation_mode == "3d" else 0)
+	if battle_camera_motion_toggle != null:
+		battle_camera_motion_toggle.button_pressed = SettingsManager.battle_3d_camera_motion
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
@@ -275,12 +272,6 @@ func _apply_settings_to_controls() -> void:
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
 
-	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
-	_apply_sprite_style_option_labels()
-	var option_index: int = sprite_style_options_button.get_item_index(option_id)
-	if option_index >= 0:
-		sprite_style_options_button.select(option_index)
-	_update_sprite_style_status_label("")
 
 	performance_details_check_box.button_pressed = SettingsManager.performance_details
 	performance_check_box.button_pressed = SettingsManager.show_performance
@@ -403,6 +394,37 @@ func _setup_tabs() -> void:
 		_create_toggle_setting(hide_other_players_check_box, "ui.settings.hide_other_players"),
 	]
 	_move_nodes_to_container(general_tab, gameplay_rows)
+	if not OS.has_feature("mobile"):
+		var layout_options := OptionButton.new()
+		layout_options.name = "BattleUILayoutOptions"
+		layout_options.add_item("Full screen")
+		layout_options.add_item("Classic")
+		layout_options.select(1 if SettingsManager.battle_ui_layout == "classic" else 0)
+		layout_options.item_selected.connect(func(index): SettingsManager.set_battle_ui_layout("classic" if index == 1 else "immersive"))
+		var layout_label := Label.new()
+		layout_label.text = "Battle UI (next battle)"
+		general_tab.add_child(_create_labeled_control_row(layout_label, layout_options))
+	if not OS.has_feature("web") and not OS.has_feature("mobile"):
+		var presentation_label := Label.new()
+		presentation_label.text = "Battle visuals (next battle)"
+		battle_presentation_options = OptionButton.new()
+		battle_presentation_options.name = "BattlePresentationOptions"
+		battle_presentation_options.add_item("2D / 2.5D — sprites")
+		battle_presentation_options.add_item("3D — models")
+		battle_presentation_options.item_selected.connect(func(index):
+			if not loading_controls:
+				SettingsManager.set_battle_presentation_mode("3d" if index == 1 else "2.5d"))
+		var presentation_hint := Label.new()
+		presentation_hint.text = "Uses available 3D models. Pokémon without a 3D model use sprites."
+		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
+		battle_camera_motion_toggle = CheckBox.new()
+		battle_camera_motion_toggle.name = "BattleCameraMotionToggle"
+		battle_camera_motion_toggle.text = "Gentle 3D camera movement"
+		battle_camera_motion_toggle.toggled.connect(func(enabled):
+			if not loading_controls:
+				SettingsManager.set_battle_3d_camera_motion(enabled))
+		graphics_tab.add_child(battle_camera_motion_toggle)
 	_wrap_settings_section(
 		general_tab,
 		"",
@@ -420,12 +442,8 @@ func _setup_tabs() -> void:
 		"",
 		language_tab.get_children()
 	)
-	var sprite_style_label := sprite_style_options_button.get_node("../SpriteStyleLabel") as Label
 	var display_label := fullscreen_check_box.get_node("../DisplayLabel") as Label
 	var resolution_label := resolution_options_button.get_node("../ResolutionLabel") as Label
-	var sprite_style_row := _create_labeled_control_row(
-		sprite_style_label, sprite_style_options_button
-	)
 	performance_check_box = CheckBox.new()
 	performance_check_box.name = "PerformanceCheckBox"
 	performance_check_box.focus_mode = Control.FOCUS_ALL
@@ -459,8 +477,6 @@ func _setup_tabs() -> void:
 		display_label.get_parent().remove_child(display_label)
 		display_label.queue_free()
 	_move_nodes_to_container(graphics_tab, [
-		sprite_style_row,
-		sprite_style_status_label,
 		fullscreen_row,
 		resolution_row,
 		world_scale_row,
@@ -469,10 +485,6 @@ func _setup_tabs() -> void:
 		performance_hint,
 		performance_details_row,
 		performance_details_hint,
-	])
-	_wrap_settings_section(graphics_tab, "ui.settings.section.sprites", "ui.settings.section.sprites_subtitle", [
-		sprite_style_row,
-		sprite_style_status_label,
 	])
 	_wrap_settings_section(graphics_tab, "ui.settings.section.display", "", [
 		fullscreen_row,
@@ -1479,11 +1491,9 @@ func _refresh_localized_content() -> void:
 	_refresh_tab_titles()
 	_refresh_navigation_state()
 	_update_about_version_label()
-	_apply_sprite_style_option_labels()
 	_apply_language_options_to_control()
 	_apply_terminology_options_to_control()
 	_apply_world_pixel_scale_options_to_control()
-	_update_sprite_style_status_label("")
 	_refresh_impersonation_account_controls()
 	if account_user_label != null and account_tab_root != null and account_tab_root.visible:
 		_refresh_account_tab()
@@ -1600,7 +1610,6 @@ func _apply_label_style(label: Label) -> void:
 		return
 	var localization_key := str(label.get_meta("i18n_text_key", ""))
 	if label.name in [
-		"SpriteStyleLabel",
 		"DisplayLabel",
 		"ResolutionLabel",
 		"WorldPixelScaleLabel",
@@ -1897,20 +1906,6 @@ func _on_hide_other_players_toggled(enabled: bool) -> void:
 	SettingsManager.set_hide_other_players(enabled)
 
 
-func _on_sprite_style_selected(index: int) -> void:
-	if loading_controls:
-		return
-
-	var option_id: int = sprite_style_options_button.get_item_id(index)
-	var sprite_style: String = str(SPRITE_STYLE_BY_OPTION_ID.get(option_id, "animated"))
-	if not SettingsManager.set_sprite_style(sprite_style):
-		_select_current_sprite_style()
-		_update_sprite_style_status_label(GEN5_SPRITE_MISSING_KEY)
-		return
-
-	_update_sprite_style_status_label("")
-
-
 func _on_performance_details_toggled(enabled: bool) -> void:
 	if not loading_controls:
 		SettingsManager.set_performance_details(enabled)
@@ -1922,7 +1917,7 @@ func _on_performance_toggled(enabled: bool) -> void:
 
 
 func _on_fullscreen_toggled(enabled: bool) -> void:
-	resolution_options_button.disabled = enabled
+	resolution_options_button.disabled = enabled or OS.has_feature("web")
 	if loading_controls:
 		return
 
@@ -1941,7 +1936,7 @@ func _on_resolution_selected(index: int) -> void:
 
 
 func _on_world_pixel_scale_selected(index: int) -> void:
-	if loading_controls or ArenaCameraPolicy.is_locked(get_tree()):
+	if loading_controls or OS.has_feature("web") or ArenaCameraPolicy.is_locked(get_tree()):
 		return
 
 	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
@@ -2714,42 +2709,6 @@ func _set_volume_value_label(label: Label, value: float) -> void:
 	label.text = "%d%%" % int(roundf(value))
 
 
-func _select_current_sprite_style() -> void:
-	var option_id: int = int(OPTION_ID_BY_SPRITE_STYLE.get(SettingsManager.sprite_style, 0))
-	var option_index: int = sprite_style_options_button.get_item_index(option_id)
-	if option_index >= 0:
-		sprite_style_options_button.select(option_index)
-
-
-func _update_sprite_style_status_label(message_key: String) -> void:
-	if sprite_style_status_label == null:
-		return
-
-	if (
-		message_key.is_empty() and not OS.has_feature("web")
-		and not SettingsManager.is_gen5_animated_sprites_installed()
-	):
-		message_key = "ui.settings.sprite.download_available"
-
-	sprite_style_status_label.text = LocalizationManager.text(message_key) if not message_key.is_empty() else ""
-	sprite_style_status_label.visible = not message_key.is_empty()
-
-
-func _apply_sprite_style_option_labels() -> void:
-	if sprite_style_options_button == null:
-		return
-	var translation_key_by_id: Dictionary = {
-		0: "ui.settings.sprite.animated",
-		1: "ui.settings.sprite.static",
-		2: "ui.settings.sprite.gen5",
-	}
-	for index: int in range(sprite_style_options_button.item_count):
-		var option_id := sprite_style_options_button.get_item_id(index)
-		var key := str(translation_key_by_id.get(option_id, ""))
-		if not key.is_empty():
-			sprite_style_options_button.set_item_text(index, LocalizationManager.text(key))
-
-
 func _apply_language_options_to_control() -> void:
 	if language_options_button == null:
 		return
@@ -2841,6 +2800,12 @@ func _apply_world_pixel_scale_options_to_control() -> void:
 	loading_controls = true
 	world_pixel_scale_options_button.clear()
 	var arena_locked := ArenaCameraPolicy.is_locked(get_tree())
+	if OS.has_feature("web") and not arena_locked:
+		world_pixel_scale_options_button.disabled = true
+		world_pixel_scale_options_button.add_item(LocalizationManager.text("ui.settings.world_pixel_scale_browser"))
+		_set_localized_text(world_pixel_scale_hint_label, "ui.settings.world_pixel_scale_browser_hint")
+		loading_controls = was_loading_controls
+		return
 	world_pixel_scale_options_button.disabled = arena_locked
 	_set_localized_text(world_pixel_scale_hint_label,
 		"ui.settings.world_pixel_scale_arena_hint" if arena_locked else "ui.settings.world_pixel_scale_hint")

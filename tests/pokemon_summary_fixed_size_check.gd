@@ -43,10 +43,29 @@ func _run() -> void:
 	var copy_button := overlay.get("pokemon_summary_copy_button") as Button
 	var hidden_ability_badge := overlay.get("pokemon_summary_hidden_ability_badge") as PanelContainer
 	var title_label := overlay.get("pokemon_summary_title_label") as Label
-	var gender_label := overlay.get("pokemon_summary_gender_label") as Label
+	var gender_icon := overlay.get("pokemon_summary_gender_label") as TextureRect
 	var id_label := overlay.get("pokemon_summary_id_label") as Label
 	var nickname_button := overlay.get("pokemon_summary_nickname_button") as Button
+	var summary_sprite := overlay.get("pokemon_summary_animated_sprite") as AnimatedSprite2D
+	var summary_viewport := overlay.get("pokemon_summary_sprite_viewport") as SubViewport
 	_check(popup != null, "Pokémon Summary popup is created")
+	_check(
+		summary_sprite != null
+			and summary_sprite.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS,
+		"rendered Summary animation uses mipmapped filtering while downscaled"
+	)
+	var summary_viewport_container: SubViewportContainer = null
+	if summary_viewport != null:
+		summary_viewport_container = summary_viewport.get_parent() as SubViewportContainer
+	_check(
+		summary_viewport_container != null
+			and summary_viewport_container.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR,
+		"completed Summary preview uses linear filtering at fractional window scales"
+	)
+	_check(
+		overlay.call("_get_pokemon_summary_sprite_position") == Vector2(132, 94),
+		"rendered Summary animation uses a stable pixel-aligned anchor"
+	)
 	_check(
 		popup != null and popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat,
 		"all standard Summary hover hints use the styled tooltip card"
@@ -94,21 +113,69 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	var fixed_summary_size := popup.size
+	var zoom_button := popup.find_child("PreviewZoomButton", true, false) as Button
+	var animation_button := popup.find_child("PreviewAnimationButton", true, false) as MenuButton
+	_check(
+		zoom_button != null
+		and hidden_ability_badge != null
+		and not zoom_button.get_global_rect().intersects(hidden_ability_badge.get_global_rect())
+		and zoom_button.get_global_rect().end.x < hidden_ability_badge.get_global_rect().position.x,
+		"portrait zoom keeps the permanent left slot before the optional Hidden Ability badge"
+	)
+	_check(animation_button != null, "Summary creates the rendered-animation review menu")
+	if animation_button != null:
+		_check(
+			animation_button.anchor_left == 1.0
+				and animation_button.anchor_right == 1.0
+				and is_equal_approx(animation_button.offset_top, -66.0)
+				and is_equal_approx(animation_button.offset_bottom, -36.0),
+			"animation control sits above the fixed level badge"
+		)
+		_check(
+			animation_button.get_theme_stylebox("normal") is StyleBoxFlat
+				and animation_button.get_theme_stylebox("hover") is StyleBoxFlat
+				and animation_button.get_theme_stylebox("pressed") is StyleBoxFlat,
+			"animation control uses complete Aether button states"
+		)
+		_check(
+			animation_button.get_popup().get_theme_stylebox("panel") is StyleBoxFlat
+				and animation_button.get_popup().get_theme_stylebox("hover") is StyleBoxFlat,
+			"animation menu uses the Aether popup surface and hover styling"
+		)
+		_check(not animation_button.visible, "legacy Summary sprites do not expose rendered animation controls")
+		var rendered_frames := SpriteFrames.new()
+		rendered_frames.set_meta("rendered_asset", true)
+		rendered_frames.set_meta("rendered_actions", {
+			"physical_attack": {"status": "needs_review"},
+			"damage": {"status": "needs_review"},
+		})
+		overlay.call(
+			"_configure_preview_animation_button",
+			overlay.get("pokemon_summary_animated_sprite"),
+			rendered_frames
+		)
+		_check(animation_button.visible and not animation_button.disabled, "rendered Summary sprites expose animation controls")
+		_check(animation_button.get_popup().item_count == 3, "animation menu lists idle and only available rendered actions")
+		overlay.call(
+			"_configure_preview_animation_button",
+			overlay.get("pokemon_summary_animated_sprite"),
+			SpriteFrames.new()
+		)
+		_check(not animation_button.visible, "animation controls hide again for a legacy sprite")
 
-	if title_label != null and gender_label != null and nickname_button != null:
+	if title_label != null and gender_icon != null and nickname_button != null:
 		title_label.text = "Crabominable"
-		gender_label.text = "♀"
-		gender_label.visible = true
+		overlay.call("_apply_pokemon_summary_gender_icon", gender_icon, "female")
 		overlay.call("_fit_pokemon_summary_title_label")
 		await process_frame
 		await process_frame
 		_check(title_label.size.x > 80.0, "Pokémon name keeps its readable content width")
 		_check(
-			gender_label.global_position.x - (title_label.global_position.x + title_label.size.x) <= 5.0,
+			gender_icon.global_position.x - (title_label.global_position.x + title_label.size.x) <= 5.0,
 			"gender sits directly after the Pokémon name"
 		)
 		_check(
-			nickname_button.global_position.x - (gender_label.global_position.x + gender_label.size.x) <= 5.0,
+			nickname_button.global_position.x - (gender_icon.global_position.x + gender_icon.size.x) <= 5.0,
 			"nickname edit action sits directly after gender"
 		)
 

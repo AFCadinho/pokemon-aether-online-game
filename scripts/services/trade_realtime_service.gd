@@ -337,7 +337,14 @@ func _is_authenticated() -> bool:
 	if not is_inside_tree():
 		return trade_service_override != null
 	var auth := get_node_or_null("/root/AuthService")
-	return auth != null and bool(auth.call("is_authenticated"))
+	if auth == null:
+		return false
+	if auth.has_method("is_authenticated"):
+		return bool(auth.call("is_authenticated"))
+	# Detached checks and lightweight clients may expose only current_user.
+	# Treat a populated user payload as the equivalent authenticated state.
+	var current_user: Variant = auth.get("current_user")
+	return current_user is Dictionary and not (current_user as Dictionary).is_empty()
 
 
 func _is_recipient(trade: Dictionary) -> bool:

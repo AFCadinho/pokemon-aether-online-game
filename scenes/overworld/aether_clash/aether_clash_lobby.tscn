@@ -13,7 +13,10 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/z_crystal_vendor_npc.tscn" id="9_z_crystal_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/mega_stone_vendor_npc.tscn" id="10_mega_stone_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_guide_npc.tscn" id="11_clash_guide"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_bot_captain_npc.tscn" id="12_bot_captain"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="13_o6lnf"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/rental_npc.tscn" id="rental_vendor"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/socialite_frames.tres" id="rental_socialite_frames"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -253,6 +256,17 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=331639728]
 
+[node name="TeamRentalNPC" parent="Entities/NPCs" unique_id=220831213 instance=ExtResource("rental_vendor")]
+position = Vector2(944, 176)
+rental_kind = "team"
+
+[node name="PokemonRentalNPC" parent="Entities/NPCs" unique_id=4411246 instance=ExtResource("rental_vendor")]
+position = Vector2(1008, 176)
+rental_kind = "pokemon"
+display_name = "Pokémon Rental"
+npc_sprite_frames = ExtResource("rental_socialite_frames")
+portrait_id = "showdown_lady_gen6"
+
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1798118896 instance=ExtResource("5_transit_keeper")]
 position = Vector2(1040, 1424)
 local_destination_id = ""
@@ -270,6 +284,11 @@ position = Vector2(1456, 944)
 [node name="ClashCoordinator" parent="Entities/NPCs" unique_id=1283508874 instance=ExtResource("11_clash_guide")]
 position = Vector2(784, 1360)
 npc_id = "aether_clash_lobby_clash_coordinator"
+
+[node name="ClashTrainingCaptain" parent="Entities/NPCs" unique_id=433982054 instance=ExtResource("12_bot_captain")]
+position = Vector2(528, 816)
+npc_id = "aether_clash_lobby_training_captain"
+facing_direction = Vector2(0, 1)
 
 [node name="HealNPC" parent="Entities/NPCs" unique_id=581918462 instance=ExtResource("8_dpboj")]
 position = Vector2(880, 976)

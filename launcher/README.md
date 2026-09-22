@@ -4,6 +4,10 @@ Small Godot launcher project for PokeAether.
 
 ## Current flow
 
+Local cosmetic packs are managed through the **Mods** button. See
+[Content packs v1](../docs/content-packs.md) for the format, player instructions,
+and the planned official catalog. The Discover tab is not connected to a feed yet.
+
 1. Downloads `manifest.json`.
 2. Compares remote versions with `user://versions.json`.
 3. Downloads files of at least 8 MiB over four bounded HTTP byte ranges in parallel.
@@ -226,6 +230,26 @@ python3 tools/upload_sprite_asset_packs.py
 ```
 
 This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions, sizes, and zip SHA-256 values. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
+
+The shared 3D forest environment is also a required launcher asset pack. Build
+its deterministic archive from the reviewed runtime PCK with:
+
+```bash
+python3 tools/package_forest_asset_pack.py /absolute/path/to/forest.pck --json
+```
+
+Upload the reported zip under `assets/<version>.zip` and pin its exact version,
+size and SHA-256 in `deploy-desktop-r2.yml`. The archive always installs
+`forest-runtime/forest.json` and `forest-runtime/forest.pck`; the launcher checks
+both files and passes the manifest path to the game. It is deliberately required,
+so a missing or corrupt hosted artifact stops publication or installation.
+
+After reviewing the reported metadata, publish it as an explicit separate step
+using the configured R2 credentials:
+
+```bash
+python3 tools/package_forest_asset_pack.py /absolute/path/to/forest.pck --upload --json
+```
 
 The script uses content hashes for versions and skips packs whose computed version is already in the workflow. That means unchanged packs are not uploaded again and users do not redownload them.
 

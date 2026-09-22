@@ -32,6 +32,7 @@ func clear_cache() -> void:
 
 
 func _fetch_overworld_pokemon_metadata(overworld_pokemon_id: String) -> Dictionary:
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var url := base_url + OVERWORLD_POKEMON_METADATA_ENDPOINT % overworld_pokemon_id.uri_encode()
 	var request := HTTPRequest.new()

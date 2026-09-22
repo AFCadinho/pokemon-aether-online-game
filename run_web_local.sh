@@ -88,6 +88,7 @@ if $BUILD; then
     || die "Godot was not found. Install Godot 4.6 or pass --godot PATH."
   printf 'Building local browser client with %s...\n' "$GODOT_BIN"
   python3 "$ROOT/tools/build_web_preview.py" --godot "$GODOT_BIN"
+  python3 "$ROOT/tools/build_web_asset_modules.py" --godot "$GODOT_BIN"
 elif [[ ! -s "$ROOT/builds/web/index.html" ]]; then
   die "--skip-build requested, but builds/web/index.html does not exist"
 fi

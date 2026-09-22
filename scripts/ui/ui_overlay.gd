@@ -4,6 +4,8 @@ const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
+const POKEDEX_MODEL_PREVIEW_SCRIPT := preload("res://scripts/ui/pokedex_model_preview.gd")
+const SUMMARY_MODEL_PREVIEW_SCRIPT := preload("res://scripts/ui/summary_model_preview.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
 const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
@@ -208,6 +210,7 @@ const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg"
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const SOCIALS_MAIL_ICON: Texture2D = preload("res://assets/ui/socials_mail.svg")
 const SOCIALS_LOANS_ICON: Texture2D = preload("res://assets/ui/player_trade.svg")
+const SOCIALS_PARTY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")
 const POKEDEX_OWNED_ICON: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
 const SHINY_TRACKER_ICON: Texture2D = preload("res://assets/items/icons/SHINYTRACKER.png")
@@ -252,6 +255,8 @@ const AETHER_EXCHANGE_POPUP_SCENE: PackedScene = preload("res://scenes/interface
 const DEV_BADGE_PROGRESS_POPUP_SCENE: PackedScene = preload("res://scenes/interface/dev_badge_progress_popup.tscn")
 const DONATOR_STORE_POPUP_SCENE: PackedScene = preload("res://scenes/interface/donator_store_popup.tscn")
 const PLAYER_INTERACTION_COORDINATOR_SCRIPT: Script = preload("res://scripts/ui/player_interaction_coordinator.gd")
+const COOP_PARTY_POPUP_SCRIPT: Script = preload("res://scripts/ui/coop_party_popup.gd")
+const COOP_PARTY_HUD_SCRIPT: Script = preload("res://scripts/ui/coop_party_hud.gd")
 const QUEST_JOURNAL_VIEW_SCRIPT: Script = preload("res://scripts/ui/quest_journal_view.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const BATTLE_SUMMARY_SLOT_BG_TEXTURE: Texture2D = preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
@@ -297,6 +302,12 @@ const TRAINER_CARD_SIZE := Vector2(720, 500)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
+## Battle trainer art is authored on a half-resolution pixel grid: most 160px
+## layers contain 2x2 logical pixels, while legacy 80px parts use layer scale
+## 2. Keep the final transform on half steps so every logical pixel occupies a
+## whole number of display pixels instead of alternating widths.
+const TRAINER_CARD_ART_SCALE_STEP := 0.5
+const TRAINER_CARD_ART_WITH_COMPANION_SCALE := 1.0
 const TRAINER_CARD_APPEARANCE_VIEWPORT_SIZE := Vector2i(194, 248)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(97, 142)
 const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(3.0, 3.0)
@@ -372,6 +383,15 @@ const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_BASE_SCALE := 1.7
 const POKEDEX_SPRITE_MAX_SIZE := Vector2(126, 104)
 const POKEDEX_SPRITE_BASE_SCALE := 1.5
+const RENDERED_PREVIEW_ANIMATIONS := [
+	{"action": "idle", "label": "Idle"},
+	{"action": "physical_attack", "label": "Physical Attack"},
+	{"action": "special_attack", "label": "Special Attack"},
+	{"action": "damage", "label": "Damage"},
+	{"action": "sleep", "label": "Sleep"},
+	{"action": "faint_start", "label": "Faint Start"},
+	{"action": "faint_loop", "label": "Faint Loop"},
+]
 const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
 const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
 const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
@@ -656,10 +676,14 @@ var donator_store_popup: DonatorStorePopup
 @onready var socials_menu: PanelContainer = $Control/SocialsMenu
 @onready var socials_friend_list_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/FriendListButton
 @onready var socials_players_on_map_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/PlayersOnMapButton
+@onready var socials_adventure_party_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/AdventurePartyButton
 @onready var socials_loans_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/LoansButton
 @onready var socials_mail_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/MailButton
 @onready var socials_close_button: Button = $Control/SocialsMenu/MarginContainer/VBoxContainer/Header/CloseButton
 var friendlist_popup: FriendlistPopup
+var coop_party_popup: Control
+var coop_party_hud: Button
+var coop_wild_notice_at_msec: Dictionary = {}
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
@@ -1200,6 +1224,10 @@ var hotkey_sidebar_drag_offset := Vector2.ZERO
 var trainer_card_popup: PanelContainer
 var public_trainer_card_popup: PanelContainer
 var public_trainer_card_data: Dictionary = {}
+var own_trainer_card_data: Dictionary = {}
+var trainer_card_dex_panel: Control
+var trainer_card_pvp_tab: Control
+var trainer_card_companion_saving := false
 var trainer_card_tabs: TabContainer
 var trainer_card_subtitle_label: Label
 var trainer_card_avatar_viewports: Array[SubViewport] = []
@@ -1250,6 +1278,7 @@ var trainer_card_appearance_message_key := ""
 var trainer_card_appearance_message_values: Dictionary = {}
 var trainer_card_dragging: bool = false
 var trainer_card_drag_offset := Vector2.ZERO
+var trainer_card_drag_popup: PanelContainer
 var bag_popup: PanelContainer
 var bag_item_grid: GridContainer
 var bag_search_input: LineEdit
@@ -1583,6 +1612,7 @@ var pokedex_sprite: TextureRect
 var pokedex_sprite_panel: PanelContainer
 var pokedex_sprite_viewport: SubViewport
 var pokedex_animated_sprite: AnimatedSprite2D
+var pokedex_3d_preview: Control
 var pokedex_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
 var pokedex_web_sprite_generation := 0
 var pokedex_sprite_side := "front"
@@ -1913,6 +1943,15 @@ func _ready() -> void:
 	socials_button.pressed.connect(_on_socials_button_pressed)
 	socials_friend_list_button.pressed.connect(_on_socials_friend_list_button_pressed)
 	socials_players_on_map_button.pressed.connect(_on_socials_players_on_map_button_pressed)
+	socials_adventure_party_button.pressed.connect(_on_socials_adventure_party_button_pressed)
+	CoopService.invitation_received.connect(_on_coop_invitation_received)
+	CoopService.invitation_sent.connect(_on_coop_invitation_sent)
+	CoopService.invitation_failed.connect(_on_coop_invitation_failed)
+	CoopService.request_failed.connect(_on_coop_request_failed)
+	CoopService.party_profile_missing.connect(_on_coop_party_profile_missing)
+	CoopService.state_changed.connect(_refresh_coop_party_hud)
+	_create_coop_party_hud()
+	_refresh_coop_party_hud()
 	socials_loans_button.pressed.connect(_on_socials_loans_button_pressed)
 	socials_mail_button.pressed.connect(_on_socials_mail_button_pressed)
 	socials_close_button.pressed.connect(_on_socials_close_button_pressed)
@@ -2321,6 +2360,7 @@ func _can_use_moderation_center() -> bool:
 	return _can_use_chat_moderation() or _can_manage_jail()
 
 func _refresh_dev_tools_visibility() -> void:
+	var is_web := OS.has_feature("web")
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_generate_dev_items: bool = _can_generate_dev_items()
@@ -2328,14 +2368,18 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_open_dev_actions: bool = can_use_dev_tools or can_generate_dev_items
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_return_from_impersonation := AuthService.is_impersonating()
+	var can_impersonate_here := can_impersonate and not is_web
+	var can_return_from_impersonation_here := can_return_from_impersonation and not is_web
 	var can_teleport: bool = _can_teleport_self()
 	var can_teleport_to_player: bool = _can_teleport_to_player()
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_photo_mode: bool = _can_use_content_creator_photo_mode()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
+	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web
+	var can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web
 	var has_staff_tool: bool = (
-		can_return_from_impersonation
-		or can_impersonate
+		can_return_from_impersonation_here
+		or can_impersonate_here
 		or can_teleport
 		or can_teleport_to_player
 		or can_teleport_other
@@ -2343,18 +2387,23 @@ func _refresh_dev_tools_visibility() -> void:
 		or _can_use_chat_moderation()
 		or _has_user_permission(CHAT_TRANSLATE_PERMISSION)
 	)
-	var has_visible_staff_action: bool = has_staff_tool or can_open_dev_actions or can_use_content_creator_photo_mode or can_use_content_creator_generation
+	var has_visible_staff_action: bool = (
+		has_staff_tool
+		or can_open_dev_actions
+		or can_use_content_creator_photo_mode_here
+		or can_use_content_creator_generation_here
+	)
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode
-		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
+		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode_here
 	if alpha_tools_slot != null:
-		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation
+		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
 	if alpha_tools_button != null:
-		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation
-		alpha_tools_button.disabled = not can_use_content_creator_generation
+		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
+		alpha_tools_button.disabled = not can_use_content_creator_generation_here
 	if alpha_create_pokemon_button != null:
 		alpha_create_pokemon_button.visible = can_use_content_creator_generation
 		alpha_create_pokemon_button.disabled = not can_use_content_creator_generation
@@ -2412,9 +2461,11 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_add_money_button.visible = can_use_dev_tools
 		dev_add_money_button.disabled = not can_use_dev_tools
 	if staff_impersonate_button != null:
-		staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate
+		staff_impersonate_button.visible = (
+			can_return_from_impersonation_here or can_impersonate_here
+		)
 		staff_impersonate_button.disabled = not (
-			can_return_from_impersonation or can_impersonate
+			can_return_from_impersonation_here or can_impersonate_here
 		)
 	_refresh_staff_impersonate_button_copy()
 	if staff_teleport_button != null:
@@ -2429,7 +2480,7 @@ func _refresh_dev_tools_visibility() -> void:
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
-	if not can_impersonate or can_return_from_impersonation:
+	if not can_impersonate_here or can_return_from_impersonation_here:
 		if staff_impersonate_popup != null:
 			staff_impersonate_popup.visible = false
 	if not (can_teleport or can_teleport_to_player or can_teleport_other) and staff_teleport_popup != null:
@@ -2451,13 +2502,16 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_badge_progress_popup.close()
 	if not can_generate_dev_items and dev_add_item_popup != null:
 		dev_add_item_popup.visible = false
-	if not can_use_content_creator_generation and alpha_tools_popup != null:
+	if not can_use_content_creator_generation_here and alpha_tools_popup != null:
 		alpha_tools_popup.visible = false
-	if not can_use_content_creator_photo_mode and content_creator_tools_popup != null:
+	if not can_use_content_creator_photo_mode_here and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
-	if not can_use_content_creator_generation and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
+	if not can_use_content_creator_generation_here and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
-	if (not can_impersonate or can_return_from_impersonation) and staff_impersonate_popup != null:
+	if (
+		(not can_impersonate_here or can_return_from_impersonation_here)
+		and staff_impersonate_popup != null
+	):
 		staff_impersonate_popup.visible = false
 	_refresh_action_bar_layouts()
 	_set_collapsible_panel_available("dex_actions", true)
@@ -9209,7 +9263,7 @@ func _prefetch_web_team_sprites(team_value: Variant, side: String) -> void:
 			"species": species,
 			"side": side,
 			"shiny": shiny,
-			"style": SettingsManager.sprite_style,
+			"style": SettingsManager.get_active_sprite_style(),
 		})
 	WebPokemonSpriteService.prefetch(entries)
 
@@ -11939,6 +11993,8 @@ func _setup_pokedex_popup() -> void:
 
 	var sprite_viewport_container := SubViewportContainer.new()
 	sprite_viewport_container.stretch = true
+	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	sprite_viewport_container.material = _make_preview_composite_material()
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(sprite_viewport_container)
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -11951,7 +12007,7 @@ func _setup_pokedex_popup() -> void:
 	sprite_viewport_container.add_child(pokedex_sprite_viewport)
 
 	pokedex_animated_sprite = AnimatedSprite2D.new()
-	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	pokedex_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokedex_animated_sprite.position = Vector2(95, 73)
 	pokedex_animated_sprite.visible = false
 	pokedex_sprite_viewport.add_child(pokedex_animated_sprite)
@@ -11964,6 +12020,11 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pokedex_3d_preview = POKEDEX_MODEL_PREVIEW_SCRIPT.new()
+	pokedex_3d_preview.visible = false
+	pokedex_sprite_panel.add_child(pokedex_3d_preview)
+	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
+	_add_preview_animation_button(pokedex_sprite_panel, pokedex_animated_sprite, pokedex_sprite_loader, "bottom_right")
 
 	var stats_panel := PanelContainer.new()
 	stats_panel.custom_minimum_size = Vector2(220, 0)
@@ -12274,6 +12335,10 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	if has_meta("battle_chat_active"):
+		_refresh_session_logout_countdown()
+		_refresh_chat_mute_countdown()
+		return
 	_refresh_aether_clash_arena_ui_mode_if_needed()
 	_refresh_ui_input_mouse_blocker()
 	if _collapsible_layout_dirty:
@@ -13547,8 +13612,11 @@ func _render_personal_buffs(buffs: Array) -> void:
 	var has_active_buffs := not buffs.is_empty()
 	if not has_active_buffs or not had_active_buffs:
 		personal_buffs_expanded = false
-	personal_buffs_panel.set_meta("group_available", true)
-	_apply_buff_tray_group_visibility(personal_buffs_panel, true)
+	if personal_buffs_panel != null:
+		personal_buffs_panel.set_meta("group_available", true)
+		_apply_buff_tray_group_visibility(personal_buffs_panel, true)
+	if personal_buff_slots == null:
+		return
 	var slot_count := personal_buff_slots.get_child_count()
 	for slot_index in range(slot_count):
 		var button := personal_buff_slots.get_child(slot_index) as Button
@@ -13630,6 +13698,7 @@ func _refresh_personal_buffs_compact_state() -> void:
 		)
 	personal_buffs_panel.custom_minimum_size.y = panel_height
 	personal_buffs_panel.offset_top = personal_buffs_panel.offset_bottom - panel_height
+	_position_coop_party_hud()
 func _personal_buffs_summary_tooltip() -> String:
 	var lines: Array[String] = [LocalizationManager.plural(
 		"ui.buff.personal_active.one",
@@ -15332,6 +15401,9 @@ func _populate_avatar_preview(viewport: SubViewport, preview_position: Vector2, 
 func _refresh_avatar_previews() -> void:
 	_populate_avatar_preview(player_status_avatar_viewport, PLAYER_STATUS_AVATAR_POSITION, PLAYER_STATUS_AVATAR_SCALE)
 	for viewport: SubViewport in trainer_card_avatar_viewports:
+		if bool(viewport.get_meta("trainer_card_battle_art", false)):
+			_populate_trainer_card_battle_art(viewport, PlayerSave.to_appearance_state())
+			continue
 		var preview_position: Vector2 = viewport.get_meta("preview_position", TRAINER_CARD_AVATAR_POSITION) as Vector2
 		var preview_scale: Vector2 = viewport.get_meta("preview_scale", TRAINER_CARD_AVATAR_SCALE) as Vector2
 		_populate_avatar_preview(viewport, preview_position, preview_scale)
@@ -15578,7 +15650,7 @@ func _refresh_player_status_card() -> void:
 	_refresh_aether_blessing_membership_status()
 
 func _make_trainer_card_outer_style() -> StyleBoxFlat:
-	var style := _make_panel_style(UI_SURFACE_BASE, UI_BORDER_SUBTLE, 14, 1)
+	var style := _make_panel_style(Color("#0b1526"), Color("#427e91"), 16, 1)
 	style.border_width_top = 2
 	style.shadow_color = Color(0, 0, 0, 0.48)
 	style.shadow_size = 16
@@ -15610,6 +15682,9 @@ func _make_trainer_card_tab_style(background: Color, border: Color, selected: bo
 	return style
 
 func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
+	# Individual pages may have different minimum content sizes. The card itself
+	# remains a fixed window; pages that need more room provide their own scroll.
+	tabs.clip_contents = true
 	var tab_bar := tabs.get_tab_bar()
 	tab_bar.focus_mode = Control.FOCUS_ALL
 	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -15637,6 +15712,24 @@ func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
 	)
 	tabs.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
 
+
+func _keep_trainer_card_popup_size(popup: PanelContainer) -> void:
+	if not is_instance_valid(popup):
+		return
+	popup.custom_minimum_size = TRAINER_CARD_SIZE
+	popup.size = TRAINER_CARD_SIZE
+	popup.offset_right = popup.offset_left + TRAINER_CARD_SIZE.x
+	popup.offset_bottom = popup.offset_top + TRAINER_CARD_SIZE.y
+
+
+func _deferred_keep_trainer_card_popup_size(popup: PanelContainer) -> void:
+	await get_tree().process_frame
+	_keep_trainer_card_popup_size(popup)
+	# Container layout can publish a late minimum-size update on the same tab
+	# change. Lock once more after that layout pass so no page can grow the card.
+	await get_tree().process_frame
+	_keep_trainer_card_popup_size(popup)
+
 func _refresh_trainer_card_tab_titles() -> void:
 	if trainer_card_tabs == null:
 		return
@@ -15651,6 +15744,8 @@ func _refresh_trainer_card_tab_titles() -> void:
 func _refresh_trainer_card_localized_ui() -> void:
 	if trainer_card_popup != null:
 		LocalizationManager.localize_tree(trainer_card_popup)
+		if not own_trainer_card_data.is_empty():
+			_apply_own_trainer_card_details(own_trainer_card_data)
 	if trainer_card_subtitle_label != null:
 		trainer_card_subtitle_label.text = LocalizationManager.text(
 			"ui.trainer_card.passport",
@@ -15690,6 +15785,7 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
 	trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
 	trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
+	_keep_trainer_card_popup_size(trainer_card_popup)
 	trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(trainer_card_popup)
 
@@ -15705,10 +15801,13 @@ func _setup_trainer_card_popup() -> void:
 	margin_container.add_child(layout)
 
 	var header := HBoxContainer.new()
+	header.name = "TrainerCardDragHandle"
 	header.custom_minimum_size = Vector2(0, 46)
 	header.add_theme_constant_override("separation", 10)
 	header.mouse_filter = Control.MOUSE_FILTER_STOP
-	header.gui_input.connect(_on_trainer_card_header_gui_input)
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	header.tooltip_text = "Drag to move this Trainer Card"
+	header.gui_input.connect(_on_trainer_card_header_gui_input.bind(trainer_card_popup))
 	layout.add_child(header)
 
 	var title_stack := VBoxContainer.new()
@@ -15754,7 +15853,18 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_tabs.add_child(_create_trainer_card_badges_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
+	trainer_card_pvp_tab = _create_public_trainer_pvp_tab(own_trainer_card_data)
+	trainer_card_pvp_tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.pvp")
+	trainer_card_tabs.add_child(trainer_card_pvp_tab)
 	_apply_trainer_card_tabs_style(trainer_card_tabs)
+	trainer_card_tabs.tab_changed.connect(
+		func(_tab_index: int) -> void:
+			_deferred_keep_trainer_card_popup_size(trainer_card_popup)
+	)
+	trainer_card_tabs.minimum_size_changed.connect(
+		func() -> void:
+			_deferred_keep_trainer_card_popup_size(trainer_card_popup)
+	)
 	_refresh_trainer_card_tab_titles()
 	layout.add_child(trainer_card_tabs)
 
@@ -15775,6 +15885,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	public_trainer_card_popup.offset_top = -TRAINER_CARD_SIZE.y * 0.5
 	public_trainer_card_popup.offset_right = TRAINER_CARD_SIZE.x * 0.5
 	public_trainer_card_popup.offset_bottom = TRAINER_CARD_SIZE.y * 0.5
+	_keep_trainer_card_popup_size(public_trainer_card_popup)
 	public_trainer_card_popup.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
 	root_control.add_child(public_trainer_card_popup)
 
@@ -15790,16 +15901,23 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	margin.add_child(root)
 
 	var header := HBoxContainer.new()
+	header.name = "PublicTrainerCardDragHandle"
 	header.custom_minimum_size = Vector2(0, 46)
 	header.add_theme_constant_override("separation", 10)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	header.tooltip_text = "Drag to move this Trainer Card"
+	header.gui_input.connect(_on_trainer_card_header_gui_input.bind(public_trainer_card_popup))
 	root.add_child(header)
 	var title_stack := VBoxContainer.new()
 	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	title_stack.add_theme_constant_override("separation", 0)
+	title_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(title_stack)
 	var title := Label.new()
 	title.text = str(card.get("displayName", card.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	title_stack.add_child(title)
@@ -15808,6 +15926,7 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 		"ui.trainer_card.passport",
 		{"id": _format_trainer_id_text(card.get("userId", "-"))}
 	)
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	subtitle.add_theme_font_size_override("font_size", 10)
 	subtitle.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	title_stack.add_child(subtitle)
@@ -15833,6 +15952,14 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	tabs.add_child(_create_public_trainer_badges_tab(card))
 	tabs.add_child(_create_public_trainer_pvp_tab(card))
 	_apply_trainer_card_tabs_style(tabs)
+	tabs.tab_changed.connect(
+		func(_tab_index: int) -> void:
+			_deferred_keep_trainer_card_popup_size(public_trainer_card_popup)
+	)
+	tabs.minimum_size_changed.connect(
+		func() -> void:
+			_deferred_keep_trainer_card_popup_size(public_trainer_card_popup)
+	)
 	tabs.set_tab_title(0, LocalizationManager.text("ui.trainer_card.tab.overview"))
 	tabs.set_tab_title(1, LocalizationManager.text("ui.trainer_card.tab.badges"))
 	tabs.set_tab_title(2, LocalizationManager.text("ui.trainer_card.tab.pvp"))
@@ -15843,6 +15970,13 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	root.add_child(actions)
+	if int(card.get("userId", 0)) != int(str(PlayerSave.player_id)):
+		var friend_button := Button.new()
+		_set_localized_control_property(friend_button, "text", "ui.friends.add")
+		_apply_button_style(friend_button)
+		friend_button.pressed.connect(_trainer_card_add_friend.bind(card, friend_button))
+		actions.add_child(friend_button)
+		_refresh_trainer_card_friend_button(card, friend_button)
 	var message_button := Button.new()
 	_set_localized_control_property(message_button, "text", "ui.trainer_card.action.message")
 	message_button.focus_mode = Control.FOCUS_ALL
@@ -15978,21 +16112,32 @@ func _create_public_trainer_badge_card(badge: Dictionary, earned: bool) -> Contr
 
 
 func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
-	var tab := MarginContainer.new()
+	# Keep ranked histories inside the fixed-size Trainer Card. The outer plain
+	# Control deliberately does not inherit the content's minimum height.
+	var tab := Control.new()
 	tab.name = "Pvp"
-	tab.add_theme_constant_override("margin_left", 10)
-	tab.add_theme_constant_override("margin_top", 10)
-	tab.add_theme_constant_override("margin_right", 10)
-	tab.add_theme_constant_override("margin_bottom", 10)
+	var scroll := ScrollContainer.new()
+	scroll.name = "TrainerCardPvpScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tab.add_child(scroll)
+	var content := MarginContainer.new()
+	content.add_theme_constant_override("margin_left", 10)
+	content.add_theme_constant_override("margin_top", 10)
+	content.add_theme_constant_override("margin_right", 10)
+	content.add_theme_constant_override("margin_bottom", 10)
+	scroll.add_child(content)
 	var pvp := _dictionary_from_value(card.get("pvp", {}))
-	if pvp.is_empty():
-		tab.add_child(_create_public_trainer_empty_pvp_panel())
-		return tab
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
-	tab.add_child(layout)
+	content.add_child(layout)
+	var period := Label.new()
+	_set_localized_control_property(period, "text", "ui.trainer_card.pvp.all_time")
+	period.add_theme_font_size_override("font_size", 12)
+	period.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(period)
+	layout.add_child(_create_public_trainer_ranked_ratings(card))
 	layout.add_child(_create_public_trainer_pvp_summary(pvp))
 
 	var source_row := HBoxContainer.new()
@@ -16013,12 +16158,121 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	for source: Dictionary in sources:
 		var record := _dictionary_from_value(source.get("record", {}))
 		var rows: Array[Dictionary] = [
-			{"label_key": "ui.trainer_card.pvp.games", "value": str(record.get("gamesPlayed", 0))},
-			{"label_key": "ui.trainer_card.pvp.wins", "value": str(record.get("wins", 0))},
-			{"label_key": "ui.trainer_card.pvp.losses", "value": str(record.get("losses", 0))},
+			{"label_key": "ui.trainer_card.pvp.games", "value": str(int(record.get("gamesPlayed", 0)))},
+			{"label_key": "ui.trainer_card.pvp.wins", "value": str(int(record.get("wins", 0)))},
+			{"label_key": "ui.trainer_card.pvp.losses", "value": str(int(record.get("losses", 0)))},
 		]
 		source_row.add_child(_create_public_trainer_info_panel(str(source.get("title_key", "")), rows))
 	return tab
+
+
+func _create_public_trainer_ranked_ratings(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "PublicTrainerRankedRatings"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	margin.add_child(stack)
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.trainer_card.pvp.rating")
+	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(title)
+	var tiers := HFlowContainer.new()
+	tiers.name = "RankedRatingTiers"
+	tiers.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tiers.add_theme_constant_override("h_separation", 6)
+	tiers.add_theme_constant_override("v_separation", 6)
+	stack.add_child(tiers)
+	var added := false
+	for value: Variant in card.get("ratings", []):
+		if value is Dictionary:
+			var entry := value as Dictionary
+			var format_name := str(entry.get("format", "")).replace("-", " ").to_upper().strip_edges()
+			if not format_name.is_empty():
+				tiers.add_child(_create_public_trainer_rating_tier(
+					_format_trainer_card_ranked_tier_name(format_name),
+					int(entry.get("rating", 0)),
+					format_name,
+					int(entry.get("peakRating", entry.get("rating", 0))),
+					int(entry.get("gamesPlayed", 0))
+				))
+				added = true
+	if not added:
+		# Keep the empty state in the same responsive tier layout. Once a player
+		# establishes ratings, each ruleset simply replaces this with its own card.
+		tiers.add_child(_create_public_trainer_rating_tier(
+			LocalizationManager.text("ui.trainer_card.pvp.unranked"),
+			-1,
+			LocalizationManager.text("ui.trainer_card.pvp.rating"),
+			-1,
+			0
+		))
+	return panel
+
+
+func _format_trainer_card_ranked_tier_name(format_name: String) -> String:
+	# The PvP card already identifies Aether ranked play; repeating the brand in
+	# every chip leaves too little room for tier names as the ladder grows.
+	return format_name.trim_prefix("AETHER ")
+
+
+func _create_public_trainer_rating_tier(
+	tier_name: String,
+	rating: int,
+	full_format_name: String,
+	peak_rating: int,
+	games_played: int
+) -> Control:
+	var tier := PanelContainer.new()
+	tier.name = "RankedTier_%s" % tier_name.to_pascal_case()
+	tier.custom_minimum_size.x = 120
+	tier.tooltip_text = "%s · %s" % [full_format_name, "—" if rating < 0 else str(rating)]
+	tier.add_theme_stylebox_override("panel", _make_panel_style(Color("#13263d"), TRAINER_CARD_ACCENT_SOFT, 6, 1))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	tier.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 2)
+	margin.add_child(stack)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 7)
+	stack.add_child(row)
+	var format_label := Label.new()
+	format_label.text = tier_name
+	format_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	format_label.clip_text = true
+	format_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	format_label.add_theme_font_size_override("font_size", 11)
+	format_label.add_theme_color_override("font_color", UI_TEXT)
+	row.add_child(format_label)
+	var rating_label := Label.new()
+	rating_label.name = "Rating"
+	rating_label.text = "—" if rating < 0 else str(rating)
+	rating_label.add_theme_font_size_override("font_size", 14)
+	rating_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	row.add_child(rating_label)
+	if rating >= 0:
+		var detail := Label.new()
+		detail.text = LocalizationManager.text("ui.trainer_card.pvp.tier_summary", {
+			"peak": peak_rating,
+			"battles": games_played,
+		})
+		detail.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		detail.add_theme_font_size_override("font_size", 9)
+		detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		stack.add_child(detail)
+	return tier
 
 
 func _create_public_trainer_pvp_summary(pvp: Dictionary) -> Control:
@@ -16046,9 +16300,9 @@ func _create_public_trainer_pvp_summary(pvp: Dictionary) -> Control:
 	stats.add_theme_constant_override("h_separation", 8)
 	stack.add_child(stats)
 	var values: Array[Dictionary] = [
-		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": str(pvp.get("gamesPlayed", 0))},
-		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": str(pvp.get("wins", 0))},
-		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": str(pvp.get("losses", 0))},
+		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": str(int(pvp.get("gamesPlayed", 0)))},
+		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": str(int(pvp.get("wins", 0)))},
+		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": str(int(pvp.get("losses", 0)))},
 		{
 			"id": "pvp_win_rate",
 			"label_key": "ui.trainer_card.pvp.win_rate",
@@ -16125,6 +16379,299 @@ func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> C
 	icon_center.add_child(texture_rect)
 	return icon_center
 
+func _create_trainer_card_dex_panel(card: Dictionary) -> Control:
+	var panel := HBoxContainer.new()
+	panel.name = "TrainerCardPokedex"
+	panel.add_theme_constant_override("separation", 8)
+	var dex := _dictionary_from_value(card.get("pokedex", {}))
+	for field: String in ["seen", "caught", "shinyCaught"]:
+		var tile := PanelContainer.new()
+		tile.name = "Dex_%s" % field
+		tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		tile.custom_minimum_size.y = 32
+		tile.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+		tile.tooltip_text = LocalizationManager.text("ui.trainer_card.dex.%s_hint" % field)
+		panel.add_child(tile)
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 8)
+		margin.add_theme_constant_override("margin_right", 8)
+		tile.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+		margin.add_child(row)
+		var label := Label.new()
+		label.text = LocalizationManager.text("ui.trainer_card.dex.%s" % field)
+		label.add_theme_font_size_override("font_size", 11)
+		label.add_theme_color_override("font_color", Color("#b5c0cc"))
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(label)
+		var value := Label.new()
+		value.name = "Value"
+		value.text = str(maxi(0, int(dex[field]))) if dex.has(field) and dex[field] != null else "—"
+		value.add_theme_font_size_override("font_size", 16)
+		value.add_theme_color_override("font_color", TRAINER_CARD_ACCENT if field == "shinyCaught" else TRAINER_CARD_CYAN)
+		row.add_child(value)
+	return panel
+
+
+func _trainer_card_add_friend(card: Dictionary, button: Button) -> void:
+	button.disabled = true
+	var result: Dictionary = await SocialService.send_friend_request(str(card.get("username", "")))
+	if not is_instance_valid(button):
+		return
+	if bool(result.get("success", false)):
+		button.text = LocalizationManager.text("ui.friends.success.request_sent")
+	else:
+		button.disabled = false
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.friends.error.action"))))
+	_refresh_friend_request_attention_from_socials.call_deferred()
+
+
+func _refresh_trainer_card_friend_button(card: Dictionary, button: Button) -> void:
+	button.disabled = true
+	var result: Dictionary = await SocialService.load_socials()
+	if not is_instance_valid(button):
+		return
+	button.disabled = false
+	var overview := _dictionary_from_value(result.get("overview", {}))
+	var username := str(card.get("username", "")).to_lower()
+	for group: String in ["friends", "incomingFriendRequests", "outgoingFriendRequests", "blockedUsers"]:
+		for value: Variant in overview.get(group, []):
+			if not value is Dictionary:
+				continue
+			var entry := value as Dictionary
+			var field := "requester" if group == "incomingFriendRequests" else ("addressee" if group == "outgoingFriendRequests" else "user")
+			var user := _dictionary_from_value(entry.get(field, {}))
+			if str(user.get("username", "")).to_lower() == username:
+				button.disabled = true
+				button.text = LocalizationManager.text("ui.trainer_card.friend." + group)
+				return
+
+
+func _open_trainer_card_companion_picker() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "TrainerCardCompanionPicker"
+	dialog.title = LocalizationManager.text("ui.trainer_card.companion.choose")
+	dialog.min_size = Vector2i(460, 500)
+	dialog.size = Vector2i(460, 500)
+	dialog.borderless = true
+	dialog.add_theme_stylebox_override("panel", _make_trainer_card_outer_style())
+	dialog.dialog_hide_on_ok = false
+	root_control.add_child(dialog)
+	_apply_button_style(dialog.get_ok_button(), "primary")
+	_apply_button_style(dialog.get_cancel_button())
+	dialog.get_ok_button().custom_minimum_size = Vector2(96, 34)
+	dialog.get_cancel_button().custom_minimum_size = Vector2(96, 34)
+	var content_margin := MarginContainer.new()
+	content_margin.add_theme_constant_override("margin_left", 14)
+	content_margin.add_theme_constant_override("margin_top", 4)
+	content_margin.add_theme_constant_override("margin_right", 14)
+	content_margin.add_theme_constant_override("margin_bottom", 8)
+	dialog.add_child(content_margin)
+	var stack := VBoxContainer.new()
+	stack.custom_minimum_size.x = 404
+	stack.add_theme_constant_override("separation", 8)
+	content_margin.add_child(stack)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	stack.add_child(header)
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.companion.choose")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_font_size_override("font_size", 16)
+	heading.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(heading)
+	var close := Button.new()
+	close.text = "×"
+	close.tooltip_text = LocalizationManager.text("ui.trainer_card.companion.close")
+	close.custom_minimum_size = Vector2(30, 28)
+	close.add_theme_font_size_override("font_size", 22)
+	close.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	close.add_theme_color_override("font_hover_color", UI_TEXT)
+	close.add_theme_stylebox_override("normal", _make_button_style(Color.TRANSPARENT, Color.TRANSPARENT, 6, 0))
+	close.add_theme_stylebox_override("hover", _make_button_style(Color("#1c344b"), Color("#638da5"), 6, 1))
+	close.add_theme_stylebox_override("pressed", _make_button_style(Color("#0a1724"), TRAINER_CARD_CYAN, 6, 1))
+	close.pressed.connect(dialog.queue_free)
+	header.add_child(close)
+	var hint := Label.new()
+	hint.custom_minimum_size.x = 404
+	hint.text = LocalizationManager.text("ui.trainer_card.companion.hint")
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 13)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(hint)
+	var search := LineEdit.new()
+	search.placeholder_text = LocalizationManager.text("ui.trainer_card.companion.search")
+	_apply_line_edit_style(search)
+	search.custom_minimum_size.y = 34
+	stack.add_child(search)
+	var list := ItemList.new()
+	list.name = "OwnedCompanions"
+	_apply_trainer_card_companion_list_style(list)
+	list.custom_minimum_size = Vector2(404, 260)
+	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stack.add_child(list)
+	var feedback := Label.new()
+	feedback.custom_minimum_size.x = 404
+	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback.add_theme_color_override("font_color", UI_DANGER)
+	stack.add_child(feedback)
+	var refill := func(_unused: Variant = null) -> void:
+		_fill_trainer_card_companions(list, search.text)
+	search.text_changed.connect(refill)
+	dialog.confirmed.connect(func() -> void:
+		if trainer_card_companion_saving or list.get_selected_items().is_empty():
+			return
+		trainer_card_companion_saving = true
+		dialog.get_ok_button().disabled = true
+		var choice := _dictionary_from_value(list.get_item_metadata(list.get_selected_items()[0]))
+		var species := str(choice.get("species", ""))
+		var selected_shiny := bool(choice.get("shiny", false))
+		var loaded: Dictionary = await PlayerGameStateService.load_player_preferences()
+		var result := loaded
+		if bool(loaded.get("success", false)):
+			var preferences := _dictionary_from_value(loaded.get("preferences", {}))
+			preferences["favoritePokemon"] = species
+			preferences["favoritePokemonShiny"] = selected_shiny
+			result = await PlayerGameStateService.save_player_preferences(preferences)
+			if bool(result.get("success", false)):
+				var saved := _dictionary_from_value(result.get("preferences", {}))
+				if not saved.has("favoritePokemon") or str(saved.get("favoritePokemon", "")) != species:
+					result = {"success": false, "error": LocalizationManager.text("ui.trainer_card.companion.unavailable")}
+		trainer_card_companion_saving = false
+		if bool(result.get("success", false)):
+			trainer_card_pvp_request_generation += 1
+			own_trainer_card_data["favoritePokemon"] = species
+			own_trainer_card_data["favoritePokemonShiny"] = selected_shiny
+			_refresh_avatar_previews()
+			if is_instance_valid(dialog):
+				dialog.queue_free()
+		elif is_instance_valid(dialog):
+			dialog.get_ok_button().disabled = false
+			feedback.text = str(result.get("error", ""))
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(460, 500))
+	dialog.get_ok_button().disabled = true
+	var owned: Dictionary = await PlayerGameStateService.load_player_preferences()
+	if not is_instance_valid(dialog):
+		return
+	if not bool(owned.get("success", false)) or not owned.has("favoritePokemonOptions"):
+		feedback.text = str(owned.get("error", LocalizationManager.text("ui.trainer_card.companion.unavailable")))
+		return
+	list.set_meta("owned_companions", owned.get("favoritePokemonOptions", []))
+	_fill_trainer_card_companions(list, search.text)
+	dialog.get_ok_button().disabled = false
+
+
+func _apply_trainer_card_companion_list_style(list: ItemList) -> void:
+	list.select_mode = ItemList.SELECT_SINGLE
+	list.add_theme_constant_override("v_separation", 5)
+	list.add_theme_font_size_override("font_size", 13)
+	list.add_theme_color_override("font_color", UI_TEXT)
+	list.add_theme_color_override("font_selected_color", Color("#f5fbff"))
+	list.add_theme_color_override("guide_color", Color("#2d4b6688"))
+	list.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	list.add_theme_stylebox_override("selected", _make_panel_style(Color("#16445e"), TRAINER_CARD_CYAN, 5, 1))
+	list.add_theme_stylebox_override("selected_focus", _make_panel_style(Color("#1a5778"), Color("#b6ecff"), 5, 1))
+	var scroll_bar := list.get_v_scroll_bar()
+	scroll_bar.custom_minimum_size.x = 10
+	scroll_bar.add_theme_constant_override("grabber_min_size", 28)
+	scroll_bar.add_theme_stylebox_override("scroll", _make_panel_style(Color("#102538"), Color("#31556d"), 4, 1))
+	scroll_bar.add_theme_stylebox_override("grabber", _make_panel_style(Color("#48738b"), Color("#6b9bb5"), 4, 1))
+	scroll_bar.add_theme_stylebox_override("grabber_highlight", _make_panel_style(Color("#6ca9c8"), Color("#b6ecff"), 4, 1))
+	scroll_bar.add_theme_stylebox_override("grabber_pressed", _make_panel_style(TRAINER_CARD_CYAN, Color("#e0f8ff"), 4, 1))
+
+
+func _fill_trainer_card_companions(list: ItemList, query: String) -> void:
+	list.clear()
+	list.add_item(LocalizationManager.text("ui.trainer_card.companion.none"))
+	list.set_item_metadata(0, {"species": "", "shiny": false})
+	for value: Variant in list.get_meta("owned_companions", []):
+		if not value is Dictionary:
+			continue
+		var choice := value as Dictionary
+		var id := str(choice.get("species", ""))
+		var shiny := bool(choice.get("shiny", false))
+		if not query.is_empty() and not id.to_lower().contains(query.to_lower()):
+			continue
+		var index := list.add_item(("★ Shiny · " if shiny else "") + id.capitalize())
+		list.set_item_metadata(index, choice)
+		if id == str(own_trainer_card_data.get("favoritePokemon", "")) and shiny == bool(own_trainer_card_data.get("favoritePokemonShiny", false)):
+			list.select(index)
+
+
+func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictionary, preview_name: String = "TrainerCardBattlePreview", card: Dictionary = {}) -> void:
+	for child: Node in viewport.get_children():
+		child.free()
+	var backdrop := Node2D.new()
+	viewport.add_child(backdrop)
+	backdrop.draw.connect(func() -> void:
+		var center := Vector2(viewport.size) * Vector2(0.5, 0.46)
+		backdrop.draw_circle(center, 82.0, Color("#102f42"))
+		backdrop.draw_arc(center, 78.0, 0.0, TAU, 96, Color("#356173"), 1.0, true)
+		backdrop.draw_line(center - Vector2(78, 0), center + Vector2(78, 0), Color("#356173"), 1.0, true)
+		backdrop.draw_circle(center, 22.0, Color("#102f42"))
+		backdrop.draw_arc(center, 22.0, 0.0, TAU, 48, Color("#356173"), 1.0, true)
+		backdrop.draw_line(Vector2(24, 254), Vector2(160, 254), Color("#65c9c0"), 2.0, true)
+	)
+	var art := Node2D.new()
+	art.name = preview_name
+	viewport.add_child(art)
+	var layers := BattlePlayerTrainerCatalog.build_layers(appearance)
+	var bounds := Rect2()
+	for layer: Dictionary in layers:
+		var texture := layer.get("texture") as Texture2D
+		if texture == null:
+			continue
+		var sprite := Sprite2D.new()
+		sprite.name = str(layer.get("category", "layer")).to_pascal_case()
+		sprite.texture = texture
+		sprite.flip_h = true
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprite.scale = Vector2.ONE * float(layer.get("scale", 1.0))
+		art.add_child(sprite)
+		var used := texture.get_image().get_used_rect()
+		var visible_rect := Rect2((Vector2(used.position) - texture.get_size() * 0.5) * sprite.scale, Vector2(used.size) * sprite.scale)
+		visible_rect.position.x = -visible_rect.end.x
+		bounds = visible_rect if bounds.size == Vector2.ZERO else bounds.merge(visible_rect)
+	if bounds.has_area():
+		var factor := minf(144.0 / bounds.size.x, 222.0 / bounds.size.y)
+		var pixel_scale := maxf(
+			TRAINER_CARD_ART_SCALE_STEP,
+			floorf(factor / TRAINER_CARD_ART_SCALE_STEP) * TRAINER_CARD_ART_SCALE_STEP
+		)
+		art.scale = Vector2.ONE * pixel_scale
+		art.position = (Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * pixel_scale).round()
+	var profile := own_trainer_card_data if preview_name == "TrainerCardBattlePreview" else card
+	var species := str(profile.get("favoritePokemon", ""))
+	if not species.is_empty():
+		var home := PokemonAssets.load_party_icon(species, bool(profile.get("favoritePokemonShiny", false)))
+		if home != null:
+			var trainer_scale := minf(art.scale.x, TRAINER_CARD_ART_WITH_COMPANION_SCALE)
+			art.scale = Vector2.ONE * trainer_scale
+			art.position = (Vector2(48, 238) - Vector2(bounds.get_center().x, bounds.end.y) * trainer_scale).round()
+			art.z_index = 1
+			var companion := Sprite2D.new()
+			companion.name = "FavoritePokemon"
+			companion.texture = home
+			companion.flip_h = true
+			companion.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			var used := home.get_image().get_used_rect()
+			if used.has_area():
+				# Offset the pair diagonally: reserve the upper left for the trainer's
+				# face, and keep the companion lower/right and behind the trainer.
+				var fit_scale := minf(140.0 / used.size.x, 148.0 / used.size.y)
+				companion.scale = Vector2.ONE * fit_scale
+				var visible_rect := Rect2(Vector2(used.position) - home.get_size() * 0.5, Vector2(used.size))
+				visible_rect.position.x = -visible_rect.end.x
+				var right_foot := Vector2(float(viewport.size.x) - 6.0, 250.0)
+				companion.position = right_foot - visible_rect.end * fit_scale
+			viewport.add_child(companion)
+			viewport.move_child(companion, viewport.get_children().find(art))
+	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+
 func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "PublicTrainerAvatarPanel"
@@ -16148,29 +16695,18 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	preview_label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
 	stack.add_child(preview_label)
 	var viewport_container := SubViewportContainer.new()
-	viewport_container.custom_minimum_size = Vector2(TRAINER_CARD_AVATAR_VIEWPORT_SIZE)
+	viewport_container.custom_minimum_size = Vector2(184, 272)
 	viewport_container.stretch = false
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.add_child(viewport_container)
 	var viewport := SubViewport.new()
 	viewport.transparent_bg = true
-	viewport.size = TRAINER_CARD_AVATAR_VIEWPORT_SIZE
+	viewport.size = Vector2i(184, 272)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(viewport)
-	var avatar_value: Variant = REMOTE_PLAYER_AVATAR_SCRIPT.new()
-	if avatar_value is RemotePlayerAvatar:
-		var avatar := avatar_value as RemotePlayerAvatar
-		avatar.name = "PublicTrainerAvatarPreview"
-		viewport.add_child(avatar)
-		var state := card.duplicate(true)
-		state["position"] = {"x": 0.0, "y": 0.0}
-		state["facingDirection"] = "down"
-		state["follower"] = {}
-		state["movement"] = {}
-		state["mountId"] = ""
-		avatar.apply_state(state)
-		_finalize_public_trainer_avatar_preview(avatar)
-		call_deferred("_finalize_public_trainer_avatar_preview", avatar)
+	var appearance := _dictionary_from_value(card.get("appearance", {})).duplicate(true)
+	appearance["gender"] = card.get("gender", appearance.get("gender", "male"))
+	_populate_trainer_card_battle_art(viewport, appearance, "PublicTrainerAvatarPreview", card)
 	return panel
 
 
@@ -16251,6 +16787,7 @@ func _create_public_trainer_profile_panel(card: Dictionary) -> Control:
 	layout.add_child(grid)
 	for profile_value: Dictionary in profile_values:
 		grid.add_child(_create_public_trainer_profile_tile(profile_value))
+	layout.add_child(_create_trainer_card_dex_panel(card))
 	return panel
 
 
@@ -16356,6 +16893,9 @@ func _get_public_trainer_badge_text(card: Dictionary) -> String:
 func _hide_public_trainer_card() -> void:
 	if public_trainer_card_popup == null:
 		return
+	if trainer_card_drag_popup == public_trainer_card_popup:
+		trainer_card_dragging = false
+		trainer_card_drag_popup = null
 	_deactivate_ui_panel(public_trainer_card_popup)
 	public_trainer_card_popup.queue_free()
 	public_trainer_card_popup = null
@@ -16367,6 +16907,8 @@ func _create_trainer_card_avatar_panel(
 	viewport_size: Vector2i = TRAINER_CARD_AVATAR_VIEWPORT_SIZE,
 	panel_minimum_size: Vector2 = Vector2(210, 198)
 ) -> Control:
+	if show_name:
+		viewport_size = Vector2i(184, 272)
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = panel_minimum_size
 	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
@@ -16409,7 +16951,16 @@ func _create_trainer_card_avatar_panel(
 	trainer_card_avatar_viewport.set_meta("preview_scale", preview_scale)
 	viewport_container.add_child(trainer_card_avatar_viewport)
 	trainer_card_avatar_viewports.append(trainer_card_avatar_viewport)
-	_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
+	trainer_card_avatar_viewport.set_meta("trainer_card_battle_art", show_name)
+	if show_name:
+		_populate_trainer_card_battle_art(trainer_card_avatar_viewport, PlayerSave.to_appearance_state())
+		var choose := Button.new()
+		_set_localized_control_property(choose, "text", "ui.trainer_card.companion.choose")
+		_apply_trainer_card_companion_button_style(choose)
+		choose.pressed.connect(_open_trainer_card_companion_picker)
+		layout.add_child(choose)
+	else:
+		_populate_avatar_preview(trainer_card_avatar_viewport, preview_position, preview_scale)
 
 	return panel
 
@@ -16422,18 +16973,23 @@ func _create_trainer_card_stats_tab() -> Control:
 	tab.add_theme_constant_override("margin_right", 8)
 	tab.add_theme_constant_override("margin_bottom", 8)
 
+	var body := HBoxContainer.new()
+	body.add_theme_constant_override("separation", 14)
+	tab.add_child(body)
+	var portrait := _create_trainer_card_avatar_panel()
+	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_child(portrait)
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
-	tab.add_child(layout)
+	body.add_child(layout)
 
 	var top_row := HBoxContainer.new()
 	top_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_row.add_theme_constant_override("separation", 12)
 	layout.add_child(top_row)
 
-	top_row.add_child(_create_trainer_card_avatar_panel())
 	var profile_stack := VBoxContainer.new()
 	profile_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	profile_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -16441,10 +16997,13 @@ func _create_trainer_card_stats_tab() -> Control:
 	profile_stack.add_child(_create_trainer_card_identity_panel())
 	profile_stack.add_child(_create_trainer_card_caps_panel())
 	top_row.add_child(profile_stack)
+	trainer_card_dex_panel = _create_trainer_card_dex_panel(own_trainer_card_data)
+	layout.add_child(trainer_card_dex_panel)
 
 	var adventure_rows: Array[Dictionary] = [
 		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
 		{"id": "playtime", "label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
+		{"id": "region_clears", "label_key": "ui.trainer_card.field.region_clears", "value": str(maxi(0, int(own_trainer_card_data.get("regionClears", 0))))},
 	]
 	var stats_row := HBoxContainer.new()
 	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -16464,29 +17023,34 @@ func _create_trainer_card_stats_tab() -> Control:
 		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": "0"},
 		{"id": "pvp_win_rate", "label_key": "ui.trainer_card.pvp.win_rate", "value": "0%"},
 	]
-	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.title", pvp_rows))
-
-	var spacer := Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_child(spacer)
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.overview_title", pvp_rows))
 
 	return tab
 
 
 func _create_trainer_card_wallet_tab() -> Control:
-	var tab := MarginContainer.new()
+	# Currency descriptions can wrap on narrow displays. Keep the Passport fixed
+	# and let this page scroll rather than expanding the surrounding card.
+	var tab := Control.new()
 	tab.name = "Wallet"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.wallet")
-	tab.add_theme_constant_override("margin_left", 12)
-	tab.add_theme_constant_override("margin_top", 12)
-	tab.add_theme_constant_override("margin_right", 12)
-	tab.add_theme_constant_override("margin_bottom", 12)
+	var scroll := ScrollContainer.new()
+	scroll.name = "WalletTabScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tab.add_child(scroll)
+	var content := MarginContainer.new()
+	content.add_theme_constant_override("margin_left", 12)
+	content.add_theme_constant_override("margin_top", 12)
+	content.add_theme_constant_override("margin_right", 12)
+	content.add_theme_constant_override("margin_bottom", 12)
+	scroll.add_child(content)
 
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 12)
-	tab.add_child(layout)
+	content.add_child(layout)
 
 	var heading_row := HBoxContainer.new()
 	heading_row.add_theme_constant_override("separation", 10)
@@ -16983,6 +17547,9 @@ func _create_trainer_card_badge_row() -> Control:
 	trainer_card_badge_status_label.add_theme_font_size_override("font_size", 12)
 	trainer_card_badge_status_label.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
 	option_wrap.add_child(trainer_card_badge_status_label)
+	# Keep save feedback before the selector so its right edge aligns with
+	# the other profile values, even when the status label is empty.
+	option_wrap.move_child(trainer_card_badge_status_label, 0)
 
 	_populate_trainer_card_badge_option()
 	if not trainer_card_badge_option.item_selected.is_connected(_on_trainer_card_badge_selected):
@@ -17167,7 +17734,7 @@ func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary])
 
 	var row_stack := VBoxContainer.new()
 	row_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	row_stack.alignment = BoxContainer.ALIGNMENT_END
+	row_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	row_stack.add_theme_constant_override("separation", 2)
 	layout.add_child(row_stack)
 
@@ -17178,8 +17745,8 @@ func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary])
 		row_stack.add_child(_create_trainer_card_stat_row(
 			label_key,
 			value_text,
-			130,
-			15,
+			80,
+			13,
 			value_color,
 			str(row_value.get("id", ""))
 		))
@@ -17230,19 +17797,27 @@ func _create_trainer_card_appearance_tab() -> Control:
 	trainer_card_appearance_capacity_label = null
 	trainer_card_appearance_unequip_button = null
 	trainer_card_appearance_return_button = null
-	var tab := MarginContainer.new()
+	# Appearance inventories may be much taller than the Passport. Keep that
+	# overflow scrollable instead of allowing this tab to resize the whole card.
+	var tab := Control.new()
 	tab.name = "Appearance"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.appearance")
-	tab.add_theme_constant_override("margin_left", 8)
-	tab.add_theme_constant_override("margin_top", 8)
-	tab.add_theme_constant_override("margin_right", 8)
-	tab.add_theme_constant_override("margin_bottom", 8)
+	var scroll := ScrollContainer.new()
+	scroll.name = "AppearanceTabScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	tab.add_child(scroll)
+	var content := MarginContainer.new()
+	content.add_theme_constant_override("margin_left", 8)
+	content.add_theme_constant_override("margin_top", 8)
+	content.add_theme_constant_override("margin_right", 8)
+	content.add_theme_constant_override("margin_bottom", 8)
+	scroll.add_child(content)
 
 	var layout := HBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 10)
-	tab.add_child(layout)
+	content.add_child(layout)
 
 	var preview_column := VBoxContainer.new()
 	preview_column.custom_minimum_size = Vector2(214, 0)
@@ -18570,8 +19145,12 @@ func _apply_player_status_panel_hover_style(hovered: bool) -> void:
 
 	player_status_panel.add_theme_stylebox_override("panel", _make_player_status_panel_style(hovered))
 
-func _on_trainer_card_header_gui_input(event: InputEvent) -> void:
+func _on_trainer_card_header_gui_input(event: InputEvent, popup: PanelContainer = null) -> void:
+	if popup == null:
+		popup = trainer_card_popup
 	if not (event is InputEventMouseButton):
+		return
+	if popup == null or not is_instance_valid(popup):
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
@@ -18580,8 +19159,9 @@ func _on_trainer_card_header_gui_input(event: InputEvent) -> void:
 
 	if mouse_event.pressed:
 		trainer_card_dragging = true
-		trainer_card_drag_offset = mouse_event.global_position - trainer_card_popup.global_position
-		_activate_ui_panel(trainer_card_popup)
+		trainer_card_drag_popup = popup
+		trainer_card_drag_offset = mouse_event.global_position - popup.global_position
+		_activate_ui_panel(popup)
 		get_viewport().set_input_as_handled()
 
 func _handle_trainer_card_drag_input(event: InputEvent) -> void:
@@ -18589,6 +19169,7 @@ func _handle_trainer_card_drag_input(event: InputEvent) -> void:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
 			trainer_card_dragging = false
+			trainer_card_drag_popup = null
 			get_viewport().set_input_as_handled()
 		return
 
@@ -18596,32 +19177,37 @@ func _handle_trainer_card_drag_input(event: InputEvent) -> void:
 		return
 
 	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
-	_move_trainer_card_to_global_position(motion_event.global_position - trainer_card_drag_offset)
+	_move_trainer_card_to_global_position(
+		motion_event.global_position - trainer_card_drag_offset,
+		trainer_card_drag_popup
+	)
 	get_viewport().set_input_as_handled()
 
-func _move_trainer_card_to_global_position(global_top_left: Vector2) -> void:
-	if trainer_card_popup == null:
+func _move_trainer_card_to_global_position(global_top_left: Vector2, popup: PanelContainer = null) -> void:
+	if popup == null:
+		popup = trainer_card_popup
+	if popup == null or not is_instance_valid(popup):
 		return
 
-	var parent_control: Control = trainer_card_popup.get_parent_control()
+	var parent_control: Control = popup.get_parent_control()
 	if parent_control == null:
 		return
 
-	var card_size: Vector2 = trainer_card_popup.size
+	var card_size: Vector2 = popup.size
 	var parent_size: Vector2 = parent_control.size
 	var clamped_position := Vector2(
 		clamp(global_top_left.x, 0.0, max(parent_size.x - card_size.x, 0.0)),
 		clamp(global_top_left.y, 0.0, max(parent_size.y - card_size.y, 0.0))
 	)
 	var anchor_point := Vector2(
-		parent_size.x * trainer_card_popup.anchor_left,
-		parent_size.y * trainer_card_popup.anchor_top
+		parent_size.x * popup.anchor_left,
+		parent_size.y * popup.anchor_top
 	)
 	var local_offset: Vector2 = clamped_position - anchor_point
-	trainer_card_popup.offset_left = local_offset.x
-	trainer_card_popup.offset_top = local_offset.y
-	trainer_card_popup.offset_right = local_offset.x + card_size.x
-	trainer_card_popup.offset_bottom = local_offset.y + card_size.y
+	popup.offset_left = local_offset.x
+	popup.offset_top = local_offset.y
+	popup.offset_right = local_offset.x + card_size.x
+	popup.offset_bottom = local_offset.y + card_size.y
 
 func _show_trainer_card() -> void:
 	if trainer_card_popup == null:
@@ -18642,7 +19228,13 @@ func _show_trainer_card() -> void:
 func _refresh_own_trainer_card_pvp() -> void:
 	trainer_card_pvp_request_generation += 1
 	var request_generation := trainer_card_pvp_request_generation
-	_apply_own_trainer_card_pvp({})
+	# A second refresh can be cancelled or fail after the PvP tab has already
+	# loaded. Keep that verified record visible instead of replacing Overview
+	# with zeroes while the request is in flight.
+	if own_trainer_card_data.has("pvp"):
+		_apply_own_trainer_card_pvp(_dictionary_from_value(own_trainer_card_data.get("pvp", {})))
+	else:
+		_apply_own_trainer_card_pvp({})
 	var user_id := int(str(PlayerSave.player_id).strip_edges())
 	if user_id <= 0:
 		return
@@ -18656,14 +19248,40 @@ func _refresh_own_trainer_card_pvp() -> void:
 		)
 		return
 	var card := _dictionary_from_value(result.get("card", {}))
+	_apply_own_trainer_card_details(card)
+
+
+func _apply_own_trainer_card_details(card: Dictionary) -> void:
+	own_trainer_card_data = card.duplicate(true)
+	_refresh_avatar_previews()
+	var region_clears_label := trainer_card_popup.find_child(
+		"TrainerCardValue_region_clears", true, false
+	) as Label if is_instance_valid(trainer_card_popup) else null
+	if is_instance_valid(region_clears_label):
+		region_clears_label.text = str(maxi(0, int(card.get("regionClears", 0))))
+	if is_instance_valid(trainer_card_dex_panel):
+		var parent := trainer_card_dex_panel.get_parent()
+		var index := trainer_card_dex_panel.get_index()
+		trainer_card_dex_panel.free()
+		trainer_card_dex_panel = _create_trainer_card_dex_panel(card)
+		parent.add_child(trainer_card_dex_panel)
+		parent.move_child(trainer_card_dex_panel, index)
+	if is_instance_valid(trainer_card_pvp_tab):
+		var selected := trainer_card_tabs.current_tab
+		trainer_card_pvp_tab.free()
+		trainer_card_pvp_tab = _create_public_trainer_pvp_tab(card)
+		trainer_card_pvp_tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.pvp")
+		trainer_card_tabs.add_child(trainer_card_pvp_tab)
+		_refresh_trainer_card_tab_titles()
+		trainer_card_tabs.current_tab = selected
 	_apply_own_trainer_card_pvp(_dictionary_from_value(card.get("pvp", {})))
 
 
 func _apply_own_trainer_card_pvp(pvp: Dictionary) -> void:
 	var values := {
-		"pvp_games": str(pvp.get("gamesPlayed", 0)),
-		"pvp_wins": str(pvp.get("wins", 0)),
-		"pvp_losses": str(pvp.get("losses", 0)),
+		"pvp_games": str(int(pvp.get("gamesPlayed", 0))),
+		"pvp_wins": str(int(pvp.get("wins", 0))),
+		"pvp_losses": str(int(pvp.get("losses", 0))),
 		"pvp_win_rate": "%s%%" % (
 			("%.1f" % float(pvp.get("winRate", 0.0))).trim_suffix(".0")
 		),
@@ -18874,6 +19492,10 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 	_update_trainer_card_appearance_save_state("ui.appearance.status.saved")
 
 func _save_trainer_card_appearance_to_backend() -> Dictionary:
+	if OS.has_feature("web"):
+		return await PlayerGameStateService.save_player_appearance(
+			PlayerSave.to_appearance_state()
+		)
 	var world := GameState.get_world()
 	if world == null or not world.has_method("save_current_player_state_now"):
 		return {
@@ -18890,8 +19512,10 @@ func _save_trainer_card_appearance_to_backend() -> Dictionary:
 	}
 
 func _save_response_matches_current_appearance(result: Dictionary) -> bool:
-	var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
-	var appearance: Dictionary = _staff_dictionary_from_variant(state.get("appearance", {}))
+	var appearance: Dictionary = _staff_dictionary_from_variant(result.get("appearance", {}))
+	if appearance.is_empty():
+		var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
+		appearance = _staff_dictionary_from_variant(state.get("appearance", {}))
 	if appearance.is_empty():
 		return false
 
@@ -18922,6 +19546,9 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 
 func _hide_trainer_card() -> void:
 	if trainer_card_popup != null:
+		if trainer_card_drag_popup == trainer_card_popup:
+			trainer_card_dragging = false
+			trainer_card_drag_popup = null
 		trainer_card_popup.visible = false
 
 func _on_trainer_card_body_selected(body_id: String) -> void:
@@ -19353,7 +19980,11 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 
 	var viewport_container := SubViewportContainer.new()
 	viewport_container.stretch = false
-	viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# This texture is the already-rendered preview surface, not pixel art. The
+	# whole UI is commonly presented at a fractional window scale, where nearest
+	# sampling creates moving block boundaries across the Pokémon.
+	viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	viewport_container.material = _make_preview_composite_material()
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_stage.add_child(viewport_container)
 	viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -19364,7 +19995,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	pokemon_summary_sprite_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(pokemon_summary_sprite_viewport)
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
-	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
 	pokemon_summary_sprite_viewport.add_child(pokemon_summary_animated_sprite)
 	pokemon_summary_sprite = TextureRect.new()
@@ -19498,15 +20129,6 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var gender_icon := _create_pokemon_summary_gender_icon()
 	title_row.add_child(gender_icon)
 	nodes["gender_icon"] = gender_icon
-	var gender_label := Label.new()
-	gender_label.custom_minimum_size = Vector2(16, 16)
-	gender_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	gender_label.add_theme_font_size_override("font_size", 13)
-	gender_label.add_theme_color_override("font_color", Color("#f49ac2"))
-	gender_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title_row.add_child(gender_label)
-	nodes["gender_label"] = gender_label
 	var id_label := Label.new()
 	id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	id_label.add_theme_font_size_override("font_size", 9)
@@ -20216,7 +20838,10 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	var sprite_viewport_container := SubViewportContainer.new()
 	sprite_viewport_container.stretch = false
-	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# Avoid re-sampling the completed preview surface with nearest filtering when
+	# the game window applies a fractional canvas scale.
+	sprite_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	sprite_viewport_container.material = _make_preview_composite_material()
 	sprite_viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sprite_frame.add_child(sprite_viewport_container)
 	sprite_viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -20229,7 +20854,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	sprite_viewport_container.add_child(pokemon_summary_sprite_viewport)
 
 	pokemon_summary_animated_sprite = AnimatedSprite2D.new()
-	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	pokemon_summary_animated_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	pokemon_summary_animated_sprite.position = Vector2(
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
@@ -20303,9 +20928,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_hidden_ability_badge.anchor_top = 1.0
 	pokemon_summary_hidden_ability_badge.anchor_right = 0.0
 	pokemon_summary_hidden_ability_badge.anchor_bottom = 1.0
-	pokemon_summary_hidden_ability_badge.offset_left = 6.0
+	pokemon_summary_hidden_ability_badge.offset_left = 40.0
 	pokemon_summary_hidden_ability_badge.offset_top = -30.0
-	pokemon_summary_hidden_ability_badge.offset_right = 50.0
+	pokemon_summary_hidden_ability_badge.offset_right = 84.0
 	pokemon_summary_hidden_ability_badge.offset_bottom = -6.0
 	pokemon_summary_hidden_ability_badge.mouse_filter = Control.MOUSE_FILTER_PASS
 	pokemon_summary_hidden_ability_badge.mouse_default_cursor_shape = Control.CURSOR_HELP
@@ -20397,6 +21022,10 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_level_badge_label.add_theme_constant_override("shadow_offset_y", 1)
 	level_badge_margin.add_child(pokemon_summary_level_badge_label)
+	# Zoom is always available, so keep it in the fixed lower-left slot. The
+	# conditional HA badge appears beside it without leaving a visual gap.
+	_add_preview_zoom_button(sprite_frame, pokemon_summary_sprite_viewport, pokemon_summary_sprite, 0.52)
+	_add_preview_animation_button(sprite_frame, pokemon_summary_animated_sprite, pokemon_summary_sprite_loader, "above_level")
 
 	var identity_panel := PanelContainer.new()
 	identity_panel.custom_minimum_size = Vector2(0, 38)
@@ -25752,11 +26381,6 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	name_label.tooltip_text = localized_species_name if display_name != localized_species_name else display_name
 	var gender_icon := nodes.get("gender_icon") as TextureRect
 	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
-	var gender_label := nodes.get("gender_label") as Label
-	if gender_label != null:
-		var normalized_gender := str(pokemon.gender).strip_edges().to_lower()
-		gender_label.text = "♂" if normalized_gender in ["male", "m", "man"] else "♀"
-		gender_label.visible = normalized_gender not in ["", "genderless", "none", "unknown"]
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
 	var shiny_icon := nodes.get("shiny_icon") as TextureRect
@@ -26262,25 +26886,70 @@ func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> vo
 	if localization_key != "":
 		icon.tooltip_text = LocalizationManager.text(localization_key)
 
-func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
+func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
-	_prefetch_pokemon_summary_web_sprites(pokemon)
 	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	pokemon_summary_web_sprite_generation += 1
 	var web_generation := pokemon_summary_web_sprite_generation
+	var stage := pokemon_summary_sprite.get_parent() as Control
+	var preview := stage.get_node_or_null("SummaryModelPreview") as Control
+	if allow_3d and stage.is_inside_tree() and SettingsManager.battle_presentation_mode == "3d":
+		if preview == null:
+			preview = SUMMARY_MODEL_PREVIEW_SCRIPT.new()
+			preview.name = "SummaryModelPreview"
+			stage.add_child(preview)
+			# Keep ball/type/level badges above the model surface.
+			stage.move_child(preview, pokemon_summary_sprite.get_index() + 1)
+			var card_key := pokemon_summary_active_card_key
+			preview.model_failed.connect(func():
+				if _apply_pokemon_summary_card_context(card_key):
+					var current := _get_active_pokemon_summary_pokemon()
+					if current != null:
+						_set_pokemon_summary_sprite(current, false))
+		preview.show()
+		var key := str(pokemon.species) + (":shiny" if pokemon.shiny else ":normal")
+		var ready_or_loading: bool = preview.get_meta("summary_species", "") == key and (preview.actor != null or not preview.loading_path.is_empty())
+		if ready_or_loading or preview.show_species(pokemon.species, pokemon.shiny):
+			preview.set_meta("summary_species", key)
+			pokemon_summary_animated_sprite.stop()
+			pokemon_summary_animated_sprite.hide()
+			pokemon_summary_sprite.hide()
+			var preview_animation_button: MenuButton = null
+			if pokemon_summary_animated_sprite.has_meta("preview_animation_button"):
+				preview_animation_button = pokemon_summary_animated_sprite.get_meta("preview_animation_button") as MenuButton
+			preview.bind_animation_button(preview_animation_button)
+			var zoom := stage.find_child("PreviewZoomButton", true, false) as Button
+			if zoom != null:
+				zoom.show()
+				preview.set_zoom(2.0 if zoom.button_pressed else 1.0)
+			return
+	if preview != null:
+		preview._clear_actor()
+		preview.hide()
+	var animation_button: MenuButton = null
+	if pokemon_summary_animated_sprite.has_meta("preview_animation_button"):
+		animation_button = pokemon_summary_animated_sprite.get_meta("preview_animation_button") as MenuButton
+	if animation_button != null:
+		animation_button.remove_meta("model_preview")
+	var zoom := stage.find_child("PreviewZoomButton", true, false) as Control
+	if zoom != null:
+		zoom.show()
 
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
-		"_load_sprite_frames",
+		"_load_preview_sprite_frames",
 		pokemon.species,
 		sprite_side,
-		pokemon.shiny
+		pokemon.shiny,
+		true,
+		true
 	)
 	var frames: SpriteFrames = loaded_frames as SpriteFrames
 	if frames != null:
 		pokemon_summary_sprite.visible = false
 		pokemon_summary_animated_sprite.visible = true
 		pokemon_summary_animated_sprite.sprite_frames = frames
+		_configure_preview_animation_button(pokemon_summary_animated_sprite, frames)
 		var animation_names: PackedStringArray = frames.get_animation_names()
 		if frames.has_animation("idle"):
 			pokemon_summary_animated_sprite.animation = "idle"
@@ -26291,15 +26960,32 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 		pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
 		_apply_pokemon_summary_sprite_center_offset(frames, pokemon_summary_animated_sprite.animation)
 		pokemon_summary_animated_sprite.play()
-		_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+		if frames.has_meta("rendered_asset"):
+			_prefetch_pokemon_summary_rendered_view.call_deferred(
+				pokemon.species,
+				"back" if sprite_side == "front" else "front",
+				pokemon.shiny
+			)
+			if bool(frames.get_meta("rendered_static_preview", false)):
+				_upgrade_pokemon_summary_rendered_animation.call_deferred(
+					web_generation,
+					pokemon.species,
+					sprite_side,
+					pokemon.shiny
+				)
+		else:
+			_prefetch_pokemon_summary_web_sprites(pokemon)
+			_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 		return
 
 	pokemon_summary_animated_sprite.stop()
 	pokemon_summary_animated_sprite.visible = false
+	_configure_preview_animation_button(pokemon_summary_animated_sprite, null)
 	pokemon_summary_sprite.visible = true
 	pokemon_summary_sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	_prefetch_pokemon_summary_web_sprites(pokemon)
 	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 
 
@@ -26312,9 +26998,51 @@ func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
 			"species": pokemon.species,
 			"side": side,
 			"shiny": pokemon.shiny,
-			"style": SettingsManager.sprite_style,
+			"style": SettingsManager.get_active_sprite_style(),
 		})
 	WebPokemonSpriteService.prefetch(entries)
+
+
+func _prefetch_pokemon_summary_rendered_view(species: String, side: String, is_shiny: bool) -> void:
+	if pokemon_summary_sprite_loader == null:
+		return
+	pokemon_summary_sprite_loader.call("_load_preview_sprite_frames", species, side, is_shiny, false, true)
+
+
+func _upgrade_pokemon_summary_rendered_animation(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	if not _summary_render_request_current(generation):
+		return
+	var frames: SpriteFrames = await pokemon_summary_sprite_loader.call(
+		"request_rendered_sprite_frames", species, side, is_shiny,
+		_show_summary_rendered_frames.bind(generation), _summary_render_request_current.bind(generation), true
+	)
+	_show_summary_rendered_frames(frames, generation)
+
+
+func _summary_render_request_current(generation: int) -> bool:
+	return generation == pokemon_summary_web_sprite_generation and is_instance_valid(pokemon_summary_animated_sprite)
+
+
+func _show_summary_rendered_frames(frames: SpriteFrames, generation: int) -> void:
+	if frames == null or not _summary_render_request_current(generation):
+		return
+	_configure_preview_animation_button(pokemon_summary_animated_sprite, frames)
+	if pokemon_summary_animated_sprite.sprite_frames == frames:
+		if not pokemon_summary_animated_sprite.is_playing():
+			var resume_frame := pokemon_summary_animated_sprite.frame
+			var resume_progress := pokemon_summary_animated_sprite.frame_progress
+			pokemon_summary_animated_sprite.play()
+			pokemon_summary_animated_sprite.set_frame_and_progress(resume_frame, resume_progress)
+		return
+	pokemon_summary_sprite.visible = false
+	pokemon_summary_animated_sprite.visible = true
+	pokemon_summary_animated_sprite.sprite_frames = frames
+	pokemon_summary_animated_sprite.animation = "idle"
+	pokemon_summary_animated_sprite.frame = 0
+	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
+	pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
+	_apply_pokemon_summary_sprite_center_offset(frames, "idle")
+	pokemon_summary_animated_sprite.play()
 
 
 func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
@@ -26324,6 +27052,7 @@ func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side:
 	pokemon_summary_sprite.visible = false
 	pokemon_summary_animated_sprite.visible = true
 	pokemon_summary_animated_sprite.sprite_frames = frames
+	_configure_preview_animation_button(pokemon_summary_animated_sprite, null)
 	pokemon_summary_animated_sprite.animation = "idle"
 	pokemon_summary_animated_sprite.frame = 0
 	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
@@ -26446,7 +27175,7 @@ func _get_pokemon_summary_sprite_position() -> Vector2:
 	return Vector2(
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x) * 0.5,
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y) * 0.52
-	)
+	).round()
 
 func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 	var render_scale := 1.0
@@ -26598,7 +27327,17 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		Color(0, 0, 0, 0),
 		_get_pokemon_summary_nature_tooltip(pokemon.nature)
 	))
-	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.location"), _get_pokemon_summary_location_text(pokemon), Color("#62d7ff"), false, 148.0))
+	info_grid.add_child(_create_summary_field_card(
+		LocalizationManager.text("ui.pokemon_summary.location"),
+		_get_pokemon_summary_location_text(pokemon),
+		Color("#62d7ff"),
+		false,
+		148.0,
+		Color(0, 0, 0, 0),
+		Color(0, 0, 0, 0),
+		"",
+		true
+	))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_date"), _get_pokemon_summary_caught_date_text(pokemon), Color("#d9ecff"), false, 148.0))
 	info_grid.add_child(_create_summary_field_card(LocalizationManager.text("ui.pokemon_summary.caught_level"), _get_pokemon_summary_caught_level_text(pokemon), Color("#d9ecff"), false, 148.0))
 
@@ -26739,9 +27478,14 @@ func _create_summary_field_card(
 	min_width: float = 96.0,
 	value_color: Color = Color(0, 0, 0, 0),
 	border_color: Color = Color(0, 0, 0, 0),
-	tooltip_text: String = ""
+	tooltip_text: String = "",
+	show_full_value_hover: bool = false
 ) -> Control:
 	var resolved_tooltip: String = tooltip_text.strip_edges()
+	var full_value_text := _default_text(value_text)
+	var hover_description := resolved_tooltip
+	if hover_description == "" and show_full_value_hover:
+		hover_description = full_value_text
 	var stack := VBoxContainer.new()
 	stack.custom_minimum_size = Vector2(min_width, 41)
 	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -26774,16 +27518,17 @@ func _create_summary_field_card(
 	value_panel.add_child(value_margin)
 
 	var value := Label.new()
-	value.text = _default_text(value_text)
-	value.tooltip_text = resolved_tooltip if resolved_tooltip != "" else value.text
+	value.text = full_value_text
+	value.tooltip_text = hover_description if hover_description != "" else value.text
 	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_make_label_clip_width(value)
 	value.add_theme_font_size_override("font_size", 13 if emphasize_value else 12)
 	var resolved_value_color: Color = value_color if value_color.a > 0.0 else (Color("#f4f7ff") if emphasize_value else Color("#e8f0ff"))
 	value.add_theme_color_override("font_color", resolved_value_color)
 	value_margin.add_child(value)
-	if resolved_tooltip != "" and not _get_pokemon_summary_hover_nodes().is_empty():
-		_configure_pokemon_summary_detail_hover(stack, _default_text(value_text), resolved_tooltip, accent_color)
+	if hover_description != "" and not _get_pokemon_summary_hover_nodes().is_empty():
+		var hover_title := label_text if show_full_value_hover and resolved_tooltip == "" else full_value_text
+		_configure_pokemon_summary_detail_hover(stack, hover_title, hover_description, accent_color)
 	return stack
 
 func _get_pokemon_origin_summary_text(pokemon: Pokemon) -> String:
@@ -28269,10 +29014,14 @@ func _on_pokemon_summary_held_item_slot_pressed(card_key: String = "") -> void:
 
 
 func _open_pokemon_summary_held_item_picker(card_key: String = "", force_open := false) -> void:
-	await _ensure_bag_inventory_loaded()
 	_apply_pokemon_summary_card_context(card_key)
 	if _is_pokemon_summary_readonly() or pokemon_summary_item_picker == null:
 		return
+	var pokemon_value: Variant = _get_selected_summary_pokemon()
+	if pokemon_value is Pokemon and _is_rental_held_item_locked(pokemon_value as Pokemon):
+		_show_rental_held_item_locked_message()
+		return
+	await _ensure_bag_inventory_loaded()
 	var picker_was_visible := pokemon_summary_item_picker.visible
 	if pokemon_summary_item_search_input != null:
 		pokemon_summary_item_search_input.text = ""
@@ -28287,6 +29036,9 @@ func _open_pokemon_summary_held_item_picker(card_key: String = "", force_open :=
 
 func _take_pokemon_held_item(pokemon: Pokemon) -> void:
 	if pokemon.owned_pokemon_id <= 0 or _get_pokemon_held_item_id(pokemon) == "":
+		return
+	if _is_rental_held_item_locked(pokemon):
+		_show_rental_held_item_locked_message()
 		return
 	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon.owned_pokemon_id)
 	if not bool(result.get("success", false)):
@@ -28324,6 +29076,9 @@ func _on_pokemon_summary_held_item_drop_highlight_changed(highlighted: bool, slo
 
 func _give_dropped_held_item(pokemon: Pokemon, item: Dictionary) -> void:
 	if pokemon.owned_pokemon_id <= 0 or not _is_holdable_bag_item(item):
+		return
+	if _is_rental_held_item_locked(pokemon):
+		_show_rental_held_item_locked_message()
 		return
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "":
@@ -28463,6 +29218,9 @@ func _on_pokemon_summary_item_selected(item_id: String, card_key: String = "") -
 	if pokemon.owned_pokemon_id <= 0:
 		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
 		return
+	if _is_rental_held_item_locked(pokemon):
+		_show_rental_held_item_locked_message()
+		return
 
 	var result: Dictionary = await PlayerPartyStateService.give_pokemon_held_item(pokemon.owned_pokemon_id, item_id)
 	if not bool(result.get("success", false)):
@@ -28495,6 +29253,12 @@ func _is_pokemon_summary_readonly() -> bool:
 func _get_pokemon_held_item_id(pokemon: Pokemon) -> String:
 	var item_id: String = pokemon.item.strip_edges().to_lower()
 	return item_id
+
+func _is_rental_held_item_locked(pokemon: Pokemon) -> bool:
+	return pokemon != null and pokemon.rental_active and pokemon.held_item_locked
+
+func _show_rental_held_item_locked_message() -> void:
+	_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.rental_locked"))
 
 func _is_holdable_bag_item(item: Dictionary) -> bool:
 	if bool(item.get("isHoldable", false)):
@@ -29669,6 +30433,27 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
+func _apply_trainer_card_companion_button_style(button: Button) -> void:
+	button.custom_minimum_size.y = 34
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_color", Color("#fff5ca"))
+	button.add_theme_color_override("font_pressed_color", Color("#fff5ca"))
+	button.add_theme_stylebox_override(
+		"normal", _make_button_style(Color("#102638"), Color("#466c83"), 7, 1)
+	)
+	button.add_theme_stylebox_override(
+		"hover", _make_button_style(Color("#183a50"), TRAINER_CARD_ACCENT, 7, 1)
+	)
+	button.add_theme_stylebox_override(
+		"pressed", _make_button_style(Color("#0a1928"), Color("#f0d27a"), 7, 1)
+	)
+	button.add_theme_stylebox_override(
+		"focus", _make_button_style(Color("#183a50"), Color("#b6ecff"), 7, 1)
+	)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
 func _apply_ai_sparring_start_style(button: Button) -> void:
 	if button == null:
 		return
@@ -30026,6 +30811,8 @@ func _apply_socials_menu_style() -> void:
 		SOCIALS_NEARBY_ICON,
 		Color("#60d3ff")
 	)
+	_configure_launcher_card_button(socials_adventure_party_button, "Adventure Party", "Play together with another Trainer.", SOCIALS_PARTY_ICON, Color("#79e49b"))
+	socials_adventure_party_button.visible = true
 	_configure_launcher_card_button(
 		socials_loans_button,
 		"ui.social.loans",
@@ -30360,6 +31147,8 @@ func _position_chat_resize_button() -> void:
 	chat_resize_button.size = COLLAPSE_BUTTON_SIZE
 
 func _position_chat_tabs_panel() -> void:
+	if has_meta("battle_chat_active"):
+		return
 	if chat_tabs_panel == null or chat_panel == null:
 		return
 
@@ -30465,6 +31254,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": item_dex_popup, "close": Callable(self, "_hide_item_dex_popup")},
 		{"panel": mail_popup, "close": Callable(self, "_on_mail_close_button_pressed")},
 		{"panel": friendlist_popup, "close": Callable(self, "_hide_friendlist_popup")},
+		{"panel": coop_party_popup, "close": Callable(self, "_hide_coop_party_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")},
 		{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")},
@@ -30476,6 +31266,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": bank_popup, "close": Callable(self, "_hide_bank")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
+		{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
 		{"panel": trainer_card_popup, "close": Callable(self, "_hide_trainer_card_for_escape")},
@@ -32405,14 +33196,19 @@ func _apply_chat_tab_state() -> void:
 	_apply_chat_main_tab_style(guild_chat_tab_button, active_chat_tab == CHAT_TAB_GUILD)
 	_apply_chat_main_tab_style(language_chat_tab_button, primary_tab == CHAT_TAB_LANGUAGES)
 	var dock_visible := primary_tab != CHAT_TAB_SYSTEM
-	chat_input_row.visible = dock_visible
+	if chat_input_row != null:
+		chat_input_row.visible = dock_visible
 	if chat_input_dock != null:
 		chat_input_dock.visible = dock_visible
-	chat_input.visible = input_active
-	send_button.visible = input_active
+	if chat_input != null:
+		chat_input.visible = input_active
+	if send_button != null:
+		send_button.visible = input_active
 	for attachment_button: Button in chat_pokemon_attachment_buttons:
 		if attachment_button != null:
 			attachment_button.visible = input_available
+	if chat_input == null:
+		return
 	chat_input.editable = input_available
 	if active_chat_tab == CHAT_TAB_PM:
 		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.private")
@@ -33570,9 +34366,6 @@ func _execute_escape_rope() -> void:
 
 
 func _on_my_powers_button_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("My Powers")
-		return
 	if not bool(my_powers_button.get_meta("group_available", false)):
 		return
 	staff_actions_panel.visible = not staff_actions_panel.visible
@@ -35750,10 +36543,13 @@ func _refresh_pokedex_type_row(types: Array) -> void:
 
 func _clear_pokedex_species_sprite() -> void:
 	pokedex_web_sprite_generation += 1
+	if pokedex_3d_preview != null:
+		pokedex_3d_preview.visible = false
 	if pokedex_animated_sprite != null:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.sprite_frames = null
 		pokedex_animated_sprite.visible = false
+		_configure_preview_animation_button(pokedex_animated_sprite, null)
 	if pokedex_sprite != null:
 		pokedex_sprite.texture = null
 		pokedex_sprite.visible = true
@@ -35764,16 +36560,28 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
 		return
 	pokedex_web_sprite_generation += 1
+	if pokedex_3d_preview != null:
+		var preview_species := str(species.get("id", species.get("showdownId", species.get("name", ""))))
+		if bool(pokedex_3d_preview.call("show_species", preview_species, pokedex_shiny_mode)):
+			pokedex_sprite.visible = false
+			pokedex_animated_sprite.stop()
+			pokedex_animated_sprite.visible = false
+			_configure_preview_animation_button(pokedex_animated_sprite, null)
+			pokedex_3d_preview.visible = true
+			pokedex_sprite_panel.tooltip_text = "Drag to rotate local 3D preview"
+			return
+		pokedex_3d_preview.visible = false
 	var web_generation := pokedex_web_sprite_generation
 
 	var loaded_frames: SpriteFrames = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
 		var frames_value: Variant = pokedex_sprite_loader.call(
-			"_load_sprite_frames",
+			"_load_preview_sprite_frames",
 			candidate,
 			_get_pokedex_sprite_side(),
 			pokedex_shiny_mode,
-			false
+			false,
+			true
 		)
 		loaded_frames = frames_value as SpriteFrames
 		if loaded_frames != null:
@@ -35783,6 +36591,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite.visible = false
 		pokedex_animated_sprite.visible = true
 		pokedex_animated_sprite.sprite_frames = loaded_frames
+		_configure_preview_animation_button(pokedex_animated_sprite, loaded_frames)
 		var animation_names: PackedStringArray = loaded_frames.get_animation_names()
 		if loaded_frames.has_animation("idle"):
 			pokedex_animated_sprite.animation = "idle"
@@ -35793,9 +36602,23 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
 		_apply_pokedex_sprite_center_offset(loaded_frames, pokedex_animated_sprite.animation)
 		pokedex_animated_sprite.play()
+		if loaded_frames.has_meta("rendered_asset"):
+			_prefetch_pokedex_rendered_view.call_deferred(
+				species.duplicate(true),
+				"back" if _get_pokedex_sprite_side() == "front" else "front",
+				pokedex_shiny_mode
+			)
+			if bool(loaded_frames.get_meta("rendered_static_preview", false)):
+				_upgrade_pokedex_rendered_animation.call_deferred(
+					web_generation,
+					species.duplicate(true),
+					_get_pokedex_sprite_side(),
+					pokedex_shiny_mode
+				)
 	else:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.visible = false
+		_configure_preview_animation_button(pokedex_animated_sprite, null)
 		pokedex_sprite.visible = true
 		pokedex_sprite.texture = _load_pokedex_species_texture(species)
 
@@ -35804,7 +36627,64 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
 			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
 		})
-	_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+	if loaded_frames == null or not loaded_frames.has_meta("rendered_asset"):
+		_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+
+
+func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny: bool) -> void:
+	if pokedex_sprite_loader == null:
+		return
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		var frames_value: Variant = pokedex_sprite_loader.call(
+			"_load_preview_sprite_frames",
+			candidate,
+			side,
+			is_shiny,
+			false,
+			true
+		)
+		if frames_value is SpriteFrames:
+			return
+
+
+func _upgrade_pokedex_rendered_animation(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
+	if not _pokedex_render_request_current(generation):
+		return
+	var loaded_frames: SpriteFrames = null
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		loaded_frames = await pokedex_sprite_loader.call(
+			"request_rendered_sprite_frames", candidate, side, is_shiny,
+			_show_pokedex_rendered_frames.bind(generation), _pokedex_render_request_current.bind(generation), true
+		)
+		if loaded_frames != null:
+			break
+	_show_pokedex_rendered_frames(loaded_frames, generation)
+
+
+func _pokedex_render_request_current(generation: int) -> bool:
+	return generation == pokedex_web_sprite_generation and is_instance_valid(pokedex_animated_sprite)
+
+
+func _show_pokedex_rendered_frames(loaded_frames: SpriteFrames, generation: int) -> void:
+	if loaded_frames == null or not _pokedex_render_request_current(generation):
+		return
+	_configure_preview_animation_button(pokedex_animated_sprite, loaded_frames)
+	if pokedex_animated_sprite.sprite_frames == loaded_frames:
+		if not pokedex_animated_sprite.is_playing():
+			var resume_frame := pokedex_animated_sprite.frame
+			var resume_progress := pokedex_animated_sprite.frame_progress
+			pokedex_animated_sprite.play()
+			pokedex_animated_sprite.set_frame_and_progress(resume_frame, resume_progress)
+		return
+	pokedex_sprite.visible = false
+	pokedex_animated_sprite.visible = true
+	pokedex_animated_sprite.sprite_frames = loaded_frames
+	pokedex_animated_sprite.animation = "idle"
+	pokedex_animated_sprite.frame = 0
+	pokedex_animated_sprite.position = _get_pokedex_sprite_position()
+	pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
+	_apply_pokedex_sprite_center_offset(loaded_frames, "idle")
+	pokedex_animated_sprite.play()
 
 
 func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
@@ -35818,6 +36698,7 @@ func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: Str
 	pokedex_sprite.visible = false
 	pokedex_animated_sprite.visible = true
 	pokedex_animated_sprite.sprite_frames = loaded_frames
+	_configure_preview_animation_button(pokedex_animated_sprite, null)
 	pokedex_animated_sprite.animation = "idle"
 	pokedex_animated_sprite.frame = 0
 	pokedex_animated_sprite.position = _get_pokedex_sprite_position()
@@ -35846,9 +36727,12 @@ func _get_pokedex_sprite_position() -> Vector2:
 	return Vector2(
 		float(pokedex_sprite_viewport.size.x) * 0.5,
 		float(pokedex_sprite_viewport.size.y) * 0.55
-	)
+	).round()
 
 func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
+	var portrait := _rendered_portrait_rect(frames, Vector2(170, 112))
+	if portrait.has_area():
+		return Vector2.ONE * (170.0 / portrait.size.x)
 	var render_scale := 1.0
 	if pokedex_sprite_loader.has_method("_get_sprite_frames_render_scale"):
 		var render_scale_value: Variant = pokedex_sprite_loader.call("_get_sprite_frames_render_scale", frames)
@@ -35907,6 +36791,14 @@ func _apply_pokedex_sprite_center_offset(frames: SpriteFrames, animation_name: S
 func _get_pokedex_sprite_visual_rect(frames: SpriteFrames, animation_name: String) -> Rect2:
 	if frames == null or animation_name == "" or not frames.has_animation(animation_name):
 		return Rect2()
+	if animation_name == "idle":
+		var portrait := _rendered_portrait_rect(frames, Vector2(170, 112))
+		if portrait.has_area():
+			return portrait
+	if animation_name == "idle" and frames.has_meta("rendered_visual_bounds"):
+		var bounds: Rect2 = frames.get_meta("rendered_visual_bounds")
+		if bounds.has_area():
+			return bounds
 
 	var has_rect := false
 	var combined_rect := Rect2()
@@ -35929,8 +36821,262 @@ func _get_pokedex_sprite_visual_rect(frames: SpriteFrames, animation_name: Strin
 
 	return combined_rect if has_rect else Rect2()
 
+func _rendered_portrait_rect(frames: SpriteFrames, stage: Vector2) -> Rect2:
+	if frames == null:
+		return Rect2()
+	var full: Rect2 = frames.get_meta("rendered_visual_bounds", Rect2())
+	if not full.has_area():
+		return Rect2()
+	# Normal view fits the complete idle. Closer inspection is an explicit toggle.
+	var scale_value: float = min(stage.x / full.size.x, stage.y / full.size.y)
+	var visible_size := stage / scale_value
+	return Rect2(full.get_center() - visible_size * 0.5, visible_size)
+
+
+func _make_preview_composite_material() -> ShaderMaterial:
+	# Transparent SubViewport output already contains RGB multiplied by alpha.
+	# Default blending would multiply the edges by alpha a second time.
+	var shader := Shader.new()
+	shader.code = "shader_type canvas_item; render_mode blend_premul_alpha;"
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	return material
+
+
+func _add_preview_zoom_button(
+	parent: Control,
+	viewport: SubViewport,
+	fallback: TextureRect,
+	center_y: float,
+	left_offset: float = 6.0
+) -> Button:
+	parent.clip_contents = true
+	# An overlay Control prevents PanelContainer from stretching the button.
+	var overlay := Control.new()
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(overlay)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var button := Button.new()
+	button.name = "PreviewZoomButton"
+	button.toggle_mode = true
+	button.mouse_filter = Control.MOUSE_FILTER_STOP
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = "Zoom in (2×)"
+	button.custom_minimum_size = Vector2(28, 28)
+	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#06111fe8"), UI_BORDER_SUBTLE, 5, 1))
+	overlay.add_child(button)
+	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	button.offset_left = left_offset
+	button.offset_top = -34
+	button.offset_right = left_offset + 28.0
+	button.offset_bottom = -6
+	button.draw.connect(func() -> void:
+		var ink := Color("#8ce7ff")
+		button.draw_arc(Vector2(11, 11), 6.5, 0, TAU, 24, ink, 1.5, true)
+		button.draw_line(Vector2(16, 16), Vector2(22, 22), ink, 2, true)
+		button.draw_line(Vector2(8, 11), Vector2(14, 11), ink, 1.5, true)
+		if not button.button_pressed:
+			button.draw_line(Vector2(11, 8), Vector2(11, 14), ink, 1.5, true)
+	)
+	button.toggled.connect(func(zoomed: bool) -> void:
+		var factor := 2.0 if zoomed else 1.0
+		var model_preview := parent.get_node_or_null("SummaryModelPreview")
+		if model_preview != null and model_preview.visible:
+			model_preview.set_zoom(factor)
+		var center := Vector2(viewport.size) * Vector2(0.5, center_y)
+		viewport.canvas_transform = Transform2D(Vector2(factor, 0), Vector2(0, factor), center * (1.0 - factor))
+		fallback.pivot_offset = fallback.size * 0.5
+		fallback.scale = Vector2.ONE * factor
+		button.tooltip_text = "Zoom out (normal view)" if zoomed else "Zoom in (2×)"
+		button.queue_redraw()
+	)
+	return button
+
+
+func _add_preview_animation_button(
+	parent: Control,
+	animated_sprite: AnimatedSprite2D,
+	loader: Node,
+	placement: String
+) -> MenuButton:
+	var overlay := Control.new()
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(overlay)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var button := MenuButton.new()
+	button.name = "PreviewAnimationButton"
+	button.visible = false
+	button.text = "▶"
+	button.tooltip_text = "Animations are loading…"
+	button.custom_minimum_size = Vector2(30, 30)
+	button.mouse_filter = Control.MOUSE_FILTER_STOP
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_color_override("font_color", Color("#bdf5ff"))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color("#638294"))
+	button.add_theme_stylebox_override("normal", _make_preview_animation_button_style(Color("#071827f2"), Color("#3f7d98")))
+	button.add_theme_stylebox_override("hover", _make_preview_animation_button_style(Color("#10344bf7"), Color("#8ce7ff"), 2))
+	button.add_theme_stylebox_override("pressed", _make_preview_animation_button_style(Color("#15516bf9"), Color("#bdf5ff"), 2))
+	button.add_theme_stylebox_override("focus", _make_preview_animation_button_style(Color("#10344bf7"), Color("#8ce7ff"), 2))
+	button.add_theme_stylebox_override("disabled", _make_preview_animation_button_style(Color("#07131dcc"), Color("#294351")))
+	overlay.add_child(button)
+	button.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	if placement == "above_level":
+		# Center over the 54px level badge without covering the Pokémon.
+		button.offset_left = -48.0
+		button.offset_top = -66.0
+		button.offset_right = -18.0
+		button.offset_bottom = -36.0
+	else:
+		button.offset_left = -36.0
+		button.offset_top = -36.0
+		button.offset_right = -6.0
+		button.offset_bottom = -6.0
+	_style_preview_animation_popup(button.get_popup())
+	animated_sprite.set_meta("preview_animation_button", button)
+	button.get_popup().id_pressed.connect(
+		_on_preview_animation_selected.bind(button, animated_sprite, loader)
+	)
+	return button
+
+
+func _make_preview_animation_button_style(
+	background: Color,
+	border: Color,
+	border_width: int = 1
+) -> StyleBoxFlat:
+	var style := _make_button_style(background, border, 7, border_width)
+	style.content_margin_left = 0
+	style.content_margin_top = 0
+	style.content_margin_right = 0
+	style.content_margin_bottom = 0
+	style.shadow_color = Color("#00000088")
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+func _style_preview_animation_popup(popup: PopupMenu) -> void:
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.min_size = Vector2i(172, 0)
+	var panel := _make_panel_style(Color("#050f1bfc"), Color("#4aa3c7e6"), 9, 1)
+	panel.content_margin_left = 5
+	panel.content_margin_top = 6
+	panel.content_margin_right = 5
+	panel.content_margin_bottom = 6
+	panel.shadow_color = Color("#000000aa")
+	panel.shadow_size = 12
+	panel.shadow_offset = Vector2(0, 5)
+	popup.add_theme_stylebox_override("panel", panel)
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_panel_style(Color("#123b55f7"), Color("#8ce7ff"), 6, 1)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_panel_style(Color.TRANSPARENT, Color("#31566a88"), 0, 0)
+	)
+	popup.add_theme_color_override("font_color", Color("#dcecf7"))
+	popup.add_theme_color_override("font_hover_color", Color.WHITE)
+	popup.add_theme_color_override("font_disabled_color", Color("#718999"))
+	popup.add_theme_color_override("font_outline_color", Color("#02070c"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 14)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_font_size_override("font_size", 13)
+
+
+func _configure_preview_animation_button(
+	animated_sprite: AnimatedSprite2D,
+	frames: SpriteFrames
+) -> void:
+	if animated_sprite == null or not animated_sprite.has_meta("preview_animation_button"):
+		return
+	var button := animated_sprite.get_meta("preview_animation_button") as MenuButton
+	if button == null:
+		return
+	var rendered := frames != null and frames.has_meta("rendered_asset")
+	button.visible = rendered
+	var popup := button.get_popup()
+	popup.clear()
+	if not rendered:
+		return
+	var actions: Dictionary = frames.get_meta("rendered_actions", {})
+	for option_value: Variant in RENDERED_PREVIEW_ANIMATIONS:
+		var option := option_value as Dictionary
+		var action := str(option.get("action", ""))
+		if action != "idle" and not actions.has(action):
+			continue
+		var item_id := popup.item_count
+		popup.add_item(str(option.get("label", action)), item_id)
+		popup.set_item_metadata(popup.item_count - 1, action)
+	button.disabled = actions.is_empty()
+	button.tooltip_text = (
+		"Animations are loading…"
+		if button.disabled
+		else "Preview rendered animation"
+	)
+
+
+func _on_preview_animation_selected(
+	item_id: int,
+	button: MenuButton,
+	animated_sprite: AnimatedSprite2D,
+	loader: Node
+) -> void:
+	if button != null and button.has_meta("model_preview"):
+		var model_preview: Variant = button.get_meta("model_preview").get_ref()
+		if is_instance_valid(model_preview) and model_preview.visible:
+			var menu := button.get_popup()
+			var index := menu.get_item_index(item_id)
+			if index >= 0:
+				model_preview.play_clip(str(menu.get_item_metadata(index)))
+				button.tooltip_text = "Playing: %s" % menu.get_item_text(index)
+			return
+	if button == null or animated_sprite == null or loader == null:
+		return
+	var popup := button.get_popup()
+	var item_index := popup.get_item_index(item_id)
+	if item_index < 0:
+		return
+	var action := str(popup.get_item_metadata(item_index))
+	var label := popup.get_item_text(item_index)
+	var frames := animated_sprite.sprite_frames
+	if frames == null or not frames.has_meta("rendered_asset"):
+		_configure_preview_animation_button(animated_sprite, null)
+		return
+	button.disabled = true
+	var still_current := func() -> bool:
+		return is_instance_valid(animated_sprite) and animated_sprite.sprite_frames == frames
+	var loaded := action == "idle"
+	if not loaded:
+		loaded = await loader.call(
+			"request_rendered_sprite_action", frames, action, still_current
+		)
+	if not still_current.call():
+		return
+	button.disabled = false
+	if not loaded or not frames.has_animation(action):
+		button.tooltip_text = "%s is unavailable" % label
+		return
+	animated_sprite.animation = action
+	animated_sprite.frame = 0
+	var action_entry: Dictionary = (frames.get_meta("rendered_actions", {}) as Dictionary).get(action, {})
+	animated_sprite.play(action, maxf(float(action_entry.get("speed", 1.0)), 0.01))
+	button.tooltip_text = "Playing: %s" % label
+
+
 func _on_pokedex_sprite_panel_gui_input(event: InputEvent) -> void:
 	if pokedex_selected_species.is_empty():
+		return
+	if pokedex_3d_preview != null and pokedex_3d_preview.visible:
+		if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			pokedex_3d_preview.call("rotate_by", (event as InputEventMouseMotion).relative.x)
+			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
@@ -35962,14 +37108,15 @@ func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
 
 	var texture: Texture2D = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
-		if PokemonAssets.load_home_sprite(candidate, pokedex_shiny_mode) != null:
-			texture = PokemonAssets.load_party_icon(candidate, pokedex_shiny_mode)
+		texture = PokemonAssets.load_party_icon(candidate, pokedex_shiny_mode)
+		if texture != null:
 			break
 
 	if texture == null:
-		var sprite_frame := _load_first_pokedex_sprite_frame(species)
-		if sprite_frame != null:
-			texture = sprite_frame
+		for candidate: String in _pokedex_species_sprite_candidates(species):
+			texture = PokemonAssets.load_home_sprite(candidate, pokedex_shiny_mode)
+			if texture != null:
+				break
 
 	if texture == null:
 		texture = PokemonAssets.load_unknown_icon()
@@ -35977,31 +37124,6 @@ func _load_pokedex_species_list_icon(species: Dictionary) -> Texture2D:
 	if cache_key != "":
 		pokedex_species_list_icon_cache[cache_key] = texture
 	return texture
-
-func _load_first_pokedex_sprite_frame(species: Dictionary) -> Texture2D:
-	for candidate: String in _pokedex_species_sprite_candidates(species):
-		var frames_value: Variant = pokedex_sprite_loader.call(
-			"_load_sprite_frames",
-			candidate,
-			"front",
-			pokedex_shiny_mode,
-			false
-		)
-		var frames := frames_value as SpriteFrames
-		if frames == null:
-			continue
-
-		var animation_name := "idle"
-		if not frames.has_animation(animation_name):
-			var animation_names := frames.get_animation_names()
-			if animation_names.is_empty():
-				continue
-			animation_name = animation_names[0]
-
-		if frames.get_frame_count(animation_name) > 0:
-			return frames.get_frame_texture(animation_name, 0)
-
-	return null
 
 func _refresh_pokedex_header_stats(stats: Dictionary) -> void:
 	if pokedex_header_stats_stack == null:
@@ -39221,6 +40343,8 @@ func _position_socials_menu() -> void:
 	if target_position.x + menu_size.x > viewport_size.x - 12.0:
 		target_position.x = viewport_size.x - menu_size.x - 12.0
 	target_position.x = max(target_position.x, 12.0)
+	if target_position.y + menu_size.y > viewport_size.y - 12.0:
+		target_position.y = max(12.0, viewport_size.y - menu_size.y - 12.0)
 	socials_menu.position = target_position
 
 func _hide_socials_menu() -> void:
@@ -39234,6 +40358,120 @@ func _on_socials_friend_list_button_pressed() -> void:
 func _on_socials_players_on_map_button_pressed() -> void:
 	_hide_socials_menu()
 	_open_players_on_map()
+
+func _on_socials_adventure_party_button_pressed() -> void:
+	_hide_socials_menu()
+	_open_coop_party_popup()
+
+func _create_coop_party_hud() -> void:
+	coop_party_hud = COOP_PARTY_HUD_SCRIPT.new() as Button
+	coop_party_hud.name = "AdventurePartyHud"
+	coop_party_hud.visible = false
+	coop_party_hud.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	coop_party_hud.offset_left = personal_buffs_panel.offset_left
+	coop_party_hud.offset_right = personal_buffs_panel.offset_right
+	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
+	coop_party_hud.pressed.connect(_open_coop_party_popup)
+	root_control.add_child(coop_party_hud)
+	_position_coop_party_hud()
+
+func _position_coop_party_hud() -> void:
+	if coop_party_hud == null or personal_buffs_panel == null:
+		return
+	coop_party_hud.offset_left = personal_buffs_panel.offset_left
+	coop_party_hud.offset_right = personal_buffs_panel.offset_right
+	coop_party_hud.offset_bottom = personal_buffs_panel.offset_top - 8.0
+	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
+
+func _refresh_coop_party_hud() -> void:
+	if coop_party_hud == null:
+		return
+	var own_id := int(AuthService.current_user.get("id", 0))
+	var hud_party: Dictionary = _coop_party_hud_data() if CoopService.available else {}
+	coop_party_hud.call("set_members", hud_party, own_id)
+
+func _coop_party_hud_data() -> Dictionary:
+	var party := CoopService.party.duplicate(true)
+	var ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	if ids.size() != 2:
+		return party
+	var names: Dictionary = party.get("memberUsernames", {}) if party.get("memberUsernames") is Dictionary else {}
+	var appearances: Dictionary = party.get("memberAppearances", {}) if party.get("memberAppearances") is Dictionary else {}
+	var own_id := str(int(AuthService.current_user.get("id", 0)))
+	if not own_id.is_empty():
+		if not names.has(own_id):
+			names[own_id] = str(AuthService.current_user.get("username", ""))
+		if not appearances.has(own_id) or appearances[own_id] is not Dictionary or str(appearances[own_id].get("body", "")).is_empty():
+			appearances[own_id] = PlayerSave.to_appearance_state()
+	var world := GameState.get_world()
+	var remote_players: Dictionary = world.get("remote_player_avatars") if world != null and world.get("remote_player_avatars") is Dictionary else {}
+	for member_id: Variant in ids:
+		var key := str(int(member_id))
+		if key == own_id:
+			continue
+		var avatar: Node = remote_players.get(key)
+		if avatar == null or not is_instance_valid(avatar):
+			continue
+		var presence: Dictionary = avatar.get("presence_state") if avatar.get("presence_state") is Dictionary else {}
+		if not names.has(key):
+			names[key] = str(presence.get("username", ""))
+		if not appearances.has(key) or appearances[key] is not Dictionary or str(appearances[key].get("body", "")).is_empty():
+			appearances[key] = presence.get("appearance", {}) if presence.get("appearance") is Dictionary else {}
+	party["memberUsernames"] = names
+	party["memberAppearances"] = appearances
+	return party
+
+func _open_coop_party_popup(recipient_name: String = "") -> void:
+	if not CoopService.available or not CoopService.activity.is_empty():
+		return
+	_ensure_coop_party_popup()
+	coop_party_popup.call("open", recipient_name)
+	_activate_ui_panel(coop_party_popup)
+
+func _ensure_coop_party_popup() -> void:
+	if coop_party_popup == null:
+		coop_party_popup = COOP_PARTY_POPUP_SCRIPT.new() as Control
+		$Control.add_child(coop_party_popup)
+		coop_party_popup.connect("closed", _on_coop_party_popup_closed)
+
+func _on_coop_invitation_received(invitation: Dictionary) -> void:
+	var sender := str(invitation.get("senderUsername", "a Trainer"))
+	add_system_message("%s invited you to an Adventure Party." % sender)
+	_ensure_coop_party_popup()
+	coop_party_popup.call("open_invitation", invitation)
+	_activate_ui_panel(coop_party_popup)
+
+func _on_coop_invitation_sent(username: String) -> void:
+	add_system_message("Adventure Party invitation sent to %s." % username)
+
+func _on_coop_invitation_failed(message: String) -> void:
+	add_system_message("Adventure Party invitation failed: %s" % message)
+
+func _on_coop_request_failed(message: String) -> void:
+	var key := ""
+	match message:
+		"coop_partner_too_far":
+			key = "ui.coop.wild.partner_too_far"
+		"coop_shared_level_cap_exceeded":
+			key = "ui.coop.wild.level_cap_exceeded"
+	if key.is_empty():
+		return
+	var now := Time.get_ticks_msec()
+	if now - int(coop_wild_notice_at_msec.get(message, -10000)) < 10000:
+		return
+	coop_wild_notice_at_msec[message] = now
+	add_system_message(LocalizationManager.text(key, {"level": int(CoopService.party.get("sharedLevelCap", 0))}))
+
+func _on_coop_party_profile_missing(source: String) -> void:
+	add_system_message("Adventure Party details are missing from the connected %s API. Check that both clients use the development server." % source)
+
+func _hide_coop_party_popup() -> void:
+	if coop_party_popup != null:
+		coop_party_popup.call("close")
+
+func _on_coop_party_popup_closed() -> void:
+	_deactivate_ui_panel(coop_party_popup)
 
 func _on_socials_loans_button_pressed() -> void:
 	_hide_socials_menu()
@@ -39266,6 +40504,7 @@ func _ensure_player_interaction_coordinator() -> bool:
 		player_interaction_coordinator.trainer_card_requested.connect(_on_player_interaction_trainer_card_requested)
 		player_interaction_coordinator.chat_moderation_requested.connect(_on_player_interaction_chat_moderation_requested)
 		player_interaction_coordinator.social_overview_updated.connect(_on_player_interaction_social_overview_updated)
+		player_interaction_coordinator.coop_invitation_requested.connect(_open_coop_party_popup)
 	return true
 
 func _on_player_interaction_private_message_requested(user: Dictionary) -> void:
@@ -40346,6 +41585,11 @@ func _pc_payload_held_item_id(payload: Dictionary) -> String:
 			return value
 	return ""
 
+func _is_rental_held_item_payload_locked(payload: Dictionary) -> bool:
+	var rental_active := bool(payload.get("rentalActive", payload.get("rental_active", false)))
+	var held_item_locked := bool(payload.get("heldItemLocked", payload.get("held_item_locked", false)))
+	return rental_active and held_item_locked
+
 
 func _pc_payload_types(payload: Dictionary) -> Array[String]:
 	var types: Array[String] = []
@@ -40911,6 +42155,10 @@ func _take_pc_box_pokemon_held_item(source: Dictionary, payload: Dictionary) -> 
 	if pokemon_id <= 0 or held_item_id == "" or pc_move_in_progress:
 		return
 	var item_name := _item_name_from_id(held_item_id)
+	if _is_rental_held_item_payload_locked(payload):
+		_set_pc_status("ui.pokemon_summary.held_item.rental_locked")
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.held_item.rental_locked"))
+		return
 	pc_move_in_progress = true
 	_set_pc_status("ui.storage.item.taking", {"item": item_name})
 	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon_id)
@@ -41341,8 +42589,11 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 	var result: Dictionary = await PokemonStorageService.move_pokemon(pokemon_id, source, target)
 	pc_move_in_progress = false
 	if not bool(result.get("success", false)):
-		_set_pc_status("ui.storage.move.failed")
-		_add_chat_message(LocalizationManager.text("ui.storage.move.failed"))
+		var failure_key := "ui.storage.move.coop_party_full" \
+			if BackendErrorLocalizationService.error_code(result) == "coop_party_size_invalid" \
+			else "ui.storage.move.failed"
+		_set_pc_status(failure_key)
+		_add_chat_message(LocalizationManager.text(failure_key))
 		_render_pc_party()
 		_render_pc_box()
 		return
@@ -42632,7 +43883,7 @@ func _format_reply_subject(subject: String) -> String:
 func _mail_can_reply(mail: Dictionary) -> bool:
 	if mail.is_empty():
 		return false
-	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin"]:
+	if str(mail.get("senderType", "player")).strip_edges().to_lower() in ["system", "admin", "guild"]:
 		return false
 
 	var can_reply_as_sender: bool = str(mail.get("senderUsername", "")).strip_edges() != ""

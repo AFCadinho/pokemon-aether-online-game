@@ -36,8 +36,12 @@ func _init() -> void:
 			and workflow.contains("Required music resources failed Godot import."),
 		"desktop release verifies the pack and rejects music import errors"
 	)
+	var desktop_music_exclusions := 0
+	for line: String in presets.split("\n"):
+		if line.begins_with("exclude_filter=") and line.contains("assets/music/**") and not line.contains("launcher/**"):
+			desktop_music_exclusions += 1
 	_check(
-		presets.count('exclude_filter="assets/sprites/pokemon/**,assets/music/**"') == 3,
+		desktop_music_exclusions == 3,
 		"desktop exports keep the externally managed music pack outside all game archives"
 	)
 	print("desktop_music_integrity_check: %s" % ("PASS" if failures == 0 else "FAIL"))

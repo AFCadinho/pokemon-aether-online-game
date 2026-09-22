@@ -82,6 +82,17 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 		return {"success": false, "error": "Invalid transition facing direction."}
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
+	if OS.has_feature("web"):
+		var checked := await get_transition_access(normalized_transition_id, true)
+		if not bool(checked.get("success", false)):
+			return checked
+		var access := _dictionary_from_value(checked.get("access", {}))
+		if bool(access.get("allowed", false)):
+			var scene_path := str(WebAssetModuleService.MISTY_MAP_SCENES.get(str(access.get("areaId", "")), ""))
+			if not scene_path.is_empty():
+				var assets := await WebAssetModuleService.ensure_scene_available(scene_path)
+				if not bool(assets.get("success", false)):
+					return assets
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response := await _request_json(

@@ -1,0 +1,1254 @@
+{
+  "schema": 1,
+  "scope": "catalog_gender_membership_not_visual_or_production_approval",
+  "inventory_sha256": "c655a83e4e6829eaff1a3de778fbb38c12de7e502575d9dfbe2d0bc8e2dc7d6d",
+  "counts": {
+    "visibility_preflight_pass": 86,
+    "visibility_preflight_hold": 2
+  },
+  "resolved_variant_bindings": 15,
+  "entries": [
+    {
+      "species": "charizard",
+      "glb_sha256": "74bea17c1dbb764cfa1aa23457aa92ef9831978d2a6294d19f6682b744b48ff3",
+      "original_runtime_sha256": "efda7151ac8a5d30594e87e1ef5a1f7feab9cb5c91adc37ed171b44470be3149",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ce9fd7c3c5378856645db7a934cf00c57aa74a1a66b9a9916bdc258a069d7b39",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "raichu",
+      "glb_sha256": "1d78f8733d664fceb31c3742d0aac979d06670115a45c5fb7580624a3c31c175",
+      "original_runtime_sha256": "37d5d601f06b521ab4771b8e422f349202748a49d83ec295c8566a2436a65790",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "40219029819e59cd757a046c51a5b428bd6817c75ed5b073f675ef5eef9b9c38",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0026_00_00",
+        "active_targets": [
+          "pm0026_00_00_body_mesh_shape",
+          "pm0026_00_00_eye_mesh_shape",
+          "pm0026_00_00_tail_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0026_01_00_tail_mesh_shape": {
+            "resource_id": "pm0026_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0026/pm0026_00_00/pm0026_00_00.trmdl": "2abf8c456afda16832a19e6907b35ae59922bddd5a79863ea83009df2e463ba6",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0026/pm0026_00_00/pm0026_00_00.trmdl": "2abf8c456afda16832a19e6907b35ae59922bddd5a79863ea83009df2e463ba6",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0026/pm0026_00_00/pm0026_00_00.trmsh": "08fb2a2fd61113d0c08dd77fcfbe196022d06796485d9bf516142a762fc8bb47",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0026/pm0026_00_00/pm0026_00_00.trmsh": "08fb2a2fd61113d0c08dd77fcfbe196022d06796485d9bf516142a762fc8bb47",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0026/pm0026_01_00/pm0026_01_00.trmdl": "8663f9abd9c85b784caeebb0c8bb68c846f7c47ca148e8e5955bf7639f22315d",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0026/pm0026_01_00/pm0026_01_00.trmdl": "8663f9abd9c85b784caeebb0c8bb68c846f7c47ca148e8e5955bf7639f22315d",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0026/pm0026_01_00/pm0026_01_00.trmsh": "7e5f783bc738d0f70489d9457344d5043c568b2dfa346c5326ac0b6657fb76cf",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0026/pm0026_01_00/pm0026_01_00.trmsh": "7e5f783bc738d0f70489d9457344d5043c568b2dfa346c5326ac0b6657fb76cf"
+        }
+      }
+    },
+    {
+      "species": "jigglypuff",
+      "glb_sha256": "7d87209debeb0b988233109f860f0722bee4c88305d06d08c9bb50b53c3671ec",
+      "original_runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "65bdcf0abfa3c571be312efd19cf441fbbfdd1eda786128452df9857b5230b7e",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "arcanine",
+      "glb_sha256": "329e2cc40ed47b2abd84214d14e6d09cf8d4929b3177c9a03485bc4f13466550",
+      "original_runtime_sha256": "022635ed3c11f90712ae406fdfe4bbcc45f37417f2297952ae2a0fbd2c0b99c5",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "e998b90707bd77ed109a43c85d99cae86ff78b5650479376a5ff66bdeeba773c",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "gastly",
+      "glb_sha256": "af53cfb24c63feced26a0fdf806bbc5f287c424efb7e1860244c87c4578404e3",
+      "original_runtime_sha256": "6135e93a36a79d2e7ce44b44fb7d03b2c7c5bdef85ce59a53d836f60e148871f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "92e891414db7bd37f7d2649da27d95598adc4f4b46c72b591f4e6985b58f7ad0",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "gengar",
+      "glb_sha256": "14120800359b91247283f2de60607130a6ed8d3b2d059cc1acef3a74fa922922",
+      "original_runtime_sha256": "78b3953637349def0c9048c5b92078aa8e6c6746f821d77eb71ce58b8b96f7ca",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a3a190b753de64fd70bcdd9bcc955e31bdd9348111c604ef66652652e4a8101a",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "gyarados",
+      "glb_sha256": "183217d1056eaa73eff752e160980483b14c85a84bc6cca907e04df9040ca2c9",
+      "original_runtime_sha256": "6c2f24d7bc71446102e3df895d0aafd1c80eccbf5e1a7bb3116fd6e483a17edf",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3b7e801c6b014f8b89db5d9b2034ecd6b87f69ee9c8675c54f74f9b3966d3856",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0130_00_00",
+        "active_targets": [
+          "pm0130_00_00_body_mesh_shape",
+          "pm0130_00_00_eye_mesh_shape",
+          "pm0130_00_00_mustache_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0130_01_00_mustache_mesh_shape": {
+            "resource_id": "pm0130_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0130/pm0130_00_00/pm0130_00_00.trmdl": "e11f6fd3eb061e7297a48952a927c8b2ae6b28c3fe448dd8d985e633ed82bcc0",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00.trmdl": "e11f6fd3eb061e7297a48952a927c8b2ae6b28c3fe448dd8d985e633ed82bcc0",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0130/pm0130_00_00/pm0130_00_00.trmsh": "69d43cad0cbdef2faecad8087d6d47b781ff826228f382e59374e495a688e174",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00.trmsh": "69d43cad0cbdef2faecad8087d6d47b781ff826228f382e59374e495a688e174",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0130/pm0130_01_00/pm0130_01_00.trmdl": "9c583f623508ca88a2ce6b094ddc351d1ab540665e830bae1c20ee289f345d0b",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_01_00/pm0130_01_00.trmdl": "9c583f623508ca88a2ce6b094ddc351d1ab540665e830bae1c20ee289f345d0b",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0130/pm0130_01_00/pm0130_01_00.trmsh": "20154d579a348c6a8aadd04e08cfaa37eb179a4068fe74f29a50172bc37a82ab",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_01_00/pm0130_01_00.trmsh": "20154d579a348c6a8aadd04e08cfaa37eb179a4068fe74f29a50172bc37a82ab"
+        }
+      }
+    },
+    {
+      "species": "eevee",
+      "glb_sha256": "1732fd45777f50aeb84507aec40d2429855b9534824742b0dc2a510ab58b674c",
+      "original_runtime_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "6372556260b9934a092c49153f97406e8113404459a27084d53d3f78b70c080a",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0133_00_00",
+        "active_targets": [
+          "pm0133_00_00_body_mesh_shape",
+          "pm0133_00_00_eye_mesh_shape",
+          "pm0133_00_00_fur_mesh_shape",
+          "pm0133_00_00_tail_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0133_01_00_tail_mesh_shape": {
+            "resource_id": "pm0133_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0133/pm0133_00_00/pm0133_00_00.trmdl": "c564f8270b40c90c544ac689b893c682868422171d32bd201a87631789045c36",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0133/pm0133_00_00/pm0133_00_00.trmdl": "c564f8270b40c90c544ac689b893c682868422171d32bd201a87631789045c36",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0133/pm0133_00_00/pm0133_00_00.trmsh": "33d4aa8985e9df10e5aac293c12fe0ca9eb8caabd36ccfc887307487c9a24dd7",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0133/pm0133_00_00/pm0133_00_00.trmsh": "33d4aa8985e9df10e5aac293c12fe0ca9eb8caabd36ccfc887307487c9a24dd7",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0133/pm0133_01_00/pm0133_01_00.trmdl": "6aa3a94c74203f72bc5ba164247ad78de165a3f2f58c624763287499d240d6b9",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0133/pm0133_01_00/pm0133_01_00.trmdl": "6aa3a94c74203f72bc5ba164247ad78de165a3f2f58c624763287499d240d6b9",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0133/pm0133_01_00/pm0133_01_00.trmsh": "59f50f941a8723ee035b5dd46c4faff5d947b2aee6c88195e0b5fd316a814ab5",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0133/pm0133_01_00/pm0133_01_00.trmsh": "59f50f941a8723ee035b5dd46c4faff5d947b2aee6c88195e0b5fd316a814ab5"
+        }
+      }
+    },
+    {
+      "species": "vaporeon",
+      "glb_sha256": "89dee7be0777b2af480dcb903c0d76c4180b4e3f7d9beb0e7c6de5836a761732",
+      "original_runtime_sha256": "c4595d7ae21e41213f26fd1f6542f71d1d8a34121aa870b246cdc35055bcdecd",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "90aa2679f3bdee18852c3605f2b23ed2a79a974a72eec07aa06b083d00cd92ae",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "jolteon",
+      "glb_sha256": "fb5a330ee73dd2bf51e147daed027b49f1947d3ce2644b01493c0257e20606b0",
+      "original_runtime_sha256": "2e9848fff483a33c54f92ef0c433d212c6cebb49810d0a6eb471a5b703ee97c6",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "630704eef99e390501e547e27ee1299c82b5958cb479ad55354522679d54a2a0",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "flareon",
+      "glb_sha256": "e43fd75a6af218ff54938c6bdfbd830e476e0c2781e20e50d7581fd5ae1d985a",
+      "original_runtime_sha256": "039480eee56bd385d7b777c6ed89885dbdc1c6df151ecb6f293452ca0e108a29",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9e968ae86ec9a237ed946daabd98b2ff8ca1347e5a355cc84a3f8b196f303119",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "articuno",
+      "glb_sha256": "ad972fab72b4cf48126816df200bead44fef596dac5ec804682bf483c2b73540",
+      "original_runtime_sha256": "0fbc55571959b09316d04bf5675bb60144a0139d7b1d9111160b51e95b622c37",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "642499132490c9dadacbad7da51deb161290430bdd298e25985bb1140702fae0",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "dragonite",
+      "glb_sha256": "b9a3d2202f445225ecf124af2d01dea7e2661c106e353e4a6a7cf2a4fc4baf58",
+      "original_runtime_sha256": "725ada339cef7100669b50b879a1b210bd9e51e7cff665f936f6cdb54f0ed155",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "8374f3eb83b49b55c2264bbbee40ab0a3b771504b1ff0052e18bca1f9b9b3477",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "lucario",
+      "glb_sha256": "5dbe46a618e8680b1c877744a3bbf9c5414d448b0a6b0a4f75e64d76de60e547",
+      "original_runtime_sha256": "ea8cdcf4dc1de3fb0e5bdad75e7b86551476315733be13ee36514ee4c19d0a3e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "b5c5c1d73a42eff87f9e8cd755795b69b17f4544ccc15f51245c9f123cf2c8bf",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "charmander",
+      "glb_sha256": "d31e9af3468e7efbfc82342bab9108100366e990005d5edf5927fae256761b01",
+      "original_runtime_sha256": "4639ee36e2aab0548315e6fb9652c1ee171840345cd9fe3caec2ef8b71ebe885",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "658a2fae23a59174f123a45d8cea95fc04e8723f40d046be21b2f235fb322ebd",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "wigglytuff",
+      "glb_sha256": "5085fd41a7387e32880155623ac582d1e2c75447a66e3006cad43b0ad089805a",
+      "original_runtime_sha256": "37f63c58217f0e8055c5625783553ee2fb1470a86ecc07d32057956154a90736",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1dcbc2012edd6d850b3d430c84690fe9553c61e0e26e862f2bde4e0261481d19",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "venonat",
+      "glb_sha256": "fa444375f2d5c4291b5e60cd6ab226421d64c0651a3302f4fd74f6775cc3aaca",
+      "original_runtime_sha256": "d2d4aa3b8a8b1a409e222e492ca501ad50fa86b39ef33136a622c7728bd407fb",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1ba0e67089155b923f044256ab5b251b08c8254854d127cdad6fea0f9e23fda8",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "diglett",
+      "glb_sha256": "6e0c4f898a5f664a44b44e097ec16a3fed21c50dcc645f9cb06d87d23464bcc8",
+      "original_runtime_sha256": "fc78fd4d78536f31b2cc1a945d42f8b271e85120a7ee99a384a35d7a2c107863",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "56e9b76a36ba0f034a9dbfcb3895eb07365b795d8f50b0b9b905d8e99a908ed2",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "dugtrio",
+      "glb_sha256": "c6ca434658b1bd0425a523488cb1b90f66c50d69d0b347fdd0e7a1eb00b52e6c",
+      "original_runtime_sha256": "58cf2d42750f9bccda80dfefdcae7e9987b0101ef7afc9a64ebc6b61fec6db35",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "4e473494c3386fd156913d8b00cb06e06f9eef3655505dce8459bda100892c3b",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "meowth",
+      "glb_sha256": "e2316e2f1b1f89dc41905eb20478fecb9c1d527d748e9c32629655d17aa5bd35",
+      "original_runtime_sha256": "e5ee0b7b90538581dabdd333586979f635a31722afa70e89c0fdbee8012a05c0",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    {
+      "species": "psyduck",
+      "glb_sha256": "dee04e13a6db147ce3505c8e2c15577dcaa33fbf0fd717a5d1572b64c392da05",
+      "original_runtime_sha256": "437f896285dcd44a0d84cc3ff6e30b28aa3e66699e41df2933108862ddfa1097",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "5174a26ba01fdb29ce674850791a777ae01f5c8ae9496c1c9c8de227b60e82be",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "golduck",
+      "glb_sha256": "b49cb3634f9254d018f8b5f56ce268f5ca8b28750a9889511bdb7ab3b1d91166",
+      "original_runtime_sha256": "47247c6be71d222f84673f7e15c4a4e2c5cd7b88c49fd9fdde5b5b4cf7088638",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "27687787af7c1a16dd2ac1315782b53f45ea52a98ffd9781256875e7bb4dd0a2",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "mankey",
+      "glb_sha256": "d22af0aa6192979d32f69831c410627e5499b4f5f74ac7d7a7862d442bc60ea5",
+      "original_runtime_sha256": "8bc2a5c9d9cbe6c26fbbe2fe709ff52a2ffd037210106b822372630c21cf7fd7",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "96ed1e910e2059f2c35f89ddee25e758d5c89e01281d6a3cf523f12cbf6ec3f9",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "primeape",
+      "glb_sha256": "1a3a0fea2b8af10090e05da92b9cb9b79909dc40d17e6fbf84326b94fc381915",
+      "original_runtime_sha256": "76d4c1ea23dde1a329e1e81af3e6693ee319b60f2b5708a48fb60c723e634ffb",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "95597c77a0f6c691a2e2d6a6923627e3df6a026880480ac13459e78a8595ca47",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "growlithe",
+      "glb_sha256": "7d477f07d5b246495c421029db6005c7d00ebf53eb32404bbb6dc955f696b41b",
+      "original_runtime_sha256": "694a75efd26a91b073491f38fea23be54d122983325cf0ee04399058acc9ff9c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "08206861e8a0ef4d3d9647dd8ffce10f8e92d5b8dd9186af44e8aeec957ee624",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "slowpoke",
+      "glb_sha256": "0b673a567bd40005c343b6de80d2e0bcecbc4dc1fdf9d5810321707bb41624b3",
+      "original_runtime_sha256": "96fbf13543b1fc54cc0e281a86e4de24366a3b97d00be8e93606d0e869eb74c8",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "b32c09acbc93ce11c165fece4961a0faddde91cf553c712ed754db5ba82683df",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "magnemite",
+      "glb_sha256": "1400c5d7dc579021ec95cf774f24ea975dd44e2f27576df10649db27e28ae9a7",
+      "original_runtime_sha256": "4ca65cf8e4d78020e9fc42a2c92a625f636dbd36031f7f5db107df7887297201",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "362adfdc4461f9514c7d05f139344eacde95f8e78fb5320301daa73f411282ad",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "magneton",
+      "glb_sha256": "1f0127127a9638465f4c09731dff5461af7bb416a779ac6d6aa0ff55a65fac96",
+      "original_runtime_sha256": "f335d0a906bccbf81af8817230412363c21b2bbcbc6a108a1b291175a82162a0",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "37a882841e198b71ad7cb330832114aec12b08e8ffc5d3d5cca7132c59322c25",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "shellder",
+      "glb_sha256": "f68e55d046c00d76488944e7db200d4230b5c2e8f7322354ca32b4f4e91de5c3",
+      "original_runtime_sha256": "407a51e73421d8a0ffe6cacaba670d90898eedd18d7e5ec694f6ea1fee03fa8d",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1dccb914044da7146da20823e044023af985b22bba01c48446a8dd6a11154390",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "cloyster",
+      "glb_sha256": "65093bbd544ccf76e23ee89769791d6035c884158039afe6bb9d1c5524e888fd",
+      "original_runtime_sha256": "887bfd934834e221b16acdad59dd3e0916aca606221954674201b5d3611f036f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "5d4c970b31b3f34d7ea83eb1288f14062478de3097f70a04d12ef0b1cc4348e9",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "haunter",
+      "glb_sha256": "db8ee3dad34a86fe47acafc7c703043191bdd8a26b770b49eb68ad1c5a226ceb",
+      "original_runtime_sha256": "1545c90daee6e79f661b9a815916a2daec0d8171ffb5a87c1fc536a73d1edd0b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a8031b28cf8619010c817f29e3b7faf9145728d565eccd16d05c2ebd03e1986a",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "drowzee",
+      "glb_sha256": "2abd493b17a98e04bc23a9c65c61337545e1d9ef7f9d7d4d0174ab6531781679",
+      "original_runtime_sha256": "78c05aa98801da4e05e252e0f6d8ff8872f4d4a7c0426380a9a60a9a652358df",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "93cb756343d9626793f146e3745e58ceea233cecf58244d68a597415b9532537",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "hypno",
+      "glb_sha256": "3013a6faa62ec75c639d797afbaa09a08a5ce2c985e844e0a91fc1adc1143c71",
+      "original_runtime_sha256": "577a5ddc810581380e559af777cd48bf8035d194c884172a5fe5279a9f73ff9f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "31f95d6cae2ab77edea79041f06552e36bf5e54342e53cd0fd32af4d12c835a0",
+      "excluded_target_count": 2,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0097_00_00",
+        "active_targets": [
+          "pm0097_00_00_body_mesh_shape",
+          "pm0097_00_00_eye_mesh_shape",
+          "pm0097_00_00_fur_mesh_shape",
+          "pm0097_00_00_zeni_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0097_01_00_fur_mesh_shape": {
+            "resource_id": "pm0097_01_00",
+            "gender_code": 1
+          },
+          "pm0097_01_00_zeni_mesh_shape": {
+            "resource_id": "pm0097_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0097/pm0097_00_00/pm0097_00_00.trmdl": "a8f766d01ac0492afd1f2cee0720e2e9ff813c66a0ecc0cc6ecede04b796adf3",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0097/pm0097_00_00/pm0097_00_00.trmdl": "a8f766d01ac0492afd1f2cee0720e2e9ff813c66a0ecc0cc6ecede04b796adf3",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0097/pm0097_00_00/pm0097_00_00.trmsh": "3fe4935a4d9f676ff06e99765a86684701d2853dbd5f9374e3b65886570a8c20",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0097/pm0097_00_00/pm0097_00_00.trmsh": "3fe4935a4d9f676ff06e99765a86684701d2853dbd5f9374e3b65886570a8c20",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0097/pm0097_01_00/pm0097_01_00.trmdl": "8a4189898c623d43c65134621e9f268c7f9d68ebbd913399f2166fcd33170d97",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0097/pm0097_01_00/pm0097_01_00.trmdl": "8a4189898c623d43c65134621e9f268c7f9d68ebbd913399f2166fcd33170d97",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0097/pm0097_01_00/pm0097_01_00.trmsh": "faff667b9be822244a19f63cfa3ffc700d82ef2105e608276c4c19c311886042",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0097/pm0097_01_00/pm0097_01_00.trmsh": "faff667b9be822244a19f63cfa3ffc700d82ef2105e608276c4c19c311886042"
+        }
+      }
+    },
+    {
+      "species": "voltorb",
+      "glb_sha256": "174e6db25cfe8aac71fedb6e2213eadbb2537c35e26cad496fd1d2cdfdc4c585",
+      "original_runtime_sha256": "6b69dc255dbbe1cccc15ce6cfc26ef07d267f1857b75bd9ff1ee56c8a115dd70",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "90c0a921d031de90fff9580fd6767af4ddd3f74ed50fa328ca3500436661ac3f",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "electrode",
+      "glb_sha256": "5c23f564cca1745647fb12680773668cb6812113782ddb847619757a269ca16d",
+      "original_runtime_sha256": "9cfc1352b82602fc6ea36f55889401f8ef155ba118ab26aa3fe0c1dd7e1aa896",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "dbad1dab8888cbbfbc06209b59f589c0f6e5a1fe864bb0ed6cb44151df7b333c",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "chansey",
+      "glb_sha256": "35ab639bf1efc820d4228530acd097819a99ee50fcdf86fc826241baf02f4007",
+      "original_runtime_sha256": "3d2c142d5d3e42994a64637277b94bc91d53f38e95c96e3566c798f4ff447d4f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9f86e46ac5ddeb827bc150100ce582a08fd08eaca2339f8e70ad85d9f5e2b667",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "scyther",
+      "glb_sha256": "e32a02c3795f33cc4674bf5df3b7b75ca39fb5779b1bdb4cd685fe0963dfa5c0",
+      "original_runtime_sha256": "abc9041dd4c36b3d2f557bace83b194c7052d168f8e0f2d3b243e1a5cacae92a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "7f735c37114a14b07ce9154335db92dfd4fb487bdcb952bf6c460acc1e96990b",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0123_00_00",
+        "active_targets": [
+          "pm0113_00_00_eye_mesh_shape",
+          "pm0123_00_00_body_mesh_shape",
+          "pm0123_00_00_hip_mesh_shape",
+          "pm0123_00_00_wing_a_mesh_shape",
+          "pm0123_00_00_wing_b_mesh_shape",
+          "pm0123_00_00_wing_c_mesh_shape",
+          "pm0123_00_00_wing_d_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0123_01_00_hip_mesh_shape": {
+            "resource_id": "pm0123_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0123/pm0123_00_00/pm0123_00_00.trmdl": "3fe83783e281814e97e0a4c173685573779bdd04340e8f87bc409253155b72f9",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0123/pm0123_00_00/pm0123_00_00.trmdl": "3fe83783e281814e97e0a4c173685573779bdd04340e8f87bc409253155b72f9",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0123/pm0123_00_00/pm0123_00_00.trmsh": "4be3be2d54fd35262882a304a7eb3884faaf4ba8fe8163eb0873ac9312bc776d",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0123/pm0123_00_00/pm0123_00_00.trmsh": "4be3be2d54fd35262882a304a7eb3884faaf4ba8fe8163eb0873ac9312bc776d",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0123/pm0123_01_00/pm0123_01_00.trmdl": "35fa3a12902cd0ced21ac75476c1a75891222c95f3561d1f64a605a54b5d8fd8",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0123/pm0123_01_00/pm0123_01_00.trmdl": "35fa3a12902cd0ced21ac75476c1a75891222c95f3561d1f64a605a54b5d8fd8",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0123/pm0123_01_00/pm0123_01_00.trmsh": "4bb33d019122cc3e0f354def87e89d79b4f4c47f8df9f8f931cb7547bafdb877",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0123/pm0123_01_00/pm0123_01_00.trmsh": "4bb33d019122cc3e0f354def87e89d79b4f4c47f8df9f8f931cb7547bafdb877"
+        }
+      }
+    },
+    {
+      "species": "tauros",
+      "glb_sha256": "3471a08ca4d4acc4a02b5a5d48bb27482eb6fc4054dc6a451940b178f582a2f9",
+      "original_runtime_sha256": "54cd4c2c3d6c2a96394a3c7c924a6525913331746bfd3b1be5106a086170680a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "dbc373d28228925aa9acd5cce8a3cd1844f73f3ba5774cb610475aab925f7b01",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "magikarp",
+      "glb_sha256": "1f168b396d0b3974d98a277f20f1e51e950ca993026335aaba447fe3c1db0edd",
+      "original_runtime_sha256": "f595951be64491bffc83c733fc1ba67af5818533c33657a18c0a550172ce57df",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ae08a867c8973fc04bae93af76c8b219a2da9082c2aac3a6d245833e71075f3c",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0129_00_00",
+        "active_targets": [
+          "pm0129_00_00_body_mesh_shape",
+          "pm0129_00_00_eye_mesh_shape",
+          "pm0129_00_00_whisker_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0129_01_00_whisker_mesh_shape": {
+            "resource_id": "pm0129_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0129/pm0129_00_00/pm0129_00_00.trmdl": "de7f9bd48184d8faaddae5587b7590c63dab71adbc2955e34ffbc14e9c902d4b",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0129/pm0129_00_00/pm0129_00_00.trmdl": "de7f9bd48184d8faaddae5587b7590c63dab71adbc2955e34ffbc14e9c902d4b",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0129/pm0129_00_00/pm0129_00_00.trmsh": "6d5cd845569ac9139417a7d97383dbeaa92adda49a04771d1b1f6fdc122e5151",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0129/pm0129_00_00/pm0129_00_00.trmsh": "6d5cd845569ac9139417a7d97383dbeaa92adda49a04771d1b1f6fdc122e5151",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0129/pm0129_01_00/pm0129_01_00.trmdl": "a74fea60c593ac913c4cad1317430330c469d1997a0db6c198a9db54c76b4b71",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0129/pm0129_01_00/pm0129_01_00.trmdl": "a74fea60c593ac913c4cad1317430330c469d1997a0db6c198a9db54c76b4b71",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0129/pm0129_01_00/pm0129_01_00.trmsh": "81a3afc6045d51d12f12de8211ae6380715b5a3c8e07551b074a3e8da4aa3f2c",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0129/pm0129_01_00/pm0129_01_00.trmsh": "81a3afc6045d51d12f12de8211ae6380715b5a3c8e07551b074a3e8da4aa3f2c"
+        }
+      }
+    },
+    {
+      "species": "ditto",
+      "glb_sha256": "c37342072ce05e0f052533601d0c9f1604152aa0af56a4efdd700ea6b929de7a",
+      "original_runtime_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "26a93e5146d98f1e456c7ac10f34e97ceb4aced3d87fa4e0d601225a684fd1c1",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "zapdos",
+      "glb_sha256": "f3088d21924bd72c596838aaf3b952a0f551cb9d4c6df32bc695589565117fc2",
+      "original_runtime_sha256": "6ee811fc4cc9969b3c056b53474e8f185f6813d7e9aea934072ec3b54f15293b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "494ec5eff4d1686f36a3ee2c34887f2e1ab6bf32ab3c91429df52a13aee7df97",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "moltres",
+      "glb_sha256": "250186fa792e9dc747374bcd51ac51ba3f317ff0961c8c4574303b988d62b234",
+      "original_runtime_sha256": "3cbea39cde57fd2080a2b50b5cf24e21a33725a6736f797132dbd6ef27923e93",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3dea2f1db10aa50c2192b9577baf35faa84a8e984fae786a59dd4febbb7a8737",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "dratini",
+      "glb_sha256": "086fae27f76c31fab90d6cb1fb6f736953ea5efc5c32b3665b140c505500ca36",
+      "original_runtime_sha256": "890ea9bb6b0c7e84d6699119895ef7131856972700ded0696377495497fef8be",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "768bc38a467d488468766c91ddb68fb087ddc9058dd080d84f2cdd7b8d6f5413",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "dragonair",
+      "glb_sha256": "19b2dcfba528c5c52987a3e48f4507bea925a3f8356357ff3335a4b4fc3dc139",
+      "original_runtime_sha256": "94c76f01fb87def5b66311f2556bc5d6bbc384d563555495d8c09d11787a802e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "321e8c079a4fa2480810832af1e0e22d199f6ac71ba7031bf0c49566fee2e3ff",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "mewtwo",
+      "glb_sha256": "3448f9d6583c287562df98156d09ba4888437ecfb7c350b1233765367213dc13",
+      "original_runtime_sha256": "6b35ac7fef08624c8434c0862a4919d3cbfa6ba1b03e83d785d809ee3488c73e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "79ba6e7fa59002dde9d57c5737602f3096be9019de3f638731abf239f3ae7bce",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "mew",
+      "glb_sha256": "c3edcd13700dbb96d204f850e927e7cd5109f70c35e62da27223d840db97b841",
+      "original_runtime_sha256": "ca73a5e9fc6df3ff237cfc7bb65bcf08390517b5fead695394fb273c3f5e7076",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a0a18b1f546ca740342fe5ab2ced5c81337011bc9711aa033a84e4aef53f3cf1",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "pichu",
+      "glb_sha256": "ac992353889a02c1375acd8de86e626847db813c747729837ca6a8861b1e7a4b",
+      "original_runtime_sha256": "48b05e4d33053df3219fa0c5a42c6f3f741c4fe70cbd8cdc58ecab739be7e744",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a01e9067ae8206d04b42dbe2a8e274754df73a12c9a7b5ace427a368c61b0620",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "marill",
+      "glb_sha256": "d7deda2d142991fc1d2ac4ee47b078d140b1cc633bccac0a187038b658ee3e0d",
+      "original_runtime_sha256": "4b339138a62f788968c81574daa53f6a0e9b55d0e609348ce794544a219ffd7f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "d4f6802a8c55299a5594803c689a76f5a8c76cc7ab710ca841aa41f6db6b740b",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "azumarill",
+      "glb_sha256": "34a40245ffbffbf2929fbd6316eb2aa69e82ad65b5af7e79a78b3587a792337b",
+      "original_runtime_sha256": "a45144b6ac33ead2300942131161ce641cd8536b0d5a0469c10f6bf4f42f0006",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "cf0c04f92221bfcc5bcaab6af5a3f1947a2052238eed325352a32c14f32f0286",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "sudowoodo",
+      "glb_sha256": "b66bab07e66b572cf673f26a3e2f7793d68fce8b55e9ff7080f4665c1ce0f93a",
+      "original_runtime_sha256": "f6fcaab6f325baa161e0807071684e34ac3cb88a83464ab1150020fa48509b7b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "14d6eaee4ed6189d58e6bcfe7b22b4963231f0ecc409684aebc2f34451aa51fb",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0185_00_00",
+        "active_targets": [
+          "pm0185_00_00_body_mesh_shape",
+          "pm0185_00_00_eye_mesh_shape",
+          "pm0185_00_00_leaf_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0185_01_00_body_mesh_shape": {
+            "resource_id": "pm0185_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0185/pm0185_00_00/pm0185_00_00.trmdl": "6964a9005413d10f6223cdd1802709aa60b7575bbc5a6c197b3a1ef2d2c8f758",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0185/pm0185_00_00/pm0185_00_00.trmdl": "6964a9005413d10f6223cdd1802709aa60b7575bbc5a6c197b3a1ef2d2c8f758",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0185/pm0185_00_00/pm0185_00_00.trmsh": "7f9903b0b2abf628f6aa5e6a56d337f67b5f9decdae1e9dc996a25aef2ac44d7",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0185/pm0185_00_00/pm0185_00_00.trmsh": "7f9903b0b2abf628f6aa5e6a56d337f67b5f9decdae1e9dc996a25aef2ac44d7",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0185/pm0185_01_00/pm0185_01_00.trmdl": "78b8c6bd62c0ce89d19c023bee899d8f38158df88c426b73fd7820cce4d872af",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0185/pm0185_01_00/pm0185_01_00.trmdl": "78b8c6bd62c0ce89d19c023bee899d8f38158df88c426b73fd7820cce4d872af",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0185/pm0185_01_00/pm0185_01_00.trmsh": "1e9587b5a6e4aabc78540508a00389f921be70cd8a7118f6d9c53b42b68e68c5",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0185/pm0185_01_00/pm0185_01_00.trmsh": "1e9587b5a6e4aabc78540508a00389f921be70cd8a7118f6d9c53b42b68e68c5"
+        }
+      }
+    },
+    {
+      "species": "hoppip",
+      "glb_sha256": "dd4e67beff0080254b7ad77f388d546abe0cabd1c5db6a71d67bef699e412ba5",
+      "original_runtime_sha256": "3466776b082f8192c51de942c82a52a6d5f20a0de7ab5bf55e9c6331a60a85e1",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9c5e9c4f3acffc9144131527627be1e361ece0bf56e3e3c8876cbcc84f002f2b",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "jumpluff",
+      "glb_sha256": "4b981ebaca693011d203168c444abe8a05f39d06b2370c61453e315d6becbc0b",
+      "original_runtime_sha256": "1707109601e912578a25e96b8ba37def059014927be469442b83f9941bcb1d64",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "66773e9295e6b4c17c4fb763d45961912f121025a84178beba9eeb03646a59d3",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "wooper",
+      "glb_sha256": "fe8611a0d102d719d95f45c36bb0398193c14bf39e434fe4796656a2de67c6fb",
+      "original_runtime_sha256": "cb8b3869e57f58b0b26945413253904d6779844211d9de47581e931f6daa3f0e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "51c8df1e1cdb1573db99243dd726366b7b1a542bd50ef187de95c775da51f113",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0194_00_00",
+        "active_targets": [
+          "pm0194_00_00_body_mesh_shape",
+          "pm0194_00_00_eye_mesh_shape",
+          "pm0194_00_00_foot_mesh_shape",
+          "pm0194_00_00_tuno_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0194_01_00_tuno_mesh_shape": {
+            "resource_id": "pm0194_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0194/pm0194_00_00/pm0194_00_00.trmdl": "e7461900ff34da813d7a222e3fd2a48669ddfe091c21509050ec434a7f644775",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0194/pm0194_00_00/pm0194_00_00.trmdl": "e7461900ff34da813d7a222e3fd2a48669ddfe091c21509050ec434a7f644775",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0194/pm0194_00_00/pm0194_00_00.trmsh": "d34aaa89428680e55654b7d758596fc29861c4220402b1617347d2bf46e09408",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0194/pm0194_00_00/pm0194_00_00.trmsh": "d34aaa89428680e55654b7d758596fc29861c4220402b1617347d2bf46e09408",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0194/pm0194_01_00/pm0194_01_00.trmdl": "5cea436281c1ba96a8fc4bed04411c959ddd9ca705af0502c4a5366d62f559ba",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0194/pm0194_01_00/pm0194_01_00.trmdl": "5cea436281c1ba96a8fc4bed04411c959ddd9ca705af0502c4a5366d62f559ba",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0194/pm0194_01_00/pm0194_01_00.trmsh": "587452fca4edd16e00767c53ff651b5e2a4fc34cd6b39617e6b00e04a2511671",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0194/pm0194_01_00/pm0194_01_00.trmsh": "587452fca4edd16e00767c53ff651b5e2a4fc34cd6b39617e6b00e04a2511671"
+        }
+      }
+    },
+    {
+      "species": "quagsire",
+      "glb_sha256": "419ed10c1063b46b41b53fc18679cc146d3429e88c0dadfcc02134529bb11156",
+      "original_runtime_sha256": "29d1c5207e26f73912007398cbb04f99a8c882104374cfdeef14c55f3de9a092",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "f4ad36c4843b12f590be05da882420e29934c730a8c09cd08da96bd5b5fb60ed",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0195_00_00",
+        "active_targets": [
+          "pm0195_00_00_body_mesh_shape",
+          "pm0195_00_00_eye_mesh_shape",
+          "pm0195_00_00_hire_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0195_01_00_hire_mesh_shape": {
+            "resource_id": "pm0195_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0195/pm0195_00_00/pm0195_00_00.trmdl": "de4db357c87fad8db1ae1250675f5e5b5dff928f6be2cfb090bd0c07e7466232",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0195/pm0195_00_00/pm0195_00_00.trmdl": "de4db357c87fad8db1ae1250675f5e5b5dff928f6be2cfb090bd0c07e7466232",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0195/pm0195_00_00/pm0195_00_00.trmsh": "300b0bb8bc3bd30c25c25bd09610d735d1a6e42cfc1edcf1b5f9baf7485bcc5c",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0195/pm0195_00_00/pm0195_00_00.trmsh": "300b0bb8bc3bd30c25c25bd09610d735d1a6e42cfc1edcf1b5f9baf7485bcc5c",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0195/pm0195_01_00/pm0195_01_00.trmdl": "32b98c16e8e74da4c1c544cf48d3c708430fceb3e98a1d64197acc4e2e73aa08",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0195/pm0195_01_00/pm0195_01_00.trmdl": "32b98c16e8e74da4c1c544cf48d3c708430fceb3e98a1d64197acc4e2e73aa08",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0195/pm0195_01_00/pm0195_01_00.trmsh": "f7d4e23a85055b73723ef80736eccdaa6469c1d2065c856d7fbd5ec703a2e196",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0195/pm0195_01_00/pm0195_01_00.trmsh": "f7d4e23a85055b73723ef80736eccdaa6469c1d2065c856d7fbd5ec703a2e196"
+        }
+      }
+    },
+    {
+      "species": "espeon",
+      "glb_sha256": "d6fe1fc534912789e9f47c97cf719fb81b5e29684d494c60dd5c8e8c6617b3eb",
+      "original_runtime_sha256": "9e7f35aba795f3864fe89d26a63579afa9af89ebc7060afbfc0b26fed0b41481",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "0c4171692e6474d6af92c6b21a7b643845d296c7052b6f0ac9db81860c728f9e",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "umbreon",
+      "glb_sha256": "1063ba2295b8366b4bbf2b3663a62823e6d6634952fa7e087d07e067e5dfb791",
+      "original_runtime_sha256": "477a885eba3c9c6286bf189501aa87e76e450cbc6fe621c3e6a8d138182b44f4",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "50489c55e0d5c9641cd5143fd9b81d08f135b84db6161324ef500da081a4b9fe",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "murkrow",
+      "glb_sha256": "f7c3db6f7aee864dae16a45f928e2c94f52277dc8504c10e804a482f7aee4299",
+      "original_runtime_sha256": "3f0e940cdca08763670ed285844834f8cce9392d77bfdb13b2e56d61448f0fb6",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "b9577f16a0e6f08f516aa5f84d6a8d4cb67bdff7bb7e6a985ed5b1e7159358db",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0198_00_00",
+        "active_targets": [
+          "pm0198_00_00_body_a_mesh_shape",
+          "pm0198_00_00_body_b_mesh_shape",
+          "pm0198_00_00_eye_mesh_shape",
+          "pm0198_00_00_head_mesh_shape",
+          "pm0198_00_00_left_openwing_mesh_shape",
+          "pm0198_00_00_right_openwing_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0198_01_00_head_mesh_shape": {
+            "resource_id": "pm0198_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0198/pm0198_00_00/pm0198_00_00.trmdl": "c29529f28b55bbd3ccc1a0825d50742aa06cb5faf7cb3ef79e4c2a5d0ded2c86",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0198/pm0198_00_00/pm0198_00_00.trmdl": "c29529f28b55bbd3ccc1a0825d50742aa06cb5faf7cb3ef79e4c2a5d0ded2c86",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0198/pm0198_00_00/pm0198_00_00.trmsh": "1081760ec45be7f69190d0ead02e216b1ed34ffd756e0cccb8dafe58bb40ce06",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0198/pm0198_00_00/pm0198_00_00.trmsh": "1081760ec45be7f69190d0ead02e216b1ed34ffd756e0cccb8dafe58bb40ce06",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0198/pm0198_01_00/pm0198_01_00.trmdl": "5a2b3d59deadcb474171e00f145eb1fe98dac9e58c40ed51f5650501f988572d",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0198/pm0198_01_00/pm0198_01_00.trmdl": "5a2b3d59deadcb474171e00f145eb1fe98dac9e58c40ed51f5650501f988572d",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0198/pm0198_01_00/pm0198_01_00.trmsh": "cc44a8256ee9480115f0cd3eea59485a8c964637578ad9cb67b4fb4dedfbd38d",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0198/pm0198_01_00/pm0198_01_00.trmsh": "cc44a8256ee9480115f0cd3eea59485a8c964637578ad9cb67b4fb4dedfbd38d"
+        }
+      }
+    },
+    {
+      "species": "misdreavus",
+      "glb_sha256": "3f2d19649fb7b51598c072a9c3bce9fd03527bab754e0c5e2ddc5b3c0cef3b9f",
+      "original_runtime_sha256": "5c4a9a143f38b44b6d95364a2aaaae6e62e3c3b88c068fbc3de04f4476009200",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "27f518bfe9dd9806eb975d37d484e5817714bfa95b02dd28efe5a5053bf11487",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "forretress",
+      "glb_sha256": "536d69606117e93663746b0dd61e0c9e3613fcc064640443d89f859a4f1024b9",
+      "original_runtime_sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "6773a278be12cbf7bb359ef01a79928f058c108db1cdcb9f913209284e2c9bc4",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "qwilfish",
+      "glb_sha256": "63ae4d255e1a98f71f7f3742f4250175b4ccabf7ce431732fe506e0d77b9987f",
+      "original_runtime_sha256": "8c0a838b9d729f60894e9601128de59eb9b934e373450bfb2a8806e4175cae5c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ef50f5bcb796b82b217cb8040e7c74a542db3c41d3b808bce553ae231d8a7d63",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "scizor",
+      "glb_sha256": "08faf8d086d32a803c4272b1dc4371734fd1bea21b30ae94581e18a4c4b695a9",
+      "original_runtime_sha256": "f2b0c217da35bad43ab86179e409566757d798b513299a1c1d0bcf451015a3f1",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1ed6782ad7478f3f7bb7df759174a5a5b1f7d1111b4a18f05c6644ca891fa2c6",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0212_00_00",
+        "active_targets": [
+          "pm0212_00_00_body_a_mesh_shape",
+          "pm0212_00_00_body_b_mesh_shape",
+          "pm0212_00_00_eye_mesh_shape",
+          "pm0212_00_00_wing_a_mesh_shape",
+          "pm0212_00_00_wing_b_mesh_shape",
+          "pm0212_00_00_wing_c_mesh_shape",
+          "pm0212_00_00_wing_d_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0212_01_00_body_a_mesh_shape": {
+            "resource_id": "pm0212_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0212/pm0212_00_00/pm0212_00_00.trmdl": "f246cadd53ca8d345d067efa65b6fee1b1e482785e22563b84087b732e1ff3c6",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0212/pm0212_00_00/pm0212_00_00.trmdl": "f246cadd53ca8d345d067efa65b6fee1b1e482785e22563b84087b732e1ff3c6",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0212/pm0212_00_00/pm0212_00_00.trmsh": "fcaa2562dd2ba43e58be813d78571f4d58b817c4aadf90bfc9510f630c689c37",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0212/pm0212_00_00/pm0212_00_00.trmsh": "fcaa2562dd2ba43e58be813d78571f4d58b817c4aadf90bfc9510f630c689c37",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0212/pm0212_01_00/pm0212_01_00.trmdl": "07cb39718c81977c0da6a0526e2aa27580c4a815d89e67b9871cb18718a32fb6",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0212/pm0212_01_00/pm0212_01_00.trmdl": "07cb39718c81977c0da6a0526e2aa27580c4a815d89e67b9871cb18718a32fb6",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0212/pm0212_01_00/pm0212_01_00.trmsh": "d56006d455e251d9ca02ff91aef4f9a90786b08497a3704eae38471c3729ef6f",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0212/pm0212_01_00/pm0212_01_00.trmsh": "d56006d455e251d9ca02ff91aef4f9a90786b08497a3704eae38471c3729ef6f"
+        }
+      }
+    },
+    {
+      "species": "heracross",
+      "glb_sha256": "59f8efe95d08cb6691bb4473d141a44dda80d75c097721767cde1e80cefff087",
+      "original_runtime_sha256": "20dd4a894dc396eac85c52ba65a65d5ef9ec82b78e880f9fa09a300cbd2f57b9",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "e0f77f9edcc636ae715f3172f21273e82da33b76a8b6dab7b7893a11c51ae1a3",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0214_00_00",
+        "active_targets": [
+          "pm0214_00_00_body_a_mesh_shape",
+          "pm0214_00_00_body_b_mesh_shape",
+          "pm0214_00_00_eye_mesh_shape",
+          "pm0214_00_00_horn_mesh_shape",
+          "pm0214_00_00_left_wing_mesh_shape",
+          "pm0214_00_00_right_wing_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0214_01_00_horn_mesh_shape": {
+            "resource_id": "pm0214_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0214/pm0214_00_00/pm0214_00_00.trmdl": "ea522518049fcb8ee2459f25e5b3cc4b30f3eb1c0c200ded9546ecac931cad45",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0214/pm0214_00_00/pm0214_00_00.trmdl": "ea522518049fcb8ee2459f25e5b3cc4b30f3eb1c0c200ded9546ecac931cad45",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0214/pm0214_00_00/pm0214_00_00.trmsh": "4332a1b6e2475c0b507365beb04367e8fa4710a8b1c8c2254ed3a153eaa0c25c",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0214/pm0214_00_00/pm0214_00_00.trmsh": "4332a1b6e2475c0b507365beb04367e8fa4710a8b1c8c2254ed3a153eaa0c25c",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0214/pm0214_01_00/pm0214_01_00.trmdl": "119fa324da9d34ba8a2777e6f9b9c8576d5938a7f36c0c4ad29d9316c96db7ad",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0214/pm0214_01_00/pm0214_01_00.trmdl": "119fa324da9d34ba8a2777e6f9b9c8576d5938a7f36c0c4ad29d9316c96db7ad",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0214/pm0214_01_00/pm0214_01_00.trmsh": "d4ed8d21b5479ce44fa5e581ea45dd726f4e530df2b8d00307904d6f912a8253",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0214/pm0214_01_00/pm0214_01_00.trmsh": "d4ed8d21b5479ce44fa5e581ea45dd726f4e530df2b8d00307904d6f912a8253"
+        }
+      }
+    },
+    {
+      "species": "delibird",
+      "glb_sha256": "217802ad170898ca172e9b402aca5b18eb34ab66e291eadffa85fdd2f165b393",
+      "original_runtime_sha256": "5a9e40dfcb9ed473f8697bc589845d21bd292fcdac83ec1153e89a3dafcfea63",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "510b859482cfa0f69436c64e304ace6a61b8357dc3a7dee0f6f1e9113e72e0a5",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "donphan",
+      "glb_sha256": "04bb53a1fd517c0943f3dfb17001ed4245ca40c95f3299570b202e4a8b1b093f",
+      "original_runtime_sha256": "d4d4b46b364b0c6bea97bc2699fed1393f8b20e8e0aaff03b350c4325097ba3c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a4dba3d395873eb738b1b3266ad3048b8ffc83fe64999ea5ab4e159e7fb71178",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0232_00_00",
+        "active_targets": [
+          "pm0232_00_00_body_mesh_shape",
+          "pm0232_00_00_eye_mesh_shape",
+          "pm0232_00_00_kiba_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0232_01_00_kiba_mesh_shape": {
+            "resource_id": "pm0232_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0232/pm0232_00_00/pm0232_00_00.trmdl": "dae38a7a7005c2622134f9bd61e5a916a2c1f168f5bf20d913338f2aba85cc97",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0232/pm0232_00_00/pm0232_00_00.trmdl": "dae38a7a7005c2622134f9bd61e5a916a2c1f168f5bf20d913338f2aba85cc97",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0232/pm0232_00_00/pm0232_00_00.trmsh": "572f9320f5ed0f057f3b901bbc9aab4a80e59a8969f33efaadebc95c37982a4c",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0232/pm0232_00_00/pm0232_00_00.trmsh": "572f9320f5ed0f057f3b901bbc9aab4a80e59a8969f33efaadebc95c37982a4c",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0232/pm0232_01_00/pm0232_01_00.trmdl": "54535a1eddc727b8c28f304768a0aadaf9207c94bd635712c70f210e6f89f61e",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0232/pm0232_01_00/pm0232_01_00.trmdl": "54535a1eddc727b8c28f304768a0aadaf9207c94bd635712c70f210e6f89f61e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0232/pm0232_01_00/pm0232_01_00.trmsh": "a62f0bd81884e51600b534e0412ea4f5cd73495cee8dce473db8766e6b3a06be",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0232/pm0232_01_00/pm0232_01_00.trmsh": "a62f0bd81884e51600b534e0412ea4f5cd73495cee8dce473db8766e6b3a06be"
+        }
+      }
+    },
+    {
+      "species": "blissey",
+      "glb_sha256": "648d181ec03a33977bb5fdda2b12b7d65b2ee81bbf21c3fdd900cd9d8369252b",
+      "original_runtime_sha256": "e86499f58c398baff39993833d48845d652ce47c81ad6724025c5497573bb896",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ac574fffb8997da3a92615c2b35be31a5784bce4e2b802115bb327c5494732ca",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "tyranitar",
+      "glb_sha256": "085b0527b678dde71abf9a6597de9a90ca4d1671f56d449cca43dd3cfabf13d5",
+      "original_runtime_sha256": "e2bcd8e99b96b6a28590c2f84f21db1e107849ba4f2e0417cc4554613d73cfac",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "93941c8c8fddf6f36e91734b7b6699461d0605535d730ce9ec99328924379747",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "gardevoir",
+      "glb_sha256": "f36afb8bf246658f55475e647372c6e88474bf2297435cc9050a3874bccb766f",
+      "original_runtime_sha256": "b2c0b3127b11bdb25262dd7139997fcc77cfcaeb35fc1e35d7b404f58b2dc2fa",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "d829b7a948a5a0b54fe743c934c8dc241f709dcb71f21c30225ceef2bd61d5bc",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "slaking",
+      "glb_sha256": "0d0f7d7dcac4e1fbcf2024c60daa0091a5d43e7af7c408afcab19987614ea163",
+      "original_runtime_sha256": "5ff9c2b3b249b3c5859aedf3830494fd93c0a5291a3c54fbffb50e6da5acdb10",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "bb7b7957aa3a8bbb6ae53c99163cbc9ecd553ea19b70b97c97a3774061eb45b2",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "hariyama",
+      "glb_sha256": "5c81994d38890bc0e0441dda7cf99147306ae92387d887c5c2be182540803d75",
+      "original_runtime_sha256": "8cc2630961bf21fab5ae7a60a8785086c171978bb5d2e9c51e8e6c89474b35f4",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "e6e04810bded452d48c9721fbd8f273c3f9ef593d760278c75fe388665c2543b",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "seviper",
+      "glb_sha256": "fb2c7fb25a58108118317147aed74c25444a02eaa4c26cb48d2f008db8bdacbd",
+      "original_runtime_sha256": "3b3def8bc44626d08f7255c3f66b75501d1796d1f28170f76b5ec3be8b473bba",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "c658d4b406f567964f0b7241688648e38f1decda43db3baddfdecda7d216a89a",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "rayquaza",
+      "glb_sha256": "9a52908840db9880f426199442770ba2c5626cf19b9a6d04393470e69667ad01",
+      "original_runtime_sha256": "5f24d27cc88817710e9756e30e44093fe46b4a5c7f3e345b1c9ba08fc2f213f9",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1fae15b4e767bfedceb6f04caba2a5a7f11920bc2612bad6d75bae3c9f0d783c",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "staraptor",
+      "glb_sha256": "2c15c314a2b9bf9b619e8a9e60f8078a087b4306df51032cf2f089cbba3e2501",
+      "original_runtime_sha256": "ab74c7e7fb6233f4d3ee773d0ab155c5555cdb40f1d236ff651134665748c136",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ac05a85658b5f95e9cbe8ea42a42bc93a2c00004151ea9958dd648b342aa704d",
+      "excluded_target_count": 1,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0398_00_00",
+        "active_targets": [
+          "pm0398_00_00_body_a_mesh_shape",
+          "pm0398_00_00_body_b_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0398_01_00_body_a_mesh_shape": {
+            "resource_id": "pm0398_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0398/pm0398_00_00/pm0398_00_00.trmdl": "ba669b0e9635c50d9c6b4f477dff676e3989afb6a221a0989eb3fe7b6179ac4e",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0398/pm0398_00_00/pm0398_00_00.trmdl": "ba669b0e9635c50d9c6b4f477dff676e3989afb6a221a0989eb3fe7b6179ac4e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0398/pm0398_00_00/pm0398_00_00.trmsh": "de0ced413b7c72f3df8cbf95ec73f3d1ec1041cb98884c8661442c4dceabb53a",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0398/pm0398_00_00/pm0398_00_00.trmsh": "de0ced413b7c72f3df8cbf95ec73f3d1ec1041cb98884c8661442c4dceabb53a",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0398/pm0398_01_00/pm0398_01_00.trmdl": "afe02530a034668d36a1b3be3bb90f583aac76967b9670aedb747d376b8a02f8",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0398/pm0398_01_00/pm0398_01_00.trmdl": "afe02530a034668d36a1b3be3bb90f583aac76967b9670aedb747d376b8a02f8",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0398/pm0398_01_00/pm0398_01_00.trmsh": "0b36a7c7f0e47e3a42bd5065c08a9a687137a05c7040a81a594f643e9ff91332",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0398/pm0398_01_00/pm0398_01_00.trmsh": "0b36a7c7f0e47e3a42bd5065c08a9a687137a05c7040a81a594f643e9ff91332"
+        }
+      }
+    },
+    {
+      "species": "drifblim",
+      "glb_sha256": "87c1db373a63a7e9427b32a47b5a6ef650473ee8054dca3b5d2523e8ae90f5a3",
+      "original_runtime_sha256": "621750d76787c7c853fcd5dea5cffaaf96783e72fd03e1f8ba7a818bb4daa245",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "df69faba126f50d8b19e2c09ad81bca5069550dd0773efab10d22a239b83fee7",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "spiritomb",
+      "glb_sha256": "476a76b9aa2d0d9fd004b1c273d190b521ed90752844103187fac568b5e20d65",
+      "original_runtime_sha256": "2acc8db767b2714a93584bfcab975b88e7a6dcee74f4b63559b82302296e9e79",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    {
+      "species": "garchomp",
+      "glb_sha256": "0e39d18cab786bea1ff8b0ae8a9fceaef8ae48c0260c4196cc0e950db51048f6",
+      "original_runtime_sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "4761353164c562e756355972e6d050a6a0e131cd6a98c85d23464f8a475852d9",
+      "excluded_target_count": 2,
+      "variant_binding": {
+        "policy": "catalog-gender-mesh-membership-v1",
+        "selected_resource_id": "pm0445_00_00",
+        "active_targets": [
+          "pm0445_00_00_body_mesh_shape",
+          "pm0445_00_00_eye_mesh_shape"
+        ],
+        "excluded_targets": {
+          "pm0445_01_00_body_mesh_shape": {
+            "resource_id": "pm0445_01_00",
+            "gender_code": 1
+          },
+          "pm0445_01_00_eye_mesh_shape": {
+            "resource_id": "pm0445_01_00",
+            "gender_code": 1
+          }
+        },
+        "source_sha256": {
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/catalog/catalog/poke_resource_table.trpmcatalog": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0445/pm0445_00_00/pm0445_00_00.trmdl": "bf965285181de650e030198d8d9f22b6fb40e7600c6a2e37fcda8e76d8155b88",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00.trmdl": "bf965285181de650e030198d8d9f22b6fb40e7600c6a2e37fcda8e76d8155b88",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0445/pm0445_00_00/pm0445_00_00.trmsh": "2d3c08ac1123710eced7e82aa8952a4171af6e6d2600ce9e8fe010b6d200c142",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00.trmsh": "2d3c08ac1123710eced7e82aa8952a4171af6e6d2600ce9e8fe010b6d200c142",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0445/pm0445_01_00/pm0445_01_00.trmdl": "6ec7d033779fd01690ac440b48b608601750dfde15d35d11925d4bacd7c68ff8",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_01_00/pm0445_01_00.trmdl": "6ec7d033779fd01690ac440b48b608601750dfde15d35d11925d4bacd7c68ff8",
+          "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0445/pm0445_01_00/pm0445_01_00.trmsh": "7d82a45ab3362d145838637f08a1ee3e794fd137b490a68c16c07ba327428709",
+          "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_01_00/pm0445_01_00.trmsh": "7d82a45ab3362d145838637f08a1ee3e794fd137b490a68c16c07ba327428709"
+        }
+      }
+    },
+    {
+      "species": "magnezone",
+      "glb_sha256": "2cf2f52113d3a5ffc477e5331e24d7da09da205d5a3d26de4daa564dbff121f4",
+      "original_runtime_sha256": "adbc50f123c8d091016efb6e2c54bb07a3fd7c7b88f54665d395f0311036cac4",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1abb8901fef592bb363d9d44d3036180276232e275ca341e2f439d5bcf575483",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "rillaboom",
+      "glb_sha256": "e1da6da7cd75a6f67439634b1cbf87c9dfea37c87e29b559f6eabf85ac3c666f",
+      "original_runtime_sha256": "d0d0554f1886ff57640cc711bf37eb4000617af1056685ea7b5e5465847828f9",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "642311331a9a94e32262ff071c2c533c6ed7224eb22e44355e4542abb1230b6d",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "volcarona",
+      "glb_sha256": "2e45df9abd11776155a245facf1c098aeca2e694ad3f7fff2c7818e0b77597d0",
+      "original_runtime_sha256": "fa505ca1320593d5bf8c97dbc1cb62e003b8bd9f52e8d151ffabc4cecb70eb15",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "4b2c33aa1423d707b49b3cd7e64f0dd2ff009d7b7814748359430ea40f923e9d",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "hydreigon",
+      "glb_sha256": "021c556cc7cc7a10d7fee6cebce02d2dd2d3caba55d40de1f744735092c7c9d5",
+      "original_runtime_sha256": "1f0c5a95b825932f5a9c8abb559315d5b8ee4c1e56bbd7f67a264005c8dac022",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a59a52b9986ec421955b241fb6deff184c74801ed83f2778fb67351b5dab1d75",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "flapple",
+      "glb_sha256": "5dceb6c97ead29c91a6238079010bed386a7ec89b29fc8a106efb90dc39e110e",
+      "original_runtime_sha256": "9d264ac46014de6ac6d4e6b6b4968b7e67a4ff7adaa9114bcb07f50804643e0c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "85bec3cc063a5e8f49176d29e81ddc57f85be78aa32e7332a3bfc0ef6b6856cf",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "hoopa",
+      "glb_sha256": "028971f2314f3d62c11ea183769876c4f43cdf20cd0ac16020a838a90154a885",
+      "original_runtime_sha256": "04c14ad1901a2e29fd9cc9dd6c348d6a13b2afb5571a333b965c9e4ba176180a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1569c9c55895033ebe57e8956b0fe1fef283d910ea5bead7becb1ea666dcd9f7",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "decidueye",
+      "glb_sha256": "42cb40da796cd838f6e82f4c747fe8c707dcbf34b4a12550c94765e894114f78",
+      "original_runtime_sha256": "acf5e4c4f09c3aa636fb141713e9c71540b5a361875c5ebaac346c03d01d976a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "50427b4d202bac9efccd1de3ffa29ba364b4984089947ed68d9e3cc8f0e219b2",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "oricorio",
+      "glb_sha256": "b9b8dcfb9cfd490302f4c7973e0b6423b7b6809aa2e32bf7785758ef240ef9ae",
+      "original_runtime_sha256": "00557d7b34478559c364b572695a3f3b5aeab6e7297941e2b4708262f68619b8",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9698ddc7112f995f4cfef2948aa8903cf7a077f54af5cccfbb043397b23daf93",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "orthworm",
+      "glb_sha256": "1d3aac040ae73250da580678b5c8212416612a890b1ae9479bcab492893abeb1",
+      "original_runtime_sha256": "997e5fcf6c5b2d21fc205225df316d9831281441f11dc67f04279d4243ec3990",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ff4c2e0f4a5eeb78992e7f401a504cb03c574a49fe9806aa99652c939095c08e",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "magearna",
+      "glb_sha256": "5b46b2149b912de02265bc78904ceb2e2c1d929397abc21d1571f2e670bcd481",
+      "original_runtime_sha256": "c25ec287f3fcdb083502619921960b942b91f3b81507525844da5c94c9c6302b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "e8c5bb0574edde543fd720dbe7e8cea8c92d1d123cb9394c13b1bfcea5cfd5de",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "cinderace",
+      "glb_sha256": "86ec2369043ff4acaaa75fb5a57a41cdd47e5d054e30e9e417170d590ef75db3",
+      "original_runtime_sha256": "71c6208b87580cb8e3ceb7e712354d2b6ea9b54f07e318e315910ace4ab7ad82",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "515de2b45d0410dea6e6b3f676f4ba0eb72beb76a1cc60ece23c93e0e2c5488a",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "corviknight",
+      "glb_sha256": "d95abcf3591e1e7df16b8053ad38f05de9b03f85930f94f732ad09a6fe215194",
+      "original_runtime_sha256": "344f7e2f0e068a5b3934031cfda19363d452c3210005d57509a33a4134633f75",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "bf518e90bb06b3e5d79d61d397defcd4aa115715570fe3353248685697623ff1",
+      "excluded_target_count": 0
+    },
+    {
+      "species": "dondozo",
+      "glb_sha256": "cd8f4ec6a2120ffa1d3ca9d0dea500e9dc7966459bdba150db7de84bc82ddf1a",
+      "original_runtime_sha256": "8e63f37c80d16d845dddf41e329adffdeb40aee5557815f367bd2218c05b5015",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "46ce93513d2b42b401b67b33f5e86d7f3921cad3177c5ef91b184d6727585625",
+      "excluded_target_count": 0
+    }
+  ],
+  "controls": [
+    {
+      "species": "raichu",
+      "runtime_sha256": "31a861e1a5c5fc0514b6002e6ad8f8d7d1abb5130595609c8f3dbeebc4454294",
+      "unchanged_mesh_arrays": true,
+      "clips": 7,
+      "motion_frames": 179,
+      "static_images": 10,
+      "bone_mismatch_frames": 0,
+      "visibility_assertions_passed": true
+    },
+    {
+      "species": "eevee",
+      "runtime_sha256": "b1882408aece718250b8ba07d563d8648a6db53676cbc564838bc3495a017461",
+      "unchanged_mesh_arrays": true,
+      "clips": 7,
+      "motion_frames": 218,
+      "static_images": 10,
+      "bone_mismatch_frames": 0,
+      "visibility_assertions_passed": true
+    },
+    {
+      "species": "garchomp",
+      "runtime_sha256": "0523055b70304dab72b7835beee3e24eb451f4334ac470fefa4e068ffa33649d",
+      "unchanged_mesh_arrays": true,
+      "clips": 7,
+      "motion_frames": 228,
+      "static_images": 10,
+      "bone_mismatch_frames": 0,
+      "visibility_assertions_passed": true
+    }
+  ],
+  "artifacts_sha256": {
+    ".tmp/visibility-variant-stage-01.json": "614d9ee2d3c7e49484769b115565b9a18ee04915e24219967abb0761c517417b",
+    ".tmp/visibility-variant-runtime-01/report.json": "debfaaebff65eca9f40fec0679bbf667cae0fbfd59ef34b825af9f7646c1d9a6",
+    ".tmp/visibility-variant-images-01/report.json": "4e940514105c1ad3ae0bdb76463101aa34b24f891bdfeed46ecdfe9d2d963a31",
+    ".tmp/visibility_variant_geometry.gd": "d954d965491cba5fc6e500254126770cb38d241e43c875f2f12c2eb84a67bdda",
+    ".tmp/visibility_variant_review.gd": "217ac89e23aa3db33f1d5f65e37db7e9fa32b2871ee26b2176751d4ed0cbd159"
+  }
+}

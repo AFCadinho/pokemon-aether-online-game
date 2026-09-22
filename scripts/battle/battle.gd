@@ -369,6 +369,7 @@ var pvp_render_ack_retry_active := false
 var pvp_render_ack_retry_generation := 0
 var pvp_active_render_progress: Dictionary = {}
 var pvp_render_progress_generation := 0
+var pvp_render_progress_timer: Timer
 var pvp_retrying_reconciliation_snapshot := false
 var pvp_room_recovery_request_active := false
 var pvp_targeted_render_recovery_active := false
@@ -394,6 +395,8 @@ var pvp_reconnect_grace_deadline_by_side: Dictionary = {}
 var pvp_forced_switch_diagnostic_keys: Dictionary = {}
 var pvp_presentation_actionable_local_msec := 0
 var pvp_presentation_schedule_token := ""
+var pvp_presentation_schedule_source_batch_id := ""
+var pvp_last_released_presentation_batch_id := ""
 var pvp_presentation_acknowledgements_authoritative := false
 var pvp_waiting_observability_started_msec := 0
 var pvp_waiting_observability_reported := false
@@ -458,6 +461,9 @@ var stat_stages_by_ident: Dictionary = {}
 
 
 func _exit_tree() -> void:
+	animation_router.release_threaded_resource_requests()
+	if pvp_render_progress_timer != null:
+		pvp_render_progress_timer.stop()
 	# Any non-standard teardown must also invalidate outstanding renderer
 	# continuations before child controls leave the SceneTree.
 	if event_renderer != null:
@@ -494,6 +500,7 @@ var damage_calc_prefetched_viewer_stats: Dictionary = {}
 var damage_calc_form_stats_cache: Dictionary = {}
 var bag_inventory_request_token := 0
 var capture_target_visibility_tween: Tween
+var trainer_callout_visibility_tokens: Dictionary = {}
 var summon_target_visibility_tween: Tween
 var summon_target_sprite_box: Control
 var summon_original_z_index := 0
@@ -506,6 +513,7 @@ var current_party_hover_rect := Rect2()
 var party_hover_request_token := 0
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
 const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
+const WILD_CAPTURE_CALLOUT_RESULT_HOLD_SECONDS := 0.85
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
@@ -550,6 +558,8 @@ var battle_ui_drag_offset := Vector2.ZERO
 #Active Pokemon
 var active_player_pokemon: Pokemon
 var active_enemy_pokemon: Pokemon
+var coop_mode := false
+var coop_presenter: Control
 var wild_owned_request_id := 0
 
 # Action Buttons
@@ -768,6 +778,12 @@ func _ready() -> void:
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_setup_weather_presentation()
+	# Optional presentation only; no assets or network requests in default 2.5D.
+	var desktop_3d := preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd").new()
+	battle_stage.add_child(desktop_3d)
+	battle_stage.move_child(desktop_3d, battle_background_video.get_index() + 1)
+	desktop_3d.setup([player_sprite_box, enemy_sprite_box], [player_battle_platform, enemy_battle_platform])
+	animation_router.model_presenter = desktop_3d
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
 	force_switch_flow.setup(battle_state)
@@ -826,6 +842,134 @@ func _t(key: String, replacements: Dictionary = {}) -> String:
 	return LocalizationManager.text(key, replacements)
 
 
+func setup_coop_battle() -> bool:
+	if coop_mode:
+		return true
+	if not is_node_ready():
+		return false
+	coop_mode = true
+	# Only doubles uses this compact, uncropped logical canvas.
+	var coop_viewport := battle_stage.get_parent() as BattleStageViewport
+	coop_viewport.crop_to_fill = false
+	coop_viewport.design_size = Vector2(1152, 600)
+	battle_stage.custom_minimum_size = coop_viewport.design_size
+	coop_viewport.call_deferred("_update_stage_transform")
+	# The ordinary single-battle controller never receives co-op battle state.
+	# Keep its visual shell, but let the server-driven co-op presenter own input.
+	set_process(false)
+	for node: CanvasItem in [enemy_trainer_sprite, mini_battle_feed]:
+		node.visible = false
+	for node: CanvasItem in [player_battle_platform, enemy_battle_platform,
+		player_sprite_box, enemy_sprite_box, player_hud_panel, enemy_hud_panel,
+		player_stage_party_grid.get_parent(), opponent_stage_party_rail,
+		battle_status_panel, vs_panel_container]:
+		node.visible = true
+	# Keep the compact doubles field low, toward the prompt and move controls.
+	# Move each platform and its Pokémon together; ordinary singles stay untouched.
+	# Give both doubles sides a lower, inward-facing field position. The extra
+	# centre clearance leaves room for the allied Trainer sprites behind p1/p3.
+	player_battle_platform.offset_left += 25.0
+	player_battle_platform.offset_right += 25.0
+	player_battle_platform.offset_top += 32.0
+	player_battle_platform.offset_bottom += 32.0
+	player_sprite_box.offset_left += 25.0
+	player_sprite_box.offset_right += 25.0
+	player_sprite_box.offset_top += 70.0
+	player_sprite_box.offset_bottom += 70.0
+	enemy_battle_platform.offset_left -= 25.0
+	enemy_battle_platform.offset_right -= 25.0
+	enemy_battle_platform.offset_top += 42.0
+	enemy_battle_platform.offset_bottom += 42.0
+	enemy_sprite_box.offset_left -= 25.0
+	enemy_sprite_box.offset_right -= 25.0
+	enemy_sprite_box.offset_top += 54.0
+	enemy_sprite_box.offset_bottom += 54.0
+	# Leave the full six-slot side rail clear of the battle prompt below it.
+	var coop_player_rail := player_stage_party_grid.get_parent() as Control
+	coop_player_rail.position.y -= 40.0
+	battle_status_panel.hide_timer()
+	battle_status_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	battle_status_panel.offset_left = 12.0
+	battle_status_panel.offset_top = 12.0
+	battle_status_panel.offset_right = 154.0
+	battle_status_panel.offset_bottom = 49.0
+	vs_panel_container.set_trainer_portraits_visible(false)
+	player_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")
+	enemy_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")
+	player_sprite_box.set_battle_type(true)
+	enemy_sprite_box.set_battle_type(true)
+	player_hud_panel.set_double_layout(true)
+	enemy_hud_panel.set_double_layout(true)
+	player_hud_panel.offset_left = 80.0
+	player_hud_panel.offset_right = 540.0
+	enemy_hud_panel.offset_left = -540.0
+	enemy_hud_panel.offset_right = -80.0
+	if moves_grid.move_selected.is_connected(_on_moves_grid_move_selected):
+		moves_grid.move_selected.disconnect(_on_moves_grid_move_selected)
+	if moves_grid.move_hovered.is_connected(_show_move_hover):
+		moves_grid.move_hovered.disconnect(_show_move_hover)
+	if moves_grid.move_unhovered.is_connected(_hide_move_hover):
+		moves_grid.move_unhovered.disconnect(_hide_move_hover)
+	if action_buttons.action_selected.is_connected(_on_action_selected):
+		action_buttons.action_selected.disconnect(_on_action_selected)
+	if player_party_grid.party_selected.is_connected(_on_party_grid_party_selected):
+		player_party_grid.party_selected.disconnect(_on_party_grid_party_selected)
+	if player_party_grid.pokemon_hovered.is_connected(_show_party_hover):
+		player_party_grid.pokemon_hovered.disconnect(_show_party_hover)
+	if player_party_grid.pokemon_unhovered.is_connected(_hide_party_hover):
+		player_party_grid.pokemon_unhovered.disconnect(_hide_party_hover)
+	for rail_grid: PartyGrid in [player_stage_party_grid, opponent_party_grid]:
+		if rail_grid.pokemon_hovered.is_connected(_show_public_party_hover):
+			rail_grid.pokemon_hovered.disconnect(_show_public_party_hover)
+		if rail_grid.pokemon_unhovered.is_connected(_hide_hud_pokemon_hover):
+			rail_grid.pokemon_unhovered.disconnect(_hide_hud_pokemon_hover)
+	if player_party_grid.party_changed.is_connected(player_stage_party_grid.set_party):
+		player_party_grid.party_changed.disconnect(player_stage_party_grid.set_party)
+	battle_drawer_layer.visible = true
+	battle_party_rail.visible = false
+	battle_log_toggle_button.visible = true
+	action_buttons.visible = true
+	calc_log_button.visible = true
+	battle_log_panel.visible = true
+	var dock_content := action_side_panel.get_node_or_null("MarginContainer/DockContent") as Control
+	if dock_content == null:
+		return false
+	for child: CanvasItem in dock_content.get_children():
+		child.visible = child.name == "ContextSection"
+	var context_section := dock_content.get_node("ContextSection") as Control
+	# The co-op dock has only this visible section. Let it fill the dock so the
+	# party slots center vertically instead of leaving unused space below them.
+	context_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if context_section is BoxContainer:
+		(context_section as BoxContainer).alignment = BoxContainer.ALIGNMENT_CENTER
+	context_hint.visible = false
+	player_party_grid.columns = 3
+	player_party_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	player_party_grid.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	player_party_grid.custom_minimum_size.x = 540.0
+	player_party_grid.set_empty_slots_visible(false)
+	player_party_grid.set_selection_enabled(false)
+	player_party_grid.visible = true
+	action_side_panel.custom_minimum_size.y = 82.0
+	action_side_panel.visible = true
+	current_action_panel.visible = true
+	coop_presenter = preload("res://scripts/battle/coop_battle_panel.gd").new()
+	coop_presenter.embedded_hosts = {"stage": battle_stage, "prompt": current_action_panel, "rail": battle_log_rail,
+		"dock_content": dock_content,
+		"capture_player": capture_ball_animation_player,
+		"player_sprite": player_sprite_box, "enemy_sprite": enemy_sprite_box,
+		"player_hud": player_hud_panel, "enemy_hud": enemy_hud_panel,
+		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,
+		"turn": battle_status_panel, "vs": vs_panel_container,
+		"own_party": player_party_grid, "allied_party": player_stage_party_grid,
+		"opponent_party": opponent_party_grid, "trainer": player_trainer_sprite,
+		"enemy_trainer": enemy_trainer_sprite}
+	coop_presenter.embedded_hosts["pokemon_hover"] = pokemon_hover_card
+	coop_presenter.embedded_hosts["move_hover"] = move_hover_card
+	add_child(coop_presenter)
+	return true
+
+
 func _on_locale_changed(_locale: String) -> void:
 	LocalizationManager.localize_tree(self)
 	_update_battle_log_toggle_button()
@@ -839,6 +983,9 @@ func _on_locale_changed(_locale: String) -> void:
 
 
 func _setup_battle_ui_position() -> void:
+	if has_meta("dedicated_battle_screen"):
+		battle_drag_handle.hide()
+		return
 	battle_drag_handle.move_to_front()
 	if not battle_drag_handle.gui_input.is_connected(_on_battle_drag_handle_gui_input):
 		battle_drag_handle.gui_input.connect(_on_battle_drag_handle_gui_input)
@@ -908,6 +1055,8 @@ func _save_battle_ui_position() -> void:
 		file.store_string(JSON.stringify({"position": [position.x, position.y]}))
 
 func _focus_battle_ui_layer() -> void:
+	if has_meta("dedicated_battle_screen"):
+		return
 	get_tree().call_group("ui_overlay", "focus_battle_ui_layer")
 
 func _setup_battle_focus_surfaces() -> void:
@@ -990,6 +1139,8 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		push_error("Battle environment profile is invalid: %s" % environment_id)
 		return
 	active_battle_environment_id = profile.environment_id
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.environment_id = profile.environment_id
 	active_battle_environment_loops_video = profile.loop_background_video
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true
@@ -1021,6 +1172,7 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
+	animation_router.poll_threaded_resource_requests()
 	var calcdex_active := current_action_panel_mode == BattleActionsPanelMode.CALC
 	if not calcdex_active and hover_state.should_poll_sprite_hover():
 		_update_sprite_hover()
@@ -2600,6 +2752,10 @@ func _input(event: InputEvent) -> void:
 		return
 
 func _unhandled_input(event: InputEvent) -> void:
+	if has_meta("battle_screen_preparing"):
+		return
+	if _is_ui_typing():
+		return
 	if event.is_action_pressed("ui_cancel") and _close_visible_battle_drawer():
 		get_viewport().set_input_as_handled()
 		return
@@ -2762,6 +2918,10 @@ func _sync_action_panel_mode_visibility() -> void:
 	else:
 		_update_side_condition_ui(_get_display_field_effects())
 	if is_calc_mode:
+		if has_meta("immersive_battle_ui"):
+			_hide_party_hover()
+			_hide_move_hover()
+			_hide_pokemon_hover_card()
 		_update_calc_drawer_layout()
 	if is_calc_mode or is_bag_view:
 		battle_drawer_layer.move_to_front()
@@ -2868,6 +3028,15 @@ func _queue_calc_drawer_layout_update() -> void:
 
 func _update_calc_drawer_layout() -> void:
 	if not is_instance_valid(calc_drawer) or not is_instance_valid(battle_frame):
+		return
+	if has_meta("immersive_battle_ui"):
+		var frame_bounds := battle_frame.get_global_rect()
+		var inverse := battle_drawer_layer.get_global_transform().affine_inverse()
+		var top_left := inverse * frame_bounds.position
+		var bottom_right := inverse * frame_bounds.end
+		calc_drawer.position = top_left + Vector2(16,16)
+		calc_drawer.size = bottom_right - top_left - Vector2(32,32)
+		_update_calc_timer_dock_layout()
 		return
 	var frame_rect: Rect2 = battle_frame.get_global_rect()
 	var drawer_layer_inverse: Transform2D = battle_drawer_layer.get_global_transform().affine_inverse()
@@ -3814,12 +3983,17 @@ func _on_action_selected(action: String) -> void:
 func _on_battle_log_toggle_pressed() -> void:
 	_focus_battle_ui_layer()
 	var requested_open := not _get_requested_battle_log_open()
+	if has_meta("immersive_battle_ui"):
+		SettingsManager.set_immersive_battle_log_open(requested_open)
 	remembered_battle_log_open = 1 if requested_open else 0
 	_set_battle_log_open(requested_open)
 	_update_battle_log_toggle_button()
 
 ## Zet de battle log bij battle start op de sessiekeuze, of anders op basis van viewport-breedte.
 func _setup_battle_log_initial_visibility() -> void:
+	if has_meta("immersive_battle_ui"):
+		_set_battle_log_open(SettingsManager.immersive_battle_log_open)
+		return
 	var should_open := (
 		remembered_battle_log_open == 1
 		if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET
@@ -3829,12 +4003,18 @@ func _setup_battle_log_initial_visibility() -> void:
 
 ## Geeft de door speler of responsive default gewenste log-state terug.
 func _get_requested_battle_log_open() -> bool:
+	if has_meta("battle_chat_bridge"):
+		return get_meta("battle_chat_bridge").log_selected
+	if has_meta("immersive_battle_ui"):
+		return battle_log_rail.visible
 	if remembered_battle_log_open != BATTLE_LOG_MEMORY_UNSET:
 		return remembered_battle_log_open == 1
 	return battle_log_rail.visible
 
 ## Bepaalt alleen de eerste default voor deze client-sessie.
 func _should_open_battle_log_by_default() -> bool:
+	if has_meta("immersive_battle_ui"):
+		return false
 	return _can_show_full_battle_log()
 
 ## Bepaalt of de grote battle log op dit scherm mag worden getoond.
@@ -3843,7 +4023,13 @@ func _can_show_full_battle_log() -> bool:
 
 ## Past de log-state toe zonder de sessiekeuze te overschrijven.
 func _set_battle_log_open(open: bool) -> void:
+	if has_meta("battle_chat_bridge"):
+		get_meta("battle_chat_bridge").select_log(open)
+		battle_log_rail.hide()
+		return
 	battle_log_rail.visible = open
+	if has_meta("immersive_battle_ui"):
+		return
 	var target_size := BATTLE_WINDOW_OPEN_SIZE if open else BATTLE_WINDOW_COLLAPSED_SIZE
 	var previous_center := position + size * 0.5
 	custom_minimum_size = target_size
@@ -3857,6 +4043,8 @@ func _update_battle_log_toggle_button() -> void:
 	var is_open := battle_log_rail.visible
 	battle_log_toggle_button.visible = true
 	battle_log_toggle_button.text = "»" if is_open else "«"
+	if has_meta("immersive_battle_ui"):
+		battle_log_toggle_button.text = "Close log" if is_open else "Battle log"
 	battle_log_toggle_button.tooltip_text = (
 		_t("battle.log.collapse")
 		if is_open
@@ -4014,6 +4202,8 @@ func _show_current_action_prompt() -> void:
 	current_action_panel.set_message(event_text_formatter.format_action_prompt(_get_active_display_name("p1")))
 
 func _set_battle_input_locked(is_locked: bool) -> void:
+	var requested_unlock := not is_locked
+	var was_locked := battle_input_locked
 	if not is_locked and not _is_pvp_battle() and action_flow.http_recovery_required and not non_pvp_opponent_force_switch_recovery_active and not non_pvp_recovery_failed:
 		_show_non_pvp_opponent_force_switch_wait.call_deferred()
 	if not _is_pvp_battle() and (action_flow.http_recovery_required or non_pvp_opponent_force_switch_recovery_active or non_pvp_recovery_failed):
@@ -4028,6 +4218,8 @@ func _set_battle_input_locked(is_locked: bool) -> void:
 	if not is_locked and _is_pvp_presentation_hold_active() and not allows_local_prechoice:
 		is_locked = true
 	battle_input_locked = is_locked
+	if was_locked != is_locked or (requested_unlock and is_locked):
+		_trace_auto_lead_turn1("input_lock", "requested_unlock=%s" % requested_unlock)
 	if action_buttons.has_method("set_all_actions_disabled"):
 		action_buttons.set_all_actions_disabled(is_locked)
 	if moves_grid.has_method("set_input_disabled"):
@@ -4054,12 +4246,25 @@ func _update_pvp_presentation_schedule(response: Dictionary) -> void:
 	var decisions: Dictionary = presentation.get("decisions", {})
 	var schedule: Dictionary = decisions.get(_get_local_state_player_id(), decisions.get(action_flow.local_player_id, {}))
 	if schedule.is_empty() or str(schedule.get("status", "")) != "SCHEDULED":
+		_trace_auto_lead_turn1("schedule_clear")
 		pvp_presentation_actionable_local_msec = 0
 		pvp_presentation_schedule_token = ""
+		pvp_presentation_schedule_source_batch_id = ""
+		return
+	var source_batch_id := str(schedule.get("sourceEventBatchId", "")).strip_edges()
+	if _pvp_presentation_batch_was_released(source_batch_id):
+		_trace_auto_lead_turn1("schedule_already_released")
+		# A lead timeout can deliver turn_open before the preview completion
+		# response is applied. Never reinstall its already-released fallback hold.
+		pvp_presentation_actionable_local_msec = 0
+		pvp_presentation_schedule_token = ""
+		pvp_presentation_schedule_source_batch_id = ""
 		return
 	var remaining := maxi(0, int(schedule.get("actionableAtMs", 0)) - int(presentation.get("serverNowMs", 0)))
 	pvp_presentation_actionable_local_msec = Time.get_ticks_msec() + remaining
 	pvp_presentation_schedule_token = "%s:%s" % [schedule.get("decisionId", ""), schedule.get("decisionGeneration", 0)]
+	pvp_presentation_schedule_source_batch_id = source_batch_id
+	_trace_auto_lead_turn1("schedule_install", "remaining_ms=%d" % remaining)
 	_set_battle_input_locked(true)
 	_release_pvp_presentation_hold_after(remaining, pvp_presentation_schedule_token)
 
@@ -4070,25 +4275,51 @@ func _release_pvp_presentation_hold_after(remaining_msec: int, token: String) ->
 		return
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
+	pvp_presentation_schedule_source_batch_id = ""
+	_trace_auto_lead_turn1("schedule_fallback_expired")
 	_set_battle_input_locked(false)
 
 func _is_pvp_presentation_hold_active() -> bool:
 	return _is_pvp_battle() and pvp_presentation_actionable_local_msec > Time.get_ticks_msec()
 
 func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> void:
+	if not bool(message.get("presentationReleased", false)):
+		return
+	_trace_auto_lead_turn1("presentation_release_received", "phase=%s" % str(message.get("phase", "")))
+	var released_batch_id := str(message.get("eventBatchId", "")).strip_edges()
+	if released_batch_id == "" or str(message.get("phase", "")) == "rendering_events":
+		return
+	pvp_last_released_presentation_batch_id = released_batch_id
 	if not pvp_presentation_acknowledgements_authoritative:
 		return
-	if not bool(message.get("presentationReleased", false)):
+	var exact_schedule_release := pvp_presentation_schedule_source_batch_id == released_batch_id
+	var legacy_fence_release := (
+		pvp_presentation_schedule_source_batch_id == ""
+		and str(pvp_pending_presentation_fence.get("eventBatchId", "")).strip_edges() == released_batch_id
+	)
+	if not exact_schedule_release and not legacy_fence_release:
 		return
 	pvp_presentation_actionable_local_msec = 0
 	pvp_presentation_schedule_token = ""
+	pvp_presentation_schedule_source_batch_id = ""
+	_trace_auto_lead_turn1("presentation_hold_released")
+
+func _pvp_presentation_batch_was_released(source_batch_id: String) -> bool:
+	return (
+		pvp_presentation_acknowledgements_authoritative
+		and source_batch_id != ""
+		and source_batch_id == pvp_last_released_presentation_batch_id
+	)
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
+	var was_ready := battle_actions_ready
 	if replay_mode:
 		is_ready = false
 	if _is_spectator_battle():
 		is_ready = false
 	battle_actions_ready = is_ready
+	if is_ready and not was_ready:
+		WebMemoryProbe.mark("battle_actions_ready")
 	_sync_party_rail_interaction()
 	_update_mechanic_button_states()
 	if battle_actions_ready:
@@ -4240,11 +4471,13 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	var use_item_message := _t("battle.item.used", {"item": item_name})
 	current_action_panel.set_message(use_item_message)
 	_add_battle_log_message(use_item_message)
+	_show_wild_capture_throw_callout(item_name)
 	SfxManager.play("battle_item_use")
 	_close_bag_for_capture_attempt()
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
 		current_action_panel.set_message(str(capture_result.get("error", _t("battle.error.capture_failed"))))
+		_clear_wild_capture_trainer()
 		_restore_bag_after_capture_error()
 		_set_battle_input_locked(false)
 		return
@@ -4269,6 +4502,9 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		capture_message = _capture_result_message_with_storage(capture_result, capture_message)
 	current_action_panel.set_message(capture_message)
 	_add_battle_log_message(capture_message)
+	if _show_wild_capture_result_callout(caught, shake_count):
+		await get_tree().create_timer(WILD_CAPTURE_CALLOUT_RESULT_HOLD_SECONDS).timeout
+	_clear_wild_capture_trainer()
 
 	if caught:
 		PokedexService.invalidate_owned_species_cache()
@@ -4304,6 +4540,31 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			return
 
 	_set_battle_input_locked(false)
+
+
+func _show_wild_capture_throw_callout(item_name: String) -> bool:
+	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+		return false
+	_show_local_player_trainer()
+	return _show_trainer_command_text(
+		"p1",
+		_t("battle.capture.callout.throw", {"item": item_name}),
+		TrainerCommandCallout.DISPLAY_SECONDS
+	)
+
+
+func _show_wild_capture_result_callout(caught: bool, shake_count: int) -> bool:
+	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+		return false
+	var key := "battle.capture.callout.caught" if caught else (
+		"battle.capture.callout.almost" if shake_count >= 2 else "battle.capture.callout.broke_free"
+	)
+	return _show_trainer_command_text("p1", _t(key), TrainerCommandCallout.DISPLAY_SECONDS)
+
+
+func _clear_wild_capture_trainer() -> void:
+	if battle_type == BattleType.WILD and player_trainer_sprite != null:
+		player_trainer_sprite.clear()
 
 func _capture_result_message_with_storage(capture_result: Dictionary, fallback_message: String) -> String:
 	var location: Dictionary = PokemonStorageService.normalize_storage_location(capture_result.get("storageLocation", {}))
@@ -4351,9 +4612,15 @@ func _on_capture_succeeded() -> void:
 
 func _on_capture_target_absorbed() -> void:
 	SfxManager.play("capture_absorb")
+	if coop_mode and is_instance_valid(coop_presenter):
+		coop_presenter.call("set_capture_target_visible", false)
+		return
 	_fade_capture_target_to_alpha(0.0, 0.14, true)
 
 func _on_capture_target_released() -> void:
+	if coop_mode and is_instance_valid(coop_presenter):
+		coop_presenter.call("set_capture_target_visible", true)
+		return
 	_fade_capture_target_to_alpha(1.0, 0.18, false)
 
 func _reset_capture_target_visibility() -> void:
@@ -4799,6 +5066,13 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 		return
 	var request := HTTPRequest.new()
 	add_child(request)
+	# Result refresh can outlive an early Continue. A battle-owned retry timer
+	# is destroyed with the scene instead of leaving a SceneTreeTimer behind.
+	var retry_timer := Timer.new()
+	retry_timer.name = "PvpResultRefreshRetryTimer"
+	retry_timer.one_shot = true
+	retry_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(retry_timer)
 	for attempt in range(15):
 		var response: Dictionary = await BattleApiClient.get_pvp_match_summary(request, normalized_match_id)
 		if bool(response.get("success", false)):
@@ -4832,10 +5106,13 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 			var reward_expected := bool(result_summary.get("rewardsReady", false))
 			if rating_found and (not reward_expected or reward_found):
 				request.queue_free()
+				retry_timer.queue_free()
 				return
 		if attempt < 14:
-			await get_tree().create_timer(0.5).timeout
+			retry_timer.start(0.5)
+			await retry_timer.timeout
 	request.queue_free()
+	retry_timer.queue_free()
 
 
 func _format_battle_point_reward_amount(amount: int) -> String:
@@ -6131,6 +6408,13 @@ func _sync_status_condition_overlay_for_player(player_id: String) -> void:
 
 	if overlay.has_method("set_condition"):
 		overlay.call("set_condition", condition_key)
+	# Local Dratini HD visual POC: keep its sleeping pose aligned with the
+	# already-resolved battle status. Other Pokémon use their existing sprites.
+	var sprite_box: Node = player_sprite_box if player_id == "p1" else enemy_sprite_box
+	if sprite_box != null and sprite_box.has_method("set_dratini_poc_sleeping"):
+		sprite_box.call("set_dratini_poc_sleeping", condition_key == "sleeping")
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_sleeping(0 if player_id == "p1" else 1, condition_key == "sleeping")
 
 func _prepare_pending_status_condition_overlays(events: Array) -> void:
 	pending_status_condition_overlay_players.clear()
@@ -8002,6 +8286,7 @@ func _prepare_battle_setup(
 
 
 func _clear_battle_trainer_sprites() -> void:
+	trainer_callout_visibility_tokens.clear()
 	if player_trainer_sprite != null:
 		player_trainer_sprite.clear()
 	if enemy_trainer_sprite != null:
@@ -8012,6 +8297,7 @@ func _show_local_player_trainer() -> void:
 	if player_trainer_sprite == null:
 		return
 	player_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.RIGHT)
+	_hide_trainer_between_non_immersive_callouts(player_trainer_sprite)
 
 
 func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
@@ -8033,6 +8319,7 @@ func _show_npc_trainer(trainer_sprite: BattleTrainerSprite, trainer_data: Dictio
 			catalog_texture = catalog.call("get_texture", battle_sprite_id) as Texture2D
 		if catalog_texture != null:
 			trainer_sprite.show_catalog_sprite(catalog_texture, facing_direction, sprite_offset)
+			_hide_trainer_between_non_immersive_callouts(trainer_sprite)
 			return
 
 	var sprite_frames_value: Variant = trainer_data.get("_battle_sprite_frames", null)
@@ -8043,6 +8330,7 @@ func _show_npc_trainer(trainer_sprite: BattleTrainerSprite, trainer_data: Dictio
 		facing_direction,
 		sprite_offset
 	)
+	_hide_trainer_between_non_immersive_callouts(trainer_sprite)
 
 
 func _show_replay_trainers() -> void:
@@ -8050,6 +8338,7 @@ func _show_replay_trainers() -> void:
 		_show_npc_trainer(player_trainer_sprite, replay_trainer_data, Vector2.RIGHT)
 		if enemy_trainer_sprite != null:
 			enemy_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.LEFT)
+			_hide_trainer_between_non_immersive_callouts(enemy_trainer_sprite)
 	else:
 		_show_local_player_trainer()
 		_show_npc_opponent_trainer(replay_trainer_data)
@@ -8102,10 +8391,15 @@ func _show_response_player_trainer(
 ) -> void:
 	if trainer_sprite == null or not (player_data_value is Dictionary):
 		return
-	var appearance_state := _get_battle_player_appearance(player_data_value as Dictionary)
+	var player_data := player_data_value as Dictionary
+	if str(player_data.get("battleSpriteId", "")) == "showdown_acetrainer_gen6":
+		_show_npc_trainer(trainer_sprite, {"_battle_sprite_id": "showdown_acetrainer_gen6"}, facing_direction)
+		return
+	var appearance_state := _get_battle_player_appearance(player_data)
 	if appearance_state.is_empty():
 		return
 	trainer_sprite.show_player(appearance_state, facing_direction)
+	_hide_trainer_between_non_immersive_callouts(trainer_sprite)
 
 
 func _get_battle_player_appearance(player_data: Dictionary) -> Dictionary:
@@ -8244,6 +8538,7 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	_debug_battle_start("initial.render.exit lastRenderedSeq=%d" % last_rendered_event_seq)
 
 func _show_battle_controls_after_initial_events() -> void:
+	_trace_auto_lead_turn1("intro_controls_start")
 	player_sprite_box.allow_web_sprite_upgrades()
 	enemy_sprite_box.allow_web_sprite_upgrades()
 	_update_battle_presentation("initial_setup")
@@ -8252,6 +8547,7 @@ func _show_battle_controls_after_initial_events() -> void:
 		return
 	_set_battle_input_locked(false)
 	_show_moves()
+	_trace_auto_lead_turn1("intro_controls_end")
 	if current_action_view == ActionView.MOVES and not battle_input_locked:
 		_show_current_action_prompt()
 
@@ -8274,9 +8570,17 @@ func _show_original_player_lead_before_initial_events(species: String, fallback_
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon), _get_active_display_name("p1"))
 
 func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
-	if sprite_box == null:
-		return
-	if pokeball_summon_animation_player == null:
+	var desktop_stage := battle_stage.get_node_or_null("ExperimentalBattle3D")
+	if desktop_stage != null:
+		desktop_stage.set_actor_shown(0 if side == "back" else 1, false)
+		await desktop_stage.await_prepared()
+		var actor_ident := "p1" if side == "back" else "p2"
+		if desktop_stage.handles(actor_ident):
+			SfxManager.play("summon_release")
+			SfxManager.play_pokemon_cry(cry_species)
+			await desktop_stage.send_out(actor_ident)
+			return
+	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
 
 	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
@@ -8316,9 +8620,12 @@ func _play_summon_release_cry() -> void:
 	SfxManager.play_pokemon_cry(summon_release_cry_species)
 
 func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String) -> void:
-	if sprite_box == null:
+	var actor_ident := "p1" if side == "back" else "p2"
+	if is_instance_valid(animation_router.model_presenter) and animation_router.model_presenter.handles(actor_ident):
+		SfxManager.play("summon_release")
+		await animation_router.model_presenter.recall(actor_ident)
 		return
-	if pokeball_summon_animation_player == null:
+	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
 
 	var original_z_index := sprite_box.z_index
@@ -8352,9 +8659,15 @@ func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String
 	sprite_box.z_as_relative = original_z_as_relative
 
 func _play_switch_release(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
-	if sprite_box == null:
-		return
-	if pokeball_summon_animation_player == null:
+	var actor_ident := "p1" if side == "back" else "p2"
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_actor_shown(0 if side == "back" else 1, false)
+		await animation_router.model_presenter.await_prepared()
+		if animation_router.model_presenter.handles(actor_ident):
+			SfxManager.play_pokemon_cry(cry_species)
+			await animation_router.model_presenter.send_out(actor_ident)
+			return
+	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
 
 	var target_rect: Rect2 = _get_summon_target_rect(sprite_box)
@@ -9050,6 +9363,7 @@ func _remember_spectator_canonical_response(response: Dictionary) -> void:
 
 
 func _finish_pvp_team_preview_selection(lead_response: Dictionary) -> Dictionary:
+	_trace_auto_lead_turn1("preview_finish", "response_phase=%s next=%s" % [str(lead_response.get("phase", "")), str(lead_response.get("nextPhase", ""))])
 	team_preview_lead_selection_active = false
 	pvp_team_preview_recovery_requested = false
 	pvp_pending_team_preview_completion.clear()
@@ -9210,7 +9524,11 @@ func _prepare_team_preview_lead_summon_transition() -> void:
 	# frame_post_draw guarantees one complete frame with no preview Pokemon before
 	# the Pokeball throw signal, release sound, or cry can begin.
 	await get_tree().process_frame
-	await RenderingServer.frame_post_draw
+	# The dummy headless renderer never emits frame_post_draw. Awaiting it
+	# strands setup (and its Pokemon argument) until after renderer shutdown.
+	# Visible desktop/web clients still require the complete blank drawn frame.
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
 
 	# Close over any delayed preview redraw that arrived during the frame barrier.
 	_clear_team_preview_visuals()
@@ -9639,6 +9957,8 @@ func _send_pvp_received_render_status(response: Dictionary) -> void:
 func _begin_pvp_render_progress(batch_context: Dictionary, total_event_count: int) -> void:
 	if _is_spectator_battle():
 		return
+	if pvp_render_progress_timer != null:
+		pvp_render_progress_timer.stop()
 	pvp_render_progress_generation += 1
 	pvp_active_render_progress = batch_context.duplicate(true)
 	pvp_active_render_progress["rendered_event_count"] = 0
@@ -9657,11 +9977,23 @@ func _mark_pvp_render_event_completed(completed_event_count: int) -> void:
 	)
 
 func _run_pvp_render_progress_heartbeat(owned_generation: int) -> void:
-	while owned_generation == pvp_render_progress_generation and not pvp_active_render_progress.is_empty():
-		await get_tree().create_timer(PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS).timeout
-		if owned_generation != pvp_render_progress_generation or pvp_active_render_progress.is_empty():
-			return
-		_send_active_pvp_render_status("PROGRESS")
+	# A completed batch must not leave an awaited SceneTreeTimer alive after
+	# Battle teardown. Keep the same heartbeat interval, but own its lifetime.
+	if owned_generation != pvp_render_progress_generation or pvp_active_render_progress.is_empty():
+		return
+	if pvp_render_progress_timer == null:
+		pvp_render_progress_timer = Timer.new()
+		pvp_render_progress_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+		pvp_render_progress_timer.wait_time = PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS
+		pvp_render_progress_timer.timeout.connect(_on_pvp_render_progress_heartbeat)
+		add_child(pvp_render_progress_timer)
+	pvp_render_progress_timer.start()
+
+func _on_pvp_render_progress_heartbeat() -> void:
+	if pvp_active_render_progress.is_empty():
+		pvp_render_progress_timer.stop()
+		return
+	_send_active_pvp_render_status("PROGRESS")
 
 func _send_active_pvp_render_status(render_state: String) -> void:
 	if pvp_active_render_progress.is_empty() or _is_spectator_battle():
@@ -9699,6 +10031,8 @@ func _finish_pvp_render_progress(batch_context: Dictionary, success: bool) -> vo
 	)
 	pvp_render_progress_generation += 1
 	pvp_active_render_progress.clear()
+	if pvp_render_progress_timer != null:
+		pvp_render_progress_timer.stop()
 
 func _observe_pvp_realtime_render_batch_fence(response: Dictionary, batch_context: Dictionary) -> void:
 	if _is_spectator_battle() or not _is_authoritative_pvp_render_batch_response(response):
@@ -9814,6 +10148,8 @@ func _set_single_pokemon_species_with_pvp_warning(
 		_get_sprite_box_debug_species(sprite_box),
 	])
 	_warn_if_pvp_species_change_outside_batch(sprite_box, species, context)
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_combatant(0 if sprite_box == player_sprite_box else 1, species, is_shiny, context == "switch_event")
 	sprite_box.set_single_pokemon_species(species, side, is_shiny)
 
 func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String, context: String) -> void:
@@ -11135,10 +11471,38 @@ func _show_trainer_command_text(
 			trainer_sprite = enemy_trainer_sprite
 		_:
 			return false
-	if trainer_sprite == null or not trainer_sprite.visible:
+	if trainer_sprite == null or not trainer_sprite.has_trainer_art():
+		return false
+	var command_only_presentation := not has_meta("immersive_battle_ui")
+	if command_only_presentation:
+		trainer_sprite.reveal_for_command()
+	if not trainer_sprite.visible:
 		return false
 	trainer_sprite.show_command(message, display_seconds)
+	if command_only_presentation:
+		_hide_non_immersive_trainer_after_callout(trainer_sprite, display_seconds)
 	return true
+
+
+func _hide_trainer_between_non_immersive_callouts(trainer_sprite: BattleTrainerSprite) -> void:
+	if trainer_sprite != null and not has_meta("immersive_battle_ui"):
+		trainer_sprite.visible = false
+
+
+func _hide_non_immersive_trainer_after_callout(
+	trainer_sprite: BattleTrainerSprite,
+	display_seconds: float
+) -> void:
+	var sprite_id := trainer_sprite.get_instance_id()
+	var token := int(trainer_callout_visibility_tokens.get(sprite_id, 0)) + 1
+	trainer_callout_visibility_tokens[sprite_id] = token
+	await get_tree().create_timer(
+		maxf(display_seconds, 0.0)
+	).timeout
+	if trainer_callout_visibility_tokens.get(sprite_id, 0) != token:
+		return
+	if is_instance_valid(trainer_sprite):
+		trainer_sprite.hide_after_command()
 
 
 func _present_initial_summon_command(player_id: String, pokemon_name: String) -> void:
@@ -11733,7 +12097,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 		return
 	if not _can_switch_to_selected_pokemon(slot, selected_pokemon_data):
 		if local_force_switch:
-			_report_pvp_forced_switch_selection_blocked("switch_ineligible")
+			_report_pvp_forced_switch_selection_blocked("switch_ineligible", _pvp_switch_eligibility_diagnostic(submit_slot))
 		if _is_pvp_battle():
 			_update_party_slots()
 			_refresh_pvp_switch_cards()
@@ -11857,18 +12221,39 @@ func _can_open_pvp_local_force_switch_ui() -> bool:
 	return pvp_last_phase == "rendering_events" and pvp_last_next_phase == "awaiting_force_switch"
 
 
-func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:
+func _pvp_switch_eligibility_diagnostic(canonical_slot: int) -> Dictionary:
+	var local_player_id := _get_local_state_player_id()
+	var request_team := _get_pvp_switch_request_team()
+	var candidate := BattleForceSwitchFlow.find_switch_candidate(canonical_slot, pvp_local_canonical_roster, request_team)
+	var reason := "other"
+	if force_switch_flow.is_player_trapped_outside_force_switch(local_player_id):
+		reason = "trapped"
+	elif candidate.is_empty():
+		reason = "candidate_missing"
+	elif bool(candidate.get("active", false)):
+		reason = "candidate_active"
+	elif bool(candidate.get("fainted", false)) or str(candidate.get("condition", "")).strip_edges().to_lower() == "fnt" or str(candidate.get("condition", "")).strip_edges().to_lower().ends_with(" fnt"):
+		reason = "candidate_fainted"
+	else:
+		reason = "candidate_health_zero"
+	return {
+		"eligibilityReason": reason,
+		"requestTeamPresent": not request_team.is_empty(),
+		"requestForceSwitchRequired": force_switch_flow.player_needs_force_switch(local_player_id),
+	}
+
+func _report_pvp_forced_switch_selection_blocked(selection_gate: String, details: Dictionary = {}) -> void:
 	if not _is_pvp_battle() or not _local_player_needs_force_switch_ui():
 		return
 	var local_player_id := _get_local_state_player_id()
 	var decision := battle_state.get_active_decision(local_player_id)
 	var decision_id := str(decision.get("decisionId", "")).strip_edges()
 	var decision_generation := _get_int_from_variant(decision.get("decisionGeneration", 0), 0)
-	var diagnostic_key := "%s:%d:%s" % [decision_id, decision_generation, selection_gate]
+	var diagnostic_key := "%s:%d:%s:%s" % [decision_id, decision_generation, selection_gate, str(details.get("eligibilityReason", ""))]
 	if pvp_forced_switch_diagnostic_keys.has(diagnostic_key):
 		return
 	pvp_forced_switch_diagnostic_keys[diagnostic_key] = true
-	PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked", {
+	var diagnostic := {
 		"decisionId": decision_id,
 		"decisionGeneration": max(decision_generation, 0),
 		"selectionGate": selection_gate,
@@ -11879,7 +12264,15 @@ func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void
 		"inputLocked": battle_input_locked,
 		"pendingAction": pvp_prechoice_buffer.has_choice(),
 		"forceSwitchRequired": true,
-	})
+	}
+	diagnostic.merge(details, true)
+	print("PvP forced-switch selection blocked: gate=%s reason=%s requestTeamPresent=%s requestForceSwitchRequired=%s" % [
+		selection_gate,
+		str(diagnostic.get("eligibilityReason", "unknown")),
+		str(diagnostic.get("requestTeamPresent", "unknown")),
+		str(diagnostic.get("requestForceSwitchRequired", "unknown")),
+	])
+	PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked", diagnostic)
 
 func _clear_force_switch_request_for_player(player_id: String) -> void:
 	var request := battle_state.get_player_request(player_id)
@@ -12537,6 +12930,7 @@ func _restore_pvp_ui_after_local_reconnect() -> void:
 		current_action_panel.set_message(_t("battle.prompt.waiting_opponent"))
 
 func _on_pvp_render_batch_completed(completion: Dictionary) -> void:
+	_trace_auto_lead_turn1("render_completed", "success=%s" % bool(completion.get("success", false)))
 	_trace_pvp_flow("render_completed", {}, "completion=%s" % JSON.stringify(completion))
 	if DEBUG_PVP_REALTIME:
 		_log_pvp_realtime(
@@ -12574,6 +12968,7 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 	var event_seq_end := _get_int_from_variant(completion.get("event_seq_end", -1), -1)
 	var last_rendered_seq := _get_int_from_variant(completion.get("last_rendered_seq", -1), -1)
 	if event_batch_id == "" or event_seq_end < 0 or last_rendered_seq < 0:
+		_trace_auto_lead_turn1("ack_skip_metadata")
 		_trace_pvp_flow("ack.skip_missing_metadata", {}, "completion=%s" % JSON.stringify(completion))
 		if DEBUG_PVP_REALTIME:
 			_log_pvp_realtime(
@@ -12617,7 +13012,8 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 			]
 		)
 
-	PvpBattleRealtimeService.send_render_ack(
+	_trace_auto_lead_turn1("ack_send", "render_state=completed")
+	var ack_sent: bool = PvpBattleRealtimeService.send_render_ack(
 		battle_state.battle_id,
 		action_flow.local_player_id,
 		event_batch_id,
@@ -12629,6 +13025,11 @@ func _send_pvp_render_ack(completion: Dictionary) -> void:
 		_get_int_from_variant(completion.get("total_event_count", -1), -1),
 		_get_int_from_variant(completion.get("observed_duration_ms", -1), -1)
 	)
+	_trace_auto_lead_turn1("ack_send_result", "sent=%s socket=%d joined=%s" % [
+		ack_sent,
+		PvpBattleRealtimeService.websocket.get_ready_state(),
+		PvpBattleRealtimeService.joined,
+	])
 
 func _retry_pending_pvp_render_ack() -> void:
 	if battle_finished or pvp_pending_render_ack_completion.is_empty():
@@ -13129,6 +13530,7 @@ func _get_pvp_connection_event_display_side(message: Dictionary) -> String:
 	return display_side
 
 func _apply_pvp_phase_update(message: Dictionary) -> void:
+	_trace_auto_lead_turn1("phase_update_received", "phase=%s released=%s" % [str(message.get("phase", "")), bool(message.get("presentationReleased", false))])
 	_trace_pvp_flow("phase_update.received", {}, "message=%s" % _describe_pvp_realtime_message(message))
 	var battle_id := str(message.get("battleId", "")).strip_edges()
 	if battle_state.battle_id != "" and battle_id != "" and battle_id != battle_state.battle_id:
@@ -13165,7 +13567,10 @@ func _apply_pvp_phase_update(message: Dictionary) -> void:
 		)
 	if releases_presentation_fence:
 		released_presentation_fence = pvp_pending_presentation_fence.duplicate(true)
-		_release_pvp_presentation_hold_from_ack_barrier(message)
+	# The opening phase can be released while the preview picker is still being
+	# unwound and no local fence is installed yet. Its exact batch still proves
+	# that the server released the presentation schedule.
+	_release_pvp_presentation_hold_from_ack_barrier(message)
 
 	var server_seq := _get_pvp_message_server_seq(message)
 	var phase := str(message.get("phase", "")).strip_edges()
@@ -13394,6 +13799,7 @@ func _apply_local_pvp_forced_switch_timeout(response: Dictionary) -> void:
 		_show_force_switch_if_needed()
 
 func _open_pvp_released_phase(phase: String) -> void:
+	_trace_auto_lead_turn1("phase_open", "phase=%s" % phase)
 	if battle_finished:
 		return
 	if _is_spectator_battle():
@@ -14293,6 +14699,9 @@ func _wait_for_pvp_opponent_choice_and_render(pending_player_choice_events: Arra
 				return false
 			return true
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
+			if not PvpBattleRealtimeService.is_confirmed_opponent_forfeit(message, action_flow.local_player_id):
+				attempt += 1
+				continue
 			if response.is_empty():
 				continue
 
@@ -14545,6 +14954,9 @@ func _wait_for_pvp_opponent_force_switch_and_render() -> bool:
 				continue
 			return true
 		if message_action == "forfeit" and str(message.get("playerId", "")) != action_flow.local_player_id:
+			if not PvpBattleRealtimeService.is_confirmed_opponent_forfeit(message, action_flow.local_player_id):
+				attempt += 1
+				continue
 			if not response.is_empty():
 				if not await _enqueue_pvp_battle_response(response, "pvp_forfeit_during_force_switch", not action_flow._response_has_deferred_display_event(response)):
 					_finish_battle({
@@ -14921,6 +15333,16 @@ func _log_pvp_realtime(tag: String, details: String = "") -> void:
 		print("[PvPRealtime] %s" % tag)
 	else:
 		print("[PvPRealtime] %s | %s" % [tag, details])
+
+func _trace_auto_lead_turn1(stage: String, details: String = "") -> void:
+	if OS.get_environment("AETHER_CLASH_TURN1_TRACE") != "true" or not _is_pvp_battle():
+		return
+	print("TURN1_TRACE t=%d stage=%s preview=%s ready=%s locked=%s phase=%s next=%s rendering=%s fence=%s hold=%s ack_pending=%s %s" % [
+		Time.get_ticks_msec(), stage, team_preview_lead_selection_active,
+		battle_actions_ready, battle_input_locked, pvp_last_phase, pvp_last_next_phase,
+		pvp_event_queue.is_rendering, not pvp_pending_presentation_fence.is_empty(),
+		_is_pvp_presentation_hold_active(), not pvp_pending_render_ack_completion.is_empty(), details,
+	])
 
 func _trace_pvp_flow(tag: String, response: Dictionary = {}, details: String = "") -> void:
 	if not DEBUG_PVP_FLOW_TRACE:
@@ -16503,6 +16925,7 @@ func _hold_opponent_response_message() -> void:
 		return
 	await get_tree().create_timer(OPPONENT_RESPONSE_HOLD_SECONDS).timeout
 
+
 func _can_switch_to_slot(slot: int) -> bool:
 	var local_state_player_id := _get_local_state_player_id()
 	if force_switch_flow.is_player_trapped_outside_force_switch(local_state_player_id):
@@ -16909,11 +17332,15 @@ func _update_active_sprite_box(
 	if active_species == "":
 		active_species = _get_active_display_species(player_id).strip_edges()
 	if field_slot_empty or force_switch_hidden:
+		if is_instance_valid(animation_router.model_presenter):
+			animation_router.model_presenter.set_combatant(0 if player_id == "p1" else 1, "")
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
 
 	if active_species == "":
+		if is_instance_valid(animation_router.model_presenter):
+			animation_router.model_presenter.set_combatant(0 if player_id == "p1" else 1, "")
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
 		return
@@ -16970,11 +17397,14 @@ func _update_battle_presentation_before_event_render(events: Array) -> void:
 func _update_vs_panel_names() -> void:
 	if vs_panel_container != null:
 		_vs_panel_call("set_names", [_get_vs_player_name("p1"), _get_vs_player_name("p2")])
-		_vs_panel_call("set_player_appearances", [
-			_get_vs_player_appearance("p1"),
-			_get_vs_player_appearance("p2")
-		])
-		_vs_panel_call("set_trainer_portraits_visible", [_vs_panel_uses_player_portraits()])
+		var show_portraits := _vs_panel_uses_player_portraits()
+		_vs_panel_call("set_trainer_portraits_visible", [show_portraits])
+		# Hidden heads must not synchronously construct the world-avatar assets.
+		if show_portraits:
+			_vs_panel_call("set_player_appearances", [
+				_get_vs_player_appearance("p1"),
+				_get_vs_player_appearance("p2")
+			])
 
 
 func _vs_panel_uses_player_portraits() -> bool:

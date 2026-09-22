@@ -34,6 +34,7 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
     ("POST", "/auth/web/signup"), ("POST", "/auth/web/login"), ("POST", "/auth/web/logout"),
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
+    ("PUT", "/auth/web/appearance"),
     ("PATCH", "/auth/web/party/battle-state"),
     ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
     ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"), ("GET", "/auth/web/guilds/me"),
@@ -44,7 +45,9 @@ HTTP_ROUTES = {
     ("GET", "/battle/pvp/training/ai/teams"),
     ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
-    ("POST", "/battle/wild-encounter"), ("GET", "/battle/wild/resume"),
+    ("POST", "/pokemon/create-from-text"), ("POST", "/team/create-from-text"),
+    ("POST", "/battle/wild-encounter"), ("POST", "/battle/dev/wild"),
+    ("GET", "/battle/wild/resume"),
     ("POST", "/battle/trainer"), ("GET", "/battle/trainer/resume"),
     ("POST", "/battle/pvp/rooms"),
     # Public species data needed by the battle hover card (including speed tiers).
@@ -56,9 +59,20 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/wallet/rewards/wild-battle"), ("POST", "/auth/web/wallet/rewards/trainer-battle"),
     ("POST", "/auth/web/mail"),
     ("POST", "/auth/web/respawn"),
+    # Adventure Party uses the same account-authorized co-op contract on web
+    # and desktop. Keep the local proxy allowlist limited to its POST actions.
+    *(("POST", "/game/coop/" + action) for action in (
+        "state", "invite", "accept", "close-invitation", "leave", "start", "cancel",
+        "grass-step", "decision", "acknowledge", "capture",
+    )),
+    ("GET", "/auth/web/world-pickups"),
     ("POST", "/auth/web/world/teleport-ack"),
+    ("POST", "/world/weather/developer"),
 }
 GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
+    ("POST", r"/auth/web/world-pickups/[a-z0-9_]+/claim"),
+    ("GET", r"/auth/web/npc-pokemon-sales/kanto_route_3_magikarp"),
+    ("POST", r"/auth/web/npc-pokemon-sales/kanto_route_3_magikarp/purchase"),
     ("GET", r"/auth/web/boxes/\d+"), ("PATCH", r"/auth/web/boxes/\d+"),
     ("DELETE", r"/auth/web/(?:pokemon|party)/\d+"),
     ("POST", r"/auth/web/pokemon/\d+/(?:nickname|held-item|evolution|evs/allocate|items/use|moves/(?:learn|delete|reorder))"),
@@ -73,6 +87,7 @@ GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
     ("POST", r"/auth/web/trainers/[a-zA-Z0-9_-]+/rematch"),
     ("POST", r"/auth/web/mail/\d+/read"),
     ("DELETE", r"/auth/web/mail/\d+"),
+    ("POST", r"/auth/web/player-actions/[a-z0-9-]+/execute"),
 ))
 AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
@@ -81,7 +96,14 @@ HTTP_ROUTE_PREFIXES = (
 	# Read/write game interfaces explicitly enabled in the browser demo. These
 	# retain the normal account and server-side authorization checks.
 	("GET", "/auth/web/pokedex/"), ("GET", "/auth/web/items/"),
-	("GET", "/game/skills"),
+	("GET", "/auth/web/skills"),
+	("GET", "/auth/web/fishing/progression"), ("PUT", "/auth/web/fishing/selection"),
+	("GET", "/auth/web/ev-training/session"), ("POST", "/auth/web/ev-training/session"),
+	("POST", "/auth/web/ev-training/tutorial/focus"), ("POST", "/auth/web/ev-training/tutorial/session"),
+	("GET", "/auth/web/thieving"), ("POST", "/auth/web/thieving/"),
+	("GET", "/auth/web/rock-smash"), ("POST", "/auth/web/rock-smash/smash"),
+	("GET", "/auth/web/hotbar"), ("PUT", "/auth/web/hotbar"),
+	("GET", "/auth/web/player-actions"),
 	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
 	("GET", "/battle/pvp/training/ai/live/"),
 	("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),
@@ -106,6 +128,11 @@ HTTP_ROUTE_PREFIXES = (
     ("GET", "/auth/web/world/transitions/"),
     ("POST", "/auth/web/world/transitions/"),
     ("GET", "/auth/web/world/areas/"),
+    ("GET", "/game/dev/"), ("POST", "/game/dev/"),
+    ("PUT", "/game/dev/"), ("DELETE", "/game/dev/"),
+    ("GET", "/game/moderation/"), ("POST", "/game/moderation/"),
+    ("GET", "/game/chat/mutes/"), ("POST", "/game/chat/mutes"),
+    ("DELETE", "/game/chat/mutes/"),
 )
 SECURITY_HEADERS = {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer",
@@ -294,10 +321,12 @@ def create_app(upstream, build=None, *, transport=None):
     async def static(path: str):
         target = (build / (path or "index.html")).resolve()
         if (not target.is_relative_to(build) or any(part.startswith(".") for part in Path(path).parts)
-                or not target.is_file() or target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".webp", ".svg", ".ico", ".ogg", ".wav", ".mp3"}):
+                or not target.is_file() or (target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".webp", ".svg", ".ico", ".ogg", ".wav", ".mp3"}
+                                          and path != "modules/manifest.json")):
             return Response(status_code=404)
         mime = {
             ".wasm": "application/wasm", ".pck": "application/octet-stream",
+            ".json": "application/json",
             ".webp": "image/webp",
             ".ogg": "audio/ogg", ".wav": "audio/wav", ".mp3": "audio/mpeg",
         }.get(target.suffix)

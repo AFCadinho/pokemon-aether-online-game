@@ -2,6 +2,661 @@
 
 ## Unreleased
 
+- Co-op immersive battles houden nu de geselecteerde actorbeweging, trainerposities, doubles-hitboxes en partydock-layout stabiel tijdens presentatie en herhaalde testcycli.
+
+- De desktoplauncher kan de zeven goedgekeurde 3D-Pokémon nu als afzonderlijke, gecontroleerde downloads installeren en bijwerken. Ontbrekende modellen blijven veilig op de bestaande battleweergave terugvallen.
+
+- The three Aether male and two Aether female hairstyles now appear correctly on Trainer Cards and player battle sprites, including their selected hair colour.
+
+- Gereviewde 3D-Pokémon kiezen nu per fysieke movefamilie tussen hun twee beschikbare aanvalsanimaties; modellen zonder veilig gecertificeerde tweede clip blijven automatisch op de bestaande aanval terugvallen.
+
+- De launcher installeert het gedeelde 3D-forestpakket voortaan verplicht en controleert de map, versie, grootte en checksum voordat Route 1, Route 22 of de generieke grasarena wordt gestart.
+
+- Alle 3D-buitenarena’s volgen nu dag, schemering en nacht van de overworld, inclusief de generieke gras- en waterarena’s en Route 1 en Route 22. Zacht invullicht houdt Pokémon in het donker zichtbaar.
+
+- De 3D-modelpipeline kan een tweede gereviewde fysieke aanval bewaren, zonder die vóór classificatie automatisch aan moves toe te wijzen.
+
+- Wilde immersive battles tonen nu rechtsboven de Pokémon HOME-afbeelding van de tegenstander in plaats van een leeg trainerportret.
+
+- Het menu-icoon van immersive battles staat nu linksboven op je trainerportret, vrij van de side field indicators.
+
+- De immersive battle-interface heeft nu een menu-icoon op je trainerportret. Daarmee open je tijdens een gevecht de bestaande Friends- en Guild-vensters; de camerarestart staat onder de Turn-indicator.
+
+- In 3D-battles kun je nu met het muiswiel in- en uitzoomen. De resetknop herstelt ook de standaardzoom.
+
+- Garchomp gebruikt in de lokale 3D-catalogus nu bijpassende staande animaties voor aanvallen, schade en faint, zonder onverwacht naar zijn vliegpose te springen.
+
+- Het ‘Switch’-label staat gecentreerd boven de partyslots, met grotere tekst, een duidelijkere cyaanrand en meer ruimte onder de actietekst.
+
+- In de immersive battle-interface staat nu een compact ‘Switch’-label boven je partyslots, zodat duidelijk is waar je Pokémon kunt wisselen.
+
+- Route 1 heeft vrije doorgangen door de rotswanden en trappen die aansluiten op de paden en terrassen. Surf- en visgevechten gebruiken de ondiepe vijver van dezelfde 3D-omgeving.
+
+- Route 1 heeft nu een eigen 3D-battle-arena met kronkelende zandpaden, hoge grasranden, beboste rotsterrassen, trappen en de noordelijke vijver uit de overworld.
+
+- De lokale desktop-debugclient kan 18 nieuwe normal-form 3D-reviewkandidaten tonen in de Pokédex en summary-kaart, met een reviewlabel en het bestaande animatiemenu. Ze zijn nog niet goedgekeurd voor battles of distributie; ontbrekende en shiny modellen behouden hun sprite-preview.
+
+- De 3D-grasveld-arena en beide Route 22-arena’s gebruiken nu lichter mesh-terrein zonder Terrain3D, met behoud van hun herkenbare aankleding en ondiepe watergevechten.
+
+- Pokémon staan bij 3D-watergevechten met hun voeten en onderpoten in het ondiepe water, ook op Route 22.
+
+- Bij een netwerkfout tonen guilds, speleracties en de hotbar geen misleidende JSON-fouten meer. Ongeldige serverreacties wissen de bestaande hotbar- en actiegegevens niet.
+
+- Bij surfen of vissen op Route 22 vecht je nu in de ondiepe waterpartij van dezelfde omgeving; landgevechten blijven op het grasveld.
+
+- Surf- en visgevechten in 3D vinden nu plaats in ondiep water boven een zichtbare zandbodem, met dieper water rondom.
+
+- In de Route 22-battle-arena is nu ook de oostelijke waterkant zichtbaar, met zacht bewegend water en een begroeide oever.
+
+- Route 22 heeft een eigen 3D-battle-arena, ook bij het eerste gevecht met Gary: een grasveld met naaldbomen, rotsplateaus en de trap uit de overworld.
+
+- Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave. Kies animaties via de bestaande playknop boven het level, zoom in of sleep om te draaien. Modellen worden groter gekadreerd en animatiewissels wissen de vorige pose; een extra platform verbergt de faint-pose niet meer. Ontbrekende modellen houden hun sprite-preview.
+
+- Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.
+
+- 3D-Pokémon behouden beter hun kleur in schaduw: de extra materiaalschaduw is subtieler, zonder de arena, slagschaduwen of individuele modellen lichter te maken.
+
+- Trainerstatus op een zojuist geladen kaart wacht nu tot de zware eerste laadframes voorbij zijn en toont geen onterechte JSON-fout meer bij een netwerkprobleem.
+
+- Donkere 3D-Pokémon blijven in Forest-arena's beter leesbaar dankzij een zachte skylight-fill die de bestaande schaduwen niet vervangt.
+
+- De lokale desktop-3D-runtime vindt het vertrouwde Forest-pakket nu automatisch naast de gekozen modelcatalogus. Daardoor kiest Automatic weer Grass → Forest zonder een aparte instellingenstap.
+
+- In de klassieke battleweergave verschijnen trainers alleen bij hun commandotekstwolk, met een zachte fade en beweging richting het veld, en verdwijnen ze daarna weer vloeiend.
+
+- In immersive wilde gevechten komt je trainer nu alleen bij een Poké Ball-worp kort in beeld, met een tekstwolk voor de worp en de vanguitkomst.
+
+- De Pokédex toont op desktop een lokaal, hash-gecontroleerd 3D-model wanneer de experimentele 3D-presentatie en een lokale modelcatalogus zijn gekozen. Sleep in het previewvak om het model te draaien; ontbrekende of shiny vormen houden hun bestaande sprite-preview.
+
+- Kaartmetadata wacht nu ook in lokale desktop-debugruns tot het eerste beeld klaar is. Daardoor laden NPC's, overworld-Pokémon en encounters niet meer in de zware eerste laadframe vast.
+
+- Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
+
+- Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
+
+- Lokale gescreende 3D-kandidaten kunnen nu voor visuele review in de gekozen 3D-arena verschijnen. De UI markeert deze weergave als niet arena-gekalibreerd; officiële en gemengde modelcatalogi behouden hun veilige klassieke fallback.
+
+- Nieuwe gecontroleerde 3D-modelpakketten koppelen zichtbaarheid nu via bronmetadata aan de gekozen geslachtsvariant, zonder onderdelen van de andere variant verkeerd toe te wijzen. Bestaande pakketten blijven ongewijzigd.
+
+- Nieuwe gecontroleerde 3D-modelpakketten kunnen accessoires en alternatieve lichaamsdelen op de juiste animatieframes tonen en verbergen. Bestaande pakketten worden niet automatisch vervangen.
+
+- De materiaalbelichting van 3D-Pokémon loopt niet meer een frame achter op hun animatie, waardoor dubbele contouren bij bewegen en posewissels verdwijnen.
+
+- Nieuwe 3D-modelpakketten ondersteunen nu meerdere gelijktijdige materiaalanimaties zonder de afspeelsnelheid te veranderen. Bestaande modelpakketten worden niet automatisch vervangen.
+
+- Nieuwe 3D-modelpakketten kunnen stilstaande animatieposes met hun oorspronkelijke duur behouden en complexere bewegende vuureffecten afspelen. Bestaande pakketten blijven ongewijzigd.
+- Het inlogscherm toont een rustige cameratocht door alle uitgewerkte buitenkaartdecors: steden, routes, Viridian Forest en Aether Clash, met vloeiende overgangen die blijven herhalen.
+
+- Nieuwe gecontroleerde 3D-modelpakketten kunnen nu bewegende rook- en vuureffecten tonen met transparantie. Bestaande modelpakketten worden niet automatisch vervangen.
+
+- Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
+
+- De vrouwelijke Aether Blossom/Wishmaker Outfit gebruikt nu ook bij trainertekst in battles de bijbehorende vier Wishmaker-spritelagen.
+
+- De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
+
+- Desktop-builds bevatten nu de benodigde battle-UI-afbeeldingen en contentpakket-helper, zodat gevechten ook zonder losse 2D-spritepakketten kunnen openen.
+
+- De launcher heeft nu een apart venster voor 3D-modellen: importeer een gecontroleerd modelpakket en selecteer het voor de volgende gamestart. Installeren gebeurt op de achtergrond en verandert je opgeslagen game-instellingen niet.
+
+- De bericht- en spectatorbalken blijven in immersive gevechten nu met duidelijke tussenruimte van elkaar gescheiden.
+
+- Gecontroleerde 3D-modellen kunnen nu als lokaal, verplaatsbaar pakket worden geïnstalleerd. De catalogus blijft werken wanneer de hele modelmap wordt verplaatst en opnieuw gekozen, zonder afhankelijkheid van tijdelijke reviewbestanden.
+
+- Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.
+
+- De lokale 3D-modelcatalogus ondersteunt nu de gecontroleerde normale en shiny versies van Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite en Roaring Moon, met passende animaties en HP-balkposities. Ontbrekende of niet-goedgekeurde modellen blijven op 2.5D terugvallen.
+
+- Immersive replays houden de berichtbalk, afspeelknoppen en replaybediening nu netjes van elkaar gescheiden.
+
+- 3D Pokémon-modelbestanden worden nu op de achtergrond gecontroleerd, zodat deze controles het beeld tijdens laden en wisselen niet blokkeren.
+
+- Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
+
+- Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
+
+- Immersive 2D-gevechten houden de HP-balken en Pokémon-indicatoren zonder overlap boven de sprites.
+
+- De immersive HUD groepeert weather en terrain bij het spelersportret, de beurt bij het tegenstanderportret en side conditions bij de bijbehorende teamiconen.
+
+- The browser client now loads, saves and activates the same eight-slot hotkey bar as the desktop client, including Ctrl+1 through Ctrl+8 shortcuts.
+
+- Pressing Escape while Pokémon Storage is open now closes Storage instead of opening Settings over it, preventing browser instability.
+
+- Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
+
+- Fixed browser battles sometimes showing an empty platform for Pokémon whose sprite catalog uses a compact species name, including Roaring Moon.
+
+- Immersive battles are now the default in the browser as well as the desktop client, with Classic still selectable in Settings. Team Preview Pokémon now stay anchored to the fullscreen arena across browser and desktop window sizes.
+
+- 3D battles now prepare only the active Pokémon instead of the entire model catalog. PvP Team Preview can open with just the arena; switching reuses checked model resources, and failed model loads do not retry endlessly.
+
+- Repeated 3D battles can reuse the prepared Pokémon model resources in memory, avoiding repeated scene imports. The cache is bounded and checks model contents and animation metadata before reuse.
+
+- Realtime 3D moves and catalogued battle effects now play the same sound cues as 2D/2.5D, without loading flat visual effects. Audio follows battle playback speed and stops on cancellation; native model animations keep their original timing.
+
+- Corrected 3D faint floor clearance for the reviewed Dragonite and Roaring Moon models, with a matching transition into a steady faint loop. Existing animation poses and timing are preserved.
+
+- Reviewed 3D Dragonite and Roaring Moon models now use animation-specific floor clearance and grounded sleeping poses. Their idle placement and animation timing remain unchanged.
+- Fainted 3D Pokémon remain visible in their faint loop until replaced or the battle ends, instead of disappearing. 2D/2.5D faint effects are unchanged.
+
+- 3D model placement now supports asset-defined scale and facing, with grounding checks tied to the exact model and placement. Existing approved models retain their current appearance.
+
+- Fixed 3D PvP loading getting stuck before Team Preview: the empty arena can now prepare before leads are selected. Trainer speech bubbles now sit closer to their trainer sprites.
+
+- Added an offline developer preview for trainer dialogue with Dragonite and Roaring Moon, repeatable left/right callouts, custom text and optional 3D arenas.
+
+- 3D and Immersive battles now reveal the prepared arena with the existing wild, trainer or PvP transition effect instead of a plain loading-screen fade.
+
+- In Immersive battles, full trainer-card artwork now appears beside the party previews while trainers speak, then fades away with their speech bubble. Corner portraits remain visible.
+
+- Immersive Damage Calculator now places results and settings side by side, with independent scrolling. Smaller windows use Results/Settings tabs, and recalculation preserves your settings tab and scroll position.
+
+- Immersive 2D/2.5D battles now use a more compact, centered Pokémon/platform layout, leaving room for the shared battle controls. Camera reset is shown only for realtime 3D.
+- Fixed 2D sprites, battle controls and chat appearing over the loading screen while a 3D battle prepares. The prepared arena is revealed only after the loading cover fades.
+- Realtime 3D battles now use model attack animations independently of the 2D/2.5D move effects. Existing sprite effects remain available in 2D; unsupported 3D effects no longer insert flat animations into the arena.
+- Immersive battles now have a visible Damage Calculator button above Chat/Battle Log and a separate camera-reset button. Smaller status badges follow the HP panels, which separate when they overlap. The calculator fits the screen, offers collapsible advanced settings and temporarily hides chat/log.
+- Looking down from above the cave no longer hides the battle behind its ceiling. Immersive battle messages have a custom framed style, and chat/log backgrounds are more transparent without fading text.
+- Immersive battles now open on Battle Log by default, with sharper, consistently sized text and more readable chat/log text. Hover cards no longer grow with fullscreen scaling.
+- Immersive battles now have separate Chat and Battle Log tabs, a taller mouse-resizable panel with saved height, and a tighter message/switch layout. Drag the free arena with the left mouse button to orbit between animations; reset the view from the battle tools menu.
+- Desktop grass battles reuse a prepared forest environment. The first forest preparation now runs under the desktop map-loading transition, rather than rebuilding terrain at every battle opening.
+- Refined Immersive battles with corner avatar portraits and trainer callouts, a taller chat with a battle-only log tab, centered switch controls, and Mega/Z/Tera beside the moves. Damage Calc now lives in the battle tools menu; Classic is unchanged.
+- Desktop forest battles prepare terrain earlier and alongside Pokémon loading. Loading progress now extends the preparation window, with a visible loading message and an explicit fallback option if preparation stalls.
+- Immersive desktop battles now retain the existing chat at bottom-left alongside a separate battle log. Enter focuses chat, Escape leaves typing, and the log's open/closed preference is saved.
+- Restored the left team preview in Immersive battles and centered the switch controls and battle message, leaving the bottom-left area free for future chat.
+- Refined Immersive battles with smaller Pokémon-following HP panels, compact move controls, one player team row and smaller battle messages.
+- Added an Immersive desktop battle UI with a fullscreen arena, floating controls and collapsible battle log; the Classic layout remains selectable in Settings.
+- Local developer forest previews now find their existing forest pack beside the selected model catalog when no forest manifest is explicitly configured.
+- 3D battles now automatically follow the same grass, water, cave and stadium environment selection as 2D battles, including gym leaders, PvP and Aether Clash lobby encounters.
+- Added a desktop development arena selector for forest, cave, sea and stadium battles, sharing the existing 3D animation and switching flow.
+- Added local Terrain3D forest-pack support and precomputed model grounding for the new battle arenas.
+
+- Made stadium logo highlights more visible and added individually timed cheering and waving spectators.
+
+- Added gentle logo animation and light sweeps across the 3D stadium branding.
+
+- Brought the 3D stadium preview to life with slowly sweeping light beams, matching floor highlights and animated supporter lights.
+
+- Updated the 3D stadium preview boards and screen to use the official PokeAether wordmark.
+
+- Added a separate 3D stadium preview with illuminated stands, PokeAether screens and a reflective battle floor.
+
+- Added a separate coastal battle preview with a sandbar, animated sea and distant rocky shoreline.
+
+- Added a separate cave battle preview with a clear stone floor, natural rock walls and recessed tunnels.
+
+- Reduced grainy, blotchy Pokémon shadows in the desktop forest preview while preserving the approved lighting and material colors.
+
+- Fixed the forest preview's ground-height calibration missing animated poses, which could leave Roaring Moon's tail underground.
+
+- Added a winding background trail to the forest battle preview and corrected model grounding using the full idle animation.
+
+- Added a separate Temperate Forest battle preview with a sunny, circular clearing for both Pokémon and tall grass retained around the arena.
+
+- Added a separate full-window forest preview for reviewing Dragonite and Roaring Moon before changing the battle arena or interface.
+
+- Prepared desktop 3D Pokémon can now use the reviewed richer material colors and highlights with fixed neutral lighting, including during attacks and switching.
+
+- Desktop 3D battles prepare their first rendered models behind the opening screen before revealing the arena, with safe cancellation and a timeout fallback.
+
+- Desktop 3D battles render at their on-screen resolution with smooth filtering and more focused shadows, instead of enlarging the low-resolution battle canvas.
+
+- The experimental 3D battle preview now explains missing model catalogs and other fallback reasons directly on screen.
+
+- Pokémon hover cards no longer intercept clicks on battle team buttons and now position correctly when the battle interface is scaled.
+
+- Experimental desktop 3D battles open in a dedicated full-screen presentation. The overworld interface returns when the battle closes, while the world connection stays active.
+
+- Experimental 3D battles now have their own send-out, recall, attack, damage and faint transitions instead of following hidden sprite animations.
+
+- Experimental 3D battles load prepared models in the background instead of converting them during play. Hidden trainer portraits no longer cause unnecessary work when opening wild battles.
+
+- Experimental desktop 3D battles now offer optional gentle camera movement, respect animation speed changes, and play the full faint animation. Returning to 2.5D releases the 3D scene.
+
+- Desktop players can keep 2.5D battles or opt into an experimental 3D preview using local Dragonite and Roaring Moon models. Unsupported Pokémon and battle situations fall back to 2.5D.
+
+- Approved animated Pokémon catalogs can now be packaged into validated, size-efficient 512×512/60 FPS runtime data without changing their review or activation state.
+
+- Animated Pokémon previews no longer develop moving block patterns when the game window uses fractional scaling.
+
+- Pokémon kept permanently after an Aether Rental are permanently untradeable.
+
+- The Aether Vanguard Leader now explains how the Guild training money pool and participant shares are calculated.
+
+- The Aether Vanguard Leader now offers a choice to challenge a Guild or read how Guild training and its daily reward work.
+
+- Corrected transparent Pokémon edges in Summary and Pokédex previews.
+
+- The Guild training daily-reward checkbox now has clear Aether-styled borders and visible checked, hover, disabled and keyboard-focus states.
+
+- The Clash Training Captain is now the Aether Vanguard Leader with Veteran artwork, and the daily AI5 Hard reward clearly advertises 200 Aetherite for each participating Trainer.
+
+- Animated Pokémon remain crisp and stable while moving in the smaller Summary and Pokédex previews.
+
+- The Team and Pokémon Rental attendants now use distinct wealthy merchant overworld sprites and matching dialogue portraits.
+
+- Rental Pokémon now explain clearly that their included held item cannot be removed or replaced.
+
+- Read-only Pokémon summaries now show a single colored gender icon instead of duplicating it with a second symbol.
+
+- Individual Pokémon rentals now use a compact three-column card grid with simple permanent, extend and return actions; pricing is kept concise and appears where it is needed.
+
+- Active individual Pokémon rentals now appear as separate detailed cards, each with its own set preview, expiry and styled extend, return and permanent-purchase actions.
+
+- The single active team rental now gets a full-detail card with all six sets, clear expiry information and styled extension and return actions.
+
+- Rental team cards now appear in small batches, keeping the catalog responsive while its Pokémon icons finish loading.
+
+- Team and Pokémon rentals now submit their catalog duration in the integer format required by the server, so confirming a rental no longer fails validation.
+
+- The Pokémon rental review card now centers its level, rarity badge and held-item chip around the Pokémon artwork for a cleaner identity summary.
+
+- Custom Pokémon rentals now preview their full set in familiar PokéPaste order, including the temporary held item and its icon, without an internal set-info scrollbar.
+
+- The Pokémon rental builder's live preview now groups identity, build details, moves and training into a compact, scan-friendly card.
+
+- Pokémon rental quotes now use a structured review card with a sprite, rarity, readable moves and stat spreads, and separate rental and permanent-price summaries.
+
+- The Team Rental and Pokémon Rental attendants now have shorter labels and can be spoken to normally from across their lobby counter.
+
+- Rendered Pokémon in Summary and Pokédex now offer an on-demand animation menu for reviewing attacks, damage, sleep and fainting without entering battle.
+
+- Active team and Pokémon rentals can now be extended by 24 hours for 100 Aetherite from My rentals; new rentals use the simplified 24-hour pricing model.
+
+- Rendered Pokémon now sit lower on battle platforms, while Summary cards preserve the natural size difference between small and large species.
+
+- Every player who can reach the Aether Clash Lobby can use level-100 rentals in Clash and Ranked play, while the lobby explains when an above-cap party member must be stored or returned before leaving.
+
+- The Pokémon rental editor now places inputs beside a live team-style Pokémon set preview.
+
+- Pokémon rentals now separate set creation from the validated review-and-rent screen.
+
+- Rental specialists now offer rent-or-explanation dialogue choices, while the catalog uses a compact balance-only header.
+
+- The Pokémon rental builder now follows a clear create, validate and rent flow with friendlier input guidance and errors.
+
+- Team rental tier filtering is limited to Aether OU and Aether UU.
+
+- Rental windows, tabs, builder fields, dropdown menus and close controls now consistently use the Aether interface styling.
+
+- Pokémon rentals can now be built from a PokéPaste set or manual fields, with server-validated rarity pricing.
+
+- Team rentals now use the familiar AI Sparring catalog layout, including team filters, six-Pokémon previews and complete set cards before choosing a rental duration.
+
+- Two rental specialists in the Aether Clash Lobby now offer level-100 teams and individual Pokémon for Aetherite, with catalog previews, duration choices, early returns and permanent purchase for individual rentals.
+
+- Trainer Cards now stay at one consistent size while switching tabs, and public previews can be moved by dragging their title bar.
+
+- Hovering a shortened Pokémon Summary location now reveals its complete name.
+
+- Pokémon Summary portrait zoom keeps its fixed lower-left position while the optional Hidden Ability badge appears beside it.
+
+- Official mod packs now show their latest publication date in Discover and Installed.
+
+- Adventure Stats now shows Region clears at zero, introducing the future region replay progression stat.
+
+- Trainer Card trainer portraits now use pixel-aligned scaling, keeping their pixel art crisp beside Favorite Pokémon.
+
+- Ranked Trainer Card tiers now also show peak rating and battles played without adding another tab.
+
+- Trainer Card Overview now keeps verified all-time PvP totals visible during refreshes, while Ranked ratings use responsive tier cards that wrap as formats are added.
+
+- Trainer Card Pokémon now face right and sit lower beside the trainer, keeping the trainer visible in front of larger companions.
+
+- Favorite Pokémon now share the full Trainer Card portrait with the trainer, giving broad poses more room instead of shrinking them into a small side icon.
+
+- Favorite Pokémon portraits now scale by visible visual mass, so wide poses such as Greninja no longer appear implausibly tiny beside the Trainer.
+
+- The Favorite Pokémon picker now keeps a visible, styled scrollbar for longer owned-Pokémon lists.
+
+- Trainer Card companions now have calmer, correctly layered portrait sizing, and their picker matches the Passport’s dark visual style.
+
+- Trainer Card PvP ratings now use individual wrapping tier cards, leaving room for additional Ranked formats.
+
+- Both Trainer Card views now show separate Seen, Caught and Shiny caught species counters, with explanations and a gold shiny accent.
+
+- Summary and Pokédex previews now have a magnifying-glass button that toggles 2× zoom. Normal view fits the full Pokémon; clicking the Pokémon still switches front/back.
+
+- Changing your trainer's skin tone now preserves the Pokéball's original red colours in battles and on Trainer Cards.
+
+- Trainer Card companions must now be Pokémon you currently own. Shiny choices use the actual owned variant; borrowed, released or traded-away Pokémon cannot be shown as your own.
+
+- Both Trainer Card views now show Pokédex progress and a favorite Pokémon's HOME portrait beside the trainer. Choose your companion from registered Pokémon, see lifetime PvP ratings by format, and add friends from public cards. Battle totals now display as whole numbers.
+
+- Rendered Pokémon in Summary and Pokédex start moving while their remaining frames load, with faster initial playback and cancellation when browsing to another Pokémon.
+
+- The Trainer Card overview now fills its lower space neatly and aligns the Trainer Title selector with the other profile values.
+
+- Trainer Cards now feature a full-body trainer portrait with your outfit and Chroma colours, a matching passport design for public profiles, and a clearer overview of your trainer information.
+
+- Player Trainers now use dedicated layered battle sprites behind their Pokémon in NPC, PvP, spectator, and co-op Trainer battles. They face into the battlefield, use every available matching outfit layer, and temporarily use the Starter Kit shirt and trousers when those two battle layers are still being made. The unisex Mysterious Outfit now has its complete battle look for male and female Trainers, while the Adinho Outfit supports its original palette and saved Chroma colours.
+
+- Local editor runs now reuse the selected launcher mod packs for cosmetic testing.
+
+- Mod category selectors now match the launcher styling instead of the default Godot dropdowns.
+
+- Installed mods can now be removed locally and installed again later from Discover.
+
+- The Mods window now clearly explains how to import a community `.zip` pack.
+
+- Community mod creators can now start from copyable Pokémon cries, battle sprites and follower sprites pack templates.
+
+- Mods can now be selected independently for Pokémon cries, battle sprites and follower sprites in the launcher.
+
+- Installed mods now use clear Enable and Disable actions instead of an unlabeled checkbox.
+
+- Fixed an error that could occur after installing an official mod pack from Discover.
+
+- Cosmetic choices now live in the launcher Mods panel. Enabled sprite and cry packs apply automatically when the game starts.
+
+- The desktop launcher can now show and install official Anime Cries and Gen 5 Animated Sprites packs from the Mods catalog once they are published. Downloads verify size and checksum before installation.
+
+- Local SCVI battle-sprite previews now preserve an explicit open-eye facial baseline when source actions omit unchanged eyelid tracks; rendered Pokémon are also consistently larger beside a compact, higher HP HUD while keeping their species-size differences and reviewed platform placement.
+
+- High-quality rendered Pokémon now appear immediately as lossless 512 px frames in Summary and Pokédex, then upgrade to their complete 60 FPS idle animation through non-blocking background decoding. Visible artwork bounds, the illustrated Summary backdrop, lightweight Pokédex list icons, cached front/back views, and the optional local development review catalog remain intact.
+
+- Desktop players can import and enable local Pokémon sprite and cry packs from the launcher's Mods panel. Missing assets use the existing game assets. Official pack discovery will be added later.
+
+
+- Local Roaring Moon battle previews now recognize the in-game species name with a space, including normal/shiny front and back views.
+
+- Local battle-sprite previews can now retain native 60 FPS for source animations that need it; existing 24 FPS sprites and fallbacks are unchanged.
+
+- Local battle-sprite review can now preview five more body shapes—Articuno, Machamp, Abra, Onix, and Parasect—without changing the default sprites or shiny fallback.
+
+- Local battle-sprite review now supports reproducible high-quality Dragonite and Rattata builds, with explicit approval and existing sprites as fallback.
+
+- Local visual test: Dragonite can also use a master-quality 512px, 24 FPS pre-rendered HD set with lazy action loading and a livelier idle cadence; the earlier Dragonite/Gyarados test and all regular sprites remain available for comparison.
+
+- Local visual test: Rattata can use a separate master-quality 512px, 24 FPS HD battle set to evaluate small-body camera framing, platform placement, and scaling; the regular sprite remains the default.
+
+- Wild battles triggered in the Aether Clash lobby now use the animated PvP stadium background.
+
+- Local visual test: Dratini can use pre-rendered HD battle animations when launched with the developer-only comparison flag; the regular sprites remain the default.
+
+- Adventure Parties can now be formed and played in the browser, including shared trainer and grass battles with desktop players in browser-available areas.
+
+- Terapagos can be switched back into battle after changing to its Terastal or Stellar form.
+
+- Co-op doubles now play Mega Evolution, Primal Reversion, and Z-Power activation effects on the Pokémon that triggered them.
+
+- Co-op battle cleanup no longer shows a false activity-save warning while the server is completing the shared settlement.
+
+- Adventure Party presence now refreshes faster. Co-op battles announce partner disconnects and reconnects in both the system feed and battle log, while AI takes over shortly after a genuine disconnect.
+
+- Co-op battles now keep both clients in the battle until the final shared move animation has played, even when the other Trainer locks the finishing turn first.
+
+- Co-op trainer battles now show the NPC Trainer behind the opposing Pokémon; wild battles remain trainer-free.
+
+- Adventure Party HUDs now keep the party leader at the top with a Leader/#1 badge and show the partner as #2; active co-op partners remain shown online through their live battle heartbeat.
+
+- Co-op battle setup now safely initializes its native mechanics and target overlays, preventing startup errors while a shared battle opens.
+
+- Co-op battles no longer emit repeated UI errors while their native battle overlay closes.
+
+- Co-op doubles now wait for every participant's final battle projection before automatically returning to the overworld, so the finishing move animation plays for both Trainers.
+
+- Co-op doubles now align the opposing platform and Pokémon slightly higher with the move controls.
+
+- Co-op doubles now place Mega Evolution and Z-Move controls higher beside the compact move grid.
+
+- Co-op doubles now receive the public active Pokémon level directly from the battle view, including Lv. 100 forms, and use slimmer two-Pokémon HP HUDs.
+
+- Co-op doubles now place both platforms and active Pokémon lower and closer to the centre, leaving a clearer left-side staging area for allied Trainer sprites.
+
+- Adventure Party HUDs now show each Trainer's live online/offline status. Wild encounters automatically use the normal single-battle flow when the partner is offline or on another map.
+
+- Co-op doubles now play the native stat-drop/raise effect on the affected Pokémon, including Close Combat's self-inflicted drops.
+
+- Co-op doubles now scale catalog move effects to cover the full battlefield, restoring full-size timing backgrounds such as Close Combat.
+
+- Co-op doubles now offer Mega Evolution and Z-Move controls whenever the current Pokémon has a simulator-legal move for that mechanic.
+
+- A cancelled co-op battle start now automatically returns both players to the overworld instead of leaving the loading overlay open.
+
+- Co-op doubles now apply catalog movement, dodge, impact feedback, and temporary attacker-hide effects to the individual Pokémon involved, rather than an entire side of the field.
+
+- Co-op double-battle move effects now use their full catalog scale. Live clients play every received battle event in order, and the automatic return waits for the final shared event cursor before closing the battle.
+
+- The Training Captain offers a development-only button to reset an already earned daily Guild training reward for another test attempt.
+
+- Co-op double battles now use every existing move animation from the catalog, including self, field and spread moves, at the appropriate doubles sprites.
+
+- The Clash Training Captain now offers an optional daily Guild reward attempt against AI5 Grandmaster Hard bots, with a clear indication after the Guild has earned its reward for the day.
+
+- The overworld Adventure Party HUD now has a translucent background that becomes clearer on hover.
+
+- Co-op double-battle logs now use the same move, damage, status, stat-change, and result colors as single battles.
+
+- Co-op double battles now group the left-side party rail into slots 1–3 for the first Trainer and 4–6 for the second, leaving empty slots in place when a roster is short.
+
+- Co-op double battles now show burn, poison, paralysis, freeze, and sleep effects on each affected Pokémon sprite, matching single battles.
+
+- Co-op doubles now have per-Pokémon animation anchors for all four positions. Ember and Will-O-Wisp use their existing move effects on a single target; other moves keep the safe standard animation while more effect types are checked.
+
+- Co-op party slots now sit centered in the bottom battle bar instead of being pushed against its top edge.
+
+- Co-op target selection now briefly confirms the chosen move and asks for a target; Cancel returns to the normal action prompt.
+
+- Co-op battles now ask “What will your Pokémon do?” with the active Pokémon's name, matching the singles prompt.
+
+- Settled co-op wild battles now return directly to the same map tile after a win or catch, avoiding a brief black reload screen.
+
+- Co-op double battles now switch from map music to wild or Trainer battle music, then restore map music on return.
+
+- Co-op battle logs now show how much HP each hit took, as a percentage.
+
+- Co-op Pokémon hover cards now show possible abilities and speed tiers. Stat-change badges sit below the HP panels instead of inside them.
+
+- Co-op double battles now use readable battle-log messages, show the normal Pokémon and move hover cards, and display stat-stage badges under each Pokémon's HP bar.
+
+- Both Trainers now see a co-op Poké Ball throw against the correct wild Pokémon after their shared choices are in.
+
+- Co-op Poké Ball animations now wait until the other Trainer has chosen an action, matching the shared turn's presentation.
+
+- Co-op Poké Ball and partner-decision dialogs now have clearer titles, descriptions and styled choices; the bag's back action sits below the available balls.
+
+- Co-op capture attempts now play the Poké Ball throw and shake animation on the assigned wild Pokémon. Capture feedback appears in the battle prompt instead of under the party slots.
+
+- Finished co-op battles now return to the world automatically after victory, defeat, or forfeit. A retry button appears only if returning fails.
+
+- Co-op double battles now update each target's HP after its own move and hit animation, instead of changing all HP bars at the end of the turn.
+
+- Co-op target hover now also works around a Pokémon's feet and legs, without changing the initial target under a stationary cursor.
+
+- Single-target moves in co-op battles now start on the left opposing Pokémon, even when a target appears under a stationary cursor.
+
+- In co-op battles, choosing a target now locks the move buttons until you pick a Pokémon or press Cancel. Cancel returns to move selection without using a turn.
+
+- Returning from a co-op wild battle after both Trainers agree to Run is faster. The game checks the exit more often and avoids reloading the map when the settled Trainer is already on the correct tile.
+
+- Co-op move targeting now highlights the selected Pokémon sprite; hover or arrow keys move the glow without covering the field with target boxes.
+
+- Both wild Pokémon in a co-op battle now glow in the side rail while they are active.
+
+- Co-op Pokémon and their platforms now sit lower on the field, nearer the battle text and moves. The combined party icons stay fully above the battle text.
+
+- In co-op double battles, each Pokémon now has its own non-overlapping target area, so you can select the right-hand Pokémon with the mouse.
+
+- Co-op confirmation and return choices now open over the battlefield, leaving the bottom switch bar neatly reserved for your Pokémon.
+
+- Co-op Pokémon stand closer together in double battles. Both Trainers stand together behind the left Pokémon in Trainer battles and stay hidden in wild battles.
+
+- Co-op wild battle logs now announce both wild Pokémon and each Trainer's sent-out Pokémon in plain battle language.
+
+- Co-op wild battles now show a clear loading panel while the shared battle starts, and check for the ready battle more often during that short phase.
+
+- Single battles again show full-width Pokémon HP bars after the double-battle HUD changes.
+
+- After both Trainers agree to flee a co-op wild battle, they return to the world automatically. A retry button appears if returning fails.
+
+- Co-op PvE battles show the turn without a countdown timer.
+
+- Double battles have an uncropped compact battlefield, smaller Trainer sprites, a wider team title, and a three-Pokémon personal switch row. Wait now sits beside Bag and Run. Single-battle layouts are unchanged.
+
+- Co-op battles now keep the normal battle log and Damage Calc button, with the combined party shown in the field rails.
+
+- Co-op double battles use a simple per-Pokémon attack and hit animation while move-specific effects are adapted later. Choose single-target moves by clicking a Pokémon or using the arrow keys and Space; Escape cancels targeting.
+
+- Co-op battles show both Trainers behind their Pokémon, a turn counter and VS banner on the field, combined party icons at the sides, and only your own Pokémon in the switch bar. The battle log uses Trainer names instead of generic co-op labels.
+
+- Co-op battle prompts use the normal battle field, with extra choices beside the battle log.
+
+- Co-op double battles show the two Pokémon HP panels side by side in a compact HUD; single battles keep their original HUD layout.
+
+- Co-op double battles now use the familiar battle field: two Pokémon sprites on each side, stacked native HP panels, standard move buttons and battle log, with Bag and Run in their usual place.
+
+- Co-op double battles now open in the regular battle window, with both Trainers' Pokémon, opponents, battle events and shared turn actions placed in its battle stage and panels.
+
+- Guild training challenges now recognize the Captain at her new lobby position.
+
+- Speaking to the Clash Training Captain now refreshes your live position before opening training, with clearer messages if location sync or distance blocks the challenge.
+
+- Adventure Party members on different maps can enter ordinary single wild and Trainer battles; mapmates can start double battles regardless of tile distance.
+
+- Bot Guild opponents now appear as Ace Trainers during battles, including after reconnecting or spectating.
+
+- Future Self's Mt. Moon scene now prepares its dialogue before the cinematic begins and retries temporary loading failures on browser and desktop.
+
+- Adventure Party wild battles now explain when a team Pokémon exceeds the shared level cap.
+
+
+- Browser login keeps the loading screen visible until the saved map module is ready, preventing a brief grey "Unknown Location" world.
+
+- Pokémon Storage now explains the three-Pokémon Adventure Party limit when a fourth party Pokémon is rejected.
+
+- Fixed the local browser preview and web gateway blocking the Route 3 Magikarp purchase before it reached the game server.
+
+- Bot Guild trainers now show their names on the arena map when there is room; very large rosters keep compact [BOT] labels to avoid overlap.
+
+- Walking through grass with an Adventure Party no longer pauses for each wild-encounter check; missed checks use fewer network requests.
+
+- The Route 3 Pokémon Center Magikarp purchase now works in the browser and shows its new ₽2,000 price.
+
+- The Adventure Party window now shows separate portrait cards for both Trainers, their leader roles, a clear shared-cap row and a distinct Leave party button.
+
+- The Adventure Party card is now as compact as the personal-buffs panel below it.
+
+- Adventure Party names and portraits now resolve correctly when Godot parses numeric member IDs from the server's JSON response.
+
+- If a connected server omits party names or portraits, System chat now identifies whether the client is using the local, production or a custom API.
+
+- Typing a Trainer name in the Adventure Party invite window is no longer interrupted by the background party-status refresh.
+
+- The Adventure Party card now stacks both Trainers vertically with a portrait beside each name, and uses live local or nearby-player data when an older party response lacks those details.
+
+- Bot difficulty names in Guild training no longer include the technical fallback note.
+
+- The Adventure Party HUD now shows both Trainers' names and character portraits, with a simple Party heading instead of a level-cap button.
+
+- Your Adventure Party partner and shared level cap now appear in a compact in-game indicator above your personal buffs. Select it to open the party window.
+
+- The Clash Training Captain now offers Grandmaster Intermediate and a mixed bot Guild; each mixed bot keeps its assigned difficulty for the duel.
+
+- Adventure Party invitations now show the current shared story level cap before you accept.
+
+- Adventure Party invitations now produce system messages for both Trainers. A new incoming invitation opens a focused Accept/Decline popup; failed invitations explain when a Trainer is busy, offline or unable to join.
+
+- Side-quest offers now have clearer reward cards, sit in the upper part of the screen, and adapt to shorter browser and desktop windows while keeping Accept and Decline visible. Their first opening in a session no longer stretches to nearly full-screen height.
+
+- Guild training Captains can choose AI4 Beginner or AI5 Grandmaster Hard when challenging the bot Guild.
+
+- Bot Guild practice no longer keeps Turn 1 moves disabled for the 30-second presentation fallback after a confirmed opening release.
+
+- Bot Guild practice no longer treats an unconfirmed opponent-forfeit update as a win or disconnects the player from an active battle.
+
+- Adventure Party invitations now accept usernames or Trainer names instead of requiring numeric Trainer IDs. If a Trainer name is shared, use the unique username; right-click invitations prefill it.
+
+- Adventure Party is now opened from Socials or a nearby Trainer's right-click menu instead of a fixed on-screen button. The styled party window can be dragged and closed, and right-clicking prefills the Trainer ID.
+
+- Browser map changes no longer prematurely time out NPC and encounter metadata during a long loading frame.
+
+- Maps now use compact, lossless atlases in browser and desktop, keeping their original pixel art while reducing texture overhead.
+
+- Oak's lab entrance now triggers on the reachable doorway tile in browser and desktop.
+- Your house and Oak's lab use smaller lossless map atlases in both browser and desktop, with their artwork unchanged.
+
+- Newly imported maps use compact lossless atlases while preserving their artwork in the browser and desktop client.
+
+- The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
+
+- Pallet Town uses a smaller lossless map atlas while keeping its tiles and gameplay unchanged.
+
+- Battle effects reuse an identical background texture without changing visuals or preloading.
+
+- Grass battle effects reuse the prepared terrain texture, keeping animation quality and battle preloading unchanged.
+
+- Electric battle effects share an existing texture to reduce memory use without changing animation quality or battle preparation.
+
+- Latest download links now point to the current release without storing extra copies. Older desktop and browser downloads retain one previous version for rollback.
+
+- Battle animation preloads and pending result refreshes are now cleaned up when a duel closes.
+
+- Browser background music is loaded separately instead of duplicated in the initial game pack. Sound effects, Pokémon cries and desktop audio are unchanged.
+
+- Browser fullscreen now fills your screen, supports exiting with Escape, and keeps its settings toggle in sync with the browser.
+
+- Login failure messages remain visible on Welcome Back, and the browser preserves your original Remember me choice when restoring a session.
+- Improved resource cleanup when closing the game and during battle-preview transitions.
+
+- Corrected missing tiles in the browser's Misty-region interiors by rebuilding their lossless texture atlases with browser-safe dimensions. Browser login no longer starts the placeholder house's NPCs while downloading your saved map.
+
+- The browser demo now includes Mt. Moon, Cerulean City, Bill and Misty. These maps download separately when needed; Route 5, Route 9 and Cerulean Cave require the desktop client.
+
+- Completed the Clash Training Captain flow for independently sized Bot Guild practice with stationary [BOT] trainers and normal battle timers. Training remains disabled pending separate release activation.
+
+- Prepared compact numbered [BOT] labels so stationary training bots stay readable in crowded arenas, and checked unequal guild rosters through the training UI. Training remains unavailable until V1 is complete.
+
+- Prepared stationary [BOT] trainers in the Clash arena, including busy indicators and removal after elimination. Bot Guild training remains unavailable until V1 is complete.
+
+- The Clash Training Captain reports team-preparation failures in your selected language. Bot Guild training remains unavailable while V1 is completed.
+
+- Added the Clash Training Captain and a training setup menu with an independent opposing bot count. Training stays unavailable until bot-guild V1 is ready.
+- Optional browser map downloads now stream to storage, verify integrity and support retry. Existing browser world boundaries remain unchanged.
+
+- Co-op testing: the battle Bag shows available Poké Balls for your own wild target. Interrupted throws reuse their saved request, and accepted catches/results recover after reconnect. Full storage is explained without consuming a ball. Co-op remains disabled pending V1 acceptance.
+
+- Co-op testing: Run and trainer Forfeit ask your partner for agreement, even after an attack was selected. Refusing lets both Trainers choose again without using a turn or PP. Forfeit warns that both Trainers lose; co-op remains disabled pending V1 acceptance.
+
+- Co-op testing: wild battles offer Wait to skip your own action without spending PP, giving your partner more catch attempts. Wild Pokémon still act. Trainer and single battles are unchanged; co-op remains disabled pending V1 acceptance.
+
+- Desktop automatic zoom now uses the same consistent world view as the browser, including interiors. Manual 1×, 1.5× and 2× outdoor zoom choices and saved preferences remain available.
+
+- Browser world zoom now adapts to the window size with a consistent view on laptop, Full HD and 4K screens, without letterboxing. Desktop zoom settings are unchanged.
+
+- Co-op testing: either Trainer can leave a wild battle for both using Run, without a partner confirmation. Trainer battles cannot be fled. Wild co-op remains disabled pending catching and release acceptance.
+
+- Co-op testing now sends grass steps to the server and enters the shared battle screen when an encounter starts. Partners no longer enter separate solo wild battles; wild co-op remains disabled pending catching and fleeing support.
+
+- The battle Bag now has styled item rows, clear quantity badges and matching hover, pressed and keyboard-focus states on desktop and in the browser.
+
+- Corrected oversized Champions ZA Mega battle sprites, including Greninja-Mega, on desktop and in the browser.
+
+- Overworld Poké Ball item pickups now work in the browser and stay collected after logging in again.
+
+- Co-op testing now includes Liam and Sammy with their original single Pokémon. Their unused opponent position stays empty and cannot be selected as an attack target. Co-op remains disabled pending release acceptance.
+- Co-op testing now supports Zoe, Mason, Cale, Rick, Doug, Anthony, Flint and Stone with their original teams. Previously victorious Trainers can join as helpers without entering the solo rematch flow.
+- Co-op testing now plays move effects and battle sounds across all four Pokémon positions, including spread attacks and misses, with safe cancellation when leaving a battle.
+- Co-op testing now has a dedicated four-Pokémon battle screen with animated sprites, HP/status, clear ownership, legal target selection, replacement controls and a reconnect-safe battle history. Co-op remains disabled until release activation.
+- Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
+- All side quests from Pallet Town through Brock can now be accepted and completed in the browser, including Fishing, Thieving, EV Training and Rock Smash objectives.
+- Permission-gated Developer Tools can now parse, generate, spawn, battle and clean up test Pokémon in the browser.
+- Browser Trainers can now save appearance changes from their Trainer Card.
+- Browser players can move immediately after using Reset / New Game and now respawn in the complete default outfit.
+- The browser world now continues through Route 22, Route 2, Viridian Forest and the Pewter City Gym; Route 3 directs Trainers to the downloadable client.
+- Browser Trainers can use the Aethernet between Pallet Town, Viridian City, Pewter City and the Aether Clash Lobby, with free Lobby travel for Guild members.
+- Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
+- Map textures now take substantially less download space in both desktop and browser builds without reducing visual quality.
+- Aethernet Keepers and the Guild Lobby travel button now work in the browser where travel is supported.
+- Browser login now opens directly at the Trainer's saved location without briefly showing the Player's House.
+- Gary now stays beside Professor Oak and chooses his Kanto starter during the browser storyline.
+- Professor Oak now finishes the Parcel scene after Gary leaves by directing the Trainer home to their parents.
+- Repeating an already recorded Parcel hand-in now repairs stalled story progress toward visiting Mom.
+- Repaired Parcel hand-ins now preserve Professor Oak's complete closing conversation in the browser.
+- Oak's Parcel rewards now appear with their item jingle after the complete conversation.
+- Trainers now reappear correctly after completing an Aethernet teleport in the browser.
+- Permission-gated Developer and Staff Tools are now available from My Powers in the browser; player-facing creator tools remain desktop-only.
+
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
 ## 0.3.78 - 2026-09-13

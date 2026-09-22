@@ -16,6 +16,11 @@ func _run() -> void:
 	_check(first._get_sprite_frames_visual_bounds(frames) == second._get_sprite_frames_visual_bounds(shared), "shared bounds are restored")
 	_check(first._get_sprite_frames_anchor(frames) == second._get_sprite_frames_anchor(shared), "shared anchor is restored")
 	_check(first._get_sprite_frames_render_scale(frames) == second._get_sprite_frames_render_scale(shared), "shared render scale is restored")
+	if frames.has_meta("rendered_asset"):
+		_check(
+			is_equal_approx(first._get_sprite_frames_display_scale_multiplier(frames), 1.3),
+			"rendered battle sprites apply the shared review-size multiplier"
+		)
 	var cached_web_bounds := Rect2(2, 3, 4, 5)
 	var prepared_web_bounds := Rect2(1, 2, 6, 7)
 	first._set_sprite_frames_anchor(frames, Vector2(8, 9), Vector2(16, 18))

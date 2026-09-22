@@ -226,6 +226,8 @@ var species_scenarios: Dictionary = {}
 var forme_catalogs: Dictionary = {}
 var forme_menu_buttons: Dictionary = {}
 var active_inspector_tab := INSPECTOR_SET
+var immersive_settings_selected := false
+var immersive_scroll := Vector2i.ZERO
 var selected_move_index := 0
 var move_scenarios: Dictionary = {}
 var pending_move_index := -1
@@ -592,34 +594,20 @@ func _render_your_damage_response(response: Dictionary) -> void:
 
 
 func _make_workspace_columns() -> Dictionary:
-	var workspace := HBoxContainer.new()
-	workspace.name = "CalcdexWorkspace"
-	workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	workspace.clip_contents = true
-	workspace.add_theme_constant_override("separation", 14)
-	content.add_child(workspace)
-
+	var immersive := has_meta("immersive_calculator")
 	var overview := VBoxContainer.new()
 	overview.name = "CalcdexOverview"
 	overview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	overview.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	overview.size_flags_stretch_ratio = 1.38
+	overview.size_flags_stretch_ratio = 1.5 if immersive else 1.38
 	overview.clip_contents = true
 	overview.add_theme_constant_override("separation", 9)
-	workspace.add_child(overview)
-
 	var inspector_panel := PanelContainer.new()
 	inspector_panel.name = "CalcdexInspectorPanel"
 	inspector_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inspector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	inspector_panel.size_flags_stretch_ratio = 1.0
 	inspector_panel.clip_contents = true
-	inspector_panel.add_theme_stylebox_override(
-		"panel",
-		_make_stylebox(Color(SURFACE_CANVAS, 0.92), Color(BORDER_NEUTRAL, 0.92), 9, 12.0, 10.0)
-	)
-	workspace.add_child(inspector_panel)
+	inspector_panel.add_theme_stylebox_override("panel", _make_stylebox(Color(SURFACE_CANVAS, 0.92), Color(BORDER_NEUTRAL, 0.92), 9, 12.0, 10.0))
 	var inspector := VBoxContainer.new()
 	inspector.name = "CalcdexInspector"
 	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -627,6 +615,25 @@ func _make_workspace_columns() -> Dictionary:
 	inspector.clip_contents = true
 	inspector.add_theme_constant_override("separation", 9)
 	inspector_panel.add_child(inspector)
+	if immersive:
+		var workspace := preload("res://scripts/battle/battle_ui/immersive_calc_workspace.gd").new()
+		workspace.configure(overview, inspector_panel)
+		workspace.settings_selected = immersive_settings_selected
+		workspace.saved_scroll = immersive_scroll
+		for button in [workspace.results_button, workspace.settings_button]:
+			for state in ["normal", "hover", "pressed"]:
+				button.add_theme_stylebox_override(state, _make_stylebox(SURFACE_RAISED if state == "normal" else PROFILE_BG, INTERACTION_ACCENT, 6, 10.0, 6.0))
+		content.add_child(workspace)
+	else:
+		var workspace := HBoxContainer.new()
+		workspace.name = "CalcdexWorkspace"
+		workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		workspace.clip_contents = true
+		workspace.add_theme_constant_override("separation", 14)
+		content.add_child(workspace)
+		workspace.add_child(overview)
+		workspace.add_child(inspector_panel)
 	return {"overview": overview, "inspector": inspector}
 
 
@@ -669,6 +676,11 @@ func _add_render_child(node: Control) -> void:
 
 
 func _clear_content() -> void:
+	if has_meta("immersive_calculator"):
+		var previous = content.get_node_or_null("CalcdexWorkspace")
+		if previous != null:
+			immersive_settings_selected = previous.settings_selected
+			immersive_scroll = Vector2i(previous.overview_scroll.scroll_vertical, previous.inspector_scroll.scroll_vertical)
 	is_clearing_content = true
 	render_target = content
 	warning_details_panel = null
@@ -2176,6 +2188,9 @@ func _make_team_selector_row(relation: String) -> HBoxContainer:
 	var label_key := "battle.calc.your_team" if relation == "viewer" else "battle.calc.opponent_team"
 	var label := _make_label(_t(label_key).to_upper(), 8, Color(accent, 0.94))
 	label.custom_minimum_size = Vector2(48, 0)
+	if has_meta("immersive_calculator"):
+		label.text = "YOU" if relation == "viewer" else "FOE"
+		label.tooltip_text = _t(label_key)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(label)
@@ -2558,6 +2573,8 @@ func _make_battle_state_side(_caption: String, relation: String) -> PanelContain
 	scenario_row.add_child(status_caption)
 	var status_selector := _make_battle_state_status_selector(relation)
 	status_selector.custom_minimum_size.x = 86
+	if has_meta("immersive_calculator"):
+		status_selector.custom_minimum_size.x = 110
 	status_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
 	scenario_row.add_child(status_selector)
 	return card

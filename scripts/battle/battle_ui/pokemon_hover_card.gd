@@ -171,7 +171,8 @@ func _get_types_from_data(pokemon_data: Dictionary, species_name: String) -> Arr
 	if not types.is_empty():
 		return types
 
-	push_warning("PokemonHoverCard missing type metadata for %s. Backend payload should include types." % species_name)
+	if not bool(pokemon_data.get("limitedBattleView", false)):
+		push_warning("PokemonHoverCard missing type metadata for %s. Backend payload should include types." % species_name)
 	return []
 
 
@@ -230,7 +231,8 @@ func _get_possible_abilities(pokemon_data: Dictionary, species_name: String) -> 
 			abilities.append(ability)
 		return abilities
 
-	push_warning("PokemonHoverCard missing possibleAbilities metadata for %s. Backend payload should include possibleAbilities." % species_name)
+	if not bool(pokemon_data.get("limitedBattleView", false)):
+		push_warning("PokemonHoverCard missing possibleAbilities metadata for %s. Backend payload should include possibleAbilities." % species_name)
 	return abilities
 
 

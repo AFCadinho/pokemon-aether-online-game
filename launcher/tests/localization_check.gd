@@ -104,8 +104,28 @@ func _run() -> void:
 				"sizeBytes": 20,
 				"sha256": "cd".repeat(32),
 			}],
+			"assetBundleIndex": {
+				"schema": 1,
+				"kind": "pokeaether-release-asset-index",
+				"revision": "approved-test",
+				"url": "https://updates.example/optional-assets/pokemon_3d/index/test.json",
+				"objectBaseUrl": "https://updates.example",
+				"sizeBytes": 100,
+				"sha256": "ef".repeat(32),
+				"requiredAssetIds": preload("res://scripts/release_asset_bundles.gd").RELEASE_ASSET_IDS.duplicate(),
+			},
 		}
 		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).is_empty(), "launcher accepts complete download integrity metadata")
+		valid_manifest["assetBundleIndex"]["requiredAssetIds"].append("pokemon_3d:azumarill:base")
+		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).contains("release set"), "launcher rejects expanded screened model release sets")
+		valid_manifest["assetBundleIndex"]["requiredAssetIds"].pop_back()
+		launcher.set("release_asset_bundles", preload("res://scripts/release_asset_bundles.gd").new(
+			"user://localization-check-bundles", "user://localization-check-indexes"
+		))
+		launcher.set("manifest", valid_manifest)
+		launcher.call("_build_download_queue")
+		var planned: Array = launcher.get("pending_downloads")
+		_check(planned.any(func(job: Dictionary) -> bool: return job.type == "asset_bundle_index"), "launcher queues the approved 3D content index")
 		valid_manifest["assetPacks"][0]["sha256"] = ""
 		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).contains("SHA-256"), "launcher rejects asset packs without a checksum")
 		_check(bool(launcher.call("_is_safe_archive_path", "assets/sprites/front.png")), "launcher accepts safe archive paths")

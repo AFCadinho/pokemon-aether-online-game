@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "kind": "pokeaether-physical-move-animation-intents",
+  "families": {
+    "bite": [
+      "bite", "bug-bite", "crunch", "fire-fang", "fishious-rend",
+      "hyper-fang", "ice-fang", "jaw-lock", "poison-fang", "psychic-fangs",
+      "super-fang", "thunder-fang"
+    ],
+    "claw_slash": [
+      "aqua-cutter", "cross-poison", "crush-claw", "cut", "dire-claw",
+      "dragon-claw", "fury-cutter", "leaf-blade", "metal-claw", "night-slash",
+      "psycho-cut", "razor-shell", "sacred-sword", "scratch", "shadow-claw",
+      "slash", "solar-blade", "stone-axe", "x-scissor"
+    ],
+    "punch": [
+      "bullet-punch", "comet-punch", "dizzy-punch", "drain-punch",
+      "dynamic-punch", "fire-punch", "focus-punch", "hammer-arm",
+      "ice-hammer", "ice-punch", "jet-punch", "mach-punch", "mega-punch",
+      "meteor-mash", "plasma-fists", "power-up-punch", "rage-fist",
+      "shadow-punch", "sky-uppercut", "sucker-punch", "surging-strikes",
+      "thunder-punch", "wicked-blow"
+    ],
+    "kick": [
+      "axe-kick", "blaze-kick", "double-kick", "high-jump-kick", "jump-kick",
+      "low-kick", "low-sweep", "mega-kick", "rolling-kick", "stomp",
+      "stomping-tantrum", "thunderous-kick", "triple-axel", "triple-kick",
+      "trop-kick"
+    ],
+    "tail": [
+      "aqua-tail", "breaking-swipe", "dragon-tail", "iron-tail", "poison-tail",
+      "tail-slap"
+    ],
+    "wing": [
+      "beak-blast", "drill-peck", "dual-wingbeat", "peck", "pluck",
+      "steel-wing", "wing-attack"
+    ],
+    "body_charge": [
+      "accelerock", "aerial-ace", "body-press", "body-slam", "brave-bird",
+      "double-edge", "dragon-rush", "extreme-speed", "facade", "flame-charge",
+      "fly", "giga-impact", "head-charge", "head-smash", "headbutt",
+      "headlong-rush", "heat-crash", "heavy-slam", "high-horsepower",
+      "horn-attack", "horn-drill", "icicle-crash", "last-resort", "megahorn",
+      "phantom-force", "quick-attack", "raging-bull", "rollout", "slam",
+      "smart-strike", "steamroller", "take-down", "thrash", "volt-tackle",
+      "wave-crash", "wild-charge", "zen-headbutt"
+    ]
+  }
+}

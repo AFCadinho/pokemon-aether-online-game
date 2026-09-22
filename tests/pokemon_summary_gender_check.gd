@@ -4,6 +4,8 @@ const GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
 const POKEMON_FACTORY := preload("res://scripts/data/pokemon_factory.gd")
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const UI_OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
+const MALE_ICON := preload("res://assets/gender/male.png")
+const FEMALE_ICON := preload("res://assets/gender/female.png")
 
 var failures := 0
 
@@ -13,15 +15,16 @@ func _init() -> void:
 
 
 func _run() -> void:
-	_check_gender("male", true, "♂", Color("#62d7ff"), "male gender")
-	_check_gender("FEMALE", true, "♀", Color("#ff82ba"), "female gender is case-insensitive")
-	_check_gender("m", true, "♂", Color("#62d7ff"), "short male gender")
-	_check_gender("♀", true, "♀", Color("#ff82ba"), "female symbol input")
+	_check_gender("male", true, "M", Color("#62d7ff"), "male gender")
+	_check_gender("FEMALE", true, "F", Color("#ff82ba"), "female gender is case-insensitive")
+	_check_gender("m", true, "M", Color("#62d7ff"), "short male gender")
+	_check_gender("♀", true, "F", Color("#ff82ba"), "female symbol input")
 	_check_gender("genderless", false, "", Color.WHITE, "genderless Pokémon")
 	_check_gender("", false, "", Color.WHITE, "missing gender")
 	_check_backend_gender_dataflow()
 	_check_summary_card_wiring()
 	await _check_interactive_name_layout()
+	await _check_readonly_name_layout()
 
 	if failures == 0:
 		print("Pokemon summary gender checks passed.")
@@ -52,12 +55,12 @@ func _check_summary_card_wiring() -> void:
 		"summary places gender in the Pokémon name row"
 	)
 	_check(
-		source.contains("_apply_pokemon_summary_gender_label(pokemon_summary_gender_label, pokemon.gender)"),
-		"summary refreshes the gender label"
+		source.contains("_apply_pokemon_summary_gender_icon(pokemon_summary_gender_label, pokemon.gender)"),
+		"summary refreshes the gender icon"
 	)
 	_check(
-		source.contains('"gender_label": pokemon_summary_gender_label if mode == "interactive" else null'),
-		"multi-card summary context retains its gender label"
+		source.contains('"gender_icon": pokemon_summary_gender_label if mode == "interactive" else null'),
+		"multi-card summary context retains its gender icon"
 	)
 
 
@@ -92,29 +95,58 @@ func _check_interactive_name_layout() -> void:
 		popup.visible = true
 
 	var name_label := overlay.get("pokemon_summary_title_label") as Label
-	var gender_label := overlay.get("pokemon_summary_gender_label") as Label
+	var gender_icon := overlay.get("pokemon_summary_gender_label") as TextureRect
 	_check(name_label != null, "interactive summary exposes its Pokémon name label")
-	_check(gender_label != null, "interactive summary exposes its gender label")
-	if name_label != null and gender_label != null:
+	_check(gender_icon != null, "interactive summary exposes its gender icon")
+	if name_label != null and gender_icon != null:
 		name_label.text = "Alakazam"
-		overlay.call("_apply_pokemon_summary_gender_label", gender_label, "male")
+		overlay.call("_apply_pokemon_summary_gender_icon", gender_icon, "male")
 		await process_frame
 		await process_frame
 		_check(name_label.size.x >= 50.0, "Pokémon name keeps visible layout width")
-		_check(gender_label.visible and gender_label.text == "♂", "gender symbol remains visible")
+		_check(gender_icon.visible and gender_icon.texture == MALE_ICON, "blue male gender icon remains visible")
 		var name_right := name_label.position.x + name_label.size.x
-		var gender_gap := gender_label.position.x - name_right
+		var gender_gap := gender_icon.position.x - name_right
 		_check(
-			gender_label.position.x >= name_right
+			gender_icon.position.x >= name_right
 				and gender_gap <= 8.0,
-			"gender symbol stays directly beside the Pokémon name (gap=%s name_pos=%s name_size=%s gender_pos=%s)" % [
+			"gender icon stays directly beside the Pokémon name (gap=%s name_pos=%s name_size=%s gender_pos=%s)" % [
 				gender_gap,
 				name_label.position,
 				name_label.size,
-				gender_label.position,
+				gender_icon.position,
 			]
 		)
 
+	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
+		var loader := overlay.get(loader_property) as Node
+		if loader != null:
+			loader.free()
+	overlay.free()
+	host.queue_free()
+	await process_frame
+
+
+func _check_readonly_name_layout() -> void:
+	var packed := load(UI_OVERLAY_SCENE_PATH) as PackedScene
+	if packed == null:
+		return
+	var overlay := packed.instantiate()
+	var host := Control.new()
+	host.size = Vector2(1280, 720)
+	root.add_child(host)
+	overlay.set("root_control", host)
+	overlay.call("_setup_readonly_pokemon_summary_popup", "readonly-gender-check")
+	var popup := overlay.get("pokemon_summary_popup") as PanelContainer
+	var nodes: Dictionary = popup.get_meta("readonly_summary_nodes", {}) if popup != null else {}
+	var gender_icon := nodes.get("gender_icon") as TextureRect
+	_check(gender_icon != null, "read-only summary exposes one gender icon")
+	_check(not nodes.has("gender_label"), "read-only summary no longer creates a duplicate gender symbol")
+	if gender_icon != null:
+		overlay.call("_apply_pokemon_summary_gender_icon", gender_icon, "male")
+		_check(gender_icon.visible and gender_icon.texture == MALE_ICON, "read-only male uses the blue icon")
+		overlay.call("_apply_pokemon_summary_gender_icon", gender_icon, "female")
+		_check(gender_icon.visible and gender_icon.texture == FEMALE_ICON, "read-only female uses the pink icon")
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:

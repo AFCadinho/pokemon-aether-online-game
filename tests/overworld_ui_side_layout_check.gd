@@ -177,9 +177,9 @@ func _init() -> void:
 			"alpha_create_pokemon_button.visible = can_use_content_creator_generation"
 		)
 		and script_source.contains(
-			"staff_impersonate_button.visible = can_return_from_impersonation or can_impersonate"
+			"can_return_from_impersonation_here or can_impersonate_here"
 		),
-		"launcher actions use permission or active-session visibility as appropriate"
+		"launcher actions use permission, platform, and active-session visibility as appropriate"
 	)
 	_check(
 		disable_icon_focus_block.contains("socials_button")

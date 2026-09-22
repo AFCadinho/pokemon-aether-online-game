@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "include": ["review_batch_01.json"],
+  "entries": [
+    {"species": "typhlosion", "pm": 157, "target_game_height_px": 145,
+      "facial_baseline_motion": "00010_defaultidle01"},
+    {"species": "charmander", "pm": 4, "target_game_height_px": 82,
+      "facial_baseline_motion": "00010_defaultidle01"},
+    {"species": "umbreon", "pm": 197, "target_game_height_px": 92,
+      "facial_baseline_motion": "00010_defaultidle01",
+      "review_warning": "SCVI battle idle omits all six eyelid tracks; defaultidle01 frame 0 supplies the explicit official open-eye baseline."},
+    {"species": "scizor", "pm": 212, "target_game_height_px": 150,
+      "facial_baseline_motion": "00010_defaultidle01"},
+    {"species": "jigglypuff", "pm": 39, "target_game_height_px": 78,
+      "facial_baseline_motion": "00010_defaultidle01",
+      "light_override": {"key_energy": 800, "fill_energy": 450, "rim_energy": 500, "world_color": [0.18, 0.18, 0.18]}},
+    {"species": "diglett", "pm": 50, "target_game_height_px": 55,
+      "facial_baseline_motion": "00010_defaultidle01",
+      "light_override": {"key_energy": 800, "fill_energy": 450, "rim_energy": 500, "world_color": [0.18, 0.18, 0.18]},
+      "review_warning": "Ground intersection and attack displacement need explicit platform review."},
+    {"species": "slowpoke", "pm": 79, "target_game_height_px": 105},
+    {"species": "magnemite", "pm": 81, "target_game_height_px": 78,
+      "review_warning": "Floating height needs explicit platform review."},
+    {"species": "voltorb", "pm": 100, "target_game_height_px": 72,
+      "facial_baseline_motion": "00010_defaultidle01"},
+    {"species": "tauros", "pm": 128, "target_game_height_px": 150,
+      "facial_baseline_motion": "00010_defaultidle01"}
+  ]
+}

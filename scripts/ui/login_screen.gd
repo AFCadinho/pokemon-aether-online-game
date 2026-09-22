@@ -67,6 +67,7 @@ var online_players_translation_key := "ui.login.checking_players"
 var online_players_translation_values: Dictionary = {}
 var loading_language_options := false
 var web_demo_notice_acknowledged := false
+var login_return_notice := ""
 
 func _ready() -> void:
 	MusicManager.play_login_music()
@@ -99,9 +100,8 @@ func _ready() -> void:
 	_setup_background_video()
 	_render_news_items([])
 	_show_login_form()
-	var pending_notice := AuthService.take_pending_login_notice()
-	if pending_notice != "":
-		show_status(pending_notice, true)
+	login_return_notice = AuthService.take_pending_login_notice()
+	_apply_login_return_notice()
 	_setup_player_preview()
 	username_input.grab_focus()
 	_center_settings_menu.call_deferred()
@@ -266,6 +266,7 @@ func _apply_language_options_to_control() -> void:
 
 
 func clear_form() -> void:
+	_clear_login_return_notice()
 	username_input.clear()
 	password_input.clear()
 	remember_me_checkbox.button_pressed = false
@@ -287,6 +288,9 @@ func _on_login_button_pressed() -> void:
 
 func _on_continue_button_pressed() -> void:
 	if is_loading:
+		return
+	_clear_login_return_notice()
+	if OS.has_feature("web") and await _offer_web_lobby_recovery():
 		return
 	if OS.has_feature("web") and not web_demo_notice_acknowledged:
 		_show_web_demo_notice()
@@ -494,6 +498,7 @@ func _escape_bbcode(text: String) -> String:
 func _submit_login() -> void:
 	if is_loading:
 		return
+	_clear_login_return_notice()
 
 	var username := username_input.text.strip_edges()
 	var password := password_input.text
@@ -545,6 +550,8 @@ func _submit_login() -> void:
 
 	login_submitted.emit(username, password)
 	if OS.has_feature("web"):
+		if await _offer_web_lobby_recovery():
+			return
 		_show_web_demo_notice()
 	else:
 		_enter_world()
@@ -581,6 +588,9 @@ func _set_server_access_notice(message: String = "", key: String = "") -> void:
 
 
 func _apply_server_access_notice() -> void:
+	if not login_return_notice.is_empty():
+		_apply_login_return_notice()
+		return
 	if not server_access_notice_active:
 		return
 	if not server_access_notice_key.is_empty():
@@ -597,6 +607,22 @@ func _clear_server_access_notice() -> void:
 	server_access_notice_active = false
 	server_access_notice_message = ""
 	server_access_notice_key = ""
+	show_status("")
+	show_saved_status("")
+	_apply_login_return_notice()
+
+
+func _apply_login_return_notice() -> void:
+	if login_return_notice.is_empty():
+		return
+	show_status(login_return_notice, true)
+	show_saved_status(login_return_notice, true)
+
+
+func _clear_login_return_notice() -> void:
+	if login_return_notice.is_empty():
+		return
+	login_return_notice = ""
 	show_status("")
 	show_saved_status("")
 
@@ -660,7 +686,7 @@ func _restore_saved_session() -> void:
 	await _apply_saved_session_preview_state()
 
 	password_input.clear()
-	remember_me_checkbox.button_pressed = true
+	remember_me_checkbox.button_pressed = AuthService.web_remember_me if OS.has_feature("web") else true
 	login_button.text = _get_idle_login_button_text()
 	_show_saved_session_card()
 
@@ -681,6 +707,46 @@ func _apply_saved_session_preview_state() -> void:
 
 	PlayerSave.apply_appearance_state(appearance)
 	_refresh_player_preview()
+
+
+func _offer_web_lobby_recovery() -> bool:
+	var result: Dictionary = await TransitService.load_web_lobby_recovery()
+	if not bool(result.get("success", false)):
+		return false
+	var recovery := _dictionary_from_value(result.get("body", {}))
+	if not bool(recovery.get("eligible", false)):
+		return false
+	var fare := int(recovery.get("fare", 0))
+	var price_text := "free with your Guild membership" if bool(recovery.get("guildBenefitActive", false)) else "₽%s" % fare
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.configure(
+		"Current location unavailable in browser",
+		"Your Trainer is currently outside the browser world. Travel via Aethernet to the Aether Clash Lobby for %s? This changes your shared position on desktop too." % price_text,
+		"Travel to Lobby",
+		"Download client"
+	)
+	dialog.confirmed.connect(_recover_web_to_lobby.bind(dialog))
+	dialog.cancel_button.pressed.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+	)
+	dialog.canceled.connect(func():
+		dialog.queue_free()
+	)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(580, 280))
+	return true
+
+
+func _recover_web_to_lobby(dialog: AetherConfirmationDialog) -> void:
+	set_loading(true)
+	var result: Dictionary = await TransitService.recover_web_to_lobby()
+	set_loading(false)
+	dialog.queue_free()
+	if not bool(result.get("success", false)):
+		show_status(str(result.get("error", "Aethernet travel is currently unavailable.")), true)
+		return
+	web_demo_notice_acknowledged = true
+	_enter_world()
 
 
 func _enter_world() -> void:
@@ -743,6 +809,7 @@ func _show_saved_session_card() -> void:
 	show_status("")
 	show_saved_status("")
 	_apply_server_access_notice()
+	_apply_login_return_notice()
 	continue_button.grab_focus()
 	if OS.has_feature("web"):
 		continue_button.disabled = is_loading or not server_online

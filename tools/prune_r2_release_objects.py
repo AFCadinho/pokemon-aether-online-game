@@ -45,6 +45,10 @@ ASSET_FAMILY_PREFIXES = (
     ("pokemon-home-", "pokemon-home"),
     ("music-", "music"),
 )
+BUILD_ID_PATTERN = r"[a-f0-9]{40}-[0-9]+-[0-9]+"
+WEB_OBJECT_PATTERN = re.compile(rf"^web/releases/({BUILD_ID_PATTERN})/[^\\]+$")
+LAUNCHER_OBJECT_PATTERN = re.compile(rf"^launcher/([0-9][0-9A-Za-z.+_-]*-{BUILD_ID_PATTERN})/PokeAetherLauncher-(windows|linux|macos)\.zip$")
+
 GAME_OBJECT_PATTERN = re.compile(r"^game-.+-(windows|linux|macos)\.zip$")
 
 
@@ -66,7 +70,7 @@ class PrunePlan:
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Delete obsolete immutable game and asset-pack objects from Cloudflare R2 "
+            "Delete obsolete immutable game, launcher, web and asset-pack objects from Cloudflare R2 "
             "after a successful manifest publication. Dry-run is the default."
         )
     )
@@ -104,6 +108,9 @@ def main() -> None:
         action="store_true",
         help="Actually delete the planned objects. Without this flag the command is a dry-run.",
     )
+    parser.add_argument("--scope", choices=("desktop", "web", "all"), default="desktop")
+    parser.add_argument("--active-web-url", default="https://play.pokeaether.com",
+                        help="Protect the build served by the active browser page, including before manifest publication.")
     args = parser.parse_args()
 
     if args.retain_previous < 1:
@@ -114,13 +121,17 @@ def main() -> None:
         raise SystemExit("--max-delete must be at least 1")
 
     manifest_dir = Path(args.manifest_dir).resolve()
-    manifests = _load_local_manifests(manifest_dir)
-    manifests.extend(_load_remote_manifests(args.public_base_url))
+    manifests = _load_local_manifests(manifest_dir, args.scope)
+    manifests.extend(_load_remote_manifests(args.public_base_url, args.scope))
     protected_keys = _protected_keys_from_manifests(manifests, args.public_base_url)
-    _assert_required_references(protected_keys)
+    bundle_indexes = _load_asset_bundle_indexes(manifests, args.public_base_url)
+    protected_keys.update(_protected_keys_from_asset_bundle_indexes(bundle_indexes))
+    if args.scope != "desktop":
+        protected_keys.add(_active_web_marker(args.active_web_url))
+    _assert_required_references(protected_keys, args.scope)
 
     config = _load_config()
-    objects = _list_release_objects(config)
+    objects = _list_release_objects(config, args.scope)
     _assert_protected_objects_exist(objects, protected_keys)
     plan = _build_prune_plan(
         objects,
@@ -148,27 +159,39 @@ def main() -> None:
         print("Dry-run only; pass --apply to delete the planned objects.")
         return
 
+    # Fail closed if another release became active while this plan was built.
+    current = _protected_keys_from_manifests(_load_remote_manifests(args.public_base_url, args.scope), args.public_base_url)
+    if args.scope != "desktop":
+        current.add(_active_web_marker(args.active_web_url))
+    if not current.issubset(protected_keys):
+        raise SystemExit("Active release changed during cleanup; rebuild the plan")
     for item in plan.delete:
         _delete_object(config, item.key)
         print(f"Deleted s3://{config.bucket}/{item.key}")
     print(f"R2 cleanup complete: deleted {len(plan.delete)} obsolete objects.")
 
 
-def _load_local_manifests(manifest_dir: Path) -> list[dict]:
+def _load_local_manifests(manifest_dir: Path, scope: str = "desktop") -> list[dict]:
     if not manifest_dir.is_dir():
         raise SystemExit(f"Manifest directory does not exist: {manifest_dir}")
     manifest_paths = sorted(manifest_dir.glob("manifest*.json"))
     names = {path.name for path in manifest_paths}
-    missing = sorted(REQUIRED_LOCAL_MANIFEST_NAMES - names)
+    required = set() if scope == "web" else set(REQUIRED_LOCAL_MANIFEST_NAMES)
+    if scope != "desktop":
+        required.add("manifest-web.json")
+    missing = sorted(required - names)
     if missing:
         raise SystemExit(f"Missing required local manifests: {', '.join(missing)}")
     return [_read_manifest(path.read_text(encoding="utf-8"), str(path)) for path in manifest_paths]
 
 
-def _load_remote_manifests(public_base_url: str) -> list[dict]:
+def _load_remote_manifests(public_base_url: str, scope: str = "desktop") -> list[dict]:
     manifests: list[dict] = []
     base_url = public_base_url.rstrip("/")
-    for name in REMOTE_MANIFEST_NAMES:
+    names = [] if scope == "web" else list(REMOTE_MANIFEST_NAMES)
+    if scope != "desktop":
+        names.append("manifest-web.json")
+    for name in names:
         url = f"{base_url}/{name}"
         request = Request(url, headers={"Cache-Control": "no-cache", "User-Agent": "PokeAether-R2-Pruner/1"})
         try:
@@ -202,6 +225,19 @@ def _protected_keys_from_manifests(manifests: list[dict], public_base_url: str) 
             key = _key_from_public_url(game.get("url"), public_base_url)
             if key is not None:
                 protected.add(key)
+        launcher = manifest.get("launcher")
+        if isinstance(launcher, dict):
+            key = _key_from_public_url(launcher.get("url"), public_base_url)
+            if key is not None:
+                protected.add(key)
+        bundle_index = manifest.get("assetBundleIndex")
+        if isinstance(bundle_index, dict):
+            key = _key_from_public_url(bundle_index.get("url"), public_base_url)
+            if key is not None:
+                protected.add(key)
+        build_id = manifest.get("gameBuildId")
+        if isinstance(build_id, str) and re.fullmatch(BUILD_ID_PATTERN, build_id) and isinstance(game, dict) and _key_from_public_url(game.get("url"), public_base_url) is None:
+            protected.add(f"web/releases/{build_id}/web-release.json")
         asset_packs = manifest.get("assetPacks")
         if not isinstance(asset_packs, list):
             continue
@@ -212,6 +248,77 @@ def _protected_keys_from_manifests(manifests: list[dict], public_base_url: str) 
             if key is not None:
                 protected.add(key)
     return protected
+
+
+def _load_asset_bundle_indexes(manifests: list[dict], public_base_url: str) -> list[dict]:
+    result: list[dict] = []
+    seen: set[str] = set()
+    for manifest in manifests:
+        descriptor = manifest.get("assetBundleIndex")
+        if not isinstance(descriptor, dict):
+            continue
+        url = descriptor.get("url")
+        key = _key_from_public_url(url, public_base_url)
+        expected_hash = descriptor.get("sha256")
+        expected_size = descriptor.get("sizeBytes")
+        if (
+            key is None
+            or not key.startswith("optional-assets/pokemon_3d/index/")
+            or key in seen
+            or not isinstance(expected_hash, str)
+            or re.fullmatch(r"[a-f0-9]{64}", expected_hash) is None
+            or not isinstance(expected_size, int)
+            or expected_size < 1
+            or expected_size > 1024 * 1024
+        ):
+            if key in seen:
+                continue
+            raise SystemExit("Desktop manifest contains an invalid asset bundle index descriptor")
+        request = Request(str(url), headers={"Cache-Control": "no-cache", "User-Agent": "PokeAether-R2-Pruner/1"})
+        try:
+            with urlopen(request, timeout=30) as response:
+                payload = response.read(1024 * 1024 + 1)
+        except (HTTPError, URLError, TimeoutError) as error:
+            raise SystemExit(f"Could not read asset bundle index {url}: {error}") from error
+        if len(payload) != expected_size or hashlib.sha256(payload).hexdigest() != expected_hash:
+            raise SystemExit("Asset bundle index failed manifest integrity verification")
+        index = _read_manifest(payload.decode("utf-8"), str(url))
+        result.append(index)
+        seen.add(key)
+    return result
+
+
+def _protected_keys_from_asset_bundle_indexes(indexes: list[dict]) -> set[str]:
+    protected: set[str] = set()
+    for index in indexes:
+        if index.get("schema") != 1 or index.get("kind") != "pokeaether-optional-asset-index":
+            raise SystemExit("Unsupported asset bundle content index")
+        assets = index.get("assets")
+        if not isinstance(assets, list) or not assets:
+            raise SystemExit("Asset bundle content index has no assets")
+        for asset in assets:
+            if not isinstance(asset, dict):
+                raise SystemExit("Asset bundle content index contains an invalid asset")
+            key = asset.get("object_key")
+            if not isinstance(key, str) or _object_family(key) is None or not key.startswith("optional-assets/pokemon_3d/"):
+                raise SystemExit("Asset bundle content index contains an unsafe object key")
+            protected.add(key)
+    return protected
+
+
+def _active_web_marker(url: str) -> str:
+    if urlparse(url).scheme != "https":
+        raise SystemExit("Active browser page must use HTTPS")
+    request = Request(url, headers={"Cache-Control": "no-cache", "User-Agent": "PokeAether-R2-Pruner/1"})
+    try:
+        with urlopen(request, timeout=30) as response:
+            html = response.read(2_000_000).decode("utf-8")
+    except (HTTPError, URLError, TimeoutError) as error:
+        raise SystemExit("Could not verify the active browser release") from error
+    match = re.search(rf'window\.POKEAETHER_WEB_RELEASE=Object\.freeze\(\{{"buildId":"({BUILD_ID_PATTERN})"', html)
+    if match is None:
+        raise SystemExit("Active browser page does not contain a valid release build ID")
+    return f"web/releases/{match.group(1)}/web-release.json"
 
 
 def _key_from_public_url(value: object, public_base_url: str) -> str | None:
@@ -231,14 +338,18 @@ def _key_from_public_url(value: object, public_base_url: str) -> str | None:
     return key
 
 
-def _assert_required_references(protected_keys: set[str]) -> None:
+def _assert_required_references(protected_keys: set[str], scope: str = "desktop") -> None:
     protected_families = {
         family
         for key in protected_keys
         if (family := _object_family(key)) is not None
     }
-    required = {f"assets:{family}" for _, family in ASSET_FAMILY_PREFIXES}
-    required.update({"game:windows", "game:linux"})
+    required = set()
+    if scope != "web":
+        required.update(f"assets:{family}" for _, family in ASSET_FAMILY_PREFIXES)
+        required.update({"game:windows", "game:linux", "launcher:windows", "launcher:linux"})
+    if scope != "desktop":
+        required.add("web")
     missing = sorted(required - protected_families)
     if missing:
         raise SystemExit(f"Manifest safety check is missing protected release families: {', '.join(missing)}")
@@ -255,6 +366,23 @@ def _assert_protected_objects_exist(objects: list[R2Object], protected_keys: set
 
 
 def _object_family(key: str) -> str | None:
+    if any(part in {"", ".", ".."} for part in key.split("/")) or "\\" in key:
+        return None
+    if WEB_OBJECT_PATTERN.fullmatch(key):
+        return "web"
+    if key.startswith("optional-assets/pokemon_3d/index/"):
+        name = key.removeprefix("optional-assets/pokemon_3d/index/")
+        if "/" not in name and name.endswith(".json"):
+            return "bundle-index:pokemon_3d"
+        return None
+    if key.startswith("optional-assets/pokemon_3d/"):
+        parts = key.split("/")
+        if len(parts) == 5 and parts[2] and parts[3] and re.fullmatch(r"v[1-9][0-9]*-[a-f0-9]{64}\.zip", parts[4]):
+            return f"bundle:pokemon_3d:{parts[2]}:{parts[3]}"
+        return None
+    launcher = LAUNCHER_OBJECT_PATTERN.fullmatch(key)
+    if launcher:
+        return f"launcher:{launcher.group(2)}"
     if key.startswith("assets/"):
         file_name = key.removeprefix("assets/")
         if "/" in file_name or not file_name.endswith(".zip"):
@@ -293,18 +421,36 @@ def _build_prune_plan(
     delete: list[R2Object] = []
     rollback: list[R2Object] = []
     recent: list[R2Object] = []
-    for family_objects in families.values():
+    for family, family_objects in families.items():
+        # Web releases are bundles: retaining individual newest objects could
+        # leave the rollback build missing maps, music or its runtime.
+        bundles: dict[str, list[R2Object]] = {}
+        for item in family_objects:
+            bundle = item.key.split("/")[2] if family == "web" else item.key
+            bundles.setdefault(bundle, []).append(item)
+        protected_bundles = {bundle for bundle, values in bundles.items()
+                             if any(item.key in protected_keys for item in values)}
         unprotected = sorted(
-            (item for item in family_objects if item.key not in protected_keys),
-            key=lambda item: (item.last_modified, item.key),
+            (values for bundle, values in bundles.items() if bundle not in protected_bundles),
+            key=lambda values: (max(item.last_modified for item in values), values[0].key),
             reverse=True,
         )
-        rollback.extend(unprotected[:retain_previous])
-        for item in unprotected[retain_previous:]:
-            if now - item.last_modified < minimum_age:
-                recent.append(item)
+        if not protected_bundles:
+            # An orphan platform/family has no known current release to anchor rollback.
+            ignored.extend(item for values in unprotected for item in values)
+            continue
+        current_start = min(item.last_modified for bundle in protected_bundles for item in bundles[bundle])
+        rollback_candidates = [values for values in unprotected
+                               if max(item.last_modified for item in values) <= current_start
+                               and (family != "web" or any(item.key.endswith("/web-release.json") for item in values))]
+        rollback_keys = {item.key for values in rollback_candidates[:retain_previous] for item in values}
+        for values in unprotected:
+            if any(item.key in rollback_keys for item in values):
+                rollback.extend(values)
+            elif now - max(item.last_modified for item in values) < minimum_age:
+                recent.extend(values)
             else:
-                delete.append(item)
+                delete.extend(values)
 
     sort_key = lambda item: item.key
     return PrunePlan(
@@ -315,9 +461,12 @@ def _build_prune_plan(
     )
 
 
-def _list_release_objects(config: R2Config) -> list[R2Object]:
+def _list_release_objects(config: R2Config, scope: str = "desktop") -> list[R2Object]:
     objects: list[R2Object] = []
-    for prefix in ("assets/", "game/"):
+    prefixes = [] if scope == "web" else ["assets/", "game/", "launcher/", "optional-assets/"]
+    if scope != "desktop":
+        prefixes.append("web/releases/")
+    for prefix in prefixes:
         continuation_token = ""
         while True:
             query = [("list-type", "2"), ("prefix", prefix)]
