@@ -130,12 +130,13 @@ func _check_battle_setup_contract() -> void:
 	)
 	_check(
 		source.contains("func _hide_non_immersive_trainer_after_callout")
-		and source.contains("TrainerCommandCallout.FADE_OUT_SECONDS"),
-		"non-immersive trainer art hides after its command bubble fades"
+		and source.contains("trainer_sprite.hide_after_command()"),
+		"non-immersive trainer art hides with its command bubble"
 	)
 	_check(
-		FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd").contains("func has_trainer_art()"),
-		"callouts require a staged trainer figure"
+		FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd").contains("func reveal_for_command()")
+		and FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd").contains("CALLOUT_ENTRY_OFFSET"),
+		"callouts use a directional trainer transition"
 	)
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains('npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")'), "trainer setup retains the NPC display name for later battle events")

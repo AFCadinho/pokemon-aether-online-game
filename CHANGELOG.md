@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- In de klassieke battleweergave verschijnen trainers alleen bij hun commandotekstwolk en verdwijnen ze weer wanneer die is uitgesproken.
+- In de klassieke battleweergave verschijnen trainers alleen bij hun commandotekstwolk, met een zachte fade en beweging richting het veld, en verdwijnen ze daarna weer vloeiend.
 
 - In immersive wilde gevechten komt je trainer nu alleen bij een Poké Ball-worp kort in beeld, met een tekstwolk voor de worp en de vanguitkomst.
 
