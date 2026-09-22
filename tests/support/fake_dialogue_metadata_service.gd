@@ -5,7 +5,7 @@ signal release_fetch
 var fetch_count := 0
 
 
-func _fetch_dialogue_metadata(dialogue_id: String, _locale: String) -> Dictionary:
+func _fetch_dialogue_metadata(dialogue_id: String, _locale: String, _timeout_seconds: float) -> Dictionary:
 	fetch_count += 1
 	await release_fetch
 	return {

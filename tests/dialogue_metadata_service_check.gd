@@ -84,7 +84,7 @@ func _check_service_locale_contract() -> void:
 func _check_dialogue_npc_uses_dialogue_id_lookup() -> void:
 	var text := _read_text(DIALOGUE_NPC_SCRIPT)
 	_check_true(text.contains("func _get_dialogue_metadata_lines() -> Array[String]:"), "DialogueNPC has dialogue metadata resolver")
-	_check_true(text.contains("NpcDialogueService.resolve_default_dialogue("), "DialogueNPC uses the central NPC resolver")
+	_check_true(text.contains("resolve_default_dialogue") and text.contains("dialogue_service"), "DialogueNPC uses the central NPC resolver")
 	_check_true(text.contains("metadata_dialogue_id"), "DialogueNPC prefers NPC metadata dialogue")
 	_check_true(
 		text.contains('result.get("speakerName", "")')

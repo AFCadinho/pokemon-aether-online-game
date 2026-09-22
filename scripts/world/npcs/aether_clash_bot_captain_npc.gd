@@ -67,7 +67,10 @@ func interact_with_player(_player: Node2D) -> void:
 func _show_training_choice() -> String:
 	var layer := CanvasLayer.new()
 	layer.layer = 120
-	get_tree().current_scene.add_child(layer)
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_tree().root
+	host.add_child(layer)
 	var dialog := CONFIRMATION.instantiate() as AetherConfirmationDialog
 	layer.add_child(dialog)
 	var choice := OptionButton.new()
