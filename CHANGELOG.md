@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wilde immersive battles tonen nu rechtsboven de Pokémon HOME-afbeelding van de tegenstander in plaats van een leeg trainerportret.
+
 - Het menu-icoon van immersive battles staat nu linksboven op je trainerportret, vrij van de side field indicators.
 
 - De immersive battle-interface heeft nu een menu-icoon op je trainerportret. Daarmee open je tijdens een gevecht de bestaande Friends- en Guild-vensters; de camerarestart staat onder de Turn-indicator.
