@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainerstatus op een zojuist geladen kaart wacht nu tot de zware eerste laadframes voorbij zijn en toont geen onterechte JSON-fout meer bij een netwerkprobleem.
+
 - Donkere 3D-Pokémon blijven in Forest-arena's beter leesbaar dankzij een zachte skylight-fill die de bestaande schaduwen niet vervangt.
 
 - De lokale desktop-3D-runtime vindt het vertrouwde Forest-pakket nu automatisch naast de gekozen modelcatalogus. Daardoor kiest Automatic weer Grass → Forest zonder een aparte instellingenstap.
