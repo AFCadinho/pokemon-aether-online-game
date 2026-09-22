@@ -1,0 +1,3623 @@
+{
+  "excluded_existing_official_models": [
+    "arcanine",
+    "articuno",
+    "dragonite",
+    "lucario"
+  ],
+  "limitations": [
+    "visual screening only",
+    "normal forms only",
+    "no arena grounding calibration",
+    "no motion-clearance calibration",
+    "not an approved or portable launcher pack"
+  ],
+  "models": {
+    "azumarill": {
+      "glb_sha256": "34a40245ffbffbf2929fbd6316eb2aa69e82ad65b5af7e79a78b3587a792337b",
+      "profile": "azumarill",
+      "sha256": "a45144b6ac33ead2300942131161ce641cd8536b0d5a0469c10f6bf4f42f0006"
+    },
+    "blissey": {
+      "glb_sha256": "648d181ec03a33977bb5fdda2b12b7d65b2ee81bbf21c3fdd900cd9d8369252b",
+      "profile": "blissey",
+      "sha256": "e86499f58c398baff39993833d48845d652ce47c81ad6724025c5497573bb896"
+    },
+    "chansey": {
+      "glb_sha256": "35ab639bf1efc820d4228530acd097819a99ee50fcdf86fc826241baf02f4007",
+      "profile": "chansey",
+      "sha256": "3d2c142d5d3e42994a64637277b94bc91d53f38e95c96e3566c798f4ff447d4f"
+    },
+    "charizard": {
+      "glb_sha256": "74bea17c1dbb764cfa1aa23457aa92ef9831978d2a6294d19f6682b744b48ff3",
+      "profile": "charizard",
+      "sha256": "efda7151ac8a5d30594e87e1ef5a1f7feab9cb5c91adc37ed171b44470be3149"
+    },
+    "cloyster": {
+      "glb_sha256": "65093bbd544ccf76e23ee89769791d6035c884158039afe6bb9d1c5524e888fd",
+      "profile": "cloyster",
+      "sha256": "887bfd934834e221b16acdad59dd3e0916aca606221954674201b5d3611f036f"
+    },
+    "corviknight": {
+      "glb_sha256": "d95abcf3591e1e7df16b8053ad38f05de9b03f85930f94f732ad09a6fe215194",
+      "profile": "corviknight",
+      "sha256": "344f7e2f0e068a5b3934031cfda19363d452c3210005d57509a33a4134633f75"
+    },
+    "delibird": {
+      "glb_sha256": "217802ad170898ca172e9b402aca5b18eb34ab66e291eadffa85fdd2f165b393",
+      "profile": "delibird",
+      "sha256": "5a9e40dfcb9ed473f8697bc589845d21bd292fcdac83ec1153e89a3dafcfea63"
+    },
+    "diglett": {
+      "glb_sha256": "6e0c4f898a5f664a44b44e097ec16a3fed21c50dcc645f9cb06d87d23464bcc8",
+      "profile": "diglett",
+      "sha256": "fc78fd4d78536f31b2cc1a945d42f8b271e85120a7ee99a384a35d7a2c107863"
+    },
+    "ditto": {
+      "glb_sha256": "c37342072ce05e0f052533601d0c9f1604152aa0af56a4efdd700ea6b929de7a",
+      "profile": "ditto",
+      "sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06"
+    },
+    "dondozo": {
+      "glb_sha256": "cd8f4ec6a2120ffa1d3ca9d0dea500e9dc7966459bdba150db7de84bc82ddf1a",
+      "profile": "dondozo",
+      "sha256": "8e63f37c80d16d845dddf41e329adffdeb40aee5557815f367bd2218c05b5015"
+    },
+    "donphan": {
+      "glb_sha256": "04bb53a1fd517c0943f3dfb17001ed4245ca40c95f3299570b202e4a8b1b093f",
+      "profile": "donphan",
+      "sha256": "d4d4b46b364b0c6bea97bc2699fed1393f8b20e8e0aaff03b350c4325097ba3c"
+    },
+    "dragonair": {
+      "glb_sha256": "19b2dcfba528c5c52987a3e48f4507bea925a3f8356357ff3335a4b4fc3dc139",
+      "profile": "dragonair",
+      "sha256": "94c76f01fb87def5b66311f2556bc5d6bbc384d563555495d8c09d11787a802e"
+    },
+    "dratini": {
+      "glb_sha256": "086fae27f76c31fab90d6cb1fb6f736953ea5efc5c32b3665b140c505500ca36",
+      "profile": "dratini",
+      "sha256": "890ea9bb6b0c7e84d6699119895ef7131856972700ded0696377495497fef8be"
+    },
+    "drifblim": {
+      "glb_sha256": "87c1db373a63a7e9427b32a47b5a6ef650473ee8054dca3b5d2523e8ae90f5a3",
+      "profile": "drifblim",
+      "sha256": "621750d76787c7c853fcd5dea5cffaaf96783e72fd03e1f8ba7a818bb4daa245"
+    },
+    "drowzee": {
+      "glb_sha256": "2abd493b17a98e04bc23a9c65c61337545e1d9ef7f9d7d4d0174ab6531781679",
+      "profile": "drowzee",
+      "sha256": "78c05aa98801da4e05e252e0f6d8ff8872f4d4a7c0426380a9a60a9a652358df"
+    },
+    "eevee": {
+      "glb_sha256": "1732fd45777f50aeb84507aec40d2429855b9534824742b0dc2a510ab58b674c",
+      "profile": "eevee",
+      "sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668"
+    },
+    "electrode": {
+      "glb_sha256": "5c23f564cca1745647fb12680773668cb6812113782ddb847619757a269ca16d",
+      "profile": "electrode",
+      "sha256": "9cfc1352b82602fc6ea36f55889401f8ef155ba118ab26aa3fe0c1dd7e1aa896"
+    },
+    "espeon": {
+      "glb_sha256": "d6fe1fc534912789e9f47c97cf719fb81b5e29684d494c60dd5c8e8c6617b3eb",
+      "profile": "espeon",
+      "sha256": "9e7f35aba795f3864fe89d26a63579afa9af89ebc7060afbfc0b26fed0b41481"
+    },
+    "flapple": {
+      "glb_sha256": "5dceb6c97ead29c91a6238079010bed386a7ec89b29fc8a106efb90dc39e110e",
+      "profile": "flapple",
+      "sha256": "9d264ac46014de6ac6d4e6b6b4968b7e67a4ff7adaa9114bcb07f50804643e0c"
+    },
+    "flareon": {
+      "glb_sha256": "e43fd75a6af218ff54938c6bdfbd830e476e0c2781e20e50d7581fd5ae1d985a",
+      "profile": "flareon",
+      "sha256": "039480eee56bd385d7b777c6ed89885dbdc1c6df151ecb6f293452ca0e108a29"
+    },
+    "forretress": {
+      "glb_sha256": "536d69606117e93663746b0dd61e0c9e3613fcc064640443d89f859a4f1024b9",
+      "profile": "forretress",
+      "sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b"
+    },
+    "garchomp": {
+      "glb_sha256": "0e39d18cab786bea1ff8b0ae8a9fceaef8ae48c0260c4196cc0e950db51048f6",
+      "profile": "garchomp",
+      "sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8"
+    },
+    "gardevoir": {
+      "glb_sha256": "f36afb8bf246658f55475e647372c6e88474bf2297435cc9050a3874bccb766f",
+      "profile": "gardevoir",
+      "sha256": "b2c0b3127b11bdb25262dd7139997fcc77cfcaeb35fc1e35d7b404f58b2dc2fa"
+    },
+    "gengar": {
+      "glb_sha256": "14120800359b91247283f2de60607130a6ed8d3b2d059cc1acef3a74fa922922",
+      "profile": "gengar",
+      "sha256": "78b3953637349def0c9048c5b92078aa8e6c6746f821d77eb71ce58b8b96f7ca"
+    },
+    "golduck": {
+      "glb_sha256": "b49cb3634f9254d018f8b5f56ce268f5ca8b28750a9889511bdb7ab3b1d91166",
+      "profile": "golduck",
+      "sha256": "47247c6be71d222f84673f7e15c4a4e2c5cd7b88c49fd9fdde5b5b4cf7088638"
+    },
+    "growlithe": {
+      "glb_sha256": "7d477f07d5b246495c421029db6005c7d00ebf53eb32404bbb6dc955f696b41b",
+      "profile": "growlithe",
+      "sha256": "694a75efd26a91b073491f38fea23be54d122983325cf0ee04399058acc9ff9c"
+    },
+    "gyarados": {
+      "glb_sha256": "183217d1056eaa73eff752e160980483b14c85a84bc6cca907e04df9040ca2c9",
+      "profile": "gyarados",
+      "sha256": "6c2f24d7bc71446102e3df895d0aafd1c80eccbf5e1a7bb3116fd6e483a17edf"
+    },
+    "hariyama": {
+      "glb_sha256": "5c81994d38890bc0e0441dda7cf99147306ae92387d887c5c2be182540803d75",
+      "profile": "hariyama",
+      "sha256": "8cc2630961bf21fab5ae7a60a8785086c171978bb5d2e9c51e8e6c89474b35f4"
+    },
+    "haunter": {
+      "glb_sha256": "db8ee3dad34a86fe47acafc7c703043191bdd8a26b770b49eb68ad1c5a226ceb",
+      "profile": "haunter",
+      "sha256": "1545c90daee6e79f661b9a815916a2daec0d8171ffb5a87c1fc536a73d1edd0b"
+    },
+    "heracross": {
+      "glb_sha256": "59f8efe95d08cb6691bb4473d141a44dda80d75c097721767cde1e80cefff087",
+      "profile": "heracross",
+      "sha256": "20dd4a894dc396eac85c52ba65a65d5ef9ec82b78e880f9fa09a300cbd2f57b9"
+    },
+    "hoopa": {
+      "glb_sha256": "028971f2314f3d62c11ea183769876c4f43cdf20cd0ac16020a838a90154a885",
+      "profile": "hoopa",
+      "sha256": "04c14ad1901a2e29fd9cc9dd6c348d6a13b2afb5571a333b965c9e4ba176180a"
+    },
+    "hoppip": {
+      "glb_sha256": "dd4e67beff0080254b7ad77f388d546abe0cabd1c5db6a71d67bef699e412ba5",
+      "profile": "hoppip",
+      "sha256": "3466776b082f8192c51de942c82a52a6d5f20a0de7ab5bf55e9c6331a60a85e1"
+    },
+    "hydreigon": {
+      "glb_sha256": "021c556cc7cc7a10d7fee6cebce02d2dd2d3caba55d40de1f744735092c7c9d5",
+      "profile": "hydreigon",
+      "sha256": "1f0c5a95b825932f5a9c8abb559315d5b8ee4c1e56bbd7f67a264005c8dac022"
+    },
+    "hypno": {
+      "glb_sha256": "3013a6faa62ec75c639d797afbaa09a08a5ce2c985e844e0a91fc1adc1143c71",
+      "profile": "hypno",
+      "sha256": "577a5ddc810581380e559af777cd48bf8035d194c884172a5fe5279a9f73ff9f"
+    },
+    "jigglypuff": {
+      "glb_sha256": "7d87209debeb0b988233109f860f0722bee4c88305d06d08c9bb50b53c3671ec",
+      "profile": "jigglypuff",
+      "sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7"
+    },
+    "jolteon": {
+      "glb_sha256": "fb5a330ee73dd2bf51e147daed027b49f1947d3ce2644b01493c0257e20606b0",
+      "profile": "jolteon",
+      "sha256": "2e9848fff483a33c54f92ef0c433d212c6cebb49810d0a6eb471a5b703ee97c6"
+    },
+    "jumpluff": {
+      "glb_sha256": "4b981ebaca693011d203168c444abe8a05f39d06b2370c61453e315d6becbc0b",
+      "profile": "jumpluff",
+      "sha256": "1707109601e912578a25e96b8ba37def059014927be469442b83f9941bcb1d64"
+    },
+    "magikarp": {
+      "glb_sha256": "1f168b396d0b3974d98a277f20f1e51e950ca993026335aaba447fe3c1db0edd",
+      "profile": "magikarp",
+      "sha256": "f595951be64491bffc83c733fc1ba67af5818533c33657a18c0a550172ce57df"
+    },
+    "magnemite": {
+      "glb_sha256": "1400c5d7dc579021ec95cf774f24ea975dd44e2f27576df10649db27e28ae9a7",
+      "profile": "magnemite",
+      "sha256": "4ca65cf8e4d78020e9fc42a2c92a625f636dbd36031f7f5db107df7887297201"
+    },
+    "magneton": {
+      "glb_sha256": "1f0127127a9638465f4c09731dff5461af7bb416a779ac6d6aa0ff55a65fac96",
+      "profile": "magneton",
+      "sha256": "f335d0a906bccbf81af8817230412363c21b2bbcbc6a108a1b291175a82162a0"
+    },
+    "magnezone": {
+      "glb_sha256": "2cf2f52113d3a5ffc477e5331e24d7da09da205d5a3d26de4daa564dbff121f4",
+      "profile": "magnezone",
+      "sha256": "adbc50f123c8d091016efb6e2c54bb07a3fd7c7b88f54665d395f0311036cac4"
+    },
+    "mankey": {
+      "glb_sha256": "d22af0aa6192979d32f69831c410627e5499b4f5f74ac7d7a7862d442bc60ea5",
+      "profile": "mankey",
+      "sha256": "8bc2a5c9d9cbe6c26fbbe2fe709ff52a2ffd037210106b822372630c21cf7fd7"
+    },
+    "marill": {
+      "glb_sha256": "d7deda2d142991fc1d2ac4ee47b078d140b1cc633bccac0a187038b658ee3e0d",
+      "profile": "marill",
+      "sha256": "4b339138a62f788968c81574daa53f6a0e9b55d0e609348ce794544a219ffd7f"
+    },
+    "meowth": {
+      "glb_sha256": "e2316e2f1b1f89dc41905eb20478fecb9c1d527d748e9c32629655d17aa5bd35",
+      "profile": "meowth",
+      "sha256": "e5ee0b7b90538581dabdd333586979f635a31722afa70e89c0fdbee8012a05c0"
+    },
+    "mew": {
+      "glb_sha256": "c3edcd13700dbb96d204f850e927e7cd5109f70c35e62da27223d840db97b841",
+      "profile": "mew",
+      "sha256": "ca73a5e9fc6df3ff237cfc7bb65bcf08390517b5fead695394fb273c3f5e7076"
+    },
+    "mewtwo": {
+      "glb_sha256": "3448f9d6583c287562df98156d09ba4888437ecfb7c350b1233765367213dc13",
+      "profile": "mewtwo",
+      "sha256": "6b35ac7fef08624c8434c0862a4919d3cbfa6ba1b03e83d785d809ee3488c73e"
+    },
+    "misdreavus": {
+      "glb_sha256": "3f2d19649fb7b51598c072a9c3bce9fd03527bab754e0c5e2ddc5b3c0cef3b9f",
+      "profile": "misdreavus",
+      "sha256": "5c4a9a143f38b44b6d95364a2aaaae6e62e3c3b88c068fbc3de04f4476009200"
+    },
+    "murkrow": {
+      "glb_sha256": "f7c3db6f7aee864dae16a45f928e2c94f52277dc8504c10e804a482f7aee4299",
+      "profile": "murkrow",
+      "sha256": "3f0e940cdca08763670ed285844834f8cce9392d77bfdb13b2e56d61448f0fb6"
+    },
+    "oricorio": {
+      "glb_sha256": "b9b8dcfb9cfd490302f4c7973e0b6423b7b6809aa2e32bf7785758ef240ef9ae",
+      "profile": "oricorio",
+      "sha256": "00557d7b34478559c364b572695a3f3b5aeab6e7297941e2b4708262f68619b8"
+    },
+    "orthworm": {
+      "glb_sha256": "1d3aac040ae73250da580678b5c8212416612a890b1ae9479bcab492893abeb1",
+      "profile": "orthworm",
+      "sha256": "997e5fcf6c5b2d21fc205225df316d9831281441f11dc67f04279d4243ec3990"
+    },
+    "pichu": {
+      "glb_sha256": "ac992353889a02c1375acd8de86e626847db813c747729837ca6a8861b1e7a4b",
+      "profile": "pichu",
+      "sha256": "48b05e4d33053df3219fa0c5a42c6f3f741c4fe70cbd8cdc58ecab739be7e744"
+    },
+    "primeape": {
+      "glb_sha256": "1a3a0fea2b8af10090e05da92b9cb9b79909dc40d17e6fbf84326b94fc381915",
+      "profile": "primeape",
+      "sha256": "76d4c1ea23dde1a329e1e81af3e6693ee319b60f2b5708a48fb60c723e634ffb"
+    },
+    "psyduck": {
+      "glb_sha256": "dee04e13a6db147ce3505c8e2c15577dcaa33fbf0fd717a5d1572b64c392da05",
+      "profile": "psyduck",
+      "sha256": "437f896285dcd44a0d84cc3ff6e30b28aa3e66699e41df2933108862ddfa1097"
+    },
+    "quagsire": {
+      "glb_sha256": "419ed10c1063b46b41b53fc18679cc146d3429e88c0dadfcc02134529bb11156",
+      "profile": "quagsire",
+      "sha256": "29d1c5207e26f73912007398cbb04f99a8c882104374cfdeef14c55f3de9a092"
+    },
+    "qwilfish": {
+      "glb_sha256": "63ae4d255e1a98f71f7f3742f4250175b4ccabf7ce431732fe506e0d77b9987f",
+      "profile": "qwilfish",
+      "sha256": "8c0a838b9d729f60894e9601128de59eb9b934e373450bfb2a8806e4175cae5c"
+    },
+    "raichu": {
+      "glb_sha256": "1d78f8733d664fceb31c3742d0aac979d06670115a45c5fb7580624a3c31c175",
+      "profile": "raichu",
+      "sha256": "37d5d601f06b521ab4771b8e422f349202748a49d83ec295c8566a2436a65790"
+    },
+    "rayquaza": {
+      "glb_sha256": "9a52908840db9880f426199442770ba2c5626cf19b9a6d04393470e69667ad01",
+      "profile": "rayquaza",
+      "sha256": "5f24d27cc88817710e9756e30e44093fe46b4a5c7f3e345b1c9ba08fc2f213f9"
+    },
+    "scizor": {
+      "glb_sha256": "08faf8d086d32a803c4272b1dc4371734fd1bea21b30ae94581e18a4c4b695a9",
+      "profile": "scizor",
+      "sha256": "f2b0c217da35bad43ab86179e409566757d798b513299a1c1d0bcf451015a3f1"
+    },
+    "scyther": {
+      "glb_sha256": "e32a02c3795f33cc4674bf5df3b7b75ca39fb5779b1bdb4cd685fe0963dfa5c0",
+      "profile": "scyther",
+      "sha256": "abc9041dd4c36b3d2f557bace83b194c7052d168f8e0f2d3b243e1a5cacae92a"
+    },
+    "seviper": {
+      "glb_sha256": "fb2c7fb25a58108118317147aed74c25444a02eaa4c26cb48d2f008db8bdacbd",
+      "profile": "seviper",
+      "sha256": "3b3def8bc44626d08f7255c3f66b75501d1796d1f28170f76b5ec3be8b473bba"
+    },
+    "shellder": {
+      "glb_sha256": "f68e55d046c00d76488944e7db200d4230b5c2e8f7322354ca32b4f4e91de5c3",
+      "profile": "shellder",
+      "sha256": "407a51e73421d8a0ffe6cacaba670d90898eedd18d7e5ec694f6ea1fee03fa8d"
+    },
+    "slaking": {
+      "glb_sha256": "0d0f7d7dcac4e1fbcf2024c60daa0091a5d43e7af7c408afcab19987614ea163",
+      "profile": "slaking",
+      "sha256": "5ff9c2b3b249b3c5859aedf3830494fd93c0a5291a3c54fbffb50e6da5acdb10"
+    },
+    "slowpoke": {
+      "glb_sha256": "0b673a567bd40005c343b6de80d2e0bcecbc4dc1fdf9d5810321707bb41624b3",
+      "profile": "slowpoke",
+      "sha256": "96fbf13543b1fc54cc0e281a86e4de24366a3b97d00be8e93606d0e869eb74c8"
+    },
+    "staraptor": {
+      "glb_sha256": "2c15c314a2b9bf9b619e8a9e60f8078a087b4306df51032cf2f089cbba3e2501",
+      "profile": "staraptor",
+      "sha256": "ab74c7e7fb6233f4d3ee773d0ab155c5555cdb40f1d236ff651134665748c136"
+    },
+    "sudowoodo": {
+      "glb_sha256": "b66bab07e66b572cf673f26a3e2f7793d68fce8b55e9ff7080f4665c1ce0f93a",
+      "profile": "sudowoodo",
+      "sha256": "f6fcaab6f325baa161e0807071684e34ac3cb88a83464ab1150020fa48509b7b"
+    },
+    "tauros": {
+      "glb_sha256": "3471a08ca4d4acc4a02b5a5d48bb27482eb6fc4054dc6a451940b178f582a2f9",
+      "profile": "tauros",
+      "sha256": "54cd4c2c3d6c2a96394a3c7c924a6525913331746bfd3b1be5106a086170680a"
+    },
+    "tyranitar": {
+      "glb_sha256": "085b0527b678dde71abf9a6597de9a90ca4d1671f56d449cca43dd3cfabf13d5",
+      "profile": "tyranitar",
+      "sha256": "e2bcd8e99b96b6a28590c2f84f21db1e107849ba4f2e0417cc4554613d73cfac"
+    },
+    "umbreon": {
+      "glb_sha256": "1063ba2295b8366b4bbf2b3663a62823e6d6634952fa7e087d07e067e5dfb791",
+      "profile": "umbreon",
+      "sha256": "477a885eba3c9c6286bf189501aa87e76e450cbc6fe621c3e6a8d138182b44f4"
+    },
+    "vaporeon": {
+      "glb_sha256": "89dee7be0777b2af480dcb903c0d76c4180b4e3f7d9beb0e7c6de5836a761732",
+      "profile": "vaporeon",
+      "sha256": "c4595d7ae21e41213f26fd1f6542f71d1d8a34121aa870b246cdc35055bcdecd"
+    },
+    "venonat": {
+      "glb_sha256": "fa444375f2d5c4291b5e60cd6ab226421d64c0651a3302f4fd74f6775cc3aaca",
+      "profile": "venonat",
+      "sha256": "d2d4aa3b8a8b1a409e222e492ca501ad50fa86b39ef33136a622c7728bd407fb"
+    },
+    "volcarona": {
+      "glb_sha256": "2e45df9abd11776155a245facf1c098aeca2e694ad3f7fff2c7818e0b77597d0",
+      "profile": "volcarona",
+      "sha256": "fa505ca1320593d5bf8c97dbc1cb62e003b8bd9f52e8d151ffabc4cecb70eb15"
+    },
+    "voltorb": {
+      "glb_sha256": "174e6db25cfe8aac71fedb6e2213eadbb2537c35e26cad496fd1d2cdfdc4c585",
+      "profile": "voltorb",
+      "sha256": "6b69dc255dbbe1cccc15ce6cfc26ef07d267f1857b75bd9ff1ee56c8a115dd70"
+    },
+    "wigglytuff": {
+      "glb_sha256": "5085fd41a7387e32880155623ac582d1e2c75447a66e3006cad43b0ad089805a",
+      "profile": "wigglytuff",
+      "sha256": "37f63c58217f0e8055c5625783553ee2fb1470a86ecc07d32057956154a90736"
+    },
+    "wooper": {
+      "glb_sha256": "fe8611a0d102d719d95f45c36bb0398193c14bf39e434fe4796656a2de67c6fb",
+      "profile": "wooper",
+      "sha256": "cb8b3869e57f58b0b26945413253904d6779844211d9de47581e931f6daa3f0e"
+    },
+    "zapdos": {
+      "glb_sha256": "f3088d21924bd72c596838aaf3b952a0f551cb9d4c6df32bc695589565117fc2",
+      "profile": "zapdos",
+      "sha256": "6ee811fc4cc9969b3c056b53474e8f185f6813d7e9aea934072ec3b54f15293b"
+    }
+  },
+  "normal_only": true,
+  "profiles": {
+    "azumarill": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 108.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 290.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "blissey": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 104.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "chansey": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 104.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "charizard": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "cloyster": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 118.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "corviknight": {
+      "action_timing": {
+        "damage": {
+          "frames": 60.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 90.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "delibird": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "diglett": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "ditto": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "dondozo": {
+      "action_timing": {
+        "damage": {
+          "frames": 60.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "donphan": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "dragonair": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "dratini": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 86.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 240.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "drifblim": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "drowzee": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 130.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "eevee": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 124.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "electrode": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "espeon": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 88.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "flapple": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "flareon": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 124.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "forretress": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "garchomp": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "gardevoir": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 84.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 124.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "gengar": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "golduck": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "growlithe": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 90.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "gyarados": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 128.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "hariyama": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 98.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "haunter": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "heracross": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "hoopa": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "hoppip": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "hydreigon": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 172.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "hypno": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 94.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 130.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "jigglypuff": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "jolteon": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 240.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "jumpluff": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "magikarp": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "magnemite": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 70.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "magneton": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "magnezone": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 240.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "mankey": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "marill": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 108.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 108.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "meowth": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 64.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "mew": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 122.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "mewtwo": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "misdreavus": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 114.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 114.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "murkrow": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 72.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "oricorio": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "orthworm": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "pichu": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 84.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "primeape": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 110.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "psyduck": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "quagsire": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 96.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "qwilfish": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 144.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "raichu": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "rayquaza": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 192.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 210.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "scizor": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "scyther": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "seviper": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "shellder": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "slaking": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "slowpoke": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "staraptor": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "sudowoodo": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 104.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "tauros": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "tyranitar": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 210.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "umbreon": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "vaporeon": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 114.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 96.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 128.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "venonat": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "volcarona": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 80.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "voltorb": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "wigglytuff": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 98.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 250.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "wooper": {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    },
+    "zapdos": {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      }
+    }
+  },
+  "schema": 1,
+  "source_visual_pass_count": 79,
+  "source_visual_review_sha256": "293ae105e45da366061a62341a0bc06600f48018129b3e0a40b2dc6fb24baf58"
+}

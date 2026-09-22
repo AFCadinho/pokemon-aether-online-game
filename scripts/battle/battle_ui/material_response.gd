@@ -115,13 +115,20 @@ func _build() -> void:
 		viewport = stage.forest_lease.response.viewport
 		world = stage.forest_lease.response.world
 		camera = stage.forest_lease.response.camera
+		# A shader sampler alone does not order sibling viewport rendering.
+		# Keep the pooled light pass alive under the pooled main pass, so it
+		# renders first and this frame's pose samples this frame's irradiance.
+		if viewport.get_parent() != stage.viewport:
+			viewport.reparent(stage.viewport)
 		return
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
 	viewport.use_hdr_2d = true
 	viewport.transparent_bg = true
 	viewport.msaa_3d = stage.viewport.msaa_3d
-	add_child(viewport)
+	# Child viewports render before their parent. Sibling passes can sample
+	# last frame's lighting even when both CPU skeletons are synchronized.
+	stage.viewport.add_child(viewport)
 	world = Node3D.new()
 	viewport.add_child(world)
 	for child in stage.world.get_children():

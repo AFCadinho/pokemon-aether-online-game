@@ -90,3 +90,65 @@ def inspect_tracm(path):
         result["visibility_tracks"] += int(visibility is not None)
         result["blendshape_tracks"] += blendshape_count
     return result
+
+
+def inspect_visibility(path):
+    """Inspect source visibility storage, not playback or target bindings.
+
+    Layout: PokeDocs de20b28d, SV/Flatbuffers/animation/tracm.fbs.
+    Preserve the two float metadata fields without assigning clock semantics.
+    Nonconstant payloads contain packed bytes despite the schema's [bool] label.
+    Preserve those bytes; do not guess bit order, sample count or clock semantics.
+    """
+    data = Path(path).read_bytes()
+    view = _Buffer(data)
+
+    def vector(table, slot, reader, width):
+        pointer = view.pointer(table, slot)
+        if pointer is None:
+            return []
+        return [reader(pointer + 4 + i * width)
+                for i in range(view.u32(pointer))]
+
+    result = []
+    for track in view.tables(view.u32(0), 1):
+        timeline = view.pointer(track, 5)
+        if timeline is None:
+            continue
+        info = view.pointer(timeline, 2)
+        if info is None:
+            raise ValueError('Visibility timeline has no info')
+        kind = view.scalar(info, 0, view.u8)
+        payload = view.pointer(info, 1)
+        if kind not in (1, 2, 3, 4) or payload is None:
+            raise ValueError('Unsupported visibility encoding: ' + str(kind))
+        if kind == 1:
+            frames, values = [], [view.scalar(payload, 0, view.u8)]
+        elif kind == 2:
+            frames, values = [], vector(payload, 0, view.u8, 1)
+        else:
+            frames = vector(payload, 0, view.u16 if kind == 3 else view.u8,
+                            2 if kind == 3 else 1)
+            values = vector(payload, 1, view.u8, 1)
+            if not frames or frames != sorted(set(frames)):
+                raise ValueError('Invalid visibility frame keys')
+        if not values or (kind == 1 and values[0] not in (0, 1)):
+            raise ValueError('Invalid visibility Boolean values')
+        result.append({
+            'target': view.string(track, 0),
+            'encoding': {1: 'fixed_bool', 2: 'dynamic_bool',
+                         3: 'framed16_bool', 4: 'framed8_bool'}[kind],
+            'time_raw': view.scalar(timeline, 0, lambda p: struct.unpack_from('<f', data, p)[0]),
+            'value_raw': view.scalar(timeline, 1, lambda p: struct.unpack_from('<f', data, p)[0]),
+            'frames': frames,
+            'fixed_value': bool(values[0]) if kind == 1 else None,
+            'packed_bytes': values if kind != 1 else [],
+        })
+    return result
+
+
+def unapplied_channel_warnings(category, summary):
+    """All three side channels are diagnostic-only in the skeletal importer."""
+    return [f'unapplied_tracm_{kind}:{category}:{summary[kind + "_tracks"]}'
+            for kind in ('material', 'visibility', 'blendshape')
+            if summary and summary.get(kind + '_tracks', 0)]

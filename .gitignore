@@ -40,3 +40,6 @@ Thumbs.db
 !assets/ui/pokeaether_combo_logo.png.import
 !assets/ui/pokeaether_text_logo.png.import
 __pycache__/
+
+# Disposable local pipeline evidence and generated model reviews.
+/.tmp/

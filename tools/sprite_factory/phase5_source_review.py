@@ -17,13 +17,16 @@ def run_entry(entry, args):
     directory = args.output / 'review' / species
     directory.mkdir(parents=True)
     try:
+        if entry['review_route'] == 'identity_blocked':
+            raise ValueError(entry.get('identity_error', 'Source identity is unverified'))
         if entry['review_route'] == 'scvi_candidate':
             source_root = args.prepared_from or args.output
             source_dir = source_root / 'sources' / species / 'normal'
             if args.prepared_from and (not (source_dir / 'import.json').is_file() or
                                       not (source_dir / (entry['identity'] + '-ready.blend')).is_file()):
                 raise ValueError('Prepared source missing; read-only reuse cannot import into old output')
-            options = {**vars(args), 'output': source_root, 'species': species, 'variant': 'normal'}
+            options = {**vars(args), 'output': source_root, 'species': species, 'variant': 'normal',
+                       'identity_entry': entry}
             import_one(SimpleNamespace(**options))
             source = source_dir / (entry['identity'] + '-ready.blend')
             imported = json.loads((source_dir / 'import.json').read_text())
@@ -52,6 +55,7 @@ def run_entry(entry, args):
         if getattr(args, 'animation_bank', None) is not None:
             job['animation_bank'] = args.animation_bank
         if entry['review_route'] == 'scvi_candidate':
+            job['identity_intake'] = entry
             material_path = Path(entry['model_dir']) / (entry['identity'] + '.trmtr')
             job['material_source'] = str(material_path)
             job['material_source_sha256'] = hashlib.sha256(material_path.read_bytes()).hexdigest()

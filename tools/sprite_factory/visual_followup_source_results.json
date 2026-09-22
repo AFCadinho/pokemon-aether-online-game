@@ -1,0 +1,1704 @@
+{
+  "schema": 1,
+  "scope": "source_diagnostic_and_fixed_visibility_intervention_not_playback_approval",
+  "runtime_approved": false,
+  "inventory_sha256": "c655a83e4e6829eaff1a3de778fbb38c12de7e502575d9dfbe2d0bc8e2dc7d6d",
+  "entries": [
+    {
+      "species": "gastly",
+      "resource_id": "pm0092_00_00",
+      "runtime_sha256": "6135e93a36a79d2e7ce44b44fb7d03b2c7c5bdef85ce59a53d836f60e148871f",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20001_battlewait01_loop.tracm",
+          "sha256": "6c0480bfa83e3b87b9184d568156f0a157d9aa2ca5a36fdd564e3343a3e03aa1",
+          "config": {
+            "loop": true,
+            "frames": 181,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20400_attack01.tracm",
+          "sha256": "de4aeda91d523c8f2500749ac8c55096c9e5cf97c2d35646f60a51c51440c928",
+          "config": {
+            "loop": false,
+            "frames": 91,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20450_rangeattack01.tracm",
+          "sha256": "5ac559872ab3dad60275bfac615f2a0c4a1de813c252fbd9e5556b210ca57959",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20500_damage01.tracm",
+          "sha256": "dab6e14a23e89a39672422b64ed0d81e2c52d997d400403d1ade752162644ea5",
+          "config": {
+            "loop": false,
+            "frames": 51,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20281_sleep01_loop.tracm",
+          "sha256": "6b0828ec8dbb7ccda037f47d717411d4fbe4ae31fdfe85191706fb96e52ae97c",
+          "config": {
+            "loop": true,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20520_down01_start.tracm",
+          "sha256": "46110f08d663d0cde05f3adea7bac223f213ef9e5dac674e90329c69c13e87b9",
+          "config": {
+            "loop": false,
+            "frames": 101,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0092/pm0092_00_00/pm0092_00_00_20521_down01_loop.tracm",
+          "sha256": "6b0828ec8dbb7ccda037f47d717411d4fbe4ae31fdfe85191706fb96e52ae97c",
+          "config": {
+            "loop": true,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        }
+      },
+      "effect_materials": [
+        {
+          "material": "smoke",
+          "source_sha256": "258f80f21d9db1842f2ce65297545c19bb595c9f5e4ecd8cbe6085b92901ebd2",
+          "shaders": [
+            {
+              "name": "NonDirectional",
+              "values": {
+                "EnableBaseColorMap": "True",
+                "EnableAlphaTest": "False",
+                "NumMaterialLayer": "5",
+                "EnableDisplacementMap": "True",
+                "NumRequiredUV": "2"
+              }
+            }
+          ],
+          "alpha_type": "Opaque",
+          "displacement_height": 0.30000001192092896,
+          "profile": "scvi_nondirectional_layered_displacement_v1"
+        }
+      ]
+    },
+    {
+      "species": "charmander",
+      "resource_id": "pm0004_00_00",
+      "runtime_sha256": "4639ee36e2aab0548315e6fb9652c1ee171840345cd9fe3caec2ef8b71ebe885",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00001_battlewait01_loop.tracm",
+          "sha256": "447b9cb31fef76a1a703adfd002ed191b1f1dfbd7a66e8fa645774cda1b5abe2",
+          "config": {
+            "loop": true,
+            "frames": 91,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00400_attack01.tracm",
+          "sha256": "f22cd74ee8030f556543de872a74a95249b3ebd57562980c2b221124eb1f919a",
+          "config": {
+            "loop": false,
+            "frames": 131,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00450_rangeattack01.tracm",
+          "sha256": "4e20fdf0f8cc9d67090a04deeb3b20fd19222488ed9f3ea443248c5a576c946d",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00500_damage01.tracm",
+          "sha256": "cf3824eaea60636eea4574973c4aab3ccc53635d03f0038f082f9ae98ce41122",
+          "config": {
+            "loop": false,
+            "frames": 41,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00281_sleep01_loop.tracm",
+          "sha256": "12c6bae9429b36c7f3107dbffba501c452fae408154bf1dbcb749bc57240c3cc",
+          "config": {
+            "loop": true,
+            "frames": 161,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00520_down01_start.tracm",
+          "sha256": "8cae6450662e5426d22671de5d86db6437f714e5a59bfafd2452a465c771bf62",
+          "config": {
+            "loop": false,
+            "frames": 101,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0004/pm0004_00_00/pm0004_00_00_00521_down01_loop.tracm",
+          "sha256": "6629200b018e8e35f9d04c39cf86054255d3726da103d70d8f811b6588a4db16",
+          "config": {
+            "loop": true,
+            "frames": 91,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        }
+      },
+      "effect_materials": [
+        {
+          "material": "fire",
+          "source_sha256": "ea8523ed29729a0cea1d398f10daa5c104b4ce91394f06a880d736307aca6a5f",
+          "shaders": [
+            {
+              "name": "Unlit",
+              "values": {
+                "EnableBaseColorMap": "True",
+                "EnableAlphaTest": "False",
+                "NumMaterialLayer": "5",
+                "EnableDisplacementMap": "True",
+                "NumRequiredUV": "1"
+              }
+            }
+          ],
+          "alpha_type": "Opaque",
+          "displacement_height": 0.05000000074505806,
+          "profile": "scvi_unlit_layered_displacement_v1"
+        }
+      ]
+    },
+    {
+      "species": "moltres",
+      "resource_id": "pm0146_00_00",
+      "runtime_sha256": "3cbea39cde57fd2080a2b50b5cf24e21a33725a6736f797132dbd6ef27923e93",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_20001_battlewait01_loop.tracm",
+          "sha256": "d12abc0dd14b8dc54b4c0ade7d44e377b7ae098c7f7e5e73658a988b62337653",
+          "config": {
+            "loop": true,
+            "frames": 109,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_20400_attack01.tracm",
+          "sha256": "0fbbc48f11c29b2b1cc4bf85b0b43d59452d2e1d05685af7da77c6bd5aa8d066",
+          "config": {
+            "loop": false,
+            "frames": 131,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_20450_rangeattack01.tracm",
+          "sha256": "1e784c22c6624dfa711f00da861bc882b631ad8c5edc9e383c1f59e191da26ca",
+          "config": {
+            "loop": false,
+            "frames": 139,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_20500_damage01.tracm",
+          "sha256": "4eaca0025317a090ebfdf97842f5ea349f644dd99b38696aef0feffbb12be197",
+          "config": {
+            "loop": false,
+            "frames": 61,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_00281_sleep01_loop.tracm",
+          "sha256": "df3fb7afb2ff5e528180e4bfe47eb4a9f5e15cf920676447c9c4ec4611e52f1a",
+          "config": {
+            "loop": true,
+            "frames": 201,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_20520_down01_start.tracm",
+          "sha256": "dccd03d1df6869178d39a95661b1d7a2b97a66667a10c81400d94ca9d4074cdc",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0146/pm0146_00_00/pm0146_00_00_20521_down01_loop.tracm",
+          "sha256": "4873dfd94690892a88edad7d792fd30993e43c0fb0fab67094e20918be86cdbe",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        }
+      },
+      "effect_materials": [
+        {
+          "material": "fire_a_00",
+          "source_sha256": "efffdf3f6cf93a51a72d369a08d46822bf234128bcb329445dafbef45a873cb8",
+          "shaders": [
+            {
+              "name": "Unlit",
+              "values": {
+                "EnableBaseColorMap": "True",
+                "EnableAlphaTest": "False",
+                "NumMaterialLayer": "5",
+                "EnableDisplacementMap": "True",
+                "NumRequiredUV": "2"
+              }
+            }
+          ],
+          "alpha_type": "Opaque",
+          "displacement_height": 0.4000000059604645,
+          "profile": "scvi_unlit_layered_displacement_uv2_v1"
+        },
+        {
+          "material": "fire_a_01",
+          "source_sha256": "efffdf3f6cf93a51a72d369a08d46822bf234128bcb329445dafbef45a873cb8",
+          "shaders": [
+            {
+              "name": "Unlit",
+              "values": {
+                "EnableBaseColorMap": "True",
+                "EnableAlphaTest": "False",
+                "NumMaterialLayer": "5",
+                "EnableDisplacementMap": "True",
+                "NumRequiredUV": "2"
+              }
+            }
+          ],
+          "alpha_type": "Opaque",
+          "displacement_height": 0.5,
+          "profile": "scvi_unlit_layered_displacement_uv2_v1"
+        },
+        {
+          "material": "fire_b",
+          "source_sha256": "efffdf3f6cf93a51a72d369a08d46822bf234128bcb329445dafbef45a873cb8",
+          "shaders": [
+            {
+              "name": "Unlit",
+              "values": {
+                "EnableBaseColorMap": "True",
+                "EnableAlphaTest": "False",
+                "NumMaterialLayer": "5",
+                "EnableDisplacementMap": "True",
+                "NumRequiredUV": "2"
+              }
+            }
+          ],
+          "alpha_type": "Opaque",
+          "displacement_height": 0.6000000238418579,
+          "profile": "scvi_unlit_layered_displacement_uv2_v1"
+        }
+      ]
+    },
+    {
+      "species": "spiritomb",
+      "resource_id": "pm0442_00_00",
+      "runtime_sha256": "2acc8db767b2714a93584bfcab975b88e7a6dcee74f4b63559b82302296e9e79",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00001_battlewait01_loop.tracm",
+          "sha256": "828335f85c142b571a9e8211467a797364450212e290cd06837250607d6878a4",
+          "config": {
+            "loop": true,
+            "frames": 251,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape",
+            "pm0442_00_00_eyeclose_mesh_shape"
+          ],
+          "fixed_visible_count": 5,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00400_attack01.tracm",
+          "sha256": "035cfdee244893d236cb06c087509c0fbf7e3a384d3a4cb56ec5474ff420316f",
+          "config": {
+            "loop": false,
+            "frames": 111,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": [
+            {
+              "target": "pm0442_00_00_eyeright_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                83,
+                91
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                5
+              ]
+            },
+            {
+              "target": "pm0442_00_00_eyeclose_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                83,
+                91
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                2
+              ]
+            }
+          ]
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00450_rangeattack01.tracm",
+          "sha256": "5046a34f0306c66e2c7b5f8000ac102bc2b2cd2ef3ca0756672dd0dfd30239fb",
+          "config": {
+            "loop": false,
+            "frames": 139,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": [
+            {
+              "target": "pm0442_00_00_eyeright_mesh_shape",
+              "encoding": "dynamic_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [],
+              "fixed_value": null,
+              "packed_bytes": [
+                255,
+                255,
+                0,
+                0,
+                192
+              ]
+            },
+            {
+              "target": "pm0442_00_00_eyeclose_mesh_shape",
+              "encoding": "dynamic_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [],
+              "fixed_value": null,
+              "packed_bytes": [
+                0,
+                0,
+                255,
+                255,
+                63
+              ]
+            }
+          ]
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00500_damage01.tracm",
+          "sha256": "d81009dee1951b89a3e101be157fa5bac0eb2d8f76fe1482a32252602f3ea42c",
+          "config": {
+            "loop": false,
+            "frames": 41,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": [
+            {
+              "target": "pm0442_00_00_eyeright_mesh_shape",
+              "encoding": "dynamic_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [],
+              "fixed_value": null,
+              "packed_bytes": [
+                0,
+                0,
+                0,
+                240
+              ]
+            },
+            {
+              "target": "pm0442_00_00_eyeclose_mesh_shape",
+              "encoding": "dynamic_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [],
+              "fixed_value": null,
+              "packed_bytes": [
+                255,
+                255,
+                255,
+                15
+              ]
+            }
+          ]
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00281_sleep01_loop.tracm",
+          "sha256": "f9f92394e2a011cba41732ef7b9caeb4e7d661b89831eef4518272fab882d34b",
+          "config": {
+            "loop": true,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape",
+            "pm0442_00_00_eyeright_mesh_shape",
+            "pm0442_00_00_body_d_mesh_shape",
+            "pm0442_00_00_body_b_mesh_shape",
+            "pm0442_00_00_body_a_mesh_shape"
+          ],
+          "fixed_visible_count": 2,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00520_down01_start.tracm",
+          "sha256": "f141255e5e0efb3844b1c37a1c3001becbcef70dacc40d9d4bf3d06789deae8b",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape"
+          ],
+          "fixed_visible_count": 1,
+          "nonconstant": [
+            {
+              "target": "pm0442_00_00_eyeright_mesh_shape",
+              "encoding": "dynamic_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [],
+              "fixed_value": null,
+              "packed_bytes": [
+                255,
+                255,
+                15
+              ]
+            },
+            {
+              "target": "pm0442_00_00_eyeclose_mesh_shape",
+              "encoding": "dynamic_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [],
+              "fixed_value": null,
+              "packed_bytes": [
+                0,
+                0,
+                240
+              ]
+            },
+            {
+              "target": "pm0442_00_00_body_d_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                96
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                1
+              ]
+            },
+            {
+              "target": "pm0442_00_00_body_b_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                97
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                1
+              ]
+            },
+            {
+              "target": "pm0442_00_00_body_a_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                107
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                1
+              ]
+            }
+          ]
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0442/pm0442_00_00/pm0442_00_00_00521_down01_loop.tracm",
+          "sha256": "47965aa45006ae4d1e3650c241f0d90a65d512a4dfb3e08f284be723adb802a1",
+          "config": {
+            "loop": true,
+            "frames": 41,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0442_00_00_eyenormal_mesh_shape",
+            "pm0442_00_00_eyeright_mesh_shape",
+            "pm0442_00_00_body_d_mesh_shape",
+            "pm0442_00_00_body_b_mesh_shape",
+            "pm0442_00_00_body_a_mesh_shape"
+          ],
+          "fixed_visible_count": 2,
+          "nonconstant": []
+        }
+      },
+      "fixed_visibility_probe": {
+        "report_sha256": "6f545247424796adef26e8378c4f0274ad77b25f43908966056f0f466d6758e0",
+        "captures": [
+          {
+            "hidden": [],
+            "name": "idle-before.png",
+            "sha256": "1b8cdc7d9e1dd62414ac85b4091e0754482cb320549d7ccd4d441a8b88956be8"
+          },
+          {
+            "hidden": [
+              "pm0442_00_00_eyenormal_mesh",
+              "pm0442_00_00_eyeclose_mesh"
+            ],
+            "name": "idle-fixed_visibility.png",
+            "sha256": "1b8cdc7d9e1dd62414ac85b4091e0754482cb320549d7ccd4d441a8b88956be8"
+          },
+          {
+            "hidden": [],
+            "name": "sleep-before.png",
+            "sha256": "16f2c518ecd4d3b89e6dc6d07662dfd7de661e0b8428e59e0f294f1934810eb7"
+          },
+          {
+            "hidden": [
+              "pm0442_00_00_eyenormal_mesh",
+              "pm0442_00_00_eyeright_mesh",
+              "pm0442_00_00_body_d_mesh",
+              "pm0442_00_00_body_b_mesh",
+              "pm0442_00_00_body_a_mesh"
+            ],
+            "name": "sleep-fixed_visibility.png",
+            "sha256": "3dbde29a40de78305d449f8f21c2520ffba404ee03bbd4996bb80b0a502ce074"
+          },
+          {
+            "hidden": [],
+            "name": "faint_loop-before.png",
+            "sha256": "1c1044cc424635e7000c93c8f7cbeb7bc360f4eead21d3f445d37046be2c6e25"
+          },
+          {
+            "hidden": [
+              "pm0442_00_00_eyenormal_mesh",
+              "pm0442_00_00_eyeright_mesh",
+              "pm0442_00_00_body_d_mesh",
+              "pm0442_00_00_body_b_mesh",
+              "pm0442_00_00_body_a_mesh"
+            ],
+            "name": "faint_loop-fixed_visibility.png",
+            "sha256": "3dbde29a40de78305d449f8f21c2520ffba404ee03bbd4996bb80b0a502ce074"
+          }
+        ]
+      }
+    },
+    {
+      "species": "rillaboom",
+      "resource_id": "pm0950_00_00",
+      "runtime_sha256": "d0d0554f1886ff57640cc711bf37eb4000617af1056685ea7b5e5465847828f9",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00001_battlewait01_loop.tracm",
+          "sha256": "c6140ab146454350b693cd659b0de606fa15b821d1048d1edefe8b434e1c8606",
+          "config": {
+            "loop": true,
+            "frames": 101,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_dram_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00400_attack01.tracm",
+          "sha256": "dc4203d4c03bde9ba2b1efbff4924b49ba5c8b2c91e7d3f10c703d086d5da5d0",
+          "config": {
+            "loop": false,
+            "frames": 131,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_dram_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00450_rangeattack01.tracm",
+          "sha256": "cf05a2c0e71e4cf48d78165c8512d238440eb84d22ee6a6f5cacc4455b2fe013",
+          "config": {
+            "loop": false,
+            "frames": 139,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_dram_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00500_damage01.tracm",
+          "sha256": "02b9b8e29f6fefcf9f57c2897ad0579ac110c0696e92bec35563f136d0cff455",
+          "config": {
+            "loop": false,
+            "frames": 41,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_dram_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00281_sleep01_loop.tracm",
+          "sha256": "278a5162d0e9737d91f8b8badaa3a8e8c3e93f5e83cd8e614c70c704e5193d7c",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_stick_mesh_shape",
+            "pm0950_00_00_dram_b_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00520_down01_start.tracm",
+          "sha256": "aefd2bdf65d0f4bc255661cf6f41e116151d3ed39ac5bf4f596f354dd0394b75",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_dram_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0950/pm0950_00_00/pm0950_00_00_00521_down01_loop.tracm",
+          "sha256": "b1045a4036d2459f8ab6b866f51fb29e7aa2b802c942ded74f9a468bb223e68a",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0950_00_00_dram_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        }
+      },
+      "fixed_visibility_probe": {
+        "report_sha256": "d01b14fd240d99571d1783765539c2966fdceb844c6d9a6fd075df858dff317f",
+        "captures": [
+          {
+            "hidden": [],
+            "name": "idle-before.png",
+            "sha256": "8da8e3c22dbbe8801514c99ef36c713afba474e57e2766fba25540e4915e59df"
+          },
+          {
+            "hidden": [
+              "pm0950_00_00_dram_a_mesh"
+            ],
+            "name": "idle-fixed_visibility.png",
+            "sha256": "893a0e85ed7ea64542885bf89b184f82390ce6262591a7ecacd946377e280104"
+          },
+          {
+            "hidden": [],
+            "name": "sleep-before.png",
+            "sha256": "230797d028c5671f7c72535efd20fa93630664386f61e4c3cba545816ef9f707"
+          },
+          {
+            "hidden": [
+              "pm0950_00_00_stick_mesh",
+              "pm0950_00_00_dram_b_mesh"
+            ],
+            "name": "sleep-fixed_visibility.png",
+            "sha256": "67b21d69ba8f017eb43f26a882df417f9a32fb804b4a625e2eb347493e57d8e4"
+          },
+          {
+            "hidden": [],
+            "name": "faint_loop-before.png",
+            "sha256": "2d6f17013d93a3ab81566aebd12000570334b4af8ff73e04f3d7bdc28c105367"
+          },
+          {
+            "hidden": [
+              "pm0950_00_00_dram_a_mesh"
+            ],
+            "name": "faint_loop-fixed_visibility.png",
+            "sha256": "bfe0e58e013ad8a56a4617a1db361c1d264577874dae35630c8cdcf80dece0e8"
+          }
+        ]
+      }
+    },
+    {
+      "species": "decidueye",
+      "resource_id": "pm0843_00_00",
+      "runtime_sha256": "acf5e4c4f09c3aa636fb141713e9c71540b5a361875c5ebaac346c03d01d976a",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_00001_battlewait01_loop.tracm",
+          "sha256": "37f261fa60f9808a19195ac05c42a0ddba64b6a51f881ab702be2770fe30944a",
+          "config": {
+            "loop": true,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_left_wing_mesh_shape",
+            "pm0843_00_00_right_wing_mesh_shape",
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 9,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_20400_attack01.tracm",
+          "sha256": "c4845decd12704c894be96218875ff4b2125b41fdca7274d1773d467a953c37a",
+          "config": {
+            "loop": false,
+            "frames": 131,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_left_cap_mesh_shape",
+            "pm0843_00_00_right_cap_mesh_shape",
+            "pm0843_00_00_left_cloak_mesh_shape",
+            "pm0843_00_00_right_cloak_mesh_shape",
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 7,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_00450_rangeattack01.tracm",
+          "sha256": "4d2569c9781a396c37e6f115a438b6c978d0cf586dd283c94ff49fd23d1d5bb4",
+          "config": {
+            "loop": false,
+            "frames": 139,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 5,
+          "nonconstant": [
+            {
+              "target": "pm0843_00_00_left_cap_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                28,
+                125
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                5
+              ]
+            },
+            {
+              "target": "pm0843_00_00_right_cap_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                28,
+                125
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                5
+              ]
+            },
+            {
+              "target": "pm0843_00_00_left_cloak_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                28,
+                125
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                5
+              ]
+            },
+            {
+              "target": "pm0843_00_00_right_cloak_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                28,
+                125
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                5
+              ]
+            },
+            {
+              "target": "pm0843_00_00_left_wing_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                28,
+                125
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                2
+              ]
+            },
+            {
+              "target": "pm0843_00_00_right_wing_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                28,
+                125
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                2
+              ]
+            }
+          ]
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_20500_damage01.tracm",
+          "sha256": "9fe7c93a9cfde7590523fc55118e86e2e0975691c4ab46e16ae54b1873101c93",
+          "config": {
+            "loop": false,
+            "frames": 61,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_left_cap_mesh_shape",
+            "pm0843_00_00_right_cap_mesh_shape",
+            "pm0843_00_00_left_cloak_mesh_shape",
+            "pm0843_00_00_right_cloak_mesh_shape",
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 7,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_00281_sleep01_loop.tracm",
+          "sha256": "2b4412bae432dd914d98a2f5b16e8a602b2a020d5425b2bcad837f67d152e607",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_left_cap_mesh_shape",
+            "pm0843_00_00_right_cap_mesh_shape",
+            "pm0843_00_00_left_cloak_mesh_shape",
+            "pm0843_00_00_right_cloak_mesh_shape",
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 7,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_20520_down01_start.tracm",
+          "sha256": "b0418dba9dc16c814eb97156c6ea59d32a06e3ba538a1b1f98c5d71b5200298c",
+          "config": {
+            "loop": false,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_left_cap_mesh_shape",
+            "pm0843_00_00_right_cap_mesh_shape",
+            "pm0843_00_00_left_cloak_mesh_shape",
+            "pm0843_00_00_right_cloak_mesh_shape",
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 7,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0843/pm0843_00_00/pm0843_00_00_20521_down01_loop.tracm",
+          "sha256": "2b4412bae432dd914d98a2f5b16e8a602b2a020d5425b2bcad837f67d152e607",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0843_00_00_left_cap_mesh_shape",
+            "pm0843_00_00_right_cap_mesh_shape",
+            "pm0843_00_00_left_cloak_mesh_shape",
+            "pm0843_00_00_right_cloak_mesh_shape",
+            "pm0843_00_00_arrow_mesh_shape"
+          ],
+          "fixed_visible_count": 7,
+          "nonconstant": []
+        }
+      },
+      "fixed_visibility_probe": {
+        "report_sha256": "c003fe8d2741b2b0e06d7f52f1cc536b350bae545dcdf12519c686e217b9abcc",
+        "captures": [
+          {
+            "hidden": [],
+            "name": "idle-before.png",
+            "sha256": "e85a42080cb36158f1ef8b65731fca94ecc9a5acc67a94faadaa74dbd8db9621"
+          },
+          {
+            "hidden": [
+              "pm0843_00_00_left_wing_mesh",
+              "pm0843_00_00_right_wing_mesh",
+              "pm0843_00_00_arrow_mesh"
+            ],
+            "name": "idle-fixed_visibility.png",
+            "sha256": "cde0248426a49dbff421821bb99d0473690456dae93b31399d1ed53cf7445abc"
+          },
+          {
+            "hidden": [],
+            "name": "sleep-before.png",
+            "sha256": "70440545b2f34d075eb76257f100d81e73eefe8d537e4cfc5664ba576b6a0dfa"
+          },
+          {
+            "hidden": [
+              "pm0843_00_00_left_cap_mesh",
+              "pm0843_00_00_right_cap_mesh",
+              "pm0843_00_00_left_cloak_mesh",
+              "pm0843_00_00_right_cloak_mesh",
+              "pm0843_00_00_arrow_mesh"
+            ],
+            "name": "sleep-fixed_visibility.png",
+            "sha256": "33ee30ed4d85f1e26596aa5f9cfb7224562a09bd9307e52d0de9a9c781dfe395"
+          },
+          {
+            "hidden": [],
+            "name": "faint_loop-before.png",
+            "sha256": "c9b16b17fd28f3a9b8a5ec95518ccef7e559ba2689eb3a1db801a044fb886b64"
+          },
+          {
+            "hidden": [
+              "pm0843_00_00_left_cap_mesh",
+              "pm0843_00_00_right_cap_mesh",
+              "pm0843_00_00_left_cloak_mesh",
+              "pm0843_00_00_right_cloak_mesh",
+              "pm0843_00_00_arrow_mesh"
+            ],
+            "name": "faint_loop-fixed_visibility.png",
+            "sha256": "ba9b64e1baed8714914c2c25be5db2a426b12336241bf9a43aa618a7a87985ff"
+          }
+        ]
+      }
+    },
+    {
+      "species": "magearna",
+      "resource_id": "pm0882_11_00",
+      "runtime_sha256": "c25ec287f3fcdb083502619921960b942b91f3b81507525844da5c94c9c6302b",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00001_battlewait01_loop.tracm",
+          "sha256": "7c5834e2b472a239d3ff80ac39ce98fbf86e5a3d966082d932eedced286b4934",
+          "config": {
+            "loop": true,
+            "frames": 91,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape",
+            "pm0882_11_00_ball_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00400_attack01.tracm",
+          "sha256": "f58a1a96467de641f57a2c6f3469d1a88ca010303774972379f1572dc396f339",
+          "config": {
+            "loop": false,
+            "frames": 91,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape",
+            "pm0882_11_00_ball_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00450_rangeattack01.tracm",
+          "sha256": "e9f4f6d60c50220ad8b026fabc55226476fa545085afea7661dae5c67e21c166",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape",
+            "pm0882_11_00_ball_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00500_damage01.tracm",
+          "sha256": "e290ba72220a71a401ea8e44a87823c35a6b1f9d770143dd4986bd0d4f558605",
+          "config": {
+            "loop": false,
+            "frames": 51,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape",
+            "pm0882_11_00_ball_a_mesh_shape"
+          ],
+          "fixed_visible_count": 4,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00281_sleep01_loop.tracm",
+          "sha256": "21de67795571e525fc6e39f04cb00c3307b848838c0648f8701c72bd111cee1e",
+          "config": {
+            "loop": true,
+            "frames": 181,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape",
+            "pm0882_11_00_body_mesh_shape",
+            "pm0882_11_00_ear_mesh_shape",
+            "pm0882_11_00_eye_mesh_shape"
+          ],
+          "fixed_visible_count": 2,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00520_down01_start.tracm",
+          "sha256": "efc33d2b0fa7f4391c5474e8c6e515aaf533beebf1132cc961e167ed74fd97f2",
+          "config": {
+            "loop": false,
+            "frames": 111,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape"
+          ],
+          "fixed_visible_count": 1,
+          "nonconstant": [
+            {
+              "target": "pm0882_11_00_ball_a_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                54
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                2
+              ]
+            },
+            {
+              "target": "pm0882_11_00_body_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                54
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                1
+              ]
+            },
+            {
+              "target": "pm0882_11_00_ear_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                54
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                1
+              ]
+            },
+            {
+              "target": "pm0882_11_00_eye_mesh_shape",
+              "encoding": "framed8_bool",
+              "time_raw": 0,
+              "value_raw": 0,
+              "frames": [
+                0,
+                54
+              ],
+              "fixed_value": null,
+              "packed_bytes": [
+                1
+              ]
+            }
+          ]
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0882/pm0882_11_00/pm0882_11_00_00521_down01_loop.tracm",
+          "sha256": "5514ad9d48703d1163cdb003e33ed52ab0214baad90ff6f9a4b9715c1b73e3e1",
+          "config": {
+            "loop": true,
+            "frames": 111,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0882_11_00_blaster_mesh_shape",
+            "pm0882_11_00_flower_mesh_shape",
+            "pm0882_11_00_body_mesh_shape",
+            "pm0882_11_00_ear_mesh_shape",
+            "pm0882_11_00_eye_mesh_shape"
+          ],
+          "fixed_visible_count": 2,
+          "nonconstant": []
+        }
+      },
+      "fixed_visibility_probe": {
+        "report_sha256": "e1eb1cec0e034b3b2f23ede0d5013f6c05a0d60f9af5bb866df23cae08d028a8",
+        "captures": [
+          {
+            "hidden": [],
+            "name": "idle-before.png",
+            "sha256": "8d02b05dc259e2ded05751fba6ba04e32317f4429996e2e769fd1c3f4706d7ce"
+          },
+          {
+            "hidden": [
+              "pm0882_11_00_blaster_mesh",
+              "pm0882_11_00_flower_mesh",
+              "pm0882_11_00_ball_a_mesh"
+            ],
+            "name": "idle-fixed_visibility.png",
+            "sha256": "80389d36330c4721db1b2b08e095061b87ce95a8dfa525db491b4488d3c2ff17"
+          },
+          {
+            "hidden": [],
+            "name": "sleep-before.png",
+            "sha256": "8c847cac7d32caf86c054e429d8b7fc1c41b21fe82caa06de8b216e9b990fe77"
+          },
+          {
+            "hidden": [
+              "pm0882_11_00_blaster_mesh",
+              "pm0882_11_00_flower_mesh",
+              "pm0882_11_00_body_mesh",
+              "pm0882_11_00_ear_mesh",
+              "pm0882_11_00_eye_mesh"
+            ],
+            "name": "sleep-fixed_visibility.png",
+            "sha256": "f4e017289ab6d979b084b33aa8177810897722e7913daed427d355d18a211f8e"
+          },
+          {
+            "hidden": [],
+            "name": "faint_loop-before.png",
+            "sha256": "da057ff0cb3db2615ecba879fe6842336ee4ec81aa53047bdf7c5ca1a4265590"
+          },
+          {
+            "hidden": [
+              "pm0882_11_00_blaster_mesh",
+              "pm0882_11_00_flower_mesh",
+              "pm0882_11_00_body_mesh",
+              "pm0882_11_00_ear_mesh",
+              "pm0882_11_00_eye_mesh"
+            ],
+            "name": "faint_loop-fixed_visibility.png",
+            "sha256": "e0b5bdad633c7ece50bbe251378b0c10cc42481e5723919d744cdc53c10ef761"
+          }
+        ]
+      }
+    },
+    {
+      "species": "cinderace",
+      "resource_id": "pm0956_00_00",
+      "runtime_sha256": "71c6208b87580cb8e3ceb7e712354d2b6ea9b54f07e318e315910ace4ab7ad82",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00001_battlewait01_loop.tracm",
+          "sha256": "1f32256ef3738a4c6719d30ac46c1e189e5182d2fbc354c20a465eb11b71926e",
+          "config": {
+            "loop": true,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00400_attack01.tracm",
+          "sha256": "b7eaa1dd05377956704e31fa74f250acda6cf5aeeb68e28a44a23e410fa64f40",
+          "config": {
+            "loop": false,
+            "frames": 91,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00450_rangeattack01.tracm",
+          "sha256": "9fd0ca2920c7e83aa18ed421c455c556e12deec016858fbe4ef5330b83fba778",
+          "config": {
+            "loop": false,
+            "frames": 139,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00500_damage01.tracm",
+          "sha256": "eac3b025065de5050ee0d44ffaa0a9c03a7b0159dd22278282656bbdc829f3a8",
+          "config": {
+            "loop": false,
+            "frames": 41,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00281_sleep01_loop.tracm",
+          "sha256": "1ff7e6ab7c5eb76c8c3ace170b92aeae398fa3bbd2e5447f30ac35f9f310e1f5",
+          "config": {
+            "loop": true,
+            "frames": 101,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00520_down01_start.tracm",
+          "sha256": "a84fd888dc132f13ebb93a787d19b01bd70559ce950cf441a39d88deb4798a6a",
+          "config": {
+            "loop": false,
+            "frames": 131,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0956/pm0956_00_00/pm0956_00_00_00521_down01_loop.tracm",
+          "sha256": "dc701c92a20ed15e07042e0fb389ea6761ab9383967a0b864de3121c1647ba7f",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [
+            "pm0956_00_00_stone_mesh_shape",
+            "pm0956_00_00_fireball_a_mesh_shape",
+            "pm0956_00_00_fireball_b_mesh_shape",
+            "pm0956_00_00_fireballaout_mesh_shape",
+            "pm0956_00_00_fireballbout_mesh_shape"
+          ],
+          "fixed_visible_count": 3,
+          "nonconstant": []
+        }
+      },
+      "fixed_visibility_probe": {
+        "report_sha256": "91ac00b747a4b33d728618e38ef2dd0d06fcbc0a34940acc8da7527fcfba1473",
+        "captures": [
+          {
+            "hidden": [],
+            "name": "idle-before.png",
+            "sha256": "390047ef9ada319f1fb42dbd2e306562831ace74463c904db931b1ca01feee05"
+          },
+          {
+            "hidden": [
+              "pm0956_00_00_stone_mesh",
+              "pm0956_00_00_fireball_a_mesh",
+              "pm0956_00_00_fireball_b_mesh",
+              "pm0956_00_00_fireballaout_mesh",
+              "pm0956_00_00_fireballbout_mesh"
+            ],
+            "name": "idle-fixed_visibility.png",
+            "sha256": "5b4608716677f3d6e86133a0ade31fb062f13935617c1165e29ebe774305cfc0"
+          },
+          {
+            "hidden": [],
+            "name": "sleep-before.png",
+            "sha256": "0186019e4d678a5246ae7e2c8a89858397cea46f8bbf5648af3be236e563e2f0"
+          },
+          {
+            "hidden": [
+              "pm0956_00_00_stone_mesh",
+              "pm0956_00_00_fireball_a_mesh",
+              "pm0956_00_00_fireball_b_mesh",
+              "pm0956_00_00_fireballaout_mesh",
+              "pm0956_00_00_fireballbout_mesh"
+            ],
+            "name": "sleep-fixed_visibility.png",
+            "sha256": "7fac3e224cfd4ed6bd5a778b86508f4076278d5c5ec865f7a6cea6d5555fc63e"
+          },
+          {
+            "hidden": [],
+            "name": "faint_loop-before.png",
+            "sha256": "aa773c34ca2ca14ef58f6e25a006200d21c1c77d23de0e4484d17796453627db"
+          },
+          {
+            "hidden": [
+              "pm0956_00_00_stone_mesh",
+              "pm0956_00_00_fireball_a_mesh",
+              "pm0956_00_00_fireball_b_mesh",
+              "pm0956_00_00_fireballaout_mesh",
+              "pm0956_00_00_fireballbout_mesh"
+            ],
+            "name": "faint_loop-fixed_visibility.png",
+            "sha256": "ae32ebf9b3783e70a06521e5c428d70c9a5425c2371171c846ef17193eb46343"
+          }
+        ]
+      }
+    },
+    {
+      "species": "dugtrio",
+      "resource_id": "pm0051_00_00",
+      "runtime_sha256": "58cf2d42750f9bccda80dfefdcae7e9987b0101ef7afc9a64ebc6b61fec6db35",
+      "runtime_approved": false,
+      "clips": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00001_battlewait01_loop.tracm",
+          "sha256": "452a0cefefec72897c02957ff8feedd38fad78d28104fa088a7d132d6679612a",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        },
+        "physical_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00400_attack01.tracm",
+          "sha256": "6fc1f9d0f7d1d5ebdb3cdc1857e943df499ea54bc0737930470e3cdc60ff30e8",
+          "config": {
+            "loop": false,
+            "frames": 111,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        },
+        "special_attack": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00450_rangeattack01.tracm",
+          "sha256": "c1675fdab1481f1523e079be691c8ab075e1b215fe0c73d5e564fb006a78a9ac",
+          "config": {
+            "loop": false,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        },
+        "damage": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00500_damage01.tracm",
+          "sha256": "aa78fce7bab4878d6f01bb268457cd58c48b39b3f958dab9fb4afc0a37e6ae3a",
+          "config": {
+            "loop": false,
+            "frames": 41,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        },
+        "sleep": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00281_sleep01_loop.tracm",
+          "sha256": "5d160854bdb03f90fb411feb2acd269f577af7183a2d573077b2448e4f4f485a",
+          "config": {
+            "loop": true,
+            "frames": 121,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00520_down01_start.tracm",
+          "sha256": "9cbf8a6f1c7cc7e9008cb778619f0e475c4baeb1ab7ba72b781d7823ce4ad5f8",
+          "config": {
+            "loop": false,
+            "frames": 101,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00521_down01_loop.tracm",
+          "sha256": "97661f9f3dc816e57759b689e156d81a36b72199bd8259aa7f37ef895bfb3ef0",
+          "config": {
+            "loop": true,
+            "frames": 81,
+            "fps": 60
+          },
+          "fixed_hidden": [],
+          "fixed_visible_count": 10,
+          "nonconstant": []
+        }
+      },
+      "source_scales": {
+        "idle": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00001_battlewait01_loop.tranm",
+          "sha256": "3b8a8cf888c6f3e5b82cb0ec2c61c3c972c6ee687a4bcd5fdc8a2d5929910fc3",
+          "bone": "spine_a_03",
+          "first": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "last": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "encoding": "FixedVectorTrackT"
+        },
+        "faint_start": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00520_down01_start.tranm",
+          "sha256": "37efe43668c7c6503e363e507ecf5684d29fb9121f98da173b57a391a4a24652",
+          "bone": "spine_a_03",
+          "first": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "last": [
+            0.15000000596046448,
+            1.0,
+            1.0
+          ],
+          "encoding": "Framed8VectorTrackT"
+        },
+        "faint_loop": {
+          "source": "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0051/pm0051_00_00/pm0051_00_00_00521_down01_loop.tranm",
+          "sha256": "9a46c0f46a57a6d63a0ae2b34b149a90edb1e6c1a88b687efa27c87d20708b45",
+          "bone": "spine_a_03",
+          "first": [
+            0.15000000596046448,
+            1.0,
+            1.0
+          ],
+          "last": [
+            0.15000000596046448,
+            1.0,
+            1.0
+          ],
+          "encoding": "FixedVectorTrackT"
+        }
+      },
+      "godot_faint_loop_scale": [
+        0.15,
+        1,
+        1
+      ]
+    }
+  ],
+  "storage_counts": {
+    "fixed_bool": 399,
+    "framed8_bool": 15,
+    "dynamic_bool": 6
+  },
+  "diagnostic_artifacts": {
+    ".tmp/visibility_fixed_probe.gd": "4fcf80637b9758f4ff09ab931829aa84ee63668c41bf66d05d70ce276f34738a",
+    ".tmp/visibility-fixed-input.json": "5719b35a93af23ba1e389d8feff5bcce3520d543c503a9208b14d5b5b44c4b21",
+    ".tmp/visibility_mesh_probe.gd": "7c3a080399acb2baeb205be98662894914041cfd6f39bbe3df1ef8d31a4fa8e7"
+  }
+}

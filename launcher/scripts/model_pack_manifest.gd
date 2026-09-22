@@ -1,6 +1,7 @@
 extends RefCounted
 ## Checked-in approval, not metadata supplied by a local catalog or Settings.
 const DATA = preload("../data/reviewed_model_catalog.json")
+const SCREENED = preload("../data/screened_model_catalog.json")
 
 static func key(species: String, shiny: bool) -> String:
 	var normalized := species.to_lower().replace(" ", "-")
@@ -19,10 +20,19 @@ static func entry_key(entry: Dictionary) -> String:
 	return key(species, variant == "shiny")
 
 static func supports(identity: String) -> bool:
-	return DATA.data.models.has(identity)
+	return DATA.data.models.has(identity) or SCREENED.data.models.has(identity)
 
 static func approved_digest(model: Dictionary, digest: String) -> bool:
 	return not model.is_empty() and (digest == model.get("sha256", "") or digest in model.get("previous_sha256", []))
+
+static func screened_digest(model: Dictionary, digest: String) -> bool:
+	# Screened candidates deliberately do not inherit the old-revision allowance.
+	# They are local normal-form test assets, not portable reviewed-pack content.
+	return not model.is_empty() and digest == model.get("sha256", "")
+
+static func is_screened(identity: String, digest := "") -> bool:
+	var model: Dictionary = SCREENED.data.models.get(identity, {})
+	return not model.is_empty() and (digest.is_empty() or screened_digest(model, digest))
 
 static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 	# Portable packs are stricter than the historical two-model local catalog.
@@ -64,9 +74,20 @@ static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 
 static func resolve(identity: String, digest: String) -> Dictionary:
 	var model: Dictionary = DATA.data.models.get(identity, {})
-	if not approved_digest(model, digest):
+	var profiles: Dictionary = DATA.data.profiles
+	var accepted := approved_digest(model, digest)
+	if not accepted:
+		model = SCREENED.data.models.get(identity, {})
+		profiles = SCREENED.data.profiles
+		accepted = screened_digest(model, digest)
+	if not accepted or not profiles.has(model.get("profile", "")):
 		return {}
-	var profile: Dictionary = DATA.data.profiles[model.profile].duplicate(true)
-	profile.grounding["sha256"] = digest
-	profile.motion["sha256"] = digest
+	var profile: Dictionary = profiles[model.profile].duplicate(true)
+	# The screened cohort has source timing and placement only. It has not passed
+	# arena grounding or motion-clearance calibration, so keep those optional and
+	# let the presenter select its existing safe classic-arena fallback.
+	if profile.get("grounding") is Dictionary:
+		profile.grounding["sha256"] = digest
+	if profile.get("motion") is Dictionary:
+		profile.motion["sha256"] = digest
 	return profile

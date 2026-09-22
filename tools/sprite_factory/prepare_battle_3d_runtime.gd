@@ -121,6 +121,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 	if errors.size() != before:
 		node.free()
 		return {}
+	if entry.has("visibility"):
+		var visibility := preload("visibility_pack.gd").new()
+		if not entry.visibility is Dictionary or not visibility.apply(node, entry.visibility, glb_hash):
+			errors.append(species + ": visibility binding failed: " + visibility.failure)
+			node.free()
+			return {}
 	if entry.has("material_effects"):
 		var effect := preload("material_effect_pack.gd").new()
 		if not entry.material_effects is Dictionary or not effect.apply(node, entry.material_effects, glb_hash):

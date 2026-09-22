@@ -20,11 +20,20 @@ def read_uv_tracks(path):
               'fps': view.scalar(config, 2, view.u32),
               'config_flag': view.scalar(config, 0, view.u32),
               'multiplier': view.scalar(root, 2, view.u8), 'tracks': []}
+    # Across the fixed cohort these bytes equal populated timeline counts,
+    # not clock ratios. Keep the old label for diagnostic compatibility only.
+    timelines = view.tables(root, 1)
+    report['declared_timeline_counts'] = [view.scalar(root, s, view.u8) for s in (2, 3, 4)]
+    report['actual_timeline_counts'] = [sum(view.pointer(t, s) is not None for t in timelines) for s in (4, 5, 6)]
+    report['nested_timing'] = []
     f32 = lambda offset: struct.unpack_from('<f', view.data, offset)[0]
-    for track in view.tables(root, 1):
+    for track in timelines:
         timeline = view.pointer(track, 4)
         if timeline is None:
             continue
+        nested = view.pointer(timeline, 0)
+        if nested is not None:
+            report['nested_timing'].append([view.scalar(nested, i, view.u32) for i in range(3)])
         for material in view.tables(timeline, 2):
             for animation in view.tables(material, 2):
                 name = view.string(animation, 0)

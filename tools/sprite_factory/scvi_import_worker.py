@@ -114,7 +114,7 @@ def main(job):
     from pokeaether_scvi_importer.PokemonSwitch import from_trmdlsv
     from pokeaether_scvi_importer.gfbanm_importer import import_animation
     from pokeaether_scvi_importer.GFLib.Anim.Animation import AnimationT
-    from scvi_tracm import inspect_tracm
+    from scvi_tracm import inspect_tracm, unapplied_channel_warnings
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.context.scene.world = bpy.data.worlds.new("PokeAether SCVI review")
@@ -138,6 +138,14 @@ def main(job):
         if path is not None:
             import_animation(bpy.context, path, False, 0, False, False)
     actions = {action.name: action for action in bpy.data.actions}
+    from source_clip_timing import preserve_constant_pose
+    fixed_pose_durations = []
+    for category, path in job['motions'].items():
+        if path:
+            native = AnimationT.InitFromPackedBuf(bytearray(Path(path).read_bytes()), 0)
+            if preserve_constant_pose(actions[Path(path).stem], native.info,
+                                      bpy.context.scene.render.fps / bpy.context.scene.render.fps_base):
+                fixed_pose_durations.append(category)
     facial_baseline = apply_facial_baseline(rig, actions, job, AnimationT)
     actions = {action.name: action for action in bpy.data.actions}
     eyelid_names = {bone.name for bone in rig.pose.bones if "eyelid" in bone.name.lower()}
@@ -193,13 +201,11 @@ def main(job):
     for category, path in job.get("motion_channels", {}).items():
         channel_animations[category] = inspect_tracm(path) if path else None
         summary = channel_animations[category]
-        if summary and summary["material_tracks"]:
-            channel_warnings.append(
-                f"unapplied_tracm_material:{category}:{summary['material_tracks']}")
-        if summary and summary["blendshape_tracks"]:
-            channel_warnings.append(
-                f"unapplied_tracm_blendshape:{category}:{summary['blendshape_tracks']}")
+        channel_warnings.extend(unapplied_channel_warnings(category, summary))
+    import hashlib
     report = {"species": job["species"], "identity": identity, "variant": job["variant"],
+              "prepared_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+              "native_fixed_pose_durations": fixed_pose_durations,
               "blender": bpy.app.version_string, "rig": rig.name,
               "meshes": [obj.name for obj in bpy.data.objects if obj.type == "MESH"],
               "materials": [mat.name for mat in bpy.data.materials],
