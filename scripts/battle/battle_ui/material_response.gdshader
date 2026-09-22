@@ -12,6 +12,9 @@ uniform bool has_roughness = false;
 uniform vec4 roughness_selector;
 uniform float roughness_value = 1.0;
 uniform float specular_value = 0.5;
+// Battle readability: retain authored shadow hues without applying their full
+// darkening on top of the scene's own diffuse lighting. 1.0 is source response.
+uniform float shadow_color_strength : hint_range(0.0, 1.0) = 0.35;
 
 void fragment() {
 	NORMAL_MAP = texture(normal_tex, UV).rgb;
@@ -19,7 +22,7 @@ void fragment() {
 	// Source EASE ramp is applied AFTER summing linear HDR irradiance.
 	// Keep Godot's standard BRDF for the final material/highlight response.
 	float energy = dot(texture(light_map, SCREEN_UV).rgb, vec3(0.2126, 0.7152, 0.0722));
-	float amount = 1.0 - smoothstep(0.5, 1.0, energy);
+	float amount = (1.0 - smoothstep(0.5, 1.0, energy)) * clamp(shadow_color_strength, 0.0, 1.0);
 	ALBEDO = mix(texture(endpoint_0, UV).rgb, texture(endpoint_1, UV).rgb, amount) * base_color.rgb;
 	ROUGHNESS = roughness_value;
 	if (has_roughness) {

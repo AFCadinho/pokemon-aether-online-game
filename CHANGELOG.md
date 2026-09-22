@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 3D-Pokémon behouden beter hun kleur in schaduw: de extra materiaalschaduw is subtieler, zonder de arena, slagschaduwen of individuele modellen lichter te maken.
+
 - Donkere 3D-Pokémon blijven in Forest-arena's beter leesbaar dankzij een zachte skylight-fill die de bestaande schaduwen niet vervangt.
 
 - De lokale desktop-3D-runtime vindt het vertrouwde Forest-pakket nu automatisch naast de gekozen modelcatalogus. Daardoor kiest Automatic weer Grass → Forest zonder een aparte instellingenstap.

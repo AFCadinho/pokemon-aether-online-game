@@ -2,6 +2,14 @@ extends SceneTree
 const Response = preload("res://scripts/battle/battle_ui/material_response.gd")
 
 func _init() -> void:
+	# Generic presentation policy, not a per-species material multiplier.
+	# Headless dummy rendering does not expose compiled uniform defaults.
+	assert("uniform float shadow_color_strength : hint_range(0.0, 1.0) = 0.35;" in Response.RESPONSE.code)
+	for strength: float in [0.0, 0.35, 1.0]:
+		var lit_amount := (1.0 - smoothstep(0.5, 1.0, 1.0)) * strength
+		var shadow_amount := (1.0 - smoothstep(0.5, 1.0, 0.0)) * strength
+		assert(is_zero_approx(lit_amount))
+		assert(is_equal_approx(shadow_amount, strength))
 	var material := StandardMaterial3D.new()
 	assert(not Response.valid_material(material))
 	var image := Image.create(2, 2, false, Image.FORMAT_RGBA8)

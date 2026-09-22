@@ -18,6 +18,13 @@ source EASE ramp after summation, then uses Godot's standard BRDF. Source IOR an
 specular level map to Godot specular through `sqrt(F0 / 0.16)`. No species-specific
 color, scale, light or shader parameters are introduced.
 
+Since 2026-09-22, battle presentation weights the authored shadow-color mix by
+0.35 for readability. This deliberately reduces additional color darkening on
+top of diffuse scene lighting; it is not an exact source-render match or a
+conversion repair. Setting `shadow_color_strength` to 1.0 recovers the previous
+response. Lit endpoints, normal maps, roughness, specular, arena lights and cast
+shadows are unchanged. See `MATERIAL_DARKNESS_REVIEW.md` for the bounded review.
+
 The second pass mirrors the presenter's transforms, skeleton poses, blend shapes,
 visibility and camera before drawing. Its AnimationPlayers do not run independent
 clocks. Switching replaces the corresponding mirror; teardown releases viewport,
