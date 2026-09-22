@@ -17,6 +17,10 @@ var PlayerGameStateService: Node
 var SettingsManager: Node
 var ThievingService: Node
 
+
+func _init() -> void:
+	_bind_services()
+
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
 const TrainerBattleMusicResolverScript := preload(
 	"res://scripts/world/npcs/trainer_battle_music_resolver.gd"
@@ -159,16 +163,24 @@ var _sorting_player: Node2D
 
 
 func _ready_base_npc() -> void:
-	CharacterAppearanceService = get_node_or_null("/root/CharacterAppearanceService")
-	CoopService = get_node_or_null("/root/CoopService")
-	GameErrorDialogService = get_node_or_null("/root/GameErrorDialogService")
-	GameState = get_node_or_null("/root/GameState")
-	ItemLocalization = get_node_or_null("/root/ItemLocalization")
-	LocalizationManager = get_node_or_null("/root/LocalizationManager")
-	NpcMetadataService = get_node_or_null("/root/NpcMetadataService")
-	PlayerGameStateService = get_node_or_null("/root/PlayerGameStateService")
-	SettingsManager = get_node_or_null("/root/SettingsManager")
-	ThievingService = get_node_or_null("/root/ThievingService")
+	_initialize_base_npc()
+
+
+func _bind_services() -> void:
+	CharacterAppearanceService = _root_service("CharacterAppearanceService")
+	CoopService = _root_service("CoopService")
+	GameErrorDialogService = _root_service("GameErrorDialogService")
+	GameState = _root_service("GameState")
+	ItemLocalization = _root_service("ItemLocalization")
+	LocalizationManager = _root_service("LocalizationManager")
+	NpcMetadataService = _root_service("NpcMetadataService")
+	PlayerGameStateService = _root_service("PlayerGameStateService")
+	SettingsManager = _root_service("SettingsManager")
+	ThievingService = _root_service("ThievingService")
+
+
+func _initialize_base_npc() -> void:
+	_bind_services()
 	_apply_npc_profile()
 	if Engine.is_editor_hint():
 		_refresh_npc_profile_preview()
