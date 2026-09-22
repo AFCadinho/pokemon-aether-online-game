@@ -18,7 +18,7 @@ func _init() -> void:
 	var inventory_source := FileAccess.get_file_as_string(INVENTORY_SERVICE)
 	var fishing_guru_source := FileAccess.get_file_as_string(FISHING_GURU_SCRIPT)
 
-	_check_true(script_source.contains("extends DialogueNPC"), "item gift NPC extends DialogueNPC")
+	_check_true(script_source.contains("extends DialogueNPC") or script_source.contains('extends "res://scripts/world/npcs/dialogue_npc.gd"'), "item gift NPC extends DialogueNPC")
 	_check_true(script_source.contains("claim_npc_item_reward"), "item gift NPC claims a server reward")
 	_check_true(script_source.contains("already_received_dialogue_id"), "item gift NPC supports repeat dialogue")
 	_check_true(
