@@ -1,5 +1,11 @@
 # Realtime 3D storage audit — 2026-09-22
 
+**Historical evidence, not an active optimization plan.** The resulting
+component-sharing experiment is closed as **promising but not production-safe**.
+Keep the existing standalone model format. Further sharing, deduplication and
+codec research is deferred until catalog size becomes a practical problem;
+see [CATALOG_PRODUCTION_STATUS.md](CATALOG_PRODUCTION_STATUS.md).
+
 ## Decision
 
 The current 11.82 MiB average is **not demonstrated to be a lower bound**.
