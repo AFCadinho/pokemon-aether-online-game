@@ -34,6 +34,10 @@ class FixtureService extends GuildServiceNode:
 class FixtureCaptain extends "res://scripts/world/npcs/aether_clash_bot_captain_npc.gd":
 	var service: FixtureService
 	var confirmations := 0
+	func _show_training_choice() -> String:
+		# The choice dialog is covered by the dedicated entry-gate test. Keep this
+		# flow fixture focused on duplicate-interaction and challenge-menu lifecycle.
+		return "challenge"
 	func _load_training_options() -> Dictionary:
 		return await service.load_aether_clash_bot_options()
 	func _create_training_challenge(count: int, tier_id: String, access: String, ai_policy: String, reward_attempt: bool) -> Dictionary:
