@@ -39,7 +39,7 @@ func resource_path(id: String) -> String:
 	return directory.path_join(manifest.components[id].file)
 
 func load_entry(entry: Dictionary, prototype: bool) -> Dictionary:
-	var key: String = entry.identity
+	var key := cache_key(entry, prototype)
 	var start := Time.get_ticks_usec()
 	var hit := cache.has(key)
 	if not hit:
@@ -56,6 +56,9 @@ func load_entry(entry: Dictionary, prototype: bool) -> Dictionary:
 	var node: Node3D = Components.instantiate(item.scene, item.appearance) if prototype else item.scene.instantiate()
 	loads.append({"identity": key, "hit": hit, "ms": (Time.get_ticks_usec() - start) / 1000.0})
 	return {"node": node, "scene": item.scene}
+
+func cache_key(entry: Dictionary, prototype: bool) -> String:
+	return ("components:" if prototype else "original:") + str(entry.identity)
 
 func clear_cache() -> void:
 	cache.clear()
@@ -158,6 +161,7 @@ func capture(entry: Dictionary, prototype: bool, two_pass: bool, camera_transfor
 	var images := {}
 	var signatures := {}
 	var placement := {}
+	var diagnostics := {}
 	var player := node.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	for action in player.get_animation_list():
 		if action == "RESET":
@@ -172,18 +176,33 @@ func capture(entry: Dictionary, prototype: bool, two_pass: bool, camera_transfor
 			images[key] = image
 			signatures[key] = signature(node)
 			placement[key] = bounds(node)
+			diagnostics[key] = diagnostic_state(node)
 	var result := {"images": images, "signatures": signatures, "bounds": placement, "camera": stage.camera.transform}
-	stage.queue_free()
+	result["diagnostics"] = diagnostics
+	result["camera_render"] = stage.camera.get_camera_transform()
+	result["camera_projection"] = stage.camera.get_camera_projection()
+	dispose_stage(stage)
 	for frame in 3:
 		await process_frame
 	await RenderingServer.frame_post_draw
 	return result
+
+func dispose_stage(stage: Stage) -> void:
+	stage.queue_free()
+
+func diagnostic_state(_node: Node3D) -> Dictionary:
+	return {}
+
+func stop_on_pixel_mismatch() -> bool:
+	return true
 
 func visuals() -> void:
 	for entry in manifest.entries:
 		for two_pass in [false, true]:
 			clear_cache()
 			var original := await capture(entry, false, two_pass, Transform3D.IDENTITY)
+			if report.get("resource_mutation", false):
+				return
 			clear_cache()
 			if original.get("unsupported_response", false):
 				var alternative := await capture(entry, true, two_pass, Transform3D.IDENTITY)
@@ -193,7 +212,12 @@ func visuals() -> void:
 				report.response_skipped.append(entry.identity)
 				continue
 			var prototype := await capture(entry, true, two_pass, original.camera)
-			if original.signatures != prototype.signatures or original.bounds != prototype.bounds:
+			if report.get("resource_mutation", false):
+				return
+			if original.camera_render != prototype.camera_render or original.camera_projection != prototype.camera_projection:
+				print("CAMERA_DIFF ", entry.identity, " ", original.camera_render, " vs ", prototype.camera_render,
+					" projection_equal=", original.camera_projection == prototype.camera_projection)
+			if original.signatures != prototype.signatures or original.bounds != prototype.bounds or original.diagnostics != prototype.diagnostics or original.camera_render != prototype.camera_render or original.camera_projection != prototype.camera_projection:
 				for key in original.signatures:
 					if original.signatures[key] != prototype.signatures[key]:
 						for index in original.signatures[key].size():
@@ -203,7 +227,6 @@ func visuals() -> void:
 						break
 				report["failure"] = "Animation/visibility/grounding state differs: " + entry.identity
 				save_report()
-				quit(2)
 				return
 			for key in original.images:
 				var a: Image = original.images[key]
@@ -217,13 +240,13 @@ func visuals() -> void:
 					a.save_png(directory.path_join("mismatch-original.png"))
 					b.save_png(directory.path_join("mismatch-prototype.png"))
 					save_report()
-					push_error("STOP: Pixel mismatch " + entry.identity + " " + key)
-					quit(2)
-					return
+					if stop_on_pixel_mismatch():
+						push_error("STOP: Pixel mismatch " + entry.identity + " " + key)
+						return
 			clear_cache()
-			print("COMPONENT_VISUAL_OK ", entry.identity, " response=", two_pass)
+			print("COMPONENT_VISUAL_CHECKED ", entry.identity, " response=", two_pass)
 			save_report()
-	report.complete = true
+	report.complete = not report.has("failure")
 
 func exercise(entry: Dictionary, prototype: bool, stage: Stage) -> void:
 	var loaded := load_entry(entry, prototype)
