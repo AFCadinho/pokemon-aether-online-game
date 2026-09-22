@@ -1,0 +1,278 @@
+[
+	{
+		"clips": [
+			{
+				"clip": "damage",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_loop",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_start",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "idle",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "physical_attack",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "sleep",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "special_attack",
+				"different_properties": [],
+				"identical": true
+			}
+		],
+		"skeletons_identical": true,
+		"skins_identical": true,
+		"source_sha256": {
+			"normal": "9846294ad349f34c13900f2ee3b22031e613f7b74b72c91102b2b09453c9637a",
+			"shiny": "3ef5aef55926dfdd4b9b1af3b70bcdf3f66f46cebcdf7c1893b4d46379991779"
+		},
+		"species": "articuno"
+	},
+	{
+		"clips": [
+			{
+				"clip": "damage",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_loop",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_start",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "idle",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "physical_attack",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "sleep",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "special_attack",
+				"different_properties": [],
+				"identical": true
+			}
+		],
+		"skeletons_identical": true,
+		"skins_identical": true,
+		"source_sha256": {
+			"normal": "caf3905fecb163920bb620ed925216729a43e7202d4d27963c85ae146545d4b9",
+			"shiny": "cecba49b71cf83f37d92d510503f6dd19f4487e3dec827a104c8b85897148e47"
+		},
+		"species": "dragonite"
+	},
+	{
+		"clips": [
+			{
+				"clip": "damage",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_loop",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_start",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "idle",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "physical_attack",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "sleep",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "special_attack",
+				"different_properties": [],
+				"identical": true
+			}
+		],
+		"skeletons_identical": true,
+		"skins_identical": true,
+		"source_sha256": {
+			"normal": "2e32606af09a99ea7c676e0ff2ecb07f364d0ed6d1b3a3af86477207220568d0",
+			"shiny": "e70d37ac51695ff8a05a94e0a6b7fd6a4353fa31e398f47e57d77724e5e16e2e"
+		},
+		"species": "lucario"
+	},
+	{
+		"clips": [
+			{
+				"clip": "damage",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_loop",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_start",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "idle",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "physical_attack",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "sleep",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "special_attack",
+				"different_properties": [],
+				"identical": true
+			}
+		],
+		"skeletons_identical": true,
+		"skins_identical": true,
+		"source_sha256": {
+			"normal": "65ac2b5511affee7f13b2b9061b1e555d648ad187c06dde43d4740a308a4ee8f",
+			"shiny": "e963b34ab0e3eb71e4523cfe8a47642b61617d261927b498ab205b0213b0b6ff"
+		},
+		"species": "pikachu"
+	},
+	{
+		"clips": [
+			{
+				"clip": "damage",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_loop",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_start",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "idle",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "physical_attack",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "sleep",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "special_attack",
+				"different_properties": [],
+				"identical": true
+			}
+		],
+		"skeletons_identical": true,
+		"skins_identical": true,
+		"source_sha256": {
+			"normal": "e6abb71e192cf5715b8efa21ad55ac73f709c69ff46c79942e570fea1ff937be",
+			"shiny": "03c5955b0967a5dc5eda1bd189852d3f179930800cd8c48d36e19a8594d0f449"
+		},
+		"species": "roaring-moon"
+	},
+	{
+		"clips": [
+			{
+				"clip": "damage",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_loop",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "faint_start",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "idle",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "physical_attack",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "sleep",
+				"different_properties": [],
+				"identical": true
+			},
+			{
+				"clip": "special_attack",
+				"different_properties": [],
+				"identical": true
+			}
+		],
+		"skeletons_identical": true,
+		"skins_identical": true,
+		"source_sha256": {
+			"normal": "9bc4962cc338d0206c96b7040e0293d1659e85460cca3675aef1a50fa41eb0c7",
+			"shiny": "755227eebafd4121c43667afaf9d8de8afc249be0363376b7ce410df81011bf6"
+		},
+		"species": "snorlax"
+	}
+]
