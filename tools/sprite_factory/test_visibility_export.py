@@ -47,9 +47,17 @@ class VisibilityExportTests(unittest.TestCase):
                 'source_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest()}}}
             animations={'idle':{'source_action':'native','duration':1.,'loop':True}}
             gltf={'nodes':[{'name':'body_mesh','mesh':0}]}
-            with patch('visibility_export.inspect_tracm',return_value={'frames':61,'fps':60,'loop':True}), patch('visibility_export.inspect_visibility',return_value=[track()]):
+            with patch('visibility_export.binding',return_value={'excluded_targets':{},'source_sha256':{}}), patch('visibility_export.inspect_tracm',return_value={'frames':61,'fps':60,'loop':True}), patch('visibility_export.inspect_visibility',return_value=[track()]):
                 result=prepare(intake,animations,gltf,'a'*64)
                 self.assertEqual(result['clips']['idle']['tracks'][0]['mesh'],'body_mesh')
+                other=dict(track('dynamic_bool'),target='other_mesh_shape')
+                with patch('visibility_export.binding',return_value={'excluded_targets':{'other_mesh_shape':{'resource_id':'other'}},'source_sha256':{}}), patch('visibility_export.inspect_visibility',return_value=[track(),other]):
+                    filtered=prepare(intake,animations,gltf,'a'*64)
+                    self.assertEqual(filtered['clips']['idle']['excluded_variant_targets'],['other_mesh_shape'])
+                    self.assertEqual(len(filtered['clips']['idle']['tracks']),1)
+                with patch('visibility_export.inspect_visibility',return_value=[track(),track()]):
+                    with self.assertRaisesRegex(ValueError,'Duplicate visibility source'):
+                        prepare(intake,animations,gltf,'a'*64)
                 for bad in [{'nodes':[{'name':'different','mesh':0}]},
                             {'nodes':gltf['nodes']*2},
                             {'nodes':gltf['nodes']+[{'name':'extra','mesh':1}]}]:

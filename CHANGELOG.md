@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe gecontroleerde 3D-modelpakketten koppelen zichtbaarheid nu via bronmetadata aan de gekozen geslachtsvariant, zonder onderdelen van de andere variant verkeerd toe te wijzen. Bestaande pakketten blijven ongewijzigd.
+
 - Nieuwe gecontroleerde 3D-modelpakketten kunnen accessoires en alternatieve lichaamsdelen op de juiste animatieframes tonen en verbergen. Bestaande pakketten worden niet automatisch vervangen.
 
 - De materiaalbelichting van 3D-Pokémon loopt niet meer een frame achter op hun animatie, waardoor dubbele contouren bij bewegen en posewissels verdwijnen.
