@@ -7,6 +7,12 @@ func _init() -> void:
 
 func _run() -> void:
 	var config := root.get_node("GatewayApiConfig")
+	config.cached_url = ""
+	var local_base_url: String = await config.get_base_url()
+	_check(
+		local_base_url == config.LOCAL_GATEWAY_URL,
+		"debug desktop runs resolve metadata requests through the local gateway"
+	)
 	var desktop := {"done": false}
 	_wait(config, false, desktop)
 	_check(desktop.done, "desktop does not introduce a frame delay")
