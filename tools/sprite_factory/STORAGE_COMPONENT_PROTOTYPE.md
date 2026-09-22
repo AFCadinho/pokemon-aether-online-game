@@ -2,6 +2,11 @@
 
 ## Decision: STOP, not qualified
 
+Follow-up: [sequence/ownership investigation](STORAGE_SEQUENCE_INVESTIGATION.md).
+It corrects the original attribution of the material-lifetime error below:
+the failing free is the **prototype's private-material actor**, not the original
+Articuno actor. Pixel stability remains a separate gate; no assets were changed.
+
 The isolated prototype was built from six existing approved normal/shiny pairs.
 It reduces actual package bytes by **38.19%**, but does **not** pass the visual
 gate. Do not migrate, activate, distribute, or treat this as a production format.
