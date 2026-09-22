@@ -67,12 +67,12 @@ func _process(delta: float) -> void:
 	_place(dock, to_battle * Vector2(center_left,area.y - 95), Vector2(center_width * stage.scale.x / dock_factor,106),dock_factor)
 	var header: Control = battle.get_node("%VSPanelContainer")
 	_place(header, Vector2((area.x - header.size.x * 0.65) * 0.5, 12), header.size, 0.65)
-	_place(stage.get_node("ResetCameraButton"), Vector2(header.position.x + header.size.x * header.scale.x + 12, 16), Vector2(32, 28), 1.0)
 	var turn: Control = battle.get_node("%BattleStatusPanel")
 	var turn_scale := 0.6
 	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null else area.x - 82
 	var turn_x := opponent_portrait_left - turn.size.x * turn_scale - 12
 	_place(turn, Vector2(maxf(16, turn_x), 14), turn.size, turn_scale)
+	_place(stage.get_node("ResetCameraButton"), Vector2(turn.position.x + turn.size.x * turn.scale.x - 32, turn.position.y + turn.size.y * turn.scale.y + 8), Vector2(32, 28), 1.0)
 	var presenter = battle.animation_router.model_presenter
 	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active
 	stage.get_node("ResetCameraButton").visible = realtime_3d

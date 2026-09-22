@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De immersive battle-interface heeft nu een menu-icoon op je trainerportret. Daarmee open je tijdens een gevecht de bestaande Friends- en Guild-vensters; de camerarestart staat onder de Turn-indicator.
+
 - In 3D-battles kun je nu met het muiswiel in- en uitzoomen. De resetknop herstelt ook de standaardzoom.
 
 - Garchomp gebruikt in de lokale 3D-catalogus nu bijpassende staande animaties voor aanvallen, schade en faint, zonder onverwacht naar zijn vliegpose te springen.

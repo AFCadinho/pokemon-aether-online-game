@@ -21,6 +21,10 @@ static func apply(battle: Control) -> void:
 	var portraits := preload("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
 	portraits.battle = battle
 	battle.add_child(portraits)
+	var social_menu := preload("res://scripts/battle/battle_ui/immersive_social_menu.gd").new()
+	social_menu.name = "ImmersiveSocialMenu"
+	social_menu.battle = battle
+	battle.add_child(social_menu)
 	var camera_input := preload("res://scripts/battle/battle_ui/immersive_camera_input.gd").new()
 	camera_input.name = "ImmersiveCameraInput"
 	camera_input.battle = battle
