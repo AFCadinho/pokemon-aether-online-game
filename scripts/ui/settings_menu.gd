@@ -397,8 +397,8 @@ func _setup_tabs() -> void:
 	if not OS.has_feature("mobile"):
 		var layout_options := OptionButton.new()
 		layout_options.name = "BattleUILayoutOptions"
-		layout_options.add_item("Immersive — fullscreen arena")
-		layout_options.add_item("Classic — framed panels")
+		layout_options.add_item("Full screen")
+		layout_options.add_item("Classic")
 		layout_options.select(1 if SettingsManager.battle_ui_layout == "classic" else 0)
 		layout_options.item_selected.connect(func(index): SettingsManager.set_battle_ui_layout("classic" if index == 1 else "immersive"))
 		var layout_label := Label.new()
@@ -406,54 +406,25 @@ func _setup_tabs() -> void:
 		general_tab.add_child(_create_labeled_control_row(layout_label, layout_options))
 	if not OS.has_feature("web") and not OS.has_feature("mobile"):
 		var presentation_label := Label.new()
-		presentation_label.text = "Battle presentation"
+		presentation_label.text = "Battle visuals (next battle)"
 		battle_presentation_options = OptionButton.new()
 		battle_presentation_options.name = "BattlePresentationOptions"
-		battle_presentation_options.add_item("2.5D — sprites")
-		battle_presentation_options.add_item("3D — experimental desktop")
+		battle_presentation_options.add_item("2D / 2.5D — sprites")
+		battle_presentation_options.add_item("3D — models")
 		battle_presentation_options.item_selected.connect(func(index):
 			if not loading_controls:
 				SettingsManager.set_battle_presentation_mode("3d" if index == 1 else "2.5d"))
 		var presentation_hint := Label.new()
-		presentation_hint.text = "Local reviewed models: Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite and Roaring Moon (normal/shiny). Missing models and unsupported forms use 2.5D. The launcher selection applies at startup; choosing a local catalog overrides it for this session. No downloads."
+		presentation_hint.text = "Uses available 3D models. Pokémon without a 3D model use sprites."
 		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
-		var choose_catalog := Button.new()
-		choose_catalog.text = "Choose local 3D model catalog…"
-		var catalog_dialog := FileDialog.new()
-		catalog_dialog.access = FileDialog.ACCESS_FILESYSTEM
-		catalog_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		catalog_dialog.filters = PackedStringArray(["*.json ; 3D model catalog"])
-		add_child(catalog_dialog)
-		catalog_dialog.file_selected.connect(SettingsManager.set_battle_3d_catalog_path)
-		choose_catalog.pressed.connect(func(): catalog_dialog.popup_centered_ratio(0.7))
-		general_tab.add_child(choose_catalog)
-		var arena_options := OptionButton.new()
-		arena_options.name = "BattleArenaOptions"
-		var arena_ids: Array = preload("res://scripts/battle/arenas/arena_catalog.gd").SELECTION_IDS
-		for label in ["Automatic — same environment as 2D", "Classic test stage", "Forest (local pack)", "Cave", "Sea / sandbar", "PvP stadium"]:
-			arena_options.add_item(label)
-		arena_options.select(arena_ids.find(SettingsManager.battle_3d_arena))
-		arena_options.item_selected.connect(func(index): SettingsManager.set_battle_3d_arena(arena_ids[index]))
-		var arena_label := Label.new()
-		arena_label.text = "3D arena — development override (next battle)"
-		general_tab.add_child(_create_labeled_control_row(arena_label, arena_options))
-		var forest_button := Button.new()
-		forest_button.text = "Choose trusted local forest pack manifest…"
-		var forest_dialog := FileDialog.new()
-		forest_dialog.access = FileDialog.ACCESS_FILESYSTEM
-		forest_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		forest_dialog.filters = PackedStringArray(["*.json ; Forest pack manifest"])
-		add_child(forest_dialog)
-		forest_dialog.file_selected.connect(SettingsManager.set_battle_3d_forest_manifest)
-		forest_button.pressed.connect(func(): forest_dialog.popup_centered_ratio(0.7))
-		general_tab.add_child(forest_button)
 		battle_camera_motion_toggle = CheckBox.new()
+		battle_camera_motion_toggle.name = "BattleCameraMotionToggle"
 		battle_camera_motion_toggle.text = "Gentle 3D camera movement"
 		battle_camera_motion_toggle.toggled.connect(func(enabled):
 			if not loading_controls:
 				SettingsManager.set_battle_3d_camera_motion(enabled))
-		general_tab.add_child(battle_camera_motion_toggle)
+		graphics_tab.add_child(battle_camera_motion_toggle)
 	_wrap_settings_section(
 		general_tab,
 		"",

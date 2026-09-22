@@ -30,6 +30,53 @@ func _run() -> void:
 	var world_scale_options := menu.find_child("WorldPixelScaleOptionsButton", true, false) as OptionButton
 	var account_portal := _find_button_with_text_key(menu, "ui.settings.account.portal")
 	var exit_game := _find_button_with_text_key(menu, "ui.settings.account.exit_game")
+	var layout := menu.find_child("BattleUILayoutOptions", true, false) as OptionButton
+	var visuals := menu.find_child("BattlePresentationOptions", true, false) as OptionButton
+	var camera_motion := menu.find_child("BattleCameraMotionToggle", true, false)
+	if not OS.has_feature("mobile"):
+		_check(layout != null and layout.item_count == 2 and layout.get_item_text(0) == "Full screen"
+			and layout.get_item_text(1) == "Classic", "battle layout uses plain player-facing names")
+	if not OS.has_feature("mobile") and not OS.has_feature("web"):
+		_check(visuals != null and visuals.item_count == 2 and visuals.get_item_text(0) == "2D / 2.5D — sprites"
+			and visuals.get_item_text(1) == "3D — models", "battle visuals offer sprites or models")
+		_check(camera_motion != null and tabs.get_child(2).is_ancestor_of(camera_motion),
+			"camera movement belongs to Graphics, not General")
+		var settings := root.get_node("SettingsManager")
+		var old_layout: String = settings.battle_ui_layout
+		var old_visuals: String = settings.battle_presentation_mode
+		layout.item_selected.emit(1)
+		_check(settings.battle_ui_layout == "classic", "Classic selection preserves existing layout contract")
+		layout.item_selected.emit(0)
+		_check(settings.battle_ui_layout == "immersive", "Full screen selects immersive implementation")
+		visuals.item_selected.emit(1)
+		_check(settings.battle_presentation_mode == "3d", "3D selects model presentation")
+		visuals.item_selected.emit(0)
+		_check(settings.battle_presentation_mode == "2.5d", "sprite choice selects existing sprite presentation")
+		settings.set_battle_ui_layout(old_layout)
+		settings.set_battle_presentation_mode(old_visuals)
+		# Slot-local persisted legacy preference: it must not become a hidden
+		# override after removing its UI. Asset paths must survive unchanged.
+		var saved_text := FileAccess.get_file_as_string(settings.SETTINGS_PATH)
+		var saved: Dictionary = JSON.parse_string(saved_text)
+		var legacy := saved.duplicate(true)
+		legacy["battle_3d_arena"] = "cave"
+		var file := FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
+		file.store_string(JSON.stringify(legacy))
+		file.close()
+		settings.load_settings()
+		_check(settings.battle_3d_arena == "auto", "legacy saved arena overrides return to automatic")
+		_check(settings.battle_3d_catalog_path == saved.get("battle_3d_catalog_path", "")
+			and settings.battle_3d_forest_manifest == saved.get("battle_3d_forest_manifest", ""),
+			"removing pickers preserves installed model and forest paths")
+		file = FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
+		file.store_string(saved_text)
+		file.close()
+		settings.load_settings()
+	_check(menu.find_child("BattleArenaOptions", true, false) == null, "General no longer exposes development arena selection")
+	var has_development_picker := false
+	for button: Node in menu.find_children("*", "Button", true, false):
+		has_development_picker = has_development_picker or "Choose local 3D" in button.text or "Choose trusted local forest" in button.text
+	_check(not has_development_picker, "settings contain no development model/forest picker")
 
 	_check(menu.custom_minimum_size == Vector2(900, 680), "settings use the larger readable workspace")
 	_check(tabs != null and tabs.get_tab_count() == 8, "all settings domains remain available")

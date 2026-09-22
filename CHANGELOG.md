@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.
+
 - 3D-Pokémon behouden beter hun kleur in schaduw: de extra materiaalschaduw is subtieler, zonder de arena, slagschaduwen of individuele modellen lichter te maken.
 
 - Trainerstatus op een zojuist geladen kaart wacht nu tot de zware eerste laadframes voorbij zijn en toont geen onterechte JSON-fout meer bij een netwerkprobleem.
