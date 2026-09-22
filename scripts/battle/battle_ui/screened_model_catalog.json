@@ -119,9 +119,9 @@
       "sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b"
     },
     "garchomp": {
-      "glb_sha256": "0e39d18cab786bea1ff8b0ae8a9fceaef8ae48c0260c4196cc0e950db51048f6",
+      "glb_sha256": "f8046bee84c4f093aaff0a06cadf061492b45da5d72045fc5eb3e6ce35e2ecb9",
       "profile": "garchomp",
-      "sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8"
+      "sha256": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71"
     },
     "gardevoir": {
       "glb_sha256": "f36afb8bf246658f55475e647372c6e88474bf2297435cc9050a3874bccb766f",
@@ -1307,7 +1307,7 @@
           "speed": 1.0
         },
         "faint_start": {
-          "frames": 80.0,
+          "frames": 100.0,
           "loop": false,
           "speed": 1.0
         },

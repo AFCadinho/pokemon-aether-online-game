@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Garchomp gebruikt in de lokale 3D-catalogus nu bijpassende staande animaties voor aanvallen, schade en faint, zonder onverwacht naar zijn vliegpose te springen.
+
 - De lokale desktop-debugclient kan 18 nieuwe normal-form 3D-reviewkandidaten tonen in de Pokédex en summary-kaart, met een reviewlabel en het bestaande animatiemenu. Ze zijn nog niet goedgekeurd voor battles of distributie; ontbrekende en shiny modellen behouden hun sprite-preview.
 
 - De 3D-grasveld-arena en beide Route 22-arena’s gebruiken nu lichter mesh-terrein zonder Terrain3D, met behoud van hun herkenbare aankleding en ondiepe watergevechten.
