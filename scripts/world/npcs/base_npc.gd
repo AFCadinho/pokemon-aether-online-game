@@ -335,12 +335,16 @@ func is_story_requirement_met() -> bool:
 
 
 func _story_requirement_met(quest_id: String, quest_step_id: String, quest_status: String) -> bool:
-	var tree := get_tree()
-	var root_node: Node = tree.root if tree != null else null
-	var story_service := root_node.get_node_or_null("StoryService") if root_node != null else null
+	var story_service := _root_service("StoryService")
 	return story_service != null and bool(story_service.call(
 		"is_requirement_met", quest_id, quest_step_id, quest_status
 	))
+
+
+func _root_service(service_name: String) -> Node:
+	var main_loop := Engine.get_main_loop()
+	var tree := main_loop as SceneTree
+	return tree.root.get_node_or_null(service_name) if tree != null and tree.root != null else null
 
 
 func _to_tile(world_position: Vector2) -> Vector2i:
@@ -1620,7 +1624,7 @@ func _is_story_visibility_active() -> bool:
 	var hidden_id := visibility_hidden_quest_id.strip_edges()
 	# A progressed party leader must still be able to help at Gary's first
 	# battle. Actual activity eligibility and helper rewards stay server-owned.
-	var coop_service := get_node_or_null("/root/CoopService")
+	var coop_service := _root_service("CoopService")
 	if npc_id == "kanto_route_22_gary_oak" and coop_service != null and not coop_service.party.is_empty():
 			return true
 	if (
