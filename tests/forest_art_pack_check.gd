@@ -13,8 +13,8 @@ func _run() -> void:
 	assert(not manifest.is_empty())
 	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(manifest))
 	# Native descriptor deliberately absent: art-only distribution is sufficient.
-	FileAccess.open(fixture, FileAccess.WRITE).store_string(JSON.stringify({"schema": 1, "pack": source.pack}))
-	assert(Catalog.prepare_forest(fixture).is_empty())
+	assert(not source.has("extension") and source.pack == "forest.pck")
+	assert(Catalog.prepare_forest(manifest).is_empty())
 	var deadline := Time.get_ticks_msec() + 30000
 	var progress := 0.0
 	while not Catalog.forest_ready():
@@ -26,7 +26,7 @@ func _run() -> void:
 	assert(not ClassDB.class_exists("Terrain3D"))
 	var count := Catalog.Art.resources.size()
 	assert(count > 10)
-	assert(Catalog.prepare_forest(fixture).is_empty())
+	assert(Catalog.prepare_forest(manifest).is_empty())
 	assert(Catalog.forest_ready() and Catalog.Art.resources.size() == count)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(fixture))
 	print("FOREST_ART_PACK_OK: invalid manifest, descriptor-free load, progress, reuse, no native module")

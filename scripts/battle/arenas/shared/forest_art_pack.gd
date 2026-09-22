@@ -21,6 +21,8 @@ static func prepare(manifest_path: String) -> String:
 	if manifest.get("schema") != 1:
 		return "Unsupported forest art manifest"
 	var path := str(manifest.get("pack", ""))
+	if path.is_relative_path():
+		path = manifest_path.get_base_dir().path_join(path).simplify_path()
 	if path == mounted_path and not path.is_empty():
 		return error
 	if not mounted_path.is_empty():

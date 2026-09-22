@@ -31,7 +31,9 @@ const EXTRACT_PROGRESS_BATCH_SIZE := 25
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 const GEN5_OPTIONAL_ASSET_PACK_PREFIX := "pokemon-gen5"
 const GEN5_SPRITES_FOLDER_PATH := "assets/sprites/pokemon/gen5"
+const FOREST_MANIFEST_ENV := "POKEAETHER_FOREST_MANIFEST"
 const ASSET_PACK_REQUIRED_PATHS := {
+	"battle-environment-forest": "forest-runtime",
 	"music": "assets/music",
 	"pokemon-home": "assets/sprites/pokemon/pokemon_home",
 	"pokemon-home-shiny": "assets/sprites/pokemon/pokemon_home_shiny",
@@ -45,6 +47,10 @@ const ASSET_PACK_REQUIRED_PATHS := {
 	"pokemon-gen5-shiny-back": "assets/sprites/pokemon/gen5/shiny_back",
 }
 const ASSET_PACK_REQUIRED_FILES := {
+	"battle-environment-forest": [
+		"forest-runtime/forest.json",
+		"forest-runtime/forest.pck",
+	],
 	"music": [
 		"assets/music/login/lugia_theme_lofi.ogg",
 		"assets/music/overworld/kanto/towns/pallet_town.ogg",
@@ -840,7 +846,17 @@ func _create_game_process(absolute_executable_path: String) -> int:
 	var had_models := OS.has_environment("POKEAETHER_MODEL_CATALOG")
 	var previous_models := OS.get_environment("POKEAETHER_MODEL_CATALOG")
 	OS.set_environment("POKEAETHER_MODEL_CATALOG", _selected_model_catalog())
+	var had_forest := OS.has_environment(FOREST_MANIFEST_ENV)
+	var previous_forest := OS.get_environment(FOREST_MANIFEST_ENV)
+	OS.set_environment(
+		FOREST_MANIFEST_ENV,
+		_globalize_storage_path(install_dir.path_join("forest-runtime/forest.json"))
+	)
 	var process_id := _create_game_process_with_mods(absolute_executable_path)
+	if had_forest:
+		OS.set_environment(FOREST_MANIFEST_ENV, previous_forest)
+	else:
+		OS.unset_environment(FOREST_MANIFEST_ENV)
 	if had_models:
 		OS.set_environment("POKEAETHER_MODEL_CATALOG", previous_models)
 	else:
