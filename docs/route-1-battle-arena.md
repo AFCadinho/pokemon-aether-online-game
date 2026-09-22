@@ -2,8 +2,10 @@
 
 Route 1 trainer and grass encounters resolve to the map-specific `route_1` 3D
 arena. Explicit environment overrides and PvP retain their existing priority.
-The current overworld implements grass encounters only, so hypothetical surf or
-fishing contexts continue to use the generic water arena.
+Surf, fishing and player-on-water encounter contexts resolve to `route_1_water`:
+the camera and fighters move into the northern pond of this same environment.
+Both variants share the terrain, props and a pond floor 0.18 units below the
+water surface. This presentation mapping does not enable overworld encounters.
 
 The visual source is `generated/tiled_visuals/route_1/route_1.visual.tscn`, a
 55 × 75-tile north/south forest route. Its recurring features are adapted into
@@ -27,6 +29,11 @@ The route bends along its right edge toward the visible northern stairs, while
 the pond and second path branch sit in the background. The wider review image
 also exposes the southern terrace and stairs that are outside the normal battle
 framing.
+
+The sandy path passes through clear openings at both terrace crossings. The
+northern staircase rises three units and the southern staircase rises 2.3 units
+from the lower terrace. Each six-unit flight has terrain-supported steps and
+landings that meet the adjacent plateau; neither staircase ends in mid-air.
 
 Focused validation:
 

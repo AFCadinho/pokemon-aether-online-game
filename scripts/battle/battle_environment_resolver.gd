@@ -28,6 +28,8 @@ static func resolve(context: Dictionary) -> StringName:
 	if battle_kind == "wild":
 		var encounter_type := _normalize_key(context.get("encounter_type", ""))
 		if WATER_ENCOUNTER_TYPES.has(encounter_type) or bool(context.get("player_on_water", false)):
+			if str(context.get("map_id", "")).strip_edges() == "kanto_route_1":
+				return &"route_1_water"
 			if str(context.get("map_id", "")).strip_edges() == "kanto_route_22":
 				return &"route_22_water"
 			return Catalog.WATER_ENVIRONMENT_ID

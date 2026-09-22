@@ -4,6 +4,8 @@ const CAMERA_FOV := 48.0
 const ROUTE_22_POND_ORIGIN := Vector3(11, 0, -4.5)
 
 static func battle_origin(id: String) -> Vector3:
+	if id == "route_1_water":
+		return Vector3(-13.5, 2.54, -29.0)
 	return ROUTE_22_POND_ORIGIN if id == "route_22_water" else Vector3.ZERO
 
 static func spawn(index: int) -> Vector3:

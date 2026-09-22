@@ -41,5 +41,18 @@ func _run() -> void:
 	await create_timer(0.4).timeout
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(output.path_join("route-1-overview.png"))
+	camera.position = Vector3(-5, 7, -13)
+	camera.look_at(Vector3(-5, 0, 20))
+	await create_timer(0.4).timeout
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(output.path_join("route-1-south.png"))
+	arena.free()
+	arena = Arenas.build("route_1_water", world, camera)
+	world.add_child(arena)
+	camera.position = Arenas.camera_home("route_1_water")
+	camera.look_at(Arenas.camera_target("route_1_water"))
+	await create_timer(0.4).timeout
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(output.path_join("route-1-water.png"))
 	print("ROUTE_1_PREVIEW_OK")
 	quit()
