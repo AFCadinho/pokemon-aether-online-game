@@ -5,6 +5,7 @@ const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_poli
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const POKEDEX_MODEL_PREVIEW_SCRIPT := preload("res://scripts/ui/pokedex_model_preview.gd")
+const SUMMARY_MODEL_PREVIEW_SCRIPT := preload("res://scripts/ui/summary_model_preview.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
 const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
@@ -26882,12 +26883,46 @@ func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> vo
 	if localization_key != "":
 		icon.tooltip_text = LocalizationManager.text(localization_key)
 
-func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
+func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
 	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	pokemon_summary_web_sprite_generation += 1
 	var web_generation := pokemon_summary_web_sprite_generation
+	var stage := pokemon_summary_sprite.get_parent() as Control
+	var preview := stage.get_node_or_null("SummaryModelPreview") as Control
+	if allow_3d and stage.is_inside_tree() and SettingsManager.battle_presentation_mode == "3d":
+		if preview == null:
+			preview = SUMMARY_MODEL_PREVIEW_SCRIPT.new()
+			preview.name = "SummaryModelPreview"
+			stage.add_child(preview)
+			# Keep ball/type/level badges above the model surface.
+			stage.move_child(preview, pokemon_summary_sprite.get_index() + 1)
+			var card_key := pokemon_summary_active_card_key
+			preview.model_failed.connect(func():
+				if _apply_pokemon_summary_card_context(card_key):
+					var current := _get_active_pokemon_summary_pokemon()
+					if current != null:
+						_set_pokemon_summary_sprite(current, false))
+		preview.show()
+		var key := str(pokemon.species) + (":shiny" if pokemon.shiny else ":normal")
+		var ready_or_loading: bool = preview.get_meta("summary_species", "") == key and (preview.actor != null or not preview.loading_path.is_empty())
+		if ready_or_loading or preview.show_species(pokemon.species, pokemon.shiny):
+			preview.set_meta("summary_species", key)
+			pokemon_summary_animated_sprite.stop()
+			pokemon_summary_animated_sprite.hide()
+			pokemon_summary_sprite.hide()
+			_configure_preview_animation_button(pokemon_summary_animated_sprite, null)
+			var zoom := stage.find_child("PreviewZoomButton", true, false) as Control
+			if zoom != null:
+				zoom.hide()
+			return
+	if preview != null:
+		preview._clear_actor()
+		preview.hide()
+	var zoom := stage.find_child("PreviewZoomButton", true, false) as Control
+	if zoom != null:
+		zoom.show()
 
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
 		"_load_preview_sprite_frames",

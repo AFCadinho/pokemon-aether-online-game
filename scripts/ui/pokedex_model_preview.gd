@@ -16,6 +16,7 @@ var requested_key := ""
 var loading_path := ""
 var yaw := 0.0
 var profile := {}
+signal model_failed
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -56,8 +57,8 @@ func _ready() -> void:
 	camera = Camera3D.new()
 	camera.position = Vector3(0, 1.2, 5.2)
 	camera.fov = 34.0
-	camera.look_at(Vector3(0, 0.8, 0))
 	world.add_child(camera)
+	camera.look_at(Vector3(0, 0.8, 0))
 	status = Label.new()
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -71,7 +72,7 @@ func show_species(species: String, shiny: bool) -> bool:
 	requested_key = ReviewedModels.key(species, shiny)
 	_clear_actor()
 	var settings := get_node_or_null("/root/SettingsManager")
-	if settings == null or settings.battle_presentation_mode != "3d" or shiny:
+	if OS.has_feature("web") or OS.has_feature("mobile") or settings == null or settings.battle_presentation_mode != "3d" or shiny:
 		return false
 	var path := str(settings.get_battle_3d_catalog_path())
 	if path.is_empty() or not FileAccess.file_exists(path):
@@ -106,10 +107,12 @@ func _process(_delta: float) -> void:
 	loading_path = ""
 	if scene == null:
 		status.text = "3D preview unavailable"
+		model_failed.emit()
 		return
 	actor = scene.instantiate() as Node3D
 	if actor == null:
 		status.text = "3D preview unavailable"
+		model_failed.emit()
 		return
 	world.add_child(actor)
 	if not profile.is_empty():

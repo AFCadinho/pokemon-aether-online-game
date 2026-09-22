@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave, met een animatiekeuze, pauze, opnieuw afspelen en slepen om te draaien. Ontbrekende modellen houden hun sprite-preview.
+
 - Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.
 
 - 3D-Pokémon behouden beter hun kleur in schaduw: de extra materiaalschaduw is subtieler, zonder de arena, slagschaduwen of individuele modellen lichter te maken.
