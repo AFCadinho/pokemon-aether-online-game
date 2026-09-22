@@ -34,8 +34,12 @@ static func resolve(context: Dictionary) -> StringName:
 
 	# Route-specific scenery follows the battle location, including story rivals.
 	# Explicit overrides, PvP and water encounters above retain their priority.
-	if battle_kind in ["wild", "trainer"] and str(context.get("map_id", "")).strip_edges() == "kanto_route_22":
-		return &"route_22"
+	if battle_kind in ["wild", "trainer"]:
+		var map_id := str(context.get("map_id", "")).strip_edges()
+		if map_id == "kanto_route_1":
+			return &"route_1"
+		if map_id == "kanto_route_22":
+			return &"route_22"
 
 	if battle_kind == "wild":
 		if bool(context.get("player_on_tall_grass", false)):
