@@ -13612,8 +13612,11 @@ func _render_personal_buffs(buffs: Array) -> void:
 	var has_active_buffs := not buffs.is_empty()
 	if not has_active_buffs or not had_active_buffs:
 		personal_buffs_expanded = false
-	personal_buffs_panel.set_meta("group_available", true)
-	_apply_buff_tray_group_visibility(personal_buffs_panel, true)
+	if personal_buffs_panel != null:
+		personal_buffs_panel.set_meta("group_available", true)
+		_apply_buff_tray_group_visibility(personal_buffs_panel, true)
+	if personal_buff_slots == null:
+		return
 	var slot_count := personal_buff_slots.get_child_count()
 	for slot_index in range(slot_count):
 		var button := personal_buff_slots.get_child(slot_index) as Button
@@ -33193,14 +33196,19 @@ func _apply_chat_tab_state() -> void:
 	_apply_chat_main_tab_style(guild_chat_tab_button, active_chat_tab == CHAT_TAB_GUILD)
 	_apply_chat_main_tab_style(language_chat_tab_button, primary_tab == CHAT_TAB_LANGUAGES)
 	var dock_visible := primary_tab != CHAT_TAB_SYSTEM
-	chat_input_row.visible = dock_visible
+	if chat_input_row != null:
+		chat_input_row.visible = dock_visible
 	if chat_input_dock != null:
 		chat_input_dock.visible = dock_visible
-	chat_input.visible = input_active
-	send_button.visible = input_active
+	if chat_input != null:
+		chat_input.visible = input_active
+	if send_button != null:
+		send_button.visible = input_active
 	for attachment_button: Button in chat_pokemon_attachment_buttons:
 		if attachment_button != null:
 			attachment_button.visible = input_available
+	if chat_input == null:
+		return
 	chat_input.editable = input_available
 	if active_chat_tab == CHAT_TAB_PM:
 		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.private")
