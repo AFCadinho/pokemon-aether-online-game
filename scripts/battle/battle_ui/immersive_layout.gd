@@ -52,16 +52,16 @@ static func apply(battle: Control) -> void:
 	switch_label.name = "PartySwitchLabel"
 	switch_label.text = "Switch"
 	switch_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	switch_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	switch_label.custom_minimum_size = Vector2(82, 26)
+	switch_label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	switch_label.custom_minimum_size = Vector2(124, 34)
 	switch_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	switch_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	switch_label.add_theme_color_override("font_color", Color("dceeff"))
+	switch_label.add_theme_color_override("font_color", Color("f0faff"))
 	var switch_style := StyleBoxFlat.new()
-	switch_style.bg_color = Color("061222d9")
-	switch_style.border_color = Color("329bdfb0")
-	switch_style.set_border_width_all(1)
-	switch_style.set_corner_radius_all(5)
+	switch_style.bg_color = Color("10334ff5")
+	switch_style.border_color = Color("62d7ff")
+	switch_style.set_border_width_all(2)
+	switch_style.set_corner_radius_all(7)
 	switch_style.content_margin_left = 10
 	switch_style.content_margin_right = 10
 	switch_label.add_theme_stylebox_override("normal", switch_style)

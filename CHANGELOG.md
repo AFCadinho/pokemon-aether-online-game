@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het ‘Switch’-label staat gecentreerd boven de partyslots, met grotere tekst, een duidelijkere cyaanrand en meer ruimte onder de actietekst.
+
 - In de immersive battle-interface staat nu een compact ‘Switch’-label boven je partyslots, zodat duidelijk is waar je Pokémon kunt wisselen.
 
 - Route 1 heeft vrije doorgangen door de rotswanden en trappen die aansluiten op de paden en terrassen. Surf- en visgevechten gebruiken de ondiepe vijver van dezelfde 3D-omgeving.
