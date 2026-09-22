@@ -342,6 +342,7 @@ func _run() -> void:
 	var left_ally_on_stage: Vector2 = coop_stage.get_global_transform().affine_inverse() * left_ally.global_position
 	service.activity.activityId = "kanto_route_1_youngster_liam"
 	presenter._sync_native_trainers()
+	await process_frame
 	_expect(absf(left_ally.global_position.x - right_ally.global_position.x) < 180.0
 		and absf(left_wild.global_position.x - right_wild.global_position.x) < 180.0
 		and absf(left_ally.global_position.y - right_ally.global_position.y) < 12.0
