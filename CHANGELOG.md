@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 3D-Pokémon behouden beter hun kleur in schaduw: de extra materiaalschaduw is subtieler, zonder de arena, slagschaduwen of individuele modellen lichter te maken.
+
 - Trainerstatus op een zojuist geladen kaart wacht nu tot de zware eerste laadframes voorbij zijn en toont geen onterechte JSON-fout meer bij een netwerkprobleem.
 
 - Donkere 3D-Pokémon blijven in Forest-arena's beter leesbaar dankzij een zachte skylight-fill die de bestaande schaduwen niet vervangt.
