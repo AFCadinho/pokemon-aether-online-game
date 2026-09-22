@@ -28,7 +28,16 @@ static func resolve(context: Dictionary) -> StringName:
 	if battle_kind == "wild":
 		var encounter_type := _normalize_key(context.get("encounter_type", ""))
 		if WATER_ENCOUNTER_TYPES.has(encounter_type) or bool(context.get("player_on_water", false)):
+			if str(context.get("map_id", "")).strip_edges() == "kanto_route_22":
+				return &"route_22_water"
 			return Catalog.WATER_ENVIRONMENT_ID
+
+	# Route-specific scenery follows the battle location, including story rivals.
+	# Explicit overrides, PvP and water encounters above retain their priority.
+	if battle_kind in ["wild", "trainer"] and str(context.get("map_id", "")).strip_edges() == "kanto_route_22":
+		return &"route_22"
+
+	if battle_kind == "wild":
 		if bool(context.get("player_on_tall_grass", false)):
 			return Catalog.DEFAULT_ENVIRONMENT_ID
 

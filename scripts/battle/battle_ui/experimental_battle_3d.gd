@@ -11,7 +11,7 @@ const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_pla
 const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
-const ForestPool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
+const ForestPool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 var forest_lease := {}
 var forest_pool: Node
 var user_camera_yaw := 0.0
@@ -452,12 +452,12 @@ func _screened_arena_review() -> bool:
 
 func _build_world() -> void:
 	var screened_review := _screened_arena_review()
-	if _requested_arena() == "forest" and (ground_offsets.size() >= packed.size() or screened_review):
+	if ArenaCatalog.uses_forest_assets(_requested_arena()) and (ground_offsets.size() >= packed.size() or screened_review):
 		forest_pool = ForestPool.get_current()
-		if forest_pool != null:
+		if forest_pool != null and forest_pool.arena_id == _requested_arena():
 			forest_lease = forest_pool.acquire(self)
 		if not forest_lease.is_empty():
-			arena_id = "forest"
+			arena_id = _requested_arena()
 			viewport = forest_lease.main.viewport
 			world = forest_lease.main.world
 			camera = forest_lease.main.camera
@@ -492,7 +492,7 @@ func _build_world() -> void:
 		arena_id = "classic"
 	elif arena_id != "classic" and screened_review:
 		arena_problem = "Screened model review — placement is not arena-calibrated"
-	if arena_id == "forest":
+	if ArenaCatalog.uses_forest_assets(arena_id):
 		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
 		if not arena_problem.is_empty():
 			arena_id = "classic"
@@ -521,7 +521,7 @@ func _build_classic_ground() -> void:
 		_mesh(cylinder, _position(i) - Vector3(0, 0.05, 0), Color("879b8a"))
 
 func _position(index: int) -> Vector3:
-	var point := ArenaCatalog.spawn(index)
+	var point := ArenaCatalog.spawn(index) + ArenaCatalog.battle_origin(arena_id)
 	if is_instance_valid(arena_root):
 		point.y = float(arena_root.get_meta("surface_height",0.0))
 	return point
@@ -924,7 +924,8 @@ func _update_camera(delta: float) -> void:
 		# Hold framing during actions: existing 2D effects capture screen anchors.
 		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"] and lifecycle[0] in ["idle", "empty", "hidden"] and lifecycle[1] in ["idle", "empty", "hidden"]:
 			camera_phase += delta * 0.22
-		camera.position = ArenaCatalog.camera_home(arena_id).rotated(Vector3.UP, sin(camera_phase) * 0.10)
+		var origin := ArenaCatalog.battle_origin(arena_id)
+		camera.position = origin + (ArenaCatalog.camera_home(arena_id) - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	var target := ArenaCatalog.camera_target(arena_id)
 	var offset := camera.position - target
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
@@ -973,7 +974,7 @@ func _process(delta: float) -> void:
 	if path.is_empty():
 		path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	# Start independent terrain I/O alongside model loading, not after it.
-	if viewport == null and _requested_arena() == "forest":
+	if viewport == null and ArenaCatalog.uses_forest_assets(_requested_arena()):
 		arena_problem = ArenaCatalog.prepare_forest(settings.get_battle_3d_forest_manifest())
 		arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
 	if path != loaded_path:
@@ -1017,11 +1018,11 @@ func _process(delta: float) -> void:
 	# arena anyway so the loading cover can release the lead-selection UI.
 	# Empty actor slots are cleared below; no placeholder Pokémon are needed.
 	if viewport == null:
-		if _requested_arena() == "forest":
+		if ArenaCatalog.uses_forest_assets(_requested_arena()):
 			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
 			arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
 			var pool := ForestPool.get_current()
-			if pool != null and not pool.ready_for_battle and not pool.failed:
+			if pool != null and pool.arena_id == _requested_arena() and not pool.ready_for_battle and not pool.failed:
 				arena_preparing = true
 			if arena_preparing:
 				reason = "Preparing forest assets…"

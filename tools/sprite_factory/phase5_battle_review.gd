@@ -148,7 +148,7 @@ func _run() -> void:
 		quit(2)
 		return
 	assert(DirAccess.make_dir_recursive_absolute(output_dir) == OK)
-	framing = load(frontend.path_join("scripts/battle/arenas/arena_framing.gd"))
+	framing = load(frontend.path_join("scripts/battle/arenas/shared/framing.gd"))
 	placement_rules = load(frontend.path_join("scripts/battle/battle_ui/model_placement.gd"))
 	motion_rules = load(frontend.path_join("scripts/battle/battle_ui/model_motion_placement.gd"))
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(source_dir.path_join("catalog.json")))

@@ -45,4 +45,4 @@ func _make_forest() -> Node3D:
 				child.environment = child.environment.duplicate()
 				child.environment.ssr_enabled = false
 				child.environment.glow_enabled = false
-	return load("res://scripts/battle/arenas/stadium_arena.gd").new(stage.world).build()
+	return load("res://scripts/battle/arenas/generic/stadium_arena.gd").new(stage.world).build()

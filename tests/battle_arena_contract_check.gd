@@ -11,8 +11,14 @@ func _init() -> void:
 		assert(Arenas.resolve("auto",resolver.resolve(context))=="stadium")
 	for id in Arenas.IDS:
 		assert(Arenas.validate(id)==id)
-		assert(Arenas.camera_home(id) == (Vector3(2.5, 5, 16) if id == "stadium" else Vector3(4, 5.5, 12)))
-		assert(Arenas.camera_target(id) == (Vector3(0, 2.8, 0) if id == "stadium" else Vector3(0, 1.3, 0)))
+		var entry := Arenas.definition(id)
+		assert(entry.scope == ("map" if id.begins_with("route_22") else "generic"))
+		if id != "classic":
+			assert(ResourceLoader.exists("res://scripts/battle/arenas/" + entry.builder))
+		if entry.scope == "map":
+			assert(entry.map_id == "kanto_route_22")
+		assert(Arenas.camera_home(id) - Arenas.battle_origin(id) == (Vector3(2.5, 5, 16) if id == "stadium" else Vector3(4, 5.5, 12)))
+		assert(Arenas.camera_target(id) - Arenas.battle_origin(id) == (Vector3(0, 2.8, 0) if id == "stadium" else Vector3(0, 1.3, 0)))
 	assert(Arenas.CAMERA_FOV == 48.0)
 	assert(Arenas.spawn(0) == Vector3(-2.8, 0, 1.5))
 	assert(Arenas.spawn(1) == Vector3(2.8, 0, -1.5))

@@ -1,4 +1,4 @@
-extends "res://scripts/battle/arenas/arena_geometry.gd"
+extends "res://scripts/battle/arenas/shared/geometry.gd"
 ## Shared by the game client and isolated visual review.
 
 func _wall_mesh() -> ArrayMesh:

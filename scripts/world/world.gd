@@ -285,9 +285,10 @@ func _prefetch_current_map_desktop_arena() -> Node:
 	if SettingsManager.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
 		return null
 	var arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
-	if arenas.resolve(SettingsManager.battle_3d_arena, _resolve_battle_environment_id("wild")) == "forest":
+	var requested_arena: String = arenas.resolve(SettingsManager.battle_3d_arena, _resolve_battle_environment_id("wild"))
+	if arenas.uses_forest_assets(requested_arena):
 		# Session-bounded environment only: never cache combatants/network state.
-		return preload("res://scripts/battle/arenas/forest_environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),Vector2i(get_viewport().get_visible_rect().size))
+		return preload("res://scripts/battle/arenas/shared/environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),Vector2i(get_viewport().get_visible_rect().size), requested_arena)
 	return null
 
 var forest_preparation_input_owned := false

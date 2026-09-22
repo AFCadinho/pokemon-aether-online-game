@@ -1,7 +1,7 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["classic", "forest", "cave", "sea", "stadium"]
-const Framing = preload("res://scripts/battle/arenas/arena_framing.gd")
+const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_22", "route_22_water"]
+const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
 const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
 
@@ -12,75 +12,43 @@ static func resolve(selection: String, environment_id: StringName) -> String:
 	if validate_selection(selection) != "auto":
 		return validate(selection)
 	return validate(preload("res://scripts/battle/battle_environment_catalog.gd").get_profile(environment_id).arena_3d_id)
-static var mounted_forest := ""
-static var forest_scene: PackedScene
-static var forest_loading := false
+# Compatibility API names retain existing settings, preparation UI and metrics.
+# These methods now load only shared art; they never mount a native extension.
+const Art = preload("res://scripts/battle/arenas/shared/forest_art_pack.gd")
 static var forest_error := ""
-static var forest_load_started_ms := 0
 static var forest_load_ms := 0
 
 static func forest_progress() -> Array:
-	var progress: Array = []
-	var status := ResourceLoader.THREAD_LOAD_LOADED if forest_scene != null else ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
-	if forest_loading:
-		status = ResourceLoader.load_threaded_get_status("res://pokeaether_forest.tscn",progress)
-	return [status,progress,forest_error]
+	return Art.progress()
 
 static func forest_ready() -> bool:
-	if forest_scene != null:
-		return true
-	if forest_loading and ResourceLoader.load_threaded_get_status("res://pokeaether_forest.tscn") == ResourceLoader.THREAD_LOAD_LOADED:
-		forest_scene = ResourceLoader.load_threaded_get("res://pokeaether_forest.tscn")
-		forest_load_ms = Time.get_ticks_msec() - forest_load_started_ms
-		forest_loading = false
-	elif forest_loading and ResourceLoader.load_threaded_get_status("res://pokeaether_forest.tscn") == ResourceLoader.THREAD_LOAD_FAILED:
-		ResourceLoader.load_threaded_get("res://pokeaether_forest.tscn")
-		forest_loading = false
-		forest_error = "Forest scene could not load; check the local pack"
-	return forest_scene != null
+	var result := Art.ready()
+	forest_error = Art.error
+	forest_load_ms = Art.load_ms
+	return result
 
 static func prepare_forest(manifest_path: String) -> String:
-	if manifest_path.is_empty() or not FileAccess.file_exists(manifest_path):
-		return "Choose a local forest pack manifest in Settings"
-	if mounted_forest == manifest_path:
-		return forest_error
-	if not mounted_forest.is_empty():
-		return "Restart the client before changing the forest pack"
-	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
-	if not data is Dictionary or data.get("schema",0) != 1:
-		return "Invalid forest pack manifest"
-	var pack: String = str(data.get("pack",""))
-	var extension: String = str(data.get("extension",""))
-	if not FileAccess.file_exists(pack) or not FileAccess.file_exists(extension):
-		return "Forest pack or Terrain3D descriptor is missing"
-	if not ProjectSettings.load_resource_pack(pack,false):
-		return "Could not mount forest pack"
-	var uids: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://forest_uids.json"))
-	if uids is Dictionary:
-		for text_id in uids:
-			var id := ResourceUID.text_to_id(text_id)
-			if ResourceUID.has_id(id) and ResourceUID.get_id_path(id) != uids[text_id]:
-				return "Forest resource UID conflicts with the client; rebuild the local pack"
-			if not ResourceUID.has_id(id):
-				ResourceUID.add_id(id,uids[text_id])
-	if not ClassDB.class_exists("Terrain3D"):
-		var status := GDExtensionManager.load_extension(extension)
-		if status != GDExtensionManager.LOAD_STATUS_OK and status != GDExtensionManager.LOAD_STATUS_ALREADY_LOADED:
-			return "Terrain3D could not load on this desktop"
-	for spec in [["wind_direction",RenderingServer.GLOBAL_VAR_TYPE_VEC2,Vector2(0.6,0.4)], ["wind_speed",RenderingServer.GLOBAL_VAR_TYPE_FLOAT,1.0], ["wind_strength",RenderingServer.GLOBAL_VAR_TYPE_FLOAT,1.0]]:
-		if not ProjectSettings.has_setting("shader_globals/"+spec[0]):
-			RenderingServer.global_shader_parameter_add(spec[0],spec[1],spec[2])
-	mounted_forest = manifest_path
-	forest_load_started_ms = Time.get_ticks_msec()
-	forest_loading = ResourceLoader.load_threaded_request("res://pokeaether_forest.tscn","PackedScene")==OK
-	if not forest_loading:
-		forest_error = "Could not request forest assets"
-		return forest_error
-	return ""
+	forest_error = Art.prepare(manifest_path)
+	return forest_error
+
+# Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
+const DEFINITIONS := {
+	"classic": {"scope": "generic", "terrain": "fallback", "builder": ""},
+	"forest": {"scope": "generic", "terrain": "grass", "builder": "generic/grassfield_arena.gd"},
+	"cave": {"scope": "generic", "terrain": "cave", "builder": "generic/cave_arena.gd"},
+	"sea": {"scope": "generic", "terrain": "water", "builder": "generic/water_arena.gd"},
+	"stadium": {"scope": "generic", "terrain": "stadium", "builder": "generic/stadium_arena.gd"},
+	"route_22": {"scope": "map", "map_id": "kanto_route_22", "terrain": "grass", "builder": "maps/route_22/arena.gd"},
+	"route_22_water": {"scope": "map", "map_id": "kanto_route_22", "terrain": "water", "builder": "maps/route_22/arena.gd"},
+}
+
+static func definition(id: String) -> Dictionary:
+	return DEFINITIONS.get(validate(id), DEFINITIONS.classic).duplicate(true)
+
 const BUILDERS := {
-	"cave": preload("res://scripts/battle/arenas/cave_arena.gd"),
-	"sea": preload("res://scripts/battle/arenas/sea_arena.gd"),
-	"stadium": preload("res://scripts/battle/arenas/stadium_arena.gd"),
+	"cave": preload("res://scripts/battle/arenas/generic/cave_arena.gd"),
+	"sea": preload("res://scripts/battle/arenas/generic/water_arena.gd"),
+	"stadium": preload("res://scripts/battle/arenas/generic/stadium_arena.gd"),
 }
 
 static func validate(id: String) -> String:
@@ -89,18 +57,28 @@ static func validate(id: String) -> String:
 static func spawn(index: int) -> Vector3:
 	return Framing.spawn(index)
 
+static func battle_origin(id: String) -> Vector3:
+	return Framing.battle_origin(id)
+
 static func camera_home(id: String) -> Vector3:
 	return Framing.camera_home(id)
 
 static func camera_target(id: String) -> Vector3:
 	return Framing.camera_target(id)
 
+static func uses_forest_assets(id: String) -> bool:
+	return id in ["forest", "route_22", "route_22_water"]
+
 static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
-	if id == "forest" and not mounted_forest.is_empty():
+	if uses_forest_assets(id) and not Art.mounted_path.is_empty() and Art.error.is_empty():
 		for child in world.get_children():
 			if child is WorldEnvironment:
 				child.environment.background_color = Color("b4cad6")
-		return preload("res://scripts/battle/arenas/forest_arena.gd").new().build(camera)
+		if id in ["route_22", "route_22_water"]:
+			var route = preload("res://scripts/battle/arenas/maps/route_22/arena.gd").new()
+			route.water_battle = id == "route_22_water"
+			return route.build(camera)
+		return preload("res://scripts/battle/arenas/generic/grassfield_arena.gd").new().build(camera)
 	if not BUILDERS.has(id):
 		return null
 	return BUILDERS[id].new(world).build()

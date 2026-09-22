@@ -80,23 +80,8 @@ func _request_json(endpoint: String, method: HTTPClient.Method, body: String) ->
 		}
 	var completed: Array = await request.request_completed
 	request.queue_free()
-	var response_code: int = int(completed[1])
-	var parsed: Variant = JSON.parse_string((completed[3] as PackedByteArray).get_string_from_utf8())
-	var parsed_body: Dictionary = _dictionary(parsed)
-	var request_result := int(completed[0])
-	if request_result != HTTPRequest.RESULT_SUCCESS:
-		return {
-			"success": false,
-			"status": response_code,
-			"error": BackendErrorLocalizationService.transport_message(request_result),
-		}
-	if response_code < 200 or response_code >= 300:
-		return BackendErrorLocalizationService.decorate({
-			"success": false,
-			"status": response_code,
-			"body": parsed_body,
-		})
-	return {"success": true, "body": parsed_body}
+	return preload("res://scripts/services/service_json_response.gd").decode(
+		int(completed[0]), int(completed[1]), completed[3] as PackedByteArray)
 
 
 func _dictionary(value: Variant) -> Dictionary:

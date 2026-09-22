@@ -12,4 +12,4 @@ func _credit_text() -> String:
 	return "PokeAether · original sea study\nTidal sandbar · animated ocean · neutral Pokémon materials · isolated preview"
 
 func _make_forest() -> Node3D:
-	return load("res://scripts/battle/arenas/sea_arena.gd").new(stage.world).build()
+	return load("res://scripts/battle/arenas/generic/water_arena.gd").new(stage.world).build()

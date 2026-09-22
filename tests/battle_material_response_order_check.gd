@@ -1,6 +1,6 @@
 extends SceneTree
 const Response = preload("res://scripts/battle/battle_ui/material_response.gd")
-const Pool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
+const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 
 class Stage:
 	extends Control

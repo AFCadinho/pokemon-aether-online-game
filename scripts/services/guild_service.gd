@@ -1008,21 +1008,8 @@ func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dic
 		return {"success": false, "error": "Could not start request: %s" % error_string(error)}
 	var completed: Array = await request.request_completed
 	request.queue_free()
-	var request_result := int(completed[0])
-	var response_code := int(completed[1])
-	var response_text := (completed[3] as PackedByteArray).get_string_from_utf8()
-	var parsed: Variant = JSON.parse_string(response_text)
-	var response_body := _dictionary(parsed)
-	if request_result != HTTPRequest.RESULT_SUCCESS:
-		return {"success": false, "status": response_code, "error": _request_result_message(request_result)}
-	if response_code < 200 or response_code >= 300:
-		return {
-			"success": false,
-			"status": response_code,
-			"error": _error_message(response_body, response_code),
-			"body": response_body,
-		}
-	return {"success": true, "status": response_code, "body": response_body}
+	return preload("res://scripts/services/service_json_response.gd").decode(
+		int(completed[0]), int(completed[1]), completed[3] as PackedByteArray, true)
 
 
 func _error_message(body: Dictionary, response_code: int) -> String:
