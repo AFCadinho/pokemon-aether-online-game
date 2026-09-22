@@ -26,7 +26,7 @@ func interact_with_player(_player: Node2D) -> void:
 			interaction_in_flight = false
 			return
 		break
-	var world := GameState.get_world()
+	var world: Node = GameState.get_world()
 	if world != null and world.has_method("save_current_player_state_now"):
 		var saved: Dictionary = await world.call("save_current_player_state_now")
 		if not bool(saved.get("success", false)):

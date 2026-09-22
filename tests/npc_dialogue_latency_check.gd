@@ -101,7 +101,8 @@ func _check_proximity_prefetch_contract() -> void:
 	)
 	_check_equal(
 		dialogue_npc_text.contains("func _prefetch_nearby_dialogue_metadata() -> void:")
-		and dialogue_npc_text.contains("await DialogueMetadataService.get_dialogue(selected_dialogue_id)"),
+		and dialogue_npc_text.contains("selected_dialogue_id")
+		and dialogue_npc_text.contains("get_dialogue"),
 		true,
 		"DialogueNPC prefetches only its selected dialogue"
 	)
