@@ -43,13 +43,21 @@ export is `physical_attack_semantic_evidence.json`. Every evidence row records
 the exact SCVI action, prepared-source hash, and lossless-loop hash. Both files
 remain `runtime_approved: false`; neither is consumed by battle routing.
 
+Those six ambiguous cases were subsequently reviewed in the animated gallery.
+Both physical clips are retained in `physical_attack_human_review.json` with
+their exact source-action and loop hashes. Their alternate labels are now:
+Delibird body/charge, Drowzee kick, Gardevoir body/charge, Jigglypuff
+body/charge, Psyduck body/charge, and Slaking punch. Slaking's primary clip has
+an additional reviewer note that it reads more like a grab. This closes the
+semantic queue for this 75-Pokémon cohort without activating runtime routing.
+
 | Visual family | Count |
 | --- | ---: |
-| body/charge | 32 |
+| body/charge | 36 |
 | tail | 13 |
 | wing | 7 |
-| punch | 6 |
-| unclear | 6 |
+| punch | 7 |
+| kick | 1 |
 | claw/slash | 5 |
 | bite | 3 |
 | generic | 3 |
