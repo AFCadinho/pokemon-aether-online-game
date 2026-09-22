@@ -46,6 +46,10 @@ func _run() -> void:
 		assert(arena.get_meta("source_map") == "kanto_route_22")
 		assert(arena.has_node("Route22Scenery/Route22Landmarks"))
 		var terrain = arena.get_node("Terrain3D")
+		var water: MeshInstance3D = arena.get_node("Route22Scenery/EasternPond/WaterSurface")
+		assert(water.position.y < first_height)
+		assert(terrain.data.get_height(water.position) < water.position.y - 0.5, "Water needs a recessed basin")
+		assert(terrain.data.get_height(Vector3(0, 0, 0)) > water.position.y, "Battle clearing stays dry")
 		assert(is_equal_approx(first_height, float(arena.get_meta("surface_height"))))
 		for point in [Arenas.spawn(0), Arenas.spawn(1), Vector3.ZERO]:
 			assert(absf(terrain.data.get_height(point) - first_height) < 0.001)
