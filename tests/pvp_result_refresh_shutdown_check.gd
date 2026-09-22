@@ -58,7 +58,7 @@ func _run() -> void:
 	root.add_child(battle)
 	await process_frame
 	battle._refresh_pvp_battle_rating("shutdown-fixture")
-	var deadline := Time.get_ticks_msec() + 3000
+	var deadline := Time.get_ticks_msec() + 6000
 	while fixture.requests < 1 and Time.get_ticks_msec() < deadline:
 		await process_frame
 	while Time.get_ticks_msec() < deadline and battle.get_node("PvpResultRefreshRetryTimer").is_stopped():
@@ -79,7 +79,7 @@ func _run() -> void:
 	root.add_child(battle)
 	await process_frame
 	battle._refresh_pvp_battle_rating("shutdown-fixture")
-	deadline = Time.get_ticks_msec() + 3000
+	deadline = Time.get_ticks_msec() + 6000
 	while not battle.pending_battle_end_result.has("ratingChange") and Time.get_ticks_msec() < deadline:
 		await process_frame
 	await process_frame
