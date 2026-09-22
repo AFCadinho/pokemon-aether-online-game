@@ -1,5 +1,5 @@
 @tool
-extends DialogueNPC
+extends "res://scripts/world/npcs/dialogue_npc.gd"
 
 class_name ItemGiftNPC
 
@@ -91,7 +91,9 @@ func interact_with_player(_player: Node2D) -> void:
 				"add_system_message",
 				get_node_or_null("/root/LocalizationManager").call("text", "ui.skill.fishing.unlocked")
 			)
-		SfxManager.play("item_received")
+		var sfx_manager := get_node_or_null("/root/SfxManager")
+		if sfx_manager != null and sfx_manager.has_method("play"):
+			sfx_manager.call("play", "item_received")
 	else:
 		reward_resolved = true
 		_refresh_quest_marker()
