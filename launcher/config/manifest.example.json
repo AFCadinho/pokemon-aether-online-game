@@ -18,6 +18,13 @@
   },
   "assetPacks": [
     {
+      "id": "battle-environment-forest",
+      "version": "battle-environment-forest-v1",
+      "url": "https://example.com/pokeaether/assets/battle-environment-forest-v1.zip",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sizeBytes": 71337990
+    },
+    {
       "id": "pokemon-home",
       "version": "pokemon-home-v1",
       "url": "https://example.com/pokeaether/assets/pokemon-home-v1.zip",
