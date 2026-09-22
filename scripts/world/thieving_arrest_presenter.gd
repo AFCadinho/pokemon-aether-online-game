@@ -18,7 +18,7 @@ static func show_confrontation(source_npc: Node2D, player: Node2D, npc_type: Str
 		player.call("face_world_position", source_npc.global_position)
 		await _show_officer_dialogue(
 			player,
-			LocalizationManager.text("ui.thieving.arrest.officer_confrontation")
+			_service(player, "LocalizationManager").call("text", "ui.thieving.arrest.officer_confrontation")
 		)
 		return
 
@@ -33,7 +33,7 @@ static func show_confrontation(source_npc: Node2D, player: Node2D, npc_type: Str
 	player.call("face_world_position", officer.global_position)
 	await _show_officer_dialogue(
 		player,
-		LocalizationManager.text("ui.thieving.arrest.civilian_confrontation")
+		_service(player, "LocalizationManager").call("text", "ui.thieving.arrest.civilian_confrontation")
 	)
 	if is_instance_valid(officer):
 		officer.queue_free()
@@ -50,7 +50,7 @@ static func show_jail_arrival(player: Node2D, arrest: Dictionary) -> void:
 	player.call("face_world_position", officer.global_position)
 	await _show_officer_dialogue(
 		player,
-		LocalizationManager.text("ui.thieving.arrest.jail_arrival", {
+		_service(player, "LocalizationManager").call("text", "ui.thieving.arrest.jail_arrival", {
 			"amount": maxi(int(arrest.get("lostMoney", 0)), 0),
 			"minutes": maxi(ceili(float(arrest.get("sentenceSeconds", 0)) / 60.0), 1),
 		})
@@ -86,7 +86,8 @@ static func _player_direction(player: Node2D) -> Vector2:
 
 
 static func _spawn_temporary_officer(player: Node2D, world_position: Vector2) -> Node2D:
-	var current_map := GameState.current_map as Node
+	var game_state := _service(player, "GameState")
+	var current_map: Node = game_state.get("current_map") as Node if game_state != null else null
 	if current_map == null or not is_instance_valid(current_map):
 		return null
 	var npc_parent := current_map.get_node_or_null("Entities/NPCs")
@@ -106,3 +107,7 @@ static func _spawn_temporary_officer(player: Node2D, world_position: Vector2) ->
 	npc_parent.add_child(officer)
 	officer.global_position = world_position
 	return officer
+
+
+static func _service(node: Node, service_name: String) -> Node:
+	return node.get_node_or_null("/root/" + service_name) if node != null else null

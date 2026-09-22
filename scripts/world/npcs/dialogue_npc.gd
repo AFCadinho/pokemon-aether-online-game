@@ -1,5 +1,5 @@
 @tool
-extends BaseNPC
+extends "res://scripts/world/npcs/base_npc.gd"
 
 class_name DialogueNPC
 
@@ -24,7 +24,10 @@ func _prefetches_dialogue_metadata_on_approach() -> bool:
 
 
 func _prefetch_nearby_dialogue_metadata() -> void:
-	var selection := NpcDialogueService.select_dialogue_reference(
+	var dialogue_service := get_node_or_null("/root/NpcDialogueService")
+	if dialogue_service == null or not dialogue_service.has_method("select_dialogue_reference"):
+		return
+	var selection: Dictionary = dialogue_service.call("select_dialogue_reference",
 		_resolve_story_dialogue_id(),
 		_get_dialogue_override_id(),
 		""
@@ -32,7 +35,9 @@ func _prefetch_nearby_dialogue_metadata() -> void:
 	var selected_dialogue_id := str(selection.get("dialogueId", "")).strip_edges()
 	if selected_dialogue_id.is_empty():
 		return
-	await DialogueMetadataService.get_dialogue(selected_dialogue_id)
+	var metadata_service := get_node_or_null("/root/DialogueMetadataService")
+	if metadata_service != null and metadata_service.has_method("get_dialogue"):
+		await metadata_service.call("get_dialogue", selected_dialogue_id)
 
 
 func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
@@ -69,7 +74,10 @@ func _get_dialogue_metadata_lines() -> Array[String]:
 		):
 			return []
 
-	var result: Dictionary = await NpcDialogueService.resolve_default_dialogue(
+	var dialogue_service := get_node_or_null("/root/NpcDialogueService")
+	if dialogue_service == null or not dialogue_service.has_method("resolve_default_dialogue"):
+		return _get_string_array(dialogue_lines)
+	var result: Dictionary = await dialogue_service.call("resolve_default_dialogue",
 		_resolve_story_dialogue_id(),
 		_get_dialogue_override_id(),
 		"",
@@ -106,16 +114,19 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 func _show_available_quest_offer(speaker_name: String) -> bool:
 	if offered_quest_id.is_empty():
 		return false
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service == null:
+		return false
 	if (
 		not offered_quest_required_quest_id.is_empty()
-		and not StoryService.is_requirement_met(
+		and not bool(story_service.call("is_requirement_met",
 			offered_quest_required_quest_id,
 			offered_quest_required_quest_step_id,
 			offered_quest_required_quest_status
-		)
+		))
 	):
 		return false
-	var quest := StoryService.get_quest(offered_quest_id)
+	var quest: Dictionary = story_service.call("get_quest", offered_quest_id)
 	if (
 		str(quest.get("questType", "")) != "side"
 		or str(quest.get("status", "")) != "available"
@@ -132,15 +143,16 @@ func _show_available_quest_offer(speaker_name: String) -> bool:
 
 
 func _resolve_story_dialogue_id() -> String:
+	var story_service := get_node_or_null("/root/StoryService")
 	for variant: Dictionary in story_dialogue_variants:
 		var dialogue_reference := str(variant.get("dialogueId", "")).strip_edges()
 		var quest_id := str(variant.get("requiredQuestId", "")).strip_edges()
 		if dialogue_reference.is_empty() or quest_id.is_empty():
 			continue
-		if StoryService.is_requirement_met(
+		if story_service != null and bool(story_service.call("is_requirement_met",
 			quest_id,
 			str(variant.get("requiredQuestStepId", "")).strip_edges(),
 			str(variant.get("requiredQuestStatus", "completed")).strip_edges()
-		):
+		)):
 			return dialogue_reference
 	return metadata_dialogue_id
