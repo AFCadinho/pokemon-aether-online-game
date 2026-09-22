@@ -5,6 +5,7 @@ const LauncherNewsLocalizationService := preload("res://scripts/news_localizatio
 const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
 const LauncherResumableDownloadService := preload("res://scripts/resumable_download_service.gd")
 const LauncherAssetPackIntegrity := preload("res://scripts/asset_pack_integrity.gd")
+const LauncherReleaseAssetBundles := preload("res://scripts/release_asset_bundles.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
@@ -156,6 +157,7 @@ var current_asset_pack_download_index := 0
 var has_unseen_diagnostics_error := false
 var last_check_datetime: Dictionary = {}
 var download_service: ResumableDownloadService
+var release_asset_bundles: RefCounted
 var download_progress_snapshot: Dictionary = {}
 var active_resumable_download_kind := ""
 var manifest_retry_count := 0
@@ -277,6 +279,7 @@ func _ready() -> void:
 	http_request.request_completed.connect(_on_request_completed)
 	http_request.timeout = 30.0
 	download_service = LauncherResumableDownloadService.new()
+	release_asset_bundles = LauncherReleaseAssetBundles.new()
 	add_child(download_service)
 	server_health_refresh_timer = Timer.new()
 	server_health_refresh_timer.wait_time = SERVER_HEALTH_REFRESH_SECONDS
@@ -879,6 +882,10 @@ func _open_content_packs() -> void:
 	)
 
 func _selected_model_catalog() -> String:
+	if release_asset_bundles != null:
+		var release_catalog: String = release_asset_bundles.catalog_path()
+		if not release_catalog.is_empty():
+			return release_catalog
 	return preload("res://scripts/model_pack_store.gd").new().selected_catalog()
 
 func _open_model_packs() -> void:
@@ -1103,6 +1110,13 @@ func _validate_download_manifest(candidate: Dictionary) -> String:
 		var sha256 := str(value.get("sha256", "")).strip_edges().to_lower()
 		if sha256.length() != 64 or not sha256.is_valid_hex_number():
 			return "%s has no valid SHA-256" % label
+	var bundle_descriptor: Variant = candidate.get("assetBundleIndex", {})
+	if bundle_descriptor is Dictionary and not bundle_descriptor.is_empty():
+		var bundle_error := LauncherReleaseAssetBundles.descriptor_error(bundle_descriptor)
+		if not bundle_error.is_empty():
+			return bundle_error
+	elif not bundle_descriptor is Dictionary:
+		return "assetBundleIndex must be an object"
 	return ""
 
 
@@ -1752,6 +1766,29 @@ func _handle_download_response() -> void:
 	var download_label: String = _get_current_download_display_label()
 	if int(current_download.get("checksum_retry_count", 0)) > 0:
 		_log("CHK-001 retry passed integrity verification. id=%s" % str(current_download.get("id", "")))
+	var download_type := str(current_download.get("type", ""))
+	if download_type in ["asset_bundle_index", "asset_bundle"]:
+		var descriptor: Dictionary = _get_dictionary(manifest, "assetBundleIndex")
+		var result: Dictionary
+		if download_type == "asset_bundle_index":
+			result = release_asset_bundles.accept_index(descriptor, file_path)
+		else:
+			var index: Dictionary = release_asset_bundles.cached_index(descriptor)
+			result = release_asset_bundles.accept_bundle(index, str(current_download.get("id", "")), file_path)
+		if not str(result.get("error", "")).is_empty():
+			_set_busy(false)
+			_set_status("Could not install approved 3D models.", "error")
+			_log_error("Asset bundle install failed. id=%s error=%s" % [current_download.get("id", ""), result.error])
+			_delete_existing_download(file_path)
+			current_download.clear()
+			return
+		_delete_existing_download(file_path)
+		if download_type == "asset_bundle_index":
+			for job: Dictionary in result.get("jobs", []):
+				pending_downloads.append(job)
+		current_download.clear()
+		_start_next_download()
+		return
 	_set_status(_t("Extracting {label}...", {"label": download_label}), "updating")
 	_log("Extracting %s." % download_label)
 	await get_tree().process_frame
@@ -2005,6 +2042,15 @@ func _build_download_queue() -> void:
 			"file_name": "%s-%s.zip" % [pack_id, pack_version],
 			"label": pack_id,
 		})
+
+	var bundle_descriptor := _get_dictionary(manifest, "assetBundleIndex")
+	if not bundle_descriptor.is_empty() and release_asset_bundles != null:
+		var bundle_plan: Dictionary = release_asset_bundles.jobs(bundle_descriptor)
+		if not str(bundle_plan.get("error", "")).is_empty():
+			_log_error("Approved 3D bundle planning failed: %s" % bundle_plan.error)
+		else:
+			for job: Dictionary in bundle_plan.get("jobs", []):
+				pending_downloads.append(job)
 
 	var filtered_downloads: Array[Dictionary] = []
 	for download: Dictionary in pending_downloads:

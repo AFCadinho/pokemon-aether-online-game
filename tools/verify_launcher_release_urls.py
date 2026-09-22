@@ -52,6 +52,14 @@ def main() -> None:
                 args.timeout,
                 verified_urls,
             )
+        if "assetBundleIndex" in manifest:
+            _verify_entry(
+                manifest_path,
+                "approved 3D bundle index",
+                manifest.get("assetBundleIndex"),
+                args.timeout,
+                verified_urls,
+            )
         if args.include_launcher:
             _verify_entry(
                 manifest_path,

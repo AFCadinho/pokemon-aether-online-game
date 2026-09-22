@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktoplauncher kan de zeven goedgekeurde 3D-Pokémon nu als afzonderlijke, gecontroleerde downloads installeren en bijwerken. Ontbrekende modellen blijven veilig op de bestaande battleweergave terugvallen.
+
 - The three Aether male and two Aether female hairstyles now appear correctly on Trainer Cards and player battle sprites, including their selected hair colour.
 
 - Gereviewde 3D-Pokémon kiezen nu per fysieke movefamilie tussen hun twee beschikbare aanvalsanimaties; modellen zonder veilig gecertificeerde tweede clip blijven automatisch op de bestaande aanval terugvallen.

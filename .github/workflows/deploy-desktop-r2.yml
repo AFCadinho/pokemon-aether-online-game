@@ -416,6 +416,40 @@ jobs:
           register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}" "${MUSIC_ASSET_SHA256}"
           register_external_pack "battle-environment-forest" "${FOREST_ASSET_VERSION}" "${FOREST_ASSET_SIZE}" "${FOREST_ASSET_SHA256}"
 
+      - name: Register approved 3D Pokemon bundle index
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          metadata = json.loads(Path("release/approved_3d_bundles_v1.json").read_text(encoding="utf-8"))
+          if metadata.get("schema") != 1 or metadata.get("kind") != "pokeaether-approved-3d-release":
+              raise SystemExit("invalid approved 3D release metadata")
+          entries = [metadata["index"], *metadata.get("bundles", [])]
+          if len(entries) != 8:
+              raise SystemExit("approved 3D release must contain one index and seven bundles")
+          for entry in entries:
+              url = f"{os.environ['UPDATE_BASE_URL'].rstrip('/')}/{entry['object_key']}"
+              request = Request(url, method="HEAD", headers={"Cache-Control": "no-cache"})
+              with urlopen(request, timeout=60) as response:
+                  if response.status < 200 or response.status >= 300:
+                      raise SystemExit(f"missing approved 3D release object: {url}")
+                  if int(response.headers.get("Content-Length", "0")) != int(entry["size_bytes"]):
+                      raise SystemExit(f"approved 3D release size mismatch: {url}")
+          index = metadata["index"]
+          values = {
+              "APPROVED_3D_REVISION": metadata["revision"],
+              "APPROVED_3D_INDEX_KEY": index["object_key"],
+              "APPROVED_3D_INDEX_SIZE": index["size_bytes"],
+              "APPROVED_3D_INDEX_SHA256": index["sha256"],
+          }
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+              for key, value in values.items():
+                  output.write(f"{key}={value}\n")
+          PY
+
       - name: Package launcher release
         run: |
           launcher_args=()
@@ -433,6 +467,7 @@ jobs:
             --output-dir builds/launcher \
             --default-platform windows \
             --platform "${PACKAGE_PLATFORMS}" \
+            --asset-bundle-index "${APPROVED_3D_REVISION}:${APPROVED_3D_INDEX_KEY}:${APPROVED_3D_INDEX_SIZE}:${APPROVED_3D_INDEX_SHA256}" \
             "${launcher_args[@]}" \
             $(cat /tmp/asset_pack_args.txt)
 
@@ -558,6 +593,16 @@ jobs:
                       raise SystemExit(f"{manifest_path} gen5 pack must be optional: {pack_id}")
                   if pack.get("autoUpdateIfInstalled") is not True:
                       raise SystemExit(f"{manifest_path} gen5 pack must auto-update when installed: {pack_id}")
+
+              bundle_index = manifest.get("assetBundleIndex")
+              if not isinstance(bundle_index, dict):
+                  raise SystemExit(f"{manifest_path} missing approved 3D bundle index")
+              if bundle_index.get("revision") != os.environ["APPROVED_3D_REVISION"]:
+                  raise SystemExit(f"{manifest_path} has the wrong approved 3D revision")
+              if bundle_index.get("sha256") != os.environ["APPROVED_3D_INDEX_SHA256"]:
+                  raise SystemExit(f"{manifest_path} has the wrong approved 3D index digest")
+              if int(bundle_index.get("sizeBytes", 0)) != int(os.environ["APPROVED_3D_INDEX_SIZE"]):
+                  raise SystemExit(f"{manifest_path} has the wrong approved 3D index size")
 
               print(f"Verified {manifest_path}")
           PY

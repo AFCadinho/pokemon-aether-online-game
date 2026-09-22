@@ -125,6 +125,11 @@ def main() -> None:
         help="Include launcher self-update metadata in each platform manifest.",
     )
     parser.add_argument(
+        "--asset-bundle-index",
+        metavar="REVISION:OBJECT_KEY:SIZE_BYTES:SHA256",
+        help="Existing hosted approved 3D bundle index to include in desktop manifests.",
+    )
+    parser.add_argument(
         "--launcher-prefix",
         default="launcher/latest",
         help="Public URL path prefix for launcher zip URLs.",
@@ -188,6 +193,10 @@ def main() -> None:
             },
             "assetPacks": asset_packs,
         }
+        if args.asset_bundle_index:
+            manifest["assetBundleIndex"] = _build_asset_bundle_index(
+                args.asset_bundle_index, base_url
+            )
         if launcher_data:
             manifest["launcher"] = launcher_data
         manifests[platform_name] = manifest
@@ -308,6 +317,47 @@ def _build_external_asset_pack(entry: str, base_url: str, asset_prefix: str) -> 
             asset_pack["autoUpdateIfInstalled"] = True
 
     return asset_pack
+
+
+def _build_asset_bundle_index(entry: str, base_url: str) -> dict:
+    parts = entry.split(":", 3)
+    if len(parts) != 4:
+        raise SystemExit("--asset-bundle-index must use REVISION:OBJECT_KEY:SIZE_BYTES:SHA256")
+    revision, object_key, size_text, sha256 = parts
+    if not revision or re.fullmatch(r"[A-Za-z0-9._-]+", revision) is None:
+        raise SystemExit("--asset-bundle-index REVISION is invalid")
+    if (
+        not object_key.startswith("optional-assets/pokemon_3d/index/")
+        or not object_key.endswith(".json")
+        or "\\" in object_key
+        or any(part in {"", ".", ".."} for part in object_key.split("/"))
+    ):
+        raise SystemExit("--asset-bundle-index OBJECT_KEY is invalid")
+    try:
+        size_bytes = int(size_text)
+    except ValueError:
+        raise SystemExit("--asset-bundle-index SIZE_BYTES must be an integer") from None
+    sha256 = sha256.strip().lower()
+    if size_bytes <= 0 or re.fullmatch(r"[a-f0-9]{64}", sha256) is None:
+        raise SystemExit("--asset-bundle-index integrity metadata is invalid")
+    return {
+        "schema": 1,
+        "kind": "pokeaether-release-asset-index",
+        "revision": revision,
+        "url": _build_url(base_url, "", object_key),
+        "objectBaseUrl": base_url.rstrip("/"),
+        "sha256": sha256,
+        "sizeBytes": size_bytes,
+        "requiredAssetIds": [
+            "pokemon_3d:arcanine:base",
+            "pokemon_3d:articuno:base",
+            "pokemon_3d:dragonite:base",
+            "pokemon_3d:lucario:base",
+            "pokemon_3d:pikachu:base",
+            "pokemon_3d:roaring-moon:base",
+            "pokemon_3d:snorlax:base",
+        ],
+    }
 
 
 def _build_url(base_url: str, prefix: str, file_name: str) -> str:

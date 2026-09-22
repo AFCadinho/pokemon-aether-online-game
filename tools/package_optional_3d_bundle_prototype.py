@@ -77,7 +77,8 @@ def approved(registry: dict, key: str, model_hash: str) -> bool:
 
 
 def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "prototype-1",
-          registry_path: Path = REGISTRY) -> dict:
+          registry_path: Path = REGISTRY, species_set: tuple[str, ...] = SPECIES,
+          dex: dict[str, int] = DEX) -> dict:
     if version < 1:
         raise ValueError("version must be positive")
     if output.exists() or output.is_symlink():
@@ -88,7 +89,7 @@ def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "p
     staging = Path(tempfile.mkdtemp(prefix=".asset-bundle-prototype-", dir=output.parent))
     assets = []
     try:
-        for species in SPECIES:
+        for species in species_set:
             appearances, paths = [], {}
             for variant in ("normal", "shiny"):
                 key = species + ("@shiny" if variant == "shiny" else "")
@@ -135,7 +136,7 @@ def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "p
                 "asset_id": asset_id,
                 "asset_type": "pokemon_3d",
                 "species_id": species,
-                "national_dex": DEX[species],
+                "national_dex": dex[species],
                 "form_id": "base",
                 "version": version,
                 "size_bytes": archive_size,

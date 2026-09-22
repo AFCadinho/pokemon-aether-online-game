@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
+import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from prune_r2_release_objects import (
     R2Config,
@@ -11,7 +13,9 @@ from prune_r2_release_objects import (
     _delete_object,
     _key_from_public_url,
     _list_release_objects,
+    _load_asset_bundle_indexes,
     _object_family,
+    _protected_keys_from_asset_bundle_indexes,
     _protected_keys_from_manifests,
 )
 
@@ -62,6 +66,59 @@ class R2ReleasePrunerTests(unittest.TestCase):
             _object_family("game/game-0.4-build-linux.zip"),
             "game:linux",
         )
+
+    def test_nested_bundle_index_protects_each_species_object(self) -> None:
+        digest = "a" * 64
+        key = f"optional-assets/pokemon_3d/dragonite/base/v2-{digest}.zip"
+        index = {
+            "schema": 1,
+            "kind": "pokeaether-optional-asset-index",
+            "assets": [{"object_key": key}],
+        }
+        self.assertEqual(_protected_keys_from_asset_bundle_indexes([index]), {key})
+        self.assertEqual(_object_family(key), "bundle:pokemon_3d:dragonite:base")
+        self.assertEqual(
+            _object_family(f"optional-assets/pokemon_3d/index/release-{digest}.json"),
+            "bundle-index:pokemon_3d",
+        )
+
+    @patch("prune_r2_release_objects.urlopen")
+    def test_nested_index_is_hash_verified_before_cleanup_protection(self, urlopen) -> None:
+        payload = json.dumps({
+            "schema": 1,
+            "kind": "pokeaether-optional-asset-index",
+            "assets": [{
+                "object_key": f"optional-assets/pokemon_3d/dragonite/base/v1-{'a' * 64}.zip",
+            }],
+        }).encode()
+        response = MagicMock()
+        response.__enter__.return_value = response
+        response.read.return_value = payload
+        urlopen.return_value = response
+        url = "https://updates.pokeaether.com/optional-assets/pokemon_3d/index/current.json"
+        manifests = [{"assetBundleIndex": {
+            "url": url,
+            "sizeBytes": len(payload),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+        }}]
+        self.assertEqual(_load_asset_bundle_indexes(manifests, "https://updates.pokeaether.com")[0]["schema"], 1)
+        manifests[0]["assetBundleIndex"]["sha256"] = "0" * 64
+        with self.assertRaises(SystemExit):
+            _load_asset_bundle_indexes(manifests, "https://updates.pokeaether.com")
+
+    def test_bundle_families_retain_only_previous_species_version(self) -> None:
+        current = f"optional-assets/pokemon_3d/dragonite/base/v3-{'a' * 64}.zip"
+        previous = f"optional-assets/pokemon_3d/dragonite/base/v2-{'b' * 64}.zip"
+        old = f"optional-assets/pokemon_3d/dragonite/base/v1-{'c' * 64}.zip"
+        plan = _build_prune_plan(
+            [item(current, 1), item(previous, 3), item(old, 10)],
+            {current},
+            retain_previous=1,
+            minimum_age=dt.timedelta(hours=24),
+            now=NOW,
+        )
+        self.assertEqual([value.key for value in plan.retained_for_rollback], [previous])
+        self.assertEqual([value.key for value in plan.delete], [old])
 
     def test_plan_keeps_current_previous_and_recent_then_deletes_older(self) -> None:
         objects = [
@@ -152,7 +209,10 @@ class R2ReleasePrunerTests(unittest.TestCase):
                 </ListBucketResult>""",
             ),
         ]
-        signed_request.side_effect = list(signed_request.side_effect) + [(200, "OK", b"<ListBucketResult><IsTruncated>false</IsTruncated></ListBucketResult>")]
+        signed_request.side_effect = list(signed_request.side_effect) + [
+            (200, "OK", b"<ListBucketResult><IsTruncated>false</IsTruncated></ListBucketResult>"),
+            (200, "OK", b"<ListBucketResult><IsTruncated>false</IsTruncated></ListBucketResult>"),
+        ]
         config = R2Config("account", "bucket", "access", "secret", "https://example.com")
 
         objects = _list_release_objects(config)
@@ -169,6 +229,10 @@ class R2ReleasePrunerTests(unittest.TestCase):
         self.assertEqual(signed_request.call_args_list[1].kwargs["query"], [
             ("list-type", "2"),
             ("prefix", "game/"),
+        ])
+        self.assertEqual(signed_request.call_args_list[3].kwargs["query"], [
+            ("list-type", "2"),
+            ("prefix", "optional-assets/"),
         ])
 
     def test_web_rollback_keeps_complete_bundle_and_ignores_newer_failed_upload(self):
