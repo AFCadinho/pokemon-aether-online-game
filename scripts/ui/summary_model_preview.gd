@@ -1,57 +1,43 @@
 extends "res://scripts/ui/pokedex_model_preview.gd"
-## Card-owned preview; never modifies animations in shared model resources.
-var clips: OptionButton
-var replay: Button
-var pause: Button
+## Card-owned playback, using the card's existing animation menu.
 var configured_player: AnimationPlayer
+var animation_button: MenuButton
+var base_transforms: Dictionary = {}
+var selected_clip := "idle"
+var camera_target := Vector3.ZERO
+var camera_distance := 1.0
+var zoom_factor := 1.0
 
 func _ready() -> void:
 	super._ready()
 	tooltip_text = "Drag to rotate the 3D model"
-	var controls := HBoxContainer.new()
-	controls.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	controls.offset_left = 6
-	controls.offset_top = -64
-	controls.offset_bottom = -38
-	controls.add_theme_constant_override("separation", 3)
-	add_child(controls)
-	clips = OptionButton.new()
-	clips.name = "ModelAnimations"
-	clips.custom_minimum_size.x = 125
-	clips.fit_to_longest_item = false
-	clips.add_theme_font_size_override("font_size", 11)
-	controls.add_child(clips)
-	clips.item_selected.connect(func(_index): play_selected())
-	replay = Button.new()
-	replay.text = "↻"
-	replay.tooltip_text = "Replay animation"
-	controls.add_child(replay)
-	replay.pressed.connect(play_selected)
-	pause = Button.new()
-	pause.text = "Ⅱ"
-	pause.tooltip_text = "Pause / resume animation"
-	controls.add_child(pause)
-	pause.pressed.connect(toggle_pause)
-	for button: BaseButton in [clips, replay, pause]:
-		button.add_theme_color_override("font_color", Color("dcecf7"))
-		for state in ["normal", "hover", "pressed", "focus", "disabled"]:
-			var style := StyleBoxFlat.new()
-			style.bg_color = Color("10344b") if state in ["hover", "pressed"] else Color("071827")
-			style.border_color = Color("3f7d98")
-			style.set_border_width_all(1)
-			style.set_corner_radius_all(4)
-			style.content_margin_left = 5
-			style.content_margin_right = 5
-			button.add_theme_stylebox_override(state, style)
-	_set_controls_enabled(false)
+	# A fixed platform obscures valid native poses below its plane.
+	# Summary cards inspect the model, not an artificial arena floor.
+	preview_floor.hide()
 
-func _set_controls_enabled(enabled: bool) -> void:
-	clips.disabled = not enabled
-	replay.disabled = not enabled
-	pause.disabled = not enabled
+func bind_animation_button(button: MenuButton) -> void:
+	animation_button = button
+	if button != null:
+		button.set_meta("model_preview", weakref(self))
+	_update_menu()
+
+func _update_menu() -> void:
+	if not is_instance_valid(animation_button):
+		return
+	animation_button.show()
+	animation_button.disabled = configured_player == null
+	animation_button.tooltip_text = "Animations are loading…" if configured_player == null else "Preview animation"
+	var popup := animation_button.get_popup()
+	popup.clear()
+	if configured_player == null:
+		return
+	for clip in player.get_animation_list():
+		if clip == "RESET":
+			continue
+		popup.add_item(String(clip).replace("_", " ").capitalize())
+		popup.set_item_metadata(popup.item_count - 1, clip)
 
 func _process(delta: float) -> void:
-	# Hidden cards consume neither animation updates nor render frames.
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if is_visible_in_tree() else SubViewport.UPDATE_DISABLED
 	if not is_visible_in_tree():
 		if player != null:
@@ -63,61 +49,80 @@ func _process(delta: float) -> void:
 	if player == null or player == configured_player:
 		return
 	configured_player = player
-	clips.clear()
-	for clip in player.get_animation_list():
-		if clip == "RESET":
-			continue
-		clips.add_item(String(clip).replace("_", " ").capitalize())
-		clips.set_item_metadata(clips.item_count - 1, clip)
-		if clip == "idle":
-			clips.select(clips.item_count - 1)
-	_set_controls_enabled(clips.item_count > 0)
-	status.text = ""
+	base_transforms.clear()
+	for node in actor.find_children("*", "Node3D", true, false):
+		base_transforms[node] = node.transform
+	selected_clip = "idle" if player.has_animation("idle") else String(player.get_animation_list()[0])
+	play_clip(selected_clip)
 	_fit_model()
-	play_selected()
+	status.text = ""
+	_update_menu()
 
-func play_selected() -> void:
-	if player == null or clips.selected < 0:
+func play_clip(clip: String) -> void:
+	if player == null or not player.has_animation(clip):
 		return
-	var clip := str(clips.get_item_metadata(clips.selected))
-	if not player.has_animation(clip):
-		return
+	selected_clip = clip
 	player.stop()
+	# Clips key different subsets of the rig. Clear previous action transforms.
+	for node: Node3D in base_transforms:
+		node.transform = base_transforms[node]
+		if node is Skeleton3D:
+			(node as Skeleton3D).reset_bone_poses()
+	if player.has_animation("RESET"):
+		player.play("RESET")
+		player.advance(0)
+	if player.has_animation("idle"):
+		player.play("idle")
+		player.advance(0)
+	if clip == "faint_loop" and player.has_animation("faint_start"):
+		player.play("faint_start")
+		player.seek(player.get_animation("faint_start").length, true)
 	player.play(clip)
+	player.seek(0, true)
 	player.advance(0)
-	pause.text = "Ⅱ"
 
 func toggle_pause() -> void:
 	if player == null:
 		return
 	if player.is_playing():
 		player.pause()
-		pause.text = "▶"
 	else:
 		player.play()
-		pause.text = "Ⅱ"
 
 func _fit_model() -> void:
+	for skeleton in actor.find_children("*", "Skeleton3D", true, false):
+		skeleton.force_update_all_bone_transforms()
 	var bounds := AABB()
 	var found := false
-	for mesh in actor.find_children("*", "MeshInstance3D", true, false):
+	for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or not mesh.is_visible_in_tree():
 			continue
-		var box: AABB = mesh.global_transform * mesh.get_aabb()
-		bounds = bounds.merge(box) if found else box
-		found = true
+		var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
+		for surface in posed.get_surface_count():
+			var vertices: PackedVector3Array = posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+			for vertex in vertices:
+				var point := mesh.global_transform * vertex
+				bounds = bounds.expand(point) if found else AABB(point, Vector3.ZERO)
+				found = true
 	if not found:
 		return
-	var radius := maxf(bounds.size.length() * 0.5, 0.1)
-	var target := bounds.get_center()
-	camera.position = target + Vector3(0, 0.1, 1).normalized() * radius * 4.5
-	camera.look_at(target)
-	camera.near = maxf(radius * 0.01, 0.001)
-	camera.far = maxf(radius * 12, 10)
+	camera_target = bounds.get_center()
+	var aspect := maxf(size.x / maxf(size.y, 1.0), 0.1)
+	var half_height := maxf(bounds.size.y, bounds.size.x / aspect) * 0.5
+	# Leave room below idle for native recoil/down poses without moving the
+	# camera on each action (which would conceal positional discontinuities).
+	camera_distance = maxf(half_height / tan(deg_to_rad(camera.fov * 0.5)) + bounds.size.z * 0.5, 0.1) * 1.35
+	camera.near = maxf(camera_distance * 0.001, 0.001)
+	camera.far = maxf(camera_distance * 12, 10)
+	set_zoom(zoom_factor)
+
+func set_zoom(factor: float) -> void:
+	zoom_factor = factor
+	camera.position = camera_target + Vector3(0, 0, camera_distance / factor)
+	camera.look_at(camera_target)
 
 func _clear_actor() -> void:
 	configured_player = null
+	base_transforms.clear()
 	super._clear_actor()
-	if clips != null:
-		clips.clear()
-		_set_controls_enabled(false)
+	_update_menu()

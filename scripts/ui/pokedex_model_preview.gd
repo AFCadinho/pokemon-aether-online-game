@@ -16,6 +16,7 @@ var requested_key := ""
 var loading_path := ""
 var yaw := 0.0
 var profile := {}
+var preview_floor: MeshInstance3D
 signal model_failed
 
 func _ready() -> void:
@@ -43,6 +44,7 @@ func _ready() -> void:
 	world.add_child(environment)
 	MaterialResponse.apply_neutral_lighting(world)
 	var floor := MeshInstance3D.new()
+	preview_floor = floor
 	var disk := CylinderMesh.new()
 	disk.top_radius = 1.7
 	disk.bottom_radius = 1.8

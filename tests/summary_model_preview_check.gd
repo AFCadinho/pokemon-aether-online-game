@@ -22,7 +22,7 @@ func _run() -> void:
 	var sprite: TextureRect = overlay.pokemon_summary_sprite
 	var stage: Control = sprite.get_parent()
 	var animated: AnimatedSprite2D = overlay.pokemon_summary_animated_sprite
-	var pokemon := Pokemon.new("cloyster", 100)
+	var pokemon := Pokemon.new("garchomp", 100)
 	overlay._set_pokemon_summary_sprite(pokemon)
 	var preview = stage.get_node("SummaryModelPreview")
 	assert(not animated.visible and not sprite.visible)
@@ -30,22 +30,39 @@ func _run() -> void:
 		await process_frame
 		if preview.configured_player != null:
 			break
-	assert(preview.player != null and preview.clips.item_count >= 7)
+	var button := animated.get_meta("preview_animation_button") as MenuButton
+	var menu := button.get_popup()
+	assert(preview.player != null and menu.item_count >= 7)
+	assert(button.visible and not button.disabled)
+	assert(button.offset_top == -66.0, "reuse play menu above level")
+	assert(preview.find_child("ModelAnimations", true, false) == null)
+	assert(not preview.preview_floor.visible, "no artificial floor cutting through faint")
 	var original_actor = preview.actor
 	overlay._set_pokemon_summary_sprite(pokemon)
 	assert(preview.actor == original_actor, "card refresh must not restart model loading")
-	for index in preview.clips.item_count:
-		preview.clips.select(index)
-		preview.play_selected()
-		assert(preview.player.current_animation == str(preview.clips.get_item_metadata(index)))
+	for index in menu.item_count:
+		overlay._on_preview_animation_selected(menu.get_item_id(index), button, animated, null)
+		assert(preview.player.current_animation == str(menu.get_item_metadata(index)))
 		preview.toggle_pause()
 		assert(not preview.player.is_playing())
 		preview.toggle_pause()
 		assert(preview.player.is_playing())
-		preview.play_selected()
+		preview.play_clip(preview.selected_clip)
 		assert(is_zero_approx(preview.player.current_animation_position))
-	preview.clips.select(0)
-	preview.play_selected()
+	preview.play_clip("damage")
+	preview.player.seek(0.1, true)
+	var damage_pose := _pose(preview.actor)
+	preview.play_clip("faint_loop")
+	preview.player.seek(0.3, true)
+	preview.play_clip("damage")
+	preview.player.seek(0.1, true)
+	assert(_pose(preview.actor) == damage_pose, "faint must not contaminate damage pose")
+	preview.play_clip("idle")
+	var zoom := stage.find_child("PreviewZoomButton", true, false) as Button
+	var distance: float = preview.camera.position.distance_to(preview.camera_target)
+	zoom.button_pressed = true
+	assert(is_equal_approx(preview.camera.position.distance_to(preview.camera_target), distance / 2))
+	zoom.button_pressed = false
 	stage.hide()
 	await process_frame
 	await process_frame
@@ -65,13 +82,21 @@ func _run() -> void:
 	preview.toggle_pause()
 	assert(second.player.is_playing(), "each card owns its playback state")
 	second.free()
-	preview.play_selected()
+	preview.play_clip("idle")
 	var capture := OS.get_environment("SUMMARY_CAPTURE")
 	if not capture.is_empty():
 		for frame in 8:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		assert(root.get_texture().get_image().save_png(capture) == OK)
+		for action in ["faint_loop", "damage"]:
+			preview.play_clip(action)
+			preview.player.seek(0.1, true)
+			preview.player.pause()
+			for frame in 3:
+				await process_frame
+			await RenderingServer.frame_post_draw
+			assert(root.get_texture().get_image().save_png(capture + "." + action + ".png") == OK)
 	pokemon.shiny = true
 	overlay._set_pokemon_summary_sprite(pokemon)
 	assert(not preview.visible and preview.actor == null)
@@ -82,5 +107,14 @@ func _run() -> void:
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_catalog
 	settings._manual_model_catalog_this_session = old_manual
-	print("SUMMARY_MODEL_PREVIEW_OK: clips, replay, pause, refresh, hidden, independent cards, fallback")
+	print("SUMMARY_MODEL_PREVIEW_OK: original menu, zoom, faint→damage baseline, replay, hidden, independent cards, fallback")
 	quit()
+
+func _pose(actor: Node3D) -> Array:
+	var result: Array = []
+	for node in actor.find_children("*", "Node3D", true, false):
+		result.append(node.transform)
+		if node is Skeleton3D:
+			for bone in node.get_bone_count():
+				result.append(node.get_bone_pose(bone))
+	return result
