@@ -85,3 +85,9 @@ GPU screenshots and logs are kept in the task slot's `.tmp/route-22-arena`.
 The existing Terrain3D interpolation deprecation and legacy scene UID warnings
 are unrelated to this arena. Full development certification and release-platform
 packaging are separate from this local feature review.
+
+## Terrain3D-free comparison prototype
+
+See [Route 22 mesh review](route-22-mesh-review.md) for the separate land/water
+prototype, reproducible A/B render checks and measured preparation/memory costs.
+Automatic battle routing still uses the arena described above during this review.

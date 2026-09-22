@@ -1,0 +1,200 @@
+{
+  "godot": "4.6.2",
+  "renderer": "Forward+ Vulkan",
+  "gpu": "RTX 3070 Laptop GPU",
+  "cache_state": "fresh processes; existing OS/driver/shader caches",
+  "measurements": [
+    {
+      "run": 1,
+      "assembly_elapsed_ms": 2796.489,
+      "backend": "terrain-land",
+      "build_pass_ms": [
+        1255.384,
+        1241.688
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1927.105,
+      "passes": 2,
+      "ready_ms": 4876.691,
+      "settled_render_bytes": 557444672.0,
+      "settled_render_delta_bytes": 557444672.0,
+      "terrain3d_loaded": true
+    },
+    {
+      "run": 1,
+      "assembly_elapsed_ms": 1087.163,
+      "backend": "mesh-land",
+      "build_pass_ms": [
+        365.02,
+        60.465
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 995.438,
+      "passes": 2,
+      "ready_ms": 2198.785,
+      "settled_render_bytes": 279015248.0,
+      "settled_render_delta_bytes": 279015248.0,
+      "terrain3d_loaded": false
+    },
+    {
+      "run": 1,
+      "assembly_elapsed_ms": 2660.514,
+      "backend": "terrain-water",
+      "build_pass_ms": [
+        1224.52,
+        1147.869
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1948.629,
+      "passes": 2,
+      "ready_ms": 4765.271,
+      "settled_render_bytes": 557444672.0,
+      "settled_render_delta_bytes": 557444672.0,
+      "terrain3d_loaded": true
+    },
+    {
+      "run": 1,
+      "assembly_elapsed_ms": 1033.913,
+      "backend": "mesh-water",
+      "build_pass_ms": [
+        362.105,
+        54.543
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 998.724,
+      "passes": 2,
+      "ready_ms": 2143.237,
+      "settled_render_bytes": 279015248.0,
+      "settled_render_delta_bytes": 279015248.0,
+      "terrain3d_loaded": false
+    },
+    {
+      "run": 2,
+      "assembly_elapsed_ms": 2867.821,
+      "backend": "terrain-land",
+      "build_pass_ms": [
+        1284.277,
+        1262.681
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1889.805,
+      "passes": 2,
+      "ready_ms": 4922.92,
+      "settled_render_bytes": 557444672.0,
+      "settled_render_delta_bytes": 557444672.0,
+      "terrain3d_loaded": true
+    },
+    {
+      "run": 2,
+      "assembly_elapsed_ms": 1056.622,
+      "backend": "mesh-land",
+      "build_pass_ms": [
+        367.809,
+        55.843
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1007.564,
+      "passes": 2,
+      "ready_ms": 2174.931,
+      "settled_render_bytes": 279015248.0,
+      "settled_render_delta_bytes": 279015248.0,
+      "terrain3d_loaded": false
+    },
+    {
+      "run": 2,
+      "assembly_elapsed_ms": 2706.72,
+      "backend": "terrain-water",
+      "build_pass_ms": [
+        1245.377,
+        1166.977
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1933.26,
+      "passes": 2,
+      "ready_ms": 4799.717,
+      "settled_render_bytes": 557444672.0,
+      "settled_render_delta_bytes": 557444672.0,
+      "terrain3d_loaded": true
+    },
+    {
+      "run": 2,
+      "assembly_elapsed_ms": 1025.182,
+      "backend": "mesh-water",
+      "build_pass_ms": [
+        358.464,
+        55.081
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 984.467,
+      "passes": 2,
+      "ready_ms": 2116.934,
+      "settled_render_bytes": 279015248.0,
+      "settled_render_delta_bytes": 279015248.0,
+      "terrain3d_loaded": false
+    },
+    {
+      "run": 3,
+      "assembly_elapsed_ms": 2691.015,
+      "backend": "terrain-land",
+      "build_pass_ms": [
+        1224.567,
+        1173.395
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1981.664,
+      "passes": 2,
+      "ready_ms": 4831.192,
+      "settled_render_bytes": 557444672.0,
+      "settled_render_delta_bytes": 557444672.0,
+      "terrain3d_loaded": true
+    },
+    {
+      "run": 3,
+      "assembly_elapsed_ms": 1007.972,
+      "backend": "mesh-land",
+      "build_pass_ms": [
+        352.11,
+        55.959
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 958.055,
+      "passes": 2,
+      "ready_ms": 2082.87,
+      "settled_render_bytes": 279015248.0,
+      "settled_render_delta_bytes": 279015248.0,
+      "terrain3d_loaded": false
+    },
+    {
+      "run": 3,
+      "assembly_elapsed_ms": 2692.887,
+      "backend": "terrain-water",
+      "build_pass_ms": [
+        1218.608,
+        1179.82
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 1903.536,
+      "passes": 2,
+      "ready_ms": 4737.799,
+      "settled_render_bytes": 557444672.0,
+      "settled_render_delta_bytes": 557444672.0,
+      "terrain3d_loaded": true
+    },
+    {
+      "run": 3,
+      "assembly_elapsed_ms": 1025.746,
+      "backend": "mesh-water",
+      "build_pass_ms": [
+        361.112,
+        56.004
+      ],
+      "dimensions": "1152x648",
+      "mount_and_baseline_resource_ms": 996.753,
+      "passes": 2,
+      "ready_ms": 2132.071,
+      "settled_render_bytes": 279015248.0,
+      "settled_render_delta_bytes": 279015248.0,
+      "terrain3d_loaded": false
+    }
+  ]
+}
