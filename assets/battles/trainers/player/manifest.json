@@ -179,6 +179,15 @@
             "Wishmaker_Shoes": {
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
               "scale": 1.0
+            },
+            "Aether_Blossom_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
+              "scale": 1.0
+            },
+            "Aether_Blossom_Shoes_Chroma": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
+              "scale": 1.0,
+              "tint": "shoes_color"
             }
           }
         },
@@ -194,6 +203,10 @@
               "scale": 1.0
             },
             "Wishmaker_Dress": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/dress.png",
+              "scale": 1.0
+            },
+            "Aether_Blossom_Dress": {
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/dress.png",
               "scale": 1.0
             }
@@ -217,6 +230,14 @@
             "Wishmaker_Hair": {
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
               "scale": 1.0
+            },
+            "Aether_Blossom_Hair": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
+              "scale": 1.0
+            },
+            "Aether_Blossom_Hair_Chroma": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -237,6 +258,15 @@
             "Wishmaker_Earrings": {
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
               "scale": 1.0
+            },
+            "Aether_Blossom_Earrings": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
+              "scale": 1.0
+            },
+            "Aether_Blossom_Earrings_Chroma": {
+              "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
+              "scale": 1.0,
+              "tint": "facegear_color"
             }
           }
         }

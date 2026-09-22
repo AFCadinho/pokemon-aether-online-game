@@ -33,7 +33,7 @@
 
 - Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
 
-- De vrouwelijke Wishmaker Outfit verschijnt nu correct op Trainer Cards en bij trainertekst in battles.
+- De vrouwelijke Aether Blossom/Wishmaker Outfit gebruikt nu ook bij trainertekst in battles de bijbehorende vier Wishmaker-spritelagen.
 
 - De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
 
