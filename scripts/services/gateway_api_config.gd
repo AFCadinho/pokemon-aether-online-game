@@ -33,7 +33,10 @@ func get_base_url() -> String:
 		cached_url = env_url.rstrip("/")
 		return cached_url
 	
-	if OS.has_feature("editor"):
+	# Running a project from Godot uses a debug build but does not necessarily
+	# expose the editor feature to the game process. Keep those local developer
+	# runs on the local gateway; exported release builds still use production.
+	if OS.has_feature("editor") or OS.is_debug_build():
 		cached_url = LOCAL_GATEWAY_URL
 		return cached_url
 	
