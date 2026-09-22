@@ -521,7 +521,7 @@ func _build_classic_ground() -> void:
 		_mesh(cylinder, _position(i) - Vector3(0, 0.05, 0), Color("879b8a"))
 
 func _position(index: int) -> Vector3:
-	var point := ArenaCatalog.spawn(index)
+	var point := ArenaCatalog.spawn(index) + ArenaCatalog.battle_origin(arena_id)
 	if is_instance_valid(arena_root):
 		point.y = float(arena_root.get_meta("surface_height",0.0))
 	return point
@@ -924,7 +924,8 @@ func _update_camera(delta: float) -> void:
 		# Hold framing during actions: existing 2D effects capture screen anchors.
 		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"] and lifecycle[0] in ["idle", "empty", "hidden"] and lifecycle[1] in ["idle", "empty", "hidden"]:
 			camera_phase += delta * 0.22
-		camera.position = ArenaCatalog.camera_home(arena_id).rotated(Vector3.UP, sin(camera_phase) * 0.10)
+		var origin := ArenaCatalog.battle_origin(arena_id)
+		camera.position = origin + (ArenaCatalog.camera_home(arena_id) - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	var target := ArenaCatalog.camera_target(arena_id)
 	var offset := camera.position - target
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)

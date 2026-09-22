@@ -1,6 +1,7 @@
 shader_type spatial;
 render_mode cull_disabled;
 // Same color palette and crossing ripples as the sea arena, with pond banks.
+uniform bool battle_shallows = false;
 uniform vec2 pond_center = vec2(11.0, -4.5);
 uniform vec2 pond_radii = vec2(4.8, 6.5);
 varying vec3 world_position;
@@ -19,6 +20,7 @@ void fragment() {
 	float foam = (1.0-smoothstep(0.004, 0.025, abs(bank_distance-edge))) * 0.22;
 	ALBEDO = mix(color, vec3(0.77, 0.88, 0.84), foam);
 	NORMAL_MAP = vec3(0.5+0.035*wave, 0.5+0.025*cross_wave, 1.0);
+	ALPHA = battle_shallows ? mix(0.65, 1.0, smoothstep(0.85, 1.13, bank_distance)) : 1.0;
 	ROUGHNESS = 0.32;
 	SPECULAR = 0.3;
 }

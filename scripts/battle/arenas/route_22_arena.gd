@@ -2,7 +2,10 @@ extends "res://scripts/battle/arenas/forest_arena.gd"
 ## Route 22 / Gary's meadow, authored from the actual (1488, 464) map location.
 ## Uses the SAME mounted forest terrain, foliage, bark, rock and flower assets.
 ## Only layout and in-memory terrain controls differ; no duplicated art pack.
-const POND_CENTER := Vector2(11.0, -4.5)
+const Framing = preload("res://scripts/battle/arenas/arena_framing.gd")
+const POND_CENTER := Vector2(Framing.ROUTE_22_POND_ORIGIN.x, Framing.ROUTE_22_POND_ORIGIN.z)
+const FIGHT_WATER_DEPTH := 0.025
+var water_battle := false
 const POND_RADII := Vector2(4.8, 6.5)
 const WATER_LEVEL := -0.22
 const Geometry = preload("res://scripts/battle/arenas/arena_geometry.gd")
@@ -13,7 +16,7 @@ var rock_materials := {}
 
 func build(camera: Camera3D, scene_path := "res://pokeaether_forest.tscn") -> Node3D:
 	route_scene = super.build(camera, scene_path)
-	route_scene.name = "Route22RivalMeadow"
+	route_scene.name = "Route22ShallowWater" if water_battle else "Route22RivalMeadow"
 	route_scene.set_meta("source_map", "kanto_route_22")
 	return route_scene
 
@@ -34,7 +37,8 @@ func _flatten(terrain) -> void:
 				continue
 			var north := 4.2 * smoothstep(18.0, 20.0, -float(z)) + 3.5 * smoothstep(28.0, 31.0, -float(z))
 			var edge := smoothstep(34.0, 54.0, maxf(absf(x), absf(z)))
-			var pond_depth := 1.2 * (1.0 - smoothstep(0.8, 1.15, _pond_distance(x, z)))
+			var depth := -WATER_LEVEL + FIGHT_WATER_DEPTH if water_battle else 1.2
+			var pond_depth := depth * (1.0 - smoothstep(1.0 if water_battle else 0.8, 1.15, _pond_distance(x, z)))
 			terrain.data.set_height(pos, lerpf(ground_height + north - pond_depth, original, edge))
 	terrain.data.update_maps()
 	_paint_route(terrain)
@@ -54,7 +58,14 @@ func _flatten(terrain) -> void:
 	_water(scenery)
 	for point in [Vector3.ZERO, Vector3(-2.8, 0, 1.5), Vector3(2.8, 0, -1.5)]:
 		assert(absf(terrain.data.get_height(point) - ground_height) < 0.001)
-	print("ROUTE_22_TERRAIN_OK")
+	if water_battle:
+		# Move the battle viewpoint/actors to the pond, keeping the actual terrain
+		# and landmarks in place. Contact stays just beneath the water surface.
+		ground_height += WATER_LEVEL - FIGHT_WATER_DEPTH
+		for index in 2:
+			var point := Framing.spawn(index) + Framing.ROUTE_22_POND_ORIGIN
+			assert(absf(terrain.data.get_height(point) - ground_height) < 0.001)
+	print("ROUTE_22_TERRAIN_OK water_battle=", water_battle)
 
 func _route_z(x: float) -> float:
 	return -11.0 + 1.2 * sin(x * 0.12)
@@ -70,7 +81,8 @@ func _paint_route(terrain) -> void:
 			var horizontal := absf(z - _route_z(x))
 			var staircase := absf(x - 5.0) if z < -11 else 100.0
 			var distance := minf(horizontal, staircase)
-			var blend := 1.0 - smoothstep(1.0, 2.0, distance)
+			var blend := maxf(1.0 - smoothstep(1.0, 2.0, distance),
+				1.0 - smoothstep(1.0, 1.16, _pond_distance(x, z)))
 			if blend <= 0.0 or not is_finite(terrain.data.get_height(pos)):
 				continue
 			terrain.data.set_control_base_id(pos, 0)
@@ -160,6 +172,9 @@ func _trees(parent: Node3D) -> void:
 					x -= 5.0 # reveal the paved League approach between the rows
 				if _pond_distance(x, z) < 1.35:
 					x += 7.0
+				# Keep the shore camera corridor open in both variants.
+				if x > 7.0 and x < 23.0 and z > -9.0:
+					x += 10.0
 				var size := rng.randf_range(0.28, 0.40)
 				var tree := _asset(trees, "trees/" + ["fir_tree_a", "spruce_tree_b", "fir_tree_c"][i % 3],
 					Vector3(x, _height(x, z), z), Vector3.ONE * size, rng.randf() * TAU)
@@ -228,6 +243,7 @@ func _water(parent: Node3D) -> void:
 	material.shader = preload("res://scripts/battle/arenas/route_22_water.gdshader")
 	material.set_shader_parameter("pond_center", POND_CENTER)
 	material.set_shader_parameter("pond_radii", POND_RADII)
+	material.set_shader_parameter("battle_shallows", water_battle)
 	var geo = Geometry.new(route_scene)
 	var surface: MeshInstance3D = geo._put(shore, plane, material,
 		Vector3(POND_CENTER.x, ground_height + WATER_LEVEL, POND_CENTER.y), Vector3.ONE)
