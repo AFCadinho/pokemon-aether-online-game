@@ -134,6 +134,14 @@ func show_command(message: String, display_seconds := TrainerCommandCallout.DISP
 	command_callout.call("show_command", message, facing_direction.x < 0.0, display_seconds)
 
 
+func has_trainer_art() -> bool:
+	return (
+		(player_battle_art != null and player_battle_art.visible)
+		or (npc_sprite != null and npc_sprite.visible)
+		or (catalog_sprite != null and catalog_sprite.visible)
+	)
+
+
 func _resolve_npc_animation(sprite_frames: SpriteFrames, facing_direction: Vector2) -> StringName:
 	var direction := _direction_name(facing_direction)
 	for animation_name: StringName in [
