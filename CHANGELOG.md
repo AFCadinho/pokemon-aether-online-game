@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Pokédex toont op desktop een lokaal, hash-gecontroleerd 3D-model wanneer de experimentele 3D-presentatie en een lokale modelcatalogus zijn gekozen. Sleep in het previewvak om het model te draaien; ontbrekende of shiny vormen houden hun bestaande sprite-preview.
+
 - Kaartmetadata wacht nu ook in lokale desktop-debugruns tot het eerste beeld klaar is. Daardoor laden NPC's, overworld-Pokémon en encounters niet meer in de zware eerste laadframe vast.
 
 - Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
