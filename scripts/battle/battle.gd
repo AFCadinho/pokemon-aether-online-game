@@ -11472,7 +11472,7 @@ func _show_trainer_command_text(
 		return false
 	var command_only_presentation := not has_meta("immersive_battle_ui")
 	if command_only_presentation:
-		trainer_sprite.visible = true
+		trainer_sprite.reveal_for_command()
 	if not trainer_sprite.visible:
 		return false
 	trainer_sprite.show_command(message, display_seconds)
@@ -11494,12 +11494,12 @@ func _hide_non_immersive_trainer_after_callout(
 	var token := int(trainer_callout_visibility_tokens.get(sprite_id, 0)) + 1
 	trainer_callout_visibility_tokens[sprite_id] = token
 	await get_tree().create_timer(
-		maxf(display_seconds, 0.0) + TrainerCommandCallout.FADE_OUT_SECONDS
+		maxf(display_seconds, 0.0)
 	).timeout
 	if trainer_callout_visibility_tokens.get(sprite_id, 0) != token:
 		return
 	if is_instance_valid(trainer_sprite):
-		trainer_sprite.visible = false
+		trainer_sprite.hide_after_command()
 
 
 func _present_initial_summon_command(player_id: String, pokemon_name: String) -> void:
