@@ -84,6 +84,17 @@ def selected_entries(entries, only):
     return [item for item in entries if item["species"] in selected]
 
 
+def requested_import_categories(args):
+    """Validate an internal action-scoped diagnostic import request."""
+    categories = tuple(getattr(args, 'categories', ()) or CATEGORIES)
+    unknown = set(categories) - set(CATEGORIES)
+    if unknown:
+        raise ValueError('Unknown requested import categories: ' + ', '.join(sorted(unknown)))
+    if len(categories) != len(set(categories)):
+        raise ValueError('Duplicate requested import categories')
+    return categories
+
+
 def probe_image_metrics(path):
     """Measure presentation symptoms without pretending to judge artwork."""
     with Image.open(path) as source:
@@ -249,7 +260,9 @@ def import_one(args):
         raise ValueError("Species not present in explicit review batch")
     from scvi_identity import validate_entry
     validate_entry(item)
-    if any(warning.startswith('motion_bank_hold:') for warning in item['warnings']):
+    requested_categories = requested_import_categories(args)
+    if any(warning.startswith('motion_bank_hold:' + category + ':')
+           for warning in item['warnings'] for category in requested_categories):
         raise ValueError('Incomplete or ambiguous idle motion bank; source review required')
     if args.variant != 'normal':
         raise ValueError('Shiny SCVI intake requires separate variant identity verification')
@@ -270,7 +283,8 @@ def import_one(args):
         if previous.get("importer_commit") != EXPECTED_IMPORTER or previous.get("variant") != args.variant:
             raise ValueError("Existing import identity differs")
         if {key: value["name"] if value else None for key, value in previous["actions"].items()} != {
-                key: Path(value).stem if value else None for key, value in item["motions"].items()}:
+                key: Path(item["motions"][key]).stem if item["motions"][key] else None
+                for key in requested_categories}:
             raise ValueError("Existing import action selection differs; archive it before reimport")
         previous_baseline = previous.get("facial_baseline", {})
         if previous_baseline.get("source") != item["facial_baseline"]:
@@ -285,10 +299,10 @@ def import_one(args):
     for path in sorted(Path(item["model_dir"]).iterdir()):
         if path.is_file() and path.name != "desktop.ini":
             source_files[str(path)] = digest(path)
-    for path in item["motions"].values():
+    for path in (item["motions"][key] for key in requested_categories):
         if path is not None:
             source_files[path] = digest(Path(path))
-    for path in item["motion_channels"].values():
+    for path in (item["motion_channels"][key] for key in requested_categories):
         if path is not None:
             source_files[path] = digest(Path(path))
     if item["facial_baseline"] is not None:
@@ -297,13 +311,15 @@ def import_one(args):
         if companion.is_file():
             source_files[str(companion)] = digest(companion)
     job = {"species": item["species"], "identity": item["identity"],
-           "model_dir": item["model_dir"], "motions": item["motions"],
-           "motion_channels": item["motion_channels"],
+           "model_dir": item["model_dir"],
+           "motions": {key: item["motions"][key] for key in requested_categories},
+           "motion_channels": {key: item["motion_channels"][key] for key in requested_categories},
            "facial_baseline": item["facial_baseline"],
            "facial_baseline_frame": item.get("facial_baseline_frame", 0),
-           "facial_baseline_categories": item.get(
+           "facial_baseline_categories": [category for category in item.get(
                "facial_baseline_categories",
-               ["idle", "physical_attack", "physical_attack_2", "special_attack", "damage"]),
+               ["idle", "physical_attack", "physical_attack_2", "special_attack", "damage"])
+               if category in requested_categories],
            "variant": args.variant, "output": str(blend), "report": str(report),
            "importer": str(args.importer), "python_deps": str(args.python_deps),
            "importer_commit": EXPECTED_IMPORTER,
