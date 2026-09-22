@@ -161,8 +161,8 @@ func _run() -> void:
 		"The Thieving service clears a completed arrest transfer"
 	)
 	_check(
-		"or ThievingService.is_arrest_transfer_pending()" in world
-		and "if not ThievingService.is_arrest_transfer_pending():" in world,
+		"ThievingService.is_arrest_transfer_pending()" in world
+		and "not ThievingService.is_arrest_transfer_pending()" in world,
 		"Position autosave pauses quietly while an arrest transfer is pending"
 	)
 
