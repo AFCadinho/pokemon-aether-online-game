@@ -323,10 +323,12 @@ func set_battle_3d_forest_manifest(path: String) -> void:
 func get_battle_3d_forest_manifest() -> String:
 	if not battle_3d_forest_manifest.is_empty():
 		return battle_3d_forest_manifest
-	# The trusted local forest runtime sits beside the explicitly selected local
-	# model catalog. This is a deterministic desktop install location, not a
-	# Downloads scan or a per-player picker; Automatic can therefore resolve
-	# grass -> forest in the actual desktop client as well as in the editor.
+	if not OS.has_feature("web") and not OS.has_feature("mobile"):
+		var installed := OS.get_environment("POKEAETHER_FOREST_MANIFEST")
+		if installed.is_absolute_path() and FileAccess.file_exists(installed):
+			return installed
+	# Developer installs made before the required launcher pack keep their
+	# deterministic forest runtime beside the explicitly selected local catalog.
 	if not OS.has_feature("web") and not OS.has_feature("mobile") and not battle_3d_catalog_path.is_empty():
 		var candidate := battle_3d_catalog_path.get_base_dir().get_base_dir().get_base_dir().path_join("forest-runtime/forest.json")
 		if FileAccess.file_exists(candidate):

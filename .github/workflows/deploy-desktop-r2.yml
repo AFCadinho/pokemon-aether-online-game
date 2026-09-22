@@ -78,6 +78,9 @@ env:
   MUSIC_ASSET_VERSION: music-3f2a6df18793
   MUSIC_ASSET_SIZE: 49402952
   MUSIC_ASSET_SHA256: 0b1a376bd7d93e31a72b8b6a49116415f8ec0c6316bf5e1a71f766857119e31a
+  FOREST_ASSET_VERSION: battle-environment-forest-4f960d69d4b8
+  FOREST_ASSET_SIZE: 71337990
+  FOREST_ASSET_SHA256: b997e73492fda256b6a0e64a0228c57bdd2284f482a50be377cacb6dfd856e8f
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
   R2_RELEASE_RETENTION_PREVIOUS: 1
@@ -411,6 +414,7 @@ jobs:
           register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SHA256}" "true"
           register_external_pack "pokemon-gen5-shiny-back" "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_BACK_ASSET_SHA256}" "true"
           register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}" "${MUSIC_ASSET_SHA256}"
+          register_external_pack "battle-environment-forest" "${FOREST_ASSET_VERSION}" "${FOREST_ASSET_SIZE}" "${FOREST_ASSET_SHA256}"
 
       - name: Package launcher release
         run: |
@@ -500,6 +504,7 @@ jobs:
               "pokemon-shiny-front",
               "pokemon-shiny-back",
               "music",
+              "battle-environment-forest",
           }
           required_gen5_ids = {
               "pokemon-gen5-front",

@@ -66,14 +66,17 @@ func _run() -> void:
 	var previous_env := OS.get_environment("POKEAETHER_MODEL_CATALOG")
 	OS.set_environment("POKEAETHER_MODEL_CATALOG", "previous-value")
 	launcher.model_path = catalog
+	launcher.install_dir = output.path_join("game-install")
 	assert(launcher._create_game_process("not-started") == 42)
 	assert(launcher.observed == catalog)
+	assert(launcher.observed_forest == output.path_join("game-install/forest-runtime/forest.json"))
 	assert(OS.get_environment("POKEAETHER_MODEL_CATALOG") == "previous-value")
 	OS.unset_environment("POKEAETHER_MODEL_CATALOG")
 	launcher.result = -1
 	launcher.model_path = ""
 	assert(launcher._create_game_process("not-started") == -1)
 	assert(launcher.observed.is_empty() and not OS.has_environment("POKEAETHER_MODEL_CATALOG"))
+	assert(not OS.has_environment("POKEAETHER_FOREST_MANIFEST"))
 	if had_env: OS.set_environment("POKEAETHER_MODEL_CATALOG", previous_env)
 	launcher.free()
 	var selection := FileAccess.get_file_as_string(store.root.path_join("selection.json"))

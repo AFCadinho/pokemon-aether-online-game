@@ -41,8 +41,7 @@ def main():
     descriptor = '[configuration]\nentry_symbol="terrain_3d_init"\ncompatibility_minimum=4.4\n[libraries]\n'
     descriptor += ''.join(f'linux.{mode}.x86_64={json.dumps(str(path))}\n' for mode, path in libraries.items())
     (output / 'terrain.gdextension').write_text(descriptor)
-    (output / 'forest.json').write_text(json.dumps({'schema': 1, 'pack': str(output / 'forest.pck'),
-                                                  'extension': str(output / 'terrain.gdextension')}, indent=2))
+    (output / 'forest.json').write_text(json.dumps({'schema': 1, 'pack': 'forest.pck'}, indent=2) + '\n')
     print(output / 'forest.json')
 
 
