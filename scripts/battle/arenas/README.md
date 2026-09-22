@@ -12,6 +12,7 @@ settings and environment resources.
 | Generic | Water / surf / fishing | `sea` | `generic/water_arena.gd` |
 | Generic | Stadium / PvP | `stadium` | `generic/stadium_arena.gd` |
 | Map-specific | Route 1, land | `route_1` | `maps/route_1/arena.gd` |
+| Map-specific | Route 1, water | `route_1_water` | `maps/route_1/arena.gd` with `water_battle` |
 | Map-specific | Route 22, land | `route_22` | `maps/route_22/arena.gd` |
 | Map-specific | Route 22, water | `route_22_water` | `maps/route_22/arena.gd` with `water_battle` |
 
