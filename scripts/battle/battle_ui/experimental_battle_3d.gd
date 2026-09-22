@@ -436,8 +436,23 @@ func _motion_profile(species: String) -> Dictionary:
 func _requested_arena() -> String:
 	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id)
 
+func _screened_arena_review() -> bool:
+	# Screened candidates are a local visual-QC cohort. They have exact source
+	# identity and hashes, but intentionally no production grounding/motion
+	# approval yet. Let a battle containing only these candidates use the chosen
+	# arena for review instead of silently replacing it with the classic stage.
+	# Mixed / official model battles keep the stricter calibration requirement.
+	if packed.is_empty():
+		return false
+	for identity in packed:
+		var entry: Dictionary = validated_entries.get(identity, catalog_entries.get(identity, {}))
+		if not entry.get("_screened_model", false):
+			return false
+	return true
+
 func _build_world() -> void:
-	if _requested_arena() == "forest" and ground_offsets.size() >= packed.size():
+	var screened_review := _screened_arena_review()
+	if _requested_arena() == "forest" and (ground_offsets.size() >= packed.size() or screened_review):
 		forest_pool = ForestPool.get_current()
 		if forest_pool != null:
 			forest_lease = forest_pool.acquire(self)
@@ -472,9 +487,11 @@ func _build_world() -> void:
 		if light is DirectionalLight3D:
 			light.shadow_blur = 2.0/3.0
 	arena_id = _requested_arena()
-	if arena_id != "classic" and ground_offsets.size() < packed.size():
+	if arena_id != "classic" and ground_offsets.size() < packed.size() and not screened_review:
 		arena_problem = "Arena ground calibration missing or outdated; regenerate the local catalog grounding file"
 		arena_id = "classic"
+	elif arena_id != "classic" and screened_review:
+		arena_problem = "Screened model review — placement is not arena-calibrated"
 	if arena_id == "forest":
 		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
 		if not arena_problem.is_empty():

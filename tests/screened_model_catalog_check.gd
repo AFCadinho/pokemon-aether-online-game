@@ -33,6 +33,7 @@ func _run() -> void:
 		await process_frame
 	assert(stage.packed.has("charizard") and stage.packed.has("azumarill"))
 	assert(stage.failed_models.is_empty())
+	assert(stage._screened_arena_review())
 	stage.free()
 	print("SCREENED_MODEL_CATALOG_OK entries=", raw.size(), " imported=charizard,azumarill normal_only=true no_grounding_or_motion_calibration")
 	quit()
