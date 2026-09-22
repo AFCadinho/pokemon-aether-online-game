@@ -35,6 +35,25 @@ suggestions (Cloyster: body/charge; Marill: tail) and kept 73 in the human
 review queue. This is evidence that skeletal metrics are useful for sorting but
 cannot safely replace visual semantics across varied anatomy.
 
+The subsequent contact-sheet review classified 69 alternate clips as visual
+candidates and retained 6 genuinely ambiguous clips for animated/human review:
+Delibird, Drowzee, Gardevoir, Jigglypuff, Psyduck, and Slaking. Candidate labels
+are stored in `physical_attack_semantic_decisions.json`; the evidence-bound
+export is `physical_attack_semantic_evidence.json`. Every evidence row records
+the exact SCVI action, prepared-source hash, and lossless-loop hash. Both files
+remain `runtime_approved: false`; neither is consumed by battle routing.
+
+| Visual family | Count |
+| --- | ---: |
+| body/charge | 32 |
+| tail | 13 |
+| wing | 7 |
+| punch | 6 |
+| unclear | 6 |
+| claw/slash | 5 |
+| bite | 3 |
+| generic | 3 |
+
 Alternate-clip navigation groups:
 
 | Group | Pokémon |
