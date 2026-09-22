@@ -2,9 +2,8 @@
 
 ## Unreleased
 
-<<<<<<< HEAD
 - Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
-=======
+
 - Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
 
 - Nieuwe gecontroleerde 3D-modelpakketten koppelen zichtbaarheid nu via bronmetadata aan de gekozen geslachtsvariant, zonder onderdelen van de andere variant verkeerd toe te wijzen. Bestaande pakketten blijven ongewijzigd.
@@ -16,8 +15,6 @@
 - Nieuwe 3D-modelpakketten ondersteunen nu meerdere gelijktijdige materiaalanimaties zonder de afspeelsnelheid te veranderen. Bestaande modelpakketten worden niet automatisch vervangen.
 
 - Nieuwe 3D-modelpakketten kunnen stilstaande animatieposes met hun oorspronkelijke duur behouden en complexere bewegende vuureffecten afspelen. Bestaande pakketten blijven ongewijzigd.
->>>>>>> development
-
 - Het inlogscherm toont een rustige cameratocht door alle uitgewerkte buitenkaartdecors: steden, routes, Viridian Forest en Aether Clash, met vloeiende overgangen die blijven herhalen.
 
 - Nieuwe gecontroleerde 3D-modelpakketten kunnen nu bewegende rook- en vuureffecten tonen met transparantie. Bestaande modelpakketten worden niet automatisch vervangen.
