@@ -1,0 +1,1019 @@
+{
+  "scope": "Blender skeletal source diagnosis only; no model export",
+  "entries": [
+    {
+      "species": "garchomp",
+      "idle": "pm0445_00_00_00001_battlewait01_loop",
+      "clips": [
+        {
+          "category": "idle",
+          "clip": "pm0445_00_00_00001_battlewait01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0,
+          "exit_delta_per_height": 0.00000946650575702544,
+          "movement_per_height": 0.3149909138751411
+        },
+        {
+          "category": "idle",
+          "clip": "pm0445_00_00_20000_defaultwait01_loop",
+          "selected": false,
+          "bank": 2,
+          "frame_range": [
+            0,
+            100
+          ],
+          "entry_delta_per_height": 1.2114209765953434,
+          "exit_delta_per_height": 1.211419166493099,
+          "movement_per_height": 0.056594618188254606
+        },
+        {
+          "category": "idle",
+          "clip": "pm0445_00_00_00000_defaultwait01_loop",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            150
+          ],
+          "entry_delta_per_height": 0.45865163941858855,
+          "exit_delta_per_height": 0.4586473550565181,
+          "movement_per_height": 0.17823491166325958
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0445_00_00_20400_attack01",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            130
+          ],
+          "entry_delta_per_height": 1.2114209765953434,
+          "exit_delta_per_height": 1.2114205327560998,
+          "movement_per_height": 1.4444540774836894
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0445_00_00_00400_attack01",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            130
+          ],
+          "entry_delta_per_height": 0.0000030612588744064123,
+          "exit_delta_per_height": 0.000004896983274760403,
+          "movement_per_height": 0.7915788605900961
+        },
+        {
+          "category": "special_attack",
+          "clip": "pm0445_00_00_00450_rangeattack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.000005314647327249114,
+          "exit_delta_per_height": 0.0000059922539419353,
+          "movement_per_height": 0.7421717484619532
+        },
+        {
+          "category": "damage",
+          "clip": "pm0445_00_00_20500_damage01",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 1.1921011126505834,
+          "exit_delta_per_height": 1.2114210627283193,
+          "movement_per_height": 0.38994938122714135
+        },
+        {
+          "category": "damage",
+          "clip": "pm0445_00_00_00500_damage01",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 0.2808845377762816,
+          "exit_delta_per_height": 0.000005238767182390495,
+          "movement_per_height": 0.4544374673452966
+        },
+        {
+          "category": "sleep",
+          "clip": "pm0445_00_00_00281_sleep01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 1.356747088871563,
+          "exit_delta_per_height": 1.3567458094829377,
+          "movement_per_height": 0.04166855271620715
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0445_00_00_20520_down01_start",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            80
+          ],
+          "entry_delta_per_height": 1.2114209765953434,
+          "exit_delta_per_height": 1.1977938732265598,
+          "movement_per_height": 0.4697970082577258
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0445_00_00_00520_down01_start",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            100
+          ],
+          "entry_delta_per_height": 0.00005454412850456715,
+          "exit_delta_per_height": 1.0814141116903688,
+          "movement_per_height": 0.814088760880875
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0445_00_00_20521_down01_loop",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 1.1977947884671252,
+          "exit_delta_per_height": 1.197791515607117,
+          "movement_per_height": 0.04374190176901251
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0445_00_00_00521_down01_loop",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 1.0814168266072142,
+          "exit_delta_per_height": 1.081415419114916,
+          "movement_per_height": 0.02469763838076126
+        }
+      ],
+      "advisory_candidate": {
+        "idle": "pm0445_00_00_00001_battlewait01_loop",
+        "physical_attack": "pm0445_00_00_00400_attack01",
+        "special_attack": "pm0445_00_00_00450_rangeattack01",
+        "damage": "pm0445_00_00_00500_damage01",
+        "sleep": "pm0445_00_00_00281_sleep01_loop",
+        "faint_start": "pm0445_00_00_00520_down01_start",
+        "faint_loop": "pm0445_00_00_00521_down01_loop"
+      },
+      "faint_joins": [
+        {
+          "bank": 2,
+          "max_vertex_delta_per_height": 0.000010400661636598474
+        },
+        {
+          "bank": 0,
+          "max_vertex_delta_per_height": 0.000027268113773426478
+        }
+      ]
+    },
+    {
+      "species": "azumarill",
+      "idle": "pm0184_00_00_00001_battlewait01_loop",
+      "clips": [
+        {
+          "category": "idle",
+          "clip": "pm0184_00_00_00001_battlewait01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0,
+          "exit_delta_per_height": 0.000027838927277377943,
+          "movement_per_height": 0.6475441838134923
+        },
+        {
+          "category": "idle",
+          "clip": "pm0184_00_00_00000_defaultwait01_loop",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            128
+          ],
+          "entry_delta_per_height": 0.24923060485785292,
+          "exit_delta_per_height": 0.24923070315832357,
+          "movement_per_height": 0.4084379909529618
+        },
+        {
+          "category": "idle",
+          "clip": "pm0184_00_00_10000_defaultwait01_loop",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.5167185833231339,
+          "exit_delta_per_height": 0.5167175867744114,
+          "movement_per_height": 0.2336728900251995
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0184_00_00_00400_attack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            130
+          ],
+          "entry_delta_per_height": 0.000009737606948731744,
+          "exit_delta_per_height": 0.00000957086641576825,
+          "movement_per_height": 1.5856226028251772
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0184_00_00_10400_attack01",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            110
+          ],
+          "entry_delta_per_height": 0.5167185833231339,
+          "exit_delta_per_height": 0.51671965573155,
+          "movement_per_height": 1.337839807195419
+        },
+        {
+          "category": "special_attack",
+          "clip": "pm0184_00_00_00450_rangeattack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            138
+          ],
+          "entry_delta_per_height": 0.000009737606948731744,
+          "exit_delta_per_height": 0.000016733992353214153,
+          "movement_per_height": 1.0320429144237957
+        },
+        {
+          "category": "damage",
+          "clip": "pm0184_00_00_00500_damage01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 0.13891647924860595,
+          "exit_delta_per_height": 0.000009958077599536247,
+          "movement_per_height": 1.0122011306239553
+        },
+        {
+          "category": "damage",
+          "clip": "pm0184_00_00_10500_damage01",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 0.49340642143433255,
+          "exit_delta_per_height": 0.5167190178039823,
+          "movement_per_height": 1.0758631688001894
+        },
+        {
+          "category": "sleep",
+          "clip": "pm0184_00_00_00281_sleep01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            290
+          ],
+          "entry_delta_per_height": 1.574725824202288,
+          "exit_delta_per_height": 1.5747274716458832,
+          "movement_per_height": 0.09257642648709452
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0184_00_00_00520_down01_start",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            108
+          ],
+          "entry_delta_per_height": 0.000009737606948731744,
+          "exit_delta_per_height": 0.476157228116794,
+          "movement_per_height": 0.8515850352153526
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0184_00_00_10520_down01_start",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            80
+          ],
+          "entry_delta_per_height": 0.5167185833231339,
+          "exit_delta_per_height": 0.6246493886667948,
+          "movement_per_height": 0.6214043767715927
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0184_00_00_00521_down01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            80
+          ],
+          "entry_delta_per_height": 0.4761552614569902,
+          "exit_delta_per_height": 0.47616165967856416,
+          "movement_per_height": 0.1835315437325461
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0184_00_00_10521_down01_loop",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            90
+          ],
+          "entry_delta_per_height": 0.6246472379158103,
+          "exit_delta_per_height": 0.6246532480196895,
+          "movement_per_height": 0.14594273163845653
+        }
+      ],
+      "advisory_candidate": {
+        "idle": "pm0184_00_00_00001_battlewait01_loop",
+        "physical_attack": "pm0184_00_00_00400_attack01",
+        "special_attack": "pm0184_00_00_00450_rangeattack01",
+        "damage": "pm0184_00_00_00500_damage01",
+        "sleep": "pm0184_00_00_00281_sleep01_loop",
+        "faint_start": "pm0184_00_00_00520_down01_start",
+        "faint_loop": "pm0184_00_00_00521_down01_loop"
+      },
+      "faint_joins": [
+        {
+          "bank": 0,
+          "max_vertex_delta_per_height": 0.000009770627407512936
+        },
+        {
+          "bank": 1,
+          "max_vertex_delta_per_height": 0.000009164998763620098
+        }
+      ]
+    },
+    {
+      "species": "flareon",
+      "idle": "pm0136_00_00_00001_battlewait01_loop",
+      "clips": [
+        {
+          "category": "idle",
+          "clip": "pm0136_00_00_00001_battlewait01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            60
+          ],
+          "entry_delta_per_height": 0,
+          "exit_delta_per_height": 0.000005710002401046422,
+          "movement_per_height": 0.10036950839278905
+        },
+        {
+          "category": "idle",
+          "clip": "pm0136_00_00_00000_defaultwait01_loop",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            100
+          ],
+          "entry_delta_per_height": 0.09319687793051795,
+          "exit_delta_per_height": 0.09319246923040117,
+          "movement_per_height": 0.04454336701472881
+        },
+        {
+          "category": "idle",
+          "clip": "pm0136_00_00_10000_defaultwait01_loop",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            112
+          ],
+          "entry_delta_per_height": 0.5104874454656446,
+          "exit_delta_per_height": 0.510496475232708,
+          "movement_per_height": 0.30093734315135606
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0136_00_00_00400_attack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            110
+          ],
+          "entry_delta_per_height": 0.000026348832721945214,
+          "exit_delta_per_height": 0.00002811778723571812,
+          "movement_per_height": 1.0323527759565188
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0136_00_00_10400_attack01",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            110
+          ],
+          "entry_delta_per_height": 0.5104874454656446,
+          "exit_delta_per_height": 0.5104906897181682,
+          "movement_per_height": 1.5521125150335662
+        },
+        {
+          "category": "special_attack",
+          "clip": "pm0136_00_00_00450_rangeattack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            138
+          ],
+          "entry_delta_per_height": 0.000007149071741567924,
+          "exit_delta_per_height": 0.000008857260223656915,
+          "movement_per_height": 0.5318099104895179
+        },
+        {
+          "category": "damage",
+          "clip": "pm0136_00_00_00500_damage01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            50
+          ],
+          "entry_delta_per_height": 0.20126886216842216,
+          "exit_delta_per_height": 0.000007359735034516361,
+          "movement_per_height": 0.12802649728951074
+        },
+        {
+          "category": "damage",
+          "clip": "pm0136_00_00_10500_damage01",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            50
+          ],
+          "entry_delta_per_height": 0.6452577471177788,
+          "exit_delta_per_height": 0.5104901786822496,
+          "movement_per_height": 0.3304767119836398
+        },
+        {
+          "category": "sleep",
+          "clip": "pm0136_00_00_00281_sleep01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            200
+          ],
+          "entry_delta_per_height": 0.9692538447971297,
+          "exit_delta_per_height": 0.9692551932196228,
+          "movement_per_height": 0.3438713408457122
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0136_00_00_00520_down01_start",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            124
+          ],
+          "entry_delta_per_height": 0.000026348832721945214,
+          "exit_delta_per_height": 1.1348474678386258,
+          "movement_per_height": 0.6159722772592666
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0136_00_00_10520_down01_start",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            80
+          ],
+          "entry_delta_per_height": 0.5104874454656446,
+          "exit_delta_per_height": 0.896041039068523,
+          "movement_per_height": 0.3910997309617892
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0136_00_00_00521_down01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            100
+          ],
+          "entry_delta_per_height": 1.1348438616078182,
+          "exit_delta_per_height": 1.1348479796898119,
+          "movement_per_height": 0.053125971014060705
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0136_00_00_10521_down01_loop",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.8960379352429785,
+          "exit_delta_per_height": 0.8960402729353689,
+          "movement_per_height": 0.05223483894931646
+        }
+      ],
+      "advisory_candidate": {
+        "idle": "pm0136_00_00_00001_battlewait01_loop",
+        "physical_attack": "pm0136_00_00_00400_attack01",
+        "special_attack": "pm0136_00_00_00450_rangeattack01",
+        "damage": "pm0136_00_00_00500_damage01",
+        "sleep": "pm0136_00_00_00281_sleep01_loop",
+        "faint_start": "pm0136_00_00_00520_down01_start",
+        "faint_loop": "pm0136_00_00_00521_down01_loop"
+      },
+      "faint_joins": [
+        {
+          "bank": 0,
+          "max_vertex_delta_per_height": 0.000007898080910318143
+        },
+        {
+          "bank": 1,
+          "max_vertex_delta_per_height": 0.000006778305278414192
+        }
+      ]
+    },
+    {
+      "species": "gardevoir",
+      "idle": "pm0282_00_00_00001_battlewait01_loop",
+      "clips": [
+        {
+          "category": "idle",
+          "clip": "pm0282_00_00_00001_battlewait01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            124
+          ],
+          "entry_delta_per_height": 0,
+          "exit_delta_per_height": 0.00001873192235902969,
+          "movement_per_height": 0.22882979560333097
+        },
+        {
+          "category": "idle",
+          "clip": "pm0282_00_00_00000_defaultwait01_loop",
+          "selected": false,
+          "bank": 0,
+          "frame_range": [
+            0,
+            124
+          ],
+          "entry_delta_per_height": 0.18061890381182627,
+          "exit_delta_per_height": 0.1806185119483247,
+          "movement_per_height": 0.33734790541278015
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0282_00_00_00400_attack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            130
+          ],
+          "entry_delta_per_height": 0.000005827807969432616,
+          "exit_delta_per_height": 0.000020688943866639617,
+          "movement_per_height": 1.0187973982683303
+        },
+        {
+          "category": "special_attack",
+          "clip": "pm0282_00_00_00450_rangeattack01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            162
+          ],
+          "entry_delta_per_height": 0.000005827807969432616,
+          "exit_delta_per_height": 0.000024163382487627192,
+          "movement_per_height": 0.5904510522597062
+        },
+        {
+          "category": "damage",
+          "clip": "pm0282_00_00_00500_damage01",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 0.2752913502339027,
+          "exit_delta_per_height": 0.000005928859034535104,
+          "movement_per_height": 0.4735145282040216
+        },
+        {
+          "category": "sleep",
+          "clip": "pm0282_00_00_00281_sleep01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.5967000617410604,
+          "exit_delta_per_height": 0.5966999935426653,
+          "movement_per_height": 0.05243251176924777
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0282_00_00_00520_down01_start",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            84
+          ],
+          "entry_delta_per_height": 0.000005827807969432616,
+          "exit_delta_per_height": 0.5893245679429577,
+          "movement_per_height": 0.49845705084855396
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0282_00_00_00521_down01_loop",
+          "selected": true,
+          "bank": 0,
+          "frame_range": [
+            0,
+            80
+          ],
+          "entry_delta_per_height": 0.5893248687485027,
+          "exit_delta_per_height": 0.5893250441836322,
+          "movement_per_height": 0.04110640822851795
+        }
+      ],
+      "advisory_candidate": {
+        "idle": "pm0282_00_00_00001_battlewait01_loop",
+        "physical_attack": "pm0282_00_00_00400_attack01",
+        "special_attack": "pm0282_00_00_00450_rangeattack01",
+        "damage": "pm0282_00_00_00500_damage01",
+        "sleep": "pm0282_00_00_00281_sleep01_loop",
+        "faint_start": "pm0282_00_00_00520_down01_start",
+        "faint_loop": "pm0282_00_00_00521_down01_loop"
+      },
+      "faint_joins": [
+        {
+          "bank": 0,
+          "max_vertex_delta_per_height": 0.000009949103379717363
+        }
+      ]
+    },
+    {
+      "species": "forretress",
+      "idle": "pm0205_00_00_20000_defaultwait01_loop",
+      "clips": [
+        {
+          "category": "idle",
+          "clip": "pm0205_00_00_20000_defaultwait01_loop",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0,
+          "exit_delta_per_height": 0.000011622538490261018,
+          "movement_per_height": 0.08444257365692115
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0205_00_00_20400_attack01",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            110
+          ],
+          "entry_delta_per_height": 0.000027279034912212282,
+          "exit_delta_per_height": 0.000023398666609696437,
+          "movement_per_height": 0.2624250955164168
+        },
+        {
+          "category": "special_attack",
+          "clip": "pm0205_00_00_20450_rangeattack01",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 1.0022822907399798e-7,
+          "exit_delta_per_height": 0.000008638727114299405,
+          "movement_per_height": 0.7885409411651785
+        },
+        {
+          "category": "damage",
+          "clip": "pm0205_00_00_20500_damage01",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 0.3840131227489334,
+          "exit_delta_per_height": 0.000026460575771292698,
+          "movement_per_height": 0.6294923057240552
+        },
+        {
+          "category": "sleep",
+          "clip": "pm0205_00_00_20281_sleep01_loop",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.3611066346977326,
+          "exit_delta_per_height": 0.36109983516174227,
+          "movement_per_height": 0.07395281987288005
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0205_00_00_20520_down01_start",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            100
+          ],
+          "entry_delta_per_height": 1.0022822907399798e-7,
+          "exit_delta_per_height": 0.44551351598055067,
+          "movement_per_height": 0.1481583515359759
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0205_00_00_20521_down01_loop",
+          "selected": true,
+          "bank": 2,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.4455129737867667,
+          "exit_delta_per_height": 0.4455165682500146,
+          "movement_per_height": 0.02482430121359845
+        }
+      ],
+      "advisory_candidate": {
+        "idle": "pm0205_00_00_20000_defaultwait01_loop",
+        "physical_attack": "pm0205_00_00_20400_attack01",
+        "special_attack": "pm0205_00_00_20450_rangeattack01",
+        "damage": "pm0205_00_00_20500_damage01",
+        "sleep": "pm0205_00_00_20281_sleep01_loop",
+        "faint_start": "pm0205_00_00_20520_down01_start",
+        "faint_loop": "pm0205_00_00_20521_down01_loop"
+      },
+      "faint_joins": [
+        {
+          "bank": 2,
+          "max_vertex_delta_per_height": 0.000009709860258883153
+        }
+      ]
+    },
+    {
+      "species": "gyarados",
+      "idle": "pm0130_00_00_10001_battlewait01_loop",
+      "clips": [
+        {
+          "category": "idle",
+          "clip": "pm0130_00_00_10001_battlewait01_loop",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0,
+          "exit_delta_per_height": 0.000011805136780885256,
+          "movement_per_height": 0.8546386657844143
+        },
+        {
+          "category": "idle",
+          "clip": "pm0130_00_00_10000_defaultwait01_loop",
+          "selected": false,
+          "bank": 1,
+          "frame_range": [
+            0,
+            180
+          ],
+          "entry_delta_per_height": 0.3469855746690854,
+          "exit_delta_per_height": 0.34696113440994863,
+          "movement_per_height": 0.6560423361672364
+        },
+        {
+          "category": "physical_attack",
+          "clip": "pm0130_00_00_10400_attack01",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            130
+          ],
+          "entry_delta_per_height": 0.000011750248890331399,
+          "exit_delta_per_height": 0.000013837310944440712,
+          "movement_per_height": 0.9443587612842799
+        },
+        {
+          "category": "special_attack",
+          "clip": "pm0130_00_00_10450_rangeattack01",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.000011750248890331399,
+          "exit_delta_per_height": 0.00001245526648373343,
+          "movement_per_height": 0.5511813738132728
+        },
+        {
+          "category": "damage",
+          "clip": "pm0130_00_00_10500_damage01",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            40
+          ],
+          "entry_delta_per_height": 0.43781468914614335,
+          "exit_delta_per_height": 0.000011691785412070449,
+          "movement_per_height": 1.2358038037024122
+        },
+        {
+          "category": "sleep",
+          "clip": "pm0130_00_00_10281_sleep01_loop",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 1.8567733344877058,
+          "exit_delta_per_height": 1.856775798935542,
+          "movement_per_height": 0.12732606150072165
+        },
+        {
+          "category": "faint_start",
+          "clip": "pm0130_00_00_10520_down01_start",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            128
+          ],
+          "entry_delta_per_height": 0.000011750248890331399,
+          "exit_delta_per_height": 0.7287348419513019,
+          "movement_per_height": 0.7831764303746043
+        },
+        {
+          "category": "faint_loop",
+          "clip": "pm0130_00_00_10521_down01_loop",
+          "selected": true,
+          "bank": 1,
+          "frame_range": [
+            0,
+            120
+          ],
+          "entry_delta_per_height": 0.7287359129214495,
+          "exit_delta_per_height": 0.7287351111031581,
+          "movement_per_height": 0.08848268345404214
+        }
+      ],
+      "advisory_candidate": {
+        "idle": "pm0130_00_00_10001_battlewait01_loop",
+        "physical_attack": "pm0130_00_00_10400_attack01",
+        "special_attack": "pm0130_00_00_10450_rangeattack01",
+        "damage": "pm0130_00_00_10500_damage01",
+        "sleep": "pm0130_00_00_10281_sleep01_loop",
+        "faint_start": "pm0130_00_00_10520_down01_start",
+        "faint_loop": "pm0130_00_00_10521_down01_loop"
+      },
+      "faint_joins": [
+        {
+          "bank": 1,
+          "max_vertex_delta_per_height": 0.000012208693455130206
+        }
+      ]
+    }
+  ],
+  "source_sha256": {
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-source-review-02/sources/garchomp/normal/pm0445_00_00-ready.blend": "ba76f85590133257724ff1ac01aa5d5c6554697b175d237eabaa99476cc1309c",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00001_battlewait01_loop.tranm": "7ffcd0ea39e921c784b782cc20bc3768d0b0c4f692d7f65be97429c48085aa47",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_20000_defaultwait01_loop.tranm": "a5fe73ecaadce22a01a96e273fc81ae98a78508c5ae550904a44516c85f38453",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00000_defaultwait01_loop.tranm": "3eb0cbb682157a8bbced82173a9c2f343a74396c32cf690d532a77d5c62cd30f",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_20400_attack01.tranm": "1c6782a4c9490b8d8f5be34f8ba31d655e85ce99205d74304f6226fdfba33bae",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00400_attack01.tranm": "9316e25672ab52ea3cbda9e0950e7b6a992c7a342b03e468e5d7a35acb82e815",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00450_rangeattack01.tranm": "496213907108213fc7044d6322a9a2f961881c33d0aa57f707f4f26fa2c6e4ac",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_20500_damage01.tranm": "ded517d3f3ab683e07d6399f59df33785b694e22b7d3ba4823e5daaee86b30ae",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00500_damage01.tranm": "4dc66ff98ea29b15a8f200d9c319d32c929b940041c07d2ce6669b9bb4cf68dd",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00281_sleep01_loop.tranm": "e847ad54973a0a3519ab18f225882bc729621ae37c5f3d3acd07878ef8645679",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_20520_down01_start.tranm": "5dc36583109e52d6dea5dc3a0da1092ef0114fbc27506fc196cdb292f56bd0cf",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00520_down01_start.tranm": "711fa93c233e66012b0743b3ec7d2268488a2dc4243629a575d0887b3b0f0411",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_20521_down01_loop.tranm": "c0fbb8c9f7f290949d350213c72c3842151c6c76f5f5bcdf4bbe152430599c9a",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0445/pm0445_00_00/pm0445_00_00_00521_down01_loop.tranm": "47e12b69c4d8f7e83b08834320ae1e0da9bcf515f24510f2952eed39629933f8",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-source-review-02/sources/azumarill/normal/pm0184_00_00-ready.blend": "e5796f34240b4feb90cf5e11c3b1bcca6fd35543f127a3ed782ccf1763fc5914",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00001_battlewait01_loop.tranm": "f2060030e1ebe778a458b84e43b78bab04bb58b8aa1849732e1199c1b152aa2b",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00000_defaultwait01_loop.tranm": "423411f576c002af7be73a73543007902967d0678304588ebcb02cf201388854",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_10000_defaultwait01_loop.tranm": "10966ed869f672d43cd443708052a48b2404f26eee12f23dc8c6ba339d7f96cc",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00400_attack01.tranm": "a7b010ed2a96df3b12837ac6962c064989c4d988b829d37ae321df92879437cc",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_10400_attack01.tranm": "67793afc5c106c3a468f54257b831f625e72ec545ef2a29a3a6b6428c740ebfb",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00450_rangeattack01.tranm": "ef205afc98dd1f3b131686e90ebf08f9094357287a02a3631133eff9fb413348",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00500_damage01.tranm": "5655295163c66799cbc64be3f130a27d7320fd43c77950c172c2cce0dd3716b1",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_10500_damage01.tranm": "4df65d5ecb384895a0f921c1c89c11473f25638bcb51d2337d6ca6ae113bd730",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00281_sleep01_loop.tranm": "9fc8d09f2f27a821ecabe650c645e67c1ac8279accb7e28c4249ddb283cbad39",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00520_down01_start.tranm": "65a5d378320034436db90b447f25bd67594397784de18aa33ad9bf3ba60b35ce",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_10520_down01_start.tranm": "d256c01f36676a3f153914f6f8c6562647ffbfbb8c93c8ae454045195bda4adf",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_00521_down01_loop.tranm": "aedba3f5731e953cbecfedae8bb6891be58f57a19dd1b5e9be6755763864083e",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0184/pm0184_00_00/pm0184_00_00_10521_down01_loop.tranm": "bb3a26f07c4525ef6c3515f1f04f9dd0285fa8e94ce2c9cc059f6960e1b81876",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-source-review-02/sources/flareon/normal/pm0136_00_00-ready.blend": "fa5b82a2d694d48f92a940f26c869c51e516327b0a179b9966eed2c78b36b7a6",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00001_battlewait01_loop.tranm": "451af85cda2e26bb9773013701f38ea5dd44c83495535f086e9be4f312b9a745",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00000_defaultwait01_loop.tranm": "9061625d7d736e747ab14d58e382490ac361370122b1da8b7b51b36873d1bc1b",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_10000_defaultwait01_loop.tranm": "195bd424d3902817d9a8926acbf34b3b43a6d74a215259bbc7ebfc38b793a52d",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00400_attack01.tranm": "43d9cbb4ef9c1e1839905beaa350f4d211f5a742c39ada4668a83db14408f2fb",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_10400_attack01.tranm": "e07a7917456e3ac319a4582791c89696fc839838e7383be882d6c06b6ac182fd",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00450_rangeattack01.tranm": "5a841685882d842314cd5af44c6d1eb21a3e504a236a16b873c728745954d1db",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00500_damage01.tranm": "038894f79049d9b12b7c8b3ddb624ba429dcb2a2c2f0f5af32d5cd6078b8c279",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_10500_damage01.tranm": "0e3506f508bfa25702080cf4ccbda8dc3c031d848d3e6e7f6aa6ce4924c541c5",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00281_sleep01_loop.tranm": "36c151b76ca779a1b63c776c3b437823c78e045b48a3b14538b740f92213c151",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00520_down01_start.tranm": "00af06f1363c1358b120b3b78eb363145a8d2b7e2bd11069b4e0077397322195",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_10520_down01_start.tranm": "9b3e1bf5bcc8e60358b20a734c2577fb36c61bbedbe29af3b37a7af32652b928",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_00521_down01_loop.tranm": "9151b8797893c3aba292aa591b660504a7150b34a2ab99a78a112a9f7fbfbe02",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0136/pm0136_00_00/pm0136_00_00_10521_down01_loop.tranm": "79e9aa00d2cfef3ee583913ba35b07a70aba95221d73fc7b450bf4963119d41e",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-source-review-02/sources/gardevoir/normal/pm0282_00_00-ready.blend": "5d2f4185800dbd4b26c729726d0e51229fe03f2d90161d99f0b1f97c2383831f",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00001_battlewait01_loop.tranm": "85cfe31ea7829298a631c3ed73a254014c1bfc19a571923b7e952356755c8ac2",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00000_defaultwait01_loop.tranm": "c971c2d016e0e4c8893a87a2cd617c12bae64f6275f61613ab6e5fac5063caae",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00400_attack01.tranm": "e6bf21499430d6493eb1d099611d0b10d3cd2719fd1272b40da431f993f60cd4",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00450_rangeattack01.tranm": "7a76a5b71e63348929bfddcd89be896eee3753f9b4610bdd3e561d0dac354a43",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00500_damage01.tranm": "0387d1466c7ad9727be059f450871e707e8281c53499b69ab23814465790d209",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00281_sleep01_loop.tranm": "6ddc7be194dc82eb402f20734a7262d51b1425f2d868fb4432ab765b588570b8",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00520_down01_start.tranm": "0412a8edc1700deed84e8b027f671bafe60261b389dd38b3e4a4831ea8386db7",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0282/pm0282_00_00/pm0282_00_00_00521_down01_loop.tranm": "e1a317b7fb0dd7e34a698ba0f85ff6555128bac85dd388ecb1e3b9694b80db9a",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-source-review-02/sources/forretress/normal/pm0205_00_00-ready.blend": "94ba9a8771147ddbff33010cfd4581eb1bfe61c4bdd3f3c2ea34cc84b534f284",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20000_defaultwait01_loop.tranm": "ff766980d92ee8fa56b5e1be06869f3188dc9909fefa04deaca4f50060d65042",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20400_attack01.tranm": "9d2692f6efeb516050d759280d61428eb910c9a1d10ff79a8d3e340e9bc06079",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20450_rangeattack01.tranm": "f736846639cbc1e66ec88db5e7bd4123cd86cea006412bfde84feb254109594f",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20500_damage01.tranm": "06c39f0db8dce5dfcc1af4939878f2c80ce4570be34f411524a349f8c9544c33",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20281_sleep01_loop.tranm": "4a46e08a5a8bd604e2d276f620c43fafaf7f159d2adb93b3087d73c29511bdbd",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20520_down01_start.tranm": "4e453b95b2001aa30ccfeb6f31e4e73dba24f8a765632431c812e3c99e79d2df",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0205/pm0205_00_00/pm0205_00_00_20521_down01_loop.tranm": "04d5abf9fe9e9dc55c81d24133083a0d2e30b298544c27b09e0cab89b2f494cd",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-source-review-02/sources/gyarados/normal/pm0130_00_00-ready.blend": "aad878ed46c683a00dbe044c352a4d8dbfde10851196a37d657276388ff7aa67",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10001_battlewait01_loop.tranm": "e92a34f666206f7ef230a55c5783aab53d93500757ab0d55937959f4213da210",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10000_defaultwait01_loop.tranm": "97d2a2c5bc4c0156df767bb504d7290f42926cb8891297c3198837bea8066789",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10400_attack01.tranm": "c901d1465361446663f0da124f69adcb4ae7f54bc8615ac0c9ef89c513bb5128",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10450_rangeattack01.tranm": "7a94efd6be31d3322c266929349903aa7c6cdcd66028683772215ae9d4f23f7b",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10500_damage01.tranm": "54b0d9baa568610a635f5f48adb7f7345ba5134993f707cdc98789bc5c8ad8d7",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10281_sleep01_loop.tranm": "870955c1639bd9e1699c96c1ed6a6a09651df08069174c296cca869f244a69f7",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10520_down01_start.tranm": "3e421549ee90934e77343603b55ed2daf1135bbc0286b042002e3a4a3f3e31c6",
+    "/home/adinho/Documents/3d_models/SV Every File/romfs/pokemon/data/pm0130/pm0130_00_00/pm0130_00_00_10521_down01_loop.tranm": "b952399765de8029014a9a41b4f862f3612ce104fa0fbd2fc0c5a922ae3a2900"
+  }
+}
