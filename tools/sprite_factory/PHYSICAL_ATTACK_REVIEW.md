@@ -51,11 +51,16 @@ body/charge, Psyduck body/charge, and Slaking punch. Slaking's primary clip has
 an additional reviewer note that it reads more like a grab. This closes the
 semantic queue for this 75-Pokémon cohort without activating runtime routing.
 
+Cloyster, Marill, and Zapdos were initially exported without their confirmation
+checkboxes, then explicitly confirmed in reviewer follow-up. Their evidence
+rows record `confirmation_source: explicit_user_followup`. Zapdos was confirmed
+as body/charge for both clips, superseding the earlier static wing suggestion.
+
 | Visual family | Count |
 | --- | ---: |
-| body/charge | 36 |
+| body/charge | 37 |
 | tail | 13 |
-| wing | 7 |
+| wing | 6 |
 | punch | 7 |
 | kick | 1 |
 | claw/slash | 5 |

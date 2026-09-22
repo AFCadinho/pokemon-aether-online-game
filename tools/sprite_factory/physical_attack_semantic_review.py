@@ -75,8 +75,12 @@ def compile_review(decisions_path: Path, catalog_path: Path) -> dict:
 
 
 def compile_human_review(export_path: Path, catalog_path: Path,
-                         species: set[str]) -> dict:
+                         species: set[str],
+                         explicit_confirmations: set[str] | None = None) -> dict:
     """Validate confirmed browser choices and bind both clips to exact evidence."""
+    explicit_confirmations = explicit_confirmations or set()
+    if not explicit_confirmations <= species:
+        raise ValueError("Explicit confirmations must be part of the selected species")
     exported = json.loads(export_path.read_text())
     catalog = json.loads(catalog_path.read_text())
     if exported.get("runtime_approved") is not False:
@@ -94,7 +98,8 @@ def compile_human_review(export_path: Path, catalog_path: Path,
     compiled = {}
     for name in sorted(species):
         exported_entry = exported_entries[name]
-        if exported_entry.get("status") != "confirmed":
+        explicitly_confirmed = name in explicit_confirmations
+        if exported_entry.get("status") != "confirmed" and not explicitly_confirmed:
             raise ValueError(f"Human review is not confirmed for {name}")
         catalog_entry = catalog_entries[name]
         report_path = root / catalog_entry["report"]
@@ -103,7 +108,7 @@ def compile_human_review(export_path: Path, catalog_path: Path,
         for action in ("physical_attack", "physical_attack_2"):
             choice = exported_entry.get("clips", {}).get(action, {})
             family = choice.get("family")
-            if family not in FAMILIES or not choice.get("confirmed"):
+            if family not in FAMILIES or (not choice.get("confirmed") and not explicitly_confirmed):
                 raise ValueError(f"Invalid or unconfirmed {action} choice for {name}")
             loop_path = report_path.parent / catalog_entry["loops"][action]
             source_action = job.get("actions", {}).get(action)
@@ -117,6 +122,8 @@ def compile_human_review(export_path: Path, catalog_path: Path,
             }
         compiled[name] = {
             "status": "confirmed",
+            "confirmation_source": ("explicit_user_followup" if explicitly_confirmed
+                                    else "browser_checkbox"),
             "note": exported_entry.get("note", ""),
             "prepared_sha256": job.get("prepared_sha256"),
             "clips": clips,
@@ -141,15 +148,20 @@ def main() -> None:
                         help="browser-exported review-decisions.json to validate")
     parser.add_argument("--human-only",
                         help="comma-separated confirmed species to import")
+    parser.add_argument("--human-confirm", default="",
+                        help="comma-separated pending rows explicitly confirmed in follow-up")
     parser.add_argument("--human-output", type=Path)
     args = parser.parse_args()
     if bool(args.human_review) != bool(args.human_only) or bool(args.human_review) != bool(args.human_output):
         parser.error("--human-review, --human-only and --human-output must be used together")
     if args.human_review:
         selected = {value.strip() for value in args.human_only.split(",") if value.strip()}
+        explicitly_confirmed = {value.strip() for value in args.human_confirm.split(",")
+                                if value.strip()}
         if not selected:
             parser.error("--human-only must select at least one species")
-        human = compile_human_review(args.human_review, args.catalog, selected)
+        human = compile_human_review(args.human_review, args.catalog, selected,
+                                     explicitly_confirmed)
         args.human_output.write_text(json.dumps(human, indent=2) + "\n")
     result = compile_review(args.decisions, args.catalog)
     rendered = json.dumps(result, indent=2) + "\n"

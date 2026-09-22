@@ -8,7 +8,7 @@
     "blissey": {"family": "body_charge", "status": "reviewed_candidate", "note": "Whole-body hop and forward compression."},
     "chansey": {"family": "body_charge", "status": "reviewed_candidate", "note": "Whole-body hop and forward compression."},
     "charizard": {"family": "tail", "status": "reviewed_candidate", "note": "Broad tail sweep is visible through the alternate clip."},
-    "cloyster": {"family": "body_charge", "status": "reviewed_candidate", "note": "Shell and body rotate as one contact motion."},
+    "cloyster": {"family": "body_charge", "status": "reviewed_candidate", "source": "human_review", "primary_family": "unclear", "note": "Explicitly confirmed after animated review."},
     "corviknight": {"family": "wing", "status": "reviewed_candidate", "note": "Wing-led aerial strike."},
     "delibird": {"family": "body_charge", "status": "reviewed_candidate", "source": "human_review", "primary_family": "claw_slash", "note": "Confirmed in animated review."},
     "diglett": {"family": "body_charge", "status": "reviewed_candidate", "note": "Body bob/lunge; no separate striking limb is visible."},
@@ -46,7 +46,7 @@
     "magneton": {"family": "generic", "status": "reviewed_candidate", "note": "Multi-body magnet rotation has no safe conventional contact family."},
     "magnezone": {"family": "generic", "status": "reviewed_candidate", "note": "Floating assembly motion has no safe conventional contact family."},
     "mankey": {"family": "punch", "status": "reviewed_candidate", "note": "Fist-led strike."},
-    "marill": {"family": "tail", "status": "reviewed_candidate", "note": "Tail-ball sweep is the dominant contact motion."},
+    "marill": {"family": "tail", "status": "reviewed_candidate", "source": "human_review", "primary_family": "unclear", "note": "Explicitly confirmed after animated review."},
     "meowth": {"family": "claw_slash", "status": "reviewed_candidate", "note": "Clawed forelimb leads the strike."},
     "mew": {"family": "tail", "status": "reviewed_candidate", "note": "Long tail provides the dominant sweeping contact motion."},
     "mewtwo": {"family": "tail", "status": "reviewed_candidate", "note": "Long tail provides the dominant sweeping contact motion."},
@@ -78,6 +78,6 @@
     "voltorb": {"family": "body_charge", "status": "reviewed_candidate", "note": "Whole-body roll/spin."},
     "wigglytuff": {"family": "body_charge", "status": "reviewed_candidate", "note": "Whole-body hop/roll."},
     "wooper": {"family": "body_charge", "status": "reviewed_candidate", "note": "Torso-led turn; no separate striking limb is visible."},
-    "zapdos": {"family": "wing", "status": "reviewed_candidate", "note": "Wing-led aerial strike."}
+    "zapdos": {"family": "body_charge", "status": "reviewed_candidate", "source": "human_review", "primary_family": "body_charge", "note": "Explicitly confirmed after animated review; supersedes the static wing suggestion."}
   }
 }

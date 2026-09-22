@@ -192,6 +192,39 @@ class PhysicalAttackReviewTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "not confirmed"):
                 compile_human_review(exported, catalog, {"fixture"})
 
+    def test_explicit_followup_can_confirm_an_exported_pending_row(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            review = root / "review" / "fixture"
+            review.mkdir(parents=True)
+            (review / "review.json").write_text("{}")
+            (review / "one.webp").write_bytes(b"one")
+            (review / "two.webp").write_bytes(b"two")
+            (review / "job.json").write_text(json.dumps({
+                "actions": {"physical_attack": "attack01",
+                            "physical_attack_2": "attack02"},
+            }))
+            catalog = root / "catalog.json"
+            catalog.write_text(json.dumps({"entries": [{
+                "species": "fixture", "status": "review_ready",
+                "report": "review/fixture/review.json",
+                "loops": {"physical_attack": "one.webp", "physical_attack_2": "two.webp"},
+            }]}))
+            exported = root / "review-decisions.json"
+            exported.write_text(json.dumps({
+                "runtime_approved": False,
+                "entries": {"fixture": {
+                    "status": "pending_human_confirmation",
+                    "clips": {
+                        "physical_attack": {"family": "unclear", "confirmed": False},
+                        "physical_attack_2": {"family": "body_charge", "confirmed": False},
+                    },
+                }},
+            }))
+            result = compile_human_review(exported, catalog, {"fixture"}, {"fixture"})
+            self.assertEqual(result["entries"]["fixture"]["confirmation_source"],
+                             "explicit_user_followup")
+
 
 if __name__ == "__main__":
     unittest.main()

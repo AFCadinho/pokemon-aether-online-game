@@ -11,13 +11,13 @@
     },
     "families": {
       "bite": 3,
-      "body_charge": 36,
+      "body_charge": 37,
       "claw_slash": 5,
       "generic": 3,
       "kick": 1,
       "punch": 7,
       "tail": 13,
-      "wing": 7
+      "wing": 6
     }
   },
   "entries": {
@@ -56,7 +56,9 @@
     "cloyster": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Shell and body rotate as one contact motion.",
+      "source": "human_review",
+      "primary_family": "unclear",
+      "note": "Explicitly confirmed after animated review.",
       "source_action": "pm0091_00_00_10410_attack02",
       "prepared_sha256": "d5c0fb45cd0ba16f4ff6bcce8c8a97e9c5ed1bf81741aff4aabb8750b9c952d0",
       "review_loop_sha256": "5a2ec16dcc0ad0d7dbf500a03624b5bfec59c0f8b89369bec8a19ebc6f38d4c2"
@@ -368,7 +370,9 @@
     "marill": {
       "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Tail-ball sweep is the dominant contact motion.",
+      "source": "human_review",
+      "primary_family": "unclear",
+      "note": "Explicitly confirmed after animated review.",
       "source_action": "pm0183_00_00_00410_attack02",
       "prepared_sha256": "db10bb8d7ef7453cc238e8fe0014711a28b5b695097fc68dcfa77759652e0d84",
       "review_loop_sha256": "4dabafb90d2a04fec002b87803bb7da6bc6ccaaa39e95d8da0f71cd95b5d3165"
@@ -626,9 +630,11 @@
       "review_loop_sha256": "af76d565f87df9ab39e4818cdd9d2131a2efeded1d8347b1ed0d8ed02bc0d265"
     },
     "zapdos": {
-      "family": "wing",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Wing-led aerial strike.",
+      "source": "human_review",
+      "primary_family": "body_charge",
+      "note": "Explicitly confirmed after animated review; supersedes the static wing suggestion.",
       "source_action": "pm0145_00_00_20410_attack02",
       "prepared_sha256": "e889bd29a76ede22d4cd9b913d931a761884b7a790ffc461e36c20e28d93eb36",
       "review_loop_sha256": "36657b4450ab87dff93733226be3bb03adaf6494333758cf31fb888d2a2b1598"
