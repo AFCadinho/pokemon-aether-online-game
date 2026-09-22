@@ -1,0 +1,585 @@
+{
+  "schema": 1,
+  "scope": "physical_attack_routing_dry_run_not_runtime_mapping",
+  "runtime_approved": false,
+  "policy": {
+    "exact_family_match": "use reviewed family action",
+    "duplicate_family": "prefer physical_attack",
+    "missing_family_or_intent": "physical_attack"
+  },
+  "counts": {
+    "species": 75,
+    "physical_moves": 390,
+    "classified_moves": 119,
+    "unclassified_moves": 271,
+    "all_species_move_pairs": 29250,
+    "classified_species_move_pairs": 8925,
+    "exact_family_pairs": 3058,
+    "primary_exact_pairs": 1928,
+    "alternate_exact_pairs": 1130,
+    "classified_fallback_pairs": 5867,
+    "unclassified_fallback_pairs": 20325
+  },
+  "intent_move_counts": {
+    "bite": 12,
+    "body_charge": 37,
+    "claw_slash": 19,
+    "kick": 15,
+    "punch": 23,
+    "tail": 6,
+    "wing": 7
+  },
+  "species_family_coverage": {
+    "bite": 4,
+    "body_charge": 55,
+    "claw_slash": 11,
+    "generic": 1,
+    "kick": 4,
+    "punch": 26,
+    "tail": 11,
+    "wing": 6
+  },
+  "candidate_family_actions": {
+    "azumarill": {
+      "body_charge": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "blissey": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "chansey": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "charizard": {
+      "claw_slash": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "cloyster": {
+      "body_charge": "physical_attack_2"
+    },
+    "corviknight": {
+      "body_charge": "physical_attack"
+    },
+    "delibird": {
+      "claw_slash": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "diglett": {
+      "body_charge": "physical_attack"
+    },
+    "ditto": {
+      "body_charge": "physical_attack"
+    },
+    "dondozo": {
+      "tail": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "donphan": {
+      "body_charge": "physical_attack"
+    },
+    "dragonair": {
+      "tail": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "dratini": {
+      "body_charge": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "drifblim": {
+      "body_charge": "physical_attack"
+    },
+    "drowzee": {
+      "body_charge": "physical_attack",
+      "kick": "physical_attack_2"
+    },
+    "eevee": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "electrode": {
+      "body_charge": "physical_attack"
+    },
+    "espeon": {
+      "claw_slash": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "flapple": {
+      "wing": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "flareon": {
+      "body_charge": "physical_attack"
+    },
+    "forretress": {
+      "body_charge": "physical_attack"
+    },
+    "garchomp": {
+      "bite": "physical_attack",
+      "claw_slash": "physical_attack_2"
+    },
+    "gardevoir": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "gengar": {
+      "generic": "physical_attack",
+      "claw_slash": "physical_attack_2"
+    },
+    "golduck": {
+      "claw_slash": "physical_attack"
+    },
+    "growlithe": {
+      "body_charge": "physical_attack",
+      "punch": "physical_attack_2"
+    },
+    "gyarados": {
+      "bite": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "hariyama": {
+      "punch": "physical_attack"
+    },
+    "haunter": {
+      "punch": "physical_attack",
+      "claw_slash": "physical_attack_2"
+    },
+    "heracross": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "hoopa": {
+      "punch": "physical_attack"
+    },
+    "hoppip": {
+      "body_charge": "physical_attack"
+    },
+    "hydreigon": {
+      "body_charge": "physical_attack"
+    },
+    "hypno": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "jigglypuff": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "jolteon": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "jumpluff": {
+      "body_charge": "physical_attack",
+      "punch": "physical_attack_2"
+    },
+    "magikarp": {
+      "wing": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "magnemite": {
+      "body_charge": "physical_attack"
+    },
+    "magneton": {
+      "body_charge": "physical_attack"
+    },
+    "magnezone": {
+      "body_charge": "physical_attack"
+    },
+    "mankey": {
+      "punch": "physical_attack",
+      "kick": "physical_attack_2"
+    },
+    "marill": {
+      "tail": "physical_attack_2"
+    },
+    "meowth": {
+      "punch": "physical_attack",
+      "claw_slash": "physical_attack_2"
+    },
+    "mew": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "mewtwo": {
+      "punch": "physical_attack",
+      "kick": "physical_attack_2"
+    },
+    "misdreavus": {
+      "body_charge": "physical_attack"
+    },
+    "murkrow": {
+      "body_charge": "physical_attack",
+      "wing": "physical_attack_2"
+    },
+    "oricorio": {
+      "wing": "physical_attack"
+    },
+    "orthworm": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "pichu": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "primeape": {
+      "punch": "physical_attack"
+    },
+    "psyduck": {
+      "claw_slash": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "quagsire": {
+      "punch": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "qwilfish": {
+      "tail": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "raichu": {
+      "punch": "physical_attack"
+    },
+    "rayquaza": {
+      "body_charge": "physical_attack"
+    },
+    "scizor": {
+      "claw_slash": "physical_attack"
+    },
+    "scyther": {
+      "wing": "physical_attack"
+    },
+    "seviper": {
+      "body_charge": "physical_attack",
+      "bite": "physical_attack_2"
+    },
+    "shellder": {
+      "body_charge": "physical_attack"
+    },
+    "slaking": {
+      "claw_slash": "physical_attack",
+      "punch": "physical_attack_2"
+    },
+    "slowpoke": {
+      "body_charge": "physical_attack"
+    },
+    "staraptor": {
+      "body_charge": "physical_attack",
+      "wing": "physical_attack_2"
+    },
+    "sudowoodo": {
+      "punch": "physical_attack",
+      "kick": "physical_attack_2"
+    },
+    "tauros": {
+      "body_charge": "physical_attack"
+    },
+    "tyranitar": {
+      "bite": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "umbreon": {
+      "body_charge": "physical_attack"
+    },
+    "vaporeon": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "venonat": {
+      "body_charge": "physical_attack"
+    },
+    "volcarona": {
+      "body_charge": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "voltorb": {
+      "body_charge": "physical_attack"
+    },
+    "wigglytuff": {
+      "punch": "physical_attack",
+      "body_charge": "physical_attack_2"
+    },
+    "wooper": {
+      "body_charge": "physical_attack",
+      "tail": "physical_attack_2"
+    },
+    "zapdos": {
+      "body_charge": "physical_attack"
+    }
+  },
+  "unclassified_physical_moves": [
+    "acid-downpour--physical",
+    "acrobatics",
+    "all-out-pummeling--physical",
+    "anchor-shot",
+    "aqua-jet",
+    "aqua-step",
+    "arm-thrust",
+    "assurance",
+    "astonish",
+    "attack-order",
+    "aura-wheel",
+    "avalanche",
+    "barb-barrage",
+    "barrage",
+    "beat-up",
+    "behemoth-bash",
+    "behemoth-blade",
+    "bide",
+    "bind",
+    "bitter-blade",
+    "black-hole-eclipse--physical",
+    "blazing-torque",
+    "bloom-doom--physical",
+    "bolt-beak",
+    "bolt-strike",
+    "bone-club",
+    "bone-rush",
+    "bonemerang",
+    "bounce",
+    "branch-poke",
+    "breakneck-blitz--physical",
+    "brick-break",
+    "brutal-swing",
+    "bulldoze",
+    "bullet-seed",
+    "catastropika",
+    "ceaseless-edge",
+    "chip-away",
+    "circle-throw",
+    "clamp",
+    "close-combat",
+    "collision-course",
+    "combat-torque",
+    "comeuppance",
+    "constrict",
+    "continental-crush--physical",
+    "corkscrew-crash--physical",
+    "counter",
+    "covet",
+    "crabhammer",
+    "cross-chop",
+    "crush-grip",
+    "darkest-lariat",
+    "devastating-drake--physical",
+    "diamond-storm",
+    "dig",
+    "dive",
+    "double-hit",
+    "double-iron-bash",
+    "double-shock",
+    "double-slap",
+    "dragon-ascent",
+    "dragon-darts",
+    "dragon-hammer",
+    "drill-run",
+    "drum-beating",
+    "dual-chop",
+    "earthquake",
+    "egg-bomb",
+    "endeavor",
+    "explosion",
+    "fake-out",
+    "false-surrender",
+    "false-swipe",
+    "feint",
+    "feint-attack",
+    "fell-stinger",
+    "fire-lash",
+    "first-impression",
+    "fissure",
+    "flail",
+    "flame-wheel",
+    "flare-blitz",
+    "fling",
+    "flip-turn",
+    "floaty-fall",
+    "flower-trick",
+    "flying-press",
+    "force-palm",
+    "foul-play",
+    "freeze-shock",
+    "frustration",
+    "fury-attack",
+    "fury-swipes",
+    "fusion-bolt",
+    "gear-grind",
+    "gigaton-hammer",
+    "gigavolt-havoc--physical",
+    "glacial-lance",
+    "glaive-rush",
+    "grassy-glide",
+    "grav-apple",
+    "guillotine",
+    "gunk-shot",
+    "gyro-ball",
+    "hard-press",
+    "heart-stamp",
+    "hold-back",
+    "horn-leech",
+    "hydro-vortex--physical",
+    "hyper-drill",
+    "hyperspace-fury",
+    "ice-ball",
+    "ice-shard",
+    "ice-spinner",
+    "icicle-spear",
+    "inferno-overdrive--physical",
+    "iron-head",
+    "ivy-cudgel",
+    "karate-chop",
+    "knock-off",
+    "kowtow-cleave",
+    "lands-wrath",
+    "lash-out",
+    "last-respects",
+    "leafage",
+    "leech-life",
+    "lets-snuggle-forever",
+    "lick",
+    "liquidation",
+    "lunge",
+    "magical-torque",
+    "magnet-bomb",
+    "magnitude",
+    "malicious-moonsault",
+    "max-airstream",
+    "max-darkness",
+    "max-flare",
+    "max-flutterby",
+    "max-geyser",
+    "max-hailstorm",
+    "max-knuckle",
+    "max-lightning",
+    "max-mindstorm",
+    "max-ooze",
+    "max-overgrowth",
+    "max-phantasm",
+    "max-quake",
+    "max-rockfall",
+    "max-starfall",
+    "max-steelspike",
+    "max-strike",
+    "max-wyrmwind",
+    "metal-burst",
+    "meteor-assault",
+    "mighty-cleave",
+    "mortal-spin",
+    "mountain-gale",
+    "multi-attack",
+    "natural-gift",
+    "needle-arm",
+    "never-ending-nightmare--physical",
+    "noxious-torque",
+    "nuzzle",
+    "order-up",
+    "outrage",
+    "pay-day",
+    "payback",
+    "petal-blizzard",
+    "pin-missile",
+    "play-rough",
+    "poison-jab",
+    "poison-sting",
+    "poltergeist",
+    "population-bomb",
+    "pounce",
+    "pound",
+    "power-trip",
+    "power-whip",
+    "precipice-blades",
+    "present",
+    "psyblade",
+    "psyshield-bash",
+    "pulverizing-pancake",
+    "punishment",
+    "pursuit",
+    "pyro-ball",
+    "rage",
+    "raging-fury",
+    "rapid-spin",
+    "razor-leaf",
+    "retaliate",
+    "return",
+    "revenge",
+    "reversal",
+    "rock-blast",
+    "rock-climb",
+    "rock-slide",
+    "rock-smash",
+    "rock-throw",
+    "rock-tomb",
+    "rock-wrecker",
+    "sacred-fire",
+    "salt-cure",
+    "sand-tomb",
+    "sappy-seed",
+    "savage-spin-out--physical",
+    "scale-shot",
+    "searing-sunraze-smash",
+    "secret-power",
+    "seed-bomb",
+    "seismic-toss",
+    "self-destruct",
+    "shadow-bone",
+    "shadow-force",
+    "shadow-sneak",
+    "shattered-psyche--physical",
+    "sinister-arrow-raid",
+    "sizzly-slide",
+    "skitter-smack",
+    "skull-bash",
+    "sky-attack",
+    "sky-drop",
+    "smack-down",
+    "smelling-salts",
+    "snap-trap",
+    "soul-stealing-7-star-strike",
+    "spark",
+    "spectral-thief",
+    "spike-cannon",
+    "spin-out",
+    "spirit-break",
+    "spirit-shackle",
+    "splintered-stormshards",
+    "steel-roller",
+    "stone-edge",
+    "storm-throw",
+    "strength",
+    "struggle",
+    "submission",
+    "subzero-slammer--physical",
+    "sunsteel-strike",
+    "supercell-slam",
+    "superpower",
+    "supersonic-skystrike--physical",
+    "tackle",
+    "tectonic-rage--physical",
+    "temper-flare",
+    "thief",
+    "thousand-arrows",
+    "thousand-waves",
+    "throat-chop",
+    "trailblaze",
+    "triple-arrows",
+    "triple-dive",
+    "twineedle",
+    "twinkle-tackle--physical",
+    "u-turn",
+    "upper-hand",
+    "v-create",
+    "veevee-volley",
+    "vice-grip",
+    "vine-whip",
+    "vital-throw",
+    "wake-up-slap",
+    "waterfall",
+    "wicked-torque",
+    "wood-hammer",
+    "wrap",
+    "zing-zap",
+    "zippy-zap"
+  ]
+}

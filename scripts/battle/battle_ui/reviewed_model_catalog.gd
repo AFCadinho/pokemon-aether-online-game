@@ -99,7 +99,7 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 		var filtered := {}
 		for family: Variant in attack_family_actions:
 			var action := str(attack_family_actions[family])
-			if family is String and family in ["bite", "claw"] and action in ["physical_attack", "physical_attack_2"]:
+			if family is String and family in ["bite", "claw_slash", "punch", "kick", "body_charge", "tail", "wing", "generic"] and action in ["physical_attack", "physical_attack_2"]:
 				filtered[family] = action
 		profile.attack_family_actions = filtered
 	return profile
