@@ -1,0 +1,853 @@
+{
+  "schema": 1,
+  "scope": "visibility_preflight_same88_and_five_runtime_controls_not_catalog_approval",
+  "counts": {
+    "visibility_preflight_pass": 71,
+    "visibility_preflight_hold": 17
+  },
+  "entries": [
+    {
+      "species": "charizard",
+      "glb_sha256": "74bea17c1dbb764cfa1aa23457aa92ef9831978d2a6294d19f6682b744b48ff3",
+      "previous_runtime_sha256": "efda7151ac8a5d30594e87e1ef5a1f7feab9cb5c91adc37ed171b44470be3149",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "dfde415fa7ea17542a9e66d847cb466298b97916ea3da595a7d7eeaab3b24b99",
+      "track_count": 28
+    },
+    {
+      "species": "raichu",
+      "glb_sha256": "1d78f8733d664fceb31c3742d0aac979d06670115a45c5fb7580624a3c31c175",
+      "previous_runtime_sha256": "37d5d601f06b521ab4771b8e422f349202748a49d83ec295c8566a2436a65790",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0026_01_00_tail_mesh_shape"
+    },
+    {
+      "species": "jigglypuff",
+      "glb_sha256": "7d87209debeb0b988233109f860f0722bee4c88305d06d08c9bb50b53c3671ec",
+      "previous_runtime_sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "20c3c079f6e8dd5655a21cd4695b7dd1d2eabd0bd18dac55ccfe7a27d7fd7032",
+      "track_count": 14
+    },
+    {
+      "species": "arcanine",
+      "glb_sha256": "329e2cc40ed47b2abd84214d14e6d09cf8d4929b3177c9a03485bc4f13466550",
+      "previous_runtime_sha256": "022635ed3c11f90712ae406fdfe4bbcc45f37417f2297952ae2a0fbd2c0b99c5",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "8b654454113916897c727369127e7c19fdf0547b1f49eb2317ac47eb05df98e8",
+      "track_count": 14
+    },
+    {
+      "species": "gastly",
+      "glb_sha256": "af53cfb24c63feced26a0fdf806bbc5f287c424efb7e1860244c87c4578404e3",
+      "previous_runtime_sha256": "6135e93a36a79d2e7ce44b44fb7d03b2c7c5bdef85ce59a53d836f60e148871f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "82f43d946721e298c31c5a3fdfcf86b79eda7592aea8b9451d16a07610b038ca",
+      "track_count": 21
+    },
+    {
+      "species": "gengar",
+      "glb_sha256": "14120800359b91247283f2de60607130a6ed8d3b2d059cc1acef3a74fa922922",
+      "previous_runtime_sha256": "78b3953637349def0c9048c5b92078aa8e6c6746f821d77eb71ce58b8b96f7ca",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "18b196b91083492d1c0e15d680abdf402d9a9fb7f478fe3ae8f61227f6f07aeb",
+      "track_count": 28
+    },
+    {
+      "species": "gyarados",
+      "glb_sha256": "183217d1056eaa73eff752e160980483b14c85a84bc6cca907e04df9040ca2c9",
+      "previous_runtime_sha256": "6c2f24d7bc71446102e3df895d0aafd1c80eccbf5e1a7bb3116fd6e483a17edf",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0130_01_00_mustache_mesh_shape"
+    },
+    {
+      "species": "eevee",
+      "glb_sha256": "1732fd45777f50aeb84507aec40d2429855b9534824742b0dc2a510ab58b674c",
+      "previous_runtime_sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0133_01_00_tail_mesh_shape"
+    },
+    {
+      "species": "vaporeon",
+      "glb_sha256": "89dee7be0777b2af480dcb903c0d76c4180b4e3f7d9beb0e7c6de5836a761732",
+      "previous_runtime_sha256": "c4595d7ae21e41213f26fd1f6542f71d1d8a34121aa870b246cdc35055bcdecd",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "6d0a91a0f35b2614142852a34f6ebc2f7daafd2ef32283bf3547062aabd32039",
+      "track_count": 14
+    },
+    {
+      "species": "jolteon",
+      "glb_sha256": "fb5a330ee73dd2bf51e147daed027b49f1947d3ce2644b01493c0257e20606b0",
+      "previous_runtime_sha256": "2e9848fff483a33c54f92ef0c433d212c6cebb49810d0a6eb471a5b703ee97c6",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "7853acda6a5b6d5cbab929f2483e09e556f052858d458bcd2fdf267ca80f4454",
+      "track_count": 14
+    },
+    {
+      "species": "flareon",
+      "glb_sha256": "e43fd75a6af218ff54938c6bdfbd830e476e0c2781e20e50d7581fd5ae1d985a",
+      "previous_runtime_sha256": "039480eee56bd385d7b777c6ed89885dbdc1c6df151ecb6f293452ca0e108a29",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "5f1b814180176de195e3123e8cd87a0a6cbbadfe887913e00bfb1f24f0056d9b",
+      "track_count": 14
+    },
+    {
+      "species": "articuno",
+      "glb_sha256": "ad972fab72b4cf48126816df200bead44fef596dac5ec804682bf483c2b73540",
+      "previous_runtime_sha256": "0fbc55571959b09316d04bf5675bb60144a0139d7b1d9111160b51e95b622c37",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "53b03acc89116744da7094a69769f236a5836470e972102277ccc81da0aeaf97",
+      "track_count": 14
+    },
+    {
+      "species": "dragonite",
+      "glb_sha256": "b9a3d2202f445225ecf124af2d01dea7e2661c106e353e4a6a7cf2a4fc4baf58",
+      "previous_runtime_sha256": "725ada339cef7100669b50b879a1b210bd9e51e7cff665f936f6cdb54f0ed155",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "082b385545b52e830d646236cb9e5a2a8bfc7efee93bb66d682efee2449f2701",
+      "track_count": 14
+    },
+    {
+      "species": "lucario",
+      "glb_sha256": "5dbe46a618e8680b1c877744a3bbf9c5414d448b0a6b0a4f75e64d76de60e547",
+      "previous_runtime_sha256": "ea8cdcf4dc1de3fb0e5bdad75e7b86551476315733be13ee36514ee4c19d0a3e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9b833b1ba5e5e35571094f804e74f57a96ded68eda056c5bb33817d5d634ee00",
+      "track_count": 14
+    },
+    {
+      "species": "charmander",
+      "glb_sha256": "d31e9af3468e7efbfc82342bab9108100366e990005d5edf5927fae256761b01",
+      "previous_runtime_sha256": "4639ee36e2aab0548315e6fb9652c1ee171840345cd9fe3caec2ef8b71ebe885",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9b9184295534c6bcd10e94fe7587763a086c0886619e9b0f404d924e12ed24f2",
+      "track_count": 21
+    },
+    {
+      "species": "wigglytuff",
+      "glb_sha256": "5085fd41a7387e32880155623ac582d1e2c75447a66e3006cad43b0ad089805a",
+      "previous_runtime_sha256": "37f63c58217f0e8055c5625783553ee2fb1470a86ecc07d32057956154a90736",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3e017b89218521fabecc7dba8e7f1a3b7c91e801d142801126bd962747d4b114",
+      "track_count": 14
+    },
+    {
+      "species": "venonat",
+      "glb_sha256": "fa444375f2d5c4291b5e60cd6ab226421d64c0651a3302f4fd74f6775cc3aaca",
+      "previous_runtime_sha256": "d2d4aa3b8a8b1a409e222e492ca501ad50fa86b39ef33136a622c7728bd407fb",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3ffe01b228784149073f5fa2dd9298c319e715db0cadae2690e09179b7566f74",
+      "track_count": 14
+    },
+    {
+      "species": "diglett",
+      "glb_sha256": "6e0c4f898a5f664a44b44e097ec16a3fed21c50dcc645f9cb06d87d23464bcc8",
+      "previous_runtime_sha256": "fc78fd4d78536f31b2cc1a945d42f8b271e85120a7ee99a384a35d7a2c107863",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "c639ae95aab787ddde200b9f4fd8af77bb985233314ad485f3285e8510b42a46",
+      "track_count": 14
+    },
+    {
+      "species": "dugtrio",
+      "glb_sha256": "c6ca434658b1bd0425a523488cb1b90f66c50d69d0b347fdd0e7a1eb00b52e6c",
+      "previous_runtime_sha256": "58cf2d42750f9bccda80dfefdcae7e9987b0101ef7afc9a64ebc6b61fec6db35",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "c41abfed68da55c329b01368749e794ba9f9aa95f6089a8432a25e740a36c964",
+      "track_count": 70
+    },
+    {
+      "species": "meowth",
+      "glb_sha256": "e2316e2f1b1f89dc41905eb20478fecb9c1d527d748e9c32629655d17aa5bd35",
+      "previous_runtime_sha256": "e5ee0b7b90538581dabdd333586979f635a31722afa70e89c0fdbee8012a05c0",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    {
+      "species": "psyduck",
+      "glb_sha256": "dee04e13a6db147ce3505c8e2c15577dcaa33fbf0fd717a5d1572b64c392da05",
+      "previous_runtime_sha256": "437f896285dcd44a0d84cc3ff6e30b28aa3e66699e41df2933108862ddfa1097",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "25cb72a43468ead7e7d061ed6f5631baf330855cf54e72a06779cde7c9b1c11d",
+      "track_count": 14
+    },
+    {
+      "species": "golduck",
+      "glb_sha256": "b49cb3634f9254d018f8b5f56ce268f5ca8b28750a9889511bdb7ab3b1d91166",
+      "previous_runtime_sha256": "47247c6be71d222f84673f7e15c4a4e2c5cd7b88c49fd9fdde5b5b4cf7088638",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "191eca4522493fd5cc24e27b36c64c36df3f56ffe4fcf5aa0f3d67d46e78893e",
+      "track_count": 14
+    },
+    {
+      "species": "mankey",
+      "glb_sha256": "d22af0aa6192979d32f69831c410627e5499b4f5f74ac7d7a7862d442bc60ea5",
+      "previous_runtime_sha256": "8bc2a5c9d9cbe6c26fbbe2fe709ff52a2ffd037210106b822372630c21cf7fd7",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "306c16e84eb72943884fe90f602d43ab0776cc2b5532c4237ea772cb24ee63b4",
+      "track_count": 14
+    },
+    {
+      "species": "primeape",
+      "glb_sha256": "1a3a0fea2b8af10090e05da92b9cb9b79909dc40d17e6fbf84326b94fc381915",
+      "previous_runtime_sha256": "76d4c1ea23dde1a329e1e81af3e6693ee319b60f2b5708a48fb60c723e634ffb",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "756a63f2978dfd277046eb315dcf1a5098df25e5425054230316234681a7c4b3",
+      "track_count": 14
+    },
+    {
+      "species": "growlithe",
+      "glb_sha256": "7d477f07d5b246495c421029db6005c7d00ebf53eb32404bbb6dc955f696b41b",
+      "previous_runtime_sha256": "694a75efd26a91b073491f38fea23be54d122983325cf0ee04399058acc9ff9c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "dd72846fa3ee7f051e598a5981fe4adeb02d7fbe36068b0d774436c88801c9b6",
+      "track_count": 14
+    },
+    {
+      "species": "slowpoke",
+      "glb_sha256": "0b673a567bd40005c343b6de80d2e0bcecbc4dc1fdf9d5810321707bb41624b3",
+      "previous_runtime_sha256": "96fbf13543b1fc54cc0e281a86e4de24366a3b97d00be8e93606d0e869eb74c8",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "6551726bdf15a036b536968d56b63d12c7bfb22de68046a65257a62f8d99e941",
+      "track_count": 7
+    },
+    {
+      "species": "magnemite",
+      "glb_sha256": "1400c5d7dc579021ec95cf774f24ea975dd44e2f27576df10649db27e28ae9a7",
+      "previous_runtime_sha256": "4ca65cf8e4d78020e9fc42a2c92a625f636dbd36031f7f5db107df7887297201",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "60e69f398034b08a74d2ec8e6bd261264bf2909b2869a31429805bf735518a1d",
+      "track_count": 7
+    },
+    {
+      "species": "magneton",
+      "glb_sha256": "1f0127127a9638465f4c09731dff5461af7bb416a779ac6d6aa0ff55a65fac96",
+      "previous_runtime_sha256": "f335d0a906bccbf81af8817230412363c21b2bbcbc6a108a1b291175a82162a0",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "fb0d1110f11ac1cce5ccbee19becf5e649384f8ad82369eedd8011ee44555ee3",
+      "track_count": 21
+    },
+    {
+      "species": "shellder",
+      "glb_sha256": "f68e55d046c00d76488944e7db200d4230b5c2e8f7322354ca32b4f4e91de5c3",
+      "previous_runtime_sha256": "407a51e73421d8a0ffe6cacaba670d90898eedd18d7e5ec694f6ea1fee03fa8d",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "57a124c0e43303c29c3b9fe602d6cff9b19a91f4e1a2af755812c1257422b011",
+      "track_count": 14
+    },
+    {
+      "species": "cloyster",
+      "glb_sha256": "65093bbd544ccf76e23ee89769791d6035c884158039afe6bb9d1c5524e888fd",
+      "previous_runtime_sha256": "887bfd934834e221b16acdad59dd3e0916aca606221954674201b5d3611f036f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "e86928ac2568c375ec9b908703bedffa64725284911289fdb955402d16438f30",
+      "track_count": 35
+    },
+    {
+      "species": "haunter",
+      "glb_sha256": "db8ee3dad34a86fe47acafc7c703043191bdd8a26b770b49eb68ad1c5a226ceb",
+      "previous_runtime_sha256": "1545c90daee6e79f661b9a815916a2daec0d8171ffb5a87c1fc536a73d1edd0b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "308652f43252abdb1842d1c23de0438f36fa92c421339bc659f98eccbd213c8b",
+      "track_count": 14
+    },
+    {
+      "species": "drowzee",
+      "glb_sha256": "2abd493b17a98e04bc23a9c65c61337545e1d9ef7f9d7d4d0174ab6531781679",
+      "previous_runtime_sha256": "78c05aa98801da4e05e252e0f6d8ff8872f4d4a7c0426380a9a60a9a652358df",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3ca26afd74638ad3dac553742ca2022cec5aed8b8e492fd6a94600eb82a857ef",
+      "track_count": 14
+    },
+    {
+      "species": "hypno",
+      "glb_sha256": "3013a6faa62ec75c639d797afbaa09a08a5ce2c985e844e0a91fc1adc1143c71",
+      "previous_runtime_sha256": "577a5ddc810581380e559af777cd48bf8035d194c884172a5fe5279a9f73ff9f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0097_01_00_zeni_mesh_shape"
+    },
+    {
+      "species": "voltorb",
+      "glb_sha256": "174e6db25cfe8aac71fedb6e2213eadbb2537c35e26cad496fd1d2cdfdc4c585",
+      "previous_runtime_sha256": "6b69dc255dbbe1cccc15ce6cfc26ef07d267f1857b75bd9ff1ee56c8a115dd70",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "c38192a1883ec84151e0bb323721a9ac19fe8e4a3db1d9009ccd428cf67622e2",
+      "track_count": 14
+    },
+    {
+      "species": "electrode",
+      "glb_sha256": "5c23f564cca1745647fb12680773668cb6812113782ddb847619757a269ca16d",
+      "previous_runtime_sha256": "9cfc1352b82602fc6ea36f55889401f8ef155ba118ab26aa3fe0c1dd7e1aa896",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "6ce3d489ad71e49253446688f5897255f08e65d8117fa14cf0174ae5ce310a39",
+      "track_count": 28
+    },
+    {
+      "species": "chansey",
+      "glb_sha256": "35ab639bf1efc820d4228530acd097819a99ee50fcdf86fc826241baf02f4007",
+      "previous_runtime_sha256": "3d2c142d5d3e42994a64637277b94bc91d53f38e95c96e3566c798f4ff447d4f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9a4bb6b38a1c0390abe13a3e55447ace838988472cd667f58be8cd7e23e4fb9e",
+      "track_count": 14
+    },
+    {
+      "species": "scyther",
+      "glb_sha256": "e32a02c3795f33cc4674bf5df3b7b75ca39fb5779b1bdb4cd685fe0963dfa5c0",
+      "previous_runtime_sha256": "abc9041dd4c36b3d2f557bace83b194c7052d168f8e0f2d3b243e1a5cacae92a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0123_01_00_hip_mesh_shape"
+    },
+    {
+      "species": "tauros",
+      "glb_sha256": "3471a08ca4d4acc4a02b5a5d48bb27482eb6fc4054dc6a451940b178f582a2f9",
+      "previous_runtime_sha256": "54cd4c2c3d6c2a96394a3c7c924a6525913331746bfd3b1be5106a086170680a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "7cf2b3d2b46fc95963b269aed652c3c44eabcb84c9fcaae42a590bfd9a1e936c",
+      "track_count": 14
+    },
+    {
+      "species": "magikarp",
+      "glb_sha256": "1f168b396d0b3974d98a277f20f1e51e950ca993026335aaba447fe3c1db0edd",
+      "previous_runtime_sha256": "f595951be64491bffc83c733fc1ba67af5818533c33657a18c0a550172ce57df",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0129_01_00_whisker_mesh_shape"
+    },
+    {
+      "species": "ditto",
+      "glb_sha256": "c37342072ce05e0f052533601d0c9f1604152aa0af56a4efdd700ea6b929de7a",
+      "previous_runtime_sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "1f18ac7cbe257e88d9ada574e1dc1cc128bb735ec772baa07c64b2c1f7a58156",
+      "track_count": 14
+    },
+    {
+      "species": "zapdos",
+      "glb_sha256": "f3088d21924bd72c596838aaf3b952a0f551cb9d4c6df32bc695589565117fc2",
+      "previous_runtime_sha256": "6ee811fc4cc9969b3c056b53474e8f185f6813d7e9aea934072ec3b54f15293b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "265feb484f40dd2d5b6d321f2d93ea4bf956a816e2f97581fc2e9d96d2f03513",
+      "track_count": 14
+    },
+    {
+      "species": "moltres",
+      "glb_sha256": "250186fa792e9dc747374bcd51ac51ba3f317ff0961c8c4574303b988d62b234",
+      "previous_runtime_sha256": "3cbea39cde57fd2080a2b50b5cf24e21a33725a6736f797132dbd6ef27923e93",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "9281fa9c7c07c4dae71355df381c5958ae2a76863ce4571eedfb92b66bd0ac8b",
+      "track_count": 35
+    },
+    {
+      "species": "dratini",
+      "glb_sha256": "086fae27f76c31fab90d6cb1fb6f736953ea5efc5c32b3665b140c505500ca36",
+      "previous_runtime_sha256": "890ea9bb6b0c7e84d6699119895ef7131856972700ded0696377495497fef8be",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "0e802e7df2a6aae3fd4d6f9d515729f7d36688fc02bea26e12301d76da137753",
+      "track_count": 14
+    },
+    {
+      "species": "dragonair",
+      "glb_sha256": "19b2dcfba528c5c52987a3e48f4507bea925a3f8356357ff3335a4b4fc3dc139",
+      "previous_runtime_sha256": "94c76f01fb87def5b66311f2556bc5d6bbc384d563555495d8c09d11787a802e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "300c95c55b482582f17c848fdd0797f97c305228f8a55a7e8af0384193680874",
+      "track_count": 14
+    },
+    {
+      "species": "mewtwo",
+      "glb_sha256": "3448f9d6583c287562df98156d09ba4888437ecfb7c350b1233765367213dc13",
+      "previous_runtime_sha256": "6b35ac7fef08624c8434c0862a4919d3cbfa6ba1b03e83d785d809ee3488c73e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "c5ff1d5b847957c15a0629bd59ca3bb8aeef2b58bacec5ff1efa12cc84a4e9d7",
+      "track_count": 14
+    },
+    {
+      "species": "mew",
+      "glb_sha256": "c3edcd13700dbb96d204f850e927e7cd5109f70c35e62da27223d840db97b841",
+      "previous_runtime_sha256": "ca73a5e9fc6df3ff237cfc7bb65bcf08390517b5fead695394fb273c3f5e7076",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "32fbbe8b7d1d8a0a77e0e9b4387bb9cc2f3150ba7900d7db1f28ed6f5c41e82b",
+      "track_count": 14
+    },
+    {
+      "species": "pichu",
+      "glb_sha256": "ac992353889a02c1375acd8de86e626847db813c747729837ca6a8861b1e7a4b",
+      "previous_runtime_sha256": "48b05e4d33053df3219fa0c5a42c6f3f741c4fe70cbd8cdc58ecab739be7e744",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "c124a56338e2c4a640c7c5923177a67a1c931b93259e1ff1e1184f41fd362d5f",
+      "track_count": 14
+    },
+    {
+      "species": "marill",
+      "glb_sha256": "d7deda2d142991fc1d2ac4ee47b078d140b1cc633bccac0a187038b658ee3e0d",
+      "previous_runtime_sha256": "4b339138a62f788968c81574daa53f6a0e9b55d0e609348ce794544a219ffd7f",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "df02b0491f2b1d3148737077114320d4f98a7204c9369046c66d69d54d6ba88d",
+      "track_count": 14
+    },
+    {
+      "species": "azumarill",
+      "glb_sha256": "34a40245ffbffbf2929fbd6316eb2aa69e82ad65b5af7e79a78b3587a792337b",
+      "previous_runtime_sha256": "a45144b6ac33ead2300942131161ce641cd8536b0d5a0469c10f6bf4f42f0006",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "b39bed71797e2dd80b98f99e84ee2276ca6edc82381a1ad1b137909001a44ed7",
+      "track_count": 14
+    },
+    {
+      "species": "sudowoodo",
+      "glb_sha256": "b66bab07e66b572cf673f26a3e2f7793d68fce8b55e9ff7080f4665c1ce0f93a",
+      "previous_runtime_sha256": "f6fcaab6f325baa161e0807071684e34ac3cb88a83464ab1150020fa48509b7b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0185_01_00_body_mesh_shape"
+    },
+    {
+      "species": "hoppip",
+      "glb_sha256": "dd4e67beff0080254b7ad77f388d546abe0cabd1c5db6a71d67bef699e412ba5",
+      "previous_runtime_sha256": "3466776b082f8192c51de942c82a52a6d5f20a0de7ab5bf55e9c6331a60a85e1",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "06f35c7a2fa2db1f83d7e46bbe33ed0f914ab4e5c95d3e69254c843335627dac",
+      "track_count": 14
+    },
+    {
+      "species": "jumpluff",
+      "glb_sha256": "4b981ebaca693011d203168c444abe8a05f39d06b2370c61453e315d6becbc0b",
+      "previous_runtime_sha256": "1707109601e912578a25e96b8ba37def059014927be469442b83f9941bcb1d64",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3c499d0696d13e3bf0aa803bae6cb30bb857dd279e4351282dd7d02035720057",
+      "track_count": 21
+    },
+    {
+      "species": "wooper",
+      "glb_sha256": "fe8611a0d102d719d95f45c36bb0398193c14bf39e434fe4796656a2de67c6fb",
+      "previous_runtime_sha256": "cb8b3869e57f58b0b26945413253904d6779844211d9de47581e931f6daa3f0e",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0194_01_00_tuno_mesh_shape"
+    },
+    {
+      "species": "quagsire",
+      "glb_sha256": "419ed10c1063b46b41b53fc18679cc146d3429e88c0dadfcc02134529bb11156",
+      "previous_runtime_sha256": "29d1c5207e26f73912007398cbb04f99a8c882104374cfdeef14c55f3de9a092",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0195_01_00_hire_mesh_shape"
+    },
+    {
+      "species": "espeon",
+      "glb_sha256": "d6fe1fc534912789e9f47c97cf719fb81b5e29684d494c60dd5c8e8c6617b3eb",
+      "previous_runtime_sha256": "9e7f35aba795f3864fe89d26a63579afa9af89ebc7060afbfc0b26fed0b41481",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "a3b4d438a08e14b6c24eee062aa47d31fb8709cc0197539f02314532601f9d1f",
+      "track_count": 14
+    },
+    {
+      "species": "umbreon",
+      "glb_sha256": "1063ba2295b8366b4bbf2b3663a62823e6d6634952fa7e087d07e067e5dfb791",
+      "previous_runtime_sha256": "477a885eba3c9c6286bf189501aa87e76e450cbc6fe621c3e6a8d138182b44f4",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "b3b154a71a9498a6c41e028ba82896b9da3cf9315743b0df87430fe2ed79ee1c",
+      "track_count": 21
+    },
+    {
+      "species": "murkrow",
+      "glb_sha256": "f7c3db6f7aee864dae16a45f928e2c94f52277dc8504c10e804a482f7aee4299",
+      "previous_runtime_sha256": "3f0e940cdca08763670ed285844834f8cce9392d77bfdb13b2e56d61448f0fb6",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0198_01_00_head_mesh_shape"
+    },
+    {
+      "species": "misdreavus",
+      "glb_sha256": "3f2d19649fb7b51598c072a9c3bce9fd03527bab754e0c5e2ddc5b3c0cef3b9f",
+      "previous_runtime_sha256": "5c4a9a143f38b44b6d95364a2aaaae6e62e3c3b88c068fbc3de04f4476009200",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3ee0615992190c6b0fda516f99a0ef30825c54e78a9be88dcfe7bc9a3400ebfc",
+      "track_count": 14
+    },
+    {
+      "species": "forretress",
+      "glb_sha256": "536d69606117e93663746b0dd61e0c9e3613fcc064640443d89f859a4f1024b9",
+      "previous_runtime_sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "f7ff4130b500e4b23746f891950155e84c1eee92fe49b5d91609587b6681ef5a",
+      "track_count": 7
+    },
+    {
+      "species": "qwilfish",
+      "glb_sha256": "63ae4d255e1a98f71f7f3742f4250175b4ccabf7ce431732fe506e0d77b9987f",
+      "previous_runtime_sha256": "8c0a838b9d729f60894e9601128de59eb9b934e373450bfb2a8806e4175cae5c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "2f9aad6bcd453a7d408c81490f1a0517ddb1cb2e769b408aac5122c7f4ef0770",
+      "track_count": 14
+    },
+    {
+      "species": "scizor",
+      "glb_sha256": "08faf8d086d32a803c4272b1dc4371734fd1bea21b30ae94581e18a4c4b695a9",
+      "previous_runtime_sha256": "f2b0c217da35bad43ab86179e409566757d798b513299a1c1d0bcf451015a3f1",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0212_01_00_body_a_mesh_shape"
+    },
+    {
+      "species": "heracross",
+      "glb_sha256": "59f8efe95d08cb6691bb4473d141a44dda80d75c097721767cde1e80cefff087",
+      "previous_runtime_sha256": "20dd4a894dc396eac85c52ba65a65d5ef9ec82b78e880f9fa09a300cbd2f57b9",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0214_01_00_horn_mesh_shape"
+    },
+    {
+      "species": "delibird",
+      "glb_sha256": "217802ad170898ca172e9b402aca5b18eb34ab66e291eadffa85fdd2f165b393",
+      "previous_runtime_sha256": "5a9e40dfcb9ed473f8697bc589845d21bd292fcdac83ec1153e89a3dafcfea63",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "68df925859aa9425cc40fc079f15452ccf15c3542ea504ed81b660e21af79a98",
+      "track_count": 28
+    },
+    {
+      "species": "donphan",
+      "glb_sha256": "04bb53a1fd517c0943f3dfb17001ed4245ca40c95f3299570b202e4a8b1b093f",
+      "previous_runtime_sha256": "d4d4b46b364b0c6bea97bc2699fed1393f8b20e8e0aaff03b350c4325097ba3c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0232_01_00_kiba_mesh_shape"
+    },
+    {
+      "species": "blissey",
+      "glb_sha256": "648d181ec03a33977bb5fdda2b12b7d65b2ee81bbf21c3fdd900cd9d8369252b",
+      "previous_runtime_sha256": "e86499f58c398baff39993833d48845d652ce47c81ad6724025c5497573bb896",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "af3ab0e571ba5a97cc867dcc57d7e6fbd215e2c008b813451a1c08078c4a66a1",
+      "track_count": 28
+    },
+    {
+      "species": "tyranitar",
+      "glb_sha256": "085b0527b678dde71abf9a6597de9a90ca4d1671f56d449cca43dd3cfabf13d5",
+      "previous_runtime_sha256": "e2bcd8e99b96b6a28590c2f84f21db1e107849ba4f2e0417cc4554613d73cfac",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "fad0bd3bcb54ad177aa3ee48f5843c78cf7ab86914589a833c5162e210d44db8",
+      "track_count": 14
+    },
+    {
+      "species": "gardevoir",
+      "glb_sha256": "f36afb8bf246658f55475e647372c6e88474bf2297435cc9050a3874bccb766f",
+      "previous_runtime_sha256": "b2c0b3127b11bdb25262dd7139997fcc77cfcaeb35fc1e35d7b404f58b2dc2fa",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "cb720c54a6346fb6beacf25721ebfad249d30f792c7249c4e0a6935870f8c2e4",
+      "track_count": 14
+    },
+    {
+      "species": "slaking",
+      "glb_sha256": "0d0f7d7dcac4e1fbcf2024c60daa0091a5d43e7af7c408afcab19987614ea163",
+      "previous_runtime_sha256": "5ff9c2b3b249b3c5859aedf3830494fd93c0a5291a3c54fbffb50e6da5acdb10",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "45ecfa356b14c8b135cbf256032e0e3a6c8254c07accb5fb51fab6c608cf549f",
+      "track_count": 14
+    },
+    {
+      "species": "hariyama",
+      "glb_sha256": "5c81994d38890bc0e0441dda7cf99147306ae92387d887c5c2be182540803d75",
+      "previous_runtime_sha256": "8cc2630961bf21fab5ae7a60a8785086c171978bb5d2e9c51e8e6c89474b35f4",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "6c73638baf0cae6489e134641019648b972f7827c53f53204eeff458e829803e",
+      "track_count": 14
+    },
+    {
+      "species": "seviper",
+      "glb_sha256": "fb2c7fb25a58108118317147aed74c25444a02eaa4c26cb48d2f008db8bdacbd",
+      "previous_runtime_sha256": "3b3def8bc44626d08f7255c3f66b75501d1796d1f28170f76b5ec3be8b473bba",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "d616dd70e76a6e7c67426a87922fa3c90572a8f3126774c35692fe8247b401db",
+      "track_count": 14
+    },
+    {
+      "species": "rayquaza",
+      "glb_sha256": "9a52908840db9880f426199442770ba2c5626cf19b9a6d04393470e69667ad01",
+      "previous_runtime_sha256": "5f24d27cc88817710e9756e30e44093fe46b4a5c7f3e345b1c9ba08fc2f213f9",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "f486a532d21758c5c9abd82277a0f37f856bc1a6faf1114e49a395ab4bfbdf09",
+      "track_count": 28
+    },
+    {
+      "species": "staraptor",
+      "glb_sha256": "2c15c314a2b9bf9b619e8a9e60f8078a087b4306df51032cf2f089cbba3e2501",
+      "previous_runtime_sha256": "ab74c7e7fb6233f4d3ee773d0ab155c5555cdb40f1d236ff651134665748c136",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0398_01_00_body_a_mesh_shape"
+    },
+    {
+      "species": "drifblim",
+      "glb_sha256": "87c1db373a63a7e9427b32a47b5a6ef650473ee8054dca3b5d2523e8ae90f5a3",
+      "previous_runtime_sha256": "621750d76787c7c853fcd5dea5cffaaf96783e72fd03e1f8ba7a818bb4daa245",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "16a210fe9c9ea87832f5cd2e4e79f6454f44bc1f0328eb4545d990fa46611dbc",
+      "track_count": 14
+    },
+    {
+      "species": "spiritomb",
+      "glb_sha256": "476a76b9aa2d0d9fd004b1c273d190b521ed90752844103187fac568b5e20d65",
+      "previous_runtime_sha256": "2acc8db767b2714a93584bfcab975b88e7a6dcee74f4b63559b82302296e9e79",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    {
+      "species": "garchomp",
+      "glb_sha256": "0e39d18cab786bea1ff8b0ae8a9fceaef8ae48c0260c4196cc0e950db51048f6",
+      "previous_runtime_sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8",
+      "runtime_approved": false,
+      "status": "visibility_preflight_hold",
+      "reason": "Unresolved visibility mesh: pm0445_01_00_eye_mesh_shape"
+    },
+    {
+      "species": "magnezone",
+      "glb_sha256": "2cf2f52113d3a5ffc477e5331e24d7da09da205d5a3d26de4daa564dbff121f4",
+      "previous_runtime_sha256": "adbc50f123c8d091016efb6e2c54bb07a3fd7c7b88f54665d395f0311036cac4",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "959ac38c30f27592ff9bdf867ddb32f3c5628aaba1d9177b0ecaf6b1a1c6af3f",
+      "track_count": 14
+    },
+    {
+      "species": "rillaboom",
+      "glb_sha256": "e1da6da7cd75a6f67439634b1cbf87c9dfea37c87e29b559f6eabf85ac3c666f",
+      "previous_runtime_sha256": "d0d0554f1886ff57640cc711bf37eb4000617af1056685ea7b5e5465847828f9",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "cb133dcc013a61349db19a232af56d761dc1b2d9ff659f1a812df76f95bf75a3",
+      "track_count": 35
+    },
+    {
+      "species": "volcarona",
+      "glb_sha256": "2e45df9abd11776155a245facf1c098aeca2e694ad3f7fff2c7818e0b77597d0",
+      "previous_runtime_sha256": "fa505ca1320593d5bf8c97dbc1cb62e003b8bd9f52e8d151ffabc4cecb70eb15",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3a43e6c235347ad4c101410ac53ddb978fa592a00df48183859aca61aa2b352e",
+      "track_count": 7
+    },
+    {
+      "species": "hydreigon",
+      "glb_sha256": "021c556cc7cc7a10d7fee6cebce02d2dd2d3caba55d40de1f744735092c7c9d5",
+      "previous_runtime_sha256": "1f0c5a95b825932f5a9c8abb559315d5b8ee4c1e56bbd7f67a264005c8dac022",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "8afabd23e95860db21fe4546721189546d9d9f5c3496c53287d913b69a096610",
+      "track_count": 14
+    },
+    {
+      "species": "flapple",
+      "glb_sha256": "5dceb6c97ead29c91a6238079010bed386a7ec89b29fc8a106efb90dc39e110e",
+      "previous_runtime_sha256": "9d264ac46014de6ac6d4e6b6b4968b7e67a4ff7adaa9114bcb07f50804643e0c",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "690eac64da135d017a81351124d1ee76f5d6f382d07f498c88eaba66782f9826",
+      "track_count": 35
+    },
+    {
+      "species": "hoopa",
+      "glb_sha256": "028971f2314f3d62c11ea183769876c4f43cdf20cd0ac16020a838a90154a885",
+      "previous_runtime_sha256": "04c14ad1901a2e29fd9cc9dd6c348d6a13b2afb5571a333b965c9e4ba176180a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "ed26aaa9b1dcf0163513deaa8b79333373e5f2508dbadbef776ff3f9b47583df",
+      "track_count": 56
+    },
+    {
+      "species": "decidueye",
+      "glb_sha256": "42cb40da796cd838f6e82f4c747fe8c707dcbf34b4a12550c94765e894114f78",
+      "previous_runtime_sha256": "acf5e4c4f09c3aa636fb141713e9c71540b5a361875c5ebaac346c03d01d976a",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "8a0bbd0692093d471b3833835dd0e732ae9c6c7f2ac006484140c1d6f5350e58",
+      "track_count": 84
+    },
+    {
+      "species": "oricorio",
+      "glb_sha256": "b9b8dcfb9cfd490302f4c7973e0b6423b7b6809aa2e32bf7785758ef240ef9ae",
+      "previous_runtime_sha256": "00557d7b34478559c364b572695a3f3b5aeab6e7297941e2b4708262f68619b8",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "aeb33b67f1dbd006abf2559f0be2803806dd5fc544dc842ea931ffc5af3f5f3d",
+      "track_count": 63
+    },
+    {
+      "species": "orthworm",
+      "glb_sha256": "1d3aac040ae73250da580678b5c8212416612a890b1ae9479bcab492893abeb1",
+      "previous_runtime_sha256": "997e5fcf6c5b2d21fc205225df316d9831281441f11dc67f04279d4243ec3990",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "4e4656498ff5aef1d73ee8378f363c34c4952d66c92dc65db3508dd7cea753ad",
+      "track_count": 21
+    },
+    {
+      "species": "magearna",
+      "glb_sha256": "5b46b2149b912de02265bc78904ceb2e2c1d929397abc21d1571f2e670bcd481",
+      "previous_runtime_sha256": "c25ec287f3fcdb083502619921960b942b91f3b81507525844da5c94c9c6302b",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "40ece1725d273888b9f8bbf116b67595cbd571de068168b7be45e31f3992ffcf",
+      "track_count": 49
+    },
+    {
+      "species": "cinderace",
+      "glb_sha256": "86ec2369043ff4acaaa75fb5a57a41cdd47e5d054e30e9e417170d590ef75db3",
+      "previous_runtime_sha256": "71c6208b87580cb8e3ceb7e712354d2b6ea9b54f07e318e315910ace4ab7ad82",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "61072ae13dc4839bbcd232e48a4b3c9fe407b3474149e516c85fd22d03d8f03d",
+      "track_count": 56
+    },
+    {
+      "species": "corviknight",
+      "glb_sha256": "d95abcf3591e1e7df16b8053ad38f05de9b03f85930f94f732ad09a6fe215194",
+      "previous_runtime_sha256": "344f7e2f0e068a5b3934031cfda19363d452c3210005d57509a33a4134633f75",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "db516b17dd4dc0ee4dad78cf59979d9d47015ca0207a30775ac960c18f13f360",
+      "track_count": 56
+    },
+    {
+      "species": "dondozo",
+      "glb_sha256": "cd8f4ec6a2120ffa1d3ca9d0dea500e9dc7966459bdba150db7de84bc82ddf1a",
+      "previous_runtime_sha256": "8e63f37c80d16d845dddf41e329adffdeb40aee5557815f367bd2218c05b5015",
+      "runtime_approved": false,
+      "status": "visibility_preflight_pass",
+      "payload_sha256": "3bf3f0ac06f4bb6112da8dc38b83f59b12394ddbffcb7df11f4d86dc621826f0",
+      "track_count": 14
+    }
+  ],
+  "controls": [
+    {
+      "species": "dragonite",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/frontend/.tmp/visibility-runtime-01/dragonite.scn",
+      "runtime_sha256": "39d0adc9569d9e86021cc1cec00f1f476ddaeb97d4ae94f980093f40f6a7628f",
+      "source_glb_sha256": "b9a3d2202f445225ecf124af2d01dea7e2661c106e353e4a6a7cf2a4fc4baf58",
+      "clips": 7,
+      "motion_frames": 250,
+      "bone_mismatch_frames": 0,
+      "visibility_mismatch_frames": 0,
+      "static_captures": 10,
+      "images_directory": ".tmp/visibility-native-images-01/dragonite"
+    },
+    {
+      "species": "rillaboom",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/frontend/.tmp/visibility-runtime-01/rillaboom.scn",
+      "runtime_sha256": "878c845d609c9c3c213ed649f7fa45b36e7fb647567bb2d1b412a364db08a3b2",
+      "source_glb_sha256": "e1da6da7cd75a6f67439634b1cbf87c9dfea37c87e29b559f6eabf85ac3c666f",
+      "clips": 7,
+      "motion_frames": 231,
+      "bone_mismatch_frames": 0,
+      "visibility_mismatch_frames": 0,
+      "static_captures": 10,
+      "images_directory": ".tmp/visibility-native-images-01/rillaboom"
+    },
+    {
+      "species": "decidueye",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/frontend/.tmp/visibility-runtime-01/decidueye.scn",
+      "runtime_sha256": "193307821acf5b68cd83bd948b2daa7eae432003126b2eea9c690a83bf1bca6a",
+      "source_glb_sha256": "42cb40da796cd838f6e82f4c747fe8c707dcbf34b4a12550c94765e894114f78",
+      "clips": 7,
+      "motion_frames": 221,
+      "bone_mismatch_frames": 0,
+      "visibility_mismatch_frames": 0,
+      "static_captures": 10,
+      "images_directory": ".tmp/visibility-native-images-01/decidueye"
+    },
+    {
+      "species": "magearna",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/frontend/.tmp/visibility-runtime-01/magearna.scn",
+      "runtime_sha256": "969d0e06b4d3fd3ee0645689dd7fdc4506a9c216edb6e4060d86109625fc17df",
+      "source_glb_sha256": "5b46b2149b912de02265bc78904ceb2e2c1d929397abc21d1571f2e670bcd481",
+      "clips": 7,
+      "motion_frames": 236,
+      "bone_mismatch_frames": 0,
+      "visibility_mismatch_frames": 0,
+      "static_captures": 10,
+      "images_directory": ".tmp/visibility-native-images-01/magearna"
+    },
+    {
+      "species": "cinderace",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/frontend/.tmp/visibility-runtime-01/cinderace.scn",
+      "runtime_sha256": "9b02eeefc9406622ed023f92b8ef5696814d3dc99a68283e142dec2c5b2086f8",
+      "source_glb_sha256": "86ec2369043ff4acaaa75fb5a57a41cdd47e5d054e30e9e417170d590ef75db3",
+      "clips": 7,
+      "motion_frames": 211,
+      "bone_mismatch_frames": 0,
+      "visibility_mismatch_frames": 0,
+      "static_captures": 10,
+      "images_directory": ".tmp/visibility-native-images-01/cinderace"
+    }
+  ],
+  "artifacts_sha256": {
+    ".tmp/visibility-stage-01.json": "c476f9e664bfa67300efff3db7a052d5b9c94c9f11d791d5f9d7fe9b323d3519",
+    ".tmp/visibility-runtime-01/report.json": "92074456dc6ac48b521226472eae0392a140a7705fc8be7e6a0f23f4696acf4e",
+    ".tmp/visibility_native_review.gd": "a30e284f9ddd15457e1b9ece494dbc733efa3a702faa9406af7c5f1f36519f3f",
+    ".tmp/visibility-native-images-01/report.json": "37d30a3236b0b5b2fbe09fd76926ac08cc5d46e9861b321560b8348b78cf6195"
+  }
+}

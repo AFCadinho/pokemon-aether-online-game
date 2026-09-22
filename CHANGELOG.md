@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe gecontroleerde 3D-modelpakketten kunnen accessoires en alternatieve lichaamsdelen op de juiste animatieframes tonen en verbergen. Bestaande pakketten worden niet automatisch vervangen.
+
 - De materiaalbelichting van 3D-Pokémon loopt niet meer een frame achter op hun animatie, waardoor dubbele contouren bij bewegen en posewissels verdwijnen.
 
 - Nieuwe 3D-modelpakketten ondersteunen nu meerdere gelijktijdige materiaalanimaties zonder de afspeelsnelheid te veranderen. Bestaande modelpakketten worden niet automatisch vervangen.

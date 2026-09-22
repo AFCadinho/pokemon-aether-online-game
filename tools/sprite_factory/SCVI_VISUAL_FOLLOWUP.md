@@ -1,5 +1,9 @@
 # Fixed 100 — nine visual holds: source diagnosis
 
+> Implementation follow-up: `SCVI_VISIBILITY_PLAYBACK.md` records generic fixed
+> and framed playback, strict mesh/clock binding, five new runtime controls and
+> explicit holds for unresolved variants and dynamic clocks.
+
 ## Result
 
 This step diagnoses the nine holds from `SCVI_RUNTIME_VISUAL_REVIEW.md`.

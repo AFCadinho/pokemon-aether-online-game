@@ -147,6 +147,9 @@ def run(job):
         report['material_response'] = response
     if job.get('identity_intake'):
         report['identity_evidence'] = job['identity_intake']['identity_evidence']
+        from visibility_export import prepare as prepare_visibility
+        report['visibility'] = prepare_visibility(job['identity_intake'], timing, gltf,
+                                                   report['glb_sha256'])
     if effect_payload is not None:
         effect_payload['glb_sha256'] = report['glb_sha256']
         report['material_effects'] = effect_payload
