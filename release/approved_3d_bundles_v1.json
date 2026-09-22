@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "kind": "pokeaether-approved-3d-release",
+  "revision": "approved-pokemon-3d-v1",
+  "index": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v1-30da804a963ff7fe1f544f2365e73261a46fa9eed4df1776ba1369d8eed4297f.json",
+    "size_bytes": 6408,
+    "sha256": "30da804a963ff7fe1f544f2365e73261a46fa9eed4df1776ba1369d8eed4297f"
+  },
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:arcanine:base",
+      "object_key": "optional-assets/pokemon_3d/arcanine/base/v1-e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970.zip",
+      "size_bytes": 20324448,
+      "sha256": "e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970"
+    },
+    {
+      "asset_id": "pokemon_3d:articuno:base",
+      "object_key": "optional-assets/pokemon_3d/articuno/base/v1-d9b3d51136379d0b9ed2024f4d2527536d467bade77cf5bdadbb7ceee5817a9b.zip",
+      "size_bytes": 15966909,
+      "sha256": "d9b3d51136379d0b9ed2024f4d2527536d467bade77cf5bdadbb7ceee5817a9b"
+    },
+    {
+      "asset_id": "pokemon_3d:dragonite:base",
+      "object_key": "optional-assets/pokemon_3d/dragonite/base/v1-a777fdf3715c4d67cf85dfed8daec3aee327cb7ee68e8c14bcfd63c1cca23e5f.zip",
+      "size_bytes": 24560313,
+      "sha256": "a777fdf3715c4d67cf85dfed8daec3aee327cb7ee68e8c14bcfd63c1cca23e5f"
+    },
+    {
+      "asset_id": "pokemon_3d:lucario:base",
+      "object_key": "optional-assets/pokemon_3d/lucario/base/v1-e20ceb07ab16970185cd6d501721b6224c91ec51238822be182c2558a3a33941.zip",
+      "size_bytes": 23822956,
+      "sha256": "e20ceb07ab16970185cd6d501721b6224c91ec51238822be182c2558a3a33941"
+    },
+    {
+      "asset_id": "pokemon_3d:pikachu:base",
+      "object_key": "optional-assets/pokemon_3d/pikachu/base/v1-24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c.zip",
+      "size_bytes": 24675657,
+      "sha256": "24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c"
+    },
+    {
+      "asset_id": "pokemon_3d:roaring-moon:base",
+      "object_key": "optional-assets/pokemon_3d/roaring-moon/base/v1-fea591cfb25f7f126d4503cd834692aa66b871347a72f0de8b4b9204edd1c5e3.zip",
+      "size_bytes": 49872921,
+      "sha256": "fea591cfb25f7f126d4503cd834692aa66b871347a72f0de8b4b9204edd1c5e3"
+    },
+    {
+      "asset_id": "pokemon_3d:snorlax:base",
+      "object_key": "optional-assets/pokemon_3d/snorlax/base/v1-f481678b509185b334e33b9ed9f7f2464d48c9483a931bfa8e75ecc789ad3bd9.zip",
+      "size_bytes": 9379336,
+      "sha256": "f481678b509185b334e33b9ed9f7f2464d48c9483a931bfa8e75ecc789ad3bd9"
+    }
+  ],
+  "total_bundle_bytes": 168602540
+}

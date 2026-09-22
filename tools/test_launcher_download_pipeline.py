@@ -59,6 +59,27 @@ class ExternalAssetMetadataTests(unittest.TestCase):
                 "assets",
             )
 
+    def test_approved_bundle_index_is_individual_release_descriptor(self) -> None:
+        digest = "12" * 32
+        descriptor = package_release._build_asset_bundle_index(
+            f"approved-v1:optional-assets/pokemon_3d/index/approved-v1-{digest}.json:6408:{digest}",
+            "https://updates.example",
+        )
+        self.assertEqual(descriptor["sha256"], digest)
+        self.assertEqual(len(descriptor["requiredAssetIds"]), 7)
+        self.assertIn("pokemon_3d:dragonite:base", descriptor["requiredAssetIds"])
+        self.assertEqual(
+            descriptor["url"],
+            f"https://updates.example/optional-assets/pokemon_3d/index/approved-v1-{digest}.json",
+        )
+
+    def test_approved_bundle_index_rejects_non_bundle_paths(self) -> None:
+        with self.assertRaises(SystemExit):
+            package_release._build_asset_bundle_index(
+                f"approved-v1:assets/models.json:10:{'12' * 32}",
+                "https://updates.example",
+            )
+
 
 class PublicArtifactVerificationTests(unittest.TestCase):
     def test_verifier_requires_exact_size_checksum_and_range_support(self) -> None:

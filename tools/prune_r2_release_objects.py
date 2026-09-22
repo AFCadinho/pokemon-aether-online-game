@@ -124,6 +124,8 @@ def main() -> None:
     manifests = _load_local_manifests(manifest_dir, args.scope)
     manifests.extend(_load_remote_manifests(args.public_base_url, args.scope))
     protected_keys = _protected_keys_from_manifests(manifests, args.public_base_url)
+    bundle_indexes = _load_asset_bundle_indexes(manifests, args.public_base_url)
+    protected_keys.update(_protected_keys_from_asset_bundle_indexes(bundle_indexes))
     if args.scope != "desktop":
         protected_keys.add(_active_web_marker(args.active_web_url))
     _assert_required_references(protected_keys, args.scope)
@@ -228,6 +230,11 @@ def _protected_keys_from_manifests(manifests: list[dict], public_base_url: str) 
             key = _key_from_public_url(launcher.get("url"), public_base_url)
             if key is not None:
                 protected.add(key)
+        bundle_index = manifest.get("assetBundleIndex")
+        if isinstance(bundle_index, dict):
+            key = _key_from_public_url(bundle_index.get("url"), public_base_url)
+            if key is not None:
+                protected.add(key)
         build_id = manifest.get("gameBuildId")
         if isinstance(build_id, str) and re.fullmatch(BUILD_ID_PATTERN, build_id) and isinstance(game, dict) and _key_from_public_url(game.get("url"), public_base_url) is None:
             protected.add(f"web/releases/{build_id}/web-release.json")
@@ -240,6 +247,62 @@ def _protected_keys_from_manifests(manifests: list[dict], public_base_url: str) 
             key = _key_from_public_url(pack.get("url"), public_base_url)
             if key is not None:
                 protected.add(key)
+    return protected
+
+
+def _load_asset_bundle_indexes(manifests: list[dict], public_base_url: str) -> list[dict]:
+    result: list[dict] = []
+    seen: set[str] = set()
+    for manifest in manifests:
+        descriptor = manifest.get("assetBundleIndex")
+        if not isinstance(descriptor, dict):
+            continue
+        url = descriptor.get("url")
+        key = _key_from_public_url(url, public_base_url)
+        expected_hash = descriptor.get("sha256")
+        expected_size = descriptor.get("sizeBytes")
+        if (
+            key is None
+            or not key.startswith("optional-assets/pokemon_3d/index/")
+            or key in seen
+            or not isinstance(expected_hash, str)
+            or re.fullmatch(r"[a-f0-9]{64}", expected_hash) is None
+            or not isinstance(expected_size, int)
+            or expected_size < 1
+            or expected_size > 1024 * 1024
+        ):
+            if key in seen:
+                continue
+            raise SystemExit("Desktop manifest contains an invalid asset bundle index descriptor")
+        request = Request(str(url), headers={"Cache-Control": "no-cache", "User-Agent": "PokeAether-R2-Pruner/1"})
+        try:
+            with urlopen(request, timeout=30) as response:
+                payload = response.read(1024 * 1024 + 1)
+        except (HTTPError, URLError, TimeoutError) as error:
+            raise SystemExit(f"Could not read asset bundle index {url}: {error}") from error
+        if len(payload) != expected_size or hashlib.sha256(payload).hexdigest() != expected_hash:
+            raise SystemExit("Asset bundle index failed manifest integrity verification")
+        index = _read_manifest(payload.decode("utf-8"), str(url))
+        result.append(index)
+        seen.add(key)
+    return result
+
+
+def _protected_keys_from_asset_bundle_indexes(indexes: list[dict]) -> set[str]:
+    protected: set[str] = set()
+    for index in indexes:
+        if index.get("schema") != 1 or index.get("kind") != "pokeaether-optional-asset-index":
+            raise SystemExit("Unsupported asset bundle content index")
+        assets = index.get("assets")
+        if not isinstance(assets, list) or not assets:
+            raise SystemExit("Asset bundle content index has no assets")
+        for asset in assets:
+            if not isinstance(asset, dict):
+                raise SystemExit("Asset bundle content index contains an invalid asset")
+            key = asset.get("object_key")
+            if not isinstance(key, str) or _object_family(key) is None or not key.startswith("optional-assets/pokemon_3d/"):
+                raise SystemExit("Asset bundle content index contains an unsafe object key")
+            protected.add(key)
     return protected
 
 
@@ -307,6 +370,16 @@ def _object_family(key: str) -> str | None:
         return None
     if WEB_OBJECT_PATTERN.fullmatch(key):
         return "web"
+    if key.startswith("optional-assets/pokemon_3d/index/"):
+        name = key.removeprefix("optional-assets/pokemon_3d/index/")
+        if "/" not in name and name.endswith(".json"):
+            return "bundle-index:pokemon_3d"
+        return None
+    if key.startswith("optional-assets/pokemon_3d/"):
+        parts = key.split("/")
+        if len(parts) == 5 and parts[2] and parts[3] and re.fullmatch(r"v[1-9][0-9]*-[a-f0-9]{64}\.zip", parts[4]):
+            return f"bundle:pokemon_3d:{parts[2]}:{parts[3]}"
+        return None
     launcher = LAUNCHER_OBJECT_PATTERN.fullmatch(key)
     if launcher:
         return f"launcher:{launcher.group(2)}"
@@ -390,7 +463,7 @@ def _build_prune_plan(
 
 def _list_release_objects(config: R2Config, scope: str = "desktop") -> list[R2Object]:
     objects: list[R2Object] = []
-    prefixes = [] if scope == "web" else ["assets/", "game/", "launcher/"]
+    prefixes = [] if scope == "web" else ["assets/", "game/", "launcher/", "optional-assets/"]
     if scope != "desktop":
         prefixes.append("web/releases/")
     for prefix in prefixes:
