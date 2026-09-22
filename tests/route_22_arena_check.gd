@@ -132,7 +132,7 @@ func _run() -> void:
 		assert(pass_data.arena.name == "Route22ShallowWater")
 		var water: MeshInstance3D = pass_data.arena.get_node("Route22Scenery/EasternPond/WaterSurface")
 		var floor_y: float = pass_data.arena.get_meta("surface_height")
-		assert(absf(water.position.y - floor_y - 0.025) < 0.001)
+		assert(water.position.y - floor_y >= 0.20 and water.position.y - floor_y <= 0.25, "Water must cover feet without swallowing small combatants")
 		assert(water.material_override.get_shader_parameter("battle_shallows"))
 		assert(pass_data.arena.has_node("Route22Scenery/Route22Landmarks"))
 	var swimmer := Renderer.new()
@@ -159,7 +159,7 @@ func _run() -> void:
 	swimmer.free()
 	await process_frame
 	assert(pool.borrower == null)
-	print("ROUTE_22_WATER_BATTLE_OK: pond placement, thin water, camera, both passes")
+	print("ROUTE_22_WATER_BATTLE_OK: pond placement, submerged feet, camera, both passes")
 	var final_view: WeakRef = weakref(pool.passes[0].viewport)
 	owner_node.queue_free()
 	await process_frame

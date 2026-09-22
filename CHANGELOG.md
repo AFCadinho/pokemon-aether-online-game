@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon staan bij 3D-watergevechten met hun voeten en onderpoten in het ondiepe water, ook op Route 22.
+
 - Bij een netwerkfout tonen guilds, speleracties en de hotbar geen misleidende JSON-fouten meer. Ongeldige serverreacties wissen de bestaande hotbar- en actiegegevens niet.
 
 - Bij surfen of vissen op Route 22 vecht je nu in de ondiepe waterpartij van dezelfde omgeving; landgevechten blijven op het grasveld.

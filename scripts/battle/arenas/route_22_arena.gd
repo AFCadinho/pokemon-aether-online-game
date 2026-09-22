@@ -4,7 +4,7 @@ extends "res://scripts/battle/arenas/forest_arena.gd"
 ## Only layout and in-memory terrain controls differ; no duplicated art pack.
 const Framing = preload("res://scripts/battle/arenas/arena_framing.gd")
 const POND_CENTER := Vector2(Framing.ROUTE_22_POND_ORIGIN.x, Framing.ROUTE_22_POND_ORIGIN.z)
-const FIGHT_WATER_DEPTH := 0.025
+const FIGHT_WATER_DEPTH := 0.22
 var water_battle := false
 const POND_RADII := Vector2(4.8, 6.5)
 const WATER_LEVEL := -0.22
