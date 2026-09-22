@@ -2,7 +2,7 @@ extends RefCounted
 ## Baked world-space clearance, sampled using the AnimationPlayer clip clock.
 ## No animation tracks, sound events, or playback durations are modified.
 const Placement = preload("model_placement.gd")
-const ACTIONS := ["physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_loop"]
+const ACTIONS := ["physical_attack", "physical_attack_2", "special_attack", "damage", "sleep", "faint_start", "faint_loop"]
 
 static func resolve(profile: Dictionary, placement: Dictionary, hash: String, timing: Dictionary) -> Dictionary:
 	if profile.get("schema") != 1 or not placement.get("calibrated", false) or profile.get("sha256") != hash:

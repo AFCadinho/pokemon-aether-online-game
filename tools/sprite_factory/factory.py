@@ -17,7 +17,8 @@ from PIL import Image, ImageChops, ImageDraw, ImageStat, __version__ as PIL_VERS
 
 HERE = Path(__file__).resolve().parent
 VERSION = 1
-CATEGORIES = {'idle', 'physical_attack', 'special_attack', 'damage', 'sleep', 'faint_start', 'faint_loop'}
+CATEGORIES = {'idle', 'physical_attack', 'physical_attack_2', 'special_attack',
+              'damage', 'sleep', 'faint_start', 'faint_loop'}
 
 
 def portrait_bounds(images):

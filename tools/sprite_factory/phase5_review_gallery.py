@@ -6,7 +6,9 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-POSES = [('idle', 'front'), ('idle', 'back'), ('special_attack', 'front'),
+POSES = [('idle', 'front'), ('idle', 'back'),
+         ('physical_attack', 'front'), ('physical_attack_2', 'front'),
+         ('special_attack', 'front'),
          ('sleep', 'front'), ('faint_start', 'front')]
 
 
@@ -17,7 +19,7 @@ def build(output):
     motion_previews = []
     for index, entry in enumerate(catalog['entries']):
         if index % 5 == 0:
-            sheet = Image.new('RGB', (1200, 1160), '#101822')
+            sheet = Image.new('RGB', ((len(POSES) + 1) * 200, 1160), '#101822')
             sheets.append(sheet)
         draw = ImageDraw.Draw(sheet)
         y = (index % 5) * 230 + 10
@@ -44,7 +46,8 @@ def build(output):
             draw.text((10, y + 65), 'XYZ units\n' + '\n'.join(map(str, dimensions)), fill='white')
         for column, (action, view) in enumerate(POSES):
             x = (column + 1) * 200
-            pose = next((p for p in report.get('poses', []) if p['category'] == action and p['view'] == view), {})
+            pose = next((p for p in report.get('poses', []) if p['category'] == action
+                         and p['view'] == view and not p.get('sample')), {})
             draw.text((x, y), action + ' / ' + view, fill='white')
             if pose.get('image'):
                 relative = Path('review') / entry['species'] / pose['image']

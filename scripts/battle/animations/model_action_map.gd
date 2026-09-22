@@ -4,6 +4,7 @@ extends RefCounted
 const CLIPS := {
 	"idle": ["idle"], "sleep": ["sleep"], "damage": ["damage"],
 	"physical_attack": ["physical_attack", "special_attack"],
+	"physical_attack_2": ["physical_attack_2", "physical_attack", "special_attack"],
 	"special_attack": ["special_attack", "physical_attack"],
 	"faint_start": ["faint_start"], "faint_loop": ["faint_loop"],
 }

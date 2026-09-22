@@ -1,5 +1,6 @@
 extends Node
 const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
+const AttackSelection = preload("res://scripts/battle/animations/model_attack_selection.gd")
 const Timeline = preload("res://scripts/battle/animations/battle_sound_timeline.gd")
 
 class CapturingPlayer extends MoveAnimationPlayer:
@@ -21,7 +22,14 @@ func _run() -> void:
 	assert(ActionMap.resolve("faint_loop", available, timing).loop)
 	assert(ActionMap.resolve("unknown", available, timing).is_empty())
 	assert(ActionMap.resolve("physical_attack", PackedStringArray(["special_attack"]), timing).action == "special_attack")
+	assert(ActionMap.resolve("physical_attack_2", PackedStringArray(["physical_attack_2"]), timing).action == "physical_attack_2")
+	assert(ActionMap.resolve("physical_attack_2", PackedStringArray(["physical_attack"]), timing).action == "physical_attack")
 	assert(ActionMap.resolve("damage", PackedStringArray(["idle", "physical_attack"]), timing).is_empty())
+	assert(AttackSelection.family_for("Dragon Claw") == "claw")
+	assert(AttackSelection.family_for("Fire Fang") == "bite")
+	assert(AttackSelection.family_for("Earthquake").is_empty())
+	assert(AttackSelection.request_for("Crunch", {"bite": "physical_attack_2"}) == "physical_attack_2")
+	assert(AttackSelection.request_for("Dragon Claw", {}) == "physical_attack")
 	for invalid in [0, -1, NAN, true, "120"]:
 		var bad := timing.duplicate(true)
 		bad.idle.frames = invalid

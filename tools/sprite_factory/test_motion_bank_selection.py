@@ -46,6 +46,17 @@ class MotionBankSelectionTests(unittest.TestCase):
         self.assertIsNone(r['motions']['damage'])
         self.assertIsNone(r['motion_bank'])
 
+    def test_second_physical_attack_is_optional_and_stays_in_idle_bank(self):
+        r = self.select(['00001_battlewait01_loop', '00400_attack01',
+                         '00410_attack02', '20410_attack02'])
+        self.assertTrue(r['motions']['physical_attack_2'].endswith(
+            '00410_attack02.tranm'))
+        self.assertFalse(any(w.startswith('motion_bank_hold:physical_attack_2:')
+                             for w in r['warnings']))
+        missing = self.select(['00001_battlewait01_loop', '00400_attack01'])
+        self.assertIsNone(missing['motions']['physical_attack_2'])
+        self.assertNotIn('missing_action:physical_attack_2', missing['warnings'])
+
     def test_measured_six_model_advisory_sets(self):
         evidence = json.loads(Path(__file__).with_name('posture_family_results.json').read_text())
         for entry in evidence['entries']:

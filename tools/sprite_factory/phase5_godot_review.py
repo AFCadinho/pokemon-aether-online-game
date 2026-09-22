@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 
 REQUIRED = {'idle', 'physical_attack', 'special_attack', 'damage', 'sleep', 'faint_start', 'faint_loop'}
+OPTIONAL = {'physical_attack_2'}
 
 
 def build_gallery(output):
@@ -61,7 +62,7 @@ def prepare_entries(catalog):
         elif Path(job['source']).with_name('import.json').exists():
             raise ValueError('Imported source needs material provenance; rerun source review')
         actions = review['review_mapping']
-        if not actions.get('idle') or set(actions) - REQUIRED:
+        if not actions.get('idle') or set(actions) - REQUIRED - OPTIONAL:
             raise ValueError('Invalid review action mapping')
         result.append({'species': name, 'status': 'pending', 'source': job['source'],
                        'source_sha256': digest, 'actions': actions,

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De resetknop voor de 3D-battlecamera staat voortaan direct onder het turnlabel. De 3D-modelpipeline kan daarnaast een tweede gereviewde fysieke aanval bewaren, zonder die vóór classificatie automatisch aan moves toe te wijzen.
+
 - Garchomp gebruikt in de lokale 3D-catalogus nu bijpassende staande animaties voor aanvallen, schade en faint, zonder onverwacht naar zijn vliegpose te springen.
 
 - Het ‘Switch’-label staat gecentreerd boven de partyslots, met grotere tekst, een duidelijkere cyaanrand en meer ruimte onder de actietekst.
