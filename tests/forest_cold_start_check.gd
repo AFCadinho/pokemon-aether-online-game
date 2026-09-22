@@ -9,10 +9,10 @@ func _run() -> void:
 	settings.battle_3d_arena = "forest"
 	settings.battle_3d_catalog_path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	settings.battle_3d_forest_manifest = ""
-	assert(Arenas.forest_scene == null, "Must start in a fresh process")
+	assert(Arenas.Art.mounted_path.is_empty(), "Must start in a fresh process")
 	var pool: Node
 	if OS.get_environment("POKEAETHER_TEST_FOREST_POOL") == "1":
-		pool = preload("res://scripts/battle/arenas/forest_environment_pool.gd").prepare(root,settings.get_battle_3d_forest_manifest(),Vector2i(1152,648))
+		pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd").prepare(root,settings.get_battle_3d_forest_manifest(),Vector2i(1152,648))
 		assert(pool != null)
 		while not pool.ready_for_battle:
 			assert(not pool.failed)

@@ -1,4 +1,4 @@
-extends "res://scripts/battle/arenas/arena_geometry.gd"
+extends "res://scripts/battle/arenas/shared/geometry.gd"
 ## Shared by client and visual review. The sandbank is submerged.
 const WATER_DEPTH := 0.22
 
@@ -43,7 +43,7 @@ func build() -> Node3D:
 	var ocean := PlaneMesh.new()
 	ocean.size = Vector2(2000, 2000)
 	var water := ShaderMaterial.new()
-	water.shader = load("res://tools/sprite_factory/sea_water.gdshader")
+	water.shader = load("res://scripts/battle/arenas/generic/water.gdshader")
 	var surface := _put(coast, ocean, water, Vector3(0, WATER_DEPTH, 0), Vector3.ONE)
 	surface.name = "ShallowWater"
 	surface.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

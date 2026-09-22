@@ -15,24 +15,24 @@ fences, purple/white flowers, and the eastern waterbank. The composition is adap
 battle camera and clear fighter positions, rather than reproducing the entire
 map at overworld scale. This is a single arena for the route's land battles.
 
-The arena subclasses the existing forest builder. It uses the same trusted
-mounted Temperate Forest pack, Terrain3D floor, grass, fir/spruce scenes, textured
-rocks, flower scenes, wind shaders, and neutral battle lighting/skylight. The
-rock tint is warmed for the brown Route 22 cliffs. Stairs, curbs and fences use
-the same procedural material helper as the other existing arenas. No new image,
-model, or copy of the purchased pack is added to the client repository.
+The arena extends the shared mesh-grassland builder under `shared/`; its own
+composition lives in `maps/route_22/arena.gd`. It uses the same trusted mounted
+Temperate Forest art pack: grass, fir/spruce scenes, textured rocks, flowers,
+wind shaders, ground textures and neutral battle lighting/skylight. Ordinary
+ArrayMesh terrain and MultiMesh grass replace Terrain3D. The rock tint is warmed
+for the brown Route 22 cliffs. Stairs, curbs and fences use the shared procedural
+material helper. No copied textures/models or native terrain module are needed.
 The eastern pond uses the sea arena’s palette and animated crossing ripples,
 adapted to its shoreline. In land battles its recessed basin keeps the fighting
 area dry. In water battles the pond bottom rises to 0.22 units below the surface;
 the camera and fighter origins move to the same eastern pond at `(11, 0, -4.5)`.
 Trees and flowers stay outside the water, with both camera corridors kept open.
 
-Terrain height/control changes and scenery transforms are runtime-only. Source
-resources are not saved. Authored background objects are hidden; generated
-Terrain3D containers remain visible. A six-unit clearing retains the original
-forest's battle presentation. Both fighter spawns are flat at `surface_height`. The water variant uses the
-shared framing origin for camera movement and actor placement, with the same
-relative combat spacing. Terrain and landmarks remain in their original positions.
+The bounded terrain mesh is generated from the route shape and shared between
+render passes. Grass placements exclude the paths, pond and six-unit clearing.
+Both fighter spawns are flat at `surface_height`. Water battles use the shared
+framing origin for camera movement and actor placement with unchanged spacing.
+Terrain and landmarks remain in their original positions.
 
 ## Preparation and ownership
 
@@ -47,7 +47,7 @@ The generic sea arena also puts its unchanged, calibrated sandbank below a
 0.22-unit water layer, using translucent shallows and opaque deep water instead
 of a dry beach ring. No Pokémon-specific placement offsets are introduced.
 
-The existing desktop forest-pack dependency and Pokémon model admission,
+The existing desktop art-pack dependency and Pokémon model admission,
 grounding and 2D fallback rules remain in effect. This change does not add models
 for Gary's party or certify their presentation. No live/server rival battle or
 production deployment is performed by the offline tests.
@@ -74,9 +74,9 @@ Focused checks:
 - `tests/battle_arena_contract_check.gd`: arena IDs, camera/spawn contract.
 - `tests/forest_map_preparation_check.tscn`: map-entry loading cover/input ownership.
 - `tests/route_22_arena_check.gd`: Route 22 resolution, water/PvP/override isolation,
-  shared 2D resources; with `POKEAETHER_FOREST_MANIFEST`, also both real terrain
+  shared 2D resources; with `POKEAETHER_FOREST_MANIFEST`, also both mesh render
   passes, ground heights, repeated presenter leases, standalone rendering,
-  calibration fallback, variant switches, terrain isolation and viewport cleanup;
+  calibration fallback, variant switches, mesh isolation and viewport cleanup;
   water variant ground contact, pond-relative camera motion and both render passes.
 - `tests/shallow_water_arena_check.gd`: generic surf/fishing selection, fully
   submerged sandbank, preserved ground calibration, both render passes and cleanup.
@@ -86,8 +86,10 @@ The existing Terrain3D interpolation deprecation and legacy scene UID warnings
 are unrelated to this arena. Full development certification and release-platform
 packaging are separate from this local feature review.
 
-## Terrain3D-free comparison prototype
+## Structure and comparison evidence
 
-See [Route 22 mesh review](route-22-mesh-review.md) for the separate land/water
-prototype, reproducible A/B render checks and measured preparation/memory costs.
-Automatic battle routing still uses the arena described above during this review.
+[The arena index](../scripts/battle/arenas/README.md) distinguishes generic
+terrain builders from map-specific compositions. Only Route 22 currently has
+map-specific land/water variants. [The mesh comparison](route-22-mesh-review.md)
+records the earlier proof and its timing/memory measurements; mesh terrain is now
+the runtime implementation for Route 22 and generic grassfield.

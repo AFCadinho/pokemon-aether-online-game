@@ -1,5 +1,5 @@
 extends Node
-## One world-session-owned pair of environment passes. Never stores battle state.
+## One world-session-owned pair of mesh-environment passes. Never stores battle state.
 const Catalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const Response = preload("res://scripts/battle/battle_ui/material_response.gd")
 static var current: WeakRef
@@ -56,7 +56,7 @@ func _process(_delta: float) -> void:
 	if passes.size() < 2:
 		passes.append(_build_pass(passes.size() == 1))
 		phase += 1
-		return # Spread terrain assembly over two frames, outside the battle.
+		return # Spread mesh assembly over two frames, outside the battle.
 	var sample := [Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_MESH), Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_SURFACE), Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_DRAW)]
 	quiet_frames = quiet_frames + 1 if sample == last_pipelines else 0
 	last_pipelines = sample

@@ -1,3 +1,14 @@
+# Current grassfield and outdoor loading
+
+Grassfield and both Route 22 variants now use ordinary mesh terrain. Terrain3D
+and the original forest-world scene are no longer loaded by the client. Shared
+art loads asynchronously through the existing preparation UI and session pool.
+The old native extension field is ignored; the existing forest art pack remains
+required. See [arena structure](../scripts/battle/arenas/README.md).
+
+The measurements and implementation notes below are historical evidence from
+before this migration, not measurements of the current mesh-based arenas.
+
 # Forest first-battle preparation
 
 The fixed 10-second total preparation deadline could reject a still-loading
