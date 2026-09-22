@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave, met een animatiekeuze, pauze, opnieuw afspelen en slepen om te draaien. Ontbrekende modellen houden hun sprite-preview.
+- Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave. Kies animaties via de bestaande playknop boven het level, zoom in of sleep om te draaien. Modellen worden groter gekadreerd en animatiewissels wissen de vorige pose; een extra platform verbergt de faint-pose niet meer. Ontbrekende modellen houden hun sprite-preview.
 
 - Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.
 
