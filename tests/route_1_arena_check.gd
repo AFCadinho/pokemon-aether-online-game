@@ -72,6 +72,15 @@ func _run() -> void:
 	assert(pool.borrower.get_ref() == stage)
 	stage.material_response._build()
 	assert(stage.material_response.viewport == pool.passes[1].viewport)
+	root.get_node("WorldTimeService").set_debug_time(23)
+	for frame in 2:
+		await process_frame
+	for pass_data in pool.passes:
+		assert(pass_data.arena.has_node("OutdoorLighting"))
+		var environment: Environment = pass_data.world.get_child(0).environment
+		assert(environment.background_mode == Environment.BG_SKY)
+		assert(environment.sky.sky_material.sky_top_color.is_equal_approx(Color("101f48")))
+	root.get_node("WorldTimeService").clear_debug_time()
 	for index in 2:
 		assert(is_equal_approx(stage._position(index).y, float(stage.arena_root.get_meta("surface_height"))))
 	stage.free()

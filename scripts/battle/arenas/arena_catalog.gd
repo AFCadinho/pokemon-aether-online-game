@@ -79,7 +79,11 @@ static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 		if id in ["route_1", "route_1_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_1/arena.gd").new()
 			route.water_battle = id == "route_1_water"
-			return route.build(camera)
+			var arena: Node3D = route.build(camera)
+			var lighting := preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd").new()
+			lighting.name = "OutdoorLighting"
+			arena.add_child(lighting)
+			return arena
 		if id in ["route_22", "route_22_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_22/arena.gd").new()
 			route.water_battle = id == "route_22_water"

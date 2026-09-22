@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De 3D-arena van Route 1 volgt nu dag, schemering en nacht van de overworld, ook bij surf- en visgevechten. Zacht invullicht houdt Pokémon in het donker zichtbaar.
+
 - De 3D-modelpipeline kan een tweede gereviewde fysieke aanval bewaren, zonder die vóór classificatie automatisch aan moves toe te wijzen.
 
 - Wilde immersive battles tonen nu rechtsboven de Pokémon HOME-afbeelding van de tegenstander in plaats van een leeg trainerportret.
