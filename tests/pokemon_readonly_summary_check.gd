@@ -181,7 +181,8 @@ func _run() -> void:
 	)
 	_check(fallback_id_label.text == "#807", "Zeraora renders its National Dex number instead of a database id")
 	fallback_id_label.free()
-	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
+	var gender_icon := nodes.get("gender_icon") as TextureRect
+	_check(gender_icon != null and gender_icon.texture != null and gender_icon.visible, "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
 	_check((nodes.get("ability_stack") as VBoxContainer).tooltip_text == "", "ability uses the compact hover card instead of a native tooltip")
 	_check((nodes.get("nature_stack") as VBoxContainer).tooltip_text == "", "nature uses the compact hover card instead of a native tooltip")

@@ -26912,7 +26912,10 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 			pokemon_summary_animated_sprite.stop()
 			pokemon_summary_animated_sprite.hide()
 			pokemon_summary_sprite.hide()
-			preview.bind_animation_button(pokemon_summary_animated_sprite.get_meta("preview_animation_button", null) as MenuButton)
+			var preview_animation_button: MenuButton = null
+			if pokemon_summary_animated_sprite.has_meta("preview_animation_button"):
+				preview_animation_button = pokemon_summary_animated_sprite.get_meta("preview_animation_button") as MenuButton
+			preview.bind_animation_button(preview_animation_button)
 			var zoom := stage.find_child("PreviewZoomButton", true, false) as Button
 			if zoom != null:
 				zoom.show()
@@ -26921,7 +26924,9 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 	if preview != null:
 		preview._clear_actor()
 		preview.hide()
-	var animation_button := pokemon_summary_animated_sprite.get_meta("preview_animation_button", null) as MenuButton
+	var animation_button: MenuButton = null
+	if pokemon_summary_animated_sprite.has_meta("preview_animation_button"):
+		animation_button = pokemon_summary_animated_sprite.get_meta("preview_animation_button") as MenuButton
 	if animation_button != null:
 		animation_button.remove_meta("model_preview")
 	var zoom := stage.find_child("PreviewZoomButton", true, false) as Control
