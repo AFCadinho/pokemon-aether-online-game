@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Kaartmetadata wacht nu ook in lokale desktop-debugruns tot het eerste beeld klaar is. Daardoor laden NPC's, overworld-Pokémon en encounters niet meer in de zware eerste laadframe vast.
+
 - Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
 
 - Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
