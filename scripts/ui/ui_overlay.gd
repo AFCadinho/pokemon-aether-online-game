@@ -26912,14 +26912,18 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 			pokemon_summary_animated_sprite.stop()
 			pokemon_summary_animated_sprite.hide()
 			pokemon_summary_sprite.hide()
-			_configure_preview_animation_button(pokemon_summary_animated_sprite, null)
-			var zoom := stage.find_child("PreviewZoomButton", true, false) as Control
+			preview.bind_animation_button(pokemon_summary_animated_sprite.get_meta("preview_animation_button", null) as MenuButton)
+			var zoom := stage.find_child("PreviewZoomButton", true, false) as Button
 			if zoom != null:
-				zoom.hide()
+				zoom.show()
+				preview.set_zoom(2.0 if zoom.button_pressed else 1.0)
 			return
 	if preview != null:
 		preview._clear_actor()
 		preview.hide()
+	var animation_button := pokemon_summary_animated_sprite.get_meta("preview_animation_button", null) as MenuButton
+	if animation_button != null:
+		animation_button.remove_meta("model_preview")
 	var zoom := stage.find_child("PreviewZoomButton", true, false) as Control
 	if zoom != null:
 		zoom.show()
@@ -36863,6 +36867,9 @@ func _add_preview_zoom_button(
 	)
 	button.toggled.connect(func(zoomed: bool) -> void:
 		var factor := 2.0 if zoomed else 1.0
+		var model_preview := parent.get_node_or_null("SummaryModelPreview")
+		if model_preview != null and model_preview.visible:
+			model_preview.set_zoom(factor)
 		var center := Vector2(viewport.size) * Vector2(0.5, center_y)
 		viewport.canvas_transform = Transform2D(Vector2(factor, 0), Vector2(0, factor), center * (1.0 - factor))
 		fallback.pivot_offset = fallback.size * 0.5
@@ -37008,6 +37015,15 @@ func _on_preview_animation_selected(
 	animated_sprite: AnimatedSprite2D,
 	loader: Node
 ) -> void:
+	if button != null and button.has_meta("model_preview"):
+		var model_preview: Variant = button.get_meta("model_preview").get_ref()
+		if is_instance_valid(model_preview) and model_preview.visible:
+			var menu := button.get_popup()
+			var index := menu.get_item_index(item_id)
+			if index >= 0:
+				model_preview.play_clip(str(menu.get_item_metadata(index)))
+				button.tooltip_text = "Playing: %s" % menu.get_item_text(index)
+			return
 	if button == null or animated_sprite == null or loader == null:
 		return
 	var popup := button.get_popup()
