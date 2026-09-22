@@ -310,6 +310,13 @@ func _check_runtime_renderer() -> void:
 		renderer.player_battle_art.get_node_or_null("Headgear") == null,
 		"Aether Blossom leaves unequipped headgear absent"
 	)
+	for layer_name: String in ["Top", "Shoes", "Hair", "Facegear"]:
+		var wishmaker_layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		_check(
+			wishmaker_layer != null
+			and wishmaker_layer.texture.get_size() * wishmaker_layer.scale == Vector2(160.0, 160.0),
+			"Aether Blossom %s aligns to the 160px trainer canvas" % layer_name.to_lower()
+		)
 	_check(
 		renderer.player_layer_metadata.filter(
 			func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
