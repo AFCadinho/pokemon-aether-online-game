@@ -143,6 +143,21 @@ func _wrong_manifest_archive(source: String, destination: String) -> void:
 	assert(writer.close() == OK)
 
 
+func _snapshot_loader_catalog(source_catalog: String) -> void:
+	var entries: Array = JSON.parse_string(FileAccess.get_file_as_string(source_catalog))
+	var models := output.path_join("loader-models")
+	assert(DirAccess.make_dir_recursive_absolute(models) == OK)
+	for entry: Dictionary in entries:
+		var destination := models.path_join(str(entry.runtime_sha256) + ".scn")
+		var file := FileAccess.open(destination, FileAccess.WRITE)
+		file.store_buffer(FileAccess.get_file_as_bytes(entry.runtime_path))
+		file.close()
+		entry.runtime_path = destination
+	var catalog := FileAccess.open(output.path_join("loader-catalog.json"), FileAccess.WRITE)
+	catalog.store_string(JSON.stringify(entries, "\t") + "\n")
+	catalog.close()
+
+
 func _run() -> void:
 	output = OS.get_environment("POKEAETHER_ASSET_BUNDLE_TEST_OUTPUT")
 	assert(output.is_absolute_path() and not DirAccess.dir_exists_absolute(output))
@@ -214,6 +229,7 @@ func _run() -> void:
 	assert(after["pokemon_3d:dragonite:base"].archive_sha256 == dragonite_v2.asset.sha256)
 	for unchanged in ["pokemon_3d:roaring-moon:base", "pokemon_3d:arcanine:base"]:
 		assert(after[unchanged].archive_sha256 == before[unchanged].archive_sha256)
+	_snapshot_loader_catalog(store.catalog_path())
 
 	# Corrupt and incomplete replacements never alter the active generation.
 	var dragonite_v3 := _write_bundle("dragonite", 3, 3)
