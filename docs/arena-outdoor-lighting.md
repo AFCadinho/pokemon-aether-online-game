@@ -1,9 +1,11 @@
 # Outdoor battle lighting
 
-Route 1 (land and water) pilots `arenas/shared/outdoor_lighting.gd`.
-The catalog adds the controller inside the arena so both pooled environment
-passes and independently built material-response arenas receive it. Other arena
-IDs retain their existing lighting.
+Every arena definition explicitly declares its lighting profile. The generic
+grassfield, generic water arena, Route 1 and Route 22 (land and water) use
+`arenas/shared/outdoor_lighting.gd`. The cave and enclosed stadium retain their
+purpose-built lighting. The catalog adds the controller inside outdoor arenas so
+both pooled environment passes and independently built material-response arenas
+receive it.
 
 The controller reads WorldTimeService, matching the overworld's UTC/server clock
 and debug time. Dawn is 05:00–08:00, dusk 17:30–20:30. Colors and energies

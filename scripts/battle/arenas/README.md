@@ -2,19 +2,19 @@
 
 This directory separates reusable terrain arenas from overworld-map-specific
 arenas. `arena_catalog.gd` is the entry point: `DEFINITIONS` records each arena's
-scope, terrain, optional map ID and builder path. Stable IDs preserve existing
-settings and environment resources.
+scope, terrain, lighting profile, optional map ID and builder path. Stable IDs
+preserve existing settings and environment resources.
 
-| Scope | Terrain/map | Stable ID | Builder |
-| --- | --- | --- | --- |
-| Generic | Grassfield | `forest` | `generic/grassfield_arena.gd` |
-| Generic | Cave | `cave` | `generic/cave_arena.gd` |
-| Generic | Water / surf / fishing | `sea` | `generic/water_arena.gd` |
-| Generic | Stadium / PvP | `stadium` | `generic/stadium_arena.gd` |
-| Map-specific | Route 1, land | `route_1` | `maps/route_1/arena.gd` |
-| Map-specific | Route 1, water | `route_1_water` | `maps/route_1/arena.gd` with `water_battle` |
-| Map-specific | Route 22, land | `route_22` | `maps/route_22/arena.gd` |
-| Map-specific | Route 22, water | `route_22_water` | `maps/route_22/arena.gd` with `water_battle` |
+| Scope | Terrain/map | Stable ID | Lighting | Builder |
+| --- | --- | --- | --- | --- |
+| Generic | Grassfield | `forest` | Outdoor | `generic/grassfield_arena.gd` |
+| Generic | Cave | `cave` | Enclosed | `generic/cave_arena.gd` |
+| Generic | Water / surf / fishing | `sea` | Outdoor | `generic/water_arena.gd` |
+| Generic | Stadium / PvP | `stadium` | Enclosed | `generic/stadium_arena.gd` |
+| Map-specific | Route 1, land | `route_1` | Outdoor | `maps/route_1/arena.gd` |
+| Map-specific | Route 1, water | `route_1_water` | Outdoor | `maps/route_1/arena.gd` with `water_battle` |
+| Map-specific | Route 22, land | `route_22` | Outdoor | `maps/route_22/arena.gd` |
+| Map-specific | Route 22, water | `route_22_water` | Outdoor | `maps/route_22/arena.gd` with `water_battle` |
 
 `classic` is the presenter's fallback surface, not a separately authored map.
 Route 1 and Route 22 currently have map-specific arenas. 2D environment resources and
@@ -29,7 +29,8 @@ encounter selection live in `resources/battle/environments` and
 - `maps/<map>/`: one overworld map's composition, landmarks and local shaders.
   Land/water variants may share a builder and art with different battle origins.
 - `shared/`: mesh generation, grass batching, art loading, geometry helpers,
-  camera/spawn framing and the session-owned environment pool.
+  camera/spawn framing, outdoor day/night lighting and the session-owned
+  environment pool.
 
 The mesh grassland base is shared infrastructure, not the generic grassfield
 layout. Route 22 does not inherit another map's layout. Additional map builders

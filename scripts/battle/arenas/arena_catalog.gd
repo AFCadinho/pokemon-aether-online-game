@@ -2,6 +2,7 @@ extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
 const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
+const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
 const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
 
@@ -33,15 +34,15 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
-	"classic": {"scope": "generic", "terrain": "fallback", "builder": ""},
-	"forest": {"scope": "generic", "terrain": "grass", "builder": "generic/grassfield_arena.gd"},
-	"cave": {"scope": "generic", "terrain": "cave", "builder": "generic/cave_arena.gd"},
-	"sea": {"scope": "generic", "terrain": "water", "builder": "generic/water_arena.gd"},
-	"stadium": {"scope": "generic", "terrain": "stadium", "builder": "generic/stadium_arena.gd"},
-	"route_1": {"scope": "map", "map_id": "kanto_route_1", "terrain": "grass", "builder": "maps/route_1/arena.gd"},
-	"route_1_water": {"scope": "map", "map_id": "kanto_route_1", "terrain": "water", "builder": "maps/route_1/arena.gd"},
-	"route_22": {"scope": "map", "map_id": "kanto_route_22", "terrain": "grass", "builder": "maps/route_22/arena.gd"},
-	"route_22_water": {"scope": "map", "map_id": "kanto_route_22", "terrain": "water", "builder": "maps/route_22/arena.gd"},
+	"classic": {"scope": "generic", "terrain": "fallback", "lighting": "fallback", "builder": ""},
+	"forest": {"scope": "generic", "terrain": "grass", "lighting": "outdoor", "builder": "generic/grassfield_arena.gd"},
+	"cave": {"scope": "generic", "terrain": "cave", "lighting": "enclosed", "builder": "generic/cave_arena.gd"},
+	"sea": {"scope": "generic", "terrain": "water", "lighting": "outdoor", "builder": "generic/water_arena.gd"},
+	"stadium": {"scope": "generic", "terrain": "stadium", "lighting": "enclosed", "builder": "generic/stadium_arena.gd"},
+	"route_1": {"scope": "map", "map_id": "kanto_route_1", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_1/arena.gd"},
+	"route_1_water": {"scope": "map", "map_id": "kanto_route_1", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_1/arena.gd"},
+	"route_22": {"scope": "map", "map_id": "kanto_route_22", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_22/arena.gd"},
+	"route_22_water": {"scope": "map", "map_id": "kanto_route_22", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_22/arena.gd"},
 }
 
 static func definition(id: String) -> Dictionary:
@@ -71,6 +72,16 @@ static func camera_target(id: String) -> Vector3:
 static func uses_forest_assets(id: String) -> bool:
 	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water"]
 
+static func uses_outdoor_lighting(id: String) -> bool:
+	return str(definition(id).get("lighting", "fallback")) == "outdoor"
+
+static func _apply_lighting(id: String, arena: Node3D) -> Node3D:
+	if arena != null and uses_outdoor_lighting(id):
+		var lighting := OutdoorLighting.new()
+		lighting.name = "OutdoorLighting"
+		arena.add_child(lighting)
+	return arena
+
 static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 	if uses_forest_assets(id) and not Art.mounted_path.is_empty() and Art.error.is_empty():
 		for child in world.get_children():
@@ -79,16 +90,12 @@ static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 		if id in ["route_1", "route_1_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_1/arena.gd").new()
 			route.water_battle = id == "route_1_water"
-			var arena: Node3D = route.build(camera)
-			var lighting := preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd").new()
-			lighting.name = "OutdoorLighting"
-			arena.add_child(lighting)
-			return arena
+			return _apply_lighting(id, route.build(camera))
 		if id in ["route_22", "route_22_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_22/arena.gd").new()
 			route.water_battle = id == "route_22_water"
-			return route.build(camera)
-		return preload("res://scripts/battle/arenas/generic/grassfield_arena.gd").new().build(camera)
+			return _apply_lighting(id, route.build(camera))
+		return _apply_lighting(id, preload("res://scripts/battle/arenas/generic/grassfield_arena.gd").new().build(camera))
 	if not BUILDERS.has(id):
 		return null
-	return BUILDERS[id].new(world).build()
+	return _apply_lighting(id, BUILDERS[id].new(world).build())

@@ -58,6 +58,7 @@ func _run() -> void:
 		assert(_height(terrain, Vector3(0, 0, -24)) > first_height + 4.0)
 		assert(arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_COLOR][43 * 121 + 65].r > 0.95)
 		assert(arena.has_node("Route22Scenery/SharedForestGrass"))
+		assert(arena.has_node("OutdoorLighting"))
 		assert(not ClassDB.class_exists("Terrain3D"))
 	# Exercise real presenter leases, both material passes, and repeat teardown.
 	var settings = root.get_node("SettingsManager")
@@ -88,6 +89,7 @@ func _run() -> void:
 	await _ready_pool(pool)
 	assert(old_main.get_ref() == null and old_response.get_ref() == null)
 	assert(pool.arena_id == "forest")
+	assert(pool.passes.all(func(pass_data): return pass_data.arena.has_node("OutdoorLighting")))
 	assert(is_equal_approx(_height(pool.passes[0].arena, Vector3(0, 0, -24)), baseline_height), "Route edits must not change the original forest terrain")
 	assert(not pool.passes[0].arena.has_node("Route22Scenery"))
 	# A ready forest pool must never lend its scenery to a Route 22 battle.
@@ -136,6 +138,7 @@ func _run() -> void:
 		assert(water.position.y - floor_y >= 0.20 and water.position.y - floor_y <= 0.25, "Water must cover feet without swallowing small combatants")
 		assert(water.material_override.get_shader_parameter("battle_shallows"))
 		assert(pass_data.arena.has_node("Route22Scenery/Route22Landmarks"))
+		assert(pass_data.arena.has_node("OutdoorLighting"))
 	var swimmer := Renderer.new()
 	owner_node.add_child(swimmer)
 	swimmer.setup()
