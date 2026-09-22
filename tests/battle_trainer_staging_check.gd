@@ -286,33 +286,42 @@ func _check_runtime_renderer() -> void:
 	renderer.show_player({
 		"gender": "female",
 		"body": "Gen4_Base_F_v1",
-		"hair": "Aether_Female_Hair_01",
+		"hair": "Aether_Blossom_Hair",
 		"headgear": "__none__",
 		"top": "Aether_Blossom_Dress",
 		"bottom": "Aether_Blossom_Trousers",
 		"shoes": "Aether_Blossom_Shoes",
+		"facegear": "Aether_Blossom_Earrings",
 	}, Vector2.LEFT)
 	_check(
 		renderer.player_battle_art.visible
 		and renderer.player_battle_art.get_node_or_null("Body") != null,
-		"an outfit without complete battle art keeps the dedicated base body"
+		"Aether Blossom keeps the dedicated battle base body"
 	)
 	_check(
 		renderer.player_battle_art.get_node_or_null("Top") != null
-		and renderer.player_battle_art.get_node_or_null("Bottom") != null,
-		"missing top and bottom battle art use their Starter Kit layers"
+		and renderer.player_battle_art.get_node_or_null("Bottom") != null
+		and renderer.player_battle_art.get_node_or_null("Hair") != null
+		and renderer.player_battle_art.get_node_or_null("Shoes") != null
+		and renderer.player_battle_art.get_node_or_null("Facegear") != null,
+		"Aether Blossom uses every authored Wishmaker battle layer"
 	)
 	_check(
-		renderer.player_battle_art.get_node_or_null("Hair") == null
-		and renderer.player_battle_art.get_node_or_null("Shoes") == null
-		and renderer.player_battle_art.get_node_or_null("Headgear") == null,
-		"other unavailable outfit layers stay empty"
+		renderer.player_battle_art.get_node_or_null("Headgear") == null,
+		"Aether Blossom leaves unequipped headgear absent"
 	)
+	for layer_name: String in ["Top", "Shoes", "Hair", "Facegear"]:
+		var wishmaker_layer := renderer.player_battle_art.get_node_or_null(layer_name) as Sprite2D
+		_check(
+			wishmaker_layer != null
+			and wishmaker_layer.texture.get_size() * wishmaker_layer.scale == Vector2(160.0, 160.0),
+			"Aether Blossom %s aligns to the 160px trainer canvas" % layer_name.to_lower()
+		)
 	_check(
 		renderer.player_layer_metadata.filter(
 			func(layer: Dictionary) -> bool: return bool(layer.get("fallback", false))
-		).size() == 2,
-		"only top and bottom report Starter Kit fallback layers"
+		).size() == 1,
+		"only Aether Blossom's trousers use the Starter Kit fallback"
 	)
 	for gender: String in ["male", "female"]:
 		renderer.show_player({
