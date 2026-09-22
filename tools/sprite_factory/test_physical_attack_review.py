@@ -5,7 +5,11 @@ import hashlib
 from pathlib import Path
 
 from physical_attack_review import build, build_gallery, classify_report, infer_family, motion_group
-from physical_attack_semantic_review import compile_human_review, compile_review
+from physical_attack_semantic_review import (
+    compile_human_review,
+    compile_review,
+    semantic_decisions_from_human_review,
+)
 
 
 class PhysicalAttackReviewTests(unittest.TestCase):
@@ -224,6 +228,23 @@ class PhysicalAttackReviewTests(unittest.TestCase):
             result = compile_human_review(exported, catalog, {"fixture"}, {"fixture"})
             self.assertEqual(result["entries"]["fixture"]["confirmation_source"],
                              "explicit_user_followup")
+
+    def test_human_review_projects_authoritative_alternate_decision(self):
+        human = {"entries": {"zapdos": {
+            "status": "confirmed",
+            "confirmation_source": "explicit_user_followup",
+            "note": "",
+            "clips": {
+                "physical_attack": {"family": "body_charge"},
+                "physical_attack_2": {"family": "body_charge"},
+            },
+        }}}
+        projected = semantic_decisions_from_human_review(human)
+        entry = projected["entries"]["zapdos"]
+        self.assertFalse(projected["runtime_approved"])
+        self.assertEqual(entry["family"], "body_charge")
+        self.assertEqual(entry["primary_family"], "body_charge")
+        self.assertEqual(entry["source"], "human_review")
 
 
 if __name__ == "__main__":

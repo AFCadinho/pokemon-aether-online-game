@@ -56,16 +56,22 @@ checkboxes, then explicitly confirmed in reviewer follow-up. Their evidence
 rows record `confirmation_source: explicit_user_followup`. Zapdos was confirmed
 as body/charge for both clips, superseding the earlier static wing suggestion.
 
+The final human evidence contains all 75 Pokémon and both physical clips per
+Pokémon. Seventy-two rows use `browser_checkbox`; the remaining three use the
+explicit follow-up source above. `physical_attack_semantic_decisions.json` is
+projected from that complete evidence, rather than mixing human labels with the
+earlier contact-sheet estimates. It remains review-only and unapproved for
+runtime use.
+
 | Visual family | Count |
 | --- | ---: |
-| body/charge | 37 |
-| tail | 13 |
-| wing | 6 |
+| body/charge | 45 |
+| tail | 8 |
+| wing | 4 |
 | punch | 7 |
-| kick | 1 |
-| claw/slash | 5 |
-| bite | 3 |
-| generic | 3 |
+| claw/slash | 6 |
+| kick | 4 |
+| bite | 1 |
 
 Alternate-clip navigation groups:
 

@@ -138,6 +138,34 @@ def compile_human_review(export_path: Path, catalog_path: Path,
     }
 
 
+def semantic_decisions_from_human_review(human_review: dict) -> dict:
+    """Project confirmed two-clip evidence into alternate runtime candidates."""
+    entries = {}
+    for name, reviewed in sorted(human_review.get("entries", {}).items()):
+        primary = reviewed.get("clips", {}).get("physical_attack", {})
+        alternate = reviewed.get("clips", {}).get("physical_attack_2", {})
+        family = alternate.get("family")
+        if reviewed.get("status") != "confirmed" or family not in FAMILIES:
+            raise ValueError(f"Human evidence is incomplete for {name}")
+        status = "needs_human_review" if family == "unclear" else "reviewed_candidate"
+        note = reviewed.get("note", "").strip()
+        entries[name] = {
+            "family": family,
+            "status": status,
+            "source": "human_review",
+            "confirmation_source": reviewed.get("confirmation_source"),
+            "primary_family": primary.get("family"),
+            "note": note or "Confirmed in animated review.",
+        }
+    return {
+        "schema": 1,
+        "scope": "visual_review_candidates_not_runtime_mapping",
+        "runtime_approved": False,
+        "reviewed_action": "physical_attack_2",
+        "entries": entries,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--decisions", type=Path, default=Path(__file__).with_name(
@@ -147,15 +175,22 @@ def main() -> None:
     parser.add_argument("--human-review", type=Path,
                         help="browser-exported review-decisions.json to validate")
     parser.add_argument("--human-only",
-                        help="comma-separated confirmed species to import")
+                        help="comma-separated confirmed species to import, or '*' for every row")
     parser.add_argument("--human-confirm", default="",
                         help="comma-separated pending rows explicitly confirmed in follow-up")
     parser.add_argument("--human-output", type=Path)
+    parser.add_argument("--human-decisions-output", type=Path,
+                        help="write semantic decisions projected from confirmed human evidence")
     args = parser.parse_args()
     if bool(args.human_review) != bool(args.human_only) or bool(args.human_review) != bool(args.human_output):
         parser.error("--human-review, --human-only and --human-output must be used together")
+    if args.human_decisions_output and not args.human_review:
+        parser.error("--human-decisions-output requires --human-review")
     if args.human_review:
-        selected = {value.strip() for value in args.human_only.split(",") if value.strip()}
+        if args.human_only.strip() == "*":
+            selected = set(json.loads(args.human_review.read_text()).get("entries", {}))
+        else:
+            selected = {value.strip() for value in args.human_only.split(",") if value.strip()}
         explicitly_confirmed = {value.strip() for value in args.human_confirm.split(",")
                                 if value.strip()}
         if not selected:
@@ -163,6 +198,9 @@ def main() -> None:
         human = compile_human_review(args.human_review, args.catalog, selected,
                                      explicitly_confirmed)
         args.human_output.write_text(json.dumps(human, indent=2) + "\n")
+        if args.human_decisions_output:
+            projected = semantic_decisions_from_human_review(human)
+            args.human_decisions_output.write_text(json.dumps(projected, indent=2) + "\n")
     result = compile_review(args.decisions, args.catalog)
     rendered = json.dumps(result, indent=2) + "\n"
     if args.output:
