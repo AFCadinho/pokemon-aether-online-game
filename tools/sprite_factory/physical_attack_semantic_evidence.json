@@ -10,21 +10,23 @@
       "reviewed_candidate": 75
     },
     "families": {
-      "bite": 3,
-      "body_charge": 37,
-      "claw_slash": 5,
-      "generic": 3,
-      "kick": 1,
+      "bite": 1,
+      "body_charge": 45,
+      "claw_slash": 6,
+      "kick": 4,
       "punch": 7,
-      "tail": 13,
-      "wing": 6
+      "tail": 8,
+      "wing": 4
     }
   },
   "entries": {
     "azumarill": {
       "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Tail-ball sweep is the dominant contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0184_00_00_00410_attack02",
       "prepared_sha256": "0a0419a874418b3aaf31f5cf6a4c8686e6e98595ca236e15ebca6af5dcc4a603",
       "review_loop_sha256": "b77610ec1e64e8549eea38add222b89710f9b41ce3ef01e53159fd40b438e25d"
@@ -32,7 +34,10 @@
     "blissey": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body hop and forward compression.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0242_00_00_00410_attack02",
       "prepared_sha256": "55b8cfc4fc2f02497eadd96ad9a7a58a3e5eb5b4409d010b479e4638f9ebfde9",
       "review_loop_sha256": "76356e7469a8f30272f8861ecddf8a2b197555ce463a92a4221a3e562098ca67"
@@ -40,7 +45,10 @@
     "chansey": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body hop and forward compression.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "1 is meer een slap",
       "source_action": "pm0113_00_00_00410_attack02",
       "prepared_sha256": "0bb6f6cac35de9c4e0a7e26a2c61859ed61197a296bd257900959a4c113d962a",
       "review_loop_sha256": "796ea909712c641d1bf677f1c9ccfd708e19a0ed02e79e4f6703552605a2d9fb"
@@ -48,7 +56,10 @@
     "charizard": {
       "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Broad tail sweep is visible through the alternate clip.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0006_00_00_20410_attack02",
       "prepared_sha256": "756982dae34f79b1b4be8379c8c5c79edd66921a3925780350fc6386261a982a",
       "review_loop_sha256": "4561615873db81cf40d1d826fa668228e006d06d9fa25f848259d110bb2e5118"
@@ -57,16 +68,20 @@
       "family": "body_charge",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "explicit_user_followup",
       "primary_family": "unclear",
-      "note": "Explicitly confirmed after animated review.",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0091_00_00_10410_attack02",
       "prepared_sha256": "d5c0fb45cd0ba16f4ff6bcce8c8a97e9c5ed1bf81741aff4aabb8750b9c952d0",
       "review_loop_sha256": "5a2ec16dcc0ad0d7dbf500a03624b5bfec59c0f8b89369bec8a19ebc6f38d4c2"
     },
     "corviknight": {
-      "family": "wing",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Wing-led aerial strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0920_00_00_20410_attack02",
       "prepared_sha256": "0983bf55e7fa5568ead85f3e7849a65fd44ba8e80a824be65b29a7809606ce12",
       "review_loop_sha256": "bcc29294c68c5b51cd960aa56636732e8cd63e2d18169606f43576e3d038eaae"
@@ -75,6 +90,7 @@
       "family": "body_charge",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "browser_checkbox",
       "primary_family": "claw_slash",
       "note": "Confirmed in animated review.",
       "source_action": "pm0225_00_00_00410_attack02",
@@ -84,7 +100,10 @@
     "diglett": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Body bob/lunge; no separate striking limb is visible.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0050_00_00_00410_attack02",
       "prepared_sha256": "16a63b1890de650112964ea7c6dda9edc8d96dbc17e8c2173a466bf90496593f",
       "review_loop_sha256": "f24b9bc5122f9145240a314a38c7d6a78d83d705eb786b25d636c2eea3b217da"
@@ -92,7 +111,10 @@
     "ditto": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole body stretches and recoils.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0132_00_00_00410_attack02",
       "prepared_sha256": "49eb15b2c3f4e096e28c21efb9059d8b31f952bbbe6155a2013b0b68e5da64cf",
       "review_loop_sha256": "839866e25e126596cade6f53db6df7274f58b47c9a1ed026a5a5527ce27e592b"
@@ -100,7 +122,10 @@
     "dondozo": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Large whole-body swimming lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "tail",
+      "note": "Confirmed in animated review.",
       "source_action": "pm1035_00_00_10410_attack02",
       "prepared_sha256": "0f1c3317f3a397eccacd00fd3bc874c68330198529193cc4ed7708f19a5c8dac",
       "review_loop_sha256": "03e9d66c6021c5777cc1fa9a9f00c794c91b328f2f6b52d52dc77fdf7032a410"
@@ -108,15 +133,21 @@
     "donphan": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body roll/turn contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "2: Doet een voorwaartse koprol",
       "source_action": "pm0232_00_00_00410_attack02",
       "prepared_sha256": "babe5045f308f2de4fc976a7eb59fbdcb6f6c82da522d9b68910057618e6d1b7",
       "review_loop_sha256": "9a370b7a4bc0609035135d17b0ae4f034439e3ede8675240615a0a4b572e48b3"
     },
     "dragonair": {
-      "family": "tail",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Serpentine rear-body sweep functions as a tail strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "tail",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0148_00_00_00410_attack02",
       "prepared_sha256": "44444831b9a9912f03fdac7ac9179385ba887edd41b83992f8ca74070b65e0cb",
       "review_loop_sha256": "74c5743bf5e13784bf670e2367d2cd6bde3f49b53f59cb7e2b3ebe5568bedde9"
@@ -124,7 +155,10 @@
     "dratini": {
       "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Serpentine rear-body sweep functions as a tail strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0147_00_00_00410_attack02",
       "prepared_sha256": "4d7cef731c4e0a5c50f65889469694527b92a1111b62a18abe3ae55c7a1f72f2",
       "review_loop_sha256": "c9909cbad02df2beaebced3b37cd6b0a6580d081521ef50334b5801c7fe67a18"
@@ -132,7 +166,10 @@
     "drifblim": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole floating body compresses and advances.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0426_00_00_20410_attack02",
       "prepared_sha256": "2c8afe35d136355130b088ef75ec69fd013dc3d2da414e44129bea2de477f785",
       "review_loop_sha256": "147a8b88ef11279906f1144722a908be67c0bbc5f9deaa16be050ab3a1219c6a"
@@ -141,6 +178,7 @@
       "family": "kick",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "browser_checkbox",
       "primary_family": "body_charge",
       "note": "Confirmed in animated review.",
       "source_action": "pm0096_00_00_00410_attack02",
@@ -150,7 +188,10 @@
     "eevee": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Forward whole-body lunge rather than a discrete kick.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "1: is meer een stomp op de grond met rechterpoot.",
       "source_action": "pm0133_00_00_00410_attack02",
       "prepared_sha256": "e4b127978c782077e9373ba8fe6fb5fcf765cb5603e3a8890dddc1fb466c1cca",
       "review_loop_sha256": "13f1d262d5d2edf6a2bd45fb00bd58cdb2eaa6f7fc0ee60229aab6a94f385da8"
@@ -158,7 +199,10 @@
     "electrode": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body roll/spin.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0101_00_00_00410_attack02",
       "prepared_sha256": "4ae72dc9992ad3b55eaaf81e60a90d6b6f27e4d7f7eafb959799a34af3648b3c",
       "review_loop_sha256": "2a1808456357041a5bf141b10035772423e3e90381ad17094aed7c1dbbbfbca8"
@@ -166,15 +210,21 @@
     "espeon": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Forward whole-body lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0196_00_00_00410_attack02",
       "prepared_sha256": "d77d7c4f5c9578c0f0336f4a0e6fb81be8a79a03409d6f4ad3faa09fee80ad4a",
       "review_loop_sha256": "f588a23d2628bab85387d9aba859af72bb8b295a0db9af05a41825ab342cc000"
     },
     "flapple": {
-      "family": "wing",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Wing-led aerial rotation.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0967_00_00_20410_attack02",
       "prepared_sha256": "0a9c17fcf9bedf2c7186da13ecefcb382c23462d0bdf81fca8d3ea0c09252a2f",
       "review_loop_sha256": "b9f70fe86e9d66b1dff4b776d68a3c19f2702f73743d5a374147b71e5c8d9cb4"
@@ -182,7 +232,10 @@
     "flareon": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Forward whole-body lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0136_00_00_00410_attack02",
       "prepared_sha256": "e3c166d8feef896cf7658f278dbcb16634d0995d0c7fcb8e4933d69b6b6323a3",
       "review_loop_sha256": "5b8419af99e227f4589ae873201b1ebbab63ee28312c57a1483b893f77e26bd0"
@@ -190,15 +243,21 @@
     "forretress": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Shell and body rotate as one contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack draait Forretress terwijl die body charged",
       "source_action": "pm0205_00_00_20410_attack02",
       "prepared_sha256": "f66ba1129119c686419c6bd57e797976f3a42e6339f115af3245e5172c724158",
       "review_loop_sha256": "70c0dae724e5c882d84691707be34a98bab68b2192e3bbb34146bcf8779ea671"
     },
     "garchomp": {
-      "family": "bite",
+      "family": "claw_slash",
       "status": "reviewed_candidate",
-      "note": "Head and open jaw lead the alternate attack; this is the bite-like clip.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "bite",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0445_00_00_00410_attack02",
       "prepared_sha256": "76bb2e2b2bb860ea5efaf32ad22faabbe240e367ab53ccb002a5f4cb07ad746b",
       "review_loop_sha256": "b583eaf63fb127f503b6b1c88e9526c21ac0e0e35eb2ef3fe9cce1d9671d500d"
@@ -207,6 +266,7 @@
       "family": "body_charge",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "browser_checkbox",
       "primary_family": "punch",
       "note": "Confirmed in animated review.",
       "source_action": "pm0282_00_00_00410_attack02",
@@ -214,9 +274,12 @@
       "review_loop_sha256": "f7c439df76c31e5049674f2695ac1a5ba2b4618d485d53434a9009f6f5caecdd"
     },
     "gengar": {
-      "family": "body_charge",
+      "family": "claw_slash",
       "status": "reviewed_candidate",
-      "note": "Compact whole-body lunge; unlike the tongue-led primary clip.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "generic",
+      "note": "Lick",
       "source_action": "pm0094_00_00_00410_attack02",
       "prepared_sha256": "74d4ef34e442a020c2582892b0f5fc91a280f5fd1188e211ce6f879fd7a30662",
       "review_loop_sha256": "5ceea3db27ab4665b43af166cb33fdd371d0ca55d105bb7513f78ab7e51af0c1"
@@ -224,23 +287,32 @@
     "golduck": {
       "family": "claw_slash",
       "status": "reviewed_candidate",
-      "note": "Extended clawed forelimbs lead the strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "tweede is met 2 claws tegelijk.",
       "source_action": "pm0055_00_00_00410_attack02",
       "prepared_sha256": "a02d01ecf04d32ef2339153daa332203a37ac96483eb637f894f1cd977f3cd4b",
       "review_loop_sha256": "29561a00fb9d29d58aa8ae2cbd324fda46b4bb146a191f035a442cff53eb941c"
     },
     "growlithe": {
-      "family": "body_charge",
+      "family": "punch",
       "status": "reviewed_candidate",
-      "note": "Forward quadruped lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0058_00_00_00410_attack02",
       "prepared_sha256": "e488d6b708ac517d4c653cf76f5eced648ed5e16db193d1043bc446b05763fd0",
       "review_loop_sha256": "4e15419ec821932d9defa1ea70b6e40dcfc89a94f698558f91bdfbb6736ea971"
     },
     "gyarados": {
-      "family": "body_charge",
+      "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Corkscrew whole-body lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "bite",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0130_00_00_10410_attack02",
       "prepared_sha256": "e2f3417ea1f85ca145d7c145ccc4dfe45951e11a0a807ee587ee7c68621a508d",
       "review_loop_sha256": "087472da03105c8daa541417d157f57543aaf7f001ea997fc95084615f2b9914"
@@ -248,7 +320,10 @@
     "hariyama": {
       "family": "punch",
       "status": "reviewed_candidate",
-      "note": "Large hand/palm strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "1: slap, 2: Palm",
       "source_action": "pm0297_00_00_00410_attack02",
       "prepared_sha256": "2732fe70335b45a61e606513e04a75c0c5975b90a5ed65719540905c210ab873",
       "review_loop_sha256": "65a9e25b9ac74b4d5901c62192a6118da366156d2fed1d24953c4cf2f921f71c"
@@ -256,7 +331,10 @@
     "haunter": {
       "family": "claw_slash",
       "status": "reviewed_candidate",
-      "note": "Detached claws lead the strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0093_00_00_20410_attack02",
       "prepared_sha256": "3909321b90f0e3b07e3b0041f07453ad951b876ab1307f53a8f60b6e622793ba",
       "review_loop_sha256": "b02320a88d65e69af55b4eb5a5cb9f6adb5502bce49722b8eaad0be1a6d25044"
@@ -264,7 +342,10 @@
     "heracross": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Horn-first whole-body charge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0214_00_00_00410_attack02",
       "prepared_sha256": "12d71cdcd84580fa83eacf09c739c868ed798f8ce6778bd8775cdddac3f85e84",
       "review_loop_sha256": "345fc85f0b2b7869c3d59e09bb4e75fa9db93f0415176e5da94b141be200a9ad"
@@ -272,7 +353,10 @@
     "hoopa": {
       "family": "punch",
       "status": "reviewed_candidate",
-      "note": "Fist-led strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "2 maakt een terugwaartse draai",
       "source_action": "pm0774_11_00_20410_attack02",
       "prepared_sha256": "97f68e1d19a5c2bfaea095a9634f1bdfe0cd18ac0dd31e9ba47e05ef2adc6195",
       "review_loop_sha256": "a6be58a131d8587c4950c08be161bd58af9d0cc616743b884e7b48243cc1de72"
@@ -280,23 +364,32 @@
     "hoppip": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body aerial tumble.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack maakt die een achterwaatse koprol na de body charge",
       "source_action": "pm0187_00_00_20410_attack02",
       "prepared_sha256": "2f66dce45e00c27a35d607440ef2f390c265b71ab065c6d676c905afdff67b78",
       "review_loop_sha256": "248db6b62ef3c96fe4428e1e89677473e2c070ef18241c5c14d34528a4f10a00"
     },
     "hydreigon": {
-      "family": "bite",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Head cluster and jaws lead the attack.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0635_00_00_20410_attack02",
       "prepared_sha256": "500d861f90a69b8813857fc7d825e3bbcdea8b11051a46756752c6b043e49eb4",
       "review_loop_sha256": "a0803bf19334b8723bdbd1e58c515f17cc3e1127109a8ec6ecc428791772919c"
     },
     "hypno": {
-      "family": "punch",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Closed forelimb leads the alternate strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0097_00_00_00410_attack02",
       "prepared_sha256": "cbc8b1471d79638e582e06ef6a4c9040fb0754d843653da4f26a94d573bfd0d3",
       "review_loop_sha256": "33412dea18c75dd9663f87504b05ed0ca2f25be96971266415823f36f925fe22"
@@ -305,6 +398,7 @@
       "family": "body_charge",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "browser_checkbox",
       "primary_family": "punch",
       "note": "Confirmed in animated review.",
       "source_action": "pm0039_00_00_00410_attack02",
@@ -314,15 +408,21 @@
     "jolteon": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Forward quadruped lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0135_00_00_00410_attack02",
       "prepared_sha256": "b4eaa403793d44610b4b7f33ab3c50c43640f9691d7f4f7e9e0dd714c6a136ac",
       "review_loop_sha256": "e593cafdbb71abc6a716b4ccc12e1895cbcf0696d9d3b61552423d03a4ac925c"
     },
     "jumpluff": {
-      "family": "body_charge",
+      "family": "punch",
       "status": "reviewed_candidate",
-      "note": "Whole-body aerial tumble.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0189_00_00_20410_attack02",
       "prepared_sha256": "384bbcfe65cfdd986ad9708a2f8ea004d947d5bbc62949cdf5e7896bde0b5d02",
       "review_loop_sha256": "f23b28b0b1819218cf63eb48cf3c363478705a43cb20678e4daf199b1caae345"
@@ -330,39 +430,54 @@
     "magikarp": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body flop/turn.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0129_00_00_10410_attack02",
       "prepared_sha256": "f01b65e9eb2224cd5fcfc0c7c963667f9394aed13e8543513ced70334733daec",
       "review_loop_sha256": "3cd94ebbf74f8fb600f583b743d134d38d6ac7cd1f4a0fb743fc7887428d9ce3"
     },
     "magnemite": {
-      "family": "generic",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Magnet and body motion has no safe conventional contact family.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0081_00_00_20410_attack02",
       "prepared_sha256": "1acd2f6e8d2b51db667c7d1837eb4ae1f7d27467767829b1777b0ffe2b947a69",
       "review_loop_sha256": "1c1d175e2f44072d4d085a988582f4ccf3a48b6faa33e93084662d85197ea498"
     },
     "magneton": {
-      "family": "generic",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Multi-body magnet rotation has no safe conventional contact family.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0082_00_00_20410_attack02",
       "prepared_sha256": "22ab8552a0bbf08a13354a6b56efa3f20a2979db63c93245da122fa61e792d6b",
       "review_loop_sha256": "58726fe454cd8b547dfd2ee83bdbcd65bfacfb18d6bd1d76207c35e1db2a9b9c"
     },
     "magnezone": {
-      "family": "generic",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Floating assembly motion has no safe conventional contact family.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0462_00_00_20410_attack02",
       "prepared_sha256": "c8412c4834227154b5f6fc057b6a6f110b7a0a944ba3e105971dc912421c3479",
       "review_loop_sha256": "659ac216af87a273f8b15bb384ad4d3e0bd44834310a010dff2b8db3bbb081e4"
     },
     "mankey": {
-      "family": "punch",
+      "family": "kick",
       "status": "reviewed_candidate",
-      "note": "Fist-led strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0056_00_00_00410_attack02",
       "prepared_sha256": "235e147f574a1024bbbdf943f577e6e0ae84af6b12900bd6cc87fb538f789925",
       "review_loop_sha256": "6a8909186b1fe0706b6870418253b2471afc88aacf41b21fa27412eb559cb422"
@@ -371,8 +486,9 @@
       "family": "tail",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "explicit_user_followup",
       "primary_family": "unclear",
-      "note": "Explicitly confirmed after animated review.",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0183_00_00_00410_attack02",
       "prepared_sha256": "db10bb8d7ef7453cc238e8fe0014711a28b5b695097fc68dcfa77759652e0d84",
       "review_loop_sha256": "4dabafb90d2a04fec002b87803bb7da6bc6ccaaa39e95d8da0f71cd95b5d3165"
@@ -380,23 +496,32 @@
     "meowth": {
       "family": "claw_slash",
       "status": "reviewed_candidate",
-      "note": "Clawed forelimb leads the strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0052_00_00_00410_attack02",
       "prepared_sha256": "39af085d74b3ffe64a82a19b9abae182cf18b7adde8209deb777ce267a8595a1",
       "review_loop_sha256": "450e153a276290bd7ccd9f123e741412d5435343de9709192b7e76a24f4e359d"
     },
     "mew": {
-      "family": "tail",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Long tail provides the dominant sweeping contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0151_00_00_20410_attack02",
       "prepared_sha256": "4836acb7ec4cb0e504c45dbaf1f57bbb4ba132b49b04d2b9c321812a92735dd1",
       "review_loop_sha256": "9b0c24e444c002d32168dc6161c0758698f4f69c63a7ef28ef5a3dc6abb58969"
     },
     "mewtwo": {
-      "family": "tail",
+      "family": "kick",
       "status": "reviewed_candidate",
-      "note": "Long tail provides the dominant sweeping contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0150_00_00_00410_attack02",
       "prepared_sha256": "8c40fceb9900059931a96cc49b073f86caf79450a00d5bdd14a7467d9d6d34ca",
       "review_loop_sha256": "7c6a60f07663d5945e746480696701bb6000bb478397f9de044482e33913af30"
@@ -404,7 +529,10 @@
     "misdreavus": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole floating body flips through the attack.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack maak misdreavus een achterwaatse salto.",
       "source_action": "pm0200_00_00_20410_attack02",
       "prepared_sha256": "830d40623ca1ee1a7b89cd8eb1e26544d2a93568b238a95b75bd60f039b559f1",
       "review_loop_sha256": "5b80cf53fd8fa79131b78d7aad6db7d30cf661a50d1d16e29cb6f535f3a69370"
@@ -412,7 +540,10 @@
     "murkrow": {
       "family": "wing",
       "status": "reviewed_candidate",
-      "note": "Wing-led aerial sweep.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0198_00_00_20410_attack02",
       "prepared_sha256": "4d9355f3559ac551d79998ce5aa745d28b24e73093460c5d2be8bf1e2554c4d5",
       "review_loop_sha256": "f1d3939fce64aa70deb1d9de5af5a889ec33157a6709d8bb9c9a03bca7c6b81c"
@@ -420,7 +551,10 @@
     "oricorio": {
       "family": "wing",
       "status": "reviewed_candidate",
-      "note": "Wing/arm plumage leads the strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0825_11_00_00410_attack02",
       "prepared_sha256": "e59e15f5aebf61f5c561f552dfe9ad3771fd7c106d5e9e95ee59887aefbb70d8",
       "review_loop_sha256": "ad133a5afda01f0c7eed6e803c2f26e5a569a402b6a8fb7a6b00ecb1f4bb5824"
@@ -428,7 +562,10 @@
     "orthworm": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole segmented body coils and lunges.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm1048_00_00_00410_attack02",
       "prepared_sha256": "316b3530f11a7fd1873a28f3fb51a677417620642c0ab2c436d9cbce4485b92b",
       "review_loop_sha256": "61aa6cce8bb2225b6530514bd4584c617d6d2fa2f20f29548f86fb70b0705f4a"
@@ -436,7 +573,10 @@
     "pichu": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body hop/turn.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0172_00_00_00410_attack02",
       "prepared_sha256": "8a6637cd5a8829e1da2d5548acb15745119b401d78b224a86d740568490cb76f",
       "review_loop_sha256": "78da0138a4fef149b96bdc8d14ba4af83a65b4020b42031759c40f731ee4688c"
@@ -444,7 +584,10 @@
     "primeape": {
       "family": "punch",
       "status": "reviewed_candidate",
-      "note": "Fist-led strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "2 is meer een stomp",
       "source_action": "pm0057_00_00_00410_attack02",
       "prepared_sha256": "a58496ab01ceef73cea57a6c0e487d91cbd7a757c79da147849285fa66189f62",
       "review_loop_sha256": "d5cf5968375a57c925711f8a264de0f47a31e3fb31fe543ebf482b3421afdd71"
@@ -453,6 +596,7 @@
       "family": "body_charge",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "browser_checkbox",
       "primary_family": "claw_slash",
       "note": "Confirmed in animated review.",
       "source_action": "pm0054_00_00_00410_attack02",
@@ -462,7 +606,10 @@
     "quagsire": {
       "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Large tail sweep is the dominant contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0195_00_00_00410_attack02",
       "prepared_sha256": "57f438429805f7be0e678cae694be16c086acd338add622e8adc951a4a90a28f",
       "review_loop_sha256": "59e5d8362ebf8785ff2eef4abfc853dbd72696125f4662cfda7546398afcc01c"
@@ -470,15 +617,21 @@
     "qwilfish": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole floating body turns through the attack.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "tail",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0211_00_00_10410_attack02",
       "prepared_sha256": "842383ab4017b1641b3b8038ebe151daadc920077a1925ead00ce0fb0855afc2",
       "review_loop_sha256": "ee83d9ae4c256eeae9fbb256429c2a8c86f194f3b184695ccceb6bb0a5669c97"
     },
     "raichu": {
-      "family": "tail",
+      "family": "punch",
       "status": "reviewed_candidate",
-      "note": "Long lightning-bolt tail leads the sweep.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "2 heeft een sprongetje",
       "source_action": "pm0026_00_00_00410_attack02",
       "prepared_sha256": "bfca91164c5f7c9b0321116fc9a6d4a3e124714f52989314da7447dbd6cdb0a3",
       "review_loop_sha256": "4264aee4e0b0a227af9673f3856f2b33d39aea4162a130cda528d51efd814707"
@@ -486,7 +639,10 @@
     "rayquaza": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole serpentine body coils through a charge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0384_00_00_20410_attack02",
       "prepared_sha256": "22f59aa544a660bbb94057217795ea16dec72e37289bea496bd4871f38f99036",
       "review_loop_sha256": "8d28b52bedbf148d74f8e9b66ff67219265c16eb80de2d035c6f74ecde4a239b"
@@ -494,23 +650,32 @@
     "scizor": {
       "family": "claw_slash",
       "status": "reviewed_candidate",
-      "note": "Pincer/claw-led strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "claw_slash",
+      "note": "2: is meer een grab",
       "source_action": "pm0212_00_00_00410_attack02",
       "prepared_sha256": "56b264fb8ed73a9cf1d24a4f31f3c8e6efff84da8d11cc727f3861f19ad79213",
       "review_loop_sha256": "8cecf35d2fee298674cfc557f630a6dea769b98cfc0991a1db5af7e01bbbc6cd"
     },
     "scyther": {
-      "family": "claw_slash",
+      "family": "wing",
       "status": "reviewed_candidate",
-      "note": "Scythe forelimb leads the slash.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "wing",
+      "note": "1: 1 wing, 2: 2 wings.",
       "source_action": "pm0123_00_00_00410_attack02",
       "prepared_sha256": "35c57b17cc14dce50c798f33ecdacf1427b43af3ff866a7405dcbb53ee5c2e61",
       "review_loop_sha256": "1bfa55a3a8a4b76c732dbc3eb186a298e4ff7558ef1aeab73fbc9b1713f715fa"
     },
     "seviper": {
-      "family": "tail",
+      "family": "bite",
       "status": "reviewed_candidate",
-      "note": "Blade-like tail/rear body leads the sweep.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0336_00_00_00410_attack02",
       "prepared_sha256": "0c2e24d809ea6812712584bdb0f16c1239a451e136e83f8eef5326896f8172db",
       "review_loop_sha256": "7162daf84f6549665aba8c9a70047ea9f8e8c32be4d02224eaedfe34acd2ba1e"
@@ -518,7 +683,10 @@
     "shellder": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Shell and body rotate as one contact motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "physical attack 2 maakt shelder een sprongetje",
       "source_action": "pm0090_00_00_00410_attack02",
       "prepared_sha256": "f97b501896acd469441ffdba9881490d22dd467d14448a8636cdbc5935ba1099",
       "review_loop_sha256": "7e99f613289bca9516ceec292294095ef8ddce24f7d26dbce3ad5905620735bf"
@@ -527,16 +695,20 @@
       "family": "punch",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "browser_checkbox",
       "primary_family": "claw_slash",
-      "note": "Confirmed in animated review; primary looks more like a grab.",
+      "note": "1 is meer een grab",
       "source_action": "pm0289_00_00_00410_attack02",
       "prepared_sha256": "53aacfbf8ba3cbb7cf77c4595e5ab60ef9f8a2262e14a9c0f5426891f6b886f1",
       "review_loop_sha256": "ac27e9cb953bae4d4953b29aa112e68b8ca252359d9d4165833bf1a4e57ad48c"
     },
     "slowpoke": {
-      "family": "bite",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Open mouth and head lead the alternate attack.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "1 headbutt, 2 body slam",
       "source_action": "pm0079_00_00_00410_attack02",
       "prepared_sha256": "1a8307a88c6769f8e79a802b561b6a004fd3bc1cf362ccea162d5bdb0e4b639c",
       "review_loop_sha256": "d773034072347b1ed28ef456545e93e0a03bc50fdbed279590330c997c2e92b5"
@@ -544,31 +716,43 @@
     "staraptor": {
       "family": "wing",
       "status": "reviewed_candidate",
-      "note": "Wing-led aerial strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0398_00_00_20410_attack02",
       "prepared_sha256": "123dd57930fadaa3e33d0178cbdf2ba8487dfa0a5f95c211e9bef53b4f9dc8a1",
       "review_loop_sha256": "b54e5c147c2d9796d195a4f2e89f6a18a3692ab924b15109eba949ea913bc342"
     },
     "sudowoodo": {
-      "family": "punch",
+      "family": "kick",
       "status": "reviewed_candidate",
-      "note": "Branch-like fist leads the strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0185_00_00_00410_attack02",
       "prepared_sha256": "8478112d09ed8611f97f8ca1f22962cc5999fec980f71e139267d07255b81487",
       "review_loop_sha256": "fcf71a51a1178013e6c214f98dca471e5f7101c987eec65c1be1fdcdc07e5b29"
     },
     "tauros": {
-      "family": "tail",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Three-tail sweep is the dominant alternate motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "1 is van onder, 2 is van boven tackle",
       "source_action": "pm0128_00_00_00410_attack02",
       "prepared_sha256": "3a44272163fa96f6d9dc5dee908f9f83bb96bb324d726c88716fad4f49f7275c",
       "review_loop_sha256": "4b2966e09a65d83907dd55ca00aed284f0c6fde9570e78ba1dcc141305e6749e"
     },
     "tyranitar": {
-      "family": "tail",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Heavy tail sweep is the dominant alternate motion.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "bite",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0248_00_00_00410_attack02",
       "prepared_sha256": "eb3aadfd2a9f0160e9be6a009ecb1ce9664cd99305edcdaa450614cfe569bc29",
       "review_loop_sha256": "668a48f9b244f1ad016856a452a188d6e192fc9698a79eef9416875d7684c80b"
@@ -576,15 +760,21 @@
     "umbreon": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Forward quadruped lunge.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0197_00_00_00410_attack02",
       "prepared_sha256": "ef1c8911a8cdabdcadd1dfacd4e7a87dcf93b69d7552ad2cc357c5930def2139",
       "review_loop_sha256": "91d2e118822a24795d67bfc153c30a792fcac3e7a99bfc2446a76955791f9647"
     },
     "vaporeon": {
-      "family": "tail",
+      "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Large finned tail leads the sweep.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0134_00_00_00410_attack02",
       "prepared_sha256": "e09721e61ced9a48e3a59572b29a1c17f7732da90b54ab41dbf08507be7709a4",
       "review_loop_sha256": "f48d1e480d507694f378d85f2ade28cf7c7db1933603640a551a4f2ba8cf36f2"
@@ -592,15 +782,21 @@
     "venonat": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body roll/turn.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack 2 maakt Venonat een sprongetje",
       "source_action": "pm0048_00_00_00410_attack02",
       "prepared_sha256": "a715b9c689a8cc40e9aed7e55ab945298867ff12fc3097187c1e2e3f237adcfc",
       "review_loop_sha256": "38e3d8a0839ee3de65d51d6cc02face49a7e5e5452181924d63455b8510da106"
     },
     "volcarona": {
-      "family": "wing",
+      "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Wing-led aerial strike.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0637_00_00_20410_attack02",
       "prepared_sha256": "6f944cd56d02fdf8cb11172636d161442066dcd6eca3f650fd6d9a72f7a0e859",
       "review_loop_sha256": "61eb7a3f90221c0c1b72cbeaea9bc3746464ba39391683eebe2fc552a99c71e2"
@@ -608,7 +804,10 @@
     "voltorb": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body roll/spin.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Physical attack 2 maakte voltorb een achterwaatse koprol na de body charge",
       "source_action": "pm0100_00_00_00410_attack02",
       "prepared_sha256": "ebed3ce48744da4dee13c105aab55896a10c17363d76c326b5b0154ae803b39b",
       "review_loop_sha256": "12492c231c42acd49b31c0b72f4dbc3dc200c5c2384b935186a44b40d3237d42"
@@ -616,15 +815,21 @@
     "wigglytuff": {
       "family": "body_charge",
       "status": "reviewed_candidate",
-      "note": "Whole-body hop/roll.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0040_00_00_00410_attack02",
       "prepared_sha256": "36a7e1c3e5742d1b6b3af79e77d4e8a3f6e23d57d502016e09aaf56f0b0c2c29",
       "review_loop_sha256": "522a3d6db6dce69c38f400857f2ef0a7a2bf50f6eb16e0285c89bb07199d1176"
     },
     "wooper": {
-      "family": "body_charge",
+      "family": "tail",
       "status": "reviewed_candidate",
-      "note": "Torso-led turn; no separate striking limb is visible.",
+      "source": "human_review",
+      "confirmation_source": "browser_checkbox",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0194_00_00_00410_attack02",
       "prepared_sha256": "6da49f543281fa9ee9891df4d58fa4d6634068862c135555fdc56dba4f463190",
       "review_loop_sha256": "af76d565f87df9ab39e4818cdd9d2131a2efeded1d8347b1ed0d8ed02bc0d265"
@@ -633,8 +838,9 @@
       "family": "body_charge",
       "status": "reviewed_candidate",
       "source": "human_review",
+      "confirmation_source": "explicit_user_followup",
       "primary_family": "body_charge",
-      "note": "Explicitly confirmed after animated review; supersedes the static wing suggestion.",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0145_00_00_20410_attack02",
       "prepared_sha256": "e889bd29a76ede22d4cd9b913d931a761884b7a790ffc461e36c20e28d93eb36",
       "review_loop_sha256": "36657b4450ab87dff93733226be3bb03adaf6494333758cf31fb888d2a2b1598"
