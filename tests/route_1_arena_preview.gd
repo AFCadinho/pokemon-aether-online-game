@@ -32,6 +32,13 @@ func _run() -> void:
 	camera.position = Arenas.camera_home("route_1")
 	camera.look_at(Arenas.camera_target("route_1"))
 	camera.current = true
+	for hour in [6, 12, 19, 23]:
+		root.get_node("WorldTimeService").set_debug_time(hour)
+		await create_timer(0.5).timeout
+		await RenderingServer.frame_post_draw
+		DirAccess.make_dir_recursive_absolute(output)
+		root.get_texture().get_image().save_png(output.path_join("route-1-hour-%02d.png" % hour))
+	root.get_node("WorldTimeService").set_debug_time(12)
 	await create_timer(2.0).timeout
 	await RenderingServer.frame_post_draw
 	DirAccess.make_dir_recursive_absolute(output)
@@ -54,5 +61,10 @@ func _run() -> void:
 	await create_timer(0.4).timeout
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(output.path_join("route-1-water.png"))
+	root.get_node("WorldTimeService").set_debug_time(23)
+	await create_timer(0.5).timeout
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(output.path_join("route-1-water-night.png"))
+	root.get_node("WorldTimeService").clear_debug_time()
 	print("ROUTE_1_PREVIEW_OK")
 	quit()
