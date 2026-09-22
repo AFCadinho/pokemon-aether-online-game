@@ -76,3 +76,32 @@ converter was exercised directly instead. No full development gate was run.
 
 Next active work is visual review/admission of these 18 candidates using the
 existing workflow, not storage research or perfection of the blocked seven.
+
+### Local preview admission (not battle approval)
+
+The 18 pending candidates are now available to the local desktop **debug** client
+in the Pokédex and summary card when Battle presentation is set to 3D. Restart
+the client after updating development. The ordinary catalog and saved settings
+are untouched. The existing summary play menu selects all seven native clips.
+Previews say **Review candidate**; their tooltip explicitly states that they are
+not approved for battles or distribution.
+
+The supplementary manifest lives at
+`/home/adinho/Documents/3d_models/PokeAether/catalog-production-01-review/catalog.json`.
+It references the retained standalone scenes, without copying or editing them.
+The preview-only resolver accepts only the pending identities and exact SCN
+hashes pinned in `catalog_production_batch_01_results.json`. Unknown hashes,
+wrong bytes, duplicate identities, blocked models and shiny forms are rejected.
+Release/web/mobile clients cannot use this admission path. Reviewed/screened
+models retain precedence. The battle registry and portable-pack registry have
+not been expanded, so this does not enable these candidates in battles yet.
+
+Review list: Charmeleon, Persian, Slowbro, Igglybuff, Mareep, Flaaffy, Ampharos,
+Skiploom, Slowking, Pineco, Dunsparce, Teddiursa, Ursaring, Houndour, Houndoom,
+Phanpy, Stantler and Larvitar.
+
+Focused checks: all 18 models load independently in both preview components,
+the seven-clip menu works, rejection/fallback checks pass, and the real summary
+card test covers the existing play button, zoom, faint-to-damage reset, separate
+cards and sprite fallback. Asset UID path-fallback warnings from existing UI
+scenes are unrelated to the preview admission and remain unchanged.
