@@ -74,13 +74,83 @@ def compile_review(decisions_path: Path, catalog_path: Path) -> dict:
     }
 
 
+def compile_human_review(export_path: Path, catalog_path: Path,
+                         species: set[str]) -> dict:
+    """Validate confirmed browser choices and bind both clips to exact evidence."""
+    exported = json.loads(export_path.read_text())
+    catalog = json.loads(catalog_path.read_text())
+    if exported.get("runtime_approved") is not False:
+        raise ValueError("Human review export must remain runtime_approved=false")
+    exported_entries = exported.get("entries", {})
+    missing = sorted(species - set(exported_entries))
+    if missing:
+        raise ValueError("Human review is missing species: " + ", ".join(missing))
+    catalog_entries = {entry["species"]: entry for entry in catalog.get("entries", [])
+                       if entry.get("status") == "review_ready"}
+    unavailable = sorted(species - set(catalog_entries))
+    if unavailable:
+        raise ValueError("Review evidence is missing species: " + ", ".join(unavailable))
+    root = catalog_path.parent
+    compiled = {}
+    for name in sorted(species):
+        exported_entry = exported_entries[name]
+        if exported_entry.get("status") != "confirmed":
+            raise ValueError(f"Human review is not confirmed for {name}")
+        catalog_entry = catalog_entries[name]
+        report_path = root / catalog_entry["report"]
+        job = json.loads((report_path.parent / "job.json").read_text())
+        clips = {}
+        for action in ("physical_attack", "physical_attack_2"):
+            choice = exported_entry.get("clips", {}).get(action, {})
+            family = choice.get("family")
+            if family not in FAMILIES or not choice.get("confirmed"):
+                raise ValueError(f"Invalid or unconfirmed {action} choice for {name}")
+            loop_path = report_path.parent / catalog_entry["loops"][action]
+            source_action = job.get("actions", {}).get(action)
+            if not source_action or not loop_path.is_file():
+                raise ValueError(f"Missing {action} evidence for {name}")
+            clips[action] = {
+                "family": family,
+                "source": "human_review",
+                "source_action": source_action,
+                "review_loop_sha256": file_sha256(loop_path),
+            }
+        compiled[name] = {
+            "status": "confirmed",
+            "note": exported_entry.get("note", ""),
+            "prepared_sha256": job.get("prepared_sha256"),
+            "clips": clips,
+        }
+    return {
+        "schema": 1,
+        "scope": "confirmed_human_review_evidence_not_runtime_mapping",
+        "runtime_approved": False,
+        "source_catalog_scope": catalog.get("scope"),
+        "counts": {"total": len(compiled)},
+        "entries": compiled,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--decisions", type=Path, default=Path(__file__).with_name(
         "physical_attack_semantic_decisions.json"))
     parser.add_argument("--catalog", type=Path, required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--human-review", type=Path,
+                        help="browser-exported review-decisions.json to validate")
+    parser.add_argument("--human-only",
+                        help="comma-separated confirmed species to import")
+    parser.add_argument("--human-output", type=Path)
     args = parser.parse_args()
+    if bool(args.human_review) != bool(args.human_only) or bool(args.human_review) != bool(args.human_output):
+        parser.error("--human-review, --human-only and --human-output must be used together")
+    if args.human_review:
+        selected = {value.strip() for value in args.human_only.split(",") if value.strip()}
+        if not selected:
+            parser.error("--human-only must select at least one species")
+        human = compile_human_review(args.human_review, args.catalog, selected)
+        args.human_output.write_text(json.dumps(human, indent=2) + "\n")
     result = compile_review(args.decisions, args.catalog)
     rendered = json.dumps(result, indent=2) + "\n"
     if args.output:

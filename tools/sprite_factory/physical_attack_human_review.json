@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "scope": "confirmed_human_review_evidence_not_runtime_mapping",
+  "runtime_approved": false,
+  "source_catalog_scope": "review_only_not_runtime_mapping",
+  "counts": {
+    "total": 6
+  },
+  "entries": {
+    "delibird": {
+      "status": "confirmed",
+      "note": "",
+      "prepared_sha256": "8d69761a58d30567447d3951cfc3bb7f112e15cc9b317c84e42ddad9c0e0adf5",
+      "clips": {
+        "physical_attack": {
+          "family": "claw_slash",
+          "source": "human_review",
+          "source_action": "pm0225_00_00_00400_attack01",
+          "review_loop_sha256": "edc94d1c35826e97fe7deb3269c4d86666111f0c7e80e4b84434db4bf747d3cc"
+        },
+        "physical_attack_2": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0225_00_00_00410_attack02",
+          "review_loop_sha256": "fb23cdfb9a3ab45251f46fc8e4d91db1b70c4e5368368028bfb389713d998aa0"
+        }
+      }
+    },
+    "drowzee": {
+      "status": "confirmed",
+      "note": "",
+      "prepared_sha256": "f37ef709478227bb1fbfe0969940edba314b94c926c4790d40b27f6c821ece50",
+      "clips": {
+        "physical_attack": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0096_00_00_00400_attack01",
+          "review_loop_sha256": "74c56fb64df8c72c4d1437cee2963114f3802a207e6b221fd2292a270c5683e2"
+        },
+        "physical_attack_2": {
+          "family": "kick",
+          "source": "human_review",
+          "source_action": "pm0096_00_00_00410_attack02",
+          "review_loop_sha256": "ebef086bac03505016c20c664a536dd26680e21024d8c1a0c14d181714e9c213"
+        }
+      }
+    },
+    "gardevoir": {
+      "status": "confirmed",
+      "note": "",
+      "prepared_sha256": "fa107ee2563fe25106b0bb8f6c374ddc7791e76288c63aa401156574f2917dba",
+      "clips": {
+        "physical_attack": {
+          "family": "punch",
+          "source": "human_review",
+          "source_action": "pm0282_00_00_00400_attack01",
+          "review_loop_sha256": "ef879f92ee3e77f56495616dbb6d874ec32323a77bdf4c7a960d14e1975fc668"
+        },
+        "physical_attack_2": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0282_00_00_00410_attack02",
+          "review_loop_sha256": "f7c439df76c31e5049674f2695ac1a5ba2b4618d485d53434a9009f6f5caecdd"
+        }
+      }
+    },
+    "jigglypuff": {
+      "status": "confirmed",
+      "note": "",
+      "prepared_sha256": "eadbdafa334d92c2bed6158b5794945f5432f72914173b2a851f8b258959b253",
+      "clips": {
+        "physical_attack": {
+          "family": "punch",
+          "source": "human_review",
+          "source_action": "pm0039_00_00_00400_attack01",
+          "review_loop_sha256": "1d1f1bd9b5c1c02769a4ce038bdc4a774b199d5939a7dd32c810fb3f1a69b34e"
+        },
+        "physical_attack_2": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0039_00_00_00410_attack02",
+          "review_loop_sha256": "7dc1bc36ab3dfa7722e273965efbb185392a064efef468e4e58c756b9d7fdbfc"
+        }
+      }
+    },
+    "psyduck": {
+      "status": "confirmed",
+      "note": "",
+      "prepared_sha256": "a1f01c9b9efd2088075e637050b9c11439a4ff4f4fdcba5adc12115ba9c520ef",
+      "clips": {
+        "physical_attack": {
+          "family": "claw_slash",
+          "source": "human_review",
+          "source_action": "pm0054_00_00_00400_attack01",
+          "review_loop_sha256": "b401d102f08da27f69904bbf4d19805b8de3708a305a7b0702ca832d6bcbc6e2"
+        },
+        "physical_attack_2": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0054_00_00_00410_attack02",
+          "review_loop_sha256": "9122e43cd953279799e4a734a8921b51aa192910e0fe8910df70f62fe837ffd4"
+        }
+      }
+    },
+    "slaking": {
+      "status": "confirmed",
+      "note": "1 is meer een grab",
+      "prepared_sha256": "53aacfbf8ba3cbb7cf77c4595e5ab60ef9f8a2262e14a9c0f5426891f6b886f1",
+      "clips": {
+        "physical_attack": {
+          "family": "claw_slash",
+          "source": "human_review",
+          "source_action": "pm0289_00_00_00400_attack01",
+          "review_loop_sha256": "c4f65ea860b2185372e66a143158c2a9d57aeff5e2f40deab17383c815d22b21"
+        },
+        "physical_attack_2": {
+          "family": "punch",
+          "source": "human_review",
+          "source_action": "pm0289_00_00_00410_attack02",
+          "review_loop_sha256": "ac27e9cb953bae4d4953b29aa112e68b8ca252359d9d4165833bf1a4e57ad48c"
+        }
+      }
+    }
+  }
+}

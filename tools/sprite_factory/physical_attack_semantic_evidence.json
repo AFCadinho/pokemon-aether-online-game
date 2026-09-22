@@ -7,17 +7,16 @@
   "counts": {
     "total": 75,
     "statuses": {
-      "needs_human_review": 6,
-      "reviewed_candidate": 69
+      "reviewed_candidate": 75
     },
     "families": {
       "bite": 3,
-      "body_charge": 32,
+      "body_charge": 36,
       "claw_slash": 5,
       "generic": 3,
-      "punch": 6,
+      "kick": 1,
+      "punch": 7,
       "tail": 13,
-      "unclear": 6,
       "wing": 7
     }
   },
@@ -71,9 +70,11 @@
       "review_loop_sha256": "bcc29294c68c5b51cd960aa56636732e8cd63e2d18169606f43576e3d038eaae"
     },
     "delibird": {
-      "family": "unclear",
-      "status": "needs_human_review",
-      "note": "Static review does not distinguish a hand strike from a bag/body motion.",
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0225_00_00_00410_attack02",
       "prepared_sha256": "8d69761a58d30567447d3951cfc3bb7f112e15cc9b317c84e42ddad9c0e0adf5",
       "review_loop_sha256": "fb23cdfb9a3ab45251f46fc8e4d91db1b70c4e5368368028bfb389713d998aa0"
@@ -135,9 +136,11 @@
       "review_loop_sha256": "147a8b88ef11279906f1144722a908be67c0bbc5f9deaa16be050ab3a1219c6a"
     },
     "drowzee": {
-      "family": "unclear",
-      "status": "needs_human_review",
-      "note": "Forelimb and body motion overlap; contact point is not clear in the contact sheet.",
+      "family": "kick",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "primary_family": "body_charge",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0096_00_00_00410_attack02",
       "prepared_sha256": "f37ef709478227bb1fbfe0969940edba314b94c926c4790d40b27f6c821ece50",
       "review_loop_sha256": "ebef086bac03505016c20c664a536dd26680e21024d8c1a0c14d181714e9c213"
@@ -199,9 +202,11 @@
       "review_loop_sha256": "b583eaf63fb127f503b6b1c88e9526c21ac0e0e35eb2ef3fe9cce1d9671d500d"
     },
     "gardevoir": {
-      "family": "unclear",
-      "status": "needs_human_review",
-      "note": "Arm, dress and body motion do not expose a reliable contact type in static review.",
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0282_00_00_00410_attack02",
       "prepared_sha256": "fa107ee2563fe25106b0bb8f6c374ddc7791e76288c63aa401156574f2917dba",
       "review_loop_sha256": "f7c439df76c31e5049674f2695ac1a5ba2b4618d485d53434a9009f6f5caecdd"
@@ -295,9 +300,11 @@
       "review_loop_sha256": "33412dea18c75dd9663f87504b05ed0ca2f25be96971266415823f36f925fe22"
     },
     "jigglypuff": {
-      "family": "unclear",
-      "status": "needs_human_review",
-      "note": "Small forelimb and body motion overlap; contact type is ambiguous.",
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "primary_family": "punch",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0039_00_00_00410_attack02",
       "prepared_sha256": "eadbdafa334d92c2bed6158b5794945f5432f72914173b2a851f8b258959b253",
       "review_loop_sha256": "7dc1bc36ab3dfa7722e273965efbb185392a064efef468e4e58c756b9d7fdbfc"
@@ -439,9 +446,11 @@
       "review_loop_sha256": "d5cf5968375a57c925711f8a264de0f47a31e3fb31fe543ebf482b3421afdd71"
     },
     "psyduck": {
-      "family": "unclear",
-      "status": "needs_human_review",
-      "note": "Forelimb and head/body motion overlap; contact type is ambiguous.",
+      "family": "body_charge",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review.",
       "source_action": "pm0054_00_00_00410_attack02",
       "prepared_sha256": "a1f01c9b9efd2088075e637050b9c11439a4ff4f4fdcba5adc12115ba9c520ef",
       "review_loop_sha256": "9122e43cd953279799e4a734a8921b51aa192910e0fe8910df70f62fe837ffd4"
@@ -511,9 +520,11 @@
       "review_loop_sha256": "7e99f613289bca9516ceec292294095ef8ddce24f7d26dbce3ad5905620735bf"
     },
     "slaking": {
-      "family": "unclear",
-      "status": "needs_human_review",
-      "note": "Grounded hand and torso motion could be a slam or body action.",
+      "family": "punch",
+      "status": "reviewed_candidate",
+      "source": "human_review",
+      "primary_family": "claw_slash",
+      "note": "Confirmed in animated review; primary looks more like a grab.",
       "source_action": "pm0289_00_00_00410_attack02",
       "prepared_sha256": "53aacfbf8ba3cbb7cf77c4595e5ab60ef9f8a2262e14a9c0f5426891f6b886f1",
       "review_loop_sha256": "ac27e9cb953bae4d4953b29aa112e68b8ca252359d9d4165833bf1a4e57ad48c"

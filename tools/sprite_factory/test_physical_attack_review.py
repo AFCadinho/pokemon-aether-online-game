@@ -5,7 +5,7 @@ import hashlib
 from pathlib import Path
 
 from physical_attack_review import build, build_gallery, classify_report, infer_family, motion_group
-from physical_attack_semantic_review import compile_review
+from physical_attack_semantic_review import compile_human_review, compile_review
 
 
 class PhysicalAttackReviewTests(unittest.TestCase):
@@ -136,6 +136,61 @@ class PhysicalAttackReviewTests(unittest.TestCase):
             }))
             with self.assertRaisesRegex(ValueError, "invariant"):
                 compile_review(decisions, catalog)
+
+    def test_confirmed_human_review_binds_both_clips(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            review = root / "review" / "fixture"
+            review.mkdir(parents=True)
+            (review / "review.json").write_text("{}")
+            (review / "physical_attack.webp").write_bytes(b"primary")
+            (review / "physical_attack_2.webp").write_bytes(b"alternate")
+            (review / "job.json").write_text(json.dumps({
+                "prepared_sha256": "b" * 64,
+                "actions": {"physical_attack": "attack01",
+                            "physical_attack_2": "attack02"},
+            }))
+            catalog = root / "catalog.json"
+            catalog.write_text(json.dumps({
+                "scope": "review_only_not_runtime_mapping",
+                "entries": [{
+                    "species": "fixture", "status": "review_ready",
+                    "report": "review/fixture/review.json",
+                    "loops": {"physical_attack": "physical_attack.webp",
+                              "physical_attack_2": "physical_attack_2.webp"},
+                }],
+            }))
+            exported = root / "review-decisions.json"
+            exported.write_text(json.dumps({
+                "runtime_approved": False,
+                "entries": {"fixture": {
+                    "status": "confirmed", "note": "reviewed",
+                    "clips": {
+                        "physical_attack": {"family": "claw_slash", "confirmed": True},
+                        "physical_attack_2": {"family": "body_charge", "confirmed": True},
+                    },
+                }},
+            }))
+            result = compile_human_review(exported, catalog, {"fixture"})
+            entry = result["entries"]["fixture"]
+            self.assertFalse(result["runtime_approved"])
+            self.assertEqual(entry["clips"]["physical_attack"]["source_action"], "attack01")
+            self.assertEqual(entry["clips"]["physical_attack_2"]["family"], "body_charge")
+
+    def test_human_review_rejects_unconfirmed_selection(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            exported = root / "review-decisions.json"
+            exported.write_text(json.dumps({
+                "runtime_approved": False,
+                "entries": {"fixture": {"status": "pending_human_confirmation"}},
+            }))
+            catalog = root / "catalog.json"
+            catalog.write_text(json.dumps({"entries": [{
+                "species": "fixture", "status": "review_ready"
+            }]}))
+            with self.assertRaisesRegex(ValueError, "not confirmed"):
+                compile_human_review(exported, catalog, {"fixture"})
 
 
 if __name__ == "__main__":
