@@ -1,0 +1,278 @@
+{
+  "prototype_only": true,
+  "production_approved": false,
+  "pairs": [
+    {
+      "species": "articuno",
+      "old_normal_bytes": 8126776,
+      "old_shiny_bytes": 7839082,
+      "new_normal_bytes": 8054764,
+      "new_shiny_standalone_bytes": 7772670,
+      "new_pair_bytes": 10396613,
+      "incremental_shiny_bytes": 2341849,
+      "shared_bytes": 5430821,
+      "shared_components_by_kind": {
+        "Animation": 7,
+        "ArrayMesh": 2,
+        "Skin": 1,
+        "ImageTexture": 6,
+        "AnimationLibrary": 1,
+        "PackedScene": 1
+      },
+      "original_hashes": [
+        "9846294ad349f34c13900f2ee3b22031e613f7b74b72c91102b2b09453c9637a",
+        "3ef5aef55926dfdd4b9b1af3b70bcdf3f66f46cebcdf7c1893b4d46379991779"
+      ]
+    },
+    {
+      "species": "dragonite",
+      "old_normal_bytes": 12294801,
+      "old_shiny_bytes": 12264455,
+      "new_normal_bytes": 12095656,
+      "new_shiny_standalone_bytes": 12074382,
+      "new_pair_bytes": 19028603,
+      "incremental_shiny_bytes": 6932947,
+      "shared_bytes": 5141435,
+      "shared_components_by_kind": {
+        "ImageTexture": 9,
+        "Animation": 7,
+        "ArrayMesh": 2,
+        "StandardMaterial3D": 1,
+        "PackedScene": 1,
+        "AnimationLibrary": 1,
+        "Skin": 1
+      },
+      "original_hashes": [
+        "caf3905fecb163920bb620ed925216729a43e7202d4d27963c85ae146545d4b9",
+        "cecba49b71cf83f37d92d510503f6dd19f4487e3dec827a104c8b85897148e47"
+      ]
+    },
+    {
+      "species": "lucario",
+      "old_normal_bytes": 12059925,
+      "old_shiny_bytes": 11761982,
+      "new_normal_bytes": 8558030,
+      "new_shiny_standalone_bytes": 8371375,
+      "new_pair_bytes": 11793031,
+      "incremental_shiny_bytes": 3235001,
+      "shared_bytes": 5136374,
+      "shared_components_by_kind": {
+        "Animation": 7,
+        "ImageTexture": 6,
+        "PackedScene": 1,
+        "ArrayMesh": 2,
+        "AnimationLibrary": 1,
+        "Skin": 1
+      },
+      "original_hashes": [
+        "2e32606af09a99ea7c676e0ff2ecb07f364d0ed6d1b3a3af86477207220568d0",
+        "e70d37ac51695ff8a05a94e0a6b7fd6a4353fa31e398f47e57d77724e5e16e2e"
+      ]
+    },
+    {
+      "species": "pikachu",
+      "old_normal_bytes": 12256179,
+      "old_shiny_bytes": 12418429,
+      "new_normal_bytes": 12050177,
+      "new_shiny_standalone_bytes": 12213249,
+      "new_pair_bytes": 17065029,
+      "incremental_shiny_bytes": 5014852,
+      "shared_bytes": 7198397,
+      "shared_components_by_kind": {
+        "ArrayMesh": 5,
+        "Animation": 7,
+        "AnimationLibrary": 1,
+        "ImageTexture": 8,
+        "PackedScene": 1,
+        "Skin": 1
+      },
+      "original_hashes": [
+        "65ac2b5511affee7f13b2b9061b1e555d648ad187c06dde43d4740a308a4ee8f",
+        "e963b34ab0e3eb71e4523cfe8a47642b61617d261927b498ab205b0213b0b6ff"
+      ]
+    },
+    {
+      "species": "roaring-moon",
+      "old_normal_bytes": 25419303,
+      "old_shiny_bytes": 24452549,
+      "new_normal_bytes": 17698042,
+      "new_shiny_standalone_bytes": 16670339,
+      "new_pair_bytes": 27271060,
+      "incremental_shiny_bytes": 9573018,
+      "shared_bytes": 7097321,
+      "shared_components_by_kind": {
+        "ImageTexture": 9,
+        "AnimationLibrary": 1,
+        "StandardMaterial3D": 1,
+        "Animation": 7,
+        "ArrayMesh": 6,
+        "PackedScene": 1,
+        "Skin": 1
+      },
+      "original_hashes": [
+        "e6abb71e192cf5715b8efa21ad55ac73f709c69ff46c79942e570fea1ff937be",
+        "03c5955b0967a5dc5eda1bd189852d3f179930800cd8c48d36e19a8594d0f449"
+      ]
+    },
+    {
+      "species": "snorlax",
+      "old_normal_bytes": 4732227,
+      "old_shiny_bytes": 4646062,
+      "new_normal_bytes": 4733145,
+      "new_shiny_standalone_bytes": 4644478,
+      "new_pair_bytes": 5952985,
+      "incremental_shiny_bytes": 1219840,
+      "shared_bytes": 3424638,
+      "shared_components_by_kind": {
+        "PackedScene": 1,
+        "ArrayMesh": 1,
+        "Animation": 7,
+        "AnimationLibrary": 1,
+        "ImageTexture": 2,
+        "Skin": 1
+      },
+      "original_hashes": [
+        "9bc4962cc338d0206c96b7040e0293d1659e85460cca3675aef1a50fa41eb0c7",
+        "755227eebafd4121c43667afaf9d8de8afc249be0363376b7ce410df81011bf6"
+      ]
+    }
+  ],
+  "old_bytes": 148271770,
+  "new_package_bytes": 91646193,
+  "manifest_bytes": 141842,
+  "savings_percent": 38.1903965940381,
+  "component_count": 206,
+  "normal_only_bytes": 63186844,
+  "both_appearances_bytes": 91504351,
+  "normal_mean_mib": 10.043278376261393,
+  "pair_mean_mib": 14.544224898020426,
+  "extrapolation_gib": {
+    "151": {
+      "normal": 1.4809912449369826,
+      "normal_and_shiny": 2.144705038672934
+    },
+    "500": {
+      "normal": 4.903944519658883,
+      "normal_and_shiny": 7.101672313486536
+    },
+    "1000": {
+      "normal": 9.807889039317766,
+      "normal_and_shiny": 14.203344626973072
+    }
+  },
+  "visual": {
+    "complete": false,
+    "samples": 51,
+    "pixel_exact": 50,
+    "renderer": "forward_plus"
+  },
+  "runtime_measurements": "Not run: visual gate stopped; no load, RAM/VRAM or lifecycle qualification.",
+  "extrapolation_caveat": "Arithmetic for these six older control pairs only; not a measured 75-model migration. Mean/extrapolations exclude manifest overhead; package total includes it.",
+  "isolated_diagnostic": [
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "damage:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "damage:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "damage:0.999"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "faint_loop:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "faint_loop:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "faint_loop:0.999"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "faint_start:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "faint_start:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "faint_start:0.999"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "idle:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "idle:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "idle:0.999"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "physical_attack:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "physical_attack:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "physical_attack:0.999"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "sleep:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "sleep:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "sleep:0.999"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "special_attack:0.0"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "special_attack:0.5"
+    },
+    {
+      "original_vs_components_pixels": 0,
+      "original_vs_original_pixels": 0,
+      "pose": "special_attack:0.999"
+    }
+  ]
+}
