@@ -27,6 +27,18 @@ func _can_start(point: Vector2) -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+		if not event.pressed or not _can_start(event.position):
+			return
+		var presenter = battle.animation_router.model_presenter
+		var step := 0.90 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1.0 / 0.90
+		presenter.user_camera_zoom = clampf(
+			presenter.user_camera_zoom * step,
+			presenter.USER_CAMERA_ZOOM_MIN,
+			presenter.USER_CAMERA_ZOOM_MAX
+		)
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if not event.pressed:
 			dragging = false

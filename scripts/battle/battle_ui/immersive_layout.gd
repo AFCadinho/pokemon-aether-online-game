@@ -82,7 +82,7 @@ static func apply(battle: Control) -> void:
 	var menu := Button.new()
 	menu.name = "ResetCameraButton"
 	menu.text = "↺"
-	menu.tooltip_text = "Reset camera"
+	menu.tooltip_text = "Reset camera and zoom"
 	menu.theme = calc.theme
 	menu.add_theme_stylebox_override("normal", calc.get_theme_stylebox("normal"))
 	battle.get_node("%BattleStage").add_child(menu)
