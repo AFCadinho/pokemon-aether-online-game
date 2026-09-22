@@ -1,9 +1,11 @@
 import json
 import tempfile
 import unittest
+import hashlib
 from pathlib import Path
 
 from physical_attack_review import build, build_gallery, classify_report, infer_family, motion_group
+from physical_attack_semantic_review import compile_review
 
 
 class PhysicalAttackReviewTests(unittest.TestCase):
@@ -72,6 +74,68 @@ class PhysicalAttackReviewTests(unittest.TestCase):
                 build(inventory, root / "prepared", output, None)
             catalog = build(inventory, root / "prepared", output, None, resume=True)
             self.assertEqual(catalog["entries"][0]["status"], "blocked")
+
+    def test_semantic_review_binds_labels_to_exact_non_runtime_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            review = root / "review" / "garchomp"
+            review.mkdir(parents=True)
+            (review / "review.json").write_text("{}")
+            (review / "physical_attack_2.webp").write_bytes(b"lossless-loop")
+            (review / "job.json").write_text(json.dumps({
+                "prepared_sha256": "a" * 64,
+                "actions": {"physical_attack_2": "pm0445_attack02"},
+            }))
+            catalog = root / "catalog.json"
+            catalog.write_text(json.dumps({
+                "scope": "review_only_not_runtime_mapping",
+                "entries": [{
+                    "species": "garchomp",
+                    "status": "review_ready",
+                    "report": "review/garchomp/review.json",
+                    "loops": {"physical_attack_2": "physical_attack_2.webp"},
+                }],
+            }))
+            decisions = root / "decisions.json"
+            decisions.write_text(json.dumps({
+                "scope": "visual_review_candidates_not_runtime_mapping",
+                "runtime_approved": False,
+                "entries": {"garchomp": {
+                    "family": "bite", "status": "reviewed_candidate", "note": "Jaw-led."
+                }},
+            }))
+            result = compile_review(decisions, catalog)
+            entry = result["entries"]["garchomp"]
+            self.assertFalse(result["runtime_approved"])
+            self.assertEqual(entry["source_action"], "pm0445_attack02")
+            self.assertEqual(entry["review_loop_sha256"],
+                             hashlib.sha256(b"lossless-loop").hexdigest())
+
+    def test_semantic_review_rejects_unclear_candidate_status(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            review = root / "review" / "fixture"
+            review.mkdir(parents=True)
+            (review / "review.json").write_text("{}")
+            (review / "physical_attack_2.webp").write_bytes(b"loop")
+            (review / "job.json").write_text(json.dumps({
+                "actions": {"physical_attack_2": "fixture_attack02"}
+            }))
+            catalog = root / "catalog.json"
+            catalog.write_text(json.dumps({"entries": [{
+                "species": "fixture", "status": "review_ready",
+                "report": "review/fixture/review.json",
+                "loops": {"physical_attack_2": "physical_attack_2.webp"},
+            }]}))
+            decisions = root / "decisions.json"
+            decisions.write_text(json.dumps({
+                "scope": "review_only", "runtime_approved": False,
+                "entries": {"fixture": {
+                    "family": "unclear", "status": "reviewed_candidate", "note": "bad"
+                }},
+            }))
+            with self.assertRaisesRegex(ValueError, "invariant"):
+                compile_review(decisions, catalog)
 
 
 if __name__ == "__main__":
