@@ -4,11 +4,15 @@
 
 - In immersive wilde gevechten komt je trainer nu alleen bij een Poké Ball-worp kort in beeld, met een tekstwolk voor de worp en de vanguitkomst.
 
+- De Pokédex toont op desktop een lokaal, hash-gecontroleerd 3D-model wanneer de experimentele 3D-presentatie en een lokale modelcatalogus zijn gekozen. Sleep in het previewvak om het model te draaien; ontbrekende of shiny vormen houden hun bestaande sprite-preview.
+
 - Kaartmetadata wacht nu ook in lokale desktop-debugruns tot het eerste beeld klaar is. Daardoor laden NPC's, overworld-Pokémon en encounters niet meer in de zware eerste laadframe vast.
 
 - Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
 
 - Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
+
+- Lokale gescreende 3D-kandidaten kunnen nu voor visuele review in de gekozen 3D-arena verschijnen. De UI markeert deze weergave als niet arena-gekalibreerd; officiële en gemengde modelcatalogi behouden hun veilige klassieke fallback.
 
 - Nieuwe gecontroleerde 3D-modelpakketten koppelen zichtbaarheid nu via bronmetadata aan de gekozen geslachtsvariant, zonder onderdelen van de andere variant verkeerd toe te wijzen. Bestaande pakketten blijven ongewijzigd.
 
