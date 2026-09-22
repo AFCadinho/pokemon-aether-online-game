@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In 3D-battles kun je nu met het muiswiel in- en uitzoomen. De resetknop herstelt ook de standaardzoom.
+
 - Het ‘Switch’-label staat gecentreerd boven de partyslots, met grotere tekst, een duidelijkere cyaanrand en meer ruimte onder de actietekst.
 
 - In de immersive battle-interface staat nu een compact ‘Switch’-label boven je partyslots, zodat duidelijk is waar je Pokémon kunt wisselen.
