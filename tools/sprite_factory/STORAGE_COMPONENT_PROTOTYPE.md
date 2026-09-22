@@ -1,6 +1,12 @@
 # Lossless component storage prototype — 2026-09-22
 
-## Decision: STOP, not qualified
+## Closed: promising but not production-safe
+
+User decision: retain this prototype and all evidence for possible later work.
+Use the existing standalone model format for production. Do not continue
+component-sharing, deduplication or codec research until catalog size becomes a
+practical problem. The diagnostic next steps below are historical, not an active
+work queue. See [production direction](CATALOG_PRODUCTION_STATUS.md).
 
 Follow-up: [sequence/ownership investigation](STORAGE_SEQUENCE_INVESTIGATION.md).
 It corrects the original attribution of the material-lifetime error below:

@@ -1,5 +1,11 @@
 # Component-sharing sequence investigation — 2026-09-22
 
+**Closed by user decision: promising but not production-safe.** Retain this
+investigation, prototype code and results. Its remaining diagnostic proposals
+are deferred, not current tasks. Catalog production resumes with standalone
+models; sharing/deduplication/codec research stays closed until catalog size
+becomes a practical problem. See [production direction](CATALOG_PRODUCTION_STATUS.md).
+
 ## Decision: still not qualified; diagnosis only
 
 The existing `storage-components-04` artifact and all approved sources were
