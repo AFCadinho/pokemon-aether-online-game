@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Donkere 3D-Pokémon blijven in Forest-arena's beter leesbaar dankzij een zachte skylight-fill die de bestaande schaduwen niet vervangt.
+
 - De lokale desktop-3D-runtime vindt het vertrouwde Forest-pakket nu automatisch naast de gekozen modelcatalogus. Daardoor kiest Automatic weer Grass → Forest zonder een aparte instellingenstap.
 
 - In de klassieke battleweergave verschijnen trainers alleen bij hun commandotekstwolk, met een zachte fade en beweging richting het veld, en verdwijnen ze daarna weer vloeiend.
