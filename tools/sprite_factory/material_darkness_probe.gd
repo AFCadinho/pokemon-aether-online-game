@@ -1,5 +1,18 @@
 extends "res://tools/sprite_factory/control_render_probe.gd"
 ## Isolated interventions; never rewrites model files or changes admission.
+func roughness_samples(material: StandardMaterial3D) -> Array:
+	if material.roughness_texture == null:
+		return [material.roughness]
+	var img := material.roughness_texture.get_image()
+	if img.is_compressed():
+		assert(img.decompress() == OK)
+	var samples := []
+	for uv in [Vector2(0,0),Vector2(0.25,0.25),Vector2(0.5,0.5),Vector2(0.75,0.75)]:
+		var color := img.get_pixel(int(uv.x * img.get_width()),int(uv.y * img.get_height()))
+		var channels := [color.r,color.g,color.b,color.a,(color.r+color.g+color.b)/3.0]
+		samples.append(channels[material.roughness_texture_channel] * material.roughness)
+	return samples
+
 func _run() -> void:
 	output = OS.get_environment("DARKNESS_OUTPUT")
 	assert(not output.is_empty() and not DirAccess.dir_exists_absolute(output))
@@ -37,7 +50,8 @@ func _run() -> void:
 			for surface in mesh.mesh.get_surface_count():
 				var mat: Material = mesh.get_active_material(surface)
 				if mat is StandardMaterial3D:
-					values.append({"material":mat.resource_name,"albedo":str(mat.albedo_color),"roughness":mat.roughness})
+					values.append({"material":mat.resource_name,"albedo":str(mat.albedo_color),"roughness":mat.roughness,
+						"roughness_samples":roughness_samples(mat),"specular":mat.get_meta("pokeaether_material_response",{}).get("specular",-1)})
 		stage.packed[row.species] = scene
 		stage.identities[0] = row.species
 		stage.actors[0] = actor
@@ -45,6 +59,16 @@ func _run() -> void:
 		helper._process(0)
 		helper._sync()
 		await capture(stage,row.species+"-readable")
+		if OS.get_environment("SPECULAR_PROBE") == "1":
+			for mesh in actor.find_children("*", "MeshInstance3D", true, false):
+				for surface in mesh.mesh.get_surface_count():
+					var mat: Material = mesh.get_active_material(surface)
+					if mat is ShaderMaterial:
+						mat.set_shader_parameter("specular_value",0.0)
+			await capture(stage,row.species+"-no-specular")
+			results.append({"species":row.species,"runtime_sha256":row.runtime_sha256,"materials":values})
+			stage.free()
+			continue
 		for mesh in actor.find_children("*", "MeshInstance3D", true, false):
 			for surface in mesh.mesh.get_surface_count():
 				var mat: Material = mesh.get_active_material(surface)
