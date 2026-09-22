@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw
 
 from scvi_batch import (automatic_probe_warnings, compact_action_report,
                         evaluate_gates, load_batch, probe_image_metrics, record_probe_review,
-                        preview_catalog, selected_entries, source_entry)
+                        preview_catalog, requested_import_categories, selected_entries, source_entry)
 
 
 class ScviBatchTest(unittest.TestCase):
@@ -42,6 +42,14 @@ class ScviBatchTest(unittest.TestCase):
         self.assertEqual(selected_entries(entries, "dragonite"), [entries[1]])
         with self.assertRaisesRegex(ValueError, "outside the explicit batch"):
             selected_entries(entries, "missingno")
+
+    def test_action_scoped_diagnostic_import_is_explicit_and_bounded(self):
+        args = argparse.Namespace(categories=("idle", "physical_attack", "physical_attack_2"))
+        self.assertEqual(requested_import_categories(args), args.categories)
+        with self.assertRaisesRegex(ValueError, "Unknown requested"):
+            requested_import_categories(argparse.Namespace(categories=("idle", "bite")))
+        with self.assertRaisesRegex(ValueError, "Duplicate requested"):
+            requested_import_categories(argparse.Namespace(categories=("idle", "idle")))
 
     def test_probe_metrics_warn_without_claiming_artistic_approval(self):
         with tempfile.TemporaryDirectory() as temp:
