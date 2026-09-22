@@ -19,6 +19,7 @@ func _run() -> void:
 		settings.battle_ui_layout = layout
 		var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 		var battle = load("res://scenes/battle/battle.tscn").instantiate()
+		battle.active_enemy_pokemon = Pokemon.new("Garchomp", 50)
 		root.add_child(host)
 		host.mount(battle)
 		battle.player_party_grid.set_party([
@@ -63,7 +64,9 @@ func _run() -> void:
 				friends_popup.call("close")
 				assert(battle.moves_grid.scale.is_equal_approx(Vector2.ONE * 0.8))
 				assert(not battle.battle_log_toggle_button.visible and not battle.calc_log_button.visible)
-				assert(not battle.battle_stage.get_node("TrainerPortrait1").visible,"Wild encounters must not invent an opponent avatar")
+				var wild_portrait: Control = battle.battle_stage.get_node("TrainerPortrait1")
+				var wild_icon: TextureRect = wild_portrait.get_child(1) as TextureRect
+				assert(wild_portrait.visible and not wild_portrait.get_child(0).visible and wild_icon.visible and wild_icon.texture != null, "Wild encounters show the opponent's HOME icon, never a trainer avatar")
 				assert(battle.battle_frame.get_global_rect().is_equal_approx(bounds))
 				var viewport = battle.get_node("%BattleStageViewport")
 				assert(viewport.get_global_rect().size.distance_to(bounds.size)<2.0,str(dimensions," viewport=",viewport.get_global_rect()," battle=",bounds))
