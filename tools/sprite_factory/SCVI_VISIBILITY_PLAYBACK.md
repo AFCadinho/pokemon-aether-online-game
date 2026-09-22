@@ -1,5 +1,9 @@
 # Generic source visibility playback — first supported subset
 
+> Follow-up: `SCVI_VISIBILITY_VARIANTS.md` resolves the fifteen variant-target
+> holds through catalog and mesh-table membership. Visibility preflight is now
+> 86/88; the two dynamic-clock holds remain. Historical counts below are retained.
+
 ## Implemented
 
 New identity-bound SCVI exports emit a GLB-hash-bound `visibility` payload.

@@ -4,6 +4,7 @@ import math
 from pathlib import Path
 
 from scvi_tracm import inspect_tracm, inspect_visibility
+from visibility_variants import binding, verify
 
 
 def keys(track, frames, fps):
@@ -37,7 +38,16 @@ def prepare(intake, animations, gltf, glb_hash):
         raise ValueError('Ambiguous exported visibility mesh names')
     if set(animations) != {key for key, value in channels.items() if value}:
         raise ValueError('Visibility clip coverage differs from skeletal clips')
-    result = {'schema': 1, 'glb_sha256': glb_hash, 'clips': {}}
+    source_tracks = {}
+    for action in animations:
+        path = Path(channels[action])
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected_hashes.get(str(path)):
+            raise ValueError('Visibility source hash mismatch')
+        source_tracks[action] = inspect_visibility(path)
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected_hashes[str(path)]:
+            raise ValueError('Visibility source changed during decoding')
+    membership = binding(intake, mesh_names, [t['target'] for tracks in source_tracks.values() for t in tracks])
+    result = {'schema': 1, 'glb_sha256': glb_hash, 'clips': {}, 'variant_binding': membership}
     for action, timing in animations.items():
         path = Path(channels[action])
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -52,8 +62,16 @@ def prepare(intake, animations, gltf, glb_hash):
                 or config['loop'] != timing['loop']):
             raise ValueError('Visibility and skeletal clocks differ')
         tracks = []
-        for track in inspect_visibility(path):
+        seen_targets = set()
+        excluded = []
+        for track in source_tracks[action]:
             target = track['target']
+            if target in seen_targets:
+                raise ValueError('Duplicate visibility source target')
+            seen_targets.add(target)
+            if target in membership['excluded_targets']:
+                excluded.append(target)
+                continue
             if not target or not target.endswith('_shape'):
                 raise ValueError('Unknown source visibility target convention')
             mesh = target.removesuffix('_shape')
@@ -66,5 +84,7 @@ def prepare(intake, animations, gltf, glb_hash):
         if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
             raise ValueError('Visibility source changed during export')
         result['clips'][action] = {'duration': duration, 'loop': config['loop'],
-                                  'source_sha256': digest, 'tracks': tracks}
+                                  'source_sha256': digest, 'tracks': tracks,
+                                  'excluded_variant_targets': excluded}
+    verify(membership)
     return result
