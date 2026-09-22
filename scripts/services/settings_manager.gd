@@ -322,9 +322,11 @@ func set_battle_3d_forest_manifest(path: String) -> void:
 func get_battle_3d_forest_manifest() -> String:
 	if not battle_3d_forest_manifest.is_empty():
 		return battle_3d_forest_manifest
-	# Local review artifacts only, rooted at the explicitly selected model report.
-	# Never scan Downloads or auto-load native code in exported player builds.
-	if OS.has_feature("editor") and not battle_3d_catalog_path.is_empty():
+	# The trusted local forest runtime sits beside the explicitly selected local
+	# model catalog. This is a deterministic desktop install location, not a
+	# Downloads scan or a per-player picker; Automatic can therefore resolve
+	# grass -> forest in the actual desktop client as well as in the editor.
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and not battle_3d_catalog_path.is_empty():
 		var candidate := battle_3d_catalog_path.get_base_dir().get_base_dir().get_base_dir().path_join("forest-runtime/forest.json")
 		if FileAccess.file_exists(candidate):
 			return candidate
