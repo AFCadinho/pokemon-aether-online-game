@@ -83,8 +83,10 @@ ownership proofs, three new scene hashes and probe hashes. Local artifacts:
 
 ## Next step
 
-Investigate the two active dynamic-clock cases using raw source tracks and an
-independent timing reference; do not stretch bit arrays over the clip. Material
+The follow-up [dynamic source audit](SCVI_DYNAMIC_VISIBILITY_REVIEW.md) checked
+651 mapped clips and preserved 18 dynamic payloads as regression evidence. It
+did not establish an independent playback clock, so both active holds remain.
+Do not stretch bit arrays over the clip. Material
 issues in Spiritomb, Gastly and the fire profiles remain separate from visibility.
 There is no need to increase the cohort or pursue 100/100 before resolving those
 specific questions.
