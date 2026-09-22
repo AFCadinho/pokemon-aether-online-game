@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De lokale desktop-debugclient kan 18 nieuwe normal-form 3D-reviewkandidaten tonen in de Pokédex en summary-kaart, met een reviewlabel en het bestaande animatiemenu. Ze zijn nog niet goedgekeurd voor battles of distributie; ontbrekende en shiny modellen behouden hun sprite-preview.
+
 - Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave. Kies animaties via de bestaande playknop boven het level, zoom in of sleep om te draaien. Modellen worden groter gekadreerd en animatiewissels wissen de vorige pose; een extra platform verbergt de faint-pose niet meer. Ontbrekende modellen houden hun sprite-preview.
 
 - Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.
