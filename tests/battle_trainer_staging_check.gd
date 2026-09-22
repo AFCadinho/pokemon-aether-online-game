@@ -117,11 +117,25 @@ func _check_battle_setup_contract() -> void:
 	var pvp_show_index := source.find("_show_pvp_trainers(display_response)", pvp_setup_start)
 	_check(
 		trainer_show_index > trainer_setup_start and trainer_show_index < pvp_setup_start,
-		"NPC and story trainer battles keep the local trainer visible"
+		"NPC and story trainer battles stage the local trainer"
 	)
 	_check(
 		pvp_show_index > pvp_setup_start,
-		"PvP battles keep both trainers visible"
+		"PvP battles stage both trainers"
+	)
+	_check(
+		source.contains("func _hide_trainer_between_non_immersive_callouts")
+		and source.contains("not has_meta(\"immersive_battle_ui\")"),
+		"non-immersive trainer art stays hidden between callouts"
+	)
+	_check(
+		source.contains("func _hide_non_immersive_trainer_after_callout")
+		and source.contains("TrainerCommandCallout.FADE_OUT_SECONDS"),
+		"non-immersive trainer art hides after its command bubble fades"
+	)
+	_check(
+		FileAccess.get_file_as_string("res://scripts/battle/battle_ui/battle_trainer_sprite.gd").contains("func has_trainer_art()"),
+		"callouts require a staged trainer figure"
 	)
 	_check(source.contains("_show_npc_opponent_trainer(trainer_data)"), "trainer battles render the placed NPC")
 	_check(source.contains('npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")'), "trainer setup retains the NPC display name for later battle events")
@@ -129,7 +143,7 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains("npc_trainer_display_name = \"\""), "every battle setup clears the prior NPC trainer name")
 	_check(source.contains("_show_pvp_trainers(display_response)"), "PvP consumes appearances only from its projected response")
 	_check(
-		source.contains('_vs_panel_call("set_trainer_portraits_visible", [_vs_panel_uses_player_portraits()])'),
+		source.contains('_vs_panel_call("set_trainer_portraits_visible", [show_portraits])'),
 		"VS panel hides player heads when full trainer art is staged"
 	)
 	_check(

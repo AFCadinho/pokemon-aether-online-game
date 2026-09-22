@@ -500,6 +500,7 @@ var damage_calc_prefetched_viewer_stats: Dictionary = {}
 var damage_calc_form_stats_cache: Dictionary = {}
 var bag_inventory_request_token := 0
 var capture_target_visibility_tween: Tween
+var trainer_callout_visibility_tokens: Dictionary = {}
 var summon_target_visibility_tween: Tween
 var summon_target_sprite_box: Control
 var summon_original_z_index := 0
@@ -512,6 +513,7 @@ var current_party_hover_rect := Rect2()
 var party_hover_request_token := 0
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
 const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
+const WILD_CAPTURE_CALLOUT_RESULT_HOLD_SECONDS := 0.85
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
@@ -4466,11 +4468,13 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	var use_item_message := _t("battle.item.used", {"item": item_name})
 	current_action_panel.set_message(use_item_message)
 	_add_battle_log_message(use_item_message)
+	_show_wild_capture_throw_callout(item_name)
 	SfxManager.play("battle_item_use")
 	_close_bag_for_capture_attempt()
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
 		current_action_panel.set_message(str(capture_result.get("error", _t("battle.error.capture_failed"))))
+		_clear_wild_capture_trainer()
 		_restore_bag_after_capture_error()
 		_set_battle_input_locked(false)
 		return
@@ -4495,6 +4499,9 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		capture_message = _capture_result_message_with_storage(capture_result, capture_message)
 	current_action_panel.set_message(capture_message)
 	_add_battle_log_message(capture_message)
+	if _show_wild_capture_result_callout(caught, shake_count):
+		await get_tree().create_timer(WILD_CAPTURE_CALLOUT_RESULT_HOLD_SECONDS).timeout
+	_clear_wild_capture_trainer()
 
 	if caught:
 		PokedexService.invalidate_owned_species_cache()
@@ -4530,6 +4537,31 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			return
 
 	_set_battle_input_locked(false)
+
+
+func _show_wild_capture_throw_callout(item_name: String) -> bool:
+	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+		return false
+	_show_local_player_trainer()
+	return _show_trainer_command_text(
+		"p1",
+		_t("battle.capture.callout.throw", {"item": item_name}),
+		TrainerCommandCallout.DISPLAY_SECONDS
+	)
+
+
+func _show_wild_capture_result_callout(caught: bool, shake_count: int) -> bool:
+	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+		return false
+	var key := "battle.capture.callout.caught" if caught else (
+		"battle.capture.callout.almost" if shake_count >= 2 else "battle.capture.callout.broke_free"
+	)
+	return _show_trainer_command_text("p1", _t(key), TrainerCommandCallout.DISPLAY_SECONDS)
+
+
+func _clear_wild_capture_trainer() -> void:
+	if battle_type == BattleType.WILD and player_trainer_sprite != null:
+		player_trainer_sprite.clear()
 
 func _capture_result_message_with_storage(capture_result: Dictionary, fallback_message: String) -> String:
 	var location: Dictionary = PokemonStorageService.normalize_storage_location(capture_result.get("storageLocation", {}))
@@ -8251,6 +8283,7 @@ func _prepare_battle_setup(
 
 
 func _clear_battle_trainer_sprites() -> void:
+	trainer_callout_visibility_tokens.clear()
 	if player_trainer_sprite != null:
 		player_trainer_sprite.clear()
 	if enemy_trainer_sprite != null:
@@ -8261,6 +8294,7 @@ func _show_local_player_trainer() -> void:
 	if player_trainer_sprite == null:
 		return
 	player_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.RIGHT)
+	_hide_trainer_between_non_immersive_callouts(player_trainer_sprite)
 
 
 func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
@@ -8282,6 +8316,7 @@ func _show_npc_trainer(trainer_sprite: BattleTrainerSprite, trainer_data: Dictio
 			catalog_texture = catalog.call("get_texture", battle_sprite_id) as Texture2D
 		if catalog_texture != null:
 			trainer_sprite.show_catalog_sprite(catalog_texture, facing_direction, sprite_offset)
+			_hide_trainer_between_non_immersive_callouts(trainer_sprite)
 			return
 
 	var sprite_frames_value: Variant = trainer_data.get("_battle_sprite_frames", null)
@@ -8292,6 +8327,7 @@ func _show_npc_trainer(trainer_sprite: BattleTrainerSprite, trainer_data: Dictio
 		facing_direction,
 		sprite_offset
 	)
+	_hide_trainer_between_non_immersive_callouts(trainer_sprite)
 
 
 func _show_replay_trainers() -> void:
@@ -8299,6 +8335,7 @@ func _show_replay_trainers() -> void:
 		_show_npc_trainer(player_trainer_sprite, replay_trainer_data, Vector2.RIGHT)
 		if enemy_trainer_sprite != null:
 			enemy_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.LEFT)
+			_hide_trainer_between_non_immersive_callouts(enemy_trainer_sprite)
 	else:
 		_show_local_player_trainer()
 		_show_npc_opponent_trainer(replay_trainer_data)
@@ -8359,6 +8396,7 @@ func _show_response_player_trainer(
 	if appearance_state.is_empty():
 		return
 	trainer_sprite.show_player(appearance_state, facing_direction)
+	_hide_trainer_between_non_immersive_callouts(trainer_sprite)
 
 
 func _get_battle_player_appearance(player_data: Dictionary) -> Dictionary:
@@ -11430,10 +11468,38 @@ func _show_trainer_command_text(
 			trainer_sprite = enemy_trainer_sprite
 		_:
 			return false
-	if trainer_sprite == null or not trainer_sprite.visible:
+	if trainer_sprite == null or not trainer_sprite.has_trainer_art():
+		return false
+	var command_only_presentation := not has_meta("immersive_battle_ui")
+	if command_only_presentation:
+		trainer_sprite.visible = true
+	if not trainer_sprite.visible:
 		return false
 	trainer_sprite.show_command(message, display_seconds)
+	if command_only_presentation:
+		_hide_non_immersive_trainer_after_callout(trainer_sprite, display_seconds)
 	return true
+
+
+func _hide_trainer_between_non_immersive_callouts(trainer_sprite: BattleTrainerSprite) -> void:
+	if trainer_sprite != null and not has_meta("immersive_battle_ui"):
+		trainer_sprite.visible = false
+
+
+func _hide_non_immersive_trainer_after_callout(
+	trainer_sprite: BattleTrainerSprite,
+	display_seconds: float
+) -> void:
+	var sprite_id := trainer_sprite.get_instance_id()
+	var token := int(trainer_callout_visibility_tokens.get(sprite_id, 0)) + 1
+	trainer_callout_visibility_tokens[sprite_id] = token
+	await get_tree().create_timer(
+		maxf(display_seconds, 0.0) + TrainerCommandCallout.FADE_OUT_SECONDS
+	).timeout
+	if trainer_callout_visibility_tokens.get(sprite_id, 0) != token:
+		return
+	if is_instance_valid(trainer_sprite):
+		trainer_sprite.visible = false
 
 
 func _present_initial_summon_command(player_id: String, pokemon_name: String) -> void:
