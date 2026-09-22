@@ -1,0 +1,243 @@
+{
+  "runtime_approved": false,
+  "samples": [
+    {
+      "action": "idle",
+      "arena": "forest",
+      "capture": "forest-idle",
+      "max_y": 1.90585958957672,
+      "min_y": 0.034724123775959,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "physical_attack",
+      "arena": "forest",
+      "capture": "forest-0-physical_attack",
+      "max_y": 2.02747368812561,
+      "min_y": 0.034758485853672,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "special_attack",
+      "arena": "forest",
+      "capture": "forest-0-special_attack",
+      "max_y": 2.24876546859741,
+      "min_y": 0.0333771407604218,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "damage",
+      "arena": "forest",
+      "capture": "forest-0-damage",
+      "max_y": 2.03374075889587,
+      "min_y": 0.0352302119135857,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "faint_loop",
+      "arena": "forest",
+      "capture": "forest-0-faint",
+      "max_y": 1.71217691898346,
+      "min_y": 0.0271052569150925,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "idle",
+      "arena": "forest",
+      "capture": "forest-0-replacement",
+      "max_y": 1.91207301616669,
+      "min_y": 0.0350476577877998,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "physical_attack",
+      "arena": "forest",
+      "capture": "forest-1-physical_attack",
+      "max_y": 2.02485799789429,
+      "min_y": 0.0350909158587456,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "special_attack",
+      "arena": "forest",
+      "capture": "forest-1-special_attack",
+      "max_y": 2.24873113632202,
+      "min_y": 0.0334161445498466,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "damage",
+      "arena": "forest",
+      "capture": "forest-1-damage",
+      "max_y": 2.03374075889587,
+      "min_y": 0.0352302119135857,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "faint_loop",
+      "arena": "forest",
+      "capture": "forest-1-faint",
+      "max_y": 1.71217691898346,
+      "min_y": 0.0271052569150925,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "idle",
+      "arena": "forest",
+      "capture": "forest-1-replacement",
+      "max_y": 1.91202867031097,
+      "min_y": 0.0350432321429253,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0.037750244140625,
+      "visible": true
+    },
+    {
+      "action": "idle",
+      "arena": "stadium",
+      "capture": "stadium-idle",
+      "max_y": 1.86951267719269,
+      "min_y": -0.00299518555402756,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "physical_attack",
+      "arena": "stadium",
+      "capture": "stadium-0-physical_attack",
+      "max_y": 1.98696792125702,
+      "min_y": -0.00263876467943192,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "special_attack",
+      "arena": "stadium",
+      "capture": "stadium-0-special_attack",
+      "max_y": 2.21108484268188,
+      "min_y": -0.00445172935724258,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "damage",
+      "arena": "stadium",
+      "capture": "stadium-0-damage",
+      "max_y": 1.99554896354675,
+      "min_y": -0.00252041965723038,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "faint_loop",
+      "arena": "stadium",
+      "capture": "stadium-0-faint",
+      "max_y": 1.67437672615051,
+      "min_y": -0.0106348246335983,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "idle",
+      "arena": "stadium",
+      "capture": "stadium-0-replacement",
+      "max_y": 1.87431585788727,
+      "min_y": -0.00270343571901321,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "physical_attack",
+      "arena": "stadium",
+      "capture": "stadium-1-physical_attack",
+      "max_y": 1.98692858219147,
+      "min_y": -0.00263302773237228,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "special_attack",
+      "arena": "stadium",
+      "capture": "stadium-1-special_attack",
+      "max_y": 2.21108484268188,
+      "min_y": -0.00445172935724258,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "damage",
+      "arena": "stadium",
+      "capture": "stadium-1-damage",
+      "max_y": 1.99603748321533,
+      "min_y": -0.00251998007297516,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "faint_loop",
+      "arena": "stadium",
+      "capture": "stadium-1-faint",
+      "max_y": 1.67442667484283,
+      "min_y": -0.0106449872255325,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    },
+    {
+      "action": "idle",
+      "arena": "stadium",
+      "capture": "stadium-1-replacement",
+      "max_y": 1.87429440021515,
+      "min_y": -0.00270595401525497,
+      "runtime_hash": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+      "surface_y": 0,
+      "visible": true
+    }
+  ],
+  "scope": "Offline real Forest/Stadium presenters; no full battle HUD/network session",
+  "cycles_per_arena": 2,
+  "catalog_activated": false,
+  "visual_review": {
+    "decision": "candidate_pass_with_minor_ground_contact_note",
+    "inspected": [
+      "forest-idle",
+      "forest-0-damage",
+      "forest-0-faint",
+      "forest-0-physical_attack",
+      "forest-0-special_attack",
+      "stadium-idle",
+      "stadium-0-damage",
+      "stadium-0-faint",
+      "stadium-1-replacement"
+    ],
+    "note": "No horizontal flight mismatch or disappearing faint actor observed. Sampled penetration ~0.003 idle / ~0.011 faint world units; no calibration change."
+  }
+}
