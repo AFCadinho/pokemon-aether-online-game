@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Pokédex toont op desktop een lokaal, hash-gecontroleerd 3D-model wanneer de experimentele 3D-presentatie en een lokale modelcatalogus zijn gekozen. Sleep in het previewvak om het model te draaien; ontbrekende of shiny vormen houden hun bestaande sprite-preview.
+
 - Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
 
 - Lokale gescreende 3D-kandidaten kunnen nu voor visuele review in de gekozen 3D-arena verschijnen. De UI markeert deze weergave als niet arena-gekalibreerd; officiële en gemengde modelcatalogi behouden hun veilige klassieke fallback.
