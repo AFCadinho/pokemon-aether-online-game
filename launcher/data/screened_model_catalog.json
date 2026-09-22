@@ -14,219 +14,219 @@
   ],
   "models": {
     "azumarill": {
-      "glb_sha256": "34a40245ffbffbf2929fbd6316eb2aa69e82ad65b5af7e79a78b3587a792337b",
+      "glb_sha256": "05c904e4e9cfe8d3827ec75ce57a5e31df0c5f976bf1e6857ea584200d55c1a7",
       "profile": "azumarill",
-      "sha256": "a45144b6ac33ead2300942131161ce641cd8536b0d5a0469c10f6bf4f42f0006"
+      "sha256": "debc9617ad98b5365dbdc4ff12ba419084552c15dd9d7813c1009e480a02643a"
     },
     "blissey": {
-      "glb_sha256": "648d181ec03a33977bb5fdda2b12b7d65b2ee81bbf21c3fdd900cd9d8369252b",
+      "glb_sha256": "eccab4299492c54c05448c472c1af6b2708a41e88fac3aeaa8f0d34798179505",
       "profile": "blissey",
-      "sha256": "e86499f58c398baff39993833d48845d652ce47c81ad6724025c5497573bb896"
+      "sha256": "fdaacb49737d8e289598afd370537e813bdcd3ad06cf9f382ebdf27ec1c28af0"
     },
     "chansey": {
-      "glb_sha256": "35ab639bf1efc820d4228530acd097819a99ee50fcdf86fc826241baf02f4007",
+      "glb_sha256": "2f87ecaf340490705667cdc04ca5f9654e67e556384f2a3114c69149b2467286",
       "profile": "chansey",
-      "sha256": "3d2c142d5d3e42994a64637277b94bc91d53f38e95c96e3566c798f4ff447d4f"
+      "sha256": "0b9f55469da084e0f94d110a8793a3578a356b7e5f217a952cdc586ec0437d7f"
     },
     "charizard": {
-      "glb_sha256": "74bea17c1dbb764cfa1aa23457aa92ef9831978d2a6294d19f6682b744b48ff3",
+      "glb_sha256": "d8b525ced96ebad27f06d0f3603583feaab628ece60db69ef7181b6fdef50816",
       "profile": "charizard",
-      "sha256": "efda7151ac8a5d30594e87e1ef5a1f7feab9cb5c91adc37ed171b44470be3149"
+      "sha256": "bb610eb2d81ea3963756cca4f0dda3ded856af5efb5853758e55a76d33c3b33f"
     },
     "cloyster": {
-      "glb_sha256": "65093bbd544ccf76e23ee89769791d6035c884158039afe6bb9d1c5524e888fd",
+      "glb_sha256": "bfac18f195652afcf2a3393fe7ffee921ccd94e2f6d66185dbe16d68a93eb089",
       "profile": "cloyster",
-      "sha256": "887bfd934834e221b16acdad59dd3e0916aca606221954674201b5d3611f036f"
+      "sha256": "de89635b685866740dedef001831a0ffbf1ea7054d4c930b8f2f9ec6473aa5e9"
     },
     "corviknight": {
-      "glb_sha256": "d95abcf3591e1e7df16b8053ad38f05de9b03f85930f94f732ad09a6fe215194",
+      "glb_sha256": "6fed5efe33c15a9e0aedb793771fb3cb6a5bad9a733db9549e7ab980ba04c66e",
       "profile": "corviknight",
-      "sha256": "344f7e2f0e068a5b3934031cfda19363d452c3210005d57509a33a4134633f75"
+      "sha256": "abda53659dd0e2f7d1f35d379f1d4e95af96d28f5d51ae1dc229cacf8e0d0ef2"
     },
     "delibird": {
-      "glb_sha256": "217802ad170898ca172e9b402aca5b18eb34ab66e291eadffa85fdd2f165b393",
+      "glb_sha256": "45fc1705c7e83ae8e64fcfb5966be26ca5f9458310da5b358151f596baae805e",
       "profile": "delibird",
-      "sha256": "5a9e40dfcb9ed473f8697bc589845d21bd292fcdac83ec1153e89a3dafcfea63"
+      "sha256": "9ba2b4160b5e20097823c4d2ee7fb94ac7f1037698526871ddf7612734a1a976"
     },
     "diglett": {
-      "glb_sha256": "6e0c4f898a5f664a44b44e097ec16a3fed21c50dcc645f9cb06d87d23464bcc8",
+      "glb_sha256": "f372129b36c284352ce92371d3e39d33a65d5747d54377c4e12ec9facfd6058f",
       "profile": "diglett",
-      "sha256": "fc78fd4d78536f31b2cc1a945d42f8b271e85120a7ee99a384a35d7a2c107863"
+      "sha256": "28bc757093aec871c0ccadee8086285f1aeac7bf29330e0e1065cedd845c0239"
     },
     "ditto": {
-      "glb_sha256": "c37342072ce05e0f052533601d0c9f1604152aa0af56a4efdd700ea6b929de7a",
+      "glb_sha256": "3b0fab217211b3510eecdf5107a8cc93e50e0f7d7181098222a18018912f49db",
       "profile": "ditto",
-      "sha256": "4096406d8c0561a00ad17fe1e9992df865c8f69dcd4e444b47a3e8e60058bc06"
+      "sha256": "43d19e70e94c72e0796d351665ed14454d0a31da70e8c12756773fa1fcde2700"
     },
     "dondozo": {
-      "glb_sha256": "cd8f4ec6a2120ffa1d3ca9d0dea500e9dc7966459bdba150db7de84bc82ddf1a",
+      "glb_sha256": "6514bbd5c2ccf84f8c81274527af61740c4388b8a5aef0c076e2d5f2ec8e86ab",
       "profile": "dondozo",
-      "sha256": "8e63f37c80d16d845dddf41e329adffdeb40aee5557815f367bd2218c05b5015"
+      "sha256": "c89c88d63312dc6881a7059b241d618c1221f103e47542d9c61f43d51499069c"
     },
     "donphan": {
-      "glb_sha256": "04bb53a1fd517c0943f3dfb17001ed4245ca40c95f3299570b202e4a8b1b093f",
+      "glb_sha256": "0de248abe3fa0af48ff6e15d7ed524c5ea88c985d34ff93d3d7cfaf4b39f9217",
       "profile": "donphan",
-      "sha256": "d4d4b46b364b0c6bea97bc2699fed1393f8b20e8e0aaff03b350c4325097ba3c"
+      "sha256": "46747dd8c415ddf55b75437da462d500224918464b67d640aefb1335af86304d"
     },
     "dragonair": {
-      "glb_sha256": "19b2dcfba528c5c52987a3e48f4507bea925a3f8356357ff3335a4b4fc3dc139",
+      "glb_sha256": "9210da4fbf15ed8d523e1945d9a9083817401eac467080424fdbc87fdfd0020e",
       "profile": "dragonair",
-      "sha256": "94c76f01fb87def5b66311f2556bc5d6bbc384d563555495d8c09d11787a802e"
+      "sha256": "b926a64546ef7aa48929f2d0397a9f64bae065179a8e10a2aba5c98c90d598b4"
     },
     "dratini": {
-      "glb_sha256": "086fae27f76c31fab90d6cb1fb6f736953ea5efc5c32b3665b140c505500ca36",
+      "glb_sha256": "f07497a8b2b3d01b296ecebd7479254fdc6985f14f2c1b307848d600ec94dbb6",
       "profile": "dratini",
-      "sha256": "890ea9bb6b0c7e84d6699119895ef7131856972700ded0696377495497fef8be"
+      "sha256": "5244a67b57f5f778fab1f5bccd9c804235be9ed96cb370749dc9f272fd244088"
     },
     "drifblim": {
-      "glb_sha256": "87c1db373a63a7e9427b32a47b5a6ef650473ee8054dca3b5d2523e8ae90f5a3",
+      "glb_sha256": "33aa2f7bb5797b798b52286cb142c97b3f458421b80ea1dbe7d7bdcdc0358c32",
       "profile": "drifblim",
-      "sha256": "621750d76787c7c853fcd5dea5cffaaf96783e72fd03e1f8ba7a818bb4daa245"
+      "sha256": "59fbfddf611fac8196a8a019a9e0662093f4089cbc61aad5a5688ae7908f1095"
     },
     "drowzee": {
-      "glb_sha256": "2abd493b17a98e04bc23a9c65c61337545e1d9ef7f9d7d4d0174ab6531781679",
+      "glb_sha256": "a8db4e741e4261ee00fb1090146163f1535c58db4b65343817f144f598a37a9f",
       "profile": "drowzee",
-      "sha256": "78c05aa98801da4e05e252e0f6d8ff8872f4d4a7c0426380a9a60a9a652358df"
+      "sha256": "790d6dcaa02f99ce77cf3aabc7bb0edcfd0c20fbf173cc3b204d5bc0c4dbbdfa"
     },
     "eevee": {
-      "glb_sha256": "1732fd45777f50aeb84507aec40d2429855b9534824742b0dc2a510ab58b674c",
+      "glb_sha256": "b719d18402889ad0aa8560a99b327b289125d77fd17f0b5f16fc1bbbf77841bf",
       "profile": "eevee",
-      "sha256": "d780a3233eabcf391a092c03ce83463c17fbe08f21d381447f1bcab4e7424668"
+      "sha256": "87347bfa0fab10c1cf9050dfdddda47e56a18036d9ef8664e2f8670c91ea9cb5"
     },
     "electrode": {
-      "glb_sha256": "5c23f564cca1745647fb12680773668cb6812113782ddb847619757a269ca16d",
+      "glb_sha256": "5749283c39b8423741c900df7d3d45641e3839081d9c9ac5e55dd60e506bcadd",
       "profile": "electrode",
-      "sha256": "9cfc1352b82602fc6ea36f55889401f8ef155ba118ab26aa3fe0c1dd7e1aa896"
+      "sha256": "fc4e7ab564fe1fb2f86ac6bfe4c6f7e90f52051b2646c817909bede8618b500d"
     },
     "espeon": {
-      "glb_sha256": "d6fe1fc534912789e9f47c97cf719fb81b5e29684d494c60dd5c8e8c6617b3eb",
+      "glb_sha256": "25e598f13a6b89325a7aa14c1b01cccc3fcf6939247476ca5a410191049679f8",
       "profile": "espeon",
-      "sha256": "9e7f35aba795f3864fe89d26a63579afa9af89ebc7060afbfc0b26fed0b41481"
+      "sha256": "4c944fa866427e9b689bc6d32378581ae6c0b71cb7330614021dca33950adc8e"
     },
     "flapple": {
-      "glb_sha256": "5dceb6c97ead29c91a6238079010bed386a7ec89b29fc8a106efb90dc39e110e",
+      "glb_sha256": "7aa5003c9355ece0cac860e5e1bad33b1a5a0af5742a2b7879c9ce2baf9b702c",
       "profile": "flapple",
-      "sha256": "9d264ac46014de6ac6d4e6b6b4968b7e67a4ff7adaa9114bcb07f50804643e0c"
+      "sha256": "34bbc116fa1d809ca6c87bcb0c6f8b33244258e126c42b481cc340620d18e8cf"
     },
     "flareon": {
-      "glb_sha256": "e43fd75a6af218ff54938c6bdfbd830e476e0c2781e20e50d7581fd5ae1d985a",
+      "glb_sha256": "b467c9278a57eaafd1315233eae97aa6e3471c09e20e9bb7b8d41b28418c7e3e",
       "profile": "flareon",
-      "sha256": "039480eee56bd385d7b777c6ed89885dbdc1c6df151ecb6f293452ca0e108a29"
+      "sha256": "a0079cc6a5d334dbf6ab57a073766aca02ce1034feba8ced5a9a27652c6af7af"
     },
     "forretress": {
-      "glb_sha256": "536d69606117e93663746b0dd61e0c9e3613fcc064640443d89f859a4f1024b9",
+      "glb_sha256": "bc3ea33b7ce3e7a839beaa4e670c4006ac76c6c333f4fc3665cfaae0bae55c49",
       "profile": "forretress",
-      "sha256": "a6b2497efcc8fab057f2fac05e9d41ae92885be360ae9055cfde9a09f4b42a2b"
+      "sha256": "d4280fe578e2f93ea9b83ddd6f850845ae85701d433861b13b5421df28fcd649"
     },
     "garchomp": {
-      "glb_sha256": "0e39d18cab786bea1ff8b0ae8a9fceaef8ae48c0260c4196cc0e950db51048f6",
+      "glb_sha256": "40ed37254559c394fa8bdbbd6d877d61319c970a43b8c9789746141224a457ed",
       "profile": "garchomp",
-      "sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8"
+      "sha256": "63981135aef04a3b7403c0d49d61e9dac6e950df9f63fec186402c55208b8af3"
     },
     "gardevoir": {
-      "glb_sha256": "f36afb8bf246658f55475e647372c6e88474bf2297435cc9050a3874bccb766f",
+      "glb_sha256": "442f51394cff7b7717d6e8392ddf0b39ca502c8891fa26b9a01c9f274260f237",
       "profile": "gardevoir",
-      "sha256": "b2c0b3127b11bdb25262dd7139997fcc77cfcaeb35fc1e35d7b404f58b2dc2fa"
+      "sha256": "243a682b37c82d8731eec6252c9bca0786e63f9fce9a00724b9e9864aa77941b"
     },
     "gengar": {
-      "glb_sha256": "14120800359b91247283f2de60607130a6ed8d3b2d059cc1acef3a74fa922922",
+      "glb_sha256": "76802c4871a0714787073a9379a0076d23e86bb866c45ef9fbd6030124bd06b2",
       "profile": "gengar",
-      "sha256": "78b3953637349def0c9048c5b92078aa8e6c6746f821d77eb71ce58b8b96f7ca"
+      "sha256": "f0674ebc6e1c7599a18ad82b9c9ff62c2b75cbf0ab521b485e8ad186030cd0af"
     },
     "golduck": {
-      "glb_sha256": "b49cb3634f9254d018f8b5f56ce268f5ca8b28750a9889511bdb7ab3b1d91166",
+      "glb_sha256": "bb97636f73c217d6fe6806fd9d3f4c70f7355b04c50b7fe331a724441d84572c",
       "profile": "golduck",
-      "sha256": "47247c6be71d222f84673f7e15c4a4e2c5cd7b88c49fd9fdde5b5b4cf7088638"
+      "sha256": "9c5855c7a652188fe356bb7c37170dfe7b1ae3dba465be14ea88d4d17604a0e1"
     },
     "growlithe": {
-      "glb_sha256": "7d477f07d5b246495c421029db6005c7d00ebf53eb32404bbb6dc955f696b41b",
+      "glb_sha256": "739477f2d4c5014679914827fc3c5ed899c88b84aaca710c51977b0cc67797b8",
       "profile": "growlithe",
-      "sha256": "694a75efd26a91b073491f38fea23be54d122983325cf0ee04399058acc9ff9c"
+      "sha256": "c241a3b14f71a350f9118aced9d6ddddd32831e39b9dc200337012c314544ec1"
     },
     "gyarados": {
-      "glb_sha256": "183217d1056eaa73eff752e160980483b14c85a84bc6cca907e04df9040ca2c9",
+      "glb_sha256": "6868688a5f33c85a3ee8f1a30bd532b6637bf89cbe28030b877eb1758bb6f5f3",
       "profile": "gyarados",
-      "sha256": "6c2f24d7bc71446102e3df895d0aafd1c80eccbf5e1a7bb3116fd6e483a17edf"
+      "sha256": "14793b5b522bd9cb8f3826b61de188ac99688b2264df20941e82ed2bb0243027"
     },
     "hariyama": {
-      "glb_sha256": "5c81994d38890bc0e0441dda7cf99147306ae92387d887c5c2be182540803d75",
+      "glb_sha256": "cd56834469acbf0ba83133b480f1ba46dfaa1f148f6e3e6e658ca42f60304380",
       "profile": "hariyama",
-      "sha256": "8cc2630961bf21fab5ae7a60a8785086c171978bb5d2e9c51e8e6c89474b35f4"
+      "sha256": "c8a6b898026a8f4efd78601eb6ae3d616b32eef9e48aa5756d75922fd0526acc"
     },
     "haunter": {
-      "glb_sha256": "db8ee3dad34a86fe47acafc7c703043191bdd8a26b770b49eb68ad1c5a226ceb",
+      "glb_sha256": "9db8a4dd4b090d3755c3cc57d6baa859a673a938c7f3e5b3501c9a732a11f1f6",
       "profile": "haunter",
-      "sha256": "1545c90daee6e79f661b9a815916a2daec0d8171ffb5a87c1fc536a73d1edd0b"
+      "sha256": "2984a3c700969b10d62cf00ac65bbc53b0cf54d075825158b31efbfa31080b35"
     },
     "heracross": {
-      "glb_sha256": "59f8efe95d08cb6691bb4473d141a44dda80d75c097721767cde1e80cefff087",
+      "glb_sha256": "997517fdde23724024528e01337b8095a1b413c9963586ac63f5089932d04317",
       "profile": "heracross",
-      "sha256": "20dd4a894dc396eac85c52ba65a65d5ef9ec82b78e880f9fa09a300cbd2f57b9"
+      "sha256": "fcd63b2534b2a02db5614408af53390179e9e2f57767ad1ee3163b77cd2aff52"
     },
     "hoopa": {
-      "glb_sha256": "028971f2314f3d62c11ea183769876c4f43cdf20cd0ac16020a838a90154a885",
+      "glb_sha256": "f0dac873c20f075f015dfbef0292f5661ab82a4a71cdc70f8530658bbdc57f5e",
       "profile": "hoopa",
-      "sha256": "04c14ad1901a2e29fd9cc9dd6c348d6a13b2afb5571a333b965c9e4ba176180a"
+      "sha256": "0c8290592826ab1d664c188caa46d1448d3e47e97cdf54207f836ce1bdf5ee8a"
     },
     "hoppip": {
-      "glb_sha256": "dd4e67beff0080254b7ad77f388d546abe0cabd1c5db6a71d67bef699e412ba5",
+      "glb_sha256": "a17ac89cc4ce0f9abdd5d513fe07eeb5b045b10092a897effa575bb0f9a32edc",
       "profile": "hoppip",
-      "sha256": "3466776b082f8192c51de942c82a52a6d5f20a0de7ab5bf55e9c6331a60a85e1"
+      "sha256": "22084945a1a4e475622ab53e3de4d3a82e6b520d7ec1347d5acb4850ff2fbeb7"
     },
     "hydreigon": {
-      "glb_sha256": "021c556cc7cc7a10d7fee6cebce02d2dd2d3caba55d40de1f744735092c7c9d5",
+      "glb_sha256": "b34c5f2420c98883cfdf5c10450576ce656939bff5bf52aa32bdd02358cb359b",
       "profile": "hydreigon",
-      "sha256": "1f0c5a95b825932f5a9c8abb559315d5b8ee4c1e56bbd7f67a264005c8dac022"
+      "sha256": "6bff795c082b16253744c142c89b319eb11c73916859b4b6ab7b7f9dc2d3636e"
     },
     "hypno": {
-      "glb_sha256": "3013a6faa62ec75c639d797afbaa09a08a5ce2c985e844e0a91fc1adc1143c71",
+      "glb_sha256": "b1455a370cf7bed23165b1fa60b1b034e84f2c7384ea744d10aa3e11aaf488a7",
       "profile": "hypno",
-      "sha256": "577a5ddc810581380e559af777cd48bf8035d194c884172a5fe5279a9f73ff9f"
+      "sha256": "67e86d40cd51ad17ffb92155a4003b1e2d84a26e5e87b56011468fafee5e3a1c"
     },
     "jigglypuff": {
-      "glb_sha256": "7d87209debeb0b988233109f860f0722bee4c88305d06d08c9bb50b53c3671ec",
+      "glb_sha256": "fb05808ad79e67dfa139c21c831b25bd533fceba24dd34bd6f3abef99352a19e",
       "profile": "jigglypuff",
-      "sha256": "acfec3effad056f9822a4bd58b642652b2df75d8f05ab8c20bf88359d4d4f7c7"
+      "sha256": "5100d8abc6a86fe4fd4cc2cfd6c20f72f522b4672b9f47ac1a46934aa3fa4294"
     },
     "jolteon": {
-      "glb_sha256": "fb5a330ee73dd2bf51e147daed027b49f1947d3ce2644b01493c0257e20606b0",
+      "glb_sha256": "6b1e26ec2050f8eae5bce1aad1993cbc9afe74a54a2115aa39ae5dc6809720a4",
       "profile": "jolteon",
-      "sha256": "2e9848fff483a33c54f92ef0c433d212c6cebb49810d0a6eb471a5b703ee97c6"
+      "sha256": "33e86e0cb200a880d0498ad220949908acacf406b09ae2adadf8f6a914ab5dcf"
     },
     "jumpluff": {
-      "glb_sha256": "4b981ebaca693011d203168c444abe8a05f39d06b2370c61453e315d6becbc0b",
+      "glb_sha256": "30d61a960a348c0ee8d14aa7c0dfca8084894950934a29040d7e0b9832503b6b",
       "profile": "jumpluff",
-      "sha256": "1707109601e912578a25e96b8ba37def059014927be469442b83f9941bcb1d64"
+      "sha256": "e0709bc6d56fd2727df1e7b3cde2ff85fe7e982aa8d7e4cdc4f0443ff731ade9"
     },
     "magikarp": {
-      "glb_sha256": "1f168b396d0b3974d98a277f20f1e51e950ca993026335aaba447fe3c1db0edd",
+      "glb_sha256": "cf08577f0269e2b130a1e1f523f481143f95e767fc88d9191280f8ca8ab56044",
       "profile": "magikarp",
-      "sha256": "f595951be64491bffc83c733fc1ba67af5818533c33657a18c0a550172ce57df"
+      "sha256": "e7c282900c4029b1ed9613efd9044e3328a26d65c7f4fdf2f75ae7886e61a579"
     },
     "magnemite": {
-      "glb_sha256": "1400c5d7dc579021ec95cf774f24ea975dd44e2f27576df10649db27e28ae9a7",
+      "glb_sha256": "d53bfe1a25e2219a28c7ea82c8c471b75bc69270157923c519db1f5fa24c0655",
       "profile": "magnemite",
-      "sha256": "4ca65cf8e4d78020e9fc42a2c92a625f636dbd36031f7f5db107df7887297201"
+      "sha256": "b65e8d75dfef8de94265f454a675ded6e5803110b25752cec95025663eac1ff8"
     },
     "magneton": {
-      "glb_sha256": "1f0127127a9638465f4c09731dff5461af7bb416a779ac6d6aa0ff55a65fac96",
+      "glb_sha256": "bfe0c2564cc04d53340cf54c4c540cf33f0d62e42b9842517293dfad34ec3bcf",
       "profile": "magneton",
-      "sha256": "f335d0a906bccbf81af8817230412363c21b2bbcbc6a108a1b291175a82162a0"
+      "sha256": "447bd31ca942ab95616edbee123ea4aea7fc5baec46f2b168f9338474e0e1616"
     },
     "magnezone": {
-      "glb_sha256": "2cf2f52113d3a5ffc477e5331e24d7da09da205d5a3d26de4daa564dbff121f4",
+      "glb_sha256": "057987bde20f73a832ba5af55076bfcbf6487fa8448c1331e5f7abad5075cc4e",
       "profile": "magnezone",
-      "sha256": "adbc50f123c8d091016efb6e2c54bb07a3fd7c7b88f54665d395f0311036cac4"
+      "sha256": "b1a20514b6cd4af1b8820992489e5a4a96c3b793689f46b9d5fc6eff20438621"
     },
     "mankey": {
-      "glb_sha256": "d22af0aa6192979d32f69831c410627e5499b4f5f74ac7d7a7862d442bc60ea5",
+      "glb_sha256": "3b06f5eece97f0d407f006dfb7aeb9865233b118f872f97d83a9517637e30992",
       "profile": "mankey",
-      "sha256": "8bc2a5c9d9cbe6c26fbbe2fe709ff52a2ffd037210106b822372630c21cf7fd7"
+      "sha256": "08a42542e674de765fb43db6a5f2ec7fc5a0ef877eb23efb2d0fa6e61dc1a579"
     },
     "marill": {
-      "glb_sha256": "d7deda2d142991fc1d2ac4ee47b078d140b1cc633bccac0a187038b658ee3e0d",
+      "glb_sha256": "0eb74878608b1f92b6a80fb3bfef1876e2fa6a0c9052327a1f986ce73a70933b",
       "profile": "marill",
-      "sha256": "4b339138a62f788968c81574daa53f6a0e9b55d0e609348ce794544a219ffd7f"
+      "sha256": "c8cec3e8862ccb21768bd74f9b798fe553d9ee84c7f3f772867bc448ae912e50"
     },
     "meowth": {
       "glb_sha256": "e2316e2f1b1f89dc41905eb20478fecb9c1d527d748e9c32629655d17aa5bd35",
@@ -234,159 +234,159 @@
       "sha256": "e5ee0b7b90538581dabdd333586979f635a31722afa70e89c0fdbee8012a05c0"
     },
     "mew": {
-      "glb_sha256": "c3edcd13700dbb96d204f850e927e7cd5109f70c35e62da27223d840db97b841",
+      "glb_sha256": "c8fd43791ba5aea04bb7a7191295bff3efff0924452dc6e94255aea2cf401c81",
       "profile": "mew",
-      "sha256": "ca73a5e9fc6df3ff237cfc7bb65bcf08390517b5fead695394fb273c3f5e7076"
+      "sha256": "59b42a9a786553f15e772af0a2d3eec40e7052f83ea0713038c07a5ecc74bdaa"
     },
     "mewtwo": {
-      "glb_sha256": "3448f9d6583c287562df98156d09ba4888437ecfb7c350b1233765367213dc13",
+      "glb_sha256": "330567872d4853c382009afe1a83bdb11ff57245ab31e056d425e157e2be40d5",
       "profile": "mewtwo",
-      "sha256": "6b35ac7fef08624c8434c0862a4919d3cbfa6ba1b03e83d785d809ee3488c73e"
+      "sha256": "9adbe54a97d008b1d58e80d9419b18f15d2c5a40cc1347eba59c70ec6d513126"
     },
     "misdreavus": {
-      "glb_sha256": "3f2d19649fb7b51598c072a9c3bce9fd03527bab754e0c5e2ddc5b3c0cef3b9f",
+      "glb_sha256": "bcd0d511c8f2c9bb194a9dda909f5bd64128a8cf5b927a3dce0c3a8b12882e74",
       "profile": "misdreavus",
-      "sha256": "5c4a9a143f38b44b6d95364a2aaaae6e62e3c3b88c068fbc3de04f4476009200"
+      "sha256": "6a024fda29e22988e8cfc171413ec6a86f3f43f924d62b9fde16c17c810a9e6b"
     },
     "murkrow": {
-      "glb_sha256": "f7c3db6f7aee864dae16a45f928e2c94f52277dc8504c10e804a482f7aee4299",
+      "glb_sha256": "b79416837a428f42eab9e436ca815140e3fd402125fb10fc9918c175ef274f42",
       "profile": "murkrow",
-      "sha256": "3f0e940cdca08763670ed285844834f8cce9392d77bfdb13b2e56d61448f0fb6"
+      "sha256": "53a2a3752db729346e64cbb7fc801e11f609543837990f73cde877c48e675c1c"
     },
     "oricorio": {
-      "glb_sha256": "b9b8dcfb9cfd490302f4c7973e0b6423b7b6809aa2e32bf7785758ef240ef9ae",
+      "glb_sha256": "d4ed5362817890a960029d074fdcc9ff514ee55a3215526a987f09e37c715a19",
       "profile": "oricorio",
-      "sha256": "00557d7b34478559c364b572695a3f3b5aeab6e7297941e2b4708262f68619b8"
+      "sha256": "fcc8348e2502ef96b23424789fc2e1a2eb3a341e4a88eee89edd90076b68fe0d"
     },
     "orthworm": {
-      "glb_sha256": "1d3aac040ae73250da580678b5c8212416612a890b1ae9479bcab492893abeb1",
+      "glb_sha256": "36ccd4659dd7c53ca7136f4f9547145452637ac07c1832f821d7d7604ead990c",
       "profile": "orthworm",
-      "sha256": "997e5fcf6c5b2d21fc205225df316d9831281441f11dc67f04279d4243ec3990"
+      "sha256": "d637ed8b77396d74fa03d71342833e624009bb42ada8accae864b5b7f167f869"
     },
     "pichu": {
-      "glb_sha256": "ac992353889a02c1375acd8de86e626847db813c747729837ca6a8861b1e7a4b",
+      "glb_sha256": "9c2261d4169326cf3d0762862c904c94c330569ecc860b3b5bbc7876a0c194de",
       "profile": "pichu",
-      "sha256": "48b05e4d33053df3219fa0c5a42c6f3f741c4fe70cbd8cdc58ecab739be7e744"
+      "sha256": "e08fa8d1443bdc2c71dc32b7b7274651c0a10d76389cc87bcc5419dbbf4c304f"
     },
     "primeape": {
-      "glb_sha256": "1a3a0fea2b8af10090e05da92b9cb9b79909dc40d17e6fbf84326b94fc381915",
+      "glb_sha256": "6df2fb9d4842a85133d45030ffa591ccd42217e9df3de871fe70110cb0cffec9",
       "profile": "primeape",
-      "sha256": "76d4c1ea23dde1a329e1e81af3e6693ee319b60f2b5708a48fb60c723e634ffb"
+      "sha256": "e51e8c3cd42b1e1d9f2955f3cf2f06961957503a76d341e39ec39b091a984729"
     },
     "psyduck": {
-      "glb_sha256": "dee04e13a6db147ce3505c8e2c15577dcaa33fbf0fd717a5d1572b64c392da05",
+      "glb_sha256": "88dce518c595c518a061c183ee4224952af1e82c2b5ced42f20c0484e0621b8e",
       "profile": "psyduck",
-      "sha256": "437f896285dcd44a0d84cc3ff6e30b28aa3e66699e41df2933108862ddfa1097"
+      "sha256": "31361b117694d7aa93105c34376406b170bd03101b751ff96b502fdc413f9036"
     },
     "quagsire": {
-      "glb_sha256": "419ed10c1063b46b41b53fc18679cc146d3429e88c0dadfcc02134529bb11156",
+      "glb_sha256": "b2dd2c8a614651edc6a36126544356c0a6e9836ba1e0785dd7c68e037f9886e5",
       "profile": "quagsire",
-      "sha256": "29d1c5207e26f73912007398cbb04f99a8c882104374cfdeef14c55f3de9a092"
+      "sha256": "f1aa3020e696304283b5ffd0188edfa8bd8d3c6a6f86fbe8bd551984c62075f0"
     },
     "qwilfish": {
-      "glb_sha256": "63ae4d255e1a98f71f7f3742f4250175b4ccabf7ce431732fe506e0d77b9987f",
+      "glb_sha256": "459e092aff48f1f68ec58c09f923126d46b6b5e32daaadb3085434c43e5da386",
       "profile": "qwilfish",
-      "sha256": "8c0a838b9d729f60894e9601128de59eb9b934e373450bfb2a8806e4175cae5c"
+      "sha256": "baeed98857c86e313beec7dafa62c3d37371e1abf99be58112377355cb26b523"
     },
     "raichu": {
-      "glb_sha256": "1d78f8733d664fceb31c3742d0aac979d06670115a45c5fb7580624a3c31c175",
+      "glb_sha256": "08cb41349275a1683507f7261f81c3d63a18e9e7e10aa1c49f7e522c0966281f",
       "profile": "raichu",
-      "sha256": "37d5d601f06b521ab4771b8e422f349202748a49d83ec295c8566a2436a65790"
+      "sha256": "9c4f531346100f0505a3c5f4d68e0f61281e26979fc1145c1b0c1d2bfd78c34f"
     },
     "rayquaza": {
-      "glb_sha256": "9a52908840db9880f426199442770ba2c5626cf19b9a6d04393470e69667ad01",
+      "glb_sha256": "2d6137d1f99ddeed7da25d968496b436dc66439fbdf59b2c2ee1928a3844115b",
       "profile": "rayquaza",
-      "sha256": "5f24d27cc88817710e9756e30e44093fe46b4a5c7f3e345b1c9ba08fc2f213f9"
+      "sha256": "54e37c47c8a89dedb905e97e58403be3883775d45bb0ab839e613900cec8b2b2"
     },
     "scizor": {
-      "glb_sha256": "08faf8d086d32a803c4272b1dc4371734fd1bea21b30ae94581e18a4c4b695a9",
+      "glb_sha256": "5643b9ffd9f8e321cce4e089ccfec6e92549516a47dfa2f084d31c28cab537d2",
       "profile": "scizor",
-      "sha256": "f2b0c217da35bad43ab86179e409566757d798b513299a1c1d0bcf451015a3f1"
+      "sha256": "998656b43df16e785a4b833a41876d0f66a334f14abdb2ba42a1f0df60abdaa4"
     },
     "scyther": {
-      "glb_sha256": "e32a02c3795f33cc4674bf5df3b7b75ca39fb5779b1bdb4cd685fe0963dfa5c0",
+      "glb_sha256": "a3fbc96612d574545531227c3092fa688af2775b12bb663269966de644645079",
       "profile": "scyther",
-      "sha256": "abc9041dd4c36b3d2f557bace83b194c7052d168f8e0f2d3b243e1a5cacae92a"
+      "sha256": "396759bdf5dc8ba4391b9d951ffe12ed1ca40767752bdedeb0326fbcf5b32399"
     },
     "seviper": {
-      "glb_sha256": "fb2c7fb25a58108118317147aed74c25444a02eaa4c26cb48d2f008db8bdacbd",
+      "glb_sha256": "a1f8006f2e66af87bce14e0fb172bc99132b1e18d6bc00798517400431e131ec",
       "profile": "seviper",
-      "sha256": "3b3def8bc44626d08f7255c3f66b75501d1796d1f28170f76b5ec3be8b473bba"
+      "sha256": "9e9fabdd6e5790659474cde0d54e2c98b0a3df3ccd3eeda121b240a79635e06c"
     },
     "shellder": {
-      "glb_sha256": "f68e55d046c00d76488944e7db200d4230b5c2e8f7322354ca32b4f4e91de5c3",
+      "glb_sha256": "bad5658cf52fb58e520131913a79058601486ff3e62bb53e57708593b7252e2c",
       "profile": "shellder",
-      "sha256": "407a51e73421d8a0ffe6cacaba670d90898eedd18d7e5ec694f6ea1fee03fa8d"
+      "sha256": "1256ea3917e712cfe82a49df03175ee24dcbc7f71335e11378276b7938f1173b"
     },
     "slaking": {
-      "glb_sha256": "0d0f7d7dcac4e1fbcf2024c60daa0091a5d43e7af7c408afcab19987614ea163",
+      "glb_sha256": "3c7ed0d6f8d782389cfe47eb62dd95d515e7ab5e64d00c10f130171bda212c55",
       "profile": "slaking",
-      "sha256": "5ff9c2b3b249b3c5859aedf3830494fd93c0a5291a3c54fbffb50e6da5acdb10"
+      "sha256": "1b86c7e63d2d1f635979c61c5e1ac49314fa166e40e1768b559686af1019324b"
     },
     "slowpoke": {
-      "glb_sha256": "0b673a567bd40005c343b6de80d2e0bcecbc4dc1fdf9d5810321707bb41624b3",
+      "glb_sha256": "feb4e84a3ff7f40546ed45e0b3afcd374fe5bd4fb6e0321015ee93e8dc624bdd",
       "profile": "slowpoke",
-      "sha256": "96fbf13543b1fc54cc0e281a86e4de24366a3b97d00be8e93606d0e869eb74c8"
+      "sha256": "07361814dff9868bbd35af36d20afe004e9819c16b7fe89e559e0e9815a9476e"
     },
     "staraptor": {
-      "glb_sha256": "2c15c314a2b9bf9b619e8a9e60f8078a087b4306df51032cf2f089cbba3e2501",
+      "glb_sha256": "05c76fa49df0f9c824d712c9133b6800bdb2362d434a7d7c833be91e3a9f6f1a",
       "profile": "staraptor",
-      "sha256": "ab74c7e7fb6233f4d3ee773d0ab155c5555cdb40f1d236ff651134665748c136"
+      "sha256": "bc178d48fe80011cf3730675de6ca59437e9c2484d2dce711df2000c1290c2c4"
     },
     "sudowoodo": {
-      "glb_sha256": "b66bab07e66b572cf673f26a3e2f7793d68fce8b55e9ff7080f4665c1ce0f93a",
+      "glb_sha256": "5cbff1944fb1d358c9242041f0ff5791dc1b8e586a74401958bd93553cb39bf4",
       "profile": "sudowoodo",
-      "sha256": "f6fcaab6f325baa161e0807071684e34ac3cb88a83464ab1150020fa48509b7b"
+      "sha256": "48f984baef40fc8b1e491f6600ecd36f05de2e742c53cf447c6786a98dec6a1f"
     },
     "tauros": {
-      "glb_sha256": "3471a08ca4d4acc4a02b5a5d48bb27482eb6fc4054dc6a451940b178f582a2f9",
+      "glb_sha256": "c16fccda9727d9f4e28839d4957ec1e9f03121fd90df5212d48146ae7ac085d1",
       "profile": "tauros",
-      "sha256": "54cd4c2c3d6c2a96394a3c7c924a6525913331746bfd3b1be5106a086170680a"
+      "sha256": "958018f9414907e558add1e7ffccf13b7fcdb870f0e321a02ff87747aa631c4b"
     },
     "tyranitar": {
-      "glb_sha256": "085b0527b678dde71abf9a6597de9a90ca4d1671f56d449cca43dd3cfabf13d5",
+      "glb_sha256": "498911224de7272d1bb3d4f327600e22d47bbba24b76f65972a095a3e4725c93",
       "profile": "tyranitar",
-      "sha256": "e2bcd8e99b96b6a28590c2f84f21db1e107849ba4f2e0417cc4554613d73cfac"
+      "sha256": "d4c043845d9e0aad77091351fb17d58af925e96d5b9fcb484bb87a0226d585e3"
     },
     "umbreon": {
-      "glb_sha256": "1063ba2295b8366b4bbf2b3663a62823e6d6634952fa7e087d07e067e5dfb791",
+      "glb_sha256": "d4ce5d1129eda69d25dadc53caf47dd25c4dc42a270a1a0f163f9787443de199",
       "profile": "umbreon",
-      "sha256": "477a885eba3c9c6286bf189501aa87e76e450cbc6fe621c3e6a8d138182b44f4"
+      "sha256": "f72339c99e68e5f6f6de03f26eabcac17282791728dfc5725d84bd4d3afee18b"
     },
     "vaporeon": {
-      "glb_sha256": "89dee7be0777b2af480dcb903c0d76c4180b4e3f7d9beb0e7c6de5836a761732",
+      "glb_sha256": "a3bd02d4877ad4ef3029b6c1bc7bf96020ef94604814fa99b6a9fb9f1b2a29cd",
       "profile": "vaporeon",
-      "sha256": "c4595d7ae21e41213f26fd1f6542f71d1d8a34121aa870b246cdc35055bcdecd"
+      "sha256": "03ea8f8f5e20bb343f2916ce999596af1a925b66beaf577f089b460f5c0c6edf"
     },
     "venonat": {
-      "glb_sha256": "fa444375f2d5c4291b5e60cd6ab226421d64c0651a3302f4fd74f6775cc3aaca",
+      "glb_sha256": "baca9583ff6feb7a888173e2a61ea8502a82fb7049d5aaa8d9ae5015a5ea38e2",
       "profile": "venonat",
-      "sha256": "d2d4aa3b8a8b1a409e222e492ca501ad50fa86b39ef33136a622c7728bd407fb"
+      "sha256": "4516986d5a05e2bac6447978e1ae55854f3ef141080b9473f3d2302b13468348"
     },
     "volcarona": {
-      "glb_sha256": "2e45df9abd11776155a245facf1c098aeca2e694ad3f7fff2c7818e0b77597d0",
+      "glb_sha256": "a259c169e24d214951a5e404ef9280e14d1d6877884f5660826ff7a9459dd29e",
       "profile": "volcarona",
-      "sha256": "fa505ca1320593d5bf8c97dbc1cb62e003b8bd9f52e8d151ffabc4cecb70eb15"
+      "sha256": "aa89b64b533bb737e47173cc843af34dd01aa6a575356b28f3aae20af333ac75"
     },
     "voltorb": {
-      "glb_sha256": "174e6db25cfe8aac71fedb6e2213eadbb2537c35e26cad496fd1d2cdfdc4c585",
+      "glb_sha256": "c7a58fa0bba2580a8683a834b91eca9315ac6879c0ceb02b84f1c8280273d3f9",
       "profile": "voltorb",
-      "sha256": "6b69dc255dbbe1cccc15ce6cfc26ef07d267f1857b75bd9ff1ee56c8a115dd70"
+      "sha256": "699fc96e116f28a5df948c7a45be4b886a7752001be09a6ee4c7c4f521f3dffd"
     },
     "wigglytuff": {
-      "glb_sha256": "5085fd41a7387e32880155623ac582d1e2c75447a66e3006cad43b0ad089805a",
+      "glb_sha256": "11812e7f0ddf8a22b53a600e04beaecc113bc852a621577ee0c1a288af286708",
       "profile": "wigglytuff",
-      "sha256": "37f63c58217f0e8055c5625783553ee2fb1470a86ecc07d32057956154a90736"
+      "sha256": "56d1d64e2d2099743dd4e53e43d7daa05779212d0dd3d5a51d24cc9e393d822b"
     },
     "wooper": {
-      "glb_sha256": "fe8611a0d102d719d95f45c36bb0398193c14bf39e434fe4796656a2de67c6fb",
+      "glb_sha256": "c671e92fffd56500075690e49fe3de8d0d0173d7bfe4052b0e07db3a40e5a8e2",
       "profile": "wooper",
-      "sha256": "cb8b3869e57f58b0b26945413253904d6779844211d9de47581e931f6daa3f0e"
+      "sha256": "b5b589820f571f31a922713d7335cef5b98948f97f889968e85685bc22dc1b67"
     },
     "zapdos": {
-      "glb_sha256": "f3088d21924bd72c596838aaf3b952a0f551cb9d4c6df32bc695589565117fc2",
+      "glb_sha256": "eac4ff87ebdb2e389fdd242d6efe47f8a580d0ece28ac83e4cffab9f50a92026",
       "profile": "zapdos",
-      "sha256": "6ee811fc4cc9969b3c056b53474e8f185f6813d7e9aea934072ec3b54f15293b"
+      "sha256": "8751fa2e0f23dd809c8150ffcc67ce6fe8962ab153ea79476d6a547e56b41adc"
     }
   },
   "normal_only": true,
@@ -418,6 +418,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 290.0,
           "loop": true,
@@ -428,6 +433,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -461,6 +470,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 150.0,
           "loop": true,
@@ -471,6 +485,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -504,6 +522,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 200.0,
           "loop": true,
@@ -514,6 +537,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -547,6 +574,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -557,6 +589,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "claw_slash": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -590,6 +626,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -600,6 +641,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -633,6 +677,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -643,6 +692,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -676,6 +728,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 200.0,
           "loop": true,
@@ -686,6 +743,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -719,6 +779,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -729,6 +794,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -762,6 +830,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -772,6 +845,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -805,6 +881,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 150.0,
           "loop": true,
@@ -815,6 +896,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "tail": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -848,6 +933,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 200.0,
           "loop": true,
@@ -858,6 +948,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -891,6 +984,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 200.0,
           "loop": true,
@@ -901,6 +999,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "tail": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -934,6 +1036,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 240.0,
           "loop": true,
@@ -944,6 +1051,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -977,6 +1088,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -987,6 +1103,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1020,6 +1139,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 130.0,
           "loop": true,
@@ -1030,6 +1154,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "kick": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1063,6 +1191,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -1073,6 +1206,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1106,6 +1243,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 180.0,
           "loop": true,
@@ -1116,6 +1258,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1149,6 +1294,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1159,6 +1309,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "claw_slash": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1192,6 +1346,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -1202,6 +1361,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "wing": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1235,6 +1398,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 200.0,
           "loop": true,
@@ -1245,6 +1413,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1278,6 +1449,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1288,6 +1464,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1307,7 +1486,7 @@
           "speed": 1.0
         },
         "faint_start": {
-          "frames": 80.0,
+          "frames": 100.0,
           "loop": false,
           "speed": 1.0
         },
@@ -1317,6 +1496,11 @@
           "speed": 1.0
         },
         "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
           "frames": 130.0,
           "loop": false,
           "speed": 1.0
@@ -1331,6 +1515,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "bite": "physical_attack",
+        "claw_slash": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1364,6 +1552,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1374,6 +1567,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1407,6 +1604,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 150.0,
           "loop": true,
@@ -1417,6 +1619,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "claw_slash": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1450,6 +1655,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -1460,6 +1670,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "claw_slash": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1493,6 +1706,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 200.0,
           "loop": true,
@@ -1503,6 +1721,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "punch": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1536,6 +1758,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1546,6 +1773,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "bite": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1579,6 +1810,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1589,6 +1825,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1622,6 +1861,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1632,6 +1876,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "claw_slash": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1665,6 +1913,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -1675,6 +1928,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1708,6 +1964,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -1718,6 +1979,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1751,6 +2015,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -1761,6 +2030,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1794,6 +2066,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1804,6 +2081,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1837,6 +2117,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 130.0,
           "loop": true,
@@ -1847,6 +2132,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1880,6 +2169,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -1890,6 +2184,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -1923,6 +2220,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 240.0,
           "loop": true,
@@ -1933,6 +2235,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -1966,6 +2272,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -1976,6 +2287,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "punch": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2009,6 +2324,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2019,6 +2339,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2052,6 +2375,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -2062,6 +2390,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2095,6 +2426,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -2105,6 +2441,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2138,6 +2477,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 240.0,
           "loop": true,
@@ -2148,6 +2492,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2181,6 +2528,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -2191,6 +2543,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "kick": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2224,6 +2580,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -2234,6 +2595,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2310,6 +2674,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 180.0,
           "loop": true,
@@ -2320,6 +2689,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2353,6 +2726,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -2363,6 +2741,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "kick": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2396,6 +2777,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 114.0,
           "loop": true,
@@ -2406,6 +2792,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2439,6 +2828,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2449,6 +2843,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "wing": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2482,6 +2880,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2492,6 +2895,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "wing": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2525,6 +2931,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2535,6 +2946,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2568,6 +2983,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -2578,6 +2998,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2611,6 +3035,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2621,6 +3050,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2654,6 +3086,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -2664,6 +3101,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "claw_slash": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2697,6 +3138,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 180.0,
           "loop": true,
@@ -2707,6 +3153,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "punch": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2740,6 +3190,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2750,6 +3205,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "tail": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2783,6 +3242,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 80.0,
           "loop": true,
@@ -2793,6 +3257,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2826,6 +3293,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 210.0,
           "loop": true,
@@ -2836,6 +3308,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2869,6 +3344,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2879,6 +3359,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "claw_slash": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2912,6 +3395,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -2922,6 +3410,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "wing": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -2955,6 +3446,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -2965,6 +3461,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "bite": "physical_attack_2",
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -2998,6 +3498,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3008,6 +3513,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3041,6 +3549,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3051,6 +3564,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "claw_slash": "physical_attack",
+        "punch": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -3084,6 +3601,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3094,6 +3616,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3127,6 +3652,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 140.0,
           "loop": true,
@@ -3137,6 +3667,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "wing": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -3170,6 +3704,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 160.0,
           "loop": true,
@@ -3180,6 +3719,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "kick": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3213,6 +3756,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 80.0,
           "loop": true,
@@ -3223,6 +3771,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3256,6 +3807,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 210.0,
           "loop": true,
@@ -3266,6 +3822,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "bite": "physical_attack",
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -3299,6 +3859,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3309,6 +3874,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3342,6 +3910,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 128.0,
           "loop": true,
@@ -3352,6 +3925,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2",
+        "punch": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3385,6 +3962,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 100.0,
           "loop": true,
@@ -3395,6 +3977,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3428,6 +4013,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 180.0,
           "loop": true,
@@ -3438,6 +4028,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -3471,6 +4065,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3481,6 +4080,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,
@@ -3514,6 +4116,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 250.0,
           "loop": true,
@@ -3524,6 +4131,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -3557,6 +4167,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3567,6 +4182,10 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack",
+        "tail": "physical_attack_2"
       },
       "placement": {
         "scale": 1.0,
@@ -3600,6 +4219,11 @@
           "loop": false,
           "speed": 1.0
         },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
         "sleep": {
           "frames": 120.0,
           "loop": true,
@@ -3610,6 +4234,9 @@
           "loop": false,
           "speed": 1.0
         }
+      },
+      "attack_family_actions": {
+        "body_charge": "physical_attack"
       },
       "placement": {
         "scale": 1.0,

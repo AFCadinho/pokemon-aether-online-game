@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gereviewde 3D-Pokémon kiezen nu per fysieke movefamilie tussen hun twee beschikbare aanvalsanimaties; modellen zonder veilig gecertificeerde tweede clip blijven automatisch op de bestaande aanval terugvallen.
+
 - Alle 3D-buitenarena’s volgen nu dag, schemering en nacht van de overworld, inclusief de generieke gras- en waterarena’s en Route 1 en Route 22. Zacht invullicht houdt Pokémon in het donker zichtbaar.
 
 - De 3D-modelpipeline kan een tweede gereviewde fysieke aanval bewaren, zonder die vóór classificatie automatisch aan moves toe te wijzen.
