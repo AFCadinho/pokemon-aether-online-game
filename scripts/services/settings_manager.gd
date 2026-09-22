@@ -137,7 +137,9 @@ func load_settings() -> void:
 	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
 	immersive_chat_height = clampf(float(data.get("immersive_chat_height",420.0)),220,800)
 	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
-	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(str(data.get("battle_3d_arena", "auto")))
+	# General settings no longer exposes development arena overrides. Do not
+	# restore a hidden override from an older client; tools can set one per run.
+	battle_3d_arena = "auto"
 	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
@@ -227,7 +229,6 @@ func save_settings() -> void:
 		"battle_animations": battle_animations,
 		"battle_presentation_mode": battle_presentation_mode,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
-		"battle_3d_arena": battle_3d_arena,
 		"battle_ui_layout": battle_ui_layout,
 		"immersive_battle_log_open": immersive_battle_log_open,
 		"immersive_chat_height": immersive_chat_height,
