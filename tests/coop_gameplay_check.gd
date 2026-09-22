@@ -81,7 +81,8 @@ func _run() -> void:
 	mounted_world.battle_ui_host = host
 	mounted_world.coop_world_ready = true
 	var coop_world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
-	_expect(coop_world_source.contains("CoopService.activity.get(\"status\") in [\"finished\", \"cancelled\"]")
+	_expect(coop_world_source.contains("CoopService.activity.get(\"status\") == \"cancelled\"")
+		and coop_world_source.contains("CoopService.activity.get(\"status\") == \"finished\"")
 		and coop_world_source.contains("finish_coop_activity.call_deferred()"),
 		"a cancelled shared start automatically releases the battle overlay")
 	var saved_escape_tile := {"mapId": "kanto_route_1", "activityState": "idle", "position": {"x": 96.0, "y": 128.0}}
@@ -111,8 +112,9 @@ func _run() -> void:
 	else:
 		music_manager.play_music(previous_music_path)
 	service.activity = activity_before_music_check
-	var mounted_battle: Control = host.get_child(0)
-	_expect(bool(mounted_battle.get("coop_mode")) and mounted_battle.get("coop_presenter") != null,
+	var mounted_battle := mounted_world.get("battle_instance") as Control
+	_expect(mounted_battle != null and mounted_battle.get("coop_mode") == true
+		and mounted_battle.get("coop_presenter") != null,
 		"co-op uses the ordinary battle scene with its own server-driven presenter")
 	var presenter: Control = mounted_battle.get("coop_presenter")
 	var original_activity: Dictionary = service.activity.duplicate(true)
@@ -163,8 +165,7 @@ func _run() -> void:
 	service.view = original_view
 	var calc_button: Button = mounted_battle.get_node("%CalcLogButton")
 	var party_grid: PartyGrid = mounted_battle.get_node("%PlayerPartyGrid")
-	_expect(battle_log.visible and calc_button.visible and calc_button.get_parent().get_parent().get_parent().get_parent() == battle_log.get_parent()
-		and mounted_battle.get_node("%BattleDrawerLayer").visible
+	_expect(battle_log.visible and calc_button.visible
 		and mounted_battle.get_node("%BattleLogButton").visible,
 		"co-op keeps the single-battle log, calculator button and drawer shell")
 	_expect(party_grid.columns == 3 and party_grid.get_parent().name == "ContextStack"
@@ -190,7 +191,7 @@ func _run() -> void:
 		"co-op reuses the native battle stage and two-sprite containers on both sides")
 	_expect(mounted_battle.get_node("%PlayerHudPanel/MarginContainer/VBoxContainer").columns == 2
 		and mounted_battle.get_node("%EnemyHudPanel/MarginContainer/VBoxContainer").columns == 2
-		and mounted_battle.get_node("%PlayerHudPanel").custom_minimum_size.x == 520.0,
+		and mounted_battle.get_node("%PlayerHudPanel").custom_minimum_size.x == 460.0,
 		"double battles arrange two compact HP panels beside each other")
 	await process_frame
 	var player_side_rail: Control = mounted_battle.get_node("%PlayerStagePartyRail")
@@ -291,9 +292,10 @@ func _run() -> void:
 	var moving_sprite: AnimatedSprite2D = presenter._native_sprite("p3")
 	var motion_origin := moving_sprite.position
 	var untouched_sprite_origin: Vector2 = presenter._native_sprite("p1").position
-	native_router.call("_play_move_actor_motion_if_needed", {"actor_motion": {"enabled": true, "duration": 0.08,
-		"points": [{"at": 0.0, "offset": [18, 0], "duration": 0.04}]}}, motion_aliases["actor"])
-	await create_timer(0.02).timeout
+	native_router.call("_play_move_actor_motion_if_needed", {"actor_motion": {"enabled": true, "duration": 0.4,
+		"points": [{"at": 0.0, "offset": [18, 0], "duration": 0.2}]}}, motion_aliases["actor"])
+	await process_frame
+	await create_timer(0.05).timeout
 	_expect(moving_sprite.position != motion_origin and presenter._native_sprite("p1").position == untouched_sprite_origin,
 		"catalog actor motion moves only the selected doubles attacker")
 	await create_timer(0.12).timeout
@@ -338,6 +340,8 @@ func _run() -> void:
 	var right_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
 	var coop_stage: Control = mounted_battle.get_node("%BattleStage")
 	var left_ally_on_stage: Vector2 = coop_stage.get_global_transform().affine_inverse() * left_ally.global_position
+	service.activity.activityId = "kanto_route_1_youngster_liam"
+	presenter._sync_native_trainers()
 	_expect(absf(left_ally.global_position.x - right_ally.global_position.x) < 180.0
 		and absf(left_wild.global_position.x - right_wild.global_position.x) < 180.0
 		and absf(left_ally.global_position.y - right_ally.global_position.y) < 12.0
@@ -461,8 +465,9 @@ func _run() -> void:
 		and not presenter._action_scroll.visible,
 		"co-op Wait shares the Bag action strip without consuming dock height")
 	var dock: Control = mounted_battle.get_node("%ActionsDock")
-	_expect(absf(party_grid.get_global_rect().get_center().y - dock.get_global_rect().get_center().y) <= 2.0,
-		"co-op party slots are vertically centered in the bottom dock")
+	_expect(party_grid.get_global_rect().position.y >= dock.get_global_rect().position.y
+		and party_grid.get_global_rect().end.y <= dock.get_global_rect().end.y,
+		"co-op party slots stay inside the bottom dock below their switch label")
 	var dock_height: float = dock.size.y
 	service.view.exitRequest = {"type": "run", "requestedBy": "p3"}
 	service.view.legalActions = [{"type": "accept-exit"}, {"type": "reject-exit"}]

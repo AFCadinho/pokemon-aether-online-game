@@ -940,9 +940,12 @@ func setup_coop_battle() -> bool:
 	# The co-op dock has only this visible section. Let it fill the dock so the
 	# party slots center vertically instead of leaving unused space below them.
 	context_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if context_section is BoxContainer:
+		(context_section as BoxContainer).alignment = BoxContainer.ALIGNMENT_CENTER
 	context_hint.visible = false
 	player_party_grid.columns = 3
 	player_party_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	player_party_grid.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	player_party_grid.custom_minimum_size.x = 540.0
 	player_party_grid.set_empty_slots_visible(false)
 	player_party_grid.set_selection_enabled(false)

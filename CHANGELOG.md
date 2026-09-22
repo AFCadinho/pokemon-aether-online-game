@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Co-op immersive battles houden nu de geselecteerde actorbeweging, trainerposities, doubles-hitboxes en partydock-layout stabiel tijdens presentatie en herhaalde testcycli.
+
 - De desktoplauncher kan de zeven goedgekeurde 3D-Pokémon nu als afzonderlijke, gecontroleerde downloads installeren en bijwerken. Ontbrekende modellen blijven veilig op de bestaande battleweergave terugvallen.
 
 - The three Aether male and two Aether female hairstyles now appear correctly on Trainer Cards and player battle sprites, including their selected hair colour.
