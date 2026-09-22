@@ -14,8 +14,8 @@ func _run() -> void:
 		context.explicit_environment_id = "cave"
 		assert(Resolver.resolve(context) == &"cave")
 	for encounter in ["surf", "fish", "old_rod", "good_rod", "super_rod"]:
-		assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "encounter_type":encounter}) == &"water")
-	assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "player_on_water":true}) == &"water")
+		assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "encounter_type":encounter}) == &"route_22_water")
+	assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "player_on_water":true}) == &"route_22_water")
 	assert(Resolver.resolve({"battle_kind":"pvp", "map_id":"kanto_route_22"}) == &"pvp_stadium")
 	assert(Resolver.resolve({"battle_kind":"trainer", "map_id":"kanto_route_2"}) == &"grass")
 	assert(Arenas.resolve("cave", &"route_22") == "cave")
@@ -125,6 +125,41 @@ func _run() -> void:
 	await _ready_pool(pool)
 	assert(forest_main.get_ref() == null)
 	assert(pool.passes[0].arena.name == "Route22RivalMeadow")
+	# Water encounters fight in the actual eastern pond, not at the grass origin.
+	pool = Pool.prepare(owner_node, manifest, Vector2i(960, 540), "route_22_water")
+	await _ready_pool(pool)
+	for pass_data in pool.passes:
+		assert(pass_data.arena.name == "Route22ShallowWater")
+		var water: MeshInstance3D = pass_data.arena.get_node("Route22Scenery/EasternPond/WaterSurface")
+		var floor_y: float = pass_data.arena.get_meta("surface_height")
+		assert(absf(water.position.y - floor_y - 0.025) < 0.001)
+		assert(water.material_override.get_shader_parameter("battle_shallows"))
+		assert(pass_data.arena.has_node("Route22Scenery/Route22Landmarks"))
+	var swimmer := Renderer.new()
+	owner_node.add_child(swimmer)
+	swimmer.setup()
+	swimmer.set_process(false)
+	swimmer.environment_id = &"route_22_water"
+	swimmer._build_world()
+	assert(swimmer.arena_id == "route_22_water")
+	assert(swimmer.viewport == pool.passes[0].viewport)
+	var terrain = swimmer.arena_root.get_node("Terrain3D")
+	for index in 2:
+		var point: Vector3 = swimmer._position(index)
+		assert(absf(terrain.data.get_height(point) - point.y) < 0.001)
+		assert(Vector2(point.x - 11.0, point.z + 4.5).length() < 4.0)
+		assert(not swimmer.camera.is_position_behind(point + Vector3.UP))
+	assert((swimmer._position(1) - swimmer._position(0)).is_equal_approx((Arenas.spawn(1) - Arenas.spawn(0))))
+	settings.battle_3d_camera_motion = true
+	swimmer._update_camera(1.0)
+	var orbit_offset: Vector3 = swimmer.camera.position - Arenas.battle_origin("route_22_water")
+	assert(is_equal_approx(orbit_offset.length(), Vector3(4, 5.5, 12).length()))
+	swimmer.material_response._build()
+	assert(swimmer.material_response.viewport == pool.passes[1].viewport)
+	swimmer.free()
+	await process_frame
+	assert(pool.borrower == null)
+	print("ROUTE_22_WATER_BATTLE_OK: pond placement, thin water, camera, both passes")
 	var final_view: WeakRef = weakref(pool.passes[0].viewport)
 	owner_node.queue_free()
 	await process_frame

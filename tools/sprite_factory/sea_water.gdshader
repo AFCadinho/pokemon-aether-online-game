@@ -17,10 +17,13 @@ void fragment() {
 	vec3 shallow_color = vec3(0.20, 0.62, 0.65);
 	vec3 color = mix(deep_color, shallow_color, shallow);
 	color += 0.018*wave*cross_wave;
-	float edge = 9.02 + 0.10*sin(TIME*1.0+p.x*0.5);
-	float foam = (1.0-smoothstep(0.02, 0.28, abs(radius-edge))) * (0.30+0.25*sin(p.x*3.0+p.y*2.0+TIME));
+	// A submerged bank has no dry beach/foam ring. Small moving crests
+	// and transparency reveal the sand under the fighters instead.
+	float foam = smoothstep(0.85, 1.0, wave * cross_wave) * 0.09 * shallow;
 	ALBEDO = mix(color, vec3(0.77, 0.88, 0.84), foam);
 	NORMAL_MAP = vec3(0.5+0.035*wave, 0.5+0.025*cross_wave, 1.0);
-	ROUGHNESS = 0.32;
+	// Flat battle floor to radius 8; the bank drops away at radii 10–14.
+	ALPHA = mix(0.65, 1.0, smoothstep(7.5, 14.0, radius));
+	ROUGHNESS = 0.24;
 	SPECULAR = 0.3;
 }

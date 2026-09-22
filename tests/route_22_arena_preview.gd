@@ -12,6 +12,8 @@ func _run() -> void:
 	while not Arenas.forest_ready():
 		await process_frame
 	var arena_id := "forest" if "--forest" in OS.get_cmdline_user_args() else "route_22"
+	if "--water" in OS.get_cmdline_user_args():
+		arena_id = "route_22_water"
 	root.title = "PokeAether — Route 22 arena review"
 	root.size = Vector2i(1440, 900)
 	var world := Node3D.new()
@@ -28,8 +30,8 @@ func _run() -> void:
 	world.add_child(camera)
 	world.add_child(Arenas.build(arena_id, world, camera))
 	camera.fov = Arenas.CAMERA_FOV
-	camera.position = Arenas.camera_home("route_22")
-	camera.look_at(Arenas.camera_target("route_22"))
+	camera.position = Arenas.camera_home(arena_id)
+	camera.look_at(Arenas.camera_target(arena_id))
 	camera.current = true
 	if "--capture" in OS.get_cmdline_user_args():
 		var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
@@ -37,7 +39,7 @@ func _run() -> void:
 		DirAccess.make_dir_recursive_absolute(output)
 		await create_timer(3).timeout
 		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png(output.path_join("route-22-battle.png"))
+		root.get_texture().get_image().save_png(output.path_join("route-22-water-battle.png" if arena_id == "route_22_water" else "route-22-battle.png"))
 		camera.position = Vector3(15, 15, 27)
 		camera.look_at(Vector3(0, 1, -7))
 		await create_timer(0.4).timeout

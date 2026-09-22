@@ -8,6 +8,7 @@ const CAVE_ENVIRONMENT_ID := &"cave"
 const PVP_STADIUM_ENVIRONMENT_ID := &"pvp_stadium"
 
 const PROFILES: Dictionary = {
+	&"route_22_water": preload("res://resources/battle/environments/route_22_water.tres"),
 	&"route_22": preload("res://resources/battle/environments/route_22.tres"),
 	DEFAULT_ENVIRONMENT_ID: preload("res://resources/battle/environments/grass.tres"),
 	WATER_ENVIRONMENT_ID: preload("res://resources/battle/environments/water.tres"),

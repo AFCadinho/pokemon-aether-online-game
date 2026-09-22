@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Bij surfen of vissen op Route 22 vecht je nu in de ondiepe waterpartij van dezelfde omgeving; landgevechten blijven op het grasveld.
+
+- Surf- en visgevechten in 3D vinden nu plaats in ondiep water boven een zichtbare zandbodem, met dieper water rondom.
+
 - In de Route 22-battle-arena is nu ook de oostelijke waterkant zichtbaar, met zacht bewegend water en een begroeide oever.
 
 - Route 22 heeft een eigen 3D-battle-arena, ook bij het eerste gevecht met Gary: een grasveld met naaldbomen, rotsplateaus en de trap uit de overworld.

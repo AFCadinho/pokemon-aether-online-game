@@ -1,5 +1,6 @@
 extends "res://scripts/battle/arenas/arena_geometry.gd"
-## Shared by client and visual review.
+## Shared by client and visual review. The sandbank is submerged.
+const WATER_DEPTH := 0.025
 
 func _sandbar() -> ArrayMesh:
 	var surface := SurfaceTool.new()
@@ -36,12 +37,16 @@ func build() -> Node3D:
 			child.environment.reflected_light_source = Environment.REFLECTION_SOURCE_DISABLED
 	var coast := Node3D.new()
 	coast.name = "SeaSandbarStudy"
-	_put(coast, _sandbar(), _stone(Color("d5c29a"), true), Vector3.ZERO, Vector3.ONE)
+	# Actors keep their calibrated ground contact; only a thin water layer covers it.
+	coast.set_meta("surface_height", 0.0)
+	_put(coast, _sandbar(), _stone(Color("d5c29a"), true), Vector3.ZERO, Vector3.ONE).name = "SubmergedSandbank"
 	var ocean := PlaneMesh.new()
 	ocean.size = Vector2(2000, 2000)
 	var water := ShaderMaterial.new()
 	water.shader = load("res://tools/sprite_factory/sea_water.gdshader")
-	_put(coast, ocean, water, Vector3(0, -0.14, 0), Vector3.ONE)
+	var surface := _put(coast, ocean, water, Vector3(0, WATER_DEPTH, 0), Vector3.ONE)
+	surface.name = "ShallowWater"
+	surface.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var rock := _stone(Color("8c9390"))
 	var grass := _stone(Color("688b59"))
 	# Distant rocky coastline, never entering the fighting area.
