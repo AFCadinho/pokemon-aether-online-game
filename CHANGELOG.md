@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The three Aether male and two Aether female hairstyles now appear correctly on Trainer Cards and player battle sprites, including their selected hair colour.
+
 - Gereviewde 3D-Pokémon kiezen nu per fysieke movefamilie tussen hun twee beschikbare aanvalsanimaties; modellen zonder veilig gecertificeerde tweede clip blijven automatisch op de bestaande aanval terugvallen.
 
 - De launcher installeert het gedeelde 3D-forestpakket voortaan verplicht en controleert de map, versie, grootte en checksum voordat Route 1, Route 22 of de generieke grasarena wordt gestart.

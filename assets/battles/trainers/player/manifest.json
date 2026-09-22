@@ -110,6 +110,21 @@
               "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/hair.png",
               "scale": 1.0,
               "tint": "hair_color"
+            },
+            "Aether_Male_Hair_01": {
+              "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_01.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Male_Hair_02": {
+              "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_02.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Male_Hair_03": {
+              "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_03.png",
+              "scale": 1.0,
+              "tint": "hair_color"
             }
           }
         },
@@ -238,6 +253,16 @@
             "Aether_Blossom_Hair_Chroma": {
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/hair.png",
               "scale": 2.0
+            },
+            "Aether_Female_Hair_01": {
+              "path": "res://assets/battles/trainers/player/female/hairstyle_batch_1/aether_female_hair_01.png",
+              "scale": 1.0,
+              "tint": "hair_color"
+            },
+            "Aether_Female_Hair_02": {
+              "path": "res://assets/battles/trainers/player/female/hairstyle_batch_1/aether_female_hair_02.png",
+              "scale": 1.0,
+              "tint": "hair_color"
             }
           }
         },

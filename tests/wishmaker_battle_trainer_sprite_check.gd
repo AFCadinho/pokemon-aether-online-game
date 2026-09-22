@@ -46,6 +46,30 @@ func _run() -> void:
 	]:
 		var layer := _find_layer(male_layers, str(expected["category"]))
 		_check(layer.is_empty() or layer.get("part_id", "") != expected["part_id"], "male catalog does not contain female-only Wishmaker %s art" % expected["category"])
+
+	for hairstyle: Dictionary in [
+		{"gender": "male", "id": "Aether_Male_Hair_01"},
+		{"gender": "male", "id": "Aether_Male_Hair_02"},
+		{"gender": "male", "id": "Aether_Male_Hair_03"},
+		{"gender": "female", "id": "Aether_Female_Hair_01"},
+		{"gender": "female", "id": "Aether_Female_Hair_02"},
+	]:
+		var hairstyle_id := str(hairstyle["id"])
+		var hairstyle_layers := BattlePlayerTrainerCatalog.build_layers({
+			"gender": str(hairstyle["gender"]),
+			"bottom": "Trousers",
+			"top": "Shirt",
+			"hair": hairstyle_id,
+			"hair_color": "#a85f3f",
+		})
+		var hair_layer := _find_layer(hairstyle_layers, "hair")
+		var hair_texture := hair_layer.get("texture") as Texture2D if not hair_layer.is_empty() else null
+		_check(
+			hair_layer.get("part_id", "") == hairstyle_id
+				and hair_texture != null
+				and hair_texture.get_size() == Vector2(160, 160),
+			"%s resolves its authored 160px battle layer" % hairstyle_id
+		)
 	quit(1 if failed else 0)
 
 func _find_layer(layers: Array[Dictionary], category: String) -> Dictionary:
