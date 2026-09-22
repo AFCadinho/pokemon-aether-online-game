@@ -20,9 +20,17 @@ func _run() -> void:
 	var host := Node.new()
 	root.add_child(host)
 	current_scene = host
-	for arena_id in [&"route_1", &"route_1_water"]:
+	var arenas := {
+		&"forest": &"grass",
+		&"sea": &"water",
+		&"route_1": &"route_1",
+		&"route_1_water": &"route_1_water",
+		&"route_22": &"route_22",
+		&"route_22_water": &"route_22_water",
+	}
+	for arena_id in arenas:
 		var stage := Stage.new()
-		stage.environment_id = arena_id
+		stage.environment_id = arenas[arena_id]
 		host.add_child(stage)
 		stage.size = Vector2(1280, 720)
 		stage.setup()
@@ -32,6 +40,7 @@ func _run() -> void:
 			await process_frame
 		await stage.await_prepared(true, 30000)
 		assert(not stage.preparation_failed and stage.arena_id == arena_id, stage.reason)
+		assert(stage.arena_root.has_node("OutdoorLighting"))
 		for hour in [6, 12, 19, 23]:
 			root.get_node("WorldTimeService").set_debug_time(hour)
 			await create_timer(0.5).timeout

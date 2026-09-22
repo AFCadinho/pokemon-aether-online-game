@@ -1,11 +1,18 @@
 extends SceneTree
 const Outdoor = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const Neutral = preload("res://scripts/battle/battle_ui/material_response.gd")
+const Arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
 
 func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	for id in ["forest", "sea", "route_1", "route_1_water", "route_22", "route_22_water"]:
+		assert(Arenas.uses_outdoor_lighting(id))
+		assert(Arenas.definition(id).lighting == "outdoor")
+	for id in ["classic", "cave", "stadium"]:
+		assert(not Arenas.uses_outdoor_lighting(id))
+		assert(Arenas.definition(id).lighting != "outdoor")
 	var passes: Array[Node3D] = []
 	var clock := root.get_node("WorldTimeService")
 	for index in 2:
@@ -29,6 +36,7 @@ func _run() -> void:
 		var b: Environment = passes[1].get_child(0).environment
 		assert(a != b and a.sky != b.sky)
 		assert(a.background_mode == Environment.BG_SKY)
+		assert(a.reflected_light_source == Environment.REFLECTION_SOURCE_BG)
 		assert(a.sky.sky_material.sky_top_color == b.sky.sky_material.sky_top_color)
 		assert(a.ambient_light_energy >= 0.3)
 		assert(passes[0].get_child(1).light_energy >= 0.4799)

@@ -28,7 +28,7 @@ func _ready() -> void:
 	_environment.sky.sky_material = _sky
 	_environment.background_mode = Environment.BG_SKY
 	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	# The default reflected-light source follows the sky background.
+	_environment.reflected_light_source = Environment.REFLECTION_SOURCE_BG
 	_process(0.0)
 
 func _process(_delta: float) -> void:
