@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bij een netwerkfout tonen guilds, speleracties en de hotbar geen misleidende JSON-fouten meer. Ongeldige serverreacties wissen de bestaande hotbar- en actiegegevens niet.
+
 - Bij surfen of vissen op Route 22 vecht je nu in de ondiepe waterpartij van dezelfde omgeving; landgevechten blijven op het grasveld.
 
 - Surf- en visgevechten in 3D vinden nu plaats in ondiep water boven een zichtbare zandbodem, met dieper water rondom.
