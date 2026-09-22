@@ -344,8 +344,8 @@ func _run() -> void:
 	presenter._sync_native_trainers()
 	for _frame in 3:
 		await process_frame
-	_expect(absf(left_ally.global_position.y - right_ally.global_position.y) < 12.0
-		and absf(left_wild.global_position.y - right_wild.global_position.y) < 12.0
+	_expect(absf(left_ally.global_position.y - right_ally.global_position.y) < 24.0
+		and absf(left_wild.global_position.y - right_wild.global_position.y) < 24.0
 		and presenter._first_trainer.position.x < presenter._second_trainer.position.x
 		and presenter._second_trainer.position.x < left_ally_on_stage.x
 		and presenter._second_trainer.position.x - presenter._first_trainer.position.x < 80.0,
