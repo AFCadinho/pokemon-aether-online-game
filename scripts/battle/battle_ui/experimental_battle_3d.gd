@@ -17,10 +17,14 @@ var forest_lease := {}
 var forest_pool: Node
 var user_camera_yaw := 0.0
 var user_camera_pitch := 0.0
+var user_camera_zoom := 1.0
+const USER_CAMERA_ZOOM_MIN := 0.72
+const USER_CAMERA_ZOOM_MAX := 1.45
 
 func reset_user_camera() -> void:
 	user_camera_yaw = 0.0
 	user_camera_pitch = 0.0
+	user_camera_zoom = 1.0
 
 func _release_forest() -> void:
 	if forest_lease.is_empty():
@@ -939,6 +943,7 @@ func _update_camera(delta: float) -> void:
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
+	offset *= user_camera_zoom
 	camera.position = target + offset
 	camera.look_at(target)
 

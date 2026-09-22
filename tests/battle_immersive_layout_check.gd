@@ -19,6 +19,7 @@ func _run() -> void:
 		settings.battle_ui_layout = layout
 		var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 		var battle = load("res://scenes/battle/battle.tscn").instantiate()
+		battle.active_enemy_pokemon = Pokemon.new("Garchomp", 50)
 		root.add_child(host)
 		host.mount(battle)
 		battle.player_party_grid.set_party([
@@ -41,15 +42,31 @@ func _run() -> void:
 				assert(battle.player_team_preview_layer.position.is_equal_approx(player_platform_center + Vector2(-40, -29) * battle.player_battle_platform.scale))
 				assert(battle.enemy_team_preview_layer.position.is_equal_approx(enemy_platform_center + Vector2(28.5, -34) * battle.enemy_battle_platform.scale))
 				var player_portrait: Control = battle.battle_stage.get_node("TrainerPortrait0")
+				var social_button: Control = battle.battle_stage.get_node("BattleSocialButton")
+				var social_menu: Control = battle.battle_stage.get_node("BattleSocialMenu")
 				var opponent_portrait: Control = battle.battle_stage.get_node("TrainerPortrait1")
+				var bounds: Rect2 = battle.get_global_rect()
 				assert(battle.field_timers_panel.position.is_equal_approx(Vector2(player_portrait.position.x + player_portrait.size.x + 12, player_portrait.position.y)))
 				assert(battle.battle_status_panel.position.x + battle.battle_status_panel.size.x * battle.battle_status_panel.scale.x <= opponent_portrait.position.x - 10)
 				assert(battle.get_node("%PlayerStagePartyRail").visible)
 				assert(battle.player_hud_panel.scale.is_equal_approx(Vector2.ONE * 0.65))
+				assert(social_button.visible and player_portrait.get_global_rect().grow(12).intersects(social_button.get_global_rect()))
+				social_button.emit_signal("pressed")
+				await process_frame
+				assert(social_menu.visible and bounds.grow(2).encloses(social_menu.get_global_rect()))
+				var actions: VBoxContainer = (social_menu.get_child(0) as MarginContainer).get_child(0) as VBoxContainer
+				var friends_action: Button = actions.get_child(0) as Button
+				assert(actions.get_child(1).name == "BattleGuildAction")
+				friends_action.emit_signal("pressed")
+				await process_frame
+				var friends_popup: Control = host.get_node("FriendlistPopup")
+				assert(friends_popup.visible)
+				friends_popup.call("close")
 				assert(battle.moves_grid.scale.is_equal_approx(Vector2.ONE * 0.8))
 				assert(not battle.battle_log_toggle_button.visible and not battle.calc_log_button.visible)
-				assert(not battle.battle_stage.get_node("TrainerPortrait1").visible,"Wild encounters must not invent an opponent avatar")
-				var bounds: Rect2 = battle.get_global_rect()
+				var wild_portrait: Control = battle.battle_stage.get_node("TrainerPortrait1")
+				var wild_icon: TextureRect = wild_portrait.get_child(1) as TextureRect
+				assert(wild_portrait.visible and not wild_portrait.get_child(0).visible and wild_icon.visible and wild_icon.texture != null, "Wild encounters show the opponent's HOME icon, never a trainer avatar")
 				assert(battle.battle_frame.get_global_rect().is_equal_approx(bounds))
 				var viewport = battle.get_node("%BattleStageViewport")
 				assert(viewport.get_global_rect().size.distance_to(bounds.size)<2.0,str(dimensions," viewport=",viewport.get_global_rect()," battle=",bounds))

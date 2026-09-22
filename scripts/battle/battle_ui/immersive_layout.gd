@@ -21,6 +21,10 @@ static func apply(battle: Control) -> void:
 	var portraits := preload("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
 	portraits.battle = battle
 	battle.add_child(portraits)
+	var social_menu := preload("res://scripts/battle/battle_ui/immersive_social_menu.gd").new()
+	social_menu.name = "ImmersiveSocialMenu"
+	social_menu.battle = battle
+	battle.add_child(social_menu)
 	var camera_input := preload("res://scripts/battle/battle_ui/immersive_camera_input.gd").new()
 	camera_input.name = "ImmersiveCameraInput"
 	camera_input.battle = battle
@@ -82,7 +86,7 @@ static func apply(battle: Control) -> void:
 	var menu := Button.new()
 	menu.name = "ResetCameraButton"
 	menu.text = "↺"
-	menu.tooltip_text = "Reset camera"
+	menu.tooltip_text = "Reset camera and zoom"
 	menu.theme = calc.theme
 	menu.add_theme_stylebox_override("normal", calc.get_theme_stylebox("normal"))
 	battle.get_node("%BattleStage").add_child(menu)

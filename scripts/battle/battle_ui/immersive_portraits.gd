@@ -79,11 +79,22 @@ func _process(_delta: float) -> void:
 			if not state.is_empty():
 				heads[index].set_appearance_state(state)
 		heads[index].visible = not state.is_empty()
-		var texture: Texture2D = trainer.catalog_sprite.texture
+		var is_wild_opponent: bool = (
+			index == 1
+			and battle.battle_type == battle.BattleType.WILD
+			and state.is_empty()
+			and not trainer.visible
+			and battle.active_enemy_pokemon != null
+		)
+		var texture: Texture2D = (
+			PokemonAssets.load_home_sprite(battle.active_enemy_pokemon.species, battle.active_enemy_pokemon.shiny)
+			if is_wild_opponent
+			else trainer.catalog_sprite.texture
+		)
 		if texture == null and trainer.npc_sprite.sprite_frames != null:
 			texture = trainer.npc_sprite.sprite_frames.get_frame_texture(trainer.npc_sprite.animation, trainer.npc_sprite.frame)
 		art[index].texture = texture
-		art[index].visible = state.is_empty() and texture != null and trainer.visible
+		art[index].visible = state.is_empty() and texture != null and (trainer.visible or is_wild_opponent)
 		if identity_changed or texture != figure_textures[index]:
 			figure_textures[index] = texture
 			_rebuild_figure(index, state, texture)

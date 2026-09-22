@@ -86,8 +86,27 @@ func _run() -> void:
 	Input.parse_input_event(press)
 	await process_frame
 	assert(not camera_input.dragging)
+	var zoom_in := InputEventMouseButton.new()
+	zoom_in.button_index = MOUSE_BUTTON_WHEEL_UP
+	zoom_in.position = point
+	zoom_in.pressed = true
+	Input.parse_input_event(zoom_in)
+	await process_frame
+	assert(renderer.user_camera_zoom < 1.0, "Mouse wheel up must zoom the 3D battle camera in")
+	for ignored in 12:
+		Input.parse_input_event(zoom_in)
+	await process_frame
+	assert(is_equal_approx(renderer.user_camera_zoom, renderer.USER_CAMERA_ZOOM_MIN), "3D camera zoom respects its near limit")
+	var zoom_out := InputEventMouseButton.new()
+	zoom_out.button_index = MOUSE_BUTTON_WHEEL_DOWN
+	zoom_out.position = point
+	zoom_out.pressed = true
+	for ignored in 20:
+		Input.parse_input_event(zoom_out)
+	await process_frame
+	assert(is_equal_approx(renderer.user_camera_zoom, renderer.USER_CAMERA_ZOOM_MAX), "3D camera zoom respects its far limit")
 	renderer.reset_user_camera()
-	assert(renderer.user_camera_yaw == 0 and renderer.user_camera_pitch == 0)
+	assert(renderer.user_camera_yaw == 0 and renderer.user_camera_pitch == 0 and renderer.user_camera_zoom == 1.0)
 	host.release()
 	host.queue_free()
 	await process_frame
