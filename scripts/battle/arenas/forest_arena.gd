@@ -17,6 +17,15 @@ func build(camera: Camera3D, scene_path := "res://pokeaether_forest.tscn") -> No
 		if property.name == "free_editor_textures":
 			terrain.set("free_editor_textures",false)
 	terrain.set_camera(camera)
+	# The outdoor pack supplies terrain/vegetation rather than a battle-grade
+	# fill light. A soft skylight keeps dark SCVI materials readable under the
+	# forest canopy without changing individual Pokémon materials or shadows.
+	var skylight := DirectionalLight3D.new()
+	skylight.rotation_degrees = Vector3(-72.0, 150.0, 0.0)
+	skylight.light_color = Color("c9e6ff")
+	skylight.light_energy = 0.52
+	skylight.shadow_enabled = false
+	scene.add_child(skylight)
 	scene.ready.connect(func():
 		_flatten(terrain)
 		scene.set_meta("surface_height", ground_height))
