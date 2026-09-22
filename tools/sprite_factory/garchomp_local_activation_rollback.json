@@ -1,0 +1,61 @@
+{
+  "scope": "Garchomp local screened catalog rollback; not automatic",
+  "catalog_path": "/home/adinho/Documents/3d_models/PokeAether/screened-catalog-v1/catalog.json",
+  "old_catalog_entry": {
+    "species": "garchomp",
+    "variant": "normal",
+    "runtime_schema": 1,
+    "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/.tmp/catalog-100-identity-runtime/garchomp.scn",
+    "runtime_sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8"
+  },
+  "old_registry_model": {
+    "glb_sha256": "0e39d18cab786bea1ff8b0ae8a9fceaef8ae48c0260c4196cc0e950db51048f6",
+    "profile": "garchomp",
+    "sha256": "ed744834e77386e45a805f66095e5353c831ab6dfa9dac707ebc0b67366110a8"
+  },
+  "old_registry_profile": {
+    "action_timing": {
+      "damage": {
+        "frames": 40,
+        "loop": false,
+        "speed": 1
+      },
+      "faint_loop": {
+        "frames": 120,
+        "loop": true,
+        "speed": 1
+      },
+      "faint_start": {
+        "frames": 80,
+        "loop": false,
+        "speed": 1
+      },
+      "idle": {
+        "frames": 120,
+        "loop": true,
+        "speed": 1
+      },
+      "physical_attack": {
+        "frames": 130,
+        "loop": false,
+        "speed": 1
+      },
+      "sleep": {
+        "frames": 120,
+        "loop": true,
+        "speed": 1
+      },
+      "special_attack": {
+        "frames": 120,
+        "loop": false,
+        "speed": 1
+      }
+    },
+    "placement": {
+      "scale": 1,
+      "yaw_degrees": 0
+    }
+  },
+  "new_runtime_sha256": "93e03cafa6f8a4fec48453c09ab60169ea3e51cd116c229efb972482ea20bd71",
+  "rollback": "Restore the old entry, model hash/GLB hash and profile together. Old SCN remains at old_catalog_entry.runtime_path; do not pair it with the new 100-frame faint timing."
+}

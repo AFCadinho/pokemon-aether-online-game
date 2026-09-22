@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Garchomp gebruikt in de lokale 3D-catalogus nu bijpassende staande animaties voor aanvallen, schade en faint, zonder onverwacht naar zijn vliegpose te springen.
+
 - Het ‘Switch’-label staat gecentreerd boven de partyslots, met grotere tekst, een duidelijkere cyaanrand en meer ruimte onder de actietekst.
 
 - In de immersive battle-interface staat nu een compact ‘Switch’-label boven je partyslots, zodat duidelijk is waar je Pokémon kunt wisselen.

@@ -75,14 +75,17 @@ func _run() -> void:
 	current_scene = host
 	for arena in ["forest", "stadium"]:
 		settings.battle_3d_arena = arena
-		var stage := CandidateStage.new()
-		stage.candidate = report[0]
+		var stage = load("res://scripts/battle/battle_ui/experimental_battle_3d.gd").new() if OS.get_environment("CANDIDATE_USE_ACTIVE_CATALOG") == "1" else CandidateStage.new()
+		if stage is CandidateStage:
+			stage.candidate = report[0]
 		host.add_child(stage)
 		stage.size = Vector2(1280, 720)
 		stage.setup()
 		stage.set_combatant(0, "garchomp")
 		stage.set_combatant(1, "azumarill")
 		await ready_stage(stage, "garchomp")
+		assert(stage.entries.garchomp.runtime_sha256 == EVIDENCE.data.runtime_sha256)
+		assert(stage.entries.garchomp.action_timing.faint_start.frames == 100)
 		assert(stage.arena_id == arena)
 		assert(stage.material_response.viewport != null)
 		await capture(stage, arena + "-idle")
