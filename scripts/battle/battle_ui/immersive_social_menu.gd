@@ -51,8 +51,8 @@ func _process(_delta: float) -> void:
 		menu.hide()
 		return
 	button.visible = portrait.visible
-	# Its right edge meets the field-indicator lane instead of covering it.
-	button.position = portrait.position + Vector2(portrait.size.x - 16, -8)
+	# The left corner leaves the field-indicator lane entirely unobstructed.
+	button.position = portrait.position + Vector2(-16, -8)
 	if menu.visible:
 		var target_x := button.position.x + button.size.x - menu.size.x
 		menu.position = Vector2(
