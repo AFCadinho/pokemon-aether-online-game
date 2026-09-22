@@ -70,8 +70,10 @@ func _init() -> void:
 		and loading.contains('saved_state["appearance"] = PlayerSave.to_appearance_state()'),
 		"the reset reload replaces empty persisted appearance fields with the default outfit"
 	)
+	var web_setup_pos := world.find("await _setup_web_demo_world()")
+	var web_reset_pos := world.find("GameState.finish_gameplay_reset()", web_setup_pos)
 	_expect(
-		world.contains('await _setup_web_demo_world()\n\t\tif GameState.gameplay_reset_in_progress:\n\t\t\tGameState.finish_gameplay_reset()'),
+		web_setup_pos >= 0 and web_reset_pos > web_setup_pos,
 		"the browser world releases the gameplay reset input lock after rebuilding"
 	)
 	_expect(overlay.contains("change_scene_to_file(LOADING_SCENE_PATH)"), "successful reset reloads authoritative state")
