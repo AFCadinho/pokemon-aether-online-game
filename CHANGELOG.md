@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In de Route 22-battle-arena is nu ook de oostelijke waterkant zichtbaar, met zacht bewegend water en een begroeide oever.
+
 - Route 22 heeft een eigen 3D-battle-arena, ook bij het eerste gevecht met Gary: een grasveld met naaldbomen, rotsplateaus en de trap uit de overworld.
 
 - Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave. Kies animaties via de bestaande playknop boven het level, zoom in of sleep om te draaien. Modellen worden groter gekadreerd en animatiewissels wissen de vorige pose; een extra platform verbergt de faint-pose niet meer. Ontbrekende modellen houden hun sprite-preview.

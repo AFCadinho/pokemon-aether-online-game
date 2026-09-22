@@ -2,6 +2,9 @@ extends "res://scripts/battle/arenas/forest_arena.gd"
 ## Route 22 / Gary's meadow, authored from the actual (1488, 464) map location.
 ## Uses the SAME mounted forest terrain, foliage, bark, rock and flower assets.
 ## Only layout and in-memory terrain controls differ; no duplicated art pack.
+const POND_CENTER := Vector2(11.0, -4.5)
+const POND_RADII := Vector2(4.8, 6.5)
+const WATER_LEVEL := -0.22
 const Geometry = preload("res://scripts/battle/arenas/arena_geometry.gd")
 var route_scene: Node3D
 var rng := RandomNumberGenerator.new()
@@ -31,10 +34,15 @@ func _flatten(terrain) -> void:
 				continue
 			var north := 4.2 * smoothstep(18.0, 20.0, -float(z)) + 3.5 * smoothstep(28.0, 31.0, -float(z))
 			var edge := smoothstep(34.0, 54.0, maxf(absf(x), absf(z)))
-			terrain.data.set_height(pos, lerpf(ground_height + north, original, edge))
+			var pond_depth := 1.2 * (1.0 - smoothstep(0.8, 1.15, _pond_distance(x, z)))
+			terrain.data.set_height(pos, lerpf(ground_height + north - pond_depth, original, edge))
 	terrain.data.update_maps()
 	_paint_route(terrain)
 	_clear_grass(terrain, Vector3.ZERO, 6.0)
+	for z in range(-13, 5):
+		for x in range(5, 18):
+			if _pond_distance(x, z) < 1.13:
+				_clear_grass(terrain, Vector3(x, 0, z), 0.8)
 	terrain.instancer.update_transforms(AABB(Vector3(-60, -100, -55), Vector3(120, 200, 96)))
 	var scenery := Node3D.new()
 	scenery.name = "Route22Scenery"
@@ -43,6 +51,7 @@ func _flatten(terrain) -> void:
 	_trees(scenery)
 	_landmarks(scenery)
 	_flowers(scenery)
+	_water(scenery)
 	for point in [Vector3.ZERO, Vector3(-2.8, 0, 1.5), Vector3(2.8, 0, -1.5)]:
 		assert(absf(terrain.data.get_height(point) - ground_height) < 0.001)
 	print("ROUTE_22_TERRAIN_OK")
@@ -93,6 +102,9 @@ func _strip_runtime_helpers(node: Node) -> void:
 			child.free()
 		else:
 			_strip_runtime_helpers(child)
+
+func _pond_distance(x: float, z: float) -> float:
+	return ((Vector2(x, z) - POND_CENTER) / POND_RADII).length()
 
 func _height(x: float, z: float) -> float:
 	return terrain_node.data.get_height(Vector3(x, 0, z))
@@ -146,6 +158,8 @@ func _trees(parent: Node3D) -> void:
 				var z: float = 3.0 - i * 3.4 + rng.randf_range(-0.6, 0.6)
 				if side == -1 and row == 1:
 					x -= 5.0 # reveal the paved League approach between the rows
+				if _pond_distance(x, z) < 1.35:
+					x += 7.0
 				var size := rng.randf_range(0.28, 0.40)
 				var tree := _asset(trees, "trees/" + ["fir_tree_a", "spruce_tree_b", "fir_tree_c"][i % 3],
 					Vector3(x, _height(x, z), z), Vector3.ONE * size, rng.randf() * TAU)
@@ -177,7 +191,7 @@ func _landmarks(parent: Node3D) -> void:
 	for side in [-1, 1]:
 		for i in [0, 6, 13]:
 			geo._put(props, box, timber, Vector3(5 + side * 1.73, ground_height + (i + 1) * 0.30 + 0.45, -11.6 - i * 0.60), Vector3(0.22, 0.95, 0.22))
-	for x in [-9.5, 9.5]:
+	for x in [-9.5, 5.6]:
 		for i in 5:
 			geo._put(props, box, rails, Vector3(x, ground_height + 0.36, -4.0 + i * 0.65), Vector3(0.12, 0.72, 0.12))
 		for y in [0.25, 0.55]:
@@ -193,9 +207,38 @@ func _flowers(parent: Node3D) -> void:
 	var flowers := Node3D.new()
 	flowers.name = "RouteFlowers"
 	parent.add_child(flowers)
-	for center in [Vector2(-7.8, -5.5), Vector2(8.1, -6.4), Vector2(9.2, -12), Vector2(-7.5, 4.2)]:
+	for center in [Vector2(-7.8, -5.5), Vector2(6.0, -7.0), Vector2(9.2, -13.2), Vector2(-7.5, 4.2)]:
 		for i in 14:
 			var x: float = center.x + rng.randf_range(-1.1, 1.1)
 			var z: float = center.y + rng.randf_range(-0.7, 0.7)
+			while _pond_distance(x, z) < 1.20:
+				x -= 0.4
 			_asset(flowers, "flowers/" + ("lupine_flower" if i % 3 != 0 else "anemone_flower"),
 				Vector3(x, _height(x, z), z), Vector3.ONE * rng.randf_range(0.65, 0.95), rng.randf() * TAU)
+
+func _water(parent: Node3D) -> void:
+	# Eastern pond from the overworld, kept outside the shared battle clearing.
+	# The surface meets a sculpted basin; it is not laid over an intact grass floor.
+	var shore := Node3D.new()
+	shore.name = "EasternPond"
+	parent.add_child(shore)
+	var plane := PlaneMesh.new()
+	plane.size = POND_RADII * 2.5
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://scripts/battle/arenas/route_22_water.gdshader")
+	material.set_shader_parameter("pond_center", POND_CENTER)
+	material.set_shader_parameter("pond_radii", POND_RADII)
+	var geo = Geometry.new(route_scene)
+	var surface: MeshInstance3D = geo._put(shore, plane, material,
+		Vector3(POND_CENTER.x, ground_height + WATER_LEVEL, POND_CENTER.y), Vector3.ONE)
+	surface.name = "WaterSurface"
+	surface.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var shoreline_rng := RandomNumberGenerator.new()
+	shoreline_rng.seed = 22022
+	for i in 18:
+		var angle := TAU * i / 18.0
+		var point := POND_CENTER + Vector2(cos(angle), sin(angle)) * POND_RADII * 1.12
+		var rock := _asset(shore, "rocks/rock_object_a",
+			Vector3(point.x, _height(point.x, point.y) - 0.03, point.y),
+			Vector3(0.45, 0.30, 0.40) * shoreline_rng.randf_range(0.7, 1.3), angle)
+		_tint_rock(rock)

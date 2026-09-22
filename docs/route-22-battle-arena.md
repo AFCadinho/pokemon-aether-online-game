@@ -10,7 +10,7 @@ The existing grass images remain the 2D presentation for this environment.
 The source is the actual `kanto_route_22.visual.tscn` tilemap, especially Gary's
 position `(1488, 464)` in the overworld scene: a higher meadow, northern rock
 terraces with stairs, evergreen rows, the western paved League approach, white
-fences, and purple/white flowers. The composition is adapted to the existing
+fences, purple/white flowers, and the eastern waterbank. The composition is adapted to the existing
 battle camera and clear fighter positions, rather than reproducing the entire
 map at overworld scale. This is a single arena for the route's land battles.
 
@@ -20,6 +20,9 @@ rocks, flower scenes, wind shaders, and neutral battle lighting/skylight. The
 rock tint is warmed for the brown Route 22 cliffs. Stairs, curbs and fences use
 the same procedural material helper as the other existing arenas. No new image,
 model, or copy of the purchased pack is added to the client repository.
+The eastern pond uses the sea arena’s palette and animated crossing ripples,
+adapted to its shoreline. Its recessed basin keeps the fighting area dry, with
+trees and flowers placed outside the water.
 
 Terrain height/control changes and scenery transforms are runtime-only. Source
 resources are not saved. Authored background objects are hidden; generated
