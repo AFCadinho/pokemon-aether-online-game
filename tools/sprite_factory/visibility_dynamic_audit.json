@@ -1,0 +1,445 @@
+{
+  "schema": 1,
+  "purpose": "read-only dynamic visibility source audit; not playback approval",
+  "runtime_approved": false,
+  "inventory_sha256": "c655a83e4e6829eaff1a3de778fbb38c12de7e502575d9dfbe2d0bc8e2dc7d6d",
+  "clips_checked": 651,
+  "clips_with_verified_identity_hash": 644,
+  "source_hashes_digest": "797a37cbd1e8dc56984de595fb59591ce421b15be75c7ea2d8a74f5b82382e4c",
+  "root_fields_matching_target_counts": 651,
+  "dynamic_tracks": 18,
+  "dynamic_tracks_shorter_than_clip": 18,
+  "rows": [
+    {
+      "species": "meowth",
+      "source": "pm0052_00_00_00400_attack01.tracm",
+      "sha256": "ee52d41dcd28b1815bc10567b50f7d419e41710da79dfd754359f2a5af2a2bd3",
+      "pinned_identity_hash": true,
+      "frames": 91,
+      "fps": 60,
+      "root_visibility_raw": 4,
+      "track": {
+        "target": "pm0052_00_00_nail_l_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          224,
+          255,
+          255,
+          255,
+          3
+        ]
+      }
+    },
+    {
+      "species": "meowth",
+      "source": "pm0052_00_00_00400_attack01.tracm",
+      "sha256": "ee52d41dcd28b1815bc10567b50f7d419e41710da79dfd754359f2a5af2a2bd3",
+      "pinned_identity_hash": true,
+      "frames": 91,
+      "fps": 60,
+      "root_visibility_raw": 4,
+      "track": {
+        "target": "pm0052_00_00_nail_r_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          224,
+          255,
+          255,
+          255,
+          3
+        ]
+      }
+    },
+    {
+      "species": "grimer",
+      "source": "pm0088_00_00_00000_defaultwait01_loop.tracm",
+      "sha256": "13517e6d9b948bb47c2ab681b7e1e02c9cf9d92f3ec1c4d1426bee2b4336172d",
+      "pinned_identity_hash": true,
+      "frames": 161,
+      "fps": 60,
+      "root_visibility_raw": 6,
+      "track": {
+        "target": "pm0088_00_00_liquid_a_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          240,
+          255,
+          15
+        ]
+      }
+    },
+    {
+      "species": "grimer",
+      "source": "pm0088_00_00_00400_attack01.tracm",
+      "sha256": "efa29fab0396d4393972f37731924eccf802550cb68ebba8acbdb60d72665356",
+      "pinned_identity_hash": true,
+      "frames": 131,
+      "fps": 60,
+      "root_visibility_raw": 6,
+      "track": {
+        "target": "pm0088_00_00_liquid_c_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          0,
+          248,
+          15
+        ]
+      }
+    },
+    {
+      "species": "grimer",
+      "source": "pm0088_00_00_00520_down01_start.tracm",
+      "sha256": "4e095e94a63148f3a2e24e8f1ed9d749192e8ea6716f1d4f6b26d951d251a93f",
+      "pinned_identity_hash": true,
+      "frames": 105,
+      "fps": 60,
+      "root_visibility_raw": 6,
+      "track": {
+        "target": "pm0088_00_00_liquid_d_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          0,
+          128,
+          255,
+          15
+        ]
+      }
+    },
+    {
+      "species": "grimer",
+      "source": "pm0088_00_00_00520_down01_start.tracm",
+      "sha256": "4e095e94a63148f3a2e24e8f1ed9d749192e8ea6716f1d4f6b26d951d251a93f",
+      "pinned_identity_hash": true,
+      "frames": 105,
+      "fps": 60,
+      "root_visibility_raw": 6,
+      "track": {
+        "target": "pm0088_00_00_liquid_c_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          224,
+          15,
+          0,
+          0,
+          0,
+          224,
+          31
+        ]
+      }
+    },
+    {
+      "species": "muk",
+      "source": "pm0089_00_00_00400_attack01.tracm",
+      "sha256": "f0b2af913bce1c1bb036e50909d7aef313f9046e2025ab05a66b59eb4610f349",
+      "pinned_identity_hash": true,
+      "frames": 131,
+      "fps": 60,
+      "root_visibility_raw": 3,
+      "track": {
+        "target": "pm0089_00_00_liquid_a_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          254,
+          3,
+          0,
+          192,
+          255,
+          127
+        ]
+      }
+    },
+    {
+      "species": "muk",
+      "source": "pm0089_00_00_00450_rangeattack01.tracm",
+      "sha256": "bcf0db9634e71ed65707574ad062ad135c440ffd165a4b36c94bdde488670e50",
+      "pinned_identity_hash": true,
+      "frames": 121,
+      "fps": 60,
+      "root_visibility_raw": 3,
+      "track": {
+        "target": "pm0089_00_00_liquid_a_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          0,
+          0,
+          240,
+          127
+        ]
+      }
+    },
+    {
+      "species": "muk",
+      "source": "pm0089_00_00_00500_damage01.tracm",
+      "sha256": "56a9b8d584eb8f30561675f730abc3f8c46da754545103621374a059f18140c2",
+      "pinned_identity_hash": true,
+      "frames": 61,
+      "fps": 60,
+      "root_visibility_raw": 3,
+      "track": {
+        "target": "pm0089_00_00_liquid_a_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          224,
+          255,
+          127
+        ]
+      }
+    },
+    {
+      "species": "spiritomb",
+      "source": "pm0442_00_00_00450_rangeattack01.tracm",
+      "sha256": "5046a34f0306c66e2c7b5f8000ac102bc2b2cd2ef3ca0756672dd0dfd30239fb",
+      "pinned_identity_hash": true,
+      "frames": 139,
+      "fps": 60,
+      "root_visibility_raw": 7,
+      "track": {
+        "target": "pm0442_00_00_eyeright_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          255,
+          255,
+          0,
+          0,
+          192
+        ]
+      }
+    },
+    {
+      "species": "spiritomb",
+      "source": "pm0442_00_00_00450_rangeattack01.tracm",
+      "sha256": "5046a34f0306c66e2c7b5f8000ac102bc2b2cd2ef3ca0756672dd0dfd30239fb",
+      "pinned_identity_hash": true,
+      "frames": 139,
+      "fps": 60,
+      "root_visibility_raw": 7,
+      "track": {
+        "target": "pm0442_00_00_eyeclose_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          255,
+          255,
+          63
+        ]
+      }
+    },
+    {
+      "species": "spiritomb",
+      "source": "pm0442_00_00_00500_damage01.tracm",
+      "sha256": "d81009dee1951b89a3e101be157fa5bac0eb2d8f76fe1482a32252602f3ea42c",
+      "pinned_identity_hash": true,
+      "frames": 41,
+      "fps": 60,
+      "root_visibility_raw": 7,
+      "track": {
+        "target": "pm0442_00_00_eyeright_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          0,
+          240
+        ]
+      }
+    },
+    {
+      "species": "spiritomb",
+      "source": "pm0442_00_00_00500_damage01.tracm",
+      "sha256": "d81009dee1951b89a3e101be157fa5bac0eb2d8f76fe1482a32252602f3ea42c",
+      "pinned_identity_hash": true,
+      "frames": 41,
+      "fps": 60,
+      "root_visibility_raw": 7,
+      "track": {
+        "target": "pm0442_00_00_eyeclose_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          255,
+          255,
+          255,
+          15
+        ]
+      }
+    },
+    {
+      "species": "spiritomb",
+      "source": "pm0442_00_00_00520_down01_start.tracm",
+      "sha256": "f141255e5e0efb3844b1c37a1c3001becbcef70dacc40d9d4bf3d06789deae8b",
+      "pinned_identity_hash": true,
+      "frames": 121,
+      "fps": 60,
+      "root_visibility_raw": 7,
+      "track": {
+        "target": "pm0442_00_00_eyeright_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          255,
+          255,
+          15
+        ]
+      }
+    },
+    {
+      "species": "spiritomb",
+      "source": "pm0442_00_00_00520_down01_start.tracm",
+      "sha256": "f141255e5e0efb3844b1c37a1c3001becbcef70dacc40d9d4bf3d06789deae8b",
+      "pinned_identity_hash": true,
+      "frames": 121,
+      "fps": 60,
+      "root_visibility_raw": 7,
+      "track": {
+        "target": "pm0442_00_00_eyeclose_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          240
+        ]
+      }
+    },
+    {
+      "species": "ceruledge",
+      "source": "pm1109_00_00_00450_rangeattack01.tracm",
+      "sha256": "f99aa1f3694d70d9d342a43c4348fc8ba5f5db87435fa7df5ddfe9883d2c9065",
+      "pinned_identity_hash": true,
+      "frames": 121,
+      "fps": 60,
+      "root_visibility_raw": 13,
+      "track": {
+        "target": "pm1109_00_00_fire_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          255,
+          255,
+          127,
+          0,
+          128
+        ]
+      }
+    },
+    {
+      "species": "ceruledge",
+      "source": "pm1109_00_00_00500_damage01.tracm",
+      "sha256": "6edddcfba9363a985b4436eaa150232422c126e129d4d596b0c350c6dc1f764c",
+      "pinned_identity_hash": true,
+      "frames": 51,
+      "fps": 60,
+      "root_visibility_raw": 13,
+      "track": {
+        "target": "pm1109_00_00_fire_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          0,
+          0,
+          0,
+          192
+        ]
+      }
+    },
+    {
+      "species": "ceruledge",
+      "source": "pm1109_00_00_00520_down01_start.tracm",
+      "sha256": "4b807d7445d1f87a84d290ca112738d65f632545b885444a0fd5f5078ef6d31e",
+      "pinned_identity_hash": true,
+      "frames": 111,
+      "fps": 60,
+      "root_visibility_raw": 13,
+      "track": {
+        "target": "pm1109_00_00_fire_mesh_shape",
+        "encoding": "dynamic_bool",
+        "time_raw": 0,
+        "value_raw": 0,
+        "frames": [],
+        "fixed_value": null,
+        "packed_bytes": [
+          255,
+          127
+        ]
+      }
+    }
+  ]
+}
