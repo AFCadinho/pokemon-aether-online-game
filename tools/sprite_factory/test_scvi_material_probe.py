@@ -7,9 +7,35 @@ from pathlib import Path
 
 from scvi_material_probe import eligible, inspect_materials
 from phase5_review_gallery import build
+from material_profiles import classify, unsupported, REFRACTION_UNSUPPORTED
 
 
 class MaterialProbeTests(unittest.TestCase):
+    def test_native_refraction_is_blocked_before_opaque_baking(self):
+        for shaders in ([{'name': 'Transparent', 'values': {}}],
+                        [{'name': 'TransparentInner', 'values': {}}],
+                        [{'name': 'renamed_shader', 'values': {'RefractionMode': 'Thin'}}],
+                        [{'name': 'Transparent', 'values': {'RefractionMode': 'Thin'}},
+                         {'name': 'TransparentInner', 'values': {'RefractionMode': 'Thin'}}]):
+            for name in ('arbitrary_surface', 'renamed_surface'):
+                with self.subTest(shaders=shaders, name=name):
+                    result = classify({'name': name, 'shaders': shaders, 'alpha_type': 'Opaque'})
+                    self.assertEqual(result['profile'], REFRACTION_UNSUPPORTED)
+                    self.assertEqual(unsupported([result]), [result])
+
+    def test_refraction_gate_does_not_reject_eye_clearcoat_by_alpha_label(self):
+        for name in ('Eye', 'EyeClearCoat', 'Standard'):
+            result = classify({'name': 'surface', 'alpha_type': 'BlendPreMultiAlpha',
+                               'shaders': [{'name': name, 'values': {}}]})
+            self.assertTrue(result['export_supported'])
+            self.assertEqual(result['profile'], 'existing_graph_validation_required')
+
+    def test_refraction_takes_precedence_over_effect_signature(self):
+        material = self.profile()
+        self.assertTrue(classify(material)['export_supported'])
+        material['shaders'][0]['values']['RefractionMode'] = 'Thin'
+        self.assertFalse(classify(material)['export_supported'])
+
     def profile(self):
         return {'name': 'any_material', 'shaders': [{'name': 'NonDirectional', 'values': {
             'EnableBaseColorMap': 'True', 'EnableDisplacementMap': 'True',

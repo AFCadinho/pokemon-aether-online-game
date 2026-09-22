@@ -3,6 +3,9 @@
 > Implementation follow-up: `SCVI_VISIBILITY_PLAYBACK.md` records generic fixed
 > and framed playback, strict mesh/clock binding, five new runtime controls and
 > explicit holds for unresolved variants and dynamic clocks.
+> Subsequent material interventions and the native refraction gate are recorded
+> in `SCVI_MATERIAL_FACTOR_REVIEW.md`; Spiritomb's facial geometry is present but
+> occluded by its incorrectly opaque exported shell.
 
 ## Result
 

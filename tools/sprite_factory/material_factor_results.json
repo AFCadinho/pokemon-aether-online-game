@@ -1,0 +1,986 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "scope": "isolated shader interventions and source profile preflight; no new model approvals",
+  "source_preflight": [
+    {
+      "species": "charizard",
+      "source_sha256": "9ba8a97ccd42ff5ab65fd50d1d96811d709a9d51169c8b1116836e752ecf9751",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "raichu",
+      "source_sha256": "fbc0726dbb2a1f30c120c913a8eeb2641c95e1f9fd7ca87acf4cea67d7484b87",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "jigglypuff",
+      "source_sha256": "40afaa5f2f159eb1ce9166226b9f105e15d747fa001b94eb93a2d17a219a830d",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "arcanine",
+      "source_sha256": "f611dafbda742cc5be18a6e03b9db7ba33ed7a2f3c320f14969f05d09593fe49",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "gastly",
+      "source_sha256": "258f80f21d9db1842f2ce65297545c19bb595c9f5e4ecd8cbe6085b92901ebd2",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "gengar",
+      "source_sha256": "059cd6802fd00304ef9c17d94a759523aefcbf3f03e4d9fda7e51bdbc3e592c4",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "gyarados",
+      "source_sha256": "aea42396f2c2ccae46ce0bd3525326614a70f6147ab207e94680a0cd93f0b2a2",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "eevee",
+      "source_sha256": "3de7853729f8514327262ded044ce4e71cdd0bb29d22074337afa6665fae62ab",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "vaporeon",
+      "source_sha256": "a4662d0316aa90b9d066db9888503f5d4ec2f73e853cd83747916964e133ccff",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "jolteon",
+      "source_sha256": "86a176b590ad4dc3b1a9b9a52b03eceba23732aebb19fcc91ad06d7e688f98dc",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "flareon",
+      "source_sha256": "63b7f9b8c11ed5e5b1f36835b97973b89d681223203790b34c5e48c46397945a",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "articuno",
+      "source_sha256": "dac095a6d8fb950351c4bbe9c08b1cca74a050f1c5e027b9d6016aaa7946bd63",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "dragonite",
+      "source_sha256": "52586271ec90ecdae3cde2b885e0c8c0edb831be79e682948ff4dba9d66d7967",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "lucario",
+      "source_sha256": "363da786cef8c2ff90b668ce1a426bca5c7c4676956c5a7ab990e5aade284a0e",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "charmander",
+      "source_sha256": "ea8523ed29729a0cea1d398f10daa5c104b4ce91394f06a880d736307aca6a5f",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "wigglytuff",
+      "source_sha256": "7c63c760370db39b6c3ee7e600e4344c551cbeacd84098fbe360776bada542db",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "venonat",
+      "source_sha256": "eab51a3722e3c2311eb9bf32b3cbbcfce749e7ea98d29e65646b4ea321fee529",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "diglett",
+      "source_sha256": "9a65c6adbf2aed3eca5bcc75ad859eea7233a038fac2fb40556367545a6de175",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "dugtrio",
+      "source_sha256": "8453f5c30ac3a2a3aec57543fc9f509ee644d39f3a2fd814b19cc2c72c196d9b",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "meowth",
+      "source_sha256": "4bb2537e207cdd670a26a865bb287057acf8ec82f5019f03962d45d7c54845fb",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "psyduck",
+      "source_sha256": "3141573a375d9c7a2532aaac6ac82c3301da38ee62530be66f230101b1c2f5f8",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "golduck",
+      "source_sha256": "8e595f4977a2d65224689cd1e74d49c607264dd10ba8e089577da5d61a5a34ef",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "mankey",
+      "source_sha256": "8259803e17fae082c86f81d40fc70a52bd5db5ef040ba4808cc6fbdbe813b39b",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "primeape",
+      "source_sha256": "dab830427f51f60b7de45446b5038cde16beba1d95fbeebeafddb3c08a9f24a2",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "growlithe",
+      "source_sha256": "71f1c055bc346502c5e8f41dba7879fdb0f8ac29df41780258520a24f84482b9",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "slowpoke",
+      "source_sha256": "b2cd5c9fc564d2a1fd9252bf12ce7acf45de4ddb413e91aaa0df6751e9e006f7",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "magnemite",
+      "source_sha256": "ecf400347819e0a5776da49ce0df2c37d16811bf9248cda6e4b4667d1c63dd70",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "magneton",
+      "source_sha256": "d058c67c4ddde6603e2b633bf6807df6ea96266d3f77afdc39a0280159ecc7c6",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "shellder",
+      "source_sha256": "d19f735c8e7cb2682b2fed873e6bc7a5dd4d30a9cb200cba5d54ddf05eaabe35",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "cloyster",
+      "source_sha256": "377a1dec3caab4d8143b0e9e7508b65e2283f001ee9eeb8a8ca01e37efcac607",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "haunter",
+      "source_sha256": "0fc77f56bbf981221b0b7c62ca13b4f67887405599298efa328385837f45a0af",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "drowzee",
+      "source_sha256": "42dbb73fcffc47b51647c3831037f0f011ccc2fdeabb05c9048e7898fe5bcc23",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "hypno",
+      "source_sha256": "6f0afdb9a2dd36bd31e4f242bcaed47cf51a1d99ce76f40e86c763b41da5be8c",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "voltorb",
+      "source_sha256": "3ab7bf0930cfba0025bc3c4fb5c4a2b966b4ab753c7657ad3f701154eed2036b",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "electrode",
+      "source_sha256": "f17c12f018d59ef2a3fb0c4469221112cc7215dd63da8e44e6cede973c55eafc",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "chansey",
+      "source_sha256": "e37c5bdb3133b525f6493e4608cd9849a9cdf0914108ecf2664dbbd8489ac8a3",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "scyther",
+      "source_sha256": "38166b3a6cca86fc48a5229f0da88bae8c189583ee4bda100982d0ae7355e37b",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "tauros",
+      "source_sha256": "d0fc05d4bc47d28783200a72b33a100ece01036503bdebb61e40d67506b567a6",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "magikarp",
+      "source_sha256": "c2f4405cea1478094f09f7f614c10fdcc1dcb3c7b407ba4fa2675782e63705bb",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "ditto",
+      "source_sha256": "2f92000529a72688929c930722f7973c750909d43bfeb52dcbc0947df25576af",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "zapdos",
+      "source_sha256": "40a2125489a82cd5e05be5c1ec330ace74bc023dca792a496018e56eb0c779a9",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "moltres",
+      "source_sha256": "efffdf3f6cf93a51a72d369a08d46822bf234128bcb329445dafbef45a873cb8",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "dratini",
+      "source_sha256": "f34d8fce57c18813412fa0c8abf70651572011273d34e5080e76cedbeb6c1214",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "dragonair",
+      "source_sha256": "73041d1f514f92cccb935f77e000066e0265445c2b84ba19bcaf84bcd411317a",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "mewtwo",
+      "source_sha256": "32d88edb25d123a3df8482b11d6b175ba3ec90c6c17dd6adaa8c75543cc65f52",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "mew",
+      "source_sha256": "2ecf01f54ac09f6e61f8380c07228efc62652f16fd3befdb1011a99abc1458ef",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "pichu",
+      "source_sha256": "67a0eb6f746d49e28cd2235c6c655b586fd9d1286414fd2879eddbabcd6eca43",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "marill",
+      "source_sha256": "a62672b56d38576377ee4d37293cabbd97766794ae3a13bfe28ebe27574f98d5",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "azumarill",
+      "source_sha256": "f35844842be65bb8ec62cdad1395a733bb79ab89254665376eb240f15ea2c9bb",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "sudowoodo",
+      "source_sha256": "af5eb814016728a22286f0b36825e24314890755350d29ee6edf2a7e2b0a1375",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "hoppip",
+      "source_sha256": "c4e12fc2a90aa82988dec0e35711a9bc4f6fa8fbc9b90f9d56edf169f0e7a00f",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "jumpluff",
+      "source_sha256": "5216e905386fcdeb831f09ed4c9b0ab40877c4882006e27902ca8dedaeb12aba",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "wooper",
+      "source_sha256": "50a0e4cb0a1618ed6d5686f76e11bdfb837b28c3ad48795b7d8364dce924e01a",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "quagsire",
+      "source_sha256": "c87e849503e89a07c53e7185af2e541f41d63df7731ccc3d259d7928c4057867",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "espeon",
+      "source_sha256": "852320de6bf7f2e1c0462823f30906bd9bbedcdad3a4643d4486e6aac34d0ad6",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "umbreon",
+      "source_sha256": "de3feb6434901df91d462b3fa01b9406ab4a21df6958019e4286c3048cc98c24",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "murkrow",
+      "source_sha256": "64591a0e8a16a8d91ed7c83471f715b8eeb97e58525181ae1886b4857b20776f",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "misdreavus",
+      "source_sha256": "0e0d514f6c78e8ba4efbb329ae0fcc68271b6862bd38db9d64aa42de7c679ae0",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "forretress",
+      "source_sha256": "1eb69d6748739ef8afe35605a35836642e05ebb3edad2c0cdca64f1936a23d05",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "qwilfish",
+      "source_sha256": "ed714b5442ef6ef878cee979064b7d2e1abce0e65132fce5242c66df5ec93c26",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "scizor",
+      "source_sha256": "4e699d821c5af3325854a8e5b88ea8b12718ea5d5953a0694fb2f86b1cf3afd8",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "heracross",
+      "source_sha256": "f82b5e41cc666b7739ebe098edea60e82060a76818b4942682406d6c26cde06c",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "delibird",
+      "source_sha256": "fa5655da182cc40cc7fcc4627e9a5982c3f28f55649531ae08c27207e20b4f80",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "donphan",
+      "source_sha256": "6cea54bc3b7480220069529a2fc35f8804e74239f50b394b7962149cf589ec97",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "blissey",
+      "source_sha256": "2e7e3aeb8e72905aa409b1ecaeef4419516717a05c737b7abd6b57b23fc38f0e",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "tyranitar",
+      "source_sha256": "a41dc29a75d9ca82907155890011041ae3668f53abb8dd534e0d83b4eca534db",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "gardevoir",
+      "source_sha256": "d81b610d741a2c44a37ab7bcef6641d514dc4d45e36ac0acc9074468e3e80751",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "slaking",
+      "source_sha256": "05aa59df80bf59d6394f58f7d7684336be377a12b16f159fe5d691796d7099d6",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "hariyama",
+      "source_sha256": "db2b2437ddab041085cbf256b3d4b94fb36e2f9295f6a22818bff91ba170db20",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "seviper",
+      "source_sha256": "d85f2a0f9ab86314e48eeb75fdc88a4dee2974b173d8397223faf94e082d5d66",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "rayquaza",
+      "source_sha256": "8da2265003190667b5fa2991bde0dfe0a815563f6430b7c2c4f8143071a6185f",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "staraptor",
+      "source_sha256": "b169734a4363c741bf3a20efa6cc9d1ba296bb87da9071dd171c2a0467884937",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "drifblim",
+      "source_sha256": "0ed957214efa3661aed0bd941af51408ebefe4ccc91d5a51a161a246f21e1020",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "spiritomb",
+      "source_sha256": "3d73bf58eb2d2c4477c94a5949e96f5a8b919b0170ad414cd34f5950c4505236",
+      "before_supported": true,
+      "after_supported": false,
+      "blocked": [
+        {
+          "material": "body_b_03",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        },
+        {
+          "material": "body_b_00",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        }
+      ]
+    },
+    {
+      "species": "garchomp",
+      "source_sha256": "afbfff04df81174347133198171ea9698e39a8d0d5ff5f7a6986e268dd83173a",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "magnezone",
+      "source_sha256": "079872e7a88eeae3101235fc8d7c4b6813fd26c0d32f68e6d872bc2a0a2640b5",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "rillaboom",
+      "source_sha256": "2a1e5751bc5ab52fc0491bfc018ff21b27ef33718ab2b3da959e29ba82bbb812",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "volcarona",
+      "source_sha256": "56fd13fb5b3050e29a11010a912ed6533984528d2921b0affdea2c25a04584c1",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "hydreigon",
+      "source_sha256": "8791a4d0f01c26ccc7093c7c01d6ccc68a945de96e5d2486a4c97c0b9b49e9e9",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "flapple",
+      "source_sha256": "83528c915340a0b4f5a2f7669784769f8b4a189c283befe49811969e15fc4530",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "hoopa",
+      "source_sha256": "34e92305929669aca7621e210bac359846720464fd0ff9916ca7ab0737763a34",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "decidueye",
+      "source_sha256": "073ab2b7288483327900ef22117fe2acd77bdefa438e25b4eb7457692939b37d",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "oricorio",
+      "source_sha256": "0fcd1c835c1e124143e5edb0d38bc62381c6fc21ef91bcf025f6a661b012ff81",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "orthworm",
+      "source_sha256": "76eb16b30fed932da96cd84c81bc1dab2d8722fa9d6287323eea4a81a8b325f7",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "magearna",
+      "source_sha256": "2e8a6eb40fe4cf939a890341199ee9ef2f4f7269e2673f241cdc4d74c9855f41",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "cinderace",
+      "source_sha256": "1748cb38dcd49c8986d9bfc8255f099a12093bc1a93eec8a01fb3667c4802f47",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "corviknight",
+      "source_sha256": "8140d6e400554ebaeb049ef3e7969804ef35f429b9733a2a7b4c81d418c0242b",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    },
+    {
+      "species": "dondozo",
+      "source_sha256": "065f04e4c2c4f1a04c3ebc80bf1a264b23eea6c914ef0ee3bfcef4f9aa2a13b1",
+      "before_supported": true,
+      "after_supported": true,
+      "blocked": []
+    }
+  ],
+  "probes": [
+    {
+      "path": ".tmp/material-factor-probe-01",
+      "script": ".tmp/material_factor_probe.gd",
+      "script_sha256": "3a458d1b593da262305468983377688ba5fddd9de5fbd6e5df1df8261a0e4e2e",
+      "report_sha256": "16a7735f9eac10547ee70371c0be329adf14654bdb63f6cab2836f9cb904c2cd",
+      "captures": [
+        {
+          "camera_size": 10.0310163497925,
+          "clips": [],
+          "runtime_approved": false,
+          "runtime_sha256": "6135e93a36a79d2e7ce44b44fb7d03b2c7c5bdef85ce59a53d836f60e148871f",
+          "sampled_union_min": [
+            -1.900634765625,
+            -1.33313751220703,
+            -2.43575572967529
+          ],
+          "sampled_union_size": [
+            3.73887801170349,
+            4.62579441070557,
+            5.87356090545654
+          ],
+          "species": "gastly",
+          "static_images": [
+            {
+              "name": "baseline-0.0.png",
+              "sha256": "865ea193fcccf171ec2fcefc72fcdb6996792aa362e75a17c785e31c6f85e36b"
+            },
+            {
+              "name": "baseline-0.5.png",
+              "sha256": "a8cb1368e0cec4e42d521eacdda4805e51aa1cbb44bd8b3d26f16903db8c8531"
+            },
+            {
+              "name": "baseline-1.0.png",
+              "sha256": "18f0eded48ea8d12426feb2d75002f14a0274b80054f95328ef52a55572acdba"
+            },
+            {
+              "name": "no_prepass-0.0.png",
+              "sha256": "9720351dad2445c345e76e1e796f6c94990bb876f1a060cd5dd801d6e92071bc"
+            },
+            {
+              "name": "no_prepass-0.5.png",
+              "sha256": "aed65416ba028941e60f81a3bf7413d7dd66cd4e344a7255618949a86680fdd7"
+            },
+            {
+              "name": "no_prepass-1.0.png",
+              "sha256": "43ebd6d1b048102355d7addda48fbd8d90d64c5809af1cd5964a1ea1c209bef1"
+            },
+            {
+              "name": "no_displacement-0.0.png",
+              "sha256": "ca4d22b3954de02ca283b54da4f3de940117e317822bd71e0b51ca9a315d3cf7"
+            },
+            {
+              "name": "no_displacement-0.5.png",
+              "sha256": "f8dce567287a869f927fce6efea9bb69b7474a34dae6d4e885a60eced7cf6a30"
+            },
+            {
+              "name": "no_displacement-1.0.png",
+              "sha256": "3d694ee41cbdf76d0276676bbf1d105c2ce73f935543544fe0eee1ad83db8a32"
+            },
+            {
+              "name": "static_color_uv-0.0.png",
+              "sha256": "865ea193fcccf171ec2fcefc72fcdb6996792aa362e75a17c785e31c6f85e36b"
+            },
+            {
+              "name": "static_color_uv-0.5.png",
+              "sha256": "287fa2f1757516296c2e57444ecd6ead1fd23b460d0c33a4c36627d518fa0655"
+            },
+            {
+              "name": "static_color_uv-1.0.png",
+              "sha256": "a9607fc058e324f960976a44128a0a1a5338a0dfe8d01ac115b9468def3bf43a"
+            },
+            {
+              "name": "opaque-0.0.png",
+              "sha256": "814362009f2052150b67c2575da68874e4b1f7be6d8d573cc319a3439bf66388"
+            },
+            {
+              "name": "opaque-0.5.png",
+              "sha256": "e97b4fccfa076aeabd42b0d32080c3a4f2d81c05aa3e084e5cdfa512775e0f33"
+            },
+            {
+              "name": "opaque-1.0.png",
+              "sha256": "09726e7e65c7fc606d34824de27863711ce502c8bbd8f85658c1bc11367031dd"
+            }
+          ]
+        },
+        {
+          "camera_size": 9.51054286956787,
+          "clips": [],
+          "runtime_approved": false,
+          "runtime_sha256": "4639ee36e2aab0548315e6fb9652c1ee171840345cd9fe3caec2ef8b71ebe885",
+          "sampled_union_min": [
+            -2.01330900192261,
+            -0.0679546520113945,
+            -2.78413367271423
+          ],
+          "sampled_union_size": [
+            3.93654036521912,
+            3.84166026115417,
+            5.70596981048584
+          ],
+          "species": "charmander",
+          "static_images": [
+            {
+              "name": "baseline-0.0.png",
+              "sha256": "9a4890bb3924500a084a4b73970e98c4a7e52580911966e3b694d6f59ffe0eb6"
+            },
+            {
+              "name": "baseline-0.5.png",
+              "sha256": "817ef26cc9ce8d1f3236b0659ec8d3840811e4cd179ab4493dbaff10dc19240c"
+            },
+            {
+              "name": "baseline-1.0.png",
+              "sha256": "3806f1b8c49534774036e59eba86219db8f43c9e275ce8d88246d58f03f1120f"
+            },
+            {
+              "name": "no_prepass-0.0.png",
+              "sha256": "7a7cd6d6a9e295d1b153c2ded664df885ff688b662a2ef9aefdc09c438c8291a"
+            },
+            {
+              "name": "no_prepass-0.5.png",
+              "sha256": "efba6198dd83d2d3a4e61ad05be103d444003e862c71389b3b7823b59b046a59"
+            },
+            {
+              "name": "no_prepass-1.0.png",
+              "sha256": "8ea057f7b384592598693b11d968171e9a5f6095fac9792292ca7351cc36154c"
+            },
+            {
+              "name": "no_displacement-0.0.png",
+              "sha256": "fa7dccda433e516b7deaadf59d0745eb629a4427f489a4c40c8226be00f06444"
+            },
+            {
+              "name": "no_displacement-0.5.png",
+              "sha256": "fa6d0733e75257e01071c1593048af5777c2ea0a094b90fc73e54c83aeee3276"
+            },
+            {
+              "name": "no_displacement-1.0.png",
+              "sha256": "7006a2900dca653133d318dba73d2b1b845b471b5c9913260e490fc156623506"
+            },
+            {
+              "name": "static_color_uv-0.0.png",
+              "sha256": "9a4890bb3924500a084a4b73970e98c4a7e52580911966e3b694d6f59ffe0eb6"
+            },
+            {
+              "name": "static_color_uv-0.5.png",
+              "sha256": "155d9c2b2c3520850b9c7d4d681c6ace1f40c2063499cbcb708e21700d38c55d"
+            },
+            {
+              "name": "static_color_uv-1.0.png",
+              "sha256": "47c855aeb59208f795579c9ff7349f3cc87405b234ed18e9e8d65675f0b9fc2f"
+            },
+            {
+              "name": "opaque-0.0.png",
+              "sha256": "9a4890bb3924500a084a4b73970e98c4a7e52580911966e3b694d6f59ffe0eb6"
+            },
+            {
+              "name": "opaque-0.5.png",
+              "sha256": "817ef26cc9ce8d1f3236b0659ec8d3840811e4cd179ab4493dbaff10dc19240c"
+            },
+            {
+              "name": "opaque-1.0.png",
+              "sha256": "3806f1b8c49534774036e59eba86219db8f43c9e275ce8d88246d58f03f1120f"
+            }
+          ]
+        },
+        {
+          "camera_size": 14.6576766967773,
+          "clips": [],
+          "runtime_approved": false,
+          "runtime_sha256": "3cbea39cde57fd2080a2b50b5cf24e21a33725a6736f797132dbd6ef27923e93",
+          "sampled_union_min": [
+            -3.72014474868774,
+            -1.4634782075882,
+            -2.970379114151
+          ],
+          "sampled_union_size": [
+            7.29420185089111,
+            6.10519075393677,
+            7.66295623779297
+          ],
+          "species": "moltres",
+          "static_images": [
+            {
+              "name": "baseline-0.0.png",
+              "sha256": "90314d6c04aa0d0c5f93a9dbe32bd2a7f6f90b391a282762a60f22c55c326672"
+            },
+            {
+              "name": "baseline-0.5.png",
+              "sha256": "8e9abf7bcbfea54ee97dda2a09c65ebe316398cf9974dcf417fa769f818a49a8"
+            },
+            {
+              "name": "baseline-1.0.png",
+              "sha256": "d3779d5a287d1ca942726b2c263bfd4e9e82065f6935d10f1c445235eaf7f160"
+            },
+            {
+              "name": "no_prepass-0.0.png",
+              "sha256": "c439edcba8555e15e66f6ff2ab0b913a8b2959f06286fda498c3d7cef47d6788"
+            },
+            {
+              "name": "no_prepass-0.5.png",
+              "sha256": "7d2ac2f6c3fc6dc54ede1feb3aa6246a7cbed02af3e3eb47c4b22591b0c2d096"
+            },
+            {
+              "name": "no_prepass-1.0.png",
+              "sha256": "1e77a3a8ec91e0b0560be4db7d4f82293713c6d31a7e72bf8ce23bb276d56477"
+            },
+            {
+              "name": "no_displacement-0.0.png",
+              "sha256": "5e79eb86e4deea25d08f48d4d7d6bd2305a7fd4e4043efe729ef1e589d689e41"
+            },
+            {
+              "name": "no_displacement-0.5.png",
+              "sha256": "f50234c895b707b697630cf6475bd0fc42475b23ea1f8be20b5b4d006d4111ff"
+            },
+            {
+              "name": "no_displacement-1.0.png",
+              "sha256": "e174369b2fcf2ca535bf51ecb6a14a3851623a610f9178dbeb97b8b6e61ed16d"
+            },
+            {
+              "name": "static_color_uv-0.0.png",
+              "sha256": "e29ac74f04c5ae05efcecec1539ec5703c7d14cc86af97febdd700ccef8a5c30"
+            },
+            {
+              "name": "static_color_uv-0.5.png",
+              "sha256": "3aed247a882d12800a54221f79412e452ccdc01fc2260888a5d1e4c12b208c30"
+            },
+            {
+              "name": "static_color_uv-1.0.png",
+              "sha256": "603228d51e591f374313ff3a02e9b5092be91414d5a4e62f06350d3adf962736"
+            },
+            {
+              "name": "opaque-0.0.png",
+              "sha256": "fecfcde515cc50fd4334d753fafef6c5f99a00096a4b98175e86859ff57dd73d"
+            },
+            {
+              "name": "opaque-0.5.png",
+              "sha256": "4830bbc29752a9c2bb0af9d1b8d3e505235adb51cb596014fd380caab34a5e9b"
+            },
+            {
+              "name": "opaque-1.0.png",
+              "sha256": "18a777e9745904c6e23296d3703c52cf408c1c1ce44bf860d408533bd6f61ff8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".tmp/transparent-factor-probe-01",
+      "script": ".tmp/transparent_factor_probe.gd",
+      "script_sha256": "961ec271b1cbca78b86f3d777a3e391ac334ae9af9dccae573052d736d17540c",
+      "report_sha256": "a2ea494627dc152ab712d93f1ba5f4ef2b82f7408bf53526a0df3ed37f6a4453",
+      "captures": [
+        {
+          "camera_size": 11.0575857162476,
+          "clips": [],
+          "runtime_approved": false,
+          "runtime_sha256": "2acc8db767b2714a93584bfcab975b88e7a6dcee74f4b63559b82302296e9e79",
+          "sampled_union_min": [
+            -3.25561666488647,
+            -0.325000792741776,
+            -1.8382363319397
+          ],
+          "sampled_union_size": [
+            6.4118504524231,
+            5.54491519927979,
+            3.61274838447571
+          ],
+          "species": "spiritomb",
+          "static_images": [
+            {
+              "name": "baseline.png",
+              "sha256": "1b8cdc7d9e1dd62414ac85b4091e0754482cb320549d7ccd4d441a8b88956be8"
+            },
+            {
+              "name": "transparent_surfaces_removed.png",
+              "sha256": "6672925b8058f0d19d0a6ba5414bb173670b74f768cf98c48cbc90ba9fc9f913"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "different_pixels_against_baseline": {
+    "gastly": {
+      "no_prepass": [
+        82,
+        204,
+        109
+      ],
+      "no_displacement": [
+        17264,
+        16986,
+        18009
+      ],
+      "static_color_uv": [
+        0,
+        10767,
+        11164
+      ],
+      "opaque": [
+        14397,
+        11655,
+        12868
+      ]
+    },
+    "charmander": {
+      "no_prepass": [
+        56,
+        46,
+        35
+      ],
+      "no_displacement": [
+        402,
+        393,
+        367
+      ],
+      "static_color_uv": [
+        0,
+        199,
+        138
+      ],
+      "opaque": [
+        0,
+        0,
+        0
+      ]
+    },
+    "moltres": {
+      "no_prepass": [
+        826,
+        1046,
+        1018
+      ],
+      "no_displacement": [
+        4377,
+        4401,
+        4535
+      ],
+      "static_color_uv": [
+        4179,
+        4166,
+        4300
+      ],
+      "opaque": [
+        98,
+        100,
+        68
+      ]
+    }
+  }
+}
