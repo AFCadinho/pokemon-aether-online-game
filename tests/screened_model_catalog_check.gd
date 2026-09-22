@@ -22,17 +22,17 @@ func _run() -> void:
 		assert(not stage.catalog_entries[entry.species].has("_reviewed_model"))
 		assert(stage.catalog_entries[entry.species].get("_screened_model", false))
 		assert(not Registry.supports(Registry.key(entry.species, true)))
-	# Exercise two unrelated candidate scenes through the normal asynchronous
+	# Exercise unrelated candidate scenes through the normal asynchronous
 	# integrity/import path. No battle scene or arena-grounding claim is made.
 	stage.set_combatant(0, "charizard")
-	stage.set_combatant(1, "eevee")
+	stage.set_combatant(1, "azumarill")
 	var deadline := Time.get_ticks_msec() + 30000
 	while stage._models_pending():
 		stage._import_next_model()
 		assert(Time.get_ticks_msec() < deadline)
 		await process_frame
-	assert(stage.packed.has("charizard") and stage.packed.has("eevee"))
+	assert(stage.packed.has("charizard") and stage.packed.has("azumarill"))
 	assert(stage.failed_models.is_empty())
 	stage.free()
-	print("SCREENED_MODEL_CATALOG_OK entries=", raw.size(), " imported=charizard,eevee normal_only=true no_grounding_or_motion_calibration")
+	print("SCREENED_MODEL_CATALOG_OK entries=", raw.size(), " imported=charizard,azumarill normal_only=true no_grounding_or_motion_calibration")
 	quit()
