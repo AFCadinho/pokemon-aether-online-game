@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["classic", "forest", "cave", "sea", "stadium"]
+const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_22"]
 const Framing = preload("res://scripts/battle/arenas/arena_framing.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
 const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
@@ -95,11 +95,16 @@ static func camera_home(id: String) -> Vector3:
 static func camera_target(id: String) -> Vector3:
 	return Framing.camera_target(id)
 
+static func uses_forest_assets(id: String) -> bool:
+	return id in ["forest", "route_22"]
+
 static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
-	if id == "forest" and not mounted_forest.is_empty():
+	if uses_forest_assets(id) and not mounted_forest.is_empty():
 		for child in world.get_children():
 			if child is WorldEnvironment:
 				child.environment.background_color = Color("b4cad6")
+		if id == "route_22":
+			return preload("res://scripts/battle/arenas/route_22_arena.gd").new().build(camera)
 		return preload("res://scripts/battle/arenas/forest_arena.gd").new().build(camera)
 	if not BUILDERS.has(id):
 		return null

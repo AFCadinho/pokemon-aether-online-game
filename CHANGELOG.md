@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 22 heeft een eigen 3D-battle-arena, ook bij het eerste gevecht met Gary: een grasveld met naaldbomen, rotsplateaus en de trap uit de overworld.
+
 - Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave, met een animatiekeuze, pauze, opnieuw afspelen en slepen om te draaien. Ontbrekende modellen houden hun sprite-preview.
 
 - Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.

@@ -3,6 +3,7 @@ extends Node
 const Catalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const Response = preload("res://scripts/battle/battle_ui/material_response.gd")
 static var current: WeakRef
+var arena_id := "forest"
 var passes: Array[Dictionary] = []
 var ready_for_battle := false
 var failed := false
@@ -19,14 +20,19 @@ var retained_render_bytes := 0.0
 static func get_current() -> Node:
 	return current.get_ref() if current != null else null
 
-static func prepare(owner_node: Node, manifest: String, dimensions: Vector2i) -> Node:
+static func prepare(owner_node: Node, manifest: String, dimensions: Vector2i, requested_arena := "forest") -> Node:
 	var existing := get_current()
 	if existing != null and existing.get_parent() == owner_node:
-		return existing
+		if existing.arena_id == requested_arena:
+			return existing
+		if existing.borrower != null and existing.borrower.get_ref() != null:
+			return null
+		existing.queue_free()
 	if not Catalog.prepare_forest(manifest).is_empty():
 		return null
 	var pool := new()
 	pool.name = "ForestEnvironmentPool"
+	pool.arena_id = requested_arena
 	pool.render_size = dimensions.max(Vector2i(2,2))
 	pool.started = Time.get_ticks_msec()
 	pool.memory_before = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
@@ -88,11 +94,11 @@ func _build_pass(light_pass: bool) -> Dictionary:
 			child.shadow_blur = 2.0/3.0
 	var camera := Camera3D.new()
 	world.add_child(camera)
-	camera.position = Catalog.camera_home("forest")
+	camera.position = Catalog.camera_home(arena_id)
 	camera.fov = 48
-	camera.look_at(Catalog.camera_target("forest"))
+	camera.look_at(Catalog.camera_target(arena_id))
 	camera.current = true
-	var arena := Catalog.build("forest",world,camera)
+	var arena := Catalog.build(arena_id,world,camera)
 	world.add_child(arena)
 	return {"viewport":viewport,"world":world,"camera":camera,"arena":arena,"base":world.get_children()}
 
