@@ -149,6 +149,8 @@ func _ready() -> void:
 		# Keep both allied Trainers tucked behind the shifted left-side doubles.
 		_first_trainer.position = Vector2(146, 496)
 		_second_trainer.position = Vector2(206, 496)
+		_first_trainer.callout_rest_position = _first_trainer.position
+		_second_trainer.callout_rest_position = _second_trainer.position
 		_first_trainer.scale = Vector2.ONE * 0.75
 		_second_trainer.scale = Vector2.ONE * 0.75
 		for side: String in ["player", "enemy"]:
@@ -250,8 +252,10 @@ func _ready() -> void:
 				if event is InputEventMouseMotion and event.relative.length_squared() > 0.0:
 					_focus_native_target(controller))
 			# Keep adjacent targets separate: the two double sprites are only ~158 px apart.
-			target.custom_minimum_size = Vector2(126, 152)
-			target.size = Vector2(126, 152)
+			# Leave a small horizontal safety margin around each sprite so the
+			# target remains clickable at the edge of a doubles visual footprint.
+			target.custom_minimum_size = Vector2(132, 152)
+			target.size = Vector2(132, 152)
 			var invisible_style := StyleBoxEmpty.new()
 			for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 				target.add_theme_stylebox_override(state, invisible_style)

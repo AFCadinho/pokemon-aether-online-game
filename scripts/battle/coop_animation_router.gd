@@ -56,7 +56,9 @@ func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void
 
 
 func _play_move_actor_motion_if_needed(config: Dictionary, actor_ident: String) -> void:
-	if audible: super._play_move_actor_motion_if_needed(config, actor_ident)
+	# Secondary spread targets do not repeat the sound, but the selected actor
+	# still performs its physical motion for every catalog presentation.
+	super._play_move_actor_motion_if_needed(config, actor_ident)
 
 
 func _hide_move_actor_sprite_if_needed(config: Dictionary, actor_ident: String) -> Array:
