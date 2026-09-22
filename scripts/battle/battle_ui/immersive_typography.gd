@@ -25,6 +25,8 @@ func _scan(node: Node) -> void:
 
 func _target(control: Control) -> int:
 	var path := str(battle.get_path_to(control))
+	if control.name == "PartySwitchLabel":
+		return 16
 	if "StatStage" in path:
 		return 12
 	if "CalcPanel" in path:

@@ -47,6 +47,28 @@ static func apply(battle: Control) -> void:
 	dock.scale = Vector2.ONE * 0.8
 	dock.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	battle.get_node("%ContextPanel").add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	var party: Control = battle.get_node("%PlayerPartyGrid")
+	var switch_label := Label.new()
+	switch_label.name = "PartySwitchLabel"
+	switch_label.text = "Switch"
+	switch_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	switch_label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	switch_label.custom_minimum_size = Vector2(124, 34)
+	switch_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	switch_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	switch_label.add_theme_color_override("font_color", Color("f0faff"))
+	var switch_style := StyleBoxFlat.new()
+	switch_style.bg_color = Color("10334ff5")
+	switch_style.border_color = Color("62d7ff")
+	switch_style.set_border_width_all(2)
+	switch_style.set_corner_radius_all(7)
+	switch_style.content_margin_left = 10
+	switch_style.content_margin_right = 10
+	switch_label.add_theme_stylebox_override("normal", switch_style)
+	party.get_parent().add_child(switch_label)
+	party.get_parent().move_child(switch_label, party.get_index())
+	switch_label.visible = party.visible
+	party.visibility_changed.connect(func(): switch_label.visible = party.visible)
 	var rail: Control = battle.get_node("%BattleLogRail")
 	_move(rail, battle)
 	rail.z_index = 90
@@ -95,16 +117,16 @@ static func apply(battle: Control) -> void:
 	prompt_style.shadow_color = Color("02081155")
 	prompt_style.shadow_size = 5
 	prompt.add_theme_stylebox_override("panel",prompt_style)
-	prompt.offset_top = -155
-	prompt.offset_bottom = -99
+	prompt.offset_top = -187
+	prompt.offset_bottom = -131
 	var update := func():
 		var width := battle.size.x
 		var height := battle.size.y
 		dock.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		var center_left := width * 0.25
 		var center_right := width - 354
-		dock.position = Vector2(center_left, height - 105)
-		dock.size = Vector2((center_right - center_left) / 0.8, 106)
+		dock.position = Vector2(center_left, height - 129)
+		dock.size = Vector2((center_right - center_left) / 0.8, 136)
 		rail.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		rail.position = Vector2(18, 150)
 		rail.size = Vector2(310, maxf(180, height - 420))

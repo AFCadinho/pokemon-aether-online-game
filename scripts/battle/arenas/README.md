@@ -11,11 +11,13 @@ settings and environment resources.
 | Generic | Cave | `cave` | `generic/cave_arena.gd` |
 | Generic | Water / surf / fishing | `sea` | `generic/water_arena.gd` |
 | Generic | Stadium / PvP | `stadium` | `generic/stadium_arena.gd` |
+| Map-specific | Route 1, land | `route_1` | `maps/route_1/arena.gd` |
+| Map-specific | Route 1, water | `route_1_water` | `maps/route_1/arena.gd` with `water_battle` |
 | Map-specific | Route 22, land | `route_22` | `maps/route_22/arena.gd` |
 | Map-specific | Route 22, water | `route_22_water` | `maps/route_22/arena.gd` with `water_battle` |
 
 `classic` is the presenter's fallback surface, not a separately authored map.
-Only Route 22 currently has a map-specific arena. 2D environment resources and
+Route 1 and Route 22 currently have map-specific arenas. 2D environment resources and
 encounter selection live in `resources/battle/environments` and
 `battle_environment_resolver.gd`; manual overrides and PvP retain precedence.
 
@@ -62,6 +64,8 @@ visited map. The shared source art remains reusable. Actor state is never cached
 - `route_22_mesh_review.gd`: current runtime captures; default Route 22 land,
   `--water` for its pond, `--forest` for generic grassfield, `--interactive` to
   keep the preview open. Run in a slot with the installed art manifest.
+- `route_1_arena_check.gd` and `route_1_arena_preview.gd`: Route 1 routing,
+  landmarks, terrace/pond geometry, pooled rendering and fixed-camera review.
 
 Historical Terrain3D comparison results are in `docs/route-22-mesh-review.md`.
 The old A/B implementation is available in commit `0bc5fd6e8`; current reviews

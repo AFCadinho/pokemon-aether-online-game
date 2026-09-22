@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_22", "route_22_water"]
+const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
 const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
@@ -38,6 +38,8 @@ const DEFINITIONS := {
 	"cave": {"scope": "generic", "terrain": "cave", "builder": "generic/cave_arena.gd"},
 	"sea": {"scope": "generic", "terrain": "water", "builder": "generic/water_arena.gd"},
 	"stadium": {"scope": "generic", "terrain": "stadium", "builder": "generic/stadium_arena.gd"},
+	"route_1": {"scope": "map", "map_id": "kanto_route_1", "terrain": "grass", "builder": "maps/route_1/arena.gd"},
+	"route_1_water": {"scope": "map", "map_id": "kanto_route_1", "terrain": "water", "builder": "maps/route_1/arena.gd"},
 	"route_22": {"scope": "map", "map_id": "kanto_route_22", "terrain": "grass", "builder": "maps/route_22/arena.gd"},
 	"route_22_water": {"scope": "map", "map_id": "kanto_route_22", "terrain": "water", "builder": "maps/route_22/arena.gd"},
 }
@@ -67,13 +69,17 @@ static func camera_target(id: String) -> Vector3:
 	return Framing.camera_target(id)
 
 static func uses_forest_assets(id: String) -> bool:
-	return id in ["forest", "route_22", "route_22_water"]
+	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water"]
 
 static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 	if uses_forest_assets(id) and not Art.mounted_path.is_empty() and Art.error.is_empty():
 		for child in world.get_children():
 			if child is WorldEnvironment:
 				child.environment.background_color = Color("b4cad6")
+		if id in ["route_1", "route_1_water"]:
+			var route = preload("res://scripts/battle/arenas/maps/route_1/arena.gd").new()
+			route.water_battle = id == "route_1_water"
+			return route.build(camera)
 		if id in ["route_22", "route_22_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_22/arena.gd").new()
 			route.water_battle = id == "route_22_water"

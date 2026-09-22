@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 	var center_left := area.x * 0.25
 	var center_width := area.x - 354 - center_left
 	var prompt: Control = battle.get_node("%CurrentActionPanel")
-	var prompt_y := area.y - 125.0
+	var prompt_y := area.y - 140.0
 	var prompt_width := center_width
 	var replay_transport: Control = null
 	if battle.spectator_action_panel.visible:
