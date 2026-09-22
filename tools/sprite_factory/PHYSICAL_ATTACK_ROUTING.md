@@ -1,4 +1,4 @@
-# Physical attack routing dry run
+# Physical attack routing
 
 The routing prototype separates two independent inputs:
 
@@ -7,8 +7,8 @@ The routing prototype separates two independent inputs:
 - `physical_attack_human_review.json` records which intent each reviewed native
   model clip visually represents.
 
-`physical_attack_routing_audit.py` joins those inputs without changing a model
-profile or enabling runtime routing. The generated
+`physical_attack_routing_audit.py` first joined those inputs without changing a
+model profile or enabling runtime routing. The generated
 `physical_attack_routing_dry_run.json` is explicitly
 `runtime_approved: false`.
 
@@ -32,9 +32,26 @@ The selection policy is deliberately conservative:
 
 The low-risk interpretation is not that every move needs a label. The 119
 clear intents prove alternate selection works across the cohort, while all
-uncertain semantics preserve existing behavior. Before runtime activation,
-the candidate mappings in the dry-run report must be copied into a separately
-reviewed catalog change and tested in representative 3D battles.
+uncertain semantics preserve existing behavior.
+
+## Runtime activation
+
+The screened local catalog now contains an append-only rebuilt scene for 74 of
+the 75 reviewed models. For every rebuilt model, the old GLB document entries,
+accessors, buffer views, animation definitions and binary payload are a
+byte-identical prefix of the new GLB. Only `physical_attack_2` is appended.
+Godot then imports and reloads every resulting scene before its digest enters
+the checked-in screened registry.
+
+Forty-seven profiles select the alternate clip for at least one classified move
+family. Other reviewed profiles keep their primary clip where it is the better
+or duplicate semantic match. Unclassified moves always keep the primary clip.
+
+Meowth remains on the established primary attack. Its alternate source contains
+a dynamic visibility clock whose timing semantics are not certified, so the
+pipeline blocks that clip instead of guessing. This is a generic visibility
+gate, not a species exception. `physical_attack_runtime_activation.json`
+records the activated and held sets.
 
 ## Reproduction
 

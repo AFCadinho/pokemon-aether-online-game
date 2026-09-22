@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gereviewde 3D-Pokémon kiezen nu per fysieke movefamilie tussen hun twee beschikbare aanvalsanimaties; modellen zonder veilig gecertificeerde tweede clip blijven automatisch op de bestaande aanval terugvallen.
+
 - De launcher installeert het gedeelde 3D-forestpakket voortaan verplicht en controleert de map, versie, grootte en checksum voordat Route 1, Route 22 of de generieke grasarena wordt gestart.
 
 - Alle 3D-buitenarena’s volgen nu dag, schemering en nacht van de overworld, inclusief de generieke gras- en waterarena’s en Route 1 en Route 22. Zacht invullicht houdt Pokémon in het donker zichtbaar.

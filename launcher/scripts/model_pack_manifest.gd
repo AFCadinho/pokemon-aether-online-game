@@ -90,4 +90,17 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 		profile.grounding["sha256"] = digest
 	if profile.get("motion") is Dictionary:
 		profile.motion["sha256"] = digest
+	# Semantic attack routing is accepted only from the checked-in review
+	# profile. A selected local catalog can never supply or override it.
+	var attack_family_actions: Variant = profile.get("attack_family_actions", {})
+	if not attack_family_actions is Dictionary:
+		profile.attack_family_actions = {}
+	else:
+		var filtered := {}
+		var available_actions: Dictionary = profile.get("action_timing", {})
+		for family: Variant in attack_family_actions:
+			var action := str(attack_family_actions[family])
+			if family is String and family in ["bite", "claw_slash", "punch", "kick", "body_charge", "tail", "wing", "generic"] and action in ["physical_attack", "physical_attack_2"] and available_actions.has(action):
+				filtered[family] = action
+		profile.attack_family_actions = filtered
 	return profile
