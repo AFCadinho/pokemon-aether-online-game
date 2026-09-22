@@ -83,7 +83,7 @@ func interact_with_player(_player: Node2D) -> void:
 
 
 func _save_market_interaction_position() -> void:
-	var world := GameState.get_world()
+	var world: Node = GameState.get_world()
 	if world != null and world.has_method("save_current_player_state_now"):
 		await world.call("save_current_player_state_now")
 
