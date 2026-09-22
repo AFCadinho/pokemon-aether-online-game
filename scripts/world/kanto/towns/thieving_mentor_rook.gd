@@ -24,7 +24,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await _show_completed_help()
 		return
 
-	var was_unlocked := ThievingService.is_unlocked()
+	var was_unlocked: bool = bool(ThievingService.is_unlocked())
 	await show_dialogue()
 	var state_result: Dictionary = await ThievingService.load_state()
 	if (

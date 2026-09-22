@@ -335,7 +335,9 @@ func is_story_requirement_met() -> bool:
 
 
 func _story_requirement_met(quest_id: String, quest_step_id: String, quest_status: String) -> bool:
-	var story_service := get_node_or_null("/root/StoryService")
+	var tree := get_tree()
+	var root_node: Node = tree.root if tree != null else null
+	var story_service := root_node.get_node_or_null("StoryService") if root_node != null else null
 	return story_service != null and bool(story_service.call(
 		"is_requirement_met", quest_id, quest_step_id, quest_status
 	))

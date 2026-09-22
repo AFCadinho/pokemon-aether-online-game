@@ -10,10 +10,10 @@ const CERULEAN_VISUAL_LAYER_NAMES := {
 	3: "Objects",
 	4: "ObjectsTop",
 }
-const WATER_SOURCE_ID := 1
+const WATER_SOURCE_ID := 1025
 const ATLAS_COLUMNS := 8
-const WATER_TILE_INDEX_MIN := 320
-const WATER_TILE_INDEX_MAX := 338
+const WATER_TILE_INDEX_MIN := 58
+const WATER_TILE_INDEX_MAX := 59
 
 
 static func build(visuals: Node) -> TileMapLayer:
