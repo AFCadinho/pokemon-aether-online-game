@@ -57,6 +57,17 @@ func _run() -> void:
 	for species in ["abra", "onix", "gastly", "arcanine-hisui", "pikachu-rock-star", "missing"]:
 		assert(not Renderer.supported(species, false, false, false))
 		assert(not Renderer.supported(species, true, false, false))
+	# Screened candidates are local normal-form test entries only. They remain
+	# separate from the fourteen reviewed pack identities above.
+	assert(Registry.SCREENED.data.models.size() == 75)
+	for identity: String in Registry.SCREENED.data.models:
+		var model: Dictionary = Registry.SCREENED.data.models[identity]
+		assert(Renderer.supported(identity, false, false, false))
+		assert(not Renderer.supported(identity, true, false, false))
+		var profile := Registry.resolve(identity, model.sha256)
+		assert(not profile.is_empty() and profile.has("placement") and profile.has("action_timing"))
+		assert(not profile.has("grounding") and not profile.has("motion"))
+		assert(Registry.resolve(identity, "unapproved").is_empty())
 	assert(Registry.entry_key({"species": "pikachu@shiny", "variant": "normal"}).is_empty())
 	var stage := Renderer.new()
 	stage._load_catalog(path)

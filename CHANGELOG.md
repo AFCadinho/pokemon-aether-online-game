@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
+
 - Nieuwe gecontroleerde 3D-modelpakketten koppelen zichtbaarheid nu via bronmetadata aan de gekozen geslachtsvariant, zonder onderdelen van de andere variant verkeerd toe te wijzen. Bestaande pakketten blijven ongewijzigd.
 
 - Nieuwe gecontroleerde 3D-modelpakketten kunnen accessoires en alternatieve lichaamsdelen op de juiste animatieframes tonen en verbergen. Bestaande pakketten worden niet automatisch vervangen.

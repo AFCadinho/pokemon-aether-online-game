@@ -429,7 +429,7 @@ func _catalog_species_allowed(species: String) -> bool:
 func _motion_profile(species: String) -> Dictionary:
 	var entry: Dictionary = catalog_entries.get(species, {})
 	var reviewed := ReviewedModels.resolve(species, str(entry.get("runtime_sha256", "")))
-	if not reviewed.is_empty():
+	if not reviewed.is_empty() and reviewed.get("motion") is Dictionary:
 		return reviewed.motion
 	return MOTION_PROFILES.data.get(species, {})
 
@@ -580,7 +580,7 @@ func _load_catalog(path: String) -> void:
 		if not raw is Dictionary:
 			continue
 		var entry: Dictionary = raw.duplicate(true)
-		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_resource_cache_key", "_reviewed_model"]:
+		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_resource_cache_key", "_reviewed_model", "_screened_model"]:
 			entry.erase(internal_key) # Local catalogs cannot forge loader/cache state.
 		var identity := ReviewedModels.entry_key(entry)
 		if not _catalog_species_allowed(identity):
@@ -594,7 +594,10 @@ func _load_catalog(path: String) -> void:
 		if not reviewed.is_empty():
 			entry.placement = reviewed.placement
 			entry.action_timing = reviewed.action_timing
-			entry["_reviewed_model"] = true
+			if ReviewedModels.is_screened(identity, str(entry.get("runtime_sha256", ""))):
+				entry["_screened_model"] = true
+			else:
+				entry["_reviewed_model"] = true
 		elif identity not in SUPPORTED:
 			continue # Only the two legacy normal controls retain compatibility.
 		var model_path := str(entry.get("runtime_path", ""))
@@ -673,14 +676,14 @@ func _queue_needed_models() -> void:
 func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 	var species: String = entry.species
 	var reviewed := ReviewedModels.resolve(species, check.digest)
-	if entry.get("_reviewed_model", false) and reviewed.is_empty():
+	if (entry.get("_reviewed_model", false) or entry.get("_screened_model", false)) and reviewed.is_empty():
 		failed_models[species] = true
-		catalog_problem = "Reviewed 3D model hash mismatch: " + species
+		catalog_problem = ("Screened" if entry.get("_screened_model", false) else "Reviewed") + " 3D model hash mismatch: " + species
 		return false
 	if not reviewed.is_empty():
 		entry.placement = reviewed.placement
 		entry.action_timing = reviewed.action_timing
-	var calibration: Dictionary = reviewed.grounding if not reviewed.is_empty() else catalog_calibration.get(species, {})
+	var calibration: Dictionary = reviewed.get("grounding", catalog_calibration.get(species, {})) if not reviewed.is_empty() else catalog_calibration.get(species, {})
 	var placement := ModelPlacement.resolve(entry, calibration, check.digest)
 	model_validation_ms += check.elapsed_ms
 	if check.digest.is_empty() or check.bytes > 134217728 or placement.is_empty():
@@ -690,9 +693,9 @@ func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 	ground_offsets.erase(species)
 	if placement.calibrated:
 		ground_offsets[species] = placement
-	var motion: Dictionary = reviewed.motion if not reviewed.is_empty() else _motion_profile(species)
+	var motion: Dictionary = reviewed.get("motion", _motion_profile(species)) if not reviewed.is_empty() else _motion_profile(species)
 	motion_clips[species] = MotionPlacement.resolve(motion, placement, check.digest, entry.action_timing)
-	if not reviewed.is_empty():
+	if not reviewed.is_empty() and reviewed.get("bounds") is Dictionary:
 		visual_bounds[species] = reviewed.bounds
 	entry["_verified_runtime_hash"] = check.digest
 	entry["_source_bytes"] = check.bytes
