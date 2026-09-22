@@ -6,6 +6,8 @@ const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.g
 const BattlePlayerTrainerCatalog := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
 const DEFAULT_DISPLAY_SCALE := 2.0
 const PLAYER_BATTLE_ART_SCALE := 0.5
+const CALLOUT_TRANSITION_SECONDS := 0.18
+const CALLOUT_ENTRY_OFFSET := Vector2(14.0, 8.0)
 ## Catalog sprites are 80px-square poses, while the legacy overworld frames
 ## are 64px-square. Preserve their shared foot baseline and leave clearance
 ## between the opponent pose and the right-side party rail.
@@ -21,6 +23,9 @@ const CATALOG_SPRITE_OFFSET := Vector2(-24.0, -16.0)
 var player_appearance_state: Dictionary = {}
 var player_layer_metadata: Array[Dictionary] = []
 var facing_direction := Vector2.RIGHT
+var callout_presentation_tween: Tween
+var callout_rest_position := Vector2.ZERO
+var callout_rest_scale := Vector2.ONE
 
 
 func _ready() -> void:
@@ -28,12 +33,15 @@ func _ready() -> void:
 	# are a separate overlay so they remain legible above foreground move art.
 	z_as_relative = true
 	z_index = BattleRenderLayers.TRAINER_ART
+	callout_rest_position = position
+	callout_rest_scale = scale
 	if command_callout != null:
 		command_callout.z_as_relative = false
 		command_callout.z_index = BattleRenderLayers.TRAINER_CALLOUTS
 
 
 func clear() -> void:
+	_reset_callout_presentation()
 	if command_callout != null:
 		command_callout.call("clear_command")
 	visible = false
@@ -134,12 +142,55 @@ func show_command(message: String, display_seconds := TrainerCommandCallout.DISP
 	command_callout.call("show_command", message, facing_direction.x < 0.0, display_seconds)
 
 
+func reveal_for_command() -> void:
+	_reset_callout_presentation()
+	visible = true
+	position = callout_rest_position + _callout_entry_offset()
+	scale = callout_rest_scale * 0.96
+	modulate = Color(1.0, 1.0, 1.0, 0.0)
+	callout_presentation_tween = create_tween()
+	callout_presentation_tween.set_parallel(true)
+	callout_presentation_tween.tween_property(self, "position", callout_rest_position, CALLOUT_TRANSITION_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	callout_presentation_tween.tween_property(self, "scale", callout_rest_scale, CALLOUT_TRANSITION_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	callout_presentation_tween.tween_property(self, "modulate:a", 1.0, CALLOUT_TRANSITION_SECONDS)
+
+
+func hide_after_command() -> void:
+	if not visible:
+		return
+	_reset_callout_presentation()
+	callout_presentation_tween = create_tween()
+	callout_presentation_tween.set_parallel(true)
+	callout_presentation_tween.tween_property(self, "position", callout_rest_position + _callout_entry_offset(), CALLOUT_TRANSITION_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	callout_presentation_tween.tween_property(self, "scale", callout_rest_scale * 0.96, CALLOUT_TRANSITION_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	callout_presentation_tween.tween_property(self, "modulate:a", 0.0, CALLOUT_TRANSITION_SECONDS)
+	callout_presentation_tween.chain().tween_callback(_finish_callout_presentation)
+
+
 func has_trainer_art() -> bool:
 	return (
 		(player_battle_art != null and player_battle_art.visible)
 		or (npc_sprite != null and npc_sprite.visible)
 		or (catalog_sprite != null and catalog_sprite.visible)
 	)
+
+
+func _callout_entry_offset() -> Vector2:
+	return Vector2(-facing_direction.x * CALLOUT_ENTRY_OFFSET.x, CALLOUT_ENTRY_OFFSET.y)
+
+
+func _reset_callout_presentation() -> void:
+	if callout_presentation_tween != null and callout_presentation_tween.is_valid():
+		callout_presentation_tween.kill()
+	callout_presentation_tween = null
+	position = callout_rest_position
+	scale = callout_rest_scale
+	modulate = Color.WHITE
+
+
+func _finish_callout_presentation() -> void:
+	visible = false
+	_reset_callout_presentation()
 
 
 func _resolve_npc_animation(sprite_frames: SpriteFrames, facing_direction: Vector2) -> StringName:
