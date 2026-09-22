@@ -1,6 +1,6 @@
 extends "res://scripts/battle/arenas/arena_geometry.gd"
 ## Shared by client and visual review. The sandbank is submerged.
-const WATER_DEPTH := 0.025
+const WATER_DEPTH := 0.22
 
 func _sandbar() -> ArrayMesh:
 	var surface := SurfaceTool.new()

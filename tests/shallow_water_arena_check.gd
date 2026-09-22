@@ -37,7 +37,7 @@ func _run() -> void:
 		world.add_child(arena)
 		var water: MeshInstance3D = arena.get_node("ShallowWater")
 		assert(arena.get_meta("surface_height") == 0.0)
-		assert(water.position.y > 0 and water.position.y <= 0.03)
+		assert(water.position.y >= 0.20 and water.position.y <= 0.25, "Water must cover feet without swallowing small combatants")
 		assert(water.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
 		var floor_mesh: MeshInstance3D = arena.get_node("SubmergedSandbank")
 		var vertices: PackedVector3Array = floor_mesh.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]

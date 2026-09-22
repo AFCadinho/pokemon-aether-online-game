@@ -23,7 +23,7 @@ the same procedural material helper as the other existing arenas. No new image,
 model, or copy of the purchased pack is added to the client repository.
 The eastern pond uses the sea arena’s palette and animated crossing ripples,
 adapted to its shoreline. In land battles its recessed basin keeps the fighting
-area dry. In water battles the pond bottom rises to 0.025 units below the surface;
+area dry. In water battles the pond bottom rises to 0.22 units below the surface;
 the camera and fighter origins move to the same eastern pond at `(11, 0, -4.5)`.
 Trees and flowers stay outside the water, with both camera corridors kept open.
 
@@ -44,7 +44,7 @@ presenter never borrows a pair for a different arena. Standalone/replay renderin
 builds the same Route 22 geometry in both material passes.
 
 The generic sea arena also puts its unchanged, calibrated sandbank below a
-0.025-unit water layer, using translucent shallows and opaque deep water instead
+0.22-unit water layer, using translucent shallows and opaque deep water instead
 of a dry beach ring. No Pokémon-specific placement offsets are introduced.
 
 The existing desktop forest-pack dependency and Pokémon model admission,
