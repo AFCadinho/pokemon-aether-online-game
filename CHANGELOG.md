@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De 3D-grasveld-arena en beide Route 22-arena’s gebruiken nu lichter mesh-terrein zonder Terrain3D, met behoud van hun herkenbare aankleding en ondiepe watergevechten.
+
 - Pokémon staan bij 3D-watergevechten met hun voeten en onderpoten in het ondiepe water, ook op Route 22.
 
 - Bij een netwerkfout tonen guilds, speleracties en de hotbar geen misleidende JSON-fouten meer. Ongeldige serverreacties wissen de bestaande hotbar- en actiegegevens niet.

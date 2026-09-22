@@ -4,10 +4,9 @@ const CLEAR_RADIUS := 5.0
 const BLEND_RADIUS := 9.0
 const PATCH_RADIUS := 6.0
 var ground_height := 0.0
-var battle_terrain: Node3D
 
 func _surface_height(pos: Vector3) -> float:
-	return battle_terrain.data.get_height(pos)
+	return preload("res://scripts/battle/arenas/generic/grassfield_layout.gd").height_at(pos.x, pos.z)
 
 func _posed_clearance(meshes: Array) -> float:
 	var minimum := INF
@@ -97,9 +96,7 @@ func _make_forest() -> Node3D:
 		if child is DirectionalLight3D:
 			child.shadow_blur = 2.0 / 3.0
 	current_scene = stage
-	var scene: Node3D = load("res://scripts/battle/arenas/forest_arena.gd").new().build(stage.camera,"res://scenes/world/test_world.res")
-	if battle_terrain == null:
-		battle_terrain = scene.get_node("Terrain3D")
+	var scene: Node3D = load("res://scripts/battle/arenas/generic/grassfield_arena.gd").new().build(stage.camera)
 	scene.ready.connect(func():
 		ground_height = float(scene.get_meta("surface_height",0.0))
 		target.y = ground_height + 1.3

@@ -1,6 +1,6 @@
 extends SceneTree
 ## Focused render/grounding check. No server, model catalog or settings writes.
-const Arena = preload("res://scripts/battle/arenas/sea_arena.gd")
+const Arena = preload("res://scripts/battle/arenas/generic/water_arena.gd")
 const Catalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const Resolver = preload("res://scripts/battle/battle_environment_resolver.gd")
 const Lighting = preload("res://scripts/battle/battle_ui/material_response.gd")

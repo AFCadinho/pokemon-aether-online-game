@@ -11,7 +11,7 @@ const MotionPlacement = preload("res://scripts/battle/battle_ui/model_motion_pla
 const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_placement.json")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
-const ForestPool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
+const ForestPool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 var forest_lease := {}
 var forest_pool: Node
 var user_camera_yaw := 0.0

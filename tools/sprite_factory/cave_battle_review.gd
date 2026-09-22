@@ -14,4 +14,4 @@ func _credit_text() -> String:
 	return "PokeAether · original cave study · Kanto-inspired\nOpen stone floor · neutral Pokémon materials · isolated preview"
 
 func _make_forest() -> Node3D:
-	return load("res://scripts/battle/arenas/cave_arena.gd").new(stage.world).build()
+	return load("res://scripts/battle/arenas/generic/cave_arena.gd").new(stage.world).build()

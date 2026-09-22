@@ -1,53 +1,25 @@
-extends "res://scripts/battle/arenas/forest_arena.gd"
-## Route 22 / Gary's meadow, authored from the actual (1488, 464) map location.
-## Uses the SAME mounted forest terrain, foliage, bark, rock and flower assets.
-## Only layout and in-memory terrain controls differ; no duplicated art pack.
-const Framing = preload("res://scripts/battle/arenas/arena_framing.gd")
+extends "res://scripts/battle/arenas/shared/mesh_grassland.gd"
+## Map-specific Route 22 / Gary arena. Land and water share one authored layout.
+const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
+const Geometry = preload("res://scripts/battle/arenas/shared/geometry.gd")
+const BASE_HEIGHT := 0.037750244140625
 const POND_CENTER := Vector2(Framing.ROUTE_22_POND_ORIGIN.x, Framing.ROUTE_22_POND_ORIGIN.z)
-const FIGHT_WATER_DEPTH := 0.22
-var water_battle := false
 const POND_RADII := Vector2(4.8, 6.5)
 const WATER_LEVEL := -0.22
-const Geometry = preload("res://scripts/battle/arenas/arena_geometry.gd")
-var route_scene: Node3D
-var rng := RandomNumberGenerator.new()
-var terrain_node: Node3D
+const FIGHT_WATER_DEPTH := 0.22
+var water_battle := false
 var rock_materials := {}
 
-func build(camera: Camera3D, scene_path := "res://pokeaether_forest.tscn") -> Node3D:
-	route_scene = super.build(camera, scene_path)
-	route_scene.name = "Route22ShallowWater" if water_battle else "Route22RivalMeadow"
-	route_scene.set_meta("source_map", "kanto_route_22")
-	return route_scene
+func _cache_key() -> String:
+	return "route_22_water" if water_battle else "route_22"
+func _grass_key() -> String:
+	return "route_22"
 
-func _flatten(terrain) -> void:
+func build(_camera: Camera3D, _scene_path := "") -> Node3D:
+	ground_height = BASE_HEIGHT
 	rng.seed = 220464
-	terrain_node = terrain
-	ground_height = terrain.data.get_height(Vector3.ZERO)
-	# Hide authored static scenery only, never Terrain3D's generated containers.
-	# Its grass/flowers remain alive and are conformed to our edited heights.
-	for child in terrain.get_children():
-		if child is Node3D and not child.scene_file_path.is_empty():
-			child.visible = false
-	for z in range(-55, 41):
-		for x in range(-60, 61):
-			var pos := Vector3(x, 0, z)
-			var original: float = terrain.data.get_height(pos)
-			if not is_finite(original):
-				continue
-			var north := 4.2 * smoothstep(18.0, 20.0, -float(z)) + 3.5 * smoothstep(28.0, 31.0, -float(z))
-			var edge := smoothstep(34.0, 54.0, maxf(absf(x), absf(z)))
-			var depth := -WATER_LEVEL + FIGHT_WATER_DEPTH if water_battle else 1.2
-			var pond_depth := depth * (1.0 - smoothstep(1.0 if water_battle else 0.8, 1.15, _pond_distance(x, z)))
-			terrain.data.set_height(pos, lerpf(ground_height + north - pond_depth, original, edge))
-	terrain.data.update_maps()
-	_paint_route(terrain)
-	_clear_grass(terrain, Vector3.ZERO, 6.0)
-	for z in range(-13, 5):
-		for x in range(5, 18):
-			if _pond_distance(x, z) < 1.13:
-				_clear_grass(terrain, Vector3(x, 0, z), 0.8)
-	terrain.instancer.update_transforms(AABB(Vector3(-60, -100, -55), Vector3(120, 200, 96)))
+	_start_scene("Route22ShallowWater" if water_battle else "Route22RivalMeadow")
+	route_scene.set_meta("source_map", "kanto_route_22")
 	var scenery := Node3D.new()
 	scenery.name = "Route22Scenery"
 	route_scene.add_child(scenery)
@@ -56,70 +28,35 @@ func _flatten(terrain) -> void:
 	_landmarks(scenery)
 	_flowers(scenery)
 	_water(scenery)
-	for point in [Vector3.ZERO, Vector3(-2.8, 0, 1.5), Vector3(2.8, 0, -1.5)]:
-		assert(absf(terrain.data.get_height(point) - ground_height) < 0.001)
+	_grass(scenery)
 	if water_battle:
-		# Move the battle viewpoint/actors to the pond, keeping the actual terrain
-		# and landmarks in place. Contact stays just beneath the water surface.
 		ground_height += WATER_LEVEL - FIGHT_WATER_DEPTH
-		for index in 2:
-			var point := Framing.spawn(index) + Framing.ROUTE_22_POND_ORIGIN
-			assert(absf(terrain.data.get_height(point) - ground_height) < 0.001)
-	print("ROUTE_22_TERRAIN_OK water_battle=", water_battle)
+	route_scene.set_meta("surface_height", ground_height)
+	return route_scene
 
-func _route_z(x: float) -> float:
-	return -11.0 + 1.2 * sin(x * 0.12)
+func _height(x: float, z: float) -> float:
+	var north := 4.2 * smoothstep(18.0, 20.0, -z) + 3.5 * smoothstep(28.0, 31.0, -z)
+	var depth := -WATER_LEVEL + FIGHT_WATER_DEPTH if water_battle else 1.2
+	var basin := depth * (1.0 - smoothstep(1.0 if water_battle else 0.8, 1.15, _pond_distance(x, z)))
+	return BASE_HEIGHT + north - basin
 
-func _paint_route(terrain) -> void:
-	var dirt = terrain.assets.get_texture(0).duplicate()
-	dirt.name = "Route 22 shared ground detail"
-	dirt.albedo_color = Color("b59b70")
-	terrain.assets.set_texture(1, dirt)
-	for z in range(-32, 6):
-		for x in range(-40, 41):
-			var pos := Vector3(x, 0, z)
-			var horizontal := absf(z - _route_z(x))
-			var staircase := absf(x - 5.0) if z < -11 else 100.0
-			var distance := minf(horizontal, staircase)
-			var blend := maxf(1.0 - smoothstep(1.0, 2.0, distance),
-				1.0 - smoothstep(1.0, 1.16, _pond_distance(x, z)))
-			if blend <= 0.0 or not is_finite(terrain.data.get_height(pos)):
-				continue
-			terrain.data.set_control_base_id(pos, 0)
-			terrain.data.set_control_overlay_id(pos, 1)
-			terrain.data.set_control_blend(pos, blend)
-			terrain.data.set_control_auto(pos, false)
-	terrain.data.update_maps()
-	for step in range(-80, 81):
-		var x: float = step * 0.5
-		_clear_grass(terrain, Vector3(x, 0, _route_z(x)), 1.8)
-	for step in range(-64, -21):
-		_clear_grass(terrain, Vector3(5, 0, step * 0.5), 1.9)
+func _path_distance(x: float, z: float) -> float:
+	return minf(absf(z - _route_z(x)), absf(x - 5.0) if z < -11 else 100.0)
 
-func _asset(parent: Node3D, path: String, point: Vector3, size: Vector3, angle := 0.0) -> Node3D:
-	var node: Node3D = load("res://entities/nature/" + path + ".tscn").instantiate()
-	_strip_runtime_helpers(node)
-	node.position = point
-	node.scale = size
-	node.rotation.y = angle
-	parent.add_child(node)
-	return node
+func _dirt(x: float, z: float) -> float:
+	return maxf(1.0 - smoothstep(1.0, 2.0, _path_distance(x, z)),
+		1.0 - smoothstep(1.0, 1.16, _pond_distance(x, z)))
 
-func _strip_runtime_helpers(node: Node) -> void:
-	# Placement/collision helpers have no role in a battle presentation scene.
-	node.set_script(null)
-	for child in node.get_children():
-		if child is CollisionObject3D:
-			node.remove_child(child)
-			child.free()
-		else:
-			_strip_runtime_helpers(child)
+func _has_grass(x: float, z: float) -> bool:
+	return (Vector2(x, z).length() > 6.0 and _pond_distance(x, z) > 1.20
+		and _path_distance(x, z) > 1.8
+		and not (absf(x + 19.0) < 2.4 and z >= -16 and z <= 5))
 
 func _pond_distance(x: float, z: float) -> float:
 	return ((Vector2(x, z) - POND_CENTER) / POND_RADII).length()
 
-func _height(x: float, z: float) -> float:
-	return terrain_node.data.get_height(Vector3(x, 0, z))
+func _route_z(x: float) -> float:
+	return -11.0 + 1.2 * sin(x * 0.12)
 
 func _terraces(parent: Node3D) -> void:
 	var cliffs := Node3D.new()
@@ -215,8 +152,6 @@ func _landmarks(parent: Node3D) -> void:
 	geo._put(props, box, paving, Vector3(-19.0, ground_height + 0.035, -6), Vector3(4.5, 0.07, 22))
 	for side in [-1, 1]:
 		geo._put(props, box, steps, Vector3(-19.0 + side * 2.35, ground_height + 0.08, -6), Vector3(0.20, 0.16, 22))
-	for step in range(-32, 11):
-		_clear_grass(terrain_node, Vector3(-19, 0, step * 0.5), 2.3)
 
 func _flowers(parent: Node3D) -> void:
 	var flowers := Node3D.new()
@@ -240,7 +175,7 @@ func _water(parent: Node3D) -> void:
 	var plane := PlaneMesh.new()
 	plane.size = POND_RADII * 2.5
 	var material := ShaderMaterial.new()
-	material.shader = preload("res://scripts/battle/arenas/route_22_water.gdshader")
+	material.shader = preload("res://scripts/battle/arenas/maps/route_22/water.gdshader")
 	material.set_shader_parameter("pond_center", POND_CENTER)
 	material.set_shader_parameter("pond_radii", POND_RADII)
 	material.set_shader_parameter("battle_shallows", water_battle)

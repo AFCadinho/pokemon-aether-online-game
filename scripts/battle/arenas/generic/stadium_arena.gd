@@ -1,4 +1,4 @@
-extends "res://scripts/battle/arenas/arena_geometry.gd"
+extends "res://scripts/battle/arenas/shared/geometry.gd"
 ## Shared by client and visual review.
 
 func _finish(color: Color, glow := 0.0) -> StandardMaterial3D:
@@ -20,7 +20,7 @@ func _box(parent: Node3D, material: Material, pos: Vector3, size: Vector3) -> Me
 func _wordmark(parent: Node3D, pos: Vector3, width: float) -> void:
 	var texture: Texture2D = load("res://assets/ui/pokeaether_text_logo.png")
 	var material := ShaderMaterial.new()
-	material.shader = load("res://tools/sprite_factory/stadium_brand.gdshader")
+	material.shader = load("res://scripts/battle/arenas/generic/stadium_brand.gdshader")
 	material.set_shader_parameter("brand_texture", texture)
 	material.set_shader_parameter("phase", pos.x*0.05)
 	var quad := QuadMesh.new()
@@ -35,12 +35,12 @@ func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 	parent.add_child(panel)
 	_box(panel, _finish(Color("151122")), Vector3.ZERO, Vector3(17, 9, 0.6))
 	var screen := ShaderMaterial.new()
-	screen.shader = load("res://tools/sprite_factory/stadium_screen.gdshader")
+	screen.shader = load("res://scripts/battle/arenas/generic/stadium_screen.gdshader")
 	var quad := QuadMesh.new()
 	quad.size = Vector2(16.4, 8.4)
 	_put(panel, quad, screen, Vector3(0, 0, 0.32), Vector3.ONE)
 	var logo := ShaderMaterial.new()
-	logo.shader = load("res://tools/sprite_factory/stadium_brand.gdshader")
+	logo.shader = load("res://scripts/battle/arenas/generic/stadium_brand.gdshader")
 	logo.set_shader_parameter("brand_texture", load("res://assets/ui/logo.png"))
 	logo.set_shader_parameter("float_amount", 0.16)
 	var logo_quad := QuadMesh.new()
@@ -110,7 +110,7 @@ func _crowd(parent: Node3D) -> void:
 	assert(batch.mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV2].size() > 0)
 	crowd.multimesh = batch
 	var mat := ShaderMaterial.new()
-	mat.shader = load("res://tools/sprite_factory/stadium_crowd.gdshader")
+	mat.shader = load("res://scripts/battle/arenas/generic/stadium_crowd.gdshader")
 	crowd.material_override = mat
 	crowd.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	parent.add_child(crowd)
@@ -153,7 +153,7 @@ func build() -> Node3D:
 	var purple := _finish(Color("8d3ef0"), 2.3)
 	var cyan := _finish(Color("40bde5"), 2.0)
 	var floor_material := ShaderMaterial.new()
-	floor_material.shader = load("res://tools/sprite_factory/stadium_floor.gdshader")
+	floor_material.shader = load("res://scripts/battle/arenas/generic/stadium_floor.gdshader")
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(65,65)
 	_put(arena, plane, floor_material, Vector3.ZERO, Vector3.ONE)
@@ -184,7 +184,7 @@ func build() -> Node3D:
 			_box(stand,purple,Vector3(x,16.7,-11),Vector3(0.15,0.1,1.5))
 	_box(arena,dark,Vector3(0,20,0),Vector3(65,0.5,65))
 	var beam_material := ShaderMaterial.new()
-	beam_material.shader = load("res://tools/sprite_factory/stadium_beam.gdshader")
+	beam_material.shader = load("res://scripts/battle/arenas/generic/stadium_beam.gdshader")
 	for x in [-12,12]:
 		for z in [-15,0,15]:
 			var moving_beam: ShaderMaterial = beam_material.duplicate()

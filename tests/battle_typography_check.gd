@@ -24,7 +24,7 @@ func _run() -> void:
 	var prompt_style = battle.current_action_panel.get_theme_stylebox("panel")
 	assert(prompt_style.border_width_left == 3 and prompt_style.border_width_top == 1)
 	var cave_world := Node3D.new()
-	var cave = load("res://scripts/battle/arenas/cave_arena.gd").new(cave_world).build()
+	var cave = load("res://scripts/battle/arenas/generic/cave_arena.gd").new(cave_world).build()
 	var found_ceiling := false
 	for child in cave.get_children():
 		if child is MeshInstance3D and child.mesh is PlaneMesh and child.position.y == 10:

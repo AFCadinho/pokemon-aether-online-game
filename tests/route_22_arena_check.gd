@@ -2,7 +2,7 @@ extends SceneTree
 const Resolver = preload("res://scripts/battle/battle_environment_resolver.gd")
 const Catalog = preload("res://scripts/battle/battle_environment_catalog.gd")
 const Arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
-const Pool = preload("res://scripts/battle/arenas/forest_environment_pool.gd")
+const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 const Renderer = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
 func _init() -> void:
 	_run.call_deferred()
@@ -34,10 +34,12 @@ func _run() -> void:
 	root.add_child(owner_node)
 	var baseline: Node = Pool.prepare(owner_node, manifest, Vector2i(960, 540), "forest")
 	await _ready_pool(baseline)
-	var baseline_height: float = baseline.passes[0].arena.get_node("Terrain3D").data.get_height(Vector3(0, 0, -24))
+	var baseline_mesh: WeakRef = weakref(baseline.passes[0].arena.get_node("MeshTerrain").mesh)
+	var baseline_height: float = _height(baseline.passes[0].arena, Vector3(0, 0, -24))
 	var pool: Node = Pool.prepare(owner_node, manifest, Vector2i(960, 540), "route_22")
 	assert(pool != null)
 	await _ready_pool(pool)
+	assert(baseline_mesh.get_ref() == null, "Retired arenas must release their ground mesh")
 	assert(Pool.prepare(owner_node, manifest, Vector2i(960, 540), "route_22") == pool)
 	var first_height: float = pool.passes[0].arena.get_meta("surface_height")
 	for pass_data in pool.passes:
@@ -45,19 +47,18 @@ func _run() -> void:
 		assert(arena.name == "Route22RivalMeadow")
 		assert(arena.get_meta("source_map") == "kanto_route_22")
 		assert(arena.has_node("Route22Scenery/Route22Landmarks"))
-		var terrain = arena.get_node("Terrain3D")
+		var terrain = arena
 		var water: MeshInstance3D = arena.get_node("Route22Scenery/EasternPond/WaterSurface")
 		assert(water.position.y < first_height)
-		assert(terrain.data.get_height(water.position) < water.position.y - 0.5, "Water needs a recessed basin")
-		assert(terrain.data.get_height(Vector3(0, 0, 0)) > water.position.y, "Battle clearing stays dry")
+		assert(_height(terrain, water.position) < water.position.y - 0.5, "Water needs a recessed basin")
+		assert(_height(terrain, Vector3(0, 0, 0)) > water.position.y, "Battle clearing stays dry")
 		assert(is_equal_approx(first_height, float(arena.get_meta("surface_height"))))
 		for point in [Arenas.spawn(0), Arenas.spawn(1), Vector3.ZERO]:
-			assert(absf(terrain.data.get_height(point) - first_height) < 0.001)
-		assert(terrain.data.get_height(Vector3(0, 0, -24)) > first_height + 4.0)
-		assert(terrain.data.get_control_overlay_id(Vector3(5, 0, -12)) == 1)
-		for child in terrain.get_children():
-			if child is Node3D and child.scene_file_path.is_empty():
-				assert(child.visible)
+			assert(absf(_height(terrain, point) - first_height) < 0.001)
+		assert(_height(terrain, Vector3(0, 0, -24)) > first_height + 4.0)
+		assert(arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_COLOR][43 * 121 + 65].r > 0.95)
+		assert(arena.has_node("Route22Scenery/SharedForestGrass"))
+		assert(not ClassDB.class_exists("Terrain3D"))
 	# Exercise real presenter leases, both material passes, and repeat teardown.
 	var settings = root.get_node("SettingsManager")
 	settings.battle_3d_arena = "auto"
@@ -87,7 +88,7 @@ func _run() -> void:
 	await _ready_pool(pool)
 	assert(old_main.get_ref() == null and old_response.get_ref() == null)
 	assert(pool.arena_id == "forest")
-	assert(is_equal_approx(pool.passes[0].arena.get_node("Terrain3D").data.get_height(Vector3(0, 0, -24)), baseline_height), "Route edits must not change the original forest terrain")
+	assert(is_equal_approx(_height(pool.passes[0].arena, Vector3(0, 0, -24)), baseline_height), "Route edits must not change the original forest terrain")
 	assert(not pool.passes[0].arena.has_node("Route22Scenery"))
 	# A ready forest pool must never lend its scenery to a Route 22 battle.
 	var standalone := Renderer.new()
@@ -100,7 +101,7 @@ func _run() -> void:
 	assert(standalone.viewport != pool.passes[0].viewport)
 	standalone.material_response._build()
 	assert(standalone.material_response.world.has_node("Route22RivalMeadow"))
-	assert(is_equal_approx(pool.passes[0].arena.get_node("Terrain3D").data.get_height(Vector3(0, 0, -24)), baseline_height), "Simultaneous variants need independent terrain data")
+	assert(is_equal_approx(_height(pool.passes[0].arena, Vector3(0, 0, -24)), baseline_height), "Simultaneous variants need independent terrain data")
 	var direct_main: WeakRef = weakref(standalone.viewport)
 	var direct_response: WeakRef = weakref(standalone.material_response.viewport)
 	standalone.free()
@@ -143,10 +144,10 @@ func _run() -> void:
 	swimmer._build_world()
 	assert(swimmer.arena_id == "route_22_water")
 	assert(swimmer.viewport == pool.passes[0].viewport)
-	var terrain = swimmer.arena_root.get_node("Terrain3D")
+	var terrain = swimmer.arena_root
 	for index in 2:
 		var point: Vector3 = swimmer._position(index)
-		assert(absf(terrain.data.get_height(point) - point.y) < 0.001)
+		assert(absf(_height(terrain, point) - point.y) < 0.001)
 		assert(Vector2(point.x - 11.0, point.z + 4.5).length() < 4.0)
 		assert(not swimmer.camera.is_position_behind(point + Vector3.UP))
 	assert((swimmer._position(1) - swimmer._position(0)).is_equal_approx((Arenas.spawn(1) - Arenas.spawn(0))))
@@ -165,6 +166,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	assert(final_view.get_ref() == null and Pool.get_current() == null)
+	assert(not ClassDB.class_exists("Terrain3D"))
 	print("ROUTE_22_POOL_SWITCH_OK")
 	quit()
 func _ready_pool(pool: Node) -> void:
@@ -172,3 +174,15 @@ func _ready_pool(pool: Node) -> void:
 	while not pool.ready_for_battle:
 		assert(not pool.failed and Time.get_ticks_msec() < deadline)
 		await process_frame
+
+func _height(arena: Node3D, point: Vector3) -> float:
+	var grid: Rect2i = arena.get_meta("mesh_grid")
+	var gx := clampf(point.x - grid.position.x, 0, grid.size.x - 1.00001)
+	var gz := clampf(point.z - grid.position.y, 0, grid.size.y - 1.00001)
+	var dx := gx - floorf(gx)
+	var dz := gz - floorf(gz)
+	var at := floori(gz) * grid.size.x + floori(gx)
+	var v: PackedVector3Array = arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	if dx + dz <= 1:
+		return v[at].y + dx * (v[at + 1].y - v[at].y) + dz * (v[at + grid.size.x].y - v[at].y)
+	return v[at + grid.size.x + 1].y + (1 - dx) * (v[at + grid.size.x].y - v[at + grid.size.x + 1].y) + (1 - dz) * (v[at + 1].y - v[at + grid.size.x + 1].y)

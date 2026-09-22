@@ -1,3 +1,8 @@
+> Historical comparison: this prototype has now been adopted for automatic Route 22
+> battles, and generic grassfield also uses mesh terrain. Current structure and
+> review commands are described in [the arena index](../scripts/battle/arenas/README.md).
+> Reproduce the original A/B measurements at commit `0bc5fd6e8`.
+
 # Route 22 without Terrain3D: comparison prototype
 
 This is the requested decision prototype, not a replacement of automatic battle
