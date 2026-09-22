@@ -4,11 +4,32 @@
   "runtime_approved": false,
   "source_catalog_scope": "review_only_not_runtime_mapping",
   "counts": {
-    "total": 6
+    "total": 9
   },
   "entries": {
+    "cloyster": {
+      "status": "confirmed",
+      "confirmation_source": "explicit_user_followup",
+      "note": "",
+      "prepared_sha256": "d5c0fb45cd0ba16f4ff6bcce8c8a97e9c5ed1bf81741aff4aabb8750b9c952d0",
+      "clips": {
+        "physical_attack": {
+          "family": "unclear",
+          "source": "human_review",
+          "source_action": "pm0091_00_00_10400_attack01",
+          "review_loop_sha256": "f1b2e0fe3f662f7ef586ef0a1705e2e3c7b5216b4e01308d3f2f946d57ade38d"
+        },
+        "physical_attack_2": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0091_00_00_10410_attack02",
+          "review_loop_sha256": "5a2ec16dcc0ad0d7dbf500a03624b5bfec59c0f8b89369bec8a19ebc6f38d4c2"
+        }
+      }
+    },
     "delibird": {
       "status": "confirmed",
+      "confirmation_source": "browser_checkbox",
       "note": "",
       "prepared_sha256": "8d69761a58d30567447d3951cfc3bb7f112e15cc9b317c84e42ddad9c0e0adf5",
       "clips": {
@@ -28,6 +49,7 @@
     },
     "drowzee": {
       "status": "confirmed",
+      "confirmation_source": "browser_checkbox",
       "note": "",
       "prepared_sha256": "f37ef709478227bb1fbfe0969940edba314b94c926c4790d40b27f6c821ece50",
       "clips": {
@@ -47,6 +69,7 @@
     },
     "gardevoir": {
       "status": "confirmed",
+      "confirmation_source": "browser_checkbox",
       "note": "",
       "prepared_sha256": "fa107ee2563fe25106b0bb8f6c374ddc7791e76288c63aa401156574f2917dba",
       "clips": {
@@ -66,6 +89,7 @@
     },
     "jigglypuff": {
       "status": "confirmed",
+      "confirmation_source": "browser_checkbox",
       "note": "",
       "prepared_sha256": "eadbdafa334d92c2bed6158b5794945f5432f72914173b2a851f8b258959b253",
       "clips": {
@@ -83,8 +107,29 @@
         }
       }
     },
+    "marill": {
+      "status": "confirmed",
+      "confirmation_source": "explicit_user_followup",
+      "note": "",
+      "prepared_sha256": "db10bb8d7ef7453cc238e8fe0014711a28b5b695097fc68dcfa77759652e0d84",
+      "clips": {
+        "physical_attack": {
+          "family": "unclear",
+          "source": "human_review",
+          "source_action": "pm0183_00_00_00400_attack01",
+          "review_loop_sha256": "fda1032983addaa2a76b81963880a6738d9858c0f0d1ae957fff8bd538a55169"
+        },
+        "physical_attack_2": {
+          "family": "tail",
+          "source": "human_review",
+          "source_action": "pm0183_00_00_00410_attack02",
+          "review_loop_sha256": "4dabafb90d2a04fec002b87803bb7da6bc6ccaaa39e95d8da0f71cd95b5d3165"
+        }
+      }
+    },
     "psyduck": {
       "status": "confirmed",
+      "confirmation_source": "browser_checkbox",
       "note": "",
       "prepared_sha256": "a1f01c9b9efd2088075e637050b9c11439a4ff4f4fdcba5adc12115ba9c520ef",
       "clips": {
@@ -104,6 +149,7 @@
     },
     "slaking": {
       "status": "confirmed",
+      "confirmation_source": "browser_checkbox",
       "note": "1 is meer een grab",
       "prepared_sha256": "53aacfbf8ba3cbb7cf77c4595e5ab60ef9f8a2262e14a9c0f5426891f6b886f1",
       "clips": {
@@ -118,6 +164,26 @@
           "source": "human_review",
           "source_action": "pm0289_00_00_00410_attack02",
           "review_loop_sha256": "ac27e9cb953bae4d4953b29aa112e68b8ca252359d9d4165833bf1a4e57ad48c"
+        }
+      }
+    },
+    "zapdos": {
+      "status": "confirmed",
+      "confirmation_source": "explicit_user_followup",
+      "note": "",
+      "prepared_sha256": "e889bd29a76ede22d4cd9b913d931a761884b7a790ffc461e36c20e28d93eb36",
+      "clips": {
+        "physical_attack": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0145_00_00_20400_attack01",
+          "review_loop_sha256": "a5fdad968b2be05b59fa72c2a71f2b6da84e391491a86d4d17ef83e3540666a1"
+        },
+        "physical_attack_2": {
+          "family": "body_charge",
+          "source": "human_review",
+          "source_action": "pm0145_00_00_20410_attack02",
+          "review_loop_sha256": "36657b4450ab87dff93733226be3bb03adaf6494333758cf31fb888d2a2b1598"
         }
       }
     }
