@@ -512,6 +512,7 @@ var current_party_hover_rect := Rect2()
 var party_hover_request_token := 0
 const OPPONENT_RESPONSE_HOLD_SECONDS := 0.0
 const CAPTURE_SUCCESS_RESULT_HOLD_SECONDS := 0.40
+const WILD_CAPTURE_CALLOUT_RESULT_HOLD_SECONDS := 0.85
 const BATTLE_END_RESULT_HOLD_SECONDS := 0.12
 const DEBUG_PVP_REALTIME := false
 const DEBUG_PVP_FLOW_TRACE := false
@@ -4466,11 +4467,13 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	var use_item_message := _t("battle.item.used", {"item": item_name})
 	current_action_panel.set_message(use_item_message)
 	_add_battle_log_message(use_item_message)
+	_show_wild_capture_throw_callout(item_name)
 	SfxManager.play("battle_item_use")
 	_close_bag_for_capture_attempt()
 	var capture_result: Dictionary = await InventoryService.catch_wild_pokemon(current_battle_id, item_id)
 	if not bool(capture_result.get("success", false)):
 		current_action_panel.set_message(str(capture_result.get("error", _t("battle.error.capture_failed"))))
+		_clear_wild_capture_trainer()
 		_restore_bag_after_capture_error()
 		_set_battle_input_locked(false)
 		return
@@ -4495,6 +4498,9 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		capture_message = _capture_result_message_with_storage(capture_result, capture_message)
 	current_action_panel.set_message(capture_message)
 	_add_battle_log_message(capture_message)
+	if _show_wild_capture_result_callout(caught, shake_count):
+		await get_tree().create_timer(WILD_CAPTURE_CALLOUT_RESULT_HOLD_SECONDS).timeout
+	_clear_wild_capture_trainer()
 
 	if caught:
 		PokedexService.invalidate_owned_species_cache()
@@ -4530,6 +4536,31 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 			return
 
 	_set_battle_input_locked(false)
+
+
+func _show_wild_capture_throw_callout(item_name: String) -> bool:
+	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+		return false
+	_show_local_player_trainer()
+	return _show_trainer_command_text(
+		"p1",
+		_t("battle.capture.callout.throw", {"item": item_name}),
+		TrainerCommandCallout.DISPLAY_SECONDS
+	)
+
+
+func _show_wild_capture_result_callout(caught: bool, shake_count: int) -> bool:
+	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+		return false
+	var key := "battle.capture.callout.caught" if caught else (
+		"battle.capture.callout.almost" if shake_count >= 2 else "battle.capture.callout.broke_free"
+	)
+	return _show_trainer_command_text("p1", _t(key), TrainerCommandCallout.DISPLAY_SECONDS)
+
+
+func _clear_wild_capture_trainer() -> void:
+	if battle_type == BattleType.WILD and player_trainer_sprite != null:
+		player_trainer_sprite.clear()
 
 func _capture_result_message_with_storage(capture_result: Dictionary, fallback_message: String) -> String:
 	var location: Dictionary = PokemonStorageService.normalize_storage_location(capture_result.get("storageLocation", {}))

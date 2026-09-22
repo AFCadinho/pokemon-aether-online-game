@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In immersive wilde gevechten komt je trainer nu alleen bij een Poké Ball-worp kort in beeld, met een tekstwolk voor de worp en de vanguitkomst.
+
 - Kaartmetadata wacht nu ook in lokale desktop-debugruns tot het eerste beeld klaar is. Daardoor laden NPC's, overworld-Pokémon en encounters niet meer in de zware eerste laadframe vast.
 
 - Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
