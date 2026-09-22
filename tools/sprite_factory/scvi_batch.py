@@ -162,10 +162,33 @@ def source_entry(entry, model_root, motion_root):
         else:
             chosen[category] = str(matches[0]) if matches else None
         alternatives[category] = [file.name for file in matches]
+    # Idle defines the posture family. Never fill a missing action from another
+    # bank (e.g. standing battle idle paired with a flying damage/faint clip).
+    bank_match = re.search(r'_(\d)\d{4}_', Path(chosen['idle']).name) if chosen['idle'] else None
+    bank = bank_match[1] if bank_match else None
+    selection_holds = []
+    for category in CATEGORIES:
+        if category == 'idle':
+            continue
+        matches = [motion / name for name in alternatives[category]
+                   if bank is not None and re.search(r'_(\d)\d{4}_', name)
+                   and re.search(r'_(\d)\d{4}_', name)[1] == bank]
+        override = entry.get('motion_overrides', {}).get(category)
+        if override:
+            selected = Path(chosen[category])
+            match = re.search(r'_(\d)\d{4}_', selected.name)
+            if bank is None or match is None or match[1] != bank:
+                raise ValueError(f'Motion override crosses idle bank: {identity} {category}')
+        elif len(matches) == 1:
+            chosen[category] = str(matches[0])
+        else:
+            chosen[category] = None
+            selection_holds.append('motion_bank_hold:' + category + ':' +
+                                   ('ambiguous' if len(matches) > 1 else 'missing'))
     model_file = model / (identity + ".trmdl")
     icon_file = model / (identity + "_00_big.png")
     rare = sorted(model.glob("*_rare_alb.png"))
-    warnings = []
+    warnings = list(selection_holds)
     if not model_file.is_file():
         warnings.append("missing_model")
     if not icon_file.is_file():
@@ -190,6 +213,7 @@ def source_entry(entry, model_root, motion_root):
             "motion_dir": str(motion), "motions_available": len(files),
             "identity_icon": str(icon_file),
             "motions": chosen, "motion_channels": channels,
+            "motion_selection_policy": "same-idle-bank-v1", "motion_bank": bank,
             "facial_baseline": baseline, "alternatives": alternatives,
             "rare_albedo_count": len(rare), "warnings": warnings,
             "status": "candidate_needs_action_and_camera_review"}
@@ -216,6 +240,8 @@ def import_one(args):
         raise ValueError("Species not present in explicit review batch")
     from scvi_identity import validate_entry
     validate_entry(item)
+    if any(warning.startswith('motion_bank_hold:') for warning in item['warnings']):
+        raise ValueError('Incomplete or ambiguous idle motion bank; source review required')
     if args.variant != 'normal':
         raise ValueError('Shiny SCVI intake requires separate variant identity verification')
     if any(value in item["warnings"] for value in
