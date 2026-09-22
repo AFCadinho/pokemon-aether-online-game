@@ -4,6 +4,7 @@ const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
+const POKEDEX_MODEL_PREVIEW_SCRIPT := preload("res://scripts/ui/pokedex_model_preview.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
 const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
@@ -1610,7 +1611,7 @@ var pokedex_sprite: TextureRect
 var pokedex_sprite_panel: PanelContainer
 var pokedex_sprite_viewport: SubViewport
 var pokedex_animated_sprite: AnimatedSprite2D
-var pokedex_3d_preview: PokedexModelPreview
+var pokedex_3d_preview: Control
 var pokedex_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
 var pokedex_web_sprite_generation := 0
 var pokedex_sprite_side := "front"
@@ -12018,7 +12019,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	pokedex_3d_preview = PokedexModelPreview.new()
+	pokedex_3d_preview = POKEDEX_MODEL_PREVIEW_SCRIPT.new()
 	pokedex_3d_preview.visible = false
 	pokedex_sprite_panel.add_child(pokedex_3d_preview)
 	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
@@ -36509,7 +36510,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	pokedex_web_sprite_generation += 1
 	if pokedex_3d_preview != null:
 		var preview_species := str(species.get("id", species.get("showdownId", species.get("name", ""))))
-		if pokedex_3d_preview.show_species(preview_species, pokedex_shiny_mode):
+		if bool(pokedex_3d_preview.call("show_species", preview_species, pokedex_shiny_mode)):
 			pokedex_sprite.visible = false
 			pokedex_animated_sprite.stop()
 			pokedex_animated_sprite.visible = false
@@ -37010,7 +37011,7 @@ func _on_pokedex_sprite_panel_gui_input(event: InputEvent) -> void:
 		return
 	if pokedex_3d_preview != null and pokedex_3d_preview.visible:
 		if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			pokedex_3d_preview.rotate_by((event as InputEventMouseMotion).relative.x)
+			pokedex_3d_preview.call("rotate_by", (event as InputEventMouseMotion).relative.x)
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseButton:
