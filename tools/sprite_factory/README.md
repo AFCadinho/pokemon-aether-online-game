@@ -1,5 +1,10 @@
 # Pokémon sprite factory V1
 
+Current production direction: [CATALOG_PRODUCTION_STATUS.md](CATALOG_PRODUCTION_STATUS.md).
+Use the established standalone model format. Component sharing is archived as
+**promising but not production-safe**; no sharing, deduplication or codec research
+until catalog size is a demonstrated practical problem and work is reopened.
+
 New SCVI imports require [catalog-backed identity evidence](SCVI_IDENTITY.md).
 Use `scvi_identity.py` before source review; model resource numbers are not
 National Dex numbers. `identity_batch_review.py` reruns a fixed gated cohort.

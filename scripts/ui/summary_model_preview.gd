@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 	selected_clip = "idle" if player.has_animation("idle") else String(player.get_animation_list()[0])
 	play_clip(selected_clip)
 	_fit_model()
-	status.text = ""
+	status.text = "Review candidate" if profile.get("review_candidate", false) else ""
 	_update_menu()
 
 func play_clip(clip: String) -> void:
@@ -125,4 +125,5 @@ func _clear_actor() -> void:
 	configured_player = null
 	base_transforms.clear()
 	super._clear_actor()
+	preview_floor.hide()
 	_update_menu()

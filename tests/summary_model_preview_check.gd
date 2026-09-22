@@ -22,7 +22,8 @@ func _run() -> void:
 	var sprite: TextureRect = overlay.pokemon_summary_sprite
 	var stage: Control = sprite.get_parent()
 	var animated: AnimatedSprite2D = overlay.pokemon_summary_animated_sprite
-	var pokemon := Pokemon.new("garchomp", 100)
+	var species := OS.get_environment("SUMMARY_MODEL_SPECIES")
+	var pokemon := Pokemon.new(species if not species.is_empty() else "garchomp", 100)
 	overlay._set_pokemon_summary_sprite(pokemon)
 	var preview = stage.get_node("SummaryModelPreview")
 	assert(not animated.visible and not sprite.visible)
@@ -73,7 +74,8 @@ func _run() -> void:
 	assert(preview.viewport.render_target_update_mode == SubViewport.UPDATE_ALWAYS)
 	var second = load("res://scripts/ui/summary_model_preview.gd").new()
 	root.add_child(second)
-	assert(second.show_species("azumarill", false))
+	var second_species := OS.get_environment("SUMMARY_SECOND_SPECIES")
+	assert(second.show_species(second_species if not second_species.is_empty() else "azumarill", false))
 	for frame in 1200:
 		await process_frame
 		if second.configured_player != null:
