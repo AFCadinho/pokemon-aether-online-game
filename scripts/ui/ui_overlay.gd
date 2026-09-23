@@ -1909,6 +1909,8 @@ func _ready() -> void:
 		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
 	if not GuildService.notification_received.is_connected(_on_guild_notification_received):
 		GuildService.notification_received.connect(_on_guild_notification_received)
+	if not PlayerWalletService.gem_credit_received.is_connected(_on_gem_credit_received):
+		PlayerWalletService.gem_credit_received.connect(_on_gem_credit_received)
 	_refresh_guild_chat_membership.call_deferred()
 	_sync_chat_mute_from_current_user()
 	_apply_chat_tab_state()
@@ -50615,6 +50617,11 @@ func _next_pokemon_reward_key(prefix: String) -> String:
 
 func _on_inventory_item_received(item_id: String, quantity: int) -> void:
 	add_item_reward_notification(item_id, quantity)
+
+
+func _on_gem_credit_received(amount: int) -> void:
+	add_system_message(LocalizationManager.text("ui.gems.kofi_credit_received", {"amount": amount}))
+	add_currency_reward_notification("gems", amount)
 
 
 func _on_guild_notification_received(notification: Dictionary) -> void:
