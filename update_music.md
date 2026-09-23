@@ -6,6 +6,10 @@ Music assets are intentionally not stored in git because the files can become la
 assets/music/
 ```
 
+Uploading to R2 and pushing a release require explicit authorization. Follow
+the workspace `AGENTS.md` and the applicable production instructions before
+running the upload steps below.
+
 Use `.ogg` files for music. The upload script rejects other packaged music formats so MP3s do not accidentally end up in launcher asset packs.
 
 ## Register A Track
@@ -60,7 +64,7 @@ The script:
 - uploads the changed pack to R2 under `assets/`
 - updates `.github/workflows/deploy-desktop-r2.yml` with the new version, size, and zip SHA-256
 
-## Publish The New Manifest
+## Integrate The New Manifest
 
 After the script finishes, check the diff:
 
@@ -69,15 +73,17 @@ git status
 git diff -- .github/workflows/deploy-desktop-r2.yml
 ```
 
-If the workflow changed, commit and push:
+If the workflow changed, commit it on the assigned task branch and follow the
+workspace integration procedure to merge into local `development`. Promotion
+to `main`, pushing, and publishing are separate authorized release steps.
 
 ```bash
 git add .github/workflows/deploy-desktop-r2.yml
 git commit -m "Update music asset pack version"
-git push
 ```
 
-Pushing `main` runs GitHub Actions. The deploy workflow publishes launcher manifests that point to the R2 zip uploaded by the local script.
+For an authorized release, consult the current deployment workflow before
+publishing launcher manifests that point to the uploaded R2 ZIP.
 
 If the script prints `No music asset pack changes detected.`, there is nothing to commit or push.
 
