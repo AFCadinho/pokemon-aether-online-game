@@ -7,7 +7,6 @@ const LOGIN_SCRIPT_PATH := "res://scripts/ui/login_screen.gd"
 const SETTINGS_SCRIPT_PATH := "res://scripts/ui/settings_menu.gd"
 const LAUNCHER_SCENE_PATH := "res://launcher/scenes/launcher.tscn"
 const LAUNCHER_SCRIPT_PATH := "res://launcher/scripts/launcher.gd"
-const LAUNCHER_CONFIG_PATH := "res://launcher/config/launcher_config.json"
 
 var failed := false
 
@@ -19,7 +18,6 @@ func _init() -> void:
 	var settings_script := FileAccess.get_file_as_string(SETTINGS_SCRIPT_PATH)
 	var launcher_scene := FileAccess.get_file_as_string(LAUNCHER_SCENE_PATH)
 	var launcher_script := FileAccess.get_file_as_string(LAUNCHER_SCRIPT_PATH)
-	var launcher_config := FileAccess.get_file_as_string(LAUNCHER_CONFIG_PATH)
 
 	_check_contains(external_links, CREDITS_URL, "game client defines the canonical credits URL")
 	_check_not_contains(login_scene, '[node name="CreditsButton"', "login screen avoids a redundant credits action")
@@ -29,17 +27,9 @@ func _init() -> void:
 	_check_contains(settings_script, "ExternalLinks.CREDITS_URL", "settings use the shared credits URL")
 	_check_contains(settings_script, '_set_localized_text(credits_button, "ui.settings.about.credits")', "About tab exposes localized credits")
 	_check_contains(settings_script, '_set_localized_text(legal_note, "ui.settings.about.legal")', "About tab retains the legal notice")
-	_check_contains(launcher_scene, '[node name="CreditsButton"', "launcher exposes credits")
-	_check_contains(launcher_scene, 'text = "Credits"', "launcher uses a clear Credits label")
-	_check_not_contains(launcher_scene, 'text = "Credits & Legal"', "launcher avoids unclear legal wording")
-	_check_contains(launcher_script, "func open_credits", "launcher credits action is connected")
-	_check_contains(launcher_script, "patch_notes_button, credits_button, uninstall_button", "launcher credits uses the pointing-hand cursor")
-	_check_contains(
-		launcher_script,
-		'credits_button.tooltip_text = _t("View credits")',
-		"launcher credits has a clear localized tooltip"
-	)
-	_check_contains(launcher_config, '"creditsUrl": "%s"' % CREDITS_URL, "launcher config uses the canonical credits URL")
+	_check_not_contains(launcher_scene, '[node name="CreditsButton"', "launcher avoids a redundant credits action")
+	_check_not_contains(launcher_script, "func open_credits", "launcher credits action is removed")
+	_check_contains(launcher_scene, '[node name="PatchNotesButton"', "launcher retains the patch notes action")
 
 	quit(1 if failed else 0)
 
