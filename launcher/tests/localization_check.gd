@@ -215,6 +215,11 @@ func _check_server_access_status() -> void:
 		and launcher_source.contains("server_health_check_in_progress"),
 		"launcher periodically rechecks server access without overlapping requests"
 	)
+	_check(
+		not launcher_source.contains("models_button")
+		and not launcher_source.contains("func _open_model_packs"),
+		"launcher keeps manual 3D model tools out of player navigation"
+	)
 
 
 func _check_language_selector_presentation(manager: Node) -> void:
