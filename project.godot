@@ -15,7 +15,7 @@ config/version="0.3.81"
 run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
-config/build_id="85d8e2ea5"
+config/build_id="0.3.81-66ca54100"
 
 [autoload]
 
