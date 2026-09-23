@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In de Aether Gift Store staat nu een duidelijke knop om Aether Gems via het accountportaal te bekijken, met een melding naast de knop als openen niet lukt.
+
 - De Donator Store opent voor Aether Gems nu het beveiligde accountportaal; de game bevat geen Ko-fi-productlinks.
 
 - De launcher toont geen verwarrende handmatige 3D-modelimport meer; goedgekeurde 3D-Pokémon worden automatisch als gecontroleerde optionele bundles beheerd.
