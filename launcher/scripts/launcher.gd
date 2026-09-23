@@ -11,8 +11,8 @@ const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_CONTENT_PACK_CATALOG_URL := "https://updates.pokeaether.com/data/content-packs.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
-const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
-const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
+const DEFAULT_KOFI_URL := "https://ko-fi.com/pokeaether"
+const DEFAULT_PATCH_NOTES_URL := "https://forums.pokeaether.com/c/announcements/updates/"
 const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
@@ -98,6 +98,7 @@ const SERVER_MAINTENANCE_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
 @onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
 @onready var log_label: RichTextLabel = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/LogLabel
+@onready var support_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/SupportButton
 @onready var content_layout: HBoxContainer = $Shell/MainSplit/Content/ContentLayout
 @onready var diagnostics_card: PanelContainer = $Shell/MainSplit/Content/DiagnosticsCard
 @onready var diagnostics_log_view: RichTextLabel = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/LogView
@@ -111,7 +112,6 @@ const SERVER_MAINTENANCE_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var play_button: Button = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ButtonRow/PlayButton
 @onready var game_folder_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton
 @onready var patch_notes_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton
-@onready var credits_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton
 @onready var home_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton
 @onready var diagnostics_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/DiagnosticsButton
 @onready var uninstall_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton
@@ -140,8 +140,8 @@ var content_pack_catalog_url := DEFAULT_CONTENT_PACK_CATALOG_URL
 var server_status_url := LauncherServerHealthService.DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
+var kofi_url := DEFAULT_KOFI_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
-var credits_url := DEFAULT_CREDITS_URL
 var install_dir := DEFAULT_INSTALL_DIR
 var locale := "en"
 var launcher_update_info: Dictionary = {}
@@ -261,13 +261,13 @@ func _ready() -> void:
 	play_button.pressed.connect(launch_game)
 	game_folder_button.pressed.connect(open_install_folder_dialog)
 	patch_notes_button.pressed.connect(open_patch_notes)
-	credits_button.pressed.connect(open_credits)
 	uninstall_button.pressed.connect(_on_uninstall_button_pressed)
 	language_options_button.item_selected.connect(_on_language_selected)
 	launcher_update_later_button.pressed.connect(_hide_launcher_update_prompt)
 	launcher_update_now_button.pressed.connect(_on_launcher_update_now_pressed)
 	launcher_update_http_request.request_completed.connect(_on_launcher_update_request_completed)
 	discord_button.pressed.connect(open_discord)
+	support_button.pressed.connect(open_kofi)
 	install_folder_dialog.dir_selected.connect(_on_install_folder_selected)
 	uninstall_confirm_dialog.confirmed.connect(_uninstall_game_folder)
 	http_request.request_completed.connect(_on_request_completed)
@@ -403,7 +403,6 @@ func _apply_visual_style() -> void:
 	var nav_buttons: Array[Button] = [
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton,
-		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/DiagnosticsButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/GameFolderButton,
 		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/UninstallButton,
@@ -418,17 +417,15 @@ func _apply_visual_style() -> void:
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("normal", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("hover", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("normal", _sidebar_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("hover", _sidebar_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("pressed", _sidebar_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
+	for social_button: Button in [discord_button, support_button]:
+		social_button.add_theme_stylebox_override("normal", _social_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
+		social_button.add_theme_stylebox_override("hover", _social_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
+		social_button.add_theme_stylebox_override("pressed", _social_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
+		social_button.add_theme_font_size_override("font_size", 14)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_constant_override("icon_max_width", 20)
 
-	for nav_button in [
-		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/PatchNotesButton,
-		$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/CreditsButton,
-	]:
-		nav_button.add_theme_stylebox_override("disabled", _panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 8, 0))
-		nav_button.add_theme_color_override("font_disabled_color", Color(0.68, 0.70, 0.80, 0.82))
+	patch_notes_button.add_theme_stylebox_override("disabled", _panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 8, 0))
+	patch_notes_button.add_theme_color_override("font_disabled_color", Color(0.68, 0.70, 0.80, 0.82))
 
 	_apply_button_style(check_button, false)
 	_apply_refresh_button_style(check_button)
@@ -496,6 +493,13 @@ func _sidebar_button_style(background_color: Color, border_color: Color, border_
 	style_box.content_margin_bottom = 8.0
 	style_box.shadow_size = 0
 	style_box.shadow_offset = Vector2.ZERO
+	return style_box
+
+
+func _social_button_style(background_color: Color, border_color: Color, border_width: int) -> StyleBoxFlat:
+	var style_box := _sidebar_button_style(background_color, border_color, border_width)
+	style_box.content_margin_left = 6.0
+	style_box.content_margin_right = 6.0
 	return style_box
 
 
@@ -682,6 +686,13 @@ func open_discord() -> void:
 		_log_error("Could not open Discord link '%s': %s" % [normalized_discord_url, error_string(open_error)])
 
 
+func open_kofi() -> void:
+	var open_error: Error = OS.shell_open(kofi_url)
+	if open_error != OK:
+		_set_status("Could not open Ko-fi link.")
+		_log_error("Could not open Ko-fi link: %s" % error_string(open_error))
+
+
 func open_patch_notes() -> void:
 	var normalized_patch_notes_url := _normalize_url(patch_notes_url)
 	if normalized_patch_notes_url.is_empty():
@@ -692,18 +703,6 @@ func open_patch_notes() -> void:
 	if open_error != OK:
 		_set_status("Could not open patch notes link.")
 		_log_error("Could not open patch notes link '%s': %s" % [normalized_patch_notes_url, error_string(open_error)])
-
-
-func open_credits() -> void:
-	var normalized_credits_url := _normalize_url(credits_url)
-	if normalized_credits_url.is_empty():
-		_set_status("Credits link is not configured.")
-		return
-
-	var open_error: Error = OS.shell_open(normalized_credits_url)
-	if open_error != OK:
-		_set_status("Could not open credits link.")
-		_log_error("Could not open credits link '%s': %s" % [normalized_credits_url, error_string(open_error)])
 
 
 func _start_launcher_update_download() -> void:
@@ -2568,22 +2567,22 @@ func _load_launcher_config() -> void:
 	var configured_discord_url := str(config.get("discordUrl", ""))
 	if not configured_discord_url.is_empty():
 		discord_url = configured_discord_url
+	var configured_kofi_url := str(config.get("kofiUrl", ""))
+	if not configured_kofi_url.is_empty():
+		kofi_url = configured_kofi_url
 
 	var configured_patch_notes_url := str(config.get("patchNotesUrl", ""))
 	if not configured_patch_notes_url.is_empty():
 		patch_notes_url = configured_patch_notes_url
-	var configured_credits_url := str(config.get("creditsUrl", ""))
-	if not configured_credits_url.is_empty():
-		credits_url = configured_credits_url
 	discord_url = _normalize_url(discord_url)
+	kofi_url = _normalize_url(kofi_url)
 	patch_notes_url = _normalize_url(patch_notes_url)
-	credits_url = _normalize_url(credits_url)
 	if discord_url.is_empty():
 		discord_url = DEFAULT_DISCORD_URL
+	if not kofi_url.begins_with("https://ko-fi.com/"):
+		kofi_url = DEFAULT_KOFI_URL
 	if patch_notes_url.is_empty():
 		patch_notes_url = DEFAULT_PATCH_NOTES_URL
-	if credits_url.is_empty():
-		credits_url = DEFAULT_CREDITS_URL
 
 
 func _load_launcher_settings() -> void:
@@ -2899,7 +2898,7 @@ func _set_busy(is_busy: bool) -> void:
 
 
 func _sync_button_cursors() -> void:
-	for button: Button in [check_button, update_button, gen5_sprites_button, play_button, patch_notes_button, credits_button, uninstall_button]:
+	for button: Button in [check_button, update_button, gen5_sprites_button, play_button, patch_notes_button, uninstall_button]:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	for button: Button in [
 		home_button,
@@ -2912,8 +2911,8 @@ func _sync_button_cursors() -> void:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	support_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	patch_notes_button.tooltip_text = _t("Open patch notes")
-	credits_button.tooltip_text = _t("View credits")
 	uninstall_button.tooltip_text = _t("Remove installed game folder")
 
 

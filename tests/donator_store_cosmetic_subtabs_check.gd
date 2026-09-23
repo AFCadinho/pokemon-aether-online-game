@@ -71,12 +71,39 @@ func _run() -> void:
 		"cosmetic filters no longer require horizontal scrolling"
 	)
 	var add_gems_button := store.find_child("AddGemsButton", true, false) as Button
-	_check(add_gems_button != null, "Store retains the future Add Gems action")
+	_check(add_gems_button != null, "Store exposes the Add Gems portal action")
 	if add_gems_button != null:
 		_check(
-			not add_gems_button.visible,
-			"unfinished Gem top-ups stay out of the active Store navigation"
+			add_gems_button.visible,
+			"Add Gems is visible in the Store"
 		)
+		_check(add_gems_button.text == "Get Aether Gems", "Store uses the clear Aether Gems call to action")
+		_check(add_gems_button.custom_minimum_size.x >= 184 and add_gems_button.icon != null,
+			"Aether Gems is a prominent, icon-led header action")
+		_check(add_gems_button.focus_mode == Control.FOCUS_ALL,
+			"Aether Gems can be opened with keyboard focus")
+		var auth_service := root.get_node_or_null("AuthService")
+		_check(auth_service != null, "Store shares the authenticated portal service")
+		if auth_service != null:
+			var previous_session_token := str(auth_service.get("session_token"))
+			auth_service.set("session_token", "")
+			add_gems_button.emit_signal("pressed")
+			await process_frame
+			auth_service.set("session_token", previous_session_token)
+		_check(not add_gems_button.disabled and not store.portal_launch_in_progress,
+			"portal launch failure allows a retry")
+		_check(store.add_gems_feedback_label.visible
+			and store.add_gems_feedback_label.text == localization_manager.text("ui.store.add_gems_error"),
+			"unauthenticated portal launch displays a localized message beside the action")
+		store.add_gems_feedback_label.visible = false
+	_check(source.contains('auth_service.call("create_account_portal_launch", locale, "gems")'),
+		"Add Gems requests the dedicated authenticated Gems destination")
+	_check(source.contains("OS.shell_open(str(result.get(\"url\", \"\")))"), "Add Gems opens only the returned portal URL")
+	_check(source.contains("if portal_launch_in_progress:") and source.contains("add_gems_button.disabled = true"),
+		"repeated clicks cannot request multiple portal launch tickets")
+	_check(not source.contains("ko-fi.com") and not source.contains("direct_link_code")
+		and not source.contains("KOFI_GEM") and not source.contains("€"),
+		"the game Store contains no Ko-fi URL, product mapping, payment flag, or EUR price")
 	_check(source.contains("product_grid.columns = 3"), "Store catalog uses three compact product columns")
 	_check(
 		source.contains("button.custom_minimum_size = Vector2(0, 140)"),
@@ -94,6 +121,9 @@ func _run() -> void:
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic filters appear inside Cosmetics")
 	_check(store.cosmetic_filter_group_buttons.size() == 3, "three compact cosmetic primary filters are built")
+	_check(store.cosmetic_outfit_gender_control != null, "outfits include an audience filter")
+	_check(store.active_cosmetic_filter_group == "outfits" and store.active_outfit_gender_filter == "mine",
+		"Cosmetics opens on outfits for the current character gender")
 	_check(store.cosmetic_item_category_select != null, "loose items use a category dropdown")
 	_check(store.cosmetic_item_category_select.item_count == 9, "dropdown includes all eight item types")
 	var item_category_popup := store.cosmetic_item_category_select.get_popup()
@@ -168,7 +198,12 @@ func _run() -> void:
 	_check(ironfanton_preview.get("hair", "") == "IronFanton_Hair", "IronFanton preview includes the hairstyle")
 	_check(ironfanton_preview.get("facial_hair", "") == "IronFanton_Beard", "IronFanton preview includes the beard")
 	_check(ironfanton_preview.get("top", "") == "IronFanton_Shirt", "IronFanton preview includes the shirt")
-	_check(store.product_buttons.has("aether-blossom-outfit"), "male Trainers can browse the female-only Aether Blossom outfit")
+	_check(not store.product_buttons.has("aether-blossom-outfit"), "male Trainers initially see their own-gender outfits")
+	store.active_outfit_gender_filter = "other"
+	store.call("_render_products")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "male Trainers can switch to browse female-only outfits")
+	store.active_outfit_gender_filter = "mine"
+	store.call("_render_products")
 	store.call("_select_product", "aether-blossom-outfit")
 	var male_blossom_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(male_blossom_preview.get("gender", "") == "female", "female-only outfits use a female preview model for male Trainers")
@@ -198,8 +233,13 @@ func _run() -> void:
 
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
-	_check(store.product_buttons.has("adinho-classic-outfit"), "female Trainers can browse the male-only Adinho Classic outfit")
-	_check(store.product_buttons.has("ironfanton-outfit"), "female Trainers can browse the male-only IronFanton outfit")
+	_check(not store.product_buttons.has("adinho-classic-outfit"), "female Trainers initially see their own-gender outfits")
+	store.active_outfit_gender_filter = "other"
+	store.call("_render_products")
+	_check(store.product_buttons.has("adinho-classic-outfit"), "female Trainers can switch to browse male-only outfits")
+	_check(store.product_buttons.has("ironfanton-outfit"), "other-gender filter includes male outfit boxes")
+	store.active_outfit_gender_filter = "mine"
+	store.call("_render_products")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
 	store.call("_select_product", "aether-blossom-outfit")
 	var blossom_item: Dictionary = store.call("_catalog_item", "aether-blossom-outfit")
@@ -269,7 +309,12 @@ func _run() -> void:
 	store.call("_select_cosmetic_subcategory", "outfits")
 	store.set_trainer_gender("male")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Adinho Classic is listed for compatible male models")
-	_check(store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom remains visible for male models")
+	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom is filtered from the default male outfit view")
+	store.active_outfit_gender_filter = "other"
+	store.call("_render_products")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom remains accessible from the other-gender filter")
+	store.active_outfit_gender_filter = "mine"
+	store.call("_render_products")
 	_check(store.call("_item_gender_badge", classic_item) == "MALE ONLY", "Adinho cards visibly identify male-only compatibility")
 	_check(
 		store.call("_item_gender_compatibility_note", classic_item) == "Male character models only.",
@@ -603,6 +648,13 @@ func _run() -> void:
 	)
 
 	if localization_manager != null:
+		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+			localization_manager.set_locale(locale)
+			await process_frame
+			_check(add_gems_button.text == localization_manager.text("ui.store.add_gems"),
+				"Aether Gems action is localized for %s" % locale)
+			_check(localization_manager.text("ui.store.add_gems_error_open") != "ui.store.add_gems_error_open",
+				"browser launch failure is localized for %s" % locale)
 		localization_manager.set_locale("nl")
 		await process_frame
 		var featured_button := store.category_buttons.get("featured") as Button

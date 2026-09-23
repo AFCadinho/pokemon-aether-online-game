@@ -615,15 +615,20 @@ var trainer_appearance: Dictionary = {}
 var active_category := "featured"
 var active_cosmetic_filter_group := "all"
 var active_cosmetic_subcategory := "all"
+var active_outfit_gender_filter := "mine"
 var selected_item_id := ""
 var category_buttons: Dictionary = {}
 var cosmetic_filter_group_buttons: Dictionary = {}
 var cosmetic_item_category_control: HBoxContainer
 var cosmetic_item_category_select: OptionButton
+var cosmetic_outfit_gender_control: OptionButton
 var product_buttons: Dictionary = {}
 var catalog_search_input: LineEdit
 var catalog_search_text := ""
 var balance_label: Label
+var add_gems_button: Button
+var add_gems_feedback_label: Label
+var portal_launch_in_progress := false
 var hero_title_label: Label
 var hero_description_label: Label
 var cosmetic_subcategory_bar: PanelContainer
@@ -809,9 +814,13 @@ func _create_header() -> Control:
 	margin.add_theme_constant_override("margin_bottom", 8)
 	panel.add_child(margin)
 
+	var header_content := VBoxContainer.new()
+	header_content.add_theme_constant_override("separation", 4)
+	margin.add_child(header_content)
+
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
-	margin.add_child(row)
+	header_content.add_child(row)
 
 	var icon_frame := PanelContainer.new()
 	icon_frame.custom_minimum_size = Vector2(46, 46)
@@ -847,16 +856,18 @@ func _create_header() -> Control:
 
 	row.add_child(_create_balance_pill())
 
-	var add_gems_button := Button.new()
+	add_gems_button = Button.new()
 	add_gems_button.name = "AddGemsButton"
 	_set_localized_property(add_gems_button, "text", "ui.store.add_gems")
 	_set_localized_property(add_gems_button, "tooltip_text", "ui.store.add_gems_tooltip")
-	add_gems_button.custom_minimum_size = Vector2(96, 36)
-	add_gems_button.focus_mode = Control.FOCUS_NONE
+	add_gems_button.custom_minimum_size = Vector2(184, 42)
+	add_gems_button.focus_mode = Control.FOCUS_ALL
+	add_gems_button.icon = GEM_ICON
+	add_gems_button.expand_icon = true
+	add_gems_button.add_theme_constant_override("icon_max_width", 19)
 	add_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	add_gems_button.pressed.connect(_on_add_gems_pressed)
-	_apply_text_button_style(add_gems_button, UI_GOLD)
-	add_gems_button.visible = false
+	_apply_add_gems_button_style(add_gems_button)
 	row.add_child(add_gems_button)
 
 	var close_button := Button.new()
@@ -868,15 +879,54 @@ func _create_header() -> Control:
 	close_button.pressed.connect(close_store)
 	_apply_text_button_style(close_button, UI_BORDER)
 	row.add_child(close_button)
+
+	add_gems_feedback_label = Label.new()
+	add_gems_feedback_label.name = "AddGemsFeedback"
+	add_gems_feedback_label.visible = false
+	add_gems_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_gems_feedback_label.add_theme_font_size_override("font_size", 11)
+	header_content.add_child(add_gems_feedback_label)
 	return panel
 
 
 func _on_add_gems_pressed() -> void:
-	var message := _t("ui.store.add_gems_unavailable")
+	if portal_launch_in_progress:
+		return
+	portal_launch_in_progress = true
+	add_gems_button.disabled = true
+	_set_add_gems_feedback("ui.store.add_gems_opening")
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	var locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
+	var auth_service := get_node_or_null("/root/AuthService")
+	if auth_service == null:
+		_finish_add_gems_launch({"success": false})
+		return
+	var result: Dictionary = await auth_service.call("create_account_portal_launch", locale, "gems")
+	if is_inside_tree():
+		_finish_add_gems_launch(result)
+
+
+func _finish_add_gems_launch(result: Dictionary) -> void:
+	var key := "ui.store.add_gems_error"
+	if bool(result.get("success", false)):
+		if OS.shell_open(str(result.get("url", ""))) == OK:
+			key = "ui.store.add_gems_opened"
+		else:
+			key = "ui.store.add_gems_error_open"
+	_set_add_gems_feedback(key, key != "ui.store.add_gems_opened")
+	portal_launch_in_progress = false
+	if add_gems_button != null:
+		add_gems_button.disabled = false
+
+
+func _set_add_gems_feedback(key: String, is_error: bool = false) -> void:
+	var message := _t(key)
+	if add_gems_feedback_label != null:
+		add_gems_feedback_label.text = message
+		add_gems_feedback_label.add_theme_color_override("font_color", UI_DANGER if is_error else UI_CYAN)
+		add_gems_feedback_label.visible = true
 	if status_label != null:
 		status_label.text = message
-	if selection_description_label != null:
-		selection_description_label.text = message
 
 
 func _create_balance_pill() -> Control:
@@ -1023,6 +1073,16 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 		button.pressed.connect(_select_cosmetic_filter_group.bind(group_id))
 		row.add_child(button)
 		cosmetic_filter_group_buttons[group_id] = button
+
+	cosmetic_outfit_gender_control = OptionButton.new()
+	cosmetic_outfit_gender_control.name = "CosmeticOutfitGenderFilter"
+	cosmetic_outfit_gender_control.custom_minimum_size = Vector2(190, 30)
+	for filter_id: String in ["mine", "other", "all"]:
+		cosmetic_outfit_gender_control.add_item(_t("ui.store.cosmetic.outfit_gender.%s" % filter_id))
+		cosmetic_outfit_gender_control.set_item_metadata(cosmetic_outfit_gender_control.item_count - 1, filter_id)
+	cosmetic_outfit_gender_control.item_selected.connect(_on_outfit_gender_filter_selected)
+	_apply_cosmetic_item_category_style(cosmetic_outfit_gender_control)
+	row.add_child(cosmetic_outfit_gender_control)
 
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1285,6 +1345,10 @@ func _select_category(category_id: String) -> void:
 		return
 	var category_changed := active_category != category_id
 	active_category = category_id
+	if category_changed and category_id == "cosmetics":
+		active_cosmetic_filter_group = "outfits"
+		active_cosmetic_subcategory = "outfits"
+		active_outfit_gender_filter = "mine"
 	selected_item_id = ""
 	if category_changed and catalog_search_text != "":
 		catalog_search_text = ""
@@ -1330,10 +1394,23 @@ func _select_cosmetic_filter_group(group_id: String) -> void:
 		active_cosmetic_subcategory = "all"
 	elif group_id == "outfits":
 		active_cosmetic_subcategory = "outfits"
+		active_outfit_gender_filter = "mine"
 	elif not COSMETIC_ITEM_CATEGORY_ORDER.has(active_cosmetic_subcategory):
 		active_cosmetic_subcategory = "all"
 	selected_item_id = ""
 	_refresh_cosmetic_subcategory_bar()
+	_reset_selection_footer()
+	_render_products()
+
+
+func _on_outfit_gender_filter_selected(index: int) -> void:
+	if cosmetic_outfit_gender_control == null or index < 0:
+		return
+	var filter_id := str(cosmetic_outfit_gender_control.get_item_metadata(index))
+	if not ["mine", "other", "all"].has(filter_id):
+		return
+	active_outfit_gender_filter = filter_id
+	selected_item_id = ""
 	_reset_selection_footer()
 	_render_products()
 
@@ -1362,6 +1439,13 @@ func _refresh_cosmetic_subcategory_bar() -> void:
 			_apply_cosmetic_subcategory_style(button, group_id == active_cosmetic_filter_group)
 	if cosmetic_item_category_control != null:
 		cosmetic_item_category_control.visible = active_cosmetic_filter_group == "items"
+	if cosmetic_outfit_gender_control != null:
+		cosmetic_outfit_gender_control.visible = active_cosmetic_filter_group == "outfits"
+		for index: int in range(cosmetic_outfit_gender_control.item_count):
+			var filter_id := str(cosmetic_outfit_gender_control.get_item_metadata(index))
+			cosmetic_outfit_gender_control.set_item_text(index, _t("ui.store.cosmetic.outfit_gender.%s" % filter_id))
+			if filter_id == active_outfit_gender_filter:
+				cosmetic_outfit_gender_control.select(index)
 	if cosmetic_item_category_select != null and active_cosmetic_filter_group == "items":
 		var selected_index := 0
 		for index: int in range(cosmetic_item_category_select.item_count):
@@ -1461,7 +1545,17 @@ func _matches_cosmetic_subcategory(item: Dictionary) -> bool:
 	if active_cosmetic_filter_group == "all":
 		return true
 	if active_cosmetic_filter_group == "outfits":
-		return _item_has_cosmetic_subcategory(item, "outfits")
+		if not _item_has_cosmetic_subcategory(item, "outfits"):
+			return false
+		var genders := _item_genders(item)
+		var other_gender := "female" if trainer_gender == "male" else "male"
+		match active_outfit_gender_filter:
+			"mine":
+				return genders.is_empty() or genders.has(trainer_gender)
+			"other":
+				return genders.has(other_gender) and not genders.has(trainer_gender)
+			_:
+				return true
 	if _item_has_cosmetic_subcategory(item, "outfits"):
 		return false
 	if active_cosmetic_subcategory == "all":
@@ -2391,6 +2485,19 @@ func _apply_product_card_style(button: Button, selected: bool) -> void:
 	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, Color("#8e6cc1"), 11, 1))
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_BASE, UI_PURPLE, 11, 1))
 	button.add_theme_stylebox_override("focus", _button_style(background, accent, 11, 1))
+
+
+func _apply_add_gems_button_style(button: Button) -> void:
+	button.add_theme_color_override("font_color", Color("#24152e"))
+	button.add_theme_color_override("font_hover_color", Color("#24152e"))
+	button.add_theme_color_override("font_pressed_color", Color("#24152e"))
+	button.add_theme_color_override("font_disabled_color", UI_MUTED_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_stylebox_override("normal", _button_style(Color("#f0cc70"), Color("#ffe4a5"), 9, 1))
+	button.add_theme_stylebox_override("hover", _button_style(Color("#ffe1a0"), Color("#fff1c8"), 9, 1))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#d9af52"), UI_GOLD, 9, 1))
+	button.add_theme_stylebox_override("focus", _button_style(Color("#f0cc70"), UI_PURPLE, 9, 2))
+	button.add_theme_stylebox_override("disabled", _button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SOFT, 9, 1))
 
 
 func _apply_text_button_style(button: Button, accent: Color) -> void:
