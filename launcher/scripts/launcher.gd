@@ -11,6 +11,7 @@ const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_CONTENT_PACK_CATALOG_URL := "https://updates.pokeaether.com/data/content-packs.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
+const DEFAULT_KOFI_URL := "https://ko-fi.com/pokeaether"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
 const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
@@ -98,6 +99,7 @@ const SERVER_MAINTENANCE_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
 @onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
 @onready var log_label: RichTextLabel = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/LogLabel
+@onready var support_button: Button = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/SupportButton
 @onready var content_layout: HBoxContainer = $Shell/MainSplit/Content/ContentLayout
 @onready var diagnostics_card: PanelContainer = $Shell/MainSplit/Content/DiagnosticsCard
 @onready var diagnostics_log_view: RichTextLabel = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/LogView
@@ -140,6 +142,7 @@ var content_pack_catalog_url := DEFAULT_CONTENT_PACK_CATALOG_URL
 var server_status_url := LauncherServerHealthService.DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
+var kofi_url := DEFAULT_KOFI_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
 var credits_url := DEFAULT_CREDITS_URL
 var install_dir := DEFAULT_INSTALL_DIR
@@ -268,6 +271,7 @@ func _ready() -> void:
 	launcher_update_now_button.pressed.connect(_on_launcher_update_now_pressed)
 	launcher_update_http_request.request_completed.connect(_on_launcher_update_request_completed)
 	discord_button.pressed.connect(open_discord)
+	support_button.pressed.connect(open_kofi)
 	install_folder_dialog.dir_selected.connect(_on_install_folder_selected)
 	uninstall_confirm_dialog.confirmed.connect(_uninstall_game_folder)
 	http_request.request_completed.connect(_on_request_completed)
@@ -435,6 +439,7 @@ func _apply_visual_style() -> void:
 	_apply_button_style(update_button, false)
 	_apply_button_style(gen5_sprites_button, false)
 	_apply_button_style(play_button, true)
+	_apply_button_style(support_button, false)
 	for diagnostics_action_button: Button in [
 		diagnostics_back_button,
 		diagnostics_copy_button,
@@ -680,6 +685,13 @@ func open_discord() -> void:
 	if open_error != OK:
 		_set_status("Could not open Discord link.")
 		_log_error("Could not open Discord link '%s': %s" % [normalized_discord_url, error_string(open_error)])
+
+
+func open_kofi() -> void:
+	var open_error: Error = OS.shell_open(kofi_url)
+	if open_error != OK:
+		_set_status("Could not open Ko-fi link.")
+		_log_error("Could not open Ko-fi link: %s" % error_string(open_error))
 
 
 func open_patch_notes() -> void:
@@ -2568,6 +2580,9 @@ func _load_launcher_config() -> void:
 	var configured_discord_url := str(config.get("discordUrl", ""))
 	if not configured_discord_url.is_empty():
 		discord_url = configured_discord_url
+	var configured_kofi_url := str(config.get("kofiUrl", ""))
+	if not configured_kofi_url.is_empty():
+		kofi_url = configured_kofi_url
 
 	var configured_patch_notes_url := str(config.get("patchNotesUrl", ""))
 	if not configured_patch_notes_url.is_empty():
@@ -2576,10 +2591,13 @@ func _load_launcher_config() -> void:
 	if not configured_credits_url.is_empty():
 		credits_url = configured_credits_url
 	discord_url = _normalize_url(discord_url)
+	kofi_url = _normalize_url(kofi_url)
 	patch_notes_url = _normalize_url(patch_notes_url)
 	credits_url = _normalize_url(credits_url)
 	if discord_url.is_empty():
 		discord_url = DEFAULT_DISCORD_URL
+	if not kofi_url.begins_with("https://ko-fi.com/"):
+		kofi_url = DEFAULT_KOFI_URL
 	if patch_notes_url.is_empty():
 		patch_notes_url = DEFAULT_PATCH_NOTES_URL
 	if credits_url.is_empty():
@@ -2912,6 +2930,7 @@ func _sync_button_cursors() -> void:
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 	game_folder_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	discord_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	support_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	patch_notes_button.tooltip_text = _t("Open patch notes")
 	credits_button.tooltip_text = _t("View credits")
 	uninstall_button.tooltip_text = _t("Remove installed game folder")

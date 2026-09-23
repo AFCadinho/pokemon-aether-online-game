@@ -467,6 +467,21 @@ size_flags_vertical = 3
 bbcode_enabled = true
 text = "No news available."
 
+[node name="SupportDivider" type="HSeparator" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout"]
+layout_mode = 2
+
+[node name="SupportTitle" type="Label" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Enjoying the game?"
+autowrap_mode = 3
+
+[node name="SupportButton" type="Button" parent="Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Buy me a coffee"
+
 [node name="DiagnosticsCard" type="PanelContainer" parent="Shell/MainSplit/Content" unique_id=527660436]
 visible = false
 layout_mode = 2

@@ -40,6 +40,8 @@ func _run() -> void:
 		manager.localize_tree(launcher)
 		var play := launcher.find_child("PlayButton", true, false) as Button
 		var news_title := launcher.find_child("NewsTitle", true, false) as Label
+		var support_title := launcher.find_child("SupportTitle", true, false) as Label
+		var support_button := launcher.find_child("SupportButton", true, false) as Button
 		var diagnostics_button := launcher.find_child("DiagnosticsButton", true, false) as Button
 		var diagnostics_card := launcher.find_child("DiagnosticsCard", true, false) as PanelContainer
 		var language_options := launcher.find_child("LanguageOptionsButton", true, false) as OptionButton
@@ -48,6 +50,15 @@ func _run() -> void:
 		_check(
 			news_title != null and news_title.text == "LAATSTE NIEUWS VAN AETHER",
 			"launcher news heading renders in Dutch"
+		)
+		_check(
+			support_title != null and support_title.text == "Geniet je van de game?"
+			and support_button != null and support_button.text == "Trakteer me op koffie",
+			"launcher support invitation renders in Dutch"
+		)
+		_check(
+			str(launcher.get("kofi_url")) == "https://ko-fi.com/pokeaether",
+			"launcher support button targets the PokeAether Ko-fi page"
 		)
 		_check(
 			diagnostics_button != null and diagnostics_button.text == "Diagnostiek",
