@@ -43,6 +43,7 @@ func _run() -> void:
 		var support_title := launcher.find_child("SupportTitle", true, false) as Label
 		var support_button := launcher.find_child("SupportButton", true, false) as Button
 		var diagnostics_button := launcher.find_child("DiagnosticsButton", true, false) as Button
+		var credits_button := launcher.find_child("CreditsButton", true, false) as Button
 		var diagnostics_card := launcher.find_child("DiagnosticsCard", true, false) as PanelContainer
 		var language_options := launcher.find_child("LanguageOptionsButton", true, false) as OptionButton
 		var last_check := launcher.find_child("LastCheckLabel", true, false) as Label
@@ -63,6 +64,11 @@ func _run() -> void:
 		_check(
 			diagnostics_button != null and diagnostics_button.text == "Diagnostiek",
 			"launcher diagnostics navigation renders in Dutch"
+		)
+		_check(credits_button == null, "launcher leaves Credits in the game client")
+		_check(
+			str(launcher.get("patch_notes_url")) == "https://forums.pokeaether.com/c/announcements/updates/",
+			"launcher Patch Notes targets forum development updates"
 		)
 		_check(diagnostics_card != null, "launcher includes the diagnostics view")
 		_check(last_check != null and last_check.text == "Nooit", "launcher localizes an empty last-check value")
