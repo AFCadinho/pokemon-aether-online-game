@@ -247,7 +247,7 @@ func logout() -> Dictionary:
 	return response
 
 
-func create_account_portal_launch(locale: String) -> Dictionary:
+func create_account_portal_launch(locale: String, destination: String = "account") -> Dictionary:
 	if session_token == "":
 		return {
 			"success": false,
@@ -259,6 +259,7 @@ func create_account_portal_launch(locale: String) -> Dictionary:
 			"error": "Account management is unavailable while impersonating a player.",
 		}
 
+	var normalized_destination := "gems" if destination == "gems" else "account"
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + "/auth/account-portal/launch",
@@ -269,14 +270,17 @@ func create_account_portal_launch(locale: String) -> Dictionary:
 			ACCEPT_HEADER,
 			get_authorization_header(),
 		])),
-		JSON.stringify({"locale": locale})
+		JSON.stringify({
+			"locale": locale,
+			"destination": normalized_destination,
+		})
 	)
 	if not bool(response.get("success", false)):
 		return response
 
 	var body := _dictionary_from_value(response.get("body", {}))
 	var url := str(body.get("url", "")).strip_edges()
-	if not _is_safe_account_portal_url(url, base_url):
+	if not _is_safe_account_portal_url(url, base_url, normalized_destination):
 		return {
 			"success": false,
 			"error": "The account portal returned an invalid address.",
@@ -288,10 +292,15 @@ func create_account_portal_launch(locale: String) -> Dictionary:
 	}
 
 
-func _is_safe_account_portal_url(url: String, gateway_base_url: String) -> bool:
+func _is_safe_account_portal_url(
+	url: String,
+	gateway_base_url: String,
+	destination: String = "account"
+) -> bool:
 	if url.length() > 2048 or url.contains("\n") or url.contains("\r"):
 		return false
-	if not url.contains("/launch#ticket=") or url.contains("@"):
+	var expected_path := "/gems#ticket=" if destination == "gems" else "/launch#ticket="
+	if not url.contains(expected_path) or url.contains("@"):
 		return false
 	if url.begins_with("https://"):
 		return true

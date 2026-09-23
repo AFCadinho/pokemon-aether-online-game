@@ -13,7 +13,8 @@ func _init() -> void:
 	_check(auth_service.contains('base_url + "/auth/account-portal/launch"'), "the game requests portal access from the authenticated backend")
 	_check(auth_service.contains("get_authorization_header()"), "portal launch uses the active game session")
 	_check(auth_service.contains("func _is_safe_account_portal_url"), "portal addresses are validated before opening")
-	_check(auth_service.contains('url.contains("/launch#ticket=")'), "the launch response must contain a fragment ticket")
+	_check(auth_service.contains('var expected_path := "/gems#ticket=" if destination == "gems" else "/launch#ticket="'),
+		"the launch response must match the requested portal destination")
 	_check(auth_service.contains('url.begins_with("https://")'), "remote portal links require HTTPS")
 	_check(auth_service.contains("is_impersonating()"), "staff impersonation cannot request player portal access")
 

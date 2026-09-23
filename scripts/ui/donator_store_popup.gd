@@ -899,7 +899,7 @@ func _on_add_gems_pressed() -> void:
 	if auth_service == null:
 		_finish_add_gems_launch({"success": false})
 		return
-	var result: Dictionary = await auth_service.call("create_account_portal_launch", locale)
+	var result: Dictionary = await auth_service.call("create_account_portal_launch", locale, "gems")
 	if is_inside_tree():
 		_finish_add_gems_launch(result)
 
