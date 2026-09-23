@@ -14,6 +14,10 @@ geen vervanging.
 - Lokalisatie: [`localization_conventions.md`](localization_conventions.md).
 - Handmatige spelcontrole: [`manual-end-to-end-testguide.md`](manual-end-to-end-testguide.md).
 - Sprites: [`tools/sprite_factory/README.md`](../tools/sprite_factory/README.md).
+- Kaart-atlassen: de huidige import en compactie staan onder
+  [`addons/tiled_tmx_importer/importer/`](../addons/tiled_tmx_importer/importer/);
+  de opslagvorm wordt gecontroleerd door
+  [`generated_map_texture_storage_check.gd`](../tests/generated_map_texture_storage_check.gd).
 
 ## Historische stukken en checks
 
