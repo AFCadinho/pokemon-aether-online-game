@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- De desktopgame herkent lokale Gem-tests en toont daarvoor een expliciete testmelding in plaats van een echte Ko-fi-betaalbevestiging.
+- De lokale Gem-aankoopsimulatie toont dezelfde systeemmelding en Gem-beloning als een echte bijschrijving; de test blijft intern gescheiden van betaalde aankopen.
 
 - Nieuwe Ko-fi-Gem-bijschrijvingen tonen in de game een systeemmelding en een Gem-beloning; de portemonnee wordt eerst vernieuwd.
 
