@@ -52,8 +52,8 @@ func _run() -> void:
 			"launcher news heading renders in Dutch"
 		)
 		_check(
-			support_button != null and support_button.text == "Ko-fi"
-			and support_button.tooltip_text == "Trakteer me op koffie",
+			support_button != null and support_button.text == "Steun ons"
+			and support_button.tooltip_text == "Steun PokeAether via Ko-fi",
 			"launcher support link stays compact and has a Dutch tooltip"
 		)
 		_check(
