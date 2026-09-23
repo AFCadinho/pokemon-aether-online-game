@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Cosmetics-catalogus opent nu met outfits voor het gender van je personage; via een filter blijven outfits voor het andere gender en alle outfits bereikbaar.
+
 - Het Gems-saldo in de winkel heeft nu een expliciet label: “Balance” in het Engels en de vertaalde variant in andere talen.
 
 - `Get Aether Gems` opent nu een gerichte Gems-pagina zonder profiel-, beveiligings- of privacy-instellingen; accountbeheer blijft een afzonderlijke bestemming.

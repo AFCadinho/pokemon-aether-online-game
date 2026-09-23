@@ -121,6 +121,9 @@ func _run() -> void:
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic filters appear inside Cosmetics")
 	_check(store.cosmetic_filter_group_buttons.size() == 3, "three compact cosmetic primary filters are built")
+	_check(store.cosmetic_outfit_gender_control != null, "outfits include an audience filter")
+	_check(store.active_cosmetic_filter_group == "outfits" and store.active_outfit_gender_filter == "mine",
+		"Cosmetics opens on outfits for the current character gender")
 	_check(store.cosmetic_item_category_select != null, "loose items use a category dropdown")
 	_check(store.cosmetic_item_category_select.item_count == 9, "dropdown includes all eight item types")
 	var item_category_popup := store.cosmetic_item_category_select.get_popup()
@@ -195,7 +198,12 @@ func _run() -> void:
 	_check(ironfanton_preview.get("hair", "") == "IronFanton_Hair", "IronFanton preview includes the hairstyle")
 	_check(ironfanton_preview.get("facial_hair", "") == "IronFanton_Beard", "IronFanton preview includes the beard")
 	_check(ironfanton_preview.get("top", "") == "IronFanton_Shirt", "IronFanton preview includes the shirt")
-	_check(store.product_buttons.has("aether-blossom-outfit"), "male Trainers can browse the female-only Aether Blossom outfit")
+	_check(not store.product_buttons.has("aether-blossom-outfit"), "male Trainers initially see their own-gender outfits")
+	store.active_outfit_gender_filter = "other"
+	store.call("_render_products")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "male Trainers can switch to browse female-only outfits")
+	store.active_outfit_gender_filter = "mine"
+	store.call("_render_products")
 	store.call("_select_product", "aether-blossom-outfit")
 	var male_blossom_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(male_blossom_preview.get("gender", "") == "female", "female-only outfits use a female preview model for male Trainers")
@@ -225,8 +233,13 @@ func _run() -> void:
 
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
-	_check(store.product_buttons.has("adinho-classic-outfit"), "female Trainers can browse the male-only Adinho Classic outfit")
-	_check(store.product_buttons.has("ironfanton-outfit"), "female Trainers can browse the male-only IronFanton outfit")
+	_check(not store.product_buttons.has("adinho-classic-outfit"), "female Trainers initially see their own-gender outfits")
+	store.active_outfit_gender_filter = "other"
+	store.call("_render_products")
+	_check(store.product_buttons.has("adinho-classic-outfit"), "female Trainers can switch to browse male-only outfits")
+	_check(store.product_buttons.has("ironfanton-outfit"), "other-gender filter includes male outfit boxes")
+	store.active_outfit_gender_filter = "mine"
+	store.call("_render_products")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
 	store.call("_select_product", "aether-blossom-outfit")
 	var blossom_item: Dictionary = store.call("_catalog_item", "aether-blossom-outfit")
@@ -296,7 +309,12 @@ func _run() -> void:
 	store.call("_select_cosmetic_subcategory", "outfits")
 	store.set_trainer_gender("male")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Adinho Classic is listed for compatible male models")
-	_check(store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom remains visible for male models")
+	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom is filtered from the default male outfit view")
+	store.active_outfit_gender_filter = "other"
+	store.call("_render_products")
+	_check(store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom remains accessible from the other-gender filter")
+	store.active_outfit_gender_filter = "mine"
+	store.call("_render_products")
 	_check(store.call("_item_gender_badge", classic_item) == "MALE ONLY", "Adinho cards visibly identify male-only compatibility")
 	_check(
 		store.call("_item_gender_compatibility_note", classic_item) == "Male character models only.",
