@@ -6,7 +6,7 @@
 
 - The launcher menu no longer shows a duplicate Credits link; Patch Notes now opens the development updates on the forum.
 
-- The launcher shows Discord and Ko-fi side by side as compact social links.
+- The launcher shows Discord and a clear Support Us link side by side.
 
 - The Gems balance in the store now has an explicit label: “Balance” in English and its translated equivalent in other languages.
 

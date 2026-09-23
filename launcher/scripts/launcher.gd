@@ -418,9 +418,10 @@ func _apply_visual_style() -> void:
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("hover", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
 	for social_button: Button in [discord_button, support_button]:
-		social_button.add_theme_stylebox_override("normal", _sidebar_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
-		social_button.add_theme_stylebox_override("hover", _sidebar_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
-		social_button.add_theme_stylebox_override("pressed", _sidebar_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
+		social_button.add_theme_stylebox_override("normal", _social_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
+		social_button.add_theme_stylebox_override("hover", _social_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
+		social_button.add_theme_stylebox_override("pressed", _social_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
+		social_button.add_theme_font_size_override("font_size", 14)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_constant_override("icon_max_width", 20)
 
 	patch_notes_button.add_theme_stylebox_override("disabled", _panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 8, 0))
@@ -492,6 +493,13 @@ func _sidebar_button_style(background_color: Color, border_color: Color, border_
 	style_box.content_margin_bottom = 8.0
 	style_box.shadow_size = 0
 	style_box.shadow_offset = Vector2.ZERO
+	return style_box
+
+
+func _social_button_style(background_color: Color, border_color: Color, border_width: int) -> StyleBoxFlat:
+	var style_box := _sidebar_button_style(background_color, border_color, border_width)
+	style_box.content_margin_left = 6.0
+	style_box.content_margin_right = 6.0
 	return style_box
 
 

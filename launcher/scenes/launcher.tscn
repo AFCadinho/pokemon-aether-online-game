@@ -191,8 +191,8 @@ alignment = 0
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Buy me a coffee"
-text = "Ko-fi"
+tooltip_text = "Support PokeAether on Ko-fi"
+text = "Support Us"
 
 [node name="ServerCard" type="PanelContainer" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout" unique_id=75090192]
 layout_mode = 2
