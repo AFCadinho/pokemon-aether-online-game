@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Release 0.3.79 bereidt de zeven goedgekeurde realtime 3D-Pokémonbundles voor op de desktopdistributie; launcher- en macOS-builds blijven afzonderlijke assets.
+
 - Co-op immersive battles houden nu de geselecteerde actorbeweging, trainerposities, doubles-hitboxes en partydock-layout stabiel tijdens presentatie en herhaalde testcycli.
 
 - De desktoplauncher kan de zeven goedgekeurde 3D-Pokémon nu als afzonderlijke, gecontroleerde downloads installeren en bijwerken. Ontbrekende modellen blijven veilig op de bestaande battleweergave terugvallen.
