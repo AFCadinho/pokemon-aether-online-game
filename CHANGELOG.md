@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Added the missing Simplified Chinese outfit-gender filter labels in the Aether Gift Store.
+
 ## 0.3.81
 
 ### Launcher, Accounts & Mods
