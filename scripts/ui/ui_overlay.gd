@@ -26272,6 +26272,9 @@ func _hide_pokemon_summary_popup(card_key: String = "") -> void:
 		if pokemon_summary_dragging_card_key == card_key:
 			pokemon_summary_dragging_card_key = ""
 	_hide_pokemon_summary_ev_allocate_popup()
+	# Escape inspects the active card's picker controls. Clear their references
+	# before the queued card is freed, including when another card stays open.
+	_reset_pokemon_summary_card_node_references()
 	pokemon_summary_preview_pokemon = null
 	pokemon_summary_mode = "interactive"
 	pokemon_summary_selected_slot = -1

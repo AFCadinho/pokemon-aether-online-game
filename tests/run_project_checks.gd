@@ -292,6 +292,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/field_move_charm_hm_requirement_check.gd",
 	"res://tests/field_move_audio_check.gd",
 	"res://tests/pokemon_readonly_summary_check.gd",
+	"res://tests/pokemon_summary_escape_after_close_check.gd",
 	"res://tests/pokemon_summary_fixed_size_check.gd",
 	"res://tests/pokedex_sprite_scale_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
