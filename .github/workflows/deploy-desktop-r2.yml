@@ -432,7 +432,14 @@ jobs:
               raise SystemExit("approved 3D release must contain one index and seven bundles")
           for entry in entries:
               url = f"{os.environ['UPDATE_BASE_URL'].rstrip('/')}/{entry['object_key']}"
-              request = Request(url, method="HEAD", headers={"Cache-Control": "no-cache"})
+              request = Request(
+                  url,
+                  method="HEAD",
+                  headers={
+                      "Cache-Control": "no-cache",
+                      "User-Agent": "PokeAether-ReleaseVerifier/1.0",
+                  },
+              )
               with urlopen(request, timeout=60) as response:
                   if response.status < 200 or response.status >= 300:
                       raise SystemExit(f"missing approved 3D release object: {url}")
