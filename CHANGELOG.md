@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed a crash when pressing Escape after closing a Pokémon summary card.
+
 - Added the missing Simplified Chinese outfit-gender filter labels in the Aether Gift Store.
 
 ## 0.3.81
