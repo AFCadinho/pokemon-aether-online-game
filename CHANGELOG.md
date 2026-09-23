@@ -6,7 +6,7 @@
 
 - The launcher menu no longer shows a duplicate Credits link; Patch Notes now opens the development updates on the forum.
 
-- The launcher now shows a modest Ko-fi button among the social links to support PokeAether.
+- The launcher shows Discord and Ko-fi side by side as compact social links.
 
 - The Gems balance in the store now has an explicit label: “Balance” in English and its translated equivalent in other languages.
 
