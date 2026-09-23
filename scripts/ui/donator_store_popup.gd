@@ -615,11 +615,13 @@ var trainer_appearance: Dictionary = {}
 var active_category := "featured"
 var active_cosmetic_filter_group := "all"
 var active_cosmetic_subcategory := "all"
+var active_outfit_gender_filter := "mine"
 var selected_item_id := ""
 var category_buttons: Dictionary = {}
 var cosmetic_filter_group_buttons: Dictionary = {}
 var cosmetic_item_category_control: HBoxContainer
 var cosmetic_item_category_select: OptionButton
+var cosmetic_outfit_gender_control: OptionButton
 var product_buttons: Dictionary = {}
 var catalog_search_input: LineEdit
 var catalog_search_text := ""
@@ -1072,6 +1074,16 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 		row.add_child(button)
 		cosmetic_filter_group_buttons[group_id] = button
 
+	cosmetic_outfit_gender_control = OptionButton.new()
+	cosmetic_outfit_gender_control.name = "CosmeticOutfitGenderFilter"
+	cosmetic_outfit_gender_control.custom_minimum_size = Vector2(190, 30)
+	for filter_id: String in ["mine", "other", "all"]:
+		cosmetic_outfit_gender_control.add_item(_t("ui.store.cosmetic.outfit_gender.%s" % filter_id))
+		cosmetic_outfit_gender_control.set_item_metadata(cosmetic_outfit_gender_control.item_count - 1, filter_id)
+	cosmetic_outfit_gender_control.item_selected.connect(_on_outfit_gender_filter_selected)
+	_apply_cosmetic_item_category_style(cosmetic_outfit_gender_control)
+	row.add_child(cosmetic_outfit_gender_control)
+
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(spacer)
@@ -1333,6 +1345,10 @@ func _select_category(category_id: String) -> void:
 		return
 	var category_changed := active_category != category_id
 	active_category = category_id
+	if category_changed and category_id == "cosmetics":
+		active_cosmetic_filter_group = "outfits"
+		active_cosmetic_subcategory = "outfits"
+		active_outfit_gender_filter = "mine"
 	selected_item_id = ""
 	if category_changed and catalog_search_text != "":
 		catalog_search_text = ""
@@ -1378,10 +1394,23 @@ func _select_cosmetic_filter_group(group_id: String) -> void:
 		active_cosmetic_subcategory = "all"
 	elif group_id == "outfits":
 		active_cosmetic_subcategory = "outfits"
+		active_outfit_gender_filter = "mine"
 	elif not COSMETIC_ITEM_CATEGORY_ORDER.has(active_cosmetic_subcategory):
 		active_cosmetic_subcategory = "all"
 	selected_item_id = ""
 	_refresh_cosmetic_subcategory_bar()
+	_reset_selection_footer()
+	_render_products()
+
+
+func _on_outfit_gender_filter_selected(index: int) -> void:
+	if cosmetic_outfit_gender_control == null or index < 0:
+		return
+	var filter_id := str(cosmetic_outfit_gender_control.get_item_metadata(index))
+	if not ["mine", "other", "all"].has(filter_id):
+		return
+	active_outfit_gender_filter = filter_id
+	selected_item_id = ""
 	_reset_selection_footer()
 	_render_products()
 
@@ -1410,6 +1439,13 @@ func _refresh_cosmetic_subcategory_bar() -> void:
 			_apply_cosmetic_subcategory_style(button, group_id == active_cosmetic_filter_group)
 	if cosmetic_item_category_control != null:
 		cosmetic_item_category_control.visible = active_cosmetic_filter_group == "items"
+	if cosmetic_outfit_gender_control != null:
+		cosmetic_outfit_gender_control.visible = active_cosmetic_filter_group == "outfits"
+		for index: int in range(cosmetic_outfit_gender_control.item_count):
+			var filter_id := str(cosmetic_outfit_gender_control.get_item_metadata(index))
+			cosmetic_outfit_gender_control.set_item_text(index, _t("ui.store.cosmetic.outfit_gender.%s" % filter_id))
+			if filter_id == active_outfit_gender_filter:
+				cosmetic_outfit_gender_control.select(index)
 	if cosmetic_item_category_select != null and active_cosmetic_filter_group == "items":
 		var selected_index := 0
 		for index: int in range(cosmetic_item_category_select.item_count):
@@ -1509,7 +1545,17 @@ func _matches_cosmetic_subcategory(item: Dictionary) -> bool:
 	if active_cosmetic_filter_group == "all":
 		return true
 	if active_cosmetic_filter_group == "outfits":
-		return _item_has_cosmetic_subcategory(item, "outfits")
+		if not _item_has_cosmetic_subcategory(item, "outfits"):
+			return false
+		var genders := _item_genders(item)
+		var other_gender := "female" if trainer_gender == "male" else "male"
+		match active_outfit_gender_filter:
+			"mine":
+				return genders.is_empty() or genders.has(trainer_gender)
+			"other":
+				return genders.has(other_gender) and not genders.has(trainer_gender)
+			_:
+				return true
 	if _item_has_cosmetic_subcategory(item, "outfits"):
 		return false
 	if active_cosmetic_subcategory == "all":
