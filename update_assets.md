@@ -2,13 +2,19 @@
 
 For music assets, use `update_music.md`. This document only covers Pokemon sprite packs.
 
+Uploading to R2 and pushing a release require explicit authorization. Follow
+the workspace `AGENTS.md` and the applicable production instructions before
+running the upload steps below.
+
 Pokemon sprite assets are intentionally not stored in git because the files are too large. Keep the local folders under:
 
 ```text
 assets/sprites/pokemon/
 ```
 
-When sprites change, upload the changed sprite packs from a local checkout and then push the updated launcher manifest references.
+When an authorized sprite release is prepared, upload the changed packs and
+integrate the updated launcher manifest references through the assigned task
+slot.
 
 ## One-Time Setup
 
@@ -67,7 +73,7 @@ pokemon-gen5-shiny-front
 pokemon-gen5-shiny-back
 ```
 
-## Publish The New Manifest
+## Integrate The New Manifest
 
 After the script finishes, check the diff:
 
@@ -76,15 +82,17 @@ git status
 git diff -- .github/workflows/deploy-desktop-r2.yml
 ```
 
-If the workflow changed, commit and push:
+If the workflow changed, commit it on the assigned task branch and follow the
+workspace integration procedure to merge into local `development`. Promotion
+to `main`, pushing, and publishing are separate authorized release steps.
 
 ```bash
 git add .github/workflows/deploy-desktop-r2.yml
 git commit -m "Update sprite asset pack versions"
-git push
 ```
 
-Pushing `main` runs GitHub Actions. The deploy workflow publishes launcher manifests that point to the R2 zips uploaded by the local script.
+For an authorized release, consult the current deployment workflow before
+publishing launcher manifests that point to the uploaded R2 ZIPs.
 
 If the script prints `No sprite asset pack changes detected.`, there is nothing to commit or push.
 

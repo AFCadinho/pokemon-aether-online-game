@@ -1,110 +1,36 @@
-# PokeAether Workflow
+# PokeAether workflow
 
-This project separates source-code pushes from playable client releases.
+This page points to the current procedures. Work from the paired `game/`
+workspace, where the frontend and backend `development` branches are integrated
+together.
 
-## Daily Development
+## Development
 
-Use normal Git pushes for code changes:
+- Read this repository's `AGENTS.md` and the workspace's `AGENTS.md` first.
+- Reserve a paired slot with `ops/worktrees/list-slots` and
+  `ops/worktrees/prepare-task`. Make frontend changes only in its assigned
+  worktree.
+- Run focused checks in that slot. Use `ops/worktrees/slot-env` for Godot.
+- Commit the task, merge it into local `development` with
+  `ops/integration/merge-task`, then release the slot with
+  `ops/worktrees/finish-task`.
 
-```bash
-git push origin main
-```
+The detailed procedures are in `game/ops/worktrees/README.md` and
+`game/ops/integration/README.md`. The complete paired verification gate is for
+an explicitly requested certification or the final check before promotion.
 
-A normal push updates the repository only. It does not build Windows, Linux, or macOS clients, it does not publish new launcher manifests, and players do not receive an update.
+## Release
 
-This keeps small commits, typo fixes, and work-in-progress changes from becoming public game updates.
+Promotion to `main`, pushing, publishing, deployment, and production access
+each require explicit authorization. Follow the current integration procedure
+before promotion. For an authorized release, consult the current workflow
+definitions under `.github/workflows/` for their actual inputs and sequence;
+do not use old release commands copied from notes or chat.
 
-## Local Checks
+Keep player-facing notes in `CHANGELOG.md`. Add completed changes under
+`## Unreleased` during development, then prepare the release section as part of
+the approved release work.
 
-Run all current headless project checks from the repository root:
-
-```bash
-godot --headless --path . --script res://tests/run_project_checks.gd
-```
-
-This runs the standalone `tests/*_check.gd` scripts, including the visual TMX importer fixture check. The visual importer check generates only fixture output under `res://generated/tiled_visuals/` and cleans it up before exiting. Per-check Godot logs are written to `/tmp/pokeaether_project_checks/`.
-
-## Publish A New Client Build
-
-When you want players to receive a new build:
-
-1. Push the code you want to release to `main`.
-2. Open GitHub.
-3. Go to **Actions**.
-4. Select **Deploy Desktop Builds to R2**.
-5. Click **Run workflow**.
-6. Fill in `release_version`, for example `0.2.0`.
-7. Set `build_launcher` to `true` only when the launcher app itself changed.
-8. Set `announce_discord` to `true` if this release should be posted to Discord.
-9. Optionally fill in `release_notes`.
-10. Wait until the workflow finishes successfully.
-
-After a successful run, the workflow uploads the new game zips and launcher manifests to R2. The launcher then sees the new manifest version and downloads the update.
-
-## Changelog
-
-Keep release notes in `CHANGELOG.md`.
-
-The changelog is for players. Write entries in clear, non-technical language that explains what changed in the game experience. Avoid implementation details, internal filenames, API names, and developer-only wording.
-
-The changelog uses Discord-friendly Markdown on purpose:
-
-```md
-**Added**
-- Added a new feature.
-
-**Fixed**
-- Fixed a reported bug.
-
-**Changed**
-- Changed an existing behavior.
-```
-
-During development, add finished changes under `## Unreleased`. When publishing a release, rename the current `## Unreleased` section to the new version, for example `## 0.2.1 - 2026-06-28`, then add a new empty `## Unreleased` section above it.
-
-For Discord, copy the release section contents from `CHANGELOG.md` into the workflow's `release_notes` field and add `Open the launcher to update.` at the end.
-
-## GitHub CLI
-
-The same release workflow can be started from the terminal:
-
-```bash
-gh workflow run deploy-desktop-r2.yml \
-  --ref main \
-  -f release_version=0.2.0 \
-  -f build_launcher=false \
-  -f announce_discord=true \
-  -f release_notes="Open de launcher om de nieuwste build te downloaden."
-```
-
-Use `build_launcher=true` when files under `launcher/`, launcher export settings, or launcher packaging changed.
-
-## Discord And Website Updates
-
-Discord announcements are release announcements, not commit announcements.
-
-The old per-push Discord workflow has been removed because a normal push no longer means a playable build exists.
-
-For public releases:
-
-1. Run the deploy workflow.
-2. Let the workflow post to Discord with `announce_discord=true`, or post manually after the workflow succeeds.
-3. Update website or launcher news with the same release notes when needed.
-
-## Versioning
-
-Use plain game versions for `release_version`, such as:
-
-```text
-0.2.0
-0.2.1
-0.3.0
-```
-
-The release version is written into the launcher manifest and into the generated game zip names.
-
-## Private Repository Notes
-
-Public repositories can use standard GitHub-hosted Actions runners without consuming paid minutes. Private repositories use the account's included Actions minutes and storage first, then billing or limits apply depending on the account settings.
-
-Because this repo no longer builds all three desktop platforms on every push, switching the repo back to private should be much easier to keep within the free included Actions usage. Still check GitHub's billing page after the first few manual releases, because full Godot exports for three platforms can use a meaningful amount of runner time.
+Sprite and music package procedures are in `update_assets.md` and
+`update_music.md`. Their upload steps are production actions and require the
+same explicit authorization.
