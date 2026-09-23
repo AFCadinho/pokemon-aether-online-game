@@ -2615,6 +2615,7 @@
   "ui.guild.invite.pending": "PENDING INVITATIONS",
   "ui.guild.notification.application_accepted": "Your application to {guild} was accepted by {actor}.",
   "ui.gems.kofi_credit_received": "Ko-fi payment verified: {amount} Aether Gems were added to your account.",
+  "ui.gems.simulated_credit_received": "Local test purchase: {amount} Aether Gems were added. No Ko-fi payment was made.",
   "ui.guild.notification.application_declined": "Your application to {guild} was declined.",
   "ui.guild.notification.member_left": "{trainer} left {guild}.",
   "ui.guild.notification.member_kicked": "You were removed from {guild} by {actor}.",

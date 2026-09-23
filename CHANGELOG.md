@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktopgame herkent lokale Gem-tests en toont daarvoor een expliciete testmelding in plaats van een echte Ko-fi-betaalbevestiging.
+
 - Nieuwe Ko-fi-Gem-bijschrijvingen tonen in de game een systeemmelding en een Gem-beloning; de portemonnee wordt eerst vernieuwd.
 
 - Fixed a crash when pressing Escape after closing a Pokémon summary card.
