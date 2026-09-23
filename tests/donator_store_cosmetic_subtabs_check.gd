@@ -77,9 +77,32 @@ func _run() -> void:
 			add_gems_button.visible,
 			"Add Gems is visible in the Store"
 		)
+		_check(add_gems_button.text == "Get Aether Gems", "Store uses the clear Aether Gems call to action")
+		_check(add_gems_button.custom_minimum_size.x >= 184 and add_gems_button.icon != null,
+			"Aether Gems is a prominent, icon-led header action")
+		_check(add_gems_button.focus_mode == Control.FOCUS_ALL,
+			"Aether Gems can be opened with keyboard focus")
+		var auth_service := root.get_node_or_null("AuthService")
+		_check(auth_service != null, "Store shares the authenticated portal service")
+		if auth_service != null:
+			var previous_session_token := str(auth_service.get("session_token"))
+			auth_service.set("session_token", "")
+			add_gems_button.emit_signal("pressed")
+			await process_frame
+			auth_service.set("session_token", previous_session_token)
+		_check(not add_gems_button.disabled and not store.portal_launch_in_progress,
+			"portal launch failure allows a retry")
+		_check(store.add_gems_feedback_label.visible
+			and store.add_gems_feedback_label.text == localization_manager.text("ui.store.add_gems_error"),
+			"unauthenticated portal launch displays a localized message beside the action")
+		store.add_gems_feedback_label.visible = false
 	_check(source.contains('auth_service.call("create_account_portal_launch", locale)'), "Add Gems uses the authenticated portal launch")
 	_check(source.contains("OS.shell_open(str(result.get(\"url\", \"\")))"), "Add Gems opens only the returned portal URL")
-	_check(not source.contains("ko-fi.com"), "the game Store never contains a Ko-fi product link")
+	_check(source.contains("if portal_launch_in_progress:") and source.contains("add_gems_button.disabled = true"),
+		"repeated clicks cannot request multiple portal launch tickets")
+	_check(not source.contains("ko-fi.com") and not source.contains("direct_link_code")
+		and not source.contains("KOFI_GEM") and not source.contains("€"),
+		"the game Store contains no Ko-fi URL, product mapping, payment flag, or EUR price")
 	_check(source.contains("product_grid.columns = 3"), "Store catalog uses three compact product columns")
 	_check(
 		source.contains("button.custom_minimum_size = Vector2(0, 140)"),
@@ -606,6 +629,13 @@ func _run() -> void:
 	)
 
 	if localization_manager != null:
+		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+			localization_manager.set_locale(locale)
+			await process_frame
+			_check(add_gems_button.text == localization_manager.text("ui.store.add_gems"),
+				"Aether Gems action is localized for %s" % locale)
+			_check(localization_manager.text("ui.store.add_gems_error_open") != "ui.store.add_gems_error_open",
+				"browser launch failure is localized for %s" % locale)
 		localization_manager.set_locale("nl")
 		await process_frame
 		var featured_button := store.category_buttons.get("featured") as Button

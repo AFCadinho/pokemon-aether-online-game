@@ -624,6 +624,9 @@ var product_buttons: Dictionary = {}
 var catalog_search_input: LineEdit
 var catalog_search_text := ""
 var balance_label: Label
+var add_gems_button: Button
+var add_gems_feedback_label: Label
+var portal_launch_in_progress := false
 var hero_title_label: Label
 var hero_description_label: Label
 var cosmetic_subcategory_bar: PanelContainer
@@ -809,9 +812,13 @@ func _create_header() -> Control:
 	margin.add_theme_constant_override("margin_bottom", 8)
 	panel.add_child(margin)
 
+	var header_content := VBoxContainer.new()
+	header_content.add_theme_constant_override("separation", 4)
+	margin.add_child(header_content)
+
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
-	margin.add_child(row)
+	header_content.add_child(row)
 
 	var icon_frame := PanelContainer.new()
 	icon_frame.custom_minimum_size = Vector2(46, 46)
@@ -847,16 +854,18 @@ func _create_header() -> Control:
 
 	row.add_child(_create_balance_pill())
 
-	var add_gems_button := Button.new()
+	add_gems_button = Button.new()
 	add_gems_button.name = "AddGemsButton"
 	_set_localized_property(add_gems_button, "text", "ui.store.add_gems")
 	_set_localized_property(add_gems_button, "tooltip_text", "ui.store.add_gems_tooltip")
-	add_gems_button.custom_minimum_size = Vector2(96, 36)
-	add_gems_button.focus_mode = Control.FOCUS_NONE
+	add_gems_button.custom_minimum_size = Vector2(184, 42)
+	add_gems_button.focus_mode = Control.FOCUS_ALL
+	add_gems_button.icon = GEM_ICON
+	add_gems_button.expand_icon = true
+	add_gems_button.add_theme_constant_override("icon_max_width", 19)
 	add_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	add_gems_button.pressed.connect(_on_add_gems_pressed)
-	_apply_text_button_style(add_gems_button, UI_GOLD)
-	add_gems_button.visible = true
+	_apply_add_gems_button_style(add_gems_button)
 	row.add_child(add_gems_button)
 
 	var close_button := Button.new()
@@ -868,25 +877,52 @@ func _create_header() -> Control:
 	close_button.pressed.connect(close_store)
 	_apply_text_button_style(close_button, UI_BORDER)
 	row.add_child(close_button)
+
+	add_gems_feedback_label = Label.new()
+	add_gems_feedback_label.name = "AddGemsFeedback"
+	add_gems_feedback_label.visible = false
+	add_gems_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_gems_feedback_label.add_theme_font_size_override("font_size", 11)
+	header_content.add_child(add_gems_feedback_label)
 	return panel
 
 
 func _on_add_gems_pressed() -> void:
-	var message := _t("ui.store.add_gems_opening")
-	if status_label != null:
-		status_label.text = message
+	if portal_launch_in_progress:
+		return
+	portal_launch_in_progress = true
+	add_gems_button.disabled = true
+	_set_add_gems_feedback("ui.store.add_gems_opening")
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	var locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
 	var auth_service := get_node_or_null("/root/AuthService")
 	if auth_service == null:
-		if status_label != null:
-			status_label.text = _t("ui.store.add_gems_error")
+		_finish_add_gems_launch({"success": false})
 		return
 	var result: Dictionary = await auth_service.call("create_account_portal_launch", locale)
-	if bool(result.get("success", false)) and OS.shell_open(str(result.get("url", ""))) == OK:
-		message = _t("ui.store.add_gems_opened")
-	else:
-		message = _t("ui.store.add_gems_error")
+	if is_inside_tree():
+		_finish_add_gems_launch(result)
+
+
+func _finish_add_gems_launch(result: Dictionary) -> void:
+	var key := "ui.store.add_gems_error"
+	if bool(result.get("success", false)):
+		if OS.shell_open(str(result.get("url", ""))) == OK:
+			key = "ui.store.add_gems_opened"
+		else:
+			key = "ui.store.add_gems_error_open"
+	_set_add_gems_feedback(key, key != "ui.store.add_gems_opened")
+	portal_launch_in_progress = false
+	if add_gems_button != null:
+		add_gems_button.disabled = false
+
+
+func _set_add_gems_feedback(key: String, is_error: bool = false) -> void:
+	var message := _t(key)
+	if add_gems_feedback_label != null:
+		add_gems_feedback_label.text = message
+		add_gems_feedback_label.add_theme_color_override("font_color", UI_DANGER if is_error else UI_CYAN)
+		add_gems_feedback_label.visible = true
 	if status_label != null:
 		status_label.text = message
 
@@ -2403,6 +2439,19 @@ func _apply_product_card_style(button: Button, selected: bool) -> void:
 	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, Color("#8e6cc1"), 11, 1))
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_BASE, UI_PURPLE, 11, 1))
 	button.add_theme_stylebox_override("focus", _button_style(background, accent, 11, 1))
+
+
+func _apply_add_gems_button_style(button: Button) -> void:
+	button.add_theme_color_override("font_color", Color("#24152e"))
+	button.add_theme_color_override("font_hover_color", Color("#24152e"))
+	button.add_theme_color_override("font_pressed_color", Color("#24152e"))
+	button.add_theme_color_override("font_disabled_color", UI_MUTED_TEXT)
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_stylebox_override("normal", _button_style(Color("#f0cc70"), Color("#ffe4a5"), 9, 1))
+	button.add_theme_stylebox_override("hover", _button_style(Color("#ffe1a0"), Color("#fff1c8"), 9, 1))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#d9af52"), UI_GOLD, 9, 1))
+	button.add_theme_stylebox_override("focus", _button_style(Color("#f0cc70"), UI_PURPLE, 9, 2))
+	button.add_theme_stylebox_override("disabled", _button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SOFT, 9, 1))
 
 
 func _apply_text_button_style(button: Button, accent: Color) -> void:
