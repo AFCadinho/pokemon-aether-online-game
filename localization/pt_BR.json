@@ -2984,7 +2984,7 @@
   "ui.atelier.slot.shoes": "Calçados",
   "ui.store.title": "Aether Gift Store",
   "ui.store.subtitle": "Bênçãos, estilo, conveniência e serviços para Treinadores",
-  "ui.store.balance": "{amount} Gemas Aether",
+  "ui.store.balance": "Saldo: {amount}",
   "ui.store.add_gems": "Obter Gemas Aether",
   "ui.store.add_gems_tooltip": "Abra o portal seguro da conta para ver os pacotes de Gemas Aether",
   "ui.store.add_gems_opening": "Abrindo o portal da conta…",

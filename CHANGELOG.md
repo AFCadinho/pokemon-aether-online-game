@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het Gems-saldo in de winkel heeft nu een expliciet label: “Balance” in het Engels en de vertaalde variant in andere talen.
+
 - `Get Aether Gems` opent nu een gerichte Gems-pagina zonder profiel-, beveiligings- of privacy-instellingen; accountbeheer blijft een afzonderlijke bestemming.
 
 - In de Aether Gift Store staat nu een duidelijke knop om Aether Gems via het accountportaal te bekijken, met een melding naast de knop als openen niet lukt.
