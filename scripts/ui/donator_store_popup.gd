@@ -856,7 +856,7 @@ func _create_header() -> Control:
 	add_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	add_gems_button.pressed.connect(_on_add_gems_pressed)
 	_apply_text_button_style(add_gems_button, UI_GOLD)
-	add_gems_button.visible = false
+	add_gems_button.visible = true
 	row.add_child(add_gems_button)
 
 	var close_button := Button.new()
@@ -872,11 +872,23 @@ func _create_header() -> Control:
 
 
 func _on_add_gems_pressed() -> void:
-	var message := _t("ui.store.add_gems_unavailable")
+	var message := _t("ui.store.add_gems_opening")
 	if status_label != null:
 		status_label.text = message
-	if selection_description_label != null:
-		selection_description_label.text = message
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	var locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
+	var auth_service := get_node_or_null("/root/AuthService")
+	if auth_service == null:
+		if status_label != null:
+			status_label.text = _t("ui.store.add_gems_error")
+		return
+	var result: Dictionary = await auth_service.call("create_account_portal_launch", locale)
+	if bool(result.get("success", false)) and OS.shell_open(str(result.get("url", ""))) == OK:
+		message = _t("ui.store.add_gems_opened")
+	else:
+		message = _t("ui.store.add_gems_error")
+	if status_label != null:
+		status_label.text = message
 
 
 func _create_balance_pill() -> Control:
