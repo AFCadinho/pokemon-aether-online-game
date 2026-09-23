@@ -17,7 +17,7 @@ func _run() -> void:
 	await process_frame
 
 	var support_button := launcher.get_node_or_null(
-		"Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/SupportButton"
+		"Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SupportButton"
 	) as Button
 	if support_button == null or launcher.get("support_button") != support_button:
 		push_error("Launcher support button is missing from the live scene")
@@ -26,6 +26,17 @@ func _run() -> void:
 		return
 	if launcher.find_child("CreditsButton", true, false) != null:
 		push_error("Launcher still shows the removed Credits button")
+		launcher.free()
+		quit(1)
+		return
+	var server_card := launcher.get_node(
+		"Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/ServerCard"
+	) as Control
+	if (
+		support_button.get_global_rect().end.y > server_card.get_global_rect().position.y
+		or server_card.get_global_rect().end.y > root.get_visible_rect().end.y
+	):
+		push_error("Launcher support link crowds the sidebar at the default window size")
 		launcher.free()
 		quit(1)
 		return

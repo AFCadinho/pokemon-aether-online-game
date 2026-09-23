@@ -4,7 +4,7 @@
 
 - Het launchermenu toont geen dubbele Credits-link meer; Patch Notes opent nu de developmentupdates op het forum.
 
-- De launcher toont onder het nieuws een bescheiden Ko-fi-knop om PokeAether te steunen.
+- De launcher toont bij de sociale links een bescheiden Ko-fi-knop om PokeAether te steunen.
 
 - De Cosmetics-catalogus opent nu met outfits voor het gender van je personage; via een filter blijven outfits voor het andere gender en alle outfits bereikbaar.
 
