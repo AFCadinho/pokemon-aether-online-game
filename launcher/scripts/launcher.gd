@@ -98,7 +98,7 @@ const SERVER_MAINTENANCE_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 @onready var progress_bar: ProgressBar = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressBar
 @onready var progress_percent_label: Label = $Shell/MainSplit/Content/ContentLayout/CenterColumn/ProgressCard/ProgressMargin/ProgressLayout/ProgressHeader/ProgressPercentLabel
 @onready var log_label: RichTextLabel = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/LogLabel
-@onready var support_button: Button = $Shell/MainSplit/Content/ContentLayout/NewsCard/NewsMargin/NewsLayout/SupportButton
+@onready var support_button: Button = $Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SupportButton
 @onready var content_layout: HBoxContainer = $Shell/MainSplit/Content/ContentLayout
 @onready var diagnostics_card: PanelContainer = $Shell/MainSplit/Content/DiagnosticsCard
 @onready var diagnostics_log_view: RichTextLabel = $Shell/MainSplit/Content/DiagnosticsCard/DiagnosticsMargin/DiagnosticsLayout/LogView
@@ -417,9 +417,10 @@ func _apply_visual_style() -> void:
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("normal", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_stylebox_override("hover", nav_active)
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/Nav/HomeButton.add_theme_color_override("font_color", Color(0.96, 0.96, 1.0))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("normal", _sidebar_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("hover", _sidebar_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
-	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_stylebox_override("pressed", _sidebar_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
+	for social_button: Button in [discord_button, support_button]:
+		social_button.add_theme_stylebox_override("normal", _sidebar_button_style(Color(0.08, 0.085, 0.14, 0.74), Color(0.24, 0.25, 0.36, 0.72), 1))
+		social_button.add_theme_stylebox_override("hover", _sidebar_button_style(Color(0.12, 0.095, 0.22, 0.86), Color(0.42, 0.22, 0.82, 0.76), 1))
+		social_button.add_theme_stylebox_override("pressed", _sidebar_button_style(Color(0.07, 0.055, 0.13, 0.9), Color(0.42, 0.22, 0.82, 0.76), 1))
 	$Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow/DiscordButton.add_theme_constant_override("icon_max_width", 20)
 
 	patch_notes_button.add_theme_stylebox_override("disabled", _panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 8, 0))
@@ -430,7 +431,6 @@ func _apply_visual_style() -> void:
 	_apply_button_style(update_button, false)
 	_apply_button_style(gen5_sprites_button, false)
 	_apply_button_style(play_button, true)
-	_apply_button_style(support_button, false)
 	for diagnostics_action_button: Button in [
 		diagnostics_back_button,
 		diagnostics_copy_button,

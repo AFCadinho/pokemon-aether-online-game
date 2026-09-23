@@ -6,7 +6,7 @@
 
 - Het launchermenu toont geen dubbele Credits-link meer; Patch Notes opent nu de developmentupdates op het forum.
 
-- De launcher toont onder het nieuws een bescheiden Ko-fi-knop om PokeAether te steunen.
+- De launcher toont bij de sociale links een bescheiden Ko-fi-knop om PokeAether te steunen.
 
 - Het Gems-saldo in de winkel heeft nu een expliciet label: “Balance” in het Engels en de vertaalde variant in andere talen.
 
