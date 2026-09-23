@@ -3001,7 +3001,7 @@
   "ui.atelier.slot.shoes": "Shoes",
   "ui.store.title": "Aether Gift Store",
   "ui.store.subtitle": "Blessings, style, convenience and Trainer services",
-  "ui.store.balance": "{amount} Aether Gems",
+  "ui.store.balance": "Balance: {amount}",
   "ui.store.add_gems": "Get Aether Gems",
   "ui.store.add_gems_tooltip": "Open the secure account portal to view Aether Gem packages",
   "ui.store.add_gems_opening": "Opening the account portal…",
