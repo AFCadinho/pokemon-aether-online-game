@@ -96,7 +96,8 @@ func _run() -> void:
 			and store.add_gems_feedback_label.text == localization_manager.text("ui.store.add_gems_error"),
 			"unauthenticated portal launch displays a localized message beside the action")
 		store.add_gems_feedback_label.visible = false
-	_check(source.contains('auth_service.call("create_account_portal_launch", locale)'), "Add Gems uses the authenticated portal launch")
+	_check(source.contains('auth_service.call("create_account_portal_launch", locale, "gems")'),
+		"Add Gems requests the dedicated authenticated Gems destination")
 	_check(source.contains("OS.shell_open(str(result.get(\"url\", \"\")))"), "Add Gems opens only the returned portal URL")
 	_check(source.contains("if portal_launch_in_progress:") and source.contains("add_gems_button.disabled = true"),
 		"repeated clicks cannot request multiple portal launch tickets")
