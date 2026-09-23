@@ -71,12 +71,15 @@ func _run() -> void:
 		"cosmetic filters no longer require horizontal scrolling"
 	)
 	var add_gems_button := store.find_child("AddGemsButton", true, false) as Button
-	_check(add_gems_button != null, "Store retains the future Add Gems action")
+	_check(add_gems_button != null, "Store exposes the Add Gems portal action")
 	if add_gems_button != null:
 		_check(
-			not add_gems_button.visible,
-			"unfinished Gem top-ups stay out of the active Store navigation"
+			add_gems_button.visible,
+			"Add Gems is visible in the Store"
 		)
+	_check(source.contains('auth_service.call("create_account_portal_launch", locale)'), "Add Gems uses the authenticated portal launch")
+	_check(source.contains("OS.shell_open(str(result.get(\"url\", \"\")))"), "Add Gems opens only the returned portal URL")
+	_check(not source.contains("ko-fi.com"), "the game Store never contains a Ko-fi product link")
 	_check(source.contains("product_grid.columns = 3"), "Store catalog uses three compact product columns")
 	_check(
 		source.contains("button.custom_minimum_size = Vector2(0, 140)"),

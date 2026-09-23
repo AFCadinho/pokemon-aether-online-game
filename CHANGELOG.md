@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Donator Store opent voor Aether Gems nu het beveiligde accountportaal; de game bevat geen Ko-fi-productlinks.
+
 - De launcher toont geen verwarrende handmatige 3D-modelimport meer; goedgekeurde 3D-Pokémon worden automatisch als gecontroleerde optionele bundles beheerd.
 
 - Release 0.3.79 bereidt de zeven goedgekeurde realtime 3D-Pokémonbundles voor op de desktopdistributie; launcher- en macOS-builds blijven afzonderlijke assets.
