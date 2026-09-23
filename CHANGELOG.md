@@ -2,29 +2,29 @@
 
 ## Unreleased
 
-### Launcher, account & mods
+### Launcher, Accounts & Mods
 
-- Het launchermenu toont geen dubbele Credits-link meer; Patch Notes opent nu de developmentupdates op het forum.
+- The launcher menu no longer shows a duplicate Credits link; Patch Notes now opens the development updates on the forum.
 
-- De launcher toont bij de sociale links een bescheiden Ko-fi-knop om PokeAether te steunen.
+- The launcher now shows a modest Ko-fi button among the social links to support PokeAether.
 
-- Het Gems-saldo in de winkel heeft nu een expliciet label: “Balance” in het Engels en de vertaalde variant in andere talen.
+- The Gems balance in the store now has an explicit label: “Balance” in English and its translated equivalent in other languages.
 
-- `Get Aether Gems` opent nu een gerichte Gems-pagina zonder profiel-, beveiligings- of privacy-instellingen; accountbeheer blijft een afzonderlijke bestemming.
+- `Get Aether Gems` now opens a dedicated Gems page, separate from profile, security, and privacy settings; account management remains a separate destination.
 
-- In de Aether Gift Store staat nu een duidelijke knop om Aether Gems via het accountportaal te bekijken, met een melding naast de knop als openen niet lukt.
+- The Aether Gift Store now has a clear button for viewing Aether Gems in the account portal, with an error message if it cannot be opened.
 
-- De Donator Store opent voor Aether Gems nu het beveiligde accountportaal; de game bevat geen Ko-fi-productlinks.
+- The Donator Store now opens the secure account portal for Aether Gems; the game contains no Ko-fi product links.
 
-- De launcher toont geen verwarrende handmatige 3D-modelimport meer; goedgekeurde 3D-Pokémon worden automatisch als gecontroleerde optionele bundles beheerd.
+- The launcher no longer offers a confusing manual 3D model import flow; approved 3D Pokémon are managed as verified optional bundles.
 
-- Release 0.3.79 bereidt de zeven goedgekeurde realtime 3D-Pokémonbundles voor op de desktopdistributie; launcher- en macOS-builds blijven afzonderlijke assets.
+- Release 0.3.79 prepares the seven approved real-time 3D Pokémon bundles for desktop distribution; launcher and macOS builds remain separate assets.
 
-- De desktoplauncher kan de zeven goedgekeurde 3D-Pokémon nu als afzonderlijke, gecontroleerde downloads installeren en bijwerken. Ontbrekende modellen blijven veilig op de bestaande battleweergave terugvallen.
+- The desktop launcher can now install and update the seven approved 3D Pokémon as separate, verified downloads. Missing models safely fall back to the existing battle presentation.
 
-- De launcher installeert het gedeelde 3D-forestpakket voortaan verplicht en controleert de map, versie, grootte en checksum voordat Route 1, Route 22 of de generieke grasarena wordt gestart.
+- The launcher now requires the shared 3D forest pack and verifies its path, version, size, and checksum before starting Route 1, Route 22, or the generic grass arena.
 
-- De launcher heeft nu een apart venster voor 3D-modellen: importeer een gecontroleerd modelpakket en selecteer het voor de volgende gamestart. Installeren gebeurt op de achtergrond en verandert je opgeslagen game-instellingen niet.
+- The launcher now has a dedicated window for 3D models: import a verified model pack and select it for the next game launch. Installation runs in the background and does not change saved game settings.
 
 - Official mod packs now show their latest publication date in Discover and Installed.
 
@@ -52,7 +52,7 @@
 
 ### Co-op & Adventure Party
 
-- Co-op immersive battles houden nu de geselecteerde actorbeweging, trainerposities, doubles-hitboxes en partydock-layout stabiel tijdens presentatie en herhaalde testcycli.
+- Co-op immersive battles now keep the selected actor movement, trainer positions, doubles hitboxes, and party dock layout stable during presentation and repeated test cycles.
 
 - Immersive 2D/2.5D battles now use a more compact, centered Pokémon/platform layout, leaving room for the shared battle controls. Camera reset is shown only for realtime 3D.
 
@@ -232,11 +232,11 @@
 
 - Added the first co-op party and battle controls for desktop testing: invite a Trainer, start Gary on Route 22 or Brock together, choose moves and targets, switch Pokémon and resume after a disconnect. Availability still requires server activation; the finished double-battle presentation follows separately.
 
-### Guilds, verhuur & training
+### Guilds, Rentals & Training
 
-- De immersive battle-interface heeft nu een menu-icoon op je trainerportret. Daarmee open je tijdens een gevecht de bestaande Friends- en Guild-vensters; de camerarestart staat onder de Turn-indicator.
+- The immersive battle interface now has a menu icon on your trainer portrait. It opens the existing Friends and Guild windows; camera reset is beneath the Turn indicator.
 
-- Bij een netwerkfout tonen guilds, speleracties en de hotbar geen misleidende JSON-fouten meer. Ongeldige serverreacties wissen de bestaande hotbar- en actiegegevens niet.
+- On network errors, guilds, player actions, and the hotbar no longer show misleading JSON errors. Invalid server responses leave existing hotbar and action data intact.
 
 - Pokémon kept permanently after an Aether Rental are permanently untradeable.
 
@@ -332,21 +332,21 @@
 
 - Aethernet Keepers and the Guild Lobby travel button now work in the browser where travel is supported.
 
-### Trainer & Pokémonpresentatie
+### Trainer & Pokémon Presentation
 
-- De Cosmetics-catalogus opent nu met outfits voor het gender van je personage; via een filter blijven outfits voor het andere gender en alle outfits bereikbaar.
+- The Cosmetics catalog now opens with outfits for your character’s gender; a filter keeps outfits for the other gender and all outfits accessible.
 
 - The three Aether male and two Aether female hairstyles now appear correctly on Trainer Cards and player battle sprites, including their selected hair colour.
 
-- Wilde immersive battles tonen nu rechtsboven de Pokémon HOME-afbeelding van de tegenstander in plaats van een leeg trainerportret.
+- Wild immersive battles now show the opposing Pokémon HOME image in the upper-right instead of a blank trainer portrait.
 
-- De lokale desktop-debugclient kan 18 nieuwe normal-form 3D-reviewkandidaten tonen in de Pokédex en summary-kaart, met een reviewlabel en het bestaande animatiemenu. Ze zijn nog niet goedgekeurd voor battles of distributie; ontbrekende en shiny modellen behouden hun sprite-preview.
+- The local desktop debug client can now show 18 new normal-form 3D review candidates in the Pokédex and Summary card, marked for review. They are not approved for battles or distribution; missing and shiny models keep their sprite preview.
 
-- Summary-kaarten tonen beschikbare lokale 3D-modellen bij de 3D-weergave. Kies animaties via de bestaande playknop boven het level, zoom in of sleep om te draaien. Modellen worden groter gekadreerd en animatiewissels wissen de vorige pose; een extra platform verbergt de faint-pose niet meer. Ontbrekende modellen houden hun sprite-preview.
+- Summary cards now show available local 3D models in the 3D view. Choose animations with the existing play button above the level, zoom in, or drag to rotate. Models are framed larger, animation changes clear the previous pose, and an added platform no longer hides the faint pose. Missing models keep their sprite preview.
 
-- De Pokédex toont op desktop een lokaal, hash-gecontroleerd 3D-model wanneer de experimentele 3D-presentatie en een lokale modelcatalogus zijn gekozen. Sleep in het previewvak om het model te draaien; ontbrekende of shiny vormen houden hun bestaande sprite-preview.
+- On desktop, the Pokédex shows a local, hash-verified 3D model when experimental 3D presentation and a local model catalog are selected. Drag in the preview to rotate it; missing or shiny forms keep their sprite preview.
 
-- De vrouwelijke Aether Blossom/Wishmaker Outfit gebruikt nu ook bij trainertekst in battles de bijbehorende vier Wishmaker-spritelagen.
+- The female Aether Blossom/Wishmaker Outfit now also uses its four matching Wishmaker sprite layers during trainer dialogue in battles.
 
 - Fixed Pokémon HOME and party icons failing to appear throughout the browser client, including Pokémon Storage.
 
@@ -420,83 +420,83 @@
 
 - Fixed browser battles falling back to Pokémon HOME images when the web release configuration was unavailable to the game runtime.
 
-### 3D-modellen, animaties & arena’s
+### 3D Models, Animations & Arenas
 
-- Gereviewde 3D-Pokémon kiezen nu per fysieke movefamilie tussen hun twee beschikbare aanvalsanimaties; modellen zonder veilig gecertificeerde tweede clip blijven automatisch op de bestaande aanval terugvallen.
+- Reviewed 3D Pokémon now select between their two available attack animations by physical move family; models without a safely certified second clip continue to use the existing attack.
 
-- Alle 3D-buitenarena’s volgen nu dag, schemering en nacht van de overworld, inclusief de generieke gras- en waterarena’s en Route 1 en Route 22. Zacht invullicht houdt Pokémon in het donker zichtbaar.
+- All 3D outdoor arenas now follow the overworld’s day, dusk, and night cycle, including the generic grass and water arenas and Routes 1 and 22. Soft fill lighting keeps Pokémon visible in the dark.
 
-- De 3D-modelpipeline kan een tweede gereviewde fysieke aanval bewaren, zonder die vóór classificatie automatisch aan moves toe te wijzen.
+- The 3D model pipeline can now retain a second reviewed physical attack without automatically assigning it to moves before classification.
 
-- Het menu-icoon van immersive battles staat nu linksboven op je trainerportret, vrij van de side field indicators.
+- The immersive battle menu icon now sits in the upper-left of your trainer portrait, clear of the side field indicators.
 
-- In 3D-battles kun je nu met het muiswiel in- en uitzoomen. De resetknop herstelt ook de standaardzoom.
+- In 3D battles, use the mouse wheel to zoom in and out. The reset button also restores the default zoom.
 
-- Garchomp gebruikt in de lokale 3D-catalogus nu bijpassende staande animaties voor aanvallen, schade en faint, zonder onverwacht naar zijn vliegpose te springen.
+- Garchomp now uses matching standing animations for attacks, damage, and fainting in the local 3D catalog, without unexpectedly switching to its flying pose.
 
-- In de immersive battle-interface staat nu een compact ‘Switch’-label boven je partyslots, zodat duidelijk is waar je Pokémon kunt wisselen.
+- The immersive battle interface now has a compact “Switch” label above your party slots, making it clear where to switch Pokémon.
 
-- Route 1 heeft vrije doorgangen door de rotswanden en trappen die aansluiten op de paden en terrassen. Surf- en visgevechten gebruiken de ondiepe vijver van dezelfde 3D-omgeving.
+- Route 1 now has open passages through the rock walls and stairs that connect to its paths and terraces. Surfing and fishing battles use the shallow pond from the same 3D environment.
 
-- Route 1 heeft nu een eigen 3D-battle-arena met kronkelende zandpaden, hoge grasranden, beboste rotsterrassen, trappen en de noordelijke vijver uit de overworld.
+- Route 1 now has its own 3D battle arena, with winding dirt paths, tall grass edges, wooded rock terraces, stairs, and the northern pond from the overworld.
 
-- De 3D-grasveld-arena en beide Route 22-arena’s gebruiken nu lichter mesh-terrein zonder Terrain3D, met behoud van hun herkenbare aankleding en ondiepe watergevechten.
+- The 3D grass arena and both Route 22 arenas now use lighter mesh terrain without Terrain3D, while keeping their distinctive scenery and shallow-water battles.
 
-- Pokémon staan bij 3D-watergevechten met hun voeten en onderpoten in het ondiepe water, ook op Route 22.
+- In 3D water battles, Pokémon now stand with their feet and lower legs in the shallow water, including on Route 22.
 
-- Surf- en visgevechten in 3D vinden nu plaats in ondiep water boven een zichtbare zandbodem, met dieper water rondom.
+- Surfing and fishing battles in 3D now take place in shallow water above a visible sandy bottom, with deeper water around it.
 
-- In de Route 22-battle-arena is nu ook de oostelijke waterkant zichtbaar, met zacht bewegend water en een begroeide oever.
+- The Route 22 battle arena now also shows the eastern waterline, with gently moving water and a vegetated shore.
 
-- Route 22 heeft een eigen 3D-battle-arena, ook bij het eerste gevecht met Gary: een grasveld met naaldbomen, rotsplateaus en de trap uit de overworld.
+- Route 22 now has its own 3D battle arena, including Gary’s first battle: a grass field with conifers, rocky plateaus, and the stairs from the overworld.
 
-- Battle-instellingen zijn eenvoudiger: kies Classic of Full screen en 2D/2.5D of 3D. Technische bestandskiezers zijn verwijderd, arena's worden automatisch gekozen en camerabeweging staat bij Graphics.
+- Battle settings are simpler: choose Classic or Full screen and 2D/2.5D or 3D. Technical file pickers are gone, arenas are selected automatically, and camera movement is under Graphics.
 
-- 3D-Pokémon behouden beter hun kleur in schaduw: de extra materiaalschaduw is subtieler, zonder de arena, slagschaduwen of individuele modellen lichter te maken.
+- 3D Pokémon now retain more of their color in shadow: added material shadowing is subtler without brightening the arena, cast shadows, or individual models.
 
-- Donkere 3D-Pokémon blijven in Forest-arena's beter leesbaar dankzij een zachte skylight-fill die de bestaande schaduwen niet vervangt.
+- Dark 3D Pokémon are easier to see in Forest arenas thanks to soft skylight fill that does not replace the existing shadows.
 
-- De lokale desktop-3D-runtime vindt het vertrouwde Forest-pakket nu automatisch naast de gekozen modelcatalogus. Daardoor kiest Automatic weer Grass → Forest zonder een aparte instellingenstap.
+- The local desktop 3D runtime now finds the trusted Forest pack beside the selected model catalog. Automatic can therefore select Grass → Forest without a separate settings step.
 
-- In immersive wilde gevechten komt je trainer nu alleen bij een Poké Ball-worp kort in beeld, met een tekstwolk voor de worp en de vanguitkomst.
+- In immersive wild battles, your trainer now appears briefly only when throwing a Poké Ball, with a speech bubble for the throw and capture result.
 
-- Desktopspelers kunnen nu een lokale, hash-gecontroleerde testcatalogus kiezen met 75 visueel gescreende 3D-Pokémon in hun normale vorm. Deze kandidaten blijven gescheiden van officiële modelpakketten; shiny-versies en niet-gescreende Pokémon vallen terug op 2.5D.
+- Desktop players can now choose a local, hash-verified test catalog with 75 visually screened 3D Pokémon in their normal forms. These candidates remain separate from official model packs; shiny and unscreened Pokémon fall back to 2.5D.
 
-- Lokale gescreende 3D-kandidaten kunnen nu voor visuele review in de gekozen 3D-arena verschijnen. De UI markeert deze weergave als niet arena-gekalibreerd; officiële en gemengde modelcatalogi behouden hun veilige klassieke fallback.
+- Locally screened 3D candidates can now appear in the selected 3D arena for visual review. The UI marks them as not arena-calibrated; official and mixed model catalogs keep their safe classic fallback.
 
-- Nieuwe gecontroleerde 3D-modelpakketten koppelen zichtbaarheid nu via bronmetadata aan de gekozen geslachtsvariant, zonder onderdelen van de andere variant verkeerd toe te wijzen. Bestaande pakketten blijven ongewijzigd.
+- New verified 3D model packs now use source metadata to match visibility to the selected gender variant, without assigning parts from the other variant incorrectly. Existing packs remain unchanged.
 
-- Nieuwe gecontroleerde 3D-modelpakketten kunnen accessoires en alternatieve lichaamsdelen op de juiste animatieframes tonen en verbergen. Bestaande pakketten worden niet automatisch vervangen.
+- New verified 3D model packs can show and hide accessories and alternate body parts on the correct animation frames. Existing packs are not replaced automatically.
 
-- De materiaalbelichting van 3D-Pokémon loopt niet meer een frame achter op hun animatie, waardoor dubbele contouren bij bewegen en posewissels verdwijnen.
+- 3D Pokémon material lighting is no longer one frame behind their animation, removing doubled outlines during movement and pose changes.
 
-- Nieuwe 3D-modelpakketten ondersteunen nu meerdere gelijktijdige materiaalanimaties zonder de afspeelsnelheid te veranderen. Bestaande modelpakketten worden niet automatisch vervangen.
+- New 3D model packs support multiple simultaneous material animations without changing playback speed. Existing packs are not replaced automatically.
 
-- Nieuwe 3D-modelpakketten kunnen stilstaande animatieposes met hun oorspronkelijke duur behouden en complexere bewegende vuureffecten afspelen. Bestaande pakketten blijven ongewijzigd.
+- New 3D model packs can preserve the original duration of static animation poses and play more complex moving fire effects. Existing packs remain unchanged.
 
-- Nieuwe gecontroleerde 3D-modelpakketten kunnen nu bewegende rook- en vuureffecten tonen met transparantie. Bestaande modelpakketten worden niet automatisch vervangen.
+- New verified 3D model packs can now show moving smoke and fire effects with transparency. Existing packs are not replaced automatically.
 
-- Nieuwe 3D-modelpakketten behouden weer de goedgekeurde materiaalkleuren en schaduwweergave van Dragonite en Roaring Moon, inclusief hun shiny versies. Bestaande pakketten blijven bruikbaar.
+- New 3D model packs once again preserve the approved material colors and shadows for Dragonite and Roaring Moon, including their shiny versions. Existing packs remain usable.
 
-- De gecombineerde HP-panelen in immersive 2D-dubbelgevechten blijven nu boven beide Pokémon staan en laten ruimte vrij voor hun statusindicatoren.
+- The combined HP panels in immersive 2D double battles now stay above both Pokémon and leave room for their status indicators.
 
-- De bericht- en spectatorbalken blijven in immersive gevechten nu met duidelijke tussenruimte van elkaar gescheiden.
+- The message and spectator bars now stay clearly separated in immersive battles.
 
-- Gecontroleerde 3D-modellen kunnen nu als lokaal, verplaatsbaar pakket worden geïnstalleerd. De catalogus blijft werken wanneer de hele modelmap wordt verplaatst en opnieuw gekozen, zonder afhankelijkheid van tijdelijke reviewbestanden.
+- Verified 3D models can now be installed as a portable local pack. The catalog still works after the whole model folder is moved and selected again, without relying on temporary review files.
 
-- Escape opent tijdens immersive gevechten opnieuw Settings, zonder actieve chatinvoer of battlepanelen te onderbreken.
+- Escape once again opens Settings during immersive battles without interrupting active chat input or battle panels.
 
-- De lokale 3D-modelcatalogus ondersteunt nu de gecontroleerde normale en shiny versies van Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite en Roaring Moon, met passende animaties en HP-balkposities. Ontbrekende of niet-goedgekeurde modellen blijven op 2.5D terugvallen.
+- The local 3D model catalog now supports verified normal and shiny versions of Pikachu, Arcanine, Lucario, Snorlax, Articuno, Dragonite, and Roaring Moon, with matching animations and HP bar positions. Missing or unapproved models still fall back to 2.5D.
 
-- Immersive replays houden de berichtbalk, afspeelknoppen en replaybediening nu netjes van elkaar gescheiden.
+- Immersive replays now keep the message bar, playback buttons, and replay controls neatly separated.
 
-- 3D Pokémon-modelbestanden worden nu op de achtergrond gecontroleerd, zodat deze controles het beeld tijdens laden en wisselen niet blokkeren.
+- 3D Pokémon model files are now checked in the background, so these checks do not block rendering while loading or switching.
 
-- Team Preview centreert beide Pokémon-teams in immersive 2D-gevechten nu op hun eigen platform.
+- Team Preview now centers both Pokémon teams on their own platforms in immersive 2D battles.
 
-- Immersive 2D-gevechten houden de HP-balken en Pokémon-indicatoren zonder overlap boven de sprites.
+- Immersive 2D battles now keep HP bars and Pokémon indicators above the sprites without overlap.
 
-- De immersive HUD groepeert weather en terrain bij het spelersportret, de beurt bij het tegenstanderportret en side conditions bij de bijbehorende teamiconen.
+- The immersive HUD groups weather and terrain with the player portrait, the turn with the opponent portrait, and side conditions with their corresponding team icons.
 
 - Immersive battles are now the default in the browser as well as the desktop client, with Classic still selectable in Settings. Team Preview Pokémon now stay anchored to the fullscreen arena across browser and desktop window sizes.
 
@@ -596,7 +596,7 @@
 
 - Aether Clash arena maps download only when needed in the browser, keeping them out of the initial game download.
 
-### Browser & desktopclient
+### Browser & Desktop Client
 
 - The browser client now loads, saves and activates the same eight-slot hotkey bar as the desktop client, including Ctrl+1 through Ctrl+8 shortcuts.
 
@@ -664,17 +664,17 @@
 
 - Permission-gated Developer and Staff Tools are now available from My Powers in the browser; player-facing creator tools remain desktop-only.
 
-### Wereld, kaarten & verhaal
+### World, Maps & Story
 
-- Bij surfen of vissen op Route 22 vecht je nu in de ondiepe waterpartij van dezelfde omgeving; landgevechten blijven op het grasveld.
+- Surfing or fishing on Route 22 now starts battles in the shallow water area of the same environment; land battles stay on the grass.
 
-- Trainerstatus op een zojuist geladen kaart wacht nu tot de zware eerste laadframes voorbij zijn en toont geen onterechte JSON-fout meer bij een netwerkprobleem.
+- Trainer status on a newly loaded map now waits until the heavy first frames have passed and no longer shows a false JSON error when the network fails.
 
-- Kaartmetadata wacht nu ook in lokale desktop-debugruns tot het eerste beeld klaar is. Daardoor laden NPC's, overworld-Pokémon en encounters niet meer in de zware eerste laadframe vast.
+- Map metadata in local desktop debug runs now also waits until the first frame is ready. NPCs, overworld Pokémon, and encounters no longer load during the heavy first frame.
 
-- Lokale debugruns gebruiken nu automatisch de lokale game-API, zodat NPC-, overworld-Pokémon- en encountergegevens correct laden.
+- Local debug runs now automatically use the local game API, so NPC, overworld Pokémon, and encounter data load correctly.
 
-- Het inlogscherm toont een rustige cameratocht door alle uitgewerkte buitenkaartdecors: steden, routes, Viridian Forest en Aether Clash, met vloeiende overgangen die blijven herhalen.
+- The login screen now shows a calm camera tour through all completed outdoor map settings: towns, routes, Viridian Forest, and Aether Clash, with smooth transitions that loop continuously.
 
 - The entrance to your house in Pallet Town now triggers on the walkable doorway tile.
 
@@ -686,7 +686,7 @@
 
 - Oak's Parcel rewards now appear with their item jingle after the complete conversation.
 
-### Prestaties & assets
+### Performance & Assets
 
 - Animated Pokémon previews no longer develop moving block patterns when the game window uses fractional scaling.
 
@@ -698,13 +698,13 @@
 
 - Improved resource cleanup when closing the game and during battle-preview transitions.
 
-### Battles & battle-interface
+### Battles & Battle Interface
 
-- Het ‘Switch’-label staat gecentreerd boven de partyslots, met grotere tekst, een duidelijkere cyaanrand en meer ruimte onder de actietekst.
+- The “Switch” label is centered above the party slots, with larger text, a clearer cyan border, and more space below the action text.
 
-- In de klassieke battleweergave verschijnen trainers alleen bij hun commandotekstwolk, met een zachte fade en beweging richting het veld, en verdwijnen ze daarna weer vloeiend.
+- In the classic battle view, trainers now appear only with their command text bubble, fading in softly and moving toward the field before fading out smoothly.
 
-- Desktop-builds bevatten nu de benodigde battle-UI-afbeeldingen en contentpakket-helper, zodat gevechten ook zonder losse 2D-spritepakketten kunnen openen.
+- Desktop builds now include the required battle UI images and content-pack helper, so battles can open without separate 2D sprite packs.
 
 - Fixed trainer speech figures failing to rebuild when a battle has no trainer appearance data.
 
