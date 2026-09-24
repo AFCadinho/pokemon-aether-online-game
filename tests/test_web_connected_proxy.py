@@ -206,6 +206,13 @@ class ConnectedProxyTests(unittest.TestCase):
                 self.assertEqual(socket.receive_text(), "presence")
                 self.assertEqual(socket.receive()["code"], 1000)
             self.assertIn("/ws/world-presence", paths[1])
+            with client.websocket_connect(
+                "ws://localhost/api/ws/pve-live?token=test-only&clientBuild=web-test"
+            ) as socket:
+                socket.send_text("spectate")
+                self.assertEqual(socket.receive_text(), "spectate")
+                self.assertEqual(socket.receive()["code"], 1000)
+            self.assertIn("/ws/pve-live", paths[2])
             upstream.shutdown()
             worker.join(timeout=5)
 
