@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- De Mysterious Outfit bedekt nu de losse huidskleurige pixels bij de vrouwelijke capezoom; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
+- De Mysterious Outfit bedekt nu huidskleurige pixels en transparante openingen bij de vrouwelijke capezoom, ook in de frontframes; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
 
 - De Wallet- en PvP-tabs van de Trainer Card benutten weer de volle breedte; grote saldi blijven leesbaar zonder de valutakaarten uit verhouding te trekken.
 
