@@ -50619,8 +50619,8 @@ func _on_inventory_item_received(item_id: String, quantity: int) -> void:
 	add_item_reward_notification(item_id, quantity)
 
 
-func _on_gem_credit_received(amount: int, _simulated: bool) -> void:
-	add_system_message(LocalizationManager.text("ui.gems.kofi_credit_received", {"amount": amount}))
+func _on_gem_credit_received(amount: int) -> void:
+	add_system_message(LocalizationManager.text("ui.gems.credit_received", {"amount": amount}))
 	add_currency_reward_notification("gems", amount)
 
 
