@@ -792,6 +792,10 @@ func _create_visual() -> void:
 			base_rider_position = rider_node.position
 		_connect_mount_frame_sync()
 	_collect_appearance_sprites(look_copy)
+	var body_sprite := _get_body_sprite()
+	if body_sprite != null:
+		# Remote movement can advance between presence packets.
+		body_sprite.frame_changed.connect(_sync_all_part_sprites_to_body)
 	_apply_appearance_state({"body": CharacterAppearanceService.DEFAULT_MALE_BODY_ID})
 	_create_nameplate_from_player_scene(player_instance)
 	_setup_map_chat_bubble()
