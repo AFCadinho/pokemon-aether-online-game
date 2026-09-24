@@ -54,6 +54,11 @@ func _init() -> void:
 		and overlay.contains("your other active sessions are signed out"),
 		"the destructive confirmation explains mail attachment loss and session revocation"
 	)
+	_expect(
+		overlay.contains("Free and test Aether Gems are removed")
+		and overlay.contains("Only unspent purchased Gems and paid items remain"),
+		"the confirmation distinguishes non-paid Gems from unspent purchased Gems"
+	)
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(
 		player_state_service.contains('const WEB_PLAYER_APPEARANCE_ENDPOINT := "/auth/web/appearance"')

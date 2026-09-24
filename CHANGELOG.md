@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De bevestiging van de in-game dev-reset vermeldt nu dat gratis en test-Gems verdwijnen en alleen niet-uitgegeven gekochte Gems behouden blijven.
+
 - Cosmetic items en garderobekeuzes tonen nu waar beschikbaar iconen uit dezelfde trainer-sprites als de Trainer Card; items zonder battle-art behouden hun bestaande icoon.
 
 - De Appearance-tab van de Trainer Card benut nu de beschikbare breedte, zodat het keuzepaneel ook bij mannelijke personages leesbaar blijft.
