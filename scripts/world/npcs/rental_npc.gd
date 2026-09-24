@@ -17,12 +17,13 @@ func interact_with_player(_player: Node2D) -> void:
 	if interaction_in_flight:
 		return
 	interaction_in_flight = true
+	var action := ""
 	while true:
-		var action := await _show_rental_choice()
+		action = await _show_rental_choice()
 		if action == "explain":
 			await show_dialogue(_rental_explanation(), display_name)
 			continue
-		if action != "rent":
+		if action not in ["rent", "bulk"]:
 			interaction_in_flight = false
 			return
 		break
@@ -35,6 +36,7 @@ func interact_with_player(_player: Node2D) -> void:
 			return
 	var menu := WORKSPACE.new()
 	menu.kind = rental_kind
+	menu.bulk_mode = action == "bulk"
 	add_child(menu)
 	menu.open_vendor()
 	await menu.finished
@@ -49,6 +51,8 @@ func _show_rental_choice() -> String:
 	layer.add_child(dialog)
 	var choice := OptionButton.new()
 	choice.add_item("Rent a team" if rental_kind == "team" else "Rent a Pokémon")
+	if rental_kind == "pokemon":
+		choice.add_item("Rent 2–6 Pokémon (PokéPaste)")
 	choice.add_item("How rentals work")
 	choice.custom_minimum_size = Vector2(0, 42)
 	dialog.add_custom_control(choice)
@@ -59,7 +63,7 @@ func _show_rental_choice() -> String:
 		"Continue",
 		"Not now"
 	)
-	dialog.confirmed.connect(func(): rental_choice_resolved.emit("rent" if choice.selected == 0 else "explain"), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(func(): rental_choice_resolved.emit("rent" if choice.selected == 0 else ("bulk" if rental_kind == "pokemon" and choice.selected == 1 else "explain")), CONNECT_ONE_SHOT)
 	dialog.canceled.connect(func(): rental_choice_resolved.emit("close"), CONNECT_ONE_SHOT)
 	dialog.popup_centered(Vector2i(540, 300))
 	var action: String = await rental_choice_resolved
@@ -75,6 +79,7 @@ func _rental_explanation() -> Array[String]:
 		]
 	return [
 		"Create any legal level-100 Pokémon from a PokéPaste set or with the manual builder. Its rarity determines the Aetherite price.",
+		"You can also paste 2–6 sets at once. Each becomes a separate rental, and you can place the whole group in your party afterward.",
 		"You may rent up to six Pokémon. An active rental can be purchased permanently, with its rental fee deducted from the total price.",
 		"The submitted held item is included and locked during the rental, but is not transferred by permanent purchase. The rental specialist remains the Original Trainer, it never counts as caught, and a permanently purchased rental can never be traded.",
 		"The rental timer also runs while you are offline.",

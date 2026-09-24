@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Rental accepteert nu ook een PokéPaste met 2–6 sets in één aanvraag, toont de totaalprijs en biedt daarna aan om de hele groep in de party te zetten; de huidige party gaat na bevestiging naar de PC.
+
 - De game bewaart een willekeurige installatie-ID bij de eerste login en stuurt die mee, zodat loginbeperkingen per installatie en verwante accountaanwijzingen mogelijk worden.
 
 - De Blessings-tab toont een Patreon-voorvertoning met de gedeelde Aether Blessing-voordelen en extra supporterrol, badge en outfit. De kaart vermeldt dat de voordelen nog niet beschikbaar zijn en kan niet met Aether Gems worden gekocht.
