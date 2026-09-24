@@ -6,6 +6,14 @@ class FakeRentalService extends Node:
 	func request(path: String, _payload: Dictionary = {}, _mutate := false, _post := false) -> Dictionary:
 		if path.begins_with("/catalog/team/"):
 			return {"success": true, "body": _team(true)}
+		if path == "/pokemon/quote" and str(_payload.get("pokemonBuild", {}).get("pasteText", "")).contains("SIX SETS"):
+			var members: Array = []
+			var pokemon: Array = []
+			for index: int in range(6):
+				var member_pokemon := {"species": "Dragonite", "item": "leftovers", "ability": "Multiscale", "nature": "Jolly", "moves": ["Dragon Dance", "Extreme Speed", "Earthquake", "Fire Punch"], "evs": {"atk": 252, "spd": 4, "spe": 252}}
+				members.append({"displayName": "Dragonite %d" % index, "rarity": "rare", "price": 200, "pokemon": member_pokemon})
+				pokemon.append(member_pokemon)
+			return {"success": true, "body": {"offerId": "bulk-six", "displayName": "6 Pokémon", "members": members, "pokemon": pokemon, "prices": [{"durationSeconds": 86400, "amount": 1200}], "buyoutTotal": 12000}}
 		if path == "/pokemon/quote" and str(_payload.get("pokemonBuild", {}).get("pasteText", "")).contains("SECOND SET"):
 			var members: Array = []
 			for species: String in ["Scizor", "Garchomp"]:
@@ -195,7 +203,12 @@ func _run() -> void:
 	bulk_workspace.add_child(bulk_workspace.service)
 	bulk_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
 	assert(bulk_workspace.pokemon_source.is_tab_hidden(1))
+	assert(bulk_workspace.pokemon_source.get_tab_title(0) == "Paste 2–6 sets")
 	bulk_workspace.pokemon_paste.text = "Scizor\n- Bullet Punch\n\nSECOND SET\n- Earthquake"
+	bulk_workspace._update_pokemon_preview()
+	assert(bulk_workspace.pokemon_preview_details.text.contains("Bullet Punch"))
+	assert(not bulk_workspace.pokemon_preview_details.text.contains("Earthquake"))
+	assert(not bulk_workspace.pokemon_preview_details.fit_content)
 	await bulk_workspace._quote_pokemon()
 	assert(bulk_workspace.selected["offerId"] == "bulk-test")
 	assert(bulk_workspace.pokemon_review_species.text == "2 Pokémon")
@@ -213,6 +226,22 @@ func _run() -> void:
 	]
 	bulk_workspace._render_active()
 	assert(bulk_workspace.active_list.get_node("PlaceRentalGroup-batch-test") != null)
+	var long_paste := ""
+	for index: int in range(6):
+		long_paste += "Dragonite %d @ Leftovers\nAbility: Multiscale\nTera Type: Flying\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Dragon Dance\n- Extreme Speed\n- Earthquake\n- Fire Punch\n\n" % index
+	bulk_workspace._show_pokemon_review(false)
+	bulk_workspace.pokemon_paste.text = long_paste
+	bulk_workspace._update_pokemon_preview()
+	await process_frame
+	assert(bulk_workspace.pokemon_preview_details.text.contains("Dragon Dance"))
+	assert(not bulk_workspace.pokemon_preview_details.text.contains("Dragonite 1"))
+	assert(bulk_workspace.quote_button.get_global_rect().end.y < bulk_workspace.size.y)
+	bulk_workspace.pokemon_paste.text = "SIX SETS\n" + long_paste
+	await bulk_workspace._quote_pokemon()
+	await process_frame
+	assert(bulk_workspace.description.scroll_active)
+	assert(not bulk_workspace.description.fit_content)
+	assert(bulk_workspace.rent_button.get_global_rect().end.y < bulk_workspace.size.y)
 	bulk_workspace.queue_free()
 	var rental_service := preload("res://scripts/services/rental_service.gd").new()
 	assert(rental_service._error_message([{"msg": "Value error, Paste a Pokémon set first."}]) == "Paste a Pokémon set first.")
