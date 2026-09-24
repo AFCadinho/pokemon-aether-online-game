@@ -46,7 +46,7 @@ class RouteValidationTests(unittest.TestCase):
 
     def test_every_outdoor_catalog_map_is_represented(self):
         groups, unbuilt = coverage()
-        self.assertEqual(set(groups) - set(self.route.get("excluded_visuals", {})), {s["scene"] for s in self.route["shots"]})
+        self.assertEqual(set(groups) - set(self.route.get("excluded_visuals", {})) | set(self.route.get("additional_visuals", {})), {s["scene"] for s in self.route["shots"]})
         self.assertEqual(unbuilt, self.route["unbuilt_areas"])
         for scene, area_ids in groups.items():
             if scene in self.route.get("excluded_visuals", {}):
@@ -72,6 +72,8 @@ class RouteValidationTests(unittest.TestCase):
         self.assertIn("kanto_viridian_forest", ids)
         self.assertIn("kanto_route_9", ids)
         self.assertNotIn("kanto_mt_moon_1f", ids)
+        self.assertIn("res://generated/tiled_visuals/mt_moon_1f/mt_moon_1f.visual.tscn", self.route["additional_visuals"])
+        self.assertIn("kanto_mt_moon_1f", set().union(*(set(s["areas"]) for s in self.route["shots"])))
         self.assertNotIn("kanto_cerulean_cave", ids)
         self.assertNotIn("kanto_players_house", ids)
 
