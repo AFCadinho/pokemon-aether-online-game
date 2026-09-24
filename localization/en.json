@@ -529,7 +529,7 @@
   "ui.exchange.confirm.buy_title": "Confirm purchase",
   "ui.exchange.confirm.buy": "Buy {name} for ₽{amount}?",
   "ui.exchange.confirm.cancel_title": "Cancel listing?",
-  "ui.exchange.confirm.cancel": "Return {name} to its original party slot? That slot must be free.",
+  "ui.exchange.confirm.cancel": "Cancel the listing for {name}? It will return to a free party slot, or to your PC Box if your party is full.",
   "ui.exchange.confirm.wish_title": "Place item request?",
   "ui.exchange.confirm.wish": "Request {quantity}× {name} for ₽{amount}? The full amount will be deducted and held by the Exchange.",
   "ui.exchange.confirm.fulfill_wish_title": "Sell these items?",

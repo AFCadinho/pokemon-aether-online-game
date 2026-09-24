@@ -512,7 +512,7 @@
   "ui.exchange.confirm.buy_title": "Confirmar compra",
   "ui.exchange.confirm.buy": "Comprar {name} por ₽{amount}?",
   "ui.exchange.confirm.cancel_title": "Cancelar anúncio?",
-  "ui.exchange.confirm.cancel": "Devolver {name} ao slot original do time? Esse slot deve estar livre.",
+  "ui.exchange.confirm.cancel": "Cancelar o anúncio de {name}? Ele voltará para um slot livre do time ou para o PC se o time estiver cheio.",
   "ui.exchange.confirm.wish_title": "Criar pedido de item?",
   "ui.exchange.confirm.wish": "Pedir {quantity}× {name} por ₽{amount}? O valor total será debitado e mantido pela Exchange.",
   "ui.exchange.confirm.fulfill_wish_title": "Vender estes itens?",

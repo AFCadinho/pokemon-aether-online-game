@@ -512,7 +512,7 @@
   "ui.exchange.confirm.buy_title": "确认购买",
   "ui.exchange.confirm.buy": "购买 {name} 的价格为 ₽{amount}？",
   "ui.exchange.confirm.cancel_title": "取消列表？",
-  "ui.exchange.confirm.cancel": "将 {name} 返回到原来的队伍位置？该插槽必须是空闲的。",
+  "ui.exchange.confirm.cancel": "取消 {name} 的挂单？它会返回空闲的队伍位置；如果队伍已满，则存入电脑。",
   "ui.exchange.confirm.wish_title": "发布物品求购？",
   "ui.exchange.confirm.wish": "以 ₽{amount} 求购 {quantity}× {name}？全部金额将被扣除并由交易所保管。",
   "ui.exchange.confirm.fulfill_wish_title": "出售这些物品？",

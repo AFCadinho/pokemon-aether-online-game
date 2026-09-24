@@ -529,7 +529,7 @@
   "ui.exchange.confirm.buy_title": "Aankoop bevestigen",
   "ui.exchange.confirm.buy": "{name} kopen voor ₽{amount}?",
   "ui.exchange.confirm.cancel_title": "Advertentie annuleren?",
-  "ui.exchange.confirm.cancel": "{name} terugplaatsen in zijn oorspronkelijke party-slot? Dat slot moet vrij zijn.",
+  "ui.exchange.confirm.cancel": "De aanbieding voor {name} annuleren? Hij komt in een vrij party-slot, of in je PC Box als je party vol is.",
   "ui.exchange.confirm.wish_title": "Itemverzoek plaatsen?",
   "ui.exchange.confirm.wish": "{quantity}× {name} vragen voor ₽{amount}? Het volledige bedrag wordt afgeschreven en door de Exchange bewaard.",
   "ui.exchange.confirm.fulfill_wish_title": "Deze items verkopen?",
