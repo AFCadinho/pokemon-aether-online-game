@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Blessings-tab toont een Patreon-voorvertoning met de gedeelde Aether Blessing-voordelen en extra supporterrol, badge en outfit. De kaart vermeldt dat de voordelen nog niet beschikbaar zijn en kan niet met Aether Gems worden gekocht.
+
 - In de browser kunnen spelers nu elkaars Trainer Card bekijken en wild- of NPC-gevechten op dezelfde kaart spectaten.
 
 - De loginintro bevat Mt. Moon 1F en speelt nu een scherpere wereldtour van 68 seconden met kleinere downloadgrootte.

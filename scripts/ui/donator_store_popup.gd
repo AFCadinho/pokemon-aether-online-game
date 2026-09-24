@@ -17,6 +17,7 @@ const AETHER_BLESSING_VOUCHER_3_DAYS_ICON: Texture2D = preload("res://assets/ite
 const AETHER_BLESSING_VOUCHER_7_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER7DAYS.png")
 const AETHER_BLESSING_VOUCHER_14_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER14DAYS.png")
 const AETHER_BLESSING_VOUCHER_30_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER30DAYS.png")
+const PATREON_BADGE_ICON: Texture2D = preload("res://assets/ui/patreon_emblem.png")
 const SURF_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SURFCHARM.png")
 const CUT_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/CUTCHARM.png")
 const STRENGTH_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/STRENGTHCHARM.png")
@@ -85,7 +86,7 @@ const CATEGORY_LABELS := {
 }
 const CATEGORY_DESCRIPTIONS := {
 	"featured": "A curated mix of supporter items, style and permanent conveniences.",
-	"membership": "Tradeable supporter membership with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+	"membership": "Tradeable Aether Blessing vouchers and a preview of the upcoming Patreon membership.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
@@ -133,6 +134,15 @@ const COSMETIC_SUBCATEGORY_LABELS := {
 	"shoes": "Shoes",
 }
 const CATALOG: Array[Dictionary] = [
+	{
+		"id": "patreon-supporter-preview",
+		"name_key": "ui.store.patreon.name",
+		"description_key": "ui.store.patreon.description",
+		"icon": PATREON_BADGE_ICON,
+		"categories": ["membership"],
+		"badge": "PATREON",
+		"informational": true,
+	},
 	{
 		"id": "aether-blessing-voucher-3-days",
 		"name": "Aether Blessing Voucher · 3 Days",
@@ -1511,6 +1521,8 @@ func _category_has_available_items(category_id: String) -> bool:
 		for item: Dictionary in CATALOG:
 			var categories: Array = item.get("categories", [])
 			if categories.has(category_id):
+				if bool(item.get("informational", false)):
+					return true
 				item_ids.append(str(item.get("id", "")))
 	for item_id: String in item_ids:
 		if _gem_price(item_id) >= 0:
@@ -1653,7 +1665,7 @@ func _create_product_card(item: Dictionary) -> Button:
 	var authoritative_price := _gem_price(item_id)
 	price.text = (
 		_t("ui.store.coming_later")
-		if store_catalog_loaded and authoritative_price < 0
+		if bool(item.get("informational", false)) or (store_catalog_loaded and authoritative_price < 0)
 		else "◆  %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
 	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1685,7 +1697,7 @@ func _select_product(item_id: String) -> void:
 	var authoritative_price := _gem_price(item_id)
 	selection_price_label.text = (
 		_t("ui.store.coming_later")
-		if store_catalog_loaded and authoritative_price < 0
+		if bool(item.get("informational", false)) or (store_catalog_loaded and authoritative_price < 0)
 		else "◆ %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
 	_refresh_purchase_state()
@@ -2318,6 +2330,14 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		purchase_button.disabled = true
 		purchase_button.tooltip_text = _t("ui.store.purchase_select")
 		return
+	var selected_item := _catalog_item(selected_item_id)
+	if bool(selected_item.get("informational", false)):
+		purchase_button.disabled = true
+		purchase_button.text = _t("ui.store.coming_later")
+		purchase_button.tooltip_text = _t("ui.store.patreon.unavailable")
+		if update_status:
+			status_label.text = _t("ui.store.patreon.unavailable")
+		return
 	if store_catalog_loading or not store_catalog_loaded:
 		purchase_button.disabled = true
 		purchase_button.tooltip_text = _t("ui.store.status.loading_short")
@@ -2555,6 +2575,9 @@ func _format_number(value: int) -> String:
 
 
 func _item_name(item: Dictionary) -> String:
+	var name_key := str(item.get("name_key", ""))
+	if name_key != "":
+		return _t(name_key)
 	var item_id := str(item.get("id", item.get("itemId", "")))
 	var fallback := str(item.get("name", _t("ui.store.item")))
 	var item_localization := get_node_or_null("/root/ItemLocalization")
@@ -2564,6 +2587,9 @@ func _item_name(item: Dictionary) -> String:
 
 
 func _item_description(item: Dictionary) -> String:
+	var description_key := str(item.get("description_key", ""))
+	if description_key != "":
+		return _t(description_key)
 	var item_id := str(item.get("id", item.get("itemId", "")))
 	var fallback := str(item.get("description", ""))
 	var item_localization := get_node_or_null("/root/ItemLocalization")
