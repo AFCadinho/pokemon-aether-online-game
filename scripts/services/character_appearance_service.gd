@@ -1198,14 +1198,18 @@ static func _cover_mysterious_female_cape_gaps(texture: Texture2D) -> Texture2D:
 	var image := texture.get_image()
 	if image == null or image.get_size() != Vector2i(256, 256):
 		return texture
-	# The female body has visible ankle pixels beneath four transparent 2×2
-	# openings in the side-facing cape frames. Complete the coat's dark hem.
-	for corner: Vector2i in [
-		Vector2i(36, 118), Vector2i(164, 118),
-		Vector2i(26, 182), Vector2i(154, 182),
+	# The unisex cape relies on the male body to fill gaps near its hem. The
+	# female body leaves those pixels transparent or shows skin through them.
+	for gap: Rect2i in [
+		Rect2i(20, 54, 2, 2), Rect2i(40, 54, 2, 2),
+		Rect2i(84, 50, 2, 8),
+		Rect2i(148, 54, 2, 2), Rect2i(168, 54, 2, 2),
+		Rect2i(232, 50, 2, 8),
+		Rect2i(36, 118, 2, 2), Rect2i(164, 118, 2, 2),
+		Rect2i(26, 182, 2, 2), Rect2i(154, 182, 2, 2),
 	]:
-		for y: int in range(corner.y, corner.y + 2):
-			for x: int in range(corner.x, corner.x + 2):
+		for y: int in range(gap.position.y, gap.position.y + gap.size.y):
+			for x: int in range(gap.position.x, gap.position.x + gap.size.x):
 				if image.get_pixel(x, y).a == 0.0:
 					image.set_pixel(x, y, Color8(34, 34, 35))
 	return ImageTexture.create_from_image(image)
