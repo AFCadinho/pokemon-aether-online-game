@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cosmetic items en garderobekeuzes tonen nu waar beschikbaar iconen uit dezelfde trainer-sprites als de Trainer Card; items zonder battle-art behouden hun bestaande icoon.
+
 - De Appearance-tab van de Trainer Card benut nu de beschikbare breedte, zodat het keuzepaneel ook bij mannelijke personages leesbaar blijft.
 
 - De Mysterious Outfit bedekt nu huidskleurige pixels en transparante openingen bij de vrouwelijke capezoom, ook in de frontframes; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
