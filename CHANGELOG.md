@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Wallet- en PvP-tabs van de Trainer Card benutten weer de volle breedte; grote saldi blijven leesbaar zonder de valutakaarten uit verhouding te trekken.
+
 - Bij het annuleren van een Pokémon-aanbieding op de Aether Exchange gaat de Pokémon terug naar het oorspronkelijke party-slot als dat vrij is, anders naar een ander vrij party-slot of bij een volle party naar de PC Box.
 
 - Een geblokkeerde gameplay-reset vermeldt nu de concrete reden en vervolgstap, bijvoorbeeld het annuleren van actieve Aether Exchange-aanbiedingen en zoekopdrachten.

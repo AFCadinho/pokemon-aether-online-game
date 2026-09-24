@@ -16124,6 +16124,7 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tab.add_child(scroll)
 	var content := MarginContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("margin_left", 10)
 	content.add_theme_constant_override("margin_top", 10)
 	content.add_theme_constant_override("margin_right", 10)
@@ -17042,6 +17043,7 @@ func _create_trainer_card_wallet_tab() -> Control:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tab.add_child(scroll)
 	var content := MarginContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("margin_left", 12)
 	content.add_theme_constant_override("margin_top", 12)
 	content.add_theme_constant_override("margin_right", 12)
@@ -17075,6 +17077,7 @@ func _create_trainer_card_wallet_tab() -> Control:
 	layout.add_child(introduction)
 
 	var cards := GridContainer.new()
+	cards.name = "WalletCurrencyGrid"
 	cards.columns = 2
 	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -17162,23 +17165,18 @@ func _create_trainer_card_currency_card(
 	details.add_theme_constant_override("separation", 2)
 	content.add_child(details)
 
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 8)
-	details.add_child(title_row)
-
 	var title := Label.new()
 	_set_localized_control_property(title, "text", title_key)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	title_row.add_child(title)
+	details.add_child(title)
 
 	var balance := Label.new()
 	balance.text = _format_money(_get_trainer_card_currency_balance(currency_key))
-	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	balance.add_theme_font_size_override("font_size", 22)
 	balance.add_theme_color_override("font_color", accent)
-	title_row.add_child(balance)
+	details.add_child(balance)
 	match currency_key:
 		"money":
 			trainer_card_money_label = balance
