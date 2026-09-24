@@ -2,7 +2,7 @@ extends Node
 
 class_name PlayerWalletServiceNode
 
-signal gem_credit_received(amount: int, simulated: bool)
+signal gem_credit_received(amount: int)
 
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
 const GEM_NOTIFICATIONS_ENDPOINT := "/game/support/gem-notifications"
@@ -62,7 +62,7 @@ func _poll_gem_notifications() -> void:
 				_delivered_gem_notifications.erase(notification_id)
 				continue
 			apply_wallet_result(wallet_result)
-			gem_credit_received.emit(amount, bool(notification.get("simulated", false)))
+			gem_credit_received.emit(amount)
 			var acknowledged := await _request_json(
 				base_url + GEM_NOTIFICATIONS_ENDPOINT + "/" + notification_id.uri_encode() + "/ack",
 				HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(), "{}"
