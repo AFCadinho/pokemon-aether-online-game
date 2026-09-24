@@ -6,6 +6,11 @@ class FakeRentalService extends Node:
 	func request(path: String, _payload: Dictionary = {}, _mutate := false, _post := false) -> Dictionary:
 		if path.begins_with("/catalog/team/"):
 			return {"success": true, "body": _team(true)}
+		if path == "/pokemon/quote" and str(_payload.get("pokemonBuild", {}).get("pasteText", "")).contains("SECOND SET"):
+			var members: Array = []
+			for species: String in ["Scizor", "Garchomp"]:
+				members.append({"displayName": species, "rarity": "rare", "price": 200, "pokemon": {"species": species, "moves": ["Earthquake"]}})
+			return {"success": true, "body": {"offerId": "bulk-test", "displayName": "2 Pokémon", "members": members, "pokemon": [members[0]["pokemon"], members[1]["pokemon"]], "prices": [{"durationSeconds": 86400, "amount": 400}], "buyoutTotal": 4000}}
 		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1500, "prices": [{"durationSeconds": 86400, "amount": 100}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "leftovers", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
 
 	func _team(detail := false) -> Dictionary:
@@ -181,6 +186,34 @@ func _run() -> void:
 	assert(manual_build["pokemon"]["item"] == "Rocky Helmet")
 	assert(manual_build["pokemon"]["ivs"]["spe"] == 31)
 	pokemon_workspace.queue_free()
+	var bulk_workspace := WORKSPACE.new()
+	bulk_workspace.kind = "pokemon"
+	bulk_workspace.bulk_mode = true
+	root.add_child(bulk_workspace)
+	bulk_workspace.service.queue_free()
+	bulk_workspace.service = FakeRentalService.new()
+	bulk_workspace.add_child(bulk_workspace.service)
+	bulk_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
+	assert(bulk_workspace.pokemon_source.is_tab_hidden(1))
+	bulk_workspace.pokemon_paste.text = "Scizor\n- Bullet Punch\n\nSECOND SET\n- Earthquake"
+	await bulk_workspace._quote_pokemon()
+	assert(bulk_workspace.selected["offerId"] == "bulk-test")
+	assert(bulk_workspace.pokemon_review_species.text == "2 Pokémon")
+	assert(bulk_workspace.description.text.contains("Scizor"))
+	assert(bulk_workspace.description.text.contains("Garchomp"))
+	assert(bulk_workspace.rent_button.text == "Rent 2 Pokémon — 400 Aetherite")
+	assert(not bulk_workspace.rent_button.disabled)
+	var bulk_payload := bulk_workspace._build_rent_payload({"durationSeconds": 86400.0, "amount": 400.0})
+	assert(not bulk_payload.has("kind"))
+	assert(bulk_payload["quotedAmount"] == 400)
+	assert(bulk_payload["pokemonBuild"]["source"] == "paste")
+	bulk_workspace.catalog["rentals"] = [
+		{"loanId": "bulk-one", "context": "npc_pokemon", "status": "active", "rental": {"batchId": "batch-test", "batchSize": 2}, "assets": []},
+		{"loanId": "bulk-two", "context": "npc_pokemon", "status": "active", "rental": {"batchId": "batch-test", "batchSize": 2}, "assets": []},
+	]
+	bulk_workspace._render_active()
+	assert(bulk_workspace.active_list.get_node("PlaceRentalGroup-batch-test") != null)
+	bulk_workspace.queue_free()
 	var rental_service := preload("res://scripts/services/rental_service.gd").new()
 	assert(rental_service._error_message([{"msg": "Value error, Paste a Pokémon set first."}]) == "Paste a Pokémon set first.")
 	rental_service.queue_free()
