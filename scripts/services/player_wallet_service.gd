@@ -2,7 +2,10 @@ extends Node
 
 class_name PlayerWalletServiceNode
 
+signal gem_credit_received(amount: int)
+
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
+const GEM_NOTIFICATIONS_ENDPOINT := "/game/support/gem-notifications"
 const PLAYER_BANK_TRANSFER_ENDPOINT := "/game/bank/transfer"
 const DEV_ADD_MONEY_ENDPOINT := "/game/dev/wallet/money"
 const DEV_ADD_GEMS_ENDPOINT := "/game/dev/wallet/gems"
@@ -17,6 +20,56 @@ const GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT := "/game/global-boosts/rare-encounte
 const GLOBAL_SHINY_BOOST_ENDPOINT := "/game/global-boosts/shiny"
 const GLOBAL_HEAL_ENDPOINT := "/game/global-heal"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+var _gem_notification_poll_in_flight := false
+var _delivered_gem_notifications: Dictionary = {}
+
+
+func _ready() -> void:
+	if OS.has_feature("web"):
+		return
+	var timer := Timer.new()
+	timer.name = "GemNotificationPollTimer"
+	timer.wait_time = 20.0
+	timer.autostart = true
+	timer.timeout.connect(_poll_gem_notifications)
+	add_child(timer)
+
+
+func _poll_gem_notifications() -> void:
+	if _gem_notification_poll_in_flight or not AuthService.is_authenticated():
+		return
+	if get_tree().get_nodes_in_group("ui_overlay").is_empty():
+		return
+	_gem_notification_poll_in_flight = true
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(
+		base_url + GEM_NOTIFICATIONS_ENDPOINT, HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(), ""
+	)
+	if bool(response.get("success", false)):
+		var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+		for value: Variant in _array_from_value(body.get("notifications", [])):
+			if not value is Dictionary:
+				continue
+			var notification: Dictionary = value
+			var notification_id := str(notification.get("id", ""))
+			var amount := int(notification.get("gems", 0))
+			if notification_id == "" or amount <= 0 or _delivered_gem_notifications.has(notification_id):
+				continue
+			_delivered_gem_notifications[notification_id] = true
+			var wallet_result := await load_wallet()
+			if not bool(wallet_result.get("success", false)):
+				_delivered_gem_notifications.erase(notification_id)
+				continue
+			apply_wallet_result(wallet_result)
+			gem_credit_received.emit(amount)
+			var acknowledged := await _request_json(
+				base_url + GEM_NOTIFICATIONS_ENDPOINT + "/" + notification_id.uri_encode() + "/ack",
+				HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(), "{}"
+			)
+			if not bool(acknowledged.get("success", false)):
+				_delivered_gem_notifications.erase(notification_id)
+	_gem_notification_poll_in_flight = false
 
 
 func load_wallet() -> Dictionary:

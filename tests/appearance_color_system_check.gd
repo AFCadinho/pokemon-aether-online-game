@@ -283,17 +283,22 @@ func _run() -> void:
 			else "male"
 		)
 		var cosmetic_icon := APPEARANCE.get_cosmetic_item_icon(cosmetic_item_id, icon_gender)
-		_check(cosmetic_icon != null, "%s has a spritesheet-frame icon" % cosmetic_item_id)
+		_check(cosmetic_icon != null, "%s has a cosmetic thumbnail" % cosmetic_item_id)
 		if cosmetic_icon != null:
 			var icon_image := cosmetic_icon.get_image()
 			_check(
 				icon_image.get_width() <= 64 and icon_image.get_height() <= 64,
-				"%s icon uses no more than one frame" % cosmetic_item_id
+				"%s icon fits a 64-pixel thumbnail" % cosmetic_item_id
 			)
+	var battle_shirt_icon := APPEARANCE.get_appearance_part_icon("top", "Shirt", "male")
+	_check(
+		battle_shirt_icon != null and battle_shirt_icon.get_image().get_height() == 64,
+		"wardrobe thumbnails use the Trainer Card battle-art scale when available"
+	)
 	_check(
 		APPEARANCE.get_cosmetic_item_icon("adinho-chroma-shirt", "male")
 			== APPEARANCE.get_cosmetic_item_icon("adinho-chroma-shirt", "male"),
-		"cosmetic frame icons are cached"
+		"cosmetic thumbnails are cached"
 	)
 	_check(
 		APPEARANCE.get_cosmetic_item_icon("aether-blossom-outfit", "male")
@@ -315,7 +320,7 @@ func _run() -> void:
 			var wardrobe_image := wardrobe_icon.get_image()
 			_check(
 				wardrobe_image.get_width() <= 64 and wardrobe_image.get_height() <= 64,
-				"wardrobe thumbnails use one cropped character frame"
+				"wardrobe thumbnails fit a 64-pixel icon"
 			)
 	var missing_wardrobe_icons: Array[String] = []
 	for wardrobe_gender: String in ["male", "female"]:
@@ -355,7 +360,7 @@ func _run() -> void:
 	_check(
 		store_source.contains("get_cosmetic_item_icon(")
 			and store_source.contains("_preview_gender_for_item(item)"),
-		"Store cards use spritesheet-frame icons for the item's compatible model"
+		"Store cards use cosmetic thumbnails for the item's compatible model"
 	)
 	_check(
 		ui_source.contains("_bag_item_icon_gender(item_id)")

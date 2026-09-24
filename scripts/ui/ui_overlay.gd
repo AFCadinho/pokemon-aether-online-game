@@ -152,7 +152,7 @@ const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item
 const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
 const GAMEPLAY_RESET_TITLE := "Reset / New Game"
 const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
-const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
+const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, all items and cosmetics (including purchases), money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nFree and test Aether Gems are removed. All Gems from valid purchases are restored, including those previously spent. Your account, roles, friends, shared mail and PvP history remain."
 # This matches the catalog team's natural setup height, including its six-slot
 # opponent preview, the separate 36px difficulty row plus its 8px gap, and
 # the catalog name search.
@@ -1909,6 +1909,8 @@ func _ready() -> void:
 		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
 	if not GuildService.notification_received.is_connected(_on_guild_notification_received):
 		GuildService.notification_received.connect(_on_guild_notification_received)
+	if not PlayerWalletService.gem_credit_received.is_connected(_on_gem_credit_received):
+		PlayerWalletService.gem_credit_received.connect(_on_gem_credit_received)
 	_refresh_guild_chat_membership.call_deferred()
 	_sync_chat_mute_from_current_user()
 	_apply_chat_tab_state()
@@ -16122,6 +16124,7 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tab.add_child(scroll)
 	var content := MarginContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("margin_left", 10)
 	content.add_theme_constant_override("margin_top", 10)
 	content.add_theme_constant_override("margin_right", 10)
@@ -17040,6 +17043,7 @@ func _create_trainer_card_wallet_tab() -> Control:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tab.add_child(scroll)
 	var content := MarginContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("margin_left", 12)
 	content.add_theme_constant_override("margin_top", 12)
 	content.add_theme_constant_override("margin_right", 12)
@@ -17073,6 +17077,7 @@ func _create_trainer_card_wallet_tab() -> Control:
 	layout.add_child(introduction)
 
 	var cards := GridContainer.new()
+	cards.name = "WalletCurrencyGrid"
 	cards.columns = 2
 	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -17160,23 +17165,18 @@ func _create_trainer_card_currency_card(
 	details.add_theme_constant_override("separation", 2)
 	content.add_child(details)
 
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 8)
-	details.add_child(title_row)
-
 	var title := Label.new()
 	_set_localized_control_property(title, "text", title_key)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	title_row.add_child(title)
+	details.add_child(title)
 
 	var balance := Label.new()
 	balance.text = _format_money(_get_trainer_card_currency_balance(currency_key))
-	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	balance.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	balance.add_theme_font_size_override("font_size", 22)
 	balance.add_theme_color_override("font_color", accent)
-	title_row.add_child(balance)
+	details.add_child(balance)
 	match currency_key:
 		"money":
 			trainer_card_money_label = balance
@@ -17805,8 +17805,10 @@ func _create_trainer_card_appearance_tab() -> Control:
 	var scroll := ScrollContainer.new()
 	scroll.name = "AppearanceTabScroll"
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tab.add_child(scroll)
 	var content := MarginContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("margin_left", 8)
 	content.add_theme_constant_override("margin_top", 8)
 	content.add_theme_constant_override("margin_right", 8)
@@ -17868,6 +17870,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	sidebar.add_child(sidebar_label)
 
 	var editor_panel := PanelContainer.new()
+	editor_panel.name = "AppearanceEditorPanel"
 	editor_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	editor_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	editor_panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
@@ -26272,6 +26275,9 @@ func _hide_pokemon_summary_popup(card_key: String = "") -> void:
 		if pokemon_summary_dragging_card_key == card_key:
 			pokemon_summary_dragging_card_key = ""
 	_hide_pokemon_summary_ev_allocate_popup()
+	# Escape inspects the active card's picker controls. Clear their references
+	# before the queued card is freed, including when another card stays open.
+	_reset_pokemon_summary_card_node_references()
 	pokemon_summary_preview_pokemon = null
 	pokemon_summary_mode = "interactive"
 	pokemon_summary_selected_slot = -1
@@ -50612,6 +50618,11 @@ func _next_pokemon_reward_key(prefix: String) -> String:
 
 func _on_inventory_item_received(item_id: String, quantity: int) -> void:
 	add_item_reward_notification(item_id, quantity)
+
+
+func _on_gem_credit_received(amount: int) -> void:
+	add_system_message(LocalizationManager.text("ui.gems.credit_received", {"amount": amount}))
+	add_currency_reward_notification("gems", amount)
 
 
 func _on_guild_notification_received(notification: Dictionary) -> void:

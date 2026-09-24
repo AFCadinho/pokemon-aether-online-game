@@ -48,19 +48,30 @@ def coverage():
 def check_coverage(route):
     groups, _ = coverage()
     excluded = route.get("excluded_visuals", {})
+    additional = route.get("additional_visuals", {})
     if not isinstance(excluded, dict) or any(not isinstance(reason, str) or not reason.strip() for reason in excluded.values()):
         raise ValueError("Excluded visuals require a written reason")
+    if not isinstance(additional, dict) or any(not isinstance(reason, str) or not reason.strip() for reason in additional.values()):
+        raise ValueError("Additional visuals require a written reason")
     if set(excluded) - set(groups):
         raise ValueError("An excluded visual no longer exists in the outdoor catalog; update the route")
+    for scene in additional:
+        path = ROOT / scene.removeprefix("res://")
+        if not scene.startswith("res://generated/tiled_visuals/") or not path.is_file():
+            raise ValueError("An additional visual is missing or invalid: " + scene)
+    if set(additional) & (set(groups) | set(excluded)):
+        raise ValueError("Additional visuals must be separate from outdoor and excluded visuals")
     recorded = {shot["scene"] for shot in route["shots"]}
     missing = set(groups) - recorded - set(excluded)
     if missing:
         raise ValueError("Tour is missing map visuals: " + ", ".join(sorted(missing)))
-    unexpected = recorded - set(groups)
+    unexpected = recorded - set(groups) - set(additional)
     if unexpected:
         raise ValueError("Outdoor tour contains non-outdoor map visuals: " + ", ".join(sorted(unexpected)))
     if recorded & set(excluded):
         raise ValueError("An excluded visual is still present in the tour")
+    if set(additional) - recorded:
+        raise ValueError("An additional visual is not present in the tour")
     return groups
 
 

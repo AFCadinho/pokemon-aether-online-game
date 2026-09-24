@@ -2,6 +2,34 @@
 
 ## Unreleased
 
+- In de browser kunnen spelers nu elkaars Trainer Card bekijken en wild- of NPC-gevechten op dezelfde kaart spectaten.
+
+- De loginintro bevat Mt. Moon 1F en speelt nu een scherpere wereldtour van 68 seconden met kleinere downloadgrootte.
+
+- De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
+
+- De bevestiging van de in-game dev-reset vermeldt nu dat gratis en test-Gems verdwijnen en alleen niet-uitgegeven gekochte Gems behouden blijven.
+
+- Cosmetic items en garderobekeuzes tonen nu waar beschikbaar iconen uit dezelfde trainer-sprites als de Trainer Card; items zonder battle-art behouden hun bestaande icoon.
+
+- De Appearance-tab van de Trainer Card benut nu de beschikbare breedte, zodat het keuzepaneel ook bij mannelijke personages leesbaar blijft.
+
+- De Mysterious Outfit bedekt nu huidskleurige pixels en transparante openingen bij de vrouwelijke capezoom, ook in de frontframes; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
+
+- De Wallet- en PvP-tabs van de Trainer Card benutten weer de volle breedte; grote saldi blijven leesbaar zonder de valutakaarten uit verhouding te trekken.
+
+- De systeemmelding na een Gem-bijschrijving noemt nu alleen het toegevoegde bedrag en het bijgewerkte saldo, zonder specifieke betaaldienst.
+
+- Bij het annuleren van een Pokémon-aanbieding op de Aether Exchange gaat de Pokémon terug naar het oorspronkelijke party-slot als dat vrij is, anders naar een ander vrij party-slot of bij een volle party naar de PC Box.
+
+- Een geblokkeerde gameplay-reset vermeldt nu de concrete reden en vervolgstap, bijvoorbeeld het annuleren van actieve Aether Exchange-aanbiedingen en zoekopdrachten.
+
+- De lokale Gem-aankoopsimulatie toont dezelfde systeemmelding en Gem-beloning als een echte bijschrijving; de test blijft intern gescheiden van betaalde aankopen.
+
+- Nieuwe Ko-fi-Gem-bijschrijvingen tonen in de game een systeemmelding en een Gem-beloning; de portemonnee wordt eerst vernieuwd.
+
+- Fixed a crash when pressing Escape after closing a Pokémon summary card.
+
 - Added the missing Simplified Chinese outfit-gender filter labels in the Aether Gift Store.
 
 ## 0.3.81

@@ -2,8 +2,8 @@
   "width": 1280,
   "height": 720,
   "fps": 30,
-  "shot_seconds": 8,
-  "transition_seconds": 1.5,
+  "shot_seconds": 4,
+  "transition_seconds": 1,
   "shots": [
     {
       "name": "Pallet Town",
@@ -131,6 +131,22 @@
       "view_width": 1100,
       "areas": [
         "kanto_route_3"
+      ]
+    },
+    {
+      "name": "Mt. Moon 1F",
+      "scene": "res://generated/tiled_visuals/mt_moon_1f/mt_moon_1f.visual.tscn",
+      "from": [
+        1440,
+        1280
+      ],
+      "to": [
+        1632,
+        1280
+      ],
+      "view_width": 1280,
+      "areas": [
+        "kanto_mt_moon_1f"
       ]
     },
     {
@@ -267,5 +283,8 @@
   "unbuilt_areas": {},
   "excluded_visuals": {
     "res://generated/tiled_visuals/open_field/open_field.visual.tscn": "Temporary open field omitted from the login tour."
+  },
+  "additional_visuals": {
+    "res://generated/tiled_visuals/mt_moon_1f/mt_moon_1f.visual.tscn": "Mt. Moon 1F is included as the first cave interior in the login tour."
   }
 }

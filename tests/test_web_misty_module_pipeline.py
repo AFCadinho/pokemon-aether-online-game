@@ -9,10 +9,21 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-from build_web_asset_modules import build_module
+from build_web_asset_modules import build_module, import_project
 
 
 class MistyModulePipelineTests(unittest.TestCase):
+    def test_asset_import_finishes_before_module_exports(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "modules"
+            output.mkdir()
+            with patch("build_web_asset_modules.run_export", return_value=0) as run_export:
+                import_project("godot", output)
+            command, console_log = run_export.call_args.args
+            self.assertIn("--import", command)
+            self.assertEqual(command[command.index("--path") + 1], str(ROOT))
+            self.assertEqual(console_log.name, "asset-module-import-console.log")
+
     def build(self, files, forbidden=()):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)

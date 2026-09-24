@@ -82,6 +82,21 @@ func _run() -> void:
 	)
 	_check(
 		errors.call("message", {
+			"body": {"detail": {
+				"code": "gameplay_reset_blocked",
+				"boundary": "exchange",
+				"message": "Internal English reset detail",
+			}}
+		}) == "Annuleer eerst je actieve Aether Exchange-aanbiedingen en zoekopdrachten voordat je de spelvoortgang reset.",
+		"gameplay reset explains the blocking Exchange activity in Dutch"
+	)
+	_check(
+		errors.call("message", {"body": {"detail": {"code": "gameplay_reset_blocked"}}})
+		== "Je kunt de spelvoortgang nu niet resetten. Rond eerst je actieve gevecht, ruil of Exchange-activiteit af en probeer het opnieuw.",
+		"gameplay reset without a known boundary has an actionable fallback"
+	)
+	_check(
+		errors.call("message", {
 			"body": {"detail": {"code": "web_demo_saved_location_outside_boundary"}}
 		}) == "Je Trainer bevindt zich buiten het browsergebied. Ga via de gameclient naar Pallet Town, Route 1 of Viridian City voordat je verdergaat in de browser.",
 		"browser boundary rejection explains how to return to the supported area"

@@ -85,6 +85,8 @@ GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
     ("POST", r"/auth/web/markets/standard/sell"),
     ("GET", r"/auth/web/trainers/[a-zA-Z0-9_-]+/progress"),
     ("POST", r"/auth/web/trainers/[a-zA-Z0-9_-]+/rematch"),
+    ("GET", r"/game/trainers/\d+/card"),
+    ("GET", r"/battle/pve/nearby/\d+/spectate"),
     ("POST", r"/auth/web/mail/\d+/read"),
     ("DELETE", r"/auth/web/mail/\d+"),
     ("POST", r"/auth/web/player-actions/[a-z0-9-]+/execute"),
@@ -303,6 +305,10 @@ def create_app(upstream, build=None, *, transport=None):
     @app.websocket("/api/ws/pvp-battle")
     async def pvp_battle_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "pvp-battle")
+
+    @app.websocket("/api/ws/pve-live")
+    async def pve_live_websocket_proxy(socket: WebSocket):
+        await websocket_proxy(socket, "pve-live")
 
     @app.get("/pokemon-assets/{style}/{side}/{species}/{filename}")
     async def pokemon_asset(style: str, side: str, species: str, filename: str):

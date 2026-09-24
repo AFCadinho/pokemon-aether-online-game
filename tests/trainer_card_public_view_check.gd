@@ -316,6 +316,48 @@ func _run() -> void:
 		message_button != null and message_button.focus_mode == Control.FOCUS_ALL,
 		"public Trainer Card provides a focused primary social action"
 	)
+	var pvp_scroll := pvp_tab.find_child("TrainerCardPvpScroll", true, false) as ScrollContainer
+	var pvp_content := pvp_scroll.get_child(0) as Control if pvp_scroll != null else null
+	_check(
+		pvp_content != null and pvp_content.size.x >= pvp_scroll.size.x - 20.0,
+		"PvP sections fill the available tab width"
+	)
+	popup.hide()
+	own_card.show()
+	var gems_balance := overlay.get("trainer_card_aether_gems_label") as Label
+	gems_balance.text = "999,998,099"
+	own_tabs.current_tab = 3
+	await process_frame
+	await process_frame
+	var wallet_scroll := own_card.find_child("WalletTabScroll", true, false) as ScrollContainer
+	var wallet_content := wallet_scroll.get_child(0) as Control if wallet_scroll != null else null
+	var wallet_grid := own_card.find_child("WalletCurrencyGrid", true, false) as GridContainer
+	var money_card := wallet_grid.get_child(0) as Control if wallet_grid != null else null
+	var gems_card := wallet_grid.get_child(1) as Control if wallet_grid != null else null
+	_check(
+		wallet_content != null and wallet_content.size.x >= wallet_scroll.size.x - 20.0
+		and money_card != null and gems_card != null
+		and money_card.size.x >= 240.0 and gems_card.size.x >= 240.0
+		and gems_balance.global_position.x + gems_balance.size.x <= gems_card.global_position.x + gems_card.size.x,
+		"Wallet keeps both currency cards readable with a large Gem balance"
+	)
+	own_tabs.current_tab = 2
+	await process_frame
+	await process_frame
+	var appearance_scroll := own_card.find_child("AppearanceTabScroll", true, false) as ScrollContainer
+	var appearance_content := appearance_scroll.get_child(0) as Control if appearance_scroll != null else null
+	var appearance_editor := own_card.find_child("AppearanceEditorPanel", true, false) as Control
+	var facegear_button := _find_button(own_card.find_child("AppearanceCategoryRail", true, false), "Facegear")
+	_check(facegear_button != null, "Appearance has a Facegear category")
+	if facegear_button != null:
+		facegear_button.pressed.emit()
+		await process_frame
+		await process_frame
+	_check(
+		appearance_content != null and appearance_content.size.x >= appearance_scroll.size.x - 20.0
+		and appearance_editor != null and appearance_editor.size.x >= 250.0,
+		"Appearance editor fills the space beside preview and categories"
+	)
 
 	await process_frame
 	await process_frame
