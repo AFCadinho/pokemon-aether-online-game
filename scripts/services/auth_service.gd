@@ -3,6 +3,7 @@ extends Node
 class_name AuthServiceNode
 
 const ClientBuild := preload("res://scripts/services/client_build.gd")
+const InstallationIdentity := preload("res://scripts/services/installation_identity.gd")
 const SESSION_FILE_PATH := "user://auth_session.json"
 const REQUEST_TIMEOUT_SECONDS := 12.0
 const PRIVACY_REQUEST_TIMEOUT_SECONDS := 60.0
@@ -54,10 +55,14 @@ func take_pending_login_notice() -> String:
 
 func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	var installation_id := InstallationIdentity.get_or_create()
+	if installation_id == "":
+		return {"success": false, "error": "Could not save this installation's login identifier."}
 	var payload := {
 		"username": username,
 		"password": password,
 		"rememberMe": remember_me,
+		"installationId": installation_id,
 	}
 
 	var response: Dictionary = await _request_json(
