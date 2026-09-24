@@ -54,8 +54,10 @@ static func load_icon(
 	candidates.append_array([
 		ICON_ROOT + normalized_stem + ".png",
 		ICON_ROOT + canonical_id + ".png",
-		ICON_ROOT + "000.png",
 	])
+	if normalized_stem.ends_with("Z"):
+		candidates.append(ICON_ROOT + normalized_stem + "HELD.png")
+	candidates.append(ICON_ROOT + "000.png")
 	for path: String in candidates:
 		var texture := _load_texture(path)
 		if texture != null:
