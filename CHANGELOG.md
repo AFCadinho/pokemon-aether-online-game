@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De loginachtergrond schaalt pixelart nu met nearest filtering en een lichtere overlay, zodat de wereldtour scherper en helderder oogt.
+
 - De loginintro bevat Mt. Moon 1F en speelt nu een scherpere wereldtour van 68 seconden met kleinere downloadgrootte.
 
 - De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
