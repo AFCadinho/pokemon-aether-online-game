@@ -17805,8 +17805,10 @@ func _create_trainer_card_appearance_tab() -> Control:
 	var scroll := ScrollContainer.new()
 	scroll.name = "AppearanceTabScroll"
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tab.add_child(scroll)
 	var content := MarginContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("margin_left", 8)
 	content.add_theme_constant_override("margin_top", 8)
 	content.add_theme_constant_override("margin_right", 8)
@@ -17868,6 +17870,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	sidebar.add_child(sidebar_label)
 
 	var editor_panel := PanelContainer.new()
+	editor_panel.name = "AppearanceEditorPanel"
 	editor_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	editor_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	editor_panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())

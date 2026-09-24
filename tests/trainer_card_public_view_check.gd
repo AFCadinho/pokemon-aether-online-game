@@ -341,6 +341,23 @@ func _run() -> void:
 		and gems_balance.global_position.x + gems_balance.size.x <= gems_card.global_position.x + gems_card.size.x,
 		"Wallet keeps both currency cards readable with a large Gem balance"
 	)
+	own_tabs.current_tab = 2
+	await process_frame
+	await process_frame
+	var appearance_scroll := own_card.find_child("AppearanceTabScroll", true, false) as ScrollContainer
+	var appearance_content := appearance_scroll.get_child(0) as Control if appearance_scroll != null else null
+	var appearance_editor := own_card.find_child("AppearanceEditorPanel", true, false) as Control
+	var facegear_button := _find_button(own_card.find_child("AppearanceCategoryRail", true, false), "Facegear")
+	_check(facegear_button != null, "Appearance has a Facegear category")
+	if facegear_button != null:
+		facegear_button.pressed.emit()
+		await process_frame
+		await process_frame
+	_check(
+		appearance_content != null and appearance_content.size.x >= appearance_scroll.size.x - 20.0
+		and appearance_editor != null and appearance_editor.size.x >= 250.0,
+		"Appearance editor fills the space beside preview and categories"
+	)
 
 	await process_frame
 	await process_frame

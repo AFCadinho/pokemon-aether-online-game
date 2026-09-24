@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Appearance-tab van de Trainer Card benut nu de beschikbare breedte, zodat het keuzepaneel ook bij mannelijke personages leesbaar blijft.
+
 - De Mysterious Outfit bedekt nu huidskleurige pixels en transparante openingen bij de vrouwelijke capezoom, ook in de frontframes; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
 
 - De Wallet- en PvP-tabs van de Trainer Card benutten weer de volle breedte; grote saldi blijven leesbaar zonder de valutakaarten uit verhouding te trekken.
