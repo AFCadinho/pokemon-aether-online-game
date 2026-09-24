@@ -34,7 +34,8 @@
     ["GET", "/game/dev/items/search"], ["POST", "/game/dev/pokemon"], ["DELETE", "/game/dev/pokemon/test-fixtures"], ["POST", "/game/dev/wallet/money"], ["PUT", "/game/dev/progression/gym-badges"], ["DELETE", "/game/dev/party"],
     ["GET", "/game/moderation/teleport-points"], ["POST", "/game/moderation/teleport-self"], ["GET", "/game/moderation/overview"],
     ["GET", "/game/chat/mutes/42"], ["POST", "/game/chat/mutes"], ["DELETE", "/game/chat/mutes/42"], ["POST", "/world/weather/developer"],
-    ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
+    ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"],
+    ["GET", "/game/trainers/42/card"], ["GET", "/battle/pve/nearby/42/spectate"]
   ],
   "denied": [
     ["GET", "/game/world-pickups"], ["POST", "/game/world-pickups/kanto_viridian_city_potion/claim"],

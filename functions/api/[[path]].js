@@ -67,7 +67,7 @@ const HTTP_PREFIXES = [
 ];
 
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
-const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle']);
+const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live']);
 const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
   ['GET', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp$/],
@@ -84,6 +84,8 @@ const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/markets\/standard\/sell$/],
   ['GET', /^\/auth\/web\/trainers\/[a-zA-Z0-9_-]+\/progress$/],
   ['POST', /^\/auth\/web\/trainers\/[a-zA-Z0-9_-]+\/rematch$/],
+  ['GET', /^\/game\/trainers\/\d+\/card$/],
+  ['GET', /^\/battle\/pve\/nearby\/\d+\/spectate$/],
   ['POST', /^\/auth\/web\/mail\/\d+\/read$/],
   ['DELETE', /^\/auth\/web\/mail\/\d+$/],
   ['POST', /^\/auth\/web\/player-actions\/[a-z0-9-]+\/execute$/],

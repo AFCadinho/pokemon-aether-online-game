@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In de browser kunnen spelers nu elkaars Trainer Card bekijken en wild- of NPC-gevechten op dezelfde kaart spectaten.
+
 - De loginintro bevat Mt. Moon 1F en speelt nu een scherpere wereldtour van 68 seconden met kleinere downloadgrootte.
 
 - De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
