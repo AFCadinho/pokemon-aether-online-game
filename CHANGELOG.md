@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
+
 - De bevestiging van de in-game dev-reset vermeldt nu dat gratis en test-Gems verdwijnen en alleen niet-uitgegeven gekochte Gems behouden blijven.
 
 - Cosmetic items en garderobekeuzes tonen nu waar beschikbaar iconen uit dezelfde trainer-sprites als de Trainer Card; items zonder battle-art behouden hun bestaande icoon.
