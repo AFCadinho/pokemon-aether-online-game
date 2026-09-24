@@ -406,6 +406,11 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 		_:
 			return null
 
+	var battle_icon := _create_battle_appearance_icon(layers, normalized_gender)
+	if battle_icon != null:
+		_remember_appearance_resource(_cosmetic_item_icon_cache, cache_key, battle_icon)
+		return battle_icon
+
 	var icon_image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
 	icon_image.fill(Color.TRANSPARENT)
 	for layer: Dictionary in layers:
@@ -461,6 +466,14 @@ static func get_appearance_part_icon(
 	if _appearance_part_icon_cache.has(cache_key):
 		return _appearance_part_icon_cache.get(cache_key) as Texture2D
 
+	var battle_icon := _create_battle_appearance_icon(
+		[{"category": normalized_category, "id": normalized_part_id}],
+		normalized_gender
+	)
+	if battle_icon != null:
+		_remember_appearance_resource(_appearance_part_icon_cache, cache_key, battle_icon)
+		return battle_icon
+
 	var icon_image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
 	icon_image.fill(Color.TRANSPARENT)
 	_blend_idle_front_frame(
@@ -470,6 +483,84 @@ static func get_appearance_part_icon(
 	var icon_texture := _create_cropped_appearance_icon(icon_image)
 	_remember_appearance_resource(_appearance_part_icon_cache, cache_key, icon_texture)
 	return icon_texture
+
+
+static func _create_battle_appearance_icon(parts: Array[Dictionary], gender: String) -> Texture2D:
+	# Use the same layered art as the Trainer Card. Some older cosmetics have no
+	# battle layer yet; those keep their existing overworld thumbnail.
+	var battle_catalog := load("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd") as Script
+	if battle_catalog == null:
+		return null
+	var appearance := {
+		"gender": gender,
+		"body": DEFAULT_FEMALE_BODY_ID if gender == "female" else DEFAULT_MALE_BODY_ID,
+		"skin_tone": DEFAULT_SKIN_TONE,
+	}
+	var requested: Dictionary = {}
+	var include_body := false
+	for part: Dictionary in parts:
+		if str(part.get("kind", "")) == "body":
+			include_body = true
+			continue
+		var category := str(part.get("category", ""))
+		if category in [EYES_CATEGORY, EYEBROWS_CATEGORY]:
+			continue # These details are already part of the battle base or hair layer.
+		var part_id := str(part.get("id", ""))
+		if category.is_empty() or part_id.is_empty():
+			continue
+		appearance[category] = part_id
+		requested[category] = part_id
+		if part.has("tint"):
+			appearance["%s_color" % category] = (part.get("tint", Color.WHITE) as Color).to_html(false)
+	if requested.is_empty():
+		return null
+	var battle_layers: Array = battle_catalog.call("build_layers", appearance)
+	for category: String in requested:
+		var found := false
+		for layer_value: Variant in battle_layers:
+			if layer_value is Dictionary:
+				var layer := layer_value as Dictionary
+				if str(layer.get("category", "")) == category \
+					and str(layer.get("part_id", "")) == str(requested[category]) \
+					and not bool(layer.get("fallback", false)):
+					found = true
+					break
+		if not found:
+			return null
+	var icon_image := Image.create(160, 160, false, Image.FORMAT_RGBA8)
+	icon_image.fill(Color.TRANSPARENT)
+	for layer_value: Variant in battle_layers:
+		if not layer_value is Dictionary:
+			continue
+		var layer := layer_value as Dictionary
+		var category := str(layer.get("category", ""))
+		if category == BODY_CATEGORY and not include_body:
+			continue
+		if not requested.has(category) and not (
+			(category == "top_accessory" and requested.has(TOP_CATEGORY))
+			or (category == EYEBROWS_CATEGORY and requested.has(HAIR_CATEGORY))
+		):
+			continue
+		var texture := layer.get("texture") as Texture2D
+		if texture == null:
+			continue
+		var source := texture.get_image()
+		var scale := float(layer.get("scale", 1.0))
+		if not is_equal_approx(scale, 1.0):
+			source.resize(roundi(source.get_width() * scale), roundi(source.get_height() * scale), Image.INTERPOLATE_NEAREST)
+		var position := (Vector2i(160, 160) - source.get_size()) / 2
+		icon_image.blend_rect(source, Rect2i(Vector2i.ZERO, source.get_size()), position)
+	icon_image.flip_x() # The Trainer Card mirrors these source sprites.
+	var used := icon_image.get_used_rect()
+	if not used.has_area():
+		return null
+	var padding := 4
+	var start := Vector2i(maxi(used.position.x - padding, 0), maxi(used.position.y - padding, 0))
+	var end := Vector2i(mini(used.end.x + padding, 160), mini(used.end.y + padding, 160))
+	var cropped := icon_image.get_region(Rect2i(start, end - start))
+	var fit := 64.0 / float(maxi(cropped.get_width(), cropped.get_height()))
+	cropped.resize(maxi(1, roundi(cropped.get_width() * fit)), maxi(1, roundi(cropped.get_height() * fit)), Image.INTERPOLATE_NEAREST)
+	return ImageTexture.create_from_image(cropped)
 
 
 static func _create_cropped_appearance_icon(icon_image: Image) -> Texture2D:
