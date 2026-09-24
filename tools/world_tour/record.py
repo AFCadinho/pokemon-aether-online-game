@@ -99,7 +99,9 @@ def main():
         return
     common = ["ffmpeg", "-v", "error", "-nostdin", "-framerate", str(route["fps"]),
               "-i", str(frames / "%06d.png"), "-an"]
-    subprocess.run(common + ["-c:v", "libtheora", "-q:v", "4", "-pix_fmt", "yuv420p", str(output / "login_background.ogv")], check=True)
+    # q:v is Theora's quality scale (0–10); q6 sharpens detailed tiles while
+    # keeping the login video a practical download size.
+    subprocess.run(common + ["-c:v", "libtheora", "-q:v", "6", "-pix_fmt", "yuv420p", str(output / "login_background.ogv")], check=True)
     subprocess.run(common + ["-c:v", "libx264", "-crf", "20", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(output / "preview.mp4")], check=True)
     if args.install:
         target = ROOT / "assets/video/login_background.ogv"

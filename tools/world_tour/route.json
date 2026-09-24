@@ -134,6 +134,22 @@
       ]
     },
     {
+      "name": "Mt. Moon 1F",
+      "scene": "res://generated/tiled_visuals/mt_moon_1f/mt_moon_1f.visual.tscn",
+      "from": [
+        1440,
+        1280
+      ],
+      "to": [
+        1632,
+        1280
+      ],
+      "view_width": 1280,
+      "areas": [
+        "kanto_mt_moon_1f"
+      ]
+    },
+    {
       "name": "Route 4",
       "scene": "res://generated/tiled_visuals/route_4/route_4.visual.tscn",
       "from": [
@@ -267,5 +283,8 @@
   "unbuilt_areas": {},
   "excluded_visuals": {
     "res://generated/tiled_visuals/open_field/open_field.visual.tscn": "Temporary open field omitted from the login tour."
+  },
+  "additional_visuals": {
+    "res://generated/tiled_visuals/mt_moon_1f/mt_moon_1f.visual.tscn": "Mt. Moon 1F is included as the first cave interior in the login tour."
   }
 }

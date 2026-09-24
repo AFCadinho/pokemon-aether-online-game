@@ -28,11 +28,13 @@ slot vervangen, nadat opname en encoding zijn geslaagd. Review, commit en merge
 naar development volgen de normale workflow; dit publiceert niets.
 
 De standaardtour bevat alle 16 geselecteerde buitenkaartdecors uit de
-wereldcatalogus en duurt 2 minuten en 8 seconden, op 1280×720 bij 30 fps.
-Dit omvat steden, routes, Viridian Forest en de buitengebieden van Aether Clash.
-Gebouwen, doorgangen binnen gebouwen, grotten en het tijdelijke open-field-decor
-van Route 5 en Route 9 zijn uitgesloten. De duel-preview wordt niet dubbel
-gefilmd; `areas` vermeldt alle vertegenwoordigde locaties. Zie [COVERAGE.md](COVERAGE.md).
+wereldcatalogus plus Mt. Moon 1F en duurt 2 minuten en 16 seconden, op 1280×720
+bij 30 fps. Dit omvat steden, routes, Viridian Forest en de buitengebieden van
+Aether Clash. Andere gebouwen, indoor-doorgangen en grotten zijn uitgesloten,
+net als het tijdelijke open-field-decor van Route 5 en Route 9. De duel-preview
+wordt niet dubbel gefilmd; `areas` vermeldt alle vertegenwoordigde locaties. Zie
+[COVERAGE.md](COVERAGE.md). Theora-kwaliteit 6 houdt de loginvideo scherp zonder
+de bestandsgrootte van de hoogste kwaliteitsinstelling.
 Het bestaande inlogscherm speelt `assets/video/login_background.ogv` af en start
 deze opnieuw aan het einde. De laatste scène mengt al terug naar de eerste;
 de camerabeweging loopt daarbij door over de lusgrens. Er is geen audio.

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De loginintro speelt nu een scherpere 136-secondenwereldtour op hogere Theora-kwaliteit en bevat Mt. Moon 1F.
+
 - De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
 
 - De bevestiging van de in-game dev-reset vermeldt nu dat gratis en test-Gems verdwijnen en alleen niet-uitgegeven gekochte Gems behouden blijven.
