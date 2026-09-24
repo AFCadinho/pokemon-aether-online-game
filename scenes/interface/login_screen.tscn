@@ -264,6 +264,7 @@ grow_vertical = 2
 mouse_filter = 2
 stream = ExtResource("6_video")
 expand = true
+texture_filter = 1
 
 [node name="HeroShade" type="ColorRect" parent="Background" unique_id=1135999407]
 layout_mode = 1
@@ -273,7 +274,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.006, 0.005, 0.02, 0.55)
+color = Color(0.006, 0.005, 0.02, 0.45)
 
 [node name="LoginAura" type="TextureRect" parent="Background" unique_id=148525017]
 modulate = Color(1, 1, 1, 0.9)
