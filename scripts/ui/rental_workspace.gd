@@ -48,6 +48,7 @@ var pokemon_review_buyout_price: Label
 var pokemon_review_terms: Label
 var pokemon_review_item_icon: TextureRect
 var pokemon_review_item_name: Label
+var pokemon_review_group_grid: GridContainer
 
 func _ready() -> void:
 	hide()
@@ -233,15 +234,23 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	review_heading.add_theme_color_override("font_color", Color("#eef6ff"))
 	review_header.add_child(review_heading)
 	var edit_button := Button.new()
-	edit_button.text = "← Edit set"
+	edit_button.text = "← Edit paste" if bulk_mode else "← Edit set"
 	edit_button.pressed.connect(func(): _show_pokemon_review(false))
 	_style_button(edit_button, false)
 	review_header.add_child(edit_button)
+	if bulk_mode:
+		pokemon_review_group_grid = GridContainer.new()
+		pokemon_review_group_grid.name = "PokemonReviewGroupGrid"
+		pokemon_review_group_grid.columns = 6
+		pokemon_review_group_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pokemon_review_group_grid.add_theme_constant_override("h_separation", 6)
+		pokemon_review_step.add_child(pokemon_review_group_grid)
 	var review_content := HBoxContainer.new()
 	review_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	review_content.add_theme_constant_override("separation", 12)
 	pokemon_review_step.add_child(review_content)
 	var identity_card := PanelContainer.new()
+	identity_card.visible = not bulk_mode
 	identity_card.custom_minimum_size.x = 230
 	identity_card.add_theme_stylebox_override("panel", _control_style(Color("#0a1726"), Color("#41698d")))
 	review_content.add_child(identity_card)
@@ -300,6 +309,8 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	review_content.add_child(details_column)
 	description = RichTextLabel.new()
 	description.bbcode_enabled = true
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	description.fit_content = not bulk_mode
 	description.scroll_active = bulk_mode
@@ -316,8 +327,9 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
 	pokemon_review_terms = Label.new()
-	pokemon_review_terms.text = "24 hours real time • Each Pokémon is rented separately • Permanent purchases are untradeable" if bulk_mode else "24 hours real time • Rental item is temporary • Permanent purchases are untradeable"
+	pokemon_review_terms.text = "24h real time • Separate rentals • Temporary items • Permanent purchases untradeable" if bulk_mode else "24 hours real time • Rental item is temporary • Permanent purchases are untradeable"
 	pokemon_review_terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_review_terms.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if bulk_mode else TextServer.AUTOWRAP_OFF
 	pokemon_review_terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_review_terms.add_theme_color_override("font_color", Color("#8ea8bd"))
 	actions.add_child(pokemon_review_terms)
@@ -329,7 +341,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	actions.add_child(duration)
 	rent_button = Button.new()
 	rent_button.text = "Rent quoted Pokémon"
-	rent_button.custom_minimum_size.x = 210
+	rent_button.custom_minimum_size.x = 270 if bulk_mode else 210
 	rent_button.disabled = true
 	rent_button.pressed.connect(_rent)
 	_style_button(rent_button, true)
@@ -356,6 +368,48 @@ func _review_price_card(parent: HBoxContainer, heading_text: String, accent: Col
 	value.add_theme_color_override("font_color", Color("#eef6ff"))
 	content.add_child(value)
 	return value
+
+func _render_group_review_cards(members: Array) -> void:
+	if pokemon_review_group_grid == null:
+		return
+	for child: Node in pokemon_review_group_grid.get_children():
+		pokemon_review_group_grid.remove_child(child)
+		child.queue_free()
+	for index: int in range(members.size()):
+		var member: Dictionary = members[index]
+		var pokemon: Dictionary = member.get("pokemon", {})
+		var species := str(pokemon.get("species", pokemon.get("speciesId", "Pokémon")))
+		var card := PanelContainer.new()
+		card.name = "GroupPokemonCard-%d" % index
+		card.custom_minimum_size.y = 112
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.add_theme_stylebox_override("panel", _control_style(Color("#0a1726"), Color("#41698d")))
+		pokemon_review_group_grid.add_child(card)
+		var layout := VBoxContainer.new()
+		layout.alignment = BoxContainer.ALIGNMENT_CENTER
+		layout.add_theme_constant_override("separation", 2)
+		card.add_child(layout)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(58, 58)
+		icon.texture = PokemonAssets.load_party_icon(species)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		layout.add_child(icon)
+		var name_label := Label.new()
+		name_label.text = species
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name_label.clip_text = true
+		name_label.add_theme_font_size_override("font_size", 12)
+		name_label.add_theme_color_override("font_color", Color("#62d5ff"))
+		layout.add_child(name_label)
+		var price_label := Label.new()
+		price_label.text = "%d Aetherite" % int(member.get("price", 0))
+		price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		price_label.add_theme_font_size_override("font_size", 10)
+		price_label.add_theme_color_override("font_color", Color("#f5df9a"))
+		layout.add_child(price_label)
 
 func _create_pokemon_preview() -> Control:
 	var card := PanelContainer.new()
@@ -818,6 +872,7 @@ func _quote_pokemon() -> void:
 		"nature": pokemon.get("nature", "Hardy"), "moves": moves,
 	}, true)
 	if bulk_mode:
+		_render_group_review_cards(selected.get("members", []))
 		var summaries: Array[String] = []
 		for member: Dictionary in selected.get("members", []):
 			var member_pokemon: Dictionary = member.get("pokemon", {})
