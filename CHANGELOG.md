@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De PokéPaste-groepspreview toont nu alle zes Pokémon en hun gehouden items; ook de reviewkaarten tonen het itemicoon. Z-Crystals gebruiken hun juiste itemafbeelding.
+
 - De review van een PokéPaste-groep toont nu alle Pokémon als compacte kaarten met sprite en prijs; de setdetails scrollen zonder de totaalprijs of huurknop buiten beeld te drukken.
 
 - De invoer voor een PokéPaste-groep blijft nu volledig binnen het rentalvenster; de live preview toont alleen de eerste set en het plakveld scrolt bij lange teams.
