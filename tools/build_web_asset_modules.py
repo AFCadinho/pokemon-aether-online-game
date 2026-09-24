@@ -19,8 +19,15 @@ def build_module(godot, output, name, preset, scenes, required, forbidden):
     log = output.parent / f"{name}-export-console.log"
     code = run_export([godot, "--headless", "--log-file", str(output.parent / f"{name}-export.log"),
                        "--path", str(ROOT), "--export-pack", preset, str(pack)], log)
-    if code or not pack.is_file() or not 0 < pack.stat().st_size <= MAX_MODULE_BYTES:
-        raise RuntimeError(f"{name} export failed or exceeds 32 MiB; see {log}")
+    if code:
+        raise RuntimeError(f"{name} export exited with status {code}; see {log}")
+    if not pack.is_file() or pack.stat().st_size <= 0:
+        raise RuntimeError(f"{name} export did not create a non-empty pack; see {log}")
+    if pack.stat().st_size > MAX_MODULE_BYTES:
+        raise RuntimeError(
+            f"{name} pack is {pack.stat().st_size / 1048576:.1f} MiB; "
+            f"the limit is {MAX_MODULE_BYTES / 1048576:.0f} MiB."
+        )
     with tempfile.TemporaryDirectory(prefix="pokeaether-module-index-") as directory:
         Path(directory, "project.godot").write_text('config_version=5\n')
         probe = subprocess.run([godot, "--headless", "--path", directory, "--script",
@@ -44,6 +51,18 @@ def build_module(godot, output, name, preset, scenes, required, forbidden):
             "sha256": digest, "version": digest[:16], "scenes": scenes}
 
 
+def import_project(godot, output):
+    """Finish pending Godot imports before running isolated pack exports."""
+    console_log = output.parent / "asset-module-import-console.log"
+    engine_log = output.parent / "asset-module-import.log"
+    code = run_export(
+        [godot, "--headless", "--log-file", str(engine_log), "--path", str(ROOT), "--import"],
+        console_log,
+    )
+    if code:
+        raise RuntimeError(f"Godot asset import exited with status {code}; see {console_log}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", default="godot")
@@ -52,6 +71,7 @@ def main():
         parser.error("Run through ops/worktrees/slot-env SLOT -- COMMAND.")
     output = ROOT / "builds/web/modules"
     output.mkdir(parents=True, exist_ok=True)
+    import_project(args.godot, output)
     scope = json.loads((ROOT / "docs/browser-misty-scope.json").read_text())
     catalog = json.loads((ROOT / "generated/world_access_catalog.json").read_text())
     misty_scenes = [catalog["areas"][map_id]["scenePath"] for map_id in scope["additionalMapIds"]]
