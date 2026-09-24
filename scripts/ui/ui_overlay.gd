@@ -152,7 +152,7 @@ const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item
 const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
 const GAMEPLAY_RESET_TITLE := "Reset / New Game"
 const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
-const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nFree and test Aether Gems are removed. Only unspent purchased Gems and paid items remain, along with your account, roles, friends, mail history and PvP history."
+const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, all items and cosmetics (including purchases), money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nFree and test Aether Gems are removed. All Gems from valid purchases are restored, including those previously spent. Your account, roles, friends, shared mail and PvP history remain."
 # This matches the catalog team's natural setup height, including its six-slot
 # opponent preview, the separate 36px difficulty row plus its 8px gap, and
 # the catalog name search.

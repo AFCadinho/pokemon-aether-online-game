@@ -56,8 +56,9 @@ func _init() -> void:
 	)
 	_expect(
 		overlay.contains("Free and test Aether Gems are removed")
-		and overlay.contains("Only unspent purchased Gems and paid items remain"),
-		"the confirmation distinguishes non-paid Gems from unspent purchased Gems"
+		and overlay.contains("All Gems from valid purchases are restored")
+		and overlay.contains("all items and cosmetics (including purchases)"),
+		"the confirmation explains paid-item removal and full paid-Gem restoration"
 	)
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(
