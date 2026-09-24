@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- De loginintro speelt nu een scherpere 136-secondenwereldtour op hogere Theora-kwaliteit en bevat Mt. Moon 1F.
+- De loginintro bevat Mt. Moon 1F en speelt nu een scherpere wereldtour van 68 seconden met kleinere downloadgrootte.
 
 - De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
 
