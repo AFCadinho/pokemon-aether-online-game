@@ -626,6 +626,23 @@ func _run() -> void:
 		and blessing_icons[2] != blessing_icons[3],
 		"Blessing durations use four distinct icon resources"
 	)
+	_check(store.product_buttons.has("patreon-supporter-preview"),
+		"Blessings makes the planned Patreon membership discoverable")
+	store.call("_select_product", "patreon-supporter-preview")
+	_check(store.selection_description_label.text.contains("5% better Shiny odds")
+		and store.selection_description_label.text.contains("50% off regional travel")
+		and store.selection_description_label.text.contains("two free Aether Anchors")
+		and store.selection_description_label.text.contains("5% off NPC currency shops")
+		and store.selection_description_label.text.contains("supporter role and badge")
+		and store.selection_description_label.text.contains("Patreon outfit"),
+		"Patreon preview explains Blessing benefits and the extra supporter perks")
+	_check(store.call("_gem_price", "patreon-supporter-preview") == -1
+		and store.selection_price_label.text == localization_manager.text("ui.store.coming_later")
+		and store.purchase_button.disabled,
+		"Patreon preview cannot be mistaken for an Aether Gem offer")
+	store.call("_on_purchase_pressed")
+	_check(not store.purchase_in_progress,
+		"Patreon preview cannot start the Aether Gem purchase flow")
 
 	store.call("_select_category", "services")
 	_check(store.product_buttons.size() == 2, "Trainer Services contains exactly two tickets")
@@ -646,6 +663,13 @@ func _run() -> void:
 		and gender_ticket_icon.get_height() == 48,
 		"Gender Chance Ticket has a 48x48 pixel-art item icon"
 	)
+	store.apply_store_state({"gems": 0}, {"items": []})
+	var blessings_button := store.category_buttons.get("membership") as Button
+	_check(blessings_button != null and blessings_button.visible,
+		"Patreon information keeps Blessings discoverable without Gem offers")
+	store.call("_select_category", "membership")
+	_check(store.product_buttons.has("patreon-supporter-preview"),
+		"Patreon information stays visible when no vouchers are offered")
 
 	if localization_manager != null:
 		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
