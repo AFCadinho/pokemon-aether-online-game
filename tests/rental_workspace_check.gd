@@ -212,6 +212,8 @@ func _run() -> void:
 	await bulk_workspace._quote_pokemon()
 	assert(bulk_workspace.selected["offerId"] == "bulk-test")
 	assert(bulk_workspace.pokemon_review_species.text == "2 Pokémon")
+	assert(bulk_workspace.pokemon_review_group_grid.get_child_count() == 2)
+	assert(bulk_workspace.pokemon_review_group_grid.get_node("GroupPokemonCard-0").find_children("*", "TextureRect", true, false).size() == 1)
 	assert(bulk_workspace.description.text.contains("Scizor"))
 	assert(bulk_workspace.description.text.contains("Garchomp"))
 	assert(bulk_workspace.rent_button.text == "Rent 2 Pokémon — 400 Aetherite")
@@ -239,8 +241,12 @@ func _run() -> void:
 	bulk_workspace.pokemon_paste.text = "SIX SETS\n" + long_paste
 	await bulk_workspace._quote_pokemon()
 	await process_frame
+	assert(bulk_workspace.pokemon_review_group_grid.get_child_count() == 6)
+	for card: Control in bulk_workspace.pokemon_review_group_grid.get_children():
+		assert(card.get_global_rect().end.x < bulk_workspace.size.x)
 	assert(bulk_workspace.description.scroll_active)
 	assert(not bulk_workspace.description.fit_content)
+	assert(bulk_workspace.rent_button.get_global_rect().end.x < bulk_workspace.size.x)
 	assert(bulk_workspace.rent_button.get_global_rect().end.y < bulk_workspace.size.y)
 	bulk_workspace.queue_free()
 	var rental_service := preload("res://scripts/services/rental_service.gd").new()

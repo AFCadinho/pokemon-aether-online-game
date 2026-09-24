@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De review van een PokéPaste-groep toont nu alle Pokémon als compacte kaarten met sprite en prijs; de setdetails scrollen zonder de totaalprijs of huurknop buiten beeld te drukken.
+
 - De invoer voor een PokéPaste-groep blijft nu volledig binnen het rentalvenster; de live preview toont alleen de eerste set en het plakveld scrolt bij lange teams.
 
 - Pokémon Rental accepteert nu ook een PokéPaste met 2–6 sets in één aanvraag, toont de totaalprijs en biedt daarna aan om de hele groep in de party te zetten; de huidige party gaat na bevestiging naar de PC.
