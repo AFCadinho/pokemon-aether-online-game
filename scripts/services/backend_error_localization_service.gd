@@ -279,7 +279,7 @@ const CODE_TO_KEY: Dictionary = {
 	"rock_smash_context_mismatch": "backend.error.rock_smash_unavailable",
 	"rock_smash_too_far": "backend.error.rock_smash_too_far",
 	"rock_smash_request_required": "backend.error.request_invalid",
-	"gameplay_reset_blocked": "backend.error.action_blocked",
+	"gameplay_reset_blocked": "backend.error.gameplay_reset_blocked",
 	"gift_code_invalid": "ui.gift_code.error.invalid",
 	"gift_code_inactive": "ui.gift_code.error.inactive",
 	"gift_code_expired": "ui.gift_code.error.expired",
@@ -336,6 +336,13 @@ static func message(
 ) -> String:
 	var code := error_code(response)
 	var key := str(CODE_TO_KEY.get(code, "")).strip_edges()
+	if code == "gameplay_reset_blocked":
+		for source: Dictionary in _response_dictionaries(response):
+			var boundary := str(source.get("boundary", "")).strip_edges().to_lower()
+			var boundary_key := "backend.error.gameplay_reset_blocked.%s" % boundary
+			if not boundary.is_empty() and _has_key(boundary_key):
+				key = boundary_key
+				break
 	if code == "aether_clash_team_invalid":
 		var rule_code := _aether_clash_team_rule_code(response)
 		var rule_key := "backend.error.aether_clash_team_invalid.%s" % rule_code

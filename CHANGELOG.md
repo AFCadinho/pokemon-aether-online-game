@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Een geblokkeerde gameplay-reset vermeldt nu de concrete reden en vervolgstap, bijvoorbeeld het annuleren van actieve Aether Exchange-aanbiedingen en zoekopdrachten.
+
 - De lokale Gem-aankoopsimulatie toont dezelfde systeemmelding en Gem-beloning als een echte bijschrijving; de test blijft intern gescheiden van betaalde aankopen.
 
 - Nieuwe Ko-fi-Gem-bijschrijvingen tonen in de game een systeemmelding en een Gem-beloning; de portemonnee wordt eerst vernieuwd.
