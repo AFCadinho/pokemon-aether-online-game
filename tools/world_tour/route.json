@@ -2,8 +2,8 @@
   "width": 1280,
   "height": 720,
   "fps": 30,
-  "shot_seconds": 8,
-  "transition_seconds": 1.5,
+  "shot_seconds": 4,
+  "transition_seconds": 1,
   "shots": [
     {
       "name": "Pallet Town",

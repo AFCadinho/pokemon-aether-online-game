@@ -13,6 +13,9 @@ class RouteValidationTests(unittest.TestCase):
 
     def test_default_route(self):
         validate(self.route)
+        self.assertEqual(self.route["shot_seconds"], 4)
+        self.assertEqual(self.route["transition_seconds"], 1)
+        self.assertEqual(len(self.route["shots"]), 17)
 
     def test_rejects_bad_timing_and_encoding_sizes(self):
         for key, value in (("fps", 0), ("width", 1279), ("height", -2),
