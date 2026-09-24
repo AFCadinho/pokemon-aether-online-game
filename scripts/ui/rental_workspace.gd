@@ -41,6 +41,7 @@ var pokemon_preview_details: RichTextLabel
 var pokemon_preview_item_icon: TextureRect
 var pokemon_preview_item_name: Label
 var pokemon_preview_group_grid: GridContainer
+var pokemon_preview_group_empty: Label
 var pokemon_review_icon: TextureRect
 var pokemon_review_species: Label
 var pokemon_review_rarity: Label
@@ -511,6 +512,16 @@ func _create_pokemon_preview() -> Control:
 		pokemon_preview_group_grid.add_theme_constant_override("h_separation", 6)
 		pokemon_preview_group_grid.add_theme_constant_override("v_separation", 6)
 		layout.add_child(pokemon_preview_group_grid)
+		pokemon_preview_group_empty = Label.new()
+		pokemon_preview_group_empty.name = "PokemonPastePreviewEmpty"
+		pokemon_preview_group_empty.text = "Paste 2–6 sets to preview them here."
+		pokemon_preview_group_empty.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pokemon_preview_group_empty.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		pokemon_preview_group_empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		pokemon_preview_group_empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		pokemon_preview_group_empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		pokemon_preview_group_empty.add_theme_color_override("font_color", Color("#8ea8bd"))
+		layout.add_child(pokemon_preview_group_empty)
 	return card
 
 func _create_preview_item_row(parent: VBoxContainer) -> Dictionary:
@@ -755,12 +766,8 @@ func _render_paste_group_preview() -> void:
 		preview_count += 1
 		if preview_count >= 6:
 			break
-	if preview_count == 0:
-		var empty := Label.new()
-		empty.text = "Paste 2–6 sets to preview them here."
-		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		empty.add_theme_color_override("font_color", Color("#8ea8bd"))
-		pokemon_preview_group_grid.add_child(empty)
+	pokemon_preview_group_grid.visible = preview_count > 0
+	pokemon_preview_group_empty.visible = preview_count == 0
 
 func _item_display_name(item_id: String) -> String:
 	var value := item_id.strip_edges()
