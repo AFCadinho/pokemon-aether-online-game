@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De invoer voor een PokéPaste-groep blijft nu volledig binnen het rentalvenster; de live preview toont alleen de eerste set en het plakveld scrolt bij lange teams.
+
 - Pokémon Rental accepteert nu ook een PokéPaste met 2–6 sets in één aanvraag, toont de totaalprijs en biedt daarna aan om de hele groep in de party te zetten; de huidige party gaat na bevestiging naar de PC.
 
 - De game bewaart een willekeurige installatie-ID bij de eerste login en stuurt die mee, zodat loginbeperkingen per installatie en verwante accountaanwijzingen mogelijk worden.

@@ -160,7 +160,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	_style_tabs(pokemon_source, true)
 	input_column.add_child(pokemon_source)
 	var paste_panel := VBoxContainer.new()
-	paste_panel.name = "Paste a set"
+	paste_panel.name = "Paste 2–6 sets" if bulk_mode else "Paste a set"
 	pokemon_source.add_child(paste_panel)
 	var paste_hint := Label.new()
 	paste_hint.text = "Paste your Showdown / PokéPaste sets below. Held items are included during the rental." if bulk_mode else "Paste your Showdown / PokéPaste set below. Its held item is included during the rental."
@@ -168,7 +168,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	paste_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
 	paste_panel.add_child(paste_hint)
 	pokemon_paste = TextEdit.new()
-	pokemon_paste.placeholder_text = "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed"
+	pokemon_paste.placeholder_text = "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\n- Dragon Dance\n\nScizor @ Leftovers\nAbility: Technician\n- Bullet Punch" if bulk_mode else "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed"
 	pokemon_paste.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_paste.text_changed.connect(_invalidate_pokemon_quote)
 	_style_text_edit(pokemon_paste)
@@ -371,7 +371,7 @@ func _create_pokemon_preview() -> Control:
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 	var eyebrow := Label.new()
-	eyebrow.text = "LIVE BUILD PREVIEW"
+	eyebrow.text = "FIRST SET PREVIEW · FULL GROUP IN REVIEW" if bulk_mode else "LIVE BUILD PREVIEW"
 	eyebrow.add_theme_font_size_override("font_size", 11)
 	eyebrow.add_theme_color_override("font_color", Color("#8ea8bd"))
 	layout.add_child(eyebrow)
@@ -412,8 +412,8 @@ func _create_pokemon_preview() -> Control:
 	pokemon_preview_details = RichTextLabel.new()
 	pokemon_preview_details.name = "PokemonBuilderPreviewDetails"
 	pokemon_preview_details.bbcode_enabled = true
-	pokemon_preview_details.fit_content = true
-	pokemon_preview_details.scroll_active = false
+	pokemon_preview_details.fit_content = false
+	pokemon_preview_details.scroll_active = true
 	pokemon_preview_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_preview_details.add_theme_font_size_override("normal_font_size", 11)
 	pokemon_preview_details.add_theme_constant_override("line_separation", 2)
@@ -660,6 +660,8 @@ func _paste_preview_data() -> Dictionary:
 	for raw_line: String in pokemon_paste.text.split("\n"):
 		var line := raw_line.strip_edges()
 		if line.is_empty():
+			if not str(result["species"]).is_empty():
+				break
 			continue
 		if str(result["species"]).is_empty() and not line.begins_with("-") and ":" not in line and not line.ends_with(" Nature"):
 			var heading_parts := line.split("@", false, 1)
