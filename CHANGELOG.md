@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De game bewaart een willekeurige installatie-ID bij de eerste login en stuurt die mee, zodat loginbeperkingen per installatie en verwante accountaanwijzingen mogelijk worden.
+
 - De Blessings-tab toont een Patreon-voorvertoning met de gedeelde Aether Blessing-voordelen en extra supporterrol, badge en outfit. De kaart vermeldt dat de voordelen nog niet beschikbaar zijn en kan niet met Aether Gems worden gekocht.
 
 - In de browser kunnen spelers nu elkaars Trainer Card bekijken en wild- of NPC-gevechten op dezelfde kaart spectaten.
