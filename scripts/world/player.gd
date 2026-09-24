@@ -2813,6 +2813,10 @@ func _cache_appearance_sprites() -> void:
 	appearance_sprites.clear()
 	_collect_appearance_sprites(look_node)
 	master_appearance_sprite = _get_master_appearance_sprite()
+	# Keep clothing on the new body frame during the same render tick.
+	if master_appearance_sprite != null \
+			and not master_appearance_sprite.frame_changed.is_connected(_sync_appearance_sprite_frames):
+		master_appearance_sprite.frame_changed.connect(_sync_appearance_sprite_frames)
 	_sync_appearance_animation_speeds()
 
 

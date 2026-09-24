@@ -800,6 +800,11 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 	if texture == null:
 		_remember_appearance_resource(_part_frames_cache, cache_key, null)
 		return null
+	if normalized_gender == "female" \
+			and normalized_category == TOP_CATEGORY \
+			and normalized_part_id == "Mysterious_Shirt" \
+			and normalized_movement_style in [BODY_MOVEMENT_DEFAULT, BODY_MOVEMENT_RUN]:
+		texture = _cover_mysterious_female_cape_gaps(texture)
 
 	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
 	_remember_appearance_resource(_part_frames_cache, cache_key, sprite_frames)
@@ -1187,6 +1192,23 @@ static func _load_part_texture_for_movement(category: String, part_id: String, g
 			if default_movement_texture != null:
 				return default_movement_texture
 	return _load_part_texture(category, part_id, gender)
+
+
+static func _cover_mysterious_female_cape_gaps(texture: Texture2D) -> Texture2D:
+	var image := texture.get_image()
+	if image == null or image.get_size() != Vector2i(256, 256):
+		return texture
+	# The female body has visible ankle pixels beneath four transparent 2×2
+	# openings in the side-facing cape frames. Complete the coat's dark hem.
+	for corner: Vector2i in [
+		Vector2i(36, 118), Vector2i(164, 118),
+		Vector2i(26, 182), Vector2i(154, 182),
+	]:
+		for y: int in range(corner.y, corner.y + 2):
+			for x: int in range(corner.x, corner.x + 2):
+				if image.get_pixel(x, y).a == 0.0:
+					image.set_pixel(x, y, Color8(34, 34, 35))
+	return ImageTexture.create_from_image(image)
 
 
 static func _load_part_texture(category: String, part_id: String, gender: String = "") -> Texture2D:

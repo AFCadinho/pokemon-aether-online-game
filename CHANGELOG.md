@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Mysterious Outfit bedekt nu de losse huidskleurige pixels bij de vrouwelijke capezoom; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
+
 - De Wallet- en PvP-tabs van de Trainer Card benutten weer de volle breedte; grote saldi blijven leesbaar zonder de valutakaarten uit verhouding te trekken.
 
 - De systeemmelding na een Gem-bijschrijving noemt nu alleen het toegevoegde bedrag en het bijgewerkte saldo, zonder specifieke betaaldienst.
