@@ -259,6 +259,37 @@ func content_creator_create_pokemon(pokemon_data: Dictionary, add_to_party: bool
 	return await _create_owned_pokemon("/game/content-creator/pokemon", _with_current_origin(pokemon_data, "content_creator"), add_to_party)
 
 
+func list_content_creator_pokemon() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/content-creator/pokemon",
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {"success": true, "pokemon": _array_from_value(body.get("pokemon", []))}
+
+
+func remove_content_creator_pokemon(pokemon_id: int) -> Dictionary:
+	if not AuthService.is_authenticated() or pokemon_id <= 0:
+		return {"success": false, "error": "Missing Content Creator Pokemon."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/content-creator/pokemon/%s" % pokemon_id,
+		HTTPClient.METHOD_DELETE,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	var result: Dictionary = _party_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
 func content_creator_clear_party_pokemon() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {

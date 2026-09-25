@@ -1538,6 +1538,10 @@ var evolution_overlay_active_evolution: Dictionary = {}
 var alpha_tools_popup: PanelContainer
 var content_creator_tools_popup: PanelContainer
 var content_creator_photo_mode_button: Button
+var content_creator_create_pokemon_button: Button
+var content_creator_remove_pokemon_button: Button
+var content_creator_pokemon_selector: OptionButton
+var content_creator_pokemon_entries: Array[Dictionary] = []
 var alpha_aetherite_button: Button
 var alpha_aetherite_amount_spinbox: SpinBox
 var alpha_reset_game_button: Button
@@ -2384,6 +2388,7 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_generate_alpha_aetherite: bool = _can_generate_alpha_aetherite()
 	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web
 	var can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web
+	var can_use_content_creator_tools_here := can_use_content_creator_photo_mode_here or can_use_content_creator_generation_here
 	var can_generate_alpha_aetherite_here := can_generate_alpha_aetherite and not is_web
 	var has_staff_tool: bool = (
 		can_return_from_impersonation_here
@@ -2398,15 +2403,23 @@ func _refresh_dev_tools_visibility() -> void:
 	var has_visible_staff_action: bool = (
 		has_staff_tool
 		or can_open_dev_actions
-		or can_use_content_creator_photo_mode_here
+		or can_use_content_creator_tools_here
 		or can_generate_alpha_aetherite_here
 	)
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools_here
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
-		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode_here
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_tools_here
+		content_creator_tools_button.disabled = not can_use_content_creator_tools_here
+	if content_creator_photo_mode_button != null:
+		content_creator_photo_mode_button.visible = can_use_content_creator_photo_mode_here
+	if content_creator_create_pokemon_button != null:
+		content_creator_create_pokemon_button.visible = can_use_content_creator_generation_here
+	if content_creator_remove_pokemon_button != null:
+		content_creator_remove_pokemon_button.visible = can_use_content_creator_generation_here
+	if content_creator_pokemon_selector != null:
+		content_creator_pokemon_selector.visible = can_use_content_creator_generation_here
 	if alpha_tools_slot != null:
 		alpha_tools_slot.visible = can_show_staff_action_bar and can_generate_alpha_aetherite_here
 	if alpha_tools_button != null:
@@ -2509,7 +2522,7 @@ func _refresh_dev_tools_visibility() -> void:
 		dev_add_item_popup.visible = false
 	if not can_generate_alpha_aetherite_here and alpha_tools_popup != null:
 		alpha_tools_popup.visible = false
-	if not can_use_content_creator_photo_mode_here and content_creator_tools_popup != null:
+	if not can_use_content_creator_tools_here and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation_here and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
@@ -9481,6 +9494,28 @@ func _setup_content_creator_tools_popup() -> void:
 		"ui.staff.creator.photo_mode_description",
 		CONTENT_CREATOR_MENU_ICON,
 		Color("#67c7ea")
+	)
+	content_creator_create_pokemon_button = Button.new()
+	content_creator_create_pokemon_button.pressed.connect(_on_content_creator_create_pokemon_button_pressed)
+	layout.add_child(content_creator_create_pokemon_button)
+	_configure_launcher_card_button(
+		content_creator_create_pokemon_button,
+		"ui.staff.creator.create_pokemon",
+		"ui.staff.creator.create_pokemon_description",
+		CONTENT_CREATOR_MENU_ICON,
+		Color("#67c7ea")
+	)
+	content_creator_pokemon_selector = OptionButton.new()
+	layout.add_child(content_creator_pokemon_selector)
+	content_creator_remove_pokemon_button = Button.new()
+	content_creator_remove_pokemon_button.pressed.connect(_on_content_creator_remove_pokemon_button_pressed)
+	layout.add_child(content_creator_remove_pokemon_button)
+	_configure_launcher_card_button(
+		content_creator_remove_pokemon_button,
+		"ui.staff.creator.remove_pokemon",
+		"ui.staff.creator.remove_pokemon_description",
+		TOOL_CLEAR_DATA_ICON,
+		Color("#ef7085")
 	)
 
 func _setup_dev_add_item_tools() -> void:
@@ -33662,7 +33697,7 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 		_add_chat_message("Paste a Showdown/Pokepaste set or team first.")
 		return false
 
-	_add_chat_message("Creating Alpha Pokemon...")
+	_add_chat_message("Creating Content Creator Pokemon...")
 	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
@@ -33676,6 +33711,9 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	var team_data: Array = team_value as Array
 	if team_data.is_empty():
 		_add_chat_message("Create failed: team was empty.")
+		return false
+	if team_data.size() != 1:
+		_add_chat_message("Create failed: choose exactly one Content Creator Pokemon.")
 		return false
 	var parsed_pokemon_payloads: Array[Dictionary] = []
 	for index in range(team_data.size()):
@@ -33710,7 +33748,8 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 			return false
 		created_count += 1
 
-	_add_chat_message("Created %s Alpha Pokemon." % created_count)
+	_add_chat_message("Created one Content Creator Pokemon.")
+	await _refresh_content_creator_pokemon_list()
 	return true
 
 func _handle_add_team_command(
@@ -35936,15 +35975,83 @@ func _on_alpha_tools_button_pressed() -> void:
 		_deactivate_ui_panel(alpha_tools_popup)
 
 func _on_content_creator_tools_button_pressed() -> void:
-	if not _can_use_content_creator_photo_mode() or content_creator_tools_popup == null:
+	if not (_can_use_content_creator_photo_mode() or _can_use_content_creator_generation()) or content_creator_tools_popup == null:
 		return
 	content_creator_tools_popup.visible = not content_creator_tools_popup.visible
 	if content_creator_tools_popup.visible:
 		_position_action_slot_popup(content_creator_tools_popup, content_creator_tools_slot)
 		_hide_my_powers_menu()
 		_activate_ui_panel(content_creator_tools_popup)
+		if _can_use_content_creator_generation():
+			await _refresh_content_creator_pokemon_list()
 	else:
 		_deactivate_ui_panel(content_creator_tools_popup)
+
+func _refresh_content_creator_pokemon_list() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	var result: Dictionary = await PlayerPartyStateService.list_content_creator_pokemon()
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not load Content Creator Pokemon: %s" % str(result.get("error", "Unknown error")))
+		return
+	content_creator_pokemon_entries.clear()
+	content_creator_pokemon_selector.clear()
+	for entry_value: Variant in result.get("pokemon", []):
+		if not entry_value is Dictionary:
+			continue
+		var entry: Dictionary = entry_value
+		var pokemon_data: Dictionary = entry.get("pokemon", {})
+		content_creator_pokemon_entries.append(entry)
+		var display_name := str(pokemon_data.get("nickname", "")).strip_edges()
+		if display_name == "":
+			display_name = str(pokemon_data.get("species", "Pokemon"))
+		content_creator_pokemon_selector.add_item(display_name)
+	var has_pokemon := not content_creator_pokemon_entries.is_empty()
+	if has_pokemon:
+		content_creator_pokemon_selector.select(0)
+	content_creator_create_pokemon_button.disabled = has_pokemon
+	content_creator_remove_pokemon_button.disabled = not has_pokemon
+	content_creator_pokemon_selector.disabled = not has_pokemon
+	if not has_pokemon:
+		content_creator_pokemon_selector.add_item(LocalizationManager.text("ui.staff.creator.no_pokemon"))
+
+func _on_content_creator_create_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation() or not content_creator_pokemon_entries.is_empty():
+		return
+	_hide_content_creator_tools_popup()
+	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
+
+func _on_content_creator_remove_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	var selected := content_creator_pokemon_selector.get_selected()
+	if selected < 0 or selected >= content_creator_pokemon_entries.size():
+		return
+	var entry: Dictionary = content_creator_pokemon_entries[selected]
+	var pokemon_id := int(entry.get("id", 0))
+	if pokemon_id <= 0:
+		return
+	_show_ui_confirm_popup(
+		LocalizationManager.text("ui.staff.creator.remove_pokemon"),
+		LocalizationManager.text("ui.staff.creator.remove_confirm"),
+		LocalizationManager.text("ui.staff.creator.remove_pokemon"),
+		Callable(self, "_on_content_creator_remove_pokemon_confirmed").bind(pokemon_id),
+		Vector2i(500, 0),
+		true
+	)
+
+func _on_content_creator_remove_pokemon_confirmed(pokemon_id: int) -> void:
+	if not _can_use_content_creator_generation():
+		return
+	content_creator_remove_pokemon_button.disabled = true
+	var result: Dictionary = await PlayerPartyStateService.remove_content_creator_pokemon(pokemon_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not remove Content Creator Pokemon: %s" % str(result.get("error", "Unknown error")))
+		content_creator_remove_pokemon_button.disabled = false
+		return
+	_refresh_party()
+	_add_chat_message("Content Creator Pokemon removed. You can now create another.")
+	await _refresh_content_creator_pokemon_list()
 
 func _on_content_creator_photo_mode_button_pressed() -> void:
 	if not _can_use_content_creator_photo_mode():
