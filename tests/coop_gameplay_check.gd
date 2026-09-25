@@ -116,6 +116,12 @@ func _run() -> void:
 	_expect(mounted_battle != null and mounted_battle.get("coop_mode") == true
 		and mounted_battle.get("coop_presenter") != null,
 		"co-op uses the ordinary battle scene with its own server-driven presenter")
+	_expect(mounted_world._coop_battle_result_message({"outcome": "win"}).contains("won")
+		and mounted_world._coop_battle_result_message({"outcome": "loss"}).contains("lost")
+		and mounted_world._coop_battle_result_message({"outcome": "draw"}).contains("draw")
+		and mounted_world._coop_battle_result_message({"outcome": "draw", "escaped": true}).contains("escaped")
+		and mounted_world._coop_battle_result_message({"outcome": "loss", "forfeited": true}).contains("forfeited"),
+		"both players receive a distinct shared battle result message after returning")
 	var presenter: Control = mounted_battle.get("coop_presenter")
 	var original_activity: Dictionary = service.activity.duplicate(true)
 	var original_view: Dictionary = service.view.duplicate(true)
@@ -353,9 +359,12 @@ func _run() -> void:
 		and presenter._first_trainer.global_position.y < presenter._second_trainer.global_position.y,
 		"both Pokémon pairs stay aligned while command Trainers anchor beside their party rails")
 	presenter._show_trainer_for_event({"kind": "move", "actor": "p1", "move": "Tackle"})
+	await process_frame
+	var mirrored_speaker := mounted_battle.get_node_or_null("%BattleStage/SpeakingTrainer0") as Control
 	_expect(presenter._first_trainer.visible and not presenter._second_trainer.visible
-		and presenter._first_trainer.command_callout.visible,
-		"only the acting allied Trainer appears with a move command")
+		and presenter._first_trainer.command_callout.visible
+		and mirrored_speaker != null and not mirrored_speaker.visible,
+		"only the acting allied Trainer appears with a move command, without a second Immersive speaker")
 	presenter._hide_native_trainers()
 	service.activity.activityId = "brock"
 	presenter._sync_native_trainers()
@@ -862,6 +871,12 @@ func _run() -> void:
 	_expect(not grass_request_source.get_slice('var world := GameState.get_world()', 1).get_slice('var result := await _request("grass-step"', 0).contains("await refresh()")
 		and grass_request_source.contains('result.get("body", {}).get("status") != "miss"'),
 		"grass misses avoid redundant status requests while starts still refresh")
+	var game_state := root.get_node("GameState")
+	game_state.set_pending_coop_battle_result({"outcome": "win", "activityId": "kanto_route_1_lass_zoe"})
+	game_state.clear_world_runtime_state()
+	_expect(game_state.take_pending_coop_battle_result() == {"outcome": "win", "activityId": "kanto_route_1_lass_zoe"}
+		and game_state.pending_coop_battle_result.is_empty(),
+		"completed co-op result survives world reload and is consumed once")
 	await process_frame
 	quit(1 if failed else 0)
 

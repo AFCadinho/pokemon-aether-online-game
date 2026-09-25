@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed duplicate large and small Trainer figures in Immersive Adventure Party doubles. Both players now receive a battle result message, and trainer victories play the NPC's defeat dialogue after returning to the world.
+
 - In Immersive Adventure Party battles, Trainer sprites appear beside their party rails only while giving a battle command.
 
 - A local battle review window and 3D catalog can now show 14 additional Pokémon in normal and shiny form.
