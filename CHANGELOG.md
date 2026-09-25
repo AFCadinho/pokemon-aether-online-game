@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
+
 - Fixed the Adventure Party HUD briefly appearing over Immersive battles when party presence updates arrive.
 
 - Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side.

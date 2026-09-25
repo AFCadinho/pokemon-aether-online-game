@@ -15,7 +15,22 @@ func _process(delta: float) -> void:
 	battle.calc_log_button.hide()
 	_place(battle.battle_log_rail, Vector2(18,150), Vector2(310,maxf(180,battle.size.y - 420)), 1.0)
 	var team_preview: Control = battle.get_node("%PlayerStagePartyRail")
-	_place(team_preview, Vector2(18, 90), team_preview.size, 0.75)
+	var party_rail_top := Vector2(18, 90)
+	var party_rail_scale := 0.75
+	var chat_bridge: Node = battle.get_meta("battle_chat_bridge") as Node if battle.has_meta("battle_chat_bridge") else null
+	if is_instance_valid(chat_bridge):
+		var calculator: Control = chat_bridge.get("calculator_button") as Control
+		if is_instance_valid(calculator):
+			# Both controls live on different canvas layers. Reserve a screen-space
+			# gap above the calculator when a shorter window compresses the field.
+			var stage_screen := stage.get_global_transform_with_canvas()
+			var rail_top_screen := (stage_screen * party_rail_top).y
+			var calculator_top_screen := (calculator.get_global_transform_with_canvas() * Vector2.ZERO).y
+			var rail_height := maxf(1.0, maxf(team_preview.size.y, team_preview.get_combined_minimum_size().y))
+			var available := calculator_top_screen - rail_top_screen - 12.0
+			party_rail_scale = minf(party_rail_scale,
+				maxf(0.1, available / (rail_height * maxf(0.01, stage_screen.get_scale().y))))
+	_place(team_preview, party_rail_top, team_preview.size, party_rail_scale)
 	var opponent_rail: Control = battle.get_node("%OpponentStagePartyRail")
 	_place(opponent_rail, Vector2(area.x - 62, 90), opponent_rail.size, 0.75)
 	var player_portrait := stage.get_node_or_null("TrainerPortrait0") as Control
