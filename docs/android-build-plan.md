@@ -20,10 +20,12 @@ Android log has no sprite-loading script errors. A small login, Route 1 and
 wild-battle music fallback is now bundled. The Android client downloads the
 versioned music pack into `user://`, checks its size and SHA-256, validates ZIP
 paths and required tracks, then activates it after extraction. The first phone
-played login, world and wild-battle music from the downloaded pack. Current
-gaps: Android keyboard and safe-area behavior, deeper touch coverage across
-battle menus, and different aspect ratios. This is not yet a player release or
-a full mobile UI validation.
+played login, world and wild-battle music from a local test pack and kept login
+and world music after an offline restart. With explicit production access
+approval, it then downloaded and activated `music-3f2a6df18793` from the public
+updates manifest. Current gaps: Android keyboard and safe-area behavior,
+deeper touch coverage across battle menus, and different aspect ratios. This
+is not yet a player release or a full mobile UI validation.
 
 Android crash diagnostics now mark a backgrounded app as clean and mark it
 active again on resume. This prevents Android's normal background process
@@ -852,6 +854,8 @@ Consider public support only after:
 - [ ] Pokémon asset resolver supports `user://`.
 - [x] Music resolver supports `user://`.
 - [ ] Interrupted-download recovery tested.
+- [ ] Old music versions are pruned after a successful update so repeated
+      updates do not consume unbounded storage.
 
 ### Feature parity
 
