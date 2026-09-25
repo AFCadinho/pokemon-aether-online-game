@@ -13,10 +13,10 @@ The checked-in `screened_model_catalog.json` binds each candidate to its exact
 SCN SHA-256, placement and seven native action timings. The presenter ignores
 placement/timing supplied by a selected local catalog and retrieves them from
 that checked-in screened registry. A changed model fails before import. The
-registry also has a separate batch-01 review group with 14 normal/shiny pairs;
-see [its playable review instructions](CATALOG_BATCH_01_PLAYABLE_REVIEW.md).
-The existing reviewed registry and portable reviewed-model pack still accept
-only their original fourteen normal/shiny identities.
+14 additional normal/shiny pairs from batch 01 have since moved to the reviewed
+registry; see [their playable review record](CATALOG_BATCH_01_PLAYABLE_REVIEW.md).
+The screened registry again contains only the original 75 normal candidates.
+The older portable reviewed-model pack still contains the original seven pairs.
 
 These original 75 candidates intentionally have no arena-grounding,
 motion-clearance, shiny or live-PvP qualification. The presenter therefore
@@ -24,8 +24,8 @@ retains its safe classic 3D floor fallback whenever one is active instead of
 claiming calibrated forest/stadium grounding. If either active Pokémon is shiny,
 an unsupported form, a double battle or uses Substitute, the normal pair
 fallback remains 2.5D. A candidate's normal form can still be inspected in a
-real single battle. The batch-01 group has its own calibrated profiles and
-qualified shiny forms.
+real single battle. The approved batch-01 pairs have their own calibrated profiles and
+qualified shiny forms in the reviewed registry.
 
 ## Current local artifact
 

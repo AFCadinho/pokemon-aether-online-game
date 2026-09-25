@@ -1,0 +1,142 @@
+{
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:arcanine:base",
+      "object_key": "optional-assets/pokemon_3d/arcanine/base/v1-e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970.zip",
+      "sha256": "e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970",
+      "size_bytes": 20324448
+    },
+    {
+      "asset_id": "pokemon_3d:articuno:base",
+      "object_key": "optional-assets/pokemon_3d/articuno/base/v1-d9b3d51136379d0b9ed2024f4d2527536d467bade77cf5bdadbb7ceee5817a9b.zip",
+      "sha256": "d9b3d51136379d0b9ed2024f4d2527536d467bade77cf5bdadbb7ceee5817a9b",
+      "size_bytes": 15966909
+    },
+    {
+      "asset_id": "pokemon_3d:charmeleon:base",
+      "object_key": "optional-assets/pokemon_3d/charmeleon/base/v1-8b8c19918eccdb9c976746d5695c528bcca5fb1f636abac871bb164493f64fe0.zip",
+      "sha256": "8b8c19918eccdb9c976746d5695c528bcca5fb1f636abac871bb164493f64fe0",
+      "size_bytes": 14640941
+    },
+    {
+      "asset_id": "pokemon_3d:dragonite:base",
+      "object_key": "optional-assets/pokemon_3d/dragonite/base/v1-a777fdf3715c4d67cf85dfed8daec3aee327cb7ee68e8c14bcfd63c1cca23e5f.zip",
+      "sha256": "a777fdf3715c4d67cf85dfed8daec3aee327cb7ee68e8c14bcfd63c1cca23e5f",
+      "size_bytes": 24560313
+    },
+    {
+      "asset_id": "pokemon_3d:dunsparce:base",
+      "object_key": "optional-assets/pokemon_3d/dunsparce/base/v1-0eaef6161b0e51f5172824156114508ad4bcd9db28c0be61a80919d917bb575b.zip",
+      "sha256": "0eaef6161b0e51f5172824156114508ad4bcd9db28c0be61a80919d917bb575b",
+      "size_bytes": 12791160
+    },
+    {
+      "asset_id": "pokemon_3d:flaaffy:base",
+      "object_key": "optional-assets/pokemon_3d/flaaffy/base/v1-ac6718faf7a2133e49d998c4af1da3680ac7157024d7396e4b81c2dc18801a80.zip",
+      "sha256": "ac6718faf7a2133e49d998c4af1da3680ac7157024d7396e4b81c2dc18801a80",
+      "size_bytes": 29257307
+    },
+    {
+      "asset_id": "pokemon_3d:houndoom:base",
+      "object_key": "optional-assets/pokemon_3d/houndoom/base/v1-1e28b2c63758df5aef64656e33ce203f003498ca1d4c2a1c4271f39345d6a020.zip",
+      "sha256": "1e28b2c63758df5aef64656e33ce203f003498ca1d4c2a1c4271f39345d6a020",
+      "size_bytes": 16707242
+    },
+    {
+      "asset_id": "pokemon_3d:houndour:base",
+      "object_key": "optional-assets/pokemon_3d/houndour/base/v1-0c61b5501596492a8705269a5a73be38a14ac4a22ecd8c5d27c951a13784c9a1.zip",
+      "sha256": "0c61b5501596492a8705269a5a73be38a14ac4a22ecd8c5d27c951a13784c9a1",
+      "size_bytes": 26866296
+    },
+    {
+      "asset_id": "pokemon_3d:igglybuff:base",
+      "object_key": "optional-assets/pokemon_3d/igglybuff/base/v1-33105bf7a9d6294630b2695695f18738dff1e25e76c7afbc925af7dbce4c3309.zip",
+      "sha256": "33105bf7a9d6294630b2695695f18738dff1e25e76c7afbc925af7dbce4c3309",
+      "size_bytes": 17688872
+    },
+    {
+      "asset_id": "pokemon_3d:lucario:base",
+      "object_key": "optional-assets/pokemon_3d/lucario/base/v1-e20ceb07ab16970185cd6d501721b6224c91ec51238822be182c2558a3a33941.zip",
+      "sha256": "e20ceb07ab16970185cd6d501721b6224c91ec51238822be182c2558a3a33941",
+      "size_bytes": 23822956
+    },
+    {
+      "asset_id": "pokemon_3d:mareep:base",
+      "object_key": "optional-assets/pokemon_3d/mareep/base/v1-9c66995ae1b40a7bf2a6ffb4c68f0cdd75f4c62fea1b91bac7151b95b5775d7e.zip",
+      "sha256": "9c66995ae1b40a7bf2a6ffb4c68f0cdd75f4c62fea1b91bac7151b95b5775d7e",
+      "size_bytes": 27722435
+    },
+    {
+      "asset_id": "pokemon_3d:persian:base",
+      "object_key": "optional-assets/pokemon_3d/persian/base/v1-67bbb07ca7f3187703b60b33e89cebfc9271a2964b278ca6b925414b01cc6cc4.zip",
+      "sha256": "67bbb07ca7f3187703b60b33e89cebfc9271a2964b278ca6b925414b01cc6cc4",
+      "size_bytes": 53620841
+    },
+    {
+      "asset_id": "pokemon_3d:phanpy:base",
+      "object_key": "optional-assets/pokemon_3d/phanpy/base/v1-d861b511df9c505917496be2f11e0559e6f7c0017fc79b31df68ec53627d12de.zip",
+      "sha256": "d861b511df9c505917496be2f11e0559e6f7c0017fc79b31df68ec53627d12de",
+      "size_bytes": 30313630
+    },
+    {
+      "asset_id": "pokemon_3d:pikachu:base",
+      "object_key": "optional-assets/pokemon_3d/pikachu/base/v1-24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c.zip",
+      "sha256": "24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c",
+      "size_bytes": 24675657
+    },
+    {
+      "asset_id": "pokemon_3d:roaring-moon:base",
+      "object_key": "optional-assets/pokemon_3d/roaring-moon/base/v1-fea591cfb25f7f126d4503cd834692aa66b871347a72f0de8b4b9204edd1c5e3.zip",
+      "sha256": "fea591cfb25f7f126d4503cd834692aa66b871347a72f0de8b4b9204edd1c5e3",
+      "size_bytes": 49872921
+    },
+    {
+      "asset_id": "pokemon_3d:skiploom:base",
+      "object_key": "optional-assets/pokemon_3d/skiploom/base/v1-e1cadca9640236feea667e7172d6518f54891cabda0e5a021eaf67428ddb8087.zip",
+      "sha256": "e1cadca9640236feea667e7172d6518f54891cabda0e5a021eaf67428ddb8087",
+      "size_bytes": 12989780
+    },
+    {
+      "asset_id": "pokemon_3d:slowking:base",
+      "object_key": "optional-assets/pokemon_3d/slowking/base/v1-50e5ac41043cdf090b4d47b2e8a16cfe08065feb55043906749145470a6d931d.zip",
+      "sha256": "50e5ac41043cdf090b4d47b2e8a16cfe08065feb55043906749145470a6d931d",
+      "size_bytes": 30328836
+    },
+    {
+      "asset_id": "pokemon_3d:snorlax:base",
+      "object_key": "optional-assets/pokemon_3d/snorlax/base/v1-f481678b509185b334e33b9ed9f7f2464d48c9483a931bfa8e75ecc789ad3bd9.zip",
+      "sha256": "f481678b509185b334e33b9ed9f7f2464d48c9483a931bfa8e75ecc789ad3bd9",
+      "size_bytes": 9379336
+    },
+    {
+      "asset_id": "pokemon_3d:stantler:base",
+      "object_key": "optional-assets/pokemon_3d/stantler/base/v1-90406bdef2283cc6e1aaf42f76a5733ff259af5aad8a21b2803c83304ad6cee7.zip",
+      "sha256": "90406bdef2283cc6e1aaf42f76a5733ff259af5aad8a21b2803c83304ad6cee7",
+      "size_bytes": 28805712
+    },
+    {
+      "asset_id": "pokemon_3d:teddiursa:base",
+      "object_key": "optional-assets/pokemon_3d/teddiursa/base/v1-fbd17d2ee5c9396d1808e301464c63f8d073fc2a01100d7837f8c2df023dc845.zip",
+      "sha256": "fbd17d2ee5c9396d1808e301464c63f8d073fc2a01100d7837f8c2df023dc845",
+      "size_bytes": 36707835
+    },
+    {
+      "asset_id": "pokemon_3d:ursaring:base",
+      "object_key": "optional-assets/pokemon_3d/ursaring/base/v1-598b57a28ccabca78640e93ecebd2488b7d2a9fbb32c9ac8cafa16205494adb2.zip",
+      "sha256": "598b57a28ccabca78640e93ecebd2488b7d2a9fbb32c9ac8cafa16205494adb2",
+      "size_bytes": 31881048
+    }
+  ],
+  "catalog_batch_01_approval_sha256": "760a53c27bde2254878b6e9714b06c529554f15a7a5596d5048ec9e32cc49f87",
+  "index": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v2-df70fa6e9e008fe114e1b211d0957f430a06300e17a2973b070af6db4d157860.json",
+    "sha256": "df70fa6e9e008fe114e1b211d0957f430a06300e17a2973b070af6db4d157860",
+    "size_bytes": 18804
+  },
+  "kind": "pokeaether-approved-3d-release",
+  "new_bundle_count": 14,
+  "revision": "approved-pokemon-3d-v2",
+  "schema": 1,
+  "total_bundle_bytes": 538924475,
+  "unchanged_v1_bundle_count": 7
+}

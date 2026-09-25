@@ -1,8 +1,9 @@
 # Batch 01: normal and shiny in-game review
 
-The 14 paired candidates are available for **local desktop battle review** in
-the development game. They remain screened candidates: this does not add them
-to the seven-species approved release, launcher delivery or the base game build.
+The 14 pairs were visually accepted by the user after **local desktop battle
+review**. Their exact normal and shiny scene hashes are now in the reviewed
+registry and in a locally prepared 21-species v2 bundle index. This does not
+publish that index or add model archives to the base game build.
 The four shiny material holds remain outside this catalog.
 
 ## Open the battle review
@@ -30,8 +31,8 @@ In the game, open **Settings**, enable **3D (experimental)**, then choose
 `/home/adinho/Documents/3d_models/PokeAether/catalog-batch-01-paired-review-v1/catalog.json`
 
 Start a **new single battle** after selecting it. Use a local game build based
-on `development` containing the batch-01 screened registry; an older release
-still knows only the original approved models. The local catalog contains both
+on `development` containing the batch-01 reviewed registry; an older release
+still knows only the original seven approved species. The local catalog contains both
 normal and shiny for each species below. Shiny is shown when the battle
 Pokémon itself is shiny. Other species and held forms continue to use the
 existing fallback. The catalog is an explicit local review choice and does not
@@ -57,7 +58,7 @@ The catalog SHA-256 is
 It references 28 hash-checked scenes copied to its own `models/` directory;
 their total size is about 353.15 MiB. Keep that folder together with the
 catalog. `review-manifest.json` lists all 28 identities and the qualification
-hash. The checked-in game and launcher screened registries contain the same
+hash. The checked-in game and launcher reviewed registries contain the same
 scene pins and one shared calibrated motion profile per normal/shiny pair.
 
 The real battle presenter loaded this exact local catalog in a rendered Classic
@@ -66,6 +67,7 @@ attacks, faint/replacement, Immersive HUD clearance, cache eviction/reload and
 held-Ampharos-shiny fallback all passed without script/renderer errors. The
 original 75-model screened catalog still passes its own admission check.
 
-The local folder can be recreated from the retained source scenes with
-`prepare_catalog_batch_01_playable_review.py` and a **new** output directory.
-It is not a portable player download or a release artifact.
+The local folder remains a review artifact and is not a portable player download.
+The historical preparation script and manifest describe the pre-approval review;
+the pinned v2 release package is documented in
+[`docs/approved-3d-bundle-release-v2.md`](../../docs/approved-3d-bundle-release-v2.md).
