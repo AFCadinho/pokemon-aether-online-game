@@ -1536,6 +1536,7 @@ var evolution_silhouette_material: ShaderMaterial
 var evolution_is_playing := false
 var evolution_overlay_active_evolution: Dictionary = {}
 var alpha_tools_popup: PanelContainer
+var alpha_aetherite_dialog: PanelContainer
 var content_creator_tools_popup: PanelContainer
 var content_creator_photo_mode_button: Button
 var content_creator_create_pokemon_button: Button
@@ -1544,6 +1545,7 @@ var content_creator_pokemon_selector: OptionButton
 var content_creator_pokemon_entries: Array[Dictionary] = []
 var alpha_aetherite_button: Button
 var alpha_aetherite_amount_spinbox: SpinBox
+var alpha_aetherite_confirm_button: Button
 var alpha_reset_game_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
@@ -2520,8 +2522,11 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_badge_progress_popup.close()
 	if not can_generate_dev_items and dev_add_item_popup != null:
 		dev_add_item_popup.visible = false
-	if not can_generate_alpha_aetherite_here and alpha_tools_popup != null:
-		alpha_tools_popup.visible = false
+	if not can_generate_alpha_aetherite_here:
+		if alpha_tools_popup != null:
+			alpha_tools_popup.visible = false
+		if alpha_aetherite_dialog != null:
+			alpha_aetherite_dialog.visible = false
 	if not can_use_content_creator_tools_here and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation_here and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
@@ -3813,6 +3818,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_add_money_popup,
 		dev_add_menu_popup,
 		alpha_tools_popup,
+		alpha_aetherite_dialog,
 		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
@@ -3888,6 +3894,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		dev_add_money_popup,
 		dev_add_menu_popup,
 		alpha_tools_popup,
+		alpha_aetherite_dialog,
 		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
@@ -9422,17 +9429,6 @@ func _setup_alpha_tools_popup() -> void:
 			Color("#b28ae8")
 		)
 	)
-	var amount_label := Label.new()
-	_set_localized_control_property(amount_label, "text", "ui.staff.alpha.aetherite_amount")
-	layout.add_child(amount_label)
-	alpha_aetherite_amount_spinbox = SpinBox.new()
-	alpha_aetherite_amount_spinbox.min_value = 1
-	alpha_aetherite_amount_spinbox.max_value = 999999999
-	alpha_aetherite_amount_spinbox.value = 500
-	alpha_aetherite_amount_spinbox.step = 1
-	alpha_aetherite_amount_spinbox.update_on_text_changed = true
-	layout.add_child(alpha_aetherite_amount_spinbox)
-
 	alpha_aetherite_button = Button.new()
 	alpha_aetherite_button.pressed.connect(_on_alpha_aetherite_button_pressed)
 	layout.add_child(alpha_aetherite_button)
@@ -9449,6 +9445,77 @@ func _setup_alpha_tools_popup() -> void:
 		Callable(self, "_hide_alpha_tools_popup"),
 		true
 	)
+	_setup_alpha_aetherite_dialog()
+
+func _setup_alpha_aetherite_dialog() -> void:
+	alpha_aetherite_dialog = PanelContainer.new()
+	alpha_aetherite_dialog.name = "AlphaAetheriteDialog"
+	alpha_aetherite_dialog.visible = false
+	alpha_aetherite_dialog.custom_minimum_size = Vector2(360, 0)
+	alpha_aetherite_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	alpha_aetherite_dialog.z_index = UI_BASE_Z_INDEX
+	alpha_aetherite_dialog.anchor_left = 0.5
+	alpha_aetherite_dialog.anchor_top = 0.5
+	alpha_aetherite_dialog.anchor_right = 0.5
+	alpha_aetherite_dialog.anchor_bottom = 0.5
+	alpha_aetherite_dialog.offset_left = -180
+	alpha_aetherite_dialog.offset_top = -105
+	alpha_aetherite_dialog.offset_right = 180
+	alpha_aetherite_dialog.offset_bottom = 105
+	alpha_aetherite_dialog.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#8065b0aa"), 12, 1)
+	)
+	root_control.add_child(alpha_aetherite_dialog)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 14)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 16)
+	alpha_aetherite_dialog.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	margin_container.add_child(layout)
+	var close_button := Button.new()
+	close_button.pressed.connect(_hide_alpha_aetherite_dialog)
+	layout.add_child(
+		_create_tool_launcher_header(
+			"ui.staff.alpha.aetherite",
+			"ui.staff.alpha.aetherite_dialog_subtitle",
+			close_button,
+			Color("#b28ae8")
+		)
+	)
+	var amount_label := Label.new()
+	_set_localized_control_property(amount_label, "text", "ui.staff.alpha.aetherite_amount")
+	layout.add_child(amount_label)
+	alpha_aetherite_amount_spinbox = SpinBox.new()
+	alpha_aetherite_amount_spinbox.min_value = 1
+	alpha_aetherite_amount_spinbox.max_value = 999999999
+	alpha_aetherite_amount_spinbox.value = 500
+	alpha_aetherite_amount_spinbox.step = 1
+	alpha_aetherite_amount_spinbox.update_on_text_changed = true
+	alpha_aetherite_amount_spinbox.custom_minimum_size = Vector2(0, 36)
+	layout.add_child(alpha_aetherite_amount_spinbox)
+	_apply_line_edit_style(alpha_aetherite_amount_spinbox.get_line_edit())
+
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+	var cancel_button := Button.new()
+	_set_localized_control_property(cancel_button, "text", "common.cancel")
+	cancel_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cancel_button.pressed.connect(_hide_alpha_aetherite_dialog)
+	actions.add_child(cancel_button)
+	_apply_button_style(cancel_button)
+	alpha_aetherite_confirm_button = Button.new()
+	_set_localized_control_property(alpha_aetherite_confirm_button, "text", "ui.staff.alpha.aetherite_confirm")
+	alpha_aetherite_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	alpha_aetherite_confirm_button.pressed.connect(_on_alpha_aetherite_confirm_pressed)
+	actions.add_child(alpha_aetherite_confirm_button)
+	_apply_button_style(alpha_aetherite_confirm_button, "primary")
 
 func _setup_content_creator_tools_popup() -> void:
 	content_creator_tools_popup = PanelContainer.new()
@@ -12291,6 +12358,8 @@ func _refresh_dev_tools_localized_ui() -> void:
 			_refresh_dev_item_results()
 	if dev_add_money_popup != null:
 		LocalizationManager.localize_tree(dev_add_money_popup)
+	if alpha_aetherite_dialog != null:
+		LocalizationManager.localize_tree(alpha_aetherite_dialog)
 	_refresh_staff_impersonate_button_copy()
 
 func _refresh_progression_prompts_localized_ui() -> void:
@@ -13183,6 +13252,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		dev_add_money_popup,
 		dev_add_menu_popup,
 		alpha_tools_popup,
+		alpha_aetherite_dialog,
 		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
@@ -31300,6 +31370,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": coop_party_popup, "close": Callable(self, "_hide_coop_party_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")},
+		{"panel": alpha_aetherite_dialog, "close": Callable(self, "_hide_alpha_aetherite_dialog")},
 		{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
@@ -36066,21 +36137,36 @@ func set_content_creator_capture_hidden(hidden: bool) -> void:
 func _on_alpha_aetherite_button_pressed() -> void:
 	if not _can_generate_alpha_aetherite():
 		return
+	_hide_alpha_tools_popup()
+	alpha_aetherite_dialog.visible = true
+	_activate_ui_panel(alpha_aetherite_dialog)
+	alpha_aetherite_amount_spinbox.get_line_edit().grab_focus.call_deferred()
+
+func _on_alpha_aetherite_confirm_pressed() -> void:
+	if not _can_generate_alpha_aetherite():
+		return
 	var amount := clampi(
 		alpha_aetherite_amount_spinbox.get_line_edit().text.to_int(),
 		int(alpha_aetherite_amount_spinbox.min_value),
 		int(alpha_aetherite_amount_spinbox.max_value)
 	)
 	alpha_aetherite_amount_spinbox.value = amount
-	alpha_aetherite_button.disabled = true
+	alpha_aetherite_confirm_button.disabled = true
 	var result: Dictionary = await PlayerWalletService.claim_alpha_aetherite(amount)
-	alpha_aetherite_button.disabled = false
+	alpha_aetherite_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not claim Alpha Aetherite: %s" % str(result.get("error", "Unknown error")))
 		return
 	PlayerWalletService.apply_wallet_result(result)
 	_refresh_player_status_card()
 	_add_chat_message("Added %s Aetherite for Alpha rentals." % _format_money(amount))
+	_hide_alpha_aetherite_dialog()
+
+func _hide_alpha_aetherite_dialog() -> void:
+	if alpha_aetherite_dialog == null:
+		return
+	alpha_aetherite_dialog.visible = false
+	_deactivate_ui_panel(alpha_aetherite_dialog)
 
 func _position_alpha_tools_popup() -> void:
 	_position_action_slot_popup(alpha_tools_popup, alpha_tools_slot)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Alpha Tools toont het Aetherite-bedrag nu in een klein venster na een klik op Generate Aetherite, zodat het hoofdmenu compact blijft.
+
 - Content Creator Tools kan nu één niet-shiny Pokémon maken, toont de bestaande Creator-Pokémon en laat die gericht verwijderen voordat je een nieuwe maakt.
 
 - Alpha Tools heeft nu een Aetherite-generator met een zelf te kiezen bedrag in plaats van de knoppen om Alpha-Pokémon te maken of te wissen.
