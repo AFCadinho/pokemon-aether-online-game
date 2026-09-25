@@ -1,6 +1,9 @@
 # Immersive Battle UI
 
-Settings → Battle UI (next battle) selects Immersive (default) or Classic.
+Settings → Battle UI (next battle) selects Immersive (default) or Classic for
+single battles. Co-op double battles always use Immersive on desktop and in the
+browser, even when Classic is selected. The saved preference is unchanged for
+the next single battle.
 This is independent of 2D/3D presentation and arena selection. Desktop and
 browser Immersive use the dedicated battle screen with the shared 2.5D fallback.
 Mobile retains the existing embedded layout until its touch and safe-area work

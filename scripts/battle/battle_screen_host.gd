@@ -89,7 +89,7 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(presenter) and not presenter.preparation_failed:
 		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
 
-func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD) -> void:
+func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false) -> void:
 	entry_transition.transition_style = transition_style
 	battle = instance
 	overlay = overworld_overlay
@@ -102,7 +102,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 		focus.release_focus()
 	battle.set_meta("dedicated_battle_screen", true)
 	battle.set_meta("battle_screen_preparing", true)
-	if get_node("/root/SettingsManager").battle_ui_layout == "immersive":
+	if force_immersive or get_node("/root/SettingsManager").battle_ui_layout == "immersive":
 		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	$Content.add_child(battle)
 	resized.connect(_fit_battle)

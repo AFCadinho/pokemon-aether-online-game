@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser; Classic remains available for single battles.
+
 - De visuals van de Aether Clash-lobby zijn bijgewerkt voor de desktop- en browserclient.
 
 - De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken als hun Kanto level cap 100 is.
