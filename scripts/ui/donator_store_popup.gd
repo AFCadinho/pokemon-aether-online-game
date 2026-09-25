@@ -976,6 +976,8 @@ func apply_patreon_status(value: Dictionary) -> void:
 func _patreon_status_key() -> String:
 	if not bool(patreon_status.get("success", false)):
 		return "ui.store.patreon.status_unavailable"
+	if bool(patreon_status.get("manualRole", false)) and not bool(patreon_status.get("active", false)):
+		return "ui.store.patreon.status_manual_role"
 	if bool(patreon_status.get("connected", false)):
 		return (
 			"ui.store.patreon.status_active"
@@ -2696,8 +2698,11 @@ func _item_description(item: Dictionary) -> String:
 	var description_key := str(item.get("description_key", ""))
 	if description_key != "":
 		var description := _t(description_key)
-		if bool(item.get("informational", false)) and not bool(patreon_status.get("benefitsEnabled", false)):
-			description += " " + _t("ui.store.patreon.benefits_pending")
+		if bool(item.get("informational", false)):
+			if bool(patreon_status.get("manualRole", false)):
+				description += " " + _t("ui.store.patreon.manual_grant_note")
+			if not bool(patreon_status.get("benefitsEnabled", false)):
+				description += " " + _t("ui.store.patreon.benefits_pending")
 		return description
 	var item_id := str(item.get("id", item.get("itemId", "")))
 	var fallback := str(item.get("description", ""))

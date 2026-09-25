@@ -4,6 +4,8 @@
 
 - De bevestiging voor het plaatsen van een gehuurde Pokémon-groep toont nu iconen van de rentals en de huidige party, met een alleen-lezen samenvatting bij hover.
 
+- De Patreon-kaart maakt een handmatig door PokeAether toegekende supporterrol zichtbaar zonder deze als geverifieerd Patreon-lidmaatschap te presenteren; de koppelknop blijft afhankelijk van de echte accountkoppeling.
+
 - De voorwaardenregel in de review voor één Pokémon breekt nu af, zodat prijsvakken en huurknop binnen het rentalvenster blijven.
 
 - De Patreon-kaart in de Gift Store toont de echte account- en lidmaatschapsstatus. Niet-gekoppelde spelers openen veilig het accountportaal; gekoppelde spelers kunnen na bevestiging Patreon openen. Voordelen blijven uit zolang fulfillment is uitgeschakeld.
