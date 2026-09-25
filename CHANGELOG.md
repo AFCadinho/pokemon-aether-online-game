@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- A local battle review window and 3D catalog can now show 14 additional Pokémon in normal and shiny form.
+
 - Adventure Party battles now show that a requested exit is being processed when the partner has disconnected.
 
 - The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
