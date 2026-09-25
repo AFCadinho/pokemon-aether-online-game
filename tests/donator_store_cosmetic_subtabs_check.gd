@@ -591,12 +591,14 @@ func _run() -> void:
 		blessing_item.get("name", "") == "Aether Blessing Voucher · 3 Days",
 		"temporary supporter benefit is sold as a voucher"
 	)
-	_check(
-		str(blessing_item.get("description", "")).contains("5% better Shiny odds")
-		and str(blessing_item.get("description", "")).contains("50% off regional travel")
-		and str(blessing_item.get("description", "")).contains("two free Aether Anchors"),
-		"Blessing Vouchers disclose every current membership benefit before purchase"
-	)
+	_check(store.selection_description_label.text.contains("×1.05 Shiny encounter odds")
+		and store.selection_description_label.text.contains("50% off regional Aether Transit fares")
+		and store.selection_description_label.text.contains("Two free Aether Anchors")
+		and store.selection_description_label.text.contains("5% off NPC currency shops")
+		and store.selection_description_label.text.contains("Optional Blessed chat badge")
+		and store.selection_description_label.text.contains("\n• ")
+		and store.selection_description_label.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT,
+		"Blessing Voucher details list every current benefit before purchase")
 	_check(not store.purchase_button.disabled, "server-listed Blessing Vouchers can be purchased with Aether Gems")
 	_check(store.selection_price_label.text.contains("75"), "Blessing Vouchers use their authoritative Aether Gem price")
 	_check(store.purchase_button.text.contains("75"), "checkout button includes the authoritative Gem price")
@@ -629,17 +631,20 @@ func _run() -> void:
 	_check(store.product_buttons.has("patreon-supporter-preview"),
 		"Blessings makes the Patreon membership discoverable")
 	store.call("_select_product", "patreon-supporter-preview")
-	_check(store.selection_description_label.text.contains("5% better Shiny odds")
-		and store.selection_description_label.text.contains("50% off regional travel")
-		and store.selection_description_label.text.contains("two free Aether Anchors")
+	_check(store.selection_description_label.text.contains("×1.05 Shiny encounter odds")
+		and store.selection_description_label.text.contains("50% off regional Aether Transit fares")
+		and store.selection_description_label.text.contains("Two free Aether Anchors")
 		and store.selection_description_label.text.contains("5% off NPC currency shops")
-		and store.selection_description_label.text.contains("supporter role and badge")
-		and store.selection_description_label.text.contains("Patreon outfit"),
-		"Patreon details explain Blessing benefits and the extra supporter perks")
+		and store.selection_description_label.text.contains("Supporter role and badge")
+		and store.selection_description_label.text.contains("Outfit wearable while membership is active")
+		and store.selection_description_label.text.contains("\n• ")
+		and store.selection_description_label.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT,
+		"Patreon details list Blessing benefits and the extra supporter perks")
 	_check(store.call("_gem_price", "patreon-supporter-preview") == -1
-		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_unavailable")
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_unknown")
+		and store.status_label.text == localization_manager.text("ui.store.patreon.status_error_hint")
 		and store.purchase_button.disabled,
-		"Patreon status fails closed without becoming an Aether Gem offer")
+		"failed Patreon account check is explained without becoming an Aether Gem offer")
 	var patreon_card := store.product_buttons.get("patreon-supporter-preview") as Button
 	var patreon_card_has_coming_later := false
 	if patreon_card != null:
@@ -655,7 +660,7 @@ func _run() -> void:
 	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.connect")
 		and not store.purchase_button.disabled
 		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_not_connected")
-		and store.selection_description_label.text.contains("not available yet"),
+		and store.selection_description_label.text.contains("not active yet"),
 		"unlinked players can open account linking while disabled benefits remain explicit")
 	store.apply_patreon_status({
 		"success": true, "available": true, "connected": false,
@@ -665,7 +670,7 @@ func _run() -> void:
 		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_manual_role")
 		and store.selection_description_label.text.contains("granted this role directly")
 		and store.selection_description_label.text.contains("does not verify Patreon membership")
-		and store.selection_description_label.text.contains("not available yet"),
+		and store.selection_description_label.text.contains("not active yet"),
 		"manual supporter grant is visible without implying a linked or paid membership")
 	store.apply_patreon_status({
 		"success": true, "available": true, "connected": true,
@@ -705,7 +710,7 @@ func _run() -> void:
 		"success": true, "available": true, "connected": true,
 		"active": true, "manualRole": false, "benefitsEnabled": true,
 	})
-	_check(not store.selection_description_label.text.contains("not available yet")
+	_check(not store.selection_description_label.text.contains("not active yet")
 		and store.status_label.text == localization_manager.text("ui.store.patreon.status_active"),
 		"benefit copy follows the server fulfillment flag")
 	store.apply_patreon_status({
@@ -759,6 +764,11 @@ func _run() -> void:
 			_check(localization_manager.text("ui.store.patreon.status_manual_role") != "ui.store.patreon.status_manual_role"
 				and localization_manager.text("ui.store.patreon.manual_grant_note") != "ui.store.patreon.manual_grant_note",
 				"manual Patreon grant is localized for %s" % locale)
+			_check(localization_manager.text("ui.store.patreon.extras") != "ui.store.patreon.extras"
+				and localization_manager.text("ui.store.blessing.voucher_intro") != "ui.store.blessing.voucher_intro"
+				and localization_manager.text("ui.store.patreon.status_unknown") != "ui.store.patreon.status_unknown"
+				and localization_manager.text("ui.store.patreon.status_error_hint") != "ui.store.patreon.status_error_hint",
+				"Blessing benefit list and Patreon account-check feedback are localized for %s" % locale)
 		localization_manager.set_locale("nl")
 		await process_frame
 		var featured_button := store.category_buttons.get("featured") as Button
