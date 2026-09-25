@@ -63,11 +63,37 @@ battles. The points below direct that review; they are not diagnosed blockers.
 
 ## Next gate
 
-Review all seven clips as moving models in the desktop debug client, including
-the full faint-start to faint-loop transition. Record any confirmed material,
-visibility, identity or action defect as a per-model hold. Send the remaining
-models through measured battle scale/grounding, motion/HUD clearance, live
-presenter lifecycle and performance checks. Only those that pass may be
+### Three-timepoint native-clip screen (2026-09-25)
+
+`catalog_motion_review.gd` rendered 0%, 50% and 100% of all seven native clips
+for each hash-matching standalone SCN: **378 captures**, with no missing clips,
+invalid posed bounds, script errors or renderer errors. `faint_loop` was sampled
+after seeking `faint_start` to its endpoint, matching the summary preview's
+transition contract. All 18 contact sheets were inspected. At this sampling
+resolution, body parts remain present and recognizable, source-like action
+silhouettes are retained, and the down endpoint persists into `faint_loop`.
+No new model-specific visual blocker was confirmed. Pineco's partly obscured
+idle eyes remain a source-model readability question for the battle camera.
+
+The evidence is retained in slot-b
+`.tmp/catalog-production-01-motion-2026-09-25/`: `review.json`, 378 PNGs, and
+one contact sheet per species. The rendered invocation and complete output are
+in `.tmp/catalog-production-01-review-2026-09-25/motion-review.log`.
+Reproduce with a **new** output directory and the retained standalone report:
+
+```sh
+ops/worktrees/slot-env SLOT -- env \
+  POKEAETHER_CATALOG_MOTION_REPORT=/absolute/path/to/report.json \
+  POKEAETHER_CATALOG_MOTION_OUTPUT=/new/absolute/output-directory \
+  godot --path .worktrees/SLOT/frontend \
+  --script res://tools/sprite_factory/catalog_motion_review.gd
+```
+
+This is sampled visual evidence, not continuous video or a battle-view test.
+The next gate measures battle scale/grounding, motion/HUD clearance, and
+presenter lifecycle and performance for the 18 candidates. Record a confirmed
+material, visibility, identity or action defect as a per-model hold; advance
+the unaffected models. Only candidates that pass battle qualification may be
 considered for checked-in admission. Normal/shiny pairing and individual
 bundle packaging are subsequent release gates. Start the next production batch
 without waiting for the seven existing technical holds to be repaired.
