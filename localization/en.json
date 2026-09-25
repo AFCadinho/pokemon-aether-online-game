@@ -5417,6 +5417,8 @@
   "ui.buff.global_heal.disable_future": "Do not show future Global Heal requests",
   "ui.buff.global_heal.healed": "Your party was fully healed by Global Heal.",
   "ui.buff.global_heal.heal_failed": "Your party could not be healed.",
+  "ui.buff.adventure_party_exp.name": "+25% Party EXP",
+  "ui.buff.adventure_party_exp.description": "Adventure Party: 25% more EXP from shared wild battles. Trainer battles keep their normal EXP rewards.",
   "ui.buff.aether_blessing_shiny.name": "5% Shiny",
   "ui.buff.aether_blessing_shiny.description": "Aether Blessing: 5% better Shiny encounter odds (×1.05).",
   "ui.buff.aether_blessing_travel.name": "50% Travel",

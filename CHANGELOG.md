@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party members now see a +25% EXP buff while grouped; it increases their own EXP rewards from shared wild battles.
+
 - NPC Trainers in Immersive Adventure Party doubles now use their own mugshot when giving commands, with their class battle portrait or overworld sprite as a fallback.
 
 - Fixed duplicate large and small Trainer figures in Immersive Adventure Party doubles. Both players now receive a battle result message, and trainer victories play the NPC's defeat dialogue after returning to the world.

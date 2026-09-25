@@ -13564,6 +13564,7 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 			var buff := buff_value as Dictionary
 			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
 			if buff_id in [
+				"adventure_party_exp",
 				"aether_blessing",
 				"aether_blessing_shiny_bonus",
 				"aether_blessing_travel_discount",
@@ -13580,8 +13581,27 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 		buffs.push_front(blessing_travel_discount)
 	if not blessing_shiny_bonus.is_empty():
 		buffs.push_front(blessing_shiny_bonus)
+	var party_exp_bonus := _current_adventure_party_exp_buff()
+	if not party_exp_bonus.is_empty():
+		buffs.push_front(party_exp_bonus)
 	_render_personal_buffs(buffs)
 	_refresh_aether_blessing_membership_status()
+
+
+func _current_adventure_party_exp_buff() -> Dictionary:
+	if not CoopService.available:
+		return {}
+	var member_ids: Array = CoopService.party.get("memberIds", []) if CoopService.party.get("memberIds") is Array else []
+	var own_id := int(AuthService.current_user.get("id", 0))
+	if member_ids.size() != 2 or own_id <= 0:
+		return {}
+	if not member_ids.any(func(member_id: Variant) -> bool: return int(member_id) == own_id):
+		return {}
+	return {
+		"id": "adventure_party_exp",
+		"name_key": "ui.buff.adventure_party_exp.name",
+		"description_key": "ui.buff.adventure_party_exp.description",
+	}
 
 
 func _current_aether_blessing_membership() -> Dictionary:
@@ -40575,6 +40595,7 @@ func _position_coop_party_hud() -> void:
 	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
 
 func _refresh_coop_party_hud() -> void:
+	_refresh_personal_buffs_from_entitlements()
 	if coop_party_hud == null:
 		return
 	var own_id := int(AuthService.current_user.get("id", 0))
