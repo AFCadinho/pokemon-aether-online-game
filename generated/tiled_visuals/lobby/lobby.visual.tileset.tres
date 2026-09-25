@@ -1,12 +1,14 @@
 [gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_1_0.texture.res" id="1_n2kii"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_14449_0.texture.res" id="2_bejsc"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_2049_0.texture.res" id="3_jqs2y"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_8193_0.texture.res" id="4_gqg5r"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_1_0.texture.res" id="1_jqs2y"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_1025_0.texture.res" id="2_gqg5r"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_15473_0.texture.res" id="3_bkqey"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_2049_0.texture.res" id="4_l80ei"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_8193_0.texture.res" id="5_w4e2b"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/lobby.visual.tileset.compact_source_9217_0.texture.res" id="6_fcf67"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bkqey"]
-texture = ExtResource("1_n2kii")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5drqx"]
+texture = ExtResource("1_jqs2y")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -100,39 +102,45 @@ texture_region_size = Vector2i(32, 32)
 3:12/0 = 0
 4:12/0 = 0
 5:12/0 = 0
-6:12/0 = 0
-0:13/0 = 0
-1:13/0 = 0
-2:13/0 = 0
-3:13/0 = 0
-4:13/0 = 0
-5:13/0 = 0
-6:13/0 = 0
-0:14/0 = 0
-1:14/0 = 0
-2:14/0 = 0
-3:14/0 = 0
-4:14/0 = 0
-5:14/0 = 0
-6:14/0 = 0
-0:15/0 = 0
-1:15/0 = 0
-2:15/0 = 0
-3:15/0 = 0
-4:15/0 = 0
-5:15/0 = 0
-6:15/0 = 0
-0:16/0 = 0
-1:16/0 = 0
-2:16/0 = 0
-3:16/0 = 0
-4:16/0 = 0
-5:16/0 = 0
-6:16/0 = 0
-0:17/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l80ei"]
-texture = ExtResource("2_bejsc")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dy2yo"]
+texture = ExtResource("2_gqg5r")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_id3sq"]
+texture = ExtResource("3_bkqey")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -150,8 +158,8 @@ texture_region_size = Vector2i(32, 32)
 4:1/0 = 0
 5:1/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w4e2b"]
-texture = ExtResource("3_jqs2y")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j2rua"]
+texture = ExtResource("4_l80ei")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -164,8 +172,59 @@ texture_region_size = Vector2i(32, 32)
 6:0/0 = 0
 0:1/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fcf67"]
-texture = ExtResource("4_gqg5r")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e4ae3"]
+texture = ExtResource("5_w4e2b")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kbcyc"]
+texture = ExtResource("6_fcf67")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -308,57 +367,14 @@ texture_region_size = Vector2i(32, 32)
 3:19/0 = 0
 4:19/0 = 0
 5:19/0 = 0
-6:19/0 = 0
-0:20/0 = 0
-1:20/0 = 0
-2:20/0 = 0
-3:20/0 = 0
-4:20/0 = 0
-5:20/0 = 0
-6:20/0 = 0
-0:21/0 = 0
-1:21/0 = 0
-2:21/0 = 0
-3:21/0 = 0
-4:21/0 = 0
-5:21/0 = 0
-6:21/0 = 0
-0:22/0 = 0
-1:22/0 = 0
-2:22/0 = 0
-3:22/0 = 0
-4:22/0 = 0
-5:22/0 = 0
-6:22/0 = 0
-0:23/0 = 0
-1:23/0 = 0
-2:23/0 = 0
-3:23/0 = 0
-4:23/0 = 0
-5:23/0 = 0
-6:23/0 = 0
-0:24/0 = 0
-1:24/0 = 0
-2:24/0 = 0
-3:24/0 = 0
-4:24/0 = 0
-5:24/0 = 0
-6:24/0 = 0
-0:25/0 = 0
-1:25/0 = 0
-2:25/0 = 0
-3:25/0 = 0
-4:25/0 = 0
-5:25/0 = 0
-6:25/0 = 0
-0:26/0 = 0
-1:26/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_bkqey")
-sources/2049 = SubResource("TileSetAtlasSource_w4e2b")
-sources/8193 = SubResource("TileSetAtlasSource_fcf67")
-sources/14449 = SubResource("TileSetAtlasSource_l80ei")
+sources/1 = SubResource("TileSetAtlasSource_5drqx")
+sources/1025 = SubResource("TileSetAtlasSource_dy2yo")
+sources/2049 = SubResource("TileSetAtlasSource_j2rua")
+sources/8193 = SubResource("TileSetAtlasSource_e4ae3")
+sources/9217 = SubResource("TileSetAtlasSource_kbcyc")
+sources/15473 = SubResource("TileSetAtlasSource_id3sq")
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/aether_clash/Lobby.tmx"
 metadata/tiled_compact_atlas_version = 1
