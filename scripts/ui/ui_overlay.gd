@@ -40580,6 +40580,10 @@ func _refresh_coop_party_hud() -> void:
 	var own_id := int(AuthService.current_user.get("id", 0))
 	var hud_party: Dictionary = _coop_party_hud_data() if CoopService.available else {}
 	coop_party_hud.call("set_members", hud_party, own_id)
+	# The immersive battle chat temporarily reuses this CanvasLayer. Presence
+	# updates must not reveal the overworld party HUD between bridge frames.
+	if has_meta("battle_chat_active"):
+		coop_party_hud.hide()
 
 func _coop_party_hud_data() -> Dictionary:
 	var party := CoopService.party.duplicate(true)

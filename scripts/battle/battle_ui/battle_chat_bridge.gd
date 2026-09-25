@@ -307,6 +307,8 @@ func release() -> void:
 		control.size = state.size
 		control.modulate = state.modulate
 		control.visible = state.visible
+	if overlay.has_method("_refresh_coop_party_hud"):
+		overlay.call("_refresh_coop_party_hud")
 
 func _exit_tree() -> void:
 	release()

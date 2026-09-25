@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed the Adventure Party HUD briefly appearing over Immersive battles when party presence updates arrive.
+
 - Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side.
 
 - Immersive 2D Adventure Party double battles now space the two Pokémon pairs across separate battlefield platforms.
