@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De actieve PokéPaste-groep heeft nu naast de partyknop een knop om alle groepsrentals na één bevestiging samen in te leveren.
+
 - Na het plaatsen van een gehuurde Pokémon-groep melden systeemberichten per Pokémon welk teamvak of welk PC-boxvak deze heeft gekregen.
 
 - De bevestiging voor het plaatsen van een gehuurde Pokémon-groep toont nu iconen van de rentals en de huidige party, met een alleen-lezen samenvatting bij hover.
