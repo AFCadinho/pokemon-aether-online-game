@@ -1654,8 +1654,15 @@ func _sync_native_trainers() -> void:
 		first = PlayerSave.to_appearance_state()
 	elif CoopService.view.get("participant") == "p3" and second.is_empty():
 		second = PlayerSave.to_appearance_state()
-	var opponent_sprite_id := "" if wild else _opponent_trainer_sprite_id()
-	var identity := JSON.stringify([first, second, opponent_sprite_id])
+	var opponent_npc: BaseNPC = null if wild else _opponent_trainer_npc()
+	var opponent_sprite_id := "" if wild else _opponent_trainer_sprite_id(opponent_npc)
+	var npc_art_identity := [
+		opponent_npc.get_instance_id(),
+		opponent_npc.mugshot.get_instance_id() if opponent_npc.mugshot != null else 0,
+		opponent_npc.npc_sprite_frames.get_instance_id() if opponent_npc.npc_sprite_frames != null else 0,
+	] if opponent_npc != null else []
+	var identity := JSON.stringify([first, second, str(CoopService.activity.get("activityId", "")),
+		opponent_sprite_id, npc_art_identity])
 	if identity == _trainer_identity:
 		return
 	_trainer_identity = identity
@@ -1669,7 +1676,7 @@ func _sync_native_trainers() -> void:
 		_second_trainer.visible = false
 	else:
 		_second_trainer.clear()
-	_show_coop_opponent_trainer(opponent_sprite_id)
+	_show_coop_opponent_trainer(opponent_sprite_id, opponent_npc)
 	if _opponent_trainer != null:
 		_opponent_trainer.visible = false
 
@@ -1752,26 +1759,53 @@ func _hide_native_trainers() -> void:
 		trainer.get_node("TrainerCommandCallout").call("clear_command")
 
 
-func _opponent_trainer_sprite_id() -> String:
+func _opponent_trainer_npc() -> BaseNPC:
+	var current_map := GameState.current_map
+	if current_map == null or not is_instance_valid(current_map):
+		return null
+	var npc_id := str(CoopService.activity.get("activityId", ""))
+	if npc_id == "brock":
+		npc_id = "kanto_alpha_gym_brock"
+	elif npc_id.contains("gary"):
+		npc_id = "kanto_route_22_gary_oak"
+	var npc_root := current_map.get_node_or_null("Entities/NPCs")
+	if npc_root == null:
+		npc_root = current_map
+	for candidate in npc_root.find_children("*", "", true, false):
+		if candidate is BaseNPC and (candidate as BaseNPC).npc_id == npc_id:
+			return candidate as BaseNPC
+	return null
+
+
+func _opponent_trainer_sprite_id(opponent_npc: BaseNPC = null) -> String:
 	var activity_id := str(CoopService.activity.get("activityId", ""))
-	if activity_id.contains("gary"):
-		return "showdown_blue_lgpe"
 	var npc_id := "kanto_alpha_gym_brock" if activity_id == "brock" else activity_id
 	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
 	if catalog == null or not catalog.has_method("resolve_battle_sprite_id"):
 		return ""
+	if opponent_npc != null:
+		return str(catalog.call("resolve_battle_sprite_id", opponent_npc.battle_sprite_id,
+			opponent_npc.portrait_id, opponent_npc.npc_id, opponent_npc.npc_definition_id))
+	if activity_id.contains("gary"):
+		return "showdown_blue_lgpe"
 	return str(catalog.call("resolve_battle_sprite_id", "", "", npc_id, ""))
 
 
-func _show_coop_opponent_trainer(sprite_id: String) -> void:
+func _show_coop_opponent_trainer(sprite_id: String, opponent_npc: BaseNPC = null) -> void:
 	if _opponent_trainer == null:
 		return
 	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
-	var texture: Texture2D = catalog.call("get_texture", sprite_id) as Texture2D if catalog != null and catalog.has_method("get_texture") else null
-	if texture == null:
-		_opponent_trainer.clear()
+	var texture: Texture2D = opponent_npc.mugshot if opponent_npc != null else null
+	if texture == null and catalog != null and catalog.has_method("get_texture"):
+		texture = catalog.call("get_texture", sprite_id) as Texture2D
+	if texture != null:
+		_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)
 		return
-	_opponent_trainer.show_catalog_sprite(texture, Vector2.LEFT)
+	if opponent_npc != null and opponent_npc.npc_sprite_frames != null:
+		_opponent_trainer.show_npc(opponent_npc._get_directional_sprite_frames(opponent_npc.npc_sprite_frames),
+			Vector2.LEFT, opponent_npc.sprite_offset)
+		return
+	_opponent_trainer.clear()
 
 
 func _label(parent: Node, text: String, font_size: int) -> Label:
