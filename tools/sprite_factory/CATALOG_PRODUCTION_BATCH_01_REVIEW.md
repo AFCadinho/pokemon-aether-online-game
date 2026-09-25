@@ -61,6 +61,15 @@ battles. The points below direct that review; they are not diagnosed blockers.
 | Stantler | Continue | Antlers in battle framing and HUD clearance. |
 | Larvitar | Continue | Back spikes and body clearance through movement. |
 
+### In-game preview feedback (2026-09-25)
+
+Ursaring, Houndour and Houndoom look somewhat soft in the small Pokédex
+preview. Their baked body albedo textures are 1024 × 1024 pixels; the Pokédex
+3D viewport is displayed at 190 × 138 pixels. The existing zoom button did not
+affect that 3D viewport, so it now changes the 3D camera field of view too.
+The observation stays open for inspection at zoom and in battle; it is not yet
+evidence of a defective source texture or a release hold.
+
 ## Next gate
 
 ### Three-timepoint native-clip screen (2026-09-25)

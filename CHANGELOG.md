@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokédex preview zoom button now enlarges local 3D Pokémon too, so model details can be inspected more closely.
+
 - Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser; Classic remains available for single battles.
 
 - De visuals van de Aether Clash-lobby zijn bijgewerkt voor de desktop- en browserclient.
