@@ -4,10 +4,12 @@ signal finished
 
 const SERVICE := preload("res://scripts/services/rental_service.gd")
 const CONFIRM := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const PARTY_HOVER_CARD := preload("res://scenes/battle/party_hover_card.tscn")
 const TEAM_CATALOG := preload("res://scripts/ui/rental_team_catalog.gd")
 const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 var service: Node
 var kind := "team"
+var bulk_mode := false
 var catalog: Dictionary = {}
 var offers: Array = []
 var selected: Dictionary = {}
@@ -16,6 +18,7 @@ var description: RichTextLabel
 var duration: OptionButton
 var status: Label
 var balance: Label
+var workspace_tabs: TabContainer
 var rent_button: Button
 var active_list: VBoxContainer
 var search: LineEdit
@@ -38,6 +41,8 @@ var pokemon_preview_species: Label
 var pokemon_preview_details: RichTextLabel
 var pokemon_preview_item_icon: TextureRect
 var pokemon_preview_item_name: Label
+var pokemon_preview_group_grid: GridContainer
+var pokemon_preview_group_empty: Label
 var pokemon_review_icon: TextureRect
 var pokemon_review_species: Label
 var pokemon_review_rarity: Label
@@ -46,6 +51,7 @@ var pokemon_review_buyout_price: Label
 var pokemon_review_terms: Label
 var pokemon_review_item_icon: TextureRect
 var pokemon_review_item_name: Label
+var pokemon_review_group_grid: GridContainer
 
 func _ready() -> void:
 	hide()
@@ -72,7 +78,7 @@ func _ready() -> void:
 	header.add_theme_constant_override("separation", 10)
 	root.add_child(header)
 	var heading := Label.new()
-	heading.text = "AETHER RENTALS  /  " + ("TEAMS" if kind == "team" else "POKÉMON")
+	heading.text = "AETHER RENTALS  /  " + ("TEAMS" if kind == "team" else "POKÉMON GROUP" if bulk_mode else "POKÉMON")
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_theme_font_size_override("font_size", 24)
 	heading.add_theme_color_override("font_color", Color("62d7ff"))
@@ -90,6 +96,7 @@ func _ready() -> void:
 	_style_button(header_close, false)
 	header.add_child(header_close)
 	var tabs := TabContainer.new()
+	workspace_tabs = tabs
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_style_tabs(tabs, false)
 	root.add_child(tabs)
@@ -134,12 +141,12 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_edit_step.add_theme_constant_override("separation", 8)
 	builder.add_child(pokemon_edit_step)
 	var intro := Label.new()
-	intro.text = "Create your level-100 Pokémon"
+	intro.text = "Create your level-100 Pokémon" if not bulk_mode else "Paste 2–6 level-100 Pokémon"
 	intro.add_theme_font_size_override("font_size", 18)
 	intro.add_theme_color_override("font_color", Color("#eef6ff"))
 	pokemon_edit_step.add_child(intro)
 	var intro_hint := Label.new()
-	intro_hint.text = "Paste one competitive set, or switch to Manual to fill in the fields yourself."
+	intro_hint.text = "Paste 2–6 competitive sets separated by blank lines. Each is rented separately." if bulk_mode else "Paste one competitive set, or switch to Manual to fill in the fields yourself."
 	intro_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
 	pokemon_edit_step.add_child(intro_hint)
 	var edit_split := HBoxContainer.new()
@@ -157,15 +164,15 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	_style_tabs(pokemon_source, true)
 	input_column.add_child(pokemon_source)
 	var paste_panel := VBoxContainer.new()
-	paste_panel.name = "Paste a set"
+	paste_panel.name = "Paste 2–6 sets" if bulk_mode else "Paste a set"
 	pokemon_source.add_child(paste_panel)
 	var paste_hint := Label.new()
-	paste_hint.text = "Paste your Showdown / PokéPaste set below. Its held item is included during the rental."
+	paste_hint.text = "Paste your Showdown / PokéPaste sets below. Held items are included during the rental." if bulk_mode else "Paste your Showdown / PokéPaste set below. Its held item is included during the rental."
 	paste_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	paste_hint.add_theme_color_override("font_color", Color("#8ea8bd"))
 	paste_panel.add_child(paste_hint)
 	pokemon_paste = TextEdit.new()
-	pokemon_paste.placeholder_text = "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed"
+	pokemon_paste.placeholder_text = "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\n- Dragon Dance\n\nScizor @ Leftovers\nAbility: Technician\n- Bullet Punch" if bulk_mode else "Paste here…\n\nExample:\nDragonite\nAbility: Multiscale\nEVs: 252 Atk / 4 SpD / 252 Spe\nAdamant Nature\n- Dragon Dance\n- Extreme Speed"
 	pokemon_paste.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_paste.text_changed.connect(_invalidate_pokemon_quote)
 	_style_text_edit(pokemon_paste)
@@ -173,6 +180,8 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	var manual_scroll := ScrollContainer.new()
 	manual_scroll.name = "Build manually"
 	pokemon_source.add_child(manual_scroll)
+	if bulk_mode:
+		pokemon_source.set_tab_hidden(1, true)
 	var manual := VBoxContainer.new()
 	manual.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	manual_scroll.add_child(manual)
@@ -208,7 +217,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	quote_actions.alignment = BoxContainer.ALIGNMENT_END
 	input_column.add_child(quote_actions)
 	quote_button = Button.new()
-	quote_button.text = "Review Pokémon & price  →"
+	quote_button.text = "Review group & total price  →" if bulk_mode else "Review Pokémon & price  →"
 	quote_button.custom_minimum_size = Vector2(260, 40)
 	quote_button.pressed.connect(_quote_pokemon)
 	_style_button(quote_button, true)
@@ -222,21 +231,29 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	review_header.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(review_header)
 	var review_heading := Label.new()
-	review_heading.text = "Review your Pokémon"
+	review_heading.text = "Review your Pokémon group" if bulk_mode else "Review your Pokémon"
 	review_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	review_heading.add_theme_font_size_override("font_size", 18)
 	review_heading.add_theme_color_override("font_color", Color("#eef6ff"))
 	review_header.add_child(review_heading)
 	var edit_button := Button.new()
-	edit_button.text = "← Edit set"
+	edit_button.text = "← Edit paste" if bulk_mode else "← Edit set"
 	edit_button.pressed.connect(func(): _show_pokemon_review(false))
 	_style_button(edit_button, false)
 	review_header.add_child(edit_button)
+	if bulk_mode:
+		pokemon_review_group_grid = GridContainer.new()
+		pokemon_review_group_grid.name = "PokemonReviewGroupGrid"
+		pokemon_review_group_grid.columns = 6
+		pokemon_review_group_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pokemon_review_group_grid.add_theme_constant_override("h_separation", 6)
+		pokemon_review_step.add_child(pokemon_review_group_grid)
 	var review_content := HBoxContainer.new()
 	review_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	review_content.add_theme_constant_override("separation", 12)
 	pokemon_review_step.add_child(review_content)
 	var identity_card := PanelContainer.new()
+	identity_card.visible = not bulk_mode
 	identity_card.custom_minimum_size.x = 230
 	identity_card.add_theme_stylebox_override("panel", _control_style(Color("#0a1726"), Color("#41698d")))
 	review_content.add_child(identity_card)
@@ -295,9 +312,11 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	review_content.add_child(details_column)
 	description = RichTextLabel.new()
 	description.bbcode_enabled = true
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	description.fit_content = true
-	description.scroll_active = false
+	description.fit_content = not bulk_mode
+	description.scroll_active = bulk_mode
 	description.text = "Your validated set will appear here."
 	description.add_theme_color_override("default_color", Color("#eef6ff"))
 	description.add_theme_stylebox_override("normal", _control_style(Color("#0a1422"), Color("#315070")))
@@ -306,13 +325,14 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	price_row.add_theme_constant_override("separation", 10)
 	details_column.add_child(price_row)
 	pokemon_review_rental_price = _review_price_card(price_row, "24-HOUR RENTAL", Color("#62d5ff"))
-	pokemon_review_buyout_price = _review_price_card(price_row, "MAKE PERMANENT LATER", Color("#f5df9a"))
+	pokemon_review_buyout_price = _review_price_card(price_row, "ALL PERMANENT LATER" if bulk_mode else "MAKE PERMANENT LATER", Color("#f5df9a"))
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	pokemon_review_step.add_child(actions)
 	pokemon_review_terms = Label.new()
-	pokemon_review_terms.text = "24 hours real time • Rental item is temporary • Permanent purchases are untradeable"
+	pokemon_review_terms.text = "24h real time • Separate rentals • Temporary items • Permanent purchases untradeable" if bulk_mode else "24 hours real time • Rental item is temporary • Permanent purchases are untradeable"
 	pokemon_review_terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_review_terms.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pokemon_review_terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_review_terms.add_theme_color_override("font_color", Color("#8ea8bd"))
 	actions.add_child(pokemon_review_terms)
@@ -324,7 +344,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	actions.add_child(duration)
 	rent_button = Button.new()
 	rent_button.text = "Rent quoted Pokémon"
-	rent_button.custom_minimum_size.x = 210
+	rent_button.custom_minimum_size.x = 270 if bulk_mode else 210
 	rent_button.disabled = true
 	rent_button.pressed.connect(_rent)
 	_style_button(rent_button, true)
@@ -352,6 +372,74 @@ func _review_price_card(parent: HBoxContainer, heading_text: String, accent: Col
 	content.add_child(value)
 	return value
 
+func _render_group_review_cards(members: Array) -> void:
+	if pokemon_review_group_grid == null:
+		return
+	for child: Node in pokemon_review_group_grid.get_children():
+		pokemon_review_group_grid.remove_child(child)
+		child.queue_free()
+	for index: int in range(members.size()):
+		var member: Dictionary = members[index]
+		var pokemon: Dictionary = member.get("pokemon", {})
+		var species := str(pokemon.get("species", pokemon.get("speciesId", "Pokémon")))
+		var card := PanelContainer.new()
+		card.name = "GroupPokemonCard-%d" % index
+		card.custom_minimum_size.y = 130
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.add_theme_stylebox_override("panel", _control_style(Color("#0a1726"), Color("#41698d")))
+		pokemon_review_group_grid.add_child(card)
+		var layout := VBoxContainer.new()
+		layout.alignment = BoxContainer.ALIGNMENT_CENTER
+		layout.add_theme_constant_override("separation", 2)
+		card.add_child(layout)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(58, 58)
+		icon.texture = PokemonAssets.load_party_icon(species)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		layout.add_child(icon)
+		var name_label := Label.new()
+		name_label.text = species
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name_label.clip_text = true
+		name_label.add_theme_font_size_override("font_size", 12)
+		name_label.add_theme_color_override("font_color", Color("#62d5ff"))
+		layout.add_child(name_label)
+		var price_label := Label.new()
+		price_label.text = "%d Aetherite" % int(member.get("price", 0))
+		price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		price_label.add_theme_font_size_override("font_size", 10)
+		price_label.add_theme_color_override("font_color", Color("#f5df9a"))
+		layout.add_child(price_label)
+		_add_compact_item_row(layout, str(pokemon.get("item", pokemon.get("heldItemId", ""))), 20)
+
+func _add_compact_item_row(parent: Container, item: String, icon_size: int) -> void:
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 3)
+	parent.add_child(row)
+	if not item.strip_edges().is_empty():
+		var icon := TextureRect.new()
+		icon.name = "HeldItemIcon"
+		icon.custom_minimum_size = Vector2(icon_size, icon_size)
+		icon.texture = ITEM_ICON_RESOLVER.load_icon(item)
+		icon.tooltip_text = _item_display_name(item)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		row.add_child(icon)
+	var label := Label.new()
+	label.text = _item_display_name(item)
+	label.custom_minimum_size.x = 78
+	label.clip_text = true
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.tooltip_text = label.text
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", Color("#8ea8bd"))
+	row.add_child(label)
+
 func _create_pokemon_preview() -> Control:
 	var card := PanelContainer.new()
 	card.custom_minimum_size.x = 310
@@ -366,11 +454,12 @@ func _create_pokemon_preview() -> Control:
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 	var eyebrow := Label.new()
-	eyebrow.text = "LIVE BUILD PREVIEW"
+	eyebrow.text = "PASTE PREVIEW · VALIDATE FOR FULL DETAILS" if bulk_mode else "LIVE BUILD PREVIEW"
 	eyebrow.add_theme_font_size_override("font_size", 11)
 	eyebrow.add_theme_color_override("font_color", Color("#8ea8bd"))
 	layout.add_child(eyebrow)
 	var hero := HBoxContainer.new()
+	hero.visible = not bulk_mode
 	hero.custom_minimum_size.y = 104
 	hero.add_theme_constant_override("separation", 10)
 	layout.add_child(hero)
@@ -402,18 +491,38 @@ func _create_pokemon_preview() -> Control:
 	pokemon_preview_item_icon = preview_item["icon"]
 	pokemon_preview_item_name = preview_item["label"]
 	var divider := HSeparator.new()
+	divider.visible = not bulk_mode
 	divider.add_theme_constant_override("separation", 6)
 	layout.add_child(divider)
 	pokemon_preview_details = RichTextLabel.new()
+	pokemon_preview_details.visible = not bulk_mode
 	pokemon_preview_details.name = "PokemonBuilderPreviewDetails"
 	pokemon_preview_details.bbcode_enabled = true
-	pokemon_preview_details.fit_content = true
-	pokemon_preview_details.scroll_active = false
+	pokemon_preview_details.fit_content = false
+	pokemon_preview_details.scroll_active = true
 	pokemon_preview_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pokemon_preview_details.add_theme_font_size_override("normal_font_size", 11)
 	pokemon_preview_details.add_theme_constant_override("line_separation", 2)
 	pokemon_preview_details.add_theme_color_override("default_color", Color("#eef6ff"))
 	layout.add_child(pokemon_preview_details)
+	if bulk_mode:
+		pokemon_preview_group_grid = GridContainer.new()
+		pokemon_preview_group_grid.name = "PokemonPastePreviewGrid"
+		pokemon_preview_group_grid.columns = 2
+		pokemon_preview_group_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		pokemon_preview_group_grid.add_theme_constant_override("h_separation", 6)
+		pokemon_preview_group_grid.add_theme_constant_override("v_separation", 6)
+		layout.add_child(pokemon_preview_group_grid)
+		pokemon_preview_group_empty = Label.new()
+		pokemon_preview_group_empty.name = "PokemonPastePreviewEmpty"
+		pokemon_preview_group_empty.text = "Paste 2–6 sets to preview them here."
+		pokemon_preview_group_empty.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pokemon_preview_group_empty.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		pokemon_preview_group_empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		pokemon_preview_group_empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		pokemon_preview_group_empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		pokemon_preview_group_empty.add_theme_color_override("font_color", Color("#8ea8bd"))
+		layout.add_child(pokemon_preview_group_empty)
 	return card
 
 func _create_preview_item_row(parent: VBoxContainer) -> Dictionary:
@@ -599,6 +708,9 @@ func _invalidate_pokemon_quote() -> void:
 func _update_pokemon_preview() -> void:
 	if pokemon_preview_species == null or pokemon_preview_details == null:
 		return
+	if bulk_mode:
+		_render_paste_group_preview()
+		return
 	var preview := _paste_preview_data() if pokemon_source != null and pokemon_source.current_tab == 0 else _manual_preview_data()
 	var species := str(preview.get("species", "")).strip_edges()
 	if species.is_empty():
@@ -612,6 +724,51 @@ func _update_pokemon_preview() -> void:
 		pokemon_preview_icon.texture = PokemonAssets.load_party_icon(species)
 	_set_preview_item(pokemon_preview_item_icon, pokemon_preview_item_name, str(preview.get("item", "")))
 	pokemon_preview_details.text = _pokepaste_text(preview, false)
+
+func _render_paste_group_preview() -> void:
+	if pokemon_preview_group_grid == null:
+		return
+	for child: Node in pokemon_preview_group_grid.get_children():
+		pokemon_preview_group_grid.remove_child(child)
+		child.queue_free()
+	var preview_count := 0
+	var paste_text := pokemon_paste.text.replace("\r\n", "\n").replace("\r", "\n")
+	for block: String in paste_text.split("\n\n", false):
+		var data := _paste_preview_data(block)
+		var species := str(data.get("species", "")).strip_edges()
+		if species.is_empty():
+			continue
+		var card := PanelContainer.new()
+		card.name = "PastePokemonCard-%d" % preview_count
+		card.custom_minimum_size.y = 112
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.add_theme_stylebox_override("panel", _control_style(Color("#0d1b2a"), Color("#315070")))
+		pokemon_preview_group_grid.add_child(card)
+		var layout := VBoxContainer.new()
+		layout.alignment = BoxContainer.ALIGNMENT_CENTER
+		layout.add_theme_constant_override("separation", 2)
+		card.add_child(layout)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(48, 48)
+		icon.texture = PokemonAssets.load_party_icon(species)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		layout.add_child(icon)
+		var name_label := Label.new()
+		name_label.text = species
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.clip_text = true
+		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name_label.add_theme_font_size_override("font_size", 12)
+		name_label.add_theme_color_override("font_color", Color("#62d5ff"))
+		layout.add_child(name_label)
+		_add_compact_item_row(layout, str(data.get("item", "")), 20)
+		preview_count += 1
+		if preview_count >= 6:
+			break
+	pokemon_preview_group_grid.visible = preview_count > 0
+	pokemon_preview_group_empty.visible = preview_count == 0
 
 func _item_display_name(item_id: String) -> String:
 	var value := item_id.strip_edges()
@@ -648,13 +805,16 @@ func _pokepaste_text(data: Dictionary, include_species: bool) -> String:
 		lines.append("[color=#c9beff]-[/color] %s" % str(move))
 	return "\n".join(lines)
 
-func _paste_preview_data() -> Dictionary:
+func _paste_preview_data(source_text: String = "") -> Dictionary:
 	var result := {"species": "", "item": "", "ability": "", "tera": "", "evs": "", "ivs": "", "nature": "", "moves": []}
 	if pokemon_paste == null:
 		return result
-	for raw_line: String in pokemon_paste.text.split("\n"):
+	var preview_text := source_text if not source_text.is_empty() else pokemon_paste.text
+	for raw_line: String in preview_text.split("\n"):
 		var line := raw_line.strip_edges()
 		if line.is_empty():
+			if not str(result["species"]).is_empty():
+				break
 			continue
 		if str(result["species"]).is_empty() and not line.begins_with("-") and ":" not in line and not line.ends_with(" Nature"):
 			var heading_parts := line.split("@", false, 1)
@@ -777,6 +937,15 @@ func _quote_pokemon() -> void:
 		status.text = str(result.get("error", "This set is not valid."))
 		return
 	selected = result["body"]
+	var quoted_count := (selected.get("pokemon", []) as Array).size()
+	if bulk_mode and quoted_count < 2:
+		selected = {}
+		status.text = "Paste at least two Pokémon sets for a group rental."
+		return
+	if not bulk_mode and quoted_count != 1:
+		selected = {}
+		status.text = "This paste contains multiple Pokémon. Choose 'Rent 2–6 Pokémon' from the vendor."
+		return
 	selected_build = build
 	duration.clear()
 	for price: Dictionary in selected.get("prices", []):
@@ -788,7 +957,7 @@ func _quote_pokemon() -> void:
 	for move: Variant in pokemon.get("moves", []):
 		moves.append(str(move.get("name", move.get("id", ""))) if move is Dictionary else str(move))
 	var species := str(pokemon.get("species", pokemon.get("speciesId", "Pokémon")))
-	var rarity := str(selected.get("rarity", "common")).replace("_", " ").capitalize()
+	var rarity := str(selected.get("rarity", "group" if bulk_mode else "common")).replace("_", " ").capitalize()
 	pokemon_review_icon.texture = PokemonAssets.load_party_icon(species)
 	pokemon_review_species.text = species
 	pokemon_review_rarity.text = rarity.to_upper()
@@ -801,11 +970,31 @@ func _quote_pokemon() -> void:
 		"teraType": pokemon.get("teraType", ""), "evs": ev_text, "ivs": iv_text,
 		"nature": pokemon.get("nature", "Hardy"), "moves": moves,
 	}, true)
+	if bulk_mode:
+		_render_group_review_cards(selected.get("members", []))
+		var summaries: Array[String] = []
+		for member: Dictionary in selected.get("members", []):
+			var member_pokemon: Dictionary = member.get("pokemon", {})
+			var member_moves: Array[String] = []
+			for member_move: Variant in member_pokemon.get("moves", []):
+				member_moves.append(str(member_move.get("name", member_move.get("id", ""))) if member_move is Dictionary else str(member_move))
+			var member_text := _pokepaste_text({
+				"species": str(member_pokemon.get("species", member_pokemon.get("speciesId", "Pokémon"))),
+				"item": str(member_pokemon.get("item", "")),
+				"ability": member_pokemon.get("ability", ""),
+				"teraType": member_pokemon.get("teraType", ""),
+				"evs": _format_quote_stat_spread(member_pokemon.get("evs", {}), 0, "No EV investment"),
+				"ivs": _format_quote_stat_spread(member_pokemon.get("ivs", {}), 31, "All stats 31"),
+				"nature": member_pokemon.get("nature", "Hardy"), "moves": member_moves,
+			}, true)
+			summaries.append("[color=#f5df9a]%s · %d Aetherite[/color]\n%s" % [str(member.get("rarity", "common")).replace("_", " ").capitalize(), int(member.get("price", 0)), member_text])
+		description.text = "\n\n".join(summaries)
+		pokemon_review_species.text = "%d Pokémon" % quoted_count
 	var rental_price := int((selected.get("prices", [{}])[0] as Dictionary).get("amount", 0))
 	var buyout_total := int(selected.get("buyoutTotal", 0))
 	pokemon_review_rental_price.text = "%d Aetherite" % rental_price
 	pokemon_review_buyout_price.text = "%d Aetherite" % maxi(0, buyout_total - rental_price)
-	rent_button.text = "Rent for 24 hours — %d Aetherite" % rental_price
+	rent_button.text = "Rent %d Pokémon — %d Aetherite" % [quoted_count, rental_price] if bulk_mode else "Rent for 24 hours — %d Aetherite" % rental_price
 	var limit_reached := _rental_limit_reached()
 	rent_button.disabled = limit_reached
 	if limit_reached:
@@ -903,17 +1092,20 @@ func _rent() -> void:
 		return
 	var price: Dictionary = duration.get_selected_metadata()
 	var payload := _build_rent_payload(price)
-	await _mutate("", payload, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
+	await _mutate("/pokemon/bulk" if bulk_mode else "", payload, "Rent %s for %d Aetherite?\nThe timer includes offline time. No refund for early return." % [selected["displayName"], int(price["amount"])])
 
 func _build_rent_payload(price: Dictionary) -> Dictionary:
 	# Godot decodes JSON numbers as floats. The rentals API deliberately uses a
 	# strict integer contract for durations, so normalize catalog metadata before
 	# serializing it back into a mutation request.
 	var payload := {
-		"kind": kind,
 		"offerId": str(selected.get("offerId", "")),
 		"durationSeconds": int(price.get("durationSeconds", 0)),
 	}
+	if not bulk_mode:
+		payload["kind"] = kind
+	else:
+		payload["quotedAmount"] = int(price.get("amount", 0))
 	if kind == "pokemon":
 		payload["pokemonBuild"] = selected_build
 	return payload
@@ -924,7 +1116,7 @@ func _rental_limit_reached() -> bool:
 	for loan: Dictionary in catalog.get("rentals", []):
 		if str(loan.get("context", "")) == context and str(loan.get("status", "")) in ["active", "return_pending"]:
 			count += 1
-	return count >= int(catalog.get("maxTeams", 1) if kind == "team" else catalog.get("maxPokemon", 6))
+	return count + (int((selected.get("pokemon", []) as Array).size()) if bulk_mode else 1) > int(catalog.get("maxTeams", 1) if kind == "team" else catalog.get("maxPokemon", 6))
 
 func _duration_label(seconds: int) -> String:
 	if seconds % 86400 == 0:
@@ -950,6 +1142,42 @@ func _render_active() -> void:
 		for loan: Dictionary in matching_loans:
 			_render_active_team(loan)
 		return
+	var groups := {}
+	for loan: Dictionary in matching_loans:
+		if str(loan.get("status", "")) != "active":
+			continue
+		var rental: Dictionary = loan.get("rental", {})
+		var batch_id := str(rental.get("batchId", ""))
+		if not batch_id.is_empty():
+			if not groups.has(batch_id):
+				groups[batch_id] = []
+			(groups[batch_id] as Array).append(loan)
+	for batch_id: String in groups:
+		var group: Array = groups[batch_id]
+		if group.size() != int((group[0] as Dictionary).get("rental", {}).get("batchSize", 0)):
+			continue
+		var actions := HBoxContainer.new()
+		actions.name = "RentalGroupActions-%s" % batch_id
+		actions.add_theme_constant_override("separation", 8)
+		active_list.add_child(actions)
+		var place_button := Button.new()
+		place_button.name = "PlaceRentalGroup-%s" % batch_id
+		place_button.text = "Place %d rented Pokémon in party" % group.size()
+		place_button.tooltip_text = "Current party Pokémon move to the PC"
+		place_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		place_button.pressed.connect(_place_bulk_group.bind(batch_id))
+		_style_button(place_button, true)
+		actions.add_child(place_button)
+		var return_all := Button.new()
+		return_all.name = "ReturnRentalGroup-%s" % batch_id
+		return_all.text = "Return all"
+		return_all.tooltip_text = "Return all %d rentals in this group without a refund" % group.size()
+		return_all.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return_all.pressed.connect(_return_bulk_group.bind(batch_id, group.size()))
+		_style_button(return_all, false)
+		return_all.add_theme_stylebox_override("normal", _control_style(Color("#291820"), Color("#8f5261")))
+		return_all.add_theme_stylebox_override("hover", _control_style(Color("#3a202a"), Color("#d57b8e")))
+		actions.add_child(return_all)
 	var grid := GridContainer.new()
 	grid.name = "ActivePokemonRentalGrid"
 	grid.columns = 3
@@ -1204,17 +1432,62 @@ func _active_pokemon_pokepaste(snapshot: Dictionary) -> String:
 		"moves": moves,
 	}, false)
 
-func _mutate(path: String, payload: Dictionary, message: String) -> void:
+func _place_bulk_group(batch_id: String) -> void:
+	if busy:
+		return
+	var incoming: Array[Dictionary] = []
+	var incoming_ids: Array[int] = []
+	var group: Array[Dictionary] = []
+	for loan: Dictionary in catalog.get("rentals", []):
+		if str(loan.get("status", "")) == "active" and str(loan.get("rental", {}).get("batchId", "")) == batch_id:
+			group.append(loan)
+	group.sort_custom(func(a: Dictionary, b: Dictionary): return int(a.get("rental", {}).get("batchPosition", 0)) < int(b.get("rental", {}).get("batchPosition", 0)))
+	for loan: Dictionary in group:
+		var snapshot := _active_pokemon_snapshot(loan)
+		if snapshot.is_empty():
+			status.text = "Could not preview the complete rental group."
+			return
+		incoming.append(snapshot)
+		for asset: Dictionary in loan.get("assets", []):
+			if str(asset.get("assetType", "")) == "pokemon":
+				incoming_ids.append(int(asset.get("pokemonId", asset.get("id", 0))))
+				break
+	if incoming.is_empty():
+		status.text = "Could not preview the complete rental group."
+		return
+	var party_service := get_node_or_null("/root/PlayerPartyStateService")
+	if party_service == null:
+		status.text = "Could not load your current party."
+		return
+	var current: Dictionary = await party_service.call("load_party")
+	if not bool(current.get("success", false)):
+		status.text = str(current.get("error", "Could not load your current party."))
+		return
+	var outgoing: Array[Dictionary] = []
+	var previous_party: Array[Dictionary] = []
+	for member: Dictionary in current.get("party", []):
+		previous_party.append(member)
+		var owned_id := int(member.get("ownedPokemonId", member.get("pokemonId", member.get("id", 0))))
+		if owned_id <= 0 or not incoming_ids.has(owned_id):
+			outgoing.append(member)
+	await _mutate("/pokemon/bulk/%s/party" % batch_id, {}, "Place this rental group in your party? Current party Pokémon shown below move to the PC. This requires enough PC space.", incoming, outgoing, previous_party)
+
+func _return_bulk_group(batch_id: String, count: int) -> void:
+	await _mutate("/pokemon/bulk/%s/return" % batch_id, {}, "Return all %d Pokémon in this rental group now?\n\nNo Aetherite will be refunded. This cannot be undone." % count)
+
+func _mutate(path: String, payload: Dictionary, message: String, incoming: Array[Dictionary] = [], outgoing: Array[Dictionary] = [], previous_party: Array[Dictionary] = []) -> void:
 	if busy:
 		return
 	busy = true
 	var confirm := CONFIRM.instantiate() as AetherConfirmationDialog
 	add_child(confirm)
 	confirm.configure("Aether Rentals", message, "Confirm", "Cancel")
+	if not incoming.is_empty():
+		_add_party_swap_preview(confirm, incoming, outgoing)
 	var choice := {"yes": false, "done": false}
 	confirm.confirmed.connect(func(): choice["yes"] = true; choice["done"] = true)
 	confirm.canceled.connect(func(): choice["done"] = true)
-	confirm.popup_centered(Vector2i(620, 340))
+	confirm.popup_centered(Vector2i(700, 440) if not incoming.is_empty() else Vector2i(620, 340))
 	while not bool(choice["done"]):
 		await get_tree().process_frame
 	confirm.queue_free()
@@ -1234,7 +1507,124 @@ func _mutate(path: String, payload: Dictionary, message: String) -> void:
 			if str(entry[0]) == "PlayerWalletService" and target.has_method("apply_wallet_result"):
 				target.call("apply_wallet_result", updated)
 	await refresh()
+	if path.begins_with("/pokemon/bulk/") and path.ends_with("/party"):
+		await _announce_party_swap(previous_party, result.get("body", {}))
+	if path == "/pokemon/bulk" and workspace_tabs != null:
+		workspace_tabs.current_tab = 1
 	status.text = "Done. Your Pokémon, wallet and rentals are up to date."
+
+func _announce_party_swap(previous_party: Array[Dictionary], response_body: Dictionary) -> void:
+	var boxes: Array = []
+	var new_party: Array = response_body.get("party", [])
+	var new_ids := {}
+	for member: Dictionary in new_party:
+		new_ids[_rental_owned_id(member)] = true
+	var has_displaced_pokemon := previous_party.any(func(member: Dictionary): return not new_ids.has(_rental_owned_id(member)))
+	if has_displaced_pokemon:
+		var storage := get_node_or_null("/root/PokemonStorageService")
+		if storage != null:
+			var box_result: Dictionary = await storage.call("load_boxes")
+			if bool(box_result.get("success", false)):
+				boxes = box_result.get("boxes", [])
+	for message: String in _party_swap_messages(previous_party, new_party, boxes):
+		get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _party_swap_messages(previous_party: Array[Dictionary], new_party: Array, boxes: Array) -> Array[String]:
+	var messages: Array[String] = []
+	var previous_ids := {}
+	var new_ids := {}
+	for member: Dictionary in previous_party:
+		previous_ids[_rental_owned_id(member)] = true
+	for member: Dictionary in new_party:
+		new_ids[_rental_owned_id(member)] = true
+	for member: Dictionary in previous_party:
+		if new_ids.has(_rental_owned_id(member)):
+			continue
+		messages.append(_rental_text("ui.rental.party_swap.to_pc", {
+			"pokemon": _rental_pokemon_name(member),
+			"location": _rental_box_location(boxes, _rental_owned_id(member)),
+		}))
+	for index: int in range(new_party.size()):
+		var member: Dictionary = new_party[index]
+		if previous_ids.has(_rental_owned_id(member)):
+			continue
+		messages.append(_rental_text("ui.rental.party_swap.to_party", {
+			"pokemon": _rental_pokemon_name(member),
+			"location": _rental_text("ui.storage.location.party_slot", {"number": index + 1}),
+		}))
+	return messages
+
+func _rental_owned_id(member: Dictionary) -> int:
+	return int(member.get("ownedPokemonId", member.get("pokemonId", member.get("id", 0))))
+
+func _rental_pokemon_name(member: Dictionary) -> String:
+	var nickname := str(member.get("nickname", "")).strip_edges()
+	if not nickname.is_empty():
+		return nickname
+	var species := str(member.get("speciesId", member.get("species", ""))).strip_edges()
+	var fallback := str(member.get("displaySpecies", member.get("species", "Pokémon"))).strip_edges()
+	if fallback.is_empty():
+		fallback = "Pokémon"
+	var localizer := get_node_or_null("/root/ContentLocalization")
+	return str(localizer.call("display_name", "species", species, fallback)) if localizer != null else fallback
+
+func _rental_box_location(boxes: Array, pokemon_id: int) -> String:
+	for box: Dictionary in boxes:
+		for slot: Dictionary in box.get("slots", []):
+			var pokemon: Dictionary = slot.get("pokemon", {})
+			if int(pokemon.get("id", 0)) == pokemon_id:
+				return _rental_text("ui.storage.location.box_slot", {
+					"box": int(slot.get("boxIndex", box.get("boxIndex", 0))) + 1,
+					"slot": int(slot.get("slotIndex", 0)) + 1,
+				})
+	return _rental_text("ui.rental.party_swap.pc")
+
+func _rental_text(key: String, values: Dictionary = {}) -> String:
+	var localizer := get_node_or_null("/root/LocalizationManager")
+	return str(localizer.call("text", key, values)) if localizer != null else key
+
+func _add_party_swap_preview(confirm: AetherConfirmationDialog, incoming: Array[Dictionary], outgoing: Array[Dictionary]) -> void:
+	var hover := PARTY_HOVER_CARD.instantiate() as PartyHoverCard
+	hover.name = "RentalPartyHoverCard"
+	confirm.add_child(hover)
+	hover.set_show_storage_details(true)
+	for section: Array in [["Rented Pokémon → party", incoming], ["Current party → PC", outgoing]]:
+		var block := VBoxContainer.new()
+		block.add_theme_constant_override("separation", 5)
+		var heading := Label.new()
+		heading.text = str(section[0])
+		heading.add_theme_font_size_override("font_size", 14)
+		heading.add_theme_color_override("font_color", Color("#69d8e7"))
+		block.add_child(heading)
+		var row := HBoxContainer.new()
+		row.name = "IncomingPokemonIcons" if section[0] == "Rented Pokémon → party" else "OutgoingPokemonIcons"
+		row.add_theme_constant_override("separation", 8)
+		block.add_child(row)
+		var members: Array[Dictionary] = section[1]
+		if members.is_empty():
+			var empty := Label.new()
+			empty.text = "None"
+			empty.add_theme_color_override("font_color", Color("#9eb3c5"))
+			row.add_child(empty)
+		for member: Dictionary in members:
+			var species := str(member.get("species", member.get("speciesId", "")))
+			var icon := TextureRect.new()
+			icon.custom_minimum_size = Vector2(72, 72)
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			icon.texture = PokemonAssets.load_party_icon(species, bool(member.get("shiny", false)))
+			icon.mouse_filter = Control.MOUSE_FILTER_STOP
+			icon.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			icon.tooltip_text = str(member.get("nickname", species))
+			icon.mouse_entered.connect(_show_party_swap_hover.bind(hover, member, icon, confirm))
+			icon.mouse_exited.connect(hover.hide_card)
+			row.add_child(icon)
+		confirm.add_custom_control(block)
+
+func _show_party_swap_hover(hover: PartyHoverCard, member: Dictionary, icon: TextureRect, confirm: AetherConfirmationDialog) -> void:
+	hover.show_for_pokemon(member)
+	hover.position_beside_rect_within(icon.get_global_rect(), confirm.panel.get_global_rect())
 
 func _close() -> void:
 	if busy:

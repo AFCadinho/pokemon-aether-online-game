@@ -6,6 +6,19 @@ class FakeRentalService extends Node:
 	func request(path: String, _payload: Dictionary = {}, _mutate := false, _post := false) -> Dictionary:
 		if path.begins_with("/catalog/team/"):
 			return {"success": true, "body": _team(true)}
+		if path == "/pokemon/quote" and str(_payload.get("pokemonBuild", {}).get("pasteText", "")).contains("SIX SETS"):
+			var members: Array = []
+			var pokemon: Array = []
+			for index: int in range(6):
+				var member_pokemon := {"species": "Dragonite", "item": "Dragonium Z", "ability": "Multiscale", "nature": "Jolly", "moves": ["Dragon Dance", "Extreme Speed", "Earthquake", "Fire Punch"], "evs": {"atk": 252, "spd": 4, "spe": 252}}
+				members.append({"displayName": "Dragonite %d" % index, "rarity": "rare", "price": 200, "pokemon": member_pokemon})
+				pokemon.append(member_pokemon)
+			return {"success": true, "body": {"offerId": "bulk-six", "displayName": "6 Pokémon", "members": members, "pokemon": pokemon, "prices": [{"durationSeconds": 86400, "amount": 1200}], "buyoutTotal": 12000}}
+		if path == "/pokemon/quote" and str(_payload.get("pokemonBuild", {}).get("pasteText", "")).contains("SECOND SET"):
+			var members: Array = []
+			for species: String in ["Scizor", "Garchomp"]:
+				members.append({"displayName": species, "rarity": "rare", "price": 200, "pokemon": {"species": species, "item": "Dragonium Z", "moves": ["Earthquake"]}})
+			return {"success": true, "body": {"offerId": "bulk-test", "displayName": "2 Pokémon", "members": members, "pokemon": [members[0]["pokemon"], members[1]["pokemon"]], "prices": [{"durationSeconds": 86400, "amount": 400}], "buyoutTotal": 4000}}
 		return {"success": true, "body": {"offerId": "custom-test", "displayName": "Scizor", "rarity": "uncommon", "buyoutTotal": 1500, "prices": [{"durationSeconds": 86400, "amount": 100}], "pokemon": [{"species": "Scizor", "nature": "Adamant", "ability": "Technician", "item": "leftovers", "moves": [{"id": "bullet-punch", "name": "Bullet Punch"}], "evs": {"atk": 252}, "ivs": {"atk": 31}}]}}
 
 	func _team(detail := false) -> Dictionary:
@@ -138,6 +151,9 @@ func _run() -> void:
 	assert(pokemon_workspace.duration.get_item_text(0).contains("100 Aetherite"))
 	assert(not pokemon_workspace.duration.visible)
 	assert(pokemon_workspace.rent_button.text == "Rent for 24 hours — 100 Aetherite")
+	await process_frame
+	assert(pokemon_workspace.rent_button.get_global_rect().end.x < pokemon_workspace.size.x)
+	assert(pokemon_workspace.pokemon_review_step.get_combined_minimum_size().x < pokemon_workspace.size.x)
 	assert(pokemon_workspace.selected_build["source"] == "paste")
 	var pokemon_rent_payload := pokemon_workspace._build_rent_payload({"durationSeconds": 86400.0})
 	assert(typeof(pokemon_rent_payload["durationSeconds"]) == TYPE_INT)
@@ -181,6 +197,110 @@ func _run() -> void:
 	assert(manual_build["pokemon"]["item"] == "Rocky Helmet")
 	assert(manual_build["pokemon"]["ivs"]["spe"] == 31)
 	pokemon_workspace.queue_free()
+	var bulk_workspace := WORKSPACE.new()
+	bulk_workspace.kind = "pokemon"
+	bulk_workspace.bulk_mode = true
+	root.add_child(bulk_workspace)
+	bulk_workspace.service.queue_free()
+	bulk_workspace.service = FakeRentalService.new()
+	bulk_workspace.add_child(bulk_workspace.service)
+	bulk_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
+	var swap_dialog := preload("res://scenes/interface/aether_confirmation_dialog.tscn").instantiate() as AetherConfirmationDialog
+	bulk_workspace.add_child(swap_dialog)
+	var incoming_party: Array[Dictionary] = []
+	for species: String in ["Dragonite", "Zeraora", "Swampert", "Buzzwole", "Celesteela", "Serperior"]:
+		incoming_party.append({"species": species, "level": 100, "item": "Leftovers", "moves": ["Protect"]})
+	var outgoing_party: Array[Dictionary] = [{"species": "Charmander", "level": 5, "moves": ["Scratch"]}]
+	bulk_workspace._add_party_swap_preview(swap_dialog, incoming_party, outgoing_party)
+	var incoming_icons := swap_dialog.find_child("IncomingPokemonIcons", true, false) as HBoxContainer
+	var outgoing_icons := swap_dialog.find_child("OutgoingPokemonIcons", true, false) as HBoxContainer
+	var swap_hover := swap_dialog.get_node("RentalPartyHoverCard") as PartyHoverCard
+	assert(incoming_icons.get_child_count() == 6)
+	assert(outgoing_icons.get_child_count() == 1)
+	assert((incoming_icons.get_child(0) as TextureRect).texture != null)
+	assert((outgoing_icons.get_child(0) as TextureRect).texture != null)
+	(incoming_icons.get_child(0) as TextureRect).mouse_entered.emit()
+	assert(swap_hover.visible)
+	assert(swap_hover.current_pokemon_data.get("species") == "Dragonite")
+	(outgoing_icons.get_child(0) as TextureRect).mouse_entered.emit()
+	assert(swap_hover.current_pokemon_data.get("species") == "Charmander")
+	(outgoing_icons.get_child(0) as TextureRect).mouse_exited.emit()
+	assert(not swap_hover.visible)
+	var previous_party: Array[Dictionary] = [{"ownedPokemonId": 10, "species": "Charmander"}, {"ownedPokemonId": 20, "species": "Scizor"}]
+	var next_party: Array = [{"ownedPokemonId": 30, "species": "Dragonite"}, {"ownedPokemonId": 20, "species": "Scizor"}]
+	var boxes: Array = [{"boxIndex": 1, "slots": [{"boxIndex": 1, "slotIndex": 4, "pokemon": {"id": 10}}]}]
+	var swap_messages := bulk_workspace._party_swap_messages(previous_party, next_party, boxes)
+	assert(swap_messages.size() == 2)
+	assert(swap_messages[0].contains("Charmander") and swap_messages[0].contains("Box 2") and swap_messages[0].contains("slot 5"))
+	assert(swap_messages[1].contains("Dragonite") and swap_messages[1].contains("party slot 1"))
+	assert(not swap_messages.any(func(value: String): return value.contains("Scizor")))
+	var unknown_box := bulk_workspace._party_swap_messages(previous_party, next_party, [])
+	assert(unknown_box[0].contains("your PC") and not unknown_box[0].contains("slot"))
+	swap_dialog.queue_free()
+	assert(bulk_workspace.pokemon_source.is_tab_hidden(1))
+	assert(bulk_workspace.pokemon_source.get_tab_title(0) == "Paste 2–6 sets")
+	await process_frame
+	assert(bulk_workspace.pokemon_preview_group_empty.visible)
+	assert(not bulk_workspace.pokemon_preview_group_grid.visible)
+	assert(bulk_workspace.pokemon_preview_group_empty.get_parent() != bulk_workspace.pokemon_preview_group_grid)
+	assert(bulk_workspace.quote_button.get_global_rect().end.y < bulk_workspace.size.y)
+	bulk_workspace.pokemon_paste.text = "Scizor @ Dragonium Z\n- Bullet Punch\n\nSECOND SET @ Leftovers\n- Earthquake"
+	bulk_workspace._update_pokemon_preview()
+	assert(not bulk_workspace.pokemon_preview_group_empty.visible)
+	assert(bulk_workspace.pokemon_preview_group_grid.visible)
+	assert(bulk_workspace.pokemon_preview_group_grid.get_child_count() == 2)
+	assert(bulk_workspace.pokemon_preview_group_grid.get_node("PastePokemonCard-0").find_children("*", "TextureRect", true, false).size() == 2)
+	var paste_item_icon := bulk_workspace.pokemon_preview_group_grid.get_node("PastePokemonCard-0").find_child("HeldItemIcon", true, false) as TextureRect
+	assert(paste_item_icon.texture.resource_path.ends_with("DRAGONIUMZHELD.png"))
+	await bulk_workspace._quote_pokemon()
+	assert(bulk_workspace.selected["offerId"] == "bulk-test")
+	assert(bulk_workspace.pokemon_review_species.text == "2 Pokémon")
+	assert(bulk_workspace.pokemon_review_group_grid.get_child_count() == 2)
+	assert(bulk_workspace.pokemon_review_group_grid.get_node("GroupPokemonCard-0").find_children("*", "TextureRect", true, false).size() == 2)
+	var review_item_icon := bulk_workspace.pokemon_review_group_grid.get_node("GroupPokemonCard-0").find_child("HeldItemIcon", true, false) as TextureRect
+	assert(review_item_icon.texture.resource_path.ends_with("DRAGONIUMZHELD.png"))
+	assert(bulk_workspace.description.text.contains("Scizor"))
+	assert(bulk_workspace.description.text.contains("Garchomp"))
+	assert(bulk_workspace.rent_button.text == "Rent 2 Pokémon — 400 Aetherite")
+	assert(not bulk_workspace.rent_button.disabled)
+	var bulk_payload := bulk_workspace._build_rent_payload({"durationSeconds": 86400.0, "amount": 400.0})
+	assert(not bulk_payload.has("kind"))
+	assert(bulk_payload["quotedAmount"] == 400)
+	assert(bulk_payload["pokemonBuild"]["source"] == "paste")
+	bulk_workspace.catalog["rentals"] = [
+		{"loanId": "bulk-one", "context": "npc_pokemon", "status": "active", "rental": {"batchId": "batch-test", "batchSize": 2}, "assets": []},
+		{"loanId": "bulk-two", "context": "npc_pokemon", "status": "active", "rental": {"batchId": "batch-test", "batchSize": 2}, "assets": []},
+	]
+	bulk_workspace._render_active()
+	var group_actions := bulk_workspace.active_list.get_node("RentalGroupActions-batch-test") as HBoxContainer
+	assert(group_actions.get_child_count() == 2)
+	assert(group_actions.get_node("PlaceRentalGroup-batch-test").text == "Place 2 rented Pokémon in party")
+	assert(group_actions.get_node("ReturnRentalGroup-batch-test").text == "Return all")
+	assert((group_actions.get_child(0) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL)
+	assert((group_actions.get_child(1) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL)
+	var long_paste := ""
+	for index: int in range(6):
+		long_paste += "Dragonite %d @ Leftovers\nAbility: Multiscale\nTera Type: Flying\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Dragon Dance\n- Extreme Speed\n- Earthquake\n- Fire Punch\n\n" % index
+	bulk_workspace._show_pokemon_review(false)
+	bulk_workspace.pokemon_paste.text = long_paste
+	bulk_workspace._update_pokemon_preview()
+	await process_frame
+	assert(bulk_workspace.pokemon_preview_group_grid.get_child_count() == 6)
+	for card: Control in bulk_workspace.pokemon_preview_group_grid.get_children():
+		assert(card.get_global_rect().end.y < bulk_workspace.size.y)
+	assert(bulk_workspace.quote_button.get_global_rect().end.y < bulk_workspace.size.y)
+	bulk_workspace.pokemon_paste.text = "SIX SETS\n" + long_paste
+	await bulk_workspace._quote_pokemon()
+	await process_frame
+	assert(bulk_workspace.pokemon_review_group_grid.get_child_count() == 6)
+	for card: Control in bulk_workspace.pokemon_review_group_grid.get_children():
+		assert(card.get_global_rect().end.x < bulk_workspace.size.x)
+		assert(card.find_child("HeldItemIcon", true, false) != null)
+	assert(bulk_workspace.description.scroll_active)
+	assert(not bulk_workspace.description.fit_content)
+	assert(bulk_workspace.rent_button.get_global_rect().end.x < bulk_workspace.size.x)
+	assert(bulk_workspace.rent_button.get_global_rect().end.y < bulk_workspace.size.y)
+	bulk_workspace.queue_free()
 	var rental_service := preload("res://scripts/services/rental_service.gd").new()
 	assert(rental_service._error_message([{"msg": "Value error, Paste a Pokémon set first."}]) == "Paste a Pokémon set first.")
 	rental_service.queue_free()

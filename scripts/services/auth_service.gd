@@ -3,6 +3,7 @@ extends Node
 class_name AuthServiceNode
 
 const ClientBuild := preload("res://scripts/services/client_build.gd")
+const InstallationIdentity := preload("res://scripts/services/installation_identity.gd")
 const SESSION_FILE_PATH := "user://auth_session.json"
 const REQUEST_TIMEOUT_SECONDS := 12.0
 const PRIVACY_REQUEST_TIMEOUT_SECONDS := 60.0
@@ -54,10 +55,14 @@ func take_pending_login_notice() -> String:
 
 func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	var installation_id := InstallationIdentity.get_or_create()
+	if installation_id == "":
+		return {"success": false, "error": "Could not save this installation's login identifier."}
 	var payload := {
 		"username": username,
 		"password": password,
 		"rememberMe": remember_me,
+		"installationId": installation_id,
 	}
 
 	var response: Dictionary = await _request_json(
@@ -289,6 +294,33 @@ func create_account_portal_launch(locale: String, destination: String = "account
 		"success": true,
 		"url": url,
 		"expiresAt": str(body.get("expiresAt", "")),
+	}
+
+
+func get_patreon_store_status() -> Dictionary:
+	if session_token == "" or is_impersonating():
+		return {"success": false}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/account-portal/patreon/status",
+		HTTPClient.METHOD_GET,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return {"success": false}
+	var body := _dictionary_from_value(response.get("body", {}))
+	if not (body.get("available") is bool and body.get("connected") is bool
+		and body.get("active") is bool and body.get("manualRole") is bool
+		and body.get("benefitsEnabled") is bool):
+		return {"success": false}
+	return {
+		"success": true,
+		"available": body.available,
+		"connected": body.connected,
+		"active": body.active,
+		"manualRole": body.manualRole,
+		"benefitsEnabled": body.benefitsEnabled,
 	}
 
 

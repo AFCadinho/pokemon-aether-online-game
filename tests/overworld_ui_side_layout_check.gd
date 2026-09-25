@@ -511,12 +511,10 @@ func _init() -> void:
 	_check(
 		donator_store_script_source.contains('"membership": "Blessings"')
 		and donator_store_script_source.contains('"membership": "5% SHINY · TRAVEL · NPC SHOPS"')
-		and donator_store_script_source.contains("5% better Shiny odds")
-		and donator_store_script_source.contains("50% off regional travel")
-		and donator_store_script_source.contains("two free Aether Anchors")
-		and donator_store_script_source.contains("5% off NPC currency shops")
-		and donator_store_script_source.contains("Aether Gems excluded"),
-		"Blessings disclose the complete Shiny, travel, anchor, and NPC shop package"
+		and donator_store_script_source.contains("_blessing_benefits_description()")
+		and donator_store_script_source.contains("ui.store.blessing.benefit.%s")
+		and donator_store_script_source.contains("ui.store.blessing.voucher_intro"),
+		"Blessings show the shared localized benefit list instead of stale catalog copy"
 	)
 	_check(donator_store_script_source.contains('"name": "Aether Blessing Voucher · 3 Days"') and donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Aether Blessing offers the intended four tradeable voucher durations")
 	_check(
@@ -571,7 +569,7 @@ func _init() -> void:
 		"successful Aether Gift Store purchases use a localized System message"
 	)
 	_check(
-		donator_store_script_source.contains("Tradeable voucher. Use it from the Bag")
+		donator_store_script_source.contains("Tradeable voucher. Use it from your Bag")
 		and script_source.contains('"id": "vouchers", "labelKey": "ui.bag.category.vouchers"')
 		and script_source.contains('use_action == "redeem_aether_blessing"')
 		and script_source.contains('LocalizationManager.text("ui.bag.message.blessing_extended"'),

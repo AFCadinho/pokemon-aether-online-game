@@ -1346,7 +1346,7 @@ func _set_workspace_mode(is_composing: bool) -> void:
 
 func _friendly_error(result: Dictionary, fallback_key: String) -> String:
 	var code := str(result.get("code", ""))
-	if code in ["loan_same_map_required", "loan_presence_unavailable", "loan_lender_party_required"]:
+	if code in ["loan_same_map_required", "loan_presence_unavailable", "loan_lender_party_required", "loan_browser_recipient_unsupported"]:
 		var localizer := get_node_or_null("/root/BackendErrorLocalization")
 		if localizer != null:
 			return str(localizer.call("message", result, fallback_key))

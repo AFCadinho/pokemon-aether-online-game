@@ -17,6 +17,8 @@ const AETHER_BLESSING_VOUCHER_3_DAYS_ICON: Texture2D = preload("res://assets/ite
 const AETHER_BLESSING_VOUCHER_7_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER7DAYS.png")
 const AETHER_BLESSING_VOUCHER_14_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER14DAYS.png")
 const AETHER_BLESSING_VOUCHER_30_DAYS_ICON: Texture2D = preload("res://assets/items/icons/AETHERBLESSINGVOUCHER30DAYS.png")
+const PATREON_BADGE_ICON: Texture2D = preload("res://assets/ui/patreon_emblem.png")
+const PATREON_PAGE_URL := "https://www.patreon.com/c/PokeAether"
 const SURF_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/SURFCHARM.png")
 const CUT_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/CUTCHARM.png")
 const STRENGTH_CHARM_ICON: Texture2D = preload("res://assets/items/icons/field_move_charms/STRENGTHCHARM.png")
@@ -85,7 +87,7 @@ const CATEGORY_LABELS := {
 }
 const CATEGORY_DESCRIPTIONS := {
 	"featured": "A curated mix of supporter items, style and permanent conveniences.",
-	"membership": "Tradeable supporter membership with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+	"membership": "Tradeable Aether Blessing vouchers and Patreon membership information.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
@@ -134,9 +136,18 @@ const COSMETIC_SUBCATEGORY_LABELS := {
 }
 const CATALOG: Array[Dictionary] = [
 	{
+		"id": "patreon-supporter-preview",
+		"name_key": "ui.store.patreon.name",
+		"description_key": "ui.store.patreon.description",
+		"icon": PATREON_BADGE_ICON,
+		"categories": ["membership"],
+		"badge": "PATREON",
+		"informational": true,
+	},
+	{
 		"id": "aether-blessing-voucher-3-days",
 		"name": "Aether Blessing Voucher · 3 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add three days with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 75,
 		"icon": AETHER_BLESSING_VOUCHER_3_DAYS_ICON,
 		"categories": ["membership"],
@@ -145,7 +156,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-7-days",
 		"name": "Aether Blessing Voucher · 7 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add one week with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 150,
 		"icon": AETHER_BLESSING_VOUCHER_7_DAYS_ICON,
 		"categories": ["membership"],
@@ -154,7 +165,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-14-days",
 		"name": "Aether Blessing Voucher · 14 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add two weeks with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 275,
 		"icon": AETHER_BLESSING_VOUCHER_14_DAYS_ICON,
 		"categories": ["membership"],
@@ -163,7 +174,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-30-days",
 		"name": "Aether Blessing Voucher · 30 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add thirty days with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 500,
 		"icon": AETHER_BLESSING_VOUCHER_30_DAYS_ICON,
 		"categories": ["featured", "membership"],
@@ -629,6 +640,10 @@ var balance_label: Label
 var add_gems_button: Button
 var add_gems_feedback_label: Label
 var portal_launch_in_progress := false
+var patreon_action_in_progress := false
+var patreon_status: Dictionary = {"success": false}
+var patreon_status_request_id := 0
+var patreon_external_dialog: ConfirmationDialog
 var hero_title_label: Label
 var hero_description_label: Label
 var cosmetic_subcategory_bar: PanelContainer
@@ -773,14 +788,27 @@ func open_store() -> void:
 	visible = true
 	if status_label != null:
 		status_label.text = _t("ui.store.status.loading")
+	patreon_status = {"success": false}
+	patreon_status_request_id += 1
+	_refresh_purchase_state()
+	_load_patreon_status(patreon_status_request_id)
 
 
 func close_store() -> void:
+	patreon_status_request_id += 1
+	patreon_action_in_progress = false
+	if patreon_external_dialog != null:
+		patreon_external_dialog.hide()
 	visible = false
 	closed.emit()
 
 
 func _build_interface() -> void:
+	patreon_external_dialog = ConfirmationDialog.new()
+	patreon_external_dialog.title = _t("ui.store.patreon.external_title")
+	patreon_external_dialog.dialog_text = _t("ui.store.patreon.external_confirm")
+	patreon_external_dialog.confirmed.connect(_open_patreon_page)
+	add_child(patreon_external_dialog)
 	var outer_margin := MarginContainer.new()
 	outer_margin.add_theme_constant_override("margin_left", 16)
 	outer_margin.add_theme_constant_override("margin_top", 14)
@@ -927,6 +955,72 @@ func _set_add_gems_feedback(key: String, is_error: bool = false) -> void:
 		add_gems_feedback_label.visible = true
 	if status_label != null:
 		status_label.text = message
+
+
+func _load_patreon_status(request_id: int) -> void:
+	var auth_service := get_node_or_null("/root/AuthService")
+	if auth_service == null:
+		return
+	var result: Dictionary = await auth_service.call("get_patreon_store_status")
+	if not is_inside_tree() or not visible or request_id != patreon_status_request_id:
+		return
+	apply_patreon_status(result)
+
+
+func apply_patreon_status(value: Dictionary) -> void:
+	patreon_status = value.duplicate(true)
+	if selected_item_id == "patreon-supporter-preview":
+		_select_product(selected_item_id)
+
+
+func _patreon_status_key() -> String:
+	if not bool(patreon_status.get("success", false)):
+		return "ui.store.patreon.status_unknown"
+	if bool(patreon_status.get("manualRole", false)) and not bool(patreon_status.get("active", false)):
+		return "ui.store.patreon.status_manual_role"
+	if bool(patreon_status.get("connected", false)):
+		return (
+			"ui.store.patreon.status_active"
+			if bool(patreon_status.get("active", false))
+			else "ui.store.patreon.status_connected"
+		)
+	if not bool(patreon_status.get("available", false)):
+		return "ui.store.patreon.status_unavailable"
+	return "ui.store.patreon.status_not_connected"
+
+
+func _on_patreon_action_pressed() -> void:
+	if patreon_action_in_progress or not bool(patreon_status.get("success", false)):
+		return
+	if bool(patreon_status.get("connected", false)):
+		patreon_external_dialog.popup_centered()
+		return
+	if not bool(patreon_status.get("available", false)):
+		return
+	patreon_action_in_progress = true
+	var request_id := patreon_status_request_id
+	_refresh_purchase_state()
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	var locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
+	var auth_service := get_node_or_null("/root/AuthService")
+	var result: Dictionary = {"success": false}
+	if auth_service != null:
+		result = await auth_service.call("create_account_portal_launch", locale, "account")
+	if not is_inside_tree():
+		return
+	patreon_action_in_progress = false
+	if not visible or request_id != patreon_status_request_id:
+		return
+	if not bool(result.get("success", false)) or OS.shell_open(str(result.get("url", ""))) != OK:
+		status_label.text = _t("ui.store.patreon.open_failed")
+		_refresh_purchase_state(false)
+		return
+	_refresh_purchase_state()
+
+
+func _open_patreon_page() -> void:
+	if OS.shell_open(PATREON_PAGE_URL) != OK:
+		status_label.text = _t("ui.store.patreon.open_failed")
 
 
 func _create_balance_pill() -> Control:
@@ -1511,6 +1605,8 @@ func _category_has_available_items(category_id: String) -> bool:
 		for item: Dictionary in CATALOG:
 			var categories: Array = item.get("categories", [])
 			if categories.has(category_id):
+				if bool(item.get("informational", false)):
+					return true
 				item_ids.append(str(item.get("id", "")))
 	for item_id: String in item_ids:
 		if _gem_price(item_id) >= 0:
@@ -1652,7 +1748,9 @@ func _create_product_card(item: Dictionary) -> Button:
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var authoritative_price := _gem_price(item_id)
 	price.text = (
-		_t("ui.store.coming_later")
+		_t("ui.store.patreon.external_membership")
+		if bool(item.get("informational", false))
+		else _t("ui.store.coming_later")
 		if store_catalog_loaded and authoritative_price < 0
 		else "◆  %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
@@ -1677,6 +1775,11 @@ func _select_product(item_id: String) -> void:
 	selection_title_label.text = _item_name(item)
 	var description := _item_description(item)
 	var compatibility_note := _item_gender_compatibility_note(item)
+	selection_description_label.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_LEFT
+		if bool(item.get("informational", false)) or item_id.begins_with("aether-blessing-voucher-")
+		else HORIZONTAL_ALIGNMENT_CENTER
+	)
 	selection_description_label.text = (
 		"%s · %s" % [description, compatibility_note]
 		if compatibility_note != ""
@@ -1684,7 +1787,9 @@ func _select_product(item_id: String) -> void:
 	)
 	var authoritative_price := _gem_price(item_id)
 	selection_price_label.text = (
-		_t("ui.store.coming_later")
+		_t(_patreon_status_key())
+		if bool(item.get("informational", false))
+		else _t("ui.store.coming_later")
 		if store_catalog_loaded and authoritative_price < 0
 		else "◆ %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
@@ -2318,6 +2423,31 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		purchase_button.disabled = true
 		purchase_button.tooltip_text = _t("ui.store.purchase_select")
 		return
+	var selected_item := _catalog_item(selected_item_id)
+	if bool(selected_item.get("informational", false)):
+		var connected := bool(patreon_status.get("connected", false))
+		purchase_button.disabled = patreon_action_in_progress or not bool(patreon_status.get("success", false)) or (
+			not connected and not bool(patreon_status.get("available", false))
+		)
+		purchase_button.text = _t(
+			"ui.store.patreon.opening" if patreon_action_in_progress
+			else "ui.store.patreon.manage" if connected and bool(patreon_status.get("active", false))
+			else "ui.store.patreon.view" if connected
+			else "ui.store.patreon.connect" if bool(patreon_status.get("success", false))
+			else "ui.store.patreon.status_unknown"
+		)
+		purchase_button.tooltip_text = _t(
+			"ui.store.patreon.external_tooltip" if connected else "ui.store.patreon.portal_tooltip"
+		)
+		if update_status:
+			status_label.text = _t(
+				"ui.store.patreon.status_error_hint"
+				if not bool(patreon_status.get("success", false))
+				else "ui.store.patreon.benefits_pending_short"
+				if not bool(patreon_status.get("benefitsEnabled", false))
+				else _patreon_status_key()
+			)
+		return
 	if store_catalog_loading or not store_catalog_loaded:
 		purchase_button.disabled = true
 		purchase_button.tooltip_text = _t("ui.store.status.loading_short")
@@ -2357,6 +2487,9 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 
 func _on_purchase_pressed() -> void:
 	if selected_item_id == "" or purchase_button.disabled:
+		return
+	if selected_item_id == "patreon-supporter-preview":
+		_on_patreon_action_pressed()
 		return
 	set_purchase_in_progress(true)
 	purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())
@@ -2555,6 +2688,9 @@ func _format_number(value: int) -> String:
 
 
 func _item_name(item: Dictionary) -> String:
+	var name_key := str(item.get("name_key", ""))
+	if name_key != "":
+		return _t(name_key)
 	var item_id := str(item.get("id", item.get("itemId", "")))
 	var fallback := str(item.get("name", _t("ui.store.item")))
 	var item_localization := get_node_or_null("/root/ItemLocalization")
@@ -2564,12 +2700,31 @@ func _item_name(item: Dictionary) -> String:
 
 
 func _item_description(item: Dictionary) -> String:
+	var description_key := str(item.get("description_key", ""))
+	if description_key != "":
+		var description := _t(description_key)
+		if bool(item.get("informational", false)):
+			description += "\n" + _t("ui.store.patreon.extras")
+			if bool(patreon_status.get("manualRole", false)):
+				description += "\n" + _t("ui.store.patreon.manual_grant_note")
+			if not bool(patreon_status.get("benefitsEnabled", false)):
+				description += "\n" + _t("ui.store.patreon.benefits_pending")
+		return description
 	var item_id := str(item.get("id", item.get("itemId", "")))
+	if item_id.begins_with("aether-blessing-voucher-"):
+		return _t("ui.store.blessing.voucher_intro") + "\n" + _blessing_benefits_description()
 	var fallback := str(item.get("description", ""))
 	var item_localization := get_node_or_null("/root/ItemLocalization")
 	if item_localization == null:
 		return fallback
 	return str(item_localization.call("short_description", item_id, fallback))
+
+
+func _blessing_benefits_description() -> String:
+	var benefits: Array[String] = []
+	for benefit in ["shiny", "travel", "anchor", "shops", "badge"]:
+		benefits.append("• " + _t("ui.store.blessing.benefit.%s" % benefit))
+	return "\n".join(benefits)
 
 
 func _category_text(category_id: String, field: String) -> String:
@@ -2613,6 +2768,9 @@ func _t(key: String, values: Dictionary = {}) -> String:
 
 
 func _on_locale_changed(_locale: String) -> void:
+	if patreon_external_dialog != null:
+		patreon_external_dialog.title = _t("ui.store.patreon.external_title")
+		patreon_external_dialog.dialog_text = _t("ui.store.patreon.external_confirm")
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	if localization_manager != null:
 		localization_manager.call("localize_tree", self)
