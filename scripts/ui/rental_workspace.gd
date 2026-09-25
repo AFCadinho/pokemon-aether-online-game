@@ -1448,13 +1448,15 @@ func _place_bulk_group(batch_id: String) -> void:
 		status.text = str(current.get("error", "Could not load your current party."))
 		return
 	var outgoing: Array[Dictionary] = []
+	var previous_party: Array[Dictionary] = []
 	for member: Dictionary in current.get("party", []):
+		previous_party.append(member)
 		var owned_id := int(member.get("ownedPokemonId", member.get("pokemonId", member.get("id", 0))))
 		if owned_id <= 0 or not incoming_ids.has(owned_id):
 			outgoing.append(member)
-	await _mutate("/pokemon/bulk/%s/party" % batch_id, {}, "Place this rental group in your party? Current party Pokémon shown below move to the PC. This requires enough PC space.", incoming, outgoing)
+	await _mutate("/pokemon/bulk/%s/party" % batch_id, {}, "Place this rental group in your party? Current party Pokémon shown below move to the PC. This requires enough PC space.", incoming, outgoing, previous_party)
 
-func _mutate(path: String, payload: Dictionary, message: String, incoming: Array[Dictionary] = [], outgoing: Array[Dictionary] = []) -> void:
+func _mutate(path: String, payload: Dictionary, message: String, incoming: Array[Dictionary] = [], outgoing: Array[Dictionary] = [], previous_party: Array[Dictionary] = []) -> void:
 	if busy:
 		return
 	busy = true
@@ -1486,9 +1488,81 @@ func _mutate(path: String, payload: Dictionary, message: String, incoming: Array
 			if str(entry[0]) == "PlayerWalletService" and target.has_method("apply_wallet_result"):
 				target.call("apply_wallet_result", updated)
 	await refresh()
+	if path.begins_with("/pokemon/bulk/") and path.ends_with("/party"):
+		await _announce_party_swap(previous_party, result.get("body", {}))
 	if path == "/pokemon/bulk" and workspace_tabs != null:
 		workspace_tabs.current_tab = 1
 	status.text = "Done. Your Pokémon, wallet and rentals are up to date."
+
+func _announce_party_swap(previous_party: Array[Dictionary], response_body: Dictionary) -> void:
+	var boxes: Array = []
+	var new_party: Array = response_body.get("party", [])
+	var new_ids := {}
+	for member: Dictionary in new_party:
+		new_ids[_rental_owned_id(member)] = true
+	var has_displaced_pokemon := previous_party.any(func(member: Dictionary): return not new_ids.has(_rental_owned_id(member)))
+	if has_displaced_pokemon:
+		var storage := get_node_or_null("/root/PokemonStorageService")
+		if storage != null:
+			var box_result: Dictionary = await storage.call("load_boxes")
+			if bool(box_result.get("success", false)):
+				boxes = box_result.get("boxes", [])
+	for message: String in _party_swap_messages(previous_party, new_party, boxes):
+		get_tree().call_group("ui_overlay", "add_system_message", message)
+
+func _party_swap_messages(previous_party: Array[Dictionary], new_party: Array, boxes: Array) -> Array[String]:
+	var messages: Array[String] = []
+	var previous_ids := {}
+	var new_ids := {}
+	for member: Dictionary in previous_party:
+		previous_ids[_rental_owned_id(member)] = true
+	for member: Dictionary in new_party:
+		new_ids[_rental_owned_id(member)] = true
+	for member: Dictionary in previous_party:
+		if new_ids.has(_rental_owned_id(member)):
+			continue
+		messages.append(_rental_text("ui.rental.party_swap.to_pc", {
+			"pokemon": _rental_pokemon_name(member),
+			"location": _rental_box_location(boxes, _rental_owned_id(member)),
+		}))
+	for index: int in range(new_party.size()):
+		var member: Dictionary = new_party[index]
+		if previous_ids.has(_rental_owned_id(member)):
+			continue
+		messages.append(_rental_text("ui.rental.party_swap.to_party", {
+			"pokemon": _rental_pokemon_name(member),
+			"location": _rental_text("ui.storage.location.party_slot", {"number": index + 1}),
+		}))
+	return messages
+
+func _rental_owned_id(member: Dictionary) -> int:
+	return int(member.get("ownedPokemonId", member.get("pokemonId", member.get("id", 0))))
+
+func _rental_pokemon_name(member: Dictionary) -> String:
+	var nickname := str(member.get("nickname", "")).strip_edges()
+	if not nickname.is_empty():
+		return nickname
+	var species := str(member.get("speciesId", member.get("species", ""))).strip_edges()
+	var fallback := str(member.get("displaySpecies", member.get("species", "Pokémon"))).strip_edges()
+	if fallback.is_empty():
+		fallback = "Pokémon"
+	var localizer := get_node_or_null("/root/ContentLocalization")
+	return str(localizer.call("display_name", "species", species, fallback)) if localizer != null else fallback
+
+func _rental_box_location(boxes: Array, pokemon_id: int) -> String:
+	for box: Dictionary in boxes:
+		for slot: Dictionary in box.get("slots", []):
+			var pokemon: Dictionary = slot.get("pokemon", {})
+			if int(pokemon.get("id", 0)) == pokemon_id:
+				return _rental_text("ui.storage.location.box_slot", {
+					"box": int(slot.get("boxIndex", box.get("boxIndex", 0))) + 1,
+					"slot": int(slot.get("slotIndex", 0)) + 1,
+				})
+	return _rental_text("ui.rental.party_swap.pc")
+
+func _rental_text(key: String, values: Dictionary = {}) -> String:
+	var localizer := get_node_or_null("/root/LocalizationManager")
+	return str(localizer.call("text", key, values)) if localizer != null else key
 
 func _add_party_swap_preview(confirm: AetherConfirmationDialog, incoming: Array[Dictionary], outgoing: Array[Dictionary]) -> void:
 	var hover := PARTY_HOVER_CARD.instantiate() as PartyHoverCard

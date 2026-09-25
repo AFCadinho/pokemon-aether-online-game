@@ -226,6 +226,16 @@ func _run() -> void:
 	assert(swap_hover.current_pokemon_data.get("species") == "Charmander")
 	(outgoing_icons.get_child(0) as TextureRect).mouse_exited.emit()
 	assert(not swap_hover.visible)
+	var previous_party: Array[Dictionary] = [{"ownedPokemonId": 10, "species": "Charmander"}, {"ownedPokemonId": 20, "species": "Scizor"}]
+	var next_party: Array = [{"ownedPokemonId": 30, "species": "Dragonite"}, {"ownedPokemonId": 20, "species": "Scizor"}]
+	var boxes: Array = [{"boxIndex": 1, "slots": [{"boxIndex": 1, "slotIndex": 4, "pokemon": {"id": 10}}]}]
+	var swap_messages := bulk_workspace._party_swap_messages(previous_party, next_party, boxes)
+	assert(swap_messages.size() == 2)
+	assert(swap_messages[0].contains("Charmander") and swap_messages[0].contains("Box 2") and swap_messages[0].contains("slot 5"))
+	assert(swap_messages[1].contains("Dragonite") and swap_messages[1].contains("party slot 1"))
+	assert(not swap_messages.any(func(value: String): return value.contains("Scizor")))
+	var unknown_box := bulk_workspace._party_swap_messages(previous_party, next_party, [])
+	assert(unknown_box[0].contains("your PC") and not unknown_box[0].contains("slot"))
 	swap_dialog.queue_free()
 	assert(bulk_workspace.pokemon_source.is_tab_hidden(1))
 	assert(bulk_workspace.pokemon_source.get_tab_title(0) == "Paste 2–6 sets")
