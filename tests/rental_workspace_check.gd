@@ -272,7 +272,12 @@ func _run() -> void:
 		{"loanId": "bulk-two", "context": "npc_pokemon", "status": "active", "rental": {"batchId": "batch-test", "batchSize": 2}, "assets": []},
 	]
 	bulk_workspace._render_active()
-	assert(bulk_workspace.active_list.get_node("PlaceRentalGroup-batch-test") != null)
+	var group_actions := bulk_workspace.active_list.get_node("RentalGroupActions-batch-test") as HBoxContainer
+	assert(group_actions.get_child_count() == 2)
+	assert(group_actions.get_node("PlaceRentalGroup-batch-test").text == "Place 2 rented Pokémon in party")
+	assert(group_actions.get_node("ReturnRentalGroup-batch-test").text == "Return all")
+	assert((group_actions.get_child(0) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL)
+	assert((group_actions.get_child(1) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL)
 	var long_paste := ""
 	for index: int in range(6):
 		long_paste += "Dragonite %d @ Leftovers\nAbility: Multiscale\nTera Type: Flying\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Dragon Dance\n- Extreme Speed\n- Earthquake\n- Fire Punch\n\n" % index

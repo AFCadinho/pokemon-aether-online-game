@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De actieve PokéPaste-groep heeft nu naast de partyknop een knop om alle groepsrentals na één bevestiging samen in te leveren.
+
 - De Blessings-tab toont voucher- en Patreon-voordelen als korte, leesbare regels. Een mislukte Patreon-accountcontrole wordt nu onderscheiden van een niet-beschikbaar lidmaatschap.
 
 - Na het plaatsen van een gehuurde Pokémon-groep melden systeemberichten per Pokémon welk teamvak of welk PC-boxvak deze heeft gekregen.

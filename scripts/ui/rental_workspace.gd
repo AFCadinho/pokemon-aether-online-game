@@ -1156,12 +1156,28 @@ func _render_active() -> void:
 		var group: Array = groups[batch_id]
 		if group.size() != int((group[0] as Dictionary).get("rental", {}).get("batchSize", 0)):
 			continue
+		var actions := HBoxContainer.new()
+		actions.name = "RentalGroupActions-%s" % batch_id
+		actions.add_theme_constant_override("separation", 8)
+		active_list.add_child(actions)
 		var place_button := Button.new()
 		place_button.name = "PlaceRentalGroup-%s" % batch_id
-		place_button.text = "Place %d rented Pokémon in party (current party to PC)" % group.size()
+		place_button.text = "Place %d rented Pokémon in party" % group.size()
+		place_button.tooltip_text = "Current party Pokémon move to the PC"
+		place_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		place_button.pressed.connect(_place_bulk_group.bind(batch_id))
 		_style_button(place_button, true)
-		active_list.add_child(place_button)
+		actions.add_child(place_button)
+		var return_all := Button.new()
+		return_all.name = "ReturnRentalGroup-%s" % batch_id
+		return_all.text = "Return all"
+		return_all.tooltip_text = "Return all %d rentals in this group without a refund" % group.size()
+		return_all.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return_all.pressed.connect(_return_bulk_group.bind(batch_id, group.size()))
+		_style_button(return_all, false)
+		return_all.add_theme_stylebox_override("normal", _control_style(Color("#291820"), Color("#8f5261")))
+		return_all.add_theme_stylebox_override("hover", _control_style(Color("#3a202a"), Color("#d57b8e")))
+		actions.add_child(return_all)
 	var grid := GridContainer.new()
 	grid.name = "ActivePokemonRentalGrid"
 	grid.columns = 3
@@ -1455,6 +1471,9 @@ func _place_bulk_group(batch_id: String) -> void:
 		if owned_id <= 0 or not incoming_ids.has(owned_id):
 			outgoing.append(member)
 	await _mutate("/pokemon/bulk/%s/party" % batch_id, {}, "Place this rental group in your party? Current party Pokémon shown below move to the PC. This requires enough PC space.", incoming, outgoing, previous_party)
+
+func _return_bulk_group(batch_id: String, count: int) -> void:
+	await _mutate("/pokemon/bulk/%s/return" % batch_id, {}, "Return all %d Pokémon in this rental group now?\n\nNo Aetherite will be refunded. This cannot be undone." % count)
 
 func _mutate(path: String, payload: Dictionary, message: String, incoming: Array[Dictionary] = [], outgoing: Array[Dictionary] = [], previous_party: Array[Dictionary] = []) -> void:
 	if busy:
