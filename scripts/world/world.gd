@@ -404,7 +404,7 @@ func _append_first_web_sprite_entry_from_value(
 	var data := value as Dictionary
 	var species := str(data.get("displaySpecies", data.get("species", ""))).strip_edges()
 	if species != "":
-		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		var shiny := _is_web_sprite_flag_set(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
 		for side: String in sides:
 			_append_web_sprite_entry(species, side, shiny, entries, seen)
 		return true
@@ -425,14 +425,20 @@ func _append_active_web_sprite_entries_from_value(
 	if not (value is Dictionary):
 		return
 	var data := value as Dictionary
-	if bool(data.get("active", false)):
+	if _is_web_sprite_flag_set(data.get("active", false)):
 		var species := str(data.get("displaySpecies", data.get("species", ""))).strip_edges()
-		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		var shiny := _is_web_sprite_flag_set(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
 		for side: String in sides:
 			_append_web_sprite_entry(species, side, shiny, entries, seen)
 	for child_value: Variant in data.values():
 		if child_value is Array or child_value is Dictionary:
 			_append_active_web_sprite_entries_from_value(child_value, sides, entries, seen)
+
+
+func _is_web_sprite_flag_set(value: Variant) -> bool:
+	if not (value is bool):
+		return false
+	return value
 
 
 func _append_web_sprite_entries_from_value(
@@ -451,7 +457,7 @@ func _append_web_sprite_entries_from_value(
 		if species != "":
 			break
 	if species != "":
-		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		var shiny := _is_web_sprite_flag_set(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
 		for side: String in sides:
 			_append_web_sprite_entry(species, side, shiny, entries, seen)
 	for child_value: Variant in data.values():

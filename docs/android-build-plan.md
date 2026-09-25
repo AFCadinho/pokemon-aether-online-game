@@ -12,10 +12,14 @@ caused an Android script compile error; the lazy-load fix removed that error in
 the second device run. Initial fixed touch controls moved the player, but
 overlapped chat. The floating joystick and world-tap prototype now also runs
 on the phone: movement, interaction, chat and UI buttons were confirmed by the
-device tester. Current gaps: small text and window controls, music excluded
-from the prototype APK, and broader touch coverage for dialogue, battles and
-different aspect ratios. This is not yet a player release or a full mobile UI
-validation.
+device tester. A 1.25x mobile content scale, larger quick actions, global buff
+buttons and chat controls, and touch-specific dialogue input are in the device
+build. The tester confirmed a multi-line NPC dialogue and a wild battle. The
+left party rail and battle log fit beneath each other, and the post-battle
+Android log has no sprite-loading script errors. Current gaps: music excluded
+from the prototype APK, Android keyboard and safe-area behavior, deeper touch
+coverage across battle menus, and different aspect ratios. This is not yet a
+player release or a full mobile UI validation.
 
 The original July estimates and store-related options below are historical.
 Android V1 uses direct APK distribution and must detect and download a newer
@@ -815,15 +819,17 @@ Consider public support only after:
 - [x] Android SDK and JDK configured locally in slot A.
 - [x] Android export templates installed in slot A.
 - [x] Android export preset added.
-- [x] ARM64 debug APK exported; device installation remains open.
-- [ ] Compatibility rendering validated.
-- [ ] Desktop window behavior excluded on mobile.
+- [x] ARM64 debug APK exported and installed on the first test phone.
+- [x] Compatibility rendering displayed login, overworld and a wild battle on
+      the first phone; detailed battle touch coverage remains open.
+- [x] Desktop window resizing and display settings are excluded on mobile.
 
 ### Controls and layout
 
-- [ ] Mobile control scene added.
+- [x] Mobile control scene added and tested on the first phone.
 - [ ] Multitouch movement and interaction work.
-- [ ] Input is released on hide and pause.
+- [x] Focus loss, pause, battle entry and dialogue entry release held movement
+      in focused tests; physical backgrounding remains to be tested.
 - [ ] Safe-area margins implemented.
 - [ ] Android back behavior implemented.
 - [ ] Software keyboard behavior validated.

@@ -3,11 +3,15 @@ extends Node
 const DESIGN_WINDOW_SIZE := Vector2i(1920, 1080)
 const MIN_WINDOW_SIZE := Vector2i(1280, 720)
 const WINDOWED_SAFE_MARGIN := Vector2i(80, 128)
+const MOBILE_CONTENT_SCALE_FACTOR := 1.25
 
 func _ready() -> void:
 	# Fill the window while retaining a uniform UI/world transform.
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
-	if OS.has_feature("web") or OS.has_feature("mobile"):
+	if OS.has_feature("mobile"):
+		get_window().content_scale_factor = MOBILE_CONTENT_SCALE_FACTOR
+		return
+	if OS.has_feature("web"):
 		return
 
 	call_deferred("_fit_window_to_screen")

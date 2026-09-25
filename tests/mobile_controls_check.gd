@@ -1,5 +1,8 @@
 extends SceneTree
 
+class FakeDialogueBox extends Control:
+	var is_open := false
+
 var failures := 0
 
 
@@ -17,6 +20,12 @@ func _run() -> void:
 	battle_host.name = "BattleUIHost"
 	battle_host.hide()
 	battle_layer.add_child(battle_host)
+	var dialogue_layer := CanvasLayer.new()
+	dialogue_layer.name = "DialogueBox"
+	world.add_child(dialogue_layer)
+	var dialogue_box := FakeDialogueBox.new()
+	dialogue_box.name = "Box"
+	dialogue_layer.add_child(dialogue_box)
 	var layer := load("res://scenes/interface/mobile/mobile_controls.tscn").instantiate() as CanvasLayer
 	world.add_child(layer)
 	var controls := layer.get_node("MobileControls") as Control
@@ -71,6 +80,15 @@ func _run() -> void:
 		"pausing Android releases held movement")
 	_send_touch(controls, 4, point + Vector2.DOWN * 85.0, false)
 	_check(not Input.is_action_pressed("interact"), "old touch release cannot interact after pause")
+
+	_send_touch(controls, 5, point, true)
+	_send_drag(controls, 5, point + Vector2.RIGHT * 85.0)
+	dialogue_box.is_open = true
+	controls._process(0.0)
+	_check(not Input.is_action_pressed("move_right") and int(controls.get("_joystick_index")) == -1,
+		"opening dialogue releases held world movement")
+	_send_touch(controls, 5, point + Vector2.RIGHT * 85.0, false)
+	_check(not Input.is_action_pressed("interact"), "old touch release cannot interact during dialogue")
 
 	world.queue_free()
 	await process_frame

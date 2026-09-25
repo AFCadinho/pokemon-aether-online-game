@@ -94,6 +94,9 @@ func _controls_available() -> bool:
 	var battle_host := get_node_or_null("../../BattleUILayer/BattleUIHost") as Control
 	if battle_host != null and battle_host.visible:
 		return false
+	var dialogue_box := get_node_or_null("../../DialogueBox/Box") as Control
+	if dialogue_box != null and dialogue_box.get("is_open") == true:
+		return false
 	var focus := get_viewport().gui_get_focus_owner()
 	return not (focus is LineEdit or focus is TextEdit)
 

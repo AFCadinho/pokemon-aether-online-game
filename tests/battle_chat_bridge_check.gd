@@ -72,6 +72,23 @@ func _run() -> void:
 	assert(bridge.log_view.get_theme_stylebox("normal").bg_color.a < 0.7)
 	assert(panel.get_theme_stylebox("panel").bg_color.a < 0.7)
 	assert(bridge.calculator_button.get_global_rect().end.y <= bridge.primary_tabs.get_global_rect().position.y)
+	bridge.mobile_layout_enabled = true
+	ui.size = Vector2(1536, 864)
+	host.size = ui.size
+	host._fit_battle()
+	for frame in 3:
+		await process_frame
+	bridge._refresh()
+	var party_rail := battle.get_node("%PlayerStagePartyRail") as Control
+	assert(bridge.calculator_button.get_global_rect().position.y >= party_rail.get_global_rect().end.y + 6.0,
+		"Mobile battle log controls must start below the final party slot")
+	assert(bridge.log_view.get_global_rect().end.y <= ui.get_global_rect().end.y,
+		"Shortened mobile battle log must stay within the screen")
+	bridge.mobile_layout_enabled = false
+	ui.size = Vector2(1920, 1080)
+	host.size = ui.size
+	host._fit_battle()
+	bridge._refresh()
 	battle.calc_drawer.show()
 	await process_frame
 	assert(not bridge.primary_tabs.visible and not bridge.log_view.visible and not panel.visible)
