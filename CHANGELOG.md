@@ -3,6 +3,7 @@
 ## Unreleased
 
 - De Android-proefbuild gebruikt liggende 2D-gevechten met de volledige battleweergave en laadt de normale geanimeerde Pokémon-sprites via de bestaande online assetroute.
+- De Android-wereldinterface laadt nu zonder afhankelijkheid van een uitgesloten desktopbestand voor lokale 3D-modelreview.
 
 - De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken als hun Kanto level cap 100 is.
 

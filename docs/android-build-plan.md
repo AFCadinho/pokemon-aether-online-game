@@ -5,6 +5,14 @@ Target: direct APK distribution from the PokeAether website, with Discord linkin
 Project baseline: Godot 4.6.2, shared client codebase
 Last updated: 2026-09-25
 
+Device smoke test (Samsung SM-G780F, Android 13): debug APK installed and
+launched, production server status loaded, login entered the world, and party
+buttons opened a Pokémon window. A missing desktop-only review JSON initially
+caused an Android script compile error; the lazy-load fix removed that error in
+the second device run. Current gaps: no touch movement controls, small text and
+window controls, and music excluded from the prototype APK. This is not yet a
+player release or a full mobile UI validation.
+
 The original July estimates and store-related options below are historical.
 Android V1 uses direct APK distribution and must detect and download a newer
 APK in-app. Android may still require the player to confirm installation.
@@ -199,11 +207,11 @@ Estimated effort: 1-2 focused development days.
 ### Acceptance criteria
 
 - [x] A debug ARM64 APK exports successfully; release signing remains open.
-- [ ] The APK installs with `adb install`.
-- [ ] The app starts without a native or Godot crash.
-- [ ] The login screen fills a landscape phone display correctly.
-- [ ] The production health/API endpoint is reachable.
-- [ ] Login succeeds on a physical Android device.
+- [x] The debug APK installs with `adb install` on the first test phone.
+- [x] The app starts without a native or Godot crash on that phone.
+- [ ] The login screen is readable at a comfortable phone scale.
+- [x] The production health/API endpoint is reachable.
+- [x] Login succeeds on the first physical Android device.
 - [ ] Windows, Linux and macOS export behavior is unchanged.
 
 ## 5. Milestone B: Mobile control layer
