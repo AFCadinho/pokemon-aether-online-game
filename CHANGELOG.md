@@ -4,7 +4,7 @@
 
 ### Player Lending
 
-- Lending offers to browser players now show clear feedback and are rejected by the server.
+- You now see a clear message when trying to lend a Pokémon to someone playing in the browser.
 
 ### Pokémon Rental
 
