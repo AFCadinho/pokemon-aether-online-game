@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive 2D Adventure Party double battles now space the two Pokémon pairs across separate battlefield platforms.
+
 - Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser; Classic remains available for single battles.
 
 - De visuals van de Aether Clash-lobby zijn bijgewerkt voor de desktop- en browserclient.

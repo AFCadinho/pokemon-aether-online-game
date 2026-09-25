@@ -155,9 +155,15 @@ func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float
 func _compose_sprite_battle(stage: Control) -> void:
 	# Move/scale each complete sprite box and platform together. Sprite-local
 	# grounding, attack motion, substitutes and platform hazards stay unchanged.
-	var factor := 0.82
+	# Doubles needs two distinct fields with room for both Pokémon on each side.
+	# This path runs only while the realtime 3D presenter is inactive.
+	var factor := 0.72 if battle.coop_mode else 0.82
 	for index in 2:
-		var center := Vector2(stage.size.x * (0.38 if index == 0 else 0.65), stage.size.y * (0.59 if index == 0 else 0.46))
+		var center: Vector2
+		if battle.coop_mode:
+			center = Vector2(stage.size.x * (0.32 if index == 0 else 0.68), stage.size.y * (0.60 if index == 0 else 0.45))
+		else:
+			center = Vector2(stage.size.x * (0.38 if index == 0 else 0.65), stage.size.y * (0.59 if index == 0 else 0.46))
 		var platform: Control = battle.player_battle_platform if index == 0 else battle.enemy_battle_platform
 		var box: Control = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
 		var platform_origin := center - Vector2(250,150) * factor
