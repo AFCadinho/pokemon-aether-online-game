@@ -122,6 +122,8 @@ func _check_sources() -> void:
 	_check(world_source.contains("content_creator_photo_mode.tscn"), "World owns the photo mode layer")
 	_check(overlay_source.contains("content_creator_photo_mode_button"), "Creator menu exposes Photo Mode")
 	_check(overlay_source.contains("content_creator_tools_popup"), "Content Creator Tools owns a separate popup")
+	_check(overlay_source.contains('"ui.staff.creator.create_pokemon"') and overlay_source.contains('"ui.staff.creator.remove_pokemon"'), "Creator menu exposes create and remove actions")
+	_check(overlay_source.contains("PlayerPartyStateService.list_content_creator_pokemon()") and overlay_source.contains("PlayerPartyStateService.remove_content_creator_pokemon(pokemon_id)"), "Creator menu checks current Pokemon and removes the selected one")
 	_check(overlay_source.contains("alpha_tools_popup"), "Alpha Tools keeps its separate popup")
 	_check(
 		overlay_source.contains("alpha_reset_game_button = _add_gameplay_reset_button("),
@@ -131,8 +133,8 @@ func _check_sources() -> void:
 	_check(overlay_scene_source.contains('[node name="AlphaToolsSlot"'), "Alpha Tools has its own action slot")
 	_check(overlay_scene_source.contains("assets/ui/content_creator.svg"), "Content Creator Tools uses its own icon")
 	_check(
-		overlay_source.contains("content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode"),
-		"Content Creator Tools visibility uses the Photo Mode permission"
+		overlay_source.contains("content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools_here"),
+		"Content Creator Tools visibility uses creator permissions"
 	)
 	_check(
 		overlay_source.contains("alpha_tools_slot.visible = can_show_staff_action_bar and can_generate_alpha_aetherite"),
