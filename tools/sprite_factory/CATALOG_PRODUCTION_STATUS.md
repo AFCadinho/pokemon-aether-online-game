@@ -76,6 +76,9 @@ converter was exercised directly instead. No full development gate was run.
 
 Next active work is visual review/admission of these 18 candidates using the
 existing workflow, not storage research or perfection of the blocked seven.
+The [batch 01 static screening handoff](CATALOG_PRODUCTION_BATCH_01_REVIEW.md)
+confirms retained SCN hashes and previews and records per-model moving-review
+focus. It does not change any visual or runtime approval.
 
 ### Local preview admission (not battle approval)
 
