@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken na het vrijspelen van de Kanto level cap van 100.
+- De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken als hun Kanto level cap 100 is.
 
 - Alpha Tools toont het Aetherite-bedrag nu in een klein venster na een klik op Generate Aetherite, zodat het hoofdmenu compact blijft.
 
