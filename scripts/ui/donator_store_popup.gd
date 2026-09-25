@@ -2702,7 +2702,7 @@ func _item_name(item: Dictionary) -> String:
 func _item_description(item: Dictionary) -> String:
 	var description_key := str(item.get("description_key", ""))
 	if description_key != "":
-		var description := _t(description_key) + "\n" + _blessing_benefits_description()
+		var description := _t(description_key)
 		if bool(item.get("informational", false)):
 			description += "\n" + _t("ui.store.patreon.extras")
 			if bool(patreon_status.get("manualRole", false)):
@@ -2723,7 +2723,7 @@ func _item_description(item: Dictionary) -> String:
 func _blessing_benefits_description() -> String:
 	var benefits: Array[String] = []
 	for benefit in ["shiny", "travel", "anchor", "shops", "badge"]:
-		benefits.append("• " + _t("ui.membership.aether_blessing.benefit.%s" % benefit))
+		benefits.append("• " + _t("ui.store.blessing.benefit.%s" % benefit))
 	return "\n".join(benefits)
 
 

@@ -512,7 +512,7 @@ func _init() -> void:
 		donator_store_script_source.contains('"membership": "Blessings"')
 		and donator_store_script_source.contains('"membership": "5% SHINY · TRAVEL · NPC SHOPS"')
 		and donator_store_script_source.contains("_blessing_benefits_description()")
-		and donator_store_script_source.contains("ui.membership.aether_blessing.benefit.%s")
+		and donator_store_script_source.contains("ui.store.blessing.benefit.%s")
 		and donator_store_script_source.contains("ui.store.blessing.voucher_intro"),
 		"Blessings show the shared localized benefit list instead of stale catalog copy"
 	)
