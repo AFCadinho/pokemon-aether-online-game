@@ -1785,21 +1785,27 @@ func _try_toggle_land_mount_input() -> bool:
 		return false
 	if _is_ui_typing():
 		return false
+	request_land_mount_toggle()
+	return true
+
+
+func request_land_mount_toggle() -> bool:
 	if is_moving or fishing_activity_active or surf_activity_active \
 		or GameState.is_overworld_input_locked():
+		return false
+	if toggle_land_mount():
 		return true
-	if not toggle_land_mount():
-		var message_key := "ui.mounts.interior_blocked" \
-			if _get_current_map_world_access_area_type() == "interior" \
-			else "ui.mounts.license_required" \
-			if not _has_mount_license_for_current_region() \
-			else "ui.mounts.unavailable"
-		get_tree().call_group(
-			"ui_overlay",
-			"add_system_message",
-			LocalizationManager.text(message_key)
-		)
-	return true
+	var message_key := "ui.mounts.interior_blocked" \
+		if _get_current_map_world_access_area_type() == "interior" \
+		else "ui.mounts.license_required" \
+		if not _has_mount_license_for_current_region() \
+		else "ui.mounts.unavailable"
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text(message_key)
+	)
+	return false
 
 
 func _show_surf_unavailable_feedback(surf_check: Dictionary) -> void:

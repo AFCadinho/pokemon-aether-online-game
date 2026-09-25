@@ -608,6 +608,8 @@
   "ui.mounts.land": "Land",
   "ui.mounts.surf": "Surf",
   "ui.mounts.none_selected": "Niet geselecteerd",
+  "ui.mounts.ride": "Opstappen",
+  "ui.mounts.dismount": "Afstappen",
   "ui.mounts.choose": "Kies een {type}-mount",
   "ui.mounts.search": "Zoek mounts",
   "ui.mounts.no_search_results": "Geen mounts gevonden voor je zoekopdracht.",

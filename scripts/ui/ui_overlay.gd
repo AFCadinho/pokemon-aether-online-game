@@ -11362,6 +11362,17 @@ func _setup_mount_loadout_panel() -> void:
 	mount_loadout_panel.z_index = UI_ACTIVE_Z_INDEX
 	root_control.add_child(mount_loadout_panel)
 	mount_loadout_panel.visibility_changed.connect(_on_mount_manager_visibility_changed)
+	mount_loadout_panel.connect("land_mount_toggle_requested", _on_land_mount_toggle_requested)
+
+
+func _on_land_mount_toggle_requested() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null or not player.has_method("request_land_mount_toggle"):
+		return
+	if bool(player.call("request_land_mount_toggle")):
+		mount_loadout_panel.call("close_manager")
+	else:
+		mount_loadout_panel.call("refresh_mount_action")
 
 
 func _on_mount_button_pressed() -> void:

@@ -2,6 +2,8 @@ extends Control
 
 class_name MountLoadoutPanel
 
+signal land_mount_toggle_requested
+
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 
 const PANEL_BACKGROUND := Color("#050b14ed")
@@ -19,6 +21,7 @@ const SELECTOR_LIST_HEIGHT := 132.0
 var slots_panel: PanelContainer
 var title_label: Label
 var manager_close_button: Button
+var mount_action_button: Button
 var slot_buttons: Dictionary = {}
 var selector_panel: PanelContainer
 var selector_title_label: Label
@@ -87,6 +90,7 @@ func toggle_manager() -> void:
 func open_manager() -> void:
 	_close_selector()
 	_refresh_slots()
+	refresh_mount_action()
 	visible = true
 	_load_mount_ownership.call_deferred()
 
@@ -101,10 +105,14 @@ func is_manager_open() -> bool:
 
 
 func _build_interface() -> void:
+	var mobile_actions := OS.has_feature("mobile")
+	if mobile_actions:
+		custom_minimum_size.y = 470.0
+		size.y = 470.0
 	slots_panel = PanelContainer.new()
 	slots_panel.name = "SlotsPanel"
 	slots_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	slots_panel.offset_bottom = 132.0
+	slots_panel.offset_bottom = 182.0 if mobile_actions else 132.0
 	slots_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var main_style := _make_panel_style(PANEL_BACKGROUND, PANEL_BORDER, 12, 1)
 	main_style.content_margin_left = 0.0
@@ -200,11 +208,27 @@ func _build_interface() -> void:
 		button.pressed.connect(_open_selector.bind(movement_mode))
 		slot_row.add_child(button)
 		slot_buttons[movement_mode] = button
+	if mobile_actions:
+		mount_action_button = Button.new()
+		mount_action_button.name = "MountActionButton"
+		mount_action_button.custom_minimum_size.y = 44.0
+		mount_action_button.focus_mode = Control.FOCUS_NONE
+		mount_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		mount_action_button.add_theme_font_size_override("font_size", 15)
+		mount_action_button.add_theme_stylebox_override(
+			"normal", _make_panel_style(SLOT_SELECTED_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
+		)
+		mount_action_button.add_theme_stylebox_override(
+			"hover", _make_panel_style(SLOT_HOVER_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
+		)
+		mount_action_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		mount_action_button.pressed.connect(_on_mount_action_pressed)
+		content.add_child(mount_action_button)
 
 	selector_panel = PanelContainer.new()
 	selector_panel.name = "SelectorPanel"
 	selector_panel.visible = false
-	selector_panel.position = Vector2(0, 140)
+	selector_panel.position = Vector2(0, 190 if mobile_actions else 140)
 	selector_panel.custom_minimum_size = Vector2(272, 0)
 	selector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	selector_panel.z_index = 5
@@ -307,6 +331,7 @@ func _refresh_localized_content() -> void:
 	selector_search_input.placeholder_text = _text("ui.mounts.search")
 	selector_close_button.tooltip_text = _text("common.close")
 	_refresh_slots()
+	refresh_mount_action()
 	if selector_panel.visible and active_mode != "":
 		_populate_selector(active_mode)
 
@@ -433,6 +458,21 @@ func _select_mount(movement_mode: String, mount_id: String) -> void:
 		settings_manager.call("set_selected_mount_id", movement_mode, mount_id)
 	):
 		_close_selector()
+		refresh_mount_action()
+
+
+func _on_mount_action_pressed() -> void:
+	land_mount_toggle_requested.emit()
+
+
+func refresh_mount_action() -> void:
+	if mount_action_button == null:
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	var riding := player != null and player.has_method("is_land_mount_activity_active") \
+		and bool(player.call("is_land_mount_activity_active"))
+	mount_action_button.text = _text("ui.mounts.dismount" if riding else "ui.mounts.ride")
+	mount_action_button.disabled = player == null or (not riding and _get_selected_mount_id("land") == "")
 
 
 func _close_selector() -> void:
@@ -442,6 +482,7 @@ func _close_selector() -> void:
 
 func _on_mount_loadout_changed(_movement_mode: String, _mount_id: String) -> void:
 	_refresh_slots()
+	refresh_mount_action()
 
 
 func _on_locale_changed(_locale: String) -> void:
@@ -466,6 +507,7 @@ func _on_inventory_changed(items: Array) -> void:
 		if not item_id.is_empty() and item_id not in owned_item_ids:
 			owned_item_ids.append(item_id)
 	_refresh_slots()
+	refresh_mount_action()
 	if selector_panel != null and selector_panel.visible and not active_mode.is_empty():
 		_populate_selector(active_mode)
 

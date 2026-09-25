@@ -608,6 +608,8 @@
   "ui.mounts.land": "Land",
   "ui.mounts.surf": "Surf",
   "ui.mounts.none_selected": "Not selected",
+  "ui.mounts.ride": "Ride selected mount",
+  "ui.mounts.dismount": "Dismount",
   "ui.mounts.choose": "Choose {type} mount",
   "ui.mounts.search": "Search mounts",
   "ui.mounts.no_search_results": "No mounts match your search.",

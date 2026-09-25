@@ -591,6 +591,8 @@
   "ui.mounts.land": "Terra",
   "ui.mounts.surf": "Surfe",
   "ui.mounts.none_selected": "Não selecionada",
+  "ui.mounts.ride": "Montar",
+  "ui.mounts.dismount": "Desmontar",
   "ui.mounts.choose": "Escolher montaria de {type}",
   "ui.mounts.search": "Buscar montarias",
   "ui.mounts.no_search_results": "Nenhuma montaria corresponde à busca.",
