@@ -105,14 +105,10 @@ func is_manager_open() -> bool:
 
 
 func _build_interface() -> void:
-	var mobile_actions := OS.has_feature("mobile")
-	if mobile_actions:
-		custom_minimum_size.y = 470.0
-		size.y = 470.0
 	slots_panel = PanelContainer.new()
 	slots_panel.name = "SlotsPanel"
 	slots_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	slots_panel.offset_bottom = 182.0 if mobile_actions else 132.0
+	slots_panel.offset_bottom = 182.0
 	slots_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var main_style := _make_panel_style(PANEL_BACKGROUND, PANEL_BORDER, 12, 1)
 	main_style.content_margin_left = 0.0
@@ -208,27 +204,26 @@ func _build_interface() -> void:
 		button.pressed.connect(_open_selector.bind(movement_mode))
 		slot_row.add_child(button)
 		slot_buttons[movement_mode] = button
-	if mobile_actions:
-		mount_action_button = Button.new()
-		mount_action_button.name = "MountActionButton"
-		mount_action_button.custom_minimum_size.y = 44.0
-		mount_action_button.focus_mode = Control.FOCUS_NONE
-		mount_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		mount_action_button.add_theme_font_size_override("font_size", 15)
-		mount_action_button.add_theme_stylebox_override(
-			"normal", _make_panel_style(SLOT_SELECTED_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
-		)
-		mount_action_button.add_theme_stylebox_override(
-			"hover", _make_panel_style(SLOT_HOVER_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
-		)
-		mount_action_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-		mount_action_button.pressed.connect(_on_mount_action_pressed)
-		content.add_child(mount_action_button)
+	mount_action_button = Button.new()
+	mount_action_button.name = "MountActionButton"
+	mount_action_button.custom_minimum_size.y = 44.0
+	mount_action_button.focus_mode = Control.FOCUS_NONE
+	mount_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	mount_action_button.add_theme_font_size_override("font_size", 15)
+	mount_action_button.add_theme_stylebox_override(
+		"normal", _make_panel_style(SLOT_SELECTED_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
+	)
+	mount_action_button.add_theme_stylebox_override(
+		"hover", _make_panel_style(SLOT_HOVER_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
+	)
+	mount_action_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	mount_action_button.pressed.connect(_on_mount_action_pressed)
+	content.add_child(mount_action_button)
 
 	selector_panel = PanelContainer.new()
 	selector_panel.name = "SelectorPanel"
 	selector_panel.visible = false
-	selector_panel.position = Vector2(0, 190 if mobile_actions else 140)
+	selector_panel.position = Vector2(0, 190)
 	selector_panel.custom_minimum_size = Vector2(272, 0)
 	selector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	selector_panel.z_index = 5
