@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Alpha Tools heeft nu een Aetherite-generator met een zelf te kiezen bedrag in plaats van de knoppen om Alpha-Pokémon te maken of te wissen.
+
 ## 0.3.83
 
 ### Player Lending

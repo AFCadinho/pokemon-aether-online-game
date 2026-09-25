@@ -135,6 +135,7 @@ const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
 const WORLD_TELEPORT_OTHER_PERMISSION := "world:teleport:other"
 const CONTENT_CREATOR_PHOTO_MODE_PERMISSION := "content:creator:photo-mode"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
+const ALPHA_AETHERITE_GENERATING_PERMISSION := "alpha:aetherite:generating"
 const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const DEV_WORLD_TIME_HOURS: Array[int] = [-1, 6, 12, 19, 0]
@@ -1537,8 +1538,8 @@ var evolution_overlay_active_evolution: Dictionary = {}
 var alpha_tools_popup: PanelContainer
 var content_creator_tools_popup: PanelContainer
 var content_creator_photo_mode_button: Button
-var alpha_create_pokemon_button: Button
-var alpha_clear_party_button: Button
+var alpha_aetherite_button: Button
+var alpha_aetherite_amount_spinbox: SpinBox
 var alpha_reset_game_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
@@ -2259,6 +2260,9 @@ func _can_use_content_creator_photo_mode() -> bool:
 func _can_use_content_creator_generation() -> bool:
 	return _has_user_permission(CONTENT_CREATOR_GENERATING_PERMISSION)
 
+func _can_generate_alpha_aetherite() -> bool:
+	return _has_user_permission(ALPHA_AETHERITE_GENERATING_PERMISSION)
+
 func _can_show_staff_action_bar() -> bool:
 	return _has_user_permission(STAFF_ACTION_BAR_PERMISSION)
 
@@ -2377,8 +2381,10 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_photo_mode: bool = _can_use_content_creator_photo_mode()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
+	var can_generate_alpha_aetherite: bool = _can_generate_alpha_aetherite()
 	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web
 	var can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web
+	var can_generate_alpha_aetherite_here := can_generate_alpha_aetherite and not is_web
 	var has_staff_tool: bool = (
 		can_return_from_impersonation_here
 		or can_impersonate_here
@@ -2393,7 +2399,7 @@ func _refresh_dev_tools_visibility() -> void:
 		has_staff_tool
 		or can_open_dev_actions
 		or can_use_content_creator_photo_mode_here
-		or can_use_content_creator_generation_here
+		or can_generate_alpha_aetherite_here
 	)
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
@@ -2402,16 +2408,13 @@ func _refresh_dev_tools_visibility() -> void:
 		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
 		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode_here
 	if alpha_tools_slot != null:
-		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
+		alpha_tools_slot.visible = can_show_staff_action_bar and can_generate_alpha_aetherite_here
 	if alpha_tools_button != null:
-		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
-		alpha_tools_button.disabled = not can_use_content_creator_generation_here
-	if alpha_create_pokemon_button != null:
-		alpha_create_pokemon_button.visible = can_use_content_creator_generation
-		alpha_create_pokemon_button.disabled = not can_use_content_creator_generation
-	if alpha_clear_party_button != null:
-		alpha_clear_party_button.visible = can_use_content_creator_generation
-		alpha_clear_party_button.disabled = not can_use_content_creator_generation
+		alpha_tools_button.visible = can_show_staff_action_bar and can_generate_alpha_aetherite_here
+		alpha_tools_button.disabled = not can_generate_alpha_aetherite_here
+	if alpha_aetherite_button != null:
+		alpha_aetherite_button.visible = can_generate_alpha_aetherite
+		alpha_aetherite_button.disabled = not can_generate_alpha_aetherite
 	if alpha_reset_game_button != null:
 		alpha_reset_game_button.visible = _can_reset_gameplay()
 		alpha_reset_game_button.disabled = not _can_reset_gameplay()
@@ -2504,7 +2507,7 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_badge_progress_popup.close()
 	if not can_generate_dev_items and dev_add_item_popup != null:
 		dev_add_item_popup.visible = false
-	if not can_use_content_creator_generation_here and alpha_tools_popup != null:
+	if not can_generate_alpha_aetherite_here and alpha_tools_popup != null:
 		alpha_tools_popup.visible = false
 	if not can_use_content_creator_photo_mode_here and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
@@ -9406,27 +9409,26 @@ func _setup_alpha_tools_popup() -> void:
 			Color("#b28ae8")
 		)
 	)
+	var amount_label := Label.new()
+	_set_localized_control_property(amount_label, "text", "ui.staff.alpha.aetherite_amount")
+	layout.add_child(amount_label)
+	alpha_aetherite_amount_spinbox = SpinBox.new()
+	alpha_aetherite_amount_spinbox.min_value = 1
+	alpha_aetherite_amount_spinbox.max_value = 999999999
+	alpha_aetherite_amount_spinbox.value = 500
+	alpha_aetherite_amount_spinbox.step = 1
+	alpha_aetherite_amount_spinbox.update_on_text_changed = true
+	layout.add_child(alpha_aetherite_amount_spinbox)
 
-	alpha_create_pokemon_button = Button.new()
-	alpha_create_pokemon_button.pressed.connect(_on_alpha_create_pokemon_button_pressed)
-	layout.add_child(alpha_create_pokemon_button)
+	alpha_aetherite_button = Button.new()
+	alpha_aetherite_button.pressed.connect(_on_alpha_aetherite_button_pressed)
+	layout.add_child(alpha_aetherite_button)
 	_configure_launcher_card_button(
-		alpha_create_pokemon_button,
-		"ui.staff.alpha.create",
-		"ui.staff.alpha.create_description",
+		alpha_aetherite_button,
+		"ui.staff.alpha.aetherite",
+		"ui.staff.alpha.aetherite_description",
 		ALPHA_TOOLS_MENU_ICON,
 		Color("#b28ae8")
-	)
-
-	alpha_clear_party_button = Button.new()
-	alpha_clear_party_button.pressed.connect(_on_alpha_clear_party_button_pressed)
-	layout.add_child(alpha_clear_party_button)
-	_configure_launcher_card_button(
-		alpha_clear_party_button,
-		"ui.staff.alpha.clear",
-		"ui.staff.alpha.clear_description",
-		TOOL_CLEAR_DATA_ICON,
-		Color("#ef7085")
 	)
 
 	alpha_reset_game_button = _add_gameplay_reset_button(
@@ -35921,7 +35923,7 @@ func _on_pokedex_button_pressed() -> void:
 	await _show_pokedex_popup()
 
 func _on_alpha_tools_button_pressed() -> void:
-	if not _can_use_content_creator_generation():
+	if not _can_generate_alpha_aetherite():
 		return
 	if alpha_tools_popup == null:
 		return
@@ -35954,41 +35956,24 @@ func set_content_creator_capture_hidden(hidden: bool) -> void:
 	if root_control != null:
 		root_control.visible = not hidden
 
-func _on_alpha_create_pokemon_button_pressed() -> void:
-	if not _can_use_content_creator_generation():
+func _on_alpha_aetherite_button_pressed() -> void:
+	if not _can_generate_alpha_aetherite():
 		return
-	_hide_alpha_tools_popup()
-	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
-
-func _on_alpha_clear_party_button_pressed() -> void:
-	if not _can_use_content_creator_generation():
-		return
-	_hide_alpha_tools_popup()
-	_show_ui_confirm_popup(
-		"Clear Alpha Pokemon",
-		"This will remove generated Alpha Pokemon from your party. Other party Pokemon stay untouched.",
-		"Clear Pokemon",
-		Callable(self, "_on_alpha_clear_party_confirmed"),
-		Vector2i(500, 0),
-		true
+	var amount := clampi(
+		alpha_aetherite_amount_spinbox.get_line_edit().text.to_int(),
+		int(alpha_aetherite_amount_spinbox.min_value),
+		int(alpha_aetherite_amount_spinbox.max_value)
 	)
-
-func _on_alpha_clear_party_confirmed() -> void:
-	if not _can_use_content_creator_generation():
-		return
-
-	var before_count := PlayerSave.party.size()
-	var result: Dictionary = await PlayerPartyStateService.content_creator_clear_party_pokemon()
+	alpha_aetherite_amount_spinbox.value = amount
+	alpha_aetherite_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.claim_alpha_aetherite(amount)
+	alpha_aetherite_button.disabled = false
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not clear Alpha Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message("Could not claim Alpha Aetherite: %s" % str(result.get("error", "Unknown error")))
 		return
-
-	var after_count := PlayerSave.party.size()
-	var removed_count: int = max(before_count - after_count, 0)
-	if removed_count > 0:
-		_add_chat_message("Removed %s Alpha Pokemon from party." % removed_count)
-	else:
-		_add_chat_message("No Alpha Pokemon found in party.")
+	PlayerWalletService.apply_wallet_result(result)
+	_refresh_player_status_card()
+	_add_chat_message("Added %s Aetherite for Alpha rentals." % _format_money(amount))
 
 func _position_alpha_tools_popup() -> void:
 	_position_action_slot_popup(alpha_tools_popup, alpha_tools_slot)

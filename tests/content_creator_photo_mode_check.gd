@@ -135,8 +135,8 @@ func _check_sources() -> void:
 		"Content Creator Tools visibility uses the Photo Mode permission"
 	)
 	_check(
-		overlay_source.contains("alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation"),
-		"Alpha Tools visibility stays tied to Alpha generation permission"
+		overlay_source.contains("alpha_tools_slot.visible = can_show_staff_action_bar and can_generate_alpha_aetherite"),
+		"Alpha Tools visibility stays tied to Alpha Aetherite permission"
 	)
 	_check(overlay_source.contains('const CONTENT_CREATOR_PHOTO_MODE_PERMISSION := "content:creator:photo-mode"'), "Photo Mode uses its dedicated permission")
 	_check(overlay_source.contains('if not _can_use_content_creator_photo_mode():'), "Photo Mode remains permission gated")
