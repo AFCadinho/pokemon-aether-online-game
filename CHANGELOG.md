@@ -5,6 +5,7 @@
 ### Player Lending
 
 - You now see a clear message when trying to lend a Pokémon to someone playing in the browser.
+- That browser-player message is also available in Portuguese and Simplified Chinese.
 
 ### Pokémon Rental
 
