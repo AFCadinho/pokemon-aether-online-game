@@ -591,10 +591,10 @@ func _run() -> void:
 		blessing_item.get("name", "") == "Aether Blessing Voucher · 3 Days",
 		"temporary supporter benefit is sold as a voucher"
 	)
-	_check(store.selection_description_label.text.contains("×1.05 Shiny encounter odds")
-		and store.selection_description_label.text.contains("50% off regional Aether Transit fares")
+	_check(store.selection_description_label.text.contains("Shiny Pokémon are 5% more likely to appear")
+		and store.selection_description_label.text.contains("Half-price travel between regions")
 		and store.selection_description_label.text.contains("Two free Aether Anchors")
-		and store.selection_description_label.text.contains("5% off NPC currency shops")
+		and store.selection_description_label.text.contains("5% off NPC shops (not Aether Gems)")
 		and store.selection_description_label.text.contains("Optional Blessed chat badge")
 		and store.selection_description_label.text.contains("\n• ")
 		and store.selection_description_label.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT,
@@ -631,15 +631,14 @@ func _run() -> void:
 	_check(store.product_buttons.has("patreon-supporter-preview"),
 		"Blessings makes the Patreon membership discoverable")
 	store.call("_select_product", "patreon-supporter-preview")
-	_check(store.selection_description_label.text.contains("×1.05 Shiny encounter odds")
-		and store.selection_description_label.text.contains("50% off regional Aether Transit fares")
-		and store.selection_description_label.text.contains("Two free Aether Anchors")
-		and store.selection_description_label.text.contains("5% off NPC currency shops")
+	_check(store.selection_description_label.text.contains("All Aether Blessing benefits are included")
+		and store.selection_description_label.text.contains("Select a voucher to see them")
 		and store.selection_description_label.text.contains("Supporter role and badge")
-		and store.selection_description_label.text.contains("Outfit wearable while membership is active")
+		and store.selection_description_label.text.contains("Patreon outfit while your membership is active")
+		and not store.selection_description_label.text.contains("Shiny Pokémon are 5% more likely")
 		and store.selection_description_label.text.contains("\n• ")
 		and store.selection_description_label.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT,
-		"Patreon details list Blessing benefits and the extra supporter perks")
+		"Patreon details refer to the vouchers instead of repeating Blessing benefits")
 	_check(store.call("_gem_price", "patreon-supporter-preview") == -1
 		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_unknown")
 		and store.status_label.text == localization_manager.text("ui.store.patreon.status_error_hint")
@@ -766,6 +765,11 @@ func _run() -> void:
 				"manual Patreon grant is localized for %s" % locale)
 			_check(localization_manager.text("ui.store.patreon.extras") != "ui.store.patreon.extras"
 				and localization_manager.text("ui.store.blessing.voucher_intro") != "ui.store.blessing.voucher_intro"
+				and localization_manager.text("ui.store.blessing.benefit.shiny") != "ui.store.blessing.benefit.shiny"
+				and localization_manager.text("ui.store.blessing.benefit.travel") != "ui.store.blessing.benefit.travel"
+				and localization_manager.text("ui.store.blessing.benefit.anchor") != "ui.store.blessing.benefit.anchor"
+				and localization_manager.text("ui.store.blessing.benefit.shops") != "ui.store.blessing.benefit.shops"
+				and localization_manager.text("ui.store.blessing.benefit.badge") != "ui.store.blessing.benefit.badge"
 				and localization_manager.text("ui.store.patreon.status_unknown") != "ui.store.patreon.status_unknown"
 				and localization_manager.text("ui.store.patreon.status_error_hint") != "ui.store.patreon.status_error_hint",
 				"Blessing benefit list and Patreon account-check feedback are localized for %s" % locale)

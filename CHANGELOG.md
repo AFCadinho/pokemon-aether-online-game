@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Patreon-kaart verwijst kort naar de Blessing-vouchers in plaats van alle gedeelde voordelen te herhalen; de voucherkaart legt de voordelen nu in gewone speltaal uit.
+
 - De actieve PokéPaste-groep heeft nu naast de partyknop een knop om alle groepsrentals na één bevestiging samen in te leveren.
 
 - De Blessings-tab toont voucher- en Patreon-voordelen als korte, leesbare regels. Een mislukte Patreon-accountcontrole wordt nu onderscheiden van een niet-beschikbaar lidmaatschap.
