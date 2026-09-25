@@ -219,8 +219,8 @@ func _ready() -> void:
 	_sync_remote_players_visibility()
 	_connect_world_presence_signals()
 	if OS.has_feature("web"):
-		if not PlayerSave.party_changed.is_connected(_on_party_changed_for_sprite_prefetch):
-			PlayerSave.party_changed.connect(_on_party_changed_for_sprite_prefetch)
+		if not PlayerSave.party_changed.is_connected(_on_web_party_changed):
+			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
 		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
@@ -230,8 +230,6 @@ func _ready() -> void:
 			GameState.finish_gameplay_reset()
 		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
-	if OS.has_feature("mobile") and not PlayerSave.party_changed.is_connected(_on_party_changed_for_sprite_prefetch):
-		PlayerSave.party_changed.connect(_on_party_changed_for_sprite_prefetch)
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
 		player.connect("overworld_steps_completed", step_callback)
 	var mount_toggle_callback := Callable(self, "_on_player_land_mount_toggled")
@@ -277,7 +275,7 @@ func _current_fishing_area_id() -> String:
 	return ""
 
 
-func _on_party_changed_for_sprite_prefetch() -> void:
+func _on_web_party_changed() -> void:
 	_schedule_current_map_web_sprite_prefetch()
 
 

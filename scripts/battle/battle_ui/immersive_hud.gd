@@ -105,7 +105,7 @@ func _process(delta: float) -> void:
 				var top := stage.get_global_transform().affine_inverse() * Vector2(bounds.get_center().x, bounds.position.y)
 				target = top - Vector2(extent.x * 0.5, extent.y + 12)
 				anchored_to_sprite = true
-		elif is_instance_valid(presenter):
+		else:
 			var bounds := Rect2()
 			if battle.coop_mode and sprite_box.has_method("get_double_animation_visual_rect_in_node"):
 				bounds = sprite_box.get_double_animation_visual_rect_in_node(stage)
