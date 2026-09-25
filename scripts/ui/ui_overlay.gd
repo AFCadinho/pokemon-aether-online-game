@@ -12127,6 +12127,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pokedex_3d_preview = POKEDEX_MODEL_PREVIEW_SCRIPT.new()
+	pokedex_3d_preview.name = "PokedexModelPreview"
 	pokedex_3d_preview.visible = false
 	pokedex_sprite_panel.add_child(pokedex_3d_preview)
 	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
@@ -36752,6 +36753,9 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			pokedex_animated_sprite.visible = false
 			_configure_preview_animation_button(pokedex_animated_sprite, null)
 			pokedex_3d_preview.visible = true
+			var zoom := pokedex_sprite_panel.find_child("PreviewZoomButton", true, false) as Button
+			if zoom != null:
+				pokedex_3d_preview.call("set_zoom", 2.0 if zoom.button_pressed else 1.0)
 			pokedex_sprite_panel.tooltip_text = "Drag to rotate local 3D preview"
 			return
 		pokedex_3d_preview.visible = false
@@ -37065,6 +37069,8 @@ func _add_preview_zoom_button(
 	button.toggled.connect(func(zoomed: bool) -> void:
 		var factor := 2.0 if zoomed else 1.0
 		var model_preview := parent.get_node_or_null("SummaryModelPreview")
+		if model_preview == null:
+			model_preview = parent.get_node_or_null("PokedexModelPreview")
 		if model_preview != null and model_preview.visible:
 			model_preview.set_zoom(factor)
 		var center := Vector2(viewport.size) * Vector2(0.5, center_y)
