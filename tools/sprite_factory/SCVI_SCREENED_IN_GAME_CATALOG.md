@@ -13,16 +13,19 @@ The checked-in `screened_model_catalog.json` binds each candidate to its exact
 SCN SHA-256, placement and seven native action timings. The presenter ignores
 placement/timing supplied by a selected local catalog and retrieves them from
 that checked-in screened registry. A changed model fails before import. The
-existing reviewed registry and portable reviewed-model pack accept only their
-original fourteen normal/shiny identities; screened candidates are not promoted
-by this work.
+registry also has a separate batch-01 review group with 14 normal/shiny pairs;
+see [its playable review instructions](CATALOG_BATCH_01_PLAYABLE_REVIEW.md).
+The existing reviewed registry and portable reviewed-model pack still accept
+only their original fourteen normal/shiny identities.
 
-Candidates intentionally have no arena-grounding, motion-clearance, shiny or
-live-PvP qualification. The presenter therefore retains its safe classic 3D
-floor fallback whenever a candidate is active instead of claiming calibrated
-forest/stadium grounding. If either active Pokémon is shiny, an unsupported
-form, a double battle or uses Substitute, the normal pair fallback remains
-2.5D. A candidate's normal form can still be inspected in a real single battle.
+These original 75 candidates intentionally have no arena-grounding,
+motion-clearance, shiny or live-PvP qualification. The presenter therefore
+retains its safe classic 3D floor fallback whenever one is active instead of
+claiming calibrated forest/stadium grounding. If either active Pokémon is shiny,
+an unsupported form, a double battle or uses Substitute, the normal pair
+fallback remains 2.5D. A candidate's normal form can still be inspected in a
+real single battle. The batch-01 group has its own calibrated profiles and
+qualified shiny forms.
 
 ## Current local artifact
 
@@ -55,7 +58,7 @@ the in-game review is complete.
 
 - Python builder tests cover only visual-pass inclusion, hash binding, missing
   scenes, stale registry data and no-overwrite output.
-- `screened_model_catalog_check.gd` loads all 75 entries through the real local
+- `screened_model_catalog_check.gd` loads the original 75 entries through the real local
   catalog validator and imports unrelated Charizard and Eevee candidate scenes
   through the regular background integrity/import path.
 - Existing 43 SCVI and 16 portable model-pack tests still pass.
