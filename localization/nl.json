@@ -6059,6 +6059,7 @@
   "ui.lending.error.action": "De lening kon niet worden bijgewerkt.",
   "ui.lending.error.same_map": "Beide Trainers moeten online, beschikbaar en op dezelfde map zijn.",
   "ui.lending.error.presence_unavailable": "De controle van nabije Trainers is tijdelijk niet beschikbaar. Probeer het zo opnieuw.",
+  "ui.lending.error.browser_recipient": "Deze Trainer speelt in de browser en kan Player Loans niet gebruiken.",
   "ui.lending.error.selection_limit": "Kies maximaal zes bezittingen.",
   "ui.lending.items_hint": "Kies herbruikbare held items uit je Bag of van een Pokémon. Iedere kopie wordt apart bijgehouden.",
   "ui.lending.items_empty": "Je hebt geen herbruikbare held items beschikbaar om uit te lenen.",

@@ -60,6 +60,7 @@ var social_action_in_flight := false
 var social_state_loading := false
 var social_status_message := ""
 var social_status_is_error := false
+var lending_status_message := ""
 var trade_capabilities: Dictionary = {}
 var trade_capabilities_loaded := false
 var trade_capabilities_loading := false
@@ -133,6 +134,7 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	):
 		return
 	current_target = normalized
+	lending_status_message = ""
 	if _exchange_actions_allowed() and not trade_capabilities_loaded and not trade_capabilities_loading:
 		_refresh_trade_capabilities()
 	if not guild_membership_loaded and not guild_membership_loading:
@@ -675,6 +677,9 @@ func _fit_context_menu_to_content(layout_serial: int) -> void:
 func _refresh_context_status() -> void:
 	if context_status_label == null:
 		return
+	if lending_status_message != "":
+		_set_context_status(lending_status_message, UI_DANGER, UI_DANGER)
+		return
 	if social_state_loading:
 		_set_context_status(_t("ui.nearby.status.checking_social"), UI_MUTED_TEXT, UI_ACCENT)
 		return
@@ -852,6 +857,10 @@ func _on_lend_pressed() -> void:
 	if not _exchange_actions_allowed():
 		return
 	if not _target_is_on_current_map():
+		return
+	if not bool(current_target.get("supportsPlayerLending", true)):
+		lending_status_message = _t("ui.lending.error.browser_recipient")
+		_refresh_context_status()
 		return
 	var username := str(current_target.get("username", "")).strip_edges()
 	var workspace := get_node_or_null("/root/LendingWorkspace")
@@ -1299,6 +1308,7 @@ func close_context_menu() -> void:
 	social_state_loading = false
 	social_status_message = ""
 	social_status_is_error = false
+	lending_status_message = ""
 	guild_action_in_flight = false
 	guild_status_message = ""
 	guild_status_is_error = false
@@ -1605,6 +1615,7 @@ func _on_locale_changed(_locale: String) -> void:
 	social_status_message = ""
 	guild_status_message = ""
 	aether_clash_status_message = ""
+	lending_status_message = ""
 	_render_players()
 	if not current_target.is_empty():
 		_render_context_menu()

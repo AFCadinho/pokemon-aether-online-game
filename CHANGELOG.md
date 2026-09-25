@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Player Lending
+
+- Lending offers to browser players now show clear feedback and are rejected by the server.
+
 ### Pokémon Rental
 
 - Pokémon Rental now accepts a PokéPaste with 2–6 Pokémon sets in one request. Review the group and total price before renting, then add the whole group to your party; your current party moves to the PC after confirmation.

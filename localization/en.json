@@ -6059,6 +6059,7 @@
   "ui.lending.error.action": "The loan could not be updated.",
   "ui.lending.error.same_map": "Both Trainers must be online, available, and on the same map.",
   "ui.lending.error.presence_unavailable": "Nearby Trainer validation is temporarily unavailable. Try again shortly.",
+  "ui.lending.error.browser_recipient": "This Trainer is playing in the browser and cannot use Player Loans.",
   "ui.lending.error.selection_limit": "Choose no more than six assets.",
   "ui.lending.items_hint": "Choose reusable held items from your Bag or Pokémon. Each copy is tracked separately.",
   "ui.lending.items_empty": "You have no reusable held items available to lend.",
