@@ -74,6 +74,11 @@ signal animation_finished
 @export var sprite_position_anchor: Vector2 = Vector2(128, 224)
 @export var sprite_position_offset: Vector2 = Vector2.ZERO
 @export var sheet_visual_offset: Vector2 = Vector2.ZERO
+var sheet_path_enabled := false
+var sheet_path_actor := Vector2.ZERO
+var sheet_path_target := Vector2.ZERO
+var sheet_path_source_actor := Vector2(128, 224)
+var sheet_path_source_target := Vector2(384, 96)
 @export var sheet_frame_offsets: Array = []
 @export var sheet_pattern_visual_offsets: Dictionary = {}
 @export_range(0.5, 4.0, 0.05) var sparkle_size_multiplier: float = 1.0
@@ -3176,7 +3181,7 @@ func _apply_frame(index: int) -> void:
 			tile_h
 		)
 		var sheet_position := _scale_sprite_position(Vector2(float(cell["x"]), float(cell["y"]))) + sprite_position_offset
-		sprite.position = _battlefield_position(sheet_position) + sheet_visual_offset + _get_sheet_pattern_visual_offset(cell_pattern) + _get_sheet_frame_offset(index)
+		sprite.position = _retarget_sheet_display_position(_battlefield_position(sheet_position)) + sheet_visual_offset + _get_sheet_pattern_visual_offset(cell_pattern) + _get_sheet_frame_offset(index)
 		var zoom: float = (float(cell["zoom"]) / 100.0) * sprite_zoom_multiplier
 		var mirror_sprite := bool(cell["mirror"])
 		if reverse_battlefield and mirror_sheet_sprites_on_reverse:
@@ -3207,6 +3212,19 @@ func _get_sheet_frame_offset(index: int) -> Vector2:
 func _get_sheet_pattern_visual_offset(pattern: int) -> Vector2:
 	var offset_value: Variant = sheet_pattern_visual_offsets.get(str(pattern), Vector2.ZERO)
 	return offset_value as Vector2 if offset_value is Vector2 else Vector2.ZERO
+
+
+func _retarget_sheet_display_position(position: Vector2) -> Vector2:
+	if not sheet_path_enabled:
+		return position
+	var authored_actor := _battlefield_position(_scale_sprite_position(sheet_path_source_actor) + sprite_position_offset) + sheet_visual_offset
+	var authored_target := _battlefield_position(_scale_sprite_position(sheet_path_source_target) + sprite_position_offset) + sheet_visual_offset
+	var path := authored_target - authored_actor
+	if path.length_squared() < 0.001:
+		return position
+	var progress := clampf((position + sheet_visual_offset - authored_actor).dot(path) / path.length_squared(), 0.0, 1.0)
+	var correction := (sheet_path_actor - authored_actor).lerp(sheet_path_target - authored_target, progress)
+	return position + correction
 
 func _projectile_enabled() -> bool:
 	return bool(projectile_config.get("enabled", not projectile_config.is_empty()))

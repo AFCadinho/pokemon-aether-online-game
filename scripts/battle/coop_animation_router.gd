@@ -66,22 +66,27 @@ func _hide_move_actor_sprite_if_needed(config: Dictionary, actor_ident: String) 
 
 
 func _fit_animation_to_parent(animation_node: Node2D, parent_node: Node) -> void:
-	# Catalog effects are authored for the 512×384 singles battlefield.  The
-	# doubles viewport is wider, so retain the standard cover transform instead
-	# of drawing that source-sized canvas in the middle of the arena.  Anchor
-	# conversion below already accounts for this transform for all four slots.
+	# Two doubles positions share each side of the field. Fit one catalog canvas
+	# into half its width instead of enlarging a singles effect to cover all four
+	# Pokémon. Endpoint conversion uses this same transform.
+	if bool(animation_node.get_meta("coop_full_field_effect", false)):
+		super._fit_animation_to_parent(animation_node, parent_node)
+		return
 	const SOURCE_SIZE := Vector2(512, 384)
 	if parent_node is Control:
 		var available_size: Vector2 = (parent_node as Control).size
-		var cover_scale: float = maxf(available_size.x / SOURCE_SIZE.x, available_size.y / SOURCE_SIZE.y)
-		animation_node.scale = Vector2(cover_scale, cover_scale)
-		animation_node.position = (available_size - SOURCE_SIZE * cover_scale) * 0.5
+		var pair_scale: float = minf(available_size.x / (SOURCE_SIZE.x * 2.0), available_size.y / SOURCE_SIZE.y)
+		animation_node.scale = Vector2(pair_scale, pair_scale)
+		animation_node.position = (available_size - SOURCE_SIZE * pair_scale) * 0.5
 		return
 	animation_node.position = Vector2.ZERO
 
 
 func _create_move_animation_node(config: Dictionary, resources: Dictionary = {}, reverse_battlefield: bool = false) -> MoveAnimationPlayer:
 	var node := super._create_move_animation_node(config, resources, reverse_battlefield)
+	var category := str(config.get("category", "")).strip_edges().to_lower()
+	if category in ["field", "field_hazard", "screen"] or str(config.get("static_visual_anchor", "")).strip_edges().to_lower() == "battlefield":
+		node.set_meta("coop_full_field_effect", true)
 	if not audible:
 		node.sound_paths = {}
 		node.sound_streams = {}
