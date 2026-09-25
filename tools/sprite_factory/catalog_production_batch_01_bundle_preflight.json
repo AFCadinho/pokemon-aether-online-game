@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "date": "2026-09-25",
+  "status": "local_candidate_bundle_preflight_passed",
+  "runtime_approved": false,
+  "release_approved": false,
+  "bundle_count": 14,
+  "appearance_count": 28,
+  "bundle_bytes": 370321935,
+  "index_bytes": 12601,
+  "index_sha256": "84225a32273e7e6a3b727637953ca46913be0bd697ede6243e18c5ad7b1045af",
+  "rounds": [
+    {
+      "arena": "classic",
+      "pairs": 14,
+      "frame_p95_ms": 17.198,
+      "frame_max_ms": 492.513,
+      "load_callback_max_ms": 1.852,
+      "retained_source_bytes": 31879995,
+      "uncovered_hitches_over_100ms": 0
+    },
+    {
+      "arena": "stadium",
+      "pairs": 14,
+      "frame_p95_ms": 17.193,
+      "frame_max_ms": 181.102,
+      "load_callback_max_ms": 1.666,
+      "retained_source_bytes": 31879995,
+      "uncovered_hitches_over_100ms": 0
+    },
+    {
+      "arena": "classic",
+      "pairs": 14,
+      "frame_p95_ms": 17.739,
+      "frame_max_ms": 114.281,
+      "load_callback_max_ms": 2.601,
+      "retained_source_bytes": 31879995,
+      "uncovered_hitches_over_100ms": 0
+    }
+  ],
+  "final_two_round_static_growth_bytes": 97992,
+  "evidence_sha256": {
+    "candidate_receipt": "12f1be4b60f85ff472eda3e7a075c6fb33c2d6957de33ec56754ddb7fc12262a",
+    "stress_report": "c09e1ee8d6d6fc1c88841f118b1fb72c2a131fb05dac7d895e836f30030a31e6",
+    "stress_log": "e929dfab3e47d03157e163233d1b187934ab41255e774b8f0f1f83efe1c623a5"
+  },
+  "open": [
+    "Full moving visual review and final per-species release approval.",
+    "Launcher release admission still pins only the existing seven approved species."
+  ]
+}

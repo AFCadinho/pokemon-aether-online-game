@@ -244,3 +244,39 @@ remain under `.tmp/catalog-production-01-shiny-*`. This is candidate
 qualification, not release certification: continuous motion review, other
 arenas, performance and portable per-Pokémon bundles remain open. The four
 material holds stay in their queue while the 14 pairs advance.
+
+### Local bundle and performance preflight (2026-09-25)
+
+Fourteen **unreleased candidate bundles** now contain the exact normal/shiny
+SCN pairs pinned in the shiny qualification report. The builder rechecks all
+28 scene hashes and the four retained evidence hashes before producing one
+versioned bundle per species. The bundles total **370,321,935 bytes
+(353.17 MiB)**; the content index and each archive have SHA-256 pins in
+[`catalog_production_batch_01_bundle_preflight.json`](catalog_production_batch_01_bundle_preflight.json)
+and the local `candidate-receipt.json`. No bundle is in the base game build or
+the currently approved seven-species launcher release.
+
+The real launcher asset store installed all 14 archives. Godot loaded all 28
+installed scenes, then confirmed a no-op plan and restart stability. A separate
+rendered, no-image-readback test used the real battle screen and Immersive HUD
+over three battles (Classic, Stadium, Classic). Each round covered all 14 pairs,
+native shiny special attacks, faint/replacement, normal/shiny switching, HUD
+clearance and bounded caching. The clean repeat had 95th-percentile frame times
+of **17.198, 17.193 and 17.739 ms**; maximum threaded-load callbacks were
+**1.852, 1.666 and 2.601 ms**. No uncovered hitch exceeded 100 ms; the final
+two rounds grew static memory by 97,992 bytes. The screened registry was
+restored byte-for-byte after the test.
+
+Retained local artifacts: `.tmp/catalog-production-01-candidate-bundles-2026-09-25/`,
+`.tmp/catalog-production-01-candidate-install-2026-09-25/`, and
+`.tmp/catalog-production-01-candidate-stress-2026-09-25-02.{json,log}`.
+Rebuild from the retained paired catalog with
+`python3 tools/package_catalog_batch_01_candidates.py CATALOG NEW_OUTPUT_DIR`.
+Run the local stress screen with
+`python3 tools/sprite_factory/run_catalog_batch_01_candidate_stress.py CATALOG REPORT LOG`.
+
+**Release approval remains open.** The sampled motion and battle images do not
+replace a full moving visual review and final per-species decision. The
+launcher release adapter intentionally continues to allow only the original
+seven approved species. Ampharos, Slowbro, Pineco and Larvitar shiny stay in
+the material review queue and do not delay these 14 candidate bundles.
