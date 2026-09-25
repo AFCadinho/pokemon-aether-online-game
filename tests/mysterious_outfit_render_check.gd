@@ -14,6 +14,7 @@ func _init() -> void:
 func _run() -> void:
 	for gender: String in ["female", "male"]:
 		_check_full_outfit_coverage(gender)
+		_check_patreon_placeholder_assets(gender)
 	_check_front_cape_opacity()
 	_check_local_frame_sync()
 	await _check_remote_frame_sync()
@@ -54,6 +55,22 @@ func _check_full_outfit_coverage(gender: String) -> void:
 						_check(false, "%s %s frame %d exposes skin at %d,%d" % [gender, animation, frame, x, y])
 						return
 	_check(true, "%s Mysterious Outfit covers skin below the cape in every walking frame" % gender)
+
+
+func _check_patreon_placeholder_assets(gender: String) -> void:
+	for part: Dictionary in [
+		{"category": "facegear", "id": "Patreon_Supporter_Mask"},
+		{"category": "top", "id": "Patreon_Supporter_Shirt"},
+		{"category": "bottom", "id": "Patreon_Supporter_Trousers"},
+		{"category": "shoes", "id": "Patreon_Supporter_Shoes"},
+	]:
+		var frames := Appearance.get_part_frames(part["category"], part["id"], gender)
+		_check(frames != null, "%s %s Patreon placeholder assets load" % [gender, part["id"]])
+		if frames == null:
+			return
+		for animation: StringName in [&"walk_down", &"walk_left", &"walk_right", &"walk_up"]:
+			_check(frames.has_animation(animation) and frames.get_frame_count(animation) == 4,
+				"%s %s has all %s placeholder frames" % [gender, part["id"], animation])
 
 
 func _check_front_cape_opacity() -> void:
