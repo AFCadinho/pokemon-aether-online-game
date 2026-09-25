@@ -297,6 +297,31 @@ func create_account_portal_launch(locale: String, destination: String = "account
 	}
 
 
+func get_patreon_store_status() -> Dictionary:
+	if session_token == "" or is_impersonating():
+		return {"success": false}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/account-portal/patreon/status",
+		HTTPClient.METHOD_GET,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return {"success": false}
+	var body := _dictionary_from_value(response.get("body", {}))
+	if not (body.get("available") is bool and body.get("connected") is bool
+		and body.get("active") is bool and body.get("benefitsEnabled") is bool):
+		return {"success": false}
+	return {
+		"success": true,
+		"available": body.available,
+		"connected": body.connected,
+		"active": body.active,
+		"benefitsEnabled": body.benefitsEnabled,
+	}
+
+
 func _is_safe_account_portal_url(
 	url: String,
 	gateway_base_url: String,
