@@ -3573,7 +3573,7 @@ func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> 
 	return response
 
 
-func _mount_battle_ui() -> bool:
+func _mount_battle_ui(force_immersive := false) -> bool:
 	WebMemoryProbe.mark("battle_ui_mount_begin")
 	if BATTLE_SCENE == null or battle_ui_host == null:
 		return false
@@ -3612,7 +3612,7 @@ func _mount_battle_ui() -> bool:
 		)
 		return false
 	var use_immersive_screen := (
-		SettingsManager.battle_ui_layout == "immersive"
+		(SettingsManager.battle_ui_layout == "immersive" or force_immersive)
 		and not OS.has_feature("mobile")
 	)
 	var use_desktop_3d_screen := (
@@ -3624,7 +3624,7 @@ func _mount_battle_ui() -> bool:
 		battle_screen_host = preload("res://scenes/battle/battle_screen_host.tscn").instantiate()
 		battle_ui_host.add_child(battle_screen_host)
 		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) else WildEncounterTransition.STYLE_WILD
-		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style)
+		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, use_immersive_screen)
 	else:
 		battle_ui_host.add_child(battle_instance)
 	battle_ui_host.visible = true
@@ -5297,7 +5297,7 @@ func _on_coop_state_changed() -> void:
 	if is_in_battle and active_battle_kind != "coop":
 		return
 	if active_battle_kind != "coop":
-		if not _mount_battle_ui():
+		if not _mount_battle_ui(true):
 			CoopService.request_failed.emit("Could not open the shared battle. Retrying…")
 			return
 		if not battle_instance.setup_coop_battle():

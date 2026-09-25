@@ -9,12 +9,13 @@ func _init() -> void:
 
 func _run() -> void:
 	var settings := root.get_node("SettingsManager")
-	settings.battle_ui_layout = "immersive"
+	settings.battle_ui_layout = "classic"
 	settings.battle_presentation_mode = "2.5d"
 	var host: Control = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	var battle: Control = load("res://scenes/battle/battle.tscn").instantiate()
 	root.add_child(host)
-	host.mount(battle)
+	host.mount(battle, null, WildEncounterTransition.STYLE_WILD, true)
+	_expect(battle.has_meta("immersive_battle_ui"), "co-op doubles override the Classic single-battle preference")
 	_expect(battle.setup_coop_battle(), "immersive doubles setup succeeds")
 	var presenter: Control = battle.coop_presenter
 	presenter._apply_positions({
