@@ -147,7 +147,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-3-days",
 		"name": "Aether Blessing Voucher · 3 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add three days with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 75,
 		"icon": AETHER_BLESSING_VOUCHER_3_DAYS_ICON,
 		"categories": ["membership"],
@@ -156,7 +156,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-7-days",
 		"name": "Aether Blessing Voucher · 7 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add one week with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 150,
 		"icon": AETHER_BLESSING_VOUCHER_7_DAYS_ICON,
 		"categories": ["membership"],
@@ -165,7 +165,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-14-days",
 		"name": "Aether Blessing Voucher · 14 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add two weeks with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 275,
 		"icon": AETHER_BLESSING_VOUCHER_14_DAYS_ICON,
 		"categories": ["membership"],
@@ -174,7 +174,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-30-days",
 		"name": "Aether Blessing Voucher · 30 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add thirty days with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
+		"description": "Tradeable voucher. Use it from your Bag to activate Aether Blessing.",
 		"price": 500,
 		"icon": AETHER_BLESSING_VOUCHER_30_DAYS_ICON,
 		"categories": ["featured", "membership"],
@@ -975,7 +975,7 @@ func apply_patreon_status(value: Dictionary) -> void:
 
 func _patreon_status_key() -> String:
 	if not bool(patreon_status.get("success", false)):
-		return "ui.store.patreon.status_unavailable"
+		return "ui.store.patreon.status_unknown"
 	if bool(patreon_status.get("manualRole", false)) and not bool(patreon_status.get("active", false)):
 		return "ui.store.patreon.status_manual_role"
 	if bool(patreon_status.get("connected", false)):
@@ -1775,6 +1775,11 @@ func _select_product(item_id: String) -> void:
 	selection_title_label.text = _item_name(item)
 	var description := _item_description(item)
 	var compatibility_note := _item_gender_compatibility_note(item)
+	selection_description_label.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_LEFT
+		if bool(item.get("informational", false)) or item_id.begins_with("aether-blessing-voucher-")
+		else HORIZONTAL_ALIGNMENT_CENTER
+	)
 	selection_description_label.text = (
 		"%s · %s" % [description, compatibility_note]
 		if compatibility_note != ""
@@ -2429,14 +2434,14 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 			else "ui.store.patreon.manage" if connected and bool(patreon_status.get("active", false))
 			else "ui.store.patreon.view" if connected
 			else "ui.store.patreon.connect" if bool(patreon_status.get("success", false))
-			else "ui.store.patreon.status_unavailable"
+			else "ui.store.patreon.status_unknown"
 		)
 		purchase_button.tooltip_text = _t(
 			"ui.store.patreon.external_tooltip" if connected else "ui.store.patreon.portal_tooltip"
 		)
 		if update_status:
 			status_label.text = _t(
-				"ui.store.patreon.status_unavailable"
+				"ui.store.patreon.status_error_hint"
 				if not bool(patreon_status.get("success", false))
 				else "ui.store.patreon.benefits_pending_short"
 				if not bool(patreon_status.get("benefitsEnabled", false))
@@ -2697,19 +2702,29 @@ func _item_name(item: Dictionary) -> String:
 func _item_description(item: Dictionary) -> String:
 	var description_key := str(item.get("description_key", ""))
 	if description_key != "":
-		var description := _t(description_key)
+		var description := _t(description_key) + "\n" + _blessing_benefits_description()
 		if bool(item.get("informational", false)):
+			description += "\n" + _t("ui.store.patreon.extras")
 			if bool(patreon_status.get("manualRole", false)):
-				description += " " + _t("ui.store.patreon.manual_grant_note")
+				description += "\n" + _t("ui.store.patreon.manual_grant_note")
 			if not bool(patreon_status.get("benefitsEnabled", false)):
-				description += " " + _t("ui.store.patreon.benefits_pending")
+				description += "\n" + _t("ui.store.patreon.benefits_pending")
 		return description
 	var item_id := str(item.get("id", item.get("itemId", "")))
+	if item_id.begins_with("aether-blessing-voucher-"):
+		return _t("ui.store.blessing.voucher_intro") + "\n" + _blessing_benefits_description()
 	var fallback := str(item.get("description", ""))
 	var item_localization := get_node_or_null("/root/ItemLocalization")
 	if item_localization == null:
 		return fallback
 	return str(item_localization.call("short_description", item_id, fallback))
+
+
+func _blessing_benefits_description() -> String:
+	var benefits: Array[String] = []
+	for benefit in ["shiny", "travel", "anchor", "shops", "badge"]:
+		benefits.append("• " + _t("ui.membership.aether_blessing.benefit.%s" % benefit))
+	return "\n".join(benefits)
 
 
 func _category_text(category_id: String, field: String) -> String:

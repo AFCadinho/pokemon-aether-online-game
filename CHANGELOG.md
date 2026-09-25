@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Blessings-tab toont voucher- en Patreon-voordelen als korte, leesbare regels. Een mislukte Patreon-accountcontrole wordt nu onderscheiden van een niet-beschikbaar lidmaatschap.
+
 - De bevestiging voor het plaatsen van een gehuurde Pokémon-groep toont nu iconen van de rentals en de huidige party, met een alleen-lezen samenvatting bij hover.
 
 - De Patreon-kaart maakt een handmatig door PokeAether toegekende supporterrol zichtbaar zonder deze als geverifieerd Patreon-lidmaatschap te presenteren; de koppelknop blijft afhankelijk van de echte accountkoppeling.
