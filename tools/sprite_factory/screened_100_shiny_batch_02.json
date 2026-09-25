@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "screened_100_cohort_shiny_export",
+  "species": [
+    "eevee",
+    "vaporeon",
+    "flareon",
+    "zapdos",
+    "dratini",
+    "mewtwo",
+    "mew",
+    "pichu",
+    "marill",
+    "azumarill",
+    "sudowoodo",
+    "hoppip",
+    "jumpluff",
+    "wooper",
+    "quagsire",
+    "espeon",
+    "umbreon",
+    "murkrow",
+    "misdreavus",
+    "qwilfish",
+    "scizor",
+    "heracross",
+    "delibird",
+    "donphan",
+    "blissey"
+  ]
+}

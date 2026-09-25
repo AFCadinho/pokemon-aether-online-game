@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "screened_100_cohort_shiny_export",
+  "species": [
+    "garchomp",
+    "volcarona",
+    "hydreigon",
+    "charizard",
+    "raichu",
+    "jigglypuff",
+    "wigglytuff",
+    "venonat",
+    "diglett",
+    "psyduck",
+    "golduck",
+    "mankey",
+    "primeape",
+    "slowpoke",
+    "magnemite",
+    "magneton",
+    "shellder",
+    "haunter",
+    "drowzee",
+    "voltorb",
+    "electrode",
+    "chansey",
+    "scyther",
+    "tauros",
+    "gyarados"
+  ]
+}
