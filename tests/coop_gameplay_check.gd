@@ -373,6 +373,38 @@ func _run() -> void:
 		and presenter._opponent_trainer.command_callout.visible,
 		"the opposing Trainer appears only to command its Pokémon")
 	presenter._hide_native_trainers()
+	var original_map: Node = root.get_node("GameState").current_map
+	var trainer_map := Node2D.new()
+	var entities := Node2D.new()
+	entities.name = "Entities"
+	trainer_map.add_child(entities)
+	var npcs := Node2D.new()
+	npcs.name = "NPCs"
+	entities.add_child(npcs)
+	var lass := BaseNPC.new()
+	lass.npc_id = "kanto_route_1_lass_zoe"
+	lass.npc_definition_id = "trainer_class_lass"
+	var mugshot_image := Image.create(80, 80, false, Image.FORMAT_RGBA8)
+	mugshot_image.fill(Color.CORNFLOWER_BLUE)
+	var lass_mugshot := ImageTexture.create_from_image(mugshot_image)
+	lass.mugshot = lass_mugshot
+	npcs.add_child(lass)
+	root.get_node("GameState").current_map = trainer_map
+	service.activity.activityId = lass.npc_id
+	presenter._sync_native_trainers()
+	_expect(presenter._opponent_trainer.catalog_sprite.texture == lass_mugshot
+		and not presenter._opponent_trainer.visible,
+		"ordinary co-op Trainers prepare the NPC's own mugshot without showing it between commands")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p2", "move": "Tackle"})
+	_expect(presenter._opponent_trainer.visible and presenter._opponent_trainer.command_callout.visible,
+		"an ordinary NPC reveals its mugshot when commanding a move")
+	presenter._hide_native_trainers()
+	lass.mugshot = null
+	presenter._sync_native_trainers()
+	_expect(presenter._opponent_trainer.catalog_sprite.texture == root.get_node("TrainerPortraitCatalog").get_texture("showdown_lass_gen6"),
+		"an ordinary Trainer uses its class portrait when no custom mugshot is set")
+	root.get_node("GameState").current_map = original_map
+	trainer_map.free()
 	service.activity.activityId = "wild_grass:kanto_route_1"
 	presenter._sync_native_trainers()
 	var hover_view: Dictionary = presenter._latest.duplicate(true)
