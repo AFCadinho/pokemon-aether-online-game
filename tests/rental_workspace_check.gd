@@ -204,8 +204,15 @@ func _run() -> void:
 	bulk_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
 	assert(bulk_workspace.pokemon_source.is_tab_hidden(1))
 	assert(bulk_workspace.pokemon_source.get_tab_title(0) == "Paste 2–6 sets")
+	await process_frame
+	assert(bulk_workspace.pokemon_preview_group_empty.visible)
+	assert(not bulk_workspace.pokemon_preview_group_grid.visible)
+	assert(bulk_workspace.pokemon_preview_group_empty.get_parent() != bulk_workspace.pokemon_preview_group_grid)
+	assert(bulk_workspace.quote_button.get_global_rect().end.y < bulk_workspace.size.y)
 	bulk_workspace.pokemon_paste.text = "Scizor @ Dragonium Z\n- Bullet Punch\n\nSECOND SET @ Leftovers\n- Earthquake"
 	bulk_workspace._update_pokemon_preview()
+	assert(not bulk_workspace.pokemon_preview_group_empty.visible)
+	assert(bulk_workspace.pokemon_preview_group_grid.visible)
 	assert(bulk_workspace.pokemon_preview_group_grid.get_child_count() == 2)
 	assert(bulk_workspace.pokemon_preview_group_grid.get_node("PastePokemonCard-0").find_children("*", "TextureRect", true, false).size() == 2)
 	var paste_item_icon := bulk_workspace.pokemon_preview_group_grid.get_node("PastePokemonCard-0").find_child("HeldItemIcon", true, false) as TextureRect
