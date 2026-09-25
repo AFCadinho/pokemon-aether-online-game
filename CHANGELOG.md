@@ -2,65 +2,37 @@
 
 ## Unreleased
 
-- De Patreon-kaart verwijst kort naar de Blessing-vouchers in plaats van alle gedeelde voordelen te herhalen; de voucherkaart legt de voordelen nu in gewone speltaal uit.
+### Pokémon Rental
 
-- De actieve PokéPaste-groep heeft nu naast de partyknop een knop om alle groepsrentals na één bevestiging samen in te leveren.
+- Pokémon Rental now accepts a PokéPaste with 2–6 Pokémon sets in one request. Review the group and total price before renting, then add the whole group to your party; your current party moves to the PC after confirmation.
+- The PokéPaste preview now shows all six Pokémon and their held items, including the correct item images for Z-Crystals. Group reviews display compact Pokémon cards and prices, and long set details scroll without hiding the total or rental button.
+- The rental window now keeps the PokéPaste input and preview within the panel, including for long teams. The preview starts with the first set, and the empty preview hint spans the full panel.
+- You can return all rentals in your active PokéPaste group with one confirmation. After placing a rented group, messages identify the party or PC box slot each Pokémon was placed in.
+- The group placement confirmation now shows the rental Pokémon and your current party, with a read-only summary on hover. The single-Pokémon review keeps its price and rental button visible when the terms wrap.
 
-- De Blessings-tab toont voucher- en Patreon-voordelen als korte, leesbare regels. Een mislukte Patreon-accountcontrole wordt nu onderscheiden van een niet-beschikbaar lidmaatschap.
+### Blessings and Gift Store
 
-- Na het plaatsen van een gehuurde Pokémon-groep melden systeemberichten per Pokémon welk teamvak of welk PC-boxvak deze heeft gekregen.
+- The Blessings tab now presents voucher and Patreon benefits in short, easy-to-read descriptions. Patreon previews explain the shared Aether Blessing benefits and extra supporter role, badge, and outfit.
+- The Patreon card now shows your account and membership status, including a supporter role granted by PokeAether. Unlinked players can open the account portal, while linked players can choose to open Patreon after confirmation.
+- The Patreon card explains that its benefits are not yet available and cannot be purchased with Aether Gems. A failed account check is clearly distinguished from an unavailable membership.
 
-- De bevestiging voor het plaatsen van een gehuurde Pokémon-groep toont nu iconen van de rentals en de huidige party, met een alleen-lezen samenvatting bij hover.
+### Aether Exchange
 
-- De Patreon-kaart maakt een handmatig door PokeAether toegekende supporterrol zichtbaar zonder deze als geverifieerd Patreon-lidmaatschap te presenteren; de koppelknop blijft afhankelijk van de echte accountkoppeling.
+- When you cancel a Pokémon listing on the Aether Exchange, that Pokémon returns to its original party slot if it is free. Otherwise, it goes to another free party slot, or to the PC Box if your party is full.
 
-- De voorwaardenregel in de review voor één Pokémon breekt nu af, zodat prijsvakken en huurknop binnen het rentalvenster blijven.
+### Battles and Trainer Card
 
-- De Patreon-kaart in de Gift Store toont de echte account- en lidmaatschapsstatus. Niet-gekoppelde spelers openen veilig het accountportaal; gekoppelde spelers kunnen na bevestiging Patreon openen. Voordelen blijven uit zolang fulfillment is uitgeschakeld.
+- In the browser, you can now view other players’ Trainer Cards and spectate their wild or NPC battles on the same map.
+- Cosmetic items and wardrobe choices now show matching Trainer Card sprites where available. Items without battle artwork keep their existing icon.
+- The Trainer Card Appearance tab now uses more of the available width, making its choices easier to read for male characters. Its Wallet and PvP tabs also use the full width, keeping large balances readable.
+- The Mysterious Outfit now covers the remaining skin-colored pixels and transparent gaps at the female cape hem, including in front-facing frames. Outfit layers also follow a moving Trainer’s body animation correctly.
 
-- De lege PokéPaste-groepspreview toont zijn hint nu over de volle paneelbreedte, zodat het venster bij openen netjes binnen beeld blijft.
+### Game Presentation
 
-- De PokéPaste-groepspreview toont nu alle zes Pokémon en hun gehouden items; ook de reviewkaarten tonen het itemicoon. Z-Crystals gebruiken hun juiste itemafbeelding.
-
-- De review van een PokéPaste-groep toont nu alle Pokémon als compacte kaarten met sprite en prijs; de setdetails scrollen zonder de totaalprijs of huurknop buiten beeld te drukken.
-
-- De invoer voor een PokéPaste-groep blijft nu volledig binnen het rentalvenster; de live preview toont alleen de eerste set en het plakveld scrolt bij lange teams.
-
-- Pokémon Rental accepteert nu ook een PokéPaste met 2–6 sets in één aanvraag, toont de totaalprijs en biedt daarna aan om de hele groep in de party te zetten; de huidige party gaat na bevestiging naar de PC.
-
-- De game bewaart een willekeurige installatie-ID bij de eerste login en stuurt die mee, zodat loginbeperkingen per installatie en verwante accountaanwijzingen mogelijk worden.
-
-- De Blessings-tab toont een Patreon-voorvertoning met de gedeelde Aether Blessing-voordelen en extra supporterrol, badge en outfit. De kaart vermeldt dat de voordelen nog niet beschikbaar zijn en kan niet met Aether Gems worden gekocht.
-
-- In de browser kunnen spelers nu elkaars Trainer Card bekijken en wild- of NPC-gevechten op dezelfde kaart spectaten.
-
-- De loginintro bevat Mt. Moon 1F en speelt nu een scherpere wereldtour van 68 seconden met kleinere downloadgrootte.
-
-- De in-game dev-reset verwijdert nu ook gekochte items en cosmetics; de bevestiging legt uit dat alleen alle geldige gekochte Gems volledig terugkomen.
-
-- De bevestiging van de in-game dev-reset vermeldt nu dat gratis en test-Gems verdwijnen en alleen niet-uitgegeven gekochte Gems behouden blijven.
-
-- Cosmetic items en garderobekeuzes tonen nu waar beschikbaar iconen uit dezelfde trainer-sprites als de Trainer Card; items zonder battle-art behouden hun bestaande icoon.
-
-- De Appearance-tab van de Trainer Card benut nu de beschikbare breedte, zodat het keuzepaneel ook bij mannelijke personages leesbaar blijft.
-
-- De Mysterious Outfit bedekt nu huidskleurige pixels en transparante openingen bij de vrouwelijke capezoom, ook in de frontframes; kledinglagen volgen bij lopende Trainers direct het body-animatieframe.
-
-- De Wallet- en PvP-tabs van de Trainer Card benutten weer de volle breedte; grote saldi blijven leesbaar zonder de valutakaarten uit verhouding te trekken.
-
-- De systeemmelding na een Gem-bijschrijving noemt nu alleen het toegevoegde bedrag en het bijgewerkte saldo, zonder specifieke betaaldienst.
-
-- Bij het annuleren van een Pokémon-aanbieding op de Aether Exchange gaat de Pokémon terug naar het oorspronkelijke party-slot als dat vrij is, anders naar een ander vrij party-slot of bij een volle party naar de PC Box.
-
-- Een geblokkeerde gameplay-reset vermeldt nu de concrete reden en vervolgstap, bijvoorbeeld het annuleren van actieve Aether Exchange-aanbiedingen en zoekopdrachten.
-
-- De lokale Gem-aankoopsimulatie toont dezelfde systeemmelding en Gem-beloning als een echte bijschrijving; de test blijft intern gescheiden van betaalde aankopen.
-
-- Nieuwe Ko-fi-Gem-bijschrijvingen tonen in de game een systeemmelding en een Gem-beloning; de portemonnee wordt eerst vernieuwd.
-
-- Fixed a crash when pressing Escape after closing a Pokémon summary card.
-
-- Added the missing Simplified Chinese outfit-gender filter labels in the Aether Gift Store.
+- Ko-fi Gem top-ups now appear in the game with a confirmation and the Gems added to your wallet.
+- The login intro now includes Mt. Moon 1F and presents a sharper 68-second tour of the world with a smaller download.
+- Fixed a crash that could occur when pressing Escape after closing a Pokémon summary card.
+- Added the missing Simplified Chinese outfit gender filter labels in the Aether Gift Store.
 
 ## 0.3.81
 
