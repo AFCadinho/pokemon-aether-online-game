@@ -19,7 +19,7 @@ func _init() -> void:
 	var create_dev_pokemon := _function_block(source, "func _on_dev_add_pokemon_button_pressed()")
 	var spawn_encounter := _function_block(source, "func _on_dev_spawn_pokemon_button_pressed()")
 	var add_currency := _function_block(source, "func _on_dev_add_money_button_pressed()")
-	var create_alpha_pokemon := _function_block(source, "func _on_alpha_create_pokemon_button_pressed()")
+	var claim_alpha_aetherite := _function_block(source, "func _on_alpha_aetherite_button_pressed()")
 
 	_check(
 		source.contains('const DEV_ITEM_GENERATING_PERMISSION := "items:generating"'),
@@ -73,8 +73,8 @@ func _init() -> void:
 		create_dev_pokemon.contains("if not _can_generate_dev_pokemon():")
 		and spawn_encounter.contains("if not _can_use_dev_tools():")
 		and add_currency.contains("if not _can_use_dev_tools():")
-		and create_alpha_pokemon.contains("if not _can_use_content_creator_generation():"),
-		"Pokemon creation, general tester tools, and Alpha generation keep separate guards"
+		and claim_alpha_aetherite.contains("if not _can_generate_alpha_aetherite():"),
+		"Pokemon creation, general tester tools, and Alpha Aetherite keep separate guards"
 	)
 
 	quit(1 if failed else 0)
