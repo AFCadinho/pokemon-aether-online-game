@@ -214,8 +214,6 @@ func try_start(trainer_id: String) -> Dictionary:
 		return {"handled": false}
 	if not _partner_is_ready_for_coop():
 		return {"handled": false}
-	if int(party.get("leaderId", 0)) != int(AuthService.current_user.get("id", 0)):
-		return {"handled": true, "success": false, "code": "coop_leader_required"}
 	var entity := trainer_entity(trainer_id)
 	if entity.is_empty():
 		return {"handled": true, "success": false, "code": "coop_interaction_unsupported"}
