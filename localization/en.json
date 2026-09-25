@@ -3039,6 +3039,8 @@
   "ui.store.patreon.status_not_connected": "NOT CONNECTED",
   "ui.store.patreon.status_connected": "ACCOUNT CONNECTED",
   "ui.store.patreon.status_active": "MEMBERSHIP VERIFIED",
+  "ui.store.patreon.status_manual_role": "ROLE GRANTED",
+  "ui.store.patreon.manual_grant_note": "PokeAether granted this role directly; it does not verify Patreon membership.",
   "ui.store.patreon.connect": "Connect Patreon",
   "ui.store.patreon.view": "View membership",
   "ui.store.patreon.manage": "Manage membership",

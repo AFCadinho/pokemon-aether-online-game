@@ -650,7 +650,7 @@ func _run() -> void:
 		"existing Patreon membership is no longer labelled Coming Later")
 	store.apply_patreon_status({
 		"success": true, "available": true, "connected": false,
-		"active": false, "benefitsEnabled": false,
+		"active": false, "manualRole": false, "benefitsEnabled": false,
 	})
 	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.connect")
 		and not store.purchase_button.disabled
@@ -658,15 +658,33 @@ func _run() -> void:
 		and store.selection_description_label.text.contains("not available yet"),
 		"unlinked players can open account linking while disabled benefits remain explicit")
 	store.apply_patreon_status({
+		"success": true, "available": true, "connected": false,
+		"active": false, "manualRole": true, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.connect")
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_manual_role")
+		and store.selection_description_label.text.contains("granted this role directly")
+		and store.selection_description_label.text.contains("does not verify Patreon membership")
+		and store.selection_description_label.text.contains("not available yet"),
+		"manual supporter grant is visible without implying a linked or paid membership")
+	store.apply_patreon_status({
 		"success": true, "available": true, "connected": true,
-		"active": false, "benefitsEnabled": false,
+		"active": false, "manualRole": false, "benefitsEnabled": false,
 	})
 	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.view")
 		and not store.purchase_button.disabled,
 		"linked players without an active tier can view Patreon")
 	store.apply_patreon_status({
 		"success": true, "available": true, "connected": true,
-		"active": true, "benefitsEnabled": false,
+		"active": false, "manualRole": true, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.view")
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_manual_role")
+		and store.selection_description_label.text.contains("does not verify Patreon membership"),
+		"linked inactive players still see an independent manual supporter grant")
+	store.apply_patreon_status({
+		"success": true, "available": true, "connected": true,
+		"active": true, "manualRole": false, "benefitsEnabled": false,
 	})
 	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.manage")
 		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_active"),
@@ -677,14 +695,22 @@ func _run() -> void:
 	store.patreon_external_dialog.hide()
 	store.apply_patreon_status({
 		"success": true, "available": true, "connected": true,
-		"active": true, "benefitsEnabled": true,
+		"active": true, "manualRole": true, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.manage")
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_active")
+		and store.selection_description_label.text.contains("granted this role directly"),
+		"verified members can also see their independent manual grant")
+	store.apply_patreon_status({
+		"success": true, "available": true, "connected": true,
+		"active": true, "manualRole": false, "benefitsEnabled": true,
 	})
 	_check(not store.selection_description_label.text.contains("not available yet")
 		and store.status_label.text == localization_manager.text("ui.store.patreon.status_active"),
 		"benefit copy follows the server fulfillment flag")
 	store.apply_patreon_status({
 		"success": true, "available": false, "connected": false,
-		"active": false, "benefitsEnabled": false,
+		"active": false, "manualRole": false, "benefitsEnabled": false,
 	})
 	_check(store.purchase_button.disabled, "unavailable linking cannot open Patreon")
 	store.call("_on_purchase_pressed")
@@ -730,6 +756,9 @@ func _run() -> void:
 				"Aether Gems action is localized for %s" % locale)
 			_check(localization_manager.text("ui.store.add_gems_error_open") != "ui.store.add_gems_error_open",
 				"browser launch failure is localized for %s" % locale)
+			_check(localization_manager.text("ui.store.patreon.status_manual_role") != "ui.store.patreon.status_manual_role"
+				and localization_manager.text("ui.store.patreon.manual_grant_note") != "ui.store.patreon.manual_grant_note",
+				"manual Patreon grant is localized for %s" % locale)
 		localization_manager.set_locale("nl")
 		await process_frame
 		var featured_button := store.category_buttons.get("featured") as Button

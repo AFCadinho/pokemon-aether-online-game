@@ -3022,6 +3022,8 @@
   "ui.store.patreon.status_not_connected": "NÃO CONECTADO",
   "ui.store.patreon.status_connected": "CONTA CONECTADA",
   "ui.store.patreon.status_active": "ASSINATURA VERIFICADA",
+  "ui.store.patreon.status_manual_role": "CARGO CONCEDIDO",
+  "ui.store.patreon.manual_grant_note": "O PokeAether concedeu este cargo diretamente; isso não confirma uma assinatura Patreon.",
   "ui.store.patreon.connect": "Conectar Patreon",
   "ui.store.patreon.view": "Ver assinatura",
   "ui.store.patreon.manage": "Gerenciar assinatura",
