@@ -164,11 +164,32 @@ closer has a fixed ten-model cohort, so its eligibility labels were not reused
 for batch 01. The candidate profile remains a local review artifact; no game
 catalog, pack, saved setting, production release or server was changed.
 
-**Next gate:** prepare the exact standalone SCNs with the measured placement and
-motion profiles in an isolated runtime candidate catalog. Run the actual
-presenter through mixed-team switching, duplicate actors, faint/replacement,
-cache eviction/reload and battle replay, plus material/HUD review and
-performance guards. Record confirmed model-specific defects as holds and
-advance the unaffected models. Normal/shiny pairing and individual bundle
-packaging remain later release gates. The seven technical holds do not block
-the next production batch.
+### Normal-SCN battle runtime screen (2026-09-25)
+
+An isolated local catalog admitted the 18 exact standalone SCNs through the
+production battle presenter. The screened registry was changed only for the
+duration of this local test and restored byte-for-byte afterwards; the
+checked-in registry and game admission remain unchanged. Each SCN matched both
+the batch result and placement-preflight SHA-256. The classic-arena battle
+scene loaded every normal model with its measured scale, ground lift and motion
+profile. The run exercised both battle sides, normal and duplicate opponents,
+physical/special/damage/sleep actions, faint loop, same-species replacement,
+and repeated switching through the bounded two-entry cache. All 18 passed;
+the rendered log contains no `ERROR:` or `SCRIPT ERROR`.
+
+All 18 idle battle captures were inspected. The models remain recognizable at
+battle distance, without an obvious missing body part or material swap. The
+Ursaring, Houndour and Houndoom fur concern from the 190 × 138 Pokédex preview
+does not show a clear texture fault in these 1280 × 720 classic-arena images.
+Pineco's partly hidden face remains a visual readability note. This screen
+does not certify moving battle video, real HUD clearance, battle replay, other
+arenas, performance, shiny forms, or portable bundles. The exact normal-SCN
+outcomes and hashes are in
+[`catalog_production_batch_01_runtime_qualification.json`](catalog_production_batch_01_runtime_qualification.json).
+The local `res://.tmp/catalog-production-01-runtime-qualification.json`, log,
+and 18 battle PNGs retain the run evidence.
+
+**Next gate:** review actual HUD and replay behavior, then produce and qualify
+shiny counterparts before release approval and individual bundle packaging.
+Keep confirmed model-specific defects in the review queue without stopping
+the other candidates. The seven technical holds do not block the next batch.
