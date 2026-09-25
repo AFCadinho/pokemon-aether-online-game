@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side.
+
 - Immersive 2D Adventure Party double battles now space the two Pokémon pairs across separate battlefield platforms.
 
 - The Pokédex preview zoom button now enlarges local 3D Pokémon too, so model details can be inspected more closely.

@@ -161,16 +161,23 @@ func _compose_sprite_battle(stage: Control) -> void:
 	for index in 2:
 		var center: Vector2
 		if battle.coop_mode:
-			center = Vector2(stage.size.x * (0.32 if index == 0 else 0.68), stage.size.y * (0.60 if index == 0 else 0.45))
+			center = Vector2(stage.size.x * (0.36 if index == 0 else 0.68), stage.size.y * (0.60 if index == 0 else 0.45))
 		else:
 			center = Vector2(stage.size.x * (0.38 if index == 0 else 0.65), stage.size.y * (0.59 if index == 0 else 0.46))
 		var platform: Control = battle.player_battle_platform if index == 0 else battle.enemy_battle_platform
 		var box: Control = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
-		var platform_origin := center - Vector2(250,150) * factor
+		var sprite_platform_origin := center - Vector2(250,150) * factor
+		var platform_scale := Vector2(factor * (1.25 if battle.coop_mode else 1.0), factor)
+		var platform_origin := center - Vector2(250,150) * platform_scale
+		if battle.coop_mode:
+			# The grass image has a broad transparent top. Lift and widen only the
+			# platform so both grounded sprites sit on its visible surface.
+			platform_origin.y -= 18.0
 		# Offsets between the original 1152×648 platform and sprite-box origins.
 		var sprite_offset := Vector2(11,-37) if index == 0 else Vector2(23,-29)
 		_place(platform, platform_origin, Vector2(600,250), factor)
-		_place(box, platform_origin + sprite_offset * factor, Vector2(450,293), factor)
+		platform.scale = platform_scale
+		_place(box, sprite_platform_origin + sprite_offset * factor, Vector2(450,293), factor)
 
 func _compose_2d_team_preview() -> void:
 	# Keep the established compact formation, but anchor it to the same platform

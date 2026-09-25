@@ -23,12 +23,12 @@ func _run() -> void:
 		"turn": 4,
 		"opponentPartySize": 2,
 		"positions": [
-			{"controller": "p1", "details": "Jigglypuff, L50, F", "hpPercent": 77},
+			{"controller": "p1", "details": "Bulbasaur, L50, M", "hpPercent": 77},
 			{"controller": "p3", "details": "Squirtle, L50, M", "hpPercent": 100},
-			{"controller": "p2", "details": "Pidgey, L50, F", "hpPercent": 100},
+			{"controller": "p2", "details": "Furret, L50, M", "hpPercent": 100},
 			{"controller": "p4", "details": "Furret, L50, M", "hpPercent": 55},
 		],
-		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 77, "maxHp": 100}],
+		"ownTeam": [{"species": "Bulbasaur", "active": true, "hp": 77, "maxHp": 100}],
 		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 100, "maxHp": 100}],
 	})
 	for dimensions: Vector2i in [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(960, 540), Vector2i(1024, 768)]:
@@ -67,18 +67,34 @@ func _settle_immersive_hud(battle: Control) -> void:
 func _check_doubles_field_spacing(battle: Control, presenter: Control) -> void:
 	var player_platform: Control = battle.player_battle_platform
 	var enemy_platform: Control = battle.enemy_battle_platform
-	var player_right := player_platform.position.x + player_platform.size.x * player_platform.scale.x
-	_expect(player_right - enemy_platform.position.x <= 24.0,
-		"immersive 2D doubles platforms leave each pair its own field")
+	var player_image := player_platform.get_node("PlatformImage") as TextureRect
+	var enemy_image := enemy_platform.get_node("PlatformImage") as TextureRect
+	var player_center := player_platform.position.x + player_image.size.x * player_platform.scale.x * 0.5
+	var enemy_center := enemy_platform.position.x + enemy_image.size.x * enemy_platform.scale.x * 0.5
+	_expect(enemy_center - player_center >= player_image.size.x * player_platform.scale.x * 0.8,
+		"the enlarged 2D doubles platforms keep separate visible grass fields")
+	_expect(player_platform.scale.x > battle.player_sprite_box.scale.x
+		and enemy_platform.scale.x > battle.enemy_sprite_box.scale.x,
+		"the doubles platforms widen without shrinking the Pokémon")
 	var player_bounds: Rect2 = battle.player_sprite_box.get_double_animation_visual_rect_in_node(battle.battle_stage)
 	var enemy_bounds: Rect2 = battle.enemy_sprite_box.get_double_animation_visual_rect_in_node(battle.battle_stage)
 	_expect(player_bounds.has_area() and enemy_bounds.has_area() and not player_bounds.intersects(enemy_bounds),
 		"the allied and opposing 2D Pokémon remain visually separate")
 	for controllers: Array in [["p1", "p3"], ["p2", "p4"]]:
+		var platform: Control = player_platform if controllers[0] == "p1" else enemy_platform
+		var platform_image: TextureRect = player_image if controllers[0] == "p1" else enemy_image
+		var sprite_box: Control = battle.player_sprite_box if controllers[0] == "p1" else battle.enemy_sprite_box
+		var grass_top := platform.position.y + platform_image.size.y * platform.scale.y * 0.5
 		var first: AnimatedSprite2D = presenter._native_sprite(controllers[0])
 		var second: AnimatedSprite2D = presenter._native_sprite(controllers[1])
 		_expect(first.global_position.x < second.global_position.x,
 			"each 2D doubles pair keeps a stable left-to-right order")
+		for sprite: AnimatedSprite2D in [first, second]:
+			var visual_rect: Rect2 = sprite_box.call("_get_sprite_visual_rect_global", sprite)
+			var inverse: Transform2D = battle.battle_stage.get_global_transform().affine_inverse()
+			var feet: float = (inverse * visual_rect.end).y
+			_expect(feet >= grass_top - 8.0,
+				"each 2D doubles Pokémon reaches the visible grass surface")
 
 
 func _check_concrete_anchors(battle: Control, presenter: Control) -> void:
