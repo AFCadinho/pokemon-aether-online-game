@@ -205,6 +205,28 @@ func _run() -> void:
 	bulk_workspace.service = FakeRentalService.new()
 	bulk_workspace.add_child(bulk_workspace.service)
 	bulk_workspace.catalog = {"offers": [], "rentals": [], "maxPokemon": 6}
+	var swap_dialog := preload("res://scenes/interface/aether_confirmation_dialog.tscn").instantiate() as AetherConfirmationDialog
+	bulk_workspace.add_child(swap_dialog)
+	var incoming_party: Array[Dictionary] = []
+	for species: String in ["Dragonite", "Zeraora", "Swampert", "Buzzwole", "Celesteela", "Serperior"]:
+		incoming_party.append({"species": species, "level": 100, "item": "Leftovers", "moves": ["Protect"]})
+	var outgoing_party: Array[Dictionary] = [{"species": "Charmander", "level": 5, "moves": ["Scratch"]}]
+	bulk_workspace._add_party_swap_preview(swap_dialog, incoming_party, outgoing_party)
+	var incoming_icons := swap_dialog.find_child("IncomingPokemonIcons", true, false) as HBoxContainer
+	var outgoing_icons := swap_dialog.find_child("OutgoingPokemonIcons", true, false) as HBoxContainer
+	var swap_hover := swap_dialog.get_node("RentalPartyHoverCard") as PartyHoverCard
+	assert(incoming_icons.get_child_count() == 6)
+	assert(outgoing_icons.get_child_count() == 1)
+	assert((incoming_icons.get_child(0) as TextureRect).texture != null)
+	assert((outgoing_icons.get_child(0) as TextureRect).texture != null)
+	(incoming_icons.get_child(0) as TextureRect).mouse_entered.emit()
+	assert(swap_hover.visible)
+	assert(swap_hover.current_pokemon_data.get("species") == "Dragonite")
+	(outgoing_icons.get_child(0) as TextureRect).mouse_entered.emit()
+	assert(swap_hover.current_pokemon_data.get("species") == "Charmander")
+	(outgoing_icons.get_child(0) as TextureRect).mouse_exited.emit()
+	assert(not swap_hover.visible)
+	swap_dialog.queue_free()
 	assert(bulk_workspace.pokemon_source.is_tab_hidden(1))
 	assert(bulk_workspace.pokemon_source.get_tab_title(0) == "Paste 2–6 sets")
 	await process_frame

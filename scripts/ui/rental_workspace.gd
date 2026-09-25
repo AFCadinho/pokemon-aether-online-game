@@ -4,6 +4,7 @@ signal finished
 
 const SERVICE := preload("res://scripts/services/rental_service.gd")
 const CONFIRM := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const PARTY_HOVER_CARD := preload("res://scenes/battle/party_hover_card.tscn")
 const TEAM_CATALOG := preload("res://scripts/ui/rental_team_catalog.gd")
 const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 var service: Node
@@ -1418,6 +1419,26 @@ func _active_pokemon_pokepaste(snapshot: Dictionary) -> String:
 func _place_bulk_group(batch_id: String) -> void:
 	if busy:
 		return
+	var incoming: Array[Dictionary] = []
+	var incoming_ids: Array[int] = []
+	var group: Array[Dictionary] = []
+	for loan: Dictionary in catalog.get("rentals", []):
+		if str(loan.get("status", "")) == "active" and str(loan.get("rental", {}).get("batchId", "")) == batch_id:
+			group.append(loan)
+	group.sort_custom(func(a: Dictionary, b: Dictionary): return int(a.get("rental", {}).get("batchPosition", 0)) < int(b.get("rental", {}).get("batchPosition", 0)))
+	for loan: Dictionary in group:
+		var snapshot := _active_pokemon_snapshot(loan)
+		if snapshot.is_empty():
+			status.text = "Could not preview the complete rental group."
+			return
+		incoming.append(snapshot)
+		for asset: Dictionary in loan.get("assets", []):
+			if str(asset.get("assetType", "")) == "pokemon":
+				incoming_ids.append(int(asset.get("pokemonId", asset.get("id", 0))))
+				break
+	if incoming.is_empty():
+		status.text = "Could not preview the complete rental group."
+		return
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
 	if party_service == null:
 		status.text = "Could not load your current party."
@@ -1426,24 +1447,26 @@ func _place_bulk_group(batch_id: String) -> void:
 	if not bool(current.get("success", false)):
 		status.text = str(current.get("error", "Could not load your current party."))
 		return
-	var outgoing: Array[String] = []
+	var outgoing: Array[Dictionary] = []
 	for member: Dictionary in current.get("party", []):
-		var name := str(member.get("nickname", "")).strip_edges()
-		outgoing.append(name if not name.is_empty() else str(member.get("species", "Pokémon")))
-	var current_names := ", ".join(outgoing) if not outgoing.is_empty() else "none"
-	await _mutate("/pokemon/bulk/%s/party" % batch_id, {}, "Place this complete rental group in your party?\nCurrent party to PC: %s\nThis requires enough PC space." % current_names)
+		var owned_id := int(member.get("ownedPokemonId", member.get("pokemonId", member.get("id", 0))))
+		if owned_id <= 0 or not incoming_ids.has(owned_id):
+			outgoing.append(member)
+	await _mutate("/pokemon/bulk/%s/party" % batch_id, {}, "Place this rental group in your party? Current party Pokémon shown below move to the PC. This requires enough PC space.", incoming, outgoing)
 
-func _mutate(path: String, payload: Dictionary, message: String) -> void:
+func _mutate(path: String, payload: Dictionary, message: String, incoming: Array[Dictionary] = [], outgoing: Array[Dictionary] = []) -> void:
 	if busy:
 		return
 	busy = true
 	var confirm := CONFIRM.instantiate() as AetherConfirmationDialog
 	add_child(confirm)
 	confirm.configure("Aether Rentals", message, "Confirm", "Cancel")
+	if not incoming.is_empty():
+		_add_party_swap_preview(confirm, incoming, outgoing)
 	var choice := {"yes": false, "done": false}
 	confirm.confirmed.connect(func(): choice["yes"] = true; choice["done"] = true)
 	confirm.canceled.connect(func(): choice["done"] = true)
-	confirm.popup_centered(Vector2i(620, 340))
+	confirm.popup_centered(Vector2i(700, 440) if not incoming.is_empty() else Vector2i(620, 340))
 	while not bool(choice["done"]):
 		await get_tree().process_frame
 	confirm.queue_free()
@@ -1466,6 +1489,49 @@ func _mutate(path: String, payload: Dictionary, message: String) -> void:
 	if path == "/pokemon/bulk" and workspace_tabs != null:
 		workspace_tabs.current_tab = 1
 	status.text = "Done. Your Pokémon, wallet and rentals are up to date."
+
+func _add_party_swap_preview(confirm: AetherConfirmationDialog, incoming: Array[Dictionary], outgoing: Array[Dictionary]) -> void:
+	var hover := PARTY_HOVER_CARD.instantiate() as PartyHoverCard
+	hover.name = "RentalPartyHoverCard"
+	confirm.add_child(hover)
+	hover.set_show_storage_details(true)
+	for section: Array in [["Rented Pokémon → party", incoming], ["Current party → PC", outgoing]]:
+		var block := VBoxContainer.new()
+		block.add_theme_constant_override("separation", 5)
+		var heading := Label.new()
+		heading.text = str(section[0])
+		heading.add_theme_font_size_override("font_size", 14)
+		heading.add_theme_color_override("font_color", Color("#69d8e7"))
+		block.add_child(heading)
+		var row := HBoxContainer.new()
+		row.name = "IncomingPokemonIcons" if section[0] == "Rented Pokémon → party" else "OutgoingPokemonIcons"
+		row.add_theme_constant_override("separation", 8)
+		block.add_child(row)
+		var members: Array[Dictionary] = section[1]
+		if members.is_empty():
+			var empty := Label.new()
+			empty.text = "None"
+			empty.add_theme_color_override("font_color", Color("#9eb3c5"))
+			row.add_child(empty)
+		for member: Dictionary in members:
+			var species := str(member.get("species", member.get("speciesId", "")))
+			var icon := TextureRect.new()
+			icon.custom_minimum_size = Vector2(72, 72)
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			icon.texture = PokemonAssets.load_party_icon(species, bool(member.get("shiny", false)))
+			icon.mouse_filter = Control.MOUSE_FILTER_STOP
+			icon.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			icon.tooltip_text = str(member.get("nickname", species))
+			icon.mouse_entered.connect(_show_party_swap_hover.bind(hover, member, icon, confirm))
+			icon.mouse_exited.connect(hover.hide_card)
+			row.add_child(icon)
+		confirm.add_custom_control(block)
+
+func _show_party_swap_hover(hover: PartyHoverCard, member: Dictionary, icon: TextureRect, confirm: AetherConfirmationDialog) -> void:
+	hover.show_for_pokemon(member)
+	hover.position_beside_rect_within(icon.get_global_rect(), confirm.panel.get_global_rect())
 
 func _close() -> void:
 	if busy:
