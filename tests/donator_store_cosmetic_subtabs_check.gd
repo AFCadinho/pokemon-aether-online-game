@@ -627,7 +627,7 @@ func _run() -> void:
 		"Blessing durations use four distinct icon resources"
 	)
 	_check(store.product_buttons.has("patreon-supporter-preview"),
-		"Blessings makes the planned Patreon membership discoverable")
+		"Blessings makes the Patreon membership discoverable")
 	store.call("_select_product", "patreon-supporter-preview")
 	_check(store.selection_description_label.text.contains("5% better Shiny odds")
 		and store.selection_description_label.text.contains("50% off regional travel")
@@ -635,14 +635,65 @@ func _run() -> void:
 		and store.selection_description_label.text.contains("5% off NPC currency shops")
 		and store.selection_description_label.text.contains("supporter role and badge")
 		and store.selection_description_label.text.contains("Patreon outfit"),
-		"Patreon preview explains Blessing benefits and the extra supporter perks")
+		"Patreon details explain Blessing benefits and the extra supporter perks")
 	_check(store.call("_gem_price", "patreon-supporter-preview") == -1
-		and store.selection_price_label.text == localization_manager.text("ui.store.coming_later")
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_unavailable")
 		and store.purchase_button.disabled,
-		"Patreon preview cannot be mistaken for an Aether Gem offer")
+		"Patreon status fails closed without becoming an Aether Gem offer")
+	var patreon_card := store.product_buttons.get("patreon-supporter-preview") as Button
+	var patreon_card_has_coming_later := false
+	if patreon_card != null:
+		for label_node: Node in patreon_card.find_children("*", "Label", true, false):
+			if (label_node as Label).text == localization_manager.text("ui.store.coming_later"):
+				patreon_card_has_coming_later = true
+	_check(not patreon_card_has_coming_later,
+		"existing Patreon membership is no longer labelled Coming Later")
+	store.apply_patreon_status({
+		"success": true, "available": true, "connected": false,
+		"active": false, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.connect")
+		and not store.purchase_button.disabled
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_not_connected")
+		and store.selection_description_label.text.contains("not available yet"),
+		"unlinked players can open account linking while disabled benefits remain explicit")
+	store.apply_patreon_status({
+		"success": true, "available": true, "connected": true,
+		"active": false, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.view")
+		and not store.purchase_button.disabled,
+		"linked players without an active tier can view Patreon")
+	store.apply_patreon_status({
+		"success": true, "available": true, "connected": true,
+		"active": true, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.text == localization_manager.text("ui.store.patreon.manage")
+		and store.selection_price_label.text == localization_manager.text("ui.store.patreon.status_active"),
+		"verified members can manage Patreon without claiming disabled benefits")
+	store.call("_on_purchase_pressed")
+	_check(store.patreon_external_dialog.visible and not store.purchase_in_progress,
+		"linked players receive a leave-game confirmation instead of Gem checkout")
+	store.patreon_external_dialog.hide()
+	store.apply_patreon_status({
+		"success": true, "available": true, "connected": true,
+		"active": true, "benefitsEnabled": true,
+	})
+	_check(not store.selection_description_label.text.contains("not available yet")
+		and store.status_label.text == localization_manager.text("ui.store.patreon.status_active"),
+		"benefit copy follows the server fulfillment flag")
+	store.apply_patreon_status({
+		"success": true, "available": false, "connected": false,
+		"active": false, "benefitsEnabled": false,
+	})
+	_check(store.purchase_button.disabled, "unavailable linking cannot open Patreon")
 	store.call("_on_purchase_pressed")
 	_check(not store.purchase_in_progress,
-		"Patreon preview cannot start the Aether Gem purchase flow")
+		"Patreon actions cannot start the Aether Gem purchase flow")
+	_check(source.contains('auth_service.call("get_patreon_store_status")')
+		and source.contains('auth_service.call("create_account_portal_launch", locale, "account")')
+		and source.contains('const PATREON_PAGE_URL := "https://www.patreon.com/c/PokeAether"'),
+		"Patreon actions use authenticated status, the secure account portal, and a fixed Patreon URL")
 
 	store.call("_select_category", "services")
 	_check(store.product_buttons.size() == 2, "Trainer Services contains exactly two tickets")
