@@ -33,12 +33,19 @@ store, then passed no-op, corrupt-update rollback and restart checks. A rendered
 real battle loaded all 14 new pairs from that installed store without script or
 renderer errors. The existing seven-bundle launcher check also passed.
 
+## R2 upload (26 September 2026)
+
+The 14 new bundle objects and the v2 index were uploaded to the existing R2
+bucket. The seven v1 bundle objects were reused. A public GET of every one of
+the 22 pinned objects returned exactly the recorded size and SHA-256; the total
+verified content was 538,943,279 bytes. The check is recorded in
+`release/approved_3d_bundles_v2_r2_upload.json`.
+
 ## Release boundary
 
 The deployment workflow still defaults to v1. A future authorized v2 release
-must first upload and publicly verify the 22 pinned objects, then select `v2`
-and rebuild the launcher in the desktop workflow. The workflow checks that all
-objects exist at the expected public URLs before constructing the manifest.
-Final desktop certification, promotion, upload, push and deployment remain
-separate steps; this local package has not performed them. The model archives
-are not in the base game build.
+must select `v2` and rebuild the launcher in the desktop workflow. The workflow
+rechecks that all objects exist at the expected public URLs before constructing
+the manifest. Final desktop certification, promotion, push and deployment remain
+separate steps. Uploading the content objects did not change the live desktop
+manifest, and the model archives are not in the base game build.
