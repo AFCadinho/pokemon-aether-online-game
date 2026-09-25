@@ -80,6 +80,7 @@ var _first_trainer: BattleTrainerSprite
 var _second_trainer: BattleTrainerSprite
 var _opponent_trainer: BattleTrainerSprite
 var _trainer_identity := ""
+var _trainer_callout_tokens: Dictionary = {}
 var _native_attack_tween: Tween
 var _native_animation_sprite: AnimatedSprite2D
 var _native_animation_origin := Vector2.ZERO
@@ -146,13 +147,12 @@ func _ready() -> void:
 		_native_party.party_selected.connect(_select_switch)
 		_second_trainer = preload("res://scenes/battle/battle_trainer_sprite.tscn").instantiate() as BattleTrainerSprite
 		stage.add_child(_second_trainer)
-		# Keep both allied Trainers tucked behind the shifted left-side doubles.
-		_first_trainer.position = Vector2(146, 496)
-		_second_trainer.position = Vector2(206, 496)
-		_first_trainer.callout_rest_position = _first_trainer.position
-		_second_trainer.callout_rest_position = _second_trainer.position
 		_first_trainer.scale = Vector2.ONE * 0.75
 		_second_trainer.scale = Vector2.ONE * 0.75
+		_opponent_trainer.scale = Vector2.ONE * 0.75
+		for trainer: BattleTrainerSprite in [_first_trainer, _second_trainer, _opponent_trainer]:
+			trainer.callout_rest_scale = trainer.scale
+		_position_native_trainers.call_deferred()
 		for side: String in ["player", "enemy"]:
 			var sprite_box: Control = embedded_hosts[side + "_sprite"]
 			sprite_box.set_double_sprite_horizontal_positions(158.0, 92.0)
@@ -467,6 +467,8 @@ func _sync() -> void:
 		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
+		if _native_mode:
+			_hide_native_trainers()
 		if _native_mode:
 			_native_pokemon_hover.hide_card()
 			_native_move_hover.hide_card()
@@ -1329,6 +1331,7 @@ func _send_out_message(controller: String, details: String) -> String:
 
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
 	if _native_mode:
+		_show_trainer_for_event(event)
 		match str(event.get("kind", "")):
 			"coopcapture":
 				_capture_target_controller = str(event.get("target", ""))
@@ -1643,13 +1646,7 @@ func _opponent_title() -> String:
 
 
 func _sync_native_trainers() -> void:
-	if str(CoopService.activity.get("activityId", "")).begins_with("wild_"):
-		if _trainer_identity != "wild":
-			_first_trainer.clear()
-			_second_trainer.clear()
-			_opponent_trainer.clear()
-			_trainer_identity = "wild"
-		return
+	var wild := str(CoopService.activity.get("activityId", "")).begins_with("wild_")
 	var appearances: Dictionary = CoopService.party.get("memberAppearances", {})
 	var first: Dictionary = appearances.get(str(_party_member_id("p1")), {})
 	var second: Dictionary = appearances.get(str(_party_member_id("p3")), {})
@@ -1657,16 +1654,102 @@ func _sync_native_trainers() -> void:
 		first = PlayerSave.to_appearance_state()
 	elif CoopService.view.get("participant") == "p3" and second.is_empty():
 		second = PlayerSave.to_appearance_state()
-	var opponent_sprite_id := _opponent_trainer_sprite_id()
+	var opponent_sprite_id := "" if wild else _opponent_trainer_sprite_id()
 	var identity := JSON.stringify([first, second, opponent_sprite_id])
 	if identity == _trainer_identity:
 		return
 	_trainer_identity = identity
 	if not first.is_empty():
 		_first_trainer.show_player(first, Vector2.RIGHT)
+		_first_trainer.visible = false
+	else:
+		_first_trainer.clear()
 	if not second.is_empty():
 		_second_trainer.show_player(second, Vector2.RIGHT)
+		_second_trainer.visible = false
+	else:
+		_second_trainer.clear()
 	_show_coop_opponent_trainer(opponent_sprite_id)
+	if _opponent_trainer != null:
+		_opponent_trainer.visible = false
+
+
+func _position_native_trainers() -> void:
+	if not _native_mode or _first_trainer == null or _allied_party == null or _opponent_party == null:
+		return
+	var stage: Control = embedded_hosts["stage"]
+	for entry: Dictionary in [
+		{"trainer": _first_trainer, "rail": _allied_party, "slot": 0, "side": 1},
+		{"trainer": _second_trainer, "rail": _allied_party, "slot": 3, "side": 1},
+		{"trainer": _opponent_trainer, "rail": _opponent_party, "slot": 0, "side": -1},
+	]:
+		var trainer: BattleTrainerSprite = entry["trainer"]
+		var rail: Control = entry["rail"]
+		if trainer == null or rail.get_child_count() <= int(entry["slot"]):
+			continue
+		var slot: Control = rail.get_child(int(entry["slot"])) as Control
+		if slot == null:
+			continue
+		var rail_rect := rail.get_global_rect()
+		var slot_rect := slot.get_global_rect()
+		var side := int(entry["side"])
+		var global_anchor := Vector2(rail_rect.end.x + 68.0 if side > 0 else rail_rect.position.x - 68.0,
+			slot_rect.end.y + 34.0)
+		var local_anchor := stage.get_global_transform().affine_inverse() * global_anchor
+		trainer.callout_rest_position = local_anchor
+		if not trainer.visible:
+			trainer.position = local_anchor
+
+
+func _trainer_for_controller(controller: String) -> BattleTrainerSprite:
+	match controller:
+		"p1": return _first_trainer
+		"p3": return _second_trainer
+		"p2", "p4": return _opponent_trainer
+	return null
+
+
+func _show_trainer_for_event(event: Dictionary) -> void:
+	var kind := str(event.get("kind", ""))
+	var message := ""
+	match kind:
+		"move": message = "Use %s!" % str(event.get("move", ""))
+		"switch", "drag", "replace":
+			var pokemon := str(event.get("details", "")).split(",")[0].strip_edges()
+			if not pokemon.is_empty():
+				message = "Go, %s!" % pokemon
+		"coopcapture": message = "Poké Ball, go!"
+		"-mega", "-primal": message = "Mega Evolve!"
+		"-zpower": message = "Use Z-Power!"
+	if message.is_empty():
+		return
+	var trainer := _trainer_for_controller(str(event.get("actor", "")))
+	if trainer == null or not trainer.has_trainer_art():
+		return
+	_hide_native_trainers()
+	_position_native_trainers()
+	var sprite_id := trainer.get_instance_id()
+	var token := int(_trainer_callout_tokens.get(sprite_id, 0)) + 1
+	_trainer_callout_tokens[sprite_id] = token
+	trainer.reveal_for_command()
+	trainer.show_command(message)
+	_hide_native_trainer_after_callout(trainer, token)
+
+
+func _hide_native_trainer_after_callout(trainer: BattleTrainerSprite, token: int) -> void:
+	await get_tree().create_timer(TrainerCommandCallout.DISPLAY_SECONDS).timeout
+	if not is_instance_valid(trainer) or _trainer_callout_tokens.get(trainer.get_instance_id(), 0) != token:
+		return
+	trainer.hide_after_command()
+
+
+func _hide_native_trainers() -> void:
+	for trainer: BattleTrainerSprite in [_first_trainer, _second_trainer, _opponent_trainer]:
+		if trainer == null:
+			continue
+		_trainer_callout_tokens[trainer.get_instance_id()] = int(_trainer_callout_tokens.get(trainer.get_instance_id(), 0)) + 1
+		trainer.visible = false
+		trainer.get_node("TrainerCommandCallout").call("clear_command")
 
 
 func _opponent_trainer_sprite_id() -> String:
