@@ -151,6 +151,9 @@ func _run() -> void:
 	assert(pokemon_workspace.duration.get_item_text(0).contains("100 Aetherite"))
 	assert(not pokemon_workspace.duration.visible)
 	assert(pokemon_workspace.rent_button.text == "Rent for 24 hours — 100 Aetherite")
+	await process_frame
+	assert(pokemon_workspace.rent_button.get_global_rect().end.x < pokemon_workspace.size.x)
+	assert(pokemon_workspace.pokemon_review_step.get_combined_minimum_size().x < pokemon_workspace.size.x)
 	assert(pokemon_workspace.selected_build["source"] == "paste")
 	var pokemon_rent_payload := pokemon_workspace._build_rent_payload({"durationSeconds": 86400.0})
 	assert(typeof(pokemon_rent_payload["durationSeconds"]) == TYPE_INT)
