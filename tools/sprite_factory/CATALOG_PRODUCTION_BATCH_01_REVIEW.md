@@ -90,10 +90,76 @@ ops/worktrees/slot-env SLOT -- env \
 ```
 
 This is sampled visual evidence, not continuous video or a battle-view test.
-The next gate measures battle scale/grounding, motion/HUD clearance, and
-presenter lifecycle and performance for the 18 candidates. Record a confirmed
-material, visibility, identity or action defect as a per-model hold; advance
-the unaffected models. Only candidates that pass battle qualification may be
-considered for checked-in admission. Normal/shiny pairing and individual
-bundle packaging are subsequent release gates. Start the next production batch
-without waiting for the seven existing technical holds to be repaired.
+
+### Battle-camera and floor preflight (2026-09-25)
+
+The existing `phase5_battle_review.gd` was run unchanged against the 18 GLB
+candidates, seven blocked rows and a hash-checked Dragonite comparison control.
+This is the **GLB review stage**, not the standalone-SCN presenter. The rendered
+Forward+ run completed without script/renderer errors. It measured 13,764
+60 Hz candidate poses and captured 288 candidate views (classic/stadium,
+both sides, four representative actions). All 288 views fit the viewport and
+none intersects the existing HUD proxy.
+
+The raw scale and idle-only lift need normal batch calibration:
+
+| Finding | Candidates |
+| --- | --- |
+| Minimum idle height below the established 60 px readability floor | Igglybuff, Mareep, Pineco, Dunsparce, Teddiursa, Houndour, Phanpy, Larvitar |
+| At least one native clip below the flat floor after idle-only lift (more than 0.001 units) | Persian, Mareep, Ampharos, Skiploom, Slowking, Ursaring, Houndoom, Stantler |
+| Neither of those raw-scale findings | Charmeleon, Slowbro, Flaaffy |
+
+These are **calibration queues, not source/export failures**. Mareep is in both
+queues. The lowest raw idle height is 26.30 px (Igglybuff), and the lowest
+sampled clearance is -0.102 units (Skiploom). Representative battle views
+confirm the tiny Igglybuff presentation and show the long Houndoom tail and
+Stantler antlers inside frame. A flat floor and proxy HUD cannot certify arena
+geometry, real HUD, full presenter lifecycle or performance.
+
+Retained slot-b evidence:
+
+- `.tmp/catalog-production-01-battle-input-2026-09-25/catalog.json`, SHA-256
+  `ad12f72ae941b7cf92a7fe8111d90cc222ccda143c3b16542322d700eec4118e`;
+- `.tmp/catalog-production-01-battle-review-2026-09-25/battle-review.json`,
+  SHA-256 `1ff7f59fa43902be3222aaf65665ad6b83df78d0c29e9e4f1b39e829b354afe8`,
+  plus its PNGs;
+- `.tmp/catalog-production-01-review-2026-09-25/battle-review.log`.
+
+### Calibrated offline placement (2026-09-25)
+
+The existing generic phase-5 rules were applied without changing the converter,
+model sources, phase-5 code or production registry. The shared readability rule
+`min(4, max(1, 66 / minimum_idle_height))` scaled ten candidates (eight were
+below 60 px; Flaaffy and Skiploom received small margins below 66 px). The
+second 60 Hz battle review put **all 18 above 60 px**, in view and clear of the
+posed-bounds HUD proxy. Grounded sleep intent was confirmed from source poses
+for Mareep, Slowking, Ursaring and Stantler; Skiploom and Pineco retain their
+native floating rest. The existing motion baker produced profiles for all 18,
+with no faint endpoint mismatch or per-model bake hold.
+
+The final rendered review repeated the four-view camera check and independently
+sampled **27,350 poses at 120 Hz**. Every corrected clip stays above the flat
+floor (minimum **0.0051 units**); all 18 idle presentations remain at least
+**65.6 px** tall; all **288** representative candidate battle views are in
+frame without HUD-proxy overlap. Its log contains no `ERROR:` or `SCRIPT ERROR`.
+The per-model results and exact GLB/SCN hashes are pinned in
+[`catalog_production_batch_01_placement_preflight.json`](catalog_production_batch_01_placement_preflight.json).
+It labels the 18 **ready for SCN runtime qualification**, not approved.
+
+Retained slot-b inputs/results: `.tmp/catalog-production-01-battle-input-2026-09-25/`
+(`readability.json`, `motion-candidates.json`),
+`.tmp/catalog-production-01-battle-scaled-2026-09-25/`,
+`.tmp/catalog-production-01-battle-corrected-2026-09-25/`, and their logs in
+`.tmp/catalog-production-01-review-2026-09-25/`. The existing phase-5 candidate
+closer has a fixed ten-model cohort, so its eligibility labels were not reused
+for batch 01. The candidate profile remains a local review artifact; no game
+catalog, pack, saved setting, production release or server was changed.
+
+**Next gate:** prepare the exact standalone SCNs with the measured placement and
+motion profiles in an isolated runtime candidate catalog. Run the actual
+presenter through mixed-team switching, duplicate actors, faint/replacement,
+cache eviction/reload and battle replay, plus material/HUD review and
+performance guards. Record confirmed model-specific defects as holds and
+advance the unaffected models. Normal/shiny pairing and individual bundle
+packaging remain later release gates. The seven technical holds do not block
+the next production batch.
