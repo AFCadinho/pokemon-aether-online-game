@@ -23,7 +23,9 @@ paths and required tracks, then activates it after extraction. The first phone
 played login, world and wild-battle music from a local test pack and kept login
 and world music after an offline restart. With explicit production access
 approval, it then downloaded and activated `music-3f2a6df18793` from the public
-updates manifest. Current gaps: Android keyboard and safe-area behavior,
+updates manifest. A later device build removed an obsolete music directory on
+startup while preserving all 16 tracks in the active pack. Current gaps:
+Android keyboard and safe-area behavior,
 deeper touch coverage across battle menus, and different aspect ratios. This
 is not yet a player release or a full mobile UI validation.
 
@@ -854,8 +856,8 @@ Consider public support only after:
 - [ ] Pokémon asset resolver supports `user://`.
 - [x] Music resolver supports `user://`.
 - [ ] Interrupted-download recovery tested.
-- [ ] Old music versions are pruned after a successful update so repeated
-      updates do not consume unbounded storage.
+- [x] Old music versions are pruned on the first launch after a successful
+      update, once no music stream uses the replaced pack.
 
 ### Feature parity
 

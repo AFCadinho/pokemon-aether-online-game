@@ -39,6 +39,10 @@ func _ready() -> void:
 		if debug_url.begins_with("http://127.0.0.1:") and debug_url.ends_with("/manifest.json"):
 			manifest_url = debug_url
 	active_version = _read_installed_version()
+	if active_version != "":
+		# A replaced pack can still be playing until the app exits. Remove old
+		# versions on the next launch, before MusicManager starts playback.
+		_prune_old_music_versions(USER_MUSIC_ROOT, active_version)
 	_build_status_ui()
 	_refresh.call_deferred()
 
@@ -342,6 +346,16 @@ func _remove_tree(path: String) -> void:
 		name = directory.get_next()
 	directory.list_dir_end()
 	DirAccess.remove_absolute(absolute_path)
+
+
+func _prune_old_music_versions(music_root: String, current_version: String) -> void:
+	if not _safe_version(current_version):
+		return
+	if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(music_root.path_join(current_version))):
+		return
+	for directory_name: String in DirAccess.get_directories_at(music_root):
+		if directory_name != current_version and _safe_version(directory_name):
+			_remove_tree(music_root.path_join(directory_name))
 
 
 func _finish_failure(message: String) -> void:

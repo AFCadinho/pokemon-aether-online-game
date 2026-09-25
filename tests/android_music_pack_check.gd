@@ -61,6 +61,20 @@ func _run() -> void:
 		and FileAccess.file_exists(installed_path), "track resolver prefers the installed version")
 	_check(service.resolve_track_path("res://assets/music/../outside.ogg") == "",
 		"track resolver cannot escape the pack")
+	var prune_root := TEST_ROOT.path_join("prune")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(prune_root.path_join("music-current")))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(prune_root.path_join("music-old")))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(prune_root.path_join("unrelated")))
+	service.call("_prune_old_music_versions", prune_root, "music-missing")
+	_check(DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(prune_root.path_join("music-old"))),
+		"cleanup does not run when the active pack is missing")
+	service.call("_prune_old_music_versions", prune_root, "music-current")
+	_check(DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(prune_root.path_join("music-current"))),
+		"cleanup preserves the active music pack")
+	_check(not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(prune_root.path_join("music-old"))),
+		"cleanup removes an obsolete music pack")
+	_check(DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(prune_root.path_join("unrelated"))),
+		"cleanup leaves unrelated storage alone")
 
 	var incomplete_path := TEST_ROOT.path_join("incomplete.zip")
 	packer = ZIPPacker.new()

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - De Android-proefbuild heeft nu muziek op het inlogscherm, in de wereld en tijdens wilde gevechten. Hij haalt het volledige muziekpakket automatisch binnen, controleert de download en bewaart die voor volgende starts.
+- Na een muziekupdate verwijdert Android bij de volgende start de oude muziekversie om opslagruimte vrij te maken.
 - Android toont geen crashrapport meer na een normale onderbreking op de achtergrond.
 - De Android-proefbuild gebruikt liggende 2D-gevechten met de volledige battleweergave en laadt de normale geanimeerde Pokémon-sprites via de bestaande online assetroute.
 - De Android-wereldinterface laadt nu zonder afhankelijkheid van een uitgesloten desktopbestand voor lokale 3D-modelreview.
