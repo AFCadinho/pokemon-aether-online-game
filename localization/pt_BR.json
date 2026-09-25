@@ -5971,6 +5971,7 @@
   "ui.lending.error.action": "Não foi possível atualizar o empréstimo.",
   "ui.lending.error.same_map": "Os dois Treinadores precisam estar online, disponíveis e no mesmo mapa.",
   "ui.lending.error.presence_unavailable": "A verificação de Treinadores próximos está temporariamente indisponível. Tente novamente em breve.",
+  "ui.lending.error.browser_recipient": "Este Treinador está jogando no navegador e não pode usar Empréstimos entre Jogadores.",
   "ui.lending.error.selection_limit": "Escolha no máximo seis recursos.",
   "ui.lending.items_hint": "Escolha itens reutilizáveis da Bolsa ou de um Pokémon. Cada cópia é controlada separadamente.",
   "ui.lending.items_empty": "Você não tem itens reutilizáveis disponíveis para emprestar.",

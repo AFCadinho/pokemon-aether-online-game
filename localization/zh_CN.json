@@ -5968,6 +5968,7 @@
   "ui.lending.error.action": "无法更新贷款。",
   "ui.lending.error.same_map": "两名训练家必须在线、可用且位于同一张地图上。",
   "ui.lending.error.presence_unavailable": "附近训练家验证暂时不可用。稍后再试。",
+  "ui.lending.error.browser_recipient": "这位训练家正在浏览器中游玩，无法使用玩家借用功能。",
   "ui.lending.error.selection_limit": "选择不超过六项资产。",
   "ui.lending.items_hint": "从你的包或宝可梦中选择可重复使用的持有物品。每个副本都单独跟踪。",
   "ui.lending.items_empty": "您没有可​​供借出的可重复使用的持有物品。",
