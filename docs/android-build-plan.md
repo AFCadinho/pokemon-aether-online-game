@@ -9,9 +9,13 @@ Device smoke test (Samsung SM-G780F, Android 13): debug APK installed and
 launched, production server status loaded, login entered the world, and party
 buttons opened a Pokémon window. A missing desktop-only review JSON initially
 caused an Android script compile error; the lazy-load fix removed that error in
-the second device run. Current gaps: no touch movement controls, small text and
-window controls, and music excluded from the prototype APK. This is not yet a
-player release or a full mobile UI validation.
+the second device run. Initial fixed touch controls moved the player, but
+overlapped chat. The floating joystick and world-tap prototype now also runs
+on the phone: movement, interaction, chat and UI buttons were confirmed by the
+device tester. Current gaps: small text and window controls, music excluded
+from the prototype APK, and broader touch coverage for dialogue, battles and
+different aspect ratios. This is not yet a player release or a full mobile UI
+validation.
 
 The original July estimates and store-related options below are historical.
 Android V1 uses direct APK distribution and must detect and download a newer
@@ -57,10 +61,10 @@ extensions.
 
 The main gaps are outside the core gameplay:
 
-1. The Android export preset has been added; installation and a physical-device
-   run still need verification.
-2. Movement and interaction actions in `project.godot` currently have keyboard
-   bindings only.
+1. The Android export preset is added and the debug APK has run on one phone;
+   release signing and broader device coverage remain open.
+2. Movement and interaction actions in `project.godot` have keyboard bindings;
+   the mobile control scene now generates those same actions from touch.
 3. The UI contains mouse-, right-click- and drag-specific interactions.
 4. Desktop display code also runs on non-web platforms and therefore needs a
    mobile exclusion.
@@ -233,11 +237,11 @@ world scene. Avoid placing the implementation directly in the already large
 
 ### Initial control layout
 
-- Bottom left: four-way directional pad.
-- Bottom right: primary interaction button.
-- Context action: fishing or surfing when available.
-- Menu/back button.
-- Optional run toggle if running cannot remain automatic.
+- A short tap on the unobstructed world sends the existing `interact` action.
+- Holding a thumb on the world opens a joystick at that touch position;
+  dragging moves in one of the four cardinal directions.
+- A second finger can tap the world while the first controls movement.
+- Existing menu and context UI remains available through its own touch targets.
 
 The controls should call:
 
@@ -251,14 +255,14 @@ directly.
 
 ### Visibility rules
 
-Show mobile controls when:
+Accept world touches when:
 
 - the local player can receive overworld movement;
 - no blocking modal is active;
 - no text input owns focus;
 - a battle UI is not consuming the screen.
 
-Hide or adapt them when:
+Release the active touch when:
 
 - the login screen is active;
 - a battle is active;
@@ -280,12 +284,15 @@ touch.
 
 ### Acceptance criteria
 
-- [ ] A player can walk one tile and hold a direction continuously.
+- [x] Movement works with the floating joystick on the first test phone;
+      precise single-tile and long-hold behavior still needs a focused pass.
 - [ ] Direction changes do not create diagonal or skipped tile movement.
 - [ ] Multitouch allows holding a direction while pressing interact.
-- [ ] NPC, sign, door, fishing and surfing interactions work.
+- [ ] World interaction works on the first test phone; NPC, sign, door,
+      fishing and surfing scenarios still need separate passes.
 - [ ] Opening a modal releases all held movement actions.
-- [ ] Backgrounding the app releases all held actions.
+- [x] A focused control check confirms pausing the app releases held actions;
+      physical-device backgrounding still needs verification.
 - [ ] Controls do not overlap critical UI on tested aspect ratios.
 
 ## 6. Milestone C: Android asset delivery
