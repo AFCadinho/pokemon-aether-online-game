@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De voorwaardenregel in de review voor één Pokémon breekt nu af, zodat prijsvakken en huurknop binnen het rentalvenster blijven.
+
 - De Patreon-kaart in de Gift Store toont de echte account- en lidmaatschapsstatus. Niet-gekoppelde spelers openen veilig het accountportaal; gekoppelde spelers kunnen na bevestiging Patreon openen. Voordelen blijven uit zolang fulfillment is uitgeschakeld.
 
 - De lege PokéPaste-groepspreview toont zijn hint nu over de volle paneelbreedte, zodat het venster bij openen netjes binnen beeld blijft.

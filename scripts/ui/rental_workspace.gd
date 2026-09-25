@@ -331,7 +331,7 @@ func _build_individual_catalog(browse: HBoxContainer) -> void:
 	pokemon_review_terms = Label.new()
 	pokemon_review_terms.text = "24h real time • Separate rentals • Temporary items • Permanent purchases untradeable" if bulk_mode else "24 hours real time • Rental item is temporary • Permanent purchases are untradeable"
 	pokemon_review_terms.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_review_terms.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if bulk_mode else TextServer.AUTOWRAP_OFF
+	pokemon_review_terms.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pokemon_review_terms.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_review_terms.add_theme_color_override("font_color", Color("#8ea8bd"))
 	actions.add_child(pokemon_review_terms)
