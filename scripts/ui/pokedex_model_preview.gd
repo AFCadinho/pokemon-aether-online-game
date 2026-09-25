@@ -6,6 +6,7 @@ extends Control
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const LocalReview = preload("res://scripts/ui/local_model_review.gd")
+const DEFAULT_FOV := 34.0
 
 var viewport: SubViewport
 var world: Node3D
@@ -18,6 +19,7 @@ var loading_path := ""
 var yaw := 0.0
 var profile := {}
 var preview_floor: MeshInstance3D
+var pokedex_zoom_factor := 1.0
 signal model_failed
 
 func _ready() -> void:
@@ -59,7 +61,7 @@ func _ready() -> void:
 	world.add_child(floor)
 	camera = Camera3D.new()
 	camera.position = Vector3(0, 1.2, 5.2)
-	camera.fov = 34.0
+	camera.fov = DEFAULT_FOV
 	world.add_child(camera)
 	camera.look_at(Vector3(0, 0.8, 0))
 	status = Label.new()
@@ -163,11 +165,18 @@ func _fit_review_actor() -> void:
 		return
 	var aspect := maxf(size.x / maxf(size.y, 1.0), 0.1)
 	var extent := maxf(box.size.y, box.size.x / aspect) * 0.5
-	var distance := maxf(extent / tan(deg_to_rad(camera.fov * 0.5)) + box.size.z * 0.5, 0.1) * 1.35
+	# Frame at the normal field of view so toggling zoom never re-fits away
+	# the closer inspection the player requested.
+	var distance := maxf(extent / tan(deg_to_rad(DEFAULT_FOV * 0.5)) + box.size.z * 0.5, 0.1) * 1.35
 	camera.near = maxf(distance * 0.001, 0.001)
 	camera.far = maxf(distance * 12, 10)
 	camera.position = box.get_center() + Vector3(0, 0, distance)
 	camera.look_at(box.get_center())
+
+func set_zoom(factor: float) -> void:
+	pokedex_zoom_factor = clampf(factor, 1.0, 2.0)
+	if camera != null:
+		camera.fov = DEFAULT_FOV / pokedex_zoom_factor
 
 func rotate_by(delta_x: float) -> void:
 	yaw += delta_x * 0.012
@@ -192,6 +201,7 @@ func _clear_actor() -> void:
 	preview_floor.show()
 	camera.near = 0.05
 	camera.far = 4000
+	camera.fov = DEFAULT_FOV / pokedex_zoom_factor
 	camera.position = Vector3(0, 1.2, 5.2)
 	camera.look_at(Vector3(0, 0.8, 0))
 
