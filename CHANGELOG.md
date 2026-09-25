@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive 2D/2.5D double battles now size move effects for two Pokémon per side and aim projectile sheets from the acting Pokémon to their actual target.
+
 - Adventure Party members now see a +25% EXP buff while grouped; it increases their own EXP rewards from shared wild battles.
 
 - NPC Trainers in Immersive Adventure Party doubles now use their own mugshot when giving commands, with their class battle portrait or overworld sprite as a fallback.

@@ -50,7 +50,7 @@ func _init() -> void:
 	_check_contains(player_source, "func _fit_timing_background_to_canvas() -> void:", "short timing backgrounds can cover the complete animation canvas")
 	_check_contains(router_source, "config.get(\"timing_background_fill_canvas\", false)", "moves can opt into complete timing background coverage")
 	_check_contains(player_source, "func _get_sheet_frame_offset", "sheet effects can apply an offset to only selected frames")
-	_check_contains(player_source, "_battlefield_position(sheet_position) + sheet_visual_offset", "sheet correction is applied after battlefield mirroring")
+	_check_contains(player_source, "_retarget_sheet_display_position(_battlefield_position(sheet_position)) + sheet_visual_offset", "sheet correction is applied after battlefield mirroring")
 	_check_contains(player_source, "func display_position_to_battlefield_source(position: Vector2) -> Vector2:", "mirrored animations can convert display anchors to source coordinates")
 	_check_contains(player_source, "if reverse_battlefield_vertical else position.y", "animations can preserve their vertical travel when mirrored")
 	_check_contains(player_source, "func battlefield_offset_to_display(offset: Vector2) -> Vector2:", "live sheet anchors respect horizontal-only battlefield mirroring")
