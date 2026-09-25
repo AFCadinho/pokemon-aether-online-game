@@ -311,13 +311,15 @@ func get_patreon_store_status() -> Dictionary:
 		return {"success": false}
 	var body := _dictionary_from_value(response.get("body", {}))
 	if not (body.get("available") is bool and body.get("connected") is bool
-		and body.get("active") is bool and body.get("benefitsEnabled") is bool):
+		and body.get("active") is bool and body.get("manualRole") is bool
+		and body.get("benefitsEnabled") is bool):
 		return {"success": false}
 	return {
 		"success": true,
 		"available": body.available,
 		"connected": body.connected,
 		"active": body.active,
+		"manualRole": body.manualRole,
 		"benefitsEnabled": body.benefitsEnabled,
 	}
 

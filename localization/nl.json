@@ -3039,6 +3039,8 @@
   "ui.store.patreon.status_not_connected": "NIET GEKOPPELD",
   "ui.store.patreon.status_connected": "ACCOUNT GEKOPPELD",
   "ui.store.patreon.status_active": "LIDMAATSCHAP BEVESTIGD",
+  "ui.store.patreon.status_manual_role": "ROL TOEGEKEND",
+  "ui.store.patreon.manual_grant_note": "PokeAether heeft deze rol rechtstreeks toegekend; dit bevestigt geen Patreon-lidmaatschap.",
   "ui.store.patreon.connect": "Koppel Patreon",
   "ui.store.patreon.view": "Bekijk lidmaatschap",
   "ui.store.patreon.manage": "Beheer lidmaatschap",

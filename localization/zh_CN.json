@@ -3019,6 +3019,8 @@
   "ui.store.patreon.status_not_connected": "尚未关联",
   "ui.store.patreon.status_connected": "账户已关联",
   "ui.store.patreon.status_active": "会员资格已验证",
+  "ui.store.patreon.status_manual_role": "身份已授予",
+  "ui.store.patreon.manual_grant_note": "PokeAether 已直接授予此身份；这不代表 Patreon 会员资格已获验证。",
   "ui.store.patreon.connect": "关联 Patreon",
   "ui.store.patreon.view": "查看会员资格",
   "ui.store.patreon.manage": "管理会员资格",
