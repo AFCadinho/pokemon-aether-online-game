@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party members can start shared trainer battles when they encounter a supported trainer, even if their partner leads the party.
+
 - Adventure Party battles now show that a requested exit is being processed when the partner has disconnected.
 
 - The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
