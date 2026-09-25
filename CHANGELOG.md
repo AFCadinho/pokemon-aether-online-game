@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party battles now show that a requested exit is being processed when the partner has disconnected.
+
 - The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
 
 - Fixed the Adventure Party HUD briefly appearing over Immersive battles when party presence updates arrive.

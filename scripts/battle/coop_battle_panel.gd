@@ -825,7 +825,10 @@ func _update_actions() -> void:
 	if not exit_request.is_empty() and not CoopService.view.get("ended", false):
 		var fleeing: bool = exit_request.get("type") == "run"
 		if exit_request.get("requestedBy") == CoopService.view.get("participant"):
-			_prompt.text = "Waiting for your partner to agree to flee…" if fleeing else "Waiting for your partner to agree to forfeit…"
+			if CoopService.activity.get("partnerConnected", true):
+				_prompt.text = "Waiting for your partner to agree to flee…" if fleeing else "Waiting for your partner to agree to forfeit…"
+			else:
+				_prompt.text = "Partner disconnected — ending the battle…"
 		else:
 			_prompt.text = "Your partner wants to flee. Do you agree?" if fleeing else "Your partner wants to forfeit. Both Trainers will lose. Do you agree?"
 			for action: Dictionary in CoopService.view.get("legalActions", []):
