@@ -16,10 +16,18 @@ device tester. A 1.25x mobile content scale, larger quick actions, global buff
 buttons and chat controls, and touch-specific dialogue input are in the device
 build. The tester confirmed a multi-line NPC dialogue and a wild battle. The
 left party rail and battle log fit beneath each other, and the post-battle
-Android log has no sprite-loading script errors. Current gaps: music excluded
-from the prototype APK, Android keyboard and safe-area behavior, deeper touch
-coverage across battle menus, and different aspect ratios. This is not yet a
-player release or a full mobile UI validation.
+Android log has no sprite-loading script errors. A small login, Route 1 and
+wild-battle music fallback is now bundled. The Android client downloads the
+versioned music pack into `user://`, checks its size and SHA-256, validates ZIP
+paths and required tracks, then activates it after extraction. The first phone
+played login, world and wild-battle music from the downloaded pack. Current
+gaps: Android keyboard and safe-area behavior, deeper touch coverage across
+battle menus, and different aspect ratios. This is not yet a player release or
+a full mobile UI validation.
+
+Android crash diagnostics now mark a backgrounded app as clean and mark it
+active again on resume. This prevents Android's normal background process
+termination from producing a false crash prompt on the next launch.
 
 The original July estimates and store-related options below are historical.
 Android V1 uses direct APK distribution and must detect and download a newer
@@ -836,13 +844,13 @@ Consider public support only after:
 
 ### Content
 
-- [ ] Asset pack service added.
-- [ ] First-launch download UI added.
-- [ ] Size and checksum checks implemented.
-- [ ] Safe ZIP extraction implemented.
-- [ ] Atomic staging and activation implemented.
+- [x] Music pack service added; Pokémon sprite pack delivery remains open.
+- [x] First-launch music download UI added; other pack UI remains open.
+- [x] Music pack size and checksum checks implemented.
+- [x] Safe ZIP extraction implemented for music.
+- [x] Atomic staging and activation implemented for music.
 - [ ] Pokémon asset resolver supports `user://`.
-- [ ] Music resolver supports `user://`.
+- [x] Music resolver supports `user://`.
 - [ ] Interrupted-download recovery tested.
 
 ### Feature parity

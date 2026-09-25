@@ -47,6 +47,7 @@ BackendErrorLocalization="*res://scripts/services/backend_error_localization_ser
 SettingsManager="*res://scripts/services/settings_manager.gd"
 WebPokemonSpriteService="*res://scripts/services/web_pokemon_sprite_service.gd"
 WebMemoryProbe="*res://scripts/services/web_memory_probe.gd"
+AndroidMusicPackService="*res://scripts/services/android_music_pack_service.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
 SfxManager="*res://scripts/services/sfx_manager.gd"
 AuthService="*res://scripts/services/auth_service.gd"
