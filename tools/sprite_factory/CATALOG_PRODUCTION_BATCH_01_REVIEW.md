@@ -275,8 +275,18 @@ Rebuild from the retained paired catalog with
 Run the local stress screen with
 `python3 tools/sprite_factory/run_catalog_batch_01_candidate_stress.py CATALOG REPORT LOG`.
 
-**Release approval remains open.** The sampled motion and battle images do not
-replace a full moving visual review and final per-species decision. The
-launcher release adapter intentionally continues to allow only the original
-seven approved species. Ampharos, Slowbro, Pineco and Larvitar shiny stay in
-the material review queue and do not delay these 14 candidate bundles.
+## Visual approval and local v2 package (26 September 2026)
+
+The user inspected all 14 normal/shiny pairs in the real local battle review
+and reported that all look good. The exact qualified scene hashes and shared
+motion profiles were moved to the reviewed game and launcher registries, with
+the decision pinned in `catalog_production_batch_01_approval.json`. The
+original 75 normal-only screened candidates remain screened. Ampharos,
+Slowbro, Pineco and Larvitar shiny remain in the material review queue.
+
+The prepared `approved-pokemon-3d-v2` index combines the seven existing
+immutable bundles with 14 new individual bundles. A local v1-to-v2 upgrade
+planned exactly 14 downloads, loaded all 42 normal/shiny scenes, survived a
+corrupt update and restart, and passed a rendered battle with all 14 new pairs.
+See [`docs/approved-3d-bundle-release-v2.md`](../../docs/approved-3d-bundle-release-v2.md).
+These objects have not been uploaded and the v2 release has not been activated.

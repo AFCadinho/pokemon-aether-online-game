@@ -28,7 +28,7 @@ func _run() -> void:
 		"url": base + "/optional-assets/pokemon_3d/index/test.json", "objectBaseUrl": base,
 		"sha256": FileAccess.get_sha256(source_index),
 		"sizeBytes": FileAccess.get_file_as_bytes(source_index).size(),
-		"requiredAssetIds": ReleaseBundles.RELEASE_ASSET_IDS.duplicate(),
+		"requiredAssetIds": ReleaseBundles.V1_ASSET_IDS.duplicate(),
 	}
 	queue = service.jobs(descriptor).jobs
 	assert(queue.size() == 1 and queue[0].type == "asset_bundle_index")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify, and only with --apply upload, the pinned seven-bundle 3D release."""
+"""Verify, and only with --apply upload, a pinned approved 3D release."""
 from __future__ import annotations
 
 import argparse
@@ -30,8 +30,13 @@ def release_files(directory: Path, metadata_path: Path = METADATA) -> list[tuple
     if metadata.get("schema") != 1 or metadata.get("kind") != "pokeaether-approved-3d-release":
         raise ValueError("invalid approved 3D release metadata")
     records = [metadata.get("index"), *metadata.get("bundles", [])]
-    if len(records) != 8 or not all(isinstance(item, dict) for item in records):
-        raise ValueError("release metadata must contain one index and seven bundles")
+    expected = {"approved-pokemon-3d-v1": 7, "approved-pokemon-3d-v2": 21}.get(metadata.get("revision"))
+    if expected is None or len(records) != expected + 1 or not all(isinstance(item, dict) for item in records):
+        raise ValueError("release metadata has an unsupported or incomplete bundle set")
+    if expected == 21:
+        approval = ROOT / "tools/sprite_factory/catalog_production_batch_01_approval.json"
+        if metadata.get("catalog_batch_01_approval_sha256") != digest(approval):
+            raise ValueError("v2 release is not bound to batch-01 approval")
     result: list[tuple[Path, str]] = []
     for index, item in enumerate(records):
         path = directory / ("asset-index.json" if index == 0 else Path(item["object_key"]).name)
@@ -46,9 +51,11 @@ def release_files(directory: Path, metadata_path: Path = METADATA) -> list[tuple
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
-    parser.add_argument("--apply", action="store_true", help="Upload after all eight files verify.")
+    parser.add_argument("--metadata", type=Path, default=METADATA,
+                        help="Pinned release receipt; defaults to the published seven-bundle v1 set.")
+    parser.add_argument("--apply", action="store_true", help="Upload after all pinned files verify.")
     args = parser.parse_args()
-    files = release_files(args.directory.resolve())
+    files = release_files(args.directory.resolve(), args.metadata.resolve())
     total = sum(path.stat().st_size for path, _ in files)
     print(f"Verified {len(files)} release objects ({total} bytes).")
     for path, key in files:

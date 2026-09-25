@@ -17,7 +17,7 @@ func _descriptor(index_path: String, revision: String) -> Dictionary:
 		"objectBaseUrl": "http://127.0.0.1",
 		"sha256": FileAccess.get_sha256(index_path),
 		"sizeBytes": FileAccess.get_file_as_bytes(index_path).size(),
-		"requiredAssetIds": ReleaseBundles.RELEASE_ASSET_IDS.duplicate(),
+		"requiredAssetIds": ReleaseBundles.V1_ASSET_IDS.duplicate(),
 	}
 
 
