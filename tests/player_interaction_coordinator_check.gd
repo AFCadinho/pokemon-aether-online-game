@@ -35,6 +35,7 @@ func _init() -> void:
 	_check_social_state_matching()
 	_check_phase_scope_contract()
 	_check_remote_avatar_interaction_contract()
+	_check_browser_lend_feedback()
 	coordinator.queue_free()
 	presence_service.queue_free()
 	auth_service.queue_free()
@@ -118,6 +119,24 @@ func _check_trade_context_action() -> void:
 	await _check_context_outside_click()
 	await _check_aether_clash_identity_filtering()
 	host.queue_free()
+
+func _check_browser_lend_feedback() -> void:
+	presence_service._apply_snapshot_message({
+		"rosterRevision": 999999,
+		"players": [{"userId": 8, "username": "browsermisty", "supportsPlayerLending": false}],
+	})
+	coordinator.open_context_for_player(
+		{"userId": 8, "username": "browsermisty", "supportsPlayerLending": false},
+		Vector2(400, 200)
+	)
+	coordinator._on_lend_pressed()
+	_check_equal(
+		coordinator.lending_status_message.contains("playing in the browser"),
+		true,
+		"Lend action gives immediate feedback for a browser player"
+	)
+	_check_equal(coordinator.context_menu.visible, true, "browser lending feedback keeps the player context open")
+	coordinator.close_context_menu()
 
 
 func _check_context_page_navigation() -> void:
