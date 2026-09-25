@@ -135,6 +135,7 @@ const WORLD_TELEPORT_PLAYER_PERMISSION := "world:teleport:player"
 const WORLD_TELEPORT_OTHER_PERMISSION := "world:teleport:other"
 const CONTENT_CREATOR_PHOTO_MODE_PERMISSION := "content:creator:photo-mode"
 const CONTENT_CREATOR_GENERATING_PERMISSION := "content:creator:generating"
+const ALPHA_AETHERITE_GENERATING_PERMISSION := "alpha:aetherite:generating"
 const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const DEV_WORLD_TIME_HOURS: Array[int] = [-1, 6, 12, 19, 0]
@@ -1535,10 +1536,16 @@ var evolution_silhouette_material: ShaderMaterial
 var evolution_is_playing := false
 var evolution_overlay_active_evolution: Dictionary = {}
 var alpha_tools_popup: PanelContainer
+var alpha_aetherite_dialog: PanelContainer
 var content_creator_tools_popup: PanelContainer
 var content_creator_photo_mode_button: Button
-var alpha_create_pokemon_button: Button
-var alpha_clear_party_button: Button
+var content_creator_create_pokemon_button: Button
+var content_creator_remove_pokemon_button: Button
+var content_creator_pokemon_selector: OptionButton
+var content_creator_pokemon_entries: Array[Dictionary] = []
+var alpha_aetherite_button: Button
+var alpha_aetherite_amount_spinbox: SpinBox
+var alpha_aetherite_confirm_button: Button
 var alpha_reset_game_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
@@ -2259,6 +2266,9 @@ func _can_use_content_creator_photo_mode() -> bool:
 func _can_use_content_creator_generation() -> bool:
 	return _has_user_permission(CONTENT_CREATOR_GENERATING_PERMISSION)
 
+func _can_generate_alpha_aetherite() -> bool:
+	return _has_user_permission(ALPHA_AETHERITE_GENERATING_PERMISSION)
+
 func _can_show_staff_action_bar() -> bool:
 	return _has_user_permission(STAFF_ACTION_BAR_PERMISSION)
 
@@ -2377,8 +2387,11 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_photo_mode: bool = _can_use_content_creator_photo_mode()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
+	var can_generate_alpha_aetherite: bool = _can_generate_alpha_aetherite()
 	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web
 	var can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web
+	var can_use_content_creator_tools_here := can_use_content_creator_photo_mode_here or can_use_content_creator_generation_here
+	var can_generate_alpha_aetherite_here := can_generate_alpha_aetherite and not is_web
 	var has_staff_tool: bool = (
 		can_return_from_impersonation_here
 		or can_impersonate_here
@@ -2392,26 +2405,31 @@ func _refresh_dev_tools_visibility() -> void:
 	var has_visible_staff_action: bool = (
 		has_staff_tool
 		or can_open_dev_actions
-		or can_use_content_creator_photo_mode_here
-		or can_use_content_creator_generation_here
+		or can_use_content_creator_tools_here
+		or can_generate_alpha_aetherite_here
 	)
 	PlayerSave.is_staff = _current_player_has_staff_role()
 	if content_creator_tools_slot != null:
-		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
+		content_creator_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_tools_here
 	if content_creator_tools_button != null:
-		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_photo_mode_here
-		content_creator_tools_button.disabled = not can_use_content_creator_photo_mode_here
+		content_creator_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_tools_here
+		content_creator_tools_button.disabled = not can_use_content_creator_tools_here
+	if content_creator_photo_mode_button != null:
+		content_creator_photo_mode_button.visible = can_use_content_creator_photo_mode_here
+	if content_creator_create_pokemon_button != null:
+		content_creator_create_pokemon_button.visible = can_use_content_creator_generation_here
+	if content_creator_remove_pokemon_button != null:
+		content_creator_remove_pokemon_button.visible = can_use_content_creator_generation_here
+	if content_creator_pokemon_selector != null:
+		content_creator_pokemon_selector.visible = can_use_content_creator_generation_here
 	if alpha_tools_slot != null:
-		alpha_tools_slot.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
+		alpha_tools_slot.visible = can_show_staff_action_bar and can_generate_alpha_aetherite_here
 	if alpha_tools_button != null:
-		alpha_tools_button.visible = can_show_staff_action_bar and can_use_content_creator_generation_here
-		alpha_tools_button.disabled = not can_use_content_creator_generation_here
-	if alpha_create_pokemon_button != null:
-		alpha_create_pokemon_button.visible = can_use_content_creator_generation
-		alpha_create_pokemon_button.disabled = not can_use_content_creator_generation
-	if alpha_clear_party_button != null:
-		alpha_clear_party_button.visible = can_use_content_creator_generation
-		alpha_clear_party_button.disabled = not can_use_content_creator_generation
+		alpha_tools_button.visible = can_show_staff_action_bar and can_generate_alpha_aetherite_here
+		alpha_tools_button.disabled = not can_generate_alpha_aetherite_here
+	if alpha_aetherite_button != null:
+		alpha_aetherite_button.visible = can_generate_alpha_aetherite
+		alpha_aetherite_button.disabled = not can_generate_alpha_aetherite
 	if alpha_reset_game_button != null:
 		alpha_reset_game_button.visible = _can_reset_gameplay()
 		alpha_reset_game_button.disabled = not _can_reset_gameplay()
@@ -2504,9 +2522,12 @@ func _refresh_dev_tools_visibility() -> void:
 			dev_badge_progress_popup.close()
 	if not can_generate_dev_items and dev_add_item_popup != null:
 		dev_add_item_popup.visible = false
-	if not can_use_content_creator_generation_here and alpha_tools_popup != null:
-		alpha_tools_popup.visible = false
-	if not can_use_content_creator_photo_mode_here and content_creator_tools_popup != null:
+	if not can_generate_alpha_aetherite_here:
+		if alpha_tools_popup != null:
+			alpha_tools_popup.visible = false
+		if alpha_aetherite_dialog != null:
+			alpha_aetherite_dialog.visible = false
+	if not can_use_content_creator_tools_here and content_creator_tools_popup != null:
 		content_creator_tools_popup.visible = false
 	if not can_use_content_creator_generation_here and dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
 		dev_pokemon_popup.visible = false
@@ -3797,6 +3818,7 @@ func _apply_ui_z_index_policy() -> void:
 		dev_add_money_popup,
 		dev_add_menu_popup,
 		alpha_tools_popup,
+		alpha_aetherite_dialog,
 		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
@@ -3872,6 +3894,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		dev_add_money_popup,
 		dev_add_menu_popup,
 		alpha_tools_popup,
+		alpha_aetherite_dialog,
 		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
@@ -9406,27 +9429,15 @@ func _setup_alpha_tools_popup() -> void:
 			Color("#b28ae8")
 		)
 	)
-
-	alpha_create_pokemon_button = Button.new()
-	alpha_create_pokemon_button.pressed.connect(_on_alpha_create_pokemon_button_pressed)
-	layout.add_child(alpha_create_pokemon_button)
+	alpha_aetherite_button = Button.new()
+	alpha_aetherite_button.pressed.connect(_on_alpha_aetherite_button_pressed)
+	layout.add_child(alpha_aetherite_button)
 	_configure_launcher_card_button(
-		alpha_create_pokemon_button,
-		"ui.staff.alpha.create",
-		"ui.staff.alpha.create_description",
+		alpha_aetherite_button,
+		"ui.staff.alpha.aetherite",
+		"ui.staff.alpha.aetherite_description",
 		ALPHA_TOOLS_MENU_ICON,
 		Color("#b28ae8")
-	)
-
-	alpha_clear_party_button = Button.new()
-	alpha_clear_party_button.pressed.connect(_on_alpha_clear_party_button_pressed)
-	layout.add_child(alpha_clear_party_button)
-	_configure_launcher_card_button(
-		alpha_clear_party_button,
-		"ui.staff.alpha.clear",
-		"ui.staff.alpha.clear_description",
-		TOOL_CLEAR_DATA_ICON,
-		Color("#ef7085")
 	)
 
 	alpha_reset_game_button = _add_gameplay_reset_button(
@@ -9434,6 +9445,77 @@ func _setup_alpha_tools_popup() -> void:
 		Callable(self, "_hide_alpha_tools_popup"),
 		true
 	)
+	_setup_alpha_aetherite_dialog()
+
+func _setup_alpha_aetherite_dialog() -> void:
+	alpha_aetherite_dialog = PanelContainer.new()
+	alpha_aetherite_dialog.name = "AlphaAetheriteDialog"
+	alpha_aetherite_dialog.visible = false
+	alpha_aetherite_dialog.custom_minimum_size = Vector2(360, 0)
+	alpha_aetherite_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	alpha_aetherite_dialog.z_index = UI_BASE_Z_INDEX
+	alpha_aetherite_dialog.anchor_left = 0.5
+	alpha_aetherite_dialog.anchor_top = 0.5
+	alpha_aetherite_dialog.anchor_right = 0.5
+	alpha_aetherite_dialog.anchor_bottom = 0.5
+	alpha_aetherite_dialog.offset_left = -180
+	alpha_aetherite_dialog.offset_top = -105
+	alpha_aetherite_dialog.offset_right = 180
+	alpha_aetherite_dialog.offset_bottom = 105
+	alpha_aetherite_dialog.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_BASE, Color("#8065b0aa"), 12, 1)
+	)
+	root_control.add_child(alpha_aetherite_dialog)
+
+	var margin_container := MarginContainer.new()
+	margin_container.add_theme_constant_override("margin_left", 16)
+	margin_container.add_theme_constant_override("margin_top", 14)
+	margin_container.add_theme_constant_override("margin_right", 16)
+	margin_container.add_theme_constant_override("margin_bottom", 16)
+	alpha_aetherite_dialog.add_child(margin_container)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	margin_container.add_child(layout)
+	var close_button := Button.new()
+	close_button.pressed.connect(_hide_alpha_aetherite_dialog)
+	layout.add_child(
+		_create_tool_launcher_header(
+			"ui.staff.alpha.aetherite",
+			"ui.staff.alpha.aetherite_dialog_subtitle",
+			close_button,
+			Color("#b28ae8")
+		)
+	)
+	var amount_label := Label.new()
+	_set_localized_control_property(amount_label, "text", "ui.staff.alpha.aetherite_amount")
+	layout.add_child(amount_label)
+	alpha_aetherite_amount_spinbox = SpinBox.new()
+	alpha_aetherite_amount_spinbox.min_value = 1
+	alpha_aetherite_amount_spinbox.max_value = 999999999
+	alpha_aetherite_amount_spinbox.value = 500
+	alpha_aetherite_amount_spinbox.step = 1
+	alpha_aetherite_amount_spinbox.update_on_text_changed = true
+	alpha_aetherite_amount_spinbox.custom_minimum_size = Vector2(0, 36)
+	layout.add_child(alpha_aetherite_amount_spinbox)
+	_apply_line_edit_style(alpha_aetherite_amount_spinbox.get_line_edit())
+
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
+	layout.add_child(actions)
+	var cancel_button := Button.new()
+	_set_localized_control_property(cancel_button, "text", "common.cancel")
+	cancel_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cancel_button.pressed.connect(_hide_alpha_aetherite_dialog)
+	actions.add_child(cancel_button)
+	_apply_button_style(cancel_button)
+	alpha_aetherite_confirm_button = Button.new()
+	_set_localized_control_property(alpha_aetherite_confirm_button, "text", "ui.staff.alpha.aetherite_confirm")
+	alpha_aetherite_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	alpha_aetherite_confirm_button.pressed.connect(_on_alpha_aetherite_confirm_pressed)
+	actions.add_child(alpha_aetherite_confirm_button)
+	_apply_button_style(alpha_aetherite_confirm_button, "primary")
 
 func _setup_content_creator_tools_popup() -> void:
 	content_creator_tools_popup = PanelContainer.new()
@@ -9479,6 +9561,28 @@ func _setup_content_creator_tools_popup() -> void:
 		"ui.staff.creator.photo_mode_description",
 		CONTENT_CREATOR_MENU_ICON,
 		Color("#67c7ea")
+	)
+	content_creator_create_pokemon_button = Button.new()
+	content_creator_create_pokemon_button.pressed.connect(_on_content_creator_create_pokemon_button_pressed)
+	layout.add_child(content_creator_create_pokemon_button)
+	_configure_launcher_card_button(
+		content_creator_create_pokemon_button,
+		"ui.staff.creator.create_pokemon",
+		"ui.staff.creator.create_pokemon_description",
+		CONTENT_CREATOR_MENU_ICON,
+		Color("#67c7ea")
+	)
+	content_creator_pokemon_selector = OptionButton.new()
+	layout.add_child(content_creator_pokemon_selector)
+	content_creator_remove_pokemon_button = Button.new()
+	content_creator_remove_pokemon_button.pressed.connect(_on_content_creator_remove_pokemon_button_pressed)
+	layout.add_child(content_creator_remove_pokemon_button)
+	_configure_launcher_card_button(
+		content_creator_remove_pokemon_button,
+		"ui.staff.creator.remove_pokemon",
+		"ui.staff.creator.remove_pokemon_description",
+		TOOL_CLEAR_DATA_ICON,
+		Color("#ef7085")
 	)
 
 func _setup_dev_add_item_tools() -> void:
@@ -12254,6 +12358,8 @@ func _refresh_dev_tools_localized_ui() -> void:
 			_refresh_dev_item_results()
 	if dev_add_money_popup != null:
 		LocalizationManager.localize_tree(dev_add_money_popup)
+	if alpha_aetherite_dialog != null:
+		LocalizationManager.localize_tree(alpha_aetherite_dialog)
 	_refresh_staff_impersonate_button_copy()
 
 func _refresh_progression_prompts_localized_ui() -> void:
@@ -13146,6 +13252,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		dev_add_money_popup,
 		dev_add_menu_popup,
 		alpha_tools_popup,
+		alpha_aetherite_dialog,
 		content_creator_tools_popup,
 		staff_tools_popup,
 		staff_impersonate_popup,
@@ -31263,6 +31370,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": coop_party_popup, "close": Callable(self, "_hide_coop_party_popup")},
 		{"panel": socials_menu, "close": Callable(self, "_hide_socials_menu")},
 		{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")},
+		{"panel": alpha_aetherite_dialog, "close": Callable(self, "_hide_alpha_aetherite_dialog")},
 		{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")},
 		{"panel": staff_tools_popup, "close": Callable(self, "_hide_staff_tools_popup")},
 		{"panel": dev_pokemon_popup, "close": Callable(self, "_hide_dev_pokemon_popup_for_escape")},
@@ -33660,7 +33768,7 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 		_add_chat_message("Paste a Showdown/Pokepaste set or team first.")
 		return false
 
-	_add_chat_message("Creating Alpha Pokemon...")
+	_add_chat_message("Creating Content Creator Pokemon...")
 	var response: Dictionary = await PokemonDataApiClient.create_team_from_text(parse_pokemon_request, pokemon_text)
 	if not bool(response.get("success", false)):
 		_add_chat_message("Create failed: %s" % str(response.get("error", "Unknown error")))
@@ -33674,6 +33782,9 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 	var team_data: Array = team_value as Array
 	if team_data.is_empty():
 		_add_chat_message("Create failed: team was empty.")
+		return false
+	if team_data.size() != 1:
+		_add_chat_message("Create failed: choose exactly one Content Creator Pokemon.")
 		return false
 	var parsed_pokemon_payloads: Array[Dictionary] = []
 	for index in range(team_data.size()):
@@ -33708,7 +33819,8 @@ func _handle_content_creator_add_pokemon_command(pokemon_text: String) -> bool:
 			return false
 		created_count += 1
 
-	_add_chat_message("Created %s Alpha Pokemon." % created_count)
+	_add_chat_message("Created one Content Creator Pokemon.")
+	await _refresh_content_creator_pokemon_list()
 	return true
 
 func _handle_add_team_command(
@@ -35921,7 +36033,7 @@ func _on_pokedex_button_pressed() -> void:
 	await _show_pokedex_popup()
 
 func _on_alpha_tools_button_pressed() -> void:
-	if not _can_use_content_creator_generation():
+	if not _can_generate_alpha_aetherite():
 		return
 	if alpha_tools_popup == null:
 		return
@@ -35934,15 +36046,83 @@ func _on_alpha_tools_button_pressed() -> void:
 		_deactivate_ui_panel(alpha_tools_popup)
 
 func _on_content_creator_tools_button_pressed() -> void:
-	if not _can_use_content_creator_photo_mode() or content_creator_tools_popup == null:
+	if not (_can_use_content_creator_photo_mode() or _can_use_content_creator_generation()) or content_creator_tools_popup == null:
 		return
 	content_creator_tools_popup.visible = not content_creator_tools_popup.visible
 	if content_creator_tools_popup.visible:
 		_position_action_slot_popup(content_creator_tools_popup, content_creator_tools_slot)
 		_hide_my_powers_menu()
 		_activate_ui_panel(content_creator_tools_popup)
+		if _can_use_content_creator_generation():
+			await _refresh_content_creator_pokemon_list()
 	else:
 		_deactivate_ui_panel(content_creator_tools_popup)
+
+func _refresh_content_creator_pokemon_list() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	var result: Dictionary = await PlayerPartyStateService.list_content_creator_pokemon()
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not load Content Creator Pokemon: %s" % str(result.get("error", "Unknown error")))
+		return
+	content_creator_pokemon_entries.clear()
+	content_creator_pokemon_selector.clear()
+	for entry_value: Variant in result.get("pokemon", []):
+		if not entry_value is Dictionary:
+			continue
+		var entry: Dictionary = entry_value
+		var pokemon_data: Dictionary = entry.get("pokemon", {})
+		content_creator_pokemon_entries.append(entry)
+		var display_name := str(pokemon_data.get("nickname", "")).strip_edges()
+		if display_name == "":
+			display_name = str(pokemon_data.get("species", "Pokemon"))
+		content_creator_pokemon_selector.add_item(display_name)
+	var has_pokemon := not content_creator_pokemon_entries.is_empty()
+	if has_pokemon:
+		content_creator_pokemon_selector.select(0)
+	content_creator_create_pokemon_button.disabled = has_pokemon
+	content_creator_remove_pokemon_button.disabled = not has_pokemon
+	content_creator_pokemon_selector.disabled = not has_pokemon
+	if not has_pokemon:
+		content_creator_pokemon_selector.add_item(LocalizationManager.text("ui.staff.creator.no_pokemon"))
+
+func _on_content_creator_create_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation() or not content_creator_pokemon_entries.is_empty():
+		return
+	_hide_content_creator_tools_popup()
+	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
+
+func _on_content_creator_remove_pokemon_button_pressed() -> void:
+	if not _can_use_content_creator_generation():
+		return
+	var selected := content_creator_pokemon_selector.get_selected()
+	if selected < 0 or selected >= content_creator_pokemon_entries.size():
+		return
+	var entry: Dictionary = content_creator_pokemon_entries[selected]
+	var pokemon_id := int(entry.get("id", 0))
+	if pokemon_id <= 0:
+		return
+	_show_ui_confirm_popup(
+		LocalizationManager.text("ui.staff.creator.remove_pokemon"),
+		LocalizationManager.text("ui.staff.creator.remove_confirm"),
+		LocalizationManager.text("ui.staff.creator.remove_pokemon"),
+		Callable(self, "_on_content_creator_remove_pokemon_confirmed").bind(pokemon_id),
+		Vector2i(500, 0),
+		true
+	)
+
+func _on_content_creator_remove_pokemon_confirmed(pokemon_id: int) -> void:
+	if not _can_use_content_creator_generation():
+		return
+	content_creator_remove_pokemon_button.disabled = true
+	var result: Dictionary = await PlayerPartyStateService.remove_content_creator_pokemon(pokemon_id)
+	if not bool(result.get("success", false)):
+		_add_chat_message("Could not remove Content Creator Pokemon: %s" % str(result.get("error", "Unknown error")))
+		content_creator_remove_pokemon_button.disabled = false
+		return
+	_refresh_party()
+	_add_chat_message("Content Creator Pokemon removed. You can now create another.")
+	await _refresh_content_creator_pokemon_list()
 
 func _on_content_creator_photo_mode_button_pressed() -> void:
 	if not _can_use_content_creator_photo_mode():
@@ -35954,41 +36134,39 @@ func set_content_creator_capture_hidden(hidden: bool) -> void:
 	if root_control != null:
 		root_control.visible = not hidden
 
-func _on_alpha_create_pokemon_button_pressed() -> void:
-	if not _can_use_content_creator_generation():
+func _on_alpha_aetherite_button_pressed() -> void:
+	if not _can_generate_alpha_aetherite():
 		return
 	_hide_alpha_tools_popup()
-	_show_dev_pokemon_popup(DevPokemonPopupMode.CONTENT_CREATOR)
+	alpha_aetherite_dialog.visible = true
+	_activate_ui_panel(alpha_aetherite_dialog)
+	alpha_aetherite_amount_spinbox.get_line_edit().grab_focus.call_deferred()
 
-func _on_alpha_clear_party_button_pressed() -> void:
-	if not _can_use_content_creator_generation():
+func _on_alpha_aetherite_confirm_pressed() -> void:
+	if not _can_generate_alpha_aetherite():
 		return
-	_hide_alpha_tools_popup()
-	_show_ui_confirm_popup(
-		"Clear Alpha Pokemon",
-		"This will remove generated Alpha Pokemon from your party. Other party Pokemon stay untouched.",
-		"Clear Pokemon",
-		Callable(self, "_on_alpha_clear_party_confirmed"),
-		Vector2i(500, 0),
-		true
+	var amount := clampi(
+		alpha_aetherite_amount_spinbox.get_line_edit().text.to_int(),
+		int(alpha_aetherite_amount_spinbox.min_value),
+		int(alpha_aetherite_amount_spinbox.max_value)
 	)
-
-func _on_alpha_clear_party_confirmed() -> void:
-	if not _can_use_content_creator_generation():
-		return
-
-	var before_count := PlayerSave.party.size()
-	var result: Dictionary = await PlayerPartyStateService.content_creator_clear_party_pokemon()
+	alpha_aetherite_amount_spinbox.value = amount
+	alpha_aetherite_confirm_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.claim_alpha_aetherite(amount)
+	alpha_aetherite_confirm_button.disabled = false
 	if not bool(result.get("success", false)):
-		_add_chat_message("Could not clear Alpha Pokemon: %s" % str(result.get("error", "Unknown error")))
+		_add_chat_message("Could not claim Alpha Aetherite: %s" % str(result.get("error", "Unknown error")))
 		return
+	PlayerWalletService.apply_wallet_result(result)
+	_refresh_player_status_card()
+	_add_chat_message("Added %s Aetherite for Alpha rentals." % _format_money(amount))
+	_hide_alpha_aetherite_dialog()
 
-	var after_count := PlayerSave.party.size()
-	var removed_count: int = max(before_count - after_count, 0)
-	if removed_count > 0:
-		_add_chat_message("Removed %s Alpha Pokemon from party." % removed_count)
-	else:
-		_add_chat_message("No Alpha Pokemon found in party.")
+func _hide_alpha_aetherite_dialog() -> void:
+	if alpha_aetherite_dialog == null:
+		return
+	alpha_aetherite_dialog.visible = false
+	_deactivate_ui_panel(alpha_aetherite_dialog)
 
 func _position_alpha_tools_popup() -> void:
 	_position_action_slot_popup(alpha_tools_popup, alpha_tools_slot)

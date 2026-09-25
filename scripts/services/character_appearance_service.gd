@@ -893,7 +893,7 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 		return null
 	if normalized_gender == "female" \
 			and normalized_category == TOP_CATEGORY \
-			and normalized_part_id == "Mysterious_Shirt" \
+			and normalized_part_id in ["Mysterious_Shirt", "Patreon_Supporter_Shirt"] \
 			and normalized_movement_style in [BODY_MOVEMENT_DEFAULT, BODY_MOVEMENT_RUN]:
 		texture = _cover_mysterious_female_cape_gaps(texture)
 

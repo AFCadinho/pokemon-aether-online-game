@@ -164,17 +164,20 @@ func _init() -> void:
 	_check(script_source.contains('"ui.staff.chat.action_description"') and script_source.contains("CHAT_MODERATION_CENTER_SCRIPT.new()"), "Staff Tools opens the compact chat moderation center")
 	_check(script_source.contains('"StaffChatTranslateModeButton"') and script_source.contains('"ui.staff.translate.action_description_off"'), "Staff Tools exposes Translate Mode as a launcher card")
 	_check(script_source.contains('alpha_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools uses the shared compact launcher")
-	_check(script_source.contains('"ui.staff.alpha.create_description"') and script_source.contains('"ui.staff.alpha.clear_description"'), "Alpha Tools actions explain their scope")
+	var alpha_launcher_source := script_source.substr(script_source.find("func _setup_alpha_tools_popup()"), script_source.find("func _setup_alpha_aetherite_dialog()") - script_source.find("func _setup_alpha_tools_popup()"))
+	_check(alpha_launcher_source.contains('"ui.staff.alpha.aetherite_description"') and not alpha_launcher_source.contains("alpha_aetherite_amount_spinbox"), "Alpha Tools keeps the amount field out of its launcher")
+	_check(script_source.contains('alpha_aetherite_dialog.name = "AlphaAetheriteDialog"') and script_source.contains('alpha_aetherite_amount_spinbox = SpinBox.new()'), "Aetherite amount uses a separate dialog")
 	_check(scene_source.contains('path="res://assets/ui/alpha_tools.svg" id="15_content_creator"') and script_source.contains('preload("res://assets/ui/alpha_tools.svg")'), "Alpha Tools uses its dedicated validated Alpha icon")
 	_check(script_source.contains('content_creator_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.creator.subtitle"'), "Content Creator Tools uses a separate compact launcher")
 	_check(scene_source.contains('path="res://assets/ui/content_creator.svg"') and script_source.contains('preload("res://assets/ui/content_creator.svg")'), "Content Creator Tools uses its dedicated creator icon")
 	_check(script_source.contains('const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")') and script_source.contains('const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")'), "internal tool launchers use dedicated action icons")
 	_check(script_source.contains('_position_action_slot_popup(dev_actions_popup, dev_actions_slot)') and script_source.contains('_position_action_slot_popup(staff_tools_popup, staff_tools_slot)'), "internal tool menus open beside their toolbar actions")
 	_check(script_source.contains('{"panel": alpha_tools_popup, "close": Callable(self, "_hide_alpha_tools_popup")}'), "Escape closes the Alpha Tools launcher")
+	_check(script_source.contains('{"panel": alpha_aetherite_dialog, "close": Callable(self, "_hide_alpha_aetherite_dialog")}'), "Escape closes the Aetherite dialog")
 	_check(script_source.contains('{"panel": content_creator_tools_popup, "close": Callable(self, "_hide_content_creator_tools_popup")}'), "Escape closes the Content Creator Tools launcher")
 	_check(
 		script_source.contains(
-			"alpha_create_pokemon_button.visible = can_use_content_creator_generation"
+			"alpha_aetherite_button.visible = can_generate_alpha_aetherite"
 		)
 		and script_source.contains(
 			"can_return_from_impersonation_here or can_impersonate_here"
