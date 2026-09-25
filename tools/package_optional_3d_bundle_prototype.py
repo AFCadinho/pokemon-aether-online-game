@@ -78,13 +78,13 @@ def approved(registry: dict, key: str, model_hash: str) -> bool:
 
 def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "prototype-1",
           registry_path: Path = REGISTRY, species_set: tuple[str, ...] = SPECIES,
-          dex: dict[str, int] = DEX) -> dict:
+          dex: dict[str, int] = DEX, candidate_hashes: dict[str, str] | None = None) -> dict:
     if version < 1:
         raise ValueError("version must be positive")
     if output.exists() or output.is_symlink():
         raise ValueError("output directory already exists")
     source = source_entries(catalog_path)
-    registry = json.loads(registry_path.read_text())
+    registry = json.loads(registry_path.read_text()) if candidate_hashes is None else None
     output.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=".asset-bundle-prototype-", dir=output.parent))
     assets = []
@@ -99,7 +99,9 @@ def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "p
                 if path.is_symlink() or not path.is_file():
                     raise ValueError(f"missing regular scene: {path}")
                 scene_hash, size = digest(path)
-                if scene_hash != entry.get("runtime_sha256") or not approved(registry, key, scene_hash):
+                permitted = (approved(registry, key, scene_hash) if registry is not None
+                             else candidate_hashes.get(key) == scene_hash)
+                if scene_hash != entry.get("runtime_sha256") or not permitted:
                     raise ValueError(f"unapproved or changed model: {key}")
                 runtime_path = f"models/{variant}.scn"
                 appearances.append({
