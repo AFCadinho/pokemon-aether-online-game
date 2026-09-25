@@ -323,8 +323,8 @@ func _run() -> void:
 		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 6
 		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data.size() == 2
 		and mounted_battle.get_node("%OpponentPartyGrid").current_party_data.size() == 2
-		and mounted_battle.get_node("%PlayerTrainerSprite").visible
-		and presenter.get("_second_trainer").visible
+		and not mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and not presenter.get("_second_trainer").visible
 		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
@@ -338,18 +338,32 @@ func _run() -> void:
 	var right_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
 	var left_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
 	var right_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
-	var coop_stage: Control = mounted_battle.get_node("%BattleStage")
-	var left_ally_on_stage: Vector2 = coop_stage.get_global_transform().affine_inverse() * left_ally.global_position
 	service.activity.activityId = "kanto_route_1_youngster_liam"
 	presenter._sync_native_trainers()
+	presenter._position_native_trainers()
 	for _frame in 3:
 		await process_frame
+	var left_rail_rect: Rect2 = mounted_battle.get_node("%PlayerStagePartyGrid").get_global_rect()
+	var right_rail_rect: Rect2 = mounted_battle.get_node("%OpponentPartyGrid").get_global_rect()
 	_expect(absf(left_ally.global_position.y - right_ally.global_position.y) < 24.0
 		and absf(left_wild.global_position.y - right_wild.global_position.y) < 24.0
-		and presenter._first_trainer.position.x < presenter._second_trainer.position.x
-		and presenter._second_trainer.position.x < left_ally_on_stage.x
-		and presenter._second_trainer.position.x - presenter._first_trainer.position.x < 80.0,
-		"both pairs stand close together while the Trainers group behind the left ally")
+		and absf(presenter._first_trainer.global_position.x - (left_rail_rect.end.x + 68.0)) < 2.0
+		and absf(presenter._second_trainer.global_position.x - (left_rail_rect.end.x + 68.0)) < 2.0
+		and absf(presenter._opponent_trainer.global_position.x - (right_rail_rect.position.x - 68.0)) < 2.0
+		and presenter._first_trainer.global_position.y < presenter._second_trainer.global_position.y,
+		"both Pokémon pairs stay aligned while command Trainers anchor beside their party rails")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p1", "move": "Tackle"})
+	_expect(presenter._first_trainer.visible and not presenter._second_trainer.visible
+		and presenter._first_trainer.command_callout.visible,
+		"only the acting allied Trainer appears with a move command")
+	presenter._hide_native_trainers()
+	service.activity.activityId = "brock"
+	presenter._sync_native_trainers()
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p2", "move": "Gust"})
+	_expect(presenter._opponent_trainer.visible and not presenter._first_trainer.visible
+		and presenter._opponent_trainer.command_callout.visible,
+		"the opposing Trainer appears only to command its Pokémon")
+	presenter._hide_native_trainers()
 	service.activity.activityId = "wild_grass:kanto_route_1"
 	presenter._sync_native_trainers()
 	var hover_view: Dictionary = presenter._latest.duplicate(true)
@@ -407,6 +421,11 @@ func _run() -> void:
 	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
 		and not presenter._second_trainer.visible,
 		"wild doubles hide both Trainer sprites")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
+	_expect(presenter._second_trainer.visible and not presenter._first_trainer.visible
+		and not presenter._opponent_trainer.visible,
+		"a wild battle reveals only the allied Trainer giving a command")
+	presenter._hide_native_trainers()
 	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
 	if not wild_layout_capture.is_empty():
 		var decision_was_visible: bool = presenter._decision_overlay.visible
@@ -418,9 +437,11 @@ func _run() -> void:
 		presenter._decision_overlay.visible = decision_was_visible
 	service.activity.activityId = "brock"
 	presenter._sync_native_trainers()
-	_expect(mounted_battle.get_node("%PlayerTrainerSprite").visible
-		and presenter._second_trainer.visible,
-		"NPC doubles restore both Trainer sprites")
+	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and not presenter._second_trainer.visible
+		and presenter._opponent_trainer.has_trainer_art()
+		and not presenter._opponent_trainer.visible,
+		"NPC doubles keep Trainer art ready but hidden between commands")
 	service.activity = {"status": "active"}
 	presenter._process(0.0)
 	_expect(not mounted_battle.get_node("%BattleStatusPanel").timer_label.visible
