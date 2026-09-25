@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In Immersive Adventure Party battles, Trainer sprites appear beside their party rails only while giving a battle command.
+
 - A local battle review accepted 14 additional Pokémon in normal and shiny form. Their individual 3D bundles are prepared for a later desktop release.
 
 - Adventure Party members can start shared trainer battles when they encounter a supported trainer, even if their partner leads the party.
