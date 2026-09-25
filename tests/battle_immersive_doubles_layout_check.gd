@@ -31,13 +31,14 @@ func _run() -> void:
 		"ownTeam": [{"species": "Jigglypuff", "active": true, "hp": 77, "maxHp": 100}],
 		"partnerTeam": [{"species": "Squirtle", "active": true, "hp": 100, "maxHp": 100}],
 	})
-	for dimensions: Vector2i in [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(960, 540)]:
+	for dimensions: Vector2i in [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(960, 540), Vector2i(1024, 768)]:
 		host.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		host.size = Vector2(dimensions)
 		host._fit_battle()
 		for frame in 8:
 			await process_frame
 		_settle_immersive_hud(battle)
+		_check_doubles_field_spacing(battle, presenter)
 		_check_hud_clearance(battle)
 		_check_concrete_anchors(battle, presenter)
 		var output := OS.get_environment("POKEAETHER_DOUBLES_OUTPUT")
@@ -61,6 +62,23 @@ func _settle_immersive_hud(battle: Control) -> void:
 			child.call("_process", 1.0)
 			return
 	_expect(false, "immersive HUD tracker is mounted")
+
+
+func _check_doubles_field_spacing(battle: Control, presenter: Control) -> void:
+	var player_platform: Control = battle.player_battle_platform
+	var enemy_platform: Control = battle.enemy_battle_platform
+	var player_right := player_platform.position.x + player_platform.size.x * player_platform.scale.x
+	_expect(player_right - enemy_platform.position.x <= 24.0,
+		"immersive 2D doubles platforms leave each pair its own field")
+	var player_bounds: Rect2 = battle.player_sprite_box.get_double_animation_visual_rect_in_node(battle.battle_stage)
+	var enemy_bounds: Rect2 = battle.enemy_sprite_box.get_double_animation_visual_rect_in_node(battle.battle_stage)
+	_expect(player_bounds.has_area() and enemy_bounds.has_area() and not player_bounds.intersects(enemy_bounds),
+		"the allied and opposing 2D Pokémon remain visually separate")
+	for controllers: Array in [["p1", "p3"], ["p2", "p4"]]:
+		var first: AnimatedSprite2D = presenter._native_sprite(controllers[0])
+		var second: AnimatedSprite2D = presenter._native_sprite(controllers[1])
+		_expect(first.global_position.x < second.global_position.x,
+			"each 2D doubles pair keeps a stable left-to-right order")
 
 
 func _check_concrete_anchors(battle: Control, presenter: Control) -> void:
