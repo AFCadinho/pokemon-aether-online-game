@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "date": "2026-09-25",
+  "scope": "offline real immersive battle HUD and recorded replay using 18 exact normal SCNs in temporary local screened registry; classic arena",
+  "runtime_approved": false,
+  "release_approved": false,
+  "base_runtime_qualification_sha256": "5c449abe259fb2b447cf6d1e18c08ed4cf3f4dc718dcf5b43fc952387d359bda",
+  "results": {
+    "hud_pairs_passed": 18,
+    "species_checked_on_each_side": 18,
+    "hud_overlap_failures": 0,
+    "recorded_replay_frames_passed": 5,
+    "recorded_replay_species": [
+      "charmeleon",
+      "persian",
+      "slowbro",
+      "houndour"
+    ],
+    "replay_events": [
+      "attack",
+      "damage",
+      "switch",
+      "faint",
+      "replacement",
+      "win"
+    ],
+    "godot_script_or_renderer_errors": 0
+  },
+  "observations": {
+    "hud": "No model envelope overlaps its real immersive HUD panel in the 18 adjacent-pair scenarios; three full-screen captures were inspected.",
+    "replay": "Charmeleon attack and Houndour damage, Persian switch/faint, Slowbro replacement and terminal win frame completed with expected actor identities and lifecycle."
+  },
+  "limitations": [
+    "Replay fixture covers four of the 18 species, not every species in every event.",
+    "Classic arena and immersive layout only; other arenas and Classic HUD are not covered by this run.",
+    "Normal forms only; shiny forms are not produced or qualified.",
+    "No portable bundle, on-demand download, or release admission was changed."
+  ],
+  "evidence": {
+    "local_json_sha256": "5da86c9726e1677a43b01f917f1c0905f00fa38651f83d2409716747712ab7d2",
+    "local_log_sha256": "875770e74dd28a3d2db5d47c787ac3165a9bdb19797769f6a82594ea14fcd833",
+    "full_screen_captures": [
+      ".tmp/catalog-production-01-hud-charmeleon.png",
+      ".tmp/catalog-production-01-hud-ursaring.png",
+      ".tmp/catalog-production-01-hud-houndour.png"
+    ]
+  }
+}

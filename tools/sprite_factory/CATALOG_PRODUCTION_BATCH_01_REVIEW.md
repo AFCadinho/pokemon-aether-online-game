@@ -189,7 +189,25 @@ outcomes and hashes are in
 The local `res://.tmp/catalog-production-01-runtime-qualification.json`, log,
 and 18 battle PNGs retain the run evidence.
 
-**Next gate:** review actual HUD and replay behavior, then produce and qualify
-shiny counterparts before release approval and individual bundle packaging.
+### Immersive HUD and recorded replay (2026-09-25)
+
+Using the same isolated, hash-checked 18-SCN catalog and the real battle UI,
+all 18 normal forms were displayed on both sides in 18 adjacent pairs. Their
+projected model envelopes stayed clear of the corresponding live Immersive HUD
+panels. Three full-screen classic-arena captures, including Ursaring/Houndour
+and Houndour/Houndoom, were visually inspected and confirm that the HUD is
+actually present and unobscured. A recorded six-frame battle fixture then
+played Charmeleon attacking Houndour, damage, Persian switching in and
+fainting, Slowbro replacing it, and the end frame. All five transitions after
+the initial frame reached the expected actor identities and lifecycle states.
+The rendered run completed without `ERROR:` or `SCRIPT ERROR`.
+
+The [HUD/replay qualification report](catalog_production_batch_01_hud_replay_qualification.json)
+pins this evidence. The temporary screened registry was restored byte-for-byte;
+none of these candidates gained player-facing battle admission. Replay used
+four species, while the HUD check covered all 18 on each side. Other arenas,
+Classic-layout HUD, shiny forms and release packaging still require their own
+checks. **Next production step:** make the shiny counterparts, qualify their
+material/animation and normal–shiny pairing, then package individually.
 Keep confirmed model-specific defects in the review queue without stopping
 the other candidates. The seven technical holds do not block the next batch.
