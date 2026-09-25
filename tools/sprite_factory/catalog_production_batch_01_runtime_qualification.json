@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "date": "2026-09-25",
+  "scope": "normal-form standalone SCNs in real battle scene and production presenter, isolated local screened registry, classic arena",
+  "runtime_approved": false,
+  "release_approved": false,
+  "outcome": "18 normal forms passed SCN runtime lifecycle screening; proceed to final visual/HUD/replay review and shiny production",
+  "checks": [
+    "exact SCN SHA-256 admission",
+    "calibrated scale/grounding",
+    "motion-clearance profile loaded",
+    "both battle sides across adjacent pairs",
+    "physical/special/damage/sleep actions",
+    "18 duplicate actor pairs",
+    "faint_loop and same-species replacement",
+    "bounded two-entry model cache"
+  ],
+  "coverage": {
+    "normal_species": 18,
+    "duplicate_pairs": 18,
+    "max_cache_entries": 2,
+    "classic_idle_battle_captures": 18
+  },
+  "visual_observations": {
+    "ursaring": "No clear texture fault at battle distance; Pok\u00e9dex softness still open for user review",
+    "houndour": "No clear texture fault at battle distance; Pok\u00e9dex softness still open for user review",
+    "houndoom": "No clear texture fault at battle distance; Pok\u00e9dex softness still open for user review",
+    "pineco": "Face remains partly obscured at battle distance, consistent with earlier source review"
+  },
+  "not_covered": [
+    "shiny forms",
+    "battle replay",
+    "actual HUD overlap",
+    "other arenas",
+    "release pack/download",
+    "performance certification"
+  ],
+  "entries": [
+    {
+      "species": "charmeleon",
+      "runtime_scn_sha256": "60e8f4ba5944fbff04ace27c43deab00e2739f2a097d68269ed807525500b7ed",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "persian",
+      "runtime_scn_sha256": "51b68eca958773e8013133d9bfbb9d12837fc5abc0f257053cf1c16fc2b04b52",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "slowbro",
+      "runtime_scn_sha256": "402e855ad42d74568a9a60ed70397ea903460eab55aea2a6fd35e2711e447bcf",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "igglybuff",
+      "runtime_scn_sha256": "0c0ebd9786bc88fa4356d1a9d507d1083be951ea8fbe72dd65782e0e70d1905a",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "mareep",
+      "runtime_scn_sha256": "b160c394beb0017d68b804d643d71a015688f937c82f3d9e9c7c9b0d12d3eb9d",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "flaaffy",
+      "runtime_scn_sha256": "20ceae9e4ddf10f069354a5c696fb59703aeb56d7015ee94f4c0a7e279b9937d",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "ampharos",
+      "runtime_scn_sha256": "eb7119d6b61cc0147042a25c0549b8ca98b1cc00135c53f5306e733823567cf2",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "skiploom",
+      "runtime_scn_sha256": "d9a65d224a5b563b427ec5d598cda837e816a7e35bd92b72cee8925b5a12a9c2",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "slowking",
+      "runtime_scn_sha256": "046cb70713b6c32199d8aedb683c8dc99ba236dd47a5edc9c8b395bfa1b81ac0",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "pineco",
+      "runtime_scn_sha256": "9a104e63a99db4e6f4497b8eb8008b6328cbf120cd746cc7ab0b688c615a33d4",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "dunsparce",
+      "runtime_scn_sha256": "7811f0a45c15ddf36ecb06db65de4b6353711d9d8fd4b8eddacb0c8f1174cbcc",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "teddiursa",
+      "runtime_scn_sha256": "3b635cb19a454e1ae740bb4f778f6fff6ca408e178882fa109ff0fd1794c0d63",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "ursaring",
+      "runtime_scn_sha256": "49908b581150c8dd64a2d759715b3d7c3cc3cdd156b2ff74f2b1d027dc00cb1d",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "houndour",
+      "runtime_scn_sha256": "01630e9a297f7667bbc15273b1f169d73e1167aac611c66b9853f3c38d0df7f2",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "houndoom",
+      "runtime_scn_sha256": "cc6fafdf110f748b80a4230904c4a8cf699dd5ef13d27c4d9dca378b64b2612d",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "phanpy",
+      "runtime_scn_sha256": "2d478ebcf3c8c471d1a11f35f38aba6c3ede92f8382e256a9622a84aa934ff22",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "stantler",
+      "runtime_scn_sha256": "6d67271ad46fe8c5fa9e4f6dfd0245bbdf74e8b0953aeb249d48cf47176af64d",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    },
+    {
+      "species": "larvitar",
+      "runtime_scn_sha256": "7403728f77876ebbc45c6aa797a7aebcfafb7c015367e9d3746f76f8032b6511",
+      "decision": "normal_scn_runtime_screen_passed",
+      "runtime_approved": false
+    }
+  ]
+}
