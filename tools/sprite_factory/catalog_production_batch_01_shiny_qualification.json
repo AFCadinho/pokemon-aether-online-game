@@ -1,0 +1,193 @@
+{
+  "schema": 1,
+  "date": "2026-09-25",
+  "scope": "batch 01 normal/shiny offline candidate qualification, local classic arena and Immersive HUD",
+  "runtime_approved": false,
+  "release_approved": false,
+  "summary": {
+    "normal_candidates": 18,
+    "shiny_glbs_and_scns": 14,
+    "material_holds": 4,
+    "sampled_shiny_motion_captures": 294,
+    "normal_shiny_battle_pairs_passed": 14
+  },
+  "entries": [
+    {
+      "species": "charmeleon",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "60e8f4ba5944fbff04ace27c43deab00e2739f2a097d68269ed807525500b7ed",
+      "shiny_scn_sha256": "28951248bebaa067b5befd00468119e59fa7a1b1be5d03af233d7201a5afa54a",
+      "shiny_glb_sha256": "2de2656a6256d7c91aab13eb575a87e70ca47599a0e571795b122b3128880847",
+      "geometry_motion_sha256": "14324cfddcca807165991674fcd7a3f695159fb667e1e73396f25d56d2eed8ea",
+      "official_rare_material_sha256": "a78d85d4f31290d0d08955e0c6984025a1ab5c14b99d739034786e3faa02a5b3",
+      "runtime_approved": false
+    },
+    {
+      "species": "dunsparce",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "7811f0a45c15ddf36ecb06db65de4b6353711d9d8fd4b8eddacb0c8f1174cbcc",
+      "shiny_scn_sha256": "232afb503bfc3774a82c8ca4e12836239ac89871b9daed2b028b8ed8c320b44c",
+      "shiny_glb_sha256": "d09bf52d62d7bf9e0b76b92b043f42fa1c97c8d2b236b9b319a177eeb62b8ec8",
+      "geometry_motion_sha256": "3d296eeae516baa4d9146093c65beece6f881bfe934d9aad3d6b0a21f127af32",
+      "official_rare_material_sha256": "b79e33b2a75f53e6ca1b7ab9dff46f8534f2fb0923f375ea860d7ce4f2694c96",
+      "runtime_approved": false
+    },
+    {
+      "species": "flaaffy",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "20ceae9e4ddf10f069354a5c696fb59703aeb56d7015ee94f4c0a7e279b9937d",
+      "shiny_scn_sha256": "7d237ba0e5ee565cc71e80e0e2418739e730392c1671c76db791c454b4a422b4",
+      "shiny_glb_sha256": "08ae00001d8079a402311fd486ca40e668a62551302332671ce4903352cdbead",
+      "geometry_motion_sha256": "0374f3114e963fbedc186c5c6ba2c73d2745fadcdff2c471e2eaa6e060b624d3",
+      "official_rare_material_sha256": "2b68083a7a280f63440302c3456882c5011a12684bf72dda56307a6f5ea8c750",
+      "runtime_approved": false
+    },
+    {
+      "species": "houndoom",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "cc6fafdf110f748b80a4230904c4a8cf699dd5ef13d27c4d9dca378b64b2612d",
+      "shiny_scn_sha256": "8d8c94febb0e55ec08f74d029917823240c7bbcfad989187669807a0846829eb",
+      "shiny_glb_sha256": "994818376b35bb10932f179e45e9f181625b91f1d295116ff7feb907b286be22",
+      "geometry_motion_sha256": "6ee73ff7aece89aedf861ee718fe942a003296bcc3c402d38c5d7b137860f90e",
+      "official_rare_material_sha256": "b781c4f47b380b5f6a13b6d115ea798cc48b8722c2e9d24d352412fe81b80b62",
+      "runtime_approved": false
+    },
+    {
+      "species": "houndour",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "01630e9a297f7667bbc15273b1f169d73e1167aac611c66b9853f3c38d0df7f2",
+      "shiny_scn_sha256": "d4849ca6d2818ab34358533305587b6d866cd2ff8f5f299b1961b45dc4fc3f85",
+      "shiny_glb_sha256": "12eecb41e4e36267f0cdbbf3ca9af81b0c3b72d77f7b7afc0806d833ff24875d",
+      "geometry_motion_sha256": "f6a03753f016816652dbf09fa655222e82dee9512e04d07fe68e193937417c11",
+      "official_rare_material_sha256": "149131d8f9cd65d81f665397dddf87bf1f574c82294ab85e2455f1dcbf155a40",
+      "runtime_approved": false
+    },
+    {
+      "species": "igglybuff",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "0c0ebd9786bc88fa4356d1a9d507d1083be951ea8fbe72dd65782e0e70d1905a",
+      "shiny_scn_sha256": "895427c34bcf5c952e6c9721532f508d77990d12c99ff7ecba55c3d6ebda5154",
+      "shiny_glb_sha256": "0e9300cba4e75f73a32d1b076eaeab69b32c7516f0652f57191cbc495eacd275",
+      "geometry_motion_sha256": "e42a80e2fecae5c65c65aab8bf74f916e56eddc89f88270cb610984e84558386",
+      "official_rare_material_sha256": "8c29025cbff82af746564d11f38ed12fa78754e01ca92ab5c188b6e4fb1a468a",
+      "runtime_approved": false
+    },
+    {
+      "species": "mareep",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "b160c394beb0017d68b804d643d71a015688f937c82f3d9e9c7c9b0d12d3eb9d",
+      "shiny_scn_sha256": "cfcf9e53551c84b7602336249fa66810460399e04db6b492b0a3ce9d6c122615",
+      "shiny_glb_sha256": "699fb8c77b91c997d72bf42f5ff9067456ebe05212891a4c3a6057fe5ff65e73",
+      "geometry_motion_sha256": "8ae40d9357dec0cc53fd83400926511dd35161c5297ad738d2e35417eb4eb289",
+      "official_rare_material_sha256": "cadf77cc96fb288cc9ecb2e64f816acf792424c4d8cbf033c8ae2a15c7f57640",
+      "runtime_approved": false
+    },
+    {
+      "species": "persian",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "51b68eca958773e8013133d9bfbb9d12837fc5abc0f257053cf1c16fc2b04b52",
+      "shiny_scn_sha256": "6988ee9a9cd7f4624488005adde35b62669e4fe7d14ab6e9cf7e8b4f61bf3ced",
+      "shiny_glb_sha256": "d85d44b0552237510277c05475bc8ca906800ec7708edd18c5a0038d6434bad0",
+      "geometry_motion_sha256": "cd3a67c947df593adf95f6294007c8d4a7d04a08ee2fbd7b9f8dd699eb1586a1",
+      "official_rare_material_sha256": "9cab3a008ec4c5cd45934a99378ed3bccd53faa395b0dd278ce078f4a614bf6b",
+      "runtime_approved": false
+    },
+    {
+      "species": "phanpy",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "2d478ebcf3c8c471d1a11f35f38aba6c3ede92f8382e256a9622a84aa934ff22",
+      "shiny_scn_sha256": "2ba3f4fed72ffce4480d217b941b06a4770062cd7d74eca411fd4899c151d9b2",
+      "shiny_glb_sha256": "381e045425419391b1338bac7d9a9a30c6abe6a894b6fe13578fd8e94748cc0a",
+      "geometry_motion_sha256": "d1baf7f20bd6f9cd155eae775141574673c62b039dd9c6fe73a234a96c577377",
+      "official_rare_material_sha256": "9fe86dce986dfbb1043807249deb8d3ecf2ebdb37eb580f85fae6a307de485c4",
+      "runtime_approved": false
+    },
+    {
+      "species": "skiploom",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "d9a65d224a5b563b427ec5d598cda837e816a7e35bd92b72cee8925b5a12a9c2",
+      "shiny_scn_sha256": "4671350f290cc824083f726586d754a2ab684841102347fc9c755ff8c4613792",
+      "shiny_glb_sha256": "041880d2923e8c0271c6cc3f5a579c7bb3c88db2ef010afc69c5fac2617deb55",
+      "geometry_motion_sha256": "c0c4d6a08320f5c9ff14da118c9755e1f613e546de1b1e2deedefe6d1ab992d7",
+      "official_rare_material_sha256": "b864e26ee65ad209dc550c15701f7299384eb37ce61c12d13758dee109a2e6ea",
+      "runtime_approved": false
+    },
+    {
+      "species": "slowking",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "046cb70713b6c32199d8aedb683c8dc99ba236dd47a5edc9c8b395bfa1b81ac0",
+      "shiny_scn_sha256": "7b61f2b5f2259ceaf8236ab456948b9ceead1445fbbaa1519833b921b562c5bf",
+      "shiny_glb_sha256": "00ce41f24e7ae202a0a7f4c13e62423a930ebde9b400c16aa481ad7aadae384f",
+      "geometry_motion_sha256": "6043da3097e2089eca2a92f7aebc8ddbacb4ef2ccd27ac9441fa59c37bdcd14f",
+      "official_rare_material_sha256": "80d7926f581675a275b9849fab2474c234d884bbf2308473fe744d8fc8d97874",
+      "runtime_approved": false
+    },
+    {
+      "species": "stantler",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "6d67271ad46fe8c5fa9e4f6dfd0245bbdf74e8b0953aeb249d48cf47176af64d",
+      "shiny_scn_sha256": "49f44b58aa326ea37b9e81afafc4f5c5494c9b7b4761adbf1196c707fe35d25e",
+      "shiny_glb_sha256": "50daed65925a67eeca0510699bdcba796ad15e1c620d56bf154f24b6deaa2ec0",
+      "geometry_motion_sha256": "5ce5b6cac74c55d733e658524ff598efcc29290669ea3b413211ab1aa4acd1a8",
+      "official_rare_material_sha256": "41284b510dbe2eb5e21db6f683395078ea1fe68bf13f23e9d47e7f4217567b38",
+      "runtime_approved": false
+    },
+    {
+      "species": "teddiursa",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "3b635cb19a454e1ae740bb4f778f6fff6ca408e178882fa109ff0fd1794c0d63",
+      "shiny_scn_sha256": "2ae04784cc9479a5eda4cdbe3dbd8fa7881db8dbd45ca9fe0fa54f7725aece41",
+      "shiny_glb_sha256": "a1dd4cfa649c8ece5abec6409399f5bf8ca89a809cd890bbb35d894c858d09d7",
+      "geometry_motion_sha256": "fe2654ce29523a5dd8f2ea5bd64370d3700c0f01f0a901a8bee963975cc2a40d",
+      "official_rare_material_sha256": "08eff9e868db75dba9f29d61c0c5d32939195de6a568a57d8b9bd361c2355297",
+      "runtime_approved": false
+    },
+    {
+      "species": "ursaring",
+      "status": "paired_runtime_screen_passed",
+      "normal_scn_sha256": "49908b581150c8dd64a2d759715b3d7c3cc3cdd156b2ff74f2b1d027dc00cb1d",
+      "shiny_scn_sha256": "879b1812c6aa11575a8691c4094d5df2fded2036bceb4e93ae5456c1a921e5af",
+      "shiny_glb_sha256": "eacea2d0e358c4b8e58050be6e5697c8b978d5f21103c233052c79adfe728c79",
+      "geometry_motion_sha256": "72deacc8d8202f146e8b270eb7f3254ad33e1b4f5844cc122b84ce1c57110f9e",
+      "official_rare_material_sha256": "10ba392f6aef64838752cb885fc666228f5585b908b5d13858e83a8f97c434c5",
+      "runtime_approved": false
+    }
+  ],
+  "material_holds": [
+    {
+      "species": "ampharos",
+      "reason": "Rare material has a non-albedo change: body_a_00/NormalMap",
+      "disposition": "review_queue",
+      "runtime_approved": false
+    },
+    {
+      "species": "larvitar",
+      "reason": "Rare material has a non-albedo change: l_eye/LayerMaskMap",
+      "disposition": "review_queue",
+      "runtime_approved": false
+    },
+    {
+      "species": "pineco",
+      "reason": "Rare material settings differ: l_eye",
+      "disposition": "review_queue",
+      "runtime_approved": false
+    },
+    {
+      "species": "slowbro",
+      "reason": "Rare material settings differ: r_eye_a",
+      "disposition": "review_queue",
+      "runtime_approved": false
+    }
+  ],
+  "limitations": [
+    "Only official rare albedo substitutions with unchanged inspected material settings were exported.",
+    "The 294 motion captures passed pose validity; 14 idle frames and four battle pair images were visually inspected.",
+    "Classic arena and Immersive HUD were tested; live PvP, other arenas, performance, portable bundles and release delivery are not certified."
+  ],
+  "evidence_sha256": {
+    ".tmp/catalog-production-01-shiny-export-2026-09-25-02/catalog.json": "46557603acfa6b8428746d7ac46cacbcb9c822d6d171b1ce591d714b7002579e",
+    ".tmp/catalog-production-01-shiny-runtime-2026-09-25/report.json": "70f56b57dd7b90134932f6704aae75e5c782f635604aba6f0dc47456999b337d",
+    ".tmp/catalog-production-01-shiny-motion-2026-09-25/review.json": "66743a7eb751c33067f6cfaf45a330144c9e4da2d8ee0966107816dabf59a29f",
+    ".tmp/catalog-production-01-shiny-pairing.json": "9268416d7e78fd15a7fe05547aaaa02ccaaa1089049233baff604fbd1586d364"
+  }
+}

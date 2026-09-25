@@ -1,10 +1,11 @@
-# Catalog production batch 01: static review handoff (2026-09-25)
+# Catalog production batch 01: staged qualification (2026-09-25)
 
-This is a **static screening pass**, not visual approval, battle qualification,
-catalog admission, or release approval. Keep the 18 entries in
-`catalog_production_batch_01_results.json` at `visual_review: pending` and
-`runtime_approved: false` until moving animation and battle gates are complete.
-The seven source/export holds remain in the separate blocked queue.
+The batch has 18 normal SCNs that passed the offline battle, HUD and replay
+screens. Fourteen now also have hash-bound shiny GLBs/SCNs and passed paired
+runtime screening. Ampharos, Slowbro, Pineco and Larvitar shiny are in a
+material review queue; the original seven source/export holds remain separate.
+No batch model has player-facing battle admission, release approval or a bundle.
+The original static review evidence below remains part of the qualification.
 
 ## Evidence checked
 
@@ -70,7 +71,7 @@ affect that 3D viewport, so it now changes the 3D camera field of view too.
 The observation stays open for inspection at zoom and in battle; it is not yet
 evidence of a defective source texture or a release hold.
 
-## Next gate
+## Qualification stages
 
 ### Three-timepoint native-clip screen (2026-09-25)
 
@@ -211,3 +212,35 @@ checks. **Next production step:** make the shiny counterparts, qualify their
 material/animation and normal–shiny pairing, then package individually.
 Keep confirmed model-specific defects in the review queue without stopping
 the other candidates. The seven technical holds do not block the next batch.
+
+### Official shiny variants and paired runtime screen (2026-09-25)
+
+The 18 normal exports were compared with their official `_rare.trmtr` material
+tables. Four changed more than the inspected base-colour texture binding and
+were held without export: Ampharos also changes a normal map; Slowbro and
+Pineco change eye-material settings; Larvitar changes an eye layer mask.
+The other 14 had unchanged inspected material settings and only official
+`BaseColorMap` replacements. Their embedded normal images were verified
+pixel-for-pixel against the official source PNGs before remapping to the rare
+PNG. Blender's retained `.001` image copies are now handled by verifying every
+matching copy; a mismatch still stops export.
+
+All 14 shiny GLBs passed exact geometry, skin and animation parity against
+their normal GLBs. Fourteen standalone shiny SCNs were created and reloaded
+with distinct SHA-256 hashes. The rendered three-timepoint review produced
+**294 captures** (14 × seven clips × three times) without invalid poses or
+script/renderer errors. All 14 idle captures were inspected; the official
+colour changes and anatomy remain recognizable. In the real battle presenter,
+all 14 normal/shiny pairs retained separate resources and actors, switched in
+both directions, played shiny actions and faint/replacement, stayed clear of
+the Immersive HUD and reloaded after bounded-cache eviction. Four pair images
+were inspected. A held Ampharos shiny fell back to 2.5D. The temporary local
+screened registry was restored byte-for-byte after the test.
+
+The exact per-model hashes and hold reasons are recorded in
+[`catalog_production_batch_01_shiny_qualification.json`](catalog_production_batch_01_shiny_qualification.json).
+The local source exports, SCNs, motion images, paired battle images and logs
+remain under `.tmp/catalog-production-01-shiny-*`. This is candidate
+qualification, not release certification: continuous motion review, other
+arenas, performance and portable per-Pokémon bundles remain open. The four
+material holds stay in their queue while the 14 pairs advance.
