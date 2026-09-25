@@ -5417,6 +5417,8 @@
   "ui.buff.global_heal.disable_future": "Toekomstige Global Heal-verzoeken niet meer tonen",
   "ui.buff.global_heal.healed": "Je party is volledig hersteld door Global Heal.",
   "ui.buff.global_heal.heal_failed": "Je party kon niet worden hersteld.",
+  "ui.buff.adventure_party_exp.name": "+25% Party-EXP",
+  "ui.buff.adventure_party_exp.description": "Adventure Party: 25% meer EXP in gezamenlijke wilde battles. Trainer battles behouden hun normale EXP-beloning.",
   "ui.buff.aether_blessing_shiny.name": "5% Shiny",
   "ui.buff.aether_blessing_shiny.description": "Aether Blessing: 5% betere Shiny-kans (×1,05).",
   "ui.buff.aether_blessing_travel.name": "50% Travel",

@@ -871,10 +871,19 @@ func _run() -> void:
 	service.party = {"memberIds": [1, 2]}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(hud_names[0].text == "SelfTrainer" and hud_names[1].text == "Trainer #2", "older party responses still show own name and identify the partner")
+	var party_exp_buff: Dictionary = overlay_ui.call("_current_adventure_party_exp_buff")
+	_expect(party_exp_buff.get("id") == "adventure_party_exp" and party_exp_buff.get("name_key") == "ui.buff.adventure_party_exp.name",
+		"active party gives its member a visible EXP buff")
+	var active_buffs: Array = overlay_ui.get("active_personal_buffs")
+	_expect(active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
+		"party state refresh updates the personal buff tray immediately")
 	auth_service.set("current_user", previous_user)
 	service.party = {}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
+	active_buffs = overlay_ui.get("active_personal_buffs")
+	_expect(not active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
+		"leaving the party removes the EXP buff immediately")
 	party_hud.free()
 	overlay_ui.free()
 	var interaction_script: Script = load("res://scripts/ui/player_interaction_coordinator.gd")

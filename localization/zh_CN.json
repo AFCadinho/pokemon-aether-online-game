@@ -5326,6 +5326,8 @@
   "ui.buff.global_heal.disable_future": "不显示未来的 Global Heal 请求",
   "ui.buff.global_heal.healed": "你的队伍已被 Global Heal 完全治愈。",
   "ui.buff.global_heal.heal_failed": "你的队伍无法被治愈。",
+  "ui.buff.adventure_party_exp.name": "+25% 队伍经验值",
+  "ui.buff.adventure_party_exp.description": "冒险组队：共同参与的野生宝可梦对战获得额外 25% 经验值。训练家对战的经验值奖励不变。",
   "ui.buff.aether_blessing_shiny.name": "5% 闪亮",
   "ui.buff.aether_blessing_shiny.description": "以太祝福：闪亮遭遇几率提高 5% (×1.05)。",
   "ui.buff.aether_blessing_travel.name": "50% 行程",

@@ -5329,6 +5329,8 @@
   "ui.buff.global_heal.disable_future": "Não mostrar futuras solicitações de Cura Global",
   "ui.buff.global_heal.healed": "Sua equipe foi completamente curada pela Cura Global.",
   "ui.buff.global_heal.heal_failed": "Não foi possível curar sua equipe.",
+  "ui.buff.adventure_party_exp.name": "+25% EXP de equipe",
+  "ui.buff.adventure_party_exp.description": "Adventure Party: 25% mais EXP em batalhas selvagens compartilhadas. Batalhas contra Treinadores mantêm a EXP normal.",
   "ui.buff.aether_blessing_shiny.name": "5% Shiny",
   "ui.buff.aether_blessing_shiny.description": "Bênção Aether: chance de encontro Shiny 5% melhor (×1,05).",
   "ui.buff.aether_blessing_travel.name": "50% Viagem",
