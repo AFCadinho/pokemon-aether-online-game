@@ -107,10 +107,11 @@ func _run() -> void:
 
 func _check_browser_contracts() -> void:
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
-	assert(world_source.contains('SettingsManager.battle_ui_layout == "immersive"\n\t\tand not OS.has_feature("mobile")'))
+	assert(world_source.contains('SettingsManager.battle_ui_layout == "immersive"'))
 	assert(world_source.contains('SettingsManager.battle_presentation_mode == "3d"\n\t\tand not OS.has_feature("web")'))
 	var settings_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
 	var layout_index := settings_source.find('layout_options.name = "BattleUILayoutOptions"')
 	var desktop_index := settings_source.find('if not OS.has_feature("web") and not OS.has_feature("mobile"):')
 	assert(layout_index >= 0 and desktop_index > layout_index, "Battle UI choice must remain available in browser settings")
+	assert(settings_source.contains('if not OS.has_feature("mobile"):\n\t\tvar layout_options := OptionButton.new()'), "Mobile fixes the immersive battle layout")
 	print("IMMERSIVE_BROWSER_CONTRACT_OK")

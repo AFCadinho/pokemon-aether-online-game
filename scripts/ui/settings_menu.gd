@@ -467,6 +467,9 @@ func _setup_tabs() -> void:
 	var resolution_row := _create_labeled_control_row(
 		resolution_label, resolution_options_button
 	)
+	if OS.has_feature("mobile"):
+		fullscreen_row.hide()
+		resolution_row.hide()
 	var world_scale_row := _create_labeled_control_row(
 		world_pixel_scale_label, world_pixel_scale_options_button, world_pixel_scale_hint_label
 	)

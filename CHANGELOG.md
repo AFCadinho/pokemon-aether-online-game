@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Android-proefbuild gebruikt liggende 2D-gevechten met de volledige battleweergave en laadt de normale geanimeerde Pokémon-sprites via de bestaande online assetroute.
+
 - De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken als hun Kanto level cap 100 is.
 
 - Alpha Tools toont het Aetherite-bedrag nu in een klein venster na een klik op Generate Aetherite, zodat het hoofdmenu compact blijft.

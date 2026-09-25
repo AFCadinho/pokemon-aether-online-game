@@ -105,6 +105,7 @@ settings/gdscript/always_track_call_stacks=true
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
+window/handheld/orientation=0
 
 [input]
 
@@ -190,6 +191,7 @@ battle_move_4={
 [rendering]
 
 renderer/rendering_method.web="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 rendering_device/driver.windows="d3d12"
 textures/vram_compression/import_etc2_astc=true
 2d/snap/snap_2d_transforms_to_pixel=true

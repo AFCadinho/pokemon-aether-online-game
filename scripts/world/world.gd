@@ -3613,7 +3613,6 @@ func _mount_battle_ui() -> bool:
 		return false
 	var use_immersive_screen := (
 		SettingsManager.battle_ui_layout == "immersive"
-		and not OS.has_feature("mobile")
 	)
 	var use_desktop_3d_screen := (
 		SettingsManager.battle_presentation_mode == "3d"

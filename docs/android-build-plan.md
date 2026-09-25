@@ -1,9 +1,15 @@
 # PokeAether Android build plan
 
-Status: proposed
-Target: closed Android alpha, followed by a public beta after validation
+Status: Android V1 implementation in slot A; device gates remain open
+Target: direct APK distribution from the PokeAether website, with Discord linking to it
 Project baseline: Godot 4.6.2, shared client codebase
-Last updated: 2026-07-28
+Last updated: 2026-09-25
+
+The original July estimates and store-related options below are historical.
+Android V1 uses direct APK distribution and must detect and download a newer
+APK in-app. Android may still require the player to confirm installation.
+No Google Play or Apple App Store release is planned. The app uses 2D sprites
+and the immersive battle view; desktop 3D assets are excluded.
 
 ## 1. Objective
 
@@ -22,6 +28,8 @@ The first milestone is a closed Android alpha that:
   only touch input;
 - safely handles backgrounding, screen locking and network reconnects;
 - preserves the existing Windows, Linux and macOS behavior;
+- detects newer Android releases, downloads a verified APK and opens Android's
+  installation flow without requiring a fresh website or Discord download;
 - passes all existing project checks plus new Android-specific checks.
 
 The first alpha does not need:
@@ -31,7 +39,7 @@ The first alpha does not need:
 - complete tablet-specific layouts;
 - optional Gen 5 animated sprite packs;
 - every desktop drag-and-drop convenience;
-- Android launcher self-updating.
+- silent installation of a replacement APK without Android's confirmation.
 
 ## 2. Current baseline
 
@@ -41,7 +49,8 @@ extensions.
 
 The main gaps are outside the core gameplay:
 
-1. `export_presets.cfg` only defines Windows, Linux and macOS exports.
+1. The Android export preset has been added; installation and a physical-device
+   run still need verification.
 2. Movement and interaction actions in `project.godot` currently have keyboard
    bindings only.
 3. The UI contains mouse-, right-click- and drag-specific interactions.
@@ -88,14 +97,38 @@ Official reference:
 
 ### 3.3 Use a normal Android app, not a launcher app
 
-Android updates the application package through an APK or store-delivered AAB.
-The Android client must not download and execute a replacement game binary.
+Android updates the application package through a signed APK. The Android
+client must never download and execute a replacement game binary inside the
+Godot process. It may download a verified APK and invoke the system installer.
 
 The app may download versioned content packs. Application updates and content
 updates are separate:
 
-- APK/AAB: client scripts, scenes and bundled essential resources;
+- APK: client scripts, scenes and bundled essential resources;
 - asset packs: large Pokémon sprites, music and optional visual content.
+
+The release manifest and APK are hosted on the existing updates domain. For
+each release, publish an immutable APK first, verify its size and SHA-256, then
+replace `manifest-android.json`. The manifest's `game.buildId` must match the
+build ID embedded in the APK; the gateway already selects this manifest for
+Android clients. The APK retains the same package name and signing key and has
+a strictly increasing Android `version/code`. The updater offers retry and a
+website fallback if Android rejects the installation. Neither build automation
+nor a GitHub artifact upload publishes a player release without separate
+authorization.
+
+The install handoff needs Android integration beyond GDScript: a `FileProvider`
+must grant the system installer temporary read access to the verified APK using
+a `content://` URI, and the app must declare `REQUEST_INSTALL_PACKAGES`. Check
+`canRequestPackageInstalls()` and lead the player through Android's per-app
+install permission before opening `ACTION_INSTALL_PACKAGE`. Godot's v2 Android
+plugin path uses a Gradle build, so the current template-only export is a
+bootstrap step. Test an upgrade from version code N to N+1 on a real phone
+with the same release key before distributing the first player APK.
+
+References: <https://developer.android.com/reference/android/content/Intent>,
+<https://developer.android.com/reference/androidx/core/content/FileProvider>,
+<https://docs.godotengine.org/en/4.6/tutorials/platform/android/android_plugin.html>.
 
 ### 3.4 Store downloaded content under `user://`
 
@@ -122,8 +155,8 @@ signing key.
 ### 3.5 Start with a closed alpha
 
 The first distribution should be a signed, sideloadable APK for invited
-testers. Store publication is a separate milestone because it adds AAB,
-store-policy, release-signing and broader device-quality requirements.
+testers. The website is the sole binary download location; Discord can point
+players there.
 
 ## 4. Milestone A: Android export bootstrap
 
@@ -133,7 +166,7 @@ Estimated effort: 1-2 focused development days.
 
 - Install and configure:
   - Godot 4.6.2 export templates;
-  - JDK 17;
+  - a supported JDK (local bootstrap currently uses JDK 26);
   - Android SDK and platform tools;
   - `adb`;
   - Android SDK packages recommended by Godot 4.6.
@@ -145,7 +178,9 @@ Estimated effort: 1-2 focused development days.
 - Enable landscape orientation.
 - Enable internet access.
 - Configure Compatibility rendering for Android.
-- Add a stable alpha signing key and keep it outside the repository.
+- Add a stable release signing key and keep it outside the repository. The
+  local export currently uses Godot's disposable debug key and cannot be an
+  upgrade source for players.
 - Make `WindowFit` skip mobile platforms.
 - Make `SettingsManager` skip desktop resolution and window-mode operations on
   mobile.
@@ -163,7 +198,7 @@ Estimated effort: 1-2 focused development days.
 
 ### Acceptance criteria
 
-- [ ] A release-mode ARM64 APK exports successfully.
+- [x] A debug ARM64 APK exports successfully; release signing remains open.
 - [ ] The APK installs with `adb install`.
 - [ ] The app starts without a native or Godot crash.
 - [ ] The login screen fills a landscape phone display correctly.
@@ -584,9 +619,14 @@ Later release steps:
 
 - inject the release keystore from GitHub Secrets;
 - export a signed release APK for closed distribution;
-- export a signed AAB for store delivery;
 - attach version metadata and checksums;
 - retain the same signing identity for all upgrades.
+
+The workflow must bind the APK `version/code`, `version/name`, and embedded
+`application/config/build_id` to one release record. It uploads a private
+artifact only. Publishing the immutable APK and then `manifest-android.json`
+is a separate, authorized release operation. The manifest includes the APK
+URL, byte count, SHA-256, and matching `game.buildId`.
 
 Never commit:
 
@@ -673,9 +713,8 @@ keyboard, lifecycle and touch behavior.
 - Review how the remembered authentication token is stored.
 - Consider Android Keystore-backed protection for persistent session material.
 - Add crash reporting or a privacy-conscious diagnostic export.
-- Verify current Google Play target SDK and AAB requirements.
-- Review privacy disclosures and store requirements separately from technical
-  build readiness.
+- Review Android target SDK and sideload installation requirements.
+- Review privacy disclosures separately from technical build readiness.
 
 ## 12. Delivery sequence
 
@@ -758,10 +797,10 @@ Consider public support only after:
 
 ### Bootstrap
 
-- [ ] Android SDK and JDK 17 configured locally.
-- [ ] Android export templates installed.
-- [ ] Android export preset added.
-- [ ] ARM64 APK exported and installed.
+- [x] Android SDK and JDK configured locally in slot A.
+- [x] Android export templates installed in slot A.
+- [x] Android export preset added.
+- [x] ARM64 debug APK exported; device installation remains open.
 - [ ] Compatibility rendering validated.
 - [ ] Desktop window behavior excluded on mobile.
 
