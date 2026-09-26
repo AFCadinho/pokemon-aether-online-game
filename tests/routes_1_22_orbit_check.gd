@@ -19,18 +19,18 @@ func _run() -> void:
 	if ids.is_empty():
 		ids = PackedStringArray(["route_1", "route_1_water", "route_22", "route_22_water"])
 	for id in ids:
-		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water", "route_2", "route_2_water", "route_4", "route_4_water"])
+		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"])
 		var arena: Node3D = Arenas.build(id, world, camera)
 		world.add_child(arena)
 		var grid: Rect2i = arena.get_meta("mesh_grid")
 		var vertices: PackedVector3Array = arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
 		var base_id := id.trim_suffix("_water")
-		var tree_path: String = {"route_1": "Route1Scenery/Route1TreeCorridor", "route_22": "Route22Scenery/RouteConifers", "route_2": "Route2Scenery/WoodlandConifers", "route_4": "Route4Scenery/ValleyConifers"}[base_id]
+		var tree_path: String = {"route_1": "Route1Scenery/Route1TreeCorridor", "route_22": "Route22Scenery/RouteConifers", "route_2": "Route2Scenery/WoodlandConifers", "route_4": "Route4Scenery/ValleyConifers", "cerulean_city": "RegionScenery/RegionConifers", "route_24": "RegionScenery/RegionConifers", "route_25": "RegionScenery/RegionConifers"}[base_id]
 		var trees := arena.get_node(tree_path)
 		var boxes: Array = []
 		ArtBounds.new()._bounds(trees, Transform3D.IDENTITY, boxes)
 		var props: Array = []
-		var landmark_path: String = {"route_1": "Route1Scenery/Route1Landmarks", "route_22": "Route22Scenery/Route22Landmarks", "route_2": "Route2Scenery/WoodlandLandmarks", "route_4": "Route4Scenery/ValleyLandmarks"}[base_id]
+		var landmark_path: String = {"route_1": "Route1Scenery/Route1Landmarks", "route_22": "Route22Scenery/Route22Landmarks", "route_2": "Route2Scenery/WoodlandLandmarks", "route_4": "Route4Scenery/ValleyLandmarks", "cerulean_city": "RegionScenery/RegionLandmarks", "route_24": "RegionScenery/RegionLandmarks", "route_25": "RegionScenery/RegionLandmarks"}[base_id]
 		var landmarks := arena.get_node(landmark_path)
 		ArtBounds.new()._bounds(landmarks, Transform3D.IDENTITY, props)
 		var target := Arenas.camera_target(id)
@@ -59,12 +59,16 @@ func _run() -> void:
 				var footprint := bounds.grow(1.0)
 				footprint.position.y = -100
 				footprint.size.y = 200
-				if footprint.intersects_segment(target + direction * 20, target + direction * (120 if base_id == "route_4" else 85)):
+				if footprint.intersects_segment(target + direction * 20, target + direction * (130 if base_id in ["route_4", "route_24", "cerulean_city", "route_25"] else 85)):
 					reached_trees = true
 					break
 			# Route 22 also has continuous high rock shelves behind its forest.
 			var backdrop := target + direction * 55
-			assert(reached_trees or _height(vertices, grid, backdrop) > target.y + 3, "%s empty horizon at %d" % [id, degrees])
+			# The cape deliberately opens onto the ocean. Its shader must cover that horizon.
+			var open_sea := base_id == "route_25" and backdrop.x + backdrop.z - 24 + 2 * sin(backdrop.z * 0.12) > 3
+			if open_sea:
+				assert(arena.has_node("RegionScenery/CeruleanCapeOcean/WaterSurface"))
+			assert(open_sea or reached_trees or _height(vertices, grid, backdrop) > target.y + 3, "%s empty horizon at %d" % [id, degrees])
 		arena.free()
 		print("ROUTES_ORBIT_CHECK_OK: ", id)
 	world.queue_free()

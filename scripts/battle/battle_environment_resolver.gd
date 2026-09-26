@@ -36,6 +36,12 @@ static func resolve(context: Dictionary) -> StringName:
 				return &"route_2_water"
 			if str(context.get("map_id", "")).strip_edges() == "kanto_route_4":
 				return &"route_4_water"
+			if str(context.get("map_id", "")).strip_edges() == "kanto_cerulean_city":
+				return &"cerulean_city_water"
+			if str(context.get("map_id", "")).strip_edges() == "kanto_route_24":
+				return &"route_24_water"
+			if str(context.get("map_id", "")).strip_edges() == "kanto_route_25":
+				return &"route_25_water"
 			return Catalog.WATER_ENVIRONMENT_ID
 
 	# Route-specific scenery follows the battle location, including story rivals.
@@ -50,6 +56,12 @@ static func resolve(context: Dictionary) -> StringName:
 			return &"route_2"
 		if map_id == "kanto_route_4":
 			return &"route_4"
+		if map_id == "kanto_cerulean_city":
+			return &"cerulean_city"
+		if map_id == "kanto_route_24":
+			return &"route_24"
+		if map_id == "kanto_route_25":
+			return &"route_25"
 		if map_id == "kanto_route_3":
 			return &"route_3"
 

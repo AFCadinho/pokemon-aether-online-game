@@ -6,7 +6,17 @@ const ROUTE_22_POND_ORIGIN := Vector3(11, 0, -4.5)
 const ROUTE_2_POND_ORIGIN := Vector3(15, 0, -8)
 const ROUTE_4_RIVER_ORIGIN := Vector3(34, 0, -8)
 
+const CERULEAN_RIVER_ORIGIN := Vector3(-24, 0, -34)
+const ROUTE_24_RIVER_ORIGIN := Vector3(32, 0, 43)
+const ROUTE_25_COAST_ORIGIN := Vector3(30, 0, 25)
+
 static func battle_origin(id: String) -> Vector3:
+	if id == "cerulean_city_water":
+		return CERULEAN_RIVER_ORIGIN
+	if id == "route_24_water":
+		return ROUTE_24_RIVER_ORIGIN
+	if id == "route_25_water":
+		return ROUTE_25_COAST_ORIGIN
 	if id == "route_2_water":
 		return ROUTE_2_POND_ORIGIN
 	if id == "route_4_water":

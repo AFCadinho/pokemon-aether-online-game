@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water"]
+const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -34,6 +34,13 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
+	"cerulean_city": {"scope": "map", "map_id": "kanto_cerulean_city", "terrain": "grass", "lighting": "outdoor", "builder": "maps/cerulean_city/arena.gd"},
+	"cerulean_city_water": {"scope": "map", "map_id": "kanto_cerulean_city", "terrain": "water", "lighting": "outdoor", "builder": "maps/cerulean_city/arena.gd"},
+	"route_24": {"scope": "map", "map_id": "kanto_route_24", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_24/arena.gd"},
+	"route_24_water": {"scope": "map", "map_id": "kanto_route_24", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_24/arena.gd"},
+	"route_25": {"scope": "map", "map_id": "kanto_route_25", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_25/arena.gd"},
+	"route_25_water": {"scope": "map", "map_id": "kanto_route_25", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_25/arena.gd"},
+
 	"classic": {"scope": "generic", "terrain": "fallback", "lighting": "fallback", "builder": ""},
 	"forest": {"scope": "generic", "terrain": "grass", "lighting": "outdoor", "builder": "generic/grassfield_arena.gd"},
 	"cave": {"scope": "generic", "terrain": "cave", "lighting": "enclosed", "builder": "generic/cave_arena.gd"},
@@ -75,7 +82,7 @@ static func camera_target(id: String) -> Vector3:
 	return Framing.camera_target(id)
 
 static func uses_forest_assets(id: String) -> bool:
-	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water"]
+	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 
 static func uses_outdoor_lighting(id: String) -> bool:
 	return str(definition(id).get("lighting", "fallback")) == "outdoor"
@@ -108,6 +115,18 @@ static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 			var route = preload("res://scripts/battle/arenas/maps/route_4/arena.gd").new()
 			route.water_battle = id == "route_4_water"
 			return _apply_lighting(id, route.build(camera))
+		if id in ["cerulean_city", "cerulean_city_water"]:
+			var region = preload("res://scripts/battle/arenas/maps/cerulean_city/arena.gd").new()
+			region.water_battle = id.ends_with("_water")
+			return _apply_lighting(id, region.build(camera))
+		if id in ["route_24", "route_24_water"]:
+			var region = preload("res://scripts/battle/arenas/maps/route_24/arena.gd").new()
+			region.water_battle = id.ends_with("_water")
+			return _apply_lighting(id, region.build(camera))
+		if id in ["route_25", "route_25_water"]:
+			var region = preload("res://scripts/battle/arenas/maps/route_25/arena.gd").new()
+			region.water_battle = id.ends_with("_water")
+			return _apply_lighting(id, region.build(camera))
 		if id == "route_3":
 			return _apply_lighting(id, preload("res://scripts/battle/arenas/maps/route_3/arena.gd").new().build(camera))
 		return _apply_lighting(id, preload("res://scripts/battle/arenas/generic/grassfield_arena.gd").new().build(camera))

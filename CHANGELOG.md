@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cerulean City, Route 24 en Route 25 hebben eigen 3D-battlearena’s voor land en water, rondom ingericht naar de pixelmaps met Nugget Bridge, de stad, bergterrassen, Bill’s huis en een rotsachtige oceaankust.
+
 - Nog 69 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm, elk met een afzonderlijke bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte release.
 
 - Route 2 en Route 4 hebben nu eigen 3D-battlearena’s voor land- en watergevechten, rondom ingericht naar hun pixelmaps met bospoorten, Diglett’s Cave, Mt. Moon, een rivierbrug en extra natuurdetails.
