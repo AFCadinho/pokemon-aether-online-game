@@ -48,3 +48,16 @@ without errors. The user reviewed the 53 side-by-side pairs and reported
 “Allemaal goed.” The evidence is pinned in
 `tools/sprite_factory/catalog_production_batch_03_shiny_visual_review.json`.
 Battle placement and real battle loading remain pending for this cohort.
+
+## Battle placement in progress
+
+The complete raw and readability-scaled 60 Hz passes measured all 65 normal
+models in both battle cameras. After scaling, all remained in view and none
+overlapped the HUD proxy. Tynamo stayed below the 60-pixel idle readability
+threshold. Sixteen sleep poses had a measured point below the floor, so these
+need visual review before any sleep placement decision. The existing baker
+created motion clearance profiles for all 65 models without a hold. The
+independent 120 Hz verification is still running; no battle or runtime approval
+follows from the preliminary passes. Exact species, floor readings and hashes
+are pinned in
+`tools/sprite_factory/catalog_production_batch_03_battle_preliminary.json`.
