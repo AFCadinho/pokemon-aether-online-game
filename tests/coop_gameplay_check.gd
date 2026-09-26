@@ -363,15 +363,19 @@ func _run() -> void:
 	var mirrored_speaker := mounted_battle.get_node_or_null("%BattleStage/SpeakingTrainer0") as Control
 	_expect(presenter._first_trainer.visible and not presenter._second_trainer.visible
 		and presenter._first_trainer.command_callout.visible
+		and presenter._first_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
+			"battle.voice.move.use", {"pokemon": "Jigglypuff", "move": "Tackle"})
 		and mirrored_speaker != null and not mirrored_speaker.visible,
-		"only the acting allied Trainer appears with a move command, without a second Immersive speaker")
+		"the acting allied Trainer names its Pokémon and move without a second Immersive speaker")
 	presenter._hide_native_trainers()
 	service.activity.activityId = "brock"
 	presenter._sync_native_trainers()
 	presenter._show_trainer_for_event({"kind": "move", "actor": "p2", "move": "Gust"})
 	_expect(presenter._opponent_trainer.visible and not presenter._first_trainer.visible
-		and presenter._opponent_trainer.command_callout.visible,
-		"the opposing Trainer appears only to command its Pokémon")
+		and presenter._opponent_trainer.command_callout.visible
+		and presenter._opponent_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
+			"battle.voice.move.use", {"pokemon": "Pidgey", "move": "Gust"}),
+		"the opposing Trainer names its own Pokémon when commanding a move")
 	presenter._hide_native_trainers()
 	var original_map: Node = root.get_node("GameState").current_map
 	var trainer_map := Node2D.new()
@@ -464,8 +468,15 @@ func _run() -> void:
 		"wild doubles hide both Trainer sprites")
 	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
 	_expect(presenter._second_trainer.visible and not presenter._first_trainer.visible
-		and not presenter._opponent_trainer.visible,
-		"a wild battle reveals only the allied Trainer giving a command")
+		and not presenter._opponent_trainer.visible
+		and presenter._second_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
+			"battle.voice.move.use", {"pokemon": "Squirtle", "move": "Water Gun"}),
+		"a wild battle reveals the allied Trainer naming its Pokémon and move")
+	presenter._remember_pokemon_name("p3", "Wartortle, L16, M")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
+	_expect(presenter._second_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
+		"battle.voice.move.use", {"pokemon": "Wartortle", "move": "Water Gun"}),
+		"a switch in the same event batch updates the next Trainer command")
 	presenter._hide_native_trainers()
 	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
 	if not wild_layout_capture.is_empty():
