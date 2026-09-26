@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De volgende 71 goedgekeurde Pokémon zijn voorbereid voor 3D-gevechten in normale en shiny vorm. Hun modellen blijven individuele downloads; de nieuwe catalogus wordt actief na de desktoprelease.
+
 - Explicitly include normal and shiny Pokémon HOME icons in Android exports so party slots can resolve their portraits.
 - Pokémon-summary cards met 3D-modellen gebruiken de bestaande grassfield-, cave- en waterarena’s als automatische 3D-achtergrond op basis van hun types. De camera kadert de zichtbare Pokémon groter in en bewaart ruimte voor de kaartknoppen.
 

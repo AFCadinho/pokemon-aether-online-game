@@ -1,7 +1,7 @@
 extends Node
 ## Downloads only the approved models requested by a desktop battle.
 
-const RELEASE = preload("res://data/approved_3d_release_v5.json")
+const RELEASE = preload("res://data/approved_3d_release_v6.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
 const ROOT := "user://on-demand-3d-v1"

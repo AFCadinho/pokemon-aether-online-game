@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Service = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
-const Release = preload("res://data/approved_3d_release_v5.json")
+const Release = preload("res://data/approved_3d_release_v6.json")
 
 
 func _init() -> void:
@@ -9,7 +9,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	var source := OS.get_environment("POKEAETHER_APPROVED_3D_V5_DIR")
+	var source := OS.get_environment("POKEAETHER_APPROVED_3D_V6_DIR")
 	assert(source.is_absolute_path())
 	var index_path := source.path_join("asset-index.json")
 	assert(FileAccess.get_sha256(index_path) == Release.data.index.sha256)
@@ -19,6 +19,7 @@ func _run() -> void:
 	assert(service._asset_id("garchomp") == "pokemon_3d:garchomp:base")
 	assert(service._asset_id("garchomp@shiny") == "pokemon_3d:garchomp:base")
 	assert(service._asset_id("dragonite-mega") == "pokemon_3d:dragonite:mega")
+	assert(service._asset_id("abomasnow") == "pokemon_3d:abomasnow:base")
 	assert(service._asset_id("unapproved-pokemon").is_empty())
 	var asset: Dictionary = service._indexed_asset(index, "pokemon_3d:garchomp:base")
 	var archive := source.path_join(str(asset.object_key).get_file())
