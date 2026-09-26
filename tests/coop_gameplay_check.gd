@@ -363,8 +363,8 @@ func _run() -> void:
 	var mirrored_speaker := mounted_battle.get_node_or_null("%BattleStage/SpeakingTrainer0") as Control
 	_expect(presenter._first_trainer.visible and not presenter._second_trainer.visible
 		and presenter._first_trainer.command_callout.visible
-		and presenter._first_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
-			"battle.voice.move.use", {"pokemon": "Jigglypuff", "move": "Tackle"})
+		and presenter._first_trainer.command_callout.message_label.text.contains("Jigglypuff")
+		and presenter._first_trainer.command_callout.message_label.text.contains("Tackle")
 		and mirrored_speaker != null and not mirrored_speaker.visible,
 		"the acting allied Trainer names its Pokémon and move without a second Immersive speaker")
 	presenter._hide_native_trainers()
@@ -373,8 +373,8 @@ func _run() -> void:
 	presenter._show_trainer_for_event({"kind": "move", "actor": "p2", "move": "Gust"})
 	_expect(presenter._opponent_trainer.visible and not presenter._first_trainer.visible
 		and presenter._opponent_trainer.command_callout.visible
-		and presenter._opponent_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
-			"battle.voice.move.use", {"pokemon": "Pidgey", "move": "Gust"}),
+		and presenter._opponent_trainer.command_callout.message_label.text.contains("Pidgey")
+		and presenter._opponent_trainer.command_callout.message_label.text.contains("Gust"),
 		"the opposing Trainer names its own Pokémon when commanding a move")
 	presenter._hide_native_trainers()
 	var original_map: Node = root.get_node("GameState").current_map
@@ -469,14 +469,22 @@ func _run() -> void:
 	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
 	_expect(presenter._second_trainer.visible and not presenter._first_trainer.visible
 		and not presenter._opponent_trainer.visible
-		and presenter._second_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
-			"battle.voice.move.use", {"pokemon": "Squirtle", "move": "Water Gun"}),
+		and presenter._second_trainer.command_callout.message_label.text.contains("Squirtle")
+		and presenter._second_trainer.command_callout.message_label.text.contains("Water Gun"),
 		"a wild battle reveals the allied Trainer naming its Pokémon and move")
 	presenter._remember_pokemon_name("p3", "Wartortle, L16, M")
 	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
-	_expect(presenter._second_trainer.command_callout.message_label.text == root.get_node("LocalizationManager").call("text",
-		"battle.voice.move.use", {"pokemon": "Wartortle", "move": "Water Gun"}),
+	_expect(presenter._second_trainer.command_callout.message_label.text.contains("Wartortle")
+		and presenter._second_trainer.command_callout.message_label.text.contains("Water Gun"),
 		"a switch in the same event batch updates the next Trainer command")
+	var move_voice_variants := {}
+	for voice_turn in range(1, 20):
+		var selection: Dictionary = presenter._voice_director.resolve_command({
+			"kind": "move", "player_id": "p1", "pokemon": "Squirtle", "move": "Water Gun",
+		}, {"turn": voice_turn})
+		move_voice_variants[str(selection.get("text_key", ""))] = true
+	_expect(move_voice_variants.size() > 1 and not move_voice_variants.has(""),
+		"co-op move commands use multiple single-battle voice variants across turns")
 	presenter._hide_native_trainers()
 	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
 	if not wild_layout_capture.is_empty():
