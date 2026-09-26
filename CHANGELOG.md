@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog 69 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm, elk met een afzonderlijke bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte release.
+
 - Route 2 en Route 4 hebben nu eigen 3D-battlearena’s voor land- en watergevechten, rondom ingericht naar hun pixelmaps met bospoorten, Diglett’s Cave, Mt. Moon, een rivierbrug en extra natuurdetails.
 
 - De 3D-battlearena's van Route 1 en Route 22 zijn rondom vernieuwd naar de pixelmaps, met vollere bosranden, aansluitende terrassen, grasvelden en bloemperken; Route 22 heeft nu ook een League-poort en een zuidelijke vijver met voetbrug. De draaibare camera blijft ook bij watergevechten vrij van boomkruinen en blokkerende trapleuningen.

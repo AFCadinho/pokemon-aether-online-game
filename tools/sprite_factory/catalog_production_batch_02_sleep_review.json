@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "scope": "14 source sleep poses in flat-floor battle screenshots",
+  "reviewer": "user",
+  "feedback": "Volgens mij alleen bij kyogre zakt een fin door de grond",
+  "visually_acceptable_for_calibration": [
+    "abomasnow",
+    "bagon",
+    "bonsly",
+    "croagunk",
+    "krokorok",
+    "leafeon",
+    "luvdisc",
+    "medicham",
+    "mismagius",
+    "palkia",
+    "shelgon",
+    "vigoroth",
+    "whiscash"
+  ],
+  "visible_issue_hold": {
+    "species": "kyogre",
+    "issue": "A fin sinks through the flat battle floor in sleep pose"
+  },
+  "decision": "Continue 13 visually acceptable sleep poses to corrected floor and battle tests; keep Kyogre out of this approval round",
+  "runtime_approved": false,
+  "release_approved": false,
+  "evidence_sha256": {
+    ".tmp/catalog-production-02-battle-calibration-2026-09-26/sleep-holds.html": "de4903de0b2e5fd6640f5f4d40119b1b45b760648309528a29ab28d9c80447be",
+    ".tmp/catalog-production-02-battle-calibration-2026-09-26/preflight-summary.json": "d7f90413d027465a441bdbf9c69ab68008f5762f9133e13165eca3b64feab2ae",
+    ".tmp/catalog-production-02-battle-raw-2026-09-26/battle-review.json": "da806a0c347c0e51fde9033f73269731412ba0b619eba9e68b809105db0409be"
+  },
+  "corrected_kyogre_feedback": "Oke verdwijnt niet meer in de grond, maar voelt wel een beetje raar dat ze fainted zweven",
+  "corrected_kyogre_decision": "Hold Kyogre for separate pose review; the floor-clearance correction is technically sound but visually unnatural",
+  "corrected_battle": {
+    "validated_normal_forms": 13,
+    "minimum_clearance_metres": 0.0222104415297508,
+    "out_of_frame_shots": 0,
+    "hud_proxy_overlap_shots": 0,
+    "sample_hz": 120,
+    "complete": true,
+    "report_sha256": "0c6ab3dd67bf725bc0204764551c60dd84b5389cfa7ec3c4bf9d652b399b17d9"
+  }
+}

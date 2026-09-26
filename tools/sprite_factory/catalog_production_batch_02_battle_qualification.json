@@ -1,0 +1,787 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "scope": "batch-02 technical and visual battle qualification handoff",
+  "runtime_approved": false,
+  "release_approved": false,
+  "battle_visual_review": "pending",
+  "summary": {
+    "paired_battle_screen_passed_visual_review_pending": 69,
+    "source_hold": 19,
+    "normal_battle_screen_passed_shiny_material_hold": 10,
+    "battle_visual_hold": 1,
+    "battle_hud_hold": 1
+  },
+  "evidence_sha256": {
+    "tools/sprite_factory/catalog_production_batch_02_results.json": "b3301e3d506ee070e554afd59cd989c91c1b6dd0cef71f5d6021df15cbd51c8a",
+    "tools/sprite_factory/catalog_production_batch_02_static_review.json": "b64e46d640c94b1396453a80b5c09e8b5f570a784fba8b9c2d9c0a941c13964e",
+    "tools/sprite_factory/catalog_production_batch_02_shiny_results.json": "f8c860fdd0787987784754f9d82198e51354f0ba078a43b3fbf916380947cf3f",
+    "tools/sprite_factory/catalog_production_batch_02_sleep_review.json": "d15eefa1f455456fcc2f38fc33ef86fee44d07f5d4c48bdff8e08f6f59cce032",
+    "tools/sprite_factory/catalog_production_batch_02_pair_stress.json": "732132f54eff2b033c7c33caef7ff4550824f4b7462e62cc17dce75232dd8e9b",
+    ".tmp/catalog-production-02-battle-corrected-2026-09-26/battle-review.json": "8d65631d56dc9d5664603008c18cc4a1cb9b74a77a71f73e0248478f609d269f",
+    ".tmp/catalog-production-02-sleep-corrected-2026-09-26/battle-review.json": "0c6ab3dd67bf725bc0204764551c60dd84b5389cfa7ec3c4bf9d652b399b17d9",
+    ".tmp/catalog-production-02-battle-gallery-2026-09-26/index.html": "def781065d0f40f4835a3b7bb1c37d0c71c5544f9701148ea1986dd65e321ce4"
+  },
+  "entries": [
+    {
+      "species": "pupitar",
+      "runtime_approved": false,
+      "normal_scn_sha256": "cf6bc25ab72d106bbdddbcbacd93b91fbb064c86276840b4f2dfe68497a64005",
+      "minimum_clearance_metres": 0.0225429777055979,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "d5ec0aade41ce1aa85bcbd158c3fb619cc52999b9463d93fe9b4d6eef6213e94"
+    },
+    {
+      "species": "wingull",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "pelipper",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "ralts",
+      "runtime_approved": false,
+      "normal_scn_sha256": "5a682d756bf5be43fbc13a385a7866af297d9526bf5ae6137293ef3849980da9",
+      "minimum_clearance_metres": 0.0167389214038849,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "e42dafb60162daf9e9b89f76b3ff4192fd21303d1b15fc04997e512cca488491"
+    },
+    {
+      "species": "kirlia",
+      "runtime_approved": false,
+      "normal_scn_sha256": "6da8a710aad652094101ed8ce15c5e34185a8a7301e9142a12f42684d5607727",
+      "minimum_clearance_metres": 0.022234944626689,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "ecb11a2aba5ebab1bcf536cb3d5541f407fbdde216832bbbe72b448aa81926f0"
+    },
+    {
+      "species": "surskit",
+      "runtime_approved": false,
+      "normal_scn_sha256": "110ffcfe57ccbefb55e90ddbbffd9b0d953545a9d8390718c7583774dff95dee",
+      "minimum_clearance_metres": 0.0231201201677322,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "1253aa8fbd27fc7c6cd9090b3b7445d3370b5cf98c6976ee2f02c8c33e7565a5"
+    },
+    {
+      "species": "masquerain",
+      "runtime_approved": false,
+      "normal_scn_sha256": "ffc941468757e0275d53ef6c8e7d5e75a0b107343f46dec94d8c2a55341f537e",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "b22097ade4756c1f9855ea7ac65abb1bb04c1b5c87a7ae65fa253e47367bac99"
+    },
+    {
+      "species": "shroomish",
+      "runtime_approved": false,
+      "normal_scn_sha256": "e0bad7efd662dd640dd0af3df6d761f869ddc876af4d7551ed19e9be30e1ca5a",
+      "minimum_clearance_metres": 0.0230929497629404,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "breloom",
+      "runtime_approved": false,
+      "normal_scn_sha256": "5fb98c5a21d879c3d6ca9e28328004aca9f04c66e5e870502e088c333986aff3",
+      "minimum_clearance_metres": 0.020076297223568,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "1b236f45dbba4f7c0e5588358918276387c6048d3d6ffe25c4b82ab4501650dc"
+    },
+    {
+      "species": "slakoth",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Cross-resource animation track reference"
+    },
+    {
+      "species": "vigoroth",
+      "runtime_approved": false,
+      "normal_scn_sha256": "db81cc8ab8eb03e70f843a160e8c24a8d6cbafd53f9517eabc851a8af4c54ec1",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "33085a82cd5045e44044475a7d837de41370ea744d18a9fddc761150957c1dcf"
+    },
+    {
+      "species": "makuhita",
+      "runtime_approved": false,
+      "normal_scn_sha256": "9c4c1a72c55bd6544696d74c3f909e06dd4a54a6542448d38d4d7c3e169ad28d",
+      "minimum_clearance_metres": 0.0131061319261789,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "6b0de0b43da98780a7893c493d1207385621b315dc6dc59dac872d0702ff9051"
+    },
+    {
+      "species": "azurill",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Ambiguous or unsupported source shape names"
+    },
+    {
+      "species": "sableye",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Unknown or ambiguous visibility variant target"
+    },
+    {
+      "species": "meditite",
+      "runtime_approved": false,
+      "normal_scn_sha256": "b3574de2f9a35f47709eaf0533a97c67a173427af4dcd376ef13a88f4efebba5",
+      "minimum_clearance_metres": 0.0144971301779151,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "34e16ccf3a53afa3aacfda0cca9802f9a83d45bb677e8d5eabd4a4e211ec0097"
+    },
+    {
+      "species": "medicham",
+      "runtime_approved": false,
+      "normal_scn_sha256": "50c1b7ce2d943aeb644f6a98cb8ce79288f60e93011c0cfd1ee684bb17451483",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "e6a72ab7148767e4a44aac4fb6016e8c2f788c887bc7c4fbecce08eb6118ccbb"
+    },
+    {
+      "species": "gulpin",
+      "runtime_approved": false,
+      "normal_scn_sha256": "82ed878df821b5c757ec501e90b720e00088707a6e35ffd2b9f6cc8169aea5dc",
+      "minimum_clearance_metres": 0.0242747366428375,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "d55ed65bd995d9406c914fe23d46c38eb6cb8d247628b4adf8bd10583fba3396"
+    },
+    {
+      "species": "swalot",
+      "runtime_approved": false,
+      "normal_scn_sha256": "8ff7da82db5f56a4fbaf2ca106939f1ce65498221ff7332976a1843cbcdd3fc5",
+      "minimum_clearance_metres": 0.0249937418848276,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "e90f416671b3c4d79f44aaf9d07ca8f8572027923a8c4b5aaebadbd5db59dac1"
+    },
+    {
+      "species": "numel",
+      "runtime_approved": false,
+      "normal_scn_sha256": "2aba42db076e1eef00e2567e628b1e4bd1aa27d3804d804a9eaa846b8746939c",
+      "minimum_clearance_metres": 0.0245419479906559,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material has a non-albedo change: l_eye/UpperEyelidColorMap"
+    },
+    {
+      "species": "camerupt",
+      "runtime_approved": false,
+      "normal_scn_sha256": "429508097bc76b76378de93497b089d1045ecec65016130c6306270c327cfffa",
+      "minimum_clearance_metres": 0.0147105250507593,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "4c72f67874f64e937bf7122caafbd84b3d9963608e7eca29764840290992b56e"
+    },
+    {
+      "species": "torkoal",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Unsupported material profiles: [{'material': 'smoke', 'profile': 'unreviewed_source_shader', 'export_supported': False}]"
+    },
+    {
+      "species": "spoink",
+      "runtime_approved": false,
+      "normal_scn_sha256": "6a1289e6b27cf4e049da2cfe79cf8748bc5c56f1d9767bd002fb8ed533cbf3ac",
+      "minimum_clearance_metres": 0.0236502271145582,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "8f1ed9f5beea36fa3483781226640942203aab7b6b439932ed3010823b685673"
+    },
+    {
+      "species": "grumpig",
+      "runtime_approved": false,
+      "normal_scn_sha256": "371cdd51fccac1aa0eab340a96430081b3bc2b14a6c14a886f430ee6ad3f2d9d",
+      "minimum_clearance_metres": 0.0234657786786556,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "3614f81ea73b27a47602d5b8ac625fc404304961ae3d0bedaf57ccffcc8ab217"
+    },
+    {
+      "species": "cacnea",
+      "runtime_approved": false,
+      "normal_scn_sha256": "2231b83ee93c9e2456085a42aec0fccf8a4e2aebc5ae43ca8d44a9fdf86a0b50",
+      "minimum_clearance_metres": 0.014932619407773,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "8b653e9002f5c1445c8386102db0c99be953812e16cc18941230d502ea48a621"
+    },
+    {
+      "species": "cacturne",
+      "runtime_approved": false,
+      "normal_scn_sha256": "75872d78732b96d9f4cfd6a36aa5b2ce0f3ba30a5687b5e9485e3bd701a6ad0f",
+      "minimum_clearance_metres": 0.0195921938866377,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "ce2c36f518b5ec20652837d64f7a10bade400ae09b957c93a8b63dbc0989187b"
+    },
+    {
+      "species": "swablu",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "altaria",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "zangoose",
+      "runtime_approved": false,
+      "normal_scn_sha256": "dba29d65b96f9779f98159de57a6249c953c7ba581e5ce0855ee87d3627e12b7",
+      "minimum_clearance_metres": 0.018833564594388,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "80dc3c62c1e90c86e3ba304506dedff84f53a025f55ad783500151004aa13203"
+    },
+    {
+      "species": "barboach",
+      "runtime_approved": false,
+      "normal_scn_sha256": "6828a717e00ae481319b6b3c97e9f7194a9e4b250649a200e916ec427223e881",
+      "minimum_clearance_metres": 0.024974012747407,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "8c39bad114f65b4c1a4b7859843d743f2d7d746396854c3e723c8c7e7a9375aa"
+    },
+    {
+      "species": "whiscash",
+      "runtime_approved": false,
+      "normal_scn_sha256": "4c91a88d6e9b6efd3707902a7ea56dcf92c317ccac5f0977694369e5468a511c",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a55ec6aa70374ecfc4cdf1f3c23730b39841665855652c31690188bcc1e35daf"
+    },
+    {
+      "species": "shuppet",
+      "runtime_approved": false,
+      "normal_scn_sha256": "cdfa4de7cf194b598ecbcbfa1d1c6e0ac23cbd71e918c66b386c0a01888dcfcd",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "9eb31ee3bbe4a3b4034b40a41717537d874c674f3f8390358e5029e736a72e19"
+    },
+    {
+      "species": "banette",
+      "runtime_approved": false,
+      "normal_scn_sha256": "92c0f4926e01565995da9050ea6eed2e1609cf3aa32a9fb3ed48a21e7cc95adc",
+      "minimum_clearance_metres": 0.0177868362516165,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "d93911245bea4ae43595075cdc31030ef516619832c6fb936286590fc566fe3f"
+    },
+    {
+      "species": "tropius",
+      "runtime_approved": false,
+      "normal_scn_sha256": "2e578b1a5c4682da1f0df65248423587f1314ee0134b8d7a58a735c6b507c5a3",
+      "minimum_clearance_metres": 0.0200151745229959,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "7105854793ccb4088d71437a6250d8d8ce36bc2eb5037d29395858f27d8460b6"
+    },
+    {
+      "species": "snorunt",
+      "runtime_approved": false,
+      "normal_scn_sha256": "bf5d87609db92795f818fb5075e4b8f27d7126f93323c046e42e91d637a68d05",
+      "minimum_clearance_metres": 0.0248253960162401,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "765a0a3de2f8af9a375d3d2124a2309183562bef3e93a2b79f18e04684376ad2"
+    },
+    {
+      "species": "glalie",
+      "runtime_approved": false,
+      "normal_scn_sha256": "862d1b1d72833b93d30e8063365cf2c0515c3f063acdaab86550e9271a258e67",
+      "minimum_clearance_metres": 0.0249999985098839,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "luvdisc",
+      "runtime_approved": false,
+      "normal_scn_sha256": "e406617e81bc52d2b412bd5b67778bc7081e468052db3cec2ba38f4e1d139796",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "bagon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "d25ecb4ad84d35065f05c91be7aa689b0fd9b674d9d90c5e02580005b3b3092c",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "eb86ed81854431b7655360fbb1e5803a9cc7e9c3499589d94a209e6b243d3d82"
+    },
+    {
+      "species": "shelgon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "06af5280d96343e1ec54b8a757900f95433f3d115a0f5193c7cf99206f2f1bb0",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a9d729ff266c1cbc4de5f0aec1fb5173fc05be830c5ef4685f3e05c9babb2ef9"
+    },
+    {
+      "species": "salamence",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "kyogre",
+      "runtime_approved": false,
+      "status": "battle_visual_hold",
+      "normal_scn_sha256": "4aa18995c710fdd839f04cabdff6a7b4f76e66a912d05d4c370e3ef83ceb8daa",
+      "reason": "Sleep pose fin intersects floor without correction; full root lift floats unnaturally in user review"
+    },
+    {
+      "species": "groudon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "fcb910f56b80e63f14ad83bf2df21f1d87dbfc9439d3a3bed1fe8cc295fea467",
+      "minimum_clearance_metres": 0.0235013905912638,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "62ec3c33065e87a276b22413db5988c1ff8a507d74b3dcea8ff149354778ddbb"
+    },
+    {
+      "species": "starly",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "staravia",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "kricketot",
+      "runtime_approved": false,
+      "normal_scn_sha256": "76ac57eb5e945a101a19a52a6c184ed984b7f896c5c251a5ec8504b34fd2b5df",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a6128fb3096e71058606c38d23be8597516bbe174816d004b9fb8c7874560813"
+    },
+    {
+      "species": "kricketune",
+      "runtime_approved": false,
+      "normal_scn_sha256": "266dc14842f029ea08da080ff9c0e1cd123fb29b4ad329011cf03888a8c0fb68",
+      "minimum_clearance_metres": 0.0221508201211691,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "22a6d3ffdfc7b76f588931f1dd02f47f5c6a7a8b323cf29845d197e8b00d3073"
+    },
+    {
+      "species": "shinx",
+      "runtime_approved": false,
+      "normal_scn_sha256": "657ce9e8d267d32abb62481fb764b1330bf957a1d7a41714d2738bb12266e94c",
+      "minimum_clearance_metres": 0.00989490747451782,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a2a68b9bd32930c9d1fdc0efd45232d400050a1e50f08fe0afb9a16250ac4d50"
+    },
+    {
+      "species": "luxio",
+      "runtime_approved": false,
+      "normal_scn_sha256": "4a00c615cead8e9edf8d5a1037754591c8c4af1526083c8ae72148c209e7faa7",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "66810d45fc62d9ba3bf5d75c877124f136829c5ea7b6c9aa8f3104adc54d3cad"
+    },
+    {
+      "species": "luxray",
+      "runtime_approved": false,
+      "normal_scn_sha256": "d7272f828a17f2ec1f6ae69c08bd2dad6b84c838c84f9494200b58f0237875fb",
+      "minimum_clearance_metres": 0.00698802806437016,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "combee",
+      "runtime_approved": false,
+      "normal_scn_sha256": "31afc47009cb2523793fcb95d35d3ac0de640a8536376497835f36d6175490ee",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "29628e239ae07a906f986d89f74935aef3767a7e1e524ce0766ca9a99688f4a6"
+    },
+    {
+      "species": "vespiquen",
+      "runtime_approved": false,
+      "normal_scn_sha256": "4c1ead669d561ae0115daf146f8c2734267d636244be03378b0e48d6e44f6f03",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "adef3bfdb42bd9cdb1f7cb9175122d183bce074dfee10053b7e9ce7b1773fb3d"
+    },
+    {
+      "species": "pachirisu",
+      "runtime_approved": false,
+      "normal_scn_sha256": "c6b1be576b1d58359cf078f52faf306bbd848e414cadc165c9521bd5d3f87489",
+      "minimum_clearance_metres": 0.0184991657733917,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "00ed9b6430b078a6c1e94b2d46773f241dd173c28a6117ce04db0a2e963cc5ed"
+    },
+    {
+      "species": "buizel",
+      "runtime_approved": false,
+      "normal_scn_sha256": "dfb3529e986a22d3a880f320c8bb45b5b7fe8703dcba7d217bdba20431172f99",
+      "minimum_clearance_metres": 0.0091676376760006,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material has a non-albedo change: l_eye/UpperEyelidColorMap"
+    },
+    {
+      "species": "floatzel",
+      "runtime_approved": false,
+      "normal_scn_sha256": "457cc76f91b422b6d30550200143bb0673f476347864d67f5335a732ecb6eac5",
+      "minimum_clearance_metres": 0.00330162234604359,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "0f8825d1f0b0e8e88483faf69e9af83c5bc93e32a669d8c693ebf0314c0c332d"
+    },
+    {
+      "species": "shellos",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Unknown or ambiguous visibility variant target"
+    },
+    {
+      "species": "gastrodon",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Unknown or ambiguous visibility variant target"
+    },
+    {
+      "species": "drifloon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "272bb49fade5c255b43f06706fac8090265f4049bb4072b977f7e13b931bfb59",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "4e968f744ff94b3e4aac33e9a08ad73a05c91f3f41e2890fc3db4b24ec11c3ff"
+    },
+    {
+      "species": "mismagius",
+      "runtime_approved": false,
+      "normal_scn_sha256": "dc44d4167621f44ebad2b2dff1826f5b5af64ec74580d00ec2edf773fcae6b67",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "f4f3fbf73e97106c43a36ea392cb17795c12675a8a958f59300190f91f82be35"
+    },
+    {
+      "species": "honchkrow",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "stunky",
+      "runtime_approved": false,
+      "normal_scn_sha256": "7605aca5b4dffcffebc465263573e7ebc3044fb3a2c7466b548f8d477c6b75d3",
+      "minimum_clearance_metres": 0.00921530462801456,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a61a578669c1486a235b6defe8d2fd6b31120ceca92ff33c7e3c25d7879d94c9"
+    },
+    {
+      "species": "skuntank",
+      "runtime_approved": false,
+      "normal_scn_sha256": "4f787994e46e0e6bb1df8a627247f75fd344251e6fb56a3a52ec39651034027f",
+      "minimum_clearance_metres": 0.0173175279051065,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "3c5d3bc4bace094adccdc8845e6d236cbfe23c06fde565b903cf28d2c0ce2a38"
+    },
+    {
+      "species": "bronzor",
+      "runtime_approved": false,
+      "normal_scn_sha256": "df6f99f9239595e1354d669a7f2aa694f2c4462cd0b48592a54d9d7cea98a634",
+      "minimum_clearance_metres": 0.0234160516411066,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "acc85b27eef8726700df1b8162f8d4a9fb62f5bb8a28521a59dd376d80f84384"
+    },
+    {
+      "species": "bronzong",
+      "runtime_approved": false,
+      "normal_scn_sha256": "720a6ca98954cd02ff4ec58416b0992c9d7cc86a2903b67d45ccad408036abbe",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: body_b"
+    },
+    {
+      "species": "bonsly",
+      "runtime_approved": false,
+      "normal_scn_sha256": "4397de045d855d87e732a33d9c88d8400be2ee1286d2afc71ab1b6c421f0865f",
+      "minimum_clearance_metres": 0.0222104415297508,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "c82409aedf9a534f0ff4ad966af3808de059b445e139d949d828d94365961b94"
+    },
+    {
+      "species": "happiny",
+      "runtime_approved": false,
+      "normal_scn_sha256": "a551418f5636b947332766c126f67e63f1e56d9d4777141c6794cd9f4e90b6a9",
+      "minimum_clearance_metres": 0.0233686603605747,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "0b5107943e9f89985a736434ca3abee486895e72dda89c0fd110dacc7d077b7d"
+    },
+    {
+      "species": "gible",
+      "runtime_approved": false,
+      "normal_scn_sha256": "39c9ca71b7e61c2214f6f59a5f1690deb98ddbc02ec2b8876f9f51dd72d4d714",
+      "minimum_clearance_metres": 0.0173846464604139,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "40d472633a9d02f8b7ab45090be3139f3353ef529b2857cd25e3364eb81aa757"
+    },
+    {
+      "species": "gabite",
+      "runtime_approved": false,
+      "normal_scn_sha256": "a940e99cd5e6b48877939b949c4872d13aca3633f3062d18a18d319eea9bda26",
+      "minimum_clearance_metres": 0.0135703925043344,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "7f0dc34366676970728ebe8fda785fcf036710519c7077609d79f2d70d9f0b28"
+    },
+    {
+      "species": "riolu",
+      "runtime_approved": false,
+      "normal_scn_sha256": "fe7839fa94c26951ca7e06a90098868af6aca0f6b22fea799cfbce6d21df2f0c",
+      "minimum_clearance_metres": 0.0179083701223135,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a69d097685a366b2da3f714e0596b95fe44307d95f085d5f73bb069a318c1d30"
+    },
+    {
+      "species": "hippopotas",
+      "runtime_approved": false,
+      "normal_scn_sha256": "a476022e794c5262f9946fb73ae78a7434d26675c4d084ee3fe9789a0d5b02cf",
+      "minimum_clearance_metres": 0.0165657103061676,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "e5941f8e4b9333ef44f9870ba906231434e5d4f2367f79dd885fbc1984f2ab2e"
+    },
+    {
+      "species": "hippowdon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "7dbd053945a5f51220d6e4b6fe3c488fcf39bf17db3cdb6525f0d819a46ef41c",
+      "minimum_clearance_metres": 0.0110042933374643,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "4273863f384727afc51fa2c54817ca305161b5e8420b9c173212f37724395c5e"
+    },
+    {
+      "species": "croagunk",
+      "runtime_approved": false,
+      "normal_scn_sha256": "a6d49973b4f8a338b8707e70857d923b99f50cb72668d4b3794bbf39a3af973f",
+      "minimum_clearance_metres": 0.024998901411891,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "a66d42ff6e45b3f622b30067940e04318e0e6016254ab1d6a26ae5049facf71f"
+    },
+    {
+      "species": "toxicroak",
+      "runtime_approved": false,
+      "normal_scn_sha256": "d3cfd837c618aa34b584be5da479b035b55611e24c458aeaa93e7ab59cce822e",
+      "minimum_clearance_metres": 0.0249853581190109,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "finneon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "7023ac6cc8046feeb0e6fe07cddf2c7bd22492c9a1b26a7ae7b31bc49028926b",
+      "minimum_clearance_metres": 0.029999976977706,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "1d62c207813eab3ba08d6eaa25f2181c8ff7172995fa41e2299e3929c0ff2947"
+    },
+    {
+      "species": "lumineon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "c3a89b81edfb974c9cfba0c350435c73c3719a233f78208710b00251afb8e22e",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "7dea2693d883a787573d3069689286cdcb86b73ba302ed8f3f11c2823789fb9d"
+    },
+    {
+      "species": "snover",
+      "runtime_approved": false,
+      "normal_scn_sha256": "20c8b73894ee84abc79d14761f92cbfefa3f719ab5d34ae5ccd1c7351ad1e044",
+      "minimum_clearance_metres": 0.0249999985098839,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "f8b7c4d3670da4e5163cb2dab32ea2a97babc72ac67926251a6f095b5aeee194"
+    },
+    {
+      "species": "abomasnow",
+      "runtime_approved": false,
+      "normal_scn_sha256": "6d7ca51e210dd5aa23e49fd9595afb1367e75abab45312d1eb75f173e5977f97",
+      "minimum_clearance_metres": 0.0249999985098839,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "b0cf6af63fc1a537bb0ca76681ddfa967758f1db4776899ccd61018b9d42a10f"
+    },
+    {
+      "species": "weavile",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Unsupported dynamic visibility clock"
+    },
+    {
+      "species": "leafeon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "27536d0e00fcc0b1e8f506e1ee1e43016e05e051e720ba47dd72700c3f962249",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "03166242f18609d75d0c63338a047ff669e5ebcbba0814d171e86fa91dbb5a65"
+    },
+    {
+      "species": "glaceon",
+      "runtime_approved": false,
+      "normal_scn_sha256": "a5482cb6fd859e1f49a684d40a9e9eabfc461e049e99715ce13fbc27c325a8a2",
+      "minimum_clearance_metres": 0.00948006846010685,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "53ebd5bd0dbee50be4c9bccbf36e9dbef2885fc3adaf2ff1d0958ef59c370a06"
+    },
+    {
+      "species": "gallade",
+      "runtime_approved": false,
+      "normal_scn_sha256": "79f16f7f3100781f848e3d4ee88ba312341dd390e7dc041e01d6cc6ed4de3228",
+      "minimum_clearance_metres": 0.0244049225002527,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "3e5df228690ee55f8786248d976c251948ad132c1c98be5df2975dba31115e44"
+    },
+    {
+      "species": "froslass",
+      "runtime_approved": false,
+      "normal_scn_sha256": "b985254523aa8f9066bc69fce7f2ba1f01d87d45f9aefa0e653b5395486ef974",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "rotom",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Missing or ambiguous auxiliary effect loop: body_b"
+    },
+    {
+      "species": "uxie",
+      "runtime_approved": false,
+      "normal_scn_sha256": "b2fe56c10ecfa4fe066c964a533a0228a6c8168fbdcbcded80bd82b311e4a48b",
+      "minimum_clearance_metres": 0.0249999985098839,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "2056839be2e4dae487648638ecb619a9bc51db810aabb766c5b0be5f23fe7f0e"
+    },
+    {
+      "species": "mesprit",
+      "runtime_approved": false,
+      "normal_scn_sha256": "5664acf084530ca039258f1ebdd5523245089783ddbacbb60745ffa9c57ccb39",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "76604f615e0d8c3c265b729b6aac8a986dd676803bf02682b90d578092df7ffa"
+    },
+    {
+      "species": "azelf",
+      "runtime_approved": false,
+      "normal_scn_sha256": "52b51dd57bdff5aa7c9c3ceef471807a903de19afb402a5f44438c4cba736e7b",
+      "minimum_clearance_metres": 0.0249999985098839,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "dde679b42e249bc84c6a4d56c550583ff772deec472ac0389db49e44dd2d5b0d"
+    },
+    {
+      "species": "dialga",
+      "runtime_approved": false,
+      "status": "battle_hud_hold",
+      "normal_scn_sha256": "9e0b7b6b95242c382cf0bc374de5b8fdd2c3dd927e9379b386a34761c76fac7c",
+      "reason": "Sleep pose overlaps HUD proxy in both classic sides"
+    },
+    {
+      "species": "palkia",
+      "runtime_approved": false,
+      "normal_scn_sha256": "207098b485c6b11f98156c32c6190ec02d2e0f8ecb142e7b2338b64b2d39406b",
+      "minimum_clearance_metres": 0.0249999985098839,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "ce18fd90ee7448738200232e3dcafc628e3032b699ee3d39323513514f744021"
+    },
+    {
+      "species": "heatran",
+      "runtime_approved": false,
+      "normal_scn_sha256": "dc68de2075f94b84c0414f3a4aee28e12bb70521bd08ed70ab96b7c0eccaf9d1",
+      "minimum_clearance_metres": 0.0118136629462242,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "0a20cd411aa38760e17e468ce192e75a863342966c4112c5603d7ec920d1f0dc"
+    },
+    {
+      "species": "giratina",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    {
+      "species": "cresselia",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "ValueError: Unsupported material profiles: [{'material': 'eff_body_c', 'profile': 'scvi_transparent_refraction_unimplemented', 'export_supported': False, 'reason': 'Native transparency/refraction is not implemented by the opaque response profile'}]"
+    },
+    {
+      "species": "arceus",
+      "runtime_approved": false,
+      "status": "source_hold",
+      "reason": "Shared form resource needs material/variant selector review"
+    },
+    {
+      "species": "oshawott",
+      "runtime_approved": false,
+      "normal_scn_sha256": "f385709e58602e5b58b8e6846c322147cf77907022e610d26cb1655f3e6f103e",
+      "minimum_clearance_metres": 0.023461127653718,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "e18bc021ecf7ba50ceb280bd11461510bbd0343c699c3c33fb53f71042178e03"
+    },
+    {
+      "species": "dewott",
+      "runtime_approved": false,
+      "normal_scn_sha256": "82faeec743a9e7eb1e4962bf06c8598cdf37ea00d4d4e869dc08fa6fdd4ef3fd",
+      "minimum_clearance_metres": 0.0233345925807953,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "17127c309d7dd36963d497843e2bfb7f29ae6d7039fbf31aeeafb0c7c0d4f5e4"
+    },
+    {
+      "species": "samurott",
+      "runtime_approved": false,
+      "normal_scn_sha256": "ec88d38033b6ae693e120f6cfcef55cee4eaf4259b8e1585d1ae92d9f576a596",
+      "minimum_clearance_metres": 0.0250000059604645,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "22ba7439dd96069dcf8d5428e972f9a72054c22a23b4630b8612652b4d95b387"
+    },
+    {
+      "species": "petilil",
+      "runtime_approved": false,
+      "normal_scn_sha256": "58b326880c3701608836387825eb1fb8be9975b4085b31835505018b518c3b55",
+      "minimum_clearance_metres": 0.0231519136577845,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "327f65272e3e9697047a8277f701ccf68594ca850e095d58767e02311550af01"
+    },
+    {
+      "species": "lilligant",
+      "runtime_approved": false,
+      "normal_scn_sha256": "d929013d0f8533a9c9ab504dde939437bf5b043a31e19e3cbb170f6239093fe6",
+      "minimum_clearance_metres": 0.00501015223562717,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "0a45be1cc830e3104fd481e549d38a01a48f7dc28e20be1ab2dce40095baf2a0"
+    },
+    {
+      "species": "sandile",
+      "runtime_approved": false,
+      "normal_scn_sha256": "049b972efe00495e8933624fad3ad81105d7324b90295a1852d3120dd35013c5",
+      "minimum_clearance_metres": 0.0205107890069485,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "675ad3e74218b5b33361c6e000e5a594556c409b11c331f2b5b83229534e4b05"
+    },
+    {
+      "species": "krokorok",
+      "runtime_approved": false,
+      "normal_scn_sha256": "5218f165d624a10f1d12d1a7c6e7f4bea2d46482ea78cd3eb79089a7268e8443",
+      "minimum_clearance_metres": 0.025000000372529,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "702112237bb5b122b49d686cd0d477985f4976a05dbcc6ce85dc3aa9c691b834"
+    },
+    {
+      "species": "krookodile",
+      "runtime_approved": false,
+      "normal_scn_sha256": "d6a585032393c809e7c2195fbb7bd1157706ac15ac97fcba2f777de14b741aa3",
+      "minimum_clearance_metres": 0.0104091241955757,
+      "status": "normal_battle_screen_passed_shiny_material_hold",
+      "shiny_hold_reason": "Rare material has a non-albedo change: r_eye/LayerMaskMap"
+    },
+    {
+      "species": "zorua",
+      "runtime_approved": false,
+      "normal_scn_sha256": "82eb2c77ae751d44e689aa7a29f9b6a0b9dc59772383815b86be541b1fa9c072",
+      "minimum_clearance_metres": 0.0112897520884871,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "5b496ebb5b6267c33c0d4a1d7049b02d405af0949b7961917fa6bbe64a9db84b"
+    },
+    {
+      "species": "zoroark",
+      "runtime_approved": false,
+      "normal_scn_sha256": "3eabede07c0f5e4dddfb80fd6b68987d272fe4c2bc9812f4445c3a5d467bee2d",
+      "minimum_clearance_metres": 0.0139488354325294,
+      "status": "paired_battle_screen_passed_visual_review_pending",
+      "shiny_scn_sha256": "30a60183a986e56838a7c5fe25744b5c11f2df28c091365d302830c9d074bac3"
+    }
+  ]
+}
