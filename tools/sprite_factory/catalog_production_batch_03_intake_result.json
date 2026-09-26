@@ -1,0 +1,220 @@
+{
+  "cohort_size": 100,
+  "counts": {
+    "exported_for_review": 65,
+    "held_for_review": 35
+  },
+  "exported_for_review": [
+    "gothita",
+    "gothorita",
+    "gothitelle",
+    "foongus",
+    "amoonguss",
+    "alomomola",
+    "tynamo",
+    "eelektrik",
+    "fraxure",
+    "haxorus",
+    "cubchoo",
+    "beartic",
+    "pawniard",
+    "bisharp",
+    "deino",
+    "zweilous",
+    "larvesta",
+    "tornadus",
+    "thundurus",
+    "landorus",
+    "chespin",
+    "quilladin",
+    "chesnaught",
+    "braixen",
+    "froakie",
+    "frogadier",
+    "scatterbug",
+    "spewpa",
+    "litleo",
+    "skiddo",
+    "gogoat",
+    "skrelp",
+    "dragalge",
+    "clauncher",
+    "clawitzer",
+    "sylveon",
+    "dedenne",
+    "goomy",
+    "sliggoo",
+    "goodra",
+    "klefki",
+    "volcanion",
+    "rowlet",
+    "dartrix",
+    "yungoos",
+    "gumshoos",
+    "crabrawler",
+    "crabominable",
+    "rockruff",
+    "lycanroc",
+    "mareanie",
+    "toxapex",
+    "mudbray",
+    "mudsdale",
+    "fomantis",
+    "bounsweet",
+    "steenee",
+    "tsareena",
+    "oranguru",
+    "passimian",
+    "komala",
+    "grookey",
+    "scorbunny",
+    "raboot",
+    "sobble"
+  ],
+  "held_for_review": {
+    "avalugg": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "axew": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "bergmite": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "braviary": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "bruxish": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "carbink": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "cryogonal": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "deerling": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "delphox": {
+      "category": "auxiliary_effect",
+      "reason": "Missing or ambiguous auxiliary effect loop: fire"
+    },
+    "diancie": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "drizzile": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "eelektross": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "fennekin": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "flabebe": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "fletchinder": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "fletchling": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "floette": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "florges": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "greninja": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "hawlucha": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "inteleon": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "lurantis": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "meloetta": {
+      "category": "source_identity",
+      "reason": "Mesh/material/skeleton differs from ROMFS: pm0648_11_00.trskl"
+    },
+    "mimikyu": {
+      "category": "cross_form_motion",
+      "reason": "Cross-form animation catalogs need selector review"
+    },
+    "noibat": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "noivern": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "palossand": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "rufflet": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "salandit": {
+      "category": "auxiliary_effect",
+      "reason": "Missing or ambiguous auxiliary effect loop: fire"
+    },
+    "salazzle": {
+      "category": "auxiliary_effect",
+      "reason": "Missing or ambiguous auxiliary effect loop: fire_a"
+    },
+    "sandygast": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "sawsbuck": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "talonflame": {
+      "category": "idle_motion_bank",
+      "reason": "Incomplete or ambiguous idle motion bank; source review required"
+    },
+    "thwackey": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "vivillon": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    }
+  },
+  "identity_verified": 98,
+  "kind": "catalog-production-batch-03-intake",
+  "runtime_approved": false,
+  "schema": 1
+}

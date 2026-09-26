@@ -24,5 +24,13 @@ python3 tools/publish_approved_3d_bundles.py V6_DIR --metadata release/approved_
 
 The publication dry run verified all 155 staged objects and selected only the
 71 new archives plus the new index for upload: 72 objects, 1,720,151,503 bytes.
-R2 upload and desktop activation remain separate steps. Select `v6` and rebuild
-the launcher in the desktop workflow after the public objects verify.
+## R2 upload (27 September 2026)
+
+The 71 new archives and v6 index were uploaded to the existing R2 bucket.
+Public GET verified their full sizes and SHA-256 digests (1,720,151,503 bytes
+total). All 155 objects required by v6 returned the pinned sizes in public
+HEAD checks. The checks are recorded in
+`release/approved_3d_bundles_v6_r2_upload.json`.
+
+Desktop activation is a separate step. Select `v6` and rebuild the launcher
+in the desktop workflow.
