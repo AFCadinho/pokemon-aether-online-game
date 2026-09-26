@@ -1,4 +1,4 @@
-name: Deploy Browser Game to Cloudflare
+name: Build Browser Release Candidate (Preview)
 
 on:
   workflow_dispatch:
@@ -12,15 +12,10 @@ on:
         required: true
         default: pokeaether-web
         type: string
-      web_url:
-        description: Public HTTPS origin of the Pages site
-        required: true
-        default: https://play.pokeaether.com
-        type: string
       asset_base_url:
-        description: Public HTTPS custom domain attached to the existing R2 bucket
+        description: Dedicated public HTTPS origin attached to the browser R2 bucket
         required: true
-        default: https://updates.pokeaether.com
+        default: https://web-assets.pokeaether.com
         type: string
       source_asset_base_url:
         description: Public HTTPS origin containing the immutable desktop source asset archives
@@ -32,11 +27,6 @@ on:
         required: true
         default: https://api.pokeaether.com
         type: string
-      publish_manifest:
-        description: Open this build to players after all public checks pass
-        required: true
-        default: false
-        type: boolean
 
 concurrency:
   group: deploy-web-cloudflare
@@ -73,16 +63,39 @@ jobs:
       - name: Validate release inputs
         env:
           RELEASE_VERSION: ${{ inputs.release_version }}
-          WEB_URL: ${{ inputs.web_url }}
           ASSET_BASE_URL: ${{ inputs.asset_base_url }}
           API_ORIGIN: ${{ inputs.api_origin }}
+          PAGES_PROJECT: ${{ inputs.pages_project }}
         run: |
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            echo "::error::Browser candidates must be built from main"
+            exit 1
+          fi
           if ! printf '%s' "${RELEASE_VERSION}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
             echo "::error::release_version must look like 0.4.0 or 0.4.0-beta.1"
             exit 1
           fi
-          python3 -c 'import sys, urllib.parse; values=sys.argv[1:]; assert all((u:=urllib.parse.urlsplit(v)).scheme == "https" and u.hostname and u.path == "" and not u.query and not u.fragment for v in values)' "${WEB_URL}" "${ASSET_BASE_URL}" "${API_ORIGIN}"
+          python3 -c 'import sys, urllib.parse; values=sys.argv[1:]; assert all((u:=urllib.parse.urlsplit(v)).scheme == "https" and u.hostname and u.path in ("", "/") and not u.query and not u.fragment for v in values)' "${ASSET_BASE_URL}" "${API_ORIGIN}"
+          if [[ ! "${PAGES_PROJECT}" =~ ^[a-z0-9-]{1,63}$ ]]; then
+            echo "::error::pages_project is not a valid Cloudflare Pages project name"
+            exit 1
+          fi
           echo "WEB_BUILD_ID=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "PREVIEW_URL=https://rc.${PAGES_PROJECT}.pages.dev" >> "${GITHUB_ENV}"
+          echo "PAGES_BRANCH=rc" >> "${GITHUB_ENV}"
+
+      - name: Resolve active production browser build ID
+        env:
+          API_ORIGIN: ${{ inputs.api_origin }}
+        run: |
+          response="$(curl --retry 5 --retry-all-errors --retry-delay 2 -fsS \
+            "${API_ORIGIN}/client-version?platform=web")"
+          client_build_id="$(python3 -c 'import json,sys; value=json.load(sys.stdin); print(value.get("requiredBuild", ""))' <<<"${response}")"
+          if [[ ! "${client_build_id}" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$ ]]; then
+            echo "::error::The production gateway did not return a valid active browser build ID"
+            exit 1
+          fi
+          echo "PREVIEW_CLIENT_BUILD_ID=${client_build_id}" >> "${GITHUB_ENV}"
 
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y rclone unzip
@@ -123,20 +136,32 @@ jobs:
       - name: Package Pages and R2 release
         env:
           RELEASE_VERSION: ${{ inputs.release_version }}
-          WEB_URL: ${{ inputs.web_url }}
           ASSET_BASE_URL: ${{ inputs.asset_base_url }}
         run: |
-          python3 tools/package_web_release.py \
-            --build-id "${WEB_BUILD_ID}" --release-version "${RELEASE_VERSION}" \
-            --web-url "${WEB_URL}" --asset-base-url "${ASSET_BASE_URL}" \
-            --sprite-animated-front-version "${POKEMON_FRONT_ASSET_VERSION}" \
-            --sprite-animated-back-version "${POKEMON_BACK_ASSET_VERSION}" \
-            --sprite-animated-shiny-front-version "${POKEMON_SHINY_FRONT_ASSET_VERSION}" \
-            --sprite-animated-shiny-back-version "${POKEMON_SHINY_BACK_ASSET_VERSION}" \
-            --sprite-pixel-front-version "${POKEMON_GEN5_FRONT_ASSET_VERSION}" \
-            --sprite-pixel-back-version "${POKEMON_GEN5_BACK_ASSET_VERSION}" \
-            --sprite-pixel-shiny-front-version "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" \
-            --sprite-pixel-shiny-back-version "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
+          package_web() {
+            pages_dir="$1"
+            r2_dir="$2"
+            web_url="$3"
+            asset_base_url="$4"
+            client_build_id="$5"
+            python3 tools/package_web_release.py \
+              --build-id "${WEB_BUILD_ID}" --release-version "${RELEASE_VERSION}" \
+              --client-build-id "${client_build_id}" \
+              --web-url "${web_url}" --asset-base-url "${asset_base_url}" \
+              --sprite-animated-front-version "${POKEMON_FRONT_ASSET_VERSION}" \
+              --sprite-animated-back-version "${POKEMON_BACK_ASSET_VERSION}" \
+              --sprite-animated-shiny-front-version "${POKEMON_SHINY_FRONT_ASSET_VERSION}" \
+              --sprite-animated-shiny-back-version "${POKEMON_SHINY_BACK_ASSET_VERSION}" \
+              --sprite-pixel-front-version "${POKEMON_GEN5_FRONT_ASSET_VERSION}" \
+              --sprite-pixel-back-version "${POKEMON_GEN5_BACK_ASSET_VERSION}" \
+              --sprite-pixel-shiny-front-version "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" \
+              --sprite-pixel-shiny-back-version "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}" \
+              --pages-dir "${pages_dir}" --r2-dir "${r2_dir}"
+          }
+          package_web builds/web-pages-production builds/web-r2 \
+            https://play.pokeaether.com "${ASSET_BASE_URL}" "${WEB_BUILD_ID}"
+          package_web builds/web-pages-preview builds/web-r2-preview \
+            "${PREVIEW_URL}" "${PREVIEW_URL}" "${PREVIEW_CLIENT_BUILD_ID}"
 
       - name: Install browser and Cloudflare tooling
         run: |
@@ -173,7 +198,7 @@ jobs:
 
       - name: Verify R2 CORS is ready
         env:
-          WEB_URL: ${{ inputs.web_url }}
+          WEB_URL: https://play.pokeaether.com
           ASSET_BASE_URL: ${{ inputs.asset_base_url }}
         run: |
           headers="$(curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm")"
@@ -232,15 +257,16 @@ jobs:
           config = json.loads(path.read_text(encoding='utf-8'))
           config['vars']['API_ORIGIN'] = os.environ['API_ORIGIN'].rstrip('/')
           config['vars']['ASSET_BASE_URL'] = os.environ['ASSET_BASE_URL'].rstrip('/')
+          config['pages_build_output_dir'] = 'builds/web-pages-preview'
           path.write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
           PY
-          npx wrangler pages deploy builds/web-pages --project-name "${PAGES_PROJECT}" --branch main --commit-dirty=true
+          npx wrangler pages deploy builds/web-pages-preview --project-name "${PAGES_PROJECT}" --branch "${PAGES_BRANCH}" --commit-dirty=true
 
       - name: Verify public release files
         env:
-          WEB_URL: ${{ inputs.web_url }}
           ASSET_BASE_URL: ${{ inputs.asset_base_url }}
         run: |
+          WEB_URL="${PREVIEW_URL}"
           public_index="$(mktemp)"
           trap 'rm -f "${public_index}"' EXIT
           deadline=$((SECONDS + 180))
@@ -252,8 +278,8 @@ jobs:
             fi
             sleep 5
           done
-          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
-            "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm" | grep -Eiq '^content-type: application/wasm'
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI \
+            "${WEB_URL}/web/releases/${WEB_BUILD_ID}/index.wasm" | grep -Eiq '^content-type: application/wasm'
           curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
             "${WEB_URL}/pokemon-assets/battle/${POKEMON_FRONT_ASSET_VERSION}/pikachu/animation.json" \
             | python3 -c 'import json,sys; value=json.load(sys.stdin); assert value.get("frames")'
@@ -267,27 +293,44 @@ jobs:
             "${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/sheet.png" \
             | grep -Eiq '^content-type: image/png'
 
-      - name: Publish web client manifest
-        if: inputs.publish_manifest
+      - name: Assemble promotable candidate artifact
         env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: python3 tools/upload_web_release.py builds/web-r2 --manifest-only --publish-manifest
-
-      - name: Test and prune obsolete browser releases
-        if: inputs.publish_manifest
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
-          WEB_URL: ${{ inputs.web_url }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
-          python3 tools/test_prune_r2_release_objects.py
-          python3 tools/prune_r2_release_objects.py builds/web-r2 \
-            --scope web --public-base-url "${ASSET_BASE_URL}" \
-            --active-web-url "${WEB_URL}" \
-            --retain-previous 1 --minimum-age-hours 24 --max-delete 20000 --apply
+          mkdir -p builds/browser-candidate/r2
+          cp -a builds/web-pages-production builds/browser-candidate/pages-production
+          cp builds/web-r2/web-release.json builds/browser-candidate/r2/web-release.json
+          cp builds/web-r2/manifest-web.json builds/browser-candidate/r2/manifest-web.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          value = {
+              'runId': os.environ['GITHUB_RUN_ID'],
+              'sourceSha': os.environ['GITHUB_SHA'],
+              'buildId': os.environ['WEB_BUILD_ID'],
+              'releaseVersion': os.environ['RELEASE_VERSION'],
+              'previewClientBuildId': os.environ['PREVIEW_CLIENT_BUILD_ID'],
+          }
+          Path('builds/browser-candidate/candidate.json').write_text(
+              json.dumps(value, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: browser-release-candidate-${{ github.run_id }}
+          path: builds/browser-candidate
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish preview instructions
+        run: |
+          {
+            echo "## Browser release candidate is ready for testing"
+            echo
+            echo "- Preview: ${PREVIEW_URL}"
+            echo "- Build ID: ${WEB_BUILD_ID}"
+            echo "- Candidate run ID: ${GITHUB_RUN_ID}"
+            echo "- Production manifest: unchanged"
+            echo
+            echo "Test the preview using the release matrix in infrastructure/web/README.md."
+          } >> "${GITHUB_STEP_SUMMARY}"

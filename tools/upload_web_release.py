@@ -7,7 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from upload_launcher_release import _load_config, _upload_file
+from upload_launcher_release import _load_config, _load_updates_config, _upload_file
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,7 +26,7 @@ def main() -> None:
         parser.error("--verify-only cannot publish a manifest")
     release_dir = args.release_dir.resolve()
     manifest = json.loads((release_dir / "web-release.json").read_text(encoding="utf-8"))
-    config = None if args.verify_only else _load_config()
+    config = None if args.verify_only or args.manifest_only else _load_config()
 
     if not args.manifest_only:
         for item in manifest["objects"]:
@@ -46,9 +46,9 @@ def main() -> None:
         else:
             print(f"Verified {len(manifest['objects'])} immutable web objects", flush=True)
     if args.publish_manifest:
-        assert config is not None
-        _upload_file(config, release_dir / "manifest-web.json", "manifest-web.json")
-        print("Published manifest-web.json", flush=True)
+        updates_config = _load_updates_config()
+        _upload_file(updates_config, release_dir / "manifest-web.json", "manifest-web.json")
+        print(f"Published manifest-web.json to updates bucket {updates_config.bucket}", flush=True)
 
 
 if __name__ == "__main__":
