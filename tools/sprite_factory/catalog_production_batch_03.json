@@ -1,0 +1,321 @@
+{
+  "schema": 1,
+  "identity_gate": "scvi-resource-identity-v1",
+  "purpose": "Next 100 normal-form catalog candidates after earlier observation and production cohorts; technical and visual gates remain mandatory; no automatic activation",
+  "selection": {
+    "catalog_sha256": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+    "order": "national_dex_ascending",
+    "excluded_manifests": [
+      "catalog_100_observation_batch.json",
+      "catalog_production_batch_01.json",
+      "pilot_batch_25.json",
+      "review_batch_01.json",
+      "catalog_production_batch_02.json"
+    ],
+    "canonical_species_rule": "backend species_id equals catch_rate_source.pokemon_species",
+    "form": 0,
+    "gender_code": 0
+  },
+  "entries": [
+    {
+      "species": "gothita"
+    },
+    {
+      "species": "gothorita"
+    },
+    {
+      "species": "gothitelle"
+    },
+    {
+      "species": "deerling"
+    },
+    {
+      "species": "sawsbuck"
+    },
+    {
+      "species": "foongus"
+    },
+    {
+      "species": "amoonguss"
+    },
+    {
+      "species": "alomomola"
+    },
+    {
+      "species": "tynamo"
+    },
+    {
+      "species": "eelektrik"
+    },
+    {
+      "species": "eelektross"
+    },
+    {
+      "species": "axew"
+    },
+    {
+      "species": "fraxure"
+    },
+    {
+      "species": "haxorus"
+    },
+    {
+      "species": "cubchoo"
+    },
+    {
+      "species": "beartic"
+    },
+    {
+      "species": "cryogonal"
+    },
+    {
+      "species": "pawniard"
+    },
+    {
+      "species": "bisharp"
+    },
+    {
+      "species": "rufflet"
+    },
+    {
+      "species": "braviary"
+    },
+    {
+      "species": "deino"
+    },
+    {
+      "species": "zweilous"
+    },
+    {
+      "species": "larvesta"
+    },
+    {
+      "species": "tornadus"
+    },
+    {
+      "species": "thundurus"
+    },
+    {
+      "species": "landorus"
+    },
+    {
+      "species": "meloetta"
+    },
+    {
+      "species": "chespin"
+    },
+    {
+      "species": "quilladin"
+    },
+    {
+      "species": "chesnaught"
+    },
+    {
+      "species": "fennekin"
+    },
+    {
+      "species": "braixen"
+    },
+    {
+      "species": "delphox"
+    },
+    {
+      "species": "froakie"
+    },
+    {
+      "species": "frogadier"
+    },
+    {
+      "species": "greninja"
+    },
+    {
+      "species": "fletchling"
+    },
+    {
+      "species": "fletchinder"
+    },
+    {
+      "species": "talonflame"
+    },
+    {
+      "species": "scatterbug"
+    },
+    {
+      "species": "spewpa"
+    },
+    {
+      "species": "vivillon"
+    },
+    {
+      "species": "litleo"
+    },
+    {
+      "species": "flabebe"
+    },
+    {
+      "species": "floette"
+    },
+    {
+      "species": "florges"
+    },
+    {
+      "species": "skiddo"
+    },
+    {
+      "species": "gogoat"
+    },
+    {
+      "species": "skrelp"
+    },
+    {
+      "species": "dragalge"
+    },
+    {
+      "species": "clauncher"
+    },
+    {
+      "species": "clawitzer"
+    },
+    {
+      "species": "sylveon"
+    },
+    {
+      "species": "hawlucha"
+    },
+    {
+      "species": "dedenne"
+    },
+    {
+      "species": "carbink"
+    },
+    {
+      "species": "goomy"
+    },
+    {
+      "species": "sliggoo"
+    },
+    {
+      "species": "goodra"
+    },
+    {
+      "species": "klefki"
+    },
+    {
+      "species": "bergmite"
+    },
+    {
+      "species": "avalugg"
+    },
+    {
+      "species": "noibat"
+    },
+    {
+      "species": "noivern"
+    },
+    {
+      "species": "diancie"
+    },
+    {
+      "species": "volcanion"
+    },
+    {
+      "species": "rowlet"
+    },
+    {
+      "species": "dartrix"
+    },
+    {
+      "species": "yungoos"
+    },
+    {
+      "species": "gumshoos"
+    },
+    {
+      "species": "crabrawler"
+    },
+    {
+      "species": "crabominable"
+    },
+    {
+      "species": "rockruff"
+    },
+    {
+      "species": "lycanroc"
+    },
+    {
+      "species": "mareanie"
+    },
+    {
+      "species": "toxapex"
+    },
+    {
+      "species": "mudbray"
+    },
+    {
+      "species": "mudsdale"
+    },
+    {
+      "species": "fomantis"
+    },
+    {
+      "species": "lurantis"
+    },
+    {
+      "species": "salandit"
+    },
+    {
+      "species": "salazzle"
+    },
+    {
+      "species": "bounsweet"
+    },
+    {
+      "species": "steenee"
+    },
+    {
+      "species": "tsareena"
+    },
+    {
+      "species": "oranguru"
+    },
+    {
+      "species": "passimian"
+    },
+    {
+      "species": "sandygast"
+    },
+    {
+      "species": "palossand"
+    },
+    {
+      "species": "komala"
+    },
+    {
+      "species": "mimikyu"
+    },
+    {
+      "species": "bruxish"
+    },
+    {
+      "species": "grookey"
+    },
+    {
+      "species": "thwackey"
+    },
+    {
+      "species": "scorbunny"
+    },
+    {
+      "species": "raboot"
+    },
+    {
+      "species": "sobble"
+    },
+    {
+      "species": "drizzile"
+    },
+    {
+      "species": "inteleon"
+    }
+  ]
+}

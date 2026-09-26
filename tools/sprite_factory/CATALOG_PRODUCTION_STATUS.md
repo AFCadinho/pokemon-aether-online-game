@@ -1,5 +1,23 @@
 # Catalog production direction — 2026-09-22
 
+## Batch 03 — next 100 normal-form candidates (2026-09-27)
+
+The [batch-03 manifest](catalog_production_batch_03.json) selects the next 100
+canonical species in National Dex order, Gothita through Inteleon, excluding
+all previous observation and production batches. Identity intake verified 98
+source/identity pairs. Meloetta is held for a source skeleton mismatch and
+Mimikyu for a cross-form animation selector. Neither is substituted. Source
+review and GLB export are in progress; no batch-03 model has visual, battle,
+runtime or release approval yet.
+
+## Release v6 preparation
+
+The 71 approved batch-02 pairs are pinned in the staged
+[v6 release](../../docs/approved-3d-bundle-release-v6.md). Its 154-bundle
+content index retains the 83 v5 bundles and adds 71 new ones. The 29 held
+batch-02 cases remain in their separate review queue and do not block the next
+batch. R2 upload and desktop activation are pending.
+
 ## Batch 02 — 100 new normal-form candidates (2026-09-26)
 
 The next 100 catalog entries have been processed in National Dex order after

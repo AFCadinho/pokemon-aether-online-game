@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De volgende 71 goedgekeurde Pokémon zijn voorbereid voor 3D-gevechten in normale en shiny vorm. Hun modellen blijven individuele downloads; de nieuwe catalogus wordt actief na de desktoprelease.
+
 - Enable the virtual keyboard for browser builds on touchscreen devices.
 
 - De desktoplauncher haalt bij een update alleen de goedgekeurde 3D-catalogusindex op. Ontbrekende Pokémon-modellen worden afzonderlijk geladen voordat ze in een 3D-gevecht verschijnen, met downloadvoortgang en een geschatte resterende tijd.

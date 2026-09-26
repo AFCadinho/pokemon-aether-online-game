@@ -101,6 +101,29 @@ class ExternalAssetMetadataTests(unittest.TestCase):
                 "https://updates.example",
             )
 
+    def test_approved_v6_bundle_index_pins_exact_154_asset_release(self) -> None:
+        import json
+
+        receipt = json.loads((TOOLS_DIR.parent / "release/approved_3d_bundles_v6.json").read_text())
+        game_pin = json.loads((TOOLS_DIR.parent / "data/approved_3d_release_v6.json").read_text())
+        launcher_pin = json.loads((TOOLS_DIR.parent / "launcher/data/approved_3d_release_v6.json").read_text())
+        self.assertEqual(game_pin, launcher_pin)
+        self.assertEqual(game_pin["revision"], receipt["revision"])
+        self.assertEqual(game_pin["index"], receipt["index"])
+        self.assertEqual(game_pin["requiredAssetIds"], [item["asset_id"] for item in receipt["bundles"]])
+        pinned = receipt["index"]
+        descriptor = package_release._build_asset_bundle_index(
+            f"{receipt['revision']}:{pinned['object_key']}:{pinned['size_bytes']}:{pinned['sha256']}",
+            "https://updates.example",
+        )
+        self.assertEqual(len(descriptor["requiredAssetIds"]), 154)
+        self.assertIn("pokemon_3d:abomasnow:base", descriptor["requiredAssetIds"])
+        with self.assertRaises(SystemExit):
+            package_release._build_asset_bundle_index(
+                f"{receipt['revision']}:{pinned['object_key']}:{pinned['size_bytes']}:{'0' * 64}",
+                "https://updates.example",
+            )
+
 
 class PublicArtifactVerificationTests(unittest.TestCase):
     def test_verifier_requires_exact_size_checksum_and_range_support(self) -> None:
