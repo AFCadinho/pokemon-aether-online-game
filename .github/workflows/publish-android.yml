@@ -72,12 +72,14 @@ jobs:
         env:
           BUILD_RUN_ID: ${{ inputs.build_run_id }}
           BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           python3 - <<'PY'
           import hashlib, json, os, re
           from pathlib import Path
-          from urllib.error import HTTPError
-          from urllib.request import Request, urlopen
           from urllib.parse import urlparse
           root = Path('release')
           manifest_path = root / 'manifest-android.json'
@@ -109,21 +111,10 @@ jobs:
               raise SystemExit('Candidate APK size or SHA-256 does not match the manifest')
           if not isinstance(game.get('versionCode'), int) or game['versionCode'] < 1:
               raise SystemExit('Candidate manifest has an invalid Android version code')
-          try:
-              request = Request('https://updates.pokeaether.com/manifest-android.json', headers={'Cache-Control': 'no-cache'})
-              with urlopen(request, timeout=30) as response:
-                  current_manifest = json.loads(response.read().decode('utf-8'))
-          except HTTPError as error:
-              if error.code != 404:
-                  raise
-              current_manifest = None
-          if current_manifest is not None:
-              current_code = current_manifest.get('game', {}).get('versionCode')
-              if not isinstance(current_code, int) or game['versionCode'] <= current_code:
-                  raise SystemExit('Candidate Android version code must exceed the currently published version')
           Path('release/apk-name.txt').write_text(apk_name + '\n')
           print(f"Verified Android {game['version']} code {game['versionCode']}: {size} bytes, SHA-256 {digest}")
           PY
+          python3 tools/check_android_manifest_version.py release/manifest-android.json
 
       - name: Upload immutable APK, then publish updater manifest
         env:

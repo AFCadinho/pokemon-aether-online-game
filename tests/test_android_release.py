@@ -3,13 +3,72 @@ from tempfile import TemporaryDirectory
 import json
 import unittest
 import zipfile
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from tools.android_release import inspect, prepare, setting
+from tools.check_android_manifest_version import require_newer_android_version
+from tools.upload_launcher_release import R2Config, _signed_request
 import android_updater.setup_build_template as setup_build_template
 
 
 class AndroidReleaseTests(unittest.TestCase):
+    def test_signed_r2_get_uses_the_manifest_key_and_closes_connection(self) -> None:
+        response = Mock(status=200, reason="OK")
+        response.read.return_value = b'{"game":{"versionCode":3}}'
+        connection = Mock()
+        connection.getresponse.return_value = response
+        config = R2Config("account", "bucket", "access", "secret", "https://r2.example")
+
+        with patch("tools.upload_launcher_release.http.client.HTTPSConnection", return_value=connection):
+            status, reason, body = _signed_request(config, "GET", "manifest-android.json")
+
+        self.assertEqual((status, reason, body), (200, "OK", b'{"game":{"versionCode":3}}'))
+        connection.request.assert_called_once()
+        method, uri = connection.request.call_args.args[:2]
+        headers = connection.request.call_args.kwargs["headers"]
+        self.assertEqual((method, uri), ("GET", "/bucket/manifest-android.json"))
+        self.assertIn("Credential=access/", headers["Authorization"])
+        self.assertIn("X-Amz-Content-Sha256", headers)
+        connection.close.assert_called_once()
+
+    def test_android_candidate_version_check_accepts_first_release(self) -> None:
+        candidate = {"game": {"versionCode": 3}}
+        config = object()
+        with patch(
+            "tools.check_android_manifest_version._signed_request",
+            return_value=(404, "Not Found", b"NoSuchKey"),
+        ) as signed_request:
+            self.assertIsNone(require_newer_android_version(candidate, config))
+        signed_request.assert_called_once_with(config, "GET", "manifest-android.json")
+
+    def test_android_candidate_version_check_requires_strict_increment(self) -> None:
+        candidate = {"game": {"versionCode": 4}}
+        current = {"game": {"versionCode": 3}}
+        with patch(
+            "tools.check_android_manifest_version._signed_request",
+            return_value=(200, "OK", json.dumps(current).encode()),
+        ):
+            self.assertEqual(require_newer_android_version(candidate, object()), 3)
+        for candidate_code in (3, 2):
+            with (
+                patch(
+                    "tools.check_android_manifest_version._signed_request",
+                    return_value=(200, "OK", json.dumps(current).encode()),
+                ),
+                self.assertRaisesRegex(SystemExit, "must exceed the currently published version"),
+            ):
+                require_newer_android_version({"game": {"versionCode": candidate_code}}, object())
+
+    def test_android_candidate_version_check_fails_closed_on_r2_errors(self) -> None:
+        with (
+            patch(
+                "tools.check_android_manifest_version._signed_request",
+                return_value=(403, "Forbidden", b"AccessDenied"),
+            ),
+            self.assertRaisesRegex(SystemExit, "Could not read current Android manifest from R2"),
+        ):
+            require_newer_android_version({"game": {"versionCode": 4}}, object())
+
     def test_setup_build_template_creates_missing_build_directory(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
