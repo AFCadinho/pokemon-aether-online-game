@@ -87,7 +87,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var mugshot: Texture2D
 @export var dialogue_portrait_visible := true
 @export_group("Battle")
-@export_enum("inherit", "grass", "water", "cave", "pvp_stadium") var battle_environment_id := "inherit"
+@export_enum("inherit", "grass", "water", "cave", "pvp_stadium", "pewter_city_gym", "cerulean_city_gym") var battle_environment_id := "inherit"
 @export_group("")
 @export_enum("idle", "pace_horizontal", "pace_vertical") var movement_behavior := "idle"
 @export_range(1, 12, 1) var movement_tiles := 3

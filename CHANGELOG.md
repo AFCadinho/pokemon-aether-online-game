@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pewter Gym en Cerulean Gym hebben eigen, rondom ingerichte 3D-battlearena’s naar hun pixelmaps: een stenen rotshal voor Brock en een zwembadhal met gele loopbruggen voor Misty. Ook de gymtrainers gebruiken hun lokale arena.
+
 - Vanuit de 3D-battlearena van Route 24 is nu Cerulean City zichtbaar aan de overkant van Nugget Bridge, met blauwe daken, een rivierpromenade, het Pokémon Center en de Gym.
 
 - Cerulean City, Route 24 en Route 25 hebben eigen 3D-battlearena’s voor land en water, rondom ingericht naar de pixelmaps met Nugget Bridge, de stad, bergterrassen, Bill’s huis en een rotsachtige oceaankust.

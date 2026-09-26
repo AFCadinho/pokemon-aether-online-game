@@ -25,6 +25,12 @@ static func resolve(context: Dictionary) -> StringName:
 	if battle_kind == "wild" and str(context.get("map_id", "")).strip_edges() == "aether_clash_lobby":
 		return Catalog.PVP_STADIUM_ENVIRONMENT_ID
 
+	# Indoor gyms retain their hall even for a water encounter. Explicit/PvP wins.
+	if battle_kind in ["wild", "trainer"]:
+		match str(context.get("map_id", "")).strip_edges():
+			"kanto_pewter_city_gym": return &"pewter_city_gym"
+			"kanto_cerulean_city_gym": return &"cerulean_city_gym"
+
 	if battle_kind == "wild":
 		var encounter_type := _normalize_key(context.get("encounter_type", ""))
 		if WATER_ENCOUNTER_TYPES.has(encounter_type) or bool(context.get("player_on_water", false)):

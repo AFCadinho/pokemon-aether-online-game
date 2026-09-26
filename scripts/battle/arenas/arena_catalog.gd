@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
+const IDS := ["pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -34,6 +34,8 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
+	"pewter_city_gym": {"scope": "map", "map_id": "kanto_pewter_city_gym", "terrain": "stone", "lighting": "enclosed", "builder": "maps/pewter_city_gym/arena.gd"},
+	"cerulean_city_gym": {"scope": "map", "map_id": "kanto_cerulean_city_gym", "terrain": "pool", "lighting": "enclosed", "builder": "maps/cerulean_city_gym/arena.gd"},
 	"cerulean_city": {"scope": "map", "map_id": "kanto_cerulean_city", "terrain": "grass", "lighting": "outdoor", "builder": "maps/cerulean_city/arena.gd"},
 	"cerulean_city_water": {"scope": "map", "map_id": "kanto_cerulean_city", "terrain": "water", "lighting": "outdoor", "builder": "maps/cerulean_city/arena.gd"},
 	"route_24": {"scope": "map", "map_id": "kanto_route_24", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_24/arena.gd"},
@@ -61,6 +63,8 @@ static func definition(id: String) -> Dictionary:
 	return DEFINITIONS.get(validate(id), DEFINITIONS.classic).duplicate(true)
 
 const BUILDERS := {
+	"pewter_city_gym": preload("res://scripts/battle/arenas/maps/pewter_city_gym/arena.gd"),
+	"cerulean_city_gym": preload("res://scripts/battle/arenas/maps/cerulean_city_gym/arena.gd"),
 	"cave": preload("res://scripts/battle/arenas/generic/cave_arena.gd"),
 	"sea": preload("res://scripts/battle/arenas/generic/water_arena.gd"),
 	"stadium": preload("res://scripts/battle/arenas/generic/stadium_arena.gd"),

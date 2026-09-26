@@ -8,6 +8,8 @@ const CAVE_ENVIRONMENT_ID := &"cave"
 const PVP_STADIUM_ENVIRONMENT_ID := &"pvp_stadium"
 
 const PROFILES: Dictionary = {
+	&"pewter_city_gym": preload("res://resources/battle/environments/pewter_city_gym.tres"),
+	&"cerulean_city_gym": preload("res://resources/battle/environments/cerulean_city_gym.tres"),
 	&"cerulean_city": preload("res://resources/battle/environments/cerulean_city.tres"),
 	&"cerulean_city_water": preload("res://resources/battle/environments/cerulean_city_water.tres"),
 	&"route_24": preload("res://resources/battle/environments/route_24.tres"),
