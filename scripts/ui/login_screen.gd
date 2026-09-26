@@ -103,7 +103,8 @@ func _ready() -> void:
 	login_return_notice = AuthService.take_pending_login_notice()
 	_apply_login_return_notice()
 	_setup_player_preview()
-	username_input.grab_focus()
+	if not OS.has_feature("mobile"):
+		username_input.grab_focus()
 	_center_settings_menu.call_deferred()
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()

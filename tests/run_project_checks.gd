@@ -102,6 +102,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/privacy_account_controls_check.gd",
 	"res://tests/client_version_contract_check.gd",
 	"res://tests/client_crash_reporting_check.gd",
+	"res://tests/android_apk_update_check.gd",
 	"res://tests/senior_staff_permission_projection_check.gd",
 	"res://tests/tester_tool_permissions_check.gd",
 	"res://tests/localization_launcher_news_check.gd",

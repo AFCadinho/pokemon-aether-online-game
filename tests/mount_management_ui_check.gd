@@ -3,6 +3,11 @@ extends SceneTree
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 const MOUNT_LOADOUT_PANEL_PATH := "res://scenes/interface/mount_loadout_panel.tscn"
 
+class FakeMountPlayer extends Node:
+	var mounted := false
+	func is_land_mount_activity_active() -> bool:
+		return mounted
+
 var failed := false
 
 
@@ -93,9 +98,16 @@ func _run() -> void:
 	panel.call("open_manager")
 	_check(panel.visible, "mount utility button can open the manager")
 	var manager_close_button := panel.get("manager_close_button") as Button
+	var mount_action_button := panel.get("mount_action_button") as Button
 	_check(
 		manager_close_button != null and manager_close_button.text == "×",
 		"mount manager has a clear header close button"
+	)
+	_check(
+		mount_action_button != null
+		and mount_action_button.visible
+		and mount_action_button.text == str(localization_manager.call("text", "ui.mounts.ride")),
+		"desktop mount manager shows its ride action"
 	)
 	_check(
 		(panel.get("slots_panel") as PanelContainer).size.x <= panel.size.x
@@ -126,6 +138,10 @@ func _run() -> void:
 	var selector_options := panel.get("selector_options") as VBoxContainer
 	var selector_empty_label := panel.get("selector_empty_label") as Label
 	_check(selector_panel.visible, "clicking a slot opens its mount selector")
+	_check(
+		selector_panel.position.y + selector_panel.get_combined_minimum_size().y <= panel.size.y,
+		"desktop mount selector fits inside the expanded popup"
+	)
 	_check(
 		selector_search_input != null
 		and selector_search_input.placeholder_text == str(localization_manager.call("text", "ui.mounts.search"))
@@ -160,6 +176,22 @@ func _run() -> void:
 		and (selector_options.get_child(0) as Button).text.contains("Cyclizar"),
 		"land selector lists Cyclizar after the mount item is owned"
 	)
+	panel.call("_select_mount", "land", "cyclizar")
+	var fake_player := FakeMountPlayer.new()
+	fake_player.add_to_group("player")
+	root.add_child(fake_player)
+	panel.call("refresh_mount_action")
+	_check(not mount_action_button.disabled, "owned land mount enables the desktop ride action")
+	var toggle_requests := [0]
+	panel.connect("land_mount_toggle_requested", func(): toggle_requests[0] += 1)
+	mount_action_button.pressed.emit()
+	_check(toggle_requests[0] == 1, "ride action requests the shared mount toggle")
+	fake_player.mounted = true
+	panel.call("refresh_mount_action")
+	_check(
+		mount_action_button.text == str(localization_manager.call("text", "ui.mounts.dismount")),
+		"mounted player sees the dismount action"
+	)
 
 	for locale_path: String in [
 		"res://localization/en.json",
@@ -170,6 +202,8 @@ func _run() -> void:
 		var locale_source := FileAccess.get_file_as_string(locale_path)
 		_check(
 			locale_source.contains('"ui.mounts.title"')
+			and locale_source.contains('"ui.mounts.ride"')
+			and locale_source.contains('"ui.mounts.dismount"')
 			and locale_source.contains('"ui.mounts.none_available"')
 			and locale_source.contains('"ui.mounts.search"')
 			and locale_source.contains('"ui.mounts.no_search_results"'),
@@ -177,6 +211,7 @@ func _run() -> void:
 		)
 
 	panel.queue_free()
+	fake_player.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 

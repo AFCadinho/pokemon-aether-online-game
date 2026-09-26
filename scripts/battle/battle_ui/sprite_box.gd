@@ -26,6 +26,7 @@ const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown",
 const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
 const HOME_SPRITE_MAX_DISPLAY_SIZE := Vector2(200.0, 180.0)
+const MOBILE_HOME_SILHOUETTE_COLOR := Color(0.08, 0.14, 0.23, 0.78)
 const BATTLE_SPRITE_ASSET_ALIASES := {
 	# Battle payloads use this form name, while the battle-sheet directory is
 	# the base species. Without the alias the loader falls through to the HOME
@@ -89,6 +90,7 @@ const SUBSTITUTE_RETREAT_OFFSET := Vector2(18.0, 7.0)
 @onready var double_sprite_2: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2
 
 var active_tween: Tween
+var mobile_sprite_reveal_tween: Tween
 var playback_speed := 1.0:
 	set(value):
 		playback_speed = clampf(value, 0.5, 4.0)
@@ -1824,6 +1826,7 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 		return null
 
 	var sprite_frames := _create_idle_sprite_frames(1.0)
+	sprite_frames.set_meta("home_fallback", true)
 	sprite_frames.add_frame(IDLE_ANIMATION, texture)
 	var frame_size := texture.get_size()
 	_set_sprite_frames_auto_anchor(sprite_frames, frame_size)
@@ -1947,6 +1950,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 	_reset_sprite_pose(double_sprite_1)
 	if frames_1 != null:
 		double_sprite_1.sprite_frames = frames_1
+		_apply_mobile_home_fallback_tint(double_sprite_1, frames_1)
 		double_sprite_1.animation = IDLE_ANIMATION
 		double_sprite_1.frame = 0
 		_set_sprite_target_scale_from_frames(double_sprite_1, frames_1)
@@ -1957,6 +1961,7 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 	_reset_sprite_pose(double_sprite_2)
 	if frames_2 != null:
 		double_sprite_2.sprite_frames = frames_2
+		_apply_mobile_home_fallback_tint(double_sprite_2, frames_2)
 		double_sprite_2.animation = IDLE_ANIMATION
 		double_sprite_2.frame = 0
 		_set_sprite_target_scale_from_frames(double_sprite_2, frames_2)
@@ -1992,6 +1997,7 @@ func set_double_pokemon_species(species_1: String, species_2: String, side: Stri
 		if frames == null:
 			continue
 		sprite.sprite_frames = frames
+		_apply_mobile_home_fallback_tint(sprite, frames)
 		sprite.animation = IDLE_ANIMATION
 		sprite.frame = 0
 		_set_sprite_target_scale_from_frames(sprite, frames)
@@ -2020,6 +2026,8 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	if dratini_poc_shadow != null:
 		dratini_poc_shadow.visible = false
 	var request_generation := web_sprite_request_generation
+	if mobile_sprite_reveal_tween != null and mobile_sprite_reveal_tween.is_valid():
+		mobile_sprite_reveal_tween.kill()
 
 	single_sprite.visible = false
 	_reset_sprite_pose(single_sprite)
@@ -2035,6 +2043,7 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	current_single_is_shiny = is_shiny
 	current_double_web_identity.clear()
 	single_sprite.sprite_frames = frames
+	_apply_mobile_home_fallback_tint(single_sprite, frames)
 	single_sprite.animation = IDLE_ANIMATION
 	single_sprite.frame = 0
 	_set_sprite_target_scale_from_frames(single_sprite, frames)
@@ -2129,13 +2138,34 @@ func allow_web_sprite_upgrades() -> void:
 func _apply_single_web_frames(frames: SpriteFrames) -> void:
 	if frames == null:
 		return
+	var was_mobile_fallback := (
+		OS.has_feature("mobile")
+		and single_sprite.sprite_frames != null
+		and bool(single_sprite.sprite_frames.get_meta("home_fallback", false))
+	)
 	single_sprite.sprite_frames = frames
 	single_sprite.animation = IDLE_ANIMATION
 	single_sprite.frame = 0
 	_set_sprite_target_scale_from_frames(single_sprite, frames)
 	_snap_sprite_to_pixel_grid(single_sprite)
+	if was_mobile_fallback:
+		if mobile_sprite_reveal_tween != null and mobile_sprite_reveal_tween.is_valid():
+			mobile_sprite_reveal_tween.kill()
+		single_sprite.self_modulate = Color(0.48, 0.68, 0.9, 0.78)
+		mobile_sprite_reveal_tween = create_tween()
+		mobile_sprite_reveal_tween.tween_property(single_sprite, "self_modulate", Color.WHITE, 0.18)
+	else:
+		single_sprite.self_modulate = Color.WHITE
 	_apply_sprite_playback_mode(single_sprite)
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+
+func _apply_mobile_home_fallback_tint(sprite: AnimatedSprite2D, frames: SpriteFrames) -> void:
+	sprite.self_modulate = (
+		MOBILE_HOME_SILHOUETTE_COLOR
+		if OS.has_feature("mobile") and bool(frames.get_meta("home_fallback", false))
+		else Color.WHITE
+	)
 
 
 func _upgrade_double_web_sprites(
@@ -2152,6 +2182,7 @@ func _upgrade_double_web_sprites(
 		if frames == null:
 			continue
 		sprite.sprite_frames = frames
+		_apply_mobile_home_fallback_tint(sprite, frames)
 		sprite.animation = IDLE_ANIMATION
 		sprite.frame = 0
 		_set_sprite_target_scale_from_frames(sprite, frames)

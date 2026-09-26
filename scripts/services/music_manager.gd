@@ -16,6 +16,7 @@ const FADE_SECONDS := 0.35
 
 var music_player: AudioStreamPlayer
 var current_track_path := ""
+var last_requested_track_path := ""
 var current_map_music_path := ""
 var current_tween: Tween
 var external_music_root := ""
@@ -29,6 +30,8 @@ func _ready() -> void:
 	music_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.MUSIC_BUS)
 	music_player.finished.connect(_on_music_finished)
 	add_child(music_player)
+	if OS.has_feature("mobile"):
+		AndroidMusicPackService.music_ready.connect(_on_android_music_ready)
 
 
 func play_overworld_music() -> void:
@@ -155,6 +158,7 @@ func get_battle_music_track_label(track_id: String) -> String:
 
 
 func play_music(track_path: String) -> void:
+	last_requested_track_path = track_path
 	if OS.has_feature("web"):
 		if current_track_path == track_path:
 			_report_web_audio_debug("native-music-already-selected", {"track": track_path})
@@ -186,6 +190,7 @@ func play_music(track_path: String) -> void:
 
 func stop_music() -> void:
 	current_track_path = ""
+	last_requested_track_path = ""
 	if OS.has_feature("web"):
 		WebAudioBridge.stop_music()
 		return
@@ -273,12 +278,23 @@ func _load_music_stream(track_path: String) -> AudioStream:
 func _build_music_track_paths(track_path: String) -> Array[String]:
 	var paths: Array[String] = []
 	if track_path.begins_with(MUSIC_RES_ROOT):
+		if OS.has_feature("mobile"):
+			var installed_path := AndroidMusicPackService.resolve_track_path(track_path)
+			if installed_path != "":
+				paths.append(installed_path)
 		var relative_path: String = track_path.trim_prefix("res://")
 		for root: String in _get_external_music_roots():
 			paths.append(root.path_join(relative_path.trim_prefix(MUSIC_RELATIVE_ROOT + "/")))
 
 	paths.append(track_path)
 	return paths
+
+
+func _on_android_music_ready() -> void:
+	if last_requested_track_path == "":
+		return
+	current_track_path = ""
+	play_music(last_requested_track_path)
 
 
 func _get_external_music_roots() -> Array[String]:

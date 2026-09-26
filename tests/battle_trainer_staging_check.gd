@@ -168,7 +168,7 @@ func _check_battle_setup_contract() -> void:
 	_check(player_catalog_source.contains("Image.load_from_file(path)"), "new battle-art PNGs render before the editor importer catches up")
 	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
 	_check(
-		export_presets.count("assets/battles/trainers/player/**/*") == 5,
+		export_presets.count("assets/battles/trainers/player/**/*") == 6,
 		"all distributable builds include the dynamically loaded player battle art"
 	)
 	var router_source := FileAccess.get_file_as_string(BATTLE_ANIMATION_ROUTER_PATH)
