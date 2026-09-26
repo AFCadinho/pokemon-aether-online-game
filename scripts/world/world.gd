@@ -4653,7 +4653,8 @@ func _show_trainer_outro_dialogue(dialogue_id: String, mugshot: Texture2D) -> vo
 	var dialogue_box := get_tree().current_scene.get_node_or_null("DialogueBox/Box") if get_tree().current_scene != null else null
 	if dialogue_box == null or lines.is_empty():
 		return
-	dialogue_box.start_dialogue(lines, str(metadata.get("speakerName", "")), mugshot)
+	# A missing Trainer portrait must not inherit DialogueBox's Oak default.
+	dialogue_box.start_dialogue(lines, str(metadata.get("speakerName", "")), mugshot, mugshot != null)
 	await dialogue_box.dialogue_finished
 
 
@@ -5434,11 +5435,38 @@ func _show_pending_coop_battle_result() -> void:
 		var metadata: Dictionary = metadata_response.get("metadata", {})
 		var dialogue_id := str(metadata.get("outroDialogueId", "")).strip_edges()
 		if not dialogue_id.is_empty():
-			var portrait_id := TrainerPortraitCatalog.resolve_portrait_id("", trainer_id, "")
-			await _show_trainer_outro_dialogue(dialogue_id, TrainerPortraitCatalog.get_texture(portrait_id))
+			await _show_trainer_outro_dialogue(dialogue_id, _coop_trainer_outro_mugshot(trainer_id, metadata))
 	else:
 		push_warning("World: co-op Trainer outro metadata failed for %s" % trainer_id)
 	GameState.release_overworld_input_lock(&"coop_trainer_outro")
+
+
+func _coop_trainer_outro_mugshot(trainer_id: String, metadata: Dictionary) -> Texture2D:
+	# The placed NPC already resolves explicit and class-assigned portraits for
+	# single battles. Use that same mugshot for both co-op players after reload.
+	var placed_npc_id := (
+		"kanto_route_22_gary_oak"
+		if trainer_id.begins_with("kanto_route_22_gary_") else trainer_id
+	)
+	var map_node := GameState.current_map as Node
+	if map_node != null:
+		for node: Node in map_node.find_children("*", "", true, false):
+			if node is BaseNPC and (node as BaseNPC).npc_id == placed_npc_id:
+				var npc := node as BaseNPC
+				if npc.mugshot != null:
+					return npc.mugshot
+				var assigned_id := TrainerPortraitCatalog.resolve_portrait_id(
+					npc.portrait_id, npc.npc_id, npc.npc_definition_id
+				)
+				var assigned_texture := TrainerPortraitCatalog.get_texture(assigned_id)
+				if assigned_texture != null:
+					return assigned_texture
+	var trainer_class := str(
+		metadata.get("trainer_class", metadata.get("trainerClass", ""))
+	).strip_edges().to_lower().replace(" ", "_").replace("-", "_")
+	var class_id := "trainer_class_%s" % trainer_class if not trainer_class.is_empty() else ""
+	var portrait_id := TrainerPortraitCatalog.resolve_portrait_id("", placed_npc_id, class_id)
+	return TrainerPortraitCatalog.get_texture(portrait_id)
 
 
 func _can_resume_coop_wild_battle_in_place(saved_state: Dictionary, current_map_id: String, current_position: Vector2) -> bool:
