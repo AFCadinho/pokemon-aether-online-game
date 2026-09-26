@@ -18,9 +18,12 @@ preserve existing settings and environment resources.
 | Map-specific | Route 3, land | `route_3` | Outdoor | `maps/route_3/arena.gd` |
 | Map-specific | Route 2, land/water | `route_2`, `route_2_water` | Outdoor | `maps/route_2/arena.gd` |
 | Map-specific | Route 4, land/water | `route_4`, `route_4_water` | Outdoor | `maps/route_4/arena.gd` |
+| Map-specific | Cerulean City, land/water | `cerulean_city`, `cerulean_city_water` | Outdoor | `maps/cerulean_city/arena.gd` |
+| Map-specific | Route 24, land/water | `route_24`, `route_24_water` | Outdoor | `maps/route_24/arena.gd` |
+| Map-specific | Route 25, land/water | `route_25`, `route_25_water` | Outdoor | `maps/route_25/arena.gd` |
 
 `classic` is the presenter's fallback surface, not a separately authored map.
-Route 1, Route 22 and Route 3 have map-specific arenas. 2D environment resources and
+The maps above have their own arenas. 2D environment resources and
 encounter selection live in `resources/battle/environments` and
 `battle_environment_resolver.gd`; manual overrides and PvP retain precedence.
 
@@ -87,3 +90,5 @@ Route 2/4 composition, new prop provenance and focused review commands are in
 [their arena guide](../../../docs/routes-2-4-battle-arenas.md). Shared shoreline
 and small-prop placement live in `shared/waterside_route.gd`; original mesh
 landmarks live in `shared/route_landmarks.gd`.
+
+See [Cerulean region arenas](../../../../docs/cerulean-region-battle-arenas.md) for the city, bridge and coastal layouts.
