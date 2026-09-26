@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon-summary cards met 3D-modellen gebruiken de bestaande grassfield-, cave- en waterarena’s als automatische 3D-achtergrond op basis van hun types. De camera kadert de zichtbare Pokémon groter in en bewaart ruimte voor de kaartknoppen.
+
 - Enable the virtual keyboard for browser builds on touchscreen devices.
 
 - De desktoplauncher haalt bij een update alleen de goedgekeurde 3D-catalogusindex op. Ontbrekende Pokémon-modellen worden afzonderlijk geladen voordat ze in een 3D-gevecht verschijnen, met downloadvoortgang en een geschatte resterende tijd.

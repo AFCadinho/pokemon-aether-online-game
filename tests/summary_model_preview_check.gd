@@ -4,6 +4,11 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	var backgrounds = load("res://scripts/ui/summary_arena_background.gd")
+	assert(backgrounds.arena_for_types(["Dragon", "Flying"]) == "forest")
+	assert(backgrounds.arena_for_types(["GROUND", "Dragon"]) == "cave")
+	assert(backgrounds.arena_for_types(["Rock", "Water"]) == "sea")
+	assert(backgrounds.arena_for_types([]) == "forest")
 	var settings := root.get_node("SettingsManager")
 	var old_mode: String = settings.battle_presentation_mode
 	var old_catalog: String = settings.battle_3d_catalog_path
@@ -38,6 +43,13 @@ func _run() -> void:
 	assert(button.offset_top == -66.0, "reuse play menu above level")
 	assert(preview.find_child("ModelAnimations", true, false) == null)
 	assert(not preview.preview_floor.visible, "no artificial floor cutting through faint")
+	if not OS.get_environment("POKEAETHER_FOREST_MANIFEST").is_empty():
+		for frame in 2400:
+			await process_frame
+			if preview.arena_background.arena != null:
+				break
+		assert(preview.arena_background.arena != null, "default grassfield loads independently of battles")
+		assert(preview.arena_background.arena.name == "GenericGrassfield")
 	var original_actor = preview.actor
 	overlay._set_pokemon_summary_sprite(pokemon)
 	assert(preview.actor == original_actor, "card refresh must not restart model loading")
@@ -59,6 +71,20 @@ func _run() -> void:
 	preview.player.seek(0.1, true)
 	assert(_pose(preview.actor) == damage_pose, "faint must not contaminate damage pose")
 	preview.play_clip("idle")
+	# Inspect every side at the card's actual aspect; refitting must not change
+	# the selected animation or the actor's approved scale.
+	var approved_scale: Vector3 = preview.actor.scale
+	for quarter in 4:
+		preview.rotate_by((PI * 0.5) / 0.012)
+		assert(preview.actor.scale.is_equal_approx(approved_scale))
+		assert(preview.camera.position.distance_to(preview.camera_target) > 0.01)
+		assert(preview.player.current_animation == "idle")
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+		var occupied: Rect2i = preview.viewport.get_texture().get_image().get_used_rect()
+		var rendered_size: Vector2i = preview.viewport.size
+		assert(maxf(float(occupied.size.y) / rendered_size.y, float(occupied.size.x) / rendered_size.x) >= 0.55, "model must be readable at normal card zoom")
+		assert(occupied.position.x > 0 and occupied.position.y > 0 and occupied.end.x < rendered_size.x and occupied.end.y < rendered_size.y, "idle silhouette must fit inside the card")
 	var zoom := stage.find_child("PreviewZoomButton", true, false) as Button
 	var distance: float = preview.camera.position.distance_to(preview.camera_target)
 	zoom.button_pressed = true
@@ -68,6 +94,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	assert(preview.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED)
+	assert(preview.arena_background.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED)
 	stage.show()
 	await process_frame
 	await process_frame
@@ -91,6 +118,14 @@ func _run() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		assert(root.get_texture().get_image().save_png(capture) == OK)
+		for types in [["rock"], ["water"], ["flying"]]:
+			pokemon.types = types
+			overlay._set_pokemon_summary_sprite(pokemon)
+			for frame in 12:
+				await process_frame
+			await RenderingServer.frame_post_draw
+			assert(preview.arena_background.arena != null)
+			assert(root.get_texture().get_image().save_png(capture + "." + preview.arena_background.arena_id + ".png") == OK)
 		for action in ["faint_loop", "damage"]:
 			preview.play_clip(action)
 			preview.player.seek(0.1, true)
@@ -99,6 +134,11 @@ func _run() -> void:
 				await process_frame
 			await RenderingServer.frame_post_draw
 			assert(root.get_texture().get_image().save_png(capture + "." + action + ".png") == OK)
+	preview.set_pokemon_types(["rock"])
+	assert(preview.arena_background.arena.name == "KantoCaveStudy")
+	preview.set_pokemon_types(["water"])
+	assert(preview.arena_background.arena.name == "SeaSandbarStudy")
+	assert(preview.actor == original_actor, "background refresh preserves model and playback")
 	pokemon.shiny = true
 	overlay._set_pokemon_summary_sprite(pokemon)
 	assert(not preview.visible and preview.actor == null)
@@ -109,7 +149,7 @@ func _run() -> void:
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_catalog
 	settings._manual_model_catalog_this_session = old_manual
-	print("SUMMARY_MODEL_PREVIEW_OK: original menu, zoom, faint→damage baseline, replay, hidden, independent cards, fallback")
+	print("SUMMARY_MODEL_PREVIEW_OK: automatic grass/cave/water, original menu, rotation, zoom, faint→damage baseline, replay, hidden passes, independent cards, fallback")
 	quit()
 
 func _pose(actor: Node3D) -> Array:
