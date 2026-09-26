@@ -1,5 +1,9 @@
 # Returning to the screened 100-model cohort
 
+**Later result:** 55 of these 61 technical pairs passed battle qualification
+and were approved with individual local bundles. Six placement cases remain
+held. See [the battle approval record](SCREENED_100_BATTLE_APPROVAL.md).
+
 The earlier 100-model experiment yielded 79 sampled-clip visual passes. Four
 already had separate approved normal/shiny models, leaving 75 normal-form
 models in the local screened catalog. This task resumed production from those
@@ -39,7 +43,7 @@ local visual handoff, not a portable model pack or player catalog.
 
 ## Admission boundary and next batches
 
-All 61 remain **technical candidates**. Their colour/material appearance still
+At this production handoff, all 61 remained **technical candidates**. Their colour/material appearance still
 needs human review, followed by battle placement, grounding, HUD, cache and
 normal/shiny switching qualification in manageable groups. A species that fails
 those checks goes to the review queue without blocking the rest. Only after

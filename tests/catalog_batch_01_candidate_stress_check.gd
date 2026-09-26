@@ -59,6 +59,16 @@ func _ready_pair(species: String, left_shiny: bool, right_shiny: bool) -> void:
 func _run() -> void:
 	var catalog := OS.get_environment("POKEAETHER_BATCH01_RUNTIME_CATALOG")
 	var output := OS.get_environment("POKEAETHER_BATCH01_STRESS_OUTPUT")
+	var names: Array[String] = []
+	var requested := OS.get_environment("POKEAETHER_BATCH01_STRESS_NAMES")
+	if requested.is_empty():
+		for name: String in NAMES:
+			names.append(name)
+	else:
+		for name: String in requested.split(",", false):
+			assert(not name.is_empty() and name == name.strip_edges() and name not in names)
+			names.append(name)
+	assert(not names.is_empty())
 	assert(catalog.is_absolute_path() and output.is_absolute_path())
 	var settings := root.get_node("SettingsManager")
 	settings.battle_3d_catalog_path = catalog
@@ -68,6 +78,7 @@ func _run() -> void:
 	Cache.clear()
 	var report := {"schema": 1, "runtime_approved": false, "release_approved": false,
 		"screenshots_enabled": false, "catalog_sha256": FileAccess.get_sha256(catalog), "rounds": []}
+	report["species"] = names
 	for cycle in 3:
 		settings.battle_presentation_mode = "3d"
 		settings.battle_3d_arena = "stadium" if cycle == 1 else "classic"
@@ -91,7 +102,7 @@ func _run() -> void:
 		frame_stalls.clear()
 		frame_tick = Time.get_ticks_usec()
 		sample = true
-		for species in NAMES:
+		for species in names:
 			await _ready_pair(species, false, true)
 			context = "action " + species
 			assert(stage.actors[0] != stage.actors[1] and stage.players[0] != stage.players[1])

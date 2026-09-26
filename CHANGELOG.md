@@ -4,6 +4,8 @@
 
 - Defeat dialogue after shared NPC battles now uses the defeated Trainer's own mugshot, including class portraits such as Lass Zoe; missing portraits no longer show Professor Oak.
 
+- Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon. Six battle placement cases remain in review.
+
 - Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes.
 
 - Classic wild battles now briefly show the player Trainer sprite and callout when throwing a Poké Ball and receiving the capture result.
