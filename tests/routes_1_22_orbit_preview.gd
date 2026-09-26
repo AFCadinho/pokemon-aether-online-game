@@ -4,7 +4,7 @@ const Renderer = preload("res://scripts/battle/battle_ui/experimental_battle_3d.
 func _init() -> void:
 	_run.call_deferred()
 func _run() -> void:
-	create_timer(240).timeout.connect(func(): printerr("ROUTES_ORBIT_PREVIEW_TIMEOUT"); quit(2))
+	create_timer(480).timeout.connect(func(): printerr("ROUTES_ORBIT_PREVIEW_TIMEOUT"); quit(2))
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	var settings := root.get_node("SettingsManager")
 	settings.battle_presentation_mode = "3d"
@@ -19,7 +19,7 @@ func _run() -> void:
 	if ids.is_empty():
 		ids = PackedStringArray(["route_1", "route_1_water", "route_22", "route_22_water"])
 	for id in ids:
-		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water", "route_2", "route_2_water", "route_4", "route_4_water"])
+		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"])
 		var host := Node.new()
 		root.add_child(host)
 		current_scene = host

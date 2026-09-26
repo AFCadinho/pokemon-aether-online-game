@@ -8,6 +8,13 @@ const CAVE_ENVIRONMENT_ID := &"cave"
 const PVP_STADIUM_ENVIRONMENT_ID := &"pvp_stadium"
 
 const PROFILES: Dictionary = {
+	&"cerulean_city": preload("res://resources/battle/environments/cerulean_city.tres"),
+	&"cerulean_city_water": preload("res://resources/battle/environments/cerulean_city_water.tres"),
+	&"route_24": preload("res://resources/battle/environments/route_24.tres"),
+	&"route_24_water": preload("res://resources/battle/environments/route_24_water.tres"),
+	&"route_25": preload("res://resources/battle/environments/route_25.tres"),
+	&"route_25_water": preload("res://resources/battle/environments/route_25_water.tres"),
+
 	&"route_2": preload("res://resources/battle/environments/route_2.tres"),
 	&"route_2_water": preload("res://resources/battle/environments/route_2_water.tres"),
 	&"route_4": preload("res://resources/battle/environments/route_4.tres"),
