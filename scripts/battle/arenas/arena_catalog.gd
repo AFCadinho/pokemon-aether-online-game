@@ -9,10 +9,19 @@ const SELECTION_IDS := ["auto", "classic", "forest", "cave", "sea", "stadium"]
 static func validate_selection(id: String) -> String:
 	return id if id in SELECTION_IDS else "auto"
 
-static func resolve(selection: String, environment_id: StringName) -> String:
+static func resolve(selection: String, environment_id: StringName, battle_kind: String = "") -> String:
 	if validate_selection(selection) != "auto":
 		return validate(selection)
-	return validate(preload("res://scripts/battle/battle_environment_catalog.gd").get_profile(environment_id).arena_3d_id)
+	var local_arena := validate(preload("res://scripts/battle/battle_environment_catalog.gd").get_profile(environment_id).arena_3d_id)
+	# Wild encounters keep the map's terrain (including surf/fishing and caves)
+	# while using its quieter generic arena. Trainer and gym battles keep the
+	# location-specific scene. An explicit review selection wins above.
+	if battle_kind == "wild" and definition(local_arena).scope == "map":
+		match str(definition(local_arena).terrain):
+			"water", "pool": return "sea"
+			"cave", "stone": return "cave"
+			_: return "forest"
+	return local_arena
 # Compatibility API names retain existing settings, preparation UI and metrics.
 # These methods now load only shared art; they never mount a native extension.
 const Art = preload("res://scripts/battle/arenas/shared/forest_art_pack.gd")

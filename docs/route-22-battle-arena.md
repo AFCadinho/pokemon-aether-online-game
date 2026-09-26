@@ -1,10 +1,11 @@
 # Route 22 battle arena
 
-Route 22's land encounters and trainer battles (including Gary's first rival
-battle) resolve to `route_22` in automatic 3D presentation. Surf, fishing and
-standing-on-water wild encounters on this map resolve to `route_22_water`. PvP
-and explicit environment/manual arena overrides retain their precedence. The
-existing grass/water images remain the respective 2D fallback presentations.
+Route 22 trainer battles, including Gary's first rival battle, use the
+`route_22` map arena. Wild land encounters use the generic grassfield, while
+wild surf, fishing and water-tile encounters use the generic sea. The
+`route_22_water` variant remains available for map-specific trainer contexts
+and visual review. The existing grass/water images remain the respective 2D
+presentations. PvP and explicit review overrides retain their precedence.
 
 ## Visual source and shared art
 

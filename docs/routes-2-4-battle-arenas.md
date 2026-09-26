@@ -2,12 +2,12 @@
 
 ## Map identity
 
-Automatic 3D presentation resolves wild and trainer battles on `kanto_route_2`
-and `kanto_route_4` to `route_2` and `route_4`. Surf, fishing and standing-on-water
-wild encounters use `route_2_water` and `route_4_water`. Explicit environments,
-manual arena settings and PvP keep their precedence. The existing grass/water
-backgrounds and platforms remain available for 2D presentation and model fallback.
-The change adds scenery, not encounters or battle rules.
+Trainer battles on `kanto_route_2` and `kanto_route_4` use the authored
+`route_2` and `route_4` arenas. Wild land encounters use the generic grassfield;
+wild surf, fishing and water-tile encounters use the generic sea. The route
+water variants remain available for trainer contexts and visual review. The
+existing grass/water backgrounds and platforms continue to represent their
+resolved environments in 2D. This changes presentation, not encounters.
 
 The layouts are based on the actual generated pixel-map scenes:
 

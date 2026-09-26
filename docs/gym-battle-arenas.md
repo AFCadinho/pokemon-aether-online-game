@@ -8,8 +8,9 @@
 | `kanto_cerulean_city_gym` | `cerulean_city_gym` | Misty, Swimmer Luis, Picnicker Diana, Swimmer Briana |
 
 The auto arena setting resolves the actual indoor map IDs. Explicit overrides
-and PvP keep their existing precedence. Indoor wild/water contexts retain the
-gym hall. Surrounding cities and routes keep their own environments.
+and PvP keep their existing precedence. Wild encounters triggered inside a gym use a generic cave or sea arena based
+on the resolved terrain. Trainer and gym leader battles use the gym hall.
+Surrounding cities and routes keep their own environments.
 
 Brock and Misty have explicit scene overrides because the shared gym leader
 script otherwise selects `pvp_stadium`. Cerulean's three support trainers now

@@ -1141,7 +1141,10 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		return
 	active_battle_environment_id = profile.environment_id
 	if is_instance_valid(animation_router.model_presenter):
-		animation_router.model_presenter.environment_id = profile.environment_id
+		var arena_kind := "wild" if battle_type == BattleType.WILD else "trainer"
+		if _is_pvp_battle():
+			arena_kind = "pvp"
+		animation_router.model_presenter.set_battle_context(profile.environment_id, arena_kind)
 	active_battle_environment_loops_video = profile.loop_background_video
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true
@@ -7902,6 +7905,8 @@ func setup_pvp_battle_from_response(
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	pvp_battle_purpose = battle_purpose
 	spectator_source_battle_kind = str(api_response.get("sourceBattleKind", "")).strip_edges().to_lower()
+	if _is_spectator_battle() and spectator_source_battle_kind in ["wild", "trainer"] and is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_battle_context(active_battle_environment_id, spectator_source_battle_kind)
 	var public_team_sizes_value: Variant = api_response.get("publicTeamSizes", {})
 	spectator_public_team_sizes = (
 		(public_team_sizes_value as Dictionary).duplicate(true)
