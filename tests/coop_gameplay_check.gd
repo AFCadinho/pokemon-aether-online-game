@@ -896,6 +896,28 @@ func _run() -> void:
 	var active_buffs: Array = overlay_ui.get("active_personal_buffs")
 	_expect(active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
 		"party state refresh updates the personal buff tray immediately")
+	service.party = {"memberIds": [1, 2], "memberMapIds": {"1": "map-a", "2": "map-b"},
+		"memberOnline": {"1": true, "2": true}}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).is_empty(),
+		"party EXP buff is hidden when members are on different maps and battles are solo")
+	active_buffs = overlay_ui.get("active_personal_buffs")
+	_expect(not active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
+		"moving to another map removes the party EXP buff from the tray")
+	service.party["memberMapIds"]["2"] = "map-a"
+	service.party["memberOnline"]["2"] = false
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).is_empty(),
+		"party EXP buff is hidden when the partner is offline")
+	service.activity = {"status": "active"}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).get("id") == "adventure_party_exp",
+		"a shared battle retains its EXP buff after the partner disconnects")
+	service.activity = {}
+	service.party["memberOnline"]["2"] = true
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).get("id") == "adventure_party_exp",
+		"party EXP buff returns when the partner reconnects on the same map")
 	auth_service.set("current_user", previous_user)
 	service.party = {}
 	overlay_ui.call("_refresh_coop_party_hud")
