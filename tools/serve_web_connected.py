@@ -55,6 +55,10 @@ HTTP_ROUTES = {
     # Public species data needed by the battle hover card (including speed tiers).
     ("GET", "/pokemon/stats"),
     ("POST", "/auth/email-verification/confirm"),
+    ("PUT", "/auth/account"), ("POST", "/auth/account-portal/launch"),
+    ("GET", "/auth/account-portal/patreon/status"),
+    ("POST", "/privacy/export"), ("POST", "/privacy/delete"),
+    ("POST", "/team/export"), ("POST", "/world/weather/action"),
     ("GET", "/auth/web/boxes"), ("GET", "/auth/web/wallet"), ("PUT", "/auth/web/party"),
     ("POST", "/auth/web/party/heal"), ("POST", "/auth/web/party/swap"), ("POST", "/auth/web/party/set-slot"),
     ("POST", "/auth/web/pokemon/storage/move"),
@@ -96,11 +100,13 @@ GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
 AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
 )
+CALCULATOR_CATALOG_ROUTE = re.compile(r"^/damage-calc/catalog/(?:items|abilities|natures|moves|formes/[A-Za-z0-9-]{1,100})$")
+CALCDEX_SAMPLE_SETS_ROUTE = re.compile(r"^/calcdex/v1/sample-sets/[a-z0-9-]{1,64}/[A-Za-z0-9-]{1,128}$")
 PVP_MATCH_START_ROUTE = re.compile(r"^/battle/pvp/matches/[A-Za-z0-9-]{1,128}/start-battle$")
 PVP_MATCH_SPECTATE_ROUTE = re.compile(r"^/battle/pvp/matches/[A-Za-z0-9-]{1,128}/spectate$")
 HTTP_ROUTE_PREFIXES = (
-	# Read/write game interfaces explicitly enabled in the browser demo. These
-	# retain the normal account and server-side authorization checks.
+	# Public lookup routes outside the shared /game and /account/pvp APIs.
+	# The upstream service still enforces account authorization.
 	("GET", "/auth/web/pokedex/"), ("GET", "/auth/web/items/"),
 	("GET", "/auth/web/skills"),
 	("GET", "/auth/web/fishing/progression"), ("PUT", "/auth/web/fishing/selection"),
@@ -198,6 +204,8 @@ def create_app(upstream, build=None, *, transport=None):
             allowed = True
         if request.method in {"GET", "POST"} and AI_BATTLE_ROUTE.fullmatch(route):
             allowed = True
+        if request.method == "GET" and (CALCULATOR_CATALOG_ROUTE.fullmatch(route) or CALCDEX_SAMPLE_SETS_ROUTE.fullmatch(route)):
+            allowed = True
         if request.method == "POST" and PVP_MATCH_START_ROUTE.fullmatch(route):
             allowed = True
         if request.method == "GET" and PVP_MATCH_SPECTATE_ROUTE.fullmatch(route):
@@ -209,7 +217,7 @@ def create_app(upstream, build=None, *, transport=None):
         # payload, so the request was rejected by the local proxy before it
         # reached the account-authorized battle service.  Keep a finite
         # browser boundary while allowing the normal client contract.
-        max_request_bytes = 128 * 1024 if route.startswith("/battle/") or route in {"/auth/web/party", "/auth/web/party/battle-state", "/game/party", "/game/party/battle-state"} else 16 * 1024
+        max_request_bytes = 128 * 1024 if route.startswith("/battle/") or route in {"/auth/web/party", "/auth/web/party/battle-state", "/game/party", "/game/party/battle-state", "/team/export"} else 16 * 1024
         body = bytearray()
         async for chunk in request.stream():
             body.extend(chunk)
@@ -319,6 +327,10 @@ def create_app(upstream, build=None, *, transport=None):
     @app.websocket("/api/ws/pve-live")
     async def pve_live_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "pve-live")
+
+    @app.websocket("/api/ws/training-live")
+    async def training_live_websocket_proxy(socket: WebSocket):
+        await websocket_proxy(socket, "training-live")
 
     @app.get("/pokemon-assets/{style}/{side}/{species}/{filename}")
     async def pokemon_asset(style: str, side: str, species: str, filename: str):
