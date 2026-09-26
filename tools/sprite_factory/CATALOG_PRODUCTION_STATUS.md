@@ -17,7 +17,9 @@ The 71 approved batch-02 pairs are pinned in the staged
 [v6 release](../../docs/approved-3d-bundle-release-v6.md). Its 154-bundle
 content index retains the 83 v5 bundles and adds 71 new ones. The 29 held
 batch-02 cases remain in their separate review queue and do not block the next
-batch. R2 upload and public verification passed; desktop activation is pending.
+batch. R2 upload and public verification passed. Desktop release `0.3.86` now
+selects v6 for Windows and Linux; the public manifests and downloads passed
+size and SHA-256 checks.
 
 ## Batch 02 — 100 new normal-form candidates (2026-09-26)
 
