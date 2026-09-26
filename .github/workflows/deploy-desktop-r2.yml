@@ -4,15 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       release_version:
-        description: Optional display version. Defaults automatically to 0.0.<workflow run number>.
+        description: Game and launcher display version for this build.
         required: false
         type: string
-        default: ""
+        default: "0.3.84"
       build_launcher:
         description: Rebuild and publish the launcher only when the launcher itself changed.
         required: false
         type: boolean
         default: false
+      approved_3d_release:
+        description: Select the already published approved 3D bundle index.
+        required: false
+        type: choice
+        options: [v1, v2]
+        default: v1
       build_macos:
         description: Build and include macOS artifacts.
         required: false
@@ -101,7 +107,7 @@ jobs:
         env:
           INPUT_RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
-          release_version="${INPUT_RELEASE_VERSION:-0.0.${GITHUB_RUN_NUMBER}}"
+          release_version="${INPUT_RELEASE_VERSION:-0.3.84}"
           if ! printf '%s' "${release_version}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
             echo "::error::release_version must look like 0.2.0 or 0.2.0-beta.1."
             exit 1
@@ -417,6 +423,8 @@ jobs:
           register_external_pack "battle-environment-forest" "${FOREST_ASSET_VERSION}" "${FOREST_ASSET_SIZE}" "${FOREST_ASSET_SHA256}"
 
       - name: Register approved 3D Pokemon bundle index
+        env:
+          INPUT_APPROVED_3D_RELEASE: ${{ inputs.approved_3d_release }}
         run: |
           python3 - <<'PY'
           import json
@@ -424,12 +432,17 @@ jobs:
           from pathlib import Path
           from urllib.request import Request, urlopen
 
-          metadata = json.loads(Path("release/approved_3d_bundles_v1.json").read_text(encoding="utf-8"))
+          selected = os.environ.get("INPUT_APPROVED_3D_RELEASE") or "v1"
+          if selected not in {"v1", "v2"}:
+              raise SystemExit("unsupported approved 3D release selection")
+          if selected == "v2" and os.environ.get("BUILD_LAUNCHER") != "true":
+              raise SystemExit("the first v2 release must rebuild the launcher")
+          metadata = json.loads(Path(f"release/approved_3d_bundles_{selected}.json").read_text(encoding="utf-8"))
           if metadata.get("schema") != 1 or metadata.get("kind") != "pokeaether-approved-3d-release":
               raise SystemExit("invalid approved 3D release metadata")
           entries = [metadata["index"], *metadata.get("bundles", [])]
-          if len(entries) != 8:
-              raise SystemExit("approved 3D release must contain one index and seven bundles")
+          if len(entries) != (8 if selected == "v1" else 22):
+              raise SystemExit("approved 3D release object count is incomplete")
           for entry in entries:
               url = f"{os.environ['UPDATE_BASE_URL'].rstrip('/')}/{entry['object_key']}"
               request = Request(

@@ -35,7 +35,7 @@ func _run() -> void:
 	var camera_motion := menu.find_child("BattleCameraMotionToggle", true, false)
 	if not OS.has_feature("mobile"):
 		_check(layout != null and layout.item_count == 2 and layout.get_item_text(0) == "Full screen"
-			and layout.get_item_text(1) == "Classic", "battle layout uses plain player-facing names")
+			and layout.get_item_text(1) == "Classic (single battles)", "battle layout explains where Classic applies")
 	if not OS.has_feature("mobile") and not OS.has_feature("web"):
 		_check(visuals != null and visuals.item_count == 2 and visuals.get_item_text(0) == "2D / 2.5D — sprites"
 			and visuals.get_item_text(1) == "3D — models", "battle visuals offer sprites or models")

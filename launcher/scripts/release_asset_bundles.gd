@@ -1,12 +1,12 @@
 extends RefCounted
-## Minimal release adapter for the seven approved desktop 3D Pokemon bundles.
+## Release adapter for the original seven and the approved 21-bundle expansion.
 const BundleIndex = preload("asset_bundle_index.gd")
 const BundleStore = preload("asset_bundle_store.gd")
 const Approval = preload("model_pack_manifest.gd")
 
 const DESCRIPTOR_SCHEMA := 1
 const DESCRIPTOR_KIND := "pokeaether-release-asset-index"
-const RELEASE_ASSET_IDS: Array[String] = [
+const V1_ASSET_IDS: Array[String] = [
 	"pokemon_3d:arcanine:base",
 	"pokemon_3d:articuno:base",
 	"pokemon_3d:dragonite:base",
@@ -14,6 +14,19 @@ const RELEASE_ASSET_IDS: Array[String] = [
 	"pokemon_3d:pikachu:base",
 	"pokemon_3d:roaring-moon:base",
 	"pokemon_3d:snorlax:base",
+]
+const RELEASE_ASSET_IDS: Array[String] = [
+	"pokemon_3d:arcanine:base", "pokemon_3d:articuno:base",
+	"pokemon_3d:charmeleon:base", "pokemon_3d:dragonite:base",
+	"pokemon_3d:dunsparce:base", "pokemon_3d:flaaffy:base",
+	"pokemon_3d:houndoom:base", "pokemon_3d:houndour:base",
+	"pokemon_3d:igglybuff:base", "pokemon_3d:lucario:base",
+	"pokemon_3d:mareep:base", "pokemon_3d:persian:base",
+	"pokemon_3d:phanpy:base", "pokemon_3d:pikachu:base",
+	"pokemon_3d:roaring-moon:base", "pokemon_3d:skiploom:base",
+	"pokemon_3d:slowking:base", "pokemon_3d:snorlax:base",
+	"pokemon_3d:stantler:base", "pokemon_3d:teddiursa:base",
+	"pokemon_3d:ursaring:base",
 ]
 
 var store: RefCounted
@@ -36,7 +49,7 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 	if not _http_url(str(descriptor.url)) or not _http_url(str(descriptor.objectBaseUrl)):
 		return "Asset bundle index URL is invalid."
 	var requested: Variant = descriptor.get("requiredAssetIds")
-	if not requested is Array or requested.size() != RELEASE_ASSET_IDS.size():
+	if not requested is Array:
 		return "Asset bundle release set is invalid."
 	var normalized: Array[String] = []
 	for value: Variant in requested:
@@ -44,9 +57,11 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 			return "Asset bundle release set is invalid."
 		normalized.append(value)
 	normalized.sort()
-	var expected := RELEASE_ASSET_IDS.duplicate()
-	expected.sort()
-	if normalized != expected:
+	var original := V1_ASSET_IDS.duplicate()
+	original.sort()
+	var expanded := RELEASE_ASSET_IDS.duplicate()
+	expanded.sort()
+	if normalized != original and normalized != expanded:
 		return "Asset bundle release set is not approved."
 	return ""
 
@@ -63,7 +78,7 @@ func cached_index(descriptor: Dictionary) -> Dictionary:
 	if file == null or file.get_length() != int(descriptor.sizeBytes) or FileAccess.get_sha256(path) != str(descriptor.sha256):
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary or not _release_index_error(parsed).is_empty():
+	if not parsed is Dictionary or not _release_index_error(parsed, descriptor).is_empty():
 		return {}
 	return parsed
 
@@ -88,7 +103,7 @@ func accept_index(descriptor: Dictionary, downloaded_path: String) -> Dictionary
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	if not parsed is Dictionary:
 		return {"error": "Asset bundle index is invalid.", "jobs": []}
-	error = _release_index_error(parsed)
+	error = _release_index_error(parsed, descriptor)
 	if not error.is_empty():
 		return {"error": error, "jobs": []}
 	if DirAccess.make_dir_recursive_absolute(index_root) != OK:
@@ -151,7 +166,10 @@ func _index_job(descriptor: Dictionary) -> Dictionary:
 
 
 func _bundle_jobs(index: Dictionary, descriptor: Dictionary) -> Dictionary:
-	var plan: Dictionary = store.plan(index, RELEASE_ASSET_IDS)
+	var requested: Array[String] = []
+	for asset_id: String in descriptor.requiredAssetIds:
+		requested.append(asset_id)
+	var plan: Dictionary = store.plan(index, requested)
 	if not str(plan.get("error", "")).is_empty():
 		return {"error": str(plan.error), "jobs": []}
 	if not plan.get("missing", []).is_empty():
@@ -176,19 +194,25 @@ func _bundle_jobs(index: Dictionary, descriptor: Dictionary) -> Dictionary:
 	return {"error": "", "jobs": result, "unchanged": plan.unchanged}
 
 
-func _release_index_error(index: Dictionary) -> String:
+func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> String:
 	var error := BundleIndex.validate(index)
 	if not error.is_empty():
 		return error
 	var assets: Variant = index.get("assets")
-	if not assets is Array or assets.size() != RELEASE_ASSET_IDS.size():
+	var expected: Array[String] = []
+	if descriptor.has("requiredAssetIds"):
+		for asset_id: String in descriptor.requiredAssetIds:
+			expected.append(asset_id)
+	else:
+		expected = V1_ASSET_IDS.duplicate() if assets is Array and assets.size() == V1_ASSET_IDS.size() else RELEASE_ASSET_IDS.duplicate()
+	if not assets is Array or assets.size() != expected.size():
 		return "Asset bundle index does not contain the exact approved release set."
 	var seen: Array[String] = []
 	for asset: Variant in assets:
 		if not asset is Dictionary:
 			return "Asset bundle index contains an invalid asset."
 		var asset_id := str(asset.get("asset_id", ""))
-		if asset_id not in RELEASE_ASSET_IDS or asset_id in seen or asset.get("form_id") != "base":
+		if asset_id not in expected or asset_id in seen or asset.get("form_id") != "base":
 			return "Asset bundle index contains an unapproved asset."
 		seen.append(asset_id)
 		var appearances: Variant = asset.get("appearances")
@@ -211,7 +235,6 @@ func _release_index_error(index: Dictionary) -> String:
 		if variants != ["normal", "shiny"]:
 			return "Approved Pokemon bundle must contain normal and shiny appearances."
 	seen.sort()
-	var expected := RELEASE_ASSET_IDS.duplicate()
 	expected.sort()
 	return "" if seen == expected else "Asset bundle index does not contain the exact approved release set."
 

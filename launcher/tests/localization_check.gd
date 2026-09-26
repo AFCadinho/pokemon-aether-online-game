@@ -128,7 +128,7 @@ func _run() -> void:
 				"objectBaseUrl": "https://updates.example",
 				"sizeBytes": 100,
 				"sha256": "ef".repeat(32),
-				"requiredAssetIds": preload("res://scripts/release_asset_bundles.gd").RELEASE_ASSET_IDS.duplicate(),
+				"requiredAssetIds": preload("res://scripts/release_asset_bundles.gd").V1_ASSET_IDS.duplicate(),
 			},
 		}
 		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).is_empty(), "launcher accepts complete download integrity metadata")

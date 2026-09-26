@@ -63,6 +63,13 @@ func _ready() -> void:
 		commands.append(command)
 
 func _process(_delta: float) -> void:
+	# The shared battle presenter owns its own party rails and command Trainers.
+	# Mirroring the singles speaker here draws a second, larger Trainer on top.
+	if battle.coop_mode:
+		for index in 2:
+			cards[index].hide()
+			speakers[index].hide()
+		return
 	var stage: Control = battle.battle_stage
 	for index in 2:
 		var trainer = battle.player_trainer_sprite if index == 0 else battle.enemy_trainer_sprite

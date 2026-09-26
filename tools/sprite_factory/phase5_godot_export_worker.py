@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+import re
 import struct
 import sys
 
@@ -43,24 +44,32 @@ def run(job):
         for path, key in ((normal, 'normal_sha256'), (rare, 'rare_sha256')):
             if hashlib.sha256(path.read_bytes()).hexdigest() != replacement[key]:
                 raise ValueError('Variant texture source changed')
-        matches = [image for image in bpy.data.images if image.name == normal.name]
-        if len(matches) != 1:
-            raise ValueError('Ambiguous embedded normal texture')
-        existing = matches[0]
+        # Blender may retain only the in-use .001 copy when the source Blend
+        # is reopened. Verify every matching packed copy against official
+        # normal pixels before remapping any of them to the rare texture.
+        matches = [image for image in bpy.data.images if re.fullmatch(
+            re.escape(normal.name) + r'(?:\.\d{3})?', image.name)]
+        if not matches:
+            raise ValueError('Embedded normal texture missing: ' + normal.name)
         reference = bpy.data.images.load(str(normal), check_existing=False)
-        reference.colorspace_settings.name = existing.colorspace_settings.name
-        if tuple(existing.size) != tuple(reference.size):
-            raise ValueError('Embedded normal dimensions differ')
-        a, b = array('f', [0]) * len(existing.pixels), array('f', [0]) * len(reference.pixels)
-        existing.pixels.foreach_get(a)
+        if any(image.colorspace_settings.name != matches[0].colorspace_settings.name for image in matches):
+            raise ValueError('Embedded normal copies use different colour spaces')
+        reference.colorspace_settings.name = matches[0].colorspace_settings.name
+        b = array('f', [0]) * len(reference.pixels)
         reference.pixels.foreach_get(b)
-        if a != b:
-            raise ValueError('Embedded normal pixels differ from official source; UV binding not proven')
+        for existing in matches:
+            if tuple(existing.size) != tuple(reference.size):
+                raise ValueError('Embedded normal dimensions differ')
+            a = array('f', [0]) * len(existing.pixels)
+            existing.pixels.foreach_get(a)
+            if a != b:
+                raise ValueError('Embedded normal pixels differ from official source; UV binding not proven')
         shiny = bpy.data.images.load(str(rare), check_existing=False)
-        shiny.colorspace_settings.name = existing.colorspace_settings.name
-        if tuple(shiny.size) != tuple(existing.size):
+        shiny.colorspace_settings.name = matches[0].colorspace_settings.name
+        if tuple(shiny.size) != tuple(reference.size):
             raise ValueError('Rare texture dimensions differ')
-        existing.user_remap(shiny)
+        for existing in matches:
+            existing.user_remap(shiny)
         shiny.pack()
         replacements.append(replacement)
     inspection = inspect()

@@ -160,13 +160,13 @@ func _run() -> void:
 	var router_source := FileAccess.get_file_as_string("res://scripts/battle/coop_animation_router.gd")
 	var presenter_source := FileAccess.get_file_as_string("res://scripts/battle/coop_battle_panel.gd")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
-	_expect(router_source.contains("var cover_scale: float = maxf(available_size.x / SOURCE_SIZE.x, available_size.y / SOURCE_SIZE.y)")
-		and router_source.contains("animation_node.scale = Vector2(cover_scale, cover_scale)")
+	_expect(router_source.contains("var pair_scale: float = minf(available_size.x / (SOURCE_SIZE.x * 2.0), available_size.y / SOURCE_SIZE.y)")
+		and router_source.contains("animation_node.scale = Vector2(pair_scale, pair_scale)")
 		and presenter_source.contains("var animate := displayed_cursor >= 0")
 		and not presenter_source.contains("fresh.size() <= 20")
 		and presenter_source.contains("func _final_event_playback_pending()")
 		and presenter_source.contains('not bool(_latest.get("ended", false))'),
-		"doubles cover the battlefield with catalog effects and never skip live event batches")
+		"doubles size catalog effects for one Pokémon pair and never skip live event batches")
 	_expect(presenter_source.contains("is_instance_valid(_loading_overlay) and _loading_overlay.visible")
 		and presenter_source.contains("if is_instance_valid(_native_turn):"),
 		"native co-op teardown does not process stale loading or turn controls")

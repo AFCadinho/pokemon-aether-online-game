@@ -44,6 +44,7 @@ func _run() -> void:
 		return
 
 	var original_locale := str(localization.get("current_locale"))
+	localization.call("set_locale", "en")
 	var coded_response := {
 		"status": 409,
 		"body": {
@@ -54,6 +55,8 @@ func _run() -> void:
 		},
 	}
 	_check(errors.call("error_code", coded_response) == "guild_name_unavailable", "nested stable code is extracted")
+	_check(str(errors.call("message", {"code": "coop_npc_out_of_range"})).contains("Move closer"),
+		"co-op trainer range rejection explains the required action")
 	var update_response := {
 		"status": 426,
 		"body": {

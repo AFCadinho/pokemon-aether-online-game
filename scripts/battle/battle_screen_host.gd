@@ -107,7 +107,7 @@ func prewarm_mobile_immersive_battle(instance: Control) -> void:
 	preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	$Content.add_child(battle)
 
-func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD) -> void:
+func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false) -> void:
 	var already_prepared := battle == instance and instance.get_parent() == $Content
 	process_mode = Node.PROCESS_MODE_INHERIT
 	show()
@@ -123,7 +123,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 		focus.release_focus()
 	battle.set_meta("dedicated_battle_screen", true)
 	battle.set_meta("battle_screen_preparing", true)
-	if not already_prepared and get_node("/root/SettingsManager").battle_ui_layout == "immersive":
+	if not already_prepared and (force_immersive or get_node("/root/SettingsManager").battle_ui_layout == "immersive"):
 		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	if not already_prepared:
 		$Content.add_child(battle)

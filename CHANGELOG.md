@@ -15,6 +15,52 @@
 - De Android-proefbuild toont login en wereldinterface groter, vergroot de rechter actieknoppen, globale buffknoppen, chattabs en chatinvoer, opent het toetsenbord pas bij het kiezen van een invoerveld en laat dialoog met één tik per regel doorgaan.
 - In Android-gevechten begint het battle-log onder de linker party-slots, zodat de onderste Pokémon niet achter de logknoppen vallen; het vooraf laden van geanimeerde Pokémon-sprites onderbreekt de overgang naar het gevecht niet meer.
 
+- Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles.
+
+- Defeat dialogue after shared NPC battles now uses the defeated Trainer's own mugshot, including class portraits such as Lass Zoe; missing portraits no longer show Professor Oak.
+
+- Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon.
+
+- Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes.
+
+- Classic wild battles now briefly show the player Trainer sprite and callout when throwing a Poké Ball and receiving the capture result.
+
+- The Adventure Party EXP buff now covers shared wild and NPC battles, and hides when a party member is offline or on another map and battles are solo.
+
+- Immersive Adventure Party doubles now use the single-battle Trainer voice variants for move callouts instead of repeating one fixed line.
+
+- Trainer callouts in Immersive Adventure Party doubles now name the acting Pokémon when ordering a move, as in single battles.
+
+- Immersive 2D/2.5D double battles now size move effects for two Pokémon per side and aim projectile sheets from the acting Pokémon to their actual target.
+
+- Adventure Party members now see a +25% EXP buff while grouped; it increases their own EXP rewards from shared wild battles.
+
+- NPC Trainers in Immersive Adventure Party doubles now use their own mugshot when giving commands, with their class battle portrait or overworld sprite as a fallback.
+
+- Fixed duplicate large and small Trainer figures in Immersive Adventure Party doubles. Both players now receive a battle result message, and trainer victories play the NPC's defeat dialogue after returning to the world.
+
+- In Immersive Adventure Party battles, Trainer sprites appear beside their party rails only while giving a battle command.
+
+- A local battle review accepted 14 additional Pokémon in normal and shiny form. Their individual 3D bundles are prepared for a later desktop release.
+
+- Adventure Party members can start shared trainer battles when they encounter a supported trainer, even if their partner leads the party.
+
+- Adventure Party battles now show that a requested exit is being processed when the partner has disconnected.
+
+- The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
+
+- Fixed the Adventure Party HUD briefly appearing over Immersive battles when party presence updates arrive.
+
+- Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side.
+
+- Immersive 2D Adventure Party double battles now space the two Pokémon pairs across separate battlefield platforms.
+
+- The Pokédex preview zoom button now enlarges local 3D Pokémon too, so model details can be inspected more closely.
+
+- Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser; Classic remains available for single battles.
+
+- De visuals van de Aether Clash-lobby zijn bijgewerkt voor de desktop- en browserclient.
+
 - De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken als hun Kanto level cap 100 is.
 
 - Alpha Tools toont het Aetherite-bedrag nu in een klein venster na een klik op Generate Aetherite, zodat het hoofdmenu compact blijft.

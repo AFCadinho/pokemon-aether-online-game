@@ -68,6 +68,25 @@ func _run() -> void:
 	bridge._refresh()
 	await process_frame
 	assert(not other.visible and not panel.visible and not tabs.visible)
+	var party_rail: Control = battle.get_node("%PlayerStagePartyRail")
+	for dimensions: Vector2 in [Vector2(1920, 1080), Vector2(1366, 768), Vector2(1280, 720)]:
+		ui.size = dimensions
+		host.size = dimensions
+		host._fit_battle()
+		bridge._refresh()
+		for frame in 3:
+			await process_frame
+		var rail_bottom: float = (party_rail.get_global_transform_with_canvas() * Vector2(0, party_rail.size.y)).y
+		var calculator_top: float = (bridge.calculator_button.get_global_transform_with_canvas() * Vector2.ZERO).y
+		assert(rail_bottom <= calculator_top - 10.0,
+			"Party rail must stay above Battle Log controls at %s: rail=%s calculator=%s" % [dimensions, rail_bottom, calculator_top])
+	ui.size = Vector2(1920, 1080)
+	host.size = ui.size
+	host._fit_battle()
+	bridge._refresh()
+	for frame in 3:
+		await process_frame
+	assert(is_equal_approx(party_rail.scale.x, 0.75), "Party rail returns to its normal size after enlarging the window")
 	assert(bridge.log_selected and bridge.log_view.visible,"Every battle must initially show Battle Log")
 	assert(bridge.log_view.get_theme_stylebox("normal").bg_color.a < 0.7)
 	assert(panel.get_theme_stylebox("panel").bg_color.a < 0.7)

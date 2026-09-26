@@ -116,6 +116,12 @@ func _run() -> void:
 	_expect(mounted_battle != null and mounted_battle.get("coop_mode") == true
 		and mounted_battle.get("coop_presenter") != null,
 		"co-op uses the ordinary battle scene with its own server-driven presenter")
+	_expect(mounted_world._coop_battle_result_message({"outcome": "win"}).contains("won")
+		and mounted_world._coop_battle_result_message({"outcome": "loss"}).contains("lost")
+		and mounted_world._coop_battle_result_message({"outcome": "draw"}).contains("draw")
+		and mounted_world._coop_battle_result_message({"outcome": "draw", "escaped": true}).contains("escaped")
+		and mounted_world._coop_battle_result_message({"outcome": "loss", "forfeited": true}).contains("forfeited"),
+		"both players receive a distinct shared battle result message after returning")
 	var presenter: Control = mounted_battle.get("coop_presenter")
 	var original_activity: Dictionary = service.activity.duplicate(true)
 	var original_view: Dictionary = service.view.duplicate(true)
@@ -323,8 +329,8 @@ func _run() -> void:
 		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 6
 		and mounted_battle.get_node("%PlayerPartyGrid").current_party_data.size() == 2
 		and mounted_battle.get_node("%OpponentPartyGrid").current_party_data.size() == 2
-		and mounted_battle.get_node("%PlayerTrainerSprite").visible
-		and presenter.get("_second_trainer").visible
+		and not mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and not presenter.get("_second_trainer").visible
 		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
@@ -338,18 +344,71 @@ func _run() -> void:
 	var right_ally: AnimatedSprite2D = mounted_battle.get_node("%PlayerSpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
 	var left_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot/AnimatedPokemonSprite")
 	var right_wild: AnimatedSprite2D = mounted_battle.get_node("%EnemySpriteBox/DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2")
-	var coop_stage: Control = mounted_battle.get_node("%BattleStage")
-	var left_ally_on_stage: Vector2 = coop_stage.get_global_transform().affine_inverse() * left_ally.global_position
 	service.activity.activityId = "kanto_route_1_youngster_liam"
 	presenter._sync_native_trainers()
+	presenter._position_native_trainers()
 	for _frame in 3:
 		await process_frame
+	var left_rail_rect: Rect2 = mounted_battle.get_node("%PlayerStagePartyGrid").get_global_rect()
+	var right_rail_rect: Rect2 = mounted_battle.get_node("%OpponentPartyGrid").get_global_rect()
 	_expect(absf(left_ally.global_position.y - right_ally.global_position.y) < 24.0
 		and absf(left_wild.global_position.y - right_wild.global_position.y) < 24.0
-		and presenter._first_trainer.position.x < presenter._second_trainer.position.x
-		and presenter._second_trainer.position.x < left_ally_on_stage.x
-		and presenter._second_trainer.position.x - presenter._first_trainer.position.x < 80.0,
-		"both pairs stand close together while the Trainers group behind the left ally")
+		and absf(presenter._first_trainer.global_position.x - (left_rail_rect.end.x + 68.0)) < 2.0
+		and absf(presenter._second_trainer.global_position.x - (left_rail_rect.end.x + 68.0)) < 2.0
+		and absf(presenter._opponent_trainer.global_position.x - (right_rail_rect.position.x - 68.0)) < 2.0
+		and presenter._first_trainer.global_position.y < presenter._second_trainer.global_position.y,
+		"both Pokémon pairs stay aligned while command Trainers anchor beside their party rails")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p1", "move": "Tackle"})
+	await process_frame
+	var mirrored_speaker := mounted_battle.get_node_or_null("%BattleStage/SpeakingTrainer0") as Control
+	_expect(presenter._first_trainer.visible and not presenter._second_trainer.visible
+		and presenter._first_trainer.command_callout.visible
+		and presenter._first_trainer.command_callout.message_label.text.contains("Jigglypuff")
+		and presenter._first_trainer.command_callout.message_label.text.contains("Tackle")
+		and mirrored_speaker != null and not mirrored_speaker.visible,
+		"the acting allied Trainer names its Pokémon and move without a second Immersive speaker")
+	presenter._hide_native_trainers()
+	service.activity.activityId = "brock"
+	presenter._sync_native_trainers()
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p2", "move": "Gust"})
+	_expect(presenter._opponent_trainer.visible and not presenter._first_trainer.visible
+		and presenter._opponent_trainer.command_callout.visible
+		and presenter._opponent_trainer.command_callout.message_label.text.contains("Pidgey")
+		and presenter._opponent_trainer.command_callout.message_label.text.contains("Gust"),
+		"the opposing Trainer names its own Pokémon when commanding a move")
+	presenter._hide_native_trainers()
+	var original_map: Node = root.get_node("GameState").current_map
+	var trainer_map := Node2D.new()
+	var entities := Node2D.new()
+	entities.name = "Entities"
+	trainer_map.add_child(entities)
+	var npcs := Node2D.new()
+	npcs.name = "NPCs"
+	entities.add_child(npcs)
+	var lass := BaseNPC.new()
+	lass.npc_id = "kanto_route_1_lass_zoe"
+	lass.npc_definition_id = "trainer_class_lass"
+	var mugshot_image := Image.create(80, 80, false, Image.FORMAT_RGBA8)
+	mugshot_image.fill(Color.CORNFLOWER_BLUE)
+	var lass_mugshot := ImageTexture.create_from_image(mugshot_image)
+	lass.mugshot = lass_mugshot
+	npcs.add_child(lass)
+	root.get_node("GameState").current_map = trainer_map
+	service.activity.activityId = lass.npc_id
+	presenter._sync_native_trainers()
+	_expect(presenter._opponent_trainer.catalog_sprite.texture == lass_mugshot
+		and not presenter._opponent_trainer.visible,
+		"ordinary co-op Trainers prepare the NPC's own mugshot without showing it between commands")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p2", "move": "Tackle"})
+	_expect(presenter._opponent_trainer.visible and presenter._opponent_trainer.command_callout.visible,
+		"an ordinary NPC reveals its mugshot when commanding a move")
+	presenter._hide_native_trainers()
+	lass.mugshot = null
+	presenter._sync_native_trainers()
+	_expect(presenter._opponent_trainer.catalog_sprite.texture == root.get_node("TrainerPortraitCatalog").get_texture("showdown_lass_gen6"),
+		"an ordinary Trainer uses its class portrait when no custom mugshot is set")
+	root.get_node("GameState").current_map = original_map
+	trainer_map.free()
 	service.activity.activityId = "wild_grass:kanto_route_1"
 	presenter._sync_native_trainers()
 	var hover_view: Dictionary = presenter._latest.duplicate(true)
@@ -407,6 +466,26 @@ func _run() -> void:
 	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
 		and not presenter._second_trainer.visible,
 		"wild doubles hide both Trainer sprites")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
+	_expect(presenter._second_trainer.visible and not presenter._first_trainer.visible
+		and not presenter._opponent_trainer.visible
+		and presenter._second_trainer.command_callout.message_label.text.contains("Squirtle")
+		and presenter._second_trainer.command_callout.message_label.text.contains("Water Gun"),
+		"a wild battle reveals the allied Trainer naming its Pokémon and move")
+	presenter._remember_pokemon_name("p3", "Wartortle, L16, M")
+	presenter._show_trainer_for_event({"kind": "move", "actor": "p3", "move": "Water Gun"})
+	_expect(presenter._second_trainer.command_callout.message_label.text.contains("Wartortle")
+		and presenter._second_trainer.command_callout.message_label.text.contains("Water Gun"),
+		"a switch in the same event batch updates the next Trainer command")
+	var move_voice_variants := {}
+	for voice_turn in range(1, 20):
+		var selection: Dictionary = presenter._voice_director.resolve_command({
+			"kind": "move", "player_id": "p1", "pokemon": "Squirtle", "move": "Water Gun",
+		}, {"turn": voice_turn})
+		move_voice_variants[str(selection.get("text_key", ""))] = true
+	_expect(move_voice_variants.size() > 1 and not move_voice_variants.has(""),
+		"co-op move commands use multiple single-battle voice variants across turns")
+	presenter._hide_native_trainers()
 	var wild_layout_capture := OS.get_environment("COOP_BATTLE_WILD_LAYOUT_CAPTURE_PATH")
 	if not wild_layout_capture.is_empty():
 		var decision_was_visible: bool = presenter._decision_overlay.visible
@@ -418,9 +497,11 @@ func _run() -> void:
 		presenter._decision_overlay.visible = decision_was_visible
 	service.activity.activityId = "brock"
 	presenter._sync_native_trainers()
-	_expect(mounted_battle.get_node("%PlayerTrainerSprite").visible
-		and presenter._second_trainer.visible,
-		"NPC doubles restore both Trainer sprites")
+	_expect(not mounted_battle.get_node("%PlayerTrainerSprite").visible
+		and not presenter._second_trainer.visible
+		and presenter._opponent_trainer.has_trainer_art()
+		and not presenter._opponent_trainer.visible,
+		"NPC doubles keep Trainer art ready but hidden between commands")
 	service.activity = {"status": "active"}
 	presenter._process(0.0)
 	_expect(not mounted_battle.get_node("%BattleStatusPanel").timer_label.visible
@@ -777,6 +858,15 @@ func _run() -> void:
 	var hud_badges: Array = party_hud.get("_badges")
 	_expect(party_hud.visible and hud_names[0].text == "TrainerTwo" and hud_names[1].text == "TrainerOne"
 		and hud_badges[0].text == "LEADER · #1" and hud_badges[1].text == "#2", "party HUD keeps the leader first with stable member badges")
+	overlay_ui.set_meta("battle_chat_active", true)
+	buffs_panel.hide()
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(not party_hud.visible, "co-op presence updates cannot reveal the party HUD over immersive battles")
+	_expect(not buffs_panel.visible, "co-op presence updates cannot flash the active boost tray over battles")
+	overlay_ui.remove_meta("battle_chat_active")
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect(party_hud.visible, "party HUD returns after the immersive battle chat closes")
+	_expect(buffs_panel.visible, "active boost tray returns after the battle chat closes")
 	_expect(hud_portraits[0].visible and hud_portraits[1].visible and not party_hud.text.contains("cap"), "party HUD shows both portraits without a level cap")
 	var hud_visual_path := OS.get_environment("COOP_PARTY_HUD_VISUAL_CAPTURE_PATH")
 	if not hud_visual_path.is_empty():
@@ -803,10 +893,41 @@ func _run() -> void:
 	service.party = {"memberIds": [1, 2]}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(hud_names[0].text == "SelfTrainer" and hud_names[1].text == "Trainer #2", "older party responses still show own name and identify the partner")
+	var party_exp_buff: Dictionary = overlay_ui.call("_current_adventure_party_exp_buff")
+	_expect(party_exp_buff.get("id") == "adventure_party_exp" and party_exp_buff.get("name_key") == "ui.buff.adventure_party_exp.name",
+		"active party gives its member a visible EXP buff")
+	var active_buffs: Array = overlay_ui.get("active_personal_buffs")
+	_expect(active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
+		"party state refresh updates the personal buff tray immediately")
+	service.party = {"memberIds": [1, 2], "memberMapIds": {"1": "map-a", "2": "map-b"},
+		"memberOnline": {"1": true, "2": true}}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).is_empty(),
+		"party EXP buff is hidden when members are on different maps and battles are solo")
+	active_buffs = overlay_ui.get("active_personal_buffs")
+	_expect(not active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
+		"moving to another map removes the party EXP buff from the tray")
+	service.party["memberMapIds"]["2"] = "map-a"
+	service.party["memberOnline"]["2"] = false
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).is_empty(),
+		"party EXP buff is hidden when the partner is offline")
+	service.activity = {"status": "active"}
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).get("id") == "adventure_party_exp",
+		"a shared battle retains its EXP buff after the partner disconnects")
+	service.activity = {}
+	service.party["memberOnline"]["2"] = true
+	overlay_ui.call("_refresh_coop_party_hud")
+	_expect((overlay_ui.call("_current_adventure_party_exp_buff") as Dictionary).get("id") == "adventure_party_exp",
+		"party EXP buff returns when the partner reconnects on the same map")
 	auth_service.set("current_user", previous_user)
 	service.party = {}
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(not party_hud.visible, "party HUD hides when the party is dissolved")
+	active_buffs = overlay_ui.get("active_personal_buffs")
+	_expect(not active_buffs.any(func(buff: Dictionary) -> bool: return buff.get("id") == "adventure_party_exp"),
+		"leaving the party removes the EXP buff immediately")
 	party_hud.free()
 	overlay_ui.free()
 	var interaction_script: Script = load("res://scripts/ui/player_interaction_coordinator.gd")
@@ -835,6 +956,12 @@ func _run() -> void:
 	_expect(not grass_request_source.get_slice('var world := GameState.get_world()', 1).get_slice('var result := await _request("grass-step"', 0).contains("await refresh()")
 		and grass_request_source.contains('result.get("body", {}).get("status") != "miss"'),
 		"grass misses avoid redundant status requests while starts still refresh")
+	var game_state := root.get_node("GameState")
+	game_state.set_pending_coop_battle_result({"outcome": "win", "activityId": "kanto_route_1_lass_zoe"})
+	game_state.clear_world_runtime_state()
+	_expect(game_state.take_pending_coop_battle_result() == {"outcome": "win", "activityId": "kanto_route_1_lass_zoe"}
+		and game_state.pending_coop_battle_result.is_empty(),
+		"completed co-op result survives world reload and is consumed once")
 	await process_frame
 	quit(1 if failed else 0)
 

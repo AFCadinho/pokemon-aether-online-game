@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "status": "local_candidate_bundle_preflight_passed",
+  "release_approved": false,
+  "bundle_count": 55,
+  "appearance_count": 110,
+  "bundle_bytes": 1340524552,
+  "index_sha256": "f1fe9ebef7e78a811a3de236c7b12cede8166f662c72ba29faf90309065490cc",
+  "receipt_sha256": "5837a4c0b969969c2584a8eb08d8be1881deef20d8a0b2dd9495855c1771aed2",
+  "qualification_sha256": "1ab70ec2bb5e2edfad4bc5e9bc575e29b6c32a31c15bf692ad70b6dd2bf7da66"
+}

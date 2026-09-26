@@ -398,7 +398,7 @@ func _setup_tabs() -> void:
 		var layout_options := OptionButton.new()
 		layout_options.name = "BattleUILayoutOptions"
 		layout_options.add_item("Full screen")
-		layout_options.add_item("Classic")
+		layout_options.add_item("Classic (single battles)")
 		layout_options.select(1 if SettingsManager.battle_ui_layout == "classic" else 0)
 		layout_options.item_selected.connect(func(index): SettingsManager.set_battle_ui_layout("classic" if index == 1 else "immersive"))
 		var layout_label := Label.new()

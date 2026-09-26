@@ -1,0 +1,388 @@
+{
+  "schema": 1,
+  "scope": "screened_100_cohort_shiny_export_readiness",
+  "runtime_approved": false,
+  "screened_registry_sha256": "952b18993e6eead0acf45b9740e5e1eae883c942edde0686fd8da9eec9ea3781",
+  "local_catalog_sha256": "63a2d1370ca73096687fe93e97a88d3931739987d5ff37e3139f9b633375d4e9",
+  "normal_report_sha256": "b82ce3e0e38f56cfca2d5098fb822e75cf59003f187bfd7c96d846921f29b91d",
+  "screened": 75,
+  "ready": 63,
+  "held": 12,
+  "entries": [
+    {
+      "species": "azumarill",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "blissey",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "chansey",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "charizard",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "cloyster",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "corviknight",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "delibird",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "diglett",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "ditto",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "dondozo",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "donphan",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "dragonair",
+      "status": "held",
+      "reason": "Rare material settings differ: body_b"
+    },
+    {
+      "species": "dratini",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "drifblim",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "drowzee",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "eevee",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "electrode",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "espeon",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "flapple",
+      "status": "held",
+      "reason": "Normal and rare albedo are byte-identical"
+    },
+    {
+      "species": "flareon",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "forretress",
+      "status": "held",
+      "reason": "Rare material has a non-albedo change: pm0205_00_00_body/NormalMap"
+    },
+    {
+      "species": "garchomp",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "gardevoir",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "gengar",
+      "status": "held",
+      "reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "golduck",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "growlithe",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "gyarados",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "hariyama",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "haunter",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "heracross",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "hoopa",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "hoppip",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "hydreigon",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "hypno",
+      "status": "held",
+      "reason": "Rare material has a non-albedo change: body_b_00/RoughnessMap"
+    },
+    {
+      "species": "jigglypuff",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "jolteon",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "jumpluff",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "magikarp",
+      "status": "held",
+      "reason": "Rare material settings differ: body_00"
+    },
+    {
+      "species": "magnemite",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "magneton",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "magnezone",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "mankey",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "marill",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "meowth",
+      "status": "held",
+      "reason": "Normal standalone export report missing"
+    },
+    {
+      "species": "mew",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "mewtwo",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "misdreavus",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "murkrow",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 4
+    },
+    {
+      "species": "oricorio",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "orthworm",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "pichu",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "primeape",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "psyduck",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "quagsire",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "qwilfish",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "raichu",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 3
+    },
+    {
+      "species": "rayquaza",
+      "status": "held",
+      "reason": "Rare material has a non-albedo change: body_b/MetallicMap"
+    },
+    {
+      "species": "scizor",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "scyther",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "seviper",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "shellder",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "slaking",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "slowpoke",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "staraptor",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "sudowoodo",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "tauros",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "tyranitar",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "umbreon",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "vaporeon",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "venonat",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "volcarona",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "voltorb",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "wigglytuff",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 1
+    },
+    {
+      "species": "wooper",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    },
+    {
+      "species": "zapdos",
+      "status": "ready_for_shiny_export",
+      "official_rare_albedo_count": 2
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "scope": "screened_100_cohort_shiny_export",
+  "species": [
+    "tyranitar",
+    "gardevoir",
+    "slaking",
+    "hariyama",
+    "seviper",
+    "staraptor",
+    "drifblim",
+    "magnezone",
+    "hoopa",
+    "oricorio",
+    "corviknight",
+    "orthworm",
+    "dondozo"
+  ]
+}

@@ -4544,7 +4544,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 
 
 func _show_wild_capture_throw_callout(item_name: String) -> bool:
-	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+	if battle_type != BattleType.WILD:
 		return false
 	_show_local_player_trainer()
 	return _show_trainer_command_text(
@@ -4555,7 +4555,7 @@ func _show_wild_capture_throw_callout(item_name: String) -> bool:
 
 
 func _show_wild_capture_result_callout(caught: bool, shake_count: int) -> bool:
-	if battle_type != BattleType.WILD or not has_meta("immersive_battle_ui"):
+	if battle_type != BattleType.WILD:
 		return false
 	var key := "battle.capture.callout.caught" if caught else (
 		"battle.capture.callout.almost" if shake_count >= 2 else "battle.capture.callout.broke_free"
