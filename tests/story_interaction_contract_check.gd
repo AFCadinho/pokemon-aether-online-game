@@ -177,11 +177,12 @@ func _test_hook_and_api_integration_contract() -> void:
 
 	_expect(
 		service.contains('STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"')
-		and service.contains('WEB_STORY_INTERACTION_ENDPOINT := "/auth/web/world/story/interactions/%s"')
+		and not service.contains("WEB_STORY_INTERACTION_ENDPOINT")
 		and service.contains('endpoint := (_story_interaction_endpoint() % normalized_interaction_id.uri_encode()) + "/resolve"')
 		and service.contains('endpoint := (_story_interaction_endpoint() % normalized_interaction_id.uri_encode()) + "/complete"')
-		and service.contains('return WEB_STORY_INTERACTION_ENDPOINT if OS.has_feature("web") else STORY_INTERACTION_ENDPOINT'),
-		"client API uses platform-scoped resolve and complete interaction endpoints"
+		and service.contains("func _story_interaction_endpoint() -> String:")
+		and service.contains("return STORY_INTERACTION_ENDPOINT"),
+		"client API uses shared resolve and complete interaction endpoints across clients"
 	)
 	_expect(
 		hook.contains('"effects": completion_result.get("effects", [])'),

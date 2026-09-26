@@ -34,7 +34,10 @@ func _check_world_initial_map() -> void:
 		"Saved player positions still take precedence over the initial spawn"
 	)
 	var initial_state_setup_position := world_script_source.find("await _setup_initial_world_state()")
-	var fishing_progression_load_position := world_script_source.find("await _refresh_fishing_progression()")
+	var fishing_progression_load_position := world_script_source.find(
+		"await _refresh_fishing_progression()",
+		initial_state_setup_position
+	)
 	_check(
 		initial_state_setup_position >= 0
 		and fishing_progression_load_position > initial_state_setup_position,
