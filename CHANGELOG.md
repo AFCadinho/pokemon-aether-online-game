@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 3 heeft nu een rijkere 3D-battlearena naar de pixelmap, met het Pokémon Center, de ingang van Mt. Moon, rotsterrassen met trappen, afgebakende grasvelden, struiken en bloemen.
+
 - De browser- en desktopclient ondersteunen nu een korte klik op vrije speelruimte als interactie en muis slepen als tijdelijke joystick.
 
 - Gevechten met wilde Pokémon en trainers op Route 3 gebruiken nu een eigen 3D-arena met het rotsachtige pad en de begroeiing van die route.
