@@ -6138,5 +6138,20 @@
   "ui.clash_bot.reset_hint": "Allows another reward test today. Existing mails, claims and payout history remain unchanged.",
   "ui.clash_bot.reset_done": "Today's Guild training reward is reset. You can choose another reward attempt.",
   "ui.clash_bot.reset_not_needed": "There is no Guild training reward to reset today.",
-  "ui.clash_bot.reset_unavailable": "The development reward reset is unavailable."
+  "ui.clash_bot.reset_unavailable": "The development reward reset is unavailable.",
+  "ui.android_update.title": "ATUALIZAÇÃO DO JOGO",
+  "ui.android_update.available": "Nova versão {version} disponível ({mb} MB).",
+  "ui.android_update.required": "Atualização obrigatória: versão {version} ({mb} MB). Instale para continuar jogando.",
+  "ui.android_update.download": "Baixar atualização",
+  "ui.android_update.downloading": "Baixando atualização do jogo: {percent}%",
+  "ui.android_update.storage_failed": "Não há espaço suficiente para a atualização.",
+  "ui.android_update.download_failed": "Falha no download. Tente novamente.",
+  "ui.android_update.verify_failed": "Não foi possível verificar a atualização. Baixe novamente.",
+  "ui.android_update.verified": "Atualização verificada. O Android pedirá que você confirme a instalação.",
+  "ui.android_update.install": "Instalar",
+  "ui.android_update.install_failed": "Não foi possível abrir o instalador do Android. Use o site.",
+  "ui.android_update.permission": "Permita que o PokeAether instale apps e toque em Instalar novamente.",
+  "ui.android_update.confirm": "Confirme a atualização no Android.",
+  "ui.android_update.retry": "Tentar novamente",
+  "ui.android_update.website": "Abrir site"
 }

@@ -6135,5 +6135,20 @@
   "ui.clash_bot.reset_hint": "Allows another reward test today. Existing mails, claims and payout history remain unchanged.",
   "ui.clash_bot.reset_done": "Today's Guild training reward is reset. You can choose another reward attempt.",
   "ui.clash_bot.reset_not_needed": "There is no Guild training reward to reset today.",
-  "ui.clash_bot.reset_unavailable": "The development reward reset is unavailable."
+  "ui.clash_bot.reset_unavailable": "The development reward reset is unavailable.",
+  "ui.android_update.title": "游戏更新",
+  "ui.android_update.available": "新版本 {version} 已发布（{mb} MB）。",
+  "ui.android_update.required": "必须更新至版本 {version}（{mb} MB）才能继续游戏。",
+  "ui.android_update.download": "下载更新",
+  "ui.android_update.downloading": "正在下载游戏更新：{percent}%",
+  "ui.android_update.storage_failed": "存储空间不足，无法下载更新。",
+  "ui.android_update.download_failed": "下载失败，请重试。",
+  "ui.android_update.verify_failed": "无法验证更新，请重新下载。",
+  "ui.android_update.verified": "更新已验证。Android 将要求你确认安装。",
+  "ui.android_update.install": "安装",
+  "ui.android_update.install_failed": "无法打开 Android 安装程序。请使用网站。",
+  "ui.android_update.permission": "请允许 PokeAether 安装应用，然后再次点击“安装”。",
+  "ui.android_update.confirm": "请在 Android 中确认更新。",
+  "ui.android_update.retry": "重试",
+  "ui.android_update.website": "打开网站"
 }
