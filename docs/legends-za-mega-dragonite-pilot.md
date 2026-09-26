@@ -58,3 +58,36 @@ download. All converted assets and screenshots remain outside the game tree.
 
 The screened catalog was altered temporarily for this local smoke test and
 restored afterwards. No Mega model is admitted to the selected catalog.
+
+## Normal and shiny battle qualification pass (26 September 2026)
+
+The archive's rare material was imported separately with the same pinned
+importer. Prepared shiny `.blend` SHA-256:
+`f81a5645f9d26e1f92094a501b38f8088e03030a645ef456f4f7db99611d9f75`.
+The baked shiny GLB passed `validate_battle_3d_report.py`, and the Godot
+converter produced a standalone scene with SHA-256
+`ce2f4a119f14d0d805eaa9d3ab8379bdc5869b14e8171ec49a34a4bc5a1b3a8e`.
+Artifacts: `/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-shiny-test`.
+
+The real battle presenter loaded a local Dragonite candidate, changed the
+player's displayed species through the battle sprite/model update path to
+normal Mega Dragonite, and displayed shiny Mega Dragonite on the opponent's
+side. Both Mega models completed physical attack, special attack, and damage;
+sleep stayed active; faint start advanced to faint loop. Godot logged no
+model, pose, or timing errors. Focused existing Mega presentation and display
+data checks also exited successfully.
+
+The `before-mega.png`, `after-mega-normal-shiny.png`, `mega-physical_attack.png`,
+`mega-special_attack.png`, `mega-damage.png`, `mega-sleep.png`, and
+`mega-faint-loop.png` screenshots record the battle view. Normal and shiny
+colors, positions, and poses look coherent in these samples. The base
+Dragonite in this test is a local catalog candidate, not the released bundle.
+This exercises the shared species update path but does **not** run a complete
+player-driven turn or the full Mega overlay/event sequence. The live local
+review window allows a human to toggle the form and replay actions.
+
+Qualification remains pending human review in motion and a complete battle
+Mega event. The sleep animation is still an explicit idle alias; source TRACM
+visibility/material tracks and the full stylized shader are still unported.
+The temporary screened-catalog entries are not release approval, and neither
+variant has been bundled or uploaded.
