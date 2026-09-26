@@ -194,3 +194,34 @@ scene SHA-256 values are
 (shiny). This is still a local pilot: the complete Mega event and release
 bundle qualification remain pending, and neither scene is selected or
 uploaded.
+
+## Local 3D Mega Evolution preview (26 September 2026)
+
+The ZA archive also contains `pm0149_51_00_20620_megaappeal01.tranm`:
+181 frames at 60 FPS, non-looping. It is a motion on the Mega rig, not a
+base-to-Mega mesh morph. The pinned clip SHA-256 is
+`1466bbc4e1d95a7471e018aa56c140c017a70ddc6a6e74f62622aae752a7e46e`.
+It was appended to a copy of the reviewed normal Mega source and exported as
+the additional `mega_appeal` action. The GLB report passed the existing
+validator and Godot reloaded the standalone runtime scene. The scene SHA-256
+is `67b9f3921d2db0120776fcb030c2ecb5599e18128e7276f3f8f393f0f48cc4cc`.
+Artifacts are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-evolution-test`.
+
+`tools/sprite_factory/mega_dragonite_evolution_preview.gd` is a standalone
+local review: ordinary Dragonite charges a 3D effect, the form changes during
+the flash, then Mega Dragonite plays its native appeal. The effect uses a
+CC0 Kenney particle texture as a 3D billboard, plus local 3D rings and a
+flash sphere. The texture license is retained beside the texture. The script
+accepts the base and Mega `.scn` paths via `POKEAETHER_MEGA_PREVIEW_BASE` and
+`POKEAETHER_MEGA_PREVIEW_MEGA`; run Godot through `ops/worktrees/slot-env` in
+an assigned slot. `POKEAETHER_MEGA_PREVIEW_AUTOQUIT=1` makes the preview run
+headlessly to completion. Optional `POKEAETHER_MEGA_PREVIEW_SCREENSHOTS` saves
+sample frames. The live preview has replay, reset, and camera-turn controls.
+
+The headless pass logged the native appeal swap and completion without errors.
+Rendered samples are in `screenshots-approved-layout/`. Human visual review
+and real battle event timing remain pending. This work does not select a Mega
+model, create a bundle, or alter the content index. The new scene exists only
+to review `mega_appeal`; the previously reviewed sleep-eye correction was not
+reapplied to it.
