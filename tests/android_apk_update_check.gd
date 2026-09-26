@@ -15,6 +15,11 @@ func _run() -> void:
 		"embedded Android version code matches the exported APK")
 	_check(str(presets.get_value("preset.7.options", "package/unique_name", "")) == "com.pokeaether.game",
 		"Android package identity remains stable")
+	var android_asset_includes := str(presets.get_value("preset.7", "include_filter", ""))
+	_check(android_asset_includes.contains("assets/sprites/pokemon/pokemon_home/*.png"),
+		"Android APK explicitly includes normal Pokémon HOME icons")
+	_check(android_asset_includes.contains("assets/sprites/pokemon/pokemon_home_shiny/*.png"),
+		"Android APK explicitly includes shiny Pokémon HOME icons")
 	var manifest := {"game": {
 		"buildId": "android-build-2",
 		"version": "0.3.84",

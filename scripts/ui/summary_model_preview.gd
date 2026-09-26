@@ -7,13 +7,22 @@ var selected_clip := "idle"
 var camera_target := Vector3.ZERO
 var camera_distance := 1.0
 var zoom_factor := 1.0
+var arena_background: SubViewportContainer
+var framing_points := PackedVector3Array()
 
 func _ready() -> void:
 	super._ready()
 	tooltip_text = "Drag to rotate the 3D model"
-	# A fixed platform obscures valid native poses below its plane.
-	# Summary cards inspect the model, not an artificial arena floor.
 	preview_floor.hide()
+	arena_background = preload("res://scripts/ui/summary_arena_background.gd").new()
+	add_child(arena_background)
+	move_child(arena_background, 0)
+	resized.connect(_frame_pose)
+
+func set_pokemon_types(types: Array) -> void:
+	var id: String = arena_background.arena_for_types(types)
+	if id != arena_background.arena_id:
+		arena_background.select_arena(id)
 
 func bind_animation_button(button: MenuButton) -> void:
 	animation_button = button
@@ -90,30 +99,46 @@ func toggle_pause() -> void:
 		player.play()
 
 func _fit_model() -> void:
+	framing_points.clear()
 	for skeleton in actor.find_children("*", "Skeleton3D", true, false):
 		skeleton.force_update_all_bone_transforms()
-	var bounds := AABB()
-	var found := false
 	for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or not mesh.is_visible_in_tree():
 			continue
-		for surface in mesh.mesh.get_surface_count():
-			var vertices: PackedVector3Array = mesh.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
-			for vertex in vertices:
-				var point := mesh.global_transform * vertex
-				bounds = bounds.expand(point) if found else AABB(point, Vector3.ZERO)
-				found = true
-	if not found:
+		# Frame the posed geometry, not the bind pose / import AABB. The latter
+		# can include long wings or tails in positions never visible in idle.
+		var posed: Mesh = mesh.mesh
+		if mesh.skin != null and mesh.get_node_or_null(mesh.skeleton) is Skeleton3D and DisplayServer.get_name() != "headless":
+			posed = mesh.bake_mesh_from_current_skeleton_pose()
+		var to_actor := actor.global_transform.affine_inverse() * mesh.global_transform
+		for surface in posed.get_surface_count():
+			for vertex: Vector3 in posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
+				framing_points.append(to_actor * vertex)
+	_frame_pose()
+
+func _frame_pose() -> void:
+	if actor == null or framing_points.is_empty():
 		return
+	var bounds := AABB(actor.global_transform * framing_points[0], Vector3.ZERO)
+	for point in framing_points:
+		bounds = bounds.expand(actor.global_transform * point)
 	camera_target = bounds.get_center()
 	var aspect := maxf(size.x / maxf(size.y, 1.0), 0.1)
-	var half_height := maxf(bounds.size.y, bounds.size.x / aspect) * 0.5
-	# Leave room below idle for native recoil/down poses without moving the
-	# camera on each action (which would conceal positional discontinuities).
-	camera_distance = maxf(half_height / tan(deg_to_rad(camera.fov * 0.5)) + bounds.size.z * 0.5, 0.1) * 1.35
+	var tangent := tan(deg_to_rad(camera.fov * 0.5))
+	# Reserve badge/control space while making the actual model fill the card.
+	var vertical_fill := clampf((size.y - 44.0) / maxf(size.y, 1), 0.55, 0.80)
+	camera_distance = 0.1
+	for point in framing_points:
+		var relative := actor.global_transform * point - camera_target
+		camera_distance = maxf(camera_distance, relative.z + maxf(absf(relative.y) / (tangent * vertical_fill), absf(relative.x) / (tangent * aspect * 0.86)))
+	camera_distance *= 1.04
 	camera.near = maxf(camera_distance * 0.001, 0.001)
 	camera.far = maxf(camera_distance * 12, 10)
 	set_zoom(zoom_factor)
+
+func rotate_by(delta_x: float) -> void:
+	super.rotate_by(delta_x)
+	_frame_pose()
 
 func set_zoom(factor: float) -> void:
 	zoom_factor = factor
@@ -122,6 +147,7 @@ func set_zoom(factor: float) -> void:
 
 func _clear_actor() -> void:
 	configured_player = null
+	framing_points.clear()
 	base_transforms.clear()
 	super._clear_actor()
 	preview_floor.hide()
