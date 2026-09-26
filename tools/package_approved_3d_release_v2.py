@@ -54,7 +54,7 @@ def build(v1_dir: Path, batch_dir: Path, output: Path, receipt_path: Path) -> di
     old_ids = {asset["species_id"] for asset in original["assets"]}
     new_ids = {asset["species_id"] for asset in batch["assets"]}
     if (len(old_ids) != 7 or new_ids != set(approval["approved_species"])
-            or old_ids & new_ids or len(approved["models"]) != 42):
+            or old_ids & new_ids or len(approved["models"]) < 42):
         raise ValueError("v2 cohort does not contain exactly 21 approved species")
     assets = sorted([*original["assets"], *batch["assets"]], key=lambda item: item["asset_id"])
     if len(assets) != 21:

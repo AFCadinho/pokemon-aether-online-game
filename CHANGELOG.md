@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon. Six battle placement cases remain in review.
+
 - Adventure Party members now see a +25% EXP buff while grouped; it increases their own EXP rewards from shared wild battles.
 
 - NPC Trainers in Immersive Adventure Party doubles now use their own mugshot when giving commands, with their class battle portrait or overworld sprite as a fallback.
