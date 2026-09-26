@@ -13957,6 +13957,11 @@ func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
 	return GLOBAL_EXP_BUFF_ICON
 
 func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bool) -> void:
+	# The battle chat bridge hides overworld controls each frame. Presence
+	# refreshes must not reveal a buff tray between those frames.
+	if has_meta("battle_chat_active"):
+		panel.hide()
+		return
 	var panel_id := "location" if panel == global_buffs_panel else "player_status"
 	var state: Dictionary = collapsible_panels.get(panel_id, {})
 	if state.is_empty():
