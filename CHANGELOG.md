@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Nog 69 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm, elk met een afzonderlijke bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte release.
 - Muisklikken en aanrakingen boven zichtbare UI-knoppen worden niet meer door de vrije-ruimtebediening van de wereld onderschept.
 - De lokale desktopreview kan 81 nieuwe 3D-Pokémon veilig in de Pokédex en summary cards tonen; de camera blijft ook bij modellen met een afwijkende skin-koppeling werken.
 

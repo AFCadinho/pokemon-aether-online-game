@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "scope": "69 hash-checked normal/shiny scene pairs in real local battle UI, three passes",
+  "runtime_approved": false,
+  "release_approved": false,
+  "species": [
+    "abomasnow",
+    "azelf",
+    "bagon",
+    "banette",
+    "barboach",
+    "bonsly",
+    "breloom",
+    "bronzor",
+    "cacnea",
+    "cacturne",
+    "camerupt",
+    "combee",
+    "croagunk",
+    "dewott",
+    "drifloon",
+    "finneon",
+    "floatzel",
+    "gabite",
+    "gallade",
+    "gible",
+    "glaceon",
+    "groudon",
+    "grumpig",
+    "gulpin",
+    "happiny",
+    "heatran",
+    "hippopotas",
+    "hippowdon",
+    "kirlia",
+    "kricketot",
+    "kricketune",
+    "krokorok",
+    "leafeon",
+    "lilligant",
+    "lumineon",
+    "luxio",
+    "makuhita",
+    "masquerain",
+    "medicham",
+    "meditite",
+    "mesprit",
+    "mismagius",
+    "oshawott",
+    "pachirisu",
+    "palkia",
+    "petilil",
+    "pupitar",
+    "ralts",
+    "riolu",
+    "samurott",
+    "sandile",
+    "shelgon",
+    "shinx",
+    "shuppet",
+    "skuntank",
+    "snorunt",
+    "snover",
+    "spoink",
+    "stunky",
+    "surskit",
+    "swalot",
+    "tropius",
+    "uxie",
+    "vespiquen",
+    "vigoroth",
+    "whiscash",
+    "zangoose",
+    "zoroark",
+    "zorua"
+  ],
+  "rounds": [
+    {
+      "arena": "classic",
+      "pairs": 69,
+      "faint_replacements": 69,
+      "frame_p95_ms": 17.507,
+      "frame_max_ms": 539.256,
+      "stalls_over_50ms": [
+        {
+          "context": "load abomasnow",
+          "covered": true,
+          "ms": 539.256
+        },
+        {
+          "context": "load abomasnow",
+          "covered": true,
+          "ms": 100.687
+        },
+        {
+          "context": "load abomasnow",
+          "covered": true,
+          "ms": 73.93
+        }
+      ],
+      "retained_source_bytes": 27466747
+    },
+    {
+      "arena": "stadium",
+      "pairs": 69,
+      "faint_replacements": 69,
+      "frame_p95_ms": 17.56,
+      "frame_max_ms": 196.357,
+      "stalls_over_50ms": [
+        {
+          "context": "load abomasnow",
+          "covered": true,
+          "ms": 131.776
+        },
+        {
+          "context": "load abomasnow",
+          "covered": true,
+          "ms": 196.357
+        }
+      ],
+      "retained_source_bytes": 27466747
+    },
+    {
+      "arena": "classic",
+      "pairs": 69,
+      "faint_replacements": 69,
+      "frame_p95_ms": 17.434,
+      "frame_max_ms": 118.083,
+      "stalls_over_50ms": [
+        {
+          "context": "load abomasnow",
+          "covered": true,
+          "ms": 118.083
+        }
+      ],
+      "retained_source_bytes": 27466747
+    }
+  ],
+  "temporary_registry_restored": true,
+  "evidence_sha256": {
+    ".tmp/catalog-production-02-pair-stress-2026-09-26/catalog.json": "8bae0e19a091602af0ef830e97b04929765bb88ccae92024640cd03f80c7a388",
+    ".tmp/catalog-production-02-pair-stress-2026-09-26/stress.json": "2402d6bff53f550545a23690f6c499d5c789e568a1e5fc0306b447748de9f470",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "9032fee03d7689491a8e8d86dedc2d03b66c4404f532240cca9022e6bde67d6f",
+    ".tmp/catalog-production-02-battle-calibration-2026-09-26/motion-candidates.json": "079f4a2a2d5c7d54ce8a0371ebb77e8c3034df88ffda99403567ffef51ab7740",
+    ".tmp/catalog-production-02-sleep-calibration-2026-09-26/motion-candidates.json": "8ae87436e5254f257ddeac84367421463972d9bf4c9b7384fb3677eb53a11a44"
+  }
+}

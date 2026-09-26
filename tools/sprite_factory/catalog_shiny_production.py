@@ -123,8 +123,9 @@ def main() -> None:
     batch = json.loads(args.batch_results.read_text())
     expected = {row["species"]: row for row in batch["entries"] if row.get("runtime_sha256")}
     normal = {row["species"]: row for row in rows if row.get("status") == "exported_for_review"}
-    if set(normal) != set(expected) or len(normal) != 18:
-        raise ValueError("Normal cohort differs from the pinned 18-SCN batch")
+    if (batch.get("runtime_approved") is not False or set(normal) != set(expected)
+            or len(normal) != batch.get("standalone_models")):
+        raise ValueError("Normal cohort differs from the pinned standalone-SCN batch")
     output.mkdir(parents=True)
     ready, held = [], []
     for species, row in normal.items():
