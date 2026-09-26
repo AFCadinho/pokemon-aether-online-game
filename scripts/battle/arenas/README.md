@@ -16,6 +16,8 @@ preserve existing settings and environment resources.
 | Map-specific | Route 22, land | `route_22` | Outdoor | `maps/route_22/arena.gd` |
 | Map-specific | Route 22, water | `route_22_water` | Outdoor | `maps/route_22/arena.gd` with `water_battle` |
 | Map-specific | Route 3, land | `route_3` | Outdoor | `maps/route_3/arena.gd` |
+| Map-specific | Route 2, land/water | `route_2`, `route_2_water` | Outdoor | `maps/route_2/arena.gd` |
+| Map-specific | Route 4, land/water | `route_4`, `route_4_water` | Outdoor | `maps/route_4/arena.gd` |
 
 `classic` is the presenter's fallback surface, not a separately authored map.
 Route 1, Route 22 and Route 3 have map-specific arenas. 2D environment resources and
@@ -80,3 +82,8 @@ visited map. The shared source art remains reusable. Actor state is never cached
 Historical Terrain3D comparison results are in `docs/route-22-mesh-review.md`.
 The old A/B implementation is available in commit `0bc5fd6e8`; current reviews
 exercise the active mesh builders through the catalog.
+
+Route 2/4 composition, new prop provenance and focused review commands are in
+[their arena guide](../../../docs/routes-2-4-battle-arenas.md). Shared shoreline
+and small-prop placement live in `shared/waterside_route.gd`; original mesh
+landmarks live in `shared/route_landmarks.gd`.

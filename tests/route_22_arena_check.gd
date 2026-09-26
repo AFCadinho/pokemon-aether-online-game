@@ -17,7 +17,7 @@ func _run() -> void:
 		assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "encounter_type":encounter}) == &"route_22_water")
 	assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "player_on_water":true}) == &"route_22_water")
 	assert(Resolver.resolve({"battle_kind":"pvp", "map_id":"kanto_route_22"}) == &"pvp_stadium")
-	assert(Resolver.resolve({"battle_kind":"trainer", "map_id":"kanto_route_2"}) == &"grass")
+	assert(Resolver.resolve({"battle_kind":"trainer", "map_id":"kanto_route_5"}) == &"grass")
 	assert(Arenas.resolve("cave", &"route_22") == "cave")
 	assert(Arenas.uses_forest_assets("route_22") and Arenas.uses_forest_assets("forest"))
 	assert(not Arenas.uses_forest_assets("cave"))
