@@ -86,8 +86,9 @@ This exercises the shared species update path but does **not** run a complete
 player-driven turn or the full Mega overlay/event sequence. The live local
 review window allows a human to toggle the form and replay actions.
 
-Qualification remains pending human review in motion and a complete battle
-Mega event. The sleep animation is still an explicit idle alias; source TRACM
+Qualification remains pending a complete battle Mega event. The corrected
+faint pose passed human review in the local battle window. The sleep animation
+is still an explicit idle alias; source TRACM
 visibility/material tracks and the full stylized shader are still unported.
 The temporary screened-catalog entries are not release approval, and neither
 variant has been bundled or uploaded.
@@ -113,6 +114,8 @@ The candidate scene SHA-256 values are:
 The latest scripted battle review captured both actors in `faint_loop` with
 their full tails above the platform:
 `/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-shiny-test/fixed-mega-faint-loop.png`.
+The player confirmed the corrected faint view looks good in the reopened
+interactive battle preview.
 Earlier `runtime-pilot` artifacts remain diagnostic history; the `runtime-faint-crop2`
 directories contain the current local candidates. Neither version is selected
 for release.
