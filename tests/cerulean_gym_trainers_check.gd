@@ -65,7 +65,7 @@ func _run() -> void:
 			int(trainer.get("sight_range_tiles")) == expected.sight_range,
 			"%s uses its designed sight range" % node_path
 		)
-		_check(str(trainer.get("battle_environment_id")) == "water", "%s battles in the water arena" % node_path)
+		_check(str(trainer.get("battle_environment_id")) == "cerulean_city_gym", "%s battles in the Cerulean Gym arena" % node_path)
 		if collision != null and water != null:
 			var cell := collision.local_to_map(trainer.position)
 			var is_water_bound: bool = expected.terrain == "water"

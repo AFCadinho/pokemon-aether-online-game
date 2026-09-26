@@ -206,6 +206,7 @@ npc_sprite_frames = ExtResource("13_gym_guide")
 [node name="GymLeaderBrock" parent="Entities/NPCs" unique_id=488623026 instance=ExtResource("7_gym_leader")]
 position = Vector2(528, 272)
 trainer_id = "kanto_alpha_gym_brock"
+battle_environment_id = "pewter_city_gym"
 npc_profile = ExtResource("8_brock_profile")
 npc_id = "kanto_alpha_gym_brock"
 display_name = "Alpha Trial · Brock"

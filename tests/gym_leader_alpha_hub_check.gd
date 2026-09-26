@@ -78,8 +78,8 @@ func _run() -> void:
 		_check(str(battle_metadata.get("_battle_music_track_id", "")) == GYM_LEADER_BATTLE_MUSIC_ID, "%s selects the Gym Leader battle track" % node_name)
 		_check(int(leader.get("sight_range_tiles")) == 0, "%s starts only through deliberate interaction" % node_name)
 		_check(
-			str(leader.get("battle_environment_id")) == "pvp_stadium",
-			"%s uses the stadium battle environment" % node_name
+			str(leader.get("battle_environment_id")) == "pewter_city_gym",
+			"%s uses the Pewter Gym battle environment" % node_name
 		)
 		if collision != null:
 			var cell := collision.local_to_map(collision.to_local(leader.global_position))

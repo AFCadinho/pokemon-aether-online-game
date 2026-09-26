@@ -173,7 +173,7 @@ npc_profile = ExtResource("8_misty_profile")
 npc_id = "kanto_alpha_gym_misty"
 display_name = "Alpha Trial · Misty"
 npc_sprite_frames = ExtResource("9_misty_frames")
-battle_environment_id = "pvp_stadium"
+battle_environment_id = "cerulean_city_gym"
 
 [node name="SwimmerLuis" parent="Entities/NPCs" unique_id=2131553428 instance=ExtResource("13_water_trainer")]
 position = Vector2(624, 496)
@@ -183,7 +183,7 @@ npc_definition_id = "trainer_class_swimmer_m"
 display_name = "Swimmer Luis"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("14_swimmer")
-battle_environment_id = "water"
+battle_environment_id = "cerulean_city_gym"
 
 [node name="PicnickerDiana" parent="Entities/NPCs" unique_id=2137755170 instance=ExtResource("16_trainer")]
 position = Vector2(560, 656)
@@ -193,7 +193,7 @@ npc_definition_id = "trainer_class_picnicker"
 display_name = "Picnicker Diana"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("15_picnicker")
-battle_environment_id = "water"
+battle_environment_id = "cerulean_city_gym"
 
 [node name="SwimmerBriana" parent="Entities/NPCs" unique_id=145664590 instance=ExtResource("13_water_trainer")]
 position = Vector2(432, 880)
@@ -204,7 +204,7 @@ npc_definition_id = "trainer_class_swimmer_f"
 display_name = "Swimmer Briana"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("17_swimmer_f")
-battle_environment_id = "water"
+battle_environment_id = "cerulean_city_gym"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=2100558889]
 
