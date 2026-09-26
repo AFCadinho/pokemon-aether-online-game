@@ -125,3 +125,38 @@ These candidates still expose only one `physical_attack`. The ZA source has
 `attack03_end` as a separate staged attack. The latter has not been assembled
 or reviewed as the game's `physical_attack_2` action. It must not be claimed
 as a second available physical attack in this pilot.
+
+## Second physical attack and sleep candidate (26 September 2026)
+
+The next local candidate combines the Mega source's `attack03_start` (35
+frames), `attack03_loop` (21 frames), and `attack03_end` (101 frames) into one
+155-frame `physical_attack_2` at 60 Hz. The exporter now supports a reviewed
+ordered list of source phases on a single NLA track. This is separate from the
+existing `attack01` physical action. Both normal and shiny Godot scenes expose
+eight battle actions.
+
+The **Mega** source directory has no sleep animation. The same archive does
+contain `pm0149_00_00_20281_sleep01_loop` for ordinary Dragonite. That 161-frame
+action was imported onto the Mega rig and replaces the earlier idle-as-sleep
+alias in this local candidate. It is a retargeted base-form motion, so the
+Mega-specific wings, tail, and face still need human review in motion. The
+importer reports inherited eyelid-pose and unapplied TRACM material/visibility
+tracks; those limitations also remain for the other actions.
+
+Artifacts are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-attack2-test`.
+The prepared Blender source SHA-256 values are
+`6520c4fab420a0bf9573a462232a8ed61c21c724c448508d5cdcf0460987d662`
+(normal) and
+`975fbf1214c80191f27744ba979067bd7a5d1494a091d0ad95b92c99f53739df`
+(shiny). The corresponding Godot scene SHA-256 values are
+`ea0f7d23ee709b8c571b35ee4500512223229be31731a1c7b1178e81841bebdb`
+and `367557de31b200b0927527e7f5723696b1cfefba446853cf0bca6adaadff4ed7`.
+Both GLB reports passed the existing validator, both Godot scenes reloaded,
+and rendered 60 Hz grounding measurements were baked into motion profiles.
+The local battle presenter loaded normal and shiny, played both physical
+actions and sleep, and advanced faint start to faint loop without a pose or
+timing error. Screenshots named `composite-mega-physical_attack_2*.png` and
+`composite-mega-sleep*.png` show sampled battle poses. This remains a local
+candidate; no selected catalog entry, bundle, content-index entry, or upload
+has been made.
