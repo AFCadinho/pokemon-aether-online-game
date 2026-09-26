@@ -881,6 +881,8 @@ Consider public support only after:
 
 ### Delivery
 
+- [x] Android checks a platform manifest, verifies an APK and blocks outdated gameplay until installation.
+- [x] Local debug APK upgraded from version code 1 to 2 through Android's installer; session and music data survived.
 - [ ] Android checks added to the project test runner.
 - [ ] Android CI workflow added.
 - [ ] Stable alpha signing configured in secrets.

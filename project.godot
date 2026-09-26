@@ -16,6 +16,7 @@ run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
 config/build_id="0.3.81-66ca54100"
+config/android_version_code=2
 
 [autoload]
 
@@ -48,6 +49,7 @@ SettingsManager="*res://scripts/services/settings_manager.gd"
 WebPokemonSpriteService="*res://scripts/services/web_pokemon_sprite_service.gd"
 WebMemoryProbe="*res://scripts/services/web_memory_probe.gd"
 AndroidMusicPackService="*res://scripts/services/android_music_pack_service.gd"
+AndroidApkUpdateService="*res://scripts/services/android_apk_update_service.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
 SfxManager="*res://scripts/services/sfx_manager.gd"
 AuthService="*res://scripts/services/auth_service.gd"

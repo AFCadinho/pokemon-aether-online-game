@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- De Android-client kan een vereiste nieuwe APK via de eigen updateserver vinden, gecontroleerd downloaden en aanbieden in Androids installatiescherm. De oude client pauzeert totdat de update is geïnstalleerd.
 - De mountdialoog op Android en desktop heeft nu een knop om op de geselecteerde landmount te stappen of af te stappen.
 - De HP-panelen in Android-gevechten blijven boven hun Pokémon staan, ook zonder 3D-presenter.
 - Wilde encounters op Android bereiden het gevechtsscherm vooraf voor en houden de overgang vloeiend terwijl de server en sprites laden. Nieuwe Pokémon tonen tijdelijk een subtiel silhouet totdat hun animatiesprite beschikbaar is; de sprites van het huidige gebied worden al bij binnenkomst opgehaald.
