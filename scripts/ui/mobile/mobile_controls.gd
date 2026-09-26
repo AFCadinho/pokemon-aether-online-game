@@ -61,7 +61,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch
 		_recent_touch_msec = Time.get_ticks_msec()
-		if not touch.pressed or _touches.has(touch.index):
+		if (
+			not touch.pressed
+			or _touches.has(touch.index)
+			or _is_pointer_over_visible_ui(touch.position)
+		):
 			return
 		_touches[touch.index] = {
 			"start": touch.position,
@@ -75,6 +79,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			mouse_button.button_index != MOUSE_BUTTON_LEFT
 			or not mouse_button.pressed
 			or _mouse_tracking
+			or _is_pointer_over_visible_ui(mouse_button.position)
 			or Time.get_ticks_msec() - _recent_touch_msec < HOLD_MSEC
 		):
 			return
@@ -83,6 +88,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_mouse_position = mouse_button.position
 		_mouse_started_msec = Time.get_ticks_msec()
 		get_viewport().set_input_as_handled()
+
+
+func _is_pointer_over_visible_ui(position: Vector2) -> bool:
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	return (
+		overlay != null
+		and overlay.has_method("is_point_over_visible_ui")
+		and bool(overlay.call("is_point_over_visible_ui", position))
+	)
 
 
 func _input(event: InputEvent) -> void:

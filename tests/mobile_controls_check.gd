@@ -3,6 +3,13 @@ extends SceneTree
 class FakeDialogueBox extends Control:
 	var is_open := false
 
+
+class FakeUiOverlay extends Node:
+	var blocked_rect := Rect2(1300, 430, 120, 140)
+
+	func is_point_over_visible_ui(position: Vector2) -> bool:
+		return blocked_rect.has_point(position)
+
 var failures := 0
 
 
@@ -26,6 +33,9 @@ func _run() -> void:
 	var dialogue_box := FakeDialogueBox.new()
 	dialogue_box.name = "Box"
 	dialogue_layer.add_child(dialogue_box)
+	var fake_ui_overlay := FakeUiOverlay.new()
+	fake_ui_overlay.add_to_group("ui_overlay")
+	world.add_child(fake_ui_overlay)
 	var layer := load("res://scenes/interface/mobile/mobile_controls.tscn").instantiate() as CanvasLayer
 	world.add_child(layer)
 	var controls := layer.get_node("MobileControls") as Control
@@ -39,6 +49,16 @@ func _run() -> void:
 	_check(Input.is_action_pressed("interact"), "short tap interacts from any world position")
 	controls._process(0.13)
 	_check(not Input.is_action_pressed("interact"), "tap interaction releases automatically")
+
+	controls.set("_recent_touch_msec", -1000)
+	var ui_button_point := Vector2(1360, 480)
+	_send_mouse_button(controls, ui_button_point, true)
+	_send_mouse_button(controls, ui_button_point, false)
+	_check(not Input.is_action_pressed("interact"), "clicking visible UI is not converted into world interaction")
+	_check(not bool(controls.get("_mouse_tracking")), "visible UI click does not start the floating joystick")
+	_send_touch(controls, 6, ui_button_point, true)
+	_send_touch(controls, 6, ui_button_point, false)
+	_check(not Input.is_action_pressed("interact"), "touching visible UI is not converted into world interaction")
 
 	controls.set("_recent_touch_msec", -1000)
 	_send_mouse_button(controls, point, true)
@@ -67,8 +87,8 @@ func _run() -> void:
 	_send_drag(controls, 1, point + Vector2.UP * 85.0)
 	_check(Input.is_action_pressed("move_up") and not Input.is_action_pressed("move_right"),
 		"changing direction releases the previous movement")
-	_send_touch(controls, 2, Vector2(1350, 480), true)
-	_send_touch(controls, 2, Vector2(1350, 480), false)
+	_send_touch(controls, 2, Vector2(1200, 480), true)
+	_send_touch(controls, 2, Vector2(1200, 480), false)
 	_check(Input.is_action_pressed("interact") and Input.is_action_pressed("move_up"),
 		"a second finger can interact while the first moves")
 	_send_touch(controls, 1, point + Vector2.UP * 85.0, false)
