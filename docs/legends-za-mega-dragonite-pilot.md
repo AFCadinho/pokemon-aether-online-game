@@ -1,8 +1,8 @@
 # Legends ZA Mega Dragonite: local 3D pilot
 
-Status: **local normal/shiny Mega battle event passed; not release qualified** (26 September 2026).
-This experiment does not add a selected model, bundle, content index entry, or
-download. All converted assets and screenshots remain outside the game tree.
+Status: **normal/shiny locally approved and bundled; not published** (26 September 2026).
+The model scenes and screenshots remain outside the game tree. The desktop
+release descriptor has not selected or downloaded the new bundle.
 
 ## Source and conversion
 
@@ -266,3 +266,37 @@ registry after the test. Neither Mega variant is selected for release, bundled,
 or uploaded. The remaining release decision needs human review of the real
 battle frames, followed by normal and shiny bundle qualification. This harness
 is offline and does not certify a server-driven or PvP turn.
+
+## Individual Mega bundle qualification (26 September 2026)
+
+After the player's visual approval, the normal and shiny candidates were
+admitted together in the matching game and launcher review registries. The
+approval receipt is `tools/sprite_factory/mega_dragonite_approval.json`; it
+pins both scene hashes, the measured motion, local battle evidence, and the
+bundle. The approved registry now has 83 species/form profiles and 166 normal
+or shiny appearances.
+
+`tools/package_mega_dragonite_bundle.py` created one independently versioned
+asset, `pokemon_3d:dragonite:mega`, depending on the existing
+`pokemon_3d:dragonite:base` bundle. Its v1 archive is **67,184,462 bytes**
+with SHA-256
+`5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279`.
+The original Dragonite bundle was reused unchanged. Archive members contain
+only the two pinned `.scn` files and `bundle.json`.
+The packager takes the existing approved asset index with `--base-index` and
+writes `combined-index.json` next to the archive. The local combined index
+contains 83 assets; its Mega entry matches the index used in store testing.
+
+The launcher bundle store passed clean installation, a no-download repeat,
+an update involving only the Mega bundle, corrupt-download rejection with the
+previous generation retained, restart, rollback, and scene reload. The game
+then loaded both Mega variants from the store-generated runtime catalog and
+completed the actual offline Mega battle event, using the approved normal and
+shiny base Dragonite scenes. No Godot script or model errors occurred.
+
+The local archives and store evidence are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-evolution-test/eye-fixed-candidates`.
+No archive or new content index was uploaded, and the desktop release
+descriptor still selects the earlier approved base-form set. A later release
+task must add the Mega asset ID to that descriptor's approved set and certify
+the combined build before players can download it.

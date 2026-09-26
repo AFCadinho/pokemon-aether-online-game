@@ -1,0 +1,51 @@
+{
+  "approved_species": "dragonite-mega",
+  "bundle_asset_id": "pokemon_3d:dragonite:mega",
+  "bundle_dependencies": [
+    "pokemon_3d:dragonite:base"
+  ],
+  "bundle_store_checks": [
+    "install",
+    "no_op",
+    "single_mega_update",
+    "corrupt_download_rollback",
+    "restart",
+    "rollback",
+    "scene_reload"
+  ],
+  "bundle_v1_bytes": 67184462,
+  "bundle_v1_sha256": "5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279",
+  "evidence": {
+    "bundle-battle-normal.log": "8134a50a08f29613ce6619ce740325ddd62176b7e61e12cfd029bf2462ecdafc",
+    "bundle-battle-shiny.log": "35d38c9c98bf3633c2faba3e93aa267fd84c97b7c20f21497caf46fd23971db9",
+    "bundle-store-test-v1.log": "f8c5693a0c9dfc136f22e1e8fc6cd83fa43b5f9cfd376b9a31c24876878c4569",
+    "normal-grounding.json": "9f1609d951d1b3ea20ca4bf5dde1896e215dd569908d15c17e0d85f34e3d49ff",
+    "normal-motion.json": "41e7383b3f61f65ce2a1375b73dc2672ebc3bd735d2c01ecc769bd59395b6b4c",
+    "real-battle-normal-sleep.log": "8134a50a08f29613ce6619ce740325ddd62176b7e61e12cfd029bf2462ecdafc",
+    "real-battle-shiny-sleep.log": "b6a507860bc088860683a196294ff2308ccf929ad46feee631591e2b6eb4f583",
+    "shiny-grounding.json": "0301a19b5fe4ea412d08e0f180ff530b02d34748cbc756d378cbefb1c299a606",
+    "shiny-motion.json": "2446c7736bec0e2dcfc35300c13e73f45dc2beb11105ab71b13f2f16c31caf9f"
+  },
+  "local_installed_battle_normal_and_shiny_passed": true,
+  "minimum_60hz_appeal_clearance": 0.03,
+  "native_mega_appeal": true,
+  "normal_and_shiny_battle_event_passed": true,
+  "release_selected": false,
+  "schema": 1,
+  "scope": "mega_dragonite_local_3d_approval",
+  "sleep_eye_check_passed": true,
+  "uploaded": false,
+  "variants": {
+    "normal": {
+      "glb_sha256": "582561213db397c8c0215cb36f35506e2616b49f42c3791c53a5a48914e25ee3",
+      "runtime_bytes": 33591680,
+      "runtime_sha256": "470f2bd0cec3155f4c96b63aa859fc71a12b6ac6691e88975f176f78a142ae3c"
+    },
+    "shiny": {
+      "glb_sha256": "ba4007e4efdf65ce7de7c0267b360c9202288a4b73c029d83482c069f9b669cc",
+      "runtime_bytes": 33591680,
+      "runtime_sha256": "9ca480ed957f90a76e963eb6264e7888d53ae1c306e01410973ecab0ebb4dc09"
+    }
+  },
+  "visual_approved_by_player": true
+}

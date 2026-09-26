@@ -78,7 +78,9 @@ def approved(registry: dict, key: str, model_hash: str) -> bool:
 
 def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "prototype-1",
           registry_path: Path = REGISTRY, species_set: tuple[str, ...] = SPECIES,
-          dex: dict[str, int] = DEX, candidate_hashes: dict[str, str] | None = None) -> dict:
+          dex: dict[str, int] = DEX, candidate_hashes: dict[str, str] | None = None,
+          form_id: str = "base", runtime_suffix: str = "",
+          dependencies: tuple[str, ...] = ()) -> dict:
     if version < 1:
         raise ValueError("version must be positive")
     if output.exists() or output.is_symlink():
@@ -92,7 +94,7 @@ def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "p
         for species in species_set:
             appearances, paths = [], {}
             for variant in ("normal", "shiny"):
-                key = species + ("@shiny" if variant == "shiny" else "")
+                key = species + runtime_suffix + ("@shiny" if variant == "shiny" else "")
                 if key not in source:
                     raise ValueError(f"missing approved prototype appearance: {key}")
                 entry, path = source[key]
@@ -112,26 +114,26 @@ def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "p
                     "bytes": size,
                 })
                 paths[runtime_path] = path
-            asset_id = f"pokemon_3d:{species}:base"
+            asset_id = f"pokemon_3d:{species}:{form_id}"
             manifest = {
                 "schema": 1,
                 "kind": "pokeaether-asset-bundle",
                 "asset_id": asset_id,
                 "asset_type": "pokemon_3d",
                 "species_id": species,
-                "form_id": "base",
+                "form_id": form_id,
                 "version": version,
-                "dependencies": [],
+                "dependencies": list(dependencies),
                 "appearances": appearances,
             }
-            archive = staging / f"{species}-base-v{version}.zip"
+            archive = staging / f"{species}-{form_id}-v{version}.zip"
             with zipfile.ZipFile(archive, "w", allowZip64=False) as target:
                 target.writestr(zip_info("bundle.json"), encoded(manifest))
                 for name, path in paths.items():
                     with path.open("rb") as model:
                         target.writestr(zip_info(name), model.read())
             archive_hash, archive_size = digest(archive)
-            object_key = f"optional-assets/pokemon_3d/{species}/base/v{version}-{archive_hash}.zip"
+            object_key = f"optional-assets/pokemon_3d/{species}/{form_id}/v{version}-{archive_hash}.zip"
             published_archive = archive.with_name(Path(object_key).name)
             archive.rename(published_archive)
             assets.append({
@@ -139,12 +141,12 @@ def build(catalog_path: Path, output: Path, version: int = 1, revision: str = "p
                 "asset_type": "pokemon_3d",
                 "species_id": species,
                 "national_dex": dex[species],
-                "form_id": "base",
+                "form_id": form_id,
                 "version": version,
                 "size_bytes": archive_size,
                 "sha256": archive_hash,
                 "object_key": object_key,
-                "dependencies": [],
+                "dependencies": list(dependencies),
                 "appearances": [
                     {key: item[key] for key in ("variant", "runtime_identity", "runtime_sha256")}
                     for item in appearances
