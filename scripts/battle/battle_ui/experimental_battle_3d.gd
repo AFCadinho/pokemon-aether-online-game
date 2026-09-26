@@ -354,7 +354,7 @@ func prepare_mega_form(ident: String, species: String, shiny: bool, timeout_ms :
 	var deadline := Time.get_ticks_msec() + timeout_ms
 	while is_inside_tree() and active and handles(ident) and not packed.has(key) and not failed_models.has(key) and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
-	var ready := is_inside_tree() and active and handles(ident) and packed.has(key)
+	var ready: bool = is_inside_tree() and active and handles(ident) and packed.has(key) and bool(placements.get(key, {}).get("calibrated", false)) and motion_clips.get(key, {}).has("mega_appeal")
 	if not ready:
 		staged_mega_species[index] = ""
 	return ready
@@ -1164,9 +1164,6 @@ func _process(delta: float) -> void:
 		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
 		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
 		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
-		if is_instance_valid(mega_effects[i]) and mega_effects[i].revealed:
-			var since_reveal: float = mega_effects[i].elapsed - MegaEvolutionEffect.CHARGE_SECONDS
-			actors[i].position.y += 0.5 * (1.0 - clampf(since_reveal / 0.55, 0.0, 1.0))
 	_prune_models()
 
 func _exit_tree() -> void:

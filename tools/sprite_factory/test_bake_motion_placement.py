@@ -25,6 +25,13 @@ class BakeMotionTests(unittest.TestCase):
         clips = bake(report, [])["fixture"]["clips"]
         self.assertEqual(clips["physical_attack_2"]["offsets"], [.23, .23, .23])
 
+    def test_mega_appeal_receives_start_pose_clearance(self):
+        report = self.report()
+        report["entries"]["fixture"]["clips"]["mega_appeal"] = {
+            "duration": 2 / 60, "minimum_y_samples": [-1.5, -0.5, 0.1]}
+        offsets = bake(report, [])["fixture"]["clips"]["mega_appeal"]["offsets"]
+        self.assertEqual(offsets, [1.43, 1.43, .43])
+
     def test_sleep_rounding_stays_within_calibrated_lift(self):
         report = self.report()
         report["entries"]["fixture"]["candidate_lift"] = .02117747077718
