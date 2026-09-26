@@ -153,7 +153,8 @@ func _barrel_roof() -> ArrayMesh:
 		var q := Vector2(cos(b) * 1.20, sin(b) * 1.1)
 		for v in [Vector3(p.x, p.y, 2.1), Vector3(q.x, q.y, 2.1), Vector3(p.x, p.y, -2.1),
 			Vector3(q.x, q.y, 2.1), Vector3(q.x, q.y, -2.1), Vector3(p.x, p.y, -2.1),
-			Vector3(0, 0, 2.1), Vector3(q.x, q.y, 2.1), Vector3(p.x, p.y, 2.1)]:
+			Vector3(0, 0, 2.1), Vector3(q.x, q.y, 2.1), Vector3(p.x, p.y, 2.1),
+			Vector3(0, 0, -2.1), Vector3(p.x, p.y, -2.1), Vector3(q.x, q.y, -2.1)]:
 			st.add_vertex(v)
 	st.generate_normals()
 	return st.commit()
