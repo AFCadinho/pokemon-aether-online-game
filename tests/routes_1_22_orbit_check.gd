@@ -15,16 +15,23 @@ func _run() -> void:
 	root.add_child(world)
 	var camera := Camera3D.new()
 	world.add_child(camera)
-	for id in ["route_1", "route_1_water", "route_22", "route_22_water"]:
+	var ids := OS.get_cmdline_user_args()
+	if ids.is_empty():
+		ids = PackedStringArray(["route_1", "route_1_water", "route_22", "route_22_water"])
+	for id in ids:
+		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water", "route_2", "route_2_water", "route_4", "route_4_water"])
 		var arena: Node3D = Arenas.build(id, world, camera)
 		world.add_child(arena)
 		var grid: Rect2i = arena.get_meta("mesh_grid")
 		var vertices: PackedVector3Array = arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
-		var trees := arena.get_node("Route1Scenery/Route1TreeCorridor" if id.begins_with("route_1") else "Route22Scenery/RouteConifers")
+		var base_id := id.trim_suffix("_water")
+		var tree_path: String = {"route_1": "Route1Scenery/Route1TreeCorridor", "route_22": "Route22Scenery/RouteConifers", "route_2": "Route2Scenery/WoodlandConifers", "route_4": "Route4Scenery/ValleyConifers"}[base_id]
+		var trees := arena.get_node(tree_path)
 		var boxes: Array = []
 		ArtBounds.new()._bounds(trees, Transform3D.IDENTITY, boxes)
 		var props: Array = []
-		var landmarks := arena.get_node("Route1Scenery/Route1Landmarks" if id.begins_with("route_1") else "Route22Scenery/Route22Landmarks")
+		var landmark_path: String = {"route_1": "Route1Scenery/Route1Landmarks", "route_22": "Route22Scenery/Route22Landmarks", "route_2": "Route2Scenery/WoodlandLandmarks", "route_4": "Route4Scenery/ValleyLandmarks"}[base_id]
+		var landmarks := arena.get_node(landmark_path)
 		ArtBounds.new()._bounds(landmarks, Transform3D.IDENTITY, props)
 		var target := Arenas.camera_target(id)
 		for degrees in range(0, 360, 5):
@@ -52,7 +59,7 @@ func _run() -> void:
 				var footprint := bounds.grow(1.0)
 				footprint.position.y = -100
 				footprint.size.y = 200
-				if footprint.intersects_segment(target + direction * 20, target + direction * 85):
+				if footprint.intersects_segment(target + direction * 20, target + direction * (120 if base_id == "route_4" else 85)):
 					reached_trees = true
 					break
 			# Route 22 also has continuous high rock shelves behind its forest.

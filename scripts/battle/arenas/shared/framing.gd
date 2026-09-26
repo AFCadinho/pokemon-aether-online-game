@@ -3,7 +3,14 @@ extends RefCounted
 const CAMERA_FOV := 48.0
 const ROUTE_22_POND_ORIGIN := Vector3(11, 0, -4.5)
 
+const ROUTE_2_POND_ORIGIN := Vector3(15, 0, -8)
+const ROUTE_4_RIVER_ORIGIN := Vector3(34, 0, -8)
+
 static func battle_origin(id: String) -> Vector3:
+	if id == "route_2_water":
+		return ROUTE_2_POND_ORIGIN
+	if id == "route_4_water":
+		return ROUTE_4_RIVER_ORIGIN
 	if id == "route_1_water":
 		return Vector3(-13.5, 2.54, -29.0)
 	return ROUTE_22_POND_ORIGIN if id == "route_22_water" else Vector3.ZERO

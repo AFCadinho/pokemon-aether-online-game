@@ -19,7 +19,7 @@ func _run() -> void:
 	if ids.is_empty():
 		ids = PackedStringArray(["route_1", "route_1_water", "route_22", "route_22_water"])
 	for id in ids:
-		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water"])
+		assert(id in ["route_1", "route_1_water", "route_22", "route_22_water", "route_2", "route_2_water", "route_4", "route_4_water"])
 		var host := Node.new()
 		root.add_child(host)
 		current_scene = host
