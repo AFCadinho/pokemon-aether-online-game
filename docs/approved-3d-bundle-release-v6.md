@@ -34,3 +34,13 @@ HEAD checks. The checks are recorded in
 
 Desktop activation is a separate step. Select `v6` and rebuild the launcher
 in the desktop workflow.
+
+## Desktop publication (27 September 2026)
+
+Desktop release `0.3.86` published the v6 index for Windows and Linux with a
+rebuilt launcher. The public default, Windows and Linux manifests all pin the
+154-bundle v6 index. Public GET verified the full SHA-256 of both game and
+launcher downloads for Windows and Linux (532,267,754 bytes total). GitHub
+Actions run `36277787802` succeeded. R2 cleanup was disabled. The public
+verification is recorded in
+`release/approved_3d_bundles_v6_desktop_publish.json`.
