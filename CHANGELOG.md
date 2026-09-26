@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De lokale 3D-Mega Dragonite-proef gebruikt nu gemeten grondcorrectie voor de oorspronkelijke Mega-pose en verbergt de eigen HP-balk tijdens de transformatie zodat die de pose niet afdekt.
+
 - Mega Dragonite gebruikt in lokale 3D-gevechten het goedgekeurde transformatie-effect met het bestaande Mega-geluid en de oorspronkelijke Mega-pose, zodra een geschikt model lokaal beschikbaar is.
 
 - De browser kan weeracties, Calcdex, team export, AI-gevechten bekijken en account- en privacyfuncties via de normale API gebruiken.

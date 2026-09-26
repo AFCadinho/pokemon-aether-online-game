@@ -3,10 +3,11 @@ const Motion = preload("res://scripts/battle/battle_ui/model_motion_placement.gd
 
 func _init() -> void:
 	var placement := {"calibrated": true, "scale": 1.0, "yaw_degrees": 0.0, "lift": 1.5}
-	var timing := {"damage": {"frames": 2}, "sleep": {"frames": 2}}
+	var timing := {"damage": {"frames": 2}, "sleep": {"frames": 2}, "mega_appeal": {"frames": 2}}
 	var profile := {"schema": 1, "sha256": "test", "scale": 1.0, "yaw_degrees": 0.0, "lift": 1.5,
 		"clips": {"damage": {"duration": 2.0 / 60, "intent": "clearance_only", "offsets": [0.0, 0.1, 0.0]},
-		"sleep": {"duration": 2.0 / 60, "intent": "grounded_rest", "offsets": [-1.0, -1.0, -1.0]}}}
+		"sleep": {"duration": 2.0 / 60, "intent": "grounded_rest", "offsets": [-1.0, -1.0, -1.0]},
+		"mega_appeal": {"duration": 2.0 / 60, "intent": "clearance_only", "offsets": [1.5, 0.5, 0.0]}}}
 	var clips := Motion.resolve(profile, placement, "test", timing)
 	assert(not clips.is_empty())
 	assert(is_equal_approx(Motion.offset(clips, "damage", .5 / 60), .05))
@@ -14,6 +15,7 @@ func _init() -> void:
 	assert(Motion.offset(clips, "idle", 0) == 0)
 	assert(Motion.offset(clips, "faint_start", 0) == 0)
 	assert(Motion.offset(clips, "sleep", 0) == -1)
+	assert(Motion.offset(clips, "mega_appeal", 0) == 1.5)
 	assert(Motion.resolve(profile, placement, "changed", timing).is_empty())
 	for key in ["scale", "yaw_degrees", "lift"]:
 		var wrong := placement.duplicate()
