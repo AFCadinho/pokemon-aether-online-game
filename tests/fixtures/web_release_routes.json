@@ -361,6 +361,14 @@
       "/battle/pvp/training/ai/battles"
     ],
     [
+      "POST",
+      "/battle/pvp/matches/test-match/start-battle"
+    ],
+    [
+      "GET",
+      "/battle/pvp/matches/test-match/spectate"
+    ],
+    [
       "GET",
       "/battle/test-id/state"
     ],

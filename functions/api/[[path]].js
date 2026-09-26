@@ -70,6 +70,8 @@ const HTTP_PREFIXES = [
 ];
 
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
+const PVP_MATCH_START_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/start-battle$/;
+const PVP_MATCH_SPECTATE_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/spectate$/;
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live']);
 const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
@@ -110,6 +112,8 @@ export function isAllowedApiRoute(method, path) {
   if (GAMEPLAY_ROUTES.some(([verb, pattern]) => verb === normalizedMethod && pattern.test(path))) return true;
   if (normalizedMethod === 'GET' && WEBSOCKETS.has(path)) return true;
   if (AI_BATTLE_ROUTE.test(path) && ['GET', 'POST'].includes(normalizedMethod)) return true;
+  if (normalizedMethod === 'POST' && PVP_MATCH_START_ROUTE.test(path)) return true;
+  if (normalizedMethod === 'GET' && PVP_MATCH_SPECTATE_ROUTE.test(path)) return true;
   return HTTP_PREFIXES.some(([allowedMethod, prefix]) => {
     if (normalizedMethod !== allowedMethod) return false;
     return prefix.endsWith('/') ? path.startsWith(prefix) : path === prefix || path.startsWith(`${prefix}/`);
