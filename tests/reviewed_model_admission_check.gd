@@ -42,7 +42,7 @@ func _run() -> void:
 		duplicate.entries[1] = duplicate.entries[0].duplicate(true)
 		assert(Registry.pack_entries(duplicate, path.get_base_dir()).is_empty())
 		print("PORTABLE_MODEL_PACK_OK self_contained=14 unsafe_paths/engine/qualification/size/duplicates rejected")
-	assert(catalog.size() == 14 and Registry.DATA.data.models.size() == 152)
+	assert(catalog.size() == 14 and Registry.DATA.data.models.size() == 164)
 	for identity: String in Registry.DATA.data.models:
 		var model: Dictionary = Registry.DATA.data.models[identity]
 		for digest: String in [model.sha256] + model.get("previous_sha256", []):
@@ -57,9 +57,9 @@ func _run() -> void:
 	for species in ["abra", "onix", "gastly", "arcanine-hisui", "pikachu-rock-star", "missing"]:
 		assert(not Renderer.supported(species, false, false, false))
 		assert(not Renderer.supported(species, true, false, false))
-	# The original local 75 now contain 55 approved pairs and 20 normal-only holds.
+	# The original local 75 now contain 61 approved pairs and 14 normal-only holds.
 	# This legacy portable pack still contains only its seven original pairs.
-	assert(Registry.SCREENED.data.models.size() == 20)
+	assert(Registry.SCREENED.data.models.size() == 14)
 	for identity: String in Registry.SCREENED.data.models:
 		var model: Dictionary = Registry.SCREENED.data.models[identity]
 		assert(Renderer.supported(identity, false, false, false))

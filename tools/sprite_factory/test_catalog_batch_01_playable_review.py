@@ -21,8 +21,8 @@ class PlayableReviewRegistrationTests(unittest.TestCase):
         self.assertEqual(set(approval["approved_species"]), species)
         self.assertEqual(approval["qualification_sha256"], hashlib.sha256(qualification_path.read_bytes()).hexdigest())
         self.assertEqual(registry["catalog_batch_01_approval_sha256"], hashlib.sha256(approval_path.read_bytes()).hexdigest())
-        self.assertEqual(len(registry["models"]), 14 + 28 + 110)
-        self.assertEqual(len(registry["profiles"]), 7 + 14 + 55)
+        self.assertEqual(len(registry["models"]), 14 + 28 + 110 + 12)
+        self.assertEqual(len(registry["profiles"]), 7 + 14 + 55 + 6)
         for row in qualification["entries"]:
             name = row["species"]
             normal = registry["models"][name]
@@ -37,7 +37,7 @@ class PlayableReviewRegistrationTests(unittest.TestCase):
         for row in qualification["material_holds"]:
             self.assertNotIn(row["species"] + "@shiny", registry["models"])
         screened = json.loads((ROOT / "scripts/battle/battle_ui/screened_model_catalog.json").read_text())
-        self.assertEqual(len(screened["models"]), 20)
+        self.assertEqual(len(screened["models"]), 14)
         self.assertTrue(screened["normal_only"])
 
 

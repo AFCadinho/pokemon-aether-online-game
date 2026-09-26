@@ -1,8 +1,10 @@
 # Returning to the screened 100-model cohort
 
-**Later result:** 55 of these 61 technical pairs passed battle qualification
-and were approved with individual local bundles. Six placement cases remain
-held. See [the battle approval record](SCREENED_100_BATTLE_APPROVAL.md).
+**Later result:** all 61 technical pairs are now battle-qualified and approved
+with individual local bundles. The first 55 are in the v3 release index; the
+last six placement recoveries are local and await a later content index. See
+[the battle approval record](SCREENED_100_BATTLE_APPROVAL.md) and
+[the placement recovery](SCREENED_100_PLACEMENT_RECOVERY.md).
 
 The earlier 100-model experiment yielded 79 sampled-clip visual passes. Four
 already had separate approved normal/shiny models, leaving 75 normal-form

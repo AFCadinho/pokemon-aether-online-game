@@ -2,9 +2,11 @@
 
 ## Unreleased
 
+- Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles.
+
 - Defeat dialogue after shared NPC battles now uses the defeated Trainer's own mugshot, including class portraits such as Lass Zoe; missing portraits no longer show Professor Oak.
 
-- Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon. Six battle placement cases remain in review.
+- Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon.
 
 - Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes.
 
