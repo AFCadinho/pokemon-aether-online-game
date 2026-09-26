@@ -14,7 +14,10 @@ composed from the actual generated pixel-map scenes in
 - **Route 24:** the northern Nugget Bridge landing, the broad golden crossing,
   riverbanks, tall grass plots, mountain stairs, conifer corridors and layered
   brown mountain shelves. The bridge shares its architecture with the city;
-  the arena shows the opposite approach.
+  the arena shows the opposite approach. Beyond the southern bridge landing,
+  Cerulean's blue-roofed riverfront houses, paved promenade, Pokémon Center and
+  Gym remain visible through an opening in the trees. Stairs connect the
+  riverfront to the upper city terrace.
 - **Route 25:** Bill's green-roofed Sea Cottage below the mountain wall, garden
   pond and fences, winding woodland paths, a sandy southeastern shore and an
   open ocean with offshore rocks. The sea extends to the horizon, independently
