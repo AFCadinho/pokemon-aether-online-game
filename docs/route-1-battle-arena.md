@@ -24,11 +24,23 @@ terrain shape, paths, prop placement and pond are map-specific under
 texture assets, or cache battle actors. The ordinary terrain mesh and batched
 grass can be shared between the main and material-response render passes.
 
-The fixed battle camera keeps both fighter positions on a flat green clearing.
+The default battle camera keeps both fighter positions on a flat green clearing.
 The route bends along its right edge toward the visible northern stairs, while
 the pond and second path branch sit in the background. The wider review image
 also exposes the southern terrace and stairs that are outside the normal battle
 framing.
+
+The full camera orbit now has layered forest borders and wooded banks. Broad
+fir/spruce crowns surround both the central clearing and the northern pond;
+their centers stay outside a 24-unit radius around both battle origins. Sandy
+paths bend into the forest beyond the terraces instead of running into an empty
+horizon. Separate tall-grass plots, short-grass lanes, shrubs, pink flower beds
+and more substantial white fences echo the actual pixel map. The ground extends
+80 units each way to support the offset pond viewpoint.
+
+Continuous capped terrace meshes replace the old row of isolated boulders.
+`shared/wooded_route.gd` supplies normalized art placement and ledge geometry
+for Route 1 and Route 22; each route owns its layout, heights and planting.
 
 The sandy path passes through clear openings at both terrace crossings. The
 northern staircase rises three units and the southern staircase rises 2.3 units
@@ -44,3 +56,15 @@ Focused validation:
   the same catalog builder and lighting as the client;
 - `tests/battle_arena_contract_check.gd`: stable arena ID, map scope and builder
   path.
+- `tests/routes_1_22_orbit_check.gd`: land/water camera clearance every five
+  degrees at the pitch/zoom limits, landmark visibility and surrounding forest.
+- `tests/routes_1_22_orbit_preview.gd`: real Dragonite/Roaring Moon paired renders
+  for all four Route 1/22 land/water arenas, with eight yaw angles in daytime,
+  nighttime and both pitch limits at maximum zoom. Set
+  `POKEAETHER_FOREST_MANIFEST`, `SUMMARY_MODEL_CATALOG` and
+  `POKEAETHER_STAGE_OUTPUT`; optional user arguments select arena IDs.
+  Each eight-image contact sheet runs left to right, top then bottom, from
+  0 to 315 degrees. Run through the assigned slot's `slot-env`.
+
+This is an offline presentation review; live backend battles and release
+certification are separate checks.

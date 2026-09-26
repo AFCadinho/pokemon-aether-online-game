@@ -132,6 +132,15 @@ func _check_connections(arena: Node3D, vertices: PackedVector3Array, grid: Rect2
 		assert(absf(_height(vertices, grid, bottom) - bottom.y) < 0.001, "Lower stair landing must meet terrain")
 		assert(absf(_height(vertices, grid, top) - top.y) < 0.001, "Upper stair landing must meet terrain")
 		for rock: Node3D in arena.get_node("Route1Scenery/Route1RockTerraces").get_children():
+			if rock is MeshInstance3D:
+				# A ledge spans both sides of its opening; inspect triangles rather
+				# than its combined AABB, which necessarily includes the stair gap.
+				var points: PackedVector3Array = rock.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+				for i in range(0, points.size(), 3):
+					var bounds := AABB(points[i], Vector3.ZERO).expand(points[i + 1]).expand(points[i + 2])
+					if bounds.position.z < bottom.z and bounds.end.z > top.z:
+						assert(bounds.end.x < bottom.x - 2.7 or bounds.position.x > bottom.x + 2.7, "Ledges must leave the stair opening clear")
+				continue
 			var boxes: Array = []
 			preload("res://scripts/battle/arenas/maps/route_1/arena.gd").new()._bounds(rock, Transform3D.IDENTITY, boxes)
 			for bounds: AABB in boxes:
