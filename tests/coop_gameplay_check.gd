@@ -859,11 +859,14 @@ func _run() -> void:
 	_expect(party_hud.visible and hud_names[0].text == "TrainerTwo" and hud_names[1].text == "TrainerOne"
 		and hud_badges[0].text == "LEADER · #1" and hud_badges[1].text == "#2", "party HUD keeps the leader first with stable member badges")
 	overlay_ui.set_meta("battle_chat_active", true)
+	buffs_panel.hide()
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(not party_hud.visible, "co-op presence updates cannot reveal the party HUD over immersive battles")
+	_expect(not buffs_panel.visible, "co-op presence updates cannot flash the active boost tray over battles")
 	overlay_ui.remove_meta("battle_chat_active")
 	overlay_ui.call("_refresh_coop_party_hud")
 	_expect(party_hud.visible, "party HUD returns after the immersive battle chat closes")
+	_expect(buffs_panel.visible, "active boost tray returns after the battle chat closes")
 	_expect(hud_portraits[0].visible and hud_portraits[1].visible and not party_hud.text.contains("cap"), "party HUD shows both portraits without a level cap")
 	var hud_visual_path := OS.get_environment("COOP_PARTY_HUD_VISUAL_CAPTURE_PATH")
 	if not hud_visual_path.is_empty():
