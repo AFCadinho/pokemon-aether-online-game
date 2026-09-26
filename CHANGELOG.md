@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Android-release builds now restore and checksum both Pokémon HOME sprite packs before export, so party icons are available in the installed APK.
+
 - Adventure Party double battles tonen op desktop vier goedgekeurde 3D-Pokémon naast elkaar, met passende camerakadering, modelanimaties en doelvlakken. Als een actief model ontbreekt, blijft de hele battle in de bestaande 2D-opstelling.
 
 - Wilde 3D-gevechten gebruiken de rustige standaardarena voor gras, grot of water. Trainergevechten gebruiken de arena van de map; gymgevechten hun eigen zaal. De bestaande 2D-achtergronden blijven op hun locatie gebaseerd.

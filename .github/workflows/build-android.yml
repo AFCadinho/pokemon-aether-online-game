@@ -5,12 +5,12 @@ on:
     inputs:
       version_name:
         description: Android release version
-        default: "0.3.84"
+        default: "0.3.87"
         required: true
         type: string
       version_code:
-        description: New integer Android version code (next release uses 3)
-        default: 3
+        description: New integer Android version code (next release uses 5)
+        default: 5
         required: true
         type: number
 
@@ -25,6 +25,13 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   GODOT_VERSION: 4.6.2
   GODOT_RELEASE: stable
+  SOURCE_ASSET_BASE_URL: https://updates.pokeaether.com
+  POKEMON_HOME_ASSET_VERSION: pokemon-home-a74442caa16b
+  POKEMON_HOME_ASSET_SIZE: 60842557
+  POKEMON_HOME_ASSET_SHA256: a7ead89ba95443e9a1326080a6ec8cc1270af99ba8d8776c4d184ac6a0916a33
+  POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-b7565d0885ae
+  POKEMON_HOME_SHINY_ASSET_SIZE: 33195703
+  POKEMON_HOME_SHINY_ASSET_SHA256: 45dafaee8c4a1ce72e5efaea93d716d17b2ab334824a95c60a78b28c62736293
   MUSIC_ASSET_VERSION: music-3f2a6df18793
   MUSIC_ASSET_SIZE: 49402952
   MUSIC_ASSET_SHA256: 0b1a376bd7d93e31a72b8b6a49116415f8ec0c6316bf5e1a71f766857119e31a
@@ -78,6 +85,21 @@ jobs:
           test "$(stat -c %s /tmp/pokeaether-music.zip)" = "${MUSIC_ASSET_SIZE}"
           unzip -oq /tmp/pokeaether-music.zip
 
+      - name: Restore Pokémon HOME icons for Android
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/pokemon-home.zip "${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip"
+          curl -fsSL -o /tmp/pokemon-home-shiny.zip "${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_SHINY_ASSET_VERSION}.zip"
+          echo "${POKEMON_HOME_ASSET_SHA256}  /tmp/pokemon-home.zip" | sha256sum --check --strict
+          echo "${POKEMON_HOME_SHINY_ASSET_SHA256}  /tmp/pokemon-home-shiny.zip" | sha256sum --check --strict
+          test "$(stat -c %s /tmp/pokemon-home.zip)" = "${POKEMON_HOME_ASSET_SIZE}"
+          test "$(stat -c %s /tmp/pokemon-home-shiny.zip)" = "${POKEMON_HOME_SHINY_ASSET_SIZE}"
+          unzip -oq /tmp/pokemon-home.zip
+          unzip -oq /tmp/pokemon-home-shiny.zip
+          test -f assets/sprites/pokemon/pokemon_home/Pikachu.png
+          test -f assets/sprites/pokemon/pokemon_home/Bulbasaur.png
+          test -f assets/sprites/pokemon/pokemon_home_shiny/Pikachu.png
+
       - name: Stamp immutable release identity
         env:
           VERSION_NAME: ${{ inputs.version_name }}
@@ -94,6 +116,7 @@ jobs:
           ./godot --headless --import --quit >/tmp/godot-import-first.log 2>&1 || true
           ./godot --headless --import --quit 2>&1 | tee /tmp/godot-import.log
           ./godot --headless --path . --script res://tests/android_apk_update_check.gd
+          ./godot --headless --path . --script res://tests/android_home_sprite_pack_check.gd
           ./godot --headless --path . --script res://tests/android_music_pack_check.gd
 
       - name: Export with the pinned release signing identity
