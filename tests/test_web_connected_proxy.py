@@ -16,6 +16,20 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_team_export_accepts_full_party_payload(self):
+        calls = []
+        def upstream(request):
+            calls.append(request)
+            return httpx.Response(200, json={"success": True})
+        client = TestClient(
+            proxy.create_app("http://127.0.0.1:8000", transport=httpx.MockTransport(upstream)),
+            base_url="http://localhost",
+        )
+        self.assertEqual(client.post("/api/team/export", content="x" * 20000).status_code, 200)
+        self.assertEqual(len(calls[0].content), 20000)
+        self.assertEqual(client.post("/api/team/export", content="x" * (128 * 1024 + 1)).status_code, 413)
+        self.assertEqual(len(calls), 1)
+
     def test_ranked_match_start_reaches_shared_battle_endpoint(self):
         calls = []
         def upstream(request):
@@ -233,6 +247,13 @@ class ConnectedProxyTests(unittest.TestCase):
                 self.assertEqual(socket.receive_text(), "spectate")
                 self.assertEqual(socket.receive()["code"], 1000)
             self.assertIn("/ws/pve-live", paths[2])
+            with client.websocket_connect(
+                "ws://localhost/api/ws/training-live?token=test-only&clientBuild=web-test"
+            ) as socket:
+                socket.send_text("training-spectate")
+                self.assertEqual(socket.receive_text(), "training-spectate")
+                self.assertEqual(socket.receive()["code"], 1000)
+            self.assertIn("/ws/training-live", paths[3])
             upstream.shutdown()
             worker.join(timeout=5)
 
