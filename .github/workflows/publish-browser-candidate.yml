@@ -1,0 +1,234 @@
+name: Publish Tested Browser Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_run_id:
+        description: Successful “Build Browser Release Candidate (Preview)” run ID that passed manual browser/gameplay testing
+        required: true
+        type: string
+
+concurrency:
+  group: publish-browser-candidate
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: web-production
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Verify candidate source run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+        run: |
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            echo "::error::Candidate publication must be dispatched from main"
+            exit 1
+          fi
+          if [[ ! "${CANDIDATE_RUN_ID}" =~ ^[0-9]+$ ]]; then
+            echo "::error::candidate_run_id must be a numeric GitHub Actions run ID"
+            exit 1
+          fi
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${CANDIDATE_RUN_ID}" > /tmp/candidate-run.json
+          python3 - <<'PY'
+          import json, os, sys
+          run = json.load(open('/tmp/candidate-run.json', encoding='utf-8'))
+          current_main = os.popen('git rev-parse HEAD').read().strip()
+          if (run.get('path') != '.github/workflows/deploy-web-cloudflare.yml'
+              or run.get('head_branch') != 'main'
+              or run.get('head_sha') != current_main
+              or run.get('status') != 'completed'
+              or run.get('conclusion') != 'success'):
+              sys.exit('Candidate must be the successful preview build for the current main commit.')
+          print(f"Verified candidate source commit {run['head_sha']}")
+          PY
+
+      - uses: actions/download-artifact@v6
+        with:
+          name: browser-release-candidate-${{ inputs.candidate_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.candidate_run_id }}
+          path: builds/browser-candidate
+
+      - name: Verify candidate artifact identity
+        run: |
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          root = Path('builds/browser-candidate')
+          candidate = json.loads((root / 'candidate.json').read_text())
+          metadata = json.loads((root / 'r2/web-release.json').read_text())
+          manifest = json.loads((root / 'r2/manifest-web.json').read_text())
+          config = json.loads((root / 'pages-production/web-release-config.json').read_text())
+          build_id = metadata.get('buildId', '')
+          if not re.fullmatch(r'[a-f0-9]{40}-[0-9]+-[0-9]+', build_id):
+              raise SystemExit('Candidate build ID is invalid.')
+          if (candidate.get('runId') != '${{ inputs.candidate_run_id }}'
+              or candidate.get('buildId') != build_id
+              or not build_id.startswith(candidate.get('sourceSha', '') + '-')
+              or candidate.get('releaseVersion') != manifest.get('gameVersion')
+              or manifest.get('gameBuildId') != build_id
+              or manifest.get('game', {}).get('buildId') != build_id
+              or manifest.get('game', {}).get('url') != 'https://play.pokeaether.com'
+              or config.get('buildId') != build_id
+              or config.get('clientBuildId') != build_id
+              or config.get('assetBaseUrl') != 'https://web-assets.pokeaether.com'):
+              raise SystemExit('Candidate manifest and production page configuration do not match.')
+          html = (root / 'pages-production/index.html').read_text()
+          if f'"buildId":"{build_id}"' not in html or f'"clientBuildId":"{build_id}"' not in html:
+              raise SystemExit('Production page does not identify this candidate build.')
+          print(f"Candidate {build_id} is internally consistent.")
+          PY
+
+      - name: Verify active release and update-bucket credentials
+        env:
+          API_ORIGIN: https://api.pokeaether.com
+          UPDATE_BASE_URL: https://updates.pokeaether.com
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          UPDATE_R2_ACCOUNT_ID: ${{ secrets.UPDATE_R2_ACCOUNT_ID }}
+          UPDATE_R2_BUCKET: ${{ secrets.UPDATE_R2_BUCKET }}
+          UPDATE_R2_ACCESS_KEY_ID: ${{ secrets.UPDATE_R2_ACCESS_KEY_ID }}
+          UPDATE_R2_SECRET_ACCESS_KEY: ${{ secrets.UPDATE_R2_SECRET_ACCESS_KEY }}
+        run: |
+          if [[ -z "${R2_BUCKET}" || -z "${UPDATE_R2_BUCKET}" || "${UPDATE_R2_BUCKET}" == "${R2_BUCKET}" ]]; then
+            echo "::error::Separate browser and updates R2 buckets must be configured"
+            exit 1
+          fi
+          PYTHONPATH=tools python3 - <<'PY'
+          from upload_launcher_release import _load_updates_config
+          _load_updates_config()
+          print('Update-manifest bucket credentials are configured.')
+          PY
+          candidate_preview_build="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/candidate.json"))["previewClientBuildId"])')"
+          public_manifest="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS "${UPDATE_BASE_URL}/manifest-web.json")"
+          manifest_build="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("gameBuildId", ""))' <<<"${public_manifest}")"
+          api_build="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
+            "${API_ORIGIN}/client-version?platform=web" \
+            | python3 -c 'import json,sys; print(json.load(sys.stdin).get("requiredBuild", ""))')"
+          if [[ "${candidate_preview_build}" != "${manifest_build}" || "${api_build}" != "${manifest_build}" ]]; then
+            echo "::error::The active browser release changed after this candidate was tested; build and test a fresh candidate"
+            exit 1
+          fi
+
+      - name: Verify immutable candidate assets are available
+        env:
+          R2_ASSET_BASE_URL: https://web-assets.pokeaether.com
+        run: |
+          build_id="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/r2/manifest-web.json"))["gameBuildId"])')"
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: https://play.pokeaether.com" \
+            "${R2_ASSET_BASE_URL}/web/releases/${build_id}/index.wasm" \
+            | grep -Eiq '^access-control-allow-origin: https://play\.pokeaether\.com$'
+
+      - name: Install Cloudflare tooling
+        run: npm ci --ignore-scripts
+
+      - name: Deploy the tested candidate page
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          PAGES_PROJECT: pokeaether-web
+          API_ORIGIN: https://api.pokeaether.com
+          ASSET_BASE_URL: https://web-assets.pokeaether.com
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('wrangler.jsonc')
+          config = json.loads(path.read_text(encoding='utf-8'))
+          config['pages_build_output_dir'] = 'builds/browser-candidate/pages-production'
+          config['vars']['API_ORIGIN'] = os.environ['API_ORIGIN']
+          config['vars']['ASSET_BASE_URL'] = os.environ['ASSET_BASE_URL']
+          path.write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
+          PY
+          npx wrangler pages deploy builds/browser-candidate/pages-production \
+            --project-name "${PAGES_PROJECT}" --branch main --commit-dirty=true
+
+      - name: Verify production page and candidate assets
+        env:
+          R2_ASSET_BASE_URL: https://web-assets.pokeaether.com
+          WEB_URL: https://play.pokeaether.com
+        run: |
+          build_id="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/r2/manifest-web.json"))["gameBuildId"])')"
+          public_index="$(mktemp)"
+          trap 'rm -f "${public_index}"' EXIT
+          deadline=$((SECONDS + 180))
+          until curl --retry 3 --retry-all-errors --retry-delay 2 -fsS -o "${public_index}" "${WEB_URL}/" \
+            && grep -Fq "${build_id}" "${public_index}"; do
+            if (( SECONDS >= deadline )); then
+              echo "Production Pages did not expose candidate ${build_id}" >&2
+              exit 1
+            fi
+            sleep 5
+          done
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
+            "${R2_ASSET_BASE_URL}/web/releases/${build_id}/index.wasm" | grep -Eiq '^content-type: application/wasm'
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
+            "${WEB_URL}/pokemon-assets/battle/pokemon-front-scale1-128-402b7a6cee88/pikachu/animation.json" \
+            | python3 -c 'import json,sys; assert json.load(sys.stdin).get("frames")'
+
+      - name: Publish the tested browser manifest
+        env:
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          UPDATE_R2_ACCOUNT_ID: ${{ secrets.UPDATE_R2_ACCOUNT_ID }}
+          UPDATE_R2_BUCKET: ${{ secrets.UPDATE_R2_BUCKET }}
+          UPDATE_R2_ACCESS_KEY_ID: ${{ secrets.UPDATE_R2_ACCESS_KEY_ID }}
+          UPDATE_R2_SECRET_ACCESS_KEY: ${{ secrets.UPDATE_R2_SECRET_ACCESS_KEY }}
+        run: |
+          if [[ "${UPDATE_R2_BUCKET}" == "${R2_BUCKET}" ]]; then
+            echo "::error::Browser assets and update manifests must use separate R2 buckets"
+            exit 1
+          fi
+          python3 tools/upload_web_release.py builds/browser-candidate/r2 --manifest-only --publish-manifest
+
+      - name: Confirm the browser build is active
+        env:
+          API_ORIGIN: https://api.pokeaether.com
+          UPDATE_BASE_URL: https://updates.pokeaether.com
+        run: |
+          expected="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/r2/manifest-web.json"))["gameBuildId"])')"
+          public_manifest="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
+            "${UPDATE_BASE_URL}/manifest-web.json")"
+          public_build="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("gameBuildId", ""))' <<<"${public_manifest}")"
+          test "${public_build}" = "${expected}"
+          actual="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
+            "${API_ORIGIN}/client-version?platform=web" \
+            | python3 -c 'import json,sys; print(json.load(sys.stdin).get("requiredBuild", ""))')"
+          test "${actual}" = "${expected}"
+
+      - name: Test and prune obsolete browser releases
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          python3 tools/test_prune_r2_release_objects.py
+          python3 tools/prune_r2_release_objects.py builds/browser-candidate/r2 \
+            --scope web --public-base-url https://updates.pokeaether.com \
+            --active-web-url https://play.pokeaether.com \
+            --retain-previous 1 --minimum-age-hours 24 --max-delete 20000 --apply
+
+      - name: Summarize published release
+        run: |
+          python3 - <<'PY' >> "${GITHUB_STEP_SUMMARY}"
+          import json
+          value = json.load(open('builds/browser-candidate/r2/manifest-web.json', encoding='utf-8'))
+          print('## Browser release is live')
+          print()
+          print(f"- Version: {value['gameVersion']}")
+          print(f"- Build ID: {value['gameBuildId']}")
+          print('- URL: https://play.pokeaether.com')
+          PY

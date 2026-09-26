@@ -4,6 +4,7 @@ import { isAllowedApiRoute, onRequest } from '../functions/api/[[path]].js';
 import { onRequestGet as getNews } from '../functions/news.json.js';
 import { onRequest as getBattleSprite } from '../functions/pokemon-assets/battle/[[path]].js';
 import { onRequest as getGen5Sprite } from '../functions/pokemon-assets/gen5/[[path]].js';
+import { onRequest as getWebReleaseObject } from '../functions/web/releases/[[path]].js';
 
 const releaseRoutes = JSON.parse(readFileSync(new URL('./fixtures/web_release_routes.json', import.meta.url)));
 for (const [method, path] of releaseRoutes.allowed) assert.equal(isAllowedApiRoute(method, path), true, `${method} ${path}`);
@@ -132,6 +133,42 @@ const deniedBattleSpritePath = await getBattleSprite({
   env: { ASSET_BASE_URL: 'https://assets.example.test' },
 });
 assert.equal(deniedBattleSpritePath.status, 404);
+
+globalThis.fetch = async request => {
+  forwarded = request;
+  return new Response(new Uint8Array([0x00, 0x61, 0x73, 0x6d]), {
+    status: 206,
+    headers: {
+      'content-type': 'application/wasm',
+      'content-range': 'bytes 0-3/64',
+      'accept-ranges': 'bytes',
+      'cache-control': 'public, max-age=31536000, immutable',
+    },
+  });
+};
+const releaseObject = await getWebReleaseObject({
+  request: new Request('https://rc.example.test/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/index.wasm', {
+    headers: { range: 'bytes=0-3', cookie: 'must-not-forward' },
+  }),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(releaseObject.status, 206);
+assert.equal(forwarded.url, 'https://assets.example.test/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/index.wasm');
+assert.equal(forwarded.headers.get('range'), 'bytes=0-3');
+assert.equal(forwarded.headers.get('cookie'), null);
+assert.equal(releaseObject.headers.get('content-range'), 'bytes 0-3/64');
+assert.equal(releaseObject.headers.get('cross-origin-resource-policy'), 'same-origin');
+assert.equal((await releaseObject.arrayBuffer()).byteLength, 4);
+const deniedReleaseTraversal = await getWebReleaseObject({
+  request: new Request('https://rc.example.test/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/%2e%2e/manifest-web.json'),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(deniedReleaseTraversal.status, 404);
+const deniedReleaseMethod = await getWebReleaseObject({
+  request: new Request('https://rc.example.test/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/index.wasm', { method: 'POST' }),
+  env: { ASSET_BASE_URL: 'https://assets.example.test' },
+});
+assert.equal(deniedReleaseMethod.status, 405);
 
 globalThis.fetch = async request => {
   assert.equal(request, 'https://assets.example.test/data/news.json');

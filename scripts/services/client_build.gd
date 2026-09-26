@@ -9,10 +9,18 @@ const HEADER_NAME := "X-PokeAether-Client-Build"
 const PLATFORM_HEADER_NAME := "X-PokeAether-Client-Platform"
 const QUERY_NAME := "clientBuild"
 const PLATFORM_QUERY_NAME := "clientPlatform"
+const WebRuntime := preload("res://scripts/services/web_runtime.gd")
 
 
 static func get_build_id() -> String:
 	if OS.has_feature("web"):
+		# A preview page may use the currently allowed production build ID while
+		# serving a candidate runtime from its own immutable asset path. This lets
+		# testers log in without opening the candidate manifest to all players.
+		var release_config := WebRuntime.web_release_config()
+		var compatible_build_id := str(release_config.get("clientBuildId", "")).strip_edges()
+		if not compatible_build_id.is_empty():
+			return compatible_build_id
 		return str(ProjectSettings.get_setting("application/config/web_build_id", "web-preview-2"))
 	var environment_build_id := OS.get_environment(BUILD_ID_ENV).strip_edges()
 	if not environment_build_id.is_empty():

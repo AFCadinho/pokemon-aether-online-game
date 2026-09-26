@@ -27,6 +27,10 @@ def main() -> None:
     parser.add_argument("--release-version", required=True)
     parser.add_argument("--asset-base-url", required=True)
     parser.add_argument("--web-url", required=True)
+    parser.add_argument(
+        "--client-build-id",
+        help="Client version sent to the API; defaults to --build-id for a production release.",
+    )
     for style in SPRITE_STYLES:
         for side in SPRITE_SIDES:
             parser.add_argument(
@@ -39,6 +43,9 @@ def main() -> None:
 
     if not BUILD_ID.fullmatch(args.build_id):
         parser.error("--build-id must contain only letters, digits, dots, underscores and hyphens")
+    client_build_id = args.client_build_id or args.build_id
+    if not BUILD_ID.fullmatch(client_build_id):
+        parser.error("--client-build-id must contain only letters, digits, dots, underscores and hyphens")
     if not RELEASE_VERSION.fullmatch(args.release_version):
         parser.error("--release-version must look like 0.4.0 or 0.4.0-beta.1")
     asset_base_url = _https_origin(args.asset_base_url, "--asset-base-url")
@@ -78,6 +85,7 @@ def main() -> None:
                 parser.error("sprite versions must be safe immutable path segments")
     release_config = {
         "buildId": args.build_id,
+        "clientBuildId": client_build_id,
         "releaseVersion": args.release_version,
         "assetBaseUrl": asset_base_url,
         "spriteStyles": {

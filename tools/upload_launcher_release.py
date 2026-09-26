@@ -85,6 +85,19 @@ def _load_config() -> R2Config:
     return R2Config(account_id, bucket, access_key_id, secret_access_key, endpoint)
 
 
+def _load_updates_config() -> R2Config:
+    """Load credentials for the public desktop/browser update manifests."""
+    account_id = _required_env("UPDATE_R2_ACCOUNT_ID")
+    bucket = _required_env("UPDATE_R2_BUCKET")
+    access_key_id = _required_env("UPDATE_R2_ACCESS_KEY_ID")
+    secret_access_key = _required_env("UPDATE_R2_SECRET_ACCESS_KEY")
+    endpoint = os.environ.get(
+        "UPDATE_R2_ENDPOINT",
+        f"https://{account_id}.r2.cloudflarestorage.com",
+    )
+    return R2Config(account_id, bucket, access_key_id, secret_access_key, endpoint)
+
+
 def _required_env(name: str) -> str:
     value = os.environ.get(name, "").strip()
     if not value:
