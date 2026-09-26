@@ -8,12 +8,36 @@ WebAssembly runtime, browser audio and versioned Gen 5 sprite catalogs are
 served from the existing R2 bucket through its HTTPS custom domain. Pages has
 a 25 MiB per-file limit, so it cannot contain the complete Godot export.
 
-The manual `Deploy Browser Game to Cloudflare` workflow builds and validates
-both halves. It uploads immutable R2 objects first, deploys Pages second, checks
-the public URLs and publishes `manifest-web.json` last. Leave
-`publish_manifest` disabled for the first staging deployment. Enabling it opens
-the exact build through the existing gateway client-version gate. Failed runs
-before that final step do not change the active browser release.
+Browser releases use two separate manual workflows so testers can log in to a
+candidate without opening it to players:
+
+1. Run `Build Browser Release Candidate (Preview)` from `main`. It uploads the
+   immutable runtime to the dedicated browser bucket, deploys the preview to
+   `https://rc.pokeaether-web.pages.dev`, and saves the exact production page
+   bundle and manifest as a 30-day GitHub artifact. The preview temporarily
+   identifies to the production API as the currently active web build, while
+   its runtime assets remain under the new immutable candidate ID. It does not
+   replace the production Pages site or `manifest-web.json`.
+2. Test that preview using a designated test account. It talks to the live API,
+   so tests can change that account's saved game state. Do not use a staff or
+   personal account for destructive gameplay checks.
+3. After the release-candidate matrix below passes, run
+   `Publish Tested Browser Candidate` with the successful preview run ID. It
+   verifies the artifact, deploys its matching production page bundle, checks
+   the public files, and publishes that same candidate's manifest last. It
+   does not rebuild the game, so the ID testers checked is the ID players get.
+
+The preview serves large immutable runtime files through a same-origin Pages
+Function backed by the browser R2 bucket. This avoids adding the preview domain
+to the production bucket's browser CORS allowlist. Production continues to read
+those files directly from `web-assets.pokeaether.com`.
+
+The web manifest is different from those runtime files: the production gateway
+reads `https://updates.pokeaether.com/manifest-web.json`. The publisher writes
+that one small file to the existing updates bucket, using separate
+`UPDATE_R2_*` credentials. It writes the immutable browser runtime to the
+`pokeaether-web` bucket using `R2_*` credentials. The two buckets must not be
+the same.
 
 One-time Cloudflare setup:
 
@@ -37,7 +61,11 @@ One-time Cloudflare setup:
    `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` to the GitHub
    `web-production` environment, with `R2_BUCKET=pokeaether-web`. Protect that
    environment with an approval rule. The Cloudflare API token needs Pages edit
-   access; the R2 keys need object read/write access to the selected bucket.
+   access; the `R2_*` keys need object read/write access to the browser bucket.
+   Also add `UPDATE_R2_ACCOUNT_ID`, `UPDATE_R2_BUCKET`,
+   `UPDATE_R2_ACCESS_KEY_ID` and `UPDATE_R2_SECRET_ACCESS_KEY` for the existing
+   updates bucket that serves `updates.pokeaether.com/manifest-web.json`.
+   These update-bucket keys need object write access to `manifest-web.json`.
 6. Add Cloudflare rate-limiting rules for `POST /api/auth/web/login` and
    `POST /api/auth/web/signup`. Start with a managed challenge after 10 login
    attempts per minute per client and after 5 signup attempts per hour, then

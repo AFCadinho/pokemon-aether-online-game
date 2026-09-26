@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Muisklikken en aanrakingen boven zichtbare UI-knoppen worden niet meer door de vrije-ruimtebediening van de wereld onderschept.
+- De lokale desktopreview kan 81 nieuwe 3D-Pokémon veilig in de Pokédex en summary cards tonen; de camera blijft ook bij modellen met een afwijkende skin-koppeling werken.
+
+- Route 3 heeft nu een rijkere 3D-battlearena naar de pixelmap, met het Pokémon Center, de ingang van Mt. Moon, rotsterrassen met trappen, afgebakende grasvelden, struiken en bloemen.
+
+- De browser- en desktopclient ondersteunen nu een korte klik op vrije speelruimte als interactie en muis slepen als tijdelijke joystick.
+
+- Gevechten met wilde Pokémon en trainers op Route 3 gebruiken nu een eigen 3D-arena met het rotsachtige pad en de begroeiing van die route.
+
 - De desktoplauncher kan de volledige goedgekeurde 3D-catalogus van 82 Pokémon plus Mega Dragonite normal en shiny als afzonderlijke bundles downloaden zodra release v5 is gepubliceerd.
 
 - Mega Dragonite normal en shiny zijn lokaal goedgekeurd voor 3D-gevechten en hebben samen een eigen bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte desktoprelease.

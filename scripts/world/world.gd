@@ -211,8 +211,7 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
-	if OS.has_feature("mobile"):
-		add_child(MOBILE_CONTROLS_SCENE.instantiate())
+	add_child(MOBILE_CONTROLS_SCENE.instantiate())
 	_ensure_remote_players_container()
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)

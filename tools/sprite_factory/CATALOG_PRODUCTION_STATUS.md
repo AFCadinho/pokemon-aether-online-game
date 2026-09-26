@@ -1,5 +1,24 @@
 # Catalog production direction — 2026-09-22
 
+## Batch 02 — 100 new normal-form candidates (2026-09-26)
+
+The next 100 catalog entries have been processed in National Dex order after
+excluding the previous observation and production cohorts. The existing pipeline
+was not changed. Of 100 requests, 98 passed identity/source verification, 81
+produced standalone Godot scenes, and 19 were safely held. The 81 scenes contain
+648 native clips (including a second physical attack on every model), with zero
+Godot pose/timing errors and zero external scene dependencies. Five static
+preview images per scene (405 total) were captured.
+
+These are **technical candidates only**. Normal-form visual review, battle
+placement/animation qualification and shiny review are still pending. No new
+model was approved, activated, bundled or uploaded. See
+[batch 02 review](CATALOG_PRODUCTION_BATCH_02_REVIEW.md) and the pinned
+[per-species results](catalog_production_batch_02_results.json).
+The 81 normal candidates are available in the local desktop debug Pokédex and
+summary preview through a separate hash-pinned manifest; this does not grant
+battle or distribution approval.
+
 ## Active decision
 
 Resume catalog production with the existing identity-gated SCVI pipeline and

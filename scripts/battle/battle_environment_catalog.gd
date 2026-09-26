@@ -12,6 +12,7 @@ const PROFILES: Dictionary = {
 	&"route_1": preload("res://resources/battle/environments/route_1.tres"),
 	&"route_22_water": preload("res://resources/battle/environments/route_22_water.tres"),
 	&"route_22": preload("res://resources/battle/environments/route_22.tres"),
+	&"route_3": preload("res://resources/battle/environments/route_3.tres"),
 	DEFAULT_ENVIRONMENT_ID: preload("res://resources/battle/environments/grass.tres"),
 	WATER_ENVIRONMENT_ID: preload("res://resources/battle/environments/water.tres"),
 	CAVE_ENVIRONMENT_ID: preload("res://resources/battle/environments/cave.tres"),

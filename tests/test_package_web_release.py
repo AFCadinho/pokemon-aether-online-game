@@ -1,18 +1,53 @@
 import json
+import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 import zipfile
+from types import SimpleNamespace
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+import upload_web_release
+from upload_launcher_release import _load_updates_config
 
 
 class PackageWebReleaseTests(unittest.TestCase):
+    def test_update_manifest_publisher_uses_a_separate_bucket_config(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'web-release.json').write_text(json.dumps({'buildId': 'candidate', 'objects': []}))
+            (root / 'manifest-web.json').write_text('{"gameBuildId":"candidate"}')
+            update_config = SimpleNamespace(bucket='pokeaether-updates')
+            with patch.object(upload_web_release, '_load_config', side_effect=AssertionError('asset bucket must not be loaded')):
+                with patch.object(upload_web_release, '_load_updates_config', return_value=update_config):
+                    with patch.object(upload_web_release, '_upload_file') as upload:
+                        with patch('sys.argv', ['upload_web_release.py', str(root), '--manifest-only', '--publish-manifest']):
+                            upload_web_release.main()
+            upload.assert_called_once_with(update_config, root / 'manifest-web.json', 'manifest-web.json')
+
+    def test_update_manifest_bucket_uses_its_own_credentials(self):
+        values = {
+            'UPDATE_R2_ACCOUNT_ID': 'update-account',
+            'UPDATE_R2_BUCKET': 'pokeaether-updates',
+            'UPDATE_R2_ACCESS_KEY_ID': 'update-access',
+            'UPDATE_R2_SECRET_ACCESS_KEY': 'update-secret',
+        }
+        with patch.dict(os.environ, values, clear=True):
+            config = _load_updates_config()
+        self.assertEqual(config.account_id, 'update-account')
+        self.assertEqual(config.bucket, 'pokeaether-updates')
+        self.assertEqual(config.access_key_id, 'update-access')
+        self.assertEqual(config.secret_access_key, 'update-secret')
+        self.assertEqual(config.endpoint, 'https://update-account.r2.cloudflarestorage.com')
+
     def test_browser_workflow_uses_noninteractive_source_asset_restore(self):
         source = (ROOT / '.github/workflows/deploy-web-cloudflare.yml').read_text()
-        self.assertIn('default: https://updates.pokeaether.com', source)
+        self.assertIn('default: https://web-assets.pokeaether.com', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${version}.zip', source)
         self.assertEqual(source.count('unzip -oq /tmp/'), 3)
@@ -27,6 +62,16 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn('${WEB_URL}/pokemon-assets/battle/${POKEMON_FRONT_ASSET_VERSION}/pikachu/sheet.png', source)
         self.assertIn('${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json', source)
         self.assertIn('${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/sheet.png', source)
+        self.assertIn('PAGES_BRANCH=rc', source)
+        self.assertIn('PREVIEW_CLIENT_BUILD_ID=', source)
+        self.assertIn('actions/upload-artifact@v6', source)
+        self.assertNotIn('inputs.publish_manifest', source)
+        publish = (ROOT / '.github/workflows/publish-browser-candidate.yml').read_text()
+        self.assertIn('candidate_run_id', publish)
+        self.assertIn('Publish the tested browser manifest', publish)
+        self.assertIn("run.get('head_branch') != 'main'", publish)
+        self.assertIn('UPDATE_R2_BUCKET', publish)
+        self.assertIn('https://updates.pokeaether.com', publish)
         build_source = (ROOT / 'tools/build_web_preview.py').read_text()
         self.assertIn("b'assets/fonts/DejaVuSans.ttf'", build_source)
         self.assertIn("b'assets/sprites/pokemon/front/pikachu/sheet.png.import'", build_source)
@@ -74,6 +119,7 @@ class PackageWebReleaseTests(unittest.TestCase):
                 '--build-id', 'build-123', '--release-version', '0.4.0',
                 '--asset-base-url', 'https://assets.example.test',
                 '--web-url', 'https://play.example.test',
+                '--client-build-id', 'active-build-456',
                 '--sprite-animated-front-version', 'front-v1',
                 '--sprite-animated-back-version', 'back-v1',
                 '--sprite-animated-shiny-front-version', 'shiny-front-v1',
@@ -94,6 +140,7 @@ class PackageWebReleaseTests(unittest.TestCase):
             self.assertNotIn('https://assets.example.test/web/assets/front-v1', html)
             config = json.loads((pages / 'web-release-config.json').read_text(encoding='utf-8'))
             self.assertEqual(config['buildId'], 'build-123')
+            self.assertEqual(config['clientBuildId'], 'active-build-456')
             self.assertEqual(
                 config['spriteStyles']['animated']['front'],
                 'https://play.example.test/pokemon-assets/battle/front-v1',
@@ -110,6 +157,13 @@ class PackageWebReleaseTests(unittest.TestCase):
             headers = (pages / '_headers').read_text(encoding='utf-8')
             self.assertIn("connect-src 'self' https://assets.example.test", headers)
             self.assertIn('Cross-Origin-Embedder-Policy: require-corp', headers)
+
+            production_command = command.copy()
+            client_build_option = production_command.index('--client-build-id')
+            del production_command[client_build_option:client_build_option + 2]
+            subprocess.run(production_command, check=True, capture_output=True, text=True)
+            production_config = json.loads((pages / 'web-release-config.json').read_text(encoding='utf-8'))
+            self.assertEqual(production_config['clientBuildId'], 'build-123')
 
     def test_sprite_pack_extraction_keeps_only_safe_runtime_files(self):
         with tempfile.TemporaryDirectory() as directory:
