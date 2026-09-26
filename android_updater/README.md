@@ -64,6 +64,13 @@ The workflow downloads the pinned music source archive from the existing
 update domain for Godot import. Its checksum and size are verified before use.
 Running the workflow and publishing its artifact are separate operations.
 
+An isolated x86_64 Android 35 emulator completed a permanent-key signed
+version-code 1 to 2 upgrade through the in-app downloader and Android's
+installer. The updater verified the downloaded APK; a pre-existing app-private
+data marker survived, and the cached APK was removed at next launch. This was
+a local HTTP fixture with the emulator's ordinary network disabled. It does
+not replace the remaining ARM64 device and published-release tests.
+
 The ignored `android/build` directory is generated from Godot 4.6.2's
 `android_source.zip`. Before a Gradle export, run:
 

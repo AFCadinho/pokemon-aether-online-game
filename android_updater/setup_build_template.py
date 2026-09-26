@@ -32,6 +32,12 @@ def main() -> int:
         with zipfile.ZipFile(template) as archive:
             archive.extractall(BUILD)
     (BUILD / "gradlew").chmod(0o755)
+    properties_path = BUILD / "gradle.properties"
+    properties = properties_path.read_text()
+    properties = properties.replace("org.gradle.jvmargs=-Xmx4536m", "org.gradle.jvmargs=-Xmx2048m")
+    if "org.gradle.workers.max=" not in properties:
+        properties += "\norg.gradle.workers.max=2\n"
+    properties_path.write_text(properties)
     manifest_path = BUILD / "src/main/AndroidManifest.xml"
     manifest = manifest_path.read_text()
     permission = '    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />\n'

@@ -887,6 +887,6 @@ Consider public support only after:
 - [x] Manual Android CI workflow prepares a signed release candidate and a manifest for review; a CI run remains open.
 - [x] Local release APK exported with a disposable test key; package, version, certificate and manifest metadata verified.
 - [x] Stable alpha signing configured in GitHub Secrets; local release APK verified against the pinned certificate. External backup remains open.
-- [ ] Signed APK upgrade preserves app data.
+- [x] Permanent-key signed APK upgraded from version code 1 to 2 through the in-app updater and Android installer on an isolated x86_64 emulator; pre-existing app data survived and the downloaded APK was pruned after relaunch. ARM64 release-device coverage remains open.
 - [ ] Closed-alpha device matrix completed.
 - [ ] Public-beta go/no-go review completed.
