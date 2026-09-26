@@ -13589,13 +13589,7 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 
 
 func _current_adventure_party_exp_buff() -> Dictionary:
-	if not CoopService.available:
-		return {}
-	var member_ids: Array = CoopService.party.get("memberIds", []) if CoopService.party.get("memberIds") is Array else []
-	var own_id := int(AuthService.current_user.get("id", 0))
-	if member_ids.size() != 2 or own_id <= 0:
-		return {}
-	if not member_ids.any(func(member_id: Variant) -> bool: return int(member_id) == own_id):
+	if not CoopService.party_exp_bonus_available():
 		return {}
 	return {
 		"id": "adventure_party_exp",
