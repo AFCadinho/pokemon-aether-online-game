@@ -148,6 +148,20 @@ class R2UploadRetryTests(unittest.TestCase):
             "public, max-age=31536000, immutable",
         )
 
+    def test_android_apk_uses_immutable_game_key_and_archive_content_type(self) -> None:
+        self.assertEqual(
+            uploader._build_object_key("game-build-id-android.apk", "", "updates"),
+            "game/game-build-id-android.apk",
+        )
+        self.assertEqual(
+            uploader._get_cache_control_for_key("game/game-build-id-android.apk"),
+            "public, max-age=31536000, immutable",
+        )
+        self.assertEqual(
+            uploader._get_content_type(Path("game-build-id-android.apk")),
+            "application/vnd.android.package-archive",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

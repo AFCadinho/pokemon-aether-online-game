@@ -1,10 +1,13 @@
 # R2 update download retention
 
-The `pokeaether-update-downloads` Worker preserves the six public `latest/`
-download links on both update hostnames. It reads the platform manifest directly
-from R2, checks that the immutable archive exists and matches its size, then
-returns an uncached 302 redirect. The Worker only reads R2. There are no download
-ZIP copies under `game/latest/` or `launcher/latest/` after migration.
+The `pokeaether-update-downloads` Worker preserves the six desktop `latest/`
+download links plus the Android APK link on both update hostnames. It reads the
+platform manifest directly from R2, checks that the immutable archive exists and
+matches its size, then returns an uncached 302 redirect. Android's
+`manifest-android.json` and immutable APK are served directly from the R2 custom
+domain; `/game/latest/PokeAether-android.apk` redirects to that versioned APK.
+The Worker only reads R2. There are no download ZIP copies under `game/latest/`
+or `launcher/latest/` after migration.
 
 Deploy the reviewed Worker with explicit Cloudflare deployment authorization:
 

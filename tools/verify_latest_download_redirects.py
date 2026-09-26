@@ -17,24 +17,30 @@ class NoRedirect(HTTPRedirectHandler):
 def verify(manifest_dir, base_url, remote=False):
     opener = build_opener(NoRedirect)
     remote_manifests = _load_remote_manifests(base_url) if remote else []
-    for platform in ("windows", "linux", "macos"):
+    for platform in ("windows", "linux", "macos", "android"):
         if remote:
             manifest = next((value for value in remote_manifests
-                             if urlparse(value.get('game', {}).get('url', '')).path.endswith(f'-{platform}.zip')), None)
+                             if urlparse(value.get('game', {}).get('url', '')).path.endswith(
+                                 f'-{platform}.apk' if platform == "android" else f'-{platform}.zip'
+                             )), None)
             if manifest is None:
-                if platform != "macos":
+                if platform not in {"macos", "android"}:
                     raise SystemExit(f"Missing remote platform manifest: {platform}")
                 continue
         else:
             path = manifest_dir / f"manifest-{platform}.json"
             if not path.exists():
-                if platform != "macos":
+                if platform not in {"macos", "android"}:
                     raise SystemExit(f"Missing local platform manifest: {platform}")
                 continue
             manifest = json.loads(path.read_text())
-        for kind, name in (("game", "PokeAether"), ("launcher", "PokeAetherLauncher")):
+        release_kinds = (("game", "PokeAether"),) if platform == "android" else (
+            ("game", "PokeAether"), ("launcher", "PokeAetherLauncher")
+        )
+        extension = "apk" if platform == "android" else "zip"
+        for kind, name in release_kinds:
             expected = base_url.rstrip("/") + urlparse(manifest[kind]["url"]).path
-            request = Request(f"{base_url.rstrip('/')}/{kind}/latest/{name}-{platform}.zip", method="HEAD",
+            request = Request(f"{base_url.rstrip('/')}/{kind}/latest/{name}-{platform}.{extension}", method="HEAD",
                               headers={"Cache-Control": "no-cache", "User-Agent": "PokeAether-R2-Pruner/1"})
             try:
                 response = opener.open(request, timeout=30)

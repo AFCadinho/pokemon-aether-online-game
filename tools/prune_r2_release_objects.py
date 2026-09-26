@@ -26,6 +26,7 @@ REMOTE_MANIFEST_NAMES = (
     "manifest-windows.json",
     "manifest-linux.json",
     "manifest-macos.json",
+    "manifest-android.json",
 )
 REQUIRED_LOCAL_MANIFEST_NAMES = {
     "manifest.json",
@@ -50,6 +51,7 @@ WEB_OBJECT_PATTERN = re.compile(rf"^web/releases/({BUILD_ID_PATTERN})/[^\\]+$")
 LAUNCHER_OBJECT_PATTERN = re.compile(rf"^launcher/([0-9][0-9A-Za-z.+_-]*-{BUILD_ID_PATTERN})/PokeAetherLauncher-(windows|linux|macos)\.zip$")
 
 GAME_OBJECT_PATTERN = re.compile(r"^game-.+-(windows|linux|macos)\.zip$")
+ANDROID_GAME_OBJECT_PATTERN = re.compile(r"^game-.+-android\.apk$")
 
 
 @dataclass(frozen=True)
@@ -198,7 +200,7 @@ def _load_remote_manifests(public_base_url: str, scope: str = "desktop") -> list
             with urlopen(request, timeout=30) as response:
                 manifests.append(_read_manifest(response.read().decode("utf-8"), url))
         except HTTPError as error:
-            if name == "manifest-macos.json" and error.code == 404:
+            if name in {"manifest-macos.json", "manifest-android.json"} and error.code == 404:
                 print(f"Optional remote manifest is not published: {url}")
                 continue
             raise SystemExit(f"Could not read remote manifest {url}: HTTP {error.code}") from error
@@ -398,6 +400,8 @@ def _object_family(key: str) -> str | None:
         match = GAME_OBJECT_PATTERN.fullmatch(file_name)
         if match is not None:
             return f"game:{match.group(1)}"
+        if ANDROID_GAME_OBJECT_PATTERN.fullmatch(file_name):
+            return "game:android"
     return None
 
 

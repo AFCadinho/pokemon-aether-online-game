@@ -102,6 +102,7 @@ def _discover_release_files(release_dir: Path) -> list[str]:
         or file_path.name.startswith("manifest-")
         or ".zip.part-" in file_path.name
         or file_path.suffix == ".zip"
+        or (file_path.name.startswith("game-") and file_path.suffix == ".apk")
         )
     )
 
@@ -109,7 +110,7 @@ def _discover_release_files(release_dir: Path) -> list[str]:
 def _build_object_key(file_name: str, prefix: str, layout: str) -> str:
     object_parts: list[str] = [part for part in [prefix.strip("/")] if part]
     if layout == "updates":
-        if file_name.startswith("game-") and file_name.endswith(".zip"):
+        if file_name.startswith("game-") and file_name.endswith((".zip", ".apk")):
             object_parts.append("game")
         elif (
             file_name.startswith("pokemon-")
@@ -132,7 +133,7 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
     canonical_uri = _canonical_uri(config.bucket, key)
     payload_hash = _sha256_hex(file_path)
     content_length = file_path.stat().st_size
-    content_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
+    content_type = _get_content_type(file_path)
     cache_control = _get_cache_control_for_key(key)
 
     for attempt in range(1, MAX_UPLOAD_ATTEMPTS + 1):
@@ -262,6 +263,12 @@ def _get_cache_control_for_key(key: str) -> str:
         return "no-cache, max-age=0"
 
     return "public, max-age=31536000, immutable"
+
+
+def _get_content_type(file_path: Path) -> str:
+    if file_path.suffix.lower() == ".apk":
+        return "application/vnd.android.package-archive"
+    return mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
 
 
 def _sha256_hex(file_path: Path) -> str:

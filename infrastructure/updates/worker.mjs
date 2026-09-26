@@ -3,8 +3,11 @@ const origins = new Set(['https://updates.pokeaether.com', 'https://updates.poke
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const match = /^\/(game|launcher)\/latest\/(PokeAether|PokeAetherLauncher)-(windows|linux|macos)\.zip$/.exec(url.pathname);
-    if (!origins.has(url.origin) || !match || (match[1] === 'launcher') !== (match[2] === 'PokeAetherLauncher')) {
+    const match = /^\/(game|launcher)\/latest\/(PokeAether|PokeAetherLauncher)-(windows|linux|macos|android)\.(zip|apk)$/.exec(url.pathname);
+    if (!origins.has(url.origin) || !match
+      || (match[1] === 'launcher') !== (match[2] === 'PokeAetherLauncher')
+      || (match[3] === 'android') !== (match[4] === 'apk')
+      || (match[3] === 'android' && match[1] !== 'game')) {
       return new Response('Not found', { status: 404 });
     }
     if (!['GET', 'HEAD'].includes(request.method)) {
@@ -17,7 +20,9 @@ export default {
       const entry = manifest[match[1]];
       const target = new URL(entry.url);
       const pattern = match[1] === 'game'
-        ? new RegExp(`^/game/game-[^/]+-${match[3]}\\.zip$`)
+        ? match[3] === 'android'
+          ? /^\/game\/game-[^/]+-android\.apk$/
+          : new RegExp(`^/game/game-[^/]+-${match[3]}\\.zip$`)
         : new RegExp(`^/launcher/[0-9][0-9A-Za-z.+_-]+/PokeAetherLauncher-${match[3]}\\.zip$`);
       if (!origins.has(target.origin) || target.search || target.hash || !pattern.test(target.pathname)) throw new Error('Invalid target');
       const key = decodeURIComponent(target.pathname.slice(1));
