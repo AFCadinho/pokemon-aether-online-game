@@ -1,0 +1,169 @@
+{
+  "schema": 1,
+  "scope": "screened_100_battle_approved_pairs",
+  "visual_approved": true,
+  "runtime_approved": true,
+  "release_approved": true,
+  "published": false,
+  "approved_species": [
+    "azumarill",
+    "blissey",
+    "chansey",
+    "delibird",
+    "diglett",
+    "donphan",
+    "dratini",
+    "drifblim",
+    "drowzee",
+    "electrode",
+    "espeon",
+    "flareon",
+    "garchomp",
+    "gardevoir",
+    "golduck",
+    "hariyama",
+    "heracross",
+    "hoopa",
+    "hoppip",
+    "hydreigon",
+    "jigglypuff",
+    "jumpluff",
+    "magnemite",
+    "magneton",
+    "magnezone",
+    "mankey",
+    "marill",
+    "mew",
+    "misdreavus",
+    "oricorio",
+    "orthworm",
+    "pichu",
+    "primeape",
+    "psyduck",
+    "quagsire",
+    "qwilfish",
+    "raichu",
+    "scizor",
+    "scyther",
+    "seviper",
+    "shellder",
+    "slaking",
+    "slowpoke",
+    "staraptor",
+    "sudowoodo",
+    "tauros",
+    "tyranitar",
+    "umbreon",
+    "vaporeon",
+    "venonat",
+    "volcarona",
+    "voltorb",
+    "wigglytuff",
+    "wooper",
+    "zapdos"
+  ],
+  "battle_qualification_holds": [
+    {
+      "species": "charizard",
+      "reasons": [
+        "model overlaps battle HUD area"
+      ]
+    },
+    {
+      "species": "corviknight",
+      "reasons": [
+        "model overlaps battle HUD area"
+      ]
+    },
+    {
+      "species": "dondozo",
+      "reasons": [
+        "model moves outside battle camera",
+        "model overlaps battle HUD area"
+      ]
+    },
+    {
+      "species": "gyarados",
+      "reasons": [
+        "model overlaps battle HUD area"
+      ]
+    },
+    {
+      "species": "haunter",
+      "reasons": [
+        "model overlaps battle HUD area"
+      ]
+    },
+    {
+      "species": "mewtwo",
+      "reasons": [
+        "model overlaps battle HUD area"
+      ]
+    }
+  ],
+  "source_material_holds": [
+    {
+      "species": "cloyster",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "ditto",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "dragonair",
+      "reason": "Rare material settings differ: body_b"
+    },
+    {
+      "species": "eevee",
+      "reason": "Normal/rare source texture mismatch"
+    },
+    {
+      "species": "flapple",
+      "reason": "Normal and rare albedo are byte-identical"
+    },
+    {
+      "species": "forretress",
+      "reason": "Rare material has a non-albedo change: pm0205_00_00_body/NormalMap"
+    },
+    {
+      "species": "gengar",
+      "reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "growlithe",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "hypno",
+      "reason": "Rare material has a non-albedo change: body_b_00/RoughnessMap"
+    },
+    {
+      "species": "jolteon",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "magikarp",
+      "reason": "Rare material settings differ: body_00"
+    },
+    {
+      "species": "meowth",
+      "reason": "Normal standalone export report missing"
+    },
+    {
+      "species": "murkrow",
+      "reason": "Rare texture dimensions differ"
+    },
+    {
+      "species": "rayquaza",
+      "reason": "Rare material has a non-albedo change: body_b/MetallicMap"
+    }
+  ],
+  "qualification_sha256": "1ab70ec2bb5e2edfad4bc5e9bc575e29b6c32a31c15bf692ad70b6dd2bf7da66",
+  "bundle_preflight_sha256": "bb1813c808be5851c6bc6b898926549d98fb9fd2d6fedd65308763e3f286d196",
+  "motion_sha256": "8430002dc7d76baa7ee1443a64e739efc782062d6bcc445bb7cbfcea8c03f214",
+  "bundle_index_sha256": "f1fe9ebef7e78a811a3de236c7b12cede8166f662c72ba29faf90309065490cc",
+  "individual_bundle_count": 55,
+  "individual_bundle_bytes": 1340524552,
+  "visual_review_basis": "User confirmed earlier visual review and authorized acceptance subject to technical checks in this conversation."
+}

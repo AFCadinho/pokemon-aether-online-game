@@ -57,7 +57,9 @@ def build(output: Path, worktree: Path = ROOT) -> Path:
         entries.append({"species": species, "variant": "normal", "runtime_schema": 1,
                         "runtime_path": str(source), "runtime_sha256": model["sha256"]})
         seen.add(species)
-    if len(entries) != len(screened.get("models", {})) or not entries:
+    batch_pairs = set(screened.get("catalog_batch_01_pairs", []))
+    batch_keys = batch_pairs | {species + "@shiny" for species in batch_pairs}
+    if seen != set(screened.get("models", {})) - batch_keys or not entries:
         raise ValueError("Incomplete screened cohort")
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(sorted(entries, key=lambda row: row["species"]), indent=2) + "\n")

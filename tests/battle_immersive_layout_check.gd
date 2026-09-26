@@ -107,7 +107,8 @@ func _run() -> void:
 
 func _check_browser_contracts() -> void:
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
-	assert(world_source.contains('SettingsManager.battle_ui_layout == "immersive"\n\t\tand not OS.has_feature("mobile")'))
+	assert(world_source.contains('(SettingsManager.battle_ui_layout == "immersive" or force_immersive)\n\t\tand not OS.has_feature("mobile")'))
+	assert(world_source.contains('if not _mount_battle_ui(true):'), "Co-op doubles request Immersive independently of the saved single-battle setting")
 	assert(world_source.contains('SettingsManager.battle_presentation_mode == "3d"\n\t\tand not OS.has_feature("web")'))
 	var settings_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
 	var layout_index := settings_source.find('layout_options.name = "BattleUILayoutOptions"')

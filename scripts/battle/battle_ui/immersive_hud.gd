@@ -15,7 +15,22 @@ func _process(delta: float) -> void:
 	battle.calc_log_button.hide()
 	_place(battle.battle_log_rail, Vector2(18,150), Vector2(310,maxf(180,battle.size.y - 420)), 1.0)
 	var team_preview: Control = battle.get_node("%PlayerStagePartyRail")
-	_place(team_preview, Vector2(18, 90), team_preview.size, 0.75)
+	var party_rail_top := Vector2(18, 90)
+	var party_rail_scale := 0.75
+	var chat_bridge: Node = battle.get_meta("battle_chat_bridge") as Node if battle.has_meta("battle_chat_bridge") else null
+	if is_instance_valid(chat_bridge):
+		var calculator: Control = chat_bridge.get("calculator_button") as Control
+		if is_instance_valid(calculator):
+			# Both controls live on different canvas layers. Reserve a screen-space
+			# gap above the calculator when a shorter window compresses the field.
+			var stage_screen := stage.get_global_transform_with_canvas()
+			var rail_top_screen := (stage_screen * party_rail_top).y
+			var calculator_top_screen := (calculator.get_global_transform_with_canvas() * Vector2.ZERO).y
+			var rail_height := maxf(1.0, maxf(team_preview.size.y, team_preview.get_combined_minimum_size().y))
+			var available := calculator_top_screen - rail_top_screen - 12.0
+			party_rail_scale = minf(party_rail_scale,
+				maxf(0.1, available / (rail_height * maxf(0.01, stage_screen.get_scale().y))))
+	_place(team_preview, party_rail_top, team_preview.size, party_rail_scale)
 	var opponent_rail: Control = battle.get_node("%OpponentStagePartyRail")
 	_place(opponent_rail, Vector2(area.x - 62, 90), opponent_rail.size, 0.75)
 	var player_portrait := stage.get_node_or_null("TrainerPortrait0") as Control
@@ -155,16 +170,29 @@ func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float
 func _compose_sprite_battle(stage: Control) -> void:
 	# Move/scale each complete sprite box and platform together. Sprite-local
 	# grounding, attack motion, substitutes and platform hazards stay unchanged.
-	var factor := 0.82
+	# Doubles needs two distinct fields with room for both Pokémon on each side.
+	# This path runs only while the realtime 3D presenter is inactive.
+	var factor := 0.72 if battle.coop_mode else 0.82
 	for index in 2:
-		var center := Vector2(stage.size.x * (0.38 if index == 0 else 0.65), stage.size.y * (0.59 if index == 0 else 0.46))
+		var center: Vector2
+		if battle.coop_mode:
+			center = Vector2(stage.size.x * (0.36 if index == 0 else 0.68), stage.size.y * (0.60 if index == 0 else 0.45))
+		else:
+			center = Vector2(stage.size.x * (0.38 if index == 0 else 0.65), stage.size.y * (0.59 if index == 0 else 0.46))
 		var platform: Control = battle.player_battle_platform if index == 0 else battle.enemy_battle_platform
 		var box: Control = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
-		var platform_origin := center - Vector2(250,150) * factor
+		var sprite_platform_origin := center - Vector2(250,150) * factor
+		var platform_scale := Vector2(factor * (1.25 if battle.coop_mode else 1.0), factor)
+		var platform_origin := center - Vector2(250,150) * platform_scale
+		if battle.coop_mode:
+			# The grass image has a broad transparent top. Lift and widen only the
+			# platform so both grounded sprites sit on its visible surface.
+			platform_origin.y -= 18.0
 		# Offsets between the original 1152×648 platform and sprite-box origins.
 		var sprite_offset := Vector2(11,-37) if index == 0 else Vector2(23,-29)
 		_place(platform, platform_origin, Vector2(600,250), factor)
-		_place(box, platform_origin + sprite_offset * factor, Vector2(450,293), factor)
+		platform.scale = platform_scale
+		_place(box, sprite_platform_origin + sprite_offset * factor, Vector2(450,293), factor)
 
 func _compose_2d_team_preview() -> void:
 	# Keep the established compact formation, but anchor it to the same platform

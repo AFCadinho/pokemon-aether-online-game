@@ -23,6 +23,7 @@ const CODE_TO_KEY: Dictionary = {
 	"client_update_required": "backend.error.client_update_required",
 	"action_forbidden": "backend.error.action_blocked",
 	"resource_not_found": "backend.error.unavailable",
+	"coop_npc_out_of_range": "backend.error.coop_npc_out_of_range",
 	"request_failed": "backend.error.generic",
 	"service_error": "backend.error.generic",
 	"web_demo_saved_location_outside_boundary": "backend.error.web_demo_saved_location_outside_boundary",

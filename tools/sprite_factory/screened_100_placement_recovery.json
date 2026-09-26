@@ -1,0 +1,79 @@
+{
+  "approved_species": [
+    "charizard",
+    "corviknight",
+    "dondozo",
+    "gyarados",
+    "haunter",
+    "mewtwo"
+  ],
+  "baseline_qualification_sha256": "1ab70ec2bb5e2edfad4bc5e9bc575e29b6c32a31c15bf692ad70b6dd2bf7da66",
+  "battle_stress_log_sha256": "336050cd57bbe66b9f36b23f7d3a1627afd733f0de86c912a7eb8409a8640591",
+  "battle_stress_p95_max_ms": 17.382,
+  "battle_stress_sha256": "dd34bb9ab9e81d0a29216957d12e84f9a3f72866568e0c30ff77d9bda3f886a9",
+  "entries": [
+    {
+      "battle_views": 16,
+      "lift": 0.0,
+      "minimum_120hz_clearance": 0.03,
+      "minimum_idle_pixels": 98.724,
+      "normal_glb_sha256": "d8b525ced96ebad27f06d0f3603583feaab628ece60db69ef7181b6fdef50816",
+      "scale": 0.85,
+      "species": "charizard"
+    },
+    {
+      "battle_views": 16,
+      "lift": 0.160388255119324,
+      "minimum_120hz_clearance": 0.024449,
+      "minimum_idle_pixels": 104.637,
+      "normal_glb_sha256": "6fed5efe33c15a9e0aedb793771fb3cb6a5bad9a733db9549e7ab980ba04c66e",
+      "scale": 0.65,
+      "species": "corviknight"
+    },
+    {
+      "battle_views": 16,
+      "lift": 0.023241615248844,
+      "minimum_120hz_clearance": 0.025,
+      "minimum_idle_pixels": 98.365,
+      "normal_glb_sha256": "6514bbd5c2ccf84f8c81274527af61740c4388b8a5aef0c076e2d5f2ec8e86ab",
+      "scale": 0.4,
+      "species": "dondozo"
+    },
+    {
+      "battle_views": 16,
+      "lift": 0.0252092361537507,
+      "minimum_120hz_clearance": 0.025,
+      "minimum_idle_pixels": 112.807,
+      "normal_glb_sha256": "6868688a5f33c85a3ee8f1a30bd532b6637bf89cbe28030b877eb1758bb6f5f3",
+      "scale": 0.8,
+      "species": "gyarados"
+    },
+    {
+      "battle_views": 16,
+      "lift": 0.0487996689975262,
+      "minimum_120hz_clearance": 0.025,
+      "minimum_idle_pixels": 95.102,
+      "normal_glb_sha256": "9db8a4dd4b090d3755c3cc57d6baa859a673a938c7f3e5b3501c9a732a11f1f6",
+      "scale": 0.9,
+      "species": "haunter"
+    },
+    {
+      "battle_views": 16,
+      "lift": 0.0354227559641004,
+      "minimum_120hz_clearance": 0.025,
+      "minimum_idle_pixels": 92.322,
+      "normal_glb_sha256": "330567872d4853c382009afe1a83bdb11ff57245ab31e056d425e157e2be40d5",
+      "scale": 0.9,
+      "species": "mewtwo"
+    }
+  ],
+  "motion_sha256": "6fa5320717a3135673a4371427128e96e84097d9747ba8a34054b728b73fe5fe",
+  "published": false,
+  "release_approved": true,
+  "runtime_approved": true,
+  "schema": 1,
+  "scope": "screened_100_placement_recovery",
+  "validated_placement_report_sha256": "69c6e3748831ebf9bbef5bcae2c3a53a70aaba29212b0cd79c1cae74ae6c0539",
+  "visual_approved": true,
+  "visual_review_basis": "Prior user review of the fixed cohort; scaled battle idle and faint screenshots inspected in this task."
+}

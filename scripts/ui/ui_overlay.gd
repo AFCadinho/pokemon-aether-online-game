@@ -12127,6 +12127,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_sprite_panel.add_child(pokedex_sprite)
 	pokedex_sprite.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pokedex_3d_preview = POKEDEX_MODEL_PREVIEW_SCRIPT.new()
+	pokedex_3d_preview.name = "PokedexModelPreview"
 	pokedex_3d_preview.visible = false
 	pokedex_sprite_panel.add_child(pokedex_3d_preview)
 	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
@@ -13563,6 +13564,7 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 			var buff := buff_value as Dictionary
 			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
 			if buff_id in [
+				"adventure_party_exp",
 				"aether_blessing",
 				"aether_blessing_shiny_bonus",
 				"aether_blessing_travel_discount",
@@ -13579,8 +13581,21 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 		buffs.push_front(blessing_travel_discount)
 	if not blessing_shiny_bonus.is_empty():
 		buffs.push_front(blessing_shiny_bonus)
+	var party_exp_bonus := _current_adventure_party_exp_buff()
+	if not party_exp_bonus.is_empty():
+		buffs.push_front(party_exp_bonus)
 	_render_personal_buffs(buffs)
 	_refresh_aether_blessing_membership_status()
+
+
+func _current_adventure_party_exp_buff() -> Dictionary:
+	if not CoopService.party_exp_bonus_available():
+		return {}
+	return {
+		"id": "adventure_party_exp",
+		"name_key": "ui.buff.adventure_party_exp.name",
+		"description_key": "ui.buff.adventure_party_exp.description",
+	}
 
 
 func _current_aether_blessing_membership() -> Dictionary:
@@ -13942,6 +13957,11 @@ func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
 	return GLOBAL_EXP_BUFF_ICON
 
 func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bool) -> void:
+	# The battle chat bridge hides overworld controls each frame. Presence
+	# refreshes must not reveal a buff tray between those frames.
+	if has_meta("battle_chat_active"):
+		panel.hide()
+		return
 	var panel_id := "location" if panel == global_buffs_panel else "player_status"
 	var state: Dictionary = collapsible_panels.get(panel_id, {})
 	if state.is_empty():
@@ -36752,6 +36772,9 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			pokedex_animated_sprite.visible = false
 			_configure_preview_animation_button(pokedex_animated_sprite, null)
 			pokedex_3d_preview.visible = true
+			var zoom := pokedex_sprite_panel.find_child("PreviewZoomButton", true, false) as Button
+			if zoom != null:
+				pokedex_3d_preview.call("set_zoom", 2.0 if zoom.button_pressed else 1.0)
 			pokedex_sprite_panel.tooltip_text = "Drag to rotate local 3D preview"
 			return
 		pokedex_3d_preview.visible = false
@@ -37065,6 +37088,8 @@ func _add_preview_zoom_button(
 	button.toggled.connect(func(zoomed: bool) -> void:
 		var factor := 2.0 if zoomed else 1.0
 		var model_preview := parent.get_node_or_null("SummaryModelPreview")
+		if model_preview == null:
+			model_preview = parent.get_node_or_null("PokedexModelPreview")
 		if model_preview != null and model_preview.visible:
 			model_preview.set_zoom(factor)
 		var center := Vector2(viewport.size) * Vector2(0.5, center_y)
@@ -40569,11 +40594,16 @@ func _position_coop_party_hud() -> void:
 	coop_party_hud.offset_top = coop_party_hud.offset_bottom - 122.0
 
 func _refresh_coop_party_hud() -> void:
+	_refresh_personal_buffs_from_entitlements()
 	if coop_party_hud == null:
 		return
 	var own_id := int(AuthService.current_user.get("id", 0))
 	var hud_party: Dictionary = _coop_party_hud_data() if CoopService.available else {}
 	coop_party_hud.call("set_members", hud_party, own_id)
+	# The immersive battle chat temporarily reuses this CanvasLayer. Presence
+	# updates must not reveal the overworld party HUD between bridge frames.
+	if has_meta("battle_chat_active"):
+		coop_party_hud.hide()
 
 func _coop_party_hud_data() -> Dictionary:
 	var party := CoopService.party.duplicate(true)

@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "scope": "catalog batch 01, 14 normal/shiny pairs",
+  "visual_review": "User inspected all 14 normal and shiny pairs in the local real-battle review and reported that all look good.",
+  "approved_species": [
+    "charmeleon",
+    "dunsparce",
+    "flaaffy",
+    "houndoom",
+    "houndour",
+    "igglybuff",
+    "mareep",
+    "persian",
+    "phanpy",
+    "skiploom",
+    "slowking",
+    "stantler",
+    "teddiursa",
+    "ursaring"
+  ],
+  "runtime_approved": true,
+  "release_approved": true,
+  "published": false,
+  "qualification_sha256": "08dba5dbfe0a565fcd23bb0be87b6767f6746d9b361c456dc3fa59a735968f62",
+  "bundle_preflight_sha256": "1e3182a540a331b402fd2241ef14ed8c8d5f2e9cf5c846c96bf358865e3ab7db",
+  "held_shiny_species": [
+    "ampharos",
+    "larvitar",
+    "pineco",
+    "slowbro"
+  ],
+  "limitations": [
+    "Live PvP and final desktop release certification remain separate.",
+    "No R2 publication, launcher manifest change, or production deployment is authorized by this record."
+  ]
+}

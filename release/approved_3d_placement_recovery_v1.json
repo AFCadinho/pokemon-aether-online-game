@@ -1,0 +1,53 @@
+{
+  "bundle_battle_stress_p95_max_ms": 17.396,
+  "bundle_battle_stress_sha256": "54970ec68c3cb68061809a9769c4fc6efadbd27d4f8f5f1351610c6aaa1d9f95",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:charizard:base",
+      "object_key": "optional-assets/pokemon_3d/charizard/base/v1-b5a3e1d21dc11f39863bc020ec00c6d8ed85dd7ae62ceedc098e246cb3b15e45.zip",
+      "sha256": "b5a3e1d21dc11f39863bc020ec00c6d8ed85dd7ae62ceedc098e246cb3b15e45",
+      "size_bytes": 27550644
+    },
+    {
+      "asset_id": "pokemon_3d:corviknight:base",
+      "object_key": "optional-assets/pokemon_3d/corviknight/base/v1-c27dc1e5ef48b303f89a52a0b4f2a16f1c649b3d6601d0d459a32cc9ca717873.zip",
+      "sha256": "c27dc1e5ef48b303f89a52a0b4f2a16f1c649b3d6601d0d459a32cc9ca717873",
+      "size_bytes": 49028264
+    },
+    {
+      "asset_id": "pokemon_3d:dondozo:base",
+      "object_key": "optional-assets/pokemon_3d/dondozo/base/v1-e7dcf03df6af56c28f85df081791ffd8865545b655670b7d57ad345a39e000ff.zip",
+      "sha256": "e7dcf03df6af56c28f85df081791ffd8865545b655670b7d57ad345a39e000ff",
+      "size_bytes": 20727000
+    },
+    {
+      "asset_id": "pokemon_3d:gyarados:base",
+      "object_key": "optional-assets/pokemon_3d/gyarados/base/v1-17986cde73ef6bb81dec7bd7d989153a538267ee951bdc81c80d66bbdc67c7a8.zip",
+      "sha256": "17986cde73ef6bb81dec7bd7d989153a538267ee951bdc81c80d66bbdc67c7a8",
+      "size_bytes": 28164285
+    },
+    {
+      "asset_id": "pokemon_3d:haunter:base",
+      "object_key": "optional-assets/pokemon_3d/haunter/base/v1-cc7bff426d48cbd0ad7e2b6e93faceb4eb906b0e4bc33f9dbc6416fd1f7ce71c.zip",
+      "sha256": "cc7bff426d48cbd0ad7e2b6e93faceb4eb906b0e4bc33f9dbc6416fd1f7ce71c",
+      "size_bytes": 10763852
+    },
+    {
+      "asset_id": "pokemon_3d:mewtwo:base",
+      "object_key": "optional-assets/pokemon_3d/mewtwo/base/v1-a41dda280c88939b76e4fbd68d307fd839ac25e30b9bb9ff765b4f9838b4a49d.zip",
+      "sha256": "a41dda280c88939b76e4fbd68d307fd839ac25e30b9bb9ff765b4f9838b4a49d",
+      "size_bytes": 20123623
+    }
+  ],
+  "index": {
+    "object_key": "optional-assets/pokemon_3d/index/screened-100-placement-recovered-v1-605b193c349f6ee1c23b7939ed053076cc63ecdfcc1c88be4b8bc9f726c67955.json",
+    "sha256": "605b193c349f6ee1c23b7939ed053076cc63ecdfcc1c88be4b8bc9f726c67955",
+    "size_bytes": 5524
+  },
+  "kind": "pokeaether-approved-3d-additions",
+  "placement_recovery_approval_sha256": "d5c770d1c38f18e1c90f494d59d559dfa9261e01537bf8ae331829dd1fb5ed62",
+  "published": false,
+  "revision": "screened-100-placement-recovered-v1",
+  "schema": 1,
+  "total_bundle_bytes": 156357668
+}

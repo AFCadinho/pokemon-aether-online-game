@@ -1,0 +1,790 @@
+{
+  "schema": 1,
+  "scope": "screened_100_normal_shiny_technical_candidates",
+  "runtime_approved": false,
+  "visual_approved": false,
+  "release_approved": false,
+  "screened_normal": 75,
+  "paired_technical_candidates": 61,
+  "held": 14,
+  "native_shiny_clips": 488,
+  "readiness_sha256": "c1d31ceaba89d64abf0a2ce53b0bca6a73afaa3ce5893c30b41711882e5f256e",
+  "batch_evidence": [
+    {
+      "batch": 1,
+      "export_catalog_sha256": "abd5815c40b8eb1dbcd5bb0f004682207df352dbdad5bfc5879a8e4c74ae550c",
+      "runtime_report_sha256": "5c503f563171b6f99835f84dbe6573593aff9b88b57bd4c87ac51eaa4f71535b",
+      "exported": 25,
+      "runtime_scenes": 25,
+      "rendered_review_sha256": "bd395c1bc9522e5e4a8b590609aebc736b75602a519f3bba892c03aec1f56e71",
+      "sampled_motion_captures": 525
+    },
+    {
+      "batch": 2,
+      "export_catalog_sha256": "424bc36fdb2ef1df6144a824e5d4ee2b234b9595d73d3655625627f427c03d32",
+      "runtime_report_sha256": "64174c18bfe31d0dc4aee5c6f0f6ea0b509d0997cf31a24d05a1b01abc1ad43e",
+      "exported": 23,
+      "runtime_scenes": 23,
+      "rendered_review_sha256": "b803f51f287139bc4501b8be2af6eeca2a4df41e5020a03a489c40101eb3a26f",
+      "sampled_motion_captures": 483
+    },
+    {
+      "batch": 3,
+      "export_catalog_sha256": "8468616555ea39fda59e62426e29093faba77e18776ac47b57604cfe629381ab",
+      "runtime_report_sha256": "b5f48b06b4f19a058919a2047416b0d5a939eab07aae330b0a27ab8c847e82d2",
+      "exported": 13,
+      "runtime_scenes": 13,
+      "rendered_review_sha256": "bdf0b2ba8245382fb9e42d28ae6245201352c5af4a9b7485ce4191fa2e603932",
+      "sampled_motion_captures": 273
+    }
+  ],
+  "entries": [
+    {
+      "species": "azumarill",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "debc9617ad98b5365dbdc4ff12ba419084552c15dd9d7813c1009e480a02643a",
+      "normal_glb_sha256": "05c904e4e9cfe8d3827ec75ce57a5e31df0c5f976bf1e6857ea584200d55c1a7",
+      "shiny_glb_sha256": "43fd80032896ee3fc520a8473b944c850b22008f317ebde2f8e06bdbfa768a2d",
+      "shiny_scn_sha256": "eee07e6f093840a29c8cc74c9d4ea0309a59347bfc6f592408116a57da6cc002",
+      "geometry_motion_sha256": "e41fde8243b3c0d7ae72368c3b102b8f32666118c1c7612aba3b18da8106207c",
+      "official_rare_material_sha256": "b382ef27efb37d462051914689aaca23490efd7ae58e7ea0f9c4058c2b77a0e5",
+      "native_clips": 8
+    },
+    {
+      "species": "blissey",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "fdaacb49737d8e289598afd370537e813bdcd3ad06cf9f382ebdf27ec1c28af0",
+      "normal_glb_sha256": "eccab4299492c54c05448c472c1af6b2708a41e88fac3aeaa8f0d34798179505",
+      "shiny_glb_sha256": "85da5a5e2cd15f6de4a2f5da3048063b08284c61c09e72ca221b5dcd2f442eaf",
+      "shiny_scn_sha256": "d1e1c2954f5b4f5fa1c4e24182b8f31719e44cc349f9e7e644d174b68c6a4555",
+      "geometry_motion_sha256": "1d4dce7c7351fa2c09d857677e9ebee4e0a9fa3dea1b3d5e5d238cb6be4cc335",
+      "official_rare_material_sha256": "865dc82d1820b03ed6067bdfa01a6cc5e3acc6168168ca5a2f1721a3a248f766",
+      "native_clips": 8
+    },
+    {
+      "species": "chansey",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "0b9f55469da084e0f94d110a8793a3578a356b7e5f217a952cdc586ec0437d7f",
+      "normal_glb_sha256": "2f87ecaf340490705667cdc04ca5f9654e67e556384f2a3114c69149b2467286",
+      "shiny_glb_sha256": "608ed127451fce7c6ef1765e1f45d55417558ef960586c98bffbde489d1f9ad8",
+      "shiny_scn_sha256": "7c03e0772c8ef672be6a3d1cb6b057a6afcfbbd4392304138a60ecda7e9991ff",
+      "geometry_motion_sha256": "a352629fe5ae6f5ea9c2e9f142fe7e8a979e2c49cb051b3971b5a68d85123752",
+      "official_rare_material_sha256": "6b3913ab37ea9132861b54f519623347d01fe4407f107c8be5caab071421c5db",
+      "native_clips": 8
+    },
+    {
+      "species": "charizard",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "bb610eb2d81ea3963756cca4f0dda3ded856af5efb5853758e55a76d33c3b33f",
+      "normal_glb_sha256": "d8b525ced96ebad27f06d0f3603583feaab628ece60db69ef7181b6fdef50816",
+      "shiny_glb_sha256": "2333c1e6d54ce92e517fe2880e547977135e58800d9719bf3317718377972e48",
+      "shiny_scn_sha256": "e24a79f05d9db792b78b90ad2b226a00cb82ffb9bc7ec2d93def5fa7ed290f55",
+      "geometry_motion_sha256": "aad65cdfe1da3f9de027ae29293fb8cf226691141b811e0c714fe787df7f7f70",
+      "official_rare_material_sha256": "4d3154d4efafde4a032f82caf2aaefeada9b0372ac4d4a26303f81a434b0913a",
+      "native_clips": 8
+    },
+    {
+      "species": "cloyster",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "corviknight",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "abda53659dd0e2f7d1f35d379f1d4e95af96d28f5d51ae1dc229cacf8e0d0ef2",
+      "normal_glb_sha256": "6fed5efe33c15a9e0aedb793771fb3cb6a5bad9a733db9549e7ab980ba04c66e",
+      "shiny_glb_sha256": "24be1b665cfc985f6dea08ff90374154ae537bbf57c3c2c5afc161db26de6a3d",
+      "shiny_scn_sha256": "0e4caaca66c5bd8eea18916f75958e42a5f84b222c36a1c89d8edfc50308adba",
+      "geometry_motion_sha256": "14217da77d8e7025aa3120cb5f447786627624efc8acc5bf2b495e347101c881",
+      "official_rare_material_sha256": "76ad97512dddf4007c7b0b98ec903b7fb53a0fd3c8a7d6794ff6889844a253e4",
+      "native_clips": 8
+    },
+    {
+      "species": "delibird",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "9ba2b4160b5e20097823c4d2ee7fb94ac7f1037698526871ddf7612734a1a976",
+      "normal_glb_sha256": "45fc1705c7e83ae8e64fcfb5966be26ca5f9458310da5b358151f596baae805e",
+      "shiny_glb_sha256": "712dc946e73c63a46806da00771dd507295d01b1f3e822eeb6a4c57cb8cb11b4",
+      "shiny_scn_sha256": "4fd24e9d219272068afd988b2bddd3e63175b6e15db42856ef985c971b9fd454",
+      "geometry_motion_sha256": "a99136c85c0c9403b7e8d7d09cd55ede76c60a5b452b6209fc8331db47af2f19",
+      "official_rare_material_sha256": "b6bdd2df9465290bc273287aed636b64875812d3278b6790d26b06bd75137de9",
+      "native_clips": 8
+    },
+    {
+      "species": "diglett",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "28bc757093aec871c0ccadee8086285f1aeac7bf29330e0e1065cedd845c0239",
+      "normal_glb_sha256": "f372129b36c284352ce92371d3e39d33a65d5747d54377c4e12ec9facfd6058f",
+      "shiny_glb_sha256": "9b2426aefea881d0145732fff2703d88d36b7cd437346369771f19a82380e4eb",
+      "shiny_scn_sha256": "4718fd741011b7b8bc163a942434212dd3eefcce0ec1b1ca4b5328142a1dd7b2",
+      "geometry_motion_sha256": "97e308a5f16a2b49b9333915e55c79e3416665755335b32af4ef75cab25a1e35",
+      "official_rare_material_sha256": "533ef1e84616522edada67ab530918f1bd6f096e699518f79614bb7c751e225c",
+      "native_clips": 8
+    },
+    {
+      "species": "ditto",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "dondozo",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "c89c88d63312dc6881a7059b241d618c1221f103e47542d9c61f43d51499069c",
+      "normal_glb_sha256": "6514bbd5c2ccf84f8c81274527af61740c4388b8a5aef0c076e2d5f2ec8e86ab",
+      "shiny_glb_sha256": "760543ad509054f5c44e3b6eb32c4361cb9279563e0b2b9738f2373767389902",
+      "shiny_scn_sha256": "96f6579a7bd46536ac343e1256f6df445f081c494e663dcabadd22644af6953d",
+      "geometry_motion_sha256": "4d72bdadee35f2614be0e1da240bc6d6c86db948405ed79d52d11ec5e76226da",
+      "official_rare_material_sha256": "ef529be709026058d52e9e91d4f4ea4f677c5da7ae64f1b76f9d21181dcec34a",
+      "native_clips": 8
+    },
+    {
+      "species": "donphan",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "46747dd8c415ddf55b75437da462d500224918464b67d640aefb1335af86304d",
+      "normal_glb_sha256": "0de248abe3fa0af48ff6e15d7ed524c5ea88c985d34ff93d3d7cfaf4b39f9217",
+      "shiny_glb_sha256": "34215c7abd1489fffcae64e8a124eeea870bca9567f7384a2339d8112c131abc",
+      "shiny_scn_sha256": "35be3d84c37c7d3bfbaf0ea9da8a35e1c7b77e76b4904613c81777a7430ce41a",
+      "geometry_motion_sha256": "1fece632ca23eac4f3da34e5a00ff34f6459543a371e94168b5c31d7688f394b",
+      "official_rare_material_sha256": "172bcb96b0546355bed0750396e6b39f222d3b201aa30d0b1e6d5683833defae",
+      "native_clips": 8
+    },
+    {
+      "species": "dragonair",
+      "status": "held",
+      "reason": "Rare material settings differ: body_b"
+    },
+    {
+      "species": "dratini",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "5244a67b57f5f778fab1f5bccd9c804235be9ed96cb370749dc9f272fd244088",
+      "normal_glb_sha256": "f07497a8b2b3d01b296ecebd7479254fdc6985f14f2c1b307848d600ec94dbb6",
+      "shiny_glb_sha256": "40e83a5eae54001e92f65e81408fdaf1c5405ad7059412ac3e0410a685da2bbb",
+      "shiny_scn_sha256": "73603d7afa7a46db434c55aa6aff2c8926a634205275e16b62c8bef7e869c624",
+      "geometry_motion_sha256": "1416eab94c221fb05588bc8b3e53a56823f92ad8c8f8f67d07ee8dc4cfd57c1c",
+      "official_rare_material_sha256": "d5d43881c1a94dd3535df87195ee2d5ade694f2c4189b1e59ed5cb3f57c29fb5",
+      "native_clips": 8
+    },
+    {
+      "species": "drifblim",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "59fbfddf611fac8196a8a019a9e0662093f4089cbc61aad5a5688ae7908f1095",
+      "normal_glb_sha256": "33aa2f7bb5797b798b52286cb142c97b3f458421b80ea1dbe7d7bdcdc0358c32",
+      "shiny_glb_sha256": "8836a2ad28f4e0a88b9250375c69a3d4ebaa4171b0502c2c5f29bed78c966802",
+      "shiny_scn_sha256": "430a4a4c5a0ebdf98992f9f205f6f70fcb561c6f3779b38d149e777c151e216c",
+      "geometry_motion_sha256": "f6d5158027475137b7fc445729410341c2ea41e269d67509b0404f0e877f6b0b",
+      "official_rare_material_sha256": "b3e578960afac5bf14a219bedabd2bd6422cf7c9f7bd323fdafc619633881556",
+      "native_clips": 8
+    },
+    {
+      "species": "drowzee",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "790d6dcaa02f99ce77cf3aabc7bb0edcfd0c20fbf173cc3b204d5bc0c4dbbdfa",
+      "normal_glb_sha256": "a8db4e741e4261ee00fb1090146163f1535c58db4b65343817f144f598a37a9f",
+      "shiny_glb_sha256": "b8679cdd1d0d692c1a622dda44a68a213f063abe639849f7c45c1c1eb5624001",
+      "shiny_scn_sha256": "a5ef058b1bc918f454eb99bb81667227ff77fffcb0d0ef32e218f703281497c0",
+      "geometry_motion_sha256": "7606a3f5ec25ac22f3bebd074fddb715186a8788ef63696affb6639b9f6c074b",
+      "official_rare_material_sha256": "c077795c5d831271fa8686d306f59e40e94d860e27319071a904f16b5046cacc",
+      "native_clips": 8
+    },
+    {
+      "species": "eevee",
+      "status": "held",
+      "reason": "Normal/rare source texture mismatch"
+    },
+    {
+      "species": "electrode",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "fc4e7ab564fe1fb2f86ac6bfe4c6f7e90f52051b2646c817909bede8618b500d",
+      "normal_glb_sha256": "5749283c39b8423741c900df7d3d45641e3839081d9c9ac5e55dd60e506bcadd",
+      "shiny_glb_sha256": "e167ba0ca96b67a15097a648fd4bb2ac208f11756eb90342f87e4de1b7426f28",
+      "shiny_scn_sha256": "2b3b013caaa101cbe4e6cebd6295b530fd4b9375d121afc773bc18fac7579715",
+      "geometry_motion_sha256": "129a76f55c9f9d39352d6dab765ff678fe1bc6ddfc2cf2fe49d0215d79eeb5c5",
+      "official_rare_material_sha256": "49eb2dbf76eea5308e4e14af3cc0e1438ec395f366b0ce3f473ba61282416001",
+      "native_clips": 8
+    },
+    {
+      "species": "espeon",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "4c944fa866427e9b689bc6d32378581ae6c0b71cb7330614021dca33950adc8e",
+      "normal_glb_sha256": "25e598f13a6b89325a7aa14c1b01cccc3fcf6939247476ca5a410191049679f8",
+      "shiny_glb_sha256": "b41e19b4d25c5e742b50a5ee0058a4eadba661a7d1e25dee31ee59f4cbb8d135",
+      "shiny_scn_sha256": "55b93b5252787514ff94c6ac3d19cbf722572808841ebf7d5339d5b21fdf1319",
+      "geometry_motion_sha256": "0ccc40543fe996813d7e7f8bb557c8d469e182b9cdf2a76aaf0b8b0adda0cbbe",
+      "official_rare_material_sha256": "556470e176aa0e81163215cde49bdd07d800eaed29cd8f11d44ddaeaf09aed91",
+      "native_clips": 8
+    },
+    {
+      "species": "flapple",
+      "status": "held",
+      "reason": "Normal and rare albedo are byte-identical"
+    },
+    {
+      "species": "flareon",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "a0079cc6a5d334dbf6ab57a073766aca02ce1034feba8ced5a9a27652c6af7af",
+      "normal_glb_sha256": "b467c9278a57eaafd1315233eae97aa6e3471c09e20e9bb7b8d41b28418c7e3e",
+      "shiny_glb_sha256": "4c8a2c0ce2d748a5b084602922d5ca90fb8a334c32c2101a1a6ffeb97698f6f1",
+      "shiny_scn_sha256": "5736966296fb080c6049565214b8ca7d304d8a65a84df561c32b5c643b297c5e",
+      "geometry_motion_sha256": "2be08036623d850cedc0bbe404987fbd5b1956aecd095db913fce99d37ff1c16",
+      "official_rare_material_sha256": "940532ddffbb4391600aec1ddbda4fc5372aeca76ea6958e1fedf749a8c2bea2",
+      "native_clips": 8
+    },
+    {
+      "species": "forretress",
+      "status": "held",
+      "reason": "Rare material has a non-albedo change: pm0205_00_00_body/NormalMap"
+    },
+    {
+      "species": "garchomp",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "63981135aef04a3b7403c0d49d61e9dac6e950df9f63fec186402c55208b8af3",
+      "normal_glb_sha256": "40ed37254559c394fa8bdbbd6d877d61319c970a43b8c9789746141224a457ed",
+      "shiny_glb_sha256": "5c15f5628766259d6c614bd08d545c7c9c38169353775e7cfee5285623c67a00",
+      "shiny_scn_sha256": "4217c90f0a4cfb2f79641527a8c4cdcff283dad951dfad387ce84d8cf25cc0c9",
+      "geometry_motion_sha256": "69e7854686392abeab2a913884fae772e7c5f6cd37c05c8dd8958dcc974704da",
+      "official_rare_material_sha256": "a5d212bf3fe7c139e7a873188b55609b09f9ee2fee390e269b7e0ff1a2e642c1",
+      "native_clips": 8
+    },
+    {
+      "species": "gardevoir",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "243a682b37c82d8731eec6252c9bca0786e63f9fce9a00724b9e9864aa77941b",
+      "normal_glb_sha256": "442f51394cff7b7717d6e8392ddf0b39ca502c8891fa26b9a01c9f274260f237",
+      "shiny_glb_sha256": "87b9fd1e645a1136dba1e776e2c5e81b5c478e9d75a7642b5a000e29b3109618",
+      "shiny_scn_sha256": "075d8d1b5ba847c348f22d8482af8d56698161318fbdca5a33b5b085c6069c6e",
+      "geometry_motion_sha256": "997b2223cc64ab6ea47ae10ac427de657c5a84600e984617345324d36a3809f7",
+      "official_rare_material_sha256": "750d34e8073fc04766ad170187106420dfbd488600ac57099932427215843fba",
+      "native_clips": 8
+    },
+    {
+      "species": "gengar",
+      "status": "held",
+      "reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "golduck",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "9c5855c7a652188fe356bb7c37170dfe7b1ae3dba465be14ea88d4d17604a0e1",
+      "normal_glb_sha256": "bb97636f73c217d6fe6806fd9d3f4c70f7355b04c50b7fe331a724441d84572c",
+      "shiny_glb_sha256": "5b29c876e785c21e18d127b554e98927fdf6810b0988a894dfe4a1d8027f84f0",
+      "shiny_scn_sha256": "286ffeab5b60691fdc6479df4bedaeaa75d46bdc8838cae19f0fe9178f9dbf3d",
+      "geometry_motion_sha256": "b83231eba0e112a75df9e4cc74ff87823b9bde70ac225fb865cad38a61cf3490",
+      "official_rare_material_sha256": "f006d2096d044aa9e73107376e3e38f1d6f903b89894375236aefb87c1415c92",
+      "native_clips": 8
+    },
+    {
+      "species": "growlithe",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "gyarados",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "14793b5b522bd9cb8f3826b61de188ac99688b2264df20941e82ed2bb0243027",
+      "normal_glb_sha256": "6868688a5f33c85a3ee8f1a30bd532b6637bf89cbe28030b877eb1758bb6f5f3",
+      "shiny_glb_sha256": "1c240c639d50c612b6c1577f89bbabdfa84b25602c62412fc9de46d2b70d4faf",
+      "shiny_scn_sha256": "f14b3adff37f12d38a881d3cd7deb5a55714b1f5b73dc5aa627715d5aa14d9f4",
+      "geometry_motion_sha256": "44652ed3523c2d872d77c2c1040aca3632d5b2da4ddf7881ce72fe1020ef51ff",
+      "official_rare_material_sha256": "1d3f1f28636f0777089fd72419b0c61cb67847645316cce92391bd69e4fdb89c",
+      "native_clips": 8
+    },
+    {
+      "species": "hariyama",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "c8a6b898026a8f4efd78601eb6ae3d616b32eef9e48aa5756d75922fd0526acc",
+      "normal_glb_sha256": "cd56834469acbf0ba83133b480f1ba46dfaa1f148f6e3e6e658ca42f60304380",
+      "shiny_glb_sha256": "fb6d89358f8aebb711c492506ad50f7af74d4af079d5101eeaa449b41dfad0dd",
+      "shiny_scn_sha256": "7f295d8dcb95ff9b8f8f308f07f0d1b4a33ec6de67d7d9a71c8af0026bac82f3",
+      "geometry_motion_sha256": "2c12cfd7f11e200fc1e34b06483afff8defea37c79a5a0cee5072ae70e567bac",
+      "official_rare_material_sha256": "753e595bbe2ecdcb8ed93d8bcc83e19f18c93862a91452d1d6ed4a6732cf6dd6",
+      "native_clips": 8
+    },
+    {
+      "species": "haunter",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "2984a3c700969b10d62cf00ac65bbc53b0cf54d075825158b31efbfa31080b35",
+      "normal_glb_sha256": "9db8a4dd4b090d3755c3cc57d6baa859a673a938c7f3e5b3501c9a732a11f1f6",
+      "shiny_glb_sha256": "8a7cd533e7390a647a8b8ac34b14466df00da6f93b9268fca77d33e8ac2c9bfb",
+      "shiny_scn_sha256": "fe96d23341df2b72bbd9aaa4cbcf7c6cc90c7180c8a55906a4e212ac9c44de4b",
+      "geometry_motion_sha256": "52f2734a517965cee30fa7f743bcf11b54bc109e0ce23a54c1bf2247376188b7",
+      "official_rare_material_sha256": "523bca032c5b893d1daa49656f1538ba91d7d793ad7ea99be5bc544f71e80157",
+      "native_clips": 8
+    },
+    {
+      "species": "heracross",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "fcd63b2534b2a02db5614408af53390179e9e2f57767ad1ee3163b77cd2aff52",
+      "normal_glb_sha256": "997517fdde23724024528e01337b8095a1b413c9963586ac63f5089932d04317",
+      "shiny_glb_sha256": "de8efefa209829db4fab97fcc794b37fbee4ff00ad9558f59811dddc7ab6e767",
+      "shiny_scn_sha256": "f7410c4979d12c51d5b3fd0a8f5e6d56548bc681e6621cb3a1325afc830266cf",
+      "geometry_motion_sha256": "567236ac5cbbcdef5d4879dcda051ce24a4109c7d11ae8e9e7442f75cd03fc9d",
+      "official_rare_material_sha256": "16d8fbbb31363ac5816ad9b417091583111d5e85d5e13e5bcff94dd34cde5c47",
+      "native_clips": 8
+    },
+    {
+      "species": "hoopa",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "0c8290592826ab1d664c188caa46d1448d3e47e97cdf54207f836ce1bdf5ee8a",
+      "normal_glb_sha256": "f0dac873c20f075f015dfbef0292f5661ab82a4a71cdc70f8530658bbdc57f5e",
+      "shiny_glb_sha256": "2ae67ec4d0acaba875a895416df2e2925abeb12fd7e08a79de32bc8d9797c66c",
+      "shiny_scn_sha256": "36cd7156b927fe501600d9e5d98f70656192faba18cda1cb57df6ba648237018",
+      "geometry_motion_sha256": "54c971bff8d1db6a8b86716abb03d2943ab54c378800dca874aa878af4511c4f",
+      "official_rare_material_sha256": "41886601e7d0abd6eb50e7eba12df3e72691ab6c8967a0db5045892a9bd79227",
+      "native_clips": 8
+    },
+    {
+      "species": "hoppip",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "22084945a1a4e475622ab53e3de4d3a82e6b520d7ec1347d5acb4850ff2fbeb7",
+      "normal_glb_sha256": "a17ac89cc4ce0f9abdd5d513fe07eeb5b045b10092a897effa575bb0f9a32edc",
+      "shiny_glb_sha256": "e169fefe4123894ee614eaa31f77b6c5601214a4bd14e1b66c3ff6627a524125",
+      "shiny_scn_sha256": "fb5bc9b436d409307bd669f947dd4cc0cbe3cd96a89519eb66e84d1f23dbb9a4",
+      "geometry_motion_sha256": "29ea1d150fc8ab966422b1d915f2c3b8693b1f77c498d7a0bbd7254c6069436e",
+      "official_rare_material_sha256": "7535c8bb3db95f7b2bcc8c62b080700ac2d104932d8ce2c4a0930c12b1942aa7",
+      "native_clips": 8
+    },
+    {
+      "species": "hydreigon",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "6bff795c082b16253744c142c89b319eb11c73916859b4b6ab7b7f9dc2d3636e",
+      "normal_glb_sha256": "b34c5f2420c98883cfdf5c10450576ce656939bff5bf52aa32bdd02358cb359b",
+      "shiny_glb_sha256": "0a2671f22bc1421d2b4a9c943638fed6ba4459e102c38a3d1e2da8d380d6f46d",
+      "shiny_scn_sha256": "2ecafddc678efaed5075dec3fb35d5500ebe0d5068bb876a0b66d0a094de9302",
+      "geometry_motion_sha256": "a83d7b0994626505d26ea792ffbf48ca310a8541048042947707e80fe8de42cb",
+      "official_rare_material_sha256": "6bbf61c0fee8b53b16bccc17ba4852873be0eb4c5cdb74f4b1ca255082fd6b50",
+      "native_clips": 8
+    },
+    {
+      "species": "hypno",
+      "status": "held",
+      "reason": "Rare material has a non-albedo change: body_b_00/RoughnessMap"
+    },
+    {
+      "species": "jigglypuff",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "5100d8abc6a86fe4fd4cc2cfd6c20f72f522b4672b9f47ac1a46934aa3fa4294",
+      "normal_glb_sha256": "fb05808ad79e67dfa139c21c831b25bd533fceba24dd34bd6f3abef99352a19e",
+      "shiny_glb_sha256": "8554757deca0199d27133a9ab40d57ce50bf8abc0a36137300330a43edfa2196",
+      "shiny_scn_sha256": "9bb5b419b6713ebe1ebad6218b4dd707808090cd070a861ecf7788f9d09305ef",
+      "geometry_motion_sha256": "2d96e523a363652fbf21598c3337ee071c09b06069c61746670cf168b64f8726",
+      "official_rare_material_sha256": "2d6d7a982c05828fe27a7de78c7098fa314b6572cafb9f63d43f38348ddc7c71",
+      "native_clips": 8
+    },
+    {
+      "species": "jolteon",
+      "status": "held",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "jumpluff",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "e0709bc6d56fd2727df1e7b3cde2ff85fe7e982aa8d7e4cdc4f0443ff731ade9",
+      "normal_glb_sha256": "30d61a960a348c0ee8d14aa7c0dfca8084894950934a29040d7e0b9832503b6b",
+      "shiny_glb_sha256": "7326d65bab1fe3a8fa493f712fe754f0badb20bcfd2493d5f07d395575e4385e",
+      "shiny_scn_sha256": "3a027392c5c0175e81add3447ecd16d74523133541671dbd733a1f8738dee1f4",
+      "geometry_motion_sha256": "fa503eb77990c039c968de06570cb37a2f0a7063abbb723f8acf9eaf2c2b65b4",
+      "official_rare_material_sha256": "b43858555c8cae37aff925aee2a75ca0c17407a2d5cd21a767981c38b355744a",
+      "native_clips": 8
+    },
+    {
+      "species": "magikarp",
+      "status": "held",
+      "reason": "Rare material settings differ: body_00"
+    },
+    {
+      "species": "magnemite",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "b65e8d75dfef8de94265f454a675ded6e5803110b25752cec95025663eac1ff8",
+      "normal_glb_sha256": "d53bfe1a25e2219a28c7ea82c8c471b75bc69270157923c519db1f5fa24c0655",
+      "shiny_glb_sha256": "b44a3cf9827fcffdf403b9ba76cc0b4cb09f87e2f1472c3317622fdbc6d3f6c6",
+      "shiny_scn_sha256": "bcd458b782d1c4626e0be56af0743f3b3a46f5eba73704c943897b9c7f460933",
+      "geometry_motion_sha256": "d93148005cbea7ba16b404a82934017ce9e26ff91cb6c2ec6e3f5fe0cbd4f46c",
+      "official_rare_material_sha256": "fa2af847f5aece287db5dc5ca77b88679c06d197a50196608b1725d03dc3ff6e",
+      "native_clips": 8
+    },
+    {
+      "species": "magneton",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "447bd31ca942ab95616edbee123ea4aea7fc5baec46f2b168f9338474e0e1616",
+      "normal_glb_sha256": "bfe0c2564cc04d53340cf54c4c540cf33f0d62e42b9842517293dfad34ec3bcf",
+      "shiny_glb_sha256": "f952d5292b6bc2774a1f7b221b23d382f4ea7ddd6933772b100303418b455f81",
+      "shiny_scn_sha256": "48ee19126396b5b4726216d0898e1550420adc8958e029adbeb39d2bba84f332",
+      "geometry_motion_sha256": "0d6d21303d157a642e7749cff0fa5e722dfae0b7acc1ee14044c764a3969118e",
+      "official_rare_material_sha256": "a947885684c6030642323ecb489325c756daea7342e38013d5594d1ac462b6b9",
+      "native_clips": 8
+    },
+    {
+      "species": "magnezone",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "b1a20514b6cd4af1b8820992489e5a4a96c3b793689f46b9d5fc6eff20438621",
+      "normal_glb_sha256": "057987bde20f73a832ba5af55076bfcbf6487fa8448c1331e5f7abad5075cc4e",
+      "shiny_glb_sha256": "35fd8746a1fbfd9f837be2fbf0222ab3124f647b5dfece12e75d560b25ee5441",
+      "shiny_scn_sha256": "d3829fb68af94cb9031f6289223f696f60e7a91a6d3e62c0fbd2b9c86e4222cb",
+      "geometry_motion_sha256": "2151c57c304fd0d484884e1618c4dabd9e856fbdb722115c3d38aaa6696d20a2",
+      "official_rare_material_sha256": "9c78526af1a5c7100a2b9759835e29cdbda98976fb8873f8d1f5e4fb66559a9e",
+      "native_clips": 8
+    },
+    {
+      "species": "mankey",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "08a42542e674de765fb43db6a5f2ec7fc5a0ef877eb23efb2d0fa6e61dc1a579",
+      "normal_glb_sha256": "3b06f5eece97f0d407f006dfb7aeb9865233b118f872f97d83a9517637e30992",
+      "shiny_glb_sha256": "f3b8c8c6a4c7851932fb40ff70b2f3cbd884789a7cdfeb793495121146f7fbdc",
+      "shiny_scn_sha256": "c71eead62d4dd9348a5656ad9a3bf3cc3e55982cfe3d89715e999a605e5d1b05",
+      "geometry_motion_sha256": "09e37944ae439c0e3bf3a1c1746e2f9a2c75c4737f00f8b4d1085519354c375d",
+      "official_rare_material_sha256": "c3c9380111722379a13b5724c45cd8dc69867dc46694b802fb71ef463f41366d",
+      "native_clips": 8
+    },
+    {
+      "species": "marill",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "c8cec3e8862ccb21768bd74f9b798fe553d9ee84c7f3f772867bc448ae912e50",
+      "normal_glb_sha256": "0eb74878608b1f92b6a80fb3bfef1876e2fa6a0c9052327a1f986ce73a70933b",
+      "shiny_glb_sha256": "79fe6eed201dfb056994ccf977ac1b878afde619bb1a5181c5f6cf6a633d09b6",
+      "shiny_scn_sha256": "b097b2590f73c97a80a25f506e00c6a1f31ce3cd6dbddeac8390dde4db8768ba",
+      "geometry_motion_sha256": "6b2295dbbaa53325ac9355e38cb138d07b0675ff0cd1b5ccb7670fe4a1ae1ee0",
+      "official_rare_material_sha256": "18bb50a162f1a4c8c7178b939579ceb792465b0795098cae462c6de56334fdfc",
+      "native_clips": 8
+    },
+    {
+      "species": "meowth",
+      "status": "held",
+      "reason": "Normal standalone export report missing"
+    },
+    {
+      "species": "mew",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "59b42a9a786553f15e772af0a2d3eec40e7052f83ea0713038c07a5ecc74bdaa",
+      "normal_glb_sha256": "c8fd43791ba5aea04bb7a7191295bff3efff0924452dc6e94255aea2cf401c81",
+      "shiny_glb_sha256": "848c8d62a83a4c2fa3fb92978525a5894091d3f5b897ec939bddf9ecb571403c",
+      "shiny_scn_sha256": "4cac60c874b348834a8d393ee3cdc571c99777b8fa3024658962384a5b6ee7b1",
+      "geometry_motion_sha256": "aef92cfd72383417c0645919720388552479d3d6d772195085c8fbe592b9b562",
+      "official_rare_material_sha256": "14b9a001e7accebb8c13306ffc56dfb00243937ac4fa616b35d9b1d85767bbf7",
+      "native_clips": 8
+    },
+    {
+      "species": "mewtwo",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "9adbe54a97d008b1d58e80d9419b18f15d2c5a40cc1347eba59c70ec6d513126",
+      "normal_glb_sha256": "330567872d4853c382009afe1a83bdb11ff57245ab31e056d425e157e2be40d5",
+      "shiny_glb_sha256": "b2ecda4889b24582a57a33eb613ac7be8b8a9a50151c870cfc709bfafbc52bb0",
+      "shiny_scn_sha256": "70458061a9e2684086587eedd4b0e34f16dfd2f9ac67f05c2d5e92a0b5ae6454",
+      "geometry_motion_sha256": "3388d35f9b612fa26e62f75703b6bc6fbb0c9137437e20cd4c2aa3882a6b7a2d",
+      "official_rare_material_sha256": "d88d7d383149cd04d4e39be5a678e24d6a9a2599b7b523fc9ec1d06bc43bad1f",
+      "native_clips": 8
+    },
+    {
+      "species": "misdreavus",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "6a024fda29e22988e8cfc171413ec6a86f3f43f924d62b9fde16c17c810a9e6b",
+      "normal_glb_sha256": "bcd0d511c8f2c9bb194a9dda909f5bd64128a8cf5b927a3dce0c3a8b12882e74",
+      "shiny_glb_sha256": "9ab1e64f9655140949bff4566915ed38306fee7f6f49d330d3ccad6071341785",
+      "shiny_scn_sha256": "21631629116c68ffd8fd81a2f762a350972d3d62b7f7f0f9ee3229324df52e79",
+      "geometry_motion_sha256": "93654138b5669fbedc91b5e3cc122ef02ee8bdc1c5f0e43efbf72b58889b0b4d",
+      "official_rare_material_sha256": "7146667f8a7f20248156d7f85179535c81e150fd6f1c87ddad66e4a3b8bfa60f",
+      "native_clips": 8
+    },
+    {
+      "species": "murkrow",
+      "status": "held",
+      "reason": "Rare texture dimensions differ"
+    },
+    {
+      "species": "oricorio",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "fcc8348e2502ef96b23424789fc2e1a2eb3a341e4a88eee89edd90076b68fe0d",
+      "normal_glb_sha256": "d4ed5362817890a960029d074fdcc9ff514ee55a3215526a987f09e37c715a19",
+      "shiny_glb_sha256": "63348b9f12ef0941960ef3802bc968491c6510204d8e74e7d96fa63710f81d11",
+      "shiny_scn_sha256": "81ef02b91b9d38c3800b236c3e19351aabec05ad3e3ff0348deca1fe01076cfd",
+      "geometry_motion_sha256": "05055e9cf581ffee4d54870b776e951ba704b6069a589b2cca9f1daa16ff68a7",
+      "official_rare_material_sha256": "3dea7122b61087c194a58e74446e37e17601332f9b782e61e6ad7b4317e908b9",
+      "native_clips": 8
+    },
+    {
+      "species": "orthworm",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "d637ed8b77396d74fa03d71342833e624009bb42ada8accae864b5b7f167f869",
+      "normal_glb_sha256": "36ccd4659dd7c53ca7136f4f9547145452637ac07c1832f821d7d7604ead990c",
+      "shiny_glb_sha256": "19e9ee1a2f11c298b12fd8692527fa8491ed661dfe7be3260987e2f636427fc3",
+      "shiny_scn_sha256": "decbd03fec74f16a38925ca91969f4dad532fe31af8902332a0f2165c0bffc60",
+      "geometry_motion_sha256": "4479825d5394a87730fbe8748a6848bd1496fda5531f071960ca6a34d09d7cce",
+      "official_rare_material_sha256": "a7dd9e3022dfbb67ee5256516d7f8f7a300fc4f88c9fe1d557ef39d24dc591dc",
+      "native_clips": 8
+    },
+    {
+      "species": "pichu",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "e08fa8d1443bdc2c71dc32b7b7274651c0a10d76389cc87bcc5419dbbf4c304f",
+      "normal_glb_sha256": "9c2261d4169326cf3d0762862c904c94c330569ecc860b3b5bbc7876a0c194de",
+      "shiny_glb_sha256": "d10a1bdf4e5bbb4837f0c2c2b32f29e866c6f6c9a83b0a44bc090d6e9e67bc90",
+      "shiny_scn_sha256": "b86658a787307b9696814afff0ddab899c24214452160f9339eb731412f05087",
+      "geometry_motion_sha256": "58fbc18f03f7458364d2a437f45e7455d419d6d4b063fde4b8a6bce4d1aa3b39",
+      "official_rare_material_sha256": "32edc46b96dfd561965dae61268ba7143b8fb7891780ad4529c4c9f2d0ae1673",
+      "native_clips": 8
+    },
+    {
+      "species": "primeape",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "e51e8c3cd42b1e1d9f2955f3cf2f06961957503a76d341e39ec39b091a984729",
+      "normal_glb_sha256": "6df2fb9d4842a85133d45030ffa591ccd42217e9df3de871fe70110cb0cffec9",
+      "shiny_glb_sha256": "286d0fbc831c7618660a8a7d92f3ae9005ed6e323e2819cf2339f3240aff9484",
+      "shiny_scn_sha256": "3f5c83f2f8625d03c8d300b58761761f4ea8eb1696fc9e274a99348ca1ddd0a4",
+      "geometry_motion_sha256": "e9c17d10a4ac67f4a7a45cf1baf354fa6f6d3a1eaec516789d282b35bc481201",
+      "official_rare_material_sha256": "e6f4b68d9a317773c19e315b8ad06bc83bb45a156605db2a32c6af5f7531ebfd",
+      "native_clips": 8
+    },
+    {
+      "species": "psyduck",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "31361b117694d7aa93105c34376406b170bd03101b751ff96b502fdc413f9036",
+      "normal_glb_sha256": "88dce518c595c518a061c183ee4224952af1e82c2b5ced42f20c0484e0621b8e",
+      "shiny_glb_sha256": "3260936d8848b684b7cd637b4d86c2a7de46881299c6a43ab376b84f87a0eda6",
+      "shiny_scn_sha256": "e60bb87c83b33eb634e6acf870f3f69245e420b1ae89f247c2388c4049450e1e",
+      "geometry_motion_sha256": "13d7356a66fed774567ddc0ef7de397c13979bdca7eee2bfa71e8eabfce79678",
+      "official_rare_material_sha256": "491a5cbc3270058cc4d5035af39006663e8be409a41994a2cd30d785fc3a8d50",
+      "native_clips": 8
+    },
+    {
+      "species": "quagsire",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "f1aa3020e696304283b5ffd0188edfa8bd8d3c6a6f86fbe8bd551984c62075f0",
+      "normal_glb_sha256": "b2dd2c8a614651edc6a36126544356c0a6e9836ba1e0785dd7c68e037f9886e5",
+      "shiny_glb_sha256": "385a33c43acbaa38e11469d8c0d78cfd0fe5b09cd7f30a1e2519843f218c9abf",
+      "shiny_scn_sha256": "e7d568601a5d2424dcc477772aba6e59f196db185a712270ca41fc534e463b8b",
+      "geometry_motion_sha256": "d5c7a98799b8b1e4caf19feaeac7e0b645e9d922d3abab29f5e0b13027e9b7ad",
+      "official_rare_material_sha256": "5e2cda336c4f38f99088d80bb43ed73d82e1f156b3f3f8aa3c814a1d2a1fefa8",
+      "native_clips": 8
+    },
+    {
+      "species": "qwilfish",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "baeed98857c86e313beec7dafa62c3d37371e1abf99be58112377355cb26b523",
+      "normal_glb_sha256": "459e092aff48f1f68ec58c09f923126d46b6b5e32daaadb3085434c43e5da386",
+      "shiny_glb_sha256": "bb0b1e5ee0d14fba46983715ca09378ba944149c0450d15c6b03419672c4ea31",
+      "shiny_scn_sha256": "7bc9c24da0155caec5331e6a4d72f8db25f4bf84b324959b6405fc9d74a035f2",
+      "geometry_motion_sha256": "d76e0a0bcd08362cd4896f05bab5a294cfd28d7183ba42c4708b5e206522ddbd",
+      "official_rare_material_sha256": "7f8eac36deda3e183c8823fe1e323d3083a3c73021e717b5309736a0d8c69823",
+      "native_clips": 8
+    },
+    {
+      "species": "raichu",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "9c4f531346100f0505a3c5f4d68e0f61281e26979fc1145c1b0c1d2bfd78c34f",
+      "normal_glb_sha256": "08cb41349275a1683507f7261f81c3d63a18e9e7e10aa1c49f7e522c0966281f",
+      "shiny_glb_sha256": "8aede9c9a1d7cfabcd77e0f09d639dc9be0ba91572b494cf88591ed869fbf964",
+      "shiny_scn_sha256": "0b7d7e9a86eabc5a7c1ba73ee1396e306970d7d8832323d295390d9f15be195e",
+      "geometry_motion_sha256": "9988bcba4fdcc6104daf49cfc5036f0630efa48684535ea16411341fea37f10d",
+      "official_rare_material_sha256": "676535cb9e85806874c8058470eed3e9e518df43bf266f5b7b609338b5b8cf44",
+      "native_clips": 8
+    },
+    {
+      "species": "rayquaza",
+      "status": "held",
+      "reason": "Rare material has a non-albedo change: body_b/MetallicMap"
+    },
+    {
+      "species": "scizor",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "998656b43df16e785a4b833a41876d0f66a334f14abdb2ba42a1f0df60abdaa4",
+      "normal_glb_sha256": "5643b9ffd9f8e321cce4e089ccfec6e92549516a47dfa2f084d31c28cab537d2",
+      "shiny_glb_sha256": "b0bdb59c75453310446d3e1394c4df98ef99925f96fcdd73bb832f910b4eebae",
+      "shiny_scn_sha256": "19e51dfa76d882537de7470977a33148ae32b85acdabd0a40beb75f58427eec9",
+      "geometry_motion_sha256": "3b38eb9de54ca8c1ad822074cdd9e98012874b2c97d1a0f010c020a916e04254",
+      "official_rare_material_sha256": "b2792b39250222d54373c81925c50f4bf8d8fa65fdd51ec8a9ae92aaa62a7e14",
+      "native_clips": 8
+    },
+    {
+      "species": "scyther",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "396759bdf5dc8ba4391b9d951ffe12ed1ca40767752bdedeb0326fbcf5b32399",
+      "normal_glb_sha256": "a3fbc96612d574545531227c3092fa688af2775b12bb663269966de644645079",
+      "shiny_glb_sha256": "6322063920909a1bf260d603e0af1f3ddbcf9ff83e5a48caf29b98ad8da47bf3",
+      "shiny_scn_sha256": "aa10b21193a6f1a3961d700de41b35409c1e52cf908483d97381baa33825ebe5",
+      "geometry_motion_sha256": "9a73ba86f49351167ed038a7599881d683dc6ae1246294acf0c27576ca3c008c",
+      "official_rare_material_sha256": "b1c26c1bba1f44c339f16ead992cbabe6afb72fb99da996869de20c5a61d3a6b",
+      "native_clips": 8
+    },
+    {
+      "species": "seviper",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "9e9fabdd6e5790659474cde0d54e2c98b0a3df3ccd3eeda121b240a79635e06c",
+      "normal_glb_sha256": "a1f8006f2e66af87bce14e0fb172bc99132b1e18d6bc00798517400431e131ec",
+      "shiny_glb_sha256": "21ae4b9dbadc1fa5e2a470698ffb4cbd24d9b0033e8dd3c920e7cd4d7e83d55a",
+      "shiny_scn_sha256": "2c23dab40072d8ca658e004a064a2d00a864fe43ae77c49e36b5c9c9bbb7d5d1",
+      "geometry_motion_sha256": "10532b2b6f66a3d882f0b895f76abae120e402a981bab3dc88fe26c584bf2c67",
+      "official_rare_material_sha256": "8b1e47aeb72c134615cb4867d2f668dd04326dc1ee8232c593a0b64a8be4984a",
+      "native_clips": 8
+    },
+    {
+      "species": "shellder",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "1256ea3917e712cfe82a49df03175ee24dcbc7f71335e11378276b7938f1173b",
+      "normal_glb_sha256": "bad5658cf52fb58e520131913a79058601486ff3e62bb53e57708593b7252e2c",
+      "shiny_glb_sha256": "d4744e42328e51da425d14091c8548ee38b8a3278609c30dbe9a6882e702933e",
+      "shiny_scn_sha256": "3151bdb45fc6152c6bbedd83788bead755c40de89e9e872c8e42d6e50d61890c",
+      "geometry_motion_sha256": "de08115f2ac095ee981e1faa05c47d95a8747511923dfedb41acdfe29bae2fc6",
+      "official_rare_material_sha256": "13dd116967f9899884b9134a7e52ad756ade56f24f01cf66b3ae9f107fb12c8f",
+      "native_clips": 8
+    },
+    {
+      "species": "slaking",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "1b86c7e63d2d1f635979c61c5e1ac49314fa166e40e1768b559686af1019324b",
+      "normal_glb_sha256": "3c7ed0d6f8d782389cfe47eb62dd95d515e7ab5e64d00c10f130171bda212c55",
+      "shiny_glb_sha256": "a4f3e530ff08a8ef457b331b8567d9aa2233e769c6382573b26ccd684f460d8f",
+      "shiny_scn_sha256": "937e85e8dd11e245b7ff67fcb50581a0093dae75766e6544250108a3d44903ce",
+      "geometry_motion_sha256": "5820573354a56cab861535b5d01f12bdb15d0aefbf1ae34f57a85c92bd339df9",
+      "official_rare_material_sha256": "fe32e74ccdde59500c37392fb7cd86e94dd74176f8ac321368115f7db9ba695f",
+      "native_clips": 8
+    },
+    {
+      "species": "slowpoke",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "07361814dff9868bbd35af36d20afe004e9819c16b7fe89e559e0e9815a9476e",
+      "normal_glb_sha256": "feb4e84a3ff7f40546ed45e0b3afcd374fe5bd4fb6e0321015ee93e8dc624bdd",
+      "shiny_glb_sha256": "8b43ee86cf0c09b869a99b6adbc25c981b626a185c904cea1987e44014f86fc6",
+      "shiny_scn_sha256": "880a8063c42beef4e19c6ab51065bef7c60545f062ae6368c993f21e7d322d0a",
+      "geometry_motion_sha256": "909824a2f27471b88dc6fd5f1427d502a3dea28e3392cff353e44685c618d019",
+      "official_rare_material_sha256": "67500d1547eaceb23110274dc0a41d6b588c4db83eece2f16d9ccf6e76967a70",
+      "native_clips": 8
+    },
+    {
+      "species": "staraptor",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "bc178d48fe80011cf3730675de6ca59437e9c2484d2dce711df2000c1290c2c4",
+      "normal_glb_sha256": "05c76fa49df0f9c824d712c9133b6800bdb2362d434a7d7c833be91e3a9f6f1a",
+      "shiny_glb_sha256": "6f55ca44865de88cba9af485848a9db1212d85e0078db217422c6faf9bb636e2",
+      "shiny_scn_sha256": "44b9f63ebcbcb9d1812e68651bfdefc0eddea5bf42e6534f4bf85d3e3b3849ef",
+      "geometry_motion_sha256": "eaaa476774f16f9afef2944d7091ac269d2d74e4ce53d4c51ee15d4367b6ea9d",
+      "official_rare_material_sha256": "2bc52e72c55aa6f42a188420bff1e450abd752e250d6f65a71e5add8ad1f7e43",
+      "native_clips": 8
+    },
+    {
+      "species": "sudowoodo",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "48f984baef40fc8b1e491f6600ecd36f05de2e742c53cf447c6786a98dec6a1f",
+      "normal_glb_sha256": "5cbff1944fb1d358c9242041f0ff5791dc1b8e586a74401958bd93553cb39bf4",
+      "shiny_glb_sha256": "68ddec0b1e51a72ae331f35d4fb08e07a7907b79cbc6a3b41e251247c7d35661",
+      "shiny_scn_sha256": "dd3e5033b479d9183d541c29ebf39709ec0fd1de975204f2b430c01df90654cc",
+      "geometry_motion_sha256": "49851e6d94338ac8bb6cc23c296e379c84d9d5271b0393fbeef83295443c2049",
+      "official_rare_material_sha256": "b7c3614ddf90c75c1fdc529fb2eaca5b6c4f862a4f7d4408d98c9076de88b8f6",
+      "native_clips": 8
+    },
+    {
+      "species": "tauros",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "958018f9414907e558add1e7ffccf13b7fcdb870f0e321a02ff87747aa631c4b",
+      "normal_glb_sha256": "c16fccda9727d9f4e28839d4957ec1e9f03121fd90df5212d48146ae7ac085d1",
+      "shiny_glb_sha256": "68abbf7bd71055d93136b3168196c90b7681862ef4fb1b1e438f52de1bccd9c7",
+      "shiny_scn_sha256": "493abce36c356b841390a451e258794583295ff2466b84a2d55b1e0f77cc0642",
+      "geometry_motion_sha256": "8b6a0681b6f42dbfb13322e426a9a8d1b1447f69fcf276f8a5bc7d4d6d388dc3",
+      "official_rare_material_sha256": "30d559d6166bb981228611a3bc0d4bb9cdbfbc8f7b05c7e0a342556c8411db12",
+      "native_clips": 8
+    },
+    {
+      "species": "tyranitar",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "d4c043845d9e0aad77091351fb17d58af925e96d5b9fcb484bb87a0226d585e3",
+      "normal_glb_sha256": "498911224de7272d1bb3d4f327600e22d47bbba24b76f65972a095a3e4725c93",
+      "shiny_glb_sha256": "43f99b739a7e3cef20935ed65724268726660bf63b6b3bff285d30eafc92447d",
+      "shiny_scn_sha256": "95e3ec4641a0b796a838b0fec3cfd6ae7e2936923a90c36d9a70d438c26eca73",
+      "geometry_motion_sha256": "a7d50ee2476aa851872eb9f2aae5a874742bfb6104f76ae0c1458c67755323d5",
+      "official_rare_material_sha256": "bdad4b738b4909250d15c6b3ca3301e37a83bf4d07a3f997600f5ee6f08ee358",
+      "native_clips": 8
+    },
+    {
+      "species": "umbreon",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "f72339c99e68e5f6f6de03f26eabcac17282791728dfc5725d84bd4d3afee18b",
+      "normal_glb_sha256": "d4ce5d1129eda69d25dadc53caf47dd25c4dc42a270a1a0f163f9787443de199",
+      "shiny_glb_sha256": "ba8570bd9667d0f415f182749b42bfc77154118bbfd3797a9f09d7e33d6dc834",
+      "shiny_scn_sha256": "333ddb4e4c0ee4175fb979f6801c3373ecc4066b14ea0dd742291b5fcd9a05a0",
+      "geometry_motion_sha256": "20b9e20b1e5942ee6b31edcfb69b7236a9919e67454158e12428813c2faf315a",
+      "official_rare_material_sha256": "474ab74fcb6c4b0a123fa87687c3c4aaf5df41e57c953978a7f33924231d62d3",
+      "native_clips": 8
+    },
+    {
+      "species": "vaporeon",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "03ea8f8f5e20bb343f2916ce999596af1a925b66beaf577f089b460f5c0c6edf",
+      "normal_glb_sha256": "a3bd02d4877ad4ef3029b6c1bc7bf96020ef94604814fa99b6a9fb9f1b2a29cd",
+      "shiny_glb_sha256": "4bbe4110eb662a4c174c3be902f127c967248b151fcd0aa6fdd3eda7c91cb275",
+      "shiny_scn_sha256": "b06b6cedcd8159f3ef03e8dd8b151ff0d7e9e8e5db0895c5ab615de061263120",
+      "geometry_motion_sha256": "ed492fdf6bcd047125e58788d1add0be4038774663afcc52a81bb11c71e10727",
+      "official_rare_material_sha256": "3228e593592901b4cf320fa7c4f2d37ce8867311c5165d856ae6b76b712332c8",
+      "native_clips": 8
+    },
+    {
+      "species": "venonat",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "4516986d5a05e2bac6447978e1ae55854f3ef141080b9473f3d2302b13468348",
+      "normal_glb_sha256": "baca9583ff6feb7a888173e2a61ea8502a82fb7049d5aaa8d9ae5015a5ea38e2",
+      "shiny_glb_sha256": "54605a6b16bbab61ada16a919e0b34924763a29f6201b9641ed1dfaf2f75e77c",
+      "shiny_scn_sha256": "e9295ae7e9c71eb1a3ecccfbc0c4a883c6626fcf730a52bd1912a96549e7874e",
+      "geometry_motion_sha256": "b07334e52417263fb13eb1fac40a77cf03f1d77ffad96542d03c9a977d1c70cd",
+      "official_rare_material_sha256": "eaebf86e105ebf0631d3e785979c2681708c9dff220a1cae77d60cea662392e6",
+      "native_clips": 8
+    },
+    {
+      "species": "volcarona",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "aa89b64b533bb737e47173cc843af34dd01aa6a575356b28f3aae20af333ac75",
+      "normal_glb_sha256": "a259c169e24d214951a5e404ef9280e14d1d6877884f5660826ff7a9459dd29e",
+      "shiny_glb_sha256": "29bdb315382c2f6fa41e67170ac882abc7ba594b780226dac964fe0b47a5dce6",
+      "shiny_scn_sha256": "12551923d247cea0842722153dcaf14c8d982ed93b86d70326ae799df16dd1aa",
+      "geometry_motion_sha256": "e840db1d6b3bb3ff3dde0bad8655ddc248031312ef5f585b9a5301648983d531",
+      "official_rare_material_sha256": "85d7ca77d531bc9cbae7c12fed6ae8e6382fef180979712441a09612a2ffc051",
+      "native_clips": 8
+    },
+    {
+      "species": "voltorb",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "699fc96e116f28a5df948c7a45be4b886a7752001be09a6ee4c7c4f521f3dffd",
+      "normal_glb_sha256": "c7a58fa0bba2580a8683a834b91eca9315ac6879c0ceb02b84f1c8280273d3f9",
+      "shiny_glb_sha256": "19a2830dad65161adaf5b24f68910991d56d275762fa34b447c6fb0fad76cf02",
+      "shiny_scn_sha256": "3d3b9d16fb8211d61c0aa12ad5489163f7c9831fc566e3f632e3a4ace7d6fb1d",
+      "geometry_motion_sha256": "3a051ece2d37a926d917586d5c41fc59b743298adcd712b4e288322a2d3807d4",
+      "official_rare_material_sha256": "f3cc10986fc60e3e4d8970b5f459da2f950e81df37ae61b7bbec7cdf0ee49d58",
+      "native_clips": 8
+    },
+    {
+      "species": "wigglytuff",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "56d1d64e2d2099743dd4e53e43d7daa05779212d0dd3d5a51d24cc9e393d822b",
+      "normal_glb_sha256": "11812e7f0ddf8a22b53a600e04beaecc113bc852a621577ee0c1a288af286708",
+      "shiny_glb_sha256": "b3fd939bd5c395435865d1ccaa38f45233a561991868f3770daf8f5f63f44a2b",
+      "shiny_scn_sha256": "f60404199af38df2296dcb279ea6c3493d17e9892e8e3304cd950e42d5fe5c5d",
+      "geometry_motion_sha256": "388b3af4653ac61d21021ed738a6d18a0a2920c959174c754005c375941977e0",
+      "official_rare_material_sha256": "d8127a084f48bbb3d6dc4071f0f5a2c6a5c5406a4099f32b714d755acbe211cf",
+      "native_clips": 8
+    },
+    {
+      "species": "wooper",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "b5b589820f571f31a922713d7335cef5b98948f97f889968e85685bc22dc1b67",
+      "normal_glb_sha256": "c671e92fffd56500075690e49fe3de8d0d0173d7bfe4052b0e07db3a40e5a8e2",
+      "shiny_glb_sha256": "89afde42da1c9fd3d570fc774a5053cc4a95c8f62122ef5423d29e107c6f6883",
+      "shiny_scn_sha256": "4f7344a488ea2fd7c64ee36149fa06dc04924a9249707d5317f0a51e97833a30",
+      "geometry_motion_sha256": "7a6ad5901771fb0bc1dda3be5262de3edcab47433c275d5c0daf0bf296ce0654",
+      "official_rare_material_sha256": "81a355d898856c55ff27b712ba9112e44ad4631f6e25006f61812a6d2d2cd759",
+      "native_clips": 8
+    },
+    {
+      "species": "zapdos",
+      "status": "technical_candidate",
+      "normal_scn_sha256": "8751fa2e0f23dd809c8150ffcc67ce6fe8962ab153ea79476d6a547e56b41adc",
+      "normal_glb_sha256": "eac4ff87ebdb2e389fdd242d6efe47f8a580d0ece28ac83e4cffab9f50a92026",
+      "shiny_glb_sha256": "ed8a6f2cc6de0cf0f8d18474a2248fecf9dd9ae62abfd10ff026475d39d00389",
+      "shiny_scn_sha256": "d9fccadbc46354a672e0a1c0b3326573848a69df6e673c6d8cf48dbd43dbccc2",
+      "geometry_motion_sha256": "24dbd233c873731cf5826c53380e30180d76c9cb46c70710da7d73c8483fb045",
+      "official_rare_material_sha256": "91be8bea6089f14d6b4ff24f37abe269bed0a6fd75564819ede17b1d5d8e90b2",
+      "native_clips": 8
+    }
+  ],
+  "sampled_motion_captures": 1281,
+  "sampled_motion_errors": 0,
+  "normal_sampled_motion_captures": 1281,
+  "normal_sampled_motion_errors": 0,
+  "normal_motion_review_sha256": "8c9a1f816ebdfb1f64292c420992b22ecf355900968162f9774a2da986d6d183",
+  "local_pair_gallery_manifest_sha256": "3b058559357daa5baa6b0b560db19f3b11b08a233acc14004191cb89f7ad9f9d"
+}

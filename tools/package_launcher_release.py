@@ -340,6 +340,22 @@ def _build_asset_bundle_index(entry: str, base_url: str) -> dict:
     sha256 = sha256.strip().lower()
     if size_bytes <= 0 or re.fullmatch(r"[a-f0-9]{64}", sha256) is None:
         raise SystemExit("--asset-bundle-index integrity metadata is invalid")
+    required_ids = [
+        "pokemon_3d:arcanine:base",
+        "pokemon_3d:articuno:base",
+        "pokemon_3d:dragonite:base",
+        "pokemon_3d:lucario:base",
+        "pokemon_3d:pikachu:base",
+        "pokemon_3d:roaring-moon:base",
+        "pokemon_3d:snorlax:base",
+    ]
+    if revision == "approved-pokemon-3d-v2":
+        receipt = json.loads((Path(__file__).resolve().parents[1] / "release/approved_3d_bundles_v2.json").read_text())
+        pinned = receipt["index"]
+        if (pinned["object_key"] != object_key or pinned["size_bytes"] != size_bytes
+                or pinned["sha256"] != sha256 or len(receipt["bundles"]) != 21):
+            raise SystemExit("--asset-bundle-index differs from the pinned v2 release")
+        required_ids = [bundle["asset_id"] for bundle in receipt["bundles"]]
     return {
         "schema": 1,
         "kind": "pokeaether-release-asset-index",
@@ -348,15 +364,7 @@ def _build_asset_bundle_index(entry: str, base_url: str) -> dict:
         "objectBaseUrl": base_url.rstrip("/"),
         "sha256": sha256,
         "sizeBytes": size_bytes,
-        "requiredAssetIds": [
-            "pokemon_3d:arcanine:base",
-            "pokemon_3d:articuno:base",
-            "pokemon_3d:dragonite:base",
-            "pokemon_3d:lucario:base",
-            "pokemon_3d:pikachu:base",
-            "pokemon_3d:roaring-moon:base",
-            "pokemon_3d:snorlax:base",
-        ],
+        "requiredAssetIds": required_ids,
     }
 
 

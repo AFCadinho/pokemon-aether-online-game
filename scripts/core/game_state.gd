@@ -8,6 +8,7 @@ var player_direction: Vector2 = Vector2.DOWN
 
 var current_map: Node = null
 var prepared_world_state: Dictionary = {}
+var pending_coop_battle_result: Dictionary = {}
 
 var input_locked := false
 var overworld_input_locked := false
@@ -78,6 +79,7 @@ func reset_gameplay_runtime_state() -> void:
 	player_direction = Vector2.DOWN
 	current_map = null
 	prepared_world_state = {}
+	pending_coop_battle_result = {}
 	repel_enabled = false
 	show_follower = true
 	running_shoes_enabled = false
@@ -135,6 +137,16 @@ func consume_prepared_world_state() -> Dictionary:
 
 func has_prepared_world_state() -> bool:
 	return not prepared_world_state.is_empty()
+
+
+func set_pending_coop_battle_result(result: Dictionary) -> void:
+	pending_coop_battle_result = result.duplicate(true)
+
+
+func take_pending_coop_battle_result() -> Dictionary:
+	var result := pending_coop_battle_result
+	pending_coop_battle_result = {}
+	return result
 
 func lock_overworld_input() -> void:
 	overworld_input_locked = true
