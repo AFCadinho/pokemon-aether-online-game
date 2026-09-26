@@ -1,0 +1,154 @@
+name: Publish Android release
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Successful Build Android release candidate workflow run ID
+        required: true
+        type: string
+      build_run_attempt:
+        description: Attempt number for that build run
+        default: "1"
+        required: true
+        type: string
+
+concurrency:
+  group: publish-android-release
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  UPDATE_BASE_URL: https://updates.pokeaether.com
+
+jobs:
+  publish:
+    name: Publish verified Android candidate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Verify candidate run came from successful main build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${BUILD_RUN_ID}" > /tmp/android-build-run.json
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          run = json.loads(Path('/tmp/android-build-run.json').read_text())
+          expected_id = os.environ['BUILD_RUN_ID']
+          expected_attempt = os.environ['BUILD_RUN_ATTEMPT']
+          if not expected_id.isdigit() or not expected_attempt.isdigit():
+              raise SystemExit('Build run ID and attempt must be positive integers')
+          if run.get('name') != 'Build Android release candidate':
+              raise SystemExit('The selected run is not the Android candidate workflow')
+          if run.get('head_branch') != 'main' or run.get('event') != 'workflow_dispatch':
+              raise SystemExit('Android candidates must be built from main by workflow_dispatch')
+          if run.get('status') != 'completed' or run.get('conclusion') != 'success':
+              raise SystemExit('The selected Android candidate build did not succeed')
+          if str(run.get('run_attempt')) != expected_attempt:
+              raise SystemExit('The selected build run attempt does not match')
+          if not re.fullmatch(r'[0-9a-f]{40}', run.get('head_sha', '')):
+              raise SystemExit('The selected build has no valid source commit')
+          print(f"Verified successful main candidate from {run['head_sha']}")
+          PY
+
+      - name: Download private signed candidate artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: android-release-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: release
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify immutable APK and manifest before publication
+        env:
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, re
+          from pathlib import Path
+          from urllib.error import HTTPError
+          from urllib.request import Request, urlopen
+          from urllib.parse import urlparse
+          root = Path('release')
+          manifest_path = root / 'manifest-android.json'
+          manifest = json.loads(manifest_path.read_text())
+          game = manifest.get('game')
+          if not isinstance(game, dict):
+              raise SystemExit('Candidate manifest is missing game metadata')
+          build_id = str(game.get('buildId', ''))
+          match = re.fullmatch(r'([0-9a-f]{40})-([0-9]+)-([0-9]+)', build_id)
+          if not match or match.group(2) != os.environ['BUILD_RUN_ID'] or match.group(3) != os.environ['BUILD_RUN_ATTEMPT']:
+              raise SystemExit('Manifest build ID does not match the selected workflow run')
+          source_run = json.loads(Path('/tmp/android-build-run.json').read_text())
+          if match.group(1) != source_run['head_sha']:
+              raise SystemExit('Manifest build ID does not match the candidate source commit')
+          apk_name = f'game-{build_id}-android.apk'
+          apk_path = root / apk_name
+          parsed = urlparse(str(game.get('url', '')))
+          if parsed.scheme != 'https' or parsed.netloc != 'updates.pokeaether.com' or parsed.path != f'/game/{apk_name}' or parsed.query or parsed.fragment:
+              raise SystemExit('Manifest URL does not match the immutable Android object key')
+          if not apk_path.is_file():
+              raise SystemExit('Candidate APK is missing')
+          size = apk_path.stat().st_size
+          digest_state = hashlib.sha256()
+          with apk_path.open('rb') as apk_file:
+              for chunk in iter(lambda: apk_file.read(1024 * 1024), b''):
+                  digest_state.update(chunk)
+          digest = digest_state.hexdigest()
+          if game.get('sizeBytes') != size or game.get('sha256') != digest:
+              raise SystemExit('Candidate APK size or SHA-256 does not match the manifest')
+          if not isinstance(game.get('versionCode'), int) or game['versionCode'] < 1:
+              raise SystemExit('Candidate manifest has an invalid Android version code')
+          try:
+              request = Request('https://updates.pokeaether.com/manifest-android.json', headers={'Cache-Control': 'no-cache'})
+              with urlopen(request, timeout=30) as response:
+                  current_manifest = json.loads(response.read().decode('utf-8'))
+          except HTTPError as error:
+              if error.code != 404:
+                  raise
+              current_manifest = None
+          if current_manifest is not None:
+              current_code = current_manifest.get('game', {}).get('versionCode')
+              if not isinstance(current_code, int) or game['versionCode'] <= current_code:
+                  raise SystemExit('Candidate Android version code must exceed the currently published version')
+          Path('release/apk-name.txt').write_text(apk_name + '\n')
+          print(f"Verified Android {game['version']} code {game['versionCode']}: {size} bytes, SHA-256 {digest}")
+          PY
+
+      - name: Upload immutable APK, then publish updater manifest
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          apk_name="$(cat release/apk-name.txt)"
+          python3 tools/upload_launcher_release.py release --layout updates \
+            --file "${apk_name}" --file manifest-android.json
+
+      - name: Verify public updater manifest and download routes
+        run: |
+          python3 tools/verify_latest_download_redirects.py --remote --public-base-url "${UPDATE_BASE_URL}"
+          python3 - <<'PY'
+          import json
+          from urllib.request import Request, urlopen
+          base = 'https://updates.pokeaether.com'
+          with urlopen(Request(f'{base}/manifest-android.json', headers={'Cache-Control': 'no-cache'}), timeout=30) as response:
+              manifest = json.loads(response.read().decode('utf-8'))
+          game = manifest['game']
+          request = Request(game['url'], method='HEAD')
+          with urlopen(request, timeout=30) as response:
+              if response.status != 200 or int(response.headers.get('Content-Length', '0')) != game['sizeBytes']:
+                  raise SystemExit('Published immutable APK URL failed its size check')
+          print(f"Published Android {game['version']} manifest and immutable APK are reachable")
+          PY

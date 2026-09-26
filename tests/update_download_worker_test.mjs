@@ -4,7 +4,8 @@ import worker from '../infrastructure/updates/worker.mjs';
 
 const build = `0.3.78-${'a'.repeat(40)}-123-1`;
 function environment(kind, platform, change = {}) {
-  const key = kind === 'game' ? `game/game-${build}-${platform}.zip` : `launcher/${build}/PokeAetherLauncher-${platform}.zip`;
+  const extension = platform === 'android' ? 'apk' : 'zip';
+  const key = kind === 'game' ? `game/game-${build}-${platform}.${extension}` : `launcher/${build}/PokeAetherLauncher-${platform}.zip`;
   const entry = { url: `https://updates.pokeaether.com/${key}`, sizeBytes: 123, ...change };
   return { UPDATES: {
     get: async name => {
@@ -20,11 +21,12 @@ function environment(kind, platform, change = {}) {
 
 for (const host of ['updates.pokeaether.com', 'updates.pokemonaetheronline.com']) {
   for (const kind of ['game', 'launcher']) {
-    for (const platform of ['windows', 'linux', 'macos']) {
+    for (const platform of kind === 'game' ? ['windows', 'linux', 'macos', 'android'] : ['windows', 'linux', 'macos']) {
       test(`${host} ${kind} ${platform} redirects GET and HEAD to the manifest archive`, async () => {
         const filename = kind === 'game' ? 'PokeAether' : 'PokeAetherLauncher';
+        const extension = platform === 'android' ? 'apk' : 'zip';
         for (const method of ['GET', 'HEAD']) {
-          const response = await worker.fetch(new Request(`https://${host}/${kind}/latest/${filename}-${platform}.zip`, { method }), environment(kind, platform));
+          const response = await worker.fetch(new Request(`https://${host}/${kind}/latest/${filename}-${platform}.${extension}`, { method }), environment(kind, platform));
           assert.equal(response.status, 302);
           assert.equal(new URL(response.headers.get('Location')).host, host);
           assert.equal(response.headers.get('Cache-Control'), 'no-store');
@@ -35,7 +37,7 @@ for (const host of ['updates.pokeaether.com', 'updates.pokemonaetheronline.com']
   }
 }
 test('rejects unrelated paths, hosts and write methods without reading R2', async () => {
-  for (const url of ['https://evil.example/game/latest/PokeAether-windows.zip', 'https://updates.pokeaether.com/manifest.json', 'https://updates.pokeaether.com/game/latest/PokeAetherLauncher-windows.zip']) {
+  for (const url of ['https://evil.example/game/latest/PokeAether-windows.zip', 'https://updates.pokeaether.com/manifest.json', 'https://updates.pokeaether.com/game/latest/PokeAetherLauncher-windows.zip', 'https://updates.pokeaether.com/launcher/latest/PokeAetherLauncher-android.apk', 'https://updates.pokeaether.com/game/latest/PokeAether-windows.apk', 'https://updates.pokeaether.com/game/latest/PokeAether-android.zip']) {
     assert.equal((await worker.fetch(new Request(url), {})).status, 404);
   }
   assert.equal((await worker.fetch(new Request('https://updates.pokeaether.com/game/latest/PokeAether-windows.zip', { method: 'POST' }), {})).status, 405);

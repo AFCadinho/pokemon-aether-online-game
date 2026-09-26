@@ -64,6 +64,12 @@ The workflow downloads the pinned music source archive from the existing
 update domain for Godot import. Its checksum and size are verified before use.
 Running the workflow and publishing its artifact are separate operations.
 
+After reviewing a successful candidate built from `main`, run the
+`Publish Android release` workflow with that build run ID and attempt. It checks
+the source commit, APK checksum, size and manifest identity, uploads the
+immutable APK first, then publishes `manifest-android.json` last so existing
+clients only see complete releases.
+
 An isolated x86_64 Android 35 emulator completed a permanent-key signed
 version-code 1 to 2 upgrade through the in-app downloader and Android's
 installer. The updater verified the downloaded APK; a pre-existing app-private
