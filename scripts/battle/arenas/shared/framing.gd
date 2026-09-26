@@ -11,6 +11,10 @@ const ROUTE_24_RIVER_ORIGIN := Vector3(32, 0, 43)
 const ROUTE_25_COAST_ORIGIN := Vector3(30, 0, 25)
 
 static func battle_origin(id: String) -> Vector3:
+	if id == "pallet_town_water":
+		return Vector3(-32, 0, 29)
+	if id == "viridian_city_water":
+		return Vector3(-32, 0, 27)
 	if id == "cerulean_city_water":
 		return CERULEAN_RIVER_ORIGIN
 	if id == "route_24_water":

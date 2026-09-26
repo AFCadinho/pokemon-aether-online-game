@@ -54,9 +54,9 @@ func _check_resolution_priority() -> void:
 		"lobby trainer battles keep their existing background"
 	)
 	_check_equal(
-		Resolver.resolve({"battle_kind": "wild", "map_id": "kanto_pallet_town"}),
+		Resolver.resolve({"battle_kind": "wild", "map_id": "kanto_route_5"}),
 		Catalog.DEFAULT_ENVIRONMENT_ID,
-		"wild battles outside the lobby keep their existing background"
+		"unmapped wild locations outside the lobby keep their default background"
 	)
 	for encounter_type: String in ["surf", "fish", "old-rod", "good_rod", "super rod"]:
 		_check_equal(

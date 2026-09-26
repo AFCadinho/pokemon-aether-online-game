@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
+const IDS := ["pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -34,6 +34,11 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
+	"pallet_town": {"scope": "map", "map_id": "kanto_pallet_town", "terrain": "grass", "lighting": "outdoor", "builder": "maps/pallet_town/arena.gd"},
+	"pallet_town_water": {"scope": "map", "map_id": "kanto_pallet_town", "terrain": "water", "lighting": "outdoor", "builder": "maps/pallet_town/arena.gd"},
+	"viridian_city": {"scope": "map", "map_id": "kanto_viridian_city", "terrain": "grass", "lighting": "outdoor", "builder": "maps/viridian_city/arena.gd"},
+	"viridian_city_water": {"scope": "map", "map_id": "kanto_viridian_city", "terrain": "water", "lighting": "outdoor", "builder": "maps/viridian_city/arena.gd"},
+	"pewter_city": {"scope": "map", "map_id": "kanto_pewter_city", "terrain": "grass", "lighting": "outdoor", "builder": "maps/pewter_city/arena.gd"},
 	"pewter_city_gym": {"scope": "map", "map_id": "kanto_pewter_city_gym", "terrain": "stone", "lighting": "enclosed", "builder": "maps/pewter_city_gym/arena.gd"},
 	"cerulean_city_gym": {"scope": "map", "map_id": "kanto_cerulean_city_gym", "terrain": "pool", "lighting": "enclosed", "builder": "maps/cerulean_city_gym/arena.gd"},
 	"cerulean_city": {"scope": "map", "map_id": "kanto_cerulean_city", "terrain": "grass", "lighting": "outdoor", "builder": "maps/cerulean_city/arena.gd"},
@@ -86,7 +91,7 @@ static func camera_target(id: String) -> Vector3:
 	return Framing.camera_target(id)
 
 static func uses_forest_assets(id: String) -> bool:
-	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
+	return id in ["pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "forest", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 
 static func uses_outdoor_lighting(id: String) -> bool:
 	return str(definition(id).get("lighting", "fallback")) == "outdoor"
@@ -103,6 +108,18 @@ static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 		for child in world.get_children():
 			if child is WorldEnvironment:
 				child.environment.background_color = Color("b4cad6")
+		if id in ["pallet_town", "pallet_town_water"]:
+			var town = preload("res://scripts/battle/arenas/maps/pallet_town/arena.gd").new()
+			town.water_battle = id.ends_with("_water")
+			return _apply_lighting(id, town.build(camera))
+		if id in ["viridian_city", "viridian_city_water"]:
+			var town = preload("res://scripts/battle/arenas/maps/viridian_city/arena.gd").new()
+			town.water_battle = id.ends_with("_water")
+			return _apply_lighting(id, town.build(camera))
+		if id == "pewter_city":
+			var town = preload("res://scripts/battle/arenas/maps/pewter_city/arena.gd").new()
+			town.water_battle = id.ends_with("_water")
+			return _apply_lighting(id, town.build(camera))
 		if id in ["route_1", "route_1_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_1/arena.gd").new()
 			route.water_battle = id == "route_1_water"
