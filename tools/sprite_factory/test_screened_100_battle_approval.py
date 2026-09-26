@@ -28,7 +28,7 @@ class Screened100BattleApprovalTests(unittest.TestCase):
         self.assertEqual(reviewed["screened_100_battle_approval_sha256"], digest(approval_path))
         self.assertEqual(reviewed["screened_100_placement_recovery_sha256"], digest(recovery_path))
         self.assertEqual((qualification["qualified"], qualification["held"]), (55, 6))
-        self.assertEqual((len(reviewed["models"]), len(reviewed["profiles"])), (164, 82))
+        self.assertEqual((len(reviewed["models"]), len(reviewed["profiles"])), (166, 83))
         self.assertEqual((len(screened["models"]), len(screened["profiles"])), (14, 14))
         candidates = {row["species"]: row for row in production["entries"] if row["status"] == "technical_candidate"}
         accepted = {row["species"] for row in qualification["entries"] if row["status"] == "battle_qualified"}
