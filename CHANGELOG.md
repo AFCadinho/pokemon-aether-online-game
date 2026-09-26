@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Classic wild battles now briefly show the player Trainer sprite and callout when throwing a Poké Ball and receiving the capture result.
+
 - The Adventure Party EXP buff now covers shared wild and NPC battles, and hides when a party member is offline or on another map and battles are solo.
 
 - Immersive Adventure Party doubles now use the single-battle Trainer voice variants for move callouts instead of repeating one fixed line.
