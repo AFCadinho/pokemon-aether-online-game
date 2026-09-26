@@ -1,0 +1,1742 @@
+{
+  "schema": 1,
+  "date": "2026-09-27",
+  "format": "standalone_scn_existing_pipeline",
+  "pipeline_changed": false,
+  "runtime_approved": false,
+  "activated": false,
+  "requested": 100,
+  "identity_verified": 98,
+  "standalone_models": 65,
+  "blocked": 35,
+  "native_clips": 520,
+  "models_with_second_physical_attack": 65,
+  "godot_pose_timing_errors": 0,
+  "standalone_motion_images": 1560,
+  "visual_approval": "normal static and motion gallery accepted by user; battle and shiny qualification pending",
+  "evidence_sha256": {
+    "tools/sprite_factory/catalog_production_batch_03.json": "11dfca1acb08498f7f406742bff2ebf18a4d30fe977f94f08ebdef3e38ebf12c",
+    "tools/sprite_factory/catalog_production_batch_03_intake_result.json": "f4195a2a85abf41b04041cec5ee85497ff43e1d7d2979184b7eb5ee78ee46f3a",
+    ".tmp/catalog-production-03-review-2026-09-27/export/catalog.json": "db13034434f6230e099f00f235809faa8a3695bd707de708a2a8301d4af2f376",
+    ".tmp/catalog-production-03-runtime-2026-09-27/report.json": "d140fdebc716b678eaa5048f7b92e62605c3ef3480f617f9b26a936f6ffd8038",
+    ".tmp/catalog-production-03-motion-2026-09-27/review.json": "c865ec794c4813dabb88f600283ea8e3f60cff039789109642c4f3c5ae198b2a",
+    ".tmp/catalog-production-03-motion-2026-09-27/index.html": "4e0093b3cb62e421a087c83dc1bd82e13cf89799d8bcf7003acad950011535d7"
+  },
+  "entries": [
+    {
+      "species": "gothita",
+      "resource_id": "pm0574_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/gothita.scn",
+      "runtime_sha256": "8a540e9bac60315a62733e56350097d90e2ee7d9dba9ec7e54d0e62e5d344dad",
+      "glb_sha256": "e375b07fdec1d418f5776a3946df412e125c84ea19809f055c5725760fc2a76e",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "gothorita",
+      "resource_id": "pm0575_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/gothorita.scn",
+      "runtime_sha256": "39fd9c46cb95feed8ed7756e03691da421495cf8833f4b9a47b31f455f5d4d8d",
+      "glb_sha256": "4bcd91c89fcfb4ab8d83eacdcf2e47c4611d57de366d28cbb76b70e4f8180550",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "gothitelle",
+      "resource_id": "pm0576_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/gothitelle.scn",
+      "runtime_sha256": "df166db290b25c60f56bc7f261a02caae2516189209ca97e335826dc1d3504d7",
+      "glb_sha256": "2dc36978e2c54d64fd09dec40831c6c0b1a67d366fdc5b3ab09da9f9e6ddb9fe",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "deerling",
+      "resource_id": "pm0585_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "sawsbuck",
+      "resource_id": "pm0586_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "foongus",
+      "resource_id": "pm0590_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/foongus.scn",
+      "runtime_sha256": "87687442fcf434682dd0efd9fab8c7805f6814d8ac144f28b419d3d3f094875b",
+      "glb_sha256": "69fb7ae5aba6b8c2eee4ba5fc3e5a15699f05d7b35403ac626436042681ff0b2",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "amoonguss",
+      "resource_id": "pm0591_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/amoonguss.scn",
+      "runtime_sha256": "4a8829e250130d68a8867ae7a5d42633c3f5ccf6e462c15b40def93b2c704ab1",
+      "glb_sha256": "e0afce036e12be92a48ed8a4cc8abe7223d8f4bd0fb4cf9f21c1ea9ff392d0e0",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "alomomola",
+      "resource_id": "pm0594_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/alomomola.scn",
+      "runtime_sha256": "0d28d64e53a82712e82612f82e4bee2b6b6f32e0747b22cb609f479b8af4e507",
+      "glb_sha256": "51ba3e11e0f8bcc47e9848007da37d76d327397fe9597f72d8bd0fde115dced6",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "tynamo",
+      "resource_id": "pm0602_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/tynamo.scn",
+      "runtime_sha256": "112f79cda5c95d43b5ed9c0b433ea99c6c4843e6173a2e609c7c75dd33a61035",
+      "glb_sha256": "849f424a5b532efa09f526e98c778d428564a23c584f5b830130767322752bb4",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "eelektrik",
+      "resource_id": "pm0603_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/eelektrik.scn",
+      "runtime_sha256": "0bd25b66b5105f0e3f3b8b9beb7d73623d25d3ae63a48057098f20ea18a1f5a1",
+      "glb_sha256": "86b97aa9a51f00f37edccbb697247d4cffe9ac310e41a92d2135e9098831e7c0",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "eelektross",
+      "resource_id": "pm0604_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "axew",
+      "resource_id": "pm0610_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_clock",
+        "reason": "Unsupported dynamic visibility clock"
+      }
+    },
+    {
+      "species": "fraxure",
+      "resource_id": "pm0611_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/fraxure.scn",
+      "runtime_sha256": "48f538a8177f42dc264ad493fedcaae28281457e0cf6ccf385c67f79bf9a7921",
+      "glb_sha256": "020baffd55d4f6781e8255912a6932977b2cd5b02d61dd931b55e902c97f550d",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "haxorus",
+      "resource_id": "pm0612_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/haxorus.scn",
+      "runtime_sha256": "5fe9a6f128639cbc5e771e817da1a54d16ad61b00b35768dda629089116a1962",
+      "glb_sha256": "522a13b19408b16ffc0652a49d2405118430f0b8d2c4903e621035ea3344f2e5",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "cubchoo",
+      "resource_id": "pm0613_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/cubchoo.scn",
+      "runtime_sha256": "87590df6973221f6e921a644f2bcab2690ae57e6507666bcdde1b41fe8286bc0",
+      "glb_sha256": "7cae19564a293232e84cb0273e185e1e7eefc5cb7b362c0b816526470e2af402",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "beartic",
+      "resource_id": "pm0614_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/beartic.scn",
+      "runtime_sha256": "f47170ef7d7088f0f8a1fbaf217bf9abd906d867d413cfd196f1cd8ca2e60809",
+      "glb_sha256": "f4b00bf93212d0ac58b9c25abcff93a7cf977d419670906b33f69b8fa0e5a8db",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "cryogonal",
+      "resource_id": "pm0615_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "pawniard",
+      "resource_id": "pm0624_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/pawniard.scn",
+      "runtime_sha256": "5ed09ba9aef3e92a584871f09c40c8714cd81fa8d87e304830db245b4f429880",
+      "glb_sha256": "faf5afe8ab2be29ce7adab60ec589726924aff6b943669b25ddd356c89168c3e",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "bisharp",
+      "resource_id": "pm0625_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/bisharp.scn",
+      "runtime_sha256": "20ecc4c0f02141409413f1340e780f752491056c92b653ea314be27b98cb2191",
+      "glb_sha256": "b9d8697da818d2b5615d1c7ab2b59a91f307d0ef166b3c4e75315ca3198149c0",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "rufflet",
+      "resource_id": "pm0627_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "braviary",
+      "resource_id": "pm0628_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "deino",
+      "resource_id": "pm0633_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/deino.scn",
+      "runtime_sha256": "0ff9ede755c3bae64bd748ec3faa085caa7c57be8c16c787f440bdb83e425905",
+      "glb_sha256": "159c75639667f9c2ea99548931045f18338160a6f181a0e7b5512e4390fcab02",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "zweilous",
+      "resource_id": "pm0634_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/zweilous.scn",
+      "runtime_sha256": "7317abcee447e3a121c23d0019661bff9f9deb450610464bbf04054e2e53fd7d",
+      "glb_sha256": "94d54bb667a96562dbecfca6b7bc82c5b0edf39bfa63d097978a41d14fb8f7d2",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "larvesta",
+      "resource_id": "pm0636_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/larvesta.scn",
+      "runtime_sha256": "0b595afe3b791224d719081714c5169d84205761fece13786df2582917e4a432",
+      "glb_sha256": "6eb4e3cd9aa9294d00e5eb5869e48b7aff4a9e5bdb58a6df0bcf5109d4489df0",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "tornadus",
+      "resource_id": "pm0641_11_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/tornadus.scn",
+      "runtime_sha256": "62a29752995b20bc82524cb88f103637c99faebbc687be78118a455811e20480",
+      "glb_sha256": "59e0089b75c11ea159d30de766e0a5f1c9fb9345eebec07a1261feae9792b6d4",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "thundurus",
+      "resource_id": "pm0642_11_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/thundurus.scn",
+      "runtime_sha256": "e2ff05f06424dbc695745caaa0a6d086246d90e56d2ad2b1cf8528a2b51de3e9",
+      "glb_sha256": "05604b8a58c2d4231255639ba1d5c4df0bf0813c97d8b77ed0bc1ebb1a752185",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "landorus",
+      "resource_id": "pm0645_11_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/landorus.scn",
+      "runtime_sha256": "3b04694ca602763d7532e15c5d981cffd85834bb763f0147bbfc52539f0d8587",
+      "glb_sha256": "ea458896dc670bab291ea0c43ff87447d9851c723ff7fdac11811d647f4d41de",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "meloetta",
+      "resource_id": null,
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "source_identity",
+        "reason": "Mesh/material/skeleton differs from ROMFS: pm0648_11_00.trskl"
+      }
+    },
+    {
+      "species": "chespin",
+      "resource_id": "pm0720_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/chespin.scn",
+      "runtime_sha256": "2a405fa390bf5dab525bee883d4b8045f722a0fc3ca48a9ac696105a9ec74131",
+      "glb_sha256": "214d8be3653dd1a2a9b903dce9254664ddedd0b9be1f12187a08b70394bc2c19",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "quilladin",
+      "resource_id": "pm0721_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/quilladin.scn",
+      "runtime_sha256": "bc91162da1ceb95f2f2667008909146b0e30a0bbf44c90635d45024e9ff867f8",
+      "glb_sha256": "d404f4e463346b8b4c902559128d1a5c4ed6d55efe4f2fa5be94c34dcec5398f",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "chesnaught",
+      "resource_id": "pm0722_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/chesnaught.scn",
+      "runtime_sha256": "6231851bedbbd4fd64a1b933108a24a4891465b087476d1b162e132761eda8e1",
+      "glb_sha256": "e61bab1e5015264c5c2022de015b01cdf489e99b65ddd11ecc7f16c6bd53a82a",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "fennekin",
+      "resource_id": "pm0717_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_clock",
+        "reason": "Unsupported dynamic visibility clock"
+      }
+    },
+    {
+      "species": "braixen",
+      "resource_id": "pm0718_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/braixen.scn",
+      "runtime_sha256": "0e8c9b813b9c3bed2f2709054a758c296348abfc3a8b32236f476f28bb73ffcf",
+      "glb_sha256": "2b849795a9aa6491d7299cc59b493586e2ec752415c3ef29dfafd2b0addd2d2b",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "delphox",
+      "resource_id": "pm0719_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "auxiliary_effect",
+        "reason": "Missing or ambiguous auxiliary effect loop: fire"
+      }
+    },
+    {
+      "species": "froakie",
+      "resource_id": "pm0723_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/froakie.scn",
+      "runtime_sha256": "bf1ead1de2172dff42c55e5441b4b07b1ed21ff1f4df68bea62a61b26ff8172d",
+      "glb_sha256": "8a1b82195f5b9c93966f4f1f83cd3b76d7f0b3318f5fc410760793587ee49872",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "frogadier",
+      "resource_id": "pm0724_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/frogadier.scn",
+      "runtime_sha256": "0f9688e50ee584fd9a82fdcb7c800da66c2ea2c7a246fb7d57f5c8b0b934998b",
+      "glb_sha256": "62589e8a0608b3f97ea0cb367937107099bc5aa1034176835b594c37c8dd1193",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "greninja",
+      "resource_id": "pm0725_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "fletchling",
+      "resource_id": "pm0753_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "fletchinder",
+      "resource_id": "pm0754_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "talonflame",
+      "resource_id": "pm0755_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "scatterbug",
+      "resource_id": "pm0706_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/scatterbug.scn",
+      "runtime_sha256": "f012bd30f3ba6305dc0a37acbdd9fbfbc9bea8525da43724248415b868739e0c",
+      "glb_sha256": "5a3a8c8b35ce7d80502bf11e1727825d474c34b39932e6656d9e7a3bb07a7028",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "spewpa",
+      "resource_id": "pm0707_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/spewpa.scn",
+      "runtime_sha256": "c038d5c060474ab7784c8e6d410def7f9f04167c7d7b511062886712e6c15b16",
+      "glb_sha256": "1d74832120c5a9f84f3ba76e37417e8714054a4a06f7d513268821240c07bdcc",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "vivillon",
+      "resource_id": "pm0708_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "litleo",
+      "resource_id": "pm0704_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/litleo.scn",
+      "runtime_sha256": "14629beae356ad3fc50d250ad80c7a9dc2d5f68be01f080dea83f5db7181833b",
+      "glb_sha256": "7c009bf83882f5316c267b2c3efcb552c2567a2357c9cafac1f919463015b162",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "flabebe",
+      "resource_id": "pm0713_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "floette",
+      "resource_id": "pm0714_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "florges",
+      "resource_id": "pm0715_11_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "skiddo",
+      "resource_id": "pm0728_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/skiddo.scn",
+      "runtime_sha256": "885a41cffd018894d578d293f0ca54caa298a828ffb95f7e6e2b85c2b2347064",
+      "glb_sha256": "e46c20cf5ddf71114d3e7e5248fdea9919d5557cad8805a0b87ba5c28fcd552e",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "gogoat",
+      "resource_id": "pm0729_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/gogoat.scn",
+      "runtime_sha256": "d71f4a67d9cc4634fd443a3c80629fbe2a4e5e7d391b8add2e71f410cfab8e1e",
+      "glb_sha256": "73199c9f3eb2dd7eab8155c67fc101eeb71d0ba8d408e4dc75e99a4cef6a51ae",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "skrelp",
+      "resource_id": "pm0709_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/skrelp.scn",
+      "runtime_sha256": "d22c1abbc563029f01be1bef54507e5f1193f49f63e8e47388af09bff3dde18d",
+      "glb_sha256": "f200c1db7b26b889f17193abf89880e15f0b18b25a379a9e0216efbcedf8b423",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "dragalge",
+      "resource_id": "pm0710_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/dragalge.scn",
+      "runtime_sha256": "d28d7cdd12ca0992707ea2cf0de262624c87c6da6e0b9bdb068da2007eb4e8da",
+      "glb_sha256": "8c61a160f966b91cd6e37a8da07d0af6a10b6f27dc29f1402089bf75683301bc",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "clauncher",
+      "resource_id": "pm0756_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/clauncher.scn",
+      "runtime_sha256": "d4aa002a39c751f9ba66442a957ce586d8e8056cd8804485aa9a403ea4892024",
+      "glb_sha256": "cded6ab276116dcfa95a6317fa9d8653d27a926c067bf2e8a48f7d5e8fd044c5",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "clawitzer",
+      "resource_id": "pm0757_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/clawitzer.scn",
+      "runtime_sha256": "40b4d20fff45cc6f6671cc3639150b82f46865c58c361adea4e2721aae206b05",
+      "glb_sha256": "e1a580077414faf29dbabc6dc21ab2ff0c4d24ca233964376195612ae8f8fcfa",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "sylveon",
+      "resource_id": "pm0767_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/sylveon.scn",
+      "runtime_sha256": "6dac737842f8827a01c4a301fd5e250af19a4f6549a4287d5b0bae702dd1e02b",
+      "glb_sha256": "d2097bb7d1259f2fbda78c87718557cf30daff5666c609e218fcf806f8d33423",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "hawlucha",
+      "resource_id": "pm0761_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_clock",
+        "reason": "Unsupported dynamic visibility clock"
+      }
+    },
+    {
+      "species": "dedenne",
+      "resource_id": "pm0741_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/dedenne.scn",
+      "runtime_sha256": "95a7b958e3bc6239b00cd593d8824976acb165c488d0a1ea0d1416c501500fad",
+      "glb_sha256": "95f1dd73bb46d83ad6c32c73725ef38077ad73eb1fb76783d08708ccf8744870",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "carbink",
+      "resource_id": "pm0766_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "goomy",
+      "resource_id": "pm0763_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/goomy.scn",
+      "runtime_sha256": "6a8bdee3c689f32141626530672a559c8e3bdb179ba8fde1c5ac458d106ac390",
+      "glb_sha256": "a31cb671f8b05771197f800becad4a029e0cce34ab9a81fe28be658066dbf2f4",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "sliggoo",
+      "resource_id": "pm0764_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/sliggoo.scn",
+      "runtime_sha256": "dc4220ee923dd51f81e41230687c4df14d786e50006ac7c070bf9f5f985db0cb",
+      "glb_sha256": "437bd518ae3df109eb53c963585339b42bac0ff383a548f1c76e566d195381d3",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "goodra",
+      "resource_id": "pm0765_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/goodra.scn",
+      "runtime_sha256": "df4343421ef33fe79a8312a97a79202d4d60e69e49fa968531bce3ea488266d7",
+      "glb_sha256": "d9d1ac558782ffa09f3c07931cdd5e377d4d3a8b4cd8196b23b0cd0b839dba39",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "klefki",
+      "resource_id": "pm0760_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/klefki.scn",
+      "runtime_sha256": "12ce16a6323a9e58df85cc6927b56e9f965b5ed171ce8dd1cc3e0319e5b7c0ab",
+      "glb_sha256": "42607220cf27f5dc2e0260c11de792897bba7d8e68602b751a407564c068533a",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "bergmite",
+      "resource_id": "pm0749_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "avalugg",
+      "resource_id": "pm0751_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "noibat",
+      "resource_id": "pm0716_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "noivern",
+      "resource_id": "pm0762_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "idle_motion_bank",
+        "reason": "Incomplete or ambiguous idle motion bank; source review required"
+      }
+    },
+    {
+      "species": "diancie",
+      "resource_id": "pm0772_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "volcanion",
+      "resource_id": "pm0773_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/volcanion.scn",
+      "runtime_sha256": "8d6667d74fc1f4f798b9f8c77b8269338190489997d98edeeaa9cd204c44e20b",
+      "glb_sha256": "b1e94f92de3c8d401f5485745c560bfaeeebe73f628b519ae8f07ff7ef676c8f",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "rowlet",
+      "resource_id": "pm0841_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/rowlet.scn",
+      "runtime_sha256": "b195018f796f5fd5700d32cc8a2756e02da279e3afa7a1d4070c13292e95242a",
+      "glb_sha256": "af3f01a0c4cd76f72b5826036b325e1a5068d7e29ba718915032f1755c84fae6",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "dartrix",
+      "resource_id": "pm0842_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/dartrix.scn",
+      "runtime_sha256": "4cdf79c492bf3c9a7f780e30d0e8e610dfd9b447b8d10250c78c0e5a27a91c81",
+      "glb_sha256": "9e9590715ef38867a4677795274c19585c0475316a82068e783e22066917f8f5",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "yungoos",
+      "resource_id": "pm0826_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/yungoos.scn",
+      "runtime_sha256": "374775b47ff82cea8f0852f7dc36edf4c27389278b8abbfe198982fe9660a478",
+      "glb_sha256": "f0e832c3035527d43c6fc7dd626be64cc3d09ae72af83c8d03239b758eeee499",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "gumshoos",
+      "resource_id": "pm0827_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/gumshoos.scn",
+      "runtime_sha256": "d06b65c87401cc4a64e68cd1662240aaa24693ee389c732aa17af32cdbee6b37",
+      "glb_sha256": "79d88abe71944cf0574e669f0e14d4eed7604fd44945ade1aba7c45ef41319fe",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "crabrawler",
+      "resource_id": "pm0859_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/crabrawler.scn",
+      "runtime_sha256": "3394c32140e62b9d8baa3b764ca699d33d63d83f09ebd269ee6de71b91c6ac98",
+      "glb_sha256": "21844803401f37b42588bebb42868e755194b11e71b0dcea6b80c94cdb5ba60b",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "crabominable",
+      "resource_id": "pm0860_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/crabominable.scn",
+      "runtime_sha256": "8f835f92db05c74809c9f74de20b7e705b91121f7c948fd0d81da1d9053866f4",
+      "glb_sha256": "623a99d057aff1914c18fe321a8a2ba834f36d513702620e2e9927d7ea3b354f",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "rockruff",
+      "resource_id": "pm0828_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/rockruff.scn",
+      "runtime_sha256": "a99ed8acf334da0a66bb7b746c21658966ec2026c7f3acf71180667ebc084563",
+      "glb_sha256": "c544c1277b667773ba54fb5d90ab78bf1ef21f7c81c2acaeca93206da100c574",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "lycanroc",
+      "resource_id": "pm0829_11_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/lycanroc.scn",
+      "runtime_sha256": "a9efb7054288f4fe4701cb1bdcb79eca9a717690bde2d017879827c407976007",
+      "glb_sha256": "6fb8d90086ba156f828287dfe56859daaf7df9a2a8b6465c2d9cb3b96491f062",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "mareanie",
+      "resource_id": "pm0801_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/mareanie.scn",
+      "runtime_sha256": "6300fb243fe93d6112b484d469024992e2d6a0c5a1af4efe29b5d242070828ae",
+      "glb_sha256": "ff6fc1c9bf273e813df0c04c3e8ddc3c238f8f3c4657733743c9d5ae64e31570",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "toxapex",
+      "resource_id": "pm0802_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/toxapex.scn",
+      "runtime_sha256": "980bd3a920cce4782675ff50cae80b0494e3cacf76b7c174313ad04aa0724e9b",
+      "glb_sha256": "1d09a34529d942d26b24942426968a86cdbf74ac4e3145d2e26ed96b8dd28de1",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "mudbray",
+      "resource_id": "pm0839_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/mudbray.scn",
+      "runtime_sha256": "b321af6c3c5487cec8a8d68c8a6f23220f6a6a7e84b2ada6b3611a80863c183b",
+      "glb_sha256": "3453dfc7cc286f255cbdf583d3df0f4268c1f8891b9b7a1910d4c30aac796821",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "mudsdale",
+      "resource_id": "pm0840_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/mudsdale.scn",
+      "runtime_sha256": "5cd7c1b4326df3db5b0df0ed04eb15a81d054df22b24deef57dec10529135e14",
+      "glb_sha256": "80a36fc0f1689cf94c344a39f5bd1de6d6cbedad492a172bff3352e2d1339c2f",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "fomantis",
+      "resource_id": "pm0868_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/fomantis.scn",
+      "runtime_sha256": "4bd177ea2141034bc85d5a356d20864ffb66343a2e9921fe53a27762087b8b29",
+      "glb_sha256": "9fd6f69ea970404336c4afc74c01c98e9a20b9481f108ae97cb093e0ee2ba5e2",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "lurantis",
+      "resource_id": "pm0869_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    },
+    {
+      "species": "salandit",
+      "resource_id": "pm0805_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "auxiliary_effect",
+        "reason": "Missing or ambiguous auxiliary effect loop: fire"
+      }
+    },
+    {
+      "species": "salazzle",
+      "resource_id": "pm0806_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "auxiliary_effect",
+        "reason": "Missing or ambiguous auxiliary effect loop: fire_a"
+      }
+    },
+    {
+      "species": "bounsweet",
+      "resource_id": "pm0812_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/bounsweet.scn",
+      "runtime_sha256": "5b4cb2fa5d0545c580cc466e7b5ae3f5be9bd2ba86b5a58f211f2f81fd662e47",
+      "glb_sha256": "39a3af7af730f3bbd80a5dd42a5dac1ebdcd62d8c0d36a688c795bad16fccdd4",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "steenee",
+      "resource_id": "pm0813_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/steenee.scn",
+      "runtime_sha256": "e50456a558adbbd50160539a5917f6e32de2e52cedde48bf02fb0bc455ded6d2",
+      "glb_sha256": "3f64fdf1766433877be6ef35d2b90c2c76a7cd281f8bbbeed2c8cf50885ee034",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "tsareena",
+      "resource_id": "pm0814_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/tsareena.scn",
+      "runtime_sha256": "5967aeeaec14c7127ebc73e8a1fa4566fa166961ca9a8412ea72af14b3bfe897",
+      "glb_sha256": "dae8e243cc83be6c91b21cb6ba4f079dcc7523620dfac5c30afd8fde7146501a",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "oranguru",
+      "resource_id": "pm0810_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/oranguru.scn",
+      "runtime_sha256": "26bc39326fe39a0af5b4836b08f9d865c62f5a8028a2d8da2f3dd41902a0205f",
+      "glb_sha256": "4ec60eb5ec34415b0a520219e24745db89cbb8e4722d78bbd7c12da456ffe34a",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "passimian",
+      "resource_id": "pm0815_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/passimian.scn",
+      "runtime_sha256": "b2c09f4c0a6f46ac8309a85d18314e3b3eabe8d09f424c90182f4edf1f8ba0ea",
+      "glb_sha256": "e405116bba6f18557ca2974ce317d432f8eaed28ca9dd1c8b4a1bd97bc59259d",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "sandygast",
+      "resource_id": "pm0822_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "palossand",
+      "resource_id": "pm0823_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_variant",
+        "reason": "Unknown or ambiguous visibility variant target"
+      }
+    },
+    {
+      "species": "komala",
+      "resource_id": "pm0811_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/komala.scn",
+      "runtime_sha256": "e3a48856b9390fd75927861c4c265c04b7a55e0e5b63596dbca66621ae0e2cd1",
+      "glb_sha256": "3b6a4e054282e3891ccab37857e81a9729dff9e6a02ad9bc7091c5e0c678163b",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "mimikyu",
+      "resource_id": null,
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "cross_form_motion",
+        "reason": "Cross-form animation catalogs need selector review"
+      }
+    },
+    {
+      "species": "bruxish",
+      "resource_id": "pm0855_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_clock",
+        "reason": "Unsupported dynamic visibility clock"
+      }
+    },
+    {
+      "species": "grookey",
+      "resource_id": "pm0948_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/grookey.scn",
+      "runtime_sha256": "c6526aa22931e88fbf27d85009acfb88a670824a42e2673e0fbc5d1276febb13",
+      "glb_sha256": "ed05e221ffb44306af91b41ebc1b9573b915eeab094f0bd5b14d98a46858f55a",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "thwackey",
+      "resource_id": "pm0949_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_clock",
+        "reason": "Unsupported dynamic visibility clock"
+      }
+    },
+    {
+      "species": "scorbunny",
+      "resource_id": "pm0954_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/scorbunny.scn",
+      "runtime_sha256": "cf1baf6e93dd785b4453fe9f562126501c8c075e98f034fa4524fb3c1321bbbb",
+      "glb_sha256": "f492b422fa6657d88fafd4d79280f1938c0b2537267decb10467b4b118e8926d",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "raboot",
+      "resource_id": "pm0955_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/raboot.scn",
+      "runtime_sha256": "d40c5203d15a456c2f12a3176a1e767eb89871de809d0735b796a49d081ce1bd",
+      "glb_sha256": "31f71fb4eaf18cf3a8d82990b430a77ffb773938b986592e0e6d4f97a78d9196",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "sobble",
+      "resource_id": "pm0951_00_00",
+      "export_status": "exported_for_review",
+      "runtime_approved": false,
+      "visual_review": "normal_static_accepted",
+      "runtime_path": ".tmp/catalog-production-03-runtime-2026-09-27/sobble.scn",
+      "runtime_sha256": "bd9dbaa09c1201335849f9e28e33fd84d99d13834a13cc89db468b660ec07e88",
+      "glb_sha256": "96913aa3a1e005706d778d65bcbcf05dea95fe8c82c75ac974c8dea7529a8c22",
+      "native_clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "godot_errors": []
+    },
+    {
+      "species": "drizzile",
+      "resource_id": "pm0952_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "visibility_clock",
+        "reason": "Unsupported dynamic visibility clock"
+      }
+    },
+    {
+      "species": "inteleon",
+      "resource_id": "pm0953_00_00",
+      "export_status": "held",
+      "runtime_approved": false,
+      "reason": {
+        "category": "unsupported_transparency",
+        "reason": "Native transparency/refraction is not supported for one or more materials."
+      }
+    }
+  ]
+}

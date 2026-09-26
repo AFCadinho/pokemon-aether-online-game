@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-27",
+  "evidence_sha256": {
+    ".tmp/catalog-production-03-battle-motion-candidates-2026-09-27.json": "e4a805222a190458ac2c51b7b5b7631fb33f6a805d67171e7d6972c309b9b790",
+    ".tmp/catalog-production-03-battle-raw-2026-09-27/battle-review.json": "b3e1cd4af23bf81b5eb417dabc0a48f976f3d92587090ab5ec6353a7af82754a",
+    ".tmp/catalog-production-03-battle-raw-2026-09-27/sleep-review.html": "5b9ff8b7dc5bdf40f38163fd5634ca510a6c76a7ad498942de32796e3ab4f210",
+    ".tmp/catalog-production-03-battle-readability-2026-09-27.json": "afaf8a300f296c9cd4403888eedb8679568532e2f40fd352723eb706d9d12086",
+    ".tmp/catalog-production-03-battle-scaled-2026-09-27/battle-review.json": "14299e9b98569439fbeb6940997b3eca2b649e2b7bc06c18182c968627ab09c3"
+  },
+  "independent_120hz_review": "in_progress",
+  "kind": "catalog-production-batch-03-battle-preliminary",
+  "motion_profiles_baked": 65,
+  "normal_models_measured": 65,
+  "raw_sample_hz": 60,
+  "release_approved": false,
+  "runtime_approved": false,
+  "scaled_below_60px_idle": [
+    "tynamo"
+  ],
+  "scaled_hud_conflicts": [],
+  "scaled_out_of_view": [],
+  "scaled_sample_hz": 60,
+  "scaled_sleep_floor_warnings_m": {
+    "alomomola": -0.004053,
+    "beartic": -0.301824,
+    "braixen": -0.009876,
+    "chesnaught": -0.29933,
+    "chespin": -0.011194,
+    "dartrix": -0.189924,
+    "deino": -0.027959,
+    "froakie": -0.082022,
+    "goodra": -0.005237,
+    "gumshoos": -0.005967,
+    "landorus": -0.054531,
+    "passimian": -0.014044,
+    "sobble": -0.091882,
+    "thundurus": -0.048888,
+    "tornadus": -0.037403,
+    "tynamo": -0.005568
+  },
+  "schema": 1,
+  "sleep_visual_review": "pending_user_feedback"
+}

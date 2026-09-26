@@ -32,3 +32,32 @@ the motion review JSON SHA-256 is
 The next stage is human visual review, battle placement and animation checks,
 then normal/shiny pairing and approval only for qualified models. Held cases
 can be addressed independently.
+
+## Visual and shiny follow-up
+
+The user reviewed all 65 normal models on the single-page motion gallery and
+reported “Allemaal goed.” The exact cohort and gallery hash are recorded in
+`tools/sprite_factory/catalog_production_batch_03_static_review.json`.
+
+Official rare materials yielded 53 albedo-only shiny candidates; 12 are held
+for settings or texture-channel differences in
+`tools/sprite_factory/catalog_production_batch_03_shiny_prescreen.json`. All
+53 eligible shinies passed exact normal/shiny geometry and animation parity,
+converted to self-contained scenes, and produced 1,272 sampled pose images
+without errors. The user reviewed the 53 side-by-side pairs and reported
+“Allemaal goed.” The evidence is pinned in
+`tools/sprite_factory/catalog_production_batch_03_shiny_visual_review.json`.
+Battle placement and real battle loading remain pending for this cohort.
+
+## Battle placement in progress
+
+The complete raw and readability-scaled 60 Hz passes measured all 65 normal
+models in both battle cameras. After scaling, all remained in view and none
+overlapped the HUD proxy. Tynamo stayed below the 60-pixel idle readability
+threshold. Sixteen sleep poses had a measured point below the floor, so these
+need visual review before any sleep placement decision. The existing baker
+created motion clearance profiles for all 65 models without a hold. The
+independent 120 Hz verification is still running; no battle or runtime approval
+follows from the preliminary passes. Exact species, floor readings and hashes
+are pinned in
+`tools/sprite_factory/catalog_production_batch_03_battle_preliminary.json`.
