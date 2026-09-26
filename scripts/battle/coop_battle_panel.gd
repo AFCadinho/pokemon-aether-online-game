@@ -30,6 +30,7 @@ var _decision := ""
 var _revision := -1
 var _playing := false
 var _latest: Dictionary = {}
+var _presented_pokemon_names: Dictionary = {}
 var _header: Label
 var _connection: Label
 var _prompt: Label
@@ -561,6 +562,8 @@ func _present() -> void:
 		if displayed_cursor < 0:
 			_apply_positions(snapshot)
 		for event: Dictionary in fresh:
+			if str(event.get("kind", "")) in ["switch", "drag", "replace", "detailschange"]:
+				_remember_pokemon_name(str(event.get("actor", "")), str(event.get("details", "")))
 			_append_event(event)
 			if animate:
 				await _animate_event(event, fresh)
@@ -576,6 +579,9 @@ func _present() -> void:
 
 
 func _apply_positions(snapshot: Dictionary) -> void:
+	_presented_pokemon_names.clear()
+	for position: Dictionary in snapshot.get("positions", []):
+		_remember_pokemon_name(str(position.get("controller", "")), str(position.get("details", "")))
 	if _native_mode:
 		_apply_native_positions(snapshot)
 		return
@@ -613,6 +619,26 @@ func _apply_positions(snapshot: Dictionary) -> void:
 			cards[controller].info.text = ""
 			cards[controller].hp.value = 0
 			cards[controller].details = ""
+
+
+func _remember_pokemon_name(controller: String, details: String) -> void:
+	if controller not in SLOTS:
+		return
+	var name := details.split(",")[0].strip_edges()
+	if name.is_empty():
+		_presented_pokemon_names.erase(controller)
+	else:
+		_presented_pokemon_names[controller] = name
+
+
+func _pokemon_name_for_command(controller: String) -> String:
+	var name := str(_presented_pokemon_names.get(controller, ""))
+	if not name.is_empty():
+		return name
+	for position: Dictionary in _latest.get("positions", []):
+		if str(position.get("controller", "")) == controller:
+			return str(position.get("details", "")).split(",")[0].strip_edges()
+	return ""
 
 
 func _apply_native_positions(snapshot: Dictionary) -> void:
@@ -1720,7 +1746,13 @@ func _show_trainer_for_event(event: Dictionary) -> void:
 	var kind := str(event.get("kind", ""))
 	var message := ""
 	match kind:
-		"move": message = "Use %s!" % str(event.get("move", ""))
+		"move":
+			var pokemon := _pokemon_name_for_command(str(event.get("actor", "")))
+			var move_name := str(event.get("move", "")).strip_edges()
+			if not pokemon.is_empty() and not move_name.is_empty():
+				message = LocalizationManager.text("battle.voice.move.use", {"pokemon": pokemon, "move": move_name})
+			elif not move_name.is_empty():
+				message = "Use %s!" % move_name
 		"switch", "drag", "replace":
 			var pokemon := str(event.get("details", "")).split(",")[0].strip_edges()
 			if not pokemon.is_empty():
