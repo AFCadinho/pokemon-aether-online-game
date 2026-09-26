@@ -168,6 +168,54 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
         _wait_before_retry(file_path.name, attempt, failure)
 
 
+def _signed_request(config: R2Config, method: str, key: str) -> tuple[int, str, bytes]:
+    """Send an authenticated, bodyless S3 request to a single R2 object key."""
+    parsed_endpoint = urlparse(config.endpoint)
+    if parsed_endpoint.scheme != "https":
+        raise SystemExit("R2_ENDPOINT must use https")
+
+    host = parsed_endpoint.netloc
+    canonical_uri = _canonical_uri(config.bucket, key)
+    payload_hash = hashlib.sha256(b"").hexdigest()
+    now = dt.datetime.now(dt.UTC)
+    amz_date = now.strftime("%Y%m%dT%H%M%SZ")
+    date_stamp = now.strftime("%Y%m%d")
+    credential_scope = f"{date_stamp}/auto/s3/aws4_request"
+    headers = {
+        "Host": host,
+        "X-Amz-Content-Sha256": payload_hash,
+        "X-Amz-Date": amz_date,
+    }
+    canonical_headers = "".join(f"{name.lower()}:{headers[name]}\n" for name in sorted(headers))
+    signed_headers = ";".join(name.lower() for name in sorted(headers))
+    canonical_request = "\n".join(
+        [method, canonical_uri, "", canonical_headers, signed_headers, payload_hash]
+    )
+    string_to_sign = "\n".join(
+        [
+            "AWS4-HMAC-SHA256",
+            amz_date,
+            credential_scope,
+            hashlib.sha256(canonical_request.encode("utf-8")).hexdigest(),
+        ]
+    )
+    signing_key = _get_signature_key(config.secret_access_key, date_stamp, "auto", "s3")
+    signature = hmac.new(signing_key, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
+    headers["Authorization"] = (
+        "AWS4-HMAC-SHA256 "
+        f"Credential={config.access_key_id}/{credential_scope}, "
+        f"SignedHeaders={signed_headers}, Signature={signature}"
+    )
+
+    connection = http.client.HTTPSConnection(host, timeout=60)
+    try:
+        connection.request(method, canonical_uri, headers=headers)
+        response = connection.getresponse()
+        return response.status, response.reason, response.read()
+    finally:
+        connection.close()
+
+
 def _upload_file_once(
     config: R2Config,
     file_path: Path,
