@@ -156,3 +156,29 @@ and restart checks. A final battle test against those installed scenes and the
 approved registry passed 69 pairs in Classic, Stadium and Classic, with no
 uncovered frame hitch over 100 ms. See
 [the installed validation record](catalog_production_batch_02_approved_install_validation.json).
+
+## Review-queue follow-up
+
+The first focused review of the 12 near-ready models found two narrow source
+differences that can be inspected without changing mesh or animation data.
+Shroomish's rare table adds a zero-intensity point light. Bronzong's
+single-layer Standard rare table omits an explicit one-UV setting. Both shiny
+exports passed exact geometry/animation parity, standalone SCN conversion and
+24 sampled motion captures without errors. The user approved both normal/shiny
+four-pose comparisons. Each pair then passed three rounds of real battle UI
+stress. Their individual local bundles passed installation, combined four-scene
+loading, no-op and restart checks. Both are approved locally by the pinned
+[follow-up record](catalog_production_batch_02_review_queue_approval.json),
+bringing this batch to **71 approved pairs**. The two new bundles total
+51,464,759 bytes. Neither was uploaded or activated in a release index.
+After local admission, both installed pairs also passed three more real battle
+rounds against the reviewed registry, with two pair loads and faint replacements
+per round.
+
+Buizel and Numel also reference rare eyelid colour maps, but their normal
+eyelid images are absent from the prepared Blender sources. The export worker
+correctly refuses to claim an exact replacement, so both remain held. Glalie,
+Luvdisc, Luxray, Toxicroak and Froslass differ in eye material floats;
+Krookodile changes an eye layer mask. Those six require specific material
+review. Kyogre and Dialga retain their battle holds, and the 19 source holds
+are unchanged. The remaining review queue is **29 models**.

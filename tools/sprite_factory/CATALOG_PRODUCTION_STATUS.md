@@ -23,9 +23,25 @@ qualified shiny materials, and 19 source holds remain queued. No new bundle
 was uploaded, activated in a release index, pushed or deployed. See
 [batch 02 review](CATALOG_PRODUCTION_BATCH_02_REVIEW.md) and the pinned
 [per-species results](catalog_production_batch_02_results.json).
-The 12 unapproved normal models remain accessible in the desktop debug
+At that first approval, the 12 unapproved normal models remained accessible in the desktop debug
 Pokédex/summary preview through a hash-pinned manifest. The 69 approved pairs
 require their bundles to be installed before they appear in battles.
+
+### Review-queue follow-up
+
+Shroomish and Bronzong have now passed a separate shiny source audit, exact
+geometry/animation parity, 24-capture motion review, user normal/shiny visual
+review, three real-battle passes, and individual-bundle install/load/no-op/restart
+checks. Their exact pairs are approved in the local game and launcher registries;
+two new unreleased bundles total 51,464,759 bytes. The current batch-02 total is
+71 approved pairs. Eight shiny-material holds, Kyogre and Dialga battle holds,
+and 19 source holds remain. The earlier 69-pair approval record remains a
+historical snapshot; see the separate
+[review-queue approval](catalog_production_batch_02_review_queue_approval.json).
+No follow-up bundle has been uploaded or activated in a release index.
+The approved registry also loaded both installed pairs in three real battle
+passes (Classic, Stadium, Classic), with no uncovered error; local evidence is
+`.tmp/catalog-production-02-review-queue-approved-installed-stress-2026-09-26.json`.
 
 ## Active decision
 

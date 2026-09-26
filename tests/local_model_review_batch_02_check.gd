@@ -22,7 +22,7 @@ func _run() -> void:
 		else:
 			assert(not Review.resolve(entry.species).is_empty())
 		assert(Review.resolve(entry.species + "@shiny").is_empty())
-	assert(approved == 69)
+	assert(approved == 71)
 	assert(Review.resolve("slakoth").is_empty())
 	assert(Review.resolve("arceus").is_empty())
 	var settings := root.get_node("SettingsManager")
@@ -37,7 +37,7 @@ func _run() -> void:
 	var button := MenuButton.new()
 	root.add_child(button)
 	summary.bind_animation_button(button)
-	for name in ["shroomish", "kyogre", "dialga"]:
+	for name in ["numel", "kyogre", "dialga"]:
 		assert(dex.show_species(name, false))
 		assert(summary.show_species(name, false))
 		var deadline := Time.get_ticks_msec() + 20000
@@ -55,5 +55,5 @@ func _run() -> void:
 	dex.queue_free()
 	summary.queue_free()
 	button.queue_free()
-	print("BATCH02_REVIEW_CHECK_OK 69 approved / 12 local previews / 3 UI previews / 8 native clips")
+	print("BATCH02_REVIEW_CHECK_OK 71 approved / 10 local previews / 3 UI previews / 8 native clips")
 	quit()

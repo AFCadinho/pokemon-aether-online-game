@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "scope": "batch-02 review queue follow-up for exact Shroomish and Bronzong normal/shiny pairs",
+  "runtime_approved": true,
+  "release_approved": true,
+  "published": false,
+  "bundle_index_sha256": "cc3da1949fc9164a0d8f81f582959f0d54333b40a51429f4e13dee5fd17e0ae4",
+  "entries": [
+    {
+      "species": "bronzong",
+      "visual_review": "user_approved_normal_shiny_idle_attack_sleep_faint",
+      "normal_scn_sha256": "720a6ca98954cd02ff4ec58416b0992c9d7cc86a2903b67d45ccad408036abbe",
+      "shiny_glb_sha256": "92565375e6e3be937c429e6be9ca97b6a2c356adbd1241c81de1ca9a8c5e35c5",
+      "shiny_scn_sha256": "0faaa95335a7ce2dfdea24a26a31379293f0cb87b628f30185ef68773fb63c51",
+      "geometry_motion_sha256": "25991b069018c618875520b0b02f48208bbad2c7fa0bf3c4784eb4c1ea9416f9",
+      "source_material_exception": "rare_omits_explicit_single_uv_count",
+      "motion_review_sha256": "c3ed25d21ba50cb354a6e128b79f7bbde65d7369159d4d20f731b294eaa5dcff",
+      "stress_report_sha256": "89d8cd996dc4216b817e09dce90fb9e84c7104c69ca06dc65fb977e5c08a9e8e",
+      "visual_page_sha256": "f1e11ec6fd449721446db5fcb3cef980bfb43a1bb554ad252588f26f953eac09"
+    },
+    {
+      "species": "shroomish",
+      "visual_review": "user_approved_normal_shiny_idle_attack_sleep_faint",
+      "normal_scn_sha256": "e0bad7efd662dd640dd0af3df6d761f869ddc876af4d7551ed19e9be30e1ca5a",
+      "shiny_glb_sha256": "7b758b33e0d49e2483fec68a1332b22f872f235468ce4c3aafa12eab54d34a34",
+      "shiny_scn_sha256": "bd49a4ed45e2318a4cc0e224899d837166f33a6bc1bdc959beffea864be7c2e2",
+      "geometry_motion_sha256": "25d2438ea7c71f56aa3bef9f3a2d4413a9585b8e252e39f662fcc12320f0ad3e",
+      "source_material_exception": "rare_adds_zero_intensity_point_light",
+      "motion_review_sha256": "4054e44207d524f11085fb5829882595b1fcb5c72b85b371ba71746b0ec98cf6",
+      "stress_report_sha256": "2d1fb16b13e7cd565a21b756c7c3f1f9776cb3b805bf44acff409ac03d0cbe59",
+      "visual_page_sha256": "a0f4426c368dff7807f7e3647a202f13a8d991ab5eb3294819d5b3aa00b162aa"
+    }
+  ],
+  "remaining_shiny_holds": [
+    "buizel",
+    "froslass",
+    "glalie",
+    "krookodile",
+    "luvdisc",
+    "luxray",
+    "numel",
+    "toxicroak"
+  ],
+  "remaining_battle_holds": [
+    "dialga",
+    "kyogre"
+  ],
+  "remaining_source_holds": 19,
+  "decision": "Approve two exact local pairs after user visual review and three-round battle stress; keep all other holds in queue. No upload or release activation.",
+  "bundle_install_catalog_sha256": "1988274f718f6a1ac996fbb251c51492d685c1e29b150d0a7196d420244b7262",
+  "approved_installed_stress_sha256": "c97ca124ef64f3a7f0866996d588afd075d6ef08e7d74ef5318b17da404b1743"
+}

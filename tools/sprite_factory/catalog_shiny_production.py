@@ -1,8 +1,9 @@
 """Export exact normal-SCN cohort shiny candidates from official rare albedos.
 
-Only a rare material table with unchanged inspected material settings and
-BaseColorMap-only substitutions is eligible. Every other species is held for
-manual review. This produces local GLB evidence, never game admission.
+Rare material tables with unchanged inspected settings and BaseColorMap-only
+substitutions are eligible. A small, explicitly reviewed set of differences
+can be opted into for held candidates. This produces local GLB evidence,
+never game admission.
 """
 
 import argparse
@@ -21,7 +22,7 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def replacements(normal_table: Path) -> tuple[list[dict], str]:
+def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[list[dict], str]:
     rare_table = normal_table.with_name(normal_table.stem + "_rare.trmtr")
     if not rare_table.is_file():
         raise ValueError("Official rare material table missing")
@@ -30,7 +31,30 @@ def replacements(normal_table: Path) -> tuple[list[dict], str]:
         raise ValueError("Rare material count differs")
     mapping = {}
     for a, b in zip(normal, rare, strict=True):
-        if {k: v for k, v in a.items() if k != "textures"} != {k: v for k, v in b.items() if k != "textures"}:
+        settings_a = {k: v for k, v in a.items() if k != "textures"}
+        settings_b = {k: v for k, v in b.items() if k != "textures"}
+        if review_queue and settings_a != settings_b:
+            # An omitted, zero-valued point light is the sole setting
+            # exception. The source renderer has no contribution in either
+            # case; every other float/shader difference remains held.
+            floats_a = dict(settings_a["floats"])
+            floats_b = dict(settings_b["floats"])
+            if floats_a.get("PointLight0_Intensity") is None and floats_b.get("PointLight0_Intensity") == 0.0:
+                floats_b.pop("PointLight0_Intensity")
+            settings_a["floats"], settings_b["floats"] = floats_a, floats_b
+            shaders_a = json.loads(json.dumps(settings_a["shaders"]))
+            shaders_b = json.loads(json.dumps(settings_b["shaders"]))
+            if (len(shaders_a) == len(shaders_b) == 1
+                    and shaders_a[0]["name"] == shaders_b[0]["name"] == "Standard"
+                    and shaders_a[0]["values"].get("NumMaterialLayer") == "1"
+                    and shaders_b[0]["values"].get("NumMaterialLayer") == "1"
+                    and shaders_a[0]["values"].get("NumRequiredUV") == "1"
+                    and "NumRequiredUV" not in shaders_b[0]["values"]):
+                # Single-layer Standard defaults to one UV in this source;
+                # source geometry parity is checked after export.
+                shaders_a[0]["values"].pop("NumRequiredUV")
+            settings_a["shaders"], settings_b["shaders"] = shaders_a, shaders_b
+        if settings_a != settings_b:
             raise ValueError("Rare material settings differ: " + a["name"])
         if a["textures"].keys() != b["textures"].keys():
             raise ValueError("Rare material texture channels differ: " + a["name"])
@@ -58,7 +82,8 @@ def replacements(normal_table: Path) -> tuple[list[dict], str]:
     return result, digest(rare_table)
 
 
-def prepare(row: dict, expected: dict, source_root: Path, output: Path) -> tuple[dict, list[str]]:
+def prepare(row: dict, expected: dict, source_root: Path, output: Path,
+            *, review_queue: bool = False) -> tuple[dict, list[str]]:
     species = row["species"]
     normal_path = Path(row["path"])
     if digest(normal_path) != row["glb_sha256"] or row["glb_sha256"] != expected["glb_sha256"]:
@@ -66,7 +91,7 @@ def prepare(row: dict, expected: dict, source_root: Path, output: Path) -> tuple
     source_job = json.loads((source_root / species / "job.json").read_text())
     validate_export_job(source_job)
     normal_table = Path(source_job["material_source"])
-    pairs, rare_table_sha = replacements(normal_table)
+    pairs, rare_table_sha = replacements(normal_table, review_queue=review_queue)
     directory = output / species
     directory.mkdir()
     job = {**source_job, "output": str(directory), "verified_texture_replacements": pairs,
@@ -115,6 +140,8 @@ def main() -> None:
     parser.add_argument("--batch-results", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--jobs", type=int, choices=[1, 2], default=2)
+    parser.add_argument("--species", action="append", help="Export only these species from the pinned cohort")
+    parser.add_argument("--review-queue", action="store_true", help="Allow narrow audited source defaults")
     args = parser.parse_args()
     output = args.output.resolve()
     if output.exists():
@@ -126,11 +153,19 @@ def main() -> None:
     if (batch.get("runtime_approved") is not False or set(normal) != set(expected)
             or len(normal) != batch.get("standalone_models")):
         raise ValueError("Normal cohort differs from the pinned standalone-SCN batch")
+    if args.review_queue and not args.species:
+        raise ValueError("Review-queue exceptions require explicit species selection")
+    if args.species:
+        requested = set(args.species)
+        if len(requested) != len(args.species) or not requested <= set(normal):
+            raise ValueError("Species selection has duplicates or is outside the pinned cohort")
+        normal = {species: row for species, row in normal.items() if species in requested}
     output.mkdir(parents=True)
     ready, held = [], []
     for species, row in normal.items():
         try:
-            ready.append(prepare(row, expected[species], args.normal.parent, output))
+            ready.append(prepare(row, expected[species], args.normal.parent, output,
+                                 review_queue=args.review_queue))
         except (OSError, ValueError, KeyError) as error:
             held.append({"species": species, "variant": "shiny", "status": "held",
                          "runtime_approved": False, "reason": str(error)})
