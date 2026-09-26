@@ -155,9 +155,11 @@ func _fit_review_actor() -> void:
 	for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or not mesh.is_visible_in_tree():
 			continue
-		var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
-		for surface in posed.get_surface_count():
-			for vertex: Vector3 in posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
+		# Some valid standalone scenes carry a skin without a registered
+		# Skeleton3D at preview-fit time. The source mesh still gives a safe
+		# camera envelope without requiring a pose bake.
+		for surface in mesh.mesh.get_surface_count():
+			for vertex: Vector3 in mesh.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
 				var point := mesh.global_transform * vertex
 				box = box.expand(point) if found else AABB(point, Vector3.ZERO)
 				found = true

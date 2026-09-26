@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De lokale desktopreview kan 81 nieuwe 3D-Pokémon veilig in de Pokédex en summary cards tonen; de camera blijft ook bij modellen met een afwijkende skin-koppeling werken.
+
 - Route 3 heeft nu een rijkere 3D-battlearena naar de pixelmap, met het Pokémon Center, de ingang van Mt. Moon, rotsterrassen met trappen, afgebakende grasvelden, struiken en bloemen.
 
 - De browser- en desktopclient ondersteunen nu een korte klik op vrije speelruimte als interactie en muis slepen als tijdelijke joystick.
