@@ -251,7 +251,7 @@ func _draw_moving_streaks(viewport_size: Vector2) -> void:
 		])
 		draw_colored_polygon(
 			points,
-			Color(0.12, 0.48, 0.92, (0.055 - float(index) * 0.012) * hold_strength)
+			Color(0.12, 0.48, 0.92, (0.13 - float(index) * 0.025) * hold_strength)
 		)
 
 

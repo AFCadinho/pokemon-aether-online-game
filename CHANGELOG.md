@@ -3,6 +3,18 @@
 ## Unreleased
 
 - Browser play now uses the same gameplay routes as desktop and can continue through all currently available maps, including Route 5, Route 9 and Cerulean Cave. Guild activity and ranked PvP are available; player asset transfers still require the desktop or Android client.
+- De Android-client kan een vereiste nieuwe APK via de eigen updateserver vinden, gecontroleerd downloaden en aanbieden in Androids installatiescherm. De oude client pauzeert totdat de update is geïnstalleerd.
+- De mountdialoog op Android en desktop heeft nu een knop om op de geselecteerde landmount te stappen of af te stappen.
+- De HP-panelen in Android-gevechten blijven boven hun Pokémon staan, ook zonder 3D-presenter.
+- Wilde encounters op Android bereiden het gevechtsscherm vooraf voor en houden de overgang vloeiend terwijl de server en sprites laden. Nieuwe Pokémon tonen tijdelijk een subtiel silhouet totdat hun animatiesprite beschikbaar is; de sprites van het huidige gebied worden al bij binnenkomst opgehaald.
+- De Android-proefbuild heeft nu muziek op het inlogscherm, in de wereld en tijdens wilde gevechten. Hij haalt het volledige muziekpakket automatisch binnen, controleert de download en bewaart die voor volgende starts.
+- Na een muziekupdate verwijdert Android bij de volgende start de oude muziekversie om opslagruimte vrij te maken.
+- Android toont geen crashrapport meer na een normale onderbreking op de achtergrond.
+- De Android-proefbuild gebruikt liggende 2D-gevechten met de volledige battleweergave en laadt de normale geanimeerde Pokémon-sprites via de bestaande online assetroute.
+- De Android-wereldinterface laadt nu zonder afhankelijkheid van een uitgesloten desktopbestand voor lokale 3D-modelreview.
+- Op Android beweeg je met een virtuele joystick die verschijnt waar je je duim vasthoudt; een korte tik op de wereld gebruikt interactie.
+- De Android-proefbuild toont login en wereldinterface groter, vergroot de rechter actieknoppen, globale buffknoppen, chattabs en chatinvoer, opent het toetsenbord pas bij het kiezen van een invoerveld en laat dialoog met één tik per regel doorgaan.
+- In Android-gevechten begint het battle-log onder de linker party-slots, zodat de onderste Pokémon niet achter de logknoppen vallen; het vooraf laden van geanimeerde Pokémon-sprites onderbreekt de overgang naar het gevecht niet meer.
 
 - Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles.
 

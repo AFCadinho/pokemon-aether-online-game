@@ -1,0 +1,89 @@
+# Android APK updater
+
+The Android client checks `https://updates.pokeaether.com/manifest-android.json`
+at startup. It offers a release only when `game.versionCode` is greater than
+`application/config/android_version_code`. The APK is downloaded into private
+`user://downloads`, checked against `sizeBytes` and SHA-256, and passed to
+Android's system installer through Godot's `FileProvider`. Android can require
+the player to allow installation from PokeAether and confirm the upgrade.
+
+The release manifest contract is:
+
+```json
+{
+  "game": {
+    "buildId": "android-immutable-build-id",
+    "version": "0.3.84",
+    "versionCode": 2,
+    "url": "https://updates.pokeaether.com/game/game-0.3.84-android.apk",
+    "sizeBytes": 12345678,
+    "sha256": "64 lowercase hex characters"
+  }
+}
+```
+
+`buildId` must equal the exported `application/config/build_id` used by the
+gateway. `versionCode` must equal the Android export preset's `version/code` and
+the exported `application/config/android_version_code`. Each release needs a
+strictly higher code and the same package ID and signing key. Upload the
+immutable APK, verify it on the server, and only then replace the manifest.
+Publishing is a separate release operation.
+
+## Signed release candidate in GitHub Actions
+
+`.github/workflows/build-android.yml` is a manual build. Supply a display
+version and an Android version code higher than the code in `export_presets.cfg`.
+The workflow stamps one immutable build ID into the game, builds an ARM64 APK,
+checks its package/version/signing certificate, and uploads the APK plus a
+matching `manifest-android.json` as a private workflow artifact. It does not
+upload anything to the update server or change the live manifest.
+
+Configure these GitHub Actions secrets before running a signed build:
+
+- `ANDROID_RELEASE_KEYSTORE_BASE64`: base64 of the permanent release keystore.
+- `ANDROID_RELEASE_KEY_ALIAS`: alias of the release key.
+- `ANDROID_RELEASE_KEY_PASSWORD`: keystore and key password (Godot requires the
+  same password for both).
+- `ANDROID_RELEASE_CERT_SHA256`: SHA-256 fingerprint of that key's certificate,
+  checked against the exported APK.
+
+The alpha signing certificate currently configured for this workflow has
+SHA-256 fingerprint
+`94a8c2ccf5fa2e3cc144b77830d7611e956753b2cbdc18d30cfd3e901efa027b`.
+The local release export was checked against this fingerprint. The keystore and
+password are held outside the repository and must also be backed up outside
+the development laptop before distributing a signed build.
+
+Back up the keystore and password outside the repository before distributing
+the first signed APK. Keep the same package ID, signing certificate, and an
+increasing version code for every later upgrade. Debug APKs use a different
+certificate; Android cannot install a release APK over the locally tested
+debug APK without removing the debug app and its data first.
+
+The workflow downloads the pinned music source archive from the existing
+update domain for Godot import. Its checksum and size are verified before use.
+Running the workflow and publishing its artifact are separate operations.
+
+An isolated x86_64 Android 35 emulator completed a permanent-key signed
+version-code 1 to 2 upgrade through the in-app downloader and Android's
+installer. The updater verified the downloaded APK; a pre-existing app-private
+data marker survived, and the cached APK was removed at next launch. This was
+a local HTTP fixture with the emulator's ordinary network disabled. It does
+not replace the remaining ARM64 device and published-release tests.
+
+The ignored `android/build` directory is generated from Godot 4.6.2's
+`android_source.zip`. Before a Gradle export, run:
+
+```sh
+python3 android_updater/setup_build_template.py \
+  /path/to/godot/export_templates/4.6.2.stable/android_source.zip
+```
+
+Use JDK 17 for the slot's Godot Android export setting. The script adds the
+install permission and Java handoff to the generated template. Do not commit
+the generated template, APKs, or signing credentials.
+
+For an isolated phone test, a debug build may place
+`http://127.0.0.1:PORT/manifest-android.json` in
+`user://android_apk_manifest_url.txt` and use `adb reverse` to a local fixture
+server. Release builds ignore this override.

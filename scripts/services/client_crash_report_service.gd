@@ -85,6 +85,19 @@ func _exit_tree() -> void:
 	_write_json_file(SESSION_STATE_PATH, _current_session_state)
 
 
+func _notification(what: int) -> void:
+	if not OS.has_feature("mobile") or _current_session_state.is_empty():
+		return
+	if what == NOTIFICATION_APPLICATION_PAUSED:
+		# Android may kill an app after it enters the background. That is a normal
+		# lifecycle event, not evidence that the game crashed.
+		_current_session_state["cleanShutdown"] = true
+		_write_json_file(SESSION_STATE_PATH, _current_session_state)
+	elif what == NOTIFICATION_APPLICATION_RESUMED:
+		_current_session_state["cleanShutdown"] = false
+		_write_json_file(SESSION_STATE_PATH, _current_session_state)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if _dialog_root == null or not _dialog_root.visible:
 		return

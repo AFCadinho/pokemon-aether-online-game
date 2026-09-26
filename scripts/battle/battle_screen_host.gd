@@ -19,14 +19,8 @@ var battle_settings_menu: PanelContainer
 @onready var settings_center: CenterContainer = $SettingsOverlay/CenterContainer
 
 func _ready() -> void:
-	var settings_scene := load("res://scenes/interface/settings/settings_menu.tscn") as PackedScene
-	if settings_scene != null:
-		battle_settings_menu = settings_scene.instantiate() as PanelContainer
-		battle_settings_menu.name = "BattleSettingsMenu"
-		battle_settings_menu.hide()
-		settings_center.add_child(battle_settings_menu)
-	if battle_settings_menu != null and battle_settings_menu.has_signal("closed"):
-		battle_settings_menu.closed.connect(_on_battle_settings_closed)
+	if not OS.has_feature("mobile"):
+		_ensure_battle_settings_menu()
 	entry_transition = WildEncounterTransition.new()
 	entry_transition.name = "EntryTransition"
 	$Cover.add_child(entry_transition)
@@ -47,6 +41,19 @@ func _ready() -> void:
 	stack.add_child(fallback_button)
 	fallback_button.pressed.connect(_reveal_cover)
 
+
+func _ensure_battle_settings_menu() -> void:
+	if battle_settings_menu != null:
+		return
+	var settings_scene := load("res://scenes/interface/settings/settings_menu.tscn") as PackedScene
+	if settings_scene != null:
+		battle_settings_menu = settings_scene.instantiate() as PanelContainer
+		battle_settings_menu.name = "BattleSettingsMenu"
+		battle_settings_menu.hide()
+		settings_center.add_child(battle_settings_menu)
+	if battle_settings_menu != null and battle_settings_menu.has_signal("closed"):
+		battle_settings_menu.closed.connect(_on_battle_settings_closed)
+
 func _input(event: InputEvent) -> void:
 	if released or not is_instance_valid(battle) or $Cover.visible:
 		return
@@ -66,6 +73,7 @@ func _input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 func _open_battle_settings() -> void:
+	_ensure_battle_settings_menu()
 	if battle_settings_menu == null:
 		return
 	settings_overlay.show()
@@ -89,7 +97,20 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(presenter) and not presenter.preparation_failed:
 		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
 
+func prewarm_mobile_immersive_battle(instance: Control) -> void:
+	# Build the Android battle controls while the world is open. Keep the whole
+	# tree dormant until mount() takes ownership of the active encounter.
+	process_mode = Node.PROCESS_MODE_DISABLED
+	hide()
+	battle = instance
+	battle.set_meta("dedicated_battle_screen", true)
+	preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
+	$Content.add_child(battle)
+
 func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false) -> void:
+	var already_prepared := battle == instance and instance.get_parent() == $Content
+	process_mode = Node.PROCESS_MODE_INHERIT
+	show()
 	entry_transition.transition_style = transition_style
 	battle = instance
 	overlay = overworld_overlay
@@ -102,9 +123,10 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 		focus.release_focus()
 	battle.set_meta("dedicated_battle_screen", true)
 	battle.set_meta("battle_screen_preparing", true)
-	if force_immersive or get_node("/root/SettingsManager").battle_ui_layout == "immersive":
+	if not already_prepared and (force_immersive or get_node("/root/SettingsManager").battle_ui_layout == "immersive"):
 		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
-	$Content.add_child(battle)
+	if not already_prepared:
+		$Content.add_child(battle)
 	resized.connect(_fit_battle)
 	_fit_battle()
 	if battle.has_meta("immersive_battle_ui") and is_instance_valid(overlay) and overlay.has_node("Control/ChatPanel") and overlay.has_node("Control/ChatTabsPanel"):

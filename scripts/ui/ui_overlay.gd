@@ -1773,6 +1773,9 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if OS.has_feature("mobile"):
+		_apply_mobile_right_quick_buttons()
+		_apply_mobile_global_buff_buttons()
 	root_control.theme = _make_main_ui_tooltip_theme()
 	_setup_reward_notification_stack()
 	_setup_replay_library()
@@ -1905,6 +1908,8 @@ func _ready() -> void:
 	_setup_chat_translate_mode_ui()
 	_setup_chat_context_selector_ui()
 	_setup_chat_tab_settings_ui()
+	if OS.has_feature("mobile"):
+		_apply_mobile_chat_controls()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	system_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -2039,6 +2044,57 @@ func _ready() -> void:
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
 	settings_menu.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(settings_menu))
+
+
+func _apply_mobile_right_quick_buttons() -> void:
+	# Five buttons must clear the hotbar above and the trainer card below.
+	var buttons: Array[Button] = [
+		donator_store_button,
+		settings_button,
+		mount_button,
+		skills_button,
+		my_powers_button,
+	]
+	var bottom := -104.0
+	for button in buttons:
+		button.custom_minimum_size = Vector2(50, 50)
+		button.offset_left = -54.0
+		button.offset_right = -4.0
+		button.offset_top = bottom - 50.0
+		button.offset_bottom = bottom
+		bottom -= 55.0
+
+
+func _apply_mobile_global_buff_buttons() -> void:
+	global_buffs_panel.custom_minimum_size = Vector2(325, 60)
+	global_buffs_panel.offset_right = 539.0
+	global_buffs_panel.offset_bottom = 66.0
+	for child in global_buff_slots.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		button.custom_minimum_size = Vector2(48, 48)
+		button.add_theme_constant_override("icon_max_width", 36)
+
+
+func _apply_mobile_chat_controls() -> void:
+	var tab_row := $Control/ChatTabsPanel/TabRow as HBoxContainer
+	for child in tab_row.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		button.custom_minimum_size = Vector2(button.custom_minimum_size.x, 38.0)
+		button.add_theme_font_size_override("font_size", 15)
+	if chat_settings_button != null:
+		chat_settings_button.custom_minimum_size = Vector2(38.0, 38.0)
+	chat_input.custom_minimum_size = Vector2(chat_input.custom_minimum_size.x, 44.0)
+	chat_input.add_theme_font_size_override("font_size", 16)
+	send_button.custom_minimum_size = Vector2(send_button.custom_minimum_size.x, 44.0)
+	send_button.add_theme_font_size_override("font_size", 15)
+	if chat_context_selector_button != null:
+		chat_context_selector_button.custom_minimum_size = Vector2(chat_context_selector_button.custom_minimum_size.x, 44.0)
+		chat_context_selector_button.add_theme_font_size_override("font_size", 15)
+	_position_chat_tabs_panel.call_deferred()
 
 
 func _on_locale_changed(_locale: String) -> void:
@@ -11306,6 +11362,17 @@ func _setup_mount_loadout_panel() -> void:
 	mount_loadout_panel.z_index = UI_ACTIVE_Z_INDEX
 	root_control.add_child(mount_loadout_panel)
 	mount_loadout_panel.visibility_changed.connect(_on_mount_manager_visibility_changed)
+	mount_loadout_panel.connect("land_mount_toggle_requested", _on_land_mount_toggle_requested)
+
+
+func _on_land_mount_toggle_requested() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null or not player.has_method("request_land_mount_toggle"):
+		return
+	if bool(player.call("request_land_mount_toggle")):
+		mount_loadout_panel.call("close_manager")
+	else:
+		mount_loadout_panel.call("refresh_mount_action")
 
 
 func _on_mount_button_pressed() -> void:

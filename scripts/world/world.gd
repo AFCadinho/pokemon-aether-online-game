@@ -5,6 +5,7 @@ const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const MOBILE_CONTROLS_SCENE: PackedScene = preload("res://scenes/interface/mobile/mobile_controls.tscn")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
@@ -70,6 +71,8 @@ const WEB_BATTLE_SPRITE_PREFETCH_ALIASES := {
 var is_in_battle := false
 var battle_instance: Node
 var battle_screen_host: Control
+var prepared_mobile_wild_battle: Control
+var prepared_mobile_wild_host: Control
 var replay_return_callback: Callable
 var coop_controls: Control
 var coop_world_ready := false
@@ -208,6 +211,8 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	if OS.has_feature("mobile"):
+		add_child(MOBILE_CONTROLS_SCENE.instantiate())
 	_ensure_remote_players_container()
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
 		SettingsManager.settings_changed.connect(_on_settings_changed)
@@ -237,7 +242,12 @@ func _ready() -> void:
 		_show_pending_coop_battle_result.call_deferred()
 		return
 	_ensure_map_transition_overlay()
+	_prewarm_mobile_wild_battle_ui()
 	await _setup_initial_world_state()
+	if is_in_battle:
+		_discard_prepared_mobile_wild_battle_ui()
+	else:
+		_prewarm_mobile_wild_battle_ui()
 	_setup_coop_controls()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
@@ -331,7 +341,7 @@ func _prefetch_current_map_wild_sprites(area_id: String) -> void:
 	WebPokemonSpriteService.prefetch(entries)
 
 
-func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false) -> void:
+func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false, skip_mobile_wait := false) -> void:
 	if not WebPokemonSpriteService.is_available():
 		return
 	var entries: Array = []
@@ -372,6 +382,10 @@ func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := 
 	# filling spare slots with the rest of the roster.
 	WebPokemonSpriteService.prefetch(priority_entries, true)
 	WebPokemonSpriteService.prefetch(entries)
+	if OS.has_feature("mobile") and skip_mobile_wait:
+		# SpriteBox replaces its temporary HOME icon when a download completes.
+		# Keep the Android cover short even on a cold sprite cache or slow network.
+		return
 	await WebPokemonSpriteService.prefetch_and_wait(priority_entries)
 
 
@@ -404,7 +418,7 @@ func _append_first_web_sprite_entry_from_value(
 	var data := value as Dictionary
 	var species := str(data.get("displaySpecies", data.get("species", ""))).strip_edges()
 	if species != "":
-		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		var shiny := _is_web_sprite_flag_set(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
 		for side: String in sides:
 			_append_web_sprite_entry(species, side, shiny, entries, seen)
 		return true
@@ -425,14 +439,20 @@ func _append_active_web_sprite_entries_from_value(
 	if not (value is Dictionary):
 		return
 	var data := value as Dictionary
-	if bool(data.get("active", false)):
+	if _is_web_sprite_flag_set(data.get("active", false)):
 		var species := str(data.get("displaySpecies", data.get("species", ""))).strip_edges()
-		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		var shiny := _is_web_sprite_flag_set(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
 		for side: String in sides:
 			_append_web_sprite_entry(species, side, shiny, entries, seen)
 	for child_value: Variant in data.values():
 		if child_value is Array or child_value is Dictionary:
 			_append_active_web_sprite_entries_from_value(child_value, sides, entries, seen)
+
+
+func _is_web_sprite_flag_set(value: Variant) -> bool:
+	if not (value is bool):
+		return false
+	return value
 
 
 func _append_web_sprite_entries_from_value(
@@ -451,7 +471,7 @@ func _append_web_sprite_entries_from_value(
 		if species != "":
 			break
 	if species != "":
-		var shiny := bool(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
+		var shiny := _is_web_sprite_flag_set(data.get("shiny", data.get("isShiny", data.get("is_shiny", false))))
 		for side: String in sides:
 			_append_web_sprite_entry(species, side, shiny, entries, seen)
 	for child_value: Variant in data.values():
@@ -1521,6 +1541,11 @@ func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
 	await wild_encounter_transition.wait_until_covered()
 
 
+func _trace_mobile_wild_transition(stage: String, started_at_msec: int) -> void:
+	if OS.has_feature("mobile") and OS.is_debug_build():
+		print("Mobile wild transition %s: %d ms" % [stage, Time.get_ticks_msec() - started_at_msec])
+
+
 func _prepare_battle_instance_reveal() -> void:
 	if is_instance_valid(battle_screen_host):
 		return # The dedicated screen owns layout and its loading cover.
@@ -1576,6 +1601,10 @@ func move_player_to_map(map: Node) -> void:
 		
 	player_parent.add_child(player)
 	_ensure_remote_players_container(map)
+	if OS.has_feature("mobile"):
+		# Start the party and local encounter-pool downloads as soon as a map is
+		# entered, rather than waiting for the first battle to request each sprite.
+		_schedule_current_map_web_sprite_prefetch.call_deferred()
 
 func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position: Vector2) -> void:
 	var spawn_position: Vector2 = fallback_position
@@ -2670,6 +2699,11 @@ func _get_remote_players_parent(map: Node = null) -> Node:
 func _on_settings_changed() -> void:
 	_sync_remote_players_visibility()
 	_sync_local_player_nameplate_visibility()
+	if OS.has_feature("mobile"):
+		if SettingsManager.battle_ui_layout != "immersive":
+			_discard_prepared_mobile_wild_battle_ui()
+		else:
+			_prewarm_mobile_wild_battle_ui.call_deferred()
 	if not OS.has_feature("web"):
 		_prefetch_current_map_desktop_arena.call_deferred()
 	if OS.has_feature("web"):
@@ -3554,6 +3588,75 @@ func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> 
 
 
 func _mount_battle_ui(force_immersive := false) -> bool:
+	if not _instantiate_battle_ui():
+		return false
+	return _attach_battle_ui(force_immersive)
+
+
+func _mount_mobile_wild_battle_ui(started_at_msec: int) -> bool:
+	if (
+		is_instance_valid(prepared_mobile_wild_battle)
+		and is_instance_valid(prepared_mobile_wild_host)
+		and SettingsManager.battle_ui_layout == "immersive"
+	):
+		battle_instance = prepared_mobile_wild_battle
+		battle_screen_host = prepared_mobile_wild_host
+		prepared_mobile_wild_battle = null
+		prepared_mobile_wild_host = null
+		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) else WildEncounterTransition.STYLE_WILD
+		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style)
+		battle_ui_host.visible = true
+		if battle_instance.has_signal("battle_ended"):
+			battle_instance.battle_ended.connect(_on_battle_ended)
+		_trace_mobile_wild_transition("ui_reused", started_at_msec)
+		return true
+	_discard_prepared_mobile_wild_battle_ui()
+	if not _instantiate_battle_ui():
+		return false
+	_trace_mobile_wild_transition("ui_instantiated", started_at_msec)
+	# Let the encounter animation draw between scene creation and node setup.
+	await get_tree().process_frame
+	if not is_instance_valid(battle_instance) or not is_in_battle:
+		return false
+	return _attach_battle_ui()
+
+
+func _prewarm_mobile_wild_battle_ui() -> void:
+	if not OS.has_feature("mobile") or SettingsManager.battle_ui_layout != "immersive":
+		return
+	if is_in_battle or wild_battle_resume_pending or is_instance_valid(prepared_mobile_wild_battle):
+		return
+	if not is_inside_tree() or battle_ui_host == null or BATTLE_SCENE == null:
+		return
+	var started_at_msec := Time.get_ticks_msec()
+	var prepared := BATTLE_SCENE.instantiate() as Control
+	if prepared == null or not prepared.has_method("prepare_wild_battle_from_response"):
+		if prepared != null:
+			prepared.free()
+		return
+	var host := preload("res://scenes/battle/battle_screen_host.tscn").instantiate() as Control
+	if host == null:
+		prepared.free()
+		return
+	host.visible = false
+	battle_ui_host.add_child(host)
+	host.prewarm_mobile_immersive_battle(prepared)
+	prepared_mobile_wild_battle = prepared
+	prepared_mobile_wild_host = host
+	if OS.is_debug_build():
+		print("Mobile wild transition: UI prewarmed in %d ms" % (Time.get_ticks_msec() - started_at_msec))
+
+
+func _discard_prepared_mobile_wild_battle_ui() -> void:
+	if is_instance_valid(prepared_mobile_wild_host):
+		prepared_mobile_wild_host.queue_free()
+	elif is_instance_valid(prepared_mobile_wild_battle):
+		prepared_mobile_wild_battle.queue_free()
+	prepared_mobile_wild_battle = null
+	prepared_mobile_wild_host = null
+
+
+func _instantiate_battle_ui() -> bool:
 	WebMemoryProbe.mark("battle_ui_mount_begin")
 	if BATTLE_SCENE == null or battle_ui_host == null:
 		return false
@@ -3591,9 +3694,12 @@ func _mount_battle_ui(force_immersive := false) -> bool:
 			]
 		)
 		return false
+	return true
+
+
+func _attach_battle_ui(force_immersive := false) -> bool:
 	var use_immersive_screen := (
 		(SettingsManager.battle_ui_layout == "immersive" or force_immersive)
-		and not OS.has_feature("mobile")
 	)
 	var use_desktop_3d_screen := (
 		SettingsManager.battle_presentation_mode == "3d"
@@ -3719,6 +3825,7 @@ func start_triggered_wild_battle_for_area(
 		_abort_battle_start()
 		await GameErrorDialogService.show_response(position_result)
 		return
+	_trace_mobile_wild_transition("position_saved", transition_started_at_msec)
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if (
 		not response.get("success", false)
@@ -3769,6 +3876,7 @@ func start_triggered_wild_battle_for_area(
 		await _show_wild_encounter_start_error(response)
 		return
 	active_battle_id = str(response.get("battleId", ""))
+	_trace_mobile_wild_transition("battle_created", transition_started_at_msec)
 	active_wild_encounter_type = str(response.get("encounterType", encounter_type)).strip_edges().to_lower()
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_publish_world_presence(true)
@@ -3783,16 +3891,23 @@ func start_triggered_wild_battle_for_area(
 		return
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_replay_shiny = wild_pokemon.shiny
-	await _prefetch_web_battle_sprites(response)
+	await _prefetch_web_battle_sprites(response, false, true)
+	_trace_mobile_wild_transition("sprites_queued", transition_started_at_msec)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
-	if not _mount_battle_ui():
+	var battle_mounted := false
+	if OS.has_feature("mobile"):
+		battle_mounted = await _mount_mobile_wild_battle_ui(transition_started_at_msec)
+	else:
+		battle_mounted = _mount_battle_ui()
+	if not battle_mounted:
 		push_error("World.start_triggered_wild_battle_for_area failed: could not load battle scene.")
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	_trace_mobile_wild_transition("ui_mounted", transition_started_at_msec)
 
 	_prepare_battle_instance_reveal()
 	var battle_environment_id := _resolve_battle_environment_id("wild", response, encounter_type)
@@ -3807,9 +3922,17 @@ func start_triggered_wild_battle_for_area(
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	_trace_mobile_wild_transition("battle_prepared", transition_started_at_msec)
 
 	MusicManager.play_wild_battle_music()
+	_trace_mobile_wild_transition("music_selected", transition_started_at_msec)
+	if OS.has_feature("mobile"):
+		# Let the battle's first rendered frame finish behind the closed encounter
+		# cover, so texture upload cannot interrupt the visible reveal.
+		await RenderingServer.frame_post_draw
+		_trace_mobile_wild_transition("battle_frame_drawn", transition_started_at_msec)
 	await _reveal_prepared_wild_battle()
+	_trace_mobile_wild_transition("battle_visible", transition_started_at_msec)
 
 	await battle_instance.play_wild_battle_intro(response)
 
@@ -4194,6 +4317,7 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	else:
 		_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
+	_prewarm_mobile_wild_battle_ui.call_deferred()
 	
 func _on_battle_ended(result: Dictionary) -> void:
 	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)

@@ -10,6 +10,7 @@ var root_was_visible := true
 var states: Array[Dictionary] = []
 var hidden_states: Dictionary = {}
 var stopped := false
+var mobile_layout_enabled := OS.has_feature("mobile")
 var log_selected := false
 var log_tab: Button
 var log_view: RichTextLabel
@@ -174,6 +175,14 @@ func _refresh() -> void:
 	var top_limit := screen.y * 0.49
 	var height := clampf(preferred_height,220,maxf(220,screen.y - top_limit - 14))
 	var header_y := screen.y - height - 14
+	if mobile_layout_enabled:
+		var party_rail := host.battle.get_node_or_null("%PlayerStagePartyRail") as Control
+		if party_rail != null and party_rail.visible:
+			var party_bottom := party_rail.get_global_rect().end.y - root.get_global_rect().position.y
+			# The calculator sits 36 px above the tabs, so reserve it below the
+			# party rail too. Shorten the log instead of covering the final slot.
+			header_y = minf(maxf(header_y, party_bottom + 44.0), screen.y - 244.0)
+			height = screen.y - header_y - 14.0
 	var channels_height := 36.0 if not log_selected else 0.0
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	panel.size = Vector2(width / factor,(height - 50 - channels_height) / factor)
