@@ -16,6 +16,8 @@ preserve existing settings and environment resources.
 | Map-specific | Route 22, land | `route_22` | Outdoor | `maps/route_22/arena.gd` |
 | Map-specific | Route 22, water | `route_22_water` | Outdoor | `maps/route_22/arena.gd` with `water_battle` |
 | Map-specific | Route 3, land | `route_3` | Outdoor | `maps/route_3/arena.gd` |
+| Map-specific | Route 2, land/water | `route_2`, `route_2_water` | Outdoor | `maps/route_2/arena.gd` |
+| Map-specific | Route 4, land/water | `route_4`, `route_4_water` | Outdoor | `maps/route_4/arena.gd` |
 
 `classic` is the presenter's fallback surface, not a separately authored map.
 Route 1, Route 22 and Route 3 have map-specific arenas. 2D environment resources and
@@ -32,6 +34,9 @@ encounter selection live in `resources/battle/environments` and
 - `shared/`: mesh generation, grass batching, art loading, geometry helpers,
   camera/spawn framing, outdoor day/night lighting and the session-owned
   environment pool.
+
+`shared/wooded_route.gd` adds normalized tree/flower placement, camera clearance
+and capped terrace meshes for Route 1 and Route 22, without sharing map layouts.
 
 The mesh grassland base is shared infrastructure, not the generic grassfield
 layout. Route 22 does not inherit another map's layout. Additional map builders
@@ -70,7 +75,15 @@ visited map. The shared source art remains reusable. Actor state is never cached
   landmarks, terrace/pond geometry, pooled rendering and fixed-camera review.
 - `route_3_arena_check.gd`: Route 3 routing, ridge and clearing geometry,
   both pooled render passes and cleanup.
+- `routes_1_22_orbit_check.gd` and `routes_1_22_orbit_preview.gd`: full camera
+  orbit clearance and real Pokémon renders for both routes' land/water variants,
+  including day/night and the pitch/zoom limits.
 
 Historical Terrain3D comparison results are in `docs/route-22-mesh-review.md`.
 The old A/B implementation is available in commit `0bc5fd6e8`; current reviews
 exercise the active mesh builders through the catalog.
+
+Route 2/4 composition, new prop provenance and focused review commands are in
+[their arena guide](../../../docs/routes-2-4-battle-arenas.md). Shared shoreline
+and small-prop placement live in `shared/waterside_route.gd`; original mesh
+landmarks live in `shared/route_landmarks.gd`.

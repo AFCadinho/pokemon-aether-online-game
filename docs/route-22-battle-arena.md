@@ -28,11 +28,26 @@ area dry. In water battles the pond bottom rises to 0.22 units below the surface
 the camera and fighter origins move to the same eastern pond at `(11, 0, -4.5)`.
 Trees and flowers stay outside the water, with both camera corridors kept open.
 
+The scenery now encloses the whole land and pond camera orbits: continuous
+capped rock shelves to the north, south and sides, conifer groves, separate grass
+plots and shrub/flower beds. The pixel map's green-roofed League approach is
+represented by an open stone gate beside the western paving. A decorative
+southwestern pond and timber footbridge give the rear view its own landmark;
+this pond does not change encounter selection or battle origins.
+
+The northern staircase moves to x=-5 with landings at z=-23 and z=-31.4. Its
+terrain ramp supports the steps. The northern shelves sit beyond the pond's
+camera orbit so their edges and the stair rails leave the fighters visible at
+maximum zoom and minimum pitch. Tree centers stay outside a 24-unit radius around
+both battle origins. The mesh extends to x=±76 and z=±70, with the taller scenery
+outside the camera orbit. Route 1 and Route 22 share the art-placement and capped
+ledge helpers in `shared/wooded_route.gd`, retaining separate route layouts.
+
 The bounded terrain mesh is generated from the route shape and shared between
 render passes. Grass placements exclude the paths, pond and six-unit clearing.
 Both fighter spawns are flat at `surface_height`. Water battles use the shared
 framing origin for camera movement and actor placement with unchanged spacing.
-Terrain and landmarks remain in their original positions.
+Land and water variants share the same scenery positions.
 
 ## Preparation and ownership
 
@@ -80,6 +95,15 @@ Focused checks:
   water variant ground contact, pond-relative camera motion and both render passes.
 - `tests/shallow_water_arena_check.gd`: generic surf/fishing selection, fully
   submerged sandbank, preserved ground calibration, both render passes and cleanup.
+- `tests/routes_1_22_orbit_check.gd`: both routes' land/water camera clearance
+  every five degrees at the pitch/zoom limits, unblocked sightlines to the battle
+  center, terrain sightlines to both fighters, and scenery in every direction.
+- `tests/routes_1_22_orbit_preview.gd`: actual Dragonite/Roaring Moon paired
+  renders in eight directions, noon/night and both pitch limits at maximum zoom.
+  Set `POKEAETHER_FOREST_MANIFEST`, `SUMMARY_MODEL_CATALOG` and
+  `POKEAETHER_STAGE_OUTPUT`. Optional arguments select `route_22` and/or
+  `route_22_water`; no arguments review both Route 1 and Route 22 variants.
+  Contact sheets run left to right, top then bottom, from 0 to 315 degrees.
 
 GPU screenshots and logs are kept in the task slot's `.tmp/route-22-arena`.
 The existing Terrain3D interpolation deprecation and legacy scene UID warnings
@@ -89,7 +113,7 @@ packaging are separate from this local feature review.
 ## Structure and comparison evidence
 
 [The arena index](../scripts/battle/arenas/README.md) distinguishes generic
-terrain builders from map-specific compositions. Only Route 22 currently has
+terrain builders from map-specific compositions. Route 1 and Route 22 have
 map-specific land/water variants. [The mesh comparison](route-22-mesh-review.md)
 records the earlier proof and its timing/memory measurements; mesh terrain is now
 the runtime implementation for Route 22 and generic grassfield.

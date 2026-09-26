@@ -17,7 +17,7 @@ func _run() -> void:
 		assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "encounter_type":encounter}) == &"route_22_water")
 	assert(Resolver.resolve({"battle_kind":"wild", "map_id":"kanto_route_22", "player_on_water":true}) == &"route_22_water")
 	assert(Resolver.resolve({"battle_kind":"pvp", "map_id":"kanto_route_22"}) == &"pvp_stadium")
-	assert(Resolver.resolve({"battle_kind":"trainer", "map_id":"kanto_route_2"}) == &"grass")
+	assert(Resolver.resolve({"battle_kind":"trainer", "map_id":"kanto_route_5"}) == &"grass")
 	assert(Arenas.resolve("cave", &"route_22") == "cave")
 	assert(Arenas.uses_forest_assets("route_22") and Arenas.uses_forest_assets("forest"))
 	assert(not Arenas.uses_forest_assets("cave"))
@@ -55,8 +55,10 @@ func _run() -> void:
 		assert(is_equal_approx(first_height, float(arena.get_meta("surface_height"))))
 		for point in [Arenas.spawn(0), Arenas.spawn(1), Vector3.ZERO]:
 			assert(absf(_height(terrain, point) - first_height) < 0.001)
-		assert(_height(terrain, Vector3(0, 0, -24)) > first_height + 4.0)
-		assert(arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_COLOR][43 * 121 + 65].r > 0.95)
+		assert(_height(terrain, Vector3(0, 0, -32)) > first_height + 4.0)
+		var grid: Rect2i = arena.get_meta("mesh_grid")
+		var approach_index := (-14 - grid.position.y) * grid.size.x - 5 - grid.position.x
+		assert(arena.get_node("MeshTerrain").mesh.surface_get_arrays(0)[Mesh.ARRAY_COLOR][approach_index].r > 0.95)
 		assert(arena.has_node("Route22Scenery/SharedForestGrass"))
 		assert(arena.has_node("OutdoorLighting"))
 		assert(not ClassDB.class_exists("Terrain3D"))

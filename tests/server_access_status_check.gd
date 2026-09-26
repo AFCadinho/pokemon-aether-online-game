@@ -42,6 +42,15 @@ func _run() -> void:
 	_check(not bool(inconsistent_status.get("valid", true)), "inconsistent game-access status fails closed")
 
 	var login_source := FileAccess.get_file_as_string("res://scripts/ui/login_screen.gd")
+	var maintenance_branch := login_source.split("elif server_in_maintenance:", false, 1)[1].split("\n\telse:", false, 1)[0]
+	_check(
+		not maintenance_branch.contains("_log_server_health_error(result)"),
+		"valid maintenance status is not reported as a failed health check"
+	)
+	_check(
+		maintenance_branch.contains("last_server_health_error = \"\""),
+		"valid maintenance status clears any previous health error"
+	)
 	_check(
 		login_source.contains("await _refresh_server_health()"),
 		"login retries the public status check after a maintenance-shaped failure"

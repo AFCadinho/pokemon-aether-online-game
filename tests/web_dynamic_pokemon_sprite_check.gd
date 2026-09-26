@@ -77,10 +77,10 @@ func _init() -> void:
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(world_source.contains("_prefetch_current_map_wild_sprites") and world_source.contains("encounterTypes"),
 		"browser maps prefetch their wild encounter pool")
-	_check(world_source.contains("WebPokemonSpriteService.prefetch(priority_entries)") and world_source.contains("await WebPokemonSpriteService.prefetch_and_wait(priority_entries)"),
+	_check(world_source.contains("WebPokemonSpriteService.prefetch(priority_entries, true)") and world_source.contains("await WebPokemonSpriteService.prefetch_and_wait(priority_entries)"),
 		"ordinary encounters prioritize the visible leads while the remaining roster warms in the background")
-	_check(world_source.contains("await _prefetch_web_battle_sprites(response, true)"),
-		"AI and custom team-preview battles can still finish their full-roster prefetch")
+	_check(world_source.contains("if wait_for_full_roster:") and world_source.contains("await WebPokemonSpriteService.prefetch_and_wait(entries)"),
+		"explicit full-roster requests can still wait until every known battle sprite is prefetched")
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains('_prefetch_web_team_sprites(pokemon, "front")') and overlay_source.contains('_prefetch_web_team_sprites(pokemon, "back")'),
 		"AI Sparring and custom-game team previews begin loading both player and opponent rosters early")
