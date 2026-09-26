@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Explicitly include normal and shiny Pokémon HOME icons in Android exports so party slots can resolve their portraits.
+
 - Enable the virtual keyboard for browser builds on touchscreen devices.
 
 - De desktoplauncher haalt bij een update alleen de goedgekeurde 3D-catalogusindex op. Ontbrekende Pokémon-modellen worden afzonderlijk geladen voordat ze in een 3D-gevecht verschijnen, met downloadvoortgang en een geschatte resterende tijd.
