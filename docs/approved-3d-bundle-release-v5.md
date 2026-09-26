@@ -34,4 +34,13 @@ The Mega archive and v5 index were uploaded to the existing R2 bucket. Public
 GET verified their full sizes and SHA-256 digests (67,258,099 bytes total).
 All 84 objects required by v5 returned the pinned sizes in public HEAD checks.
 The details are recorded in `release/approved_3d_bundles_v5_r2_upload.json`.
-The desktop manifest has not selected v5 yet.
+At the time of this upload, the desktop manifest had not selected v5 yet.
+
+## Desktop publication (26 September 2026)
+
+Desktop release `0.3.85` published the v5 index for Windows and Linux with a
+rebuilt launcher. The public default, Windows and Linux manifests all pin the
+83-bundle v5 index; public size checks passed for both game and launcher
+downloads. GitHub Actions run `36256493745` succeeded. R2 cleanup was
+disabled for this release. The public verification is recorded in
+`release/approved_3d_bundles_v5_desktop_publish.json`.
