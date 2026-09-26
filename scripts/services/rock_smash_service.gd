@@ -6,8 +6,6 @@ signal state_changed(state: Dictionary)
 
 const ROCK_SMASH_ENDPOINT := "/game/rock-smash"
 const SMASH_ENDPOINT := "/game/rock-smash/smash"
-const WEB_ROCK_SMASH_ENDPOINT := "/auth/web/rock-smash"
-const WEB_SMASH_ENDPOINT := "/auth/web/rock-smash/smash"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var state: Dictionary = {}
@@ -16,7 +14,7 @@ var was_authenticated := false
 
 
 func _ready() -> void:
-	set_process(not OS.has_feature("web"))
+	set_process(true)
 
 
 func _process(_delta: float) -> void:
@@ -33,7 +31,7 @@ func _process(_delta: float) -> void:
 func load_state() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	var response := await _request_json(_endpoint(ROCK_SMASH_ENDPOINT, WEB_ROCK_SMASH_ENDPOINT), HTTPClient.METHOD_GET, "")
+	var response := await _request_json(ROCK_SMASH_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)):
 		return response
 	_apply_state(_dictionary_from_value(response.get("body", {})))
@@ -50,7 +48,7 @@ func smash_rock(rock_id: String, field_move_result: Dictionary) -> Dictionary:
 	if source == "pokemon" and pokemon != null:
 		pokemon_id = pokemon.owned_pokemon_id
 	var response := await _request_json(
-		_endpoint(SMASH_ENDPOINT, WEB_SMASH_ENDPOINT),
+		SMASH_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		JSON.stringify({
 			"rockId": normalized_rock_id,
@@ -143,10 +141,6 @@ func _new_request_id() -> String:
 		Time.get_ticks_usec(),
 		randi(),
 	]
-
-
-func _endpoint(desktop_endpoint: String, web_endpoint: String) -> String:
-	return web_endpoint if OS.has_feature("web") else desktop_endpoint
 
 
 func _array_from_value(value: Variant) -> Array:

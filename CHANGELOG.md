@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser play now uses the same gameplay routes as desktop and can continue through all currently available maps, including Route 5, Route 9 and Cerulean Cave. Guild activity and ranked PvP are available; player asset transfers still require the desktop or Android client.
+
 - Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles.
 
 - Defeat dialogue after shared NPC battles now uses the defeated Trainer's own mugshot, including class portraits such as Lass Zoe; missing portraits no longer show Professor Oak.

@@ -7,7 +7,7 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
 func _mail_endpoint() -> String:
-	return "/auth/web/mail" if OS.has_feature("web") else MAIL_ENDPOINT
+	return MAIL_ENDPOINT
 
 
 func load_mail(box: String = "inbox") -> Dictionary:

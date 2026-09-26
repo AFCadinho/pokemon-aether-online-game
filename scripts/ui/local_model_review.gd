@@ -1,6 +1,6 @@
 extends RefCounted
 ## Explicit desktop-debug preview admission, never battle/pack approval.
-const EVIDENCE = preload("res://tools/sprite_factory/catalog_production_batch_01_results.json")
+const EVIDENCE_PATH := "res://tools/sprite_factory/catalog_production_batch_01_results.json"
 
 static func catalog_path() -> String:
 	var override := OS.get_environment("POKEAETHER_PREVIEW_REVIEW_CATALOG")
@@ -17,8 +17,16 @@ static func catalog_path() -> String:
 static func resolve(identity: String) -> Dictionary:
 	if not OS.is_debug_build() or OS.has_feature("web") or OS.has_feature("mobile") or "@" in identity:
 		return {}
+	if not FileAccess.file_exists(EVIDENCE_PATH):
+		return {}
+	var evidence: Variant = JSON.parse_string(FileAccess.get_file_as_string(EVIDENCE_PATH))
+	if not evidence is Dictionary:
+		return {}
+	var evidence_entries: Variant = evidence.get("entries", [])
+	if not evidence_entries is Array:
+		return {}
 	var expected := ""
-	for row: Dictionary in EVIDENCE.data.entries:
+	for row: Dictionary in evidence_entries:
 		if row.species == identity and row.get("export_status") == "exported_for_review" and row.get("visual_review") == "pending" and row.get("runtime_approved") == false:
 			expected = str(row.get("runtime_sha256", ""))
 	if expected.length() != 64:

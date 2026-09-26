@@ -21,13 +21,16 @@ func _init() -> void:
 			failures += 1
 	if not LOADER.validate_module_manifest(JSON.stringify({"modules": {LOADER.MISTY_MODULE_NAME: valid}}), LOADER.MISTY_MODULE_NAME).success:
 		failures += 1
-	if LOADER.module_for_scene("res://scenes/overworld/kanto/routes/kanto_route_5.tscn") != "":
+	if LOADER.module_for_scene("res://scenes/overworld/kanto/routes/kanto_route_5.tscn") != LOADER.EXTENDED_MODULE_NAME:
 		failures += 1
 	if LOADER.module_for_scene("res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn") != LOADER.MISTY_MODULE_NAME:
 		failures += 1
 	var catalog := JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json")) as Dictionary
 	for map_id: String in LOADER.MISTY_MAP_SCENES:
 		if str(catalog.areas[map_id].scenePath) != LOADER.MISTY_MAP_SCENES[map_id]:
+			failures += 1
+	for map_id: String in LOADER.EXTENDED_MAP_SCENES:
+		if str(catalog.areas[map_id].scenePath) != LOADER.EXTENDED_MAP_SCENES[map_id]:
 			failures += 1
 	print("web_asset_module_manifest_check: ", "PASS" if failures == 0 else "FAIL")
 	quit(failures)

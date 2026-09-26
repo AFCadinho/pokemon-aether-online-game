@@ -9,14 +9,10 @@ signal item_received(item_id: String, quantity: int)
 const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
 const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"
-const WEB_FISHING_PROGRESSION_ENDPOINT := "/auth/web/fishing/progression"
-const WEB_FISHING_SELECTION_ENDPOINT := "/auth/web/fishing/selection"
 const NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"
 const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"
 const WORLD_PICKUPS_ENDPOINT := "/game/world-pickups"
 const WORLD_PICKUP_CLAIM_ENDPOINT := "/game/world-pickups/%s/claim"
-const WEB_WORLD_PICKUPS_ENDPOINT := "/auth/web/world-pickups"
-const WEB_WORLD_PICKUP_CLAIM_ENDPOINT := "/auth/web/world-pickups/%s/claim"
 const APPEARANCE_INVENTORY_ENDPOINT := "/game/appearance/inventory"
 const INVENTORY_ITEM_USE_ENDPOINT := "/game/inventory/items/%s/use"
 const APPEARANCE_ITEM_RETURN_ENDPOINT := "/game/appearance/inventory/items/%s/return"
@@ -32,17 +28,17 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
 func _inventory_endpoint() -> String:
-	return "/auth/web/inventory" if OS.has_feature("web") else INVENTORY_ENDPOINT
+	return INVENTORY_ENDPOINT
 
 
 func _npc_item_reward_endpoint(reward_id: String) -> String:
 	var endpoint := NPC_ITEM_REWARD_ENDPOINT % reward_id.uri_encode()
-	return endpoint.replace("/game/npc-rewards", "/auth/web/npc-rewards") if OS.has_feature("web") else endpoint
+	return endpoint
 
 
 func _npc_quest_item_turn_in_endpoint(turn_in_id: String) -> String:
 	var endpoint := NPC_QUEST_ITEM_TURN_IN_ENDPOINT % turn_in_id.uri_encode()
-	return endpoint.replace("/game/npc-quest-item-turn-ins", "/auth/web/npc-quest-item-turn-ins") if OS.has_feature("web") else endpoint
+	return endpoint
 
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
@@ -173,7 +169,7 @@ func load_fishing_progression(area_id := "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
 
-	var endpoint := WEB_FISHING_PROGRESSION_ENDPOINT if OS.has_feature("web") else FISHING_PROGRESSION_ENDPOINT
+	var endpoint := FISHING_PROGRESSION_ENDPOINT
 	var normalized_area_id := str(area_id).strip_edges()
 	if normalized_area_id != "":
 		endpoint += "?areaId=%s" % normalized_area_id.uri_encode()
@@ -199,7 +195,7 @@ func select_fishing_rod(item_id: String, area_id := "") -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + (WEB_FISHING_SELECTION_ENDPOINT if OS.has_feature("web") else FISHING_SELECTION_ENDPOINT),
+		base_url + (FISHING_SELECTION_ENDPOINT),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({
@@ -358,7 +354,7 @@ func load_collected_world_pickups(force_refresh := false) -> Dictionary:
 	world_pickup_request_active = true
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + (WEB_WORLD_PICKUPS_ENDPOINT if OS.has_feature("web") else WORLD_PICKUPS_ENDPOINT),
+		base_url + (WORLD_PICKUPS_ENDPOINT),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -401,7 +397,7 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + (WEB_WORLD_PICKUP_CLAIM_ENDPOINT if OS.has_feature("web") else WORLD_PICKUP_CLAIM_ENDPOINT) % normalized_pickup_id.uri_encode(),
+		base_url + (WORLD_PICKUP_CLAIM_ENDPOINT) % normalized_pickup_id.uri_encode(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		""
@@ -696,8 +692,6 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var endpoint := WILD_BATTLE_CATCH_ENDPOINT % battle_id.uri_encode()
-	if OS.has_feature("web"):
-		endpoint = endpoint.replace("/game/wild-battles", "/auth/web/wild-battles")
 	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,

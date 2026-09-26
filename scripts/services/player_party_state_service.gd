@@ -3,7 +3,6 @@ extends Node
 class_name PlayerPartyStateServiceNode
 
 const PLAYER_PARTY_ENDPOINT := "/game/party"
-const WEB_PLAYER_PARTY_ENDPOINT := "/auth/web/party"
 const PLAYER_PARTY_BATTLE_ENDPOINT := "/game/party/battle-state"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -227,15 +226,15 @@ func claim_starter(species_id: String) -> Dictionary:
 
 
 func _player_party_endpoint() -> String:
-	return WEB_PLAYER_PARTY_ENDPOINT if OS.has_feature("web") else PLAYER_PARTY_ENDPOINT
+	return PLAYER_PARTY_ENDPOINT
 
 
 func _starter_options_endpoint() -> String:
-	return "/auth/web/starter/options" if OS.has_feature("web") else "/game/starter/options"
+	return "/game/starter/options"
 
 
 func _starter_claim_endpoint() -> String:
-	return "/auth/web/starter" if OS.has_feature("web") else "/game/starter"
+	return "/game/starter"
 
 
 func dev_create_pokemon(

@@ -19,8 +19,8 @@ func _run() -> void:
 		"browser Keepers do not stop before loading the Aethernet network"
 	)
 	_check(
-		transit_service_source.contains('return "/auth/web/transit" if OS.has_feature("web") else TRANSIT_ENDPOINT'),
-		"browser Aethernet calls the restricted authenticated transit API"
+		transit_service_source.contains('return TRANSIT_ENDPOINT'),
+		"browser Aethernet calls the shared transit API"
 	)
 	_check(
 		keeper_source.contains("TransitService.load_network")

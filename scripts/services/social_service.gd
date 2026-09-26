@@ -7,11 +7,11 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
 func _socials_endpoint() -> String:
-	return "/auth/web/socials" if OS.has_feature("web") else SOCIALS_ENDPOINT
+	return SOCIALS_ENDPOINT
 
 
 func _web_social_path(path: String) -> String:
-	return path.replace(SOCIALS_ENDPOINT, _socials_endpoint()) if OS.has_feature("web") else path
+	return path
 
 
 func load_socials() -> Dictionary:

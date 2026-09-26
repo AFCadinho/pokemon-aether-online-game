@@ -213,18 +213,6 @@ func _ready() -> void:
 		SettingsManager.settings_changed.connect(_on_settings_changed)
 	_sync_remote_players_visibility()
 	_connect_world_presence_signals()
-	if OS.has_feature("web"):
-		if not PlayerSave.party_changed.is_connected(_on_web_party_changed):
-			PlayerSave.party_changed.connect(_on_web_party_changed)
-		_ensure_map_transition_overlay()
-		await _setup_web_demo_world()
-		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
-			player.process_mode = web_player_process_mode_before_load
-			_setup_coop_controls()
-		if GameState.gameplay_reset_in_progress:
-			GameState.finish_gameplay_reset()
-		_show_pending_coop_battle_result.call_deferred()
-		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
 		player.connect("overworld_steps_completed", step_callback)
@@ -235,6 +223,19 @@ func _ready() -> void:
 		PlayerSave.party_changed.connect(_validate_active_flash_source)
 	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
+	if OS.has_feature("web"):
+		if not PlayerSave.party_changed.is_connected(_on_web_party_changed):
+			PlayerSave.party_changed.connect(_on_web_party_changed)
+		_ensure_map_transition_overlay()
+		await _setup_web_demo_world()
+		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
+			player.process_mode = web_player_process_mode_before_load
+			_setup_coop_controls()
+			await _refresh_fishing_progression()
+		if GameState.gameplay_reset_in_progress:
+			GameState.finish_gameplay_reset()
+		_show_pending_coop_battle_result.call_deferred()
+		return
 	_ensure_map_transition_overlay()
 	await _setup_initial_world_state()
 	_setup_coop_controls()
@@ -369,7 +370,7 @@ func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := 
 		)
 	# Put the visible leads at the front of the bounded download pool before
 	# filling spare slots with the rest of the roster.
-	WebPokemonSpriteService.prefetch(priority_entries)
+	WebPokemonSpriteService.prefetch(priority_entries, true)
 	WebPokemonSpriteService.prefetch(entries)
 	await WebPokemonSpriteService.prefetch_and_wait(priority_entries)
 
@@ -480,19 +481,7 @@ func _append_web_sprite_entry(
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if OS.has_feature("web"):
-		if is_loading_map or not _has_active_world_map():
-			return
-		if not is_in_battle:
-			position_presence_elapsed += delta
-			if position_presence_elapsed >= POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS:
-				position_presence_elapsed = 0.0
-				_publish_world_presence()
-		position_autosave_elapsed += delta
-		if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
-			position_autosave_elapsed = 0.0
-			if not _is_player_position_save_blocked_by_teleport():
-				await _save_current_player_position_if_changed(true)
+	if OS.has_feature("web") and (is_loading_map or not _has_active_world_map()):
 		return
 	_track_playtime(delta)
 	await _retry_pending_remote_authorized_teleport(delta)
@@ -515,15 +504,12 @@ func _process(delta: float) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and not GameState.gameplay_reset_in_progress:
 		_save_current_player_position_if_changed(true)
-		if not OS.has_feature("web"):
-			_flush_playtime_if_needed.call_deferred(true)
+		_flush_playtime_if_needed.call_deferred(true)
 
 func save_current_player_state() -> void:
 	if GameState.gameplay_reset_in_progress:
 		return
 	_save_current_player_position_if_changed.call_deferred(true)
-	if OS.has_feature("web"):
-		return
 	_flush_playtime_if_needed.call_deferred(true)
 	_publish_world_presence.call_deferred(true)
 
@@ -3170,14 +3156,6 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 	var active_land_mount_id := str(player.call("get_active_land_mount_id")) \
 		if player.has_method("get_active_land_mount_id") \
 		else ""
-	if OS.has_feature("web"):
-		return {
-			"mapId": _get_map_id(current_map),
-			"mapScenePath": _get_map_scene_path(current_map),
-			"position": {"x": position.x, "y": position.y},
-			"facingDirection": _direction_to_name(player.last_direction),
-			"spawnMarker": spawn_marker,
-		}
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),
@@ -4068,7 +4046,7 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(trainer_data)
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
-	await _prefetch_web_battle_sprites(response, true)
+	await _prefetch_web_battle_sprites(response)
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
 	if not _mount_battle_ui():
@@ -4102,7 +4080,7 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		await cancel_pvp_battle_transition()
 		return false
 
-	await _prefetch_web_battle_sprites(response, true)
+	await _prefetch_web_battle_sprites(response)
 	await _wait_for_pvp_battle_cover()
 	is_in_battle = true
 	active_battle_kind = "pvp"

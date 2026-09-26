@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build both optional browser map modules through ops/worktrees/slot-env."""
+"""Build optional browser map modules through ops/worktrees/slot-env."""
 from __future__ import annotations
 import argparse
 import hashlib
@@ -11,7 +11,7 @@ from pathlib import Path
 from build_web_preview import run_export
 
 ROOT = Path(__file__).resolve().parents[1]
-MAX_MODULE_BYTES = 32 * 1024 * 1024
+MAX_MODULE_BYTES = 64 * 1024 * 1024
 
 
 def build_module(godot, output, name, preset, scenes, required, forbidden):
@@ -89,7 +89,13 @@ def main():
     modules["kanto-through-misty-maps"] = build_module(
         args.godot, output, "kanto-through-misty-maps", "Web Misty Maps Trial", misty_scenes,
         tuple(path.removeprefix("res://").encode() for path in misty_scenes), forbidden)
-    # Publish one manifest only after both packs pass validation.
+    extended_ids = ("kanto_route_5", "kanto_route_9", "kanto_cerulean_cave")
+    extended_scenes = [catalog["areas"][map_id]["scenePath"] for map_id in extended_ids]
+    modules["kanto-extended-maps"] = build_module(
+        args.godot, output, "kanto-extended-maps", "Web Extended Kanto Maps", extended_scenes,
+        tuple(path.removeprefix("res://").encode() for path in extended_scenes),
+        tuple(path.removeprefix("res://").encode() for path in misty_scenes))
+    # Publish one manifest only after every pack passes validation.
     (output / "manifest.json").write_text(json.dumps({"schemaVersion": 1, "modules": modules}, indent=2) + "\n", encoding="utf-8")
 
 

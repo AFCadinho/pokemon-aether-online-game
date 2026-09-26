@@ -290,8 +290,6 @@ func _on_continue_button_pressed() -> void:
 	if is_loading:
 		return
 	_clear_login_return_notice()
-	if OS.has_feature("web") and await _offer_web_lobby_recovery():
-		return
 	if OS.has_feature("web") and not web_demo_notice_acknowledged:
 		_show_web_demo_notice()
 		return
@@ -301,8 +299,8 @@ func _on_continue_button_pressed() -> void:
 func _show_web_demo_notice() -> void:
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	dialog.configure(
-		"Welcome to the PokeAether browser demo",
-		"This browser version is a small, limited part of PokeAether. Explore the opening world, chat and practise battles here. Download the client for the full MMO experience. Your account and progress are shared.",
+		"Welcome to PokeAether in your browser",
+		"Your account and progress are shared with the downloadable game. Trading, Lending, Aether Exchange, Guild Bank and mail attachments require the desktop or Android client.",
 		"Continue in browser",
 		"Download client"
 	)
@@ -550,8 +548,6 @@ func _submit_login() -> void:
 
 	login_submitted.emit(username, password)
 	if OS.has_feature("web"):
-		if await _offer_web_lobby_recovery():
-			return
 		_show_web_demo_notice()
 	else:
 		_enter_world()
@@ -707,46 +703,6 @@ func _apply_saved_session_preview_state() -> void:
 
 	PlayerSave.apply_appearance_state(appearance)
 	_refresh_player_preview()
-
-
-func _offer_web_lobby_recovery() -> bool:
-	var result: Dictionary = await TransitService.load_web_lobby_recovery()
-	if not bool(result.get("success", false)):
-		return false
-	var recovery := _dictionary_from_value(result.get("body", {}))
-	if not bool(recovery.get("eligible", false)):
-		return false
-	var fare := int(recovery.get("fare", 0))
-	var price_text := "free with your Guild membership" if bool(recovery.get("guildBenefitActive", false)) else "₽%s" % fare
-	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
-	dialog.configure(
-		"Current location unavailable in browser",
-		"Your Trainer is currently outside the browser world. Travel via Aethernet to the Aether Clash Lobby for %s? This changes your shared position on desktop too." % price_text,
-		"Travel to Lobby",
-		"Download client"
-	)
-	dialog.confirmed.connect(_recover_web_to_lobby.bind(dialog))
-	dialog.cancel_button.pressed.connect(func():
-		OS.shell_open("https://pokeaether.com/download")
-	)
-	dialog.canceled.connect(func():
-		dialog.queue_free()
-	)
-	add_child(dialog)
-	dialog.popup_centered(Vector2i(580, 280))
-	return true
-
-
-func _recover_web_to_lobby(dialog: AetherConfirmationDialog) -> void:
-	set_loading(true)
-	var result: Dictionary = await TransitService.recover_web_to_lobby()
-	set_loading(false)
-	dialog.queue_free()
-	if not bool(result.get("success", false)):
-		show_status(str(result.get("error", "Aethernet travel is currently unavailable.")), true)
-		return
-	web_demo_notice_acknowledged = true
-	_enter_world()
 
 
 func _enter_world() -> void:
