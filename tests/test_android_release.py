@@ -2,12 +2,36 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import json
 import unittest
+import zipfile
 from unittest.mock import patch
 
 from tools.android_release import inspect, prepare, setting
+import android_updater.setup_build_template as setup_build_template
 
 
 class AndroidReleaseTests(unittest.TestCase):
+    def test_setup_build_template_creates_missing_build_directory(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            template = root / "android_source.zip"
+            (root / "version.txt").write_text("4.6.2.stable\n")
+            with zipfile.ZipFile(template, "w") as archive:
+                archive.writestr("build.gradle", "")
+                archive.writestr("gradlew", "#!/bin/sh\n")
+                archive.writestr("gradle.properties", "org.gradle.jvmargs=-Xmx4536m\n")
+                archive.writestr("src/main/AndroidManifest.xml", "<manifest>\n    <application\n    </application>\n</manifest>\n")
+            overlay = root / "overlay"
+            overlay.mkdir()
+            (overlay / "ApkInstallBridge.java").write_text("// test bridge\n")
+            build = root / "android" / "build"
+            self.assertFalse(build.exists())
+            with patch.object(setup_build_template, "BUILD", build), \
+                    patch.object(setup_build_template, "OVERLAY", overlay), \
+                    patch("sys.argv", ["setup_build_template.py", str(template)]):
+                self.assertEqual(setup_build_template.main(), 0)
+            self.assertTrue((build / ".gdignore").is_file())
+            self.assertTrue((build / "gradlew").stat().st_mode & 0o111)
+
     def test_prepare_stamps_matching_identity_and_rejects_old_code(self) -> None:
         with TemporaryDirectory() as directory:
             project = Path(directory) / "project.godot"
