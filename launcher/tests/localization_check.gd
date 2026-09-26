@@ -134,6 +134,17 @@ func _run() -> void:
 		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).is_empty(), "launcher accepts complete download integrity metadata")
 		valid_manifest["assetBundleIndex"]["requiredAssetIds"].append("pokemon_3d:azumarill:base")
 		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).contains("release set"), "launcher rejects expanded screened model release sets")
+		var future_manifest: Dictionary = valid_manifest.duplicate(true)
+		future_manifest["launcher"] = {"version": "999.0.0", "url": "https://updates.example/launcher.zip",
+			"sizeBytes": 30, "sha256": "ef".repeat(32)}
+		_check(bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
+			"Asset bundle release set is not approved.")), "newer launcher may bootstrap an unknown approved bundle set")
+		future_manifest["launcher"]["version"] = "0.0.0"
+		_check(not bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
+			"Asset bundle release set is not approved.")), "same or older launcher cannot bypass bundle validation")
+		future_manifest["launcher"]["version"] = "999.0.0"
+		_check(not bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
+			"Asset bundle index integrity metadata is invalid.")), "malformed bundle metadata cannot bootstrap")
 		valid_manifest["assetBundleIndex"]["requiredAssetIds"].pop_back()
 		launcher.set("release_asset_bundles", preload("res://scripts/release_asset_bundles.gd").new(
 			"user://localization-check-bundles", "user://localization-check-indexes"

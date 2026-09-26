@@ -1040,6 +1040,21 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		return
 	var manifest_validation_error := _validate_download_manifest(parsed_json)
 	if not manifest_validation_error.is_empty():
+		if _can_bootstrap_launcher_update(parsed_json, manifest_validation_error):
+			# Older launchers cannot name a future approved bundle set. Keep all
+			# game/content downloads blocked and only offer the verified launcher
+			# update; the restarted launcher revalidates the full manifest.
+			manifest = parsed_json
+			launcher_update_info = _get_launcher_update_info()
+			_refresh_launcher_update_status()
+			pending_downloads.clear()
+			update_required = false
+			_set_busy(false)
+			_set_status("Update needed", "update_needed")
+			launcher_update_shown = true
+			_show_launcher_update_prompt()
+			_log("New 3D content requires a launcher update.")
+			return
 		_set_busy(false)
 		_set_status("Manifest is invalid.")
 		_log_error("Manifest validation failed: %s" % manifest_validation_error)
@@ -1064,6 +1079,16 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 		_log("Update available.")
 	else:
 		_log("Everything is up to date.")
+
+
+func _can_bootstrap_launcher_update(candidate: Dictionary, validation_error: String) -> bool:
+	if validation_error != "Asset bundle release set is not approved.":
+		return false
+	var update: Variant = candidate.get("launcher", {})
+	if not update is Dictionary:
+		return false
+	var version := str(update.get("version", "")).strip_edges()
+	return not version.is_empty() and _is_newer_version(version, _get_local_launcher_version())
 
 
 func _validate_download_manifest(candidate: Dictionary) -> String:
