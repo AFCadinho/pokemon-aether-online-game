@@ -15,7 +15,7 @@ def bake(report, grounded_sleep):
         lift = entry["candidate_lift"]
         profile = {"schema": 1, "sha256": entry["sha256"], "scale": entry["scale"],
                    "yaw_degrees": entry["yaw_degrees"], "lift": lift, "clips": {}}
-        for action in ("physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_loop"):
+        for action in ("physical_attack", "physical_attack_2", "special_attack", "damage", "sleep", "faint_start", "faint_loop"):
             if action not in entry["clips"]:
                 continue
             if action == "sleep" and species not in grounded_sleep:
@@ -36,7 +36,8 @@ def bake(report, grounded_sleep):
                     offsets = [max(offsets)] * len(offsets)
             profile["clips"][action] = {"duration": clip["duration"],
                 "intent": "grounded_rest" if action == "sleep" else "clearance_only",
-                "offsets": [round(value, 7) for value in offsets]}
+                "offsets": [max(round(value, 7), -lift) if action == "sleep" else round(value, 7)
+                            for value in offsets]}
         clips = profile["clips"]
         if "faint_start" in clips and "faint_loop" in clips:
             start_min = entry["clips"]["faint_start"]["minimum_y_samples"][-1]

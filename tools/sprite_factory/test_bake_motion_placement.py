@@ -18,6 +18,21 @@ class BakeMotionTests(unittest.TestCase):
         self.assertNotIn("idle", clips)
         self.assertNotIn("faint_start", clips)
 
+    def test_second_physical_attack_receives_clearance(self):
+        report = self.report()
+        report["entries"]["fixture"]["clips"]["physical_attack_2"] = {
+            "duration": 2 / 60, "minimum_y_samples": [0.0, -0.3, 0.0]}
+        clips = bake(report, [])["fixture"]["clips"]
+        self.assertEqual(clips["physical_attack_2"]["offsets"], [.23, .23, .23])
+
+    def test_sleep_rounding_stays_within_calibrated_lift(self):
+        report = self.report()
+        report["entries"]["fixture"]["candidate_lift"] = .02117747077718
+        report["entries"]["fixture"]["clips"]["sleep"] = {
+            "duration": 2 / 60, "minimum_y_samples": [.1, .1, .1]}
+        offsets = bake(report, ["fixture"])["fixture"]["clips"]["sleep"]["offsets"]
+        self.assertTrue(all(value >= -.02117747077718 for value in offsets))
+
     def test_reject_unverified_or_invalid_measurement(self):
         for mutate in (
             lambda r: r.update(errors=["failed"]),
