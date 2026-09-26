@@ -3,6 +3,7 @@ extends "res://tools/sprite_factory/phase5_godot_review.gd"
 ## catalog. This produces review evidence only; it cannot approve a model.
 
 const ACTIONS := ["idle", "physical_attack", "special_attack", "damage", "sleep", "faint_start", "faint_loop"]
+const OPTIONAL_ACTIONS := ["physical_attack_2"]
 const FRACTIONS := [0.0, 0.5, 1.0]
 
 func _pose(model: Node3D, player: AnimationPlayer, action: String, fraction: float) -> AABB:
@@ -79,9 +80,13 @@ func _run() -> void:
 					record.errors.append("Expected one AnimationPlayer")
 				else:
 					var player: AnimationPlayer = players[0]
+					var actions := ACTIONS.duplicate()
+					for optional: String in OPTIONAL_ACTIONS:
+						if player.has_animation(optional):
+							actions.append(optional)
 					var framing := AABB()
 					var found := false
-					for action: String in ACTIONS:
+					for action: String in actions:
 						if not player.has_animation(action):
 							record.errors.append("Missing clip: " + action)
 							continue
@@ -97,7 +102,7 @@ func _run() -> void:
 						var target := framing.get_center()
 						camera.position = target + Vector3(3, 2, 7).normalized() * camera.size * 3
 						camera.look_at(target)
-						for action: String in ACTIONS:
+						for action: String in actions:
 							if not player.has_animation(action):
 								continue
 							for fraction: float in FRACTIONS:

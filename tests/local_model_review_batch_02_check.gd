@@ -13,12 +13,16 @@ func _run() -> void:
 	var entries: Array = JSON.parse_string(FileAccess.get_file_as_string(catalog))
 	assert(entries.size() == 81)
 	var names := {}
+	var approved := 0
 	for entry: Dictionary in entries:
 		assert(not names.has(entry.species))
 		names[entry.species] = true
-		assert(not Registry.supports(entry.species), "Preview cannot grant battle approval")
-		assert(not Review.resolve(entry.species).is_empty())
+		if Registry.supports(entry.species):
+			approved += 1
+		else:
+			assert(not Review.resolve(entry.species).is_empty())
 		assert(Review.resolve(entry.species + "@shiny").is_empty())
+	assert(approved == 69)
 	assert(Review.resolve("slakoth").is_empty())
 	assert(Review.resolve("arceus").is_empty())
 	var settings := root.get_node("SettingsManager")
@@ -33,7 +37,7 @@ func _run() -> void:
 	var button := MenuButton.new()
 	root.add_child(button)
 	summary.bind_animation_button(button)
-	for name in ["pupitar", "dialga", "zoroark"]:
+	for name in ["shroomish", "kyogre", "dialga"]:
 		assert(dex.show_species(name, false))
 		assert(summary.show_species(name, false))
 		var deadline := Time.get_ticks_msec() + 20000
@@ -46,10 +50,10 @@ func _run() -> void:
 		for i in button.get_popup().item_count:
 			summary.play_clip(str(button.get_popup().get_item_metadata(i)))
 			assert(summary.player.is_playing())
-		print("BATCH02_PREVIEW_OK ", name)
+		print("BATCH02_HELD_PREVIEW_OK ", name)
 	settings.battle_presentation_mode = previous
 	dex.queue_free()
 	summary.queue_free()
 	button.queue_free()
-	print("BATCH02_REVIEW_CHECK_OK 81 identities / 3 UI previews / 8 native clips")
+	print("BATCH02_REVIEW_CHECK_OK 69 approved / 12 local previews / 3 UI previews / 8 native clips")
 	quit()

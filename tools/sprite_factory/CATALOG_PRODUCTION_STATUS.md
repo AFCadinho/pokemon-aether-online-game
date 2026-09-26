@@ -10,14 +10,22 @@ produced standalone Godot scenes, and 19 were safely held. The 81 scenes contain
 Godot pose/timing errors and zero external scene dependencies. Five static
 preview images per scene (405 total) were captured.
 
-These are **technical candidates only**. Normal-form visual review, battle
-placement/animation qualification and shiny review are still pending. No new
-model was approved, activated, bundled or uploaded. See
+The user accepted all 81 normal forms in the static overview and 79 in battle
+images. Kyogre's corrected sleep pose floats unnaturally; Dialga's sleep pose
+intersects the classic HUD proxy. These two stay in the review queue. The other
+79 passed 120 Hz floor, framing and HUD checks. Sixty-nine shiny variants have
+exact normal/shiny geometry and animation parity, error-free motion captures
+and user visual approval. All 69 normal/shiny pairs passed local real-battle
+stress, individual-bundle installation, scene loading, no-op update and restart
+checks. They are now locally approved in the game and launcher registries, with
+69 individual bundles totaling 1,591.25 MiB. Ten normal models still await
+qualified shiny materials, and 19 source holds remain queued. No new bundle
+was uploaded, activated in a release index, pushed or deployed. See
 [batch 02 review](CATALOG_PRODUCTION_BATCH_02_REVIEW.md) and the pinned
 [per-species results](catalog_production_batch_02_results.json).
-The 81 normal candidates are available in the local desktop debug Pokédex and
-summary preview through a separate hash-pinned manifest; this does not grant
-battle or distribution approval.
+The 12 unapproved normal models remain accessible in the desktop debug
+Pokédex/summary preview through a hash-pinned manifest. The 69 approved pairs
+require their bundles to be installed before they appear in battles.
 
 ## Active decision
 

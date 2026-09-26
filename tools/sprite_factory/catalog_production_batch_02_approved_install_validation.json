@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "scope": "approved registry plus launcher-installed catalog, 69 normal/shiny pairs in three real battle rounds",
+  "approval_sha256": "601fcca87aaf31c94ba24516cdfa5246ee46a9be3b2b57bf662ea5a7b077e894",
+  "runtime_approved": true,
+  "release_approved": true,
+  "published": false,
+  "rounds": [
+    {
+      "arena": "classic",
+      "pairs": 69,
+      "frame_p95_ms": 17.249,
+      "uncovered_hitches_over_100ms": 0
+    },
+    {
+      "arena": "stadium",
+      "pairs": 69,
+      "frame_p95_ms": 17.066,
+      "uncovered_hitches_over_100ms": 0
+    },
+    {
+      "arena": "classic",
+      "pairs": 69,
+      "frame_p95_ms": 17.314,
+      "uncovered_hitches_over_100ms": 0
+    }
+  ],
+  "evidence_sha256": {
+    ".tmp/catalog-production-02-approved-installed-stress.json": "33b1a24d8441e30756408843d82f7b2c589c98ce5e8d4cc34f05b0638c9b7af9",
+    ".tmp/catalog-production-02-approved-installed-stress.log": "0dd6fa89acb41b79c569b414c51309ddb3370e6e96fb7f543609e4f8185c893f",
+    "tests/catalog_batch_02_approved_admission_check.gd": "23904f5ae22756936f17dc1f80aa88831ef37d574c3570a4158ecc7f8f5c0620"
+  }
+}

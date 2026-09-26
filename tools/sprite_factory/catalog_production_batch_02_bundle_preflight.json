@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "status": "local_candidate_bundle_preflight_passed",
+  "runtime_approved": false,
+  "release_approved": false,
+  "bundle_count": 69,
+  "appearance_count": 138,
+  "bundle_bytes": 1668550493,
+  "index_bytes": 61038,
+  "index_sha256": "3c42d8752828b1f7d32ef1e56f6cebb07b5cb327e35331d6a2c8b593ec31cf13",
+  "launcher_install_scenes_loaded": 138,
+  "launcher_no_op": true,
+  "launcher_restart": true,
+  "rounds": [
+    {
+      "arena": "classic",
+      "pairs": 69,
+      "frame_p95_ms": 17.507,
+      "frame_max_ms": 539.256,
+      "load_callback_max_ms": 2.684,
+      "retained_source_bytes": 27466747,
+      "uncovered_hitches_over_100ms": 0
+    },
+    {
+      "arena": "stadium",
+      "pairs": 69,
+      "frame_p95_ms": 17.56,
+      "frame_max_ms": 196.357,
+      "load_callback_max_ms": 3.255,
+      "retained_source_bytes": 27466747,
+      "uncovered_hitches_over_100ms": 0
+    },
+    {
+      "arena": "classic",
+      "pairs": 69,
+      "frame_p95_ms": 17.434,
+      "frame_max_ms": 118.083,
+      "load_callback_max_ms": 2.798,
+      "retained_source_bytes": 27466747,
+      "uncovered_hitches_over_100ms": 0
+    }
+  ],
+  "final_two_round_static_growth_bytes": 275856,
+  "evidence_sha256": {
+    "candidate_receipt": "261778a96d99f7541b6e4a2d7f0b13cdb4294e90dfefc8b501da393475d9a82f",
+    "stress_report": "2402d6bff53f550545a23690f6c499d5c789e568a1e5fc0306b447748de9f470",
+    "stress_log": "e5fb03897db927e3c0991fdc31594dc0072f9b76d9e3d5fd8059e7c955085878",
+    "launcher_install_log": "c37445be72338180734c3f6d696e64170c106b96401c88a23dea69d2fc0e539b",
+    "launcher_install_test": "241607f80ecc0acb3e8057588375ba1d82eff8e46343098b2d841a19af4894ee"
+  },
+  "open": [
+    "Local approval registry and next content index are not yet prepared.",
+    "Bundles have not been uploaded or activated."
+  ]
+}

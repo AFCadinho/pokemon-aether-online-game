@@ -1,0 +1,1483 @@
+{
+  "schema": 1,
+  "date": "2026-09-26",
+  "purpose": "Read-only shiny material pre-screen; no export or approval",
+  "runtime_approved": false,
+  "release_approved": false,
+  "normal_results_sha256": "b3301e3d506ee070e554afd59cd989c91c1b6dd0cef71f5d6021df15cbd51c8a",
+  "normal_export_catalog_sha256": "10e445e55b93d08a93951906e4b7f7e5326e3a3f3eadfa9b7a90b8e1e1c29d48",
+  "albedo_only_candidates": 69,
+  "material_holds": 12,
+  "entries": [
+    {
+      "species": "pupitar",
+      "normal_glb_sha256": "111d72e927fc0f2912ae6f13ab00d5632e7332c058e3be09d1c291e5a01fb5d9",
+      "normal_material_table_sha256": "77118555bf2a7f32c7b0a71ee592754020a615869ccfc68ccc007365ab456e75",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "d5cf17729b17473c16bc49f9dca3c7c29f52473329c076ed7d270d7ee3263cbe",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0247/pm0247_00_00/pm0247_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0247/pm0247_00_00/pm0247_00_00_body_rare_alb.png",
+          "normal_sha256": "1ce82cf4601219737a54a31ac83560090978095ffafbe3bba353233e3ad7d470",
+          "rare_sha256": "61743b2de3ae1fcb054770587380c4ab6617cada48b051a277f248a475bf11c4"
+        }
+      ]
+    },
+    {
+      "species": "ralts",
+      "normal_glb_sha256": "30bba93a8453ab2dda00ee778ad044d1c63eed3cfdc888920810aca5ae1fe98b",
+      "normal_material_table_sha256": "7e5e3aa4da8da2e0416711b3312175b55cdb87badd78855b360c8367ea08e0c6",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "bb443abd607e4cf5ce060d240229c6df5e075fbca31eb7731a3a300838fd7c30",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0280/pm0280_00_00/pm0280_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0280/pm0280_00_00/pm0280_00_00_body_rare_alb.png",
+          "normal_sha256": "c348b6f5d3e8c0cf8609093537190beddaa7309d3684ff8184e3d70fadd2cd19",
+          "rare_sha256": "968815ea51827e8f6ef6a8acc8e52823c842c8f0c47e3ea3e0b0ad2ed9049a38"
+        }
+      ]
+    },
+    {
+      "species": "kirlia",
+      "normal_glb_sha256": "60038c4853416724c62c9027eb82e1880542033d7d668782e461f7292c1a918d",
+      "normal_material_table_sha256": "6d0594af844de61d8f0d89243a98b05e88452145333b64a4b375d8a1469a968a",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "a6f5ee2387280a42a36c257db3d841d5da8bc352bb1531b81200fbd8d5201cb7",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0281/pm0281_00_00/pm0281_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0281/pm0281_00_00/pm0281_00_00_body_rare_alb.png",
+          "normal_sha256": "2f042621473e38480c83586dfc4f6168f22e674c5a84361f602dcde55922c379",
+          "rare_sha256": "b5a1c5df82f5f283261fd1ed19b64b45e13fd0b0345d588cf2e6e036a52b31dc"
+        }
+      ]
+    },
+    {
+      "species": "surskit",
+      "normal_glb_sha256": "f74ea50b87a3808f98a2c7cda7bdb571d6749d1804e898aeb1d4199e6cf52d49",
+      "normal_material_table_sha256": "514a614bde597e5bbc00b255b08d520449fe261c1e2924f20646e7780b3e1d00",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "c8cd42a1d5bd907f2a54590044525fd21d7cf1602adf6729284bf0c843f878d4",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0283/pm0283_00_00/pm0283_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0283/pm0283_00_00/pm0283_00_00_body_rare_alb.png",
+          "normal_sha256": "78722f194654923137eb3c865adf7abc86caaa8a68e3af084deb2afff0a14563",
+          "rare_sha256": "77660de36622a0871310f489d57ea4dd63505fc7ebbc02527eb41e0bf693f876"
+        }
+      ]
+    },
+    {
+      "species": "masquerain",
+      "normal_glb_sha256": "4d71f1670a38ee6977db70a364f5602012a2cb3f3174c40cce75e6da9642ad0f",
+      "normal_material_table_sha256": "274aa28858346af5d541b702c6b610a20cec3c9a7c74ddb13ff70350c83aa5ab",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "a4148b00c55b5600df9a933f282b2432e7d5441a06783a71388acf8664cbce15",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0284/pm0284_00_00/pm0284_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0284/pm0284_00_00/pm0284_00_00_body_rare_alb.png",
+          "normal_sha256": "a4abc95c2f3d0fd955cf56d7f3617a366b65a577786624def75a906f8c73dd55",
+          "rare_sha256": "0446be1351f61f95c9cce049e6f75021d4c083ff4d043073f2a11d088c0bf91b"
+        }
+      ]
+    },
+    {
+      "species": "shroomish",
+      "normal_glb_sha256": "c8aa7136b2a74a632f56f4a5fdec9c711ac2c32b23953a0c90c5e93cecb56d21",
+      "normal_material_table_sha256": "588f24de90808144cd60b88acd5d11a48aa38f505d0f34a511aa2f8edee9504b",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "breloom",
+      "normal_glb_sha256": "6a7cb69d29bbfb305ca8ab78c2454901bfcee7dc0ac7ca3f51cfd7651096f3a4",
+      "normal_material_table_sha256": "a9a573d3b65690f9f0f854ce7b57a0a579aeea9b93ab0c9c00686d0ac6f93463",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "b1109ed0e65dc94d06648d7cbe7e317ea939df4142eefc12fc9a458d60fdd545",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0286/pm0286_00_00/pm0286_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0286/pm0286_00_00/pm0286_00_00_body_a_rare_alb.png",
+          "normal_sha256": "311cfec842b27552681aff58ad549e971c4b3198e8bb672fe9aa974ec961ec38",
+          "rare_sha256": "32c2283b994ed6db3a66cb68c1c4a3ac7d4e6c91968d139edb2b1c47a5940673"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0286/pm0286_00_00/pm0286_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0286/pm0286_00_00/pm0286_00_00_body_b_rare_alb.png",
+          "normal_sha256": "c29a14c1694497b8d33d6189efe101a02145b507242e44191847bb51ff382dd2",
+          "rare_sha256": "9d069732f197ec7ad288e318b4357de69a162c42c75722483fb046f56d0f389f"
+        }
+      ]
+    },
+    {
+      "species": "vigoroth",
+      "normal_glb_sha256": "9f1abd09f51bef69606d637a29278f6014e8e05aa5d6ad517efce1eeb154f7bd",
+      "normal_material_table_sha256": "97f761d807df3337bd2d7cd089fd82f7b20dc2bdea8985051d7f679d15f5b5a4",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "e7f7ca7d4c9024fe0c0fe92cb57cd928a5f2837a4c25d2258f750ad3ec813abe",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0288/pm0288_00_00/pm0288_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0288/pm0288_00_00/pm0288_00_00_body_a_rare_alb.png",
+          "normal_sha256": "cedafb9ae1508267d464ef8c14c2b90ac2c5e483a01d6cbccff3c149712be57f",
+          "rare_sha256": "d4bb86816769defef5225fd53b015ae5b5b54a4d04d01e4121a7d91e56075aa3"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0288/pm0288_00_00/pm0288_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0288/pm0288_00_00/pm0288_00_00_body_b_rare_alb.png",
+          "normal_sha256": "6e2bfb932436e83a1be69c45508b460913549ab864fde3fdc84cf921f9c2c3af",
+          "rare_sha256": "5107c20674ececcafdc39d40bd432eb49b7beda02ab586ae4aa677cb7c387f0f"
+        }
+      ]
+    },
+    {
+      "species": "makuhita",
+      "normal_glb_sha256": "beea2f261e60d7942d4632a233ed323d0344ab6679a4a5c49921401c3946b3e4",
+      "normal_material_table_sha256": "d175aa72a03e830ab8db4c785e2e4c65a97456328f440c01c8a52a53950c4987",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "d27c4aa4deccc78f30fa71002486c8d043167b37745cd8fca36b0363964a35ca",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0296/pm0296_00_00/pm0296_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0296/pm0296_00_00/pm0296_00_00_body_rare_alb.png",
+          "normal_sha256": "616df0131da6eb94fecac0f135d5339542dcb6cccb5fb5f32424b612684496be",
+          "rare_sha256": "e9ef64e4f33cb50b7eb79d13b62396e28edd04455731c222dc46673e735a0fdb"
+        }
+      ]
+    },
+    {
+      "species": "meditite",
+      "normal_glb_sha256": "ad315e5c04afb1cbcb1584377cd64da29bd511730c99863f5ba9e13b907146d8",
+      "normal_material_table_sha256": "df17e3c7f50345ce49181b201678df619e53baaf891ed4656e32951a6a855284",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "37d4321d7a3f34fc96c71117f24e2b7829e738631ebef75acf05ce09b67dfb8e",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0307/pm0307_00_00/pm0307_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0307/pm0307_00_00/pm0307_00_00_body_a_rare_alb.png",
+          "normal_sha256": "feda7c44ff8684abbef2896f20e5700c9934f824ea5cc94682eb405990c5c46a",
+          "rare_sha256": "e661742a3a1519c25b3dccfe19e6c69d52fbc31af7be48a89362a81cd35f3088"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0307/pm0307_00_00/pm0307_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0307/pm0307_00_00/pm0307_00_00_body_b_rare_alb.png",
+          "normal_sha256": "ccdc0e3b69ace4cc83a7f388de48d06b3f5ad6d60635567607a18fec4ff2f93d",
+          "rare_sha256": "d68f032e68bd48b45290a9a3c54ed1f1933e01d55b30bd431e7c8aabfa52030f"
+        }
+      ]
+    },
+    {
+      "species": "medicham",
+      "normal_glb_sha256": "6bcf646abce33cd4a04cb3cbc01146fd63459ac054da648c40d3359077a7e72a",
+      "normal_material_table_sha256": "abdc763b1f9a653546b925833c72e644cb065be75962e6639fe1e6d320889b30",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "39582c3f91120f2f99c49fa7a188f0935795177a04c6ccdd444f17a9020aa535",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0308/pm0308_00_00/pm0308_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0308/pm0308_00_00/pm0308_00_00_body_a_rare_alb.png",
+          "normal_sha256": "a406499a4a976597542d8b4e56b007b41eb6b2684e1b168cf5e5d79b704149ac",
+          "rare_sha256": "72ea2020d1634c931294fa77716a55d60e8fa014c2d6b034ba0a4e4bba5f35c2"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0308/pm0308_00_00/pm0308_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0308/pm0308_00_00/pm0308_00_00_body_b_rare_alb.png",
+          "normal_sha256": "3ab032ee23defb3941d0b2a9561e51d98d18fbb9f56be595d69ebcacf62b62e3",
+          "rare_sha256": "60e2f94721518266d480d7c7c340b812cc2dbfea73c9d6d725595e926da62bb5"
+        }
+      ]
+    },
+    {
+      "species": "gulpin",
+      "normal_glb_sha256": "1cf1bc6368887e5eafcc5f1e65e2157f2470526e89a14bae8f6b10a4d65eb466",
+      "normal_material_table_sha256": "05a4dad658d498c1af51b36eef4246d5eeddc16ebf9192aeacbffd442625226d",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "531b14f85f287a194889f94daf27d85c637ccd9ee365aa2ef274f44b725a22f3",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0316/pm0316_00_00/pm0316_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0316/pm0316_00_00/pm0316_00_00_body_rare_alb.png",
+          "normal_sha256": "47b0422dc197ee74779415798b333ac3e92be5a28878738e3dc73e7fbc7e8be5",
+          "rare_sha256": "05fec41813004eaae66d7bbadc00d24ad44b54cb57196c4c5420e743ba9ab912"
+        }
+      ]
+    },
+    {
+      "species": "swalot",
+      "normal_glb_sha256": "fcb3e6f0befdc674b565db4abe97044f4b3105b2e92803198114bdee319e2985",
+      "normal_material_table_sha256": "db1b06da66a295d7e107d4b3c5ac7ef256ff0b42fda9cc38373ca52c0c2a5a3d",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "faf976529970fff3e52a20c54a32a9ce23367357eb29d8d2be34909da3d18dd7",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0317/pm0317_00_00/pm0317_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0317/pm0317_00_00/pm0317_00_00_body_rare_alb.png",
+          "normal_sha256": "0c12070e25cd6e8d282e32295b810f297755d170c2779a9675c0f52c349ba854",
+          "rare_sha256": "cfb3c68c86f7cb50119511b48200a734703b8da706f800aea83e52917c0deeef"
+        }
+      ]
+    },
+    {
+      "species": "numel",
+      "normal_glb_sha256": "bad1eaa35c692877736225c25a45e145feed8c95ac763a48c788901ab8fa0f52",
+      "normal_material_table_sha256": "626dea109ea8768e265c0499fbdf826c526e052b631f61155bcf753e64bdb753",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material has a non-albedo change: l_eye/UpperEyelidColorMap"
+    },
+    {
+      "species": "camerupt",
+      "normal_glb_sha256": "c474f811db0710b990c40c49fc2bd4d9fcd412c5d77fbcf8bfc8cc65c1784a66",
+      "normal_material_table_sha256": "882bb3740081585ce3014c48d62f33b063f3ca8771478a9b07679f54a064f2a0",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "6e0607adee4b6664f78d97a8e21ffbd8cd87511d7c6b79abf8ae143a8863c4e2",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0323/pm0323_00_00/pm0323_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0323/pm0323_00_00/pm0323_00_00_body_a_rare_alb.png",
+          "normal_sha256": "6364ac594ea5ca5d611a04d8139cbb4bda19628ae2e0e3d31e62d9e68d6cab95",
+          "rare_sha256": "8b5d162bcc795f84486d9b78e2a42678247507964d75b61913ddf2b13a315405"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0323/pm0323_00_00/pm0323_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0323/pm0323_00_00/pm0323_00_00_body_b_rare_alb.png",
+          "normal_sha256": "41ca5d618989fbe322000192c9490cb1e02c227add746caf717d78cfb4e605fc",
+          "rare_sha256": "4a0adacfe4e9dd918b73469307e97038caaf10c5bb89a3421255ee775356fab1"
+        }
+      ]
+    },
+    {
+      "species": "spoink",
+      "normal_glb_sha256": "797492604d39147025e92f041ac969be2d17f6bca906c2d3020417b646db0669",
+      "normal_material_table_sha256": "71c83b950315b10720aad983bfe95c89a78cb06dacf37db228a0cf087c3cdc10",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "ff3dd6090ca85cb570eddf381474ab0f8899024e2a902e338434fa0f4c9f22c7",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0325/pm0325_00_00/pm0325_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0325/pm0325_00_00/pm0325_00_00_body_a_rare_alb.png",
+          "normal_sha256": "3c867a59f163b06af5c34f8d9cbec4807576754a5366752397a886327907c2ad",
+          "rare_sha256": "8ba21022b6e54770823e36b1c61dca9c9c8b674baa698663e552b87503996736"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0325/pm0325_00_00/pm0325_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0325/pm0325_00_00/pm0325_00_00_body_b_rare_alb.png",
+          "normal_sha256": "1fe598b032496fa302332d7b155d07a65819f5537ce28db5f8474160b411e781",
+          "rare_sha256": "370ec7a2fc6e0e33638d8c9276a6dd99803794d2bf39dd0475a0aa0620a673ee"
+        }
+      ]
+    },
+    {
+      "species": "grumpig",
+      "normal_glb_sha256": "2752df40fc0a5b9489f8c6ba3ae4a8044a11f6247899828cf5067192a6aa4169",
+      "normal_material_table_sha256": "45328092156da6133ec86f40a0174ee9588941b75f7a3654b635af8c30920f13",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "2d7b6dbb1360e8f27957c06d6f1c26692aaac49a69792ce870de1adbeceaef41",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0326/pm0326_00_00/pm0326_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0326/pm0326_00_00/pm0326_00_00_body_rare_alb.png",
+          "normal_sha256": "eeddfecebdbbbf25c3fb7185bf5d5d3ac415b96444a9daeab09794ae951c4989",
+          "rare_sha256": "b039ccdb086d7f64e280953f60dd81b867ce438bc9fa6ab82e8fe4648c5716d0"
+        }
+      ]
+    },
+    {
+      "species": "cacnea",
+      "normal_glb_sha256": "cedaeb51c4bcf2ba76e9e1234a6920953948a847a24fe4a03dcd8ed00c29b662",
+      "normal_material_table_sha256": "4da93d54e798aba8f1b94db5a883a37eb6377b4c0d738218617f904a9920237f",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "849e04b24e6262429e8d864d7a3920636dcf2c8df915949de155d2b7bbd17208",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0331/pm0331_00_00/pm0331_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0331/pm0331_00_00/pm0331_00_00_body_a_rare_alb.png",
+          "normal_sha256": "bda407be1fa9df199a3ff1d2af0af3217582466d83cbe18b46a9880b09bbbe2a",
+          "rare_sha256": "1e4a14171b7b8bb0ece1c91356d8b3d1c8debf18dc5980750cd019da0f68a22f"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0331/pm0331_00_00/pm0331_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0331/pm0331_00_00/pm0331_00_00_body_b_rare_alb.png",
+          "normal_sha256": "8b757fb7a48930456d953347bf88b7001c2860c2904aea6620210761c201436c",
+          "rare_sha256": "4021c8a1c6d8acd9e854cbbcbcbec5f546d24a0df322b7749051a1373c576025"
+        }
+      ]
+    },
+    {
+      "species": "cacturne",
+      "normal_glb_sha256": "98259600fd1cb4dd95381e248467da5df82a7f2b591a7c8cfaa509421db7e4c0",
+      "normal_material_table_sha256": "c1a504decb6038b93417aef25ea08fe9804fa818105544c04226299593960d62",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "b85e25622690f6a377b60d79dbbd5525f5725f043abfe0de488f199d210897cb",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0332/pm0332_00_00/pm0332_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0332/pm0332_00_00/pm0332_00_00_body_rare_alb.png",
+          "normal_sha256": "dbe394a3175219b98c841503c0a4ac602e98c7090a960b235d0213ab7dcf5d0a",
+          "rare_sha256": "30f6268b3447f49a9a9db8189a452bf3eb25ce872169ef5db82d4adbef6b8917"
+        }
+      ]
+    },
+    {
+      "species": "zangoose",
+      "normal_glb_sha256": "99aea2cc581b71780d01951c4ca86d74cb2e20ae6918c9244bc70ff109eb0907",
+      "normal_material_table_sha256": "857bf314a58e692c3027c9682d8a9f3a772d0db9b9148ce95e9b5625d6015ece",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "1410f8515fe63926047f40f964c47523c40806422df698b2f070af76a728ed2d",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0335/pm0335_00_00/pm0335_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0335/pm0335_00_00/pm0335_00_00_body_a_rare_alb.png",
+          "normal_sha256": "d6aafa27fcead4f27f724f8571921c96403bb9578a2d27b39a94e3569b0b1287",
+          "rare_sha256": "868bef9c82423caad5a50caf2afcfcfc9790153fb277db9af870c71d56fa5de6"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0335/pm0335_00_00/pm0335_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0335/pm0335_00_00/pm0335_00_00_body_b_rare_alb.png",
+          "normal_sha256": "f46cf3bb625f8338ecacc3de3807383274cd02aa082d5e75a23817897824b0e7",
+          "rare_sha256": "330505b2249aa86fecf34e5265ad7f09a72f8a805a68e89b4251a48fa0330c4b"
+        }
+      ]
+    },
+    {
+      "species": "barboach",
+      "normal_glb_sha256": "b945dabb117d3b45ecb178883b34e277bae9ce3de8fc3e9644117c976240a3a1",
+      "normal_material_table_sha256": "7746184a18a713f8ea77318f1079d93d04fa236ae21d3d2e9a6d0d2c8d4941c1",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "632e3b1f8a997214586ac036f4ad169ce3348fa6cc7a8fb33781bd222ce614ae",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0339/pm0339_00_00/pm0339_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0339/pm0339_00_00/pm0339_00_00_body_a_rare_alb.png",
+          "normal_sha256": "496fc7a278996e012613ed39e7955748acb3aa58f30d6b1069361d3fad6f9879",
+          "rare_sha256": "e755f6d4d91e42991c58cf1e3dd36efb1b8785b38742827c3a0e8c3dacc97b60"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0339/pm0339_00_00/pm0339_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0339/pm0339_00_00/pm0339_00_00_body_b_rare_alb.png",
+          "normal_sha256": "1b805ec0fb2d867da6b28dac530af5148dd35f841c23d83d8637c73832af658f",
+          "rare_sha256": "ed59ccc9e796a02cb57a01a4b108fde2d865f21ade41b3f3f2f2e8f5070cfff4"
+        }
+      ]
+    },
+    {
+      "species": "whiscash",
+      "normal_glb_sha256": "867c9cb2b37ccc8e375add6b716b27209e431e0e6b1061354d688f1e24ee3f6f",
+      "normal_material_table_sha256": "b6d8e5e97de7d481bab9102b0d8a539ac2ed4a56c1ca9244f6e0f41da2cecea5",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "e26cb02fa380a6f533f13a6f4d1a1d830a7f4823886959dec1abcf905158f692",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0340/pm0340_00_00/pm0340_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0340/pm0340_00_00/pm0340_00_00_body_a_rare_alb.png",
+          "normal_sha256": "b3c76efd1e0226c260debdbc81dc18918b9384e5fcb7068f85eec103ae02cdfc",
+          "rare_sha256": "92c0f6d3b7dcd41c5f788717829b9f777b6f1a4f46cdf8f99f4bcf0303115008"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0340/pm0340_00_00/pm0340_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0340/pm0340_00_00/pm0340_00_00_body_b_rare_alb.png",
+          "normal_sha256": "49066c0050ef1e577898ca81fb1ea44d1cd3810d50f14c0b7995ad65d37e3590",
+          "rare_sha256": "63770d2a27b6c2d312d1d19c2a6bc75c82760f3e9fbaede550cda121133079b5"
+        }
+      ]
+    },
+    {
+      "species": "shuppet",
+      "normal_glb_sha256": "ca7f9d3df035a2cc182e6129cf5078bcaf0185e8a94117b94d08dd3cc27bbf21",
+      "normal_material_table_sha256": "eb4c6d5eb4c0346b0265413933da6b458454e8ab19d122d6dffcebe7dffa182f",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "9b54dd0243d5498c7c62aaab21e933a445f45621dda04f04ef5c7206b90d566f",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0353/pm0353_00_00/pm0353_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0353/pm0353_00_00/pm0353_00_00_body_rare_alb.png",
+          "normal_sha256": "507d8a3251f3a6a7d3dcf3744e6abffcc7bae5f7335938b62fd9b5b61cb70d5b",
+          "rare_sha256": "60f8da2208d79076778969c46d473ebdd92417af00fbc80c60dac28d71479b40"
+        }
+      ]
+    },
+    {
+      "species": "banette",
+      "normal_glb_sha256": "c7c8663757be6aa9e49733ec19a4dbc6b1d5a8b7638694d1a0e13b012ce1046c",
+      "normal_material_table_sha256": "f15d884659920baecf837f13bc5b7d4078d0fe62cf55bddd59c7679ee29b9233",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "1e53e13c6e143dbb61af87a42bd46e3fd19b1300d60f11f13f2cf67620786fc9",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0354/pm0354_00_00/pm0354_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0354/pm0354_00_00/pm0354_00_00_body_a_rare_alb.png",
+          "normal_sha256": "a88f9f458b71a9503fa2f37f053c7d7780a5c7d7e08b6cded4189ebeb9505f0d",
+          "rare_sha256": "fb4c2cb58030d91456ecdfd8e5571e955cf230198deb22f1832cce48c249f24c"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0354/pm0354_00_00/pm0354_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0354/pm0354_00_00/pm0354_00_00_body_b_rare_alb.png",
+          "normal_sha256": "2b2d520db6f9b19c997a3edf8793af77ede1ac6b6c53705c029544bad4c4f677",
+          "rare_sha256": "76e8d5ed731f70b56070285ec05b74bcdf9586dc92bc6eee615c03c60ce47777"
+        }
+      ]
+    },
+    {
+      "species": "tropius",
+      "normal_glb_sha256": "d76064cf097fde6d7a22289ce6b8a0e1d52ff749e2e2d88a12e8c5c2c19cff97",
+      "normal_material_table_sha256": "2d23b527a46873d7919a94746b6b8e41e47a334a5bc15380f561b15fb3e27954",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "8598c4071e57d18061177a8dd68e7919dd4729c08b4111ccc93ed74b6a9eebfc",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0357/pm0357_00_00/pm0357_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0357/pm0357_00_00/pm0357_00_00_body_a_rare_alb.png",
+          "normal_sha256": "597f524a361bba054161070e7429fd7b981afe10e1b24c3a2a51ea5c089ef582",
+          "rare_sha256": "be6c0116ae4f4a2912e411cf1ffce8baf5a98292b5e7cb59491418d539c40ddb"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0357/pm0357_00_00/pm0357_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0357/pm0357_00_00/pm0357_00_00_body_b_rare_alb.png",
+          "normal_sha256": "879b904e4fc10e1f540d29de1a45a51623614ed3e0a0f8316c533f6c51ca2f04",
+          "rare_sha256": "b794bf7b0a12f21772812e548a2a031cc47e7aef721cbd5b547082e1aefc7bd5"
+        }
+      ]
+    },
+    {
+      "species": "snorunt",
+      "normal_glb_sha256": "0b39f485ab71918843ae43cf1d5e493b48793d8f67ad24a82146d9175117081b",
+      "normal_material_table_sha256": "6febe8672fb5791c533b73b164c9245124c3d84480c3da1d9823b885afb0c55b",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "84747e35d68ef5b4dfc8e2777938a5eeced8822b1c161f9fb35cff2a9c3df487",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0361/pm0361_00_00/pm0361_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0361/pm0361_00_00/pm0361_00_00_body_a_rare_alb.png",
+          "normal_sha256": "68cacf87ef9734d1e892069b0f38dfb287521af4fa4368befa3e01562c543ab8",
+          "rare_sha256": "ae587d77697173d6a9f3dbb5814ca4bf5e5faeec7b1010ea1f00afd44e43c55a"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0361/pm0361_00_00/pm0361_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0361/pm0361_00_00/pm0361_00_00_body_b_rare_alb.png",
+          "normal_sha256": "f36354d4acb4a292406a684109342f4118f3884d49aa807e837d0b44c57cc5ab",
+          "rare_sha256": "f9e2cfa42abf269e96f39d3400c4ebd72affc94a86e312d74c12f2d9d6ee6a28"
+        }
+      ]
+    },
+    {
+      "species": "glalie",
+      "normal_glb_sha256": "c2ff1c578ec0515a7de36f16b01cd25864c130de92440289dfb20456a51266c6",
+      "normal_material_table_sha256": "c24cd0033ad23b46480b08d006e339e2e8458a1808f35b01a3f26cb8628b5c04",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "luvdisc",
+      "normal_glb_sha256": "8f11ceb863a966f97f3d27788beaf8c0c47771b7d80f809e6a984d58613cb225",
+      "normal_material_table_sha256": "2bd8a190aba9533213458d70f1f6326f4c2e19249b7386e3b0da4aa91e9fc4e7",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "bagon",
+      "normal_glb_sha256": "2fd5c4abb79e7d89728573dd319ef0bba0a1c0d381520b0e3044e50f341550d6",
+      "normal_material_table_sha256": "f532d340cdfcc759e7cc60c7fab3e2c588ef9a065df2d20b9a92bc037a0407cb",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "baa7d9a550fddbddf49bbba53fc1f7a468316a3cf12e43d2a399901327bc441c",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0371/pm0371_00_00/pm0371_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0371/pm0371_00_00/pm0371_00_00_body_a_rare_alb.png",
+          "normal_sha256": "d398ae292066349af1472bab82ba9b42b95aac9912b4f9e08be63efa0c4fc0a0",
+          "rare_sha256": "863c18f0ee641b8815b31bf4ce89bec5bdb5348bd0768a8c17671c88116ff27b"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0371/pm0371_00_00/pm0371_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0371/pm0371_00_00/pm0371_00_00_body_b_rare_alb.png",
+          "normal_sha256": "5f2c5cb896cb5dc85c0bdb8d1a579fe87f196c230e4e25065087a828e1344ccf",
+          "rare_sha256": "6a975a206c768240c0ae7a102749536a7d2133ece5b271187194d984597306bb"
+        }
+      ]
+    },
+    {
+      "species": "shelgon",
+      "normal_glb_sha256": "f34a0405dfb0deafa5c5e0aebb5f2881a402c5389335fc1862200664fb8cbd7c",
+      "normal_material_table_sha256": "464500a607f22b9220345f4700ba2f539ffc22cdeaee67e9ae900fe95b3ac956",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "6b262c2d9576a38080eca23f2429c99c81c9a38b6940e259d10c7daeaeb62e14",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0372/pm0372_00_00/pm0372_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0372/pm0372_00_00/pm0372_00_00_body_a_rare_alb.png",
+          "normal_sha256": "fdbc257d86124606783a51dddade2cbc9ae958b90fb939cbcb1540ac2c2abab9",
+          "rare_sha256": "810650da1da534d3fcd56f64570dca75d2af13e40b7ec52bb2152da1243c3d90"
+        }
+      ]
+    },
+    {
+      "species": "kyogre",
+      "normal_glb_sha256": "42120e9456c60d142c59450d1d7895a978053f35c6e79df36ccdd81bfca23cb1",
+      "normal_material_table_sha256": "d8dd669ff339a265bf425da0af6e53198d63ac5fe31d368e0c61ff0fcd300eca",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material has a non-albedo change: body_a/EmissionColorMap"
+    },
+    {
+      "species": "groudon",
+      "normal_glb_sha256": "8b8247f45e40592da5627cb851280bbe437ff93459909edaba9c7624e4e70505",
+      "normal_material_table_sha256": "f25259627efbec1aa03f15a5c5af46684c0dc4ac62399b9de4a96818a470b434",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "fe91ab123aa624eddeaa17316f3f6fab5f8ed8d2e6affec9e875c9b5e704b330",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0383/pm0383_00_00/pm0383_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0383/pm0383_00_00/pm0383_00_00_body_a_rare_alb.png",
+          "normal_sha256": "15151e8f7a93d308153a98400ae8a4609695a3e13c5fcb14f72ede08d0ba7e21",
+          "rare_sha256": "39e5c8ca3060d07637debf4854653c5980f851a2c3ffc26ce9186f48527232eb"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0383/pm0383_00_00/pm0383_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0383/pm0383_00_00/pm0383_00_00_body_b_rare_alb.png",
+          "normal_sha256": "16f153ada60fb341d7dc51c5562a1c8ffc2c973d023d5bfc3685b7cfb601934a",
+          "rare_sha256": "e94de15708110f5aa11efe812f3d85fef6ef2794fe1cac4b82b44b34d72abb77"
+        }
+      ]
+    },
+    {
+      "species": "kricketot",
+      "normal_glb_sha256": "4c2668f9eece80182e7577669b3c6101185770609c3f2c3dc19d4d9faacc61d6",
+      "normal_material_table_sha256": "4dd42c7223af5d355ba0fc63e552d17e86ca83b9bcadc5e1ff44864e0229f6a4",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "b1fc66e5b93e728c00d12e3ffe8c3b0b18f5639e73259821bef59510dbee8158",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0401/pm0401_00_00/pm0401_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0401/pm0401_00_00/pm0401_00_00_body_a_rare_alb.png",
+          "normal_sha256": "52f8882ead5980fab47c5a2bbc2a00ddb22abcfd65f1321b5976062845f0341b",
+          "rare_sha256": "b2e2ff4d3cc4572c12a088854cbf30828834c0440282233a292f5bc4ff43e471"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0401/pm0401_00_00/pm0401_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0401/pm0401_00_00/pm0401_00_00_body_b_rare_alb.png",
+          "normal_sha256": "f159bf1fef0996d939f18d44aad47cb24d00041e4dd8255134e7b9f64ab2b28b",
+          "rare_sha256": "bf205630bebfa9936d6ee9bd04dd64065e0578362bf940a9ed4a71529697316c"
+        }
+      ]
+    },
+    {
+      "species": "kricketune",
+      "normal_glb_sha256": "d523e70aa85a8a4cd5d56c4cb6b0fe2c49f3e1d90b205522051156eb64d33057",
+      "normal_material_table_sha256": "3b63ece7b9ae47d6b05f83710a8894e1376d3599933b8cedae76931808aad2bc",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "4ff13c320b8173839bc9062f15d5327e9aa1e0726711e3a070eac9ae30de7042",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0402/pm0402_00_00/pm0402_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0402/pm0402_00_00/pm0402_00_00_body_a_rare_alb.png",
+          "normal_sha256": "9b291770b293b5c3c6cbd182f1824defc23bbc10cd773a68a04edfde6b9c3e8b",
+          "rare_sha256": "fb574c6bda2688414228f6161bae67fa7cbeb15b1cc6acfc5a59385a75b773da"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0402/pm0402_00_00/pm0402_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0402/pm0402_00_00/pm0402_00_00_body_b_rare_alb.png",
+          "normal_sha256": "d1b15661e837763af1b7a6a984d6b1a6198e3a47f2c415ca5761c63009d541a4",
+          "rare_sha256": "4f1906cb4448a716626717668a20c3a104388d609eb5e4defac20698037dae98"
+        }
+      ]
+    },
+    {
+      "species": "shinx",
+      "normal_glb_sha256": "f21d8aea6ca666695f8351f9b91137413eec35573046a8a1df7725e9e42dadc3",
+      "normal_material_table_sha256": "1e94a72d54c04c5a7d951d57f844b9c408d86c5e6bfe38abe25cf9517ab1c0ed",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "189fc346188f70c22eb161e67c820640b9dfde0cdd189fbc3a9476de5db6666c",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0403/pm0403_00_00/pm0403_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0403/pm0403_00_00/pm0403_00_00_body_a_rare_alb.png",
+          "normal_sha256": "ede287371968e38160f9b7df9970696342140ee72719d4a4e105817e8cca5357",
+          "rare_sha256": "baebb04d396ec20e858da13626dfbf6f914ca61656b797a0a22240c672e188da"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0403/pm0403_00_00/pm0403_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0403/pm0403_00_00/pm0403_00_00_body_b_rare_alb.png",
+          "normal_sha256": "6c95d0411944ef4caaf77d51c1e5e4df28f73d6b644d49d035972b3de2e97b7c",
+          "rare_sha256": "97f603a36ed0261d799ec9034c0957cc4347f20bd317ee899a3bc82974c902da"
+        }
+      ]
+    },
+    {
+      "species": "luxio",
+      "normal_glb_sha256": "1c76d4eaef459747e03ba5a86706122f5d529c39ab1a7ab8dc8d97064518d705",
+      "normal_material_table_sha256": "61c3f23ab3fb0d114ae7ff6e2cc226008d4b652913ad333f2c5959bbca31e87f",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "844a1cdc2d651d31cebb0b3a66e835af4af1cdaa3dd79efb971763c9c8ed1b84",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0404/pm0404_00_00/pm0404_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0404/pm0404_00_00/pm0404_00_00_body_a_rare_alb.png",
+          "normal_sha256": "3d0406ca332db3e7e0c9611399c35a02132a16b757db7eefd4bcf8b311f1ac1a",
+          "rare_sha256": "ae1c1454cc6fefcd84d5f3784256fcb0aef3d5a22abc7869adcb609523911347"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0404/pm0404_00_00/pm0404_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0404/pm0404_00_00/pm0404_00_00_body_b_rare_alb.png",
+          "normal_sha256": "1f2e9dc0131db32dc896eb49255fc37741a7a10ca0636bcd208887b3c18d472c",
+          "rare_sha256": "2e11693a833d5971870858537330e64c3a7fb6dc4c0445f6007b002282418e97"
+        }
+      ]
+    },
+    {
+      "species": "luxray",
+      "normal_glb_sha256": "f86209590fdd6b7828a1bce615f5103445a0142c260076e35b17acda5c9896f9",
+      "normal_material_table_sha256": "3d41886e4ddb2cd0c9b6ecb6c4ac05dd928ba39888cf733f9c87df11bced252d",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "combee",
+      "normal_glb_sha256": "04041140e83282c808c7bcc01582a7a049db1068ebcae578827a3ab7ea9b2be8",
+      "normal_material_table_sha256": "4bca6756425fc546d97b6bccaf29f20e80f58ade83ff74655353c181577f78af",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "2363426cc494d2891b9ab362683bb11ba1f254acbd858d2e6f13e11794ec4d7c",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0415/pm0415_00_00/pm0415_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0415/pm0415_00_00/pm0415_00_00_body_a_rare_alb.png",
+          "normal_sha256": "9cde9ec5b0f5a099a00e3e3258943ae8e2616494b15edd83ccfdb1478a868700",
+          "rare_sha256": "6c2333714a626d9134ef309df44d50f6fa4a078327306a1c6a47349acb8a5b92"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0415/pm0415_00_00/pm0415_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0415/pm0415_00_00/pm0415_00_00_body_b_rare_alb.png",
+          "normal_sha256": "ffc5e42a2c87cefbe1153dc79e77055674f986f4d541c699e0a3733d1a6cdb50",
+          "rare_sha256": "ee084dead006a0d0d9429cd1d970ceb7409e67df1f09fb48d1a355c9d4df2243"
+        }
+      ]
+    },
+    {
+      "species": "vespiquen",
+      "normal_glb_sha256": "39e41657546e002d6b672563d8ac41fa98a56871c8a38a2ad6e8f48b5310d330",
+      "normal_material_table_sha256": "d8a3e1c423fdcd0345e5ecccff8def6c6c97eec26ab770f406721c0e23522e47",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "214b893796af735f8ad1945193d102d38eb0a187f787dcb97b63ab44451bfeb3",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0416/pm0416_00_00/pm0416_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0416/pm0416_00_00/pm0416_00_00_body_a_rare_alb.png",
+          "normal_sha256": "7b771e9b74ebc6d0352f888865607e0de9025bd7e851060d2b797c235064c481",
+          "rare_sha256": "eef468042c2402a7a16af00678c5045704ff3140cd4ed6e2e33e67c2d0fb2e8d"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0416/pm0416_00_00/pm0416_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0416/pm0416_00_00/pm0416_00_00_body_b_rare_alb.png",
+          "normal_sha256": "4996c117c0e6ea0263e445c4c58e3d37c302154882f2de0540ef3bf79458ac9c",
+          "rare_sha256": "bf281fde2a49dd11d4f3de3763cb5ef2bb34084706b26bcfdb63d896de64c4ee"
+        }
+      ]
+    },
+    {
+      "species": "pachirisu",
+      "normal_glb_sha256": "c5a3a07525f6b67e08f497df758cc519db0b63d7b9ba96bdb251119836584bd1",
+      "normal_material_table_sha256": "8688a6c7278ea5d10ef0a8460ef3e780dd2076c72afe31809e9a78b63c8f15f4",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "72570cb70bbc336235472c2709724f1ae0f137d704c9124986f7a5b1272d6734",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0417/pm0417_00_00/pm0417_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0417/pm0417_00_00/pm0417_00_00_body_a_rare_alb.png",
+          "normal_sha256": "43921b83ff4e58563a608448d21542e969ee035cf28c4e3df94c1610a7ec0e8e",
+          "rare_sha256": "4218487a268f5f9575399c6d348d9f820c525a3390624086052068d4344e09d2"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0417/pm0417_00_00/pm0417_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0417/pm0417_00_00/pm0417_00_00_body_b_rare_alb.png",
+          "normal_sha256": "dbd7a52c89db2934823c148c256d1a1358dc3c76ed28d57667265aeb0ca468c9",
+          "rare_sha256": "439f44af0687e578f10e087f655dab4fb283f57eee9bcf37cadb9df7f6096676"
+        }
+      ]
+    },
+    {
+      "species": "buizel",
+      "normal_glb_sha256": "e02f0399069104c41250fbf6590d90f40c5f2a0ee65be8b46ef70fccddedec5c",
+      "normal_material_table_sha256": "9fe5b894e2ab7c4fda5ce6131c9bf41eacaf1e4ec358c2cc15ba4b9981154f4e",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material has a non-albedo change: l_eye/UpperEyelidColorMap"
+    },
+    {
+      "species": "floatzel",
+      "normal_glb_sha256": "0679eea79b02cf98d7cdfad30c76e60d6327f10aa3c36ed63282fa8a30c709a0",
+      "normal_material_table_sha256": "98a2d4cf5f1a7c10ab7bdea32b8f5299a79fb7dd11b47cabc2f0236492bece68",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "c84072c1767a435cbff7b926480e04b37cd3fa90b4f754969af513ad73b9f956",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0419/pm0419_00_00/pm0419_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0419/pm0419_00_00/pm0419_00_00_body_a_rare_alb.png",
+          "normal_sha256": "4a1d272ba2f6ac991d8be0a8c97d5f3f59e9e14186609099c9c0c0b28ab627c2",
+          "rare_sha256": "2b9e19c31c7ef34d6625757889c417d3b4de1542acda1e9a8e6c4cf5e6a08924"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0419/pm0419_00_00/pm0419_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0419/pm0419_00_00/pm0419_00_00_body_b_rare_alb.png",
+          "normal_sha256": "5f3e7b428d0ecb47ad2170f2ceb9857147661ecc93273db13d16683b0ce229af",
+          "rare_sha256": "c0d4f557cb36360630e0980a04792b46cfd1991ae6ecb0cc712a91ab78f76d0c"
+        }
+      ]
+    },
+    {
+      "species": "drifloon",
+      "normal_glb_sha256": "b823dfba14c3301d518f6abf07b37f87d3847ad951fbdd7415485c630c1d825b",
+      "normal_material_table_sha256": "03eb36a1a91cc3e16dcf3e6f98f7e687765923b50fd8e501905afb8482956258",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "d20ec6974eaee476a2ba76b6c753d7d75f97850d71dd4e91029e228f23fcf941",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0425/pm0425_00_00/pm0425_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0425/pm0425_00_00/pm0425_00_00_body_rare_alb.png",
+          "normal_sha256": "df802769bc4ca86723fdfcbbb453129e2f37d43dda9542e8f422f81d60f194fe",
+          "rare_sha256": "8b63ea7505e1a7ecd3a5c74c3f4fe57693b3c5fe8c8d5a64621ee532b3c33633"
+        }
+      ]
+    },
+    {
+      "species": "mismagius",
+      "normal_glb_sha256": "73f3e4fd4fc36207b04329faf69dcc4ec69d9467184c778d93cf105365f016e8",
+      "normal_material_table_sha256": "5891a38dca28971a06f31eaca49c042767a2cb0c7f828e16e9f42a7124f02c3c",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "95d87fc3c5596d01fe8354749638fce642e9fc733d96324d5031634ae5cdcafb",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0429/pm0429_00_00/pm0429_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0429/pm0429_00_00/pm0429_00_00_body_a_rare_alb.png",
+          "normal_sha256": "eae5149a345ad2c30b6cadcfe854dcc1c874d5d47ca3e7b662add35d74439986",
+          "rare_sha256": "4a37eccd3f21e6cab52ced2650c6ff6630f9828e7c6a83070fdb2cd7db199aea"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0429/pm0429_00_00/pm0429_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0429/pm0429_00_00/pm0429_00_00_body_b_rare_alb.png",
+          "normal_sha256": "59000a2fabc94e1e34917da6818c8955c641eb6b965f2ffb687ee13174776cf7",
+          "rare_sha256": "5a99e1fbc48a938453a449f2fb6b63de47e87b409976a9c284559cd0c4cf04a3"
+        }
+      ]
+    },
+    {
+      "species": "stunky",
+      "normal_glb_sha256": "c7ea1db4597b3c0d57cf317a302bc8d3e19f50df404f521535dd14fa91fc20f8",
+      "normal_material_table_sha256": "0d8f99fe2f25c48a4cb3a5b6be4795a825e2ec73aeff3ab81240f1b5c526c43c",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "39303ecb757351daa5459e401a1c914c70a9a0789ebfae4b60c7cb9076eb33c6",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0434/pm0434_00_00/pm0434_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0434/pm0434_00_00/pm0434_00_00_body_a_rare_alb.png",
+          "normal_sha256": "23d43452e63c17c6fd7e076d87fc6921cd09e691569177ff1fe83cd4f89193b8",
+          "rare_sha256": "be15ead5ff927a33cda574096dda097ad7b926b3b046f9581e8193971b854c25"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0434/pm0434_00_00/pm0434_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0434/pm0434_00_00/pm0434_00_00_body_b_rare_alb.png",
+          "normal_sha256": "10d2daf7d11ea5ab542463182c2951452ce58577ee0a0c15d562aa32a82ebf28",
+          "rare_sha256": "1676d15d8475de84d4a1dade5b0af6ea7152f98e262513e0b0ce226f002b5015"
+        }
+      ]
+    },
+    {
+      "species": "skuntank",
+      "normal_glb_sha256": "780e863df53674f88fb6253c5fba4f7e9177268f62ea15481062fda2cff70442",
+      "normal_material_table_sha256": "850ec38270ce70bdbfe4516af98ff5b647328faa85fcc454500ea1ac9d0462d7",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "4fae3e238841e5f0a0d463bd1e288196de8c87158967f52f3333fd5138b61184",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0435/pm0435_00_00/pm0435_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0435/pm0435_00_00/pm0435_00_00_body_a_rare_alb.png",
+          "normal_sha256": "60a0108f559c9e658560c266b3183b7594c1c93efc2ab25f340f3fbc5e7bae13",
+          "rare_sha256": "7779372c03f215f64caa77f72807a69e29d7717e9180ebff339232f2ee0b8b5c"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0435/pm0435_00_00/pm0435_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0435/pm0435_00_00/pm0435_00_00_body_b_rare_alb.png",
+          "normal_sha256": "d123d4d67c21848cf44f8e48ff53cbd8bed9faa9e10a756ed945f3a154b592ba",
+          "rare_sha256": "afd62c80d564adf2a191a5656e853eb42e09e5a5aa4bd97c5816c69ad67cea16"
+        }
+      ]
+    },
+    {
+      "species": "bronzor",
+      "normal_glb_sha256": "f2cd83dfec4b71c8316d4691bb58b4162eee00461ad593e7b6f7f4dd11b48efb",
+      "normal_material_table_sha256": "62c40a696e5a1449a3831b1e758549df15393c9f0e3a50a828ab7335d6dabb06",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "e9e52913e9d77ac467a64f49daf3e30be32752199d219b3ea9cc06696980c357",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0436/pm0436_00_00/pm0436_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0436/pm0436_00_00/pm0436_00_00_body_rare_alb.png",
+          "normal_sha256": "7d1e3d60ddccf9991323c2f4126beeebd02d871a4a73566b623d70d879c924a5",
+          "rare_sha256": "adb6312b3fe545f794350ad73d3cf72535a07846fec69463fb9a9d2671b5784e"
+        }
+      ]
+    },
+    {
+      "species": "bronzong",
+      "normal_glb_sha256": "cb426c00b6696f8c44c6b96ee3495a459ace684ada682be034e9fe991da830b5",
+      "normal_material_table_sha256": "24bfcf4da0264586cf7ba0a78c7ef40e83cda0b68ea936a4550e5ade44d9a0dd",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: body_b"
+    },
+    {
+      "species": "bonsly",
+      "normal_glb_sha256": "55fc25dd17cf2fac97a309c57518a3429670c7f90c4762994b035d480c3ee653",
+      "normal_material_table_sha256": "9675f408fbfffa735ec4ff9353115355775a75b35b8ba543776f713b84cc9b9e",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "3dd0d2521bbc81f746e0d940f58dd2c1f2708c4e801c9884303ebabe860e9836",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0438/pm0438_00_00/pm0438_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0438/pm0438_00_00/pm0438_00_00_body_rare_alb.png",
+          "normal_sha256": "1de32942e4f29c6d2e064a714089171bf3776d77b9afdb962cc0468b1518d23d",
+          "rare_sha256": "10b24effa42096ac5a33e165f8b598efb94bb1dfe56c2a12721c691301632418"
+        }
+      ]
+    },
+    {
+      "species": "happiny",
+      "normal_glb_sha256": "abcf18bf6d0f23aa98d84d77c3733e32c41a450216eab7bc2defc744f31c2c06",
+      "normal_material_table_sha256": "08c943906549940b414a1b165d916efb0980ff1a96c50bce89f5ba1f6c87b877",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "0557c81d44c586a9db4c692269aad786d9a1c8c2f40298e7490642c875f11523",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0440/pm0440_00_00/pm0440_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0440/pm0440_00_00/pm0440_00_00_body_a_rare_alb.png",
+          "normal_sha256": "0e68b8b98a4dbdeb85f2c832b0c0049a1533b6a1f672df6e221c727c3e844e1f",
+          "rare_sha256": "62380a72648f75bb49db86f7b9cb57a69ff8d7ea7f4c9327830c6632c7057b49"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0440/pm0440_00_00/pm0440_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0440/pm0440_00_00/pm0440_00_00_body_b_rare_alb.png",
+          "normal_sha256": "a550062140e0a7fd8fefb66d6569dcb72b0098a5837150e95299c1d5ca64c4ba",
+          "rare_sha256": "f5c4c97b30737cb13ea0fc68a79ea7544b86d70265ca00e78ac081e89ffbc1b9"
+        }
+      ]
+    },
+    {
+      "species": "gible",
+      "normal_glb_sha256": "125be98bb36d050b760172c6002a78115a1d6edd7dd242021184b6943983da75",
+      "normal_material_table_sha256": "0beb313b23e292cd474d73e5060c2b17d56059a1b9946f6f375f88425708bc0a",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "1e0a0156472d653ecaea3f63d7b031b5685d271a102df385279214131b95ae34",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0443/pm0443_00_00/pm0443_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0443/pm0443_00_00/pm0443_00_00_body_rare_alb.png",
+          "normal_sha256": "1271476eacc58b09067965647256422634be21bf3f6042cba6e9a7c41ff100b2",
+          "rare_sha256": "c45d3ab487f7001477a272b075038ae8340f15311b94665fc5c37381bfd2462f"
+        }
+      ]
+    },
+    {
+      "species": "gabite",
+      "normal_glb_sha256": "5f51e7da41c4065c548aa827550357979ae8d316c5481335edfea129ffc0682f",
+      "normal_material_table_sha256": "6928116128ecae13ada9ed20982fdc76b11e327687f74bd6d424bbe0f295ff44",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "8a0947885fe4ee85556f1936026906f2c027a344e4520b11d6602a58fb903696",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0444/pm0444_00_00/pm0444_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0444/pm0444_00_00/pm0444_00_00_body_a_rare_alb.png",
+          "normal_sha256": "d778af4eae837db1b237e493afff523ab67c0cd8ff7a6aeb6eadf97836811347",
+          "rare_sha256": "ce216377c0ee7d008bac614ee3dbf3af873261bcdc9ece64cee62579dcb27cb9"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0444/pm0444_00_00/pm0444_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0444/pm0444_00_00/pm0444_00_00_body_b_rare_alb.png",
+          "normal_sha256": "3faaabf870db5bb9b330f856916684d6792357070644bd0c5fedbf04cab93b9e",
+          "rare_sha256": "4236682b35c39d4c185403baf996f296862996dd9bcdf3b6e28a9a54735be2a7"
+        }
+      ]
+    },
+    {
+      "species": "riolu",
+      "normal_glb_sha256": "ac84890c3ec336b0dcec3d5840e0b3357badaef78efb14981fab4e73f8f2ae8f",
+      "normal_material_table_sha256": "0c055d4ae1056d865ed41999d934aa0328e890dec76c180020810aa436296abf",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "4c24786874fc840ad3c142536846a35ac54f2ff39c8360e2c714687783f786a7",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0447/pm0447_00_00/pm0447_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0447/pm0447_00_00/pm0447_00_00_body_rare_alb.png",
+          "normal_sha256": "e6e1d6f6e7ceb6c2c30f7025942dae3e7100db184a125148251526a2cb1bbe40",
+          "rare_sha256": "3575d9883347dcac9969004416b39f6a41c4a3d5a023de120474fa1a092a3454"
+        }
+      ]
+    },
+    {
+      "species": "hippopotas",
+      "normal_glb_sha256": "44c480e96a45907937b5512d23e15a5d5e7d78b8bbf2e635c03824f376526437",
+      "normal_material_table_sha256": "edcb77759fe6248c868e178b10b8250bdce7a2791eb2b5699182f2ad9eb2dabf",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "5a2f6d3605f5ffe5a23b57d36d998b6943e579018b15ebaf47a5c8ae6746e9f1",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0449/pm0449_00_00/pm0449_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0449/pm0449_00_00/pm0449_00_00_body_a_rare_alb.png",
+          "normal_sha256": "3a5d529041288fc2aa7041b86f7069040fdda2aae8d80e7a9dbd992dd7d192c2",
+          "rare_sha256": "f373e7f32fd605e95ffad686370c36aa5ad7c78feea66db3e479a678d32d9aaf"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0449/pm0449_00_00/pm0449_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0449/pm0449_00_00/pm0449_00_00_body_b_rare_alb.png",
+          "normal_sha256": "323cfeee670f6224d0b65103abd3b3ad5524021a3e8f23a0e14aaa2af685937d",
+          "rare_sha256": "b3d1b6b701676d537a2e90b55127dadd934fdd9c9113a0b24e53219026dc06dd"
+        }
+      ]
+    },
+    {
+      "species": "hippowdon",
+      "normal_glb_sha256": "588a2a2fb18a9ced1049f8d87931b064bd44be788d2686d4ad6cae7198cbaa40",
+      "normal_material_table_sha256": "d830ea6f2db954a1ebe1998d0ee5ea7c65441ffb5a6393af75baf89cab411386",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "88da1709c048b425d3e7cf065748b1a0d88d267d24e5a15584217e0c25e67acf",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0450/pm0450_00_00/pm0450_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0450/pm0450_00_00/pm0450_00_00_body_a_rare_alb.png",
+          "normal_sha256": "adbc9b9327bea8c6b7e9c73c4a4bf3baef2ce2d0f047f73569a7425b5e6e5ab3",
+          "rare_sha256": "8eca301236eccce1e16f6aba2273c513706c5871d6654d8a7f2e9bccc73059f7"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0450/pm0450_00_00/pm0450_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0450/pm0450_00_00/pm0450_00_00_body_b_rare_alb.png",
+          "normal_sha256": "976a7ff5c2146d16fbc7966f84ae4f05095905f14910b679dee3c0e41c96ee79",
+          "rare_sha256": "c9ba427a190bf8218f67038cced053b12efb74da7e7e63afcaad42ab8ae4c868"
+        }
+      ]
+    },
+    {
+      "species": "croagunk",
+      "normal_glb_sha256": "e309658a70baf91d1df629dc45c5222513351da2e4873ef90a76c4d7f7664188",
+      "normal_material_table_sha256": "7d321156733c5986ca7a40aeebb8734ca887ed802ab9761462a6665c11a788ee",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "740884b8734103259c072a1bbf4d8650a02878c0a3e91726a1788bc3fbfa6504",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0453/pm0453_00_00/pm0453_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0453/pm0453_00_00/pm0453_00_00_body_a_rare_alb.png",
+          "normal_sha256": "d836a1c836f45acd703f72d3b8a642fdaef625e781632c897d2b141da739cd05",
+          "rare_sha256": "136eaac1f8080d184ccf3d1bdee52f486b8831fb1268d413613ae100f9754359"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0453/pm0453_00_00/pm0453_01_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0453/pm0453_00_00/pm0453_01_00_body_a_rare_alb.png",
+          "normal_sha256": "d54e08625686814db8c6d6c8c113590f85cb7900744f26dbf49f8c8793bf8277",
+          "rare_sha256": "d30b9a8a9b23360767c8c4db85f1f29104c6fbac2ea1fbeed154cf085d04d50e"
+        }
+      ]
+    },
+    {
+      "species": "toxicroak",
+      "normal_glb_sha256": "f0c92abdfd9c32e8a9edc7487b309ecc1b2fb79e9b05e57daf8251fa8149e609",
+      "normal_material_table_sha256": "35a7204893ab258cbb7b8a89b2af05cd627b6bcedba93160b01b2803b8ff93f5",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: l_eye"
+    },
+    {
+      "species": "finneon",
+      "normal_glb_sha256": "4ced1b137fbe4a134ad944b0a58ccf18062337c8cb00f7ec42df92ec28af8bf4",
+      "normal_material_table_sha256": "8e60f9c77b4d4a4598b448790b1451115d9fc3ee759379c7c37bd7f902f0f8db",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "38c16a25788e17780432c27a402617eda20a25e1cd5fd2d424aea6624c86d1ec",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0456/pm0456_00_00/pm0456_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0456/pm0456_00_00/pm0456_00_00_body_rare_alb.png",
+          "normal_sha256": "39b9c33242ea1978a04a0d91efa4b32a2fe890f333cadc8cff676d245ae40ec7",
+          "rare_sha256": "2a757f49effb62b8110fbc00dfc3b1922bc85ce2b02329ff9ad9a1e9faecd169"
+        }
+      ]
+    },
+    {
+      "species": "lumineon",
+      "normal_glb_sha256": "6bfd508f6c624c9aa186f2825241e1ba0698441b6704eb8270590e9150612452",
+      "normal_material_table_sha256": "41c1218bd2467cd30b18353f70f92cc9c4a3e8e9e8f17ef23d9fba5b59deeca0",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "431b1160d82f7d7d5c0b54ab495da1a5a1cc496bd31ef832deb2a278415160e1",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0457/pm0457_00_00/pm0457_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0457/pm0457_00_00/pm0457_00_00_body_a_rare_alb.png",
+          "normal_sha256": "1de904506f56cc4a87bc49aef233b4dde7723abb11a64af1e72d5febddf45a9b",
+          "rare_sha256": "c95f45a36d72a31bce303dff393d4cbf4c37970e4ee2ebb042b6bb22a4fe2f8d"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0457/pm0457_00_00/pm0457_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0457/pm0457_00_00/pm0457_00_00_body_b_rare_alb.png",
+          "normal_sha256": "7547293f82bd6bf78f270ba12847c61a7e16b032c6c9d0caccbcd6754e8b1e85",
+          "rare_sha256": "928e9af5d4638086c4f6cff1f0f45eed461890b1ba3af4c23770d35ecb9ce3ae"
+        }
+      ]
+    },
+    {
+      "species": "snover",
+      "normal_glb_sha256": "371d0896b1b63db44ff71045bb9e0d2b11beb99fe9414c78f0bc8fede55dfd5b",
+      "normal_material_table_sha256": "1f0fc1a1fac084f6c25f5ef4e78b2a126d1c69e252c17eed2027858ca61d68cc",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "45fcfbd2ed3a4bdd104ef68f60c987b0a06583f0c4da5be9f9036f78e49b9298",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0459/pm0459_00_00/pm0459_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0459/pm0459_00_00/pm0459_00_00_body_rare_alb.png",
+          "normal_sha256": "a0636815f85fb5136a3a0c13549fc940199ddb5dada3880154f20cd731e8f975",
+          "rare_sha256": "08d2ae140ba095ba662884d6bd5985885ade9c0425b0dcc8e51c7fd94e2003f6"
+        }
+      ]
+    },
+    {
+      "species": "abomasnow",
+      "normal_glb_sha256": "151cf18324e37ebfd6978e1fa6c43e301cc287cb3621c19e7763ff41d70849c5",
+      "normal_material_table_sha256": "cd16466813bb8376c5f919284eab17cd70f8c5426d56a3f7d4c1c729253c5ddd",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "de79d9bb7940b3e0dc1ff93e792bddc1f43fa89954b703f0664ea425d4d5616c",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0460/pm0460_00_00/pm0460_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0460/pm0460_00_00/pm0460_00_00_body_a_rare_alb.png",
+          "normal_sha256": "b591bf4052aa003361bb5f5e27add0631b963dd48b762e43ff880697ebb2cc44",
+          "rare_sha256": "719e673f181dcc5267308f60215533202104a98d4120fb28b5381979ee98ac22"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0460/pm0460_00_00/pm0460_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0460/pm0460_00_00/pm0460_00_00_body_b_rare_alb.png",
+          "normal_sha256": "696c8e027d353a5284ae1c13d74c84a133960ac99eeb57b7b6f15a8e3d3ce5fe",
+          "rare_sha256": "01b75622cece193c95f65bc99e3975701abd27fe1a6b67652b39cb8c1549b955"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0460/pm0460_00_00/pm0460_01_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0460/pm0460_00_00/pm0460_01_00_body_a_rare_alb.png",
+          "normal_sha256": "3e72e5c68395b44c3aebdf1e7633c208baddd917299ac9a36b5ddf8101e6bf4c",
+          "rare_sha256": "12e058e4aa1f31273a27adb476e15b58461c65861873ea20de7ea6feaa8ca435"
+        }
+      ]
+    },
+    {
+      "species": "leafeon",
+      "normal_glb_sha256": "1e4df2c5c5d8ff05eb58830336d1a890fb8e871129a190301f3a77b9dc588b89",
+      "normal_material_table_sha256": "ef0eec5fba637e214c80e4358f54de4dac25f543d3c0691ac6a79ec49113cec4",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "f1fae28a1bd2095c4762e7e5e5f536548cf71193dd2de1034122f33b03ec4b3f",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0470/pm0470_00_00/pm0470_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0470/pm0470_00_00/pm0470_00_00_body_a_rare_alb.png",
+          "normal_sha256": "88d30d3d1d30f6dbcf31a6a1eacf71c10fda12492d846b80e8c34818349ba878",
+          "rare_sha256": "1eb532baa324b66502f159a8d692d0f95e1973ce6335ba3259de1d57b0464eb6"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0470/pm0470_00_00/pm0470_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0470/pm0470_00_00/pm0470_00_00_body_b_rare_alb.png",
+          "normal_sha256": "90794fb21116b660183e5ea9ce90785e64ecce63679b375053e629c7075d37d1",
+          "rare_sha256": "d7758ae74b6fa9105b130de706d3e334c163311d637915f9fe30a83c558b9b56"
+        }
+      ]
+    },
+    {
+      "species": "glaceon",
+      "normal_glb_sha256": "a630b701da6ad9c3e1a14877e0f35ae50b66a6c89fc694879a88a3ee2efdee3e",
+      "normal_material_table_sha256": "818cecea1406feb1c7b89e9cd4e48434495b9e4ffbbc177c1489ba0acaa62bbc",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "c66add291ed4e9b4572ef34934a53b97c604d03c1a34d690b80fe221ae6e01a8",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0471/pm0471_00_00/pm0471_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0471/pm0471_00_00/pm0471_00_00_body_rare_alb.png",
+          "normal_sha256": "5d068078e3e04730ef4e0e8f4e92bd6d472376149176521963bd5891fc39ce28",
+          "rare_sha256": "5a77a5cefa2fd40e35cdbcf62ae5ba6378b39902330c02ec3e1d3c9e578b0603"
+        }
+      ]
+    },
+    {
+      "species": "gallade",
+      "normal_glb_sha256": "c0a605e1370d312b7c346cd2ed1afa7f2f13e90974ed37926ce02a8e80054fd7",
+      "normal_material_table_sha256": "49a8defd5004739b21d427bb82e17d2388f2cce8e0bdfad090f354b322ba4efd",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "a0ddc069bfefcb99452de1311b21d14ff4d0657b459a02a594ffdd4aa133c0a8",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0475/pm0475_00_00/pm0475_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0475/pm0475_00_00/pm0475_00_00_body_rare_alb.png",
+          "normal_sha256": "1e96a3c74a0e1d6368cb672d339de0c1d4f2f6e816ce61991a4b9fc19dd28419",
+          "rare_sha256": "6b9eb2c668dcc5285c1d352e5dba8497f07172d35694c14404ee2cf6a9e7a186"
+        }
+      ]
+    },
+    {
+      "species": "froslass",
+      "normal_glb_sha256": "deb23bac79feb930cb397919920d69bfc6311a7a8319b818003fbef5eda86b20",
+      "normal_material_table_sha256": "1060af44f7ce4c871965cd2a51fd4ba4ad1534242462b80aaf522f7399c62d7e",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material settings differ: r_eye"
+    },
+    {
+      "species": "uxie",
+      "normal_glb_sha256": "bf282ca524bc5ece8d98eb0c94f65fdb373ee8f72d52d6e762a219b00d25870f",
+      "normal_material_table_sha256": "ee5e14ede1f72aed030a41ca2ad1ece20cac5d76ca9250e9370bad02ca97dabd",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "82124d234d7bab11bf9c020864628024cdce1a9d06736515e866c1e6264d710b",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0480/pm0480_00_00/pm0480_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0480/pm0480_00_00/pm0480_00_00_body_rare_alb.png",
+          "normal_sha256": "564f264fa283b0dd2725af78c05970f94870ade107513666f164c4a8c984b36e",
+          "rare_sha256": "1a72ccbdfaf939b660961e1126d14a944f9f76141dd39e6e7ae47bd8c355b297"
+        }
+      ]
+    },
+    {
+      "species": "mesprit",
+      "normal_glb_sha256": "f7bfe8ea414440e0dec10bfbb82e192cb6d2529e8f5c76d5983496de551a1b5d",
+      "normal_material_table_sha256": "5020c8999c589936c71b52fe67cb2d719edaaf53ccc24e11ebc8f0fa3863aafe",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "cef58bd5739305bb1c05d9f295a6c191c134fb8d3a45aa63c34daf6834739bf8",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0481/pm0481_00_00/pm0481_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0481/pm0481_00_00/pm0481_00_00_body_rare_alb.png",
+          "normal_sha256": "0d887c601510c48bcf986c9392164ecfd38f8679f819316abad752124fb924f2",
+          "rare_sha256": "deb40842ec5d753240891132233ce18c7ddfee294a05b32b8e44153337b53355"
+        }
+      ]
+    },
+    {
+      "species": "azelf",
+      "normal_glb_sha256": "a94036dafab3fb7020e65472fd47f917c8ea189df51ff0175e89c26df5a11097",
+      "normal_material_table_sha256": "5f2c423407c8bbaf1d3fb8fd392974176854e9d267962280d255cf177ea5a805",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "43129ffde837e33109a2c7ff34b3bde49588d5ec655a792b9abd6b7352772464",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0482/pm0482_00_00/pm0482_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0482/pm0482_00_00/pm0482_00_00_body_a_rare_alb.png",
+          "normal_sha256": "7136f1a0ad78ebe87ff560e1ae132dc35f12abf418c47e39a009a5c3bc2d4c0c",
+          "rare_sha256": "62a38dc05dbd9c730b3e340b8947b5ea2873ce247a7466fe2ccbabbbf90af9ed"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0482/pm0482_00_00/pm0482_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0482/pm0482_00_00/pm0482_00_00_body_b_rare_alb.png",
+          "normal_sha256": "1d44f4e3bc8e4f9820bc7db831f4dbd585677dd2af40f724006787dbda802c6a",
+          "rare_sha256": "d70e88a24ba5d8fd485b3e7ba6c82fadb480c300530ae2949d5b02ee8fdc114d"
+        }
+      ]
+    },
+    {
+      "species": "dialga",
+      "normal_glb_sha256": "5c7d0f802685dfb89a7086daca8a4e111d9a1a3ab7f7ad26b619fa3faa4b993a",
+      "normal_material_table_sha256": "65a99eb1e1fb5353c1494e41b6b78b45497bbb9e28e3b25d09d724f3cd52f4a2",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material has a non-albedo change: body_b_00/EmissionColorMap"
+    },
+    {
+      "species": "palkia",
+      "normal_glb_sha256": "de4f043a91821371b50b91faf097e45279cd15f758d1b7a4c3524077cd13bdbd",
+      "normal_material_table_sha256": "9f75cdfed110efd3611f5f0bfa064fc15741fd1ae02a919e16e8bee201379ac8",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "fbaf3a68c98cd3555562430bf3f071b0541cf60ed1b9420e866202df14331492",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0484/pm0484_11_00/pm0484_11_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0484/pm0484_11_00/pm0484_11_00_body_a_rare_alb.png",
+          "normal_sha256": "36ecf3128dd7c3d4e9cb3f4aaff25ec8067679786ba91a7fea35065a7b3707ca",
+          "rare_sha256": "40be1c2e069e53df244beb981344b91a90769764208e56ecb53b3ec540e0cbcb"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0484/pm0484_11_00/pm0484_11_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0484/pm0484_11_00/pm0484_11_00_body_b_rare_alb.png",
+          "normal_sha256": "d594587f3517b8ae317dcdd7817d450936d58e857a151997e558313154bc048c",
+          "rare_sha256": "ff3f9963c99f8874a61ff6ee4294aca64b79c59f42c86c380b48331635024d19"
+        }
+      ]
+    },
+    {
+      "species": "heatran",
+      "normal_glb_sha256": "3133cf659ab6ef4097868493faa177d549c64cf02330f9bf015f1fcf1fa12ab8",
+      "normal_material_table_sha256": "1b5033a35a8738d241e52723668bae32307f9f1a83faa369e7001b5aaa5c64ba",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "ab7ec239009426e746ca2ab4788303d6834dca7814d48045efe71ccc1c30dcfe",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0485/pm0485_00_00/pm0485_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0485/pm0485_00_00/pm0485_00_00_body_a_rare_alb.png",
+          "normal_sha256": "607b97bb74b3025834e67877513db514f76facb0788e4cad9c64c715ba0fc859",
+          "rare_sha256": "75efeb02cb70d87f9b3cc16c9c15547874d7572c92ba5e935c819b146c74140e"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0485/pm0485_00_00/pm0485_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0485/pm0485_00_00/pm0485_00_00_body_b_rare_alb.png",
+          "normal_sha256": "729da9705ef1b0ba4def79f68f7815c6ae16bbbd72c54161d5d636f49501d801",
+          "rare_sha256": "49c01df4c57884974ff04f812168cbd0e2585c197be2e393e7cdf497f7f1c0d4"
+        }
+      ]
+    },
+    {
+      "species": "oshawott",
+      "normal_glb_sha256": "65c11313be35feb554cd76e0ed39bebf8df4c8d0e4b6cda19133c65daf87f871",
+      "normal_material_table_sha256": "0959851d479152e703935df018b5aaa67bdc61424b642fc1a37b430fd6f2b4a5",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "9bfb9f1bc79c2ea511ab92f8493607bad70b596de11be2624f1d5f6c3b73fbd7",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0501/pm0501_00_00/pm0501_00_00_body_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0501/pm0501_00_00/pm0501_00_00_body_rare_alb.png",
+          "normal_sha256": "47ca8271bf3d64f5d0f106ddf3e8d7a7fb5a9f5b620a6fbe878d480312330f42",
+          "rare_sha256": "28bf1e7a20b7fab145aea45f98892180d0a1a95a67004bb8f551eb8a6312c93b"
+        }
+      ]
+    },
+    {
+      "species": "dewott",
+      "normal_glb_sha256": "a564f5d387ad98ccd0a825c1cf3ea733df572498682d9946abd483b036d0edcc",
+      "normal_material_table_sha256": "d01f7157f82bb81c013f67166694c4fa6a62ec0b4b4f0995a941d92ed5a8069f",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "5f240b43f333b4ca9e68cf8c0752d11923d69afee8a6b4a628c62dfb716a3747",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0502/pm0502_00_00/pm0502_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0502/pm0502_00_00/pm0502_00_00_body_a_rare_alb.png",
+          "normal_sha256": "b92f81aa4b4bb91740cf1fceb9c795472c93e1242c3254a33ad2096bb37b22c3",
+          "rare_sha256": "0455b534e3a68cf32dc8e280cc3f1d5cd1f961c3f2e569b78edcf516fd7869c4"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0502/pm0502_00_00/pm0502_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0502/pm0502_00_00/pm0502_00_00_body_b_rare_alb.png",
+          "normal_sha256": "324182b3707e70ce2bd5e5c06d1ff2de1f5ceb56e128f241b2200fb80e5f4b10",
+          "rare_sha256": "de4cef87de83a0f92e488c4dee57f2c9daf9cbcc1f4287b5fee82555d543028f"
+        }
+      ]
+    },
+    {
+      "species": "samurott",
+      "normal_glb_sha256": "41098f6b0b11cee471bf7660f370dce36901a8dc0752bcf8f80d1efcf4d62a36",
+      "normal_material_table_sha256": "57817ac4d7bbf1382b406660f3b0a22df7073e33fc5759766d9e1baba56fefcf",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "be539f2dd6d9a45f31a6ec00c1f27d71e884a2703aa633eeda83a1cb8200014e",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0503/pm0503_00_00/pm0503_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0503/pm0503_00_00/pm0503_00_00_body_a_rare_alb.png",
+          "normal_sha256": "2291683fdcb51d1ac73fee50ebb0e19b5e337c5735a823f90c0a3df109fe838b",
+          "rare_sha256": "586ac9379080e9ba72e9b0e6d816793d5ebbb138e312b13b9909ab6b7b33d4fa"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0503/pm0503_00_00/pm0503_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0503/pm0503_00_00/pm0503_00_00_body_b_rare_alb.png",
+          "normal_sha256": "f59990bbc2370dd0ac0dd7651aaf44b7a1174806eb7ce9f130621f5550c5447f",
+          "rare_sha256": "7ffbce2f24b90fe4de768affdc1b8175a066e2a51b3af977a9132240b0484df5"
+        }
+      ]
+    },
+    {
+      "species": "petilil",
+      "normal_glb_sha256": "14977aa961a99d409f7cbe0faf26d8d08ba79c480bfebb736472023891aae6c0",
+      "normal_material_table_sha256": "361e63a7d6b7c622865d267299172fcc368b13d8de12235471bd7f8c73646e03",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "0a932426476797acc92fd05cdc05982a60fe26e6e249ed51ea1f04a0944cb744",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0548/pm0548_00_00/pm0548_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0548/pm0548_00_00/pm0548_00_00_body_a_rare_alb.png",
+          "normal_sha256": "c35b7ffa11bb6024e3e75aba754ceae786e64edc17ad71cfb4fd721f440c6558",
+          "rare_sha256": "1db91516c1c8e37e1dc6fabb767e996777792172fbbb37dd40e64c98d39601f8"
+        }
+      ]
+    },
+    {
+      "species": "lilligant",
+      "normal_glb_sha256": "849c7423d96f5ec748fe974e193a45d551f75e2c3ab7d0b65112f538722026a9",
+      "normal_material_table_sha256": "c1f349dabc1a224f58f6a6dadea1365c3a1856b82deb0be69a51c6b8103c3610",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "3040eb9966ab6cc85c093160e5135576992bdd8079cd281d1c9b7fdb47266935",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0549/pm0549_00_00/pm0549_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0549/pm0549_00_00/pm0549_00_00_body_a_rare_alb.png",
+          "normal_sha256": "b52685921519f96bd235e6a0a5008b874cda5c5dec944cb4d5a89375816fc2ee",
+          "rare_sha256": "1114945030a82641d73f4c39139e684bd1a9864da30eaed34026bbd4e00e264b"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0549/pm0549_00_00/pm0549_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0549/pm0549_00_00/pm0549_00_00_body_b_rare_alb.png",
+          "normal_sha256": "077cc991383a44601c1a2e0534dde5c5aba2b665be1675644e84db68cbd244e2",
+          "rare_sha256": "c51536b06766a1856f1a09d5733aec8c25fa08213f3a012a17906f6c681bb739"
+        }
+      ]
+    },
+    {
+      "species": "sandile",
+      "normal_glb_sha256": "7ef57178ef465abb0f89c2f0a5249d44187cf3f9f319e5061147538a7099b91b",
+      "normal_material_table_sha256": "41683cfa2f83fed851513ad43d3acc034006e51ae3e5aaf21b3f15570f723882",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "60a96091adde0d8771d76dec48289ff21300e9e37a3da9f65f75635e81cdca43",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0551/pm0551_00_00/pm0551_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0551/pm0551_00_00/pm0551_00_00_body_a_rare_alb.png",
+          "normal_sha256": "a0100cbada9b6153c90c0551e8df4edb7e90b449ff9648527d6011b357d6b1f6",
+          "rare_sha256": "a4004753e1c4bb17118adb60385edeb64639c302e5229f660e212dcf59fb971a"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0551/pm0551_00_00/pm0551_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0551/pm0551_00_00/pm0551_00_00_body_b_rare_alb.png",
+          "normal_sha256": "82ec7274d67d8f0d084016fd9b0a6ceaa1a080b946553c0a028d872421d02c7c",
+          "rare_sha256": "bef5fe215923e772e2dc417e5db4ec36500ca9b242102569d578f69c280a31ad"
+        }
+      ]
+    },
+    {
+      "species": "krokorok",
+      "normal_glb_sha256": "00ee42e79c9c227e599dcd92bece83f7001f7dbc07c6d6bc93e00bdd378e3405",
+      "normal_material_table_sha256": "204152936cb26df0dfb93c8cb5445cd6aa2825452ab75634479b65883f0bb37d",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "d34df602126398fd94d60bb1c7595c0689cc61d9822ad1648469f7f2cc9d30bc",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0552/pm0552_00_00/pm0552_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0552/pm0552_00_00/pm0552_00_00_body_a_rare_alb.png",
+          "normal_sha256": "e70a414ba15667207f4e8774bf8732f11d50d080e9393d4fa0fe3b560e5b3683",
+          "rare_sha256": "0a801ac13352aacd492991be71cba68a43d4e20ed0a3b8aa97b0c866512fb1e1"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0552/pm0552_00_00/pm0552_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0552/pm0552_00_00/pm0552_00_00_body_b_rare_alb.png",
+          "normal_sha256": "73b6a2d10335e0da2bc113ec770776d84d96487c780d6019fc7d5709e6f3c50e",
+          "rare_sha256": "7ff71a8652bb2475fb33bec8b236ffa20423e02d96112b3cc2c2d0a3e9338dbb"
+        }
+      ]
+    },
+    {
+      "species": "krookodile",
+      "normal_glb_sha256": "3b5d643700443938fadc7a7bb00182efd07a32c82b90e64ab59da12ec316118b",
+      "normal_material_table_sha256": "9d35ab2020239b7f6a7c0367a18a39a711234f6b4e43faffffe7eaf497221086",
+      "runtime_approved": false,
+      "status": "material_hold",
+      "reason": "Rare material has a non-albedo change: r_eye/LayerMaskMap"
+    },
+    {
+      "species": "zorua",
+      "normal_glb_sha256": "b43844d995169da1d9ec8d97142217365bfa7fe0fe6fbcd4976abc3b0164a53f",
+      "normal_material_table_sha256": "5053ebf19157f20fa285a309000bd63307bed276985702f8053f958c9e36d986",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "0e78420b27cc9f8940e7170f7697fb94ca81791d85736dfd90c6e4290e17faa6",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0570/pm0570_00_00/pm0570_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0570/pm0570_00_00/pm0570_00_00_body_a_rare_alb.png",
+          "normal_sha256": "6034b69c6c0f14d0c002df2305badd8a8cfd9a7d36171721505e0e7b75982421",
+          "rare_sha256": "9f31d70bcd4eaafc7c23a3163c2f248de4a6bd41ea3c065a6010dfe641c40172"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0570/pm0570_00_00/pm0570_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0570/pm0570_00_00/pm0570_00_00_body_b_rare_alb.png",
+          "normal_sha256": "2f1d588aca46d4ad888005a2fce6398c6de7b0321f7fe88bdd3b4f99ca879f4d",
+          "rare_sha256": "b40475d09faacee0b26d9a3a824b470c7c0ac8cce87683c1b6650325d3b63242"
+        }
+      ]
+    },
+    {
+      "species": "zoroark",
+      "normal_glb_sha256": "4a61d2b7846a64256ff8adb5fb0bbfe3bd32aa53875e2c18012803361b3a8cc9",
+      "normal_material_table_sha256": "3a48a07c931a6ab218a78a736afdcc63562244473d2cd50393eba320939ae253",
+      "runtime_approved": false,
+      "status": "albedo_only_candidate",
+      "official_rare_material_sha256": "c5897d931860242065c3e592a75977bf7ba84eb35e887b993cc62e0671845e5d",
+      "official_albedo_replacements": [
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0571/pm0571_00_00/pm0571_00_00_body_a_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0571/pm0571_00_00/pm0571_00_00_body_a_rare_alb.png",
+          "normal_sha256": "16756d82141394fc44303ea22b5e2f29935b340ac58059ec552374f10d938aea",
+          "rare_sha256": "59e48805838fc4bea4fb90b6bc771dd2687ce919af71fffe8e90777ebd9919c9"
+        },
+        {
+          "normal": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0571/pm0571_00_00/pm0571_00_00_body_b_alb.png",
+          "rare": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0571/pm0571_00_00/pm0571_00_00_body_b_rare_alb.png",
+          "normal_sha256": "bd266c853b1473bc082b668240849f0eb5468c728019a7b4b8db2b0104a02b20",
+          "rare_sha256": "313d7e676e5947e385ea152f11ba01f9bdab8c00c5e34c94f5c89d454d64a977"
+        }
+      ]
+    }
+  ]
+}
