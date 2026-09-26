@@ -579,7 +579,10 @@ func _refresh_server_health() -> void:
 		_clear_server_access_notice()
 		await _refresh_online_players()
 	elif server_in_maintenance:
-		_log_server_health_error(result)
+		# A valid closed/draining access status is an expected server state, not
+		# a failed health request. Clear any prior failure so it can be logged if
+		# the next request actually fails.
+		last_server_health_error = ""
 		_set_server_status("ui.login.server_maintenance", CHECKING_COLOR)
 		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
 		var maintenance_message := str(result.get("message", "")).strip_edges()
