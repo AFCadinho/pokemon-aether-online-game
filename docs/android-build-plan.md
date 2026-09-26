@@ -886,7 +886,7 @@ Consider public support only after:
 - [x] Android APK updater check added to the project test runner.
 - [x] Manual Android CI workflow prepares a signed release candidate and a manifest for review; a CI run remains open.
 - [x] Local release APK exported with a disposable test key; package, version, certificate and manifest metadata verified.
-- [ ] Stable alpha signing configured in secrets.
+- [x] Stable alpha signing configured in GitHub Secrets; local release APK verified against the pinned certificate. External backup remains open.
 - [ ] Signed APK upgrade preserves app data.
 - [ ] Closed-alpha device matrix completed.
 - [ ] Public-beta go/no-go review completed.

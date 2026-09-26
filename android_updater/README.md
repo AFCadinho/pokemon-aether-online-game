@@ -47,6 +47,13 @@ Configure these GitHub Actions secrets before running a signed build:
 - `ANDROID_RELEASE_CERT_SHA256`: SHA-256 fingerprint of that key's certificate,
   checked against the exported APK.
 
+The alpha signing certificate currently configured for this workflow has
+SHA-256 fingerprint
+`94a8c2ccf5fa2e3cc144b77830d7611e956753b2cbdc18d30cfd3e901efa027b`.
+The local release export was checked against this fingerprint. The keystore and
+password are held outside the repository and must also be backed up outside
+the development laptop before distributing a signed build.
+
 Back up the keystore and password outside the repository before distributing
 the first signed APK. Keep the same package ID, signing certificate, and an
 increasing version code for every later upgrade. Debug APKs use a different
