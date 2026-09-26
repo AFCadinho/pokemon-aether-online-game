@@ -1,5 +1,5 @@
 extends SceneTree
-## Local install/load check for the 69 unreleased catalog batch-02 bundles.
+## Local install/load check for unreleased catalog bundles.
 const Index = preload("res://scripts/asset_bundle_index.gd")
 const Store = preload("res://scripts/asset_bundle_store.gd")
 
@@ -11,30 +11,32 @@ func _init() -> void:
 func _run() -> void:
 	var directory := OS.get_environment("POKEAETHER_CANDIDATE_BUNDLE_DIR")
 	var output := OS.get_environment("POKEAETHER_CANDIDATE_INSTALL_OUTPUT")
+	var expected_count := int(OS.get_environment("POKEAETHER_CANDIDATE_BUNDLE_COUNT")) if not OS.get_environment("POKEAETHER_CANDIDATE_BUNDLE_COUNT").is_empty() else 69
 	assert(directory.is_absolute_path() and output.is_absolute_path())
+	assert(expected_count > 0)
 	assert(not DirAccess.dir_exists_absolute(output))
 	var index: Variant = JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("asset-index.json")))
 	assert(index is Dictionary and Index.validate(index).is_empty())
-	assert(index.assets.size() == 69)
+	assert(index.assets.size() == expected_count)
 	var ids: Array[String] = []
 	for asset: Dictionary in index.assets:
 		ids.append(asset.asset_id)
 		assert(asset.appearances.size() == 2)
 	var store := Store.new(output)
 	var plan := store.plan(index, ids)
-	assert(plan.error.is_empty() and plan.downloads.size() == 69)
+	assert(plan.error.is_empty() and plan.downloads.size() == expected_count)
 	for asset: Dictionary in index.assets:
 		var archive: String = directory.path_join(str(asset.object_key).get_file())
 		var installed := store.install_archive(index, asset.asset_id, archive)
 		assert(installed.error.is_empty(), installed.error)
 	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string(store.catalog_path()))
-	assert(catalog is Array and catalog.size() == 138)
+	assert(catalog is Array and catalog.size() == expected_count * 2)
 	for entry: Dictionary in catalog:
 		assert(FileAccess.get_sha256(entry.runtime_path) == entry.runtime_sha256)
 		assert(ResourceLoader.load(entry.runtime_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) is PackedScene)
 	var settled := store.plan(index, ids)
-	assert(settled.error.is_empty() and settled.downloads.is_empty() and settled.unchanged.size() == 69)
+	assert(settled.error.is_empty() and settled.downloads.is_empty() and settled.unchanged.size() == expected_count)
 	var restarted := Store.new(output)
 	assert(restarted.plan(index, ids).downloads.is_empty())
-	print("CATALOG_BATCH_02_CANDIDATE_BUNDLES_OK bundles=69 scenes=138 no_op=true restart=true")
+	print("CATALOG_BATCH_02_CANDIDATE_BUNDLES_OK bundles=", expected_count, " scenes=", expected_count * 2, " no_op=true restart=true")
 	quit()
