@@ -12,6 +12,12 @@ var _joystick_index := -1
 var _joystick_center := Vector2.ZERO
 var _move_action := ""
 var _interact_time_left := 0.0
+var _mouse_tracking := false
+var _mouse_start := Vector2.ZERO
+var _mouse_position := Vector2.ZERO
+var _mouse_started_msec := 0
+var _mouse_joystick_active := false
+var _recent_touch_msec := -1000
 
 
 func _ready() -> void:
@@ -40,6 +46,8 @@ func _process(delta: float) -> void:
 	if _joystick_index != -1:
 		return
 	var now := Time.get_ticks_msec()
+	if _mouse_tracking and not _mouse_joystick_active and now - _mouse_started_msec >= HOLD_MSEC:
+		_activate_mouse_joystick()
 	for index: int in _touches:
 		var touch: Dictionary = _touches[index]
 		if now - int(touch.started_msec) >= HOLD_MSEC:
@@ -48,22 +56,64 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event is InputEventScreenTouch or not _controls_available():
+	if not _controls_available():
 		return
-	var touch := event as InputEventScreenTouch
-	if not touch.pressed or _touches.has(touch.index):
-		return
-	_touches[touch.index] = {
-		"start": touch.position,
-		"position": touch.position,
-		"started_msec": Time.get_ticks_msec(),
-	}
-	get_viewport().set_input_as_handled()
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		_recent_touch_msec = Time.get_ticks_msec()
+		if not touch.pressed or _touches.has(touch.index):
+			return
+		_touches[touch.index] = {
+			"start": touch.position,
+			"position": touch.position,
+			"started_msec": _recent_touch_msec,
+		}
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton:
+		var mouse_button := event as InputEventMouseButton
+		if (
+			mouse_button.button_index != MOUSE_BUTTON_LEFT
+			or not mouse_button.pressed
+			or _mouse_tracking
+			or Time.get_ticks_msec() - _recent_touch_msec < HOLD_MSEC
+		):
+			return
+		_mouse_tracking = true
+		_mouse_start = mouse_button.position
+		_mouse_position = mouse_button.position
+		_mouse_started_msec = Time.get_ticks_msec()
+		get_viewport().set_input_as_handled()
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventScreenDrag:
+	if event is InputEventMouseMotion and _mouse_tracking:
+		var motion := event as InputEventMouseMotion
+		_mouse_position = motion.position
+		if not _mouse_joystick_active and motion.position.distance_to(_mouse_start) >= DRAG_START_DISTANCE:
+			_activate_mouse_joystick()
+		if _mouse_joystick_active:
+			_set_move_action(_direction_for(motion.position - _joystick_center))
+			queue_redraw()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and _mouse_tracking:
+		var mouse_button := event as InputEventMouseButton
+		if mouse_button.button_index != MOUSE_BUTTON_LEFT or mouse_button.pressed:
+			return
+		_mouse_position = mouse_button.position
+		if not _mouse_joystick_active and Time.get_ticks_msec() - _mouse_started_msec >= HOLD_MSEC:
+			_activate_mouse_joystick()
+		if _mouse_joystick_active:
+			_set_move_action("")
+			_mouse_joystick_active = false
+			_joystick_index = -1
+			queue_redraw()
+		elif mouse_button.position.distance_to(_mouse_start) < DRAG_START_DISTANCE:
+			_pulse_interact()
+		_mouse_tracking = false
+		get_viewport().set_input_as_handled()
+	elif event is InputEventScreenDrag:
 		var drag := event as InputEventScreenDrag
+		_recent_touch_msec = Time.get_ticks_msec()
 		if not _touches.has(drag.index):
 			return
 		var touch: Dictionary = _touches[drag.index]
@@ -77,6 +127,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event is InputEventScreenTouch:
 		var release := event as InputEventScreenTouch
+		_recent_touch_msec = Time.get_ticks_msec()
 		if release.pressed or not _touches.has(release.index):
 			return
 		var touch: Dictionary = _touches[release.index]
@@ -102,12 +153,21 @@ func _controls_available() -> bool:
 
 
 func _activate_joystick(index: int) -> void:
-	if _joystick_index != -1 or not _touches.has(index):
+	if _joystick_index != -1 or _mouse_joystick_active or not _touches.has(index):
 		return
 	_joystick_index = index
 	var touch: Dictionary = _touches[index]
 	_joystick_center = touch.start
 	_set_move_action(_direction_for(touch.position - _joystick_center))
+	queue_redraw()
+
+
+func _activate_mouse_joystick() -> void:
+	if _mouse_joystick_active or _joystick_index != -1 or not _mouse_tracking:
+		return
+	_mouse_joystick_active = true
+	_joystick_center = _mouse_start
+	_set_move_action(_direction_for(_mouse_position - _joystick_center))
 	queue_redraw()
 
 
@@ -136,22 +196,31 @@ func _pulse_interact() -> void:
 
 
 func _release_all() -> void:
+	var had_joystick := _joystick_index != -1 or _mouse_joystick_active
 	_set_move_action("")
 	if _interact_time_left > 0.0:
 		Input.action_release("interact")
 		_interact_time_left = 0.0
 	_touches.clear()
-	if _joystick_index != -1:
-		_joystick_index = -1
+	_mouse_tracking = false
+	_mouse_joystick_active = false
+	_joystick_index = -1
+	if had_joystick:
 		queue_redraw()
 
 
 func _draw() -> void:
-	if _joystick_index == -1 or not _touches.has(_joystick_index):
+	var center := Vector2.ZERO
+	var point := Vector2.ZERO
+	if _mouse_joystick_active:
+		center = _joystick_center
+		point = _mouse_position
+	elif _joystick_index != -1 and _touches.has(_joystick_index):
+		center = _joystick_center
+		var touch: Dictionary = _touches[_joystick_index]
+		point = touch.position
+	else:
 		return
-	var center := _joystick_center
-	var touch: Dictionary = _touches[_joystick_index]
-	var point: Vector2 = touch.position
 	var knob: Vector2 = center + (point - center).limit_length(KNOB_TRAVEL)
 	draw_circle(center, PAD_RADIUS, Color(0.04, 0.08, 0.15, 0.63))
 	draw_arc(center, PAD_RADIUS - 2.0, 0.0, TAU, 64, Color(0.57, 0.78, 1.0, 0.82), 3.0)

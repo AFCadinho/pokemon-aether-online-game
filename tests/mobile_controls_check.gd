@@ -40,6 +40,20 @@ func _run() -> void:
 	controls._process(0.13)
 	_check(not Input.is_action_pressed("interact"), "tap interaction releases automatically")
 
+	controls.set("_recent_touch_msec", -1000)
+	_send_mouse_button(controls, point, true)
+	_check(not Input.is_action_pressed("interact"), "mouse press does not interact before release")
+	_send_mouse_button(controls, point, false)
+	_check(Input.is_action_pressed("interact"), "short click on free world space interacts")
+	controls._process(0.13)
+	_check(not Input.is_action_pressed("interact"), "mouse click interaction releases automatically")
+
+	_send_mouse_button(controls, point, true)
+	_send_mouse_motion(controls, point + Vector2.LEFT * 85.0)
+	_check(Input.is_action_pressed("move_left"), "mouse drag opens the floating joystick and moves")
+	_send_mouse_button(controls, point + Vector2.LEFT * 85.0, false)
+	_check(not Input.is_action_pressed("move_left"), "releasing mouse drag stops movement")
+
 	_send_touch(controls, 1, point, true)
 	var touches: Dictionary = controls.get("_touches")
 	var held_touch: Dictionary = touches[1]
@@ -111,6 +125,23 @@ func _send_touch(controls: Control, index: int, position: Vector2, pressed: bool
 func _send_drag(controls: Control, index: int, position: Vector2) -> void:
 	var event := InputEventScreenDrag.new()
 	event.index = index
+	event.position = position
+	controls._input(event)
+
+
+func _send_mouse_button(controls: Control, position: Vector2, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.position = position
+	event.pressed = pressed
+	if pressed:
+		controls._unhandled_input(event)
+	else:
+		controls._input(event)
+
+
+func _send_mouse_motion(controls: Control, position: Vector2) -> void:
+	var event := InputEventMouseMotion.new()
 	event.position = position
 	controls._input(event)
 
