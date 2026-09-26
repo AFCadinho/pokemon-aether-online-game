@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktoplauncher kan de volledige goedgekeurde 3D-catalogus van 82 Pokémon plus Mega Dragonite normal en shiny als afzonderlijke bundles downloaden zodra release v5 is gepubliceerd.
+
 - Mega Dragonite normal en shiny zijn lokaal goedgekeurd voor 3D-gevechten en hebben samen een eigen bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte desktoprelease.
 
 - Het inlogscherm controleert de serverstatus opnieuw na een mislukte aanvraag. Een tijdelijke netwerkfout laat de browserclient daardoor niet permanent offline staan.

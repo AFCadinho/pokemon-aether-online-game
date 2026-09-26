@@ -3,6 +3,7 @@ extends RefCounted
 const BundleIndex = preload("asset_bundle_index.gd")
 const BundleStore = preload("asset_bundle_store.gd")
 const Approval = preload("model_pack_manifest.gd")
+const V5 = preload("res://data/approved_3d_release_v5.json")
 
 const DESCRIPTOR_SCHEMA := 1
 const DESCRIPTOR_KIND := "pokeaether-release-asset-index"
@@ -28,6 +29,7 @@ const RELEASE_ASSET_IDS: Array[String] = [
 	"pokemon_3d:stantler:base", "pokemon_3d:teddiursa:base",
 	"pokemon_3d:ursaring:base",
 ]
+const MEGA_ID := "pokemon_3d:dragonite:mega"
 
 var store: RefCounted
 var index_root: String
@@ -61,9 +63,24 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 	original.sort()
 	var expanded := RELEASE_ASSET_IDS.duplicate()
 	expanded.sort()
-	if normalized != original and normalized != expanded:
+	var v5 := _v5_ids()
+	v5.sort()
+	if normalized != original and normalized != expanded and normalized != v5:
 		return "Asset bundle release set is not approved."
+	if normalized == v5:
+		var pinned: Dictionary = V5.data.index
+		if (descriptor.revision != V5.data.revision or descriptor.sha256 != pinned.sha256
+				or descriptor.sizeBytes != pinned.size_bytes
+				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
+			return "Mega Dragonite release index differs from the approved v5 index."
 	return ""
+
+
+static func _v5_ids() -> Array[String]:
+	var result: Array[String] = []
+	for asset_id: String in V5.data.requiredAssetIds:
+		result.append(asset_id)
+	return result
 
 
 static func _http_url(value: String) -> bool:
@@ -139,7 +156,7 @@ func accept_bundle(index: Dictionary, asset_id: String, downloaded_path: String)
 	var error := _release_index_error(index)
 	if not error.is_empty():
 		return {"error": error}
-	if asset_id not in RELEASE_ASSET_IDS:
+	if asset_id not in RELEASE_ASSET_IDS and asset_id not in _v5_ids():
 		return {"error": "Asset bundle is outside the approved release set."}
 	return store.install_archive(index, asset_id, downloaded_path)
 
@@ -204,7 +221,12 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 		for asset_id: String in descriptor.requiredAssetIds:
 			expected.append(asset_id)
 	else:
-		expected = V1_ASSET_IDS.duplicate() if assets is Array and assets.size() == V1_ASSET_IDS.size() else RELEASE_ASSET_IDS.duplicate()
+		if assets is Array and assets.size() == V1_ASSET_IDS.size():
+			expected = V1_ASSET_IDS.duplicate()
+		elif assets is Array and assets.size() == RELEASE_ASSET_IDS.size():
+			expected = RELEASE_ASSET_IDS.duplicate()
+		else:
+			expected = _v5_ids()
 	if not assets is Array or assets.size() != expected.size():
 		return "Asset bundle index does not contain the exact approved release set."
 	var seen: Array[String] = []
@@ -212,7 +234,8 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 		if not asset is Dictionary:
 			return "Asset bundle index contains an invalid asset."
 		var asset_id := str(asset.get("asset_id", ""))
-		if asset_id not in expected or asset_id in seen or asset.get("form_id") != "base":
+		var form := "mega" if asset_id == MEGA_ID else "base"
+		if asset_id not in expected or asset_id in seen or asset.get("form_id") != form:
 			return "Asset bundle index contains an unapproved asset."
 		seen.append(asset_id)
 		var appearances: Variant = asset.get("appearances")
@@ -224,7 +247,7 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 				return "Asset bundle appearance is invalid."
 			var variant := str(appearance.get("variant", ""))
 			var identity := str(appearance.get("runtime_identity", ""))
-			var expected_identity := str(asset.species_id) + ("@shiny" if variant == "shiny" else "")
+			var expected_identity := str(asset.species_id) + ("-mega" if form == "mega" else "") + ("@shiny" if variant == "shiny" else "")
 			var approved: Dictionary = Approval.DATA.data.models.get(identity, {})
 			if variant not in ["normal", "shiny"] or variant in variants or identity != expected_identity:
 				return "Asset bundle appearance identity is not approved."

@@ -35,6 +35,7 @@ def release_files(directory: Path, metadata_path: Path = METADATA) -> list[tuple
         "approved-pokemon-3d-v2": 21,
         "approved-pokemon-3d-v3": 76,
         "approved-pokemon-3d-v4": 82,
+        "approved-pokemon-3d-v5": 83,
     }.get(metadata.get("revision"))
     if expected is None or len(records) != expected + 1 or not all(isinstance(item, dict) for item in records):
         raise ValueError("release metadata has an unsupported or incomplete bundle set")
@@ -50,6 +51,12 @@ def release_files(directory: Path, metadata_path: Path = METADATA) -> list[tuple
         approval = ROOT / "tools/sprite_factory/screened_100_placement_recovery.json"
         if metadata.get("screened_100_placement_recovery_approval_sha256") != digest(approval):
             raise ValueError("v4 release is not bound to placement recovery approval")
+    if expected == 83:
+        approval = ROOT / "tools/sprite_factory/mega_dragonite_approval.json"
+        previous = ROOT / "release/approved_3d_bundles_v4.json"
+        if (metadata.get("mega_dragonite_approval_sha256") != digest(approval)
+                or metadata.get("v4_index_sha256") != json.loads(previous.read_text())["index"]["sha256"]):
+            raise ValueError("v5 release is not bound to Mega Dragonite and v4 approval")
     result: list[tuple[Path, str]] = []
     for index, item in enumerate(records):
         path = directory / ("asset-index.json" if index == 0 else Path(item["object_key"]).name)
@@ -80,6 +87,12 @@ def main() -> None:
         unchanged = {
             item["object_key"]
             for item in json.loads((ROOT / "release/approved_3d_bundles_v3.json").read_text(encoding="utf-8"))["bundles"]
+        }
+        files = [item for item in files if item[1] not in unchanged]
+    if metadata.get("revision") == "approved-pokemon-3d-v5":
+        unchanged = {
+            item["object_key"]
+            for item in json.loads((ROOT / "release/approved_3d_bundles_v4.json").read_text(encoding="utf-8"))["bundles"]
         }
         files = [item for item in files if item[1] not in unchanged]
     total = sum(path.stat().st_size for path, _ in files)

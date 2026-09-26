@@ -349,12 +349,14 @@ def _build_asset_bundle_index(entry: str, base_url: str) -> dict:
         "pokemon_3d:roaring-moon:base",
         "pokemon_3d:snorlax:base",
     ]
-    if revision == "approved-pokemon-3d-v2":
-        receipt = json.loads((Path(__file__).resolve().parents[1] / "release/approved_3d_bundles_v2.json").read_text())
+    if revision in {"approved-pokemon-3d-v2", "approved-pokemon-3d-v5"}:
+        version = "v2" if revision.endswith("v2") else "v5"
+        expected_count = 21 if version == "v2" else 83
+        receipt = json.loads((Path(__file__).resolve().parents[1] / f"release/approved_3d_bundles_{version}.json").read_text())
         pinned = receipt["index"]
         if (pinned["object_key"] != object_key or pinned["size_bytes"] != size_bytes
-                or pinned["sha256"] != sha256 or len(receipt["bundles"]) != 21):
-            raise SystemExit("--asset-bundle-index differs from the pinned v2 release")
+                or pinned["sha256"] != sha256 or len(receipt["bundles"]) != expected_count):
+            raise SystemExit(f"--asset-bundle-index differs from the pinned {version} release")
         required_ids = [bundle["asset_id"] for bundle in receipt["bundles"]]
     return {
         "schema": 1,

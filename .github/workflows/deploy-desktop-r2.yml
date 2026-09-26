@@ -17,7 +17,7 @@ on:
         description: Select the already published approved 3D bundle index.
         required: false
         type: choice
-        options: [v1, v2]
+        options: [v1, v2, v5]
         default: v1
       build_macos:
         description: Build and include macOS artifacts.
@@ -433,15 +433,16 @@ jobs:
           from urllib.request import Request, urlopen
 
           selected = os.environ.get("INPUT_APPROVED_3D_RELEASE") or "v1"
-          if selected not in {"v1", "v2"}:
+          if selected not in {"v1", "v2", "v5"}:
               raise SystemExit("unsupported approved 3D release selection")
-          if selected == "v2" and os.environ.get("BUILD_LAUNCHER") != "true":
-              raise SystemExit("the first v2 release must rebuild the launcher")
+          if selected in {"v2", "v5"} and os.environ.get("BUILD_LAUNCHER") != "true":
+              raise SystemExit("expanded 3D releases must rebuild the launcher")
           metadata = json.loads(Path(f"release/approved_3d_bundles_{selected}.json").read_text(encoding="utf-8"))
           if metadata.get("schema") != 1 or metadata.get("kind") != "pokeaether-approved-3d-release":
               raise SystemExit("invalid approved 3D release metadata")
           entries = [metadata["index"], *metadata.get("bundles", [])]
-          if len(entries) != (8 if selected == "v1" else 22):
+          expected = {"v1": 8, "v2": 22, "v5": 84}[selected]
+          if len(entries) != expected:
               raise SystemExit("approved 3D release object count is incomplete")
           for entry in entries:
               url = f"{os.environ['UPDATE_BASE_URL'].rstrip('/')}/{entry['object_key']}"
