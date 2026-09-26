@@ -71,7 +71,7 @@ func _run() -> void:
 								assert(not bounds.intersects_segment(inverse * camera, inverse * aim), "Scenery hides combatant: " + str(mesh.get_path()))
 		world.free()
 		print("GYM_ARENA_OK: ", id, " meshes=", meshes.size(), " camera samples=648")
-	assert(Resolver.resolve({"map_id": "kanto_pewter_city", "battle_kind": "trainer"}) == &"grass")
+	assert(Resolver.resolve({"map_id": "kanto_pewter_city", "battle_kind": "trainer"}) == &"pewter_city")
 	assert(Resolver.resolve({"map_id": "kanto_cerulean_city", "battle_kind": "trainer"}) == &"cerulean_city")
 	print("GYM_ARENAS_CHECK_OK")
 	quit()
