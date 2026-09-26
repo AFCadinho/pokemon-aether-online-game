@@ -1,0 +1,30 @@
+{
+  "approved_bundle_index_sha256": "609e95118b68fc22d7020a84e23589a22a4293e1396da56e04b253cf6e1bd447",
+  "github_run_conclusion": "success",
+  "github_run_id": 36256493745,
+  "github_run_url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/36256493745",
+  "pinned_release_sha256": "7bd6e69f91cd9b585af46b63bd13416b45165276b811f9d9b3e869dcaf02d360",
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_manifests": {
+    "manifest-linux.json": {
+      "game_build_id": "b3265293c7e23f16acf8c8139ea16945f5a9187b-36256493745-1",
+      "sha256": "0f3d5e845c5eba2dc0492981e8a044aad4cf6355c0154b918435b7d830cf6e4e"
+    },
+    "manifest-windows.json": {
+      "game_build_id": "b3265293c7e23f16acf8c8139ea16945f5a9187b-36256493745-1",
+      "sha256": "c4ea9cbae8fafe68a45616d95929119611a81f44e41302da6bb3946f5a54b8e4"
+    },
+    "manifest.json": {
+      "game_build_id": "b3265293c7e23f16acf8c8139ea16945f5a9187b-36256493745-1",
+      "sha256": "c4ea9cbae8fafe68a45616d95929119611a81f44e41302da6bb3946f5a54b8e4"
+    }
+  },
+  "public_windows_linux_game_launcher_size_checks_passed": true,
+  "published_at_utc": "2026-09-26T16:51:29Z",
+  "r2_cleanup_requested": false,
+  "release_version": "0.3.85",
+  "required_bundle_count": 83,
+  "revision": "approved-pokemon-3d-v5",
+  "schema": 1,
+  "source_commit": "b3265293c7e23f16acf8c8139ea16945f5a9187b"
+}
