@@ -109,6 +109,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 	var ability_boost_target_ident := str(presentation.get("ability_boost_target_ident", ""))
 	var effect_animation_key: String = str(presentation.get("effect_animation_key", ""))
 	var effect_animation_target_ident: String = str(presentation.get("effect_animation_target_ident", ""))
+	var effect_reveal_3d: Callable = presentation.get("effect_reveal_3d", Callable())
 
 	if pre_log_message != "":
 		if not suppress_player_gap:
@@ -169,7 +170,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 	)
 	if effect_animation_key != "" and heal_target_ident == "" and not defer_stat_change_effect:
 		if animations_allowed:
-			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident, effect_reveal_3d)
 			if owned_generation != render_generation:
 				return
 	if attack_actor_ident != "":
