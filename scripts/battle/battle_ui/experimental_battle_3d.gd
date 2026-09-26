@@ -37,6 +37,7 @@ func _release_forest() -> void:
 	forest_lease.clear()
 var arena_id := "classic"
 var environment_id: StringName = &"grass"
+var battle_kind := "trainer"
 var arena_root: Node3D
 var arena_problem := ""
 var ground_offsets := {}
@@ -559,7 +560,28 @@ func _motion_profile(species: String) -> Dictionary:
 	return MOTION_PROFILES.data.get(species, {})
 
 func _requested_arena() -> String:
-	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id)
+	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id, battle_kind)
+
+func set_battle_context(next_environment_id: StringName, next_kind: String) -> void:
+	environment_id = next_environment_id
+	battle_kind = next_kind
+	if viewport == null or arena_id == _requested_arena():
+		return
+	# A battle screen can be prewarmed before its response supplies the actual
+	# encounter kind. Rebuild that empty stage before showing the battle.
+	_set_active(false)
+	_clear_actors()
+	material_response._drop()
+	render_surface.texture = null
+	if forest_lease.is_empty():
+		viewport.queue_free()
+	else:
+		_release_forest()
+	viewport = null
+	world = null
+	camera = null
+	arena_root = null
+	arena_preparing = false
 
 func _screened_arena_review() -> bool:
 	# Screened candidates are a local visual-QC cohort. They have exact source

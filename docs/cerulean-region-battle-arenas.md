@@ -40,10 +40,12 @@ Existing forest art and the bundled CC0 nature details are reused.
 
 The catalog, profile resources, resolver and framing register the six stable
 IDs (`cerulean_city`, `route_24`, `route_25`, each with a `_water` variant).
-Wild and trainer encounters use the land layout; wild surf/fishing/water contexts
-use the corresponding water layout. Explicit environments, manual arena choices,
-and PvP retain precedence. Other maps and interiors retain their existing rules.
-Grass/water 2D backgrounds remain the fallback when 3D presentation is unavailable.
+Trainer encounters use the authored map layout. Wild land encounters use
+the generic grassfield; wild surf, fishing and water-tile encounters use the
+generic sea arena. The map water variants remain available for trainer contexts
+and visual review. Explicit environment selections, review arena choices and
+PvP retain precedence. Grass/water 2D backgrounds still follow the resolved
+map environment.
 
 Terrain and grass retain the shared weak caches and two-pass environment pool.
 No additional native addon, backend dependency or asset-bundle change is needed.

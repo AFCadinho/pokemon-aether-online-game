@@ -2,7 +2,8 @@
 
 ## Map identity and source art
 
-The three outdoor maps now select their own 3D arena automatically:
+Trainer battles on the three outdoor maps select their own 3D arena. Wild
+battles use the matching generic grassfield or sea arena:
 
 | Map ID | Land environment | Water environment |
 | --- | --- | --- |

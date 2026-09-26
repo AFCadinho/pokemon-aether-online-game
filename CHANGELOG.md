@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wilde 3D-gevechten gebruiken de rustige standaardarena voor gras, grot of water. Trainergevechten gebruiken de arena van de map; gymgevechten hun eigen zaal. De bestaande 2D-achtergronden blijven op hun locatie gebaseerd.
+
 - De volgende 71 goedgekeurde Pokémon zijn voorbereid voor 3D-gevechten in normale en shiny vorm. Hun modellen blijven individuele downloads; de nieuwe catalogus wordt actief na de desktoprelease.
 
 - Explicitly include normal and shiny Pokémon HOME icons in Android exports so party slots can resolve their portraits.

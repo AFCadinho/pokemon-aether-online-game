@@ -1,11 +1,11 @@
 # Route 1 battle arena
 
-Route 1 trainer and grass encounters resolve to the map-specific `route_1` 3D
-arena. Explicit environment overrides and PvP retain their existing priority.
-Surf, fishing and player-on-water encounter contexts resolve to `route_1_water`:
-the camera and fighters move into the northern pond of this same environment.
-Both variants share the terrain, props and a pond floor 0.18 units below the
-water surface. This presentation mapping does not enable overworld encounters.
+Route 1 trainers use the map-specific `route_1` 3D arena, and water-side
+trainer contexts may use `route_1_water`. Wild grass encounters use the generic
+grassfield; wild surf, fishing and water-tile encounters use the generic sea.
+The map-specific water scene remains available for trainers and visual review.
+The 2D grass/water backgrounds continue to use the resolved map environment.
+These presentation rules do not enable overworld encounters.
 
 The visual source is `generated/tiled_visuals/route_1/route_1.visual.tscn`, a
 55 × 75-tile north/south forest route. Its recurring features are adapted into

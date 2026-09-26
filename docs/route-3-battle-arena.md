@@ -1,9 +1,10 @@
 # Route 3 battle arena
 
-Automatic wild and trainer battles on `kanto_route_3` use the `route_3` 3D
-arena. Explicit environment choices and PvP keep their existing priority. The
-grass background and platform remain the 2D fallback. Route 3 has no mapped
-water battle area, so generic water encounters retain the sea arena.
+Trainer battles on `kanto_route_3` use the `route_3` 3D arena. Wild land
+encounters use the generic grassfield. The grass background and platform remain
+the 2D presentation. Route 3 has no mapped water battle area, so water
+encounters use the generic sea arena. Explicit review choices and PvP keep
+their existing priority.
 
 ## Pixel-map composition
 
