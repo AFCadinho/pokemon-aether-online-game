@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3"]
+const IDS := ["classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -44,6 +44,10 @@ const DEFINITIONS := {
 	"route_22": {"scope": "map", "map_id": "kanto_route_22", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_22/arena.gd"},
 	"route_22_water": {"scope": "map", "map_id": "kanto_route_22", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_22/arena.gd"},
 	"route_3": {"scope": "map", "map_id": "kanto_route_3", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_3/arena.gd"},
+	"route_2": {"scope": "map", "map_id": "kanto_route_2", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_2/arena.gd"},
+	"route_2_water": {"scope": "map", "map_id": "kanto_route_2", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_2/arena.gd"},
+	"route_4": {"scope": "map", "map_id": "kanto_route_4", "terrain": "grass", "lighting": "outdoor", "builder": "maps/route_4/arena.gd"},
+	"route_4_water": {"scope": "map", "map_id": "kanto_route_4", "terrain": "water", "lighting": "outdoor", "builder": "maps/route_4/arena.gd"},
 }
 
 static func definition(id: String) -> Dictionary:
@@ -71,7 +75,7 @@ static func camera_target(id: String) -> Vector3:
 	return Framing.camera_target(id)
 
 static func uses_forest_assets(id: String) -> bool:
-	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water", "route_3"]
+	return id in ["forest", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water"]
 
 static func uses_outdoor_lighting(id: String) -> bool:
 	return str(definition(id).get("lighting", "fallback")) == "outdoor"
@@ -95,6 +99,14 @@ static func build(id: String, world: Node3D, camera: Camera3D = null) -> Node3D:
 		if id in ["route_22", "route_22_water"]:
 			var route = preload("res://scripts/battle/arenas/maps/route_22/arena.gd").new()
 			route.water_battle = id == "route_22_water"
+			return _apply_lighting(id, route.build(camera))
+		if id in ["route_2", "route_2_water"]:
+			var route = preload("res://scripts/battle/arenas/maps/route_2/arena.gd").new()
+			route.water_battle = id == "route_2_water"
+			return _apply_lighting(id, route.build(camera))
+		if id in ["route_4", "route_4_water"]:
+			var route = preload("res://scripts/battle/arenas/maps/route_4/arena.gd").new()
+			route.water_battle = id == "route_4_water"
 			return _apply_lighting(id, route.build(camera))
 		if id == "route_3":
 			return _apply_lighting(id, preload("res://scripts/battle/arenas/maps/route_3/arena.gd").new().build(camera))
