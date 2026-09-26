@@ -80,9 +80,31 @@ func _pokemon_preview(manifest: String, output: String) -> void:
 		await create_timer(0.5).timeout
 		await RenderingServer.frame_post_draw
 		assert(stage.viewport.get_texture().get_image().save_png(output.path_join("route-3-pokemon-%02d.png" % hour)) == OK)
+	if "--orbit" in OS.get_cmdline_user_args():
+		for hour in [12, 23]:
+			root.get_node("WorldTimeService").set_debug_time(hour)
+			for degrees in range(0, 360, 45):
+				stage.user_camera_yaw = deg_to_rad(degrees)
+				stage.user_camera_pitch = 0.0
+				stage.user_camera_zoom = 1.0
+				await _capture_orbit(stage, output, "orbit-%02d-%03d" % [hour, degrees])
+		# Both pitch limits at maximum zoom, including all diagonal joins.
+		root.get_node("WorldTimeService").set_debug_time(12)
+		for pitch in [-0.12, 0.65]:
+			for degrees in range(0, 360, 45):
+				stage.user_camera_yaw = deg_to_rad(degrees)
+				stage.user_camera_pitch = pitch
+				stage.user_camera_zoom = stage.USER_CAMERA_ZOOM_MAX
+				await _capture_orbit(stage, output, "orbit-limit-%s-%03d" % ["low" if pitch < 0 else "high", degrees])
 	root.get_node("WorldTimeService").clear_debug_time()
 	host.queue_free()
 	await process_frame
 	await process_frame
 	print("ROUTE_3_POKEMON_PREVIEW_OK")
 	quit()
+
+func _capture_orbit(stage: Control, output: String, label: String) -> void:
+	await create_timer(0.2).timeout
+	await RenderingServer.frame_post_draw
+	assert(stage.active and stage.arena_id == "route_3")
+	assert(stage.viewport.get_texture().get_image().save_png(output.path_join("route-3-%s.png" % label)) == OK)
