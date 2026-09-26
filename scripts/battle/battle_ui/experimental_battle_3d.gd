@@ -3,6 +3,7 @@ extends Control
 ## Missing models/forms/doubles/substitute fall back as a pair, never guessing art.
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
+const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
 const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
@@ -59,6 +60,8 @@ var failed_models := {}
 var packed := {}
 var actors: Array = [null, null]
 var players: Array = [null, null]
+var staged_mega_species := ["", ""]
+var mega_effects := [null, null]
 var identities := ["", ""]
 var restoring := ["idle", "idle"]
 var loaded_path := "!unloaded"
@@ -292,6 +295,7 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 	if not force and combatants[index].species == normalized and combatants[index].shiny == shiny:
 		return
 	action_generation[index] += 1
+	staged_mega_species[index] = ""
 	_stop_transition(index)
 	combatants[index] = {"species": normalized, "shiny": shiny}
 	actor_shown[index] = true
@@ -327,11 +331,74 @@ func set_sleeping(index: int, sleeping: bool) -> void:
 
 func cancel_actions() -> void:
 	for index in 2:
+		staged_mega_species[index] = ""
+		if is_instance_valid(mega_effects[index]):
+			mega_effects[index].cancel()
+		mega_effects[index] = null
 		_stop_transition(index)
 		actor_scale[index] = 1.0
 		actor_shown[index] = not combatants[index].species.is_empty()
 		lifecycle[index] = "idle" if actor_shown[index] else "empty"
 		_action("reset", index)
+
+func prepare_mega_form(ident: String, species: String, shiny: bool, timeout_ms := 5000) -> bool:
+	var index := actor_index(ident)
+	# The battle effect is qualified only for the Dragonite Mega pilot.
+	if species.to_lower().replace(" ", "-") != "dragonite-mega" or index < 0 or not handles(ident):
+		return false
+	var key := ReviewedModels.key(species, shiny)
+	if not catalog_entries.has(key) or not _supports_combatant(species.to_lower().replace(" ", "-"), shiny, false, false):
+		return false
+	staged_mega_species[index] = key
+	_queue_needed_models()
+	var deadline := Time.get_ticks_msec() + timeout_ms
+	while is_inside_tree() and active and handles(ident) and not packed.has(key) and not failed_models.has(key) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	var ready := is_inside_tree() and active and handles(ident) and packed.has(key)
+	if not ready:
+		staged_mega_species[index] = ""
+	return ready
+
+func play_mega_evolution(ident: String, reveal: Callable) -> bool:
+	var index := actor_index(ident)
+	if index < 0 or not handles(ident) or staged_mega_species[index].is_empty() or not packed.has(staged_mega_species[index]) or not reveal.is_valid():
+		return false
+	var effect := MegaEvolutionEffect.new()
+	world.add_child(effect)
+	effect.position = actors[index].position
+	mega_effects[index] = effect
+	var target_key: String = staged_mega_species[index]
+	effect.reveal_requested.connect(func():
+		if not is_instance_valid(effect) or mega_effects[index] != effect or not handles(ident):
+			return
+		reveal.call()
+		_start_mega_appeal_after_swap(index, target_key, effect)
+	)
+	effect.start(playback_speed)
+	await effect.finished
+	if mega_effects[index] == effect:
+		mega_effects[index] = null
+	return effect.revealed
+
+func _start_mega_appeal_after_swap(index: int, expected_key: String, effect: Node) -> void:
+	for frame in 10:
+		await get_tree().process_frame
+		if not is_inside_tree() or not is_instance_valid(effect) or mega_effects[index] != effect:
+			return
+		if identities[index] == expected_key and players[index] != null:
+			break
+	if identities[index] != expected_key or players[index] == null:
+		return
+	var player: AnimationPlayer = players[index]
+	if not player.has_animation("mega_appeal"):
+		return
+	var clip := player.get_animation("mega_appeal")
+	clip.length = 181.0 / 60.0
+	clip.loop_mode = Animation.LOOP_NONE
+	player.speed_scale = playback_speed
+	player.play("mega_appeal")
+	current_actions[index] = "mega_appeal"
+	resting[index] = false
 
 func start_action(ident: String, action: String) -> void:
 	if handles(ident):
@@ -673,6 +740,9 @@ func _needed_species() -> Array[String]:
 		var key := _combatant_key(index)
 		if key not in needed:
 			needed.append(key)
+	for key in staged_mega_species:
+		if key != "" and key not in needed:
+			needed.append(key)
 	return needed
 
 func _actors_resolved() -> bool:
@@ -818,6 +888,10 @@ func _import_next_model() -> void:
 
 func _clear_actors() -> void:
 	for i in 2:
+		staged_mega_species[i] = ""
+		if is_instance_valid(mega_effects[i]):
+			mega_effects[i].cancel()
+		mega_effects[i] = null
 		action_generation[i] += 1
 		if is_instance_valid(actors[i]):
 			actors[i].queue_free()
@@ -829,6 +903,10 @@ func _set_active(value: bool) -> void:
 	if active and not value:
 		camera_phase = 0.0
 		for i in 2:
+			staged_mega_species[i] = ""
+			if is_instance_valid(mega_effects[i]):
+				mega_effects[i].cancel()
+			mega_effects[i] = null
 			_stop_transition(i)
 			action_generation[i] += 1
 			if is_instance_valid(players[i]):
@@ -1086,6 +1164,9 @@ func _process(delta: float) -> void:
 		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
 		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
 		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
+		if is_instance_valid(mega_effects[i]) and mega_effects[i].revealed:
+			var since_reveal: float = mega_effects[i].elapsed - MegaEvolutionEffect.CHARGE_SECONDS
+			actors[i].position.y += 0.5 * (1.0 - clampf(since_reveal / 0.55, 0.0, 1.0))
 	_prune_models()
 
 func _exit_tree() -> void:

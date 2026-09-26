@@ -166,14 +166,18 @@ func _check_form_change_refreshes_party_rails() -> void:
 		"Mega and forme changes refresh the field, HUD and party rails from one presentation boundary"
 	)
 	_check_equal(
-		render_source.contains("if event_type == \"mega\" or event_type == \"primal\":\n\t\t\t# Reconcile once more after the transformation animation."),
+		render_source.find("if event_type == \"mega\" or event_type == \"primal\":", render_source.find("await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)")) >= 0
+		and render_source.contains("presentation[\"effect_reveal_3d\"] = func():")
+		and render_source.contains("_update_active_pokemon_presentation_for_ident(reveal_ident, reveal_species)"),
 		true,
-		"Mega presentation reconciles the transformed field sprite after its animation"
+		"Mega presentation reveals the 3D form on cue and reconciles the field after its animation"
 	)
 	_check_equal(
-		render_source.count('str(event_data.get("species", "")) if training_ai_battle else ""') == 2,
+		render_source.contains('var public_mega_species := str(event_data.get("species", "")) if training_ai_battle else ""')
+		and render_source.contains('var reveal_species := str(event_data.get("species", "")) if training_ai_battle else ""')
+		and render_source.contains('str(event_data.get("species", "")) if training_ai_battle else ""\n\t\t\t)'),
 		true,
-		"AI sparring pins the resolved public Mega species before and after its animation"
+		"AI sparring pins the resolved public Mega species before, during and after its animation"
 	)
 	_check_equal(
 		function_source.contains('_update_active_hud_panel("p2", enemy_hud_panel, public_species_override)')

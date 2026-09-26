@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mega Dragonite gebruikt in lokale 3D-gevechten het goedgekeurde transformatie-effect met het bestaande Mega-geluid en de oorspronkelijke Mega-pose, zodra een geschikt model lokaal beschikbaar is.
+
 - De browser kan weeracties, Calcdex, team export, AI-gevechten bekijken en account- en privacyfuncties via de normale API gebruiken.
 - Ranked kiest in de browser standaard Aether OU en kan een gevonden gevecht nu ook vanuit de browser openen of hervatten.
 - De Android-downloadlink op de website en de updateserver ondersteunen nu de ondertekende APK, inclusief controle van manifest, bestandsgrootte en SHA-256.

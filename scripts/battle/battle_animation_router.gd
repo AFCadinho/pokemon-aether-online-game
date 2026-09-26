@@ -215,7 +215,7 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 		await _play_move_target_dodge(_target_ident, playback_options, true)
 
 
-func play_effect_animation(effect_key: String, target_ident: String = "") -> void:
+func play_effect_animation(effect_key: String, target_ident: String = "", reveal_3d: Callable = Callable()) -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.effect_animation", {
@@ -225,6 +225,14 @@ func play_effect_animation(effect_key: String, target_ident: String = "") -> voi
 		return
 
 	if uses_realtime_3d():
+		if _normalize_animation_key(effect_key) == "mega_evolution" and reveal_3d.is_valid():
+			var owned_generation := render_generation
+			var played: bool = await model_presenter.play_mega_evolution(target_ident, reveal_3d)
+			if owned_generation != render_generation:
+				return
+			if played:
+				return
+			reveal_3d.call()
 		var audio := await _start_3d_audio("effect", _normalize_animation_key(effect_key))
 		while is_instance_valid(audio) and not audio.done:
 			await audio.get_tree().process_frame

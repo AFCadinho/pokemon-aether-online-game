@@ -10239,22 +10239,30 @@ func _render_battle_events(
 				_summarize_battle_event(event_data),
 				_summarize_active_battle_state(),
 			])
+		var staged_3d_mega := false
 		if event_type == "mega" or event_type == "primal":
 			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			_fill_mega_event_species(event_data)
+			var mega_ident := str(event_data.get("target", ""))
+			var mega_stage: Node = animation_router.model_presenter
+			if event_type == "mega" and SettingsManager.battle_animations and animation_router.uses_realtime_3d() and is_instance_valid(mega_stage):
+				var mega_index: int = mega_stage.actor_index(mega_ident)
+				if mega_index >= 0:
+					staged_3d_mega = await mega_stage.prepare_mega_form(
+						mega_ident,
+						str(event_data.get("species", "")),
+						bool(mega_stage.combatants[mega_index].shiny)
+					)
 			if training_ai_battle and _get_player_id_from_ident(str(event_data.get("target", ""))) == "p2":
 				display_data_presenter.remember_public_trainer_mega_species(event_data)
 			battle_state.apply_event_conditions([event_data])
 			var public_mega_species := str(event_data.get("species", "")) if training_ai_battle else ""
-			_update_active_pokemon_presentation_for_ident(
-				str(event_data.get("target", "")),
-				public_mega_species
-			)
+			if not staged_3d_mega:
+				_update_active_pokemon_presentation_for_ident(mega_ident, public_mega_species)
 			# AI Practice receives the complete resolution before its events are
-			# rendered. Commit the newly selected front sprite and HUD label to a
-			# frame before the fullscreen Mega overlay starts, so the animation
-			# visibly transforms the opponent instead of covering its base form.
-			if public_mega_species != "":
+			# rendered. Its 2D overlay needs the transformed sprite before starting;
+			# the staged 3D model swaps only at the reveal sound.
+			if public_mega_species != "" and not staged_3d_mega:
 				await get_tree().process_frame
 			_clear_pending_mega_species_for_event(event_data)
 		if event_type == "ability" or event_type == "pokemonEffect":
@@ -10277,6 +10285,11 @@ func _render_battle_events(
 				return
 
 		var presentation: Dictionary = event_presentation.build(event_data)
+		if staged_3d_mega:
+			var reveal_ident := str(event_data.get("target", ""))
+			var reveal_species := str(event_data.get("species", "")) if training_ai_battle else ""
+			presentation["effect_reveal_3d"] = func():
+				_update_active_pokemon_presentation_for_ident(reveal_ident, reveal_species)
 		var apply_forme_change_after_render := event_type == "formeChange"
 		if (
 			event_type == "formeChange"
@@ -10334,9 +10347,7 @@ func _render_battle_events(
 		if replay_mode and owned_replay_generation != replay_generation:
 			return
 		if event_type == "mega" or event_type == "primal":
-			# Reconcile once more after the transformation animation. The pre-render
-			# update gives the effect its transformed target; this final boundary
-			# prevents an earlier base-form refresh from surviving on the field.
+			# Reconcile after the transformation, including the 3D reveal callback.
 			_update_active_pokemon_presentation_for_ident(
 				str(event_data.get("target", "")),
 				str(event_data.get("species", "")) if training_ai_battle else ""
