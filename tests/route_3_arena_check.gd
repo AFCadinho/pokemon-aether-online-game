@@ -5,6 +5,7 @@ const Arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 
 func _init() -> void:
+	create_timer(90).timeout.connect(func(): printerr("ROUTE_3_CHECK_TIMEOUT"); quit(2))
 	_run.call_deferred()
 
 func _run() -> void:
@@ -38,7 +39,10 @@ func _run() -> void:
 		assert(arena.get_meta("source_map") == "kanto_route_3")
 		assert(arena.has_node("Route3Scenery/RockRidges"))
 		assert(arena.has_node("Route3Scenery/MountainConifers"))
-		assert(arena.has_node("Route3Scenery/RoadLandmarks"))
+		var landmarks: Node3D = arena.get_node("Route3Scenery/RoadLandmarks")
+		for landmark in ["PokemonCenter", "MtMoonEntrance/TunnelOpening", "MtMoonSign", "LowerStairs", "MoonStairs"]:
+			assert(landmarks.has_node(landmark))
+		assert(arena.has_node("Route3Scenery/ShrubBanks"))
 		assert(arena.has_node("Route3Scenery/SharedForestGrass"))
 		assert(arena.has_node("OutdoorLighting"))
 		assert(arena.get_meta("terrain_backend") == "mesh")
@@ -48,6 +52,17 @@ func _run() -> void:
 		for point in [Arenas.spawn(0), Arenas.spawn(1), Vector3.ZERO]:
 			var index := (int(point.z) - grid.position.y) * grid.size.x + int(point.x) - grid.position.x
 			assert(is_equal_approx(vertices[index].y, float(arena.get_meta("surface_height"))))
+		for x in range(-5, 6):
+			for z in range(-3, 4):
+				assert(is_equal_approx(_terrain_height(arena, Vector3(x, 0, z)), float(arena.get_meta("surface_height"))))
+		_check_stairs(arena, landmarks.get_node("LowerStairs"), 2.4)
+		_check_stairs(arena, landmarks.get_node("MoonStairs"), 3.2)
+		# Regress the green terrain protrusions found during the visual review.
+		for cliff: Node in arena.get_node("Route3Scenery/RockRidges").get_children():
+			if not str(cliff.name).begins_with("CliffFace"):
+				continue
+			for point: Vector3 in cliff.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]:
+				assert(point.y >= _terrain_height(arena, point) - 0.05, "Cliff faces must cover the terrain ramp")
 		var north_index := (-28 - grid.position.y) * grid.size.x - grid.position.x
 		assert(vertices[north_index].y > float(arena.get_meta("surface_height")) + 3.0)
 	assert(pool.passes[0].arena.get_node("MeshTerrain").mesh == pool.passes[1].arena.get_node("MeshTerrain").mesh)
@@ -57,3 +72,22 @@ func _run() -> void:
 	assert(Pool.get_current() == null)
 	print("ROUTE_3_ARENA_OK")
 	quit()
+
+func _check_stairs(arena: Node3D, stairs: Node3D, rise: float) -> void:
+	var base := stairs.position
+	assert(is_equal_approx(_terrain_height(arena, base), base.y))
+	assert(is_equal_approx(_terrain_height(arena, base + Vector3(0, 0, -6)), base.y + rise))
+	for i in 10:
+		var step: MeshInstance3D = stairs.get_node("Step%d" % i)
+		var point := base + step.position
+		assert(_terrain_height(arena, point) <= point.y + step.scale.y * 0.5)
+
+func _terrain_height(arena: Node3D, point: Vector3) -> float:
+	var grid: Rect2i = arena.get_meta("mesh_grid")
+	var mesh: ArrayMesh = arena.get_node("MeshTerrain").mesh
+	var vertices: PackedVector3Array = mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var x := clampf(point.x - grid.position.x, 0, grid.size.x - 1.00001)
+	var z := clampf(point.z - grid.position.y, 0, grid.size.y - 1.00001)
+	var index := int(z) * grid.size.x + int(x)
+	return lerpf(lerpf(vertices[index].y, vertices[index + 1].y, x - floorf(x)),
+		lerpf(vertices[index + grid.size.x].y, vertices[index + grid.size.x + 1].y, x - floorf(x)), z - floorf(z))
