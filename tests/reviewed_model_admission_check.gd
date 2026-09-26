@@ -52,7 +52,7 @@ func _run() -> void:
 	for species in ["pikachu", "arcanine", "lucario", "snorlax", "articuno", "dragonite", "roaring-moon"]:
 		assert(Renderer.supported(species, false, false, false))
 		assert(Renderer.supported(species, true, false, false))
-		assert(not Renderer.supported(species, false, true, false))
+		assert(Renderer.supported(species, false, true, false))
 		assert(not Renderer.supported(species, true, false, true))
 	for species in ["abra", "onix", "gastly", "arcanine-hisui", "pikachu-rock-star", "missing"]:
 		assert(not Renderer.supported(species, false, false, false))

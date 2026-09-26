@@ -5408,6 +5408,10 @@ func _on_coop_state_changed() -> void:
 			_clear_battle_ui_instance()
 			CoopService.request_failed.emit("Could not prepare the shared battle. Retrying…")
 			return
+		var model_stage: Node = battle_instance.animation_router.model_presenter
+		if is_instance_valid(model_stage):
+			var coop_kind := "wild" if str(CoopService.activity.get("activityId", "")).begins_with("wild_") else "trainer"
+			model_stage.set_battle_context(_resolve_battle_environment_id(coop_kind, CoopService.activity), coop_kind)
 		is_in_battle = true
 		active_battle_kind = "coop"
 		_lock_overworld_for_battle()

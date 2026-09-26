@@ -89,6 +89,11 @@ var _native_animation_sprite: AnimatedSprite2D
 var _native_animation_origin := Vector2.ZERO
 var _target_sprite_materials: Dictionary = {}
 var _target_glow_material: ShaderMaterial
+var _native_sprite_origins: Dictionary = {}
+var _model_anchored_sprites: Dictionary = {}
+var _model_roster_key := ""
+var _model_roster_preparing := false
+var _model_highlight_active := false
 
 
 func _ready() -> void:
@@ -162,6 +167,7 @@ func _ready() -> void:
 			sprite_box.set_double_sprite_horizontal_positions(158.0, 92.0)
 		for controller: String in SLOTS:
 			var sprite := _native_sprite(controller)
+			_native_sprite_origins[controller] = sprite.position
 			var overlay := STATUS_CONDITION_OVERLAY.new() as StatusConditionOverlay
 			overlay.name = "CoopStatusOverlay" + controller
 			overlay.z_index = 80
@@ -456,10 +462,56 @@ func _position_native_targets() -> void:
 		if target == null:
 			continue
 		var sprite := _native_sprite(controller)
+		var model: Node = _model_presenter()
+		if model != null and model.handles(controller):
+			var rect: Rect2 = model.actor_visual_rect(controller)
+			if rect.has_area():
+				var inverse := stage.get_global_transform().affine_inverse()
+				var center := inverse * rect.get_center()
+				target.size = Vector2(clampf(rect.size.x + 20.0, 100.0, 220.0),
+					clampf(rect.size.y + 20.0, 100.0, 220.0))
+				target.position = center - target.size * 0.5
+				continue
 		if sprite != null:
+			target.size = Vector2(132, 152)
 			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
 			# Keep the old top edge but include the Pokémon's feet below its origin.
 			target.position = center - Vector2(target.size.x * 0.5, target.size.y - 56.0)
+
+
+func _model_presenter() -> Node:
+	if not _native_mode:
+		return null
+	return embedded_hosts.get("model_presenter") as Node
+
+
+func _prepare_model_roster() -> void:
+	if _model_roster_preparing:
+		return
+	var model: Node = _model_presenter()
+	if model == null:
+		return
+	_model_roster_preparing = true
+	while is_inside_tree():
+		var requested := _model_roster_key
+		await model.await_prepared()
+		if requested == _model_roster_key:
+			break
+	_model_roster_preparing = false
+
+
+func _sync_model_sprite_anchors() -> void:
+	var model: Node = _model_presenter()
+	for controller: String in SLOTS:
+		var sprite := _native_sprite(controller)
+		if sprite == null:
+			continue
+		if model != null and model.handles(controller):
+			sprite.global_position = model.actor_anchor(controller)
+			_model_anchored_sprites[controller] = true
+		elif _model_anchored_sprites.has(controller) and _native_sprite_origins.has(controller):
+			sprite.position = _native_sprite_origins[controller]
+			_model_anchored_sprites.erase(controller)
 
 
 func _sync() -> void:
@@ -528,6 +580,13 @@ func _process(_delta: float) -> void:
 			_loading_label.text = "Starting co-op battle" + ".".repeat(1 + int(Time.get_ticks_msec() / 500) % 3)
 		if is_instance_valid(_native_turn):
 			_native_turn.hide_timer()
+		_sync_model_sprite_anchors()
+		_position_native_targets()
+		var model: Node = _model_presenter()
+		var model_active: bool = model != null and model.active
+		if model_active != _model_highlight_active:
+			_model_highlight_active = model_active
+			_refresh_target_highlight()
 		_update_coop_sprite_hover()
 		return
 	_connection.text = "%s  ·  %s" % [
@@ -727,9 +786,23 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 				"maxHp": max_hp, "status": str(position.get("status", ""))})
 		sprite_box.set_double_pokemon_species(species[0], species[1],
 			"back" if side == "player" else "front", shiny[0], shiny[1])
+		var model: Node = _model_presenter()
+		if model != null:
+			for row_index in 2:
+				model.set_combatant(model.actor_index(controllers[row_index]), species[row_index], shiny[row_index])
 		for controller: String in controllers:
 			var position: Dictionary = active.get(controller, {})
 			_set_native_status(controller, str(position.get("status", "")) if not position.get("fainted", false) else "")
+	var model: Node = _model_presenter()
+	if model != null:
+		var roster: Array[String] = []
+		for controller: String in ["p1", "p2", "p3", "p4"]:
+			var index: int = model.actor_index(controller)
+			roster.append(model._combatant_key(index))
+		var roster_key := "|".join(roster)
+		if roster_key != _model_roster_key:
+			_model_roster_key = roster_key
+			_prepare_model_roster.call_deferred()
 	_position_coop_stat_overlays.call_deferred()
 
 
@@ -737,6 +810,9 @@ func _set_native_status(controller: String, status: String) -> void:
 	var overlay: StatusConditionOverlay = _status_overlays.get(controller) as StatusConditionOverlay
 	if overlay != null:
 		overlay.set_condition(status if SettingsManager.battle_animations else "")
+	var model: Node = _model_presenter()
+	if model != null and controller in SLOTS:
+		model.set_sleeping(model.actor_index(controller), status.to_lower() in ["slp", "sleep", "sleeping"])
 
 
 func _position_coop_stat_overlays() -> void:
@@ -1256,6 +1332,20 @@ func _refresh_target_highlight() -> void:
 	for controller: String in SLOTS:
 		var target: Button = cards[controller].target
 		var sprite := _native_sprite(controller)
+		var model: Node = _model_presenter()
+		if model != null and model.handles(controller):
+			var outline := StyleBoxFlat.new()
+			outline.bg_color = Color.TRANSPARENT
+			outline.border_color = Color("67e8bf")
+			outline.set_border_width_all(2 if target.visible and controller == selected_target else 0)
+			outline.set_corner_radius_all(18)
+			for state: String in ["normal", "hover", "pressed", "focus"]:
+				target.add_theme_stylebox_override(state, outline)
+			if sprite != null:
+				sprite.material = _target_sprite_materials.get(controller)
+			continue
+		for state: String in ["normal", "hover", "pressed", "focus"]:
+			target.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 		if sprite != null:
 			sprite.material = _target_glow_material if target.visible and controller == selected_target else _target_sprite_materials.get(controller)
 
@@ -1362,6 +1452,8 @@ func _send_out_message(controller: String, details: String) -> String:
 func _animate_event(event: Dictionary, batch: Array = []) -> void:
 	if _native_mode:
 		_show_trainer_for_event(event)
+		var model: Node = _model_presenter()
+		var controller := str(event.get("actor", ""))
 		match str(event.get("kind", "")):
 			"coopcapture":
 				_capture_target_controller = str(event.get("target", ""))
@@ -1374,18 +1466,40 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 				_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
 			"move":
 				if SettingsManager.battle_animations:
-					await _play_native_attack(str(event.get("actor", "")))
+					if model != null and model.handles(controller):
+						await model.play_action(controller, model.attack_action_for(str(event.get("move", "")), controller))
+					else:
+						await _play_native_attack(controller)
 					await _play_native_catalog_move(event, batch)
 			"-damage", "-heal":
 				if SettingsManager.battle_animations and event.get("kind") == "-damage":
-					await _play_native_hit(str(event.get("actor", "")))
+					if model != null and model.handles(controller):
+						await model.play_action(controller, "damage")
+					else:
+						await _play_native_hit(controller)
 				_apply_native_event_hp(event)
+			"faint":
+				if SettingsManager.battle_animations and model != null and model.handles(controller):
+					await model.play_action(controller, "faint_start")
+				_set_native_status(controller, "")
+			"switch", "drag", "replace":
+				if model != null and controller in SLOTS:
+					if SettingsManager.battle_animations and model.handles(controller):
+						await model.recall(controller)
+					var details := str(event.get("details", ""))
+					model.set_combatant(model.actor_index(controller), details.split(",")[0].strip_edges(),
+						details.to_lower().contains("shiny"), true)
+					await model.await_prepared()
+					if SettingsManager.battle_animations and model.handles(controller):
+						model.set_actor_shown(model.actor_index(controller), false)
+						await model.send_out(controller)
+				_set_native_status(controller, "")
 			"-status":
 				_set_native_status(str(event.get("actor", "")), str(event.get("status", "")))
 			"-boost", "-unboost":
 				if SettingsManager.battle_animations:
 					await _play_native_stat_change(str(event.get("actor", "")), -1 if event.get("kind") == "-unboost" else 1)
-			"-curestatus", "faint", "switch", "drag", "replace":
+			"-curestatus":
 				_set_native_status(str(event.get("actor", "")), "")
 			"-mega", "-primal":
 				if SettingsManager.battle_animations:
@@ -1438,6 +1552,12 @@ func _update_coop_sprite_hover() -> void:
 	for controller: String in SLOTS:
 		var sprite := _native_sprite(controller)
 		if sprite == null or not sprite.visible:
+			continue
+		var model: Node = _model_presenter()
+		if model != null and model.handles(controller):
+			if model.actor_visual_rect(controller).grow(12.0).has_point(mouse):
+				hovered = controller
+				break
 			continue
 		var box: Control = embedded_hosts["player_sprite"] if controller in ["p1", "p3"] else embedded_hosts["enemy_sprite"]
 		if (box.call("_get_sprite_hover_rect", sprite) as Rect2).has_point(mouse):

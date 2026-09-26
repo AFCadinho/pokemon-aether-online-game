@@ -35,7 +35,8 @@ func _run() -> void:
 	settings.battle_presentation_mode = "2.5d"
 	assert(Renderer.supported("Dragonite", false, false, false))
 	assert(Renderer.supported("Dragonite", true, false, false))
-	for args in [["Eevee", false, false, false], ["Gastly", true, false, false], ["Dragonite", false, true, false], ["Dragonite", false, false, true]]:
+	assert(Renderer.supported("Dragonite", false, true, false))
+	for args in [["Definitely Not A Pokémon", false, false, false], ["Definitely Not A Pokémon", true, false, false], ["Dragonite", false, false, true]]:
 		assert(not Renderer.supported.callv(args))
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	var screen_host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
@@ -224,7 +225,7 @@ func _run() -> void:
 		stage.cancel_actions()
 		for frame in 3:
 			await process_frame
-		stage.set_combatant(1, "Roaring Moon", true)
+		stage.set_combatant(1, "Definitely Not A Pokémon", false)
 		await process_frame
 		await process_frame
 		assert(not stage.active and battle.player_sprite_box.single_sprite.self_modulate.a == 1)
@@ -349,8 +350,8 @@ func _run() -> void:
 		assert(not stage.active and stage.packed.is_empty())
 		assert(Renderer.ModelCache.items.is_empty() and Renderer.ModelCache.source_bytes == 0)
 		assert(stage.viewport == null and old_viewport.get_ref() == null)
-		assert(stage.material_response.viewport == null and stage.material_response.pairs == [[], []])
-		assert(stage.actors == [null, null] and stage.pending_entries.is_empty())
+		assert(stage.material_response.viewport == null and stage.material_response.pairs == [[], [], [], []])
+		assert(stage.actors == [null, null, null, null] and stage.pending_entries.is_empty())
 		assert(not battle.player_sprite_box.presentation_anchor.is_valid())
 		assert(battle.player_sprite_box.single_sprite.self_modulate.a == 1)
 		# Cancel a fresh in-flight request, then let the detached drain finish.
