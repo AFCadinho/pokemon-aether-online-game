@@ -57,3 +57,20 @@ Next, review the normal forms visually and in real battles, route visible
 failures to the queue, then produce and qualify shiny variants for the accepted
 normal forms. Only pairs passing those gates should enter the individual-bundle
 approval and distribution workflow.
+
+## Local Pokédex and summary-card preview
+
+The 81 normal candidates are staged in the local debug preview manifest at
+`/home/adinho/Documents/3d_models/PokeAether/catalog-production-02-review/catalog.json`.
+From the development frontend, run
+`python tools/sprite_factory/launch_catalog_batch_02_review.py` to open the
+game with that manifest. Set Battle presentation to 3D, then inspect a species
+in the Pokédex or summary card. The summary play menu includes both physical
+attacks. This preview uses exact SCN hashes from the batch-02 results and
+rejects shiny, blocked, duplicate or changed scenes. The reviewed battle
+registry, launcher packs and release bundles are unchanged.
+
+Focused UI checks admitted all 81 identities, rejected their shiny variants
+and held species, and loaded Pupitar, Dialga and Zoroark in both screens with
+eight clips and no Godot errors. The older batch-01 preview check also passes
+for its four remaining unapproved normal candidates.

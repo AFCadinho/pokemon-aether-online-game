@@ -97,9 +97,8 @@ func _fit_model() -> void:
 	for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or not mesh.is_visible_in_tree():
 			continue
-		var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
-		for surface in posed.get_surface_count():
-			var vertices: PackedVector3Array = posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+		for surface in mesh.mesh.get_surface_count():
+			var vertices: PackedVector3Array = mesh.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
 			for vertex in vertices:
 				var point := mesh.global_transform * vertex
 				bounds = bounds.expand(point) if found else AABB(point, Vector3.ZERO)

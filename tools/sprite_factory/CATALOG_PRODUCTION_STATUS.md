@@ -15,6 +15,9 @@ placement/animation qualification and shiny review are still pending. No new
 model was approved, activated, bundled or uploaded. See
 [batch 02 review](CATALOG_PRODUCTION_BATCH_02_REVIEW.md) and the pinned
 [per-species results](catalog_production_batch_02_results.json).
+The 81 normal candidates are available in the local desktop debug Pokédex and
+summary preview through a separate hash-pinned manifest; this does not grant
+battle or distribution approval.
 
 ## Active decision
 

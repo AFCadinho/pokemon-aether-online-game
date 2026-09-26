@@ -13,6 +13,8 @@ func _run() -> void:
 	assert(FileAccess.file_exists(path))
 	var entries: Array = JSON.parse_string(FileAccess.get_file_as_string(path))
 	assert(entries.size() == 18)
+	var pending: Array = entries.filter(func(entry: Dictionary) -> bool: return not Registry.supports(entry.species))
+	assert(pending.size() >= 2)
 	var settings := root.get_node("SettingsManager")
 	var old_mode: String = settings.battle_presentation_mode
 	settings.battle_presentation_mode = "3d" # In-memory test setting, never saved.
@@ -25,8 +27,7 @@ func _run() -> void:
 	var button := MenuButton.new()
 	root.add_child(button)
 	summary.bind_animation_button(button)
-	for entry: Dictionary in entries:
-		assert(not Registry.supports(entry.species), "Preview admission must not grant battle approval")
+	for entry: Dictionary in pending:
 		assert(not Review.resolve(entry.species).is_empty())
 		assert(Review.resolve(entry.species + "@shiny").is_empty())
 		assert(dex.show_species(entry.species, false))
@@ -45,22 +46,23 @@ func _run() -> void:
 			summary.play_clip(str(button.get_popup().get_item_metadata(i)))
 			assert(summary.player.is_playing())
 		print("LOCAL_REVIEW_PREVIEW_OK ", entry.species)
-	assert(not dex.show_species("charmeleon", true))
+	var first_pending: String = pending[0].species
+	assert(not dex.show_species(first_pending, true))
 	assert(Review.resolve("venomoth").is_empty())
 	assert(Review.resolve("unknown").is_empty())
 	settings.battle_presentation_mode = "2.5d"
-	assert(not dex.show_species("charmeleon", false))
+	assert(not dex.show_species(first_pending, false))
 	settings.battle_presentation_mode = old_mode
 	var negative := ProjectSettings.globalize_path("user://local-model-review-negative.json")
 	OS.set_environment("POKEAETHER_PREVIEW_REVIEW_CATALOG", negative)
-	var first: Dictionary = entries[0].duplicate(true)
+	var first: Dictionary = pending[0].duplicate(true)
 	_write(negative, [first, first])
 	assert(Review.resolve(first.species).is_empty(), "Duplicate identities rejected")
 	first.runtime_sha256 = "0".repeat(64)
 	_write(negative, [first])
 	assert(Review.resolve(first.species).is_empty(), "Unknown digest rejected")
-	first = entries[0].duplicate(true)
-	first.runtime_path = entries[1].runtime_path
+	first = pending[0].duplicate(true)
+	first.runtime_path = pending[1].runtime_path
 	_write(negative, [first])
 	assert(Review.resolve(first.species).is_empty(), "Wrong scene bytes rejected")
 	OS.set_environment("POKEAETHER_PREVIEW_REVIEW_CATALOG", path)
@@ -69,7 +71,7 @@ func _run() -> void:
 	button.queue_free()
 	for frame in 4:
 		await process_frame
-	print("LOCAL_REVIEW_CHECK_OK 18 models / two previews / seven clips / strict admission / fallbacks")
+	print("LOCAL_REVIEW_CHECK_OK ", pending.size(), " pending models / two previews / seven clips / strict admission / fallbacks")
 	quit()
 
 func _write(path: String, data: Variant) -> void:
