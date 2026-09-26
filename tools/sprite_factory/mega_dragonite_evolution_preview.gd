@@ -2,7 +2,8 @@ extends SceneTree
 ## Local 3D form-change review. Loads external candidate scenes; changes no catalog.
 
 const SPARK = preload("res://tools/sprite_factory/mega_evolution_preview_assets/spark_04.png")
-const MEGA_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav")
+const CHARGE_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution1.wav")
+const REVEAL_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav")
 const CHARGE_SECONDS := 1.35
 const APPEAL_SECONDS := 181.0 / 60.0
 const TOTAL_SECONDS := CHARGE_SECONDS + APPEAL_SECONDS + 0.35
@@ -17,7 +18,8 @@ var sparkles: Array[MeshInstance3D] = []
 var rings: Array[MeshInstance3D] = []
 var flash: MeshInstance3D
 var status: Label
-var sound: AudioStreamPlayer
+var charge_sound: AudioStreamPlayer
+var reveal_sound: AudioStreamPlayer
 var running := false
 var swapped := false
 var elapsed := 0.0
@@ -68,9 +70,12 @@ func _run() -> void:
 		return
 	_build_effect()
 	_build_controls()
-	sound = AudioStreamPlayer.new()
-	sound.stream = MEGA_SOUND
-	root.add_child(sound)
+	charge_sound = AudioStreamPlayer.new()
+	charge_sound.stream = CHARGE_SOUND
+	root.add_child(charge_sound)
+	reveal_sound = AudioStreamPlayer.new()
+	reveal_sound.stream = REVEAL_SOUND
+	root.add_child(reveal_sound)
 	_reset()
 	autoquit = OS.get_environment("POKEAETHER_MEGA_PREVIEW_AUTOQUIT") == "1"
 	screenshot_dir = OS.get_environment("POKEAETHER_MEGA_PREVIEW_SCREENSHOTS")
@@ -221,8 +226,10 @@ func _reset() -> void:
 	mega_actor.visible = false
 	base_player.play("idle")
 	mega_player.play("idle")
-	if sound != null:
-		sound.stop()
+	if charge_sound != null:
+		charge_sound.stop()
+	if reveal_sound != null:
+		reveal_sound.stop()
 	_set_effect(0.0)
 	status.text = "Gewone Dragonite · klaar voor Mega Evolution"
 
@@ -230,7 +237,7 @@ func _start() -> void:
 	_reset()
 	running = true
 	captured.clear()
-	sound.play()
+	charge_sound.play()
 	status.text = "Mega-energie verzamelt zich rond Dragonite"
 
 func _set_effect(time: float) -> void:
@@ -267,6 +274,7 @@ func _process(delta: float) -> bool:
 		base_actor.visible = false
 		mega_actor.visible = true
 		mega_player.play("mega_appeal")
+		reveal_sound.play()
 		status.text = "Mega Dragonite · oorspronkelijke ZA Mega-pose"
 		print("MEGA_PREVIEW_SWAP native_appeal=", mega_player.has_animation("mega_appeal"))
 	if swapped:
