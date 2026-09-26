@@ -29,6 +29,34 @@ strictly higher code and the same package ID and signing key. Upload the
 immutable APK, verify it on the server, and only then replace the manifest.
 Publishing is a separate release operation.
 
+## Signed release candidate in GitHub Actions
+
+`.github/workflows/build-android.yml` is a manual build. Supply a display
+version and an Android version code higher than the code in `export_presets.cfg`.
+The workflow stamps one immutable build ID into the game, builds an ARM64 APK,
+checks its package/version/signing certificate, and uploads the APK plus a
+matching `manifest-android.json` as a private workflow artifact. It does not
+upload anything to the update server or change the live manifest.
+
+Configure these GitHub Actions secrets before running a signed build:
+
+- `ANDROID_RELEASE_KEYSTORE_BASE64`: base64 of the permanent release keystore.
+- `ANDROID_RELEASE_KEY_ALIAS`: alias of the release key.
+- `ANDROID_RELEASE_KEY_PASSWORD`: keystore and key password (Godot requires the
+  same password for both).
+- `ANDROID_RELEASE_CERT_SHA256`: SHA-256 fingerprint of that key's certificate,
+  checked against the exported APK.
+
+Back up the keystore and password outside the repository before distributing
+the first signed APK. Keep the same package ID, signing certificate, and an
+increasing version code for every later upgrade. Debug APKs use a different
+certificate; Android cannot install a release APK over the locally tested
+debug APK without removing the debug app and its data first.
+
+The workflow downloads the pinned music source archive from the existing
+update domain for Godot import. Its checksum and size are verified before use.
+Running the workflow and publishing its artifact are separate operations.
+
 The ignored `android/build` directory is generated from Godot 4.6.2's
 `android_source.zip`. Before a Gradle export, run:
 

@@ -883,8 +883,9 @@ Consider public support only after:
 
 - [x] Android checks a platform manifest, verifies an APK and blocks outdated gameplay until installation.
 - [x] Local debug APK upgraded from version code 1 to 2 through Android's installer; session and music data survived.
-- [ ] Android checks added to the project test runner.
-- [ ] Android CI workflow added.
+- [x] Android APK updater check added to the project test runner.
+- [x] Manual Android CI workflow prepares a signed release candidate and a manifest for review; a CI run remains open.
+- [x] Local release APK exported with a disposable test key; package, version, certificate and manifest metadata verified.
 - [ ] Stable alpha signing configured in secrets.
 - [ ] Signed APK upgrade preserves app data.
 - [ ] Closed-alpha device matrix completed.
