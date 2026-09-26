@@ -7,7 +7,7 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	for id in ["forest", "sea", "route_1", "route_1_water", "route_22", "route_22_water"]:
+	for id in ["forest", "sea", "route_1", "route_1_water", "route_22", "route_22_water", "route_3"]:
 		assert(Arenas.uses_outdoor_lighting(id))
 		assert(Arenas.definition(id).lighting == "outdoor")
 	for id in ["classic", "cave", "stadium"]:

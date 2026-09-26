@@ -42,6 +42,8 @@ static func resolve(context: Dictionary) -> StringName:
 			return &"route_1"
 		if map_id == "kanto_route_22":
 			return &"route_22"
+		if map_id == "kanto_route_3":
+			return &"route_3"
 
 	if battle_kind == "wild":
 		if bool(context.get("player_on_tall_grass", false)):
