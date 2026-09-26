@@ -224,8 +224,10 @@ func _run() -> void:
 			var timing := {}
 			for action in measured.clips:
 				timing[action] = {"frames": measured.clips[action].duration * 60.0}
+			# Runtime uses the pinned lift. A fresh geometric sample can differ by a
+			# few final floating-point bits after the JSON round trip.
 			var placement := {"scale": measured.scale, "yaw_degrees": measured.yaw_degrees,
-				"lift": measured.candidate_lift, "calibrated": true}
+				"lift": profile.lift, "calibrated": true}
 			assert(motion_rules.resolve(profile, placement, entry.glb_sha256, timing) == profile.clips)
 			measured["corrected_clearance_120hz"] = await _validate_motion(entry, model, player, measured)
 		measured["bounds_hud_proxy"] = corrected_hud

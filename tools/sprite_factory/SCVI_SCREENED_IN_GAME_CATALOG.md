@@ -1,7 +1,7 @@
 # Local screened 3D test catalog
 
-**Current status:** 55 of the original 75 normal models now have approved
-normal/shiny pairs; 20 remain normal-only screened candidates. The original
+**Current status:** 61 of the original 75 normal models now have approved
+normal/shiny pairs; 14 remain normal-only screened candidates. The original
 75-entry local catalog still loads each model under its current reviewed or
 screened status. See [the screened-100 battle approval](SCREENED_100_BATTLE_APPROVAL.md).
 
@@ -19,11 +19,11 @@ SCN SHA-256 and native action timings. The presenter ignores placement/timing
 supplied by a selected local catalog. A changed model fails before import. The
 14 additional normal/shiny pairs from batch 01 moved to the reviewed registry;
 see [their playable review record](CATALOG_BATCH_01_PLAYABLE_REVIEW.md). The
-screened-100 approval later moved 55 more, leaving 20 normal-only screened
-entries.
+screened-100 approval later moved 55 more, and placement recovery moved six,
+leaving 14 normal-only screened entries.
 The older portable reviewed-model pack still contains the original seven pairs.
 
-The remaining 20 screened candidates have no arena-grounding, motion-clearance
+The remaining 14 screened candidates have no arena-grounding, motion-clearance
 or shiny qualification. The presenter retains its safe classic 3D floor
 fallback whenever one is active. A shiny screened form, unsupported form,
 double battle or Substitute falls back to 2.5D. The reviewed pairs have
@@ -65,5 +65,6 @@ the in-game review is complete.
   through the regular background integrity/import path.
 - Existing 43 SCVI and 16 portable model-pack tests still pass.
 
-The remaining screened entries are a local review boundary. The 55 approved
-pairs have their own individual local bundles; publishing them is separate.
+The remaining screened entries are a local review boundary. The 61 approved
+pairs have their own individual bundles; publishing the six newest bundles is
+separate.

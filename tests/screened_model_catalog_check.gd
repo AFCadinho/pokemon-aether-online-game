@@ -27,16 +27,16 @@ func _run() -> void:
 			assert(Registry.supports(Registry.key(entry.species, true)))
 	# Exercise unrelated candidate scenes through the normal asynchronous
 	# integrity/import path. No battle scene or arena-grounding claim is made.
-	stage.set_combatant(0, "charizard")
-	stage.set_combatant(1, "corviknight")
+	stage.set_combatant(0, "cloyster")
+	stage.set_combatant(1, "ditto")
 	var deadline := Time.get_ticks_msec() + 30000
 	while stage._models_pending():
 		stage._import_next_model()
 		assert(Time.get_ticks_msec() < deadline)
 		await process_frame
-	assert(stage.packed.has("charizard") and stage.packed.has("corviknight"))
+	assert(stage.packed.has("cloyster") and stage.packed.has("ditto"))
 	assert(stage.failed_models.is_empty())
 	assert(stage._screened_arena_review())
 	stage.free()
-	print("SCREENED_MODEL_CATALOG_OK original_entries=", raw.size(), " imported=charizard,corviknight")
+	print("SCREENED_MODEL_CATALOG_OK original_entries=", raw.size(), " imported=cloyster,ditto")
 	quit()

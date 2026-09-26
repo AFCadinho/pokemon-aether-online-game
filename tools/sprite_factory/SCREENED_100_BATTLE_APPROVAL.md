@@ -1,5 +1,11 @@
 # Screened 100 cohort: battle approval
 
+**Later result:** all six battle-placement holds were recovered and approved
+with smaller, measured battle scales. The reviewed catalog now has 82 pairs;
+14 source/material holds remain. The first 55 bundles are on R2 in release v3;
+the six recovery bundles are local. See
+[`SCREENED_100_PLACEMENT_RECOVERY.md`](SCREENED_100_PLACEMENT_RECOVERY.md).
+
 The user confirmed the earlier visual review and authorized acceptance of
 models that pass the machine checks. The 61 normal/shiny technical pairs from
 [`screened_100_shiny_production_results.json`](screened_100_shiny_production_results.json)
