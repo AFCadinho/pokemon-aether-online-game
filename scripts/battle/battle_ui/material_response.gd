@@ -11,9 +11,9 @@ var viewport: SubViewport
 var world: Node3D
 var camera: Camera3D
 var source_world_id := 0
-var source_ids := [0, 0]
-var copies: Array = [null, null]
-var pairs: Array = [[], []]
+var source_ids := [0, 0, 0, 0]
+var copies: Array = [null, null, null, null]
+var pairs: Array = [[], [], [], []]
 var sync_count := 0
 
 static func apply_neutral_lighting(target: Node3D) -> void:
@@ -105,9 +105,9 @@ func _drop() -> void:
 	world = null
 	camera = null
 	source_world_id = 0
-	source_ids = [0, 0]
-	copies = [null, null]
-	pairs = [[], []]
+	source_ids = [0, 0, 0, 0]
+	copies = [null, null, null, null]
+	pairs = [[], [], [], []]
 
 func _build() -> void:
 	source_world_id = stage.world.get_instance_id()
@@ -163,7 +163,7 @@ func _process(_delta: float) -> void:
 		return
 	if source_world_id != 0 and source_world_id != stage.world.get_instance_id():
 		_drop()
-	for index in 2:
+	for index in stage.actors.size():
 		var source: Node = stage.actors[index]
 		var id := source.get_instance_id() if is_instance_valid(source) else 0
 		if id == source_ids[index]:

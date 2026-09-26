@@ -899,6 +899,8 @@ func setup_coop_battle() -> bool:
 	enemy_sprite_box.web_sprite_upgrades_allowed = OS.has_feature("web")
 	player_sprite_box.set_battle_type(true)
 	enemy_sprite_box.set_battle_type(true)
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_double_mode(true)
 	player_hud_panel.set_double_layout(true)
 	enemy_hud_panel.set_double_layout(true)
 	player_hud_panel.offset_left = 80.0
@@ -958,6 +960,7 @@ func setup_coop_battle() -> bool:
 	coop_presenter.embedded_hosts = {"stage": battle_stage, "prompt": current_action_panel, "rail": battle_log_rail,
 		"dock_content": dock_content,
 		"capture_player": capture_ball_animation_player,
+		"model_presenter": animation_router.model_presenter,
 		"player_sprite": player_sprite_box, "enemy_sprite": enemy_sprite_box,
 		"player_hud": player_hud_panel, "enemy_hud": enemy_hud_panel,
 		"moves": moves_grid, "log": battle_log_panel, "utility": action_buttons,

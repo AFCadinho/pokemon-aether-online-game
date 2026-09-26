@@ -1,6 +1,6 @@
 extends Control
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
-## Missing models/forms/doubles/substitute fall back as a pair, never guessing art.
+## Missing models/forms/substitute fall back as a whole battle, never guessing art.
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
@@ -44,7 +44,7 @@ var ground_offsets := {}
 var placements := {}
 var motion_clips := {}
 var visual_bounds := {}
-var motion_offsets := [0.0, 0.0]
+var motion_offsets := [0.0, 0.0, 0.0, 0.0]
 var arena_preparing := false
 var material_response: Node
 var boxes: Array = []
@@ -59,19 +59,19 @@ var catalog_calibration := {}
 var validated_entries := {}
 var failed_models := {}
 var packed := {}
-var actors: Array = [null, null]
-var players: Array = [null, null]
-var staged_mega_species := ["", ""]
-var mega_effects := [null, null]
-var identities := ["", ""]
-var restoring := ["idle", "idle"]
+var actors: Array = [null, null, null, null]
+var players: Array = [null, null, null, null]
+var staged_mega_species := ["", "", "", ""]
+var mega_effects := [null, null, null, null]
+var identities := ["", "", "", ""]
+var restoring := ["idle", "idle", "idle", "idle"]
 var loaded_path := "!unloaded"
 var active := false
 var saved_colors := {}
 var reason := "2.5D selected"
 var catalog_problem := ""
-var current_actions := ["idle", "idle"]
-var resting := [true, true]
+var current_actions := ["idle", "idle", "idle", "idle"]
+var resting := [true, true, true, true]
 var mode_label: Label
 var pending_entries: Array = []
 var import_times_ms := {}
@@ -238,7 +238,9 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 				if not _models_pending() and _actors_resolved():
 					return
 			if render_under_cover:
-				var has_combatants: bool = not combatants[0].species.is_empty() or not combatants[1].species.is_empty()
+				var has_combatants := false
+				for index in _slot_count():
+					has_combatants = has_combatants or not combatants[index].species.is_empty()
 				if not catalog_problem.is_empty() or (not active and has_combatants):
 					# Give _process time to resolve combatants before accepting fallback.
 					quiet_frames += 1
@@ -281,12 +283,14 @@ func _ensure_downloaded_models() -> void:
 	while is_instance_valid(model_downloader):
 		await get_tree().process_frame
 	var needed: Array[String] = []
-	for index in 2:
+	for index in _slot_count():
 		var box: Node = boxes[index] if index < boxes.size() else null
-		if box != null and (box.double_container.visible or box.substitute_active):
+		if box != null and (box.substitute_active or (box.double_container.visible and not double_mode)):
 			return
 		if str(combatants[index].species).is_empty():
 			continue
+		if not _supports_combatant(combatants[index].species, combatants[index].shiny, double_mode, false):
+			return
 		var identity := _combatant_key(index)
 		if not identity.is_empty() and identity not in needed:
 			needed.append(identity)
@@ -312,17 +316,42 @@ func _ensure_downloaded_models() -> void:
 	if not new_path.is_empty() and new_path != old_path:
 		OS.set_environment("POKEAETHER_MODEL_CATALOG", new_path)
 		_load_catalog(new_path)
-var action_generation := [0, 0]
+var action_generation := [0, 0, 0, 0]
 var camera_phase := 0.0
-var combatants := [{"species": "", "shiny": false}, {"species": "", "shiny": false}]
-var actor_shown := [true, true]
-var actor_scale := [1.0, 1.0]
-var transition_tweens: Array = [null, null]
-var transition_generation := [0, 0]
-var lifecycle := ["empty", "empty"]
+var combatants := [{"species": "", "shiny": false}, {"species": "", "shiny": false},
+	{"species": "", "shiny": false}, {"species": "", "shiny": false}]
+var actor_shown := [true, true, true, true]
+var actor_scale := [1.0, 1.0, 1.0, 1.0]
+var transition_tweens: Array = [null, null, null, null]
+var transition_generation := [0, 0, 0, 0]
+var lifecycle := ["empty", "empty", "empty", "empty"]
+var double_mode := false
 var playback_speed := 1.0
 var move_categories := {}
 const CAMERA_HOME := Vector3(4, 5.5, 12)
+
+func _slot_count() -> int:
+	return 4 if double_mode else 2
+
+func set_double_mode(enabled: bool) -> void:
+	if double_mode == enabled:
+		return
+	_set_active(false)
+	if viewport != null:
+		_clear_actors()
+		material_response._drop()
+		render_surface.texture = null
+		if forest_lease.is_empty():
+			viewport.queue_free()
+		else:
+			_release_forest()
+		viewport = null
+		world = null
+		camera = null
+		arena_root = null
+	double_mode = enabled
+	for index in 4:
+		set_combatant(index, "", false, true)
 
 func attack_action_for(move_name: String, actor: String = "") -> String:
 	if move_categories.is_empty():
@@ -358,7 +387,10 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 		_action("reset", index)
 
 func actor_index(ident: String) -> int:
-	return 0 if ident.begins_with("p1") else (1 if ident.begins_with("p2") else -1)
+	for index in _slot_count():
+		if ident.begins_with("p" + str(index + 1)):
+			return index
+	return -1
 
 func handles(ident: String) -> bool:
 	var index := actor_index(ident)
@@ -378,7 +410,7 @@ func set_sleeping(index: int, sleeping: bool) -> void:
 		_action("reset", index)
 
 func cancel_actions() -> void:
-	for index in 2:
+	for index in _slot_count():
 		staged_mega_species[index] = ""
 		if is_instance_valid(mega_effects[index]):
 			mega_effects[index].cancel()
@@ -542,7 +574,7 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	process_priority = 10
 
 static func supported(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
-	return ReviewedModels.supports(ReviewedModels.key(species, shiny)) and not double and not substitute
+	return ReviewedModels.supports(ReviewedModels.key(species, shiny)) and not substitute
 
 # Narrow override points for the offline candidate harness. The production
 # renderer never reads candidate allowlists or motion profiles from Settings.
@@ -660,7 +692,7 @@ func _build_classic_ground() -> void:
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(80, 80)
 	_mesh(plane, Vector3(0, -0.1, 0), Color("405651"))
-	for i in 2:
+	for i in _slot_count():
 		var cylinder := CylinderMesh.new()
 		cylinder.top_radius = 2.3
 		cylinder.bottom_radius = 2.4
@@ -668,7 +700,10 @@ func _build_classic_ground() -> void:
 		_mesh(cylinder, _position(i) - Vector3(0, 0.05, 0), Color("879b8a"))
 
 func _position(index: int) -> Vector3:
-	var point := ArenaCatalog.spawn(index) + ArenaCatalog.battle_origin(arena_id)
+	var point := ArenaCatalog.spawn(index % 2) + ArenaCatalog.battle_origin(arena_id)
+	if double_mode:
+		# Keep both partners apart in the default camera while preserving their side.
+		point += Vector3(0.949, 0.0, -0.316) * (1.65 if index >= 2 else -1.65)
 	if is_instance_valid(arena_root):
 		point.y = float(arena_root.get_meta("surface_height",0.0))
 	return point
@@ -797,12 +832,14 @@ func _needed_species() -> Array[String]:
 	for platform in platforms:
 		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
 			return []
-	for index in 2:
+	for index in _slot_count():
 		var box: Node = boxes[index] if index < boxes.size() else null
-		var double: bool = box != null and box.double_container.visible
+		if box != null and box.double_container.visible and not double_mode:
+			return []
+		var double: bool = double_mode
 		var substitute: bool = box != null and box.substitute_active
 		var species: String = combatants[index].species
-		if species.is_empty() and not double and not substitute:
+		if species.is_empty() and not substitute:
 			continue
 		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
 			return [] # Pair fallback must not import unused art.
@@ -817,7 +854,7 @@ func _needed_species() -> Array[String]:
 func _actors_resolved() -> bool:
 	if not active:
 		return true # The process loop has resolved a fallback.
-	for index in 2:
+	for index in _slot_count():
 		if identities[index] != _combatant_key(index):
 			return false
 	return true
@@ -956,7 +993,7 @@ func _import_next_model() -> void:
 	loading_scene = null
 
 func _clear_actors() -> void:
-	for i in 2:
+	for i in 4:
 		staged_mega_species[i] = ""
 		if is_instance_valid(mega_effects[i]):
 			mega_effects[i].cancel()
@@ -971,7 +1008,7 @@ func _clear_actors() -> void:
 func _set_active(value: bool) -> void:
 	if active and not value:
 		camera_phase = 0.0
-		for i in 2:
+		for i in 4:
 			staged_mega_species[i] = ""
 			if is_instance_valid(mega_effects[i]):
 				mega_effects[i].cancel()
@@ -1000,6 +1037,9 @@ func _set_active(value: bool) -> void:
 			hidden.append(platform.get_node("PlatformImage"))
 		for box in boxes:
 			hidden.append(box.single_sprite)
+			if double_mode:
+				hidden.append(box.double_sprite_1)
+				hidden.append(box.double_sprite_2)
 			if is_instance_valid(box.dratini_poc_shadow):
 				hidden.append(box.dratini_poc_shadow)
 		for node in hidden:
@@ -1044,6 +1084,12 @@ func _visual_rect(index: int) -> Rect2:
 	var extent := absf(bottom.y - top.y)
 	return Rect2(Vector2(bottom.x - extent * 0.7, top.y), Vector2(extent * 1.4, extent))
 
+func actor_visual_rect(ident: String) -> Rect2:
+	return _visual_rect(actor_index(ident)) if handles(ident) else Rect2()
+
+func actor_anchor(ident: String) -> Vector2:
+	return _anchor(true, actor_index(ident)) if handles(ident) else Vector2.ZERO
+
 func _action(action: String, index: int) -> void:
 	if not active or players[index] == null:
 		return
@@ -1081,7 +1127,10 @@ func _update_camera(delta: float) -> void:
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
-		if resting[0] and resting[1] and current_actions[0] in ["idle", "sleep"] and current_actions[1] in ["idle", "sleep"] and lifecycle[0] in ["idle", "empty", "hidden"] and lifecycle[1] in ["idle", "empty", "hidden"]:
+		var all_resting := true
+		for index in _slot_count():
+			all_resting = all_resting and resting[index] and current_actions[index] in ["idle", "sleep"] and lifecycle[index] in ["idle", "empty", "hidden"]
+		if all_resting:
 			camera_phase += delta * 0.22
 		var origin := ArenaCatalog.battle_origin(arena_id)
 		camera.position = origin + (ArenaCatalog.camera_home(arena_id) - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
@@ -1090,7 +1139,7 @@ func _update_camera(delta: float) -> void:
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
-	offset *= user_camera_zoom
+	offset *= user_camera_zoom * (1.35 if double_mode else 1.0)
 	camera.position = target + offset
 	camera.look_at(target)
 
@@ -1159,16 +1208,20 @@ func _process(delta: float) -> void:
 			reason = "Field hazard/screen presentation uses 2.5D"
 			_set_active(false)
 			return
-	for index in 2:
+	for index in _slot_count():
 		var box: Node = boxes[index] if index < boxes.size() else null
-		var double: bool = box != null and box.double_container.visible
+		if box != null and box.double_container.visible and not double_mode:
+			reason = "Double battle has no four-slot 3D presenter"
+			_set_active(false)
+			return
+		var double: bool = double_mode
 		var substitute: bool = box != null and box.substitute_active
 		var species: String = combatants[index].species
-		if species.is_empty() and not double and not substitute:
+		if species.is_empty() and not substitute:
 			desired.append("")
 			continue
 		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
-			reason = "Unsupported active Pokémon/form, doubles or substitute: " + species
+			reason = "Unsupported active Pokémon/form or substitute: " + species
 			_set_active(false)
 			return
 		var key := _combatant_key(index)
@@ -1196,7 +1249,7 @@ func _process(delta: float) -> void:
 	_set_active(true)
 	_update_camera(delta)
 	reason = "Experimental 3D active"
-	for i in 2:
+	for i in _slot_count():
 		if desired[i].is_empty():
 			action_generation[i] += 1
 			if is_instance_valid(actors[i]):
@@ -1216,7 +1269,7 @@ func _process(delta: float) -> void:
 			if ground_offsets.has(desired[i]):
 				actors[i].position.y += float(ground_offsets[desired[i]].lift)
 			actors[i].scale = Vector3.ONE * float(placements[desired[i]].scale)
-			var direction := _position(1-i) - _position(i)
+			var direction := _position(1 - (i % 2)) - _position(i)
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[desired[i]].yaw_degrees))
 			players[i] = _find_player(actors[i])
 			identities[i] = desired[i]
@@ -1239,7 +1292,7 @@ func _process(delta: float) -> void:
 	_prune_models()
 
 func _exit_tree() -> void:
-	for index in 2:
+	for index in 4:
 		_stop_transition(index)
 	_cancel_load()
 	_set_active(false)

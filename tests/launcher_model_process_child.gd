@@ -29,7 +29,7 @@ func _run() -> void:
 		root.add_child(presenter)
 		presenter.setup()
 		await presenter.await_prepared(true)
-		assert(presenter.active and presenter.actors == [null, null], "Empty Team Preview stalled")
+		assert(presenter.active and presenter.actors == [null, null, null, null], "Empty Team Preview stalled")
 		presenter.set_combatant(0, "pikachu", true)
 		presenter.set_combatant(1, "snorlax")
 		await presenter.await_prepared(true)
