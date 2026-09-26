@@ -78,7 +78,7 @@ func _init() -> void:
 	_check(world_source.contains("_prefetch_current_map_wild_sprites") and world_source.contains("encounterTypes"),
 		"browser maps prefetch their wild encounter pool")
 	_check(world_source.contains("WebPokemonSpriteService.prefetch(priority_entries)") and world_source.contains("await WebPokemonSpriteService.prefetch_and_wait(priority_entries)"),
-		"ordinary encounters wait only for the visible leads while the remaining roster warms in the background")
+		"ordinary encounters prioritize the visible leads while the remaining roster warms in the background")
 	_check(world_source.contains("await _prefetch_web_battle_sprites(response, true)"),
 		"AI and custom team-preview battles can still finish their full-roster prefetch")
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")

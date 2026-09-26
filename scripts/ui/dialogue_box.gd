@@ -42,6 +42,7 @@ var default_mugshot: Texture2D
 
 var is_open := false
 var just_started := false
+var touch_input_enabled := false
 var quest_offer_open := false
 var quest_offer_pending := false
 var quest_offer_layout_ready := false
@@ -55,6 +56,7 @@ var current_line_index := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	touch_input_enabled = OS.has_feature("mobile")
 	default_mugshot = npc_sprite.texture
 	quest_offer_decline_button.pressed.connect(_on_quest_offer_declined)
 	quest_offer_accept_button.pressed.connect(_on_quest_offer_accepted)
@@ -80,7 +82,12 @@ func _process(_delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not is_open or quest_offer_open or just_started:
 		return
-	if event is InputEventMouseButton:
+	if touch_input_enabled and event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed:
+			_advance_dialogue()
+			get_viewport().set_input_as_handled()
+	elif not touch_input_enabled and event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
 			_advance_dialogue()

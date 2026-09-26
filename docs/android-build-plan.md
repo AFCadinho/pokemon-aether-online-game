@@ -1,9 +1,43 @@
 # PokeAether Android build plan
 
-Status: proposed
-Target: closed Android alpha, followed by a public beta after validation
+Status: Android V1 implementation in slot A; device gates remain open
+Target: direct APK distribution from the PokeAether website, with Discord linking to it
 Project baseline: Godot 4.6.2, shared client codebase
-Last updated: 2026-07-28
+Last updated: 2026-09-25
+
+Device smoke test (Samsung SM-G780F, Android 13): debug APK installed and
+launched, production server status loaded, login entered the world, and party
+buttons opened a Pokémon window. A missing desktop-only review JSON initially
+caused an Android script compile error; the lazy-load fix removed that error in
+the second device run. Initial fixed touch controls moved the player, but
+overlapped chat. The floating joystick and world-tap prototype now also runs
+on the phone: movement, interaction, chat and UI buttons were confirmed by the
+device tester. A 1.25x mobile content scale, larger quick actions, global buff
+buttons and chat controls, and touch-specific dialogue input are in the device
+build. The tester confirmed a multi-line NPC dialogue and a wild battle. The
+left party rail and battle log fit beneath each other, and the post-battle
+Android log has no sprite-loading script errors. A small login, Route 1 and
+wild-battle music fallback is now bundled. The Android client downloads the
+versioned music pack into `user://`, checks its size and SHA-256, validates ZIP
+paths and required tracks, then activates it after extraction. The first phone
+played login, world and wild-battle music from a local test pack and kept login
+and world music after an offline restart. With explicit production access
+approval, it then downloaded and activated `music-3f2a6df18793` from the public
+updates manifest. A later device build removed an obsolete music directory on
+startup while preserving all 16 tracks in the active pack. Current gaps:
+Android keyboard and safe-area behavior,
+deeper touch coverage across battle menus, and different aspect ratios. This
+is not yet a player release or a full mobile UI validation.
+
+Android crash diagnostics now mark a backgrounded app as clean and mark it
+active again on resume. This prevents Android's normal background process
+termination from producing a false crash prompt on the next launch.
+
+The original July estimates and store-related options below are historical.
+Android V1 uses direct APK distribution and must detect and download a newer
+APK in-app. Android may still require the player to confirm installation.
+No Google Play or Apple App Store release is planned. The app uses 2D sprites
+and the immersive battle view; desktop 3D assets are excluded.
 
 ## 1. Objective
 
@@ -22,6 +56,8 @@ The first milestone is a closed Android alpha that:
   only touch input;
 - safely handles backgrounding, screen locking and network reconnects;
 - preserves the existing Windows, Linux and macOS behavior;
+- detects newer Android releases, downloads a verified APK and opens Android's
+  installation flow without requiring a fresh website or Discord download;
 - passes all existing project checks plus new Android-specific checks.
 
 The first alpha does not need:
@@ -31,7 +67,7 @@ The first alpha does not need:
 - complete tablet-specific layouts;
 - optional Gen 5 animated sprite packs;
 - every desktop drag-and-drop convenience;
-- Android launcher self-updating.
+- silent installation of a replacement APK without Android's confirmation.
 
 ## 2. Current baseline
 
@@ -41,9 +77,10 @@ extensions.
 
 The main gaps are outside the core gameplay:
 
-1. `export_presets.cfg` only defines Windows, Linux and macOS exports.
-2. Movement and interaction actions in `project.godot` currently have keyboard
-   bindings only.
+1. The Android export preset is added and the debug APK has run on one phone;
+   release signing and broader device coverage remain open.
+2. Movement and interaction actions in `project.godot` have keyboard bindings;
+   the mobile control scene now generates those same actions from touch.
 3. The UI contains mouse-, right-click- and drag-specific interactions.
 4. Desktop display code also runs on non-web platforms and therefore needs a
    mobile exclusion.
@@ -88,14 +125,38 @@ Official reference:
 
 ### 3.3 Use a normal Android app, not a launcher app
 
-Android updates the application package through an APK or store-delivered AAB.
-The Android client must not download and execute a replacement game binary.
+Android updates the application package through a signed APK. The Android
+client must never download and execute a replacement game binary inside the
+Godot process. It may download a verified APK and invoke the system installer.
 
 The app may download versioned content packs. Application updates and content
 updates are separate:
 
-- APK/AAB: client scripts, scenes and bundled essential resources;
+- APK: client scripts, scenes and bundled essential resources;
 - asset packs: large Pokémon sprites, music and optional visual content.
+
+The release manifest and APK are hosted on the existing updates domain. For
+each release, publish an immutable APK first, verify its size and SHA-256, then
+replace `manifest-android.json`. The manifest's `game.buildId` must match the
+build ID embedded in the APK; the gateway already selects this manifest for
+Android clients. The APK retains the same package name and signing key and has
+a strictly increasing Android `version/code`. The updater offers retry and a
+website fallback if Android rejects the installation. Neither build automation
+nor a GitHub artifact upload publishes a player release without separate
+authorization.
+
+The install handoff needs Android integration beyond GDScript: a `FileProvider`
+must grant the system installer temporary read access to the verified APK using
+a `content://` URI, and the app must declare `REQUEST_INSTALL_PACKAGES`. Check
+`canRequestPackageInstalls()` and lead the player through Android's per-app
+install permission before opening `ACTION_INSTALL_PACKAGE`. Godot's v2 Android
+plugin path uses a Gradle build, so the current template-only export is a
+bootstrap step. Test an upgrade from version code N to N+1 on a real phone
+with the same release key before distributing the first player APK.
+
+References: <https://developer.android.com/reference/android/content/Intent>,
+<https://developer.android.com/reference/androidx/core/content/FileProvider>,
+<https://docs.godotengine.org/en/4.6/tutorials/platform/android/android_plugin.html>.
 
 ### 3.4 Store downloaded content under `user://`
 
@@ -122,8 +183,8 @@ signing key.
 ### 3.5 Start with a closed alpha
 
 The first distribution should be a signed, sideloadable APK for invited
-testers. Store publication is a separate milestone because it adds AAB,
-store-policy, release-signing and broader device-quality requirements.
+testers. The website is the sole binary download location; Discord can point
+players there.
 
 ## 4. Milestone A: Android export bootstrap
 
@@ -133,7 +194,7 @@ Estimated effort: 1-2 focused development days.
 
 - Install and configure:
   - Godot 4.6.2 export templates;
-  - JDK 17;
+  - a supported JDK (local bootstrap currently uses JDK 26);
   - Android SDK and platform tools;
   - `adb`;
   - Android SDK packages recommended by Godot 4.6.
@@ -145,7 +206,9 @@ Estimated effort: 1-2 focused development days.
 - Enable landscape orientation.
 - Enable internet access.
 - Configure Compatibility rendering for Android.
-- Add a stable alpha signing key and keep it outside the repository.
+- Add a stable release signing key and keep it outside the repository. The
+  local export currently uses Godot's disposable debug key and cannot be an
+  upgrade source for players.
 - Make `WindowFit` skip mobile platforms.
 - Make `SettingsManager` skip desktop resolution and window-mode operations on
   mobile.
@@ -163,12 +226,12 @@ Estimated effort: 1-2 focused development days.
 
 ### Acceptance criteria
 
-- [ ] A release-mode ARM64 APK exports successfully.
-- [ ] The APK installs with `adb install`.
-- [ ] The app starts without a native or Godot crash.
-- [ ] The login screen fills a landscape phone display correctly.
-- [ ] The production health/API endpoint is reachable.
-- [ ] Login succeeds on a physical Android device.
+- [x] A debug ARM64 APK exports successfully; release signing remains open.
+- [x] The debug APK installs with `adb install` on the first test phone.
+- [x] The app starts without a native or Godot crash on that phone.
+- [ ] The login screen is readable at a comfortable phone scale.
+- [x] The production health/API endpoint is reachable.
+- [x] Login succeeds on the first physical Android device.
 - [ ] Windows, Linux and macOS export behavior is unchanged.
 
 ## 5. Milestone B: Mobile control layer
@@ -190,11 +253,11 @@ world scene. Avoid placing the implementation directly in the already large
 
 ### Initial control layout
 
-- Bottom left: four-way directional pad.
-- Bottom right: primary interaction button.
-- Context action: fishing or surfing when available.
-- Menu/back button.
-- Optional run toggle if running cannot remain automatic.
+- A short tap on the unobstructed world sends the existing `interact` action.
+- Holding a thumb on the world opens a joystick at that touch position;
+  dragging moves in one of the four cardinal directions.
+- A second finger can tap the world while the first controls movement.
+- Existing menu and context UI remains available through its own touch targets.
 
 The controls should call:
 
@@ -208,14 +271,14 @@ directly.
 
 ### Visibility rules
 
-Show mobile controls when:
+Accept world touches when:
 
 - the local player can receive overworld movement;
 - no blocking modal is active;
 - no text input owns focus;
 - a battle UI is not consuming the screen.
 
-Hide or adapt them when:
+Release the active touch when:
 
 - the login screen is active;
 - a battle is active;
@@ -237,12 +300,15 @@ touch.
 
 ### Acceptance criteria
 
-- [ ] A player can walk one tile and hold a direction continuously.
+- [x] Movement works with the floating joystick on the first test phone;
+      precise single-tile and long-hold behavior still needs a focused pass.
 - [ ] Direction changes do not create diagonal or skipped tile movement.
 - [ ] Multitouch allows holding a direction while pressing interact.
-- [ ] NPC, sign, door, fishing and surfing interactions work.
+- [ ] World interaction works on the first test phone; NPC, sign, door,
+      fishing and surfing scenarios still need separate passes.
 - [ ] Opening a modal releases all held movement actions.
-- [ ] Backgrounding the app releases all held actions.
+- [x] A focused control check confirms pausing the app releases held actions;
+      physical-device backgrounding still needs verification.
 - [ ] Controls do not overlap critical UI on tested aspect ratios.
 
 ## 6. Milestone C: Android asset delivery
@@ -584,9 +650,14 @@ Later release steps:
 
 - inject the release keystore from GitHub Secrets;
 - export a signed release APK for closed distribution;
-- export a signed AAB for store delivery;
 - attach version metadata and checksums;
 - retain the same signing identity for all upgrades.
+
+The workflow must bind the APK `version/code`, `version/name`, and embedded
+`application/config/build_id` to one release record. It uploads a private
+artifact only. Publishing the immutable APK and then `manifest-android.json`
+is a separate, authorized release operation. The manifest includes the APK
+URL, byte count, SHA-256, and matching `game.buildId`.
 
 Never commit:
 
@@ -673,9 +744,8 @@ keyboard, lifecycle and touch behavior.
 - Review how the remembered authentication token is stored.
 - Consider Android Keystore-backed protection for persistent session material.
 - Add crash reporting or a privacy-conscious diagnostic export.
-- Verify current Google Play target SDK and AAB requirements.
-- Review privacy disclosures and store requirements separately from technical
-  build readiness.
+- Review Android target SDK and sideload installation requirements.
+- Review privacy disclosures separately from technical build readiness.
 
 ## 12. Delivery sequence
 
@@ -758,32 +828,36 @@ Consider public support only after:
 
 ### Bootstrap
 
-- [ ] Android SDK and JDK 17 configured locally.
-- [ ] Android export templates installed.
-- [ ] Android export preset added.
-- [ ] ARM64 APK exported and installed.
-- [ ] Compatibility rendering validated.
-- [ ] Desktop window behavior excluded on mobile.
+- [x] Android SDK and JDK configured locally in slot A.
+- [x] Android export templates installed in slot A.
+- [x] Android export preset added.
+- [x] ARM64 debug APK exported and installed on the first test phone.
+- [x] Compatibility rendering displayed login, overworld and a wild battle on
+      the first phone; detailed battle touch coverage remains open.
+- [x] Desktop window resizing and display settings are excluded on mobile.
 
 ### Controls and layout
 
-- [ ] Mobile control scene added.
+- [x] Mobile control scene added and tested on the first phone.
 - [ ] Multitouch movement and interaction work.
-- [ ] Input is released on hide and pause.
+- [x] Focus loss, pause, battle entry and dialogue entry release held movement
+      in focused tests; physical backgrounding remains to be tested.
 - [ ] Safe-area margins implemented.
 - [ ] Android back behavior implemented.
 - [ ] Software keyboard behavior validated.
 
 ### Content
 
-- [ ] Asset pack service added.
-- [ ] First-launch download UI added.
-- [ ] Size and checksum checks implemented.
-- [ ] Safe ZIP extraction implemented.
-- [ ] Atomic staging and activation implemented.
+- [x] Music pack service added; Pokémon sprite pack delivery remains open.
+- [x] First-launch music download UI added; other pack UI remains open.
+- [x] Music pack size and checksum checks implemented.
+- [x] Safe ZIP extraction implemented for music.
+- [x] Atomic staging and activation implemented for music.
 - [ ] Pokémon asset resolver supports `user://`.
-- [ ] Music resolver supports `user://`.
+- [x] Music resolver supports `user://`.
 - [ ] Interrupted-download recovery tested.
+- [x] Old music versions are pruned on the first launch after a successful
+      update, once no music stream uses the replaced pack.
 
 ### Feature parity
 
@@ -807,9 +881,12 @@ Consider public support only after:
 
 ### Delivery
 
-- [ ] Android checks added to the project test runner.
-- [ ] Android CI workflow added.
-- [ ] Stable alpha signing configured in secrets.
-- [ ] Signed APK upgrade preserves app data.
+- [x] Android checks a platform manifest, verifies an APK and blocks outdated gameplay until installation.
+- [x] Local debug APK upgraded from version code 1 to 2 through Android's installer; session and music data survived.
+- [x] Android APK updater check added to the project test runner.
+- [x] Manual Android CI workflow prepares a signed release candidate and a manifest for review; a CI run remains open.
+- [x] Local release APK exported with a disposable test key; package, version, certificate and manifest metadata verified.
+- [x] Stable alpha signing configured in GitHub Secrets; local release APK verified against the pinned certificate. External backup remains open.
+- [x] Permanent-key signed APK upgraded from version code 1 to 2 through the in-app updater and Android installer on an isolated x86_64 emulator; pre-existing app data survived and the downloaded APK was pruned after relaunch. ARM64 release-device coverage remains open.
 - [ ] Closed-alpha device matrix completed.
 - [ ] Public-beta go/no-go review completed.

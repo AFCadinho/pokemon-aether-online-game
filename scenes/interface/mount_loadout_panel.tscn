@@ -4,9 +4,9 @@
 
 [node name="MountLoadoutPanel" type="Control"]
 visible = false
-custom_minimum_size = Vector2(272, 132)
+custom_minimum_size = Vector2(272, 470)
 layout_mode = 1
 offset_right = 272.0
-offset_bottom = 300.0
+offset_bottom = 470.0
 mouse_filter = 2
 script = ExtResource("1_mount_loadout")

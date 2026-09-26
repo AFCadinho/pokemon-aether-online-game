@@ -134,6 +134,9 @@ func load_settings() -> void:
 	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
+	if OS.has_feature("mobile"):
+		battle_presentation_mode = "2.5d"
+		battle_ui_layout = "immersive"
 	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
 	immersive_chat_height = clampf(float(data.get("immersive_chat_height",420.0)),220,800)
 	battle_3d_forest_manifest = str(data.get("battle_3d_forest_manifest", ""))
@@ -279,7 +282,7 @@ func set_battle_animations(enabled: bool) -> void:
 	_save_and_emit()
 
 func set_battle_presentation_mode(mode: String) -> void:
-	var validated := "3d" if mode == "3d" else "2.5d"
+	var validated := "3d" if mode == "3d" and not OS.has_feature("mobile") else "2.5d"
 	if battle_presentation_mode == validated:
 		return
 	battle_presentation_mode = validated
@@ -305,7 +308,7 @@ func set_battle_3d_arena(id: String) -> void:
 	_save_and_emit()
 
 func set_battle_ui_layout(value: String) -> void:
-	battle_ui_layout = "classic" if value == "classic" else "immersive"
+	battle_ui_layout = "classic" if value == "classic" and not OS.has_feature("mobile") else "immersive"
 	_save_and_emit()
 
 func set_immersive_battle_log_open(value: bool) -> void:
@@ -375,6 +378,8 @@ func set_hide_other_players(enabled: bool) -> void:
 
 
 func get_active_sprite_style() -> String:
+	if OS.has_feature("mobile"):
+		return SPRITE_STYLE_ANIMATED
 	return SPRITE_STYLE_PIXEL if ContentPacks.has_sprite_collection_style("gen5") else SPRITE_STYLE_ANIMATED
 
 
@@ -393,6 +398,8 @@ func set_show_performance(enabled: bool) -> void:
 
 
 func set_fullscreen(enabled: bool) -> void:
+	if OS.has_feature("mobile"):
+		return
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.pokeaetherFullscreen?.request(%s)" % ("true" if enabled else "false"), true)
 		return
@@ -405,6 +412,8 @@ func set_fullscreen(enabled: bool) -> void:
 
 
 func set_window_resolution(resolution: Vector2i) -> void:
+	if OS.has_feature("mobile"):
+		return
 	var validated_resolution: Vector2i = _validated_window_resolution(resolution)
 	if window_resolution == validated_resolution:
 		return
@@ -800,6 +809,8 @@ func _apply_audio_bus_volume(bus_name: String, volume: float) -> void:
 
 
 func _apply_display_settings() -> void:
+	if OS.has_feature("mobile"):
+		return
 	if OS.has_feature("web"):
 		# Never enter fullscreen automatically from persisted settings.
 		fullscreen = bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.active())", true))

@@ -592,6 +592,8 @@
   "ui.mounts.land": "土地",
   "ui.mounts.surf": "冲浪",
   "ui.mounts.none_selected": "未选择",
+  "ui.mounts.ride": "骑上坐骑",
+  "ui.mounts.dismount": "下坐骑",
   "ui.mounts.choose": "选择 {type} 安装座",
   "ui.mounts.search": "搜索坐骑",
   "ui.mounts.no_search_results": "没有符合搜索条件的坐骑。",

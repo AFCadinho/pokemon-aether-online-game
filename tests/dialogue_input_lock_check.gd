@@ -25,6 +25,19 @@ func _run() -> void:
 		dialogue_box.has_method("_input"),
 		"dialogue box listens for left mouse input alongside the interaction key"
 	)
+	dialogue_box.set("touch_input_enabled", true)
+	dialogue_box.set("just_started", false)
+	var touch := InputEventScreenTouch.new()
+	touch.pressed = true
+	dialogue_box._input(touch)
+	_check(int(dialogue_box.get("current_line_index")) == 1,
+		"one touch advances one dialogue line")
+	var emulated_mouse := InputEventMouseButton.new()
+	emulated_mouse.button_index = MOUSE_BUTTON_LEFT
+	emulated_mouse.pressed = true
+	dialogue_box._input(emulated_mouse)
+	_check(int(dialogue_box.get("current_line_index")) == 1,
+		"emulated mouse click does not advance a second line on mobile")
 	dialogue_box.hide_dialogue()
 	_check(
 		not bool(game_state.input_locked)

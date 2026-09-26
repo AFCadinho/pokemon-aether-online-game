@@ -8,6 +8,7 @@ const CACHE_LIMIT := 96
 const DOWNLOAD_ATTEMPTS := 3
 const DOWNLOAD_RETRY_SECONDS := 0.35
 const PREFETCH_CONCURRENCY := 4
+const MOBILE_ASSET_ORIGIN := "https://play.pokeaether.com"
 
 class LoadTicket extends RefCounted:
 	signal completed
@@ -23,7 +24,7 @@ var _release_config_ticket: LoadTicket
 
 
 func is_available() -> bool:
-	return OS.has_feature("web")
+	return OS.has_feature("web") or OS.has_feature("mobile")
 
 
 func load_frames(
@@ -164,7 +165,7 @@ func _load_frames_uncached(identity: Dictionary) -> Dictionary:
 			base_root = str((configured_bases as Dictionary).get(side_folder, "")).trim_suffix("/")
 	if base_root == "":
 		var route := "/pokemon-assets/gen5" if catalog_style == "pixel" else "/pokemon-assets/battle"
-		base_root = WebRuntime.api_base_url().trim_suffix("/api") + route + "/" + side_folder
+		base_root = _asset_origin() + route + "/" + side_folder
 	if base_root == "":
 		return {}
 	for candidate_id: String in candidate_ids:
@@ -224,7 +225,7 @@ func _get_release_config() -> Dictionary:
 	var ticket := LoadTicket.new()
 	_release_config_ticket = ticket
 	var result: Dictionary = {}
-	var origin := WebRuntime.api_base_url().trim_suffix("/api")
+	var origin := _asset_origin()
 	if origin != "":
 		var response := await _download(origin + "/web-release-config.json")
 		if not response.is_empty():
@@ -238,6 +239,12 @@ func _get_release_config() -> Dictionary:
 	_release_config_ticket = null
 	ticket.completed.emit()
 	return result
+
+
+func _asset_origin() -> String:
+	if OS.has_feature("web"):
+		return WebRuntime.api_base_url().trim_suffix("/api")
+	return str(ProjectSettings.get_setting("application/config/mobile_asset_origin", MOBILE_ASSET_ORIGIN)).trim_suffix("/")
 
 
 func _has_sprite_styles(config: Dictionary) -> bool:

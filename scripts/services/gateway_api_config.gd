@@ -30,6 +30,12 @@ func get_base_url() -> String:
 	if env_url != "":
 		cached_url = env_url.rstrip("/")
 		return cached_url
+
+	# On an Android debug APK, localhost refers to the phone rather than the
+	# development computer. Keep device testing on a reachable HTTPS gateway.
+	if OS.has_feature("mobile"):
+		cached_url = PRODUCTION_GATEWAY_URL
+		return cached_url
 	
 	# Running a project from Godot uses a debug build but does not necessarily
 	# expose the editor feature to the game process. Keep those local developer

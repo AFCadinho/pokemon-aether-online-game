@@ -1,0 +1,140 @@
+name: Build Android release candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: Android release version
+        default: "0.3.84"
+        required: true
+        type: string
+      version_code:
+        description: New integer Android version code (next release uses 3)
+        default: 3
+        required: true
+        type: number
+
+concurrency:
+  group: build-android-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  GODOT_VERSION: 4.6.2
+  GODOT_RELEASE: stable
+  MUSIC_ASSET_VERSION: music-3f2a6df18793
+  MUSIC_ASSET_SIZE: 49402952
+  MUSIC_ASSET_SHA256: 0b1a376bd7d93e31a72b8b6a49116415f8ec0c6316bf5e1a71f766857119e31a
+
+jobs:
+  build:
+    name: Export signed ARM64 APK for review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Prepare Android SDK
+        run: |
+          : "${ANDROID_HOME:?Android SDK is required on the runner}"
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" \
+            'platform-tools' 'build-tools;35.0.1' 'platforms;android-35' \
+            'cmake;3.10.2.4988404' 'ndk;28.1.13356709'
+
+      - name: Install Godot 4.6.2 and export templates
+        run: |
+          curl -fsSL -o /tmp/godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip
+          mv "Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64" godot
+          chmod +x godot
+          curl -fsSL -o /tmp/godot-templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz"
+          unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
+          template_dir="${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
+          mkdir -p "${template_dir}"
+          mv /tmp/godot-templates/templates/* "${template_dir}/"
+          python3 android_updater/setup_build_template.py "${template_dir}/android_source.zip"
+          mkdir -p "${HOME}/.config/godot"
+          cat > "${HOME}/.config/godot/editor_settings-4.6.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/java_sdk_path = "${JAVA_HOME}"
+          export/android/android_sdk_path = "${ANDROID_HOME}"
+          EOF
+
+      - name: Restore required music for Godot import
+        run: |
+          curl -fsSL -o /tmp/pokeaether-music.zip "https://updates.pokeaether.com/assets/${MUSIC_ASSET_VERSION}.zip"
+          echo "${MUSIC_ASSET_SHA256}  /tmp/pokeaether-music.zip" | sha256sum --check --strict
+          test "$(stat -c %s /tmp/pokeaether-music.zip)" = "${MUSIC_ASSET_SIZE}"
+          unzip -oq /tmp/pokeaether-music.zip
+
+      - name: Stamp immutable release identity
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          echo "ANDROID_BUILD_ID=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          python3 tools/android_release.py prepare \
+            --version "${VERSION_NAME}" --code "${VERSION_CODE}" \
+            --build-id "${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+      - name: Import Godot assets and run Android checks
+        run: |
+          set -o pipefail
+          ./godot --headless --import --quit >/tmp/godot-import-first.log 2>&1 || true
+          ./godot --headless --import --quit 2>&1 | tee /tmp/godot-import.log
+          ./godot --headless --path . --script res://tests/android_apk_update_check.gd
+          ./godot --headless --path . --script res://tests/android_music_pack_check.gd
+
+      - name: Export with the pinned release signing identity
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          GODOT_ANDROID_KEYSTORE_RELEASE_USER: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: |
+          : "${KEYSTORE_BASE64:?Missing Android release keystore secret}"
+          : "${GODOT_ANDROID_KEYSTORE_RELEASE_USER:?Missing Android key alias}"
+          : "${GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD:?Missing Android key password}"
+          umask 077
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="${RUNNER_TEMP}/pokeaether-release.keystore"
+          trap 'rm -f "${GODOT_ANDROID_KEYSTORE_RELEASE_PATH}"' EXIT
+          printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > "${GODOT_ANDROID_KEYSTORE_RELEASE_PATH}"
+          mkdir -p builds/android
+          ./godot --headless --export-release "Android Internal Alpha" \
+            builds/android/PokeAether-alpha.apk
+
+      - name: Verify APK and create review manifest
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+          VERSION_CODE: ${{ inputs.version_code }}
+          RELEASE_CERT_SHA256: ${{ secrets.ANDROID_RELEASE_CERT_SHA256 }}
+        run: |
+          : "${RELEASE_CERT_SHA256:?Missing pinned Android signing certificate}"
+          mkdir -p release
+          mv builds/android/PokeAether-alpha.apk "release/game-${ANDROID_BUILD_ID}-android.apk"
+          python3 tools/android_release.py inspect \
+            --apk "release/game-${ANDROID_BUILD_ID}-android.apk" \
+            --aapt "${ANDROID_HOME}/build-tools/35.0.1/aapt" \
+            --apksigner "${ANDROID_HOME}/build-tools/35.0.1/apksigner" \
+            --version "${VERSION_NAME}" --code "${VERSION_CODE}" \
+            --build-id "${ANDROID_BUILD_ID}" \
+            --certificate "${RELEASE_CERT_SHA256}" \
+            --output release/manifest-android.json
+
+      - name: Retain private release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: release/
+          if-no-files-found: error
+          retention-days: 30
