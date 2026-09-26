@@ -96,6 +96,8 @@ GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
 AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
 )
+PVP_MATCH_START_ROUTE = re.compile(r"^/battle/pvp/matches/[A-Za-z0-9-]{1,128}/start-battle$")
+PVP_MATCH_SPECTATE_ROUTE = re.compile(r"^/battle/pvp/matches/[A-Za-z0-9-]{1,128}/spectate$")
 HTTP_ROUTE_PREFIXES = (
 	# Read/write game interfaces explicitly enabled in the browser demo. These
 	# retain the normal account and server-side authorization checks.
@@ -195,6 +197,10 @@ def create_app(upstream, build=None, *, transport=None):
         if request.method == "GET" and route.startswith("/battle/pvp/training/ai/teams/"):
             allowed = True
         if request.method in {"GET", "POST"} and AI_BATTLE_ROUTE.fullmatch(route):
+            allowed = True
+        if request.method == "POST" and PVP_MATCH_START_ROUTE.fullmatch(route):
+            allowed = True
+        if request.method == "GET" and PVP_MATCH_SPECTATE_ROUTE.fullmatch(route):
             allowed = True
         if not allowed:
             return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)

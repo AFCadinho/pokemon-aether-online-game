@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ranked kiest in de browser standaard Aether OU en kan een gevonden gevecht nu ook vanuit de browser openen of hervatten.
 - De Android-downloadlink op de website en de updateserver ondersteunen nu de ondertekende APK, inclusief controle van manifest, bestandsgrootte en SHA-256.
 - Browser play now uses the same gameplay routes as desktop and can continue through all currently available maps, including Route 5, Route 9 and Cerulean Cave. Guild activity and ranked PvP are available; player asset transfers still require the desktop or Android client.
 - De Android-client kan een vereiste nieuwe APK via de eigen updateserver vinden, gecontroleerd downloaden en aanbieden in Androids installatiescherm. De oude client pauzeert totdat de update is geïnstalleerd.

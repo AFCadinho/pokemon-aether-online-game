@@ -14,6 +14,10 @@ assert.equal(isAllowedApiRoute('GET', '/auth/web/world/transitions/test/access')
 assert.equal(isAllowedApiRoute('PUT', '/auth/web/world'), true);
 assert.equal(isAllowedApiRoute('POST', '/auth/web/world/teleport-ack'), true);
 assert.equal(isAllowedApiRoute('GET', '/battle/pvp/training/ai/teams/catalog-team'), true);
+assert.equal(isAllowedApiRoute('POST', '/battle/pvp/matches/test-match/start-battle'), true);
+assert.equal(isAllowedApiRoute('GET', '/battle/pvp/matches/test-match/spectate'), true);
+assert.equal(isAllowedApiRoute('GET', '/battle/pvp/matches/test-match/start-battle'), false);
+assert.equal(isAllowedApiRoute('POST', '/battle/pvp/matches/test-match/settle'), false);
 assert.equal(isAllowedApiRoute('POST', '/battle/test-id/choice-and-resolve'), true);
 assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-rewards/test-reward/claim'), true);
 assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-quest-item-turn-ins/test-turn-in/claim'), true);
@@ -66,6 +70,16 @@ assert.equal(forwarded.headers.get('cookie'), null);
 assert.equal(forwarded.headers.get('origin'), null);
 assert.equal(forwarded.headers.get('x-pokeaether-client-platform'), 'web');
 assert.equal(proxied.headers.get('set-cookie'), null);
+const rankedStart = await onRequest({
+  request: new Request('https://play.example.test/api/battle/pvp/matches/test-match/start-battle', {
+    method: 'POST', headers: { authorization: 'Bearer test-only' }, body: '{}',
+  }),
+  env: { API_ORIGIN: 'https://api.example.test' },
+});
+assert.equal(rankedStart.status, 200);
+assert.equal(forwarded.url, 'https://api.example.test/battle/pvp/matches/test-match/start-battle');
+assert.equal(forwarded.headers.get('authorization'), 'Bearer test-only');
+assert.equal(forwarded.headers.get('x-pokeaether-client-platform'), 'web');
 
 globalThis.fetch = async request => {
   forwarded = request;

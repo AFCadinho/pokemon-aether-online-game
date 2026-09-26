@@ -16,6 +16,26 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_ranked_match_start_reaches_shared_battle_endpoint(self):
+        calls = []
+        def upstream(request):
+            calls.append(request)
+            return httpx.Response(200, json={"success": True, "battleId": "battle-test"})
+        with tempfile.TemporaryDirectory() as directory:
+            client = TestClient(
+                proxy.create_app("http://127.0.0.1:8000", Path(directory), transport=httpx.MockTransport(upstream)),
+                base_url="http://127.0.0.1:8061",
+            )
+            path = "/api/battle/pvp/matches/test-match/start-battle"
+            response = client.post(path, json={}, headers={"authorization": "Bearer test-only"})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(calls[0].url.path, path.removeprefix("/api"))
+            self.assertEqual(calls[0].headers["authorization"], "Bearer test-only")
+            self.assertEqual(calls[0].headers["x-pokeaether-client-platform"], "web")
+            self.assertEqual(client.get("/api/battle/pvp/matches/test-match/spectate").status_code, 200)
+            self.assertEqual(client.get(path).status_code, 403)
+            self.assertEqual(client.post("/api/battle/pvp/matches/test-match/settle").status_code, 403)
+
     def test_adventure_party_uses_shared_browser_and_desktop_client_paths(self):
         root = Path(__file__).resolve().parents[1]
         service = (root / "scripts/services/coop_service.gd").read_text()

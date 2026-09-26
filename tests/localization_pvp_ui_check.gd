@@ -160,6 +160,15 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_populate_pvp_queue_select", active_ranked_queues)
 	_check(format_select.item_count == 2, "Ranked matchmaking exposes both Aether OU and Aether UU")
 	_check(format_select.get_item_text(0) == "Aether OU" and format_select.get_item_text(1) == "Aether UU", "Ranked tier labels come from the server queue catalog")
+	var reversed_ranked_queues: Array[Dictionary] = [active_ranked_queues[1], active_ranked_queues[0]]
+	overlay.set("pvp_active_queue_id", "missing_queue")
+	overlay.call("_populate_pvp_queue_select", reversed_ranked_queues)
+	_check(str(overlay.get("pvp_active_queue_id")) == "ranked_queue_v1", "Ranked defaults to Aether OU even when the server lists UU first")
+	overlay.set("pvp_active_queue_id", "ranked_aether_uu_queue_v1")
+	overlay.call("_select_first_pvp_queue_for_mode", "ranked")
+	_check(str(overlay.get("pvp_active_queue_id")) == "ranked_aether_uu_queue_v1", "Reopening Ranked preserves an explicitly selected UU queue")
+	overlay.set("pvp_active_queue_id", "ranked_queue_v1")
+	overlay.call("_populate_pvp_queue_select", active_ranked_queues)
 	overlay.call("_update_pvp_active_format_from_queue_id", "ranked_aether_uu_queue_v1")
 	var leaderboard_title := overlay.get("pvp_leaderboard_title_label") as Label
 	_check(leaderboard_title != null and leaderboard_title.text == "Aether UU-ranglijst", "Ranked data headings follow the selected tier")
