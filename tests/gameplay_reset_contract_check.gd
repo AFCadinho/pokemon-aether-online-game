@@ -62,7 +62,7 @@ func _init() -> void:
 	)
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(
-		player_state_service.contains('const WEB_PLAYER_APPEARANCE_ENDPOINT := "/auth/web/appearance"')
+		player_state_service.contains('const PLAYER_APPEARANCE_ENDPOINT := "/game/appearance"')
 		and player_state_service.contains("func save_player_appearance(appearance: Dictionary)"),
 		"browser appearance saves use a dedicated narrow endpoint"
 	)

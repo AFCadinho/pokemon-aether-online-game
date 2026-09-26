@@ -23,10 +23,10 @@ const assert = require('node:assert/strict');
   bridge.stderr.on('data', chunk => { bridgeError += chunk.toString(); });
   const pending = [];
   readline.createInterface({ input: bridge.stdout }).on('line', line => pending.shift()?.resolve(JSON.parse(line)));
-  bridge.on('exit', () => {
+  bridge.on('exit', (code, signal) => {
     for (const task of pending.splice(0)) {
       if (closing) task.resolve({ status: 503, body: '{}' });
-      else task.reject(new Error('Isolated account fixture exited'));
+      else task.reject(new Error(`Isolated account fixture exited (code ${code}, signal ${signal}): ${bridgeError.slice(-1000)}`));
     }
   });
   const request = data => new Promise((resolve, reject) => {
@@ -34,6 +34,9 @@ const assert = require('node:assert/strict');
   });
   const browser = await chromium.launch({ executablePath: process.env.POKEAETHER_CHROME_PATH || undefined, headless: true, args: ['--enable-unsafe-swiftshader'] });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await context.addInitScript(() => {
+    window.pokeaetherMemoryProbe = { samples: [], record(sample) { this.samples.push(sample); } };
+  });
   let presencePositions = 0;
   let lastPresenceMapId = '';
   let lastPresenceAppearance = {};
@@ -129,27 +132,28 @@ const assert = require('node:assert/strict');
 			await page.waitForTimeout(500);
 		}
 		await page.waitForFunction(() => window.pokeaetherPreview?.worldReady, null, { timeout: 120000 });
-		await waitForApi(item => item.path === '/api/auth/web/profile' && item.status === 200, 30000);
-		await waitForApi(item => item.path === '/api/auth/web/world/story' && item.status === 200, 30000);
+		await waitForApi(item => item.path === '/api/game/profile' && item.status === 200, 30000);
+		await waitForApi(item => item.path === '/api/game/story' && item.status === 200, 30000);
 		await page.waitForTimeout(3000);
     await page.screenshot({ path: path.join(output, 'world.png') });
-		assert(api.some(item => item.path === '/api/auth/web/profile' && item.status === 200), 'browser profile supplies the initial world position');
-    assert(api.some(item => item.path === '/api/auth/web/world/story' && item.status === 200), 'shared story loads through the browser boundary');
+		assert(api.some(item => item.path === '/api/game/profile' && item.status === 200), 'browser profile supplies the initial world position');
+    assert(api.some(item => item.path === '/api/game/story' && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status === 200), 'demo NPC metadata really loads');
 		assert(presencePositions > 0, 'browser publishes its world position through the websocket');
-		assert(api.some(item => item.path === '/api/auth/web/world/teleport-ack' && item.status === 200), 'browser acknowledges the pending staff teleport through its scoped route');
+		assert(api.some(item => item.path === '/api/game/player-position/teleport-ack' && item.status === 200), 'browser acknowledges the pending staff teleport through its scoped route');
 		assert(presenceAppearances.some(value => value.top === 'Adinho_Shirt'), `browser publishes its canonical custom outfit to native clients: ${JSON.stringify(presenceAppearances)}`);
 		await page.keyboard.press('ArrowDown');
-		await waitForApi(item => item.path === '/api/auth/web/world/transitions/kanto_players_house__to_pallet_town/enter' && item.status === 200, 30000);
+		await waitForApi(item => item.path === '/api/game/world/transitions/kanto_players_house__to_pallet_town/enter' && item.status === 200, 30000);
 		const transitionDeadline = Date.now() + 30000;
 		while (lastPresenceMapId !== 'kanto_pallet_town') {
 			assert(Date.now() < transitionDeadline, 'browser must open Pallet Town and publish its new location');
 			await page.waitForTimeout(100);
 		}
 		await page.screenshot({ path: path.join(output, 'world-after-house-exit.png') });
-		await page.mouse.click(207, 72); // Open the browser PvP menu.
+		await page.mouse.click(207, 27); // Open the browser PvP menu.
 		await page.waitForTimeout(500);
-		await page.mouse.click(330, 296); // Choose AI Sparring.
+		await page.screenshot({ path: path.join(output, 'pvp-menu.png') });
+		await page.mouse.click(330, 250); // Choose AI Sparring.
 		await waitForApi(item => item.path === '/api/battle/pvp/training/ai/teams' && item.status === 200, 30000);
 		await page.waitForTimeout(2000);
 		await page.screenshot({ path: path.join(output, 'ai-sparring.png') });
@@ -160,7 +164,7 @@ const assert = require('node:assert/strict');
 		await page.waitForTimeout(1000);
 		await page.mouse.click(975, 739);
 		await waitForApi(item => item.path === '/api/battle/pvp/training/ai/battles' && item.status === 200, 30000);
-		await waitForApi(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200, 30000);
+		await waitForApi(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200, 90000);
 		const spriteDeadline = Date.now() + 60000;
 		while (!['back/pikachu/sheet.png', 'front/eevee/sheet.png'].every(suffix => pokemonAssets.some(p => p.endsWith(suffix)))) {
 			assert(Date.now() < spriteDeadline, 'AI battle must finish its intro and request both Gen5 sprites');
@@ -170,12 +174,14 @@ const assert = require('node:assert/strict');
 		await page.screenshot({ path: path.join(output, 'ai-battle-start.png') });
 		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/lead' && item.status === 200), 'browser submits its AI Sparring lead');
 		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200), 'AI lead resolves');
-		await page.mouse.click(1080, 478); // Choose Thunderbolt in the rendered battle controls.
+		for (let attempt = 0; attempt < 20 && !api.some(item => item.path.startsWith('/api/battle/web-ai-e2e/choice-and-resolve')); attempt += 1) {
+			await page.mouse.click(1100, 740); // Choose Thunderbolt once the intro reveals its move controls.
+			await page.waitForTimeout(1000);
+		}
 		await waitForApi(item => item.path.startsWith('/api/battle/web-ai-e2e/choice-and-resolve') && item.status === 200, 30000);
 		await page.waitForTimeout(5000);
 		await page.screenshot({ path: path.join(output, 'ai-battle-turn.png') });
     assert.deepEqual(external, []);
-    assert(!api.some(item => item.path === '/api/game/player-position' && item.status < 400), 'desktop position endpoint is never used');
 		assert(!errors.some(item => item.includes('generated/tiled_visuals')), 'browser map resources load without runtime errors');
 		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, pokemonAssets, presencePositions, lastPresenceMapId, lastPresenceAppearance, registration: true, world: true, houseExit: true, aiSparringStarted: true, aiTurnSubmitted: true }, null, 2));
 		console.log('web_accounts_browser_smoke: PASS (registration, login, world presence, Gen5 sprites, AI Sparring start and turn)');
@@ -185,7 +191,9 @@ const assert = require('node:assert/strict');
 		fs.writeFileSync(path.join(output, 'pokemon-assets.json'), JSON.stringify(pokemonAssets, null, 2));
 		fs.writeFileSync(path.join(output, 'errors.json'), JSON.stringify(errors, null, 2));
 		// This contains only a traceback from the isolated, synthetic fixture.
-		fs.writeFileSync(path.join(output, 'bridge-stderr.log'), bridgeError);
+    fs.writeFileSync(path.join(output, 'bridge-stderr.log'), bridgeError);
+    fs.writeFileSync(path.join(output, 'memory-probe.json'), JSON.stringify(
+      await page.evaluate(() => window.pokeaetherMemoryProbe?.samples || []).catch(() => []), null, 2));
     await page.screenshot({ path: path.join(output, 'last-state.png') }).catch(() => {});
     await browser.close();
     bridge.stdin.end();

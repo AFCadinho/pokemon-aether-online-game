@@ -7,6 +7,7 @@ const MODULE_NAME := "aether-clash-maps"
 const MANIFEST_PATH := "/modules/manifest.json"
 const MODULE_SCENE := "res://scenes/overworld/aether_clash/aether_clash_duel.tscn"
 const MISTY_MODULE_NAME := "kanto-through-misty-maps"
+const EXTENDED_MODULE_NAME := "kanto-extended-maps"
 const MISTY_MODULE_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
 const MISTY_MAP_SCENES := {
 	"kanto_route_3": MISTY_MODULE_SCENE,
@@ -26,6 +27,11 @@ const MISTY_MAP_SCENES := {
 	"kanto_route_25": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 	"kanto_route_25_bills_house": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 }
+const EXTENDED_MAP_SCENES := {
+	"kanto_route_5": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+	"kanto_route_9": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+	"kanto_cerulean_cave": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+}
 const REQUEST_TIMEOUT_SECONDS := 60.0
 
 var _loaded_modules: Dictionary = {}
@@ -38,6 +44,8 @@ static func module_for_scene(scene_path: String) -> String:
 		return MODULE_NAME
 	if scene_path in MISTY_MAP_SCENES.values():
 		return MISTY_MODULE_NAME
+	if scene_path in EXTENDED_MAP_SCENES.values():
+		return EXTENDED_MODULE_NAME
 	return ""
 
 
@@ -97,7 +105,7 @@ func _download_and_mount(module_name: String, required_scene: String) -> Diction
 	var pack_path := "%s/%s-%s.pck" % [module_dir, module_name, expected_hash]
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
-	request.body_size_limit = 32 * 1024 * 1024
+	request.body_size_limit = 64 * 1024 * 1024
 	request.download_file = pack_path
 	add_child(request)
 	var start_error := request.request(origin + "/modules/" + file_name.uri_encode())

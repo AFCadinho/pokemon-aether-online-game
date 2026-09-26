@@ -7775,9 +7775,6 @@ func _confirm_open_guild_join(guild: Dictionary) -> void:
 
 
 func _join_selected_guild(guild: Dictionary) -> void:
-	if OS.has_feature("web"):
-		_show_web_guild_download_dialog()
-		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
@@ -7804,9 +7801,6 @@ func _join_selected_guild(guild: Dictionary) -> void:
 
 
 func _apply_to_selected_guild(guild: Dictionary) -> void:
-	if OS.has_feature("web"):
-		_show_web_guild_download_dialog()
-		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
@@ -7859,9 +7853,6 @@ func _on_create_form_changed(_unused: Variant = null) -> void:
 
 
 func _on_create_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_guild_download_dialog()
-		return
 	if is_creating_guild:
 		return
 
@@ -7930,8 +7921,8 @@ func _show_web_guild_download_dialog() -> void:
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	dialog.name = "GuildWebClientRequiredDialog"
 	dialog.configure(
-		_t("ui.guild.web_client.title"),
-		_t("ui.guild.web_client.message"),
+		"Guild Bank requires the game client",
+		"Download the desktop or Android game to deposit, withdraw or borrow Guild Bank assets.",
 		_t("ui.guild.web_client.download"),
 		_t("ui.guild.web_client.not_now")
 	)

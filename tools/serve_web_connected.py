@@ -42,6 +42,8 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/starter/options"), ("POST", "/auth/web/starter"),
     ("GET", "/auth/web/ai-sparring/statistics"),
     ("GET", "/auth/web/ai-sparring/history"), ("DELETE", "/auth/web/ai-sparring/history"),
+    ("GET", "/account/pvp/training-ai/statistics"),
+    ("GET", "/account/pvp/training-ai/history/me"), ("DELETE", "/account/pvp/training-ai/history/me"),
     ("GET", "/battle/pvp/training/ai/teams"),
     ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
@@ -181,7 +183,9 @@ def create_app(upstream, build=None, *, transport=None):
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
     async def proxy(request: Request, path: str):
         route = "/" + path
-        allowed = (request.method, route) in HTTP_ROUTES or any(
+        if "internal" in route.split("/") or re.match(r"^/game/(?:trades|loans|exchange)(?:/|$)", route) or re.match(r"^/game/guilds/me/bank(?:/|$)", route) or re.match(r"^/game/guilds/me/members/[^/]+/bank-permissions$", route) or re.match(r"^/game/pokemon/[^/]+/transfer(?:/|$)", route) or re.match(r"^/game/mail/[^/]+/(?:claim|attachments/[^/]+/claim)$", route):
+            return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
+        allowed = (route.startswith(("/game/", "/account/pvp/")) and request.method in {"GET", "POST", "PUT", "PATCH", "DELETE"}) or (request.method, route) in HTTP_ROUTES or any(
             request.method == method and (route.startswith(prefix) if prefix.endswith("/") else route == prefix or route.startswith(prefix + "/"))
             for method, prefix in HTTP_ROUTE_PREFIXES
         )
@@ -199,7 +203,7 @@ def create_app(upstream, build=None, *, transport=None):
         # payload, so the request was rejected by the local proxy before it
         # reached the account-authorized battle service.  Keep a finite
         # browser boundary while allowing the normal client contract.
-        max_request_bytes = 128 * 1024 if route.startswith("/battle/") or route in {"/auth/web/party", "/auth/web/party/battle-state"} else 16 * 1024
+        max_request_bytes = 128 * 1024 if route.startswith("/battle/") or route in {"/auth/web/party", "/auth/web/party/battle-state", "/game/party", "/game/party/battle-state"} else 16 * 1024
         body = bytearray()
         async for chunk in request.stream():
             body.extend(chunk)

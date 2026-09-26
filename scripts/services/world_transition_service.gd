@@ -4,10 +4,7 @@ class_name WorldTransitionServiceNode
 
 const TRANSITION_ACCESS_ENDPOINT := "/game/world/transitions/%s/access"
 const TRANSITION_ENTER_ENDPOINT := "/game/world/transitions/%s/enter"
-const WEB_TRANSITION_ACCESS_ENDPOINT := "/auth/web/world/transitions/%s/access"
-const WEB_TRANSITION_ENTER_ENDPOINT := "/auth/web/world/transitions/%s/enter"
 const AREA_ACCESS_ENDPOINT := "/game/world/areas/%s/access"
-const WEB_AREA_ACCESS_ENDPOINT := "/auth/web/world/areas/%s/access"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
@@ -88,7 +85,8 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 			return checked
 		var access := _dictionary_from_value(checked.get("access", {}))
 		if bool(access.get("allowed", false)):
-			var scene_path := str(WebAssetModuleService.MISTY_MAP_SCENES.get(str(access.get("areaId", "")), ""))
+			var area_id := str(access.get("areaId", ""))
+			var scene_path := str(WebAssetModuleService.MISTY_MAP_SCENES.get(area_id, WebAssetModuleService.EXTENDED_MAP_SCENES.get(area_id, "")))
 			if not scene_path.is_empty():
 				var assets := await WebAssetModuleService.ensure_scene_available(scene_path)
 				if not bool(assets.get("success", false)):
@@ -127,15 +125,15 @@ func clear_cache() -> void:
 
 
 func _transition_access_endpoint() -> String:
-	return WEB_TRANSITION_ACCESS_ENDPOINT if OS.has_feature("web") else TRANSITION_ACCESS_ENDPOINT
+	return TRANSITION_ACCESS_ENDPOINT
 
 
 func _area_access_endpoint() -> String:
-	return WEB_AREA_ACCESS_ENDPOINT if OS.has_feature("web") else AREA_ACCESS_ENDPOINT
+	return AREA_ACCESS_ENDPOINT
 
 
 func _transition_enter_endpoint() -> String:
-	return WEB_TRANSITION_ENTER_ENDPOINT if OS.has_feature("web") else TRANSITION_ENTER_ENDPOINT
+	return TRANSITION_ENTER_ENDPOINT
 
 
 func _request_json(

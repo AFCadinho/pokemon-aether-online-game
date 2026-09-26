@@ -62,9 +62,10 @@ func get_cached_frames(
 	return _cache.get(cache_key, {}) if cache_key != "" else {}
 
 
-func prefetch(entries: Array) -> void:
+func prefetch(entries: Array, prioritize := false) -> void:
 	if not is_available():
 		return
+	var priority_queue: Array[Dictionary] = []
 	for entry_value: Variant in entries:
 		if not (entry_value is Dictionary):
 			continue
@@ -76,12 +77,25 @@ func prefetch(entries: Array) -> void:
 			str(entry.get("style", "animated"))
 		)
 		var cache_key := str(identity.get("cache_key", ""))
-		if cache_key == "" or _cache.has(cache_key) or _in_flight.has(cache_key) or _prefetch_queued_keys.has(cache_key):
+		if cache_key == "" or _cache.has(cache_key) or _in_flight.has(cache_key):
+			continue
+		if _prefetch_queued_keys.has(cache_key):
+			if prioritize:
+				for index: int in range(_prefetch_queue.size()):
+					if str(_prefetch_queue[index].get("cache_key", "")) == cache_key:
+						priority_queue.append(_prefetch_queue.pop_at(index))
+						break
 			continue
 		var queued_entry := entry.duplicate(true)
 		queued_entry["cache_key"] = cache_key
-		_prefetch_queue.append(queued_entry)
+		if prioritize:
+			priority_queue.append(queued_entry)
+		else:
+			_prefetch_queue.append(queued_entry)
 		_prefetch_queued_keys[cache_key] = true
+	if not priority_queue.is_empty():
+		priority_queue.append_array(_prefetch_queue)
+		_prefetch_queue = priority_queue
 	_drain_prefetch_queue()
 
 

@@ -26,8 +26,6 @@ var _delivered_gem_notifications: Dictionary = {}
 
 
 func _ready() -> void:
-	if OS.has_feature("web"):
-		return
 	var timer := Timer.new()
 	timer.name = "GemNotificationPollTimer"
 	timer.wait_time = 20.0

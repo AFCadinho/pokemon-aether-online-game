@@ -8,12 +8,10 @@ signal notification_received(notification: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
-const WEB_GUILD_HOME_ENDPOINT := "/auth/web/guilds/me"
 const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
-const WEB_GUILD_LOBBY_TELEPORT_ENDPOINT := "/auth/web/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
 const AETHER_CLASH_HISTORY_ENDPOINT := "/game/aether-clash/history"
@@ -34,9 +32,6 @@ var delivered_notification_ids: Dictionary = {}
 
 
 func _ready() -> void:
-	if OS.has_feature("web"):
-		# Guild gameplay/notification acknowledgements are outside the web demo.
-		return
 	var timer := Timer.new()
 	timer.name = "GuildNotificationPollTimer"
 	timer.wait_time = 60.0
@@ -48,7 +43,7 @@ func _ready() -> void:
 func load_directory() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	var endpoint := "/auth/web/guilds" if OS.has_feature("web") else GUILDS_ENDPOINT
+	var endpoint := GUILDS_ENDPOINT
 	var response := await _request_json(endpoint, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)):
 		return response
@@ -66,8 +61,6 @@ func deliver_notification(notification: Dictionary) -> void:
 
 
 func _poll_notifications() -> void:
-	if OS.has_feature("web"):
-		return
 	if notification_poll_in_flight or not AuthService.is_authenticated():
 		return
 	notification_poll_in_flight = true
@@ -160,7 +153,7 @@ func cancel_application(application_id: int) -> Dictionary:
 
 
 func load_home() -> Dictionary:
-	var endpoint := WEB_GUILD_HOME_ENDPOINT if OS.has_feature("web") else GUILD_HOME_ENDPOINT
+	var endpoint := GUILD_HOME_ENDPOINT
 	var response := await _authenticated_request(endpoint, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)) and int(response.get("status", 0)) == 404:
 		_set_current_membership({})
@@ -318,7 +311,7 @@ func force_return_bank_loan_asset(asset_id: String) -> Dictionary:
 
 func teleport_to_lobby() -> Dictionary:
 	var response := await _authenticated_request(
-		WEB_GUILD_LOBBY_TELEPORT_ENDPOINT if OS.has_feature("web") else GUILD_LOBBY_TELEPORT_ENDPOINT,
+		GUILD_LOBBY_TELEPORT_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		"{}"
 	)
@@ -992,11 +985,6 @@ func _normalize_guild(value: Variant) -> Dictionary:
 
 
 func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
-	if OS.has_feature("web"):
-		if path.begins_with("/game/aether-clash"):
-			path = path.replace("/game/aether-clash", "/auth/web/aether-clash")
-		elif path not in ["/auth/web/guilds", WEB_GUILD_HOME_ENDPOINT, WEB_GUILD_LOBBY_TELEPORT_ENDPOINT]:
-			return {"success": false, "error": "Guild gameplay requires the game client."}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS

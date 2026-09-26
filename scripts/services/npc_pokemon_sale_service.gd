@@ -33,8 +33,6 @@ func _sale_request(sale_id: String, should_purchase: bool) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var endpoint := PURCHASE_ENDPOINT if should_purchase else SALE_ENDPOINT
-	if OS.has_feature("web"):
-		endpoint = endpoint.replace("/game/npc-pokemon-sales", "/auth/web/npc-pokemon-sales")
 	var method := HTTPClient.METHOD_POST if should_purchase else HTTPClient.METHOD_GET
 	var response := await _request_json(
 		base_url + endpoint % normalized_sale_id.uri_encode(),

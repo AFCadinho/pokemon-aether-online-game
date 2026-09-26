@@ -105,8 +105,6 @@ func _new_request_id() -> String:
 
 
 func _endpoint(desktop_endpoint: String) -> String:
-	if OS.has_feature("web"):
-		return desktop_endpoint.replace("/game/ev-training", "/auth/web/ev-training")
 	return desktop_endpoint
 
 
