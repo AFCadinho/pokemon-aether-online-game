@@ -48,6 +48,36 @@ func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node, a
 	return rect.get_center()
 
 
+func _apply_move_sheet_anchor(animation_node: MoveAnimationPlayer, actor_ident: String,
+		target_ident: String, parent_node: Node, config: Dictionary) -> void:
+	var category := str(config.get("category", "")).strip_edges().to_lower()
+	var has_curated_groups := config.get("sheet_pattern_anchor_groups", []) is Array and not (config.get("sheet_pattern_anchor_groups", []) as Array).is_empty()
+	if not animation_node.show_sheet_sprites or not (category.contains("projectile") or category == "beam") \
+			or has_curated_groups or not str(config.get("static_visual_anchor", "")).is_empty() or actor_ident == target_ident:
+		super._apply_move_sheet_anchor(animation_node, actor_ident, target_ident, parent_node, config)
+		return
+	var actor_id := _get_player_id_from_ident(actor_ident)
+	var target_id := _get_player_id_from_ident(target_ident)
+	if actor_id == "" or target_id == "":
+		super._apply_move_sheet_anchor(animation_node, actor_ident, target_ident, parent_node, config)
+		return
+	var actor_parent := _get_effect_target_anchor_in_parent(actor_id, parent_node)
+	var target_parent := _get_effect_target_anchor_in_parent(target_id, parent_node)
+	if actor_parent == Vector2.ZERO or target_parent == Vector2.ZERO:
+		return
+	var actor_source := _parent_position_to_animation_source(animation_node, actor_parent)
+	var target_source := _parent_position_to_animation_source(animation_node, target_parent)
+	animation_node.sheet_path_source_actor = _vector2_from_config_value(
+		config.get("sheet_actor_source_position", [EFFECT_SOURCE_PLAYER_POSITION.x, EFFECT_SOURCE_PLAYER_POSITION.y]),
+		EFFECT_SOURCE_PLAYER_POSITION)
+	animation_node.sheet_path_source_target = _vector2_from_config_value(
+		config.get("sheet_anchor_source_position", [EFFECT_SOURCE_ENEMY_POSITION.x, EFFECT_SOURCE_ENEMY_POSITION.y]),
+		EFFECT_SOURCE_ENEMY_POSITION)
+	animation_node.sheet_path_actor = animation_node.display_position_to_battlefield_source(actor_source)
+	animation_node.sheet_path_target = animation_node.display_position_to_battlefield_source(target_source)
+	animation_node.sheet_path_enabled = true
+
+
 # The SpriteBox helpers animate every visible Pokémon on one side. In doubles,
 # only the concrete attacker or target may move, so these equivalents operate on
 # the sprite selected by bind_native_pair instead.

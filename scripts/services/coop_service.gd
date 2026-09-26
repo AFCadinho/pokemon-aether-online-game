@@ -307,6 +307,20 @@ func _partner_is_ready_for_coop() -> bool:
 	return true
 
 
+func party_exp_bonus_available() -> bool:
+	if not available:
+		return false
+	var member_ids: Array = party.get("memberIds", []) if party.get("memberIds") is Array else []
+	var own_id := int(AuthService.current_user.get("id", 0))
+	if member_ids.size() != 2 or own_id <= 0 or not member_ids.any(
+		func(member_id: Variant) -> bool: return int(member_id) == own_id):
+		return false
+	# A running shared battle keeps its reward even if the partner disconnects.
+	if activity.get("status") in ["starting", "active"]:
+		return true
+	return _partner_is_ready_for_coop()
+
+
 func submit_action(action: Dictionary) -> Dictionary:
 	if view.is_empty() or view.get("locked", true) or not pending_command.is_empty():
 		return {"success": false}

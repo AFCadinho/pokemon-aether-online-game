@@ -4,6 +4,18 @@
 
 - Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon. Six battle placement cases remain in review.
 
+- Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes.
+
+- Classic wild battles now briefly show the player Trainer sprite and callout when throwing a Poké Ball and receiving the capture result.
+
+- The Adventure Party EXP buff now covers shared wild and NPC battles, and hides when a party member is offline or on another map and battles are solo.
+
+- Immersive Adventure Party doubles now use the single-battle Trainer voice variants for move callouts instead of repeating one fixed line.
+
+- Trainer callouts in Immersive Adventure Party doubles now name the acting Pokémon when ordering a move, as in single battles.
+
+- Immersive 2D/2.5D double battles now size move effects for two Pokémon per side and aim projectile sheets from the acting Pokémon to their actual target.
+
 - Adventure Party members now see a +25% EXP buff while grouped; it increases their own EXP rewards from shared wild battles.
 
 - NPC Trainers in Immersive Adventure Party doubles now use their own mugshot when giving commands, with their class battle portrait or overworld sprite as a fallback.

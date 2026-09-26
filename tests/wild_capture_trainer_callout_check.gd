@@ -26,10 +26,14 @@ func _run() -> void:
 	_check(battle_source.contains("func _show_wild_capture_throw_callout"), "wild capture has a throw callout")
 	_check(battle_source.contains("func _show_wild_capture_result_callout"), "wild capture has an outcome callout")
 	_check(battle_source.contains("func _clear_wild_capture_trainer"), "wild capture cleans up its trainer")
-	_check(
-		battle_source.contains("battle_type != BattleType.WILD or not has_meta(\"immersive_battle_ui\")"),
-		"callouts are limited to immersive wild battles"
-	)
+	var throw_callout := battle_source.get_slice("func _show_wild_capture_throw_callout", 1).get_slice("func _show_wild_capture_result_callout", 0)
+	var result_callout := battle_source.get_slice("func _show_wild_capture_result_callout", 1).get_slice("func _clear_wild_capture_trainer", 0)
+	_check(throw_callout.contains("battle_type != BattleType.WILD") and not throw_callout.contains("immersive_battle_ui"),
+		"throw callout shows the local trainer in Classic and Immersive wild battles")
+	_check(result_callout.contains("battle_type != BattleType.WILD") and not result_callout.contains("immersive_battle_ui"),
+		"capture outcome callout also works in Classic and Immersive wild battles")
+	_check(battle_source.contains("trainer_sprite.reveal_for_command()") and battle_source.contains("_hide_non_immersive_trainer_after_callout"),
+		"Classic trainer fades in and out around its capture callout")
 	_check(
 		battle_source.contains("_show_local_player_trainer()"),
 		"the local trainer appears for the throw"

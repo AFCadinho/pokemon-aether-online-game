@@ -6,6 +6,7 @@ const ACCENT := Color("67e8bf")
 const ANIMATION_WAIT := preload("res://scripts/battle/battle_animation_wait.gd")
 const COOP_EFFECTS := preload("res://scripts/battle/coop_battle_effects.gd")
 const NATIVE_MOVE_ROUTER := preload("res://scripts/battle/coop_native_animation_router.gd")
+const BATTLE_VOICE_DIRECTOR := preload("res://scripts/battle/battle_voice_director.gd")
 const STATUS_CONDITION_OVERLAY := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 const TARGET_OUTLINE_SHADER := """shader_type canvas_item;
 uniform vec4 glow_color : source_color = vec4(0.42, 0.94, 1.0, 1.0);
@@ -30,6 +31,8 @@ var _decision := ""
 var _revision := -1
 var _playing := false
 var _latest: Dictionary = {}
+var _presented_pokemon_names: Dictionary = {}
+var _voice_director := BATTLE_VOICE_DIRECTOR.new()
 var _header: Label
 var _connection: Label
 var _prompt: Label
@@ -89,6 +92,7 @@ var _target_glow_material: ShaderMaterial
 
 
 func _ready() -> void:
+	_voice_director.configure("", "trainer")
 	var field: GridContainer
 	var effect_layer: Control
 	if embedded_hosts.is_empty():
@@ -481,6 +485,7 @@ func _sync() -> void:
 			_native_move_router.call("cancel_render")
 		_cancel_native_attack_tween()
 		displayed_battle = battle_id
+		_voice_director.configure(battle_id, "trainer")
 		displayed_cursor = -1
 		_revision = -1
 		selected_move = 0
@@ -561,6 +566,8 @@ func _present() -> void:
 		if displayed_cursor < 0:
 			_apply_positions(snapshot)
 		for event: Dictionary in fresh:
+			if str(event.get("kind", "")) in ["switch", "drag", "replace", "detailschange"]:
+				_remember_pokemon_name(str(event.get("actor", "")), str(event.get("details", "")))
 			_append_event(event)
 			if animate:
 				await _animate_event(event, fresh)
@@ -576,6 +583,9 @@ func _present() -> void:
 
 
 func _apply_positions(snapshot: Dictionary) -> void:
+	_presented_pokemon_names.clear()
+	for position: Dictionary in snapshot.get("positions", []):
+		_remember_pokemon_name(str(position.get("controller", "")), str(position.get("details", "")))
 	if _native_mode:
 		_apply_native_positions(snapshot)
 		return
@@ -613,6 +623,26 @@ func _apply_positions(snapshot: Dictionary) -> void:
 			cards[controller].info.text = ""
 			cards[controller].hp.value = 0
 			cards[controller].details = ""
+
+
+func _remember_pokemon_name(controller: String, details: String) -> void:
+	if controller not in SLOTS:
+		return
+	var name := details.split(",")[0].strip_edges()
+	if name.is_empty():
+		_presented_pokemon_names.erase(controller)
+	else:
+		_presented_pokemon_names[controller] = name
+
+
+func _pokemon_name_for_command(controller: String) -> String:
+	var name := str(_presented_pokemon_names.get(controller, ""))
+	if not name.is_empty():
+		return name
+	for position: Dictionary in _latest.get("positions", []):
+		if str(position.get("controller", "")) == controller:
+			return str(position.get("details", "")).split(",")[0].strip_edges()
+	return ""
 
 
 func _apply_native_positions(snapshot: Dictionary) -> void:
@@ -1720,7 +1750,20 @@ func _show_trainer_for_event(event: Dictionary) -> void:
 	var kind := str(event.get("kind", ""))
 	var message := ""
 	match kind:
-		"move": message = "Use %s!" % str(event.get("move", ""))
+		"move":
+			var pokemon := _pokemon_name_for_command(str(event.get("actor", "")))
+			var move_name := str(event.get("move", "")).strip_edges()
+			if not pokemon.is_empty() and not move_name.is_empty():
+				message = LocalizationManager.text("battle.voice.move.use", {"pokemon": pokemon, "move": move_name})
+				var player_id := "p2" if str(event.get("actor", "")) in ["p2", "p4"] else "p1"
+				var selection: Dictionary = _voice_director.resolve_command({
+					"kind": "move", "player_id": player_id, "pokemon": pokemon, "move": move_name,
+				}, {"turn": int(event.get("turn", _latest.get("turn", 0)))})
+				var text_key := str(selection.get("text_key", ""))
+				if not text_key.is_empty() and LocalizationManager.has_key(text_key):
+					message = LocalizationManager.text(text_key, selection.get("values", {}))
+			elif not move_name.is_empty():
+				message = "Use %s!" % move_name
 		"switch", "drag", "replace":
 			var pokemon := str(event.get("details", "")).split(",")[0].strip_edges()
 			if not pokemon.is_empty():

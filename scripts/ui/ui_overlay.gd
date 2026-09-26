@@ -13589,13 +13589,7 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 
 
 func _current_adventure_party_exp_buff() -> Dictionary:
-	if not CoopService.available:
-		return {}
-	var member_ids: Array = CoopService.party.get("memberIds", []) if CoopService.party.get("memberIds") is Array else []
-	var own_id := int(AuthService.current_user.get("id", 0))
-	if member_ids.size() != 2 or own_id <= 0:
-		return {}
-	if not member_ids.any(func(member_id: Variant) -> bool: return int(member_id) == own_id):
+	if not CoopService.party_exp_bonus_available():
 		return {}
 	return {
 		"id": "adventure_party_exp",
@@ -13963,6 +13957,11 @@ func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
 	return GLOBAL_EXP_BUFF_ICON
 
 func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bool) -> void:
+	# The battle chat bridge hides overworld controls each frame. Presence
+	# refreshes must not reveal a buff tray between those frames.
+	if has_meta("battle_chat_active"):
+		panel.hide()
+		return
 	var panel_id := "location" if panel == global_buffs_panel else "player_status"
 	var state: Dictionary = collapsible_panels.get(panel_id, {})
 	if state.is_empty():
