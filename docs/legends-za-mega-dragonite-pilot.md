@@ -1,8 +1,8 @@
 # Legends ZA Mega Dragonite: local 3D pilot
 
-Status: **normal/shiny approved; v5 bundle and index uploaded, desktop manifest not activated** (26 September 2026).
+Status: **normal/shiny approved; desktop release 0.3.85 live with v5** (26 September 2026).
 The model scenes and screenshots remain outside the game tree. The desktop
-release descriptor has not selected or downloaded the new bundle.
+release descriptor now selects the independently downloaded Mega bundle.
 
 ## Source and conversion
 
@@ -297,6 +297,5 @@ shiny base Dragonite scenes. No Godot script or model errors occurred.
 The local archives and store evidence are under
 `/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-evolution-test/eye-fixed-candidates`.
 The Mega archive and v5 content index were uploaded and publicly hash-verified
-after this qualification. The desktop manifest still selects the earlier
-approved set; see `docs/approved-3d-bundle-release-v5.md` for the release
-status and receipt.
+after this qualification. Desktop release 0.3.85 selects v5; see
+`docs/approved-3d-bundle-release-v5.md` for the release status and receipts.
