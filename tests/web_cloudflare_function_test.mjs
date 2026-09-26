@@ -18,7 +18,9 @@ assert.equal(isAllowedApiRoute('POST', '/battle/test-id/choice-and-resolve'), tr
 assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-rewards/test-reward/claim'), true);
 assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-quest-item-turn-ins/test-turn-in/claim'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/story-escape'), false);
-assert.equal(isAllowedApiRoute('GET', '/game/guilds-escape'), false);
+assert.equal(isAllowedApiRoute('GET', '/game/guilds/me'), true);
+assert.equal(isAllowedApiRoute('GET', '/game/guilds/me/bank'), false);
+assert.equal(isAllowedApiRoute('PUT', '/game/guilds/me/members/7/bank-permissions'), false);
 assert.equal(isAllowedApiRoute('POST', '/pvp/queues/ranked/join'), false);
 assert.equal(isAllowedApiRoute('GET', '/internal/authority'), false);
 

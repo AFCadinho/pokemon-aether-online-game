@@ -153,6 +153,13 @@ func _prepare_world() -> void:
 		if bool(position_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(position_response.get("state", {}))
 			_apply_saved_appearance_state(saved_state)
+		elif OS.has_feature("web"):
+			var initial_position := await PlayerGameStateService.load_player_position()
+			if not bool(initial_position.get("success", false)) or not bool(initial_position.get("hasState", false)):
+				_return_to_login(str(initial_position.get("error", "Could not prepare your first location.")))
+				return
+			saved_state = _dictionary_from_value(initial_position.get("state", {}))
+			_apply_saved_appearance_state(saved_state)
 	else:
 		push_warning("LoadingScreen: player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
 		if AuthService.account_switch_pending:

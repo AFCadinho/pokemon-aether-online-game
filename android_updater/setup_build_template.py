@@ -24,6 +24,7 @@ def main() -> int:
     if not version_file.is_file():
         print(f"Godot template version missing: {version_file}", file=sys.stderr)
         return 1
+    BUILD.mkdir(parents=True, exist_ok=True)
     (BUILD.parent / ".build_version").parent.mkdir(parents=True, exist_ok=True)
     (BUILD.parent / ".build_version").write_text(version_file.read_text().strip() + "\n")
     (BUILD / ".gdignore").touch()

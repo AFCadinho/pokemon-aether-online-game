@@ -186,7 +186,7 @@ func _verify_integration_contract() -> void:
 		game_state_service.contains('const PLAYER_STORY_ENDPOINT := "/game/story"')
 		and game_state_service.contains('const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"')
 		and game_state_service.contains('const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"')
-		and game_state_service.contains('const WEB_STORY_QUEST_ACCEPT_ENDPOINT := "/auth/web/world/story/quests/%s/accept"')
+		and not game_state_service.contains('/auth/web/world/story')
 		and game_state_service.contains("func _story_quest_accept_endpoint() -> String:")
 		and game_state_service.contains("func bootstrap_story() -> Dictionary:")
 		and game_state_service.contains("func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:")
@@ -217,25 +217,24 @@ func _verify_integration_contract() -> void:
 	_expect(
 		inventory.contains('const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"')
 		and inventory.contains("func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:")
-		and inventory.contains('"/auth/web/npc-rewards"')
-		and inventory.contains('"/auth/web/npc-quest-item-turn-ins"'),
+		and not inventory.contains('/auth/web/npc-rewards')
+		and not inventory.contains('/auth/web/npc-quest-item-turn-ins'),
 		"inventory service exposes authoritative desktop and browser parcel rewards and turn-in"
 	)
 	_expect(
-		inventory.contains('const WEB_FISHING_PROGRESSION_ENDPOINT := "/auth/web/fishing/progression"')
-		and inventory.contains('const WEB_FISHING_SELECTION_ENDPOINT := "/auth/web/fishing/selection"')
-		and ev_training.contains('replace("/game/ev-training", "/auth/web/ev-training")')
-		and thieving.contains('replace("/game/thieving", "/auth/web/thieving")')
-		and rock_smash.contains('const WEB_SMASH_ENDPOINT := "/auth/web/rock-smash/smash"')
-		and skills.contains('const WEB_SKILLS_ENDPOINT := "/auth/web/skills"'),
-		"first-gym side-quest services select browser-authorized endpoints in web exports"
+		inventory.contains('const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"')
+		and inventory.contains('const FISHING_SELECTION_ENDPOINT := "/game/fishing/selection"')
+		and not ev_training.contains('/auth/web/ev-training')
+		and not thieving.contains('/auth/web/thieving')
+		and rock_smash.contains('const SMASH_ENDPOINT := "/game/rock-smash/smash"')
+		and skills.contains('const SKILLS_ENDPOINT := "/game/skills"'),
+		"first-gym side-quest services use shared endpoints"
 	)
 	_expect(
-		inventory.contains('const WEB_WORLD_PICKUPS_ENDPOINT := "/auth/web/world-pickups"')
-		and inventory.contains('const WEB_WORLD_PICKUP_CLAIM_ENDPOINT := "/auth/web/world-pickups/%s/claim"')
-		and inventory.contains("WEB_WORLD_PICKUPS_ENDPOINT if OS.has_feature(\"web\") else WORLD_PICKUPS_ENDPOINT")
-		and inventory.contains("WEB_WORLD_PICKUP_CLAIM_ENDPOINT if OS.has_feature(\"web\") else WORLD_PICKUP_CLAIM_ENDPOINT"),
-		"browser pickup collection and claims both use authorized web endpoints"
+		inventory.contains('const WORLD_PICKUPS_ENDPOINT := "/game/world-pickups"')
+		and inventory.contains('const WORLD_PICKUP_CLAIM_ENDPOINT := "/game/world-pickups/%s/claim"')
+		and not inventory.contains('/auth/web/world-pickups'),
+		"browser pickup collection and claims use shared endpoints"
 	)
 	_expect(
 		inventory.contains('if bool(body.get("caught", false))')

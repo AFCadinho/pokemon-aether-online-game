@@ -44679,15 +44679,9 @@ func _hide_pvp_mode_menu() -> void:
 	_deactivate_ui_panel(pvp_mode_menu)
 
 func _on_pvp_mode_ranked_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("Ranked PvP")
-		return
 	await _open_pvp_popup_section("Ranked")
 
 func _on_pvp_mode_tournaments_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("Tournaments")
-		return
 	await _open_pvp_popup_section("Tournaments")
 
 
@@ -49656,10 +49650,6 @@ func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
 
 
 func _refresh_pvp_ranked_queue_availability(delta: float) -> void:
-	# Ranked matchmaking is intentionally desktop-only.  Do not keep polling
-	# its account endpoint in the browser demo after the button has been gated.
-	if OS.has_feature("web"):
-		return
 	pvp_ranked_queue_availability_elapsed += delta
 	if pvp_ranked_queue_availability_in_flight or pvp_ranked_queue_availability_elapsed < RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS:
 		return

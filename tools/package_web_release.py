@@ -55,6 +55,7 @@ def main() -> None:
         "modules/manifest.json",
         "modules/aether-clash-maps.pck",
         "modules/kanto-through-misty-maps.pck",
+        "modules/kanto-extended-maps.pck",
     ):
         if not (export_dir / required).is_file():
             parser.error(f"web export is incomplete: missing {required}")

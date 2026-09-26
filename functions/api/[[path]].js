@@ -42,6 +42,9 @@ const HTTP_PREFIXES = [
   ['GET', '/auth/web/pokedex/'], ['GET', '/auth/web/items/'],
   ['GET', '/game/donator-store'], ['POST', '/game/donator-store/'],
   ['GET', '/battle/pvp/training/ai/live/'],
+  ['GET', '/account/pvp/training-ai/statistics'],
+  ['GET', '/account/pvp/training-ai/history/me'],
+  ['DELETE', '/account/pvp/training-ai/history/me'],
   ['GET', '/battle/pvp/training/ai/teams/'],
   ['GET', '/battle/pvp/rooms/'], ['POST', '/battle/pvp/rooms/'],
   ['GET', '/trainers/'], ['GET', '/npcs/'], ['GET', '/overworld-pokemon/'],
@@ -93,6 +96,16 @@ const GAMEPLAY_ROUTES = [
 
 export function isAllowedApiRoute(method, path) {
   const normalizedMethod = method.toUpperCase();
+  if (path.split('/').includes('internal')) return false;
+  if (/^\/game\/(?:trades|loans|exchange)(?:\/|$)/.test(path)
+      || /^\/game\/guilds\/me\/bank(?:\/|$)/.test(path)
+      || /^\/game\/guilds\/me\/members\/[^/]+\/bank-permissions$/.test(path)
+      || /^\/game\/pokemon\/[^/]+\/transfer(?:\/|$)/.test(path)
+      || /^\/game\/mail\/[^/]+\/(?:claim|attachments\/[^/]+\/claim)$/.test(path)) return false;
+  // Gameplay uses the same account API on every platform. Transfer rules are
+  // enforced by the account service from the persisted session type.
+  if (path.startsWith('/game/') && ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) return true;
+  if (path.startsWith('/account/pvp/') && ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) return true;
   if (HTTP_ROUTES.has(`${normalizedMethod} ${path}`)) return true;
   if (GAMEPLAY_ROUTES.some(([verb, pattern]) => verb === normalizedMethod && pattern.test(path))) return true;
   if (normalizedMethod === 'GET' && WEBSOCKETS.has(path)) return true;
@@ -131,7 +144,7 @@ export async function onRequest(context) {
     });
   }
   const contentLength = Number(context.request.headers.get('content-length') || 0);
-  const largeBattlePayload = backendPath.startsWith('/battle/') || ['/auth/web/party', '/auth/web/party/battle-state'].includes(backendPath);
+  const largeBattlePayload = backendPath.startsWith('/battle/') || ['/auth/web/party', '/auth/web/party/battle-state', '/game/party', '/game/party/battle-state'].includes(backendPath);
   const maximumBytes = largeBattlePayload ? 128 * 1024 : 16 * 1024;
   if (contentLength > maximumBytes) {
     return Response.json({ detail: { code: 'request_too_large' } }, {

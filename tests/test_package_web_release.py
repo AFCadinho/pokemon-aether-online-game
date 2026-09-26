@@ -63,6 +63,7 @@ class PackageWebReleaseTests(unittest.TestCase):
                 'modules/manifest.json': b'{"schemaVersion":1,"modules":{}}',
                 'modules/aether-clash-maps.pck': b'module',
                 'modules/kanto-through-misty-maps.pck': b'misty module',
+                'modules/kanto-extended-maps.pck': b'extended module',
                 'modules/export.log': b'private build diagnostics',
             }.items():
                 path = export / name

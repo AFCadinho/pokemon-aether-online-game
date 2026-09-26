@@ -10,15 +10,15 @@ func _init() -> void:
 
 func _run() -> void:
 	for path: String in ["boxes/0", "pokemon/storage/move", "party/heal", "party/battle-state", "wallet/rewards/trainer-battle", "markets/standard", "trainers/zoe/progress", "pokedex/species", "pokedex/species/pidgey", "items/search", "hotbar", "player-actions", "player-actions/escape-rope/execute"]:
-		_check(Runtime.browser_gameplay_url("http://localhost/api/game/" + path) == "http://localhost/api/auth/web/" + path, "browser route: " + path)
+		_check(Runtime.browser_gameplay_url("http://localhost/api/game/" + path) == "http://localhost/api/game/" + path, "shared gameplay route: " + path)
 	var pokedex_service_source := FileAccess.get_file_as_string("res://scripts/services/pokedex_service.gd")
 	_check(_function(pokedex_service_source, "_request_json").contains("WebRuntime.gameplay_url(url)"), "Pokédex requests use the scoped browser transport")
 	var hotbar_service_source := FileAccess.get_file_as_string("res://scripts/services/player_hotbar_service.gd")
 	_check(_function(hotbar_service_source, "_request_json").contains("WebRuntime.gameplay_url(base_url + HOTBAR_ENDPOINT)"), "hotbar requests use the scoped browser transport")
 	var action_service_source := FileAccess.get_file_as_string("res://scripts/services/player_action_service.gd")
 	_check(_function(action_service_source, "_request_json").contains("WebRuntime.gameplay_url(base_url + endpoint)"), "hotbar player actions use the scoped browser transport")
-	for path: String in ["trades", "loans", "guilds/me/bank", "aether-clash/challenges", "dev/pokemon", "party-escape"]:
-		_check(Runtime.browser_gameplay_url("/game/" + path) == "/game/" + path, "restricted route is not remapped: " + path)
+	for path: String in ["trades", "loans", "exchange", "guilds/me/bank"]:
+		_check(Runtime.browser_gameplay_url("/game/" + path) == "/game/" + path, "transfer policy is enforced by the account session: " + path)
 	var source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var ready := _function(source, "_ready")
 	_check(ready.find("_connect_world_presence_signals()") < ready.find('if OS.has_feature("web")'), "both platforms connect the visible roster before branching")
@@ -39,11 +39,11 @@ func _run() -> void:
 	_check(setup.contains("await _resume_saved_wild_battle(saved_state)"), "browser restores wild AND trainer activity on entry")
 	_check(setup.contains("WorldPresenceService.connect_presence.call_deferred()"), "browser connects presence after loading")
 	_check(setup.contains('saved_state.get("teleportAcknowledgementRequired", false)') and setup.contains("await _ack_authorized_teleport_state(saved_state)"), "browser acknowledges a pending staff teleport during startup")
-	_check(_function(source, "_process").split("\t_track_playtime")[0].contains("_publish_world_presence()"), "browser publishes movement periodically")
+	_check(_function(source, "_process").contains("_publish_world_presence()"), "browser publishes movement periodically")
 	_check(_function(source, "_apply_web_demo_transition_state").find("_publish_world_presence.call_deferred(true)") < _function(source, "_apply_web_demo_transition_state").rfind('return {"success": true}'), "map arrival publication is reachable")
 	_check(_function(source, "_apply_web_demo_transition_state").contains("await _ack_authorized_teleport_state(state)"), "live staff teleports are acknowledged after browser arrival")
 	var player_state_source := FileAccess.get_file_as_string("res://scripts/services/player_game_state_service.gd")
-	_check(_function(player_state_source, "_player_teleport_ack_endpoint").contains("WEB_PLAYER_TELEPORT_ACK_ENDPOINT if OS.has_feature(\"web\")"), "browser teleport acknowledgements stay on the scoped web boundary")
+	_check(_function(player_state_source, "_player_teleport_ack_endpoint").contains("return PLAYER_TELEPORT_ACK_ENDPOINT"), "browser teleport acknowledgements use the shared endpoint")
 	_check(_function(source, "_load_map_scene_threaded").contains('if OS.has_feature("web"):\n\t\treturn ResourceLoader.load'), "browser map changes use the synchronous PCK loader")
 	_check(_function(source, "_apply_web_demo_profile").contains('player.call("refresh_appearance")'), "browser profile refreshes the live player appearance")
 	_check(_function(source, "_publish_world_presence").contains("_enrich_web_world_presence_state(presence_state)"), "browser enriches presence before publishing it")

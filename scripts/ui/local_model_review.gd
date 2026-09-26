@@ -20,10 +20,13 @@ static func resolve(identity: String) -> Dictionary:
 	if not FileAccess.file_exists(EVIDENCE_PATH):
 		return {}
 	var evidence: Variant = JSON.parse_string(FileAccess.get_file_as_string(EVIDENCE_PATH))
-	if not evidence is Dictionary or not evidence.get("entries") is Array:
+	if not evidence is Dictionary:
+		return {}
+	var evidence_entries: Variant = evidence.get("entries", [])
+	if not evidence_entries is Array:
 		return {}
 	var expected := ""
-	for row: Dictionary in evidence.entries:
+	for row: Dictionary in evidence_entries:
 		if row.species == identity and row.get("export_status") == "exported_for_review" and row.get("visual_review") == "pending" and row.get("runtime_approved") == false:
 			expected = str(row.get("runtime_sha256", ""))
 	if expected.length() != 64:

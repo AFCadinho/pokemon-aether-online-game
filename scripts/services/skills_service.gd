@@ -6,7 +6,6 @@ signal state_changed(skills: Array)
 signal fishing_catalog_changed(catalog: Dictionary)
 
 const SKILLS_ENDPOINT := "/game/skills"
-const WEB_SKILLS_ENDPOINT := "/auth/web/skills"
 const FISHING_CATALOG_ENDPOINT := "/encounters/fishing-catalog"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -38,7 +37,7 @@ func _process(_delta: float) -> void:
 func load_skills(area_id := "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	var endpoint := WEB_SKILLS_ENDPOINT if OS.has_feature("web") else SKILLS_ENDPOINT
+	var endpoint := SKILLS_ENDPOINT
 	var normalized_area_id := str(area_id).strip_edges()
 	if normalized_area_id != "":
 		endpoint += "?areaId=%s" % normalized_area_id.uri_encode()
@@ -237,5 +236,4 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 
 
 func load_rock_smash_rewards(level: int) -> Dictionary:
-	var endpoint := "/auth/web/rock-smash/rewards" if OS.has_feature("web") else "/game/rock-smash/rewards"
-	return await _request_json("%s?level=%d" % [endpoint, level])
+	return await _request_json("/game/rock-smash/rewards?level=%d" % level)
