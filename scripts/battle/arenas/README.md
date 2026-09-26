@@ -33,6 +33,9 @@ encounter selection live in `resources/battle/environments` and
   camera/spawn framing, outdoor day/night lighting and the session-owned
   environment pool.
 
+`shared/wooded_route.gd` adds normalized tree/flower placement, camera clearance
+and capped terrace meshes for Route 1 and Route 22, without sharing map layouts.
+
 The mesh grassland base is shared infrastructure, not the generic grassfield
 layout. Route 22 does not inherit another map's layout. Additional map builders
 should extend the shared base and supply their own shape, clearing, paths and
@@ -70,6 +73,9 @@ visited map. The shared source art remains reusable. Actor state is never cached
   landmarks, terrace/pond geometry, pooled rendering and fixed-camera review.
 - `route_3_arena_check.gd`: Route 3 routing, ridge and clearing geometry,
   both pooled render passes and cleanup.
+- `routes_1_22_orbit_check.gd` and `routes_1_22_orbit_preview.gd`: full camera
+  orbit clearance and real Pokémon renders for both routes' land/water variants,
+  including day/night and the pitch/zoom limits.
 
 Historical Terrain3D comparison results are in `docs/route-22-mesh-review.md`.
 The old A/B implementation is available in commit `0bc5fd6e8`; current reviews
