@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktoplauncher haalt bij een update alleen de goedgekeurde 3D-catalogusindex op. Ontbrekende Pokémon-modellen worden afzonderlijk geladen voordat ze in een 3D-gevecht verschijnen, met downloadvoortgang en een geschatte resterende tijd.
+
 - Pallet Town, Viridian City en Pewter City hebben eigen 3D-battlearena’s naar hun pixelmaps, met herkenbare gebouwen, tuinen en bergterrassen rondom de camera. Viridian bevat ook het omheinde EV-trainingsgrasveld. Pallet heeft een open oceaan richting Cinnabar; Pallet en Viridian hebben ook een aparte waterarena.
 
 - Pewter Gym en Cerulean Gym hebben eigen, rondom ingerichte 3D-battlearena’s naar hun pixelmaps: een stenen rotshal voor Brock en een zwembadhal met gele loopbruggen voor Misty. Ook de gymtrainers gebruiken hun lokale arena.

@@ -28,6 +28,10 @@ func _run() -> void:
 	assert(service._release_index_error(index, descriptor).is_empty())
 	var result: Dictionary = service.accept_index(descriptor, path)
 	assert(result.error.is_empty() and result.jobs.size() == 83)
+	var optional: Dictionary = service.jobs(descriptor, false)
+	assert(optional.error.is_empty() and optional.jobs.is_empty())
+	optional = service.accept_index(descriptor, path, false)
+	assert(optional.error.is_empty() and optional.jobs.is_empty())
 	var jobs: Dictionary = {}
 	for job: Dictionary in result.jobs:
 		jobs[job.id] = job

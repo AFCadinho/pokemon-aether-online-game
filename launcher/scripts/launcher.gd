@@ -1779,7 +1779,7 @@ func _handle_download_response() -> void:
 		var descriptor: Dictionary = _get_dictionary(manifest, "assetBundleIndex")
 		var result: Dictionary
 		if download_type == "asset_bundle_index":
-			result = release_asset_bundles.accept_index(descriptor, file_path)
+			result = release_asset_bundles.accept_index(descriptor, file_path, false)
 		else:
 			var index: Dictionary = release_asset_bundles.cached_index(descriptor)
 			result = release_asset_bundles.accept_bundle(index, str(current_download.get("id", "")), file_path)
@@ -2053,7 +2053,7 @@ func _build_download_queue() -> void:
 
 	var bundle_descriptor := _get_dictionary(manifest, "assetBundleIndex")
 	if not bundle_descriptor.is_empty() and release_asset_bundles != null:
-		var bundle_plan: Dictionary = release_asset_bundles.jobs(bundle_descriptor)
+		var bundle_plan: Dictionary = release_asset_bundles.jobs(bundle_descriptor, false)
 		if not str(bundle_plan.get("error", "")).is_empty():
 			_log_error("Approved 3D bundle planning failed: %s" % bundle_plan.error)
 		else:

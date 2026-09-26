@@ -303,6 +303,9 @@ func get_battle_3d_catalog_path() -> String:
 			return selected
 	return battle_3d_catalog_path
 
+func has_manual_battle_3d_catalog_selection() -> bool:
+	return _manual_model_catalog_this_session
+
 func set_battle_3d_arena(id: String) -> void:
 	battle_3d_arena = preload("res://scripts/battle/arenas/arena_catalog.gd").validate_selection(id)
 	_save_and_emit()

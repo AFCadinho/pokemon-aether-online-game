@@ -100,17 +100,17 @@ func cached_index(descriptor: Dictionary) -> Dictionary:
 	return parsed
 
 
-func jobs(descriptor: Dictionary) -> Dictionary:
+func jobs(descriptor: Dictionary, include_bundles := true) -> Dictionary:
 	var error := descriptor_error(descriptor)
 	if not error.is_empty():
 		return {"error": error, "jobs": []}
 	var index := cached_index(descriptor)
 	if index.is_empty():
 		return {"error": "", "jobs": [_index_job(descriptor)]}
-	return _bundle_jobs(index, descriptor)
+	return _bundle_jobs(index, descriptor) if include_bundles else {"error": "", "jobs": []}
 
 
-func accept_index(descriptor: Dictionary, downloaded_path: String) -> Dictionary:
+func accept_index(descriptor: Dictionary, downloaded_path: String, include_bundles := true) -> Dictionary:
 	var error := descriptor_error(descriptor)
 	if not error.is_empty():
 		return {"error": error, "jobs": []}
@@ -127,7 +127,7 @@ func accept_index(descriptor: Dictionary, downloaded_path: String) -> Dictionary
 		return {"error": "Cannot create asset bundle index store.", "jobs": []}
 	var destination := _index_path(str(descriptor.sha256))
 	if FileAccess.file_exists(destination) and FileAccess.get_sha256(destination) == str(descriptor.sha256):
-		return _bundle_jobs(parsed, descriptor)
+		return _bundle_jobs(parsed, descriptor) if include_bundles else {"error": "", "jobs": []}
 	var temporary := index_root.path_join(".index-" + str(Time.get_ticks_usec()))
 	var output := FileAccess.open(temporary, FileAccess.WRITE)
 	if output == null:
@@ -149,7 +149,7 @@ func accept_index(descriptor: Dictionary, downloaded_path: String) -> Dictionary
 		DirAccess.remove_absolute(temporary)
 		return {"error": "Cannot publish asset bundle index.", "jobs": []}
 	DirAccess.remove_absolute(previous)
-	return _bundle_jobs(parsed, descriptor)
+	return _bundle_jobs(parsed, descriptor) if include_bundles else {"error": "", "jobs": []}
 
 
 func accept_bundle(index: Dictionary, asset_id: String, downloaded_path: String) -> Dictionary:
