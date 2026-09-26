@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       release_version:
-        description: Optional display version. Defaults automatically to 0.0.<workflow run number>.
+        description: Game and launcher display version for this build.
         required: false
         type: string
-        default: ""
+        default: "0.3.84"
       build_launcher:
         description: Rebuild and publish the launcher only when the launcher itself changed.
         required: false
@@ -107,7 +107,7 @@ jobs:
         env:
           INPUT_RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
-          release_version="${INPUT_RELEASE_VERSION:-0.0.${GITHUB_RUN_NUMBER}}"
+          release_version="${INPUT_RELEASE_VERSION:-0.3.84}"
           if ! printf '%s' "${release_version}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
             echo "::error::release_version must look like 0.2.0 or 0.2.0-beta.1."
             exit 1
