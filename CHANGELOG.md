@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De 3D-battlearena van Route 3 is nu rondom ingericht voor de draaibare camera, met aansluitende rotsterrassen, een zuidelijk pad met trap en extra bomen, rotsen, struiken en bloemen.
+
 - Muisklikken en aanrakingen boven zichtbare UI-knoppen worden niet meer door de vrije-ruimtebediening van de wereld onderschept.
 - De lokale desktopreview kan 81 nieuwe 3D-Pokémon veilig in de Pokédex en summary cards tonen; de camera blijft ook bij modellen met een afwijkende skin-koppeling werken.
 

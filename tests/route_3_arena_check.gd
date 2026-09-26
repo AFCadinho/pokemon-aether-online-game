@@ -57,6 +57,8 @@ func _run() -> void:
 				assert(is_equal_approx(_terrain_height(arena, Vector3(x, 0, z)), float(arena.get_meta("surface_height"))))
 		_check_stairs(arena, landmarks.get_node("LowerStairs"), 2.4)
 		_check_stairs(arena, landmarks.get_node("MoonStairs"), 3.2)
+		_check_stairs(arena, landmarks.get_node("SouthStairs"), 2.4)
+		_check_orbit(arena)
 		# Regress the green terrain protrusions found during the visual review.
 		for cliff: Node in arena.get_node("Route3Scenery/RockRidges").get_children():
 			if not str(cliff.name).begins_with("CliffFace"):
@@ -76,11 +78,26 @@ func _run() -> void:
 func _check_stairs(arena: Node3D, stairs: Node3D, rise: float) -> void:
 	var base := stairs.position
 	assert(is_equal_approx(_terrain_height(arena, base), base.y))
-	assert(is_equal_approx(_terrain_height(arena, base + Vector3(0, 0, -6)), base.y + rise))
+	assert(is_equal_approx(_terrain_height(arena, stairs.transform * Vector3(0, 0, -6)), base.y + rise))
 	for i in 10:
 		var step: MeshInstance3D = stairs.get_node("Step%d" % i)
-		var point := base + step.position
+		var point := stairs.transform * step.position
 		assert(_terrain_height(arena, point) <= point.y + step.scale.y * 0.5)
+
+func _check_orbit(arena: Node3D) -> void:
+	var target := Arenas.camera_target("route_3")
+	for degrees in range(0, 360, 15):
+		var yaw := deg_to_rad(degrees)
+		for pitch in [-0.12, 0.0, 0.65]:
+			for zoom in [0.72, 1.45]:
+				var offset: Vector3 = (Arenas.camera_home("route_3") - target).rotated(Vector3.UP, yaw)
+				offset = offset.rotated(offset.cross(Vector3.UP).normalized(), pitch) * zoom
+				var position := target + offset
+				assert(position.y > _terrain_height(arena, position) + 0.5, "Terrain must remain below the full camera orbit")
+		# A raised mountain backdrop must enclose all compass directions, including
+		# diagonal views between the former front-only scenery and the new shelves.
+		var horizon := Vector3(sin(yaw), 0, cos(yaw)) * 54.0
+		assert(_terrain_height(arena, horizon) > 6.0, "Missing mountain backdrop at %d degrees" % degrees)
 
 func _terrain_height(arena: Node3D, point: Vector3) -> float:
 	var grid: Rect2i = arena.get_meta("mesh_grid")
