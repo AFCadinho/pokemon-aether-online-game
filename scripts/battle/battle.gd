@@ -10240,6 +10240,8 @@ func _render_battle_events(
 				_summarize_active_battle_state(),
 			])
 		var staged_3d_mega := false
+		var mega_hud_panel: Control = null
+		var mega_hud_was_visible := false
 		if event_type == "mega" or event_type == "primal":
 			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			_fill_mega_event_species(event_data)
@@ -10259,6 +10261,10 @@ func _render_battle_events(
 			var public_mega_species := str(event_data.get("species", "")) if training_ai_battle else ""
 			if not staged_3d_mega:
 				_update_active_pokemon_presentation_for_ident(mega_ident, public_mega_species)
+			else:
+				mega_hud_panel = player_hud_panel if _get_player_id_from_ident(mega_ident) == "p1" else enemy_hud_panel
+				mega_hud_was_visible = mega_hud_panel.visible
+				mega_hud_panel.hide()
 			# AI Practice receives the complete resolution before its events are
 			# rendered. Its 2D overlay needs the transformed sprite before starting;
 			# the staged 3D model swaps only at the reveal sound.
@@ -10290,6 +10296,8 @@ func _render_battle_events(
 			var reveal_species := str(event_data.get("species", "")) if training_ai_battle else ""
 			presentation["effect_reveal_3d"] = func():
 				_update_active_pokemon_presentation_for_ident(reveal_ident, reveal_species)
+				if is_instance_valid(mega_hud_panel):
+					mega_hud_panel.hide()
 		var apply_forme_change_after_render := event_type == "formeChange"
 		if (
 			event_type == "formeChange"
@@ -10342,6 +10350,8 @@ func _render_battle_events(
 			])
 		if not (suppress_terminal_win_presentation and event_type == "win"):
 			await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)
+		if is_instance_valid(mega_hud_panel):
+			mega_hud_panel.visible = mega_hud_was_visible
 		if spectator_exit_in_progress:
 			return
 		if replay_mode and owned_replay_generation != replay_generation:

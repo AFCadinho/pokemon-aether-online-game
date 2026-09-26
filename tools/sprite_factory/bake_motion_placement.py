@@ -15,7 +15,7 @@ def bake(report, grounded_sleep):
         lift = entry["candidate_lift"]
         profile = {"schema": 1, "sha256": entry["sha256"], "scale": entry["scale"],
                    "yaw_degrees": entry["yaw_degrees"], "lift": lift, "clips": {}}
-        for action in ("physical_attack", "physical_attack_2", "special_attack", "damage", "sleep", "faint_start", "faint_loop"):
+        for action in ("physical_attack", "physical_attack_2", "special_attack", "damage", "sleep", "faint_start", "faint_loop", "mega_appeal"):
             if action not in entry["clips"]:
                 continue
             if action == "sleep" and species not in grounded_sleep:

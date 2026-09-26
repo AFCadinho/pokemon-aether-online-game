@@ -21,8 +21,8 @@ class PlayableReviewRegistrationTests(unittest.TestCase):
         self.assertEqual(set(approval["approved_species"]), species)
         self.assertEqual(approval["qualification_sha256"], hashlib.sha256(qualification_path.read_bytes()).hexdigest())
         self.assertEqual(registry["catalog_batch_01_approval_sha256"], hashlib.sha256(approval_path.read_bytes()).hexdigest())
-        self.assertEqual(len(registry["models"]), 14 + 28 + 110 + 12)
-        self.assertEqual(len(registry["profiles"]), 7 + 14 + 55 + 6)
+        self.assertEqual(len(registry["models"]), 14 + 28 + 110 + 12 + 2)
+        self.assertEqual(len(registry["profiles"]), 7 + 14 + 55 + 6 + 1)
         for row in qualification["entries"]:
             name = row["species"]
             normal = registry["models"][name]

@@ -50,6 +50,14 @@ func _run() -> void:
 		login_source.contains("login_button.disabled = is_loading or not server_online"),
 		"login remains disabled while game access is unavailable"
 	)
+	_check(
+		login_source.contains("server_health_retry_timer.timeout.connect(_refresh_server_health)"),
+		"failed server checks are retried automatically"
+	)
+	_check(
+		login_source.contains("server_health_retry_timer.start()"),
+		"offline status schedules another server check"
+	)
 
 	if failed:
 		quit(1)

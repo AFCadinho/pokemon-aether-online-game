@@ -1,8 +1,8 @@
 # Legends ZA Mega Dragonite: local 3D pilot
 
-Status: **battle preview passed; not release qualified** (26 September 2026).
-This experiment does not add a selected model, bundle, content index entry, or
-download. All converted assets and screenshots remain outside the game tree.
+Status: **normal/shiny approved; v5 bundle and index uploaded, desktop manifest not activated** (26 September 2026).
+The model scenes and screenshots remain outside the game tree. The desktop
+release descriptor has not selected or downloaded the new bundle.
 
 ## Source and conversion
 
@@ -229,3 +229,74 @@ and real battle event timing remain pending. This work does not select a Mega
 model, create a bundle, or alter the content index. The new scene exists only
 to review `mega_appeal`; the previously reviewed sleep-eye correction was not
 reapplied to it.
+
+## Real battle event pilot with combined candidates (26 September 2026)
+
+The earlier preview scene had `mega_appeal` but lacked the reviewed sleep-eye
+fix. The hash-pinned offline `battle_3d_append_action.gd` tool copied that
+native clip onto the corrected normal and shiny scenes, leaving the originals
+unchanged. The resulting candidate SHA-256 values are
+`470f2bd0cec3155f4c96b63aa859fc71a12b6ac6691e88975f176f78a142ae3c`
+(normal) and
+`9ca480ed957f90a76e963eb6264e7888d53ae1c306e01410973ecab0ebb4dc09`
+(shiny). Inputs, reports, scenes, and screenshots are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-evolution-test/eye-fixed-candidates`.
+
+The first rendered battle event exposed a floor intersection in the initial
+native Mega pose. A rendered 60 Hz sweep measured its lowest point at about
+**-1.52 model units**. Both candidates passed the existing grounding check
+without errors. The motion baker and runtime clearance resolver now include
+`mega_appeal`; the baked opening clearance is about **+1.50 units** and eases
+away as the native pose rises. The 3D event only starts when the target scene
+has a calibrated `mega_appeal` motion profile. The target HP panel is hidden
+for that event so it does not cover the raised pose, then restored.
+
+The offline battle harness calls the game's actual `_render_battle_events`
+Mega route with the same presenter, state update, sound and animation router
+used by battles. In both normal and shiny runs, the base form stayed visible
+through the charge, the form changed at about **1.35 seconds**, the native
+`mega_appeal` played, and the battle remained in 3D. The corrected sleep eye
+mesh was still hidden during sleep in both new scenes. Rendered frames show
+the pose above the platform and the target HUD clear of it. The shiny test
+used a normal-colored base-form placeholder solely to exercise the variant
+switch; the resulting Mega form was the actual shiny candidate.
+
+The temporary candidate entries were removed from the game's screened
+registry after the test. At that point neither Mega variant was selected for
+release, bundled, or uploaded. The remaining decision was human review of the
+real battle frames, followed by normal and shiny bundle qualification. This harness
+is offline and does not certify a server-driven or PvP turn.
+
+## Individual Mega bundle qualification (26 September 2026)
+
+After the player's visual approval, the normal and shiny candidates were
+admitted together in the matching game and launcher review registries. The
+approval receipt is `tools/sprite_factory/mega_dragonite_approval.json`; it
+pins both scene hashes, the measured motion, local battle evidence, and the
+bundle. The approved registry now has 83 species/form profiles and 166 normal
+or shiny appearances.
+
+`tools/package_mega_dragonite_bundle.py` created one independently versioned
+asset, `pokemon_3d:dragonite:mega`, depending on the existing
+`pokemon_3d:dragonite:base` bundle. Its v1 archive is **67,184,462 bytes**
+with SHA-256
+`5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279`.
+The original Dragonite bundle was reused unchanged. Archive members contain
+only the two pinned `.scn` files and `bundle.json`.
+The packager takes the existing approved asset index with `--base-index` and
+writes `combined-index.json` next to the archive. The local combined index
+contains 83 assets; its Mega entry matches the index used in store testing.
+
+The launcher bundle store passed clean installation, a no-download repeat,
+an update involving only the Mega bundle, corrupt-download rejection with the
+previous generation retained, restart, rollback, and scene reload. The game
+then loaded both Mega variants from the store-generated runtime catalog and
+completed the actual offline Mega battle event, using the approved normal and
+shiny base Dragonite scenes. No Godot script or model errors occurred.
+
+The local archives and store evidence are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-evolution-test/eye-fixed-candidates`.
+The Mega archive and v5 content index were uploaded and publicly hash-verified
+after this qualification. The desktop manifest still selects the earlier
+approved set; see `docs/approved-3d-bundle-release-v5.md` for the release
+status and receipt.

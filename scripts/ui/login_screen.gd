@@ -20,6 +20,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const PLAYER_PREVIEW_VIEWPORT_SIZE := Vector2i(190, 154)
 const PLAYER_PREVIEW_POSITION := Vector2(95, 92)
 const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
+const SERVER_HEALTH_RETRY_SECONDS := 10.0
 
 @onready var username_input: LineEdit = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/UsernameInput
 @onready var password_input: LineEdit = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/PasswordInput
@@ -49,6 +50,9 @@ const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
 
 var server_online := false
 var server_in_maintenance := false
+var server_health_check_in_progress := false
+var server_health_retry_timer: Timer
+var last_server_health_error := ""
 var server_access_notice_active := false
 var server_access_notice_message := ""
 var server_access_notice_key := ""
@@ -102,6 +106,12 @@ func _ready() -> void:
 	_show_login_form()
 	login_return_notice = AuthService.take_pending_login_notice()
 	_apply_login_return_notice()
+	server_health_retry_timer = Timer.new()
+	server_health_retry_timer.name = "ServerHealthRetryTimer"
+	server_health_retry_timer.one_shot = true
+	server_health_retry_timer.wait_time = SERVER_HEALTH_RETRY_SECONDS
+	server_health_retry_timer.timeout.connect(_refresh_server_health)
+	add_child(server_health_retry_timer)
 	_setup_player_preview()
 	if not OS.has_feature("mobile"):
 		username_input.grab_focus()
@@ -555,14 +565,21 @@ func _submit_login() -> void:
 
 
 func _refresh_server_health() -> void:
+	if server_health_check_in_progress:
+		return
+	server_health_check_in_progress = true
+	if is_instance_valid(server_health_retry_timer):
+		server_health_retry_timer.stop()
 	var result: Dictionary = await ServerHealthService.check_async(self)
 	server_online = bool(result.get("online", false))
 	server_in_maintenance = bool(result.get("maintenance", false))
 	if server_online:
+		last_server_health_error = ""
 		_set_server_status("ui.login.server_online", ONLINE_COLOR)
 		_clear_server_access_notice()
 		await _refresh_online_players()
 	elif server_in_maintenance:
+		_log_server_health_error(result)
 		_set_server_status("ui.login.server_maintenance", CHECKING_COLOR)
 		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
 		var maintenance_message := str(result.get("message", "")).strip_edges()
@@ -571,10 +588,24 @@ func _refresh_server_health() -> void:
 		else:
 			_set_server_access_notice(maintenance_message)
 	else:
+		_log_server_health_error(result)
 		_set_server_status("ui.login.server_offline", OFFLINE_COLOR)
 		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
 		_set_server_access_notice("", "ui.login.error.offline")
 	_apply_server_access_controls()
+	server_health_check_in_progress = false
+	if not server_online and is_inside_tree() and is_instance_valid(server_health_retry_timer):
+		server_health_retry_timer.start()
+
+
+func _log_server_health_error(result: Dictionary) -> void:
+	var error_message := str(result.get("error", "Server access is unavailable."))
+	var response_code := int(result.get("status", 0))
+	var error_key := "%d:%s" % [response_code, error_message]
+	if error_key == last_server_health_error:
+		return
+	last_server_health_error = error_key
+	push_warning("Server health check failed (HTTP %d): %s" % [response_code, error_message])
 
 
 func _set_server_access_notice(message: String = "", key: String = "") -> void:
