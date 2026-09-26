@@ -213,6 +213,8 @@ local review: ordinary Dragonite charges a 3D effect, the form changes during
 the flash, then Mega Dragonite plays its native appeal. The effect uses a
 CC0 Kenney particle texture as a 3D billboard, plus local 3D rings and a
 flash sphere. The texture license is retained beside the texture. The script
+plays the game's existing `PRSFX- Mega Evolution2.wav` from the start of the
+1.35-second charge; that file lasts about 1.37 seconds. The script
 accepts the base and Mega `.scn` paths via `POKEAETHER_MEGA_PREVIEW_BASE` and
 `POKEAETHER_MEGA_PREVIEW_MEGA`; run Godot through `ops/worktrees/slot-env` in
 an assigned slot. `POKEAETHER_MEGA_PREVIEW_AUTOQUIT=1` makes the preview run
