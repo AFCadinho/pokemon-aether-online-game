@@ -164,6 +164,19 @@ func _reveal_when_prepared(token: int) -> void:
 	if released or not is_instance_valid(battle):
 		return
 	var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
+	var settings := get_node("/root/SettingsManager")
+	if presenter != null and OS.has_environment("POKEAETHER_MODEL_CATALOG") and settings.battle_presentation_mode == "3d" and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_feature("web") and not OS.has_feature("mobile"):
+		# A fresh install has no models yet. Keep the first encounter covered
+		# until its combatants are known; Team Preview deliberately opens empty.
+		var model_deadline := Time.get_ticks_msec() + 30000
+		while not released and token == generation and is_instance_valid(battle) and is_instance_valid(presenter):
+			if bool(battle.get("team_preview_lead_selection_active")) or not str(presenter.combatants[0].species).is_empty() or not str(presenter.combatants[1].species).is_empty():
+				break
+			if Time.get_ticks_msec() >= model_deadline:
+				break
+			await get_tree().process_frame
+	if released or token != generation or not is_inside_tree():
+		return
 	if presenter != null:
 		await presenter.await_prepared(true)
 	if released or token != generation or not is_inside_tree():

@@ -83,23 +83,27 @@ func show_species(species: String, shiny: bool) -> bool:
 	if not candidate_review.is_empty():
 		profile = candidate_review.profile
 		return _request_model(candidate_review.path)
-	var path := str(settings.get_battle_3d_catalog_path())
-	if path.is_empty() or not FileAccess.file_exists(path):
-		return false
-	var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not raw is Array:
-		return false
-	for candidate: Variant in raw:
-		if not candidate is Dictionary or ReviewedModels.entry_key(candidate) != requested_key:
+	var catalogs := [str(settings.get_battle_3d_catalog_path())]
+	if not settings.has_manual_battle_3d_catalog_selection():
+		var downloaded := ProjectSettings.globalize_path("user://on-demand-3d-v1/runtime-catalog.json")
+		if downloaded not in catalogs:
+			catalogs.append(downloaded)
+	for path in catalogs:
+		if path.is_empty() or not FileAccess.file_exists(path):
 			continue
-		var digest := str(candidate.get("runtime_sha256", ""))
-		var model_path := str(candidate.get("runtime_path", ""))
-		profile = ReviewedModels.resolve(requested_key, digest)
-		if profile.is_empty() or not model_path.ends_with(".scn") or not FileAccess.file_exists(model_path):
-			return false
-		if FileAccess.get_sha256(model_path) != digest:
-			return false
-		return _request_model(model_path)
+		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		if not raw is Array:
+			continue
+		for candidate: Variant in raw:
+			if not candidate is Dictionary or ReviewedModels.entry_key(candidate) != requested_key:
+				continue
+			var digest := str(candidate.get("runtime_sha256", ""))
+			var model_path := str(candidate.get("runtime_path", ""))
+			profile = ReviewedModels.resolve(requested_key, digest)
+			if profile.is_empty() or not model_path.ends_with(".scn") or not FileAccess.file_exists(model_path):
+				continue
+			if FileAccess.get_sha256(model_path) == digest:
+				return _request_model(model_path)
 	return false
 
 func _request_model(model_path: String) -> bool:

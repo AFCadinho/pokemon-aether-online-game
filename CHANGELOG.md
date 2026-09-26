@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktoplauncher haalt bij een update alleen de goedgekeurde 3D-catalogusindex op. Ontbrekende Pokémon-modellen worden afzonderlijk geladen voordat ze in een 3D-gevecht verschijnen, met downloadvoortgang en een geschatte resterende tijd.
+
 - Pewter Gym en Cerulean Gym hebben eigen, rondom ingerichte 3D-battlearena’s naar hun pixelmaps: een stenen rotshal voor Brock en een zwembadhal met gele loopbruggen voor Misty. Ook de gymtrainers gebruiken hun lokale arena.
 
 - Oudere desktoplaunchers bieden een beschikbare launcher-update nu ook aan wanneer ze de nieuwe 3D-bundellijst nog niet kennen; game- en modeldownloads starten pas na de herstart met de nieuwe launcher.

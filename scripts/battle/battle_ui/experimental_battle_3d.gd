@@ -151,6 +151,7 @@ var preparation_failed := false
 var warming_render := false
 var preparation_phase := "Loading model catalog"
 var preparation_metrics := {}
+var model_downloader: Node
 
 func _preparation_progress() -> Array:
 	var progress: Array = []
@@ -182,6 +183,10 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	# Reuse these exact viewports/materials after reveal; do not rebuild them.
 	if render_under_cover:
 		warming_render = true
+	await _ensure_downloaded_models()
+	if preparation_cancelled or preparation_failed or not is_inside_tree():
+		warming_render = false
+		return
 	var deadline := Time.get_ticks_msec() + timeout_ms
 	var started := Time.get_ticks_msec()
 	var hard_deadline := started + maxi(timeout_ms,120000)
@@ -264,6 +269,48 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			_set_active(false)
 			return
 		await get_tree().process_frame
+
+
+func _ensure_downloaded_models() -> void:
+	if OS.has_feature("web") or OS.has_feature("mobile") or not OS.has_environment("POKEAETHER_MODEL_CATALOG"):
+		return
+	var settings := get_tree().root.get_node("SettingsManager")
+	if settings.battle_presentation_mode != "3d" or settings.has_manual_battle_3d_catalog_selection():
+		return
+	while is_instance_valid(model_downloader):
+		await get_tree().process_frame
+	var needed: Array[String] = []
+	for index in 2:
+		var box: Node = boxes[index] if index < boxes.size() else null
+		if box != null and (box.double_container.visible or box.substitute_active):
+			return
+		if str(combatants[index].species).is_empty():
+			continue
+		var identity := _combatant_key(index)
+		if not identity.is_empty() and identity not in needed:
+			needed.append(identity)
+	for identity: String in staged_mega_species:
+		if not identity.is_empty() and identity not in needed:
+			needed.append(identity)
+	if needed.is_empty():
+		return
+	model_downloader = preload("res://scripts/services/on_demand_3d_bundle_service.gd").new()
+	add_child(model_downloader)
+	preparation_phase = "Checking approved 3D models…"
+	var old_path: String = settings.get_battle_3d_catalog_path()
+	var result: Dictionary = await model_downloader.ensure_models(needed, old_path)
+	model_downloader.queue_free()
+	model_downloader = null
+	if preparation_cancelled or not is_inside_tree():
+		return
+	if not str(result.get("error", "")).is_empty():
+		preparation_failed = true
+		reason = str(result.error)
+		return
+	var new_path := str(result.get("path", ""))
+	if not new_path.is_empty() and new_path != old_path:
+		OS.set_environment("POKEAETHER_MODEL_CATALOG", new_path)
+		_load_catalog(new_path)
 var action_generation := [0, 0]
 var camera_phase := 0.0
 var combatants := [{"species": "", "shiny": false}, {"species": "", "shiny": false}]
@@ -1027,6 +1074,9 @@ func _update_camera(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_sync_render_size()
+	if is_instance_valid(model_downloader):
+		preparation_phase = model_downloader.progress_text()
+		return
 	if preparation_failed or preparation_cancelled:
 		_set_active(false)
 		if is_instance_valid(mode_label):
