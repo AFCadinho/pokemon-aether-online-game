@@ -27,3 +27,11 @@ python3 tools/publish_approved_3d_bundles.py V5_DIR --metadata release/approved_
 
 Uploading, certification, promotion, pushing and desktop deployment are
 separate release operations.
+
+## R2 upload (26 September 2026)
+
+The Mega archive and v5 index were uploaded to the existing R2 bucket. Public
+GET verified their full sizes and SHA-256 digests (67,258,099 bytes total).
+All 84 objects required by v5 returned the pinned sizes in public HEAD checks.
+The details are recorded in `release/approved_3d_bundles_v5_r2_upload.json`.
+The desktop manifest has not selected v5 yet.

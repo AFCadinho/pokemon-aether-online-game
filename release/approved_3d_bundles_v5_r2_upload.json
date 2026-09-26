@@ -1,0 +1,18 @@
+{
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v5-609e95118b68fc22d7020a84e23589a22a4293e1396da56e04b253cf6e1bd447.json",
+    "sha256": "609e95118b68fc22d7020a84e23589a22a4293e1396da56e04b253cf6e1bd447",
+    "size_bytes": 73637
+  },
+  "desktop_manifest_activated": false,
+  "new_bundle_objects_uploaded": 1,
+  "pinned_receipt_sha256": "7bd6e69f91cd9b585af46b63bd13416b45165276b811f9d9b3e869dcaf02d360",
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_bytes": 67258099,
+  "public_get_sha256_verified_objects": 2,
+  "public_head_size_verified_objects": 84,
+  "revision": "approved-pokemon-3d-v5",
+  "schema": 1,
+  "unchanged_v4_bundle_objects": 82,
+  "verified_at_utc": "2026-09-26T16:22:57.378084+00:00"
+}
