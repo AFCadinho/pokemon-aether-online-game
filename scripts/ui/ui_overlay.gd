@@ -27107,6 +27107,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 					var current := _get_active_pokemon_summary_pokemon()
 					if current != null:
 						_set_pokemon_summary_sprite(current, false))
+		preview.set_pokemon_types(pokemon.types)
 		preview.show()
 		var key := str(pokemon.species) + (":shiny" if pokemon.shiny else ":normal")
 		var ready_or_loading: bool = preview.get_meta("summary_species", "") == key and (preview.actor != null or not preview.loading_path.is_empty())

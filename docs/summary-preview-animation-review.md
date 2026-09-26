@@ -48,3 +48,25 @@ as part of this UI correction.
 available Garchomp clips, replay, zoom, faint-to-damage pose determinism,
 refresh reuse, hidden rendering, independent Azumarill playback, and shiny
 sprite fallback. Optional SUMMARY_CAPTURE saves idle/faint/damage screenshots.
+
+
+## 2026-09-27: automatic arena backgrounds and closer framing
+
+Summary cards now render the existing generic grassfield, cave and sea builders
+in a separate, card-owned scenery viewport. `Pokemon.types` selects sea for Water
+(including Water/Ground), cave for Rock/Ground, and grassfield otherwise. Missing
+types default to grassfield. There is no habitat field or per-species lookup.
+
+The scenery uses stable daylight. The Pokémon retains its neutral review lighting
+and transparent model pass, so low native poses remain visible over terrain.
+Both passes stop rendering when the card is hidden. Forest art uses the existing
+manifest loader and async readiness polling; absent art keeps the 2D backdrop.
+No art downloads, new packs, or changes to approved model placement are required.
+
+Framing uses the initial posed mesh vertices on the GPU, with source vertices as
+the headless fallback. It reserves badge/control space and refits cached idle
+geometry when the card resizes or the model is rotated. Animation changes keep
+the camera stable; 2× zoom remains an intentional close inspection view. The
+summary preview test covers type selection, arena switching without actor reload,
+visible silhouette size/margins, rotation, zoom, animation resets, two independent
+cards, hidden rendering and the existing shiny sprite fallback.
