@@ -20,7 +20,11 @@ func _init() -> void:
 	_check(Build.append_http_header(source).has("User-Agent: PokeAether/1.0"), "desktop build headers preserve user agent")
 	_check(Runtime.api_base_url() == "", "desktop never uses browser origin")
 	var shell := FileAccess.get_file_as_string("res://infrastructure/web/shell.html")
+	var export_presets := FileAccess.get_file_as_string("res://export_presets.cfg")
+	var web_export_options := export_presets.split("[preset.3.options]", false, 1)[1].split("[preset.4]", false, 1)[0]
 	var client_build := FileAccess.get_file_as_string("res://scripts/services/client_build.gd")
+	_check(web_export_options.contains("html/experimental_virtual_keyboard=true"),
+		"mobile browser exports include Godot's virtual keyboard support")
 	_check(shell.contains("if (!local && !webRelease)"), "only unconfigured non-local web exports are blocked")
 	_check(shell.contains("window.POKEAETHER_WEB_RELEASE || null"), "production release configuration is explicit")
 	_check(client_build.contains("clientBuildId"), "preview runtime can identify with the active production build")
