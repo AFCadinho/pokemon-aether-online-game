@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De browser- en desktopclient ondersteunen nu een korte klik op vrije speelruimte als interactie en muis slepen als tijdelijke joystick.
+
 - Gevechten met wilde Pokémon en trainers op Route 3 gebruiken nu een eigen 3D-arena met het rotsachtige pad en de begroeiing van die route.
 
 - De desktoplauncher kan de volledige goedgekeurde 3D-catalogus van 82 Pokémon plus Mega Dragonite normal en shiny als afzonderlijke bundles downloaden zodra release v5 is gepubliceerd.
