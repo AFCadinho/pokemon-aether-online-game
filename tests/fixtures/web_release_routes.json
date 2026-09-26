@@ -361,6 +361,14 @@
       "/battle/pvp/training/ai/battles"
     ],
     [
+      "POST",
+      "/battle/pvp/matches/test-match/start-battle"
+    ],
+    [
+      "GET",
+      "/battle/pvp/matches/test-match/spectate"
+    ],
+    [
       "GET",
       "/battle/test-id/state"
     ],
@@ -419,6 +427,58 @@
     [
       "POST",
       "/game/rock-smash/smash"
+    ],
+    [
+      "GET",
+      "/damage-calc/catalog/items"
+    ],
+    [
+      "GET",
+      "/damage-calc/catalog/abilities"
+    ],
+    [
+      "GET",
+      "/damage-calc/catalog/natures"
+    ],
+    [
+      "GET",
+      "/damage-calc/catalog/moves"
+    ],
+    [
+      "GET",
+      "/damage-calc/catalog/formes/charizard"
+    ],
+    [
+      "GET",
+      "/calcdex/v1/sample-sets/aether-ou/charizard"
+    ],
+    [
+      "POST",
+      "/world/weather/action"
+    ],
+    [
+      "POST",
+      "/team/export"
+    ],
+    [
+      "PUT",
+      "/auth/account"
+    ],
+    [
+      "POST",
+      "/auth/account-portal/launch"
+    ],
+    [
+      "GET",
+      "/auth/account-portal/patreon/status"
+    ],
+    [
+      "POST",
+      "/privacy/export"
+    ],
+    [
+      "POST",
+      "/privacy/delete"
     ]
   ],
   "denied": [
@@ -517,6 +577,26 @@
     [
       "POST",
       "/pvp/queues/ranked/join"
+    ],
+    [
+      "POST",
+      "/auth/login"
+    ],
+    [
+      "POST",
+      "/damage-calc/catalog/items"
+    ],
+    [
+      "GET",
+      "/damage-calc/catalog/private"
+    ],
+    [
+      "POST",
+      "/calcdex/v1/sample-sets/aether-ou/charizard"
+    ],
+    [
+      "GET",
+      "/ws/trade"
     ]
   ]
 }

@@ -125,3 +125,107 @@ These candidates still expose only one `physical_attack`. The ZA source has
 `attack03_end` as a separate staged attack. The latter has not been assembled
 or reviewed as the game's `physical_attack_2` action. It must not be claimed
 as a second available physical attack in this pilot.
+
+## Second physical attack and sleep candidate (26 September 2026)
+
+The next local candidate combines the Mega source's `attack03_start` (35
+frames), `attack03_loop` (21 frames), and `attack03_end` (101 frames) into one
+155-frame `physical_attack_2` at 60 Hz. The exporter now supports a reviewed
+ordered list of source phases on a single NLA track. This is separate from the
+existing `attack01` physical action. Both normal and shiny Godot scenes expose
+eight battle actions.
+
+The **Mega** source directory has no sleep animation. The same archive does
+contain `pm0149_00_00_20281_sleep01_loop` for ordinary Dragonite. That 161-frame
+action was imported onto the Mega rig and replaces the earlier idle-as-sleep
+alias in this local candidate. It is a retargeted base-form motion, so the
+Mega-specific wings, tail, and face still need human review in motion. The
+importer reports inherited eyelid-pose and unapplied TRACM material/visibility
+tracks; those limitations also remain for the other actions.
+
+Artifacts are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-attack2-test`.
+The prepared Blender source SHA-256 values are
+`6520c4fab420a0bf9573a462232a8ed61c21c724c448508d5cdcf0460987d662`
+(normal) and
+`975fbf1214c80191f27744ba979067bd7a5d1494a091d0ad95b92c99f53739df`
+(shiny). The corresponding Godot scene SHA-256 values are
+`ea0f7d23ee709b8c571b35ee4500512223229be31731a1c7b1178e81841bebdb`
+and `367557de31b200b0927527e7f5723696b1cfefba446853cf0bca6adaadff4ed7`.
+Both GLB reports passed the existing validator, both Godot scenes reloaded,
+and rendered 60 Hz grounding measurements were baked into motion profiles.
+The local battle presenter loaded normal and shiny, played both physical
+actions and sleep, and advanced faint start to faint loop without a pose or
+timing error. Screenshots named `composite-mega-physical_attack_2*.png` and
+`composite-mega-sleep*.png` show sampled battle poses. This remains a local
+candidate; no selected catalog entry, bundle, content-index entry, or upload
+has been made.
+
+## Sleep eyes corrected in local review (26 September 2026)
+
+Human review found the eyes visibly open during the borrowed Dragonite sleep
+loop. The base-form clip omits ten Mega upper-eyelid tracks. A fresh normal
+and shiny import uses Mega Dragonite's own `28000_eye01` frame 10 as the closed
+eyelid baseline for those missing tracks; both import reports now have no
+unresolved sleep eyelid warning.
+
+The eyes were still visibly open in Godot because the baked eye image contains
+the open iris. The base sleep TRACM specifies a fixed eye UV offset of about
+`-0.35513`, which the current PBR material bake does not preserve. Applying
+that offset to a material override did not survive the battle presenter's
+material-response pass. The reviewed local candidate therefore hides the eye
+mesh **only during sleep**, with the closed eyelid pose retained, and restores
+it for all other actions. This is an explicit visual approximation, not a
+claim of full source eye-shader parity. The offline, SHA-pinned transformation
+is implemented by `battle_3d_action_visibility_patch.gd`; its inputs and
+reports are in the `eyelid-fix/{normal,shiny}` artifact directories.
+
+Both corrected Blender exports passed the report validator, both Godot scenes
+reloaded, and rendered 60 Hz grounding checks reported zero errors. The local
+battle presenter exercised normal and shiny idle, two physical attacks,
+special attack, damage, sleep, and faint start/loop without a model, pose, or
+timing failure. The corrected sleep and late-sleep screenshots are in
+`eyelid-fix/composite-mega-sleep*.png`. The player then confirmed the closed-eye
+sleep appearance in the reopened interactive battle preview. The final local
+scene SHA-256 values are
+`044a0801792b20457736787e3f4ffb4e26afb68ef6ff05260556e9bdceac1881`
+(normal) and
+`2537d353bcbeb5a3a2a3b7e15455ab437b049382858f911f1b6822dca1ae5cad`
+(shiny). This is still a local pilot: the complete Mega event and release
+bundle qualification remain pending, and neither scene is selected or
+uploaded.
+
+## Local 3D Mega Evolution preview (26 September 2026)
+
+The ZA archive also contains `pm0149_51_00_20620_megaappeal01.tranm`:
+181 frames at 60 FPS, non-looping. It is a motion on the Mega rig, not a
+base-to-Mega mesh morph. The pinned clip SHA-256 is
+`1466bbc4e1d95a7471e018aa56c140c017a70ddc6a6e74f62622aae752a7e46e`.
+It was appended to a copy of the reviewed normal Mega source and exported as
+the additional `mega_appeal` action. The GLB report passed the existing
+validator and Godot reloaded the standalone runtime scene. The scene SHA-256
+is `67b9f3921d2db0120776fcb030c2ecb5599e18128e7276f3f8f393f0f48cc4cc`.
+Artifacts are under
+`/home/adinho/Documents/3d_models/LegendsZA-Mega-Dragonite-evolution-test`.
+
+`tools/sprite_factory/mega_dragonite_evolution_preview.gd` is a standalone
+local review: ordinary Dragonite charges a 3D effect, the form changes during
+the flash, then Mega Dragonite plays its native appeal. The effect uses a
+CC0 Kenney particle texture as a 3D billboard, plus local 3D rings and a
+flash sphere. The texture license is retained beside the texture. The script
+plays the game's existing `PRSFX- Mega Evolution1.wav` during the charge and
+starts `PRSFX- Mega Evolution2.wav` at the form reveal. Those files last about
+1.92 and 1.37 seconds respectively, so the reveal sound extends into the
+native Mega pose. The script
+accepts the base and Mega `.scn` paths via `POKEAETHER_MEGA_PREVIEW_BASE` and
+`POKEAETHER_MEGA_PREVIEW_MEGA`; run Godot through `ops/worktrees/slot-env` in
+an assigned slot. `POKEAETHER_MEGA_PREVIEW_AUTOQUIT=1` makes the preview run
+headlessly to completion. Optional `POKEAETHER_MEGA_PREVIEW_SCREENSHOTS` saves
+sample frames. The live preview has replay, reset, and camera-turn controls.
+
+The headless pass logged the native appeal swap and completion without errors.
+Rendered samples are in `screenshots-approved-layout/`. Human visual review
+and real battle event timing remain pending. This work does not select a Mega
+model, create a bundle, or alter the content index. The new scene exists only
+to review `mega_appeal`; the previously reviewed sleep-eye correction was not
+reapplied to it.

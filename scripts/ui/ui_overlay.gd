@@ -44886,23 +44886,30 @@ func _select_first_pvp_queue_for_mode(mode: String) -> bool:
 	var normalized_mode: String = mode.strip_edges().to_lower()
 	if normalized_mode == "":
 		return false
-	for queue: Dictionary in pvp_available_queues:
-		var queue_mode: String = str(queue.get("mode", "")).strip_edges().to_lower()
-		if queue_mode != normalized_mode:
-			continue
-		var queue_id: String = str(queue.get("id", "")).strip_edges()
-		if queue_id == "":
-			continue
-		pvp_active_queue_id = queue_id
-		_select_pvp_queue_by_id(queue_id)
-		_update_pvp_active_format_from_queue_id(queue_id)
-		if pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
-			_refresh_pvp_queue_buttons(pvp_active_queue_status)
-		else:
-			_set_pvp_queue_status_key("ui.pvp.queue.ready")
-			_refresh_pvp_queue_buttons("idle")
-		return true
-	return false
+	var preferred_queue := _pvp_queue_by_id(pvp_active_queue_id)
+	if str(preferred_queue.get("mode", "")).strip_edges().to_lower() != normalized_mode:
+		preferred_queue = {}
+	if preferred_queue.is_empty() and normalized_mode == "ranked":
+		for queue: Dictionary in pvp_available_queues:
+			if str(queue.get("mode", "")).strip_edges().to_lower() == "ranked" and _pvp_queue_format_key(queue) == PVP_RANKED_DEFAULT_FORMAT_KEY:
+				preferred_queue = queue
+				break
+	if preferred_queue.is_empty():
+		for queue: Dictionary in pvp_available_queues:
+			if str(queue.get("mode", "")).strip_edges().to_lower() == normalized_mode and str(queue.get("id", "")).strip_edges() != "":
+				preferred_queue = queue
+				break
+	if preferred_queue.is_empty():
+		return false
+	pvp_active_queue_id = str(preferred_queue.get("id", "")).strip_edges()
+	_select_pvp_queue_by_id(pvp_active_queue_id)
+	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
+	if pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "":
+		_refresh_pvp_queue_buttons(pvp_active_queue_status)
+	else:
+		_set_pvp_queue_status_key("ui.pvp.queue.ready")
+		_refresh_pvp_queue_buttons("idle")
+	return true
 
 func _select_pvp_mode_by_queue_id(queue_id: String) -> void:
 	if pvp_mode_select == null:
@@ -47679,8 +47686,16 @@ func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
 		pvp_queue_select.set_item_metadata(0, "ranked_queue_v1")
 
 	if not _select_pvp_queue_by_id(pvp_active_queue_id):
-		pvp_active_queue_id = str(pvp_queue_select.get_item_metadata(0)).strip_edges()
-		pvp_queue_select.select(0)
+		var default_queue_id := ""
+		for queue: Dictionary in pvp_available_queues:
+			if str(queue.get("mode", "")).strip_edges().to_lower() == "ranked" and _pvp_queue_format_key(queue) == PVP_RANKED_DEFAULT_FORMAT_KEY:
+				default_queue_id = str(queue.get("id", "")).strip_edges()
+				break
+		if default_queue_id != "" and _select_pvp_queue_by_id(default_queue_id):
+			pvp_active_queue_id = default_queue_id
+		else:
+			pvp_active_queue_id = str(pvp_queue_select.get_item_metadata(0)).strip_edges()
+			pvp_queue_select.select(0)
 	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("Ranked"))

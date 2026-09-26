@@ -17,6 +17,10 @@ const HTTP_ROUTES = new Set([
   'POST /battle/pvp/rooms', 'GET /pokemon/stats',
   'POST /pokemon/create-from-text', 'POST /team/create-from-text',
   'POST /auth/email-verification/confirm',
+  'PUT /auth/account', 'POST /auth/account-portal/launch',
+  'GET /auth/account-portal/patreon/status',
+  'POST /privacy/export', 'POST /privacy/delete',
+  'POST /team/export', 'POST /world/weather/action',
   'GET /auth/web/boxes', 'GET /auth/web/wallet', 'PUT /auth/web/party',
   'POST /auth/web/party/heal', 'POST /auth/web/party/swap', 'POST /auth/web/party/set-slot',
   'POST /auth/web/pokemon/storage/move',
@@ -70,7 +74,11 @@ const HTTP_PREFIXES = [
 ];
 
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
-const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live']);
+const CALCULATOR_CATALOG_ROUTE = /^\/damage-calc\/catalog\/(?:items|abilities|natures|moves|formes\/[A-Za-z0-9-]{1,100})$/;
+const CALCDEX_SAMPLE_SETS_ROUTE = /^\/calcdex\/v1\/sample-sets\/[a-z0-9-]{1,64}\/[A-Za-z0-9-]{1,128}$/;
+const PVP_MATCH_START_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/start-battle$/;
+const PVP_MATCH_SPECTATE_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/spectate$/;
+const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live', '/ws/training-live']);
 const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
   ['GET', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp$/],
@@ -110,6 +118,9 @@ export function isAllowedApiRoute(method, path) {
   if (GAMEPLAY_ROUTES.some(([verb, pattern]) => verb === normalizedMethod && pattern.test(path))) return true;
   if (normalizedMethod === 'GET' && WEBSOCKETS.has(path)) return true;
   if (AI_BATTLE_ROUTE.test(path) && ['GET', 'POST'].includes(normalizedMethod)) return true;
+  if (normalizedMethod === 'GET' && (CALCULATOR_CATALOG_ROUTE.test(path) || CALCDEX_SAMPLE_SETS_ROUTE.test(path))) return true;
+  if (normalizedMethod === 'POST' && PVP_MATCH_START_ROUTE.test(path)) return true;
+  if (normalizedMethod === 'GET' && PVP_MATCH_SPECTATE_ROUTE.test(path)) return true;
   return HTTP_PREFIXES.some(([allowedMethod, prefix]) => {
     if (normalizedMethod !== allowedMethod) return false;
     return prefix.endsWith('/') ? path.startsWith(prefix) : path === prefix || path.startsWith(`${prefix}/`);
@@ -144,7 +155,7 @@ export async function onRequest(context) {
     });
   }
   const contentLength = Number(context.request.headers.get('content-length') || 0);
-  const largeBattlePayload = backendPath.startsWith('/battle/') || ['/auth/web/party', '/auth/web/party/battle-state', '/game/party', '/game/party/battle-state'].includes(backendPath);
+  const largeBattlePayload = backendPath.startsWith('/battle/') || ['/auth/web/party', '/auth/web/party/battle-state', '/game/party', '/game/party/battle-state', '/team/export'].includes(backendPath);
   const maximumBytes = largeBattlePayload ? 128 * 1024 : 16 * 1024;
   if (contentLength > maximumBytes) {
     return Response.json({ detail: { code: 'request_too_large' } }, {

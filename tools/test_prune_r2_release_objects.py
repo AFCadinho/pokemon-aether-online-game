@@ -32,6 +32,22 @@ def recent_item(key: str, hours_old: int, size: int = 10) -> R2Object:
 
 
 class R2ReleasePrunerTests(unittest.TestCase):
+    def test_android_manifest_protects_immutable_apk_release(self) -> None:
+        manifest = {
+            "game": {
+                "url": "https://updates.pokeaether.com/game/game-current-android.apk",
+            },
+        }
+        protected = _protected_keys_from_manifests(
+            [manifest], "https://updates.pokeaether.com"
+        )
+        self.assertEqual(protected, {"game/game-current-android.apk"})
+        self.assertEqual(
+            _object_family("game/game-current-android.apk"),
+            "game:android",
+        )
+        self.assertIsNone(_object_family("game/game-current-android.zip"))
+
     def test_manifest_urls_protect_only_the_configured_public_origin(self) -> None:
         manifests = [
             {

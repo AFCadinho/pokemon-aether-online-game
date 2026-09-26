@@ -28,9 +28,19 @@ class RedirectVerificationTests(unittest.TestCase):
                     manifest[kind] = {"url": url}
                     targets.append(Response(302, url))
                 (root / f"manifest-{platform}.json").write_text(json.dumps(manifest))
+            android_url = "https://updates.pokeaether.com/game/game-build-android.apk"
+            (root / "manifest-android.json").write_text(
+                json.dumps({"game": {"url": android_url}})
+            )
+            targets.append(Response(302, android_url))
             build_opener.return_value.open.side_effect = targets
             verify(root, "https://updates.pokeaether.com")
-            self.assertEqual(build_opener.return_value.open.call_count, 4)
+            self.assertEqual(build_opener.return_value.open.call_count, 5)
+            android_request = build_opener.return_value.open.call_args_list[-1].args[0]
+            self.assertEqual(
+                android_request.full_url,
+                "https://updates.pokeaether.com/game/latest/PokeAether-android.apk",
+            )
             build_opener.return_value.open.side_effect = [Response(200, targets[0].headers["Location"])]
             with self.assertRaises(SystemExit):
                 verify(root, "https://updates.pokeaether.com")

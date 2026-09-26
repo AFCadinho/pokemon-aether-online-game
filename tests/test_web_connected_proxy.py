@@ -16,6 +16,40 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_team_export_accepts_full_party_payload(self):
+        calls = []
+        def upstream(request):
+            calls.append(request)
+            return httpx.Response(200, json={"success": True})
+        client = TestClient(
+            proxy.create_app("http://127.0.0.1:8000", transport=httpx.MockTransport(upstream)),
+            base_url="http://localhost",
+        )
+        self.assertEqual(client.post("/api/team/export", content="x" * 20000).status_code, 200)
+        self.assertEqual(len(calls[0].content), 20000)
+        self.assertEqual(client.post("/api/team/export", content="x" * (128 * 1024 + 1)).status_code, 413)
+        self.assertEqual(len(calls), 1)
+
+    def test_ranked_match_start_reaches_shared_battle_endpoint(self):
+        calls = []
+        def upstream(request):
+            calls.append(request)
+            return httpx.Response(200, json={"success": True, "battleId": "battle-test"})
+        with tempfile.TemporaryDirectory() as directory:
+            client = TestClient(
+                proxy.create_app("http://127.0.0.1:8000", Path(directory), transport=httpx.MockTransport(upstream)),
+                base_url="http://127.0.0.1:8061",
+            )
+            path = "/api/battle/pvp/matches/test-match/start-battle"
+            response = client.post(path, json={}, headers={"authorization": "Bearer test-only"})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(calls[0].url.path, path.removeprefix("/api"))
+            self.assertEqual(calls[0].headers["authorization"], "Bearer test-only")
+            self.assertEqual(calls[0].headers["x-pokeaether-client-platform"], "web")
+            self.assertEqual(client.get("/api/battle/pvp/matches/test-match/spectate").status_code, 200)
+            self.assertEqual(client.get(path).status_code, 403)
+            self.assertEqual(client.post("/api/battle/pvp/matches/test-match/settle").status_code, 403)
+
     def test_adventure_party_uses_shared_browser_and_desktop_client_paths(self):
         root = Path(__file__).resolve().parents[1]
         service = (root / "scripts/services/coop_service.gd").read_text()
@@ -213,6 +247,13 @@ class ConnectedProxyTests(unittest.TestCase):
                 self.assertEqual(socket.receive_text(), "spectate")
                 self.assertEqual(socket.receive()["code"], 1000)
             self.assertIn("/ws/pve-live", paths[2])
+            with client.websocket_connect(
+                "ws://localhost/api/ws/training-live?token=test-only&clientBuild=web-test"
+            ) as socket:
+                socket.send_text("training-spectate")
+                self.assertEqual(socket.receive_text(), "training-spectate")
+                self.assertEqual(socket.receive()["code"], 1000)
+            self.assertIn("/ws/training-live", paths[3])
             upstream.shutdown()
             worker.join(timeout=5)
 
