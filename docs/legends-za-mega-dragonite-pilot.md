@@ -160,3 +160,37 @@ timing error. Screenshots named `composite-mega-physical_attack_2*.png` and
 `composite-mega-sleep*.png` show sampled battle poses. This remains a local
 candidate; no selected catalog entry, bundle, content-index entry, or upload
 has been made.
+
+## Sleep eyes corrected in local review (26 September 2026)
+
+Human review found the eyes visibly open during the borrowed Dragonite sleep
+loop. The base-form clip omits ten Mega upper-eyelid tracks. A fresh normal
+and shiny import uses Mega Dragonite's own `28000_eye01` frame 10 as the closed
+eyelid baseline for those missing tracks; both import reports now have no
+unresolved sleep eyelid warning.
+
+The eyes were still visibly open in Godot because the baked eye image contains
+the open iris. The base sleep TRACM specifies a fixed eye UV offset of about
+`-0.35513`, which the current PBR material bake does not preserve. Applying
+that offset to a material override did not survive the battle presenter's
+material-response pass. The reviewed local candidate therefore hides the eye
+mesh **only during sleep**, with the closed eyelid pose retained, and restores
+it for all other actions. This is an explicit visual approximation, not a
+claim of full source eye-shader parity. The offline, SHA-pinned transformation
+is implemented by `battle_3d_action_visibility_patch.gd`; its inputs and
+reports are in the `eyelid-fix/{normal,shiny}` artifact directories.
+
+Both corrected Blender exports passed the report validator, both Godot scenes
+reloaded, and rendered 60 Hz grounding checks reported zero errors. The local
+battle presenter exercised normal and shiny idle, two physical attacks,
+special attack, damage, sleep, and faint start/loop without a model, pose, or
+timing failure. The corrected sleep and late-sleep screenshots are in
+`eyelid-fix/composite-mega-sleep*.png`. The player then confirmed the closed-eye
+sleep appearance in the reopened interactive battle preview. The final local
+scene SHA-256 values are
+`044a0801792b20457736787e3f4ffb4e26afb68ef6ff05260556e9bdceac1881`
+(normal) and
+`2537d353bcbeb5a3a2a3b7e15455ab437b049382858f911f1b6822dca1ae5cad`
+(shiny). This is still a local pilot: the complete Mega event and release
+bundle qualification remain pending, and neither scene is selected or
+uploaded.
