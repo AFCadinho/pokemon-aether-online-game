@@ -125,6 +125,33 @@ def bake_color_materials(pbr=False):
     return records
 
 
+def add_action_track(rig, name, spec):
+    """Join reviewed source phases on one NLA track for one battle action."""
+    segments = spec.get('segments', [spec])
+    if not segments or (spec.get('segments') and len(segments) < 2):
+        raise ValueError('Expected at least two phases for composite action: ' + name)
+    track = rig.animation_data.nla_tracks.new()
+    track.name = name
+    cursor = 0
+    for phase in segments:
+        if phase.get('neutral_bones'):
+            raise ValueError('Needs explicit neutral-bone baking: ' + name)
+        frames = phase['frames']
+        if len(frames) < 2 or frames != list(range(int(frames[0]), int(frames[-1]) + 1)):
+            raise ValueError('Non-contiguous source animation: ' + name)
+        action = bpy.data.actions[phase['action']]
+        strip = track.strips.new(name, cursor, action)
+        if hasattr(strip, 'action_slot') and action.slots:
+            strip.action_slot = next((s for s in action.slots if s.identifier == phase.get('slot')), action.slots[0])
+        strip.action_frame_start = frames[0]
+        strip.action_frame_end = frames[-1]
+        strip.frame_start = cursor
+        cursor += frames[-1] - frames[0]
+        strip.frame_end = cursor
+    track.mute = True
+    return cursor + 1
+
+
 def export_entry(entry, output, job):
     source = Path(entry['source'])
     cfg = entry['manifest']
@@ -142,25 +169,11 @@ def export_entry(entry, output, job):
     for track in list(rig.animation_data.nla_tracks):
         rig.animation_data.nla_tracks.remove(track)
     selected = []
+    action_frames = {}
     for name, spec in cfg['actions'].items():
         if not spec:
             continue
-        if spec.get('neutral_bones'):
-            raise ValueError('Needs explicit neutral-bone baking: ' + name)
-        frames = spec['frames']
-        if frames != list(range(int(frames[0]), int(frames[-1]) + 1)):
-            raise ValueError('Non-contiguous source animation: ' + name)
-        action = bpy.data.actions[spec['action']]
-        track = rig.animation_data.nla_tracks.new()
-        track.name = name
-        strip = track.strips.new(name, 0, action)
-        if hasattr(strip, 'action_slot') and action.slots:
-            strip.action_slot = next((s for s in action.slots if s.identifier == spec.get('slot')), action.slots[0])
-        strip.action_frame_start = frames[0]
-        strip.action_frame_end = frames[-1]
-        strip.frame_start = 0
-        strip.frame_end = frames[-1] - frames[0]
-        track.mute = True
+        action_frames[name] = add_action_track(rig, name, spec)
         selected.append(name)
     bpy.ops.object.select_all(action='DESELECT')
     for obj in scene.objects:
@@ -197,7 +210,9 @@ def export_entry(entry, output, job):
         animations=animations, export_seconds=time.perf_counter()-started,
         cameras=cfg['cameras'], extensions=gltf.get('extensionsUsed', []),
         source_sha256=cfg['source']['sha256'], baked_albedo=baked,
-        action_timing={name: dict(frames=len(spec['frames']), loop=spec['loop'], speed=spec.get('speed', 1.0)) for name, spec in cfg['actions'].items() if spec},
+        action_timing={name: dict(frames=action_frames[name], loop=spec['loop'], speed=spec.get('speed', 1.0)) for name, spec in cfg['actions'].items() if spec},
+        composite_actions={name: [phase['action'] for phase in spec['segments']]
+                           for name, spec in cfg['actions'].items() if spec and spec.get('segments')},
         material_limitations=('PBR albedo/normal/roughness translated; source emission, alpha and stylized lighting remain unported' if job.get('pbr_maps') else 'Simplified PBR: original normals, roughness, emission and alpha not translated') if baked else 'Direct exporter translation, requires inspection')
 
 
