@@ -4,11 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       version_name:
-        description: Android display version, for example 0.3.84-alpha.3
+        description: Android release version
+        default: "0.3.84"
         required: true
         type: string
       version_code:
-        description: New integer Android version code, greater than the preset's code
+        description: New integer Android version code (next release uses 3)
+        default: 3
         required: true
         type: number
 
