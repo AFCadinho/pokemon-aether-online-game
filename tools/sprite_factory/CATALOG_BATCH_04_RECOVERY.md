@@ -134,3 +134,15 @@ All placement candidates require visual battle review before runtime approval.
 The completed placement pass is pinned in `catalog_production_batch_04_recovery_battle.json`: all 24 candidates pass 120 Hz clearance, readability, both-camera framing and HUD-proxy checks. Giratina uses the separate 0.85-scale recheck. The local `battle-review.html` presents 384 images. The user accepted all 24 battle presentations. Three real battle rounds per group passed loading, action, faint replacement, framing, performance and memory checks. Twenty-four individual local bundles (48 appearances, 653.51 MiB) passed archive, launcher install, scene load, no-op and restart checks. `catalog_production_batch_04_recovery_approval.json` pins the local content approval. No release was published or activated.
 
 Walking Wake and Iron Leaves remain source holds and are not counted among the 24 approvals. Their review queue remains open before batch 05.
+
+## Follow-up source lead for the two holds
+
+The public Sketchfab model metadata (checked 2026-09-27) lists downloadable,
+animated Pokémon HOME models for [Walking Wake](https://sketchfab.com/3d-models/mobile-pokemon-home-1009-walking-wake-a40571bef9954259923b01584cebf2e2)
+(six animations, uploader `goblin_king`) and [Iron Leaves](https://sketchfab.com/3d-models/mobile-pokemon-home-1010-iron-leaves-aa9345df4fc149c18ff063c7b5f91551)
+(seven animations, uploader `Forsaken AR Official`), both marked CC BY. The public
+API download endpoint returns HTTP 401 without a Sketchfab login. These are
+unverified candidate sources, not yet imported or approved: clip names, shiny
+coverage, skeleton compatibility, attribution and battle suitability require
+inspection of the actual downloaded archives. The user has been asked to supply
+local paths to those archives if their account can download them.
