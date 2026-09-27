@@ -99,17 +99,17 @@
   },
   "pallet_town": {
     "baseRGBABytes": 5363712.0,
-    "cells": 4376,
-    "fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
-    "layers": 5,
-    "usedTiles": 325
+    "cells": 4377.0,
+    "fingerprint": "7180d0e03317b6aa21d313b3b53a22f219221dded00caeaa9bfb0084f3539b70",
+    "layers": 5.0,
+    "usedTiles": 325.0
   },
   "pallet_town_compact": {
     "baseRGBABytes": 5363712.0,
-    "cells": 4376,
-    "fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
-    "layers": 5,
-    "usedTiles": 325
+    "cells": 4377.0,
+    "fingerprint": "7180d0e03317b6aa21d313b3b53a22f219221dded00caeaa9bfb0084f3539b70",
+    "layers": 5.0,
+    "usedTiles": 325.0
   },
   "pewter_city": {
     "baseRGBABytes": 6193152.0,

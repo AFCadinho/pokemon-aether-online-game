@@ -152,14 +152,14 @@
 		"pallet_town": {
 			"after": {
 				"baseRGBABytes": 5363712,
-				"cells": 4376,
-				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+				"cells": 4377,
+				"fingerprint": "7180d0e03317b6aa21d313b3b53a22f219221dded00caeaa9bfb0084f3539b70",
 				"layers": 5,
 				"usedTiles": 325
 			},
 			"animated_cells": {
 				"canopy": 1265,
-				"flower": 38,
+				"flower": 39,
 				"water": 148
 			},
 			"animated_types": 21,
@@ -169,19 +169,37 @@
 				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
 				"layers": 5,
 				"usedTiles": 325
+			},
+			"current_static_reference": {
+				"baseRGBABytes": 5363712,
+				"cells": 4377,
+				"fingerprint": "7180d0e03317b6aa21d313b3b53a22f219221dded00caeaa9bfb0084f3539b70",
+				"layers": 5,
+				"usedTiles": 325
+			},
+			"source_revision": {
+				"date": "2026-09-27",
+				"previous_visual": {
+					"baseRGBABytes": 5363712,
+					"cells": 4376,
+					"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+					"layers": 5,
+					"usedTiles": 325
+				},
+				"reason": "Reimport current Pallet Town TMX: add missing pink flower base GID44 to Objects at (10,20). Verified as the only changed cell; all 48 animation frames retained."
 			}
 		},
 		"pallet_town_compact": {
 			"after": {
 				"baseRGBABytes": 5363712,
-				"cells": 4376,
-				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+				"cells": 4377,
+				"fingerprint": "7180d0e03317b6aa21d313b3b53a22f219221dded00caeaa9bfb0084f3539b70",
 				"layers": 5,
 				"usedTiles": 325
 			},
 			"animated_cells": {
 				"canopy": 1265,
-				"flower": 38,
+				"flower": 39,
 				"water": 148
 			},
 			"animated_types": 21,
@@ -191,6 +209,24 @@
 				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
 				"layers": 5,
 				"usedTiles": 325
+			},
+			"current_static_reference": {
+				"baseRGBABytes": 5363712,
+				"cells": 4377,
+				"fingerprint": "7180d0e03317b6aa21d313b3b53a22f219221dded00caeaa9bfb0084f3539b70",
+				"layers": 5,
+				"usedTiles": 325
+			},
+			"source_revision": {
+				"date": "2026-09-27",
+				"previous_visual": {
+					"baseRGBABytes": 5363712,
+					"cells": 4376,
+					"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+					"layers": 5,
+					"usedTiles": 325
+				},
+				"reason": "Reimport current Pallet Town TMX: add missing pink flower base GID44 to Objects at (10,20). Verified as the only changed cell; all 48 animation frames retained."
 			}
 		},
 		"pewter_city": {
