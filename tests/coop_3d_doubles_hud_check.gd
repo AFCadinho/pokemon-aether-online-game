@@ -77,8 +77,14 @@ func _run() -> void:
 		"Wild doubles need one shared opponent portrait")
 	assert((stage.get_node("TrainerPortrait1").get_child(1) as TextureRect).texture.resource_path ==
 		"res://assets/ui/wild_encounter_radar.svg", "Wild portrait must use the generic encounter icon")
-	assert(stage.get_node("TrainerPortrait0").position.x < stage.get_node("TrainerPortrait2").position.x,
-		"The two party Trainer portraits must stay side by side")
+	var own_portrait: Control = stage.get_node("TrainerPortrait0")
+	var partner_portrait: Control = stage.get_node("TrainerPortrait2")
+	var wild_portrait: Control = stage.get_node("TrainerPortrait1")
+	assert(own_portrait.size == Vector2(44, 44) and partner_portrait.size == own_portrait.size
+		and wild_portrait.size == own_portrait.size, "Co-op pixel portraits must stay compact")
+	assert(is_equal_approx(partner_portrait.position.x, own_portrait.position.x + own_portrait.size.x + 8.0)
+		and is_equal_approx(wild_portrait.position.x + wild_portrait.size.x, stage.size.x - 18.0),
+		"Compact double portraits must keep their corner spacing")
 	hud._process(0.016)
 	var turn_panel: Control = battle.battle_status_panel
 	var reset_camera: Control = stage.get_node("ResetCameraButton")
@@ -89,7 +95,7 @@ func _run() -> void:
 	battle.coop_presenter._opponent_trainer.catalog_sprite.texture = load(
 		"res://assets/sprites/trainer_cards/showdown/veteran-gen7.png")
 	portraits._process(0.0)
-	assert(stage.get_node("TrainerPortrait1").visible,
+	assert(stage.get_node("TrainerPortrait1").visible and stage.get_node("TrainerPortrait1").size == Vector2(44, 44),
 		"Trainer doubles need one opponent Trainer portrait")
 	coop_service.activity = previous_activity
 	coop_service.view = previous_view

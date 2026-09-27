@@ -44,7 +44,7 @@ func _process(delta: float) -> void:
 	if player_portrait != null:
 		field_anchor = Vector2(player_portrait.position.x + player_portrait.size.x + 12, player_portrait.position.y)
 	if battle.coop_mode:
-		field_anchor = Vector2(176, 20)
+		field_anchor = Vector2(130, 20)
 	_place(field_indicators, field_anchor, field_indicators.size, 0.65)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
 	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 204, area.y - 210), Vector2(178, 34), 0.8)
@@ -90,7 +90,7 @@ func _process(delta: float) -> void:
 	_place(header, Vector2((area.x - header.size.x * 0.65) * 0.5, 12), header.size, 0.65)
 	var turn: Control = battle.get_node("%BattleStatusPanel")
 	var turn_scale := 0.6
-	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null and opponent_portrait.visible else area.x - 82
+	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null and opponent_portrait.visible else area.x - (62 if battle.coop_mode else 82)
 	var turn_x := opponent_portrait_left - turn.size.x * turn_scale - 12
 	_place(turn, Vector2(maxf(16, turn_x), 14), turn.size, turn_scale)
 	var reset_camera: Control = stage.get_node("ResetCameraButton")

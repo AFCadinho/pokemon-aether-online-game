@@ -1,6 +1,9 @@
 extends Node
 ## Presentation mirrors existing trainer identity/commands, never battle authority.
 const WILD_ENCOUNTER_ICON := preload("res://assets/ui/wild_encounter_radar.svg")
+const COOP_PORTRAIT_SIZE := Vector2(44, 44)
+const COOP_PORTRAIT_GAP := 8.0
+const PORTRAIT_MARGIN := 18.0
 var battle: Control
 var cards: Array[Panel] = []
 var heads: Array[Control] = []
@@ -130,11 +133,13 @@ func _update_coop_portraits() -> void:
 			card.hide()
 		return
 	var stage: Control = battle.battle_stage
+	for card: Panel in cards:
+		card.size = COOP_PORTRAIT_SIZE
 	for speaker: Control in speakers:
 		speaker.hide()
 	for entry: Dictionary in [
-		{"index": 0, "trainer": presenter._first_trainer, "x": 18.0},
-		{"index": 2, "trainer": presenter._second_trainer, "x": 90.0},
+		{"index": 0, "trainer": presenter._first_trainer, "x": PORTRAIT_MARGIN},
+		{"index": 2, "trainer": presenter._second_trainer, "x": PORTRAIT_MARGIN + COOP_PORTRAIT_SIZE.x + COOP_PORTRAIT_GAP},
 	]:
 		var index: int = entry.index
 		var trainer: BattleTrainerSprite = entry.trainer
@@ -153,7 +158,7 @@ func _update_coop_portraits() -> void:
 		art[1].texture = WILD_ENCOUNTER_ICON
 		art[1].show()
 		cards[1].show()
-		cards[1].position = Vector2(stage.size.x - 82.0, 12)
+		cards[1].position = Vector2(stage.size.x - PORTRAIT_MARGIN - COOP_PORTRAIT_SIZE.x, 12)
 	else:
 		var trainer: BattleTrainerSprite = presenter._opponent_trainer
 		var texture: Texture2D = trainer.catalog_sprite.texture if is_instance_valid(trainer) else null
@@ -163,7 +168,7 @@ func _update_coop_portraits() -> void:
 		art[1].texture = texture
 		art[1].visible = texture != null
 		cards[1].visible = texture != null
-		cards[1].position = Vector2(stage.size.x - 82.0, 12)
+		cards[1].position = Vector2(stage.size.x - PORTRAIT_MARGIN - COOP_PORTRAIT_SIZE.x, 12)
 
 func _rebuild_figure(index: int, state: Dictionary, fallback: Texture2D) -> void:
 	var figure := figures[index]
