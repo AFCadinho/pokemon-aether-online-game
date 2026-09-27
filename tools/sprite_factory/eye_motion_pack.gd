@@ -46,7 +46,7 @@ func apply(actor: Node, manifest: Dictionary, glb_hash: String) -> bool:
 				seen[spec.material] = true
 				var base := original.duplicate() as StandardMaterial3D
 				base.resource_local_to_scene = true
-				base.texture_repeat = false
+				base.texture_repeat = spec.get("repeat_uv", false)
 				mesh.set_surface_override_material(surface, base)
 				var prefix := str(animation_root.get_path_to(mesh)) + ":surface_material_override/" + str(surface)
 				var targets := {"UVScaleOffset": [base, prefix]}

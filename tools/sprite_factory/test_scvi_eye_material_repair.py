@@ -1,8 +1,17 @@
 import math
 import unittest
 from scvi_eye_material_repair import eyelid_transform
+from scvi_eyelid_binding import source_layers
 
 class EyelidTransformTests(unittest.TestCase):
+    def test_only_source_declared_lid_layers_are_used(self):
+        for kind, indices in [('All',[3,4]),('Upper',[3]),('Lower',[4]),('None',[])]:
+            row={'shaders':[{'name':'Eye','values':{'EyelidType':kind}}]}
+            self.assertEqual([r[1] for r in source_layers(row)],indices)
+        for kinds in [('Upper','Lower'),('Unknown',),()]:
+            row={'shaders':[{'values':{'EyelidType':k}} for k in kinds]}
+            with self.assertRaises(ValueError):source_layers(row)
+
     def test_source_top_origin_offset_is_converted_to_blender_bottom_origin(self):
         row = {'colors': {'UVScaleOffset3': [1, 1, 0, 0.6]}, 'floats': {'UVRotation3': 0}}
         scale, offset = eyelid_transform(row, 3)

@@ -15,7 +15,8 @@ import math
 from pathlib import Path
 import subprocess
 
-from rare_material_parameters import COLOR_SOCKETS, UNREPRESENTED_COLORS
+from rare_material_parameters import (COLOR_SOCKETS, UNREPRESENTED_COLORS, color_socket,
+                                      FLOAT_SOCKETS, UNREPRESENTED_FLOATS, unrepresented_eye_normal)
 from phase5_variant_parity import compare
 from scvi_identity import export_read_paths, validate_export_job
 from scvi_material_probe import inspect_materials
@@ -26,7 +27,10 @@ def digest(path: Path) -> str:
 
 
 def replacements(normal_table: Path, *, review_queue: bool = False,
-                 include_float_overrides: bool = False, include_color_overrides: bool = False):
+                 include_float_overrides: bool = False, include_color_overrides: bool = False,
+                 material_scoped: bool = False):
+    if material_scoped and not review_queue:
+        raise ValueError('Material-specific substitutions require explicit review')
     rare_table = normal_table.with_name(normal_table.stem + "_rare.trmtr")
     if not rare_table.is_file():
         raise ValueError("Official rare material table missing")
@@ -49,6 +53,12 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
         settings_b = {k: v for k, v in b.items() if k != "textures"}
         if review_queue and include_color_overrides:
             colors_a, colors_b = dict(a.get("colors", {})), dict(b.get("colors", {}))
+            # The pinned importer initializes omitted BaseColor to neutral white.
+            # Only that exact no-op omission is equivalent in this review path.
+            if colors_a.get('BaseColor') == [1.0, 1.0, 1.0, 1.0] and 'BaseColor' not in colors_b:
+                colors_a.pop('BaseColor')
+            if colors_b.get('BaseColor') == [1.0, 1.0, 1.0, 1.0] and 'BaseColor' not in colors_a:
+                colors_b.pop('BaseColor')
             if ("PointLight0_Color" not in colors_a and colors_b.get("PointLight0_Color") == [0.0, 0.0, 0.0, 1.0]
                     and b['floats'].get('PointLight0_Intensity') == 0.0):
                 colors_b.pop("PointLight0_Color")
@@ -59,12 +69,14 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
                 if colors_a[key] == colors_b[key]:
                     continue
                 if (key not in allowed or len(colors_a[key]) != 4 or len(colors_b[key]) != 4
-                        or colors_a[key][3] != 1.0 or colors_b[key][3] != 1.0
+                        or colors_a[key][3] != colors_b[key][3]
+                        or not 0.0 <= colors_a[key][3] <= 1.0
+                        or (color_socket(key, a['name']) is not None and colors_a[key][3] != 1.0)
                         or not all(math.isfinite(v) for v in colors_a[key] + colors_b[key])):
                     raise ValueError("Unrepresented rare colour change: " + key)
                 color_overrides.append({"material": a["name"], "key": key,
                                         "normal": colors_a[key], "rare": colors_b[key],
-                                        "mode": "apply" if key in COLOR_SOCKETS else "unrepresented"})
+                                        "mode": "apply" if color_socket(key, a["name"]) is not None else "unrepresented"})
             settings_b["colors"] = settings_a.get("colors", {})
             settings_a.setdefault("colors", {})
         if review_queue and settings_a != settings_b:
@@ -75,27 +87,14 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
             floats_b = dict(settings_b["floats"])
             if floats_a.get("PointLight0_Intensity") is None and floats_b.get("PointLight0_Intensity") == 0.0:
                 floats_b.pop("PointLight0_Intensity")
-            if (include_float_overrides and a["name"] in ("l_eye", "r_eye")
-                    and any(shader["name"] in ("Eye", "EyeClearCoat") for shader in a["shaders"])):
-                for key in ("EmissionIntensityLayer1", "EmissionIntensityLayer2",
-                            "EmissionIntensityLayer3", "EmissionIntensityLayer4", "EmissionIntensityLayer5",
-                            "NormalHeight1", "RoughnessHighlight", "MetallicHighlight"):
+            if include_float_overrides:
+                for key in FLOAT_SOCKETS.keys() | UNREPRESENTED_FLOATS:
                     if key in floats_a and key in floats_b and floats_a[key] != floats_b[key]:
-                        # Layers 1-4 have importer shader inputs and are applied
-                        # below. The other source floats have no such input in
-                        # the pinned importer; expose that limitation for
-                        # human review instead of silently calling it parity.
-                        mode = "apply" if key in {"EmissionIntensityLayer1", "EmissionIntensityLayer2",
-                                                   "EmissionIntensityLayer3", "EmissionIntensityLayer4"} else "unrepresented"
+                        mode = "apply" if key in FLOAT_SOCKETS else "unrepresented"
                         float_overrides.append({"material": a["name"], "key": key,
                                                 "normal": floats_a[key], "rare": floats_b[key],
                                                 "mode": mode})
                         floats_b[key] = floats_a[key]
-            if (include_float_overrides and "EmissionIntensity" in floats_a and "EmissionIntensity" in floats_b
-                    and floats_a["EmissionIntensity"] != floats_b["EmissionIntensity"]):
-                float_overrides.append({"material": a["name"], "key": "EmissionIntensity",
-                                        "normal": floats_a["EmissionIntensity"], "rare": floats_b["EmissionIntensity"], "mode": "apply"})
-                floats_b["EmissionIntensity"] = floats_a["EmissionIntensity"]
             settings_a["floats"], settings_b["floats"] = floats_a, floats_b
             shaders_a = json.loads(json.dumps(settings_a["shaders"]))
             shaders_b = json.loads(json.dumps(settings_b["shaders"]))
@@ -118,7 +117,7 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
             if before == after:
                 continue
             review_channels = {"UpperEyelidColorMap", "LowerEyelidColorMap", "EmissionColorMap",
-                               "RoughnessMap", "NormalMap", "LayerMaskMap", "MetallicMap"}
+                               "RoughnessMap", "NormalMap", "NormalMap1", "LayerMaskMap", "MetallicMap"}
             if ((channel != "BaseColorMap" and (not review_queue or channel not in review_channels))
                     or Path(before).name != before or Path(after).name != after):
                 raise ValueError("Rare material has a non-albedo change: " + a["name"] + "/" + channel)
@@ -137,8 +136,27 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
             # Some official rare tables point at a distinct filename with the
             # same pixels. Keep the embedded normal texture for that channel.
             continue
-        result.append({"normal": str(normal_png), "rare": str(rare_png),
-                       "normal_sha256": digest(normal_png), "rare_sha256": digest(rare_png)})
+        record = {"normal": str(normal_png), "rare": str(rare_png),
+                  "normal_sha256": digest(normal_png), "rare_sha256": digest(rare_png)}
+        owners = [(row, channel) for row in normal for channel, texture in row['textures'].items()
+                  if texture == before]
+        if review_queue and owners and all(unrepresented_eye_normal(row, channel) for row, channel in owners):
+            record['unrepresented_channel'] = 'NormalMap1'
+        elif any(b['textures'][channel] != after for a, b in zip(normal, rare, strict=True)
+                 for channel, texture in a['textures'].items() if texture == before):
+            if not material_scoped:
+                raise ValueError('Shared normal texture has material-specific rare bindings')
+            bindings = []
+            for a, b in zip(normal, rare, strict=True):
+                targets = {b['textures'][channel] for channel, texture in a['textures'].items() if texture == before}
+                if len(targets) > 1:
+                    raise ValueError('One material needs different replacements for a shared texture')
+                if targets == {after}:
+                    bindings.append(a['name'])
+            if not bindings:
+                raise ValueError('No material-specific replacement bindings')
+            record['material_bindings'] = bindings
+        result.append(record)
     if not result and not color_overrides:
         raise ValueError("Normal and rare albedo are byte-identical")
     if not all(math.isfinite(value) for row in float_overrides for value in (row['normal'], row['rare'])):
@@ -151,7 +169,7 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
 
 
 def prepare(row: dict, expected: dict, source_root: Path, output: Path,
-            *, review_queue: bool = False) -> tuple[dict, list[str]]:
+            *, review_queue: bool = False, material_scoped: bool = False) -> tuple[dict, list[str]]:
     species = row["species"]
     normal_path = Path(row["path"])
     if digest(normal_path) != row["glb_sha256"] or row["glb_sha256"] != expected["glb_sha256"]:
@@ -160,7 +178,8 @@ def prepare(row: dict, expected: dict, source_root: Path, output: Path,
     validate_export_job(source_job)
     normal_table = Path(source_job["material_source"])
     pairs, rare_table_sha, float_overrides, color_overrides = replacements(
-        normal_table, review_queue=review_queue, include_float_overrides=True, include_color_overrides=True)
+        normal_table, review_queue=review_queue, include_float_overrides=True, include_color_overrides=True,
+        material_scoped=material_scoped)
     directory = output / species
     directory.mkdir()
     job = {**source_job, "output": str(directory), "verified_texture_replacements": pairs,

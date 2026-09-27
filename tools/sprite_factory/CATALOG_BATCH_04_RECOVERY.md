@@ -2,8 +2,10 @@
 
 **Current status:** the last two source holds, Walking Wake and Iron Leaves,
 have since passed local normal/shiny, battle, bundle and launcher review. The
-batch-04 recovery review queue is empty. See the final qualification section
-below. No new content has been published.
+26-case batch-04 recovery review queue is empty. This does **not** complete
+the other 200 batch-04 candidates: their full normal/shiny and battle
+qualification is tracked separately in `CATALOG_BATCH_04_MAIN.md`.
+See the final qualification section below. No new content has been published.
 
 ## Scope and status
 
@@ -205,7 +207,8 @@ replaced fainted actors successfully. Their 95th percentile frame times were
 `catalog_production_batch_04_sketchfab_approval.json` pins the source, model,
 scene, bundle and review hashes.
 
-These two are **locally content-approved**, clearing the batch-04 review queue.
+These two are **locally content-approved**, clearing the 26-case recovery queue.
+The other 200 candidates still need their independent qualification.
 The approved candidate bundles are not merged into a released content index or
 uploaded. Before distribution, add the Sketchfab uploader/source attribution
 to the game's linked credits page, then run the explicitly authorized release

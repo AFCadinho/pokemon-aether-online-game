@@ -1,8 +1,17 @@
 """Resolve visibility target membership from catalog and source mesh tables."""
 from pathlib import Path
 import hashlib
+import re
 
 from scvi_identity import Buffer, read_catalog
+
+
+def mesh_name(shape):
+    """Match the pinned importer's shape removal, including embedded LODs."""
+    match = re.fullmatch(r'(.+)_shape(_lod[12])?', shape or '')
+    if match is None or '_shape' in match[1]:
+        raise ValueError('Unknown source visibility target convention')
+    return match[1] + (match[2] or '')
 
 
 def binding(intake, exported_meshes, targets, redundant=None):
@@ -46,12 +55,15 @@ def binding(intake, exported_meshes, targets, redundant=None):
             raise ValueError('Unsafe visibility mesh reference')
         mesh = Buffer(read(model_path.parent / filename))
         shapes = [mesh.string(t, 0) for t in mesh.tables(mesh.number(0), 1)]
-        if not shapes or len(shapes) != len(set(shapes)) or any(not s.endswith('_shape') for s in shapes):
+        if not shapes or len(shapes) != len(set(shapes)):
             raise ValueError('Ambiguous or unsupported source shape names')
+        mapped = [mesh_name(s) for s in shapes]
+        if len(mapped) != len(set(mapped)):
+            raise ValueError('Ambiguous mapped source shape names')
         return set(shapes)
 
     active = resource_shapes(selected, True)
-    if sorted(s.removesuffix('_shape') for s in active) != sorted(exported_meshes):
+    if sorted(mesh_name(s) for s in active) != sorted(exported_meshes):
         raise ValueError('Exported meshes differ from selected source variant')
     extra = set(targets) - active
     owners = {target: [] for target in extra}
@@ -64,6 +76,11 @@ def binding(intake, exported_meshes, targets, redundant=None):
                 owners[target].append({'resource_id': sibling['resource_id'],
                                        'form': sibling['form'],
                                        'gender_code': sibling['gender_code']})
+    if intake.get('selected_mesh_visibility_diagnostic') is True:
+        return {'policy': 'selected-source-mesh-membership-review-v1',
+                'selected_resource_id': selected['resource_id'], 'active_targets': sorted(active),
+                'excluded_targets': {t: {'absent_from_verified_selected_mesh': True, 'sibling_owners': owners[t]}
+                                     for t in sorted(owners)}, 'source_sha256': files}
     if any(len(owner) != 1 and not (len(owner) == 0 and target in redundant
                                    and redundant[target] in active)
            for target, owner in owners.items()):

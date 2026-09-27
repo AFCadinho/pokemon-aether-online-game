@@ -358,6 +358,34 @@ class IdentityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'species/form/variant'):
             validate_export_job(job)
 
+    def test_native_rare_import_needs_explicit_flag_and_matching_source(self):
+        row = self.inventory()
+        rare = Path(row['model_dir']) / (row['identity'] + '_rare.trmtr')
+        original = Path(row['motion_dir']) / rare.name
+        rare.write_bytes(b'official rare fixture')
+        original.write_bytes(rare.read_bytes())
+        proof = row['identity_evidence']
+        row['identity_evidence'] = bind(row, proof['identity'], read_catalog(proof['catalog_path']),
+                                        proof['model_root'], proof['motion_root'], proof['species_path'])
+        source = self.root / (row['identity'] + '-ready.blend')
+        source.write_bytes(b'prepared shiny fixture')
+        actions = {k: {'name': Path(p).stem} if p else None for k, p in row['motions'].items()}
+        imported = {'species': row['species'], 'identity': row['identity'], 'variant': 'shiny',
+                    'prepared_sha256': sha(source), 'actions': actions,
+                    'source_files': row['identity_evidence']['source_sha256']}
+        source.with_name('import.json').write_text(json.dumps(imported))
+        job = {'identity_intake': row, 'source': str(source), 'source_sha256': sha(source),
+               'actions': {'idle': actions['idle']['name']}, 'effect_motion_dir': row['motion_dir'],
+               'material_source': str(rare), 'native_rare_import_diagnostic': True}
+        self.assertEqual('verified', validate_export_job(job)['status'])
+        with self.assertRaisesRegex(ValueError, 'species/form/variant'):
+            validate_export_job({**job, 'native_rare_import_diagnostic': False})
+        with self.assertRaisesRegex(ValueError, 'cannot apply'):
+            validate_export_job({**job, 'verified_texture_replacements': [{'normal': 'fake'}]})
+        original.write_bytes(b'different')
+        with self.assertRaisesRegex(ValueError, 'provenance'):
+            validate_export_job(job)
+
     def test_cached_prepared_bytes_cannot_be_silently_rebaselined(self):
         source = self.root / 'sources/mareanie/normal/pm0801_00_00-ready.blend'
         source.parent.mkdir(parents=True)

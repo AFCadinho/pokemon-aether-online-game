@@ -47,6 +47,18 @@ func _run() -> void:
 	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.environment.ambient_light_color = Color.WHITE
 	environment.environment.ambient_light_energy = 0.6
+	var reflection_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_REFLECTIONS") == "neutral_studio"
+	if reflection_review:
+		# A black reflection environment makes silver metals look black even
+		# with white diffuse ambient light. Keep the background unchanged.
+		var sky_material := ProceduralSkyMaterial.new()
+		sky_material.sky_top_color = Color(0.55, 0.55, 0.55)
+		sky_material.sky_horizon_color = Color(0.8, 0.8, 0.8)
+		sky_material.ground_bottom_color = Color(0.16, 0.16, 0.16)
+		sky_material.ground_horizon_color = Color(0.8, 0.8, 0.8)
+		environment.environment.sky = Sky.new()
+		environment.environment.sky.sky_material = sky_material
+		environment.environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	world.add_child(environment)
 	for rotation in [Vector3(-50, -30, 0), Vector3(-25, 140, 0)]:
 		var light := DirectionalLight3D.new()
@@ -59,6 +71,9 @@ func _run() -> void:
 	world.add_child(camera)
 	camera.current = true
 	var result := {"schema": 1, "runtime_approved": false, "renderer": RenderingServer.get_current_rendering_method(), "entries": []}
+	result["reflection_environment"] = "neutral_studio" if reflection_review else "default"
+	var eye_level_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_EYE_LEVEL") == "1"
+	result["camera_angle"] = "low_front" if eye_level_review else "default"
 	var failed := false
 	for row: Variant in rows:
 		if not row is Dictionary:
@@ -100,7 +115,8 @@ func _run() -> void:
 					if found:
 						camera.size = maxf(framing.size.length() * 1.12, 0.1)
 						var target := framing.get_center()
-						camera.position = target + Vector3(3, 2, 7).normalized() * camera.size * 3
+						var direction := Vector3(3, 0.4, 7) if eye_level_review else Vector3(3, 2, 7)
+						camera.position = target + direction.normalized() * camera.size * 3
 						camera.look_at(target)
 						for action: String in actions:
 							if not player.has_animation(action):

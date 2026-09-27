@@ -4,10 +4,10 @@ import math
 from pathlib import Path
 
 from scvi_tracm import inspect_tracm, inspect_visibility
-from visibility_variants import binding, verify
+from visibility_variants import binding, verify, mesh_name
 
 
-def keys(track, frames, fps, *, dynamic_review=False):
+def keys(track, frames, fps, *, dynamic_review=False, full_frame_review=False):
     if track['time_raw'] != 0 or track['value_raw'] != 0:
         raise ValueError('Unsupported visibility timeline metadata')
     kind = track['encoding']
@@ -20,9 +20,14 @@ def keys(track, frames, fps, *, dynamic_review=False):
         # per source frame, least-significant bit first, then hold its final
         # bit. This requires independent pose/battle review before admission.
         packed = track['packed_bytes']
-        if not packed or track['frames'] or 8 * len(packed) >= frames:
+        if not packed or track['frames']:
             raise ValueError('Unsupported dynamic visibility payload')
         values = [bool((byte >> bit) & 1) for byte in packed for bit in range(8)]
+        if len(values) >= frames:
+            if (not full_frame_review or len(packed) != (frames + 7) // 8
+                    or any(v != values[frames - 1] for v in values[frames:])):
+                raise ValueError('Unsupported dynamic visibility payload')
+            values = values[:frames]
         return [[i / fps, value] for i, value in enumerate(values)
                 if i == 0 or value != values[i - 1]]
     if kind not in ('framed8_bool', 'framed16_bool'):
@@ -95,14 +100,30 @@ def prepare(intake, animations, gltf, glb_hash):
             if target in membership['excluded_targets']:
                 excluded.append(target)
                 continue
-            if not target or not target.endswith('_shape'):
-                raise ValueError('Unknown source visibility target convention')
-            mesh = target.removesuffix('_shape')
+            mesh = mesh_name(target)
             if mesh_names.count(mesh) != 1:
                 raise ValueError('Unresolved visibility mesh: ' + target)
             tracks.append({'mesh': mesh, 'source_target': target,
                            'keys': keys(track, config['frames'], config['fps'],
-                                        dynamic_review=intake.get('dynamic_visibility_diagnostic') is True)})
+                                        dynamic_review=intake.get('dynamic_visibility_diagnostic') is True,
+                                        full_frame_review=intake.get('dynamic_visibility_full_frame_diagnostic') is True)})
+        if intake.get('source_lod_visibility_diagnostic') is True:
+            covered = {t['mesh'] for t in tracks}
+            # Some main mesh resources include unanimated lower-detail copies.
+            # Only explicitly opted-in, source-bound LODs of a covered mesh may
+            # be held hidden; never infer visibility for an ordinary missing part.
+            for target in membership['active_targets']:
+                mesh = mesh_name(target)
+                if (mesh not in covered and target.endswith(('_shape_lod1', '_shape_lod2'))
+                        and mesh.rsplit('_lod', 1)[0] in covered):
+                    tracks.append({'mesh': mesh, 'source_target': target,
+                                   'keys': [[0.0, False]], 'source_lod_diagnostic': True})
+        authored = intake.get('authored_visible_untracked_meshes_diagnostic', [])
+        for mesh in authored:
+            if mesh not in mesh_names or any(mesh_name(t['target']) == mesh for ts in source_tracks.values() for t in ts):
+                raise ValueError('Authored visibility requires a selected, entirely untracked source mesh')
+            tracks.append({'mesh': mesh, 'source_target': mesh + '_shape', 'keys': [[0.0, True]],
+                           'authored_default_visibility_review': True})
         if sorted(t['mesh'] for t in tracks) != sorted(mesh_names):
             raise ValueError('Incomplete or duplicate visibility mesh coverage')
         if hashlib.sha256(path.read_bytes()).hexdigest() != digest:

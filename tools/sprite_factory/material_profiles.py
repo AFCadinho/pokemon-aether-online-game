@@ -5,12 +5,13 @@ from scvi_material_probe import inspect_materials, eligible
 
 LAYERED = 'scvi_nondirectional_layered_displacement_v1'
 UNLIT = 'scvi_unlit_layered_displacement_v1'
+LIT = 'scvi_standard_displacement_review_v1'
 UNLIT_UV2 = 'scvi_unlit_layered_displacement_uv2_v1'
 REFRACTION_UNSUPPORTED = 'scvi_transparent_refraction_unimplemented'
 TRANSPARENT_PROBE = 'scvi_source_alpha_diagnostic_v1'
 
 
-def classify(material, *, transparent_review=False):
+def classify(material, *, transparent_review=False, displacement_review=False):
     shaders = material.get('shaders', [])
     # Check native semantics before Blender/GLB baking can flatten the surface
     # to opaque. Runtime StandardMaterial3D transparency alone is not evidence
@@ -24,7 +25,7 @@ def classify(material, *, transparent_review=False):
         if transparent_review and material.get('alpha_type') in ('Blend', 'Add', 'BlendPreMultiAlpha') and all(
                 s.get('name') in ('Transparent', 'TransparentInner') and
                 s.get('values', {}).get('RefractionMode') in (None, '', 'None', 'Thin')
-                for s in shaders) and 0.0 <= fresnel_min <= fresnel_max <= 1.0:
+                for s in shaders) and 0.0 <= fresnel_min <= 1.0 and 0.0 <= fresnel_max <= 1.0:
             return {'material': material['name'], 'profile': TRANSPARENT_PROBE,
                     'export_supported': True, 'source_alpha_type': material['alpha_type'],
                     'source_refraction': any(s['values'].get('RefractionMode') == 'Thin' for s in shaders),
@@ -39,6 +40,18 @@ def classify(material, *, transparent_review=False):
              values.get('EnableBaseColorMap') == 'True' and values.get('EnableDisplacementMap') == 'True' and
              values.get('NumMaterialLayer') == '5' and values.get('NumRequiredUV') in ('1', '2') and
              {'BaseColorMap','LayerMaskMap','DisplacementMap'} <= material.get('textures', {}).keys())
+    if (displacement_review and len(shaders) == 1 and shaders[0]['name'] == 'Standard'
+            and values.get('EnableDisplacementMap') == 'True'
+            and values.get('NumRequiredUV') in ('1', '2')
+            and values.get('NumMaterialLayer') == '5'
+            and values.get('EnableParallaxMap') in (None, 'False')
+            and material.get('alpha_type') == 'Opaque'
+            and {'BaseColorMap', 'LayerMaskMap', 'DisplacementMap'} <= material.get('textures', {}).keys()):
+        return {'material': material['name'], 'profile': LIT,
+                'alpha_test': values.get('EnableAlphaTest') == 'True',
+                'export_supported': True, 'requires_effect_payload': True,
+                'use_uv2': values['NumRequiredUV'] == '2', 'visual_review_required': True,
+                'requirements': ['baked_pbr', 'native_displacement', 'auxiliary_uv_animation']}
     if eligible(material) or unlit:
         values = material['shaders'][0]['values']
         return {'material': material['name'], 'profile': (UNLIT_UV2 if values.get('NumRequiredUV') == '2' else UNLIT) if unlit else LAYERED,
@@ -54,11 +67,11 @@ def classify(material, *, transparent_review=False):
             'export_supported': not unsupported}
 
 
-def read_profiles(path, digest, *, transparent_review=False):
+def read_profiles(path, digest, *, transparent_review=False, displacement_review=False):
     path = Path(path)
     if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
         raise ValueError('Material source changed')
-    return [classify(m, transparent_review=transparent_review) for m in inspect_materials(path)]
+    return [classify(m, transparent_review=transparent_review, displacement_review=displacement_review) for m in inspect_materials(path)]
 
 
 def unsupported(profiles):

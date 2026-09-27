@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Nieuwe 3D-cataloguskandidaten voor Grimer en Muk kunnen zonder scheuren tussen hun bewegende lichaamsdelen worden weergegeven.
+
+- Herstelt aanvullende 3D-bronmodellen en shiny-materialen voor catalogusreview, met behoud van metaal, gloed en bewegende oppervlakken.
+
+- Nieuwe 3D-modelbundles behouden bij gedeelde texturen de juiste shiny-kleur per onderdeel, onder meer bij Veluza.
+
+- Nieuwe Paradox-3D-modelbundles kunnen lichtgevende kleurvlakken, geanimeerde LED-ogen, metaalkaarten en de oorspronkelijke lensdoorzichtigheid behouden.
+
+- Nieuwe 3D-modelbundles ondersteunen een aangepaste rookweergave met een duidelijker gezicht voor Gastly.
+
+- Statische vuureffecten in nieuwe 3D-modelbundles behouden hun gebakken kleurindeling, zodat Typhlosions vlammen geen witte vlakken krijgen door een dubbel toegepaste textuurschaal.
+
 - De Aether Wayfarer is als aparte male- en female-outfitbox beschikbaar met trainer- en overworldlagen voor lopen, vissen en rijden. De boxen staan niet in de store.
 
 - De vrouwelijke Rocket-traineroutfit heeft een zichtbare tailleband en donkerdere rok, zodat shirt en rok duidelijk van elkaar te onderscheiden zijn.

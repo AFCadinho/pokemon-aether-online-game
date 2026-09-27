@@ -14,7 +14,7 @@ from pathlib import Path
 import bpy
 
 
-def bake_color_materials(pbr=False, transparent=()):
+def bake_color_materials(pbr=False, transparent=(), emissive=False, metallic=False):
     """Extract the imported shader's color/mask/eyelid chain, then plain PBR.
 
     This prototype retains albedo detail/resolution. Optional PBR baking also
@@ -52,6 +52,11 @@ def bake_color_materials(pbr=False, transparent=()):
             graph.interface.new_socket(name='ProbeAlbedo', in_out='OUTPUT', socket_type='NodeSocketColor')
             group_output = next(n for n in graph.nodes if n.type == 'GROUP_OUTPUT' and n.is_active_output)
             graph.links.new(graph.nodes['Mix (Legacy).040'].outputs['Color'], group_output.inputs['ProbeAlbedo'])
+            if emissive:
+                if 'Group.003' not in graph.nodes:
+                    raise ValueError('Unsupported source emission graph')
+                graph.interface.new_socket(name='ProbeEmission', in_out='OUTPUT', socket_type='NodeSocketColor')
+                graph.links.new(graph.nodes['Group.003'].outputs['Color'], group_output.inputs['ProbeEmission'])
             output_node = next(n for n in tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
             size = max((max(n.image.size) for n in tree.nodes if n.type == 'TEX_IMAGE' and n.image), default=512)
             image = bpy.data.images.new('ProbeAlbedo_' + material.name, width=size, height=size,
@@ -64,8 +69,21 @@ def bake_color_materials(pbr=False, transparent=()):
             tree.links.new(emission.outputs['Emission'], output_node.inputs['Surface'])
             prepared[material.name] = (material, image)
             auxiliary[material.name] = {}
+            if emissive:
+                # The source layered emission graph already uses per-layer
+                # intensity as its mask. Global intensity applies to the
+                # separate single-map path; zero must not erase active layers.
+                layered = any(group.inputs['EmissionIntensityLayer' + str(i)].default_value > 0 for i in range(1, 5))
+                auxiliary[material.name]['emission'] = {'output': group.outputs['ProbeEmission'],
+                    'strength': 1.0 if layered else group.inputs['EmissionStrength'].default_value, 'size': size}
             if pbr:
-                for channel, socket_name in (('normal', 'NormalMap'), ('roughness', 'Roughness')):
+                channels = [('normal', 'NormalMap'), ('roughness', 'Roughness')]
+                # The emissive diagnostic replaces the custom response shader
+                # with PBR. Preserve its source metallic input as well, or
+                # silver rare albedo becomes a white dielectric surface.
+                if emissive or metallic:
+                    channels.append(('metallic', 'Metallic'))
+                for channel, socket_name in channels:
                     socket = group.inputs[socket_name]
                     auxiliary[material.name][channel] = {'socket': socket, 'size': size}
             if material.name in transparent:
@@ -85,16 +103,22 @@ def bake_color_materials(pbr=False, transparent=()):
         emission = next(n for n in tree.nodes if n.type == 'EMISSION')
         for channel, record in auxiliary[material.name].items():
             image = bpy.data.images.new('Probe_' + channel + '_' + material.name,
-                width=record['size'], height=record['size'], alpha=False, is_data=True)
+                width=record['size'], height=record['size'], alpha=False, is_data=channel != 'emission')
             target = tree.nodes.new('ShaderNodeTexImage')
             target.image = image
             tree.nodes.active = target
             for link in list(emission.inputs['Color'].links):
                 tree.links.remove(link)
-            source = record['socket']
-            if source.is_linked:
+            source = record.get('socket')
+            if channel == 'emission':
+                scale = tree.nodes.new('ShaderNodeVectorMath')
+                scale.operation = 'SCALE'
+                scale.inputs['Scale'].default_value = record['strength']
+                tree.links.new(record['output'], scale.inputs[0])
+                tree.links.new(scale.outputs[0], emission.inputs['Color'])
+            elif source.is_linked:
                 output_socket = source.links[0].from_socket
-                if channel in ('roughness', 'alpha'):
+                if channel in ('roughness', 'metallic', 'alpha'):
                     scalar = tree.nodes.new('ShaderNodeMath')
                     scalar.operation = 'ADD'
                     scalar.inputs[1].default_value = 0.0
@@ -129,6 +153,12 @@ def bake_color_materials(pbr=False, transparent=()):
         texture.image = image
         tree.links.new(texture.outputs['Color'], bsdf.inputs['Base Color'])
         for channel, record in auxiliary[material.name].items():
+            if channel == 'emission':
+                node = tree.nodes.new('ShaderNodeTexImage')
+                node.image = record['image']
+                tree.links.new(node.outputs['Color'], bsdf.inputs['Emission Color'])
+                bsdf.inputs['Emission Strength'].default_value = 1.0
+                continue
             if channel == 'alpha':
                 tree.links.new(texture.outputs['Alpha'], bsdf.inputs['Alpha'])
                 material.surface_render_method = 'DITHERED'
@@ -140,7 +170,7 @@ def bake_color_materials(pbr=False, transparent=()):
                 tree.links.new(node.outputs['Color'], normal.inputs['Color'])
                 tree.links.new(normal.outputs['Normal'], bsdf.inputs['Normal'])
             else:
-                tree.links.new(node.outputs['Color'], bsdf.inputs['Roughness'])
+                tree.links.new(node.outputs['Color'], bsdf.inputs['Metallic' if channel == 'metallic' else 'Roughness'])
         tree.links.new(bsdf.outputs['BSDF'], out.inputs['Surface'])
         records.append(dict(material=material.name, albedo_size=list(image.size), maps=list(auxiliary[material.name])))
     return records
