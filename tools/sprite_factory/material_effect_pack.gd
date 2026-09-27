@@ -48,12 +48,41 @@ func _texture(record: Dictionary) -> Texture2D:
 	image.generate_mipmaps()
 	return ImageTexture.create_from_image(image)
 
+func _lit_surface(source: Material, target: ShaderMaterial) -> ShaderMaterial:
+	if not source is StandardMaterial3D or source.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
+		failure = "Lit displacement requires an opaque imported PBR surface"
+		return null
+	var result: ShaderMaterial = target.duplicate()
+	for pair in [["albedo_color", "base_color"], ["roughness", "surface_roughness"], ["metallic", "surface_metallic"], ["metallic_specular", "surface_specular"], ["normal_scale", "normal_scale"], ["emission_energy_multiplier", "emission_energy"]]:
+		result.set_shader_parameter(pair[1], source.get(pair[0]))
+	result.set_shader_parameter("emission_color", source.emission if source.emission_enabled else Color.BLACK)
+	for pair in [["normal_texture", "normal"], ["roughness_texture", "roughness"], ["metallic_texture", "metallic"], ["emission_texture", "emission"]]:
+		var texture: Texture2D = source.get(pair[0])
+		var enabled: bool = texture != null
+		if pair[1] == "normal": enabled = enabled and source.normal_enabled
+		if pair[1] == "emission": enabled = enabled and source.emission_enabled
+		result.set_shader_parameter("has_" + pair[1], enabled)
+		if enabled: result.set_shader_parameter(pair[1] + "_tex", texture)
+	for prefix in ["roughness", "metallic"]:
+		var channel: int = source.get(prefix + "_texture_channel")
+		if channel < 0 or channel > 4:
+			failure = "Unknown imported PBR channel"
+			return null
+		var weights := Vector4(0.3333333,0.3333333,0.3333333,0.0) if channel == 4 else Vector4.ZERO
+		if channel < 4: weights[channel] = 1.0
+		result.set_shader_parameter(prefix + "_channel", weights)
+	return result
+
 func _bind(node: Node, materials: Dictionary, used: Dictionary) -> void:
 	if node is MeshInstance3D and node.mesh != null:
 		for surface in node.mesh.get_surface_count():
 			var original: Material = node.get_active_material(surface)
 			if original != null and materials.has(original.resource_name):
-				node.set_surface_override_material(surface, materials[original.resource_name])
+				var replacement: ShaderMaterial = materials[original.resource_name]
+				if replacement.shader.code == Effect.LIT_SHADER.code:
+					replacement = _lit_surface(original, replacement)
+					if replacement == null: return
+				node.set_surface_override_material(surface, replacement)
 				used[original.resource_name] = true
 	for child in node.get_children():
 		_bind(child, materials, used)
@@ -65,12 +94,28 @@ func apply(node: Node, manifest: Dictionary, glb_hash: String) -> bool:
 		return false
 	var materials := {}
 	for raw in manifest.records:
-		if not raw is Dictionary or not raw.get("material") is String or materials.has(raw.material) or raw.get("profile") not in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_v1", "scvi_unlit_layered_displacement_uv2_v1"]:
+		if not raw is Dictionary or not raw.get("material") is String or materials.has(raw.material) or raw.get("profile") not in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_v1", "scvi_unlit_layered_displacement_uv2_v1", "scvi_standard_displacement_review_v1"]:
 			failure = "Unknown or duplicate effect profile"
 			return false
 		var material := ShaderMaterial.new()
 		material.shader = Shader.new()
-		material.shader.code = Effect.SAMPLED_SHADER.code if raw.has("uv_samples") else Effect.SHADER.code
+		if raw.profile == "scvi_standard_displacement_review_v1":
+			if raw.has("authored_reconstruction") or not raw.get("use_uv2") is bool:
+				failure = "Invalid lit displacement declaration"
+				return false
+			material.shader.code = Effect.LIT_SHADER.code
+		elif raw.has("authored_reconstruction"):
+			if raw.authored_reconstruction != "outward_rim_smoke_v1" or raw.profile != "scvi_nondirectional_layered_displacement_v1" or raw.has("uv_samples") or raw.has("static_source_material"):
+				failure = "Unsupported authored effect reconstruction"
+				return false
+			material.shader.code = Effect.RIM_SMOKE_SHADER.code
+		elif raw.has("static_source_material"):
+			if raw.static_source_material != true or raw.has("uv_samples"):
+				failure = "Invalid static effect declaration"
+				return false
+			material.shader.code = Effect.STATIC_SHADER.code
+		else:
+			material.shader.code = Effect.SAMPLED_SHADER.code if raw.has("uv_samples") else Effect.SHADER.code
 		material.set_meta(Effect.META, 1)
 		for key in ["loop_seconds", "height", "intensity", "alpha_cutoff"]:
 			var value: Variant = raw.get(key)
@@ -78,7 +123,7 @@ func apply(node: Node, manifest: Dictionary, glb_hash: String) -> bool:
 				failure = "Invalid effect scalar"
 				return false
 			material.set_shader_parameter(key, float(value))
-		if raw.get("use_uv2") != (raw.profile in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_uv2_v1"]):
+		if raw.profile != "scvi_standard_displacement_review_v1" and raw.get("use_uv2") != (raw.profile in ["scvi_nondirectional_layered_displacement_v1", "scvi_unlit_layered_displacement_uv2_v1"]):
 			failure = "Invalid effect UV binding"
 			return false
 		material.set_shader_parameter("use_uv2", raw.use_uv2)
@@ -110,16 +155,24 @@ func apply(node: Node, manifest: Dictionary, glb_hash: String) -> bool:
 						return false
 				start[i] = channels[i][0]
 				end[i] = channels[i][1]
-			if start.x <= 0 or start.y <= 0 or start.x != end.x or start.y != end.y or absf((end.z - start.z) - roundf(end.z - start.z)) > 0.00001 or absf((end.w - start.w) - roundf(end.w - start.w)) > 0.00001:
+			if start.x <= 0 or start.y <= 0 or start.x != end.x or start.y != end.y or (not raw.get("source_loop_endpoint_reset", false) and (absf((end.z - start.z) - roundf(end.z - start.z)) > 0.00001 or absf((end.w - start.w) - roundf(end.w - start.w)) > 0.00001)):
 				failure = "Nonperiodic effect UV loop"
+				return false
+			if raw.get("static_source_material", false) and start != end:
+				failure = "Static effect contains animated UV endpoints"
 				return false
 			material.set_shader_parameter(mapping[1] + "_start", start)
 			material.set_shader_parameter(mapping[1] + "_end", end)
+		if raw.get("source_loop_endpoint_reset", false) and not raw.has("uv_samples"):
+			failure = "Source loop reset requires sampled UV tracks"
+			return false
 		if not _samples(raw, material):
 			return false
 		materials[raw.material] = material
 	var used := {}
 	_bind(node, materials, used)
+	if not failure.is_empty():
+		return false
 	if materials.is_empty() or used.size() != materials.size():
 		failure = "Effect material not found on model"
 		return false

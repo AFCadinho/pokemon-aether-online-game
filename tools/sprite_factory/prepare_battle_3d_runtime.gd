@@ -151,6 +151,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 			errors.append(species + ": eye motion binding failed: " + eye_motion.failure)
 			node.free()
 			return {}
+	if entry.has("led_eyes"):
+		var led := preload("led_eye_pack.gd").new()
+		if not entry.led_eyes is Dictionary or not led.apply(node, entry.led_eyes, glb_hash):
+			errors.append(species + ": LED binding failed: " + led.failure)
+			node.free()
+			return {}
 	var packed := PackedScene.new()
 	var signature := _signature(node)
 	code = packed.pack(node)
@@ -183,6 +189,10 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 		return {}
 	if entry.has("eye_motion") and verified.get_meta("pokeaether_eye_motion", 0) != 1:
 		errors.append(species + ": eye motion lost on reload")
+		verified.free()
+		return {}
+	if entry.has("led_eyes") and verified.get_meta("pokeaether_led_eyes", 0) != 1:
+		errors.append(species + ": LED eyes lost on reload")
 		verified.free()
 		return {}
 	verified.free()

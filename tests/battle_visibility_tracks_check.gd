@@ -92,5 +92,30 @@ func run() -> void:
 		assert(not pack.apply(actor, data, "a".repeat(64)), fault)
 		assert(actor.get_node("AnimationPlayer").get_animation("idle").get_track_count() == 0, "Partial mutation")
 		actor.free()
+	for fault in ["none", "visible_lod", "wrong_source", "missing_base", "missing_opt_in"]:
+		actor = fixture()
+		root.add_child(actor)
+		var lod := MeshInstance3D.new()
+		lod.name = "body_mesh_lod1"
+		lod.mesh = BoxMesh.new()
+		actor.add_child(lod)
+		lod.owner = actor
+		var data := manifest()
+		for clip: Dictionary in data.clips.values():
+			clip.tracks.append({"mesh": "body_mesh_lod1", "source_target": "body_mesh_shape_lod1", "keys": [[0.0, false]], "source_lod_diagnostic": true})
+		match fault:
+			"visible_lod": data.clips.idle.tracks[-1]["keys"] = [[0.0, true]]
+			"wrong_source": data.clips.idle.tracks[-1].source_target = "tool_mesh_shape_lod1"
+			"missing_base": actor.get_node("body_mesh").name = "other_mesh"
+			"missing_opt_in": data.clips.idle.tracks[-1].erase("source_lod_diagnostic")
+		if fault == "none":
+			assert(pack.apply(actor, data, "a".repeat(64)), pack.failure)
+			for action in ["idle", "attack", "sleep", "faint_loop", "RESET"]:
+				sample(actor, action, 0.5)
+				assert(not lod.visible, "Redundant LOD became visible")
+		else:
+			assert(not pack.apply(actor, data, "a".repeat(64)), fault)
+			assert(actor.get_node("AnimationPlayer").get_animation("idle").get_track_count() == 0)
+		actor.free()
 	print("VISIBILITY_TRACKS_PASS: switch, seek boundaries, RESET, reload, isolated instances, fail-closed binding")
 	quit()

@@ -61,6 +61,23 @@ class VariantBindingTests(unittest.TestCase):
                          {'resource_id':'alternate','form':0,'gender_code':1})
         verify(result)
 
+    def test_embedded_lod_shapes_bind_without_dropping_meshes(self):
+        shapes = ['selected_eye_shape', 'selected_eye_shape_lod1', 'selected_eye_shape_lod2']
+        for base in ['models', 'romfs']:
+            path = self.root / base / 'selected/main.trmsh'
+            path.write_bytes(named_tables(shapes))
+            self.files[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
+        meshes = ['selected_eye', 'selected_eye_lod1', 'selected_eye_lod2']
+        self.assertEqual(self.resolve(meshes, shapes)['active_targets'], shapes)
+        with self.assertRaisesRegex(ValueError, 'selected source variant'):
+            self.resolve(meshes[:1], shapes)
+
+    def test_shape_mapping_rejects_ambiguous_and_unknown_suffixes(self):
+        from visibility_variants import mesh_name
+        for shape in ['eye', 'eye_shape_lod9', 'eye_shape_extra', 'eye_shape_shape']:
+            with self.assertRaises(ValueError):
+                mesh_name(shape)
+
     def test_missing_selected_mesh_is_not_ignored(self):
         with self.assertRaisesRegex(ValueError,'selected source variant'):
             self.resolve(['alternate_body_mesh'])
@@ -98,6 +115,16 @@ class VariantBindingTests(unittest.TestCase):
     def test_ambiguous_owner_rejected(self):
         self.rows.append(dict(self.rows[1],resource_id='another',gender_code=2))
         with self.assertRaisesRegex(ValueError,'ambiguous'):self.resolve()
+
+    def test_review_exclusion_still_requires_complete_selected_geometry(self):
+        self.intake['selected_mesh_visibility_diagnostic'] = True
+        result = self.resolve(targets=['selected_body_mesh_shape', 'unowned_mesh_shape'])
+        self.assertTrue(result['excluded_targets']['unowned_mesh_shape']['absent_from_verified_selected_mesh'])
+        with self.assertRaisesRegex(ValueError, 'selected source variant'):
+            self.resolve(meshes=['wrong_mesh'])
+        self.files[str(self.root/'models/selected/main.trmsh')] = '0'*64
+        with self.assertRaisesRegex(ValueError, 'hash changed'):
+            self.resolve()
 
     def test_changed_selected_hash_rejected(self):
         self.files[str(self.root/'models/selected/main.trmsh')]='0'*64

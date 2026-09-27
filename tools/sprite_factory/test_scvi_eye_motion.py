@@ -1,3 +1,5 @@
+import copy
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -24,5 +26,31 @@ class EyeMotionTests(unittest.TestCase):
                     prepare(job,{'idle':{'duration':2.0,'loop':True}},'a'*64)
                 path.write_bytes(b'changed')
                 with self.assertRaisesRegex(ValueError,'source changed'): prepare(job,timing,'a'*64)
+
+class DuplicateEyeTracksTest(unittest.TestCase):
+    def test_exact_duplicate_is_safe_but_conflicting_keys_remain_held(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'idle.tracm'; path.write_bytes(b'bound motion')
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            job = {'material_source': str(Path(tmp) / 'material.trmtr'),
+                   'identity_intake': {'source_eye_material_diagnostic': 'eye_source_uv',
+                    'motion_channels': {'idle': str(path)},
+                    'identity_evidence': {'source_sha256': {str(path): digest}}}}
+            material = {'name': 'l_eye', 'shaders': [{'name': 'Eye'}],
+                        'colors': {'UVScaleOffset': [1, 1, 0, 0]}}
+            track = {'material': 'l_eye', 'parameter': 'UVScaleOffset',
+                     'channels': [[{'time': t, 'value': value, 'config': [0,0,0]}
+                                   for t in [0, 2]] for value in [1,1,0,0]]}
+            data = {'fps': 2, 'frames': 3, 'config_flag': 1, 'nested_timing': [],
+                    'tracks': [track, copy.deepcopy(track)]}
+            timing = {'idle': {'duration': 1.0, 'loop': True}}
+            with patch('scvi_eye_motion.inspect_materials', return_value=[material]), patch('scvi_eye_motion.read_uv_tracks', return_value=data):
+                result = prepare(job, timing, 'glb')
+                keys = result['materials'][0]['clips']['idle']['parameters']['UVScaleOffset']
+                self.assertEqual(keys, [[0.0,[1,1,0,0]], [1.0,[1,1,0,0]]])
+                data['tracks'][1]['channels'][2][-1]['value'] = 0.5
+                with self.assertRaisesRegex(ValueError, 'Conflicting duplicate'):
+                    prepare(job, timing, 'glb')
+
 
 if __name__=='__main__': unittest.main()

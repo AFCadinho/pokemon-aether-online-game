@@ -347,8 +347,19 @@ def validate_export_job(job):
     source = Path(job['source'])
     imported = json.loads(source.with_name('import.json').read_text())
     validate_prepared_source(source, imported)
+    native_rare = job.get('native_rare_import_diagnostic') is True
+    variant = 'shiny' if native_rare else 'normal'
+    if native_rare:
+        rare = Path(entry['model_dir']) / (entry['identity'] + '_rare.trmtr')
+        original = Path(entry['motion_dir']) / rare.name
+        if (not original.is_file() or sha(rare) != sha(original)
+                or entry['identity_evidence']['source_sha256'].get(str(rare)) != sha(rare)
+                or imported.get('source_files', {}).get(str(rare)) != sha(rare)):
+            raise ValueError('Native rare material lacks matching catalog-resource provenance')
+        if job.get('official_rare_material_source') or job.get('verified_texture_replacements'):
+            raise ValueError('Native rare imports cannot apply normal texture substitutions')
     if (imported.get('species'), imported.get('identity'), imported.get('variant')) != (
-            entry['species'], entry['identity'], 'normal'):
+            entry['species'], entry['identity'], variant):
         raise ValueError('Imported species/form/variant differs from verified intake')
     if source.name != entry['identity'] + '-ready.blend' or sha(source) != job['source_sha256']:
         raise ValueError('Prepared model differs from verified source')
@@ -356,7 +367,7 @@ def validate_export_job(job):
     actual = {name: a['name'] if a else None for name, a in imported['actions'].items()}
     if actual != expected or any(expected.get(name) != value for name, value in job['actions'].items()):
         raise ValueError('Prepared animation mapping differs from identity evidence')
-    if job.get('effect_motion_dir') != entry['motion_dir'] or job['material_source'] != str(Path(entry['model_dir']) / (entry['identity'] + '.trmtr')):
+    if job.get('effect_motion_dir') != entry['motion_dir'] or job['material_source'] != str(Path(entry['model_dir']) / (entry['identity'] + ('_rare.trmtr' if native_rare else '.trmtr'))):
         raise ValueError('Export materials/motions differ from verified identity')
     if not imported.get('source_files'):
         raise ValueError('Imported source provenance missing')

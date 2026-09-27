@@ -1,9 +1,12 @@
 extends RefCounted
 const SHADER = preload("res://scripts/battle/battle_ui/material_effect.gdshader")
 const SAMPLED_SHADER = preload("res://scripts/battle/battle_ui/material_effect_sampled.gdshader")
+const STATIC_SHADER = preload("res://scripts/battle/battle_ui/material_effect_static.gdshader")
+const RIM_SMOKE_SHADER = preload("res://scripts/battle/battle_ui/material_effect_rim_smoke.gdshader")
+const LIT_SHADER = preload("res://scripts/battle/battle_ui/material_effect_lit.gdshader")
 const META := "pokeaether_material_effect"
 static func valid(material: Material) -> bool:
-	if not material is ShaderMaterial or material.get_meta(META, 0) != 1 or material.shader == null or material.shader.code not in [SHADER.code, SAMPLED_SHADER.code]:
+	if not material is ShaderMaterial or material.get_meta(META, 0) != 1 or material.shader == null or material.shader.code not in [SHADER.code, SAMPLED_SHADER.code, STATIC_SHADER.code, RIM_SMOKE_SHADER.code, LIT_SHADER.code]:
 		return false
 	if material.shader.code == SAMPLED_SHADER.code and not material.get_shader_parameter("uv_samples") is Texture2D:
 		return false

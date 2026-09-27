@@ -1,0 +1,2479 @@
+{
+  "schema": 1,
+  "date": "2026-09-28",
+  "status": "visual_review_evidence_recorded",
+  "runtime_approved": false,
+  "release_approved": false,
+  "published": false,
+  "scope": "200 exact normal battle review selections and scoped appearance acceptances; not a release admission or bundle manifest",
+  "normal_battle_accepted_count": 200,
+  "latest_accepted_appearance_pairs": 18,
+  "latest_accepted_battle_models": 15,
+  "open_findings_from_final_review": [],
+  "remaining_release_work": [
+    "assemble exact normal/shiny pair selections and audit prior appearance evidence",
+    "real battle runtime qualification and individual bundle install/load/update checks",
+    "release admission and publication"
+  ],
+  "source_batch_sha256": "551ffb693ef1449b8c1022bbaca38488c17f1bb67143f6bdd0d5082f5f5c30ec",
+  "evidence": [
+    {
+      "review": "attention-review-10",
+      "receipt_sha256": "12e7195e129619b8b0defa75ed12bfda53b6e1ce93cfe5221d04901cf023e019",
+      "feedback_sha256": "8bd37c41b9df73d22b9feb52b5a84ca9a5db1fbef515373e972e5879b199a070",
+      "scope": "Gastly sleep placement; Floragato corrected attacks; Sinistea size and poses in battle comparison",
+      "answer": "vergelijking ziet er goed uit"
+    },
+    {
+      "review": "paradox-battle-review-11",
+      "receipt_sha256": "e6a9e873294ef1763fddff3ca787d9666416d944f194423d50044b49b94fd164",
+      "feedback_sha256": "e74f139e888d6dc173377b9b5265d2aa9162ac634c6e5f656ae733e8fd1e5209",
+      "scope": "normal battle poses in both camera presets/sides; separate normal/shiny appearance samples",
+      "answer": "Alle vier goed"
+    },
+    {
+      "review": "recovery-battle-review-13",
+      "receipt_sha256": "c032c3e03d47600815e3c53316e9857019e95be6b5cca3a0260d405692ede988",
+      "feedback_sha256": "167d7f15b68e9ce72208d8cb20ea60b493a93fa12b2c11b03c9fcc29f3f333e3",
+      "scope": "displayed normal battle corrections for eight models",
+      "answer": "ja ze zijn goed"
+    },
+    {
+      "review": "recovery-battle-review-25",
+      "receipt_sha256": "1e32fc0da96b6255b072456380aed579ca5269f9d56f03e6d47be8c018467732",
+      "feedback_sha256": "ba97e04575e403cfac694b07b8fbca3a523996baa6b416dccbf34672a72aa92a",
+      "scope": "displayed normal battle corrections for twenty models",
+      "answer": "Zien er goed uit"
+    },
+    {
+      "review": "clean-battle-review-30",
+      "receipt_sha256": "89576f7435e951796e59cc9616a50131df9ac2aca42d4b64858cf8c43006c65f",
+      "feedback_sha256": "6f45a1e67ef6ded4d333212b9b4fbfe6f63c154b84d64fe7b796aa6c560bf573",
+      "scope": "displayed 107 normal battle models, four poses, both cameras and sides",
+      "answer": "Zien er goed uit"
+    },
+    {
+      "review": "recovery-battle-review-44",
+      "receipt_sha256": "34d6406efc993cddfb61d1aa88aff52b7a8281ba3d49a613ffee54ccf22ecdfc",
+      "feedback_sha256": "c0e8f3a0c6d8a8bbf743c6f670199905ae668d811796d753a4f136f3179c2d81",
+      "scope": "37 displayed normal battle scenes and linked corrected attack moments",
+      "answer": "Zien er goed uit"
+    },
+    {
+      "review": "recovery-battle-review-52",
+      "receipt_sha256": "e3ca157fb0ed95a41f777df463fb48e604237fea95d03d19bfed5f84fe2e5181",
+      "feedback_sha256": "c5c18ba3de595899572010449d992d5a2dfbc605a2467971d17ed62b5fbba18b",
+      "scope": "9 displayed normal battle scenes, eight sampled poses, two cameras and sides",
+      "answer": "zien er goed uit"
+    },
+    {
+      "review": "remaining-battle-76",
+      "receipt_sha256": "9601cc9ae5f753df7d736fe5b0a5c5fd8e2f2267e42aca75c3f46c1da47932f5",
+      "feedback_sha256": "cadfb4b149c4aca4a3b5ade48e9e1ba12aafa04ea611a5143aa0013f33398265",
+      "scope": "15 displayed normal battle scenes, eight sampled poses, two cameras and sides",
+      "answer": "ja dit is nu allemaal goed"
+    },
+    {
+      "review": "eye-appearance-29",
+      "receipt_sha256": "274bf48efce5eb8235cc4089c08581c50100a800e1b6a5142914c88b31d3938c",
+      "feedback_sha256": "5eda35d87902d64a08b1fa3ca3adcc41de757b236942870119683fcf3a009f7f",
+      "scope": "displayed seven normal/shiny pairs, colours, eyes and poses",
+      "answer": "Zien er goed uit"
+    },
+    {
+      "review": "recovery-appearance-25",
+      "receipt_sha256": "eaae38cc71ce739287b284fa5e2eca513a4ba53b0ff9206d0270b2951f527059",
+      "feedback_sha256": "82635490b56f4e5034c0a35c312a39f09378e266aca658bfc5cc261180c46cb6",
+      "scope": "displayed fourteen normal/shiny pairs and sampled poses",
+      "answer": "Zien er goed uit"
+    },
+    {
+      "review": "recovery-appearance-44",
+      "receipt_sha256": "746a833f1e17f6b9b4fd4579c9cc14e953685668127b4389c41c70bf32db4b32",
+      "feedback_sha256": "002d8fb2363fde87899f86f468a8ad9811b7f40fc67cd69abf89db177ab783bc",
+      "scope": "ten displayed normal/shiny pairs and sampled poses",
+      "answer": "Zien er goed uit"
+    },
+    {
+      "review": "recovery-appearance-53",
+      "receipt_sha256": "fe0846a9bcfdc6b014961cd042de15ca426068310310f98a3f7c35fcd4d927ef",
+      "feedback_sha256": "34e6aa4a001932840eed001010f2061b209b06e635320e865dc48aff0483e8aa",
+      "scope": "normal/shiny appearance and three samples per action; battle placement separate",
+      "answer": "zien er goed uit"
+    },
+    {
+      "review": "remaining-appearance-76",
+      "receipt_sha256": "452f730e087c695f6cb16c32300694712f8d1518d89f62499d9b27af6260af65",
+      "feedback_sha256": "52e36e16c0e894655160702e0db6e97eca6a5bafad93b4ff113b3cad5d5a3ee4",
+      "scope": "normal/shiny appearance and three samples per action; battle placement separate",
+      "answer": "ja dit is nu allemaal goed"
+    },
+    {
+      "review": "color-review-78",
+      "receipt_sha256": "041c4e32db2d96130a133783a4fffd4c786ae1fd0e7ec778332d2502c59d86dd",
+      "feedback_sha256": "8f0556478ddcd899d86a278344a4f44db8ae51f592c56282c8ed9e5b0b550fdd",
+      "scope": "Armarouge and Ceruledge normal/shiny color appearance, including the reported body/flame concern; does not approve the separate battle gallery or other species",
+      "answer": "Lijkt nu goed te zijn"
+    }
+  ],
+  "entries": [
+    {
+      "species": "charmander",
+      "normal_runtime_sha256": "23805df764f17e7e8df8851d9c7caf8d40ddaa49efb15262d7534ad4b2084b45",
+      "normal_glb_sha256": "290ce7839f7af02021e266607d621210566368ca5b04d831184c0365db0b53f0",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "361c762735dfe69b45d661fe19dc0e62b5d9fc888446467deaa8b55b7e19c900",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/001/normal-runtime/charmander.scn"
+    },
+    {
+      "species": "gastly",
+      "normal_runtime_sha256": "dfaf527dbec7c21ec2cadc2da20d3b19a802565ba5b03a3e62cbcf12a50d0fdd",
+      "normal_glb_sha256": "e4592072d1d53cbb3437d9333d8ce7f8e7a9d17214d4c238c6befc86f7703d29",
+      "battle_review": "attention-review-10",
+      "placement_sha256": "7de1abd7360186f6d6b4f0e0afa4917d3813cbb4f45e6a07ca594265f25e4521",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/fixes-04/normal-runtime/gastly.scn"
+    },
+    {
+      "species": "gengar",
+      "normal_runtime_sha256": "ce97c452517a08262c8e981339107e3f08ef6cfcd9a99a42acba99115df166fb",
+      "normal_glb_sha256": "c1f69355a5234021933f1afca3e3cdab75c6e49d7f9da23d1725ccb07eff4749",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b4037ec38abefbc83113b621be0aea5a1ccd21dad50e8aad12289d92d8cf4721",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/001/normal-runtime/gengar.scn"
+    },
+    {
+      "species": "dragonair",
+      "normal_runtime_sha256": "89851e67078cc8b4b9f65696e2b23b546d3251509f1c73147e6ede849062abb1",
+      "normal_glb_sha256": "5de64b21ed15852150f89b80403e274e2f511fcbc039555b56c0ee0f53452aa3",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "fafecc32b2e0287cab05c4d3dd8fe205cf850d430cf5677a2ec94aa3fc2a9bf5",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/001/normal-runtime/dragonair.scn"
+    },
+    {
+      "species": "cyndaquil",
+      "normal_runtime_sha256": "05351555b59ba2de6ea561acd379b7e637a5c35c8de7c8371a416ca501c524af",
+      "normal_glb_sha256": "3c1126e7463dfd15123ceca177d93cb0caf68772e0d71681531e18769c7d4499",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "4b1f447b16bde8f230d3ff0dab546a21dec064e5d2b62b9218ef742d1ba4d382",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/002/normal-runtime/cyndaquil.scn"
+    },
+    {
+      "species": "quilava",
+      "normal_runtime_sha256": "c02d25aef56eb26dcbaeae00565c3a6eb539d6321d9e4259dcac0be91f87db45",
+      "normal_glb_sha256": "c36da0629bebe409ef6128e3db3c8d9dad394d4b280b21501630ba377ac526cd",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "da47a6075b891343f0a6e2e4dbc19eabe9d6ffb7cb6fe63be8dd7af1521082f3",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/002/normal-runtime/quilava.scn"
+    },
+    {
+      "species": "typhlosion",
+      "normal_runtime_sha256": "3658ca5c63a848d434bd878ddd5567db045b0b3432f4f565f0cff8bd3756eb02",
+      "normal_glb_sha256": "3ae14e660a83bd03d9c2f4421c141216145e9b1d9c94c393a2da2f2056de0047",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "accd55737264ecd01c892d522fc97972b0216239c556a764e9af0886916e7ead",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/fixes-04/normal-runtime/typhlosion.scn"
+    },
+    {
+      "species": "ampharos",
+      "normal_runtime_sha256": "3f58dfb879eb72769f3299cf306463189222be2a87bac8fbd5f235631f89b59c",
+      "normal_glb_sha256": "de737e7a57ca4a8da74a720a0e198f5d545a787167ef118a55b4c2645a80d1f1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "897ff7fa70a6b2c06a284e489459008e33b8045c0f38111e599a764eceaf0d48",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/001/normal-runtime/ampharos.scn"
+    },
+    {
+      "species": "larvitar",
+      "normal_runtime_sha256": "a63bcb08ff97365b6e15a7f302aac54b4afe919d8eed76fc6a9138d47ff93620",
+      "normal_glb_sha256": "4c5fda891381d9815e3f828730b3fa454f2c73681052a30a476886ed3806a9e8",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "76341bfc59b32ee49073d64e72d30284a962fa691b53c56bb4ad74521f0423a4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/001/normal-runtime/larvitar.scn"
+    },
+    {
+      "species": "azurill",
+      "normal_runtime_sha256": "4226ad83578058b1367fd045d801ca2f09e5271e8af39f579353334fe7267013",
+      "normal_glb_sha256": "feec8f345ea2156e02b8ecad4fb7dab70d518c5f3e0ef4da51f5c716f43bb421",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "d6ba77da280b337b02c79f840e50914befa3b7022ef7c4f61d8d34818ce722f7",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-34-azurill/normal-runtime/azurill.scn"
+    },
+    {
+      "species": "luxray",
+      "normal_runtime_sha256": "a00dc4d92825bcee5c81b0dece48c7d6364aafe1f7fa7e2e38661615281d5102",
+      "normal_glb_sha256": "80512df8c614d8003fce7e1ed89e2c6283ca68d78afe2a22672b906165c67200",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b880c0a44d7983b71d769b5e261e5247c065c90aa10b8e186b2df8fa6a6c0abe",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/luxray.scn"
+    },
+    {
+      "species": "krookodile",
+      "normal_runtime_sha256": "49b3a19fb445867d4e28203e7c02c50c48f55ae6e000b1c723733375aea8d919",
+      "normal_glb_sha256": "2a82859d9321ba451ce10c042adb631acfea7bb95aff03df61b9a032ec023a28",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b4c9a2c7476f723b46f3e6ae75d0641cffb96e8431b2874c6187860e4846926d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/krookodile.scn"
+    },
+    {
+      "species": "decidueye",
+      "normal_runtime_sha256": "4b15f8b3ba41fcb6454aa6f2695f7bba17773e0a4d8fcf87e3e42aab083e9ecb",
+      "normal_glb_sha256": "5ebfb5c2efe0847459ac6dfd6a0541c5014b9c7495b8a53eec96eafc06d58568",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "d50b915fc64dd3686b4b509e14cae60ed2765ef01cfc3673431578432facd764",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/decidueye.scn"
+    },
+    {
+      "species": "rillaboom",
+      "normal_runtime_sha256": "221264a525adeb238cfd404db4d890e8ffdd9b5487e1ca6b8aee8f7e5403aec0",
+      "normal_glb_sha256": "3ba3b0b0626b72d5ef38718c00470a83773ec192844c5bed2e50b6a67e16e38c",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "e7f2b942449db67c395d8c50e72753bf1ddcd79d2af184a80ddf6d3e0c40598f",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/rillaboom.scn"
+    },
+    {
+      "species": "cinderace",
+      "normal_runtime_sha256": "7a996e8d3586027abe52e9b3b392dfea4401ba0bccf28ab9e2c2d41214de5ae0",
+      "normal_glb_sha256": "35f11aefd9d9e5547060c971d6babe289a9bfe378f3460a866f1eb42e35ff2ae",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "2b0c7f4ad73fb7e943a04e87cc6df30410ba8599421a9ea494788d63c12b63ab",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/cinderace.scn"
+    },
+    {
+      "species": "rolycoly",
+      "normal_runtime_sha256": "6ab91f50057b8ad2945d7f4014a10441199aa200673719675abc3cf503ad0f4c",
+      "normal_glb_sha256": "327db47d42e9a7b834ed52648810151dfb0064c0af0acfa6b29753fa838eb8d0",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "8a2ac8945fbc4d4504447d60dd096dd0d3c1c5331a851069f5105ef95c454af8",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-41/normal-runtime/rolycoly.scn"
+    },
+    {
+      "species": "carkol",
+      "normal_runtime_sha256": "da030d7c503bf47aba00c88e5b3929dc25230def6300ba6dce7bc1113500c111",
+      "normal_glb_sha256": "7ccbb3f1e24e5c81a76efe16e93fc6c09b90efcf3ce5cd33542be36a756f5e3c",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "f52038f2de1d0419cb542ee1c1bce30be1c17a1c2f612c1a2d3c824252b35a7f",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-32/normal-runtime/carkol.scn"
+    },
+    {
+      "species": "coalossal",
+      "normal_runtime_sha256": "328227581c4e1202c214b447a832c1e6f10976facff4fe611bcd0d1ed40426d4",
+      "normal_glb_sha256": "e37d6aee2cf246946c58afd792eb87bdb3855c9d83f2eb303e44db2d380ec131",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "ef6374fe30428f588489b36d50a4d570ed56d60c0db41694cd93d3adff73cac0",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-32/normal-runtime/coalossal.scn"
+    },
+    {
+      "species": "applin",
+      "normal_runtime_sha256": "d14946527c9dd969205472fc0495f07abda6a44843d31de85ab43651e8201bf9",
+      "normal_glb_sha256": "2c54ddd70b7a4e9a35d614cadee35a44754cd0179b49bfb934c4ae13ed59def0",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a178be5fc14b1c20ed303d85c1f3748ea2d7ebe25f4666939d0b8da6725a665b",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/applin.scn"
+    },
+    {
+      "species": "hatenna",
+      "normal_runtime_sha256": "cf0128ccb7c7383b11a9e0e90aab72d4dcca713d5b2963e1d62dd9894174b314",
+      "normal_glb_sha256": "64d07f0ca4f87cf83374f2b83160395ef5074518f831cae2fab5f5b03a9d8063",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "e04e5df344f87b4a7f9736964b76d0ab18e713522b413bf0f7e6799af38a7e2e",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/002/normal-runtime/hatenna.scn"
+    },
+    {
+      "species": "hattrem",
+      "normal_runtime_sha256": "cdd2a32a7377565dde8474341c74f102e42d81f513416d75ee4c63bd69240a81",
+      "normal_glb_sha256": "69d482f73fac5e00bb280988d9d03f4515a780718bd731a9d179eeb3ea6197e9",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "f20f347e1beb00ed61eb1975d44af55f87819ac140a2af4e1b9dae595ae19dab",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/003/normal-runtime/hattrem.scn"
+    },
+    {
+      "species": "hatterene",
+      "normal_runtime_sha256": "9f15844deb01fa4b336ee003bdf5bb0fb8a8aa0e09ff0e928280253a158d044d",
+      "normal_glb_sha256": "cfaa369ca1f4fb4d25341b3e33f4074f497bca18e4860f780769fc7ff13c1c06",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "4340832edfc0f9a635cbacbd1179107872a531d270c1fb67421026a922c6e1f2",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-31-hatterene/normal-runtime/hatterene.scn"
+    },
+    {
+      "species": "impidimp",
+      "normal_runtime_sha256": "40ff36f7d002db2a6d180452a3a450ec9f01eaed4a80ff03ef1e7bb78b666ec1",
+      "normal_glb_sha256": "d22c417e45168604b2ac9739dc3d02ed543716e38e8cc2407b70b25ff9ad7ad1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "f1fca3703faac21c20032e62c4501ede34a3af2433aeac6a25ff7bafbffc47da",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/003/normal-runtime/impidimp.scn"
+    },
+    {
+      "species": "morgrem",
+      "normal_runtime_sha256": "1777b843641d59a07d9e2d458f90bd4ff1188531a8ee75b3d82c73c6ee332ac3",
+      "normal_glb_sha256": "92d3002c6694d5838110192115a03c4223ef8e12425aa65c00f67f6560c29c94",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "92c1ab2362ecbce9565a9f86eeb3bd92e320f333b8162a6a2e917fa513151881",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-13/normal-runtime/morgrem.scn"
+    },
+    {
+      "species": "grimmsnarl",
+      "normal_runtime_sha256": "e45f94d327211b71b817e67f381f3e8077d69444ec04e3ae5b77dd834ccf87b8",
+      "normal_glb_sha256": "4068872fb27d6e3e4d90ae014e6ecb3bf3a07ac00ae99545c1e4ceeba7e5b384",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "9cdfc9fdb66568cd6fc12d38bcee7206576615241fb76037dc98210ddb2b99b0",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-13/normal-runtime/grimmsnarl.scn"
+    },
+    {
+      "species": "dreepy",
+      "normal_runtime_sha256": "887c9c24947c3d627ade87e1e645296481aad48c36b274873d96d265b65bedbf",
+      "normal_glb_sha256": "74fa6e4e03c3e8e2fca2ef7e4db5e5dc3adbb7d7bd0f30870e08a3e9efdf904f",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "2b769856a2da27126c125b6b726430af99d42a9e3abc1bee6e4e657317d3ebee",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/003/normal-runtime/dreepy.scn"
+    },
+    {
+      "species": "drakloak",
+      "normal_runtime_sha256": "227f66705bfcb26eef28a209ff9b87ee32b7367e31c2f10e44b68fb7238b9615",
+      "normal_glb_sha256": "9edecb8457fee6347409210ba2d2787ffbc927643e01c5eaef1fe855c28ce39e",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "1b6f8242a1dc962a79fb1231c962510de6a04c492efda40a73e7e10afea8fdff",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/003/normal-runtime/drakloak.scn"
+    },
+    {
+      "species": "dragapult",
+      "normal_runtime_sha256": "81d86044762d16e4f3f76c5767d233c17adf52d17b32c2083392f6b58aebedab",
+      "normal_glb_sha256": "4feb869b27315e27a33714d0283440ad9abe4705e20c455ae59f35c6c1451fe9",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "624d34c27daec0c729ea12b97366582d2a7959a7eba4448adfa3a5ae2805721a",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-13/normal-runtime/dragapult.scn"
+    },
+    {
+      "species": "ursaluna",
+      "normal_runtime_sha256": "e40d77c5554b00c31ab41f54879dedb824f49e8d575a3f13c062655ebac7c97b",
+      "normal_glb_sha256": "17d648bcd25dd4cc085f1c985b1c6f6c7748040c6cc6397e117549489bc0cc6b",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "99a4d8cdb0a6488d11a7648242f9b1a08554fef1e573c5041b4f991c7f309ad4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/003/normal-runtime/ursaluna.scn"
+    },
+    {
+      "species": "sprigatito",
+      "normal_runtime_sha256": "de6fc5b9fb7fa11702cef038a89a93bb94069cfaa32eacb95c84f4dfe8e0c1a6",
+      "normal_glb_sha256": "b2061a92f8b3898b744fe62e5cef596bda36cae021db237581f4ae52df55302a",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "1c0297f22cccf6c495538785e2cea4b731684db4598bd8a981f67389e3cc4bd4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/003/normal-runtime/sprigatito.scn"
+    },
+    {
+      "species": "floragato",
+      "normal_runtime_sha256": "da2d1f554e89673f9a10141f51bac95cfa99c496ec38fb8c529b47c2356af676",
+      "normal_glb_sha256": "976fd509413a6ec53f57b303af9995d781347ef3398984091f4055d88be50f8d",
+      "battle_review": "attention-review-10",
+      "placement_sha256": "1c7c3bb51622709fc7d2df9cb4e040330dd21e024935979617c420d847417c03",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/placement-10/normal-runtime/floragato.scn"
+    },
+    {
+      "species": "meowscarada",
+      "normal_runtime_sha256": "0bd0cf46aab21f9e6e432836aa2e5126f6173b2a7ba29abe1244b47e47d0e774",
+      "normal_glb_sha256": "32be21fc1bae73449c346ed9f4e42234d9866301f92e4497a6fdfa1756c75607",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "032fbe00c670f56ba0be4bf024dbd0280f3cbcf83f7dfc287a59737165d70b01",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/meowscarada.scn"
+    },
+    {
+      "species": "fuecoco",
+      "normal_runtime_sha256": "8679a947396e8e9181aef0091ed458ed111de1cabdfabd7978b14af790d40438",
+      "normal_glb_sha256": "5174db8632b7c8e04a8c5baaf11285a97ac58b3804cbb515a72f3295e08d1e56",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "7209e3c08e5c5caf64721682191fed16c8916d752fc96d25abe04f5467d94522",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-31-fuecoco/normal-runtime/fuecoco.scn"
+    },
+    {
+      "species": "crocalor",
+      "normal_runtime_sha256": "ac2d82c2ff64f9f308d80cd3d2b24df469c5ba80f1d0c30276b0bbd23fab95fc",
+      "normal_glb_sha256": "82f3684722bc37bfd586cafdb7ab214584a6fee7c0b640fe4ad0d0d1ced59f5d",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "4599a462226bbb22ed0e20f85fb7dba209a530cf07462348bde28ead6aa018d1",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-31-crocalor/normal-runtime/crocalor.scn"
+    },
+    {
+      "species": "skeledirge",
+      "normal_runtime_sha256": "6df10255087e3bebef2ff21c31a29979493ba637eb4a4dd6d7a53d7213fafbdc",
+      "normal_glb_sha256": "b4213136d251b1603804d4232d83e04d1601df7d2c2b86f6cfec787f52a6fef3",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "3dbdf1c72c475b5d2a8d9259b959da82b5ec7d724455c616edc1f3119b006651",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/skeledirge.scn"
+    },
+    {
+      "species": "quaxly",
+      "normal_runtime_sha256": "636c39b27430e8e3b925f76ed126e864f7b054e407cd19ab49382ae7b84d4bc7",
+      "normal_glb_sha256": "8686dae4b0b634cb4d0661958447582d35a8b05a935054a8f37300e1a74a8752",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "031099f4a338862db2193a1c883e5000dcc09f6a2b3ccb1bbfca80dfb3ebf3e6",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/quaxly.scn"
+    },
+    {
+      "species": "quaxwell",
+      "normal_runtime_sha256": "aaecd002b8de334ba91d59363c7e7eaaa1c7cad0cebac3ae4deec44935abc432",
+      "normal_glb_sha256": "a2ebd85fbdee12b4ab261053a068101f3e0f395ef115479a7982b3970217af42",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b7cb1e69c92700a356c3e79a8a4cffffe14f6b50ff1bc84138a89910c104b06d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/quaxwell.scn"
+    },
+    {
+      "species": "quaquaval",
+      "normal_runtime_sha256": "62777b0190d04e0926f1f24bcc8d13f5c9d5e72c53a300a85b4b577cd0a777d0",
+      "normal_glb_sha256": "02d5fb3c73d8b4ff46398482ed0ba3ef006344b3b5babb96699830aa785a9196",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "2e8a62eb2b7a7b8c4da0f3fb809597819c4bf0330f1b17d94289118e6452562d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/quaquaval.scn"
+    },
+    {
+      "species": "pawmi",
+      "normal_runtime_sha256": "b236d71a6c8f730a68ccd1869266d7ebcc47fa4e3fcb25c302cffaf79331cfd7",
+      "normal_glb_sha256": "f56b74a845e1301b4bb429c0541b22386fc148c7ee03036fff8add5fc65e0947",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "8e1282df80b090e6875396065a42567b75b178990f90df6b47c97dba026f3384",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/pawmi.scn"
+    },
+    {
+      "species": "pawmo",
+      "normal_runtime_sha256": "49518622bda53206afebc730aed5c69ce41af2c8f8e98bc33df533dcc6cf14e2",
+      "normal_glb_sha256": "221c07b030914b29dcf43572f3ce23f84da0df1df3974c9afb30cc8d0065fda2",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "4f84f2bcede0a844823a6be44ff784885233ea9a85de9cc0b1e72f634a270e75",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/004/normal-runtime/pawmo.scn"
+    },
+    {
+      "species": "pawmot",
+      "normal_runtime_sha256": "e44cdffcd57f2cd809024a4f0741befae7560fad167ad8ab5f418d114d4b1d64",
+      "normal_glb_sha256": "9244402bc12622705b6c8ac3fdafd544dfaaf2310a055bd4a8cc9a261b4e4997",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "15187297383428a3953997f07c79c1111145d11703625d701613b3e038329bc1",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/pawmot.scn"
+    },
+    {
+      "species": "smoliv",
+      "normal_runtime_sha256": "dc9680e9e9ad1c3372ea1af84717c03c2a2011daddd6b4c1178383b0d68f9297",
+      "normal_glb_sha256": "e3763d1dc05e8fa2ff988793eafad3db5528accf11ee5d62548f187c483134f0",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "c02ea60661ba6ef959913f717d5a67502f3b7564a06a946454a8c6ad26b60a93",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/smoliv.scn"
+    },
+    {
+      "species": "dolliv",
+      "normal_runtime_sha256": "509580c3a03e91bb25c3ce2d773ce2c2fd6ef08f3f7ace910c5cc6d467d618c3",
+      "normal_glb_sha256": "51ee031b179eeb9b4cf04bd38752d78754504bc665361b84ec658dc9659e5392",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a76e8ebaaaa8acd84f84e0de52109d445704792e35b705fb278738630b85f946",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/dolliv.scn"
+    },
+    {
+      "species": "arboliva",
+      "normal_runtime_sha256": "3513cec665ddf6505f1dc377cc192a955a61ae43fad977c2e0412b381b3bc0b2",
+      "normal_glb_sha256": "d12d3702ebaf5dde5435500f1a0350cc2dc550630ae31f2356e205241787e05b",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "cc43a77aaf44c1c331157fab678c4ccdc74f8a019f76c29664efa4ef62587752",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/arboliva.scn"
+    },
+    {
+      "species": "nacli",
+      "normal_runtime_sha256": "70aeeb7acaae85afbbfa44b00aa457a70f93906c5c2067436adf4a77edc57763",
+      "normal_glb_sha256": "bd6d8692513a5ad0e93936118ed315875a6de7218c6a175e08e71c260d7cddf6",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "69aa7c9c5792b97fe22b322f90dc9b9c6c1fb7c5cec9c0ade55809268a95a137",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/nacli.scn"
+    },
+    {
+      "species": "naclstack",
+      "normal_runtime_sha256": "7200f84875de234f6c711644a7389bf661641667b5b9a327ee2694c648590537",
+      "normal_glb_sha256": "38a64ffb8b3b1bdda5d079d39cb529cccce01798cbc07dbc5eef1dcc54ff83f4",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "95b34abcbd05e4f4923b303acd9a47f1a8230470a58d21b754ff57bc31d4e42f",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/naclstack.scn"
+    },
+    {
+      "species": "garganacl",
+      "normal_runtime_sha256": "1a37fd6af8e3823c3369abdb1b6a4c8d639beb1bc7d2a09117d8daf244ed1ddd",
+      "normal_glb_sha256": "12547c2adcc968271f86dc6f5ca7e78586411ef396be652ec87dce6259bebf73",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a78e5e3f43e3dd1fe7fb129a50fae3035ed7d72b11d5166af214959979a4ad98",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/garganacl.scn"
+    },
+    {
+      "species": "tinkatink",
+      "normal_runtime_sha256": "75b7292e58a7be02d9c29ecd46130a9d27f720c562f27f9f2b863db5c9726413",
+      "normal_glb_sha256": "0c1bb351904059738967d6521a0079fb47eaed16a775665f97fc08a2da452cef",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "50abd4964267b063cf71cb9adf75282d55747d2d6325694d67326d53f7c36d10",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/tinkatink.scn"
+    },
+    {
+      "species": "tinkatuff",
+      "normal_runtime_sha256": "0b3d605344a41cea9f1f1d51f610d9542e8efa81e4d4c6425b3ae35ec9963ae4",
+      "normal_glb_sha256": "56c0be5d8fc63df6efa7247a435f6cdc9442d358520630d48e30208c32d5f628",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "43338ec28dcdf24f03772d397fdf3f37d7637fa211535d4223ca2b236059fc0e",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/tinkatuff.scn"
+    },
+    {
+      "species": "tinkaton",
+      "normal_runtime_sha256": "d20466f839f5ff387f751d890c4c5ea08a665d85acc686ec0c54e5a53826bae4",
+      "normal_glb_sha256": "b2802fd34bc3397bb1cac4e49739392697bec5bb99780f38b4928c289ff60dbc",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "2098042504c6a7b8f13ad2f72e06e7066f32c059eebeaccdf3e73fa20e3a089e",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/005/normal-runtime/tinkaton.scn"
+    },
+    {
+      "species": "annihilape",
+      "normal_runtime_sha256": "174aee1f3e25ff103b250f249b316182071a5fb9046a4cb5c9c5f4a0d2fc8f09",
+      "normal_glb_sha256": "1c2712cc013ff04aabe247fd91c09bd114c91566aca78c5b3adfc8a06e66c7dd",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "f97fdbb05ffc52cdda6e2666688064ff31fb4643d9a9476f398e4f37158c1aab",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/annihilape.scn"
+    },
+    {
+      "species": "kingambit",
+      "normal_runtime_sha256": "0ae0d98e06d5797fc2c8656976161df9c16bf67c52e3ae62548f45711b7e80c5",
+      "normal_glb_sha256": "54cd6d016664ac4544e548c9d36546e45b63bcc05fe2b644c0d9ca7178124c73",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "58835b026b9d1d53f51f29e1f638793772c834b41cb915bd3bba5a7a627e2b29",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/kingambit.scn"
+    },
+    {
+      "species": "frigibax",
+      "normal_runtime_sha256": "bd71a0efa8724fb928486ebe85f700342af1bb532b6afde834fdb93e9304b44b",
+      "normal_glb_sha256": "5c0a4fc65da89298bafee6f8e4422954927749e89c6ac2e4a1ca3bb1cf40f529",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "5adbc9c2f17439d43a875725186d20eebe0d0ba3be0b9bdcefcf7cd419e6fc99",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/frigibax.scn"
+    },
+    {
+      "species": "arctibax",
+      "normal_runtime_sha256": "3b1dcd89718ff660e88602ebe2a71ac36edf388508a451aa3c47698ce5ce5970",
+      "normal_glb_sha256": "bfd91661e59ca72a9c0e78d877c6ebf154cb407e8bf8d703dad790ffbcd1a5fc",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "def72313f8d436da432b4344e7f32963833a6be7e33b2018b8d34c0539c369c2",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/arctibax.scn"
+    },
+    {
+      "species": "baxcalibur",
+      "normal_runtime_sha256": "54e453c27e3ddb97b48f126e62b2cbe827b002332dd5c6b378d25771030d43da",
+      "normal_glb_sha256": "d6fcb66fdd313de6d12c785bc7525179d875991212478ed46127b9d17616cabb",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b9fc723ebf7e50e06c52089b9fecdfcbbe22abab1df5e4291142221443f8c7ad",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/baxcalibur.scn"
+    },
+    {
+      "species": "venomoth",
+      "normal_runtime_sha256": "7e9fc1d99af675d403df72b953b10fa0323fa9ce48791dba116b5c332ef839e7",
+      "normal_glb_sha256": "00145349da35760a1ea6a6288f5e911ae8fa087e367a6a46dc4c817838ed837b",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "757b67a213c9647a0ca48a36b4f0edef3b06930240835fde083d5e7b20b0c11f",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-31-venomoth/normal-runtime/venomoth.scn"
+    },
+    {
+      "species": "dugtrio",
+      "normal_runtime_sha256": "b21dd216e52c9ff671eb7286e2b966a92e75da67d16ef66ecf1ec4441aa1a5be",
+      "normal_glb_sha256": "2e505fe51c71af77809f6bbd82cb1a534b72ff08bc3f0e26688df2326fa3c00b",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "47ba8076e57ebecd949ce942422d985d90dc40e7430834bd5e5406f63db58762",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/dugtrio.scn"
+    },
+    {
+      "species": "meowth",
+      "normal_runtime_sha256": "0574b8be2d04a277cce4e21ebbb9a2da23c708505bd550b1a7d082cb890e644f",
+      "normal_glb_sha256": "6d06ee2d3c0ea573eeb53789e77fdc8951abdb56b5ac0ed664ed240d22b74f89",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "f567fba767430e391c1ab3a395dc66da813ef72ec6c9e0287b0caa0209317275",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/004/normal-runtime/meowth.scn"
+    },
+    {
+      "species": "growlithe",
+      "normal_runtime_sha256": "3f3293578d1e8188d4e76d19a07d24118e4f5dc3019414aafe77fa3665e13d5e",
+      "normal_glb_sha256": "5df467c4a4d5c1d2ba380b727757093019b1a773e3e9b991bcdaaf671483156e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "8ccde5b289ad390093f5231b6e100be5df8fe686e4d2fff89c8367d6ab1b14be",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/growlithe.scn"
+    },
+    {
+      "species": "slowbro",
+      "normal_runtime_sha256": "24c163bcc0bb3bfe9321326f704737fd4fb46c9cd3d2117d7b09e0a7487a697b",
+      "normal_glb_sha256": "730dbcb38f75f795f46a494436f7f951ec65730e32ba3fa5e561b165d3012cec",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "52adf7084e821712db8d0893686cdf0150e97f964a6fe26fe78853112f82cac4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/006/normal-runtime/slowbro.scn"
+    },
+    {
+      "species": "grimer",
+      "normal_runtime_sha256": "04424a19717a59d2053f968933d5838d94371b1bee43b9b9d0d30e5487c9c3ab",
+      "normal_glb_sha256": "00d6c3712345188e8428e4ab25118ff3dbead89e7ae20072c915124841a9ed04",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "b16b67ddd8cebed09a2027ebeb597653895d4443bda98243b8dcb91968afe4bb",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/corrections-74/normal-runtime/grimer.scn"
+    },
+    {
+      "species": "muk",
+      "normal_runtime_sha256": "84ccb6bc71809aed87fb020f9635c59a2831208299311fc9fd9100b571ea08ea",
+      "normal_glb_sha256": "69b92154abe0ec47f5c4fd9f3b3359bc19d6fed39f8f7f459acf5caf3875b77e",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "7d197e5f947cf5fe4e9bcfe9074d787ab29ca4b1130edcb0a19e73fe2d0bfc2b",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/corrections-74/normal-runtime/muk.scn"
+    },
+    {
+      "species": "cloyster",
+      "normal_runtime_sha256": "e898304615884a218161cc55342ffe558a3e977fae489809a67a82217fb2b039",
+      "normal_glb_sha256": "f156eb6a3833d320263baf2d22945d509106512bb69efa213b0c88f96f51f0c2",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "cb7d5c002bcb5aa64204e597021015fcf55159997362c3e9abb681f7e9fed0da",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/007/normal-runtime/cloyster.scn"
+    },
+    {
+      "species": "hypno",
+      "normal_runtime_sha256": "2bc1200ae09e63258170295ab1aa84ba6b58a9cb3d81847e59c7250b1907d760",
+      "normal_glb_sha256": "fc4a85a78851dcd40fc2e3ebfd340a3aff9f617a464f316ec797652d70cd5f81",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "987aa9453e6ec913d0680f1c5337eb4ffb6bde3740f7de6e8a8bf86ffb1cdb8d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/007/normal-runtime/hypno.scn"
+    },
+    {
+      "species": "magikarp",
+      "normal_runtime_sha256": "d349807d89fb7e1b219a718cb69022817c241ce64587443b2546fe04f0b60a8a",
+      "normal_glb_sha256": "31ffc55561974eeb72bcbc288996e2cb7b921fbd5307ef50c925205ba79b7967",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "522e525d85d3d698cece6c8636633ba5871bb6ebc05ffb72e2b95205eae3f101",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/007/normal-runtime/magikarp.scn"
+    },
+    {
+      "species": "ditto",
+      "normal_runtime_sha256": "65d0fee6be3f193f0c8f23653c3180c3ac5d57e6c57c06563bb3b89add1f1186",
+      "normal_glb_sha256": "ed6bd9de5d13c776e08e914ebd8ac66281db20156fd97fc7dcb14cf76428c33e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "90853e971f8a5b0fce9e22970eeb3108cb27be7fe886f1cd1cb8059f9a62f6ba",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/007/normal-runtime/ditto.scn"
+    },
+    {
+      "species": "eevee",
+      "normal_runtime_sha256": "06ff763d1586fe386361e292ff767cc33e1950acedeee8f963774741adaff09a",
+      "normal_glb_sha256": "8fb1a05957fbc4fd9b5d4f654f502700b2292ecce861a707e7201201bdc23c44",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a7ce5fd590c0243f3c178198a30288b085758eed6e412bea6ec747cd2d842ab4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/007/normal-runtime/eevee.scn"
+    },
+    {
+      "species": "jolteon",
+      "normal_runtime_sha256": "68aad0ea05c38e5deefb9e6af59b7dea3b3a6f32625c3c42dbcbfa3922f5cb22",
+      "normal_glb_sha256": "8cbc6bc5dbd2fb9e17453718b8f746d53b38ad367f1cfa6820b1da7257f7f2fe",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "17b53236be4ae45be19be3c025302b7d46e935281c7e2b7bdc8cad6a9d4dc3cb",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/007/normal-runtime/jolteon.scn"
+    },
+    {
+      "species": "sunkern",
+      "normal_runtime_sha256": "b9bcb1fd834a0c95b17d546166c15dc2bd03126dd37441f2e28623c89d5cc165",
+      "normal_glb_sha256": "d9b20ab4b21965295400d29a909183168acaa7a8514930d1a9f9d7e312aba2eb",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "1552cbfba5fd54e6b48e083005bd88dabe4fe788f17630842310df047b684711",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/004/normal-runtime/sunkern.scn"
+    },
+    {
+      "species": "sunflora",
+      "normal_runtime_sha256": "399a43698b21f1e6d180c0eaa0e3fdb3141f44938c820f8dbcb71d5b199ce5c8",
+      "normal_glb_sha256": "a0e6732a415ce2a075b42ab202a45a844134714dde156f0dd35378ae60a1db07",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "e8802162f14de5ecb46bfc96c0a0ec99d9080af0ee2d5d6f212dc699b33a7955",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/004/normal-runtime/sunflora.scn"
+    },
+    {
+      "species": "girafarig",
+      "normal_runtime_sha256": "f31fd57048f7a406354aa9b75e87a4a505686d38178b3b63cb5224c0fb7bcd5f",
+      "normal_glb_sha256": "002cfa0526dbb8fae8c820c76aed7392007e2704f1278fc60af2a2e38b41805d",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "3e7db08ccaf631ba60251ef4463b3010e4d87175ce03f32cc3bf09f768d5404b",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/004/normal-runtime/girafarig.scn"
+    },
+    {
+      "species": "pineco",
+      "normal_runtime_sha256": "3dff0f7fcf47409483ac545029d57fe29f8bdf6e3235668c31c3aa56ead07f53",
+      "normal_glb_sha256": "6311a812e7ddfbe3c38775d007603b71d5682afa8c7c798f6e359d33d1bff4a6",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "4f512732e60155cfa48ac384b9e27b07c861eeb5a209561acd3d105d7c72acc5",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/008/normal-runtime/pineco.scn"
+    },
+    {
+      "species": "forretress",
+      "normal_runtime_sha256": "d0923d301f56bb6127876a50e631a225f0b1085a4a67bda8aac273e7306be323",
+      "normal_glb_sha256": "b204f2db3198c38812d6dc79a2b855e1b99441e07c6e5f6bbf2d3a13f0c666c2",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "0d8940b1fe40bdc0f5bd06bf26dcd979c62b821c9391e87cc5a1e1ae5ec1aa39",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/008/normal-runtime/forretress.scn"
+    },
+    {
+      "species": "sneasel",
+      "normal_runtime_sha256": "e9795c8bf83d075aaa73cadea70ea416772c8aed624a138b52821683427a6cd1",
+      "normal_glb_sha256": "543667b377b03bf70999709b9d3b7a3227fe28483f27ab49369c08bf7fc33e49",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "d9b6762b983f0eb3f2c86e452c86d615ee0d390ce3d0a0a623819adf826ada5e",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/004/normal-runtime/sneasel.scn"
+    },
+    {
+      "species": "sableye",
+      "normal_runtime_sha256": "6b956c6b3a4a6b4eaa24f99a1aad54859f8e2d65a884257a85e330ded473cf08",
+      "normal_glb_sha256": "1f040921c8bc1bf87516e76fd470579da1107475f055465f8354479967b0df25",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "f3a9853cd770c701293579cef95969e1fc7fbe78e75db9f31a8f44ac8454bf53",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-60-0/normal-runtime/sableye.scn"
+    },
+    {
+      "species": "numel",
+      "normal_runtime_sha256": "a382babf381309316d03374f3913c435d5ab23b8dd2ab01a2baa3b5e435a1499",
+      "normal_glb_sha256": "bad1eaa35c692877736225c25a45e145feed8c95ac763a48c788901ab8fa0f52",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "9a5739ff6993cfc081c4e01d20b59677bace4029aa38891e346e3517ac6a5481",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/008/normal-runtime/numel.scn"
+    },
+    {
+      "species": "torkoal",
+      "normal_runtime_sha256": "2a09f65e6ae072650bf001e2eceb74eff490f7c03d53ca3e9b5ecb4c4730177e",
+      "normal_glb_sha256": "63cf7ee192603f0e4e8674359166bb9e569714e6b0bc8e1c215a13daf93d6d75",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "e8bef358691855f5adc062f3e4edda2d504ddea817f09a949c0ea26891e48b9c",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-60-1/normal-runtime/torkoal.scn"
+    },
+    {
+      "species": "glalie",
+      "normal_runtime_sha256": "ced85dfb5ab1037450345c03e30c9235913822f89452655ca2e126a7d491e30d",
+      "normal_glb_sha256": "c0a498d57aac68f262c6f8e7bc92e1fe9ed09d28c28676b98b3dac114d9f8062",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "7f72295f855ff64cb0349fdff1a2c7006c4f4be78a738d242b336e13111294b8",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/008/normal-runtime/glalie.scn"
+    },
+    {
+      "species": "luvdisc",
+      "normal_runtime_sha256": "7bab01494b4e3eb958f58b41e4a260d75aa9a013c7c3a3c49d586b66451bc221",
+      "normal_glb_sha256": "222bc644534d26263442d31809c6a6c2dcac54176a89d55553adc40e87ab26d9",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "d49c566fc1bd3e38af789c4535483dc2c099c704cfc33b25402362252ba53b3a",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/008/normal-runtime/luvdisc.scn"
+    },
+    {
+      "species": "kyogre",
+      "normal_runtime_sha256": "24c50757f4ea0ab8e0f8769b97ca7cbcffc6517acf100885a8fe9ec4cf3e3324",
+      "normal_glb_sha256": "42120e9456c60d142c59450d1d7895a978053f35c6e79df36ccdd81bfca23cb1",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "d31e702ab5218e51dcfac08e31fea64cbd2d9e05078780ca274170be9783e550",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/008/normal-runtime/kyogre.scn"
+    },
+    {
+      "species": "rayquaza",
+      "normal_runtime_sha256": "55f289cd562704b92ca8dc93eaf9ea47ee34566cf6bc48f3a35346f6f889576f",
+      "normal_glb_sha256": "9546886f029899ce57543ab21f5f7a696a80e93bd14e39026e36cad81406180f",
+      "battle_review": "recovery-battle-review-13",
+      "placement_sha256": "f2b24fea559187f01448a518491366365572e92784f22980ac70da00f0bc534e",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-13/normal-runtime/rayquaza.scn"
+    },
+    {
+      "species": "buizel",
+      "normal_runtime_sha256": "629a2f131072c17741b9762b90bdee549359da62346a004b3abefe83666ee1d8",
+      "normal_glb_sha256": "e02f0399069104c41250fbf6590d90f40c5f2a0ee65be8b46ef70fccddedec5c",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "5babea19b37771aba2d37607a3aea82415b79e24b912081942173fa8b7c4ac9f",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/009/normal-runtime/buizel.scn"
+    },
+    {
+      "species": "shellos",
+      "normal_runtime_sha256": "dd7af5db6bba073652a38474a1928920cfa74d1e21be7d54e99f6fa333aa4bf0",
+      "normal_glb_sha256": "ea6169f3e1995ebbc07b655f12a522ed91f5a9c3ebee5b5ebc19d7a451a0853e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a09a6c6430720faee65b5d4b8829ba7e13c4a7749d581de039e16821f5a7f63f",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/009/normal-runtime/shellos.scn"
+    },
+    {
+      "species": "gastrodon",
+      "normal_runtime_sha256": "c7bad2fb5653002501d289ea8048cd9cf4e63a46e973bdf86e13e2885694a201",
+      "normal_glb_sha256": "e067b6b181d55e82de4c7e605fca3c983fdbb280e6223ceea143cdc91eb2837c",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "2b01c3a848d3b921608b0ec3fc076ede45b8f2593ac49fa6230cbe3b25abfba7",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/009/normal-runtime/gastrodon.scn"
+    },
+    {
+      "species": "toxicroak",
+      "normal_runtime_sha256": "2a620afaabbc6b7ba54905f596da13a03c8e509233d7c271de70b687fa82761a",
+      "normal_glb_sha256": "f0c92abdfd9c32e8a9edc7487b309ecc1b2fb79e9b05e57daf8251fa8149e609",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "e90ffe126967070aa94f61519627db0dbfd51a0931753f9dab47ce6926635744",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/009/normal-runtime/toxicroak.scn"
+    },
+    {
+      "species": "weavile",
+      "normal_runtime_sha256": "c225dc68e064890d7925397ac013e2dd25b13977f60fd7070b188a36eacb1783",
+      "normal_glb_sha256": "d75adae04e3881946f459c083c376f7b232a09d107bfbcca8e5db44053d9f1d1",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "e088b5deb0532d8b91f9057ce728148da2547f5b1f0966e91f835bd0c9c7643c",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/004/normal-runtime/weavile.scn"
+    },
+    {
+      "species": "froslass",
+      "normal_runtime_sha256": "91fa8df16bfd28a61d763a2f75b37eae7bddacc52aa7181f1203f41cdf116a62",
+      "normal_glb_sha256": "cdcb3be64fd3a108e1c9db221e15f33a4b71d4b2623a626202ca4d1d9b6faf1d",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "1e4b4887a0a710782bfce118f73ccee7b156fda86ef8baa5b45323cf8a13bb64",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/009/normal-runtime/froslass.scn"
+    },
+    {
+      "species": "rotom",
+      "normal_runtime_sha256": "c897a036f4fd26760063aa4339a046c8285e5962a6dc1d0cbc753d8d498ce174",
+      "normal_glb_sha256": "01ead83833ec25138c6d2c760b3c7f684d78c6fc886a86a2851c63b8751340c6",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "28011b43b21d894e31ff6e93316a38328c2cdf5d2bc17bc5db56b1b6b74bf7f4",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/005/normal-runtime/rotom.scn"
+    },
+    {
+      "species": "dialga",
+      "normal_runtime_sha256": "506984e60dd1be64c9b5146d08c146cc244a55bcb4a2799af5d5f2d28f9596a1",
+      "normal_glb_sha256": "62db8ae1eafe0585057946556f817ccc45d96bd91e535c1af9d4e274a9570300",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "ca1fa7dd025eceb546ec436f3a5c789a2d045e13a03170617f94bbace2f5ac04",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/009/normal-runtime/dialga.scn"
+    },
+    {
+      "species": "cresselia",
+      "normal_runtime_sha256": "5759328e17630d62ec5d9f236054f3116ffe173df082eb75a9acf0dc99cbb7cf",
+      "normal_glb_sha256": "3af92cd372a7996b247d2acb1d681918e669e89a214fe0a83384e3f1f6f5aa48",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "e296724263ec92b6d91f932519310ade33715bf700293b8a3f03aaf5dc10d3a9",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/005/normal-runtime/cresselia.scn"
+    },
+    {
+      "species": "magearna",
+      "normal_runtime_sha256": "e5ab78319efc434753728a9908bff48ceb297d63db29cb32ad60573987fa1571",
+      "normal_glb_sha256": "3121f96d09701d643b65a7cb4642b0e7ac2a1a0205242c43515e00dc2477065e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "c804e16b4b680d39e4540e1e0a3cbf62832b694d8e7848736aecdce0ddb05247",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/magearna.scn"
+    },
+    {
+      "species": "skwovet",
+      "normal_runtime_sha256": "c9cffcf8fbd0271b3c39eeb45b135c1a37f6d37ed198cfe2853a437829b775fc",
+      "normal_glb_sha256": "319284071ed791f39ab04d0677933c509df87f1c462f84cb337710d933fc6530",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "0149645c7c6cee62c7881fcb015cc83540a28f18d5f60bec8463e452894325eb",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/skwovet.scn"
+    },
+    {
+      "species": "greedent",
+      "normal_runtime_sha256": "9fe851a4bcabf2c588de3dd349647664ddbc4e1a0845e0055ab8e47febe870c8",
+      "normal_glb_sha256": "bfda96acb021d9cd013020f6bd6a02bb28048a036fb1ab682b8b460c094f4d08",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "846aa02784a5b59125cd8c775a8a483465abf47109869d580efd97e1ab3d3c8b",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/005/normal-runtime/greedent.scn"
+    },
+    {
+      "species": "chewtle",
+      "normal_runtime_sha256": "651035d0884f4c8eea1cb31ef4a31ab41b3410fd9b0670ee03387cf560761e0f",
+      "normal_glb_sha256": "65269adfa6f77d622618853e49d580cf44e57ec0732b5b653bfcb04d8c028e55",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "69122e6839b294b0e7981eaa0a726a9fefaf51fb24477e18642563f15b6972ff",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/chewtle.scn"
+    },
+    {
+      "species": "drednaw",
+      "normal_runtime_sha256": "b9a2ac618fce1792d0707915f8c6ac6546e28e902b22f9de9858ead329c87b13",
+      "normal_glb_sha256": "53edf0402fd25ee1eeb41c9ad35bba1109178e33b9c3a03aab28cdd67bea99ea",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "c799b0e79c5239f08afd3605717f99a41dd6ddc71f834a8ecc9565b36d07f98c",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/drednaw.scn"
+    },
+    {
+      "species": "flapple",
+      "normal_runtime_sha256": "367d73fa26ead9547b85db85cb3cf073d7cb3ef178a913003c7f4f6931ebfad8",
+      "normal_glb_sha256": "630563f1482825de927ee6d047b97672fe1b4d3aab8c74a1507ea71c955d82d0",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "f5857fc23917022a089a858e8f0d079f42b3b4d31bb33fa047a068fd91ea2c57",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/flapple.scn"
+    },
+    {
+      "species": "appletun",
+      "normal_runtime_sha256": "33e682e8128a1d5a68bdbc486879e149c926969130a713577071e0d2163e44f2",
+      "normal_glb_sha256": "f2c63a11e20e020fbd1c64c91ee9f0e0a11c371b3ee9e0738603e575683e63c1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "d48b898e2426fef888944e451e498c76b192810f64ceee156eff62b9ea27ee27",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/appletun.scn"
+    },
+    {
+      "species": "silicobra",
+      "normal_runtime_sha256": "bd2d3e35cad3137022394d2e59f605d49819f50373461399b0e83fe6b2a7b559",
+      "normal_glb_sha256": "a3c08a4816398499842b57629c2773eb4becae48056ae29ceb354b96d9582078",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "dbd72adf52621a45f88c748f8f7d27d3b25e0f49ca928cc2dcdc2743ac0fd659",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/silicobra.scn"
+    },
+    {
+      "species": "sandaconda",
+      "normal_runtime_sha256": "f10f4f4c637a8ee7288bf78f39d3b8a529ce9cd33c0ccaa15e249845c68abc1e",
+      "normal_glb_sha256": "f49929d9abbdfa2693a8ee1173543bddd57b2fe64d0392e1a26c944cedd86dc5",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b2a82c3ab43e9ea295500e9349e68dcf6cef8898abf1ad821aecd5b66631361d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/sandaconda.scn"
+    },
+    {
+      "species": "arrokuda",
+      "normal_runtime_sha256": "c911c3768d4c9135b22e879d75adfd5e6dd12f301c47f0afa4de11b349559fb3",
+      "normal_glb_sha256": "76f4371de516622aabd28fd97038385e49770bb93fee29fa137ab0ac4ea2e804",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "a4a90d5f230dfffb966de3a289fdca9f215f0ccf8fb26c3afd488c27d5eeb045",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/010/normal-runtime/arrokuda.scn"
+    },
+    {
+      "species": "barraskewda",
+      "normal_runtime_sha256": "11f8af6620f157fbfb2b5b48929594ea3f80a6eddca6ebf8496c1823b09e40a3",
+      "normal_glb_sha256": "9b830c6f61d8d85bee6aa25fee3d736a0c4fb254a384e9d8213c315fceeb54ab",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "3d773ef498a84ba62faea2c40b5e9e7843e9d9fd98d1e21c592384427e4a152d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/011/normal-runtime/barraskewda.scn"
+    },
+    {
+      "species": "toxel",
+      "normal_runtime_sha256": "44082bd33b39c6954f7e41ebffbbdf4a3a50d6ba018f69f3091644b859081602",
+      "normal_glb_sha256": "d4e0c97c3b16686b21eac22d79b22c0c4995c1232f8ac7f2ba835dbc4ded8352",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "942c66dca14ec8f50a576ee55c40172a697b5dcc9b7d690c561562deb14ea213",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/011/normal-runtime/toxel.scn"
+    },
+    {
+      "species": "toxtricity",
+      "normal_runtime_sha256": "597174e8014b6069e481e849febd3a959cdc070f33e6df1931e278b8726c727d",
+      "normal_glb_sha256": "5ffb61c86cee88f4e8120f6fdcd86983797ebacf67d7e2be34f3ef573e2e1a37",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "76b25a846e67700f3331b1be2717aa86c3cfd81f7e1557c6b02b9c923a011e01",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/011/normal-runtime/toxtricity.scn"
+    },
+    {
+      "species": "sinistea",
+      "normal_runtime_sha256": "ba0d94cd215fc2d0c2924a8509f22bfbe74dd1a880ca4054736752b88cfa19d3",
+      "normal_glb_sha256": "cb5c94ba6b2f1a12c29c9fc6778a33276081f30324ddf4145c2590da6a1fa860",
+      "battle_review": "attention-review-10",
+      "placement_sha256": "0aed7262bb31f7689097727b5da6d977f0baf1874608b0a6b08bccba54565fb6",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/placement-10/normal-runtime/sinistea.scn"
+    },
+    {
+      "species": "polteageist",
+      "normal_runtime_sha256": "f8d62c37e1db963f8471b7e78bdba07b0b49ff8b7a620b40fe0d97ac42bb9d10",
+      "normal_glb_sha256": "91e9a9b8b77c4dc1ed721c9fa315137e43bd3039c509d968bcc00dc31853c968",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "f14fa68c19837983e7e7ac82993485159ad1621d16fa7f04ecfeb33f8d725290",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-41/normal-runtime/polteageist.scn"
+    },
+    {
+      "species": "perrserker",
+      "normal_runtime_sha256": "212b4935b53adb64b25308f98af9d274eb67ffa21cf9e78e724d64025e38c763",
+      "normal_glb_sha256": "8ae01d01a1b7fc3328af15f7dff78d626223dc86ebd39f2af3ca162e6dcd0234",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "86ff2d2ea9e792c693f01d1d5995c20db2bef7ba28fd40255d42f904ec46fc75",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/011/normal-runtime/perrserker.scn"
+    },
+    {
+      "species": "falinks",
+      "normal_runtime_sha256": "cfbbbf3efecc5c5e4bec5b8832650cdb3d7349058c9333c0cf54c7be360c38eb",
+      "normal_glb_sha256": "95abe126d6c2d3d6c2c1d80f3bafbd331455be7df83a3ea90c7ad7a9933356a6",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "4188066e481b37fab55b5554879636f006ccb58b83eb10a77286f074ce6b05cc",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/011/normal-runtime/falinks.scn"
+    },
+    {
+      "species": "pincurchin",
+      "normal_runtime_sha256": "a94a686c84a16916a5ec252a5bbaa467afbc4c40d7879e41e51fe500ab8129fa",
+      "normal_glb_sha256": "d44dde9a60cc48e667033839b14cb6ce51eb664a4cd946eb736c458c7999efbb",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "e9ae84ff2c31ddb7901d25b6a5eb7b9adf65ea65b7286d7c218a76baf34212d4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/011/normal-runtime/pincurchin.scn"
+    },
+    {
+      "species": "snom",
+      "normal_runtime_sha256": "aee2ecc520d186ecb82174e0d7f77e8e2838978f64d10e0588d1df7e295703d3",
+      "normal_glb_sha256": "b53148baf21b6d5d0217506e42c2d90cc43906d48a8d9801df8f7819f3516a2a",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "41f72a34fff3a509b6de8f9b9f82e1a544f9186c095562aa965a89ac66739a93",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/005/normal-runtime/snom.scn"
+    },
+    {
+      "species": "frosmoth",
+      "normal_runtime_sha256": "1ea8abb40482e9b3f1cb20b958889db08e32f98f0a1f666ac2dd983e4e873dfc",
+      "normal_glb_sha256": "f89269334c0a67bbb12525d1bcff5545797fd6db00b468a852c40e82b73db9ba",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "750934dcfebb03e6ab001cc3d7c4ca57566fe373d88dfae6a05c6ae9e33d3808",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/005/normal-runtime/frosmoth.scn"
+    },
+    {
+      "species": "stonjourner",
+      "normal_runtime_sha256": "20550e35e62dc8e2cb64e68461d4118d19556fd519f3a242acc93c4ff56dbce8",
+      "normal_glb_sha256": "d42270ed1c5c97ed5f1f078075b723018505c067b40e94bc869b9ea77af7ffe9",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "1092bc2dd5768a0f979c9acddb2f614ecf222edb3e17f72454f24e9f88865937",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/012/normal-runtime/stonjourner.scn"
+    },
+    {
+      "species": "eiscue",
+      "normal_runtime_sha256": "3e15df2ab9f2b2217aa89093b9ab46ed2c7f13638d0ad21b5dc11055aaad2d9a",
+      "normal_glb_sha256": "3cc912d71f55441c6955675943942ca7eceecb6399fbf8a808e17b1539370d04",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "7bd4909cc16bca877484579f08ae7e381e84e7afb504566e930ce2c48bfa5e08",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/012/normal-runtime/eiscue.scn"
+    },
+    {
+      "species": "indeedee",
+      "normal_runtime_sha256": "5da7fd3eeb2f8c04d0a73781964aa98263b939eefc8cf4e3e6a396b62152270c",
+      "normal_glb_sha256": "f9193aee36d31472f55c80342ed5a0dfd2eb7f4476a0a6569e07f8f652847da8",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "0a9ea83fea76be31aa656e6e422a7dc5ad38f2eaa8d1c35004e71ba45a1e5dde",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/012/normal-runtime/indeedee.scn"
+    },
+    {
+      "species": "cufant",
+      "normal_runtime_sha256": "bf4bb1b452865991e55f8563865fc2e0530746fc7cf1719915e120bc0b22f649",
+      "normal_glb_sha256": "1c2bd11aded4b33a5b21c6ebd7456f849423958ca22aa3fbfdddbc24257cc4f1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "527fbfb012bca60948361e51487ab63948d7e2fa4fd78451827e9b99ea625cbf",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/012/normal-runtime/cufant.scn"
+    },
+    {
+      "species": "copperajah",
+      "normal_runtime_sha256": "9c423f9d86006741f7266228d53fb0ab56889e71ef07d1dbc86c9df838ba5022",
+      "normal_glb_sha256": "fe8922c7bfe45012e73a5ef0a1e9e6543440adea74d3b3a4adea1058e52fa05d",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "8ef3f9eadeb052141c8afa722e35b2a8d807dee3c9466172c531f4d451eb3091",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/006/normal-runtime/copperajah.scn"
+    },
+    {
+      "species": "zacian",
+      "normal_runtime_sha256": "311bcfac762985255ec6008bda7c3f974f96b6156a1f1d9d1fdcf2ecf66f2db0",
+      "normal_glb_sha256": "5a8a2f564f0966364da3fd61559b508944f5240512d228edda94fdd43e87dba0",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "6920fe22d35ad4c07612e342e1f69d3bcef89145ef502465671f9ad727552f59",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/zacian.scn"
+    },
+    {
+      "species": "zamazenta",
+      "normal_runtime_sha256": "bf1bc8fda2d7cfa2b31ce42e26f0aaf9f97609a4051ac97082784c1ad90b1253",
+      "normal_glb_sha256": "f431381461999d85b172e6c7218e927af32b89cfa2e765e0d16bc2b1d34881cd",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "9f2cadb1fdd43186fb876c6c64ab6290cf63802d201e329150343b1aa6c94b66",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/012/normal-runtime/zamazenta.scn"
+    },
+    {
+      "species": "eternatus",
+      "normal_runtime_sha256": "2b0f236ee7ff1cab43ac74cb11f0011cb86df742948abc1d9e54332d251e3ce8",
+      "normal_glb_sha256": "b5bc25d655a157014157a4b715a601b2f98f12a56fd416130a61c09356cfbbc2",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "15e7e294e59f45f6d50e9fe3585f0b3269154c21454d9b786dfbad701ee7ba0d",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-60-1/normal-runtime/eternatus.scn"
+    },
+    {
+      "species": "kubfu",
+      "normal_runtime_sha256": "3d004974de7d6716c2fafaa1205839a1e09143af6ad84c5a3abcab32ca83c269",
+      "normal_glb_sha256": "a228bdbf80a2b89640d0964026d010dae9b4369d071c652ab5b39136791ee12b",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "638b953a3392eea8eb55c9ef90e3d5bed60ab4b56c4a30db9a78150204f19c58",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/012/normal-runtime/kubfu.scn"
+    },
+    {
+      "species": "urshifu",
+      "normal_runtime_sha256": "0468f1ba255ad1aad8d9a11d782599d31c3b1fb3fb139693fc29d5f7a47be621",
+      "normal_glb_sha256": "9368018ad6065058c0c83df1ccb6447d39c1ee606cedf10a22ddf462a0e62e8b",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "92799e9c13b71b3a3097432c2893983a7dc87c10a450ff84e86d28d7a1f739bd",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-45/normal-runtime/urshifu.scn"
+    },
+    {
+      "species": "zarude",
+      "normal_runtime_sha256": "c48c4e1af1afa75e83f15676ae19ac165ff54b121635545a6529d46f55a635b1",
+      "normal_glb_sha256": "56d259849fd7512f6bc808bc00b41e33852ba1913304b4efc2b04d9304751bd7",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "bd3c10fd17b7ee78d8145c5f8de5c9e2a33a5c5900988205c709b4a525dc126d",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/zarude.scn"
+    },
+    {
+      "species": "regieleki",
+      "normal_runtime_sha256": "92113c49148334d1cadb1cfe7d014cc43eb9cd6ce418d0cd6cc409d7067a26cd",
+      "normal_glb_sha256": "34ceac47f8cf4333256b4514be5b04cb1baf74f0fa913376fac6d9aa1b034426",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "e955869149fd26cf90eb99fd3fac7e9ecd82213487b2a7fa4e45c111d0102b44",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/006/normal-runtime/regieleki.scn"
+    },
+    {
+      "species": "glastrier",
+      "normal_runtime_sha256": "695b5015276e345557041750111fee1b08636c9296744df19201c18735063865",
+      "normal_glb_sha256": "5650e78be691402150d298456cc8c2a82748583ab5998483770b0d7442dca468",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "a845d28d27f104f6fbecd25a7cc3df705f5352c341b058ec6657cc3bd7e39e39",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/006/normal-runtime/glastrier.scn"
+    },
+    {
+      "species": "spectrier",
+      "normal_runtime_sha256": "b52ef7c5845d6e4e3b20541d729d3d384a3d560f7b099071b5bf90be8ebb2d44",
+      "normal_glb_sha256": "d9a06e49d531cf2ecc0dfff4e549fb551f28492f69ec88576245f98691bd46f7",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "5e6fbd59c01771fddc17d6dbe60c3c10084b9729fdf377db12eb3e43246045cc",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/spectrier.scn"
+    },
+    {
+      "species": "calyrex",
+      "normal_runtime_sha256": "60585bf76b8ad39eec7559a7f4c71332bfe49ae87004fa8994468ef1ea3907d2",
+      "normal_glb_sha256": "26eb086d0bc2e51c3b31071c89bd5fbf339dde26608d2e582b5f948a9134faa6",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "c41ecea8e66e6898bb4b0a264512f821477a10595b2a1dc7512da2c2037b0db9",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/006/normal-runtime/calyrex.scn"
+    },
+    {
+      "species": "wyrdeer",
+      "normal_runtime_sha256": "0ce95c2ca464ca4a4442de07e3b388259dd1e18b3732c1d3cb1e0eebe1a5118b",
+      "normal_glb_sha256": "410e7c6e0771665441af798c2e41492a8deeee7e5bd5259d32dfd942de621a3d",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "249cb54c95edb5022ec9e9fa0e69ed7e2b50c2fdebcc2697aad8e812d76a0d55",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/013/normal-runtime/wyrdeer.scn"
+    },
+    {
+      "species": "kleavor",
+      "normal_runtime_sha256": "c2f4413b4080ebe0eb220347bd3d3f31f3f1c914f64c9ea34498d6d2249f068d",
+      "normal_glb_sha256": "80d352944602e626e1959c3e23d086211360a7b7134ea7eaa4b73cdd8d9fe82f",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a2f962d1f558034053e87449c34fbd4d5941904b541f20e7149b91183e0ee135",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/013/normal-runtime/kleavor.scn"
+    },
+    {
+      "species": "basculegion",
+      "normal_runtime_sha256": "345bb01512f8592c9599846132bed6ce3c04935217b3c6e5711adc3b28638b7e",
+      "normal_glb_sha256": "1ed9dcb2ec63fe102b39b031a68e6fb412bf3dc7f5363192b87dfbc15233e96a",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "0c3b90bdeb30a7e6611e9f2e8401aaa913845f9b260104793fa204eacd6baf5f",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-60-1/normal-runtime/basculegion.scn"
+    },
+    {
+      "species": "sneasler",
+      "normal_runtime_sha256": "6640f40539bc72a1a6b7beeb5e8b7e03e3d34488ba3f47489a1c90403c809e58",
+      "normal_glb_sha256": "7f5747bd536d01656ad0ee866a0cb21d9b1001ce5fb9d4a3c4db206233df0678",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "d366ff30be1cd1b9f1547401d2bac344b6d93d77c67efab6262d37d088c7e779",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/sneasler.scn"
+    },
+    {
+      "species": "overqwil",
+      "normal_runtime_sha256": "4fe0441215cbaea2a2460a998c12fd348668c84c3f9b90d55b446186eff66fb9",
+      "normal_glb_sha256": "c963e1817b213c92d0a220da74795d3fcc76cd01464f80f649ba095f8b6ab1c3",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "c0e1c925becedcbe1f24fa96e0ba2dff7b8cfbf6da34f871cab162f2b15e131b",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/013/normal-runtime/overqwil.scn"
+    },
+    {
+      "species": "enamorus",
+      "normal_runtime_sha256": "0fce357b604eb3633e3c97331f0d09d33be3d212bed3f2b4f1308ecd75b7a015",
+      "normal_glb_sha256": "aa301f8131bb2e32d66b3c692dc691dda3d319b30410d2a109e64e8ea1a2bd36",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "621e991cb58c5f0c958a662bdc040f203596b280109791761c65cd7dcbbf22a9",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/014/normal-runtime/enamorus.scn"
+    },
+    {
+      "species": "lechonk",
+      "normal_runtime_sha256": "c5c774890a0095bb435f2676a5288b048e89d6e6cd50b634c52f70251392b5d8",
+      "normal_glb_sha256": "3c7156a896eae31d09a0977049d4bfd42f0b7c53b3007976f6f907386de137c6",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "59aa5841a8f6508cbd5f39717d2df166e9c147c735a209cfd1619b927ac8e42d",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/007/normal-runtime/lechonk.scn"
+    },
+    {
+      "species": "oinkologne",
+      "normal_runtime_sha256": "443e75cedf14e5470c51589a5f4fbfb83ab32d688dfc6fe1e6eb526d750cfc9f",
+      "normal_glb_sha256": "fff667678370b262f340316fde9d73c833a154704bcf76e93d64c1a847087a09",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "6dca1141f30d9c3ea1c2d266a0b89417364ee813d033c6c0b6ff30ace7389058",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/oinkologne.scn"
+    },
+    {
+      "species": "tarountula",
+      "normal_runtime_sha256": "4051a2904fd256ca47998c77f9fb522657767d8d9815ad68bdb4e7c8dffa0c87",
+      "normal_glb_sha256": "d365335abdae00905ab9c29333e5d965e359008712794c0b7d2900acfb459a32",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "9069a2b9271ea57a44a66d3a8e2aac1307d278ac1b43976d2fe87530e2afbaeb",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/tarountula.scn"
+    },
+    {
+      "species": "spidops",
+      "normal_runtime_sha256": "96036f367298edd10794117617d772e7ed722eb8c5d61fc4d6a1a5197e2d1710",
+      "normal_glb_sha256": "717a3be2c56875d8493a39dfd44256d4fb654d19695b24b5b5f313790716fdcf",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a11ae0a0bd549efcf5a997f64b9bdacc0ec7fd7e5c24dc011240fc87045317cc",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/014/normal-runtime/spidops.scn"
+    },
+    {
+      "species": "nymble",
+      "normal_runtime_sha256": "c92536f1b7a0a199521c6f8481411c8c93158a60ca81369fd49615d43e62928b",
+      "normal_glb_sha256": "12f0d8759426f66064e9ad650539a161eaabaa6199723da682af27d27f244a95",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "baabba3ff7e2bcbd1dff76be306693647f71bd960604aa391b976480b9413427",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/014/normal-runtime/nymble.scn"
+    },
+    {
+      "species": "lokix",
+      "normal_runtime_sha256": "f703e831f9d22ad3f9cecc9570df79e6080b18c50a684d42b4eece9b67d96076",
+      "normal_glb_sha256": "02708a937fa3c5803e2b30aea5251f42788c04881dd2a27d71e28723907d016d",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "01c04fea0ca1e82325f138ff5da391dbef3463b6ebf7d2de53114dfa810cfea2",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/014/normal-runtime/lokix.scn"
+    },
+    {
+      "species": "tandemaus",
+      "normal_runtime_sha256": "bad5a8c1dccbf39c20703f8197c2f13e96cc7c303d41f618a3b147d68d777c76",
+      "normal_glb_sha256": "57bfd29ede1d7ab5ebf7288b0b5abb382e9113901dac7bda3251a4065232194f",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "263d0956c670c7eb8e1bc2b276a05446cc53883cd2b1e44776b9d9bfb9bf5f5f",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/007/normal-runtime/tandemaus.scn"
+    },
+    {
+      "species": "maushold",
+      "normal_runtime_sha256": "8066fd582028742ff130ddd8b691e102c7368cc55875b1e62a1b5aa8aa686155",
+      "normal_glb_sha256": "e0462649f1c49afc39d0acc1bf503f1462d5034751b24260e006d4819cddf5b5",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "ea75fca775375f974ff496eeee654e04c0c7d60a08f9bc2f0cae80abea2a3b5a",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/007/normal-runtime/maushold.scn"
+    },
+    {
+      "species": "fidough",
+      "normal_runtime_sha256": "416baf04bef2f48237c26fbd59de4786c8035c36e8f1b99697b123c9833ac3b7",
+      "normal_glb_sha256": "f8084c66bef3f8c4e901ff3ec28064f0b7a6a616db1a331e998e6e841bc9525f",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "2702c59bf8afdf7eaf61aaeb603dc8bb8409fdf97af7cf2753b5fc415ac221b7",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/014/normal-runtime/fidough.scn"
+    },
+    {
+      "species": "dachsbun",
+      "normal_runtime_sha256": "ddc60cf9aae6bc6d5de9e8ebfa5ea78533d12e034e45c58ff8c0f2fab8e5b3db",
+      "normal_glb_sha256": "bc30b52296279b1bc7072f3438971f83c24392ca9fb46f7dd78eb9700f6fa00d",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a3bc470faa90402c96a0e6c60f72a554ec8ec905f144851e78feb07543283a82",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/015/normal-runtime/dachsbun.scn"
+    },
+    {
+      "species": "charcadet",
+      "normal_runtime_sha256": "0c9235c592a16cf5981f4409d1ab10bd089c1d141e2a8eb5e2926e82d81ab625",
+      "normal_glb_sha256": "a303ffc18f0fc3ec98a1f679820eef9a7e5e85736a47a4eb8cb8b70215ea6daa",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "e7d2de5952a3d14bab137a5413d0cda56ee67a9086002fb5a447ba25291dd14a",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-50/normal-runtime/charcadet.scn"
+    },
+    {
+      "species": "armarouge",
+      "normal_runtime_sha256": "ab48b6c4156ca358a395d7727e9bf7d2153cdf1495d1981102675cc834c049be",
+      "normal_glb_sha256": "497a939ca820c3277a1bd661b45efa0af6e1cabeffa25d11951ef7ebc01449a4",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "b369a0907fff0d71b326fa068fbd94182421327dd2965b4dfb151b153de7b4f3",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-61-2/normal-runtime/armarouge.scn"
+    },
+    {
+      "species": "ceruledge",
+      "normal_runtime_sha256": "8ee6529b36700161b3680105df9287c0f13927e5913419ec0d7e2eec467cfca2",
+      "normal_glb_sha256": "83b788005b1a379273c9cafbaef3876c455e03f3a5e82536fc6ee66a8805cf19",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "80c1fcfc5bdfff8a7c20a55a9b3c689d407597949f935f0dc8f2a5e5b1977817",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-61-2/normal-runtime/ceruledge.scn"
+    },
+    {
+      "species": "tadbulb",
+      "normal_runtime_sha256": "725759750a356be95f308c0416497bc167bad1875daddd8f21c055021821d005",
+      "normal_glb_sha256": "b8df8eca81c49514ab4593f7abd3b14a08daf7775ee41b5b7286e76591260997",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "737f5905455d5cfc18f92db2b120dff5d1cb9a41c3e529ba268464c94ee9658f",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/015/normal-runtime/tadbulb.scn"
+    },
+    {
+      "species": "bellibolt",
+      "normal_runtime_sha256": "5835d8369a71efbe48ab5c082038e1fc23e3a1aeef34e7b6caf1346c80ed4616",
+      "normal_glb_sha256": "4df287838b8b03d088d55d1b1ed56c91454a9eb146cd899ac1e4ef488f2eda32",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "cd905c38c27650298fcf2e1fbf6026b0af6e8d1719275bde741a7ebe069fedcd",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/007/normal-runtime/bellibolt.scn"
+    },
+    {
+      "species": "maschiff",
+      "normal_runtime_sha256": "4a9a177179d990d154765bd3b4f55ec4a74b18770e36eb383b3f08904c868be9",
+      "normal_glb_sha256": "9e9ae4b62780af676b88b38cbea653b0f9214107d73155e1fcebfe3adae6b8e6",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "b0b3107efc8b4170994f5c2a469014bef4088e017f88a8ae3c7b45e901468620",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/015/normal-runtime/maschiff.scn"
+    },
+    {
+      "species": "mabosstiff",
+      "normal_runtime_sha256": "d9d3521dc80a70b5aaf426c1761bbe0a77a92a309b4a0f0f526823e3589399d6",
+      "normal_glb_sha256": "812ecdc713af0868af3b96a3440a898ccf32d41fa892aa576a86d391cef92b75",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "01347ad4f800a6cfebe8b7c7e2f44bb7123bfaf2483922ba77f354da610f0fe4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/015/normal-runtime/mabosstiff.scn"
+    },
+    {
+      "species": "shroodle",
+      "normal_runtime_sha256": "03950479f6d35a27d44e49278cb7de326eec5d4c2b769a865f0db7f4d8e1535d",
+      "normal_glb_sha256": "0e90ab4316d73cf212c3d5198d3ca59a3424458429082812e5d04368fea67897",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "ee30ba5f96e531f156c15f5ec31c5caee9934622df418e47e171ce02019fac7b",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/015/normal-runtime/shroodle.scn"
+    },
+    {
+      "species": "grafaiai",
+      "normal_runtime_sha256": "8e043cee7a8d66e17a54c0beb4e2c6d1fc358eba1c0c930dbe37dcb78a86f70b",
+      "normal_glb_sha256": "7358e831c925fcdb1d89ef6901b89f7674c9eff2a0cbe438da4dfc6f5637b20c",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "3ac931e3a310f98d61db13e9f65882129b7b158cbbe7f8c074da14a2765545b4",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/016/normal-runtime/grafaiai.scn"
+    },
+    {
+      "species": "bramblin",
+      "normal_runtime_sha256": "f188611f6967506ef3aebbce8803407158857ab68e4866c55ab54317f7387590",
+      "normal_glb_sha256": "5c8a0af97d5df2f4affc1ee0a3794369ff356398638b1a61a214ce4458a13430",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "261312760a8903e1f0f44d75e0defdaadeb64705e22c1b1295e481f3d27935b2",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/016/normal-runtime/bramblin.scn"
+    },
+    {
+      "species": "brambleghast",
+      "normal_runtime_sha256": "4a2040ea130354e9f6c64d950ecfad528ad47095e1228613db66feb2387cb353",
+      "normal_glb_sha256": "71a84344913a5e3bab909b0bb9066914884d4748f6ea5158f898314d7436e5f5",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "809b9f33d8ce92b6a3d4b8b913e141a1ef94e4969451a13e7c466fc57c094de5",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/016/normal-runtime/brambleghast.scn"
+    },
+    {
+      "species": "toedscool",
+      "normal_runtime_sha256": "c420a6d9a3c86817a764bf37e2c983b56f2f14d9b74354ff2bf957e264741a2e",
+      "normal_glb_sha256": "75dcf931896ed109c2868368bb5074c56f0e1280757759fd695d595de73341a0",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "a9275c0a529e66b9ce8ecf1008a86a11ee50915f42954cad0e9d711cd5f0210a",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-45/normal-runtime/toedscool.scn"
+    },
+    {
+      "species": "toedscruel",
+      "normal_runtime_sha256": "f6983d1e5fc64a1d49155c3fc311be849021d7a86b2d93a3546373897141fd91",
+      "normal_glb_sha256": "0d1e27ca946834ba847763d8192b2d9f98ea356feb42f2e83e8491e8ef5b9acc",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "a3be5756fccafd24f55c035ae47da94ead2f700148a68969b7864f616e4006f1",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/008/normal-runtime/toedscruel.scn"
+    },
+    {
+      "species": "klawf",
+      "normal_runtime_sha256": "691471815607d5c83b81de290760e803be32fd25ac0e36fdf9c660134c0b7175",
+      "normal_glb_sha256": "af1a263a99ef78e7611559bd1b80422609f23624755f3872a2f3f14c298e79ec",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "47f5649e491c3ca873d9f798a4124cebfb9925524605bddef3b40d35f6351e0b",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/klawf-24/normal-runtime/klawf.scn"
+    },
+    {
+      "species": "capsakid",
+      "normal_runtime_sha256": "e95f84d4c2e38c6d4a7950173dfa46a8e08ce9dbec3c568c1621b04ca628f85a",
+      "normal_glb_sha256": "5e6126582280f7460ae263257e12a8366298534b1bc4ca60ff7e9140f21f94f2",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "23bd3cbec4958330623e132015474699b54c62ad93adfe79555571a6c8dafcfc",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/016/normal-runtime/capsakid.scn"
+    },
+    {
+      "species": "scovillain",
+      "normal_runtime_sha256": "db4da8e8889ab22b01bb2c6d054fb2d2823f608caef8eafce6c726330829f784",
+      "normal_glb_sha256": "2fe94a2aaaede8a886926ef124c4b163ac27ff0d3e71701d1fc41ff1dd8810d1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "53684a28a2796c9361a351a7bedfb00ca2d3002df98d5e9a7e710d190cba1b3b",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/016/normal-runtime/scovillain.scn"
+    },
+    {
+      "species": "rabsca",
+      "normal_runtime_sha256": "89a758ccb9b98858112da0e6232ecb9377dfdbc1c530f7c67edc29d0339badc2",
+      "normal_glb_sha256": "13cc4d1a564d358639abfb78d3319e92106d7664ffaae0a1071439d4fda2bc85",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "23aa9be10e497efcf8222e0e931aebf1f79ccc2f94c49ada1dd272f94a6a6fa1",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-61-2/normal-runtime/rabsca.scn"
+    },
+    {
+      "species": "flittle",
+      "normal_runtime_sha256": "180cb0c0a43b3c93fc8e1e13bfbcbc17354b26a1ef4f7ce338982c749d95dfba",
+      "normal_glb_sha256": "30c76501aefaa73e24d027cdd3cfc0cf69e5b12c3596b3cd49b96964c0d2dafc",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "777ee05f1a92d1675101cb9de8135ae7a24601cfb6d55aed671cae2843d7bdc9",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/016/normal-runtime/flittle.scn"
+    },
+    {
+      "species": "espathra",
+      "normal_runtime_sha256": "92fec79258bed2275ffc1f2f84dd445954612bd14f777a0eb482fc2c8f8dbdd5",
+      "normal_glb_sha256": "1c836cdfab80fdceb346346d3820599d448f70085ef827ae7bbaeccbcf367fc6",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "4b33968511a0e8f8d99aad9952c6be97bd8234ea42c460b89dda516554710873",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/espathra.scn"
+    },
+    {
+      "species": "wiglett",
+      "normal_runtime_sha256": "d9c1de0fde1e154c33b86d5a46da05547668fc2b62e266be17d411f60e1f2b5a",
+      "normal_glb_sha256": "6cf86276fd9c8ceac2c6471402046a771721af62b19801357e396d49de4e2533",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "b393bbb5926d4798dfc0572f9c5dea2e027a5fefb9bdc62e6e8b137f5cd6c644",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/size-17/normal-runtime/wiglett.scn"
+    },
+    {
+      "species": "wugtrio",
+      "normal_runtime_sha256": "f3e312af1f15e0144e83afa71f5ad11194da2abd5b6229f1d07aa6f2dd8b3ad4",
+      "normal_glb_sha256": "eeb47a4d855897fa58dbfc049954bd68205997f8d9674f8ff80db78cfba688c1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "0bf63756d7a976e9e886af982be6b7234f1c9efb5cbe7a6ac409aff979d2779d",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/017/normal-runtime/wugtrio.scn"
+    },
+    {
+      "species": "finizen",
+      "normal_runtime_sha256": "164bc780c130d29e90fa6313562470c1b11419d97cc7af35fafefcf52d930e1a",
+      "normal_glb_sha256": "7c494144c4c25f4acf6e50dfcfda9b200cb0dd22d4d62a6d28fc199f1888f2ad",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "7d2d540f48fc08abe913e81ca2892eb81b495440c2caf907465c272fe7bbf990",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/dolphins-26/normal-runtime/finizen.scn"
+    },
+    {
+      "species": "palafin",
+      "normal_runtime_sha256": "5793c5db0fadcffcd2ec623323b68bc35ed3423d0371c86e2fe820eb13aae9f5",
+      "normal_glb_sha256": "c392dc461f36881fe642ebcf74642b6b6898d9608a5c90d2eb5a26d6e9dff45a",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "ef8efa27d487ccd4471bbe4c441b78b867381dd2277c426b7435588ca9c07693",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/dolphins-26/normal-runtime/palafin.scn"
+    },
+    {
+      "species": "varoom",
+      "normal_runtime_sha256": "c3a3f8a6f5347cc98ba22b59a677965385b49d6a9a32b124fdfd8c57c552dff9",
+      "normal_glb_sha256": "1246000d2272e490d2843339ddb4f8c344762e3180541421f36f1d930b81fe4e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "c6806224f4b083efc4dbfd6fcca4e1811d997927d432d31d0ca1441a4b64e78c",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/017/normal-runtime/varoom.scn"
+    },
+    {
+      "species": "revavroom",
+      "normal_runtime_sha256": "7d5121b3df92c5ee40612d4ed1a3c966a8368a6f66e098f05be008d72cbd046a",
+      "normal_glb_sha256": "28ac90f56115bf4c9135a3c14a0beac1321d01140c9b25a4604cad28ac43bbe4",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "4fba1aa4e00ec357d12f02bd17f58e308552375e36f7a342c65996ab460a46d8",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/017/normal-runtime/revavroom.scn"
+    },
+    {
+      "species": "cyclizar",
+      "normal_runtime_sha256": "adf7603d89af438861d8183c8ce561c9cbc4b1bad245296823bc8af771ae5b15",
+      "normal_glb_sha256": "771755d9c4d34706e541c35698c58a03046ac97ecab2eac64cccaccf31d8643f",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "9dccd8e8888409dd4e78d528177ebade71a3f9d0939c6b818e3d84c6ffa9e20c",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/008/normal-runtime/cyclizar.scn"
+    },
+    {
+      "species": "glimmet",
+      "normal_runtime_sha256": "fcb7b6a066203fa77ceda795b3e46a4998db4731121c78898f1276654fd439ac",
+      "normal_glb_sha256": "19f852371ab6ee6f7611d42fec44ef24a0fa24eecc9a5c801048c066bad5c83e",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "a8817e308a1c8d91ae880d2a38a40c610721060a75bdf1b7658491fd9dad965e",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/008/normal-runtime/glimmet.scn"
+    },
+    {
+      "species": "glimmora",
+      "normal_runtime_sha256": "26fad4f2b3c4ca87d47ef28b0c20eb3396ff015d20c9010d7171af9f13a7304c",
+      "normal_glb_sha256": "6d6df778538dd935b34ba6c9c96d819c3a2f347f2ee13fad8d3573a10098fd65",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "5079e16eed2928aef2ff488daf09021b07d23d5fbcbd3e83cf58cc45da4e6e1d",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/008/normal-runtime/glimmora.scn"
+    },
+    {
+      "species": "greavard",
+      "normal_runtime_sha256": "aa449c829fce104fbef6f353c3867085e7d3b0fb45e8cd50ed0f3c888ad88276",
+      "normal_glb_sha256": "f099063f8624c2f4db4f457ba3d9ce7e0747076fa5e9cf8256b45dece094eec1",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "62ff02ff9c079e501e63d5dd3a078c2082790eb19cb8d1b6770517d8f85b4f8b",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-61-3/normal-runtime/greavard.scn"
+    },
+    {
+      "species": "houndstone",
+      "normal_runtime_sha256": "e01692a55004aaae222a5c65eb29540e96190469f2354cbce2199ecfc75dd83b",
+      "normal_glb_sha256": "9a5c0d0df4dde3b936275afc1e8c0816b4ab19848378df385dfd9e274999fa3b",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "409b4b1a2630564cbe6bcf72426acc7256f996a3cd8614f524487eb5331f6465",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/018/normal-runtime/houndstone.scn"
+    },
+    {
+      "species": "flamigo",
+      "normal_runtime_sha256": "6be96cebd7f9923636b737cc64d315c2b467ceaba83c9dfb90e81b1ebe96ca6e",
+      "normal_glb_sha256": "c26c4246ddc75f77989863d63124ff45133839b964b516e33d24354734e7349b",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "213435bda6e904e68efe9f483f8a5cb95d2f0577ebb79abdc927389233690b42",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/008/normal-runtime/flamigo.scn"
+    },
+    {
+      "species": "cetoddle",
+      "normal_runtime_sha256": "667c54f7f7c7fc4b658547665f75731ffa6bc7436dd138687fad4dbfbbfaea9e",
+      "normal_glb_sha256": "d2628d184e021a8d5cc0947bb6b25bcd496c3aab49cfad65132a076c96ca4405",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "c7d87f7c540710fdd4c764fce0ed65b73a8dc1f7c13d4c102477413a7af829d0",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/018/normal-runtime/cetoddle.scn"
+    },
+    {
+      "species": "cetitan",
+      "normal_runtime_sha256": "c2efb9b2a0dc9ba62747f459a76b6b17c9d1ccec564391eaf505b62049360dbf",
+      "normal_glb_sha256": "fb68a0dc73fa26a05e05b69163cbd2c135a665606162636238e285a1c3035b2c",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "19246c5be62389f332225bd3978deb5848bbcacd6f96e6a2c9653ab3ac8d10be",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/cetitan.scn"
+    },
+    {
+      "species": "veluza",
+      "normal_runtime_sha256": "4ff571bae83add3ff0fbd3188093e5ac21475f5db6a5103db299e200c582b5bd",
+      "normal_glb_sha256": "2dc2c0f3341cfa8e3b3105f7efe3d4260b4927235607f34129424880aaddf268",
+      "battle_review": "recovery-battle-review-52",
+      "placement_sha256": "91d36de4f267daf8e0f14736b0a7690f8dc4865d41fc3d757c4cec08719ec035",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-45/normal-runtime/veluza.scn"
+    },
+    {
+      "species": "tatsugiri",
+      "normal_runtime_sha256": "a0c255420a4a68698e65e16baecc3ce1e8d0efac9985ec9804d3592353256d6b",
+      "normal_glb_sha256": "b67e2e2fd33a659270c5fb2435edf22ef77bf186d8cc139b614880a573a8fd2d",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "f063b342f68072b94e41ef09ad5b3e3f07bb1d88663d3558ba48fc1acf1b1c75",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/size-17/normal-runtime/tatsugiri.scn"
+    },
+    {
+      "species": "clodsire",
+      "normal_runtime_sha256": "7ae81a61bd73040bc8e73e8fe0c67b013b4f7daf3ce9bb8a35582ec27f62427f",
+      "normal_glb_sha256": "b461f2b33ae629ed463b7db3d77dbce62643384dcf47d5cb184ef2971e1e252e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "5c4d95d87a2223c1774d69676a6defcf6fea41184a9c348873c5376abc91b0eb",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/018/normal-runtime/clodsire.scn"
+    },
+    {
+      "species": "farigiraf",
+      "normal_runtime_sha256": "4780b3c6fc4110af322565a2cb55dda0a07d6b03726f48dba87396c524a8cf41",
+      "normal_glb_sha256": "3facc6b917180492a81d1e5cb56a8e3da5b0cac957383135a1f607b30c257cd7",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "458bde8bfc85bd1600c3a85b849d48c133da9ff4dacc82d1c9bbd00ca671cd5c",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/018/normal-runtime/farigiraf.scn"
+    },
+    {
+      "species": "dudunsparce",
+      "normal_runtime_sha256": "9da202b8fd2933dc26f9332e32a1df78b8f16f145a4cd25b0e395f362c37018d",
+      "normal_glb_sha256": "1a788c8782a627d97dff6ef9d76964fe1ac6f668afdf67301048d38c44219e10",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "1e9f352ecd4afc9ef426c8d8055b3709243482041842958932677b44b817dd1e",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/dudunsparce.scn"
+    },
+    {
+      "species": "great-tusk",
+      "normal_runtime_sha256": "db2365ad38c9f6a782d89ae1fe1ad66a1e5b7abe05d5b635be70311bbf91c6fc",
+      "normal_glb_sha256": "03efc7965fc7587ebeb87ffe0e30b1e34df32addfee5042d9599a70bd279aef1",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "dc8ce71e5397c58d09145b0c557c12627a2604f25699d60fbdd432cc16920785",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/019/normal-runtime/great-tusk.scn"
+    },
+    {
+      "species": "scream-tail",
+      "normal_runtime_sha256": "7cf01cb4b6f20a69eddb973f5a8945ad8afb977d1c5e08d6f0f6a23fa2ef9fbb",
+      "normal_glb_sha256": "b6109bb6f3c66244cd543c2afbbf8df30f2b026e50e8425167f23d699428af1a",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "6cbf7fca077d395ddbf9b54bcb7df94e41f2828e0f873a2e5e62e56fd56c2086",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/018/normal-runtime/scream-tail.scn"
+    },
+    {
+      "species": "brute-bonnet",
+      "normal_runtime_sha256": "b1864baea844f0de2c03b98f086bc8bfb8f573486de7eda019dc493398fa7906",
+      "normal_glb_sha256": "7ad2a05fb61e2339c99ce41528bf5bad05b9fecb517e28a909d5091169d346de",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "ba86d7e132ad4ba4592ff1ded24bb1dd6d4fc2845c3728c802f75ba45133b429",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/019/normal-runtime/brute-bonnet.scn"
+    },
+    {
+      "species": "flutter-mane",
+      "normal_runtime_sha256": "26e38475049b8d98b2154f2b8f6bbcc72ae24ee075a21f13f3e0d54541aed7fe",
+      "normal_glb_sha256": "1827866b2c2874d53c226f0e46b87858ba70a1060235af3dad668dfd07a7a70b",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "914f7cc5e2ef8cd748ed3d69fb9c1aa56689964b5c1e4c340c5e5b17375f7301",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/019/normal-runtime/flutter-mane.scn"
+    },
+    {
+      "species": "slither-wing",
+      "normal_runtime_sha256": "bdbfa626bfd16e5a8b669dde557ded7bebc5b78e66e4f0018942f326c21ece6d",
+      "normal_glb_sha256": "a0e9683e02dbf86e5ed7330200f8f432e76146d0b125ef29eb85a7ab6a0b507d",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "2f397bdce40700cd7d54574bfce3fb78f0eabaaf26acbdf20dc91a4e6e5d1eff",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/019/normal-runtime/slither-wing.scn"
+    },
+    {
+      "species": "sandy-shocks",
+      "normal_runtime_sha256": "2037df31fe273e6356e5f710578bf9ccac0bb2da34baaa54944bbfec652c3d67",
+      "normal_glb_sha256": "5609b05e15f2e17cd5f11bfb8bc9fcc89511776aab3fd59803c874b511e57232",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "7331966d13c3cc6579fdc9a9be84333b1297793e663e8d999373d2150dc5b706",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/009/normal-runtime/sandy-shocks.scn"
+    },
+    {
+      "species": "iron-treads",
+      "normal_runtime_sha256": "a8919dbabd999c1c750651b70d1681fc2ad139525cead2813e20eb900a13d500",
+      "normal_glb_sha256": "da7ac54a189a41db7df4e004012e311454a4171aa12133374ffdf6c1e5c62fa4",
+      "battle_review": "paradox-battle-review-11",
+      "placement_sha256": "f9c00ca18e501d5a056545cacc0254d2d262028ea34ba0f2c9dc4935922c676b",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/treads-11/normal-runtime/iron-treads.scn"
+    },
+    {
+      "species": "iron-bundle",
+      "normal_runtime_sha256": "9310d866b97ae852d3ee5a2acc3e041a98784c5c910a6e653e7bc79fd1123383",
+      "normal_glb_sha256": "e86eefc9ccdb8b4503250885f12bd272eea088a10f6d3f58ac38d84b63eacc4c",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "72dc9a7dc88a2580cfc90848297396b44304d59b575c736e210b1f031590b105",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/corrections-74/normal-runtime/iron-bundle.scn"
+    },
+    {
+      "species": "iron-hands",
+      "normal_runtime_sha256": "5a752597b17cfb15ff9f3d5fd7fe0deef103e6295d915ab2225d37ddfabe0472",
+      "normal_glb_sha256": "f49683933a57abf16722205352d47fb8298c6bfb306180ba8e8eb386804291d9",
+      "battle_review": "paradox-battle-review-11",
+      "placement_sha256": "fa1a2cf4145a176fa70fa244a7e39b0c5a2eb288a1f4edc57bd0b6ad1ea96478",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/paradox-09/normal-runtime/iron-hands.scn"
+    },
+    {
+      "species": "iron-jugulis",
+      "normal_runtime_sha256": "0166490f154a99e8521683fcb358a4f2abd990d56ac660e59af6b9e1673ae571",
+      "normal_glb_sha256": "45d5e448638644ec3ed8a3add10f8d5c8c3274c130630fe042d4e1669b9fd4c5",
+      "battle_review": "paradox-battle-review-11",
+      "placement_sha256": "cec6866d789a9722214bb7ef06163cadd4f32af54520047c5df2b02785b971b2",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/paradox-09/normal-runtime/iron-jugulis.scn"
+    },
+    {
+      "species": "iron-moth",
+      "normal_runtime_sha256": "fe256b1124348279d347e0812b8bbe86a96044c64d2ea8bb5f4d518d059a3599",
+      "normal_glb_sha256": "6f5337a3a1bea9bcd33550e88a19e7e14ca0744f67a394efe313156b72d0084e",
+      "battle_review": "paradox-battle-review-11",
+      "placement_sha256": "663960d08e7ccf01e0aa97b6c7ebc24a9d78848fe39d3303fb1482147173c2bd",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/paradox-09/normal-runtime/iron-moth.scn"
+    },
+    {
+      "species": "iron-thorns",
+      "normal_runtime_sha256": "935ecdbc73168ed923028b7a8a02ca25222fbc507ce344afd8c1e6ee9715fb12",
+      "normal_glb_sha256": "0d64d8193129673cb34fe41ac4a002615bf3eb13a8d3ce42c470dde34a6ed027",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "eb5415c3b5732e29dd0e2fafc5681884198ead9ced7e2630e20a55d4d9b062e6",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/corrections-74/normal-runtime/iron-thorns.scn"
+    },
+    {
+      "species": "gimmighoul",
+      "normal_runtime_sha256": "aa226708e3543e304ef8ffb1cc40e26d7743636f9933a196854471859ca5d76f",
+      "normal_glb_sha256": "f23bfc33d962c1a2a177e0014cdc15ac9a6c05bd4c59f45bf8af14d9b785e7d3",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "513a0c029060523aefaf1f440d09d0e17f9aab5bfa6c0ddb5327752ed1b23dd7",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/010/normal-runtime/gimmighoul.scn"
+    },
+    {
+      "species": "gholdengo",
+      "normal_runtime_sha256": "8b4be6b0559325c9d90a92a92158f7a042c452442db7ab27b5c695b84bd501da",
+      "normal_glb_sha256": "e4edc89682c7e39e649e8aa8ed81dffc135dd5c5c43afb27f94baf4cf13ad42b",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "ddb0ba1f3e7e6a820cbde2651e1090b332e226629f483944982ddec20bcbf8b5",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/010/normal-runtime/gholdengo.scn"
+    },
+    {
+      "species": "wo-chien",
+      "normal_runtime_sha256": "3aafe8b9b58008540647535104c43a4c61e093d831e003c5c548efe44ae57a0e",
+      "normal_glb_sha256": "04d0b0fc7ce34bf1a9731fcea984e184806575d39dc9b8c6cfbdc236497a991e",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "a397f3a28484c35028b9ec82820efc6a75d117ad20c5d8b4f4d5fd4973fba9e3",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/020/normal-runtime/wo-chien.scn"
+    },
+    {
+      "species": "chien-pao",
+      "normal_runtime_sha256": "b8ec2c38bd766ef79bc1a7677017c8d1e6047e328a1a4e1814f88c3d29ce6f36",
+      "normal_glb_sha256": "e6c3c8033c8318407fbe9082c674ff1f975669c7e0a141cfae25139879ca8c85",
+      "battle_review": "recovery-battle-review-44",
+      "placement_sha256": "e0d46ddc6b4ecbe76cd9d959ed47021183f0386d87c5e7c8d44eef582a4e3efa",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/010/normal-runtime/chien-pao.scn"
+    },
+    {
+      "species": "ting-lu",
+      "normal_runtime_sha256": "04b4dc0293fa03937835c369b80c1300ac884827bb32317ac05381a262dfb8eb",
+      "normal_glb_sha256": "ba79b8678092779caf839cf86ed652ba65497201f4c30550e25da9047bccee2f",
+      "battle_review": "clean-battle-review-30",
+      "placement_sha256": "61516e70707b0c7bff2a36adc1df9b4a374e109bfac80656e887460cf9539d09",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/020/normal-runtime/ting-lu.scn"
+    },
+    {
+      "species": "chi-yu",
+      "normal_runtime_sha256": "efd96551ebaa61ea9ad050f467b00b1f01d6db1a4235eeaf64d4c8edb853a6ba",
+      "normal_glb_sha256": "e3ff86e0396b0d9afb188b02b61b308a7a8743aee5e2dac314d860191492659a",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "8224178d8f17685562612707de2d8949f998a243278ffa1cb83e8a7c52894adb",
+      "normal_runtime_artifact": ".tmp/batch04-main/groups/020/normal-runtime/chi-yu.scn"
+    },
+    {
+      "species": "iron-valiant",
+      "normal_runtime_sha256": "5fad4e810619344509e5594f9ba0c162c3da363318dbc0f3dba4b0058e3bd601",
+      "normal_glb_sha256": "0e20f6131fd9ac1de0d00cab7b055190cffa6f598c4a8688fb58ac7f50fb3ef4",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "379320147c8fa4fffaf992cb77d5dbe756376cb5e034b70690ea74870fd2644f",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/corrections-74/normal-runtime/iron-valiant.scn"
+    },
+    {
+      "species": "koraidon",
+      "normal_runtime_sha256": "2acbfb111f609023fe062d05d5c2e03c19557af3f62ef9f4570d5ad78f994255",
+      "normal_glb_sha256": "c2424a147dc8f8b067c1181b95e36cc5a1b97b27ac86359b1933ffe5bfb23fd1",
+      "battle_review": "recovery-battle-review-25",
+      "placement_sha256": "8ddea3a707a3f1f43c55f0f0bf4df8079453e286c09217b3ca3b4bd56dc5bf56",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/attacks-15/normal-runtime/koraidon.scn"
+    },
+    {
+      "species": "miraidon",
+      "normal_runtime_sha256": "14c3627afd1ec5ce9877e841b9ed792bc2a8f2387171e9ab89e171e5eb0c51b1",
+      "normal_glb_sha256": "c2b05699c6e5e62a72ba7d8da5555a327103b170a3a0f63a1202c77fdc5db72a",
+      "battle_review": "remaining-battle-76",
+      "placement_sha256": "92570b9ccf0cd047e51d259702c52e80dd16132383d1c27874bde3d2984933d5",
+      "normal_runtime_artifact": ".tmp/batch04-main/recovery-groups/remaining-61-3/normal-runtime/miraidon.scn"
+    }
+  ],
+  "appearance_acceptances": [
+    {
+      "species": "pineco",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "4228d3d5f15fecb6b9ac6219c47303008accc80113fa4b4243dceb3f211a8e1d",
+          "glb_sha256": "6311a812e7ddfbe3c38775d007603b71d5682afa8c7c798f6e359d33d1bff4a6"
+        },
+        "shiny": {
+          "runtime_sha256": "bafc2d513169266587444ed988cbdeaf1b50bddc755bccc17b0d8f57dee0c9ad",
+          "glb_sha256": "c6746406dda678f0d4b4f423a52fbce1029f29520b3698e72406ca676320f305"
+        }
+      }
+    },
+    {
+      "species": "numel",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "2798c32950da8444299e1bc14fb07f991fe788caaaee0232fbb5715241d2acc0",
+          "glb_sha256": "bad1eaa35c692877736225c25a45e145feed8c95ac763a48c788901ab8fa0f52"
+        },
+        "shiny": {
+          "runtime_sha256": "4d9d5cdf76a0446824c3da4078d02fbc35b2ba1729aeba28c1e33a7b8b31b0bd",
+          "glb_sha256": "143577aa10f022ca7f70d4ed5c232eca3c5af1275ad65a034b73b978b3f45179"
+        }
+      }
+    },
+    {
+      "species": "buizel",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "8bf267759a1f5a11baaed503ae611d275fe1fb59fb239fd6e8b1c0f053765ea8",
+          "glb_sha256": "e02f0399069104c41250fbf6590d90f40c5f2a0ee65be8b46ef70fccddedec5c"
+        },
+        "shiny": {
+          "runtime_sha256": "5af22b098a845b60ced8bccf79d74598d4809ce8af18ce0e32509828f68aa02c",
+          "glb_sha256": "04d693ed18682ef10b8ee76af26712207129d33f6f898c44870cd20a59949f96"
+        }
+      }
+    },
+    {
+      "species": "magearna",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "422fc8a5fbd6e45ced957993dfa36f3efe18d24e0d2831c183d322aa200ad692",
+          "glb_sha256": "3121f96d09701d643b65a7cb4642b0e7ac2a1a0205242c43515e00dc2477065e"
+        },
+        "shiny": {
+          "runtime_sha256": "6162020530190b2acbc053a043455f2fa418d9c2c60ca3e6ea6b44fee1dafde1",
+          "glb_sha256": "951d5df6eeb895dc9f150b7f0198e58d7a5f5d6b99b271766571687e5808cd12"
+        }
+      }
+    },
+    {
+      "species": "drednaw",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "0dd82f38a3339b63c5ebcf8fe22c2909f15b9d38c063f05bf3cd3e5286713e44",
+          "glb_sha256": "53edf0402fd25ee1eeb41c9ad35bba1109178e33b9c3a03aab28cdd67bea99ea"
+        },
+        "shiny": {
+          "runtime_sha256": "2efa188804ec9b147dc99e3d4555181c15df633f78cdd6ce09b4655240ef2c0a",
+          "glb_sha256": "07fd2db359175bff504f1187abd7a9697c3dd84e12b69d91673df58fa2afbddc"
+        }
+      }
+    },
+    {
+      "species": "finizen",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "164bc780c130d29e90fa6313562470c1b11419d97cc7af35fafefcf52d930e1a",
+          "glb_sha256": "7c494144c4c25f4acf6e50dfcfda9b200cb0dd22d4d62a6d28fc199f1888f2ad"
+        },
+        "shiny": {
+          "runtime_sha256": "3a7c2cbd2cdcde75c576eef67839477190e47484e539b3f68ce897d15e7454e4",
+          "glb_sha256": "4e466efd9181f886c901396f11438372fa9576c6dc4c52501846523e67b0c9ed"
+        }
+      }
+    },
+    {
+      "species": "palafin",
+      "review": "eye-appearance-29",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "5793c5db0fadcffcd2ec623323b68bc35ed3423d0371c86e2fe820eb13aae9f5",
+          "glb_sha256": "c392dc461f36881fe642ebcf74642b6b6898d9608a5c90d2eb5a26d6e9dff45a"
+        },
+        "shiny": {
+          "runtime_sha256": "7ced90f28e3d39b5ff25c35c28732a4282704294d3abe0117f1bb03e57ded9a1",
+          "glb_sha256": "ab12bf5bbf58c25d59692b5b3ceccc7b4322e652fb62b108ce40fc8a8a683a86"
+        }
+      }
+    },
+    {
+      "species": "morgrem",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "1777b843641d59a07d9e2d458f90bd4ff1188531a8ee75b3d82c73c6ee332ac3",
+          "glb_sha256": "92d3002c6694d5838110192115a03c4223ef8e12425aa65c00f67f6560c29c94"
+        },
+        "shiny": {
+          "runtime_sha256": "355f69de9e28c06365276050d9d75d742dab53863670c21f8fb11abd6b85ab12",
+          "glb_sha256": "072c77659c68d2f93aecb628b68b796bdb19e499dc8cf5c6faf0ae6a93f25cab"
+        }
+      }
+    },
+    {
+      "species": "zacian",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "311bcfac762985255ec6008bda7c3f974f96b6156a1f1d9d1fdcf2ecf66f2db0",
+          "glb_sha256": "5a8a2f564f0966364da3fd61559b508944f5240512d228edda94fdd43e87dba0"
+        },
+        "shiny": {
+          "runtime_sha256": "e1f3e73de5b2efe0972a00fed17614be227c0b70c38609fa50986159e125a2c1",
+          "glb_sha256": "eee001e7b74cef6f12009560b27a242a32e699d55ddf8078a5b7c04ed7f6185c"
+        }
+      }
+    },
+    {
+      "species": "zarude",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "c48c4e1af1afa75e83f15676ae19ac165ff54b121635545a6529d46f55a635b1",
+          "glb_sha256": "56d259849fd7512f6bc808bc00b41e33852ba1913304b4efc2b04d9304751bd7"
+        },
+        "shiny": {
+          "runtime_sha256": "3f3ce928a6a02ae677095f9c44a85faf8827bc69aeb1ee5218a701463f90f5f7",
+          "glb_sha256": "0c26b74e7977251e861b803cdf9d7b6ccfe233c7b27be71eede21300c66efd37"
+        }
+      }
+    },
+    {
+      "species": "spectrier",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "b52ef7c5845d6e4e3b20541d729d3d384a3d560f7b099071b5bf90be8ebb2d44",
+          "glb_sha256": "d9a06e49d531cf2ecc0dfff4e549fb551f28492f69ec88576245f98691bd46f7"
+        },
+        "shiny": {
+          "runtime_sha256": "f1d2c450b1dac64c0e1c7cc59a2c946103e37036140a54e878a846d6d50a4a05",
+          "glb_sha256": "4f1ad5ad9dee9c565e2b3e02dce85420e73584a591dee6b07795db0b96715d4d"
+        }
+      }
+    },
+    {
+      "species": "sneasler",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "6640f40539bc72a1a6b7beeb5e8b7e03e3d34488ba3f47489a1c90403c809e58",
+          "glb_sha256": "7f5747bd536d01656ad0ee866a0cb21d9b1001ce5fb9d4a3c4db206233df0678"
+        },
+        "shiny": {
+          "runtime_sha256": "4469358dddaeeaf2efc18a35a883c190f3ea49f3b556a874dd1f4a56037a835a",
+          "glb_sha256": "d048846ee5b6670d020bacd8c71fe7ce3b3bbac0280a8fcde323b12c9fdbeefc"
+        }
+      }
+    },
+    {
+      "species": "oinkologne",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "443e75cedf14e5470c51589a5f4fbfb83ab32d688dfc6fe1e6eb526d750cfc9f",
+          "glb_sha256": "fff667678370b262f340316fde9d73c833a154704bcf76e93d64c1a847087a09"
+        },
+        "shiny": {
+          "runtime_sha256": "c2f9d33dc36734a6bf453daf9c941ff14d9b48e7cd980224334d4e7c3a003f09",
+          "glb_sha256": "4dfeb60c88de23ea1e9adf0037fa97ae2cb2a504afcb29355967a379199a524f"
+        }
+      }
+    },
+    {
+      "species": "tarountula",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "4051a2904fd256ca47998c77f9fb522657767d8d9815ad68bdb4e7c8dffa0c87",
+          "glb_sha256": "d365335abdae00905ab9c29333e5d965e359008712794c0b7d2900acfb459a32"
+        },
+        "shiny": {
+          "runtime_sha256": "8643e7201de647ce4b6ffd5e38dd46236cf8a17b504d44949a1aed49e03ffce5",
+          "glb_sha256": "4b2451ea6de13d859a39228f502b925ad5b99ec7786eb713118d911d5ee02ffe"
+        }
+      }
+    },
+    {
+      "species": "klawf",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "691471815607d5c83b81de290760e803be32fd25ac0e36fdf9c660134c0b7175",
+          "glb_sha256": "af1a263a99ef78e7611559bd1b80422609f23624755f3872a2f3f14c298e79ec"
+        },
+        "shiny": {
+          "runtime_sha256": "b4fc4d91ac0a8f70140b6aa28bce88f0d5e95aabdf02fb5db9bc36b7fc2a983c",
+          "glb_sha256": "9800acdf60edc4acec55e7f9c1ae14fa1a1efe3ec5ee572ddc0901591b4a3a04"
+        }
+      }
+    },
+    {
+      "species": "espathra",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "92fec79258bed2275ffc1f2f84dd445954612bd14f777a0eb482fc2c8f8dbdd5",
+          "glb_sha256": "1c836cdfab80fdceb346346d3820599d448f70085ef827ae7bbaeccbcf367fc6"
+        },
+        "shiny": {
+          "runtime_sha256": "eb494a3052c7ec1c578a1e58dab0a2df9f3c826efa2eb989fc0c219b72bc9d2c",
+          "glb_sha256": "c62901a7b805df1d91f5eb15d4dd916929224813623a078479a3dd7a1686d29c"
+        }
+      }
+    },
+    {
+      "species": "wiglett",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "d9c1de0fde1e154c33b86d5a46da05547668fc2b62e266be17d411f60e1f2b5a",
+          "glb_sha256": "6cf86276fd9c8ceac2c6471402046a771721af62b19801357e396d49de4e2533"
+        },
+        "shiny": {
+          "runtime_sha256": "caf6f2d7b0d85edb64577f5d2b7cfeea0c361b3ae28291ad82567cecf062fe97",
+          "glb_sha256": "fe346eba48e2e4dab6b320ad6f4aad12b05fa9d62509ed7fb31900bcb87266cf"
+        }
+      }
+    },
+    {
+      "species": "cetitan",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "c2efb9b2a0dc9ba62747f459a76b6b17c9d1ccec564391eaf505b62049360dbf",
+          "glb_sha256": "fb68a0dc73fa26a05e05b69163cbd2c135a665606162636238e285a1c3035b2c"
+        },
+        "shiny": {
+          "runtime_sha256": "8418f8af1486dffe956d8ed61d9c6d5d47acc1297d188a4c99cfa175ce765d33",
+          "glb_sha256": "4fd436ba5c29b706c1b8b41d1bbf4d74610400a1dd2745c75ed248d91bcd5f48"
+        }
+      }
+    },
+    {
+      "species": "tatsugiri",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "a0c255420a4a68698e65e16baecc3ce1e8d0efac9985ec9804d3592353256d6b",
+          "glb_sha256": "b67e2e2fd33a659270c5fb2435edf22ef77bf186d8cc139b614880a573a8fd2d"
+        },
+        "shiny": {
+          "runtime_sha256": "882df056c62574ee7bb107ad864247d67ab8679957bfe939bef24c72540edadc",
+          "glb_sha256": "3f56b13baac6b03e30f47fb0e0ea3633f243328700ab6af77084282a9869900a"
+        }
+      }
+    },
+    {
+      "species": "dudunsparce",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "9da202b8fd2933dc26f9332e32a1df78b8f16f145a4cd25b0e395f362c37018d",
+          "glb_sha256": "1a788c8782a627d97dff6ef9d76964fe1ac6f668afdf67301048d38c44219e10"
+        },
+        "shiny": {
+          "runtime_sha256": "60f495708b80abe453950d72f04f0b011f83875206b6ba754c8389445d6f00f4",
+          "glb_sha256": "25eeaceb1e413ccfb3563f4b3035dcf9b7ba441f7a9b8252f8cd336b7496a763"
+        }
+      }
+    },
+    {
+      "species": "koraidon",
+      "review": "recovery-appearance-25",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "2acbfb111f609023fe062d05d5c2e03c19557af3f62ef9f4570d5ad78f994255",
+          "glb_sha256": "c2424a147dc8f8b067c1181b95e36cc5a1b97b27ac86359b1933ffe5bfb23fd1"
+        },
+        "shiny": {
+          "runtime_sha256": "199752e746d74dc9b93b4531684260dc8624ce1c97a071e5b5b3ba445663ef24",
+          "glb_sha256": "cdb372411c895cc3f3212adff296c89d89247b43c40d6bde7e9bc6ca0417e663"
+        }
+      }
+    },
+    {
+      "species": "azurill",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "4226ad83578058b1367fd045d801ca2f09e5271e8af39f579353334fe7267013",
+          "glb_sha256": "feec8f345ea2156e02b8ecad4fb7dab70d518c5f3e0ef4da51f5c716f43bb421"
+        },
+        "shiny": {
+          "runtime_sha256": "57833a1f03ad1f3a387d6cbec32fa54bbfee9d3df35091fe1edf1853fe37b7dd",
+          "glb_sha256": "919881c54cf7b6909f1ba69e9c9603a71b90d305db1c4797d7475a7303676d64"
+        }
+      }
+    },
+    {
+      "species": "rolycoly",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "6ab91f50057b8ad2945d7f4014a10441199aa200673719675abc3cf503ad0f4c",
+          "glb_sha256": "327db47d42e9a7b834ed52648810151dfb0064c0af0acfa6b29753fa838eb8d0"
+        },
+        "shiny": {
+          "runtime_sha256": "b7d2d50aaf90d250f770c75b3f4908b1c08b4cca8f354362be3083216b90fc75",
+          "glb_sha256": "35bc9caee7e5c85583de6a16d782a57f60fabd99e602f78f716545eca582d5b9"
+        }
+      }
+    },
+    {
+      "species": "carkol",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "da030d7c503bf47aba00c88e5b3929dc25230def6300ba6dce7bc1113500c111",
+          "glb_sha256": "7ccbb3f1e24e5c81a76efe16e93fc6c09b90efcf3ce5cd33542be36a756f5e3c"
+        },
+        "shiny": {
+          "runtime_sha256": "3fd92a11dae4e72d26873a53a5091cb7d5611a21dfa9ccf4b5b6b4db8741c1ad",
+          "glb_sha256": "db0dd2bb88fa6fe36b6c5318cf1e5bed5c5e5790a0a54b9aaa98cbc41afbc8eb"
+        }
+      }
+    },
+    {
+      "species": "coalossal",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "328227581c4e1202c214b447a832c1e6f10976facff4fe611bcd0d1ed40426d4",
+          "glb_sha256": "e37d6aee2cf246946c58afd792eb87bdb3855c9d83f2eb303e44db2d380ec131"
+        },
+        "shiny": {
+          "runtime_sha256": "56303ce331f05fd5372d2afce19d12060297a8c5b499fbc24601efb1845c0d9c",
+          "glb_sha256": "374cac009f7bb0d64fab3484b00a9fd27390f998af7477a71ca188a9b1985468"
+        }
+      }
+    },
+    {
+      "species": "hatterene",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "9f15844deb01fa4b336ee003bdf5bb0fb8a8aa0e09ff0e928280253a158d044d",
+          "glb_sha256": "cfaa369ca1f4fb4d25341b3e33f4074f497bca18e4860f780769fc7ff13c1c06"
+        },
+        "shiny": {
+          "runtime_sha256": "02e2ddc2e3b85204795bd4138cbe9a580ddd5a03fd16662525cc76209b86d070",
+          "glb_sha256": "08ef55f7e001788a0d89add660a06a45a3594cc79b96e2aac1b7f7f36c6db46f"
+        }
+      }
+    },
+    {
+      "species": "fuecoco",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "8679a947396e8e9181aef0091ed458ed111de1cabdfabd7978b14af790d40438",
+          "glb_sha256": "5174db8632b7c8e04a8c5baaf11285a97ac58b3804cbb515a72f3295e08d1e56"
+        },
+        "shiny": {
+          "runtime_sha256": "94ebe9a57ebe5b17bd069df650cf9c925a558efdf4b7b0da2a36cd9b03946177",
+          "glb_sha256": "9e539c3c2a45aa85019d52cc5ec12b1bf270c92fee54d89cd806685985d8aca2"
+        }
+      }
+    },
+    {
+      "species": "crocalor",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "ac2d82c2ff64f9f308d80cd3d2b24df469c5ba80f1d0c30276b0bbd23fab95fc",
+          "glb_sha256": "82f3684722bc37bfd586cafdb7ab214584a6fee7c0b640fe4ad0d0d1ced59f5d"
+        },
+        "shiny": {
+          "runtime_sha256": "b8462e9102a2109d121be9a48f956b462c2247a274fd14a0257c0eedad0872ad",
+          "glb_sha256": "9ecbc33ad45daf9677818b01d2166d5be5b9f5bc0d727a9d3067c266c9531524"
+        }
+      }
+    },
+    {
+      "species": "venomoth",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "7e9fc1d99af675d403df72b953b10fa0323fa9ce48791dba116b5c332ef839e7",
+          "glb_sha256": "00145349da35760a1ea6a6288f5e911ae8fa087e367a6a46dc4c817838ed837b"
+        },
+        "shiny": {
+          "runtime_sha256": "f53255caa4ffa81b8842f2b2d93a5f813321adc60baf00dbc18ded1731613556",
+          "glb_sha256": "8c160280e65f0390eced151f5bf9b70ab42e14f79e472c29981ce6775e6d9539"
+        }
+      }
+    },
+    {
+      "species": "polteageist",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "f8d62c37e1db963f8471b7e78bdba07b0b49ff8b7a620b40fe0d97ac42bb9d10",
+          "glb_sha256": "91e9a9b8b77c4dc1ed721c9fa315137e43bd3039c509d968bcc00dc31853c968"
+        },
+        "shiny": {
+          "runtime_sha256": "1a91c750466f6dc30899d052c29c30639b6ca2fa087740da5d12e8df7301965e",
+          "glb_sha256": "533d05e528a7d1e3f532908e0eb0bd1049038282a253e3782f0b05c40ddb486e"
+        }
+      }
+    },
+    {
+      "species": "falinks",
+      "review": "recovery-appearance-44",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "cfbbbf3efecc5c5e4bec5b8832650cdb3d7349058c9333c0cf54c7be360c38eb",
+          "glb_sha256": "95abe126d6c2d3d6c2c1d80f3bafbd331455be7df83a3ea90c7ad7a9933356a6"
+        },
+        "shiny": {
+          "runtime_sha256": "4e70cc3f9aace0a7cbb2fd584ead24581dab84d6d87883e846553a91593be85a",
+          "glb_sha256": "17864649fef388d8c90035822815f68425eb66b731a628370ac9d55c3f64d804"
+        }
+      }
+    },
+    {
+      "species": "urshifu",
+      "review": "recovery-appearance-53",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "0468f1ba255ad1aad8d9a11d782599d31c3b1fb3fb139693fc29d5f7a47be621",
+          "glb_sha256": "9368018ad6065058c0c83df1ccb6447d39c1ee606cedf10a22ddf462a0e62e8b"
+        },
+        "shiny": {
+          "runtime_sha256": "9760beb062c80e661dc68add6553848db44a7ba3b010f60e643104f1f62bc77c",
+          "glb_sha256": "8e63915469cb54b197c79f498b22eabe520d39005c77bea4e56a093c337dfdbe"
+        }
+      }
+    },
+    {
+      "species": "toedscool",
+      "review": "recovery-appearance-53",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "c420a6d9a3c86817a764bf37e2c983b56f2f14d9b74354ff2bf957e264741a2e",
+          "glb_sha256": "75dcf931896ed109c2868368bb5074c56f0e1280757759fd695d595de73341a0"
+        },
+        "shiny": {
+          "runtime_sha256": "719f29dacd1707615949e70dd1e02146988ddf0f79bb86ca7b58f5d360fae4fb",
+          "glb_sha256": "795203ad3dea5a0adccfb1c8a4bf27ad068d0781fb4388651d2616dadd94db85"
+        }
+      }
+    },
+    {
+      "species": "veluza",
+      "review": "recovery-appearance-53",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "4ff571bae83add3ff0fbd3188093e5ac21475f5db6a5103db299e200c582b5bd",
+          "glb_sha256": "2dc2c0f3341cfa8e3b3105f7efe3d4260b4927235607f34129424880aaddf268"
+        },
+        "shiny": {
+          "runtime_sha256": "0efc66c9ee1f86de9518b103b698a6920fb0c9f263029ded7f514aebd80f8d77",
+          "glb_sha256": "b2e2869f3e6db480d9b234e18ee716b932dd71f17c3ec474046c503a5ebd6569"
+        }
+      }
+    },
+    {
+      "species": "grimer",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "04424a19717a59d2053f968933d5838d94371b1bee43b9b9d0d30e5487c9c3ab",
+          "glb_sha256": "00d6c3712345188e8428e4ab25118ff3dbead89e7ae20072c915124841a9ed04"
+        },
+        "shiny": {
+          "runtime_sha256": "eeead3103a7969b7cad56b88e19287b6431213aa5334ffcbad2fc930336f17c2",
+          "glb_sha256": "537c47de7fe830298475c0b98e634470c817e10d05da1afb9ce19fcf19e63917"
+        }
+      }
+    },
+    {
+      "species": "muk",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "84ccb6bc71809aed87fb020f9635c59a2831208299311fc9fd9100b571ea08ea",
+          "glb_sha256": "69b92154abe0ec47f5c4fd9f3b3359bc19d6fed39f8f7f459acf5caf3875b77e"
+        },
+        "shiny": {
+          "runtime_sha256": "4a516bc40df3105f3e23b15d84554aa2c8453d83efc4bff54695cfa157da4c94",
+          "glb_sha256": "02daed47b00d869b3c183c4ec7015e425e2385ef25aee535fa7f19da54fe878e"
+        }
+      }
+    },
+    {
+      "species": "magikarp",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "d349807d89fb7e1b219a718cb69022817c241ce64587443b2546fe04f0b60a8a",
+          "glb_sha256": "31ffc55561974eeb72bcbc288996e2cb7b921fbd5307ef50c925205ba79b7967"
+        },
+        "shiny": {
+          "runtime_sha256": "a8b8b069862f180c331abd4e7d1c1c889eccdc95ea679e63500e04e499aeb85a",
+          "glb_sha256": "5021d48cf0549d20511182bd27f75b7005aca83cae289008e9b60ca2c38c2763"
+        }
+      }
+    },
+    {
+      "species": "sableye",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "6b956c6b3a4a6b4eaa24f99a1aad54859f8e2d65a884257a85e330ded473cf08",
+          "glb_sha256": "1f040921c8bc1bf87516e76fd470579da1107475f055465f8354479967b0df25"
+        },
+        "shiny": {
+          "runtime_sha256": "e799dd74fc0b10dca74e4ef72e935d1804865e018047a8dd6025eb3f9c37e9f6",
+          "glb_sha256": "68743cec3116890941cbb82d52ce33e6f3f7c2a15ba21052a6e0e333eb24d106"
+        }
+      }
+    },
+    {
+      "species": "torkoal",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "2a09f65e6ae072650bf001e2eceb74eff490f7c03d53ca3e9b5ecb4c4730177e",
+          "glb_sha256": "63cf7ee192603f0e4e8674359166bb9e569714e6b0bc8e1c215a13daf93d6d75"
+        },
+        "shiny": {
+          "runtime_sha256": "776c2c1dcd64539b1fbf91fce0069f14bad391b18cc45539965340356fa1967b",
+          "glb_sha256": "b857f40caa45a480d860b96e5194de6ce6fd3aed216cb57ec54822e427be7cd1"
+        }
+      }
+    },
+    {
+      "species": "barraskewda",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "11f8af6620f157fbfb2b5b48929594ea3f80a6eddca6ebf8496c1823b09e40a3",
+          "glb_sha256": "9b830c6f61d8d85bee6aa25fee3d736a0c4fb254a384e9d8213c315fceeb54ab"
+        },
+        "shiny": {
+          "runtime_sha256": "a457090847b097875fa33c01e6caa92fbfbb6267e2ec86de70fdf43c4a482fdf",
+          "glb_sha256": "5ae9f1d5103e660a8eb4269db70230af896088949f93875293e4c3a87c017ccf"
+        }
+      }
+    },
+    {
+      "species": "eternatus",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "2b0f236ee7ff1cab43ac74cb11f0011cb86df742948abc1d9e54332d251e3ce8",
+          "glb_sha256": "b5bc25d655a157014157a4b715a601b2f98f12a56fd416130a61c09356cfbbc2"
+        },
+        "shiny": {
+          "runtime_sha256": "203830340e65cc0b1923192a826959a961606852e204f8941f3dd3c0e9ab196c",
+          "glb_sha256": "bd26aedf27f38494a46cb264ba37afe6acb873c346b4a3cc4bf1b21033b2c321"
+        }
+      }
+    },
+    {
+      "species": "basculegion",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "345bb01512f8592c9599846132bed6ce3c04935217b3c6e5711adc3b28638b7e",
+          "glb_sha256": "1ed9dcb2ec63fe102b39b031a68e6fb412bf3dc7f5363192b87dfbc15233e96a"
+        },
+        "shiny": {
+          "runtime_sha256": "268fdf093c66b0a161ecd401e20844b04718ca7333aee7808c28179b7a1b8ba2",
+          "glb_sha256": "16b38f671eaac41319d6cc30645ac65a0b5d7a66b05ebb2f6c31800617aa40d6"
+        }
+      }
+    },
+    {
+      "species": "charcadet",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "0c9235c592a16cf5981f4409d1ab10bd089c1d141e2a8eb5e2926e82d81ab625",
+          "glb_sha256": "a303ffc18f0fc3ec98a1f679820eef9a7e5e85736a47a4eb8cb8b70215ea6daa"
+        },
+        "shiny": {
+          "runtime_sha256": "e0566ce7532eced3ea67ea40df54cf913272e6c577f2351dbf621249c1b1d49c",
+          "glb_sha256": "5448d406b6fed9dc62df76ee98804f7209485893d05d9bfdf0a6fa732e753d81"
+        }
+      }
+    },
+    {
+      "species": "armarouge",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "ab48b6c4156ca358a395d7727e9bf7d2153cdf1495d1981102675cc834c049be",
+          "glb_sha256": "497a939ca820c3277a1bd661b45efa0af6e1cabeffa25d11951ef7ebc01449a4"
+        },
+        "shiny": {
+          "runtime_sha256": "65e187d7318f864056be738720c75108c5e7bc8a42e8fedbaf1a123fe87cb3c1",
+          "glb_sha256": "7cad7d7e3f9a68eb68336f2490a2db1d1fafef863e3a441c62ece16e9708860e"
+        }
+      }
+    },
+    {
+      "species": "ceruledge",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "8ee6529b36700161b3680105df9287c0f13927e5913419ec0d7e2eec467cfca2",
+          "glb_sha256": "83b788005b1a379273c9cafbaef3876c455e03f3a5e82536fc6ee66a8805cf19"
+        },
+        "shiny": {
+          "runtime_sha256": "cf68b7b98f9eb367ec5874af6f96ea071e511d5254fb24f77d1706ec03d9095a",
+          "glb_sha256": "c41dc2757f15439e8e46ca43db4649de04ff21e0001354c699804e619a3fd5ae"
+        }
+      }
+    },
+    {
+      "species": "rabsca",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "89a758ccb9b98858112da0e6232ecb9377dfdbc1c530f7c67edc29d0339badc2",
+          "glb_sha256": "13cc4d1a564d358639abfb78d3319e92106d7664ffaae0a1071439d4fda2bc85"
+        },
+        "shiny": {
+          "runtime_sha256": "c2057e86ab661d83820d00aab3ad504a2951034c0c8214934ac9d237414bcbed",
+          "glb_sha256": "311cfa37a9998e273decc3542274244155c841dd78913d617068993edc0e8098"
+        }
+      }
+    },
+    {
+      "species": "greavard",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "aa449c829fce104fbef6f353c3867085e7d3b0fb45e8cd50ed0f3c888ad88276",
+          "glb_sha256": "f099063f8624c2f4db4f457ba3d9ce7e0747076fa5e9cf8256b45dece094eec1"
+        },
+        "shiny": {
+          "runtime_sha256": "071d7cbc3e5b00c1e6a21be86f13c24dbe162225c4fd83c1d9e4b7765f7b1ccd",
+          "glb_sha256": "4f6c52f9ca7ea0a807376a81946dc112972542f48e8b4ed21464cff4237d7f8a"
+        }
+      }
+    },
+    {
+      "species": "iron-bundle",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "9310d866b97ae852d3ee5a2acc3e041a98784c5c910a6e653e7bc79fd1123383",
+          "glb_sha256": "e86eefc9ccdb8b4503250885f12bd272eea088a10f6d3f58ac38d84b63eacc4c"
+        },
+        "shiny": {
+          "runtime_sha256": "436220b98dd89ee375d2dac251877e6f6addb2b55ced189e54e9400ca39834dc",
+          "glb_sha256": "d3245f8e71f36c8320c07f091b3c496efd635e3aae21135193bca5b19a02d354"
+        }
+      }
+    },
+    {
+      "species": "iron-thorns",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "935ecdbc73168ed923028b7a8a02ca25222fbc507ce344afd8c1e6ee9715fb12",
+          "glb_sha256": "0d64d8193129673cb34fe41ac4a002615bf3eb13a8d3ce42c470dde34a6ed027"
+        },
+        "shiny": {
+          "runtime_sha256": "fd5ced290dc01b0f1715fb30dc6f8ed00f4aae25578d029cb3887a79dfa52150",
+          "glb_sha256": "229cf8f6fd871e83dea23421cacde8971f166aa4c4070b6a65943aed6ad85c1f"
+        }
+      }
+    },
+    {
+      "species": "wo-chien",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "3aafe8b9b58008540647535104c43a4c61e093d831e003c5c548efe44ae57a0e",
+          "glb_sha256": "04d0b0fc7ce34bf1a9731fcea984e184806575d39dc9b8c6cfbdc236497a991e"
+        },
+        "shiny": {
+          "runtime_sha256": "68e5ede70be0f0099c5cb40d55951562ac48184d8721685a6acf0419643dd4c3",
+          "glb_sha256": "f3d17c7526382ed19eec44e1810dfa6aa1b889fab1b47407d4d53e2d377d23f1"
+        }
+      }
+    },
+    {
+      "species": "iron-valiant",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "5fad4e810619344509e5594f9ba0c162c3da363318dbc0f3dba4b0058e3bd601",
+          "glb_sha256": "0e20f6131fd9ac1de0d00cab7b055190cffa6f598c4a8688fb58ac7f50fb3ef4"
+        },
+        "shiny": {
+          "runtime_sha256": "8f3d819969dcf1274ce90622dd4245de539f4cde033fc51226169031bd3425af",
+          "glb_sha256": "6875327faa063079dbbef1fb993c32688142b177b025e2bbcd38011471d2baba"
+        }
+      }
+    },
+    {
+      "species": "miraidon",
+      "review": "remaining-appearance-76",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "14c3627afd1ec5ce9877e841b9ed792bc2a8f2387171e9ab89e171e5eb0c51b1",
+          "glb_sha256": "c2b05699c6e5e62a72ba7d8da5555a327103b170a3a0f63a1202c77fdc5db72a"
+        },
+        "shiny": {
+          "runtime_sha256": "0ba605178288a6a3b74acb7a0d68bb197f98e6c1706b9534536abc5089a7549d",
+          "glb_sha256": "c1879797210b19c58e202d8e9ce627016b5d6f93f35c82df0be9519f97dbc6d4"
+        }
+      }
+    },
+    {
+      "species": "armarouge",
+      "review": "color-review-78",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "ab48b6c4156ca358a395d7727e9bf7d2153cdf1495d1981102675cc834c049be",
+          "glb_sha256": "497a939ca820c3277a1bd661b45efa0af6e1cabeffa25d11951ef7ebc01449a4"
+        },
+        "shiny": {
+          "runtime_sha256": "65e187d7318f864056be738720c75108c5e7bc8a42e8fedbaf1a123fe87cb3c1",
+          "glb_sha256": "7cad7d7e3f9a68eb68336f2490a2db1d1fafef863e3a441c62ece16e9708860e"
+        }
+      }
+    },
+    {
+      "species": "ceruledge",
+      "review": "color-review-78",
+      "variants": {
+        "normal": {
+          "runtime_sha256": "8ee6529b36700161b3680105df9287c0f13927e5913419ec0d7e2eec467cfca2",
+          "glb_sha256": "83b788005b1a379273c9cafbaef3876c455e03f3a5e82536fc6ee66a8805cf19"
+        },
+        "shiny": {
+          "runtime_sha256": "cf68b7b98f9eb367ec5874af6f96ea071e511d5254fb24f77d1706ec03d9095a",
+          "glb_sha256": "c41dc2757f15439e8e46ca43db4649de04ff21e0001354c699804e619a3fd5ae"
+        }
+      }
+    }
+  ]
+}

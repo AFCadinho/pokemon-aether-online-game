@@ -29,7 +29,8 @@ def run(job):
         validate_export_job(job)
         from material_profiles import read_profiles, unsupported, TRANSPARENT_PROBE
         profiles = read_profiles(job['material_source'], job['material_source_sha256'],
-                                 transparent_review=job.get('source_transparency_diagnostic') is True)
+                                 transparent_review=job.get('source_transparency_diagnostic') is True,
+                                 displacement_review=job.get('identity_intake', {}).get('source_lit_displacement_diagnostic') is True)
         if unsupported(profiles):
             raise ValueError('Unsupported material profiles: ' + repr(unsupported(profiles)))
         if any(p.get('requires_effect_payload') for p in profiles):
@@ -39,6 +40,11 @@ def run(job):
     rig, rig_selection = isolate(source)
     from source_repairs import apply as apply_repair
     source_repair = apply_repair(job['source_sha256'], job['actions'].values())
+    quaternion_repair = []
+    quaternion_clips = job.get('identity_intake', {}).get('quaternion_continuity_diagnostic')
+    if quaternion_clips:
+        from quaternion_continuity import apply as repair_quaternions
+        quaternion_repair = repair_quaternions(job['actions'], quaternion_clips)
     float_overrides = job.get('verified_rare_float_overrides', [])
     color_overrides = job.get('verified_rare_color_overrides', [])
     if float_overrides or color_overrides or job.get('official_rare_material_source'):
@@ -51,6 +57,7 @@ def run(job):
         from scvi_material_probe import inspect_materials
         normal_rows = {row['name']: row for row in inspect_materials(Path(job['material_source']))}
         rare_rows = {row['name']: row for row in inspect_materials(rare_table)}
+        from rare_material_parameters import FLOAT_SOCKETS, UNREPRESENTED_FLOATS
         for override in float_overrides:
             name, key = override['material'], override['key']
             if (name not in normal_rows or name not in rare_rows
@@ -61,17 +68,14 @@ def run(job):
             material = bpy.data.materials.get(override['material'])
             if material is None or material.node_tree is None:
                 raise ValueError('Unbound rare float override')
-            socket_key = 'EmissionStrength' if key == 'EmissionIntensity' else key
+            socket_key = FLOAT_SOCKETS.get(key, key)
             nodes = [node for node in material.node_tree.nodes if node.type == 'GROUP'
                      and socket_key in node.inputs]
-            if override.get('mode') == 'unrepresented' and key in (
-                    'EmissionIntensityLayer5', 'NormalHeight1', 'RoughnessHighlight', 'MetallicHighlight'):
+            if override.get('mode') == 'unrepresented' and key in UNREPRESENTED_FLOATS:
                 if nodes:
                     raise ValueError('Rare source float unexpectedly has a shader input')
                 continue
-            if override.get('mode') != 'apply' or key not in (
-                    'EmissionIntensityLayer1', 'EmissionIntensityLayer2',
-                    'EmissionIntensityLayer3', 'EmissionIntensityLayer4', 'EmissionIntensity'):
+            if override.get('mode') != 'apply' or key not in FLOAT_SOCKETS:
                 raise ValueError('Unsupported rare float override')
             if len(nodes) != 1 or nodes[0].inputs[socket_key].is_linked:
                 raise ValueError('Ambiguous rare float shader input')
@@ -79,7 +83,7 @@ def run(job):
             if not math.isclose(socket.default_value, override['normal'], rel_tol=0, abs_tol=1e-5):
                 raise ValueError('Embedded normal float differs from official source')
             socket.default_value = override['rare']
-        from rare_material_parameters import COLOR_SOCKETS, UNREPRESENTED_COLORS
+        from rare_material_parameters import COLOR_SOCKETS, UNREPRESENTED_COLORS, color_socket
         for override in color_overrides:
             name, key = override['material'], override['key']
             allowed = set(COLOR_SOCKETS) | UNREPRESENTED_COLORS
@@ -87,25 +91,28 @@ def run(job):
                     or normal_rows[name]['colors'].get(key) != override['normal']
                     or rare_rows[name]['colors'].get(key) != override['rare']
                     or len(override['normal']) != 4 or len(override['rare']) != 4
-                    or override['normal'][3] != 1.0 or override['rare'][3] != 1.0
+                    or override['normal'][3] != override['rare'][3]
+                    or not 0.0 <= override['normal'][3] <= 1.0
+                    or (color_socket(key, name) is not None and override['normal'][3] != 1.0)
                     or not all(math.isfinite(v) for v in override['normal'] + override['rare'])):
                 raise ValueError('Rare colour override differs from supported official tables')
             material = bpy.data.materials.get(name)
-            socket_key = COLOR_SOCKETS.get(key, key)
+            socket_key = color_socket(key, name) or key
             nodes = [n for n in material.node_tree.nodes if n.type == 'GROUP' and socket_key in n.inputs] if material and material.node_tree else []
-            if override.get('mode') == 'unrepresented' and key in UNREPRESENTED_COLORS:
+            if override.get('mode') == 'unrepresented' and color_socket(key, name) is None:
                 if material is None or nodes:
                     raise ValueError('Unrepresented colour unexpectedly has a shader input')
                 continue
-            if override.get('mode') != 'apply' or key not in COLOR_SOCKETS:
+            if override.get('mode') != 'apply' or color_socket(key, name) is None:
                 raise ValueError('Unsupported colour override mode')
             if len(nodes) != 1 or nodes[0].inputs[socket_key].is_linked:
                 raise ValueError('Unbound or ambiguous rare colour input')
             socket = nodes[0].inputs[socket_key]
             if not all(math.isclose(a, b, rel_tol=0, abs_tol=1e-5) for a, b in zip(socket.default_value, override['normal'], strict=True)):
-                raise ValueError('Embedded normal colour differs from official source')
+                raise ValueError('Embedded normal colour differs from official source: ' + name + '/' + key)
             socket.default_value = override['rare']
     replacements = []
+    unrepresented_textures = []
     for replacement in job.get('verified_texture_replacements', []):
         from array import array
         normal, rare = Path(replacement['normal']), Path(replacement['rare'])
@@ -117,6 +124,19 @@ def run(job):
         # normal pixels before remapping any of them to the rare texture.
         matches = [image for image in bpy.data.images if re.fullmatch(
             re.escape(normal.name) + r'(?:\.\d{3})?', image.name)]
+        if replacement.get('unrepresented_channel'):
+            from rare_material_parameters import unrepresented_eye_normal
+            owners = [(row, channel) for row in normal_rows.values()
+                      for channel, texture in row['textures'].items()
+                      if Path(texture).with_suffix('.png').name == normal.name]
+            if (replacement['unrepresented_channel'] != 'NormalMap1' or matches or not owners
+                    or not all(unrepresented_eye_normal(row, channel)
+                               and unrepresented_eye_normal(rare_rows[row['name']], channel)
+                               and Path(rare_rows[row['name']]['textures'][channel]).with_suffix('.png').name in (normal.name, rare.name)
+                               for row, channel in owners)):
+                raise ValueError('Unrepresented eye normal map has an unexpected binding')
+            unrepresented_textures.append(replacement)
+            continue
         if not matches:
             raise ValueError('Embedded normal texture missing: ' + normal.name)
         reference = bpy.data.images.load(str(normal), check_existing=False)
@@ -138,8 +158,33 @@ def run(job):
         # exact replacement for the same channel. Official rare textures may
         # use a different resolution (Meloetta's layer mask is 128x256 rather
         # than 512x512); resizing them would change the authored pixels.
-        for existing in matches:
-            existing.user_remap(shiny)
+        bindings = replacement.get('material_bindings')
+        if bindings is not None:
+            if not isinstance(bindings, list) or not bindings or len(set(bindings)) != len(bindings):
+                raise ValueError('Invalid material-specific texture binding list')
+            expected = []
+            for name, row in normal_rows.items():
+                targets = {Path(rare_rows[name]['textures'][channel]).with_suffix('.png').name
+                           for channel, texture in row['textures'].items()
+                           if Path(texture).with_suffix('.png').name == normal.name}
+                if len(targets) > 1:
+                    raise ValueError('Shared texture needs different channels within one material')
+                if targets == {rare.name}:
+                    expected.append(name)
+            if set(bindings) != set(expected):
+                raise ValueError('Material-specific binding differs from official tables')
+            nodes_to_replace = []
+            for name in bindings:
+                material = bpy.data.materials.get(name)
+                nodes = [n for n in material.node_tree.nodes if n.type == 'TEX_IMAGE' and n.image in matches] if material and material.node_tree else []
+                if not nodes:
+                    raise ValueError('Material-specific texture has no direct image binding: ' + name)
+                nodes_to_replace.extend(nodes)
+            for node in nodes_to_replace:
+                node.image = shiny
+        else:
+            for existing in matches:
+                existing.user_remap(shiny)
         shiny.pack()
         replacements.append(replacement)
     eye_material_repair = []
@@ -154,6 +199,20 @@ def run(job):
     baked = []
     response = None
     transparent = [p for p in profiles if p['profile'] == TRANSPARENT_PROBE] if profiles else []
+    if job.get('identity_intake', {}).get('source_emission_diagnostic') is True:
+        from scvi_material_probe import inspect_materials
+        table = Path(job.get('official_rare_material_source', job['material_source']))
+        expected = job.get('official_rare_material_sha256', job['material_source_sha256'])
+        if hashlib.sha256(table.read_bytes()).hexdigest() != expected:
+            raise ValueError('Emissive material source changed')
+        source_materials = {m['name']: m for m in inspect_materials(table)}
+        for profile in transparent:
+            # The importer connects texture alpha but omits the native constant
+            # BaseColor alpha. These thin lenses otherwise hide the LED meshes.
+            alpha = source_materials[profile['material']]['colors']['BaseColor'][3]
+            if not math.isfinite(alpha) or not 0 <= alpha <= 1:
+                raise ValueError('Invalid native transparent base alpha')
+            profile['source_base_alpha'] = alpha
     if job.get('scvi_pbr_probe'):
         materials = {m for o in bpy.context.scene.objects if o.type == 'MESH' for m in o.data.materials}
         matching = [m for m in materials if m.node_tree and any(
@@ -166,11 +225,13 @@ def run(job):
             for track in rig.animation_data.nla_tracks:
                 track.mute = True
             bpy.context.scene.frame_set(int(rig.animation_data.action.frame_range[0]))
-            if not transparent:
+            if not transparent and job.get('identity_intake', {}).get('source_emission_diagnostic') is not True and job.get('identity_intake', {}).get('source_pbr_metallic_diagnostic') is not True:
                 from scvi_response_bake import bake
                 response = bake(Path(job['output']) / 'response', exclude={e['material'] for e in effects})
             from battle_3d_export_probe import bake_color_materials
-            baked = bake_color_materials(pbr=True, transparent={p['material'] for p in transparent})
+            baked = bake_color_materials(pbr=True, transparent={p['material'] for p in transparent},
+                emissive=job.get('identity_intake', {}).get('source_emission_diagnostic') is True,
+                metallic=job.get('identity_intake', {}).get('source_pbr_metallic_diagnostic') is True)
     effect_payload = None
     if effects:
         from material_effect_export import finish
@@ -208,6 +269,7 @@ def run(job):
     path = Path(job['output']) / 'model.glb'
     bpy.ops.export_scene.gltf(filepath=str(path), export_format='GLB', use_selection=True,
         export_animation_mode='NLA_TRACKS', export_animations=True, export_force_sampling=True,
+        export_hierarchy_flatten_bones=job.get('identity_intake', {}).get('flatten_bone_hierarchy_diagnostic') is True,
         export_frame_range=False, export_reset_pose_bones=True, export_frame_step=1,
         export_cameras=False, export_lights=False, export_materials='EXPORT', export_yup=True,
         export_tangents=bool(baked))
@@ -230,6 +292,9 @@ def run(job):
         'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
         'rig_selection': rig_selection,
         'source_repair': source_repair,
+        'unrepresented_rare_textures': unrepresented_textures,
+        'quaternion_continuity_repair': quaternion_repair,
+        'flatten_bone_hierarchy': job.get('identity_intake', {}).get('flatten_bone_hierarchy_diagnostic') is True,
         'eye_material_repair': eye_material_repair,
         'verified_rare_float_overrides': float_overrides,
         'verified_rare_color_overrides': color_overrides,
@@ -254,6 +319,15 @@ def run(job):
         # properties, so these review scenes use the existing PBR runtime path.
         report.pop('material_response', None)
         report['material_limitations'] = report['eye_motion']['limitations']
+    if job.get('identity_intake', {}).get('source_emission_diagnostic') is True:
+        from led_eye_export import prepare as prepare_led
+        report['led_eyes'] = prepare_led(job, timing, report['glb_sha256'])
+        from scvi_eye_motion import prepare as prepare_emissive_eye_motion
+        motion_job = {**job, 'identity_intake': {**job['identity_intake'], 'source_eye_material_diagnostic': 'emissive_source_uv'}}
+        eye_motion = prepare_emissive_eye_motion(motion_job, timing, report['glb_sha256'])
+        if eye_motion['materials']:
+            report['eye_motion'] = eye_motion
+        report['material_limitations'] = 'Source colour/emission and animated LED masks; interior parallax and native lighting are approximated'
     if job.get('identity_intake', {}).get('source_refraction_alpha_diagnostic') is True:
         if not transparent:
             raise ValueError('Alpha refraction diagnostic requires transparent source materials')
@@ -268,6 +342,8 @@ def run(job):
         report['material_effects'] = effect_payload
         report['material_limitations'] = ('PBR response plus source-driven layered smoke/fire reconstruction; '
             'colour-domain baking and mask/displacement semantics are not bit-exact original-game shader parity')
+    if unrepresented_textures:
+        report['material_limitations'] += '; secondary EyeClearCoat normal maps omitted by pinned importer in both variants'
     (Path(job['output']) / 'export.json').write_text(json.dumps(report, indent=2))
 
 

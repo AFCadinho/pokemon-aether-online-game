@@ -3,6 +3,20 @@ extends SceneTree
 var world: Node3D
 var camera: Camera3D
 
+func _axis_aligned(basis: Basis) -> bool:
+	# A signed axis permutation (including scale) preserves extrema exactly.
+	# Other rotations/shear require the vertex path below for floor clearance.
+	var used := {}
+	for axis: Vector3 in [basis.x, basis.y, basis.z]:
+		var dominant := axis.abs().max_axis_index()
+		if absf(axis[dominant]) <= 0.000001 or used.has(dominant):
+			return false
+		used[dominant] = true
+		for component in 3:
+			if component != dominant and absf(axis[component]) > absf(axis[dominant]) * 0.000001:
+				return false
+	return true
+
 func _initialize() -> void:
 	_run.call_deferred()
 
@@ -10,7 +24,16 @@ func _bounds(model: Node) -> AABB:
 	var box := AABB()
 	var first := true
 	for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
+		# Native clips can park hidden accessories far outside the visible pose.
+		# Include them again as soon as the source visibility track enables them.
+		if not mesh.is_visible_in_tree() or mesh.mesh == null:
+			continue
 		var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
+		if _axis_aligned(mesh.global_transform.basis):
+			var transformed := mesh.global_transform * posed.get_aabb()
+			box = transformed if first else box.merge(transformed)
+			first = false
+			continue
 		for surface in posed.get_surface_count():
 			for vertex: Vector3 in posed.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
 				var point := mesh.global_transform * vertex

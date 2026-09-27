@@ -43,7 +43,7 @@ func apply(actor: Node, manifest: Dictionary, glb_hash: String) -> bool:
 			return reject("Invalid visibility source hash")
 		var seen := {}
 		for track: Variant in clip.tracks:
-			if not track is Dictionary or not track.get("mesh") is String or not meshes.has(track.mesh) or seen.has(track.mesh) or track.get("source_target") != track.mesh + "_shape" or not track.get("keys") is Array or track.keys.is_empty():
+			if not track is Dictionary or not track.get("mesh") is String or not meshes.has(track.mesh) or seen.has(track.mesh) or not source_target_matches(track, meshes) or not track.get("keys") is Array or track.keys.is_empty():
 				return reject("Invalid or unresolved visibility target")
 			seen[track.mesh] = true
 			var path := NodePath(str(animation_root.get_path_to(meshes[track.mesh])) + ":visible")
@@ -73,6 +73,18 @@ func apply(actor: Node, manifest: Dictionary, glb_hash: String) -> bool:
 			plan[3].visible = plan[2][0][1]
 	actor.set_meta("pokeaether_visibility", 1)
 	return true
+
+func source_target_matches(track: Dictionary, meshes: Dictionary) -> bool:
+	if track.get("source_lod_diagnostic") == true:
+		# The source names these *_shape_lodN; Blender moves the LOD suffix
+		# after the mesh name. Only explicitly hidden, redundant LODs qualify.
+		var mesh: String = track.mesh
+		for suffix: String in ["_lod1", "_lod2"]:
+			if mesh.ends_with(suffix):
+				var base := mesh.trim_suffix(suffix)
+				return meshes.has(base) and track.get("source_target") == base + "_shape" + suffix and track.get("keys") == [[0.0, false]]
+		return false
+	return track.get("source_target") == track.mesh + "_shape"
 
 func add_track(animation: Animation, path: NodePath, keys: Array) -> void:
 	var index := animation.add_track(Animation.TYPE_VALUE)

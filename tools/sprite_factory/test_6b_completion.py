@@ -1,7 +1,7 @@
 import copy,hashlib,json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from material_profiles import classify,UNLIT
+from material_profiles import classify,UNLIT,UNLIT_UV2
 from material_effect_export import prepare
 from source_repairs import decision
 
@@ -55,13 +55,45 @@ class CompletionTests(unittest.TestCase):
                 'textures':dict.fromkeys(['BaseColorMap','LayerMaskMap','DisplacementMap'],'texture.bntx')}
         self.assertEqual(classify(source)['profile'],UNLIT)
         source['shaders'][0]['values']['NumRequiredUV']='2'
-        self.assertFalse(classify(source)['export_supported'])
+        self.assertEqual(classify(source)['profile'],UNLIT_UV2)
 
     def test_effect_rejects_changed_material_source(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'material.trmtr';p.write_bytes(b'changed')
             with self.assertRaisesRegex(ValueError,'provenance'):
                 prepare({'material_source':str(p),'material_source_sha256':'0'*64})
+
+    def test_static_effect_requires_opt_in_and_every_motion_hash(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);material,motion,job=self.effect_fixture(root)
+            material['floats']['DisplacementHeight']=0.0
+            material['colors']={key:[1.0,1.0,0.0,0.0]
+                                for key in ('UVScaleOffset','UVScaleOffset3')}
+            path=root/'first_loop01_loop.tracm'
+            proof={str(path):hashlib.sha256(path.read_bytes()).hexdigest()}
+            job['identity_intake']={'static_effect_material_diagnostic':['any'],
+                                   'identity_evidence':{'source_sha256':proof}}
+            empty={**motion,'tracks':[]}
+            with patch('material_effect_export.inspect_materials',return_value=[material]), patch('material_effect_export.read_uv_tracks',return_value=empty):
+                result=prepare(job)[0]
+                self.assertTrue(result['static_source_material'])
+                self.assertEqual(result['tracks']['UVScaleOffset'],[[1.,1.],[1.,1.],[0.,0.],[0.,0.]])
+                job['identity_intake']['static_effect_material_diagnostic']=[]
+                with self.assertRaisesRegex(ValueError,'Missing or ambiguous'):prepare(job)
+                job['identity_intake']['static_effect_material_diagnostic']=['any']
+                proof[str(path)]='0'*64
+                with self.assertRaisesRegex(ValueError,'provenance'):prepare(job)
+
+    def test_static_effect_does_not_ignore_non_loop_material_animation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);material,motion,job=self.effect_fixture(root)
+            material['floats']['DisplacementHeight']=0.0
+            first=root/'first_loop01_loop.tracm';first.unlink()
+            path=root/'attack.tracm';path.write_bytes(b'attack')
+            job['identity_intake']={'static_effect_material_diagnostic':['any'],
+                'identity_evidence':{'source_sha256':{str(path):hashlib.sha256(path.read_bytes()).hexdigest()}}}
+            with patch('material_effect_export.inspect_materials',return_value=[material]), patch('material_effect_export.read_uv_tracks',return_value=motion):
+                with self.assertRaisesRegex(ValueError,'unhandled animated'):prepare(job)
 
     def test_effect_cannot_pass_without_source_motion(self):
         m={'name':'any','shaders':[{'name':'Unlit','values':{'EnableBaseColorMap':'True','EnableDisplacementMap':'True','NumMaterialLayer':'5','NumRequiredUV':'1'}}],
