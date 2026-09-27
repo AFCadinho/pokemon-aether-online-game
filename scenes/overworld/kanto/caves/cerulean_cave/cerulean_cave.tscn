@@ -1,47 +1,201 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/templates/open_field_placeholder_template.tscn" id="1_template"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
-[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/cerulean_cave_1f/cerulean_cave_1f.visual.tscn" id="1_visual"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_route_hint"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_city_exit"]
+[sub_resource type="RectangleShape2D" id="shape_32_32"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_128_32"]
 size = Vector2(128, 32)
 
-[node name="CeruleanCave" instance=ExtResource("1_template")]
+[node name="CeruleanCave1F" type="Node2D"]
+script = ExtResource("2_metadata")
 map_id = "kanto_cerulean_cave"
 map_region_name = "Kanto"
-map_display_name = "Cerulean Cave"
+map_display_name = "Cerulean Cave 1F"
 world_access_group_id = "kanto_cerulean_cave"
 world_access_group_label = "Cerulean Cave"
 world_access_area_type = "wilderness"
-location_id = "kanto.cerulean_cave"
-location_name = "Cerulean Cave"
+location_id = "kanto.cerulean_cave.1f"
+location_name = "Cerulean Cave 1F"
 region_id = "kanto"
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"
 music_track_id = "overworld.kanto.cave.mt_moon"
 
-[node name="FromCerulean" type="Marker2D" parent="Spawns"]
-position = Vector2(384, 512)
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
 
-[node name="ToCerulean" type="Area2D" parent="Exits"]
-position = Vector2(384, 560)
+[node name="Spawns" type="Node2D" parent="."]
+[node name="From2FA" type="Marker2D" parent="Spawns"]
+position = Vector2(624, 720)
+
+[node name="From2FB" type="Marker2D" parent="Spawns"]
+position = Vector2(944, 1104)
+
+[node name="From2FC" type="Marker2D" parent="Spawns"]
+position = Vector2(496, 1744)
+
+[node name="From2FD" type="Marker2D" parent="Spawns"]
+position = Vector2(2192, 2000)
+
+[node name="From2FE" type="Marker2D" parent="Spawns"]
+position = Vector2(2928, 1616)
+
+[node name="From2FF" type="Marker2D" parent="Spawns"]
+position = Vector2(3568, 720)
+
+[node name="FromB1FG" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 1168)
+
+[node name="FromB1FH" type="Marker2D" parent="Spawns"]
+position = Vector2(3504, 1360)
+
+[node name="FromCerulean" type="Marker2D" parent="Spawns"]
+position = Vector2(3184, 2704)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="To2FA" type="Area2D" parent="Exits"]
+position = Vector2(624, 688)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn"
+target_spawn_name = "From1FA"
+transition_id = "kanto_cerulean_cave__to_2f_a"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To2FA"]
+shape = SubResource("shape_32_32")
+
+[node name="To2FB" type="Area2D" parent="Exits"]
+position = Vector2(944, 1072)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn"
+target_spawn_name = "From1FB"
+transition_id = "kanto_cerulean_cave__to_2f_b"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To2FB"]
+shape = SubResource("shape_32_32")
+
+[node name="To2FC" type="Area2D" parent="Exits"]
+position = Vector2(496, 1712)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn"
+target_spawn_name = "From1FC"
+transition_id = "kanto_cerulean_cave__to_2f_c"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To2FC"]
+shape = SubResource("shape_32_32")
+
+[node name="To2FD" type="Area2D" parent="Exits"]
+position = Vector2(2192, 1968)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn"
+target_spawn_name = "From1FD"
+transition_id = "kanto_cerulean_cave__to_2f_d"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To2FD"]
+shape = SubResource("shape_32_32")
+
+[node name="To2FE" type="Area2D" parent="Exits"]
+position = Vector2(2928, 1584)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn"
+target_spawn_name = "From1FE"
+transition_id = "kanto_cerulean_cave__to_2f_e"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To2FE"]
+shape = SubResource("shape_32_32")
+
+[node name="To2FF" type="Area2D" parent="Exits"]
+position = Vector2(3568, 688)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn"
+target_spawn_name = "From1FF"
+transition_id = "kanto_cerulean_cave__to_2f_f"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To2FF"]
+shape = SubResource("shape_32_32")
+
+[node name="ToB1FG" type="Area2D" parent="Exits"]
+position = Vector2(400, 1168)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn"
+target_spawn_name = "From1FG"
+transition_id = "kanto_cerulean_cave__to_b1f_g"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FG"]
+shape = SubResource("shape_32_32")
+
+[node name="ToB1FH" type="Area2D" parent="Exits"]
+position = Vector2(3536, 1360)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn"
+target_spawn_name = "From1FH"
+transition_id = "kanto_cerulean_cave__to_b1f_h"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FH"]
+shape = SubResource("shape_32_32")
+
+[node name="ToCeruleanCity" type="Area2D" parent="Exits"]
+position = Vector2(3168, 2992)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromCeruleanCave"
 transition_id = "kanto_cerulean_cave__to_cerulean_city"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCerulean"]
-shape = SubResource("RectangleShape2D_city_exit")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanCity"]
+shape = SubResource("shape_128_32")
 
-[node name="RouteTransitionHint" parent="Exits/ToCerulean" instance=ExtResource("4_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanCity" instance=ExtResource("5_route_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
-[node name="Collision" parent="Tiles" index="0"]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAABAAAAAAAAAAAAAAABABEAAAAAAAAAAAACAAAAAAAAAAAAAAACABEAAAAAAAAAAAADAAAAAAAAAAAAAAADABEAAAAAAAAAAAAEAAAAAAAAAAAAAAAEABEAAAAAAAAAAAAFAAAAAAAAAAAAAAAFABEAAAAAAAAAAAAGAAAAAAAAAAAAAAAGABEAAAAAAAAAAAAHAAAAAAAAAAAAAAAHABEAAAAAAAAAAAAIAAAAAAAAAAAAAAAIABEAAAAAAAAAAAAJAAAAAAAAAAAAAAAJABEAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAOABEAAAAAAAAAAAAPAAAAAAAAAAAAAAAPABEAAAAAAAAAAAAQAAAAAAAAAAAAAAAQABEAAAAAAAAAAAARAAAAAAAAAAAAAAARABEAAAAAAAAAAAASAAAAAAAAAAAAAAASABEAAAAAAAAAAAATAAAAAAAAAAAAAAATABEAAAAAAAAAAAAUAAAAAAAAAAAAAAAUABEAAAAAAAAAAAAVAAAAAAAAAAAAAAAVABEAAAAAAAAAAAAWAAAAAAAAAAAAAAAWABEAAAAAAAAAAAAXAAAAAAAAAAAAAAAXABEAAAAAAAAAAAAAAAEAAAAAAAAAAAAXAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAXAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAXAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAXAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAXAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAXAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAXAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAXAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAXAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAAXAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAAXAAsAAAAAAAAAAAAAAAwAAAAAAAAAAAAXAAwAAAAAAAAAAAAAAA0AAAAAAAAAAAAXAA0AAAAAAAAAAAAAAA4AAAAAAAAAAAAXAA4AAAAAAAAAAAAAAA8AAAAAAAAAAAAXAA8AAAAAAAAAAAAAABAAAAAAAAAAAAAXABAAAAAAAAAAAAA=")
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
 
-[connection signal="body_entered" from="Exits/ToCerulean" to="Exits/ToCerulean" method="_on_body_entered"]
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("4_mask")
+floor_regions = {
+&"1f": Rect2(0, 0, 4096, 3072)
+}
+floor_display_names = {
+&"1f": "Cerulean Cave 1F"
+}
+active_floor = &"1f"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[connection signal="body_entered" from="Exits/To2FA" to="Exits/To2FA" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/To2FB" to="Exits/To2FB" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/To2FC" to="Exits/To2FC" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/To2FD" to="Exits/To2FD" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/To2FE" to="Exits/To2FE" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/To2FF" to="Exits/To2FF" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToB1FG" to="Exits/ToB1FG" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToB1FH" to="Exits/ToB1FH" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanCity" to="Exits/ToCeruleanCity" method="_on_body_entered"]

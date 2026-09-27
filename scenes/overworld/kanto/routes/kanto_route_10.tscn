@@ -19,6 +19,9 @@ size = Vector2(96, 32)
 [sub_resource type="RectangleShape2D" id="shape_5"]
 size = Vector2(192, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_6"]
+size = Vector2(32, 32)
+
 [node name="Route10" type="Node2D"]
 script = ExtResource("2_metadata")
 map_id = "kanto_route_10"
@@ -51,7 +54,21 @@ position = Vector2(624, 2544)
 [node name="FromLavenderNorth" type="Marker2D" parent="Spawns"]
 position = Vector2(1248, 3248)
 
+[node name="FromPowerPlant" type="Marker2D" parent="Spawns"]
+position = Vector2(1200, 1808)
+
 [node name="Exits" type="Node2D" parent="."]
+
+[node name="ToPowerPlant" type="Area2D" parent="Exits"]
+position = Vector2(1200, 1744)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/interiors/power_plant.tscn"
+target_spawn_name = "FromRoute10"
+transition_id = "kanto_route_10__to_power_plant"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPowerPlant"]
+shape = SubResource("shape_6")
 
 [node name="ToRoute9" type="Area2D" parent="Exits"]
 position = Vector2(16, 656)
@@ -118,3 +135,4 @@ z_index = 5
 [connection signal="body_entered" from="Exits/ToRockTunnelNorth" to="Exits/ToRockTunnelNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRockTunnelSouth" to="Exits/ToRockTunnelSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToLavenderNorth" to="Exits/ToLavenderNorth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPowerPlant" to="Exits/ToPowerPlant" method="_on_body_entered"]

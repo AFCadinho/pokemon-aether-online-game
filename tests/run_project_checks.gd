@@ -145,6 +145,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/map_blocker_index_check.gd",
 	"res://tests/overlay_layout_performance_check.gd",
 	"res://tests/world_access_catalog_generation_check.gd",
+	"res://tests/cerulean_cave_power_plant_transition_check.gd",
 	"res://tests/aether_clash_staff_preview_check.gd",
 	"res://tests/aether_clash_bot_anchors_check.gd",
 	"res://tests/aether_clash_bot_arena_check.gd",
