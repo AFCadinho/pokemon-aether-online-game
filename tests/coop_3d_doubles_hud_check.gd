@@ -26,6 +26,10 @@ func _run() -> void:
 	root.add_child(host)
 	host.mount(battle, null, WildEncounterTransition.STYLE_WILD, true)
 	assert(battle.setup_coop_battle())
+	battle.coop_presenter._native_move_router.call("play_damage_sound")
+	assert((battle.coop_presenter._native_move_router.get("sound_stream_cache") as Dictionary).has(
+		"res://assets/battles/animations/common/damage/normaldamage.ogg"),
+		"Co-op damage must use the regular battle damage sound")
 	var snapshot := {"participant": "p1", "turn": 1, "opponentPartySize": 2,
 		"field": {"weather": "sandstorm", "terrain": "electricterrain"},
 		"positions": [
@@ -52,6 +56,11 @@ func _run() -> void:
 			break
 	assert(hud != null)
 	hud.set_process(false)
+	hud._process(0.016)
+	var turn_panel: Control = battle.battle_status_panel
+	var reset_camera: Control = stage.get_node("ResetCameraButton")
+	assert(turn_panel.position.x > stage.size.x * 0.7 and reset_camera.position.x > stage.size.x * 0.7,
+		"3D co-op turn and camera controls must stay on the right without a trainer portrait")
 	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
 	assert(not battle.player_hud_panel.visible and not battle.enemy_hud_panel.visible)
 	assert(battle.field_timers_panel.visible and battle.field_timers_panel.current_effects.size() == 2,

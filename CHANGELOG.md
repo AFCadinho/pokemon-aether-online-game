@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gedeelde double battles spelen het gebruikelijke schadegeluid af naast de 3D-hitreactie. De turn- en cameraknoppen blijven rechtsboven staan wanneer er geen zichtbaar tegenstanderportrait is.
+
 - Gedeelde double battles tonen weer en terrein linksboven vanuit de actuele battle-status, melden publieke veldwisselingen in het gevechtslog en schalen statveranderingen mee met de compacte 3D-HP-kaarten.
 
 - Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen de vier HP-kaarten in een compacte statusrij boven het speelveld.
