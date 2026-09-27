@@ -184,6 +184,7 @@ def source_entry(entry, model_root, motion_root):
     bank_match = re.search(r'_(\d)\d{4}_', Path(chosen['idle']).name) if chosen['idle'] else None
     bank = bank_match[1] if bank_match else None
     selection_holds = []
+    cross_bank_sleep = False
     for category in CATEGORIES:
         if category == 'idle':
             continue
@@ -195,7 +196,11 @@ def source_entry(entry, model_root, motion_root):
             selected = Path(chosen[category])
             match = re.search(r'_(\d)\d{4}_', selected.name)
             if bank is None or match is None or match[1] != bank:
-                raise ValueError(f'Motion override crosses idle bank: {identity} {category}')
+                if (category == 'sleep' and entry.get('cross_bank_sleep_diagnostic') is True
+                        and override == '00281_sleep01_loop'):
+                    cross_bank_sleep = True
+                else:
+                    raise ValueError(f'Motion override crosses idle bank: {identity} {category}')
         elif len(matches) == 1:
             chosen[category] = str(matches[0])
         elif category in OPTIONAL_CATEGORIES and not matches:
@@ -208,6 +213,8 @@ def source_entry(entry, model_root, motion_root):
     icon_file = model / (identity + "_00_big.png")
     rare = sorted(model.glob("*_rare_alb.png"))
     warnings = list(selection_holds)
+    if cross_bank_sleep:
+        warnings.append('cross_bank_sleep_requires_visual_review')
     if not model_file.is_file():
         warnings.append("missing_model")
     if not icon_file.is_file():
@@ -233,7 +240,8 @@ def source_entry(entry, model_root, motion_root):
             "motion_dir": str(motion), "motions_available": len(files),
             "identity_icon": str(icon_file),
             "motions": chosen, "motion_channels": channels,
-            "motion_selection_policy": "same-idle-bank-v1", "motion_bank": bank,
+            "motion_selection_policy": ("cross-bank-sleep-diagnostic-v1" if cross_bank_sleep
+                                        else "same-idle-bank-v1"), "motion_bank": bank,
             "facial_baseline": baseline, "alternatives": alternatives,
             "rare_albedo_count": len(rare), "warnings": warnings,
             "status": "candidate_needs_action_and_camera_review"}

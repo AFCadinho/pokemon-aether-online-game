@@ -170,6 +170,24 @@ class ScviBatchTest(unittest.TestCase):
             self.assertIsNone(result["motions"]["sleep"])
             self.assertIn("missing_action:sleep", result["warnings"])
             self.assertNotIn("missing_official_rare_albedo", result["warnings"])
+            (motion / (identity + "_00281_sleep01_loop.tranm")).touch()
+            with self.assertRaisesRegex(ValueError, "crosses idle bank"):
+                source_entry({"species": "dragonite", "pm": 149,
+                              "motion_overrides": {"sleep": "00281_sleep01_loop"}},
+                             root / "models", root / "motions")
+            diagnostic = source_entry({"species": "dragonite", "pm": 149,
+                                       "motion_overrides": {"sleep": "00281_sleep01_loop"},
+                                       "cross_bank_sleep_diagnostic": True},
+                                      root / "models", root / "motions")
+            self.assertEqual(diagnostic["motion_selection_policy"], "cross-bank-sleep-diagnostic-v1")
+            self.assertTrue(diagnostic["motions"]["sleep"].endswith("00281_sleep01_loop.tranm"))
+            self.assertIn("cross_bank_sleep_requires_visual_review", diagnostic["warnings"])
+            (motion / (identity + "_00381_sleep01_loop.tranm")).touch()
+            with self.assertRaisesRegex(ValueError, "crosses idle bank"):
+                source_entry({"species": "dragonite", "pm": 149,
+                              "motion_overrides": {"sleep": "00381_sleep01_loop"},
+                              "cross_bank_sleep_diagnostic": True},
+                             root / "models", root / "motions")
             result = source_entry({"species": "dragonite", "pm": 149,
                                    "target_game_height_px": 180,
                                    "motion_overrides": {"idle": "28000_eye01"}},

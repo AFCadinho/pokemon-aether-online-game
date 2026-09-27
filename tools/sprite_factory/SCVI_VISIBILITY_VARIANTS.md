@@ -1,4 +1,8 @@
-# Visibility targets: catalog-bound gender membership
+# Visibility targets: catalog-bound variant membership
+
+The first review below used a gender-only sibling rule. Batch 03 extended the
+same source-metadata proof to uniquely identified form siblings; see the
+follow-up at the end of this document.
 
 ## Outcome
 
@@ -27,14 +31,15 @@ The resolver now:
    This matches the pinned importer's `Meshes(0)` / `loadlods=False` path.
 3. Requires exact equality between selected source shape membership and exported
    GLB mesh-node names (only the structural `_shape` suffix is removed).
-4. For remaining targets, reads catalog siblings with the same species/form and
-   a different gender code. A target is excluded only if exactly one such
-   sibling's primary mesh table contains it and the selected table does not.
+4. For remaining targets, reads catalog siblings with the same internal
+   species but a different resource ID. A target is excluded only if exactly
+   one such sibling's primary mesh table contains it and the selected table
+   does not. The proof records that sibling's form and gender.
 5. Records excluded targets, owning resource/gender, and all metadata hashes;
    rechecks hashes after export preparation.
 
 There is no `_01_` to `_00_` substitution and no inferred gender from a filename.
-Missing active geometry, unknown targets, different-form targets, ambiguous owners,
+Missing active geometry, unknown targets, ambiguous owners,
 duplicate tracks, unsafe references and changed metadata remain errors. Inactive
 variant tracks are excluded rather than remapped onto an active mesh. Every
 selected mesh must still receive a time-zero track in every clip. The rule is
@@ -90,3 +95,14 @@ Do not stretch bit arrays over the clip. Material
 issues in Spiritomb, Gastly and the fire profiles remain separate from visibility.
 There is no need to increase the cohort or pursue 100/100 before resolving those
 specific questions.
+
+## Batch 03 form follow-up (2026-09-27)
+
+The same unique-owner rule now accounts for distinct catalog forms of
+Deerling, Flabébé, Floette, Florges, Sawsbuck and Vivillon. Their six GLBs
+passed source export, standalone Godot conversion and 24-pose scene review
+without errors; the user accepted their source visual gallery. The policy
+record is `catalog-form-gender-mesh-membership-v2`, with resource, form,
+gender and source hashes pinned. Palossand and Sandygast remain held because
+their additional `body_c` target is absent from the selected primary mesh and
+has no unique sibling owner. No target is silently discarded.

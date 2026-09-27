@@ -1,0 +1,283 @@
+{
+  "schema": 1,
+  "kind": "catalog-production-batch-03-exception-followup",
+  "date": "2026-09-27",
+  "runtime_approved": false,
+  "release_approved": false,
+  "original_source_holds": 35,
+  "recovered_normal_species": [
+    "delphox",
+    "salandit",
+    "salazzle",
+    "deerling",
+    "flabebe",
+    "floette",
+    "florges",
+    "sawsbuck",
+    "vivillon",
+    "braviary",
+    "eelektross",
+    "noibat",
+    "noivern",
+    "rufflet",
+    "talonflame"
+  ],
+  "recovered_normal_scenes": 15,
+  "recovered_normal_pose_captures": 360,
+  "recovered_shiny_from_original_holds": [
+    "foongus",
+    "froakie",
+    "gumshoos",
+    "klefki",
+    "larvesta",
+    "mudbray",
+    "mudsdale",
+    "passimian",
+    "spewpa"
+  ],
+  "recovered_shiny_from_new_normals": [
+    "deerling",
+    "flabebe",
+    "floette",
+    "florges",
+    "noibat",
+    "noivern",
+    "rufflet",
+    "salandit",
+    "salazzle",
+    "sawsbuck",
+    "talonflame",
+    "vivillon",
+    "delphox"
+  ],
+  "recovered_shiny_scenes": 22,
+  "recovered_shiny_pose_captures": 528,
+  "source_review_feedback": "Allemaal goed",
+  "cross_bank_sleep_feedback": "Allemaal goed",
+  "shiny_pair_feedback": "Allemaal goed",
+  "battle_visual_feedback": "Allemaal goed",
+  "battle_readability_min_pixels": 65.02,
+  "battle_hud_conflicts": 0,
+  "battle_out_of_view": 0,
+  "source_holds": {
+    "avalugg": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "axew": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "bergmite": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "bruxish": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "carbink": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "cryogonal": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "diancie": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "drizzile": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "fennekin": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "fletchinder": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock exposed after cross-bank sleep selection"
+    },
+    "fletchling": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock exposed after cross-bank sleep selection"
+    },
+    "greninja": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "hawlucha": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    },
+    "inteleon": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "lurantis": {
+      "category": "unsupported_transparency",
+      "reason": "Native transparency/refraction is not supported for one or more materials."
+    },
+    "meloetta": {
+      "category": "source_identity",
+      "reason": "Mesh/material/skeleton differs from ROMFS: pm0648_11_00.trskl"
+    },
+    "mimikyu": {
+      "category": "cross_form_motion",
+      "reason": "Cross-form animation catalogs need selector review"
+    },
+    "palossand": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "sandygast": {
+      "category": "visibility_variant",
+      "reason": "Unknown or ambiguous visibility variant target"
+    },
+    "thwackey": {
+      "category": "visibility_clock",
+      "reason": "Unsupported dynamic visibility clock"
+    }
+  },
+  "shiny_holds": [
+    "braviary",
+    "crabominable",
+    "eelektrik",
+    "eelektross",
+    "skrelp"
+  ],
+  "original_65_battle": {
+    "full_120hz_complete": true,
+    "raw_sleep_floor_warnings": 16,
+    "raw_sleep_visual_feedback": "Allemaal goed",
+    "corrected_sleep_lift_rejected_as_floating": true,
+    "tynamo_far_camera_min_idle_pixels": 65.2,
+    "mareanie_second_physical_attack_minimum_y_m": 0.03,
+    "tynamo_scale_visual_feedback": "Nieuwe grootte is goed",
+    "battle_gallery_feedback": "Allemaal goed"
+  },
+  "recovered_15_battle_120hz": {
+    "complete": true,
+    "models": 15,
+    "non_sleep_minimum_y_m": 0.012892,
+    "sleep_floor_visual_exceptions_m": {
+      "delphox": -0.1147,
+      "flabebe": -0.024163,
+      "florges": -0.037246
+    },
+    "minimum_idle_pixels": 65.02,
+    "hud_or_camera_conflicts": 0,
+    "faint_source_pose_visual_exceptions": [
+      "delphox",
+      "braviary"
+    ],
+    "faint_exception_test": "120 Hz: source-height screenshots byte-identical to user-accepted raw battle images; no HUD/camera conflict; floor AABB remains negative by reviewed choice"
+  },
+  "artifacts_sha256": {
+    ".tmp/catalog-production-03-source-recovery-stage-2026-09-27.json": "12fbfd2ea835899c84a9a1b24ec4d55c7db9542ded23a8fe081cdff9e6eaafeb",
+    ".tmp/catalog-production-03-source-recovery-runtime-2026-09-27/report.json": "822369a392c789ea15311256077726aa859e782ab6f5d66f14487bc82d10ff78",
+    ".tmp/catalog-production-03-source-recovery-motion-2026-09-27/review.json": "60fc99451485998cb7785a69cffcfaf80f97937c30f53edaf5946edce1c5f7b1",
+    ".tmp/catalog-production-03-shiny-held-stage-2026-09-27.json": "08ac10090c7c0a8fcc557242f547cbacc70999da60c6525812a842b40da39f1c",
+    ".tmp/catalog-production-03-shiny-held-runtime-2026-09-27/report.json": "5c1394d351de41b075443d56011ad33bca77e7464238040a756c086fedfd8bba",
+    ".tmp/catalog-production-03-shiny-held-motion-2026-09-27/review.json": "4b1640931c979abafd6c4c5b2bd701a92e11f1eabdde1b6984ec5ce7b1c99700",
+    ".tmp/catalog-production-03-source-recovery-shiny-stage-2026-09-27.json": "5d750b177cd7ad63eefe9185629fd3fcc38e80428eb3f3a81f9f527d856075aa",
+    ".tmp/catalog-production-03-source-recovery-shiny-runtime-2026-09-27/report.json": "8410a8ed6571b87b10ce694cd8743dbafe4249f50c884650609c537cc65bced1",
+    ".tmp/catalog-production-03-source-recovery-shiny-motion-2026-09-27/review.json": "d642902a3ed27107d5f049923a48e147deb7170d93dc99960b44115595a77a16",
+    ".tmp/catalog-production-03-new-shiny-pairs-2026-09-27/index.html": "4350a900ccd111b8d25ea6d17cd7bd8fc10552322fdb966ed8062a3f704159a5",
+    ".tmp/catalog-production-03-battle-corrected-2026-09-27/battle-review.json": "6abbb7272b2f731fcc0039d8f9d3fd814e67bfc4df479bf94be227b199f7311c",
+    ".tmp/catalog-production-03-sleep-corrected-2026-09-27/battle-review.json": "269cccd866be316967ddd4a4177bf5ab5a6f72a5c2ee719e7697d9f452c346be",
+    ".tmp/catalog-production-03-tynamo-verified-review-2026-09-27/battle-review.json": "ec2f1c0d7a2e57eb211bf7790803652675b81abe80f20fd1f6da4fc8857efd84",
+    ".tmp/catalog-production-03-mareanie-adjusted-review-2026-09-27/battle-review.json": "72eb5f0858b8e17a7514fe9df5a18d7349718b09fe87ed5be861a3dd90e9c19d",
+    ".tmp/catalog-production-03-battle-final-candidates-2026-09-27.json": "242e9b30b607d3e3a404e85a8a8f2e43ffda09867940abcefe416531bfd9e3bf",
+    ".tmp/catalog-production-03-source-recovery-battle-raw-2026-09-27/battle-review.json": "1fa7d4aa38592a53e868868de67556ed648d0851eb5b705e7595eeeb4e2dbdcd",
+    ".tmp/catalog-production-03-source-recovery-battle-scaled-2026-09-27/battle-review.json": "a520b28751be601363bb8deb3ab91752fbcf871998f24d7f580f1c1acd15b4d5",
+    ".tmp/catalog-production-03-source-recovery-battle-gallery-2026-09-27/index.html": "089d8945a855532e91c427349be6552a77b1331f5623229b32e7249493de03dd",
+    ".tmp/catalog-production-03-source-recovery-motion-candidates-2026-09-27.json": "0c3acefa5b46fd50e66020bc7f69769237a00cb97a973c106d4f06efa926134f",
+    ".tmp/catalog-production-03-source-recovery-visual-2026-09-27/index.html": "4c9dc60c7910cc9e75bfbf570f40c6bf81461b602c38c41057d028316d777d62",
+    ".tmp/catalog-production-03-crossbank-source-review-retry-2026-09-27/sleep-comparison.html": "b852c0a66014b984696ca7991135ff7cee46f44e740a3faaa91121f4e940a95b",
+    ".tmp/catalog-production-03-crossbank-batch-2026-09-27.json": "43d37a57199cfcd7fb1944aeccd4de5d97d412e3f4dfcad71112b5678c2f8c88",
+    ".tmp/catalog-production-03-source-recovery-scaled-input-2026-09-27/catalog.json": "6fc15d8f3705aaff1b6744ee486fbeb3a051c3445d4872373488a76d333fd580",
+    ".tmp/catalog-production-03-source-recovery-readability-2026-09-27.json": "968957a4389afd987e9310a7991ade7f905323239618f60580699893e5765f2c",
+    ".tmp/catalog-production-03-tynamo-size-comparison-2026-09-27/index.html": "5d1a70a5d7c48507c0e8898cd2d278a349661708cfc4305909931b2671ad34c3",
+    ".tmp/catalog-production-03-source-recovery-battle-verified-2026-09-27/battle-review.json": "ff6585d339d704543de6da51ef8863a83b17338508166d1bd5e58f2a3a708a0e",
+    ".tmp/catalog-production-03-source-recovery-final-candidates-2026-09-27.json": "1255ab7e28d1bcf81e668bed279a9c8df23dfb5e8ecbe2389fa1cb15c56eccde",
+    ".tmp/catalog-production-03-source-recovery-faint-exception-candidates-2026-09-27.json": "0d7598d8bee28fb5374ae2d30c0e78621bcdc1bb32c26f027388646258866a7f",
+    ".tmp/catalog-production-03-source-recovery-faint-exception-review-2026-09-27/battle-review.json": "38a4e1376db08da6064e267b71ffbc20ffe5b3843f93c7dc8327e899386c7f2a",
+    ".tmp/catalog-production-03-original-65-battle-gallery-2026-09-27/index.html": "f0536c3c8bfa3fa35e0eb16d49ead63f84e21d5b5065169222afdd287063655f",
+    ".tmp/catalog-production-03-pair-stress-group-01-2026-09-27/stress.json": "68d775fb5f4fc03796e65faea776318a918fc32884cb276cf351736b574241f6",
+    ".tmp/catalog-production-03-pair-stress-group-02-2026-09-27/stress.json": "82df9fb4e7058838b1d9ad24561de209743723b878ceb523d3da5a71bc2a481e",
+    ".tmp/catalog-production-03-pair-stress-group-03-2026-09-27/stress.json": "8b6b07413c1b5c60a1bb28acaf91c100a694e3a87be07f9a6e4f82ba78308acc",
+    ".tmp/catalog-production-03-pair-stress-group-04-2026-09-27/stress.json": "d0c0b82cf2a3d1503551e639512441caa8a9fd46b0fcbd6e26a1390fd7ce1452",
+    ".tmp/catalog-production-03-pair-stress-group-05-2026-09-27/stress.json": "285816b654615ec4c26b88f54b91ba9ca69a8a6fa2b30f0704f20817bc47702c",
+    ".tmp/catalog-production-03-pair-stress-group-06-2026-09-27/stress.json": "9ba2cc4bf44b249b0c314289c20a2e696250ad3c9d5e5ebc40684d26649a14fd",
+    ".tmp/catalog-production-03-pair-stress-group-07-2026-09-27/stress.json": "90f979f7ceb6bea9c2a924618dee9722cd3224d4a7c49b77fc905f3146cb3fcb",
+    ".tmp/catalog-production-03-pair-stress-group-08-2026-09-27/stress.json": "2fecb8c366d25ffd7bf831d45427b58d9c1d5e9c0d347efed2712e832b9cbcae"
+  },
+  "source_recovery_groups": {
+    "constant_idle_effect_uv": [
+      "delphox",
+      "salandit",
+      "salazzle"
+    ],
+    "unique_catalog_form_visibility": [
+      "deerling",
+      "flabebe",
+      "floette",
+      "florges",
+      "sawsbuck",
+      "vivillon"
+    ],
+    "explicit_cross_bank_sleep": [
+      "braviary",
+      "eelektross",
+      "noibat",
+      "noivern",
+      "rufflet",
+      "talonflame"
+    ]
+  },
+  "shiny_hold_reasons": {
+    "braviary": "Official rare eye shader float settings differ.",
+    "crabominable": "Required embedded normal lower-eyelid texture is missing from the Blender import.",
+    "eelektrik": "Required embedded normal lower-eyelid texture is missing from the Blender import.",
+    "eelektross": "Official rare upper-eyelid texture change has not been safely exported.",
+    "skrelp": "Official rare eye EmissionIntensityLayer5 setting changes from 1 to 10."
+  },
+  "recovered_placement_overrides": {
+    "readability_scale": {
+      "salandit": 3.334713,
+      "salazzle": 1.226098,
+      "deerling": 1.378625,
+      "flabebe": 2.907214,
+      "floette": 2.429839,
+      "rufflet": 1.466048
+    },
+    "authored_scale": {
+      "braviary": 0.75
+    },
+    "yaw_degrees": {
+      "vivillon": 90.0,
+      "noibat": 90.0,
+      "noivern": 90.0
+    }
+  },
+  "paired_battle_stress": {
+    "complete": true,
+    "species": 75,
+    "groups": 8,
+    "rounds": 24,
+    "pairs_loaded": 225,
+    "faint_replacements": 225,
+    "frame_p95_ms_range": [
+      17.173,
+      17.515
+    ],
+    "stalls_over_50ms": 48,
+    "uncovered_stalls": 0,
+    "registry_restored_byte_for_byte": true,
+    "runtime_approved": false,
+    "release_approved": false
+  }
+}

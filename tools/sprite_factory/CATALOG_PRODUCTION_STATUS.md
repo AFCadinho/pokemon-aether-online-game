@@ -8,8 +8,12 @@ all previous observation and production batches. Identity intake verified 98
 source/identity pairs. Source review produced 65 diagnostic GLBs and held 35
 cases with explicit reasons in the [intake result](catalog_production_batch_03_intake_result.json).
 All 65 exports have standalone Godot scenes with 520 native clips, including a
-second physical attack per model. Visual, battle, shiny, runtime and release
-approval are still pending; the 35 holds do not block the 65 candidates.
+second physical attack per model. Follow-up recovered another 15 normal models
+and 22 shiny candidates. The 80 normal candidates and 75 complete
+normal/shiny pairs passed local visual review and battle checks, including
+three real battle-presenter rounds per pair. Twenty source and five shiny
+holds remain in the review queue. Runtime and release approval are still
+pending; see [batch-03 follow-up](../../docs/catalog-production-batch-03.md).
 
 ## Release v6 preparation
 
