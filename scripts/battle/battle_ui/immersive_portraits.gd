@@ -1,18 +1,18 @@
 extends Node
 ## Presentation mirrors existing trainer identity/commands, never battle authority.
+const WILD_ENCOUNTER_ICON := preload("res://assets/ui/wild_encounter_radar.svg")
 var battle: Control
 var cards: Array[Panel] = []
 var heads: Array[Control] = []
 var art: Array[TextureRect] = []
 var commands: Array[Label] = []
-var appearances: Array[Dictionary] = [{}, {}, {}, {}]
+var appearances: Array[Dictionary] = [{}, {}, {}]
 var speakers: Array[Control] = []
 var figures: Array[Node2D] = []
-var figure_textures: Array[Texture2D] = [null, null, null, null]
-var coop_wild_details: Dictionary = {}
+var figure_textures: Array[Texture2D] = [null, null, null]
 
 func _ready() -> void:
-	for index in 4:
+	for index in 3:
 		var card := Panel.new()
 		card.name = "TrainerPortrait" + str(index)
 		card.size = Vector2(64,64)
@@ -149,27 +149,12 @@ func _update_coop_portraits() -> void:
 		cards[index].position = Vector2(entry.x, 12)
 	var wild := str(CoopService.activity.get("activityId", "")).begins_with("wild_")
 	if wild:
-		var positions: Array = CoopService.view.get("positions", [])
-		for entry: Dictionary in [
-			{"index": 1, "controller": "p2", "x": stage.size.x - 154.0},
-			{"index": 3, "controller": "p4", "x": stage.size.x - 82.0},
-		]:
-			var index: int = entry.index
-			var details := ""
-			for position: Dictionary in positions:
-				if position.get("controller") == entry.controller:
-					details = str(position.get("details", ""))
-					break
-			var species := details.split(",")[0].strip_edges()
-			if coop_wild_details.get(index, "") != details or art[index].texture == null:
-				coop_wild_details[index] = details
-				art[index].texture = PokemonAssets.load_home_sprite(species, details.to_lower().contains("shiny")) if not species.is_empty() else null
-			heads[index].hide()
-			art[index].visible = art[index].texture != null
-			cards[index].visible = art[index].visible
-			cards[index].position = Vector2(entry.x, 12)
+		heads[1].hide()
+		art[1].texture = WILD_ENCOUNTER_ICON
+		art[1].show()
+		cards[1].show()
+		cards[1].position = Vector2(stage.size.x - 82.0, 12)
 	else:
-		cards[3].hide()
 		var trainer: BattleTrainerSprite = presenter._opponent_trainer
 		var texture: Texture2D = trainer.catalog_sprite.texture if is_instance_valid(trainer) else null
 		if texture == null and is_instance_valid(trainer) and trainer.npc_sprite.sprite_frames != null:
