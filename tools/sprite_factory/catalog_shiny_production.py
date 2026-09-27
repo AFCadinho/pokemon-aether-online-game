@@ -29,6 +29,14 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
     normal, rare = inspect_materials(normal_table), inspect_materials(rare_table)
     if not normal or len(normal) != len(rare):
         raise ValueError("Rare material count differs")
+    if review_queue:
+        # The source table may reorder materials without changing their
+        # bindings. Match explicit unique names before comparing settings.
+        names = [material["name"] for material in normal]
+        rare_by_name = {material["name"]: material for material in rare}
+        if len(set(names)) != len(names) or len(rare_by_name) != len(rare) or set(names) != set(rare_by_name):
+            raise ValueError("Rare material names differ or are ambiguous")
+        rare = [rare_by_name[name] for name in names]
     mapping = {}
     for a, b in zip(normal, rare, strict=True):
         settings_a = {k: v for k, v in a.items() if k != "textures"}
@@ -62,7 +70,10 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
             before, after = a["textures"][channel], b["textures"][channel]
             if before == after:
                 continue
-            if channel != "BaseColorMap" or Path(before).name != before or Path(after).name != after:
+            review_channels = {"UpperEyelidColorMap", "LowerEyelidColorMap", "EmissionColorMap",
+                               "RoughnessMap", "NormalMap"}
+            if ((channel != "BaseColorMap" and (not review_queue or channel not in review_channels))
+                    or Path(before).name != before or Path(after).name != after):
                 raise ValueError("Rare material has a non-albedo change: " + a["name"] + "/" + channel)
             if before in mapping and mapping[before] != after:
                 raise ValueError("One normal texture maps to different rare textures")
@@ -76,9 +87,13 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
         if not normal_png.is_file() or not rare_png.is_file():
             raise ValueError("Official normal or rare PNG missing")
         if digest(normal_png) == digest(rare_png):
-            raise ValueError("Normal and rare albedo are byte-identical")
+            # Some official rare tables point at a distinct filename with the
+            # same pixels. Keep the embedded normal texture for that channel.
+            continue
         result.append({"normal": str(normal_png), "rare": str(rare_png),
                        "normal_sha256": digest(normal_png), "rare_sha256": digest(rare_png)})
+    if not result:
+        raise ValueError("Normal and rare albedo are byte-identical")
     return result, digest(rare_table)
 
 

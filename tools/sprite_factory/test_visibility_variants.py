@@ -58,7 +58,7 @@ class VariantBindingTests(unittest.TestCase):
         result=self.resolve()
         self.assertEqual(result['active_targets'],['selected_body_mesh_shape'])
         self.assertEqual(result['excluded_targets']['alternate_body_mesh_shape'],
-                         {'resource_id':'alternate','gender_code':1})
+                         {'resource_id':'alternate','form':0,'gender_code':1})
         verify(result)
 
     def test_missing_selected_mesh_is_not_ignored(self):
@@ -73,10 +73,14 @@ class VariantBindingTests(unittest.TestCase):
         self.assertEqual(result['active_targets'],['alternate_body_mesh_shape'])
         self.assertEqual(result['excluded_targets']['selected_body_mesh_shape']['gender_code'],0)
 
-    def test_unknown_or_other_form_target_rejected(self):
-        for name in ['typo_mesh_shape','otherform_body_mesh_shape']:
-            with self.assertRaisesRegex(ValueError,'Unknown or ambiguous'):
-                self.resolve(targets=['selected_body_mesh_shape',name])
+    def test_other_form_target_has_unique_catalog_owner(self):
+        result=self.resolve(targets=['selected_body_mesh_shape','otherform_body_mesh_shape'])
+        self.assertEqual(result['excluded_targets']['otherform_body_mesh_shape'],
+                         {'resource_id':'otherform','form':1,'gender_code':1})
+
+    def test_unknown_target_rejected(self):
+        with self.assertRaisesRegex(ValueError,'Unknown or ambiguous'):
+            self.resolve(targets=['selected_body_mesh_shape','typo_mesh_shape'])
 
     def test_ambiguous_owner_rejected(self):
         self.rows.append(dict(self.rows[1],resource_id='another',gender_code=2))

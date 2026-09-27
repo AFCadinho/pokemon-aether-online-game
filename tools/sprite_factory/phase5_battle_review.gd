@@ -99,12 +99,15 @@ func _validate_motion(entry: Dictionary, model: Node3D, player: AnimationPlayer,
 		var duration := player.get_animation(action).length
 		var minimum := INF
 		var count := ceili(duration * 120.0)
+		var minima := []
 		for sample in count + 1:
 			var time := minf(sample / 120.0, duration)
 			model.position.y = measured.candidate_lift + _motion_offset(entry.species, action, time)
 			var box := await _sample(model, player, action, time / duration)
 			minimum = minf(minimum, box.position.y)
-		result[action] = {"samples": count + 1, "minimum_y": minimum}
+			minima.append(box.position.y)
+		result[action] = {"samples": count + 1, "minimum_y": minimum,
+			"minimum_y_samples": minima}
 	model.position = Vector3.ZERO
 	return result
 
@@ -243,6 +246,9 @@ func _run() -> void:
 		file.store_string(JSON.stringify(report, "  "))
 		file.close()
 	report.complete = true
+	# The display can resize the root viewport after its initial assignment.
+	# Record the size that was actually used for the screen-space measurements.
+	report.viewport = [root.size.x, root.size.y]
 	report["candidates_sha256"] = FileAccess.get_sha256(candidates_path) if not candidates_path.is_empty() else ""
 	var completed_file := FileAccess.open(output_dir.path_join("battle-review.json"), FileAccess.WRITE)
 	completed_file.store_string(JSON.stringify(report, "  "))

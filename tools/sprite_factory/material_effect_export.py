@@ -44,6 +44,29 @@ def prepare(job):
                 # source-key playback has its own versioned runtime shader.
                 payload['uv_samples'] = samples
             candidates.append((path, payload))
+        if not candidates:
+            # A few sources keep a constant effect transform on their selected
+            # idle clip instead of supplying a separate auxiliary loop. This
+            # fallback is valid only when every sampled UV value is constant.
+            intake = job.get('identity_intake', {})
+            idle_name = intake.get('motion_channels', {}).get('idle')
+            idle = Path(idle_name) if idle_name else None
+            hashes = intake.get('identity_evidence', {}).get('source_sha256', {})
+            if (idle is not None and idle.is_file() and idle.parent.resolve() == directory.resolve()
+                    and hashlib.sha256(idle.read_bytes()).hexdigest() == hashes.get(str(idle))):
+                data = read_uv_tracks(idle)
+                data['tracks'] = [t for t in data['tracks'] if t['material'] == material['name']]
+                if data['tracks']:
+                    from effect_uv_samples import sample_tracks
+                    samples = sample_tracks(data)
+                    if (set(samples) == {'UVScaleOffset', 'UVScaleOffset3'}
+                            and all(frames and all(frame == frames[0] for frame in frames)
+                                    and frames[0][0] > 0 and frames[0][1] > 0
+                                    for frames in samples.values())):
+                        tracks = {name: [[frames[0][i], frames[-1][i]] for i in range(4)]
+                                  for name, frames in samples.items()}
+                        candidates.append((idle, {'loop_seconds': (data['frames']-1)/data['fps'],
+                                                  'tracks': tracks, 'uv_samples': samples}))
         if not candidates or len({json.dumps(c[1], sort_keys=True) for c in candidates}) != 1:
             raise ValueError('Missing or ambiguous auxiliary effect loop: ' + material['name'])
         record = {'material': material['name'], 'profile': profile['profile'], **candidates[0][1],

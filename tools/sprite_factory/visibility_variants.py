@@ -55,15 +55,15 @@ def binding(intake, exported_meshes, targets):
     if extra:
         siblings = [r for r in catalog['entries']
                     if r['internal_species_id'] == selected['internal_species_id']
-                    and r['form'] == selected['form']
-                    and r['gender_code'] != selected['gender_code']]
+                    and r['resource_id'] != selected['resource_id']]
         for sibling in siblings:
             for target in resource_shapes(sibling, False) & extra:
                 owners[target].append({'resource_id': sibling['resource_id'],
+                                       'form': sibling['form'],
                                        'gender_code': sibling['gender_code']})
     if any(len(owner) != 1 for owner in owners.values()):
         raise ValueError('Unknown or ambiguous visibility variant target')
-    return {'policy': 'catalog-gender-mesh-membership-v1',
+    return {'policy': 'catalog-form-gender-mesh-membership-v2',
             'selected_resource_id': selected['resource_id'],
             'active_targets': sorted(active),
             'excluded_targets': {t: owners[t][0] for t in sorted(owners)},
