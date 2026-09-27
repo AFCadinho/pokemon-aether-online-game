@@ -186,7 +186,10 @@ static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: 
 
 static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	var normalized_item_id := item_id.strip_edges().to_lower()
-	if normalized_item_id in ["team-rocket-outfit", "team-rocket-female-outfit"]:
+	if normalized_item_id in [
+		"team-rocket-outfit", "team-rocket-female-outfit",
+		"adinho-classic-sunglasses", "adinho-chroma-glasses",
+	]:
 		return ["male", "female"]
 	if normalized_item_id.begins_with("aether-wayfarer-male-"):
 		return ["male"]
