@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Een aparte Route 1-proef laat één veld tall grass zacht bewegen, met verschillende pauzes per groepje en een aan/uitvergelijking.
+
 - Het roze bloemetje naast het pad in Pallet Town heeft weer een complete onderkant; de map is opnieuw geïmporteerd met behoud van de animaties.
 
 - De mannelijke Team Rocket-outfit volgt nu de Gen 4-gruntreferentie met een donkerder uniform, paarsgrijze handschoenen en laarzen, en een losse pet in de outfitbox.
