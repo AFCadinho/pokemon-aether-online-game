@@ -197,6 +197,7 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 		or normalized_item_id.begins_with("adinho-")
 		or normalized_item_id.begins_with("ironfanton-")
 		or normalized_item_id.begins_with("smoking-")
+		or normalized_item_id.begins_with("team-rocket-")
 	):
 		return ["male"]
 	return []
@@ -259,6 +260,19 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			layers = [{"category": BOTTOM_CATEGORY, "id": "Smoking_Trousers"}]
 		"smoking-shoes":
 			layers = [{"category": SHOES_CATEGORY, "id": "Smoking_Shoes"}]
+		"team-rocket-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "TeamRocket_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "TeamRocket_Shoes"},
+				{"category": TOP_CATEGORY, "id": "TeamRocket_Shirt"},
+			]
+		"team-rocket-shirt":
+			layers = [{"category": TOP_CATEGORY, "id": "TeamRocket_Shirt"}]
+		"team-rocket-trousers":
+			layers = [{"category": BOTTOM_CATEGORY, "id": "TeamRocket_Trousers"}]
+		"team-rocket-shoes":
+			layers = [{"category": SHOES_CATEGORY, "id": "TeamRocket_Shoes"}]
 		"mysterious-outfit":
 			layers = [
 				{"kind": "body"},

@@ -361,6 +361,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/adinho_appearance_unlock_check.gd",
 	"res://tests/ironfanton_appearance_unlock_check.gd",
 	"res://tests/smoking_outfit_check.gd",
+	"res://tests/team_rocket_outfit_check.gd",
 	"res://tests/no_hair_rendering_check.gd",
 	"res://tests/appearance_color_system_check.gd",
 	"res://tests/donator_store_cosmetic_subtabs_check.gd",

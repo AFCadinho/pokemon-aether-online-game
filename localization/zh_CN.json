@@ -6153,5 +6153,8 @@
   "ui.android_update.website": "打开网站",
   "ui.appearance.option.smoking_shirt": "礼服外套",
   "ui.appearance.option.smoking_trousers": "礼服长裤",
-  "ui.appearance.option.smoking_shoes": "礼服皮鞋"
+  "ui.appearance.option.smoking_shoes": "礼服皮鞋",
+  "ui.appearance.option.teamrocket_shirt": "火箭队制服",
+  "ui.appearance.option.teamrocket_trousers": "火箭队长裤",
+  "ui.appearance.option.teamrocket_shoes": "火箭队长靴"
 }

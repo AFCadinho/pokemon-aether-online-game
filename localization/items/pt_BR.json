@@ -290,5 +290,21 @@
   "smoking-shoes": {
     "name": "Sapatos de Smoking",
     "shortDesc": "Mova os sapatos de smoking masculinos para a Personalização de Personagem."
+  },
+  "team-rocket-outfit": {
+    "name": "Caixa de Traje da Equipe Rocket",
+    "shortDesc": "Abra esta caixa masculina para receber um uniforme da Equipe Rocket com luvas, calça e botas."
+  },
+  "team-rocket-shirt": {
+    "name": "Uniforme da Equipe Rocket",
+    "shortDesc": "Mova o uniforme masculino da Equipe Rocket com luvas para a Personalização de Personagem."
+  },
+  "team-rocket-trousers": {
+    "name": "Calça da Equipe Rocket",
+    "shortDesc": "Mova a calça masculina da Equipe Rocket para a Personalização de Personagem."
+  },
+  "team-rocket-shoes": {
+    "name": "Botas da Equipe Rocket",
+    "shortDesc": "Mova as botas masculinas da Equipe Rocket para a Personalização de Personagem."
   }
 }

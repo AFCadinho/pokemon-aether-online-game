@@ -6157,5 +6157,8 @@
   "ui.skills.unlock.rock_smash_big_nugget": "Big Nuggets and improved treasure",
   "ui.appearance.option.smoking_shirt": "Tuxedo Jacket",
   "ui.appearance.option.smoking_trousers": "Tuxedo Trousers",
-  "ui.appearance.option.smoking_shoes": "Tuxedo Shoes"
+  "ui.appearance.option.smoking_shoes": "Tuxedo Shoes",
+  "ui.appearance.option.teamrocket_shirt": "Team Rocket Uniform",
+  "ui.appearance.option.teamrocket_trousers": "Team Rocket Trousers",
+  "ui.appearance.option.teamrocket_shoes": "Team Rocket Boots"
 }
