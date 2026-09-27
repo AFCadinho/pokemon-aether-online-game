@@ -2256,6 +2256,16 @@
 						"y": 1
 					}
 				},
+				"from_daycare": {
+					"facingDirection": "down",
+					"label": "Daycare",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromDaycare",
+					"tile": {
+						"x": 16,
+						"y": 36
+					}
+				},
 				"from_saffron_north": {
 					"facingDirection": "down",
 					"label": "Saffron North",
@@ -2274,6 +2284,28 @@
 					"tile": {
 						"x": 38,
 						"y": 41
+					}
+				}
+			}
+		},
+		"kanto_route_5_daycare": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 5 Daycare",
+			"locationGroupId": "kanto_route_5",
+			"locationGroupLabel": "Route 5",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/route5/daycare.tscn",
+			"spawnPoints": {
+				"from_route_5": {
+					"facingDirection": "down",
+					"label": "Route 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute5",
+					"tile": {
+						"x": 12,
+						"y": 19
 					}
 				}
 			}
@@ -2413,7 +2445,9 @@
 			"locationGroupId": "kanto_underground_path",
 			"locationGroupLabel": "Underground Path",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://5rwhgxy863f5"
+			],
 			"scenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
 			"spawnPoints": {
 				"from_route_5": {
@@ -2432,8 +2466,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromTunnel",
 					"tile": {
-						"x": 11,
-						"y": 10
+						"x": 10,
+						"y": 8
 					}
 				}
 			}
@@ -4811,6 +4845,21 @@
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_route_5"
 		},
+		"kanto_route_5__to_daycare": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_5_daycare",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route5/daycare.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 624.0
+				},
+				"spawnMarker": "FromRoute5"
+			},
+			"destinationAreaId": "kanto_route_5_daycare",
+			"sourceMapId": "kanto_route_5"
+		},
 		"kanto_route_5__to_saffron_north": {
 			"destination": {
 				"facingDirection": "down",
@@ -4830,7 +4879,9 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_underground_path_route_5_entrance",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://5rwhgxy863f5"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
 				"position": {
 					"x": 336.0,
@@ -4840,6 +4891,23 @@
 			},
 			"destinationAreaId": "kanto_underground_path_route_5_entrance",
 			"sourceMapId": "kanto_route_5"
+		},
+		"kanto_route_5_daycare__to_route_5": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_5",
+				"mapSceneAliases": [
+					"uid://ded6hbiskrxtb"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+				"position": {
+					"x": 528.0,
+					"y": 1168.0
+				},
+				"spawnMarker": "FromDaycare"
+			},
+			"destinationAreaId": "kanto_route_5",
+			"sourceMapId": "kanto_route_5_daycare"
 		},
 		"kanto_route_6__to_saffron_south": {
 			"destination": {
@@ -4984,7 +5052,7 @@
 		},
 		"kanto_underground_path_route_5_entrance__to_tunnel": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "down",
 				"mapId": "kanto_underground_path_tunnel",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
@@ -5031,11 +5099,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_underground_path_route_5_entrance",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://5rwhgxy863f5"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
 				"position": {
-					"x": 368.0,
-					"y": 336.0
+					"x": 336.0,
+					"y": 272.0
 				},
 				"spawnMarker": "FromTunnel"
 			},

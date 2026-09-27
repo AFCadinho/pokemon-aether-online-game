@@ -7,6 +7,11 @@
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_vd24t"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_seajf"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="daycare_door_hint"]
+
+[sub_resource type="RectangleShape2D" id="daycare_exit_shape"]
+size = Vector2(32, 16)
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(64, 32)
 
@@ -216,6 +221,9 @@ position = Vector2(672, 1780)
 [node name="FromUndergroundPath" type="Marker2D" parent="Spawns" unique_id=1179034687]
 position = Vector2(1232, 1328)
 
+[node name="FromDaycare" type="Marker2D" parent="Spawns"]
+position = Vector2(528, 1168)
+
 [node name="Exits" type="Node2D" parent="." unique_id=464119343]
 
 [node name="ToCeruleanLeft" type="Area2D" parent="Exits" unique_id=376647128]
@@ -273,6 +281,21 @@ transition_facing_direction = "up"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=1359017765]
 shape = SubResource("shape_5")
 
+[node name="ToDaycare" type="Area2D" parent="Exits"]
+position = Vector2(528, 1104)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/route5/daycare.tscn"
+target_spawn_name = "FromRoute5"
+transition_id = "kanto_route_5__to_daycare"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDaycare"]
+position = Vector2(0, -8)
+shape = SubResource("daycare_exit_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToDaycare" instance=ExtResource("daycare_door_hint")]
+z_as_relative = false
+
 [node name="Entities" type="Node2D" parent="." unique_id=206770098]
 z_index = 5
 
@@ -304,3 +327,5 @@ tile_set = SubResource("TileSet_20p23")
 [connection signal="body_entered" from="Exits/ToCeruleanRight" to="Exits/ToCeruleanRight" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSaffronNorth" to="Exits/ToSaffronNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToDaycare" to="Exits/ToDaycare" method="_on_body_entered"]

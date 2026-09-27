@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 5 heeft een eigen daycare-interior met ontvangstbalie, rustplekjes en speelruimte, gekoppelde deuren en een bestemming voor staffteleport.
+
 - De Aether Ronin-tailleband loopt in de overworld-zijframes niet meer over de armen; de arm van het basismodel blijft zichtbaar bij lopen, vissen en rijden.
 
 - Route 5 toont de nieuwste handmatige Tiled-aanpassingen in de bestaande Godot-scene, met behoud van de animaties en gameplaylagen.
