@@ -1,8 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://5rwhgxy863f5"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/underground_path_route_5_entrance/underground_path_route_5_entrance.visual.tscn" id="1_visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_sr51q"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
@@ -10,7 +11,7 @@ size = Vector2(96, 32)
 [sub_resource type="RectangleShape2D" id="shape_2"]
 size = Vector2(32, 32)
 
-[node name="UndergroundPathRoute5Entrance" type="Node2D"]
+[node name="UndergroundPathRoute5Entrance" type="Node2D" unique_id=178694514]
 script = ExtResource("2_metadata")
 map_id = "kanto_underground_path_route_5_entrance"
 map_region_name = "Kanto"
@@ -24,19 +25,19 @@ region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
 
-[node name="Visual" parent="." instance=ExtResource("1_visual")]
+[node name="Visual" parent="." unique_id=191266960 instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=808331746]
 
-[node name="FromRoute5" type="Marker2D" parent="Spawns"]
+[node name="FromRoute5" type="Marker2D" parent="Spawns" unique_id=2016046913]
 position = Vector2(336, 448)
 
-[node name="FromTunnel" type="Marker2D" parent="Spawns"]
-position = Vector2(368, 336)
+[node name="FromTunnel" type="Marker2D" parent="Spawns" unique_id=1657037798]
+position = Vector2(336, 272)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1379272475]
 
-[node name="ToRoute5" type="Area2D" parent="Exits"]
+[node name="ToRoute5" type="Area2D" parent="Exits" unique_id=2057968244]
 position = Vector2(336, 496)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
@@ -44,24 +45,33 @@ target_spawn_name = "FromUndergroundPath"
 transition_id = "kanto_underground_path_route_5_entrance__to_route5"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5" unique_id=1719350480]
 shape = SubResource("shape_1")
 
-[node name="ToTunnel" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/ToRoute5" unique_id=1034660884 instance=ExtResource("4_sr51q")]
+z_as_relative = false
+flow_direction = "down"
+
+[node name="ToTunnel" type="Area2D" parent="Exits" unique_id=240678969]
 position = Vector2(368, 272)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn"
 target_spawn_name = "FromRoute5Entrance"
 transition_id = "kanto_underground_path_route_5_entrance__to_tunnel"
-transition_facing_direction = "up"
+transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel" unique_id=57320158]
+position = Vector2(16, 0)
 shape = SubResource("shape_2")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="DoorTransitionHint" parent="Exits/ToTunnel" unique_id=812731825 instance=ExtResource("4_sr51q")]
+z_as_relative = false
+flow_direction = "right"
+
+[node name="Entities" type="Node2D" parent="." unique_id=370215608]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=867339308]
 
 [connection signal="body_entered" from="Exits/ToRoute5" to="Exits/ToRoute5" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToTunnel" to="Exits/ToTunnel" method="_on_body_entered"]
