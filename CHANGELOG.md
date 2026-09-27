@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Route 5-daycare heeft een compact interieur met ontvangstbalie achterin, rode loper, zithoek en een Pokémon-PC.
+
 - Het Route 5-daycare-interior heeft een volledig afgewerkte balie, verzorgingstafel, planten en bloemenpot.
 
 - De Underground Path heeft zijwaartse trappen tegen de wanden, met bijpassende aankomstpunten en vrije bordessen.

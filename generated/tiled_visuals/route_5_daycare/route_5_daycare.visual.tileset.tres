@@ -1,13 +1,51 @@
 [gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_1_0.texture.res" id="1_jirnn"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_1025_0.texture.res" id="2_kv6uo"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_2049_0.texture.res" id="3_1uigq"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_3073_0.texture.res" id="4_npf6i"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_4097_0.texture.res" id="5_pm3b8"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_1_0.texture.res" id="1_md7tb"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_1025_0.texture.res" id="2_jirnn"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_2049_0.texture.res" id="3_kv6uo"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_5_daycare/assets/route_5_daycare.visual.tileset.compact_source_3073_0.texture.res" id="4_1uigq"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_npf6i"]
+texture = ExtResource("1_md7tb")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pm3b8"]
+texture = ExtResource("2_jirnn")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h1gkh"]
-texture = ExtResource("1_jirnn")
+texture = ExtResource("3_kv6uo")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -19,34 +57,13 @@ texture_region_size = Vector2i(32, 32)
 5:0/0 = 0
 6:0/0 = 0
 0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wswy"]
-texture = ExtResource("2_kv6uo")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_py425"]
-texture = ExtResource("3_1uigq")
+texture = ExtResource("4_1uigq")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -79,76 +96,12 @@ texture_region_size = Vector2i(32, 32)
 5:3/0 = 0
 6:3/0 = 0
 0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-4:5/0 = 0
-5:5/0 = 0
-6:5/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hkdwc"]
-texture = ExtResource("4_npf6i")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-5:2/0 = 0
-6:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_txw5u"]
-texture = ExtResource("5_pm3b8")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_h1gkh")
-sources/1025 = SubResource("TileSetAtlasSource_0wswy")
-sources/2049 = SubResource("TileSetAtlasSource_py425")
-sources/3073 = SubResource("TileSetAtlasSource_hkdwc")
-sources/4097 = SubResource("TileSetAtlasSource_txw5u")
+sources/1 = SubResource("TileSetAtlasSource_npf6i")
+sources/1025 = SubResource("TileSetAtlasSource_pm3b8")
+sources/2049 = SubResource("TileSetAtlasSource_h1gkh")
+sources/3073 = SubResource("TileSetAtlasSource_0wswy")
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/route_5/Daycare.tmx"
 metadata/tiled_compact_atlas_version = 1

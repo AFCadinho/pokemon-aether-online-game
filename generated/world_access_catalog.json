@@ -2304,8 +2304,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute5",
 					"tile": {
-						"x": 12,
-						"y": 19
+						"x": 6,
+						"y": 15
 					}
 				}
 			}
@@ -2500,7 +2500,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromTunnel",
 					"tile": {
-						"x": 9,
+						"x": 8,
 						"y": 8
 					}
 				}
@@ -2524,8 +2524,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute5Entrance",
 					"tile": {
-						"x": 8,
-						"y": 7
+						"x": 7,
+						"y": 6
 					}
 				},
 				"from_route_6_entrance": {
@@ -2534,8 +2534,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute6Entrance",
 					"tile": {
-						"x": 7,
-						"y": 88
+						"x": 8,
+						"y": 87
 					}
 				}
 			}
@@ -4856,8 +4856,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/route5/daycare.tscn",
 				"position": {
-					"x": 400.0,
-					"y": 624.0
+					"x": 208.0,
+					"y": 496.0
 				},
 				"spawnMarker": "FromRoute5"
 			},
@@ -4938,7 +4938,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 				"position": {
 					"x": 336.0,
-					"y": 448.0
+					"y": 464.0
 				},
 				"spawnMarker": "FromRoute6"
 			},
@@ -5065,8 +5065,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
 				"position": {
-					"x": 272.0,
-					"y": 240.0
+					"x": 240.0,
+					"y": 208.0
 				},
 				"spawnMarker": "FromRoute5Entrance"
 			},
@@ -5097,8 +5097,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
 				"position": {
-					"x": 240.0,
-					"y": 2832.0
+					"x": 272.0,
+					"y": 2800.0
 				},
 				"spawnMarker": "FromRoute6Entrance"
 			},
@@ -5131,7 +5131,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 				"position": {
-					"x": 304.0,
+					"x": 272.0,
 					"y": 272.0
 				},
 				"spawnMarker": "FromTunnel"
