@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De vrouwelijke Aether Ronin-top heeft gesloten mouwnaden in de zijwaartse loopframes, zodat daar geen lichte huidpuntjes doorheen komen.
+
 - De Route 5-daycare heeft een compact interieur met ontvangstbalie achterin, rode loper, zithoek en een Pokémon-PC.
 
 - Het Route 5-daycare-interior heeft een volledig afgewerkte balie, verzorgingstafel, planten en bloemenpot.
