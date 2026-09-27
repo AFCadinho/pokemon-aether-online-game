@@ -3738,6 +3738,24 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return
+	if coop_wild_step_pending:
+		return
+	coop_wild_step_pending = true
+	var wild_data := wild_pokemon.to_battle_dict()
+	var spawn := {"kind": "set", "pokemon": {
+		"species": str(wild_data.get("species", "")), "level": int(wild_data.get("level", 1)),
+		"nature": str(wild_data.get("nature", "Hardy")), "ivs": wild_data.get("ivs", {}),
+		"shiny": bool(wild_data.get("shiny", false)), "moves": wild_data.get("moves", []),
+		"ability": str(wild_data.get("ability", "")), "item": str(wild_data.get("item", "")),
+		"evs": wild_data.get("evs", {}), "gender": str(wild_data.get("gender", "N")),
+		"happiness": int(wild_data.get("happiness", 50)),
+	}}
+	var coop_spawn: Dictionary = await CoopService.try_dev_wild_spawn(spawn)
+	coop_wild_step_pending = false
+	if coop_spawn.get("handled", false):
+		if not coop_spawn.get("success", false):
+			CoopService.request_failed.emit("dev_wild:" + str(coop_spawn.get("code", "coop_start_pending")))
+		return
 		
 	is_in_battle = true
 	active_battle_kind = "wild"
@@ -3790,6 +3808,15 @@ func start_triggered_wild_battle_for_area(
 	if coop_wild_step_pending:
 		return
 	coop_wild_step_pending = true
+	if not forced_species_id.is_empty():
+		var dev_spawn: Dictionary = await CoopService.try_dev_wild_spawn({
+			"kind": "map", "speciesId": forced_species_id, "encounterType": encounter_type,
+		})
+		if dev_spawn.get("handled", false):
+			coop_wild_step_pending = false
+			if not dev_spawn.get("success", false):
+				CoopService.request_failed.emit("dev_wild:" + str(dev_spawn.get("code", "coop_start_pending")))
+			return
 	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
 	coop_wild_step_pending = false
 	if coop_step.get("handled", false):
