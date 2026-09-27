@@ -152,7 +152,8 @@ def sample_idle_frames(frames, sample_count=4):
 
 def probe_directory(args):
     root = args.output / "probes" / args.variant
-    return root / args.probe_run if args.probe_run else root
+    probe_run = getattr(args, "probe_run", "")
+    return root / probe_run if probe_run else root
 
 
 def compact_action_report(actions):
