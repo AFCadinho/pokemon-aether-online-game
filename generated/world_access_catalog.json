@@ -2221,7 +2221,9 @@
 			"locationGroupId": "kanto_route_5",
 			"locationGroupLabel": "Route 5",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://ded6hbiskrxtb"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 			"spawnPoints": {
 				"from_cerulean_grass": {
@@ -2270,8 +2272,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromUndergroundPath",
 					"tile": {
-						"x": 36,
-						"y": 43
+						"x": 38,
+						"y": 41
 					}
 				}
 			}
@@ -3043,7 +3045,9 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_5",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://ded6hbiskrxtb"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
 					"x": 640.0,
@@ -3058,7 +3062,9 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_5",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://ded6hbiskrxtb"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
 					"x": 464.0,
@@ -3073,7 +3079,9 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_5",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://ded6hbiskrxtb"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
 					"x": 816.0,
@@ -4929,7 +4937,9 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_5",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://ded6hbiskrxtb"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
 					"x": 672.0,
@@ -4959,11 +4969,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_5",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://ded6hbiskrxtb"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 1168.0,
-					"y": 1384.0
+					"x": 1232.0,
+					"y": 1328.0
 				},
 				"spawnMarker": "FromUndergroundPath"
 			},
