@@ -46,7 +46,8 @@ func _run() -> void:
 	for layer: Dictionary in BATTLE.build_layers(appearance):
 		_check(not str(layer.get("part_id", "")).begins_with("TeamRocket_"), "female trainer does not use male Team Rocket art")
 	for item: String in ITEMS:
-		_check(APPEARANCE.get_cosmetic_item_allowed_genders(item) == ["male"], "%s declares its compatible model" % item)
+		var expected_genders := ["male", "female"] if item == "team-rocket-outfit" else ["male"]
+		_check(APPEARANCE.get_cosmetic_item_allowed_genders(item) == expected_genders, "%s declares its compatible model" % item)
 		for gender: String in ["male", "female"]:
 			var icon: Texture2D = APPEARANCE.get_cosmetic_item_icon(item, gender)
 			_check(icon != null and icon.get_image().get_used_rect().has_area(), "%s has a visible %s bag icon" % [item, gender])

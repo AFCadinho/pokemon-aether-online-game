@@ -112,11 +112,17 @@ func _claim_lesson_reward() -> void:
 			"reward": LocalizationManager.text("ui.quest.thieving_lesson_reward", {
 				"tm": ItemLocalization.display_name("tm-thief", "TM Thief"),
 				"glasses": ItemLocalization.display_name("black-glasses", "Black Glasses"),
+				"male_outfit": ItemLocalization.display_name("team-rocket-outfit", "Team Rocket Outfit Box"),
+				"female_outfit": ItemLocalization.display_name("team-rocket-female-outfit", "Female Team Rocket Outfit Box"),
 			}),
 		})
 	)
 	if bool(result.get("claimed", false)):
-		InventoryService.notify_claimed_item_reward(result)
+		var item_reward_displayed := InventoryService.notify_story_reward_effects(
+			result.get("storyEffects", [])
+		)
+		if not item_reward_displayed:
+			InventoryService.notify_claimed_item_reward(result)
 		SfxManager.play("item_received")
 
 
