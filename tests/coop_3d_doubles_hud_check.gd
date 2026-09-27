@@ -56,11 +56,42 @@ func _run() -> void:
 			break
 	assert(hud != null)
 	hud.set_process(false)
+	var portraits: Node = null
+	for child: Node in battle.get_children():
+		if child.get_script() == load("res://scripts/battle/battle_ui/immersive_portraits.gd"):
+			portraits = child
+			break
+	assert(portraits != null)
+	var coop_service := root.get_node("CoopService")
+	var previous_activity: Dictionary = coop_service.activity.duplicate(true)
+	var previous_view: Dictionary = coop_service.view.duplicate(true)
+	coop_service.activity["activityId"] = "wild_route_1"
+	coop_service.view = snapshot.duplicate(true)
+	var appearance: Dictionary = root.get_node("PlayerSave").to_appearance_state()
+	battle.coop_presenter._first_trainer.player_appearance_state = appearance
+	battle.coop_presenter._second_trainer.player_appearance_state = appearance
+	portraits._process(0.0)
+	assert(stage.get_node("TrainerPortrait0").visible and stage.get_node("TrainerPortrait2").visible,
+		"Both co-op Trainers need portraits in the left corner")
+	assert(stage.get_node("TrainerPortrait1").visible and stage.get_node("TrainerPortrait3").visible,
+		"Both wild opponents need portraits in the right corner")
+	assert(stage.get_node("TrainerPortrait0").position.x < stage.get_node("TrainerPortrait2").position.x
+		and stage.get_node("TrainerPortrait1").position.x < stage.get_node("TrainerPortrait3").position.x,
+		"Double battle portraits must be paired side by side")
 	hud._process(0.016)
 	var turn_panel: Control = battle.battle_status_panel
 	var reset_camera: Control = stage.get_node("ResetCameraButton")
-	assert(turn_panel.position.x > stage.size.x * 0.7 and reset_camera.position.x > stage.size.x * 0.7,
-		"3D co-op turn and camera controls must stay on the right without a trainer portrait")
+	assert(turn_panel.position.x > stage.size.x * 0.7 and reset_camera.position.x > stage.size.x * 0.7
+		and turn_panel.position.x + turn_panel.size.x * turn_panel.scale.x < stage.get_node("TrainerPortrait1").position.x,
+		"3D co-op turn and camera controls must fit beside the right portraits")
+	coop_service.activity["activityId"] = "trainer_brock"
+	battle.coop_presenter._opponent_trainer.catalog_sprite.texture = load(
+		"res://assets/sprites/trainer_cards/showdown/veteran-gen7.png")
+	portraits._process(0.0)
+	assert(stage.get_node("TrainerPortrait1").visible and not stage.get_node("TrainerPortrait3").visible,
+		"Trainer doubles need one opponent Trainer portrait")
+	coop_service.activity = previous_activity
+	coop_service.view = previous_view
 	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
 	assert(not battle.player_hud_panel.visible and not battle.enemy_hud_panel.visible)
 	assert(battle.field_timers_panel.visible and battle.field_timers_panel.current_effects.size() == 2,

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gedeelde double battles behouden de portrethoeken: beide partytrainers links naast elkaar, beide wilde tegenstanders rechts naast elkaar en bij trainergevechten één trainer rechts. De turn- en cameraknoppen wijken voor de rechterportretten.
+
 - Gedeelde double battles spelen het gebruikelijke schadegeluid af naast de 3D-hitreactie. De turn- en cameraknoppen blijven rechtsboven staan wanneer er geen zichtbaar tegenstanderportrait is.
 
 - Gedeelde double battles tonen weer en terrein linksboven vanuit de actuele battle-status, melden publieke veldwisselingen in het gevechtslog en schalen statveranderingen mee met de compacte 3D-HP-kaarten.
