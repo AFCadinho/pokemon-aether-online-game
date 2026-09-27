@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "date": "2026-09-27",
+  "scope": "Walking Wake and Iron Leaves downloaded Sketchfab HOME sources, local authored missing actions, normal/shiny visual and battle reviews, independent 120Hz clearance, installed-bundle battle stress",
+  "status": "local_content_approved",
+  "runtime_approved": true,
+  "release_approved": false,
+  "published": false,
+  "source_holds_resolved": [
+    "walking-wake",
+    "iron-leaves"
+  ],
+  "sources": {
+    "walking-wake": {
+      "archive": "/home/adinho/Documents/3d_models/SketchFab/mobile-pokemon-home-1009-walking-wake.zip",
+      "source_url": "https://sketchfab.com/3d-models/mobile-pokemon-home-1009-walking-wake-a40571bef9954259923b01584cebf2e2",
+      "uploader": "goblin_king",
+      "license_as_listed": "CC BY",
+      "archive_sha256": "52c0b85518c2e67689c674eafb35ae1709fdc77d94d5c2dbaacdc0de441032a5"
+    },
+    "iron-leaves": {
+      "archive": "/home/adinho/Documents/3d_models/SketchFab/mobile-pokemon-home-1010-iron-leaves.zip",
+      "source_url": "https://sketchfab.com/3d-models/mobile-pokemon-home-1010-iron-leaves-aa9345df4fc149c18ff063c7b5f91551",
+      "uploader": "Forsaken AR Official",
+      "license_as_listed": "CC BY",
+      "archive_sha256": "6bc9c47b28137c4545e426e7d717d645577dd0093617142445fc5b87cbf07e6f"
+    }
+  },
+  "native_body_actions": [
+    "idle",
+    "physical_attack",
+    "special_attack",
+    "roar"
+  ],
+  "authored_actions": [
+    "physical_attack_2",
+    "damage",
+    "sleep",
+    "faint_start",
+    "faint_loop"
+  ],
+  "entries": [
+    {
+      "species": "walking-wake",
+      "national_dex": 1009,
+      "normal_scn_sha256": "d8427071ec66935c18b54ad62bc9a6d0cb34fd555cd8065aad7e58c77f1fff0f",
+      "shiny_scn_sha256": "94d31d7f1051ee656af1db3d8af07d23542283d96d5c8e82ab7d6ddb6e77dd11",
+      "normal_glb_sha256": "a9f4aad6065de75a8f1efadb9594779bec120255b6ec2752328fd5bb996eb9b3",
+      "shiny_glb_sha256": "c2519a803b3e48c7f48659a25931037763236ebe3223c37b6516be4036276bd4",
+      "battle_scale": 1.4,
+      "minimum_clearance_120hz": 0.0249999985098839,
+      "battle_shots_in_view": 16,
+      "battle_shots_total": 16,
+      "battle_hud_overlaps": 0,
+      "status": "local_content_approved"
+    },
+    {
+      "species": "iron-leaves",
+      "national_dex": 1010,
+      "normal_scn_sha256": "f5211587148322281d30f4a1e4a70280a62744f0c9fd5c45258d1467d6332207",
+      "shiny_scn_sha256": "e266dd3bbcdae9130d3b3376233c39521bcb3c65a062fae992c722951ea115ff",
+      "normal_glb_sha256": "efa8b91bd1a8e61a70a30121fec9a06be3dd2423bc503b0b6e11864e097b359c",
+      "shiny_glb_sha256": "221c0c2d9cb100bfcf2203ac20e8f5dd6fdd192549bd4391492349d6696fd3c1",
+      "battle_scale": 2.0,
+      "minimum_clearance_120hz": 0.0197111554443836,
+      "battle_shots_in_view": 16,
+      "battle_shots_total": 16,
+      "battle_hud_overlaps": 0,
+      "status": "local_content_approved"
+    }
+  ],
+  "bundle_count": 2,
+  "appearance_count": 4,
+  "bundle_bytes": 9559685,
+  "bundle_index_sha256": "c39fafcff5d0b63b70cb9cbe5829aab7eae4775c35c50885ea7fe7af5c6c7220",
+  "battle_rounds": [
+    {
+      "arena": "classic",
+      "pairs": 2,
+      "frame_p95_ms": 17.427,
+      "faint_replacements": 2
+    },
+    {
+      "arena": "stadium",
+      "pairs": 2,
+      "frame_p95_ms": 17.318,
+      "faint_replacements": 2
+    },
+    {
+      "arena": "classic",
+      "pairs": 2,
+      "frame_p95_ms": 17.315,
+      "faint_replacements": 2
+    }
+  ],
+  "launcher_install": "two bundles/four scenes; no-op and restart passed",
+  "user_visual_review": "normal and shiny source, authored poses, and battle scale accepted",
+  "evidence_sha256": {
+    ".tmp/batch04-recovery/sketchfab-authored-glb-v4/report.json": "5308eddcef7f504c65d889e21dfdd2fb06094650483abb1e61925e76012227b3",
+    ".tmp/batch04-recovery/sketchfab-authored-runtime-v4/report.json": "2fa416c9b798140f09c3e5cb65cb88b63ebf6f2e9e2a47fe4f045a6c199c13c0",
+    ".tmp/batch04-recovery/sketchfab-grounding-v5.json": "7152ebbaff682d9d8778a3247f654fe4e08b160bd05177186779adf8a8254ed7",
+    ".tmp/batch04-recovery/sketchfab-battle-v5-output/battle-review.json": "492bedddac2bccc176ba196552ceb05f8d283ae60c344929d9fe17dc7fcc863b",
+    ".tmp/batch04-recovery/sketchfab-battle-wake-v6-output/battle-review.json": "037841e2a547dbf1abb3a538002f99d014a711277a50e071b8f47b782300eb45",
+    ".tmp/batch04-recovery/sketchfab-authored-review-v4.html": "6d50588694ef1fa0d31ac762aba948ed496a2551e725448ce3a93a7f095ba0d7",
+    ".tmp/batch04-recovery/sketchfab-battle-review-v6.html": "d1dc1445cb9a4935040ece90d66a7987f96efd7a2a5446affb0632d6ff33488c",
+    ".tmp/batch04-recovery/sketchfab-candidate-bundles-v1/asset-index.json": "c39fafcff5d0b63b70cb9cbe5829aab7eae4775c35c50885ea7fe7af5c6c7220",
+    ".tmp/batch04-recovery/sketchfab-battle-stress-v1/report.json": "aaf9bad30cf4492d231b59d413a2a1084592043f4440f5ba4bfbdc2ee2d9f449"
+  },
+  "remaining_release_work": [
+    "merge these two candidate bundles into the next approved content index",
+    "add uploader/source attribution to the game credits page before distribution",
+    "release certification and publishing require explicit authorization"
+  ]
+}

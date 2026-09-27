@@ -1,5 +1,10 @@
 # Batch 04: source recovery, 2026-09-27
 
+**Current status:** the last two source holds, Walking Wake and Iron Leaves,
+have since passed local normal/shiny, battle, bundle and launcher review. The
+batch-04 recovery review queue is empty. See the final qualification section
+below. No new content has been published.
+
 ## Scope and status
 
 Recover the 25 initial intake holds and Spiritomb, then review normal/shiny and
@@ -141,8 +146,67 @@ The public Sketchfab model metadata (checked 2026-09-27) lists downloadable,
 animated Pokémon HOME models for [Walking Wake](https://sketchfab.com/3d-models/mobile-pokemon-home-1009-walking-wake-a40571bef9954259923b01584cebf2e2)
 (six animations, uploader `goblin_king`) and [Iron Leaves](https://sketchfab.com/3d-models/mobile-pokemon-home-1010-iron-leaves-aa9345df4fc149c18ff063c7b5f91551)
 (seven animations, uploader `Forsaken AR Official`), both marked CC BY. The public
-API download endpoint returns HTTP 401 without a Sketchfab login. These are
-unverified candidate sources, not yet imported or approved: clip names, shiny
-coverage, skeleton compatibility, attribution and battle suitability require
-inspection of the actual downloaded archives. The user has been asked to supply
-local paths to those archives if their account can download them.
+API download endpoint returns HTTP 401 without a Sketchfab login. The user
+subsequently supplied the two original-format ZIPs for local inspection.
+
+## Downloaded Pokémon HOME sources: local diagnostic
+
+The original archives are in `/home/adinho/Documents/3d_models/SketchFab/`.
+Neither was modified. Walking Wake ZIP SHA-256:
+`52c0b85518c2e67689c674eafb35ae1709fdc77d94d5c51cfe62c0dbaacdc0de`;
+Iron Leaves ZIP SHA-256:
+`6bc9c47b28137c4545e426e7d717d645577dd0093617142445fc5b87cbf07e6f`.
+The Sketchfab pages above identify the respective uploaders as `goblin_king`
+and `Forsaken AR Official` and mark each download CC BY. Any distributed
+derivative needs the corresponding creator attribution and source link recorded
+with the bundle.
+
+Both nested archives contain a genuine animated FBX and normal/rare textures.
+Blender 5.2 imported 168 Walking Wake bones and 53 Iron Leaves bones. Walking
+Wake has native idle, physical attack, special attack and roar, plus eye/mouth
+tracks. Iron Leaves has the same body actions, eye/mouth tracks and an extra
+loop that does not produce a distinct body pose in Godot. Separate damage,
+sleep, faint and second physical-attack motions are absent from these FBXs.
+`sketchfab_home_recovery.py` keeps those source clips and makes five explicitly
+authored *diagnostic* actions from the same rigs. The output is not claimed as
+native source animation. Shiny PNG substitution is explicit.
+
+The four preliminary GLBs and rendered reviews are under
+`.tmp/batch04-recovery/sketchfab-authored-glb-v4/` and
+`.tmp/batch04-recovery/sketchfab-authored-review-v4.html`. The user accepted
+both normal/shiny pairs in native idle/attack and the provisional sleep/faint
+gallery. All four GLBs converted to standalone Godot scenes with the eight
+required battle actions. The 60 Hz normal-model grounding sweep completed
+without pose errors; Walking Wake's authored faint intersects the resting
+plane during its transition, so its existing motion-placement correction is
+required and had to pass independent battle review before approval. At this
+diagnostic stage, the two holds still required 120 Hz clearance, both battle
+cameras, runtime loading and bundle validation.
+
+## Final qualification of Walking Wake and Iron Leaves
+
+The user accepted the normal and shiny source appearance, the authored
+sleep/faint poses, and the battle placement in both camera presets. Walking
+Wake uses battle scale 1.4 and Iron Leaves scale 2.0. The 60 Hz grounding
+measurements completed with no errors. Independent 120 Hz sampling found one
+short Walking Wake physical-attack floor dip that the ordinary 60 Hz envelope
+missed; an explicit six-sample local correction around that motion removed it.
+The final minimum clearance is 0.0298 m for Walking Wake and 0.0197 m for Iron
+Leaves. All 32 battle screenshots remained in view with no HUD proxy overlap.
+
+The four standalone scenes contain all eight required battle actions. Two
+individual local bundles hold normal and shiny for each species, together
+9,559,685 bytes. Their archive and scene hashes passed independent extraction
+checks. The actual launcher asset store installed both bundles, loaded all four
+scenes, and passed no-op update and restart checks. Three real battle rounds
+(classic, stadium, classic) loaded normal against shiny, played actions and
+replaced fainted actors successfully. Their 95th percentile frame times were
+17.427, 17.318 and 17.315 ms respectively. The tracked
+`catalog_production_batch_04_sketchfab_approval.json` pins the source, model,
+scene, bundle and review hashes.
+
+These two are **locally content-approved**, clearing the batch-04 review queue.
+The approved candidate bundles are not merged into a released content index or
+uploaded. Before distribution, add the Sketchfab uploader/source attribution
+to the game's linked credits page, then run the explicitly authorized release
+certification/publishing flow.
