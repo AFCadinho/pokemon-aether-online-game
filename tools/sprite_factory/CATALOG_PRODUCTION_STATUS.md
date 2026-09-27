@@ -11,9 +11,12 @@ All 65 exports have standalone Godot scenes with 520 native clips, including a
 second physical attack per model. Follow-up recovered another 15 normal models
 and 22 shiny candidates. The 80 normal candidates and 75 complete
 normal/shiny pairs passed local visual review and battle checks, including
-three real battle-presenter rounds per pair. Twenty source and five shiny
-holds remain in the review queue. Runtime and release approval are still
-pending; see [batch-03 follow-up](../../docs/catalog-production-batch-03.md).
+three real battle-presenter rounds per pair. The 75 complete pairs now have
+individual local bundles, passed launcher installation/load/no-op/restart
+checks, and are admitted in the matching local game and launcher reviewed
+registries. Twenty source and five shiny holds remain in the review queue.
+No batch-03 bundle has been uploaded or activated in a release content index;
+see [batch-03 follow-up](../../docs/catalog-production-batch-03.md).
 
 ## Release v6 preparation
 
