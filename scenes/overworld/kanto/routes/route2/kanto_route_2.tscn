@@ -322,6 +322,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_ohdj5")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_diglett_cave"]
+size = Vector2(96, 32)
+
 [node name="KantoRoute2" type="Node2D" unique_id=1334981567]
 script = ExtResource("8_metadata")
 map_id = "kanto_route_2"
@@ -611,6 +614,20 @@ tile_set = SubResource("TileSet_ywtea")
 z_index = 100
 tile_set = SubResource("TileSet_ywtea")
 
+[node name="FromDiglettCave" type="Marker2D" parent="Spawns"]
+position = Vector2(976, 624)
+
+[node name="ToDiglettCave" type="Area2D" parent="Exits"]
+position = Vector2(976, 560)
+script = ExtResource("6_3mgn4")
+target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn"
+target_spawn_name = "FromRoute2"
+transition_id = "kanto_route_2__to_diglett_cave"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDiglettCave"]
+shape = SubResource("RectangleShape2D_diglett_cave")
+
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestNorth" to="Exits/ToViridianForestNorth" method="_on_body_entered"]
@@ -618,3 +635,4 @@ tile_set = SubResource("TileSet_ywtea")
 [connection signal="body_entered" from="Exits/ToRoute2GateNorth" to="Exits/ToRoute2GateNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2GateSouth" to="Exits/ToRoute2GateSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse" to="Exits/ToHouse" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToDiglettCave" to="Exits/ToDiglettCave" method="_on_body_entered"]
