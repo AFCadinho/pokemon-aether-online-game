@@ -293,7 +293,7 @@
   },
   "team-rocket-outfit": {
     "name": "Caixa de Traje da Equipe Rocket",
-    "shortDesc": "Abra esta caixa masculina para receber um uniforme da Equipe Rocket com luvas, calça e botas."
+    "shortDesc": "Abra esta caixa masculina para receber um boné, uniforme com luvas, calça e botas da Equipe Rocket."
   },
   "team-rocket-shirt": {
     "name": "Uniforme da Equipe Rocket",
@@ -306,5 +306,9 @@
   "team-rocket-shoes": {
     "name": "Botas da Equipe Rocket",
     "shortDesc": "Mova as botas masculinas da Equipe Rocket para a Personalização de Personagem."
+  },
+  "team-rocket-cap": {
+    "name": "Boné da Equipe Rocket",
+    "shortDesc": "Mova o boné masculino da Equipe Rocket para a Personalização de Personagem."
   }
 }

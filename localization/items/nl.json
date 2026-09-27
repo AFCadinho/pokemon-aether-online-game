@@ -293,7 +293,7 @@
   },
   "team-rocket-outfit": {
     "name": "Team Rocket-outfitbox",
-    "shortDesc": "Open deze box voor een Team Rocket-uniform met handschoenen, broek en laarzen voor het mannelijke model."
+    "shortDesc": "Open deze box voor een Team Rocket-pet, uniform met handschoenen, broek en laarzen voor het mannelijke model."
   },
   "team-rocket-shirt": {
     "name": "Team Rocket-uniform",
@@ -306,5 +306,9 @@
   "team-rocket-shoes": {
     "name": "Team Rocket-laarzen",
     "shortDesc": "Verplaats de Team Rocket-laarzen voor het mannelijke model naar Character Customization."
+  },
+  "team-rocket-cap": {
+    "name": "Team Rocket-pet",
+    "shortDesc": "Verplaats de Team Rocket-pet voor het mannelijke model naar Character Customization."
   }
 }
