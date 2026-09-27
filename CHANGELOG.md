@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het Team Rocket-uniform heeft nu dezelfde open halsuitsnede als de starter-outfit, zodat een stukje nek zichtbaar blijft tijdens staan en lopen.
+
 - De kraag van het Team Rocket-uniform volgt nu de nek tijdens het lopen, zonder extra omhoog te springen in de stapstanden.
 
 - Tall grass beweegt nu standaard zacht met verschillende rustpauzes per groepje, ook in Viridian Forest. Nieuwe Tiled-imports krijgen dezelfde animatie automatisch.
