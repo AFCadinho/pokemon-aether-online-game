@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_town_north/lavender_town_north.visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+
+[sub_resource type="RectangleShape2D" id="shape_1"]
+size = Vector2(192, 32)
+
+[node name="LavenderTownNorth" type="Node2D"]
+script = ExtResource("2_metadata")
+map_id = "kanto_lavender_town_north"
+map_region_name = "Kanto"
+map_display_name = "Lavender Town North"
+world_access_group_id = "kanto_lavender_town_north"
+world_access_group_label = "Lavender Town North"
+world_access_area_type = "transition"
+location_id = "kanto.lavender.town.north"
+location_name = "Lavender Town North"
+region_id = "kanto"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromRoute10" type="Marker2D" parent="Spawns"]
+position = Vector2(1248, 64)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToRoute10" type="Area2D" parent="Exits"]
+position = Vector2(1248, 16)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
+target_spawn_name = "FromLavenderNorth"
+transition_id = "kanto_lavender_town_north__to_route10"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10"]
+shape = SubResource("shape_1")
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]

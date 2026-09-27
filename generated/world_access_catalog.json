@@ -628,6 +628,124 @@
 				}
 			}
 		},
+		"kanto_diglett_cave_route_11_entrance": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Diglett Cave Route 11 Entrance",
+			"locationGroupId": "kanto_diglett_cave",
+			"locationGroupLabel": "Diglett Cave",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn",
+			"spawnPoints": {
+				"from_route_11": {
+					"facingDirection": "down",
+					"label": "Route 11",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute11",
+					"tile": {
+						"x": 11,
+						"y": 14
+					}
+				},
+				"from_tunnel": {
+					"facingDirection": "down",
+					"label": "Tunnel",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromTunnel",
+					"tile": {
+						"x": 14,
+						"y": 10
+					}
+				}
+			}
+		},
+		"kanto_diglett_cave_route_2_entrance": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Diglett Cave Route 2 Entrance",
+			"locationGroupId": "kanto_diglett_cave",
+			"locationGroupLabel": "Diglett Cave",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn",
+			"spawnPoints": {
+				"from_route_2": {
+					"facingDirection": "down",
+					"label": "Route 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2",
+					"tile": {
+						"x": 11,
+						"y": 14
+					}
+				},
+				"from_tunnel": {
+					"facingDirection": "down",
+					"label": "Tunnel",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromTunnel",
+					"tile": {
+						"x": 7,
+						"y": 10
+					}
+				}
+			}
+		},
+		"kanto_diglett_cave_tunnel": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Diglett Cave Tunnel",
+			"locationGroupId": "kanto_diglett_cave",
+			"locationGroupLabel": "Diglett Cave",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
+			"spawnPoints": {
+				"from_route_11_entrance": {
+					"facingDirection": "down",
+					"label": "Route 11 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute11Entrance",
+					"tile": {
+						"x": 34,
+						"y": 75
+					}
+				},
+				"from_route_2_entrance": {
+					"facingDirection": "down",
+					"label": "Route 2 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2Entrance",
+					"tile": {
+						"x": 12,
+						"y": 13
+					}
+				}
+			}
+		},
+		"kanto_lavender_town_north": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Lavender Town North",
+			"locationGroupId": "kanto_lavender_town_north",
+			"locationGroupLabel": "Lavender Town North",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
+			"spawnPoints": {
+				"from_route_10": {
+					"facingDirection": "down",
+					"label": "Route 10",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute10",
+					"tile": {
+						"x": 39,
+						"y": 2
+					}
+				}
+			}
+		},
 		"kanto_mt_moon_1f": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
@@ -884,6 +1002,16 @@
 					"tile": {
 						"x": 35,
 						"y": 13
+					}
+				},
+				"from_route_21": {
+					"facingDirection": "down",
+					"label": "Route 21",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute21",
+					"tile": {
+						"x": 12,
+						"y": 38
 					}
 				},
 				"oaks_lab_entrance": {
@@ -1250,6 +1378,130 @@
 				}
 			}
 		},
+		"kanto_rock_tunnel_1f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Rock Tunnel 1F",
+			"locationGroupId": "kanto_rock_tunnel",
+			"locationGroupLabel": "Rock Tunnel",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"spawnPoints": {
+				"from_b_1fa": {
+					"facingDirection": "down",
+					"label": "B 1 Fa",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1FA",
+					"tile": {
+						"x": 78,
+						"y": 13
+					}
+				},
+				"from_b_1fb": {
+					"facingDirection": "down",
+					"label": "B 1 Fb",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1FB",
+					"tile": {
+						"x": 13,
+						"y": 13
+					}
+				},
+				"from_b_1fc": {
+					"facingDirection": "down",
+					"label": "B 1 Fc",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1FC",
+					"tile": {
+						"x": 35,
+						"y": 32
+					}
+				},
+				"from_b_1fd": {
+					"facingDirection": "down",
+					"label": "B 1 Fd",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1FD",
+					"tile": {
+						"x": 78,
+						"y": 49
+					}
+				},
+				"from_route_10_north": {
+					"facingDirection": "down",
+					"label": "Route 10 North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute10North",
+					"tile": {
+						"x": 50,
+						"y": 10
+					}
+				},
+				"from_route_10_south": {
+					"facingDirection": "down",
+					"label": "Route 10 South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute10South",
+					"tile": {
+						"x": 25,
+						"y": 69
+					}
+				}
+			}
+		},
+		"kanto_rock_tunnel_b1f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Rock Tunnel B1F",
+			"locationGroupId": "kanto_rock_tunnel",
+			"locationGroupLabel": "Rock Tunnel",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"spawnPoints": {
+				"from_1fa": {
+					"facingDirection": "down",
+					"label": "1 Fa",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FA",
+					"tile": {
+						"x": 80,
+						"y": 13
+					}
+				},
+				"from_1fb": {
+					"facingDirection": "down",
+					"label": "1 Fb",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FB",
+					"tile": {
+						"x": 15,
+						"y": 13
+					}
+				},
+				"from_1fc": {
+					"facingDirection": "down",
+					"label": "1 Fc",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FC",
+					"tile": {
+						"x": 37,
+						"y": 32
+					}
+				},
+				"from_1fd": {
+					"facingDirection": "down",
+					"label": "1 Fd",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FD",
+					"tile": {
+						"x": 80,
+						"y": 49
+					}
+				}
+			}
+		},
 		"kanto_route_1": {
 			"areaType": "route",
 			"defaultMode": "open",
@@ -1284,6 +1536,132 @@
 				}
 			}
 		},
+		"kanto_route_10": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 10",
+			"locationGroupId": "kanto_route_10",
+			"locationGroupLabel": "Route 10",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"spawnPoints": {
+				"from_lavender_north": {
+					"facingDirection": "down",
+					"label": "Lavender North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderNorth",
+					"tile": {
+						"x": 39,
+						"y": 101
+					}
+				},
+				"from_rock_tunnel_north": {
+					"facingDirection": "down",
+					"label": "Rock Tunnel North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRockTunnelNorth",
+					"tile": {
+						"x": 33,
+						"y": 34
+					}
+				},
+				"from_rock_tunnel_south": {
+					"facingDirection": "down",
+					"label": "Rock Tunnel South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRockTunnelSouth",
+					"tile": {
+						"x": 19,
+						"y": 79
+					}
+				},
+				"from_route_9": {
+					"facingDirection": "down",
+					"label": "Route 9",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute9",
+					"tile": {
+						"x": 2,
+						"y": 20
+					}
+				},
+				"from_route_9_river": {
+					"facingDirection": "down",
+					"label": "Route 9 River",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute9River",
+					"tile": {
+						"x": 2,
+						"y": 9
+					}
+				}
+			}
+		},
+		"kanto_route_11": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 11",
+			"locationGroupId": "kanto_route_11",
+			"locationGroupLabel": "Route 11",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"spawnPoints": {
+				"from_diglett_cave": {
+					"facingDirection": "down",
+					"label": "Diglett Cave",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromDiglettCave",
+					"tile": {
+						"x": 17,
+						"y": 15
+					}
+				},
+				"from_route_12_west": {
+					"facingDirection": "down",
+					"label": "Route 12 West",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute12West",
+					"tile": {
+						"x": 78,
+						"y": 21
+					}
+				},
+				"from_vermilion": {
+					"facingDirection": "down",
+					"label": "Vermilion",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVermilion",
+					"tile": {
+						"x": 2,
+						"y": 21
+					}
+				}
+			}
+		},
+		"kanto_route_12_west": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Route 12 West",
+			"locationGroupId": "kanto_route_12_west",
+			"locationGroupLabel": "Route 12 West",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn",
+			"spawnPoints": {
+				"from_route_11": {
+					"facingDirection": "down",
+					"label": "Route 11",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute11",
+					"tile": {
+						"x": 1,
+						"y": 21
+					}
+				}
+			}
+		},
 		"kanto_route_2": {
 			"areaType": "route",
 			"defaultMode": "open",
@@ -1296,6 +1674,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 			"spawnPoints": {
+				"from_diglett_cave": {
+					"facingDirection": "down",
+					"label": "Diglett Cave",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromDiglettCave",
+					"tile": {
+						"x": 30,
+						"y": 19
+					}
+				},
 				"from_house": {
 					"facingDirection": "down",
 					"label": "House",
@@ -1364,6 +1752,28 @@
 					"tile": {
 						"x": 10,
 						"y": 40
+					}
+				}
+			}
+		},
+		"kanto_route_21": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 21",
+			"locationGroupId": "kanto_route_21",
+			"locationGroupLabel": "Route 21",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
+			"spawnPoints": {
+				"from_pallet_town": {
+					"facingDirection": "down",
+					"label": "Pallet Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPalletTown",
+					"tile": {
+						"x": 12,
+						"y": 2
 					}
 				}
 			}
@@ -1820,8 +2230,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanGrass",
 					"tile": {
-						"x": 12,
-						"y": 16
+						"x": 20,
+						"y": 1
 					}
 				},
 				"from_cerulean_left": {
@@ -1830,8 +2240,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanLeft",
 					"tile": {
-						"x": 4,
-						"y": 16
+						"x": 14,
+						"y": 1
 					}
 				},
 				"from_cerulean_right": {
@@ -1840,8 +2250,70 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanRight",
 					"tile": {
-						"x": 20,
-						"y": 16
+						"x": 25,
+						"y": 1
+					}
+				},
+				"from_saffron_north": {
+					"facingDirection": "down",
+					"label": "Saffron North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSaffronNorth",
+					"tile": {
+						"x": 21,
+						"y": 55
+					}
+				},
+				"from_underground_path": {
+					"facingDirection": "down",
+					"label": "Underground Path",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromUndergroundPath",
+					"tile": {
+						"x": 36,
+						"y": 43
+					}
+				}
+			}
+		},
+		"kanto_route_6": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 6",
+			"locationGroupId": "kanto_route_6",
+			"locationGroupLabel": "Route 6",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"spawnPoints": {
+				"from_saffron_south": {
+					"facingDirection": "down",
+					"label": "Saffron South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSaffronSouth",
+					"tile": {
+						"x": 23,
+						"y": 1
+					}
+				},
+				"from_underground_path": {
+					"facingDirection": "down",
+					"label": "Underground Path",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromUndergroundPath",
+					"tile": {
+						"x": 36,
+						"y": 14
+					}
+				},
+				"from_vermilion": {
+					"facingDirection": "down",
+					"label": "Vermilion",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVermilion",
+					"tile": {
+						"x": 23,
+						"y": 52
 					}
 				}
 			}
@@ -1863,7 +2335,199 @@
 					"spawnMarker": "FromCerulean",
 					"tile": {
 						"x": 2,
+						"y": 20
+					}
+				},
+				"from_route_10": {
+					"facingDirection": "down",
+					"label": "Route 10",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute10",
+					"tile": {
+						"x": 94,
+						"y": 20
+					}
+				},
+				"from_route_10_river": {
+					"facingDirection": "down",
+					"label": "Route 10 River",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute10River",
+					"tile": {
+						"x": 94,
 						"y": 9
+					}
+				}
+			}
+		},
+		"kanto_saffron_city_north": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Saffron City North",
+			"locationGroupId": "kanto_saffron_city_north",
+			"locationGroupLabel": "Saffron City North",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/connections/saffron_city_north.tscn",
+			"spawnPoints": {
+				"from_route_5": {
+					"facingDirection": "down",
+					"label": "Route 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute5",
+					"tile": {
+						"x": 21,
+						"y": 1
+					}
+				}
+			}
+		},
+		"kanto_saffron_city_south": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Saffron City South",
+			"locationGroupId": "kanto_saffron_city_south",
+			"locationGroupLabel": "Saffron City South",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/connections/saffron_city_south.tscn",
+			"spawnPoints": {
+				"from_route_6": {
+					"facingDirection": "down",
+					"label": "Route 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute6",
+					"tile": {
+						"x": 23,
+						"y": 6
+					}
+				}
+			}
+		},
+		"kanto_underground_path_route_5_entrance": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Underground Path Route 5 Entrance",
+			"locationGroupId": "kanto_underground_path",
+			"locationGroupLabel": "Underground Path",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
+			"spawnPoints": {
+				"from_route_5": {
+					"facingDirection": "down",
+					"label": "Route 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute5",
+					"tile": {
+						"x": 10,
+						"y": 14
+					}
+				},
+				"from_tunnel": {
+					"facingDirection": "down",
+					"label": "Tunnel",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromTunnel",
+					"tile": {
+						"x": 11,
+						"y": 10
+					}
+				}
+			}
+		},
+		"kanto_underground_path_route_6_entrance": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Underground Path Route 6 Entrance",
+			"locationGroupId": "kanto_underground_path",
+			"locationGroupLabel": "Underground Path",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
+			"spawnPoints": {
+				"from_route_6": {
+					"facingDirection": "down",
+					"label": "Route 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute6",
+					"tile": {
+						"x": 10,
+						"y": 14
+					}
+				},
+				"from_tunnel": {
+					"facingDirection": "down",
+					"label": "Tunnel",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromTunnel",
+					"tile": {
+						"x": 7,
+						"y": 10
+					}
+				}
+			}
+		},
+		"kanto_underground_path_tunnel": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Underground Path",
+			"locationGroupId": "kanto_underground_path",
+			"locationGroupLabel": "Underground Path",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
+			"spawnPoints": {
+				"from_route_5_entrance": {
+					"facingDirection": "down",
+					"label": "Route 5 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute5Entrance",
+					"tile": {
+						"x": 9,
+						"y": 11
+					}
+				},
+				"from_route_6_entrance": {
+					"facingDirection": "down",
+					"label": "Route 6 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute6Entrance",
+					"tile": {
+						"x": 9,
+						"y": 84
+					}
+				}
+			}
+		},
+		"kanto_vermilion_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Vermilion City",
+			"locationGroupId": "kanto_vermilion_city",
+			"locationGroupLabel": "Vermilion City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"spawnPoints": {
+				"from_route_11": {
+					"facingDirection": "down",
+					"label": "Route 11",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute11",
+					"tile": {
+						"x": 78,
+						"y": 39
+					}
+				},
+				"from_route_6": {
+					"facingDirection": "down",
+					"label": "Route 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute6",
+					"tile": {
+						"x": 41,
+						"y": 1
 					}
 				}
 			}
@@ -2382,8 +3046,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 384.0,
-					"y": 512.0
+					"x": 640.0,
+					"y": 48.0
 				},
 				"spawnMarker": "FromCeruleanGrass"
 			},
@@ -2397,8 +3061,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 128.0,
-					"y": 512.0
+					"x": 464.0,
+					"y": 48.0
 				},
 				"spawnMarker": "FromCeruleanLeft"
 			},
@@ -2412,8 +3076,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 640.0,
-					"y": 512.0
+					"x": 816.0,
+					"y": 48.0
 				},
 				"spawnMarker": "FromCeruleanRight"
 			},
@@ -2428,7 +3092,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
 					"x": 64.0,
-					"y": 288.0
+					"y": 656.0
 				},
 				"spawnMarker": "FromCerulean"
 			},
@@ -2536,6 +3200,113 @@
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_cerulean_city_pokemon_center"
+		},
+		"kanto_diglett_cave_route_11_entrance__to_route11": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_11",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+				"position": {
+					"x": 560.0,
+					"y": 496.0
+				},
+				"spawnMarker": "FromDiglettCave"
+			},
+			"destinationAreaId": "kanto_route_11",
+			"sourceMapId": "kanto_diglett_cave_route_11_entrance"
+		},
+		"kanto_diglett_cave_route_11_entrance__to_tunnel": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_diglett_cave_tunnel",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
+				"position": {
+					"x": 1104.0,
+					"y": 2416.0
+				},
+				"spawnMarker": "FromRoute11Entrance"
+			},
+			"destinationAreaId": "kanto_diglett_cave_tunnel",
+			"sourceMapId": "kanto_diglett_cave_route_11_entrance"
+		},
+		"kanto_diglett_cave_route_2_entrance__to_route2": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+				"position": {
+					"x": 976.0,
+					"y": 624.0
+				},
+				"spawnMarker": "FromDiglettCave"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_diglett_cave_route_2_entrance"
+		},
+		"kanto_diglett_cave_route_2_entrance__to_tunnel": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_diglett_cave_tunnel",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 416.0
+				},
+				"spawnMarker": "FromRoute2Entrance"
+			},
+			"destinationAreaId": "kanto_diglett_cave_tunnel",
+			"sourceMapId": "kanto_diglett_cave_route_2_entrance"
+		},
+		"kanto_diglett_cave_tunnel__to_route11_entrance": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_diglett_cave_route_11_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromTunnel"
+			},
+			"destinationAreaId": "kanto_diglett_cave_route_11_entrance",
+			"sourceMapId": "kanto_diglett_cave_tunnel"
+		},
+		"kanto_diglett_cave_tunnel__to_route2_entrance": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_diglett_cave_route_2_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromTunnel"
+			},
+			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
+			"sourceMapId": "kanto_diglett_cave_tunnel"
+		},
+		"kanto_lavender_town_north__to_route10": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 1248.0,
+					"y": 3248.0
+				},
+				"spawnMarker": "FromLavenderNorth"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_lavender_town_north"
 		},
 		"kanto_mt_moon_1f__to_b1f_1": {
 			"destination": {
@@ -2889,6 +3660,21 @@
 			"destinationAreaId": "kanto_route_1",
 			"sourceMapId": "kanto_pallet_town"
 		},
+		"kanto_pallet_town__to_route_21": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_21",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 64.0
+				},
+				"spawnMarker": "FromPalletTown"
+			},
+			"destinationAreaId": "kanto_route_21",
+			"sourceMapId": "kanto_pallet_town"
+		},
 		"kanto_pewter_city__to_gym": {
 			"destination": {
 				"mapId": "kanto_pewter_city_gym",
@@ -3081,6 +3867,291 @@
 			"destinationAreaId": "kanto_pallet_town",
 			"sourceMapId": "kanto_rivals_house"
 		},
+		"kanto_rock_tunnel_1f__to_b1_f_a": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_rock_tunnel_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+				"position": {
+					"x": 2576.0,
+					"y": 416.0
+				},
+				"spawnMarker": "From1FA"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_b1f",
+			"sourceMapId": "kanto_rock_tunnel_1f"
+		},
+		"kanto_rock_tunnel_1f__to_b1_f_b": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_rock_tunnel_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 416.0
+				},
+				"spawnMarker": "From1FB"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_b1f",
+			"sourceMapId": "kanto_rock_tunnel_1f"
+		},
+		"kanto_rock_tunnel_1f__to_b1_f_c": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_rock_tunnel_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+				"position": {
+					"x": 1200.0,
+					"y": 1024.0
+				},
+				"spawnMarker": "From1FC"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_b1f",
+			"sourceMapId": "kanto_rock_tunnel_1f"
+		},
+		"kanto_rock_tunnel_1f__to_b1_f_d": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_rock_tunnel_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+				"position": {
+					"x": 2576.0,
+					"y": 1568.0
+				},
+				"spawnMarker": "From1FD"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_b1f",
+			"sourceMapId": "kanto_rock_tunnel_1f"
+		},
+		"kanto_rock_tunnel_1f__to_route10_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 1072.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "FromRockTunnelNorth"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_rock_tunnel_1f"
+		},
+		"kanto_rock_tunnel_1f__to_route10_south": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 624.0,
+					"y": 2544.0
+				},
+				"spawnMarker": "FromRockTunnelSouth"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_rock_tunnel_1f"
+		},
+		"kanto_rock_tunnel_b1f__to1_f_a": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_rock_tunnel_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+				"position": {
+					"x": 2512.0,
+					"y": 416.0
+				},
+				"spawnMarker": "FromB1FA"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_1f",
+			"sourceMapId": "kanto_rock_tunnel_b1f"
+		},
+		"kanto_rock_tunnel_b1f__to1_f_b": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_rock_tunnel_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+				"position": {
+					"x": 432.0,
+					"y": 416.0
+				},
+				"spawnMarker": "FromB1FB"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_1f",
+			"sourceMapId": "kanto_rock_tunnel_b1f"
+		},
+		"kanto_rock_tunnel_b1f__to1_f_c": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_rock_tunnel_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+				"position": {
+					"x": 1136.0,
+					"y": 1024.0
+				},
+				"spawnMarker": "FromB1FC"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_1f",
+			"sourceMapId": "kanto_rock_tunnel_b1f"
+		},
+		"kanto_rock_tunnel_b1f__to1_f_d": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_rock_tunnel_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+				"position": {
+					"x": 2512.0,
+					"y": 1568.0
+				},
+				"spawnMarker": "FromB1FD"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_1f",
+			"sourceMapId": "kanto_rock_tunnel_b1f"
+		},
+		"kanto_route_10__to_lavender_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_lavender_town_north",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
+				"position": {
+					"x": 1248.0,
+					"y": 64.0
+				},
+				"spawnMarker": "FromRoute10"
+			},
+			"destinationAreaId": "kanto_lavender_town_north",
+			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_10__to_rock_tunnel_north": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_rock_tunnel_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+				"position": {
+					"x": 1600.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromRoute10North"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_1f",
+			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_10__to_rock_tunnel_south": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_rock_tunnel_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+				"position": {
+					"x": 816.0,
+					"y": 2208.0
+				},
+				"spawnMarker": "FromRoute10South"
+			},
+			"destinationAreaId": "kanto_rock_tunnel_1f",
+			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_10__to_route9": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_9",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+				"position": {
+					"x": 3008.0,
+					"y": 656.0
+				},
+				"spawnMarker": "FromRoute10"
+			},
+			"destinationAreaId": "kanto_route_9",
+			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_10__to_route9_river": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_9",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+				"position": {
+					"x": 3008.0,
+					"y": 288.0
+				},
+				"spawnMarker": "FromRoute10River"
+			},
+			"destinationAreaId": "kanto_route_9",
+			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_11__to_diglett_cave": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_diglett_cave_route_11_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute11"
+			},
+			"destinationAreaId": "kanto_diglett_cave_route_11_entrance",
+			"sourceMapId": "kanto_route_11"
+		},
+		"kanto_route_11__to_route12_west": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_12_west",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 688.0
+				},
+				"spawnMarker": "FromRoute11"
+			},
+			"destinationAreaId": "kanto_route_12_west",
+			"sourceMapId": "kanto_route_11"
+		},
+		"kanto_route_11__to_vermilion": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 2496.0,
+					"y": 1264.0
+				},
+				"spawnMarker": "FromRoute11"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_route_11"
+		},
+		"kanto_route_12_west__to_route11": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_11",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+				"position": {
+					"x": 2496.0,
+					"y": 688.0
+				},
+				"spawnMarker": "FromRoute12West"
+			},
+			"destinationAreaId": "kanto_route_11",
+			"sourceMapId": "kanto_route_12_west"
+		},
 		"kanto_route_1__to_pallet_town": {
 			"destination": {
 				"mapId": "kanto_pallet_town",
@@ -3096,6 +4167,23 @@
 			},
 			"destinationAreaId": "kanto_pallet_town",
 			"sourceMapId": "kanto_route_1"
+		},
+		"kanto_route_21__to_pallet_town": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_pallet_town",
+				"mapSceneAliases": [
+					"uid://cbb7318supm5h"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 1216.0
+				},
+				"spawnMarker": "FromRoute21"
+			},
+			"destinationAreaId": "kanto_pallet_town",
+			"sourceMapId": "kanto_route_21"
 		},
 		"kanto_route_22__to_viridian_city": {
 			"destination": {
@@ -3316,6 +4404,21 @@
 			},
 			"destinationAreaId": "kanto_route_25",
 			"sourceMapId": "kanto_route_25_bills_house"
+		},
+		"kanto_route_2__to_diglett_cave": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_diglett_cave_route_2_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute2"
+			},
+			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
+			"sourceMapId": "kanto_route_2"
 		},
 		"kanto_route_2__to_house": {
 			"destination": {
@@ -3700,6 +4803,81 @@
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_route_5"
 		},
+		"kanto_route_5__to_saffron_north": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_saffron_city_north",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/saffron_city_north.tscn",
+				"position": {
+					"x": 672.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromRoute5"
+			},
+			"destinationAreaId": "kanto_saffron_city_north",
+			"sourceMapId": "kanto_route_5"
+		},
+		"kanto_route_5__to_underground_path": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_underground_path_route_5_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 448.0
+				},
+				"spawnMarker": "FromRoute5"
+			},
+			"destinationAreaId": "kanto_underground_path_route_5_entrance",
+			"sourceMapId": "kanto_route_5"
+		},
+		"kanto_route_6__to_saffron_south": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_saffron_city_south",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/saffron_city_south.tscn",
+				"position": {
+					"x": 736.0,
+					"y": 192.0
+				},
+				"spawnMarker": "FromRoute6"
+			},
+			"destinationAreaId": "kanto_saffron_city_south",
+			"sourceMapId": "kanto_route_6"
+		},
+		"kanto_route_6__to_underground_path": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_underground_path_route_6_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 448.0
+				},
+				"spawnMarker": "FromRoute6"
+			},
+			"destinationAreaId": "kanto_underground_path_route_6_entrance",
+			"sourceMapId": "kanto_route_6"
+		},
+		"kanto_route_6__to_vermilion": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 1328.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromRoute6"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_route_6"
+		},
 		"kanto_route_9__to_cerulean_city": {
 			"destination": {
 				"facingDirection": "left",
@@ -3716,6 +4894,186 @@
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_route_9"
+		},
+		"kanto_route_9__to_route10": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 64.0,
+					"y": 656.0
+				},
+				"spawnMarker": "FromRoute9"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_route_9"
+		},
+		"kanto_route_9__to_route10_river": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 64.0,
+					"y": 288.0
+				},
+				"spawnMarker": "FromRoute9River"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_route_9"
+		},
+		"kanto_saffron_city_north__to_route5": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_5",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+				"position": {
+					"x": 672.0,
+					"y": 1780.0
+				},
+				"spawnMarker": "FromSaffronNorth"
+			},
+			"destinationAreaId": "kanto_route_5",
+			"sourceMapId": "kanto_saffron_city_north"
+		},
+		"kanto_saffron_city_south__to_route6": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_6",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+				"position": {
+					"x": 736.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromSaffronSouth"
+			},
+			"destinationAreaId": "kanto_route_6",
+			"sourceMapId": "kanto_saffron_city_south"
+		},
+		"kanto_underground_path_route_5_entrance__to_route5": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_5",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+				"position": {
+					"x": 1168.0,
+					"y": 1384.0
+				},
+				"spawnMarker": "FromUndergroundPath"
+			},
+			"destinationAreaId": "kanto_route_5",
+			"sourceMapId": "kanto_underground_path_route_5_entrance"
+		},
+		"kanto_underground_path_route_5_entrance__to_tunnel": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_underground_path_tunnel",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 352.0
+				},
+				"spawnMarker": "FromRoute5Entrance"
+			},
+			"destinationAreaId": "kanto_underground_path_tunnel",
+			"sourceMapId": "kanto_underground_path_route_5_entrance"
+		},
+		"kanto_underground_path_route_6_entrance__to_route6": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_6",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+				"position": {
+					"x": 1168.0,
+					"y": 448.0
+				},
+				"spawnMarker": "FromUndergroundPath"
+			},
+			"destinationAreaId": "kanto_route_6",
+			"sourceMapId": "kanto_underground_path_route_6_entrance"
+		},
+		"kanto_underground_path_route_6_entrance__to_tunnel": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_underground_path_tunnel",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 2704.0
+				},
+				"spawnMarker": "FromRoute6Entrance"
+			},
+			"destinationAreaId": "kanto_underground_path_tunnel",
+			"sourceMapId": "kanto_underground_path_route_6_entrance"
+		},
+		"kanto_underground_path_tunnel__to_route5_entrance": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_underground_path_route_5_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromTunnel"
+			},
+			"destinationAreaId": "kanto_underground_path_route_5_entrance",
+			"sourceMapId": "kanto_underground_path_tunnel"
+		},
+		"kanto_underground_path_tunnel__to_route6_entrance": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_underground_path_route_6_entrance",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromTunnel"
+			},
+			"destinationAreaId": "kanto_underground_path_route_6_entrance",
+			"sourceMapId": "kanto_underground_path_tunnel"
+		},
+		"kanto_vermilion_city__to_route11": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_11",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+				"position": {
+					"x": 64.0,
+					"y": 688.0
+				},
+				"spawnMarker": "FromVermilion"
+			},
+			"destinationAreaId": "kanto_route_11",
+			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city__to_route6": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_6",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+				"position": {
+					"x": 752.0,
+					"y": 1680.0
+				},
+				"spawnMarker": "FromVermilion"
+			},
+			"destinationAreaId": "kanto_route_6",
+			"sourceMapId": "kanto_vermilion_city"
 		},
 		"kanto_viridian_city__to_house_1": {
 			"destination": {

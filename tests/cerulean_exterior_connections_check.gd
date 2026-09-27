@@ -29,6 +29,8 @@ const CONNECTIONS := {
 	},
 	"route_9": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+		"visual": "res://generated/tiled_visuals/route_9/route_9.visual.tscn",
+		"template": false,
 		"map_id": "kanto_route_9",
 		"city_spawn": "FromRoute9",
 		"city_exit": "ToRoute9",
@@ -40,6 +42,8 @@ const CONNECTIONS := {
 	},
 	"route_5": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+		"visual": "res://generated/tiled_visuals/route_5/route_5.visual.tscn",
+		"template": false,
 		"map_id": "kanto_route_5",
 		"city_spawn": "FromRoute5Left",
 		"city_exit": "ToRoute5Left",

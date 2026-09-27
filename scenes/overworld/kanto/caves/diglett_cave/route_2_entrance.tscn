@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/diglett_cave_route_2_entrance/diglett_cave_route_2_entrance.visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+
+[sub_resource type="RectangleShape2D" id="shape_1"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_2"]
+size = Vector2(96, 32)
+
+[node name="DiglettCaveRoute2Entrance" type="Node2D"]
+script = ExtResource("2_metadata")
+map_id = "kanto_diglett_cave_route_2_entrance"
+map_region_name = "Kanto"
+map_display_name = "Diglett Cave Route 2 Entrance"
+world_access_group_id = "kanto_diglett_cave"
+world_access_group_label = "Diglett Cave"
+world_access_area_type = "interior"
+location_id = "kanto.diglett.cave.route.2.entrance"
+location_name = "Diglett Cave Route 2 Entrance"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromTunnel" type="Marker2D" parent="Spawns"]
+position = Vector2(240, 336)
+
+[node name="FromRoute2" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 464)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToTunnel" type="Area2D" parent="Exits"]
+position = Vector2(240, 272)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn"
+target_spawn_name = "FromRoute2Entrance"
+transition_id = "kanto_diglett_cave_route_2_entrance__to_tunnel"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel"]
+shape = SubResource("shape_1")
+
+[node name="ToRoute2" type="Area2D" parent="Exits"]
+position = Vector2(368, 528)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
+target_spawn_name = "FromDiglettCave"
+transition_id = "kanto_diglett_cave_route_2_entrance__to_route2"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2"]
+shape = SubResource("shape_2")
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[connection signal="body_entered" from="Exits/ToTunnel" to="Exits/ToTunnel" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
