@@ -3,6 +3,7 @@
 ## Unreleased
 
 - De Underground Path heeft zijwaartse trappen tegen de wanden, met bijpassende aankomstpunten en vrije bordessen.
+- Route 5- en Route 6-ingangen van de Underground Passage hebben bijgewerkte tegel- en blokkeerlagen.
 
 - Route 5 heeft een eigen daycare-interior met ontvangstbalie, rustplekjes en speelruimte, gekoppelde deuren en een bestemming voor staffteleport.
 

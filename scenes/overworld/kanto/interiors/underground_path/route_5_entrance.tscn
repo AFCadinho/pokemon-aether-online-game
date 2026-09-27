@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_sr51q"]
-[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_spayy"]
-[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_a25ct"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_spayy"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_a25ct"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
@@ -120,6 +120,71 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_x3o86")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2fxm7"]
+texture = ExtResource("6_a25ct")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_878an"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_2fxm7")
+
 [node name="UndergroundPathRoute5Entrance" type="Node2D" unique_id=178694514]
 script = ExtResource("2_metadata")
 map_id = "kanto_underground_path_route_5_entrance"
@@ -197,6 +262,10 @@ visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAALAAcAAAABAAEAAAAMAAcAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_2fxm7")
+
+[node name="BlockUp" type="TileMapLayer" parent="Tiles/BlockDirection" unique_id=528120308]
+tile_map_data = PackedByteArray("AAALAAoAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_878an")
 
 [connection signal="body_entered" from="Exits/ToRoute5" to="Exits/ToRoute5" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToTunnel" to="Exits/ToTunnel" method="_on_body_entered"]
