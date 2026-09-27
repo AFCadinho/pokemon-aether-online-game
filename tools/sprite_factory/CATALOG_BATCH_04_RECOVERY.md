@@ -8,7 +8,7 @@ entries, approve bundles, upload content, or start batch 05.
 
 **24 normal/shiny candidate pairs are exported:** 23 of the initial 25 holds,
 plus Spiritomb. Eight native clips per variant include both physical attacks.
-Visual review and battle placement remain pending. Two source cases remain open;
+The user accepted all 24 normal/shiny pairs after the eye corrections. Battle placement remains pending. Two source cases remain open;
 the review queue is not empty.
 
 The manifest retains starter priority and then National Dex order. Basculin and
@@ -83,8 +83,8 @@ Artifacts live in `.tmp/batch04-recovery/` in slot-a:
 
 `catalog_production_batch_04_recovery.json` pins valid GLBs, standalone scenes,
 review reports and capture digests. `runtime_approved` stays false throughout.
-Next: record the user's visual review of these exact pairs, measure and calibrate
-battle scale/grounding/cameras, then obtain battle review. The other batch-04
+The updated 24-pair visual review is accepted. Next: finish calibration and
+independent battle scale/grounding/camera measurements, then obtain battle review. The other batch-04
 candidates still need their remaining shiny and battle qualification. No new
 batch begins while the two source holds remain unresolved.
 
@@ -114,9 +114,21 @@ flying idle. The latest pass uses native top-origin offsets after glTF import.
 `eye-motion-{normal,shiny}-captures-uv2/review.json` pin the corrected candidates.
 All 144 rendered sample poses completed without reported pose errors. Open idle
 and closed sleep were visually inspected; the user accepted Wattrel and Kilowattrel normal/shiny idle and sleep on
-`eyes-review-v2.html`, with enlarged images. Starly still needs explicit acceptance.
+`eyes-review-v2.html`, with enlarged images. The user subsequently accepted the updated full 24-pair gallery, including Starly.
 
 The rendered two-instance check passes 76 seek/reset/isolation assertions.
 The initial check freed instances before rendering any frame and emitted
 material-is-null errors; allowing render frames before teardown removes those
 errors. Battle qualification remains pending. No runtime entries are approved or activated.
+
+## Battle follow-up
+
+The 24 current normal scenes are pinned in `.tmp/batch04-recovery/battle-input/`,
+replacing the three original eye candidates with the UV2 standalone scenes.
+The 60 Hz sweep and two-camera/two-side screenshots are complete. Small models
+received a candidate readability scale; native motion clearance was baked with the
+existing helper and independently checked at 120 Hz. Land/bird sleep poses use
+explicit grounded-rest candidates; Basculin retains its native floating intent.
+All placement candidates require visual battle review before runtime approval.
+
+The completed placement pass is pinned in `catalog_production_batch_04_recovery_battle.json`: all 24 candidates pass 120 Hz clearance, readability, both-camera framing and HUD-proxy checks. Giratina uses the separate 0.85-scale recheck. The local `battle-review.html` presents 384 images. Visual battle review and full runtime stress remain pending; no models are activated.
