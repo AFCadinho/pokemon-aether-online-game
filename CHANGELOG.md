@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De vrouwelijke Team Rocket-outfit is beschikbaar als outfitbox met uniform, rok, laarzen, paars bobkapsel en pet, inclusief trainer- en overworld-sprites. De box staat nog niet in de store.
+
 - Het Team Rocket-uniform heeft nu dezelfde open halsuitsnede als de starter-outfit, zodat een stukje nek zichtbaar blijft tijdens staan en lopen.
 
 - De kraag van het Team Rocket-uniform volgt nu de nek tijdens het lopen, zonder extra omhoog te springen in de stapstanden.

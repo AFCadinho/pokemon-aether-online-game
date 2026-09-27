@@ -190,6 +190,7 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 		normalized_item_id.begins_with("aether-blossom-")
 		or normalized_item_id.begins_with("aether-female-")
 		or normalized_item_id.begins_with("wishmaker-")
+		or normalized_item_id.begins_with("team-rocket-female-")
 	):
 		return ["female"]
 	if (
@@ -260,6 +261,25 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			layers = [{"category": BOTTOM_CATEGORY, "id": "Smoking_Trousers"}]
 		"smoking-shoes":
 			layers = [{"category": SHOES_CATEGORY, "id": "Smoking_Shoes"}]
+		"team-rocket-female-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "TeamRocketFemale_Skirt"},
+				{"category": SHOES_CATEGORY, "id": "TeamRocketFemale_Boots"},
+				{"category": TOP_CATEGORY, "id": "TeamRocketFemale_Shirt"},
+				{"category": HAIR_CATEGORY, "id": "TeamRocketFemale_Hair"},
+				{"category": HEADGEAR_CATEGORY, "id": "TeamRocketFemale_Cap"},
+			]
+		"team-rocket-female-shirt":
+			layers = [{"category": TOP_CATEGORY, "id": "TeamRocketFemale_Shirt"}]
+		"team-rocket-female-skirt":
+			layers = [{"category": BOTTOM_CATEGORY, "id": "TeamRocketFemale_Skirt"}]
+		"team-rocket-female-boots":
+			layers = [{"category": SHOES_CATEGORY, "id": "TeamRocketFemale_Boots"}]
+		"team-rocket-female-hair":
+			layers = [{"category": HAIR_CATEGORY, "id": "TeamRocketFemale_Hair"}]
+		"team-rocket-female-cap":
+			layers = [{"category": HEADGEAR_CATEGORY, "id": "TeamRocketFemale_Cap"}]
 		"team-rocket-outfit":
 			layers = [
 				{"kind": "body"},
@@ -758,7 +778,7 @@ static func is_tintable_part(category: String, part_id: String) -> bool:
 	var normalized_category: String = normalize_part_category(category)
 	var normalized_part_id: String = part_id.strip_edges()
 	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
-		return normalized_part_id not in ["Aether_Blossom_Hair", "Wishmaker_Hair"]
+		return normalized_part_id not in ["Aether_Blossom_Hair", "Wishmaker_Hair", "TeamRocketFemale_Hair"]
 	if normalized_category == FACEGEAR_CATEGORY:
 		return normalized_part_id in ["Adinho_Glasses_Chroma", "Aether_Blossom_Earrings_Chroma"]
 	if normalized_category == TOP_CATEGORY:

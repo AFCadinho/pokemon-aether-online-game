@@ -310,5 +310,29 @@
   "team-rocket-cap": {
     "name": "Boné da Equipe Rocket",
     "shortDesc": "Mova o boné masculino da Equipe Rocket para a Personalização de Personagem."
+  },
+  "team-rocket-female-outfit": {
+    "name": "Caixa de Traje Feminino da Equipe Rocket",
+    "shortDesc": "Abra esta caixa feminina para receber uniforme com luvas, saia, botas, cabelo curto roxo e boné."
+  },
+  "team-rocket-female-shirt": {
+    "name": "Uniforme Feminino da Equipe Rocket",
+    "shortDesc": "Mova este cosmético feminino para a Personalização de Personagem."
+  },
+  "team-rocket-female-skirt": {
+    "name": "Saia da Equipe Rocket",
+    "shortDesc": "Mova este cosmético feminino para a Personalização de Personagem."
+  },
+  "team-rocket-female-boots": {
+    "name": "Botas Femininas da Equipe Rocket",
+    "shortDesc": "Mova este cosmético feminino para a Personalização de Personagem."
+  },
+  "team-rocket-female-hair": {
+    "name": "Cabelo Curto da Equipe Rocket",
+    "shortDesc": "Mova este cosmético feminino para a Personalização de Personagem."
+  },
+  "team-rocket-female-cap": {
+    "name": "Boné Feminino da Equipe Rocket",
+    "shortDesc": "Mova este cosmético feminino para a Personalização de Personagem."
   }
 }

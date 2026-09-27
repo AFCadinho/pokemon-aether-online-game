@@ -310,5 +310,29 @@
   "team-rocket-cap": {
     "name": "Team Rocket-pet",
     "shortDesc": "Verplaats de Team Rocket-pet voor het mannelijke model naar Character Customization."
+  },
+  "team-rocket-female-outfit": {
+    "name": "Team Rocket-outfitbox (vrouw)",
+    "shortDesc": "Open deze box voor een uniform met handschoenen, rok, laarzen, paars bobkapsel en pet voor het vrouwelijke model."
+  },
+  "team-rocket-female-shirt": {
+    "name": "Team Rocket-uniform (vrouw)",
+    "shortDesc": "Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+  },
+  "team-rocket-female-skirt": {
+    "name": "Team Rocket-rok",
+    "shortDesc": "Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+  },
+  "team-rocket-female-boots": {
+    "name": "Team Rocket-laarzen (vrouw)",
+    "shortDesc": "Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+  },
+  "team-rocket-female-hair": {
+    "name": "Team Rocket-bobkapsel",
+    "shortDesc": "Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+  },
+  "team-rocket-female-cap": {
+    "name": "Team Rocket-pet (vrouw)",
+    "shortDesc": "Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
   }
 }
