@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe Kanto-route-, grot- en verbindingsscenes tonen de geïmporteerde Tiled-maps en hebben gekoppelde ingangspunten en uitgangen. Route 2 en Pallet Town sluiten nu aan op Diglett Cave en Route 21; de locaties zijn beschikbaar voor staffteleport.
+
 - Het Team Rocket-uniform heeft nu dezelfde open halsuitsnede als de starter-outfit, zodat een stukje nek zichtbaar blijft tijdens staan en lopen.
 
 - De kraag van het Team Rocket-uniform volgt nu de nek tijdens het lopen, zonder extra omhoog te springen in de stapstanden.

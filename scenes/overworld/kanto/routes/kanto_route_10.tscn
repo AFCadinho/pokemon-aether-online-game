@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_10/route_10.visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+
+[sub_resource type="RectangleShape2D" id="shape_1"]
+size = Vector2(32, 160)
+
+[sub_resource type="RectangleShape2D" id="shape_2"]
+size = Vector2(32, 128)
+
+[sub_resource type="RectangleShape2D" id="shape_3"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_4"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_5"]
+size = Vector2(192, 32)
+
+[node name="Route10" type="Node2D"]
+script = ExtResource("2_metadata")
+map_id = "kanto_route_10"
+map_region_name = "Kanto"
+map_display_name = "Route 10"
+world_access_group_id = "kanto_route_10"
+world_access_group_label = "Route 10"
+world_access_area_type = "route"
+location_id = "kanto.route.10"
+location_name = "Route 10"
+region_id = "kanto"
+music_profile_id = "kanto.routes_3_10_16_22"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromRoute9" type="Marker2D" parent="Spawns"]
+position = Vector2(64, 656)
+
+[node name="FromRoute9River" type="Marker2D" parent="Spawns"]
+position = Vector2(64, 288)
+
+[node name="FromRockTunnelNorth" type="Marker2D" parent="Spawns"]
+position = Vector2(1072, 1104)
+
+[node name="FromRockTunnelSouth" type="Marker2D" parent="Spawns"]
+position = Vector2(624, 2544)
+
+[node name="FromLavenderNorth" type="Marker2D" parent="Spawns"]
+position = Vector2(1248, 3248)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToRoute9" type="Area2D" parent="Exits"]
+position = Vector2(16, 656)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
+target_spawn_name = "FromRoute10"
+transition_id = "kanto_route_10__to_route9"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9"]
+shape = SubResource("shape_1")
+
+[node name="ToRoute9River" type="Area2D" parent="Exits"]
+position = Vector2(16, 288)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
+target_spawn_name = "FromRoute10River"
+transition_id = "kanto_route_10__to_route9_river"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9River"]
+shape = SubResource("shape_2")
+
+[node name="ToRockTunnelNorth" type="Area2D" parent="Exits"]
+position = Vector2(1072, 1040)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn"
+target_spawn_name = "FromRoute10North"
+transition_id = "kanto_route_10__to_rock_tunnel_north"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRockTunnelNorth"]
+shape = SubResource("shape_3")
+
+[node name="ToRockTunnelSouth" type="Area2D" parent="Exits"]
+position = Vector2(624, 2480)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn"
+target_spawn_name = "FromRoute10South"
+transition_id = "kanto_route_10__to_rock_tunnel_south"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRockTunnelSouth"]
+shape = SubResource("shape_4")
+
+[node name="ToLavenderNorth" type="Area2D" parent="Exits"]
+position = Vector2(1248, 3312)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"
+target_spawn_name = "FromRoute10"
+transition_id = "kanto_route_10__to_lavender_north"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToLavenderNorth"]
+shape = SubResource("shape_5")
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[connection signal="body_entered" from="Exits/ToRoute9" to="Exits/ToRoute9" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute9River" to="Exits/ToRoute9River" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRockTunnelNorth" to="Exits/ToRockTunnelNorth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRockTunnelSouth" to="Exits/ToRockTunnelSouth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToLavenderNorth" to="Exits/ToLavenderNorth" method="_on_body_entered"]
