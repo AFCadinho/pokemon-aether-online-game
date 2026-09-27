@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "date": "2026-09-27",
+  "scope": "24 exact recovered batch04 normal/shiny pairs; user visual and battle reviews, three real battle rounds per pair, individual bundle launcher install/load/no-op/restart",
+  "status": "local_release_content_approved",
+  "runtime_approved": true,
+  "release_approved": true,
+  "published": false,
+  "approved_species": [
+    "salamence",
+    "starly",
+    "staravia",
+    "moltres",
+    "murkrow",
+    "wingull",
+    "pelipper",
+    "swablu",
+    "altaria",
+    "honchkrow",
+    "basculin-red-striped",
+    "pyroar-male",
+    "regidrago",
+    "wattrel",
+    "kilowattrel",
+    "bombirdier",
+    "rellor",
+    "slakoth",
+    "arceus",
+    "squawkabilly",
+    "rookidee",
+    "corvisquire",
+    "spiritomb",
+    "giratina"
+  ],
+  "source_holds": [
+    "walking-wake",
+    "iron-leaves"
+  ],
+  "appearance_count": 48,
+  "bundle_count": 24,
+  "bundle_bytes": 685250103,
+  "bundle_index_sha256": "b3b9c9c236ce27a5da2a1ddc8e50c986fbdd15abdbdfdcba5076ef84b54a5849",
+  "installed_catalog_sha256": "06c8f196c39cb33b54e20a16b8086f8eb4d346b899bf93fcd0bebcf3c1f60550",
+  "battle_rounds": [
+    {
+      "group": 1,
+      "arena": "classic",
+      "pairs": 8,
+      "frame_p95_ms": 17.41,
+      "max_dispatch_ms": 2.749
+    },
+    {
+      "group": 1,
+      "arena": "stadium",
+      "pairs": 8,
+      "frame_p95_ms": 17.408,
+      "max_dispatch_ms": 2.136
+    },
+    {
+      "group": 1,
+      "arena": "classic",
+      "pairs": 8,
+      "frame_p95_ms": 17.315,
+      "max_dispatch_ms": 1.939
+    },
+    {
+      "group": 2,
+      "arena": "classic",
+      "pairs": 8,
+      "frame_p95_ms": 17.338,
+      "max_dispatch_ms": 3.139
+    },
+    {
+      "group": 2,
+      "arena": "stadium",
+      "pairs": 8,
+      "frame_p95_ms": 17.136,
+      "max_dispatch_ms": 2.24
+    },
+    {
+      "group": 2,
+      "arena": "classic",
+      "pairs": 8,
+      "frame_p95_ms": 17.296,
+      "max_dispatch_ms": 2.074
+    },
+    {
+      "group": 3,
+      "arena": "classic",
+      "pairs": 8,
+      "frame_p95_ms": 17.331,
+      "max_dispatch_ms": 2.399
+    },
+    {
+      "group": 3,
+      "arena": "stadium",
+      "pairs": 8,
+      "frame_p95_ms": 17.472,
+      "max_dispatch_ms": 2.963
+    },
+    {
+      "group": 3,
+      "arena": "classic",
+      "pairs": 8,
+      "frame_p95_ms": 17.369,
+      "max_dispatch_ms": 2.377
+    }
+  ],
+  "evidence_sha256": {
+    "tools/sprite_factory/catalog_production_batch_04_recovery_battle.json": "2dcd618efa57db0192f16132829626653aee3200a68910a5964e2279dc462e74",
+    ".tmp/batch04-recovery/candidate-bundles/asset-index.json": "b3b9c9c236ce27a5da2a1ddc8e50c986fbdd15abdbdfdcba5076ef84b54a5849",
+    ".tmp/batch04-recovery/candidate-bundle-source-catalog.json": "2e961a5c5ec39f832a25b5edd79addac32ddeab194b13cd650ed78b46961ad86",
+    ".tmp/batch04-recovery/stress-group-01/report.json": "bd54479a4524c5f1b72b2b7d25a494af90790bcf90c76f758f03f6092c62d250",
+    ".tmp/batch04-recovery/stress-group-01/catalog.json": "c46d7f66dbcf84040e46fcb7915bcaa4e0df295e47a535e9db890039bb7de226",
+    ".tmp/batch04-recovery/stress-group-01/godot.log": "fe58166bc2118fdf6c862f81c0bbe6ac015ccd752acf2c93c23dd3ae2768d34e",
+    ".tmp/batch04-recovery/stress-group-02/report.json": "cb167d80ab54522fcb3c22fd4759729dca7c8da1f27a70356078510dab8b0c0f",
+    ".tmp/batch04-recovery/stress-group-02/catalog.json": "a8f675cecdeb12f48140301a79b4432d56af8a00fedfa331cd36285b780beee1",
+    ".tmp/batch04-recovery/stress-group-02/godot.log": "25228d6812d9f093cc95ad1c37b625666cdd401d1aa26c533dd17f2d2a9500d1",
+    ".tmp/batch04-recovery/stress-group-03/report.json": "2a9e81cadac5bb91fb9527ab3491f355fd6403ab4eb97fdb6b32696c618c3eb0",
+    ".tmp/batch04-recovery/stress-group-03/catalog.json": "4f0f85b3659647652afb965beea08ae98e61ab37aae1ea2ed0a750947a43a19b",
+    ".tmp/batch04-recovery/stress-group-03/godot.log": "ddb7bac2b0aedfcfd5726c3daaaa5ad981e7d353ffe7b2e2d7c3a770bff8821e",
+    ".tmp/batch04-recovery/candidate-install/generations/0a69853ce9f2846a5d7e0a92dddab40ae0b8dabe6ebc5c2d63cb653ed6e48bd0/runtime-catalog.json": "06c8f196c39cb33b54e20a16b8086f8eb4d346b899bf93fcd0bebcf3c1f60550",
+    "launcher/tests/catalog_batch_04_candidate_bundles_check.gd": "bc0f2ee9e317f7cc1a6563078e54ab5fe89aa83846849e187c6b2a8b29a03f80"
+  },
+  "remaining": [
+    "Walking Wake and Iron Leaves require compatible source models and motions.",
+    "Release integration, certification and publication remain separate."
+  ]
+}
