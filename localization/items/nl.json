@@ -274,5 +274,21 @@
   "adinho-chroma-shoes": {
     "name": "Adinho Chroma Shoes",
     "shortDesc": "Ontgrendel de aanpasbare Adinho-schoenen voor mannelijke modellen."
+  },
+  "smoking-outfit": {
+    "name": "Smoking-outfitbox",
+    "shortDesc": "Open deze box voor een smokingjasje, broek en schoenen voor het mannelijke model."
+  },
+  "smoking-shirt": {
+    "name": "Smokingjasje",
+    "shortDesc": "Verplaats het smokingjasje voor het mannelijke model naar Character Customization."
+  },
+  "smoking-trousers": {
+    "name": "Smokingbroek",
+    "shortDesc": "Verplaats de smokingbroek voor het mannelijke model naar Character Customization."
+  },
+  "smoking-shoes": {
+    "name": "Smokingschoenen",
+    "shortDesc": "Verplaats de smokingschoenen voor het mannelijke model naar Character Customization."
   }
 }
