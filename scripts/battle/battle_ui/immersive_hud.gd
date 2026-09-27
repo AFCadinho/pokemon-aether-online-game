@@ -90,7 +90,7 @@ func _process(delta: float) -> void:
 	_place(header, Vector2((area.x - header.size.x * 0.65) * 0.5, 12), header.size, 0.65)
 	var turn: Control = battle.get_node("%BattleStatusPanel")
 	var turn_scale := 0.6
-	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null else area.x - 82
+	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null and opponent_portrait.visible and not battle.coop_mode else area.x - 82
 	var turn_x := opponent_portrait_left - turn.size.x * turn_scale - 12
 	_place(turn, Vector2(maxf(16, turn_x), 14), turn.size, turn_scale)
 	var reset_camera: Control = stage.get_node("ResetCameraButton")

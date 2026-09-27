@@ -1495,6 +1495,8 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 					await _play_native_catalog_move(event, batch)
 			"-damage", "-heal":
 				if SettingsManager.battle_animations and event.get("kind") == "-damage":
+					if _native_move_router != null and float(event.get("damagePercent", 1.0)) > 0.0:
+						_native_move_router.call("play_damage_sound")
 					if model != null and model.handles(controller):
 						await model.play_action(controller, "damage")
 					else:
