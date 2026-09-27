@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Underground Path heeft zijwaartse trappen tegen de wanden, met bijpassende aankomstpunten en vrije bordessen.
+
 - Route 5 heeft een eigen daycare-interior met ontvangstbalie, rustplekjes en speelruimte, gekoppelde deuren en een bestemming voor staffteleport.
 
 - Nieuwe 3D-cataloguskandidaten voor Grimer en Muk kunnen zonder scheuren tussen hun bewegende lichaamsdelen worden weergegeven.

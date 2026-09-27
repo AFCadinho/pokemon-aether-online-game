@@ -167,7 +167,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn"
 target_spawn_name = "FromRoute5Entrance"
 transition_id = "kanto_underground_path_route_5_entrance__to_tunnel"
-transition_facing_direction = "down"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel" unique_id=57320158]
 position = Vector2(16, 0)
