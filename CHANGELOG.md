@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het roze bloemetje naast het pad in Pallet Town heeft weer een complete onderkant; de map is opnieuw geïmporteerd met behoud van de animaties.
+
 - De mannelijke Team Rocket-outfit volgt nu de Gen 4-gruntreferentie met een donkerder uniform, paarsgrijze handschoenen en laarzen, en een losse pet in de outfitbox.
 
 - Water, boombladeren en bloemen bewegen nu subtiel in de bestaande maps; ook grotvijvers hebben wateranimatie. De statische mapindeling en botsingsgegevens blijven behouden.

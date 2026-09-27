@@ -21,7 +21,7 @@ func _init() -> void:
 			continue
 		var root := scene.instantiate()
 		var actual := Fingerprint.new().capture(root)
-		var previous: Dictionary = report.maps[id].before
+		var previous: Dictionary = report.maps[id].get("current_static_reference", report.maps[id].before)
 		for key in ["fingerprint", "cells", "layers", "usedTiles"]:
 			if actual[key] != previous[key]:
 				failures.append("Static frame/geometry/TileData differs: " + id + " " + key)
