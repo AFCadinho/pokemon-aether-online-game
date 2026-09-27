@@ -4,7 +4,7 @@
 
 - De laatste 25 Pokémon uit batch 03 zijn lokaal goedgekeurd als 3D-model in normale en shiny vorm, elk met een eigen bijwerkbare bundle. De modellen komen pas met een aparte publicatie beschikbaar voor spelers.
 
-- Gedeelde double battles behouden de portrethoeken: beide partytrainers links naast elkaar, beide wilde tegenstanders rechts naast elkaar en bij trainergevechten één trainer rechts. De turn- en cameraknoppen wijken voor de rechterportretten.
+- Gedeelde double battles behouden de portrethoeken: beide partytrainers links naast elkaar, bij wilde gevechten één generiek encounterportrait rechts en bij trainergevechten één trainer rechts. De turn- en cameraknoppen wijken voor het rechterportrait.
 
 - Gedeelde double battles spelen het gebruikelijke schadegeluid af naast de 3D-hitreactie. De turn- en cameraknoppen blijven rechtsboven staan wanneer er geen zichtbaar tegenstanderportrait is.
 

@@ -73,11 +73,12 @@ func _run() -> void:
 	portraits._process(0.0)
 	assert(stage.get_node("TrainerPortrait0").visible and stage.get_node("TrainerPortrait2").visible,
 		"Both co-op Trainers need portraits in the left corner")
-	assert(stage.get_node("TrainerPortrait1").visible and stage.get_node("TrainerPortrait3").visible,
-		"Both wild opponents need portraits in the right corner")
-	assert(stage.get_node("TrainerPortrait0").position.x < stage.get_node("TrainerPortrait2").position.x
-		and stage.get_node("TrainerPortrait1").position.x < stage.get_node("TrainerPortrait3").position.x,
-		"Double battle portraits must be paired side by side")
+	assert(stage.get_node("TrainerPortrait1").visible and stage.get_node_or_null("TrainerPortrait3") == null,
+		"Wild doubles need one shared opponent portrait")
+	assert((stage.get_node("TrainerPortrait1").get_child(1) as TextureRect).texture.resource_path ==
+		"res://assets/ui/wild_encounter_radar.svg", "Wild portrait must use the generic encounter icon")
+	assert(stage.get_node("TrainerPortrait0").position.x < stage.get_node("TrainerPortrait2").position.x,
+		"The two party Trainer portraits must stay side by side")
 	hud._process(0.016)
 	var turn_panel: Control = battle.battle_status_panel
 	var reset_camera: Control = stage.get_node("ResetCameraButton")
@@ -88,7 +89,7 @@ func _run() -> void:
 	battle.coop_presenter._opponent_trainer.catalog_sprite.texture = load(
 		"res://assets/sprites/trainer_cards/showdown/veteran-gen7.png")
 	portraits._process(0.0)
-	assert(stage.get_node("TrainerPortrait1").visible and not stage.get_node("TrainerPortrait3").visible,
+	assert(stage.get_node("TrainerPortrait1").visible,
 		"Trainer doubles need one opponent Trainer portrait")
 	coop_service.activity = previous_activity
 	coop_service.view = previous_view
