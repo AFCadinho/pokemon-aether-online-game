@@ -138,7 +138,11 @@
         "slakoth"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official source catalog includes unused foreign battlewait references; only verified local Slakoth clips are selected",
+      "excluded_animation_references": [
+        "pm0297_00_00_00001_battlewait01_loop.tranm",
+        "pm0297_00_00_00001_battlewait01_loop.tracm"
+      ]
     },
     {
       "species": "azurill",
@@ -161,7 +165,13 @@
         "bagon"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "starly",
@@ -172,7 +182,14 @@
         "starly"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0,
+      "source_eye_material_diagnostic": "unreferenced_white_highlight"
     },
     {
       "species": "staravia",
@@ -183,7 +200,13 @@
         "starly"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "luxray",
@@ -253,7 +276,14 @@
         "rookidee"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0,
+      "dynamic_visibility_diagnostic": true
     },
     {
       "species": "corvisquire",
@@ -264,7 +294,14 @@
         "rookidee"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0,
+      "dynamic_visibility_diagnostic": true
     },
     {
       "species": "rolycoly",
@@ -869,7 +906,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "sunkern",
@@ -897,7 +940,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "girafarig",
@@ -944,7 +993,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "pelipper",
@@ -953,7 +1008,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "sableye",
@@ -990,7 +1051,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "altaria",
@@ -999,7 +1066,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "glalie",
@@ -1076,7 +1149,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "spiritomb",
@@ -1085,7 +1164,10 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Review official visibility and transparent shell in native 3D; sprite probe framing is insufficient",
+      "source_transparency_diagnostic": true,
+      "dynamic_visibility_diagnostic": true,
+      "source_refraction_alpha_diagnostic": true
     },
     {
       "species": "toxicroak",
@@ -1142,7 +1224,12 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Use the complete official standing motion bank; review posture and battle placement",
+      "motion_overrides": {
+        "idle": "00000_defaultwait01_loop"
+      },
+      "facial_baseline_motion": "00010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "cresselia",
@@ -1161,25 +1248,30 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Base form only: verify shared material selector frame zero against default colours, then review normal/shiny visually",
+      "verify_shared_default_materials": true
     },
     {
-      "species": "basculin",
+      "species": "basculin-red-striped",
       "national_dex_number": 550,
       "resource_id": "pm0550_11_00",
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval.",
+      "form": 0,
+      "gender_code": 0
     },
     {
-      "species": "pyroar",
+      "species": "pyroar-male",
       "national_dex_number": 668,
       "resource_id": "pm0705_00_00",
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval.",
+      "form": 0,
+      "gender_code": 0
     },
     {
       "species": "magearna",
@@ -1493,7 +1585,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "glastrier",
@@ -1685,7 +1783,12 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Base form only: verify shared material selector frame zero against default colours, then review normal/shiny visually",
+      "verify_shared_default_materials": true,
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true
     },
     {
       "species": "charcadet",
@@ -1742,7 +1845,15 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0,
+      "restore_all_eyelids": true,
+      "source_eye_material_diagnostic": "eyelid_source_uv"
     },
     {
       "species": "kilowattrel",
@@ -1751,7 +1862,15 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0,
+      "restore_all_eyelids": true,
+      "source_eye_material_diagnostic": "eyelid_source_uv"
     },
     {
       "species": "maschiff",
@@ -1923,7 +2042,13 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Official grounded sleep from bank 0; review transition from flying idle and floor clearance",
+      "motion_overrides": {
+        "sleep": "00281_sleep01_loop"
+      },
+      "cross_bank_sleep_diagnostic": true,
+      "facial_baseline_motion": "20010_defaultidle01",
+      "facial_baseline_frame": 0
     },
     {
       "species": "finizen",
@@ -2293,7 +2418,7 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Hold: current original ROMFS contains Raichu placeholder geometry and motions; newer species-correct source required"
     },
     {
       "species": "iron-leaves",
@@ -2302,7 +2427,7 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
+      "review_warning": "Hold: current original ROMFS contains Raichu placeholder geometry and motions; newer species-correct source required"
     }
   ]
 }

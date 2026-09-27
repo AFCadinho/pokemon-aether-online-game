@@ -26,6 +26,8 @@ def inspect_materials(path):
             'alpha_type': view.string(table, 15),
             'textures': {view.string(tex, 0): view.string(tex, 1)
                          for tex in view.tables(table, 2)},
+            'colors': {view.string(value, 0): list(struct.unpack_from('<4f', data, value + view.field(value, 1)))
+                       for value in view.tables(table, 7) if view.field(value, 1)},
             'floats': {view.string(value, 0): view.scalar(
                 value, 1, lambda offset: struct.unpack_from('<f', data, offset)[0], 0.0)
                 for value in view.tables(table, 4)}})

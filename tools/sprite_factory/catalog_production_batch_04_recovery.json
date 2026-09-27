@@ -1,0 +1,1033 @@
+{
+  "schema": 1,
+  "date": "2026-09-27",
+  "runtime_approved": false,
+  "visual_review": "corrections_requested",
+  "battle_qualification": "pending",
+  "scope": "25 original batch-04 holds plus Spiritomb",
+  "candidate_pairs": 24,
+  "source_holds": [
+    {
+      "species": "walking-wake",
+      "runtime_approved": false,
+      "status": "held",
+      "reason": "Known original-ROMFS Raichu placeholder, unsuitable model and motions",
+      "rejected_glb_sha256": "e748f64edb47884a4862b9e777db7c4c91aa148b928bad7be1101210eda6a49a"
+    },
+    {
+      "species": "iron-leaves",
+      "runtime_approved": false,
+      "status": "held",
+      "reason": "Known original-ROMFS Raichu placeholder, unsuitable model and motions",
+      "rejected_glb_sha256": "86452353becaadae3cd3f9424ad80234aa96b56fbb36dff372dad0144d61c71c"
+    }
+  ],
+  "entries": [
+    {
+      "species": "salamence",
+      "resource_id": "pm0373_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "215249495ae07a84cae9315ff0c1920581b614f47ba2ef6d07aa0986c05bca49",
+      "variants": {
+        "normal": {
+          "glb_sha256": "3bb9dec0911973704882993e617120ec8a94703c52177d1cd5ef15a4337896ad",
+          "runtime_sha256": "d05304eef84f1abb000ff1818bc43a1ddbfd9baf3033141dc63b5a8fd9ce822d",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/salamence.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/salamence/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "2f4fae87010a8839c7b7788bf4337c90492df894336fd13bb8ed8a0b730e264b",
+          "runtime_sha256": "e8d9cbef68861d1bb4ea72d844fab39548d01e34b371dd86067316a23a7358c8",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/salamence.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-export/salamence/model.glb",
+          "export_report_sha256": "a710baf329a86a262e2a2d3db3c4a4a0f982e1573b7eb0cb1b6814f0c96763bc",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "starly",
+      "resource_id": "pm0396_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "3e5a9cfd35704bb38d926ad45c7c6d8bd5c7c4a3624eea1cd980ef22a4fbb04c",
+      "variants": {
+        "normal": {
+          "glb_sha256": "60657ad8a90aae271b6fd74dafeaa6ade293fe21ac9ab0ae906ebab9d21e53d2",
+          "runtime_sha256": "5d51b21b87ab63515b8afae4abf06b85f4377f0cd84f0c1f398afb44fc472d52",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/starly.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/starly/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "f64bc2cbd6b136eb4dd1496e32fa5ebd9bf2d7ff7fa9f3e204cba5b23d47572a",
+          "runtime_sha256": "a2ee1400e6f959dc9f8693f7ed0245aabdc161c01452a7cce81c80157bc4d523",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/starly.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/starly/model.glb",
+          "export_report_sha256": "c1232ad9fcbaf6d4d07cfd57dcc0be97304f5db23f21981d4b23e2ef31430436",
+          "unrepresented_rare_parameters": [
+            {
+              "key": "EmissionColorLayer5",
+              "material": "l_eye",
+              "mode": "unrepresented",
+              "normal": [
+                0.871356248855591,
+                0.871356248855591,
+                0.871356248855591,
+                1.0
+              ],
+              "rare": [
+                0.863146781921387,
+                0.863146781921387,
+                0.863146781921387,
+                1.0
+              ]
+            },
+            {
+              "key": "EmissionColorLayer5",
+              "material": "r_eye",
+              "mode": "unrepresented",
+              "normal": [
+                0.871356248855591,
+                0.871356248855591,
+                0.871356248855591,
+                1.0
+              ],
+              "rare": [
+                0.863146781921387,
+                0.863146781921387,
+                0.863146781921387,
+                1.0
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "species": "staravia",
+      "resource_id": "pm0397_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "9a1c09414e7bfe218eb492188748e358d3e76c093bb166cddb2005ce3b502275",
+      "variants": {
+        "normal": {
+          "glb_sha256": "edb264d007b73b9dbbc9c0c9112c17ec6475f6d556ed613389edcb5ff5b584bc",
+          "runtime_sha256": "646213a71bc5470f7d077f25fc329ea11cdef936042004dc2f740cc75d74a875",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/staravia.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/staravia/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "34acd2a2e0870b3166095428335fba9747e3921ced36390127c7582207476ad7",
+          "runtime_sha256": "49a21f38a0c2050d8ed46ac88b50d39e4e31195352c95e2c33c64453f9b59b41",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/staravia.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/staravia/model.glb",
+          "export_report_sha256": "0e1f643f1db3701bb45d8b4712409ce66b9343b9e3c034ca8e806a4542563084",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "moltres",
+      "resource_id": "pm0146_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "6de1355b4a0ac47cfa608b32689558a551eefe53e83e6520b703ec2545c6fb9a",
+      "variants": {
+        "normal": {
+          "glb_sha256": "5f6ea19e8130a151025f2035509ac81daea420f0fa31a069facbabb6bb0f9a02",
+          "runtime_sha256": "e86ad7a0cd9a9136c172121a924f219828d6e26b151363fbaa37283313855785",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/moltres.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/moltres/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "bb479caa88e46358159b6bdad4f2f67d693a5c77cd08f54f7ce16ed7e0fd14d3",
+          "runtime_sha256": "cd3c8d652fc2bfa34b0e813bf19a3f8f60cebd010a59548059cb976f3e1719aa",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/moltres.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/moltres/model.glb",
+          "export_report_sha256": "3a987df82e2b8959739eda198d8dedbee99d0feb60571b7b36d0fee7c9f217a6",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "murkrow",
+      "resource_id": "pm0198_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "762397bf9d8597b2d0ed61acaa9f620013fe6a45805403a3f97581de324ee49f",
+      "variants": {
+        "normal": {
+          "glb_sha256": "19a62132ceef530a2a1faae4a19cf739f0b178c904f40b7ac965bf041b997757",
+          "runtime_sha256": "ce4731b23350c185c73473d67a9ba2a223877fc4d2386df9c55d246bceca9497",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/murkrow.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/murkrow/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "e3f0dc15b0af62d60ba3ee3685c61baeec74302bbf72f35a7eb587bf8837cb51",
+          "runtime_sha256": "3520054d37ec31e1128cc092a5268983c0d18c668b9ec6d8eff9f32b702a6d55",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/murkrow.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/murkrow/model.glb",
+          "export_report_sha256": "978da7bcf7c40e6ce82bcb6305667aeb9747dad0167cef623d0877bc899b8c43",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "wingull",
+      "resource_id": "pm0278_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "929f4605665a8ba142d33b88368e559ac212cb73f163fcd50cdeaf4ac637a2ab",
+      "variants": {
+        "normal": {
+          "glb_sha256": "5afb8f4a20fde7c0e8b6017fcc2cea3ac6cce3cbc10ddb3233c0699f47a7a5f8",
+          "runtime_sha256": "9aaf0afe9582d22cf8bca5e6a5cbd117c4e883cd96cb6ccdad453b8a91f6c2b6",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/wingull.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/wingull/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "c5475379c619b50142c1d8dba7ddc3154c2ddcd529e6e5904d8e856143028a85",
+          "runtime_sha256": "6303fed386ce7d9b8e59ea03583cd20edcc15c92904d311aaebf22333de540a5",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/wingull.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/wingull/model.glb",
+          "export_report_sha256": "132b753e882719f4b8cb7f44938888110470b4842480e6cbd16245689e6d9481",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "pelipper",
+      "resource_id": "pm0279_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "927a86e770e4b635321535e32c58917cb80444307f0931a0911d570df37434ed",
+      "variants": {
+        "normal": {
+          "glb_sha256": "375b90945a40735b8fb60081017e490121045cb282d30c1940a069217b5b8443",
+          "runtime_sha256": "b9d59ecdd590986e7a91f5a45e7c142508d5a7fe117745ec6268882a4580ba8f",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/pelipper.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/pelipper/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "ad09a97ce33cbde17e254184f677b6608066442b765b75734cae9bf35fe58b1f",
+          "runtime_sha256": "2b772eff018fef05eb063ee8d4efc8ec9f70ddf06dbcfcc5364da128e1305229",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/pelipper.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/pelipper/model.glb",
+          "export_report_sha256": "2bd590be40850107b264811988b28a775336490ba2494de907ce7bc808e37f9e",
+          "unrepresented_rare_parameters": [
+            {
+              "key": "BaseColorLayer6",
+              "material": "r_eye",
+              "mode": "unrepresented",
+              "normal": [
+                0.672456979751587,
+                0.745417594909668,
+                0.775830507278442,
+                1.0
+              ],
+              "rare": [
+                0.863146781921387,
+                0.863146781921387,
+                0.863146781921387,
+                1.0
+              ]
+            },
+            {
+              "key": "BaseColorLayer6",
+              "material": "l_eye",
+              "mode": "unrepresented",
+              "normal": [
+                0.672456979751587,
+                0.745417594909668,
+                0.775830507278442,
+                1.0
+              ],
+              "rare": [
+                0.863146781921387,
+                0.863146781921387,
+                0.863146781921387,
+                1.0
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "species": "swablu",
+      "resource_id": "pm0333_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "585dd8cffc216bf47890dc0061e4134051edc5389c4eba34d29afbdf6ab6b681",
+      "variants": {
+        "normal": {
+          "glb_sha256": "4249523718a787af93e15ddbb0d4a9c9c003a3284ba782beb2729e85464e6e8a",
+          "runtime_sha256": "715b0d73e6d9b29c517b45c89ef18275b525d968d77e4edd166523ee498b3d13",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/swablu.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review/export/swablu/model.glb",
+          "export_report_sha256": "d71e5732debbb33ab13d10baece318df0c245d4116f31165095554aef1f81edd",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "55b1d974edbbfdf5de912f58b3a0d23df4e3941e8164d88bf4f2df174c5a9723",
+          "runtime_sha256": "5f6cc170045275db23ec357bde84d48ea9169c8218b70780f49711eccbea9ba6",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/swablu.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-export/swablu/model.glb",
+          "export_report_sha256": "4fa8904a5bcb990f7ecbd3b14fa4e64b20bb7cb1cff2e59daf86bc57d6cd4d67",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "altaria",
+      "resource_id": "pm0334_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "7189826a47ef91f2c6b15758b85d892f5795ee419e5bed4fc9a893004d97c323",
+      "variants": {
+        "normal": {
+          "glb_sha256": "ae3522efa38f39f6ca23a0642ace7ff7fb7d4eb88a5dc13d98f81611cbab7a91",
+          "runtime_sha256": "e37cc6ae59f87826ac3dffc6a62c86dfaddaba581129d2ae7cfff88202bee507",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/altaria.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part2/export/altaria/model.glb",
+          "export_report_sha256": "c6b48b10998aac9b04a46ebe97b403ade3d9d48e4ea415571efabec109357a9e",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "305d2ef02a73478f83fba08e652666444eeb328542fbdf5ba14455ab3b705d24",
+          "runtime_sha256": "3daa498b7f2730523d5f288da3fd551b28a28202b5b1a49d8b535e91442615d6",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/altaria.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/altaria/model.glb",
+          "export_report_sha256": "ab7e0ed9be3ce5614e93d91a6d1d7c6559a98929d7cc6200c0e4480f19859e3a",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "honchkrow",
+      "resource_id": "pm0430_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "ae84086a2c09f895f80b94204e129ec1b58fb8e2cefd64e6edf8f0b27a5bab80",
+      "variants": {
+        "normal": {
+          "glb_sha256": "45badf9b89d345c4215b271d89a74b8b9a4aca30acbd49830fb9865a8505a92d",
+          "runtime_sha256": "2498022aa7881d12792beed6e3c442e1ca4378301ba438e8e15205d3a22c8d51",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/honchkrow.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part2/export/honchkrow/model.glb",
+          "export_report_sha256": "c6b48b10998aac9b04a46ebe97b403ade3d9d48e4ea415571efabec109357a9e",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "8456dc7b3ea711ec7b3dbe46078d097e278c11706d71c7c9cab9fa0c18c7f173",
+          "runtime_sha256": "cda0fd86c7ffe7bd218efaf1a1b829a4e9060a4e8d958d11c4943c3607eb817d",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/honchkrow.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-a/honchkrow/model.glb",
+          "export_report_sha256": "446e560679e0c796e037c7654b7ebf24a6a8dd81cc3fc41bd97cefd3dbd77743",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "giratina",
+      "resource_id": "pm0487_11_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "458c5a6d1dac67c3cca281b30e45fb15f1c6ce3c596ec54cad962ddf66203759",
+      "variants": {
+        "normal": {
+          "glb_sha256": "76faa61fc9e1676211ef2fd7de1327a493da7d3ce1b365308422312846fd0fc2",
+          "runtime_sha256": "708f0736ffcf2b545a2afe01e62f97b893bc61d30fdcd5cc582451a17835951a",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/giratina.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part2/export/giratina/model.glb",
+          "export_report_sha256": "c6b48b10998aac9b04a46ebe97b403ade3d9d48e4ea415571efabec109357a9e",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "748decdd72962308ff4779c9384d37eac9a443f94a00446888a613d0f1454ea9",
+          "runtime_sha256": "b583951a2066b11c22d9991fe4a1a6cab700faf976d2e8ee691c0d8bf298ea4d",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/giratina.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/giratina/model.glb",
+          "export_report_sha256": "291c364b10fb67afe975502b5b3b1a859fa2331566d965525ab66d677a2a1e50",
+          "unrepresented_rare_parameters": [
+            {
+              "key": "MetallicHighlight",
+              "material": "l_eye",
+              "mode": "unrepresented",
+              "normal": 0.300000011920929,
+              "rare": 0.200000002980232
+            }
+          ]
+        }
+      }
+    },
+    {
+      "species": "basculin-red-striped",
+      "resource_id": "pm0550_11_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "a0d7e7de880efed95383145164aaf1fe381f408cff46ae56d0bcbc2ba6d86bff",
+      "variants": {
+        "normal": {
+          "glb_sha256": "4289bfc7726270330fad5e0ac178c2762eab58f1c0de9b3124ebc0d9b3538967",
+          "runtime_sha256": "e9102b2ced18be6e9c8f66682700e8a2ff5e231e93f2ebcecca51d19391c6b98",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/basculin-red-striped.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part2/export/basculin-red-striped/model.glb",
+          "export_report_sha256": "c6b48b10998aac9b04a46ebe97b403ade3d9d48e4ea415571efabec109357a9e",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "62151387f8c4283faa3faa76be771d198093aa193e4e9cae9401681a40d54348",
+          "runtime_sha256": "0e2c3346405939dd60e41f09ff4b141fd03a99a6a0ea9b576ed33277a5650694",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/basculin-red-striped.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/basculin-red-striped/model.glb",
+          "export_report_sha256": "0f0b14e7bdd0a14afbe03506e86c401d1aef17d5abb123c4d731f74f5c5f5f34",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "pyroar-male",
+      "resource_id": "pm0705_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "7ffc3899ca774278509dc54a4a15f999e96ac90f2d3524760a339e70d91a12ee",
+      "variants": {
+        "normal": {
+          "glb_sha256": "999e601d2886fd79c07907b0d0ce0ef946efab04fd8cd49fa673e6ef7a7d4c94",
+          "runtime_sha256": "25f69d2df0c97b1556413a215e52a1fc07da72788183f69d7d345e360b1db0f8",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/pyroar-male.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part3/export/pyroar-male/model.glb",
+          "export_report_sha256": "6f23e5d812d11527dc0346924ff1b6e5d00b1691296dda21dfb6aa7929648dba",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "ed6d4b38e75930bb4a533a90a585aa386e943c5ea7edf32173ea4d161299adb5",
+          "runtime_sha256": "a236b349ebac72fa739a68aa659a10228b5304e5db63b9b2c76749ebb61230e3",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/pyroar-male.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/pyroar-male/model.glb",
+          "export_report_sha256": "b6ad36776b65b5cd15c2702f16f8ce6604bf17dd2706737e1f08b26dae26bc04",
+          "unrepresented_rare_parameters": [
+            {
+              "key": "SubsurfaceColor",
+              "material": "body_a_00",
+              "mode": "unrepresented",
+              "normal": [
+                0.200000002980232,
+                0.200000002980232,
+                0.200000002980232,
+                1.0
+              ],
+              "rare": [
+                0.100000001490116,
+                0.100000001490116,
+                0.100000001490116,
+                1.0
+              ]
+            },
+            {
+              "key": "SubsurfaceColor",
+              "material": "body_b_00",
+              "mode": "unrepresented",
+              "normal": [
+                0.200000002980232,
+                0.200000002980232,
+                0.200000002980232,
+                1.0
+              ],
+              "rare": [
+                0.100000001490116,
+                0.100000001490116,
+                0.100000001490116,
+                1.0
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "species": "regidrago",
+      "resource_id": "pm0990_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "2cfca60399002e513044931d3c3b9ba16cd7b5a3eb765b3a5b5a652c3fcf90c6",
+      "variants": {
+        "normal": {
+          "glb_sha256": "f2e612e8037fef9e1ffad3b5993b7946bb53ab5127339e03d1ca9c8708c4d19c",
+          "runtime_sha256": "65f292c01f0ad867850ff5a833c9d84888c7dc217e2c69acbaff8b5dfe3bd38d",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/regidrago.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part3/export/regidrago/model.glb",
+          "export_report_sha256": "6f23e5d812d11527dc0346924ff1b6e5d00b1691296dda21dfb6aa7929648dba",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "34f8ca01b70310db14097fbeecebc57766aea24af4226018c8cc35c7ee51d31a",
+          "runtime_sha256": "ec073df591f2130ecf54e587c7622c9fb9cb06442bd380dca964a5d43a425a46",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/regidrago.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-export/regidrago/model.glb",
+          "export_report_sha256": "a384169803099527e89f575d4cb672f32fabde305ad675074cdba4276ed7fa9b",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "wattrel",
+      "resource_id": "pm1061_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "71f54745043b463262ad50104354f5ae3d0927d7add02bf1103528c4a002bd31",
+      "variants": {
+        "normal": {
+          "glb_sha256": "89267bb6879e1c6caea3d26d5b7bd69b03a331ccc266b3636891e51ef449be46",
+          "runtime_sha256": "cccc3cb5ffac8a08106a4c4e283760ad35ae6f736cf80dbe7e8199118fa4b54a",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/wattrel.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/eyelid-review/export/wattrel/model.glb",
+          "export_report_sha256": "46d628a2f9fb7251b9fd9f46c404d41aece02b506fbea6d07a586a58d916bba9",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "5148f1cf9cd3d2b77cdc3d305ed8b57a3cef9d56b5356cc5251bb2392001c41b",
+          "runtime_sha256": "a72f92607508638b6681887447921450f43d8c6ececd720adcb2bc1a4cc9fe8d",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/wattrel.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-eyelid-spiritomb/wattrel/model.glb",
+          "export_report_sha256": "057aa9c4a0ea1d618fee011613c896c27c42e9b397ddf0b06bc7ed0cf61f4fed",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "kilowattrel",
+      "resource_id": "pm1062_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "9a8a2a3de8da8aa3fe71c355bd70489c4a9cdec051a752839d234cedb3c3bde7",
+      "variants": {
+        "normal": {
+          "glb_sha256": "3b63be32d6e781124fb9ca1d65220d404f12fb761213d294658e38aa2a0c54ee",
+          "runtime_sha256": "254c7da535d2b9c007fa02488f9b067e4cef415801325a906562b9f8b8997c5f",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/kilowattrel.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/eyelid-review/export/kilowattrel/model.glb",
+          "export_report_sha256": "ebba505643ce2c2278ea5083c5048055250d3e15a15651f89b357fa3779bed9b",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "4e3769dbc579da9e974a8785a01c8e004950fd3bf49d43e69f4c2e624c7bf727",
+          "runtime_sha256": "c0f9c31f889469f256ec34a44f881bca0ce32a5e66068b90cce52106e9abbfb7",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/kilowattrel.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-eyelid-spiritomb/kilowattrel/model.glb",
+          "export_report_sha256": "d3237548a1ae445fb828f215a7b3a2fbcc53d3a445c5fb5463e8725dd8e15e22",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "bombirdier",
+      "resource_id": "pm1063_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "20db92c6c767e2c27ba81fa586cbd9695a1070e70a2a11b441fcf4e382555f46",
+      "variants": {
+        "normal": {
+          "glb_sha256": "b416567f1b0a22347da7fda52d635025d843d3eb43caa3bcd303df8037cb427c",
+          "runtime_sha256": "266d5689fdacf9df04a76ceba2b5d04386cac2e1a882b12b3da74b3a0efedc0b",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/bombirdier.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/native-review-part3/export/bombirdier/model.glb",
+          "export_report_sha256": "6f23e5d812d11527dc0346924ff1b6e5d00b1691296dda21dfb6aa7929648dba",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "116b737c9cfb9d83304413dfa398be75fb344214d54a2459c0b6e3f4f284de9b",
+          "runtime_sha256": "14ca00eda5effca05e876c5e2e40a1f33c7b54deb6b8a9b1a4036ba246972500",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/bombirdier.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/bombirdier/model.glb",
+          "export_report_sha256": "5f196733864138a372dec0135550e7fa4d96ebc614140b91d977677779f4c748",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "rellor",
+      "resource_id": "pm1026_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "8f5c6d49653baf01036cbe480913debb516ff927062bf89aadea660f43979b81",
+      "variants": {
+        "normal": {
+          "glb_sha256": "2f26468319339db592808765eb74875692037447af9d0e79f2dd4fe87f422d4e",
+          "runtime_sha256": "066e961b00fe345f35d36f82363d3747a410a347880eabc342522e5318502d9a",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/rellor.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/romfs-review-absolute/export/rellor/model.glb",
+          "export_report_sha256": "97c9784788b78fcf033ecac92296cb01799372fafbe90856a9a108f8becf6e99",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "a36cff37d2b294bdfc10691848c85157e070a4f3448b67296c27a616dc5a9959",
+          "runtime_sha256": "f8ee38002e8421cbc22b3ab7599ab4faad9b662da7f205eec8f0f50115fe1f25",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/rellor.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-material-retry/rellor/model.glb",
+          "export_report_sha256": "c948358e83951114c690a01ba034b62ad2ef99bdcdee555557e9b6009d57b7de",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "slakoth",
+      "resource_id": "pm0287_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "2e8865b01a2e804487e3c2f3f7c3ace9a92c3444b85e17b3df1fc223ce34b5ec",
+      "variants": {
+        "normal": {
+          "glb_sha256": "8b52de86d3a5ea2ace48b01b0061c3db91a2f232d653e94c381c6f792901ded7",
+          "runtime_sha256": "306ca56edf2ada4509832b4343b9e19fa867fb89a63a7e32e27900c5a2756b61",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/slakoth.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/selector-review/export/slakoth/model.glb",
+          "export_report_sha256": "0bd59ac0fc2b6db002c0036290f77efd53687788195befd851fa6a5e9df60b63",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "d37d1b371b7a9d47952cee034ba205c3e9f66ee2fcbbe68034f1f4d6808f4a76",
+          "runtime_sha256": "984148b82f760dbf7b9d99be7ce48e34536a9c156de37d20bd0541c5ef158399",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/slakoth.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-export/slakoth/model.glb",
+          "export_report_sha256": "0a93cf3a2dc7cb692e532e4ce6c6e8e50fd4cb776bc3411f37fe40ed7da5b1d5",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "arceus",
+      "resource_id": "pm0493_11_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "4c2c0a30ffa8b2444d5a972e0b08c9ef4159def19e40541012fbad20b3f1bf3c",
+      "variants": {
+        "normal": {
+          "glb_sha256": "c43d202ee26523e14f6653576f5b978ba4367f714eab43b9ed51934389b11a17",
+          "runtime_sha256": "aa34542e540615358cbd9d12c35fc84a70e3cd5d75a8bdd30bf125826e559506",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/arceus.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/selector-retry/export/arceus/model.glb",
+          "export_report_sha256": "1982658582cdfac3e060692ce1864959c4b2b838f28f8e0f898caab0d2a7aba4",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "1efaa766c4259ab9f7dfab9ec5b2e37ae9b065f004de1b3bb8b8d05934b9b0b4",
+          "runtime_sha256": "df09c87779b4578d94bed2a48ad7e30f9fb486435c69b3b8c52bb38df7983914",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/arceus.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/arceus/model.glb",
+          "export_report_sha256": "068fb81f108bac307baa47e204cba8c034b53fd7594a45b84801adff5d17fb60",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "squawkabilly",
+      "resource_id": "pm1064_11_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "9e4c817e83a2fd8fc999ddd436f6f0b708d6b44cbea21c04e73e5f4732c78cde",
+      "variants": {
+        "normal": {
+          "glb_sha256": "d171115bd5ef37abda75937886447995b44f5ad8e9547dc6b38533f04dc4d7d9",
+          "runtime_sha256": "70d2162c0bacf454182558687c2b2d685ffb99638080bf8b2a805706f191dada",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/squawkabilly.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/selector-retry/export/squawkabilly/model.glb",
+          "export_report_sha256": "1982658582cdfac3e060692ce1864959c4b2b838f28f8e0f898caab0d2a7aba4",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "0e63b939abd374dd1395f1cf9b4683fa6398db5e62df3d7baf78d417f267c628",
+          "runtime_sha256": "bc92de168ead3c718d676f2b9ecbb901277f683b882450ec7d953052aa4e6ccc",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/squawkabilly.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/squawkabilly/model.glb",
+          "export_report_sha256": "4492765db429e57dcdf04b871afc478f5315099cf500bbbbfee323577f3c3944",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "rookidee",
+      "resource_id": "pm0918_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "b66d36fc806f05058a3a5d5cbcc9b5e766a5da72974b16aa1617727df03ad50f",
+      "variants": {
+        "normal": {
+          "glb_sha256": "6cfaab5f75b6c8e9d13e16147458f68605980f8b3c3b9e50c13b9521aa547568",
+          "runtime_sha256": "b830ab4ac80b78effc6539e000e21f604a7f643d5011dd82ecf5e2abdc98c874",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/rookidee.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/visibility-retry/rookidee/model.glb",
+          "export_report_sha256": "df67cd4ec61541b9d48c53afa4e97777a428c7edcfa282354ac015faf14d507f",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "012d7e0a81d5c9632bf8122bf13794c57594d4bc6683d8c70a878cb31c756864",
+          "runtime_sha256": "620166064fa2af22311ed62185a6d0046d096eefe488728886ccc6ddcbe13b2b",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/rookidee.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-export/rookidee/model.glb",
+          "export_report_sha256": "be917d7c770612306fc8e94ebb7fdac1201d4ce42f4f08b936c1f316aa43e5d9",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "corvisquire",
+      "resource_id": "pm0919_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "67905acae793a2f45ee0b102407f355fd4b5c1f82e85d2d3ade76213fd8f6104",
+      "variants": {
+        "normal": {
+          "glb_sha256": "c8c90a6675287e7c08bba125287be93ce0f24abef69de67e29d7fd891fe76805",
+          "runtime_sha256": "b381ff361bb8c2e43984b4e9d0e2f3d2ba6dce0ae9c77fbce7463f497a0ec1ef",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/corvisquire.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/visibility-retry/corvisquire/model.glb",
+          "export_report_sha256": "df67cd4ec61541b9d48c53afa4e97777a428c7edcfa282354ac015faf14d507f",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "ff64060cb90aed09541f6b58b2d9bcf6ca09494139c0abdab98de6e8b4c0cf80",
+          "runtime_sha256": "6cc56ac900f517fa5bc33cd60afca7d6e96f64647708c1ce4bee2bf52b3ecab8",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/corvisquire.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-export/corvisquire/model.glb",
+          "export_report_sha256": "85c5f68da1391c3951ff31384c576ea92601bcab3ca3db7f0d8de238016a3a6d",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    },
+    {
+      "species": "spiritomb",
+      "resource_id": "pm0442_00_00",
+      "actions": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "identity_proof_sha256": "9e836b48161969a9eb95de22f46b2f8f74d277ced99bfe39bbcc57970a558769",
+      "variants": {
+        "normal": {
+          "glb_sha256": "5234c5501ab7e993c242a826a596bdc8549a9b7d568b2ef70e76c7d8f5d422fb",
+          "runtime_sha256": "9bd0abbf2c256766b443edeb1f1a7ae0bd13ef3161245d4fcaa1748977d143c3",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/spiritomb.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/spiritomb-retry/spiritomb/model.glb",
+          "export_report_sha256": "842c74185ecddc74d7714e9b784c21501c3e7a24194bc5b275e227ed03ebb768",
+          "unrepresented_rare_parameters": []
+        },
+        "shiny": {
+          "glb_sha256": "fc1f0aadc90afb5dea35b55b81875ef3b585cbeb6c37ab880ee3b9fecbad7ae4",
+          "runtime_sha256": "766d43380135f3d1e9bc0518f27a8501422fca99ea5a4d007c2ce22383efdb3a",
+          "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/spiritomb.scn",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/shiny-colors-b/spiritomb/model.glb",
+          "export_report_sha256": "80b8539d00485c5b0fb8a72250bac92648ee15496eef361b8fdd4a29fabb4a4d",
+          "unrepresented_rare_parameters": []
+        }
+      }
+    }
+  ],
+  "evidence": {
+    "normal": {
+      "runtime_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-runtime/report.json",
+      "runtime_report_sha256": "cb717afb0a36ac6d40b5e61d70e9f70967cbbaf874cbb013b45665fc4e8b88a2",
+      "motion_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-normal-motion/review.json",
+      "motion_report_sha256": "ffe12d91c9673e42f4ceaa9dc7a89af9f6e6d6709b7beb8f5c370950e71eed25",
+      "captures": 576,
+      "capture_list_sha256": "018da62b89f3e99e02f86edbf41782b4431a924255e17d2fffafddae18d11320"
+    },
+    "shiny": {
+      "runtime_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-runtime/report.json",
+      "runtime_report_sha256": "ae0e45f9162d2da1d5b614db7e29fabfdefb1dc9044e6d1b0fc68bf2ee0351a9",
+      "motion_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/valid-shiny-motion/review.json",
+      "motion_report_sha256": "164cdc1d540971cab2f34161a6c02d8e52b272b67e529bd749cb3c94478498e3",
+      "captures": 576,
+      "capture_list_sha256": "b11d968af652e4a68b9e0874598a09cc500f4ec8c413d5e66c103ff89c2cef5e"
+    },
+    "gallery": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/index.html",
+      "sha256": "bb00f524b96b66feb62d817c8c61efd8e790337d5fa33b6e7f63d41908370c24"
+    },
+    "structural_repair_receipt": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-recovery/romfs-models/repair-receipt.json",
+      "sha256": "cdec6ba1e07f0adfd178474706260b51ebc09bb05abb26f26861e70a2def9842"
+    }
+  },
+  "verification": {
+    "python_passed": 98,
+    "python_skipped": 1,
+    "standalone_scenes": 48,
+    "native_clips": 384,
+    "sampled_poses": 1152,
+    "pose_errors": 0,
+    "limitations": [
+      "Three pose times per clip, not continuous floor/timing certification",
+      "No battle scale, placement or gameplay approval",
+      "Two placeholder source cases remain unresolved"
+    ]
+  },
+  "visual_issues": [
+    {
+      "species": "starly",
+      "issue": "User reports all-white/all-black or otherwise wrong eyes",
+      "status": "under_investigation"
+    },
+    {
+      "species": "wattrel",
+      "issue": "User reports all-white/all-black or otherwise wrong eyes",
+      "status": "under_investigation"
+    },
+    {
+      "species": "kilowattrel",
+      "issue": "User reports all-white/all-black or otherwise wrong eyes",
+      "status": "under_investigation"
+    }
+  ],
+  "eye_followup": {
+    "species": [
+      "starly",
+      "wattrel",
+      "kilowattrel"
+    ],
+    "status": "wattrel_and_kilowattrel_eye_review_accepted",
+    "runtime_approved": false,
+    "correction": "Use native top-origin UV offsets in Godot; Blender conversion must not be repeated after glTF import.",
+    "runtime_reports": [
+      {
+        "path": ".tmp/batch04-recovery/eye-motion-normal-runtime-uv2/report.json",
+        "sha256": "b96f85af74c2eaf5acd0daeeeb08f2eee570e3c759afec792841529e0354c5d2"
+      },
+      {
+        "path": ".tmp/batch04-recovery/eye-motion-shiny-runtime-uv2/report.json",
+        "sha256": "a40451bd982dbb659ba0865dd780d8942d2670e017f5251b244fffdedb221a15"
+      }
+    ],
+    "capture_reports": [
+      {
+        "path": ".tmp/batch04-recovery/eye-motion-normal-captures-uv2/review.json",
+        "sha256": "c44478c6099231bdb4f063ea7bc0f3683b77e3576b93f93d38669ce74ec4a147"
+      },
+      {
+        "path": ".tmp/batch04-recovery/eye-motion-shiny-captures-uv2/review.json",
+        "sha256": "6ca3c5eedb4664de214b8c888c83e974ec8d7bfb2606701ff4aa6293c7d2023a"
+      }
+    ],
+    "gallery": ".tmp/batch04-recovery/eyes-review-v2.html",
+    "captures": 144,
+    "rendered_pose_errors": 0,
+    "seek_and_instance_assertions": {
+      "normal": 76,
+      "shiny": 76
+    },
+    "remaining_issue": "Battle qualification and remaining visual review pending.",
+    "user_review": {
+      "wattrel": "accepted_normal_and_shiny_idle_and_sleep",
+      "kilowattrel": "accepted_normal_and_shiny_idle_and_sleep",
+      "starly": "pending_explicit_acceptance",
+      "answer": "Allebei goed"
+    },
+    "test_note": "Normal and shiny rendered instance checks pass without errors when render frames occur between creation and teardown."
+  }
+}

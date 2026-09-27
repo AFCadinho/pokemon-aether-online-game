@@ -146,9 +146,15 @@ def resolve(catalog, species, dex, form=0, gender=0):
     return {**matches[0], 'species': species, 'variant': 'normal'}
 
 
-def animation_resources(directory, identity):
+def animation_resources(directory, identity, excluded_tracks=()):
     """Read extracted TRACN -> TRACR references, including named base bundles."""
     files, tracks = {}, set()
+    excluded = set(excluded_tracks)
+    if len(excluded) != len(excluded_tracks) or any(
+            not isinstance(name, str) or not re.fullmatch(r'pm\d{4}_\d{2}_\d{2}_[A-Za-z0-9_]+\.(?:tranm|tracm)', name)
+            or name.startswith(identity + '_') for name in excluded):
+        raise ValueError('Only explicit unused foreign animation references may be excluded')
+    seen_excluded = set()
     bundles = sorted(directory.glob(identity + '*.tracn'))
     if not bundles:
         raise ValueError('No extracted animation catalog for resource')
@@ -170,18 +176,38 @@ def animation_resources(directory, identity):
                     if r.field(resources, slot) is None:
                         continue
                     name = r.string(r.pointer(resources, slot), 0)
+                    if name in excluded:
+                        seen_excluded.add(name)
+                        continue
                     if Path(name).name != name or not name.startswith(identity + '_'):
                         raise ValueError('Cross-resource animation track reference')
                     tracks.add(str(directory / name))
     if not tracks:
         raise ValueError('Animation resource catalog has no tracks')
+    if seen_excluded != excluded:
+        raise ValueError('Excluded animation reference is absent from the catalog')
     return files, tracks
+
+
+def reject_known_placeholder(resource_id, mesh_path):
+    # These original ROMFS resources are byte-identical Raichu test geometry,
+    # despite their Walking Wake / Iron Leaves catalog names. The rejection
+    # is content-bound so a future genuine resource is not blocked by name.
+    if (resource_id in ('pm1084_00_00', 'pm1091_00_00')
+            and sha(mesh_path) == 'bd14f5beaa4b6d1547b37c171def01f80f2500447a39f3ac06dc0ead661b0cdd'):
+        raise ValueError('Known Raichu placeholder geometry; newer species-correct model and motions required')
 
 
 def bind(entry, identity, catalog, model_root, motion_root, species_path):
     """Check selected model/materials against the catalog's ROMFS resource tree."""
     model_root, motion_root = Path(model_root).resolve(), Path(motion_root).resolve()
-    if sum(r['model_path'] == identity['model_path'] for r in catalog['entries']) != 1:
+    siblings = [r for r in catalog['entries'] if r['model_path'] == identity['model_path']]
+    shared = len(siblings) != 1
+    if shared and (entry.get('verify_shared_default_materials') is not True
+                   or identity['form'] != 0 or identity['gender_code'] != 0
+                   or any(any(row[key] != identity[key] for key in (
+                       'internal_species_id', 'gender_code', 'material_table_path', 'config_path'))
+                          for row in siblings)):
         raise ValueError('Shared form resource needs material/variant selector review')
     own_dir = PurePosixPath(identity['model_path']).parent
     own_catalogs = [p for p in identity['animation_catalog_paths']
@@ -218,6 +244,9 @@ def bind(entry, identity, catalog, model_root, motion_root, species_path):
     references += [model.string(model.pointer(root, 2), 0)] + materials
     if any(Path(p).name != p or not p.startswith(rid) or not (model_dir / p).is_file() for p in references):
         raise ValueError('Model references missing or cross-resource mesh/skeleton/material')
+    mesh_buffer = motion_dir / (rid + '.trmbf')
+    if mesh_buffer.is_file():
+        reject_known_placeholder(rid, mesh_buffer)
     files = {}
     for relative in [identity['model_path'], identity['material_table_path'], identity['config_path']]:
         local, original = model_root / relative, motion_root / relative
@@ -225,7 +254,8 @@ def bind(entry, identity, catalog, model_root, motion_root, species_path):
             raise ValueError('Model resource differs from catalog ROMFS: ' + relative)
         files[str(local)] = sha(local)
         files[str(original)] = sha(original)
-    animation_files, tracks = animation_resources(motion_dir, rid)
+    excluded_tracks = entry.get('excluded_animation_references', [])
+    animation_files, tracks = animation_resources(motion_dir, rid, excluded_tracks)
     files.update(animation_files)
     # Bind the entire selected source directory, including meshes, skeleton,
     # material definitions and texture assets, to the review evidence.
@@ -247,11 +277,18 @@ def bind(entry, identity, catalog, model_root, motion_root, species_path):
     for p in [v for v in entry['motions'].values() if v] + [v for v in entry['motion_channels'].values() if v]:
         if str(Path(p).resolve()) not in files or str(Path(p).resolve()) not in tracks:
             raise ValueError('Motion selected outside verified resource')
+    shared_proof = {}
+    if shared:
+        from scvi_shared_material_identity import verify_default_materials
+        shared_proof = verify_default_materials(
+            model_root / identity['material_table_path'], model_dir / (rid + '.trmtr'))
     return {'policy': POLICY, 'status': 'verified', 'identity': identity,
             'catalog_path': catalog['catalog_path'], 'catalog_sha256': catalog['catalog_sha256'],
             'species_path': str(Path(species_path).resolve()), 'species_sha256': sha(species_path),
             'source_sha256': files, 'model_root': str(model_root), 'motion_root': str(motion_root),
-            'runtime_approved': False}
+            'runtime_approved': False,
+            **({'excluded_animation_references': sorted(excluded_tracks)} if excluded_tracks else {}),
+            **({'shared_default_materials': shared_proof} if shared_proof else {})}
 
 
 def validate_entry(entry):

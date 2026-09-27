@@ -145,6 +145,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 			errors.append(species + ": " + response.failure)
 			node.free()
 			return {}
+	if entry.has("eye_motion"):
+		var eye_motion := preload("eye_motion_pack.gd").new()
+		if entry.has("material_response") or not eye_motion.apply(node, entry.eye_motion, glb_hash):
+			errors.append(species + ": eye motion binding failed: " + eye_motion.failure)
+			node.free()
+			return {}
 	var packed := PackedScene.new()
 	var signature := _signature(node)
 	code = packed.pack(node)
@@ -173,6 +179,10 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 		return {}
 	if entry.has("transparent_diagnostic") and verified.get_meta("pokeaether_transparency_diagnostic", 0) != 1:
 		errors.append(species + ": transparency binding lost on reload")
+		verified.free()
+		return {}
+	if entry.has("eye_motion") and verified.get_meta("pokeaether_eye_motion", 0) != 1:
+		errors.append(species + ": eye motion lost on reload")
 		verified.free()
 		return {}
 	verified.free()

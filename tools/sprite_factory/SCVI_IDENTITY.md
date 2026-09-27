@@ -27,6 +27,9 @@ Dex number. The first 100-model batch made that mistake for some entries.
 5. The extracted resource bundle (`*_base.tracn`) references TRACR files whose
    explicit track references must contain every selected TRANM/TRACM. Catalog
    paths use the logical `.tracn` stem; the supplied extraction has named bundles.
+   An explicitly listed unused foreign reference may be excluded only by exact
+   basename; it must exist, and no selected clip may use it. This recovers
+   Slakoth's local motions without admitting the foreign battlewait pair.
    The reader records the actual bundle and resource hashes. It never borrows
    tracks from another resource directory.
 6. SCVI source import and diagnostic GLB export repeat the proof check. Export
@@ -43,13 +46,25 @@ The bounded decoder follows the pinned PokeDocs schemas for
 and [TRACR](https://github.com/pkZukan/PokeDocs/blob/de20b28d82d5d8b473905eb2c24e5d8b47841ca8/SV/Flatbuffers/animation/tracr.fbs).
 Schema version 6 is the reviewed catalog version. The explicit null and egg
 sentinels are excluded. Catalog sharing is preserved in the parsed data:
-multiple forms can legitimately share a model. Shared model resources remain
-held. A form with a distinct model may list a reciprocal sibling animation
+multiple forms can legitimately share a model. Shared model resources remain held unless the intake explicitly opts into
+`verify_shared_default_materials` for form 0 / gender 0. That route verifies
+frame zero of the official TRMMT normal colour selector against every mapped
+TRMTR colour (including measured rounding tolerance), and rejects changed mesh
+switches, material replacements, other forms and unrecognized selector channels. A form with a distinct model may list a reciprocal sibling animation
 catalog; that case is accepted only when the sibling is unique, belongs to the
 same internal species and gender, and references the selected form back. The
 selected clips must still resolve from the selected form's own local resource.
 All other cross-form animation catalogs remain held.
 Gender is retained as the catalog's numeric code, not guessed from filenames.
+
+## Catalog identity is not visual identity
+
+The older supplied ROMFS contains Raichu-shaped placeholders under Walking Wake
+and Iron Leaves resource names. Their catalog references and renamed motions
+are internally consistent. A content-bound rejection now prevents these known
+mesh bytes from passing intake, including an attempted restoration of old ROMFS
+geometry over newer model-dump geometry. Newer genuine bytes still require the
+normal proof and visual review. See `CATALOG_BATCH_04_RECOVERY.md`.
 
 ## Reproduction
 

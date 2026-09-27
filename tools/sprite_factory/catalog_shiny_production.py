@@ -11,9 +11,11 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+import math
 from pathlib import Path
 import subprocess
 
+from rare_material_parameters import COLOR_SOCKETS, UNREPRESENTED_COLORS
 from phase5_variant_parity import compare
 from scvi_identity import export_read_paths, validate_export_job
 from scvi_material_probe import inspect_materials
@@ -24,7 +26,7 @@ def digest(path: Path) -> str:
 
 
 def replacements(normal_table: Path, *, review_queue: bool = False,
-                 include_float_overrides: bool = False):
+                 include_float_overrides: bool = False, include_color_overrides: bool = False):
     rare_table = normal_table.with_name(normal_table.stem + "_rare.trmtr")
     if not rare_table.is_file():
         raise ValueError("Official rare material table missing")
@@ -41,9 +43,30 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
         rare = [rare_by_name[name] for name in names]
     mapping = {}
     float_overrides = []
+    color_overrides = []
     for a, b in zip(normal, rare, strict=True):
         settings_a = {k: v for k, v in a.items() if k != "textures"}
         settings_b = {k: v for k, v in b.items() if k != "textures"}
+        if review_queue and include_color_overrides:
+            colors_a, colors_b = dict(a.get("colors", {})), dict(b.get("colors", {}))
+            if ("PointLight0_Color" not in colors_a and colors_b.get("PointLight0_Color") == [0.0, 0.0, 0.0, 1.0]
+                    and b['floats'].get('PointLight0_Intensity') == 0.0):
+                colors_b.pop("PointLight0_Color")
+            if colors_a.keys() != colors_b.keys():
+                raise ValueError("Rare material colour channels differ")
+            allowed = set(COLOR_SOCKETS) | UNREPRESENTED_COLORS
+            for key in colors_a:
+                if colors_a[key] == colors_b[key]:
+                    continue
+                if (key not in allowed or len(colors_a[key]) != 4 or len(colors_b[key]) != 4
+                        or colors_a[key][3] != 1.0 or colors_b[key][3] != 1.0
+                        or not all(math.isfinite(v) for v in colors_a[key] + colors_b[key])):
+                    raise ValueError("Unrepresented rare colour change: " + key)
+                color_overrides.append({"material": a["name"], "key": key,
+                                        "normal": colors_a[key], "rare": colors_b[key],
+                                        "mode": "apply" if key in COLOR_SOCKETS else "unrepresented"})
+            settings_b["colors"] = settings_a.get("colors", {})
+            settings_a.setdefault("colors", {})
         if review_queue and settings_a != settings_b:
             # An omitted, zero-valued point light is the sole setting
             # exception. The source renderer has no contribution in either
@@ -56,7 +79,7 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
                     and any(shader["name"] in ("Eye", "EyeClearCoat") for shader in a["shaders"])):
                 for key in ("EmissionIntensityLayer1", "EmissionIntensityLayer2",
                             "EmissionIntensityLayer3", "EmissionIntensityLayer4", "EmissionIntensityLayer5",
-                            "NormalHeight1", "RoughnessHighlight"):
+                            "NormalHeight1", "RoughnessHighlight", "MetallicHighlight"):
                     if key in floats_a and key in floats_b and floats_a[key] != floats_b[key]:
                         # Layers 1-4 have importer shader inputs and are applied
                         # below. The other source floats have no such input in
@@ -68,6 +91,11 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
                                                 "normal": floats_a[key], "rare": floats_b[key],
                                                 "mode": mode})
                         floats_b[key] = floats_a[key]
+            if (include_float_overrides and "EmissionIntensity" in floats_a and "EmissionIntensity" in floats_b
+                    and floats_a["EmissionIntensity"] != floats_b["EmissionIntensity"]):
+                float_overrides.append({"material": a["name"], "key": "EmissionIntensity",
+                                        "normal": floats_a["EmissionIntensity"], "rare": floats_b["EmissionIntensity"], "mode": "apply"})
+                floats_b["EmissionIntensity"] = floats_a["EmissionIntensity"]
             settings_a["floats"], settings_b["floats"] = floats_a, floats_b
             shaders_a = json.loads(json.dumps(settings_a["shaders"]))
             shaders_b = json.loads(json.dumps(settings_b["shaders"]))
@@ -90,14 +118,14 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
             if before == after:
                 continue
             review_channels = {"UpperEyelidColorMap", "LowerEyelidColorMap", "EmissionColorMap",
-                               "RoughnessMap", "NormalMap", "LayerMaskMap"}
+                               "RoughnessMap", "NormalMap", "LayerMaskMap", "MetallicMap"}
             if ((channel != "BaseColorMap" and (not review_queue or channel not in review_channels))
                     or Path(before).name != before or Path(after).name != after):
                 raise ValueError("Rare material has a non-albedo change: " + a["name"] + "/" + channel)
             if before in mapping and mapping[before] != after:
                 raise ValueError("One normal texture maps to different rare textures")
             mapping[before] = after
-    if not mapping:
+    if not mapping and not color_overrides:
         raise ValueError("Rare material has no distinct official albedo")
     result = []
     for before, after in sorted(mapping.items()):
@@ -111,8 +139,12 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
             continue
         result.append({"normal": str(normal_png), "rare": str(rare_png),
                        "normal_sha256": digest(normal_png), "rare_sha256": digest(rare_png)})
-    if not result:
+    if not result and not color_overrides:
         raise ValueError("Normal and rare albedo are byte-identical")
+    if not all(math.isfinite(value) for row in float_overrides for value in (row['normal'], row['rare'])):
+        raise ValueError("Non-finite rare material scalar")
+    if include_color_overrides:
+        return result, digest(rare_table), float_overrides, color_overrides
     if include_float_overrides:
         return result, digest(rare_table), float_overrides
     return result, digest(rare_table)
@@ -127,14 +159,14 @@ def prepare(row: dict, expected: dict, source_root: Path, output: Path,
     source_job = json.loads((source_root / species / "job.json").read_text())
     validate_export_job(source_job)
     normal_table = Path(source_job["material_source"])
-    pairs, rare_table_sha, float_overrides = replacements(
-        normal_table, review_queue=review_queue, include_float_overrides=True)
+    pairs, rare_table_sha, float_overrides, color_overrides = replacements(
+        normal_table, review_queue=review_queue, include_float_overrides=True, include_color_overrides=True)
     directory = output / species
     directory.mkdir()
     job = {**source_job, "output": str(directory), "verified_texture_replacements": pairs,
            "official_rare_material_source": str(normal_table.with_name(normal_table.stem + "_rare.trmtr")),
            "official_rare_material_sha256": rare_table_sha,
-           "verified_rare_float_overrides": float_overrides}
+           "verified_rare_float_overrides": float_overrides, "verified_rare_color_overrides": color_overrides}
     job_path = directory / "job.json"
     job_path.write_text(json.dumps(job, indent=2) + "\n")
     tools = Path(__file__).resolve().parent
@@ -148,7 +180,7 @@ def prepare(row: dict, expected: dict, source_root: Path, output: Path,
     evidence = {"species": species, "variant": "shiny", "runtime_approved": False,
                 "normal_glb_sha256": row["glb_sha256"], "official_rare_material_sha256": rare_table_sha,
                 "official_albedo_replacements": pairs,
-                "official_rare_float_overrides": float_overrides}
+                "official_rare_float_overrides": float_overrides, "official_rare_color_overrides": color_overrides}
     return evidence, command
 
 

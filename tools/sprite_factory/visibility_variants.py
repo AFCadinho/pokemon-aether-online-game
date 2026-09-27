@@ -12,7 +12,9 @@ def binding(intake, exported_meshes, targets, redundant=None):
     if catalog['catalog_sha256'] != proof['catalog_sha256']:
         raise ValueError('Visibility catalog hash changed')
     identity = proof['identity']
-    selected = [r for r in catalog['entries'] if r['resource_id'] == intake['identity']]
+    selected = [r for r in catalog['entries'] if r['resource_id'] == intake['identity']
+                and all(r[key] == identity.get(key) for key in
+                        ('internal_species_id', 'form', 'gender_code'))]
     if len(selected) != 1 or any(selected[0][k] != identity.get(k) for k in selected[0]):
         raise ValueError('Visibility selected catalog identity differs')
     selected = selected[0]
