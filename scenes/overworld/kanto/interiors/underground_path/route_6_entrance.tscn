@@ -3,8 +3,9 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/underground_path_route_6_entrance/underground_path_route_6_entrance.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_670gu"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_4ad2t"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_4ad2t"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_670gu"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_4ad2t"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
@@ -203,15 +204,15 @@ weather_profile = "disabled"
 [node name="Spawns" type="Node2D" parent="." unique_id=1914365831]
 
 [node name="FromTunnel" type="Marker2D" parent="Spawns" unique_id=21521542]
-position = Vector2(304, 272)
+position = Vector2(272, 272)
 
 [node name="FromRoute6" type="Marker2D" parent="Spawns" unique_id=1170393890]
-position = Vector2(336, 448)
+position = Vector2(336, 464)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1098137960]
 
 [node name="ToTunnel" type="Area2D" parent="Exits" unique_id=2145599167]
-position = Vector2(272, 272)
+position = Vector2(240, 272)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn"
 target_spawn_name = "FromRoute6Entrance"
@@ -219,7 +220,12 @@ transition_id = "kanto_underground_path_route_6_entrance__to_tunnel"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel" unique_id=1939252175]
+position = Vector2(-16, 16)
 shape = SubResource("shape_1")
+
+[node name="DoorTransitionHint" parent="Exits/ToTunnel" unique_id=952897899 instance=ExtResource("4_4ad2t")]
+z_as_relative = false
+flow_direction = "left"
 
 [node name="ToRoute6" type="Area2D" parent="Exits" unique_id=1960702754]
 position = Vector2(336, 496)
@@ -231,6 +237,10 @@ transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute6" unique_id=1234088445]
 shape = SubResource("shape_2")
+
+[node name="DoorTransitionHint" parent="Exits/ToRoute6" unique_id=1138449172 instance=ExtResource("4_4ad2t")]
+z_as_relative = false
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=987228837]
 z_index = 5
@@ -246,7 +256,6 @@ tile_map_data = PackedByteArray("AAAAAAAAAAABAAEAAAAAAAEAAAABAAEAAAAAAAIAAAABAAE
 tile_set = SubResource("TileSet_8m823")
 
 [node name="BlockDirection" type="Node2D" parent="Tiles" unique_id=244557708]
-visible = false
 
 [node name="BlockDown" type="TileMapLayer" parent="Tiles/BlockDirection" unique_id=366510205]
 z_index = 100
