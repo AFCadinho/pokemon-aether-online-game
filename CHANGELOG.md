@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 5 toont de nieuwste handmatige Tiled-aanpassingen in de bestaande Godot-scene, met behoud van de animaties en gameplaylagen.
+
 - De Underground Passage-ingang op Route 5 staat naast het wandelpad met een eigen toegangspad; deur, terugkeerpositie en collision sluiten hierop aan.
 
 - De bijna witte lensreflectie in de zijaanzichten van de Adinho-brillen is gedempt voor male en female; de vooraanzichten blijven gelijk.
