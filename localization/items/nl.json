@@ -275,6 +275,38 @@
     "name": "Adinho Chroma Shoes",
     "shortDesc": "Ontgrendel de aanpasbare Adinho-schoenen voor mannelijke modellen."
   },
+  "aether-wayfarer-male-outfit": {
+    "name": "Aether Wayfarer-outfitbox (man)",
+    "shortDesc": "Open deze outfitbox voor mannelijke modellen voor de Wayfarer-jas, broek en schoenen."
+  },
+  "aether-wayfarer-male-shirt": {
+    "name": "Wayfarer-jas (man)",
+    "shortDesc": "Verplaats de Wayfarer-jas voor mannelijke modellen naar Personage aanpassen."
+  },
+  "aether-wayfarer-male-trousers": {
+    "name": "Wayfarer-broek (man)",
+    "shortDesc": "Verplaats de Wayfarer-broek voor mannelijke modellen naar Personage aanpassen."
+  },
+  "aether-wayfarer-male-shoes": {
+    "name": "Wayfarer-schoenen (man)",
+    "shortDesc": "Verplaats de Wayfarer-schoenen voor mannelijke modellen naar Personage aanpassen."
+  },
+  "aether-wayfarer-female-outfit": {
+    "name": "Aether Wayfarer-outfitbox (vrouw)",
+    "shortDesc": "Open deze outfitbox voor vrouwelijke modellen voor de Wayfarer-jas, broek en schoenen."
+  },
+  "aether-wayfarer-female-shirt": {
+    "name": "Wayfarer-jas (vrouw)",
+    "shortDesc": "Verplaats de Wayfarer-jas voor vrouwelijke modellen naar Personage aanpassen."
+  },
+  "aether-wayfarer-female-trousers": {
+    "name": "Wayfarer-broek (vrouw)",
+    "shortDesc": "Verplaats de Wayfarer-broek voor vrouwelijke modellen naar Personage aanpassen."
+  },
+  "aether-wayfarer-female-shoes": {
+    "name": "Wayfarer-schoenen (vrouw)",
+    "shortDesc": "Verplaats de Wayfarer-schoenen voor vrouwelijke modellen naar Personage aanpassen."
+  },
   "smoking-outfit": {
     "name": "Smoking-outfitbox",
     "shortDesc": "Open deze box voor een smokingjasje, broek en schoenen voor het mannelijke model."
