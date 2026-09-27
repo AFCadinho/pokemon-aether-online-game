@@ -33,7 +33,7 @@ metadata/tiled_visual_layer = true
 
 [node name="Objects" type="TileMapLayer" parent="." unique_id=1736422136]
 z_index = 2
-tile_map_data = PackedByteArray("AAAKAAUAAQwBAAAAAAANAAUAAQwAAAAAAAALAAcAAQwCAAAAAAAMAAcAAQwDAAAAAAAFAAgAAQwDAAEAAAAGAAgAAQwDAAEAAAAIAAgAAQwBAAEAAAALAAgAAQwEAAAAAAAMAAgAAQwFAAAAAAAFAAkAAQwEAAEAAAAGAAkAAQwEAAEAAAAIAAkAAQwCAAEAAAALAAkAAQwGAAAAAAAMAAkAAQwAAAEAAAA=")
+tile_map_data = PackedByteArray("AAAKAAUAAQwBAAAAAAANAAUAAQwAAAAAAAALAAgAAQwEAAAAAAAMAAgAAQwFAAAAAAAFAAkAAQwEAAEAAAAGAAkAAQwEAAEAAAAIAAkAAQwCAAEAAAALAAkAAQwGAAAAAAAMAAkAAQwAAAEAAAA=")
 tile_set = ExtResource("1_sfgdv")
 metadata/tiled_name = "Objects"
 metadata/tiled_layer_id = 3
@@ -41,6 +41,7 @@ metadata/tiled_visual_layer = true
 
 [node name="ObjectsTop" type="TileMapLayer" parent="." unique_id=207986657]
 z_index = 2051
+tile_map_data = PackedByteArray("AAALAAcAAQwCAAAAAAAMAAcAAQwDAAAAAAAFAAgAAQwDAAEAAAAGAAgAAQwDAAEAAAAIAAgAAQwBAAEAAAA=")
 tile_set = ExtResource("1_sfgdv")
 metadata/tiled_name = "ObjectsTop"
 metadata/tiled_layer_id = 4
