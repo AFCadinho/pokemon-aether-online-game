@@ -2049,7 +2049,7 @@ sources/0 = SubResource("TileSetAtlasSource_voysl")
 size = Vector2(160, 15.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3e7rq"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3e7rq"]
 texture = ExtResource("14_2e47g")
@@ -2499,11 +2499,11 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/players_hous
 target_spawn_name = "FromPalletTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPlayersHouse" unique_id=1283236050]
+position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="DoorTransitionHint" parent="Exits/ToPlayersHouse" unique_id=228985460 instance=ExtResource("24_door_hint")]
 z_as_relative = false
-position = Vector2(0, 0)
 
 [node name="ToRivalsHouse" type="Area2D" parent="Exits" unique_id=858244795]
 position = Vector2(1136, 368)
