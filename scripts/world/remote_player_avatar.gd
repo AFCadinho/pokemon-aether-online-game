@@ -1682,6 +1682,11 @@ func _restore_sprite_base_offset(sprite: AnimatedSprite2D) -> void:
 func _get_activity_layer_offset(category: String) -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(current_body_movement_style)
+	# Dedicated headgear sheets already follow the activity body's head position.
+	if normalized_category == "headgear" and CharacterAppearanceService.has_authored_movement_pose(
+		normalized_category, _get_appearance_part_id(normalized_category), current_body_gender, normalized_style
+	):
+		return Vector2.ZERO
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_LAYER_OFFSETS.get(normalized_style, {})
