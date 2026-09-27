@@ -26,6 +26,15 @@ func compact(root: Node, output_tileset_path: String, animations: Dictionary = {
 			if not used.has(id):
 				used[id] = {}
 			used[id][layer.get_cell_atlas_coords(cell)] = true
+	# Preserve existing native timelines when recompacting an animated map.
+	# New/overridden timelines may still reference the original dense sources.
+	animations = animations.duplicate(true)
+	for id in animations.keys():
+		for coords in animations[id].keys():
+			if not used.get(id, {}).has(coords):
+				animations[id].erase(coords)
+		if animations[id].is_empty():
+			animations.erase(id)
 	# Validate everything before writing or mutating any cells.
 	for id in used:
 		if not original.has_source(id):
@@ -39,8 +48,21 @@ func compact(root: Node, output_tileset_path: String, animations: Dictionary = {
 		for coords in used[id]:
 			if not source.has_tile(coords):
 				return {"success": false, "error": "Visual cell references a missing atlas tile."}
-			if source.get_tile_animation_frames_count(coords) != 1 or source.get_tile_size_in_atlas(coords) != Vector2i.ONE:
-				return {"success": false, "error": "Animated or multi-cell atlas tiles require an animation-aware import path."}
+			if source.get_tile_size_in_atlas(coords) != Vector2i.ONE:
+				return {"success": false, "error": "Multi-cell atlas tiles are not supported."}
+			var frame_count := source.get_tile_animation_frames_count(coords)
+			if frame_count > 1 and not animations.get(id, {}).has(coords):
+				if source.get_tile_animation_speed(coords) <= 0 or frame_count > mini(COLUMNS, LIMIT / slot.x) * (LIMIT / slot.y):
+					return {"success": false, "error": "Invalid native animation speed/size."}
+				var frames: Array = []
+				for f in frame_count:
+					var duration := source.get_tile_animation_frame_duration(coords,f) / source.get_tile_animation_speed(coords)
+					if duration <= 0:
+						return {"success": false, "error": "Invalid native animation duration."}
+					frames.append({"source_id":id,"atlas_coords":coords,"frame_index":f,"duration":duration*1000.0})
+				if not animations.has(id):
+					animations[id] = {}
+				animations[id][coords] = frames
 	var compact_set := original.duplicate(false) as TileSet
 	# The dense builder signature must never authorize reusing a remapped layout.
 	if compact_set.has_meta("tiled_source_signature"):

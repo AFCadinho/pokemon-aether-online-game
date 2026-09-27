@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Tall grass beweegt nu standaard zacht met verschillende rustpauzes per groepje, ook in Viridian Forest. Nieuwe Tiled-imports krijgen dezelfde animatie automatisch.
+
 - Een aparte Route 1-proef laat één veld tall grass zacht bewegen, met verschillende pauzes per groepje en een aan/uitvergelijking.
 
 - De Team Rocket-laarzen volgen nu de voeten in ieder loopframe; de broek dekt de benen volledig. De losse streep achter op de pet is verwijderd en de pet krijgt bij vissen en rijden geen dubbele verschuiving meer.

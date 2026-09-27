@@ -1,6 +1,6 @@
 extends SceneTree
 
-# Isolated Route 1 tall-grass trial; Space affects only the four grass variants.
+# Live Route 1 grass viewer. Space affects only tall-grass animations.
 class MapView extends Node2D:
 	var camera: Camera2D
 	var entries: Array[Dictionary] = []
@@ -40,7 +40,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
-	var id := "route1_tall_grass_test"
+	var id := "route_1"
 	for arg in args:
 		if not arg.begins_with("--"):
 			id = arg
