@@ -144,8 +144,8 @@ func _check_import_and_failure() -> void:
 	var asset_hashes := {}
 	for name in assets:
 		asset_hashes[name] = FileAccess.get_sha256(generated.path_join("assets").path_join(name))
-	var rejected := Wrapper.new().import_tmx("res://tests/fixtures/tiled/used_animation.tmx", generated.get_file())
-	_check(not rejected.get("success", true) and str(rejected.get("error", "")).contains("animation"), "Used inline TMX animation is explicitly rejected")
+	var rejected := Wrapper.new().import_tmx("res://tests/fixtures/tiled/invalid_animation.tmx", generated.get_file())
+	_check(not rejected.get("success", true) and str(rejected.get("error", "")).contains("animation"), "Invalid animation is rejected before replacing output")
 	_check(FileAccess.get_sha256(wrapped.visual_scene_path) == previous_hash and DirAccess.get_files_at(generated.path_join("assets")) == assets, "Rejected import preserves prior scene and assets")
 	for name in assets:
 		_check(FileAccess.get_sha256(generated.path_join("assets").path_join(name)) == asset_hashes[name], "Rejected import preserves texture bytes")

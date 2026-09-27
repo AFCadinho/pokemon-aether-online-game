@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Tiled-importer ondersteunt nu tegelanimaties. Een aparte Viridian City-proef toont bewegend vijverwater; de bestaande speelbare stad blijft ongewijzigd.
+
 - De Poké Ball-keuze in gedeelde gevechten toont baliconen en een apart, heel aantal in plaats van een decimaal aantal.
 
 - De laatste 25 Pokémon uit batch 03 zijn lokaal goedgekeurd als 3D-model in normale en shiny vorm, elk met een eigen bijwerkbare bundle. De modellen komen pas met een aparte publicatie beschikbaar voor spelers.

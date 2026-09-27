@@ -7,6 +7,8 @@ const TmxTilesetBuilder := preload("res://addons/tiled_tmx_importer/importer/tmx
 const TmxVisualSceneBuilder := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_scene_builder.gd")
 const AtlasCompactor := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_compactor.gd")
 
+const TileAnimations := preload("res://addons/tiled_tmx_importer/importer/tmx_tile_animations.gd")
+
 const MAX_GENERATED_TEXTURE_SIZE := 4096
 
 
@@ -31,6 +33,11 @@ func import_tmx(tmx_path: String, output_scene_path: String, missing_tileset_pat
 			"error": "Infinite/chunked TMX maps are not supported for visual imports.",
 		}
 
+	# Validate every used frame before replacing any generated output.
+	var animation_result := TileAnimations.new().validate(map_data)
+	if not animation_result.get("success", false):
+		return animation_result
+
 	var materialize_result := _materialize_tileset_images(map_data, normalized_output)
 	if not bool(materialize_result.get("success", false)):
 		return materialize_result
@@ -45,7 +52,7 @@ func import_tmx(tmx_path: String, output_scene_path: String, missing_tileset_pat
 
 	var scene_builder := TmxVisualSceneBuilder.new()
 	var root := scene_builder.build_scene(map_data, tileset_result["tileset"], tileset_builder)
-	var compact_result := AtlasCompactor.new().compact(root, tileset_path)
+	var compact_result := AtlasCompactor.new().compact(root, tileset_path, TileAnimations.new().resolve(animation_result.animations, tileset_builder))
 	if not bool(compact_result.get("success", false)):
 		root.free()
 		return compact_result
@@ -106,10 +113,6 @@ func _materialize_tileset_images(map_data: Dictionary, output_scene_path: String
 	var assets_dir := output_dir.path_join("assets")
 	var materialized_tilesets: Array = []
 	var paths: Array[String] = []
-	for tileset: Dictionary in map_data.get("tilesets", []):
-		for tile_id in tileset.get("animated_tile_ids", []):
-			if map_data.get("used_gids", {}).has(int(tileset.get("firstgid", 1)) + int(tile_id)):
-				return {"success": false, "error": "Used TMX tile animations are not supported; refusing a static/lossy import."}
 
 	for tileset: Dictionary in map_data.get("tilesets", []):
 		var image: Dictionary = tileset.get("image", {})

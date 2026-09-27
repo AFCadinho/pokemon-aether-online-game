@@ -2,13 +2,14 @@
 extends RefCounted
 
 const PathUtils := preload("res://addons/tiled_tmx_importer/importer/tmx_path_utils.gd")
+const Animations := preload("res://addons/tiled_tmx_importer/importer/tmx_tile_animations.gd")
 const VERSION := 1
-const LIMIT := 4096
-const BORDER := 2
-const COLUMNS := 7
+const LIMIT := Animations.LIMIT
+const BORDER := Animations.BORDER
+const COLUMNS := Animations.COLUMNS
 
 # Import-time only. No resizing, scene-tree entry or gameplay side effects.
-func compact(root: Node, output_tileset_path: String) -> Dictionary:
+func compact(root: Node, output_tileset_path: String, animations: Dictionary = {}) -> Dictionary:
 	var layers: Array[TileMapLayer] = []
 	_collect(root, layers)
 	if layers.is_empty():
@@ -66,7 +67,7 @@ func compact(root: Node, output_tileset_path: String) -> Dictionary:
 		var slot := size + Vector2i.ONE * BORDER * 2
 		var columns := mini(COLUMNS, LIMIT / slot.x)
 		var capacity := columns * (LIMIT / slot.y)
-		var coords: Array = used[id].keys()
+		var coords: Array = used[id].keys().filter(func(c): return not animations.get(id, {}).has(c))
 		coords.sort_custom(func(a: Vector2i, b: Vector2i): return a.y < b.y or (a.y == b.y and a.x < b.x))
 		mappings[id] = {}
 		var chunk := 0
@@ -118,6 +119,11 @@ func compact(root: Node, output_tileset_path: String) -> Dictionary:
 			paths.append(texture_path)
 			base_bytes += width * height * 4
 			chunk += 1
+	var animation_result := Animations.new().append_compact(original, compact_set, animations, mappings, output_tileset_path, next_id)
+	if not animation_result.get("success", false):
+		return animation_result
+	paths.append_array(animation_result.texture_paths)
+	base_bytes += int(animation_result.base_rgba_bytes)
 	var save_error := ResourceSaver.save(compact_set, output_tileset_path, ResourceSaver.FLAG_CHANGE_PATH)
 	if save_error != OK:
 		return {"success": false, "error": "Could not save compact TileSet: %s" % error_string(save_error)}

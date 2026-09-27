@@ -15,7 +15,8 @@ Scope:
 - Tiled object layers and gameplay properties are ignored
 - one shared Godot `TileSet` is rebuilt and saved beside the imported scene
 - generated atlas chunks are stored with portable lossless compression for desktop and Web exports
-- only regions referenced by tile layers (including hidden layers) are packed into compact atlases
+- only regions referenced by tile layers (including hidden layers) and their animation frames are packed into compact atlases
+- inline TMX and external TSX animations preserve frame order, repeated frames and individual durations; frames may span source chunks
 - tile pixels, transforms, alternative TileData and layer settings are preserved without resizing
 
 Out of scope:
@@ -29,7 +30,7 @@ Out of scope:
 - infinite/chunked Tiled maps
 - compressed CSV layer data
 - non-orthogonal maps
-- used TMX/TSX tile animations and multi-cell atlas tiles (explicitly rejected rather than silently stripped)
+- multi-cell atlas tiles
 
 ## Editor Usage
 
@@ -55,8 +56,11 @@ Compaction is automatic in both editor and CLI imports. Atlases use 2px borders,
 4px separation and dimensions capped at 4096px; large sources are split. The
 importer saves external compact textures and removes only its own superseded
 chunks after saving the scene. Other outputs in the same directory are preserved.
-Unsupported used animations are rejected before generating textures, preserving
-the previous output. This is not a fully transactional filesystem operation.
+Animated tiles use one padded compact strip per logical tile and native Godot
+atlas animation. Frames remain visual only; gameplay/collision ownership does
+not move between frames. Each strip is capped at 4096px in either dimension.
+Invalid or oversized used animations are rejected before generating textures,
+preserving the previous output. This is not a fully transactional filesystem operation.
 
 `tests/generated_map_atlas_layout_check.gd` checks the compact layout in CI.
 The 35 existing visuals have an explicit scene-and-TileSet hash baseline pending
