@@ -8,7 +8,7 @@
 size = Vector2(64, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(96, 32)
+size = Vector2(128, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
 size = Vector2(32, 32)
@@ -45,7 +45,7 @@ weather_profile = "disabled"
 position = Vector2(1600, 336)
 
 [node name="FromRoute10South" type="Marker2D" parent="Spawns"]
-position = Vector2(816, 2208)
+position = Vector2(832, 2208)
 
 [node name="FromB1FA" type="Marker2D" parent="Spawns"]
 position = Vector2(2512, 416)
@@ -73,7 +73,7 @@ transition_facing_direction = "down"
 shape = SubResource("shape_1")
 
 [node name="ToRoute10South" type="Area2D" parent="Exits"]
-position = Vector2(816, 2256)
+position = Vector2(832, 2256)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 target_spawn_name = "FromRockTunnelSouth"
