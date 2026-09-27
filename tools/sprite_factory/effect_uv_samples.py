@@ -28,7 +28,7 @@ def channel_samples(keys, endpoint):
     return samples
 
 
-def sample_tracks(data):
+def sample_tracks(data, *, allow_endpoint_jump=False):
     if 'declared_timeline_counts' in data:
         counts = data['declared_timeline_counts']
         if counts != data.get('actual_timeline_counts') or len(counts) != 3 or not counts[0] or counts[0] != data['multiplier']:
@@ -48,7 +48,7 @@ def sample_tracks(data):
         for index, values in enumerate(channels):
             if index < 2 and (values[0] <= 0 or any(v != values[0] for v in values)):
                 raise ValueError('Animated/nonpositive effect UV scale needs review')
-            if index >= 2 and abs((values[-1] - values[0]) - round(values[-1] - values[0])) > 1e-5:
+            if not allow_endpoint_jump and index >= 2 and abs((values[-1] - values[0]) - round(values[-1] - values[0])) > 1e-5:
                 raise ValueError('Nonperiodic effect UV loop')
         result[name] = [list(frame) for frame in zip(*channels)]
     if set(result) != {'UVScaleOffset', 'UVScaleOffset3'}:

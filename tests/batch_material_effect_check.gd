@@ -49,6 +49,73 @@ func _init() -> void:
 	response.free()
 	copy.free()
 	restored.free()
+	var lit := manifest.duplicate(true)
+	lit.records[0].profile = "scvi_standard_displacement_review_v1"
+	node = actor()
+	var surface: StandardMaterial3D = node.get_active_material(0)
+	surface.metallic = 0.8
+	surface.roughness = 0.35
+	surface.emission_enabled = true
+	surface.emission = Color(0.2, 0.4, 0.6)
+	assert(pack.apply(node, lit, "fixture"), pack.failure)
+	var lit_material: ShaderMaterial = node.get_active_material(0)
+	assert(Effect.valid(lit_material) and Response.supported_actor(node))
+	assert(is_equal_approx(lit_material.get_shader_parameter("surface_metallic"), 0.8))
+	assert(is_equal_approx(lit_material.get_shader_parameter("surface_roughness"), 0.35))
+	assert(lit_material.get_shader_parameter("emission_color") == surface.emission)
+	var lit_scene := PackedScene.new()
+	assert(lit_scene.pack(node) == OK)
+	var lit_path := directory.path_join("lit.scn")
+	assert(ResourceSaver.save(lit_scene, lit_path, ResourceSaver.FLAG_COMPRESS) == OK)
+	assert(ResourceLoader.get_dependencies(lit_path).is_empty())
+	node.free()
+	var lit_restored: MeshInstance3D = load(lit_path).instantiate()
+	assert(Effect.valid(lit_restored.get_active_material(0)))
+	lit_restored.free()
+	var source_static := manifest.duplicate(true)
+	var smoke := manifest.duplicate(true)
+	smoke.records[0].profile = "scvi_nondirectional_layered_displacement_v1"
+	smoke.records[0].use_uv2 = true
+	smoke.records[0].authored_reconstruction = "outward_rim_smoke_v1"
+	node = actor()
+	assert(pack.apply(node, smoke, "fixture"), pack.failure)
+	assert(Effect.valid(node.get_active_material(0)))
+	assert(node.get_active_material(0).shader.code == Effect.RIM_SMOKE_SHADER.code)
+	node.free()
+	for kind in ["unknown", "unlit", "sampled", "static"]:
+		var bad_smoke := smoke.duplicate(true)
+		match kind:
+			"unknown": bad_smoke.records[0].authored_reconstruction = "guessed"
+			"unlit": bad_smoke.records[0].profile = "scvi_unlit_layered_displacement_v1"
+			"sampled": bad_smoke.records[0].uv_samples = {}
+			"static": bad_smoke.records[0].static_source_material = true
+		node = actor()
+		assert(not pack.apply(node, bad_smoke, "fixture"), kind)
+		node.free()
+	source_static.records[0].static_source_material = true
+	source_static.records[0].tracks = {"UVScaleOffset": [[2,2],[1,1],[0,0],[0,0]],
+		"UVScaleOffset3": [[1,1],[1,1],[0,0],[0,0]]}
+	node = actor()
+	assert(pack.apply(node, source_static, "fixture"), pack.failure)
+	assert(Effect.valid(node.get_active_material(0)))
+	assert(node.get_active_material(0).shader.code == Effect.STATIC_SHADER.code)
+	saved = PackedScene.new()
+	assert(saved.pack(node) == OK)
+	assert(ResourceSaver.save(saved, scene_path, ResourceSaver.FLAG_COMPRESS) == OK)
+	assert(ResourceLoader.get_dependencies(scene_path).is_empty())
+	node.free()
+	restored = ResourceLoader.load(scene_path, "", ResourceLoader.CACHE_MODE_REPLACE).instantiate()
+	assert(Effect.valid(restored.get_active_material(0)))
+	restored.free()
+	for kind in ["animated", "sampled", "false"]:
+		var invalid_static := source_static.duplicate(true)
+		match kind:
+			"animated": invalid_static.records[0].tracks.UVScaleOffset[2] = [0,1]
+			"sampled": invalid_static.records[0].uv_samples = {}
+			"false": invalid_static.records[0].static_source_material = false
+		node = actor()
+		assert(not pack.apply(node, invalid_static, "fixture"), kind)
+		node.free()
 	var sampled := manifest.duplicate(true)
 	sampled.records[0].profile = "scvi_unlit_layered_displacement_uv2_v1"
 	sampled.records[0].use_uv2 = true

@@ -45,6 +45,17 @@ class VisibilityExportTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 keys(track('framed8_bool',frames=frames,packed_bytes=data),61,60)
 
+    def test_full_frame_dynamic_stream_requires_explicit_opt_in_and_hold_padding(self):
+        value=track('dynamic_bool',packed_bytes=[0]*6+[252])
+        with self.assertRaisesRegex(ValueError,'payload'):
+            keys(value,51,60,dynamic_review=True)
+        self.assertEqual(keys(value,51,60,dynamic_review=True,full_frame_review=True),
+                         [[0.0,False],[50/60,True]])
+        for packed in ([0]*6+[4], [0]*8):
+            with self.assertRaisesRegex(ValueError,'payload'):
+                keys(track('dynamic_bool',packed_bytes=packed),51,60,
+                     dynamic_review=True,full_frame_review=True)
+
     def test_unknown_clock_metadata(self):
         t=track();t['time_raw']=1
         with self.assertRaisesRegex(ValueError,'metadata'):keys(t,61,60)
@@ -59,6 +70,19 @@ class VisibilityExportTests(unittest.TestCase):
             with patch('visibility_export.binding',return_value={'excluded_targets':{},'source_sha256':{}}), patch('visibility_export.inspect_tracm',return_value={'frames':61,'fps':60,'loop':True}), patch('visibility_export.inspect_visibility',return_value=[track()]):
                 result=prepare(intake,animations,gltf,'a'*64)
                 self.assertEqual(result['clips']['idle']['tracks'][0]['mesh'],'body_mesh')
+                lod_gltf={'nodes':gltf['nodes']+[{'name':'body_mesh_lod1','mesh':1}]}
+                membership={'excluded_targets':{},'source_sha256':{},
+                            'active_targets':['body_mesh_shape','body_mesh_shape_lod1']}
+                with patch('visibility_export.binding',return_value=membership):
+                    with self.assertRaisesRegex(ValueError,'coverage'):
+                        prepare(intake,animations,lod_gltf,'a'*64)
+                    intake['source_lod_visibility_diagnostic']=True
+                    lod=prepare(intake,animations,lod_gltf,'a'*64)['clips']['idle']['tracks']
+                    self.assertEqual(lod[-1]['keys'],[[0.0,False]])
+                    self.assertTrue(lod[-1]['source_lod_diagnostic'])
+                    with self.assertRaisesRegex(ValueError,'coverage'):
+                        prepare(intake,animations,{'nodes':lod_gltf['nodes']+[{'name':'missing','mesh':2}]},'a'*64)
+                    intake.pop('source_lod_visibility_diagnostic')
                 other=dict(track('dynamic_bool'),target='other_mesh_shape')
                 with patch('visibility_export.binding',return_value={'excluded_targets':{'other_mesh_shape':{'resource_id':'other'}},'source_sha256':{}}), patch('visibility_export.inspect_visibility',return_value=[track(),other]):
                     filtered=prepare(intake,animations,gltf,'a'*64)

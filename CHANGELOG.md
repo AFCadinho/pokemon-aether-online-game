@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Nieuwe 3D-cataloguskandidaten voor Grimer en Muk kunnen zonder scheuren tussen hun bewegende lichaamsdelen worden weergegeven.
+
+- Herstelt aanvullende 3D-bronmodellen en shiny-materialen voor catalogusreview, met behoud van metaal, gloed en bewegende oppervlakken.
+
+- Nieuwe 3D-modelbundles behouden bij gedeelde texturen de juiste shiny-kleur per onderdeel, onder meer bij Veluza.
+
+- Nieuwe Paradox-3D-modelbundles kunnen lichtgevende kleurvlakken, geanimeerde LED-ogen, metaalkaarten en de oorspronkelijke lensdoorzichtigheid behouden.
+
+- Nieuwe 3D-modelbundles ondersteunen een aangepaste rookweergave met een duidelijker gezicht voor Gastly.
+
+- Statische vuureffecten in nieuwe 3D-modelbundles behouden hun gebakken kleurindeling, zodat Typhlosions vlammen geen witte vlakken krijgen door een dubbel toegepaste textuurschaal.
+
 - De Aether Ronin-tailleband loopt in de overworld-zijframes niet meer over de armen; de arm van het basismodel blijft zichtbaar bij lopen, vissen en rijden.
 
 - Route 5 toont de nieuwste handmatige Tiled-aanpassingen in de bestaande Godot-scene, met behoud van de animaties en gameplaylagen.

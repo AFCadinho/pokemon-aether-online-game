@@ -9,6 +9,66 @@ from catalog_shiny_production import replacements
 
 
 class CatalogShinyProductionTest(unittest.TestCase):
+    def test_secondary_eye_normal_omission_does_not_cover_shared_body_texture(self):
+        import copy
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); table = root / 'material.trmtr'
+            table.touch(); table.with_stem('material_rare').touch()
+            (root / 'eye.png').write_bytes(b'normal'); (root / 'rare.png').write_bytes(b'rare')
+            eye = {'name': 'r_eye', 'floats': {}, 'shaders': [{'name': 'EyeClearCoat', 'values': {}}],
+                   'textures': {'NormalMap1': 'eye.bntx'}}
+            rare = {**eye, 'textures': {'NormalMap1': 'rare.bntx'}}
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[eye], [rare]]):
+                pairs, _ = replacements(table, review_queue=True)
+            self.assertEqual(pairs[0]['unrepresented_channel'], 'NormalMap1')
+            body = copy.deepcopy(eye); body.update(name='body', shaders=[{'name': 'Standard', 'values': {}}])
+            body_rare = {**body, 'textures': {'NormalMap1': 'rare.bntx'}}
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[eye, body], [rare, body_rare]]):
+                pairs, _ = replacements(table, review_queue=True)
+            self.assertNotIn('unrepresented_channel', pairs[0])
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[eye, body], [rare, body]]):
+                with self.assertRaisesRegex(ValueError, 'material-specific rare bindings'):
+                    replacements(table, review_queue=True)
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[eye, body], [rare, body]]):
+                pairs, _ = replacements(table, review_queue=True, material_scoped=True)
+            self.assertEqual(pairs[0]['material_bindings'], ['r_eye'])
+
+    def test_layer8_is_applied_only_to_source_eye_materials(self):
+        with tempfile.TemporaryDirectory() as temp:
+            table = Path(temp) / 'material.trmtr'
+            table.touch(); table.with_stem('material_rare').touch()
+            for name, expected in [('body_a_01', 'unrepresented'), ('l_eye', 'apply')]:
+                normal = {'name': name, 'floats': {}, 'shaders': [], 'textures': {},
+                          'colors': {'BaseColorLayer8': [0.1, 0.2, 0.3, 1.0]}}
+                rare = {**normal, 'colors': {'BaseColorLayer8': [0.5, 0.6, 0.7, 1.0]}}
+                with patch('catalog_shiny_production.inspect_materials', side_effect=[[normal], [rare]]):
+                    _, _, _, colors = replacements(table, review_queue=True,
+                        include_float_overrides=True, include_color_overrides=True)
+                self.assertEqual(colors[0]['mode'], expected)
+
+    def test_roughness_changes_keep_applied_and_unrepresented_fields_distinct(self):
+        import copy
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); table = root / 'material.trmtr'
+            table.touch(); table.with_stem('material_rare').touch()
+            (root / 'normal.png').write_bytes(b'normal')
+            (root / 'rare.png').write_bytes(b'rare')
+            normal = {'name': 'body', 'floats': {'Roughness': .8, 'RoughnessLayer1': .2},
+                      'shaders': [], 'textures': {'BaseColorMap': 'normal.bntx'}}
+            rare = {**normal, 'floats': {'Roughness': .4, 'RoughnessLayer1': .1},
+                    'textures': {'BaseColorMap': 'rare.bntx'}}
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[normal], [rare]]):
+                with self.assertRaises(ValueError): replacements(table)
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[normal], [rare]]):
+                _, _, floats = replacements(table, review_queue=True, include_float_overrides=True)
+            self.assertEqual({r['key']: r['mode'] for r in floats},
+                             {'Roughness': 'apply', 'RoughnessLayer1': 'unrepresented'})
+            for value in [float('nan'), float('inf')]:
+                bad = copy.deepcopy(rare); bad['floats']['Roughness'] = value
+                with patch('catalog_shiny_production.inspect_materials', side_effect=[[normal], [bad]]):
+                    with self.assertRaises(ValueError):
+                        replacements(table, review_queue=True, include_float_overrides=True)
+
     def test_colour_only_shiny_requires_explicit_supported_source_parameters(self):
         import copy
         from test_scvi_shared_material_identity import material_fixture

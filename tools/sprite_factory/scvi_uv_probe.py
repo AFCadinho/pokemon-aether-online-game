@@ -10,7 +10,7 @@ from pathlib import Path
 from scvi_tracm import _Buffer
 
 
-def read_uv_tracks(path, *, parameters=('UVScaleOffset', 'UVScaleOffset3')):
+def read_uv_tracks(path, *, parameters=('UVScaleOffset', 'UVScaleOffset3'), scalar_parameters=()):
     view = _Buffer(Path(path).read_bytes())
     root = view.u32(0)
     config = view.pointer(root, 0)
@@ -26,6 +26,8 @@ def read_uv_tracks(path, *, parameters=('UVScaleOffset', 'UVScaleOffset3')):
     report['declared_timeline_counts'] = [view.scalar(root, s, view.u8) for s in (2, 3, 4)]
     report['actual_timeline_counts'] = [sum(view.pointer(t, s) is not None for t in timelines) for s in (4, 5, 6)]
     report['nested_timing'] = []
+    if scalar_parameters:
+        report['scalar_tracks'] = []
     f32 = lambda offset: struct.unpack_from('<f', view.data, offset)[0]
     for track in timelines:
         timeline = view.pointer(track, 4)
@@ -35,6 +37,17 @@ def read_uv_tracks(path, *, parameters=('UVScaleOffset', 'UVScaleOffset3')):
         if nested is not None:
             report['nested_timing'].append([view.scalar(nested, i, view.u32) for i in range(3)])
         for material in view.tables(timeline, 2):
+            for scalar in view.tables(material, 1):
+                name = view.string(scalar, 0)
+                if name not in scalar_parameters:
+                    continue
+                sequence = view.pointer(scalar, 1)
+                if sequence is None:
+                    raise ValueError('Missing scalar material keys')
+                report['scalar_tracks'].append({'material': view.string(material, 0), 'parameter': name,
+                    'keys': [{'time': view.scalar(key, 0, f32), 'value': view.scalar(key, 1, f32),
+                              'config': [view.scalar(key, n, view.u32) for n in (2,3,4)]}
+                             for key in view.tables(sequence, 0)]})
             for animation in view.tables(material, 2):
                 name = view.string(animation, 0)
                 if name not in parameters:

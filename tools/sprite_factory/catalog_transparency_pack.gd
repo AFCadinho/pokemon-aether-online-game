@@ -13,6 +13,12 @@ func _visit(node: Node, expected: Dictionary, seen: Dictionary, alpha_mix: bool)
 				return false
 			var profile: Dictionary = expected[original.resource_name]
 			var material := original.duplicate() as StandardMaterial3D
+			if profile.has("source_base_alpha"):
+				var alpha := float(profile.source_base_alpha)
+				if not is_finite(alpha) or alpha < 0.0 or alpha > 1.0:
+					failure = "Invalid source constant alpha"
+					return false
+				material.albedo_color.a *= alpha
 			match str(profile.source_alpha_type):
 				"Blend": material.blend_mode = BaseMaterial3D.BLEND_MODE_MIX
 				"Add": material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
@@ -23,7 +29,7 @@ func _visit(node: Node, expected: Dictionary, seen: Dictionary, alpha_mix: bool)
 			if profile.source_refraction:
 				var alpha_min := float(profile.get("source_fresnel_alpha_min", 1.0))
 				var alpha_max := float(profile.get("source_fresnel_alpha_max", 1.0))
-				if not is_finite(alpha_min) or not is_finite(alpha_max) or alpha_min < 0.0 or alpha_max > 1.0 or alpha_min > alpha_max:
+				if not is_finite(alpha_min) or not is_finite(alpha_max) or alpha_min < 0.0 or alpha_min > 1.0 or alpha_max < 0.0 or alpha_max > 1.0:
 					failure = "Invalid source Fresnel alpha"
 					return false
 				var tint: Color = material.albedo_color

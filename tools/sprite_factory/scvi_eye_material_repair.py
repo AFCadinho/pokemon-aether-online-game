@@ -3,6 +3,7 @@ import math
 from pathlib import Path
 
 from scvi_material_probe import inspect_materials
+from scvi_eyelid_binding import source_layers
 
 
 def eyelid_transform(row, index):
@@ -57,10 +58,7 @@ def apply(table, mode):
             records.append({'material':row['name'], 'mode':mode, 'removed_fallback':node.image.name})
             tree.links.remove(socket.links[0]);socket.default_value = 0.0
         else:
-            if any(s['values'].get('EyelidType') != 'All' for s in shaders):
-                raise ValueError('UV repair requires both source eyelid layers')
-            for prefix, index, channel, colour in (('UpEye',3,'UpperEyelidColorMap','BaseColorLayer7'),
-                                                   ('LowEye',4,'LowerEyelidColorMap','BaseColorLayer8')):
+            for prefix, index, channel, colour in source_layers(row):
                 socket = group.inputs[prefix + '_alpha']
                 if len(socket.links) != 1:
                     raise ValueError('Source eyelids must be restored before UV repair')
