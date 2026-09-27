@@ -1,5 +1,16 @@
 # Catalog production direction — 2026-09-22
 
+## Batch 04 — 226 candidates, starter lines first (2026-09-27)
+
+The [batch-04 manifest](catalog_production_batch_04.json) contains the 226
+remaining unapproved normal-form candidates. It puts species from all 120
+starter choices currently offered by the game, including their evolution paths,
+first in National Dex order (61 candidates); the other 165 candidates follow in
+National Dex order. Already approved models are skipped. This is a production
+queue only: every candidate still needs the normal technical and visual review
+and later battle qualification. The manifest records hashes for the source
+starter catalog, species data, reviewed registry, and SCVI resource catalog.
+
 ## Batch 03 — next 100 normal-form candidates (2026-09-27)
 
 The [batch-03 manifest](catalog_production_batch_03.json) selects the next 100
