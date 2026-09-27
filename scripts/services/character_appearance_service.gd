@@ -933,6 +933,19 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 	return sprite_frames
 
 
+static func has_authored_movement_pose(category: String, part_id: String, gender: String, movement_style: String) -> bool:
+	var style := resolve_layer_movement_style(movement_style, category)
+	if style == BODY_MOVEMENT_DEFAULT:
+		return false
+	var frames := get_part_frames(category, part_id, gender, style)
+	if frames == null or not frames.has_animation(&"idle_down"):
+		return false
+	var atlas := frames.get_frame_texture(&"idle_down", 0) as AtlasTexture
+	return atlas != null and atlas.atlas != null and atlas.atlas.resource_path.ends_with(
+		"/%s/%s_%s.png" % [style, part_id, style]
+	)
+
+
 static func get_tinted_part_frames(
 	category: String,
 	part_id: String,
