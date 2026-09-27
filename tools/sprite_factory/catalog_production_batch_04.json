@@ -18,7 +18,8 @@
     "species_data_sha256": "850c14c806ae2dbceb47faec3a1febeafb0ed56c5c13653b8197113bd1613397",
     "reviewed_registry_sha256": "1a144dd157e78d332f63884a60361e3e72076d6b2f2c48797df2f9d6b69a5c32",
     "approved_species_skipped_count": 252,
-    "reviewed_registry_species_id_count": 254
+    "reviewed_registry_species_id_count": 254,
+    "preview_scale_policy": "uniform 120px composition-preview target; per-species battle scale remains unqualified"
   },
   "entries": [
     {
@@ -28,7 +29,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "charmander"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "gastly",
@@ -37,7 +40,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "gastly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "gengar",
@@ -46,7 +51,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "gastly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dragonair",
@@ -55,7 +62,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "dratini"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cyndaquil",
@@ -64,7 +73,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "cyndaquil"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "quilava",
@@ -73,7 +84,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "cyndaquil"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "typhlosion",
@@ -82,7 +95,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "cyndaquil"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "ampharos",
@@ -91,7 +106,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "mareep"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "larvitar",
@@ -100,7 +117,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "larvitar"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "slakoth",
@@ -109,7 +128,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "slakoth"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "azurill",
@@ -118,7 +139,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "azurill"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "salamence",
@@ -127,7 +150,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "bagon"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "starly",
@@ -136,7 +161,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "starly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "staravia",
@@ -145,7 +172,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "starly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "luxray",
@@ -154,7 +183,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "shinx"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "krookodile",
@@ -163,7 +194,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "sandile"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "decidueye",
@@ -172,7 +205,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "rowlet"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rillaboom",
@@ -181,7 +216,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "grookey"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cinderace",
@@ -190,7 +227,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "scorbunny"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rookidee",
@@ -199,7 +238,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "rookidee"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "corvisquire",
@@ -208,7 +249,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "rookidee"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rolycoly",
@@ -217,7 +260,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "rolycoly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "carkol",
@@ -226,7 +271,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "rolycoly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "coalossal",
@@ -235,7 +282,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "rolycoly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "applin",
@@ -244,7 +293,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "applin"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "hatenna",
@@ -253,7 +304,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "hatenna"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "hattrem",
@@ -262,7 +315,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "hatenna"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "hatterene",
@@ -271,7 +326,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "hatenna"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "impidimp",
@@ -280,7 +337,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "impidimp"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "morgrem",
@@ -289,7 +348,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "impidimp"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "grimmsnarl",
@@ -298,7 +359,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "impidimp"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dreepy",
@@ -307,7 +370,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "dreepy"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "drakloak",
@@ -316,7 +381,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "dreepy"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dragapult",
@@ -325,7 +392,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "dreepy"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "ursaluna",
@@ -334,7 +403,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "teddiursa"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sprigatito",
@@ -343,7 +414,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "sprigatito"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "floragato",
@@ -352,7 +425,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "sprigatito"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "meowscarada",
@@ -361,7 +436,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "sprigatito"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "fuecoco",
@@ -370,7 +447,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "fuecoco"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "crocalor",
@@ -379,7 +458,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "fuecoco"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "skeledirge",
@@ -388,7 +469,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "fuecoco"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "quaxly",
@@ -397,7 +480,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "quaxly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "quaxwell",
@@ -406,7 +491,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "quaxly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "quaquaval",
@@ -415,7 +502,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "quaxly"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pawmi",
@@ -424,7 +513,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "pawmi"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pawmo",
@@ -433,7 +524,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "pawmi"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pawmot",
@@ -442,7 +535,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "pawmi"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "smoliv",
@@ -451,7 +546,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "smoliv"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dolliv",
@@ -460,7 +557,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "smoliv"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "arboliva",
@@ -469,7 +568,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "smoliv"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "nacli",
@@ -478,7 +579,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "nacli"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "naclstack",
@@ -487,7 +590,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "nacli"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "garganacl",
@@ -496,7 +601,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "nacli"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tinkatink",
@@ -505,7 +612,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "tinkatink"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tinkatuff",
@@ -514,7 +623,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "tinkatink"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tinkaton",
@@ -523,7 +634,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "tinkatink"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "annihilape",
@@ -532,7 +645,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "mankey"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "kingambit",
@@ -541,7 +656,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "pawniard"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "frigibax",
@@ -550,7 +667,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "frigibax"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "arctibax",
@@ -559,7 +678,9 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "frigibax"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "baxcalibur",
@@ -568,1162 +689,1494 @@
       "priority_group": "starter_evolution",
       "starter_line_roots": [
         "frigibax"
-      ]
+      ],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "venomoth",
       "national_dex_number": 49,
       "resource_id": "pm0049_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dugtrio",
       "national_dex_number": 51,
       "resource_id": "pm0051_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "meowth",
       "national_dex_number": 52,
       "resource_id": "pm0052_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "growlithe",
       "national_dex_number": 58,
       "resource_id": "pm0058_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "slowbro",
       "national_dex_number": 80,
       "resource_id": "pm0080_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "grimer",
       "national_dex_number": 88,
       "resource_id": "pm0088_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "muk",
       "national_dex_number": 89,
       "resource_id": "pm0089_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cloyster",
       "national_dex_number": 91,
       "resource_id": "pm0091_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "hypno",
       "national_dex_number": 97,
       "resource_id": "pm0097_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "magikarp",
       "national_dex_number": 129,
       "resource_id": "pm0129_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "ditto",
       "national_dex_number": 132,
       "resource_id": "pm0132_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "eevee",
       "national_dex_number": 133,
       "resource_id": "pm0133_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "jolteon",
       "national_dex_number": 135,
       "resource_id": "pm0135_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "moltres",
       "national_dex_number": 146,
       "resource_id": "pm0146_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sunkern",
       "national_dex_number": 191,
       "resource_id": "pm0191_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sunflora",
       "national_dex_number": 192,
       "resource_id": "pm0192_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "murkrow",
       "national_dex_number": 198,
       "resource_id": "pm0198_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "girafarig",
       "national_dex_number": 203,
       "resource_id": "pm0203_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pineco",
       "national_dex_number": 204,
       "resource_id": "pm0204_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "forretress",
       "national_dex_number": 205,
       "resource_id": "pm0205_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sneasel",
       "national_dex_number": 215,
       "resource_id": "pm0215_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "wingull",
       "national_dex_number": 278,
       "resource_id": "pm0278_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pelipper",
       "national_dex_number": 279,
       "resource_id": "pm0279_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sableye",
       "national_dex_number": 302,
       "resource_id": "pm0302_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "numel",
       "national_dex_number": 322,
       "resource_id": "pm0322_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "torkoal",
       "national_dex_number": 324,
       "resource_id": "pm0324_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "swablu",
       "national_dex_number": 333,
       "resource_id": "pm0333_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "altaria",
       "national_dex_number": 334,
       "resource_id": "pm0334_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "glalie",
       "national_dex_number": 362,
       "resource_id": "pm0362_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "luvdisc",
       "national_dex_number": 370,
       "resource_id": "pm0370_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "kyogre",
       "national_dex_number": 382,
       "resource_id": "pm0382_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rayquaza",
       "national_dex_number": 384,
       "resource_id": "pm0384_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "buizel",
       "national_dex_number": 418,
       "resource_id": "pm0418_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "shellos",
       "national_dex_number": 422,
       "resource_id": "pm0422_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "gastrodon",
       "national_dex_number": 423,
       "resource_id": "pm0423_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "honchkrow",
       "national_dex_number": 430,
       "resource_id": "pm0430_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "spiritomb",
       "national_dex_number": 442,
       "resource_id": "pm0442_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "toxicroak",
       "national_dex_number": 454,
       "resource_id": "pm0454_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "weavile",
       "national_dex_number": 461,
       "resource_id": "pm0461_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "froslass",
       "national_dex_number": 478,
       "resource_id": "pm0478_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rotom",
       "national_dex_number": 479,
       "resource_id": "pm0479_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dialga",
       "national_dex_number": 483,
       "resource_id": "pm0483_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "giratina",
       "national_dex_number": 487,
       "resource_id": "pm0487_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cresselia",
       "national_dex_number": 488,
       "resource_id": "pm0488_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "arceus",
       "national_dex_number": 493,
       "resource_id": "pm0493_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "basculin",
       "national_dex_number": 550,
       "resource_id": "pm0550_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pyroar",
       "national_dex_number": 668,
       "resource_id": "pm0705_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "magearna",
       "national_dex_number": 801,
       "resource_id": "pm0882_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "skwovet",
       "national_dex_number": 819,
       "resource_id": "pm0909_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "greedent",
       "national_dex_number": 820,
       "resource_id": "pm0910_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "chewtle",
       "national_dex_number": 833,
       "resource_id": "pm0903_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "drednaw",
       "national_dex_number": 834,
       "resource_id": "pm0904_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "flapple",
       "national_dex_number": 841,
       "resource_id": "pm0967_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "appletun",
       "national_dex_number": 842,
       "resource_id": "pm0968_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "silicobra",
       "national_dex_number": 843,
       "resource_id": "pm0936_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sandaconda",
       "national_dex_number": 844,
       "resource_id": "pm0937_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "arrokuda",
       "national_dex_number": 846,
       "resource_id": "pm0913_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "barraskewda",
       "national_dex_number": 847,
       "resource_id": "pm0914_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "toxel",
       "national_dex_number": 848,
       "resource_id": "pm0921_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "toxtricity",
       "national_dex_number": 849,
       "resource_id": "pm0922_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sinistea",
       "national_dex_number": 854,
       "resource_id": "pm0972_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "polteageist",
       "national_dex_number": 855,
       "resource_id": "pm0973_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "perrserker",
       "national_dex_number": 863,
       "resource_id": "pm0943_00_31",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "falinks",
       "national_dex_number": 870,
       "resource_id": "pm0923_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "pincurchin",
       "national_dex_number": 871,
       "resource_id": "pm0944_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "snom",
       "national_dex_number": 872,
       "resource_id": "pm0945_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "frosmoth",
       "national_dex_number": 873,
       "resource_id": "pm0946_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "stonjourner",
       "national_dex_number": 874,
       "resource_id": "pm0974_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "eiscue",
       "national_dex_number": 875,
       "resource_id": "pm0975_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "indeedee",
       "national_dex_number": 876,
       "resource_id": "pm0942_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cufant",
       "national_dex_number": 878,
       "resource_id": "pm0926_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "copperajah",
       "national_dex_number": 879,
       "resource_id": "pm0927_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "zacian",
       "national_dex_number": 888,
       "resource_id": "pm0938_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "zamazenta",
       "national_dex_number": 889,
       "resource_id": "pm0939_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "eternatus",
       "national_dex_number": 890,
       "resource_id": "pm0940_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "kubfu",
       "national_dex_number": 891,
       "resource_id": "pm0982_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "urshifu",
       "national_dex_number": 892,
       "resource_id": "pm0983_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "zarude",
       "national_dex_number": 893,
       "resource_id": "pm0988_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "regieleki",
       "national_dex_number": 894,
       "resource_id": "pm0989_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "regidrago",
       "national_dex_number": 895,
       "resource_id": "pm0990_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "glastrier",
       "national_dex_number": 896,
       "resource_id": "pm0984_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "spectrier",
       "national_dex_number": 897,
       "resource_id": "pm0985_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "calyrex",
       "national_dex_number": 898,
       "resource_id": "pm0986_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "wyrdeer",
       "national_dex_number": 899,
       "resource_id": "pm1001_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "kleavor",
       "national_dex_number": 900,
       "resource_id": "pm1002_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "basculegion",
       "national_dex_number": 902,
       "resource_id": "pm1006_11_41",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sneasler",
       "national_dex_number": 903,
       "resource_id": "pm1003_00_41",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "overqwil",
       "national_dex_number": 904,
       "resource_id": "pm1005_00_41",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "enamorus",
       "national_dex_number": 905,
       "resource_id": "pm1004_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "lechonk",
       "national_dex_number": 915,
       "resource_id": "pm1019_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "oinkologne",
       "national_dex_number": 916,
       "resource_id": "pm1020_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tarountula",
       "national_dex_number": 917,
       "resource_id": "pm1022_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "spidops",
       "national_dex_number": 918,
       "resource_id": "pm1023_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "nymble",
       "national_dex_number": 919,
       "resource_id": "pm1024_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "lokix",
       "national_dex_number": 920,
       "resource_id": "pm1025_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tandemaus",
       "national_dex_number": 924,
       "resource_id": "pm1049_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "maushold",
       "national_dex_number": 925,
       "resource_id": "pm1050_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "fidough",
       "national_dex_number": 926,
       "resource_id": "pm1074_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dachsbun",
       "national_dex_number": 927,
       "resource_id": "pm1075_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "squawkabilly",
       "national_dex_number": 931,
       "resource_id": "pm1064_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "charcadet",
       "national_dex_number": 935,
       "resource_id": "pm1107_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "armarouge",
       "national_dex_number": 936,
       "resource_id": "pm1108_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "ceruledge",
       "national_dex_number": 937,
       "resource_id": "pm1109_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tadbulb",
       "national_dex_number": 938,
       "resource_id": "pm1044_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "bellibolt",
       "national_dex_number": 939,
       "resource_id": "pm1045_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "wattrel",
       "national_dex_number": 940,
       "resource_id": "pm1061_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "kilowattrel",
       "national_dex_number": 941,
       "resource_id": "pm1062_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "maschiff",
       "national_dex_number": 942,
       "resource_id": "pm1076_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "mabosstiff",
       "national_dex_number": 943,
       "resource_id": "pm1077_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "shroodle",
       "national_dex_number": 944,
       "resource_id": "pm1072_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "grafaiai",
       "national_dex_number": 945,
       "resource_id": "pm1073_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "bramblin",
       "national_dex_number": 946,
       "resource_id": "pm1078_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "brambleghast",
       "national_dex_number": 947,
       "resource_id": "pm1079_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "toedscool",
       "national_dex_number": 948,
       "resource_id": "pm1110_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "toedscruel",
       "national_dex_number": 949,
       "resource_id": "pm1111_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "klawf",
       "national_dex_number": 950,
       "resource_id": "pm1066_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "capsakid",
       "national_dex_number": 951,
       "resource_id": "pm1042_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "scovillain",
       "national_dex_number": 952,
       "resource_id": "pm1043_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rellor",
       "national_dex_number": 953,
       "resource_id": "pm1026_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "rabsca",
       "national_dex_number": 954,
       "resource_id": "pm1027_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "flittle",
       "national_dex_number": 955,
       "resource_id": "pm1030_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "espathra",
       "national_dex_number": 956,
       "resource_id": "pm1031_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "wiglett",
       "national_dex_number": 960,
       "resource_id": "pm1033_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "wugtrio",
       "national_dex_number": 961,
       "resource_id": "pm1034_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "bombirdier",
       "national_dex_number": 962,
       "resource_id": "pm1063_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "finizen",
       "national_dex_number": 963,
       "resource_id": "pm1037_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "palafin",
       "national_dex_number": 964,
       "resource_id": "pm1038_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "varoom",
       "national_dex_number": 965,
       "resource_id": "pm1046_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "revavroom",
       "national_dex_number": 966,
       "resource_id": "pm1047_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cyclizar",
       "national_dex_number": 967,
       "resource_id": "pm1057_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "glimmet",
       "national_dex_number": 969,
       "resource_id": "pm1070_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "glimmora",
       "national_dex_number": 970,
       "resource_id": "pm1071_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "greavard",
       "national_dex_number": 971,
       "resource_id": "pm1028_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "houndstone",
       "national_dex_number": 972,
       "resource_id": "pm1029_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "flamigo",
       "national_dex_number": 973,
       "resource_id": "pm1065_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cetoddle",
       "national_dex_number": 974,
       "resource_id": "pm1051_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "cetitan",
       "national_dex_number": 975,
       "resource_id": "pm1052_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "veluza",
       "national_dex_number": 976,
       "resource_id": "pm1036_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "tatsugiri",
       "national_dex_number": 978,
       "resource_id": "pm1056_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "clodsire",
       "national_dex_number": 980,
       "resource_id": "pm1113_00_51",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "farigiraf",
       "national_dex_number": 981,
       "resource_id": "pm1032_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "dudunsparce",
       "national_dex_number": 982,
       "resource_id": "pm1021_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "great-tusk",
       "national_dex_number": 984,
       "resource_id": "pm1082_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "scream-tail",
       "national_dex_number": 985,
       "resource_id": "pm1086_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "brute-bonnet",
       "national_dex_number": 986,
       "resource_id": "pm1083_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "flutter-mane",
       "national_dex_number": 987,
       "resource_id": "pm1087_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "slither-wing",
       "national_dex_number": 988,
       "resource_id": "pm1088_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "sandy-shocks",
       "national_dex_number": 989,
       "resource_id": "pm1085_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-treads",
       "national_dex_number": 990,
       "resource_id": "pm1090_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-bundle",
       "national_dex_number": 991,
       "resource_id": "pm1096_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-hands",
       "national_dex_number": 992,
       "resource_id": "pm1093_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-jugulis",
       "national_dex_number": 993,
       "resource_id": "pm1094_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-moth",
       "national_dex_number": 994,
       "resource_id": "pm1092_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-thorns",
       "national_dex_number": 995,
       "resource_id": "pm1095_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "gimmighoul",
       "national_dex_number": 999,
       "resource_id": "pm1080_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "gholdengo",
       "national_dex_number": 1000,
       "resource_id": "pm1081_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "wo-chien",
       "national_dex_number": 1001,
       "resource_id": "pm1100_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "chien-pao",
       "national_dex_number": 1002,
       "resource_id": "pm1099_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "ting-lu",
       "national_dex_number": 1003,
       "resource_id": "pm1098_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "chi-yu",
       "national_dex_number": 1004,
       "resource_id": "pm1101_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-valiant",
       "national_dex_number": 1006,
       "resource_id": "pm1097_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "koraidon",
       "national_dex_number": 1007,
       "resource_id": "pm1102_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "miraidon",
       "national_dex_number": 1008,
       "resource_id": "pm1103_11_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "walking-wake",
       "national_dex_number": 1009,
       "resource_id": "pm1084_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     },
     {
       "species": "iron-leaves",
       "national_dex_number": 1010,
       "resource_id": "pm1091_00_00",
       "priority_group": "national_dex",
-      "starter_line_roots": []
+      "starter_line_roots": [],
+      "target_game_height_px": 120,
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval."
     }
   ]
 }

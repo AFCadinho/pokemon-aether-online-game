@@ -1,0 +1,370 @@
+{
+	"catalog": "res://tools/map_animation_assets/catalog.json",
+	"maps": {
+		"cerulean_city": {
+			"after": {
+				"baseRGBABytes": 6893568,
+				"cells": 10151,
+				"fingerprint": "63c1a649d142327ce6a5310ed873a40b22da2884e773283e8897e77d5806fda4",
+				"layers": 6,
+				"usedTiles": 590
+			},
+			"animated_cells": {
+				"canopy": 715,
+				"flower": 34,
+				"water": 826
+			},
+			"animated_types": 22,
+			"before": {
+				"baseRGBABytes": 3244032,
+				"cells": 10151,
+				"fingerprint": "63c1a649d142327ce6a5310ed873a40b22da2884e773283e8897e77d5806fda4",
+				"layers": 6,
+				"usedTiles": 590
+			}
+		},
+		"kanto_route_2": {
+			"after": {
+				"baseRGBABytes": 5013504,
+				"cells": 10586,
+				"fingerprint": "048df4973f8416bcd3b29fe4020bc5734a66dd8e0319b68fd95299bb1f5a1532",
+				"layers": 8,
+				"usedTiles": 282
+			},
+			"animated_cells": {
+				"canopy": 2773,
+				"flower": 153,
+				"water": 84
+			},
+			"animated_types": 20,
+			"before": {
+				"baseRGBABytes": 1585152,
+				"cells": 10586,
+				"fingerprint": "048df4973f8416bcd3b29fe4020bc5734a66dd8e0319b68fd95299bb1f5a1532",
+				"layers": 8,
+				"usedTiles": 282
+			}
+		},
+		"kanto_route_22": {
+			"after": {
+				"baseRGBABytes": 4644864,
+				"cells": 7535,
+				"fingerprint": "b020c96eb2eed0b9cb8b271378c2b9fe8ecbe1174a90159369cbddf6f787068e",
+				"layers": 4,
+				"usedTiles": 219
+			},
+			"animated_cells": {
+				"canopy": 810,
+				"flower": 61,
+				"water": 118
+			},
+			"animated_types": 20,
+			"before": {
+				"baseRGBABytes": 1179648,
+				"cells": 7535,
+				"fingerprint": "b020c96eb2eed0b9cb8b271378c2b9fe8ecbe1174a90159369cbddf6f787068e",
+				"layers": 4,
+				"usedTiles": 219
+			}
+		},
+		"lobby": {
+			"after": {
+				"baseRGBABytes": 4773888,
+				"cells": 8554,
+				"fingerprint": "6886566c4746a0d45f6d790fa9e61ab7d6a5603c71dab4e706e917c7608c7483",
+				"layers": 5,
+				"usedTiles": 325
+			},
+			"animated_cells": {
+				"canopy": 2412,
+				"flower": 60,
+				"water": 72
+			},
+			"animated_types": 17,
+			"before": {
+				"baseRGBABytes": 1806336,
+				"cells": 8554,
+				"fingerprint": "6886566c4746a0d45f6d790fa9e61ab7d6a5603c71dab4e706e917c7608c7483",
+				"layers": 5,
+				"usedTiles": 325
+			}
+		},
+		"mt_moon_1f": {
+			"after": {
+				"baseRGBABytes": 3612672,
+				"cells": 12166,
+				"fingerprint": "234581c2b59bb087effd3ac63d8c7f6fb90bf84507421377f5038ae82d922c21",
+				"layers": 4,
+				"usedTiles": 341
+			},
+			"animated_cells": {
+				"water": 137
+			},
+			"animated_types": 10,
+			"before": {
+				"baseRGBABytes": 1806336,
+				"cells": 12166,
+				"fingerprint": "234581c2b59bb087effd3ac63d8c7f6fb90bf84507421377f5038ae82d922c21",
+				"layers": 4,
+				"usedTiles": 341
+			}
+		},
+		"mt_moon_b1f": {
+			"after": {
+				"baseRGBABytes": 3207168,
+				"cells": 8891,
+				"fingerprint": "42b3d9a08bbfdad4fcdbb28dfd999de9548f858b7fe84406068b1d4264646f17",
+				"layers": 4,
+				"usedTiles": 231
+			},
+			"animated_cells": {
+				"water": 75
+			},
+			"animated_types": 11,
+			"before": {
+				"baseRGBABytes": 1253376,
+				"cells": 8891,
+				"fingerprint": "42b3d9a08bbfdad4fcdbb28dfd999de9548f858b7fe84406068b1d4264646f17",
+				"layers": 4,
+				"usedTiles": 231
+			}
+		},
+		"mt_moon_b2f": {
+			"after": {
+				"baseRGBABytes": 3170304,
+				"cells": 12304,
+				"fingerprint": "a96af9306033c0eaa76079bafb877bf6b39b051e738098dbafe6ce531fdd361a",
+				"layers": 4,
+				"usedTiles": 189
+			},
+			"animated_cells": {
+				"water": 166
+			},
+			"animated_types": 12,
+			"before": {
+				"baseRGBABytes": 995328,
+				"cells": 12304,
+				"fingerprint": "a96af9306033c0eaa76079bafb877bf6b39b051e738098dbafe6ce531fdd361a",
+				"layers": 4,
+				"usedTiles": 189
+			}
+		},
+		"pallet_town": {
+			"after": {
+				"baseRGBABytes": 5363712,
+				"cells": 4376,
+				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+				"layers": 5,
+				"usedTiles": 325
+			},
+			"animated_cells": {
+				"canopy": 1265,
+				"flower": 38,
+				"water": 148
+			},
+			"animated_types": 21,
+			"before": {
+				"baseRGBABytes": 1843200,
+				"cells": 4376,
+				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+				"layers": 5,
+				"usedTiles": 325
+			}
+		},
+		"pallet_town_compact": {
+			"after": {
+				"baseRGBABytes": 5363712,
+				"cells": 4376,
+				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+				"layers": 5,
+				"usedTiles": 325
+			},
+			"animated_cells": {
+				"canopy": 1265,
+				"flower": 38,
+				"water": 148
+			},
+			"animated_types": 21,
+			"before": {
+				"baseRGBABytes": 1843200,
+				"cells": 4376,
+				"fingerprint": "33be41fe83cf3afe84406cad9502818121a88776d0a23824e870f63a6abd659f",
+				"layers": 5,
+				"usedTiles": 325
+			}
+		},
+		"pewter_city": {
+			"after": {
+				"baseRGBABytes": 6193152,
+				"cells": 6862,
+				"fingerprint": "3442fb9ae5dc6252bcdce6d817bc0d22972925c52fe80640be5620fe798a09a2",
+				"layers": 6,
+				"usedTiles": 726
+			},
+			"animated_cells": {
+				"canopy": 448,
+				"flower": 32
+			},
+			"animated_types": 9,
+			"before": {
+				"baseRGBABytes": 3907584,
+				"cells": 6862,
+				"fingerprint": "3442fb9ae5dc6252bcdce6d817bc0d22972925c52fe80640be5620fe798a09a2",
+				"layers": 6,
+				"usedTiles": 726
+			}
+		},
+		"route_1": {
+			"after": {
+				"baseRGBABytes": 4267008,
+				"cells": 8581,
+				"fingerprint": "5eb518ba0203f4b6d19b2b4f622effe8555189f130dd8f81c8f91e3e0aca2c5d",
+				"layers": 6,
+				"usedTiles": 150
+			},
+			"animated_cells": {
+				"canopy": 2214,
+				"flower": 146,
+				"water": 104
+			},
+			"animated_types": 20,
+			"before": {
+				"baseRGBABytes": 857088,
+				"cells": 8581,
+				"fingerprint": "5eb518ba0203f4b6d19b2b4f622effe8555189f130dd8f81c8f91e3e0aca2c5d",
+				"layers": 6,
+				"usedTiles": 150
+			}
+		},
+		"route_24": {
+			"after": {
+				"baseRGBABytes": 4442112,
+				"cells": 5770,
+				"fingerprint": "2e2e3b6c461c0ed42f126b9576a5557b665a30e3dea1a9675ccbe957daae1c4d",
+				"layers": 4,
+				"usedTiles": 159
+			},
+			"animated_cells": {
+				"canopy": 264,
+				"flower": 35,
+				"water": 589
+			},
+			"animated_types": 21,
+			"before": {
+				"baseRGBABytes": 921600,
+				"cells": 5770,
+				"fingerprint": "2e2e3b6c461c0ed42f126b9576a5557b665a30e3dea1a9675ccbe957daae1c4d",
+				"layers": 4,
+				"usedTiles": 159
+			}
+		},
+		"route_25": {
+			"after": {
+				"baseRGBABytes": 4451328,
+				"cells": 6322,
+				"fingerprint": "72a34675b76d5867f3fb72d9da69a3999ed8c653c3399423befac7bc0ed976b1",
+				"layers": 6,
+				"usedTiles": 180
+			},
+			"animated_cells": {
+				"canopy": 486,
+				"flower": 38,
+				"water": 468
+			},
+			"animated_types": 20,
+			"before": {
+				"baseRGBABytes": 1041408,
+				"cells": 6322,
+				"fingerprint": "72a34675b76d5867f3fb72d9da69a3999ed8c653c3399423befac7bc0ed976b1",
+				"layers": 6,
+				"usedTiles": 180
+			}
+		},
+		"route_3": {
+			"after": {
+				"baseRGBABytes": 3741696,
+				"cells": 8569,
+				"fingerprint": "817e41038ee22fa96d731838901b115587c798b0dff78d4e1745213a8483fcc8",
+				"layers": 6,
+				"usedTiles": 270
+			},
+			"animated_cells": {
+				"canopy": 564,
+				"flower": 26
+			},
+			"animated_types": 9,
+			"before": {
+				"baseRGBABytes": 1511424,
+				"cells": 8569,
+				"fingerprint": "817e41038ee22fa96d731838901b115587c798b0dff78d4e1745213a8483fcc8",
+				"layers": 6,
+				"usedTiles": 270
+			}
+		},
+		"route_4": {
+			"after": {
+				"baseRGBABytes": 4368384,
+				"cells": 8434,
+				"fingerprint": "8bcf453de6a98e31724e21914af8e40791c7d33a5610746091be8966e51f1e1a",
+				"layers": 4,
+				"usedTiles": 178
+			},
+			"animated_cells": {
+				"canopy": 414,
+				"flower": 49,
+				"water": 278
+			},
+			"animated_types": 19,
+			"before": {
+				"baseRGBABytes": 1069056,
+				"cells": 8434,
+				"fingerprint": "8bcf453de6a98e31724e21914af8e40791c7d33a5610746091be8966e51f1e1a",
+				"layers": 4,
+				"usedTiles": 178
+			}
+		},
+		"viridian_city": {
+			"after": {
+				"baseRGBABytes": 6064128,
+				"cells": 9917,
+				"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+				"layers": 7,
+				"usedTiles": 494
+			},
+			"animated_cells": {
+				"canopy": 2494,
+				"flower": 178,
+				"water": 66
+			},
+			"animated_types": 19,
+			"before": {
+				"baseRGBABytes": 2764800,
+				"cells": 9917,
+				"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+				"layers": 7,
+				"usedTiles": 494
+			}
+		},
+		"viridian_forest": {
+			"after": {
+				"baseRGBABytes": 995328,
+				"cells": 13842,
+				"fingerprint": "33c18d9ccf77b2914d52ffc1255c8a3757c2bfc52f51218eca2093013b5ff834",
+				"layers": 5,
+				"usedTiles": 140
+			},
+			"animated_cells": {
+				"flower": 47
+			},
+			"animated_types": 1,
+			"before": {
+				"baseRGBABytes": 774144,
+				"cells": 13842,
+				"fingerprint": "33c18d9ccf77b2914d52ffc1255c8a3757c2bfc52f51218eca2093013b5ff834",
+				"layers": 5,
+				"usedTiles": 140
+			}
+		}
+	},
+	"version": 1
+}
