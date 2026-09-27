@@ -43,6 +43,7 @@ eyelid warning were also sampled at four idle frames. Seventy-four passed
 probe QC; Spiritomb retained its already known front/back clipping failure.
 Their visual overview is at
 `game/.worktrees/slot-a/frontend/.tmp/catalog-production-04/probes/normal/multi-frame-remaining/index.html`.
+The user reviewed this overview and found no further visibly closed eyes.
 
 ## Batch 04 — 226 candidates, starter lines first (2026-09-27)
 
