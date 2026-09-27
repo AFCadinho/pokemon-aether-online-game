@@ -82,6 +82,19 @@ class VariantBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Unknown or ambiguous'):
             self.resolve(targets=['selected_body_mesh_shape','typo_mesh_shape'])
 
+    def test_unowned_redundant_track_requires_explicit_equivalence(self):
+        targets=['selected_body_mesh_shape','unowned_body_mesh_shape']
+        with self.assertRaisesRegex(ValueError,'Unknown or ambiguous'):
+            self.resolve(targets=targets)
+        result=binding(self.intake,['selected_body_mesh'],targets,
+                       {'unowned_body_mesh_shape':'selected_body_mesh_shape'})
+        self.assertEqual(result['excluded_targets']['unowned_body_mesh_shape'],
+                         {'redundant_with':'selected_body_mesh_shape',
+                          'source_equivalent_all_clips':True})
+        with self.assertRaisesRegex(ValueError,'Unknown or ambiguous'):
+            binding(self.intake,['selected_body_mesh'],targets,
+                    {'unowned_body_mesh_shape':'absent_mesh_shape'})
+
     def test_ambiguous_owner_rejected(self):
         self.rows.append(dict(self.rows[1],resource_id='another',gender_code=2))
         with self.assertRaisesRegex(ValueError,'ambiguous'):self.resolve()

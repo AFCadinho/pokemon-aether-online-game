@@ -290,6 +290,8 @@ def import_one(args):
         validate_prepared_source(blend, previous)
         if previous.get("importer_commit") != EXPECTED_IMPORTER or previous.get("variant") != args.variant:
             raise ValueError("Existing import identity differs")
+        if bool(previous.get("restored_eyelids")) != (item.get("restore_all_eyelids") is True):
+            raise ValueError("Existing eyelid restoration differs; archive it before reimport")
         if {key: value["name"] if value else None for key, value in previous["actions"].items()} != {
                 key: Path(item["motions"][key]).stem if item["motions"][key] else None
                 for key in requested_categories}:
@@ -323,6 +325,7 @@ def import_one(args):
            "motions": {key: item["motions"][key] for key in requested_categories},
            "motion_channels": {key: item["motion_channels"][key] for key in requested_categories},
            "facial_baseline": item["facial_baseline"],
+           "restore_all_eyelids": item.get("restore_all_eyelids") is True,
            "facial_baseline_frame": item.get("facial_baseline_frame", 0),
            "facial_baseline_categories": [category for category in item.get(
                "facial_baseline_categories",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De laatste 25 Pokémon uit batch 03 zijn lokaal goedgekeurd als 3D-model in normale en shiny vorm, elk met een eigen bijwerkbare bundle. De modellen komen pas met een aparte publicatie beschikbaar voor spelers.
+
 - Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen in immersive mode voor alle vier een eigen HP-kaart bij hun model.
 
 - Nog 75 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm. Elk modelpaar heeft een eigen downloadbare bundle; publicatie volgt in een latere desktoprelease.

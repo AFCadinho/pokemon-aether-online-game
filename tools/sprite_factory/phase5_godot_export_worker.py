@@ -1,6 +1,7 @@
 """Direct GLB diagnostic export. Trusted worker, never saves source Blend files."""
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import struct
@@ -26,8 +27,9 @@ def run(job):
     if job.get('material_source'):
         from scvi_identity import validate_export_job
         validate_export_job(job)
-        from material_profiles import read_profiles, unsupported
-        profiles = read_profiles(job['material_source'], job['material_source_sha256'])
+        from material_profiles import read_profiles, unsupported, TRANSPARENT_PROBE
+        profiles = read_profiles(job['material_source'], job['material_source_sha256'],
+                                 transparent_review=job.get('source_transparency_diagnostic') is True)
         if unsupported(profiles):
             raise ValueError('Unsupported material profiles: ' + repr(unsupported(profiles)))
         if any(p.get('requires_effect_payload') for p in profiles):
@@ -37,6 +39,40 @@ def run(job):
     rig, rig_selection = isolate(source)
     from source_repairs import apply as apply_repair
     source_repair = apply_repair(job['source_sha256'], job['actions'].values())
+    float_overrides = job.get('verified_rare_float_overrides', [])
+    if float_overrides:
+        rare_table = Path(job['official_rare_material_source'])
+        if hashlib.sha256(rare_table.read_bytes()).hexdigest() != job['official_rare_material_sha256']:
+            raise ValueError('Official rare material table changed')
+        from scvi_material_probe import inspect_materials
+        normal_rows = {row['name']: row for row in inspect_materials(Path(job['material_source']))}
+        rare_rows = {row['name']: row for row in inspect_materials(rare_table)}
+        for override in float_overrides:
+            name, key = override['material'], override['key']
+            if (name not in normal_rows or name not in rare_rows
+                    or normal_rows[name]['floats'].get(key) != override['normal']
+                    or rare_rows[name]['floats'].get(key) != override['rare']):
+                raise ValueError('Rare float override differs from official tables')
+            material = bpy.data.materials.get(override['material'])
+            if material is None or material.node_tree is None:
+                raise ValueError('Unbound rare float override')
+            nodes = [node for node in material.node_tree.nodes if node.type == 'GROUP'
+                     and override['key'] in node.inputs]
+            if override.get('mode') == 'unrepresented' and key in (
+                    'EmissionIntensityLayer5', 'NormalHeight1', 'RoughnessHighlight'):
+                if nodes:
+                    raise ValueError('Rare source float unexpectedly has a shader input')
+                continue
+            if override.get('mode') != 'apply' or key not in (
+                    'EmissionIntensityLayer1', 'EmissionIntensityLayer2',
+                    'EmissionIntensityLayer3', 'EmissionIntensityLayer4'):
+                raise ValueError('Unsupported rare float override')
+            if len(nodes) != 1 or nodes[0].inputs[override['key']].is_linked:
+                raise ValueError('Ambiguous rare float shader input')
+            socket = nodes[0].inputs[override['key']]
+            if not math.isclose(socket.default_value, override['normal'], rel_tol=0, abs_tol=1e-5):
+                raise ValueError('Embedded normal float differs from official source')
+            socket.default_value = override['rare']
     replacements = []
     for replacement in job.get('verified_texture_replacements', []):
         from array import array
@@ -66,8 +102,10 @@ def run(job):
                 raise ValueError('Embedded normal pixels differ from official source; UV binding not proven')
         shiny = bpy.data.images.load(str(rare), check_existing=False)
         shiny.colorspace_settings.name = matches[0].colorspace_settings.name
-        if tuple(shiny.size) != tuple(reference.size):
-            raise ValueError('Rare texture dimensions differ')
+        # UV coordinates are normalized and the rare material table names this
+        # exact replacement for the same channel. Official rare textures may
+        # use a different resolution (Meloetta's layer mask is 128x256 rather
+        # than 512x512); resizing them would change the authored pixels.
         for existing in matches:
             existing.user_remap(shiny)
         shiny.pack()
@@ -77,6 +115,7 @@ def run(job):
         raise ValueError('Source is not self-contained')
     baked = []
     response = None
+    transparent = [p for p in profiles if p['profile'] == TRANSPARENT_PROBE] if profiles else []
     if job.get('scvi_pbr_probe'):
         materials = {m for o in bpy.context.scene.objects if o.type == 'MESH' for m in o.data.materials}
         matching = [m for m in materials if m.node_tree and any(
@@ -89,10 +128,11 @@ def run(job):
             for track in rig.animation_data.nla_tracks:
                 track.mute = True
             bpy.context.scene.frame_set(int(rig.animation_data.action.frame_range[0]))
-            from scvi_response_bake import bake
-            response = bake(Path(job['output']) / 'response', exclude={e['material'] for e in effects})
+            if not transparent:
+                from scvi_response_bake import bake
+                response = bake(Path(job['output']) / 'response', exclude={e['material'] for e in effects})
             from battle_3d_export_probe import bake_color_materials
-            baked = bake_color_materials(pbr=True)
+            baked = bake_color_materials(pbr=True, transparent={p['material'] for p in transparent})
     effect_payload = None
     if effects:
         from material_effect_export import finish
@@ -139,6 +179,12 @@ def run(job):
     actual = {a['name'] for a in gltf.get('animations', [])}
     if actual != set(timing):
         raise ValueError('Exported clips differ: ' + str(actual))
+    if transparent:
+        materials_by_name = {m.get('name'): m for m in gltf.get('materials', [])}
+        for profile in transparent:
+            material = materials_by_name.get(profile['material'])
+            if material is None or material.get('alphaMode') != 'BLEND':
+                raise ValueError('Transparent source surface lost GLB alpha: ' + profile['material'])
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source modified during export')
     report = {'status': 'exported_for_review', 'path': str(path),
@@ -146,14 +192,20 @@ def run(job):
         'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
         'rig_selection': rig_selection,
         'source_repair': source_repair,
+        'verified_rare_float_overrides': float_overrides,
         'material_profiles': profiles,
         'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
-        'material_limitations': ('PBR plus supported shadow-colour response baked at idle; alpha, emission and material animation remain unported'
+        'material_limitations': ('PBR alpha diagnostic from source albedo; source refraction and view-dependent Fresnel are not reproduced'
+            if transparent else 'PBR plus supported shadow-colour response baked at idle; alpha, emission and material animation remain unported'
             if baked else 'Direct glTF translation: source shader graphs and material animation are not certified')}
     if response is not None:
         response['glb_sha256'] = report['glb_sha256']
         response['source_sha256'] = job['source_sha256']
         report['material_response'] = response
+    if transparent:
+        report['transparent_diagnostic'] = {'schema': 1, 'materials': transparent,
+                                            'visual_review_required': True,
+                                            'glb_sha256': report['glb_sha256']}
     if job.get('identity_intake'):
         report['identity_evidence'] = job['identity_intake']['identity_evidence']
         from visibility_export import prepare as prepare_visibility

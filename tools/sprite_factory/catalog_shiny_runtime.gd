@@ -53,7 +53,7 @@ func _run() -> void:
 		entry.glb_sha256 = variant.glb_sha256
 		entry.erase("runtime_path")
 		entry.erase("runtime_sha256")
-		for key in ["material_response", "material_effects", "visibility"]:
+		for key in ["material_response", "material_effects", "visibility", "transparent_diagnostic"]:
 			entry.erase(key)
 			if variant.has(key):
 				entry[key] = variant[key]

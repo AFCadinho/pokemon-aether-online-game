@@ -127,6 +127,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 			errors.append(species + ": visibility binding failed: " + visibility.failure)
 			node.free()
 			return {}
+	if entry.has("transparent_diagnostic"):
+		var transparency := preload("catalog_transparency_pack.gd").new()
+		if not entry.transparent_diagnostic is Dictionary or not transparency.apply(node, entry.transparent_diagnostic, glb_hash):
+			errors.append(species + ": transparency binding failed: " + transparency.failure)
+			node.free()
+			return {}
 	if entry.has("material_effects"):
 		var effect := preload("material_effect_pack.gd").new()
 		if not entry.material_effects is Dictionary or not effect.apply(node, entry.material_effects, glb_hash):
@@ -163,6 +169,10 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 		return {}
 	if entry.has("material_response") and (verified.get_meta("pokeaether_material_response", 0) != 1 or not preload("res://scripts/battle/battle_ui/material_response.gd").supported_actor(verified)):
 		errors.append(species + ": response lost on reload")
+		verified.free()
+		return {}
+	if entry.has("transparent_diagnostic") and verified.get_meta("pokeaether_transparency_diagnostic", 0) != 1:
+		errors.append(species + ": transparency binding lost on reload")
 		verified.free()
 		return {}
 	verified.free()

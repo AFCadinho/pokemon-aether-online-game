@@ -5,7 +5,8 @@ import hashlib
 from scvi_identity import Buffer, read_catalog
 
 
-def binding(intake, exported_meshes, targets):
+def binding(intake, exported_meshes, targets, redundant=None):
+    redundant = redundant or {}
     proof = intake['identity_evidence']
     catalog = read_catalog(proof['catalog_path'])
     if catalog['catalog_sha256'] != proof['catalog_sha256']:
@@ -61,12 +62,16 @@ def binding(intake, exported_meshes, targets):
                 owners[target].append({'resource_id': sibling['resource_id'],
                                        'form': sibling['form'],
                                        'gender_code': sibling['gender_code']})
-    if any(len(owner) != 1 for owner in owners.values()):
+    if any(len(owner) != 1 and not (len(owner) == 0 and target in redundant
+                                   and redundant[target] in active)
+           for target, owner in owners.items()):
         raise ValueError('Unknown or ambiguous visibility variant target')
     return {'policy': 'catalog-form-gender-mesh-membership-v2',
             'selected_resource_id': selected['resource_id'],
             'active_targets': sorted(active),
-            'excluded_targets': {t: owners[t][0] for t in sorted(owners)},
+            'excluded_targets': {t: owners[t][0] if owners[t] else
+                                 {'redundant_with': redundant[t], 'source_equivalent_all_clips': True}
+                                 for t in sorted(owners)},
             'source_sha256': files}
 
 

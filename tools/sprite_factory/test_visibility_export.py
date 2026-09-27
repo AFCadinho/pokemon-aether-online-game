@@ -31,6 +31,15 @@ class VisibilityExportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'dynamic visibility clock'):
             keys(track('dynamic_bool',packed_bytes=[255,0]),121,60)
 
+    def test_opt_in_dynamic_bits_hold_last_state(self):
+        self.assertEqual(keys(track('dynamic_bool',packed_bytes=[255,0]),121,60,
+                              dynamic_review=True), [[0,True],[8/60,False]])
+        self.assertEqual(keys(track('dynamic_bool',packed_bytes=[0,192]),81,60,
+                              dynamic_review=True), [[0,False],[14/60,True]])
+        for payload, frames in (([], 121), ([255,0], 16)):
+            with self.assertRaisesRegex(ValueError, 'payload'):
+                keys(track('dynamic_bool',packed_bytes=payload),frames,60,dynamic_review=True)
+
     def test_invalid_framed_payloads(self):
         for frames, data in [([1],[1]),([0,2,1],[5]),([0,61],[1]),([0],[1,0]),([0,1],[255])]:
             with self.assertRaises(ValueError):

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from scvi_material_probe import eligible, inspect_materials
 from phase5_review_gallery import build
-from material_profiles import classify, unsupported, REFRACTION_UNSUPPORTED
+from material_profiles import classify, unsupported, REFRACTION_UNSUPPORTED, TRANSPARENT_PROBE
 
 
 class MaterialProbeTests(unittest.TestCase):
@@ -22,6 +22,18 @@ class MaterialProbeTests(unittest.TestCase):
                     result = classify({'name': name, 'shaders': shaders, 'alpha_type': 'Opaque'})
                     self.assertEqual(result['profile'], REFRACTION_UNSUPPORTED)
                     self.assertEqual(unsupported([result]), [result])
+
+    def test_transparent_alpha_probe_requires_explicit_opt_in(self):
+        material = {'name': 'arbitrary_surface', 'alpha_type': 'BlendPreMultiAlpha',
+                    'shaders': [{'name': 'Transparent', 'values': {'RefractionMode': 'Thin'}}]}
+        self.assertFalse(classify(material)['export_supported'])
+        result = classify(material, transparent_review=True)
+        self.assertEqual(result['profile'], TRANSPARENT_PROBE)
+        self.assertTrue(result['source_refraction'])
+        self.assertTrue(result['visual_review_required'])
+        self.assertEqual(unsupported([result]), [])
+        material['shaders'][0]['values']['RefractionMode'] = 'Unknown'
+        self.assertFalse(classify(material, transparent_review=True)['export_supported'])
 
     def test_refraction_gate_does_not_reject_eye_clearcoat_by_alpha_label(self):
         for name in ('Eye', 'EyeClearCoat', 'Standard'):
