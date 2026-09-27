@@ -19,6 +19,9 @@ var forest_pool: Node
 var user_camera_yaw := 0.0
 var user_camera_pitch := 0.0
 var user_camera_zoom := 1.0
+var coop_camera_focus_enabled := false
+var coop_camera_focus_index := -1
+var coop_camera_focus_weight := 0.0
 const USER_CAMERA_ZOOM_MIN := 0.72
 const USER_CAMERA_ZOOM_MAX := 1.45
 
@@ -336,6 +339,9 @@ func _slot_count() -> int:
 func set_double_mode(enabled: bool) -> void:
 	if double_mode == enabled:
 		return
+	coop_camera_focus_enabled = false
+	coop_camera_focus_index = -1
+	coop_camera_focus_weight = 0.0
 	_set_active(false)
 	if viewport != null:
 		_clear_actors()
@@ -391,6 +397,14 @@ func actor_index(ident: String) -> int:
 		if ident.begins_with("p" + str(index + 1)):
 			return index
 	return -1
+
+
+func set_coop_camera_focus(controller: String, enabled: bool) -> void:
+	var index := actor_index(controller)
+	coop_camera_focus_enabled = double_mode and enabled and index in [0, 2]
+	if coop_camera_focus_enabled:
+		coop_camera_focus_index = index
+
 
 func handles(ident: String) -> bool:
 	var index := actor_index(ident)
@@ -1128,25 +1142,44 @@ func _action(action: String, index: int) -> void:
 
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
+	var all_resting := true
+	var focus_reframe_safe := true
+	for index in _slot_count():
+		all_resting = all_resting and resting[index] and current_actions[index] in ["idle", "sleep"] and lifecycle[index] in ["idle", "empty", "hidden"]
+		focus_reframe_safe = focus_reframe_safe and (
+			lifecycle[index] in ["empty", "hidden", "fainted"]
+			or (resting[index] and current_actions[index] in ["idle", "sleep"])
+		)
 	if not settings.battle_3d_camera_motion:
 		camera_phase = 0.0
 		camera.position = ArenaCatalog.camera_home(arena_id)
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
-		var all_resting := true
-		for index in _slot_count():
-			all_resting = all_resting and resting[index] and current_actions[index] in ["idle", "sleep"] and lifecycle[index] in ["idle", "empty", "hidden"]
 		if all_resting:
 			camera_phase += delta * 0.22
 		var origin := ArenaCatalog.battle_origin(arena_id)
 		camera.position = origin + (ArenaCatalog.camera_home(arena_id) - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	var target := ArenaCatalog.camera_target(arena_id)
 	var offset := camera.position - target
+	var focus_ready: bool = (
+		coop_camera_focus_enabled
+		and coop_camera_focus_index >= 0
+		and handles("p%d" % (coop_camera_focus_index + 1))
+		and actor_shown[coop_camera_focus_index]
+		and lifecycle[coop_camera_focus_index] != "fainted"
+	)
+	if focus_reframe_safe:
+		coop_camera_focus_weight = move_toward(coop_camera_focus_weight, 1.0 if focus_ready else 0.0, delta * 1.8)
+	var focus_mix := smoothstep(0.0, 1.0, coop_camera_focus_weight)
+	if coop_camera_focus_index >= 0 and focus_mix > 0.0:
+		# Keep the partner and both opponents visible while giving the local
+		# Trainer a closer, over-the-shoulder view during their decision.
+		target = target.lerp(_position(coop_camera_focus_index) + Vector3(0, 1.2, 0), focus_mix * 0.35)
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
-	offset *= user_camera_zoom * (1.35 if double_mode else 1.0)
+	offset *= user_camera_zoom * (1.35 if double_mode else 1.0) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
 
