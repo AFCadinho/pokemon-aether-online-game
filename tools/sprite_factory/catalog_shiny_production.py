@@ -1,8 +1,9 @@
-"""Export exact normal-SCN cohort shiny candidates from official rare albedos.
+"""Export normal-SCN cohort shiny candidates from official rare material tables.
 
 Rare material tables with unchanged inspected settings and BaseColorMap-only
 substitutions are eligible. A small, explicitly reviewed set of differences
-can be opted into for held candidates. This produces local GLB evidence,
+can be opted into for held candidates. Unrepresented source floats remain
+explicit limitations pending visual review. This produces local GLB evidence,
 never game admission.
 """
 
@@ -22,7 +23,8 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[list[dict], str]:
+def replacements(normal_table: Path, *, review_queue: bool = False,
+                 include_float_overrides: bool = False):
     rare_table = normal_table.with_name(normal_table.stem + "_rare.trmtr")
     if not rare_table.is_file():
         raise ValueError("Official rare material table missing")
@@ -38,6 +40,7 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
             raise ValueError("Rare material names differ or are ambiguous")
         rare = [rare_by_name[name] for name in names]
     mapping = {}
+    float_overrides = []
     for a, b in zip(normal, rare, strict=True):
         settings_a = {k: v for k, v in a.items() if k != "textures"}
         settings_b = {k: v for k, v in b.items() if k != "textures"}
@@ -49,6 +52,22 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
             floats_b = dict(settings_b["floats"])
             if floats_a.get("PointLight0_Intensity") is None and floats_b.get("PointLight0_Intensity") == 0.0:
                 floats_b.pop("PointLight0_Intensity")
+            if (include_float_overrides and a["name"] in ("l_eye", "r_eye")
+                    and any(shader["name"] in ("Eye", "EyeClearCoat") for shader in a["shaders"])):
+                for key in ("EmissionIntensityLayer1", "EmissionIntensityLayer2",
+                            "EmissionIntensityLayer3", "EmissionIntensityLayer4", "EmissionIntensityLayer5",
+                            "NormalHeight1", "RoughnessHighlight"):
+                    if key in floats_a and key in floats_b and floats_a[key] != floats_b[key]:
+                        # Layers 1-4 have importer shader inputs and are applied
+                        # below. The other source floats have no such input in
+                        # the pinned importer; expose that limitation for
+                        # human review instead of silently calling it parity.
+                        mode = "apply" if key in {"EmissionIntensityLayer1", "EmissionIntensityLayer2",
+                                                   "EmissionIntensityLayer3", "EmissionIntensityLayer4"} else "unrepresented"
+                        float_overrides.append({"material": a["name"], "key": key,
+                                                "normal": floats_a[key], "rare": floats_b[key],
+                                                "mode": mode})
+                        floats_b[key] = floats_a[key]
             settings_a["floats"], settings_b["floats"] = floats_a, floats_b
             shaders_a = json.loads(json.dumps(settings_a["shaders"]))
             shaders_b = json.loads(json.dumps(settings_b["shaders"]))
@@ -71,7 +90,7 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
             if before == after:
                 continue
             review_channels = {"UpperEyelidColorMap", "LowerEyelidColorMap", "EmissionColorMap",
-                               "RoughnessMap", "NormalMap"}
+                               "RoughnessMap", "NormalMap", "LayerMaskMap"}
             if ((channel != "BaseColorMap" and (not review_queue or channel not in review_channels))
                     or Path(before).name != before or Path(after).name != after):
                 raise ValueError("Rare material has a non-albedo change: " + a["name"] + "/" + channel)
@@ -94,6 +113,8 @@ def replacements(normal_table: Path, *, review_queue: bool = False) -> tuple[lis
                        "normal_sha256": digest(normal_png), "rare_sha256": digest(rare_png)})
     if not result:
         raise ValueError("Normal and rare albedo are byte-identical")
+    if include_float_overrides:
+        return result, digest(rare_table), float_overrides
     return result, digest(rare_table)
 
 
@@ -106,12 +127,14 @@ def prepare(row: dict, expected: dict, source_root: Path, output: Path,
     source_job = json.loads((source_root / species / "job.json").read_text())
     validate_export_job(source_job)
     normal_table = Path(source_job["material_source"])
-    pairs, rare_table_sha = replacements(normal_table, review_queue=review_queue)
+    pairs, rare_table_sha, float_overrides = replacements(
+        normal_table, review_queue=review_queue, include_float_overrides=True)
     directory = output / species
     directory.mkdir()
     job = {**source_job, "output": str(directory), "verified_texture_replacements": pairs,
            "official_rare_material_source": str(normal_table.with_name(normal_table.stem + "_rare.trmtr")),
-           "official_rare_material_sha256": rare_table_sha}
+           "official_rare_material_sha256": rare_table_sha,
+           "verified_rare_float_overrides": float_overrides}
     job_path = directory / "job.json"
     job_path.write_text(json.dumps(job, indent=2) + "\n")
     tools = Path(__file__).resolve().parent
@@ -124,7 +147,8 @@ def prepare(row: dict, expected: dict, source_root: Path, output: Path,
                 "--", str(job_path)]
     evidence = {"species": species, "variant": "shiny", "runtime_approved": False,
                 "normal_glb_sha256": row["glb_sha256"], "official_rare_material_sha256": rare_table_sha,
-                "official_albedo_replacements": pairs}
+                "official_albedo_replacements": pairs,
+                "official_rare_float_overrides": float_overrides}
     return evidence, command
 
 

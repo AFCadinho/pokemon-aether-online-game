@@ -14,7 +14,7 @@ from pathlib import Path
 import bpy
 
 
-def bake_color_materials(pbr=False):
+def bake_color_materials(pbr=False, transparent=()):
     """Extract the imported shader's color/mask/eyelid chain, then plain PBR.
 
     This prototype retains albedo detail/resolution. Optional PBR baking also
@@ -32,6 +32,7 @@ def bake_color_materials(pbr=False):
     records = []
     prepared = {}
     auxiliary = {}
+    transparent = set(transparent)
     meshes = [obj for obj in scene.objects if obj.type == 'MESH']
     for obj in meshes:
         for material in obj.data.materials:
@@ -53,7 +54,8 @@ def bake_color_materials(pbr=False):
             graph.links.new(graph.nodes['Mix (Legacy).040'].outputs['Color'], group_output.inputs['ProbeAlbedo'])
             output_node = next(n for n in tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
             size = max((max(n.image.size) for n in tree.nodes if n.type == 'TEX_IMAGE' and n.image), default=512)
-            image = bpy.data.images.new('ProbeAlbedo_' + material.name, width=size, height=size, alpha=False)
+            image = bpy.data.images.new('ProbeAlbedo_' + material.name, width=size, height=size,
+                                        alpha=material.name in transparent)
             target = tree.nodes.new('ShaderNodeTexImage')
             target.image = image
             tree.nodes.active = target
@@ -66,6 +68,11 @@ def bake_color_materials(pbr=False):
                 for channel, socket_name in (('normal', 'NormalMap'), ('roughness', 'Roughness')):
                     socket = group.inputs[socket_name]
                     auxiliary[material.name][channel] = {'socket': socket, 'size': size}
+            if material.name in transparent:
+                socket = group.inputs.get('AlbedoAlpha')
+                if socket is None:
+                    raise ValueError('Transparent source has no albedo alpha: ' + material.name)
+                auxiliary[material.name]['alpha'] = {'socket': socket, 'size': size}
     # Bake the entire UV-domain shader on a plane so mesh UV coverage,
     # overlapping faces and active bake UV selection cannot discard regions.
     for material, _image in prepared.values():
@@ -87,7 +94,7 @@ def bake_color_materials(pbr=False):
             source = record['socket']
             if source.is_linked:
                 output_socket = source.links[0].from_socket
-                if channel == 'roughness':
+                if channel in ('roughness', 'alpha'):
                     scalar = tree.nodes.new('ShaderNodeMath')
                     scalar.operation = 'ADD'
                     scalar.inputs[1].default_value = 0.0
@@ -99,6 +106,16 @@ def bake_color_materials(pbr=False):
                 emission.inputs['Color'].default_value = tuple(value) if channel == 'normal' else (value, value, value, 1)
             bpy.ops.object.bake(type='EMIT')
             record['image'] = image
+        if 'alpha' in auxiliary[material.name]:
+            from array import array
+            color_pixels = array('f', [0]) * len(_image.pixels)
+            alpha_pixels = array('f', [0]) * len(auxiliary[material.name]['alpha']['image'].pixels)
+            _image.pixels.foreach_get(color_pixels)
+            auxiliary[material.name]['alpha']['image'].pixels.foreach_get(alpha_pixels)
+            for index in range(3, len(color_pixels), 4):
+                color_pixels[index] = max(0.0, min(1.0, alpha_pixels[index - 3]))
+            _image.pixels.foreach_set(color_pixels)
+            _image.update()
         mesh = plane.data
         bpy.data.objects.remove(plane, do_unlink=True)
         bpy.data.meshes.remove(mesh)
@@ -112,6 +129,10 @@ def bake_color_materials(pbr=False):
         texture.image = image
         tree.links.new(texture.outputs['Color'], bsdf.inputs['Base Color'])
         for channel, record in auxiliary[material.name].items():
+            if channel == 'alpha':
+                tree.links.new(texture.outputs['Alpha'], bsdf.inputs['Alpha'])
+                material.surface_render_method = 'DITHERED'
+                continue
             node = tree.nodes.new('ShaderNodeTexImage')
             node.image = record['image']
             if channel == 'normal':

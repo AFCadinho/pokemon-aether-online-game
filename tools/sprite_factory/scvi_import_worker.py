@@ -125,6 +125,10 @@ def main(job):
     identity = job["identity"]
     from_trmdlsv(str(model_dir), identity + ".trmdl", job["variant"] == "shiny",
                   False, True, False, True, False)
+    restored_eyelids = []
+    if job.get("restore_all_eyelids") is True:
+        from scvi_eyelid_binding import restore
+        restored_eyelids = restore(model_dir, identity)
     arms = [obj for obj in bpy.data.objects if obj.type == "ARMATURE"]
     assert len(arms) == 1, f"Expected one armature, got {len(arms)}"
     rig = arms[0]
@@ -213,6 +217,7 @@ def main(job):
               "facial_baseline": facial_baseline,
               "pose_initialization": "rest_before_each_clip",
               "facial_inheritance_warnings": facial_inheritance_warnings,
+              "restored_eyelids": restored_eyelids,
               "channel_animations": channel_animations,
               "channel_warnings": channel_warnings,
               "source_files": job["source_files"], "importer_commit": job["importer_commit"],

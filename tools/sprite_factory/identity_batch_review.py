@@ -37,7 +37,8 @@ def process(entry, args):
     job = json.loads(path.with_name('job.json').read_text())
     destination = args.output / 'export' / entry['species']
     destination.mkdir()
-    job.update(output=str(destination), actions=review['review_mapping'], scvi_pbr_probe=True)
+    job.update(output=str(destination), actions=review['review_mapping'], scvi_pbr_probe=True,
+               source_transparency_diagnostic=entry.get('source_transparency_diagnostic') is True)
     try:
         validate_export_job(job)
         write(destination / 'job.json', job)

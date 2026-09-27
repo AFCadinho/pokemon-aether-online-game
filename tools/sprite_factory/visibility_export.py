@@ -7,16 +7,24 @@ from scvi_tracm import inspect_tracm, inspect_visibility
 from visibility_variants import binding, verify
 
 
-def keys(track, frames, fps):
+def keys(track, frames, fps, *, dynamic_review=False):
     if track['time_raw'] != 0 or track['value_raw'] != 0:
         raise ValueError('Unsupported visibility timeline metadata')
     kind = track['encoding']
     if kind == 'fixed_bool':
         return [[0.0, track['fixed_value']]]
     if kind == 'dynamic_bool':
-        # The observed byte streams can be shorter than the clip. Their
-        # sample clock/truncation semantics are not established: do not guess.
-        raise ValueError('Unsupported dynamic visibility clock')
+        if not dynamic_review:
+            raise ValueError('Unsupported dynamic visibility clock')
+        # Diagnostic interpretation of the observed packed stream: one bit
+        # per source frame, least-significant bit first, then hold its final
+        # bit. This requires independent pose/battle review before admission.
+        packed = track['packed_bytes']
+        if not packed or track['frames'] or 8 * len(packed) >= frames:
+            raise ValueError('Unsupported dynamic visibility payload')
+        values = [bool((byte >> bit) & 1) for byte in packed for bit in range(8)]
+        return [[i / fps, value] for i, value in enumerate(values)
+                if i == 0 or value != values[i - 1]]
     if kind not in ('framed8_bool', 'framed16_bool'):
         raise ValueError('Unsupported visibility encoding')
     indices, packed = track['frames'], track['packed_bytes']
@@ -46,7 +54,22 @@ def prepare(intake, animations, gltf, glb_hash):
         source_tracks[action] = inspect_visibility(path)
         if hashlib.sha256(path.read_bytes()).hexdigest() != expected_hashes[str(path)]:
             raise ValueError('Visibility source changed during decoding')
-    membership = binding(intake, mesh_names, [t['target'] for tracks in source_tracks.values() for t in tracks])
+    redundant = {}
+    if intake.get('redundant_visibility_diagnostic') is True:
+        active = {name + '_shape' for name in mesh_names}
+        all_targets = {track['target'] for tracks in source_tracks.values() for track in tracks}
+        fields = ('encoding', 'fixed_value', 'frames', 'packed_bytes', 'time_raw', 'value_raw')
+        by_action = {action: {track['target']: track for track in tracks}
+                     for action, tracks in source_tracks.items()}
+        for extra in all_targets - active:
+            owners = [target for target in active if all(
+                extra in tracks and target in tracks
+                and all(tracks[extra].get(field) == tracks[target].get(field) for field in fields)
+                for tracks in by_action.values())]
+            if len(owners) == 1:
+                redundant[extra] = owners[0]
+    membership = binding(intake, mesh_names,
+                         [t['target'] for tracks in source_tracks.values() for t in tracks], redundant)
     result = {'schema': 1, 'glb_sha256': glb_hash, 'clips': {}, 'variant_binding': membership}
     for action, timing in animations.items():
         path = Path(channels[action])
@@ -78,7 +101,8 @@ def prepare(intake, animations, gltf, glb_hash):
             if mesh_names.count(mesh) != 1:
                 raise ValueError('Unresolved visibility mesh: ' + target)
             tracks.append({'mesh': mesh, 'source_target': target,
-                           'keys': keys(track, config['frames'], config['fps'])})
+                           'keys': keys(track, config['frames'], config['fps'],
+                                        dynamic_review=intake.get('dynamic_visibility_diagnostic') is True)})
         if sorted(t['mesh'] for t in tracks) != sorted(mesh_names):
             raise ValueError('Incomplete or duplicate visibility mesh coverage')
         if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
