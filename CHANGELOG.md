@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De bijna witte lensreflectie in de zijaanzichten van de Adinho-brillen is gedempt voor male en female; de vooraanzichten blijven gelijk.
+
 - Route 5 heeft bijgewerkte Tiled-visuals en ingetekende lagen voor collision, sprongranden en hoog gras.
 
 - De Aether Wayfarer is als aparte male- en female-outfitbox beschikbaar met trainer- en overworldlagen voor lopen, vissen en rijden. De boxen staan niet in de store.
