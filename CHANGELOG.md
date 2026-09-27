@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 5 heeft een eigen daycare-interior met ontvangstbalie, rustplekjes en speelruimte, gekoppelde deuren en een bestemming voor staffteleport.
+
 - Nieuwe 3D-cataloguskandidaten voor Grimer en Muk kunnen zonder scheuren tussen hun bewegende lichaamsdelen worden weergegeven.
 
 - Herstelt aanvullende 3D-bronmodellen en shiny-materialen voor catalogusreview, met behoud van metaal, gloed en bewegende oppervlakken.
