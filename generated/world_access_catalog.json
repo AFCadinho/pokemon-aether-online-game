@@ -2500,7 +2500,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromTunnel",
 					"tile": {
-						"x": 9,
+						"x": 8,
 						"y": 8
 					}
 				}
@@ -4938,7 +4938,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 				"position": {
 					"x": 336.0,
-					"y": 448.0
+					"y": 464.0
 				},
 				"spawnMarker": "FromRoute6"
 			},
@@ -5131,7 +5131,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 				"position": {
-					"x": 304.0,
+					"x": 272.0,
 					"y": 272.0
 				},
 				"spawnMarker": "FromTunnel"
