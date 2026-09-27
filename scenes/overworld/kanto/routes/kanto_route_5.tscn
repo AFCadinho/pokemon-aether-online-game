@@ -4,18 +4,19 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_8otmp"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_20p23"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_vd24t"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_seajf"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="daycare_door_hint"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
-size = Vector2(64, 32)
+size = Vector2(128, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(64, 32)
+size = Vector2(128, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
-size = Vector2(64, 32)
+size = Vector2(128, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_4"]
 size = Vector2(64, 32)
@@ -234,7 +235,12 @@ transition_id = "kanto_route_5__to_cerulean_city_left"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanLeft" unique_id=1613694365]
+position = Vector2(-16, -8)
 shape = SubResource("shape_1")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanLeft" unique_id=1339137749 instance=ExtResource("4_20p23")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
 
 [node name="ToCeruleanGrass" type="Area2D" parent="Exits" unique_id=82868551]
 position = Vector2(640, 16)
@@ -245,7 +251,12 @@ transition_id = "kanto_route_5__to_cerulean_city_grass"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanGrass" unique_id=2103569091]
+position = Vector2(0, -8)
 shape = SubResource("shape_2")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanGrass" unique_id=34785707 instance=ExtResource("4_20p23")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
 
 [node name="ToCeruleanRight" type="Area2D" parent="Exits" unique_id=244823478]
 position = Vector2(816, 16)
@@ -256,7 +267,12 @@ transition_id = "kanto_route_5__to_cerulean_city_right"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanRight" unique_id=1742766844]
+position = Vector2(16, -8)
 shape = SubResource("shape_3")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanRight" unique_id=1140721037 instance=ExtResource("4_20p23")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
 
 [node name="ToSaffronNorth" type="Area2D" parent="Exits" unique_id=1330322679]
 position = Vector2(656, 1776)
@@ -270,6 +286,12 @@ transition_facing_direction = "down"
 position = Vector2(16, 16)
 shape = SubResource("shape_4")
 
+[node name="RouteTransitionHint" parent="Exits/ToSaffronNorth/CollisionShape2D" unique_id=2061645481 instance=ExtResource("4_20p23")]
+z_as_relative = false
+position = Vector2(0, -48)
+tile_footprint = Vector2i(2, 2)
+flow_direction = "down"
+
 [node name="ToUndergroundPath" type="Area2D" parent="Exits" unique_id=1851236698]
 position = Vector2(1232, 1264)
 script = ExtResource("3_exit")
@@ -280,6 +302,9 @@ transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=1359017765]
 shape = SubResource("shape_5")
+
+[node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=1253175302 instance=ExtResource("daycare_door_hint")]
+z_as_relative = false
 
 [node name="ToDaycare" type="Area2D" parent="Exits" unique_id=1635749854]
 position = Vector2(528, 1104)
@@ -302,6 +327,7 @@ z_index = 5
 [node name="Players" type="Node2D" parent="Entities" unique_id=1792456903]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=318081660]
+visible = false
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=858535537]
 visible = false
