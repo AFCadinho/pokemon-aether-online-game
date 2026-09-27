@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "entries": [
+    {
+      "species": "groudon",
+      "pm": 383,
+      "resource_id": "pm0383_00_00",
+      "form": 0,
+      "gender_code": 0,
+      "target_game_height_px": 120,
+      "facial_baseline_motion": "08000_eye01",
+      "facial_baseline_frame": 0,
+      "review_warning": "Official eye01 open-eye pose for the battle idle; verify normal and shiny before replacing the approved bundle"
+    }
+  ]
+}
