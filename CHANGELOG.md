@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Aether Wayfarer is als aparte male- en female-outfitbox beschikbaar met trainer- en overworldlagen voor lopen, vissen en rijden. De boxen staan niet in de store.
+
 - De vrouwelijke Rocket-traineroutfit heeft een zichtbare tailleband en donkerdere rok, zodat shirt en rok duidelijk van elkaar te onderscheiden zijn.
 
 - De laatste aanpassing aan de kraag, taille, rok en logokleur van de female Rocket-overworld-outfit is teruggedraaid naar de voorgaande versie.

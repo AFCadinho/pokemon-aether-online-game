@@ -275,6 +275,38 @@
     "name": "Sapatos Chroma do Adinho",
     "shortDesc": "Desbloqueie os sapatos personalizáveis do Adinho para modelos masculinos."
   },
+  "aether-wayfarer-male-outfit": {
+    "name": "Caixa de Traje Aether Wayfarer (Masculino)",
+    "shortDesc": "Abra esta caixa exclusiva para modelos masculinos para receber a jaqueta, calça e sapatos Wayfarer."
+  },
+  "aether-wayfarer-male-shirt": {
+    "name": "Jaqueta Wayfarer (Masculino)",
+    "shortDesc": "Mova a jaqueta Wayfarer masculina para a Personalização do Personagem."
+  },
+  "aether-wayfarer-male-trousers": {
+    "name": "Calça Wayfarer (Masculino)",
+    "shortDesc": "Mova a calça Wayfarer masculina para a Personalização do Personagem."
+  },
+  "aether-wayfarer-male-shoes": {
+    "name": "Sapatos Wayfarer (Masculino)",
+    "shortDesc": "Mova os sapatos Wayfarer masculinos para a Personalização do Personagem."
+  },
+  "aether-wayfarer-female-outfit": {
+    "name": "Caixa de Traje Aether Wayfarer (Feminino)",
+    "shortDesc": "Abra esta caixa exclusiva para modelos femininos para receber a jaqueta, calça e sapatos Wayfarer."
+  },
+  "aether-wayfarer-female-shirt": {
+    "name": "Jaqueta Wayfarer (Feminino)",
+    "shortDesc": "Mova a jaqueta Wayfarer feminina para a Personalização do Personagem."
+  },
+  "aether-wayfarer-female-trousers": {
+    "name": "Calça Wayfarer (Feminino)",
+    "shortDesc": "Mova a calça Wayfarer feminina para a Personalização do Personagem."
+  },
+  "aether-wayfarer-female-shoes": {
+    "name": "Sapatos Wayfarer (Feminino)",
+    "shortDesc": "Mova os sapatos Wayfarer femininos para a Personalização do Personagem."
+  },
   "smoking-outfit": {
     "name": "Caixa de Traje de Smoking",
     "shortDesc": "Abra esta caixa masculina para receber um paletó, uma calça e um par de sapatos de smoking."

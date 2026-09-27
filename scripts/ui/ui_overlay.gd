@@ -19028,6 +19028,18 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.adinho_shoes")
 			"Adinho_Shoes_Chroma":
 				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shoes")
+			"AetherWayfarer_Male_Shirt":
+				return LocalizationManager.text("ui.appearance.option.wayfarer_shirt")
+			"AetherWayfarer_Male_Trousers":
+				return LocalizationManager.text("ui.appearance.option.wayfarer_trousers")
+			"AetherWayfarer_Male_Shoes":
+				return LocalizationManager.text("ui.appearance.option.wayfarer_shoes")
+			"AetherWayfarer_Female_Shirt":
+				return LocalizationManager.text("ui.appearance.option.wayfarer_shirt")
+			"AetherWayfarer_Female_Trousers":
+				return LocalizationManager.text("ui.appearance.option.wayfarer_trousers")
+			"AetherWayfarer_Female_Shoes":
+				return LocalizationManager.text("ui.appearance.option.wayfarer_shoes")
 			"Smoking_Shirt":
 				return LocalizationManager.text("ui.appearance.option.smoking_shirt")
 			"Smoking_Trousers":

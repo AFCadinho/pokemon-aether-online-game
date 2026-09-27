@@ -43,6 +43,10 @@
             "TeamRocket_Trousers": {
               "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/trousers.png",
               "scale": 1.0
+            },
+            "AetherWayfarer_Male_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -73,6 +77,10 @@
             "TeamRocket_Shoes": {
               "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherWayfarer_Male_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -102,6 +110,10 @@
             },
             "TeamRocket_Shirt": {
               "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherWayfarer_Male_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/shirt.png",
               "scale": 1.0
             }
           }
@@ -209,6 +221,10 @@
             "TeamRocketFemale_Skirt": {
               "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/skirt.png",
               "scale": 1.0
+            },
+            "AetherWayfarer_Female_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -239,6 +255,10 @@
             "TeamRocketFemale_Boots": {
               "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/boots.png",
               "scale": 1.0
+            },
+            "AetherWayfarer_Female_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -263,6 +283,10 @@
             },
             "TeamRocketFemale_Shirt": {
               "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherWayfarer_Female_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/shirt.png",
               "scale": 1.0
             }
           }

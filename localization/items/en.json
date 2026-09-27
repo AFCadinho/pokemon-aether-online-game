@@ -275,6 +275,38 @@
     "name": "Adinho Chroma Shoes",
     "shortDesc": "Unlock the male-only, colour-customizable Adinho shoes."
   },
+  "aether-wayfarer-male-outfit": {
+    "name": "Aether Wayfarer Outfit Box (Male)",
+    "shortDesc": "Open this male-only outfit box to receive the Wayfarer jacket, trousers and shoes."
+  },
+  "aether-wayfarer-male-shirt": {
+    "name": "Wayfarer Jacket (Male)",
+    "shortDesc": "Move the male-only Wayfarer jacket into Character Customization."
+  },
+  "aether-wayfarer-male-trousers": {
+    "name": "Wayfarer Trousers (Male)",
+    "shortDesc": "Move the male-only Wayfarer trousers into Character Customization."
+  },
+  "aether-wayfarer-male-shoes": {
+    "name": "Wayfarer Shoes (Male)",
+    "shortDesc": "Move the male-only Wayfarer shoes into Character Customization."
+  },
+  "aether-wayfarer-female-outfit": {
+    "name": "Aether Wayfarer Outfit Box (Female)",
+    "shortDesc": "Open this female-only outfit box to receive the Wayfarer jacket, trousers and shoes."
+  },
+  "aether-wayfarer-female-shirt": {
+    "name": "Wayfarer Jacket (Female)",
+    "shortDesc": "Move the female-only Wayfarer jacket into Character Customization."
+  },
+  "aether-wayfarer-female-trousers": {
+    "name": "Wayfarer Trousers (Female)",
+    "shortDesc": "Move the female-only Wayfarer trousers into Character Customization."
+  },
+  "aether-wayfarer-female-shoes": {
+    "name": "Wayfarer Shoes (Female)",
+    "shortDesc": "Move the female-only Wayfarer shoes into Character Customization."
+  },
   "smoking-outfit": {
     "name": "Tuxedo Outfit Box",
     "shortDesc": "Open this male-only box to receive a tuxedo jacket, trousers and shoes."

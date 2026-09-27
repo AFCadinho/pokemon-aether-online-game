@@ -275,6 +275,38 @@
     "name": "Adinho Chroma 鞋",
     "shortDesc": "解锁男性专用、颜色可定制的 Adinho 鞋。"
   },
+  "aether-wayfarer-male-outfit": {
+    "name": "Aether旅者套装箱（男性）",
+    "shortDesc": "打开此男性角色专用套装箱，获得旅者夹克、长裤和鞋子。"
+  },
+  "aether-wayfarer-male-shirt": {
+    "name": "旅者夹克（男性）",
+    "shortDesc": "将男性角色专用旅者夹克放入角色自定义。"
+  },
+  "aether-wayfarer-male-trousers": {
+    "name": "旅者长裤（男性）",
+    "shortDesc": "将男性角色专用旅者长裤放入角色自定义。"
+  },
+  "aether-wayfarer-male-shoes": {
+    "name": "旅者鞋子（男性）",
+    "shortDesc": "将男性角色专用旅者鞋子放入角色自定义。"
+  },
+  "aether-wayfarer-female-outfit": {
+    "name": "Aether旅者套装箱（女性）",
+    "shortDesc": "打开此女性角色专用套装箱，获得旅者夹克、长裤和鞋子。"
+  },
+  "aether-wayfarer-female-shirt": {
+    "name": "旅者夹克（女性）",
+    "shortDesc": "将女性角色专用旅者夹克放入角色自定义。"
+  },
+  "aether-wayfarer-female-trousers": {
+    "name": "旅者长裤（女性）",
+    "shortDesc": "将女性角色专用旅者长裤放入角色自定义。"
+  },
+  "aether-wayfarer-female-shoes": {
+    "name": "旅者鞋子（女性）",
+    "shortDesc": "将女性角色专用旅者鞋子放入角色自定义。"
+  },
   "smoking-outfit": {
     "name": "男士礼服套装盒",
     "shortDesc": "打开此男士套装盒，获得礼服外套、长裤和皮鞋。"

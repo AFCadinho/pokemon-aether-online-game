@@ -188,6 +188,10 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	var normalized_item_id := item_id.strip_edges().to_lower()
 	if normalized_item_id in ["team-rocket-outfit", "team-rocket-female-outfit"]:
 		return ["male", "female"]
+	if normalized_item_id.begins_with("aether-wayfarer-male-"):
+		return ["male"]
+	if normalized_item_id.begins_with("aether-wayfarer-female-"):
+		return ["female"]
 	if (
 		normalized_item_id.begins_with("aether-blossom-")
 		or normalized_item_id.begins_with("aether-female-")
@@ -250,6 +254,32 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 
 	var layers: Array[Dictionary] = []
 	match normalized_item_id:
+		"aether-wayfarer-male-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "AetherWayfarer_Male_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "AetherWayfarer_Male_Shoes"},
+				{"category": TOP_CATEGORY, "id": "AetherWayfarer_Male_Shirt"},
+			]
+		"aether-wayfarer-male-shirt":
+			layers = [{"category": TOP_CATEGORY, "id": "AetherWayfarer_Male_Shirt"}]
+		"aether-wayfarer-male-trousers":
+			layers = [{"category": BOTTOM_CATEGORY, "id": "AetherWayfarer_Male_Trousers"}]
+		"aether-wayfarer-male-shoes":
+			layers = [{"category": SHOES_CATEGORY, "id": "AetherWayfarer_Male_Shoes"}]
+		"aether-wayfarer-female-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "AetherWayfarer_Female_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "AetherWayfarer_Female_Shoes"},
+				{"category": TOP_CATEGORY, "id": "AetherWayfarer_Female_Shirt"},
+			]
+		"aether-wayfarer-female-shirt":
+			layers = [{"category": TOP_CATEGORY, "id": "AetherWayfarer_Female_Shirt"}]
+		"aether-wayfarer-female-trousers":
+			layers = [{"category": BOTTOM_CATEGORY, "id": "AetherWayfarer_Female_Trousers"}]
+		"aether-wayfarer-female-shoes":
+			layers = [{"category": SHOES_CATEGORY, "id": "AetherWayfarer_Female_Shoes"}]
 		"smoking-outfit":
 			layers = [
 				{"kind": "body"},
