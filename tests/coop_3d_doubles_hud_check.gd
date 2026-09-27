@@ -96,12 +96,22 @@ func _run() -> void:
 	var horde_cards: Array[Rect2] = []
 	for position: Vector2 in horde_layout["opponents"]:
 		var rect := Rect2(position, horde_size * float(horde_layout["opponent_scale"]))
-		assert(rect.end.y < player_rect.position.y, "Horde HP rows overlap")
-		assert(rect.position.x >= 96.0 and rect.end.x <= 1184.0, "Horde HP card leaves the status rail")
+		assert(player_rect.end.x < rect.position.x, "Horde player HP card must stay left of wild Pokémon")
+		assert(rect.end.y < 225.0, "Horde HP card covers the upper battlefield")
+		assert(rect.position.x >= 96.0 and rect.end.x <= 1220.0, "Horde HP card leaves the status rail")
 		for previous: Rect2 in horde_cards:
 			assert(not rect.intersects(previous), "Horde opponents' HP cards overlap")
 		horde_cards.append(rect)
 	assert(horde_cards.size() == 5, "Horde layout must place five wild Pokémon")
+	assert(is_equal_approx(horde_cards[0].position.y, horde_cards[1].position.y)
+		and is_equal_approx(horde_cards[1].position.y, horde_cards[2].position.y),
+		"First horde row must hold three Pokémon")
+	assert(horde_cards[3].position.y > horde_cards[0].end.y
+		and is_equal_approx(horde_cards[3].position.y, horde_cards[4].position.y),
+		"Second horde row must hold two Pokémon")
+	var first_row_center := (horde_cards[0].position.x + horde_cards[2].end.x) * 0.5
+	var second_row_center := (horde_cards[3].position.x + horde_cards[4].end.x) * 0.5
+	assert(absf(first_row_center - second_row_center) < 1.0, "Horde's second row should be centered")
 	var normal_bounds: Dictionary = presenter.bounds.duplicate(true)
 	for controller: String in presenter.bounds:
 		presenter.bounds[controller] = Rect2(Vector2(560, 300), Vector2(140, 160))
@@ -130,7 +140,7 @@ func _run() -> void:
 	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "2D HUD was not restored")
 	for card: Control in hud.coop_huds.values():
 		assert(not card.visible, "3D health card survived the 2D fallback")
-	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, five-opponent layout, 2D fallback")
+	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, 3+2 horde layout, 2D fallback")
 	host.release()
 	host.free()
 	quit()
