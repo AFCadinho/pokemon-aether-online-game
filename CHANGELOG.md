@@ -19,7 +19,7 @@
 
 - Statische vuureffecten in nieuwe 3D-modelbundles behouden hun gebakken kleurindeling, zodat Typhlosions vlammen geen witte vlakken krijgen door een dubbel toegepaste textuurschaal.
 
-- De Aether Ronin-tailleband loopt in de overworld-zijframes niet meer over de armen; de arm van het basismodel blijft zichtbaar bij lopen, vissen en rijden.
+- De Aether Ronin-tailleband loopt in de overworld-zijframes niet meer over de armen; ook de female-top laat de armen vrij bij lopen.
 
 - Route 5 toont de nieuwste handmatige Tiled-aanpassingen in de bestaande Godot-scene, met behoud van de animaties en gameplaylagen.
 
