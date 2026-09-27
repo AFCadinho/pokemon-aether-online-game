@@ -702,8 +702,9 @@ func _build_classic_ground() -> void:
 func _position(index: int) -> Vector3:
 	var point := ArenaCatalog.spawn(index % 2) + ArenaCatalog.battle_origin(arena_id)
 	if double_mode:
-		# Keep both partners apart in the default camera while preserving their side.
-		point += Vector3(0.949, 0.0, -0.316) * (1.65 if index >= 2 else -1.65)
+		# Give each team a horizontal row at the same world depth, with room
+		# for large models and a separate health card above each one.
+		point.x += 2.25 if index >= 2 else -2.25
 	if is_instance_valid(arena_root):
 		point.y = float(arena_root.get_meta("surface_height",0.0))
 	return point

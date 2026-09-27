@@ -1,0 +1,110 @@
+extends SceneTree
+
+class PresenterFixture:
+	extends Node
+	var stage: Control
+	var bounds: Dictionary = {}
+
+	func handles(controller: String) -> bool:
+		return bounds.has(controller)
+
+	func actor_visual_rect(controller: String) -> Rect2:
+		var local_rect: Rect2 = bounds[controller]
+		var transform := stage.get_global_transform()
+		return Rect2(transform * local_rect.position, transform.basis_xform(local_rect.size))
+
+func _init() -> void:
+	_run.call_deferred()
+
+func _run() -> void:
+	root.size = Vector2i(1280, 900)
+	root.content_scale_size = Vector2i(1280, 900)
+	var host: Control = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	var battle: Control = load("res://scenes/battle/battle.tscn").instantiate()
+	root.add_child(host)
+	host.mount(battle, null, WildEncounterTransition.STYLE_WILD, true)
+	assert(battle.setup_coop_battle())
+	var snapshot := {"participant": "p1", "turn": 1, "opponentPartySize": 2,
+		"positions": [
+			{"controller": "p1", "details": "Dragonite, L100, F", "hpPercent": 65},
+			{"controller": "p3", "details": "Garchomp, L100, F", "hpPercent": 80},
+			{"controller": "p2", "details": "Roaring Moon, L100", "hpPercent": 100},
+			{"controller": "p4", "details": "Roaring Moon, L100", "hpPercent": 45}],
+		"ownTeam": [{"species": "Dragonite", "active": true, "hp": 130, "maxHp": 200}]}
+	battle.coop_presenter._apply_positions(snapshot)
+	var stage: Control = battle.battle_stage
+	var presenter := PresenterFixture.new()
+	presenter.stage = stage
+	presenter.bounds = {
+		"p1": Rect2(Vector2(250, 400), Vector2(140, 160)),
+		"p3": Rect2(Vector2(480, 405), Vector2(140, 160)),
+		"p2": Rect2(Vector2(720, 225), Vector2(140, 160)),
+		"p4": Rect2(Vector2(970, 230), Vector2(140, 160)),
+	}
+	stage.add_child(presenter)
+	var hud: Node = null
+	for child: Node in battle.get_children():
+		if child.get_script() == load("res://scripts/battle/battle_ui/immersive_hud.gd"):
+			hud = child
+			break
+	assert(hud != null)
+	hud.set_process(false)
+	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	assert(not battle.player_hud_panel.visible and not battle.enemy_hud_panel.visible)
+	var rectangles: Array[Rect2] = []
+	for controller: String in ["p1", "p3", "p2", "p4"]:
+		var card: Control = hud.coop_huds[controller]
+		assert(card.visible and card.active_info_rows[0].visible)
+		assert(not card.active_info_rows[1].visible)
+		for previous: Rect2 in rectangles:
+			assert(not previous.intersects(Rect2(card.position, card.size * card.scale)), "Independent HP cards overlap")
+		rectangles.append(Rect2(card.position, card.size * card.scale))
+	assert(hud.coop_huds.p1.active_info_rows[0].get_meta("battle_hud_data").current_hp == 130)
+	assert(hud.coop_huds.p4.active_info_rows[0].get_meta("battle_hud_data").current_hp == 45)
+	var damaged_snapshot: Dictionary = snapshot.duplicate(true)
+	for position: Dictionary in damaged_snapshot.positions:
+		if position.controller == "p4":
+			position.hpPercent = 20
+	battle.coop_presenter._apply_positions(damaged_snapshot)
+	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	assert(hud.coop_huds.p4.active_info_rows[0].get_meta("battle_hud_data").current_hp == 20)
+	assert(hud.coop_huds.p1.active_info_rows[0].get_meta("battle_hud_data").current_hp == 130)
+	var model: Node = stage.get_node("ExperimentalBattle3D")
+	var pair: Vector3 = model._position(2) - model._position(0)
+	var axis: Vector3 = model._position(1) - model._position(0)
+	assert(pair.x >= 4.5 and is_equal_approx(pair.z, 0.0), "Allies must stand side by side at the same depth")
+	var opponent_pair: Vector3 = model._position(3) - model._position(1)
+	assert(opponent_pair.x >= 4.5 and is_equal_approx(opponent_pair.z, 0.0), "Opponents must stand side by side at the same depth")
+	assert(absf(pair.cross(axis).y) > 12.0, "Double partners still follow the singles diagonal")
+	var normal_bounds: Dictionary = presenter.bounds.duplicate(true)
+	for controller: String in presenter.bounds:
+		presenter.bounds[controller] = Rect2(Vector2(560, 300), Vector2(140, 160))
+	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	var crowded: Array[Rect2] = []
+	for controller: String in ["p1", "p3", "p2", "p4"]:
+		var card: Control = hud.coop_huds[controller]
+		var rect := Rect2(card.position, card.size * card.scale)
+		for previous: Rect2 in crowded:
+			assert(not rect.intersects(previous), "3D health cards overlap after camera alignment")
+		crowded.append(rect)
+	presenter.bounds = normal_bounds
+	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	var capture_path := OS.get_environment("COOP_3D_HUD_CAPTURE_PATH")
+	if not capture_path.is_empty():
+		host.set_process(false)
+		host.get_node("Cover").hide()
+		host.loading_label.get_parent().hide()
+		battle.coop_presenter.set_process(false)
+		battle.coop_presenter._loading_overlay.hide()
+		for frame in 5:
+			await process_frame
+		await RenderingServer.frame_post_draw
+		assert(root.get_texture().get_image().save_png(capture_path) == OK)
+	hud._update_coop_3d_huds(stage, presenter, stage.size, false)
+	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "2D HUD was not restored")
+	for card: Control in hud.coop_huds.values():
+		assert(not card.visible, "3D health card survived the 2D fallback")
+	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, two lanes, 2D fallback")
+	host.release()
+	host.free()
+	quit()

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adventure Party double battles plaatsen de twee 3D-Pokémon per team duidelijk naast elkaar en tonen in immersive mode voor alle vier een eigen HP-kaart bij hun model.
+
 - Gedeelde Adventure Party-encounters melden nu wanneer de lokale backend de nieuwe route nog niet heeft, in plaats van dit als verbindingsfout te tonen.
 
 - Devtools-spawns starten voor een beschikbare Adventure Party nu één gedeeld double battle met de gekozen Pokémon; beide spelers zien hetzelfde gevecht. Zonder beschikbare partner volgt geen onbedoelde single battle.

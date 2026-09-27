@@ -7,6 +7,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_region_arena_check.gd",
 	"res://tests/coop_gameplay_check.gd",
 	"res://tests/coop_battle_presentation_check.gd",
+	"res://tests/coop_3d_doubles_hud_check.gd",
 	"res://tests/mount_performance_check.gd",
 	"res://tests/player_map_layer_cache_check.gd",
 	"res://tests/battle_display_data_presenter_check.gd",

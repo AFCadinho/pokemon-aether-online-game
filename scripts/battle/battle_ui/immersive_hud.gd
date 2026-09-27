@@ -1,7 +1,11 @@
 extends Node
 ## Screen-space presentation only; the existing battle owns every control/signal.
+const COOP_SLOTS := ["p1", "p3", "p2", "p4"]
+const COOP_HUD_SCENE := preload("res://scenes/battle/pokemon_hud_panel.tscn")
 var battle: Control
 var initialized := [false, false]
+var coop_huds: Dictionary = {}
+var coop_huds_active := false
 
 func _ready() -> void:
 	process_priority = 100
@@ -160,6 +164,109 @@ func _process(delta: float) -> void:
 		var effects_x := side_rail.position.x + rail_extent.x + 8 if index == 0 else side_rail.position.x - effects_extent.x - 8
 		effects_x = clampf(effects_x, 16, area.x - effects_extent.x - 16)
 		_place(effects, Vector2(effects_x, side_rail.position.y), effects.size, 0.5)
+	_update_coop_3d_huds(stage, presenter, area, battle.coop_mode and realtime_3d and presenter.double_mode)
+
+func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enabled: bool) -> void:
+	if not enabled:
+		if coop_huds_active:
+			battle.player_hud_panel.show()
+			battle.enemy_hud_panel.show()
+			if is_instance_valid(battle.coop_presenter):
+				battle.coop_presenter._position_coop_stat_overlays.call_deferred()
+		for card: Control in coop_huds.values():
+			card.hide()
+		coop_huds_active = false
+		return
+	if coop_huds.is_empty():
+		for controller: String in COOP_SLOTS:
+			var card: Control = COOP_HUD_SCENE.instantiate()
+			card.name = "Coop3DHud" + controller
+			stage.add_child(card)
+			card.set_double_layout(false)
+			card.set_experience_bar_enabled(false)
+			card.z_index = 40
+			card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			card.scale = Vector2.ONE * 0.7
+			var row: Control = card.active_info_rows[0]
+			var owner := Label.new()
+			owner.name = "CoopOwnerLabel"
+			owner.add_theme_font_size_override("font_size", 12)
+			owner.add_theme_color_override("font_color", Color("67e8bf"))
+			row.add_child(owner)
+			row.move_child(owner, 0)
+			coop_huds[controller] = card
+	var inverse := stage.get_global_transform().affine_inverse()
+	var occupied: Array[Rect2] = []
+	for controller: String in COOP_SLOTS:
+		var card: Control = coop_huds[controller]
+		var source: Control = battle.player_hud_panel if controller in ["p1", "p3"] else battle.enemy_hud_panel
+		var source_row: Control = source.active_info_rows[1 if controller in ["p3", "p4"] else 0]
+		var data_value: Variant = source_row.get_meta("battle_hud_data", {})
+		if not presenter.handles(controller) or not source_row.visible or not data_value is Dictionary or (data_value as Dictionary).is_empty():
+			card.hide()
+			continue
+		var data := data_value as Dictionary
+		if card.get_meta("coop_source_data", {}) != data:
+			card.set_pokemon_data(str(data.get("species", "")), int(data.get("level", 0)),
+				int(data.get("current_hp", 0)), int(data.get("max_hp", 100)), str(data.get("status", "")),
+				str(data.get("gender", "")), bool(data.get("is_shiny", false)), {}, str(data.get("display_name", "")))
+			card.set_meta("coop_source_data", data.duplicate(true))
+		var owner_source := source_row.get_node_or_null("CoopOwnerLabel") as Label
+		var owner_target := card.active_info_rows[0].get_node("CoopOwnerLabel") as Label
+		owner_target.text = owner_source.text if owner_source != null else ""
+		var source_bar := source_row.get_node_or_null("MarginContainer/VBoxContainer/HPRow/HpBar") as ProgressBar
+		var target_bar := card.active_info_rows[0].get_node("MarginContainer/VBoxContainer/HPRow/HpBar") as ProgressBar
+		if source_bar != null and target_bar != null:
+			target_bar.value = source_bar.value
+		card.reset_size()
+		var bounds: Rect2 = presenter.actor_visual_rect(controller)
+		if not bounds.has_area():
+			card.hide()
+			continue
+		var top := inverse * Vector2(bounds.get_center().x, bounds.position.y)
+		var extent := card.size * card.scale
+		var target := Vector2(top.x - extent.x * 0.5, top.y - extent.y - 14.0)
+		target.x = clampf(target.x, 12.0, area.x - extent.x - 12.0)
+		target.y = clampf(target.y, 72.0, area.y - extent.y - 230.0)
+		var rect := Rect2(target, extent)
+		var preferred := target
+		var found := false
+		for column in 5:
+			if column > 0:
+				var sideways := ceili(float(column) * 0.5) * (extent.x + 10.0)
+				target.x = preferred.x + (-sideways if column % 2 == 1 else sideways)
+			if target.x < 12.0 or target.x + extent.x > area.x - 12.0:
+				continue
+			for step in 9:
+				target.y = preferred.y
+				if step > 0:
+					var distance := ceili(float(step) * 0.5) * (extent.y + 10.0)
+					target.y += -distance if step % 2 == 1 else distance
+				if target.y < 72.0 or target.y + extent.y > area.y - 230.0:
+					continue
+				rect.position = target
+				var clear := true
+				for previous: Rect2 in occupied:
+					if rect.intersects(previous.grow(8.0)):
+						clear = false
+						break
+				if clear:
+					found = true
+					break
+			if found:
+				break
+		if not found:
+			target = preferred
+			rect.position = target
+		card.position = target
+		card.show()
+		occupied.append(rect)
+		var stat_panel: Control = battle.coop_presenter._stat_overlays.get(controller) as Control
+		if is_instance_valid(stat_panel) and stat_panel.visible:
+			stat_panel.position = Vector2(target.x + (extent.x - stat_panel.size.x) * 0.5, target.y + extent.y + 4.0)
+	battle.player_hud_panel.hide()
+	battle.enemy_hud_panel.hide()
+	coop_huds_active = true
 
 func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float) -> void:
 	control.set_anchors_preset(Control.PRESET_TOP_LEFT)
