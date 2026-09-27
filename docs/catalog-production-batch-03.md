@@ -144,3 +144,22 @@ four-slot presenter introduced for double battles; the two unused slots stay
 empty in these single battles. Evidence hashes are in
 `tools/sprite_factory/catalog_production_batch_03_approved_install_validation.json`.
 The bundles remain local and have not been uploaded or activated for players.
+
+## Remaining hold audit
+
+The remaining 25 cases were checked again before batch 04. The source holds
+are eight transparent/refraction materials, eight dynamic visibility clocks,
+two unowned `body_c` visibility targets, Meloetta's mismatched skeleton and
+Mimikyu's form/material case. The five shiny holds have official rare eye
+settings or eyelid textures that the current shiny exporter cannot reproduce
+with verified source bindings. Exact species groups and next actions are in
+`tools/sprite_factory/catalog_production_batch_03_hold_audit.json`.
+
+Mimikyu's catalog uses two distinct form models with reciprocal animation
+catalog links. The identity gate now allows this bounded case while still
+requiring every selected clip from the chosen form's own catalog. A fresh
+form-0 inventory and source pose review passed. Its normal export then blocked
+on the native transparent/refraction `eff_l` and `eff_r` materials. Mimikyu
+therefore remains a source hold. The other 24 also remain held; this audit
+adds no runtime approvals or bundles. Batch 04 may proceed with the holds
+isolated in the review queue.
