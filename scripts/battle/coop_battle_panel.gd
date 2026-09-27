@@ -583,6 +583,7 @@ func _process(_delta: float) -> void:
 		_sync_model_sprite_anchors()
 		_position_native_targets()
 		var model: Node = _model_presenter()
+		_sync_coop_camera_focus(model)
 		var model_active: bool = model != null and model.active
 		if model_active != _model_highlight_active:
 			_model_highlight_active = model_active
@@ -598,6 +599,22 @@ func _process(_delta: float) -> void:
 		var field: Dictionary = CoopService.view.get("field", {})
 		for effect in [field.get("weather", ""), field.get("terrain", "")]:
 			if not str(effect).is_empty(): _connection.text += "  ·  " + str(effect).capitalize()
+
+
+func _sync_coop_camera_focus(model: Node) -> void:
+	if model == null:
+		return
+	var controller := str(_latest.get("participant", ""))
+	var choosing: bool = (
+		CoopService.activity.get("status") == "active"
+		and controller in ["p1", "p3"]
+		and not _latest.get("locked", true)
+		and not _latest.get("ended", false)
+		and not _latest.get("legalActions", []).is_empty()
+		and CoopService.pending_command.is_empty()
+		and not _playing
+	)
+	model.set_coop_camera_focus(controller, choosing)
 
 
 func _present() -> void:
@@ -1770,6 +1787,9 @@ func _play_native_mechanic_effect(controller: String, effect_key: String) -> voi
 
 
 func _exit_tree() -> void:
+	var model: Node = _model_presenter()
+	if model != null:
+		model.set_coop_camera_focus("", false)
 	_cancel_native_attack_tween()
 	if _native_move_router != null:
 		_native_move_router.call("dispose")

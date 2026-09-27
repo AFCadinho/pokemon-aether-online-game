@@ -125,6 +125,58 @@ func _run() -> void:
 	assert(hud.coop_huds.p4.active_info_rows[0].get_meta("battle_hud_data").current_hp == 20)
 	assert(hud.coop_huds.p1.active_info_rows[0].get_meta("battle_hud_data").current_hp == 130)
 	var model: Node = stage.get_node("ExperimentalBattle3D")
+	var saved_latest: Dictionary = battle.coop_presenter._latest.duplicate(true)
+	var camera_view: Dictionary = snapshot.duplicate(true)
+	camera_view.locked = false
+	camera_view.legalActions = [{"type": "move", "slot": 1, "target": 1}]
+	battle.coop_presenter._latest = camera_view
+	coop_service.activity["status"] = "active"
+	battle.coop_presenter._sync_coop_camera_focus(model)
+	assert(model.coop_camera_focus_enabled and model.coop_camera_focus_index == 0,
+		"The local p1 Trainer gets the decision camera behind their own Pokémon")
+	camera_view.participant = "p3"
+	battle.coop_presenter._sync_coop_camera_focus(model)
+	assert(model.coop_camera_focus_enabled and model.coop_camera_focus_index == 2,
+		"The local p3 Trainer gets the opposite ally's decision camera")
+	camera_view.locked = true
+	battle.coop_presenter._sync_coop_camera_focus(model)
+	assert(not model.coop_camera_focus_enabled, "The decision camera returns to the shared view after choosing")
+	battle.coop_presenter._latest = saved_latest
+	coop_service.activity = previous_activity
+	var saved_camera: Camera3D = model.camera
+	var saved_active: bool = model.active
+	var saved_actor: Node3D = model.actors[0]
+	var saved_combatant: Dictionary = model.combatants[0]
+	var saved_identity: String = model.identities[0]
+	var focus_test_camera := Camera3D.new()
+	focus_test_camera.fov = ArenaCatalog.CAMERA_FOV
+	stage.add_child(focus_test_camera)
+	model.camera = focus_test_camera
+	model.active = true
+	model.combatants[0] = {"species": "dragonite", "shiny": false}
+	model.identities[0] = model._combatant_key(0)
+	var focus_test_actor := Node3D.new()
+	model.actors[0] = focus_test_actor
+	model.set_coop_camera_focus("", false)
+	model._update_camera(1.0)
+	var overview_distance: float = focus_test_camera.position.distance_to(model._position(0))
+	model.set_coop_camera_focus("p1", true)
+	model._update_camera(1.0)
+	assert(focus_test_camera.position.distance_to(model._position(0)) < overview_distance,
+		"The co-op decision camera must move closer to the local Pokémon")
+	var camera_frame := Rect2(Vector2.ZERO, root.size)
+	for index in 4:
+		assert(camera_frame.has_point(focus_test_camera.unproject_position(model._position(index) + Vector3(0, 1.2, 0))),
+			"The decision camera must keep both allies and opponents in view")
+	model.set_coop_camera_focus("", false)
+	model.coop_camera_focus_weight = 0.0
+	model.actors[0] = saved_actor
+	model.identities[0] = saved_identity
+	model.combatants[0] = saved_combatant
+	model.active = saved_active
+	model.camera = saved_camera
+	focus_test_actor.free()
+	focus_test_camera.queue_free()
 	var pair: Vector3 = model._position(2) - model._position(0)
 	var opponent_pair: Vector3 = model._position(3) - model._position(1)
 	var view: Vector3 = ArenaCatalog.camera_home(model.arena_id) - ArenaCatalog.camera_target(model.arena_id)
