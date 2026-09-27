@@ -366,5 +366,21 @@
   "team-rocket-female-cap": {
     "name": "火箭队女式帽子",
     "shortDesc": "不可交易。 将此女性专用外观移入角色自定义。"
+  },
+  "aether-ronin-outfit": {
+    "name": "浪人服装箱",
+    "shortDesc": "不可交易。打开后可获得适合当前角色模型的浪人和服、袴裤和足袋木屐。"
+  },
+  "aether-ronin-shirt": {
+    "name": "浪人和服",
+    "shortDesc": "不可交易。将浪人和服移至角色自定义。"
+  },
+  "aether-ronin-trousers": {
+    "name": "浪人袴裤",
+    "shortDesc": "不可交易。将浪人袴裤移至角色自定义。"
+  },
+  "aether-ronin-shoes": {
+    "name": "浪人足袋木屐",
+    "shortDesc": "不可交易。将浪人足袋木屐移至角色自定义。"
   }
 }

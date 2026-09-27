@@ -366,5 +366,21 @@
   "team-rocket-female-cap": {
     "name": "Boné Feminino da Equipe Rocket",
     "shortDesc": "Não negociável. Mova este cosmético feminino para a Personalização de Personagem."
+  },
+  "aether-ronin-outfit": {
+    "name": "Caixa de Traje Aether Ronin",
+    "shortDesc": "Intransferível. Abra esta caixa para receber o quimono Ronin, a hakama e as sandálias tabi para seu modelo de personagem."
+  },
+  "aether-ronin-shirt": {
+    "name": "Quimono Aether Ronin",
+    "shortDesc": "Intransferível. Leve o quimono Ronin para a Personalização de Personagem."
+  },
+  "aether-ronin-trousers": {
+    "name": "Hakama Aether Ronin",
+    "shortDesc": "Intransferível. Leve a hakama Ronin para a Personalização de Personagem."
+  },
+  "aether-ronin-shoes": {
+    "name": "Sandálias Tabi Aether Ronin",
+    "shortDesc": "Intransferível. Leve as sandálias tabi Ronin para a Personalização de Personagem."
   }
 }

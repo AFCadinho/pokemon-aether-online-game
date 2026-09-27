@@ -14,6 +14,14 @@
 
 - Statische vuureffecten in nieuwe 3D-modelbundles behouden hun gebakken kleurindeling, zodat Typhlosions vlammen geen witte vlakken krijgen door een dubbel toegepaste textuurschaal.
 
+- De Aether Ronin-tailleband loopt in de overworld-zijframes niet meer over de armen; de arm van het basismodel blijft zichtbaar bij lopen, vissen en rijden.
+
+- Route 5 toont de nieuwste handmatige Tiled-aanpassingen in de bestaande Godot-scene, met behoud van de animaties en gameplaylagen.
+
+- De Underground Passage-ingang op Route 5 staat naast het wandelpad met een eigen toegangspad; deur, terugkeerpositie en collision sluiten hierop aan.
+
+- Route 5 heeft bijgewerkte Tiled-visuals en ingetekende lagen voor collision, sprongranden en hoog gras.
+
 - De Aether Wayfarer is als aparte male- en female-outfitbox beschikbaar met trainer- en overworldlagen voor lopen, vissen en rijden. De boxen staan niet in de store.
 
 - De vrouwelijke Rocket-traineroutfit heeft een zichtbare tailleband en donkerdere rok, zodat shirt en rok duidelijk van elkaar te onderscheiden zijn.
