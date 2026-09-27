@@ -80,7 +80,7 @@ func append_compact(original: TileSet, compact_set: TileSet, animations: Diction
 				if not decoded.has(frame.source_id):
 					decoded[frame.source_id] = from.texture.get_image()
 					decoded[frame.source_id].convert(Image.FORMAT_RGBA8)
-				image.blit_rect(decoded[frame.source_id], from.get_tile_texture_region(frame.atlas_coords), Vector2i(n % columns, n / columns) * slot + Vector2i.ONE * BORDER)
+				image.blit_rect(decoded[frame.source_id], from.get_tile_texture_region(frame.atlas_coords, int(frame.get("frame_index", 0))), Vector2i(n % columns, n / columns) * slot + Vector2i.ONE * BORDER)
 			var texture := PortableCompressedTexture2D.new()
 			texture.keep_compressed_buffer = true
 			texture.create_from_image(image, PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS)
@@ -98,6 +98,8 @@ func append_compact(original: TileSet, compact_set: TileSet, animations: Diction
 			source.separation = Vector2i.ONE * BORDER * 2
 			source.use_texture_padding = old.use_texture_padding
 			source.set_meta("tiled_animation_strip", true)
+			if old.has_meta("pao_tall_grass_family"):
+				source.set_meta("pao_tall_grass_family",old.get_meta("pao_tall_grass_family"))
 			compact_set.add_source(source, next_id)
 			source.create_tile(Vector2i.ZERO)
 			source.set_tile_animation_columns(Vector2i.ZERO, columns)

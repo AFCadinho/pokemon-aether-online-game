@@ -1,6 +1,6 @@
-# Route 1 tall-grass wind trial
+# Route 1 tall-grass wind trial — approved
 
-An isolated copy of Route 1 animates only its northwestern grass patch: 37 cells at x=7..15, y=13..17. This is a visual preview awaiting user assessment.
+An isolated copy of Route 1 animates only its northwestern grass patch: 37 cells at x=7..15, y=13..17. The user approved this trial; the standard is documented in `tall_grass_standard.md`.
 
 ```sh
 godot --path /home/adinho/Desktop/pokemonaetheronline/game/pokemon-aether-online --rendering-method gl_compatibility --script res://tools/preview_tall_grass.gd
@@ -10,7 +10,7 @@ godot --path /home/adinho/Desktop/pokemonaetheronline/game/pokemon-aether-online
 - Tab: close-up, surrounding route, whole-map view.
 - WASD: pan. +/−: zoom. Esc: close.
 
-The preview loads `generated/tiled_visuals/route1_tall_grass_test/`. The canonical Route 1 visual and the live Tiled sources retain their original hashes. No encounter settings or character interactions are changed. Walking-triggered rustling is outside this wind trial.
+The preview command now opens canonical Route 1. Add `-- route1_tall_grass_test` to view the preserved original 37-cell trial. The canonical Route 1 visual and the live Tiled sources retain their original hashes. No encounter settings or character interactions are changed. Walking-triggered rustling is outside this wind trial.
 
 ## Artwork and timing
 

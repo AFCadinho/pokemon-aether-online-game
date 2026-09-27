@@ -40,7 +40,7 @@ func _init() -> void:
 				var hash := Fingerprint.new()._hash(pixels.get_region(source.get_tile_texture_region(coords,0)).get_data())
 				var frames := source.get_tile_animation_frames_count(coords)
 				if not catalog.has(hash):
-					if frames > 1:
+					if frames > 1 and not preload("res://addons/tiled_tmx_importer/importer/tmx_tall_grass_wind.gd").IMAGES.has(hash):
 						failures.append("Unknown animated artwork: " + id)
 					continue
 				var entry: Dictionary = catalog[hash]
