@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De vrouwelijke Rocket-traineroutfit heeft een zichtbare tailleband en donkerdere rok, zodat shirt en rok duidelijk van elkaar te onderscheiden zijn.
+
 - De laatste aanpassing aan de kraag, taille, rok en logokleur van de female Rocket-overworld-outfit is teruggedraaid naar de voorgaande versie.
 
 - De vrouwelijke Rocket-outfit heeft duidelijkere handschoenen, een zichtbare rok met vrije knieën, een herkenbare petklep en een korter bobkapsel in de overworld.
