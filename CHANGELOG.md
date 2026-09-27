@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De kraag van het Team Rocket-uniform volgt nu de nek tijdens het lopen, zonder extra omhoog te springen in de stapstanden.
+
 - Tall grass beweegt nu standaard zacht met verschillende rustpauzes per groepje, ook in Viridian Forest. Nieuwe Tiled-imports krijgen dezelfde animatie automatisch.
 
 - Kleding volgt tijdens lopen exact de animatie van het lichaam, ook bij starten en van richting veranderen. Het Team Rocket-shirt heeft een stabiele romp en borstmarkering zonder opspringende tailleband.
