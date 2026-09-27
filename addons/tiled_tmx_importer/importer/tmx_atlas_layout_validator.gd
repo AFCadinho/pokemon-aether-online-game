@@ -44,9 +44,22 @@ func validate(root: Node, expected_path := "") -> Array[String]:
 			continue
 		if source.get_tiles_count() != used.get(id, {}).size():
 			failures.append("Atlas contains unused tile definitions.")
-		for coords in used.get(id, {}):
-			if source.has_tile(coords) and source.get_tile_animation_frames_count(coords) != 1:
-				failures.append("Animated tiles require an animation-aware compact layout.")
+		var packed_count := source.get_tiles_count()
+		var animated := bool(source.get_meta("tiled_animation_strip", false))
+		if animated:
+			if source.get_tiles_count() != 1 or not source.has_tile(Vector2i.ZERO):
+				failures.append("Animation atlas must have exactly one logical tile at its origin.")
+				continue
+			packed_count = source.get_tile_animation_frames_count(Vector2i.ZERO)
+			if source.get_tile_animation_columns(Vector2i.ZERO) != mini(Compactor.COLUMNS, Compactor.LIMIT / (source.texture_region_size.x + Compactor.BORDER * 2)) or source.get_tile_animation_separation(Vector2i.ZERO) != Vector2i.ZERO or source.get_tile_animation_speed(Vector2i.ZERO) != 1.0:
+				failures.append("Animation atlas layout or timing is invalid.")
+			for frame in packed_count:
+				if source.get_tile_animation_frame_duration(Vector2i.ZERO, frame) <= 0:
+					failures.append("Animation frame duration must be positive.")
+		else:
+			for coords in used.get(id, {}):
+				if source.has_tile(coords) and source.get_tile_animation_frames_count(coords) != 1:
+					failures.append("Animation is missing its compact strip layout.")
 		var texture := source.texture as PortableCompressedTexture2D
 		if texture == null or texture.get_compression_mode() != PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS:
 			failures.append("Atlas must use portable lossless compression.")
@@ -57,12 +70,12 @@ func validate(root: Node, expected_path := "") -> Array[String]:
 			failures.append("Invalid compact tile dimensions/count.")
 			continue
 		var columns := mini(Compactor.COLUMNS, Compactor.LIMIT / slot.x)
-		var width := mini(columns, source.get_tiles_count()) * slot.x
+		var width := mini(columns, packed_count) * slot.x
 		var power := 1
 		while power < width:
 			power *= 2
 		width = mini(power, Compactor.LIMIT)
-		var height := ceili(float(source.get_tiles_count()) / columns) * slot.y
+		var height := ceili(float(packed_count) / columns) * slot.y
 		if source.texture.get_width() != width or source.texture.get_height() != height or height > Compactor.LIMIT:
 			failures.append("Atlas canvas is oversized or violates compact layout.")
 		if source.margins != Vector2i.ONE * Compactor.BORDER or source.separation != Vector2i.ONE * Compactor.BORDER * 2:

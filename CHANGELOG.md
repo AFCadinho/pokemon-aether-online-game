@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Tiled-importer ondersteunt nu tegelanimaties. Een aparte Viridian City-proef toont bewegend vijverwater; de bestaande speelbare stad blijft ongewijzigd.
+
 - Tijdens de eigen keuze in een gedeelde 3D-double battle schuift de camera rustig achter de eigen Pokémon en iets dichterbij; na de keuze keert het overzicht terug.
 
 - De Poké Ball-keuze in gedeelde gevechten toont baliconen en een apart, heel aantal in plaats van een decimaal aantal.
