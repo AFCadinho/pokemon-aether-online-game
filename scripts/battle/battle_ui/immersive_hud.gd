@@ -252,23 +252,54 @@ static func plan_3d_hud_layout(area: Vector2, allied_sizes: Array[Vector2], oppo
 	var gap := 8.0
 	var top := 84.0
 	if opponent_sizes.size() >= 3:
-		# A horde gets five compact opponent cards along the top. Keep the
-		# player's card on the left below that row, clear of the battlefield.
-		var margin := clampf(area.x * 0.09, 96.0, 128.0)
-		var opponent_gaps := gap * maxi(0, opponent_sizes.size() - 1)
-		var opponent_scale := minf(0.5, maxf(1.0, area.x - margin * 2.0 - opponent_gaps) / maxf(1.0, opponent_width))
-		var opponent_row_width := opponent_width * opponent_scale + opponent_gaps
-		var opponent_x := (area.x - opponent_row_width) * 0.5
-		var opponent_height := 0.0
-		for dimensions: Vector2 in opponent_sizes:
-			opponent_positions.append(Vector2(opponent_x, top))
-			opponent_x += dimensions.x * opponent_scale + gap
-			opponent_height = maxf(opponent_height, dimensions.y * opponent_scale)
+		# A horde keeps the player's HP on the left and puts wild Pokémon in
+		# a right-hand grid: three above, with the remaining two centered below.
+		var first_row_count := mini(3, opponent_sizes.size())
+		var second_row_count := opponent_sizes.size() - first_row_count
+		var first_width := 0.0
+		var second_width := 0.0
+		var first_height := 0.0
+		var second_height := 0.0
+		for index in opponent_sizes.size():
+			var dimensions: Vector2 = opponent_sizes[index]
+			if index < first_row_count:
+				first_width += dimensions.x
+				first_height = maxf(first_height, dimensions.y)
+			else:
+				second_width += dimensions.x
+				second_height = maxf(second_height, dimensions.y)
+		var right_start := area.x * 0.39
+		var right_margin := clampf(area.x * 0.06, 60.0, 96.0)
+		var right_width := maxf(1.0, area.x - right_start - right_margin)
+		var first_gaps := gap * maxi(0, first_row_count - 1)
+		var second_gaps := gap * maxi(0, second_row_count - 1)
+		var opponent_scale := minf(0.5,
+			minf(maxf(1.0, right_width - first_gaps) / maxf(1.0, first_width),
+				maxf(1.0, right_width - second_gaps) / maxf(1.0, second_width)))
+		var first_x := right_start + (right_width - first_width * opponent_scale - first_gaps) * 0.5
+		var second_x := right_start + (right_width - second_width * opponent_scale - second_gaps) * 0.5
+		var second_y := top + first_height * opponent_scale + gap
+		for index in opponent_sizes.size():
+			var dimensions: Vector2 = opponent_sizes[index]
+			if index < first_row_count:
+				opponent_positions.append(Vector2(first_x, top))
+				first_x += dimensions.x * opponent_scale + gap
+			else:
+				opponent_positions.append(Vector2(second_x, second_y))
+				second_x += dimensions.x * opponent_scale + gap
+		var grid_height := first_height * opponent_scale
+		if second_row_count > 0:
+			grid_height += gap + second_height * opponent_scale
 		var ally_gaps := gap * maxi(0, allied_sizes.size() - 1)
-		var ally_scale := minf(0.5, maxf(1.0, area.x - margin * 2.0 - ally_gaps) / maxf(1.0, ally_width))
-		var ally_x := margin
+		var ally_margin := clampf(area.x * 0.09, 72.0, 128.0)
+		var ally_scale := minf(0.5, maxf(1.0, right_start - ally_margin - 16.0 - ally_gaps) / maxf(1.0, ally_width))
+		var ally_height := 0.0
 		for dimensions: Vector2 in allied_sizes:
-			ally_positions.append(Vector2(ally_x, top + opponent_height + 10.0))
+			ally_height = maxf(ally_height, dimensions.y * ally_scale)
+		var ally_y := top + maxf(0.0, (grid_height - ally_height) * 0.5)
+		var ally_x := ally_margin
+		for dimensions: Vector2 in allied_sizes:
+			ally_positions.append(Vector2(ally_x, ally_y))
 			ally_x += dimensions.x * ally_scale + gap
 		return {"allies": ally_positions, "opponents": opponent_positions,
 			"ally_scale": ally_scale, "opponent_scale": opponent_scale}
