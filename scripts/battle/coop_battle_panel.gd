@@ -1018,11 +1018,12 @@ func _update_actions() -> void:
 			else:
 				for ball: Dictionary in capture_options.get("balls", []):
 					var item_id: String = str(ball.get("itemId", ""))
-					var label := "%s    ×%s" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))]
+					var quantity := maxi(0, int(ball.get("quantity", 0)))
+					var item_name := ItemLocalization.display_name(item_id, item_id.replace("-", " ").capitalize())
 					if _native_mode:
-						_decision_button(label, "item", func() -> void: await _submit_capture_with_preview(item_id))
+						_decision_ball_button(item_id, item_name, quantity, func() -> void: await _submit_capture_with_preview(item_id))
 					else:
-						_button(_actions, "%s ×%s — your target" % [item_id.replace("-", " ").capitalize(), str(ball.get("quantity", 0))], func() -> void: await _submit_capture_with_preview(item_id))
+						_button(_actions, "%s ×%d — your target" % [item_name, quantity], func() -> void: await _submit_capture_with_preview(item_id))
 			if _native_mode:
 				_decision_button("Back to battle", "secondary", func() -> void:
 					_bag_open = false
@@ -2030,6 +2031,58 @@ func _decision_button(text: String, variant: String, callback: Callable) -> Butt
 	button.add_theme_stylebox_override("hover", _decision_button_style(base.lightened(0.16), Color("8ce7ee")))
 	button.add_theme_stylebox_override("pressed", _decision_button_style(base.darkened(0.15), Color("8ce7ee")))
 	button.add_theme_stylebox_override("focus", _decision_button_style(Color.TRANSPARENT, Color("b4f1ff")))
+	return button
+
+
+func _decision_ball_button(item_id: String, item_name: String, quantity: int, callback: Callable) -> Button:
+	var button := _decision_button("", "item", callback)
+	button.custom_minimum_size.y = 58
+	button.tooltip_text = "%s ×%d" % [item_name, quantity]
+	button.disabled = quantity <= 0
+	var padding := MarginContainer.new()
+	padding.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for edge: String in ["left", "right"]:
+		padding.add_theme_constant_override("margin_" + edge, 12)
+	for edge: String in ["top", "bottom"]:
+		padding.add_theme_constant_override("margin_" + edge, 7)
+	button.add_child(padding)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 12)
+	padding.add_child(row)
+	var icon := TextureRect.new()
+	var icon_key := item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-").replace("-", "").to_upper()
+	var icon_path := "res://assets/items/icons/%s.png" % icon_key
+	if ResourceLoader.exists(icon_path):
+		icon.texture = load(icon_path) as Texture2D
+	icon.custom_minimum_size = Vector2(36, 36)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	var name_label := Label.new()
+	name_label.text = item_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 16)
+	name_label.add_theme_color_override("font_color", Color("e5f3ff"))
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(name_label)
+	var badge := PanelContainer.new()
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	badge.add_theme_stylebox_override("panel", _decision_button_style(Color("102e43"), Color("315d77")))
+	row.add_child(badge)
+	var count_label := Label.new()
+	count_label.text = "×%d" % quantity
+	count_label.custom_minimum_size.x = 36
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count_label.add_theme_font_size_override("font_size", 14)
+	count_label.add_theme_color_override("font_color", Color("78dfff"))
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_child(count_label)
 	return button
 
 

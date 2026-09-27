@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Poké Ball-keuze in gedeelde gevechten toont baliconen en een apart, heel aantal in plaats van een decimaal aantal.
+
 - De laatste 25 Pokémon uit batch 03 zijn lokaal goedgekeurd als 3D-model in normale en shiny vorm, elk met een eigen bijwerkbare bundle. De modellen komen pas met een aparte publicatie beschikbaar voor spelers.
 
 - Gedeelde double battles behouden de portrethoeken met compacte pixelportretten: beide partytrainers links naast elkaar, bij wilde gevechten één generiek encounterportrait rechts en bij trainergevechten één trainer rechts. De turn- en cameraknoppen wijken voor het rechterportrait.

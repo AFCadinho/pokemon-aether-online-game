@@ -99,7 +99,7 @@ func _run() -> void:
 	service.view.exitRequest = null
 	service.view.locked = false
 	service.view.legalActions = normal_actions
-	service.view.captureOptions = {"targetController": "p4", "storageAvailable": true, "balls": [{"itemId": "poke-ball", "quantity": 2}]}
+	service.view.captureOptions = {"targetController": "p4", "storageAvailable": true, "balls": [{"itemId": "poke-ball", "quantity": 2.0}]}
 	service.view.lastCapture = {"checkpointRevision": 1, "itemId": "poke-ball", "caught": false, "shakeCount": 2}
 	panel._bag_open = true
 	panel._action_signature = ""
@@ -107,6 +107,14 @@ func _run() -> void:
 	_expect(panel._actions.find_children("*", "Button", true, false).any(func(button: Button) -> bool: return button.text == "Poke Ball ×2 — your target"), "co-op Bag uses server-owned ball options for only the assigned target")
 	_expect(panel._capture_status.text.contains("2 shakes"), "reconnect shows the last accepted throw result")
 	await _capture_visual("COOP_BAG_VISUAL_CAPTURE_PATH")
+	panel._native_mode = true
+	var native_ball_row: Button = panel._decision_ball_button("poke-ball", "Poke Ball", 2, func() -> void: pass)
+	var native_icon := native_ball_row.find_children("*", "TextureRect", true, false).front() as TextureRect
+	_expect(native_icon.texture != null and native_icon.texture.resource_path.ends_with("POKEBALL.png"), "native co-op Bag shows the existing Poké Ball icon")
+	_expect(native_ball_row.find_children("*", "Label", true, false).any(func(label: Label) -> bool: return label.text == "×2"), "native co-op Bag shows a whole-number quantity badge")
+	panel._native_mode = false
+	panel._actions.remove_child(native_ball_row)
+	native_ball_row.queue_free()
 	service.view.captureOptions.storageAvailable = false
 	panel._action_signature = ""
 	panel._update_actions()
