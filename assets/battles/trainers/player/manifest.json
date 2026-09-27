@@ -205,6 +205,10 @@
             "Mysterious_Trousers": {
               "path": "res://assets/battles/trainers/player/mysterious_outfit/trousers.png",
               "scale": 1.0
+            },
+            "TeamRocketFemale_Skirt": {
+              "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/skirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -231,6 +235,10 @@
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/shoes.png",
               "scale": 2.0,
               "tint": "shoes_color"
+            },
+            "TeamRocketFemale_Boots": {
+              "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/boots.png",
+              "scale": 1.0
             }
           }
         },
@@ -252,6 +260,10 @@
             "Aether_Blossom_Dress": {
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/dress.png",
               "scale": 2.0
+            },
+            "TeamRocketFemale_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -291,6 +303,10 @@
               "path": "res://assets/battles/trainers/player/female/hairstyle_batch_1/aether_female_hair_02.png",
               "scale": 1.0,
               "tint": "hair_color"
+            },
+            "TeamRocketFemale_Hair": {
+              "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -298,6 +314,10 @@
           "parts": {
             "Cap": {
               "path": "res://assets/battles/trainers/player/female/starter_kit/cap.png",
+              "scale": 1.0
+            },
+            "TeamRocketFemale_Cap": {
+              "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/cap.png",
               "scale": 1.0
             }
           }

@@ -19034,6 +19034,16 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.smoking_trousers")
 			"Smoking_Shoes":
 				return LocalizationManager.text("ui.appearance.option.smoking_shoes")
+			"TeamRocketFemale_Shirt":
+				return LocalizationManager.text("ui.appearance.option.teamrocketfemale_shirt")
+			"TeamRocketFemale_Skirt":
+				return LocalizationManager.text("ui.appearance.option.teamrocketfemale_skirt")
+			"TeamRocketFemale_Boots":
+				return LocalizationManager.text("ui.appearance.option.teamrocketfemale_boots")
+			"TeamRocketFemale_Hair":
+				return LocalizationManager.text("ui.appearance.option.teamrocketfemale_hair")
+			"TeamRocketFemale_Cap":
+				return LocalizationManager.text("ui.appearance.option.teamrocketfemale_cap")
 			"TeamRocket_Cap":
 				return LocalizationManager.text("ui.appearance.option.teamrocket_cap")
 			"TeamRocket_Shirt":
