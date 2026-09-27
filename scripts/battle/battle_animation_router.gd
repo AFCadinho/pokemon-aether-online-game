@@ -1644,8 +1644,7 @@ func play_damage_tween_for_target(target_ident: String, sound_variant: String = 
 	if not _can_start_battle_animation("router.damage_tween", {"target": target_ident}):
 		return
 
-	var sound_path := get_damage_sound_path(sound_variant)
-	_play_one_shot_sound(sound_path)
+	play_damage_sound(sound_variant)
 	if uses_realtime_3d():
 		if _has_model_actor(target_ident):
 			await model_presenter.play_action(target_ident, "damage")
@@ -1661,6 +1660,17 @@ static func get_damage_sound_path(sound_variant: String) -> String:
 	if sound_variant == "super_effective":
 		return SUPER_EFFECTIVE_DAMAGE_SOUND_PATH
 	return TAKE_DAMAGE_SOUND_PATH
+
+
+func play_damage_sound(sound_variant: String = "normal") -> void:
+	var sound_path := get_damage_sound_path(sound_variant)
+	# Co-op may receive its first hit before the threaded sound prewarm finishes.
+	# This small clip must be available on that first damage event.
+	if not OS.has_feature("web") and not sound_stream_cache.has(sound_path):
+		var stream := ResourceLoader.load(sound_path) as AudioStream
+		if stream != null:
+			sound_stream_cache[sound_path] = stream
+	_play_one_shot_sound(sound_path)
 
 
 func _play_one_shot_sound(sound_path: String) -> void:

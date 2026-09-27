@@ -706,6 +706,7 @@ func _pokemon_name_for_command(controller: String) -> String:
 
 func _apply_native_positions(snapshot: Dictionary) -> void:
 	_native_turn.set_turn(int(snapshot.get("turn", 0)))
+	_apply_native_field(snapshot)
 	var own_team: Array = snapshot.get("ownTeam", [])
 	_native_party.set_party(own_team)
 	_native_party.set_empty_slots_visible(false)
@@ -804,6 +805,23 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 			_model_roster_key = roster_key
 			_prepare_model_roster.call_deferred()
 	_position_coop_stat_overlays.call_deferred()
+
+
+func _apply_native_field(snapshot: Dictionary) -> void:
+	var battle: Control = get_parent() as Control
+	if battle == null:
+		return
+	var field: Dictionary = snapshot.get("field", {})
+	var weather := str(field.get("weather", "")).strip_edges()
+	var terrain := str(field.get("terrain", "")).strip_edges()
+	var effects: Array = []
+	if not weather.is_empty() and weather != "none":
+		effects.append({"effectType": "weather", "effectId": weather})
+	if not terrain.is_empty() and terrain != "none":
+		effects.append({"effectType": "fieldCondition", "effectGroup": "terrain", "effectId": terrain})
+	battle.field_timers_panel.set_effects(effects, int(snapshot.get("turn", 0)))
+	battle.weather_presentation.update_weather(weather)
+	battle.weather_presentation.update_terrain(terrain)
 
 
 func _set_native_status(controller: String, status: String) -> void:
@@ -1373,6 +1391,10 @@ func _append_event(event: Dictionary) -> void:
 		"-zpower": text = "%s surrounded itself with Z-Power!" % actor
 		"-boost", "-unboost": text = "%s %s for %s!" % [_stat_name(str(event.get("stat", ""))), "rose" if event.get("kind") == "-boost" else "fell", actor]
 		"-setboost": text = "%s changed for %s!" % [_stat_name(str(event.get("stat", ""))), actor]
+		"-weather":
+			var weather := str(event.get("effect", ""))
+			text = "The weather returned to normal." if weather == "none" else "%s began!" % weather
+		"-fieldstart", "-fieldend": text = "%s %s." % [str(event.get("effect", "")), "ended" if event.kind == "-fieldend" else "began"]
 		"-start", "-end": text = "%s's %s %s." % [actor, str(event.get("condition", "")).capitalize(), "ended" if event.kind == "-end" else "started"]
 		"-miss": text = "%s's attack missed!" % actor
 		"cant": text = "%s couldn't move!" % actor
@@ -1409,7 +1431,7 @@ func _battle_log_kind(event_kind: String) -> String:
 		"-damage": return "damage"
 		"-heal": return "heal"
 		"-status", "-curestatus": return "status"
-		"-boost", "-unboost", "-setboost", "-start", "-end", "-mega", "-primal", "-zpower": return "effect"
+		"-boost", "-unboost", "-setboost", "-start", "-end", "-weather", "-fieldstart", "-fieldend", "-mega", "-primal", "-zpower": return "effect"
 		"-miss", "cant": return "warning"
 		"faint": return "faint"
 		"coopcapture", "win", "tie": return "result"
@@ -1473,6 +1495,8 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 					await _play_native_catalog_move(event, batch)
 			"-damage", "-heal":
 				if SettingsManager.battle_animations and event.get("kind") == "-damage":
+					if _native_move_router != null and float(event.get("damagePercent", 1.0)) > 0.0:
+						_native_move_router.call("play_damage_sound")
 					if model != null and model.handles(controller):
 						await model.play_action(controller, "damage")
 					else:

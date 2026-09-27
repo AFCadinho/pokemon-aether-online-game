@@ -1,5 +1,6 @@
 extends SceneTree
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
+const ImmersiveHud = preload("res://scripts/battle/battle_ui/immersive_hud.gd")
 
 class PresenterFixture:
 	extends Node
@@ -25,9 +26,14 @@ func _run() -> void:
 	root.add_child(host)
 	host.mount(battle, null, WildEncounterTransition.STYLE_WILD, true)
 	assert(battle.setup_coop_battle())
+	battle.coop_presenter._native_move_router.call("play_damage_sound")
+	assert((battle.coop_presenter._native_move_router.get("sound_stream_cache") as Dictionary).has(
+		"res://assets/battles/animations/common/damage/normaldamage.ogg"),
+		"Co-op damage must use the regular battle damage sound")
 	var snapshot := {"participant": "p1", "turn": 1, "opponentPartySize": 2,
+		"field": {"weather": "sandstorm", "terrain": "electricterrain"},
 		"positions": [
-			{"controller": "p1", "details": "Dragonite, L100, F", "hpPercent": 65},
+			{"controller": "p1", "details": "Dragonite, L100, F", "hpPercent": 65, "boosts": {"atk": 1, "spe": 1}},
 			{"controller": "p3", "details": "Garchomp, L100, F", "hpPercent": 80},
 			{"controller": "p2", "details": "Roaring Moon, L100", "hpPercent": 100},
 			{"controller": "p4", "details": "Roaring Moon, L100", "hpPercent": 45}],
@@ -50,8 +56,49 @@ func _run() -> void:
 			break
 	assert(hud != null)
 	hud.set_process(false)
+	var portraits: Node = null
+	for child: Node in battle.get_children():
+		if child.get_script() == load("res://scripts/battle/battle_ui/immersive_portraits.gd"):
+			portraits = child
+			break
+	assert(portraits != null)
+	var coop_service := root.get_node("CoopService")
+	var previous_activity: Dictionary = coop_service.activity.duplicate(true)
+	var previous_view: Dictionary = coop_service.view.duplicate(true)
+	coop_service.activity["activityId"] = "wild_route_1"
+	coop_service.view = snapshot.duplicate(true)
+	var appearance: Dictionary = root.get_node("PlayerSave").to_appearance_state()
+	battle.coop_presenter._first_trainer.player_appearance_state = appearance
+	battle.coop_presenter._second_trainer.player_appearance_state = appearance
+	portraits._process(0.0)
+	assert(stage.get_node("TrainerPortrait0").visible and stage.get_node("TrainerPortrait2").visible,
+		"Both co-op Trainers need portraits in the left corner")
+	assert(stage.get_node("TrainerPortrait1").visible and stage.get_node("TrainerPortrait3").visible,
+		"Both wild opponents need portraits in the right corner")
+	assert(stage.get_node("TrainerPortrait0").position.x < stage.get_node("TrainerPortrait2").position.x
+		and stage.get_node("TrainerPortrait1").position.x < stage.get_node("TrainerPortrait3").position.x,
+		"Double battle portraits must be paired side by side")
+	hud._process(0.016)
+	var turn_panel: Control = battle.battle_status_panel
+	var reset_camera: Control = stage.get_node("ResetCameraButton")
+	assert(turn_panel.position.x > stage.size.x * 0.7 and reset_camera.position.x > stage.size.x * 0.7
+		and turn_panel.position.x + turn_panel.size.x * turn_panel.scale.x < stage.get_node("TrainerPortrait1").position.x,
+		"3D co-op turn and camera controls must fit beside the right portraits")
+	coop_service.activity["activityId"] = "trainer_brock"
+	battle.coop_presenter._opponent_trainer.catalog_sprite.texture = load(
+		"res://assets/sprites/trainer_cards/showdown/veteran-gen7.png")
+	portraits._process(0.0)
+	assert(stage.get_node("TrainerPortrait1").visible and not stage.get_node("TrainerPortrait3").visible,
+		"Trainer doubles need one opponent Trainer portrait")
+	coop_service.activity = previous_activity
+	coop_service.view = previous_view
 	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
 	assert(not battle.player_hud_panel.visible and not battle.enemy_hud_panel.visible)
+	assert(battle.field_timers_panel.visible and battle.field_timers_panel.current_effects.size() == 2,
+		"Co-op weather and terrain indicators must follow the server snapshot")
+	var boost_panel: Control = battle.coop_presenter._stat_overlays.p1
+	assert(boost_panel.visible and boost_panel.scale.x < 1.0,
+		"3D stat indicators must match the compact HP card scale")
 	var rectangles: Array[Rect2] = []
 	for controller: String in ["p1", "p3", "p2", "p4"]:
 		var card: Control = hud.coop_huds[controller]
@@ -85,6 +132,32 @@ func _run() -> void:
 	var opponent_center: Vector3 = (model._position(1) + model._position(3)) * 0.5
 	assert((ally_center - opponent_center).dot(view) > 5.39,
 		"Teams must occupy separate rows along the camera depth")
+	var horde_size := Vector2(460, 100)
+	var horde_allies: Array[Vector2] = [horde_size]
+	var horde_opponents: Array[Vector2] = [horde_size, horde_size, horde_size, horde_size, horde_size]
+	var horde_layout: Dictionary = ImmersiveHud.plan_3d_hud_layout(Vector2(1280, 900),
+		horde_allies, horde_opponents)
+	var player_rect := Rect2(horde_layout["allies"][0], horde_size * float(horde_layout["ally_scale"]))
+	assert(player_rect.end.y < 225.0, "Horde player HP card covers the upper battlefield")
+	var horde_cards: Array[Rect2] = []
+	for position: Vector2 in horde_layout["opponents"]:
+		var rect := Rect2(position, horde_size * float(horde_layout["opponent_scale"]))
+		assert(player_rect.end.x < rect.position.x, "Horde player HP card must stay left of wild Pokémon")
+		assert(rect.end.y < 225.0, "Horde HP card covers the upper battlefield")
+		assert(rect.position.x >= 96.0 and rect.end.x <= 1220.0, "Horde HP card leaves the status rail")
+		for previous: Rect2 in horde_cards:
+			assert(not rect.intersects(previous), "Horde opponents' HP cards overlap")
+		horde_cards.append(rect)
+	assert(horde_cards.size() == 5, "Horde layout must place five wild Pokémon")
+	assert(is_equal_approx(horde_cards[0].position.y, horde_cards[1].position.y)
+		and is_equal_approx(horde_cards[1].position.y, horde_cards[2].position.y),
+		"First horde row must hold three Pokémon")
+	assert(horde_cards[3].position.y > horde_cards[0].end.y
+		and is_equal_approx(horde_cards[3].position.y, horde_cards[4].position.y),
+		"Second horde row must hold two Pokémon")
+	var first_row_center := (horde_cards[0].position.x + horde_cards[2].end.x) * 0.5
+	var second_row_center := (horde_cards[3].position.x + horde_cards[4].end.x) * 0.5
+	assert(absf(first_row_center - second_row_center) < 1.0, "Horde's second row should be centered")
 	var normal_bounds: Dictionary = presenter.bounds.duplicate(true)
 	for controller: String in presenter.bounds:
 		presenter.bounds[controller] = Rect2(Vector2(560, 300), Vector2(140, 160))
@@ -111,9 +184,14 @@ func _run() -> void:
 		assert(root.get_texture().get_image().save_png(capture_path) == OK)
 	hud._update_coop_3d_huds(stage, presenter, stage.size, false)
 	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "2D HUD was not restored")
+	assert(boost_panel.scale == Vector2.ONE, "2D stat indicators must keep their original scale")
+	var clear_snapshot: Dictionary = snapshot.duplicate(true)
+	clear_snapshot.field = {"weather": "", "terrain": ""}
+	battle.coop_presenter._apply_native_field(clear_snapshot)
+	assert(not battle.field_timers_panel.visible, "Expired co-op weather must clear from the HUD")
 	for card: Control in hud.coop_huds.values():
 		assert(not card.visible, "3D health card survived the 2D fallback")
-	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, two lanes, 2D fallback")
+	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, 3+2 horde layout, 2D fallback")
 	host.release()
 	host.free()
 	quit()

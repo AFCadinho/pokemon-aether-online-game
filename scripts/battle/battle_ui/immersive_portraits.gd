@@ -5,13 +5,14 @@ var cards: Array[Panel] = []
 var heads: Array[Control] = []
 var art: Array[TextureRect] = []
 var commands: Array[Label] = []
-var appearances: Array[Dictionary] = [{}, {}]
+var appearances: Array[Dictionary] = [{}, {}, {}, {}]
 var speakers: Array[Control] = []
 var figures: Array[Node2D] = []
-var figure_textures: Array[Texture2D] = [null, null]
+var figure_textures: Array[Texture2D] = [null, null, null, null]
+var coop_wild_details: Dictionary = {}
 
 func _ready() -> void:
-	for index in 2:
+	for index in 4:
 		var card := Panel.new()
 		card.name = "TrainerPortrait" + str(index)
 		card.size = Vector2(64,64)
@@ -24,6 +25,7 @@ func _ready() -> void:
 		style.set_corner_radius_all(12)
 		card.add_theme_stylebox_override("panel", style)
 		battle.get_node("%BattleStage").add_child(card)
+		card.hide()
 		cards.append(card)
 		var head := preload("res://scripts/ui/trainer_head_portrait.gd").new()
 		card.add_child(head)
@@ -63,12 +65,8 @@ func _ready() -> void:
 		commands.append(command)
 
 func _process(_delta: float) -> void:
-	# The shared battle presenter owns its own party rails and command Trainers.
-	# Mirroring the singles speaker here draws a second, larger Trainer on top.
 	if battle.coop_mode:
-		for index in 2:
-			cards[index].hide()
-			speakers[index].hide()
+		_update_coop_portraits()
 		return
 	var stage: Control = battle.battle_stage
 	for index in 2:
@@ -124,6 +122,63 @@ func _process(_delta: float) -> void:
 		commands[index].size = Vector2(bubble_width, 64.0)
 		if source != null:
 			source.hide()
+
+func _update_coop_portraits() -> void:
+	var presenter: Control = battle.coop_presenter
+	if not is_instance_valid(presenter):
+		for card: Panel in cards:
+			card.hide()
+		return
+	var stage: Control = battle.battle_stage
+	for speaker: Control in speakers:
+		speaker.hide()
+	for entry: Dictionary in [
+		{"index": 0, "trainer": presenter._first_trainer, "x": 18.0},
+		{"index": 2, "trainer": presenter._second_trainer, "x": 90.0},
+	]:
+		var index: int = entry.index
+		var trainer: BattleTrainerSprite = entry.trainer
+		var state: Dictionary = trainer.player_appearance_state if is_instance_valid(trainer) else {}
+		if state != appearances[index]:
+			appearances[index] = state.duplicate(true)
+			if not state.is_empty():
+				heads[index].set_appearance_state(state)
+		heads[index].visible = not state.is_empty()
+		art[index].hide()
+		cards[index].visible = not state.is_empty()
+		cards[index].position = Vector2(entry.x, 12)
+	var wild := str(CoopService.activity.get("activityId", "")).begins_with("wild_")
+	if wild:
+		var positions: Array = CoopService.view.get("positions", [])
+		for entry: Dictionary in [
+			{"index": 1, "controller": "p2", "x": stage.size.x - 154.0},
+			{"index": 3, "controller": "p4", "x": stage.size.x - 82.0},
+		]:
+			var index: int = entry.index
+			var details := ""
+			for position: Dictionary in positions:
+				if position.get("controller") == entry.controller:
+					details = str(position.get("details", ""))
+					break
+			var species := details.split(",")[0].strip_edges()
+			if coop_wild_details.get(index, "") != details or art[index].texture == null:
+				coop_wild_details[index] = details
+				art[index].texture = PokemonAssets.load_home_sprite(species, details.to_lower().contains("shiny")) if not species.is_empty() else null
+			heads[index].hide()
+			art[index].visible = art[index].texture != null
+			cards[index].visible = art[index].visible
+			cards[index].position = Vector2(entry.x, 12)
+	else:
+		cards[3].hide()
+		var trainer: BattleTrainerSprite = presenter._opponent_trainer
+		var texture: Texture2D = trainer.catalog_sprite.texture if is_instance_valid(trainer) else null
+		if texture == null and is_instance_valid(trainer) and trainer.npc_sprite.sprite_frames != null:
+			texture = trainer.npc_sprite.sprite_frames.get_frame_texture(trainer.npc_sprite.animation, trainer.npc_sprite.frame)
+		heads[1].hide()
+		art[1].texture = texture
+		art[1].visible = texture != null
+		cards[1].visible = texture != null
+		cards[1].position = Vector2(stage.size.x - 82.0, 12)
 
 func _rebuild_figure(index: int, state: Dictionary, fallback: Texture2D) -> void:
 	var figure := figures[index]

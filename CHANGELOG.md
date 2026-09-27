@@ -4,7 +4,13 @@
 
 - De laatste 25 Pokémon uit batch 03 zijn lokaal goedgekeurd als 3D-model in normale en shiny vorm, elk met een eigen bijwerkbare bundle. De modellen komen pas met een aparte publicatie beschikbaar voor spelers.
 
-- Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen in immersive mode voor alle vier een eigen HP-kaart bij hun model.
+- Gedeelde double battles behouden de portrethoeken: beide partytrainers links naast elkaar, beide wilde tegenstanders rechts naast elkaar en bij trainergevechten één trainer rechts. De turn- en cameraknoppen wijken voor de rechterportretten.
+
+- Gedeelde double battles spelen het gebruikelijke schadegeluid af naast de 3D-hitreactie. De turn- en cameraknoppen blijven rechtsboven staan wanneer er geen zichtbaar tegenstanderportrait is.
+
+- Gedeelde double battles tonen weer en terrein linksboven vanuit de actuele battle-status, melden publieke veldwisselingen in het gevechtslog en schalen statveranderingen mee met de compacte 3D-HP-kaarten.
+
+- Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen de vier HP-kaarten in een compacte statusrij boven het speelveld.
 
 - Nog 75 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm. Elk modelpaar heeft een eigen downloadbare bundle; publicatie volgt in een latere desktoprelease.
 
