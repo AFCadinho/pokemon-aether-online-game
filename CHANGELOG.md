@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Kleding volgt tijdens lopen exact de animatie van het lichaam, ook bij starten en van richting veranderen. Het Team Rocket-shirt heeft een stabiele romp en borstmarkering zonder opspringende tailleband.
+
 - Een aparte Route 1-proef laat één veld tall grass zacht bewegen, met verschillende pauzes per groepje en een aan/uitvergelijking.
 
 - De Team Rocket-laarzen volgen nu de voeten in ieder loopframe; de broek dekt de benen volledig. De losse streep achter op de pet is verwijderd en de pet krijgt bij vissen en rijden geen dubbele verschuiving meer.
