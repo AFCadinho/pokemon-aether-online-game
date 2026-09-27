@@ -266,7 +266,10 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				{"category": BOTTOM_CATEGORY, "id": "TeamRocket_Trousers"},
 				{"category": SHOES_CATEGORY, "id": "TeamRocket_Shoes"},
 				{"category": TOP_CATEGORY, "id": "TeamRocket_Shirt"},
+				{"category": HEADGEAR_CATEGORY, "id": "TeamRocket_Cap"},
 			]
+		"team-rocket-cap":
+			layers = [{"category": HEADGEAR_CATEGORY, "id": "TeamRocket_Cap"}]
 		"team-rocket-shirt":
 			layers = [{"category": TOP_CATEGORY, "id": "TeamRocket_Shirt"}]
 		"team-rocket-trousers":

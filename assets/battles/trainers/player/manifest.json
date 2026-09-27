@@ -166,6 +166,10 @@
             "Cap": {
               "path": "res://assets/battles/trainers/player/male/starter_kit/cap.png",
               "scale": 1.0
+            },
+            "TeamRocket_Cap": {
+              "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/cap.png",
+              "scale": 1.0
             }
           }
         },

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De mannelijke Team Rocket-outfit volgt nu de Gen 4-gruntreferentie met een donkerder uniform, paarsgrijze handschoenen en laarzen, en een losse pet in de outfitbox.
+
 - De mannelijke Team Rocket-outfit is toegevoegd als outfitbox met uniform en handschoenen, broek en laarzen, inclusief trainer- en overworld-sprites.
 
 - Een aparte Pallet Town-preview combineert echte Tiled-animaties voor water, boombladeren en bloemen, met een vergelijking tegen stilstaande tegels.

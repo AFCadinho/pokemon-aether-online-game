@@ -293,7 +293,7 @@
   },
   "team-rocket-outfit": {
     "name": "Team Rocket Outfit Box",
-    "shortDesc": "Open this male-only box to receive a Team Rocket uniform with gloves, trousers and boots."
+    "shortDesc": "Open this male-only box to receive a Team Rocket cap, uniform with gloves, trousers and boots."
   },
   "team-rocket-shirt": {
     "name": "Team Rocket Uniform",
@@ -306,5 +306,9 @@
   "team-rocket-shoes": {
     "name": "Team Rocket Boots",
     "shortDesc": "Move the male-only Team Rocket boots into Character Customization."
+  },
+  "team-rocket-cap": {
+    "name": "Team Rocket Cap",
+    "shortDesc": "Move the male-only Team Rocket cap into Character Customization."
   }
 }

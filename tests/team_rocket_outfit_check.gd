@@ -2,8 +2,8 @@ extends SceneTree
 
 const APPEARANCE := preload("res://scripts/services/character_appearance_service.gd")
 const BATTLE := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
-const PARTS := {"top": "TeamRocket_Shirt", "bottom": "TeamRocket_Trousers", "shoes": "TeamRocket_Shoes"}
-const ITEMS := ["team-rocket-outfit", "team-rocket-shirt", "team-rocket-trousers", "team-rocket-shoes"]
+const PARTS := {"top": "TeamRocket_Shirt", "bottom": "TeamRocket_Trousers", "shoes": "TeamRocket_Shoes", "headgear": "TeamRocket_Cap"}
+const ITEMS := ["team-rocket-outfit", "team-rocket-shirt", "team-rocket-trousers", "team-rocket-shoes", "team-rocket-cap"]
 var failed := false
 
 
@@ -32,7 +32,7 @@ func _run() -> void:
 					var atlas := frames.get_frame_texture(animation, index) as AtlasTexture
 					if atlas == null or atlas.atlas.resource_path != expected or atlas.region.size != Vector2(64, 64):
 						_check(false, "%s %s uses its own registered sheet, not a starter fallback" % [part_id, movement])
-	var appearance := {"gender": "male", "top": "TeamRocket_Shirt", "bottom": "TeamRocket_Trousers", "shoes": "TeamRocket_Shoes"}
+	var appearance := {"gender": "male", "top": "TeamRocket_Shirt", "bottom": "TeamRocket_Trousers", "shoes": "TeamRocket_Shoes", "headgear": "TeamRocket_Cap"}
 	var battle_layers: Array[Dictionary] = BATTLE.build_layers(appearance)
 	for category: String in PARTS:
 		var found := false
@@ -71,7 +71,7 @@ func _save_render_previews(battle_layers: Array[Dictionary]) -> void:
 	_check(trainer.save_png("user://team_rocket_trainer_check.png") == OK, "trainer render preview saved")
 	for movement: String in ["walk", "fish", "ride"]:
 		var layers: Array[SpriteFrames] = [APPEARANCE.get_body_frames("Gen4_Base_v1", "male", movement)]
-		for category: String in ["bottom", "shoes", "top"]:
+		for category: String in ["bottom", "shoes", "top", "headgear"]:
 			layers.append(APPEARANCE.get_part_frames(category, PARTS[category], "male", movement))
 		var sheet := Image.create(256, 256, false, Image.FORMAT_RGBA8)
 		var row := 0

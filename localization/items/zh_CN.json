@@ -293,7 +293,7 @@
   },
   "team-rocket-outfit": {
     "name": "火箭队服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得火箭队制服（含手套）、长裤和长靴。"
+    "shortDesc": "打开此男性专用礼盒，获得火箭队帽子、制服（含手套）、长裤和长靴。"
   },
   "team-rocket-shirt": {
     "name": "火箭队制服",
@@ -306,5 +306,9 @@
   "team-rocket-shoes": {
     "name": "火箭队长靴",
     "shortDesc": "将男性专用火箭队长靴移入角色自定义。"
+  },
+  "team-rocket-cap": {
+    "name": "火箭队帽子",
+    "shortDesc": "将男性专用火箭队帽子移入角色自定义。"
   }
 }
