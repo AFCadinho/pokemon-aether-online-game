@@ -27,8 +27,9 @@ func _run() -> void:
 	host.mount(battle, null, WildEncounterTransition.STYLE_WILD, true)
 	assert(battle.setup_coop_battle())
 	var snapshot := {"participant": "p1", "turn": 1, "opponentPartySize": 2,
+		"field": {"weather": "sandstorm", "terrain": "electricterrain"},
 		"positions": [
-			{"controller": "p1", "details": "Dragonite, L100, F", "hpPercent": 65},
+			{"controller": "p1", "details": "Dragonite, L100, F", "hpPercent": 65, "boosts": {"atk": 1, "spe": 1}},
 			{"controller": "p3", "details": "Garchomp, L100, F", "hpPercent": 80},
 			{"controller": "p2", "details": "Roaring Moon, L100", "hpPercent": 100},
 			{"controller": "p4", "details": "Roaring Moon, L100", "hpPercent": 45}],
@@ -53,6 +54,11 @@ func _run() -> void:
 	hud.set_process(false)
 	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
 	assert(not battle.player_hud_panel.visible and not battle.enemy_hud_panel.visible)
+	assert(battle.field_timers_panel.visible and battle.field_timers_panel.current_effects.size() == 2,
+		"Co-op weather and terrain indicators must follow the server snapshot")
+	var boost_panel: Control = battle.coop_presenter._stat_overlays.p1
+	assert(boost_panel.visible and boost_panel.scale.x < 1.0,
+		"3D stat indicators must match the compact HP card scale")
 	var rectangles: Array[Rect2] = []
 	for controller: String in ["p1", "p3", "p2", "p4"]:
 		var card: Control = hud.coop_huds[controller]
@@ -138,6 +144,11 @@ func _run() -> void:
 		assert(root.get_texture().get_image().save_png(capture_path) == OK)
 	hud._update_coop_3d_huds(stage, presenter, stage.size, false)
 	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "2D HUD was not restored")
+	assert(boost_panel.scale == Vector2.ONE, "2D stat indicators must keep their original scale")
+	var clear_snapshot: Dictionary = snapshot.duplicate(true)
+	clear_snapshot.field = {"weather": "", "terrain": ""}
+	battle.coop_presenter._apply_native_field(clear_snapshot)
+	assert(not battle.field_timers_panel.visible, "Expired co-op weather must clear from the HUD")
 	for card: Control in hud.coop_huds.values():
 		assert(not card.visible, "3D health card survived the 2D fallback")
 	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, 3+2 horde layout, 2D fallback")

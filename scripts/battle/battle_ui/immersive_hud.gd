@@ -43,6 +43,8 @@ func _process(delta: float) -> void:
 	var field_anchor := Vector2(94, 12)
 	if player_portrait != null:
 		field_anchor = Vector2(player_portrait.position.x + player_portrait.size.x + 12, player_portrait.position.y)
+	if battle.coop_mode:
+		field_anchor = Vector2(176, 20)
 	_place(field_indicators, field_anchor, field_indicators.size, 0.65)
 	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
 	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 204, area.y - 210), Vector2(178, 34), 0.8)
@@ -172,6 +174,8 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 			battle.player_hud_panel.show()
 			battle.enemy_hud_panel.show()
 			if is_instance_valid(battle.coop_presenter):
+				for panel: Control in battle.coop_presenter._stat_overlays.values():
+					panel.scale = Vector2.ONE
 				battle.coop_presenter._position_coop_stat_overlays.call_deferred()
 		for card: Control in coop_huds.values():
 			card.hide()
@@ -235,7 +239,8 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 		var extent := card.size * card.scale
 		var stat_panel: Control = battle.coop_presenter._stat_overlays.get(controller) as Control
 		if is_instance_valid(stat_panel) and stat_panel.visible:
-			stat_panel.position = Vector2(card.position.x + (extent.x - stat_panel.size.x) * 0.5, card.position.y + extent.y + 4.0)
+			stat_panel.scale = card.scale
+			stat_panel.position = Vector2(card.position.x + (extent.x - stat_panel.size.x * stat_panel.scale.x) * 0.5, card.position.y + extent.y + 4.0)
 	battle.player_hud_panel.hide()
 	battle.enemy_hud_panel.hide()
 	coop_huds_active = true
