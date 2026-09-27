@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De female Rocket-outfit heeft een duidelijkere kraag en taille, een uitlopende rok en een rood borstlogo dat losstaat van de nek; de huidstrook onder de rok is opgesplitst in twee afzonderlijke benen.
+
 - De vrouwelijke Rocket-outfit heeft duidelijkere handschoenen, een zichtbare rok met vrije knieën, een herkenbare petklep en een korter bobkapsel in de overworld.
 - De zuidelijke uitgang van Rock Tunnel 1F heeft nu een complete grotboog en een lage voorwand zoals in Mt. Moon; de uitgang en aankomst staan midden onder de boog.
 
