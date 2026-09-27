@@ -12,6 +12,18 @@ scale still needs review. Full action builds remain behind the explicit human
 probe-review gate. Local reports and images are retained in
 `game/.worktrees/slot-a/frontend/.tmp/catalog-production-04/`.
 
+## Batch 04 — idle eyelid correction (2026-09-27)
+
+The first-frame probes made some brief blinks look like a persistent closed-eye
+pose. The initial intake also flagged inherited eyelid poses on 126 candidates.
+The importer now samples four evenly spaced idle frames for review. A matching
+official default-idle pose is supplied as an eyelid baseline where the source
+rig supports it. All 126 candidates now have technically passing, four-frame
+probes and remain unapproved pending visual review. Seventy-eight no longer
+carry the idle eyelid warning; 48 still carry it, which is a review signal and
+not proof that the rendered eyes look closed. The combined page is
+`game/.worktrees/slot-a/frontend/.tmp/catalog-production-04-facial-baseline/review-index.html`.
+
 ## Batch 04 — 226 candidates, starter lines first (2026-09-27)
 
 The [batch-04 manifest](catalog_production_batch_04.json) contains the 226

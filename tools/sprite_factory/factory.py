@@ -141,7 +141,7 @@ def validate(cfg, variant):
         require(all(isinstance(f, (int, float)) and math.isfinite(f) for f in frames), 'Invalid frames')
         require(all(b > a for a, b in zip(frames, frames[1:])), 'Frames must be increasing')
         require(action['source_fps'] > 0 and action['speed'] > 0, 'Invalid timing')
-        if len(frames) > 1:
+        if len(frames) > 1 and not cfg.get('probe_sample_only', False):
             require(all(abs((b - a) - action['source_fps'] / cfg['render']['fps']) < 1e-5 for a, b in zip(frames, frames[1:])),
                     'Sample source timeline at the configured render FPS')
         if name.startswith('faint'):
