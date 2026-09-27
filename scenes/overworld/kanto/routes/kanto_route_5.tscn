@@ -22,7 +22,7 @@ size = Vector2(128, 16)
 size = Vector2(64, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_5"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="daycare_exit_shape"]
 size = Vector2(32, 16)
@@ -301,6 +301,7 @@ transition_id = "kanto_route_5__to_underground_path"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=1359017765]
+position = Vector2(0, -8)
 shape = SubResource("shape_5")
 
 [node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=1253175302 instance=ExtResource("daycare_door_hint")]
