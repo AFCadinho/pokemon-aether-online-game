@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-09-27",
   "runtime_approved": false,
-  "visual_review": "corrections_requested",
+  "visual_review": "accepted_all_24_normal_shiny_pairs",
   "battle_qualification": "pending",
   "scope": "25 original batch-04 holds plus Spiritomb",
   "candidate_pairs": 24,
@@ -991,7 +991,7 @@
       "wattrel",
       "kilowattrel"
     ],
-    "status": "wattrel_and_kilowattrel_eye_review_accepted",
+    "status": "visual_review_accepted",
     "runtime_approved": false,
     "correction": "Use native top-origin UV offsets in Godot; Blender conversion must not be repeated after glTF import.",
     "runtime_reports": [
@@ -1021,13 +1021,21 @@
       "normal": 76,
       "shiny": 76
     },
-    "remaining_issue": "Battle qualification and remaining visual review pending.",
+    "remaining_issue": "Battle qualification pending.",
     "user_review": {
       "wattrel": "accepted_normal_and_shiny_idle_and_sleep",
       "kilowattrel": "accepted_normal_and_shiny_idle_and_sleep",
-      "starly": "pending_explicit_acceptance",
+      "starly": "accepted_normal_and_shiny",
       "answer": "Allebei goed"
     },
     "test_note": "Normal and shiny rendered instance checks pass without errors when render frames occur between creation and teardown."
+  },
+  "visual_review_answer": "Allemaal goed",
+  "visual_review_gallery": ".tmp/batch04-recovery/recovered-review-v2.html",
+  "battle_placement": {
+    "receipt": "tools/sprite_factory/catalog_production_batch_04_recovery_battle.json",
+    "technical_ready": 24,
+    "visual_review": "pending",
+    "runtime_approved": false
   }
 }
