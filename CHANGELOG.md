@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het Route 5-daycare-interior heeft een volledig afgewerkte balie, verzorgingstafel, planten en bloemenpot.
+
 - De Underground Path heeft zijwaartse trappen tegen de wanden, met bijpassende aankomstpunten en vrije bordessen.
 - Route 5- en Route 6-ingangen van de Underground Passage hebben bijgewerkte tegel- en blokkeerlagen.
 
