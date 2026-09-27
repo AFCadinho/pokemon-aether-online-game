@@ -1,0 +1,1729 @@
+{
+  "schema": 1,
+  "identity_gate": "scvi-resource-identity-v1",
+  "purpose": "Batch 04 candidates: offered starter evolutionary lines first, then all other unapproved normal-form candidates in National Dex order. Technical and visual qualification required; selection does not approve or activate models.",
+  "selection": {
+    "catalog_sha256": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+    "order": "starter_evolution_species_by_national_dex_then_remaining_by_national_dex_ascending",
+    "canonical_species_rule": "backend species_id equals catch_rate_source.pokemon_species; Dex 550=basculin and 668=pyroar from SCVI identity mapping",
+    "form": 0,
+    "gender_code": 0,
+    "candidate_pool_count": 226,
+    "starter_choices_offered": 120,
+    "starter_evolution_species_unique": 357,
+    "starter_candidates_first_count": 61,
+    "remaining_candidates_count": 165,
+    "starter_choices_sha256": "d2079b4d98e9c8c9a44f6427757ac1915508a5501e9c23652183d269ec8037b4",
+    "starter_catalog_source_sha256": "5440eaf77ab571cd61cd78ecf46665843e722302ffa6c36ae5345ca5a3565a89",
+    "species_data_sha256": "850c14c806ae2dbceb47faec3a1febeafb0ed56c5c13653b8197113bd1613397",
+    "reviewed_registry_sha256": "1a144dd157e78d332f63884a60361e3e72076d6b2f2c48797df2f9d6b69a5c32",
+    "approved_species_skipped_count": 252,
+    "reviewed_registry_species_id_count": 254
+  },
+  "entries": [
+    {
+      "species": "charmander",
+      "national_dex_number": 4,
+      "resource_id": "pm0004_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "charmander"
+      ]
+    },
+    {
+      "species": "gastly",
+      "national_dex_number": 92,
+      "resource_id": "pm0092_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "gastly"
+      ]
+    },
+    {
+      "species": "gengar",
+      "national_dex_number": 94,
+      "resource_id": "pm0094_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "gastly"
+      ]
+    },
+    {
+      "species": "dragonair",
+      "national_dex_number": 148,
+      "resource_id": "pm0148_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "dratini"
+      ]
+    },
+    {
+      "species": "cyndaquil",
+      "national_dex_number": 155,
+      "resource_id": "pm0155_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "cyndaquil"
+      ]
+    },
+    {
+      "species": "quilava",
+      "national_dex_number": 156,
+      "resource_id": "pm0156_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "cyndaquil"
+      ]
+    },
+    {
+      "species": "typhlosion",
+      "national_dex_number": 157,
+      "resource_id": "pm0157_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "cyndaquil"
+      ]
+    },
+    {
+      "species": "ampharos",
+      "national_dex_number": 181,
+      "resource_id": "pm0181_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "mareep"
+      ]
+    },
+    {
+      "species": "larvitar",
+      "national_dex_number": 246,
+      "resource_id": "pm0246_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "larvitar"
+      ]
+    },
+    {
+      "species": "slakoth",
+      "national_dex_number": 287,
+      "resource_id": "pm0287_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "slakoth"
+      ]
+    },
+    {
+      "species": "azurill",
+      "national_dex_number": 298,
+      "resource_id": "pm0298_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "azurill"
+      ]
+    },
+    {
+      "species": "salamence",
+      "national_dex_number": 373,
+      "resource_id": "pm0373_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "bagon"
+      ]
+    },
+    {
+      "species": "starly",
+      "national_dex_number": 396,
+      "resource_id": "pm0396_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "starly"
+      ]
+    },
+    {
+      "species": "staravia",
+      "national_dex_number": 397,
+      "resource_id": "pm0397_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "starly"
+      ]
+    },
+    {
+      "species": "luxray",
+      "national_dex_number": 405,
+      "resource_id": "pm0405_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "shinx"
+      ]
+    },
+    {
+      "species": "krookodile",
+      "national_dex_number": 553,
+      "resource_id": "pm0553_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "sandile"
+      ]
+    },
+    {
+      "species": "decidueye",
+      "national_dex_number": 724,
+      "resource_id": "pm0843_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "rowlet"
+      ]
+    },
+    {
+      "species": "rillaboom",
+      "national_dex_number": 812,
+      "resource_id": "pm0950_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "grookey"
+      ]
+    },
+    {
+      "species": "cinderace",
+      "national_dex_number": 815,
+      "resource_id": "pm0956_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "scorbunny"
+      ]
+    },
+    {
+      "species": "rookidee",
+      "national_dex_number": 821,
+      "resource_id": "pm0918_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "rookidee"
+      ]
+    },
+    {
+      "species": "corvisquire",
+      "national_dex_number": 822,
+      "resource_id": "pm0919_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "rookidee"
+      ]
+    },
+    {
+      "species": "rolycoly",
+      "national_dex_number": 837,
+      "resource_id": "pm0933_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "rolycoly"
+      ]
+    },
+    {
+      "species": "carkol",
+      "national_dex_number": 838,
+      "resource_id": "pm0934_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "rolycoly"
+      ]
+    },
+    {
+      "species": "coalossal",
+      "national_dex_number": 839,
+      "resource_id": "pm0935_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "rolycoly"
+      ]
+    },
+    {
+      "species": "applin",
+      "national_dex_number": 840,
+      "resource_id": "pm0966_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "applin"
+      ]
+    },
+    {
+      "species": "hatenna",
+      "national_dex_number": 856,
+      "resource_id": "pm0969_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "hatenna"
+      ]
+    },
+    {
+      "species": "hattrem",
+      "national_dex_number": 857,
+      "resource_id": "pm0970_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "hatenna"
+      ]
+    },
+    {
+      "species": "hatterene",
+      "national_dex_number": 858,
+      "resource_id": "pm0971_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "hatenna"
+      ]
+    },
+    {
+      "species": "impidimp",
+      "national_dex_number": 859,
+      "resource_id": "pm0957_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "impidimp"
+      ]
+    },
+    {
+      "species": "morgrem",
+      "national_dex_number": 860,
+      "resource_id": "pm0958_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "impidimp"
+      ]
+    },
+    {
+      "species": "grimmsnarl",
+      "national_dex_number": 861,
+      "resource_id": "pm0959_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "impidimp"
+      ]
+    },
+    {
+      "species": "dreepy",
+      "national_dex_number": 885,
+      "resource_id": "pm0976_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "dreepy"
+      ]
+    },
+    {
+      "species": "drakloak",
+      "national_dex_number": 886,
+      "resource_id": "pm0977_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "dreepy"
+      ]
+    },
+    {
+      "species": "dragapult",
+      "national_dex_number": 887,
+      "resource_id": "pm0978_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "dreepy"
+      ]
+    },
+    {
+      "species": "ursaluna",
+      "national_dex_number": 901,
+      "resource_id": "pm1007_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "teddiursa"
+      ]
+    },
+    {
+      "species": "sprigatito",
+      "national_dex_number": 906,
+      "resource_id": "pm1010_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "sprigatito"
+      ]
+    },
+    {
+      "species": "floragato",
+      "national_dex_number": 907,
+      "resource_id": "pm1011_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "sprigatito"
+      ]
+    },
+    {
+      "species": "meowscarada",
+      "national_dex_number": 908,
+      "resource_id": "pm1012_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "sprigatito"
+      ]
+    },
+    {
+      "species": "fuecoco",
+      "national_dex_number": 909,
+      "resource_id": "pm1013_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "fuecoco"
+      ]
+    },
+    {
+      "species": "crocalor",
+      "national_dex_number": 910,
+      "resource_id": "pm1014_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "fuecoco"
+      ]
+    },
+    {
+      "species": "skeledirge",
+      "national_dex_number": 911,
+      "resource_id": "pm1015_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "fuecoco"
+      ]
+    },
+    {
+      "species": "quaxly",
+      "national_dex_number": 912,
+      "resource_id": "pm1016_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "quaxly"
+      ]
+    },
+    {
+      "species": "quaxwell",
+      "national_dex_number": 913,
+      "resource_id": "pm1017_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "quaxly"
+      ]
+    },
+    {
+      "species": "quaquaval",
+      "national_dex_number": 914,
+      "resource_id": "pm1018_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "quaxly"
+      ]
+    },
+    {
+      "species": "pawmi",
+      "national_dex_number": 921,
+      "resource_id": "pm1058_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "pawmi"
+      ]
+    },
+    {
+      "species": "pawmo",
+      "national_dex_number": 922,
+      "resource_id": "pm1059_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "pawmi"
+      ]
+    },
+    {
+      "species": "pawmot",
+      "national_dex_number": 923,
+      "resource_id": "pm1060_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "pawmi"
+      ]
+    },
+    {
+      "species": "smoliv",
+      "national_dex_number": 928,
+      "resource_id": "pm1039_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "smoliv"
+      ]
+    },
+    {
+      "species": "dolliv",
+      "national_dex_number": 929,
+      "resource_id": "pm1040_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "smoliv"
+      ]
+    },
+    {
+      "species": "arboliva",
+      "national_dex_number": 930,
+      "resource_id": "pm1041_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "smoliv"
+      ]
+    },
+    {
+      "species": "nacli",
+      "national_dex_number": 932,
+      "resource_id": "pm1067_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "nacli"
+      ]
+    },
+    {
+      "species": "naclstack",
+      "national_dex_number": 933,
+      "resource_id": "pm1068_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "nacli"
+      ]
+    },
+    {
+      "species": "garganacl",
+      "national_dex_number": 934,
+      "resource_id": "pm1069_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "nacli"
+      ]
+    },
+    {
+      "species": "tinkatink",
+      "national_dex_number": 957,
+      "resource_id": "pm1104_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "tinkatink"
+      ]
+    },
+    {
+      "species": "tinkatuff",
+      "national_dex_number": 958,
+      "resource_id": "pm1105_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "tinkatink"
+      ]
+    },
+    {
+      "species": "tinkaton",
+      "national_dex_number": 959,
+      "resource_id": "pm1106_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "tinkatink"
+      ]
+    },
+    {
+      "species": "annihilape",
+      "national_dex_number": 979,
+      "resource_id": "pm1114_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "mankey"
+      ]
+    },
+    {
+      "species": "kingambit",
+      "national_dex_number": 983,
+      "resource_id": "pm1112_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "pawniard"
+      ]
+    },
+    {
+      "species": "frigibax",
+      "national_dex_number": 996,
+      "resource_id": "pm1053_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "frigibax"
+      ]
+    },
+    {
+      "species": "arctibax",
+      "national_dex_number": 997,
+      "resource_id": "pm1054_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "frigibax"
+      ]
+    },
+    {
+      "species": "baxcalibur",
+      "national_dex_number": 998,
+      "resource_id": "pm1055_00_00",
+      "priority_group": "starter_evolution",
+      "starter_line_roots": [
+        "frigibax"
+      ]
+    },
+    {
+      "species": "venomoth",
+      "national_dex_number": 49,
+      "resource_id": "pm0049_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "dugtrio",
+      "national_dex_number": 51,
+      "resource_id": "pm0051_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "meowth",
+      "national_dex_number": 52,
+      "resource_id": "pm0052_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "growlithe",
+      "national_dex_number": 58,
+      "resource_id": "pm0058_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "slowbro",
+      "national_dex_number": 80,
+      "resource_id": "pm0080_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "grimer",
+      "national_dex_number": 88,
+      "resource_id": "pm0088_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "muk",
+      "national_dex_number": 89,
+      "resource_id": "pm0089_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "cloyster",
+      "national_dex_number": 91,
+      "resource_id": "pm0091_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "hypno",
+      "national_dex_number": 97,
+      "resource_id": "pm0097_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "magikarp",
+      "national_dex_number": 129,
+      "resource_id": "pm0129_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "ditto",
+      "national_dex_number": 132,
+      "resource_id": "pm0132_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "eevee",
+      "national_dex_number": 133,
+      "resource_id": "pm0133_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "jolteon",
+      "national_dex_number": 135,
+      "resource_id": "pm0135_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "moltres",
+      "national_dex_number": 146,
+      "resource_id": "pm0146_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sunkern",
+      "national_dex_number": 191,
+      "resource_id": "pm0191_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sunflora",
+      "national_dex_number": 192,
+      "resource_id": "pm0192_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "murkrow",
+      "national_dex_number": 198,
+      "resource_id": "pm0198_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "girafarig",
+      "national_dex_number": 203,
+      "resource_id": "pm0203_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "pineco",
+      "national_dex_number": 204,
+      "resource_id": "pm0204_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "forretress",
+      "national_dex_number": 205,
+      "resource_id": "pm0205_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sneasel",
+      "national_dex_number": 215,
+      "resource_id": "pm0215_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "wingull",
+      "national_dex_number": 278,
+      "resource_id": "pm0278_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "pelipper",
+      "national_dex_number": 279,
+      "resource_id": "pm0279_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sableye",
+      "national_dex_number": 302,
+      "resource_id": "pm0302_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "numel",
+      "national_dex_number": 322,
+      "resource_id": "pm0322_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "torkoal",
+      "national_dex_number": 324,
+      "resource_id": "pm0324_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "swablu",
+      "national_dex_number": 333,
+      "resource_id": "pm0333_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "altaria",
+      "national_dex_number": 334,
+      "resource_id": "pm0334_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "glalie",
+      "national_dex_number": 362,
+      "resource_id": "pm0362_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "luvdisc",
+      "national_dex_number": 370,
+      "resource_id": "pm0370_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "kyogre",
+      "national_dex_number": 382,
+      "resource_id": "pm0382_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "rayquaza",
+      "national_dex_number": 384,
+      "resource_id": "pm0384_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "buizel",
+      "national_dex_number": 418,
+      "resource_id": "pm0418_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "shellos",
+      "national_dex_number": 422,
+      "resource_id": "pm0422_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "gastrodon",
+      "national_dex_number": 423,
+      "resource_id": "pm0423_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "honchkrow",
+      "national_dex_number": 430,
+      "resource_id": "pm0430_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "spiritomb",
+      "national_dex_number": 442,
+      "resource_id": "pm0442_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "toxicroak",
+      "national_dex_number": 454,
+      "resource_id": "pm0454_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "weavile",
+      "national_dex_number": 461,
+      "resource_id": "pm0461_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "froslass",
+      "national_dex_number": 478,
+      "resource_id": "pm0478_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "rotom",
+      "national_dex_number": 479,
+      "resource_id": "pm0479_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "dialga",
+      "national_dex_number": 483,
+      "resource_id": "pm0483_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "giratina",
+      "national_dex_number": 487,
+      "resource_id": "pm0487_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "cresselia",
+      "national_dex_number": 488,
+      "resource_id": "pm0488_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "arceus",
+      "national_dex_number": 493,
+      "resource_id": "pm0493_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "basculin",
+      "national_dex_number": 550,
+      "resource_id": "pm0550_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "pyroar",
+      "national_dex_number": 668,
+      "resource_id": "pm0705_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "magearna",
+      "national_dex_number": 801,
+      "resource_id": "pm0882_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "skwovet",
+      "national_dex_number": 819,
+      "resource_id": "pm0909_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "greedent",
+      "national_dex_number": 820,
+      "resource_id": "pm0910_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "chewtle",
+      "national_dex_number": 833,
+      "resource_id": "pm0903_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "drednaw",
+      "national_dex_number": 834,
+      "resource_id": "pm0904_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "flapple",
+      "national_dex_number": 841,
+      "resource_id": "pm0967_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "appletun",
+      "national_dex_number": 842,
+      "resource_id": "pm0968_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "silicobra",
+      "national_dex_number": 843,
+      "resource_id": "pm0936_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sandaconda",
+      "national_dex_number": 844,
+      "resource_id": "pm0937_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "arrokuda",
+      "national_dex_number": 846,
+      "resource_id": "pm0913_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "barraskewda",
+      "national_dex_number": 847,
+      "resource_id": "pm0914_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "toxel",
+      "national_dex_number": 848,
+      "resource_id": "pm0921_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "toxtricity",
+      "national_dex_number": 849,
+      "resource_id": "pm0922_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sinistea",
+      "national_dex_number": 854,
+      "resource_id": "pm0972_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "polteageist",
+      "national_dex_number": 855,
+      "resource_id": "pm0973_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "perrserker",
+      "national_dex_number": 863,
+      "resource_id": "pm0943_00_31",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "falinks",
+      "national_dex_number": 870,
+      "resource_id": "pm0923_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "pincurchin",
+      "national_dex_number": 871,
+      "resource_id": "pm0944_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "snom",
+      "national_dex_number": 872,
+      "resource_id": "pm0945_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "frosmoth",
+      "national_dex_number": 873,
+      "resource_id": "pm0946_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "stonjourner",
+      "national_dex_number": 874,
+      "resource_id": "pm0974_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "eiscue",
+      "national_dex_number": 875,
+      "resource_id": "pm0975_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "indeedee",
+      "national_dex_number": 876,
+      "resource_id": "pm0942_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "cufant",
+      "national_dex_number": 878,
+      "resource_id": "pm0926_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "copperajah",
+      "national_dex_number": 879,
+      "resource_id": "pm0927_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "zacian",
+      "national_dex_number": 888,
+      "resource_id": "pm0938_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "zamazenta",
+      "national_dex_number": 889,
+      "resource_id": "pm0939_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "eternatus",
+      "national_dex_number": 890,
+      "resource_id": "pm0940_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "kubfu",
+      "national_dex_number": 891,
+      "resource_id": "pm0982_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "urshifu",
+      "national_dex_number": 892,
+      "resource_id": "pm0983_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "zarude",
+      "national_dex_number": 893,
+      "resource_id": "pm0988_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "regieleki",
+      "national_dex_number": 894,
+      "resource_id": "pm0989_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "regidrago",
+      "national_dex_number": 895,
+      "resource_id": "pm0990_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "glastrier",
+      "national_dex_number": 896,
+      "resource_id": "pm0984_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "spectrier",
+      "national_dex_number": 897,
+      "resource_id": "pm0985_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "calyrex",
+      "national_dex_number": 898,
+      "resource_id": "pm0986_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "wyrdeer",
+      "national_dex_number": 899,
+      "resource_id": "pm1001_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "kleavor",
+      "national_dex_number": 900,
+      "resource_id": "pm1002_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "basculegion",
+      "national_dex_number": 902,
+      "resource_id": "pm1006_11_41",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sneasler",
+      "national_dex_number": 903,
+      "resource_id": "pm1003_00_41",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "overqwil",
+      "national_dex_number": 904,
+      "resource_id": "pm1005_00_41",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "enamorus",
+      "national_dex_number": 905,
+      "resource_id": "pm1004_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "lechonk",
+      "national_dex_number": 915,
+      "resource_id": "pm1019_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "oinkologne",
+      "national_dex_number": 916,
+      "resource_id": "pm1020_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "tarountula",
+      "national_dex_number": 917,
+      "resource_id": "pm1022_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "spidops",
+      "national_dex_number": 918,
+      "resource_id": "pm1023_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "nymble",
+      "national_dex_number": 919,
+      "resource_id": "pm1024_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "lokix",
+      "national_dex_number": 920,
+      "resource_id": "pm1025_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "tandemaus",
+      "national_dex_number": 924,
+      "resource_id": "pm1049_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "maushold",
+      "national_dex_number": 925,
+      "resource_id": "pm1050_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "fidough",
+      "national_dex_number": 926,
+      "resource_id": "pm1074_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "dachsbun",
+      "national_dex_number": 927,
+      "resource_id": "pm1075_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "squawkabilly",
+      "national_dex_number": 931,
+      "resource_id": "pm1064_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "charcadet",
+      "national_dex_number": 935,
+      "resource_id": "pm1107_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "armarouge",
+      "national_dex_number": 936,
+      "resource_id": "pm1108_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "ceruledge",
+      "national_dex_number": 937,
+      "resource_id": "pm1109_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "tadbulb",
+      "national_dex_number": 938,
+      "resource_id": "pm1044_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "bellibolt",
+      "national_dex_number": 939,
+      "resource_id": "pm1045_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "wattrel",
+      "national_dex_number": 940,
+      "resource_id": "pm1061_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "kilowattrel",
+      "national_dex_number": 941,
+      "resource_id": "pm1062_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "maschiff",
+      "national_dex_number": 942,
+      "resource_id": "pm1076_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "mabosstiff",
+      "national_dex_number": 943,
+      "resource_id": "pm1077_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "shroodle",
+      "national_dex_number": 944,
+      "resource_id": "pm1072_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "grafaiai",
+      "national_dex_number": 945,
+      "resource_id": "pm1073_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "bramblin",
+      "national_dex_number": 946,
+      "resource_id": "pm1078_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "brambleghast",
+      "national_dex_number": 947,
+      "resource_id": "pm1079_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "toedscool",
+      "national_dex_number": 948,
+      "resource_id": "pm1110_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "toedscruel",
+      "national_dex_number": 949,
+      "resource_id": "pm1111_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "klawf",
+      "national_dex_number": 950,
+      "resource_id": "pm1066_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "capsakid",
+      "national_dex_number": 951,
+      "resource_id": "pm1042_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "scovillain",
+      "national_dex_number": 952,
+      "resource_id": "pm1043_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "rellor",
+      "national_dex_number": 953,
+      "resource_id": "pm1026_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "rabsca",
+      "national_dex_number": 954,
+      "resource_id": "pm1027_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "flittle",
+      "national_dex_number": 955,
+      "resource_id": "pm1030_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "espathra",
+      "national_dex_number": 956,
+      "resource_id": "pm1031_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "wiglett",
+      "national_dex_number": 960,
+      "resource_id": "pm1033_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "wugtrio",
+      "national_dex_number": 961,
+      "resource_id": "pm1034_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "bombirdier",
+      "national_dex_number": 962,
+      "resource_id": "pm1063_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "finizen",
+      "national_dex_number": 963,
+      "resource_id": "pm1037_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "palafin",
+      "national_dex_number": 964,
+      "resource_id": "pm1038_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "varoom",
+      "national_dex_number": 965,
+      "resource_id": "pm1046_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "revavroom",
+      "national_dex_number": 966,
+      "resource_id": "pm1047_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "cyclizar",
+      "national_dex_number": 967,
+      "resource_id": "pm1057_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "glimmet",
+      "national_dex_number": 969,
+      "resource_id": "pm1070_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "glimmora",
+      "national_dex_number": 970,
+      "resource_id": "pm1071_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "greavard",
+      "national_dex_number": 971,
+      "resource_id": "pm1028_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "houndstone",
+      "national_dex_number": 972,
+      "resource_id": "pm1029_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "flamigo",
+      "national_dex_number": 973,
+      "resource_id": "pm1065_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "cetoddle",
+      "national_dex_number": 974,
+      "resource_id": "pm1051_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "cetitan",
+      "national_dex_number": 975,
+      "resource_id": "pm1052_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "veluza",
+      "national_dex_number": 976,
+      "resource_id": "pm1036_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "tatsugiri",
+      "national_dex_number": 978,
+      "resource_id": "pm1056_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "clodsire",
+      "national_dex_number": 980,
+      "resource_id": "pm1113_00_51",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "farigiraf",
+      "national_dex_number": 981,
+      "resource_id": "pm1032_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "dudunsparce",
+      "national_dex_number": 982,
+      "resource_id": "pm1021_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "great-tusk",
+      "national_dex_number": 984,
+      "resource_id": "pm1082_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "scream-tail",
+      "national_dex_number": 985,
+      "resource_id": "pm1086_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "brute-bonnet",
+      "national_dex_number": 986,
+      "resource_id": "pm1083_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "flutter-mane",
+      "national_dex_number": 987,
+      "resource_id": "pm1087_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "slither-wing",
+      "national_dex_number": 988,
+      "resource_id": "pm1088_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "sandy-shocks",
+      "national_dex_number": 989,
+      "resource_id": "pm1085_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-treads",
+      "national_dex_number": 990,
+      "resource_id": "pm1090_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-bundle",
+      "national_dex_number": 991,
+      "resource_id": "pm1096_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-hands",
+      "national_dex_number": 992,
+      "resource_id": "pm1093_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-jugulis",
+      "national_dex_number": 993,
+      "resource_id": "pm1094_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-moth",
+      "national_dex_number": 994,
+      "resource_id": "pm1092_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-thorns",
+      "national_dex_number": 995,
+      "resource_id": "pm1095_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "gimmighoul",
+      "national_dex_number": 999,
+      "resource_id": "pm1080_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "gholdengo",
+      "national_dex_number": 1000,
+      "resource_id": "pm1081_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "wo-chien",
+      "national_dex_number": 1001,
+      "resource_id": "pm1100_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "chien-pao",
+      "national_dex_number": 1002,
+      "resource_id": "pm1099_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "ting-lu",
+      "national_dex_number": 1003,
+      "resource_id": "pm1098_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "chi-yu",
+      "national_dex_number": 1004,
+      "resource_id": "pm1101_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-valiant",
+      "national_dex_number": 1006,
+      "resource_id": "pm1097_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "koraidon",
+      "national_dex_number": 1007,
+      "resource_id": "pm1102_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "miraidon",
+      "national_dex_number": 1008,
+      "resource_id": "pm1103_11_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "walking-wake",
+      "national_dex_number": 1009,
+      "resource_id": "pm1084_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    },
+    {
+      "species": "iron-leaves",
+      "national_dex_number": 1010,
+      "resource_id": "pm1091_00_00",
+      "priority_group": "national_dex",
+      "starter_line_roots": []
+    }
+  ]
+}
