@@ -282,6 +282,47 @@ func try_wild_step(encounter_type: String) -> Dictionary:
 		"status": result.get("body", {}).get("status", "")}
 
 
+func try_dev_wild_spawn(spawn: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"handled": false}
+	var known_party := not party.is_empty()
+	var state_result := await refresh()
+	if not state_result.get("success", false):
+		if not known_party and state_result.get("code") == "coop_gameplay_disabled":
+			return {"handled": false}
+		return {"handled": true, "success": false, "code": "coop_state_unavailable"}
+	if party.is_empty():
+		return {"handled": false}
+	if not _partner_is_ready_for_coop():
+		return {"handled": true, "success": false, "code": "coop_member_unavailable"}
+	if not activity.is_empty():
+		if pending_start.get("kind") == "dev-wild" and activity.get("reservationId") == pending_start.get("reservationId"):
+			var existing_battle_id := str(activity.get("battleId", ""))
+			pending_start = {}
+			return {"handled": true, "success": true, "battleId": existing_battle_id}
+		return {"handled": true, "success": false, "code": "coop_activity_already_reserved"}
+	var world := GameState.get_world()
+	if world == null:
+		return {"handled": true, "success": false, "code": "coop_world_unavailable"}
+	var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
+	if not position_result.get("success", false):
+		return {"handled": true, "success": false, "code": "coop_position_unavailable"}
+	if pending_start.is_empty():
+		pending_start = {"reservationId": new_id(), "kind": "dev-wild", "spawn": spawn.duplicate(true)}
+	elif pending_start.get("kind") != "dev-wild" or pending_start.get("spawn") != spawn:
+		return {"handled": true, "success": false, "code": "coop_start_pending"}
+	var key := str(pending_start["reservationId"])
+	var result := await _request("dev-wild", {"reservationId": key, "spawn": spawn})
+	await refresh()
+	if result.get("success", false) or activity.get("reservationId") == key:
+		pending_start = {}
+		_poll_after = 0.0
+		return {"handled": true, "success": true, "battleId": "coop-" + key}
+	if int(result.get("status", 0)) in [400, 401, 403, 404, 409, 422] or result.get("code") == "coop_wild_gameplay_disabled":
+		pending_start = {}
+	return {"handled": true, "success": false, "code": result.get("code", "coop_start_pending")}
+
+
 func _partner_is_on_another_map() -> bool:
 	var map_ids: Dictionary = party.get("memberMapIds", {})
 	var own_id := str(int(AuthService.current_user.get("id", 0)))

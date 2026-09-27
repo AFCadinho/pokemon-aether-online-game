@@ -40731,6 +40731,15 @@ func _on_coop_invitation_failed(message: String) -> void:
 	add_system_message("Adventure Party invitation failed: %s" % message)
 
 func _on_coop_request_failed(message: String) -> void:
+	if message.begins_with("dev_wild:"):
+		var code := message.trim_prefix("dev_wild:")
+		var detail := "Could not start the shared encounter (%s)." % code
+		if code == "coop_member_unavailable":
+			detail = "Both Adventure Party members must be online on the same map."
+		elif code == "coop_shared_level_cap_exceeded":
+			detail = "Both parties must respect the shared level cap."
+		add_system_message(detail)
+		return
 	var key := ""
 	match message:
 		"coop_partner_too_far":
