@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cerulean Cave 1F, 2F en B1F gebruiken nu hun Tiled-visuals met wederzijdse trapverbindingen en staffteleports. De Power Plant is via Route 10 bereikbaar; de indoor scenes gebruiken de zichtmaskers voor hun vloer.
+
 - De vrouwelijke Aether Ronin-top heeft gesloten mouwnaden in de zijwaartse loopframes, zodat daar geen lichte huidpuntjes doorheen komen.
 
 - De Route 5-daycare heeft een compact interieur met ontvangstbalie achterin, rode loper, zithoek en een Pokémon-PC.

@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_vewn0"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_vewn0"]
 
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_visibility_mask"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
 
@@ -120,6 +122,7 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_gf4ee")
 
+
 [node name="UndergroundPathTunnel" type="Node2D" unique_id=1618441615]
 script = ExtResource("2_metadata")
 map_id = "kanto_underground_path_tunnel"
@@ -197,6 +200,28 @@ visible = false
 [node name="BlockDown" type="TileMapLayer" parent="Tiles/BlockDirection" unique_id=1784057989]
 tile_map_data = PackedByteArray("AAAJAFYAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_f21oy")
+
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("floor_visibility_mask")
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 512, 3072)
+}
+floor_display_names = {
+&"ground_floor": "Underground Path"
+}
+active_floor = &"ground_floor"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
 
 [connection signal="body_entered" from="Exits/ToRoute5Entrance" to="Exits/ToRoute5Entrance" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute6Entrance" to="Exits/ToRoute6Entrance" method="_on_body_entered"]

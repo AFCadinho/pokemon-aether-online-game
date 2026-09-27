@@ -196,6 +196,140 @@
           "safe": true
         }
       }
+    },
+    "kanto_cerulean_cave": {
+      "points": {
+        "from_cerulean": {
+          "facingDirection": "down",
+          "id": "city_entrance",
+          "label": "Cerulean City Entrance",
+          "safe": true
+        },
+        "from_2fa": {
+          "facingDirection": "down",
+          "id": "2f_stair_a",
+          "label": "2F — Stair A",
+          "safe": true
+        },
+        "from_2fb": {
+          "facingDirection": "down",
+          "id": "2f_stair_b",
+          "label": "2F — Stair B",
+          "safe": true
+        },
+        "from_2fc": {
+          "facingDirection": "down",
+          "id": "2f_stair_c",
+          "label": "2F — Stair C",
+          "safe": true
+        },
+        "from_2fd": {
+          "facingDirection": "down",
+          "id": "2f_stair_d",
+          "label": "2F — Stair D",
+          "safe": true
+        },
+        "from_2fe": {
+          "facingDirection": "down",
+          "id": "2f_stair_e",
+          "label": "2F — Stair E",
+          "safe": true
+        },
+        "from_2ff": {
+          "facingDirection": "down",
+          "id": "2f_stair_f",
+          "label": "2F — Stair F",
+          "safe": true
+        },
+        "from_b_1fg": {
+          "facingDirection": "down",
+          "id": "b1f_stair_g",
+          "label": "B1F — Stair G",
+          "safe": true
+        },
+        "from_b_1fh": {
+          "facingDirection": "down",
+          "id": "b1f_stair_h",
+          "label": "B1F — Stair H",
+          "safe": true
+        }
+      }
+    },
+    "kanto_cerulean_cave_2f": {
+      "points": {
+        "from_1fa": {
+          "facingDirection": "up",
+          "id": "1f_stair_a",
+          "label": "1F — Stair A",
+          "safe": true
+        },
+        "from_1fb": {
+          "facingDirection": "up",
+          "id": "1f_stair_b",
+          "label": "1F — Stair B",
+          "safe": true
+        },
+        "from_1fc": {
+          "facingDirection": "up",
+          "id": "1f_stair_c",
+          "label": "1F — Stair C",
+          "safe": true
+        },
+        "from_1fd": {
+          "facingDirection": "up",
+          "id": "1f_stair_d",
+          "label": "1F — Stair D",
+          "safe": true
+        },
+        "from_1fe": {
+          "facingDirection": "up",
+          "id": "1f_stair_e",
+          "label": "1F — Stair E",
+          "safe": true
+        },
+        "from_1ff": {
+          "facingDirection": "up",
+          "id": "1f_stair_f",
+          "label": "1F — Stair F",
+          "safe": true
+        }
+      }
+    },
+    "kanto_cerulean_cave_b1f": {
+      "points": {
+        "from_1fg": {
+          "facingDirection": "down",
+          "id": "1f_stair_g",
+          "label": "1F — Stair G",
+          "safe": true
+        },
+        "from_1fh": {
+          "facingDirection": "down",
+          "id": "1f_stair_h",
+          "label": "1F — Stair H",
+          "safe": true
+        }
+      }
+    },
+    "kanto_power_plant": {
+      "points": {
+        "from_route_10": {
+          "facingDirection": "up",
+          "id": "route_10_entrance",
+          "label": "Route 10 Entrance",
+          "safe": true
+        }
+      }
+    },
+    "kanto_route_10": {
+      "points": {
+        "from_power_plant": {
+          "facingDirection": "down",
+          "id": "power_plant_entrance",
+          "label": "Power Plant Entrance",
+          "safe": true
+        }
+      }
     }
   }
 }
