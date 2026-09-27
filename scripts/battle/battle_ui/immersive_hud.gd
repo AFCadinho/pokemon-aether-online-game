@@ -217,22 +217,17 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 		if source_bar != null and target_bar != null:
 			target_bar.value = source_bar.value
 		card.reset_size()
-	var card_width := 0.0
-	for controller: String in COOP_SLOTS:
-		card_width += (coop_huds[controller] as Control).size.x
-	var gap := 8.0
-	var team_gap := 28.0
-	var available_width := maxf(1.0, area.x - 32.0 - gap * 2.0 - team_gap)
-	var row_scale := minf(0.5, available_width / maxf(1.0, card_width))
-	var total_width := card_width * row_scale + gap * 2.0 + team_gap
-	var row_x := (area.x - total_width) * 0.5
-	# Keep the four co-op HP cards in one compact rail, clear of projected models.
-	var row_y := 84.0
+	var allied_sizes: Array[Vector2] = [coop_huds["p1"].size, coop_huds["p3"].size]
+	var opponent_sizes: Array[Vector2] = [coop_huds["p2"].size, coop_huds["p4"].size]
+	var layout := plan_3d_hud_layout(area, allied_sizes, opponent_sizes)
 	for index in COOP_SLOTS.size():
 		var controller: String = COOP_SLOTS[index]
 		var card: Control = coop_huds[controller]
-		card.scale = Vector2.ONE * row_scale
-		card.position = Vector2(row_x, row_y)
+		var allied := index < 2
+		var group_index := index if allied else index - 2
+		var positions: Array[Vector2] = layout["allies"] if allied else layout["opponents"]
+		card.scale = Vector2.ONE * float(layout["ally_scale"] if allied else layout["opponent_scale"])
+		card.position = positions[group_index]
 		if presenter.handles(controller) and not card.get_meta("coop_source_data", {}).is_empty():
 			card.show()
 		else:
@@ -240,11 +235,58 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 		var extent := card.size * card.scale
 		var stat_panel: Control = battle.coop_presenter._stat_overlays.get(controller) as Control
 		if is_instance_valid(stat_panel) and stat_panel.visible:
-			stat_panel.position = Vector2(row_x + (extent.x - stat_panel.size.x) * 0.5, row_y + extent.y + 4.0)
-		row_x += extent.x + gap + (team_gap if index == 1 else 0.0)
+			stat_panel.position = Vector2(card.position.x + (extent.x - stat_panel.size.x) * 0.5, card.position.y + extent.y + 4.0)
 	battle.player_hud_panel.hide()
 	battle.enemy_hud_panel.hide()
 	coop_huds_active = true
+
+static func plan_3d_hud_layout(area: Vector2, allied_sizes: Array[Vector2], opponent_sizes: Array[Vector2]) -> Dictionary:
+	var ally_positions: Array[Vector2] = []
+	var opponent_positions: Array[Vector2] = []
+	var ally_width := 0.0
+	var opponent_width := 0.0
+	for dimensions: Vector2 in allied_sizes:
+		ally_width += dimensions.x
+	for dimensions: Vector2 in opponent_sizes:
+		opponent_width += dimensions.x
+	var gap := 8.0
+	var top := 84.0
+	if opponent_sizes.size() >= 3:
+		# A horde gets five compact opponent cards along the top. Keep the
+		# player's card on the left below that row, clear of the battlefield.
+		var margin := clampf(area.x * 0.09, 96.0, 128.0)
+		var opponent_gaps := gap * maxi(0, opponent_sizes.size() - 1)
+		var opponent_scale := minf(0.5, maxf(1.0, area.x - margin * 2.0 - opponent_gaps) / maxf(1.0, opponent_width))
+		var opponent_row_width := opponent_width * opponent_scale + opponent_gaps
+		var opponent_x := (area.x - opponent_row_width) * 0.5
+		var opponent_height := 0.0
+		for dimensions: Vector2 in opponent_sizes:
+			opponent_positions.append(Vector2(opponent_x, top))
+			opponent_x += dimensions.x * opponent_scale + gap
+			opponent_height = maxf(opponent_height, dimensions.y * opponent_scale)
+		var ally_gaps := gap * maxi(0, allied_sizes.size() - 1)
+		var ally_scale := minf(0.5, maxf(1.0, area.x - margin * 2.0 - ally_gaps) / maxf(1.0, ally_width))
+		var ally_x := margin
+		for dimensions: Vector2 in allied_sizes:
+			ally_positions.append(Vector2(ally_x, top + opponent_height + 10.0))
+			ally_x += dimensions.x * ally_scale + gap
+		return {"allies": ally_positions, "opponents": opponent_positions,
+			"ally_scale": ally_scale, "opponent_scale": opponent_scale}
+	var count := allied_sizes.size() + opponent_sizes.size()
+	var team_gap := 28.0 if not allied_sizes.is_empty() and not opponent_sizes.is_empty() else 0.0
+	var gaps := gap * maxi(0, count - 1) + team_gap
+	var scale := minf(0.5, maxf(1.0, area.x - 32.0 - gaps) / maxf(1.0, ally_width + opponent_width))
+	var row_width := (ally_width + opponent_width) * scale + gaps
+	var row_x := (area.x - row_width) * 0.5
+	for dimensions: Vector2 in allied_sizes:
+		ally_positions.append(Vector2(row_x, top))
+		row_x += dimensions.x * scale + gap
+	row_x += team_gap
+	for dimensions: Vector2 in opponent_sizes:
+		opponent_positions.append(Vector2(row_x, top))
+		row_x += dimensions.x * scale + gap
+	return {"allies": ally_positions, "opponents": opponent_positions,
+		"ally_scale": scale, "opponent_scale": scale}
 
 func _place(control: Control, point: Vector2, dimensions: Vector2, factor: float) -> void:
 	control.set_anchors_preset(Control.PRESET_TOP_LEFT)

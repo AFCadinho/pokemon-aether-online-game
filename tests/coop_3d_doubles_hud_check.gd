@@ -1,5 +1,6 @@
 extends SceneTree
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
+const ImmersiveHud = preload("res://scripts/battle/battle_ui/immersive_hud.gd")
 
 class PresenterFixture:
 	extends Node
@@ -85,6 +86,22 @@ func _run() -> void:
 	var opponent_center: Vector3 = (model._position(1) + model._position(3)) * 0.5
 	assert((ally_center - opponent_center).dot(view) > 5.39,
 		"Teams must occupy separate rows along the camera depth")
+	var horde_size := Vector2(460, 100)
+	var horde_allies: Array[Vector2] = [horde_size]
+	var horde_opponents: Array[Vector2] = [horde_size, horde_size, horde_size, horde_size, horde_size]
+	var horde_layout: Dictionary = ImmersiveHud.plan_3d_hud_layout(Vector2(1280, 900),
+		horde_allies, horde_opponents)
+	var player_rect := Rect2(horde_layout["allies"][0], horde_size * float(horde_layout["ally_scale"]))
+	assert(player_rect.end.y < 225.0, "Horde player HP card covers the upper battlefield")
+	var horde_cards: Array[Rect2] = []
+	for position: Vector2 in horde_layout["opponents"]:
+		var rect := Rect2(position, horde_size * float(horde_layout["opponent_scale"]))
+		assert(rect.end.y < player_rect.position.y, "Horde HP rows overlap")
+		assert(rect.position.x >= 96.0 and rect.end.x <= 1184.0, "Horde HP card leaves the status rail")
+		for previous: Rect2 in horde_cards:
+			assert(not rect.intersects(previous), "Horde opponents' HP cards overlap")
+		horde_cards.append(rect)
+	assert(horde_cards.size() == 5, "Horde layout must place five wild Pokémon")
 	var normal_bounds: Dictionary = presenter.bounds.duplicate(true)
 	for controller: String in presenter.bounds:
 		presenter.bounds[controller] = Rect2(Vector2(560, 300), Vector2(140, 160))
@@ -113,7 +130,7 @@ func _run() -> void:
 	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "2D HUD was not restored")
 	for card: Control in hud.coop_huds.values():
 		assert(not card.visible, "3D health card survived the 2D fallback")
-	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, two lanes, 2D fallback")
+	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, five-opponent layout, 2D fallback")
 	host.release()
 	host.free()
 	quit()
