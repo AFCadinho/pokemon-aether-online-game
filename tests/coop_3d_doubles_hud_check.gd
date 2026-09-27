@@ -1,4 +1,5 @@
 extends SceneTree
+const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 
 class PresenterFixture:
 	extends Node
@@ -71,11 +72,19 @@ func _run() -> void:
 	assert(hud.coop_huds.p1.active_info_rows[0].get_meta("battle_hud_data").current_hp == 130)
 	var model: Node = stage.get_node("ExperimentalBattle3D")
 	var pair: Vector3 = model._position(2) - model._position(0)
-	var axis: Vector3 = model._position(1) - model._position(0)
-	assert(pair.x >= 4.5 and is_equal_approx(pair.z, 0.0), "Allies must stand side by side at the same depth")
 	var opponent_pair: Vector3 = model._position(3) - model._position(1)
-	assert(opponent_pair.x >= 4.5 and is_equal_approx(opponent_pair.z, 0.0), "Opponents must stand side by side at the same depth")
-	assert(absf(pair.cross(axis).y) > 12.0, "Double partners still follow the singles diagonal")
+	var view: Vector3 = ArenaCatalog.camera_home(model.arena_id) - ArenaCatalog.camera_target(model.arena_id)
+	view.y = 0.0
+	view = view.normalized()
+	var right := Vector3(view.z, 0.0, -view.x)
+	assert(absf(pair.dot(view)) < 0.01 and pair.dot(right) > 4.49,
+		"Allies must project side by side in the home camera")
+	assert(absf(opponent_pair.dot(view)) < 0.01 and opponent_pair.dot(right) > 4.49,
+		"Opponents must project side by side in the home camera")
+	var ally_center: Vector3 = (model._position(0) + model._position(2)) * 0.5
+	var opponent_center: Vector3 = (model._position(1) + model._position(3)) * 0.5
+	assert((ally_center - opponent_center).dot(view) > 5.39,
+		"Teams must occupy separate rows along the camera depth")
 	var normal_bounds: Dictionary = presenter.bounds.duplicate(true)
 	for controller: String in presenter.bounds:
 		presenter.bounds[controller] = Rect2(Vector2(560, 300), Vector2(140, 160))

@@ -702,9 +702,15 @@ func _build_classic_ground() -> void:
 func _position(index: int) -> Vector3:
 	var point := ArenaCatalog.spawn(index % 2) + ArenaCatalog.battle_origin(arena_id)
 	if double_mode:
-		# Give each team a horizontal row at the same world depth, with room
-		# for large models and a separate health card above each one.
-		point.x += 2.25 if index >= 2 else -2.25
+		# Align each team's row with the home camera. World X alone projects at
+		# different screen heights because that camera views the arena obliquely.
+		var view := ArenaCatalog.camera_home(arena_id) - ArenaCatalog.camera_target(arena_id)
+		view.y = 0.0
+		view = view.normalized()
+		var right := Vector3(view.z, 0.0, -view.x)
+		var team_side := 1.0 if index % 2 == 0 else -1.0
+		var lane_side := -1.0 if index < 2 else 1.0
+		point = ArenaCatalog.battle_origin(arena_id) + view * team_side * 2.7 + right * lane_side * 2.25
 	if is_instance_valid(arena_root):
 		point.y = float(arena_root.get_meta("surface_height",0.0))
 	return point
@@ -1270,7 +1276,8 @@ func _process(delta: float) -> void:
 			if ground_offsets.has(desired[i]):
 				actors[i].position.y += float(ground_offsets[desired[i]].lift)
 			actors[i].scale = Vector3.ONE * float(placements[desired[i]].scale)
-			var direction := _position(1 - (i % 2)) - _position(i)
+			var opponent_index := i + 1 if i % 2 == 0 else i - 1
+			var direction := _position(opponent_index) - _position(i)
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[desired[i]].yaw_degrees))
 			players[i] = _find_player(actors[i])
 			identities[i] = desired[i]
