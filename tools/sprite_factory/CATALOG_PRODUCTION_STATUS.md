@@ -1,5 +1,17 @@
 # Catalog production direction — 2026-09-22
 
+## Batch 04 — initial intake and composition probes (2026-09-27)
+
+The first review-only pipeline pass processed all 226 candidates. Source intake
+produced 201 render configurations; 25 were held for identity or motion-bank
+issues. Of the configured candidates, 200 front/back composition probes passed
+technical QC and await human visual review. Spiritomb's probe has front and back
+clipping errors and remains held. No candidate was approved or activated. The
+manifest uses a uniform provisional 120px composition target; per-species battle
+scale still needs review. Full action builds remain behind the explicit human
+probe-review gate. Local reports and images are retained in
+`game/.worktrees/slot-a/frontend/.tmp/catalog-production-04/`.
+
 ## Batch 04 — 226 candidates, starter lines first (2026-09-27)
 
 The [batch-04 manifest](catalog_production_batch_04.json) contains the 226
