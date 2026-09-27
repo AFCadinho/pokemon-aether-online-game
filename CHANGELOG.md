@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Team Rocket-laarzen volgen nu de voeten in ieder loopframe; de broek dekt de benen volledig. De losse streep achter op de pet is verwijderd en de pet krijgt bij vissen en rijden geen dubbele verschuiving meer.
+
 - Het roze bloemetje naast het pad in Pallet Town heeft weer een complete onderkant; de map is opnieuw geïmporteerd met behoud van de animaties.
 
 - De mannelijke Team Rocket-outfit volgt nu de Gen 4-gruntreferentie met een donkerder uniform, paarsgrijze handschoenen en laarzen, en een losse pet in de outfitbox.
