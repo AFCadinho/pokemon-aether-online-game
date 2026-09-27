@@ -1,5 +1,5 @@
 extends SceneTree
-## Three local real-battle passes of the 14 paired candidates, without image readback.
+## Three local real-battle passes of selected paired candidates, without image readback.
 const Cache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const Candidate = preload("res://tests/phase5_candidate_stage.gd")
 const NAMES := ["charmeleon", "dunsparce", "flaaffy", "houndoom", "houndour", "igglybuff", "mareep", "persian", "phanpy", "skiploom", "slowking", "stantler", "teddiursa", "ursaring"]
@@ -41,10 +41,12 @@ func _ready_pair(species: String, left_shiny: bool, right_shiny: bool) -> void:
 	stage.set_combatant(1, species, right_shiny, true)
 	var identities := [species + ("@shiny" if left_shiny else ""), species + ("@shiny" if right_shiny else "")]
 	var deadline := Time.get_ticks_msec() + 30000
-	while not stage.active or stage.identities != identities or stage._models_pending():
+	while not stage.active or stage.identities.slice(0, 2) != identities or stage._models_pending():
 		assert(Time.get_ticks_msec() < deadline, stage.reason)
 		await process_frame
 	await _frames(3)
+	for index in range(2, stage.identities.size()):
+		assert(stage.identities[index].is_empty())
 	assert(stage.failed_models.is_empty() and stage.packed.size() <= 2)
 	assert(Cache.items.size() <= Cache.MAX_ENTRIES and Cache.source_bytes <= Cache.MAX_SOURCE_BYTES)
 	for identity in identities:
