@@ -47,6 +47,10 @@
             "AetherWayfarer_Male_Trousers": {
               "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/trousers.png",
               "scale": 1.0
+            },
+            "AetherRonin_Male_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -81,6 +85,10 @@
             "AetherWayfarer_Male_Shoes": {
               "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherRonin_Male_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -114,6 +122,10 @@
             },
             "AetherWayfarer_Male_Shirt": {
               "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherRonin_Male_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/shirt.png",
               "scale": 1.0
             }
           }
@@ -225,6 +237,10 @@
             "AetherWayfarer_Female_Trousers": {
               "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/trousers.png",
               "scale": 1.0
+            },
+            "AetherRonin_Female_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -259,6 +275,10 @@
             "AetherWayfarer_Female_Shoes": {
               "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherRonin_Female_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -287,6 +307,10 @@
             },
             "AetherWayfarer_Female_Shirt": {
               "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherRonin_Female_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/shirt.png",
               "scale": 1.0
             }
           }

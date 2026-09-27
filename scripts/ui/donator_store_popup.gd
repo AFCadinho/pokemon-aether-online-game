@@ -453,7 +453,7 @@ const CATALOG: Array[Dictionary] = [
 		"cosmetic_subcategory": "facegear",
 		"appearance_slots": ["facegear"],
 		"preview_part": {"slot": "facegear", "appearance_id": "Adinho_Glasses_Chroma", "tint": "facegear_color"},
-		"genders": ["male"],
+		"genders": ["male", "female"],
 		"badge": "CHROMA",
 	},
 	{
