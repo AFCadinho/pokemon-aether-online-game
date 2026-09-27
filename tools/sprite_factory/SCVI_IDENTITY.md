@@ -43,8 +43,12 @@ The bounded decoder follows the pinned PokeDocs schemas for
 and [TRACR](https://github.com/pkZukan/PokeDocs/blob/de20b28d82d5d8b473905eb2c24e5d8b47841ca8/SV/Flatbuffers/animation/tracr.fbs).
 Schema version 6 is the reviewed catalog version. The explicit null and egg
 sentinels are excluded. Catalog sharing is preserved in the parsed data:
-multiple forms can legitimately share a model. Such forms, and cross-form
-animation catalogs, are held until their selector semantics are implemented.
+multiple forms can legitimately share a model. Shared model resources remain
+held. A form with a distinct model may list a reciprocal sibling animation
+catalog; that case is accepted only when the sibling is unique, belongs to the
+same internal species and gender, and references the selected form back. The
+selected clips must still resolve from the selected form's own local resource.
+All other cross-form animation catalogs remain held.
 Gender is retained as the catalog's numeric code, not guessed from filenames.
 
 ## Reproduction

@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "kind": "catalog-production-batch-03-held-case-audit",
+  "date": "2026-09-27",
+  "runtime_approved": false,
+  "release_approved": false,
+  "source_holds": {
+    "unsupported_transparency": {
+      "species": ["avalugg", "bergmite", "carbink", "cryogonal", "diancie", "greninja", "inteleon", "lurantis"],
+      "finding": "The selected native materials require transparent/refraction response; the current opaque exporter is not equivalent.",
+      "next_step": "Implement and visually qualify the native transparent/refraction material profile."
+    },
+    "visibility_clock": {
+      "species": ["axew", "bruxish", "drizzile", "fennekin", "fletchinder", "fletchling", "hawlucha", "thwackey"],
+      "finding": "Dynamic visibility payloads are shorter than their animation clips; their independent sample clock remains unknown.",
+      "next_step": "Decode and verify the native visibility clock before export."
+    },
+    "unowned_visibility_target": {
+      "species": ["palossand", "sandygast"],
+      "finding": "The body_c visibility target has no unique owner in the selected mesh or catalog sibling.",
+      "next_step": "Identify the target's geometry or form selector from source evidence."
+    },
+    "source_identity": {
+      "species": ["meloetta"],
+      "finding": "The selected dump skeleton differs from ROMFS while the checked model, mesh and material files match.",
+      "next_step": "Resolve skeleton revision and reimport under a verified single source identity."
+    },
+    "cross_form_material": {
+      "species": ["mimikyu"],
+      "finding": "The two form catalogs reciprocally reference each other, but all eight selected clips belong to form 0's own resource. The bounded identity selector passes. Source review passes; export correctly blocks on eff_l and eff_r transparent/refraction materials.",
+      "next_step": "Use the transparent/refraction material review before Godot, shiny, visual or battle qualification.",
+      "local_evidence": {
+        "inventory": ".tmp/catalog-production-03-mimikyu-review-2026-09-27/inventory.json",
+        "inventory_sha256": "90bb5e05149516b8df1262b960ba5477ca9ab2725072cf76921f3f042fd6616d",
+        "source_review": ".tmp/catalog-production-03-mimikyu-source-2026-09-27/source/review/mimikyu/review.json",
+        "source_review_sha256": "c8ed2e92c82f88ff7b55b8871ded8c20d172d361285afee8fa8df8fb9f29cdd5",
+        "export_log": ".tmp/catalog-production-03-mimikyu-source-2026-09-27/export/mimikyu/export.log",
+        "export_log_sha256": "62effc1065efe1dc08f89546c31ca0baf3c8f58b10f1247bca0f241be804b6ce"
+      }
+    }
+  },
+  "shiny_holds": {
+    "shader_settings": {
+      "species": ["braviary", "skrelp"],
+      "finding": "Official rare eye shader floats change, beyond the current texture-only shiny export.",
+      "next_step": "Export the pinned rare material float settings and compare both variants visually."
+    },
+    "missing_embedded_eyelid_texture": {
+      "species": ["crabominable", "eelektrik", "eelektross"],
+      "finding": "Official rare eyelid textures visibly differ, but the corresponding normal image is absent from the Blender import, so replacement cannot be verified.",
+      "next_step": "Bind the native eyelid material to the correct imported image, then rerun parity and visual review."
+    }
+  },
+  "source_hold_count": 20,
+  "shiny_hold_count": 5,
+  "new_approvals": 0,
+  "batch_04_can_start_with_holds_isolated": true
+}

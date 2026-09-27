@@ -56,7 +56,8 @@ class Fixture:
         return bytes(self.data)
 
 
-def catalog_fixture(rows):
+def catalog_fixture(rows, cross_form_catalogs=None):
+    cross_form_catalogs = cross_form_catalogs or {}
     f = Fixture()
     root = f.table(2)
     version = f.table(1)
@@ -72,10 +73,11 @@ def catalog_fixture(rows):
         prefix = rid[:6] + '/' + rid + '/' + rid
         for slot, suffix in [(1, '.trmdl'), (2, '.trmmt'), (3, '.trpokecfg'), (6, '_00.bntx')]:
             f.string(f.field(t, slot), prefix + suffix)
-        p = f.vector(f.field(t, 4), 1)[0]
-        a = f.table(2)
-        f.pointer(p, a)
-        f.string(f.field(a, 1), prefix + '.tracn')
+        animation_paths = [prefix + '.tracn', *cross_form_catalogs.get(rid, [])]
+        for p, animation_path in zip(f.vector(f.field(t, 4), len(animation_paths)), animation_paths):
+            a = f.table(2)
+            f.pointer(p, a)
+            f.string(f.field(a, 1), animation_path)
     return f.finish(root)
 
 
@@ -240,6 +242,45 @@ class IdentityTests(unittest.TestCase):
         identity = resolve(catalog, 'mareanie', 747)
         with self.assertRaisesRegex(ValueError, 'Shared form'):
             bind(row, identity, catalog, self.models, self.motions, self.species / 'mareanie.json')
+
+    def test_reciprocal_sibling_catalog_keeps_selected_clips_local(self):
+        row = self.inventory()
+        own, sibling = 'pm0801_00_00', 'pm0801_01_00'
+        own_path = f'pm0801/{own}/{own}.tracn'
+        sibling_path = f'pm0801/{sibling}/{sibling}.tracn'
+        self.catalog.write_bytes(catalog_fixture(
+            [(747, 0, 0, own), (747, 1, 0, sibling)],
+            {own: [sibling_path], sibling: [own_path]}))
+        catalog = read_catalog(self.catalog)
+        identity = resolve(catalog, 'mareanie', 747)
+        row['identity_evidence'] = bind(row, identity, catalog, self.models, self.motions,
+                                        self.species / 'mareanie.json')
+        self.assertEqual('verified', validate_entry(row)['status'])
+        self.assertTrue(all(Path(p).parent == Path(row['motion_dir'])
+                            for p in row['motions'].values() if p))
+
+    def test_cross_form_catalog_requires_unique_reciprocal_same_species_sibling(self):
+        row = self.inventory()
+        own, sibling = 'pm0801_00_00', 'pm0801_01_00'
+        foreign = f'pm0801/{sibling}/{sibling}.tracn'
+        for internal, reciprocal in [(748, True), (747, False)]:
+            links = {own: [foreign]}
+            if reciprocal:
+                links[sibling] = [f'pm0801/{own}/{own}.tracn']
+            self.catalog.write_bytes(catalog_fixture(
+                [(747, 0, 0, own), (internal, 1, 0, sibling)], links))
+            catalog = read_catalog(self.catalog)
+            with self.assertRaisesRegex(ValueError, 'Cross-form'):
+                bind(row, resolve(catalog, 'mareanie', 747), catalog,
+                     self.models, self.motions, self.species / 'mareanie.json')
+        self.catalog.write_bytes(catalog_fixture(
+            [(747, 0, 0, own), (747, 1, 0, sibling)],
+            {own: [f'pm0801/{sibling}/unlisted.tracn'],
+             sibling: [f'pm0801/{own}/{own}.tracn']}))
+        catalog = read_catalog(self.catalog)
+        with self.assertRaisesRegex(ValueError, 'Cross-form'):
+            bind(row, resolve(catalog, 'mareanie', 747), catalog,
+                 self.models, self.motions, self.species / 'mareanie.json')
 
     def test_export_requires_identity_before_opening_model(self):
         with self.assertRaisesRegex(ValueError, 'verified identity'):

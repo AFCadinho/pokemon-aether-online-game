@@ -183,9 +183,25 @@ def bind(entry, identity, catalog, model_root, motion_root, species_path):
     model_root, motion_root = Path(model_root).resolve(), Path(motion_root).resolve()
     if sum(r['model_path'] == identity['model_path'] for r in catalog['entries']) != 1:
         raise ValueError('Shared form resource needs material/variant selector review')
-    if any(PurePosixPath(p).parent != PurePosixPath(identity['model_path']).parent
-           for p in identity['animation_catalog_paths']):
-        raise ValueError('Cross-form animation catalogs need selector review')
+    own_dir = PurePosixPath(identity['model_path']).parent
+    own_catalogs = [p for p in identity['animation_catalog_paths']
+                    if PurePosixPath(p).parent == own_dir]
+    foreign_catalogs = [p for p in identity['animation_catalog_paths']
+                        if PurePosixPath(p).parent != own_dir]
+    if not own_catalogs:
+        raise ValueError('Selected form has no local animation catalog')
+    for path in foreign_catalogs:
+        owners = [r for r in catalog['entries'] if r['model_path'] != identity['model_path']
+                  and PurePosixPath(r['model_path']).parent == PurePosixPath(path).parent]
+        if (len(owners) != 1 or owners[0]['internal_species_id'] != identity['internal_species_id']
+                or owners[0]['form'] == identity['form']
+                or owners[0]['gender_code'] != identity['gender_code']
+                or path not in owners[0]['animation_catalog_paths']
+                or not any(PurePosixPath(p).parent == own_dir
+                           for p in owners[0]['animation_catalog_paths'])):
+            raise ValueError('Cross-form animation catalogs need selector review')
+    # Foreign catalogs describe sibling forms. This import selects only the
+    # verified local TRACN/TRACR tracks below; it never borrows sibling clips.
     model_dir = model_root / PurePosixPath(identity['model_path']).parent
     motion_dir = motion_root / PurePosixPath(identity['model_path']).parent
     if Path(entry['model_dir']).resolve() != model_dir or Path(entry['motion_dir']).resolve() != motion_dir:
