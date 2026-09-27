@@ -10,7 +10,7 @@ from pathlib import Path
 from scvi_tracm import _Buffer
 
 
-def read_uv_tracks(path):
+def read_uv_tracks(path, *, parameters=('UVScaleOffset', 'UVScaleOffset3')):
     view = _Buffer(Path(path).read_bytes())
     root = view.u32(0)
     config = view.pointer(root, 0)
@@ -37,7 +37,7 @@ def read_uv_tracks(path):
         for material in view.tables(timeline, 2):
             for animation in view.tables(material, 2):
                 name = view.string(animation, 0)
-                if name not in ('UVScaleOffset', 'UVScaleOffset3'):
+                if name not in parameters:
                     continue
                 channels = view.pointer(animation, 1)
                 if channels is None:

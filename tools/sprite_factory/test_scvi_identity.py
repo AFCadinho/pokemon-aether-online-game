@@ -3,10 +3,11 @@ import json
 import struct
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from scvi_identity import (Buffer, bind, build_inventory, national_id, read_catalog,
-                           resolve, sha, validate_entry, validate_export_job, validate_prepared_source)
+                           resolve, sha, reject_known_placeholder, validate_entry, validate_export_job, validate_prepared_source)
 
 
 class Fixture:
@@ -81,7 +82,7 @@ def catalog_fixture(rows, cross_form_catalogs=None):
     return f.finish(root)
 
 
-def animation_fixture(directory, rid):
+def animation_fixture(directory, rid, extra_tracks=()):
     name = rid + '_00001_battlewait01_loop.tranm'
     material = name.replace('.tranm', '.tracm')
     f = Fixture()
@@ -96,15 +97,16 @@ def animation_fixture(directory, rid):
     root = f.table(1)
     tracks = f.table(1)
     f.pointer(f.field(root, 0), tracks)
-    p = f.vector(f.field(tracks, 0), 1)[0]
-    track = f.table(4)
-    f.pointer(p, track)
-    resources = f.table(2)
-    f.pointer(f.field(track, 3), resources)
-    for slot, value in enumerate((name, material)):
-        item = f.table(1)
-        f.pointer(f.field(resources, slot), item)
-        f.string(f.field(item, 0), value)
+    names = [(name, material), *extra_tracks]
+    for p, pair in zip(f.vector(f.field(tracks, 0), len(names)), names):
+        track = f.table(4)
+        f.pointer(p, track)
+        resources = f.table(2)
+        f.pointer(f.field(track, 3), resources)
+        for slot, value in enumerate(pair):
+            item = f.table(1)
+            f.pointer(f.field(resources, slot), item)
+            f.string(f.field(item, 0), value)
     (directory / (rid + '_base.tracr')).write_bytes(f.finish(root))
     (directory / name).write_bytes(b'animation')
     (directory / material).write_bytes(b'material channel')
@@ -132,6 +134,16 @@ class IdentityTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.catalog = self.root / 'resource.trpmcatalog'
         self.catalog.write_bytes(catalog_fixture([(747, 0, 0, 'pm0801_00_00')]))
+
+    def test_known_placeholder_is_bound_to_resource_and_geometry_bytes(self):
+        placeholder = 'bd14f5beaa4b6d1547b37c171def01f80f2500447a39f3ac06dc0ead661b0cdd'
+        with patch('scvi_identity.sha', return_value=placeholder):
+            for resource in ('pm1084_00_00', 'pm1091_00_00'):
+                with self.assertRaisesRegex(ValueError, 'Raichu placeholder'):
+                    reject_known_placeholder(resource, Path('mesh'))
+            reject_known_placeholder('pm0026_00_00', Path('mesh'))
+        with patch('scvi_identity.sha', return_value='a' * 64):
+            reject_known_placeholder('pm1084_00_00', Path('mesh'))
 
     def test_catalog_maps_resource_to_species_and_preserves_form_gender(self):
         self.catalog.write_bytes(catalog_fixture([(747, 0, 0, 'pm0801_00_00'), (25, 9, 1, 'pm0025_18_00')]))
@@ -235,6 +247,24 @@ class IdentityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'metadata changed'):
             validate_entry(row)
 
+    def test_unused_foreign_references_require_exact_explicit_exclusion(self):
+        from scvi_identity import animation_resources
+        row = self.inventory()
+        directory = Path(row['motion_dir'])
+        foreign = ['pm0297_00_00_00001_battlewait01_loop.tranm',
+                   'pm0297_00_00_00001_battlewait01_loop.tracm']
+        animation_fixture(directory, row['identity'], [foreign])
+        with self.assertRaisesRegex(ValueError, 'Cross-resource'):
+            animation_resources(directory, row['identity'])
+        _, tracks = animation_resources(directory, row['identity'], foreign)
+        self.assertEqual(2, len(tracks))
+        self.assertTrue(all(Path(p).name.startswith(row['identity']) for p in tracks))
+        for invalid in ([foreign[0]], foreign + [foreign[0]],
+                        ['../foreign.tranm'], [row['identity'] + '_idle.tranm'],
+                        ['pm0297_00_00_missing.tranm']):
+            with self.assertRaises(ValueError):
+                animation_resources(directory, row['identity'], invalid)
+
     def test_shared_form_resource_is_not_implicitly_approved(self):
         row = self.inventory()
         self.catalog.write_bytes(catalog_fixture([(747, 0, 0, 'pm0801_00_00'), (747, 1, 0, 'pm0801_00_00')]))
@@ -242,6 +272,26 @@ class IdentityTests(unittest.TestCase):
         identity = resolve(catalog, 'mareanie', 747)
         with self.assertRaisesRegex(ValueError, 'Shared form'):
             bind(row, identity, catalog, self.models, self.motions, self.species / 'mareanie.json')
+
+    def test_shared_default_material_proof_is_explicit_and_cannot_select_another_form(self):
+        from test_scvi_shared_material_identity import material_fixture, selector_fixture
+        row = self.inventory()
+        self.catalog.write_bytes(catalog_fixture([(747, 0, 0, 'pm0801_00_00'), (747, 1, 0, 'pm0801_00_00')]))
+        colour = (0.2, 0.4, 0.6, 1)
+        for directory in (Path(row['model_dir']), Path(row['motion_dir'])):
+            (directory / 'pm0801_00_00.trmmt').write_bytes(selector_fixture(colour))
+            (directory / 'pm0801_00_00.trmtr').write_bytes(material_fixture(colour))
+        catalog = read_catalog(self.catalog)
+        row['verify_shared_default_materials'] = True
+        identity = resolve(catalog, 'mareanie', 747)
+        row['identity_evidence'] = bind(row, identity, catalog, self.models, self.motions,
+                                        self.species / 'mareanie.json')
+        self.assertEqual(0, validate_entry(row)['shared_default_materials']['frame'])
+        with self.assertRaises(ValueError):
+            validate_entry({**row, 'verify_shared_default_materials': False})
+        with self.assertRaisesRegex(ValueError, 'Shared form'):
+            bind({**row, 'form': 1}, resolve(catalog, 'mareanie', 747, form=1), catalog,
+                 self.models, self.motions, self.species / 'mareanie.json')
 
     def test_reciprocal_sibling_catalog_keeps_selected_clips_local(self):
         row = self.inventory()

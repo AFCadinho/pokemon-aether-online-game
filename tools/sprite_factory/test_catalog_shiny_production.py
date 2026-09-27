@@ -9,6 +9,49 @@ from catalog_shiny_production import replacements
 
 
 class CatalogShinyProductionTest(unittest.TestCase):
+    def test_colour_only_shiny_requires_explicit_supported_source_parameters(self):
+        import copy
+        from test_scvi_shared_material_identity import material_fixture
+        from scvi_material_probe import inspect_materials
+        with tempfile.TemporaryDirectory() as temp:
+            table = Path(temp) / 'material.trmtr'
+            rare_table = table.with_stem('material_rare')
+            table.write_bytes(material_fixture((0.2, 0.4, 0.6, 1.0)))
+            rare_table.write_bytes(material_fixture((0.8, 0.7, 0.2, 1.0)))
+            with self.assertRaisesRegex(ValueError, 'settings differ'):
+                replacements(table)
+            pairs, _, floats, colors = replacements(table, review_queue=True,
+                include_float_overrides=True, include_color_overrides=True)
+            self.assertEqual(pairs, [])
+            self.assertEqual(floats, [])
+            self.assertEqual(len(colors), 1)
+            self.assertEqual(colors[0]['key'], 'BaseColorLayer1')
+            original, rare = inspect_materials(table), inspect_materials(rare_table)
+            for change in ('alpha', 'nan', 'unknown'):
+                altered = copy.deepcopy(rare)
+                if change == 'alpha': altered[0]['colors']['BaseColorLayer1'][3] = 0.5
+                if change == 'nan': altered[0]['colors']['BaseColorLayer1'][0] = float('nan')
+                if change == 'unknown': altered[0]['colors']['UnboundColour'] = [1, 0, 0, 1]
+                with patch('catalog_shiny_production.inspect_materials', side_effect=[original, altered]):
+                    with self.assertRaises(ValueError):
+                        replacements(table, review_queue=True, include_color_overrides=True)
+
+    def test_emission_scalar_and_metallic_map_are_preserved_for_review(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); table = root / 'material.trmtr'
+            table.touch(); table.with_stem('material_rare').touch()
+            (root / 'metal.png').write_bytes(b'normal'); (root / 'rare.png').write_bytes(b'rare')
+            normal = {'name': 'body', 'floats': {'EmissionIntensity': 0.2}, 'shaders': [],
+                      'textures': {'MetallicMap': 'metal.bntx'}}
+            rare = {**normal, 'floats': {'EmissionIntensity': 0.0}, 'textures': {'MetallicMap': 'rare.bntx'}}
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[normal], [rare]]):
+                with self.assertRaises(ValueError): replacements(table)
+            with patch('catalog_shiny_production.inspect_materials', side_effect=[[normal], [rare]]):
+                pairs, _, floats = replacements(table, review_queue=True, include_float_overrides=True)
+            self.assertEqual(len(pairs), 1)
+            self.assertEqual(floats[0]['key'], 'EmissionIntensity')
+            self.assertEqual(floats[0]['mode'], 'apply')
+
     def test_review_queue_matches_names_and_recovers_distinct_eye_texture(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
