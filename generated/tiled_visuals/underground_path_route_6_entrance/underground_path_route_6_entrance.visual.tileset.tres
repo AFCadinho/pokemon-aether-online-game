@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dij3llshlkmhr"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/underground_path_route_6_entrance/assets/underground_path_route_6_entrance.visual.tileset.compact_source_1_0.texture.res" id="1_irhcn"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/underground_path_route_6_entrance/assets/underground_path_route_6_entrance.visual.tileset.compact_source_1025_0.texture.res" id="2_mc2r6"]
