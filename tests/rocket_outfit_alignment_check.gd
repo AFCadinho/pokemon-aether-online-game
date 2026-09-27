@@ -79,11 +79,11 @@ func _run() -> void:
 		for col: int in [1, 3]:
 			var step_head_y := body.get_region(Rect2i(col * 64, row * 64, 64, 64)).get_used_rect().position.y
 			var torso_matches := true
-			for y: int in range(44, 54):
+			for y: int in range(40, 54):
 				# Keep inside the chest; side contour gaps change with the arms.
 				for x: int in range(28, 34):
 					torso_matches = torso_matches and shirt.get_pixel(x, row * 64 + y) == shirt.get_pixel(col * 64 + x, row * 64 + y + step_head_y - idle_head_y)
-			_check(torso_matches, "row %s step %s torso detail follows the body's vertical displacement" % [row, col])
+			_check(torso_matches, "row %s step %s collar and torso follow the body's vertical displacement" % [row, col])
 	for style: String in ["walk", "fish", "ride"]:
 		var frames := APPEARANCE.get_part_frames("headgear", "TeamRocket_Cap", "male", style)
 		for col: int in range(4):
