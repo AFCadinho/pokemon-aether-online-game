@@ -144,6 +144,7 @@ func _run() -> void:
 	battle.coop_presenter._latest = saved_latest
 	coop_service.activity = previous_activity
 	var saved_camera: Camera3D = model.camera
+	var saved_viewport: SubViewport = model.viewport
 	var saved_active: bool = model.active
 	var saved_actor: Node3D = model.actors[0]
 	var saved_combatant: Dictionary = model.combatants[0]
@@ -151,7 +152,11 @@ func _run() -> void:
 	var focus_test_camera := Camera3D.new()
 	focus_test_camera.fov = ArenaCatalog.CAMERA_FOV
 	stage.add_child(focus_test_camera)
+	var focus_test_viewport := SubViewport.new()
+	focus_test_viewport.size = root.size
+	stage.add_child(focus_test_viewport)
 	model.camera = focus_test_camera
+	model.viewport = focus_test_viewport
 	model.active = true
 	model.combatants[0] = {"species": "dragonite", "shiny": false}
 	model.identities[0] = model._combatant_key(0)
@@ -168,6 +173,27 @@ func _run() -> void:
 	for index in 4:
 		assert(camera_frame.has_point(focus_test_camera.unproject_position(model._position(index) + Vector3(0, 1.2, 0))),
 			"The decision camera must keep both allies and opponents in view")
+	var target_mesh := MeshInstance3D.new()
+	target_mesh.mesh = SphereMesh.new()
+	var original_overlay := StandardMaterial3D.new()
+	target_mesh.material_overlay = original_overlay
+	focus_test_actor.add_child(target_mesh)
+	battle.coop_presenter.cards.p1.target.visible = true
+	battle.coop_presenter.selected_target = "p1"
+	battle.coop_presenter._refresh_target_highlight()
+	assert(target_mesh.material_overlay is ShaderMaterial,
+		"The selected 3D Pokémon gets a mesh outline")
+	assert(battle.coop_presenter.cards.p1.target.get_theme_stylebox("normal") is StyleBoxEmpty,
+		"The 3D target hitbox must not draw a large frame")
+	battle.coop_presenter._position_native_targets()
+	assert(battle.coop_presenter.cards.p1.target.size.x <= 160.0
+		and battle.coop_presenter.cards.p1.target.size.y <= 170.0,
+		"The invisible target area stays near the Pokémon's body")
+	battle.coop_presenter.cards.p1.target.visible = false
+	battle.coop_presenter.selected_target = ""
+	battle.coop_presenter._refresh_target_highlight()
+	assert(target_mesh.material_overlay == original_overlay,
+		"Leaving target selection restores the model's original material overlay")
 	model.set_coop_camera_focus("", false)
 	model.coop_camera_focus_weight = 0.0
 	model.actors[0] = saved_actor
@@ -175,8 +201,10 @@ func _run() -> void:
 	model.combatants[0] = saved_combatant
 	model.active = saved_active
 	model.camera = saved_camera
+	model.viewport = saved_viewport
 	focus_test_actor.free()
 	focus_test_camera.queue_free()
+	focus_test_viewport.queue_free()
 	var pair: Vector3 = model._position(2) - model._position(0)
 	var opponent_pair: Vector3 = model._position(3) - model._position(1)
 	var view: Vector3 = ArenaCatalog.camera_home(model.arena_id) - ArenaCatalog.camera_target(model.arena_id)
