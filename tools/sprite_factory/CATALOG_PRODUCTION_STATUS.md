@@ -45,6 +45,25 @@ Their visual overview is at
 `game/.worktrees/slot-a/frontend/.tmp/catalog-production-04/probes/normal/multi-frame-remaining/index.html`.
 The user reviewed this overview and found no further visibly closed eyes.
 
+## Groudon — open-eye bundle candidate (2026-09-27)
+
+The [one-species source manifest](catalog_production_groudon_eye_followup.json)
+pins the official `08000_eye01` frame as Groudon's open-eye idle baseline.
+Identity-gated normal and official rare-material shiny GLBs were exported;
+their geometry and native animation parity passed. Both converted to
+self-contained Godot scenes. Motion review captured all eight clips at three
+times for both variants (48 captures, zero errors). The user accepted the
+normal/shiny paired gallery, including eyes, colours and poses.
+
+A local version-2 Groudon bundle contains both scenes (21,848,484 bytes,
+SHA-256 `a175e88f0921937e3dd0bf167b38f73dca6f1ef5ed0e81c6b036039753493689`).
+The staged candidate and a 154-bundle index with only Groudon replaced are at
+`/home/adinho/Documents/3d_models/PokeAether/groudon-eye01-bundle-v2-candidate`.
+The focused launcher test passed v1 install, no-op, single-Groudon v2 update,
+corrupt-archive rejection, restart and loading both scenes. The published
+v1 bundle, game registry and public index have not changed. Release
+certification and publication remain separate.
+
 ## Batch 04 — 226 candidates, starter lines first (2026-09-27)
 
 The [batch-04 manifest](catalog_production_batch_04.json) contains the 226
