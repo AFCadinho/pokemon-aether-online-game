@@ -186,7 +186,7 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 			card.set_experience_bar_enabled(false)
 			card.z_index = 40
 			card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			card.scale = Vector2.ONE * 0.7
+			card.scale = Vector2.ONE * 0.5
 			var row: Control = card.active_info_rows[0]
 			var owner := Label.new()
 			owner.name = "CoopOwnerLabel"
@@ -195,8 +195,6 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 			row.add_child(owner)
 			row.move_child(owner, 0)
 			coop_huds[controller] = card
-	var inverse := stage.get_global_transform().affine_inverse()
-	var occupied: Array[Rect2] = []
 	for controller: String in COOP_SLOTS:
 		var card: Control = coop_huds[controller]
 		var source: Control = battle.player_hud_panel if controller in ["p1", "p3"] else battle.enemy_hud_panel
@@ -219,51 +217,31 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 		if source_bar != null and target_bar != null:
 			target_bar.value = source_bar.value
 		card.reset_size()
-		var bounds: Rect2 = presenter.actor_visual_rect(controller)
-		if not bounds.has_area():
+	var card_width := 0.0
+	for controller: String in COOP_SLOTS:
+		card_width += (coop_huds[controller] as Control).size.x
+	var gap := 8.0
+	var team_gap := 28.0
+	var available_width := maxf(1.0, area.x - 32.0 - gap * 2.0 - team_gap)
+	var row_scale := minf(0.5, available_width / maxf(1.0, card_width))
+	var total_width := card_width * row_scale + gap * 2.0 + team_gap
+	var row_x := (area.x - total_width) * 0.5
+	# Keep the four co-op HP cards in one compact rail, clear of projected models.
+	var row_y := 84.0
+	for index in COOP_SLOTS.size():
+		var controller: String = COOP_SLOTS[index]
+		var card: Control = coop_huds[controller]
+		card.scale = Vector2.ONE * row_scale
+		card.position = Vector2(row_x, row_y)
+		if presenter.handles(controller) and not card.get_meta("coop_source_data", {}).is_empty():
+			card.show()
+		else:
 			card.hide()
-			continue
-		var top := inverse * Vector2(bounds.get_center().x, bounds.position.y)
 		var extent := card.size * card.scale
-		var target := Vector2(top.x - extent.x * 0.5, top.y - extent.y - 14.0)
-		target.x = clampf(target.x, 12.0, area.x - extent.x - 12.0)
-		target.y = clampf(target.y, 72.0, area.y - extent.y - 230.0)
-		var rect := Rect2(target, extent)
-		var preferred := target
-		var found := false
-		for column in 5:
-			if column > 0:
-				var sideways := ceili(float(column) * 0.5) * (extent.x + 10.0)
-				target.x = preferred.x + (-sideways if column % 2 == 1 else sideways)
-			if target.x < 12.0 or target.x + extent.x > area.x - 12.0:
-				continue
-			for step in 9:
-				target.y = preferred.y
-				if step > 0:
-					var distance := ceili(float(step) * 0.5) * (extent.y + 10.0)
-					target.y += -distance if step % 2 == 1 else distance
-				if target.y < 72.0 or target.y + extent.y > area.y - 230.0:
-					continue
-				rect.position = target
-				var clear := true
-				for previous: Rect2 in occupied:
-					if rect.intersects(previous.grow(8.0)):
-						clear = false
-						break
-				if clear:
-					found = true
-					break
-			if found:
-				break
-		if not found:
-			target = preferred
-			rect.position = target
-		card.position = target
-		card.show()
-		occupied.append(rect)
 		var stat_panel: Control = battle.coop_presenter._stat_overlays.get(controller) as Control
 		if is_instance_valid(stat_panel) and stat_panel.visible:
-			stat_panel.position = Vector2(target.x + (extent.x - stat_panel.size.x) * 0.5, target.y + extent.y + 4.0)
+			stat_panel.position = Vector2(row_x + (extent.x - stat_panel.size.x) * 0.5, row_y + extent.y + 4.0)
+		row_x += extent.x + gap + (team_gap if index == 1 else 0.0)
 	battle.player_hud_panel.hide()
 	battle.enemy_hud_panel.hide()
 	coop_huds_active = true
