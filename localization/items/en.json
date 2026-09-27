@@ -274,5 +274,21 @@
   "adinho-chroma-shoes": {
     "name": "Adinho Chroma Shoes",
     "shortDesc": "Unlock the male-only, colour-customizable Adinho shoes."
+  },
+  "smoking-outfit": {
+    "name": "Tuxedo Outfit Box",
+    "shortDesc": "Open this male-only box to receive a tuxedo jacket, trousers and shoes."
+  },
+  "smoking-shirt": {
+    "name": "Tuxedo Jacket",
+    "shortDesc": "Move the male-only tuxedo jacket into Character Customization."
+  },
+  "smoking-trousers": {
+    "name": "Tuxedo Trousers",
+    "shortDesc": "Move the male-only tuxedo trousers into Character Customization."
+  },
+  "smoking-shoes": {
+    "name": "Tuxedo Shoes",
+    "shortDesc": "Move the male-only tuxedo shoes into Character Customization."
   }
 }

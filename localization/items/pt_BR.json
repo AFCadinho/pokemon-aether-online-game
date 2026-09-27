@@ -274,5 +274,21 @@
   "adinho-chroma-shoes": {
     "name": "Sapatos Chroma do Adinho",
     "shortDesc": "Desbloqueie os sapatos personalizáveis do Adinho para modelos masculinos."
+  },
+  "smoking-outfit": {
+    "name": "Caixa de Traje de Smoking",
+    "shortDesc": "Abra esta caixa masculina para receber um paletó, uma calça e um par de sapatos de smoking."
+  },
+  "smoking-shirt": {
+    "name": "Paletó de Smoking",
+    "shortDesc": "Mova o paletó de smoking masculino para a Personalização de Personagem."
+  },
+  "smoking-trousers": {
+    "name": "Calça de Smoking",
+    "shortDesc": "Mova a calça de smoking masculina para a Personalização de Personagem."
+  },
+  "smoking-shoes": {
+    "name": "Sapatos de Smoking",
+    "shortDesc": "Mova os sapatos de smoking masculinos para a Personalização de Personagem."
   }
 }

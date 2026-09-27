@@ -6154,5 +6154,8 @@
   "ui.skills.rock_smash.rewards.bonus": "Onafhankelijke bonus · Complete fossielen",
   "ui.skills.rock_smash.rewards.one_item": "Eén item per drop",
   "ui.skills.rock_smash.rewards.fossils_locked": "Fossielen zijn beschikbaar vanaf skill-level 20.",
-  "ui.skills.unlock.rock_smash_big_nugget": "Big Nuggets en betere schatten"
+  "ui.skills.unlock.rock_smash_big_nugget": "Big Nuggets en betere schatten",
+  "ui.appearance.option.smoking_shirt": "Smokingjasje",
+  "ui.appearance.option.smoking_trousers": "Smokingbroek",
+  "ui.appearance.option.smoking_shoes": "Smokingschoenen"
 }

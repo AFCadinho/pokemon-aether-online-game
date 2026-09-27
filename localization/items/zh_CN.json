@@ -274,5 +274,21 @@
   "adinho-chroma-shoes": {
     "name": "Adinho Chroma 鞋",
     "shortDesc": "解锁男性专用、颜色可定制的 Adinho 鞋。"
+  },
+  "smoking-outfit": {
+    "name": "男士礼服套装盒",
+    "shortDesc": "打开此男士套装盒，获得礼服外套、长裤和皮鞋。"
+  },
+  "smoking-shirt": {
+    "name": "礼服外套",
+    "shortDesc": "将男士礼服外套移至角色自定义。"
+  },
+  "smoking-trousers": {
+    "name": "礼服长裤",
+    "shortDesc": "将男士礼服长裤移至角色自定义。"
+  },
+  "smoking-shoes": {
+    "name": "礼服皮鞋",
+    "shortDesc": "将男士礼服皮鞋移至角色自定义。"
   }
 }

@@ -6154,5 +6154,8 @@
   "ui.skills.rock_smash.rewards.bonus": "Independent bonus · Complete fossils",
   "ui.skills.rock_smash.rewards.one_item": "One item per drop",
   "ui.skills.rock_smash.rewards.fossils_locked": "Fossils become available at skill level 20.",
-  "ui.skills.unlock.rock_smash_big_nugget": "Big Nuggets and improved treasure"
+  "ui.skills.unlock.rock_smash_big_nugget": "Big Nuggets and improved treasure",
+  "ui.appearance.option.smoking_shirt": "Tuxedo Jacket",
+  "ui.appearance.option.smoking_trousers": "Tuxedo Trousers",
+  "ui.appearance.option.smoking_shoes": "Tuxedo Shoes"
 }
