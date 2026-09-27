@@ -14,6 +14,20 @@ const MOTION_PROFILES = preload("res://scripts/battle/battle_ui/reviewed_motion_
 const MaterialResponse = preload("res://scripts/battle/battle_ui/material_response.gd")
 const ArenaCatalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const ForestPool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
+const COOP_TARGET_OUTLINE_SHADER := """shader_type spatial;
+render_mode unshaded, cull_front, depth_draw_never;
+uniform vec4 outline_color : source_color = vec4(0.36, 0.97, 0.78, 1.0);
+uniform float outline_width = 0.07;
+void vertex() {
+	float model_scale = (length(MODEL_MATRIX[0].xyz) + length(MODEL_MATRIX[1].xyz) + length(MODEL_MATRIX[2].xyz)) / 3.0;
+	VERTEX += NORMAL * outline_width / max(model_scale, 0.001);
+}
+void fragment() {
+	float pulse = 0.78 + 0.22 * sin(TIME * 4.0);
+	ALBEDO = outline_color.rgb * pulse;
+	EMISSION = outline_color.rgb * pulse;
+}
+"""
 var forest_lease := {}
 var forest_pool: Node
 var user_camera_yaw := 0.0
@@ -22,6 +36,10 @@ var user_camera_zoom := 1.0
 var coop_camera_focus_enabled := false
 var coop_camera_focus_index := -1
 var coop_camera_focus_weight := 0.0
+var coop_target_highlight_index := -1
+var coop_target_highlight_actor: Node3D
+var coop_target_original_overlays: Dictionary = {}
+var coop_target_outline_material: ShaderMaterial
 const USER_CAMERA_ZOOM_MIN := 0.72
 const USER_CAMERA_ZOOM_MAX := 1.45
 
@@ -339,6 +357,7 @@ func _slot_count() -> int:
 func set_double_mode(enabled: bool) -> void:
 	if double_mode == enabled:
 		return
+	set_coop_target_highlight("")
 	coop_camera_focus_enabled = false
 	coop_camera_focus_index = -1
 	coop_camera_focus_weight = 0.0
@@ -409,6 +428,44 @@ func set_coop_camera_focus(controller: String, enabled: bool) -> void:
 func handles(ident: String) -> bool:
 	var index := actor_index(ident)
 	return active and index >= 0 and identities[index] == _combatant_key(index) and is_instance_valid(actors[index])
+
+
+func set_coop_target_highlight(controller: String) -> void:
+	var index := actor_index(controller)
+	coop_target_highlight_index = index if double_mode and index >= 0 else -1
+	_sync_coop_target_highlight()
+
+
+func _clear_coop_target_highlight() -> void:
+	for mesh: MeshInstance3D in coop_target_original_overlays:
+		if is_instance_valid(mesh):
+			mesh.material_overlay = coop_target_original_overlays[mesh]
+	coop_target_original_overlays.clear()
+	coop_target_highlight_actor = null
+
+
+func _sync_coop_target_highlight() -> void:
+	var desired_actor: Node3D
+	if coop_target_highlight_index >= 0 and handles("p%d" % (coop_target_highlight_index + 1)):
+		desired_actor = actors[coop_target_highlight_index] as Node3D
+	if desired_actor == coop_target_highlight_actor:
+		return
+	_clear_coop_target_highlight()
+	if desired_actor == null:
+		return
+	if coop_target_outline_material == null:
+		var shader := Shader.new()
+		shader.code = COOP_TARGET_OUTLINE_SHADER
+		coop_target_outline_material = ShaderMaterial.new()
+		coop_target_outline_material.shader = shader
+	coop_target_highlight_actor = desired_actor
+	var meshes: Array[Node] = desired_actor.find_children("*", "MeshInstance3D", true, false)
+	if desired_actor is MeshInstance3D:
+		meshes.append(desired_actor)
+	for node: Node in meshes:
+		var mesh := node as MeshInstance3D
+		coop_target_original_overlays[mesh] = mesh.material_overlay
+		mesh.material_overlay = coop_target_outline_material
 
 func _combatant_key(index: int) -> String:
 	return ReviewedModels.key(combatants[index].species, combatants[index].shiny)
@@ -1014,6 +1071,7 @@ func _import_next_model() -> void:
 	loading_scene = null
 
 func _clear_actors() -> void:
+	_clear_coop_target_highlight()
 	for i in 4:
 		staged_mega_species[i] = ""
 		if is_instance_valid(mega_effects[i]):
@@ -1028,6 +1086,7 @@ func _clear_actors() -> void:
 
 func _set_active(value: bool) -> void:
 	if active and not value:
+		_clear_coop_target_highlight()
 		camera_phase = 0.0
 		for i in 4:
 			staged_mega_species[i] = ""
@@ -1330,6 +1389,7 @@ func _process(delta: float) -> void:
 		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
 		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
 		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
+	_sync_coop_target_highlight()
 	_prune_models()
 
 func _exit_tree() -> void:

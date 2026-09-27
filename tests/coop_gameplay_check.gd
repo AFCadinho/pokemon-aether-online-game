@@ -583,7 +583,8 @@ func _run() -> void:
 	presenter._update_actions()
 	await process_frame
 	_expect(presenter._decision_title.text == "Choose a Poké Ball"
-		and (presenter._actions.get_child(0) as Button).text.begins_with("Poke Ball")
+		and (presenter._actions.get_child(0) as Button).find_children("*", "TextureRect", true, false).any(func(icon: TextureRect) -> bool: return icon.texture != null)
+		and (presenter._actions.get_child(0) as Button).find_children("*", "Label", true, false).any(func(label: Label) -> bool: return label.text == "Poke Ball")
 		and (presenter._actions.get_child(1) as Button).text == "Back to battle"
 		and (presenter._actions.get_child(0) as Button).get_theme_stylebox("hover") is StyleBoxFlat,
 		"Poké Ball choices are styled and precede the back action")

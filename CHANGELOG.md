@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De geselecteerde tegenstander in gedeelde 3D-double battles krijgt een gloed langs het Pokémon-model in plaats van een groot kader rond de klikzone.
+
 - De mannelijke smoking is toegevoegd als outfitbox met los jasje, broek en schoenen, inclusief overworld- en trainer-sprites. De box staat nog niet in de store.
 
 - De Tiled-importer ondersteunt nu tegelanimaties. Een aparte Viridian City-proef toont bewegend vijverwater; de bestaande speelbare stad blijft ongewijzigd.

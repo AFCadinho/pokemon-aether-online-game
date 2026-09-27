@@ -261,11 +261,9 @@ func _ready() -> void:
 			target.gui_input.connect(func(event: InputEvent) -> void:
 				if event is InputEventMouseMotion and event.relative.length_squared() > 0.0:
 					_focus_native_target(controller))
-			# Keep adjacent targets separate: the two double sprites are only ~158 px apart.
-			# Leave a small horizontal safety margin around each sprite so the
-			# target remains clickable at the edge of a doubles visual footprint.
-			target.custom_minimum_size = Vector2(132, 152)
-			target.size = Vector2(132, 152)
+			# Keep adjacent target areas separate while covering each sprite's body.
+			target.custom_minimum_size = Vector2(112, 152)
+			target.size = Vector2(112, 152)
 			var invisible_style := StyleBoxEmpty.new()
 			for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 				target.add_theme_stylebox_override(state, invisible_style)
@@ -468,12 +466,14 @@ func _position_native_targets() -> void:
 			if rect.has_area():
 				var inverse := stage.get_global_transform().affine_inverse()
 				var center := inverse * rect.get_center()
-				target.size = Vector2(clampf(rect.size.x + 20.0, 100.0, 220.0),
-					clampf(rect.size.y + 20.0, 100.0, 220.0))
+				# The model itself gets the visible outline. Keep its invisible
+				# click area near the body instead of using the full wing span.
+				target.size = Vector2(clampf(rect.size.x * 0.72, 100.0, 160.0),
+					clampf(rect.size.y * 0.78, 100.0, 170.0))
 				target.position = center - target.size * 0.5
 				continue
 		if sprite != null:
-			target.size = Vector2(132, 152)
+			target.size = Vector2(112, 152)
 			var center := stage.get_global_transform().affine_inverse() * sprite.global_position
 			# Keep the old top edge but include the Pokémon's feet below its origin.
 			target.position = center - Vector2(target.size.x * 0.5, target.size.y - 56.0)
@@ -1365,25 +1365,17 @@ func _focus_native_target(controller: String) -> void:
 func _refresh_target_highlight() -> void:
 	if not _native_mode:
 		return
+	var model: Node = _model_presenter()
+	if model != null:
+		var model_target := selected_target if selected_target in SLOTS and cards[selected_target].target.visible else ""
+		model.set_coop_target_highlight(model_target)
 	for controller: String in SLOTS:
 		var target: Button = cards[controller].target
 		var sprite := _native_sprite(controller)
-		var model: Node = _model_presenter()
-		if model != null and model.handles(controller):
-			var outline := StyleBoxFlat.new()
-			outline.bg_color = Color.TRANSPARENT
-			outline.border_color = Color("67e8bf")
-			outline.set_border_width_all(2 if target.visible and controller == selected_target else 0)
-			outline.set_corner_radius_all(18)
-			for state: String in ["normal", "hover", "pressed", "focus"]:
-				target.add_theme_stylebox_override(state, outline)
-			if sprite != null:
-				sprite.material = _target_sprite_materials.get(controller)
-			continue
 		for state: String in ["normal", "hover", "pressed", "focus"]:
 			target.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 		if sprite != null:
-			sprite.material = _target_glow_material if target.visible and controller == selected_target else _target_sprite_materials.get(controller)
+			sprite.material = _target_glow_material if (model == null or not model.handles(controller)) and target.visible and controller == selected_target else _target_sprite_materials.get(controller)
 
 
 func _append_event(event: Dictionary) -> void:
