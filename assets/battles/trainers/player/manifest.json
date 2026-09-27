@@ -39,6 +39,10 @@
             "Smoking_Trousers": {
               "path": "res://assets/battles/trainers/player/male/smoking_outfit/trousers.png",
               "scale": 1.0
+            },
+            "TeamRocket_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -65,6 +69,10 @@
             "Smoking_Shoes": {
               "path": "res://assets/battles/trainers/player/male/smoking_outfit/shoes.png",
               "scale": 1.0
+            },
+            "TeamRocket_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -90,6 +98,10 @@
             },
             "Smoking_Shirt": {
               "path": "res://assets/battles/trainers/player/male/smoking_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "TeamRocket_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/shirt.png",
               "scale": 1.0
             }
           }

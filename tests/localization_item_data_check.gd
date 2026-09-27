@@ -65,7 +65,7 @@ func _check_catalogs() -> void:
 		catalogs[locale] = parsed as Dictionary if parsed is Dictionary else {}
 
 	var english: Dictionary = catalogs.get("en", {})
-	_check(english.size() == 73, "item overlay covers 73 item IDs including the tuxedo box and components")
+	_check(english.size() == 77, "item overlay covers 77 item IDs including tuxedo and Team Rocket boxes and components")
 	var english_item_ids: Array = english.keys()
 	english_item_ids.sort()
 	for locale: String in CATALOG_PATHS:
@@ -153,7 +153,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1389,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1393,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 
