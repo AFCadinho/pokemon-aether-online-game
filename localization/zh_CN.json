@@ -6150,5 +6150,8 @@
   "ui.android_update.permission": "请允许 PokeAether 安装应用，然后再次点击“安装”。",
   "ui.android_update.confirm": "请在 Android 中确认更新。",
   "ui.android_update.retry": "重试",
-  "ui.android_update.website": "打开网站"
+  "ui.android_update.website": "打开网站",
+  "ui.appearance.option.smoking_shirt": "礼服外套",
+  "ui.appearance.option.smoking_trousers": "礼服长裤",
+  "ui.appearance.option.smoking_shoes": "礼服皮鞋"
 }

@@ -19028,6 +19028,12 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.adinho_shoes")
 			"Adinho_Shoes_Chroma":
 				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shoes")
+			"Smoking_Shirt":
+				return LocalizationManager.text("ui.appearance.option.smoking_shirt")
+			"Smoking_Trousers":
+				return LocalizationManager.text("ui.appearance.option.smoking_trousers")
+			"Smoking_Shoes":
+				return LocalizationManager.text("ui.appearance.option.smoking_shoes")
 			"IronFanton_Hair":
 				return LocalizationManager.text("ui.appearance.option.ironfanton_hair")
 			"IronFanton_Beard":

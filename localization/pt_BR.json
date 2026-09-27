@@ -6153,5 +6153,8 @@
   "ui.android_update.permission": "Permita que o PokeAether instale apps e toque em Instalar novamente.",
   "ui.android_update.confirm": "Confirme a atualização no Android.",
   "ui.android_update.retry": "Tentar novamente",
-  "ui.android_update.website": "Abrir site"
+  "ui.android_update.website": "Abrir site",
+  "ui.appearance.option.smoking_shirt": "Paletó de Smoking",
+  "ui.appearance.option.smoking_trousers": "Calça de Smoking",
+  "ui.appearance.option.smoking_shoes": "Sapatos de Smoking"
 }
