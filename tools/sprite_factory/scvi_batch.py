@@ -138,6 +138,23 @@ def automatic_probe_warnings(metrics):
     return warnings
 
 
+def sample_idle_frames(frames, sample_count=4):
+    """Select evenly spaced source frames so an initial blink is not the only face shown."""
+    values = list(frames)
+    if len(values) <= sample_count:
+        return values
+    if sample_count < 2:
+        return [values[0]]
+    indices = [round(index * (len(values) - 1) / (sample_count - 1))
+               for index in range(sample_count)]
+    return [values[index] for index in indices]
+
+
+def probe_directory(args):
+    root = args.output / "probes" / args.variant
+    return root / args.probe_run if args.probe_run else root
+
+
 def compact_action_report(actions):
     """Keep review-relevant action provenance without duplicating frame arrays."""
     return {
@@ -298,7 +315,14 @@ def import_one(args):
             raise ValueError("Existing import action selection differs; archive it before reimport")
         previous_baseline = previous.get("facial_baseline", {})
         if previous_baseline.get("source") != item["facial_baseline"]:
-            if previous_baseline.get("configured") or item["facial_baseline"] is not None:
+            expected_unmatched_donor = previous_baseline.get("warning") == \
+                "donor_has_no_matching_eyelid_tracks"
+            if expected_unmatched_donor:
+                job_path = destination / "job.json"
+                previous_job = json.loads(job_path.read_text()) if job_path.is_file() else {}
+                if previous_job.get("facial_baseline") != item["facial_baseline"]:
+                    raise ValueError("Existing facial baseline differs; archive it before reimport")
+            elif previous_baseline.get("configured") or item["facial_baseline"] is not None:
                 raise ValueError("Existing facial baseline differs; archive it before reimport")
         for path, expected in previous.get("source_files", {}).items():
             if not Path(path).is_file() or digest(Path(path)) != expected:
@@ -657,14 +681,14 @@ def preview_catalog(args):
 
 
 def run_probes(args):
-    """Render one full-quality idle pose per view for every configured candidate.
+    """Render evenly spaced idle poses per view for every configured candidate.
 
     Probes are composition/facial triage only and never enter a game catalog.
     """
     status = json.loads((args.output / ("intake-status-" + args.variant + ".json")).read_text())
     entries = json.loads((args.output / "intake.json").read_text())["entries"]
     factory = Path(__file__).with_name("factory.py")
-    probe_root = args.output / "probes" / args.variant
+    probe_root = probe_directory(args)
     status_path = probe_root / "status.json"
     results = json.loads(status_path.read_text()).get("entries", {}) if status_path.exists() else {}
     for item in selected_entries(entries, args.only):
@@ -695,7 +719,9 @@ def run_probes(args):
                             raise ValueError("Source warnings require explicit review: " + str(warnings))
                         draft["source"]["accepted_warnings"] = warnings
                         draft["source"]["inspection_note"] += " Single-frame probe: disconnected image nodes acknowledged for review."
-                    draft["actions"]["idle"]["frames"] = draft["actions"]["idle"]["frames"][:1]
+                    draft["actions"]["idle"]["frames"] = sample_idle_frames(
+                        draft["actions"]["idle"]["frames"])
+                    draft["probe_sample_only"] = True
                     manifest = probe_root / "manifests" / (species + ".json")
                     write_json(manifest, draft)
                     source = source_dir / (item["identity"] + "-ready.blend")
@@ -722,6 +748,9 @@ def run_probes(args):
             results[species] = {"status": "needs_review" if not qc["errors"] else "qc_failed",
                                 "build": str(build), "qc_errors": qc["errors"],
                                 "qc_warnings": qc["warnings"],
+                                "sampled_idle_frames": json.loads(
+                                    (build / "provenance.json").read_text()
+                                )["identity"]["manifest"]["actions"]["idle"]["frames"],
                                 "image_metrics": image_metrics,
                                 "automatic_warnings": automatic_warnings}
             print("PROBED", species, "errors", len(qc["errors"]), flush=True)
@@ -737,21 +766,29 @@ def run_probes(args):
             rows.append("<tr><td>" + html.escape(species) + "</td><td>geblokkeerd</td><td>" +
                         html.escape(result.get("error", "onbekende fout")) + "</td></tr>")
             continue
-        overview = Path(build) / "previews" / "overview.png"
+        previews = Path(build) / "previews"
+        front_contact = previews / "front-contact.png"
+        back_contact = previews / "back-contact.png"
+        preview_page = previews / "index.html"
         note = by_species.get(species, {}).get("review_warning", "")
         warnings = [*result.get("qc_warnings", []), *result.get("automatic_warnings", [])]
-        rows.append("<tr><td>" + html.escape(species) + "</td><td><a href='" +
-                    html.escape(str(overview)) + "'><img src='" + html.escape(str(overview)) +
-                    "' width='480' alt='front and back'></a></td><td>" +
+        frames = ", ".join(map(str, result.get("sampled_idle_frames", [])))
+        rows.append("<tr><td>" + html.escape(species) + "<br><small>frames " +
+                    html.escape(frames) + "</small></td><td><a href='" +
+                    html.escape(str(preview_page)) + "'><img src='" +
+                    html.escape(str(front_contact)) + "' width='512' alt='front idle frame samples'></a></td>"
+                    "<td><a href='" + html.escape(str(preview_page)) + "'><img src='" +
+                    html.escape(str(back_contact)) + "' width='512' alt='back idle frame samples'></a></td><td>" +
                     html.escape("; ".join(filter(None, [note, *warnings])) or
-                                "Geen automatische waarschuwing; visueel beoordelen") +
+                                "Visueel beoordelen; samples tonen meerdere idle-momenten") +
                     "</td></tr>")
     page = ("<!doctype html><html lang='nl'><meta charset='utf-8'><title>Pokémon compositieproeven</title>"
             "<style>body{font:16px system-ui;background:#141722;color:#eee;margin:2rem}"
             "a{color:#8bd4ff}td,th{padding:.6rem;border:1px solid #555}table{border-collapse:collapse}</style>"
             "<h1>Front/back idle-triage</h1><p>Een pose of een eerder volledig idle-resultaat per soort. "
             "Deze technische previews zijn geen goedgekeurde battle-assets.</p>"
-            "<table><tr><th>Pokémon</th><th>Beeld</th><th>Reviewpunt</th></tr>" +
+            "<table><tr><th>Pokémon en frames</th><th>Idle voorzijde</th><th>Idle achterzijde</th>"
+            "<th>Reviewpunt</th></tr>" +
             "".join(rows) + "</table></html>")
     (probe_root / "index.html").write_text(page)
     print("PROBE INDEX", probe_root / "index.html")
@@ -765,7 +802,7 @@ def evaluate_gates(args):
     """
     entries = json.loads((args.output / "intake.json").read_text())["entries"]
     intake_path = args.output / ("intake-status-" + args.variant + ".json")
-    probe_path = args.output / "probes" / args.variant / "status.json"
+    probe_path = probe_directory(args) / "status.json"
     build_path = args.output / ("build-status-" + args.variant + "-full.json")
     intake = json.loads(intake_path.read_text()).get("entries", {}) if intake_path.exists() else {}
     probes = json.loads(probe_path.read_text()).get("entries", {}) if probe_path.exists() else {}
@@ -901,6 +938,8 @@ def main():
                         help="Explicitly acknowledge only disconnected empty texture nodes")
     parser.add_argument("--through", choices=["probes", "full"], default="probes",
                         help="run-pipeline stops after probes unless human-reviewed entries may render fully")
+    parser.add_argument("--probe-run", default="",
+                        help="store and evaluate a separate probe set under probes/<variant>/<name>")
     parser.add_argument("--decision", choices=["approved_for_full_render", "held_for_review", "rejected"],
                         help="Human decision for record-probe-review")
     parser.add_argument("--reviewer", help="Human reviewer name for record-probe-review")

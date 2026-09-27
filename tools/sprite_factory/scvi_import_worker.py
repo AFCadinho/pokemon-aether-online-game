@@ -78,7 +78,13 @@ def apply_facial_baseline(rig, actions, job, animation_type):
     baseline = {bone.name: bone.matrix_basis.copy() for bone in eyelids
                 if bone.name in donor_tracks}
     if not baseline:
-        raise ValueError("Configured facial donor has no matching eyelid tracks")
+        # Some rigs have eyelid bones but the default idle clip does not key
+        # them. Keep those candidates importable for visual review; the normal
+        # inherited-pose warning below will still flag their unresolved eyes.
+        return {"configured": False, "source": baseline_path,
+                "frame": job.get("facial_baseline_frame", 0),
+                "injected": {},
+                "warning": "donor_has_no_matching_eyelid_tracks"}
     injected = {}
     for category in job.get("facial_baseline_categories", []):
         motion = job["motions"].get(category)
