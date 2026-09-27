@@ -2273,7 +2273,7 @@
 					"spawnMarker": "FromSaffronNorth",
 					"tile": {
 						"x": 21,
-						"y": 55
+						"y": 54
 					}
 				},
 				"from_underground_path": {
@@ -2283,7 +2283,7 @@
 					"spawnMarker": "FromUndergroundPath",
 					"tile": {
 						"x": 38,
-						"y": 41
+						"y": 40
 					}
 				}
 			}
@@ -2479,7 +2479,9 @@
 			"locationGroupId": "kanto_underground_path",
 			"locationGroupLabel": "Underground Path",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://c25wp5r1uf38i"
+			],
 			"scenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 			"spawnPoints": {
 				"from_route_6": {
@@ -4930,7 +4932,9 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_underground_path_route_6_entrance",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://c25wp5r1uf38i"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 				"position": {
 					"x": 336.0,
@@ -5012,8 +5016,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 672.0,
-					"y": 1780.0
+					"x": 688.0,
+					"y": 1744.0
 				},
 				"spawnMarker": "FromSaffronNorth"
 			},
@@ -5045,7 +5049,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
 					"x": 1232.0,
-					"y": 1328.0
+					"y": 1296.0
 				},
 				"spawnMarker": "FromUndergroundPath"
 			},
@@ -5122,7 +5126,9 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_underground_path_route_6_entrance",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://c25wp5r1uf38i"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 				"position": {
 					"x": 304.0,
