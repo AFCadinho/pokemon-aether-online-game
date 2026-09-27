@@ -31,8 +31,9 @@ desktop or browser client.
 The additional atlas-layout CI check rejects oversized canvases, unused atlas
 sources/tiles, missing cell alternatives and non-lossless compact output. Existing
 visuals are immutable hash-baselined migration exceptions; new or edited imports
-must pass. Used TMX/TSX animations are explicitly rejected before replacing output
-until an animation-aware compaction path exists.
+must pass. TMX/TSX animations are packed into dedicated lossless frame strips and use
+native Godot tile animation, including frame timing. Invalid used animations
+are rejected before replacing output.
 
 Visual render hints:
 

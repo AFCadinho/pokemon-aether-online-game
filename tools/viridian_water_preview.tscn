@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/viridian_water_test/viridian_water_test.visual.tscn" id="1"]
+[ext_resource type="Script" path="res://tools/viridian_water_preview_controls.gd" id="2"]
+
+[node name="ViridianWaterPreview" type="Node2D"]
+texture_filter = 1
+script = ExtResource("2")
+
+[node name="ViridianCity" parent="." instance=ExtResource("1")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(736, 1632)
+zoom = Vector2(2, 2)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 20.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Viridian City • wateranimatie
+Tab: hele stad / vijver   |   Esc: sluiten"

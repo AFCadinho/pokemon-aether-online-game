@@ -78,6 +78,10 @@ func parse_tmx(tmx_path: String, missing_tileset_paths: Dictionary = {}) -> Dict
 				"animation":
 					if not current_tileset.is_empty() and current_tile_id >= 0:
 						current_tileset["animated_tile_ids"].append(current_tile_id)
+						current_tileset["tile_animations"][current_tile_id] = []
+				"frame":
+					if not current_tileset.is_empty() and current_tileset["tile_animations"].has(current_tile_id):
+						current_tileset["tile_animations"][current_tile_id].append({"tile_id": int(attrs.get("tileid", -1)), "duration": int(attrs.get("duration", 0))})
 				"objectgroup":
 					current_object_group = _parse_object_group(attrs)
 					if parser.is_empty():
@@ -202,6 +206,7 @@ func _parse_tileset_reference(attrs: Dictionary, tmx_path: String, missing_tiles
 		"properties": {},
 		"tile_properties": {},
 		"animated_tile_ids": [],
+		"tile_animations": {},
 	}
 	var source := str(tileset["source"])
 	if source != "":
@@ -246,6 +251,7 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 		"properties": {},
 		"tile_properties": {},
 		"animated_tile_ids": [],
+		"tile_animations": {},
 	}
 	var in_properties := false
 	var properties_target: Dictionary = {}
@@ -274,6 +280,10 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 				"animation":
 					if current_tile_id >= 0:
 						tileset["animated_tile_ids"].append(current_tile_id)
+						tileset["tile_animations"][current_tile_id] = []
+				"frame":
+					if tileset["tile_animations"].has(current_tile_id):
+						tileset["tile_animations"][current_tile_id].append({"tile_id": int(attrs.get("tileid", -1)), "duration": int(attrs.get("duration", 0))})
 				"properties":
 					in_properties = true
 					properties_target = tileset["properties"]
