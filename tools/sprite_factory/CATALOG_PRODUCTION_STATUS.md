@@ -24,6 +24,27 @@ carry the idle eyelid warning; 48 still carry it, which is a review signal and
 not proof that the rendered eyes look closed. The combined page is
 `game/.worktrees/slot-a/frontend/.tmp/catalog-production-04-facial-baseline/review-index.html`.
 
+## Batch 04 — official eye01 follow-up (2026-09-27)
+
+User review identified visibly closed idle eyes on Gengar, Froslass, Glalie and
+Scream Tail. The source's official `eye01` animation provides an open-eye frame
+for each. Twelve batch-04 source entries now use that frame as their facial
+baseline, including other visibly improved cases such as Arctibax, Smoliv,
+Frosmoth and Flamigo. All twelve four-frame normal idle probes passed technical
+QC; their visual comparison is retained at
+`game/.worktrees/slot-a/frontend/.tmp/catalog-production-04-eye01-review/index.html`.
+The user reviewed the before/after page and accepted all thirteen corrected
+eye appearances, including Groudon's separate normal-form comparison.
+This is a facial review correction, not candidate approval or a full battle
+qualification. Groudon is an already approved batch-02 model and has a separate
+local normal-form eye01 comparison; its released bundle has not changed.
+The remaining 75 batch-04 candidates without the original inherited-idle
+eyelid warning were also sampled at four idle frames. Seventy-four passed
+probe QC; Spiritomb retained its already known front/back clipping failure.
+Their visual overview is at
+`game/.worktrees/slot-a/frontend/.tmp/catalog-production-04/probes/normal/multi-frame-remaining/index.html`.
+The user reviewed this overview and found no further visibly closed eyes.
+
 ## Batch 04 — 226 candidates, starter lines first (2026-09-27)
 
 The [batch-04 manifest](catalog_production_batch_04.json) contains the 226

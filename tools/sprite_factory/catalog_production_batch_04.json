@@ -54,8 +54,8 @@
         "gastly"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "dragonair",
@@ -581,8 +581,8 @@
         "smoliv"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "dolliv",
@@ -721,8 +721,8 @@
         "frigibax"
       ],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "baxcalibur",
@@ -1008,8 +1008,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "20010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "28000_eye01"
     },
     {
       "species": "luvdisc",
@@ -1113,8 +1113,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "20010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "28000_eye01"
     },
     {
       "species": "rotom",
@@ -1300,8 +1300,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "sinistea",
@@ -1366,8 +1366,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "20010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "28000_eye01"
     },
     {
       "species": "stonjourner",
@@ -1855,8 +1855,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "rellor",
@@ -1950,8 +1950,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "20010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "28000_eye01"
     },
     {
       "species": "revavroom",
@@ -1960,8 +1960,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "20010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "28000_eye01"
     },
     {
       "species": "cyclizar",
@@ -2017,8 +2017,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "cetoddle",
@@ -2105,8 +2105,8 @@
       "priority_group": "national_dex",
       "starter_line_roots": [],
       "target_game_height_px": 120,
-      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official default-idle eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
-      "facial_baseline_motion": "00010_defaultidle01"
+      "review_warning": "Uniform 120px composition-preview scale only; calibrate this species in battle before approval. Official eye01 open-eye pose fills missing idle eyelid tracks; inspect eyes. Sleep/faint remain separate.",
+      "facial_baseline_motion": "08000_eye01"
     },
     {
       "species": "brute-bonnet",
