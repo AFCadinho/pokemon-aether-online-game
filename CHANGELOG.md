@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen in immersive mode voor alle vier een eigen HP-kaart bij hun model.
+- Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen de vier HP-kaarten in een compacte statusrij boven het speelveld.
 
 - Nog 75 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm. Elk modelpaar heeft een eigen downloadbare bundle; publicatie volgt in een latere desktoprelease.
 
