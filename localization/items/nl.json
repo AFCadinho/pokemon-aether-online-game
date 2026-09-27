@@ -366,5 +366,21 @@
   "team-rocket-female-cap": {
     "name": "Team Rocket-pet (vrouw)",
     "shortDesc": "Niet verhandelbaar. Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+  },
+  "aether-ronin-outfit": {
+    "name": "Aether Ronin-outfitbox",
+    "shortDesc": "Onverhandelbaar. Open deze box voor de Ronin-kimono, hakama en tabisandalen voor jouw personagemodel."
+  },
+  "aether-ronin-shirt": {
+    "name": "Aether Ronin-kimono",
+    "shortDesc": "Onverhandelbaar. Verplaats de Ronin-kimono naar Personage aanpassen."
+  },
+  "aether-ronin-trousers": {
+    "name": "Aether Ronin-hakama",
+    "shortDesc": "Onverhandelbaar. Verplaats de Ronin-hakama naar Personage aanpassen."
+  },
+  "aether-ronin-shoes": {
+    "name": "Aether Ronin-tabisandalen",
+    "shortDesc": "Onverhandelbaar. Verplaats de Ronin-tabisandalen naar Personage aanpassen."
   }
 }

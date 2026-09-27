@@ -366,5 +366,21 @@
   "team-rocket-female-cap": {
     "name": "Team Rocket Cap (Female)",
     "shortDesc": "Untradeable. Move this female-only cosmetic into Character Customization."
+  },
+  "aether-ronin-outfit": {
+    "name": "Aether Ronin Outfit Box",
+    "shortDesc": "Untradeable. Open this box to receive the Ronin kimono, hakama trousers and tabi sandals for your character model."
+  },
+  "aether-ronin-shirt": {
+    "name": "Aether Ronin Kimono",
+    "shortDesc": "Untradeable. Move the Aether Ronin kimono into Character Customization."
+  },
+  "aether-ronin-trousers": {
+    "name": "Aether Ronin Hakama",
+    "shortDesc": "Untradeable. Move the Aether Ronin hakama into Character Customization."
+  },
+  "aether-ronin-shoes": {
+    "name": "Aether Ronin Tabi Sandals",
+    "shortDesc": "Untradeable. Move the Aether Ronin tabi sandals into Character Customization."
   }
 }
