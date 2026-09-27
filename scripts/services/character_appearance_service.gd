@@ -187,12 +187,14 @@ static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: 
 static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	var normalized_item_id := item_id.strip_edges().to_lower()
 	if normalized_item_id in [
-		"team-rocket-outfit", "team-rocket-female-outfit",
+		"team-rocket-outfit", "team-rocket-female-outfit", "aether-ronin-outfit",
 		"adinho-classic-sunglasses", "adinho-chroma-glasses",
 	]:
 		return ["male", "female"]
 	if normalized_item_id.begins_with("aether-wayfarer-male-"):
 		return ["male"]
+	if normalized_item_id.begins_with("aether-ronin-"):
+		return ["male", "female"]
 	if normalized_item_id.begins_with("aether-wayfarer-female-"):
 		return ["female"]
 	if (
@@ -283,6 +285,19 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			layers = [{"category": BOTTOM_CATEGORY, "id": "AetherWayfarer_Female_Trousers"}]
 		"aether-wayfarer-female-shoes":
 			layers = [{"category": SHOES_CATEGORY, "id": "AetherWayfarer_Female_Shoes"}]
+		"aether-ronin-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "AetherRonin_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "AetherRonin_Shoes"},
+				{"category": TOP_CATEGORY, "id": "AetherRonin_Shirt"},
+			]
+		"aether-ronin-shirt":
+			layers = [{"category": TOP_CATEGORY, "id": "AetherRonin_Shirt"}]
+		"aether-ronin-trousers":
+			layers = [{"category": BOTTOM_CATEGORY, "id": "AetherRonin_Trousers"}]
+		"aether-ronin-shoes":
+			layers = [{"category": SHOES_CATEGORY, "id": "AetherRonin_Shoes"}]
 		"smoking-outfit":
 			layers = [
 				{"kind": "body"},

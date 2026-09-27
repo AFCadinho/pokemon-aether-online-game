@@ -48,7 +48,7 @@
               "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/trousers.png",
               "scale": 1.0
             },
-            "AetherRonin_Male_Trousers": {
+            "AetherRonin_Trousers": {
               "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/trousers.png",
               "scale": 1.0
             }
@@ -86,7 +86,7 @@
               "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/shoes.png",
               "scale": 1.0
             },
-            "AetherRonin_Male_Shoes": {
+            "AetherRonin_Shoes": {
               "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/shoes.png",
               "scale": 1.0
             }
@@ -124,7 +124,7 @@
               "path": "res://assets/battles/trainers/player/male/aether_wayfarer_outfit/shirt.png",
               "scale": 1.0
             },
-            "AetherRonin_Male_Shirt": {
+            "AetherRonin_Shirt": {
               "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/shirt.png",
               "scale": 1.0
             }
@@ -238,7 +238,7 @@
               "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/trousers.png",
               "scale": 1.0
             },
-            "AetherRonin_Female_Trousers": {
+            "AetherRonin_Trousers": {
               "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/trousers.png",
               "scale": 1.0
             }
@@ -276,7 +276,7 @@
               "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/shoes.png",
               "scale": 1.0
             },
-            "AetherRonin_Female_Shoes": {
+            "AetherRonin_Shoes": {
               "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/shoes.png",
               "scale": 1.0
             }
@@ -309,7 +309,7 @@
               "path": "res://assets/battles/trainers/player/female/aether_wayfarer_outfit/shirt.png",
               "scale": 1.0
             },
-            "AetherRonin_Female_Shirt": {
+            "AetherRonin_Shirt": {
               "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/shirt.png",
               "scale": 1.0
             }
