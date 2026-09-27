@@ -6157,5 +6157,10 @@
   "ui.appearance.option.teamrocket_shirt": "火箭队制服",
   "ui.appearance.option.teamrocket_trousers": "火箭队长裤",
   "ui.appearance.option.teamrocket_shoes": "火箭队长靴",
-  "ui.appearance.option.teamrocket_cap": "火箭队帽子"
+  "ui.appearance.option.teamrocket_cap": "火箭队帽子",
+  "ui.appearance.option.teamrocketfemale_shirt": "火箭队女式制服",
+  "ui.appearance.option.teamrocketfemale_skirt": "火箭队短裙",
+  "ui.appearance.option.teamrocketfemale_boots": "火箭队女式长靴",
+  "ui.appearance.option.teamrocketfemale_hair": "火箭队短发",
+  "ui.appearance.option.teamrocketfemale_cap": "火箭队女式帽子"
 }

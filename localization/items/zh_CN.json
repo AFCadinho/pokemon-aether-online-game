@@ -310,5 +310,29 @@
   "team-rocket-cap": {
     "name": "火箭队帽子",
     "shortDesc": "将男性专用火箭队帽子移入角色自定义。"
+  },
+  "team-rocket-female-outfit": {
+    "name": "火箭队女性服装礼盒",
+    "shortDesc": "打开此女性专用礼盒，获得制服（含手套）、短裙、长靴、紫色短发和帽子。"
+  },
+  "team-rocket-female-shirt": {
+    "name": "火箭队女式制服",
+    "shortDesc": "将此女性专用外观移入角色自定义。"
+  },
+  "team-rocket-female-skirt": {
+    "name": "火箭队短裙",
+    "shortDesc": "将此女性专用外观移入角色自定义。"
+  },
+  "team-rocket-female-boots": {
+    "name": "火箭队女式长靴",
+    "shortDesc": "将此女性专用外观移入角色自定义。"
+  },
+  "team-rocket-female-hair": {
+    "name": "火箭队短发",
+    "shortDesc": "将此女性专用外观移入角色自定义。"
+  },
+  "team-rocket-female-cap": {
+    "name": "火箭队女式帽子",
+    "shortDesc": "将此女性专用外观移入角色自定义。"
   }
 }

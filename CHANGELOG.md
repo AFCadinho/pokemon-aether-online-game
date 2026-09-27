@@ -4,6 +4,8 @@
 
 - De zuidelijke uitgang van Rock Tunnel 1F heeft nu een complete grotboog en een lage voorwand zoals in Mt. Moon; de uitgang en aankomst staan midden onder de boog.
 
+- De vrouwelijke Team Rocket-outfit is beschikbaar als outfitbox met uniform, rok, laarzen, paars bobkapsel en pet, inclusief trainer- en overworld-sprites. De box staat nog niet in de store.
+
 - Nieuwe Kanto-route-, grot- en verbindingsscenes tonen de geïmporteerde Tiled-maps en hebben gekoppelde ingangspunten en uitgangen. Route 2 en Pallet Town sluiten nu aan op Diglett Cave en Route 21; de locaties zijn beschikbaar voor staffteleport.
 
 - Het Team Rocket-uniform heeft nu dezelfde open halsuitsnede als de starter-outfit, zodat een stukje nek zichtbaar blijft tijdens staan en lopen.

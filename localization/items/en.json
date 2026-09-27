@@ -310,5 +310,29 @@
   "team-rocket-cap": {
     "name": "Team Rocket Cap",
     "shortDesc": "Move the male-only Team Rocket cap into Character Customization."
+  },
+  "team-rocket-female-outfit": {
+    "name": "Female Team Rocket Outfit Box",
+    "shortDesc": "Open this female-only box to receive a uniform with gloves, skirt, boots, purple bob and cap."
+  },
+  "team-rocket-female-shirt": {
+    "name": "Team Rocket Uniform (Female)",
+    "shortDesc": "Move this female-only cosmetic into Character Customization."
+  },
+  "team-rocket-female-skirt": {
+    "name": "Team Rocket Skirt",
+    "shortDesc": "Move this female-only cosmetic into Character Customization."
+  },
+  "team-rocket-female-boots": {
+    "name": "Team Rocket Boots (Female)",
+    "shortDesc": "Move this female-only cosmetic into Character Customization."
+  },
+  "team-rocket-female-hair": {
+    "name": "Team Rocket Bob",
+    "shortDesc": "Move this female-only cosmetic into Character Customization."
+  },
+  "team-rocket-female-cap": {
+    "name": "Team Rocket Cap (Female)",
+    "shortDesc": "Move this female-only cosmetic into Character Customization."
   }
 }

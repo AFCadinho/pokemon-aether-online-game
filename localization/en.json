@@ -6161,5 +6161,10 @@
   "ui.appearance.option.teamrocket_shirt": "Team Rocket Uniform",
   "ui.appearance.option.teamrocket_trousers": "Team Rocket Trousers",
   "ui.appearance.option.teamrocket_shoes": "Team Rocket Boots",
-  "ui.appearance.option.teamrocket_cap": "Team Rocket Cap"
+  "ui.appearance.option.teamrocket_cap": "Team Rocket Cap",
+  "ui.appearance.option.teamrocketfemale_shirt": "Team Rocket Uniform (Female)",
+  "ui.appearance.option.teamrocketfemale_skirt": "Team Rocket Skirt",
+  "ui.appearance.option.teamrocketfemale_boots": "Team Rocket Boots (Female)",
+  "ui.appearance.option.teamrocketfemale_hair": "Team Rocket Bob",
+  "ui.appearance.option.teamrocketfemale_cap": "Team Rocket Cap (Female)"
 }
