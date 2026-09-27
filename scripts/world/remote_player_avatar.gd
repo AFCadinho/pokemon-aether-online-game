@@ -1602,10 +1602,8 @@ func _sync_sprite_to_body(sprite: AnimatedSprite2D) -> void:
 	if frame_count > 0:
 		sprite.frame = mini(body_sprite.frame, frame_count - 1)
 		sprite.frame_progress = body_sprite.frame_progress
-	if body_sprite.is_playing():
-		sprite.play(animation_name)
-	else:
-		sprite.stop()
+	# Keep clothing on the body's clock, including frames with a long delta.
+	sprite.pause()
 
 
 func _clear_appearance_part_sprite(category: String) -> void:

@@ -2300,6 +2300,7 @@ func play_walk_animation(direction: Vector2) -> void:
 			sprite.play(animation_name)
 		else:
 			_hide_layer_for_missing_animation(sprite)
+	_sync_appearance_sprite_frames()
 	_sync_mount_animation(true, direction)
 
 func can_move_to(check_position: Vector2) -> bool:
@@ -3063,10 +3064,9 @@ func _sync_part_sprite_to_animation(sprite: AnimatedSprite2D) -> void:
 	if frame_count > 0:
 		sprite.frame = mini(master_appearance_sprite.frame, frame_count - 1)
 		sprite.frame_progress = master_appearance_sprite.frame_progress
-	if master_appearance_sprite.is_playing():
-		sprite.play(animation_name)
-	else:
-		sprite.stop()
+	# The body owns the animation clock; followers must not advance again
+	# during their own AnimatedSprite2D internal process later in this frame.
+	sprite.pause()
 
 func _get_appearance_sprite(sprite_name: String) -> AnimatedSprite2D:
 	for sprite in appearance_sprites:
@@ -3401,8 +3401,7 @@ func _sync_appearance_sprite_frames() -> void:
 
 		sprite.frame = mini(frame, frame_count - 1)
 		sprite.frame_progress = frame_progress
-		if not sprite.is_playing():
-			sprite.play(animation_name)
+		sprite.pause()
 
 func _sync_appearance_animation_speeds() -> void:
 	var idle_animation_names: Array[String] = ["idle_down", "idle_left", "idle_right", "idle_up"]

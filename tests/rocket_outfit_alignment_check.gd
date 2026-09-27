@@ -71,6 +71,19 @@ func _run() -> void:
 	save.appearance_headgear_id = previous_hat
 	var body := (load("res://assets/player/male/body/Gen4_Base_v1.png") as Texture2D).get_image()
 	var boots := (load("res://assets/player/male/shoes/TeamRocket_Shoes.png") as Texture2D).get_image()
+	var shirt := (load("res://assets/player/male/top/TeamRocket_Shirt.png") as Texture2D).get_image()
+	# The torso material and chest mark must move with the body, independently
+	# of the raised arm's bounding box. A whole-shirt rescale breaks this.
+	for row: int in [0, 3]:
+		var idle_head_y := body.get_region(Rect2i(0, row * 64, 64, 64)).get_used_rect().position.y
+		for col: int in [1, 3]:
+			var step_head_y := body.get_region(Rect2i(col * 64, row * 64, 64, 64)).get_used_rect().position.y
+			var torso_matches := true
+			for y: int in range(44, 54):
+				# Keep inside the chest; side contour gaps change with the arms.
+				for x: int in range(28, 34):
+					torso_matches = torso_matches and shirt.get_pixel(x, row * 64 + y) == shirt.get_pixel(col * 64 + x, row * 64 + y + step_head_y - idle_head_y)
+			_check(torso_matches, "row %s step %s torso detail follows the body's vertical displacement" % [row, col])
 	for style: String in ["walk", "fish", "ride"]:
 		var frames := APPEARANCE.get_part_frames("headgear", "TeamRocket_Cap", "male", style)
 		for col: int in range(4):
