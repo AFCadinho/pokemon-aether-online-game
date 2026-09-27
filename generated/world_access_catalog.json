@@ -1444,7 +1444,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute10South",
 					"tile": {
-						"x": 25,
+						"x": 26,
 						"y": 69
 					}
 				}
@@ -4054,7 +4054,7 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 816.0,
+					"x": 832.0,
 					"y": 2208.0
 				},
 				"spawnMarker": "FromRoute10South"
