@@ -40738,6 +40738,10 @@ func _on_coop_request_failed(message: String) -> void:
 			detail = "Both Adventure Party members must be online on the same map."
 		elif code == "coop_shared_level_cap_exceeded":
 			detail = "Both parties must respect the shared level cap."
+		elif code == "coop_http_404":
+			detail = "Shared encounters are unavailable on this game server. Update the local backend."
+		elif code == "coop_connection_unavailable":
+			detail = "Could not connect to the game server for the shared encounter."
 		add_system_message(detail)
 		return
 	var key := ""

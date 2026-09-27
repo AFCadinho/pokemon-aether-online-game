@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gedeelde Adventure Party-encounters melden nu wanneer de lokale backend de nieuwe route nog niet heeft, in plaats van dit als verbindingsfout te tonen.
+
 - Devtools-spawns starten voor een beschikbare Adventure Party nu één gedeeld double battle met de gekozen Pokémon; beide spelers zien hetzelfde gevecht. Zonder beschikbare partner volgt geen onbedoelde single battle.
 
 - Android-release builds now restore and checksum both Pokémon HOME sprite packs before export, so party icons are available in the installed APK.

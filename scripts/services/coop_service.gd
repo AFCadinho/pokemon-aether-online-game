@@ -471,6 +471,9 @@ func _request(action: String, payload: Dictionary) -> Dictionary:
 	var data: Dictionary = parsed if parsed is Dictionary else {}
 	var status := int(response[1])
 	var detail: Dictionary = data.get("detail", {}) if data.get("detail") is Dictionary else {}
+	var fallback_code := "coop_connection_unavailable"
+	if int(response[0]) == HTTPRequest.RESULT_SUCCESS and status > 0:
+		fallback_code = "coop_http_%d" % status
 	return {"success": int(response[0]) == HTTPRequest.RESULT_SUCCESS and status >= 200 and status < 300,
-		"status": status, "body": data, "code": detail.get("code", "coop_connection_unavailable"),
+		"status": status, "body": data, "code": detail.get("code", fallback_code),
 		"error": BackendErrorLocalizationService.message({"body": data, "status": status})}
