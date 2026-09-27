@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Een aparte Pallet Town-preview combineert echte Tiled-animaties voor water, boombladeren en bloemen, met een vergelijking tegen stilstaande tegels.
+
 - De pantalon van de mannelijke smoking-trainersprite volgt de benen beter, met aangepaste contouren en plooien.
 
 - De geselecteerde tegenstander in gedeelde 3D-double battles krijgt een gloed langs het Pokémon-model in plaats van een groot kader rond de klikzone.
