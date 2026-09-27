@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "date": "2026-09-27",
+  "status": "local_candidate_bundle_preflight_passed",
+  "runtime_approved": false,
+  "release_approved": false,
+  "bundle_count": 75,
+  "appearance_count": 150,
+  "bundle_bytes": 2128713452,
+  "bundle_index_bytes": 66488,
+  "bundle_index_sha256": "51ae99d19e9e05183342466e1b53b3cce371ae1d223444d5518638de743a3df7",
+  "archive_hashes_verified": 75,
+  "launcher_install_scenes_loaded": 150,
+  "launcher_resume_from_previously_installed": 43,
+  "launcher_no_op": true,
+  "launcher_restart": true,
+  "installed_catalog": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/catalog-production-03-candidate-install-2026-09-27/generations/3edfb330d36afb78725db29f1e8471bf2b531ae4f49ae6449a88c55081931260/runtime-catalog.json",
+  "installed_catalog_sha256": "ed009280a103c315ced3f5d31a7314128a99cd9907332cd2b7f9f0b2ab02fb82",
+  "evidence_sha256": {
+    ".tmp/catalog-production-03-candidate-bundles-2026-09-27-source-catalog.json": "a3c0fda42fe821734cefe1374734a57845a56fe02561fbec571daf2cdd921194",
+    ".tmp/catalog-production-03-candidate-install-resumed-2026-09-27.log": "75cf1868e4e1684fc43537413e7dbae4aff1a5ec2eb5ed3cc54b8800de1657c9",
+    "launcher/tests/catalog_batch_03_candidate_bundles_check.gd": "d20b7b9c021298c2f8aba06b4ed364301e540f4419d1e5d5d0df3d30c056c6ca"
+  }
+}

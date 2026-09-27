@@ -6,7 +6,7 @@ review and diagnostic GLB export produced 65 candidates. All 65 converted to
 self-contained Godot scenes with 520 native clips, including a second physical
 attack for every model. The standalone motion review captured eight actions at
 three times per model: 1,560 images, with zero missing-clip or pose errors.
-None are approved for runtime use yet.
+At that initial export stage, none were approved for runtime use.
 
 The 35 held cases are recorded by species and reason in
 `tools/sprite_factory/catalog_production_batch_03_intake_result.json`:
@@ -106,8 +106,8 @@ re-entry. Each round loaded every pair and completed every faint replacement.
 Across the 24 rounds, frame-time p95 was 17.173–17.515 ms; all 48 measured
 stalls over 50 ms occurred while the battle cover was visible. Cache and scene
 release assertions passed, and the temporary registry was restored byte for
-byte after each group. This is local battle-stress evidence, not runtime or
-release approval. No batch-03 model has been approved, bundled or uploaded.
+byte after each group. At this review stage, no batch-03 model had yet been
+approved, bundled or uploaded.
 
 Twenty source holds remain: eight transparent/refraction materials, eight
 dynamic visibility clocks (including the newly exposed Fletchling and
@@ -116,3 +116,31 @@ Meloetta's identity mismatch and Mimikyu's cross-form selector. These remain
 in a separate review queue; none is silently admitted. Batch 04 has not
 started. The exact recovery sets, feedback and local artifact hashes are in
 `tools/sprite_factory/catalog_production_batch_03_exception_review.json`.
+
+## Local admission and individual bundles
+
+The 75 visually accepted normal/shiny pairs were packaged into 75 separately
+versioned local bundles, totaling 2,128,713,452 bytes (2,030.10 MiB). Each
+archive and scene was checked against its exact SHA-256. The launcher installed
+all 75 bundles, loaded all 150 scenes, found no download on a repeat check,
+and recovered the installed state after a restart. Its transactional store
+resumed safely from 43 bundles when the first, shorter test run was stopped.
+The bundle index, installation catalog, logs and exact hashes are pinned in
+`tools/sprite_factory/catalog_production_batch_03_bundle_preflight.json`.
+
+Only those 75 pairs are admitted to the matching local game and launcher
+reviewed registries. The checked-in registry now has 229 profiles and 458
+normal/shiny model identities. All 20 remaining source holds and five shiny
+holds stay outside it. The exact admission decision is pinned in
+`tools/sprite_factory/catalog_production_batch_03_approval.json`; it does not
+publish a desktop release or activate an R2 content index.
+
+The game resolved all 150 launcher-installed scenes against the approved
+registry. A final real-battle pass loaded each installed pair and completed a
+faint/re-entry cycle in Classic, Stadium and Classic: 225 pair loads and 225
+faint replacements. Across 24 rounds, frame-time p95 was 17.210–18.417 ms;
+all 48 stalls over 50 ms occurred behind the battle cover. This run uses the
+four-slot presenter introduced for double battles; the two unused slots stay
+empty in these single battles. Evidence hashes are in
+`tools/sprite_factory/catalog_production_batch_03_approved_install_validation.json`.
+The bundles remain local and have not been uploaded or activated for players.

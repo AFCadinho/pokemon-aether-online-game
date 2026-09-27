@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog 75 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm. Elk modelpaar heeft een eigen downloadbare bundle; publicatie volgt in een latere desktoprelease.
+
 - Gedeelde Adventure Party-encounters melden nu wanneer de lokale backend de nieuwe route nog niet heeft, in plaats van dit als verbindingsfout te tonen.
 
 - Devtools-spawns starten voor een beschikbare Adventure Party nu één gedeeld double battle met de gekozen Pokémon; beide spelers zien hetzelfde gevecht. Zonder beschikbare partner volgt geen onbedoelde single battle.

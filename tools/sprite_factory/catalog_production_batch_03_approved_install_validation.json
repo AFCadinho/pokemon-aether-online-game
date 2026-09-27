@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "date": "2026-09-27",
+  "scope": "75 approved batch-03 normal/shiny pairs loaded from launcher-installed scenes in three real battle rounds",
+  "approval_sha256": "565939e2ffe5fcb51e66785fd66d6f3ec0d45022b7482bfc7b749e6b66052502",
+  "runtime_approved": true,
+  "release_approved": true,
+  "published": false,
+  "species": 75,
+  "rounds": 24,
+  "pair_loads": 225,
+  "faint_replacements": 225,
+  "frame_p95_ms_range": [
+    17.21,
+    18.417
+  ],
+  "stalls_over_50ms": 48,
+  "uncovered_stalls": 0,
+  "approved_admission_scenes_loaded": 150,
+  "evidence_sha256": {
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-01-2026-09-27/stress.json": "182caeb79d15fb92502418e3bff89fc36f8b0b0c00c8e131635ee1d10d53178b",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-01-2026-09-27/stress.log": "5f5db97cd36c1ef4c31a1f41f4facd725d639a444cf41d375f0f5105f6b02688",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-02-2026-09-27/stress.json": "31c716b02eb2194a104a79a0ed9c6b4612ebb9f532787a096dc3333687ed0a73",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-02-2026-09-27/stress.log": "581a3fc2ac9d2584ec92963fed65dd9b8dfb60973ae7117d1c15a4efd826b138",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-03-2026-09-27/stress.json": "8b973be0b7077272b6927f8c1ac2c33e81addc6a7122494855571bd107f68f82",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-03-2026-09-27/stress.log": "f825d3b35e167ad4a1724408009690cb214447252386144438405031427e63f8",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-04-2026-09-27/stress.json": "8fbf1211f662b5519c93a36ad9eb16766c5eb50877f6a80c1bb1f5676a8f8c82",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-04-2026-09-27/stress.log": "2ec11f3e075fb076a73dfd92de034e42ff33b5fa83d9339e34242a341a675529",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-05-2026-09-27/stress.json": "fa79ecff013b1c196305c49cc32d983d8b93ca55ff526f5da12ab55953efadcc",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-05-2026-09-27/stress.log": "e5b4bf875715597d64e51d8fd08b00640c0515d4c8e278e139a77d6ce58b76b4",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-06-2026-09-27/stress.json": "35a967bab1104e79318062f9e50ceb565fe8567158a76b35f86defa3b5510755",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-06-2026-09-27/stress.log": "60aa4e8d37eb28ab286493d01b745a9fdb9bdc91ff0cce23410eb66e07fa23a0",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-07-2026-09-27/stress.json": "5d3cd4e17142a8d848008ce7277917a97d2781283e168f7061832db98ada5e2d",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-07-2026-09-27/stress.log": "daf1e80b583188c3788319615b3bb941da8b773d7158f9dcaa7bb9b76a13c6ce",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-08-2026-09-27/stress.json": "820d5333ad3ffadecb74888c3eda9f97213fe703c4270bd10e0d3580f56cd397",
+    ".tmp/catalog-production-03-approved-installed-stress-final-group-08-2026-09-27/stress.log": "046ea4c0cb9918943e673244f2eada257e178bdc16f89913ead647e9e99a71c5",
+    ".tmp/catalog-production-03-approved-admission-2026-09-27.log": "8269fab95d0da851254ba118da575eb21c3bf6d7109278b7950d25a836c9f303",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "8e3ac23d135697f5b94e3149d27715258885c317a2ba41b267ebf0c0e924bd2b",
+    "tests/catalog_batch_03_approved_admission_check.gd": "78b715d2637d774ee762673bd430de40b7421276ce52b2a8f73d996cb8079ece"
+  }
+}
