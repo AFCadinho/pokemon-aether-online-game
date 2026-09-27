@@ -1035,7 +1035,8 @@
   "battle_placement": {
     "receipt": "tools/sprite_factory/catalog_production_batch_04_recovery_battle.json",
     "technical_ready": 24,
-    "visual_review": "pending",
+    "visual_review": "user_accepted_all_24",
     "runtime_approved": false
-  }
+  },
+  "local_approval": "tools/sprite_factory/catalog_production_batch_04_recovery_approval.json"
 }

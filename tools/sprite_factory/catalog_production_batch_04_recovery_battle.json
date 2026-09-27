@@ -4,7 +4,7 @@
   "runtime_approved": false,
   "release_approved": false,
   "normal_shiny_visual_review": "user_accepted_all_24",
-  "battle_visual_review": "pending",
+  "battle_visual_review": "user_accepted_all_24",
   "evidence_sha256": {
     ".tmp/batch04-recovery/battle-corrected-1/battle-review.json": "d6d7de1e7d155abb6ac6991bb0453ecaad394dd654b1937939f2b153d54805aa",
     ".tmp/batch04-recovery/battle-group-1/candidates.json": "ce50a5c0df0a4f4d70baf015312f3a13929be4009906385c6cc40c13edf36b95",
