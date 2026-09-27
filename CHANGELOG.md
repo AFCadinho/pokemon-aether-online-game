@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Tall grass beweegt nu standaard zacht met verschillende rustpauzes per groepje, ook in Viridian Forest. Nieuwe Tiled-imports krijgen dezelfde animatie automatisch.
+
 - Kleding volgt tijdens lopen exact de animatie van het lichaam, ook bij starten en van richting veranderen. Het Team Rocket-shirt heeft een stabiele romp en borstmarkering zonder opspringende tailleband.
 
 - Een aparte Route 1-proef laat één veld tall grass zacht bewegen, met verschillende pauzes per groepje en een aan/uitvergelijking.

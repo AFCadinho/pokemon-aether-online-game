@@ -152,9 +152,7 @@ static func _match_exact_visual_tile_mask(
 	# from being reclassified as grass on other legacy maps.
 	var source_cells: Array[Vector2i] = []
 	var source_cell_set: Dictionary = {}
-	var matched_source_id := -1
-	var matched_atlas_coords := Vector2i(-1, -1)
-	var matched_alternative := -1
+	var matched_key := ""
 
 	for marker_cell: Vector2i in marker_layer.get_used_cells():
 		var marker_center_global := marker_layer.to_global(marker_layer.map_to_local(marker_cell))
@@ -164,28 +162,17 @@ static func _match_exact_visual_tile_mask(
 		var source_id := candidate.get_cell_source_id(source_cell)
 		if source_id < 0:
 			return {}
-		var atlas_coords := candidate.get_cell_atlas_coords(source_cell)
-		var alternative := candidate.get_cell_alternative_tile(source_cell)
-		if matched_source_id < 0:
-			matched_source_id = source_id
-			matched_atlas_coords = atlas_coords
-			matched_alternative = alternative
-		elif (
-			source_id != matched_source_id
-			or atlas_coords != matched_atlas_coords
-			or alternative != matched_alternative
-		):
+		var key := _logical_grass_key(candidate,source_cell)
+		if matched_key == "":
+			matched_key = key
+		elif key != matched_key:
 			return {}
 		source_cells.append(source_cell)
 		source_cell_set[source_cell] = true
 
 	var matching_tile_count := 0
 	for candidate_cell: Vector2i in candidate.get_used_cells():
-		if (
-			candidate.get_cell_source_id(candidate_cell) != matched_source_id
-			or candidate.get_cell_atlas_coords(candidate_cell) != matched_atlas_coords
-			or candidate.get_cell_alternative_tile(candidate_cell) != matched_alternative
-		):
+		if _logical_grass_key(candidate,candidate_cell) != matched_key:
 			continue
 		matching_tile_count += 1
 		if not source_cell_set.has(candidate_cell):
@@ -198,6 +185,18 @@ static func _match_exact_visual_tile_mask(
 		"visual_layer": candidate,
 		"cells": source_cells,
 	}
+
+
+static func _logical_grass_key(layer: TileMapLayer,cell: Vector2i) -> String:
+	var id := layer.get_cell_source_id(cell)
+	var coords := layer.get_cell_atlas_coords(cell)
+	var alternative := layer.get_cell_alternative_tile(cell)
+	var source := layer.tile_set.get_source(id) as TileSetAtlasSource
+	# Importer-marked phase variants share one logical grass family. The full
+	# occurrence set must still match the encounter mask exactly.
+	if source != null and source.has_meta("pao_tall_grass_family"):
+		return "wind:%s:%d" % [source.get_meta("pao_tall_grass_family"),alternative]
+	return "%d:%s:%d" % [id,coords,alternative]
 
 
 static func _collect_tilemap_layers(node: Node, layers: Array[TileMapLayer]) -> void:

@@ -52,7 +52,9 @@ func import_tmx(tmx_path: String, output_scene_path: String, missing_tileset_pat
 
 	var scene_builder := TmxVisualSceneBuilder.new()
 	var root := scene_builder.build_scene(map_data, tileset_result["tileset"], tileset_builder)
-	var compact_result := AtlasCompactor.new().compact(root, tileset_path, TileAnimations.new().resolve(animation_result.animations, tileset_builder))
+	var resolved_animations := TileAnimations.new().resolve(animation_result.animations, tileset_builder)
+	var grass := preload("res://addons/tiled_tmx_importer/importer/tmx_tall_grass_wind.gd").new().apply(root, resolved_animations)
+	var compact_result := AtlasCompactor.new().compact(root, tileset_path, grass.animations)
 	if not bool(compact_result.get("success", false)):
 		root.free()
 		return compact_result

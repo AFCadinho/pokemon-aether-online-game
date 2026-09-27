@@ -1,0 +1,245 @@
+{
+	"maps": {
+		"cerulean_city": {
+			"after": {
+				"baseRGBABytes": 7483392,
+				"cells": 10151,
+				"fingerprint": "63c1a649d142327ce6a5310ed873a40b22da2884e773283e8897e77d5806fda4",
+				"layers": 6,
+				"usedTiles": 591
+			},
+			"before": {
+				"baseRGBABytes": 6893568,
+				"cells": 10151,
+				"fingerprint": "63c1a649d142327ce6a5310ed873a40b22da2884e773283e8897e77d5806fda4",
+				"layers": 6,
+				"usedTiles": 590
+			},
+			"existing_animation_fingerprint": "29f51c5da0fc8cd48ff0f32b7da3c6f2e4a6b26a3fc89c30be16245f503e4f31",
+			"grass_cells": 20,
+			"phase_counts": [
+				0,
+				10,
+				10,
+				0
+			]
+		},
+		"kanto_route_2": {
+			"after": {
+				"baseRGBABytes": 6156288,
+				"cells": 10586,
+				"fingerprint": "048df4973f8416bcd3b29fe4020bc5734a66dd8e0319b68fd95299bb1f5a1532",
+				"layers": 8,
+				"usedTiles": 285
+			},
+			"before": {
+				"baseRGBABytes": 5013504,
+				"cells": 10586,
+				"fingerprint": "048df4973f8416bcd3b29fe4020bc5734a66dd8e0319b68fd95299bb1f5a1532",
+				"layers": 8,
+				"usedTiles": 282
+			},
+			"existing_animation_fingerprint": "82f659a92bd7fc184434baa4dab4764124d22750ffc5dec113fa61a1146b2d30",
+			"grass_cells": 100,
+			"phase_counts": [
+				28,
+				15,
+				31,
+				26
+			]
+		},
+		"kanto_route_22": {
+			"after": {
+				"baseRGBABytes": 5824512,
+				"cells": 7535,
+				"fingerprint": "b020c96eb2eed0b9cb8b271378c2b9fe8ecbe1174a90159369cbddf6f787068e",
+				"layers": 4,
+				"usedTiles": 222
+			},
+			"before": {
+				"baseRGBABytes": 4644864,
+				"cells": 7535,
+				"fingerprint": "b020c96eb2eed0b9cb8b271378c2b9fe8ecbe1174a90159369cbddf6f787068e",
+				"layers": 4,
+				"usedTiles": 219
+			},
+			"existing_animation_fingerprint": "d3ea2a9b6562e611ae7a03e2ea2779de8a28b804472035ad471b5c0a9150fee2",
+			"grass_cells": 253,
+			"phase_counts": [
+				63,
+				49,
+				75,
+				66
+			]
+		},
+		"route_1": {
+			"after": {
+				"baseRGBABytes": 5732352,
+				"cells": 8581,
+				"fingerprint": "5eb518ba0203f4b6d19b2b4f622effe8555189f130dd8f81c8f91e3e0aca2c5d",
+				"layers": 6,
+				"usedTiles": 153
+			},
+			"before": {
+				"baseRGBABytes": 4267008,
+				"cells": 8581,
+				"fingerprint": "5eb518ba0203f4b6d19b2b4f622effe8555189f130dd8f81c8f91e3e0aca2c5d",
+				"layers": 6,
+				"usedTiles": 150
+			},
+			"existing_animation_fingerprint": "b9465735b770c8998c40ad6fb212afcd494ce1bf38501bd2bd1b52a5d6b4f427",
+			"grass_cells": 342,
+			"phase_counts": [
+				85,
+				96,
+				82,
+				79
+			]
+		},
+		"route_24": {
+			"after": {
+				"baseRGBABytes": 5584896,
+				"cells": 5770,
+				"fingerprint": "2e2e3b6c461c0ed42f126b9576a5557b665a30e3dea1a9675ccbe957daae1c4d",
+				"layers": 4,
+				"usedTiles": 162
+			},
+			"before": {
+				"baseRGBABytes": 4442112,
+				"cells": 5770,
+				"fingerprint": "2e2e3b6c461c0ed42f126b9576a5557b665a30e3dea1a9675ccbe957daae1c4d",
+				"layers": 4,
+				"usedTiles": 159
+			},
+			"existing_animation_fingerprint": "4851ac330f104526495d4243cff41e26528346bf5f4c1fd3f3c603cc1f1ff62e",
+			"grass_cells": 126,
+			"phase_counts": [
+				38,
+				44,
+				17,
+				27
+			]
+		},
+		"route_25": {
+			"after": {
+				"baseRGBABytes": 5630976,
+				"cells": 6322,
+				"fingerprint": "72a34675b76d5867f3fb72d9da69a3999ed8c653c3399423befac7bc0ed976b1",
+				"layers": 6,
+				"usedTiles": 183
+			},
+			"before": {
+				"baseRGBABytes": 4451328,
+				"cells": 6322,
+				"fingerprint": "72a34675b76d5867f3fb72d9da69a3999ed8c653c3399423befac7bc0ed976b1",
+				"layers": 6,
+				"usedTiles": 180
+			},
+			"existing_animation_fingerprint": "7d502f2e2c6d8759af7b17b0ec79575f41452c2da4503431c420f5035d93cab5",
+			"grass_cells": 46,
+			"phase_counts": [
+				7,
+				17,
+				11,
+				11
+			]
+		},
+		"route_3": {
+			"after": {
+				"baseRGBABytes": 4921344,
+				"cells": 8569,
+				"fingerprint": "817e41038ee22fa96d731838901b115587c798b0dff78d4e1745213a8483fcc8",
+				"layers": 6,
+				"usedTiles": 273
+			},
+			"before": {
+				"baseRGBABytes": 3741696,
+				"cells": 8569,
+				"fingerprint": "817e41038ee22fa96d731838901b115587c798b0dff78d4e1745213a8483fcc8",
+				"layers": 6,
+				"usedTiles": 270
+			},
+			"existing_animation_fingerprint": "4e31449f8680049b86e2a18b302be0f005efbfa98b0c4d73eaaee9693bb2f2a6",
+			"grass_cells": 167,
+			"phase_counts": [
+				36,
+				52,
+				41,
+				38
+			]
+		},
+		"route_4": {
+			"after": {
+				"baseRGBABytes": 5548032,
+				"cells": 8434,
+				"fingerprint": "8bcf453de6a98e31724e21914af8e40791c7d33a5610746091be8966e51f1e1a",
+				"layers": 4,
+				"usedTiles": 181
+			},
+			"before": {
+				"baseRGBABytes": 4368384,
+				"cells": 8434,
+				"fingerprint": "8bcf453de6a98e31724e21914af8e40791c7d33a5610746091be8966e51f1e1a",
+				"layers": 4,
+				"usedTiles": 178
+			},
+			"existing_animation_fingerprint": "58dba83d3fd3dde54bc090c70994b0ad21dc2ff31e8dab2fb53b20ceda57e1e7",
+			"grass_cells": 142,
+			"phase_counts": [
+				33,
+				46,
+				39,
+				24
+			]
+		},
+		"viridian_city": {
+			"after": {
+				"baseRGBABytes": 6948864,
+				"cells": 9917,
+				"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+				"layers": 7,
+				"usedTiles": 496
+			},
+			"before": {
+				"baseRGBABytes": 6064128,
+				"cells": 9917,
+				"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+				"layers": 7,
+				"usedTiles": 494
+			},
+			"existing_animation_fingerprint": "77f34dcbd80e4c97860a91a897f0821b79fec15e2a5c77e45acc9f55b2f44c94",
+			"grass_cells": 39,
+			"phase_counts": [
+				11,
+				0,
+				12,
+				16
+			]
+		},
+		"viridian_forest": {
+			"after": {
+				"baseRGBABytes": 2174976,
+				"cells": 13842,
+				"fingerprint": "33c18d9ccf77b2914d52ffc1255c8a3757c2bfc52f51218eca2093013b5ff834",
+				"layers": 5,
+				"usedTiles": 143
+			},
+			"before": {
+				"baseRGBABytes": 995328,
+				"cells": 13842,
+				"fingerprint": "33c18d9ccf77b2914d52ffc1255c8a3757c2bfc52f51218eca2093013b5ff834",
+				"layers": 5,
+				"usedTiles": 140
+			},
+			"existing_animation_fingerprint": "a0ffb848fb75535b1af2e6a436ad188275dd2466a528b3490ca23db6fee803f9",
+			"grass_cells": 812,
+			"phase_counts": [
+				207,
+				197,
+				226,
+				182
+			]
+		}
+	},
+	"version": 1
+}
