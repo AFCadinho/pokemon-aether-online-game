@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "date": "2026-09-29",
+  "scope": "144 reviewed normal/shiny pairs; native clips, floor and camera checks, installed battle lifecycle",
+  "appearance_approved": true,
+  "camera_grounding_checks_passed": true,
+  "runtime_lifecycle_check_passed": true,
+  "runtime_approved": false,
+  "release_approved": false,
+  "species_count": 144,
+  "scene_count": 288,
+  "normal_clip_count": 1150,
+  "battle_capture_count": 2304,
+  "minimum_sampled_clearance_required_m": 0.015,
+  "minimum_idle_logical_pixels_required": 60,
+  "minimum_measured_clearance_m": 0.0162282921373844,
+  "minimum_measured_idle_logical_pixels": 66.6731567382812,
+  "user_review": {
+    "battle_approved": true,
+    "scope": "all 144 final battle cards",
+    "feedback": "Allemaal goed",
+    "date": "2026-09-29",
+    "reviewer": "user"
+  },
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "pairs": 144,
+      "faint_replacements": 144,
+      "frame_p95_ms": 7.021,
+      "retained_source_bytes": 9090340
+    },
+    {
+      "arena": "stadium",
+      "pairs": 144,
+      "faint_replacements": 144,
+      "frame_p95_ms": 7.653,
+      "retained_source_bytes": 9090340
+    },
+    {
+      "arena": "classic",
+      "pairs": 144,
+      "faint_replacements": 144,
+      "frame_p95_ms": 7.027,
+      "retained_source_bytes": 9090340
+    }
+  ],
+  "profiles_sha256": "74eb937a286b8465e553f962f0b4ce7b06424dfce7c094821da4022f5dd110a9",
+  "evidence_sha256": {
+    "tools/sprite_factory/catalog_remaining_144_appearance_review.json": "39cfb0151c8a785282ae93bcc0607a1bd2c0f864388d6ff92080f08859007d6e",
+    ".tmp/remaining-pairs-battle/battle-status.json": "2cde12c3dfdf4dd26acce05d011df3fe14867310a20bf585cd71515f73200f97",
+    ".tmp/remaining-pairs-battle/runtime-fixture.json": "c6b2130b423ce0acebf6e68f5ac0d77ddb8868049e5f40fab56ce7b66f6723c9",
+    ".tmp/remaining-pairs-battle/runtime-catalog.json": "af3a2bc4a9d5b1c033ec875ff9d9e6fe3891083ce7cc8504393748129e0803ee",
+    ".tmp/remaining-pairs-battle/battle-index.html": "2e3de8cd99f35cb45d778f155f876ea1ec0d5c4b1cea64ffac506cb5e590a675",
+    ".tmp/remaining-pairs-battle/installed-stress-all.json": "8fcd1604e3982e65dcfff2ed5a5d41831e285cc96be3dae5b8689c08b3f6d9e5",
+    ".tmp/remaining-pairs-battle/installed-stress-all.log": "8dbfd9d2a4516d9cf9716176068b17f15a6542f2b8940d9c1af14c9266eb4e0c",
+    ".tmp/remaining-pairs-battle/installed-all/installed-catalog.json": "c15de8e3189b23a8a605eecb307608de2fc2b8221edf881af7a68440e4bc78b2",
+    ".tmp/remaining-pairs-battle/battle-user-review.json": "a36539ef74a86970a9fdd43c744443a9dbc552547e37734748fb99dcf5799e94",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "aebca18ecace390af8cbcffb43bea661eafa1387898fbc8ac9b983d52b40bdf3",
+    "tools/sprite_factory/phase5_battle_review.gd": "1355c27084c40442701de5477e68fbf90771372a4464d0c6c00cb36c14f4cbe1",
+    ".tmp/remaining-pairs-battle/battle-01/raw/battle-review.json": "75f47c6dbc4ff498c5d8d6913cf6f6214417c93eb8974a6e9fc20bf1401821aa",
+    ".tmp/remaining-pairs-battle/battle-01/corrected/battle-review.json": "ed2345b2738854f845a0a97230ea4703fec856f9796288c51b35bb7e43781f6d",
+    ".tmp/remaining-pairs-battle/battle-01/motion-candidates.json": "b929ceca866ca632e87b2d55ffc5adebf414d45db207a74538511b0bead996c4",
+    ".tmp/remaining-pairs-battle/battle-02/raw/battle-review.json": "136f69adfea5925b8d6dcdad3507e7e34c818e7721c7fa292748e198ec49d839",
+    ".tmp/remaining-pairs-battle/battle-02/corrected/battle-review.json": "ed9d639bc672ccf579264638d372c38752851eadc1db4c557d5abdd48bfa4fd2",
+    ".tmp/remaining-pairs-battle/battle-02/motion-candidates.json": "0954c2a93a43d7d9e185a45d71b096416a6d472e5e2b726fdc7c69d01c5b9023",
+    ".tmp/remaining-pairs-battle/battle-03/raw/battle-review.json": "9aee9952733abe5e59267a268e0a7da7259ea04b59d3ba440045bc3724291f54",
+    ".tmp/remaining-pairs-battle/battle-03/corrected/battle-review.json": "cb44cdd31f3dd005208d17456e98f31c85ff67474ab2b80719c9caf8aab68871",
+    ".tmp/remaining-pairs-battle/battle-03/motion-candidates.json": "a77cd8ff4f852eb67620787a98a09f6c3704190c3d83d15e3981cf47cd21667c",
+    ".tmp/remaining-pairs-battle/battle-04/raw/battle-review.json": "57c95653f5a049123c89323b4403bf1ddbbc11e16e5da6d94219c3620e0470e5",
+    ".tmp/remaining-pairs-battle/battle-04/corrected/battle-review.json": "1012dfb7170939ab3dcb1c8875136fc9d804ec31ad30fde46fb436949529009d",
+    ".tmp/remaining-pairs-battle/battle-04/motion-candidates.json": "151f37aea20173a1e125363b8b499f29fb98be245bc1c87fb14b26699f890741",
+    ".tmp/remaining-pairs-battle/battle-05/raw/battle-review.json": "54f786b800aaa3c812ae9a32ec7ccfecd225a817ecca35f3775c2efa8ad4d2d5",
+    ".tmp/remaining-pairs-battle/battle-05/corrected/battle-review.json": "4eccdbb8920b3adb44aa9ba29cc639f20967216252e2290919521b0ef1161acd",
+    ".tmp/remaining-pairs-battle/battle-05/motion-candidates.json": "21b55ed65a3bad938293ff1266cf75a14cfd8b5558c057e7403e4234e3f8b1dc",
+    ".tmp/remaining-pairs-battle/battle-06/raw/battle-review.json": "d953a536020569f0978b4564d941ca15fb336e322d9ae2c483f6373995041d2b",
+    ".tmp/remaining-pairs-battle/battle-06/corrected/battle-review.json": "7802141887e72e2bd63d5cc6c0f732d10df7a5fa183480759ef32a5b06b9c416",
+    ".tmp/remaining-pairs-battle/battle-06/motion-candidates.json": "577c5a3eba1392cf9231f6c304c00a7f06d03d180af9cfbe8746a55c9ff36493",
+    ".tmp/remaining-pairs-battle/mienshao-clearance/corrected/battle-review.json": "c398926c78e2c740e765782a7806377f87d468fb8c586df27c2e2124678f32de",
+    ".tmp/remaining-pairs-battle/mienshao-clearance/motion-candidates.json": "ef1fab1075bda89bde333c40e995a8319656f80f037d25615d08937494aaf676",
+    ".tmp/remaining-pairs-battle/porygon-z-clearance/corrected/battle-review.json": "fa87b00a5153af157ecdc3b92449ec44b4aef4718283e552fe2ad66c1eae92de",
+    ".tmp/remaining-pairs-battle/porygon-z-clearance/motion-candidates.json": "8c950d317d7b5ab067aaca0e130c7f9a2e17a4f0591036ebc1c70badde70ff67",
+    ".tmp/remaining-pairs-battle/battle-05-repairs/corrected/battle-review.json": "50d0afa5c520d5f4a10cf0e30a538956f98e2b519ada87b911b29ba4081ad809",
+    ".tmp/remaining-pairs-battle/battle-05-repairs/motion-candidates.json": "c1c1f4c67e8b3e4d581a7e64ed74b1f3596c661e1ed7d7b17659c9248aee19cb",
+    ".tmp/remaining-pairs-battle/battle-06-repairs/corrected/battle-review.json": "050e0c6ef9d98d5ea653c7c05d7b705aa0d154b503cbdc28766e02c93065b997",
+    ".tmp/remaining-pairs-battle/battle-06-repairs/motion-candidates.json": "b547f662c4270866217c52677f0fd1564d7c74766b75715e027da4500be3cb97"
+  },
+  "remaining": [
+    "individual bundle admission to local game/launcher catalogs",
+    "release certification and publication"
+  ],
+  "limitations": [
+    "Floor sampling uses 120 Hz on normal; shiny uses exact geometry and animation parity.",
+    "Battle screenshots show four actions in both cameras and sides for normal; shiny appearance was reviewed separately.",
+    "No network download or release gate exercised."
+  ]
+}

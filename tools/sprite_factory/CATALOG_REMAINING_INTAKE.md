@@ -455,6 +455,32 @@ No public index or R2 object changed. Release certification and publication
 remain separate; the bundle receipt records `release_approved=false` and
 `published=false`.
 
+## Final 144 pairs from the remaining intake
+
+The final 144 normal/shiny pairs were converted to 288 standalone SCN scenes.
+The hash-pinned appearance receipt is
+`catalog_remaining_144_appearance_review.json`. The user accepted the full
+appearance review after Minccino and Cinccino's original iris glints were
+restored by `catalog_remaining_eye_highlight.py`. Exact normal/shiny geometry
+and native animation parity was checked for every pair.
+
+The battle qualification receipt
+`catalog_remaining_144_battle_qualification.json` covers 120 Hz floor sampling,
+both battle cameras and sides, 2,304 effective battle captures, native action
+timing, and three installed-catalog lifecycle rounds in classic/stadium/classic
+arenas. The user accepted all 144 final battle cards. Individual clearance and
+scale adjustments are retained in the pinned supplemental battle reports;
+`catalog_remaining_144_battle_profiles.json` holds their exact runtime profiles.
+
+`package_remaining_144.py` checks the appearance and battle receipts, exact
+installed scene digests, and all 144 individual bundle archive hashes before
+adding the pairs to the matching local game and launcher registries. The
+combined local candidate index and installed artifacts are under
+`.tmp/remaining-pairs-battle/`. The bundle receipt is
+`catalog_remaining_144_bundle_qualification.json`. It records that these
+models are ready locally, while release approval and publication remain false.
+No R2 upload or public content-index update was performed in this task.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired

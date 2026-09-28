@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Nog 144 Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, met gecontroleerde ogen, kleuren, animaties en battleplaatsing. Elk paar heeft een afzonderlijke bundle voor een volgende contentrelease.
+
+- Het 3D-stadion bouwt de publiekslichten nu betrouwbaar op bij herhaalde battles.
+
 - Route 10 gebruikt de nieuwste Tiled-visual in de bestaande Godot-scene.
 
 - Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar, Primarina en Dewpider hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen bundle voor een volgende contentrelease.

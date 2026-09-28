@@ -114,7 +114,13 @@ func _run() -> void:
 			stage.play_action("p2", "faint_start")
 			stage.players[1].advance(100.0)
 			await _frames(4)
-			assert(stage.lifecycle[1] == "fainted" and stage.current_actions[1] == "faint_loop")
+			assert(stage.lifecycle[1] == "fainted")
+			var actor_identity: String = stage.identities[1]
+			var has_faint_loop: bool = stage.players[1].has_animation("faint_loop") and stage.entries[actor_identity].action_timing.has("faint_loop")
+			if has_faint_loop:
+				assert(stage.current_actions[1] == "faint_loop")
+			else:
+				assert(stage.current_actions[1] == "faint_start" and not stage.players[1].is_playing())
 			stage.set_combatant(1, species, true, true)
 			await _frames(4)
 			assert(stage.lifecycle[1] == "idle")
