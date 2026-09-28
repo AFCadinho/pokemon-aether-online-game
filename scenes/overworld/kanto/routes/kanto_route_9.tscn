@@ -15,7 +15,7 @@ size = Vector2(32, 176)
 size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
-size = Vector2(32, 128)
+size = Vector2(32, 192)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gkrtn"]
 texture = ExtResource("4_cfv8a")
@@ -257,10 +257,10 @@ music_profile_id = "kanto.routes_3_10_16_22"
 position = Vector2(48, 656)
 
 [node name="FromRoute10" type="Marker2D" parent="Spawns" unique_id=768790429]
-position = Vector2(3008, 656)
+position = Vector2(3024, 656)
 
 [node name="FromRoute10River" type="Marker2D" parent="Spawns" unique_id=1057195357]
-position = Vector2(3008, 288)
+position = Vector2(3024, 304)
 
 [node name="Exits" type="Node2D" parent="." unique_id=2064127287]
 
@@ -285,6 +285,7 @@ transition_id = "kanto_route_9__to_route10"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10" unique_id=853394462]
+position = Vector2(16, 0)
 shape = SubResource("shape_2")
 
 [node name="ToRoute10River" type="Area2D" parent="Exits" unique_id=1805557518]
@@ -296,6 +297,7 @@ transition_id = "kanto_route_9__to_route10_river"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10River" unique_id=1581881002]
+position = Vector2(16, 0)
 shape = SubResource("shape_3")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1196930494]
