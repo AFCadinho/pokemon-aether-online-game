@@ -71,6 +71,8 @@ func _run() -> void:
 	world.add_child(camera)
 	camera.current = true
 	var result := {"schema": 1, "runtime_approved": false, "renderer": RenderingServer.get_current_rendering_method(), "entries": []}
+	var quick_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_QUICK") == "1"
+	result["capture_profile"] = "quick_pair" if quick_review else "full_motion"
 	result["reflection_environment"] = "neutral_studio" if reflection_review else "default"
 	var eye_level_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_EYE_LEVEL") == "1"
 	result["camera_angle"] = "low_front" if eye_level_review else "default"
@@ -95,7 +97,7 @@ func _run() -> void:
 					record.errors.append("Expected one AnimationPlayer")
 				else:
 					var player: AnimationPlayer = players[0]
-					var actions := ACTIONS.duplicate()
+					var actions := ["idle", "physical_attack", "special_attack", "sleep", "faint_start"] if quick_review else ACTIONS.duplicate()
 					for optional: String in OPTIONAL_ACTIONS:
 						if player.has_animation(optional):
 							actions.append(optional)
@@ -121,7 +123,8 @@ func _run() -> void:
 						for action: String in actions:
 							if not player.has_animation(action):
 								continue
-							for fraction: float in FRACTIONS:
+							var capture_fractions: Array = [1.0 if action == "faint_start" else 0.5] if quick_review else FRACTIONS
+							for fraction: float in capture_fractions:
 								var box := await _pose(model, player, action, fraction)
 								await RenderingServer.frame_post_draw
 								var image_name := "%s-%s-%d.png" % [record.species, action, roundi(fraction * 100)]
