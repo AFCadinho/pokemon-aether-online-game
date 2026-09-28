@@ -224,6 +224,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_aethernet_check.gd",
 	"res://tests/cerulean_encounter_check.gd",
 	"res://tests/route_4_collision_boundary_check.gd",
+	"res://tests/route_9_river_barrier_check.gd",
 	"res://tests/route_4_tall_grass_visual_check.gd",
 	"res://tests/route_4_encounters_and_trainers_check.gd",
 	"res://tests/pokemon_center_template_structure_check.gd",

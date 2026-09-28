@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 9 heeft afgesloten rivieroevers met leuningen, extra bomen en bijpassende collision; het Surf-pad en de route naar Route 10 blijven open.
+
 - Jirachi en Zekrom hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles, met herstelde ogen en lichaamsdelen en gecontroleerde battleplaatsing. Beschikbaar voor een volgende contentrelease.
 
 - Cinnabar Island heeft doorlopende wegranden en hoeken; de Mansion-trap sluit via een breed, vrij pad aan op het plein naast het onderzoekslab.
