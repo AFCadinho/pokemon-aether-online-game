@@ -1,6 +1,6 @@
 extends SceneTree
 
-class TestActor extends Node:
+class TestActor extends Node2D:
 	var surfing := false
 	func is_surfing_activity_active() -> bool:
 		return surfing
@@ -102,11 +102,86 @@ func _run() -> void:
 	_expect(map.get_actor_sort_z_floor_for_actor(underpass, remote) > bridge.z_index,
 		"remote walker stays above bridge")
 	remote.free()
+	_check_ground_crossings(map, bridge)
+	player.global_position = _center(65, 44)
+	player._update_sort_z()
+	_expect(not player._is_world_barrier_step_blocked(_center(65, 44), _center(66, 44)),
+		"player movement accepts the lower dry crossing")
+	player.global_position = _center(66, 44)
+	player._update_sort_z()
+	_expect(player.z_index < bridge.z_index, "player walking beneath bridge renders below deck")
+	follower.global_position = _center(65, 44)
+	follower._update_sort_z()
+	follower.global_position = _center(66, 44)
+	follower._update_sort_z()
+	_expect(follower.z_index < bridge.z_index, "walking follower passes beneath the deck")
+	follower.remove_meta(map.BRIDGE_POSITION_META)
+	follower._update_sort_z()
+	_expect(follower.z_index < bridge.z_index, "new follower inherits the lower crossing level")
 	game_state.current_map = original_map
 
 	map.queue_free()
 	print("CERULEAN_BRIDGE_LEVELS ", "PASS" if not failed else "FAIL")
 	quit(1 if failed else 0)
+
+
+func _check_ground_crossings(map: Node, bridge: TileMapLayer) -> void:
+	for y in range(42, 50):
+		for direction in [-1, 1]:
+			var walker := TestActor.new()
+			map.add_child(walker)
+			var x := 65 if direction == 1 else 68
+			walker.global_position = _center(x, y)
+			map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+			var crossed := true
+			for step in range(3):
+				var next_position := _center(x+direction, y)
+				crossed = crossed and not map.is_actor_bridge_step_blocked(walker.global_position, next_position, walker)
+				crossed = crossed and not map.is_water_tile_for_actor(next_position, walker)
+				x += direction
+				walker.global_position = next_position
+				crossed = crossed and map.get_actor_sort_z_floor_for_actor(next_position, walker) < bridge.z_index
+			_expect(crossed, "dry underpass row %d is walkable below deck in direction %d" % [y, direction])
+			walker.free()
+
+	var walker := TestActor.new()
+	map.add_child(walker)
+	walker.global_position = _center(67, 41)
+	map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+	var above := true
+	for y in range(42, 51):
+		walker.global_position = _center(67, y)
+		above = above and map.get_actor_sort_z_floor_for_actor(walker.global_position, walker) > bridge.z_index
+	_expect(above, "upper bridge walk stays above the entire dry underpass")
+	walker.global_position = _center(67, 44)
+	map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+	_expect(map.is_actor_bridge_step_blocked(walker.global_position, _center(68, 44), walker),
+		"upper bridge walker cannot step sideways onto the lower floor")
+	_expect(map.is_actor_bridge_step_blocked(_center(65, 50), _center(66, 50), walker),
+		"cliff face below a dry bridge remains blocked")
+	walker.global_position = _center(65, 42)
+	map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+	walker.global_position = _center(66, 42)
+	map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+	_expect(map.is_water_tile_for_actor(_center(66, 41), walker),
+		"lower walker sees water at the end of the dry underpass")
+	var state_before: Dictionary = walker.get_meta(map.BRIDGE_POSITION_META).duplicate()
+	map.is_actor_bridge_step_blocked(_center(67, 11), _center(67, 12), walker)
+	_expect(walker.get_meta(map.BRIDGE_POSITION_META) == state_before,
+		"movement probes do not change the actor's crossing level")
+	var saved: Vector2 = map.get_safe_saved_position_for_actor(walker.global_position, walker)
+	_expect(saved == _center(65, 42), "lower crossing saves beside the bridge, without moving onto its deck")
+	walker.surfing = true
+	walker.global_position = _center(66, 41)
+	map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+	_expect(not map.is_actor_bridge_step_blocked(walker.global_position, _center(66, 42), walker),
+		"Surf can land on the dry floor beneath the bridge")
+	walker.global_position = _center(66, 42)
+	map.get_actor_sort_z_floor_for_actor(walker.global_position, walker)
+	walker.surfing = false
+	_expect(map.get_actor_sort_z_floor_for_actor(walker.global_position, walker) < bridge.z_index,
+		"dismounting Surf beneath a bridge preserves the lower level")
+	walker.free()
 
 
 func _center(x: int, y: int) -> Vector2:
