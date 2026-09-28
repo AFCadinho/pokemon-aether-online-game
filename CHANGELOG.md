@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Jirachi en Zekrom hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles, met herstelde ogen en lichaamsdelen en gecontroleerde battleplaatsing. Beschikbaar voor een volgende contentrelease.
+
 - Cinnabar Island heeft doorlopende wegranden en hoeken; de Mansion-trap sluit via een breed, vrij pad aan op het plein naast het onderzoekslab.
 
 - Saffron City gebruikt de nieuwste Tiled-visual met complete bomenranden, doorlopende noord-/zuidpaden en halve oost-/westpoorten met aansluitende bomen.

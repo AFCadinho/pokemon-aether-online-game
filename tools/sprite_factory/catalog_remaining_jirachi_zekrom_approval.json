@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "date": "2026-09-28",
+  "reviewer": "user",
+  "feedback": "zien er goed uit",
+  "scope": "Jirachi and Zekrom normal/shiny in both battle cameras and both sides",
+  "appearance_approved": true,
+  "battle_visual_approved": true,
+  "published": false,
+  "release_approved": false,
+  "battle_qualification_sha256": "7c7cd8c0c9d8b434da02323a2e8c882fc5aabd78ddd1f821c54b953bb03a7e60",
+  "entries": [
+    {
+      "species": "jirachi",
+      "variant": "normal",
+      "glb_sha256": "c4f3a7507edd505f38f28e8d96250f8252caecbef961f3e4360de51d9c9d5803",
+      "runtime_sha256": "24a03c05c5bfeb5952976ced5b44866ae642cec1abf61f8c2a3bea1d83e12527"
+    },
+    {
+      "species": "jirachi",
+      "variant": "shiny",
+      "glb_sha256": "63aa45251db671cf412035e866c9db84617a0706d7f926a0c295055c047bf732",
+      "runtime_sha256": "200bf2085fb8bcebb61667ade99d0999e88210a083951927694446b421fcb5db"
+    },
+    {
+      "species": "zekrom",
+      "variant": "normal",
+      "glb_sha256": "8d0010e648e93e9dcd46c90b704d45701b8fbec25827de2eba5148ff1c7fdf17",
+      "runtime_sha256": "f031b5980112c6aabe7a175a75a6a13c4640a424ebffefd1f49c72ddfc5ed5e3"
+    },
+    {
+      "species": "zekrom",
+      "variant": "shiny",
+      "glb_sha256": "2a12afd0de003ea493d5fc0d70137a041e059fc0ff7f36fb9b8c196273fc41ef",
+      "runtime_sha256": "2ae4471990bf97c4a1efefcb7e2df1273d5b00646d134dd0d85c0d409edd9e35"
+    }
+  ]
+}

@@ -296,6 +296,44 @@ through `ops/worktrees/slot-env slot-a`. `make_page.py` regenerates the gallery;
 `write_receipt.py` validates hashes, placement, camera and performance gates
 before regenerating the candidate receipts.
 
+### Jirachi and Zekrom local bundle admission (2026-09-28)
+
+The user approved the battle gallery with "zien er goed uit". The exact four
+appearance hashes and preceding battle qualification hash are pinned in
+`catalog_remaining_jirachi_zekrom_approval.json`.
+
+Both species now have individual version-1 normal/shiny bundles, 37,109,245 bytes
+combined (35.39 MiB), retained under `.tmp/jirachi-zekrom-bundles/bundles/`.
+The two-entry asset index, archive hashes, object keys and installation evidence
+are retained in `catalog_remaining_jirachi_zekrom_bundle_qualification.json`.
+The launcher's transactional store installed each bundle, loaded all four SCNs,
+and passed no-op planning and restart checks. A subsequent three-round production
+presenter check used the installed catalog and the actual checked-in registry,
+without candidate injection: classic/stadium/classic, both normal/shiny sides,
+HUD separation, faint/replacement, cleanup and performance gates all passed.
+Frame p95 was 17.352 / 17.349 / 17.100 ms. Resource UID fallback warnings remain
+as in the earlier test; there were no script/load errors.
+
+The game and launcher reviewed registries now include these four hashes and two
+shared species profiles. Normal/shiny timing, bounds and placement were asserted
+identical before sharing the profiles. Existing catalog entries are unchanged.
+The prior appearance/battle receipts remain historical evidence; this bundle
+receipt supersedes their pending bundle/catalog steps. The other intake review
+holds remain open.
+
+Reproduce with `tools/sprite_factory/package_jirachi_zekrom.py package`, run the
+retained `install_check.gd` through slot-env with the launcher project, then run
+`admit`. Run `tests/catalog_batch_01_candidate_stress_check.gd` against
+`.tmp/jirachi-zekrom-bundles/installed/installed-catalog.json` with names
+`jirachi,zekrom`, write `installed-stress.json` / `installed-stress.log`, and run
+`finalize`. Packaging refuses an existing output; admission refuses already
+registered identities. These phases are for replay from the pre-admission
+revision, preserving the existing receipts and artifacts.
+
+No public index or R2 objects have been changed. Release certification and
+publication remain separate; the bundle receipt deliberately keeps
+`release_approved=false` and `published=false`.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired
