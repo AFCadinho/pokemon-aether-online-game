@@ -250,6 +250,52 @@ versions. Their review placement was scale 1 with automatic camera framing;
 battle scale, floor clearance through motion, both battle cameras and bundle
 qualification remain outstanding.
 
+### Jirachi and Zekrom battle calibration (2026-09-28)
+
+The approved appearance hashes now also have completed candidate battle checks
+in `catalog_remaining_jirachi_zekrom_battle_qualification.json`. Exact runtime
+profiles are retained in `catalog_remaining_jirachi_zekrom_battle_profiles.json`;
+these are candidate evidence, not additions to the production registry.
+
+- Jirachi's scale increased from 1 to 2.3716752825: minimum idle screen height
+  increased from 27.83 to 65.47 pixels in the measured 1920×1008 viewport.
+  Zekrom keeps scale 1 (minimum idle height 290.20 pixels).
+- Existing motion placement was baked from 60 Hz source bounds and independently
+  checked at 120 Hz for eight clips in each normal/shiny scene. Minimum clearance
+  across all samples is 0.025 world units. Native faint endpoints match.
+- All 64 captures (four variants × two cameras × two sides × four actions) are
+  fully in view, with no HUD-proxy overlaps. Assistant visual inspection found
+  no new obvious clipping or missing corrected parts. Gallery:
+  `.tmp/jirachi-zekrom-battle/index.html`, served at
+  `http://127.0.0.1:8765/.tmp/jirachi-zekrom-battle/index.html`.
+- The existing production-presenter stress test passed classic/stadium/classic,
+  with both species normal/shiny and swapped, actual HUD checks, faint lifecycle,
+  replacement, resource cleanup and cache checks. Candidate registry entries
+  were injected only in memory in the isolated slot process. No production
+  catalog was changed. p95 frames: 17.547 / 17.942 / 17.478 ms; maximum threaded
+  dispatch/collect 2.33 ms; retained source cache 17,708,862 bytes; no uncovered
+  stalls over 50 ms; last-round static growth 44,364 bytes.
+
+The runtime log contains pre-existing scene-resource UID fallback warnings;
+all resources resolve by path, with no script/load errors. This check does not
+certify bundle installation, downloading or a release. Individual bundle
+qualification and catalog integration remain; the other intake review holds
+listed above are unaffected.
+
+Local replay inputs, scripts, screenshots and reports are retained under
+`.tmp/jirachi-zekrom-battle/` and pinned in the qualification receipt. Run
+`calibrate.py` after the raw `phase5_battle_review.gd` pass, then repeat that
+Godot script with `POKEAETHER_PHASE5_CANDIDATES` pointing to
+`motion-candidates.json` and `POKEAETHER_PHASE5_BATTLE_OUTPUT` to `corrected`.
+The phase-five review root is this folder and the runtime report is
+`runtime.json`. Run `prepare_runtime_check.py`, then execute `runtime_check.gd`
+with `POKEAETHER_BATCH01_RUNTIME_CATALOG` pointing to `runtime-catalog.json`,
+`POKEAETHER_BATCH01_STRESS_OUTPUT` to `runtime-stress.json` and
+`POKEAETHER_BATCH01_STRESS_NAMES=jirachi,zekrom`. All Godot invocations must go
+through `ops/worktrees/slot-env slot-a`. `make_page.py` regenerates the gallery;
+`write_receipt.py` validates hashes, placement, camera and performance gates
+before regenerating the candidate receipts.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired

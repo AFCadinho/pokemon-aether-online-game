@@ -1,0 +1,405 @@
+{
+  "schema": 1,
+  "date": "2026-09-28",
+  "scope": "Jirachi and Zekrom corrected normal/shiny candidates; flat floor, classic/stadium cameras, both sides, isolated production-presenter fixture",
+  "appearance_approved": true,
+  "camera_grounding_checks_passed": true,
+  "runtime_lifecycle_check_passed": true,
+  "runtime_approved": false,
+  "release_approved": false,
+  "reviewer": "assistant",
+  "visual_review": "64 battle captures inspected; corrected parts remain visible; no obvious clipping, cropped actors or unnatural size relative to Dragonite",
+  "godot": "4.6.2-stable (official)",
+  "renderer": "forward_plus",
+  "viewport": [
+    1920,
+    1008
+  ],
+  "entries": [
+    {
+      "species": "jirachi",
+      "variant": "normal",
+      "glb_sha256": "c4f3a7507edd505f38f28e8d96250f8252caecbef961f3e4360de51d9c9d5803",
+      "runtime_sha256": "24a03c05c5bfeb5952976ced5b44866ae642cec1abf61f8c2a3bea1d83e12527",
+      "minimum_idle_pixels": 65.467529296875,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999862909317,
+        "faint_loop": 0.0311039797961712,
+        "faint_start": 0.0299999937415123,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.0496308878064156,
+        "physical_attack_2": 0.029749795794487,
+        "sleep": 0.0300000309944153,
+        "special_attack": 0.0299999862909317
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "jirachi-normal"
+    },
+    {
+      "species": "jirachi",
+      "variant": "shiny",
+      "glb_sha256": "63aa45251db671cf412035e866c9db84617a0706d7f926a0c295055c047bf732",
+      "runtime_sha256": "200bf2085fb8bcebb61667ade99d0999e88210a083951927694446b421fcb5db",
+      "minimum_idle_pixels": 65.467529296875,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999862909317,
+        "faint_loop": 0.0311039797961712,
+        "faint_start": 0.0299999937415123,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.0496308878064156,
+        "physical_attack_2": 0.029749795794487,
+        "sleep": 0.0300000309944153,
+        "special_attack": 0.0299999862909317
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "jirachi-shiny"
+    },
+    {
+      "species": "zekrom",
+      "variant": "normal",
+      "glb_sha256": "8d0010e648e93e9dcd46c90b704d45701b8fbec25827de2eba5148ff1c7fdf17",
+      "runtime_sha256": "f031b5980112c6aabe7a175a75a6a13c4640a424ebffefd1f49c72ddfc5ed5e3",
+      "minimum_idle_pixels": 290.201141357422,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299995318055153,
+        "faint_loop": 0.0300000011920929,
+        "faint_start": 0.0299816057085991,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0279372520744801,
+        "physical_attack_2": 0.029804028570652,
+        "sleep": 0.0299999825656414,
+        "special_attack": 0.0299258269369602
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "zekrom-normal"
+    },
+    {
+      "species": "zekrom",
+      "variant": "shiny",
+      "glb_sha256": "2a12afd0de003ea493d5fc0d70137a041e059fc0ff7f36fb9b8c196273fc41ef",
+      "runtime_sha256": "2ae4471990bf97c4a1efefcb7e2df1273d5b00646d134dd0d85c0d409edd9e35",
+      "minimum_idle_pixels": 290.201141357422,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299995318055153,
+        "faint_loop": 0.0300000011920929,
+        "faint_start": 0.0299816057085991,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0279372520744801,
+        "physical_attack_2": 0.029804028570652,
+        "sleep": 0.0299999825656414,
+        "special_attack": 0.0299258269369602
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "zekrom-shiny"
+    }
+  ],
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 533.08,
+      "frame_p95_ms": 17.547,
+      "frame_samples": 126,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 2.329,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 2.385,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2,
+          "ms": 2.33,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2,
+          "ms": 2.441,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17,
+          "ms": 2.098,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17,
+          "ms": 2.202,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 25,
+          "ms": 2.101,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 48,
+          "ms": 1.387,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 67,
+          "ms": 1.519,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 67,
+          "ms": 1.621,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 78,
+          "ms": 1.601,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 78,
+          "ms": 1.693,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 85,
+          "ms": 1.409,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 109,
+          "ms": 1.273,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 17708862,
+      "stalls_over_50ms": [
+        {
+          "context": "load jirachi",
+          "covered": true,
+          "ms": 533.08
+        },
+        {
+          "context": "load jirachi",
+          "covered": true,
+          "ms": 93.093
+        }
+      ],
+      "static_bytes": 251618293
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 2,
+      "frame_max_ms": 571.381,
+      "frame_p95_ms": 17.942,
+      "frame_samples": 130,
+      "load_spans": [
+        {
+          "frame": 130,
+          "ms": 1.069,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 130,
+          "ms": 1.121,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 135,
+          "ms": 1.942,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 135,
+          "ms": 2.046,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 148,
+          "ms": 2.028,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 148,
+          "ms": 2.132,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 156,
+          "ms": 259.128,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 201,
+          "ms": 1.546,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 201,
+          "ms": 1.652,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 212,
+          "ms": 1.494,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 212,
+          "ms": 1.597,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 220,
+          "ms": 1.4,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 244,
+          "ms": 1.471,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 17708862,
+      "stalls_over_50ms": [
+        {
+          "context": "load jirachi",
+          "covered": true,
+          "ms": 108.126
+        },
+        {
+          "context": "load jirachi",
+          "covered": true,
+          "ms": 571.381
+        }
+      ],
+      "static_bytes": 253717109
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 100.691,
+      "frame_p95_ms": 17.478,
+      "frame_samples": 129,
+      "load_spans": [
+        {
+          "frame": 265,
+          "ms": 3.435,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 265,
+          "ms": 3.483,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 270,
+          "ms": 1.895,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 270,
+          "ms": 1.999,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 285,
+          "ms": 2.091,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 285,
+          "ms": 2.198,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 293,
+          "ms": 2.127,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 317,
+          "ms": 1.339,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 336,
+          "ms": 1.618,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 336,
+          "ms": 1.721,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 347,
+          "ms": 1.6,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 347,
+          "ms": 1.715,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 354,
+          "ms": 1.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 378,
+          "ms": 1.031,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 17708862,
+      "stalls_over_50ms": [
+        {
+          "context": "load jirachi",
+          "covered": true,
+          "ms": 100.691
+        }
+      ],
+      "static_bytes": 253761473
+    }
+  ],
+  "profiles_sha256": "b8ec73e6f8282ac851942c20733cb25f602586b0159589c93a013f56360d6c0e",
+  "evidence_sha256": {
+    ".tmp/jirachi-zekrom-battle/raw/battle-review.json": "288196e3d5dc220118e1c3ef3e244e889d3f514c40de6939dfc5cee9fd0c9e2a",
+    ".tmp/jirachi-zekrom-battle/corrected/battle-review.json": "5a75c31f51078344826513f6593c40d33764da1cf40728abf4557a7da56022f3",
+    ".tmp/jirachi-zekrom-battle/catalog.json": "475fc866377e2ee313bf2aabe5d5675df8c2ae06d8e795963c4bff3ab319ce1d",
+    ".tmp/jirachi-zekrom-battle/runtime.json": "208fb8536f1abaa3d42859cf050b4968d8bf445d1ef60c1504fbb31dda0ece1e",
+    ".tmp/jirachi-zekrom-battle/motion-candidates.json": "fb46f2eb07835f29f0c8c34a2f9f98cbf8b5e85cc57f9942bc173439b898cf2b",
+    ".tmp/jirachi-zekrom-battle/runtime-catalog.json": "220ce7efb26b7eff1e63c9bb89b1f0ccf1e06a0931cd99f24a4416a66de32e27",
+    ".tmp/jirachi-zekrom-battle/runtime-fixture.json": "b7f469afbb060322d9f7ecb42157c4cf186d47476fd7b9e370dd2bae33404489",
+    ".tmp/jirachi-zekrom-battle/runtime_check.gd": "935a148fcac6bdab0ff05838a4c5bcb1d328ee9bcdf85d6d86e27e168b556151",
+    ".tmp/jirachi-zekrom-battle/runtime-stress.json": "35fc3c535005af9fa1366c0d37baf4b78f75aa682c3581666152d16ffefaf612",
+    ".tmp/jirachi-zekrom-battle/runtime-stress.log": "8e992e454ee287d5c62da3e3ca63163dc11121e951f10d338daf7c9006e2b7cc",
+    ".tmp/jirachi-zekrom-battle/corrected.log": "60dcfcd8dd3d931a0b61f0c4b2f3c5c4f1bba9bde9f3bd89f8de956cdded95ed",
+    ".tmp/jirachi-zekrom-battle/index.html": "6f2fac529c3a710b06b5d6d1a6f9655b4c811f478f83506c8f701746680377ec",
+    ".tmp/jirachi-zekrom-battle/calibrate.py": "0cbc5d243b170ee83b4690f5fd275804e4f62281a40fed2d977fb668ea682ce0",
+    ".tmp/jirachi-zekrom-battle/prepare_runtime_check.py": "604229e329d795eb16ff7a496b7952cfd0b0270a3840c4e273f998592418753f",
+    ".tmp/jirachi-zekrom-battle/make_page.py": "12c340381bbc8d490c0dfe04719c63cab0190f37e904964fda1819f56eb76e48"
+  },
+  "remaining": [
+    "individual bundle qualification and catalog integration",
+    "release certification and publication"
+  ],
+  "limitations": [
+    "Runtime stress uses in-memory candidate registry fixture; no production registry or content index changed.",
+    "Floor measurements cover 8 clips at 120 Hz; visual captures cover idle/special_attack/sleep/faint_start in each camera and side.",
+    "No network download, bundle installation or release gate exercised."
+  ]
+}
