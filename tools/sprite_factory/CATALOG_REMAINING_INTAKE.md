@@ -241,6 +241,15 @@ GLBs are byte-identical to the rendered trial. Nodes, meshes, skeletons,
 animations and the original binary prefix are unchanged. This is source
 appearance review evidence, not battle or release approval.
 
+The user subsequently approved both corrected normal/shiny pairs with
+"beide zien er goed uit". This appearance approval is recorded against the
+four exact GLB/SCN hashes in
+`catalog_remaining_jirachi_zekrom_appearance_review.json`. Jirachi's eyes and
+Zekrom's wing/back/tail appearance are no longer open visual issues for those
+versions. Their review placement was scale 1 with automatic camera framing;
+battle scale, floor clearance through motion, both battle cameras and bundle
+qualification remain outstanding.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired
