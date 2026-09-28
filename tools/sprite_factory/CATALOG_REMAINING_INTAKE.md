@@ -423,6 +423,38 @@ are in `catalog_remaining_ten_battle_qualification.json`. Local evidence and the
 single battle gallery remain under `.tmp/remaining-ten-battle/` in slot-a.
 No bundle, public index or release was changed by this qualification task.
 
+## Ten repaired pairs: local bundle admission — 2026-09-28
+
+The ten battle-approved species now have individual version-1 bundles containing
+their normal and shiny scenes, 128,527,727 bytes (122.57 MiB) combined. The
+archives and ten-entry asset index remain locally under
+`.tmp/remaining-ten-bundles/bundles/`. Exact archive sizes, object keys, hashes,
+source approvals and install evidence are pinned in
+`catalog_remaining_ten_bundle_qualification.json`.
+
+The launcher's transactional store installed each of the ten bundles and loaded
+all 20 packed scenes. Repeating the install found ten unchanged bundles;
+restarted stores also planned no downloads. A separate version-2 test updated
+only Blastoise while Furret stayed on version 1. A truncated update was rejected
+without changing Blastoise's installed catalog, and a valid update then loaded
+both variants after restart. The version-2 archive is only a local test fixture;
+the approved content index retains version 1 for every species.
+
+Three production-presenter rounds with the installed catalog and checked-in
+game registry passed in classic/stadium/classic arenas. All ten pairs were
+loaded, swapped, fainted and cleaned up in each round. Frame p95 was
+17.448 / 17.483 / 17.389 ms. The game and launcher reviewed registries now have
+the same 20 exact scene hashes and ten shared normal/shiny profiles. Earlier
+appearance and battle receipts remain historical evidence; this receipt closes
+their pending local bundle and catalog stages.
+
+`package_remaining_ten.py` verifies hash-pinned appearance and battle evidence
+before packaging, then validates installed scenes before catalog admission.
+Its `finalize` phase pins the installed runtime and single-species update checks.
+No public index or R2 object changed. Release certification and publication
+remain separate; the bundle receipt records `release_approved=false` and
+`published=false`.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired
