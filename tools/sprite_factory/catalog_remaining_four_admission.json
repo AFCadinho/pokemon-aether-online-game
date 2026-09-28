@@ -1,0 +1,60 @@
+{
+  "bundle_size_bytes": 41348107,
+  "date": "2026-09-29",
+  "evidence_sha256": {
+    ".tmp/remaining-catalog-intake/eye-corrected/dodrio/normal.glb": "3cd27c9f63a0f92ef7de07fd229f0326557445e7b69908f693b6ee564c8b15e6",
+    ".tmp/remaining-catalog-intake/eye-corrected/dodrio/shiny.glb": "19d5a11b1cfaa1d6828a909db8eeaade38a124b4c205ef1520dfcc7300123456",
+    ".tmp/remaining-catalog-intake/eye-corrected/eye-level/review.json": "1fa68d985cd6a85c44754d015f731b5fbaa1baf2a500b768443d366f491a9431",
+    ".tmp/remaining-catalog-intake/eye-corrected/eye-review/review.json": "a7ff243280830b0d8687e2cfc8d50387412c8cb2afa3eb82621eefa2e5b7ae5e",
+    ".tmp/remaining-catalog-intake/eye-corrected/normal-glint-runtime/torchic.scn": "9305745d4bc52b0fae4ade5499ec1cc38c22a35c0abf8dc5f34dd135e49f6799",
+    ".tmp/remaining-catalog-intake/eye-corrected/normal-runtime/dodrio.scn": "fea8a90b984727badb33848eba7583f8353cabf8db350e48e440d057848963cb",
+    ".tmp/remaining-catalog-intake/eye-corrected/normal-runtime/vileplume.scn": "b926a6acd7fc6b61a9844a0c2f6f77f60fca84da8671806c23f60f1f9448afb2",
+    ".tmp/remaining-catalog-intake/eye-corrected/shiny-glint-runtime/torchic.scn": "6bd10eead689e49f27222bff10ed7508aa866211454835bceb85419b6f983a4c",
+    ".tmp/remaining-catalog-intake/eye-corrected/shiny-runtime/dodrio.scn": "f691ebe2d79e902954038d709cf511a07cbf305a5287def09480f0f06cc7da21",
+    ".tmp/remaining-catalog-intake/eye-corrected/shiny-runtime/vileplume.scn": "4d6c95a5bb2c594e109904f988e3e62746a5f65de7754724cf9b1d026e1ec60f",
+    ".tmp/remaining-catalog-intake/eye-corrected/torchic/normal-glint.glb": "2034e8e3b8e76425f6acbc6d146f6f009fab0521774ab5d5398b36f7e9549ecf",
+    ".tmp/remaining-catalog-intake/eye-corrected/torchic/shiny-glint.glb": "1e488fcc2034cbd52c40163804dfca5ede5e3be2d9e96b346d27cf068562dc15",
+    ".tmp/remaining-catalog-intake/eye-corrected/vileplume/normal.glb": "57092a744aa12868c8e900dd20c43ed35ad80d594fbc398dcfc1ac13a950d209",
+    ".tmp/remaining-catalog-intake/eye-corrected/vileplume/shiny.glb": "cf558f60772b2820e797dd9a10839c7d0c337418614d1e3f54abdec54ed1c202",
+    ".tmp/remaining-catalog-intake/four-approved/bundles/asset-index.json": "19c0b61809ef9a36bf17b99db60db13630ac3bb433dc84da794ea6ded3392f21",
+    ".tmp/remaining-catalog-intake/four-approved/catalog.json": "a856850966fbcadb10b17e8a1e72a8eb98e5b240001222c08411d5aa33142f23",
+    ".tmp/remaining-catalog-intake/four-approved/install.log": "a02f600db43c5aa273437d25dfe73164ab22e4a988ad6a35085e7a08a2c821a1",
+    ".tmp/remaining-catalog-intake/four-approved/installed/installed-catalog.json": "02c58c2c5fd572671220ba3b881d8621dfe52cc4fa96f9fde629dde98bea32b1",
+    ".tmp/remaining-catalog-intake/four-approved/runtime-fixture.json": "06969e77a3066c77670866e4d709fcc3a965d74832651328f5fbe31c3bda823c",
+    ".tmp/remaining-catalog-intake/four-approved/stress.json": "b6b087130014b80f64dbee5e372264abd321fd79213ded83f6c4795cccfd481f",
+    ".tmp/remaining-catalog-intake/four-approved/stress.log": "e91d487e23daefbd400f4b7b9384029a401c9e91ea9af4110580ff90d1ebbef6",
+    ".tmp/remaining-catalog-intake/new-pairs-battle/corrected-v2/battle-review.json": "edc77806e5a8b0264117353d542575c03b9c0ee8e1693c40fc7c9f3b37967c4b",
+    ".tmp/remaining-catalog-intake/rig-recovered-normal/0044-gloom/model.glb": "56155c68b443776ea8432a95acbcd53bdda054bd725c7a3d056c78f38d4ba1d8",
+    ".tmp/remaining-catalog-intake/rig-recovered-runtime/gloom/runtime/gloom.scn": "940fd3a3004f7960685b8c7b803921be711228bb32ff292436a1c07757758c2b",
+    ".tmp/remaining-catalog-intake/rig-recovered-shiny-pinned/gloom/model.glb": "8a3daa01f4883fdb7b38cdf6a43ad1f91afb5e9c36a382a9b7eb8e8dc35107e9",
+    ".tmp/remaining-catalog-intake/rig-recovered-shiny-runtime/gloom/runtime/gloom.scn": "6c7db39ee5dd777cbc9b5d9035360c48b29801069a2421b67f5c8f9094a80b16"
+  },
+  "published": false,
+  "release_approved": false,
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.869,
+      "pairs": 4
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 17.428,
+      "pairs": 4
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.983,
+      "pairs": 4
+    }
+  ],
+  "schema": 1,
+  "scope": "four local normal/shiny individual bundles after user appearance, eye and battle approval",
+  "species": [
+    "gloom",
+    "vileplume",
+    "dodrio",
+    "torchic"
+  ]
+}

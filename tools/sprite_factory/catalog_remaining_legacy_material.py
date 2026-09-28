@@ -9,6 +9,7 @@ from catalog_shiny_production import replacements
 
 
 PINNED_MANIFEST_SHA256 = "6b8920cddc15716af61a8e1d1f718ad55fab0701c1162cc8a4d90512441cfc42"
+RIG_RECOVERED_MANIFEST_SHA256 = "3df7b38a21fbaa5daeaab9aa0bea437a0f5984b4037d9d0cd878387240eb50f3"
 
 
 def sha(path):
@@ -24,9 +25,13 @@ def validate(job):
     if job.get("legacy_material_diagnostic") is not True:
         raise ValueError("Legacy material diagnostic flag missing")
     manifest_path = Path(job["legacy_candidate_manifest"]).resolve()
-    if (manifest_path != Path(__file__).with_name("catalog_remaining_normal_candidates.json").resolve() or
-            sha(manifest_path) != PINNED_MANIFEST_SHA256 or
-            job["legacy_candidate_manifest_sha256"] != PINNED_MANIFEST_SHA256):
+    pinned = {
+        Path(__file__).with_name("catalog_remaining_normal_candidates.json").resolve(): PINNED_MANIFEST_SHA256,
+        Path(__file__).with_name("catalog_remaining_rig_recovered_candidates.json").resolve(): RIG_RECOVERED_MANIFEST_SHA256,
+    }
+    expected_manifest_sha = pinned.get(manifest_path)
+    if (expected_manifest_sha is None or sha(manifest_path) != expected_manifest_sha or
+            job["legacy_candidate_manifest_sha256"] != expected_manifest_sha):
         raise ValueError("Remaining candidate manifest changed")
     rows = json.loads(manifest_path.read_text())["entries"]
     found = [row for row in rows if row["species"] == job["species"]]
