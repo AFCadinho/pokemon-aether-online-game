@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cinnabar Island heeft doorlopende wegranden en hoeken; de Mansion-trap sluit via een breed, vrij pad aan op het plein naast het onderzoekslab.
+
 - Saffron City gebruikt de nieuwste Tiled-visual met complete bomenranden, doorlopende noord-/zuidpaden en halve oost-/westpoorten met aansluitende bomen.
 
 - De Cerulean Cave-quest kan via Dev Tools worden gegeven of voltooid; zodra ze actief is, gaat de League-agent in Cerulean City opzij en is de grot toegankelijk.
