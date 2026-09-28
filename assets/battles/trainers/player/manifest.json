@@ -5,6 +5,7 @@
     "bottom",
     "shoes",
     "top",
+    "cape_overlay",
     "top_accessory",
     "eyebrows",
     "hair",
@@ -51,6 +52,10 @@
             "AetherRonin_Trousers": {
               "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/trousers.png",
               "scale": 1.0
+            },
+            "AetherRoyal_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -89,6 +94,10 @@
             "AetherRonin_Shoes": {
               "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherRoyal_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -126,6 +135,10 @@
             },
             "AetherRonin_Shirt": {
               "path": "res://assets/battles/trainers/player/male/aether_ronin_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherRoyal_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/shirt.png",
               "scale": 1.0
             }
           }
@@ -194,6 +207,10 @@
             "TeamRocket_Cap": {
               "path": "res://assets/battles/trainers/player/male/team_rocket_outfit/cap.png",
               "scale": 1.0
+            },
+            "AetherRoyal_Crown": {
+              "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/crown.png",
+              "scale": 1.0
             }
           }
         },
@@ -211,6 +228,22 @@
               "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/glasses.png",
               "scale": 1.0,
               "tint": "facegear_color"
+            }
+          }
+        },
+        "cape": {
+          "parts": {
+            "AetherRoyal_Cape": {
+              "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/cape.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "cape_overlay": {
+          "parts": {
+            "AetherRoyal_Cape": {
+              "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/cape_overlay.png",
+              "scale": 1.0
             }
           }
         }
@@ -240,6 +273,10 @@
             },
             "AetherRonin_Trousers": {
               "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/trousers.png",
+              "scale": 1.0
+            },
+            "AetherRoyal_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/trousers.png",
               "scale": 1.0
             }
           }
@@ -279,6 +316,10 @@
             "AetherRonin_Shoes": {
               "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherRoyal_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -311,6 +352,10 @@
             },
             "AetherRonin_Shirt": {
               "path": "res://assets/battles/trainers/player/female/aether_ronin_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherRoyal_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/shirt.png",
               "scale": 1.0
             }
           }
@@ -367,6 +412,10 @@
             "TeamRocketFemale_Cap": {
               "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/cap.png",
               "scale": 1.0
+            },
+            "AetherRoyal_Crown": {
+              "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/crown.png",
+              "scale": 1.0
             }
           }
         },
@@ -388,6 +437,22 @@
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
               "scale": 2.0,
               "tint": "facegear_color"
+            }
+          }
+        },
+        "cape": {
+          "parts": {
+            "AetherRoyal_Cape": {
+              "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/cape.png",
+              "scale": 1.0
+            }
+          }
+        },
+        "cape_overlay": {
+          "parts": {
+            "AetherRoyal_Cape": {
+              "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/cape_overlay.png",
+              "scale": 1.0
             }
           }
         }

@@ -4,6 +4,12 @@
 
 - 200 extra Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen downloadbare bundle. Typhlosions gekleurde vlammen en andere eerder beoordeelde correcties zijn in de definitieve modellen hersteld.
 
+- De rugcosmetic-categorie heet nu Back. De Aether Royal-cape valt van opzij smaller en rechter naar beneden, voor beide modellen en alle overworld-activiteiten.
+
+- De Aether Royal Patreon-outfit heeft een gedeelde, niet-verhandelbare outfitbox voor male en female, met vijf losse onderdelen: kroon, jas, broek, laarzen en skillcape. De cape heeft een eigen uitrustingsslot en is met andere kleding te combineren. Inclusief trainer-, loop-, vis- en rijsprites; nog niet in de store.
+
+- Route 21 heeft onder Pallet Town een zandstrand met branding en kliffen; verderop maken twee zandbanken en losse rifrotsen de Surf-route opener.
+
 - Cinnabar Island en de aparte Vermilion Docks zijn nu in Godot geïmporteerd, met wederzijdse overgangen naar Route 21 en Vermilion City. Vermilion City gebruikt weer de actuele Tiled-indeling met grijze straten.
 
 - In Cerulean Cave kun je over de brug lopen en onder dezelfde brug door surfen. De brughoofden bepalen wanneer de speler het hogere pad betreedt of verlaat.

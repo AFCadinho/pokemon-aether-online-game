@@ -6172,5 +6172,11 @@
   "ui.appearance.option.teamrocketfemale_cap": "Team Rocket Cap (Female)",
   "ui.appearance.option.ronin_shirt": "Ronin Kimono",
   "ui.appearance.option.ronin_hakama": "Ronin Hakama",
-  "ui.appearance.option.ronin_sandals": "Ronin Tabi Sandals"
+  "ui.appearance.option.ronin_sandals": "Ronin Tabi Sandals",
+  "ui.appearance.option.royal_shirt": "Aether Royal Jacket",
+  "ui.appearance.option.royal_trousers": "Aether Royal Trousers",
+  "ui.appearance.option.royal_shoes": "Aether Royal Boots",
+  "ui.appearance.option.royal_crown": "Aether Royal Crown",
+  "ui.appearance.category.back": "Back",
+  "ui.appearance.option.royal_cape": "Aether Royal Skillcape"
 }

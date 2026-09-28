@@ -147,6 +147,8 @@ const SURF_FISH_BODY_HIDDEN_REGIONS := {
 	"down": Rect2i(30, 48, 4, 16),
 }
 const APPEARANCE_PART_SPRITES := {
+	"cape": "CapeSprite",
+	"cape_overlay": "CapeOverlaySprite",
 	"hair": "HairSprite",
 	"headgear": "HeadgearSprite",
 	"facial_hair": "FacialHairSprite",
@@ -452,6 +454,7 @@ func _merge_presence_appearance_values_from_container(appearance_state: Dictiona
 	_merge_presence_appearance_value(appearance_state, container, "hair", ["appearanceHair", "hair"])
 	_merge_presence_appearance_value(appearance_state, container, "hair_style_index", ["appearanceHairStyleIndex", "hair_style_index", "hairStyleIndex"])
 	_merge_presence_appearance_value(appearance_state, container, "headgear", ["appearanceHeadgear", "headgear"])
+	_merge_presence_appearance_value(appearance_state, container, "cape", ["appearanceCape", "cape"])
 	_merge_presence_appearance_value(appearance_state, container, "facial_hair", ["appearanceFacialHair", "facial_hair", "facialHair"])
 	_merge_presence_appearance_value(appearance_state, container, "facegear", ["appearanceFacegear", "facegear"])
 	_merge_presence_appearance_value(appearance_state, container, "top", ["appearanceTop", "top"])
@@ -1492,6 +1495,8 @@ func _get_appearance_part_id(category: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):
 		"hair":
 			return _get_appearance_hair_id()
+		"cape", "cape_overlay":
+			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("cape", "")))
 		"headgear":
 			return CharacterAppearanceService.deserialize_part_id(str(current_appearance_state.get("headgear", CharacterAppearanceService.get_default_part_id("headgear", current_body_gender))))
 		"facial_hair":
@@ -1826,11 +1831,12 @@ func _parse_appearance_color(color_text: String, fallback: Color) -> Color:
 
 
 func _get_appearance_signature(appearance_state: Dictionary) -> String:
-	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	return "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		str(appearance_state.get("body", "")),
 		str(appearance_state.get("hair", "")),
 		str(appearance_state.get("hair_style_index", "")),
 		str(appearance_state.get("headgear", "")),
+		str(appearance_state.get("cape", "")),
 		str(appearance_state.get("facial_hair", "")),
 		str(appearance_state.get("facegear", "")),
 		str(appearance_state.get("top", "")),

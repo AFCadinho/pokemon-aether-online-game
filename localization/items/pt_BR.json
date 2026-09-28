@@ -382,5 +382,29 @@
   "aether-ronin-shoes": {
     "name": "Sandálias Tabi Aether Ronin",
     "shortDesc": "Intransferível. Leve as sandálias tabi Ronin para a Personalização de Personagem."
+  },
+  "aether-royal-outfit": {
+    "name": "Caixa de Traje Aether Royal",
+    "shortDesc": "Não negociável. Abra para receber cinco cosméticos separados: casaco, calças, botas, coroa e capa. Para personagens masculinos e femininos."
+  },
+  "aether-royal-shirt": {
+    "name": "Casaco Aether Royal",
+    "shortDesc": "Não negociável. Adicione este cosmético Aether Royal à personalização. Para personagens masculinos e femininos."
+  },
+  "aether-royal-trousers": {
+    "name": "Calças Aether Royal",
+    "shortDesc": "Não negociável. Adicione este cosmético Aether Royal à personalização. Para personagens masculinos e femininos."
+  },
+  "aether-royal-shoes": {
+    "name": "Botas Aether Royal",
+    "shortDesc": "Não negociável. Adicione este cosmético Aether Royal à personalização. Para personagens masculinos e femininos."
+  },
+  "aether-royal-crown": {
+    "name": "Coroa Aether Royal",
+    "shortDesc": "Não negociável. Adicione este cosmético Aether Royal à personalização. Para personagens masculinos e femininos."
+  },
+  "aether-royal-cape": {
+    "name": "Capa Aether Royal",
+    "shortDesc": "Não negociável. Equipe esta capa separadamente no espaço Costas. Para personagens masculinos e femininos."
   }
 }

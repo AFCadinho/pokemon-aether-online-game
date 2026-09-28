@@ -952,6 +952,10 @@ func _get_player_preview_category_for_sprite(sprite_name: String) -> String:
 			return "hair"
 		"HeadgearSprite":
 			return "headgear"
+		"CapeSprite":
+			return "cape"
+		"CapeOverlaySprite":
+			return "cape_overlay"
 		"FacialHairSprite":
 			return "facial_hair"
 		"FaceGearSprite":
@@ -977,6 +981,8 @@ func _get_player_preview_part_id(category_id: String) -> String:
 			)
 		"headgear":
 			return PlayerSave.appearance_headgear_id
+		"cape", "cape_overlay":
+			return PlayerSave.appearance_cape_id
 		"facial_hair":
 			return PlayerSave.appearance_facial_hair_id
 		"facegear":

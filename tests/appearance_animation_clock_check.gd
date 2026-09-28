@@ -23,7 +23,7 @@ func run() -> void:
 	harness.remote = remote
 	var bodies: Array[AnimatedSprite2D] = []
 	var followers: Array[Array] = [[], []]
-	var specs := {"top": ["TopSprite", "TeamRocket_Shirt"], "bottom": ["BottomSprite", "TeamRocket_Trousers"], "shoes": ["ShoesSprite", "TeamRocket_Shoes"], "headgear": ["HeadgearSprite", "TeamRocket_Cap"]}
+	var specs := {"top": ["TopSprite", "TeamRocket_Shirt"], "bottom": ["BottomSprite", "TeamRocket_Trousers"], "shoes": ["ShoesSprite", "TeamRocket_Shoes"], "headgear": ["HeadgearSprite", "TeamRocket_Cap"], "cape": ["CapeSprite", "AetherRoyal_Cape"], "cape_overlay": ["CapeOverlaySprite", "AetherRoyal_Cape"]}
 	for index: int in range(2):
 		var group := Node2D.new()
 		harness.add_child(group)
