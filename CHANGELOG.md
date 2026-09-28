@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De zuidoever van Route 9 is nu afgesloten met een dichte bomenrand; de Surf-opgang blijft vrij en de collision volgt de bomen.
+
 - Route 9 heeft afgesloten rivieroevers met leuningen, extra bomen en bijpassende collision; het Surf-pad en de route naar Route 10 blijven open.
 
 - Jirachi en Zekrom hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles, met herstelde ogen en lichaamsdelen en gecontroleerde battleplaatsing. Beschikbaar voor een volgende contentrelease.
