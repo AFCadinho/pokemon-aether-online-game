@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Trainer Card past Aether Royal-delen zonder Patreon-rol niet meer lokaal toe en zet een door de server afgewezen preview terug naar de opgeslagen outfit, zonder console-warning.
+
 - De Trainer Card toont een duidelijke melding als de Patreon-rol ontbreekt; positiebewaring werkt de gedragen Aether Royal-outfit bij zodra de server een verlopen onderdeel verwijdert.
 
 - Patreon Support toont nu de Aether Royal-outfit op het spelersmodel in de Gift Store. De kaart behoudt het Patreon-pixelicoon.
