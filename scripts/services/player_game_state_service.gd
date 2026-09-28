@@ -177,7 +177,7 @@ func dev_set_side_quest_progress(quest_id: String, action: String) -> Dictionary
 		return {"success": false, "status": 401, "error": "Not authenticated."}
 	var normalized_quest_id := quest_id.strip_edges().to_lower()
 	var normalized_action := action.strip_edges().to_lower()
-	if normalized_quest_id.is_empty() or not normalized_action in ["reset", "complete"]:
+	if normalized_quest_id.is_empty() or not normalized_action in ["reset", "activate", "complete"]:
 		return {"success": false, "status": 0, "error": "Invalid side quest action."}
 
 	var base_url: String = await GatewayApiConfig.get_base_url()

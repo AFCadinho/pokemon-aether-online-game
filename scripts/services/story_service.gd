@@ -83,7 +83,10 @@ func is_requirement_met(
 	var normalized_status := required_status.strip_edges().to_lower()
 	var normalized_step_id := quest_step_id.strip_edges()
 	if normalized_step_id.is_empty():
-		return str(quest.get("status", "")).strip_edges().to_lower() == normalized_status
+		var actual_status := str(quest.get("status", "")).strip_edges().to_lower()
+		if normalized_status == "started":
+			return actual_status in ["active", "completed"]
+		return actual_status == normalized_status
 
 	var steps_value: Variant = quest.get("steps", [])
 	if not steps_value is Array:

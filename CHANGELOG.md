@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Cerulean Cave-quest kan via Dev Tools worden gegeven of voltooid; zodra ze actief is, gaat de League-agent in Cerulean City opzij en is de grot toegankelijk.
+
 - Saffron City gebruikt de volledige Tiled-stad en is via aparte verticale poortinterieurs met Route 5 en Route 6 verbonden, inclusief wederzijdse aankomstpunten en indoor zichtmaskers.
 
 - De Trainer Card past Aether Royal-delen zonder Patreon-rol niet meer lokaal toe en zet een door de server afgewezen preview terug naar de opgeslagen outfit, zonder console-warning.

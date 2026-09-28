@@ -145,6 +145,14 @@ func _verify_base_npc_story_requirement(service: Node) -> void:
 		not bool(service.call("is_requirement_met", "choose_starter", "choose_starter", "completed")),
 		"an unfinished required quest step keeps an NPC gated"
 	)
+	_expect(
+		bool(service.call("is_requirement_met", "choose_starter", "", "started")),
+		"an active quest opens a started-status gate"
+	)
+	_expect(
+		not bool(service.call("is_requirement_met", "cerulean_cave_clearance", "", "started")),
+		"a missing quest does not open a started-status gate"
+	)
 	service.apply_story({
 		"revision": 9,
 		"quests": [{
@@ -156,6 +164,10 @@ func _verify_base_npc_story_requirement(service: Node) -> void:
 	_expect(
 		bool(service.call("is_requirement_met", "choose_starter", "choose_starter", "completed")),
 		"a completed required quest step unlocks an NPC"
+	)
+	_expect(
+		bool(service.call("is_requirement_met", "choose_starter", "", "started")),
+		"a completed quest keeps a started-status gate open"
 	)
 	service.reset_story()
 
