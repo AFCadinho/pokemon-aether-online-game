@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://cq22q8wnrtgo0"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_cave_1f/assets/cerulean_cave_1f.visual.tileset.compact_source_1_0.texture.res" id="1_jsevp"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_cave_1f/assets/cerulean_cave_1f.visual.tileset.compact_source_17001_0.texture.res" id="2_edxtu"]

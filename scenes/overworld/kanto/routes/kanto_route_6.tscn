@@ -4,17 +4,18 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_4wgod"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_dp7hi"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_nbafy"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_dp7hi"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(192, 32)
+size = Vector2(96, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
-size = Vector2(96, 32)
+size = Vector2(256, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y075s"]
 texture = ExtResource("4_4wgod")
@@ -253,10 +254,10 @@ music_profile_id = "kanto.routes_3_10_16_22"
 [node name="Spawns" type="Node2D" parent="." unique_id=275142603]
 
 [node name="FromUndergroundPath" type="Marker2D" parent="Spawns" unique_id=339705195]
-position = Vector2(1168, 448)
+position = Vector2(1168, 432)
 
 [node name="FromSaffronSouth" type="Marker2D" parent="Spawns" unique_id=1782264346]
-position = Vector2(736, 48)
+position = Vector2(752, 176)
 
 [node name="FromVermilion" type="Marker2D" parent="Spawns" unique_id=1516574648]
 position = Vector2(752, 1680)
@@ -272,10 +273,11 @@ transition_id = "kanto_route_6__to_underground_path"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=335215712]
+position = Vector2(0, -8)
 shape = SubResource("shape_1")
 
 [node name="ToSaffronSouth" type="Area2D" parent="Exits" unique_id=979983108]
-position = Vector2(736, 16)
+position = Vector2(752, 112)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/connections/saffron_city_south.tscn"
 target_spawn_name = "FromRoute6"
@@ -283,7 +285,13 @@ transition_id = "kanto_route_6__to_saffron_south"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSaffronSouth" unique_id=706204713]
+position = Vector2(-16, -8)
 shape = SubResource("shape_2")
+
+[node name="RouteTransitionHint" parent="Exits/ToSaffronSouth" unique_id=1611382310 instance=ExtResource("4_dp7hi")]
+z_as_relative = false
+position = Vector2(-16, 0)
+tile_footprint = Vector2i(3, 1)
 
 [node name="ToVermilion" type="Area2D" parent="Exits" unique_id=1090221435]
 position = Vector2(752, 1712)
@@ -294,6 +302,7 @@ transition_id = "kanto_route_6__to_vermilion"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilion" unique_id=1022283317]
+position = Vector2(16, 16)
 shape = SubResource("shape_3")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1064945309]
