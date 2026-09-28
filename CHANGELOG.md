@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 200 extra Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen downloadbare bundle. Typhlosions gekleurde vlammen en andere eerder beoordeelde correcties zijn in de definitieve modellen hersteld.
+
 - Cinnabar Island en de aparte Vermilion Docks zijn nu in Godot geïmporteerd, met wederzijdse overgangen naar Route 21 en Vermilion City. Vermilion City gebruikt weer de actuele Tiled-indeling met grijze straten.
 
 - In Cerulean Cave kun je over de brug lopen en onder dezelfde brug door surfen. De brughoofden bepalen wanneer de speler het hogere pad betreedt of verlaat.
