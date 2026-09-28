@@ -95,8 +95,11 @@ func _draw_hud(index: int, name: String, actor: Node3D, side: int) -> Rect2:
 	if corrected_hud:
 		var bounds := _screen_box(_bounds(actor))
 		point = Vector2(bounds.get_center().x - 90, bounds.position.y - 57)
-	point.x = clampf(point.x, 16, root.size.x - 196)
-	point.y = clampf(point.y, 62, root.size.y - 275)
+	# Camera projections and Control positions use viewport coordinates. The
+	# physical window can be smaller when canvas_items stretching is active.
+	var visible_size := root.get_visible_rect().size
+	point.x = clampf(point.x, 16, visible_size.x - 196)
+	point.y = clampf(point.y, 62, visible_size.y - 275)
 	overlays[index].position = point
 	overlays[index].text = name + " · HUD anchor proxy"
 	return Rect2(point, Vector2(180, 45))
@@ -146,7 +149,9 @@ func _shots(entry: Dictionary, model: Node3D, player: AnimationPlayer, measured:
 				var image := "%s-%s-%s-%s.png" % [entry.species, arena, side, pose[0]]
 				assert(root.get_texture().get_image().save_png(output_dir.path_join(image)) == OK)
 				result.append({"arena_camera": arena, "side": side, "action": pose[0], "image": image,
-					"minimum_y": box.position.y, "in_view": Rect2(Vector2.ZERO, Vector2(root.size)).encloses(screen),
+					"minimum_y": box.position.y, "in_view": root.get_visible_rect().encloses(screen),
+					"logical_viewport": [root.get_visible_rect().size.x, root.get_visible_rect().size.y],
+					"physical_viewport": [root.size.x, root.size.y],
 					"model_overlaps_hud_proxy": screen.intersects(hud), "hud_gap_pixels": screen.position.y - hud.end.y,
 					"screen_rect": [screen.position.x, screen.position.y, screen.size.x, screen.size.y]})
 	return result

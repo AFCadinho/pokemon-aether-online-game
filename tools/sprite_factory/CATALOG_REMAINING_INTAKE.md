@@ -385,6 +385,44 @@ in the exact-hash review receipt. Battle size/grounding, bundle qualification
 and publication are still pending. Jirachi and Zekrom are
 already locally admitted as documented above and are outside this ten-pair set.
 
+## Ten repaired pairs: battle qualification — 2026-09-28
+
+Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar,
+Primarina and Dewpider now have user-approved battle placement for normal and
+shiny. This completes their appearance and battle visual reviews; individual
+bundle qualification and catalog admission are still pending.
+
+`catalog_remaining_ten_battle_profiles.json` retains the exact scene hashes,
+action timing, bounds, scale, grounding and motion profiles. Mudkip is scaled
+2.02568×, Solosis 2.58674× and Dewpider 2.04282× for readability; the other seven
+retain their original scale. Existing source sleep clearance is preserved when
+already sufficient. Primarina uses the previously approved ponytail scene.
+
+All 160 clips were measured at 60 Hz and independently checked with the final
+motion offsets at 120 Hz. Minimum sampled floor clearance is 0.0193066 m
+(Incineroar's second physical attack); the baker's 0.03 m target is not claimed
+as a measured minimum. The 320 final battle captures cover both camera presets,
+both sides and idle, special attack, sleep and faint poses. All actors fit the
+viewport with no HUD-proxy overlap. The user approved the ten pairs with
+"Allemaal goed", including the three enlarged small models.
+
+The review renderer also now uses logical viewport coordinates for camera bounds
+and HUD clamping. Comparing projected coordinates against physical window size
+incorrectly reported off-screen actors after resizing a stretched window.
+Each shot records both coordinate sizes. A separate 32-shot Furret normal/shiny
+regression passed at 1280×720 physical / 1920×1080 logical resolution. Final
+camera recapture reused the hash-pinned world-space motion measurements; its
+receipt explicitly identifies that reuse.
+
+Three production-presenter fixture rounds (classic/stadium/classic) exercised
+all ten normal/shiny pairs, replacement after fainting, HUD placement, loading,
+cache limits and cleanup. All passed, with frame p95 around 17.3 ms. This fixture
+only modifies the registry in memory; it does not admit candidates to the game.
+The exact evidence hashes, measured results, user approval and remaining stages
+are in `catalog_remaining_ten_battle_qualification.json`. Local evidence and the
+single battle gallery remain under `.tmp/remaining-ten-battle/` in slot-a.
+No bundle, public index or release was changed by this qualification task.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired
