@@ -14,6 +14,7 @@ from PIL import Image
 
 from catalog_remaining_eye_bake import append_png, chunks, write_glb
 from catalog_remaining_blastoise_eye import repair as repair_blastoise_eye
+from catalog_remaining_source_exceptions import repair as repair_source_exception
 from scvi_material_probe import inspect_materials
 
 
@@ -154,6 +155,11 @@ def main():
                                 table, resource,
                                 clear_all_mask_emission=species in {
                                     'magmar', 'jirachi', 'golett'})
+                if species in ('jirachi', 'zekrom'):
+                    target = args.output / species / variant / 'model.glb'
+                    record['source_exception'] = repair_source_exception(
+                        species, record['path'], target, table, resource)
+                    record['path'] = str(target.resolve())
                 if species == 'blastoise' and args.blastoise_sclera_review:
                     target = args.output / species / variant / 'model.glb'
                     record['blastoise_eye_materials'] = repair_blastoise_eye(
@@ -166,7 +172,8 @@ def main():
             shiny = [r['material'] for r in result['shiny']['restored']]
             if normal != shiny:
                 raise ValueError('Normal/shiny contaminated material lists differ')
-            if normal or (species == 'blastoise' and args.blastoise_sclera_review):
+            if (normal or 'source_exception' in result['normal'] or
+                    (species == 'blastoise' and args.blastoise_sclera_review)):
                 result['status'] = 'repaired_for_review'
         except (OSError, ValueError, KeyError, IndexError, TypeError) as error:
             result = {'species': species, 'status': 'held',

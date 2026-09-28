@@ -198,7 +198,9 @@ not approve the 156 pairs. The following are explicit visual holds:
   six-layer source shader needs a dedicated reconstruction.
 - Solosis and Reuniclus: their green transparent outer bodies are too dark;
   Reuniclus's shell is barely visible against the review background.
-- Zekrom: several tail pieces appear detached in idle.
+- Zekrom: the missing wing/back and tail sections received the subsequent
+  source-opacity correction below; the corrected candidate still needs battle
+  qualification.
 - Dewpider: eye and bubble appearance are doubtful in the current render.
 - Entei, Furret and Mudkip: user-reported eye appearance needs a closer
   battle-camera check; a clean material binding alone cannot clear them.
@@ -206,6 +208,38 @@ not approve the 156 pairs. The following are explicit visual holds:
   check.
 
 None of these GLBs updates the approved catalog, bundles or R2.
+
+### Jirachi eyes and Zekrom back follow-up
+
+`catalog_remaining_source_exceptions.py` is now called by the body-repair
+batch for these two species, so regenerating the page retains the corrections.
+The latest two-pair receipt is `.tmp/jirachi-zekrom-review/final/status.json`;
+it supersedes only Jirachi and Zekrom in body v6. The browser comparison is
+`.tmp/jirachi-zekrom-review/index.html`.
+
+Jirachi's Biochao eye node group explicitly connects `eye_msk.Color` to
+`Mask`, with a white mask colour. The generic eye bake omitted that final
+highlight mix and used brighter TRMTR layer 2/3 colours than the original
+Blender material. The focused repair restores the pinned source highlight,
+the authored darker layer 2/3 values and roughness 0.5. It preserves the
+official normal/rare layer 1 difference. Source blend and highlight hashes
+are documented in the repair module; the highlight hash and material profile
+are guarded. The read-only node inspection is retained locally in
+`.tmp/jirachi-zekrom-review/{nodes,group}.json`.
+
+Zekrom's source declares five body materials `Opaque`, but the GLB retained
+albedo alpha on three of them, cutting holes through wings/back and turbine
+sections. Only those five source-opaque materials are forced opaque; the
+explicit `body_b_03` transparent effect and eye materials remain unchanged.
+The invalid alpha multiplier on `body_b_01` is normalized to 1.
+
+Both normal/shiny pairs were imported and rendered in Godot: 24 captures of
+idle, both physical attacks, special attack, sleep and faint, with zero
+reported errors. Visual inspection shows the eye highlights, solid wings/back
+and connected tail shell; sleep still hides Jirachi's eyes. The final scripted
+GLBs are byte-identical to the rendered trial. Nodes, meshes, skeletons,
+animations and the original binary prefix are unchanged. This is source
+appearance review evidence, not battle or release approval.
 
 ## Reproduce or resume
 
