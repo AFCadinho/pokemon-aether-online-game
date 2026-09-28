@@ -279,9 +279,9 @@ shape = SubResource("shape_1")
 [node name="ToSaffronSouth" type="Area2D" parent="Exits" unique_id=979983108]
 position = Vector2(752, 112)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/connections/saffron_city_south.tscn"
-target_spawn_name = "FromRoute6"
-transition_id = "kanto_route_6__to_saffron_south"
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn"
+target_spawn_name = "FromSouth"
+transition_id = "kanto_route_6__to_saffron_gate"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSaffronSouth" unique_id=706204713]

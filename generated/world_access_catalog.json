@@ -2582,8 +2582,8 @@
 			"areaType": "transition",
 			"defaultMode": "open",
 			"label": "Route 5–Saffron Gate",
-			"locationGroupId": "kanto_saffron_city_north",
-			"locationGroupLabel": "Saffron City North",
+			"locationGroupId": "kanto_saffron_city",
+			"locationGroupLabel": "Saffron City",
 			"regionName": "Kanto",
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn",
@@ -2629,7 +2629,7 @@
 					"spawnMarker": "FromSaffronSouth",
 					"tile": {
 						"x": 23,
-						"y": 1
+						"y": 5
 					}
 				},
 				"from_underground_path": {
@@ -2639,7 +2639,7 @@
 					"spawnMarker": "FromUndergroundPath",
 					"tile": {
 						"x": 36,
-						"y": 14
+						"y": 13
 					}
 				},
 				"from_vermilion": {
@@ -2650,6 +2650,38 @@
 					"tile": {
 						"x": 23,
 						"y": 52
+					}
+				}
+			}
+		},
+		"kanto_route_6_saffron_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Route 6–Saffron Gate",
+			"locationGroupId": "kanto_saffron_city",
+			"locationGroupLabel": "Saffron City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
+			"spawnPoints": {
+				"from_north": {
+					"facingDirection": "down",
+					"label": "North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromNorth",
+					"tile": {
+						"x": 10,
+						"y": 8
+					}
+				},
+				"from_south": {
+					"facingDirection": "down",
+					"label": "South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSouth",
+					"tile": {
+						"x": 10,
+						"y": 18
 					}
 				}
 			}
@@ -2692,6 +2724,48 @@
 					"tile": {
 						"x": 94,
 						"y": 9
+					}
+				}
+			}
+		},
+		"kanto_saffron_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Saffron City",
+			"locationGroupId": "kanto_saffron_city",
+			"locationGroupLabel": "Saffron City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn",
+			"spawnPoints": {
+				"city_center": {
+					"facingDirection": "down",
+					"label": "City Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "CityCenter",
+					"tile": {
+						"x": 47,
+						"y": 54
+					}
+				},
+				"from_route_5": {
+					"facingDirection": "down",
+					"label": "Route 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute5",
+					"tile": {
+						"x": 47,
+						"y": 5
+					}
+				},
+				"from_route_6": {
+					"facingDirection": "down",
+					"label": "Route 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute6",
+					"tile": {
+						"x": 49,
+						"y": 83
 					}
 				}
 			}
@@ -5564,6 +5638,7 @@
 		},
 		"kanto_route_5_saffron_gate__to_route5": {
 			"destination": {
+				"facingDirection": "up",
 				"mapId": "kanto_route_5",
 				"mapSceneAliases": [
 					"uid://ded6hbiskrxtb"
@@ -5578,33 +5653,34 @@
 			"destinationAreaId": "kanto_route_5",
 			"sourceMapId": "kanto_route_5_saffron_gate"
 		},
-		"kanto_route_5_saffron_gate__to_saffron_city_north": {
+		"kanto_route_5_saffron_gate__to_saffron_city": {
 			"destination": {
-				"mapId": "kanto_saffron_city_north",
+				"facingDirection": "down",
+				"mapId": "kanto_saffron_city",
 				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/saffron_city_north.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn",
 				"position": {
-					"x": 672.0,
-					"y": 48.0
+					"x": 1520.0,
+					"y": 176.0
 				},
 				"spawnMarker": "FromRoute5"
 			},
-			"destinationAreaId": "kanto_saffron_city_north",
+			"destinationAreaId": "kanto_saffron_city",
 			"sourceMapId": "kanto_route_5_saffron_gate"
 		},
-		"kanto_route_6__to_saffron_south": {
+		"kanto_route_6__to_saffron_gate": {
 			"destination": {
 				"facingDirection": "up",
-				"mapId": "kanto_saffron_city_south",
+				"mapId": "kanto_route_6_saffron_gate",
 				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/saffron_city_south.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
 				"position": {
-					"x": 736.0,
-					"y": 192.0
+					"x": 336.0,
+					"y": 592.0
 				},
-				"spawnMarker": "FromRoute6"
+				"spawnMarker": "FromSouth"
 			},
-			"destinationAreaId": "kanto_saffron_city_south",
+			"destinationAreaId": "kanto_route_6_saffron_gate",
 			"sourceMapId": "kanto_route_6"
 		},
 		"kanto_route_6__to_underground_path": {
@@ -5638,6 +5714,38 @@
 			},
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_route_6"
+		},
+		"kanto_route_6_saffron_gate__to_route6": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_6",
+				"mapSceneAliases": [
+					"uid://byyelt2dffj6y"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+				"position": {
+					"x": 752.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromSaffronSouth"
+			},
+			"destinationAreaId": "kanto_route_6",
+			"sourceMapId": "kanto_route_6_saffron_gate"
+		},
+		"kanto_route_6_saffron_gate__to_saffron_city": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_saffron_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn",
+				"position": {
+					"x": 1584.0,
+					"y": 2672.0
+				},
+				"spawnMarker": "FromRoute6"
+			},
+			"destinationAreaId": "kanto_saffron_city",
+			"sourceMapId": "kanto_route_6_saffron_gate"
 		},
 		"kanto_route_9__to_cerulean_city": {
 			"destination": {
@@ -5686,6 +5794,36 @@
 			"destinationAreaId": "kanto_route_10",
 			"sourceMapId": "kanto_route_9"
 		},
+		"kanto_saffron_city__to_route5_gate": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_5_saffron_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromSouth"
+			},
+			"destinationAreaId": "kanto_route_5_saffron_gate",
+			"sourceMapId": "kanto_saffron_city"
+		},
+		"kanto_saffron_city__to_route6_gate": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_6_saffron_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromNorth"
+			},
+			"destinationAreaId": "kanto_route_6_saffron_gate",
+			"sourceMapId": "kanto_saffron_city"
+		},
 		"kanto_saffron_city_north__to_route5_saffron_gate": {
 			"destination": {
 				"facingDirection": "up",
@@ -5701,21 +5839,19 @@
 			"destinationAreaId": "kanto_route_5_saffron_gate",
 			"sourceMapId": "kanto_saffron_city_north"
 		},
-		"kanto_saffron_city_south__to_route6": {
+		"kanto_saffron_city_south__to_route6_saffron_gate": {
 			"destination": {
 				"facingDirection": "down",
-				"mapId": "kanto_route_6",
-				"mapSceneAliases": [
-					"uid://byyelt2dffj6y"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+				"mapId": "kanto_route_6_saffron_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
 				"position": {
-					"x": 736.0,
-					"y": 48.0
+					"x": 336.0,
+					"y": 272.0
 				},
-				"spawnMarker": "FromSaffronSouth"
+				"spawnMarker": "FromNorth"
 			},
-			"destinationAreaId": "kanto_route_6",
+			"destinationAreaId": "kanto_route_6_saffron_gate",
 			"sourceMapId": "kanto_saffron_city_south"
 		},
 		"kanto_underground_path_route_5_entrance__to_route5": {
@@ -5762,7 +5898,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
 					"x": 1168.0,
-					"y": 448.0
+					"y": 432.0
 				},
 				"spawnMarker": "FromUndergroundPath"
 			},

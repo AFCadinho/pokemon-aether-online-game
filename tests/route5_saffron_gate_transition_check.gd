@@ -44,16 +44,16 @@ func _init() -> void:
 	)
 	_check_transition(
 		transitions,
-		"kanto_saffron_city_north__to_route5_saffron_gate",
-		"kanto_saffron_city_north",
+		"kanto_saffron_city__to_route5_gate",
+		"kanto_saffron_city",
 		"kanto_route_5_saffron_gate",
 		"FromSouth"
 	)
 	_check_transition(
 		transitions,
-		"kanto_route_5_saffron_gate__to_saffron_city_north",
+		"kanto_route_5_saffron_gate__to_saffron_city",
 		"kanto_route_5_saffron_gate",
-		"kanto_saffron_city_north",
+		"kanto_saffron_city",
 		"FromRoute5"
 	)
 
