@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 200 extra Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen downloadbare bundle. Typhlosions gekleurde vlammen en andere eerder beoordeelde correcties zijn in de definitieve modellen hersteld.
+
 - De rugcosmetic-categorie heet nu Back. De Aether Royal-cape valt van opzij smaller en rechter naar beneden, voor beide modellen en alle overworld-activiteiten.
 
 - De Aether Royal Patreon-outfit heeft een gedeelde, niet-verhandelbare outfitbox voor male en female, met vijf losse onderdelen: kroon, jas, broek, laarzen en skillcape. De cape heeft een eigen uitrustingsslot en is met andere kleding te combineren. Inclusief trainer-, loop-, vis- en rijsprites; nog niet in de store.

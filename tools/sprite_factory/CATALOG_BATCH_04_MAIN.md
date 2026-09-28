@@ -1,6 +1,39 @@
 # Batch 04: qualification of the other 200 candidates
 
-## Current status — 2026-09-28
+## Current status — 2026-09-28, local admission complete
+
+All 200 normal/shiny pairs are locally approved in the game and launcher reviewed
+registries. `catalog_production_batch_04_main_approval.json` pins the exact
+400 scenes and 200 individual bundles. The corrected bundle index contains 178
+version-1 and 22 version-2 bundles, totaling 5.40 GiB. No R2 upload, release
+certification, publication or deployment was performed.
+
+The first candidate assembly accidentally selected older scenes for 21 models.
+The user spotted Typhlosion's white flames in the proposed final gallery. The
+reconciliation restored all 21 exact accepted normal battle scenes and seven
+corresponding shiny scenes; Floragato retained its separately requalified later
+fix. The user accepted the corrected 147-pair normal/shiny page with “Allemaal
+goed”. `candidate-reconciliation-v2.json` and the version-2 candidate manifest
+retain the exact hashes. The original candidate bundles and rejected gallery
+remain as evidence, not release inputs.
+
+All 200 final pairs passed three real battle rounds in 25 groups: Classic,
+Stadium, Classic. A single 819 ms uncovered Perrserker loading stall occurred
+while the shared-store install test saturated the machine. Group 10 was rerun
+after installation stopped; all three rounds passed with no uncovered stall.
+Each of the 200 individual bundles then passed launcher archive validation,
+normal/shiny scene load and hash checks, no-op update and store restart.
+`catalog_batch_04_main_admission_check.gd` passed against the installed
+400-scene catalog. Thirteen earlier normal-only screened entries were removed
+when their reviewed pairs were admitted; only Murkrow remains screened.
+
+The shared-store full-catalog replay was stopped because its repeated
+whole-store validation becomes expensive as more bundles accumulate. Its
+transactional partial results remain local; they are not counted as a
+completed 200-bundle check. Full release verification remains for a future
+certification request.
+
+## Earlier qualification status — 2026-09-28
 
 The user accepted the complete final overview with “ja dit is nu allemaal goed”.
 All reported findings in that overview are closed: 18 normal/shiny appearance
