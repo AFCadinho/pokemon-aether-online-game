@@ -334,6 +334,55 @@ No public index or R2 objects have been changed. Release certification and
 publication remain separate; the bundle receipt deliberately keeps
 `release_approved=false` and `published=false`.
 
+### Ten remaining visual holds — source reconstruction (2026-09-28)
+
+The ten explicit remaining visual holds now have a single candidate gallery:
+`.tmp/remaining-visual-holds/index.html`, served at
+`http://127.0.0.1:8765/.tmp/remaining-visual-holds/index.html`.
+The selected outputs are `final-stage.json`, `final-runtime-v3/report.json` and
+`final-captures-v3/review.json` in that directory; earlier trial folders are
+superseded. `catalog_remaining_visual_holds_review.json` pins the 20 exact
+GLB/SCN hashes and evidence. These remain review candidates, not catalog entries.
+
+- Blastoise, Furret, Entei and Mudkip: restore original Biochao eye albedo/mask
+  pixels rather than newer SCVI atlas layouts. Their old eye albedos are fully
+  white. Restore source-authored white highlights for Furret, Entei and Mudkip;
+  keep the official normal/rare layer-colour differences. Dewpider's four eye
+  materials also use their original source atlas. Blastoise retains its native
+  narrow eye geometry; no eye mesh has been enlarged.
+- Yanma: all four thin wing meshes existed, but their material was single-sided.
+  Double-sided rendering restores the missing views. Ten additional side-view
+  captures cover five idle moments for both variants.
+- Primarina: the export displayed both loose and tied hair meshes. The reviewed
+  proposal hides `hair_b` using the existing native visibility-track pack in all
+  eight clips and RESET, preserving the animated ponytail. This is explicitly an
+  artistic candidate, not a claim to decode missing original visibility data.
+- Incineroar: reconstruct the four layer-mask colours plus the fifth mask layer
+  and their authored emission, restoring the orange/yellow belt in both variants.
+- Solosis, Reuniclus and Dewpider: reconstruct linear source layer colours and
+  emission with original alpha, instead of multiplying sRGB colours into albedo.
+  Independent RGBA mask channels are resized separately; ordinary premultiplied
+  resizing erased red-channel data under zero alpha in an intermediate trial.
+- Entei also had raw mask emission on its smoke and metal. The smoke now uses
+  the original white/red-mask atlas with authored colours, and the metal uses
+  the official low constant emission. The spurious red smoke is gone.
+
+`catalog_remaining_visual_holds.py` reproduces these candidates from hash-pinned
+inputs in `catalog_remaining_visual_holds_inputs.json`. Run it with `--work`
+pointing to the retained work directory, `--materials` to the external SCVI
+material dump and `--output` to a new directory. It refuses changed input files
+and an existing output. Its 20 GLBs and all timing/visibility metadata reproduced
+byte-for-byte. Meshes, skinning, skeletons, animation arrays and original binary
+prefixes remain unchanged; Primarina's extra visibility is applied only during
+standalone scene conversion.
+
+All 20 scenes converted without errors. The 120 normal/shiny pose captures and
+10 Yanma side captures rendered without errors. Assistant review inspected all
+120 poses and compared Dewpider with the local source icon; no new obvious
+artifacts were found at review scale. User approval, battle size/grounding,
+bundle qualification and publication are still pending. Jirachi and Zekrom are
+already locally admitted as documented above and are outside this ten-pair set.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired
