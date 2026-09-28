@@ -277,9 +277,9 @@ tile_footprint = Vector2i(4, 1)
 [node name="ToSaffronNorth" type="Area2D" parent="Exits" unique_id=1330322679]
 position = Vector2(656, 1776)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/connections/saffron_city_north.tscn"
-target_spawn_name = "FromRoute5"
-transition_id = "kanto_route_5__to_saffron_north"
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn"
+target_spawn_name = "FromNorth"
+transition_id = "kanto_route_5__to_saffron_gate"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSaffronNorth" unique_id=1273540423]
