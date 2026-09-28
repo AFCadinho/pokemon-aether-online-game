@@ -54,6 +54,9 @@ func is_surfing_activity_active() -> bool:
 	return player != null and is_instance_valid(player) and player.has_method("is_surfing_activity_active") \
 		and bool(player.call("is_surfing_activity_active"))
 
+func get_traversal_leader() -> Node2D:
+	return player if is_instance_valid(player) else null
+
 func set_pokemon(pokemon: Pokemon) -> void:
 	if pokemon == null or pokemon.species == "":
 		current_species = ""

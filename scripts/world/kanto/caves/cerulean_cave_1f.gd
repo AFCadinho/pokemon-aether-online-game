@@ -8,6 +8,10 @@ const WATER_SOURCE_MAX := 19014
 const BRIDGE_Z := 2053
 const ACTOR_ON_BRIDGE_Z := 2054
 const LANDINGS := [Vector2i(67, 11), Vector2i(33, 23), Vector2i(84, 33), Vector2i(67, 56)]
+# The imported lower floor is exposed at both sides of these bridge cells.
+# The remaining dry bridge cells cover cliff faces, not walkable underpasses.
+const GROUND_UNDERPASS := Rect2i(66, 42, 2, 8)
+const BRIDGE_POSITION_META := &"cerulean_cave_bridge_position"
 
 @onready var bridge_layer: TileMapLayer = get_node_or_null("Visual/Bridges - Upper Level") as TileMapLayer
 @onready var water_layer: TileMapLayer = get_node_or_null("Visual/GroundDetail") as TileMapLayer
@@ -23,25 +27,37 @@ func _ready() -> void:
 func is_water_tile_for_actor(world_position: Vector2, actor: Node) -> bool:
 	if not _has_water(_tile_at(world_position)):
 		return false
-	return not (_has_bridge(world_position) and not _is_surfing(actor))
+	return not (_has_bridge(world_position) and not _is_surfing(actor)
+		and not _uses_ground_underpass(_actor_position(actor, world_position), actor))
 
 
 func is_actor_bridge_step_blocked(from_position: Vector2, to_position: Vector2, actor: Node) -> bool:
 	var from_bridge := _has_bridge(from_position)
 	var to_bridge := _has_bridge(to_position)
+	var from_tile := _tile_at(from_position)
+	var to_tile := _tile_at(to_position)
 	if _is_surfing(actor):
-		# Surf uses the lower water footprint, even where the deck is above it.
-		return to_bridge and not _has_water(_tile_at(to_position))
+		# Surf may land on the lower floor, but not on a cliff or the upper deck.
+		return to_bridge and not _has_water(to_tile) and not GROUND_UNDERPASS.has_point(to_tile)
+	if _uses_ground_underpass(from_position, actor):
+		return to_bridge and not GROUND_UNDERPASS.has_point(to_tile) and not _has_water(to_tile)
 	if to_bridge and not from_bridge:
-		return not LANDINGS.has(_tile_at(from_position))
+		return not (LANDINGS.has(from_tile)
+			or (GROUND_UNDERPASS.has_point(to_tile) and _is_ground_approach(from_tile)))
 	if from_bridge and not to_bridge:
-		return not LANDINGS.has(_tile_at(to_position))
+		return not LANDINGS.has(to_tile)
 	return false
 
 
 func get_actor_sort_z_floor_for_actor(world_position: Vector2, actor: Node) -> int:
+	var below_deck := _is_surfing(actor) or _uses_ground_underpass(world_position, actor)
+	if actor != null:
+		# Observe actual rendered positions; movement probes must not change levels.
+		actor.set_meta(BRIDGE_POSITION_META, {
+			"map": get_instance_id(), "tile": _tile_at(world_position), "below": below_deck,
+		})
 	# A sprite reaches over the deck while its feet are still on the landing.
-	if not _is_surfing(actor) and (_has_bridge(world_position) or LANDINGS.has(_tile_at(world_position))):
+	if not below_deck and (_has_bridge(world_position) or LANDINGS.has(_tile_at(world_position))):
 		return ACTOR_ON_BRIDGE_Z
 	return super.get_actor_sort_z_floor(world_position)
 
@@ -53,6 +69,12 @@ func get_safe_saved_position_for_actor(world_position: Vector2, actor: Node) -> 
 		return world_position
 	if _is_surfing(actor):
 		return _nearest_exposed_water(world_position)
+	if _uses_ground_underpass(world_position, actor):
+		# Account positions have no level: save next to the lower crossing so a
+		# login cannot reinterpret the position as standing on the upper deck.
+		var tile := _tile_at(world_position)
+		tile.x = GROUND_UNDERPASS.position.x - 1 if tile.x == GROUND_UNDERPASS.position.x else GROUND_UNDERPASS.end.x
+		return to_global(Vector2(tile) * TILE_SIZE + Vector2.ONE * TILE_SIZE * 0.5)
 	var best_tile: Vector2i = LANDINGS[0]
 	var shortest_distance := INF
 	for landing: Vector2i in LANDINGS:
@@ -62,6 +84,40 @@ func get_safe_saved_position_for_actor(world_position: Vector2, actor: Node) -> 
 			shortest_distance = distance
 			best_tile = landing
 	return to_global(Vector2(best_tile) * TILE_SIZE + Vector2.ONE * TILE_SIZE * 0.5)
+
+
+func _actor_position(actor: Node, fallback: Vector2) -> Vector2:
+	if actor != null and actor.has_method("get_feet_position"):
+		return actor.call("get_feet_position")
+	if actor is Node2D:
+		return (actor as Node2D).global_position
+	return fallback
+
+
+func _is_ground_approach(tile: Vector2i) -> bool:
+	return tile.y >= GROUND_UNDERPASS.position.y and tile.y < GROUND_UNDERPASS.end.y \
+		and (tile.x == GROUND_UNDERPASS.position.x - 1 or tile.x == GROUND_UNDERPASS.end.x)
+
+
+func _uses_ground_underpass(world_position: Vector2, actor: Node) -> bool:
+	if actor == null or not GROUND_UNDERPASS.has_point(_tile_at(world_position)):
+		return false
+	var state: Dictionary = actor.get_meta(BRIDGE_POSITION_META, {})
+	if int(state.get("map", 0)) == get_instance_id():
+		var previous_tile: Vector2i = state["tile"]
+		if GROUND_UNDERPASS.has_point(previous_tile):
+			return bool(state["below"])
+		# A surfer arriving from the water stays on the lower floor when landing.
+		return _is_ground_approach(previous_tile) \
+			or (bool(state["below"]) and _has_water(previous_tile)
+				and previous_tile.distance_to(_tile_at(world_position)) <= 1.0)
+	# A follower can be created midway through a crossing (e.g. party changes).
+	if actor.has_method("get_traversal_leader"):
+		var leader: Node = actor.call("get_traversal_leader")
+		if leader != null and is_instance_valid(leader):
+			var leader_state: Dictionary = leader.get_meta(BRIDGE_POSITION_META, {})
+			return int(leader_state.get("map", 0)) == get_instance_id() and bool(leader_state.get("below", false))
+	return false
 
 
 func _nearest_exposed_water(world_position: Vector2) -> Vector2:
