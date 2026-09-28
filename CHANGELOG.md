@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Nog 144 Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, met gecontroleerde ogen, kleuren, animaties en battleplaatsing. Elk paar heeft een afzonderlijke bundle voor een volgende contentrelease.
+
+- Het 3D-stadion bouwt de publiekslichten nu betrouwbaar op bij herhaalde battles.
+
 - Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar, Primarina en Dewpider hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen bundle voor een volgende contentrelease.
 
 - De zuidoever van Route 9 is nu afgesloten met een dichte bomenrand; de Surf-opgang blijft vrij en de collision volgt de bomen.

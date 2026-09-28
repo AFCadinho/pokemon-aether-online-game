@@ -106,7 +106,7 @@ func _crowd(parent: Node3D) -> void:
 				batch.set_instance_color(index, tint)
 				index += 1
 	var crowd := MultiMeshInstance3D.new()
-	assert(batch.use_custom_data and batch.get_instance_custom_data(0) != batch.get_instance_custom_data(1))
+	assert(batch.use_custom_data and batch.instance_count == 4*9*65)
 	assert(batch.mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV2].size() > 0)
 	crowd.multimesh = batch
 	var mat := ShaderMaterial.new()
@@ -115,19 +115,25 @@ func _crowd(parent: Node3D) -> void:
 	crowd.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	parent.add_child(crowd)
 	# Tiny supporter lights share the crowd transforms; no individual light nodes.
-	var lights: MultiMesh = batch.duplicate()
+	var lights := MultiMesh.new()
+	lights.transform_format = batch.transform_format
+	lights.use_colors = batch.use_colors
+	lights.use_custom_data = batch.use_custom_data
 	var bulb := SphereMesh.new()
 	bulb.radius = 0.035
 	bulb.height = 0.07
 	bulb.radial_segments = 6
 	bulb.rings = 2
 	lights.mesh = bulb
+	lights.instance_count = batch.instance_count
 	for i in lights.instance_count:
-		var pose := lights.get_instance_transform(i)
+		var pose := batch.get_instance_transform(i)
 		pose.origin.y += 0.3
 		if i % 4 != 0:
 			pose.basis = Basis.from_scale(Vector3.ONE*0.001)
 		lights.set_instance_transform(i, pose)
+		lights.set_instance_color(i, batch.get_instance_color(i))
+		lights.set_instance_custom_data(i, batch.get_instance_custom_data(i))
 	var points := MultiMeshInstance3D.new()
 	points.multimesh = lights
 	var sparkle: ShaderMaterial = mat.duplicate()
