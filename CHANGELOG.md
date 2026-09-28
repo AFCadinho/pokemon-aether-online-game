@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Aether Ronin-mouwen sluiten nu ook bij male-lopen en bij vissen en rijden voor beide geslachten, zodat geen lichte huidstrook door de kleding schijnt.
+
 - De vrouwelijke Aether Ronin-top heeft gesloten mouwnaden in de zijwaartse loopframes, zodat daar geen lichte huidpuntjes doorheen komen.
 
 - De Route 5-daycare heeft een compact interieur met ontvangstbalie achterin, rode loper, zithoek en een Pokémon-PC.
