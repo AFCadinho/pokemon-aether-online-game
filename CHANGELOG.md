@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cinnabar Island en de aparte Vermilion Docks zijn nu in Godot geïmporteerd, met wederzijdse overgangen naar Route 21 en Vermilion City. Vermilion City gebruikt weer de actuele Tiled-indeling met grijze straten.
+
 - In Cerulean Cave kun je over de brug lopen en onder dezelfde brug door surfen. De brughoofden bepalen wanneer de speler het hogere pad betreedt of verlaat.
 
 - Cerulean Cave gebruikt de normale cave-wandtrappen voor verbindingen omhoog; de twee ontbrekende trapgaten naar B1F zijn hersteld.

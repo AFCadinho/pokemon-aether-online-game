@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_city/vermilion_city.visual.tscn" id="1_visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
@@ -9,6 +9,9 @@ size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
 size = Vector2(32, 160)
+
+[sub_resource type="RectangleShape2D" id="shape_docks"]
+size = Vector2(96, 32)
 
 [node name="VermilionCity" type="Node2D"]
 script = ExtResource("2_metadata")
@@ -21,6 +24,7 @@ world_access_area_type = "exterior"
 location_id = "kanto.vermilion.city"
 location_name = "Vermilion City"
 region_id = "kanto"
+water_reference_tile = Vector2i(0, 50)
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
 
@@ -31,6 +35,9 @@ position = Vector2(1328, 48)
 
 [node name="FromRoute11" type="Marker2D" parent="Spawns"]
 position = Vector2(2496, 1264)
+
+[node name="FromDocks" type="Marker2D" parent="Spawns"]
+position = Vector2(1328, 2000)
 
 [node name="Exits" type="Node2D" parent="."]
 
@@ -56,6 +63,17 @@ transition_facing_direction = "right"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute11"]
 shape = SubResource("shape_2")
 
+[node name="ToDocks" type="Area2D" parent="Exits"]
+position = Vector2(1328, 2032)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn"
+target_spawn_name = "FromVermilionCity"
+transition_id = "kanto_vermilion_city__to_docks"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDocks"]
+shape = SubResource("shape_docks")
+
 [node name="Entities" type="Node2D" parent="."]
 z_index = 5
 
@@ -63,3 +81,4 @@ z_index = 5
 
 [connection signal="body_entered" from="Exits/ToRoute6" to="Exits/ToRoute6" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute11" to="Exits/ToRoute11" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToDocks" to="Exits/ToDocks" method="_on_body_entered"]
