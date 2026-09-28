@@ -269,6 +269,7 @@ const APPEARANCE_CATEGORIES := [
 	{"id": "hair", "label_key": "ui.appearance.category.hair"},
 	{"id": "eyes", "label_key": "ui.appearance.category.eyes"},
 	{"id": "headgear", "label_key": "ui.appearance.category.headgear"},
+	{"id": "cape", "label_key": "ui.appearance.category.cape"},
 	{"id": "facial_hair", "label_key": "ui.appearance.category.facial_hair"},
 	{"id": "facegear", "label_key": "ui.appearance.category.facegear"},
 	{"id": "top", "label_key": "ui.appearance.category.top"},
@@ -15659,6 +15660,10 @@ func _get_appearance_category_for_sprite(sprite_name: String) -> String:
 			return "hair"
 		"HeadgearSprite":
 			return "headgear"
+		"CapeSprite":
+			return "cape"
+		"CapeOverlaySprite":
+			return "cape_overlay"
 		"FacialHairSprite":
 			return "facial_hair"
 		"FaceGearSprite":
@@ -15684,6 +15689,8 @@ func _get_preview_part_id(category_id: String) -> String:
 			)
 		"headgear":
 			return PlayerSave.appearance_headgear_id
+		"cape", "cape_overlay":
+			return PlayerSave.appearance_cape_id
 		"facial_hair":
 			return PlayerSave.appearance_facial_hair_id
 		"facegear":
@@ -19030,6 +19037,16 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shoes")
 			"AetherRonin_Shirt":
 				return LocalizationManager.text("ui.appearance.option.ronin_shirt")
+			"AetherRoyal_Shirt":
+				return LocalizationManager.text("ui.appearance.option.royal_shirt")
+			"AetherRoyal_Trousers":
+				return LocalizationManager.text("ui.appearance.option.royal_trousers")
+			"AetherRoyal_Shoes":
+				return LocalizationManager.text("ui.appearance.option.royal_shoes")
+			"AetherRoyal_Cape":
+				return LocalizationManager.text("ui.appearance.option.royal_cape")
+			"AetherRoyal_Crown":
+				return LocalizationManager.text("ui.appearance.option.royal_crown")
 			"AetherRonin_Trousers":
 				return LocalizationManager.text("ui.appearance.option.ronin_hakama")
 			"AetherRonin_Shoes":
@@ -19763,6 +19780,7 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 		"body",
 		"hair",
 		"headgear",
+		"cape",
 		"facial_hair",
 		"facegear",
 		"top",
@@ -20011,6 +20029,8 @@ func _apply_player_save_appearance_part(category_id: String, part_id: String) ->
 			PlayerSave.sync_hair_style_index_from_id()
 		"headgear":
 			PlayerSave.appearance_headgear_id = normalized_part_id
+		"cape":
+			PlayerSave.appearance_cape_id = normalized_part_id
 		"facial_hair":
 			PlayerSave.appearance_facial_hair_id = normalized_part_id
 		"facegear":
@@ -36089,6 +36109,7 @@ func _reset_impersonated_appearance_to_defaults() -> void:
 	PlayerSave.appearance_body_id = CharacterAppearanceService.DEFAULT_FEMALE_BODY_ID if PlayerSave.gender == "female" else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
 	PlayerSave.appearance_hair_id = CharacterAppearanceService.get_default_part_id("hair", PlayerSave.gender)
 	PlayerSave.appearance_headgear_id = CharacterAppearanceService.get_default_part_id("headgear", PlayerSave.gender)
+	PlayerSave.appearance_cape_id = ""
 	PlayerSave.appearance_facial_hair_id = CharacterAppearanceService.get_default_part_id("facial_hair", PlayerSave.gender)
 	PlayerSave.appearance_facegear_id = CharacterAppearanceService.get_default_part_id("facegear", PlayerSave.gender)
 	PlayerSave.appearance_top_id = CharacterAppearanceService.get_default_part_id("top", PlayerSave.gender)

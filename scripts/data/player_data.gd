@@ -21,6 +21,7 @@ var playtime_seconds := 0
 var appearance_body_id: String = CharacterAppearanceService.DEFAULT_BODY_ID
 var appearance_hair_id: String = CharacterAppearanceService.DEFAULT_MALE_HAIR_ID
 var appearance_headgear_id: String = CharacterAppearanceService.DEFAULT_MALE_HEADGEAR_ID
+var appearance_cape_id := ""
 var appearance_facial_hair_id := ""
 var appearance_facegear_id := ""
 var appearance_top_id: String = CharacterAppearanceService.DEFAULT_MALE_TOP_ID
@@ -124,6 +125,7 @@ func reset_appearance_to_defaults() -> void:
 	)
 	appearance_hair_id = CharacterAppearanceService.get_default_part_id("hair", gender)
 	appearance_headgear_id = CharacterAppearanceService.get_default_part_id("headgear", gender)
+	appearance_cape_id = ""
 	appearance_facial_hair_id = ""
 	appearance_facegear_id = ""
 	appearance_top_id = CharacterAppearanceService.get_default_part_id("top", gender)
@@ -261,6 +263,7 @@ func to_appearance_state() -> Dictionary:
 		"hair": CharacterAppearanceService.serialize_part_id(appearance_hair_id),
 		"hair_style_index": appearance_hair_style_index,
 		"headgear": CharacterAppearanceService.serialize_part_id(appearance_headgear_id),
+		"cape": CharacterAppearanceService.serialize_part_id(appearance_cape_id),
 		"facial_hair": CharacterAppearanceService.serialize_part_id(appearance_facial_hair_id),
 		"facegear": CharacterAppearanceService.serialize_part_id(appearance_facegear_id),
 		"top": CharacterAppearanceService.serialize_part_id(appearance_top_id),
@@ -299,6 +302,7 @@ func apply_appearance_state(appearance_state: Dictionary) -> void:
 	if appearance_state.has("hair_style_index"):
 		appearance_hair_style_index = max(int(appearance_state.get("hair_style_index", appearance_hair_style_index)), 0)
 	appearance_headgear_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("headgear", appearance_headgear_id)))
+	appearance_cape_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("cape", appearance_cape_id)))
 	appearance_facial_hair_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("facial_hair", appearance_facial_hair_id)))
 	appearance_facegear_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("facegear", appearance_facegear_id)))
 	appearance_top_id = CharacterAppearanceService.deserialize_part_id(str(appearance_state.get("top", appearance_top_id)))

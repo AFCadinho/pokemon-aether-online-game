@@ -382,5 +382,29 @@
   "aether-ronin-shoes": {
     "name": "Aether Ronin-tabisandalen",
     "shortDesc": "Onverhandelbaar. Verplaats de Ronin-tabisandalen naar Personage aanpassen."
+  },
+  "aether-royal-outfit": {
+    "name": "Aether Royal-outfitbox",
+    "shortDesc": "Niet verhandelbaar. Open voor vijf losse onderdelen: jas, broek, laarzen, kroon en skillcape. Voor mannelijke en vrouwelijke personages."
+  },
+  "aether-royal-shirt": {
+    "name": "Aether Royal-jas",
+    "shortDesc": "Niet verhandelbaar. Voeg dit Aether Royal-onderdeel toe aan Personage aanpassen. Voor mannelijke en vrouwelijke personages."
+  },
+  "aether-royal-trousers": {
+    "name": "Aether Royal-broek",
+    "shortDesc": "Niet verhandelbaar. Voeg dit Aether Royal-onderdeel toe aan Personage aanpassen. Voor mannelijke en vrouwelijke personages."
+  },
+  "aether-royal-shoes": {
+    "name": "Aether Royal-laarzen",
+    "shortDesc": "Niet verhandelbaar. Voeg dit Aether Royal-onderdeel toe aan Personage aanpassen. Voor mannelijke en vrouwelijke personages."
+  },
+  "aether-royal-crown": {
+    "name": "Aether Royal-kroon",
+    "shortDesc": "Niet verhandelbaar. Voeg dit Aether Royal-onderdeel toe aan Personage aanpassen. Voor mannelijke en vrouwelijke personages."
+  },
+  "aether-royal-cape": {
+    "name": "Aether Royal-skillcape",
+    "shortDesc": "Niet verhandelbaar. Draag deze skillcape afzonderlijk via het Cape-slot. Voor mannelijke en vrouwelijke personages."
   }
 }

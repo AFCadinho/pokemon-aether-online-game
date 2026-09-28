@@ -77,6 +77,9 @@ z_index = 10
 
 [node name="Rider" type="Node2D" parent="Look"]
 
+[node name="CapeSprite" type="AnimatedSprite2D" parent="Look/Rider"]
+visible = false
+
 [node name="BodySprite" type="AnimatedSprite2D" parent="Look/Rider" unique_id=2078077717]
 
 [node name="BottomSprite" type="AnimatedSprite2D" parent="Look/Rider" unique_id=2005324672]
@@ -86,6 +89,10 @@ z_index = 1
 z_index = 2
 
 [node name="TopSprite" type="AnimatedSprite2D" parent="Look/Rider" unique_id=1542332786]
+z_index = 3
+
+[node name="CapeOverlaySprite" type="AnimatedSprite2D" parent="Look/Rider"]
+visible = false
 z_index = 3
 
 [node name="EyebrowsSprite" type="AnimatedSprite2D" parent="Look/Rider" unique_id=630475804]

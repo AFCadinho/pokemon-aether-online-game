@@ -382,5 +382,29 @@
   "aether-ronin-shoes": {
     "name": "浪人足袋木屐",
     "shortDesc": "不可交易。将浪人足袋木屐移至角色自定义。"
+  },
+  "aether-royal-outfit": {
+    "name": "以太王室服装箱",
+    "shortDesc": "不可交易。打开可获得五件独立装扮：外套、长裤、靴子、王冠和披风。适用于男性和女性角色。"
+  },
+  "aether-royal-shirt": {
+    "name": "以太王室外套",
+    "shortDesc": "不可交易。将此以太王室装扮添加到角色自定义。适用于男性和女性角色。"
+  },
+  "aether-royal-trousers": {
+    "name": "以太王室长裤",
+    "shortDesc": "不可交易。将此以太王室装扮添加到角色自定义。适用于男性和女性角色。"
+  },
+  "aether-royal-shoes": {
+    "name": "以太王室靴子",
+    "shortDesc": "不可交易。将此以太王室装扮添加到角色自定义。适用于男性和女性角色。"
+  },
+  "aether-royal-crown": {
+    "name": "以太王室王冠",
+    "shortDesc": "不可交易。将此以太王室装扮添加到角色自定义。适用于男性和女性角色。"
+  },
+  "aether-royal-cape": {
+    "name": "以太王室披风",
+    "shortDesc": "不可交易。可在披风栏位独立装备。适用于男性和女性角色。"
   }
 }
