@@ -3104,6 +3104,16 @@ func _save_current_player_position(
 			"error": _get_player_position_save_block_reason(allow_gameplay_reset),
 		}
 	var state: Dictionary = _build_current_player_position_state(spawn_marker, use_confirmed_appearance)
+	if GameState.current_map != null and GameState.current_map.has_method("get_safe_saved_position_for_actor"):
+		var current_position: Dictionary = state.get("position", {})
+		var position_for_save := Vector2(
+			float(current_position.get("x", player.global_position.x)),
+			float(current_position.get("y", player.global_position.y))
+		)
+		var safe_position: Vector2 = GameState.current_map.call(
+			"get_safe_saved_position_for_actor", position_for_save, player
+		)
+		state["position"] = {"x": safe_position.x, "y": safe_position.y}
 	var happiness_walk_steps_sent: int = int(state.get("walkSteps", 0))
 	if _is_player_position_save_blocked_by_teleport(allow_gameplay_reset):
 		is_saving_player_position = false

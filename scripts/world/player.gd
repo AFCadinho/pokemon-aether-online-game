@@ -2096,6 +2096,9 @@ func _get_fishing_ripple_position() -> Vector2:
 
 func _is_water_tile_at(check_position: Vector2) -> bool:
 	_ensure_map_layers()
+	var current_map := _resolve_current_map()
+	if current_map != null and current_map.has_method("is_water_tile_for_actor"):
+		return bool(current_map.call("is_water_tile_for_actor", check_position, self))
 	if water_tilemap == null:
 		return false
 	return _tilemap_has_tile_at(water_tilemap, check_position)
@@ -2352,6 +2355,9 @@ func can_move_to(check_position: Vector2) -> bool:
 
 func _is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
 	var current_map := _resolve_current_map()
+	if current_map != null and current_map.has_method("is_actor_bridge_step_blocked") \
+			and bool(current_map.call("is_actor_bridge_step_blocked", from_position, to_position, self)):
+		return true
 	return (
 		current_map != null
 		and current_map.has_method("is_world_barrier_step_blocked")
@@ -2811,7 +2817,9 @@ func _update_sort_z() -> void:
 	var sort_position := get_feet_position()
 	var sort_z := floori(sort_position.y)
 	var current_map := _resolve_current_map()
-	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor_for_actor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor_for_actor", sort_position, self)))
+	elif current_map != null and current_map.has_method("get_actor_sort_z_floor"):
 		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", sort_position)))
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 

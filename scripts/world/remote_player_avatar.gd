@@ -1964,9 +1964,22 @@ func _is_unequipped_appearance_part_sprite(sprite: AnimatedSprite2D) -> bool:
 func _update_sort_z() -> void:
 	var sort_z := floori(global_position.y)
 	var current_map := GameState.current_map
-	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor_for_actor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor_for_actor", global_position, self)))
+	elif current_map != null and current_map.has_method("get_actor_sort_z_floor"):
 		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
+
+
+func is_surfing_activity_active() -> bool:
+	# Appearance normalization maps Surf to the general ride pose, so use the
+	# original presence value when deciding which side of the bridge to draw on.
+	var movement_value: Variant = presence_state.get("movement", {})
+	var movement_state: Dictionary = movement_value if movement_value is Dictionary else {}
+	var raw_style := str(movement_state.get("activityStyle", presence_state.get("activityStyle", ""))).to_lower()
+	return raw_style == CharacterAppearanceService.BODY_MOVEMENT_SURF \
+		or raw_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH \
+		or raw_style == "surf-fish"
 
 
 func _get_idle_animation_name(direction: Vector2) -> StringName:
