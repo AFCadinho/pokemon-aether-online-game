@@ -379,8 +379,10 @@ standalone scene conversion.
 All 20 scenes converted without errors. The 120 normal/shiny pose captures and
 10 Yanma side captures rendered without errors. Assistant review inspected all
 120 poses and compared Dewpider with the local source icon; no new obvious
-artifacts were found at review scale. User approval, battle size/grounding,
-bundle qualification and publication are still pending. Jirachi and Zekrom are
+artifacts were found at review scale. The user subsequently approved all ten normal/shiny pairs with "Allemaal goed",
+including the Primarina ponytail proposal. This appearance approval is recorded
+in the exact-hash review receipt. Battle size/grounding, bundle qualification
+and publication are still pending. Jirachi and Zekrom are
 already locally admitted as documented above and are outside this ten-pair set.
 
 ## Reproduce or resume

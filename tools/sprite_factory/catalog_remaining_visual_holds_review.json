@@ -19,7 +19,7 @@
       "runtime_sha256": "313d4a493f0c5274205c4791e672908c3fae1ea6838f1e69f90f5d8a498c5ade",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -31,7 +31,7 @@
       "runtime_sha256": "1190035453a1dacf0c94189d53463612735b9cf0862c32dab2113f83303443a5",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -43,7 +43,7 @@
       "runtime_sha256": "9ee63f8f23b0b4d57155d5d1706b5c8fa82b9420d9501aaf0e78ef8935ff4d48",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -55,7 +55,7 @@
       "runtime_sha256": "6cfbf843225ee57f5965c9dbad2171db40a53ae813160d2531cc8d11a54d892a",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -67,7 +67,7 @@
       "runtime_sha256": "a9ff5e41b31602d026b345fea84f215fea5eb641077a051788634676e08b7eac",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -79,7 +79,7 @@
       "runtime_sha256": "b732e43f5f78f281306cdd48854f3088393004c15e983e2da329a76b2d467904",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -91,7 +91,7 @@
       "runtime_sha256": "d7e61072f1f6c65a22d969416e066acc9f8ad34ccd1cdddad4c58ae02319baa2",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -103,7 +103,7 @@
       "runtime_sha256": "6fd00f1e4b38324ed7c3063b6ade14178a2c7a9fed0e85b5680913faaff866b0",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -115,7 +115,7 @@
       "runtime_sha256": "e64c0bcf58b95cd659dc0335eb4b6875b5e9b2c6439eeff1cec6abb9cb8e9e63",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -127,7 +127,7 @@
       "runtime_sha256": "7cbdc2be83ebb708ef3df07bfa2c5cef699c69c544b42a60e16efd43c3498104",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -139,7 +139,7 @@
       "runtime_sha256": "598ff120120b16e2f616592beeac17e1b245ebe2b6744bd475a96a3f977485dd",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -151,7 +151,7 @@
       "runtime_sha256": "37ef3aeb34bbcfbb3966b0f0488582e9d30d760af9572691df8667a887b13419",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -163,7 +163,7 @@
       "runtime_sha256": "2d44bd7d4e095f0fb62dc31bd0d290ba1a29d063b29155f12ed3c9ee656261a3",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -175,7 +175,7 @@
       "runtime_sha256": "27c73cc66d95b7725a4b568423559b40d04d8f912004744d10e197b8271112c5",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -187,7 +187,7 @@
       "runtime_sha256": "dd4e7d1c88beefc66da5771c9870f1b98d4f781fd5e7d7a59795548ee402d57c",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -199,7 +199,7 @@
       "runtime_sha256": "74453b3689466d166c9ab13a4ec63ab7f6ab3ca6004aa757f7127ee1073fd51d",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -211,7 +211,7 @@
       "runtime_sha256": "7cd7203ec2bcd145defe65f67b4afe0592e2d01058380256bd150cf3887de275",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": "review-only ponytail selection; loose hair disabled across eight clips, not decoded native visibility",
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -223,7 +223,7 @@
       "runtime_sha256": "379c7092f3771bbc30025aa5c62d61087ce61d00f80d2e18588862d403de5a33",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": "review-only ponytail selection; loose hair disabled across eight clips, not decoded native visibility",
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -235,7 +235,7 @@
       "runtime_sha256": "aea6ec09f8ab77c1359e8befcd734918880f10ad0111afa06f493478694383a7",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     },
     {
@@ -247,7 +247,7 @@
       "runtime_sha256": "daede86a108c572d9adab20dcf808fdd1f887ce880b711a6d9bff988c16bea79",
       "geometry_and_native_motion_unchanged": true,
       "visibility_policy": null,
-      "visual_approval": "pending",
+      "visual_approval": "user_approved",
       "battle_approved": false
     }
   ],
@@ -270,7 +270,6 @@
     "tools/sprite_factory/catalog_remaining_visual_holds_inputs.json": "1ba1fb043149fe36491767b5906b8c8a236005e2e4eb7f6a21ac739a56fe592e"
   },
   "remaining": [
-    "user visual approval of corrected normal/shiny pairs",
     "battle scale and motion-grounding qualification",
     "bundle admission and publication"
   ],
@@ -278,5 +277,11 @@
     "Primarina uses constant ponytail visibility for all eight source clips; this is an artistic review proposal rather than decoded native side-channel visibility.",
     "Transparent layer rendering approximates source colour/emission in standard PBR; it does not reproduce native refraction.",
     "No production registry, launcher index or R2 object changed."
-  ]
+  ],
+  "user_review": {
+    "date": "2026-09-28",
+    "feedback": "Allemaal goed",
+    "scope": "All ten corrected normal/shiny pairs in the six-pose source review, including Blastoise eyes, Yanma wings and Primarina ponytail proposal",
+    "appearance_approved": true
+  }
 }
