@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Saffron City gebruikt de volledige Tiled-stad en is via aparte verticale poortinterieurs met Route 5 en Route 6 verbonden, inclusief wederzijdse aankomstpunten en indoor zichtmaskers.
+
 - De Trainer Card past Aether Royal-delen zonder Patreon-rol niet meer lokaal toe en zet een door de server afgewezen preview terug naar de opgeslagen outfit, zonder console-warning.
 
 - De Trainer Card toont een duidelijke melding als de Patreon-rol ontbreekt; positiebewaring werkt de gedragen Aether Royal-outfit bij zodra de server een verlopen onderdeel verwijdert.

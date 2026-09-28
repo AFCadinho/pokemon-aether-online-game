@@ -31,9 +31,9 @@ position = Vector2(736, 192)
 [node name="ToRoute6" type="Area2D" parent="Exits"]
 position = Vector2(736, 240)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_6.tscn"
-target_spawn_name = "FromSaffronSouth"
-transition_id = "kanto_saffron_city_south__to_route6"
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn"
+target_spawn_name = "FromNorth"
+transition_id = "kanto_saffron_city_south__to_route6_saffron_gate"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute6"]
