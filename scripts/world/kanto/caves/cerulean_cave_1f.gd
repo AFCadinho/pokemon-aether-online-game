@@ -40,7 +40,8 @@ func is_actor_bridge_step_blocked(from_position: Vector2, to_position: Vector2, 
 
 
 func get_actor_sort_z_floor_for_actor(world_position: Vector2, actor: Node) -> int:
-	if _has_bridge(world_position) and not _is_surfing(actor):
+	# A sprite reaches over the deck while its feet are still on the landing.
+	if not _is_surfing(actor) and (_has_bridge(world_position) or LANDINGS.has(_tile_at(world_position))):
 		return ACTOR_ON_BRIDGE_Z
 	return super.get_actor_sort_z_floor(world_position)
 

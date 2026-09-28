@@ -50,6 +50,10 @@ func setup(target_player: Node2D) -> void:
 	player = target_player
 	_reset_position_history()
 
+func is_surfing_activity_active() -> bool:
+	return player != null and is_instance_valid(player) and player.has_method("is_surfing_activity_active") \
+		and bool(player.call("is_surfing_activity_active"))
+
 func set_pokemon(pokemon: Pokemon) -> void:
 	if pokemon == null or pokemon.species == "":
 		current_species = ""
@@ -289,8 +293,11 @@ func _update_sort_z() -> void:
 				sprite_sort_z = _get_player_visual_sort_depth() + 1
 			else:
 				sort_z = mini(sort_z, player_sort_z - 1)
-	var current_map := GameState.current_map
-	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+	var game_state := get_tree().root.get_node_or_null("GameState") if is_inside_tree() else null
+	var current_map: Node = game_state.current_map if game_state != null else null
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor_for_actor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor_for_actor", global_position, self)))
+	elif current_map != null and current_map.has_method("get_actor_sort_z_floor"):
 		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:
