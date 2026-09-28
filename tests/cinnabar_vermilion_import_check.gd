@@ -39,6 +39,20 @@ func _run() -> void:
 	_expect(_position(vermilion, "FromDocks") == Vector2(1328, 2000), "Vermilion docks arrival")
 	_expect(_position(docks, "FromVermilionCity") == Vector2(1008, 48), "Docks city arrival")
 	_expect(cinnabar.get_node_or_null("Visual/ObjectsTop") != null, "Cinnabar imported visual in scene")
+	_expect(cinnabar.get_node_or_null("Visual/PavementCorners") != null, "Cinnabar includes the completed road corners")
+	var terrain := cinnabar.get_node("Visual/GroundDetail") as TileMapLayer
+	# The Mansion flight now sits east of the laboratory roof. Its native
+	# stair tiles must match the unchanged Gym flight, including both end caps.
+	var staircase_complete := true
+	for y in range(2):
+		for x in range(4):
+			var mansion_cell := Vector2i(21+x, 47+y)
+			var gym_cell := Vector2i(44+x, 34+y)
+			staircase_complete = staircase_complete and terrain.get_cell_source_id(mansion_cell) == terrain.get_cell_source_id(gym_cell)
+			staircase_complete = staircase_complete and terrain.get_cell_atlas_coords(mansion_cell) == terrain.get_cell_atlas_coords(gym_cell)
+	_expect(staircase_complete, "Mansion uses a complete relocated native staircase")
+	var validator = load("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new()
+	_expect(validator.validate(cinnabar.get_node("Visual"), "res://generated/tiled_visuals/cinnabar_island/cinnabar_island.visual.tileset.tres").is_empty(), "Cinnabar atlas passes validation")
 	_expect(docks.get_node_or_null("Visual/ObjectsTop") != null, "Docks imported visual in scene")
 	_expect(vermilion.get_node_or_null("Visual/PavementEdges") != null,
 		"Vermilion scene uses the restored city visual")
