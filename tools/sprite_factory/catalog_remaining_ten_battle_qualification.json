@@ -1,0 +1,1466 @@
+{
+  "schema": 1,
+  "date": "2026-09-28",
+  "scope": "Ten corrected normal/shiny pairs; flat floor, classic/stadium cameras, both sides, isolated production-presenter fixture",
+  "appearance_approved": true,
+  "camera_grounding_checks_passed": true,
+  "minimum_sampled_clearance_required": 0.015,
+  "clearance_note": "Baker targets 0.03 m for corrected actions; independent sampling found a 0.0193066 m minimum in Incineroar physical_attack_2. All clips remain positive with >=0.015 m margin; 0.03 m is not claimed as a measured minimum.",
+  "runtime_lifecycle_check_passed": true,
+  "runtime_approved": false,
+  "release_approved": false,
+  "reviewer": "assistant",
+  "visual_review": "320 battle captures inspected as full-frame contact sheets; no obvious clipping, cropped actors or abnormal placement. User approved all ten normal/shiny pairs in both cameras with Allemaal goed.",
+  "godot": "4.6.2-stable (official)",
+  "renderer": "forward_plus",
+  "viewport": [
+    1920.0,
+    1008.0
+  ],
+  "entries": [
+    {
+      "species": "blastoise",
+      "variant": "normal",
+      "glb_sha256": "85b8584d7a3d01317d43535f3b6484e08115f9e68c375dcb8347d2071ddfe30e",
+      "runtime_sha256": "313d4a493f0c5274205c4791e672908c3fae1ea6838f1e69f90f5d8a498c5ade",
+      "minimum_idle_logical_pixels": 112.10400390625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299939811229706,
+        "faint_loop": 0.0300000347197056,
+        "faint_start": 0.02999372407794,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0298505984246731,
+        "physical_attack_2": 0.0299714915454388,
+        "sleep": 0.0300000421702862,
+        "special_attack": 0.0299832485616207
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "blastoise-normal"
+    },
+    {
+      "species": "blastoise",
+      "variant": "shiny",
+      "glb_sha256": "c15cf9cf7f088adc149825889de9603cf8037777018f893699303c3cf2ca5c0f",
+      "runtime_sha256": "1190035453a1dacf0c94189d53463612735b9cf0862c32dab2113f83303443a5",
+      "minimum_idle_logical_pixels": 112.10400390625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299939811229706,
+        "faint_loop": 0.0300000347197056,
+        "faint_start": 0.02999372407794,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0298505984246731,
+        "physical_attack_2": 0.0299714915454388,
+        "sleep": 0.0300000421702862,
+        "special_attack": 0.0299832485616207
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "blastoise-shiny"
+    },
+    {
+      "species": "furret",
+      "variant": "normal",
+      "glb_sha256": "74fadf2c0ac43f07e11743aacde09712ccfb70595299194b26dfb6c43628c013",
+      "runtime_sha256": "9ee63f8f23b0b4d57155d5d1706b5c8fa82b9420d9501aaf0e78ef8935ff4d48",
+      "minimum_idle_logical_pixels": 69.0972900390625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299984347075224,
+        "faint_loop": 0.0300000384449959,
+        "faint_start": 0.0299926791340113,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299850963056087,
+        "physical_attack_2": 0.0294524133205414,
+        "sleep": 0.0300000049173832,
+        "special_attack": 0.0299991816282272
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "furret-normal"
+    },
+    {
+      "species": "furret",
+      "variant": "shiny",
+      "glb_sha256": "f09b6654a4df4ab928e9321a33616a468b1f3852844c62e18a5c3ebb5b5a5ded",
+      "runtime_sha256": "6cfbf843225ee57f5965c9dbad2171db40a53ae813160d2531cc8d11a54d892a",
+      "minimum_idle_logical_pixels": 69.0972900390625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299984347075224,
+        "faint_loop": 0.0300000384449959,
+        "faint_start": 0.0299926791340113,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299850963056087,
+        "physical_attack_2": 0.0294524133205414,
+        "sleep": 0.0300000049173832,
+        "special_attack": 0.0299991816282272
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "furret-shiny"
+    },
+    {
+      "species": "yanma",
+      "variant": "normal",
+      "glb_sha256": "ab5a280032d92dc9c36c708a1ebb9aacd9d61cad6d526b52f81c6c7dd880840c",
+      "runtime_sha256": "a9ff5e41b31602d026b345fea84f215fea5eb641077a051788634676e08b7eac",
+      "minimum_idle_logical_pixels": 88.209228515625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0326788946986198,
+        "faint_loop": 0.0300000384449959,
+        "faint_start": 0.0299950391054153,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.0299999862909317,
+        "physical_attack_2": 0.0299999564886093,
+        "sleep": 0.0300000011920929,
+        "special_attack": 0.0299999602138996
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "yanma-normal"
+    },
+    {
+      "species": "yanma",
+      "variant": "shiny",
+      "glb_sha256": "c731c59d1b0ebc8a9e6f772261d7441b3ab903fbe8d38016fe30ebcfc1e5268b",
+      "runtime_sha256": "b732e43f5f78f281306cdd48854f3088393004c15e983e2da329a76b2d467904",
+      "minimum_idle_logical_pixels": 88.209228515625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0326788946986198,
+        "faint_loop": 0.0300000384449959,
+        "faint_start": 0.0299950391054153,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.0299999862909317,
+        "physical_attack_2": 0.0299999564886093,
+        "sleep": 0.0300000011920929,
+        "special_attack": 0.0299999602138996
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "yanma-shiny"
+    },
+    {
+      "species": "entei",
+      "variant": "normal",
+      "glb_sha256": "fa8a45a7bf4cb38a64741d999bf5c3f14f56a263e90eddf422355cd50156a5ee",
+      "runtime_sha256": "d7e61072f1f6c65a22d969416e066acc9f8ad34ccd1cdddad4c58ae02319baa2",
+      "minimum_idle_logical_pixels": 177.272888183594,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299695059657097,
+        "faint_loop": 0.0299999713897705,
+        "faint_start": 0.0299985185265541,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.029777355492115,
+        "physical_attack_2": 0.028335765004158,
+        "sleep": 0.0300000384449959,
+        "special_attack": 0.0299546755850315
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "entei-normal"
+    },
+    {
+      "species": "entei",
+      "variant": "shiny",
+      "glb_sha256": "29f47207577ec8c837331922a700e174b6d8351ac78fccd10fb8b8a7b796d747",
+      "runtime_sha256": "6fd00f1e4b38324ed7c3063b6ade14178a2c7a9fed0e85b5680913faaff866b0",
+      "minimum_idle_logical_pixels": 177.272888183594,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299695059657097,
+        "faint_loop": 0.0299999713897705,
+        "faint_start": 0.0299985185265541,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.029777355492115,
+        "physical_attack_2": 0.028335765004158,
+        "sleep": 0.0300000384449959,
+        "special_attack": 0.0299546755850315
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "entei-shiny"
+    },
+    {
+      "species": "mudkip",
+      "variant": "normal",
+      "glb_sha256": "7af1705b73aaef85bb8ac7223415ad085686dc9dde01f8e35c7d4dd1acf0feee",
+      "runtime_sha256": "e64c0bcf58b95cd659dc0335eb4b6875b5e9b2c6439eeff1cec6abb9cb8e9e63",
+      "minimum_idle_logical_pixels": 65.8624267578125,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299967546015978,
+        "faint_loop": 0.0299999509006739,
+        "faint_start": 0.0299899745732546,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299445651471615,
+        "physical_attack_2": 0.0293997265398502,
+        "sleep": 0.0299999937415123,
+        "special_attack": 0.0299867410212755
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "mudkip-normal"
+    },
+    {
+      "species": "mudkip",
+      "variant": "shiny",
+      "glb_sha256": "61312e1e9ac993adab1c630ce1e801903159a428a7e209cc60f35c48fa17707e",
+      "runtime_sha256": "7cbdc2be83ebb708ef3df07bfa2c5cef699c69c544b42a60e16efd43c3498104",
+      "minimum_idle_logical_pixels": 65.8624267578125,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299967546015978,
+        "faint_loop": 0.0299999509006739,
+        "faint_start": 0.0299899745732546,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299445651471615,
+        "physical_attack_2": 0.0293997265398502,
+        "sleep": 0.0299999937415123,
+        "special_attack": 0.0299867410212755
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "mudkip-shiny"
+    },
+    {
+      "species": "solosis",
+      "variant": "normal",
+      "glb_sha256": "f569cbbf51a78ebd075c2024e2e63fce73b35df3695ae145836d5812f81c63ea",
+      "runtime_sha256": "598ff120120b16e2f616592beeac17e1b245ebe2b6744bd475a96a3f977485dd",
+      "minimum_idle_logical_pixels": 65.3648681640625,
+      "minimum_clearance_120hz": {
+        "damage": 0.030000027269125,
+        "faint_loop": 0.0299999862909317,
+        "faint_start": 0.0317297577857971,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0444120429456234,
+        "physical_attack_2": 0.0729351565241814,
+        "sleep": 0.0299999639391899,
+        "special_attack": 0.0300000160932541
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "solosis-normal"
+    },
+    {
+      "species": "solosis",
+      "variant": "shiny",
+      "glb_sha256": "0c99e6a0fa7a3949b5e7e5156313ca644aed1e1ab48db25ec8c2c764734757c8",
+      "runtime_sha256": "37ef3aeb34bbcfbb3966b0f0488582e9d30d760af9572691df8667a887b13419",
+      "minimum_idle_logical_pixels": 65.3648681640625,
+      "minimum_clearance_120hz": {
+        "damage": 0.030000027269125,
+        "faint_loop": 0.0299999862909317,
+        "faint_start": 0.0317297577857971,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0444120429456234,
+        "physical_attack_2": 0.0729351565241814,
+        "sleep": 0.0299999639391899,
+        "special_attack": 0.0300000160932541
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "solosis-shiny"
+    },
+    {
+      "species": "reuniclus",
+      "variant": "normal",
+      "glb_sha256": "e02f0ff81e8d3e380ccfa715e2b8840c584599e4295dcf7b55e211a718671770",
+      "runtime_sha256": "2d44bd7d4e095f0fb62dc31bd0d290ba1a29d063b29155f12ed3c9ee656261a3",
+      "minimum_idle_logical_pixels": 107.382751464844,
+      "minimum_clearance_120hz": {
+        "damage": 0.0813136324286461,
+        "faint_loop": 0.0300000011920929,
+        "faint_start": 0.0508185476064682,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299999564886093,
+        "physical_attack_2": 0.0300000011920929,
+        "sleep": 0.0299999862909317,
+        "special_attack": 0.0299999564886093
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "reuniclus-normal"
+    },
+    {
+      "species": "reuniclus",
+      "variant": "shiny",
+      "glb_sha256": "d2e56294438c1798b729661e2c778a285f6c6e5b4be36d5413bd99fbce126902",
+      "runtime_sha256": "27c73cc66d95b7725a4b568423559b40d04d8f912004744d10e197b8271112c5",
+      "minimum_idle_logical_pixels": 107.382751464844,
+      "minimum_clearance_120hz": {
+        "damage": 0.0813136324286461,
+        "faint_loop": 0.0300000011920929,
+        "faint_start": 0.0508185476064682,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299999564886093,
+        "physical_attack_2": 0.0300000011920929,
+        "sleep": 0.0299999862909317,
+        "special_attack": 0.0299999564886093
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "reuniclus-shiny"
+    },
+    {
+      "species": "incineroar",
+      "variant": "normal",
+      "glb_sha256": "6e9c773027f06bc1bb38006f6c219bcdba9ffb54093114ea53ff7cb1d68ac45d",
+      "runtime_sha256": "dd4e7d1c88beefc66da5771c9870f1b98d4f781fd5e7d7a59795548ee402d57c",
+      "minimum_idle_logical_pixels": 150.35546875,
+      "minimum_clearance_120hz": {
+        "damage": 0.0202356092631817,
+        "faint_loop": 0.0300000235438347,
+        "faint_start": 0.0299016870558262,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0268460586667061,
+        "physical_attack_2": 0.0193066410720348,
+        "sleep": 0.0300000123679638,
+        "special_attack": 0.0286898128688335
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "incineroar-normal"
+    },
+    {
+      "species": "incineroar",
+      "variant": "shiny",
+      "glb_sha256": "f6eb733f81ad386747e53e9d5e4f13e21799f5f6c51c7e0a267e009303adfdf0",
+      "runtime_sha256": "74453b3689466d166c9ab13a4ec63ab7f6ab3ca6004aa757f7127ee1073fd51d",
+      "minimum_idle_logical_pixels": 150.35546875,
+      "minimum_clearance_120hz": {
+        "damage": 0.0202356092631817,
+        "faint_loop": 0.0300000235438347,
+        "faint_start": 0.0299016870558262,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0268460586667061,
+        "physical_attack_2": 0.0193066410720348,
+        "sleep": 0.0300000123679638,
+        "special_attack": 0.0286898128688335
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "incineroar-shiny"
+    },
+    {
+      "species": "primarina",
+      "variant": "normal",
+      "glb_sha256": "59ad0e1a53771d9e12665d8b2b114a442c9015a85c73fce16cde9fa48bb6635f",
+      "runtime_sha256": "7cd7203ec2bcd145defe65f67b4afe0592e2d01058380256bd150cf3887de275",
+      "minimum_idle_logical_pixels": 122.549438476562,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999564886093,
+        "faint_loop": 0.0299999788403511,
+        "faint_start": 0.0299999788403511,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.0299993306398392,
+        "physical_attack_2": 0.0299999937415123,
+        "sleep": 0.0323263630270958,
+        "special_attack": 0.0299989283084869
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "primarina-normal"
+    },
+    {
+      "species": "primarina",
+      "variant": "shiny",
+      "glb_sha256": "0a4bf7bd539076e16b49d8e687f9b079a0acc36af1517ad45995a794d29d0413",
+      "runtime_sha256": "379c7092f3771bbc30025aa5c62d61087ce61d00f80d2e18588862d403de5a33",
+      "minimum_idle_logical_pixels": 122.549438476562,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999564886093,
+        "faint_loop": 0.0299999788403511,
+        "faint_start": 0.0299999788403511,
+        "idle": 0.0249999985098839,
+        "physical_attack": 0.0299993306398392,
+        "physical_attack_2": 0.0299999937415123,
+        "sleep": 0.0323263630270958,
+        "special_attack": 0.0299989283084869
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "primarina-shiny"
+    },
+    {
+      "species": "dewpider",
+      "variant": "normal",
+      "glb_sha256": "6860911231b6941165594843cb9e4a9cb648c49471ac523ddfe103a35d0685e1",
+      "runtime_sha256": "aea6ec09f8ab77c1359e8befcd734918880f10ad0111afa06f493478694383a7",
+      "minimum_idle_logical_pixels": 65.7777709960938,
+      "minimum_clearance_120hz": {
+        "damage": 0.0294018387794495,
+        "faint_loop": 0.0299999807029963,
+        "faint_start": 0.0299834851175547,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0288356263190508,
+        "physical_attack_2": 0.0281093791127205,
+        "sleep": 0.0300000086426735,
+        "special_attack": 0.0268421564251184
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "dewpider-normal"
+    },
+    {
+      "species": "dewpider",
+      "variant": "shiny",
+      "glb_sha256": "6bb3fd85f665ab2cedac62828cf69cd105378655f73904fa0b127a28d5b54610",
+      "runtime_sha256": "daede86a108c572d9adab20dcf808fdd1f887ce880b711a6d9bff988c16bea79",
+      "minimum_idle_logical_pixels": 65.7777709960938,
+      "minimum_clearance_120hz": {
+        "damage": 0.0294018387794495,
+        "faint_loop": 0.0299999807029963,
+        "faint_start": 0.0299834851175547,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0288356263190508,
+        "physical_attack_2": 0.0281093791127205,
+        "sleep": 0.0300000086426735,
+        "special_attack": 0.0268421564251184
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "dewpider-shiny"
+    }
+  ],
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 10,
+      "frame_max_ms": 699.635,
+      "frame_p95_ms": 17.331,
+      "frame_samples": 590,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 13.755,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 13.823,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2,
+          "ms": 2.386,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2,
+          "ms": 2.629,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18,
+          "ms": 2.298,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18,
+          "ms": 2.419,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 26,
+          "ms": 4.22,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 50,
+          "ms": 1.663,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 69,
+          "ms": 1.741,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 69,
+          "ms": 1.844,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 76,
+          "ms": 1.721,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 76,
+          "ms": 1.881,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 104,
+          "ms": 1.242,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 123,
+          "ms": 1.909,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 123,
+          "ms": 2.026,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 133,
+          "ms": 1.825,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 133,
+          "ms": 2.017,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 139,
+          "ms": 1.941,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 164,
+          "ms": 1.484,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 184,
+          "ms": 3.071,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 184,
+          "ms": 3.18,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 200,
+          "ms": 2.653,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 200,
+          "ms": 2.773,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 210,
+          "ms": 1.373,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 234,
+          "ms": 1.96,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 253,
+          "ms": 1.839,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 253,
+          "ms": 1.964,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 262,
+          "ms": 2.179,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 262,
+          "ms": 2.283,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 268,
+          "ms": 1.419,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 292,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 310,
+          "ms": 1.517,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 310,
+          "ms": 1.627,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 316,
+          "ms": 1.407,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 316,
+          "ms": 1.51,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 319,
+          "ms": 1.159,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 343,
+          "ms": 1.145,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 361,
+          "ms": 2.051,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 361,
+          "ms": 2.196,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 367,
+          "ms": 1.613,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 367,
+          "ms": 1.722,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 371,
+          "ms": 1.212,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 414,
+          "ms": 2.05,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 414,
+          "ms": 2.165,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 423,
+          "ms": 2.458,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 423,
+          "ms": 2.598,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 429,
+          "ms": 1.777,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 453,
+          "ms": 1.736,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 473,
+          "ms": 2.174,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 473,
+          "ms": 2.299,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 487,
+          "ms": 2.505,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 487,
+          "ms": 2.638,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 495,
+          "ms": 2.217,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 519,
+          "ms": 1.691,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 537,
+          "ms": 1.54,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 537,
+          "ms": 1.649,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 544,
+          "ms": 2.141,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 544,
+          "ms": 2.244,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 549,
+          "ms": 1.563,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 10,
+      "retained_source_bytes": 8638099,
+      "stalls_over_50ms": [
+        {
+          "context": "load blastoise",
+          "covered": true,
+          "ms": 59.098
+        },
+        {
+          "context": "load blastoise",
+          "covered": true,
+          "ms": 699.635
+        },
+        {
+          "context": "load blastoise",
+          "covered": true,
+          "ms": 101.412
+        },
+        {
+          "context": "load yanma",
+          "covered": false,
+          "ms": 51.493
+        }
+      ],
+      "static_bytes": 256349688
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 10,
+      "frame_max_ms": 202.399,
+      "frame_p95_ms": 17.326,
+      "frame_samples": 628,
+      "load_spans": [
+        {
+          "frame": 594,
+          "ms": 4.438,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 594,
+          "ms": 4.486,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 599,
+          "ms": 3.295,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 599,
+          "ms": 3.454,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 610,
+          "ms": 2.689,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 610,
+          "ms": 2.807,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 617,
+          "ms": 148.855,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 642,
+          "ms": 1.447,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 661,
+          "ms": 1.631,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 661,
+          "ms": 1.74,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 669,
+          "ms": 1.65,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 669,
+          "ms": 1.837,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 674,
+          "ms": 1.871,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 717,
+          "ms": 2.25,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 717,
+          "ms": 2.373,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 730,
+          "ms": 1.928,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 730,
+          "ms": 2.036,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 736,
+          "ms": 1.521,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 760,
+          "ms": 1.432,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 780,
+          "ms": 2.736,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 780,
+          "ms": 2.935,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 816,
+          "ms": 2.292,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 816,
+          "ms": 2.387,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 825,
+          "ms": 1.421,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 849,
+          "ms": 1.765,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 868,
+          "ms": 3.32,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 868,
+          "ms": 3.425,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 876,
+          "ms": 2.591,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 876,
+          "ms": 2.764,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 882,
+          "ms": 1.571,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 924,
+          "ms": 1.968,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 924,
+          "ms": 2.088,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 938,
+          "ms": 1.397,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 938,
+          "ms": 1.499,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 941,
+          "ms": 1.16,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 965,
+          "ms": 1.314,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 983,
+          "ms": 3.453,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 983,
+          "ms": 3.56,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 989,
+          "ms": 1.696,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 989,
+          "ms": 1.848,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 993,
+          "ms": 1.227,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1017,
+          "ms": 1.423,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1036,
+          "ms": 3.207,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1036,
+          "ms": 3.357,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1047,
+          "ms": 2.192,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1047,
+          "ms": 2.304,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1053,
+          "ms": 2.796,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1077,
+          "ms": 2.95,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1097,
+          "ms": 6.091,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1097,
+          "ms": 6.229,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1111,
+          "ms": 2.759,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1111,
+          "ms": 2.893,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1119,
+          "ms": 3.602,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1143,
+          "ms": 2.178,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1162,
+          "ms": 1.468,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1162,
+          "ms": 1.574,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1177,
+          "ms": 1.527,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1177,
+          "ms": 1.631,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1182,
+          "ms": 1.761,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1206,
+          "ms": 1.073,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 10,
+      "retained_source_bytes": 8638099,
+      "stalls_over_50ms": [
+        {
+          "context": "load blastoise",
+          "covered": true,
+          "ms": 180.117
+        },
+        {
+          "context": "load blastoise",
+          "covered": true,
+          "ms": 202.399
+        }
+      ],
+      "static_bytes": 258526800
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 10,
+      "frame_max_ms": 166.494,
+      "frame_p95_ms": 17.322,
+      "frame_samples": 664,
+      "load_spans": [
+        {
+          "frame": 1227,
+          "ms": 7.71,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 1227,
+          "ms": 7.837,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1232,
+          "ms": 2.893,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1232,
+          "ms": 3.067,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1242,
+          "ms": 2.696,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1242,
+          "ms": 2.817,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1249,
+          "ms": 3.201,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1267,
+          "ms": 22.185,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1273,
+          "ms": 1.279,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1290,
+          "ms": 1.46,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1290,
+          "ms": 1.564,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1298,
+          "ms": 2.051,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1298,
+          "ms": 2.156,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1302,
+          "ms": 1.156,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1344,
+          "ms": 2.6,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1344,
+          "ms": 2.718,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1353,
+          "ms": 1.886,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1353,
+          "ms": 1.992,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1358,
+          "ms": 1.456,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1382,
+          "ms": 1.545,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1402,
+          "ms": 2.563,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1402,
+          "ms": 2.678,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1418,
+          "ms": 1.996,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1418,
+          "ms": 2.086,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1428,
+          "ms": 1.807,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1452,
+          "ms": 1.506,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1477,
+          "ms": 1.843,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1477,
+          "ms": 1.957,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1489,
+          "ms": 1.8,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1489,
+          "ms": 1.906,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1494,
+          "ms": 1.261,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1518,
+          "ms": 1.354,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1536,
+          "ms": 1.462,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1536,
+          "ms": 1.58,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1555,
+          "ms": 1.446,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1555,
+          "ms": 1.55,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1558,
+          "ms": 1.048,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1582,
+          "ms": 1.254,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1612,
+          "ms": 1.657,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1612,
+          "ms": 1.766,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1623,
+          "ms": 1.47,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1623,
+          "ms": 1.568,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1626,
+          "ms": 1.349,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1650,
+          "ms": 1.162,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1680,
+          "ms": 1.987,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1680,
+          "ms": 2.093,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1696,
+          "ms": 2.136,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1696,
+          "ms": 2.259,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1703,
+          "ms": 2.127,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1727,
+          "ms": 1.767,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1750,
+          "ms": 2.34,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1750,
+          "ms": 2.466,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1775,
+          "ms": 2.046,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1775,
+          "ms": 2.165,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1785,
+          "ms": 2.298,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1809,
+          "ms": 1.804,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1837,
+          "ms": 1.393,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1837,
+          "ms": 1.495,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1847,
+          "ms": 1.396,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1847,
+          "ms": 1.498,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1851,
+          "ms": 1.387,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 10,
+      "retained_source_bytes": 8638099,
+      "stalls_over_50ms": [
+        {
+          "context": "load blastoise",
+          "covered": true,
+          "ms": 166.494
+        },
+        {
+          "context": "action blastoise",
+          "covered": true,
+          "ms": 73.599
+        }
+      ],
+      "static_bytes": 258596932
+    }
+  ],
+  "capture_script_sha256": "1355c27084c40442701de5477e68fbf90771372a4464d0c6c00cb36c14f4cbe1",
+  "profiles_sha256": "e7c181df0251a9d18ca62bc3dec124306828c0bbdd657151bbfa05a63aa2dc76",
+  "evidence_sha256": {
+    ".tmp/remaining-ten-battle/resize-regression/battle-review.json": "7306385d2eea4862233d0f006741e40cbeb5dd0c974b598a32c860a10b8b94fb",
+    ".tmp/remaining-ten-battle/resize-regression.log": "cfb2283356f5430bd7e36dd0423efc122d8456223665defdef6e2b0f64c0b0ef",
+    ".tmp/remaining-ten-battle/resize_regression.gd": "d6bbc529c1053fd5337f4615d524fb126981bb8dad7578264bf42c013589d4c0",
+    ".tmp/remaining-ten-battle/raw/battle-review.json": "44b0bca3ea9598fb1b42295e8f054acd48b8b8221d5cf7f0a1b764ed7fe540e1",
+    ".tmp/remaining-ten-battle/corrected/battle-review.json": "0ce621a675c56898999f95d392dbccfb25c1bd513d3092f9f78875bfcc32f67b",
+    ".tmp/remaining-ten-battle/final-captures/battle-review.json": "d435edebe9b792287c528b45404d996cc0232f9558a0f4ee7dd5dd71a6f9d504",
+    ".tmp/remaining-ten-battle/final-captures.log": "afddbde6ed4be3a8900d180feba960aabb468594c9f07e0463fc3a47da359db2",
+    ".tmp/remaining-ten-battle/recapture.gd": "4ab80b614406b0cb71862331e541b2100a007a98b39c08529d53f774f97dba4c",
+    ".tmp/remaining-ten-battle/catalog.json": "396b5313987527461cdf1f0dbd1ac3359c4ef95c23547464acb617dacad05f74",
+    ".tmp/remaining-ten-battle/runtime.json": "2235173f0441cc4d65364bece4f6da01b8902f40ac5a9864726f5b300c688e30",
+    ".tmp/remaining-ten-battle/motion-candidates.json": "5beb5b810ebe463d32b90b0dedbb210eb239dbea8c01eea36db340923e4b4f91",
+    ".tmp/remaining-ten-battle/runtime-catalog.json": "7c187f263868f0e4d32bc0e7d4da71602a504b42f94e155ed5a5cc86eba31f8e",
+    ".tmp/remaining-ten-battle/runtime-fixture.json": "d47b81bcb12652f14916f01fa83eebf22829c3baa509b31abb84e8d1dc2dd5f8",
+    ".tmp/remaining-ten-battle/runtime_check.gd": "93fcb0b00d549f1d9ace0ce1467697ad2127522ced796daeaeb36f750163f039",
+    ".tmp/remaining-ten-battle/runtime-stress.json": "d77a05dd5eada66f827e009df0e3cd8dc71bb3cc5861b88f64c892bb120b7fe1",
+    ".tmp/remaining-ten-battle/runtime-stress.log": "5bc98e4599ca2d953d823868e34bbdefac795652e509573f0d3e382953ff773a",
+    ".tmp/remaining-ten-battle/corrected.log": "7103d4cef0fd3c8cd43765a61bef26b5af19e6d940255a2f73a8f71daad50b3b",
+    ".tmp/remaining-ten-battle/index.html": "ada7536f3bb37e090e474fa3e5eced08c7e1d47a4332c1e5545ab14507235ae4",
+    ".tmp/remaining-ten-battle/calibrate.py": "d84b414dceab19b122996e4885d330e25cc4660daae199ab651715b4e280e1a7",
+    ".tmp/remaining-ten-battle/prepare_runtime_check.py": "cbbf955710d22b889aadd95077eadd7c5e97fb48e743125a1cb9b405a0d08a4b",
+    ".tmp/remaining-ten-battle/make_page.py": "2b6fc70e358d554e6ebe60a4d49476cc92694e0d6aa6b0bb73490e116f106d60"
+  },
+  "user_review": {
+    "battle_approved": true,
+    "feedback": "Allemaal goed",
+    "scope": "all ten normal/shiny pairs, size and poses in both cameras; includes enlarged Mudkip, Solosis and Dewpider"
+  },
+  "remaining": [
+    "individual bundle qualification and catalog integration",
+    "release certification and publication"
+  ],
+  "limitations": [
+    "Runtime stress uses in-memory candidate registry fixture; no production registry or content index changed.",
+    "Screen rectangles use logical viewport coordinates; each capture records its physical window size separately.",
+    "Floor measurements cover 8 clips at 120 Hz; visual captures cover idle/special_attack/sleep/faint_start in each camera and side.",
+    "No network download, bundle installation or release gate exercised."
+  ]
+}
