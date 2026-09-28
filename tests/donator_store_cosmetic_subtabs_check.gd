@@ -634,7 +634,7 @@ func _run() -> void:
 	_check(store.selection_description_label.text.contains("All Aether Blessing benefits are included")
 		and store.selection_description_label.text.contains("Select a voucher to see them")
 		and store.selection_description_label.text.contains("Supporter role and badge")
-		and store.selection_description_label.text.contains("Patreon outfit while your membership is active")
+		and store.selection_description_label.text.contains("Aether Royal outfit box")
 		and not store.selection_description_label.text.contains("Shiny Pokémon are 5% more likely")
 		and store.selection_description_label.text.contains("\n• ")
 		and store.selection_description_label.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT,
@@ -645,6 +645,17 @@ func _run() -> void:
 		and store.purchase_button.disabled,
 		"failed Patreon account check is explained without becoming an Aether Gem offer")
 	var patreon_card := store.product_buttons.get("patreon-supporter-preview") as Button
+	var patreon_item: Dictionary = store.call("_catalog_item", "patreon-supporter-preview")
+	_check(patreon_item.get("icon") == load("res://assets/ui/patreon_emblem.png"),
+		"Patreon Support card retains its pixel-art icon")
+	var patreon_appearance: Dictionary = store.call("_current_character_preview_appearance")
+	for slot: String in ["top", "bottom", "shoes", "headgear", "cape"]:
+		_check(str(patreon_appearance.get(slot, "")).begins_with("AetherRoyal_"),
+			"Patreon player preview equips Royal %s" % slot)
+	var patreon_visual := store.call("_create_character_preview_visual", patreon_appearance) as Node2D
+	_check(patreon_visual.get_node("CapeSprite").visible and patreon_visual.get_node("CapeOverlaySprite").visible,
+		"Patreon preview draws the rear cape and shoulder mantle")
+	patreon_visual.free()
 	var patreon_card_has_coming_later := false
 	if patreon_card != null:
 		for label_node: Node in patreon_card.find_children("*", "Label", true, false):
