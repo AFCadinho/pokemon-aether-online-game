@@ -143,6 +143,13 @@ const CATALOG: Array[Dictionary] = [
 		"categories": ["membership"],
 		"badge": "PATREON",
 		"informational": true,
+		"preview_parts": [
+			{"slot": "top", "appearance_id": "AetherRoyal_Shirt"},
+			{"slot": "bottom", "appearance_id": "AetherRoyal_Trousers"},
+			{"slot": "shoes", "appearance_id": "AetherRoyal_Shoes"},
+			{"slot": "headgear", "appearance_id": "AetherRoyal_Crown"},
+			{"slot": "cape", "appearance_id": "AetherRoyal_Cape"},
+		],
 	},
 	{
 		"id": "aether-blessing-voucher-3-days",
@@ -1983,10 +1990,12 @@ func _refresh_character_preview() -> void:
 func _create_character_preview_visual(appearance: Dictionary) -> Node2D:
 	var visual_root := Node2D.new()
 	for layer: Dictionary in [
+		{"name": "CapeSprite", "z": 0},
 		{"name": "BodySprite", "z": 0},
 		{"name": "BottomSprite", "z": 1},
 		{"name": "ShoesSprite", "z": 2},
 		{"name": "TopSprite", "z": 3},
+		{"name": "CapeOverlaySprite", "z": 3},
 		{"name": "EyebrowsSprite", "z": 4},
 		{"name": "EyesSprite", "z": 5},
 		{"name": "HairSprite", "z": 6},
@@ -2058,6 +2067,10 @@ func _apply_character_preview_part(sprite: AnimatedSprite2D, appearance: Diction
 
 func _character_preview_category_for_sprite(sprite_name: String) -> String:
 	match sprite_name:
+		"CapeSprite":
+			return "cape"
+		"CapeOverlaySprite":
+			return "cape_overlay"
 		"HairSprite":
 			return "hair"
 		"HeadgearSprite":
@@ -2083,6 +2096,8 @@ func _character_preview_category_for_sprite(sprite_name: String) -> String:
 func _character_preview_part_id(category: String, appearance: Dictionary) -> String:
 	var preview_gender := str(appearance.get("gender", trainer_gender))
 	match CharacterAppearanceService.normalize_part_category(category):
+		"cape_overlay":
+			return str(appearance.get("cape", "")).strip_edges()
 		"hair":
 			return CharacterAppearanceService.deserialize_part_id(
 				str(appearance.get("hair", ""))

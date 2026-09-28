@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Patreon Support toont nu de Aether Royal-outfit op het spelersmodel in de Gift Store. De kaart behoudt het Patreon-pixelicoon.
+
 - In Cerulean Cave kunnen spelers en hun Pokémon over de droge doorgang onder de brug lopen, terwijl de bovenliggende brugroute en Surf gescheiden blijven.
 
 - 200 extra Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen downloadbare bundle. Typhlosions gekleurde vlammen en andere eerder beoordeelde correcties zijn in de definitieve modellen hersteld.
