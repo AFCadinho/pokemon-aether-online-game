@@ -10,9 +10,9 @@ const MANIFEST_PATH := "res://assets/battles/trainers/player/manifest.json"
 const BASE_SKIN_PALETTE: Array[Color] = [Color("#f8d0b8"), Color("#d8a078"), Color("#b87860")]
 const REQUIRED_CLOTHING_CATEGORIES: Array[String] = ["bottom", "top"]
 const OPTIONAL_CATEGORIES: Array[String] = [
-	"shoes", "top_accessory", "eyebrows", "hair", "facial_hair", "headgear", "facegear"
+	"shoes", "top_accessory", "eyebrows", "hair", "facial_hair", "headgear", "facegear", "cape", "cape_overlay"
 ]
-const APPEARANCE_CATEGORY_ALIASES := {"top_accessory": "top", "eyebrows": "hair"}
+const APPEARANCE_CATEGORY_ALIASES := {"top_accessory": "top", "eyebrows": "hair", "cape_overlay": "cape"}
 
 static var _manifest: Dictionary = {}
 static var _texture_cache: Dictionary = {}
@@ -29,6 +29,9 @@ static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
 		return []
 	var gender_data := gender_value as Dictionary
 	var layers: Array[Dictionary] = []
+	var cape_layer := _resolve_part_layer(gender_data, appearance_state, gender, "cape")
+	if not cape_layer.is_empty():
+		layers.append(cape_layer)
 	var base_path := str(gender_data.get("base", ""))
 	var base_texture := _load_texture(base_path)
 	if base_texture == null:
@@ -54,6 +57,8 @@ static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
 		return layers
 	for category_value: Variant in layer_order_value as Array:
 		var category := str(category_value)
+		if category == "cape":
+			continue # The rear cape must be below the body, not only below the shirt.
 		if category not in REQUIRED_CLOTHING_CATEGORIES and category not in OPTIONAL_CATEGORIES:
 			continue
 		var layer := _resolve_part_layer(gender_data, appearance_state, gender, category)

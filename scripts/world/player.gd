@@ -54,6 +54,8 @@ const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
+	"cape": "CapeSprite",
+	"cape_overlay": "CapeOverlaySprite",
 	"hair": HAIR_SPRITE_NAME,
 	"headgear": HEADGEAR_SPRITE_NAME,
 	"facial_hair": FACIAL_HAIR_SPRITE_NAME,
@@ -638,6 +640,8 @@ func set_appearance_part(category: String, part_id: String) -> void:
 			PlayerSave.sync_hair_style_index_from_id()
 		"headgear":
 			PlayerSave.appearance_headgear_id = normalized_part_id
+		"cape":
+			PlayerSave.appearance_cape_id = normalized_part_id
 		"facial_hair":
 			PlayerSave.appearance_facial_hair_id = normalized_part_id
 		"facegear":
@@ -652,6 +656,8 @@ func set_appearance_part(category: String, part_id: String) -> void:
 			return
 
 	_apply_appearance_part(normalized_category, normalized_part_id, body_sprite_frames_movement_style)
+	if normalized_category == "cape":
+		_apply_appearance_part("cape_overlay", normalized_part_id, body_sprite_frames_movement_style)
 	if normalized_category == "hair":
 		_apply_appearance_part(
 			"eyebrows",
@@ -3002,6 +3008,8 @@ func _get_player_appearance_part_id(category: String) -> String:
 			)
 		"headgear":
 			return PlayerSave.appearance_headgear_id
+		"cape", "cape_overlay":
+			return PlayerSave.appearance_cape_id
 		"facial_hair":
 			return PlayerSave.appearance_facial_hair_id
 		"facegear":

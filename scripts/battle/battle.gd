@@ -8423,6 +8423,7 @@ func _get_battle_player_appearance(player_data: Dictionary) -> Dictionary:
 		"hair",
 		"hair_style_index",
 		"headgear",
+		"cape",
 		"facial_hair",
 		"facegear",
 		"top",

@@ -382,5 +382,29 @@
   "aether-ronin-shoes": {
     "name": "Aether Ronin Tabi Sandals",
     "shortDesc": "Untradeable. Move the Aether Ronin tabi sandals into Character Customization."
+  },
+  "aether-royal-outfit": {
+    "name": "Aether Royal Outfit Box",
+    "shortDesc": "Untradeable. Open for five separate cosmetics: jacket, trousers, boots, crown and skillcape. Fits male and female characters."
+  },
+  "aether-royal-shirt": {
+    "name": "Aether Royal Jacket",
+    "shortDesc": "Untradeable. Move this Aether Royal cosmetic into Character Customization. Fits male and female characters."
+  },
+  "aether-royal-trousers": {
+    "name": "Aether Royal Trousers",
+    "shortDesc": "Untradeable. Move this Aether Royal cosmetic into Character Customization. Fits male and female characters."
+  },
+  "aether-royal-shoes": {
+    "name": "Aether Royal Boots",
+    "shortDesc": "Untradeable. Move this Aether Royal cosmetic into Character Customization. Fits male and female characters."
+  },
+  "aether-royal-crown": {
+    "name": "Aether Royal Crown",
+    "shortDesc": "Untradeable. Move this Aether Royal cosmetic into Character Customization. Fits male and female characters."
+  },
+  "aether-royal-cape": {
+    "name": "Aether Royal Skillcape",
+    "shortDesc": "Untradeable. Equip this skillcape independently in the Cape slot. Fits male and female characters."
   }
 }

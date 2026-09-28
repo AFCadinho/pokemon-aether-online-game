@@ -8,6 +8,9 @@ const BODY_DIRECTORY := "res://assets/player/body"
 const BODY_MANIFEST_PATH := "res://assets/player/body/body_manifest.json"
 const HAIR_CATEGORY := "hair"
 const HEADGEAR_CATEGORY := "headgear"
+const CAPE_CATEGORY := "cape"
+# Auxiliary render layer driven by the same equipped cape; not a wardrobe slot.
+const CAPE_OVERLAY_CATEGORY := "cape_overlay"
 const FACIAL_HAIR_CATEGORY := "facial_hair"
 const FACEGEAR_CATEGORY := "facegear"
 const TOP_CATEGORY := "top"
@@ -130,6 +133,7 @@ const BODY_MOVEMENT_SURF := "surf"
 const BODY_MOVEMENT_SURF_FISH := "surf_fish"
 const BODY_MOVEMENT_MOUNT := "mount"
 const LAYERED_PART_CATEGORIES: Array[String] = [
+	CAPE_CATEGORY,
 	HAIR_CATEGORY,
 	HEADGEAR_CATEGORY,
 	FACIAL_HAIR_CATEGORY,
@@ -141,6 +145,8 @@ const LAYERED_PART_CATEGORIES: Array[String] = [
 	EYEBROWS_CATEGORY,
 ]
 const MOVEMENT_POSE_PART_CATEGORIES: Array[String] = [
+	CAPE_CATEGORY,
+	CAPE_OVERLAY_CATEGORY,
 	TOP_CATEGORY,
 	BOTTOM_CATEGORY,
 	SHOES_CATEGORY,
@@ -193,7 +199,7 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 		return ["male", "female"]
 	if normalized_item_id.begins_with("aether-wayfarer-male-"):
 		return ["male"]
-	if normalized_item_id.begins_with("aether-ronin-"):
+	if normalized_item_id.begins_with("aether-ronin-") or normalized_item_id.begins_with("aether-royal-"):
 		return ["male", "female"]
 	if normalized_item_id.begins_with("aether-wayfarer-female-"):
 		return ["female"]
@@ -259,6 +265,25 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 
 	var layers: Array[Dictionary] = []
 	match normalized_item_id:
+		"aether-royal-outfit":
+			layers = [
+				{"category": CAPE_CATEGORY, "id": "AetherRoyal_Cape"},
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "AetherRoyal_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "AetherRoyal_Shoes"},
+				{"category": TOP_CATEGORY, "id": "AetherRoyal_Shirt"},
+				{"category": HEADGEAR_CATEGORY, "id": "AetherRoyal_Crown"},
+			]
+		"aether-royal-shirt":
+			layers = [{"category": TOP_CATEGORY, "id": "AetherRoyal_Shirt"}]
+		"aether-royal-trousers":
+			layers = [{"category": BOTTOM_CATEGORY, "id": "AetherRoyal_Trousers"}]
+		"aether-royal-shoes":
+			layers = [{"category": SHOES_CATEGORY, "id": "AetherRoyal_Shoes"}]
+		"aether-royal-crown":
+			layers = [{"category": HEADGEAR_CATEGORY, "id": "AetherRoyal_Crown"}]
+		"aether-royal-cape":
+			layers = [{"category": CAPE_CATEGORY, "id": "AetherRoyal_Cape"}]
 		"aether-wayfarer-male-outfit":
 			layers = [
 				{"kind": "body"},
@@ -639,6 +664,7 @@ static func _create_battle_appearance_icon(parts: Array[Dictionary], gender: Str
 			continue
 		if not requested.has(category) and not (
 			(category == "top_accessory" and requested.has(TOP_CATEGORY))
+			or (category == CAPE_OVERLAY_CATEGORY and requested.has(CAPE_CATEGORY))
 			or (category == EYEBROWS_CATEGORY and requested.has(HAIR_CATEGORY))
 		):
 			continue
@@ -793,6 +819,10 @@ static func get_default_part_id(category: String, gender: String = "") -> String
 static func normalize_part_category(category: String) -> String:
 	var normalized: String = category.strip_edges().to_lower().replace("_", "")
 	match normalized:
+		"cape":
+			return CAPE_CATEGORY
+		"capeoverlay":
+			return CAPE_OVERLAY_CATEGORY
 		"hair":
 			return HAIR_CATEGORY
 		"headgear", "headwear", "hat", "cap":
@@ -966,7 +996,7 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 	var normalized_part_id: String = _normalize_body_id(part_id)
 	if normalized_category == "" or normalized_part_id == "":
 		return null
-	if not LAYERED_PART_CATEGORIES.has(normalized_category):
+	if not LAYERED_PART_CATEGORIES.has(normalized_category) and normalized_category != CAPE_OVERLAY_CATEGORY:
 		return null
 
 	var normalized_gender: String = normalize_gender(gender)

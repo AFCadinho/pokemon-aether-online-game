@@ -6172,5 +6172,11 @@
   "ui.appearance.option.teamrocketfemale_cap": "Team Rocket-pet (vrouw)",
   "ui.appearance.option.ronin_shirt": "Ronin-kimono",
   "ui.appearance.option.ronin_hakama": "Ronin-hakama",
-  "ui.appearance.option.ronin_sandals": "Ronin-tabisandalen"
+  "ui.appearance.option.ronin_sandals": "Ronin-tabisandalen",
+  "ui.appearance.option.royal_shirt": "Aether Royal-jas",
+  "ui.appearance.option.royal_trousers": "Aether Royal-broek",
+  "ui.appearance.option.royal_shoes": "Aether Royal-laarzen",
+  "ui.appearance.option.royal_crown": "Aether Royal-kroon",
+  "ui.appearance.category.cape": "Cape",
+  "ui.appearance.option.royal_cape": "Aether Royal-skillcape"
 }
