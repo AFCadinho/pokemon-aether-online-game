@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cerulean Cave gebruikt de normale cave-wandtrappen voor verbindingen omhoog; de twee ontbrekende trapgaten naar B1F zijn hersteld.
+
 - De Aether Ronin-mouwen sluiten nu ook bij male-lopen en bij vissen en rijden voor beide geslachten, zodat geen lichte huidstrook door de kleding schijnt.
 
 - Cerulean Cave 1F, 2F en B1F gebruiken nu hun Tiled-visuals met wederzijdse trapverbindingen en staffteleports. De Power Plant is via Route 10 bereikbaar; de indoor scenes gebruiken de zichtmaskers voor hun vloer.
