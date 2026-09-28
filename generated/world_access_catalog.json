@@ -227,21 +227,205 @@
 		"kanto_cerulean_cave": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
-			"label": "Cerulean Cave",
+			"label": "Cerulean Cave 1F",
 			"locationGroupId": "kanto_cerulean_cave",
 			"locationGroupLabel": "Cerulean Cave",
 			"regionName": "Kanto",
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
 			"spawnPoints": {
-				"from_cerulean": {
+				"2f_stair_a": {
 					"facingDirection": "down",
-					"label": "Cerulean",
+					"label": "2F — Stair A",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From2FA",
+					"tile": {
+						"x": 19,
+						"y": 22
+					}
+				},
+				"2f_stair_b": {
+					"facingDirection": "down",
+					"label": "2F — Stair B",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From2FB",
+					"tile": {
+						"x": 29,
+						"y": 34
+					}
+				},
+				"2f_stair_c": {
+					"facingDirection": "down",
+					"label": "2F — Stair C",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From2FC",
+					"tile": {
+						"x": 15,
+						"y": 54
+					}
+				},
+				"2f_stair_d": {
+					"facingDirection": "down",
+					"label": "2F — Stair D",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From2FD",
+					"tile": {
+						"x": 68,
+						"y": 62
+					}
+				},
+				"2f_stair_e": {
+					"facingDirection": "down",
+					"label": "2F — Stair E",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From2FE",
+					"tile": {
+						"x": 91,
+						"y": 50
+					}
+				},
+				"2f_stair_f": {
+					"facingDirection": "down",
+					"label": "2F — Stair F",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From2FF",
+					"tile": {
+						"x": 111,
+						"y": 22
+					}
+				},
+				"b1f_stair_g": {
+					"facingDirection": "down",
+					"label": "B1F — Stair G",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1FG",
+					"tile": {
+						"x": 11,
+						"y": 36
+					}
+				},
+				"b1f_stair_h": {
+					"facingDirection": "down",
+					"label": "B1F — Stair H",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1FH",
+					"tile": {
+						"x": 109,
+						"y": 42
+					}
+				},
+				"city_entrance": {
+					"facingDirection": "down",
+					"label": "Cerulean City Entrance",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCerulean",
 					"tile": {
-						"x": 12,
+						"x": 99,
+						"y": 84
+					}
+				}
+			}
+		},
+		"kanto_cerulean_cave_2f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Cerulean Cave 2F",
+			"locationGroupId": "kanto_cerulean_cave",
+			"locationGroupLabel": "Cerulean Cave",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+			"spawnPoints": {
+				"1f_stair_a": {
+					"facingDirection": "up",
+					"label": "1F — Stair A",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FA",
+					"tile": {
+						"x": 19,
 						"y": 16
+					}
+				},
+				"1f_stair_b": {
+					"facingDirection": "up",
+					"label": "1F — Stair B",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FB",
+					"tile": {
+						"x": 29,
+						"y": 28
+					}
+				},
+				"1f_stair_c": {
+					"facingDirection": "up",
+					"label": "1F — Stair C",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FC",
+					"tile": {
+						"x": 15,
+						"y": 48
+					}
+				},
+				"1f_stair_d": {
+					"facingDirection": "up",
+					"label": "1F — Stair D",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FD",
+					"tile": {
+						"x": 68,
+						"y": 56
+					}
+				},
+				"1f_stair_e": {
+					"facingDirection": "up",
+					"label": "1F — Stair E",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FE",
+					"tile": {
+						"x": 91,
+						"y": 44
+					}
+				},
+				"1f_stair_f": {
+					"facingDirection": "up",
+					"label": "1F — Stair F",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FF",
+					"tile": {
+						"x": 111,
+						"y": 16
+					}
+				}
+			}
+		},
+		"kanto_cerulean_cave_b1f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Cerulean Cave B1F",
+			"locationGroupId": "kanto_cerulean_cave",
+			"locationGroupLabel": "Cerulean Cave",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn",
+			"spawnPoints": {
+				"1f_stair_g": {
+					"facingDirection": "down",
+					"label": "1F — Stair G",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FG",
+					"tile": {
+						"x": 14,
+						"y": 34
+					}
+				},
+				"1f_stair_h": {
+					"facingDirection": "down",
+					"label": "1F — Stair H",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1FH",
+					"tile": {
+						"x": 112,
+						"y": 40
 					}
 				}
 			}
@@ -1334,6 +1518,28 @@
 				}
 			}
 		},
+		"kanto_power_plant": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Power Plant",
+			"locationGroupId": "kanto_power_plant",
+			"locationGroupLabel": "Power Plant",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/interiors/power_plant.tscn",
+			"spawnPoints": {
+				"route_10_entrance": {
+					"facingDirection": "up",
+					"label": "Route 10 Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute10",
+					"tile": {
+						"x": 8,
+						"y": 49
+					}
+				}
+			}
+		},
 		"kanto_rivals_house": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -1594,6 +1800,16 @@
 					"tile": {
 						"x": 2,
 						"y": 9
+					}
+				},
+				"power_plant_entrance": {
+					"facingDirection": "down",
+					"label": "Power Plant Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPowerPlant",
+					"tile": {
+						"x": 37,
+						"y": 56
 					}
 				}
 			}
@@ -2317,7 +2533,9 @@
 			"locationGroupId": "kanto_route_6",
 			"locationGroupLabel": "Route 6",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://byyelt2dffj6y"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 			"spawnPoints": {
 				"from_saffron_south": {
@@ -2849,6 +3067,216 @@
 	},
 	"schemaVersion": 3,
 	"transitions": {
+		"kanto_cerulean_cave_2f__to_1f_a": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 624.0,
+					"y": 720.0
+				},
+				"spawnMarker": "From2FA"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_2f"
+		},
+		"kanto_cerulean_cave_2f__to_1f_b": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "From2FB"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_2f"
+		},
+		"kanto_cerulean_cave_2f__to_1f_c": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 1744.0
+				},
+				"spawnMarker": "From2FC"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_2f"
+		},
+		"kanto_cerulean_cave_2f__to_1f_d": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 2192.0,
+					"y": 2000.0
+				},
+				"spawnMarker": "From2FD"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_2f"
+		},
+		"kanto_cerulean_cave_2f__to_1f_e": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 2928.0,
+					"y": 1616.0
+				},
+				"spawnMarker": "From2FE"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_2f"
+		},
+		"kanto_cerulean_cave_2f__to_1f_f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 3568.0,
+					"y": 720.0
+				},
+				"spawnMarker": "From2FF"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_2f"
+		},
+		"kanto_cerulean_cave__to_2f_a": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+				"position": {
+					"x": 624.0,
+					"y": 528.0
+				},
+				"spawnMarker": "From1FA"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_2f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_2f_b": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 912.0
+				},
+				"spawnMarker": "From1FB"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_2f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_2f_c": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 1552.0
+				},
+				"spawnMarker": "From1FC"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_2f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_2f_d": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+				"position": {
+					"x": 2192.0,
+					"y": 1808.0
+				},
+				"spawnMarker": "From1FD"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_2f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_2f_e": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+				"position": {
+					"x": 2928.0,
+					"y": 1424.0
+				},
+				"spawnMarker": "From1FE"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_2f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_2f_f": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+				"position": {
+					"x": 3568.0,
+					"y": 528.0
+				},
+				"spawnMarker": "From1FF"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_2f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_b1f_g": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "From1FG"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_b1f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave__to_b1f_h": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_cave_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn",
+				"position": {
+					"x": 3600.0,
+					"y": 1296.0
+				},
+				"spawnMarker": "From1FH"
+			},
+			"destinationAreaId": "kanto_cerulean_cave_b1f",
+			"sourceMapId": "kanto_cerulean_cave"
+		},
 		"kanto_cerulean_cave__to_cerulean_city": {
 			"destination": {
 				"facingDirection": "down",
@@ -2865,6 +3293,36 @@
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_cerulean_cave"
+		},
+		"kanto_cerulean_cave_b1f__to_1f_g": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 1168.0
+				},
+				"spawnMarker": "FromB1FG"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_b1f"
+		},
+		"kanto_cerulean_cave_b1f__to_1f_h": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_cave",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+				"position": {
+					"x": 3504.0,
+					"y": 1360.0
+				},
+				"spawnMarker": "FromB1FH"
+			},
+			"destinationAreaId": "kanto_cerulean_cave",
+			"sourceMapId": "kanto_cerulean_cave_b1f"
 		},
 		"kanto_cerulean_city__to_bike_store": {
 			"destination": {
@@ -2890,8 +3348,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
 				"position": {
-					"x": 384.0,
-					"y": 512.0
+					"x": 3184.0,
+					"y": 2704.0
 				},
 				"spawnMarker": "FromCerulean"
 			},
@@ -3897,6 +4355,36 @@
 			"destinationAreaId": "kanto_pallet_town",
 			"sourceMapId": "kanto_players_house"
 		},
+		"kanto_power_plant__to_route_10": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 1200.0,
+					"y": 1808.0
+				},
+				"spawnMarker": "FromPowerPlant"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_power_plant"
+		},
+		"kanto_power_plant__to_route_10_northwest": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 1200.0,
+					"y": 1808.0
+				},
+				"spawnMarker": "FromPowerPlant"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_power_plant"
+		},
 		"kanto_rivals_house__to_pallet_town": {
 			"destination": {
 				"mapId": "kanto_pallet_town",
@@ -4076,6 +4564,21 @@
 				"spawnMarker": "FromRoute10"
 			},
 			"destinationAreaId": "kanto_lavender_town_north",
+			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_10__to_power_plant": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_power_plant",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/interiors/power_plant.tscn",
+				"position": {
+					"x": 272.0,
+					"y": 1584.0
+				},
+				"spawnMarker": "FromRoute10"
+			},
+			"destinationAreaId": "kanto_power_plant",
 			"sourceMapId": "kanto_route_10"
 		},
 		"kanto_route_10__to_rock_tunnel_north": {
@@ -5028,7 +5531,9 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_6",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://byyelt2dffj6y"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
 					"x": 736.0,
@@ -5077,7 +5582,9 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_6",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://byyelt2dffj6y"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
 					"x": 1168.0,
@@ -5158,7 +5665,9 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_6",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://byyelt2dffj6y"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
 					"x": 752.0,
