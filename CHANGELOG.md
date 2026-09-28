@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- In Cerulean Cave kun je over de brug lopen en onder dezelfde brug door surfen. De brughoofden bepalen wanneer de speler het hogere pad betreedt of verlaat.
+
 - Cerulean Cave gebruikt de normale cave-wandtrappen voor verbindingen omhoog; de twee ontbrekende trapgaten naar B1F zijn hersteld.
 
 - De Aether Ronin-mouwen sluiten nu ook bij male-lopen en bij vissen en rijden voor beide geslachten, zodat geen lichte huidstrook door de kleding schijnt.
