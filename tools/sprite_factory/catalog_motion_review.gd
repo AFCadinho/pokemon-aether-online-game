@@ -73,7 +73,8 @@ func _run() -> void:
 	var result := {"schema": 1, "runtime_approved": false, "renderer": RenderingServer.get_current_rendering_method(), "entries": []}
 	var quick_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_QUICK") == "1"
 	var eye_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_EYES_ONLY") == "1"
-	result["capture_profile"] = "eye_pair" if eye_review else ("quick_pair" if quick_review else "full_motion")
+	var eye_sweep := OS.get_environment("POKEAETHER_CATALOG_REVIEW_EYE_SWEEP") == "1"
+	result["capture_profile"] = "eye_sweep" if eye_sweep else ("eye_pair" if eye_review else ("quick_pair" if quick_review else "full_motion"))
 	result["reflection_environment"] = "neutral_studio" if reflection_review else "default"
 	var eye_level_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_EYE_LEVEL") == "1"
 	var side_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_SIDE") == "1"
@@ -99,8 +100,8 @@ func _run() -> void:
 					record.errors.append("Expected one AnimationPlayer")
 				else:
 					var player: AnimationPlayer = players[0]
-					var actions := ["idle", "sleep"] if eye_review else (["idle", "physical_attack", "special_attack", "sleep", "faint_start"] if quick_review else ACTIONS.duplicate())
-					if not eye_review:
+					var actions := ["idle"] if eye_sweep else (["idle", "sleep"] if eye_review else (["idle", "physical_attack", "special_attack", "sleep", "faint_start"] if quick_review else ACTIONS.duplicate()))
+					if not eye_review and not eye_sweep:
 						for optional: String in OPTIONAL_ACTIONS:
 							if player.has_animation(optional):
 								actions.append(optional)
@@ -126,7 +127,7 @@ func _run() -> void:
 						for action: String in actions:
 							if not player.has_animation(action):
 								continue
-							var capture_fractions: Array = [0.5] if eye_review else ([1.0 if action == "faint_start" else 0.5] if quick_review else FRACTIONS)
+							var capture_fractions: Array = [0.0, 0.25, 0.5, 0.75, 1.0] if eye_sweep else ([0.5] if eye_review else ([1.0 if action == "faint_start" else 0.5] if quick_review else FRACTIONS))
 							for fraction: float in capture_fractions:
 								var box := await _pose(model, player, action, fraction)
 								await RenderingServer.frame_post_draw
