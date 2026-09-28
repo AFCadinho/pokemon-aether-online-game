@@ -2,15 +2,15 @@
   "schema": 1,
   "date": "2026-09-28",
   "scope": "Batch 04 main catalog, 200 independently versioned normal/shiny Pok\u00e9mon bundles",
-  "status": "local_candidate_bundles_built_and_smoke_tested",
+  "status": "local_candidate_bundles_built_and_battle_requalified",
   "runtime_approved": false,
   "release_approved": false,
   "published": false,
   "candidate_count": 200,
   "appearance_count": 400,
   "bundle_count": 200,
-  "bundle_bytes": 5744369723,
-  "bundle_index_sha256": "6320d5013c192e840726726e851f23a1d02e021b046ad583aa6d02b5bbbabba1",
+  "bundle_bytes": 5743702329,
+  "bundle_index_sha256": "8fe2feac4e1230a759bcb73a44e102ed934742655766d42d3a4022e5685e9f8e",
   "candidate_bundle_directory": ".tmp/batch04-main/candidate-bundles-v1",
   "smoke_test": {
     "status": "passed",
@@ -21,10 +21,12 @@
       "scene_hash_validation",
       "PackedScene_load",
       "no_op_update",
-      "store_restart"
+      "store_restart",
+      "single_pokemon_versioned_update_v1_to_v2"
     ],
-    "bundle_index_sha256": "872c38d8a85bb87400b3c6e9872cf127cc1166c01f03c2dfc1eb72f8d2527082",
-    "install_output": ".tmp/batch04-main/candidate-install-smoke-v1"
+    "bundle_index_sha256": "b72001adf0652b5d7690b785db6068c7e9b02bb9b4c028f293d57ac152e50e8a",
+    "install_output": ".tmp/batch04-main/candidate-install-smoke-v1",
+    "floragato_update": "bundle v1 to v2 passed; 23 other bundles unchanged"
   },
   "silicobra_shiny_recovery": {
     "status": "converted_and_geometry_motion_parity_verified",
@@ -68,17 +70,20 @@
     ]
   },
   "remaining": [
-    "Do not publish these candidates yet. Reconcile the 22 changed normal scene hashes against their battle approval; six also have a different source GLB and need targeted battle-runtime review.",
-    "Release admission and R2 publication remain separate work."
+    "Release admission is still separate.",
+    "No R2 upload or publication was performed."
   ],
   "evidence_sha256": {
     "tools/sprite_factory/catalog_production_batch_04_main_review.json": "711b4e9affcdc0a7d7c6e88fe5dbf24a0194d56225e051aea2166815c4ecf8c2",
     "tools/sprite_factory/catalog_production_batch_04.json": "a4acf1b9f98c880470c575bc5eac10c8db431d464e93d0fad37080d7d3a5331a",
     ".tmp/batch04-main/candidate-catalog.json": "c5e1ca55909ddd3bc318e74b5df26297d0c70e0b76b7b5577a261450c1e5a65d",
     ".tmp/batch04-main/candidate-selection-audit.json": "34a2cea0e27e5c10d2c4b68271e0ef055f74ce12ab21d6b970e6e35b263ecdf5",
-    ".tmp/batch04-main/candidate-bundles-v1/asset-index.json": "6320d5013c192e840726726e851f23a1d02e021b046ad583aa6d02b5bbbabba1",
-    ".tmp/batch04-main/candidate-bundles-smoke-v1/asset-index.json": "872c38d8a85bb87400b3c6e9872cf127cc1166c01f03c2dfc1eb72f8d2527082",
-    ".tmp/batch04-main/silicobra-final-shiny/runtime/parity.json": "95868199227479a855250ada8bebe13c799702db1d1ec9402b91e74a905d0ffa"
+    ".tmp/batch04-main/candidate-bundles-v1/asset-index.json": "8fe2feac4e1230a759bcb73a44e102ed934742655766d42d3a4022e5685e9f8e",
+    ".tmp/batch04-main/candidate-bundles-smoke-v1/asset-index.json": "b72001adf0652b5d7690b785db6068c7e9b02bb9b4c028f293d57ac152e50e8a",
+    ".tmp/batch04-main/silicobra-final-shiny/runtime/parity.json": "95868199227479a855250ada8bebe13c799702db1d1ec9402b91e74a905d0ffa",
+    ".tmp/batch04-main/floragato-scale-fix-test/final/compressed-requalification/battle-review.json": "5c0b9b222253011498be667484f4f64832c7e40cc2ce1c6d0320cb4e457eff65",
+    ".tmp/batch04-main/floragato-scale-fix-test/normal-alias-compressed.scn": "c8f2e68ee72a60f2681bebfce96c33e493e6ebb09a57ce00e0204c62c112ddc6",
+    ".tmp/batch04-main/floragato-scale-fix-test/shiny-alias-compressed.scn": "79a3fad9e8c28e1b8988742f916bafa65d8de2b36d36f6553ef3497fa8ecbe6e"
   },
   "entries": [
     {
@@ -1568,16 +1573,18 @@
     {
       "species": "floragato",
       "national_dex": 907,
-      "normal_scn_sha256": "9e4018522fbfb59c23d2129b2d49a29ac595d04a83be287beedd2cfaa2d09814",
-      "shiny_scn_sha256": "e14ec67a0b175964b542309a69187856407dba43d96262cfbefcafcfd0bc19de",
+      "normal_scn_sha256": "c8f2e68ee72a60f2681bebfce96c33e493e6ebb09a57ce00e0204c62c112ddc6",
+      "shiny_scn_sha256": "79a3fad9e8c28e1b8988742f916bafa65d8de2b36d36f6553ef3497fa8ecbe6e",
       "normal_glb_sha256": "0bf1e2fcecf49759d73764966895d8998fc6179d13c187fdab56e371780496a8",
       "shiny_glb_sha256": "bdf85e374f560af833a7d9996973ac9f88ea3cbfb4f3631a305a6b058e854df1",
-      "bundle_sha256": "8b07a6712ec8b1ba6b6d61eede76a5224a03e2a788123643543302b7a43feeb0",
-      "bundle_size_bytes": 68152488,
-      "object_key": "optional-assets/pokemon_3d/floragato/base/v1-8b07a6712ec8b1ba6b6d61eede76a5224a03e2a788123643543302b7a43feeb0.zip",
+      "bundle_sha256": "92ade175cc26d9b7adb9d48b1821dd3efec095f0533b14f54c61f63396e53985",
+      "bundle_size_bytes": 67485094,
+      "object_key": "optional-assets/pokemon_3d/floragato/base/v2-92ade175cc26d9b7adb9d48b1821dd3efec095f0533b14f54c61f63396e53985.zip",
       "pair_source_receipt": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/batch04-main/review-01/receipt.json",
       "normal_scene_matches_battle_accepted_scene": false,
-      "normal_glb_matches_battle_accepted_glb": false
+      "normal_glb_matches_battle_accepted_glb": false,
+      "runtime_requalification": "passed after Floragato attack02 fallback",
+      "bundle_version": 2
     },
     {
       "species": "meowscarada",
@@ -2881,5 +2888,25 @@
       "normal_scene_matches_battle_accepted_scene": true,
       "normal_glb_matches_battle_accepted_glb": true
     }
-  ]
+  ],
+  "battle_requalification": {
+    "status": "passed_for_all_22_updated_normal_scenes",
+    "models": 22,
+    "candidate_scenes_rendered": 23,
+    "views_per_model": 16,
+    "camera_or_hud_failures": 0,
+    "source_glbs_different_from_previous_receipts": 6,
+    "floragato_fix": {
+      "status": "passed",
+      "normal_scene_sha256": "c8f2e68ee72a60f2681bebfce96c33e493e6ebb09a57ce00e0204c62c112ddc6",
+      "shiny_scene_sha256": "79a3fad9e8c28e1b8988742f916bafa65d8de2b36d36f6553ef3497fa8ecbe6e",
+      "physical_attack_2": "uses the already checked physical_attack animation because native attack02 scales claw_a to hundreds",
+      "special_attack_minimum_clearance_120hz_m": 0.0033,
+      "physical_attack_2_minimum_clearance_120hz_m": 0.0231,
+      "camera_failures": 0,
+      "hud_overlaps": 0
+    },
+    "evidence": "local .tmp/batch04-main/final-battle-requalification/corrected-final/battle-review.json plus .tmp/batch04-main/floragato-scale-fix-test/final/compressed-requalification/battle-review.json",
+    "candidate_scene_runs": 23
+  }
 }
