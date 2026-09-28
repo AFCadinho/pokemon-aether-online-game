@@ -74,6 +74,15 @@ func _run() -> void:
 		_check(items.has("aether-royal-cape") and items.has("aether-royal-outfit"), "%s item localization" % locale)
 	var encoded := APPEARANCE.encode_presence_body_with_appearance("Gen4_Base_v1", {"cape": "AetherRoyal_Cape"})
 	_check(APPEARANCE.decode_presence_body_appearance(encoded).get("cape") == "AetherRoyal_Cape", "cape survives presence encoding")
+	# A stale local Royal outfit must follow the server's corrected movement-save response.
+	save.apply_appearance_state({"top": "AetherRoyal_Shirt", "cape": "AetherRoyal_Cape"})
+	var world = load("res://scripts/world/world.gd").new()
+	world.call("_reconcile_patreon_royal_appearance_after_save",
+		{"top": "AetherRoyal_Shirt", "cape": "AetherRoyal_Cape"},
+		{"top": null, "cape": null})
+	_check(save.appearance_top_id == "" and save.appearance_cape_id == "",
+		"expired Royal pieces are cleared from the local player after movement save")
+	world.free()
 	save.gender = previous_gender
 	save.apply_appearance_state(previous)
 	print("Aether Royal independent cape checks: ", "FAILED" if failed else "PASS")
