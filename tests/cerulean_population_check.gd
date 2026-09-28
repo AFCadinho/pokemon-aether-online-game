@@ -136,8 +136,8 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 		)
 		_check(
 			str(cave_agent.get("required_quest_id")) == "cerulean_cave_clearance"
-				and str(cave_agent.get("required_quest_status")) == "completed",
-			"Investigation agent leaves only after the future cave-clearance sidequest"
+				and str(cave_agent.get("required_quest_status")) == "started",
+			"Investigation agent leaves when cave clearance is active or completed"
 		)
 		_check(not bool(cave_agent.get("requires_party_pokemon")), "Cave access is story-gated instead of party-gated")
 		_check(

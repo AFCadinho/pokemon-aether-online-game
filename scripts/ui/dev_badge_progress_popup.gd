@@ -67,6 +67,7 @@ const SIDE_QUESTS: Array[Dictionary] = [
 		"id": "pokemon_fan_club_chairman",
 		"label_key": "ui.staff.side_quest.pokemon_fan_club_chairman",
 	},
+	{"id": "cerulean_cave_clearance", "label_key": "ui.staff.side_quest.cerulean_cave_clearance"},
 ]
 
 const UI_BG := Color("#050b14fa")
@@ -554,6 +555,13 @@ func _build_side_quests_ui(layout: VBoxContainer) -> void:
 	reset_side_button.pressed.connect(_apply_side_quest_action.bind("reset"))
 	_apply_button_style(reset_side_button, false)
 	side_actions.add_child(reset_side_button)
+	var activate_side_button := Button.new()
+	activate_side_button.name = "ActivateSideQuestButton"
+	activate_side_button.custom_minimum_size = Vector2(180, 36)
+	_set_localized_property(activate_side_button, "text", "ui.staff.side_quest.activate")
+	activate_side_button.pressed.connect(_apply_side_quest_action.bind("activate"))
+	_apply_button_style(activate_side_button, false)
+	side_actions.add_child(activate_side_button)
 	var complete_side_button := Button.new()
 	complete_side_button.name = "CompleteSideQuestButton"
 	complete_side_button.custom_minimum_size = Vector2(210, 36)

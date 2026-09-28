@@ -800,6 +800,7 @@ blocked_dialogue_id = "kanto_cerulean_city_cave_agent_blocked"
 story_blocked_dialogue_id = "kanto_cerulean_city_cave_agent_blocked"
 npc_id = "kanto_cerulean_city_cave_agent"
 required_quest_id = "cerulean_cave_clearance"
+required_quest_status = "started"
 display_name = "League Investigation Agent"
 
 [node name="OfficerJenny" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]

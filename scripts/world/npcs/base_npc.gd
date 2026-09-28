@@ -62,7 +62,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Optional story condition. An empty quest id keeps the NPC unrestricted.
 @export var required_quest_id := ""
 @export var required_quest_step_id := ""
-@export_enum("active", "completed") var required_quest_status := "completed"
+@export_enum("active", "completed", "started") var required_quest_status := "completed"
 ## Optional scene-presence window driven by projected story state.
 @export var visibility_required_quest_id := ""
 @export var visibility_required_quest_step_id := ""
@@ -1538,7 +1538,7 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 				metadata.get("required_quest_status", required_quest_status)
 			)
 		).strip_edges().to_lower()
-		if metadata_required_quest_status in ["active", "completed"]:
+		if metadata_required_quest_status in ["active", "completed", "started"]:
 			required_quest_status = metadata_required_quest_status
 
 	metadata_dialogue_id = str(

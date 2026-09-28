@@ -72,7 +72,7 @@ func _run() -> void:
 	var side_quest_select := popup.find_child("SideQuestSelect", true, false) as OptionButton
 	_check(story_chapter_select != null, "trainer progress exposes a story chapter selector")
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
-	_check(side_quest_select != null and side_quest_select.item_count == 7, "trainer progress exposes all side-quest controls")
+	_check(side_quest_select != null and side_quest_select.item_count == 8, "trainer progress exposes all side-quest controls")
 	var side_quest_ids: Array[String] = []
 	if side_quest_select != null:
 		for index in side_quest_select.item_count:
@@ -81,7 +81,9 @@ func _run() -> void:
 		"pokemon_fan_club_chairman" in side_quest_ids,
 		"trainer progress exposes the Pokemon Fan Club Chairman side quest"
 	)
+	_check("cerulean_cave_clearance" in side_quest_ids, "trainer progress exposes Cerulean Cave clearance")
 	_check(popup.find_child("ResetSideQuestButton", true, false) != null, "side quests can be restarted")
+	_check(popup.find_child("ActivateSideQuestButton", true, false) != null, "side quests can be given")
 	_check(popup.find_child("CompleteSideQuestButton", true, false) != null, "side quests can be completed with rewards")
 	_check(
 		popup.find_child("ApplyStoryCheckpointButton", true, false).get_parent().get_parent().name == "StoryContent"
