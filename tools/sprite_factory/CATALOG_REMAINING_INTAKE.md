@@ -146,8 +146,10 @@ original GLBs, despite the visually preferred result. A clean technical audit
 does **not** prove good-looking eyes: Blastoise, Entei, Furret, and Mudkip are
 user-reported eye holds, including Blastoise whose material audit is clean.
 
-Additional visual holds: Magmar body colours, Yanma's apparent missing wing,
-Elekid's electricity colour, and Torracat's neon body. Chinchou and Lanturn
+The initial visual holds included Magmar body colours, Yanma's apparent missing
+wing, Elekid's electricity colour, and Torracat's neon body. The colour cases
+received the later review-only repair described below; Yanma still needs a
+side-view check. Chinchou and Lanturn
 previously had wrong pink/green body colours; the review-only pass restores
 their official normal/rare body albedo, and both variants converted and rendered
 in Godot. Ninetales, Chinchou and Lanturn appear together in
@@ -155,6 +157,55 @@ in Godot. Ninetales, Chinchou and Lanturn appear together in
 tail was confirmed present from the side. The combined 156-pair comparison is
 `.tmp/catalog-remaining-eye-review-v6-2026-09-28/index.html`. None of these
 technical or visual reviews changes the approved catalog or releases the 156.
+
+## Body-colour audit after full-eye review
+
+The 156-pair eye page still exposed major colour failures, especially among
+later National Dex entries. A binding scan found 96 body-material bindings per
+normal/shiny set across **37 species** where the glTF base colour used a
+normal, metal, region or layer-mask image instead of the source albedo.
+`catalog_remaining_body_repair.py` checks the eye-review GLB hashes, restores
+the official normal/rare `BaseColorMap`, and bakes non-neutral source layer
+tints for 27 bindings per variant. It removes raw mask emission from corrected
+materials and, for Magmar, Jirachi and Golett, the remaining raw mask
+emission on their bodies. This is review-only reconstruction, not complete
+SCVI shader parity. White source tints preserve albedo instead of replacing
+it; this matters on Magmar's belly. Alpha remains the source albedo alpha.
+
+The local receipt is `.tmp/catalog-remaining-body-repair-v6-2026-09-28/status.json`:
+37 pairs repaired for review, 119 unchanged, zero technical holds. Across all
+156 pairs, the original GLB binary prefix, meshes, skeleton, animation and
+node data are unchanged. The 18-variant targeted layer trial imported and
+rendered in Godot with zero errors. Earlier 40-variant and 34-variant body
+trials also imported and rendered with zero errors. The before/after page is
+`.tmp/catalog-remaining-body-review-v2-2026-09-28/index.html`.
+
+Self-review of the Godot renders found clear improvements for Litten,
+Torracat, Magmar, Elekid, Jirachi, Chimchar, Monferno, Magmortar and Golett.
+The 119 unchanged normal/shiny idle pairs were also scanned in ten contact
+sheets under `.tmp/catalog-remaining-unchanged-audit-2026-09-28`; this did
+not reveal another obvious neon or missing-body case at thumbnail size.
+Brionne and Duraludon match their pinned normal/rare source colours, although
+the studio lighting makes Duraludon's shiny difference subtle. Shiny Kommo-o's
+yellow/pink colour matches the official rare albedo. These observations do
+not approve the 156 pairs. The following are explicit visual holds:
+
+- Blastoise: the eye remains too small/dark. A neutral sclera trial is retained
+  separately in `.tmp/blastoise-sclera-eye-2026-09-28`; it is not selected in
+  v6 because the eye still reads poorly in the camera.
+- Primarina: a large spiky, cyan effect silhouette obscures the seal body.
+- Incineroar: the raw mask emission still makes the belt pink/yellow; its
+  six-layer source shader needs a dedicated reconstruction.
+- Solosis and Reuniclus: their green transparent outer bodies are too dark;
+  Reuniclus's shell is barely visible against the review background.
+- Zekrom: several tail pieces appear detached in idle.
+- Dewpider: eye and bubble appearance are doubtful in the current render.
+- Entei, Furret and Mudkip: user-reported eye appearance needs a closer
+  battle-camera check; a clean material binding alone cannot clear them.
+- Yanma: the reported apparent missing wing still needs a side-view motion
+  check.
+
+None of these GLBs updates the approved catalog, bundles or R2.
 
 ## Reproduce or resume
 
