@@ -19735,7 +19735,11 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 	if not bool(result.get("success", false)):
 		trainer_card_has_unsaved_appearance_changes = true
 		push_warning("Appearance save failed: %s" % str(result.get("error", "Unknown error")))
-		_update_trainer_card_appearance_save_state("ui.appearance.status.save_failed")
+		_update_trainer_card_appearance_save_state(
+			"backend.error.patreon_role_required"
+			if BackendErrorLocalizationService.error_code(result) == "patreon_role_required"
+			else "ui.appearance.status.save_failed"
+		)
 		return
 
 	if not _save_response_matches_current_appearance(result):
@@ -19745,27 +19749,15 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 		return
 
 	trainer_card_has_unsaved_appearance_changes = false
+	var world := GameState.get_world()
+	if world != null and world.has_method("confirm_current_appearance_saved"):
+		world.call("confirm_current_appearance_saved")
 	_update_trainer_card_appearance_save_state("ui.appearance.status.saved")
 
 func _save_trainer_card_appearance_to_backend() -> Dictionary:
-	if OS.has_feature("web"):
-		return await PlayerGameStateService.save_player_appearance(
-			PlayerSave.to_appearance_state()
-		)
-	var world := GameState.get_world()
-	if world == null or not world.has_method("save_current_player_state_now"):
-		return {
-			"success": false,
-			"error": "World is not ready.",
-		}
-
-	var result_value: Variant = await world.call("save_current_player_state_now")
-	if result_value is Dictionary:
-		return result_value as Dictionary
-	return {
-		"success": false,
-		"error": "Invalid save response.",
-	}
+	return await PlayerGameStateService.save_player_appearance(
+		PlayerSave.to_appearance_state()
+	)
 
 func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 	var appearance: Dictionary = _staff_dictionary_from_variant(result.get("appearance", {}))

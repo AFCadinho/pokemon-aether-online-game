@@ -55,6 +55,8 @@ func _run() -> void:
 		},
 	}
 	_check(errors.call("error_code", coded_response) == "guild_name_unavailable", "nested stable code is extracted")
+	_check(str(errors.call("message", {"body": {"detail": {"code": "patreon_role_required"}}})).contains("Patreon role"),
+		"expired Royal outfit explains the Patreon role requirement")
 	_check(str(errors.call("message", {"code": "coop_npc_out_of_range"})).contains("Move closer"),
 		"co-op trainer range rejection explains the required action")
 	var update_response := {

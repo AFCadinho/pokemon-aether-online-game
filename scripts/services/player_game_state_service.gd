@@ -661,12 +661,6 @@ func save_player_appearance(appearance: Dictionary) -> Dictionary:
 			"success": false,
 			"error": "Not authenticated.",
 		}
-	if not OS.has_feature("web"):
-		return {
-			"success": false,
-			"error": "The dedicated appearance endpoint is only used by the browser client.",
-		}
-
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + PLAYER_APPEARANCE_ENDPOINT,

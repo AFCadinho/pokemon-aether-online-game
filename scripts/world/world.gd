@@ -673,6 +673,11 @@ func save_current_player_state_now() -> Dictionary:
 	return result
 
 
+func confirm_current_appearance_saved() -> void:
+	confirmed_appearance_state = PlayerSave.to_appearance_state().duplicate(true)
+	_publish_world_presence(true)
+
+
 func relocate_player_within_current_map(destination: Vector2) -> Dictionary:
 	if is_in_battle or is_loading_map or authorized_teleport_in_progress:
 		return {"success": false, "error": "The trail is unavailable right now."}
@@ -3125,6 +3130,10 @@ func _save_current_player_position(
 	if bool(result.get("success", false)):
 		pending_happiness_walk_steps = maxi(pending_happiness_walk_steps - happiness_walk_steps_sent, 0)
 		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))
+		_reconcile_patreon_royal_appearance_after_save(
+			_dictionary_from_value(state.get("appearance", {})),
+			_dictionary_from_value(response_state.get("appearance", {}))
+		)
 		current_teleport_revision = int(response_state.get("teleportRevision", current_teleport_revision))
 		last_saved_position_signature = signature
 		if mark_current_appearance_confirmed:
@@ -3294,6 +3303,35 @@ func _save_player_activity_state(activity_state: String, activity_context: Dicti
 
 func _get_current_appearance_presence_state() -> Dictionary:
 	return PlayerSave.to_appearance_state()
+
+func _reconcile_patreon_royal_appearance_after_save(submitted: Dictionary, saved: Dictionary) -> void:
+	if saved.is_empty():
+		return
+	var local_appearance: Dictionary = PlayerSave.to_appearance_state()
+	var cleared := false
+	for slot: String in ["top", "bottom", "shoes", "headgear", "cape"]:
+		var royal_id := str({
+			"top": "AetherRoyal_Shirt",
+			"bottom": "AetherRoyal_Trousers",
+			"shoes": "AetherRoyal_Shoes",
+			"headgear": "AetherRoyal_Crown",
+			"cape": "AetherRoyal_Cape",
+		}.get(slot, ""))
+		if str(submitted.get(slot, "")) != royal_id or str(saved.get(slot, "")) == royal_id:
+			continue
+		if str(local_appearance.get(slot, "")) == royal_id:
+			local_appearance[slot] = "__none__"
+			if slot == "bottom":
+				local_appearance["legs"] = "__none__"
+			elif slot == "shoes":
+				local_appearance["feet"] = "__none__"
+			cleared = true
+	confirmed_appearance_state = saved.duplicate(true)
+	if cleared:
+		PlayerSave.apply_appearance_state(local_appearance)
+		if player != null and player.has_method("refresh_appearance"):
+			player.call("refresh_appearance")
+		_publish_world_presence(true)
 
 func _get_confirmed_appearance_state() -> Dictionary:
 	if confirmed_appearance_state.is_empty():

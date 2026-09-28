@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Trainer Card toont een duidelijke melding als de Patreon-rol ontbreekt; positiebewaring werkt de gedragen Aether Royal-outfit bij zodra de server een verlopen onderdeel verwijdert.
+
 - Patreon Support toont nu de Aether Royal-outfit op het spelersmodel in de Gift Store. De kaart behoudt het Patreon-pixelicoon.
 
 - In Cerulean Cave kunnen spelers en hun Pokémon over de droge doorgang onder de brug lopen, terwijl de bovenliggende brugroute en Surf gescheiden blijven.

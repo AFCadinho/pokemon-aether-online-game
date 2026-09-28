@@ -64,12 +64,12 @@ func _init() -> void:
 	_expect(
 		player_state_service.contains('const PLAYER_APPEARANCE_ENDPOINT := "/game/appearance"')
 		and player_state_service.contains("func save_player_appearance(appearance: Dictionary)"),
-		"browser appearance saves use a dedicated narrow endpoint"
+		"appearance saves use a dedicated narrow endpoint"
 	)
 	_expect(
-		overlay.contains('if OS.has_feature("web"):\n\t\treturn await PlayerGameStateService.save_player_appearance(')
+		overlay.contains('return await PlayerGameStateService.save_player_appearance(')
 		and overlay.contains('result.get("appearance", {})'),
-		"Trainer Card saves and verifies the dedicated browser appearance response"
+		"Trainer Card saves and verifies the dedicated appearance response"
 	)
 	_expect(
 		loading.contains("PlayerSave.reset_appearance_to_defaults()")
