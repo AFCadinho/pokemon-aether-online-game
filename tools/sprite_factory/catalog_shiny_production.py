@@ -88,7 +88,7 @@ def replacements(normal_table: Path, *, review_queue: bool = False,
             if floats_a.get("PointLight0_Intensity") is None and floats_b.get("PointLight0_Intensity") == 0.0:
                 floats_b.pop("PointLight0_Intensity")
             if include_float_overrides:
-                for key in FLOAT_SOCKETS.keys() | UNREPRESENTED_FLOATS:
+                for key in sorted(FLOAT_SOCKETS.keys() | UNREPRESENTED_FLOATS):
                     if key in floats_a and key in floats_b and floats_a[key] != floats_b[key]:
                         mode = "apply" if key in FLOAT_SOCKETS else "unrepresented"
                         float_overrides.append({"material": a["name"], "key": key,

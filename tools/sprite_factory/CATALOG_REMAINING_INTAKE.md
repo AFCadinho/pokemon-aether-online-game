@@ -63,6 +63,41 @@ holds, 21 missing sources). These scenes still need
 normal/shiny production, material and visibility review, scale/grounding,
 rendered motion checks, battle review and individual bundle qualification.
 
+## Bulk shiny continuation — 2026-09-28
+
+The complete 546-species remainder was sent through a conservative local shiny
+material pass. Biochao source hashes, the existing normal GLB hashes, official
+normal/rare material tables, and embedded normal pixels are checked before a
+rare texture is used. The eight plain-albedo cases were exported by
+`catalog_remaining_shiny_glb.py`. The audited review route in
+`catalog_remaining_shiny_review.py` attempted the other material-backed cases
+and retained explicit warnings when the older Biochao shader lacks an input
+for an official rare parameter. Exact geometry and native animation parity is
+required for every exported shiny GLB.
+
+**156 normal/shiny pairs now have standalone Godot scenes**: eight simple
+substitutions and 148 audited source exports. All 148 new shiny scenes
+converted without Godot errors; the earlier eight also converted without
+errors. Seventy-five of the 156 pairs have one or more unrepresented rare
+shader parameters and need particular attention to eyes, glow, and material
+colour. All 156 pairs remain technical candidates, not visually or battle
+approved. The pinned per-species status, hashes, source limitations, and
+remaining holds are in [catalog_remaining_shiny_results.json](catalog_remaining_shiny_results.json).
+
+The remaining 390 consist of **141 shiny-material holds**, **228 prior source
+or native-action holds**, and **21 missing base sources**. Of the 141 material
+holds, 121 have no corresponding official normal/rare material tables in the
+available SCVI dump. The other 20 failed explicit rare-settings, source-pixel,
+or distinct-variant checks. These holds do not change any approved catalog.
+
+Normal and shiny scenes were rendered at six poses each, 1,872 captures with
+zero render errors. The local one-page visual overview is
+`.tmp/catalog-remaining-156-review-2026-09-28/index.html` in slot-a. It uses
+auto-fit framing; battle size, grounding, and placement still need separate
+qualification. The GLBs, SCNs, captures, and run logs remain ignored local
+artifacts in the assigned slot. No registry, bundle, R2 index, release, or
+game default was changed.
+
 ## Reproduce or resume
 
 Run the three scripts from the assigned frontend slot, passing its paired

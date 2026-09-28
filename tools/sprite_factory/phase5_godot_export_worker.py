@@ -25,17 +25,21 @@ def run(job):
     if source.with_name('import.json').exists() and not job.get('material_source'):
         raise ValueError('Imported source needs material provenance; rerun source review')
     if job.get('material_source'):
-        from scvi_identity import validate_export_job
-        validate_export_job(job)
-        from material_profiles import read_profiles, unsupported, TRANSPARENT_PROBE
-        profiles = read_profiles(job['material_source'], job['material_source_sha256'],
-                                 transparent_review=job.get('source_transparency_diagnostic') is True,
-                                 displacement_review=job.get('identity_intake', {}).get('source_lit_displacement_diagnostic') is True)
-        if unsupported(profiles):
-            raise ValueError('Unsupported material profiles: ' + repr(unsupported(profiles)))
-        if any(p.get('requires_effect_payload') for p in profiles):
-            from material_effect_export import prepare
-            effects = prepare(job)
+        if job.get('legacy_material_diagnostic') is True:
+            from catalog_remaining_legacy_material import validate
+            validate(job)
+        else:
+            from scvi_identity import validate_export_job
+            validate_export_job(job)
+            from material_profiles import read_profiles, unsupported, TRANSPARENT_PROBE
+            profiles = read_profiles(job['material_source'], job['material_source_sha256'],
+                                     transparent_review=job.get('source_transparency_diagnostic') is True,
+                                     displacement_review=job.get('identity_intake', {}).get('source_lit_displacement_diagnostic') is True)
+            if unsupported(profiles):
+                raise ValueError('Unsupported material profiles: ' + repr(unsupported(profiles)))
+            if any(p.get('requires_effect_payload') for p in profiles):
+                from material_effect_export import prepare
+                effects = prepare(job)
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
     rig, rig_selection = isolate(source)
     from source_repairs import apply as apply_repair
@@ -47,6 +51,7 @@ def run(job):
         quaternion_repair = repair_quaternions(job['actions'], quaternion_clips)
     float_overrides = job.get('verified_rare_float_overrides', [])
     color_overrides = job.get('verified_rare_color_overrides', [])
+    unrepresented_rare_parameters = []
     if float_overrides or color_overrides or job.get('official_rare_material_source'):
         rare_table = Path(job['official_rare_material_source'])
         normal_table = Path(job['material_source'])
@@ -74,10 +79,16 @@ def run(job):
             if override.get('mode') == 'unrepresented' and key in UNREPRESENTED_FLOATS:
                 if nodes:
                     raise ValueError('Rare source float unexpectedly has a shader input')
+                unrepresented_rare_parameters.append({'material': name, 'key': key,
+                                                       'kind': 'float', 'reason': 'source_input_absent'})
                 continue
             if override.get('mode') != 'apply' or key not in FLOAT_SOCKETS:
                 raise ValueError('Unsupported rare float override')
             if len(nodes) != 1 or nodes[0].inputs[socket_key].is_linked:
+                if job.get('legacy_material_diagnostic') is True:
+                    unrepresented_rare_parameters.append({'material': name, 'key': key,
+                                                           'kind': 'float', 'reason': 'source_input_unbound'})
+                    continue
                 raise ValueError('Ambiguous rare float shader input')
             socket = nodes[0].inputs[socket_key]
             if not math.isclose(socket.default_value, override['normal'], rel_tol=0, abs_tol=1e-5):
@@ -102,10 +113,16 @@ def run(job):
             if override.get('mode') == 'unrepresented' and color_socket(key, name) is None:
                 if material is None or nodes:
                     raise ValueError('Unrepresented colour unexpectedly has a shader input')
+                unrepresented_rare_parameters.append({'material': name, 'key': key,
+                                                       'kind': 'color', 'reason': 'source_input_absent'})
                 continue
             if override.get('mode') != 'apply' or color_socket(key, name) is None:
                 raise ValueError('Unsupported colour override mode')
             if len(nodes) != 1 or nodes[0].inputs[socket_key].is_linked:
+                if job.get('legacy_material_diagnostic') is True:
+                    unrepresented_rare_parameters.append({'material': name, 'key': key,
+                                                           'kind': 'color', 'reason': 'source_input_unbound'})
+                    continue
                 raise ValueError('Unbound or ambiguous rare colour input')
             socket = nodes[0].inputs[socket_key]
             if not all(math.isclose(a, b, rel_tol=0, abs_tol=1e-5) for a, b in zip(socket.default_value, override['normal'], strict=True)):
@@ -298,6 +315,7 @@ def run(job):
         'eye_material_repair': eye_material_repair,
         'verified_rare_float_overrides': float_overrides,
         'verified_rare_color_overrides': color_overrides,
+        'unrepresented_rare_parameters': unrepresented_rare_parameters,
         'material_profiles': profiles,
         'materials': gltf.get('materials', []), 'runtime_approved': False, 'baked_materials': baked,
         'material_limitations': ('PBR alpha diagnostic from source albedo; source refraction and view-dependent Fresnel are not reproduced'
@@ -344,6 +362,8 @@ def run(job):
             'colour-domain baking and mask/displacement semantics are not bit-exact original-game shader parity')
     if unrepresented_textures:
         report['material_limitations'] += '; secondary EyeClearCoat normal maps omitted by pinned importer in both variants'
+    if unrepresented_rare_parameters:
+        report['material_limitations'] += '; official rare shader parameters absent in Biochao source and require visual review'
     (Path(job['output']) / 'export.json').write_text(json.dumps(report, indent=2))
 
 
