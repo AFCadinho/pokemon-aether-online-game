@@ -13,6 +13,13 @@ const AETHER_CLASH_ANNOUNCEMENT_FORMATTER := preload(
 	"res://scripts/ui/aether_clash_announcement_formatter.gd"
 )
 const MAX_PARTY_SIZE := 6
+const PATREON_ROYAL_PARTS := {
+	"top": "AetherRoyal_Shirt",
+	"bottom": "AetherRoyal_Trousers",
+	"shoes": "AetherRoyal_Shoes",
+	"headgear": "AetherRoyal_Crown",
+	"cape": "AetherRoyal_Cape",
+}
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
 const PARTY_PANEL_VERTICAL_PADDING := 14.0
@@ -1276,6 +1283,7 @@ var trainer_card_badge_options: Array[Dictionary] = []
 var trainer_card_gym_badge_slots: Dictionary = {}
 var trainer_card_has_unsaved_appearance_changes := false
 var trainer_card_is_saving_appearance := false
+var patreon_royal_role_denied := false
 var trainer_card_appearance_message_key := ""
 var trainer_card_appearance_message_values: Dictionary = {}
 var trainer_card_dragging: bool = false
@@ -19733,13 +19741,12 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 	trainer_card_is_saving_appearance = false
 
 	if not bool(result.get("success", false)):
+		if BackendErrorLocalizationService.error_code(result) == "patreon_role_required":
+			_update_trainer_card_appearance_save_state("backend.error.patreon_role_required")
+			return
 		trainer_card_has_unsaved_appearance_changes = true
 		push_warning("Appearance save failed: %s" % str(result.get("error", "Unknown error")))
-		_update_trainer_card_appearance_save_state(
-			"backend.error.patreon_role_required"
-			if BackendErrorLocalizationService.error_code(result) == "patreon_role_required"
-			else "ui.appearance.status.save_failed"
-		)
+		_update_trainer_card_appearance_save_state("ui.appearance.status.save_failed")
 		return
 
 	if not _save_response_matches_current_appearance(result):
@@ -19755,9 +19762,52 @@ func _on_trainer_card_appearance_save_pressed() -> void:
 	_update_trainer_card_appearance_save_state("ui.appearance.status.saved")
 
 func _save_trainer_card_appearance_to_backend() -> Dictionary:
-	return await PlayerGameStateService.save_player_appearance(
+	var result: Dictionary = await PlayerGameStateService.save_player_appearance(
 		PlayerSave.to_appearance_state()
 	)
+	if BackendErrorLocalizationService.error_code(result) == "patreon_role_required":
+		patreon_royal_role_denied = true
+		await _restore_rejected_patreon_royal_parts()
+	return result
+
+func _restore_rejected_patreon_royal_parts() -> void:
+	var loaded: Dictionary = await PlayerGameStateService.load_player_position()
+	var state: Dictionary = _staff_dictionary_from_variant(loaded.get("state", {}))
+	var authoritative: Dictionary = _staff_dictionary_from_variant(state.get("appearance", {}))
+	_apply_authoritative_royal_appearance(authoritative)
+
+func _apply_authoritative_royal_appearance(authoritative: Dictionary) -> void:
+	var previous: Dictionary = PlayerSave.to_appearance_state()
+	var appearance: Dictionary = _appearance_with_rejected_royal_parts_restored(previous, authoritative)
+	if appearance != previous:
+		PlayerSave.apply_appearance_state(appearance)
+		var player := get_tree().get_first_node_in_group("player")
+		if player != null and player.has_method("refresh_appearance"):
+			player.call("refresh_appearance")
+		_refresh_trainer_card_part_buttons()
+		_refresh_avatar_previews()
+		var world := GameState.get_world()
+		if world != null and world.has_method("_publish_world_presence"):
+			world.call("_publish_world_presence", true)
+	trainer_card_has_unsaved_appearance_changes = (
+		true if authoritative.is_empty()
+		else not _save_response_matches_current_appearance({"appearance": authoritative})
+	)
+
+func _appearance_with_rejected_royal_parts_restored(current: Dictionary, authoritative: Dictionary) -> Dictionary:
+	var appearance: Dictionary = current.duplicate(true)
+	for slot: String in PATREON_ROYAL_PARTS:
+		if str(appearance.get(slot, "")) != str(PATREON_ROYAL_PARTS[slot]):
+			continue
+		var replacement := CharacterAppearanceService.normalize_legacy_optional_text(authoritative.get(slot, ""))
+		if replacement == str(PATREON_ROYAL_PARTS[slot]) or replacement == "":
+			replacement = "__none__"
+		appearance[slot] = replacement
+		if slot == "bottom":
+			appearance["legs"] = replacement
+		elif slot == "shoes":
+			appearance["feet"] = replacement
+	return appearance
 
 func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 	var appearance: Dictionary = _staff_dictionary_from_variant(result.get("appearance", {}))
@@ -19788,7 +19838,12 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 		"shoes_color",
 	]
 	for key: String in keys:
-		if str(appearance.get(key, "")).strip_edges() != str(current_appearance.get(key, "")).strip_edges():
+		var saved_value := str(appearance.get(key, "")).strip_edges()
+		var current_value := str(current_appearance.get(key, "")).strip_edges()
+		if key in ["hair", "headgear", "cape", "facial_hair", "facegear", "top", "bottom", "shoes"]:
+			saved_value = CharacterAppearanceService.deserialize_part_id(saved_value)
+			current_value = CharacterAppearanceService.deserialize_part_id(current_value)
+		if saved_value != current_value:
 			return false
 
 	return int(appearance.get("hair_style_index", 0)) == int(current_appearance.get("hair_style_index", 0))
@@ -19816,6 +19871,11 @@ func _on_trainer_card_body_selected(body_id: String) -> void:
 
 func _on_trainer_card_part_selected(category_id: String, part_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
+	if str(PATREON_ROYAL_PARTS.get(normalized_category, "")) == part_id and (
+		patreon_royal_role_denied or not _current_user_role_ids().has("patreon")
+	):
+		_update_trainer_card_appearance_save_state("backend.error.patreon_role_required")
+		return
 	if not _is_appearance_part_owned(normalized_category, part_id):
 		_update_trainer_card_appearance_save_state("ui.appearance.status.unlock_first")
 		return
