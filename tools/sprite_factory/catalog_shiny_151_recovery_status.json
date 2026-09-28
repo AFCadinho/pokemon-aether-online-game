@@ -8,12 +8,12 @@
   "counts": {
     "missing_compatible_shiny_source": 86,
     "za_binding_hold": 17,
-    "awaiting_appearance_review": 32,
     "scvi_material_hold": 4,
-    "visual_hold": 12
+    "visual_hold": 12,
+    "awaiting_battle_qualification": 32
   },
   "appearance_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/index.html",
-  "user_review_pending": true,
+  "user_review_pending": false,
   "evidence": [
     {
       "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/inventory.json",
@@ -90,7 +90,7 @@
       "national_dex": 23,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Rare material colour channels differ",
       "original_normal_sha256": "fb9b04bca749f0ccdde6e4564ea2ff5035f4ba46ca00f566e35e2d83f1452e44",
@@ -110,8 +110,9 @@
       },
       "geometry_motion_sha256": "1c87cf5850bbb2e159ecde9b750ebc01d7f5b8d5bcf270726720294c305cc56b",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "nidoran-f",
@@ -478,7 +479,7 @@
       "national_dex": 341,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal texture missing: pm0341_00_00_lower_eyelid_alb.png",
       "original_normal_sha256": "e299e9f65b92d4ada6d3ee666a64871d67e3aa4b945e175e3f6304d2f572df8f",
@@ -498,15 +499,16 @@
       },
       "geometry_motion_sha256": "79be4c177eb3b8cbf06898f2c7995a4bff9b172cd6fac11a7a9c39ffd6f23e68",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "crawdaunt",
       "national_dex": 342,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Rare material colour channels differ",
       "original_normal_sha256": "e75e990fb2057766952ee6effc84e1ce70a6b564fb5ee3e7b201bfd0c31b5791",
@@ -526,15 +528,16 @@
       },
       "geometry_motion_sha256": "ce0a8ab265529fe25585157276d36206334aae9e492577634e0c9f4327b200c6",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "feebas",
       "national_dex": 349,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal texture missing: pm0349_00_00_lower_eyelid_alb.png",
       "original_normal_sha256": "e8760f50897e4585228f83a389fca72f2e70235519da3fd724f9124e80f4e7a7",
@@ -554,8 +557,9 @@
       },
       "geometry_motion_sha256": "6c275c64cf39724e3db2f19955d618a1b5248e83940aadfd2392a7bffe5078ab",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "absol",
@@ -598,7 +602,7 @@
       "national_dex": 374,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal colour differs from official source: eye_a/BaseColorLayer8",
       "original_normal_sha256": "d4953377f461c2fa7b2dd3b1609ca60b8222c0c7486cd41a427f236bcca75f2c",
@@ -618,15 +622,16 @@
       },
       "geometry_motion_sha256": "73f39202deafc5f2bf2a1050638248cbe9017cbe5ebd86c1bac54681122480e7",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "metang",
       "national_dex": 375,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer8",
       "original_normal_sha256": "182e3ff160b6e7f6c175b6d3b0e032794da1537763431b7f6e2e33198bb7486b",
@@ -646,15 +651,16 @@
       },
       "geometry_motion_sha256": "bdc3f40e678ebb1aa82b6d1f10dbe2952daa0940d36118bac4a211d007f2bff7",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "metagross",
       "national_dex": 376,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer8",
       "original_normal_sha256": "138e68f56ffe5c0a078d72bff87109d2f2f3cc12c326f83dc48e8660e070c1d7",
@@ -674,15 +680,16 @@
       },
       "geometry_motion_sha256": "fdac1a301662220899ccb99af07935709d5608d820545e266690285b443fb73b",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "infernape",
       "national_dex": 392,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: One material needs different replacements for a shared texture",
       "original_normal_sha256": "7f9243d1fc5579905837a01d554145a8bda75981efd939df6465eb91ec1e5d36",
@@ -702,15 +709,16 @@
       },
       "geometry_motion_sha256": "7993f2e0df0527b8107ad27828964d142251ce728d76d712a328cd4c51072ccb",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "mamoswine",
       "national_dex": 473,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Rare material count differs",
       "original_normal_sha256": "6547dd01895c2f4b012c1315b6f39459c4eb154685bc9248e28af001cedfda5f",
@@ -730,8 +738,9 @@
       },
       "geometry_motion_sha256": "7a8bacd03a6aeec994b92ce256465525285890157c8e60606c5b60a50c89626a",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "victini",
@@ -750,7 +759,7 @@
       "national_dex": 500,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal float differs from official source",
       "original_normal_sha256": "4585c2e5aade3b1c4e309ad5462b0a89fb8c2f7ff43301ed001b066600b71785",
@@ -770,8 +779,9 @@
       },
       "geometry_motion_sha256": "d20f28ad9c9f83bf86b3c166064f2526237ab566579b13878ddde3b1ed0afdc7",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "lillipup",
@@ -1142,7 +1152,7 @@
       "national_dex": 659,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "93a7c4114a690d848854667f1c808b6a177b64137b91c939e447df08227045cb",
@@ -1162,15 +1172,16 @@
       },
       "geometry_motion_sha256": "a51f9029854307b7d5781121ee9550f5e6250bbaba57394d551789d3a411c490",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "diggersby",
       "national_dex": 660,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "3e06d5b275d655f7f7ea524aff7ec036505cd43494e63fed95fe4156920afd47",
@@ -1190,15 +1201,16 @@
       },
       "geometry_motion_sha256": "1a646afc451e007607d4e8ca3966a1211f3b1df21ebf75ea51230b123f9e4e15",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "pancham",
       "national_dex": 674,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "5564a63c5476ea0a96eb2ac6304d0f02f319b248f56f7b843e6866ce851ab9e7",
@@ -1218,15 +1230,16 @@
       },
       "geometry_motion_sha256": "6218990b6cd5875f2e02838b71760a71ee2592397f209e5d8f94c05a65674e8f",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "pangoro",
       "national_dex": 675,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "9ca0d1cecc68faa2c3afd3972dbec750b2a488ba727074abea22488045187600",
@@ -1246,15 +1259,16 @@
       },
       "geometry_motion_sha256": "f8e7ca5f0c3d0e56bd07d86fab2e5bd9767f489a98daf52e3b1e2861d1a3dd18",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "espurr",
       "national_dex": 677,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer1",
       "original_normal_sha256": "55a536a216a6a2153c64dc9f4532cea83e746a44252e8aa007134d8778687aef",
@@ -1274,8 +1288,9 @@
       },
       "geometry_motion_sha256": "d93d3091be3dd2ca7bae7eb1c0df9dd3d2a36635eaa14267d83611dce8a47608",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "meowstic-male",
@@ -1294,7 +1309,7 @@
       "national_dex": 679,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "9daded072baa4ac5676449025226b79356ba00a344724169df61dd7313110305",
@@ -1314,8 +1329,9 @@
       },
       "geometry_motion_sha256": "f1ad72b52677313b9f27ba354cc8801426826c5a4cbfc7b9201728523ff45d9c",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "doublade",
@@ -1350,7 +1366,7 @@
       "national_dex": 682,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "f0a2cebaa4578b041da07fd236b552c2a1ec495769f61533ac9f35ec84d3e370",
@@ -1370,15 +1386,16 @@
       },
       "geometry_motion_sha256": "4ae41f755cf6bda7b9755c13d7db47eebb61aae59d7cbb6a1afe52dfd15d0c94",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "aromatisse",
       "national_dex": 683,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "9aa43a724988bdd45ed718ac793ce0ab675e41da94054a6f621ba6dc840f5c12",
@@ -1398,15 +1415,16 @@
       },
       "geometry_motion_sha256": "6593d4e0ef96e583322e2f4e76e4b0c1e9212abb81267369a997a6585d8eb522",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "slurpuff",
       "national_dex": 685,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "dff1635452d85ff80de920565fb6b7615d581d1c05396a14ab6fa01ac485e42a",
@@ -1426,8 +1444,9 @@
       },
       "geometry_motion_sha256": "74e9769dbfb0e71036d1d5d31195e2e85226fd9981c9d508cf0a08acc0ddd25e",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "inkay",
@@ -1462,7 +1481,7 @@
       "national_dex": 687,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal colour differs from official source: l_eye/BaseColorLayer1",
       "original_normal_sha256": "cb6fc3d5687e35446221533ec939901329ad3e05ad02a4ac05acb9768ab923fb",
@@ -1482,15 +1501,16 @@
       },
       "geometry_motion_sha256": "0b9ca95996bb58720bbc5c473329ac08e55ccd1e6ad534ec5e61eb515f62f25d",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "binacle",
       "national_dex": 688,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "ae5ec8900a37ae30c8d955813a77130fe4779aff29e43f8a70e541b50c8b7ccf",
@@ -1510,15 +1530,16 @@
       },
       "geometry_motion_sha256": "ca1849f50685324ff2c689268378add414bed6c7617d9b91065a48f750d08eda",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "barbaracle",
       "national_dex": 689,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "9681b248e70763a378ffbcb72059f33aa3754428253081376e8eaf54e453c4d3",
@@ -1538,8 +1559,9 @@
       },
       "geometry_motion_sha256": "08b51197f1bfee1f22c61bbd89e8a68648e31df75ee96a504df48719919ae27d",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "helioptile",
@@ -1602,7 +1624,7 @@
       "national_dex": 696,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "3e7869772c9ce0ae48109f9a7f8c522b39eaee28d08243a95f42b7906e18e7a3",
@@ -1622,15 +1644,16 @@
       },
       "geometry_motion_sha256": "0549400b0e428c8ad987fbd9f2e9e63bd6928097d923c5f9a13353d4622e4c10",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "tyrantrum",
       "national_dex": 697,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "b0ae52a5faee0b011890c85521c5b43e1cbb720273bd7fa8be060dd7701d63c3",
@@ -1650,15 +1673,16 @@
       },
       "geometry_motion_sha256": "53c846533562764f4f0a2f63bd0685ca572a016e037fe9dffbdb8cb953c00645",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "amaura",
       "national_dex": 698,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "8d9084a8c17bc427a865b9bcefa16ac4694f53653e40075b59814e69f199c4ca",
@@ -1678,15 +1702,16 @@
       },
       "geometry_motion_sha256": "5af1c47465bcceff3e108df6c0435311c3417250efbdf3cf2fb30e1d537195e4",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "aurorus",
       "national_dex": 699,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "90fe8827645117d1f451e0f1204314abe99030e77c65ffe4c4e6fd7bab242ae0",
@@ -1706,15 +1731,16 @@
       },
       "geometry_motion_sha256": "691084b3e3baa7844e1346b25985fe80c0046482b0eab884c0994402a1f9f37b",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "phantump",
       "national_dex": 708,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal colour differs from official source: r_eye/BaseColorLayer1",
       "original_normal_sha256": "7e41f6df631c8d144789ba1b84a6608e4a1afa9a2b74b1a848a737d10694b9e0",
@@ -1734,8 +1760,9 @@
       },
       "geometry_motion_sha256": "50bba965df83bcfe558a91d6082b6af0c416b3065d78286ac451cfd1fb4797d7",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "trevenant",
@@ -1810,7 +1837,7 @@
       "national_dex": 738,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "Embedded normal pixels differ from official source; UV binding not proven",
       "original_normal_sha256": "a841d9f4185ec79844af4a1281303a39849c09aec53934cd59f7b66f55e7240e",
@@ -1830,8 +1857,9 @@
       },
       "geometry_motion_sha256": "367ecece17fbc38e6f059cfd2c82dcf59c43fc92cc72a18a76af8d11cae6ebc2",
       "media": "quick-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "morelull",
@@ -1886,7 +1914,7 @@
       "national_dex": 768,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "ffca93de1af2d34487b61c11f8fe29a3690cc18237d7effeef6ede96c2ffeec9",
@@ -1906,8 +1934,9 @@
       },
       "geometry_motion_sha256": "aa8d881179f263523706be2d1fb873ca7b27105907f780cdec811620dc268e18",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "pyukumuku",
@@ -2226,7 +2255,7 @@
       "national_dex": 807,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "aa3bb66a96112d9d4a3e90e337fe8f01431e14a1798cbba77eeb47886acbbfe6",
@@ -2246,8 +2275,9 @@
       },
       "geometry_motion_sha256": "1121de65b8d496a60a1f2de98c8b9f5feb954b1f77af673da3083fcafce98f4d",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "meltan",
@@ -2334,7 +2364,7 @@
       "national_dex": 827,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "53f23a096334a8c330a823861aff61dce80d4d1b8703d063d7dfd5263298b7ef",
@@ -2354,15 +2384,16 @@
       },
       "geometry_motion_sha256": "45a0523d3c45317e82570f12fe8dcfee5b80fba2d90d9540dada06929a87d1dd",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "thievul",
       "national_dex": 828,
       "runtime_approved": false,
       "release_approved": false,
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "0943f1c2b634f64f183359d7915e48109af2a790e3dd38629940a3521e860159",
@@ -2382,8 +2413,9 @@
       },
       "geometry_motion_sha256": "fcb6aa7e0a4a2bd8da68b932fbb551d1227e5ff1a1cc6f668509d9ad9da2d6a7",
       "media": "za-v3-review",
-      "status": "awaiting_appearance_review",
-      "reason": null
+      "status": "awaiting_battle_qualification",
+      "reason": null,
+      "user_appearance_feedback": "de 32 zien er goed uit"
     },
     {
       "species": "gossifleur",
