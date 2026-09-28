@@ -269,7 +269,7 @@ const APPEARANCE_CATEGORIES := [
 	{"id": "hair", "label_key": "ui.appearance.category.hair"},
 	{"id": "eyes", "label_key": "ui.appearance.category.eyes"},
 	{"id": "headgear", "label_key": "ui.appearance.category.headgear"},
-	{"id": "cape", "label_key": "ui.appearance.category.cape"},
+	{"id": "cape", "label_key": "ui.appearance.category.back"},
 	{"id": "facial_hair", "label_key": "ui.appearance.category.facial_hair"},
 	{"id": "facegear", "label_key": "ui.appearance.category.facegear"},
 	{"id": "top", "label_key": "ui.appearance.category.top"},
