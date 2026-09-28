@@ -10,68 +10,9 @@
     "no arena grounding or motion-clearance approval",
     "not an approved or portable launcher pack"
   ],
-  "models": {
-    "murkrow": {
-      "glb_sha256": "b79416837a428f42eab9e436ca815140e3fd402125fb10fc9918c175ef274f42",
-      "profile": "murkrow",
-      "sha256": "53a2a3752db729346e64cbb7fc801e11f609543837990f73cde877c48e675c1c"
-    }
-  },
+  "models": {},
   "normal_only": true,
-  "profiles": {
-    "murkrow": {
-      "action_timing": {
-        "damage": {
-          "frames": 40.0,
-          "loop": false,
-          "speed": 1.0
-        },
-        "faint_loop": {
-          "frames": 96.0,
-          "loop": true,
-          "speed": 1.0
-        },
-        "faint_start": {
-          "frames": 80.0,
-          "loop": false,
-          "speed": 1.0
-        },
-        "idle": {
-          "frames": 72.0,
-          "loop": true,
-          "speed": 1.0
-        },
-        "physical_attack": {
-          "frames": 90.0,
-          "loop": false,
-          "speed": 1.0
-        },
-        "physical_attack_2": {
-          "frames": 110.0,
-          "loop": false,
-          "speed": 1.0
-        },
-        "sleep": {
-          "frames": 120.0,
-          "loop": true,
-          "speed": 1.0
-        },
-        "special_attack": {
-          "frames": 120.0,
-          "loop": false,
-          "speed": 1.0
-        }
-      },
-      "attack_family_actions": {
-        "body_charge": "physical_attack",
-        "wing": "physical_attack_2"
-      },
-      "placement": {
-        "scale": 1.0,
-        "yaw_degrees": 0.0
-      }
-    }
-  },
+  "profiles": {},
   "schema": 1,
   "source_visual_pass_count": 79,
   "source_visual_review_sha256": "293ae105e45da366061a62341a0bc06600f48018129b3e0a40b2dc6fb24baf58"

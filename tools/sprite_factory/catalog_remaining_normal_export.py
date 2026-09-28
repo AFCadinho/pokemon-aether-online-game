@@ -20,6 +20,7 @@ REQUIRED = {"idle", "physical_attack", "special_attack", "damage", "sleep",
 
 def choose_actions(report):
     direct = report["unambiguous_actions"]
+    selected = ""
     numeric_banks = {match[1] for key in REQUIRED if (match := re.search(
         r"^pm\d{4}_\d{2}_\d{2}_(\d)\d{4}_", direct.get(key, ""), re.I))}
     if REQUIRED <= direct.keys() and len(numeric_banks) <= 1:
@@ -32,10 +33,28 @@ def choose_actions(report):
                     if REQUIRED <= (values := {key: found[0] for key, found in candidates.items()
                                              if len(found) == 1}).keys()]
         if len(complete) != 1:
-            return None, "missing_or_ambiguous_native_actions"
-        bank, mapping, optional = complete[0]
+            selected = report.get("rig_selection", {}).get("rig", "").removesuffix(".trmdl")
+            if not re.fullmatch(r"pm\d{4}(?:_\d{2}){1,2}", selected):
+                return None, "missing_or_ambiguous_native_actions"
+            candidates = report.get("action_candidates", {})
+            own = {key: [name for name in candidates.get(key, [])
+                         if name.startswith(selected + "_")] for key in REQUIRED}
+            if not all(len(found) == 1 for found in own.values()):
+                return None, "missing_or_ambiguous_native_actions"
+            mapping = {key: own[key][0] for key in REQUIRED}
+            banks = {match[1] for name in mapping.values() if (match := re.search(
+                r"^pm\d{4}_\d{2}_\d{2}_(\d)\d{4}_", name, re.I))}
+            if len(banks) > 1:
+                return None, "missing_or_ambiguous_native_actions"
+            bank = next(iter(banks), "selected_rig")
+            optional = [name for name in candidates.get("faint_loop", [])
+                        if name.startswith(selected + "_")]
+        else:
+            bank, mapping, optional = complete[0]
     second = report.get("second_physical_candidates", [])
-    chosen_numeric_bank = next(iter(numeric_banks), None) if bank == "direct" else bank
+    if selected:
+        second = [name for name in second if name.startswith(selected + "_")]
+    chosen_numeric_bank = next(iter(numeric_banks), None) if bank == "direct" else (bank if bank in ("0", "1", "2") else None)
     if len(optional) == 1:
         loop_bank = re.search(r"^pm\d{4}_\d{2}_\d{2}_(\d)\d{4}_", optional[0], re.I)
         if chosen_numeric_bank is None or loop_bank is None or loop_bank[1] == chosen_numeric_bank:

@@ -40,6 +40,22 @@ class SourceMembersTest(unittest.TestCase):
             str(bank): {key: [f"bank{bank}_{key}"] for key in REQUIRED} for bank in (0, 1)}}
         self.assertEqual(choose_actions(report), (None, "missing_or_ambiguous_native_actions"))
 
+    def test_export_selects_actions_from_proven_default_rig(self):
+        own = "pm0044_00_00"
+        other = "pm0044_01_00"
+        report = {"unambiguous_actions": {},
+                  "rig_selection": {"rig": own, "policy": "exclusive_texture_variant_v1"},
+                  "action_candidates": {key: [f"{own}_0{index:04d}_{key}",
+                                              f"{other}_0{index:04d}_{key}"]
+                                        for index, key in enumerate(sorted(REQUIRED))},
+                  "action_candidates_by_bank": {},
+                  "second_physical_candidates": [f"{own}_00410_attack02",
+                                                 f"{other}_00410_attack02"]}
+        mapping, bank = choose_actions(report)
+        self.assertEqual(bank, "0")
+        self.assertEqual(set(mapping), REQUIRED | {"physical_attack_2"})
+        self.assertTrue(all(name.startswith(own + "_") for name in mapping.values()))
+
     def test_export_rejects_direct_cross_bank_mix(self):
         direct = {key: f"pm0007_00_00_0{index:04d}_{key}.gfbanm"
                   for index, key in enumerate(sorted(REQUIRED))}
