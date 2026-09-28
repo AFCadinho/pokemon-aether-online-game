@@ -6,6 +6,8 @@
 
 - Het 3D-stadion bouwt de publiekslichten nu betrouwbaar op bij herhaalde battles.
 
+- Route 10 gebruikt de nieuwste Tiled-visual in de bestaande Godot-scene.
+
 - Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar, Primarina en Dewpider hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen bundle voor een volgende contentrelease.
 
 - De zuidoever van Route 9 is nu afgesloten met een dichte bomenrand; de Surf-opgang blijft vrij en de collision volgt de bomen.
