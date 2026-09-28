@@ -40,6 +40,9 @@ func _run() -> void:
 	_expect(map.is_actor_bridge_step_blocked(underpass, _center(66, 12), actor), "Surf cannot climb onto dry deck")
 
 	actor.surfing = false
+	for landing: Vector2i in [Vector2i(67, 11), Vector2i(33, 23), Vector2i(84, 33), Vector2i(67, 56)]:
+		_expect(map.get_actor_sort_z_floor_for_actor(_center(landing.x, landing.y), actor) > bridge.z_index,
+			"walker remains visible on bridge landing %s" % landing)
 	_expect(not map.is_actor_bridge_step_blocked(_center(33, 23), _center(34, 23), actor), "west landing leads onto deck")
 	_expect(map.is_actor_bridge_step_blocked(_center(34, 24), _center(34, 23), actor), "side entry onto deck is blocked")
 	_expect(map.is_actor_bridge_step_blocked(_center(34, 23), _center(34, 24), actor), "walking off bridge edge is blocked")
@@ -75,6 +78,21 @@ func _run() -> void:
 	player.global_position = underpass
 	player._update_sort_z()
 	_expect(player.z_index > bridge.z_index, "player walking sprite is above bridge")
+	var follower := PokemonFollower.new()
+	map.get_node("Entities/Players").add_child(follower)
+	follower.setup(player)
+	follower.global_position = _center(33, 23)
+	follower._update_sort_z()
+	_expect(follower.z_index > bridge.z_index, "follower remains visible on a bridge landing")
+	follower.global_position = underpass
+	follower._update_sort_z()
+	_expect(follower.z_index > bridge.z_index, "follower remains visible across a horizontal bridge")
+	player.surf_activity_active = true
+	player.global_position = underpass
+	player._update_sort_z()
+	follower._update_sort_z()
+	_expect(follower.z_index < bridge.z_index, "follower remains below the deck during Surf")
+	player.surf_activity_active = false
 	var remote = load("res://scripts/world/remote_player_avatar.gd").new()
 	remote.current_activity_style = "ride"
 	remote.presence_state = {"movement": {"activityStyle": "surf"}}
