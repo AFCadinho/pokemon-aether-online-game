@@ -22,7 +22,7 @@ func _run() -> void:
 		quit(1)
 		return
 
-	_check_water(route_21, Vector2i(50, 90), 3514)
+	_check_water(route_21, Vector2i(50, 90), 3690)
 	_check_water(cinnabar, Vector2i(64, 72), 2212)
 	_check_water(vermilion, Vector2i(80, 64), 654)
 	_check_water(docks, Vector2i(64, 48), 2290)
