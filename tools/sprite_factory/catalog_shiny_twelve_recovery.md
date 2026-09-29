@@ -2,7 +2,8 @@
 
 These are review candidates, not approved catalog additions. The existing
 671 base species plus Mega Dragonite remain unchanged. The 151-case ledger
-still has twelve visual holds until the user reviews these exact candidates.
+now records eleven appearance approvals awaiting battle review and one
+Marshadow appearance hold. The original twelve-pair receipt remains immutable.
 
 `catalog_shiny_twelve_recovery.json` pins 24 corrected GLBs and standalone
 Godot scenes, their source tables/textures, motion files, reconstruction
@@ -48,3 +49,28 @@ receipt. They deliberately have not replaced production catalog tooling while
 visual review is pending. Keep this task slot and those files. Do not overwrite
 or regenerate a displayed candidate after recording user approval without
 invalidating that approval.
+
+## Marshadow follow-up (2026-09-29)
+
+The user accepted the other eleven pairs; their exact GLB/SCN hashes and
+feedback are recorded in `catalog_shiny_eleven_appearance_acceptance.json`.
+No battle or runtime approval is inferred from this appearance review.
+
+Marshadow's native `UVScaleOffsetLayerMask` moves during both attack clips.
+The static rest mask hid the normal green / shiny purple distinction.
+`catalog_marshadow_mask_motion.py` bakes this source motion per mesh at 60 fps,
+using all four independent RGBA mask channels. Eight pixels of atlas padding
+remove light seams at UV-island boundaries without changing covered samples.
+`catalog_marshadow_mask_pack.gd` embeds the texture frames into ordinary native
+AnimationPlayer tracks, including idle and RESET restoration. No runtime
+shader, downloaded sidecar or skeletal retiming is introduced.
+
+`catalog_marshadow_mask_recovery.json` pins the new review-only candidates:
+46 mask samples per mesh, four mesh bindings per variant, seven native clips
+per variant. Focused checks verify original geometry and native tracks,
+serialized texture keys and sampled playback/return to idle. Five mask-bake
+tests pass; ten rendered pose images have no reported errors. Normal/shiny
+attack and idle captures were inspected. Both standalone scenes are about
+28 MiB each; storage optimisation is deferred. Existing PBR approximation
+still applies. Marshadow appearance approval and all twelve battle checks
+remain pending at this checkpoint.

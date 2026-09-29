@@ -21,7 +21,7 @@ def accessor(d, b, i):
     off = v.get('byteOffset', 0) + a.get('byteOffset', 0)
     return [struct.unpack_from('<' + fmt * count, b, off + j * v.get('byteStride', size)) for j in range(a['count'])]
 
-def raster(d, b, material, im, scale, N=512):
+def raster(d, b, material, im, scale, N=512, padding=0):
     if not isinstance(N, int) or N < 1 or N > 4096 or len(scale) != 4 or (not all((math.isfinite(x) for x in scale))):
         raise ValueError('Invalid bake size or source UV transform')
     if im.mode != 'RGBA':
@@ -80,4 +80,17 @@ def raster(d, b, material, im, scale, N=512):
         raise ValueError('UV bake covered no pixels')
     if conflicts:
         raise ValueError('Overlapping UVs require conflicting source mask samples')
-    return (out, {'covered_pixels': len(seen), 'sample_visits': visits, 'conflicts': conflicts})
+    covered = len(seen)
+    if not isinstance(padding, int) or padding < 0 or padding > 32:
+        raise ValueError('Invalid atlas padding')
+    frontier = seen
+    for _ in range(padding):
+        extra = {}
+        for (x, y), value in frontier.items():
+            for xx, yy in ((x-1, y), (x+1, y), (x, y-1), (x, y+1)):
+                if 0 <= xx < N and 0 <= yy < N and (xx, yy) not in seen and (xx, yy) not in extra:
+                    extra[xx, yy] = value
+                    pix[xx, yy] = value
+        seen.update(extra)
+        frontier = extra
+    return (out, {'covered_pixels': covered, 'sample_visits': visits, 'conflicts': conflicts, 'padding_pixels': len(seen)-covered})
