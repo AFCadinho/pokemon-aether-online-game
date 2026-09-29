@@ -47,6 +47,11 @@ class PackageWebReleaseTests(unittest.TestCase):
 
     def test_browser_workflow_uses_noninteractive_source_asset_restore(self):
         source = (ROOT / '.github/workflows/deploy-web-cloudflare.yml').read_text()
+        self.assertIn('size_exception:', source)
+        self.assertIn('default: false', source)
+        self.assertIn('inputs.size_exception_reason', source)
+        self.assertIn('--allow-size-exception --size-exception-reason', source)
+        self.assertIn('A size exception requires an audit reason', source)
         self.assertIn('default: https://web-assets.pokeaether.com', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${version}.zip', source)
