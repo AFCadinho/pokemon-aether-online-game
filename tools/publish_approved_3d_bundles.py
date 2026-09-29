@@ -37,6 +37,7 @@ def release_files(directory: Path, metadata_path: Path = METADATA) -> list[tuple
         "approved-pokemon-3d-v4": 82,
         "approved-pokemon-3d-v5": 83,
         "approved-pokemon-3d-v6": 154,
+        "approved-pokemon-3d-v7": 160,
     }.get(metadata.get("revision"))
     if expected is None or len(records) != expected + 1 or not all(isinstance(item, dict) for item in records):
         raise ValueError("release metadata has an unsupported or incomplete bundle set")
@@ -66,13 +67,34 @@ def release_files(directory: Path, metadata_path: Path = METADATA) -> list[tuple
                 or metadata.get("batch_02_followup_approval_sha256") != digest(followup)
                 or metadata.get("v5_index_sha256") != json.loads(previous.read_text())["index"]["sha256"]):
             raise ValueError("v6 release is not bound to the batch-02 approvals and v5")
+    if expected == 160:
+        previous = ROOT / "release/approved_3d_bundles_v6.json"
+        previous_upload = ROOT / "release/approved_3d_bundles_v6_r2_upload.json"
+        approval = ROOT / "tools/sprite_factory/catalog_remaining_six_bundle_qualification.json"
+        previous_data = json.loads(previous.read_text())
+        upload_data = json.loads(previous_upload.read_text())
+        if (metadata.get("six_pair_bundle_qualification_sha256") != digest(approval)
+                or metadata.get("v6_index_sha256") != previous_data['index']['sha256']
+                or upload_data.get("pinned_receipt_sha256") != digest(previous)
+                or upload_data.get("content_index") != previous_data['index']
+                or upload_data.get("public_head_size_verified_objects") != 155
+                or upload_data.get("public_get_sha256_verified_objects") != 72):
+            raise ValueError("v7 release is not bound to the six-pair approval and v6")
+    previous_assets = ({item["object_key"]: item for item in
+                        json.loads((ROOT / "release/approved_3d_bundles_v6.json").read_text())["bundles"]}
+                       if expected == 160 else {})
     result: list[tuple[Path, str]] = []
     for index, item in enumerate(records):
         path = directory / ("asset-index.json" if index == 0 else Path(item["object_key"]).name)
         if not path.is_file() or path.is_symlink():
             raise ValueError(f"missing release file: {path}")
-        if path.stat().st_size != item["size_bytes"] or digest(path) != item["sha256"]:
-            raise ValueError(f"release file does not match pinned metadata: {path}")
+        if path.stat().st_size != item["size_bytes"]:
+            raise ValueError(f"release file size does not match pinned metadata: {path}")
+        if item.get("object_key") in previous_assets:
+            if item != previous_assets[item["object_key"]]:
+                raise ValueError(f"inherited bundle changed from approved v6: {path}")
+        elif digest(path) != item["sha256"]:
+            raise ValueError(f"release file hash does not match pinned metadata: {path}")
         result.append((path, item["object_key"]))
     return result
 
@@ -108,6 +130,12 @@ def main() -> None:
         unchanged = {
             item["object_key"]
             for item in json.loads((ROOT / "release/approved_3d_bundles_v5.json").read_text(encoding="utf-8"))["bundles"]
+        }
+        files = [item for item in files if item[1] not in unchanged]
+    if metadata.get("revision") == "approved-pokemon-3d-v7":
+        unchanged = {
+            item["object_key"]
+            for item in json.loads((ROOT / "release/approved_3d_bundles_v6.json").read_text(encoding="utf-8"))["bundles"]
         }
         files = [item for item in files if item[1] not in unchanged]
     total = sum(path.stat().st_size for path, _ in files)
