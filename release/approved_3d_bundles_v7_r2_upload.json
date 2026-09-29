@@ -1,0 +1,62 @@
+{
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v7-2ef65ef3408bf2aa366fb5de5a087d0efd0db2aab89eec18b30fa49d28f6dfee.json",
+    "sha256": "2ef65ef3408bf2aa366fb5de5a087d0efd0db2aab89eec18b30fa49d28f6dfee",
+    "size_bytes": 141611
+  },
+  "desktop_manifest_activated": false,
+  "new_bundle_objects_uploaded": 6,
+  "pinned_receipt_sha256": "d48a3b3cb88ec945111b84f2a688eb9a38c3919c95b0d20984f20d61d96bf034",
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_bytes": 22974086,
+  "public_get_sha256_verified_objects": 7,
+  "public_get_verified": [
+    {
+      "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v7-2ef65ef3408bf2aa366fb5de5a087d0efd0db2aab89eec18b30fa49d28f6dfee.json",
+      "sha256": "2ef65ef3408bf2aa366fb5de5a087d0efd0db2aab89eec18b30fa49d28f6dfee",
+      "size_bytes": 141611,
+      "status": 200
+    },
+    {
+      "object_key": "optional-assets/pokemon_3d/cursola/base/v1-769c12834c30fbc060e7fdf982de09e5c013d1cf7f796e37c6af4acafcc28eed.zip",
+      "sha256": "769c12834c30fbc060e7fdf982de09e5c013d1cf7f796e37c6af4acafcc28eed",
+      "size_bytes": 8274766,
+      "status": 200
+    },
+    {
+      "object_key": "optional-assets/pokemon_3d/darmanitan-standard/base/v1-5cf4b16a6eebf85f5afd283908e22aa643c9a3bb8d6a774c1ba3693b75c2c6f8.zip",
+      "sha256": "5cf4b16a6eebf85f5afd283908e22aa643c9a3bb8d6a774c1ba3693b75c2c6f8",
+      "size_bytes": 1938454,
+      "status": 200
+    },
+    {
+      "object_key": "optional-assets/pokemon_3d/obstagoon/base/v1-503d6fb8f1b38ddc37a47e62c14bef83b3bf33db4efaad06ee2bf7fe7b815cf7.zip",
+      "sha256": "503d6fb8f1b38ddc37a47e62c14bef83b3bf33db4efaad06ee2bf7fe7b815cf7",
+      "size_bytes": 3939545,
+      "status": 200
+    },
+    {
+      "object_key": "optional-assets/pokemon_3d/silvally/base/v1-fab4c0924bff8a25d7c74fa12aaec3bce7ad9f1d35122f0bd8b6db81b35f4fa7.zip",
+      "sha256": "fab4c0924bff8a25d7c74fa12aaec3bce7ad9f1d35122f0bd8b6db81b35f4fa7",
+      "size_bytes": 6035047,
+      "status": 200
+    },
+    {
+      "object_key": "optional-assets/pokemon_3d/unown/base/v1-aba173431c50f714aabe3e3ef3f07cccc5c32104d1beff47beca743872d40dd6.zip",
+      "sha256": "aba173431c50f714aabe3e3ef3f07cccc5c32104d1beff47beca743872d40dd6",
+      "size_bytes": 1457466,
+      "status": 200
+    },
+    {
+      "object_key": "optional-assets/pokemon_3d/wishiwashi/base/v1-f76cc8c7330c085b5d5004aae7433f318d9d2f7ea9164b5f097b3efab038a363.zip",
+      "sha256": "f76cc8c7330c085b5d5004aae7433f318d9d2f7ea9164b5f097b3efab038a363",
+      "size_bytes": 1187197,
+      "status": 200
+    }
+  ],
+  "public_head_size_verified_objects": 161,
+  "revision": "approved-pokemon-3d-v7",
+  "schema": 1,
+  "unchanged_v6_bundle_objects": 154,
+  "verified_at_utc": "2026-09-29T17:54:44.924381+00:00"
+}
