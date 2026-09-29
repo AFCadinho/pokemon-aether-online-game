@@ -4,7 +4,7 @@ import zipfile
 from pathlib import Path
 
 from catalog_remaining_intake import source_members
-from catalog_remaining_normal_export import REQUIRED, choose_actions
+from catalog_remaining_normal_export import REQUIRED, WISHIWASHI_SOLO_SOURCE_SHA256, choose_actions
 from phase5_review_actions import candidates
 
 
@@ -24,6 +24,38 @@ class SourceMembersTest(unittest.TestCase):
                 zipped.writestr("_pokemon_dev_numbers.csv", "#,Dev #,Name\n810,948,Grookey\n")
                 zipped.writestr("pm0948.blend", b"blend")
             self.assertEqual(source_members(archive, 8)[810].filename, "pm0948.blend")
+
+    def test_form_only_source_requires_matching_developer_number(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            archive = Path(temporary) / "Gen8.zip"
+            with zipfile.ZipFile(archive, "w") as zipped:
+                zipped.writestr("_pokemon_dev_numbers.csv", "#,Dev #,Name\n862,928,Obstagoon\n")
+                zipped.writestr("pm0928_00_31.blend", b"blend")
+            self.assertEqual(source_members(archive, 8)[862].filename, "pm0928_00_31.blend")
+            with zipfile.ZipFile(archive, "w") as zipped:
+                zipped.writestr("_pokemon_dev_numbers.csv", "#,Dev #,Name\n863,928,Perrserker\n")
+                zipped.writestr("pm0928_00_31.blend", b"blend")
+            with self.assertRaisesRegex(ValueError, "Invalid form-only source"):
+                source_members(archive, 8)
+
+    def test_legends_arceus_native_actions(self):
+        names = [f"pm0201_11_00_{code}_{action}.gfbanm" for code, action in (
+            ("20000", "defaultwait01_loop"), ("20400", "attack01"),
+            ("20450", "rangeattack01_start"), ("20500", "damage01_start"),
+            ("20281", "sleep01_loop"), ("20520", "down01_start"))]
+        found = candidates(names)
+        self.assertTrue(all(len(found[key]) == 1 for key in REQUIRED))
+
+    def test_wishiwashi_uses_pinned_field_wait_for_sleep_review(self):
+        direct = {key: key for key in REQUIRED - {"sleep"}}
+        report = {"species": "wishiwashi", "source_member": "pm0820_11.blend",
+                  "source_sha256": WISHIWASHI_SOLO_SOURCE_SHA256,
+                  "unambiguous_actions": direct,
+                  "action_names": ["pm0820_11_kw01_wait01"],
+                  "action_candidates": {"faint_loop": []}}
+        self.assertEqual(choose_actions(report)[0]["sleep"], "pm0820_11_kw01_wait01")
+        report["source_sha256"] = "changed"
+        self.assertIsNone(choose_actions(report)[0])
 
     def test_export_chooses_one_complete_bank_and_matching_second_attack(self):
         report = {"unambiguous_actions": {}, "action_candidates_by_bank": {

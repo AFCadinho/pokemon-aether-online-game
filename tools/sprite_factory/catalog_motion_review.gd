@@ -120,6 +120,7 @@ func _run() -> void:
 								found = true
 					if found:
 						camera.size = maxf(framing.size.length() * 1.12, 0.1)
+						camera.far = maxf(camera.size * 10.0, 1000.0)
 						var target := framing.get_center()
 						var direction := Vector3(7, 2, 3) if side_review else (Vector3(3, 0.4, 7) if eye_level_review else Vector3(3, 2, 7))
 						camera.position = target + direction.normalized() * camera.size * 3

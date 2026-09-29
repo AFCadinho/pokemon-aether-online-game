@@ -16,10 +16,22 @@ from pathlib import Path
 
 REQUIRED = {"idle", "physical_attack", "special_attack", "damage", "sleep",
             "faint_start"}
+WISHIWASHI_SOLO_SOURCE_SHA256 = "028fdad10505fcea05f8e03ef5dac10ada2fec7ab1077066e5fd96663b6ba669"
 
 
 def choose_actions(report):
-    direct = report["unambiguous_actions"]
+    direct = dict(report["unambiguous_actions"])
+    # The archived solo Wishiwashi has no sleep clip or eyelid rig. Use its
+    # own field-wait loop as a review candidate; its eyes remain open.
+    # Keep this narrow and source-pinned; it still needs visual qualification.
+    if (report.get("species") == "wishiwashi" and
+            report.get("source_member") == "pm0820_11.blend" and
+            report.get("source_sha256") == WISHIWASHI_SOLO_SOURCE_SHA256 and
+            "sleep" not in direct):
+        resting = [name for name in report.get("action_names", [])
+                   if name == "pm0820_11_kw01_wait01"]
+        if len(resting) == 1:
+            direct["sleep"] = resting[0]
     selected = ""
     numeric_banks = {match[1] for key in REQUIRED if (match := re.search(
         r"^pm\d{4}_\d{2}_\d{2}_(\d)\d{4}_", direct.get(key, ""), re.I))}
@@ -115,6 +127,14 @@ def export_one(entry, probe_status, output, worker):
         result = json.loads((directory / "export.json").read_text())
         if result["status"] != "exported_for_review" or set(result["animations"]) != set(mapping):
             raise ValueError("Export report differs from selected native actions")
+        if species == "unown":
+            from catalog_remaining_unown_body import repair
+            corrected = directory / "model-unown-body-review.glb"
+            result["body_review_candidate"] = repair(directory / "model.glb", corrected, digest)
+            result["path"] = str(corrected)
+            result["glb_sha256"] = result["body_review_candidate"]["sha256"]
+            result["bytes"] = corrected.stat().st_size
+            (directory / "export.json").write_text(json.dumps(result, indent=2) + "\n")
         return {"species": species, "status": "exported", "bank": bank,
                 "physical_attack_2": "physical_attack_2" in mapping,
                 "report": str(directory / "export.json")}
