@@ -142,3 +142,14 @@ remaining 107 shiny cases, 86 lack a compatible rare source, 17 have unresolved
 ZA material binding, and 4 have SCVI material issues. They can be managed as
 one batch with per-species holds, but the 86 cannot be produced from their
 current sources by another pass of the same converter.
+
+## One-pass intake of the next 107
+
+`catalog_shiny_107_preflight.json` records a fresh one-run check of all 107
+remaining shiny holds after the twelve admissions. Every pinned normal GLB
+matches its hash and every Biochao archive member still has the expected size
+and CRC. The pass found 86 without any locally matched normal/rare SCVI or ZA
+material pair, 17 with ZA source pairs needing exact material binding repair,
+and 4 with SCVI material shader repair. None is silently promoted. Work can be
+batched and failures can stay in a per-Pokémon queue, but the 86 require new
+compatible shiny source data before a genuine normal/shiny pair can be built.
