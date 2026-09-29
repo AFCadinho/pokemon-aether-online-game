@@ -121,3 +121,8 @@ clearance 0.025, all 32 captures in view with no HUD-proxy overlap.
 `catalog_shiny_xerneas_battle_scale_review.json` supersedes only Xerneas'
 placement in the twelve-pair checkpoint. Its before/after review is pending;
 do not admit the previous twelve-pair Xerneas scale unchanged.
+
+The user accepted the revised Xerneas scale (“Nieuwe grootte is goed”). This is
+recorded separately from full group battle acceptance. The updated group page
+is `twelve-battle/index-v2.html`; it replaces only Xerneas' images with the
+accepted larger version and retains the other eleven pairs unchanged.
