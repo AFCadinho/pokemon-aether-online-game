@@ -109,3 +109,15 @@ review images. The new page is `.tmp/shiny-151-recovery/twelve-battle/index.html
 Human battle acceptance is pending. Full arena/runtime stress, installed bundle
 checks, catalog admission and publishing have not been inferred from this
 flat-floor camera/HUD-proxy test. Retain slot-a and its pinned review artifacts.
+
+## Xerneas scale follow-up
+
+User found Xerneas too small. The generic whole-silhouette 250px cap includes
+its tall antlers and reduced the body too strongly. The replacement candidate
+uses scale 0.75 instead of 0.4360126 (about 72% larger), for both variants.
+The exact approved scenes are unchanged. Floor profiles were recomputed from
+raw geometry and both scenes resampled independently at 120 Hz: minimum
+clearance 0.025, all 32 captures in view with no HUD-proxy overlap.
+`catalog_shiny_xerneas_battle_scale_review.json` supersedes only Xerneas'
+placement in the twelve-pair checkpoint. Its before/after review is pending;
+do not admit the previous twelve-pair Xerneas scale unchanged.

@@ -1846,9 +1846,9 @@
       "battle_review": {
         "appearance_approved": true,
         "battle_approved": false,
-        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
-        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
-        "status": "technical_checks_passed_visual_review_pending"
+        "receipt": "tools/sprite_factory/catalog_shiny_xerneas_battle_scale_review.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/index.html",
+        "status": "revised_scale_technical_checks_passed_visual_review_pending"
       },
       "geometry_motion_sha256": "0134a549f6e4bb99ecd00790a9072017a05799c328bdd3d688ecfd56826ec2e6",
       "media": "za-v3-review",
