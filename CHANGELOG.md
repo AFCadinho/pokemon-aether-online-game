@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 32 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen en individuele bundles. Kleuren, ogen en battleplaatsing zijn gecontroleerd; Mamoswine en Malamar blijven ook tijdens hun aanvallen boven de vloer.
+
 - 30 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. De ogen van Torchic, Dodrio en Vileplume en de battleschaal van Torchic zijn gecontroleerd. De resterende catalogusintake staat per Pokémon in een technische wachtlijst.
 
 - Nog 144 Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, met gecontroleerde ogen, kleuren, animaties en battleplaatsing. Elk paar heeft een afzonderlijke bundle voor een volgende contentrelease.

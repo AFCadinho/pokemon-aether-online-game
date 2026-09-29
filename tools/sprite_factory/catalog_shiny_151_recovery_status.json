@@ -1,0 +1,2621 @@
+{
+  "appearance_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/index.html",
+  "counts": {
+    "locally_admitted": 32,
+    "missing_compatible_shiny_source": 86,
+    "scvi_material_hold": 4,
+    "visual_hold": 12,
+    "za_binding_hold": 17
+  },
+  "date": "2026-09-29",
+  "entries": [
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 11,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "518b68cbfecd2ac30ecaeef1e3ad90ec68fb812fbfbfce632119bceed160875e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "metapod",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 12,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "10e52e24c63199318e7f4b18101f8c7b7867c17fb176a84780233f073d062839",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "butterfree",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 16,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3f77c51d7bbc23c1c6d69049ed813f5f1cc73feaa9be21b6ab79da412c1fb877",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "pidgey",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 20,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3725d5b7fe0b93476bb21413a3467a1c9183ed670c6b41dde06753d023f9e788",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "raticate",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "1c87cf5850bbb2e159ecde9b750ebc01d7f5b8d5bcf270726720294c305cc56b",
+      "media": "quick-review",
+      "national_dex": 23,
+      "original_hold": "ValueError: Rare material colour channels differ",
+      "original_normal_sha256": "fb9b04bca749f0ccdde6e4564ea2ff5035f4ba46ca00f566e35e2d83f1452e44",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "ekans",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/ekans/normal/model.glb",
+          "sha256": "f6ddbeb74e79f6d3fa005ed8cf00af07b6784cfb135100efe8ca5818c21d94cf",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0023/pm0023_00_00/pm0023_00_00.trmtr",
+          "table_sha256": "76109dfb21d3016f0474ac7fd68280ba9c331e3df07b702ce650bf95d1442f3d"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/ekans/shiny/model.glb",
+          "sha256": "712224937b1344261fa975efe54be5c82a77074295b4479bd1914c2e24baf038",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0023/pm0023_00_00/pm0023_00_00_rare.trmtr",
+          "table_sha256": "f27a4063d48498ad9a30a52d8b1200629a83a2b57fc9a70dc1a696aa3ef57d4c"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 29,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "6752d72b60a2c3898aa8e02e7eb6d0c03a87d3165b6cd8b15b6e3dec8d80ff8c",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "nidoran-f",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 32,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "904ecf788d7d1248e77ac4a9696dbba323c5b58b35e5de51a1c1f9e5bd3510ae",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "nidoran-m",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 46,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "4174e3a79c3b429b27f5f8124cdbec3aa7b2ee119e6bfd63c684ddb3f4bab532",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "paras",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 47,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9a5ea4a2a1c78018ca0933d76798935de169f5155f3cc2522b48e984bab6cd7c",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "parasect",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 77,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "2d3932e008a3a7eec85c9cc3ef1b76aebb41612efb58dd3f338989e1f477ddb5",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "ponyta",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 78,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "54e955c7a1a9cb9f5f29462c334fb211c72bf27453922e3978b101af93c51a3d",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "rapidash",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 83,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "96004b4052c3d587088e796281e2555e9706f05921fd6315f60c8c35e550c1c9",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "farfetchd",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 104,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "db0cd22152764b893bfec061933b5ab605095b98064e2e04992b1ebf77833302",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "cubone",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 105,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "7b145dc07eb3d3de2746f7d10c39ae4226cbf7d5785498a21fe2f39f20bebbab",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "marowak",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 108,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "e65a8a81bf50148a94bfab595137474984b4ee627c6f495779aa26b0d0d35782",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "lickitung",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 114,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "bc24e6d1d7b23227c9ff321c55a83efd824d6e982259dbc6e5913dba8d1281a6",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "tangela",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 118,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "f88050a6e713792fb0ec3842f703d1e218f19f10c1cf44d91b745bf479363e4a",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "goldeen",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 120,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "761abe16ab54d5fd1e8ed46c55d8d71fc036e0675e5367d4bf9e1f9546ea5de9",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "staryu",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 175,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "8220d962669bc9447ee5f966ed39b39204e437125302aa26fd83381867c9241e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "togepi",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 176,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "417dca40de534ed53e1e66814c16e3b6f6a079a597b0e93d6add0650e5e625fc",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "togetic",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 177,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "5820d796850590c35a66b263b01b45c99799661eaf300ec1e9c9d378fd93ef08",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "natu",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 178,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "befbc7cee9d6ec24b911f095369d4022fcf7f6c1e7cbf34a2facd8df9c1fbb04",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "xatu",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 202,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "43de6552881f4af97cfb3e6f109872c263f4ce4dfe8ecb46044bb1da0adafbf3",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "wobbuffet",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 213,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "e117678888786d8df29ce766986078a162b48cb07e045387f5b519dfec676420",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "shuckle",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 218,
+      "original_hold": "ValueError: Unrepresented rare colour change: EmissionColorLayer9",
+      "original_normal_sha256": "00d8cb30f0156b5735c914d2eab68a1bc1f756ffcdd45c512d2fb080557c255c",
+      "reason": "Eye has an explicit opacity map; cannot force opaque",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "slugma",
+      "status": "scvi_material_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 219,
+      "original_hold": "ValueError: Unrepresented rare colour change: EmissionColorLayer9",
+      "original_normal_sha256": "d496ce9e6f765810d4fc87daa74f41c76bcdb2341217fc5443d426998468b3eb",
+      "reason": "Eye has an explicit opacity map; cannot force opaque",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "magcargo",
+      "status": "scvi_material_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 238,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "8f20d0759de713fefbfbe5594cd0c614a8a24e9743b1c5a998f8659b0ec2d5ba",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "smoochum",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 241,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "4697936dd46f55e520bff3058cdf8d2dfffa3bfe29fc7f0c98c64bde69ad8d02",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "miltank",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 251,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "bc898c0675cafd1661a6225809df6935e895f3308e72daadc2e523e92635ec44",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "celebi",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 263,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "09e34dc077f758446a52294108b04a1b14bdd8b1108b83777c3fa9807b61199b",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "zigzagoon",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 264,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "2ea2163e268be5129bc1900f4dd1b81f1f523aef62e1c9b98ad22e6e20570d2f",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "linoone",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 303,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "c13305cf7c5e3bf155d2f80a2f831c7d7e33bc2c92eb9ca5bb7aa80db95841a8",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "mawile",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 310,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "8e594e8584d9310e8728222545d1e07768fcd585f8d18b5209923b30dc29be0e",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "manectric",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 319,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "ecb9b855bb128e47b4756aa5d89ce527a972e8f1243c072978bf1a42b5d54262",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "sharpedo",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 321,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "1922472797d3061bd2ffe13c4804c9a117ee4c8ba3a48ce30df745589f6721e0",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "wailord",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "79be4c177eb3b8cbf06898f2c7995a4bff9b172cd6fac11a7a9c39ffd6f23e68",
+      "media": "quick-review",
+      "national_dex": 341,
+      "original_hold": "Embedded normal texture missing: pm0341_00_00_lower_eyelid_alb.png",
+      "original_normal_sha256": "e299e9f65b92d4ada6d3ee666a64871d67e3aa4b945e175e3f6304d2f572df8f",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "corphish",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/corphish/normal/model.glb",
+          "sha256": "a726bfd03a75075230c1a017eda941f55cf8028aaad70d9356fb23de00094557",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0341/pm0341_00_00/pm0341_00_00.trmtr",
+          "table_sha256": "1faf7e9a4fee82d1e1b3af046a6a1537210ba318b2c47d44dc00be41ff4454a0"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/corphish/shiny/model.glb",
+          "sha256": "ebeff3d27078c27a228b47ab656ee33b74e05e6028553f8a63ba5943cf1e7825",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0341/pm0341_00_00/pm0341_00_00_rare.trmtr",
+          "table_sha256": "1542cb65c7a148336660a93a7967daed0e47d159132b0b07cb42f94bce4c45f6"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "ce0a8ab265529fe25585157276d36206334aae9e492577634e0c9f4327b200c6",
+      "media": "quick-review",
+      "national_dex": 342,
+      "original_hold": "ValueError: Rare material colour channels differ",
+      "original_normal_sha256": "e75e990fb2057766952ee6effc84e1ce70a6b564fb5ee3e7b201bfd0c31b5791",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "crawdaunt",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/crawdaunt/normal/model.glb",
+          "sha256": "86a43a9bade144b9dfdd11e687bee05541e0c1c70b5f520f0a601399c84ddb6e",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0342/pm0342_00_00/pm0342_00_00.trmtr",
+          "table_sha256": "c4a4ec5246602b97562968e034467e080ac99922232d8266934f9ae1cc96c87b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/crawdaunt/shiny/model.glb",
+          "sha256": "06a797a5111fb1254033d56e2fcda6827ffc51899f7d8d285caabd5c65914570",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0342/pm0342_00_00/pm0342_00_00_rare.trmtr",
+          "table_sha256": "b69dc1172735252e0faeb9cdf330d514c5cfd39fb23ddf32cb5ca9605cc12d03"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "6c275c64cf39724e3db2f19955d618a1b5248e83940aadfd2392a7bffe5078ab",
+      "media": "quick-review",
+      "national_dex": 349,
+      "original_hold": "Embedded normal texture missing: pm0349_00_00_lower_eyelid_alb.png",
+      "original_normal_sha256": "e8760f50897e4585228f83a389fca72f2e70235519da3fd724f9124e80f4e7a7",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "feebas",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/feebas/normal/model.glb",
+          "sha256": "5477dcac5735c2e38d7be3d760311d12f34201a6ed3c179b1e86962cb27dd66e",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0349/pm0349_00_00/pm0349_00_00.trmtr",
+          "table_sha256": "7ffe73d9a44b4b2b56d820cc84d10cd4b46db00b5fe3d2e9bfd03476d1241f5c"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/feebas/shiny/model.glb",
+          "sha256": "313ada2ae00fc870bcef020b6e306bce54eab6e76eed2b419742204d778f3c86",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0349/pm0349_00_00/pm0349_00_00_rare.trmtr",
+          "table_sha256": "0493a5b8d5b846f8351eac29876a95f958d8ce61667a354fab00fd986f165781"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 359,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "68f0d7502b05aca61291ce13c4502df2ed48b019eb817fb0bbb199f16cfe1644",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "absol",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 360,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "1d45c224d71d17a270676fe7f96286a5369bc9682fe99034771c2dcb7b2d6a03",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "wynaut",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 363,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "47406837da35380a718773f88e694ffffef9f268aa254147fb82c4c337846e1a",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "spheal",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "73f39202deafc5f2bf2a1050638248cbe9017cbe5ebd86c1bac54681122480e7",
+      "media": "quick-review",
+      "national_dex": 374,
+      "original_hold": "Embedded normal colour differs from official source: eye_a/BaseColorLayer8",
+      "original_normal_sha256": "d4953377f461c2fa7b2dd3b1609ca60b8222c0c7486cd41a427f236bcca75f2c",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "beldum",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/beldum/normal/model.glb",
+          "sha256": "1af25ded1231f857ae1c096c12b43ebddee4e2620e7153b2d8c362dea3d59282",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0374/pm0374_00_00/pm0374_00_00.trmtr",
+          "table_sha256": "71884f6c36596074c7e4042d00dbfbc4a7bb633e2bdfc40bc6563c63575721ed"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/beldum/shiny/model.glb",
+          "sha256": "68c59384136eace23e07ab21392020c11e995e956d871c573a2473b064692b99",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0374/pm0374_00_00/pm0374_00_00_rare.trmtr",
+          "table_sha256": "875d4c31fe855e13931cfcdbc8ae597cfe049e1db4ff99d7ee57a6a419f0ea4f"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "bdc3f40e678ebb1aa82b6d1f10dbe2952daa0940d36118bac4a211d007f2bff7",
+      "media": "quick-review",
+      "national_dex": 375,
+      "original_hold": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer8",
+      "original_normal_sha256": "182e3ff160b6e7f6c175b6d3b0e032794da1537763431b7f6e2e33198bb7486b",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "metang",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/metang/normal/model.glb",
+          "sha256": "8999c3aa628dd9518847aa4215197a640a375b85760d90af738053fc519f4d78",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0375/pm0375_00_00/pm0375_00_00.trmtr",
+          "table_sha256": "ce78e6446d6634287a1fe8c636e4bd8a3b907ee0093125f90fb76ceaed8c603c"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/metang/shiny/model.glb",
+          "sha256": "60377fef29aebc5a25c25abe86881a3b4dc449b0b5dd530774b52e8776345726",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0375/pm0375_00_00/pm0375_00_00_rare.trmtr",
+          "table_sha256": "b8f300ec0da2848e702c4f7f878d61d4f1cd2da0faf9facafcd3b3a8cd66c6a6"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "fdac1a301662220899ccb99af07935709d5608d820545e266690285b443fb73b",
+      "media": "quick-review",
+      "national_dex": 376,
+      "original_hold": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer8",
+      "original_normal_sha256": "138e68f56ffe5c0a078d72bff87109d2f2f3cc12c326f83dc48e8660e070c1d7",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "metagross",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/metagross/normal/model.glb",
+          "sha256": "069c4e0ca63252c3b7419b3252b567c8e2a21ad9a6fe74868a25f6e759c5d9f3",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0376/pm0376_00_00/pm0376_00_00.trmtr",
+          "table_sha256": "7406fcc942bd9be925565c44b8d5984f88e3b4ab38c99d0699ee46a915a15356"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/metagross/shiny/model.glb",
+          "sha256": "0ca1815b252db7df3c209210e5c48fced5436459ef444a25c17ef570f7468a6f",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0376/pm0376_00_00/pm0376_00_00_rare.trmtr",
+          "table_sha256": "7e306f636213ff61d465f6346239b487b64aba9fb28940f9020a349fc993f8d1"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "7993f2e0df0527b8107ad27828964d142251ce728d76d712a328cd4c51072ccb",
+      "media": "quick-review",
+      "national_dex": 392,
+      "original_hold": "ValueError: One material needs different replacements for a shared texture",
+      "original_normal_sha256": "7f9243d1fc5579905837a01d554145a8bda75981efd939df6465eb91ec1e5d36",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "infernape",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/infernape/normal/model.glb",
+          "sha256": "1ae6a9d5d7922f59a3ef3748605ca9182139fc699463c8a7b7f39401f27a9636",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0392/pm0392_00_00/pm0392_00_00.trmtr",
+          "table_sha256": "9c86b9331cd5415441c7e95b5c9679e233328c3df34d99069778e13486a731cc"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/infernape/shiny/model.glb",
+          "sha256": "0ce649af7ab405dd288764eaf2d5c9d17458e0ef40fa2904bdd7299abbeef443",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0392/pm0392_00_00/pm0392_00_00_rare.trmtr",
+          "table_sha256": "efc70654d05d4e18adae8a3e6fae4d9d56e60de33ad1f41cce85d9fb4b8dd7e5"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "7a8bacd03a6aeec994b92ce256465525285890157c8e60606c5b60a50c89626a",
+      "media": "quick-review",
+      "national_dex": 473,
+      "original_hold": "ValueError: Rare material count differs",
+      "original_normal_sha256": "6547dd01895c2f4b012c1315b6f39459c4eb154685bc9248e28af001cedfda5f",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "mamoswine",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/mamoswine/normal/model.glb",
+          "sha256": "8ede7f106bc54e07a1dba1f2e801de1fb450752470b59e3839cacc088856e9a7",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0473/pm0473_00_00/pm0473_00_00.trmtr",
+          "table_sha256": "41f58de6760c239e86ffab14cd054a0c2a51f0767e66914864f3f402b1de0937"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/mamoswine/shiny/model.glb",
+          "sha256": "badc1a970fd08015f97c9c0ab0f74641e64122169576b3854f850fe1eb25ee44",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0473/pm0473_00_00/pm0473_00_00_rare.trmtr",
+          "table_sha256": "047d7e568edd3287f475f731c266243350fc53d9be7098afad83b72cdd49f5af"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 494,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "75096546da4bb74b4c88947114b67c010a40ec9280a5e5de090cd13a71f93118",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "victini",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "d20f28ad9c9f83bf86b3c166064f2526237ab566579b13878ddde3b1ed0afdc7",
+      "media": "quick-review",
+      "national_dex": 500,
+      "original_hold": "Embedded normal float differs from official source",
+      "original_normal_sha256": "4585c2e5aade3b1c4e309ad5462b0a89fb8c2f7ff43301ed001b066600b71785",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "emboar",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/emboar/normal/model.glb",
+          "sha256": "69e619cd5997f0876d5f0874602432ba2455c4b8f48a10ebb4492702334c8474",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0500/pm0500_00_00/pm0500_00_00.trmtr",
+          "table_sha256": "92a378459eeab42e41696c5554192733be050c31ab4062a7af239c5b60cdd853"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/emboar/shiny/model.glb",
+          "sha256": "cec87ccd7b22b1a2942d958e9c8c094f87c84ebdb825689c1c73fad40a8ffc7e",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0500/pm0500_00_00/pm0500_00_00_rare.trmtr",
+          "table_sha256": "0be96a5aca259e43eda41b5d5531086de1732a1c93c1b08bd396c884689aea05"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 506,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9049af06676d4f01a877d321e8e431cd8ac450d8a970d272fcefb846e83dd6d9",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "lillipup",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 507,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "40fd4464279242d2fbda410f652b62266381104403638aa7cdaff94f7f637027",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "herdier",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 508,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "7982a104790893c036ac996a67309bbe969a8670dbeb645ecf6934e3ef6582b7",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "stoutland",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 509,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "f5890e72aa1567089b5329a042e9376556a62d7b6b598be083621e9af3c362f3",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "purrloin",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 517,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "6924311e22e36de7bdb2ceb84c57fb5daef249d837ff638dd0b577d7e4d093cf",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "munna",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 519,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "63d5e3ebe25e9e106f8a17d766b4b5e550db72983386b98b7c2db7be79da7156",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "pidove",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 527,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3e530b506a8121433abf9fc0aa2ee4f8fb5d47f01bdee38125878a757640217e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "woobat",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 528,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "7eb5e8880de486a00c36e08aa1c1b6fbf6a3fe835c09b6bbad12e0f73405396f",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "swoobat",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 531,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "2af9147b29af9fc002cf79f383c1a33e803ea16d240b1250e7905e4667b6f878",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "audino",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 536,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "e80d58e5b95c6a5e1299883bc9ec01ead7a13acfe03d1dbdcccd9c2aab76eef7",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "palpitoad",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 537,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "6ba8f7af56649e6b5180ad170bb781b8f77763605588d6a9584e4ac7fd0a04e8",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "seismitoad",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 554,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "82ddf832efb676653ebd3327195ab92780b85f1de626c8eff0b5e881a6a73af1",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "darumaka",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 556,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "0a2e04ecb4a0b7365c5d28ee70a22800dbf04cc82c64c0761c0766c70f56c8f8",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "maractus",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 557,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "ba57705df7f769433e76489b5dcfca1468e18a7ec9d335197d18f8d3366f6dc6",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "dwebble",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 558,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "444a2b9f57eaf01952fde3fbda3912e04c3064c8100550150122f17023834fdf",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "crustle",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 561,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9e769a398f7cb47cd766d75ec77d59e4acda873be40c0e5fc446783ff209477a",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "sigilyph",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 563,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "c0a013d8bb81541d10ed3ec1db152af05536a6628a128ea57be2a522f9e8c288",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "cofagrigus",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 566,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "912460cb8aa1813230f6989d8ea42555848acab62614bfb99c3e86c7b3634188",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "archen",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 568,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "523bca4287550a1d8b81a9ee69265d4ff050ac14887a171ff042e962564fef1f",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "trubbish",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 584,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "b7b55399e720cb0b228703ce26654453da274e84df6e329c96751b98c3564742",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "vanilluxe",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 587,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "56f4e52ed8cb3dd44572f3150c7c2aee5252a863af3abf831d47dafa7e49e29d",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "emolga",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 592,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "2ca7b35f7d78fac6d748211a3c6ba2dec0923c2f33c5363d7b9ff21d9bf09950",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "frillish-male",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 598,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "47add0e8a878528c6752a46b3596c27d903f9f466d496224538e4ea096bc574f",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "ferrothorn",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 599,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "8c306e702d2b48d0f722b8060faa1a140007b1620621e7a7042a2f395f5ced5e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "klink",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 600,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "d84dbdf1872615c5834d073cec54ba132a75a4ad5eb73c8608cc5764615ebf17",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "klang",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 601,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "4b10b0c597aaf8b8b3c31eb1bc4ceadf59cae5351edc29bdebb30885babb33be",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "klinklang",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "bea9a54bcaed1aad56ecc840c66ae8cd06cf151622ca7e963dbfa61ad033df1d",
+      "media": "quick-review",
+      "national_dex": 607,
+      "original_hold": "ValueError: Variant is identical to normal",
+      "original_normal_sha256": "2245d12ea478aa8e756dc3a7be6a9a7a5acc5a1e60cdfd9d9659a5041df7d989",
+      "reason": "flame colour/emission",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "litwick",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/litwick/normal/model.glb",
+          "sha256": "127c315f8ae65e397d08f538885bdfd57b6cc7b74fefe0ed1554690eab079ddf",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0607/pm0607_00_00/pm0607_00_00.trmtr",
+          "table_sha256": "5bca1821385270966094b033541644171535e4c35d4661effd13333fadb792f1"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/litwick/shiny/model.glb",
+          "sha256": "0e3cfe09eb56847ae55bd5dabf352e86b600b9a2bd2727288745fec38887e180",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0607/pm0607_00_00/pm0607_00_00_rare.trmtr",
+          "table_sha256": "7dd53ffb56e490d5b10842ee879551f22b181f2a703c9c4d7008faa939b7a29a"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 618,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "f429d6303985a14155903a0596a182a2acc6295adb0a239648b5405987c3fddf",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "stunfisk",
+      "status": "za_binding_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 626,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "ea4500cbbbeb69e961701f4af7394bda7835d2bc55f18b1ec7af00fbbab1109e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "bouffalant",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "a51f9029854307b7d5781121ee9550f5e6250bbaba57394d551789d3a411c490",
+      "media": "za-v3-review",
+      "national_dex": 659,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "93a7c4114a690d848854667f1c808b6a177b64137b91c939e447df08227045cb",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "bunnelby",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/bunnelby/normal/model.glb",
+          "sha256": "bfeeffed01439c601cfcd7a0bdf054a748648e8e85925ff749978661e29ca25d",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0711/pm0711_00_00/pm0711_00_00.trmtr",
+          "table_sha256": "52cea03910ca32ec8d760e8bf0322b9b56cba6d025b41b153284a18c4ec8bcf7"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/bunnelby/shiny/model.glb",
+          "sha256": "6ea3f5872450033d497a839a95f30985553f87e6e97fd1e3ee8208dbb078683e",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0711/pm0711_00_00/pm0711_00_00_rare.trmtr",
+          "table_sha256": "c9981c641fa023b47c5bed2fe5d2acd3a3bd02af8207ab3439156c1a357d43be"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "1a646afc451e007607d4e8ca3966a1211f3b1df21ebf75ea51230b123f9e4e15",
+      "media": "za-v3-review",
+      "national_dex": 660,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3e06d5b275d655f7f7ea524aff7ec036505cd43494e63fed95fe4156920afd47",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "diggersby",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/diggersby/normal/model.glb",
+          "sha256": "1dc9e9405e550af7e189c072774757b8644068f47f574442bcdb3f88147639d2",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0712/pm0712_00_00/pm0712_00_00.trmtr",
+          "table_sha256": "9eaff683b6837b7d2cf35e80dd4b5fcec60e44e469827e8408c7110438d82465"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/diggersby/shiny/model.glb",
+          "sha256": "190879e1f15842e9e8515bdefad87234c8d17dc279d80a12f446f4c121418969",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0712/pm0712_00_00/pm0712_00_00_rare.trmtr",
+          "table_sha256": "aa345e1b195c7c3cfe3983ada73da564e7c0b6ac064d65da4324ac8f0f37d454"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "6218990b6cd5875f2e02838b71760a71ee2592397f209e5d8f94c05a65674e8f",
+      "media": "za-v3-review",
+      "national_dex": 674,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "5564a63c5476ea0a96eb2ac6304d0f02f319b248f56f7b843e6866ce851ab9e7",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "pancham",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/pancham/normal/model.glb",
+          "sha256": "6979db370a4cb51121e765606031a424ecc15456b8e7f156a98e6e489acbaf13",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0752/pm0752_00_00/pm0752_00_00.trmtr",
+          "table_sha256": "686081f2b735d2987955f110f1eac14b19fd526f25069ca82b20d2dabc68c974"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/pancham/shiny/model.glb",
+          "sha256": "a3deeb34260f8b24904a24bbe4145b11ea7547b0a632f4ce12dc8d5f0c744053",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0752/pm0752_00_00/pm0752_00_00_rare.trmtr",
+          "table_sha256": "d3c96c135dfe01dd9be8cd18d70be4ab71024407ddb384f334eb52b2723a2339"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "f8e7ca5f0c3d0e56bd07d86fab2e5bd9767f489a98daf52e3b1e2861d1a3dd18",
+      "media": "za-v3-review",
+      "national_dex": 675,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9ca0d1cecc68faa2c3afd3972dbec750b2a488ba727074abea22488045187600",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "pangoro",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/pangoro/normal/model.glb",
+          "sha256": "a1424507e69f0238e33ef405eeab5d421f50ae85b0b7749dbf2a5f56feed5b46",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0730/pm0730_00_00/pm0730_00_00.trmtr",
+          "table_sha256": "20eb2226ab560c2379e99bcf36299ccbda04606a9810249a7312a5563c37c2e5"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/pangoro/shiny/model.glb",
+          "sha256": "74e3cf813e9e36a19bb70e052fecdd853ffbd4583714e98ab0bd793347b1a423",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0730/pm0730_00_00/pm0730_00_00_rare.trmtr",
+          "table_sha256": "eeef993ac5ef0294829606a89d08d403571510d6fcc4fa0aa5d35e9cecddaf06"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "d93d3091be3dd2ca7bae7eb1c0df9dd3d2a36635eaa14267d83611dce8a47608",
+      "media": "quick-review",
+      "national_dex": 677,
+      "original_hold": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer1",
+      "original_normal_sha256": "55a536a216a6a2153c64dc9f4532cea83e746a44252e8aa007134d8778687aef",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "espurr",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/espurr/normal/model.glb",
+          "sha256": "bc46b2a47a661dc029783125b4c94122119780a83e746d5a499961bcb7e22caa",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0733/pm0733_00_00/pm0733_00_00.trmtr",
+          "table_sha256": "f869b14be2084bb536ef5ea7ad8dd17ffdedb837205f4e3f0c8ae3e20f62ebe3"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/espurr/shiny/model.glb",
+          "sha256": "860e0b0eb6a87a8949bc71a5e061f8864eaf9c6ab003f616039fc7f5dadf66ea",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0733/pm0733_00_00/pm0733_00_00_rare.trmtr",
+          "table_sha256": "0d8664642db17e9837101c26c9e3bf213840338946ede26e06bf359677e7d106"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 678,
+      "original_hold": "ValueError: Rare material settings differ: l_eye_b",
+      "original_normal_sha256": "a1aed2070b98a4645e274093db8343fd877e016ab9badaa4a16b0726fe85e6c9",
+      "reason": "eye_c: exported texture name does not match source table",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "meowstic-male",
+      "status": "scvi_material_hold"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "f1ad72b52677313b9f27ba354cc8801426826c5a4cbfc7b9201728523ff45d9c",
+      "media": "za-v3-review",
+      "national_dex": 679,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9daded072baa4ac5676449025226b79356ba00a344724169df61dd7313110305",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "honedge",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/honedge/normal/model.glb",
+          "sha256": "9fbbe90abaaf201a32ab858e2c6a99d7a74b4025ec35a59ce27789ab1d6ac5d3",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0744/pm0744_00_00/pm0744_00_00.trmtr",
+          "table_sha256": "7661b6b8fc7a228e4cda6ca20c14e55e51747403ca51f87e86dbf0db40391a40"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/honedge/shiny/model.glb",
+          "sha256": "f6a56cd125aafaeae4d85cdb90b4b2182a4df7160a2e1db9b4e36980a8ec9380",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0744/pm0744_00_00/pm0744_00_00_rare.trmtr",
+          "table_sha256": "ea1bb86858be27a9178f09527126d0b654aaee780dfab7b6ce8c2707b11b6fbb"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "ff98c8343e04c9e0ba80798a841b0a8a25b7c2e73fe6d1e85f45389838fc9dac",
+      "media": "za-v3-review",
+      "national_dex": 680,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "a798c20cbc5e21972d6e8e54db8f99a6bb664b84209c4a0502a5bd8ad1765a63",
+      "reason": "overlapping ribbons in sleep",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "doublade",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/doublade/normal/model.glb",
+          "sha256": "0ee18a9e2d3331726a1a9d80492df0b0c2575f4d35ea4945382830add2d906f7",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0745/pm0745_00_00/pm0745_00_00.trmtr",
+          "table_sha256": "ab2f5132d65c60314908aadf95eb18d4280ee340461d46e14c8df126cb7999a4"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/doublade/shiny/model.glb",
+          "sha256": "be06308af7a8c6dcd71f715e541144bfff7985c576f785868e9fdf2dd6d9e65b",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0745/pm0745_00_00/pm0745_00_00_rare.trmtr",
+          "table_sha256": "3e405c10e5e3422f9ccc0a2226cb46344234f30039eb86d4a0439cfe9921aff7"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "4ae41f755cf6bda7b9755c13d7db47eebb61aae59d7cbb6a1afe52dfd15d0c94",
+      "media": "za-v3-review",
+      "national_dex": 682,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "f0a2cebaa4578b041da07fd236b552c2a1ec495769f61533ac9f35ec84d3e370",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "spritzee",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/spritzee/normal/model.glb",
+          "sha256": "bdc7b9fe3a89b7bf177a9ec7528ec76ecb2cf4cfc7b20761a7411d8c63b05fb2",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0758/pm0758_00_00/pm0758_00_00.trmtr",
+          "table_sha256": "aebc5d1db3119b79246d9fc8864c4ba22d5a216799fe999d5a5ddb86bbd4148f"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/spritzee/shiny/model.glb",
+          "sha256": "dede5cc12a428cc0910102374e4b1a85a2179c17df0b523f422511c4d17b975d",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0758/pm0758_00_00/pm0758_00_00_rare.trmtr",
+          "table_sha256": "dc38cdcbea794e7e471568c1ae961eb24b31d623803e6311c8782d088da83524"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "6593d4e0ef96e583322e2f4e76e4b0c1e9212abb81267369a997a6585d8eb522",
+      "media": "za-v3-review",
+      "national_dex": 683,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9aa43a724988bdd45ed718ac793ce0ab675e41da94054a6f621ba6dc840f5c12",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "aromatisse",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/aromatisse/normal/model.glb",
+          "sha256": "732b384688444b841f6a4a74de0b7e42775b5e9ec38e8aa7f487519d897ae299",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0759/pm0759_00_00/pm0759_00_00.trmtr",
+          "table_sha256": "79fad65291c452216212537ec72488d001a1ddc0d6de05aa2c8610b291d382ea"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/aromatisse/shiny/model.glb",
+          "sha256": "6adabe91891ec7da48c0861f57d8406bd101fd8b0d518ce9083d0224d2f2ddc2",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0759/pm0759_00_00/pm0759_00_00_rare.trmtr",
+          "table_sha256": "4ccee8b0ff0b1f6310044d2294cbed6be14ea72de343256f5e91f4463a832837"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "74e9769dbfb0e71036d1d5d31195e2e85226fd9981c9d508cf0a08acc0ddd25e",
+      "media": "za-v3-review",
+      "national_dex": 685,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "dff1635452d85ff80de920565fb6b7615d581d1c05396a14ab6fa01ac485e42a",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "slurpuff",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/slurpuff/normal/model.glb",
+          "sha256": "5d05c6bbbf899b1d0684de56ec816186af7328c2ee6ebd4fe0978896e6b242bd",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0743/pm0743_00_00/pm0743_00_00.trmtr",
+          "table_sha256": "57c69b194c8588a0908d329007e99dfadc9d2b8a83d187bb7a22303b2fc99042"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/slurpuff/shiny/model.glb",
+          "sha256": "c9ab1cef60295b87ada1c1a3ac38b03c677ca77ae20d36a568bea9b1ac4e1fa0",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0743/pm0743_00_00/pm0743_00_00_rare.trmtr",
+          "table_sha256": "24bbd79193bd75fc2435ec3639859f1dc5e0b8172728404c888c592c3871ebeb"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "76f4a9988814db570c529cf71a2b9887b285f329a527ea616a4344fc8008e740",
+      "media": "quick-review",
+      "national_dex": 686,
+      "original_hold": "Embedded normal colour differs from official source: r_eye/BaseColorLayer1",
+      "original_normal_sha256": "aed0198c007d4bb073e3502d60601855732d7d86255b7920445c684da85f77c4",
+      "reason": "transparent mantle",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "inkay",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/inkay/normal/model.glb",
+          "sha256": "9ac3a583090b014e77fdd03ef2a64083355f480620a0b8d25635075d2cc8f125",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0726/pm0726_00_00/pm0726_00_00.trmtr",
+          "table_sha256": "ff9656c537c192124751fe0fae2ac4425a907342d2bb957a31398b45e5108e6f"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/inkay/shiny/model.glb",
+          "sha256": "66f96d3dcd15c52bebe66f091dc97299ba6206dab61ee4d33b4d3f1be43f28ea",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0726/pm0726_00_00/pm0726_00_00_rare.trmtr",
+          "table_sha256": "9b4f63708c0518d5163c2026d814c1dedd26259f4015981187d45569148dad1a"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "0b9ca95996bb58720bbc5c473329ac08e55ccd1e6ad534ec5e61eb515f62f25d",
+      "media": "quick-review",
+      "national_dex": 687,
+      "original_hold": "Embedded normal colour differs from official source: l_eye/BaseColorLayer1",
+      "original_normal_sha256": "cb6fc3d5687e35446221533ec939901329ad3e05ad02a4ac05acb9768ab923fb",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "malamar",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/malamar/normal/model.glb",
+          "sha256": "c0a646817ca61c3be7cfa65a48e6722cfe71feedb33aaa77802e537c335046de",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0727/pm0727_00_00/pm0727_00_00.trmtr",
+          "table_sha256": "2171cb773c6f0ee69274d6ab5e3f6f786f9152a77a59ce03d57211f9b1abc05e"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/malamar/shiny/model.glb",
+          "sha256": "d9e5f43e203bd874bfeef5f4a6eefb672bf4418d8e0b7a08b8727f7350aaed8b",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0727/pm0727_00_00/pm0727_00_00_rare.trmtr",
+          "table_sha256": "f86d1c1baa4a08ff45523a1eed9de2cab278ee64c6fa4d2cc63c94b71b050828"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "ca1849f50685324ff2c689268378add414bed6c7617d9b91065a48f750d08eda",
+      "media": "za-v3-review",
+      "national_dex": 688,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "ae5ec8900a37ae30c8d955813a77130fe4779aff29e43f8a70e541b50c8b7ccf",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "binacle",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/binacle/normal/model.glb",
+          "sha256": "673a6ba79e681c1d465c9d209ab9b23e2d1d20e4fe80b7a452ffe8383895a2c1",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0747/pm0747_00_00/pm0747_00_00.trmtr",
+          "table_sha256": "0156e9d74afad1a5a7599861333c577c3d20bab36f95c19aa00ce4a52132bc5f"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/binacle/shiny/model.glb",
+          "sha256": "fe2077a72bfa005155f9862b15aa637cdae9f7a60eedfe17600e5182b2998d03",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0747/pm0747_00_00/pm0747_00_00_rare.trmtr",
+          "table_sha256": "a4f84863e72ce172edbb9e3957e0b03ce1f6c45ef08835efef78407f579b7a05"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "08b51197f1bfee1f22c61bbd89e8a68648e31df75ee96a504df48719919ae27d",
+      "media": "za-v3-review",
+      "national_dex": 689,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9681b248e70763a378ffbcb72059f33aa3754428253081376e8eaf54e453c4d3",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "barbaracle",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/barbaracle/normal/model.glb",
+          "sha256": "4ef3f2e732f925504b9642aaad5fba7e1da39148e20eb5bd82b6b663c1d4541c",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0748/pm0748_00_00/pm0748_00_00.trmtr",
+          "table_sha256": "5dcb4181b83acde4974eeb7ac288200884a72ebd2c8826fac0f1bc9f8b23ad44"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/barbaracle/shiny/model.glb",
+          "sha256": "01e5b77d4bc7ebfac15bbf1346b46521ae62346385b943d3c88981af284b6b21",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0748/pm0748_00_00/pm0748_00_00_rare.trmtr",
+          "table_sha256": "6d1405d2b8ce1b21755e7cee7045ec7f96b4246e0c9733eec268a1749a4190b3"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "c252b617680853f7008be0d565c65a6ee7a6cb504fe0f98ced7b197d7adfd1c5",
+      "media": "za-v3-review",
+      "national_dex": 694,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "273cd8281c015a4c522e372185b86fe12fd3141af770ac08dff26e24522fc54f",
+      "reason": "sleep eye state and frill surface",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "helioptile",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/helioptile/normal/model.glb",
+          "sha256": "28fffaf653a9aea23ebee85b424487a9fb5abc9694b642cfe00dd3d40f8dbb7b",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0731/pm0731_00_00/pm0731_00_00.trmtr",
+          "table_sha256": "1f26c9aff410e7f1c88cc1bcfe92442eb684d1e8f41c84d483049c90e7baaad2"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/helioptile/shiny/model.glb",
+          "sha256": "ee92d1d76e690f9220181f904a2bd3e669a4ae470aa3610785f205bbcbfc9b6c",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0731/pm0731_00_00/pm0731_00_00_rare.trmtr",
+          "table_sha256": "696acfe72bb293f1d812da95bc5b216570648d1c9ec609044b4ba3bcd352f6dd"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "932e42ec7a98bba097113dca932f46564016aee127c4062370b2d6838c6ae31a",
+      "media": "za-v3-review",
+      "national_dex": 695,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "a754bc55751cde272d99dd7fc94544c3232b5772f0300d9ddada7495eea437d4",
+      "reason": "closed idle eyes",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "heliolisk",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/heliolisk/normal/model.glb",
+          "sha256": "28c0556cd18e7283de81b431a957078e8479a5330b154e32d166e2d0394ba5aa",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0732/pm0732_00_00/pm0732_00_00.trmtr",
+          "table_sha256": "ccf9bb29e9a65a10d19698f71a29105dfb7a15857665ea50aca8b218f5ca685b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/heliolisk/shiny/model.glb",
+          "sha256": "fa14dc94b68573e87ef5295ddfbfe0dfbe2c9fb360d494002185feefaa4bc676",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0732/pm0732_00_00/pm0732_00_00_rare.trmtr",
+          "table_sha256": "b9f04b1cc459bd9236db18c3372ce2804ee5cd9595b7bd70671546c95781fd84"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "0549400b0e428c8ad987fbd9f2e9e63bd6928097d923c5f9a13353d4622e4c10",
+      "media": "za-v3-review",
+      "national_dex": 696,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3e7869772c9ce0ae48109f9a7f8c522b39eaee28d08243a95f42b7906e18e7a3",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "tyrunt",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/tyrunt/normal/model.glb",
+          "sha256": "d80dcba23dd2ab4cd1b4238295f11f9dc2d3e7191d919a1a13ecab1155a52a3d",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0737/pm0737_00_00/pm0737_00_00.trmtr",
+          "table_sha256": "38e45e2343e13704de11453908fa73db9236eef3225a12dfeac89cfab79b892e"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/tyrunt/shiny/model.glb",
+          "sha256": "81255087c3ac982c11c18697ba5c35b20e477fe469bb06de5c3c9d6328eba674",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0737/pm0737_00_00/pm0737_00_00_rare.trmtr",
+          "table_sha256": "ea9bcb38e0c503c492106d5155afffb422b5698945a3120ebc230eaceefef534"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "53c846533562764f4f0a2f63bd0685ca572a016e037fe9dffbdb8cb953c00645",
+      "media": "za-v3-review",
+      "national_dex": 697,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "b0ae52a5faee0b011890c85521c5b43e1cbb720273bd7fa8be060dd7701d63c3",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "tyrantrum",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/tyrantrum/normal/model.glb",
+          "sha256": "f415823193be2b521646933ad2bf0f57e948ea7619ce652969f4434f0b321842",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0738/pm0738_00_00/pm0738_00_00.trmtr",
+          "table_sha256": "c039996ff0190479dcc117d997d1b4267bf2115abb573e10a48a3de3ff2db52f"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/tyrantrum/shiny/model.glb",
+          "sha256": "0ebc441776b93296867a732e262fc366f9bdf1ac24b19917e566599d203825a2",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0738/pm0738_00_00/pm0738_00_00_rare.trmtr",
+          "table_sha256": "9b2a4a435fb802866964efd6eed967d17504f2a86034e3e75fb241d1574e42ce"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "5af1c47465bcceff3e108df6c0435311c3417250efbdf3cf2fb30e1d537195e4",
+      "media": "za-v3-review",
+      "national_dex": 698,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "8d9084a8c17bc427a865b9bcefa16ac4694f53653e40075b59814e69f199c4ca",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "amaura",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/amaura/normal/model.glb",
+          "sha256": "070eeee5ce7542549f2447cbc214a4142a9d53c8bbebc8dce7811563de9c5f01",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0739/pm0739_00_00/pm0739_00_00.trmtr",
+          "table_sha256": "0ae4d0b030d3e4355e172cb14f040ab3b917d8a7f3d62afbb44ab9fdecd91f28"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/amaura/shiny/model.glb",
+          "sha256": "ba4c47f21fdb837732d41c0ba1122de738246b6d66f8d60fb22664c1324a43bc",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0739/pm0739_00_00/pm0739_00_00_rare.trmtr",
+          "table_sha256": "c4e2a9a076d46e6f05834e52a04bd1c28d3eac6ed46f73008fb231d5c38072be"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "691084b3e3baa7844e1346b25985fe80c0046482b0eab884c0994402a1f9f37b",
+      "media": "za-v3-review",
+      "national_dex": 699,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "90fe8827645117d1f451e0f1204314abe99030e77c65ffe4c4e6fd7bab242ae0",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "aurorus",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/aurorus/normal/model.glb",
+          "sha256": "aaeb3e0135947166142d5c823f4af112e458ba16aba4f7d6bdbd382cb6ab312b",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0740/pm0740_00_00/pm0740_00_00.trmtr",
+          "table_sha256": "2ab4f2eaff70960de77a1c73285e908b63a9374715eb2524cfff8f2e7b096e6b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/aurorus/shiny/model.glb",
+          "sha256": "7ad93a43b17565ec04b435345df97f1c41fd5231264d1aeaf4190b2f52afe57a",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0740/pm0740_00_00/pm0740_00_00_rare.trmtr",
+          "table_sha256": "ee0ca9713df5bb6f4cc859609d4514a4ce3fc4b62e779874f2e78b2fc3309558"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "50bba965df83bcfe558a91d6082b6af0c416b3065d78286ac451cfd1fb4797d7",
+      "media": "quick-review",
+      "national_dex": 708,
+      "original_hold": "Embedded normal colour differs from official source: r_eye/BaseColorLayer1",
+      "original_normal_sha256": "7e41f6df631c8d144789ba1b84a6608e4a1afa9a2b74b1a848a737d10694b9e0",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "phantump",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/phantump/normal/model.glb",
+          "sha256": "b2d3a2de82c9da4636e8e53e022ea14cbb0f77706ce1b26150a41ff58787c107",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0702/pm0702_00_00/pm0702_00_00.trmtr",
+          "table_sha256": "390b399b67d12a3c411602f58cba9d368c7e7a9208b0cd1142c0ec6159a2223b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/phantump/shiny/model.glb",
+          "sha256": "8dc81d2dd16270e0645e4ec37937cd08cfec2dac399496377cedab1ef5dfb2e5",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0702/pm0702_00_00/pm0702_00_00_rare.trmtr",
+          "table_sha256": "37290fb57a2359f7ff4e5d398e0ae9069f66ff19d2f5685d151e949ef316dd57"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 709,
+      "original_hold": "Embedded normal pixels differ from official source; UV binding not proven",
+      "original_normal_sha256": "c235c6da6fa92c28128280916ac4861fe7f607a1eb4d406a501f9906adc82d4a",
+      "reason": "Source material names do not identify every exported material",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "trevenant",
+      "status": "scvi_material_hold"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "0134a549f6e4bb99ecd00790a9072017a05799c328bdd3d688ecfd56826ec2e6",
+      "media": "za-v3-review",
+      "national_dex": 716,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "47a353884dc24075210a1a6db02876ff7e106a31c680b00fe4b7eb8b037fbf2b",
+      "reason": "active antler appearance",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "xerneas",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/xerneas/normal/model.glb",
+          "sha256": "c16881d98290cc06db2087eefecd5bf7c2a2bad0615c6963948395ee09d80e94",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0768/pm0768_00_00/pm0768_00_00.trmtr",
+          "table_sha256": "2bdee22b626d7c0bd2d958182aed4d9ad063825c1531bea62cec52d9d1741a89"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/xerneas/shiny/model.glb",
+          "sha256": "f3c767bda0848cdc56da5cc61bbc035f40488751778e013e6a0a6fb188b84ae0",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0768/pm0768_00_00/pm0768_00_00_rare.trmtr",
+          "table_sha256": "dbd12a355ee6ba6a3d037646a7e09b87623d7a58bae6a3b82054130e88d706d0"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "231f38caa743a0793c7c28ac65de1f85f177112184f79b783033ee8e34ea97a8",
+      "media": "za-v3-review",
+      "national_dex": 717,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "a15aad0f4ce5a813429e1ea183719e563a373200fc24db7120db5a61f983796d",
+      "reason": "layer-five wing colours",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "yveltal",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/yveltal/normal/model.glb",
+          "sha256": "0d87100e1f9c174c3ce0c1a2931ff8a22bb2b04ee3b35f8842b8f6c2cf2c298f",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0769/pm0769_00_00/pm0769_00_00.trmtr",
+          "table_sha256": "750a5f0376ebd63d7d78f73b7524d141fa1fc5e65f9f77c02f4371d57e550b8d"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/yveltal/shiny/model.glb",
+          "sha256": "a70f27e3f5ccaf2ac24cb3dfd7bf4d8094b37f7ffd6fe7156a709a4bbb25597f",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0769/pm0769_00_00/pm0769_00_00_rare.trmtr",
+          "table_sha256": "c08ce69b6967278d76884d70059ef72e323c14321dd7d4d225b7e1a1b00ed3be"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "367ecece17fbc38e6f059cfd2c82dcf59c43fc92cc72a18a76af8d11cae6ebc2",
+      "media": "quick-review",
+      "national_dex": 738,
+      "original_hold": "Embedded normal pixels differ from official source; UV binding not proven",
+      "original_normal_sha256": "a841d9f4185ec79844af4a1281303a39849c09aec53934cd59f7b66f55e7240e",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "vikavolt",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/vikavolt/normal/model.glb",
+          "sha256": "8b68b51fbe63def1968971cd6250f2713e2aaf82e2d4558039ad53dce706073d",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0838/pm0838_00_00/pm0838_00_00.trmtr",
+          "table_sha256": "c205c8ac9fda1abaf5bc2c780e997f91966d015c79af802cb32e7d25cfe00c4b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/vikavolt/shiny/model.glb",
+          "sha256": "597362854750c9fa6d5fd218062b91fdd7fc5aa0014fed406c13532b804fcc4b",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0838/pm0838_00_00/pm0838_00_00_rare.trmtr",
+          "table_sha256": "68c0e8202776c7af5c70190e0f0037cde239191929ad5d3a0d6f6a03699fb41d"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 755,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "fed67728541e5f541063dfea467393f8ff4a90daf2163d5dbc5d193825bd0a26",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "morelull",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 756,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "23656304da868aa4ebb46d3b02be7a9f2b65081418dea46c58125061623e6410",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "shiinotic",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 759,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "292a457d369ff83f20b4a231bdf17597bd24b003ff1b71d9b98b8c5815311df8",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "stufful",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 760,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "db7e3a79453087ee3f53a800461e0d0985887631661cd3c9306067bd94342e6b",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "bewear",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "aa8d881179f263523706be2d1fb873ca7b27105907f780cdec811620dc268e18",
+      "media": "za-v3-review",
+      "national_dex": 768,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "ffca93de1af2d34487b61c11f8fe29a3690cc18237d7effeef6ede96c2ffeec9",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "golisopod",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/golisopod/normal/model.glb",
+          "sha256": "085ea5d841ffd379727ed6f4a2817c9d67990e6d884d129b53dcac774b46f1ab",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0867/pm0867_00_00/pm0867_00_00.trmtr",
+          "table_sha256": "56168e2095bf081f7dc3b3d54e57218ea5af0b204a5f65a53b4ca3dec2cae567"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/golisopod/shiny/model.glb",
+          "sha256": "71f3703f9e5800d5f367ee171b47d2a23dc5e6f6762ba2cbbc9002752035416b",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0867/pm0867_00_00/pm0867_00_00_rare.trmtr",
+          "table_sha256": "2b90f3626ac3e123c407cddc0984aafcc73d6cc1861733b78a00d3fbbe5ee9cb"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 771,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "dd1ccd405041a51046c23be7db957e14cd498807c2584d32afea9dc57b5e6243",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "pyukumuku",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 772,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "f78827643140d0e596ee07c50fd12ecee106f4a69562d672fbe68eb849310053",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "type-null",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 776,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "d670ad624ac7c7665fa199abac85fc7eed99b8944c3c362f22965af29a7172fd",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "turtonator",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 777,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "24a6a5dc77b48788929b3706065523b87baf4ca88ed26e3df27325e3eba1e5cb",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "togedemaru",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 781,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "7365c8865c3c16baf129bb09e650abbd885cd0797196e00d11c0141e4b45b975",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "dhelmise",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 785,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "ff103b0eb5da742d05267cde03157825548400b946029bd8e837de41eb117979",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "tapu-koko",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 786,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "10862255a1ae826409d0e777050b5a6d040c68b206bde6c0997ac3368913524c",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "tapu-lele",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 787,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "6a7ce32cdb7c44514bf5b5f4338acf867b3f921b63f6d02199d66a22e5da8c14",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "tapu-bulu",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 788,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "6c49c6a7efe3c4fcf4748fc528a5e495e14b5296dedf8451302898c959e1ad24",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "tapu-fini",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "b03c9616bb9bd7396d4775252ff03e12fc4ee1169083233db093437aac10b3c3",
+      "media": "quick-review",
+      "national_dex": 789,
+      "original_hold": "ValueError: Variant is identical to normal",
+      "original_normal_sha256": "97391408f5fc34eb3d1d848b678142cdda0781051ee20f606ee167fae78e2797",
+      "reason": "layered translucent surface",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "cosmog",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/cosmog/normal/model.glb",
+          "sha256": "5c308b5ca3fed7b26933961f0720cde9bdb03072cde4d699e20c12aa84280abf",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0871/pm0871_00_00/pm0871_00_00.trmtr",
+          "table_sha256": "ec8645c07d2d61353fb0f6aae09ecd13aca3ae80681347a0c259ed9125e4cff9"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/cosmog/shiny/model.glb",
+          "sha256": "5393a2a2ce97b7c6f3db10162cd9399a68e3ae6baba5cba537ee53ed2743572a",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0871/pm0871_00_00/pm0871_00_00_rare.trmtr",
+          "table_sha256": "f6547510fc88bfcd196e4e338a107f8e33436683c598de0dda792d32ea35091d"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "73e58f5c0a02cef0427958a6d73cf5c5f507507adbe89d793ae1e4a52b7b940a",
+      "media": "quick-review",
+      "national_dex": 790,
+      "original_hold": "ValueError: Variant is identical to normal",
+      "original_normal_sha256": "5f3feb74c6e93c790d02e3e1aaaeeedf52e79fb6f495e18b40651bec2ac1b600",
+      "reason": "layered translucent surface",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "cosmoem",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/cosmoem/normal/model.glb",
+          "sha256": "2a067bd7ab2072bbef1f2e52d20ccb1424aa54c8a941ac785e16194909f5bb17",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0872/pm0872_00_00/pm0872_00_00.trmtr",
+          "table_sha256": "71c4cd27f8cf5a63c8782694e0c079a8dc32df41dfe3240a6afdac8b2b7b51fb"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/cosmoem/shiny/model.glb",
+          "sha256": "379dcc8289cab39094a1672e0a9e670d185f915ac868b199244e41fd4b7a1507",
+          "table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0872/pm0872_00_00/pm0872_00_00_rare.trmtr",
+          "table_sha256": "1232fe7227dffb2e00e9dcbd64b2c57180471eebae0df882dd8e56dc95a17b5f"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 793,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "35253531423e3278eeb149400012bc6c9bea6d026695d69a04d7e51922fe238a",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "nihilego",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 794,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "c25345ebb9dfc3a4ce630d996f5b09f629ebfde1feafa808b53ffdf8d49feffd",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "buzzwole",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 795,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "4c203964e0704ec48f9ef250c44dbb6f5a5d18a08673fc5d8730b9a7be1dc7a5",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "pheromosa",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 796,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "520658842eb49da93df4d10e5f5ae49617ef0f0172ccc65c92961d784297d202",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "xurkitree",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 797,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "443b1b0bf8ef62e1edd38623cef24ceeacba4f545e50f08a695371a488bbca81",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "celesteela",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 798,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "a0e4c94de3d48df4ffd05581ceecc4974fb87d8ba8ae7fda4f0729daa2c543bc",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "kartana",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 799,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3515b6e8b4ab4e929383849301a092b4c967859cc2121538ee6f058d5822906a",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "guzzlord",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "6b85b463b195ebddd7b966a60cfbe79dbd0298b94f283589af244e89c37a2e11",
+      "media": "za-v3-review",
+      "national_dex": 802,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "5e35e94692f111a9df23d4b07f484525764cb75084c1ec156dc4afa0d2d0cd58",
+      "reason": "effect visibility",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "marshadow",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/marshadow/normal/model.glb",
+          "sha256": "252fb689a6f8278723ad1fb8ee07225601159df4608dcc608d33c1572f5f560a",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0883/pm0883_00_00/pm0883_00_00.trmtr",
+          "table_sha256": "aba5d4690f1319f55294001c9d0ecf527d486b9b82573af47ed13b00a995d498"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/marshadow/shiny/model.glb",
+          "sha256": "aa32bccef40dd631d25242d369a3f4bb9e27ba8772a0fe0591ae06d1030df58e",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0883/pm0883_00_00/pm0883_00_00_rare.trmtr",
+          "table_sha256": "caf32a511084cc3c3ec6d1543f52b708328dbabd452a797679e77b0a3301d856"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 803,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3171a312f5cf36470413596e293f786c507ec8d2eee4a5a7f924cf42c8e0eb88",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "poipole",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 804,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "83b5f5b872e677d20a1b66f4116baf03fd77b1fe4cb8048db695a30f4093a494",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "naganadel",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 806,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "aa3141480b7bb688636e86b3c6fc990c21730dc9d6596c86549c8aaac37c7b81",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "blacephalon",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "1121de65b8d496a60a1f2de98c8b9f5feb954b1f77af673da3083fcafce98f4d",
+      "media": "za-v3-review",
+      "national_dex": 807,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "aa3bb66a96112d9d4a3e90e337fe8f01431e14a1798cbba77eeb47886acbbfe6",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "zeraora",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/zeraora/normal/model.glb",
+          "sha256": "8b2d6c38d1add47c606f53f9defba2575cf0cd1c654d4499862faa84479e85b7",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0888/pm0888_00_00/pm0888_00_00.trmtr",
+          "table_sha256": "c23cb5c373f04786bf1b366a839d086a5bc362eb9eb6791b7f68177f6c7e96b9"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/zeraora/shiny/model.glb",
+          "sha256": "f8c27d2ac593b25b0323fd0d9a27e4c17551fee78f406c1b939c07bf4daee88e",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0888/pm0888_00_00/pm0888_00_00_rare.trmtr",
+          "table_sha256": "856178ba107e6278195c54e5e9dd84cc7cd2450d27e2336a1918ff10b994ff7f"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "33291f30dc7ae8d38a99179b314f116ffcf8106eb0676a05a965fabb0cfca051",
+      "media": "za-v3-review",
+      "national_dex": 808,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "0102c4dccadbdf9912ae81dd65bf34dba00e213fad5952e755678867384eddca",
+      "reason": "metal and eye reflection",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "meltan",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/meltan/normal/model.glb",
+          "sha256": "158bf55e0556070cef7836a9a9855b861a4da33cb17887be2c5be04f9935618b",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0891/pm0891_00_00/pm0891_00_00.trmtr",
+          "table_sha256": "2b673699d4204efcfeebf6d07883651154bb0560c4ee9833f06cb958429c2516"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/meltan/shiny/model.glb",
+          "sha256": "8c0d7fae06e206c6657f6d246d426fd6dd1cf778369e735c7bcaf421a3e5edb2",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0891/pm0891_00_00/pm0891_00_00_rare.trmtr",
+          "table_sha256": "6343f77ae23944b09e26ddd73c36581e189c4bdecdbca38296e6cf8e7a4a85aa"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "geometry_motion_sha256": "1aaa3c859d7d53c9f56970298a68936fd3dbb7c0d05b14374c865508853df5ad",
+      "media": "za-v3-review",
+      "national_dex": 809,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "5ba2273dadb8d7d54d4d7e11f8a43f351780fc832a50370707d9491bbcd3155d",
+      "reason": "metal and eye reflection",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "melmetal",
+      "status": "visual_hold",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/melmetal/normal/model.glb",
+          "sha256": "a2f5c15fb75cfb663ee5b1800076e4f598711f0aa6f5b1548f0a99e5595f1074",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0892/pm0892_00_00/pm0892_00_00.trmtr",
+          "table_sha256": "f59a0b099f426118d8811dd2f9aa08e2b2c18a1e7e5f562df5f21ff8ab1d73be"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/melmetal/shiny/model.glb",
+          "sha256": "145fdf7b71dacec48b82817f60d6a5b8b92d5d61071c9414bc84418a793f9a2e",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0892/pm0892_00_00/pm0892_00_00_rare.trmtr",
+          "table_sha256": "da418a125524d741559e932a79ec7ca717bc57512059a4637c626ce68a0d3a8e"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 824,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "eb6bcf3fa56eb5c33ebed416abcba8930454d2eb63c0181f1991f2b29a180a3e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "blipbug",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 826,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "1d5d2383babc7ada1ab663b145c13bf78ece28d2df40f818b30e6fbd51d93759",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "orbeetle",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "45a0523d3c45317e82570f12fe8dcfee5b80fba2d90d9540dada06929a87d1dd",
+      "media": "za-v3-review",
+      "national_dex": 827,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "53f23a096334a8c330a823861aff61dce80d4d1b8703d063d7dfd5263298b7ef",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "nickit",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/nickit/normal/model.glb",
+          "sha256": "3fa1fd2fa2b53c9ebcdb5e2aa5857ef6b5e94488f81ef42be153c42bcd77af53",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0901/pm0901_00_00/pm0901_00_00.trmtr",
+          "table_sha256": "db1f97637f78af2d2fd020e7b19f6b1670c08b4b40ecf08ce06d2aa5251426e1"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/nickit/shiny/model.glb",
+          "sha256": "29be3cd5441161a4af075bbb1ecffdf499fbe7fdafb199e6e43d098d63059033",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0901/pm0901_00_00/pm0901_00_00_rare.trmtr",
+          "table_sha256": "b82ca16b2e1441961d7d5d3a841cf2313c99ab2a1e7d703f4b438e9239777e15"
+        }
+      }
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "geometry_motion_sha256": "fcb6aa7e0a4a2bd8da68b932fbb551d1227e5ff1a1cc6f668509d9ad9da2d6a7",
+      "media": "za-v3-review",
+      "national_dex": 828,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "0943f1c2b634f64f183359d7915e48109af2a790e3dd38629940a3521e860159",
+      "reason": null,
+      "release_approved": false,
+      "runtime_approved": true,
+      "species": "thievul",
+      "status": "locally_admitted",
+      "user_appearance_feedback": "de 32 zien er goed uit",
+      "user_battle_feedback": "ziet er goed uit",
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/thievul/normal/model.glb",
+          "sha256": "37f4ec4babcdf1509e6c7a1d6c2bb5dabca20088e8651dffacb8f159db2a4931",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0902/pm0902_00_00/pm0902_00_00.trmtr",
+          "table_sha256": "97e102e2b9edebf2a1300d0720edbd7140eb0e1e2b3ec47ff6b140380bc4fd9a"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/thievul/shiny/model.glb",
+          "sha256": "176366c4a06e0abcc2da0c159e60ad7bc63c32978753db482c931d22e43b4495",
+          "table": ".tmp/shiny-151-recovery/za-materials/pm0902/pm0902_00_00/pm0902_00_00_rare.trmtr",
+          "table_sha256": "6f683446189e0e46cd94e3bdfcf37acc174ed80c5591099b0b9d32f2ee53c4ee"
+        }
+      }
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 829,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "76438174dfb64e4835377ef4c615dddd3feb4947e839ee8f08584d6ebe45e9c8",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "gossifleur",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 830,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "85edbc2caacdd804fedbba6d70a2ef72131c1d4de89589ee14393da2527e02bf",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "eldegoss",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 831,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "f26f3ee03d3e47c54411bf04b2c03515af3a4c78ecba086fa89728106d628706",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "wooloo",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 832,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "5056a010388b1c3d08255102bda321f0610939e79328799007de8b2a9a104812",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "dubwool",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 835,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "1fa384b712dbfd8ffdf5d04af0dc72df876bca4d4e9be219b0b13929b3ccd984",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "yamper",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 836,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "8c677735d41e3de802e9dc34d697d283759ada818a10822993e3761cb1b40c58",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "boltund",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 850,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9ffb93fcb944d8c1f898e79eb42db968a0f0ebfd0ab79fdce89bc196e1f7e12f",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "sizzlipede",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 851,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "e50960fd4df7e8e14416ec5a8f95eb70a972256e884f5952226db05df140f468",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "centiskorch",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 865,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "3f2b434a5b63407d6f269e079298864bac4b88ca1638282e2c47ed7552f0e891",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "sirfetchd",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 866,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "4d68aac644c75a69d9913daf94083d490f4ebd469d4aa24f61440009b2d0a052",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "mr-rime",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 880,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "62e6db3148e27b147d009bcf3e70ceb4187ae8884378605b0d90ec66aa6740e6",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "dracozolt",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 881,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "059334c2fe2c7b4efbe41fad7c3dbae2e9c6963431310e87a7685b491ccb456e",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "arctozolt",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 882,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "7433139d4641c882c586ec05f51465347b1fcedbb65d6b0c55fecd25ba88f6f4",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "dracovish",
+      "status": "missing_compatible_shiny_source"
+    },
+    {
+      "appearance_approved": false,
+      "battle_approved": false,
+      "national_dex": 883,
+      "original_hold": "ValueError: Official normal/rare material tables absent for this source",
+      "original_normal_sha256": "9244a1e33877c036a1c498b52997e4b6fc78e34b3c8ce428b87bba427a3c484f",
+      "reason": "No matching normal/rare tables in the local SCVI or ZA dumps; Biochao archive has no separate rare asset.",
+      "release_approved": false,
+      "runtime_approved": false,
+      "species": "arctovish",
+      "status": "missing_compatible_shiny_source"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/inventory.json",
+      "sha256": "016c88f9b61c7f7097c9472aa1a37042b28e1c2a51b3cfc4d14c665faff85067"
+    },
+    {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/status.json",
+      "sha256": "f182619b1f298e1f6087a97bf3d08ae3e6613d853b6a5f2bccd06fa01565f341"
+    },
+    {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/status.json",
+      "sha256": "d9f9a70d717fd29662e19da1797fc3a79aaee036551c13bf11e1e7235e6a3e93"
+    },
+    {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/quick-review/review.json",
+      "sha256": "ebd350c1dd71cbe0b3ec442ac63f9e4d01118408661e7ccedff968d454eeeacc"
+    },
+    {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-v3-review/review.json",
+      "sha256": "c104b5ca1ea74bd50de63ef58d0ab60155f03d10f5fe8e9acdc8add07a0b3032"
+    }
+  ],
+  "release_approved": false,
+  "runtime_approved": false,
+  "schema": 1,
+  "scope": "151 original shiny holds; 32 locally admitted, 119 remaining; no publication",
+  "total": 151,
+  "user_review_pending": false
+}
