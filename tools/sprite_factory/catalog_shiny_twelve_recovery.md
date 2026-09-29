@@ -74,3 +74,11 @@ attack and idle captures were inspected. Both standalone scenes are about
 28 MiB each; storage optimisation is deferred. Existing PBR approximation
 still applies. Marshadow appearance approval and all twelve battle checks
 remain pending at this checkpoint.
+
+The user subsequently questioned the tint/coverage. The v3 candidate additionally
+uses the pinned tables' zero specular intensity for all four body_a colour
+layers, removing the generic PBR white highlights. Albedo frames, geometry and
+motion are unchanged. The review page now includes an attributed Sword/Shield
+comparison image; its lighting differs from the review studio. Appearance
+acceptance remains pending; neither the clarification nor the follow-up question
+about temporary battle colour changes constitutes approval.
