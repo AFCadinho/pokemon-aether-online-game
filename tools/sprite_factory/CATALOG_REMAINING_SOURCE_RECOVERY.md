@@ -58,6 +58,19 @@ Wishiwashi field-wait render. The page is a diagnostic and does not grant
 approval. Cursola's mostly white coral and transparency still need a focused
 visual decision.
 
+Body-detail follow-up: a fresh source audit found that Wishiwashi, Silvally,
+Obstagoon and Cursola mix their albedo with a `Colors` vertex attribute at
+factor 0.5. Their archived meshes contain `Color` and `Color2`, but no
+`Colors`; Blender therefore renders the albedo at half linear brightness.
+The glTF exporter drops the mix and leaves the unscaled texture, washing out
+body detail in Godot. `catalog_remaining_body_detail.py` restores the exact
+0.5 material factor for those four source-hash-pinned models. Unown's earlier
+flat charcoal diagnostic is replaced by a bake of its authored blue body
+shader, retaining the source normal map. Darmanitan has a separate 0.7
+contrast-calibration candidate; its source does not use the missing `Colors`
+mix. All six export fresh and convert to standalone Godot scenes. The body
+review is still pending, and no normal/shiny pair is catalog approved.
+
 An external [Pokémon 3D API asset repository](https://github.com/Pokemon-3D-api/assets)
 contains shiny GLBs for Unown (201), Silvally (773), and Obstagoon (862).
 Inspection of their GLB headers found **zero animation clips** in all three.
