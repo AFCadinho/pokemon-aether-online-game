@@ -78,7 +78,25 @@ func _run() -> void:
 	result["reflection_environment"] = "neutral_studio" if reflection_review else "default"
 	var eye_level_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_EYE_LEVEL") == "1"
 	var side_review := OS.get_environment("POKEAETHER_CATALOG_REVIEW_SIDE") == "1"
-	result["camera_angle"] = "side" if side_review else ("low_front" if eye_level_review else "default")
+	var direction_text := OS.get_environment("POKEAETHER_CATALOG_REVIEW_CAMERA_DIRECTION")
+	var custom_direction := Vector3.ZERO
+	if not direction_text.is_empty():
+		var coordinates := direction_text.split(",")
+		if coordinates.size() != 3:
+			printerr("Invalid review camera direction")
+			quit(2)
+			return
+		for value: String in coordinates:
+			if not value.is_valid_float():
+				printerr("Invalid review camera direction")
+				quit(2)
+				return
+		custom_direction = Vector3(float(coordinates[0]), float(coordinates[1]), float(coordinates[2]))
+		if not custom_direction.is_finite() or custom_direction.length_squared() < 0.01:
+			printerr("Invalid review camera direction")
+			quit(2)
+			return
+	result["camera_angle"] = direction_text if not direction_text.is_empty() else ("side" if side_review else ("low_front" if eye_level_review else "default"))
 	var failed := false
 	for row: Variant in rows:
 		if not row is Dictionary:
@@ -122,7 +140,7 @@ func _run() -> void:
 						camera.size = maxf(framing.size.length() * 1.12, 0.1)
 						camera.far = maxf(camera.size * 10.0, 1000.0)
 						var target := framing.get_center()
-						var direction := Vector3(7, 2, 3) if side_review else (Vector3(3, 0.4, 7) if eye_level_review else Vector3(3, 2, 7))
+						var direction := custom_direction if not direction_text.is_empty() else (Vector3(7, 2, 3) if side_review else (Vector3(3, 0.4, 7) if eye_level_review else Vector3(3, 2, 7)))
 						camera.position = target + direction.normalized() * camera.size * 3
 						camera.look_at(target)
 						for action: String in actions:

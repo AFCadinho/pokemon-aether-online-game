@@ -31,6 +31,20 @@ artifact without editing the archived blend. None of these six has a qualified
 shiny scene. Keep them outside the approved catalog until normal/shiny visual
 review, grounding and battle qualification finish.
 
+Face follow-up: the first six normal renders were rejected for eye/face
+appearance. Unown A's glTF export had selected the packed `eye_msk` as its
+visible albedo, producing a giant black eye. The source-hash-pinned Unown
+conversion now bakes the original Blender eye material's Base Color and binds
+that texture in the GLB. Its new Godot idle render has a light eye and pupil.
+This remains a visual-review candidate, not a shiny or battle approval.
+The other five remain on face review hold. Their eye geometry exists, but
+isolated-eye captures show mostly flat atlas colours. Darmanitan's eye-UV
+experiment exposed a wrong atlas tile on one eye; that experiment was not
+applied to the production conversion. Their source eye-UV node groups need
+individual review before promoting normal scenes. The Godot review renderer
+accepts an optional `POKEAETHER_CATALOG_REVIEW_CAMERA_DIRECTION=x,y,z` for
+viewing such cases from other angles.
+
 The six normal poses can now be reviewed together with
 `catalog_remaining_six_review.py`; it uses the corrected Unown render and the
 Wishiwashi field-wait render. The page is a diagnostic and does not grant

@@ -96,6 +96,10 @@ def export_one(entry, probe_status, output, worker):
         if set(current["animations"]) != set(mapping):
             return {"species": species, "status": "held",
                     "reason": "existing_diagnostic_has_different_action_set"}
+        if (species == "unown" and current.get("body_review_candidate", {}).get("policy")
+                != "unown-a-body-eye-review-v2"):
+            return {"species": species, "status": "held",
+                    "reason": "stale_unown_face_candidate_requires_new_output"}
         return {"species": species, "status": "exported", "bank": bank,
                 "physical_attack_2": "physical_attack_2" in mapping,
                 "report": str(existing_report)}
@@ -129,8 +133,19 @@ def export_one(entry, probe_status, output, worker):
             raise ValueError("Export report differs from selected native actions")
         if species == "unown":
             from catalog_remaining_unown_body import repair
-            corrected = directory / "model-unown-body-review.glb"
-            result["body_review_candidate"] = repair(directory / "model.glb", corrected, digest)
+            eye_bake = directory / "unown-a-authored-eye.png"
+            eye_worker = Path(__file__).with_name("catalog_remaining_unown_eye_worker.py").resolve()
+            eye_command = ["flatpak", "run", "--unshare=network", "--nofilesystem=host",
+                           "--filesystem=" + str(directory), "--filesystem=" + str(eye_worker.parent) + ":ro",
+                           "org.blender.Blender", "--background", "--factory-startup", "--disable-autoexec",
+                           "--python-exit-code", "1", "--python", str(eye_worker), "--",
+                           str(extracted), str(eye_bake)]
+            with (directory / "eye-bake.log").open("w") as log:
+                subprocess.run(eye_command, stdout=log, stderr=subprocess.STDOUT,
+                               timeout=120, check=True)
+            corrected = directory / "model-unown-face-review.glb"
+            result["body_review_candidate"] = repair(directory / "model.glb", corrected, digest,
+                                                      eye_bake)
             result["path"] = str(corrected)
             result["glb_sha256"] = result["body_review_candidate"]["sha256"]
             result["bytes"] = corrected.stat().st_size
