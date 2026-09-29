@@ -119,14 +119,8 @@ func _run() -> void:
 			var presenter = battle.battle_stage.get_node("ExperimentalBattle3D")
 			presenter.preparation_failed = true
 			presenter.reason = "Test stalled loader"
-			await get_tree().process_frame
-			await get_tree().process_frame
-			assert(host.get_node("Cover").visible)
-			assert(host.fallback_button.visible)
-			assert(host.loading_label.text.contains("Test stalled loader"))
-			host.fallback_button.pressed.emit()
 			await get_tree().create_timer(0.3).timeout
-			assert(not host.get_node("Cover").visible)
+			assert(not host.get_node("Cover").visible, "Failed 3D preparation must reveal automatic 2D fallback")
 		# A server-driven relocation is not overwritten on return.
 		player.position = Vector2(321, 456)
 		world._clear_battle_ui_instance()
