@@ -5994,7 +5994,7 @@
 		},
 		"kanto_underground_path_route_5_entrance__to_tunnel": {
 			"destination": {
-				"facingDirection": "right",
+				"facingDirection": "down",
 				"mapId": "kanto_underground_path_tunnel",
 				"mapSceneAliases": [
 					"uid://dojbifvyrs1si"
@@ -6028,7 +6028,7 @@
 		},
 		"kanto_underground_path_route_6_entrance__to_tunnel": {
 			"destination": {
-				"facingDirection": "left",
+				"facingDirection": "up",
 				"mapId": "kanto_underground_path_tunnel",
 				"mapSceneAliases": [
 					"uid://dojbifvyrs1si"
@@ -6045,7 +6045,7 @@
 		},
 		"kanto_underground_path_tunnel__to_route5_entrance": {
 			"destination": {
-				"facingDirection": "left",
+				"facingDirection": "down",
 				"mapId": "kanto_underground_path_route_5_entrance",
 				"mapSceneAliases": [
 					"uid://5rwhgxy863f5"
@@ -6062,7 +6062,7 @@
 		},
 		"kanto_underground_path_tunnel__to_route6_entrance": {
 			"destination": {
-				"facingDirection": "right",
+				"facingDirection": "down",
 				"mapId": "kanto_underground_path_route_6_entrance",
 				"mapSceneAliases": [
 					"uid://c25wp5r1uf38i"

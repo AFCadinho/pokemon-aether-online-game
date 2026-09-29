@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bij de trappen van de Underground Passage kijkt de speler na aankomst de kamer of tunnel in, vanuit zowel Route 5 als Route 6.
+
 - 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
 
 - Route 10 gebruikt de nieuwste Tiled-visual; het Pokémon Center is via de servercatalogus bereikbaar en beschikbaar als bestemming voor staffteleport.

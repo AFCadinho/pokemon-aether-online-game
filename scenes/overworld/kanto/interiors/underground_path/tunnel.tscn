@@ -155,7 +155,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn"
 target_spawn_name = "FromTunnel"
 transition_id = "kanto_underground_path_tunnel__to_route5_entrance"
-transition_facing_direction = "left"
+transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Entrance" unique_id=1709218067]
 position = Vector2(-16, 0)
@@ -171,7 +171,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn"
 target_spawn_name = "FromTunnel"
 transition_id = "kanto_underground_path_tunnel__to_route6_entrance"
-transition_facing_direction = "right"
+transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute6Entrance" unique_id=1662763225]
 position = Vector2(16, 0)
