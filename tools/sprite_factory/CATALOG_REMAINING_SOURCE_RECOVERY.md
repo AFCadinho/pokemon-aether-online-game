@@ -31,6 +31,21 @@ artifact without editing the archived blend. None of these six has a qualified
 shiny scene. Keep them outside the approved catalog until normal/shiny visual
 review, grounding and battle qualification finish.
 
+The six normal poses can now be reviewed together with
+`catalog_remaining_six_review.py`; it uses the corrected Unown render and the
+Wishiwashi field-wait render. The page is a diagnostic and does not grant
+approval. Cursola's mostly white coral and transparency still need a focused
+visual decision.
+
+An external [Pokémon 3D API asset repository](https://github.com/Pokemon-3D-api/assets)
+contains shiny GLBs for Unown (201), Silvally (773), and Obstagoon (862).
+Inspection of their GLB headers found **zero animation clips** in all three.
+They may help compare colours, but cannot replace the native animated source
+or qualify a shiny runtime scene. The same repository has no shiny GLB for
+Darmanitan (555), Wishiwashi (746), or Cursola (864). Its asset map was empty
+when checked, so original upstream provenance for these three GLBs was not
+established; do not include their bytes in production bundles on this evidence.
+
 ## Fifteen newer Scarlet/Violet models
 
 The supplied `Pokémon SCVI Base + DLC Model Dump` contains models, normal
