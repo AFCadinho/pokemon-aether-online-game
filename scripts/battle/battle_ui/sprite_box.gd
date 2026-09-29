@@ -2119,7 +2119,9 @@ func _upgrade_single_web_sprite(generation: int, species: String, side: String, 
 	_apply_single_web_frames(frames)
 
 
-func allow_web_sprite_upgrades() -> void:
+func allow_web_sprite_upgrades(force_fallback := false) -> void:
+	if not force_fallback and not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+		return
 	web_sprite_upgrades_allowed = true
 	if current_single_species != "" and single_container.visible and not _has_dratini_poc_sprite():
 		_upgrade_single_web_sprite.call_deferred(

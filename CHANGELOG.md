@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktopclient biedt 2D-sprites, 3D-modellen op een 2D-achtergrond en volledige 3D-gevechten. Sprites en goedgekeurde modellen worden per Pokémon vooraf geladen zodra een map wordt betreden, blijven lokaal bewaard en kunnen via Instellingen weer worden verwijderd; ontbrekende 3D-modellen vallen terug op 2D.
+
 - Diglett's Cave heeft bij beide entreekamers complete grotopeningen; de uitgangen in Godot volgen nu de volle breedte.
 
 - Bij de trappen van de Underground Passage kijkt de speler na aankomst de kamer of tunnel in, vanuit zowel Route 5 als Route 6.
