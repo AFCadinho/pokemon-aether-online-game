@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
+
 - 32 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen en individuele bundles. Kleuren, ogen en battleplaatsing zijn gecontroleerd; Mamoswine en Malamar blijven ook tijdens hun aanvallen boven de vloer.
 
 - 30 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. De ogen van Torchic, Dodrio en Vileplume en de battleschaal van Torchic zijn gecontroleerd. De resterende catalogusintake staat per Pokémon in een technische wachtlijst.
