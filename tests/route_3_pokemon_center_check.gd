@@ -17,7 +17,7 @@ func _run() -> void:
 	var mt_moon_source := FileAccess.get_file_as_string(MT_MOON_1F_PATH)
 	_check_route_3_center_npc_spacing()
 	_check(center_source.contains('map_id = "kanto_route_3_pokemon_center"'), "center has a unique map id")
-	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_nurse_joy"'), "center places Nurse Joy")
+	_check(not center_source.contains('npc_id = "kanto_route_3_pokemon_center_nurse_joy"'), "Nurse Joy uses the shared Pokémon Center metadata")
 	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_magikarp_salesman"'), "center places the Magikarp salesman")
 	_check(center_source.contains('target_spawn_name = "FromPokecenter"'), "center returns to the route")
 	var exit := _node_block(route_source, "ToPokecenter")

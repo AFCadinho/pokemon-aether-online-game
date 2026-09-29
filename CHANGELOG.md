@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Centers gebruiken nu de standaard metadata uit hun gedeelde template. Route 10 heeft twee nieuwe bezoekers met Magnemite en Emolga.
+
 - Het geplande 3D-starterpakket wordt nog niet vooraf gedownload. De desktopclient laadt alleen modellen voor de huidige party, map en gevechten wanneer ze nodig zijn.
 
 - Nieuwe desktopspelers starten standaard in 3D. Als een model ontbreekt of niet kan worden geladen, schakelt het gevecht automatisch over naar 2D.
