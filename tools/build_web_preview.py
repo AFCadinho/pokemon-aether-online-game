@@ -16,6 +16,9 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 # Background music is external; effects/cries and core gameplay stay bundled.
 MAX_INITIAL_BYTES = 312 * 1024 * 1024
+# A one-release exception may be used for a candidate that narrowly exceeds
+# the normal phase-5 limit. This ceiling is deliberately bounded and opt-in.
+MAX_EXCEPTION_BYTES = 328 * 1024 * 1024
 WEB_AUDIO_SOURCE_DIRS = (
     ROOT / "assets/music",
     ROOT / "assets/audio",
@@ -136,10 +139,33 @@ def validate_external_music_pack(path: Path) -> None:
         raise RuntimeError(f'Web PCK embeds background music: {forbidden[:5]}')
 
 
+def initial_size_limit(*, allow_exception: bool, reason: str | None) -> tuple[int, str | None]:
+    """Return the normal or explicitly approved, bounded one-release limit."""
+    if not allow_exception:
+        if reason:
+            raise ValueError('A size-exception reason requires --allow-size-exception.')
+        return MAX_INITIAL_BYTES, None
+    clean_reason = (reason or '').strip()
+    if len(clean_reason) < 15:
+        raise ValueError('A size exception requires a reason of at least 15 characters.')
+    return MAX_EXCEPTION_BYTES, clean_reason
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--godot', default='godot')
+    parser.add_argument('--allow-size-exception', action='store_true',
+                        help='Allow this candidate to exceed 312 MiB, up to 328 MiB.')
+    parser.add_argument('--size-exception-reason',
+                        help='Required audit reason when --allow-size-exception is set.')
     args = parser.parse_args()
+    try:
+        size_limit, exception_reason = initial_size_limit(
+            allow_exception=args.allow_size_exception,
+            reason=args.size_exception_reason,
+        )
+    except ValueError as error:
+        parser.error(str(error))
     if ROOT.parent.name.startswith('slot-') and os.environ.get('POKEAETHER_SLOT') != ROOT.parent.name:
         parser.error('Run slot builds through ops/worktrees/slot-env SLOT -- COMMAND.')
     output = ROOT / 'builds/web'
@@ -209,17 +235,19 @@ def main():
 
     initial_bytes = sum(item['bytes'] for item in files)
     validate_external_music_pack(pck_path)
-    if initial_bytes > MAX_INITIAL_BYTES:
+    if initial_bytes > size_limit:
         raise RuntimeError(
             f'Web build is {initial_bytes / 1048576:.1f} MiB; '
-            f'the phase-5 budget is {MAX_INITIAL_BYTES / 1048576:.0f} MiB.'
+            f'the permitted limit is {size_limit / 1048576:.0f} MiB.'
         )
     receipt = {
         'phase': 7, 'accounts': True, 'onlineGameplay': True,
         'chat': True, 'aiSparring': True, 'ranked': False,
         'dynamicPokemonSprites': True,
         'assetProfile': 'kanto-all-current-maps-modular',
-        'maxInitialBytes': MAX_INITIAL_BYTES,
+        'maxInitialBytes': size_limit,
+        'standardInitialLimitBytes': MAX_INITIAL_BYTES,
+        'sizeExceptionReason': exception_reason,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),
         'engine': subprocess.check_output([args.godot, '--version'], text=True).strip(),
@@ -230,6 +258,8 @@ def main():
     }
     (output / 'build-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(f"Web preview exported: {receipt['initialBytes'] / 1048576:.1f} MiB before HTTP compression.")
+    if exception_reason:
+        print(f"One-release size exception: {exception_reason}")
     print('Serve with: python3 tools/serve_web_preview.py')
 
 

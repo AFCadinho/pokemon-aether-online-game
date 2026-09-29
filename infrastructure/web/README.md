@@ -226,6 +226,13 @@ demo is expected to be about 303 MiB before
 HTTP compression, down from the phase-4 baseline of 559 MiB while adding the
 static battle sprite catalog.
 
+The preview workflow normally enforces the 312 MiB limit. For an explicitly
+approved, one-release exception, its manual dispatch can allow a payload up to
+328 MiB and requires an audit reason; the build receipt records that reason and
+the exception ceiling. The normal limit stays at 312 MiB, and a payload above
+328 MiB still fails. The candidate must still pass the regular preview checks
+and manual browser release matrix before publication.
+
 Phase 7 serves the optional Gen 5 sheets separately under
 `/pokemon-assets/gen5/`. The browser build never embeds that 1.1 GiB source
 collection: battle and detail views show their HOME fallback immediately, fetch
