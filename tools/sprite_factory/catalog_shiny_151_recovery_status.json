@@ -2250,12 +2250,12 @@
       "national_dex": 802,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "5e35e94692f111a9df23d4b07f484525764cb75084c1ec156dc4afa0d2d0cd58",
-      "reason": "User reported normal and shiny identical: native attack colour-mask translation was missing. Corrected candidate awaiting visual review.",
+      "reason": "User still questions green normal / purple shiny attack colours; reference confirms Zenith colours, clarification about pose or tint/coverage pending. Not approved.",
       "release_approved": false,
       "repair_review": {
         "receipt": "tools/sprite_factory/catalog_marshadow_mask_recovery.json",
         "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/marshadow-motion-v2/index.html",
-        "status": "awaiting_appearance_review",
+        "status": "awaiting_colour_feedback_clarification",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,

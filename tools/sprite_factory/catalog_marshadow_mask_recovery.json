@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-09-29",
   "species": "marshadow",
-  "status": "awaiting_appearance_review",
+  "status": "awaiting_colour_feedback_clarification",
   "appearance_approved": false,
   "battle_approved": false,
   "runtime_approved": false,
@@ -522,5 +522,10 @@
     "Review-only candidates; battle qualification and admission pending.",
     "Source mask is sampled at native 60 fps into embedded albedo textures; existing approximate PBR material remains.",
     "Additional embedded textures increase scene size; storage optimisation is not part of this correction."
-  ]
+  ],
+  "user_feedback": "Nee kleuren kloppen nog steeds niet. Normale laat nu groen zien. En shiny laat paars zien.",
+  "reference_check": {
+    "url": "https://bulbapedia.bulbagarden.net/wiki/Marshadow_(Pok%C3%A9mon)#Zenith_Marshadow",
+    "finding": "Normal green and shiny purple are expected during attacks; resting models remain grey. Clarification requested about pose versus tint/coverage."
+  }
 }
