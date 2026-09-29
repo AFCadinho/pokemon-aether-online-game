@@ -9,6 +9,8 @@ const DOWNLOAD_ATTEMPTS := 3
 const DOWNLOAD_RETRY_SECONDS := 0.35
 const PREFETCH_CONCURRENCY := 4
 const MOBILE_ASSET_ORIGIN := "https://play.pokeaether.com"
+const DESKTOP_CACHE_ROOT := "user://desktop-pokemon-sprites-v1"
+const DesktopAssetStorage := preload("res://scripts/services/desktop_asset_storage.gd")
 
 class LoadTicket extends RefCounted:
 	signal completed
@@ -23,8 +25,43 @@ var _release_config_cache: Dictionary = {}
 var _release_config_ticket: LoadTicket
 
 
+func can_clear_desktop_disk() -> bool:
+	return _in_flight.is_empty()
+
+
 func is_available() -> bool:
-	return OS.has_feature("web") or OS.has_feature("mobile")
+	return true
+
+
+func desktop_disk_bytes() -> int:
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		return 0
+	var directory := DirAccess.open(DESKTOP_CACHE_ROOT)
+	var total := 0
+	if directory != null:
+		for name in directory.get_files():
+			var file := FileAccess.open(DESKTOP_CACHE_ROOT.path_join(name), FileAccess.READ)
+			if file != null:
+				total += file.get_length()
+	return total + DesktopAssetStorage.legacy_sprite_bytes()
+
+
+func clear_desktop_disk() -> bool:
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		return false
+	if not can_clear_desktop_disk():
+		return false
+	_prefetch_queue.clear()
+	_prefetch_queued_keys.clear()
+	var directory := DirAccess.open(DESKTOP_CACHE_ROOT)
+	if directory != null:
+		for name in directory.get_files():
+			if not name.ends_with(".cache"):
+				continue
+			if DirAccess.remove_absolute(ProjectSettings.globalize_path(DESKTOP_CACHE_ROOT.path_join(name))) != OK:
+				return false
+	_cache.clear()
+	return DesktopAssetStorage.clear_legacy_sprites()
 
 
 func load_frames(
@@ -64,6 +101,8 @@ func get_cached_frames(
 
 func prefetch(entries: Array, prioritize := false) -> void:
 	if not is_available():
+		return
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and get_tree().root.get_node("SettingsManager").battle_presentation_mode != "2d":
 		return
 	var priority_queue: Array[Dictionary] = []
 	for entry_value: Variant in entries:
@@ -114,6 +153,10 @@ func prefetch_and_wait(entries: Array) -> void:
 
 
 func _drain_prefetch_queue() -> void:
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and get_tree().root.get_node("SettingsManager").battle_presentation_mode != "2d":
+		_prefetch_queue.clear()
+		_prefetch_queued_keys.clear()
+		return
 	while _prefetch_active < PREFETCH_CONCURRENCY and not _prefetch_queue.is_empty():
 		var entry := _prefetch_queue.pop_front() as Dictionary
 		_prefetch_active += 1
@@ -198,20 +241,24 @@ func _load_candidate_frames(
 		return {}
 	var parsed: Variant = JSON.parse_string((metadata_result.body as PackedByteArray).get_string_from_utf8())
 	if not (parsed is Dictionary):
+		_invalidate_desktop_file(base_url + "/animation.json")
 		return {}
 	var metadata := parsed as Dictionary
 	var image_name := str(metadata.get("image", "sheet.png"))
 	if image_name != "sheet.png":
+		_invalidate_desktop_file(base_url + "/animation.json")
 		return {}
 	var image_result := await _download(base_url + "/sheet.png")
 	if image_result.is_empty():
 		return {}
 	var image := Image.new()
 	if image.load_png_from_buffer(image_result.body as PackedByteArray) != OK:
+		_invalidate_desktop_file(base_url + "/sheet.png")
 		return {}
 	var visual_bounds := _calculate_visual_bounds(metadata, image)
 	var frames := _build_frames(metadata, image)
 	if frames == null:
+		_invalidate_desktop_file(base_url + "/animation.json")
 		return {}
 	var result := {
 		"frames": frames,
@@ -267,13 +314,60 @@ func _has_sprite_styles(config: Dictionary) -> bool:
 
 
 func _download(url: String) -> Dictionary:
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and _cacheable_desktop_url(url):
+		var cached := _read_desktop_file(url)
+		if not cached.is_empty():
+			return {"body": cached}
 	for attempt: int in range(DOWNLOAD_ATTEMPTS):
 		var result := await _download_once(url)
 		if not result.is_empty():
+			if not OS.has_feature("web") and not OS.has_feature("mobile") and _cacheable_desktop_url(url):
+				_write_desktop_file(url, result.body)
 			return result
 		if attempt + 1 < DOWNLOAD_ATTEMPTS:
 			await get_tree().create_timer(DOWNLOAD_RETRY_SECONDS).timeout
 	return {}
+
+
+func _desktop_file(url: String) -> String:
+	return DESKTOP_CACHE_ROOT.path_join(url.sha256_text() + ".cache")
+
+
+func _invalidate_desktop_file(url: String) -> void:
+	if OS.has_feature("web") or OS.has_feature("mobile") or not _cacheable_desktop_url(url):
+		return
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(_desktop_file(url)))
+
+
+func _cacheable_desktop_url(url: String) -> bool:
+	var pattern := RegEx.new()
+	if pattern.compile("-[a-f0-9]{12}/[a-z0-9-]+/(animation\\.json|sheet\\.png)$") != OK:
+		return false
+	return pattern.search(url) != null
+
+
+func _read_desktop_file(url: String) -> PackedByteArray:
+	var path := _desktop_file(url)
+	if not FileAccess.file_exists(path):
+		return PackedByteArray()
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null or file.get_length() < 1 or file.get_length() > MAX_RESPONSE_BYTES:
+		return PackedByteArray()
+	return file.get_buffer(file.get_length())
+
+
+func _write_desktop_file(url: String, body: PackedByteArray) -> void:
+	if body.is_empty() or body.size() > MAX_RESPONSE_BYTES:
+		return
+	var path := ProjectSettings.globalize_path(_desktop_file(url))
+	if DirAccess.make_dir_recursive_absolute(path.get_base_dir()) != OK:
+		return
+	var file := FileAccess.open(path + ".partial", FileAccess.WRITE)
+	if file == null:
+		return
+	file.store_buffer(body)
+	file.close()
+	DirAccess.rename_absolute(path + ".partial", path)
 
 
 func _download_once(url: String) -> Dictionary:

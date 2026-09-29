@@ -6,9 +6,15 @@
 
 - Slugma, Magcargo, mannelijke Meowstic en Trevenant hebben lokaal goedgekeurde normal/shiny-3D-modellen in vier losse bundles. Ogen, kleuren, animaties en battleplaatsing zijn gecontroleerd.
 
+- De desktopclient biedt 2D-sprites, 3D-modellen op een 2D-achtergrond en volledige 3D-gevechten. Sprites en goedgekeurde modellen worden per Pokémon vooraf geladen zodra een map wordt betreden, blijven lokaal bewaard en kunnen via Instellingen weer worden verwijderd; ontbrekende 3D-modellen vallen terug op 2D.
+
+- Diglett's Cave heeft bij beide entreekamers complete grotopeningen; de uitgangen in Godot volgen nu de volle breedte.
+
+- Bij de trappen van de Underground Passage kijkt de speler na aankomst de kamer of tunnel in, vanuit zowel Route 5 als Route 6.
+
 - 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
 
-- Route 10’s Pokémon Center uses the current complete Tiled exterior and now opens its own masked Pokémon Center interior with a return door to Route 10.
+- Route 10 gebruikt de nieuwste Tiled-visual; het Pokémon Center is via de servercatalogus bereikbaar en beschikbaar als bestemming voor staffteleport.
 
 - 32 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen en individuele bundles. Kleuren, ogen en battleplaatsing zijn gecontroleerd; Mamoswine en Malamar blijven ook tijdens hun aanvallen boven de vloer.
 

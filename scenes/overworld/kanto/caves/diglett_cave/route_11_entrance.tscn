@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_visibility_mask"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
-size = Vector2(96, 32)
+size = Vector2(128, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
 size = Vector2(32, 32)
@@ -40,7 +40,7 @@ position = Vector2(464, 336)
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToRoute11" type="Area2D" parent="Exits"]
-position = Vector2(368, 528)
+position = Vector2(384, 528)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_11.tscn"
 target_spawn_name = "FromDiglettCave"

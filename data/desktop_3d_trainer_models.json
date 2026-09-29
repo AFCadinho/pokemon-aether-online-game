@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "map_prefix_species": {
+    "kanto_cerulean_city_gym": [
+      "goldeen",
+      "horsea",
+      "poliwag",
+      "psyduck",
+      "shellder"
+    ],
+    "kanto_mt_moon": [
+      "bellsprout",
+      "caterpie",
+      "clefairy",
+      "ekans",
+      "geodude",
+      "grimer",
+      "kakuna",
+      "koffing",
+      "magnemite",
+      "metapod",
+      "oddish",
+      "onix",
+      "rattata",
+      "sandshrew",
+      "voltorb",
+      "weedle",
+      "zubat"
+    ],
+    "kanto_pallet_town": [
+      "bulbasaur",
+      "charmander",
+      "squirtle"
+    ],
+    "kanto_pewter_city_gym": [
+      "geodude",
+      "onix",
+      "sandshrew"
+    ],
+    "kanto_route_1": [
+      "bidoof",
+      "blastoise",
+      "bulbasaur",
+      "caterpie",
+      "charizard",
+      "kakuna",
+      "lapras",
+      "nidoran-f",
+      "patrat",
+      "pidgey",
+      "pikachu",
+      "rattata",
+      "snorlax",
+      "squirtle",
+      "taillow",
+      "venusaur",
+      "weedle"
+    ],
+    "kanto_route_2": [
+      "caterpie",
+      "pidgey",
+      "rattata",
+      "weedle"
+    ],
+    "kanto_route_22": [
+      "bulbasaur",
+      "charmander",
+      "mankey",
+      "pidgey",
+      "rattata",
+      "spearow",
+      "squirtle"
+    ],
+    "kanto_route_24": [
+      "abra",
+      "bellsprout",
+      "caterpie",
+      "charmeleon",
+      "ekans",
+      "ivysaur",
+      "mankey",
+      "nidoran-f",
+      "nidoran-m",
+      "oddish",
+      "pidgeotto",
+      "pidgey",
+      "rattata",
+      "sandshrew",
+      "wartortle",
+      "weedle",
+      "zubat"
+    ],
+    "kanto_route_25": [
+      "ekans",
+      "geodude",
+      "machop",
+      "nidoran-f",
+      "nidoran-m",
+      "oddish",
+      "onix",
+      "pidgey",
+      "rattata",
+      "sandshrew",
+      "slowpoke",
+      "spearow"
+    ],
+    "kanto_route_3": [
+      "geodude",
+      "koffing",
+      "machop",
+      "rattata",
+      "spearow",
+      "vulpix"
+    ],
+    "kanto_route_4": [
+      "mareep",
+      "pidgey",
+      "ponyta",
+      "sentret",
+      "spearow"
+    ],
+    "kanto_viridian_forest": [
+      "caterpie",
+      "kakuna",
+      "metapod",
+      "weedle"
+    ]
+  }
+}

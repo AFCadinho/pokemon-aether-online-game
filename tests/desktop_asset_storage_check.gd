@@ -1,0 +1,33 @@
+extends SceneTree
+
+const Storage = preload("res://scripts/services/desktop_asset_storage.gd")
+const Models = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
+
+
+func _init() -> void:
+	var sandbox := ProjectSettings.globalize_path("user://desktop-asset-storage-check-%d" % Time.get_ticks_usec())
+	var install := sandbox.path_join("install")
+	var bundles := sandbox.path_join("asset-bundles-v1")
+	var sprite := install.path_join("assets/sprites/pokemon/front/pikachu/sheet.png")
+	var model := bundles.path_join("objects/model.scn")
+	DirAccess.make_dir_recursive_absolute(sprite.get_base_dir())
+	DirAccess.make_dir_recursive_absolute(model.get_base_dir())
+	var sprite_file := FileAccess.open(sprite, FileAccess.WRITE)
+	sprite_file.store_buffer(PackedByteArray([1, 2, 3]))
+	sprite_file.close()
+	var model_file := FileAccess.open(model, FileAccess.WRITE)
+	model_file.store_buffer(PackedByteArray([4, 5]))
+	model_file.close()
+	OS.set_environment("POKEAETHER_INSTALL_DIR", install)
+	OS.set_environment("POKEAETHER_LAUNCHER_MODEL_DIR", bundles)
+	assert(Storage.legacy_sprite_bytes() == 3)
+	assert(Storage.legacy_model_bytes() == 2)
+	assert(Storage.clear_legacy_sprites())
+	assert(Storage.legacy_sprite_bytes() == 0)
+	assert(Storage.clear_legacy_models())
+	assert(Storage.legacy_model_bytes() == 0)
+	assert(Models.downloaded_bytes() >= 0)
+	OS.unset_environment("POKEAETHER_INSTALL_DIR")
+	OS.unset_environment("POKEAETHER_LAUNCHER_MODEL_DIR")
+	print("DESKTOP_ASSET_STORAGE_OK")
+	quit()

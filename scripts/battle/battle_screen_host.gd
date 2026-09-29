@@ -36,10 +36,40 @@ func _ready() -> void:
 	loading_label.text = "Preparing battle…"
 	stack.add_child(loading_label)
 	fallback_button = Button.new()
-	fallback_button.text = "Continue this battle in 2.5D"
+	fallback_button.text = "Continue this battle in 2D"
 	fallback_button.hide()
 	stack.add_child(fallback_button)
-	fallback_button.pressed.connect(_reveal_cover)
+	fallback_button.pressed.connect(_continue_in_2d)
+
+
+func _continue_in_2d() -> void:
+	fallback_button.disabled = true
+	await _prepare_2d_fallback()
+	if not released:
+		_reveal_cover()
+
+
+func _prepare_2d_fallback() -> void:
+	if not is_instance_valid(battle):
+		return
+	var presenter = battle.animation_router.model_presenter
+	if not is_instance_valid(presenter):
+		return
+	var entries: Array = []
+	for index in presenter.combatants.size():
+		var combatant: Dictionary = presenter.combatants[index]
+		var species := str(combatant.get("species", ""))
+		if species.is_empty():
+			continue
+		entries.append({"species": species, "side": "back" if index % 2 == 0 else "front",
+			"shiny": bool(combatant.get("shiny", false)), "style": get_node("/root/SettingsManager").get_active_sprite_style()})
+	if entries.is_empty():
+		return
+	loading_label.text = "Preparing 2D sprites…"
+	await get_node("/root/WebPokemonSpriteService").prefetch_and_wait(entries)
+	if is_instance_valid(battle):
+		battle.player_sprite_box.allow_web_sprite_upgrades(true)
+		battle.enemy_sprite_box.allow_web_sprite_upgrades(true)
 
 
 func _ensure_battle_settings_menu() -> void:
@@ -165,7 +195,7 @@ func _reveal_when_prepared(token: int) -> void:
 		return
 	var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
 	var settings := get_node("/root/SettingsManager")
-	if presenter != null and OS.has_environment("POKEAETHER_MODEL_CATALOG") and settings.battle_presentation_mode == "3d" and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if presenter != null and settings.battle_presentation_mode in ["2.5d", "3d"] and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_feature("web") and not OS.has_feature("mobile"):
 		# A fresh install has no models yet. Keep the first encounter covered
 		# until its combatants are known; Team Preview deliberately opens empty.
 		var model_deadline := Time.get_ticks_msec() + 30000
@@ -182,9 +212,13 @@ func _reveal_when_prepared(token: int) -> void:
 	if released or token != generation or not is_inside_tree():
 		return
 	if presenter != null and presenter.preparation_failed:
-		loading_label.text = presenter.reason + "\nYou can continue this battle in 2.5D."
+		loading_label.text = presenter.reason + "\nYou can continue this battle in 2D."
 		fallback_button.show()
 		return
+	if presenter != null and not presenter.active and settings.battle_presentation_mode in ["2.5d", "3d"]:
+		await _prepare_2d_fallback()
+		if released or token != generation or not is_inside_tree():
+			return
 	_reveal_cover()
 
 func _reveal_cover() -> void:

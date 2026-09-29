@@ -27208,7 +27208,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 	var web_generation := pokemon_summary_web_sprite_generation
 	var stage := pokemon_summary_sprite.get_parent() as Control
 	var preview := stage.get_node_or_null("SummaryModelPreview") as Control
-	if allow_3d and stage.is_inside_tree() and SettingsManager.battle_presentation_mode == "3d":
+	if allow_3d and stage.is_inside_tree() and SettingsManager.battle_presentation_mode in ["2.5d", "3d"]:
 		if preview == null:
 			preview = SUMMARY_MODEL_PREVIEW_SCRIPT.new()
 			preview.name = "SummaryModelPreview"

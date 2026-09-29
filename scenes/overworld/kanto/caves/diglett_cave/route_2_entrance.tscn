@@ -10,7 +10,7 @@
 size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(96, 32)
+size = Vector2(128, 32)
 
 
 [node name="DiglettCaveRoute2Entrance" type="Node2D"]
@@ -51,7 +51,7 @@ transition_facing_direction = "down"
 shape = SubResource("shape_1")
 
 [node name="ToRoute2" type="Area2D" parent="Exits"]
-position = Vector2(368, 528)
+position = Vector2(384, 528)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromDiglettCave"

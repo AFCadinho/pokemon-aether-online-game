@@ -41,6 +41,9 @@ var language_label: Label
 var language_options_button: OptionButton
 var battle_presentation_options: OptionButton
 var battle_camera_motion_toggle: CheckBox
+var sprite_storage_button: Button
+var model_storage_button: Button
+var storage_confirm_dialog: ConfirmationDialog
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
@@ -184,6 +187,7 @@ func _configure_graphics_dropdowns() -> void:
 
 func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
+	_refresh_asset_storage_controls()
 	_apply_context(context)
 	_refresh_impersonation_account_controls()
 	_refresh_support_report_state()
@@ -261,7 +265,7 @@ func _input(event: InputEvent) -> void:
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
 	if battle_presentation_options != null:
-		battle_presentation_options.select(1 if SettingsManager.battle_presentation_mode == "3d" else 0)
+		battle_presentation_options.select(["2d", "2.5d", "3d"].find(SettingsManager.battle_presentation_mode))
 	if battle_camera_motion_toggle != null:
 		battle_camera_motion_toggle.button_pressed = SettingsManager.battle_3d_camera_motion
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
@@ -409,13 +413,14 @@ func _setup_tabs() -> void:
 		presentation_label.text = "Battle visuals (next battle)"
 		battle_presentation_options = OptionButton.new()
 		battle_presentation_options.name = "BattlePresentationOptions"
-		battle_presentation_options.add_item("2D / 2.5D — sprites")
-		battle_presentation_options.add_item("3D — models")
+		battle_presentation_options.add_item("2D — animated sprites")
+		battle_presentation_options.add_item("2.5D — models, 2D background")
+		battle_presentation_options.add_item("3D — models and 3D arena")
 		battle_presentation_options.item_selected.connect(func(index):
 			if not loading_controls:
-				SettingsManager.set_battle_presentation_mode("3d" if index == 1 else "2.5d"))
+				SettingsManager.set_battle_presentation_mode(["2d", "2.5d", "3d"][index]))
 		var presentation_hint := Label.new()
-		presentation_hint.text = "Uses available 3D models. Pokémon without a 3D model use sprites."
+		presentation_hint.text = "2.5D and 3D share models. If a model is unavailable, the battle uses 2D sprites."
 		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
 		battle_camera_motion_toggle = CheckBox.new()
@@ -425,6 +430,19 @@ func _setup_tabs() -> void:
 			if not loading_controls:
 				SettingsManager.set_battle_3d_camera_motion(enabled))
 		graphics_tab.add_child(battle_camera_motion_toggle)
+		var storage_label := Label.new()
+		storage_label.text = "Downloaded battle assets"
+		graphics_tab.add_child(storage_label)
+		sprite_storage_button = Button.new()
+		sprite_storage_button.text = "Remove downloaded 2D sprites"
+		sprite_storage_button.pressed.connect(_confirm_remove_sprites)
+		graphics_tab.add_child(sprite_storage_button)
+		model_storage_button = Button.new()
+		model_storage_button.text = "Remove downloaded 3D models"
+		model_storage_button.pressed.connect(_confirm_remove_models)
+		graphics_tab.add_child(model_storage_button)
+		storage_confirm_dialog = ConfirmationDialog.new()
+		add_child(storage_confirm_dialog)
 	_wrap_settings_section(
 		general_tab,
 		"",
@@ -2849,3 +2867,35 @@ func _world_pixel_scale_option_text(scale: float) -> String:
 	if is_equal_approx(scale, 1.5):
 		return LocalizationManager.text("ui.settings.world_pixel_scale_balanced")
 	return LocalizationManager.text("ui.settings.world_pixel_scale_close")
+
+
+func _refresh_asset_storage_controls() -> void:
+	if sprite_storage_button == null or model_storage_button == null:
+		return
+	var battle_open := get_tree().root.find_child("ExperimentalBattle3D", true, false) != null
+	var sprite_bytes: int = WebPokemonSpriteService.desktop_disk_bytes()
+	var model_bytes: int = preload("res://scripts/services/on_demand_3d_bundle_service.gd").downloaded_bytes()
+	sprite_storage_button.text = "Remove downloaded 2D sprites (%0.1f MiB)" % (sprite_bytes / 1048576.0)
+	model_storage_button.text = "Remove downloaded 3D models (%0.1f MiB)" % (model_bytes / 1048576.0)
+	sprite_storage_button.disabled = battle_open or sprite_bytes == 0 or not WebPokemonSpriteService.can_clear_desktop_disk()
+	model_storage_button.disabled = battle_open or model_bytes == 0 or not OnDemand3DBundleService.can_clear_cache()
+
+
+func _confirm_remove_sprites() -> void:
+	storage_confirm_dialog.dialog_text = "Remove downloaded battle sprites? They will be downloaded again when needed."
+	for connection in storage_confirm_dialog.confirmed.get_connections():
+		storage_confirm_dialog.confirmed.disconnect(connection.callable)
+	storage_confirm_dialog.confirmed.connect(func():
+		WebPokemonSpriteService.clear_desktop_disk()
+		_refresh_asset_storage_controls(), CONNECT_ONE_SHOT)
+	storage_confirm_dialog.popup_centered()
+
+
+func _confirm_remove_models() -> void:
+	storage_confirm_dialog.dialog_text = "Remove downloaded 3D Pokémon models? Both 3D and 2.5D will download them again when needed."
+	for connection in storage_confirm_dialog.confirmed.get_connections():
+		storage_confirm_dialog.confirmed.disconnect(connection.callable)
+	storage_confirm_dialog.confirmed.connect(func():
+		OnDemand3DBundleService.clear_cache()
+		_refresh_asset_storage_controls(), CONNECT_ONE_SHOT)
+	storage_confirm_dialog.popup_centered()
