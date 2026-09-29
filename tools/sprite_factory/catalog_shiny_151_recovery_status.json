@@ -1,9 +1,8 @@
 {
   "appearance_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/index.html",
   "counts": {
-    "locally_admitted": 48,
-    "missing_compatible_shiny_source": 86,
-    "za_binding_hold": 17
+    "locally_admitted": 65,
+    "missing_compatible_shiny_source": 86
   },
   "date": "2026-09-29",
   "entries": [
@@ -32,16 +31,17 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 16,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "3f77c51d7bbc23c1c6d69049ed813f5f1cc73feaa9be21b6ab79da412c1fb877",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "pidgey",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -158,40 +158,43 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 83,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "96004b4052c3d587088e796281e2555e9706f05921fd6315f60c8c35e550c1c9",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "farfetchd",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 104,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "db0cd22152764b893bfec061933b5ab605095b98064e2e04992b1ebf77833302",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "cubone",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 105,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "7b145dc07eb3d3de2746f7d10c39ae4226cbf7d5785498a21fe2f39f20bebbab",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "marowak",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -230,16 +233,17 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 120,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "761abe16ab54d5fd1e8ed46c55d8d71fc036e0675e5367d4bf9e1f9546ea5de9",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "staryu",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -400,40 +404,43 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 303,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "c13305cf7c5e3bf155d2f80a2f831c7d7e33bc2c92eb9ca5bb7aa80db95841a8",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "mawile",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 310,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "8e594e8584d9310e8728222545d1e07768fcd585f8d18b5209923b30dc29be0e",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "manectric",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 319,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "ecb9b855bb128e47b4756aa5d89ce527a972e8f1243c072978bf1a42b5d54262",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "sharpedo",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -538,16 +545,17 @@
       }
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 359,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "68f0d7502b05aca61291ce13c4502df2ed48b019eb817fb0bbb199f16cfe1644",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "absol",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -802,28 +810,30 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 509,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "f5890e72aa1567089b5329a042e9376556a62d7b6b598be083621e9af3c362f3",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "purrloin",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 517,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "6924311e22e36de7bdb2ceb84c57fb5daef249d837ff638dd0b577d7e4d093cf",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "munna",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -862,16 +872,17 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 531,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "2af9147b29af9fc002cf79f383c1a33e803ea16d240b1250e7905e4667b6f878",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "audino",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -958,16 +969,17 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 563,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "c0a013d8bb81541d10ed3ec1db152af05536a6628a128ea57be2a522f9e8c288",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "cofagrigus",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -982,40 +994,43 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 568,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "523bca4287550a1d8b81a9ee69265d4ff050ac14887a171ff042e962564fef1f",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "trubbish",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 584,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "b7b55399e720cb0b228703ce26654453da274e84df6e329c96751b98c3564742",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "vanilluxe",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 587,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "56f4e52ed8cb3dd44572f3150c7c2aee5252a863af3abf831d47dafa7e49e29d",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "emolga",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -1121,16 +1136,17 @@
       }
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_za_seventeen_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 618,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "f429d6303985a14155903a0596a182a2acc6295adb0a239648b5405987c3fddf",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "stunfisk",
-      "status": "za_binding_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -2799,7 +2815,7 @@
   "release_approved": false,
   "runtime_approved": false,
   "schema": 1,
-  "scope": "151 original shiny holds; 48 locally admitted, 103 source/material holds; no publication",
+  "scope": "151 original shiny holds; 65 locally admitted, 86 source holds; no publication",
   "total": 151,
   "user_review_pending": false
 }
