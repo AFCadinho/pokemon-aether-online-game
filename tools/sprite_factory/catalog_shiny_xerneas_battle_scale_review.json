@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-09-29",
-  "status": "awaiting_scale_review",
+  "status": "scale_approved_remaining_battle_review_pending",
   "species": "xerneas",
   "appearance_approved": true,
   "battle_approved": false,
@@ -1667,7 +1667,11 @@
     "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/corrected/xerneas@shiny-stadium-1-special_attack.png": "9ebbc05424d27f4d17b6118083d6baa4146ed92df5a968efe049475e6421596b",
     "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/corrected/xerneas@shiny-stadium-1-sleep.png": "50dbc1f2e6bf136beff02b9dff88daf1dbed91d7246e2ba99e73e851f4cd1173",
     "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/corrected/xerneas@shiny-stadium-1-faint_start.png": "a6c4b49a4bac705c90a18f58c7a8a125518772d11c11cc2adab1b046515eb9ae",
-    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve-battle/resize_xerneas.py": "baeaa221b751aa950bac0ffc724428fabb72e8fbcb35ef965cbb7a8135cb2dd2"
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve-battle/resize_xerneas.py": "baeaa221b751aa950bac0ffc724428fabb72e8fbcb35ef965cbb7a8135cb2dd2",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve-battle/index-v2.html": "da7255ba8ec8ddb7156be7f95a7f4aa03c185123f57ef0227b54e1ccfc5809dd"
   },
-  "supersedes_xerneas_placement_in": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json"
+  "supersedes_xerneas_placement_in": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+  "scale_approved": true,
+  "user_scale_feedback": "Nieuwe grootte is goed",
+  "updated_group_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index-v2.html"
 }
