@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Diglett's Cave heeft bij beide entreekamers complete grotopeningen; de uitgangen in Godot volgen nu de volle breedte.
+
 - Bij de trappen van de Underground Passage kijkt de speler na aankomst de kamer of tunnel in, vanuit zowel Route 5 als Route 6.
 
 - 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
