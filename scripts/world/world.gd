@@ -363,7 +363,6 @@ func _prefetch_current_map_models() -> void:
 	var area_id := _current_fishing_area_id()
 	if area_id.is_empty():
 		_append_current_map_trainer_models(identities)
-		_append_desktop_starter_models(identities)
 		OnDemand3DBundleService.prefetch_models(identities)
 		return
 	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
@@ -382,7 +381,6 @@ func _prefetch_current_map_models() -> void:
 			if identity not in identities:
 				identities.append(identity)
 	_append_current_map_trainer_models(identities)
-	_append_desktop_starter_models(identities)
 	OnDemand3DBundleService.prefetch_models(identities)
 
 
@@ -397,17 +395,6 @@ func _append_current_map_trainer_models(identities: Array[String]) -> void:
 			var identity := str(value)
 			if identity not in identities:
 				identities.append(identity)
-
-
-func _append_desktop_starter_models(identities: Array[String]) -> void:
-	var starter: Dictionary = preload("res://data/desktop_3d_starter_models.json").data
-	var map_id := _get_map_id(GameState.current_map)
-	if map_id not in starter.get("map_ids", []):
-		return
-	for value in starter.get("species", []):
-		var identity := str(value)
-		if identity not in identities:
-			identities.append(identity)
 
 
 func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false, skip_mobile_wait := false) -> void:
