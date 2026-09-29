@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De desktoprelease activeert catalogus v7 met 160 individueel downloadbare, goedgekeurde normal/shiny-3D-bundles.
+
 - Unown, Darmanitan, Wishiwashi, Silvally, Obstagoon en Cursola hebben lokaal goedgekeurde normal/shiny-3D-modellen in zes losse bundles. Kleuren, ogen, battleplaatsing en animaties zijn gecontroleerd.
 
 - Route 6 gebruikt de nieuwste Tiled-kaart; collision, water, hoog gras, ledges en de zuidelijke uitgang volgen de bijgewerkte indeling.

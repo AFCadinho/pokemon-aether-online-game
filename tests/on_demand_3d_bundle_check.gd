@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Service = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
-const Release = preload("res://data/approved_3d_release_v6.json")
+const Release = preload("res://data/approved_3d_release_v7.json")
 
 
 func _init() -> void:
@@ -9,7 +9,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	var source := OS.get_environment("POKEAETHER_APPROVED_3D_V6_DIR")
+	var source := OS.get_environment("POKEAETHER_APPROVED_3D_V7_DIR")
 	assert(source.is_absolute_path())
 	var index_path := source.path_join("asset-index.json")
 	assert(FileAccess.get_sha256(index_path) == Release.data.index.sha256)
@@ -34,7 +34,7 @@ func _run() -> void:
 	var corrupt := FileAccess.open(corrupt_path, FileAccess.WRITE)
 	corrupt.store_string("corrupt")
 	corrupt.close()
-	assert(not service._entry_available(installed.entries, str(installed.entries[0].species)))
+	assert(not service._entry_available(installed.entries, str(installed.entries[0].species), str(installed.entries[0].runtime_sha256)))
 	installed = service._unpack_asset(asset, archive)
 	assert(installed.error.is_empty())
 	var catalog := service._publish_catalog(installed.entries)
