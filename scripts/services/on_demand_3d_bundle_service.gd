@@ -3,15 +3,106 @@ extends Node
 
 const RELEASE = preload("res://data/approved_3d_release_v6.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
 const ROOT := "user://on-demand-3d-v1"
 const MAX_INDEX_BYTES := 1024 * 1024
 const MAX_ARCHIVE_BYTES := 512 * 1024 * 1024
 
+
+static func downloaded_bytes() -> int:
+	return _directory_bytes(ProjectSettings.globalize_path(ROOT)) + DesktopAssetStorage.legacy_model_bytes()
+
+
+static func clear_downloaded_models() -> bool:
+	return _clear_directory(ProjectSettings.globalize_path(ROOT)) and DesktopAssetStorage.clear_legacy_models()
+
+
+static func _directory_bytes(path: String) -> int:
+	var directory := DirAccess.open(path)
+	if directory == null:
+		return 0
+	var total := 0
+	for name in directory.get_files():
+		var file := FileAccess.open(path.path_join(name), FileAccess.READ)
+		if file != null:
+			total += file.get_length()
+	for name in directory.get_directories():
+		if not directory.is_link(name):
+			total += _directory_bytes(path.path_join(name))
+	return total
+
+
+static func _clear_directory(path: String) -> bool:
+	var directory := DirAccess.open(path)
+	if directory == null:
+		return true
+	for name in directory.get_files():
+		if DirAccess.remove_absolute(path.path_join(name)) != OK:
+			return false
+	for name in directory.get_directories():
+		var child := path.path_join(name)
+		if not directory.is_link(name) and not _clear_directory(child):
+			return false
+		if DirAccess.remove_absolute(child) != OK:
+			return false
+	return true
+
 var active_request: HTTPRequest
 var active_label := ""
 var active_size := 0
 var active_started_ms := 0
+var _busy := false
+var _battle_waiters := 0
+var _prefetch_generation := 0
+
+
+func can_clear_cache() -> bool:
+	return not _busy and _battle_waiters == 0
+
+
+func clear_cache() -> bool:
+	if not can_clear_cache():
+		return false
+	_prefetch_generation += 1
+	var catalog := OS.get_environment("POKEAETHER_MODEL_CATALOG")
+	var own_root := ProjectSettings.globalize_path(ROOT).trim_suffix("/") + "/"
+	var legacy_root := OS.get_environment("POKEAETHER_LAUNCHER_MODEL_DIR").trim_suffix("/") + "/"
+	var cleared := clear_downloaded_models()
+	if cleared:
+		if catalog.begins_with(own_root) or (legacy_root != "/" and catalog.begins_with(legacy_root)):
+			OS.unset_environment("POKEAETHER_MODEL_CATALOG")
+		preload("res://scripts/battle/battle_ui/model_resource_cache.gd").clear()
+	return cleared
+
+
+func prefetch_models(identities: Array[String]) -> void:
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		return
+	_prefetch_generation += 1
+	_run_prefetch.call_deferred(identities.duplicate(), _prefetch_generation)
+
+
+func cancel_prefetch() -> void:
+	_prefetch_generation += 1
+
+
+func _run_prefetch(identities: Array[String], generation: int) -> void:
+	for identity in identities:
+		if generation != _prefetch_generation or not is_inside_tree():
+			return
+		if _asset_id(identity).is_empty():
+			continue
+		while _busy or _battle_waiters > 0:
+			await get_tree().process_frame
+			if generation != _prefetch_generation or not is_inside_tree():
+				return
+		_busy = true
+		var source: String = get_tree().root.get_node("SettingsManager").get_battle_3d_catalog_path()
+		var result := await _ensure_models([identity], source)
+		_busy = false
+		if str(result.get("error", "")).is_empty() and not str(result.get("path", "")).is_empty():
+			OS.set_environment("POKEAETHER_MODEL_CATALOG", str(result.path))
 
 
 func progress_text() -> String:
@@ -30,24 +121,49 @@ func progress_text() -> String:
 
 
 func ensure_models(identities: Array[String], source_catalog: String) -> Dictionary:
+	_battle_waiters += 1
+	while _busy:
+		await get_tree().process_frame
+	_battle_waiters -= 1
+	_busy = true
+	var result := await _ensure_models(identities, source_catalog)
+	_busy = false
+	return result
+
+
+func _ensure_models(identities: Array[String], source_catalog: String) -> Dictionary:
 	var existing := _catalog(source_catalog)
 	var own := _catalog(ROOT.path_join("runtime-catalog.json"))
-	var entries := _merge_entries(own, existing)
+	var entries := _merge_entries(existing, own)
 	var missing: Array[String] = []
+	var requested: Array[String] = []
 	for identity in identities:
-		if _entry_available(entries, identity):
-			continue
 		var asset_id := _asset_id(identity)
 		if asset_id.is_empty():
 			continue # This Pokémon has no approved 3D bundle.
-		if asset_id not in missing:
-			missing.append(asset_id)
-	if missing.is_empty():
+		if asset_id not in requested:
+			requested.append(asset_id)
+	if requested.is_empty():
 		return {"error": "", "path": source_catalog if own.is_empty() else _publish_catalog(entries)}
 	var index_result := await _approved_index()
 	if not str(index_result.get("error", "")).is_empty():
 		return index_result
 	var index: Dictionary = index_result.index
+	for identity in identities:
+		var asset_id := _asset_id(identity)
+		if asset_id.is_empty():
+			continue
+		var asset := _indexed_asset(index, asset_id)
+		if asset.is_empty():
+			return {"error": "Approved 3D model is missing from the content index."}
+		var expected_digest := ""
+		for appearance in asset.get("appearances", []):
+			if appearance is Dictionary and str(appearance.get("runtime_identity", "")) == identity:
+				expected_digest = str(appearance.get("runtime_sha256", ""))
+		if expected_digest.is_empty():
+			return {"error": "Approved 3D appearance is missing from the content index."}
+		if not _entry_available(entries, identity, expected_digest) and asset_id not in missing:
+			missing.append(asset_id)
 	for asset_id in missing:
 		var asset: Dictionary = _indexed_asset(index, asset_id)
 		if asset.is_empty():
@@ -94,14 +210,14 @@ func _merge_entries(first: Array, second: Array) -> Array:
 	return result
 
 
-func _entry_available(entries: Array, identity: String) -> bool:
+func _entry_available(entries: Array, identity: String, expected_digest: String) -> bool:
 	for entry in entries:
 		if not entry is Dictionary:
 			continue
 		var key := str(entry.get("species", "")) + ("@shiny" if entry.get("variant") == "shiny" else "")
 		var model_path := str(entry.get("runtime_path", ""))
 		var digest := str(entry.get("runtime_sha256", ""))
-		if key == identity and not ReviewedModels.resolve(identity, digest).is_empty() and _valid_file(model_path, int(entry.get("bytes", 0)), digest):
+		if key == identity and digest == expected_digest and not ReviewedModels.resolve(identity, digest).is_empty() and _valid_file(model_path, int(entry.get("bytes", 0)), digest):
 			return true
 	return false
 
@@ -109,6 +225,9 @@ func _entry_available(entries: Array, identity: String) -> bool:
 func _approved_index() -> Dictionary:
 	var pin: Dictionary = RELEASE.data.index
 	var path := ROOT.path_join("index-%s.json" % pin.sha256)
+	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
+	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
+		path = launcher_path
 	if not _valid_file(path, int(pin.size_bytes), str(pin.sha256)):
 		var result := await _fetch(BASE_URL + str(pin.object_key), path, int(pin.size_bytes), str(pin.sha256), MAX_INDEX_BYTES, "3D content index")
 		if not result.is_empty():
@@ -139,7 +258,10 @@ func _install_asset(asset: Dictionary) -> Dictionary:
 		var error := await _fetch(BASE_URL + key, zip_path, size, sha, MAX_ARCHIVE_BYTES, parts[1])
 		if not error.is_empty():
 			return {"error": error}
-	return _unpack_asset(asset, zip_path)
+	var installed := _unpack_asset(asset, zip_path)
+	if str(installed.get("error", "")).is_empty():
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(zip_path))
+	return installed
 
 
 func _unpack_asset(asset: Dictionary, zip_path: String) -> Dictionary:

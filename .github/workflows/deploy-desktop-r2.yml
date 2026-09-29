@@ -411,10 +411,10 @@ jobs:
 
           register_external_pack "pokemon-home" "${POKEMON_HOME_ASSET_VERSION}" "${POKEMON_HOME_ASSET_SIZE}" "${POKEMON_HOME_ASSET_SHA256}"
           register_external_pack "pokemon-home-shiny" "${POKEMON_HOME_SHINY_ASSET_VERSION}" "${POKEMON_HOME_SHINY_ASSET_SIZE}" "${POKEMON_HOME_SHINY_ASSET_SHA256}"
-          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_SIZE}" "${POKEMON_FRONT_ASSET_SHA256}"
-          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_SIZE}" "${POKEMON_BACK_ASSET_SHA256}"
-          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_SHINY_FRONT_ASSET_SHA256}"
-          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_SIZE}" "${POKEMON_SHINY_BACK_ASSET_SHA256}"
+          register_external_pack "pokemon-front" "${POKEMON_FRONT_ASSET_VERSION}" "${POKEMON_FRONT_ASSET_SIZE}" "${POKEMON_FRONT_ASSET_SHA256}" "true"
+          register_external_pack "pokemon-back" "${POKEMON_BACK_ASSET_VERSION}" "${POKEMON_BACK_ASSET_SIZE}" "${POKEMON_BACK_ASSET_SHA256}" "true"
+          register_external_pack "pokemon-shiny-front" "${POKEMON_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_SHINY_FRONT_ASSET_SHA256}" "true"
+          register_external_pack "pokemon-shiny-back" "${POKEMON_SHINY_BACK_ASSET_VERSION}" "${POKEMON_SHINY_BACK_ASSET_SIZE}" "${POKEMON_SHINY_BACK_ASSET_SHA256}" "true"
           register_external_pack "pokemon-gen5-front" "${POKEMON_GEN5_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_FRONT_ASSET_SIZE}" "${POKEMON_GEN5_FRONT_ASSET_SHA256}" "true"
           register_external_pack "pokemon-gen5-back" "${POKEMON_GEN5_BACK_ASSET_VERSION}" "${POKEMON_GEN5_BACK_ASSET_SIZE}" "${POKEMON_GEN5_BACK_ASSET_SHA256}" "true"
           register_external_pack "pokemon-gen5-shiny-front" "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SIZE}" "${POKEMON_GEN5_SHINY_FRONT_ASSET_SHA256}" "true"
@@ -545,7 +545,7 @@ jobs:
               print(f"Preserved launcher {launcher['version']} in {manifest_path}")
           PY
 
-      - name: Verify launcher manifests include required asset packs
+      - name: Verify launcher manifests include core and optional asset packs
         run: |
           python3 - <<'PY'
           import json
@@ -555,12 +555,12 @@ jobs:
           required_ids = {
               "pokemon-home",
               "pokemon-home-shiny",
-              "pokemon-front",
-              "pokemon-back",
-              "pokemon-shiny-front",
-              "pokemon-shiny-back",
               "music",
               "battle-environment-forest",
+          }
+          optional_battle_ids = {
+              "pokemon-front", "pokemon-back",
+              "pokemon-shiny-front", "pokemon-shiny-back",
           }
           required_gen5_ids = {
               "pokemon-gen5-front",
@@ -587,11 +587,11 @@ jobs:
                   if isinstance(pack, dict) and pack.get("id")
               }
 
-              missing = sorted(required_ids - by_id.keys())
+              missing = sorted((required_ids | optional_battle_ids) - by_id.keys())
               if missing:
                   raise SystemExit(f"{manifest_path} missing required asset packs: {', '.join(missing)}")
 
-              for pack_id in sorted(required_ids):
+              for pack_id in sorted(required_ids | optional_battle_ids):
                   pack = by_id[pack_id]
                   if not pack.get("version") or not pack.get("url") or not pack.get("sizeBytes"):
                       raise SystemExit(f"{manifest_path} has incomplete asset pack: {pack_id}")
@@ -600,6 +600,8 @@ jobs:
                       raise SystemExit(f"{manifest_path} has no valid SHA-256 for {pack_id}")
                   if pack_id != "music" and not str(pack["url"]).endswith(f"/{pack['version']}.zip"):
                       raise SystemExit(f"{manifest_path} URL does not match version for {pack_id}: {pack['url']}")
+                  if pack_id in optional_battle_ids and pack.get("optional") is not True:
+                      raise SystemExit(f"{manifest_path} battle sprite pack must be optional: {pack_id}")
 
               missing_gen5 = sorted(required_gen5_ids - by_id.keys())
               if missing_gen5:
