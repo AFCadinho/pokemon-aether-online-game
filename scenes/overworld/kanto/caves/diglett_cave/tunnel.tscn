@@ -13,6 +13,8 @@ size = Vector2(32, 32)
 [node name="DiglettCaveTunnel" type="Node2D"]
 script = ExtResource("2_metadata")
 map_id = "kanto_diglett_cave_tunnel"
+encounter_area_id = "kanto_digletts_cave"
+cave_encounter_chance = 0.07
 map_region_name = "Kanto"
 map_display_name = "Diglett Cave Tunnel"
 world_access_group_id = "kanto_diglett_cave"

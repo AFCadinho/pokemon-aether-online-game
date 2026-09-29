@@ -200,6 +200,8 @@ world_access_area_type = "route"
 location_id = "kanto.route.5"
 location_name = "Route 5"
 region_id = "kanto"
+encounter_area_id = "kanto_route_5"
+grass_encounter_chance = 0.21
 music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Visual" parent="." unique_id=380601260 instance=ExtResource("1_visual")]

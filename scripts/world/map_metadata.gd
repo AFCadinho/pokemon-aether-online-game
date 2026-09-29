@@ -20,6 +20,7 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export_enum("outdoor", "disabled") var weather_profile := "outdoor"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.0
 @export_range(0.0, 1.0, 0.01) var cave_encounter_chance := 0.0
+@export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.0
 # An explicit track ID always wins. Leave this empty for a regular interior
 # that should inherit the track associated with its town or city music profile.
 @export var music_track_id := ""
@@ -113,6 +114,8 @@ func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
 			return randf() <= grass_encounter_chance
 		"cave":
 			return randf() <= cave_encounter_chance
+		"surf":
+			return randf() <= surf_encounter_chance
 		_:
 			return false
 
@@ -136,6 +139,8 @@ func _load_encounter_area_metadata() -> void:
 	grass_encounter_chance = clampf(float(grass_metadata.get("encounterChance", grass_encounter_chance)), 0.0, 1.0)
 	var cave_metadata: Dictionary = encounter_types.get("cave", {})
 	cave_encounter_chance = clampf(float(cave_metadata.get("encounterChance", cave_encounter_chance)), 0.0, 1.0)
+	var surf_metadata: Dictionary = encounter_types.get("surf", {})
+	surf_encounter_chance = clampf(float(surf_metadata.get("encounterChance", surf_encounter_chance)), 0.0, 1.0)
 
 
 func is_position_blocked_by_character(world_position: Vector2) -> bool:
