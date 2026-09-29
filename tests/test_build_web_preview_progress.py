@@ -5,10 +5,38 @@ import sys
 import tempfile
 import unittest
 
-from tools.build_web_preview import copy_web_shell_assets, parse_export_progress, run_export
+from tools.build_web_preview import (
+    MAX_EXCEPTION_BYTES,
+    MAX_INITIAL_BYTES,
+    copy_web_shell_assets,
+    initial_size_limit,
+    parse_export_progress,
+    run_export,
+)
 
 
 class BuildWebPreviewProgressTests(unittest.TestCase):
+    def test_normal_initial_size_limit_remains_312_mib(self):
+        self.assertEqual(initial_size_limit(allow_exception=False, reason=None), (MAX_INITIAL_BYTES, None))
+        self.assertEqual(MAX_INITIAL_BYTES, 312 * 1024 * 1024)
+
+    def test_size_exception_is_opt_in_bounded_and_auditable(self):
+        reason = 'Requested one-release browser exception for v0.3.87.'
+        self.assertEqual(
+            initial_size_limit(allow_exception=True, reason=reason),
+            (MAX_EXCEPTION_BYTES, reason),
+        )
+        self.assertEqual(MAX_EXCEPTION_BYTES, 328 * 1024 * 1024)
+
+    def test_size_exception_requires_reason(self):
+        for reason in (None, '', 'too big'):
+            with self.subTest(reason=reason), self.assertRaises(ValueError):
+                initial_size_limit(allow_exception=True, reason=reason)
+
+    def test_reason_without_exception_is_rejected(self):
+        with self.assertRaises(ValueError):
+            initial_size_limit(allow_exception=False, reason='one-off release')
+
     def test_plain_progress_line(self):
         self.assertEqual(parse_export_progress('[  42% ] savepack | Storing File'), (42, 'savepack'))
 
