@@ -31,6 +31,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_route_5": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 	"kanto_route_9": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 	"kanto_cerulean_cave": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+	"kanto_route_10_pokemon_center": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
 }
 const REQUEST_TIMEOUT_SECONDS := 60.0
 

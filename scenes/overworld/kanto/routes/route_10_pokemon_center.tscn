@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue_npc"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_overworld_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="4_hiker"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="5_camper"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_route_10_pokemon_center"
+map_display_name = "Route 10 Pokémon Center"
+world_access_group_id = "kanto_route_10"
+world_access_group_label = "Route 10"
+world_access_area_type = "interior"
+location_id = "kanto.route_10.pokemon_center"
+location_name = "Route 10 Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0"]
+respawn_point_id = "kanto_route_10_pokemon_center"
+npc_id = "kanto_route_10_pokemon_center_nurse_joy"
+
+[node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2"]
+npc_id = "kanto_route_10_pokemon_center_clerk"
+
+[node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3"]
+npc_id = "kanto_route_10_pokemon_center_clerk_2"
+
+[node name="CamperIris" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue_npc")]
+position = Vector2(368, 848)
+npc_id = "kanto_route_10_pokemon_center_camper_iris"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Iris"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("5_camper")
+
+[node name="HikerDax" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="6" instance=ExtResource("2_dialogue_npc")]
+position = Vector2(656, 784)
+npc_id = "kanto_route_10_pokemon_center_hiker_dax"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Dax"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("4_hiker")
+
+[node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3"]
+
+[node name="Zubat" parent="Entities/Pokemon" index="0" instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(400, 848)
+overworld_pokemon_id = "kanto_route_10_pokemon_center_zubat_1"
+species_id = "zubat"
+level = 17
+display_name = "Zubat"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 40.0
+
+[node name="Geodude" parent="Entities/Pokemon" index="1" instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(592, 784)
+overworld_pokemon_id = "kanto_route_10_pokemon_center_geodude_1"
+species_id = "geodude"
+level = 16
+display_name = "Geodude"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
+target_spawn_name = "FromPokemonCenter"
+transition_id = "kanto_route_10_pokemon_center__to_outside"
+transition_facing_direction = "down"

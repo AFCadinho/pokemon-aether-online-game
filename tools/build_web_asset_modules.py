@@ -89,7 +89,12 @@ def main():
     modules["kanto-through-misty-maps"] = build_module(
         args.godot, output, "kanto-through-misty-maps", "Web Misty Maps Trial", misty_scenes,
         tuple(path.removeprefix("res://").encode() for path in misty_scenes), forbidden)
-    extended_ids = ("kanto_route_5", "kanto_route_9", "kanto_cerulean_cave")
+    extended_ids = (
+        "kanto_route_5",
+        "kanto_route_9",
+        "kanto_cerulean_cave",
+        "kanto_route_10_pokemon_center",
+    )
     extended_scenes = [catalog["areas"][map_id]["scenePath"] for map_id in extended_ids]
     modules["kanto-extended-maps"] = build_module(
         args.godot, output, "kanto-extended-maps", "Web Extended Kanto Maps", extended_scenes,
