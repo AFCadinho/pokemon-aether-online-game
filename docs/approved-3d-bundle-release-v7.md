@@ -8,9 +8,11 @@ type), Obstagoon and Cursola. The new bundles contain 12 appearances and total
 
 Its immutable index object is
 `optional-assets/pokemon_3d/index/approved-pokemon-3d-v7-2ef65ef3408bf2aa366fb5de5a087d0efd0db2aab89eec18b30fa49d28f6dfee.json`.
-The R2 upload receipt will record which new archives and the index were
-published and verified. Desktop manifests remain on v6 until a later launcher
-release selects v7.
+The six new archives and the v7 index have been uploaded. Public GET checks
+verified all seven SHA-256 hashes (22,974,086 bytes); public HEAD checks
+verified the sizes of all 161 objects required by the new index. The receipt is
+`release/approved_3d_bundles_v7_r2_upload.json`. Desktop manifests remain on
+v6 until a later launcher release selects v7.
 
 The local release stage reuses v6 archives by hard link and copies the six new
 archives from their individually qualified local bundles. Rebuild with:
