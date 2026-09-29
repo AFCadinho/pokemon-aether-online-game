@@ -108,11 +108,18 @@ func _check_route_5_openings() -> void:
 	var route := await _instantiate_map(ROUTE_5_SCENE)
 	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
 
-	_check(_is_open(collision, Vector2i(4, 17)), "Route 5 opens its left exit")
-	_check(_is_open(collision, Vector2i(12, 17)), "Route 5 opens its grass exit")
-	_check(_is_open(collision, Vector2i(20, 17)), "Route 5 opens its right exit")
-	_check(not _is_open(collision, Vector2i(8, 17)), "Route 5 closes the first gap between exits")
-	_check(not _is_open(collision, Vector2i(16, 17)), "Route 5 closes the second gap between exits")
+	var exit_cells: Array[Vector2i] = []
+	for suffix: String in ["Left", "Grass", "Right"]:
+		var exit := route.get_node("Exits/ToCerulean" + suffix) as Area2D
+		var arrival := route.get_node("Spawns/FromCerulean" + suffix) as Marker2D
+		var cell := collision.local_to_map(collision.to_local(exit.global_position))
+		exit_cells.append(cell)
+		_check(_is_open(collision, cell), "Route 5 opens its %s exit at the current map boundary" % suffix)
+		_check(_is_open(collision, collision.local_to_map(collision.to_local(arrival.global_position))), "Route 5 %s arrival is walkable" % suffix)
+	for index in range(exit_cells.size() - 1):
+		var gap := Vector2i((exit_cells[index].x + exit_cells[index + 1].x) / 2, exit_cells[index].y)
+		_check(not _is_open(collision, gap), "Route 5 closes the gap between exits at %s" % gap)
+
 	await _free_map(route)
 
 
@@ -120,7 +127,8 @@ func _check_route_9_opening() -> void:
 	var route := await _instantiate_map(ROUTE_9_SCENE)
 	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
 
-	_check(_is_open(collision, Vector2i(0, 8)), "Route 9 opens its west-facing Cerulean exit")
+	var exit := route.get_node("Exits/ToCerulean") as Area2D
+	_check(_is_open(collision, collision.local_to_map(collision.to_local(exit.global_position))), "Route 9 opens its west-facing Cerulean exit")
 	_check(not _is_open(collision, Vector2i(0, 4)), "Route 9 keeps the rest of its west boundary closed")
 	await _free_map(route)
 

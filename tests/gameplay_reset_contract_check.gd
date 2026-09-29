@@ -67,7 +67,7 @@ func _init() -> void:
 		"appearance saves use a dedicated narrow endpoint"
 	)
 	_expect(
-		overlay.contains('return await PlayerGameStateService.save_player_appearance(')
+		overlay.contains('var result: Dictionary = await PlayerGameStateService.save_player_appearance(')
 		and overlay.contains('result.get("appearance", {})'),
 		"Trainer Card saves and verifies the dedicated appearance response"
 	)

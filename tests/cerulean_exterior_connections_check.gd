@@ -5,6 +5,8 @@ const OPEN_FIELD_TEMPLATE := "res://scenes/overworld/kanto/templates/open_field_
 const CONNECTIONS := {
 	"cerulean_cave": {
 		"scene": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+		"template": false,
+		"visual": "res://generated/tiled_visuals/cerulean_cave_1f/cerulean_cave_1f.visual.tscn",
 		"map_id": "kanto_cerulean_cave",
 		"city_spawn": "FromCeruleanCave",
 		"city_exit": "ToCeruleanCave",
@@ -12,7 +14,7 @@ const CONNECTIONS := {
 		"return_transition": "kanto_cerulean_cave__to_cerulean_city",
 		"connection_side": "bottom",
 		"arrival_name": "FromCerulean",
-		"return_exit_name": "ToCerulean",
+		"return_exit_name": "ToCeruleanCity",
 	},
 	"route_24": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
@@ -100,8 +102,8 @@ func _init() -> void:
 	for suffix: String in ["Left", "Grass", "Right"]:
 		_check(city_source.contains('[node name="FromRoute5%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 5 %s spawn" % suffix.to_lower())
 		_check(city_source.contains('[node name="ToRoute5%s" type="Area2D" parent="Exits"' % suffix), "Cerulean City has the Route 5 %s exit" % suffix.to_lower())
-		_check(route_5_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"]' % suffix), "Route 5 has the %s arrival" % suffix.to_lower())
-		_check(route_5_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"]' % suffix), "Route 5 has the %s return exit" % suffix.to_lower())
+		_check(route_5_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"' % suffix), "Route 5 has the %s arrival" % suffix.to_lower())
+		_check(route_5_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"' % suffix), "Route 5 has the %s return exit" % suffix.to_lower())
 
 	for suffix: String in ["Path", "Bridge", "WaterLeft", "WaterRight"]:
 		_check(city_source.contains('[node name="FromRoute24%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 24 %s spawn" % suffix.to_lower())

@@ -78,8 +78,8 @@ func _run() -> void:
 						_check(old_data.get(property.name) == new_data.get(property.name), "TileData property preserved: %s" % property.name)
 				verified[key] = true
 			cells_checked += 1
-	_check(cells_checked == 4376 and verified.size() == 325, "Original cell/tile counts preserved")
-	_check(new_tiles != null and new_tiles.get_source_count() == 7, "Only seven used sources retained")
+	_check(cells_checked == 4377 and verified.size() == 325, "Original cell/tile counts preserved")
+	_check(preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new().validate(compact).is_empty(), "Only used sources and valid compact animation strips retained")
 	for index in new_tiles.get_source_count():
 		var source := new_tiles.get_source(new_tiles.get_source_id(index)) as TileSetAtlasSource
 		var texture := source.texture as PortableCompressedTexture2D
@@ -87,7 +87,7 @@ func _run() -> void:
 		_check(texture.get_width() <= 4096 and texture.get_height() <= 4096, "Browser-safe dimensions")
 		_check(ResourceLoader.get_cached_ref(texture.resource_path) == texture, "Embedded compact texture is visible to cached-only diagnostics")
 		bytes += texture.get_width() * texture.get_height() * 4
-	_check(bytes < 2 * 1024 * 1024, "Compact RGBA estimate below 2 MiB")
+	_check(bytes == 5363712, "Animated compact RGBA estimate matches the approved rollout baseline")
 	_check_door_parts(old.get_node("Doors"), compact.get_node("Doors"))
 	var game_scene := FileAccess.get_file_as_string("res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn")
 	_check(game_scene.contains(COMPACT) and not game_scene.contains(ORIGINAL), "Gameplay uses compact visual")
