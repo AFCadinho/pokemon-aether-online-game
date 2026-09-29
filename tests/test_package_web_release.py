@@ -17,6 +17,18 @@ from upload_launcher_release import _load_updates_config
 
 
 class PackageWebReleaseTests(unittest.TestCase):
+    def test_extended_kanto_preset_covers_every_module_map(self):
+        presets = (ROOT / 'export_presets.cfg').read_text()
+        extended = presets.split('[preset.8]\n', 1)[1].split('[preset.8.options]', 1)[0]
+        for scene in (
+            'scenes/overworld/kanto/routes/kanto_route_5.tscn',
+            'scenes/overworld/kanto/routes/kanto_route_9.tscn',
+            'scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn',
+            'scenes/overworld/kanto/routes/route_10_pokemon_center.tscn',
+        ):
+            with self.subTest(scene=scene):
+                self.assertIn(f'res://{scene}', extended)
+
     def test_update_manifest_publisher_uses_a_separate_bucket_config(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
