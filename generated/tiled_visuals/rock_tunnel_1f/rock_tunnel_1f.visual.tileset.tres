@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://w1yqo1xdcege"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/rock_tunnel_1f/assets/rock_tunnel_1f.visual.tileset.compact_source_1_0.texture.res" id="1_esskd"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/rock_tunnel_1f/assets/rock_tunnel_1f.visual.tileset.compact_source_1026_0.texture.res" id="2_1msbg"]
