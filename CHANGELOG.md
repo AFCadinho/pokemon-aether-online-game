@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nieuwe desktopspelers starten standaard in 3D. Als een model ontbreekt of niet kan worden geladen, schakelt het gevecht automatisch over naar 2D.
+
 - 17 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in losse bundles. Staryu's juweel en Vanilluxe's ijs en gezicht zijn hersteld; alle 17 zijn visueel en in battle gecontroleerd.
 
 - Slugma, Magcargo, mannelijke Meowstic en Trevenant hebben lokaal goedgekeurde normal/shiny-3D-modellen in vier losse bundles. Ogen, kleuren, animaties en battleplaatsing zijn gecontroleerd.

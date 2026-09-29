@@ -11,7 +11,6 @@ var generation := 0
 var reveal_tween: Tween
 var chat_bridge: Node
 var loading_label: Label
-var fallback_button: Button
 var entry_transition: WildEncounterTransition
 var battle_unhandled_input_before_settings := true
 var battle_settings_menu: PanelContainer
@@ -35,20 +34,6 @@ func _ready() -> void:
 	loading_label.custom_minimum_size = Vector2(520,60)
 	loading_label.text = "Preparing battle…"
 	stack.add_child(loading_label)
-	fallback_button = Button.new()
-	fallback_button.text = "Continue this battle in 2D"
-	fallback_button.hide()
-	stack.add_child(fallback_button)
-	fallback_button.pressed.connect(_continue_in_2d)
-
-
-func _continue_in_2d() -> void:
-	fallback_button.disabled = true
-	await _prepare_2d_fallback()
-	if not released:
-		_reveal_cover()
-
-
 func _prepare_2d_fallback() -> void:
 	if not is_instance_valid(battle):
 		return
@@ -195,7 +180,7 @@ func _reveal_when_prepared(token: int) -> void:
 		return
 	var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
 	var settings := get_node("/root/SettingsManager")
-	if presenter != null and settings.battle_presentation_mode in ["2.5d", "3d"] and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if presenter != null and settings.battle_presentation_mode in ["2.5d", "3d"] and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_environment("POKEAETHER_3D_STAGE_REPORT") and not OS.has_feature("web") and not OS.has_feature("mobile"):
 		# A fresh install has no models yet. Keep the first encounter covered
 		# until its combatants are known; Team Preview deliberately opens empty.
 		var model_deadline := Time.get_ticks_msec() + 30000
@@ -211,11 +196,7 @@ func _reveal_when_prepared(token: int) -> void:
 		await presenter.await_prepared(true)
 	if released or token != generation or not is_inside_tree():
 		return
-	if presenter != null and presenter.preparation_failed:
-		loading_label.text = presenter.reason + "\nYou can continue this battle in 2D."
-		fallback_button.show()
-		return
-	if presenter != null and not presenter.active and settings.battle_presentation_mode in ["2.5d", "3d"]:
+	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
 		await _prepare_2d_fallback()
 		if released or token != generation or not is_inside_tree():
 			return
@@ -224,8 +205,7 @@ func _reveal_when_prepared(token: int) -> void:
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
-	# Keep the opaque loading cover until preparation succeeds (or the player
-	# explicitly chooses fallback). Then open the same shutters/bands as 2D.
+	# Keep the opaque loading cover until 3D or its 2D fallback is ready.
 	loading_label.get_parent().hide()
 	entry_transition.cover_progress = 1.0
 	entry_transition.show()
