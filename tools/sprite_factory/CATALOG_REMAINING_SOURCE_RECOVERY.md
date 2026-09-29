@@ -67,9 +67,17 @@ body detail in Godot. `catalog_remaining_body_detail.py` restores the exact
 0.5 material factor for those four source-hash-pinned models. Unown's earlier
 flat charcoal diagnostic is replaced by a bake of its authored blue body
 shader, retaining the source normal map. Darmanitan has a separate 0.7
-contrast-calibration candidate; its source does not use the missing `Colors`
-mix. All six export fresh and convert to standalone Godot scenes. The body
-review is still pending, and no normal/shiny pair is catalog approved.
+contrast calibration; its source does not use the missing `Colors` mix. Its
+`mirrorTexture` group also uses `PINGPONG(2 * U, 1)`, whereas the glTF exporter
+records only `Scale(2, 1)`. The source-pinned repair now mirrors its body
+atlases per pixel. The archived flame atlas has transparent red beyond the
+yellow core; that alpha erased most of both eyebrow flames in Godot. The
+repair extends the source yellow across the existing flame geometry and makes
+that material opaque. Five models (Unown, Wishiwashi, Silvally, Obstagoon,
+Cursola) passed user visual review. Darmanitan's revised normal scene passes
+standalone Godot conversion, five pose captures, and user visual review of its
+flames and arms.
+No normal/shiny pair is catalog approved yet.
 
 An external [Pokémon 3D API asset repository](https://github.com/Pokemon-3D-api/assets)
 contains shiny GLBs for Unown (201), Silvally (773), and Obstagoon (862).
