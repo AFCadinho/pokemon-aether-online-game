@@ -31,18 +31,18 @@ water_reference_tile = Vector2i(0, 50)
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="FromRoute6" type="Marker2D" parent="Spawns"]
-position = Vector2(1328, 48)
+position = Vector2(688, 48)
 
 [node name="FromRoute11" type="Marker2D" parent="Spawns"]
-position = Vector2(2496, 1264)
+position = Vector2(2320, 720)
 
 [node name="FromDocks" type="Marker2D" parent="Spawns"]
-position = Vector2(1328, 2000)
+position = Vector2(1040, 2160)
 
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToRoute6" type="Area2D" parent="Exits"]
-position = Vector2(1328, 16)
+position = Vector2(688, 16)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_6.tscn"
 target_spawn_name = "FromVermilion"
@@ -53,7 +53,7 @@ transition_facing_direction = "up"
 shape = SubResource("shape_1")
 
 [node name="ToRoute11" type="Area2D" parent="Exits"]
-position = Vector2(2544, 1264)
+position = Vector2(2384, 720)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_11.tscn"
 target_spawn_name = "FromVermilion"
@@ -64,7 +64,7 @@ transition_facing_direction = "right"
 shape = SubResource("shape_2")
 
 [node name="ToDocks" type="Area2D" parent="Exits"]
-position = Vector2(1328, 2032)
+position = Vector2(1040, 2224)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn"
 target_spawn_name = "FromVermilionCity"
