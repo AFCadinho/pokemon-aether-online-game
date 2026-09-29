@@ -13,6 +13,8 @@ import subprocess
 import zipfile
 from pathlib import Path
 
+from catalog_remaining_body_detail import POLICY as BODY_DETAIL_POLICY, repair as repair_body_detail
+
 
 REQUIRED = {"idle", "physical_attack", "special_attack", "damage", "sleep",
             "faint_start"}
@@ -105,6 +107,10 @@ def export_one(entry, probe_status, output, worker):
             if current.get("eye_domain_review_candidate", {}).get("policy") != EYE_DOMAIN_POLICY:
                 return {"species": species, "status": "held",
                         "reason": "stale_eye_domain_candidate_requires_new_output"}
+        if species in ("unown", "darmanitan-standard", "wishiwashi", "silvally", "obstagoon", "cursola"):
+            if current.get("body_detail_review_candidate", {}).get("policy") != BODY_DETAIL_POLICY:
+                return {"species": species, "status": "held",
+                        "reason": "stale_body_detail_candidate_requires_new_output"}
         return {"species": species, "status": "exported", "bank": bank,
                 "physical_attack_2": "physical_attack_2" in mapping,
                 "report": str(existing_report)}
@@ -166,6 +172,31 @@ def export_one(entry, probe_status, output, worker):
             result["path"] = str(corrected)
             result["glb_sha256"] = face["glb_sha256"]
             result["bytes"] = corrected.stat().st_size
+            (directory / "export.json").write_text(json.dumps(result, indent=2) + "\n")
+        if species in ("unown", "darmanitan-standard", "wishiwashi", "silvally", "obstagoon", "cursola"):
+            body_bake = None
+            if species == "unown":
+                body_bake = directory / "unown-a-authored-body.png"
+                body_worker = Path(__file__).with_name("catalog_remaining_eye_domain_worker.py").resolve()
+                body_job = directory / "body-bake-job.json"
+                body_job.write_text(json.dumps({"source": str(extracted), "materials": [{
+                    "name": "body", "source_uv_bounds": [0, 1, 0, 1], "output": str(body_bake)
+                }]}, indent=2) + "\n")
+                body_command = ["flatpak", "run", "--unshare=network", "--nofilesystem=host",
+                                "--filesystem=" + str(directory),
+                                "--filesystem=" + str(body_worker.parent) + ":ro",
+                                "org.blender.Blender", "--background", "--factory-startup",
+                                "--disable-autoexec", "--python-exit-code", "1", "--python",
+                                str(body_worker), "--", str(body_job)]
+                with (directory / "body-bake.log").open("w") as log:
+                    subprocess.run(body_command, stdout=log, stderr=subprocess.STDOUT,
+                                   timeout=120, check=True)
+            detailed = directory / "model-body-detail-review.glb"
+            result["body_detail_review_candidate"] = repair_body_detail(
+                species, digest, Path(result["path"]), detailed, body_bake)
+            result["path"] = str(detailed)
+            result["glb_sha256"] = result["body_detail_review_candidate"]["glb_sha256"]
+            result["bytes"] = detailed.stat().st_size
             (directory / "export.json").write_text(json.dumps(result, indent=2) + "\n")
         return {"species": species, "status": "exported", "bank": bank,
                 "physical_attack_2": "physical_attack_2" in mapping,
