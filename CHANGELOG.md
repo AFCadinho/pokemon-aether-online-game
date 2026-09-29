@@ -4,7 +4,7 @@
 
 - 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
 
-- Route 10’s Pokémon Center uses the current complete Tiled exterior and now opens its own masked Pokémon Center interior with a return door to Route 10.
+- Route 10 gebruikt de nieuwste Tiled-visual; het Pokémon Center is via de servercatalogus bereikbaar en beschikbaar als bestemming voor staffteleport.
 
 - 32 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen en individuele bundles. Kleuren, ogen en battleplaatsing zijn gecontroleerd; Mamoswine en Malamar blijven ook tijdens hun aanvallen boven de vloer.
 

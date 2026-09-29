@@ -1633,7 +1633,9 @@
 			"locationGroupId": "kanto_rock_tunnel",
 			"locationGroupLabel": "Rock Tunnel",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://buo38hu0vgp7w"
+			],
 			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 			"spawnPoints": {
 				"from_b_1fa": {
@@ -1642,8 +1644,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB1FA",
 					"tile": {
-						"x": 78,
-						"y": 13
+						"x": 75,
+						"y": 11
 					}
 				},
 				"from_b_1fb": {
@@ -1652,8 +1654,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB1FB",
 					"tile": {
-						"x": 13,
-						"y": 13
+						"x": 10,
+						"y": 11
 					}
 				},
 				"from_b_1fc": {
@@ -1662,8 +1664,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB1FC",
 					"tile": {
-						"x": 35,
-						"y": 32
+						"x": 32,
+						"y": 30
 					}
 				},
 				"from_b_1fd": {
@@ -1672,8 +1674,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB1FD",
 					"tile": {
-						"x": 78,
-						"y": 49
+						"x": 75,
+						"y": 47
 					}
 				},
 				"from_route_10_north": {
@@ -1682,8 +1684,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute10North",
 					"tile": {
-						"x": 50,
-						"y": 10
+						"x": 49,
+						"y": 8
 					}
 				},
 				"from_route_10_south": {
@@ -1693,7 +1695,7 @@
 					"spawnMarker": "FromRoute10South",
 					"tile": {
 						"x": 26,
-						"y": 69
+						"y": 70
 					}
 				}
 			}
@@ -1705,7 +1707,9 @@
 			"locationGroupId": "kanto_rock_tunnel",
 			"locationGroupLabel": "Rock Tunnel",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://b6uv3fbq8gdvi"
+			],
 			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
 			"spawnPoints": {
 				"from_1fa": {
@@ -1714,8 +1718,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1FA",
 					"tile": {
-						"x": 80,
-						"y": 13
+						"x": 79,
+						"y": 11
 					}
 				},
 				"from_1fb": {
@@ -1724,8 +1728,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1FB",
 					"tile": {
-						"x": 15,
-						"y": 13
+						"x": 14,
+						"y": 11
 					}
 				},
 				"from_1fc": {
@@ -1734,8 +1738,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1FC",
 					"tile": {
-						"x": 37,
-						"y": 32
+						"x": 36,
+						"y": 30
 					}
 				},
 				"from_1fd": {
@@ -1744,8 +1748,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1FD",
 					"tile": {
-						"x": 80,
-						"y": 49
+						"x": 79,
+						"y": 47
 					}
 				}
 			}
@@ -4664,11 +4668,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_rock_tunnel_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://b6uv3fbq8gdvi"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
 				"position": {
-					"x": 2576.0,
-					"y": 416.0
+					"x": 2544.0,
+					"y": 368.0
 				},
 				"spawnMarker": "From1FA"
 			},
@@ -4679,11 +4685,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_rock_tunnel_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://b6uv3fbq8gdvi"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
 				"position": {
-					"x": 496.0,
-					"y": 416.0
+					"x": 464.0,
+					"y": 368.0
 				},
 				"spawnMarker": "From1FB"
 			},
@@ -4694,11 +4702,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_rock_tunnel_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://b6uv3fbq8gdvi"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
 				"position": {
-					"x": 1200.0,
-					"y": 1024.0
+					"x": 1168.0,
+					"y": 976.0
 				},
 				"spawnMarker": "From1FC"
 			},
@@ -4709,11 +4719,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_rock_tunnel_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://b6uv3fbq8gdvi"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
 				"position": {
-					"x": 2576.0,
-					"y": 1568.0
+					"x": 2544.0,
+					"y": 1520.0
 				},
 				"spawnMarker": "From1FD"
 			},
@@ -4758,11 +4770,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_rock_tunnel_1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://buo38hu0vgp7w"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 2512.0,
-					"y": 416.0
+					"x": 2416.0,
+					"y": 368.0
 				},
 				"spawnMarker": "FromB1FA"
 			},
@@ -4773,11 +4787,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_rock_tunnel_1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://buo38hu0vgp7w"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 432.0,
-					"y": 416.0
+					"x": 336.0,
+					"y": 368.0
 				},
 				"spawnMarker": "FromB1FB"
 			},
@@ -4788,11 +4804,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_rock_tunnel_1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://buo38hu0vgp7w"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 1136.0,
-					"y": 1024.0
+					"x": 1040.0,
+					"y": 976.0
 				},
 				"spawnMarker": "FromB1FC"
 			},
@@ -4803,11 +4821,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_rock_tunnel_1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://buo38hu0vgp7w"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 2512.0,
-					"y": 1568.0
+					"x": 2416.0,
+					"y": 1520.0
 				},
 				"spawnMarker": "FromB1FD"
 			},
@@ -4862,11 +4882,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_rock_tunnel_1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://buo38hu0vgp7w"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 1600.0,
-					"y": 336.0
+					"x": 1584.0,
+					"y": 272.0
 				},
 				"spawnMarker": "FromRoute10North"
 			},
@@ -4877,11 +4899,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_rock_tunnel_1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://buo38hu0vgp7w"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 				"position": {
-					"x": 832.0,
-					"y": 2208.0
+					"x": 848.0,
+					"y": 2256.0
 				},
 				"spawnMarker": "FromRoute10South"
 			},
