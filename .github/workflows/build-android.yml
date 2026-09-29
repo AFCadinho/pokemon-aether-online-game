@@ -98,7 +98,7 @@ jobs:
           unzip -oq /tmp/pokemon-home-shiny.zip
           test -f assets/sprites/pokemon/pokemon_home/Pikachu.png
           test -f assets/sprites/pokemon/pokemon_home/Bulbasaur.png
-          test -f assets/sprites/pokemon/pokemon_home_shiny/Pikachu.png
+          test -f assets/sprites/pokemon/pokemon_home_shiny/pikachu.png
 
       - name: Stamp immutable release identity
         env:
