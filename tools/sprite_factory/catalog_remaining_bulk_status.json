@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "date": "2026-09-29",
-  "scope": "all 1025 base species after 26 recovered pairs and four new local approvals",
+  "scope": "all 1025 base species after 32 additional shiny-recovery pair approvals",
   "base_species_total": 1025,
-  "approved_base_species": 639,
-  "approved_with_mega_profiles": 640,
-  "remaining_base_species": 386,
+  "approved_base_species": 671,
+  "approved_with_mega_profiles": 672,
+  "remaining_base_species": 354,
   "counts": {
     "review_hold": 214,
-    "shiny_hold": 151,
+    "shiny_hold": 119,
     "source_missing": 21
   },
   "runtime_approved": false,
@@ -21,11 +21,12 @@
     ".tmp/remaining-catalog-intake/rig-recovered-shiny-pinned/status.json": "8a8e882f8cac0a7b5375a12f7d22d03fa17db2a4f601b178ba45fb2ce869b576",
     "tools/sprite_factory/catalog_batch04_recovered_26_admission.json": "1d949283bfb6770731b6e7f8d9b36f356079aa18bedeeef68e848c9d9e152a35",
     "tools/sprite_factory/catalog_remaining_four_admission.json": "8e9042385f833d2e57d12174df26a480214f12d0c0390dc0765238d921c08d68",
+    "tools/sprite_factory/catalog_shiny_151_first_32_admission.json": "e6e5e9640783bc0f360e851a9e18b21b4b6433bcf53d4a43d484c9ba2a0a5d0d",
     ".tmp/remaining-catalog-intake/rig-recovered-normal/status.json": "2ee8e0db48152422934c3cde32b040d21f76fb9cfb43b3aa42fbb91fdd745662",
     ".tmp/remaining-catalog-intake/rig-recovered-runtime/status.json": "24f2b0524bc3548db82d3ba4a558a88500524aa4f290439cd9ea4ea77ca5e949",
     ".tmp/remaining-catalog-intake/rig-recovered-shiny-runtime/status.json": "495c313bba39dd2e6656fcfcc06f2fcf27e8187804467e3b6cb47426e6775065",
     ".tmp/remaining-catalog-intake/new-pairs-captures/review.json": "f89eea06a5a7a226a2256c73a5a1736799f93419a9c892162bdc6dafca56e7e2",
-    "tools/sprite_factory/catalog_remaining_bulk_status.py": "d2421d6662b9f1955de84bfafd548313aadb82bb123322bcdcbcf83115c747de",
+    "tools/sprite_factory/catalog_remaining_bulk_status.py": "0848dce7e167a59990afcd9e7c0253c3121640d7daf248d169fedbc144331d26",
     "tools/sprite_factory/catalog_remaining_normal_export.py": "eb43d6b56561508684b0800db4fae11fdae0732942ca006b0f42ffd0357d3ca0",
     "tools/sprite_factory/catalog_remaining_legacy_material.py": "373eea401755e95e9ea4a2833c46e8e6ff7c4dd7bb53c5a2b06b0b82647153d2"
   },
@@ -148,14 +149,6 @@
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 23,
-      "species": "ekans",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Rare material colour channels differ",
       "runtime_approved": false
     },
     {
@@ -1113,22 +1106,6 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 341,
-      "species": "corphish",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal texture missing: pm0341_00_00_lower_eyelid_alb.png",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 342,
-      "species": "crawdaunt",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Rare material colour channels differ",
-      "runtime_approved": false
-    },
-    {
       "national_dex": 343,
       "species": "baltoy",
       "status": "review_hold",
@@ -1174,14 +1151,6 @@
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 349,
-      "species": "feebas",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal texture missing: pm0349_00_00_lower_eyelid_alb.png",
       "runtime_approved": false
     },
     {
@@ -1285,30 +1254,6 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 374,
-      "species": "beldum",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal colour differs from official source: eye_a/BaseColorLayer8",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 375,
-      "species": "metang",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer8",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 376,
-      "species": "metagross",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer8",
-      "runtime_approved": false
-    },
-    {
       "national_dex": 386,
       "species": "deoxys",
       "status": "review_hold",
@@ -1322,14 +1267,6 @@
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 392,
-      "species": "infernape",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: One material needs different replacements for a shared texture",
       "runtime_approved": false
     },
     {
@@ -1533,16 +1470,6 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 473,
-      "species": "mamoswine",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Rare material count differs",
-      "runtime_approved": false,
-      "normal_glb_sha256": "6547dd01895c2f4b012c1315b6f39459c4eb154685bc9248e28af001cedfda5f",
-      "normal_scene_sha256": "922d5e743d9fbd501e0500ec9a7f8a05d477ad11b7b283b486db39a26287d219"
-    },
-    {
       "national_dex": 489,
       "species": "phione",
       "status": "review_hold",
@@ -1580,14 +1507,6 @@
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 500,
-      "species": "emboar",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal float differs from official source",
       "runtime_approved": false
     },
     {
@@ -2221,51 +2140,11 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 659,
-      "species": "bunnelby",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 660,
-      "species": "diggersby",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 674,
-      "species": "pancham",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 675,
-      "species": "pangoro",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
       "national_dex": 676,
       "species": "furfrou",
       "status": "review_hold",
       "stage": "source",
       "reason": "source_probe_not_passed",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 677,
-      "species": "espurr",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal colour differs from official source: l_eye_a/BaseColorLayer1",
       "runtime_approved": false
     },
     {
@@ -2277,14 +2156,6 @@
       "runtime_approved": false,
       "normal_glb_sha256": "a1aed2070b98a4645e274093db8343fd877e016ab9badaa4a16b0726fe85e6c9",
       "normal_scene_sha256": "126115f74ea85985bd8a080826f0eab44e572bb84658455fb63eaf9df65ffa77"
-    },
-    {
-      "national_dex": 679,
-      "species": "honedge",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
     },
     {
       "national_dex": 680,
@@ -2303,35 +2174,11 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 682,
-      "species": "spritzee",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 683,
-      "species": "aromatisse",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
       "national_dex": 684,
       "species": "swirlix",
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 685,
-      "species": "slurpuff",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
       "runtime_approved": false
     },
     {
@@ -2341,32 +2188,6 @@
       "stage": "shiny_material",
       "reason": "Embedded normal colour differs from official source: r_eye/BaseColorLayer1",
       "runtime_approved": false
-    },
-    {
-      "national_dex": 687,
-      "species": "malamar",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal colour differs from official source: l_eye/BaseColorLayer1",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 688,
-      "species": "binacle",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 689,
-      "species": "barbaracle",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false,
-      "normal_glb_sha256": "9681b248e70763a378ffbcb72059f33aa3754428253081376e8eaf54e453c4d3",
-      "normal_scene_sha256": "223fd58a58272da389a330ec6138acb8f66c46596b5ad84d44828446334da4aa"
     },
     {
       "national_dex": 694,
@@ -2382,46 +2203,6 @@
       "status": "shiny_hold",
       "stage": "shiny_material",
       "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 696,
-      "species": "tyrunt",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 697,
-      "species": "tyrantrum",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 698,
-      "species": "amaura",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 699,
-      "species": "aurorus",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 708,
-      "species": "phantump",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal colour differs from official source: r_eye/BaseColorLayer1",
       "runtime_approved": false
     },
     {
@@ -2489,14 +2270,6 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 738,
-      "species": "vikavolt",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal pixels differ from official source; UV binding not proven",
-      "runtime_approved": false
-    },
-    {
       "national_dex": 746,
       "species": "wishiwashi",
       "status": "source_missing",
@@ -2542,14 +2315,6 @@
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 768,
-      "species": "golisopod",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
       "runtime_approved": false
     },
     {
@@ -2777,16 +2542,6 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 807,
-      "species": "zeraora",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false,
-      "normal_glb_sha256": "aa3bb66a96112d9d4a3e90e337fe8f01431e14a1798cbba77eeb47886acbbfe6",
-      "normal_scene_sha256": "d8929f5344234d89f19e27b1d1efc4edfe75e966397ac94f78558cd6c7738560"
-    },
-    {
       "national_dex": 808,
       "species": "meltan",
       "status": "shiny_hold",
@@ -2821,22 +2576,6 @@
     {
       "national_dex": 826,
       "species": "orbeetle",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 827,
-      "species": "nickit",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 828,
-      "species": "thievul",
       "status": "shiny_hold",
       "stage": "shiny_material",
       "reason": "ValueError: Official normal/rare material tables absent for this source",
