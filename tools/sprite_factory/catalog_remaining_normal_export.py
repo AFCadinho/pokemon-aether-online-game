@@ -17,6 +17,7 @@ from pathlib import Path
 REQUIRED = {"idle", "physical_attack", "special_attack", "damage", "sleep",
             "faint_start"}
 WISHIWASHI_SOLO_SOURCE_SHA256 = "028fdad10505fcea05f8e03ef5dac10ada2fec7ab1077066e5fd96663b6ba669"
+EYE_DOMAIN_POLICY = "source-eye-domain-review-v1"
 
 
 def choose_actions(report):
@@ -100,6 +101,10 @@ def export_one(entry, probe_status, output, worker):
                 != "unown-a-body-eye-review-v2"):
             return {"species": species, "status": "held",
                     "reason": "stale_unown_face_candidate_requires_new_output"}
+        if species in ("darmanitan-standard", "wishiwashi", "silvally", "obstagoon", "cursola"):
+            if current.get("eye_domain_review_candidate", {}).get("policy") != EYE_DOMAIN_POLICY:
+                return {"species": species, "status": "held",
+                        "reason": "stale_eye_domain_candidate_requires_new_output"}
         return {"species": species, "status": "exported", "bank": bank,
                 "physical_attack_2": "physical_attack_2" in mapping,
                 "report": str(existing_report)}
@@ -148,6 +153,18 @@ def export_one(entry, probe_status, output, worker):
                                                       eye_bake)
             result["path"] = str(corrected)
             result["glb_sha256"] = result["body_review_candidate"]["sha256"]
+            result["bytes"] = corrected.stat().st_size
+            (directory / "export.json").write_text(json.dumps(result, indent=2) + "\n")
+        if species in ("darmanitan-standard", "wishiwashi", "silvally", "obstagoon", "cursola"):
+            from catalog_remaining_eye_domain import repair
+            corrected = directory / "model-source-eyes-review.glb"
+            face = repair(species, extracted, directory / "model.glb", corrected)
+            result["eye_domain_review_candidate"] = {"policy": EYE_DOMAIN_POLICY,
+                                                       "source_sha256": digest,
+                                                       "eye_materials": face["eye_materials"],
+                                                       "runtime_approved": False}
+            result["path"] = str(corrected)
+            result["glb_sha256"] = face["glb_sha256"]
             result["bytes"] = corrected.stat().st_size
             (directory / "export.json").write_text(json.dumps(result, indent=2) + "\n")
         return {"species": species, "status": "exported", "bank": bank,
