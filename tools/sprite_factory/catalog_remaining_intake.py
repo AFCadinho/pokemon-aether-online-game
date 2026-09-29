@@ -17,6 +17,17 @@ from pathlib import Path
 
 
 MEMBER = re.compile(r"(?:^|/)pm(\d{4})(?:_00)?\.blend$")
+# These archives contain only form-specific files for the canonical species.
+# The chosen members were checked against the archive's developer-number table
+# (where present) and probed as Blender scenes before adding them here.
+FORM_SOURCE_MEMBERS = {
+    2: {201: "pm0201_11.blend"},             # Unown A
+    5: {555: "pm0555_11_12.blend"},          # Darmanitan standard
+    7: {746: "pm0820_11.blend",              # Wishiwashi solo
+        773: "pm0862_11.blend"},             # Silvally normal type
+    8: {862: "pm0928_00_31.blend",           # Obstagoon
+        864: "pm0947_00_31.blend"},          # Cursola
+}
 FORM_ONLY_BASE = {
     550: "basculin-red-striped", 555: "darmanitan-standard",
     592: "frillish-male", 593: "jellicent-male", 647: "keldeo-ordinary",
@@ -50,6 +61,17 @@ def source_members(archive, generation):
                 continue
             old = selected.get(dex)
             if old is None or (info.filename.endswith("_00.blend") and not old.filename.endswith("_00.blend")):
+                selected[dex] = info
+        for dex, member in FORM_SOURCE_MEMBERS.get(generation, {}).items():
+            try:
+                info = zipped.getinfo(member)
+            except KeyError:
+                continue
+            resource = int(re.match(r"pm(\d{4})", Path(member).name)[1])
+            mapped = dex_for_dev.get(resource) if generation >= 6 else resource
+            if mapped != dex or info.is_dir() or info.file_size > 1024**3:
+                raise ValueError(f"Invalid form-only source member {member}")
+            if dex not in selected:
                 selected[dex] = info
         return selected
 

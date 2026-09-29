@@ -3,10 +3,10 @@ import re
 
 
 PATTERNS = {
-    'idle': r'_(?:battlewait01_loop|ba10_waitA01)(?:\.|$)',
+    'idle': r'_(?:battlewait01_loop|defaultwait01_loop|ba10_waitA01)(?:\.|$)',
     'physical_attack': r'_(?:attack01|ba20_buturi01)(?:\.|$)',
-    'special_attack': r'_(?:rangeattack01|ba21_tokusyu01)(?:\.|$)',
-    'damage': r'_(?:damage01|ba30_damageS01)(?:\.|$)',
+    'special_attack': r'_(?:rangeattack01(?:_start)?|ba21_tokusyu01)(?:\.|$)',
+    'damage': r'_(?:damage01(?:_start)?|ba30_damageS01)(?:\.|$)',
     'sleep': r'_(?:sleep01_loop|kw20_drowseB01)(?:\.|$)',
     'faint_start': r'_(?:down01_start|ba41_down01)(?:\.|$)',
     'faint_loop': r'_down01_loop(?:\.|$)',
