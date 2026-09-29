@@ -37,13 +37,20 @@ visible albedo, producing a giant black eye. The source-hash-pinned Unown
 conversion now bakes the original Blender eye material's Base Color and binds
 that texture in the GLB. Its new Godot idle render has a light eye and pupil.
 This remains a visual-review candidate, not a shiny or battle approval.
-The other five remain on face review hold. Their eye geometry exists, but
-isolated-eye captures show mostly flat atlas colours. Darmanitan's eye-UV
-experiment exposed a wrong atlas tile on one eye; that experiment was not
-applied to the production conversion. Their source eye-UV node groups need
-individual review before promoting normal scenes. The Godot review renderer
-accepts an optional `POKEAETHER_CATALOG_REVIEW_CAMERA_DIRECTION=x,y,z` for
-viewing such cases from other angles.
+The other five also have source-faithful **normal review candidates**. Their
+Blender eye shader uses a mirrorTexture node group and out-of-range UVs that
+the glTF exporter does not preserve. `catalog_remaining_eye_domain.py` pins
+each source SHA-256, bakes the original Base Color over the source eye UV
+domain, and remaps only the named eye primitives to that bake. Darmanitan,
+Wishiwashi, Silvally, Obstagoon, and Cursola all converted to Godot SCNs and
+rendered their native review poses without pose/timing errors. This fixes the
+flat atlas colours in the diagnostic renders; their faces still need human
+visual review. Wishiwashi's sleep fallback keeps its eyes open, because the
+source has no native sleep clip or eyelid rig. Cursola's coral is still much
+brighter in Godot than in the Blender source, so its body material needs a
+separate decision. The Godot review renderer accepts an optional
+`POKEAETHER_CATALOG_REVIEW_CAMERA_DIRECTION=x,y,z` for viewing such cases
+from other angles.
 
 The six normal poses can now be reviewed together with
 `catalog_remaining_six_review.py`; it uses the corrected Unown render and the
