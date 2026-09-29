@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Unown, Darmanitan, Wishiwashi, Silvally, Obstagoon en Cursola hebben lokaal goedgekeurde normal/shiny-3D-modellen in zes losse bundles. Kleuren, ogen, battleplaatsing en animaties zijn gecontroleerd.
+
 - Route 6 gebruikt de nieuwste Tiled-kaart; collision, water, hoog gras, ledges en de zuidelijke uitgang volgen de bijgewerkte indeling.
 
 - Vermilion City gebruikt de nieuwste Tiled-visual met de bijgewerkte buitentileset; de aansluitingen naar Route 6, Route 11 en de docks volgen de nieuwe kaartopeningen.
