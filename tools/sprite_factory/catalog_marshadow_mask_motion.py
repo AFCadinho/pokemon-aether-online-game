@@ -95,6 +95,8 @@ def main():
         mask_path = verify(table.parent / Path(row['textures']['LayerMaskMap']).with_suffix('.png').name)
         if row['alpha_type'] != 'Opaque' or any(row['floats'].get('EmissionIntensityLayer'+str(i), 0) for i in range(1, 5)):
             raise ValueError('Expected the audited opaque nonemissive head material')
+        if any(row['floats'].get('SpecularLayer'+str(i)+'Intensity', -1) != 0 for i in range(1, 5)):
+            raise ValueError('Nonzero layer specular requires a separate animated specular bake')
         base = Image.open(base_path).convert('RGBA').resize((512, 512))
         source_mask = Image.open(mask_path).convert('RGBA')
         doc, binary = chunks(candidate['path'])
@@ -128,7 +130,7 @@ def main():
                 timing = candidate['action_timing'][action]
                 clips[action] = {'duration': timing['frames']/60, 'loop': timing['loop'],
                                  'source_sha256': clip['sha256'], 'keys': keys}
-            record['bindings'].append({'mesh': node['name'], 'material': 'body_a', 'frames': frames, 'clips': clips})
+            record['bindings'].append({'mesh': node['name'], 'material': 'body_a', 'source_layer_specular': 0, 'frames': frames, 'clips': clips})
             print(variant, node['name'], 'frames=', len(frames), flush=True)
         if len(record['bindings']) != 4:
             raise ValueError('Expected four source head/effect mesh bindings')

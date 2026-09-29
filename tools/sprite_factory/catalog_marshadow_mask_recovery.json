@@ -2,12 +2,12 @@
   "schema": 1,
   "date": "2026-09-29",
   "species": "marshadow",
-  "status": "awaiting_colour_feedback_clarification",
+  "status": "awaiting_appearance_review",
   "appearance_approved": false,
   "battle_approved": false,
   "runtime_approved": false,
   "release_approved": false,
-  "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/marshadow-motion-v2/index.html",
+  "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/marshadow-motion-v3/index.html",
   "variants": [
     {
       "action_timing": {
@@ -49,13 +49,13 @@
       },
       "embedded_texture_keys_and_playback_verified": true,
       "glb_sha256": "7d321a621b2f7fa7f99ddc678e7fe2cbb0419a6e56b59bd550797e3467043ad5",
-      "mask_motion_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/manifest.json",
-      "mask_motion_manifest_sha256": "1ff9d5ee00a2ae205e5c9ca8117dab2ea63f2e0994320035e7306b10c163d846",
+      "mask_motion_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/manifest.json",
+      "mask_motion_manifest_sha256": "ff145b1ba48f67ca0efdbf2f242a35811eca1fe06834e2a53194d196549c1835",
       "native_geometry_motion_preserved": true,
       "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/marshadow/normal/model.glb",
       "runtime_approved": false,
-      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/runtime/marshadow-normal.scn",
-      "runtime_sha256": "c86edfca38cd13d1ff9108bf7a4be27524ad7f1a9af6cce402ddbe032c442d3d",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/runtime/marshadow-normal.scn",
+      "runtime_sha256": "0ee018498953bc63e751be2c7b4db9c83243b0fd3031a977836f851150efcfe3",
       "source_runtime_sha256": "a8804bec1e612eb286be0427f5477cdab63643779f9fa397abf2cc1e85bf9601",
       "source_sha256": "2b8e5eb526b6b67729b8f183edccc1c0a3d117a2096b50b2ad66b5ff38de6aa7",
       "species": "marshadow",
@@ -101,13 +101,13 @@
       },
       "embedded_texture_keys_and_playback_verified": true,
       "glb_sha256": "c93fb5db65772637adacf3827a4f17713caff8a9773eee14290d444386a1de5f",
-      "mask_motion_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/manifest.json",
-      "mask_motion_manifest_sha256": "1ff9d5ee00a2ae205e5c9ca8117dab2ea63f2e0994320035e7306b10c163d846",
+      "mask_motion_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/manifest.json",
+      "mask_motion_manifest_sha256": "ff145b1ba48f67ca0efdbf2f242a35811eca1fe06834e2a53194d196549c1835",
       "native_geometry_motion_preserved": true,
       "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/marshadow/shiny/model.glb",
       "runtime_approved": false,
-      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/runtime/marshadow-shiny.scn",
-      "runtime_sha256": "a667a25d549d648e60eec96b17cc22c5c8c548bf35e70494517a92960962934c",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/runtime/marshadow-shiny.scn",
+      "runtime_sha256": "80481c955d38e3a869178b7d48df76cda6525e9ba135fe1be4d04ad4180ec8ab",
       "source_runtime_sha256": "17ae8b1fd5e5cab77c5e446e5749994d66ee4028fc1cc07f1a59b25c99a8eb5b",
       "source_sha256": "2b8e5eb526b6b67729b8f183edccc1c0a3d117a2096b50b2ad66b5ff38de6aa7",
       "species": "marshadow",
@@ -512,11 +512,29 @@
     "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/normal/pm0883_00_00_parts_mesh/frame-043.png": "4a64651be321fde45f1faae9b39f4c526ef7bab215d88a73c9d519016359db26",
     "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/normal/pm0883_00_00_parts_mesh/frame-044.png": "8fab3cc4f6c4c936fbf701c75368044e815e8e42aac40715b2a0addb533d4c04",
     "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/normal/pm0883_00_00_parts_mesh/frame-045.png": "27637c0c7a7812101b48c807b693a6bb5c2da40962f728250cf5fbd29c213d40",
-    "tools/sprite_factory/catalog_marshadow_mask_motion.py": "3efe9f229dfd65682985abd988bd0dcfe6f016cb844020f5f3c894dca685f8cb",
-    "tools/sprite_factory/catalog_marshadow_mask_pack.gd": "dbc1d99701e37864b56b5e78b872ad5a5be0657bb0debd95bf3070d8ffab2ac9",
+    "tools/sprite_factory/catalog_marshadow_mask_motion.py": "e1a6c779c7314610a74de7de92ba12b5028b1fd5105f04baf170f6170dffa97f",
+    "tools/sprite_factory/catalog_marshadow_mask_pack.gd": "1c4e2ead907d078a01bcd424929f9f505c3d21013d48b72a4fca68016307da47",
     "tools/sprite_factory/catalog_marshadow_mask_pack.gd.uid": "d9b587108b3f8e10a6c807d5e7569ce4107ce6fb3615913d609a147003944a12",
     "tools/sprite_factory/catalog_uv_mask_bake.py": "01191ef2034bf4f257249d4a9a5cf8115309a9e91b7ceb2a7750f006ec19fe77",
-    "tools/sprite_factory/test_catalog_uv_mask_bake.py": "e076db8f87c3de1baf5911d4257d3c4d1086af2f9320ff4cd1da7109c10a0332"
+    "tools/sprite_factory/test_catalog_uv_mask_bake.py": "e076db8f87c3de1baf5911d4257d3c4d1086af2f9320ff4cd1da7109c10a0332",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/manifest.json": "ff145b1ba48f67ca0efdbf2f242a35811eca1fe06834e2a53194d196549c1835",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review-report.json": "756742fec83dda9c53c9991b88f2bf30e26098f687c02e0db930d22befcfebef",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/index.html": "159a6074eee8be906e50535e5e85e30030a78a3caaa2434b9b7aa95a2eea350b",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/runtime/marshadow-normal.scn": "0ee018498953bc63e751be2c7b4db9c83243b0fd3031a977836f851150efcfe3",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/runtime/marshadow-shiny.scn": "80481c955d38e3a869178b7d48df76cda6525e9ba135fe1be4d04ad4180ec8ab",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/runtime/report.json": "078d633c02ceb269a2939bbec4be4f75f3bc135ec7eae6b15f7429a13306f695",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow-idle-50.png": "cdc30b5104b2255bcd5f650feac86b95edb74b891c4e6f905838ded9a6b10a43",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow-physical_attack-50.png": "0e09e7861c00b07b8417db4f04e853ab5e062ef0efdc3ff7e53761c8275f4026",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow-special_attack-50.png": "f4ed33c9b821a8052dbb1a66620ca3d0202feb36588f0865b81cdb0f9027a150",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow-sleep-50.png": "0662ab0deab4c6b411c00ebf787f25ff605bfd5a8a7c2a9e79b3d4a85dfad5e0",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow-faint_start-100.png": "824ba543f397e3dcb6d58748c9dd4197f4dff2ff8f95cfbc276e38d9c09dd833",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow@shiny-idle-50.png": "f5958ae97fa19f16667c92b8e0a83a59179fc3d1551ebffcee57223a3142fc19",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow@shiny-physical_attack-50.png": "141d7c5e122a62f9f7a20451a032c41d6625b776e47dfa8178ba20252a3b7429",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow@shiny-special_attack-50.png": "66700bb994e808ece3f8a49d373584f6be6beef3cf0a50ac7e49acc302d047de",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow@shiny-sleep-50.png": "8cbbbaff4faade26626b10e796341db94f40ac3b4e3d23001e62aba11a175f22",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/marshadow@shiny-faint_start-100.png": "c45690905a2bb4604826a90846d220c94fa0745e0d9fcb698844d4e248135208",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v3/review/review.json": "7ff4f3ccd63f741aababf22f2bd7be05e0f06822c9ace896217743edf7a740fd",
+    "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-reference.png": "495ab6f3dd07463938f1f460fadfa7a6a962d3f0292ed7b22cbc2dd2c374551f"
   },
   "limitations": [
     "Review-only candidates; battle qualification and admission pending.",
@@ -527,5 +545,114 @@
   "reference_check": {
     "url": "https://bulbapedia.bulbagarden.net/wiki/Marshadow_(Pok%C3%A9mon)#Zenith_Marshadow",
     "finding": "Normal green and shiny purple are expected during attacks; resting models remain grey. Clarification requested about pose versus tint/coverage."
-  }
+  },
+  "superseded_runtime_variants": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "embedded_texture_keys_and_playback_verified": true,
+      "glb_sha256": "7d321a621b2f7fa7f99ddc678e7fe2cbb0419a6e56b59bd550797e3467043ad5",
+      "mask_motion_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/manifest.json",
+      "mask_motion_manifest_sha256": "1ff9d5ee00a2ae205e5c9ca8117dab2ea63f2e0994320035e7306b10c163d846",
+      "native_geometry_motion_preserved": true,
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/marshadow/normal/model.glb",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/runtime/marshadow-normal.scn",
+      "runtime_sha256": "c86edfca38cd13d1ff9108bf7a4be27524ad7f1a9af6cce402ddbe032c442d3d",
+      "source_runtime_sha256": "a8804bec1e612eb286be0427f5477cdab63643779f9fa397abf2cc1e85bf9601",
+      "source_sha256": "2b8e5eb526b6b67729b8f183edccc1c0a3d117a2096b50b2ad66b5ff38de6aa7",
+      "species": "marshadow",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "embedded_texture_keys_and_playback_verified": true,
+      "glb_sha256": "c93fb5db65772637adacf3827a4f17713caff8a9773eee14290d444386a1de5f",
+      "mask_motion_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/manifest.json",
+      "mask_motion_manifest_sha256": "1ff9d5ee00a2ae205e5c9ca8117dab2ea63f2e0994320035e7306b10c163d846",
+      "native_geometry_motion_preserved": true,
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/marshadow/shiny/model.glb",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/marshadow-motion-v2/runtime/marshadow-shiny.scn",
+      "runtime_sha256": "a667a25d549d648e60eec96b17cc22c5c8c548bf35e70494517a92960962934c",
+      "source_runtime_sha256": "17ae8b1fd5e5cab77c5e446e5749994d66ee4028fc1cc07f1a59b25c99a8eb5b",
+      "source_sha256": "2b8e5eb526b6b67729b8f183edccc1c0a3d117a2096b50b2ad66b5ff38de6aa7",
+      "species": "marshadow",
+      "variant": "shiny"
+    }
+  ],
+  "user_feedback_clarification": "Tinten of gekleurde delen kloppen niet",
+  "correction_followup": "Set body_a specular to zero, matching SpecularLayer1..4Intensity=0 in both pinned source tables; native colour frames unchanged. Added Sword/Shield reference screenshot to review page.",
+  "reference_image_url": "https://archives.bulbagarden.net/wiki/File:Shiny_Marshadow_Comparison.png"
 }

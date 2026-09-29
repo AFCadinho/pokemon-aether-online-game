@@ -72,6 +72,9 @@ func _apply(actor: Node, bindings: Array, added: Array) -> bool:
 			return _reject("Expected ordinary source PBR material")
 		var material := original.duplicate() as StandardMaterial3D
 		material.resource_local_to_scene = true
+		if spec.get("source_layer_specular", -1) != 0:
+			return _reject("Expected audited zero specular on all colour layers")
+		material.metallic_specular = 0.0
 		mesh.set_surface_override_material(surface, material)
 		var path := NodePath(str(animation_root.get_path_to(mesh)) + ":surface_material_override/" + str(surface) + ":albedo_texture")
 		if path in added:
