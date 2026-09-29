@@ -50,6 +50,7 @@ const EYEBROWS_BY_HAIR_ID := {
 	"male:Aether_Male_Hair_02": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_03": DEFAULT_MALE_EYEBROWS_ID,
 	"female:Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:TeamRocketFemale_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
 	"female:Aether_Blossom_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
 	"female:Aether_Blossom_Hair_Chroma": DEFAULT_FEMALE_EYEBROWS_ID,
 	"female:Aether_Female_Hair_01": DEFAULT_FEMALE_EYEBROWS_ID,

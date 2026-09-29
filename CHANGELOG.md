@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De vrouwelijke Team Rocket-haarstijl toont nu ook de bijbehorende wenkbrauwen.
+
 - Cerulean City laadt weer correct met de gedeelde Surf-encounterinstellingen. De encountermaskers op Route 6, 9 en 10 en in Vermilion City blijven onzichtbaar achter de kaartvisuals.
 
 - De desktoprelease activeert catalogus v7 met 160 individueel downloadbare, goedgekeurde normal/shiny-3D-bundles.
