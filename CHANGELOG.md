@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Centers gebruiken nu de standaard metadata uit hun gedeelde template. Route 10 heeft twee nieuwe bezoekers met Magnemite en Emolga.
+
 - Diglett's Cave heeft bij beide entreekamers complete grotopeningen; de uitgangen in Godot volgen nu de volle breedte.
 
 - Bij de trappen van de Underground Passage kijkt de speler na aankomst de kamer of tunnel in, vanuit zowel Route 5 als Route 6.

@@ -7,6 +7,7 @@ const PEWTER_CENTER_PATH := "res://scenes/overworld/kanto/towns/pewter_city/poke
 const PEWTER_CITY_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 const VIRIDIAN_CENTER_PATH := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 const VIRIDIAN_CITY_PATH := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+const ROUTE_10_CENTER_PATH := "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn"
 
 var failed := false
 
@@ -88,6 +89,20 @@ func _init() -> void:
 		and template_source.contains('method="play_heal_sequence"'),
 		"Pokémon Center connects Nurse Joy to the healing machine light sequence"
 	)
+	var shared_services := {
+		"AetherAtelier": ["Aether Atelier", "res://scenes/npcs/aether_atelier_npc.tscn", "aether_atelier_tailor"],
+		"Banker": ["Banker", "res://scenes/npcs/banker_npc.tscn", "pokemon_center_banker"],
+		"MoveManiac": ["Move Maniac", "res://scenes/npcs/move_mentor_npc.tscn", "pokemon_center_move_mentor"],
+		"MoveDeleter": ["Move Deleter", "res://scenes/npcs/move_deleter_npc.tscn", "pokemon_center_move_deleter"],
+	}
+	for node_name: String in shared_services:
+		var service: Array = shared_services[node_name]
+		var service_source := FileAccess.get_file_as_string(service[1])
+		_check(
+			template_source.contains('[node name="%s" parent="Entities/NPCs"' % node_name)
+				and service_source.contains('npc_definition_id = "%s"' % service[2]),
+			"%s uses its shared reusable NPC definition" % service[0]
+		)
 	var heal_machine_effect := HealMachineEffectScript.new()
 	_check(
 		heal_machine_effect.has_method("play_heal_sequence"),
@@ -140,10 +155,10 @@ func _init() -> void:
 		"Pewter City Pokémon Center does not duplicate Entities"
 	)
 	_check(
-		center_source.contains('npc_id = "kanto_pewter_city_pokemon_center_nurse_joy"')
+		not center_source.contains('npc_id = "kanto_pewter_city_pokemon_center_nurse_joy"')
 		and center_source.contains('respawn_point_id = "kanto_pewter_city_pokemon_center"')
-		and center_source.contains('npc_id = "kanto_pewter_city_pokemon_center_clerk"'),
-		"Pewter City overrides location-specific staff identity and respawn data"
+		and not center_source.contains('npc_id = "kanto_pewter_city_pokemon_center_clerk"'),
+		"Pewter City keeps its local respawn point and inherits shared staff metadata"
 	)
 	_check(
 		center_source.contains('target_spawn_name = "FromPokecenter"'),
@@ -161,9 +176,20 @@ func _init() -> void:
 		viridian_center_source.contains('instance=ExtResource("1_template")')
 			and viridian_center_source.contains('map_id = "kanto_viridian_city_pokemon_center"')
 			and viridian_center_source.contains('map_display_name = "Viridian City Pokémon Center"')
-			and viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_nurse_joy"')
+			and not viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_nurse_joy"')
+			and viridian_center_source.contains('npc_id = "kanto_viridian_city_pokemon_center_clerk"')
 			and viridian_center_source.contains('target_spawn_name = "FromPokecenter"'),
-		"Viridian City Pokémon Center inherits the shared interior and its local identity"
+		"Viridian inherits shared nurse metadata and keeps its quest clerk override"
+	)
+	var route_10_center_source := FileAccess.get_file_as_string(ROUTE_10_CENTER_PATH)
+	_check(
+		route_10_center_source.contains('npc_definition_id = "trainer_class_worker"')
+			and route_10_center_source.contains('npc_definition_id = "trainer_class_bird_keeper"')
+			and route_10_center_source.contains('species_id = "magnemite"')
+			and route_10_center_source.contains('species_id = "emolga"')
+			and not route_10_center_source.contains('kanto_route_10_pokemon_center_nurse_joy')
+			and not route_10_center_source.contains('kanto_route_10_pokemon_center_clerk'),
+		"Route 10 uses its new visitors while standard staff inherit template metadata"
 	)
 	var viridian_city_source := FileAccess.get_file_as_string(VIRIDIAN_CITY_PATH)
 	_check(
