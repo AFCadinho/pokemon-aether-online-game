@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Slugma, Magcargo, mannelijke Meowstic en Trevenant hebben lokaal goedgekeurde normal/shiny-3D-modellen in vier losse bundles. Ogen, kleuren, animaties en battleplaatsing zijn gecontroleerd.
+
 - 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
 
 - Route 10’s Pokémon Center uses the current complete Tiled exterior and now opens its own masked Pokémon Center interior with a return door to Route 10.

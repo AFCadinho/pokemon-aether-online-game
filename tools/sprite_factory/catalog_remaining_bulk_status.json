@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "date": "2026-09-29",
-  "scope": "all 1025 base species after 44 additional shiny-recovery pair approvals",
+  "scope": "all 1025 base species after 48 additional shiny-recovery pair approvals",
   "base_species_total": 1025,
-  "approved_base_species": 683,
-  "approved_with_mega_profiles": 684,
-  "remaining_base_species": 342,
+  "approved_base_species": 687,
+  "approved_with_mega_profiles": 688,
+  "remaining_base_species": 338,
   "counts": {
     "review_hold": 214,
-    "shiny_hold": 107,
+    "shiny_hold": 103,
     "source_missing": 21
   },
   "runtime_approved": false,
@@ -23,11 +23,12 @@
     "tools/sprite_factory/catalog_remaining_four_admission.json": "8e9042385f833d2e57d12174df26a480214f12d0c0390dc0765238d921c08d68",
     "tools/sprite_factory/catalog_shiny_151_first_32_admission.json": "e6e5e9640783bc0f360e851a9e18b21b4b6433bcf53d4a43d484c9ba2a0a5d0d",
     "tools/sprite_factory/catalog_shiny_twelve_admission.json": "1785d5bb542acbc3270d5a802d18321febf14078bfdf2591208eb9fb918a7c28",
+    "tools/sprite_factory/catalog_shiny_21_material_admission.json": "c9ac7de1380164496282b34af15b8ed61029c0efaf9454b40ef49e9f5881b0e2",
     ".tmp/remaining-catalog-intake/rig-recovered-normal/status.json": "2ee8e0db48152422934c3cde32b040d21f76fb9cfb43b3aa42fbb91fdd745662",
     ".tmp/remaining-catalog-intake/rig-recovered-runtime/status.json": "24f2b0524bc3548db82d3ba4a558a88500524aa4f290439cd9ea4ea77ca5e949",
     ".tmp/remaining-catalog-intake/rig-recovered-shiny-runtime/status.json": "495c313bba39dd2e6656fcfcc06f2fcf27e8187804467e3b6cb47426e6775065",
     ".tmp/remaining-catalog-intake/new-pairs-captures/review.json": "f89eea06a5a7a226a2256c73a5a1736799f93419a9c892162bdc6dafca56e7e2",
-    "tools/sprite_factory/catalog_remaining_bulk_status.py": "b538a3cae6ef6351162729cc3a9b586d4b899422792d6abd84f89d39b8d82497",
+    "tools/sprite_factory/catalog_remaining_bulk_status.py": "42feee47a57c913f4a76d2c34a01df75a3b689d2aa079bc1a9b46e604857a516",
     "tools/sprite_factory/catalog_remaining_normal_export.py": "eb43d6b56561508684b0800db4fae11fdae0732942ca006b0f42ffd0357d3ca0",
     "tools/sprite_factory/catalog_remaining_legacy_material.py": "373eea401755e95e9ea4a2833c46e8e6ff7c4dd7bb53c5a2b06b0b82647153d2"
   },
@@ -686,22 +687,6 @@
       "status": "shiny_hold",
       "stage": "shiny_material",
       "reason": "ValueError: Official normal/rare material tables absent for this source",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 218,
-      "species": "slugma",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Unrepresented rare colour change: EmissionColorLayer9",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 219,
-      "species": "magcargo",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Unrepresented rare colour change: EmissionColorLayer9",
       "runtime_approved": false
     },
     {
@@ -2141,16 +2126,6 @@
       "runtime_approved": false
     },
     {
-      "national_dex": 678,
-      "species": "meowstic-male",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "ValueError: Rare material settings differ: l_eye_b",
-      "runtime_approved": false,
-      "normal_glb_sha256": "a1aed2070b98a4645e274093db8343fd877e016ab9badaa4a16b0726fe85e6c9",
-      "normal_scene_sha256": "126115f74ea85985bd8a080826f0eab44e572bb84658455fb63eaf9df65ffa77"
-    },
-    {
       "national_dex": 681,
       "species": "aegislash-shield",
       "status": "review_hold",
@@ -2164,14 +2139,6 @@
       "status": "review_hold",
       "stage": "normal_export",
       "reason": "missing_or_ambiguous_native_actions",
-      "runtime_approved": false
-    },
-    {
-      "national_dex": 709,
-      "species": "trevenant",
-      "status": "shiny_hold",
-      "stage": "shiny_material",
-      "reason": "Embedded normal pixels differ from official source; UV binding not proven",
       "runtime_approved": false
     },
     {

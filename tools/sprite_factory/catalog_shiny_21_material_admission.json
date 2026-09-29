@@ -1,0 +1,72 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_size_bytes": 56250864,
+  "date": "2026-09-29",
+  "evidence_sha256": {
+    ".tmp/shiny-151-recovery/21-repair-v2/battle-captures/battle-review.json": "d7b1bc592931f5b16e5cbec80043b20083e5cf5319ba46d0acb1373ea4d06523",
+    ".tmp/shiny-151-recovery/21-repair-v2/battle-corrected/battle-review.json": "bb96458cc58b2f7e93982a6137c6e58e6162f52262d758bac7bd19b9bc20da9d",
+    ".tmp/shiny-151-recovery/21-repair-v2/battle-focus-corrected/battle-review.json": "58381da526ebc79fc21815c3f5793eaed905ad554469e3b235edd67beb3eac6a",
+    ".tmp/shiny-151-recovery/21-repair-v2/battle-input/motion-candidates-v4.json": "e511a6f923b3503bfba89ea5d47818c17770fd94bfc858cb3049598147755051",
+    ".tmp/shiny-151-recovery/21-repair-v2/captures/review.json": "d1e1da54da215d720a2dbe01c008a2cd30b4d3417d203e4194657599ba91ea97",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/bundles/asset-index.json": "bae0321c6e7f5371dd96107af6858473e40127b5c32be2f268c39b7a57913704",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/final-metrics.json": "3fa42f30d0d7c736c31fb32dbb761891ade6a7cb68d9dba076c0327fc57dc1ab",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/install.log": "48ead95cf89e118eb44d7f0f158a86d2128202eb21851a75148c5f83937bf287",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/installed/installed-catalog.json": "f6be90c1e10e26652c5a2eeeda7ba190dc993d7b056801433d8d6f127ecadeb9",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/runtime-catalog.json": "1d6c0bf1fce95c969def4f7b7f5d14d444fad3ccb5329fa6686f7ece0eb89edf",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/runtime-fixture.json": "dce9c613a913a0c93c0603d31216b6e3181f6bec32d6066af7356552a8254390",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/stress.json": "30fb61e6ee11efb6e977778f106ccd0d7817a206987e71031195793b350eb141",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/stress.log": "97b03ddad25cd257fd57747464bb6dbe9f0d139d59601babc1be93d3aad58dcd",
+    ".tmp/shiny-151-recovery/21-repair-v2/delivery/user-review.json": "3167a86ea5e47afc26b8c1f3f69e4b8af552c929b2b7e59c38d7b0bfcb23d8cf",
+    ".tmp/shiny-151-recovery/21-repair-v2/runtime/report.json": "faa27484b4d26fabfd81b3f7f5ec8744bf0d9d5535073addbdbdf61c5f81df30",
+    ".tmp/shiny-151-recovery/21-repair-v2/status.json": "4fb16ed8ee44468314151d34d4adc3caf662a11247bf385937fb683d600cc763",
+    "tools/sprite_factory/admit_shiny_material_four.py": "d230c64747ccb3b71909a69340672073f42d56cc7e263a3ee6d500bbcc71771c",
+    "tools/sprite_factory/catalog_shiny_151_material_probe.py": "b58f74e34211ce686b175feac6bc33ceb0409efc588200908db05aa5257c3f50",
+    "tools/sprite_factory/catalog_shiny_21_repair.py": "54886ce7bdd531140b5c9dec3d47638fd5afdad4a6c61128c3eae3ee56ed132d"
+  },
+  "minimum_floor_clearance_120hz": 0.015772245824337,
+  "published": false,
+  "release_approved": false,
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.244,
+      "pairs": 4
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 17.285,
+      "pairs": 4
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 17.329,
+      "pairs": 4
+    }
+  ],
+  "schema": 1,
+  "scope": "four local normal/shiny material repairs, individually bundled and battle checked",
+  "species": [
+    "magcargo",
+    "meowstic-male",
+    "slugma",
+    "trevenant"
+  ],
+  "user_review": {
+    "appearance_approved": true,
+    "appearance_feedback": "Alle vier goed",
+    "appearance_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/21-repair-v2/review/index.html",
+    "battle_approved": true,
+    "battle_feedback": "Alle vier goed",
+    "battle_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/21-repair-v2/battle-review/index.html",
+    "date": "2026-09-29",
+    "scope": "exact eight standalone scenes and displayed battle placements; no release approval",
+    "species": [
+      "slugma",
+      "magcargo",
+      "meowstic-male",
+      "trevenant"
+    ]
+  }
+}

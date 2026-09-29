@@ -1,9 +1,8 @@
 {
   "appearance_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/index.html",
   "counts": {
-    "locally_admitted": 44,
+    "locally_admitted": 48,
     "missing_compatible_shiny_source": 86,
-    "scvi_material_hold": 4,
     "za_binding_hold": 17
   },
   "date": "2026-09-29",
@@ -315,28 +314,30 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_21_material_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 218,
       "original_hold": "ValueError: Unrepresented rare colour change: EmissionColorLayer9",
       "original_normal_sha256": "00d8cb30f0156b5735c914d2eab68a1bc1f756ffcdd45c512d2fb080557c255c",
       "reason": "Eye has an explicit opacity map; cannot force opaque",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "slugma",
-      "status": "scvi_material_hold"
+      "status": "locally_admitted"
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_21_material_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 219,
       "original_hold": "ValueError: Unrepresented rare colour change: EmissionColorLayer9",
       "original_normal_sha256": "d496ce9e6f765810d4fc87daa74f41c76bcdb2341217fc5443d426998468b3eb",
       "reason": "Eye has an explicit opacity map; cannot force opaque",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "magcargo",
-      "status": "scvi_material_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": false,
@@ -1294,16 +1295,17 @@
       }
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_21_material_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 678,
       "original_hold": "ValueError: Rare material settings differ: l_eye_b",
       "original_normal_sha256": "a1aed2070b98a4645e274093db8343fd877e016ab9badaa4a16b0726fe85e6c9",
       "reason": "eye_c: exported texture name does not match source table",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "meowstic-male",
-      "status": "scvi_material_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": true,
@@ -1838,16 +1840,17 @@
       }
     },
     {
-      "appearance_approved": false,
-      "battle_approved": false,
+      "admission_receipt": "tools/sprite_factory/catalog_shiny_21_material_admission.json",
+      "appearance_approved": true,
+      "battle_approved": true,
       "national_dex": 709,
       "original_hold": "Embedded normal pixels differ from official source; UV binding not proven",
       "original_normal_sha256": "c235c6da6fa92c28128280916ac4861fe7f607a1eb4d406a501f9906adc82d4a",
       "reason": "Source material names do not identify every exported material",
       "release_approved": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "species": "trevenant",
-      "status": "scvi_material_hold"
+      "status": "locally_admitted"
     },
     {
       "appearance_approved": true,
@@ -2796,7 +2799,7 @@
   "release_approved": false,
   "runtime_approved": false,
   "schema": 1,
-  "scope": "151 original shiny holds; 44 locally admitted, 107 source/material holds; no publication",
+  "scope": "151 original shiny holds; 48 locally admitted, 103 source/material holds; no publication",
   "total": 151,
   "user_review_pending": false
 }
