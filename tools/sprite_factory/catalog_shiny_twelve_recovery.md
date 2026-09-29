@@ -126,3 +126,19 @@ The user accepted the revised Xerneas scale (“Nieuwe grootte is goed”). This
 recorded separately from full group battle acceptance. The updated group page
 is `twelve-battle/index-v2.html`; it replaces only Xerneas' images with the
 accepted larger version and retains the other eleven pairs unchanged.
+
+## Local admission and individual bundles
+
+The user asked to finish all twelve by building bundles after accepting
+Xerneas' revised scale. Twelve individual local candidate bundles were built
+from the exact appearance-approved scenes and the battle profiles that passed
+60/120 Hz checks. Transactional install, no-op update, restart, scene hashes
+and three installed battle rounds pass. `catalog_shiny_twelve_admission.json`
+pins the result: 24 scenes, 12 bundles, 131096807 bytes total, with p95 frame
+times 7.442/7.433/7.0 ms. The local game and launcher catalogs now include
+these twelve pairs; neither the bundles nor the catalog has been published.
+The overall intake is 683 approved base species and 342 remaining. Of the
+remaining 107 shiny cases, 86 lack a compatible rare source, 17 have unresolved
+ZA material binding, and 4 have SCVI material issues. They can be managed as
+one batch with per-species holds, but the 86 cannot be produced from their
+current sources by another pass of the same converter.

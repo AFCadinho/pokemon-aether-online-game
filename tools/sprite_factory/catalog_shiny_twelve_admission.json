@@ -1,0 +1,84 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_size_bytes": 131096807,
+  "date": "2026-09-29",
+  "evidence_sha256": {
+    ".tmp/shiny-151-recovery/twelve-battle/final/battle-review.json": "14b1cdec80d160473464071f342f92a2241b1f38a0d9440e536b12fa359cada7",
+    ".tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/corrected/battle-review.json": "ba806c0fb38ca0dd50ef47f7ca4129d7d1b114e19358bd2581e7b827c587b0e8",
+    ".tmp/shiny-151-recovery/twelve-delivery/battle-user-review.json": "f0cab94905fd4562ff83f9501bf09bc69bcb339677ed13adfb0b71997190a44c",
+    ".tmp/shiny-151-recovery/twelve-delivery/bundles/asset-index.json": "5b5350c5339a935da95df6d0d3b9e3f2fea39345c71c9951b5867ebea6a583a5",
+    ".tmp/shiny-151-recovery/twelve-delivery/final-metrics.json": "e8e4d040ec6f89229a4fb355ed6b94837c498194f77f86288bbe0f843fed43a3",
+    ".tmp/shiny-151-recovery/twelve-delivery/install.log": "e852e955b35e5cf419c3322843e7dee2e59ccc4214529d33fa936e1189362777",
+    ".tmp/shiny-151-recovery/twelve-delivery/installed/installed-catalog.json": "a7269c01aa846449a67dd1d5bb504c4c1b0af9bdfadaf7ee3cef8e23e120b150",
+    ".tmp/shiny-151-recovery/twelve-delivery/runtime-catalog.json": "2ed744698ea5655bee3f304cfcbb592a24362238a6ace387511843161439802d",
+    ".tmp/shiny-151-recovery/twelve-delivery/runtime-fixture.json": "71ca9a301f6914788e8e20f6bbd81f742a50bd597b6cecf167a7bcc2aacdac7a",
+    ".tmp/shiny-151-recovery/twelve-delivery/stress.json": "b04e633c4e53c75efc035fac95de6f45b8cfd6772ef4f4dc452791d30346fe47",
+    ".tmp/shiny-151-recovery/twelve-delivery/stress.log": "a49ab02f7b85a3ae8d9cda84ca291a2e6170b2b406365d2fe9f80f8fab7ff84d",
+    "tools/sprite_factory/admit_shiny_recovery_twelve.py": "fc3d9eacb4da310c4eeac38613532a9b4520e9a00db014f4941283bfe51a5025",
+    "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json": "2e9d381765fe17ef1802729bb7699016e9e6d6c88164fced9140d246a7fe9e1e",
+    "tools/sprite_factory/catalog_shiny_xerneas_battle_scale_review.json": "e195807c81e39c73ab6e5642484c7500764c1f130f136862d1ab6a0bb08012eb"
+  },
+  "minimum_floor_clearance_120hz": 0.0162923261523247,
+  "published": false,
+  "release_approved": false,
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 7.442,
+      "pairs": 12
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 7.433,
+      "pairs": 12
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 7.0,
+      "pairs": 12
+    }
+  ],
+  "schema": 1,
+  "scope": "12 local normal/shiny pairs; appearance and battle reviewed, individual bundles installed and stress checked",
+  "species": [
+    "cosmoem",
+    "cosmog",
+    "doublade",
+    "heliolisk",
+    "helioptile",
+    "inkay",
+    "litwick",
+    "marshadow",
+    "melmetal",
+    "meltan",
+    "xerneas",
+    "yveltal"
+  ],
+  "user_battle_review": {
+    "battle_approved": true,
+    "date": "2026-09-29",
+    "feedback": "User instructed finishing the 12 by building bundles after reviewing Xerneas; interpreted as approval of the displayed battle group.",
+    "source_review_urls": [
+      "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+      "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/index.html",
+      "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index-v2.html"
+    ],
+    "species": [
+      "cosmoem",
+      "cosmog",
+      "doublade",
+      "heliolisk",
+      "helioptile",
+      "inkay",
+      "litwick",
+      "marshadow",
+      "melmetal",
+      "meltan",
+      "xerneas",
+      "yveltal"
+    ],
+    "xerneas_scale_feedback": "Nieuwe grootte is goed"
+  }
+}
