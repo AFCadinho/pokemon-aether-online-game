@@ -42,6 +42,32 @@ class PackageWebReleaseTests(unittest.TestCase):
                             upload_web_release.main()
             upload.assert_called_once_with(update_config, root / 'manifest-web.json', 'manifest-web.json')
 
+    def test_browser_runtime_upload_uses_verified_object_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / 'index.wasm'
+            source.write_bytes(b'webassembly')
+            import hashlib
+            release = {
+                'buildId': 'candidate-123',
+                'objects': [{
+                    'source': 'index.wasm',
+                    'key': 'web/releases/candidate-123/index.wasm',
+                    'bytes': source.stat().st_size,
+                    'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+                }],
+            }
+            (root / 'web-release.json').write_text(json.dumps(release))
+            config = SimpleNamespace(bucket='pokeaether-web')
+            with patch.object(upload_web_release, '_load_config', return_value=config):
+                with patch.object(upload_web_release, '_upload_file') as upload:
+                    with patch('sys.argv', ['upload_web_release.py', str(root)]):
+                        upload_web_release.main()
+            self.assertEqual(upload.call_args_list, [
+                unittest.mock.call(config, source, 'web/releases/candidate-123/index.wasm'),
+                unittest.mock.call(config, root / 'web-release.json', 'web/releases/candidate-123/web-release.json'),
+            ])
+
     def test_update_manifest_bucket_uses_its_own_credentials(self):
         values = {
             'UPDATE_R2_ACCOUNT_ID': 'update-account',
@@ -65,6 +91,8 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn('--allow-size-exception --size-exception-reason', source)
         self.assertIn('A size exception requires an audit reason', source)
         self.assertIn('default: https://web-assets.pokeaether.com', source)
+        self.assertIn('python3 tools/upload_web_release.py builds/web-r2', source)
+        self.assertNotIn('rclone copy builds/web-r2', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${version}.zip', source)
         self.assertEqual(source.count('unzip -oq /tmp/'), 3)
