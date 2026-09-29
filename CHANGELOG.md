@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion City gebruikt de nieuwste Tiled-visual met de bijgewerkte buitentileset.
+
 - De desktopclient verwijdert de vorige lokale versie van een Pokémon-sprite automatisch zodra de nieuwe metadata en sheet succesvol zijn geladen. Bestaande spritecaches zonder versie-index worden eenmalig opgeschoond.
 
 - Pokémon Centers gebruiken nu de standaard metadata uit hun gedeelde template. Route 10 heeft twee nieuwe bezoekers met Magnemite en Emolga.
