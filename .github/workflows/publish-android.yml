@@ -144,7 +144,11 @@ jobs:
           with urlopen(request, timeout=30) as response:
               manifest = json.loads(response.read().decode('utf-8'))
           game = manifest['game']
-          request = Request(game['url'], method='HEAD')
+          request = Request(
+              game['url'],
+              method='HEAD',
+              headers={'User-Agent': 'PokeAetherAndroidPublisher/1.0'},
+          )
           with urlopen(request, timeout=30) as response:
               if response.status != 200 or int(response.headers.get('Content-Length', '0')) != game['sizeBytes']:
                   raise SystemExit('Published immutable APK URL failed its size check')
