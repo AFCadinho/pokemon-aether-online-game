@@ -836,6 +836,18 @@ func _on_install_folder_selected(selected_path: String) -> void:
 
 func _create_game_process(absolute_executable_path: String) -> int:
 	# The launcher and game have different user:// roots. Share one explicit path.
+	var had_install := OS.has_environment("POKEAETHER_INSTALL_DIR")
+	var previous_install := OS.get_environment("POKEAETHER_INSTALL_DIR")
+	OS.set_environment("POKEAETHER_INSTALL_DIR", _globalize_storage_path(install_dir))
+	var had_bundle_store := OS.has_environment("POKEAETHER_LAUNCHER_MODEL_DIR")
+	var previous_bundle_store := OS.get_environment("POKEAETHER_LAUNCHER_MODEL_DIR")
+	OS.set_environment("POKEAETHER_LAUNCHER_MODEL_DIR", ProjectSettings.globalize_path("user://asset-bundles-v1"))
+	var had_model_index := OS.has_environment("POKEAETHER_MODEL_INDEX")
+	var previous_model_index := OS.get_environment("POKEAETHER_MODEL_INDEX")
+	var index_descriptor := _get_dictionary(manifest, "assetBundleIndex")
+	var index_digest := str(index_descriptor.get("sha256", ""))
+	if index_digest.length() == 64 and index_digest.is_valid_hex_number():
+		OS.set_environment("POKEAETHER_MODEL_INDEX", ProjectSettings.globalize_path("user://asset-bundle-indexes-v1/" + index_digest + ".json"))
 	var had_value := OS.has_environment("POKEAETHER_MODS_DIR")
 	var previous := OS.get_environment("POKEAETHER_MODS_DIR")
 	OS.set_environment("POKEAETHER_MODS_DIR", ProjectSettings.globalize_path("user://mods"))
@@ -853,6 +865,18 @@ func _create_game_process(absolute_executable_path: String) -> int:
 		OS.set_environment(FOREST_MANIFEST_ENV, previous_forest)
 	else:
 		OS.unset_environment(FOREST_MANIFEST_ENV)
+	if had_bundle_store:
+		OS.set_environment("POKEAETHER_LAUNCHER_MODEL_DIR", previous_bundle_store)
+	else:
+		OS.unset_environment("POKEAETHER_LAUNCHER_MODEL_DIR")
+	if had_model_index:
+		OS.set_environment("POKEAETHER_MODEL_INDEX", previous_model_index)
+	else:
+		OS.unset_environment("POKEAETHER_MODEL_INDEX")
+	if had_install:
+		OS.set_environment("POKEAETHER_INSTALL_DIR", previous_install)
+	else:
+		OS.unset_environment("POKEAETHER_INSTALL_DIR")
 	if had_models:
 		OS.set_environment("POKEAETHER_MODEL_CATALOG", previous_models)
 	else:

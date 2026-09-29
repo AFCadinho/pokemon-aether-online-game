@@ -45,8 +45,20 @@ def main():
     assert registry["catalog_shiny_twelve_admission_sha256"] == sha(twelve_path)
     approved_twelve = set(twelve["species"])
     assert len(approved_twelve) == 12 and not (approved_four | approved_recovery).intersection(approved_twelve)
-    approved_intake = approved_four | approved_recovery | approved_twelve
-    assert len(registry["profiles"]) == 684 and len(registry["models"]) == 1368
+    material_path = HERE / "catalog_shiny_21_material_admission.json"
+    material = read(material_path)
+    assert material["runtime_approved"] and not material["published"]
+    assert registry["catalog_shiny_21_material_admission_sha256"] == sha(material_path)
+    approved_material = set(material["species"])
+    assert len(approved_material) == 4 and not (approved_four | approved_recovery | approved_twelve).intersection(approved_material)
+    za_path = HERE / "catalog_shiny_za_seventeen_admission.json"
+    za = read(za_path)
+    assert za["runtime_approved"] and not za["published"]
+    assert registry["catalog_shiny_za_seventeen_admission_sha256"] == sha(za_path)
+    approved_za = set(za["species"])
+    assert len(approved_za) == 17 and not (approved_four | approved_recovery | approved_twelve | approved_material).intersection(approved_za)
+    approved_intake = approved_four | approved_recovery | approved_twelve | approved_material | approved_za
+    assert len(registry["profiles"]) == 705 and len(registry["models"]) == 1410
     assert inventory["canonical_species_count"] == 1025
     assert inventory["remaining_species_count"] == 390
     expected = {row["species"] for row in inventory["entries"]}
@@ -88,10 +100,10 @@ def main():
             row["geometry_motion_sha256"] = rare["geometry_motion_sha256"]
         rows.append(row)
     counts = Counter(row["status"] for row in rows)
-    assert len(rows) == 342 and counts == {
-        "review_hold": 214, "shiny_hold": 107, "source_missing": 21}
+    assert len(rows) == 321 and counts == {
+        "review_hold": 214, "shiny_hold": 86, "source_missing": 21}
     evidence = [inventory_path, previous_path, recovered_path, shiny_path,
-                admission_path, HERE / "catalog_remaining_four_admission.json", recovery_path, twelve_path,
+                admission_path, HERE / "catalog_remaining_four_admission.json", recovery_path, twelve_path, material_path, za_path,
                 WORK / "rig-recovered-normal/status.json",
                 WORK / "rig-recovered-runtime/status.json",
                 WORK / "rig-recovered-shiny-runtime/status.json",
@@ -100,11 +112,11 @@ def main():
                 HERE / "catalog_remaining_legacy_material.py"]
     receipt = {
         "schema": 1, "date": "2026-09-29",
-        "scope": "all 1025 base species after 44 additional shiny-recovery pair approvals",
+        "scope": "all 1025 base species after 65 additional shiny-recovery pair approvals",
         "base_species_total": 1025,
-        "approved_base_species": 683,
-        "approved_with_mega_profiles": 684,
-        "remaining_base_species": 342,
+        "approved_base_species": 704,
+        "approved_with_mega_profiles": 705,
+        "remaining_base_species": 321,
         "counts": dict(counts),
         "runtime_approved": False,
         "release_approved": False,

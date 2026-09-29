@@ -160,6 +160,7 @@ var creator_nameplates_visible := true
 var pending_map_chat_messages: Dictionary = {}
 var pending_remote_player_interaction: Dictionary = {}
 var remote_player_interaction_pending := false
+var last_desktop_presentation_mode := ""
 var active_battle_kind := ""
 var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
@@ -211,6 +212,7 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	last_desktop_presentation_mode = SettingsManager.battle_presentation_mode
 	add_child(MOBILE_CONTROLS_SCENE.instantiate())
 	_ensure_remote_players_container()
 	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
@@ -283,6 +285,12 @@ func _on_web_party_changed() -> void:
 
 func _schedule_current_map_web_sprite_prefetch() -> void:
 	_prefetch_current_map_desktop_arena.call_deferred()
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode in ["2.5d", "3d"]:
+		_prefetch_current_map_models.call_deferred()
+	elif not OS.has_feature("web") and not OS.has_feature("mobile"):
+		OnDemand3DBundleService.cancel_prefetch()
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+		return
 	if not WebPokemonSpriteService.is_available():
 		return
 	var party_entries: Array = []
@@ -325,6 +333,8 @@ func _await_current_map_desktop_arena() -> void:
 
 
 func _prefetch_current_map_wild_sprites(area_id: String) -> void:
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+		return
 	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
 	if area_id != _current_fishing_area_id() or not bool(response.get("success", false)):
 		return
@@ -340,7 +350,56 @@ func _prefetch_current_map_wild_sprites(area_id: String) -> void:
 	WebPokemonSpriteService.prefetch(entries)
 
 
+func _prefetch_current_map_models() -> void:
+	if SettingsManager.battle_presentation_mode not in ["2.5d", "3d"]:
+		return
+	var identities: Array[String] = []
+	for pokemon_value: Variant in PlayerSave.party:
+		if pokemon_value is Pokemon:
+			var pokemon := pokemon_value as Pokemon
+			var identity := preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd").key(pokemon.species, pokemon.shiny)
+			if identity not in identities:
+				identities.append(identity)
+	var area_id := _current_fishing_area_id()
+	if area_id.is_empty():
+		_append_current_map_trainer_models(identities)
+		OnDemand3DBundleService.prefetch_models(identities)
+		return
+	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
+	if area_id != _current_fishing_area_id() or SettingsManager.battle_presentation_mode not in ["2.5d", "3d"]:
+		return
+	if bool(response.get("success", false)):
+		var metadata := _dictionary_from_value(response.get("metadata", {}))
+		var encounter_types := _dictionary_from_value(metadata.get("encounterTypes", {}))
+		var entries: Array = []
+		var seen: Dictionary = {}
+		for encounter_value: Variant in encounter_types.values():
+			var encounter := _dictionary_from_value(encounter_value)
+			_append_web_sprite_entries_from_value(encounter.get("pokemon", []), ["front"], entries, seen)
+		for entry: Dictionary in entries:
+			var identity := preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd").key(str(entry.species), bool(entry.shiny))
+			if identity not in identities:
+				identities.append(identity)
+	_append_current_map_trainer_models(identities)
+	OnDemand3DBundleService.prefetch_models(identities)
+
+
+func _append_current_map_trainer_models(identities: Array[String]) -> void:
+	var catalog: Dictionary = preload("res://data/desktop_3d_trainer_models.json").data
+	var map_id := _get_map_id(GameState.current_map)
+	var maps: Dictionary = catalog.get("map_prefix_species", {})
+	for prefix in maps:
+		if map_id != prefix and not (prefix == "kanto_mt_moon" and map_id.begins_with(prefix + "_")):
+			continue
+		for value in maps[prefix]:
+			var identity := str(value)
+			if identity not in identities:
+				identities.append(identity)
+
+
 func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false, skip_mobile_wait := false) -> void:
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+		return
 	if not WebPokemonSpriteService.is_available():
 		return
 	var entries: Array = []
@@ -2710,6 +2769,9 @@ func _on_settings_changed() -> void:
 			_prewarm_mobile_wild_battle_ui.call_deferred()
 	if not OS.has_feature("web"):
 		_prefetch_current_map_desktop_arena.call_deferred()
+	if not OS.has_feature("web") and not OS.has_feature("mobile") and last_desktop_presentation_mode != SettingsManager.battle_presentation_mode:
+		last_desktop_presentation_mode = SettingsManager.battle_presentation_mode
+		_schedule_current_map_web_sprite_prefetch()
 	if OS.has_feature("web"):
 		_schedule_current_map_web_sprite_prefetch()
 
@@ -3750,7 +3812,7 @@ func _attach_battle_ui(force_immersive := false) -> bool:
 		(SettingsManager.battle_ui_layout == "immersive" or force_immersive)
 	)
 	var use_desktop_3d_screen := (
-		SettingsManager.battle_presentation_mode == "3d"
+		SettingsManager.battle_presentation_mode in ["2.5d", "3d"]
 		and not OS.has_feature("web")
 		and not OS.has_feature("mobile")
 	)

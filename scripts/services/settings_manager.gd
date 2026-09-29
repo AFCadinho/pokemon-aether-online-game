@@ -58,7 +58,7 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 ]
 
 var battle_animations := true
-var battle_presentation_mode := "2.5d"
+var battle_presentation_mode := "3d"
 var battle_3d_catalog_path := ""
 var _manual_model_catalog_this_session := false
 var battle_3d_arena := "auto"
@@ -115,6 +115,8 @@ func _process(_delta: float) -> void:
 		settings_changed.emit()
 
 func load_settings() -> void:
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		battle_presentation_mode = "2d"
 	if not FileAccess.file_exists(SETTINGS_PATH):
 		locale = LocalizationManager.get_preferred_system_locale()
 		_apply_launcher_locale_argument()
@@ -131,11 +133,14 @@ func load_settings() -> void:
 
 	var data: Dictionary = parsed_data as Dictionary
 	battle_animations = bool(data.get("battle_animations", battle_animations))
-	battle_presentation_mode = "3d" if data.get("battle_presentation_mode", "2.5d") == "3d" else "2.5d"
+	# Older clients called the sprite renderer 2.5D. Preserve that player choice.
+	var saved_presentation := str(data.get("battle_presentation_mode", "3d"))
+	battle_presentation_mode = saved_presentation if saved_presentation in ["2d", "3d"] or (saved_presentation == "2.5d" and int(data.get("battle_presentation_schema", 1)) >= 2) else ("2d" if saved_presentation == "2.5d" else "3d")
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		battle_presentation_mode = "2d"
 	if OS.has_feature("mobile"):
-		battle_presentation_mode = "2.5d"
 		battle_ui_layout = "immersive"
 	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
 	immersive_chat_height = clampf(float(data.get("immersive_chat_height",420.0)),220,800)
@@ -231,6 +236,7 @@ func save_settings() -> void:
 	var data: Dictionary = {
 		"battle_animations": battle_animations,
 		"battle_presentation_mode": battle_presentation_mode,
+		"battle_presentation_schema": 2,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"battle_ui_layout": battle_ui_layout,
 		"immersive_battle_log_open": immersive_battle_log_open,
@@ -282,7 +288,7 @@ func set_battle_animations(enabled: bool) -> void:
 	_save_and_emit()
 
 func set_battle_presentation_mode(mode: String) -> void:
-	var validated := "3d" if mode == "3d" and not OS.has_feature("mobile") else "2.5d"
+	var validated := mode if mode in ["2d", "2.5d", "3d"] and not OS.has_feature("mobile") and not OS.has_feature("web") else "2d"
 	if battle_presentation_mode == validated:
 		return
 	battle_presentation_mode = validated

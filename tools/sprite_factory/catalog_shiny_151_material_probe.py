@@ -69,14 +69,17 @@ def za_colour(row, resource):
     return output.getvalue()
 
 
-def rebuild(source, target, table):
+def rebuild(source, target, table, *, aliases=None, opaque_eye_exceptions=()):
     doc, binary = chunks(source)
     rows = {r['name']: r for r in inspect_materials(table)}
     normal_table = table.with_name(table.name.replace('_rare.trmtr', '.trmtr'))
     normal_rows = {r['name']: r for r in inspect_materials(normal_table)}
     names = [m['name'] for m in doc['materials']]
-    mapped = [n if n in rows else re.sub(r'\.\d{3}$', '', n) for n in names]
-    if len(mapped) != len(set(mapped)) or any(n not in rows for n in mapped):
+    aliases = aliases or {}
+    mapped = [aliases.get(n, n if n in rows else re.sub(r'\.\d{3}$', '', n)) for n in names]
+    duplicates = {name for name in mapped if mapped.count(name) > 1}
+    if (any(n not in rows for n in mapped) or
+            any(original not in aliases for original, name in zip(names, mapped) if name in duplicates)):
         raise ValueError('Source material names do not identify every exported material')
     records = []
     for material, name in zip(doc['materials'], mapped):
@@ -89,7 +92,7 @@ def rebuild(source, target, table):
         old_texture = doc['textures'][bound['index']]
         old_image = doc['images'][old_texture['source']]
         stems = [Path(value).stem for value in normal_rows[name]['textures'].values()]
-        if not any(stem in old_image.get('name', '') for stem in stems):
+        if not any(stem in old_image.get('name', '') for stem in stems) and material['name'] not in aliases:
             raise ValueError(name + ': exported texture name does not match source table')
         old_view = doc['bufferViews'][old_image['bufferView']]
         start = old_view.get('byteOffset', 0)
@@ -99,7 +102,18 @@ def rebuild(source, target, table):
             packed = za_colour(row, table.parent)
             limitations.append('ZA layered surface requires visual qualification')
         elif 'Eye' in shaders:
-            packed = bake_eye(row, table.parent)
+            if ('OpacityMap' in row['textures'] or 'OpacityMap1' in row['textures']) and name in opaque_eye_exceptions:
+                # These two eye meshes already export fully opaque in the pinned
+                # normal GLB. Their authored opacity texture is identical in
+                # both variants. Keep that alpha rather than inventing a mask.
+                if authored.getchannel('A').getextrema() != (255, 255):
+                    raise ValueError(name + ': source eye alpha is not opaque')
+                eye_row = {**row, 'textures': {k: v for k, v in row['textures'].items()
+                           if k not in ('OpacityMap', 'OpacityMap1')}}
+                packed = bake_eye(eye_row, table.parent)
+                limitations.append('authored eye opacity is opaque; preserve in visual review')
+            else:
+                packed = bake_eye(row, table.parent)
             baked = Image.open(BytesIO(packed)).convert('RGBA')
             # Preserve a separately authored white glint, if unambiguously
             # white-on-black; do not treat an RGB layer mask as a glint.

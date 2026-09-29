@@ -1,0 +1,99 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_size_bytes": 89083040,
+  "date": "2026-09-29",
+  "evidence_sha256": {
+    ".tmp/shiny-151-recovery/za-17-final-pilot/battle-corrected/battle-review.json": "92a48204810c07e22b0d15c2521ea2a75eaa744ad3c4678dfb9bc284e8043fe4",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/battle-sized/battle-review.json": "9659d11c464f7d4defa7283a8b79f541041a8bb51c9a76f4429c083634bc844e",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/battle-stable-input/motion-candidates.json": "e24ea50700fdf10c8826c25659abdb0acbcbe5b9eab832197159b2e7e7ec685b",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/bundles/asset-index.json": "4b1d9e414c174130c8b08a0e91667157efb4dc205e9bac6caec057840eb56c27",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/final-metrics.json": "a1487cc9a2b2fb86d1a8798c1ccec293c7fee80b0d8b79e9d53d49460e7e9c31",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/install.log": "73cb27a63f7d4a5cf22b49ab63b26fac292a55b805540939ae882c592c7d1c50",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/installed/installed-catalog.json": "771ec7fe5c731b625d5c15652c767c4e668b6b770b9ca8a99a93faf57c33baa8",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/runtime-catalog.json": "1e40d93833f2b3c5e9fc2a861ae194c8f7b47f939554a906908f60632d5ca5d0",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/runtime-fixture.json": "8907cbf4f95b5da998b462e7bb1e31b4f5a38d37e115201bf8de19d6b54f8ba2",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/stress.json": "302180963c51c9126fe2397bfbcb2fa93c446f94d0e4d42c9f2852fb73fbb805",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/delivery/stress.log": "3058a2f82924ddb56ed0f626428849230071b37bec0e9e23eaaa8f0bd08b210f",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/status.json": "6b23953289720be90913951a37ce982a8310ae18f4055fb3ec9d0a367186f9c4",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/user-appearance-review.json": "2a9e50db4febd20621e65159730104e3f914c8a1bfe5674093e8d53d8fefaf61",
+    ".tmp/shiny-151-recovery/za-17-final-pilot/user-review.json": "3813fd3f0af203499c3d42ddce1487bff6ecbaa137ffc70c01559cdf7f6a3b9c",
+    "tools/sprite_factory/admit_shiny_za_seventeen.py": "4e413cd430478887943544cad3691f186cbe79e1234f4dfec989ec287eb9d4d5",
+    "tools/sprite_factory/catalog_shiny_za_17_probe.py": "405c03d9caf1ee8c5b4ba375cfc46758d665c9b2bdad8f0db704339579df5225"
+  },
+  "minimum_floor_clearance_120hz": 0.0244012735784054,
+  "published": false,
+  "release_approved": false,
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 9.771,
+      "pairs": 17
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 17.199,
+      "pairs": 17
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 10.06,
+      "pairs": 17
+    }
+  ],
+  "schema": 1,
+  "scope": "17 local ZA normal/shiny pairs, individually bundled and battle checked",
+  "species": [
+    "absol",
+    "audino",
+    "cofagrigus",
+    "cubone",
+    "emolga",
+    "farfetchd",
+    "manectric",
+    "marowak",
+    "mawile",
+    "munna",
+    "pidgey",
+    "purrloin",
+    "sharpedo",
+    "staryu",
+    "stunfisk",
+    "trubbish",
+    "vanilluxe"
+  ],
+  "user_review": {
+    "appearance_approved": true,
+    "battle_approved": true,
+    "battle_feedback": "Allemaal goed",
+    "battle_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/za-17-final-pilot/battle-review/index.html",
+    "date": "2026-09-29",
+    "final_feedback": "Ja, Vanilluxe is goed",
+    "followup_feedback": "Vanniluxe klopt volgens mij nog niet. Zijn cone lijkt zwart",
+    "initial_feedback": "Staryu ogen kloppen niet. Vaniluxe kleuren kloppen niet en rechter gezicht klopt niet. De rest ziet er goed uit",
+    "schema": 1,
+    "scope": "local appearance and battle review; no release approval",
+    "species": [
+      "pidgey",
+      "farfetchd",
+      "cubone",
+      "marowak",
+      "staryu",
+      "mawile",
+      "manectric",
+      "sharpedo",
+      "absol",
+      "purrloin",
+      "munna",
+      "audino",
+      "cofagrigus",
+      "trubbish",
+      "vanilluxe",
+      "emolga",
+      "stunfisk"
+    ],
+    "staryu_correction": "ZA Fresnel first-layer jewel tint restored",
+    "vanilluxe_correction": "ZA Fresnel first-layer colour and emission restored; idle eyelid donor imported from source"
+  }
+}

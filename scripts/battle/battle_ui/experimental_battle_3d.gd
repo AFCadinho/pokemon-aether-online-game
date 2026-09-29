@@ -89,7 +89,7 @@ var restoring := ["idle", "idle", "idle", "idle"]
 var loaded_path := "!unloaded"
 var active := false
 var saved_colors := {}
-var reason := "2.5D selected"
+var reason := "2D selected"
 var catalog_problem := ""
 var current_actions := ["idle", "idle", "idle", "idle"]
 var resting := [true, true, true, true]
@@ -246,7 +246,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			warming_render = false
 			return
 		var settings := get_tree().root.get_node("SettingsManager")
-		if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+		if settings.battle_presentation_mode not in ["2.5d", "3d"] or OS.has_feature("web") or OS.has_feature("mobile"):
 			warming_render = false
 			return
 		var requested: String = settings.get_battle_3d_catalog_path()
@@ -296,10 +296,12 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 
 
 func _ensure_downloaded_models() -> void:
-	if OS.has_feature("web") or OS.has_feature("mobile") or not OS.has_environment("POKEAETHER_MODEL_CATALOG"):
+	if OS.has_feature("web") or OS.has_feature("mobile") or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
-	if settings.battle_presentation_mode != "3d" or settings.has_manual_battle_3d_catalog_selection():
+	if settings.battle_presentation_mode not in ["2.5d", "3d"] or settings.has_manual_battle_3d_catalog_selection():
+		return
+	if not settings.battle_3d_catalog_path.is_empty() and not OS.has_environment("POKEAETHER_MODEL_CATALOG"):
 		return
 	while is_instance_valid(model_downloader):
 		await get_tree().process_frame
@@ -320,12 +322,10 @@ func _ensure_downloaded_models() -> void:
 			needed.append(identity)
 	if needed.is_empty():
 		return
-	model_downloader = preload("res://scripts/services/on_demand_3d_bundle_service.gd").new()
-	add_child(model_downloader)
+	model_downloader = get_tree().root.get_node("OnDemand3DBundleService")
 	preparation_phase = "Checking approved 3D models…"
 	var old_path: String = settings.get_battle_3d_catalog_path()
 	var result: Dictionary = await model_downloader.ensure_models(needed, old_path)
-	model_downloader.queue_free()
 	model_downloader = null
 	if preparation_cancelled or not is_inside_tree():
 		return
@@ -623,6 +623,7 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	platforms = stage_platforms
 	name = "ExperimentalBattle3D"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	z_index = 1 # Above the 2D platform art, below battle HUD and effects.
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	render_surface = TextureRect.new()
@@ -663,6 +664,8 @@ func _motion_profile(species: String) -> Dictionary:
 	return MOTION_PROFILES.data.get(species, {})
 
 func _requested_arena() -> String:
+	if get_tree().root.get_node("SettingsManager").battle_presentation_mode == "2.5d":
+		return "classic"
 	return ArenaCatalog.resolve(get_tree().root.get_node("SettingsManager").battle_3d_arena, environment_id, battle_kind)
 
 func set_battle_context(next_environment_id: StringName, next_kind: String) -> void:
@@ -719,6 +722,7 @@ func _build_world() -> void:
 			return
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
+	viewport.transparent_bg = get_tree().root.get_node("SettingsManager").battle_presentation_mode == "2.5d"
 	viewport.msaa_3d = Viewport.MSAA_4X
 	add_child(viewport)
 	_sync_render_size()
@@ -727,7 +731,7 @@ func _build_world() -> void:
 	viewport.add_child(world)
 	var environment := WorldEnvironment.new()
 	environment.environment = Environment.new()
-	environment.environment.background_mode = Environment.BG_COLOR
+	environment.environment.background_mode = Environment.BG_CLEAR_COLOR if viewport.transparent_bg else Environment.BG_COLOR
 	environment.environment.background_color = Color("23364b")
 	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	world.add_child(environment)
@@ -752,7 +756,7 @@ func _build_world() -> void:
 	arena_root = ArenaCatalog.build(arena_id, world, camera)
 	if arena_root != null:
 		world.add_child(arena_root)
-	else:
+	elif not viewport.transparent_bg:
 		_build_classic_ground()
 	camera.position = ArenaCatalog.camera_home(arena_id)
 	camera.fov = ArenaCatalog.CAMERA_FOV
@@ -940,7 +944,7 @@ func _actors_resolved() -> bool:
 func _queue_needed_models() -> void:
 	if preparation_cancelled or preparation_failed:
 		return
-	if is_inside_tree() and get_tree().root.get_node("SettingsManager").battle_presentation_mode != "3d":
+	if is_inside_tree() and get_tree().root.get_node("SettingsManager").battle_presentation_mode not in ["2.5d", "3d"]:
 		return
 	var needed := _needed_species()
 	pending_entries = pending_entries.filter(func(entry): return entry.species in needed)
@@ -1113,8 +1117,9 @@ func _set_active(value: bool) -> void:
 		boxes[i].presentation_visual_rect = _visual_rect.bind(i) if value else Callable()
 	if value:
 		var hidden: Array = []
-		for platform in platforms:
-			hidden.append(platform.get_node("PlatformImage"))
+		if get_tree().root.get_node("SettingsManager").battle_presentation_mode == "3d":
+			for platform in platforms:
+				hidden.append(platform.get_node("PlatformImage"))
 		for box in boxes:
 			hidden.append(box.single_sprite)
 			if double_mode:
@@ -1250,14 +1255,14 @@ func _process(delta: float) -> void:
 	if preparation_failed or preparation_cancelled:
 		_set_active(false)
 		if is_instance_valid(mode_label):
-			mode_label.text = "2.5D · " + reason
+			mode_label.text = "2D · " + reason
 			mode_label.tooltip_text = reason
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
-	mode_label.visible = settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile")
-	mode_label.text = ("3D · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if _models_pending() else "2.5D · " + reason)
+	mode_label.visible = settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile")
+	mode_label.text = (("2.5D" if settings.battle_presentation_mode == "2.5d" else "3D") + " · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if _models_pending() else "2D · " + reason)
 	mode_label.tooltip_text = reason + (" · " + arena_problem if not arena_problem.is_empty() else "")
-	if settings.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+	if settings.battle_presentation_mode not in ["2.5d", "3d"] or OS.has_feature("web") or OS.has_feature("mobile"):
 		ModelCache.clear() # Explicitly leaving 3D releases retained resources.
 		_set_active(false)
 		_cancel_load()
@@ -1304,7 +1309,7 @@ func _process(delta: float) -> void:
 	var desired := []
 	for platform in platforms:
 		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
-			reason = "Field hazard/screen presentation uses 2.5D"
+			reason = "Field hazard/screen presentation uses 2D"
 			_set_active(false)
 			return
 	for index in _slot_count():
@@ -1322,6 +1327,8 @@ func _process(delta: float) -> void:
 		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
 			reason = "Unsupported active Pokémon/form or substitute: " + species
 			_set_active(false)
+			for sprite_box in boxes:
+				sprite_box.allow_web_sprite_upgrades(true)
 			return
 		var key := _combatant_key(index)
 		if not packed.has(key):

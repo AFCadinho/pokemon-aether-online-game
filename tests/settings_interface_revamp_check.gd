@@ -37,8 +37,9 @@ func _run() -> void:
 		_check(layout != null and layout.item_count == 2 and layout.get_item_text(0) == "Full screen"
 			and layout.get_item_text(1) == "Classic (single battles)", "battle layout explains where Classic applies")
 	if not OS.has_feature("mobile") and not OS.has_feature("web"):
-		_check(visuals != null and visuals.item_count == 2 and visuals.get_item_text(0) == "2D / 2.5D — sprites"
-			and visuals.get_item_text(1) == "3D — models", "battle visuals offer sprites or models")
+		_check(visuals != null and visuals.item_count == 3 and visuals.get_item_text(0) == "2D — animated sprites"
+			and visuals.get_item_text(1) == "2.5D — models, 2D background"
+			and visuals.get_item_text(2) == "3D — models and 3D arena", "battle visuals offer three distinct presentations")
 		_check(camera_motion != null and tabs.get_child(2).is_ancestor_of(camera_motion),
 			"camera movement belongs to Graphics, not General")
 		var settings := root.get_node("SettingsManager")
@@ -48,10 +49,12 @@ func _run() -> void:
 		_check(settings.battle_ui_layout == "classic", "Classic selection preserves existing layout contract")
 		layout.item_selected.emit(0)
 		_check(settings.battle_ui_layout == "immersive", "Full screen selects immersive implementation")
-		visuals.item_selected.emit(1)
+		visuals.item_selected.emit(2)
 		_check(settings.battle_presentation_mode == "3d", "3D selects model presentation")
+		visuals.item_selected.emit(1)
+		_check(settings.battle_presentation_mode == "2.5d", "2.5D selects models with sprite background")
 		visuals.item_selected.emit(0)
-		_check(settings.battle_presentation_mode == "2.5d", "sprite choice selects existing sprite presentation")
+		_check(settings.battle_presentation_mode == "2d", "sprite choice selects 2D presentation")
 		settings.set_battle_ui_layout(old_layout)
 		settings.set_battle_presentation_mode(old_visuals)
 		# Slot-local persisted legacy preference: it must not become a hidden
@@ -68,6 +71,19 @@ func _run() -> void:
 		_check(settings.battle_3d_catalog_path == saved.get("battle_3d_catalog_path", "")
 			and settings.battle_3d_forest_manifest == saved.get("battle_3d_forest_manifest", ""),
 			"removing pickers preserves installed model and forest paths")
+		legacy.erase("battle_presentation_mode")
+		file = FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
+		file.store_string(JSON.stringify(legacy))
+		file.close()
+		settings.load_settings()
+		_check(settings.battle_presentation_mode == "3d", "profiles without a visual choice default to 3D")
+		legacy["battle_presentation_mode"] = "2.5d"
+		legacy.erase("battle_presentation_schema")
+		file = FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
+		file.store_string(JSON.stringify(legacy))
+		file.close()
+		settings.load_settings()
+		_check(settings.battle_presentation_mode == "2d", "old sprite preference stays 2D")
 		file = FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
 		file.store_string(saved_text)
 		file.close()
