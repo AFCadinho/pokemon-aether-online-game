@@ -79,6 +79,9 @@ func _check_scene_source(scene_path: String) -> void:
 		var npc_name := _quoted_header_value(header, "name")
 		var npc_id := _quoted_property(block, "npc_id")
 		var definition_id := _quoted_property(block, "npc_definition_id")
+		# The center now inherits NurseJoy's definition without a city-specific ID.
+		if npc_name == "NurseJoy" and definition_id.is_empty():
+			definition_id = "pokemon_center_nurse"
 		if definition_id.is_empty() and INHERITED_NPC_DEFINITIONS.has(npc_id):
 			definition_id = str(INHERITED_NPC_DEFINITIONS[npc_id])
 		var explicit_portrait_id := _quoted_property(block, "portrait_id")

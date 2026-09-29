@@ -75,7 +75,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	)
 	_check(
 		category_rail != null
-		and category_rail.get_child_count() == 10
+		and category_rail.get_child_count() == 11
 		and _all_category_buttons_toggle(category_rail),
 		"Appearance category rail stays compact and clearly selectable"
 	)

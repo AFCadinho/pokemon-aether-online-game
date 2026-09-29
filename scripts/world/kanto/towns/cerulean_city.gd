@@ -6,7 +6,11 @@ const CeruleanWeatherWaterMaskScript := preload(
 
 const MOUNTAIN_DEPTH_SORT_BASE_Z := 2054
 const MOUNTAIN_DEPTH_ZONES_PATH := NodePath("MountainDepthZones")
-@export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.1
+
+
+func _init() -> void:
+	surf_encounter_chance = 0.1
+
 
 func _ready() -> void:
 	CeruleanWeatherWaterMaskScript.build(get_node_or_null("CeruleanCityVisual"))
