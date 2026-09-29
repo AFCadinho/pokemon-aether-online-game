@@ -1087,6 +1087,11 @@
       "original_normal_sha256": "2245d12ea478aa8e756dc3a7be6a9a7a5acc5a1e60cdfd9d9659a5041df7d989",
       "reason": "flame colour/emission",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "litwick",
       "status": "visual_hold",
@@ -1331,6 +1336,11 @@
       "original_normal_sha256": "a798c20cbc5e21972d6e8e54db8f99a6bb664b84209c4a0502a5bd8ad1765a63",
       "reason": "overlapping ribbons in sleep",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "doublade",
       "status": "visual_hold",
@@ -1449,6 +1459,11 @@
       "original_normal_sha256": "aed0198c007d4bb073e3502d60601855732d7d86255b7920445c684da85f77c4",
       "reason": "transparent mantle",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "inkay",
       "status": "visual_hold",
@@ -1567,6 +1582,11 @@
       "original_normal_sha256": "273cd8281c015a4c522e372185b86fe12fd3141af770ac08dff26e24522fc54f",
       "reason": "sleep eye state and frill surface",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "helioptile",
       "status": "visual_hold",
@@ -1595,6 +1615,11 @@
       "original_normal_sha256": "a754bc55751cde272d99dd7fc94544c3232b5772f0300d9ddada7495eea437d4",
       "reason": "closed idle eyes",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "heliolisk",
       "status": "visual_hold",
@@ -1785,6 +1810,11 @@
       "original_normal_sha256": "47a353884dc24075210a1a6db02876ff7e106a31c680b00fe4b7eb8b037fbf2b",
       "reason": "active antler appearance",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "xerneas",
       "status": "visual_hold",
@@ -1813,6 +1843,11 @@
       "original_normal_sha256": "a15aad0f4ce5a813429e1ea183719e563a373200fc24db7120db5a61f983796d",
       "reason": "layer-five wing colours",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "yveltal",
       "status": "visual_hold",
@@ -2057,6 +2092,11 @@
       "original_normal_sha256": "97391408f5fc34eb3d1d848b678142cdda0781051ee20f606ee167fae78e2797",
       "reason": "layered translucent surface",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "cosmog",
       "status": "visual_hold",
@@ -2085,6 +2125,11 @@
       "original_normal_sha256": "5f3feb74c6e93c790d02e3e1aaaeeedf52e79fb6f495e18b40651bec2ac1b600",
       "reason": "layered translucent surface",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "cosmoem",
       "status": "visual_hold",
@@ -2197,6 +2242,11 @@
       "original_normal_sha256": "5e35e94692f111a9df23d4b07f484525764cb75084c1ec156dc4afa0d2d0cd58",
       "reason": "effect visibility",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "marshadow",
       "status": "visual_hold",
@@ -2291,6 +2341,11 @@
       "original_normal_sha256": "0102c4dccadbdf9912ae81dd65bf34dba00e213fad5952e755678867384eddca",
       "reason": "metal and eye reflection",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "meltan",
       "status": "visual_hold",
@@ -2319,6 +2374,11 @@
       "original_normal_sha256": "5ba2273dadb8d7d54d4d7e11f8a43f351780fc832a50370707d9491bbcd3155d",
       "reason": "metal and eye reflection",
       "release_approved": false,
+      "repair_review": {
+        "receipt": "catalog_shiny_twelve_recovery.json",
+        "status": "awaiting_appearance_review",
+        "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
+      },
       "runtime_approved": false,
       "species": "melmetal",
       "status": "visual_hold",
