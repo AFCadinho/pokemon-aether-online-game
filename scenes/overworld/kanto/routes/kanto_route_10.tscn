@@ -4,16 +4,18 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_0sbse"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_kkef3"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_lrh64"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="5_rrflk"]
 
 [sub_resource type="RectangleShape2D" id="shape_6"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(32, 128)
+size = Vector2(32, 224)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
 size = Vector2(96, 32)
@@ -22,7 +24,7 @@ size = Vector2(96, 32)
 size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_5"]
-size = Vector2(192, 32)
+size = Vector2(128, 31)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rrflk"]
 texture = ExtResource("4_0sbse")
@@ -162,22 +164,22 @@ music_profile_id = "kanto.routes_3_10_16_22"
 [node name="Spawns" type="Node2D" parent="." unique_id=18802584]
 
 [node name="FromRoute9" type="Marker2D" parent="Spawns" unique_id=1584908064]
-position = Vector2(64, 656)
+position = Vector2(48, 656)
 
 [node name="FromRoute9River" type="Marker2D" parent="Spawns" unique_id=1148799862]
-position = Vector2(64, 288)
+position = Vector2(48, 304)
 
 [node name="FromRockTunnelNorth" type="Marker2D" parent="Spawns" unique_id=959521393]
-position = Vector2(1072, 1104)
+position = Vector2(1072, 1072)
 
 [node name="FromRockTunnelSouth" type="Marker2D" parent="Spawns" unique_id=899213792]
-position = Vector2(624, 2544)
+position = Vector2(624, 2512)
 
 [node name="FromLavenderNorth" type="Marker2D" parent="Spawns" unique_id=1645792106]
-position = Vector2(1248, 3248)
+position = Vector2(1232, 3280)
 
 [node name="FromPowerPlant" type="Marker2D" parent="Spawns" unique_id=1617080901]
-position = Vector2(1200, 1808)
+position = Vector2(1200, 1776)
 
 [node name="Exits" type="Node2D" parent="." unique_id=871120581]
 
@@ -190,7 +192,11 @@ transition_id = "kanto_route_10__to_power_plant"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPowerPlant" unique_id=930945931]
+position = Vector2(0, -8)
 shape = SubResource("shape_6")
+
+[node name="DoorTransitionHint" parent="Exits/ToPowerPlant" unique_id=1092185579 instance=ExtResource("4_kkef3")]
+z_as_relative = false
 
 [node name="ToRoute9" type="Area2D" parent="Exits" unique_id=565841392]
 position = Vector2(16, 656)
@@ -201,7 +207,13 @@ transition_id = "kanto_route_10__to_route9"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9" unique_id=516198547]
+position = Vector2(-16, 0)
 shape = SubResource("shape_1")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute9" unique_id=819354894 instance=ExtResource("5_lrh64")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 5)
+flow_direction = "left"
 
 [node name="ToRoute9River" type="Area2D" parent="Exits" unique_id=463488184]
 position = Vector2(16, 288)
@@ -212,7 +224,14 @@ transition_id = "kanto_route_10__to_route9_river"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9River" unique_id=828297031]
+position = Vector2(-16, 16)
 shape = SubResource("shape_2")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute9River" unique_id=1984742250 instance=ExtResource("5_lrh64")]
+z_as_relative = false
+position = Vector2(-16, 15)
+tile_footprint = Vector2i(1, 7)
+flow_direction = "left"
 
 [node name="ToRockTunnelNorth" type="Area2D" parent="Exits" unique_id=1917208174]
 position = Vector2(1072, 1040)
@@ -223,7 +242,12 @@ transition_id = "kanto_route_10__to_rock_tunnel_north"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRockTunnelNorth" unique_id=752522854]
+position = Vector2(0, -16)
 shape = SubResource("shape_3")
+
+[node name="RouteTransitionHint" parent="Exits/ToRockTunnelNorth" unique_id=2049560922 instance=ExtResource("5_lrh64")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
 
 [node name="ToRockTunnelSouth" type="Area2D" parent="Exits" unique_id=1948740012]
 position = Vector2(624, 2480)
@@ -234,7 +258,12 @@ transition_id = "kanto_route_10__to_rock_tunnel_south"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRockTunnelSouth" unique_id=1866077113]
+position = Vector2(0, -16)
 shape = SubResource("shape_4")
+
+[node name="RouteTransitionHint" parent="Exits/ToRockTunnelSouth" unique_id=1233889090 instance=ExtResource("5_lrh64")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
 
 [node name="ToLavenderNorth" type="Area2D" parent="Exits" unique_id=459165126]
 position = Vector2(1248, 3312)
@@ -245,7 +274,14 @@ transition_id = "kanto_route_10__to_lavender_north"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToLavenderNorth" unique_id=1160466403]
+position = Vector2(-32, 15.5)
 shape = SubResource("shape_5")
+
+[node name="RouteTransitionHint" parent="Exits/ToLavenderNorth" unique_id=1548152894 instance=ExtResource("5_lrh64")]
+z_as_relative = false
+position = Vector2(-32, -1)
+tile_footprint = Vector2i(4, 1)
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=2061554904]
 z_index = 5
