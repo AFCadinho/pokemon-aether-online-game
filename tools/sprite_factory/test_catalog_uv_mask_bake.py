@@ -50,6 +50,17 @@ class MaskBakeTests(unittest.TestCase):
         actual, _ = raster(d, b, 0, im, [1, 1, 0, 0], 8)
         self.assertEqual(expected.tobytes(), actual.tobytes())
 
+    def test_padding_fills_border_without_changing_covered_samples(self):
+        d, b, im = scene()
+        plain, original = raster(d, b, 0, im, [1, 1, 0, 0], 8)
+        padded, audit = raster(d, b, 0, im, [1, 1, 0, 0], 8, padding=2)
+        self.assertEqual(audit['covered_pixels'], original['covered_pixels'])
+        self.assertGreater(audit['padding_pixels'], 0)
+        for a, z in zip(plain.get_flattened_data(), padded.get_flattened_data()):
+            if a != (0, 0, 0, 0):
+                self.assertEqual(a, z)
+        self.assertEqual(padded.getpixel((4, 4)), (255, 0, 0, 0))
+
     def test_ambiguous_overlaps_fail(self):
         d, b, im = scene(conflict=True)
         with self.assertRaisesRegex(ValueError, 'conflicting'):

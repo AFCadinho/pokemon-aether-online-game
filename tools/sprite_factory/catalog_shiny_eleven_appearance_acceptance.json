@@ -1,0 +1,1071 @@
+{
+  "schema": 1,
+  "date": "2026-09-29",
+  "status": "appearance_approved_battle_pending",
+  "user_feedback": "Marshadow normal en shiny zien er hetzelfde uit. De rest lijken allemaal goed",
+  "source_receipt": "tools/sprite_factory/catalog_shiny_twelve_recovery.json",
+  "source_receipt_sha256": "2d6641b30aff7c663da5ddcb086ea1ad13af9dcf84ebd4e8bd1ad9e263387624",
+  "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html",
+  "pairs": 11,
+  "appearance_approved": true,
+  "battle_approved": false,
+  "runtime_approved": false,
+  "release_approved": false,
+  "variants": [
+    {
+      "species": "litwick",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/litwick/normal/model.glb",
+      "glb_sha256": "0a6b186f3fae733052a27285a323b5b014ed837562b87598c7107e4322969f5e",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/litwick.scn",
+      "runtime_sha256": "c65b83b84defb6319d39aaf800ea533f7b562157425c3aa32f0011e3e6b72235",
+      "source_sha256": "398eb9ee08b3c986f01b1eeb23d3c9d301bbe4615b00a068ce5cf5d32f8e6da7",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "doublade",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/doublade/normal/model.glb",
+      "glb_sha256": "f9066002b0b65860311e83829404e6fe647b44fa44fcc90f86e9de1c7341ea27",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/doublade.scn",
+      "runtime_sha256": "c58cf5eca8fd87299502e86234c83d472d6d7a488f5738d3bd96ef5226410772",
+      "source_sha256": "55ce7f7909cadb41ffe2cebe2f98b68ee0b82cf7fb1c995ae300971c21ed5123",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 128.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "inkay",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/inkay/normal/model.glb",
+      "glb_sha256": "f0e2d2762fa86f15fc46ae19cf84cb587d9d11e1640719324ccc9e2e78ead268",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/normal-runtime/inkay.scn",
+      "runtime_sha256": "3c29d0cdbb9cd08b6df13df1bc8f5601520a61e3b8da2f040ca088017e8f79cd",
+      "source_sha256": "a5b0078ee4fc12b8c94ce570075d3cfe558c465c3044a61cafe8704e4643f953",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "helioptile",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/helioptile/normal/model.glb",
+      "glb_sha256": "4a61e2690a9f12b33fec97d92658e554957a38bb10db667b52f582e23dec6784",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/helioptile.scn",
+      "runtime_sha256": "9ac92ad51029aefef913397e827447fd757282add0098fb8dc842d34904d10a2",
+      "source_sha256": "b6bfd443ccb515719fd07aa044242877bf9798ed24199145baa0ac5ca63602f0",
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 72.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "heliolisk",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/heliolisk/normal/model.glb",
+      "glb_sha256": "0a9c25e6faf3c493c66d82b862e7fa6b35adb6483ea645d846914f59acc9b52b",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/heliolisk.scn",
+      "runtime_sha256": "d2001e3b529a5fd3b378013cfbd7a25a9ed241602e72d48cf4785f55f85be0fd",
+      "source_sha256": "b2be46aa3fcfc105708ab50662cdd55534df1c7f9cf69f09ad4efdfba06b5658",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "xerneas",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/xerneas/normal/model.glb",
+      "glb_sha256": "c63a1686a2118477771796e588dcf03103ffb2bb6201a3325be08bed16d99689",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/normal-runtime/xerneas.scn",
+      "runtime_sha256": "d0e0d5332eaca635dfe6ed9ea6dcafa5b12fd415c92d36f87c8f59d6d22e5681",
+      "source_sha256": "92002c0bc227e1b338505b3ab5715d6586b1c4d9e936b4805677ef29788837ed",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "yveltal",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/yveltal/normal/model.glb",
+      "glb_sha256": "ff8ce01a75b350199134aa5cfe7c12f1e43e2d2e02372fdd6609aaef7c0db5ec",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/yveltal.scn",
+      "runtime_sha256": "6545eed6a089bdf6466022cf5c1271e644135be36001f6f62c2a42f5798b195b",
+      "source_sha256": "09770ef7bd76aae6b07a8cae406e9713c2a1fb0d0dddcadfcde00fa421fa5e47",
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 90.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "cosmog",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/cosmog/normal/model.glb",
+      "glb_sha256": "be5c7fb7e776b03ba8081258a5398c4e2e3c0a32c2d42d01e6fb9931b60acbfe",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/cosmog.scn",
+      "runtime_sha256": "83d6d747c55c801ec8ebaf6d1b8ab5271969987faf6c7d6cf1c543b83c86bfc8",
+      "source_sha256": "72643732eb1e32e38fd6c6f1a51b307e812fad11a8ce148271b98f2575da7ea0",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "cosmoem",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/cosmoem/normal/model.glb",
+      "glb_sha256": "d88bd12c8241acd3cb5ee2302c546c9c4fd6ed837e1f64f54edf3acd38071cce",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/cosmoem.scn",
+      "runtime_sha256": "e6fdd85bb3fe7b8035685783b768a44fd7cc3c1d21cc204a19f444df56dd6448",
+      "source_sha256": "36b4a177e7c1afc51c80bdf3e49b338b324cdccb8a11321f6a415fae1b13e83d",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "meltan",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/meltan/normal/model.glb",
+      "glb_sha256": "22b1f59ce3eb742182d4401e6404fd7b9d55aaad0b00aac1870618b8ca11c43e",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/meltan.scn",
+      "runtime_sha256": "3eedbefbee7b5e5f262106bc454c3ff146da7b07dd498f9118da1e06cf04b72e",
+      "source_sha256": "cce2b94ef0b5a018fec39da537aa6a3e6d77e0ee9d202118d4e180c6a11a0eb7",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "melmetal",
+      "variant": "normal",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/melmetal/normal/model.glb",
+      "glb_sha256": "032c7ff4e2872466defc38e3437b3693337b5a1602a81d479a9aefe3d4cab055",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/normal-motion-runtime/melmetal.scn",
+      "runtime_sha256": "05fa65c178559f19608b2facebd5bf24067be21b26036e74895096ca1353f872",
+      "source_sha256": "3bfd2029177bd8f9cea174b1923b451560057bb272b40acda5b4b2647da0212a",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 118.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "litwick",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/litwick/shiny/model.glb",
+      "glb_sha256": "60075ec3f55600293de6b07c620187139b7c37094523ea2fe56f7427c3e4a1c5",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/litwick.scn",
+      "runtime_sha256": "5dcdd29d602882ecd98591685fb7d4dd14061f36d1247a8f32dad97c8e2f0309",
+      "source_sha256": "398eb9ee08b3c986f01b1eeb23d3c9d301bbe4615b00a068ce5cf5d32f8e6da7",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "doublade",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/doublade/shiny/model.glb",
+      "glb_sha256": "aa5cb22609142d31c4b5f716f643c1c4f2e84a844b15e2db60c569381dac8f43",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/doublade.scn",
+      "runtime_sha256": "3d91c3cd90aaf8b25309b57b61d51b19cbce21ce0871513bfd2e9aca95a21e96",
+      "source_sha256": "55ce7f7909cadb41ffe2cebe2f98b68ee0b82cf7fb1c995ae300971c21ed5123",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 128.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "inkay",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/inkay/shiny/model.glb",
+      "glb_sha256": "fd8138c6228f872dc6a32a10aacde97ae0fc4b5b1564d511d165cbc52718829f",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/shiny-runtime/inkay.scn",
+      "runtime_sha256": "e2a83f9832b565142a93465d0690a398b6d5f6a82e1ea04eb8a74cb5c7d2d18c",
+      "source_sha256": "a5b0078ee4fc12b8c94ce570075d3cfe558c465c3044a61cafe8704e4643f953",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 140.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "helioptile",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/helioptile/shiny/model.glb",
+      "glb_sha256": "5b4cfd844e885393dd521bcd691a263fb13c28f498d9139ad55d13dfec7b863c",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/helioptile.scn",
+      "runtime_sha256": "7e456e475bae965a54118d096fefd0781d2b1f8e83ddbce542e5471779ac7904",
+      "source_sha256": "b6bfd443ccb515719fd07aa044242877bf9798ed24199145baa0ac5ca63602f0",
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 72.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "heliolisk",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/heliolisk/shiny/model.glb",
+      "glb_sha256": "ab705d2b56f46f718f8bb537d6aa9b62154c5d13c12eab9dd9354a41a4a7c2e0",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/heliolisk.scn",
+      "runtime_sha256": "a2d11ed12a8d89ede128bd5508169958d375a5f6762fb49614d10c2e1a9281ae",
+      "source_sha256": "b2be46aa3fcfc105708ab50662cdd55534df1c7f9cf69f09ad4efdfba06b5658",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "xerneas",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/xerneas/shiny/model.glb",
+      "glb_sha256": "627494d85a292e5ce254869b12620d767ebd06cba788e8166eb924b3068ee9ac",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v5/shiny-runtime/xerneas.scn",
+      "runtime_sha256": "63e357a007d5e74af9a5e39a63b11790b8b989ef2cca7886ef9382893621ef21",
+      "source_sha256": "92002c0bc227e1b338505b3ab5715d6586b1c4d9e936b4805677ef29788837ed",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "yveltal",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/yveltal/shiny/model.glb",
+      "glb_sha256": "203901ed017b515e2a21bdb098cd1493fb0fb0cd51bb413af48e9dd2c863c580",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/yveltal.scn",
+      "runtime_sha256": "59e8a7ec7986087231fcbbfe016625f15cc63ab6c286472d435ab98b8770c887",
+      "source_sha256": "09770ef7bd76aae6b07a8cae406e9713c2a1fb0d0dddcadfcde00fa421fa5e47",
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 90.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "cosmog",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/cosmog/shiny/model.glb",
+      "glb_sha256": "6388138092bb1cede3ffb0d909d5d7f423b1f96f1e137be4fe3128c50cc306b1",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/cosmog.scn",
+      "runtime_sha256": "7942749590d3db2bfebb4a7281acbd0575d03a0b0e7560a05076d0a27c130039",
+      "source_sha256": "72643732eb1e32e38fd6c6f1a51b307e812fad11a8ce148271b98f2575da7ea0",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "cosmoem",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/cosmoem/shiny/model.glb",
+      "glb_sha256": "11b190d36a5a76ea153c14937bc402d82231e30a22324e92fa1522348c1b89ce",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/cosmoem.scn",
+      "runtime_sha256": "4aecfc8fffaa2fbae66a2b01153bf4bb49ce8ab349da0911016c57f776fd642e",
+      "source_sha256": "36b4a177e7c1afc51c80bdf3e49b338b324cdccb8a11321f6a415fae1b13e83d",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 110.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "meltan",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/meltan/shiny/model.glb",
+      "glb_sha256": "f31191f3e825fdd488a649f8b535fa37416fd91fa10b191b65ecd3829021d42e",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/meltan.scn",
+      "runtime_sha256": "190a5e1d47c1be440c6715216e51df7c75a42031adb8bd15e481593cd91a80dd",
+      "source_sha256": "cce2b94ef0b5a018fec39da537aa6a3e6d77e0ee9d202118d4e180c6a11a0eb7",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    },
+    {
+      "species": "melmetal",
+      "variant": "shiny",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/melmetal/shiny/model.glb",
+      "glb_sha256": "183c3b25d275ab4ebd431a105c9cc94de45ddfecabe6350c68d447879d0dba46",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/twelve/material-v2/shiny-motion-runtime/melmetal.scn",
+      "runtime_sha256": "9e6daeb68d56de3c50249202d60029dec0ae6043c8187aa1ca4d6ac90e01a0a9",
+      "source_sha256": "3bfd2029177bd8f9cea174b1923b451560057bb272b40acda5b4b2647da0212a",
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 118.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      }
+    }
+  ],
+  "excluded": {
+    "marshadow": "Attack colour mask stayed fixed at rest UV; animated mask correction awaiting review."
+  }
+}

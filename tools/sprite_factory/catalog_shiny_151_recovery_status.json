@@ -1,10 +1,11 @@
 {
   "appearance_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/index.html",
   "counts": {
+    "battle_review_pending": 11,
     "locally_admitted": 32,
     "missing_compatible_shiny_source": 86,
     "scvi_material_hold": 4,
-    "visual_hold": 12,
+    "visual_hold": 1,
     "za_binding_hold": 17
   },
   "date": "2026-09-29",
@@ -1078,7 +1079,7 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "bea9a54bcaed1aad56ecc840c66ae8cd06cf151622ca7e963dbfa61ad033df1d",
       "media": "quick-review",
@@ -1088,13 +1089,14 @@
       "reason": "flame colour/emission",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "litwick",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/litwick/normal/model.glb",
@@ -1327,7 +1329,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "ff98c8343e04c9e0ba80798a841b0a8a25b7c2e73fe6d1e85f45389838fc9dac",
       "media": "za-v3-review",
@@ -1337,13 +1339,14 @@
       "reason": "overlapping ribbons in sleep",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "doublade",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/doublade/normal/model.glb",
@@ -1450,7 +1453,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "76f4a9988814db570c529cf71a2b9887b285f329a527ea616a4344fc8008e740",
       "media": "quick-review",
@@ -1460,13 +1463,14 @@
       "reason": "transparent mantle",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "inkay",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/inkay/normal/model.glb",
@@ -1573,7 +1577,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "c252b617680853f7008be0d565c65a6ee7a6cb504fe0f98ced7b197d7adfd1c5",
       "media": "za-v3-review",
@@ -1583,13 +1587,14 @@
       "reason": "sleep eye state and frill surface",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "helioptile",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/helioptile/normal/model.glb",
@@ -1606,7 +1611,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "932e42ec7a98bba097113dca932f46564016aee127c4062370b2d6838c6ae31a",
       "media": "za-v3-review",
@@ -1616,13 +1621,14 @@
       "reason": "closed idle eyes",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "heliolisk",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/heliolisk/normal/model.glb",
@@ -1801,7 +1807,7 @@
       "status": "scvi_material_hold"
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "0134a549f6e4bb99ecd00790a9072017a05799c328bdd3d688ecfd56826ec2e6",
       "media": "za-v3-review",
@@ -1811,13 +1817,14 @@
       "reason": "active antler appearance",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "xerneas",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/xerneas/normal/model.glb",
@@ -1834,7 +1841,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "231f38caa743a0793c7c28ac65de1f85f177112184f79b783033ee8e34ea97a8",
       "media": "za-v3-review",
@@ -1844,13 +1851,14 @@
       "reason": "layer-five wing colours",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "yveltal",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/yveltal/normal/model.glb",
@@ -2083,7 +2091,7 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "b03c9616bb9bd7396d4775252ff03e12fc4ee1169083233db093437aac10b3c3",
       "media": "quick-review",
@@ -2093,13 +2101,14 @@
       "reason": "layered translucent surface",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "cosmog",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/cosmog/normal/model.glb",
@@ -2116,7 +2125,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "73e58f5c0a02cef0427958a6d73cf5c5f507507adbe89d793ae1e4a52b7b940a",
       "media": "quick-review",
@@ -2126,13 +2135,14 @@
       "reason": "layered translucent surface",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "cosmoem",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/material-probe-v3/cosmoem/normal/model.glb",
@@ -2240,10 +2250,11 @@
       "national_dex": 802,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "5e35e94692f111a9df23d4b07f484525764cb75084c1ec156dc4afa0d2d0cd58",
-      "reason": "effect visibility",
+      "reason": "User reported normal and shiny identical: native attack colour-mask translation was missing. Corrected candidate awaiting visual review.",
       "release_approved": false,
       "repair_review": {
-        "receipt": "catalog_shiny_twelve_recovery.json",
+        "receipt": "tools/sprite_factory/catalog_marshadow_mask_recovery.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/marshadow-motion-v2/index.html",
         "status": "awaiting_appearance_review",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
@@ -2332,7 +2343,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "33291f30dc7ae8d38a99179b314f116ffcf8106eb0676a05a965fabb0cfca051",
       "media": "za-v3-review",
@@ -2342,13 +2353,14 @@
       "reason": "metal and eye reflection",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "meltan",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/meltan/normal/model.glb",
@@ -2365,7 +2377,7 @@
       }
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "1aaa3c859d7d53c9f56970298a68936fd3dbb7c0d05b14374c865508853df5ad",
       "media": "za-v3-review",
@@ -2375,13 +2387,14 @@
       "reason": "metal and eye reflection",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_shiny_eleven_appearance_acceptance.json",
         "receipt": "catalog_shiny_twelve_recovery.json",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "melmetal",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/melmetal/normal/model.glb",
