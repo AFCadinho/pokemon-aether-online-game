@@ -7,10 +7,10 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_dp7hi"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_nbafy"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_dp7hi"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="8_bug_catcher"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/camper_frames.tres" id="9_camper"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="8_bug_catcher"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="9_camper"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 16)
@@ -315,20 +315,19 @@ shape = SubResource("shape_3")
 [node name="Entities" type="Node2D" parent="." unique_id=1064945309]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=283960078]
 
-[node name="BugCatcherKeigo" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
-position = Vector2(608, 528)
+[node name="BugCatcherKeigo" parent="Entities/NPCs" unique_id=637404269 instance=ExtResource("7_trainer")]
+position = Vector2(608, 496)
 trainer_id = "kanto_route_6_bug_catcher_keigo"
 sight_range_tiles = 3
 npc_id = "kanto_route_6_bug_catcher_keigo"
 npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Keigo"
-facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("8_bug_catcher")
 
-[node name="CamperRicky" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
-position = Vector2(896, 672)
+[node name="CamperRicky" parent="Entities/NPCs" unique_id=485106914 instance=ExtResource("7_trainer")]
+position = Vector2(1200, 784)
 trainer_id = "kanto_route_6_camper_ricky"
 sight_range_tiles = 3
 npc_id = "kanto_route_6_camper_ricky"
@@ -337,8 +336,8 @@ display_name = "Camper Ricky"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("9_camper")
 
-[node name="PicnickerNancy" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
-position = Vector2(896, 832)
+[node name="PicnickerNancy" parent="Entities/NPCs" unique_id=171927362 instance=ExtResource("7_trainer")]
+position = Vector2(272, 880)
 trainer_id = "kanto_route_6_picnicker_nancy"
 sight_range_tiles = 3
 npc_id = "kanto_route_6_picnicker_nancy"
@@ -347,8 +346,8 @@ display_name = "Picnicker Nancy"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("10_picnicker")
 
-[node name="BugCatcherElijah" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
-position = Vector2(896, 1072)
+[node name="BugCatcherElijah" parent="Entities/NPCs" unique_id=44153149 instance=ExtResource("7_trainer")]
+position = Vector2(1040, 880)
 trainer_id = "kanto_route_6_bug_catcher_elijah"
 sight_range_tiles = 3
 npc_id = "kanto_route_6_bug_catcher_elijah"
@@ -357,8 +356,8 @@ display_name = "Bug Catcher Elijah"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("8_bug_catcher")
 
-[node name="PicnickerIsabelle" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
-position = Vector2(608, 1376)
+[node name="PicnickerIsabelle" parent="Entities/NPCs" unique_id=967696408 instance=ExtResource("7_trainer")]
+position = Vector2(496, 1104)
 trainer_id = "kanto_route_6_picnicker_isabelle"
 sight_range_tiles = 3
 npc_id = "kanto_route_6_picnicker_isabelle"
@@ -367,8 +366,8 @@ display_name = "Picnicker Isabelle"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("10_picnicker")
 
-[node name="CamperJeff" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
-position = Vector2(896, 1536)
+[node name="CamperJeff" parent="Entities/NPCs" unique_id=1685859924 instance=ExtResource("7_trainer")]
+position = Vector2(1040, 1456)
 trainer_id = "kanto_route_6_camper_jeff"
 sight_range_tiles = 3
 npc_id = "kanto_route_6_camper_jeff"
