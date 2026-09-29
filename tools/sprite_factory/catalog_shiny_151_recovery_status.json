@@ -1,11 +1,10 @@
 {
   "appearance_review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/index.html",
   "counts": {
-    "battle_review_pending": 11,
+    "battle_review_pending": 12,
     "locally_admitted": 32,
     "missing_compatible_shiny_source": 86,
     "scvi_material_hold": 4,
-    "visual_hold": 1,
     "za_binding_hold": 17
   },
   "date": "2026-09-29",
@@ -2243,24 +2242,25 @@
       "status": "missing_compatible_shiny_source"
     },
     {
-      "appearance_approved": false,
+      "appearance_approved": true,
       "battle_approved": false,
       "geometry_motion_sha256": "6b85b463b195ebddd7b966a60cfbe79dbd0298b94f283589af244e89c37a2e11",
       "media": "za-v3-review",
       "national_dex": 802,
       "original_hold": "ValueError: Official normal/rare material tables absent for this source",
       "original_normal_sha256": "5e35e94692f111a9df23d4b07f484525764cb75084c1ec156dc4afa0d2d0cd58",
-      "reason": "Native attack colour-mask motion restored and source zero-specular colour layers applied; updated appearance review with reference image awaiting user acceptance.",
+      "reason": "User accepted the corrected normal/shiny pair after explanation of the temporary Zenith attack colours; exact v3 scenes pinned in recovery receipt. Battle qualification pending.",
       "release_approved": false,
       "repair_review": {
+        "appearance_acceptance_receipt": "tools/sprite_factory/catalog_marshadow_mask_recovery.json",
         "receipt": "tools/sprite_factory/catalog_marshadow_mask_recovery.json",
         "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/marshadow-motion-v3/index.html",
-        "status": "awaiting_appearance_review",
+        "status": "appearance_approved_battle_pending",
         "url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve/review-v1/index.html"
       },
       "runtime_approved": false,
       "species": "marshadow",
-      "status": "visual_hold",
+      "status": "battle_review_pending",
       "variants": {
         "normal": {
           "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/shiny-151-recovery/za-probe-v3/marshadow/normal/model.glb",

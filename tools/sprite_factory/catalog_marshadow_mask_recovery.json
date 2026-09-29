@@ -2,8 +2,8 @@
   "schema": 1,
   "date": "2026-09-29",
   "species": "marshadow",
-  "status": "awaiting_appearance_review",
-  "appearance_approved": false,
+  "status": "appearance_approved_battle_pending",
+  "appearance_approved": true,
   "battle_approved": false,
   "runtime_approved": false,
   "release_approved": false,
@@ -654,5 +654,20 @@
   ],
   "user_feedback_clarification": "Tinten of gekleurde delen kloppen niet",
   "correction_followup": "Set body_a specular to zero, matching SpecularLayer1..4Intensity=0 in both pinned source tables; native colour frames unchanged. Added Sword/Shield reference screenshot to review page.",
-  "reference_image_url": "https://archives.bulbagarden.net/wiki/File:Shiny_Marshadow_Comparison.png"
+  "reference_image_url": "https://archives.bulbagarden.net/wiki/File:Shiny_Marshadow_Comparison.png",
+  "appearance_acceptance": {
+    "date": "2026-09-29",
+    "user_feedback": "oke, dan keur ik hem goed",
+    "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/marshadow-motion-v3/index.html",
+    "variants": [
+      {
+        "variant": "normal",
+        "runtime_sha256": "0ee018498953bc63e751be2c7b4db9c83243b0fd3031a977836f851150efcfe3"
+      },
+      {
+        "variant": "shiny",
+        "runtime_sha256": "80481c955d38e3a869178b7d48df76cda6525e9ba135fe1be4d04ad4180ec8ab"
+      }
+    ]
+  }
 }

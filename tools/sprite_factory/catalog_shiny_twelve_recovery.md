@@ -2,8 +2,7 @@
 
 These are review candidates, not approved catalog additions. The existing
 671 base species plus Mega Dragonite remain unchanged. The 151-case ledger
-now records eleven appearance approvals awaiting battle review and one
-Marshadow appearance hold. The original twelve-pair receipt remains immutable.
+now records twelve appearance approvals awaiting battle review. The original twelve-pair receipt remains immutable.
 
 `catalog_shiny_twelve_recovery.json` pins 24 corrected GLBs and standalone
 Godot scenes, their source tables/textures, motion files, reconstruction
@@ -82,3 +81,9 @@ motion are unchanged. The review page now includes an attributed Sword/Shield
 comparison image; its lighting differs from the review studio. Appearance
 acceptance remains pending; neither the clarification nor the follow-up question
 about temporary battle colour changes constitutes approval.
+
+Final user response: “oke, dan keur ik hem goed”. This approves the exact v3
+normal/shiny Marshadow scenes, recorded with runtime hashes in its recovery
+receipt. All twelve pairs now have appearance approval; battle qualification,
+catalog admission and bundles remain pending. Earlier holds above are retained
+as historical context, not the current acceptance state.
