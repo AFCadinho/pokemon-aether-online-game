@@ -1,0 +1,995 @@
+{
+  "schema": 1,
+  "date": "2026-09-29",
+  "appearance_approved": true,
+  "camera_grounding_checks_passed": true,
+  "runtime_lifecycle_check_passed": true,
+  "runtime_approved": false,
+  "release_approved": false,
+  "user_review": {
+    "battle_approved": true,
+    "feedback": "Alle zes goed",
+    "scope": "six normal/shiny pairs, size and poses next to Dragonite in both cameras"
+  },
+  "entries": [
+    {
+      "species": "unown",
+      "variant": "normal",
+      "glb_sha256": "1e4222948c3f5fc22c2317a62379374b8b7190d9f3b49520c1a8f1cb9efdddaa",
+      "runtime_sha256": "0c5aab537888fa4725717f7efb829cf259c2d0d4e976dc6b7bd6ff1688a15679",
+      "minimum_idle_logical_pixels": 64.6207275390625,
+      "minimum_clearance_120hz": {
+        "damage": 0.174428358674049,
+        "faint_loop": 0.0366235747933388,
+        "faint_start": 0.0400880798697472,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0564136728644371,
+        "physical_attack_2": 0.0319346934556961,
+        "sleep": 0.121192574501038,
+        "special_attack": 0.0341794975101948
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "unown-normal"
+    },
+    {
+      "species": "unown",
+      "variant": "shiny",
+      "glb_sha256": "a09ac738d15e9b4a7f77b450f01ca6aaa78f61a4b61090d3b954f0f6870eb6ad",
+      "runtime_sha256": "40b3599a2dabf736eef5c95cb6c05545ef6e1f861231b1c514456555ae696ff1",
+      "minimum_idle_logical_pixels": 64.6207275390625,
+      "minimum_clearance_120hz": {
+        "damage": 0.174428358674049,
+        "faint_loop": 0.0366235747933388,
+        "faint_start": 0.0400880798697472,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0564136728644371,
+        "physical_attack_2": 0.0319346934556961,
+        "sleep": 0.121192574501038,
+        "special_attack": 0.0341794975101948
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "unown-shiny"
+    },
+    {
+      "species": "darmanitan-standard",
+      "variant": "normal",
+      "glb_sha256": "0c075586b639ebb39cf8f1f04b05a0cc7b605aa06b06f8b5445f7356b90b10dd",
+      "runtime_sha256": "1d00c7b3112c2c65f5d46b9fb86237f6415602de26c81db0cf578942c473b57e",
+      "minimum_idle_logical_pixels": 118.945678710938,
+      "minimum_clearance_120hz": {
+        "damage": 0.0300000086426735,
+        "faint_start": 0.0297108292579651,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299362223595381,
+        "sleep": 0.0300000496208668,
+        "special_attack": 0.0299999937415123
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "darmanitan-standard-normal"
+    },
+    {
+      "species": "darmanitan-standard",
+      "variant": "shiny",
+      "glb_sha256": "ae1ba7038052d972cc53340510fc1200ddb5b4d4b9a7cea18723721eafa883cf",
+      "runtime_sha256": "56d0f61739018d4e2b4cd5cc987e0772bee311c0be4abaff685ec612b9de727b",
+      "minimum_idle_logical_pixels": 118.945678710938,
+      "minimum_clearance_120hz": {
+        "damage": 0.0300000086426735,
+        "faint_start": 0.0297108292579651,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0299362223595381,
+        "sleep": 0.0300000496208668,
+        "special_attack": 0.0299999937415123
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "darmanitan-standard-shiny"
+    },
+    {
+      "species": "wishiwashi",
+      "variant": "normal",
+      "glb_sha256": "de814f26d9125d007fda6fc8a50fff07d05e8892afa558b3996b7cc01ba982a7",
+      "runtime_sha256": "8ef097dd2f07b7e3d2c57af842540f85f370e58a5a5df585f448cda28391e650",
+      "minimum_idle_logical_pixels": 60.84326171875,
+      "minimum_clearance_120hz": {
+        "damage": 1.2013932466507,
+        "faint_start": 0.732677936553955,
+        "idle": 1.28728580474854,
+        "physical_attack": 1.23444247245789,
+        "sleep": 1.28732442855835,
+        "special_attack": 0.988505184650421
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "wishiwashi-normal"
+    },
+    {
+      "species": "wishiwashi",
+      "variant": "shiny",
+      "glb_sha256": "784f100297aa599bb15ebe5d386cf16871a9608c0606e2dd7c3981b91cca6b0c",
+      "runtime_sha256": "51a8e54675b23d3820de87e74b295620fdfdeaa03df483463472f293ccbc5dc0",
+      "minimum_idle_logical_pixels": 60.84326171875,
+      "minimum_clearance_120hz": {
+        "damage": 1.2013932466507,
+        "faint_start": 0.732677936553955,
+        "idle": 1.28728580474854,
+        "physical_attack": 1.23444247245789,
+        "sleep": 1.28732442855835,
+        "special_attack": 0.988505184650421
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "wishiwashi-shiny"
+    },
+    {
+      "species": "silvally",
+      "variant": "normal",
+      "glb_sha256": "f115ae3f73508346263dc776879eafe6f480ba593402ed92bbdd9ba26778d7c2",
+      "runtime_sha256": "9d4643c0e036159a9c43cc82a0ebca1a7c3c428eb4333402742a715511cb5dbf",
+      "minimum_idle_logical_pixels": 110.244140625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999564886093,
+        "faint_start": 0.0299993641674519,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0297562628984451,
+        "physical_attack_2": 0.0299951191991568,
+        "sleep": 0.0299999695271254,
+        "special_attack": 0.0299979113042355
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "silvally-normal"
+    },
+    {
+      "species": "silvally",
+      "variant": "shiny",
+      "glb_sha256": "1a7c31b43d51423ff06c273640eb6e7b85c77a7dd312cce3365c57f38b527fa4",
+      "runtime_sha256": "84b44ead3766f9778ec278454aee61a25dbb0a952b17256cf05b9657785ba5e3",
+      "minimum_idle_logical_pixels": 110.244140625,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999564886093,
+        "faint_start": 0.0299993641674519,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0297562628984451,
+        "physical_attack_2": 0.0299951191991568,
+        "sleep": 0.0299999695271254,
+        "special_attack": 0.0299979113042355
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "silvally-shiny"
+    },
+    {
+      "species": "obstagoon",
+      "variant": "normal",
+      "glb_sha256": "273dedfe46f3c800c768c099bf542500bd70efcc210ff6343a7fba2d23f8eb42",
+      "runtime_sha256": "494bffe9cdda6767eb49d4a5264e3f1b015addd7b08741edc4d4b38689946f6b",
+      "minimum_idle_logical_pixels": 125.013366699219,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299918167293072,
+        "faint_start": 0.0299790557473898,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0348296612501144,
+        "physical_attack_2": 0.0299513228237629,
+        "sleep": 0.0299829188734293,
+        "special_attack": 0.0297181271016598
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "obstagoon-normal"
+    },
+    {
+      "species": "obstagoon",
+      "variant": "shiny",
+      "glb_sha256": "e0add8ccd2604d2033e7457c7756b963c72f7d0af944cea6e2e5f6b242097da8",
+      "runtime_sha256": "c0e67171fd1f9b2036f9bf97d4702f60b766b49c52f01497cb47582b122f6479",
+      "minimum_idle_logical_pixels": 125.013366699219,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299918167293072,
+        "faint_start": 0.0299790557473898,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0348296612501144,
+        "physical_attack_2": 0.0299513228237629,
+        "sleep": 0.0299829188734293,
+        "special_attack": 0.0297181271016598
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "obstagoon-shiny"
+    },
+    {
+      "species": "cursola",
+      "variant": "normal",
+      "glb_sha256": "633fa7381c52a97c063b2b5183051e88c80f3a80bef9f916151a5916d0af0fa0",
+      "runtime_sha256": "4fb76c41daebf406c613c08924570c88ce384260968f894bfd2ea773a9df6a68",
+      "minimum_idle_logical_pixels": 101.064270019531,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999993294477,
+        "faint_start": 0.0299999993294477,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0297158509492874,
+        "sleep": 0.0299999993294477,
+        "special_attack": 0.0299999993294477
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "cursola-normal"
+    },
+    {
+      "species": "cursola",
+      "variant": "shiny",
+      "glb_sha256": "137c0ee9940f1e0b9c2a433c43633617ab81b78f660ed0b6023ea14fbbfbb50f",
+      "runtime_sha256": "2bc928a1fb0d7f9b3ddd0e83d3e24a9fb92bf4cd8846973005a06784ec15c3d4",
+      "minimum_idle_logical_pixels": 101.064270019531,
+      "minimum_clearance_120hz": {
+        "damage": 0.0299999993294477,
+        "faint_start": 0.0299999993294477,
+        "idle": 0.025000000372529,
+        "physical_attack": 0.0297158509492874,
+        "sleep": 0.0299999993294477,
+        "special_attack": 0.0299999993294477
+      },
+      "shots": 16,
+      "all_in_view": true,
+      "hud_proxy_overlaps": 0,
+      "profile": "cursola-shiny"
+    }
+  ],
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 6,
+      "frame_max_ms": 515.207,
+      "frame_p95_ms": 17.401,
+      "frame_samples": 305,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 1.727,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 1.791,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11,
+          "ms": 1.4,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 52,
+          "ms": 1.181,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 52,
+          "ms": 1.29,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 60,
+          "ms": 1.109,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 60,
+          "ms": 1.226,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 62,
+          "ms": 1.052,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 86,
+          "ms": 1.285,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 104,
+          "ms": 1.057,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 104,
+          "ms": 1.175,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 108,
+          "ms": 1.024,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 152,
+          "ms": 1.612,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 152,
+          "ms": 1.723,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 157,
+          "ms": 1.434,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 157,
+          "ms": 1.542,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 160,
+          "ms": 1.206,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 184,
+          "ms": 1.299,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 202,
+          "ms": 1.795,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 202,
+          "ms": 1.934,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 207,
+          "ms": 1.62,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 207,
+          "ms": 1.721,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 210,
+          "ms": 1.651,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 234,
+          "ms": 1.456,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 252,
+          "ms": 2.215,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 252,
+          "ms": 2.326,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 260,
+          "ms": 2.147,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 260,
+          "ms": 2.271,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 264,
+          "ms": 4.936,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 288,
+          "ms": 3.724,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 6,
+      "retained_source_bytes": 8273719,
+      "stalls_over_50ms": [
+        {
+          "context": "load unown",
+          "covered": true,
+          "ms": 515.207
+        },
+        {
+          "context": "load unown",
+          "covered": true,
+          "ms": 91.083
+        }
+      ],
+      "static_bytes": 289543280
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 6,
+      "frame_max_ms": 139.057,
+      "frame_p95_ms": 17.219,
+      "frame_samples": 303,
+      "load_spans": [
+        {
+          "frame": 309,
+          "ms": 2.088,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 309,
+          "ms": 2.143,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 315,
+          "ms": 1.069,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 315,
+          "ms": 1.19,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 319,
+          "ms": 1.511,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 319,
+          "ms": 108.038,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 361,
+          "ms": 1.115,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 361,
+          "ms": 1.223,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 370,
+          "ms": 1.067,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 370,
+          "ms": 1.166,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 372,
+          "ms": 1.026,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 396,
+          "ms": 1.07,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 462,
+          "ms": 1.456,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 462,
+          "ms": 1.562,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 467,
+          "ms": 2.116,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 467,
+          "ms": 2.24,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 470,
+          "ms": 1.336,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 494,
+          "ms": 1.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 512,
+          "ms": 1.959,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 512,
+          "ms": 2.106,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 517,
+          "ms": 1.444,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 517,
+          "ms": 1.547,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 520,
+          "ms": 1.57,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 544,
+          "ms": 1.53,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 562,
+          "ms": 1.637,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 562,
+          "ms": 1.738,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 569,
+          "ms": 1.666,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 569,
+          "ms": 1.769,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 572,
+          "ms": 2.423,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 596,
+          "ms": 2.498,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 6,
+      "retained_source_bytes": 8273719,
+      "stalls_over_50ms": [
+        {
+          "context": "load unown",
+          "covered": true,
+          "ms": 115.661
+        },
+        {
+          "context": "load unown",
+          "covered": true,
+          "ms": 139.057
+        }
+      ],
+      "static_bytes": 292808806
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 6,
+      "frame_max_ms": 103.329,
+      "frame_p95_ms": 17.24,
+      "frame_samples": 302,
+      "load_spans": [
+        {
+          "frame": 617,
+          "ms": 2.185,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 617,
+          "ms": 2.245,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 623,
+          "ms": 1.332,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 623,
+          "ms": 1.425,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 627,
+          "ms": 1.422,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 627,
+          "ms": 2.591,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 669,
+          "ms": 1.266,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 669,
+          "ms": 1.391,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 676,
+          "ms": 1.182,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 676,
+          "ms": 1.286,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 678,
+          "ms": 1.231,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 720,
+          "ms": 1.006,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 724,
+          "ms": 1.052,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 768,
+          "ms": 1.69,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 768,
+          "ms": 1.807,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 773,
+          "ms": 1.628,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 773,
+          "ms": 1.727,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 776,
+          "ms": 1.347,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 800,
+          "ms": 2.503,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 818,
+          "ms": 1.903,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 818,
+          "ms": 2.032,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 823,
+          "ms": 1.633,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 823,
+          "ms": 1.737,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 826,
+          "ms": 1.772,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 850,
+          "ms": 1.886,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 868,
+          "ms": 2.065,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 868,
+          "ms": 2.185,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 875,
+          "ms": 1.715,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 875,
+          "ms": 1.812,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 879,
+          "ms": 3.035,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 903,
+          "ms": 2.934,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 6,
+      "retained_source_bytes": 8273719,
+      "stalls_over_50ms": [
+        {
+          "context": "load unown",
+          "covered": true,
+          "ms": 103.329
+        }
+      ],
+      "static_bytes": 292912734
+    }
+  ],
+  "profiles_sha256": "625ac25668e60652845a7e67f64ec80c74d20d91bbb2485439776d3f7f5f5bc4",
+  "appearance_receipt_sha256": "3c00abf6b2415d3358e04452df10dc1a7fe95c7ed54b8a5cc862e978c0fe58c0",
+  "evidence_sha256": {
+    ".tmp/remaining-six-shiny-battle/final-battle/captures/battle-review.json": "dd452e211745e9e8f00b0aa764d8cf7e8ed2c6a4636a56bb1bf9f11c6c2f7bc3",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/battle-review.json": "d07afcdf04946ad23306a6c33b387d7a32a0d4077860edeba817893d23a855da",
+    ".tmp/remaining-six-shiny-battle/final-battle/catalog.json": "75ebf0ba6693a71309d9913d4e1d45e8b44fc18bb0bd6a8f89ffe7f3355f1755",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime/report.json": "e006aeca3019f0ed5567563357bf8675c13366d79190b437635c683a424a4d19",
+    ".tmp/remaining-six-shiny-battle/final-battle/motion-candidates.json": "3434b7054a37b411b14c72e8d42bcce404129e0c3d3ca059d4d82fa8dee77acd",
+    ".tmp/remaining-six-shiny-battle/final-battle/motion-candidates-v2.json": "e6b06474d4ed0a23ff687307651a9e1b7b06cd7fe9d517e85d3caf9951da5ebe",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime-catalog.json": "7d22241a5c7b0b827f020bec6afc6fcdd02411dad26202b1eed1f464f68b73f0",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime-fixture.json": "ee1ab58c7177cf7d4ca91fc50cd4785500c325e62845d1a853d86662550ae9d6",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime_check.gd": "5de63fa04990a23a35ff3b1e2783617275c2da7c55e243ff343e801dd4792a85",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime-stress.json": "cb7e413f748824902afa190fafccfb56f27eac9380fb589de264a923996708c8",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime-stress.log": "9a61d25924e06192f367b572211dd30e1bd30bac0f348992413a9d77ade5af8a",
+    ".tmp/remaining-six-shiny-battle/final-battle/refine.gd": "3d6a398efa849e65b0ba381dc5b753bbd37f103596a813b54672ed929a8f0685",
+    ".tmp/remaining-six-shiny-battle/final-battle/refine.log": "e0d5c96a12360705c29cc06b11a38b8c72ae24a027b33b594f0420da84bf5105",
+    ".tmp/remaining-six-shiny-battle/final-battle/index.html": "a7a599ee36ecc33f5da0a805afedbc77b2c7b0a5e423358768fee0e688bd9a4b",
+    ".tmp/remaining-six-shiny-battle/final-battle/make_page.py": "f8b9198fb9b669325d25c78132b1977b0edb9beaba10fb0c8374432171a0e905"
+  },
+  "capture_sha256": {
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-0-idle.png": "4e8b6a844b623f7f5ec03990c4953e54e0840b0faf52b541a443164d713a9094",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-0-special_attack.png": "a485ba0d9e29d09a4f1f426f17213b29da97c25a3fe741a2cd1217f0023fde0b",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-0-sleep.png": "8ae686c10ef5e5f6daf55f74d668daf3800d5f7720fb5da943a9f63253673f57",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-0-faint_start.png": "94b6534b94ab947ea5e375422337a0d7e6c229a0216252d61d5f98f2ed0e4605",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-1-idle.png": "12a51c6285b4c955afc578d1151bee249b3bed1437d2fa2c32d5ba654b4b061a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-1-special_attack.png": "578348d87992f793c5707406ecb3a58180329446d5ce15597ad8c93181447163",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-1-sleep.png": "f2666740cbdd28e99f1360b34ccfcee9b3f718be8aabf71a346dc0e37a08c7e7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-classic-1-faint_start.png": "497f350d45b87ce82af15ebca8e129f1e90f3557f9446d96fca0570566950bff",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-0-idle.png": "cf3792f3fe1113ca4bbdc0768124dad9a133fe08fc37b8cd16673e8dae97519e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-0-special_attack.png": "a0535747c64faf679b9c8f8eedcdb1bf16fabf049229582966f42d6e61a34676",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-0-sleep.png": "afc411564defa1d07ada8ad7c19fb23fa490f940359e5dca1ce67a8c80717f69",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-0-faint_start.png": "2c3c07c5b5d8c3676a952c3668b41dbe7401968e32b0691877dbff2619541e46",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-1-idle.png": "15905ab8ce1e91a9c06cd4972c256ad901f91e95d060ced124bd48099e37d444",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-1-special_attack.png": "cf2209b4c4f14cadadd1cf7ffbfb22e80b792d0280d9dc790cfbbbda0e267b82",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-1-sleep.png": "cc12c035a70861df9eaa2b0f03116a8c3b640a86b9f7e59c1c4e00264d5d7fea",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-normal-stadium-1-faint_start.png": "de8b5b1afbee1b1b1b9739ffbbd0950295df26ab62907c3ec891b3fc9ba928fe",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-0-idle.png": "66bb838c7bd5fc457efad65e3422ac8fa26a0575e0d0adf3fb02d9437d0342de",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-0-special_attack.png": "86fb38df22bb2da02dc4c68200b41b38b2e208075fd1bc0555d7a64c7a3ab4c0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-0-sleep.png": "29028d276a3404448110c88aeb80d252bb01fddab24126104f9a12419ac726b8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-0-faint_start.png": "dc6539e15875a6f08b653125d018ee6ebbcffe6a8bc46f0abb11cb20a79c3a36",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-1-idle.png": "0bb63f6d8f3f1a5bdb2b74f17853778e347d1bf604d2ac23c442f9d698363fc4",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-1-special_attack.png": "e71710c7361b66b1524990551f1fcc3dbec8321073eadfdbe211bd8571db9e6d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-1-sleep.png": "17b932591a4ebd2f4a6db35d9a8387b2a7009b2635e113423a54eff5ee0e01c7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-classic-1-faint_start.png": "fd6bd04af4f934faa2967f8d8bf6e48be3b6085b1b25557a5157730c9f975ac6",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-0-idle.png": "7f2764695ea9046a30540fe8ffd0df97ad3cabf8cdbb265355a047a0ff004c3b",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-0-special_attack.png": "6dc7c8ad3137392c15857f37a6ee6b73f2b67459ec529735321a89a15a25cf4e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-0-sleep.png": "b3bf927daf0ab36333cd94073e2db5afe1c812087edf901ee1d8be2043f76d9c",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-0-faint_start.png": "c415f843811d4c9a146febe5da7952f61f388cfcb3be94f5171b4023153e9189",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-1-idle.png": "80932363a73e3b133c5c76e271dd08a00c4435348e7fd74b1011b654a9f1d3d7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-1-special_attack.png": "a832310bd3d59f260810a36cc2ae6ff82a87591983d43c588a4e8b6dffb0b25d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-1-sleep.png": "cc85c3bb116772fefa4f036725bae63380eb6dd4630d4308480a97a16b80a31d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/unown-shiny-stadium-1-faint_start.png": "d98bf27daf2697f440e350f4a4ddcbb66116c9b061ce1845a536a6fba6c17777",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-0-idle.png": "e2ea4ba5315490385d6928d7c392bf287ee30a669deccd17e2374c7b3fc26522",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-0-special_attack.png": "dec2a2ec8d4e4f523022785b00c065bf846c9d7533890562f403251d48575f5a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-0-sleep.png": "47fdc0f25f371692d50c4e9200c3bf39d81486eccfb8de3a185c8ac42fffcab3",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-0-faint_start.png": "f4b34abae0d4bca5e03aeaf59fa401f7f274ca834ff1a13fcf685fe76782a301",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-1-idle.png": "4b95d88a56a9865075d8c1a283faae53ba5baee792998ebd0828b12911206b4a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-1-special_attack.png": "5255d2bdc88a471fd488ced411830e946344eb8110e0c0e294351a511f26a5a0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-1-sleep.png": "b9926a48baf4ae9d335830be7d08528bb3e669c414cf33a65b4fa83534a07ee9",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-classic-1-faint_start.png": "1a53b57f0aa935d3722b8ead27c2424b2e78bf847dd577fdcb947f3d1a065d9a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-0-idle.png": "ae00e2876d56d82c25d4eb7c944963a8e1a0a232bb7d49ee4830c418a28ea4af",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-0-special_attack.png": "f0485a690559a13dacf109cdc1dd561edc95e7c3cf8e93d684d0ea41fe84d303",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-0-sleep.png": "f69093947e6ebc079a81b0b8bbeb7c955207d7577e9efd770d53a2a663418d79",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-0-faint_start.png": "e8bc846306745ebd1b5a3ca6a54ae68f54d414981ac42e44f3afed43e416cc6a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-1-idle.png": "82f87215780c97181c1e58096a25780dd0779fbe41dcb6da0d5da25bf1982e77",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-1-special_attack.png": "d842f690c66d45f9ef27ccc1b96648cce6083ea2ab9055438ab6f886c04722a5",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-1-sleep.png": "b46c28eab79af54ee501cfdd10263ea68dba1b9c43ded73b10858b3d1d14e6b8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-normal-stadium-1-faint_start.png": "853664af764ae5672548f794b5b472d0ae8ea5b5da1843e8d21cdc41acecd8fd",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-0-idle.png": "d816f21502a6b0f0015092b110aac11ba53a43a2bc5932abefb61daa685c5402",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-0-special_attack.png": "c3796d866d1c07d9df84bc3022f10a5b1ba008ffaa562efda8b12b4f58b89ac7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-0-sleep.png": "ae1ed06e44eeb4f1e5179b06ca892d6d64903dbe5fca05c162e2016e39b476b6",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-0-faint_start.png": "e64a15ac3c83ad03006e78e9cd2116ed40435879d372e8899a0d1502ea3ce640",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-1-idle.png": "3365267e6fc980eb618becbb8a5262ef2fb2455d32e91f2ae4999f34618a41cb",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-1-special_attack.png": "506856d5ae78c1a538fb6b2d4e7e3b3670339b63a414a249683526057bb18d5b",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-1-sleep.png": "8127877c962f2ea104842863adfe9ce556b347170d12338c620c6a64b40e67f0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-classic-1-faint_start.png": "8fbc4287f6d5c978a95753535c5e9e139e12f286a101c98b4b1e1a845ea03b06",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-0-idle.png": "4007a4f008e63be36b512f9e22663ca6acd9fd4ec3aaec82aa3d4b33208af8df",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-0-special_attack.png": "476b1dff37eadaaeedf66422d24e9db9ee369aa6ae027448e079d9950489bdeb",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-0-sleep.png": "665c236d380e20acf34547c892f9143b02021ff7d6dee7847ef0435a072f3dc6",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-0-faint_start.png": "e0d25d8dfbb528cb8768105827b0d2d8f1abe9fa445917b9a5e25fe0b8df21a2",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-1-idle.png": "9004acda94d401e06712e2e86aff96c885e4d8a66324c362e6864fbcdf5a2051",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-1-special_attack.png": "19925f201f93f324cebfaef1b2c7782cb2109ceaca71bb7ccbdbb1cd02c1b064",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-1-sleep.png": "aecd083909148086c2a420430fc578b92d8e089ee22b607eb9217fe63372ee99",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/darmanitan-standard-shiny-stadium-1-faint_start.png": "015a4abe47b7b2857e6a7f3868aa2096c45018e6cd025fddb1c697a6881154a8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-0-idle.png": "8398f44c9476bf1f0d9bcd01353f6c64097aebbcd3af67f62eba83c31c3105ab",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-0-special_attack.png": "1eca12f683732513385e361ebcc8fbec4f97906296019ad3a15dff6da36054c6",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-0-sleep.png": "7f6492dd2d457eb26dcd5d613787a43fdc36e6c1654e344d1781c038698ea911",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-0-faint_start.png": "b84dabefb1516e6d8a576babf798c474622f7d3d9b3d3a2fb1618be452e5432a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-1-idle.png": "c93da665c1861132aa66575eee1642846e74be976a16497f15dc4f01e68ce025",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-1-special_attack.png": "5d5ac6b6b1a5a9e75b6bf7f7dcb9f189359ed63409d9b1d319e9a68671d06006",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-1-sleep.png": "0b5ccb0a0f4f6b26b361cc88ed37ffb18cf1604a30137883fad462041d68b8e5",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-classic-1-faint_start.png": "1de7b42e87b20a84cebb94cf9b696a2decb7d847cbb127c2d80cea1ec617d53e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-0-idle.png": "5bbfbdcb8817a01426b5d7908ce94012b27b8b8b81e769b786a0d9f73dfb450f",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-0-special_attack.png": "c84d2bc465a162358156d6c6f5f9b134f7901258714a8bc539bf1eb0dbb5f4e7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-0-sleep.png": "e93d1484b767de158ef0f078cc8bee2ff511582a19db7ec1dd68af2e6c2d9918",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-0-faint_start.png": "18d83abcee46e1bb005d8b233cd89a00f1b241152f7c423b58536bfcde2f93c0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-1-idle.png": "e70ce0c8184e34e0792666163f36aa8336d72e2420a386f6ea37867575bba926",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-1-special_attack.png": "b08bcc2c1d9e7d27bb5a48d75eded01efa7c2e96048ccdda35dc788d0979541f",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-1-sleep.png": "86bbbc2d5af45be0bf09824432f1ac662187a4d1506fa0635b417889bf9cb2cd",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-normal-stadium-1-faint_start.png": "a9161a76e733b9c1c8f9574348ba0a1b05b261adb7988e369b6a3e17bc925828",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-0-idle.png": "23fccb55388800e508fff877ba947e5b8ab3813606969329c9c75a020d84c4fb",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-0-special_attack.png": "3736c47017a3250e22b2fe52eb50cd6788262004c9cd29ab231b5e173d686315",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-0-sleep.png": "8090011eef88c5ef09306484062282e8f38a4f0de1a77f9ad3ef7cf818f31a89",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-0-faint_start.png": "8bb6dcf7a050c94dfb51d7acce8f41e8218ddb28b7450ef6ad96ecebe8263e5a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-1-idle.png": "edfc993a3bdeffc3526500b935be627bf72f15a873e0c5f20fce12aabc9b3085",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-1-special_attack.png": "f3146dc4c1ce6073279c3ac68c6e9b9971ac09befe2ea6ce4ac5d475e19e7d8e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-1-sleep.png": "4c99c1012bde67d85c73d8c4d70e7cf90844d84eff54d8ca3f7343e3301fea8c",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-classic-1-faint_start.png": "338d5cfd5e3ddd456b3e65e19f72dbd7b71a18a6f95926ff99218dcc7ef5eb69",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-0-idle.png": "f9d7866be240da4b30b7b44f064f3c5a63e8e02a6f93b7d0bde2ebe7516d7443",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-0-special_attack.png": "e27b45d8b52d60716c220f6f7463137b323a3e1e1ae3992874526ff02b88d7c7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-0-sleep.png": "94e91897b38c6a76fa363df54dd60d0c3d04747dd37c8daaa472ed9bd06a8b8b",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-0-faint_start.png": "9bb0e4f758989e0ae04a929cb546fc7876a80bf3ab5592833c494b2faeb365b8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-1-idle.png": "455e4c9614b218942628ed688851b15a1e72530a90b1a784b96932d17e9be1aa",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-1-special_attack.png": "36c74c1fce58041e1197df97651148cde3d913e569ed92c593a2c3ed0c8956fe",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-1-sleep.png": "a1f54667402d8d9f83629762c7f801b3d374e99389b72bc19afdbb5d77a922d7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/wishiwashi-shiny-stadium-1-faint_start.png": "3f2c9bb3b1948dbb3204ad2d452bd45552981da271f195b8d743712563cea013",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-0-idle.png": "676f6bae763ee84cae5fec3e4ad75c289bd38aed29c68eca3827a29c13b9eba7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-0-special_attack.png": "979c053eefeda2c0ecaa89791ff0f68e8361bdb37565ffd1660b9aec3fed34ee",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-0-sleep.png": "f0ac60b72d28a5074d0cac5bb69f413e5a4a2b6f0ab9f552819c2ea0fc8d2db0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-0-faint_start.png": "00e7cf8dd41bfc81d1aa1b83d8a20b8b0294125e6fc8bb6f2ed22627a99f062c",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-1-idle.png": "1bfc2cf60702af7ba0a28ed5612a2d13a53008c383e052eb3114a0b53520cfa8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-1-special_attack.png": "9085109c13bff5b68eb81bbd29b95519464b041e2623ef34c804870ee58a563d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-1-sleep.png": "aef51615692515c5453fb83e25096ed58fd8b2721752fcd6765d386cbcadbc46",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-classic-1-faint_start.png": "e5475e8e8a7129dc80dfd92a910f883b3eb748099191148edc9b6239fbd714ff",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-0-idle.png": "c0182c73d22ef65eb7bd2a49c59a642444443add4b4f106d515967344b284397",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-0-special_attack.png": "bac8c1b74ae429e683b4d89b3d65f8bcea665a3df79337fe044009481bbb364a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-0-sleep.png": "868ba7112d8db3defba2478d30009fe91b67e3137cabeb84d4c9c94e08badc9d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-0-faint_start.png": "efdf3aa515a6ca704a6db8457f08a8b114e098706c0413c5ca7dcb32087b5bda",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-1-idle.png": "78726d94826b3215d0a2c390d733356b1218d91841637c45900dde248aaea33e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-1-special_attack.png": "984b40c80122245a872796f563f4bb6b4d63ccd5017229dadaea1add91ac18e2",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-1-sleep.png": "c221e45803d086300cd4c576e63fc27a7fbd7654c757528966232f52ae5654a5",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-normal-stadium-1-faint_start.png": "4e1e1f9ca741ece14bf1d7e815b47f553e0db1cb1f114f37c7e499ed87886da9",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-0-idle.png": "6bde2d5dd7a3d28edb1d6e534d6c9a7c6b1b0cae2f4f7c7e52d16606fa76b1a1",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-0-special_attack.png": "fd50365491eb5f880c4b86503363bed872f08463b4ffa719dec34d3c72b7becb",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-0-sleep.png": "9b0ec99e90484fe439038ae46e47be726ddd98c7047be741647585ba8c6fa4e1",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-0-faint_start.png": "9e1c6cab77ee44766ca8c7da27daa68c6e345435633b4a23df48e04e0744a4bc",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-1-idle.png": "7784891a973f873ac94b94836bbc4033f1f0bbbd5e8e761d9e3aac102cb6c7b0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-1-special_attack.png": "43549b778859ee2054c5f9c74f174e7e9d568809ba7a1fd953ca0b7fbdd955c8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-1-sleep.png": "c42ad578ebdb9d4fec5193c7977baa51a91b5a0a66f899139426adeb1cd41997",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-classic-1-faint_start.png": "9c37aec3bc5869e720f62a62a12b0f1a6345e54adfa72047b25c5c38c28c5d05",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-0-idle.png": "339386d87f2f31ee7d4240caaf14dd66ca04c6c3e7ec48d215d81a9f8f9aeb0f",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-0-special_attack.png": "b597055af7d5c5f984a0f0f6d9cbae151de4da7012039beada04d98ab4e211e6",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-0-sleep.png": "e4621ba6376eeb8a732d4d19b8bdbb757b453b84b593e7651fe730807d042d1e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-0-faint_start.png": "2e08f4385d4de522165f30fea8ce7187a131b2204f12c1ff7cab241103e9fd90",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-1-idle.png": "b4400dff6153fb9f78b45035e27a87d0bd58ed5f601e056f09380f5f7af5ba10",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-1-special_attack.png": "03759051018a7584449a3ad7557819e22435f11a59fe30f67e9ed3b99d42a518",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-1-sleep.png": "1c68c8dd2b11498c31b4ba4afc1dff01f2add273edb3fc57a12e4e0d69f4af94",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/silvally-shiny-stadium-1-faint_start.png": "651da99b5a1c3ed29f7b75442245552804fe757e3f480a66d26582d7ed7e9daf",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-0-idle.png": "5c49c2add4b7a1f04fc65111a7d5cdf6978d9b47e5fd3c18453f69b30c79093a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-0-special_attack.png": "afdb23975fcfd728806aeac4790ea973175fab613c174e347ec2d292030d9c3d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-0-sleep.png": "98da4b150add653e1b3153e6859c8a5ec7434fe8589091fcd68e55d57bafd891",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-0-faint_start.png": "0ba2cb99e71274059220f8e311e32c40818bfd48523d9fc54dd294aaadd5e7fe",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-1-idle.png": "b7f9f5f9d863483db1957e19a66b1c7a41e8cb9fdf70322fd506f28b8433c356",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-1-special_attack.png": "c59753dbbc750cdd2ca43e10245257801087ebf3f4d38488b0553200f6adc92c",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-1-sleep.png": "c5ee7b7c38d545ce16d4633e39e08ae565d2bf5fb6ec06103377d1722e9db7fe",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-classic-1-faint_start.png": "8902c69a7565c972ad1862e26190542ca674ffa223a58ea515bcdcb58287b1e1",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-0-idle.png": "289c0497f7ea9309e6b46d579557f8a51a15f4dc7ca3e7723066f5a2d2150965",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-0-special_attack.png": "237e302d120d652be8360b9047cf014062b8eace2ccadee5b7f9591918577aad",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-0-sleep.png": "0d61da73b91d50efeabbd182d08a98a210026fd8ea33db0b03b81392834a38d2",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-0-faint_start.png": "ef2083943db61d08de28e977f6ef97da1dd905ae065ff519117b0aaafa6918b8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-1-idle.png": "be88dbcb0e7e3d69c3a355bbcba6a6a666238fbac99dd3583f73c3a4eaf75513",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-1-special_attack.png": "a643a3d65301e499708febce0cbdf809770c6b76c83a80ed0410acbfd30ea7a4",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-1-sleep.png": "5162f51362a3f541ffc33f6d09ff6af3b3a37eceff63eeff15c1c00a73322883",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-normal-stadium-1-faint_start.png": "0252670e3e1b13ce392d9b95b3a513de7dba4110363d45d8a605623037be1e99",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-0-idle.png": "f1ec5c4c108421ff4e915cfd434fc91f7403d64f803bd2da053b035f913b14c7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-0-special_attack.png": "c200a36f8faa3f1167af02575dc8d4e81deddb9815a3bb84ee820d3c897da7ce",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-0-sleep.png": "a3086832d8606c10afcb4785c91a672c0d43b9cac074457e7766241dd27cd045",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-0-faint_start.png": "06034914c775bf3715aabc31528faaddc25ce004ab55c46a14b970793ecdff78",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-1-idle.png": "503af48a4fcba174a9b639ffe6c7467a1920ca8d808cab8a6eb7c7a0e0aa1cc5",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-1-special_attack.png": "d5280e61626a2fd9a16648ff81e0c05177946846872b612828faa32e7afa772c",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-1-sleep.png": "85e9ce3645aba220017fe1da3b16b4cf1a23653b847e7f7e9c41fccf4cfe3dae",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-classic-1-faint_start.png": "44e3d80cd7bb64567663919e11d42b3395fe99eac04a8fa43d59ef172f096e48",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-0-idle.png": "c5c001ddfc16d767bef305d9e95aa3612cb69b39f397b0dac9a4909a54f31aeb",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-0-special_attack.png": "c57190c45e704beb8f3f1b35f0cbcb643005f5f064716a76cd2e88198359d8c5",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-0-sleep.png": "0e0f19e4472008136bb0c9ae9cdb5d2b528c9d6e6f0cb9572be3bcbf4d0ecd3a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-0-faint_start.png": "8654ab6a1ee497d2a1208a2519e394b492fda5add0725cf53db2567098e2a682",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-1-idle.png": "03d26e33abd1cb1d10807edcd4ec9246c6433ee87c60573921fb56ea3767bf6a",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-1-special_attack.png": "72e2c4363b0b77fe6bcbaaebd3ac80f7dea0a3e7e2fb53c6cbd9df6cc1aeafbf",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-1-sleep.png": "0a425bfaa9a9a85c4cf5811dd1a4f5b72225c5644f794cdd409e74c6ea81f2ff",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/obstagoon-shiny-stadium-1-faint_start.png": "f942a6f99f96fa5b3c9ef974d3e589282779fa5994191aa9bf33fb87b3cd4841",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-0-idle.png": "dac819cec259b8f43d8209d64603402e502a505b1997e367e628d2b4fd9212fb",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-0-special_attack.png": "59da3524b9203817d4182b55090cf6dd036e4944d492b530b8c6057f07d7fcef",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-0-sleep.png": "4e296267939ead46eba6d758e1a25b59c58af504415c62a97e970ca6182e50bc",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-0-faint_start.png": "160893b3a7d10d9872c082a2b3ad0bee59cde257525292a2f7302925c013e6fd",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-1-idle.png": "f23d061c7dcd77e0b1dceadbbec2b85179098aac311c928af1b35f05f3bb7bec",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-1-special_attack.png": "b15b381d30d49db5023f906d3d689bbdcf64afc0d0f833b8dd249c51b44cf0a1",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-1-sleep.png": "a41aaab4fd5a52b903746c7279ca2f3c87f0b799d3ef16f758eca73959262cf8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-classic-1-faint_start.png": "b7df0bfd76a0a02440892de2aba5d8e6d90c22aa4ea8b78d3bd501971b655095",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-0-idle.png": "b139cd3ac6e03baf2833e229d79677d1ccba0bac3893e16e4a96d825e8566b10",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-0-special_attack.png": "95e7a4a44d18a8441105beabcf002fe6f404660fdc4a5e30379cf28de97e3439",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-0-sleep.png": "f340ded1b3750cef1457beebb1142c3cb8897e8da13ce1135678596b2ba0ad9e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-0-faint_start.png": "9005bb04b1fd1ed53dc40812651cc2b41518ee72fa46551b9b5d6bd713ebfae0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-1-idle.png": "21652a0186821d889f65413b2336c636e37a3690373c5a4e4c8d25086d60ba5f",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-1-special_attack.png": "40b421433b4ddf189460ed45dfd0e616fd93c12fa71b01f327b0f1ed2330d095",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-1-sleep.png": "14be0dc87754cb1a1501999e478cc0e2777e7299c15ca198921bea99789a92d2",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-normal-stadium-1-faint_start.png": "b92524b769400ff674c9b7ebafa062927321f21343ff0c86fc6cd06b8f8cc6fc",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-0-idle.png": "4a8c74eb38736d51ce794a145bf2ff74668d7c7dd9af7835f5320f929d2ce84d",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-0-special_attack.png": "bae0fbac550c7a0978056c8dfd36a985b5b2aa55d54cace8843ca8248511926c",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-0-sleep.png": "40dd3b1fe959c5da8d0feaf5784c36d38e0bed6ecd01e669a506c930cb24c481",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-0-faint_start.png": "e3a25251094978bcdc3f975201d198b100723e47ca0a6aee25c25649829fc6a3",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-1-idle.png": "a85396e49cad84a140ce55a7fe5328364ef0ee437cbf63e5cb28bc5f6bc9e3a5",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-1-special_attack.png": "3aed3b2f82504e39678d87a82108214415ee92788218ed822ea6ef6ff1a890de",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-1-sleep.png": "2d83f5b2c01aece8bd3bafb6ca0d0aa1440e91d520844bed86f795c8730fdff8",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-classic-1-faint_start.png": "b632b15c5812e65357035207ab61d172067d9224dfc37ec63b6194d5d0e7a5d3",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-0-idle.png": "192ff1885f0a6beaee077adbb6c817f0ba2970effa74a7356494aab6499fade7",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-0-special_attack.png": "455b78d7815e2ec8ea59ae76af460c6d699060b1d5f01d7b3e86ebe3847772c2",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-0-sleep.png": "5c52fee9e4c4c7a4d1a94c3d49b0bfae7bffecd4fd80b790ce48034a13e30135",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-0-faint_start.png": "15f19717d0675420d9a3adf3519392c0a2c7620b4534d808d9bfe82f2927b5a1",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-1-idle.png": "9b1197b008b1676229e20a4d1a7dad934c3c81ae7fd8963c1722e8af899985f0",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-1-special_attack.png": "7fc8cd96f5414990646eee1d82b6f16c3bfc501c23d37099e8862cd6094ae47e",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-1-sleep.png": "0eb609f28509de8f100db96977ab6d6ce68c65bb8dbc4ee4b9fff4257b52a181",
+    ".tmp/remaining-six-shiny-battle/final-battle/captures-v2/cursola-shiny-stadium-1-faint_start.png": "e5e7800f728626ccc1dd3ae86068209e75a4513183a5f08d9482622ab822a5cc"
+  },
+  "limitations": [
+    "Flat floor; classic/stadium cameras on both sides. HUD proxy in images; actual battle UI separately checked by lifecycle stress.",
+    "80 native clips sampled at 120 Hz; final changed Unown/Obstagoon actions independently resampled. Unchanged profiles reuse exact-scene prior samples.",
+    "Wishiwashi retains the documented field-wait sleep fallback with open eyes.",
+    "Candidate fixture used for lifecycle check; individual bundle install and local catalog admission follow."
+  ]
+}

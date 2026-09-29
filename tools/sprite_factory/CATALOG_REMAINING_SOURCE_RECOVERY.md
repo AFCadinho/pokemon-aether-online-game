@@ -1,8 +1,35 @@
 # Remaining base-species source recovery (2026-09-29)
 
-This is source discovery and normal-scene diagnosis, not visual, shiny, battle,
-runtime or release approval. The historical `catalog_remaining_bulk_status.json`
-remains a snapshot of its original intake; do not rewrite its evidence hashes.
+The historical `catalog_remaining_bulk_status.json` remains a snapshot of its
+original intake; do not rewrite its evidence hashes.
+
+## Current six-form review status
+
+All six normal/shiny appearances passed user review on 2026-09-29. The exact
+GLB hashes, reviewed scene hashes, geometry/motion parity, local HOME palette
+references and user feedback are in `catalog_remaining_six_appearance_review.json`.
+The user also approved all six pairs in both battle cameras. The battle receipt
+`catalog_remaining_six_battle_qualification.json` covers 80 clips, independent
+120 Hz floor checks and 192 captures. Unown and Obstagoon received small
+per-attack clearance corrections; final sampled clearance is at least 0.025 m.
+
+Six individual bundles (22,832,475 bytes total) passed installation, no-op and
+restart checks and three installed-catalog battle lifecycle rounds. The game
+and launcher registries admit the exact twelve scene hashes, with one shared
+normal/shiny placement profile per species. See
+`catalog_remaining_six_bundle_qualification.json` and `admit_remaining_six.py`.
+R2 publication and desktop release certification remain separate steps.
+
+`catalog_remaining_six_variants.py` produces source-hash-pinned variants without
+changing geometry or animation. The original blue Unown is the shiny variant;
+normal uses charcoal with the same shading. Cursola shiny retains white coral
+and translucent branches, with a dark inner core/base and purple eyes. The
+earlier grey-coral candidate was rejected and is not an approved appearance.
+These palettes use existing HOME art as visual references because matching
+rare material tables were not present in the supplied sources. Wishiwashi's
+sleep pose remains the documented source field-wait fallback.
+
+The source and repair history below describes the earlier diagnostic stages.
 
 ## Six form-only Biochao sources
 

@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "date": "2026-09-29",
+  "appearance_approved": true,
+  "battle_approved": false,
+  "runtime_approved": false,
+  "release_approved": false,
+  "scope": "Six recovered Biochao forms: normal and shiny source-pinned visual candidates",
+  "palette_policy": "remaining-six-home-palette-review-v1",
+  "user_feedback": [
+    {
+      "scope": "Other five normal/shiny pairs",
+      "answer": "Zien er goed uit, maar als ik zo naar Cursola kijk, dan denk ik niet dat de shiny variant klopt. Is de grijzig en kleuren bij ogen kloppen niet"
+    },
+    {
+      "scope": "Final Cursola after revised core/base/eye palette; white coral retained",
+      "answer": "Cursola goed"
+    }
+  ],
+  "entries": [
+    {
+      "species": "unown",
+      "variant": "normal",
+      "source_sha256": "8e1deb6e7cf14e12f2cf52235c45035b913a7b9e60950fa4473683dd5248fafb",
+      "glb_sha256": "1e4222948c3f5fc22c2317a62379374b8b7190d9f3b49520c1a8f1cb9efdddaa",
+      "reviewed_runtime_sha256": "2671a7a3e8176b96a4443fd9106c497ec3ee800535c853b95d455cb14db7072a",
+      "final_runtime_sha256": "0c5aab537888fa4725717f7efb829cf259c2d0d4e976dc6b7bd6ff1688a15679",
+      "captures": 6,
+      "errors": [],
+      "geometry_motion_parity": null,
+      "appearance_approved": true
+    },
+    {
+      "species": "unown",
+      "variant": "shiny",
+      "source_sha256": "8e1deb6e7cf14e12f2cf52235c45035b913a7b9e60950fa4473683dd5248fafb",
+      "glb_sha256": "a09ac738d15e9b4a7f77b450f01ca6aaa78f61a4b61090d3b954f0f6870eb6ad",
+      "reviewed_runtime_sha256": "ad0fcfb41d528980314d3e4713b59a3dbc1a1acc231bea304592a48e0d399191",
+      "final_runtime_sha256": "40b3599a2dabf736eef5c95cb6c05545ef6e1f861231b1c514456555ae696ff1",
+      "captures": 6,
+      "errors": [],
+      "geometry_motion_parity": "489cf5c889cd68d17131809bdbc6d02fa382d470f1d9d78c7064083d92d0afcb",
+      "appearance_approved": true
+    },
+    {
+      "species": "darmanitan-standard",
+      "variant": "normal",
+      "source_sha256": "2bd48db021316e0ca499d9a569d9dbf4b34b03c514df5ed7de7367f76e9ac27d",
+      "glb_sha256": "0c075586b639ebb39cf8f1f04b05a0cc7b605aa06b06f8b5445f7356b90b10dd",
+      "reviewed_runtime_sha256": "837dddee547e157a2764a1fc34b54d57db6dc64beab84c90af4888dc96f238d2",
+      "final_runtime_sha256": "1d00c7b3112c2c65f5d46b9fb86237f6415602de26c81db0cf578942c473b57e",
+      "captures": 5,
+      "errors": [],
+      "geometry_motion_parity": null,
+      "appearance_approved": true
+    },
+    {
+      "species": "darmanitan-standard",
+      "variant": "shiny",
+      "source_sha256": "2bd48db021316e0ca499d9a569d9dbf4b34b03c514df5ed7de7367f76e9ac27d",
+      "glb_sha256": "ae1ba7038052d972cc53340510fc1200ddb5b4d4b9a7cea18723721eafa883cf",
+      "reviewed_runtime_sha256": "4188b06493a55f011238354342223e14732b3a9877d446a45fbbc633ef48d5cc",
+      "final_runtime_sha256": "56d0f61739018d4e2b4cd5cc987e0772bee311c0be4abaff685ec612b9de727b",
+      "captures": 5,
+      "errors": [],
+      "geometry_motion_parity": "558db425440b77a94df3e8c457ed147c5afa53878fdd92e713b71b59cda6f0d4",
+      "appearance_approved": true
+    },
+    {
+      "species": "wishiwashi",
+      "variant": "normal",
+      "source_sha256": "028fdad10505fcea05f8e03ef5dac10ada2fec7ab1077066e5fd96663b6ba669",
+      "glb_sha256": "de814f26d9125d007fda6fc8a50fff07d05e8892afa558b3996b7cc01ba982a7",
+      "reviewed_runtime_sha256": "f530a10ae37967e97e908cac1be897a4d5ccd2dae1306a1f453da5d1ddc1fb74",
+      "final_runtime_sha256": "8ef097dd2f07b7e3d2c57af842540f85f370e58a5a5df585f448cda28391e650",
+      "captures": 5,
+      "errors": [],
+      "geometry_motion_parity": null,
+      "appearance_approved": true
+    },
+    {
+      "species": "wishiwashi",
+      "variant": "shiny",
+      "source_sha256": "028fdad10505fcea05f8e03ef5dac10ada2fec7ab1077066e5fd96663b6ba669",
+      "glb_sha256": "784f100297aa599bb15ebe5d386cf16871a9608c0606e2dd7c3981b91cca6b0c",
+      "reviewed_runtime_sha256": "66c58f54f46ea44c9e32e1a55e5f7e09bcc84fd4ce95f642bfe8dc65abba2631",
+      "final_runtime_sha256": "51a8e54675b23d3820de87e74b295620fdfdeaa03df483463472f293ccbc5dc0",
+      "captures": 5,
+      "errors": [],
+      "geometry_motion_parity": "c5a144a4fec9c5c4f4279a634b2dbe1f5f9e764724d5c6c07bb3cf672d18092b",
+      "appearance_approved": true
+    },
+    {
+      "species": "silvally",
+      "variant": "normal",
+      "source_sha256": "25ab80539f2636429ef5e65087ba27e75946261283629da3a1e58c789ae7bb8f",
+      "glb_sha256": "f115ae3f73508346263dc776879eafe6f480ba593402ed92bbdd9ba26778d7c2",
+      "reviewed_runtime_sha256": "2051a6549eafce21f9ea1dbc36e49b6fa57624c6b5ffc382325ae5167f296e01",
+      "final_runtime_sha256": "9d4643c0e036159a9c43cc82a0ebca1a7c3c428eb4333402742a715511cb5dbf",
+      "captures": 6,
+      "errors": [],
+      "geometry_motion_parity": null,
+      "appearance_approved": true
+    },
+    {
+      "species": "silvally",
+      "variant": "shiny",
+      "source_sha256": "25ab80539f2636429ef5e65087ba27e75946261283629da3a1e58c789ae7bb8f",
+      "glb_sha256": "1a7c31b43d51423ff06c273640eb6e7b85c77a7dd312cce3365c57f38b527fa4",
+      "reviewed_runtime_sha256": "3fe6e634a523ac23a87d2c848db1e1437f0255cd10a53a95fa77d773e45e146f",
+      "final_runtime_sha256": "84b44ead3766f9778ec278454aee61a25dbb0a952b17256cf05b9657785ba5e3",
+      "captures": 6,
+      "errors": [],
+      "geometry_motion_parity": "22955fbfbb15e9aac076a03374b5388f4f113f23bd438253433843a1f300c10e",
+      "appearance_approved": true
+    },
+    {
+      "species": "obstagoon",
+      "variant": "normal",
+      "source_sha256": "bc0043d5fef6670097ca875a90d4f452f9eecc2ea44035a68048a812710ddbbe",
+      "glb_sha256": "273dedfe46f3c800c768c099bf542500bd70efcc210ff6343a7fba2d23f8eb42",
+      "reviewed_runtime_sha256": "93a2d27a7c8a8fdd4deda90f0baa23c43c8d6560097ae5e85d96d43b6d0067d4",
+      "final_runtime_sha256": "494bffe9cdda6767eb49d4a5264e3f1b015addd7b08741edc4d4b38689946f6b",
+      "captures": 6,
+      "errors": [],
+      "geometry_motion_parity": null,
+      "appearance_approved": true
+    },
+    {
+      "species": "obstagoon",
+      "variant": "shiny",
+      "source_sha256": "bc0043d5fef6670097ca875a90d4f452f9eecc2ea44035a68048a812710ddbbe",
+      "glb_sha256": "e0add8ccd2604d2033e7457c7756b963c72f7d0af944cea6e2e5f6b242097da8",
+      "reviewed_runtime_sha256": "d4879bfbb40ca7e00e2e656ca6ebf7454a3179540fa6641d5af710726723cd1a",
+      "final_runtime_sha256": "c0e67171fd1f9b2036f9bf97d4702f60b766b49c52f01497cb47582b122f6479",
+      "captures": 6,
+      "errors": [],
+      "geometry_motion_parity": "fcb49431a5b6b11496cae25f5e246d634efa809e37cc6c121969f7c033e7c34a",
+      "appearance_approved": true
+    },
+    {
+      "species": "cursola",
+      "variant": "normal",
+      "source_sha256": "393b3e2f6ec5adbdde009878602011e7d3cd4f4962225aeff1df75d86091d86a",
+      "glb_sha256": "633fa7381c52a97c063b2b5183051e88c80f3a80bef9f916151a5916d0af0fa0",
+      "reviewed_runtime_sha256": "fcf45ca4415c8cc6dda594bf1697cb7b7df680044e29dd46b97f33adceb4dffe",
+      "final_runtime_sha256": "4fb76c41daebf406c613c08924570c88ce384260968f894bfd2ea773a9df6a68",
+      "captures": 5,
+      "errors": [],
+      "geometry_motion_parity": null,
+      "appearance_approved": true
+    },
+    {
+      "species": "cursola",
+      "variant": "shiny",
+      "source_sha256": "393b3e2f6ec5adbdde009878602011e7d3cd4f4962225aeff1df75d86091d86a",
+      "glb_sha256": "137c0ee9940f1e0b9c2a433c43633617ab81b78f660ed0b6023ea14fbbfbb50f",
+      "reviewed_runtime_sha256": "271a95cfecc89c22f2c68fab8d66785ffc23b5f0324a81b4ebff882e1ef418a1",
+      "final_runtime_sha256": "2bc928a1fb0d7f9b3ddd0e83d3e24a9fb92bf4cd8846973005a06784ec15c3d4",
+      "captures": 5,
+      "errors": [],
+      "geometry_motion_parity": "7d2847abad493239062a078fcb60d7eec74dd0ae3d39551e5c8af77c5b2a33d4",
+      "appearance_approved": true
+    }
+  ],
+  "reference_images": [
+    {
+      "path": "assets/sprites/pokemon/pokemon_home/Unown.png",
+      "sha256": "379f700b3b8f32685f569a90ccc945741b3000aaa5509e35ea6bd14ac08b70c8"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home/Darmanitan-Standard.png",
+      "sha256": "1363cdba6803f98abeb1d2fb07fbba9661925fc31199c318b253ee8489426359"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home/Wishiwashi.png",
+      "sha256": "42f0b31dd2af7782577b5adfac6ac14f816ba54b5e07e2520b6c44ff15056466"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home/Silvally.png",
+      "sha256": "bf96f3e87a9a8f23437384528edb712b9fe5d34dc92efdb2c651b0b10daab545"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home/Obstagoon.png",
+      "sha256": "110e9ebfd397c8058928cd29097a91874d9b8cfdf5e00c77fbb3be24b44a5b7a"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home/Cursola.png",
+      "sha256": "872185f238ce93d629d401cb843f61adac5c6faa7720ce6082b2573281a68b9e"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home_shiny/unown.png",
+      "sha256": "501ad46646e13d677536c4c8cf8a4144d7e182e6f5e142143ffab1cc5d79ebe0"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home_shiny/darmanitan.png",
+      "sha256": "5485fe1c03d52a38e32816a18df777579754441258358b841ebf0da126684000"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home_shiny/wishiwashi.png",
+      "sha256": "a93659e44e58e992af5dc00887a5125006994d5724bcfbb4303951cbf77ea137"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home_shiny/silvally.png",
+      "sha256": "457b1717a246dd467a07576e05dc4ebcf6baecf7e96da1d8b5f3d32c32709cde"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home_shiny/obstagoon.png",
+      "sha256": "64822adafc4dd7a8130cee701533b4deab7f67bacf89446150831eb8ba7a8902"
+    },
+    {
+      "path": "assets/sprites/pokemon/pokemon_home_shiny/cursola.png",
+      "sha256": "f5874bf590f65a010799574db6e0f8e9020ea88f4a90315a2e13ec8bec230751"
+    }
+  ],
+  "evidence_sha256": {
+    ".tmp/remaining-six-shiny-battle/variants-v6/status.json": "b6cb63994ebafc1e745893fd51538ba53ebfdd9dd957fc3df87e81c58ec2761d",
+    ".tmp/remaining-six-shiny-battle/variant-captures/review.json": "83e70d9c8a6cf685f989d365a799f84ad09f60f96528ce3aef8e9866785b8c1e",
+    ".tmp/remaining-six-shiny-battle/variant-runtime/report.json": "6c6304be922fd47c02d070dfb7ae67d372b88edc9e0e328dc78933e93e937233",
+    ".tmp/remaining-six-shiny-battle/cursola-v6-captures/review.json": "ffcab2b8a139087b9c94c1135147d3b9dae0f6c0eaa0c39c218b7458e53dcecd",
+    ".tmp/remaining-six-shiny-battle/cursola-v6-runtime/report.json": "8337cd135395b057d96e22e45453c863318bb647e70424834b0b0f4bf052a139",
+    ".tmp/remaining-six-shiny-battle/cursola-final-review/index.html": "838d40d8c2d609d627e2b891a1e4113762981db5b09a7ee77daab5e8a11336c8",
+    ".tmp/remaining-six-shiny-battle/variant-review/index.html": "5da58ec744f2b66b6221ba7d349912389628a6d975dbb10cde430aa9048ba40a",
+    ".tmp/remaining-six-shiny-battle/final-battle/runtime/report.json": "e006aeca3019f0ed5567563357bf8675c13366d79190b437635c683a424a4d19"
+  },
+  "limitations": [
+    "Palette variants are authored from existing HOME colour references, not matching rare material tables.",
+    "Wishiwashi uses the archived field-wait pose for sleep; no native sleep clip or eyelid rig is available.",
+    "Reviewed GLB hashes are unchanged in the final conversion; PackedScene bytes differ on regeneration. Final scenes require battle verification before catalog admission.",
+    "No catalog activation, bundle installation, upload or release is claimed."
+  ]
+}
