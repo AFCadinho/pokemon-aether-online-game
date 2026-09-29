@@ -1080,6 +1080,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "bea9a54bcaed1aad56ecc840c66ae8cd06cf151622ca7e963dbfa61ad033df1d",
       "media": "quick-review",
       "national_dex": 607,
@@ -1330,6 +1337,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "ff98c8343e04c9e0ba80798a841b0a8a25b7c2e73fe6d1e85f45389838fc9dac",
       "media": "za-v3-review",
       "national_dex": 680,
@@ -1454,6 +1468,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "76f4a9988814db570c529cf71a2b9887b285f329a527ea616a4344fc8008e740",
       "media": "quick-review",
       "national_dex": 686,
@@ -1578,6 +1599,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "c252b617680853f7008be0d565c65a6ee7a6cb504fe0f98ced7b197d7adfd1c5",
       "media": "za-v3-review",
       "national_dex": 694,
@@ -1612,6 +1640,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "932e42ec7a98bba097113dca932f46564016aee127c4062370b2d6838c6ae31a",
       "media": "za-v3-review",
       "national_dex": 695,
@@ -1808,6 +1843,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_xerneas_battle_scale_review.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/xerneas-size-v1/index.html",
+        "status": "revised_scale_technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "0134a549f6e4bb99ecd00790a9072017a05799c328bdd3d688ecfd56826ec2e6",
       "media": "za-v3-review",
       "national_dex": 716,
@@ -1842,6 +1884,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "231f38caa743a0793c7c28ac65de1f85f177112184f79b783033ee8e34ea97a8",
       "media": "za-v3-review",
       "national_dex": 717,
@@ -2092,6 +2141,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "b03c9616bb9bd7396d4775252ff03e12fc4ee1169083233db093437aac10b3c3",
       "media": "quick-review",
       "national_dex": 789,
@@ -2126,6 +2182,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "73e58f5c0a02cef0427958a6d73cf5c5f507507adbe89d793ae1e4a52b7b940a",
       "media": "quick-review",
       "national_dex": 790,
@@ -2244,6 +2307,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "6b85b463b195ebddd7b966a60cfbe79dbd0298b94f283589af244e89c37a2e11",
       "media": "za-v3-review",
       "national_dex": 802,
@@ -2345,6 +2415,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "33291f30dc7ae8d38a99179b314f116ffcf8106eb0676a05a965fabb0cfca051",
       "media": "za-v3-review",
       "national_dex": 808,
@@ -2379,6 +2456,13 @@
     {
       "appearance_approved": true,
       "battle_approved": false,
+      "battle_review": {
+        "appearance_approved": true,
+        "battle_approved": false,
+        "receipt": "tools/sprite_factory/catalog_shiny_twelve_battle_qualification.json",
+        "review_url": "http://127.0.0.1:8765/.tmp/shiny-151-recovery/twelve-battle/index.html",
+        "status": "technical_checks_passed_visual_review_pending"
+      },
       "geometry_motion_sha256": "1aaa3c859d7d53c9f56970298a68936fd3dbb7c0d05b14374c865508853df5ad",
       "media": "za-v3-review",
       "national_dex": 809,
@@ -2690,5 +2774,5 @@
   "schema": 1,
   "scope": "151 original shiny holds; 32 locally admitted, 119 remaining; no publication",
   "total": 151,
-  "user_review_pending": false
+  "user_review_pending": true
 }

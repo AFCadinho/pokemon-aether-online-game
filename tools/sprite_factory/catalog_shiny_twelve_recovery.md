@@ -87,3 +87,37 @@ normal/shiny Marshadow scenes, recorded with runtime hashes in its recovery
 receipt. All twelve pairs now have appearance approval; battle qualification,
 catalog admission and bundles remain pending. Earlier holds above are retained
 as historical context, not the current acceptance state.
+
+## Battle placement checkpoint (2026-09-29)
+
+All 24 exact appearance-approved standalone scenes were measured independently:
+176 native clips at 60 Hz, followed by separate 120 Hz clearance samples after
+placement calibration. Both camera presets and actor sides produced 384 pose
+images. Minimum final clearance is 0.0162923 world units; the smallest idle
+silhouette is 67.275 logical pixels. All 24 pass the technical floor, readability,
+framing and HUD-proxy checks. Original GLB and SCN hashes remain unchanged.
+
+Normal/shiny pairs share the same readability multiplier. A local tapered root
+offset fixes Doublade's damage contact; constant positive sleep offsets fix
+Inkay and Cosmoem without changing their native skeletal poses. Those six
+variants were remeasured independently at 120 Hz. Floating pose intent is
+preserved; these corrections are review-only placement data.
+
+`catalog_shiny_twelve_battle_qualification.json` pins the exact scenes,
+placement profiles, source receipts, measurement reports, scratch recipes and
+review images. The new page is `.tmp/shiny-151-recovery/twelve-battle/index.html`.
+Human battle acceptance is pending. Full arena/runtime stress, installed bundle
+checks, catalog admission and publishing have not been inferred from this
+flat-floor camera/HUD-proxy test. Retain slot-a and its pinned review artifacts.
+
+## Xerneas scale follow-up
+
+User found Xerneas too small. The generic whole-silhouette 250px cap includes
+its tall antlers and reduced the body too strongly. The replacement candidate
+uses scale 0.75 instead of 0.4360126 (about 72% larger), for both variants.
+The exact approved scenes are unchanged. Floor profiles were recomputed from
+raw geometry and both scenes resampled independently at 120 Hz: minimum
+clearance 0.025, all 32 captures in view with no HUD-proxy overlap.
+`catalog_shiny_xerneas_battle_scale_review.json` supersedes only Xerneas'
+placement in the twelve-pair checkpoint. Its before/after review is pending;
+do not admit the previous twelve-pair Xerneas scale unchanged.
