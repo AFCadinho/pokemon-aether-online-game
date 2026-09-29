@@ -11,6 +11,9 @@
 [sub_resource type="RectangleShape2D" id="shape_6"]
 size = Vector2(32, 16)
 
+[sub_resource type="RectangleShape2D" id="shape_pokecenter_exit"]
+size = Vector2(32, 56)
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 160)
 
@@ -169,6 +172,9 @@ position = Vector2(48, 656)
 [node name="FromRoute9River" type="Marker2D" parent="Spawns" unique_id=1148799862]
 position = Vector2(48, 304)
 
+[node name="FromPokemonCenter" type="Marker2D" parent="Spawns" unique_id=1569100175]
+position = Vector2(1344, 736)
+
 [node name="FromRockTunnelNorth" type="Marker2D" parent="Spawns" unique_id=959521393]
 position = Vector2(1072, 1072)
 
@@ -182,6 +188,22 @@ position = Vector2(1232, 3280)
 position = Vector2(1200, 1776)
 
 [node name="Exits" type="Node2D" parent="." unique_id=871120581]
+
+[node name="ToPokemonCenter" type="Area2D" parent="Exits" unique_id=1569100172]
+position = Vector2(1344, 672)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_route_10__to_pokemon_center"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonCenter" unique_id=1569100173]
+position = Vector2(0, -20)
+shape = SubResource("shape_pokecenter_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokemonCenter" unique_id=1569100174 instance=ExtResource("4_kkef3")]
+z_as_relative = false
+position = Vector2(0, -16)
+tile_footprint = Vector2i(1, 2)
 
 [node name="ToPowerPlant" type="Area2D" parent="Exits" unique_id=1500086454]
 position = Vector2(1200, 1744)
@@ -307,6 +329,7 @@ tile_map_data = PackedByteArray("AAAYAF4ABAAIAAEAAAAYAF8ABAAIAAEAAAAYAGAABAAIAAE
 tile_set = SubResource("TileSet_kkef3")
 
 [connection signal="body_entered" from="Exits/ToPowerPlant" to="Exits/ToPowerPlant" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPokemonCenter" to="Exits/ToPokemonCenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute9" to="Exits/ToRoute9" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute9River" to="Exits/ToRoute9River" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRockTunnelNorth" to="Exits/ToRockTunnelNorth" method="_on_body_entered"]

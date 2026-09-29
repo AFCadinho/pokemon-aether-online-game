@@ -1791,7 +1791,9 @@
 			"locationGroupId": "kanto_route_10",
 			"locationGroupLabel": "Route 10",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cwemdr3lxm8ws"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 			"spawnPoints": {
 				"from_lavender_north": {
@@ -1800,8 +1802,18 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromLavenderNorth",
 					"tile": {
-						"x": 39,
-						"y": 101
+						"x": 38,
+						"y": 102
+					}
+				},
+				"from_pokemon_center": {
+					"facingDirection": "down",
+					"label": "Pokemon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokemonCenter",
+					"tile": {
+						"x": 42,
+						"y": 23
 					}
 				},
 				"from_rock_tunnel_north": {
@@ -1811,7 +1823,7 @@
 					"spawnMarker": "FromRockTunnelNorth",
 					"tile": {
 						"x": 33,
-						"y": 34
+						"y": 33
 					}
 				},
 				"from_rock_tunnel_south": {
@@ -1821,7 +1833,7 @@
 					"spawnMarker": "FromRockTunnelSouth",
 					"tile": {
 						"x": 19,
-						"y": 79
+						"y": 78
 					}
 				},
 				"from_route_9": {
@@ -1830,7 +1842,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute9",
 					"tile": {
-						"x": 2,
+						"x": 1,
 						"y": 20
 					}
 				},
@@ -1840,7 +1852,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute9River",
 					"tile": {
-						"x": 2,
+						"x": 1,
 						"y": 9
 					}
 				},
@@ -1851,7 +1863,39 @@
 					"spawnMarker": "FromPowerPlant",
 					"tile": {
 						"x": 37,
-						"y": 56
+						"y": 55
+					}
+				}
+			}
+		},
+		"kanto_route_10_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 10 Pokémon Center",
+			"locationGroupId": "kanto_route_10",
+			"locationGroupLabel": "Route 10",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
 					}
 				}
 			}
@@ -2693,7 +2737,9 @@
 			"locationGroupId": "kanto_route_9",
 			"locationGroupLabel": "Route 9",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cggebav3nmqab"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 			"spawnPoints": {
 				"from_cerulean": {
@@ -2702,7 +2748,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCerulean",
 					"tile": {
-						"x": 2,
+						"x": 1,
 						"y": 20
 					}
 				},
@@ -3782,10 +3828,12 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_9",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cggebav3nmqab"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
-					"x": 64.0,
+					"x": 48.0,
 					"y": 656.0
 				},
 				"spawnMarker": "FromCerulean"
@@ -4006,11 +4054,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
-					"x": 1248.0,
-					"y": 3248.0
+					"x": 1232.0,
+					"y": 3280.0
 				},
 				"spawnMarker": "FromLavenderNorth"
 			},
@@ -4564,11 +4614,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
 					"x": 1200.0,
-					"y": 1808.0
+					"y": 1776.0
 				},
 				"spawnMarker": "FromPowerPlant"
 			},
@@ -4579,11 +4631,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
 					"x": 1200.0,
-					"y": 1808.0
+					"y": 1776.0
 				},
 				"spawnMarker": "FromPowerPlant"
 			},
@@ -4670,11 +4724,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
 					"x": 1072.0,
-					"y": 1104.0
+					"y": 1072.0
 				},
 				"spawnMarker": "FromRockTunnelNorth"
 			},
@@ -4685,11 +4741,13 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
 					"x": 624.0,
-					"y": 2544.0
+					"y": 2512.0
 				},
 				"spawnMarker": "FromRockTunnelSouth"
 			},
@@ -4771,6 +4829,20 @@
 			"destinationAreaId": "kanto_lavender_town_north",
 			"sourceMapId": "kanto_route_10"
 		},
+		"kanto_route_10__to_pokemon_center": {
+			"destination": {
+				"mapId": "kanto_route_10_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_route_10_pokemon_center",
+			"sourceMapId": "kanto_route_10"
+		},
 		"kanto_route_10__to_power_plant": {
 			"destination": {
 				"facingDirection": "up",
@@ -4820,10 +4892,12 @@
 			"destination": {
 				"facingDirection": "left",
 				"mapId": "kanto_route_9",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cggebav3nmqab"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
-					"x": 3008.0,
+					"x": 3024.0,
 					"y": 656.0
 				},
 				"spawnMarker": "FromRoute10"
@@ -4835,16 +4909,35 @@
 			"destination": {
 				"facingDirection": "left",
 				"mapId": "kanto_route_9",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cggebav3nmqab"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
-					"x": 3008.0,
-					"y": 288.0
+					"x": 3024.0,
+					"y": 304.0
 				},
 				"spawnMarker": "FromRoute10River"
 			},
 			"destinationAreaId": "kanto_route_9",
 			"sourceMapId": "kanto_route_10"
+		},
+		"kanto_route_10_pokemon_center__to_outside": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_10",
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+				"position": {
+					"x": 1344.0,
+					"y": 736.0
+				},
+				"spawnMarker": "FromPokemonCenter"
+			},
+			"destinationAreaId": "kanto_route_10",
+			"sourceMapId": "kanto_route_10_pokemon_center"
 		},
 		"kanto_route_11__to_diglett_cave": {
 			"destination": {
@@ -5768,10 +5861,12 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
-					"x": 64.0,
+					"x": 48.0,
 					"y": 656.0
 				},
 				"spawnMarker": "FromRoute9"
@@ -5783,11 +5878,13 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_10",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cwemdr3lxm8ws"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 				"position": {
-					"x": 64.0,
-					"y": 288.0
+					"x": 48.0,
+					"y": 304.0
 				},
 				"spawnMarker": "FromRoute9River"
 			},
