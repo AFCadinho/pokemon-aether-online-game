@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Vermilion City gebruikt de nieuwste Tiled-visual met de bijgewerkte buitentileset.
+- Vermilion City gebruikt de nieuwste Tiled-visual met de bijgewerkte buitentileset; de aansluitingen naar Route 6, Route 11 en de docks volgen de nieuwe kaartopeningen.
 
 - De desktopclient verwijdert de vorige lokale versie van een Pokémon-sprite automatisch zodra de nieuwe metadata en sheet succesvol zijn geladen. Bestaande spritecaches zonder versie-index worden eenmalig opgeschoond.
 
