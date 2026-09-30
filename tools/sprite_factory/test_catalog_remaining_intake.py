@@ -1,10 +1,12 @@
 import tempfile
 import unittest
 import zipfile
+import hashlib
+import json
 from pathlib import Path
 
 from catalog_remaining_intake import source_members
-from catalog_remaining_normal_export import REQUIRED, WISHIWASHI_SOLO_SOURCE_SHA256, choose_actions
+from catalog_remaining_normal_export import REQUIRED, WISHIWASHI_SOLO_SOURCE_SHA256, choose_actions, export_one
 from phase5_review_actions import candidates
 
 
@@ -103,6 +105,71 @@ class SourceMembersTest(unittest.TestCase):
                                         "action_candidates": {"faint_loop": []}})
         self.assertEqual(bank, "direct")
         self.assertNotIn("faint_loop", mapping)
+
+    def test_battle_idle_resolves_same_rig_same_bank_default_idle(self):
+        names = [f"pm0428_00_00_{code}_{action}" for code, action in (
+            ("00000", "defaultwait01_loop"), ("00001", "battlewait01_loop"),
+            ("00400", "attack01"), ("00450", "rangeattack01"),
+            ("00500", "damage01"), ("00281", "sleep01_loop"),
+            ("00520", "down01_start"))]
+        found = candidates(names)
+        report = {"rig_selection": {"rig": "pm0428_00_00"},
+                  "unambiguous_actions": {}, "action_candidates": found,
+                  "action_candidates_by_bank": {"0": found}}
+        mapping, bank = choose_actions(report)
+        self.assertEqual(mapping["idle"], names[1])
+        self.assertTrue(REQUIRED <= mapping.keys())
+
+    def test_proven_rig_isolated_before_complete_bank_selection(self):
+        own, other = "pm0272_00_00", "pm0272_01_00"
+        names = [f"{rig}_{code}_{action}.gfbanm" for rig in (own, other)
+                 for code, action in (("00000", "defaultwait01_loop"),
+                 ("00001", "battlewait01_loop"), ("00400", "attack01"),
+                 ("00450", "rangeattack01"), ("00500", "damage01"),
+                 ("00281", "sleep01_loop"), ("00520", "down01_start"))]
+        found = candidates(names)
+        mapping, bank = choose_actions({"rig_selection": {"rig": own + ".trmdl"},
+            "unambiguous_actions": {}, "action_candidates": found,
+            "action_candidates_by_bank": {"0": found}})
+        self.assertTrue(REQUIRED <= mapping.keys())
+        self.assertTrue(all(name.startswith(own + "_") for name in mapping.values()))
+
+    def test_battle_idle_preference_keeps_competing_complete_banks_held(self):
+        names = [f"pm0742_00_00_{bank}{code}_{action}" for bank in (0, 2)
+                 for code, action in (("0000", "defaultwait01_loop"),
+                 ("0001", "battlewait01_loop"), ("0400", "attack01"),
+                 ("0450", "rangeattack01"), ("0500", "damage01"),
+                 ("0281", "sleep01_loop"), ("0520", "down01_start"))]
+        self.assertEqual(choose_actions({"rig_selection": {"rig": "pm0742_00_00"},
+            "unambiguous_actions": {}, "action_candidates": candidates(names),
+            "action_candidates_by_bank": {str(b): candidates(names, bank=b) for b in (0, 2)}}),
+            (None, "missing_or_ambiguous_native_actions"))
+
+    def test_resume_rejects_changed_mapping_and_artifact_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            directory = root / "0387-turtwig"
+            directory.mkdir()
+            actions = {k: k for k in REQUIRED}
+            probe = root / "probe.json"
+            probe.write_text(json.dumps({'unambiguous_actions': actions,
+                                         'source_sha256': 'pinned-source'}))
+            model = directory / 'model.glb'
+            model.write_bytes(b'original model')
+            (directory / 'export.json').write_text(json.dumps({'path': str(model),
+                'glb_sha256': hashlib.sha256(model.read_bytes()).hexdigest(),
+                'animations': actions}))
+            job = directory / 'job.json'
+            job.write_text(json.dumps({'actions': actions | {'idle': 'old idle'},
+                                       'source_sha256': 'pinned-source'}))
+            entry = {'species': 'turtwig', 'national_dex': 387}
+            probes = {'turtwig': {'status': 'probed', 'report': str(probe)}}
+            self.assertEqual(export_one(entry, probes, root, root / 'unused')['reason'],
+                             'existing_diagnostic_has_different_source_or_action_mapping')
+            job.write_text(json.dumps({'actions': actions, 'source_sha256': 'pinned-source'}))
+            model.write_bytes(b'changed model')
+            self.assertEqual(export_one(entry, probes, root, root / 'unused')['reason'],
+                             'existing_diagnostic_bytes_changed')
 
     def test_extensionless_native_actions_keep_exact_token_boundaries(self):
         names = ["pm0711_00_00_00001_battlewait01_loop",

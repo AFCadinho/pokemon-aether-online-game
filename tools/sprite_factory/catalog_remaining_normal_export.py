@@ -22,8 +22,36 @@ WISHIWASHI_SOLO_SOURCE_SHA256 = "028fdad10505fcea05f8e03ef5dac10ada2fec7ab107706
 EYE_DOMAIN_POLICY = "source-eye-domain-review-v1"
 
 
+def native_candidates(report):
+    """Select the proven rig first, then prefer its battle idle per bank."""
+    selected = re.sub(r"\.(?:trmdl|gfbmdl)$", "",
+                      report.get("rig_selection", {}).get("rig", ""))
+    if not re.fullmatch(r"pm\d{4}(?:_\d{2}){1,2}", selected):
+        selected = ""
+
+    def narrow(found):
+        result = {key: [name for name in names if not selected or
+                        name.startswith(selected + "_")]
+                  for key, names in found.items()}
+        idle = result.get("idle", [])
+        battle_namespaces = {match[1] for name in idle if (match := re.match(
+            r"^(pm\d{4}_\d{2}_\d{2}_\d)\d{4}_battlewait01_loop(?:\.|$)", name, re.I))}
+        result["idle"] = [name for name in idle if not ((match := re.match(
+            r"^(pm\d{4}_\d{2}_\d{2}_\d)\d{4}_defaultwait01_loop(?:\.|$)", name, re.I))
+            and match[1] in battle_namespaces)]
+        return result
+
+    possible = narrow(report.get("action_candidates", {}))
+    banks = {bank: narrow(found) for bank, found in
+             report.get("action_candidates_by_bank", {}).items()}
+    return selected, possible, banks
+
+
 def choose_actions(report):
-    direct = dict(report["unambiguous_actions"])
+    selected_rig, possible, bank_candidates = native_candidates(report)
+    direct = ({key: found[0] for key, found in possible.items() if len(found) == 1}
+              if REQUIRED.intersection(report.get("action_candidates", {}))
+              else dict(report["unambiguous_actions"]))
     # The archived solo Wishiwashi has no sleep clip or eyelid rig. Use its
     # own field-wait loop as a review candidate; its eyes remain open.
     # Keep this narrow and source-pinned; it still needs visual qualification.
@@ -41,17 +69,19 @@ def choose_actions(report):
     if REQUIRED <= direct.keys() and len(numeric_banks) <= 1:
         mapping = {key: direct[key] for key in REQUIRED}
         bank = "direct"
-        optional = report.get("action_candidates", {}).get("faint_loop", [])
+        if selected_rig and numeric_banks and not REQUIRED <= report["unambiguous_actions"].keys():
+            bank = next(iter(numeric_banks))
+        optional = possible.get("faint_loop", [])
     else:
         complete = [(name, values, candidates.get("faint_loop", []))
-                    for name, candidates in report.get("action_candidates_by_bank", {}).items()
+                    for name, candidates in bank_candidates.items()
                     if REQUIRED <= (values := {key: found[0] for key, found in candidates.items()
                                              if len(found) == 1}).keys()]
         if len(complete) != 1:
-            selected = report.get("rig_selection", {}).get("rig", "").removesuffix(".trmdl")
+            selected = selected_rig
             if not re.fullmatch(r"pm\d{4}(?:_\d{2}){1,2}", selected):
                 return None, "missing_or_ambiguous_native_actions"
-            candidates = report.get("action_candidates", {})
+            candidates = possible
             own = {key: [name for name in candidates.get(key, [])
                          if name.startswith(selected + "_")] for key in REQUIRED}
             if not all(len(found) == 1 for found in own.values()):
@@ -67,8 +97,8 @@ def choose_actions(report):
         else:
             bank, mapping, optional = complete[0]
     second = report.get("second_physical_candidates", [])
-    if selected:
-        second = [name for name in second if name.startswith(selected + "_")]
+    if selected_rig:
+        second = [name for name in second if name.startswith(selected_rig + "_")]
     chosen_numeric_bank = next(iter(numeric_banks), None) if bank == "direct" else (bank if bank in ("0", "1", "2") else None)
     if len(optional) == 1:
         loop_bank = re.search(r"^pm\d{4}_\d{2}_\d{2}_(\d)\d{4}_", optional[0], re.I)
@@ -96,6 +126,16 @@ def export_one(entry, probe_status, output, worker):
     existing_report = directory / "export.json"
     if existing_report.is_file():
         current = json.loads(existing_report.read_text())
+        existing_job = json.loads((directory / "job.json").read_text())
+        if (existing_job.get("actions") != mapping or
+                existing_job.get("source_sha256") != report["source_sha256"]):
+            return {"species": species, "status": "held",
+                    "reason": "existing_diagnostic_has_different_source_or_action_mapping"}
+        artifact = Path(current["path"])
+        if (not artifact.is_file() or
+                hashlib.sha256(artifact.read_bytes()).hexdigest() != current["glb_sha256"]):
+            return {"species": species, "status": "held",
+                    "reason": "existing_diagnostic_bytes_changed"}
         if set(current["animations"]) != set(mapping):
             return {"species": species, "status": "held",
                     "reason": "existing_diagnostic_has_different_action_set"}
