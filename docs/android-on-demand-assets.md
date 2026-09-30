@@ -2,11 +2,14 @@
 
 Android now keeps all native maps and the small HOME placeholder in the APK,
 while HOME icons, normal Pokémon cries and the original login-world Theora video
-load individually from the immutable browser asset release. Unused anime cries
+load individually from the immutable asset release pinned to the signed APK. Unused anime cries
 are excluded. Desktop loading and browser trade restrictions are unchanged.
 
-`MobileAssetService` reads the active `web-release-config.json`, then downloads
-`web/releases/BUILD_ID/mobile-assets/catalog.json`. The manifest records exact
+Android builds stamp `application/config/android_asset_build_id` with their
+immutable APK build ID. `MobileAssetService` downloads
+`https://web-assets.pokeaether.com/web/releases/BUILD_ID/mobile-assets/catalog.json`
+without needing a browser release. Unstamped local builds retain the active
+`web-release-config.json` fallback. The manifest records exact
 byte sizes and SHA-256 checksums for the existing `home-icons/` and
 `browser-audio/assets/audio/sfx/pokemon_cries/` objects, plus
 `login-media/world.ogv`. Browser MP4 playback remains unchanged; native playback
@@ -39,10 +42,16 @@ For a local asset review payload, run:
 python3 tools/prepare_android_assets.py --asset-output builds/android-demand-assets
 ```
 
-The normal web build now also prepares the native Theora file and mobile asset
-manifest. `package_web_release.py` puts both in the immutable R2 payload. Publish
-a matching web asset release before distributing an Android APK that relies on
-it. No assets or APK are published by the preparation or check scripts.
+The Android build workflow retains both the signed candidate and its matching
+native asset payload. Run `Prepare Android test download` with the successful
+main candidate run ID. It uploads the verified assets to the browser asset
+bucket under the APK's own immutable build ID, then uploads and verifies the
+signed APK in the updates bucket. It does not replace any updater manifest,
+Pages deployment, or active browser configuration. Test the resulting direct
+APK link on a device before running the existing `Publish Android release`
+workflow for that same candidate. The regular web pipeline can still include
+native assets, but Android publication does not depend on publishing the
+browser game.
 
 Keep the current Android map files bundled. Browser map packs are exported for
 a different target; using them on Android requires a separately verified native

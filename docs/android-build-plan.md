@@ -6,8 +6,9 @@ Project baseline: Godot 4.6.2, shared client codebase
 Last updated: 2026-09-30
 
 Android asset-size follow-up: [on-demand icons, cries, video and persistent
-battle-sprite cache](android-on-demand-assets.md). Publish the matching asset
-release before distributing the updated APK. Native maps remain bundled.
+battle-sprite cache](android-on-demand-assets.md). Prepare the matching Android
+asset payload and direct signed test download before distributing the updated
+APK. Browser game publication is not required. Native maps remain bundled.
 
 Device smoke test (Samsung SM-G780F, Android 13): debug APK installed and
 launched, production server status loaded, login entered the world, and party

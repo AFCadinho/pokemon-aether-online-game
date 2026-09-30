@@ -52,6 +52,7 @@ def prepare(project: Path, presets: Path, version: str, code: int, build_id: str
     replace_setting(project, "application", "config/version", json.dumps(version))
     replace_setting(project, "application", "config/build_id", json.dumps(build_id))
     replace_setting(project, "application", "config/android_version_code", str(code))
+    replace_setting(project, "application", "config/android_asset_build_id", json.dumps(build_id))
     replace_setting(presets, "preset.7.options", "version/code", str(code))
     replace_setting(presets, "preset.7.options", "version/name", json.dumps(version))
 

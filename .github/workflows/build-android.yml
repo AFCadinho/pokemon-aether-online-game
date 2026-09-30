@@ -167,3 +167,14 @@ jobs:
           path: release/
           if-no-files-found: error
           retention-days: 30
+
+      - name: Prepare matching Android asset payload
+        run: python3 tools/prepare_android_assets.py --asset-output builds/android-assets
+
+      - name: Retain matching Android assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-assets-${{ github.run_id }}-${{ github.run_attempt }}
+          path: builds/android-assets/
+          if-no-files-found: error
+          retention-days: 30

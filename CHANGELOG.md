@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Android assets are pinned to the signed APK build, allowing Android test downloads and releases independently of browser publication.
+
 - Android now uses immersive fullscreen mode to hide the system status and navigation bars while playing.
 
 - Android HOME icons, Pokémon cries and the full-quality login video now download separately and remain cached between launches. Battle sprites also use a bounded persistent cache.
