@@ -87,11 +87,20 @@ var _prepared := false
 var _counterattack_played := false
 var _future_self_spawn_global_position := Vector2.ZERO
 var _fainted_follower: PokemonFollower
+var _follower_sprite_origin := Vector2.ZERO
+var _follower_was_visible := false
+var _follower_was_processing := true
 var _story_player: Node2D
 var _starter_options: Dictionary = {}
+var _rocket_origins: Array[Vector2] = []
+var _other_fossil: Node2D
+var _other_fossil_was_visible := false
 
 
 func prepare_story_sequence() -> Dictionary:
+	# A checkpoint rewind or failed completion can replay this same map instance.
+	if _prepared or _dialogue_stage != 0:
+		abort_story_sequence()
 	if not _starter_options.is_empty():
 		return {"success": true}
 	var options: Dictionary = {}
@@ -130,6 +139,7 @@ func _has_starter_final_evolution(options: Dictionary) -> bool:
 
 func _ready() -> void:
 	for rocket: Node in rockets:
+		_rocket_origins.append(rocket.position)
 		rocket.visible = false
 	_configure_future_self_appearance()
 	future_self.visible = false
@@ -183,6 +193,7 @@ func _configure_future_self_appearance() -> void:
 
 
 func _exit_tree() -> void:
+	_restore_follower()
 	if StoryService.story_changed.is_connected(_on_story_changed):
 		StoryService.story_changed.disconnect(_on_story_changed)
 	if is_instance_valid(_overlay_layer):
@@ -224,6 +235,36 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 
 func set_story_player(player: Node2D) -> void:
 	_story_player = player
+
+
+func abort_story_sequence() -> void:
+	_restore_follower()
+	for index: int in range(rockets.size()):
+		rockets[index].visible = false
+		rockets[index].modulate.a = 1.0
+		rockets[index].position = _rocket_origins[index]
+	future_self.visible = false
+	if is_instance_valid(_starter):
+		_starter.queue_free()
+	_starter = null
+	for pokemon: Node2D in _rocket_pokemon:
+		if is_instance_valid(pokemon):
+			pokemon.queue_free()
+	_rocket_pokemon.clear()
+	if is_instance_valid(_rift):
+		_rift.queue_free()
+	_rift = null
+	if is_instance_valid(_other_fossil):
+		_other_fossil.visible = _other_fossil_was_visible
+	_other_fossil = null
+	var miguel := get_node_or_null(miguel_path)
+	if miguel != null and miguel.has_method("reset_after_ambush_failure"):
+		miguel.call("reset_after_ambush_failure")
+	_dialogue_stage = 0
+	_prepared = false
+	_counterattack_played = false
+	_future_self_spawn_global_position = Vector2.ZERO
+	_starter_options.clear()
 
 
 func _prepare_ambush() -> void:
@@ -272,6 +313,8 @@ func _show_miguel_takes_other_fossil() -> void:
 			_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, -16)
 	if miguel == null or other_fossil == null:
 		return
+	_other_fossil = other_fossil as Node2D
+	_other_fossil_was_visible = other_fossil.visible
 	other_fossil.visible = true
 	var previous_position := miguel.position
 	var approach_tween := create_tween()
@@ -440,6 +483,10 @@ func _attack_and_faint_follower() -> bool:
 		# block the server-backed story interaction on its availability.
 		push_warning("MtMoonAmbushController: player follower is unavailable; skipping cosmetic ambush attack.")
 		return true
+	_follower_was_visible = _fainted_follower.visible
+	_follower_was_processing = _fainted_follower.is_processing()
+	if _fainted_follower.sprite != null:
+		_follower_sprite_origin = _fainted_follower.sprite.position
 	_fainted_follower.visible = true
 	_fainted_follower.set_process(false)
 	var attacker_species := ROCKET_SPECIES[0]
@@ -511,8 +558,10 @@ func _show_rocket_line(line: String) -> void:
 func _restore_follower() -> void:
 	if not is_instance_valid(_fainted_follower):
 		return
-	_fainted_follower.set_process(true)
+	_fainted_follower.set_process(_follower_was_processing)
+	_fainted_follower.visible = _follower_was_visible
 	if _fainted_follower.sprite != null:
+		_fainted_follower.sprite.position = _follower_sprite_origin
 		_fainted_follower.sprite.rotation = 0.0
 		_fainted_follower.sprite.modulate = Color.WHITE
 	_fainted_follower.reset_follow_position()

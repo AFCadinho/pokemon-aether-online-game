@@ -407,6 +407,8 @@ z_index = 8
 position = Vector2(768, 624)
 script = ExtResource("12_ambush_trigger")
 story_host_path = NodePath("../../Entities/MtMoonAmbush")
+required_quest_id = "travel_through_mt_moon"
+required_step_id = "cross_mt_moon"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/MtMoonAmbush" unique_id=2026616160]
 shape = SubResource("RectangleShape2D_ambush")
