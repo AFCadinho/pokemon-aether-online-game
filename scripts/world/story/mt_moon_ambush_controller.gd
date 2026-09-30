@@ -387,7 +387,7 @@ func _spawn_starter_final_evolution() -> void:
 		return
 	_starter_species_id = species_id
 	var starter_target := future_self.global_position + Vector2(0, 48)
-	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target))
+	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target), true)
 	var localized_name := ContentLocalization.display_name("species", species_id, species_name)
 	await _show_caption(_text("story.mt_moon.cutscene.go").replace("{pokemon}", localized_name), 0.75)
 	await _play_ball_summon(future_self.global_position + Vector2(12, -16), _starter, "ultra-ball")
@@ -594,9 +594,10 @@ func _close_rift() -> void:
 	_rift.queue_free()
 
 
-func _create_cutscene_pokemon(species_id: String, local_position: Vector2) -> Node2D:
+func _create_cutscene_pokemon(species_id: String, local_position: Vector2, is_shiny := false) -> Node2D:
 	var pokemon := OVERWORLD_POKEMON_SCENE.instantiate() as Node2D
 	pokemon.set("species_id", species_id)
+	pokemon.set("shiny", is_shiny)
 	pokemon.set("display_name", "")
 	pokemon.position = local_position
 	pokemon.visible = false

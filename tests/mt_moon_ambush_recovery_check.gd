@@ -42,6 +42,15 @@ func _run() -> void:
 	controller.call("set_story_player", player)
 	_check(await controller.call("_attack_and_faint_follower"), "missing follower skips the cosmetic attack without failing the rescue")
 
+	var future_starter: Variant = controller.call("_create_cutscene_pokemon", "garchomp", Vector2.ZERO, true)
+	var rocket_partner: Variant = controller.call("_create_cutscene_pokemon", "zubat", Vector2.ZERO)
+	_check(future_starter.shiny, "future self's evolved starter is shiny")
+	_check(future_starter.npc_sprite_frames == FollowerSpriteService.get_sprite_frames("garchomp", true), "future starter draws the shiny overworld sprites")
+	_check(not future_starter.visible, "shiny future starter stays hidden until the summon")
+	_check(not rocket_partner.shiny, "Rocket partners keep their ordinary appearance")
+	future_starter.queue_free()
+	rocket_partner.queue_free()
+
 	var follower := PokemonFollower.new()
 	root.add_child(follower)
 	follower.sprite.position = Vector2(0, 8)

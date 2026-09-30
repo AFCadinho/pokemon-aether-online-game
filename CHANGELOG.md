@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Professor Oak's starter choices show their guaranteed shiny appearance. Your future self in Mt. Moon also summons a shiny final evolution of your chosen starter.
+
 - Vermilion Gym heeft drie nieuwe NPC-trainers met Electric-type teams op level 20–22, geldbeloningen en gelokaliseerde gevechtsdialogen.
 
 - Vermilion Gym heeft de nieuwe Tiled-visual, Lt. Surge, een Gym Guide en de verbinding met de stad. De terrein-collisionlaag is voorbereid en blijft leeg voor handmatige inrichting.
