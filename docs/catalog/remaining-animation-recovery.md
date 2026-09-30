@@ -174,3 +174,27 @@ Dragonite. No upload or release is part of this checkpoint.
 Portable scene hashes and approval boundaries are recorded in
 `tools/sprite_factory/catalog_animation_recovery_39_checkpoint.json`.
 Working evidence is under `.tmp/remaining-animation-recovery/remaining-39`.
+
+## Remaining 39 pairs — approved individual bundles
+
+The user approved corrected Chatot ("ziet er goed uit.") and all 39 pairs on
+the final battle page ("Allemaal goed"). All 78 exact scenes are now admitted
+to identical game and launcher registries, with one shared reviewed placement
+and animation profile per species. `catalog_animation_recovery_39_checkpoint.json`
+records both approval boundaries, the pinned camera evidence and palette
+provenance; its earlier 712-species count describes the pre-admission baseline.
+
+There are 39 new individual bundles, 279,850,346 bytes total (266.89 MiB).
+Transactional installation, no-op planning and restart checks passed for
+all 78 scenes. Installed scenes passed three production presenter lifecycle
+rounds in classic/stadium/classic cameras, 39 pairs and faint replacements per
+round. The production registry resolves every installed scene to the reviewed
+timing, placement, bounds and motion, and rejects an unapproved digest.
+
+The approved total is now **751 base species plus Mega Dragonite**: 752
+profiles and 1,504 normal/shiny records, leaving 274 of the 1,025 base species.
+Bundle qualification is recorded in
+`tools/sprite_factory/catalog_animation_recovery_39_bundle_qualification.json`.
+Archives are under
+`.tmp/remaining-animation-recovery/remaining-39/final-battle/bundles` in slot-a.
+These bundles have not been uploaded to R2 or included in a release.
