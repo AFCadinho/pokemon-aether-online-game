@@ -24,6 +24,11 @@ func _scan(node: Node) -> void:
 		_scan(child)
 
 func _target(control: Control) -> int:
+	var settings := get_node("/root/SettingsManager")
+	return roundi(_base_target(control) * float(settings.get("ui_scale")) / 100.0)
+
+
+func _base_target(control: Control) -> int:
 	var path := str(battle.get_path_to(control))
 	if control.name == "PartySwitchLabel":
 		return 16

@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
   <meta name="referrer" content="no-referrer">
   <title>PokeAether · Browser</title>
   <style>
     :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #060b16; color: #f5f1ff; }
     * { box-sizing: border-box; }
     body { margin: 0; overflow: hidden; background: #060b16; }
-    #game-surface { position: fixed; inset: 0; background: #060b16; }
+    #game-surface { position: fixed; inset: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); background: #060b16; }
     #login-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-    canvas { position: relative; display: block; width: 100vw; height: 100vh; outline: none; }
+    canvas { position: relative; display: block; width: 100%; height: 100%; outline: none; touch-action: none; }
     #cover { position: fixed; inset: 0; display: grid; place-items: center; overflow: auto; padding: 28px 18px; background: radial-gradient(circle at 50% 22%, #34285c 0, #131a31 38%, #060b16 78%); }
     #cover::before { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .25; background: linear-gradient(115deg, transparent 20%, #9874ff18 50%, transparent 80%); }
     #cover[hidden] { display: none; }
