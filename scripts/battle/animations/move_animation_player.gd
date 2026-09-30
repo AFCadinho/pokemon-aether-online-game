@@ -291,6 +291,8 @@ func _build_nodes() -> void:
 	add_child(fg)
 
 	for sound_name: Variant in sound_paths.keys():
+		if OS.has_feature("web"):
+			continue
 		var sound_key: String = str(sound_name)
 		var stream: AudioStream = sound_streams.get(sound_key, null) as AudioStream
 		var sound_path: String = str(sound_paths.get(sound_name, ""))

@@ -299,6 +299,14 @@ WebSocket proxy API: [websockets 16 client documentation](https://websockets.rea
 
 ## On-demand startup assets
 
+All browser music, cries and sound effects are served as raw files under
+`browser-audio/`; their native/imported audio resources are excluded from the
+web PCK. Before export the build generates `generated/browser_audio_catalog.json`
+from the copied files. Cry/form resolution and animation availability use this
+catalog on web rather than requiring bundled AudioStream resources. Native
+clients retain the existing audio resources and mixer. The build rejects raw
+or imported audio that accidentally gets embedded again.
+
 The normal browser export excludes both HOME image directories and the login
 OGV from the initial PCK. `build_web_preview.py` prepares `home-icons/` with a
 case-sensitive normal/shiny catalog and content-hashed PNG filenames. Existing
@@ -338,3 +346,10 @@ approximately 322.33 to 205.36 MiB (116.97 MiB, 36.3% less, before HTTP
 compression). These figures exclude on-demand transfers and do not measure RAM.
 The world-login smoke also found a pre-existing 3D sparkle preload under the
 excluded `tools/` tree; its runtime copy now lives under `assets/battles/effect`.
+
+Removing the duplicate audio resources on the same slot build reduced initial
+payload from 205.4 to 167.5 MiB (about 37.9 MiB). The generated availability
+catalog is included; sound downloads remain outside that initial figure.
+Focused audio checks cover PCK exclusion, native animation timing and resource
+lifetimes, native Mega Evolution, browser login/world entry, and actual browser
+playback of music, an OGG cry, a battle WAV and the notification MP3.

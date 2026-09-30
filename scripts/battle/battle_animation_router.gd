@@ -912,7 +912,7 @@ func _request_animation_resources(config: Dictionary) -> void:
 	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
 	for sound_path_value: Variant in sound_paths.values():
 		var sound_path: String = str(sound_path_value)
-		if sound_path != "":
+		if sound_path != "" and not OS.has_feature("web"):
 			_request_threaded_resource(sound_path)
 
 
@@ -961,7 +961,7 @@ func _get_animation_resource_paths(config: Dictionary) -> Array[String]:
 	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
 	for sound_path_value: Variant in sound_paths.values():
 		var sound_path: String = str(sound_path_value)
-		if sound_path != "":
+		if sound_path != "" and not OS.has_feature("web"):
 			resource_paths.append(sound_path)
 
 	return resource_paths
@@ -1058,7 +1058,7 @@ func _animation_assets_available(config: Dictionary) -> bool:
 	var sound_paths: Dictionary = config.get("sound_paths", {}) as Dictionary
 	for sound_path_value: Variant in sound_paths.values():
 		var sound_path: String = str(sound_path_value)
-		if sound_path != "" and not ResourceLoader.exists(sound_path):
+		if sound_path != "" and not (WebAudioBridge.has_resource(sound_path) if OS.has_feature("web") else ResourceLoader.exists(sound_path)):
 			return false
 
 	return true
@@ -1702,6 +1702,8 @@ func _play_one_shot_sound(sound_path: String) -> void:
 
 
 func _get_cached_sound_stream(sound_path: String) -> AudioStream:
+	if OS.has_feature("web"):
+		return null
 	if sound_path == "":
 		return null
 	if sound_stream_cache.has(sound_path):

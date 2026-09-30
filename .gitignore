@@ -43,3 +43,6 @@ __pycache__/
 
 # Disposable local pipeline evidence and generated model reviews.
 /.tmp/
+
+# Generated availability catalog for the browser audio export.
+/generated/browser_audio_catalog.json

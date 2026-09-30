@@ -18,7 +18,7 @@ except ImportError:
     from build_web_on_demand import prepare_home_icons, prepare_login_media
 
 ROOT = Path(__file__).resolve().parents[1]
-# Background music is external; effects/cries and core gameplay stay bundled.
+# Browser audio is external; only its availability catalog stays bundled.
 MAX_INITIAL_BYTES = 312 * 1024 * 1024
 # A one-release exception may be used for a candidate that narrowly exceeds
 # the normal phase-5 limit. This ceiling is deliberately bounded and opt-in.
@@ -91,6 +91,13 @@ def copy_browser_audio(output: Path) -> list[dict[str, object]]:
     return copied
 
 
+def write_browser_audio_catalog(files: list[dict[str, object]], destination: Path) -> None:
+    """Resolve cries without depending on resources excluded from the web PCK."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    paths = sorted("res://assets/" + str(item["name"]) for item in files)
+    destination.write_text(json.dumps(paths, separators=(',', ':')) + '\n')
+
+
 def copy_web_shell_assets(output: Path) -> list[Path]:
     """Copy the small assets referenced directly by the custom HTML shell."""
     copied = []
@@ -133,14 +140,16 @@ def pack_entry_names(path: Path) -> list[str]:
         return names
 
 
-def validate_external_music_pack(path: Path) -> None:
-    imported_music = set()
-    for metadata in (ROOT / 'assets/music').rglob('*.import'):
-        imported_music.update(re.findall(r'res://(\.godot/imported/[^"\n]+)', metadata.read_text()))
+def validate_external_audio_pack(path: Path) -> None:
+    imported_audio = set()
+    for metadata in (ROOT / 'assets').rglob('*.import'):
+        if metadata.with_suffix('').suffix.lower() not in WEB_AUDIO_SUFFIXES:
+            continue
+        imported_audio.update(re.findall(r'res://(\.godot/imported/[^"\n]+)', metadata.read_text()))
     forbidden = [name for name in pack_entry_names(path)
-                 if name.startswith('assets/music/') or name in imported_music]
+                 if Path(name).suffix.lower() in WEB_AUDIO_SUFFIXES or name in imported_audio]
     if forbidden:
-        raise RuntimeError(f'Web PCK embeds background music: {forbidden[:5]}')
+        raise RuntimeError(f'Web PCK embeds browser audio: {forbidden[:5]}')
 
 
 def initial_size_limit(*, allow_exception: bool, reason: str | None) -> tuple[int, str | None]:
@@ -174,6 +183,8 @@ def main():
         parser.error('Run slot builds through ops/worktrees/slot-env SLOT -- COMMAND.')
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
+    browser_audio_files = copy_browser_audio(output)
+    write_browser_audio_catalog(browser_audio_files, ROOT / 'generated/browser_audio_catalog.json')
     home_bytes = prepare_home_icons(ROOT, output)
     print('Preparing streamed login video at source quality...', flush=True)
     media_bytes = prepare_login_media(ROOT, output)
@@ -201,7 +212,6 @@ def main():
     if returncode != 0:
         tail = console_log.read_text(errors='replace').splitlines()[-80:]
         raise RuntimeError('Godot web export failed:\n' + '\n'.join(tail))
-    browser_audio_files = copy_browser_audio(output)
     shell_assets = copy_web_shell_assets(output)
     files = []
     for name in ('index.html', 'index.js', 'index.wasm', 'index.pck', *(path.name for path in shell_assets)):
@@ -221,6 +231,7 @@ def main():
         b'generated/tiled_visuals/pewter_gym/pewter_gym.visual.tscn',
         b'generated/tiled_visuals/lobby/lobby.visual.tscn',
         b'assets/fonts/DejaVuSans.ttf',
+        b'generated/browser_audio_catalog.json',
         b'assets/ui/home_unknown.png',
     )
     forbidden_markers = (
@@ -240,7 +251,7 @@ def main():
             raise RuntimeError(f'Web pack contains excluded asset marker: {marker.decode()}')
 
     initial_bytes = sum(item['bytes'] for item in files)
-    validate_external_music_pack(pck_path)
+    validate_external_audio_pack(pck_path)
     packed_names = set(pack_entry_names(pck_path))
     excluded_sources = ('assets/sprites/pokemon/pokemon_home/', 'assets/sprites/pokemon/pokemon_home_shiny/', 'assets/video/login_background.ogv')
     if any(name.startswith(excluded_sources) for name in packed_names):
