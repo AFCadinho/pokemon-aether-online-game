@@ -58,7 +58,7 @@ func _run() -> void:
 		_check(misty_name_label != null and misty_name_label.text == "Misty", "Misty's nameplate identifies her")
 		var player_portrait: Texture2D = await date.call("_dialogue_portrait", 0, "")
 		_check(player_portrait != null, "the player's opening line uses their current trainer mugshot")
-		_check(player_portrait != null and player_portrait.get_size() == Vector2(64, 64), "the player mugshot uses the dialogue portrait size")
+		_check(player_portrait != null and player_portrait.get_size() == Vector2(160, 160), "the player mugshot preserves the full trainer-card resolution")
 		var player_save := root.get_node("PlayerSave")
 		var original_player_name := str(player_save.get("player_name"))
 		player_save.set("player_name", "Admin")

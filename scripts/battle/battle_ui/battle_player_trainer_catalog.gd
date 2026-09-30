@@ -68,7 +68,7 @@ static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
 
 
 # Dialogue uses the same layered art and orientation as the trainer card,
-# framed around the head and upper body instead of shrinking the whole trainer.
+# keeping the full canvas at its authored resolution for the dialogue to fit.
 static func build_dialogue_portrait(appearance_state: Dictionary) -> Texture2D:
 	var layers := build_layers(appearance_state)
 	if layers.is_empty():
@@ -93,10 +93,7 @@ static func build_dialogue_portrait(appearance_state: Dictionary) -> Texture2D:
 		image.flip_x()
 		var offset := (Vector2i(canvas_size, canvas_size) - image.get_size()) / 2
 		canvas.blend_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), offset)
-	var bust_size := roundi(canvas_size * 0.6)
-	var portrait := canvas.get_region(Rect2i((canvas_size - bust_size) / 2, 0, bust_size, bust_size))
-	portrait.resize(64, 64, Image.INTERPOLATE_NEAREST)
-	var texture := ImageTexture.create_from_image(portrait)
+	var texture := ImageTexture.create_from_image(canvas)
 	texture.set_meta("trainer_card_portrait", true)
 	return texture
 

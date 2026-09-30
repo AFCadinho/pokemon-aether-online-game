@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player and future-self dialogue portraits show the full trainer-card artwork at its original resolution, without a zoomed crop.
+
 - De Fishing Guru geeft zijn Old Rod en visles-quest nu in Huis 1 in Vermilion City. Zijn lesbeloning en hulp verhuizen mee; bestaande questvoortgang blijft behouden.
 
 - Player dialogue portraits now use trainer-card artwork; Mt. Moon’s future self uses the matching masked Mysterious Outfit portrait.
