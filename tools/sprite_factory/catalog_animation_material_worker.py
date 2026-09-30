@@ -191,7 +191,23 @@ def bake(job):
             bpy.data.objects.remove(obj, do_unlink=True)
         bpy.ops.mesh.primitive_plane_add()
         obj = bpy.context.object
-        obj.data.uv_layers.active.name = 'SourceUV'
+        domain = item.get('source_uv_domain')
+        if domain is None:
+            obj.data.uv_layers.active.name = 'SourceUV'
+        else:
+            # glTF flips Blender's V coordinate. Imported legacy materials can
+            # use UVs outside the first tile and non-periodic eye adjustments;
+            # baking only [0, 1] then repeating that image loses their faces.
+            if (len(domain) != 4 or not all(math.isfinite(v) for v in domain)
+                    or domain[2] <= domain[0] or domain[3] <= domain[1]):
+                raise ValueError('Invalid native source UV bake domain')
+            obj.data.uv_layers.active.name = 'BakeUV'
+            source_uv = obj.data.uv_layers.new(name='SourceUV')
+            for index, corner in enumerate(obj.data.uv_layers['BakeUV'].data):
+                source_uv.data[index].uv = (
+                    domain[0] + corner.uv.x * (domain[2] - domain[0]),
+                    domain[1] + corner.uv.y * (domain[3] - domain[1]))
+            obj.data.uv_layers.active_index = 0
         obj.data.materials.append(material)
         emission = tree.nodes.new('ShaderNodeEmission')
         tree.links.new(emission.outputs['Emission'], outputs[0].inputs['Surface'])
@@ -218,7 +234,8 @@ def bake(job):
         images[0].filepath_raw = item['output']
         images[0].file_format = 'PNG'
         images[0].save()
-        receipts.append({'material': item['name'], 'native_emission_output_zero': True})
+        receipts.append({'material': item['name'], 'native_emission_output_zero': True,
+                         **({'source_uv_domain': domain} if domain is not None else {})})
         print('NATIVE_COLOUR_BAKED', item['name'], item['output'], flush=True)
     Path(job['receipt']).write_text(json.dumps(receipts, indent=2) + '\n')
 
