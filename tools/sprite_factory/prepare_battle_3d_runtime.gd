@@ -165,6 +165,14 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 			errors.append(species + ": LED binding failed: " + led.failure)
 			node.free()
 			return {}
+	if entry.has("visual_ground_motion"):
+		var visual_ground := preload("visual_ground_motion_pack.gd").new()
+		var wrapped := visual_ground.apply(node, entry.visual_ground_motion, glb_hash)
+		if wrapped == null:
+			errors.append(species + ": visual grounding failed: " + visual_ground.failure)
+			node.free()
+			return {}
+		node = wrapped
 	var packed := PackedScene.new()
 	var signature := _signature(node)
 	code = packed.pack(node)
@@ -201,6 +209,10 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 		return {}
 	if entry.has("led_eyes") and verified.get_meta("pokeaether_led_eyes", 0) != 1:
 		errors.append(species + ": LED eyes lost on reload")
+		verified.free()
+		return {}
+	if entry.has("visual_ground_motion") and verified.get_meta("pokeaether_visual_ground_motion", 0) != 1:
+		errors.append(species + ": visual grounding lost on reload")
 		verified.free()
 		return {}
 	verified.free()
