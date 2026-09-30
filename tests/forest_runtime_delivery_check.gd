@@ -21,8 +21,14 @@ func _run() -> void:
 	settings.battle_3d_forest_manifest = ""
 	OS.set_environment("POKEAETHER_FOREST_MANIFEST", manifest_path)
 	if settings.get_battle_3d_forest_manifest() != manifest_path: failures += 1
-	settings.battle_3d_forest_manifest = "user://explicit-forest.json"
-	if settings.get_battle_3d_forest_manifest() != "user://explicit-forest.json": failures += 1
+	var custom_manifest_path := absolute.path_join("custom-forest.json")
+	var custom_file := FileAccess.open(custom_manifest_path, FileAccess.WRITE)
+	custom_file.store_string('{"schema":1,"pack":"custom.pck"}')
+	custom_file.close()
+	settings.battle_3d_forest_manifest = custom_manifest_path
+	if settings.get_battle_3d_forest_manifest() != custom_manifest_path: failures += 1
+	settings.battle_3d_forest_manifest = "user://explicit-forest-that-was-moved.json"
+	if settings.get_battle_3d_forest_manifest() != manifest_path: failures += 1
 	settings.battle_3d_forest_manifest = previous_setting
 	if had_env: OS.set_environment("POKEAETHER_FOREST_MANIFEST", previous_env)
 	else: OS.unset_environment("POKEAETHER_FOREST_MANIFEST")

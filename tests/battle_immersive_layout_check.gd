@@ -98,9 +98,20 @@ func _run() -> void:
 		print("BATTLE_UI_LAYOUT_OK ",layout)
 	settings.battle_3d_catalog_path = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	settings.battle_3d_forest_manifest = ""
+	var installed_manifest_path := "user://layout-installed-forest.json"
+	var installed_manifest := FileAccess.open(installed_manifest_path, FileAccess.WRITE)
+	installed_manifest.store_string('{"schema":1,"pack":"installed.pck"}')
+	installed_manifest.close()
+	OS.set_environment("POKEAETHER_FOREST_MANIFEST", ProjectSettings.globalize_path(installed_manifest_path))
 	assert(FileAccess.file_exists(settings.get_battle_3d_forest_manifest()),"Local forest pack discovery")
-	settings.battle_3d_forest_manifest = "user://explicit-missing.json"
-	assert(settings.get_battle_3d_forest_manifest()=="user://explicit-missing.json","Explicit path wins")
+	var custom_manifest_path := "user://explicit-forest-%d.json" % Time.get_ticks_usec()
+	var custom_manifest := FileAccess.open(custom_manifest_path, FileAccess.WRITE)
+	custom_manifest.store_string('{"schema":1,"pack":"custom.pck"}')
+	custom_manifest.close()
+	settings.battle_3d_forest_manifest = custom_manifest_path
+	assert(settings.get_battle_3d_forest_manifest()==custom_manifest_path,"Existing explicit path wins")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(custom_manifest_path))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(installed_manifest_path))
 	print("FOREST_DISCOVERY_OK")
 	quit()
 
@@ -109,7 +120,7 @@ func _check_browser_contracts() -> void:
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	assert(world_source.contains('(SettingsManager.battle_ui_layout == "immersive" or force_immersive)'))
 	assert(world_source.contains('if not _mount_battle_ui(true):'), "Co-op doubles request Immersive independently of the saved single-battle setting")
-	assert(world_source.contains('SettingsManager.battle_presentation_mode == "3d"\n\t\tand not OS.has_feature("web")'))
+	assert(world_source.contains('SettingsManager.battle_presentation_mode in ["2.5d", "3d"]\n\t\tand not OS.has_feature("web")'))
 	var settings_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
 	var layout_index := settings_source.find('layout_options.name = "BattleUILayoutOptions"')
 	var desktop_index := settings_source.find('if not OS.has_feature("web") and not OS.has_feature("mobile"):')
