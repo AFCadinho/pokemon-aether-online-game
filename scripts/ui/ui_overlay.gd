@@ -2103,6 +2103,7 @@ func _apply_mobile_chat_controls() -> void:
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	chat_tabs_panel.add_child(scroll)
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	chat_tab_row.reparent(scroll)
 	var tab_row := chat_tab_row
 	for child in tab_row.get_children():
@@ -31213,7 +31214,8 @@ func _fit_touch_popups() -> void:
 	if chat_layout != _touch_chat_layout:
 		_touch_chat_layout = chat_layout
 		if chat_panel.visible:
-			var tabs_height := chat_tabs_panel.get_combined_minimum_size().y + CHAT_TABS_GAP
+			var tab_scroll := chat_tabs_panel.get_node("TouchChatTabsScroll") as ScrollContainer
+			var tabs_height := chat_tab_row.get_combined_minimum_size().y + tab_scroll.get_h_scroll_bar().get_combined_minimum_size().y + CHAT_TABS_GAP
 			var factor := minf(1, minf(available.x / chat_panel.size.x, available.y / (chat_panel.size.y + tabs_height)))
 			chat_panel.scale = Vector2.ONE * factor
 			chat_tabs_panel.scale = chat_panel.scale
@@ -31576,6 +31578,9 @@ func _position_chat_tabs_panel() -> void:
 		var row_minimum_size := tab_row.get_combined_minimum_size()
 		tabs_size.x = maxf(tabs_size.x, row_minimum_size.x)
 		tabs_size.y = maxf(tabs_size.y, row_minimum_size.y)
+	if WindowFit.is_touch_ui():
+		var tab_scroll := chat_tabs_panel.get_node("TouchChatTabsScroll") as ScrollContainer
+		tabs_size.y += tab_scroll.get_h_scroll_bar().get_combined_minimum_size().y
 	var max_tabs_width: float = max(0.0, viewport_size.x)
 	tabs_size.x = min(tabs_size.x, max_tabs_width)
 	chat_tabs_panel.size = tabs_size

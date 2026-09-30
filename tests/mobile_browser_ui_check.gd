@@ -63,6 +63,13 @@ func _run() -> void:
 		check(bool(overlay.collapsible_panels[panel_id]["collapsed"]), "touch HUD starts compact: " + panel_id)
 		var button: Control = overlay.collapsible_panels[panel_id]["button"]
 		check(button.size.x >= 44 and button.size.y >= 44, "HUD expander has a touch target")
+	overlay._on_collapsible_panel_button_pressed("chat")
+	for frame in 5:
+		await process_frame
+	var tab_scroll: ScrollContainer = overlay.chat_tabs_panel.get_node("TouchChatTabsScroll")
+	check(tab_scroll.size.x > 0, "scrollable chat tabs have visible width")
+	check(tab_scroll.size.y >= overlay.chat_tab_row.size.y, "chat tabs are not clipped vertically")
+	check(overlay.chat_tabs_panel.position.y >= 68, "chat channels stay below the HUD navigation")
 	overlay.queue_free()
 	await process_frame
 	var old_presentation: String = settings.battle_presentation_mode
