@@ -2988,6 +2988,16 @@
 						"y": 67
 					}
 				},
+				"from_fan_club": {
+					"facingDirection": "down",
+					"label": "Fan Club",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromFanClub",
+					"tile": {
+						"x": 11,
+						"y": 29
+					}
+				},
 				"from_gym": {
 					"facingDirection": "down",
 					"label": "Gym",
@@ -3080,6 +3090,28 @@
 					"tile": {
 						"x": 14,
 						"y": 23
+					}
+				}
+			}
+		},
+		"kanto_vermilion_city_pokemon_fan_club": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Vermilion City Pokémon Fan Club",
+			"locationGroupId": "kanto_vermilion_city",
+			"locationGroupLabel": "Vermilion City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+			"spawnPoints": {
+				"from_vermilion_city": {
+					"facingDirection": "down",
+					"label": "Vermilion City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVermilionCity",
+					"tile": {
+						"x": 11,
+						"y": 22
 					}
 				}
 			}
@@ -6202,6 +6234,21 @@
 			"destinationAreaId": "kanto_vermilion_city_pokemon_center",
 			"sourceMapId": "kanto_vermilion_city"
 		},
+		"kanto_vermilion_city__to_pokemon_fan_club": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_vermilion_city_pokemon_fan_club",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 720.0
+				},
+				"spawnMarker": "FromVermilionCity"
+			},
+			"destinationAreaId": "kanto_vermilion_city_pokemon_fan_club",
+			"sourceMapId": "kanto_vermilion_city"
+		},
 		"kanto_vermilion_city__to_route11": {
 			"destination": {
 				"facingDirection": "right",
@@ -6267,6 +6314,23 @@
 			},
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_vermilion_city_pokemon_center"
+		},
+		"kanto_vermilion_city_pokemon_fan_club__to_outside": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromFanClub"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_vermilion_city_pokemon_fan_club"
 		},
 		"kanto_vermilion_docks__to_city": {
 			"destination": {
