@@ -3,7 +3,8 @@
 As of 2026-09-30, this production run started with 751 approved base species
 plus Mega Dragonite and 274 remaining base species. The first 56 pairs are now
 approved locally and individually bundled: 807 base species plus Mega Dragonite
-are ready; 218 base species remain. The new bundles are not published to R2.
+are ready; 218 base species remain. All 56 new bundles are published to R2 and publicly verified; see
+`release/approved_3d_remaining_56_r2_upload.json`.
 
 ## Current results
 
@@ -102,5 +103,10 @@ all 56 normal/shiny pairs and exercised faint replacement in classic/stadium
 arenas. Frame p95 was 16.84–16.87 ms; existing memory/stall limits passed.
 `catalog_remaining_56_bundle_qualification.json` binds the complete evidence.
 
-Next: separately authorized R2 publication and further recovery of the remaining
-218 species. The active download manifest is unchanged.
+All 56 bundles and their immutable index were published and checked via public
+GET SHA-256 and HEAD size. A complete 808-profile index also includes the newly
+published Sandslash/Toucannon versions; the other 750 bundles were retained.
+See `docs/approved-3d-bundles-808.md`.
+
+Next: further recovery of the remaining 218 species. The active download manifest
+and desktop release are unchanged.
