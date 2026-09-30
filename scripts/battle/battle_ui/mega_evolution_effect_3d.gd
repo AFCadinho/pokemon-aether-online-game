@@ -5,8 +5,8 @@ signal reveal_requested
 signal finished
 
 const SPARK = preload("res://assets/battles/effect/mega_evolution_spark.png")
-const CHARGE_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution1.wav")
-const REVEAL_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav")
+const CHARGE_SOUND := "res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution1.wav"
+const REVEAL_SOUND := "res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav"
 const CHARGE_SECONDS := 1.35
 const TOTAL_SECONDS := CHARGE_SECONDS + 181.0 / 60.0 + 0.35
 
@@ -66,11 +66,13 @@ func start(playback_speed: float) -> void:
 	flash.position.y = 1.2
 	add_child(flash)
 	charge_audio = AudioStreamPlayer.new()
-	charge_audio.stream = CHARGE_SOUND
+	if not OS.has_feature("web"):
+		charge_audio.stream = load(CHARGE_SOUND)
 	charge_audio.pitch_scale = speed
 	add_child(charge_audio)
 	reveal_audio = AudioStreamPlayer.new()
-	reveal_audio.stream = REVEAL_SOUND
+	if not OS.has_feature("web"):
+		reveal_audio.stream = load(REVEAL_SOUND)
 	reveal_audio.pitch_scale = speed
 	add_child(reveal_audio)
 	charge_audio.play()

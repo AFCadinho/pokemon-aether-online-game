@@ -1,5 +1,7 @@
 extends RefCounted
 
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
+
 const POKEMON_CRY_DIR := "res://assets/audio/sfx/pokemon_cries"
 const ANIME_POKEMON_CRY_DIR := "res://assets/audio/sfx/pokemon_anime_cries"
 
@@ -30,11 +32,15 @@ func get_cry_path(species: String, prefer_anime_cry: bool) -> String:
 
 func _get_cry_path(cry_key: String, prefer_anime_cry: bool) -> String:
 	var anime_path := "%s/%s.ogg" % [ANIME_POKEMON_CRY_DIR, cry_key]
-	if prefer_anime_cry and ResourceLoader.exists(anime_path):
+	if prefer_anime_cry and _cry_exists(anime_path):
 		return anime_path
 
 	var default_path := "%s/%s.ogg" % [POKEMON_CRY_DIR, cry_key]
-	return default_path if ResourceLoader.exists(default_path) else ""
+	return default_path if _cry_exists(default_path) else ""
+
+
+func _cry_exists(path: String) -> bool:
+	return WebAudioBridge.has_resource(path) if OS.has_feature("web") else ResourceLoader.exists(path)
 
 
 func _normalize_species_id(species: String) -> String:

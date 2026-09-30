@@ -52,6 +52,19 @@ func _init() -> void:
 	var bridge_source := FileAccess.get_file_as_string("res://scripts/services/web_audio_bridge.gd")
 	_check(bridge_source.contains("play_music") and bridge_source.contains("play_sfx"), "web audio bridge supports music and effects")
 	_check(music_manager_source.contains("WebAudioBridge.play_music"), "web music uses the native browser bridge")
+	var bridge := preload("res://scripts/services/web_audio_bridge.gd")
+	# Source checks also run before a web build generates its ignored catalog.
+	var previous_catalog: Dictionary = bridge._available
+	var previous_loaded: bool = bridge._catalog_loaded
+	bridge._available = {"res://assets/audio/sfx/pokemon_cries/PIKACHU.ogg": true}
+	bridge._catalog_loaded = true
+	_check(bridge.has_resource("res://assets/audio/sfx/pokemon_cries/PIKACHU.ogg"), "external cry exists in generated catalog")
+	_check(not bridge.has_resource("res://assets/audio/sfx/pokemon_cries/NOTAPOKEMON.ogg"), "missing cries remain unavailable")
+	bridge._available = previous_catalog
+	bridge._catalog_loaded = previous_loaded
+	var resolver := preload("res://scripts/services/pokemon_cry_resolver.gd").new()
+	_check(resolver.get_cry_path("pikachu", false).ends_with("/PIKACHU.ogg"), "native cry resolution still works")
+	_check(resolver.get_cry_path("pikachu-gmax", false).ends_with("/PIKACHU.ogg"), "cry form fallback remains intact")
 	print("web_audio_shell_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)
 

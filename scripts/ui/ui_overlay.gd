@@ -1853,6 +1853,8 @@ func _ready() -> void:
 	_setup_socials_attention_badge()
 	if mail_notification_sound != null and AudioServer.get_bus_index(SettingsManager.NOTIFICATION_BUS) >= 0:
 		mail_notification_sound.bus = SettingsManager.get_audio_output_bus(SettingsManager.NOTIFICATION_BUS)
+	if mail_notification_sound != null and not OS.has_feature("web"):
+		mail_notification_sound.stream = load("res://assets/audio/notification/notification.mp3")
 	_setup_loan_return_request_attention()
 	_set_socials_attention("mail", false)
 	_refresh_location_label()
@@ -2301,6 +2303,11 @@ func _refresh_pvp_localized_ui() -> void:
 
 
 func _play_mail_notification_sound() -> void:
+	if OS.has_feature("web"):
+		var volume := SettingsManager.master_volume / 100.0 * SettingsManager.notification_volume / 100.0
+		var bridge := preload("res://scripts/services/web_audio_bridge.gd")
+		bridge.play_sfx("res://assets/audio/notification/notification.mp3", volume)
+		return
 	if mail_notification_sound == null:
 		return
 	if mail_notification_sound.playing:

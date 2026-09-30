@@ -151,7 +151,7 @@ func play_field_move(move_id: String) -> void:
 
 func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:
 	var sound_path := pokemon_cry_resolver.get_cry_path(species, false)
-	if OS.has_feature("web") and (sound_path == "" or not ResourceLoader.exists(sound_path)):
+	if OS.has_feature("web") and sound_path == "":
 		return
 	if OS.has_feature("web"):
 		WebAudioBridge.play_sfx(sound_path, _web_cry_volume(volume_offset_db), pitch_scale)
