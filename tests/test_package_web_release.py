@@ -192,6 +192,8 @@ class PackageWebReleaseTests(unittest.TestCase):
                 'home-icons/catalog.json': b'{}',
                 'home-icons/abc.png': b'icon',
                 'login-media/world.mp4': b'video',
+                'login-media/world.ogv': b'native video',
+                'mobile-assets/catalog.json': b'{}',
                 'login-media/poster.webp': b'poster',
                 'login-media/.source-sha256': b'private build marker',
                 'build-receipt.json': b'{}',
@@ -237,7 +239,7 @@ class PackageWebReleaseTests(unittest.TestCase):
             )
             self.assertFalse((pages / 'index.pck').exists())
             self.assertTrue((r2 / 'index.pck').is_file())
-            for name in ('home-icons/catalog.json', 'home-icons/abc.png', 'login-media/world.mp4', 'login-media/poster.webp'):
+            for name in ('home-icons/catalog.json', 'home-icons/abc.png', 'login-media/world.mp4', 'login-media/poster.webp', 'login-media/world.ogv', 'mobile-assets/catalog.json'):
                 self.assertTrue((r2 / name).is_file())
                 self.assertFalse((pages / name).exists())
             self.assertFalse((r2 / 'login-media/.source-sha256').exists())

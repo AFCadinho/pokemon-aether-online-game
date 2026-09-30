@@ -1828,7 +1828,7 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 	var sprite_frames := _create_idle_sprite_frames(1.0)
 	sprite_frames.set_meta("home_fallback", true)
 	sprite_frames.add_frame(IDLE_ANIMATION, texture)
-	if OS.has_feature("web"):
+	if OS.has_feature("web") or OS.has_feature("mobile"):
 		texture.changed.connect(_refresh_home_fallback_frames.bind(weakref(sprite_frames), weakref(texture), species, is_shiny), CONNECT_ONE_SHOT)
 	var frame_size := texture.get_size()
 	_set_sprite_frames_auto_anchor(sprite_frames, frame_size)

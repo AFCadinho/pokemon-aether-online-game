@@ -159,6 +159,11 @@ func _run_prefetch(entry: Dictionary) -> void:
 		bool(entry.get("shiny", false)),
 		str(entry.get("style", "animated"))
 	)
+	if OS.has_feature("mobile"):
+		var resolver := preload("res://scripts/services/pokemon_cry_resolver.gd").new()
+		var cry: String = resolver.get_cry_path(str(entry.get("species", entry.get("asset_id", ""))), false)
+		if cry != "":
+			await get_tree().root.get_node("MobileAssetService").fetch("browser-audio/" + cry.trim_prefix("res://"))
 	_prefetch_queued_keys.erase(str(entry.get("cache_key", "")))
 	_prefetch_active = maxi(_prefetch_active - 1, 0)
 	_drain_prefetch_queue()
@@ -289,6 +294,17 @@ func _get_release_config() -> Dictionary:
 			if parsed is Dictionary and _has_sprite_styles(parsed as Dictionary):
 				result = parsed as Dictionary
 				_release_config_cache = result
+				if OS.has_feature("mobile"):
+					var file := FileAccess.open("user://mobile-release-config.json", FileAccess.WRITE)
+					if file != null:
+						file.store_string(JSON.stringify(result))
+	if result.is_empty() and OS.has_feature("mobile") and FileAccess.file_exists("user://mobile-release-config.json"):
+		var file := FileAccess.open("user://mobile-release-config.json", FileAccess.READ)
+		if file != null and file.get_length() <= 2 * 1024 * 1024:
+			var saved: Variant = JSON.parse_string(file.get_as_text())
+			if saved is Dictionary and _has_sprite_styles(saved):
+				result = saved
+				_release_config_cache = result
 	ticket.result = result
 	_release_config_ticket = null
 	ticket.completed.emit()
@@ -307,6 +323,9 @@ func _has_sprite_styles(config: Dictionary) -> bool:
 
 
 func _download(url: String) -> Dictionary:
+	if OS.has_feature("mobile") and _cacheable_desktop_url(url):
+		var path: String = await get_tree().root.get_node("MobileAssetService").fetch_url(url)
+		return {"body": FileAccess.get_file_as_bytes(path)} if path != "" else {}
 	if not OS.has_feature("web") and not OS.has_feature("mobile") and _cacheable_desktop_url(url):
 		var cached := _disk_cache.read(url)
 		if not cached.is_empty():
@@ -323,6 +342,9 @@ func _download(url: String) -> Dictionary:
 
 
 func _invalidate_desktop_file(url: String) -> void:
+	if OS.has_feature("mobile"):
+		get_tree().root.get_node("MobileAssetService").cache.invalidate(url)
+		return
 	if OS.has_feature("web") or OS.has_feature("mobile") or not _cacheable_desktop_url(url):
 		return
 	_disk_cache.invalidate(url)
