@@ -6,7 +6,7 @@ const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 const HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home/%s.png"
 const SHINY_HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home_shiny/%s.png"
 const FRONT_FRAME_PATH := "res://assets/sprites/pokemon/front/%s/frame_000.png"
-const UNKNOWN_HOME_SPRITE_PATH := "res://assets/sprites/pokemon/pokemon_home/unknown.png"
+const UNKNOWN_HOME_SPRITE_PATH := "res://assets/ui/home_unknown.png"
 const POKEMON_SPRITE_RES_ROOT := "res://assets/sprites/pokemon"
 const POKEMON_SPRITE_RELATIVE_ROOT := "assets/sprites/pokemon"
 const GEN5_SPRITE_ROOT := "gen5"
@@ -133,6 +133,8 @@ static func load_texture(path: String) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 static func load_home_sprite(species: String, is_shiny: bool = false) -> Texture2D:
+	if OS.has_feature("web"):
+		return (Engine.get_main_loop() as SceneTree).root.get_node("WebHomeIconService").get_icon(species, is_shiny)
 	if is_shiny:
 		for sprite_name in _get_home_sprite_names(species):
 			for shiny_path in build_pokemon_sprite_path("pokemon_home_shiny/%s.png" % sprite_name):
@@ -244,6 +246,8 @@ static func _normalize_home_sprite_key(value: String) -> String:
 	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-").replace(".", "")
 
 static func load_party_icon(species: String, is_shiny: bool = false) -> Texture2D:
+	if OS.has_feature("web"):
+		return (Engine.get_main_loop() as SceneTree).root.get_node("WebHomeIconService").get_icon(species, is_shiny, true)
 	var cache_key := "%s|%s" % [species, str(is_shiny)]
 	var cached_icon: Variant = party_icon_cache.get(cache_key)
 	if cached_icon is Texture2D:
@@ -260,6 +264,8 @@ static func load_party_icon(species: String, is_shiny: bool = false) -> Texture2
 	return unknown_icon
 
 static func load_unknown_icon() -> Texture2D:
+	if OS.has_feature("web"):
+		return load(UNKNOWN_HOME_SPRITE_PATH) as Texture2D
 	for path in build_pokemon_sprite_path("pokemon_home/unknown.png"):
 		var texture := load_texture(path)
 		if texture != null:

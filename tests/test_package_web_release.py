@@ -189,6 +189,11 @@ class PackageWebReleaseTests(unittest.TestCase):
                 'pokeaether-logo.webp': b'logo',
                 'pokeaether-world-preview.webp': b'preview',
                 'browser-audio/music/theme.ogg': b'audio',
+                'home-icons/catalog.json': b'{}',
+                'home-icons/abc.png': b'icon',
+                'login-media/world.mp4': b'video',
+                'login-media/poster.webp': b'poster',
+                'login-media/.source-sha256': b'private build marker',
                 'build-receipt.json': b'{}',
                 'modules/manifest.json': b'{"schemaVersion":1,"modules":{}}',
                 'modules/aether-clash-maps.pck': b'module',
@@ -232,6 +237,10 @@ class PackageWebReleaseTests(unittest.TestCase):
             )
             self.assertFalse((pages / 'index.pck').exists())
             self.assertTrue((r2 / 'index.pck').is_file())
+            for name in ('home-icons/catalog.json', 'home-icons/abc.png', 'login-media/world.mp4', 'login-media/poster.webp'):
+                self.assertTrue((r2 / name).is_file())
+                self.assertFalse((pages / name).exists())
+            self.assertFalse((r2 / 'login-media/.source-sha256').exists())
             self.assertTrue((pages / 'pokeaether-logo.webp').is_file())
             self.assertTrue((pages / 'pokeaether-world-preview.webp').is_file())
             self.assertTrue((pages / 'modules/aether-clash-maps.pck').is_file())

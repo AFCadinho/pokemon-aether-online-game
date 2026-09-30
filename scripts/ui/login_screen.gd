@@ -388,6 +388,14 @@ func _on_settings_menu_closed() -> void:
 
 
 func _setup_background_video() -> void:
+	if OS.has_feature("web"):
+		background_video_player.hide()
+		hero_background.hide()
+		($Background as ColorRect).color.a = 0.0
+		get_viewport().transparent_bg = true
+		JavaScriptBridge.eval("window.pokeaetherLoginVideo?.start()", true)
+		return
+	background_video_player.stream = load("res://assets/video/login_background.ogv") as VideoStream
 	var has_video := background_video_player.stream != null
 	background_video_player.visible = has_video
 	hero_background.visible = not has_video
@@ -1111,3 +1119,9 @@ func _get_login_error_message(result: Dictionary) -> String:
 	if status >= 500:
 		return LocalizationManager.text("ui.login.error.unavailable")
 	return LocalizationManager.text("ui.login.error.sign_in")
+
+
+func _exit_tree() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherLoginVideo?.stop()", true)
+		get_viewport().transparent_bg = false

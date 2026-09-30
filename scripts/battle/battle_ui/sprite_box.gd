@@ -1828,6 +1828,8 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 	var sprite_frames := _create_idle_sprite_frames(1.0)
 	sprite_frames.set_meta("home_fallback", true)
 	sprite_frames.add_frame(IDLE_ANIMATION, texture)
+	if OS.has_feature("web"):
+		texture.changed.connect(_refresh_home_fallback_frames.bind(weakref(sprite_frames), weakref(texture), species, is_shiny), CONNECT_ONE_SHOT)
 	var frame_size := texture.get_size()
 	_set_sprite_frames_auto_anchor(sprite_frames, frame_size)
 	_set_sprite_frames_render_scale(
@@ -1835,6 +1837,25 @@ func _load_sprite_frames_from_home_sprite(species: String, is_shiny: bool) -> Sp
 		_get_home_sprite_render_scale(_get_sprite_frames_visual_bounds(sprite_frames))
 	)
 	return sprite_frames
+
+func _refresh_home_fallback_frames(frames_ref: WeakRef, texture_ref: WeakRef, species: String, is_shiny: bool) -> void:
+	var frames := frames_ref.get_ref() as SpriteFrames
+	var texture := texture_ref.get_ref() as Texture2D
+	if frames == null or texture == null:
+		return
+	var bounds := Rect2(texture.get_image().get_used_rect())
+	_set_sprite_frames_auto_anchor(frames, texture.get_size())
+	_set_sprite_frames_visual_bounds(frames, bounds)
+	_set_sprite_frames_render_scale(frames, _get_home_sprite_render_scale(bounds))
+	for side: String in ["front", "back"]:
+		var key := _sprite_cache_key(species, side, is_shiny)
+		if sprite_frames_cache.get(key) == frames:
+			_remember_shared_sprite_frames(key, frames)
+	for node: Node in find_children("*", "AnimatedSprite2D", true, false):
+		var sprite := node as AnimatedSprite2D
+		if sprite.sprite_frames == frames:
+			_set_sprite_target_scale_from_frames(sprite, frames)
+			_apply_sprite_anchor(sprite)
 
 func _get_home_sprite_render_scale(visual_bounds: Rect2) -> float:
 	if visual_bounds.size.x <= 0.0 or visual_bounds.size.y <= 0.0:
@@ -2073,6 +2094,12 @@ func request_web_sprite_frames(species: String, side: String, is_shiny: bool = f
 		_remember_sprite_frames(cache_key, frames)
 		_remember_shared_sprite_frames(cache_key, frames)
 		return frames
+	if OS.has_feature("web"):
+		await WebHomeIconService.load_icon(species, is_shiny)
+		var fallback := _load_sprite_frames_from_home_sprite(species, is_shiny)
+		if fallback != null:
+			_apply_species_position_offset(fallback, species, side, is_shiny)
+			return fallback
 	return null
 
 

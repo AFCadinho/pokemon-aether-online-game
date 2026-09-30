@@ -295,3 +295,46 @@ security decision.
 
 Reference: [Godot 4.6 web export documentation](https://docs.godotengine.org/en/4.6/tutorials/export/exporting_for_web.html).
 WebSocket proxy API: [websockets 16 client documentation](https://websockets.readthedocs.io/en/16.1/reference/asyncio/client.html).
+
+
+## On-demand startup assets
+
+The normal browser export excludes both HOME image directories and the login
+OGV from the initial PCK. `build_web_preview.py` prepares `home-icons/` with a
+case-sensitive normal/shiny catalog and content-hashed PNG filenames. Existing
+HOME source archives remain the source of these assets; the browser fetches
+individual PNGs rather than downloading or opening a whole ZIP. The placeholder
+is bundled as `assets/ui/home_unknown.png`. Shared mutable textures refresh the
+current UI in place; downloads are coalesced and limited to four concurrent
+requests, and each memory cache retains at most 256 entries. Conservative RGBA estimates
+also cap retained UI textures at 32 MiB and decoded images at 16 MiB; displayed
+textures remain valid when evicted from the cache. Pokédex list icons
+start loading only when their rows intersect the visible scroll area.
+
+FFmpeg is required for web builds. It prepares `login-media/world.mp4` (H.264,
+CRF 18, source resolution/frame rate, full length, no audio, faststart) and a
+high-quality first-frame WebP poster. This prioritizes image quality; the
+streamed video can be larger than the source OGV. It is not part of the startup
+size budget. The native browser video plays behind the transparent login UI,
+including fullscreen, pauses when the tab is hidden, and releases its source
+when the login scene exits. Native clients keep playing the original OGV.
+
+Packaging places HOME images, their catalog, and login media in the immutable
+release R2 payload. Browser requests use `/web/releases/<build-id>/...` on the
+Pages origin, whose existing function forwards range/cache headers to R2.
+These changes are local until the usual separately authorized candidate
+publication; no existing bucket objects need overwriting.
+
+Focused checks include `web_home_icon_service_check.gd`,
+`web_login_background_check.gd`, the Python export/packaging tests, fullscreen
+smoke, and browser startup assets with
+`POKEAETHER_STARTUP_ASSETS_ONLY=1` in `web_accounts_browser_smoke.cjs`.
+
+
+Local comparison (2026-09-30, slot B, Godot 4.6.2): changing only the web
+resource-selection preset on the same source/import cache reduced PCK payload
+from 285.87 to 168.90 MiB. With the same engine and shell files, startup is
+approximately 322.33 to 205.36 MiB (116.97 MiB, 36.3% less, before HTTP
+compression). These figures exclude on-demand transfers and do not measure RAM.
+The world-login smoke also found a pre-existing 3D sparkle preload under the
+excluded `tools/` tree; its runtime copy now lives under `assets/battles/effect`.
