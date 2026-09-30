@@ -14,8 +14,8 @@ const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const FOLLOWER_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
 const BASE_FOLLOWER_FRAME_HEIGHT := 64.0
 const SHINY_SPARKLE_COLOR := Color(1.0, 0.82, 0.22, 0.88)
-const SHINY_SPARKLE_CENTER_OFFSET := Vector2(0.0, -20.0)
-const SHINY_SPARKLE_RADIUS := 20.0
+const SHINY_SPARKLE_PADDING := Vector2(4.0, 4.0)
+const SHINY_SPARKLE_MIN_RADIUS := Vector2(8.0, 8.0)
 
 var player: Node2D
 var sprite: AnimatedSprite2D
@@ -102,10 +102,10 @@ func _draw() -> void:
 		return
 
 	var center := _get_shiny_sparkle_center()
+	var radii := _get_shiny_sparkle_radii()
 	for index in range(4):
 		var angle := shiny_sparkle_time * 2.2 + float(index) * TAU / 4.0
-		var radius := SHINY_SPARKLE_RADIUS + float(index % 2) * 5.0
-		var sparkle_position := center + Vector2(cos(angle), sin(angle * 1.17)) * radius
+		var sparkle_position := center + Vector2(cos(angle), sin(angle)) * radii
 		var pulse := 0.45 + 0.45 * absf(sin(shiny_sparkle_time * 4.0 + float(index)))
 		var sparkle_size := 2.0 + pulse * 1.7
 		var sparkle_color := Color(
@@ -226,8 +226,28 @@ func _update_sprite_visual_offset(direction: Vector2) -> void:
 
 	sprite.position = _get_sprite_visual_offset(direction)
 
+func _get_shiny_sparkle_bounds() -> Rect2:
+	if sprite == null or sprite.sprite_frames == null:
+		return Rect2(_get_sprite_visual_offset(last_animation_direction) - Vector2(12, 12), Vector2(24, 24))
+	var animation_name := _get_idle_animation_name(last_animation_direction)
+	var bounds := FollowerSpriteService.get_visual_bounds(sprite.sprite_frames, animation_name)
+	var frame_size := _get_current_frame_size()
+	if not bounds.has_area():
+		bounds = Rect2(Vector2.ZERO, frame_size)
+	var origin := sprite.offset - frame_size * 0.5 if sprite.centered else sprite.offset
+	var transformed := Rect2(sprite.transform * (bounds.position + origin), Vector2.ZERO)
+	for point: Vector2 in [bounds.position, Vector2(bounds.end.x, bounds.position.y), bounds.end, Vector2(bounds.position.x, bounds.end.y)]:
+		transformed = transformed.expand(sprite.transform * (point + origin))
+	return transformed
+
+
 func _get_shiny_sparkle_center() -> Vector2:
-	return _get_sprite_visual_offset(last_animation_direction) + SHINY_SPARKLE_CENTER_OFFSET
+	return _get_shiny_sparkle_bounds().get_center()
+
+
+func _get_shiny_sparkle_radii() -> Vector2:
+	var half_size := _get_shiny_sparkle_bounds().size * 0.5
+	return (half_size + SHINY_SPARKLE_PADDING).max(SHINY_SPARKLE_MIN_RADIUS)
 
 func _get_sprite_visual_offset(_direction: Vector2) -> Vector2:
 	var large_sprite_offset := Vector2(0.0, -maxf(_get_current_frame_size().y - BASE_FOLLOWER_FRAME_HEIGHT, 0.0) * 0.5)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Shiny follower sparkles now surround the visible Pokémon and scale with its sprite, instead of floating above small followers.
+
 - De drie huizen in Vermilion City hebben toegankelijke interieurs met de gedeelde Vermilion House-visual, collision en eigen stadsverbindingen.
 
 - De Pokemon Fan Club in Vermilion City is toegankelijk, met de Chairman en zijn Bike Voucher-quest, drie nieuwe bezoekers en Rapidash, Eevee en Clefairy. De Chairman staat niet meer in de Cerulean Bike Shop.

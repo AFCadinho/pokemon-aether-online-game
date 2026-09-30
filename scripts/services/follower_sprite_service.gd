@@ -58,6 +58,47 @@ static func get_sprite_frames(species: String, shiny: bool) -> SpriteFrames:
 	_sprite_frames_cache[cache_key] = sprite_frames
 	return sprite_frames
 
+static func get_visual_bounds(sprite_frames: SpriteFrames, animation_name: String) -> Rect2:
+	if sprite_frames == null:
+		return Rect2()
+	if not sprite_frames.has_meta("follower_visual_bounds"):
+		_cache_visual_bounds(sprite_frames)
+	# Use the whole walking cycle for an idle or walking direction so the
+	# sparkle envelope does not jump as individual animation frames advance.
+	var direction_animation := animation_name.replace("idle_", "walk_")
+	var bounds: Dictionary = sprite_frames.get_meta("follower_visual_bounds", {})
+	return bounds.get(direction_animation, Rect2()) as Rect2
+
+
+static func _cache_visual_bounds(sprite_frames: SpriteFrames) -> void:
+	var bounds_by_animation: Dictionary = {}
+	var source_images: Dictionary = {}
+	for animation_name: StringName in sprite_frames.get_animation_names():
+		if not str(animation_name).begins_with("walk_"):
+			continue
+		var animation_bounds := Rect2()
+		for frame_index in range(sprite_frames.get_frame_count(animation_name)):
+			var texture := sprite_frames.get_frame_texture(animation_name, frame_index) as AtlasTexture
+			if texture == null or texture.atlas == null:
+				continue
+			var source_key := texture.atlas.get_instance_id()
+			if not source_images.has(source_key):
+				var image := texture.atlas.get_image()
+				if image != null and image.is_compressed():
+					image.decompress()
+				source_images[source_key] = image
+			var source_image := source_images[source_key] as Image
+			if source_image == null or source_image.is_empty():
+				continue
+			var frame_image := source_image.get_region(Rect2i(texture.region))
+			var frame_bounds := Rect2(frame_image.get_used_rect())
+			if frame_bounds.has_area():
+				animation_bounds = animation_bounds.merge(frame_bounds) if animation_bounds.has_area() else frame_bounds
+		bounds_by_animation[str(animation_name)] = animation_bounds
+	# Share only compact geometry with other followers; release the CPU sheet.
+	sprite_frames.set_meta("follower_visual_bounds", bounds_by_animation)
+
+
 static func _load_texture_for_species(species: String, shiny: bool) -> Texture2D:
 	var mod_texture := ContentPacks.follower_texture(species, shiny)
 	if mod_texture != null:
