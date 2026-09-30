@@ -198,3 +198,13 @@ Bundle qualification is recorded in
 Archives are under
 `.tmp/remaining-animation-recovery/remaining-39/final-battle/bundles` in slot-a.
 These bundles have not been uploaded to R2 or included in a release.
+
+## R2 publication of the 39-pair cohort
+
+The user authorized upload of these 39 bundles. All archives and their own
+immutable index have now passed public GET SHA-256 and HEAD size verification.
+`release/approved_3d_recovery_39_r2_upload.json` records the public object keys
+and binds publication to the exact bundle qualification and reviewed catalog.
+`release/approved_3d_recovery_39_index.json` contains these 39 species only.
+The active public launcher/game manifest was checked before and after upload
+and is unchanged. Desktop activation remains a separate release step.
