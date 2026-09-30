@@ -11,6 +11,11 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/gym_leader_npc.tscn" id="leader"]
 [ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="surge_profile"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="frames_scientist_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="frames_gentleman"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(128, 32)
 
@@ -67,6 +72,39 @@ position = Vector2(368, 272)
 npc_profile = ExtResource("surge_profile")
 trainer_id = "kanto_alpha_gym_lt_surge"
 npc_id = "kanto_alpha_gym_lt_surge"
+
+[node name="WorkerDax" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(208, 816)
+trainer_id = "kanto_vermilion_city_gym_worker_dax"
+npc_id = "kanto_vermilion_city_gym_worker_dax"
+npc_definition_id = "trainer_class_worker"
+display_name = "Worker Dax"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_worker")
+sight_range_tiles = 5
+battle_environment_id = "pvp_stadium"
+
+[node name="ScientistMira" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(528, 720)
+trainer_id = "kanto_vermilion_city_gym_scientist_mira"
+npc_id = "kanto_vermilion_city_gym_scientist_mira"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Scientist Mira"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("frames_scientist_f")
+sight_range_tiles = 5
+battle_environment_id = "pvp_stadium"
+
+[node name="GentlemanEdwin" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(272, 624)
+trainer_id = "kanto_vermilion_city_gym_gentleman_edwin"
+npc_id = "kanto_vermilion_city_gym_gentleman_edwin"
+npc_definition_id = "trainer_class_gentleman"
+display_name = "Gentleman Edwin"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_gentleman")
+sight_range_tiles = 5
+battle_environment_id = "pvp_stadium"
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 

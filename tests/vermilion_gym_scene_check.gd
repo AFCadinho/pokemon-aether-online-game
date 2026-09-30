@@ -26,6 +26,7 @@ func _run() -> void:
 	var leader := gym.get_node("Entities/NPCs/GymLeaderLtSurge")
 	_check(leader.trainer_id == "kanto_alpha_gym_lt_surge" and leader.npc_profile.badge_id == "thunder", "existing Lt. Surge trainer and Thunder Badge profile")
 	_check(gym.get_node("Entities/NPCs/GymGuide").npc_id == "kanto_vermilion_city_gym_guide", "guide uses dedicated dialogue metadata")
+	_check_trainers(gym)
 	var entrance := city.get_node("Exits/ToGym")
 	var exit := gym.get_node("Exits/ToVermilionCity")
 	_check(entrance.target_scene_path == GYM and entrance.target_spawn_name == "FromVermilionCity", "city entrance")
@@ -45,3 +46,31 @@ func _check(ok: bool, label: String) -> void:
 	if not ok:
 		failed = true
 		push_error("FAIL " + label)
+
+func _check_trainers(gym: Node) -> void:
+	var expected := {
+		"WorkerDax": "kanto_vermilion_city_gym_worker_dax",
+		"ScientistMira": "kanto_vermilion_city_gym_scientist_mira",
+		"GentlemanEdwin": "kanto_vermilion_city_gym_gentleman_edwin",
+	}
+	var ground := gym.get_node("Visual/Ground") as TileMapLayer
+	var floor_cell := Vector2i(11, 20)
+	var floor_source := ground.get_cell_source_id(floor_cell)
+	var floor_atlas := ground.get_cell_atlas_coords(floor_cell)
+	var occupied: Dictionary = {}
+	for npc: Node2D in gym.get_node("Entities/NPCs").get_children():
+		var cell := ground.local_to_map(npc.position)
+		_check(not occupied.has(cell), str(npc.name) + " has a separate tile")
+		occupied[cell] = true
+	_check(gym.get_node("Entities/NPCs").get_child_count() == 5, "three trainers supplement Lt. Surge and guide")
+	for name: String in expected:
+		var trainer := gym.get_node("Entities/NPCs/" + name)
+		_check(trainer.trainer_id == expected[name] and trainer.npc_id == expected[name], name + " uses its canonical trainer identity")
+		_check(trainer.scene_file_path == "res://scenes/npcs/trainer_npc.tscn", name + " uses battle trainer interaction")
+		_check(trainer.npc_sprite_frames != null, name + " has character sprites")
+		var cell := ground.local_to_map(trainer.position)
+		for step in range(trainer.sight_range_tiles + 1):
+			var lane: Vector2i = cell + Vector2i(trainer.facing_direction) * step
+			_check(ground.get_cell_source_id(lane) == floor_source and ground.get_cell_atlas_coords(lane) == floor_atlas, name + " approach stays on the visual floor")
+			if step > 0:
+				_check(not occupied.has(lane), name + " approach avoids another NPC")
