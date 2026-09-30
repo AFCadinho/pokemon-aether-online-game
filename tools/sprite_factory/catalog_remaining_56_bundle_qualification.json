@@ -1,0 +1,6428 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "abra",
+            "runtime_sha256": "8c26bc3c72f05b9d5c5d504012458971e00374f24b3c87ce2778cd2b911b2354",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "abra@shiny",
+            "runtime_sha256": "49a7135b914fdc5a2cb5792728db1089110edc9cb03b49923c1ee4f348d81b50",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:abra:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 63,
+        "object_key": "optional-assets/pokemon_3d/abra/base/v1-24f6cebf7a44867fafe91d464ef018e8320f01dbc3585c1baed15e64836307a9.zip",
+        "sha256": "24f6cebf7a44867fafe91d464ef018e8320f01dbc3585c1baed15e64836307a9",
+        "size_bytes": 4490781,
+        "species_id": "abra",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "aerodactyl",
+            "runtime_sha256": "dffcd20260cd68bd3336d39c3ef5d0c9cf73241dd9d7592bea0344340f3a4090",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "aerodactyl@shiny",
+            "runtime_sha256": "3f19c5e9385a8e0711072feba57fc8a2e38ec4baa9a404fb820bec8f88038584",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:aerodactyl:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 142,
+        "object_key": "optional-assets/pokemon_3d/aerodactyl/base/v1-8a97c5975b2a08c1b036c395c917755c44e3cf922bafaf819064eb0c126af1ae.zip",
+        "sha256": "8a97c5975b2a08c1b036c395c917755c44e3cf922bafaf819064eb0c126af1ae",
+        "size_bytes": 6765355,
+        "species_id": "aerodactyl",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "aggron",
+            "runtime_sha256": "136407960cd7745195939178829371be428f8690fdc01ef8b0ae6faa8f087182",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "aggron@shiny",
+            "runtime_sha256": "9a1e65238de8ecb27dae06630fc4d933f24fee3fc8e6e2833e4abcd8a8462712",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:aggron:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 306,
+        "object_key": "optional-assets/pokemon_3d/aggron/base/v1-c25ff48d57e983fb3cf899b8c12701e142efb0d8e2b9e62c55d653beaa2e6a83.zip",
+        "sha256": "c25ff48d57e983fb3cf899b8c12701e142efb0d8e2b9e62c55d653beaa2e6a83",
+        "size_bytes": 6524345,
+        "species_id": "aggron",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "alakazam",
+            "runtime_sha256": "0c1e8cd849c31ed81bf9c35f7a92b30058f967e356f837150f2a490037eb3614",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "alakazam@shiny",
+            "runtime_sha256": "394305218b62a108380565e534d7e8dc2804123dcb9692b27c710b4be4666913",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:alakazam:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 65,
+        "object_key": "optional-assets/pokemon_3d/alakazam/base/v1-f308b8a4074148bbf3e949e1f63f8e9c71356d84a1c1030f32b37e7988539e4f.zip",
+        "sha256": "f308b8a4074148bbf3e949e1f63f8e9c71356d84a1c1030f32b37e7988539e4f",
+        "size_bytes": 4827512,
+        "species_id": "alakazam",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "aron",
+            "runtime_sha256": "8eacc7cc8f1829255ae317a4c8dc9411ef88c75041a296a1f8aedb8c63ca54d3",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "aron@shiny",
+            "runtime_sha256": "d88a0c0e40ab57610ea71c609034f82976dea8da4fc2ff2fe8cf28fda81acce8",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:aron:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 304,
+        "object_key": "optional-assets/pokemon_3d/aron/base/v1-2f3a86e3be71c9588a77bd93aeb91d56dd22bb881c806cafbc58bc4a2f1883ba.zip",
+        "sha256": "2f3a86e3be71c9588a77bd93aeb91d56dd22bb881c806cafbc58bc4a2f1883ba",
+        "size_bytes": 3086908,
+        "species_id": "aron",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "beedrill",
+            "runtime_sha256": "4c4412703f2518f23cafe94b4a41fdb534743ac5f43f2ed0fb7063725e3be608",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "beedrill@shiny",
+            "runtime_sha256": "fea4cb079e06a030f284174e5ee999c8a36143f1786263f67d100ec6ce2b5f39",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:beedrill:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 15,
+        "object_key": "optional-assets/pokemon_3d/beedrill/base/v1-cbd5f53de7d8d4aed689603c9660bb020560093996c5a347a787c29dafb55dda.zip",
+        "sha256": "cbd5f53de7d8d4aed689603c9660bb020560093996c5a347a787c29dafb55dda",
+        "size_bytes": 2669969,
+        "species_id": "beedrill",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "blaziken",
+            "runtime_sha256": "f06544960700a71294735da0fc4a03e62808cf2841535b2f721d27e2278a5eca",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "blaziken@shiny",
+            "runtime_sha256": "3193616154dac5607025acf5cc1689c85adbb1d4c43097cba5d532d42179c604",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:blaziken:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 257,
+        "object_key": "optional-assets/pokemon_3d/blaziken/base/v1-86913492ec4f0dff348f7ecd1c1b6f8279c1636e7266a5f707e0ae3263225218.zip",
+        "sha256": "86913492ec4f0dff348f7ecd1c1b6f8279c1636e7266a5f707e0ae3263225218",
+        "size_bytes": 9929442,
+        "species_id": "blaziken",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "carvanha",
+            "runtime_sha256": "7ec8797d9daad30e451bda6d142ed7e9f2955af35e119636affcd035b2b0b85c",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "carvanha@shiny",
+            "runtime_sha256": "4c3b5eb360a0a70ebc3ab6efeea377e929ac0264bda9c2a8f5970bbd6f09f450",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:carvanha:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 318,
+        "object_key": "optional-assets/pokemon_3d/carvanha/base/v1-c14d090a0788289ed2a0b8ef321f0ff4901afc6157a4fd0926cd278d95febb53.zip",
+        "sha256": "c14d090a0788289ed2a0b8ef321f0ff4901afc6157a4fd0926cd278d95febb53",
+        "size_bytes": 7286318,
+        "species_id": "carvanha",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "clobbopus",
+            "runtime_sha256": "1c5788812909aa081ce4dae34c4365c6e8852a75d785f693da5d6fae562f48ba",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "clobbopus@shiny",
+            "runtime_sha256": "74083131baada394f2feb37824c243c9312cdd75510c64593cc4d0120912e562",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:clobbopus:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 852,
+        "object_key": "optional-assets/pokemon_3d/clobbopus/base/v1-e1c2462bc9957d0ab17aa803a95db220073beb38c91630902613a165d11ef4e5.zip",
+        "sha256": "e1c2462bc9957d0ab17aa803a95db220073beb38c91630902613a165d11ef4e5",
+        "size_bytes": 2683054,
+        "species_id": "clobbopus",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "combusken",
+            "runtime_sha256": "644cd21f8e51ca4b89ba275ddb99dc81928bc261d410a962c9f510e0021d8b1e",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "combusken@shiny",
+            "runtime_sha256": "9336eddf9ed22b43d86875a401dc88d8a00fb11c287579b91a7f8bee31db3f0d",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:combusken:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 256,
+        "object_key": "optional-assets/pokemon_3d/combusken/base/v1-f07054d54541d3ef9481d02e4a09b711f337a4d279d8da16d6064ea9a1b29659.zip",
+        "sha256": "f07054d54541d3ef9481d02e4a09b711f337a4d279d8da16d6064ea9a1b29659",
+        "size_bytes": 5954221,
+        "species_id": "combusken",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "crobat",
+            "runtime_sha256": "0da87955c278606966efd06f9da3147d9f2686e7fbc0ec0ada44e2b317c0f3e4",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "crobat@shiny",
+            "runtime_sha256": "c7265a41bbd20b1f04f6bc17645f25ae319dcd12ce469166afd50aff33a49c7f",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:crobat:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 169,
+        "object_key": "optional-assets/pokemon_3d/crobat/base/v1-57c34d1d295d3dd5ae80eb58e05ae735429fff2641d8b7daebb544f4b68362d6.zip",
+        "sha256": "57c34d1d295d3dd5ae80eb58e05ae735429fff2641d8b7daebb544f4b68362d6",
+        "size_bytes": 3926822,
+        "species_id": "crobat",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "electrike",
+            "runtime_sha256": "89f9aae8d6579535a8c92832d7b073071ddfb915a0bc659cbd03edf9abe85c1a",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "electrike@shiny",
+            "runtime_sha256": "cfe596bbe4983acba799317761c1ab853efc2d7a591c7ce94ac8585912163f15",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:electrike:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 309,
+        "object_key": "optional-assets/pokemon_3d/electrike/base/v1-470b08e52542c8949fbfe19645faed14cf69718af913c3d5ee1607529a8e79ba.zip",
+        "sha256": "470b08e52542c8949fbfe19645faed14cf69718af913c3d5ee1607529a8e79ba",
+        "size_bytes": 2871230,
+        "species_id": "electrike",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "garbodor",
+            "runtime_sha256": "e6e5684c37bfeb70a79df9fd65318861bc21688c6db50c54526c506fe0c69746",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "garbodor@shiny",
+            "runtime_sha256": "c21493b99d92c12ce8608d703c81c1e59d13fd019678ea198e8f2245bcbe898d",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:garbodor:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 569,
+        "object_key": "optional-assets/pokemon_3d/garbodor/base/v1-11a6d806dd32ceb667b03dac8b0781eb78fdc8c023330f2d784bc2611c1b89f4.zip",
+        "sha256": "11a6d806dd32ceb667b03dac8b0781eb78fdc8c023330f2d784bc2611c1b89f4",
+        "size_bytes": 9411591,
+        "species_id": "garbodor",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "golbat",
+            "runtime_sha256": "59f5456405771a2798e5eaa0c0ef090336580a0b4758046ad2e08b51f6b6cffb",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "golbat@shiny",
+            "runtime_sha256": "cfccddd8fd10cedc8208d5f430034a1a560cd68d22e9e56aa1cd40a5330d86b6",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:golbat:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 42,
+        "object_key": "optional-assets/pokemon_3d/golbat/base/v1-68196da3ff80608a645954e9a16848742d7209c481875ba8f53e390831f3ee83.zip",
+        "sha256": "68196da3ff80608a645954e9a16848742d7209c481875ba8f53e390831f3ee83",
+        "size_bytes": 5033287,
+        "species_id": "golbat",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "grapploct",
+            "runtime_sha256": "5937f183cb964e75f7e4fb55a9913760cb0d33cbd3496c5528a238ad23416bfd",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "grapploct@shiny",
+            "runtime_sha256": "9722776239ee57f3bcc424fec71717450c06388d4d72f61da9ea068e12a4e98f",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:grapploct:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 853,
+        "object_key": "optional-assets/pokemon_3d/grapploct/base/v1-6f1d637c5793101dbc1b8ee00e8793d47d300ac4814387015f7e513f35bad446.zip",
+        "sha256": "6f1d637c5793101dbc1b8ee00e8793d47d300ac4814387015f7e513f35bad446",
+        "size_bytes": 4643183,
+        "species_id": "grapploct",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "kadabra",
+            "runtime_sha256": "e174588d7432cdf6fe68bca7701dc3b9d5111ac7d84662c1e34b57e01c5a0706",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "kadabra@shiny",
+            "runtime_sha256": "99f85b02d2fe24b816460c780c0f35d5365bee6b79379c853b5ae38b5258bbd5",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:kadabra:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 64,
+        "object_key": "optional-assets/pokemon_3d/kadabra/base/v1-28685d0ee1995288c5c5279283290ab582e1a0903ccc9d28edd72eb1cf9e5e74.zip",
+        "sha256": "28685d0ee1995288c5c5279283290ab582e1a0903ccc9d28edd72eb1cf9e5e74",
+        "size_bytes": 8120416,
+        "species_id": "kadabra",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "kakuna",
+            "runtime_sha256": "38a28496f5482d0e14024b6582e6558096c4039b2d339690c9a3908ccd24c96f",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "kakuna@shiny",
+            "runtime_sha256": "230082ed3b2bab3a25ce87b23d226f6f761f4f7eee608920ff7e01ceadaf5665",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:kakuna:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 14,
+        "object_key": "optional-assets/pokemon_3d/kakuna/base/v1-f5e5f4c63fbc9b45f0badfc7c7dae49b6cee4f71d14c845e5b32fbf2706b0281.zip",
+        "sha256": "f5e5f4c63fbc9b45f0badfc7c7dae49b6cee4f71d14c845e5b32fbf2706b0281",
+        "size_bytes": 1356447,
+        "species_id": "kakuna",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "kangaskhan",
+            "runtime_sha256": "4fb057aa31b64d7d62105b8fe9ba1fd48f507e2af9d174acc5e21da1e569f4c2",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "kangaskhan@shiny",
+            "runtime_sha256": "d3ee9ca8665627425805df8c417fc20f05949274e270444641b08d602fa7b976",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:kangaskhan:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 115,
+        "object_key": "optional-assets/pokemon_3d/kangaskhan/base/v1-7d222400c52657822a62fb6251422c71dae43d1dcc618ab37c28e933e3807ddd.zip",
+        "sha256": "7d222400c52657822a62fb6251422c71dae43d1dcc618ab37c28e933e3807ddd",
+        "size_bytes": 6680060,
+        "species_id": "kangaskhan",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "kecleon",
+            "runtime_sha256": "0c0582e028fcccdfe4b045a475abba9368b6b87a53670b308916d528c5e34d16",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "kecleon@shiny",
+            "runtime_sha256": "708fea292da7235f22848e3724e7ee5b58c7b9b40cd6ec1767c505d8e54d31a1",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:kecleon:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 352,
+        "object_key": "optional-assets/pokemon_3d/kecleon/base/v1-4c0e16a6b47ba6560ec76151ecf3dd55bc6212421adf03e30be5a83212693470.zip",
+        "sha256": "4c0e16a6b47ba6560ec76151ecf3dd55bc6212421adf03e30be5a83212693470",
+        "size_bytes": 6126003,
+        "species_id": "kecleon",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "lairon",
+            "runtime_sha256": "b538c13f897d29743f769bedd3a02d2793c826e85e5be98dbeacfd70ece1e745",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "lairon@shiny",
+            "runtime_sha256": "68b23e3b2e549f19f8edff194512bb453fb33d0050e960237958cb683c1d9cca",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:lairon:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 305,
+        "object_key": "optional-assets/pokemon_3d/lairon/base/v1-5d2388f1260cb5515771bbaf0f784716b4cd1fcf4caa712569abf5dc0fa9da0c.zip",
+        "sha256": "5d2388f1260cb5515771bbaf0f784716b4cd1fcf4caa712569abf5dc0fa9da0c",
+        "size_bytes": 8131065,
+        "species_id": "lairon",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "machamp",
+            "runtime_sha256": "96d261fd636fd93e2b3f508458c657e833ebc5bbb0553daaada0b5e5ee8024ad",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "machamp@shiny",
+            "runtime_sha256": "02c170db28a991f8f313557bfca48cf832cb81b6fd9e0d5611957fcba87a59e0",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:machamp:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 68,
+        "object_key": "optional-assets/pokemon_3d/machamp/base/v1-7b545de85b43aea47d0098815ffa645cad1de01f59e1552de868221f865008e4.zip",
+        "sha256": "7b545de85b43aea47d0098815ffa645cad1de01f59e1552de868221f865008e4",
+        "size_bytes": 10013776,
+        "species_id": "machamp",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "machoke",
+            "runtime_sha256": "5e20f11f0a0e76ccef733f4b5cfe82034412f0aa0716ec6c31a614df8510d064",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "machoke@shiny",
+            "runtime_sha256": "cfddfc5b71e626b68335bc8056ea29c4387555dcd59b1c0efb27dedc86eb6a35",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:machoke:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 67,
+        "object_key": "optional-assets/pokemon_3d/machoke/base/v1-02afda6770090e1a8569ee78849f7c4c52926f84932ea44e539afa57c86d4582.zip",
+        "sha256": "02afda6770090e1a8569ee78849f7c4c52926f84932ea44e539afa57c86d4582",
+        "size_bytes": 6794286,
+        "species_id": "machoke",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "machop",
+            "runtime_sha256": "e00b08631e62f594bc85cb367b0ed5c34dcae21c54003698a83ff4efca85d0f1",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "machop@shiny",
+            "runtime_sha256": "1fbac59cbb7161ff3d180e1264f6a3f343d5f55b685b53ffe1f966b2d0c362c4",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:machop:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 66,
+        "object_key": "optional-assets/pokemon_3d/machop/base/v1-3aab28123011aa4e7ce4afd6c9101ac96c358f86a70ee97e05aec687a3e2a591.zip",
+        "sha256": "3aab28123011aa4e7ce4afd6c9101ac96c358f86a70ee97e05aec687a3e2a591",
+        "size_bytes": 5670078,
+        "species_id": "machop",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "meganium",
+            "runtime_sha256": "37f3706d56b25cd46a8550d0631d7fdf9e057c7f6c06abce51b3384ab49064dd",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "meganium@shiny",
+            "runtime_sha256": "e80f3f571ade063f6daeb69c3d70994707fc8fcb972085b3cfa38a45fb9d00b2",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:meganium:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 154,
+        "object_key": "optional-assets/pokemon_3d/meganium/base/v1-3c0021254aacc83bc78849eb0bff99d9285a746e279dc883a4c980ff962f4f67.zip",
+        "sha256": "3c0021254aacc83bc78849eb0bff99d9285a746e279dc883a4c980ff962f4f67",
+        "size_bytes": 6723420,
+        "species_id": "meganium",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "milotic",
+            "runtime_sha256": "ddc9d3165636c26581979a721d685c8225b7330202945f8c3af08a9ace70b50c",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "milotic@shiny",
+            "runtime_sha256": "5b149dbe667e82632f2320e8bc4e6be9f39ba7e40fb985202f8a8e16c75629b0",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:milotic:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 350,
+        "object_key": "optional-assets/pokemon_3d/milotic/base/v1-58534fa0f634cb6d05d0fe159c151772c07bc049d9e97575d9168e4bee90e68d.zip",
+        "sha256": "58534fa0f634cb6d05d0fe159c151772c07bc049d9e97575d9168e4bee90e68d",
+        "size_bytes": 6959677,
+        "species_id": "milotic",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "mr-mime",
+            "runtime_sha256": "4b3419015a320663fd212eaaa3c1d8b2470ab7ab87679d84212c3326f288b78f",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "mr-mime@shiny",
+            "runtime_sha256": "7f2207b9262e15f89875dd603defbc874cbeaa42fda9debf1fb0592798e9fcf4",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:mr-mime:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 122,
+        "object_key": "optional-assets/pokemon_3d/mr-mime/base/v1-123cc91ed5a3cc13087528b2491ffd8e33a138b28b507dd93f782b5aeee7f03c.zip",
+        "sha256": "123cc91ed5a3cc13087528b2491ffd8e33a138b28b507dd93f782b5aeee7f03c",
+        "size_bytes": 5198214,
+        "species_id": "mr-mime",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "musharna",
+            "runtime_sha256": "96c92786293271105aa95d24f26bc1933a1ba56171aca7c18792b38afa38b087",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "musharna@shiny",
+            "runtime_sha256": "afcc0ff9c9ec20bf1351e49f05c2a09e90d50507c450ca1ad6ea3df7208a2a36",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:musharna:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 518,
+        "object_key": "optional-assets/pokemon_3d/musharna/base/v1-8e2df6d3753fbb91c880534c40272b54954c6fe0316b1b6e8667d761d3ac57d1.zip",
+        "sha256": "8e2df6d3753fbb91c880534c40272b54954c6fe0316b1b6e8667d761d3ac57d1",
+        "size_bytes": 5808844,
+        "species_id": "musharna",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "onix",
+            "runtime_sha256": "69fc1d3d563f98421824fbe42d0b4c5afbffe1ad561e19f793c10ac929d535bb",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "onix@shiny",
+            "runtime_sha256": "75a90e58332bc05960d642a7fbdb91ec6bd9081816048f25c453ac6bb3ff09d2",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:onix:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 95,
+        "object_key": "optional-assets/pokemon_3d/onix/base/v1-31c01048cd79a7141887bb0f85542672d1443933bb114aa42a6304a5ad6af544.zip",
+        "sha256": "31c01048cd79a7141887bb0f85542672d1443933bb114aa42a6304a5ad6af544",
+        "size_bytes": 10040944,
+        "species_id": "onix",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "panpour",
+            "runtime_sha256": "16b6d62175516725ae730a9b3f820e1dde27a2ab92484e86374ca0dd1ac7e7fb",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "panpour@shiny",
+            "runtime_sha256": "d65b8e3b1478d6ffb7fed349078901825abf731780ac1d0e1758d8ac87dca27c",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:panpour:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 515,
+        "object_key": "optional-assets/pokemon_3d/panpour/base/v1-d50bc80255f36d2a5e8ad4322976b1b6b0e80648a4f9f10103b95f6c31a18841.zip",
+        "sha256": "d50bc80255f36d2a5e8ad4322976b1b6b0e80648a4f9f10103b95f6c31a18841",
+        "size_bytes": 2873780,
+        "species_id": "panpour",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "pansage",
+            "runtime_sha256": "7f63535fb74f892d2fc71163a6b2ce2c78d007a17f4294c76d20e79062dece0b",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "pansage@shiny",
+            "runtime_sha256": "95232a92676819b7a7aed1918e7eab542bfefda26bd36afce3f630a72a9ad6b3",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:pansage:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 511,
+        "object_key": "optional-assets/pokemon_3d/pansage/base/v1-c9c223e4731762ebf02ca5cea19764478a65706dcc14a69be24e53cf20ae4dfc.zip",
+        "sha256": "c9c223e4731762ebf02ca5cea19764478a65706dcc14a69be24e53cf20ae4dfc",
+        "size_bytes": 3380338,
+        "species_id": "pansage",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "pansear",
+            "runtime_sha256": "fa62001af55b9020bf32d07ed7273e62418d401b2c469576d52a74b5253ba886",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "pansear@shiny",
+            "runtime_sha256": "c2d8306fae2144895a2d914f9f656e5e92d5ad0bf7f74c34e0dbd4139ac11d79",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:pansear:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 513,
+        "object_key": "optional-assets/pokemon_3d/pansear/base/v1-df67baac128311a1868c515367b98491ba7b5aaea043d367e51d39f84f119686.zip",
+        "sha256": "df67baac128311a1868c515367b98491ba7b5aaea043d367e51d39f84f119686",
+        "size_bytes": 3301576,
+        "species_id": "pansear",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "patrat",
+            "runtime_sha256": "c84e7c1662e75a83f4a2a0697af33f1c3f6f8b5f15f66a3fad027f8fb024279a",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "patrat@shiny",
+            "runtime_sha256": "a1a3bcfb033b31c008f181ebff3e8ab528a44eb666365b4b7788960352157e09",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:patrat:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 504,
+        "object_key": "optional-assets/pokemon_3d/patrat/base/v1-d871a19213cd50139a510f64c3f539887c7193463c6a398a330eedcc309eeeaf.zip",
+        "sha256": "d871a19213cd50139a510f64c3f539887c7193463c6a398a330eedcc309eeeaf",
+        "size_bytes": 3691535,
+        "species_id": "patrat",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "pidgeot",
+            "runtime_sha256": "1ec221117eac7161c04c1190d0a13891114396c673f0731805ff8f0fe6b2b5ad",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "pidgeot@shiny",
+            "runtime_sha256": "02ab9f948471916effa53be104a10f6cd1b309a2ce6ecd6f2b61549d6be8437c",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:pidgeot:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 18,
+        "object_key": "optional-assets/pokemon_3d/pidgeot/base/v1-504bd47f7d2197548932a2efbda9cab49bd73ab393589a352280e4f46364849d.zip",
+        "sha256": "504bd47f7d2197548932a2efbda9cab49bd73ab393589a352280e4f46364849d",
+        "size_bytes": 9624509,
+        "species_id": "pidgeot",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "pidgeotto",
+            "runtime_sha256": "d515c5e0b14be7adb61ddf76a149607295c1a74415530140366d3e39527ba21d",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "pidgeotto@shiny",
+            "runtime_sha256": "fbaf5a8734687c43961826b5800ac2d649ede2257710a19395099463af984ada",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:pidgeotto:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 17,
+        "object_key": "optional-assets/pokemon_3d/pidgeotto/base/v1-5bb340c70134a4dc17e264379323fa26e46c75669987370d3176d1f38bbe987c.zip",
+        "sha256": "5bb340c70134a4dc17e264379323fa26e46c75669987370d3176d1f38bbe987c",
+        "size_bytes": 7159152,
+        "species_id": "pidgeotto",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "pinsir",
+            "runtime_sha256": "aaa02c94fbba07c6d07126cf139de29a14500c8475bf0ea2f80ae94eb39b7216",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "pinsir@shiny",
+            "runtime_sha256": "24c4ba5beb491091fa706236284179ddc6a379b41722da50ce5e882174d4c56a",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:pinsir:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 127,
+        "object_key": "optional-assets/pokemon_3d/pinsir/base/v1-b63c49c523aa30981de122270e7d5d42aeb69114296539e4f173bce5456d476f.zip",
+        "sha256": "b63c49c523aa30981de122270e7d5d42aeb69114296539e4f173bce5456d476f",
+        "size_bytes": 3771867,
+        "species_id": "pinsir",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "roserade",
+            "runtime_sha256": "eb2f83dff9fe1e8cdfa1902d4b8d3899fe795a57b2994933430f1d8d95e79326",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "roserade@shiny",
+            "runtime_sha256": "424d3bebb3baeeb418b8bafe8408c05cf989a0794babc13792855ba403568fbf",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:roserade:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 407,
+        "object_key": "optional-assets/pokemon_3d/roserade/base/v1-abee882e4da6291026d680cd5c130648535e5ca1d50bb6c69fefbdca9d4011df.zip",
+        "sha256": "abee882e4da6291026d680cd5c130648535e5ca1d50bb6c69fefbdca9d4011df",
+        "size_bytes": 7807594,
+        "species_id": "roserade",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "sawk",
+            "runtime_sha256": "bd8648027899d1a67e7bf17e8e5511f41984508b6a5e9a51ed4017643b9ff16d",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "sawk@shiny",
+            "runtime_sha256": "2fbaad02e892165362612ab91383c49d21569610e6e444fa1361dc24d25e355a",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:sawk:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 539,
+        "object_key": "optional-assets/pokemon_3d/sawk/base/v1-64456aadeb686806b73fd5c7dd05819ce572bc9146d7312ebb50f8d8bc77247a.zip",
+        "sha256": "64456aadeb686806b73fd5c7dd05819ce572bc9146d7312ebb50f8d8bc77247a",
+        "size_bytes": 7434806,
+        "species_id": "sawk",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "scolipede",
+            "runtime_sha256": "61f595752d394b87e829671a07792c269e9928a1d62a4be4d9455e0a903c1a30",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "scolipede@shiny",
+            "runtime_sha256": "cdff5c3d1f4faccae64e2db8a074d22692468752a4236f1ec2c37f9e615afc60",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:scolipede:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 545,
+        "object_key": "optional-assets/pokemon_3d/scolipede/base/v1-4549c3b147c5eb0877b5c42caace4bcbf2eb57876a5216f72123df02e973d4f0.zip",
+        "sha256": "4549c3b147c5eb0877b5c42caace4bcbf2eb57876a5216f72123df02e973d4f0",
+        "size_bytes": 6558779,
+        "species_id": "scolipede",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "simipour",
+            "runtime_sha256": "98ff787938fd5ce31166b192d88b96690a6d420c6d48bad8b01ed8e87387f680",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "simipour@shiny",
+            "runtime_sha256": "b51bd9bf213369c2c5432968fac400593b9959e642995f964bed3779af8e7c99",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:simipour:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 516,
+        "object_key": "optional-assets/pokemon_3d/simipour/base/v1-04d487d1a36984c570e916377c506b5d2dd3c386407956c62862dd9dce56c2c2.zip",
+        "sha256": "04d487d1a36984c570e916377c506b5d2dd3c386407956c62862dd9dce56c2c2",
+        "size_bytes": 4037186,
+        "species_id": "simipour",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "simisage",
+            "runtime_sha256": "b3bd72272b901b67d43bc0f5af66b5d97e4b31e6913ba3cf1196082c6a18b708",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "simisage@shiny",
+            "runtime_sha256": "4ab5b2b64dfd35f15dc96c4323c1197824faf22ed0b7d882769faf7fad1faa40",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:simisage:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 512,
+        "object_key": "optional-assets/pokemon_3d/simisage/base/v1-92bd33aa5bca9cd3a1cafde4671d468d11ff3f71187664f685be0c034faeb4ba.zip",
+        "sha256": "92bd33aa5bca9cd3a1cafde4671d468d11ff3f71187664f685be0c034faeb4ba",
+        "size_bytes": 4607176,
+        "species_id": "simisage",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "simisear",
+            "runtime_sha256": "5c2a103b030f4f4e2f8461962f41cd7ee11e1daf4a1f493e4a647a73c9c8b4db",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "simisear@shiny",
+            "runtime_sha256": "21764fc70424044169e14ab49d61f93d5745b5b0477dc7c2949aca719ea637c6",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:simisear:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 514,
+        "object_key": "optional-assets/pokemon_3d/simisear/base/v1-4dc774b6f277912acc349f1ba76b3aaa84bd8814144dccf586b15cd408188150.zip",
+        "sha256": "4dc774b6f277912acc349f1ba76b3aaa84bd8814144dccf586b15cd408188150",
+        "size_bytes": 7138225,
+        "species_id": "simisear",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "skarmory",
+            "runtime_sha256": "a19514d01214ca0f17495216a647475691ffb108648da3cf2ae41ee92d735fe0",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "skarmory@shiny",
+            "runtime_sha256": "3b53c7c98264b0972b8c0c0ced70e149c61a95f22078d1c8e42b13afb308157d",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:skarmory:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 227,
+        "object_key": "optional-assets/pokemon_3d/skarmory/base/v1-3b8fe9d240412ab992f3deb2667bfbfa9b78bfe1822a8597807d632a940f70e5.zip",
+        "sha256": "3b8fe9d240412ab992f3deb2667bfbfa9b78bfe1822a8597807d632a940f70e5",
+        "size_bytes": 7151950,
+        "species_id": "skarmory",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "starmie",
+            "runtime_sha256": "def6783663944db7551f423a558c3761bcd16e413e5ee446d998beefa58948f0",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "starmie@shiny",
+            "runtime_sha256": "e54e26d6289835dfb64e682ad8ddf06e36f9c5c71cca06fc87148ad853824464",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:starmie:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 121,
+        "object_key": "optional-assets/pokemon_3d/starmie/base/v1-676490f1cdca0d2e425316589915b53b9cedaecdb1be5481803718d3f7e4abb5.zip",
+        "sha256": "676490f1cdca0d2e425316589915b53b9cedaecdb1be5481803718d3f7e4abb5",
+        "size_bytes": 3760507,
+        "species_id": "starmie",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "steelix",
+            "runtime_sha256": "930623ab682e6b51e5ca5d8125fac10dadee267f2cff7b93b4ea31c7715ee762",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "steelix@shiny",
+            "runtime_sha256": "5c7ad91ec273dfcf27f5a73bc0a35fda1be30d9c1144f9a316d5a1c9e6fe8609",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:steelix:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 208,
+        "object_key": "optional-assets/pokemon_3d/steelix/base/v1-2166f446007e0f1fd46ec71772604bb045921e7ea36cb7920c97ed49250cac68.zip",
+        "sha256": "2166f446007e0f1fd46ec71772604bb045921e7ea36cb7920c97ed49250cac68",
+        "size_bytes": 9520916,
+        "species_id": "steelix",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "swirlix",
+            "runtime_sha256": "2deb26cad568e00e1a6eede7e01a8199e76a34180bbe532f6d5fae694e78c320",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "swirlix@shiny",
+            "runtime_sha256": "c4b12c29023d7967299b102d5633799c1c16e1d8f2c0cae2d3124117b81a9c7e",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:swirlix:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 684,
+        "object_key": "optional-assets/pokemon_3d/swirlix/base/v1-7c44196e1886e0c1f677ae299c27f62dd3861710c677654f9ee32661ccce903d.zip",
+        "sha256": "7c44196e1886e0c1f677ae299c27f62dd3861710c677654f9ee32661ccce903d",
+        "size_bytes": 4031645,
+        "species_id": "swirlix",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "throh",
+            "runtime_sha256": "06bbb2148bf9b9a3f67db4b90c94619daa45f3d8f0f77a4ea68e4cd3763ea43f",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "throh@shiny",
+            "runtime_sha256": "2923b0099e87596c753a280ae78b63093fb047f515bff9d045fc192d7f236986",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:throh:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 538,
+        "object_key": "optional-assets/pokemon_3d/throh/base/v1-8bd3ec502ea2db047261039f805746cf1876d454502a5d62f3874ed24c3d51e0.zip",
+        "sha256": "8bd3ec502ea2db047261039f805746cf1876d454502a5d62f3874ed24c3d51e0",
+        "size_bytes": 7815536,
+        "species_id": "throh",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "vanillish",
+            "runtime_sha256": "3f3084922f4dfd7463a46e4d9bba047b42d5b166b5a39a0ac7ef01f9d3241055",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "vanillish@shiny",
+            "runtime_sha256": "654c424eb57d2dd48f56dff8962fffa4bda122cbc0b626e67507ddd4ba562735",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:vanillish:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 583,
+        "object_key": "optional-assets/pokemon_3d/vanillish/base/v1-fe6a1f4824fb25451359ce834bf67db1f9818a61ea30ac785436495bff14a0b9.zip",
+        "sha256": "fe6a1f4824fb25451359ce834bf67db1f9818a61ea30ac785436495bff14a0b9",
+        "size_bytes": 2657456,
+        "species_id": "vanillish",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "vanillite",
+            "runtime_sha256": "dda46c048ecb7cdcc4dedaa0bc059028438f401d71ad03042837297c01ef11dc",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "vanillite@shiny",
+            "runtime_sha256": "b05a0f0cd52f25237a95622acfc94fc9efc6809244235563ba54f7a9b2c7571a",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:vanillite:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 582,
+        "object_key": "optional-assets/pokemon_3d/vanillite/base/v1-1fa190a150266103bf5b58a3fdc4ab6a9e377e6c6e57fdd3c3e7c0c29ac23f1e.zip",
+        "sha256": "1fa190a150266103bf5b58a3fdc4ab6a9e377e6c6e57fdd3c3e7c0c29ac23f1e",
+        "size_bytes": 1779244,
+        "species_id": "vanillite",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "venipede",
+            "runtime_sha256": "516749f5c6c4918e42b66b2224572f248ad303a48d2066be298122b63823bcbf",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "venipede@shiny",
+            "runtime_sha256": "e7208572bed04ff0d013d6531b005064e23c9f39d91f4a6eb461ab337a6f339c",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:venipede:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 543,
+        "object_key": "optional-assets/pokemon_3d/venipede/base/v1-7195db5b29ce8b7e9776cda40719d9cd6e6c26f43781cb3db8eec35a97c1f7e6.zip",
+        "sha256": "7195db5b29ce8b7e9776cda40719d9cd6e6c26f43781cb3db8eec35a97c1f7e6",
+        "size_bytes": 1692542,
+        "species_id": "venipede",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "venusaur",
+            "runtime_sha256": "1d7cfebc5d675023d152f484ea8439eac499b729deb3787ade65df745d68655e",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "venusaur@shiny",
+            "runtime_sha256": "37fb7f88131c6e6fc97f1a07095c81308d45c3684c60ebe9d493c5a9f8fae6f6",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:venusaur:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 3,
+        "object_key": "optional-assets/pokemon_3d/venusaur/base/v1-d2f76ad8eebac5b2811a0ade930971b8f09a42076ed167426f794fa21cb0ceef.zip",
+        "sha256": "d2f76ad8eebac5b2811a0ade930971b8f09a42076ed167426f794fa21cb0ceef",
+        "size_bytes": 8115266,
+        "species_id": "venusaur",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "watchog",
+            "runtime_sha256": "481fdc5898ebb52ae52c375a74d3ffef45639ca230b71d7e1aa76613d0fde919",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "watchog@shiny",
+            "runtime_sha256": "b2b23cd7093517466e34e71f5fc50037c71add53e9dfa344f2255c3a84df65eb",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:watchog:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 505,
+        "object_key": "optional-assets/pokemon_3d/watchog/base/v1-42bffde2ee4396a70c246ed87c0b9342abab345b88728ba816e29526de6d7344.zip",
+        "sha256": "42bffde2ee4396a70c246ed87c0b9342abab345b88728ba816e29526de6d7344",
+        "size_bytes": 6532075,
+        "species_id": "watchog",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "weedle",
+            "runtime_sha256": "9f47d3b2af1ed08bf4a6cef969bfc4a5d08610142636b3c9cb435d92c8b3799e",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "weedle@shiny",
+            "runtime_sha256": "eacc9681e8a3794c577de2bace58a710e9c2085d0716e2787777c0159631902a",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:weedle:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 13,
+        "object_key": "optional-assets/pokemon_3d/weedle/base/v1-482bf98686a92b32a212b7130f1f2b554bb890e04ca68388ea7040d6f4701fe4.zip",
+        "sha256": "482bf98686a92b32a212b7130f1f2b554bb890e04ca68388ea7040d6f4701fe4",
+        "size_bytes": 2876330,
+        "species_id": "weedle",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "whirlipede",
+            "runtime_sha256": "f9936f86a75b1aded307bb93d8ad378f87ab742aaa8b7250e8dd9acd3a28b542",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "whirlipede@shiny",
+            "runtime_sha256": "561e510b87f5b9d965325b7566d283c87304b6d3bb09ec138a0769fc6ca849e6",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:whirlipede:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 544,
+        "object_key": "optional-assets/pokemon_3d/whirlipede/base/v1-ef2f1d2649b1580fbaabbe1804f83a54d670ac6824c0cf4b87086ec77db8f4b6.zip",
+        "sha256": "ef2f1d2649b1580fbaabbe1804f83a54d670ac6824c0cf4b87086ec77db8f4b6",
+        "size_bytes": 2103286,
+        "species_id": "whirlipede",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "wimpod",
+            "runtime_sha256": "9bea5473d41e117c13810615032fb6e9e12a8134a523cf778fef3e8275d1ddf4",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "wimpod@shiny",
+            "runtime_sha256": "8bfb6c3a896cdcc7d1845eeb1d6abb7267d91f78d12ce27140668867bb7537ba",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:wimpod:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 767,
+        "object_key": "optional-assets/pokemon_3d/wimpod/base/v1-027a0341379418b139346b1c2608ca6ed0a0d1f6edd525c2242b6d1261c31cf9.zip",
+        "sha256": "027a0341379418b139346b1c2608ca6ed0a0d1f6edd525c2242b6d1261c31cf9",
+        "size_bytes": 5140386,
+        "species_id": "wimpod",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "yamask",
+            "runtime_sha256": "6b6fa73508ae1db71e5146ec90a7eaa6a0c386f47be0a99a6af80001c571a172",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "yamask@shiny",
+            "runtime_sha256": "9f1c3185e5060ddb35a186a4f3d09c625a4860a412b662f01deee294e2353552",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:yamask:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 562,
+        "object_key": "optional-assets/pokemon_3d/yamask/base/v1-e37aa19fa8786d2afdf8f8550340a02fda11521b817e8d32555815090e56e7ab.zip",
+        "sha256": "e37aa19fa8786d2afdf8f8550340a02fda11521b817e8d32555815090e56e7ab",
+        "size_bytes": 2544460,
+        "species_id": "yamask",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "zubat",
+            "runtime_sha256": "7e1c9a1f072f51e03cdea55601816158fc6368304a476e051bb5cb19c724d699",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "zubat@shiny",
+            "runtime_sha256": "43451f200378a00664747df078c973fa5525649e97437041177b4d4d8ce3ce71",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:zubat:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 41,
+        "object_key": "optional-assets/pokemon_3d/zubat/base/v1-bbc5ad69a64e4f0d10091cc62bf338a86fa94dfe3b3caf5c81f6da4dd8b1c634.zip",
+        "sha256": "bbc5ad69a64e4f0d10091cc62bf338a86fa94dfe3b3caf5c81f6da4dd8b1c634",
+        "size_bytes": 3550151,
+        "species_id": "zubat",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "remaining-56-approved-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 308385521,
+  "date": "2026-09-30",
+  "evidence_sha256": {
+    ".tmp/remaining-274-production/approved-56/bundles/asset-index.json": "24eaa6ea3f73351482e43126144eee25f6317913f5752b9ab5b7aff717ca26df",
+    ".tmp/remaining-274-production/approved-56/install-launcher.log": "baf14bb5651a523fbef5a6ea9006adeff6f60d134ab71380adb28b4cc80844ff",
+    ".tmp/remaining-274-production/approved-56/installed-stress.json": "4cbd144613abbc7fda7bb823d84f0ac80d0983cde5316a451f23c68e82dc1108",
+    ".tmp/remaining-274-production/approved-56/installed-stress.log": "0be0fbdd6053f77ac4e9a27d1e64dd28fc1907a4861f77fd5daef178a0c11256",
+    ".tmp/remaining-274-production/approved-56/installed/installed-catalog.json": "8ce53830eb480b747e7b37e76c441652f5633e7b2d04fc0ddf0ade9382541113",
+    "tools/sprite_factory/admit_remaining_56.py": "4a4ac46453f99da7632af8e3da87e2e7d8ef6903a614aab9df03a2924ea5d4d8",
+    "tools/sprite_factory/catalog_remaining_56_checkpoint.json": "92cf832bb193f77681ac25d6d86236cf13b31ceb1b525de99edcb655ba148b79",
+    "tools/sprite_factory/catalog_remaining_56_profiles.json": "b23cf5407cb981edae3d8a99c9ef505c8fdd5cc69ce7678cca9c34a2ab7cc668"
+  },
+  "installed_runtime_check_passed": true,
+  "no_op_restart_check_passed": true,
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release certification and publication"
+  ],
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 56,
+      "frame_max_ms": 396.678,
+      "frame_p95_ms": 16.851,
+      "frame_samples": 2790,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 12.083,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 12.134,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2,
+          "ms": 1.293,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2,
+          "ms": 1.411,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7,
+          "ms": 1.753,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7,
+          "ms": 1.898,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10,
+          "ms": 10.882,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 52,
+          "ms": 2.677,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 52,
+          "ms": 2.812,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 58,
+          "ms": 1.702,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 58,
+          "ms": 1.827,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 62,
+          "ms": 3.102,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 86,
+          "ms": 1.457,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 104,
+          "ms": 1.522,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 104,
+          "ms": 1.644,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 110,
+          "ms": 1.517,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 110,
+          "ms": 1.615,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 113,
+          "ms": 1.471,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 137,
+          "ms": 1.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 155,
+          "ms": 1.437,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 155,
+          "ms": 1.529,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 160,
+          "ms": 1.355,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 160,
+          "ms": 1.473,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 163,
+          "ms": 1.422,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 187,
+          "ms": 1.522,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 205,
+          "ms": 1.905,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 205,
+          "ms": 2.047,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 210,
+          "ms": 1.747,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 210,
+          "ms": 1.851,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 213,
+          "ms": 1.604,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 237,
+          "ms": 1.605,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 255,
+          "ms": 1.169,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 255,
+          "ms": 1.272,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 259,
+          "ms": 1.114,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 259,
+          "ms": 1.217,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 261,
+          "ms": 1.081,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 304,
+          "ms": 1.78,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 304,
+          "ms": 1.903,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 310,
+          "ms": 1.751,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 310,
+          "ms": 1.865,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 314,
+          "ms": 1.687,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 338,
+          "ms": 1.805,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 356,
+          "ms": 1.555,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 356,
+          "ms": 1.668,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 362,
+          "ms": 1.427,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 362,
+          "ms": 1.524,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 366,
+          "ms": 1.359,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 390,
+          "ms": 1.121,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 408,
+          "ms": 1.231,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 408,
+          "ms": 1.356,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 412,
+          "ms": 1.239,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 412,
+          "ms": 1.364,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 414,
+          "ms": 1.184,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 456,
+          "ms": 1.553,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 456,
+          "ms": 1.669,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 461,
+          "ms": 1.47,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 461,
+          "ms": 1.568,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 464,
+          "ms": 1.475,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 488,
+          "ms": 1.401,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 506,
+          "ms": 1.658,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 506,
+          "ms": 1.772,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 511,
+          "ms": 2.098,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 511,
+          "ms": 2.211,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 514,
+          "ms": 1.76,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 538,
+          "ms": 1.357,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 556,
+          "ms": 1.622,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 556,
+          "ms": 1.787,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 560,
+          "ms": 1.537,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 560,
+          "ms": 1.658,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 562,
+          "ms": 1.496,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 586,
+          "ms": 1.364,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 605,
+          "ms": 1.937,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 605,
+          "ms": 2.065,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 611,
+          "ms": 1.628,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 611,
+          "ms": 1.752,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 616,
+          "ms": 1.614,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 640,
+          "ms": 1.293,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 658,
+          "ms": 1.856,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 658,
+          "ms": 1.989,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 663,
+          "ms": 1.868,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 663,
+          "ms": 1.969,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 666,
+          "ms": 1.971,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 690,
+          "ms": 1.783,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 708,
+          "ms": 1.476,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 708,
+          "ms": 1.589,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 713,
+          "ms": 1.522,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 713,
+          "ms": 1.636,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 715,
+          "ms": 1.36,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 739,
+          "ms": 1.405,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 757,
+          "ms": 1.686,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 757,
+          "ms": 1.814,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 762,
+          "ms": 1.735,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 762,
+          "ms": 1.835,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 765,
+          "ms": 1.491,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 789,
+          "ms": 1.412,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 807,
+          "ms": 1.019,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 807,
+          "ms": 1.147,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 811,
+          "ms": 1.116,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 811,
+          "ms": 1.27,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 813,
+          "ms": 1.014,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 855,
+          "ms": 1.655,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 855,
+          "ms": 1.775,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 860,
+          "ms": 1.794,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 860,
+          "ms": 1.932,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 863,
+          "ms": 1.884,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 887,
+          "ms": 1.677,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 905,
+          "ms": 2.02,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 905,
+          "ms": 2.148,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 910,
+          "ms": 2.087,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 910,
+          "ms": 2.2,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 913,
+          "ms": 2.177,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 937,
+          "ms": 1.889,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 955,
+          "ms": 1.585,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 955,
+          "ms": 1.688,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 960,
+          "ms": 1.773,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 960,
+          "ms": 1.898,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 963,
+          "ms": 1.952,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 976,
+          "ms": 1.259,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 987,
+          "ms": 1.282,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1006,
+          "ms": 1.824,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1006,
+          "ms": 1.929,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1011,
+          "ms": 1.707,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1011,
+          "ms": 1.807,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1014,
+          "ms": 1.56,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1038,
+          "ms": 1.686,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1056,
+          "ms": 1.542,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1056,
+          "ms": 1.663,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1061,
+          "ms": 1.516,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1061,
+          "ms": 1.637,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1064,
+          "ms": 1.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1088,
+          "ms": 1.16,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1106,
+          "ms": 1.665,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1106,
+          "ms": 1.766,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1111,
+          "ms": 1.718,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1111,
+          "ms": 1.816,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1114,
+          "ms": 1.894,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1138,
+          "ms": 1.428,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1156,
+          "ms": 2.169,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1156,
+          "ms": 2.272,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1161,
+          "ms": 1.994,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1161,
+          "ms": 2.126,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1164,
+          "ms": 2.019,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1188,
+          "ms": 1.647,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1206,
+          "ms": 1.818,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1206,
+          "ms": 1.913,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1211,
+          "ms": 1.724,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1211,
+          "ms": 1.824,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1214,
+          "ms": 1.996,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1238,
+          "ms": 1.719,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1256,
+          "ms": 1.707,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1256,
+          "ms": 1.807,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1261,
+          "ms": 1.811,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1261,
+          "ms": 1.917,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1264,
+          "ms": 2.19,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1288,
+          "ms": 1.363,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1306,
+          "ms": 1.738,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1306,
+          "ms": 1.832,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1311,
+          "ms": 2.094,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1311,
+          "ms": 2.212,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1315,
+          "ms": 2.007,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1339,
+          "ms": 1.455,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1357,
+          "ms": 1.168,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1357,
+          "ms": 1.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1363,
+          "ms": 1.24,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1363,
+          "ms": 1.338,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1391,
+          "ms": 1.2,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1409,
+          "ms": 1.543,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1409,
+          "ms": 1.658,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1413,
+          "ms": 1.484,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1413,
+          "ms": 1.626,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1415,
+          "ms": 1.518,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1439,
+          "ms": 1.229,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1457,
+          "ms": 1.705,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1457,
+          "ms": 1.822,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1461,
+          "ms": 1.506,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1461,
+          "ms": 1.607,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1463,
+          "ms": 1.514,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1487,
+          "ms": 1.795,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1505,
+          "ms": 1.757,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1505,
+          "ms": 1.867,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1509,
+          "ms": 1.605,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1509,
+          "ms": 1.725,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1511,
+          "ms": 2.274,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1535,
+          "ms": 1.945,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1553,
+          "ms": 1.911,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1553,
+          "ms": 2.021,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1558,
+          "ms": 1.683,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1558,
+          "ms": 1.764,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1561,
+          "ms": 1.938,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1585,
+          "ms": 2.053,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1603,
+          "ms": 1.561,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1603,
+          "ms": 1.669,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1609,
+          "ms": 1.733,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1609,
+          "ms": 1.837,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1613,
+          "ms": 1.9,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1637,
+          "ms": 1.56,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1655,
+          "ms": 1.585,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1655,
+          "ms": 1.682,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1660,
+          "ms": 1.395,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1660,
+          "ms": 1.521,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1663,
+          "ms": 2.002,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1687,
+          "ms": 1.231,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1705,
+          "ms": 1.61,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1705,
+          "ms": 1.732,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1710,
+          "ms": 1.617,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1710,
+          "ms": 1.722,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1712,
+          "ms": 1.5,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1736,
+          "ms": 2.057,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1755,
+          "ms": 1.779,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1755,
+          "ms": 1.895,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1760,
+          "ms": 1.935,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1760,
+          "ms": 2.037,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1764,
+          "ms": 2.572,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1788,
+          "ms": 1.909,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1806,
+          "ms": 2.097,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1806,
+          "ms": 2.206,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1811,
+          "ms": 2.231,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1811,
+          "ms": 2.374,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1814,
+          "ms": 1.877,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1838,
+          "ms": 1.855,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1856,
+          "ms": 1.697,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1856,
+          "ms": 1.813,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1861,
+          "ms": 1.631,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1861,
+          "ms": 1.742,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1864,
+          "ms": 1.944,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1888,
+          "ms": 1.949,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1906,
+          "ms": 1.182,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1906,
+          "ms": 1.275,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1910,
+          "ms": 1.286,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1910,
+          "ms": 1.379,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1912,
+          "ms": 1.529,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1936,
+          "ms": 1.047,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1954,
+          "ms": 1.753,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1954,
+          "ms": 1.848,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1959,
+          "ms": 1.378,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1959,
+          "ms": 1.479,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1962,
+          "ms": 1.727,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1986,
+          "ms": 1.473,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2004,
+          "ms": 1.865,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2004,
+          "ms": 1.989,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2009,
+          "ms": 1.353,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2009,
+          "ms": 1.479,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2012,
+          "ms": 1.206,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2036,
+          "ms": 1.375,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2054,
+          "ms": 1.63,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2054,
+          "ms": 1.777,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2059,
+          "ms": 1.524,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2059,
+          "ms": 1.631,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2062,
+          "ms": 1.327,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2086,
+          "ms": 1.394,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2104,
+          "ms": 1.304,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2104,
+          "ms": 1.429,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2108,
+          "ms": 1.178,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2108,
+          "ms": 1.286,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2153,
+          "ms": 1.566,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2153,
+          "ms": 1.667,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2158,
+          "ms": 1.784,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2158,
+          "ms": 1.885,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2161,
+          "ms": 1.435,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2185,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2203,
+          "ms": 1.605,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2203,
+          "ms": 1.702,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2207,
+          "ms": 1.607,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2207,
+          "ms": 1.725,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2210,
+          "ms": 1.48,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2234,
+          "ms": 1.49,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2252,
+          "ms": 1.91,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2252,
+          "ms": 2.045,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2258,
+          "ms": 2.074,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2258,
+          "ms": 2.192,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2262,
+          "ms": 2.007,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2286,
+          "ms": 2.108,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2304,
+          "ms": 1.357,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2304,
+          "ms": 1.463,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2308,
+          "ms": 1.218,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2308,
+          "ms": 1.341,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2310,
+          "ms": 1.273,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2334,
+          "ms": 1.066,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2352,
+          "ms": 1.554,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2352,
+          "ms": 1.714,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2356,
+          "ms": 1.429,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2356,
+          "ms": 1.59,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2358,
+          "ms": 1.13,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2382,
+          "ms": 1.265,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2400,
+          "ms": 1.337,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2400,
+          "ms": 1.472,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2404,
+          "ms": 1.303,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2404,
+          "ms": 1.41,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2406,
+          "ms": 1.27,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2430,
+          "ms": 1.038,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2448,
+          "ms": 2.636,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2448,
+          "ms": 2.761,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2453,
+          "ms": 2.074,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2453,
+          "ms": 2.181,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2456,
+          "ms": 2.172,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2480,
+          "ms": 1.997,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2498,
+          "ms": 1.96,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2498,
+          "ms": 2.056,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2504,
+          "ms": 2.232,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2504,
+          "ms": 2.341,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2507,
+          "ms": 1.644,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2531,
+          "ms": 2.05,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2549,
+          "ms": 1.598,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2549,
+          "ms": 1.714,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2553,
+          "ms": 1.674,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2553,
+          "ms": 1.8,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2555,
+          "ms": 1.47,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2579,
+          "ms": 1.345,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2597,
+          "ms": 1.13,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2597,
+          "ms": 1.248,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2601,
+          "ms": 1.115,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2601,
+          "ms": 1.239,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2645,
+          "ms": 2.183,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2645,
+          "ms": 2.317,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2650,
+          "ms": 2.059,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2650,
+          "ms": 2.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2653,
+          "ms": 2.84,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2677,
+          "ms": 2.1,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2695,
+          "ms": 1.48,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2695,
+          "ms": 1.601,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2699,
+          "ms": 1.63,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2699,
+          "ms": 1.724,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2701,
+          "ms": 1.593,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2725,
+          "ms": 1.551,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2743,
+          "ms": 1.11,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2743,
+          "ms": 1.253,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2747,
+          "ms": 1.37,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2747,
+          "ms": 1.515,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2749,
+          "ms": 1.219,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 56,
+      "retained_source_bytes": 3549112,
+      "stalls_over_50ms": [
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 396.678
+        },
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 76.925
+        },
+        {
+          "context": "load kangaskhan",
+          "covered": false,
+          "ms": 74.667
+        }
+      ],
+      "static_bytes": 228073116
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 56,
+      "frame_max_ms": 122.323,
+      "frame_p95_ms": 16.865,
+      "frame_samples": 2785,
+      "load_spans": [
+        {
+          "frame": 2794,
+          "ms": 12.829,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 2794,
+          "ms": 12.882,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2796,
+          "ms": 1.218,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2796,
+          "ms": 1.341,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2800,
+          "ms": 1.208,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2800,
+          "ms": 1.31,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2802,
+          "ms": 57.196,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2825,
+          "ms": 1.001,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2843,
+          "ms": 1.675,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2843,
+          "ms": 1.765,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2848,
+          "ms": 1.844,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2848,
+          "ms": 1.992,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2851,
+          "ms": 2.009,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2875,
+          "ms": 1.545,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2893,
+          "ms": 1.432,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2893,
+          "ms": 1.54,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2898,
+          "ms": 1.366,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2898,
+          "ms": 1.455,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2901,
+          "ms": 1.359,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2925,
+          "ms": 1.322,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2943,
+          "ms": 1.543,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2943,
+          "ms": 1.644,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2948,
+          "ms": 1.542,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2948,
+          "ms": 1.664,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2951,
+          "ms": 1.472,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2975,
+          "ms": 1.52,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2993,
+          "ms": 1.821,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2993,
+          "ms": 1.948,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2998,
+          "ms": 1.633,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2998,
+          "ms": 1.741,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3001,
+          "ms": 1.826,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3025,
+          "ms": 1.809,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3043,
+          "ms": 1.081,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3043,
+          "ms": 1.192,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3047,
+          "ms": 1.253,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3047,
+          "ms": 1.359,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3049,
+          "ms": 1.036,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3091,
+          "ms": 1.738,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3091,
+          "ms": 1.87,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3099,
+          "ms": 1.921,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3099,
+          "ms": 2.026,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3103,
+          "ms": 1.659,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3127,
+          "ms": 1.359,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3145,
+          "ms": 1.611,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3145,
+          "ms": 1.727,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3150,
+          "ms": 1.664,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3150,
+          "ms": 1.776,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3153,
+          "ms": 1.831,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3177,
+          "ms": 1.2,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3195,
+          "ms": 1.481,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3195,
+          "ms": 1.603,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3199,
+          "ms": 1.411,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3199,
+          "ms": 1.503,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3201,
+          "ms": 1.043,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3225,
+          "ms": 1.103,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3243,
+          "ms": 1.569,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3243,
+          "ms": 1.693,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3248,
+          "ms": 1.619,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3248,
+          "ms": 1.757,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3251,
+          "ms": 1.442,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3275,
+          "ms": 1.436,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3293,
+          "ms": 1.637,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3293,
+          "ms": 1.765,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3297,
+          "ms": 1.687,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3297,
+          "ms": 1.795,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3300,
+          "ms": 1.248,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3324,
+          "ms": 1.281,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3342,
+          "ms": 1.671,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3342,
+          "ms": 1.784,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3346,
+          "ms": 1.573,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3346,
+          "ms": 1.708,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3348,
+          "ms": 1.41,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3372,
+          "ms": 1.364,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3391,
+          "ms": 1.747,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3391,
+          "ms": 1.878,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3397,
+          "ms": 1.731,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3397,
+          "ms": 1.853,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3401,
+          "ms": 1.713,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3425,
+          "ms": 1.408,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3443,
+          "ms": 1.919,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3443,
+          "ms": 2.034,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3448,
+          "ms": 2.361,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3448,
+          "ms": 2.482,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3451,
+          "ms": 1.914,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3475,
+          "ms": 1.44,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3493,
+          "ms": 1.477,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3493,
+          "ms": 1.626,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3498,
+          "ms": 1.36,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3498,
+          "ms": 1.466,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3500,
+          "ms": 1.401,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3524,
+          "ms": 1.244,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3542,
+          "ms": 1.624,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3542,
+          "ms": 1.765,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3543,
+          "ms": 1.959,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3547,
+          "ms": 1.771,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3547,
+          "ms": 1.884,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3550,
+          "ms": 1.724,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3574,
+          "ms": 1.575,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3592,
+          "ms": 1.1,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3596,
+          "ms": 1.092,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3596,
+          "ms": 1.198,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3598,
+          "ms": 1.181,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3640,
+          "ms": 1.633,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3640,
+          "ms": 1.769,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3645,
+          "ms": 1.72,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3645,
+          "ms": 1.835,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3648,
+          "ms": 2.038,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3671,
+          "ms": 1.429,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3689,
+          "ms": 2.305,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3689,
+          "ms": 2.452,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3694,
+          "ms": 1.992,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3694,
+          "ms": 2.099,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3697,
+          "ms": 1.992,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3721,
+          "ms": 1.757,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3739,
+          "ms": 1.806,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3739,
+          "ms": 1.904,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3744,
+          "ms": 1.645,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3744,
+          "ms": 1.765,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3747,
+          "ms": 1.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3771,
+          "ms": 1.497,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3789,
+          "ms": 1.622,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3789,
+          "ms": 1.834,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3794,
+          "ms": 1.528,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3794,
+          "ms": 1.641,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3797,
+          "ms": 1.539,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3821,
+          "ms": 1.878,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3839,
+          "ms": 1.605,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3839,
+          "ms": 1.706,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3844,
+          "ms": 1.465,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3844,
+          "ms": 1.609,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3847,
+          "ms": 1.511,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3871,
+          "ms": 1.294,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3889,
+          "ms": 1.804,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3889,
+          "ms": 1.9,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3894,
+          "ms": 1.72,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3894,
+          "ms": 1.815,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3897,
+          "ms": 1.848,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3921,
+          "ms": 1.429,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3939,
+          "ms": 1.727,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3939,
+          "ms": 1.815,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3944,
+          "ms": 1.952,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3944,
+          "ms": 2.066,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3947,
+          "ms": 1.863,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3971,
+          "ms": 1.83,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3989,
+          "ms": 1.685,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3989,
+          "ms": 1.822,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3994,
+          "ms": 2.008,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3994,
+          "ms": 2.181,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3997,
+          "ms": 1.664,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4021,
+          "ms": 2.211,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4039,
+          "ms": 1.896,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4039,
+          "ms": 2.032,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4044,
+          "ms": 2.078,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4044,
+          "ms": 2.243,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4047,
+          "ms": 2.331,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4071,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4089,
+          "ms": 1.938,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4089,
+          "ms": 2.052,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4094,
+          "ms": 2.112,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4094,
+          "ms": 2.23,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4097,
+          "ms": 1.687,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4121,
+          "ms": 1.474,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4140,
+          "ms": 1.276,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4140,
+          "ms": 1.4,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4147,
+          "ms": 1.636,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4147,
+          "ms": 1.765,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4151,
+          "ms": 1.044,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4193,
+          "ms": 1.749,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4193,
+          "ms": 1.866,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4197,
+          "ms": 1.433,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4197,
+          "ms": 1.541,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4199,
+          "ms": 1.428,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4223,
+          "ms": 1.436,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4241,
+          "ms": 1.638,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4241,
+          "ms": 1.774,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4245,
+          "ms": 1.565,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4245,
+          "ms": 1.697,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4247,
+          "ms": 1.566,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4271,
+          "ms": 1.377,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4289,
+          "ms": 1.91,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4289,
+          "ms": 2.059,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4294,
+          "ms": 1.682,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4294,
+          "ms": 1.855,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4297,
+          "ms": 1.692,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4321,
+          "ms": 2.565,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4339,
+          "ms": 2.05,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4339,
+          "ms": 2.213,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4344,
+          "ms": 2.241,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4344,
+          "ms": 2.377,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4347,
+          "ms": 2.594,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4371,
+          "ms": 2.31,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4389,
+          "ms": 1.915,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4389,
+          "ms": 2.021,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4395,
+          "ms": 1.739,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4395,
+          "ms": 1.848,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4399,
+          "ms": 1.886,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4423,
+          "ms": 2.013,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4441,
+          "ms": 1.671,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4441,
+          "ms": 1.798,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4446,
+          "ms": 1.499,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4446,
+          "ms": 1.604,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4449,
+          "ms": 1.545,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4473,
+          "ms": 1.278,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4491,
+          "ms": 1.659,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4491,
+          "ms": 1.772,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4496,
+          "ms": 1.616,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4496,
+          "ms": 1.754,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4499,
+          "ms": 1.504,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4523,
+          "ms": 1.602,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4541,
+          "ms": 1.793,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4541,
+          "ms": 1.949,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4546,
+          "ms": 1.812,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4546,
+          "ms": 1.957,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4549,
+          "ms": 2.256,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4573,
+          "ms": 2.107,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4591,
+          "ms": 2.294,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4591,
+          "ms": 2.406,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4597,
+          "ms": 2.013,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4597,
+          "ms": 2.127,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4601,
+          "ms": 1.763,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4625,
+          "ms": 1.64,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4643,
+          "ms": 1.553,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4643,
+          "ms": 1.647,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4648,
+          "ms": 1.714,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4648,
+          "ms": 1.824,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4651,
+          "ms": 1.549,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4675,
+          "ms": 1.966,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4693,
+          "ms": 1.122,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4693,
+          "ms": 1.22,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4697,
+          "ms": 1.188,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4697,
+          "ms": 1.308,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4699,
+          "ms": 1.525,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4723,
+          "ms": 1.254,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4741,
+          "ms": 1.549,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4741,
+          "ms": 1.696,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4746,
+          "ms": 1.342,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4746,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4749,
+          "ms": 1.977,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4773,
+          "ms": 1.531,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4791,
+          "ms": 1.373,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4791,
+          "ms": 1.497,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4796,
+          "ms": 1.441,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4796,
+          "ms": 1.57,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4799,
+          "ms": 1.371,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4823,
+          "ms": 1.167,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4841,
+          "ms": 1.528,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4841,
+          "ms": 1.626,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4846,
+          "ms": 1.572,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4846,
+          "ms": 1.667,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4849,
+          "ms": 1.194,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4873,
+          "ms": 1.478,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4891,
+          "ms": 1.695,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4891,
+          "ms": 1.817,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4895,
+          "ms": 1.289,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4895,
+          "ms": 1.397,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4941,
+          "ms": 1.713,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4941,
+          "ms": 1.844,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4946,
+          "ms": 1.807,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4946,
+          "ms": 1.929,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4949,
+          "ms": 1.254,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4973,
+          "ms": 1.243,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4991,
+          "ms": 1.771,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4991,
+          "ms": 1.907,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4996,
+          "ms": 2.02,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4996,
+          "ms": 2.134,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4999,
+          "ms": 1.726,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5023,
+          "ms": 1.256,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5041,
+          "ms": 1.912,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5041,
+          "ms": 2.01,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5047,
+          "ms": 1.929,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5047,
+          "ms": 2.065,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5051,
+          "ms": 2.15,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5075,
+          "ms": 1.797,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5093,
+          "ms": 1.19,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5093,
+          "ms": 1.299,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5097,
+          "ms": 1.227,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5097,
+          "ms": 1.333,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5099,
+          "ms": 1.12,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5141,
+          "ms": 1.157,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5141,
+          "ms": 1.263,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5145,
+          "ms": 1.364,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5145,
+          "ms": 1.471,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5147,
+          "ms": 1.103,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5171,
+          "ms": 1.224,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5189,
+          "ms": 1.316,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5189,
+          "ms": 1.452,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5193,
+          "ms": 1.081,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5193,
+          "ms": 1.218,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5195,
+          "ms": 1.191,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5219,
+          "ms": 1.177,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5237,
+          "ms": 2.405,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5237,
+          "ms": 2.528,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5243,
+          "ms": 2.198,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5243,
+          "ms": 2.314,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5247,
+          "ms": 2.042,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5271,
+          "ms": 2.015,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5289,
+          "ms": 1.963,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5289,
+          "ms": 2.049,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5294,
+          "ms": 1.899,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5294,
+          "ms": 1.986,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5297,
+          "ms": 1.979,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5321,
+          "ms": 1.665,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5339,
+          "ms": 1.603,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5339,
+          "ms": 1.714,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5343,
+          "ms": 1.58,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5343,
+          "ms": 1.695,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5345,
+          "ms": 1.356,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5369,
+          "ms": 1.49,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5387,
+          "ms": 1.059,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5387,
+          "ms": 1.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5391,
+          "ms": 1.032,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5391,
+          "ms": 1.149,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5435,
+          "ms": 2.014,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5435,
+          "ms": 2.129,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5440,
+          "ms": 2.255,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5440,
+          "ms": 2.477,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5443,
+          "ms": 2.126,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5467,
+          "ms": 1.983,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5485,
+          "ms": 1.811,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5485,
+          "ms": 1.923,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5489,
+          "ms": 1.431,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5489,
+          "ms": 1.549,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5491,
+          "ms": 2.266,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5515,
+          "ms": 1.277,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5533,
+          "ms": 1.095,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5537,
+          "ms": 1.157,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5537,
+          "ms": 1.258,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 56,
+      "retained_source_bytes": 3549112,
+      "stalls_over_50ms": [
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 122.323
+        },
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 114.842
+        },
+        {
+          "context": "load kangaskhan",
+          "covered": false,
+          "ms": 52.493
+        }
+      ],
+      "static_bytes": 230047720
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 56,
+      "frame_max_ms": 109.989,
+      "frame_p95_ms": 16.84,
+      "frame_samples": 2787,
+      "load_spans": [
+        {
+          "frame": 5584,
+          "ms": 13.889,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 5584,
+          "ms": 13.935,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5587,
+          "ms": 1.454,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5587,
+          "ms": 1.574,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5591,
+          "ms": 1.561,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5591,
+          "ms": 1.672,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5593,
+          "ms": 7.173,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5617,
+          "ms": 1.217,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5635,
+          "ms": 1.944,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5635,
+          "ms": 2.054,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5640,
+          "ms": 1.665,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5640,
+          "ms": 1.793,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5643,
+          "ms": 1.981,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5667,
+          "ms": 1.641,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5685,
+          "ms": 1.369,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5685,
+          "ms": 1.495,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5690,
+          "ms": 1.465,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5690,
+          "ms": 1.574,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5693,
+          "ms": 1.782,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5717,
+          "ms": 1.414,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5735,
+          "ms": 1.549,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5735,
+          "ms": 1.661,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5739,
+          "ms": 1.284,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5739,
+          "ms": 1.429,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5741,
+          "ms": 1.579,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5765,
+          "ms": 2.264,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5783,
+          "ms": 1.689,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5783,
+          "ms": 1.795,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5788,
+          "ms": 1.666,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5788,
+          "ms": 1.757,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5790,
+          "ms": 1.78,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5814,
+          "ms": 1.864,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5832,
+          "ms": 1.315,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5832,
+          "ms": 1.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5836,
+          "ms": 1.138,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5836,
+          "ms": 1.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5838,
+          "ms": 1.301,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5880,
+          "ms": 1.909,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5880,
+          "ms": 2.019,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5886,
+          "ms": 2.059,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5886,
+          "ms": 2.158,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5891,
+          "ms": 1.592,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5915,
+          "ms": 1.636,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5933,
+          "ms": 1.553,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5933,
+          "ms": 1.684,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5938,
+          "ms": 1.484,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5938,
+          "ms": 1.595,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5941,
+          "ms": 1.546,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5965,
+          "ms": 1.094,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5983,
+          "ms": 1.267,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5983,
+          "ms": 1.384,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5987,
+          "ms": 1.256,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5987,
+          "ms": 1.393,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5989,
+          "ms": 1.098,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6013,
+          "ms": 1.089,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6031,
+          "ms": 1.542,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6031,
+          "ms": 1.649,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6036,
+          "ms": 1.629,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6036,
+          "ms": 1.761,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6039,
+          "ms": 1.461,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6063,
+          "ms": 1.741,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6081,
+          "ms": 1.624,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6081,
+          "ms": 1.752,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6085,
+          "ms": 1.595,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6085,
+          "ms": 1.723,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6088,
+          "ms": 1.37,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6112,
+          "ms": 1.361,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6130,
+          "ms": 1.504,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6130,
+          "ms": 1.627,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6134,
+          "ms": 1.528,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6134,
+          "ms": 1.641,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6136,
+          "ms": 1.384,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6160,
+          "ms": 1.315,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6178,
+          "ms": 1.595,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6178,
+          "ms": 1.708,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6184,
+          "ms": 1.431,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6184,
+          "ms": 1.548,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6188,
+          "ms": 1.202,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6212,
+          "ms": 1.177,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6230,
+          "ms": 1.87,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6230,
+          "ms": 1.999,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6235,
+          "ms": 1.777,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6235,
+          "ms": 1.898,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6238,
+          "ms": 1.869,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6262,
+          "ms": 1.773,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6280,
+          "ms": 1.409,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6280,
+          "ms": 1.509,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6285,
+          "ms": 1.672,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6285,
+          "ms": 1.786,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6288,
+          "ms": 1.506,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6312,
+          "ms": 1.204,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6330,
+          "ms": 1.686,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6330,
+          "ms": 1.781,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6335,
+          "ms": 1.907,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6335,
+          "ms": 2.012,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6338,
+          "ms": 1.753,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6362,
+          "ms": 1.395,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6380,
+          "ms": 1.005,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6380,
+          "ms": 1.112,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6384,
+          "ms": 1.09,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6384,
+          "ms": 1.194,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6428,
+          "ms": 1.495,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6428,
+          "ms": 1.609,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6433,
+          "ms": 1.589,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6433,
+          "ms": 1.716,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6436,
+          "ms": 1.581,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6460,
+          "ms": 1.587,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6478,
+          "ms": 1.826,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6478,
+          "ms": 1.933,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6484,
+          "ms": 1.85,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6484,
+          "ms": 1.961,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6488,
+          "ms": 1.59,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6512,
+          "ms": 1.775,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6530,
+          "ms": 1.77,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6530,
+          "ms": 1.887,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6535,
+          "ms": 1.785,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6535,
+          "ms": 1.887,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6538,
+          "ms": 1.443,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6562,
+          "ms": 1.525,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6581,
+          "ms": 1.638,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6581,
+          "ms": 1.731,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6587,
+          "ms": 1.57,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6587,
+          "ms": 1.692,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6591,
+          "ms": 2.003,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6615,
+          "ms": 1.627,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6633,
+          "ms": 1.515,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6633,
+          "ms": 1.647,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6638,
+          "ms": 1.609,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6638,
+          "ms": 1.746,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6641,
+          "ms": 1.315,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6665,
+          "ms": 1.328,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6683,
+          "ms": 1.748,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6683,
+          "ms": 1.873,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6688,
+          "ms": 1.828,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6688,
+          "ms": 1.962,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6691,
+          "ms": 1.919,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6715,
+          "ms": 1.682,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6733,
+          "ms": 2.59,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6733,
+          "ms": 2.721,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6738,
+          "ms": 1.991,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6738,
+          "ms": 2.096,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6742,
+          "ms": 2.059,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6766,
+          "ms": 1.599,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6784,
+          "ms": 1.793,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6784,
+          "ms": 1.912,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6789,
+          "ms": 1.761,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6789,
+          "ms": 1.885,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6792,
+          "ms": 1.699,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6816,
+          "ms": 1.883,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6834,
+          "ms": 1.689,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6834,
+          "ms": 1.818,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6839,
+          "ms": 1.683,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6839,
+          "ms": 1.819,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6842,
+          "ms": 1.548,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6866,
+          "ms": 1.373,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6884,
+          "ms": 2.1,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6884,
+          "ms": 2.239,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6889,
+          "ms": 1.796,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6889,
+          "ms": 1.882,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6892,
+          "ms": 1.421,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6916,
+          "ms": 1.499,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6934,
+          "ms": 1.089,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6934,
+          "ms": 1.192,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6941,
+          "ms": 1.259,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6941,
+          "ms": 1.372,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6987,
+          "ms": 1.473,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6987,
+          "ms": 1.596,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6991,
+          "ms": 1.692,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6991,
+          "ms": 1.832,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6993,
+          "ms": 1.562,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7017,
+          "ms": 1.61,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7035,
+          "ms": 1.5,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7035,
+          "ms": 1.603,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7039,
+          "ms": 1.795,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7039,
+          "ms": 1.929,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7041,
+          "ms": 1.876,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7065,
+          "ms": 1.432,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7083,
+          "ms": 1.724,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7083,
+          "ms": 1.835,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7088,
+          "ms": 1.687,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7088,
+          "ms": 1.806,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7091,
+          "ms": 1.946,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7115,
+          "ms": 1.68,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7133,
+          "ms": 1.713,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7133,
+          "ms": 1.817,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7138,
+          "ms": 2.124,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7138,
+          "ms": 2.253,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7141,
+          "ms": 2.17,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7165,
+          "ms": 2.071,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7183,
+          "ms": 1.543,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7183,
+          "ms": 1.639,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7189,
+          "ms": 1.787,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7189,
+          "ms": 1.888,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7193,
+          "ms": 1.757,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7217,
+          "ms": 1.662,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7235,
+          "ms": 1.581,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7235,
+          "ms": 1.691,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7240,
+          "ms": 1.463,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7240,
+          "ms": 1.571,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7243,
+          "ms": 1.595,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7267,
+          "ms": 1.01,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7285,
+          "ms": 1.676,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7285,
+          "ms": 1.803,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7290,
+          "ms": 1.496,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7290,
+          "ms": 1.59,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7293,
+          "ms": 1.531,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7317,
+          "ms": 1.645,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7335,
+          "ms": 1.878,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7335,
+          "ms": 1.992,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7340,
+          "ms": 1.845,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7340,
+          "ms": 1.948,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7343,
+          "ms": 2.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7367,
+          "ms": 1.944,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7385,
+          "ms": 1.979,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7385,
+          "ms": 2.096,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7391,
+          "ms": 2.116,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7391,
+          "ms": 2.254,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7394,
+          "ms": 2.015,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7418,
+          "ms": 1.738,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7436,
+          "ms": 1.643,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7436,
+          "ms": 1.767,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7441,
+          "ms": 1.592,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7441,
+          "ms": 1.7,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7444,
+          "ms": 2.091,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7468,
+          "ms": 1.891,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7486,
+          "ms": 1.237,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7486,
+          "ms": 1.358,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7490,
+          "ms": 1.293,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7490,
+          "ms": 1.404,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7492,
+          "ms": 1.455,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7516,
+          "ms": 1.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7534,
+          "ms": 1.463,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7534,
+          "ms": 1.547,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7539,
+          "ms": 1.999,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7539,
+          "ms": 2.136,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7542,
+          "ms": 2.21,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7566,
+          "ms": 1.405,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7584,
+          "ms": 1.335,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7584,
+          "ms": 1.42,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7589,
+          "ms": 1.482,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7589,
+          "ms": 1.597,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7592,
+          "ms": 1.76,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7616,
+          "ms": 1.18,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7634,
+          "ms": 2.168,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7634,
+          "ms": 2.305,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7639,
+          "ms": 1.58,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7639,
+          "ms": 1.695,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7642,
+          "ms": 1.487,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7666,
+          "ms": 1.621,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7684,
+          "ms": 1.243,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7684,
+          "ms": 1.331,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7688,
+          "ms": 1.232,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7688,
+          "ms": 1.335,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7733,
+          "ms": 1.495,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7733,
+          "ms": 1.61,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7739,
+          "ms": 1.664,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7739,
+          "ms": 1.794,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7742,
+          "ms": 1.419,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7766,
+          "ms": 1.508,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7784,
+          "ms": 1.555,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7784,
+          "ms": 1.669,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7789,
+          "ms": 1.778,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7789,
+          "ms": 1.897,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7792,
+          "ms": 1.651,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7816,
+          "ms": 1.534,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7834,
+          "ms": 1.929,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7834,
+          "ms": 2.041,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7840,
+          "ms": 2.284,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7840,
+          "ms": 2.423,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7844,
+          "ms": 1.746,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7868,
+          "ms": 1.563,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7886,
+          "ms": 1.269,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7886,
+          "ms": 1.371,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7890,
+          "ms": 1.122,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7890,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7892,
+          "ms": 1.263,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7934,
+          "ms": 1.508,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7934,
+          "ms": 1.633,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7938,
+          "ms": 1.502,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7938,
+          "ms": 1.617,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7940,
+          "ms": 1.129,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7964,
+          "ms": 1.206,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7982,
+          "ms": 1.316,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7982,
+          "ms": 1.444,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7986,
+          "ms": 1.791,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7986,
+          "ms": 1.97,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7988,
+          "ms": 1.317,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8012,
+          "ms": 1.322,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8030,
+          "ms": 2.869,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8030,
+          "ms": 2.996,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8036,
+          "ms": 2.425,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8036,
+          "ms": 2.543,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8039,
+          "ms": 2.309,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8063,
+          "ms": 1.807,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8081,
+          "ms": 1.961,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8081,
+          "ms": 2.067,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8086,
+          "ms": 1.998,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8086,
+          "ms": 2.094,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8089,
+          "ms": 1.899,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8113,
+          "ms": 1.758,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8131,
+          "ms": 1.594,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8131,
+          "ms": 1.699,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8135,
+          "ms": 1.673,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8135,
+          "ms": 1.774,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8137,
+          "ms": 1.774,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8161,
+          "ms": 1.298,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8179,
+          "ms": 1.102,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8183,
+          "ms": 1.083,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8183,
+          "ms": 1.193,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8227,
+          "ms": 1.915,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8227,
+          "ms": 2.023,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8232,
+          "ms": 2.093,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8232,
+          "ms": 2.225,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8235,
+          "ms": 2.486,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8259,
+          "ms": 2.028,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8277,
+          "ms": 1.626,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8277,
+          "ms": 1.743,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8281,
+          "ms": 1.435,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8281,
+          "ms": 1.546,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8283,
+          "ms": 1.494,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8307,
+          "ms": 1.443,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8325,
+          "ms": 1.077,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8325,
+          "ms": 1.185,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8329,
+          "ms": 1.097,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8329,
+          "ms": 1.208,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8331,
+          "ms": 1.037,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 56,
+      "retained_source_bytes": 3549112,
+      "stalls_over_50ms": [
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 109.989
+        }
+      ],
+      "static_bytes": 230266584
+    }
+  ],
+  "schema": 1,
+  "species": [
+    "abra",
+    "aerodactyl",
+    "aggron",
+    "alakazam",
+    "aron",
+    "beedrill",
+    "blaziken",
+    "carvanha",
+    "clobbopus",
+    "combusken",
+    "crobat",
+    "electrike",
+    "garbodor",
+    "golbat",
+    "grapploct",
+    "kadabra",
+    "kakuna",
+    "kangaskhan",
+    "kecleon",
+    "lairon",
+    "machamp",
+    "machoke",
+    "machop",
+    "meganium",
+    "milotic",
+    "mr-mime",
+    "musharna",
+    "onix",
+    "panpour",
+    "pansage",
+    "pansear",
+    "patrat",
+    "pidgeot",
+    "pidgeotto",
+    "pinsir",
+    "roserade",
+    "sawk",
+    "scolipede",
+    "simipour",
+    "simisage",
+    "simisear",
+    "skarmory",
+    "starmie",
+    "steelix",
+    "swirlix",
+    "throh",
+    "vanillish",
+    "vanillite",
+    "venipede",
+    "venusaur",
+    "watchog",
+    "weedle",
+    "whirlipede",
+    "wimpod",
+    "yamask",
+    "zubat"
+  ]
+}

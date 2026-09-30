@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog 56 Pokémon hebben goedgekeurde normal/shiny-3D-modellen in individuele bundles. Kleuren, ogen, battleplaatsing, animaties en installatie zijn gecontroleerd. De lokale catalogus bevat nu 807 gewone Pokémon plus Mega Dragonite.
+
 - Nog 39 Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles, met gecontroleerde kleuren, ogen, battleplaatsing en animaties. De catalogus bevat nu 751 gewone Pokémon plus Mega Dragonite.
 
 - Android now uses immersive fullscreen mode to hide the system status and navigation bars while playing.

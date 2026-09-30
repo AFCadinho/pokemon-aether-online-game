@@ -1,0 +1,2692 @@
+{
+  "schema": 1,
+  "task": "remaining-274-production",
+  "date": "2026-09-30",
+  "existing_approved_base_species": 807,
+  "remaining_base_species": 218,
+  "runtime_approved": false,
+  "counts": {
+    "source_or_motion_recovery_pending": 117,
+    "approved_individual_bundle_ready": 56,
+    "normal_restored_shiny_pending": 76,
+    "native_material_hold": 10,
+    "dlc_model_found_native_motion_missing": 15
+  },
+  "review_url": "http://127.0.0.1:8781/appearance-56-v1/index.html",
+  "diagnostic_root": ".tmp/remaining-274-production",
+  "evidence": {
+    "inventory.json": "69e410f3ecdd8609621fddc41ce53cc70e6cbf3e55b46bc212727ac2aa0b8f22",
+    "za-final-stage.json": "0ccf09e417b858db4785484104823664d9d8c11f871d88073eb57a5c16b596f4",
+    "za-final-runtime-parity.json": "c22c652b7d3bc1a6cc298894b5102efb76910da9a80758e5c9dd22ec5f1a426c",
+    "native-colour/status.json": "40dcf18c90c453e0efe6df0e463c3b8e2cf24e2ab6cc4213fc735aab61120790",
+    "native-normal-runtime/status.json": "e9ad302a314fb9af8a0b45720dc61fc8c9b1df0182a9bec7f796aebf048a5493",
+    "dlc-intake.json": "77a8da295c8de8072f7c7a9922ea3b13ca6ab1aa744a5992df4ce871beabd3f1",
+    "za-final-stage-v2.json": "92293e9d0da1e88966d978fb65701b197ba894e31d57f8b1a8137ae340c031d4",
+    "final-parity-v2.json": "83c574b082e1d233c8dfa2191adbab4a1bc8ba6b69c4de5d26d0feb22622a93b",
+    "pour-eyes/status.json": "f56fc30f44eae48a6fe202f9312ac0fca87ed354bd234e946fc0736d90658bba",
+    "native-colour-four-v1/status.json": "dc6b69af4e2f1258302356998d514c057254f09774822f9e2c9af29baacc4652",
+    "native-normal-runtime-four/status.json": "bf42e71354a49b9a02ec0235fb284971f40392138f7b5bef50edc4facf433559",
+    "battle-56/raw/battle-review.json": "b0ed922aac45657447dd45ed6d28ba89dcbbc95f20336675203149e99e61663e",
+    "battle-56-current/motion-candidates.json": "24f8f8427ac37760be728b10785922f508b27db7bd5828bdbf948bad275b220a",
+    "za-final-stage-v3.json": "e8ee0d3be73dd8aaea7ad708f7028ef2a4fb918b3a77d13cb7eb5ad988810af0",
+    "final-parity-v3.json": "88acd90e12cfcd3f73708f461c03193fb4272282d06ac375bfd8a63425ae64ab",
+    "native-herdier-v2/status.json": "52c47b8d18dbc76d2dc1fd7c587b9b24412b8d8fdf631c6b484e7ceb87d6a624",
+    "native-herdier-runtime/status.json": "e602f35ed23127ee2d8f3cf01f8012b49ec4c83c3133a76a4843ed700e96c9bc",
+    "battle-56-current/corrected-v1/battle-review.json": "8ec35cf8d3b7ceb9fb1d9ba3269d70b4df845f4eb569e1f7945e8fa5d67e4b0d",
+    "battle-clearance-five/corrected/battle-review.json": "bcadc6303cffc0c9c93f513b2ded6d025633605ddd09ae30d657c8f2a827cd6c",
+    "battle-55-final/captures-v2/battle-review.json": "1ff38a25e2ef63b6553277eb0d6bd3e20dee6959662694abd102d4922ec0bfd4",
+    "venusaur-recovered-v1/status.json": "3193458ad1fb16f4e2461c81a6c13709eddc3fa3b63aa943bc8adc3e1346e017",
+    "venusaur-flat-export/battle/corrected-v2/battle-review.json": "e743e27522bece525687b0498ab8f6cc94748a3df5f3394fd68f0962aaf0f581",
+    "venusaur-flat-export/battle/motion-candidates.json": "23c9f587750f9aaa19f69d9aebac42c8a470b2fcfca4b43dc874b421ae45c3b4",
+    "venusaur-flat-export/runtime-parity.json": "9d049d15b749905af4f24678b5bc61e5ca3d818bd445523b484381fcd2d798f4",
+    "battle-56-final/captures/battle-review.json": "b8fbf08895f974b1d9081dcf73e021451d2c0535e449704d4058831facd0badd"
+  },
+  "entries": [
+    {
+      "species": "bulbasaur",
+      "national_dex": 1,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "Source repair does not cover this animation set; explicit visibility review required"
+    },
+    {
+      "species": "venusaur",
+      "national_dex": 3,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "f2ce17715e9947ef945a2614f6ec3fe3bdda4fa29253d1b68f7008e861d1f543",
+      "shiny_glb_sha256": "b9442090bac39d2e19e455407619ef5446ba7b9129fe4e34a032c37562991fe6",
+      "normal_runtime_sha256": "1d7cfebc5d675023d152f484ea8439eac499b729deb3787ade65df745d68655e",
+      "shiny_runtime_sha256": "37fb7f88131c6e6fc97f1a07095c81308d45c3684c60ebe9d493c5a9f8fae6f6",
+      "geometry_animation_sha256": "f8500eadd04d14c1bf986438c1eadcef3dc868b57041cdce7522770fe6c7362a",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "caterpie",
+      "national_dex": 10,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "metapod",
+      "national_dex": 11,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "97f23de86a3de1e86ba0c55d64ddb615de549c9e970013b0e5f6889727b4e7d4",
+      "geometry_motion_sha256": "eda4f87107d9a9531354100bdd7dab54a8b6cb87f0509a77ca4b2d3f3c94056e"
+    },
+    {
+      "species": "butterfree",
+      "national_dex": 12,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "d1e1bafa7601bc2e82e1ed365c5815867e1aa63382906479962c1e6a022eba04",
+      "geometry_motion_sha256": "5d8707dbe859d308ba3744cd71f8a60fe631fdc64bf916c3f6bd542d450067cd"
+    },
+    {
+      "species": "weedle",
+      "national_dex": 13,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "6690f92241feab986561b164b8a5f6d066de7719aae0ec965f386e8bd9d4749f",
+      "shiny_glb_sha256": "2b58ecb6399aee9b8832aaa3f0e86da1997ef05023c8b03c23c6cc626872f972",
+      "normal_runtime_sha256": "9f47d3b2af1ed08bf4a6cef969bfc4a5d08610142636b3c9cb435d92c8b3799e",
+      "shiny_runtime_sha256": "eacc9681e8a3794c577de2bace58a710e9c2085d0716e2787777c0159631902a",
+      "geometry_animation_sha256": "d58b3000aad863b97eddb2cbbc0722c33fc52d62a0200984b7cb566242e7c422",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "kakuna",
+      "national_dex": 14,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "dbfbab757c00542de86450b6ba67a60aa4326570089b1c627b0faac8a68f0e3b",
+      "shiny_glb_sha256": "34c17be7cbaa300a935f6ca419c0ccb5fd5ee11f92fe480587607d74f654ceb2",
+      "normal_runtime_sha256": "38a28496f5482d0e14024b6582e6558096c4039b2d339690c9a3908ccd24c96f",
+      "shiny_runtime_sha256": "230082ed3b2bab3a25ce87b23d226f6f761f4f7eee608920ff7e01ceadaf5665",
+      "geometry_animation_sha256": "40f28ab378136886911ccd308e681f01365447ff7c1f952c4a2153f58c954919",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "beedrill",
+      "national_dex": 15,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "5de0b27b2b7f008fef85e31dc5c3b793f3b27af07b71d758d1f37d8b765d1ef1",
+      "shiny_glb_sha256": "4637a2e1595ffd0ed0c2ca4caf1f37b9a7199722f06e5a3aca4a318ac78a9ec1",
+      "normal_runtime_sha256": "4c4412703f2518f23cafe94b4a41fdb534743ac5f43f2ed0fb7063725e3be608",
+      "shiny_runtime_sha256": "fea4cb079e06a030f284174e5ee999c8a36143f1786263f67d100ec6ce2b5f39",
+      "geometry_animation_sha256": "d35000caf4f9c17e4fe85c4eaa91fcc81fb57a61664fbca5015893a879e52c0a",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "pidgeotto",
+      "national_dex": 17,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "2a1210289fce6e3f89e0be5f36d32d3570ba9a19c1884b3a71cafc13cf04e81b",
+      "shiny_glb_sha256": "244ff80fd5093430925d220e4e669b9d9380ce20a75f639dc746825d1b4d86e2",
+      "normal_runtime_sha256": "d515c5e0b14be7adb61ddf76a149607295c1a74415530140366d3e39527ba21d",
+      "shiny_runtime_sha256": "fbaf5a8734687c43961826b5800ac2d649ede2257710a19395099463af984ada",
+      "geometry_animation_sha256": "8e962182920b90e8d488ee15315e34a6a03508e74330178e251789b716dc3b47",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "pidgeot",
+      "national_dex": 18,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "796790a0fdf333afbad3c137e5fa8073c319b584bb730213a65af5505935413f",
+      "shiny_glb_sha256": "0b1cc1717f78312c36ed7154694d17c9cd574fa7b4cfd997b79938d5c81c0c4f",
+      "normal_runtime_sha256": "1ec221117eac7161c04c1190d0a13891114396c673f0731805ff8f0fe6b2b5ad",
+      "shiny_runtime_sha256": "02ab9f948471916effa53be104a10f6cd1b309a2ce6ecd6f2b61549d6be8437c",
+      "geometry_animation_sha256": "76a1cbdee5d9facd2f0e17fbc14932f45d18bf2d4192feb75ad2e859e2429bda",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "rattata",
+      "national_dex": 19,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "raticate",
+      "national_dex": 20,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "804d1419c0eef7213e0b6141ee7bbfb6ea1d52e12fa3edbf6c871efaab087737",
+      "geometry_motion_sha256": "cf8100c05f231b52336650fb6b785e615dd8da29478285bc30341e6b3a2e07f1"
+    },
+    {
+      "species": "spearow",
+      "national_dex": 21,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "fearow",
+      "national_dex": 22,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "nidoran-f",
+      "national_dex": 29,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "a4da0ac6f6fc4dca5c4d5a914bc94198cde3390a345f49c69fcda77d85c4c438",
+      "geometry_motion_sha256": "16d13f34d7e57f7ffb7c4203fa13a5a0227e8064bd713d19533f4fb40ed2bd15"
+    },
+    {
+      "species": "nidorina",
+      "national_dex": 30,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "nidoqueen",
+      "national_dex": 31,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "nidoran-m",
+      "national_dex": 32,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "eb132fb2163619209c0d6a306a7aba6cef27c8219d29b9aa14462d06da28233f",
+      "geometry_motion_sha256": "07bd3c7a8108d25d881ad2a0d07e09766670fa73fdbb679d2a29e5cb3453dde6"
+    },
+    {
+      "species": "nidorino",
+      "national_dex": 33,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "nidoking",
+      "national_dex": 34,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "zubat",
+      "national_dex": 41,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "d188f8aee4d7e0847e495744a9d910ea2cb1898065ed513ef6f31032cb5695ec",
+      "shiny_glb_sha256": "a0ea3af5b54e75a256fb5901f848badc5fe485b59d066e4a07ad1f847170b298",
+      "normal_runtime_sha256": "7e1c9a1f072f51e03cdea55601816158fc6368304a476e051bb5cb19c724d699",
+      "shiny_runtime_sha256": "43451f200378a00664747df078c973fa5525649e97437041177b4d4d8ce3ce71",
+      "geometry_animation_sha256": "9c68364e6f0610334abcdadb82f323d6b6ca02e1be5cc33c1f2110cacb242c97",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "golbat",
+      "national_dex": 42,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "2c68ffa7fc112517e0b25a603baa2c5882ea6ae479529c95d9f7792ee16548a1",
+      "shiny_glb_sha256": "c69d072309a6a8968b98bafd9a57817327283d32256d826be7ffd6e32ee22d00",
+      "normal_runtime_sha256": "59f5456405771a2798e5eaa0c0ef090336580a0b4758046ad2e08b51f6b6cffb",
+      "shiny_runtime_sha256": "cfccddd8fd10cedc8208d5f430034a1a560cd68d22e9e56aa1cd40a5330d86b6",
+      "geometry_animation_sha256": "da7258bcdd1d1e760bf41c0740d2dcb2e7c1f87a5d2ca4a65ee30d65ed5e2f30",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "paras",
+      "national_dex": 46,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native shader mix is not Principled plus emission"
+    },
+    {
+      "species": "parasect",
+      "national_dex": 47,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "84eb511ffef0bf45ba3a2a09e93590cf0e40f3d260b87f40296ae68f6f64a275",
+      "geometry_motion_sha256": "f8b0bad296ff1498260995b0260a6b4827251f57058412c06268e6d4b05e13c1"
+    },
+    {
+      "species": "abra",
+      "national_dex": 63,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "c74647a969ff86dc68d1ff84b70e51db50310c4d83fdc9f0ca1f1e2fe8e45c48",
+      "shiny_glb_sha256": "c0f713f019437e369762dfd346c8f0e959dc0251e44fa259c73a7d42227cb3ba",
+      "normal_runtime_sha256": "8c26bc3c72f05b9d5c5d504012458971e00374f24b3c87ce2778cd2b911b2354",
+      "shiny_runtime_sha256": "49a7135b914fdc5a2cb5792728db1089110edc9cb03b49923c1ee4f348d81b50",
+      "geometry_animation_sha256": "e34f32cbc7e959695a589eaabed8099209d11a07c01c2ae88486f8494352c80b",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "kadabra",
+      "national_dex": 64,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "2e71a2dd0cea4b2aeda73c17ff4cdf1f345b4e099546729adc9a70f652bd7faf",
+      "shiny_glb_sha256": "753d8c94616e1d4f2ce5eb7698487206c8ba3924407c87742e2fc29a2ba2e43a",
+      "normal_runtime_sha256": "e174588d7432cdf6fe68bca7701dc3b9d5111ac7d84662c1e34b57e01c5a0706",
+      "shiny_runtime_sha256": "99f85b02d2fe24b816460c780c0f35d5365bee6b79379c853b5ae38b5258bbd5",
+      "geometry_animation_sha256": "7e13b876e670964d2129befaa374564f8a65e2e07de22ae3b66e550bfde73dd7",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "alakazam",
+      "national_dex": 65,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "7030129119fcc9c9f5f3a5cdd0d01b8973eb434ca95418777dcd59fa7cd44a3f",
+      "shiny_glb_sha256": "69446ff853f21f44d7baeb2e6ed95853cb6b9613b48460535ee9552c57241a21",
+      "normal_runtime_sha256": "0c1e8cd849c31ed81bf9c35f7a92b30058f967e356f837150f2a490037eb3614",
+      "shiny_runtime_sha256": "394305218b62a108380565e534d7e8dc2804123dcb9692b27c710b4be4666913",
+      "geometry_animation_sha256": "9df0a06de68cecf0e96351385aae47a8d4896d26dacb355c394f134592a56a92",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "machop",
+      "national_dex": 66,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "1605221dbd701547bc6221b2d8ba9a551a3e526cc62299f3de830d031ff3b6a4",
+      "shiny_glb_sha256": "0b2941e81d638f2d67f42bf93c22d5bbd49ac94e29fc3c4816715c23c5aea496",
+      "normal_runtime_sha256": "e00b08631e62f594bc85cb367b0ed5c34dcae21c54003698a83ff4efca85d0f1",
+      "shiny_runtime_sha256": "1fbac59cbb7161ff3d180e1264f6a3f343d5f55b685b53ffe1f966b2d0c362c4",
+      "geometry_animation_sha256": "2de432efc8571c4fd1e96ae2f02f2baf3daf0f84575b8dd74a2b5f00fd7276d7",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "machoke",
+      "national_dex": 67,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "075b83f4505861d744ae0b06f5df2111f257c06efc5f3d2043614be4bbe8a251",
+      "shiny_glb_sha256": "fcb7414f413e7cb8f8dc778999cc3096056e8feacc670108ee7b657f4d7def46",
+      "normal_runtime_sha256": "5e20f11f0a0e76ccef733f4b5cfe82034412f0aa0716ec6c31a614df8510d064",
+      "shiny_runtime_sha256": "cfddfc5b71e626b68335bc8056ea29c4387555dcd59b1c0efb27dedc86eb6a35",
+      "geometry_animation_sha256": "5d3cc3f738960b508d269147724df9e5074f22b1eb66c3a9aa498d8eb36ac5a6",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "machamp",
+      "national_dex": 68,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "a6cc3d0797ba9c8a02ee1776dbbbb2f8ce6c83b413fccaa7c40fae59ac65d327",
+      "shiny_glb_sha256": "392a56a181706d67120587e92bfbf29daecd7feef58eadb1a8718ea38a5d2e7e",
+      "normal_runtime_sha256": "96d261fd636fd93e2b3f508458c657e833ebc5bbb0553daaada0b5e5ee8024ad",
+      "shiny_runtime_sha256": "02c170db28a991f8f313557bfca48cf832cb81b6fd9e0d5611957fcba87a59e0",
+      "geometry_animation_sha256": "8057c4bb33b34a2e1abb7999dc8b5538bca471df1a490cbed2c6fca7bc74a23f",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "tentacool",
+      "national_dex": 72,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "tentacruel",
+      "national_dex": 73,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "ponyta",
+      "national_dex": 77,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native emission is active; separate reconstruction needed: FireCoreA"
+    },
+    {
+      "species": "rapidash",
+      "national_dex": 78,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native emission is active; separate reconstruction needed: FireCoreA"
+    },
+    {
+      "species": "doduo",
+      "national_dex": 84,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "onix",
+      "national_dex": 95,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "34d4848c32a963d880b8837ac22505bcced96c9b8d015b9e2c95c02b8fb20652",
+      "shiny_glb_sha256": "f2f95779b4d4166315c3338b1a7bfb8b4be023badfdbdaf56e2f202fb61b4194",
+      "normal_runtime_sha256": "69fc1d3d563f98421824fbe42d0b4c5afbffe1ad561e19f793c10ac929d535bb",
+      "shiny_runtime_sha256": "75a90e58332bc05960d642a7fbdb91ec6bd9081816048f25c453ac6bb3ff09d2",
+      "geometry_animation_sha256": "543cc66de0ed8505fd87fec839ee5df107839536378ec6af33d5f931d088e7e0",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "krabby",
+      "national_dex": 98,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "kingler",
+      "national_dex": 99,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "lickitung",
+      "national_dex": 108,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "1f3c56e290411d4d43613d2e2829e0a582684b7c4e6d4c664c49fe7061c8afe9",
+      "geometry_motion_sha256": "ac10b8e8c5154f18b19014280860febfff98317b42f7c9204d6daa4c708e1132"
+    },
+    {
+      "species": "rhyhorn",
+      "national_dex": 111,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "rhydon",
+      "national_dex": 112,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "tangela",
+      "national_dex": 114,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "ba620b4ee836d02bfa57d2ddeeaeca36b1f76ef44b97e7cd92c7b515aa2e3727",
+      "geometry_motion_sha256": "6ddb86e67d3cf17489987c21049ce1a57ebbf435ec0920feaff19d8da98b7983"
+    },
+    {
+      "species": "kangaskhan",
+      "national_dex": 115,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "260618d9c43464e55b2d9a14053d2c62486ea9f6daf385be8ff1832c175e5e1e",
+      "shiny_glb_sha256": "812c040475abcc14ce7aabc609a2c94018196856c558471fe213ee29a9bc75cb",
+      "normal_runtime_sha256": "4fb057aa31b64d7d62105b8fe9ba1fd48f507e2af9d174acc5e21da1e569f4c2",
+      "shiny_runtime_sha256": "d3ee9ca8665627425805df8c417fc20f05949274e270444641b08d602fa7b976",
+      "geometry_animation_sha256": "aca15191d69977bad7f182cc56e4e7bef4abaf2cc937d06d5404c8f9bc3032e2",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "goldeen",
+      "national_dex": 118,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "d09a8886699905decaa5ed663a7683cb3d408ab690e1ecc06ac3b32432abb8b8",
+      "geometry_motion_sha256": "75032a3cc836e7a699cff2241c48deed7d6fbfdff939c56caf5f473b89496ebd"
+    },
+    {
+      "species": "seaking",
+      "national_dex": 119,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "starmie",
+      "national_dex": 121,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "8aa271c670b7ba04bc9791c40c0adb32a7708ce1a2db2843330aeeae13abe871",
+      "shiny_glb_sha256": "79d02fac1e2aa4dcfebe5cd59f042dca1bda188fda294bc49bf0cd7c0638cfe2",
+      "normal_runtime_sha256": "def6783663944db7551f423a558c3761bcd16e413e5ee446d998beefa58948f0",
+      "shiny_runtime_sha256": "e54e26d6289835dfb64e682ad8ddf06e36f9c5c71cca06fc87148ad853824464",
+      "geometry_animation_sha256": "35fcf34328c385577b8c3add42f13d0f8f5a3f4ecbc02e378a1a21f4e7e0895c",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "mr-mime",
+      "national_dex": 122,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "4768a12500e39277909bf14343bf236af9eb543bb4e989b480b324aac4506238",
+      "shiny_glb_sha256": "52724ef0629fa335e5c04b6f7bc72c5884ee39ef67f46dfad16a4a99fc6fa573",
+      "normal_runtime_sha256": "4b3419015a320663fd212eaaa3c1d8b2470ab7ab87679d84212c3326f288b78f",
+      "shiny_runtime_sha256": "7f2207b9262e15f89875dd603defbc874cbeaa42fda9debf1fb0592798e9fcf4",
+      "geometry_animation_sha256": "2b1d4aee6a15e7bf8fb39fd10b62e2bc7923c64b743f23ed94ceaced05c0b619",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "jynx",
+      "national_dex": 124,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "pinsir",
+      "national_dex": 127,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "baf24eb6feccf6063b41d66b3b9a5e12f0d9b7bb4b7d34ae6c38c59538e22cb8",
+      "shiny_glb_sha256": "52d5a9762e4dcf047205943f50b1a6380b60fee547299ae45969b725284f10e6",
+      "normal_runtime_sha256": "aaa02c94fbba07c6d07126cf139de29a14500c8475bf0ea2f80ae94eb39b7216",
+      "shiny_runtime_sha256": "24c4ba5beb491091fa706236284179ddc6a379b41722da50ce5e882174d4c56a",
+      "geometry_animation_sha256": "3eb0d5f77c266ecd01d9b51958894c390ea2ed84d14a7661455fb8de91bd96ab",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "omanyte",
+      "national_dex": 138,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "omastar",
+      "national_dex": 139,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "kabuto",
+      "national_dex": 140,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "kabutops",
+      "national_dex": 141,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "aerodactyl",
+      "national_dex": 142,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "b65041066b7d5aefb93dc00d8345b6e95574a1ad46bc23b804a81780ed48c5ba",
+      "shiny_glb_sha256": "c5f2b6fe46278d88bf5765500375e4d81d11d4d7086419e673dfea00d83e12e6",
+      "normal_runtime_sha256": "dffcd20260cd68bd3336d39c3ef5d0c9cf73241dd9d7592bea0344340f3a4090",
+      "shiny_runtime_sha256": "3f19c5e9385a8e0711072feba57fc8a2e38ec4baa9a404fb820bec8f88038584",
+      "geometry_animation_sha256": "faf6ddb73a3601276aad58a74f74981730d01db48da68b0449e211bddd09e768",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "meganium",
+      "national_dex": 154,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "e8aec84a4bb06a74e0e3d07b26f3223c2f2071d0614970f3b59e752bededbc9b",
+      "shiny_glb_sha256": "6438338e078d38547919c309237976ca31d016214150c0d0ce31640c0b0fdad5",
+      "normal_runtime_sha256": "37f3706d56b25cd46a8550d0631d7fdf9e057c7f6c06abce51b3384ab49064dd",
+      "shiny_runtime_sha256": "e80f3f571ade063f6daeb69c3d70994707fc8fcb972085b3cfa38a45fb9d00b2",
+      "geometry_animation_sha256": "4c6d924929e1ac6bdcc42afb60baab2888c7a095191bbff2eddf2c65b2b4129b",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "noctowl",
+      "national_dex": 164,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "ledyba",
+      "national_dex": 165,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "ledian",
+      "national_dex": 166,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "crobat",
+      "national_dex": 169,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "f683a8bf4a90906095a1ee3e848ffed3bc9bdc8e86c37c744dd5c18a24f2ea8e",
+      "shiny_glb_sha256": "827bec50a612472db834691e0df897a1fd8271e143c33d48ba02b4db4b96f0cb",
+      "normal_runtime_sha256": "0da87955c278606966efd06f9da3147d9f2686e7fbc0ec0ada44e2b317c0f3e4",
+      "shiny_runtime_sha256": "c7265a41bbd20b1f04f6bc17645f25ae319dcd12ce469166afd50aff33a49c7f",
+      "geometry_animation_sha256": "13ca4d60b502ed089ecd4292748ba79d75b052e10fdf17538ca43e83feff4ca5",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "togepi",
+      "national_dex": 175,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "3aaf93a278cd72fc26b21fa62bb3a052ed04711f4c6665a1bae79a9e726a894e",
+      "geometry_motion_sha256": "7b5fd6b60a90d187553f3320b2f5001ddfeae6e952f8717024a3ad1921b3612f"
+    },
+    {
+      "species": "togetic",
+      "national_dex": 176,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "160ab72540ec6ae1f7519387ba86af644aedcf7321b6248901ab1a516f09c895",
+      "geometry_motion_sha256": "978c9957697173347403466ee2bd3afcdb006a69b0da7220d8d9624d66bef4da"
+    },
+    {
+      "species": "natu",
+      "national_dex": 177,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "629c75d2a423529be9d90996abb6ba7890d532e5dcdc0f3d65ab4f55df0d55cf",
+      "geometry_motion_sha256": "2d78cb3cba60f7d6ac3e3324d5cd416764277d326aa5e077aa43ea10dd23b9a1"
+    },
+    {
+      "species": "xatu",
+      "national_dex": 178,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "d33030018464bf4f029da5f9aa1db67867b41f94bf9f5c031f14ce5599838006",
+      "geometry_motion_sha256": "86e1941501f7745cd939aea2e0dfaba89e8b39a9c98948aa3c99d3c808b6b126"
+    },
+    {
+      "species": "bellossom",
+      "national_dex": 182,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "politoed",
+      "national_dex": 186,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "aipom",
+      "national_dex": 190,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "wobbuffet",
+      "national_dex": 202,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "1d13628b18c0edf20070fc7589a7bdf7f4428e2a414b7469c6af201eb75e83c7",
+      "geometry_motion_sha256": "919ea50aefb89c7ad8c47f90feb1ca96f30599b4fc87c8e2f613baecdb361861"
+    },
+    {
+      "species": "gligar",
+      "national_dex": 207,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "steelix",
+      "national_dex": 208,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "fc93ce606e065ff1cdc183fbfe57e7700ba968bf18a76150243faba448fd33fa",
+      "shiny_glb_sha256": "45bcd4db669dab20cb59818c427c1bcac416132976700f33b75d1009d14191e3",
+      "normal_runtime_sha256": "930623ab682e6b51e5ca5d8125fac10dadee267f2cff7b93b4ea31c7715ee762",
+      "shiny_runtime_sha256": "5c7ad91ec273dfcf27f5a73bc0a35fda1be30d9c1144f9a316d5a1c9e6fe8609",
+      "geometry_animation_sha256": "7b50362847a44ea2bd563b4558ec0ec24031d09d093502acf503b05d0b0bd703",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "shuckle",
+      "national_dex": 213,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "9e7675880edfa55acc0122bcc4c59d5c67ceba40d5f26e48fcc05ce01260ec43",
+      "geometry_motion_sha256": "db9172f65e13d7d43a56b618d048908f65517b3d458576ca527e40635d8f10a8"
+    },
+    {
+      "species": "piloswine",
+      "national_dex": 221,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "corsola",
+      "national_dex": 222,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "remoraid",
+      "national_dex": 223,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "octillery",
+      "national_dex": 224,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "mantine",
+      "national_dex": 226,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "skarmory",
+      "national_dex": 227,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "a4f8dba6cec5d3170dd33668dbf4b1506dc835a3973adc63137268e53d27edd8",
+      "shiny_glb_sha256": "1b1ed5ff774659dc4f523c85621e8d814f104c2728287f6825d8538f84c0d1aa",
+      "normal_runtime_sha256": "a19514d01214ca0f17495216a647475691ffb108648da3cf2ae41ee92d735fe0",
+      "shiny_runtime_sha256": "3b53c7c98264b0972b8c0c0ced70e149c61a95f22078d1c8e42b13afb308157d",
+      "geometry_animation_sha256": "21528b5dff099a6986ac414496a46056b54a36e6b32154e51b627483f44a1f74",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "smoochum",
+      "national_dex": 238,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "f8e06ff37c5b0a9313abd1641b21239a990c5601a80497c19823547217066c6a",
+      "geometry_motion_sha256": "aff4beb517cc8306324c2bfc6b996ea455d49d5137bd961a2850a286a980d096"
+    },
+    {
+      "species": "miltank",
+      "national_dex": 241,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "3a2314830bd9c732e48ff63dff8f0374b8f64722160221f129f274425528f363",
+      "geometry_motion_sha256": "edde47a427d4c28c9bf3301de2db381fba706fefb4f65f3dd1614a2ed1ec4620"
+    },
+    {
+      "species": "lugia",
+      "national_dex": 249,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "ho-oh",
+      "national_dex": 250,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "celebi",
+      "national_dex": 251,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "f1081427fcc722d054734948bfa148de2a553ac13597fd966befab40ae4a010b",
+      "geometry_motion_sha256": "1abaf9be1356978dfe50b3b93edd4a5d1e67fe77c22e6f6cb23454f42163b489"
+    },
+    {
+      "species": "combusken",
+      "national_dex": 256,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "8191668de238cba1a37d37349ab226aec2b96c1ee8a51547f18e16e86c43a500",
+      "shiny_glb_sha256": "c36f21156a13b58069ad80e50c1644b1fcc98d5991897bcb1554d74986019fe9",
+      "normal_runtime_sha256": "644cd21f8e51ca4b89ba275ddb99dc81928bc261d410a962c9f510e0021d8b1e",
+      "shiny_runtime_sha256": "9336eddf9ed22b43d86875a401dc88d8a00fb11c287579b91a7f8bee31db3f0d",
+      "geometry_animation_sha256": "93e7682cfc5febcbd88634fb4d0480dc57fa443b129ab8acee9e8cfc315313b3",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "blaziken",
+      "national_dex": 257,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "22ed620a9b1938e4f3d8281ed052f1db4b2caaa48ba3549966e2f8674fda4153",
+      "shiny_glb_sha256": "d40b26730d3bfef9109abf302fb05c3e13b5f9d7d2ae7d5669c580ee392b4a36",
+      "normal_runtime_sha256": "f06544960700a71294735da0fc4a03e62808cf2841535b2f721d27e2278a5eca",
+      "shiny_runtime_sha256": "3193616154dac5607025acf5cc1689c85adbb1d4c43097cba5d532d42179c604",
+      "geometry_animation_sha256": "3f3dcf751969a15087d5dacd8140f89c51c2194a7fe8d8c5c46eff9c9a94ddd4",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "zigzagoon",
+      "national_dex": 263,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "5511b98a2fb6d44cb0b502953f46b572d970e94f5e03edd87429a0e520b6dd20",
+      "geometry_motion_sha256": "3fe157a0c5f3fef3d06ce62c311a5f140a58f95c0722ca5fcc62d0d969ef3939"
+    },
+    {
+      "species": "linoone",
+      "national_dex": 264,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "9ede49a797d1065a0cd7b7f1444ffe75e4ffbc33f64845f53dcdcd1f91e75bfa",
+      "geometry_motion_sha256": "d1e1f0114e6c8b099b189671f26e57ebfbe4bf8a5ffaef22112f3793175c5b14"
+    },
+    {
+      "species": "dustox",
+      "national_dex": 269,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "nuzleaf",
+      "national_dex": 274,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "shiftry",
+      "national_dex": 275,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "taillow",
+      "national_dex": 276,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "swellow",
+      "national_dex": 277,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "nincada",
+      "national_dex": 290,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "ninjask",
+      "national_dex": 291,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "shedinja",
+      "national_dex": 292,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "whismur",
+      "national_dex": 293,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "loudred",
+      "national_dex": 294,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "exploud",
+      "national_dex": 295,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "skitty",
+      "national_dex": 300,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "delcatty",
+      "national_dex": 301,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "aron",
+      "national_dex": 304,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "d73067aacd5344452d0783b4e810fa47e6315828c9f989bae88010b29ba583c3",
+      "shiny_glb_sha256": "10c5e81ce6e0075cfd360cb848acb58a85c91f34aee235c842c9e2e7e9409acd",
+      "normal_runtime_sha256": "8eacc7cc8f1829255ae317a4c8dc9411ef88c75041a296a1f8aedb8c63ca54d3",
+      "shiny_runtime_sha256": "d88a0c0e40ab57610ea71c609034f82976dea8da4fc2ff2fe8cf28fda81acce8",
+      "geometry_animation_sha256": "ec231d256feba9871b674f36e9c83d1fe7f656495f027a47c81aa2299ac23596",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "lairon",
+      "national_dex": 305,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "1b56a811eca974ff07b478a7596c84f65acee743bdb7a86d9440788a463ae912",
+      "shiny_glb_sha256": "37ad569827eb5f436847a1648e6a3add4f828d89ee2c904fe98a0212f4565bc3",
+      "normal_runtime_sha256": "b538c13f897d29743f769bedd3a02d2793c826e85e5be98dbeacfd70ece1e745",
+      "shiny_runtime_sha256": "68b23e3b2e549f19f8edff194512bb453fb33d0050e960237958cb683c1d9cca",
+      "geometry_animation_sha256": "317254e2551d0e00bef8c43c2d411cd55ffe884326618177890d81955381c5d3",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "aggron",
+      "national_dex": 306,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "0f37dc0a8cede09c33f8972e35ad095d7bbec4f3ac46627d13e1a4384477493e",
+      "shiny_glb_sha256": "dc3b7c776ca31f3446ea6af9f47bd0d8ebf472acdd6eb02f03f272f0154b74c4",
+      "normal_runtime_sha256": "136407960cd7745195939178829371be428f8690fdc01ef8b0ae6faa8f087182",
+      "shiny_runtime_sha256": "9a1e65238de8ecb27dae06630fc4d933f24fee3fc8e6e2833e4abcd8a8462712",
+      "geometry_animation_sha256": "1b4ae8e0dd4fbf4a810f00c108ce1740ff333c0ba332f3efc4610b309d806147",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "electrike",
+      "national_dex": 309,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "bf84989be0adf66eb8322bc2ac4d1e017cd962ebb6865d8870a5967a1b913603",
+      "shiny_glb_sha256": "8178af58cd74e10970bb6080134be6b78f70762f35d761785446382cb423406f",
+      "normal_runtime_sha256": "89f9aae8d6579535a8c92832d7b073071ddfb915a0bc659cbd03edf9abe85c1a",
+      "shiny_runtime_sha256": "cfe596bbe4983acba799317761c1ab853efc2d7a591c7ce94ac8585912163f15",
+      "geometry_animation_sha256": "ca3ad7b9be65c7e64e1e1b07e20365498f21ba9ef8c6fd4c666f3be952b767a6",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "carvanha",
+      "national_dex": 318,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "b287cea059b3eaec4886ec9c918607a4892dbfca32d721971ed9584e6bb3b408",
+      "shiny_glb_sha256": "aca9fa11ab5988b2a665aa09a5cb884460f392c5c7bccb03f169c92e704adc7e",
+      "normal_runtime_sha256": "7ec8797d9daad30e451bda6d142ed7e9f2955af35e119636affcd035b2b0b85c",
+      "shiny_runtime_sha256": "4c3b5eb360a0a70ebc3ab6efeea377e929ac0264bda9c2a8f5970bbd6f09f450",
+      "geometry_animation_sha256": "72cf1ed877a4348b7988962cf13655a50471b8bf1d199de29470a7bf3ce23c11",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "wailmer",
+      "national_dex": 320,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "wailord",
+      "national_dex": 321,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "bbc9f5db125aed903a3739888ebba9846d147f3a07b59974a3d6f4b0549e9863",
+      "geometry_motion_sha256": "4acc3947b858f691a0f99a9e235908983c662cb83d9b1877f3c5ced0ad87b84c"
+    },
+    {
+      "species": "spinda",
+      "national_dex": 327,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "vibrava",
+      "national_dex": 329,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "flygon",
+      "national_dex": 330,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "lunatone",
+      "national_dex": 337,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "solrock",
+      "national_dex": 338,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "baltoy",
+      "national_dex": 343,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "claydol",
+      "national_dex": 344,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "lileep",
+      "national_dex": 345,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "cradily",
+      "national_dex": 346,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "anorith",
+      "national_dex": 347,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "armaldo",
+      "national_dex": 348,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "milotic",
+      "national_dex": 350,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "29b3996285f121ff16fffe3904e5d4bfe70ed6ed3e6121575cf9867e3f43b4c6",
+      "shiny_glb_sha256": "f04dd546000b70e4b9d8df33f6e9662a98d627dc072a3fab6cbd3a636102790e",
+      "normal_runtime_sha256": "ddc9d3165636c26581979a721d685c8225b7330202945f8c3af08a9ace70b50c",
+      "shiny_runtime_sha256": "5b149dbe667e82632f2320e8bc4e6be9f39ba7e40fb985202f8a8e16c75629b0",
+      "geometry_animation_sha256": "b42df80b57231cdcd90827a68615d0c239eca62d2cca734bde478a88e2c8e4c7",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "castform",
+      "national_dex": 351,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "kecleon",
+      "national_dex": 352,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "580c18f8512d5419d26ed62ec6092a2c503c39c21dbe0402ac3ec88425187dcf",
+      "shiny_glb_sha256": "9caf3366b8569f6314c67c406f44fdd6684d61c9a339657bbdf164378f665605",
+      "normal_runtime_sha256": "0c0582e028fcccdfe4b045a475abba9368b6b87a53670b308916d528c5e34d16",
+      "shiny_runtime_sha256": "708fea292da7235f22848e3724e7ee5b58c7b9b40cd6ec1767c505d8e54d31a1",
+      "geometry_animation_sha256": "261e8f958f77519d529621cf65f9bf030dd31acf4859d0e15f82c91b66dff5f3",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "wynaut",
+      "national_dex": 360,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "274841cf49ad75b4453221b680feb460309231cb488481429d752fe363d9bcf6",
+      "geometry_motion_sha256": "bac408667dd84dc6f4405610509c573db7fb815993735aba8ef17a8b9658cd7b"
+    },
+    {
+      "species": "spheal",
+      "national_dex": 363,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "previous_status": "shiny_hold",
+      "previous_reason": "ValueError: Official normal/rare material tables absent for this source",
+      "normal_glb_sha256": "cacc7f6ae22dfd6e43f6513c0d5c3359b574f5562cc190c1dcdb08b831e733c9",
+      "geometry_motion_sha256": "5d4b64a9b1140dfd17d9742af9c49b7f251c6d6352d27cd8dd8a116402944a2f"
+    },
+    {
+      "species": "sealeo",
+      "national_dex": 364,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "walrein",
+      "national_dex": 365,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "clamperl",
+      "national_dex": 366,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "huntail",
+      "national_dex": 367,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "gorebyss",
+      "national_dex": 368,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "relicanth",
+      "national_dex": 369,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "deoxys",
+      "national_dex": 386,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "bidoof",
+      "national_dex": 399,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "bibarel",
+      "national_dex": 400,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "roserade",
+      "national_dex": 407,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "11cf516065117aa9fc4f51219aedaad5bb9df5c05e6e2e0b9aaec21a893c9ffb",
+      "shiny_glb_sha256": "7301855dff554f3bb3b8325dfe0981341317904eee097f7fed943ed94ada48f5",
+      "normal_runtime_sha256": "eb2f83dff9fe1e8cdfa1902d4b8d3899fe795a57b2994933430f1d8d95e79326",
+      "shiny_runtime_sha256": "424d3bebb3baeeb418b8bafe8408c05cf989a0794babc13792855ba403568fbf",
+      "geometry_animation_sha256": "c2d07e9eedce3c3b2fb5ee4a6839155deb905d26155de611f031f6defe1b4ca9",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "burmy",
+      "national_dex": 412,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "wormadam",
+      "national_dex": 413,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "cherrim",
+      "national_dex": 421,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "ambipom",
+      "national_dex": 424,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "rhyperior",
+      "national_dex": 464,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "shaymin",
+      "national_dex": 492,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "victini",
+      "national_dex": 494,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "308897d389badd1eb9fa8c2209e162fb3be20a7c33370f49c49089826ac104f8",
+      "geometry_motion_sha256": "b8f2fbc866c04566922b22b364ff98a59d86bbfefc5ce7d41ca6d82b8dab0d09"
+    },
+    {
+      "species": "patrat",
+      "national_dex": 504,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "6d773f718db4a68af7ff380d2bbf130abf938817d3268418ec70ab7cf5919c8d",
+      "shiny_glb_sha256": "4ab12de7510da891957416a658ca73571b5d5366b3b01c2083556e60bc26e330",
+      "normal_runtime_sha256": "c84e7c1662e75a83f4a2a0697af33f1c3f6f8b5f15f66a3fad027f8fb024279a",
+      "shiny_runtime_sha256": "a1a3bcfb033b31c008f181ebff3e8ab528a44eb666365b4b7788960352157e09",
+      "geometry_animation_sha256": "25f9dd0de64421c0748d1844eeda9da098b31cbfe3a0827756c6f4d66d82bb96",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "watchog",
+      "national_dex": 505,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "135eafe70a0b63c494a3be9aa7c6ff19d06cc2dac3ac5772b746e0ae714f3d24",
+      "shiny_glb_sha256": "1b229b98f306d9019bcd8556ec0e6678f7ed11a44ea97e56c1bb3ecdedac99ed",
+      "normal_runtime_sha256": "481fdc5898ebb52ae52c375a74d3ffef45639ca230b71d7e1aa76613d0fde919",
+      "shiny_runtime_sha256": "b2b23cd7093517466e34e71f5fc50037c71add53e9dfa344f2255c3a84df65eb",
+      "geometry_animation_sha256": "81aa66219f74de86272a6d7476fc428e2eafacb7b9fad0004cd3bc934bbd46a6",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "lillipup",
+      "national_dex": 506,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Authored shader inputs changed while cloning the graph"
+    },
+    {
+      "species": "herdier",
+      "national_dex": 507,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "previous_status": "shiny_hold",
+      "previous_reason": "ValueError: Official normal/rare material tables absent for this source",
+      "reason": "Authored shader inputs changed while cloning the graph",
+      "normal_glb_sha256": "510c1ca8452e616f06ac4679b685228a4885ef5c9852ebeb913df4a6b27d9e77",
+      "normal_runtime_sha256": "0ff469973908dadd426eab060cdccda014775de1ce17771b3c03533dacea0731"
+    },
+    {
+      "species": "stoutland",
+      "national_dex": 508,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "previous_status": "shiny_hold",
+      "previous_reason": "ValueError: Official normal/rare material tables absent for this source",
+      "normal_glb_sha256": "b3685c592f9058497962e1089ddc81455bba1026f52576d6e5179a4d5af46803",
+      "geometry_motion_sha256": "7a90759749afd64f98054e246b84d5eaeaa0bc37bcb69021da37d1f7aa2886e4"
+    },
+    {
+      "species": "liepard",
+      "national_dex": 510,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "Source is not self-contained"
+    },
+    {
+      "species": "pansage",
+      "national_dex": 511,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "29717d8e745f9d228c447748469b2b30f3dafd38f531a9b3612bce84ef7624a6",
+      "shiny_glb_sha256": "d1d695452706bc09da11c2e89e92513b1ab40be6a8f80216a47f4084e2c50e6d",
+      "normal_runtime_sha256": "7f63535fb74f892d2fc71163a6b2ce2c78d007a17f4294c76d20e79062dece0b",
+      "shiny_runtime_sha256": "95232a92676819b7a7aed1918e7eab542bfefda26bd36afce3f630a72a9ad6b3",
+      "geometry_animation_sha256": "5fa79935f60821150777092ab29a51c67464c4fef559ed1e099aca29b7473514",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "simisage",
+      "national_dex": 512,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "9aa5dadfbafcaaf17d5c3ecc23e48c93bc41bd792ba1935201bee74b043cdfeb",
+      "shiny_glb_sha256": "25580c1b96e7a97ae520046a12a3a0241f7cf0e855dde0f4d8b4861bbd78bef0",
+      "normal_runtime_sha256": "b3bd72272b901b67d43bc0f5af66b5d97e4b31e6913ba3cf1196082c6a18b708",
+      "shiny_runtime_sha256": "4ab5b2b64dfd35f15dc96c4323c1197824faf22ed0b7d882769faf7fad1faa40",
+      "geometry_animation_sha256": "2070a35351dac65915730d18a7a53f090769774a07105090f1263d0c580df3d9",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "pansear",
+      "national_dex": 513,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "50a5643f3cbf20622050d8d8cebe9d9a0b79a6b4db2059af29e90806e900f099",
+      "shiny_glb_sha256": "c4d504e16859b3a94aaef0e2e34c38500dff6bfa051f4535c7c03f555ac6e648",
+      "normal_runtime_sha256": "fa62001af55b9020bf32d07ed7273e62418d401b2c469576d52a74b5253ba886",
+      "shiny_runtime_sha256": "c2d8306fae2144895a2d914f9f656e5e92d5ad0bf7f74c34e0dbd4139ac11d79",
+      "geometry_animation_sha256": "b65bdecf61f6f3385b3e77560cb081e038557e2e3c3f370ef8e38f01cce1af51",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "simisear",
+      "national_dex": 514,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "21896dcd428a03b43098508b505d745cbe2888f8bb5829a9f758c2cc828e8468",
+      "shiny_glb_sha256": "ed54f91214f29f3ba0d7b1aaec74a76461b19bffcc97ce03a808df99b626267e",
+      "normal_runtime_sha256": "5c2a103b030f4f4e2f8461962f41cd7ee11e1daf4a1f493e4a647a73c9c8b4db",
+      "shiny_runtime_sha256": "21764fc70424044169e14ab49d61f93d5745b5b0477dc7c2949aca719ea637c6",
+      "geometry_animation_sha256": "b0e76cf657d8f45ef9c64d7865d510763cc7229d28d354459dacb518d14f0a35",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "panpour",
+      "national_dex": 515,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "340e02b555257a95426c3a5eb923d158033456011875934b695ec0ccfc367136",
+      "shiny_glb_sha256": "875765fa3d296cbaeba390a805413bb2409520a25446f0fcd88bac227a6ba890",
+      "normal_runtime_sha256": "16b6d62175516725ae730a9b3f820e1dde27a2ab92484e86374ca0dd1ac7e7fb",
+      "shiny_runtime_sha256": "d65b8e3b1478d6ffb7fed349078901825abf731780ac1d0e1758d8ac87dca27c",
+      "geometry_animation_sha256": "2c37909fa27c489c173909269f24178720a6902dafe8d492bf02dd707e6f286d",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "simipour",
+      "national_dex": 516,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "e3995ecdc01355dd99e9ecc699c871932638d48982a5ba83e6eea94c8e3241ee",
+      "shiny_glb_sha256": "950dbf33e6d6b3ddf7ae6e7791a5a5b9d451e124735ba06c180751e1f9f7d26a",
+      "normal_runtime_sha256": "98ff787938fd5ce31166b192d88b96690a6d420c6d48bad8b01ed8e87387f680",
+      "shiny_runtime_sha256": "b51bd9bf213369c2c5432968fac400593b9959e642995f964bed3779af8e7c99",
+      "geometry_animation_sha256": "5844c4f8c829ef217b8a03486bb8fd797ffb23063266a68e00ec7226a7aafa83",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "musharna",
+      "national_dex": 518,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "8126f4ed8d9daa0411775e63ef1b0641db33375f5f91e73e020ce0ae101e31ae",
+      "shiny_glb_sha256": "a30b839c302c8ccbcfc544d65cf283622b5990c8517f9411162f285e108eeb87",
+      "normal_runtime_sha256": "96c92786293271105aa95d24f26bc1933a1ba56171aca7c18792b38afa38b087",
+      "shiny_runtime_sha256": "afcc0ff9c9ec20bf1351e49f05c2a09e90d50507c450ca1ad6ea3df7208a2a36",
+      "geometry_animation_sha256": "16356eea2d7e287ce7d1f91155b98715b7bbd04871d4617500b0c9f3646cb60d",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "pidove",
+      "national_dex": 519,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "ba53eeb3db11bf4573c5384be1faf4873961ae3bd43447be8fec89e2bcfe564b",
+      "geometry_motion_sha256": "f25da274c8345ce9f5794c84359acd2709b6da7d5cef628b51d44cf2174c117f"
+    },
+    {
+      "species": "tranquill",
+      "national_dex": 520,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "unfezant",
+      "national_dex": 521,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "roggenrola",
+      "national_dex": 524,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "boldore",
+      "national_dex": 525,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "gigalith",
+      "national_dex": 526,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "woobat",
+      "national_dex": 527,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "180285617e6f39c85c78a3e142c211c0129bd9ca8691f262fe16f49e4fc53a83",
+      "geometry_motion_sha256": "d2f2b00cc73025a78bdb4e0a9401cdad50a1baa09febe59d91ba1fcecd8a76c5"
+    },
+    {
+      "species": "swoobat",
+      "national_dex": 528,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "a5cd12bd12ae8b97b6b65a4fdcd82bc5719d77d32d099b3801dfdcaeeb486b5e",
+      "geometry_motion_sha256": "22133036e0d7fcd350940f36275913d0a8634bd5e9590f5e8210f48e1fd806a8"
+    },
+    {
+      "species": "tympole",
+      "national_dex": 535,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "palpitoad",
+      "national_dex": 536,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native Base Color is not connected unambiguously"
+    },
+    {
+      "species": "seismitoad",
+      "national_dex": 537,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native Base Color is not connected unambiguously"
+    },
+    {
+      "species": "throh",
+      "national_dex": 538,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "910e5f5d8deef9486bd576d14ef1851f7ee2776e170c664a0ed7a6279a53175c",
+      "shiny_glb_sha256": "8b023533a433f434193dcc1f82f433cae7ad1619d2e28df4a350055f8f172c76",
+      "normal_runtime_sha256": "06bbb2148bf9b9a3f67db4b90c94619daa45f3d8f0f77a4ea68e4cd3763ea43f",
+      "shiny_runtime_sha256": "2923b0099e87596c753a280ae78b63093fb047f515bff9d045fc192d7f236986",
+      "geometry_animation_sha256": "d3237c182ab9157e2066115b34c98cdce882a53b2d4634c94980529187014832",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "sawk",
+      "national_dex": 539,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "2b8dd714b4e62fbb816eb78cd87f4ff348992d34d3b65d0740e7a82e8d6e6bf9",
+      "shiny_glb_sha256": "3851e3ca9d8e79fa64cd50c8749252a1e9a33a50e63b6e50c145556ac9250ab3",
+      "normal_runtime_sha256": "bd8648027899d1a67e7bf17e8e5511f41984508b6a5e9a51ed4017643b9ff16d",
+      "shiny_runtime_sha256": "2fbaad02e892165362612ab91383c49d21569610e6e444fa1361dc24d25e355a",
+      "geometry_animation_sha256": "ae25e22c1fb46ac8765d9a77a1d1f536125b4b2960a403a3e86a0c66b07d4dcf",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "venipede",
+      "national_dex": 543,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "da5ea1a1ddb51ebda9b62503fa026186109e29d082a6a7a5e9e97d689bbc9652",
+      "shiny_glb_sha256": "359ae9b579e510873200ccc835fc4c2468d13a88abd1f72df54812c7de720e5f",
+      "normal_runtime_sha256": "516749f5c6c4918e42b66b2224572f248ad303a48d2066be298122b63823bcbf",
+      "shiny_runtime_sha256": "e7208572bed04ff0d013d6531b005064e23c9f39d91f4a6eb461ab337a6f339c",
+      "geometry_animation_sha256": "c89e666e2744a7666260daff5b726e9eb9531402cc18631c148e2bf2364789a0",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "whirlipede",
+      "national_dex": 544,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "2b10a6132798efc0e926c6fec8418984b019a5ada3a5e6f9439aa8c735d226a5",
+      "shiny_glb_sha256": "1e4f7bf7659b2d5dacf8bdcd711f29e86dc19ac18ae1aef795d57d35a6f0767c",
+      "normal_runtime_sha256": "f9936f86a75b1aded307bb93d8ad378f87ab742aaa8b7250e8dd9acd3a28b542",
+      "shiny_runtime_sha256": "561e510b87f5b9d965325b7566d283c87304b6d3bb09ec138a0769fc6ca849e6",
+      "geometry_animation_sha256": "d82a06764fc1615803e80a8d6df5411073482e1d6110daef65d249539c5b01e0",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "scolipede",
+      "national_dex": 545,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "8a0b40fe7fffc711b934926b9db93427dc4fbc26fcbebeda3ecf4d7774e54a93",
+      "shiny_glb_sha256": "af6ad94c19591f20f4786748f11a4cd0dae52357d85c7c2d896e3eaaf1b781d5",
+      "normal_runtime_sha256": "61f595752d394b87e829671a07792c269e9928a1d62a4be4d9455e0a903c1a30",
+      "shiny_runtime_sha256": "cdff5c3d1f4faccae64e2db8a074d22692468752a4236f1ec2c37f9e615afc60",
+      "geometry_animation_sha256": "33a79569b3d1eb18cb1099fb866a319afbbf385725a910296029295617c92866",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "darumaka",
+      "national_dex": 554,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "8b29c6e39d80d7976e5180bf62d1fa184c87f47531a75a580b2a81488d434905",
+      "geometry_motion_sha256": "79fbc22d747a336f7626e41a3bd4d85a1e9dd113e35d433c46e146a9fa56ed89"
+    },
+    {
+      "species": "maractus",
+      "national_dex": 556,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "34248e617ddd9ef969c90fd26ec4e94cb5b8fd5f245d048b702e92a0f6332938",
+      "geometry_motion_sha256": "e33e9aec969fb8451a165bd67b70ce5432eafa66da8ac270d3a58fd2a369ce79"
+    },
+    {
+      "species": "dwebble",
+      "national_dex": 557,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "d2de468b7e15b8e2a4610a39dd1ec5914d28ae3155869e29d8e4e29720397e4b",
+      "geometry_motion_sha256": "1303395f46b12518e704e7aea780ed753df98c04479cc6481671666e01a64c1c"
+    },
+    {
+      "species": "crustle",
+      "national_dex": 558,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "b4b287c20f32551743a66a77bf6c0e17287ebd3729d7a86e48e5aa5f460e2c19",
+      "geometry_motion_sha256": "cdfb2a7ee6473ca641fd3179f4a53b58eb00eab77befd588b08ccbb15cd66b6d"
+    },
+    {
+      "species": "sigilyph",
+      "national_dex": 561,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "722732bf316adfea2bc2eeb3d7d7d0d4452d7ee8220432e2bad9da851b713910",
+      "geometry_motion_sha256": "7215b61d134a230eb52a0428570b28e4c1afeccb77718586a44aef5e1945dc86"
+    },
+    {
+      "species": "yamask",
+      "national_dex": 562,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "d3247390d322e7454328bae05ec241a2ad401d5b1baf10b0dac72af5da5cf8d4",
+      "shiny_glb_sha256": "a5c7bd2701ddcdf48a5ee12c4737015fd8fbfcbfe7e481f05ddabaa1d9266df5",
+      "normal_runtime_sha256": "6b6fa73508ae1db71e5146ec90a7eaa6a0c386f47be0a99a6af80001c571a172",
+      "shiny_runtime_sha256": "9f1c3185e5060ddb35a186a4f3d09c625a4860a412b662f01deee294e2353552",
+      "geometry_animation_sha256": "6a1049e655dfe3b2ac6d1c33fd864649877a4d2c20717a98148b82710fd4564f",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "tirtouga",
+      "national_dex": 564,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "carracosta",
+      "national_dex": 565,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "archen",
+      "national_dex": 566,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "6f9718cfc9deb02858bcdfe5c641e395d845d279de858a339c4ecbf7f0e5f75a",
+      "geometry_motion_sha256": "c61ce59523dffeaedbb85175ad028783416b075fd640762636e54fffc512d634"
+    },
+    {
+      "species": "archeops",
+      "national_dex": 567,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "garbodor",
+      "national_dex": 569,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "a41580f7fdd3348893ea3e9b6ceb71e56b922d184bae95115b9bc32302a077ee",
+      "shiny_glb_sha256": "40a887dc5c127a0345efe48e9aa427146f9f5fb64a95797c90e52b539c4bc337",
+      "normal_runtime_sha256": "e6e5684c37bfeb70a79df9fd65318861bc21688c6db50c54526c506fe0c69746",
+      "shiny_runtime_sha256": "c21493b99d92c12ce8608d703c81c1e59d13fd019678ea198e8f2245bcbe898d",
+      "geometry_animation_sha256": "0ea3974c2fa7dc34b2606d5180ba559c0838b388b419ba7c829a3dd7a41d3eb5",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "swanna",
+      "national_dex": 581,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "vanillite",
+      "national_dex": 582,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "6fb3d4c64c98cfb086e1345d7635ee10b7219d76601feeadde9e00e28ce6d16b",
+      "shiny_glb_sha256": "76809bf2522c18b8b37a4bad19a684e94b6f1a93afede1a0672d27b1ed1cec72",
+      "normal_runtime_sha256": "dda46c048ecb7cdcc4dedaa0bc059028438f401d71ad03042837297c01ef11dc",
+      "shiny_runtime_sha256": "b05a0f0cd52f25237a95622acfc94fc9efc6809244235563ba54f7a9b2c7571a",
+      "geometry_animation_sha256": "ba6956d5cd49612bfe9fdb87df35e5fd2743b7f1e2929358af92865a6584fc01",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "vanillish",
+      "national_dex": 583,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "d94c4e4f33fb6250af72a3e12a7d9a57a1327b7e86283f49a733abe2d5eb9dbb",
+      "shiny_glb_sha256": "b413a50e9ec8fb6a55ce440d5a0e623d9106e1a9bfd3dc5f9e0fd65eeb6363d1",
+      "normal_runtime_sha256": "3f3084922f4dfd7463a46e4d9bba047b42d5b166b5a39a0ac7ef01f9d3241055",
+      "shiny_runtime_sha256": "654c424eb57d2dd48f56dff8962fffa4bda122cbc0b626e67507ddd4ba562735",
+      "geometry_animation_sha256": "574618b64dfc92a9af651311c47ff0a864cc82aaed6e027f236106304bcb957d",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "karrablast",
+      "national_dex": 588,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "escavalier",
+      "national_dex": 589,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "frillish-male",
+      "national_dex": 592,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "previous_status": "shiny_hold",
+      "previous_reason": "ValueError: Official normal/rare material tables absent for this source",
+      "normal_glb_sha256": "8567aecbac78c0c0da4523dd25491a9326d3e1c557a96c948a4dc129ae779498",
+      "geometry_motion_sha256": "5cd22dbe38620482c31d51e4d9a7aa74257cd05469049adcc10f43773893293c"
+    },
+    {
+      "species": "jellicent-male",
+      "national_dex": 593,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "ferroseed",
+      "national_dex": 597,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "ferrothorn",
+      "national_dex": 598,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "7653451ecd97f3daf6ecd2ac211805bb59339300d601cf8a4819c55687c74839",
+      "geometry_motion_sha256": "0c9f6a4c1fac42b183651d5bd1b0d522c43f8c045fabb69eef1e45ada36f33ab"
+    },
+    {
+      "species": "klink",
+      "national_dex": 599,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "c2199f36eef8f823341e81da2e3a52d4f2fe888db020eb027070e76739082dad",
+      "geometry_motion_sha256": "61b73705315fdb7656b0dda27b17d8f30d6e02fc018e2c7473e814b2ed553d7c"
+    },
+    {
+      "species": "klang",
+      "national_dex": 600,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "6e4e988ee25df9b7f11466e3ed4988501fc6e6fe6cbd5f7bccec8577680b36c5",
+      "geometry_motion_sha256": "5db8f0a81a7274ca31480b7ac465f9ed2252a50a8bc76bd2e81cd025a0757a4f"
+    },
+    {
+      "species": "klinklang",
+      "national_dex": 601,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "830b0c481313ac46f6f084713549edf39ffd160334cff85d6ac8ad3c2ee89732",
+      "geometry_motion_sha256": "ce82a96c575adffd3a70f13ea7db088c2bc38c8df262b370cb8e848945c39191"
+    },
+    {
+      "species": "elgyem",
+      "national_dex": 605,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "beheeyem",
+      "national_dex": 606,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "shelmet",
+      "national_dex": 616,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "accelgor",
+      "national_dex": 617,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "druddigon",
+      "national_dex": 621,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "bouffalant",
+      "national_dex": 626,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "4be54bd1407259a4e3b6513cd6223c1ed180fdd5f19bf61adc55a12523fa6592",
+      "geometry_motion_sha256": "23f3765b8b3246cca0fc596eb9cb259d5a23f5fc7e083ff12334c1b555808429"
+    },
+    {
+      "species": "mandibuzz",
+      "national_dex": 630,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "heatmor",
+      "national_dex": 631,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "durant",
+      "national_dex": 632,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "kyurem",
+      "national_dex": 646,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "keldeo-ordinary",
+      "national_dex": 647,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "genesect",
+      "national_dex": 649,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "furfrou",
+      "national_dex": 676,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "aegislash-shield",
+      "national_dex": 681,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "swirlix",
+      "national_dex": 684,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "a5a6b0a9f2f0e7ffa52fbda4de9c72bd00b7d0c92eae1c1d88c8b436b0569aca",
+      "shiny_glb_sha256": "068fa4815ca1ce2b9276221dde90e0ce44b49f19b91f75bb07d5df4849ca56ed",
+      "normal_runtime_sha256": "2deb26cad568e00e1a6eede7e01a8199e76a34180bbe532f6d5fae694e78c320",
+      "shiny_runtime_sha256": "c4b12c29023d7967299b102d5633799c1c16e1d8f2c0cae2d3124117b81a9c7e",
+      "geometry_animation_sha256": "164930d9bc14da9241c9498403c1caab956f1a1dccfb77d4863a953f689f81e1",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "pumpkaboo-average",
+      "national_dex": 710,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "gourgeist-average",
+      "national_dex": 711,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "zygarde-50",
+      "national_dex": 718,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "trumbeak",
+      "national_dex": 732,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "morelull",
+      "national_dex": 755,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "b2c2caafaba02725797d1bfb8cc8fa4ab7ecb2a2b1c98e2d1df48ea5661421a4",
+      "geometry_motion_sha256": "d09bba612ecb56e529bd70a3ffe0d6ed2159f62a07f576ec4c308140cdb4d0cb"
+    },
+    {
+      "species": "shiinotic",
+      "national_dex": 756,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "f32df2ba7da264bcd005ad24109407ef6fb48373b5eb21905c8f412a9d6cc036",
+      "geometry_motion_sha256": "dceac84e6bce511c1031f913de789fb2921ee5639660f5660e2fc9dcc26fba11"
+    },
+    {
+      "species": "stufful",
+      "national_dex": 759,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "eadf9142741a5ebb022a03bbc0ee6bc7d080ac73d167a9e440051af04d2429ee",
+      "geometry_motion_sha256": "f24ab8383209188d9513b3818a85cc0eb332726117a0404a497ca3e3ec3da845"
+    },
+    {
+      "species": "bewear",
+      "national_dex": 760,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "f0d8de2d34c0d50868137b2351133dbe7d6d1b0f9ec6763cffb4645e542de9d2",
+      "geometry_motion_sha256": "608a56cca52ce26c6d79fcff671219d01b0a9dc57f5fa3710b50720a1a0491e1"
+    },
+    {
+      "species": "wimpod",
+      "national_dex": 767,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "95ed2bd605268ab1e4c3d4f9b7ddfb985e8155ebaf0de974c7b040403c42f244",
+      "shiny_glb_sha256": "b1d43e8b19249402d09174ada80a947a6b5d54d0a1d14e9312596287f22aea1a",
+      "normal_runtime_sha256": "9bea5473d41e117c13810615032fb6e9e12a8134a523cf778fef3e8275d1ddf4",
+      "shiny_runtime_sha256": "8bfb6c3a896cdcc7d1845eeb1d6abb7267d91f78d12ce27140668867bb7537ba",
+      "geometry_animation_sha256": "8d3d11c62f33a59413b64abb4f6af2d5832b2b27a0299b1d19e4b87ef998cb8a",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "pyukumuku",
+      "national_dex": 771,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "caa6a1e3a9ec3025e8b5a23f644eb8775594d3e15e8d3b02cb55a7f59ad03e9c",
+      "geometry_motion_sha256": "2b0dd6bfde50add33cac1342b8c4e1a7e25f7e232c9dda5e5229975bad6318b2"
+    },
+    {
+      "species": "type-null",
+      "national_dex": 772,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "539a24add77ad34dfa4a1d78c346317e8b124125927f800de51649ff78b3be62",
+      "geometry_motion_sha256": "f416d2db68845402df69c86d8ae773a0878048f08c6a654f39ba04cadbcc79c9"
+    },
+    {
+      "species": "minior",
+      "national_dex": 774,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "turtonator",
+      "national_dex": 776,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "8b12542195b6baed9f58a0c7dd88a2cdb0a37c82dd6796cade907e02dbdb8560",
+      "geometry_motion_sha256": "6f69935715f165cef9d5d34fce80dcec70b64eff02cc3b6f28a98fa0a0bcdf5f"
+    },
+    {
+      "species": "togedemaru",
+      "national_dex": 777,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "1a422df9bd6875beb2cba7e66c6ed0098d9f50bc30a8bc9f9af3dac5ed1fad0e",
+      "geometry_motion_sha256": "5c17e2fdc86514c12dcd8b9baad55e05ae130811ac1e57a853819d949e3dce85"
+    },
+    {
+      "species": "dhelmise",
+      "national_dex": 781,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "0a8a9e00769d02bfaf1e080e99d7f7e27f3477c93a56239bcc0f15ea4d819c6d",
+      "geometry_motion_sha256": "7659abe84db52478cbbe8ee8386c28f73ff6f14dbceba61d2b4b9067ebbb8242"
+    },
+    {
+      "species": "tapu-koko",
+      "national_dex": 785,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "5fee13e40ebfafcf91b00ff4d48a61bb6534156826c804e47f7dfc530d9d7ac3",
+      "geometry_motion_sha256": "803912b49d565e864edf315c1dc0301b1293b651f8b2b23d27569db541181644"
+    },
+    {
+      "species": "tapu-lele",
+      "national_dex": 786,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "2cd8f96448b51cc722786274c35455b71250f7448bd3feb9b734ecbe510d335d",
+      "geometry_motion_sha256": "5550ce92ede491e260bdd252ab6ac21ce057313317a016350e3a0dd42b6a4d75"
+    },
+    {
+      "species": "tapu-bulu",
+      "national_dex": 787,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "2b714c8a615a46dccbc8e1ee626def3724660d6115c9fb0ad89be8c7fc2ed7b2",
+      "geometry_motion_sha256": "c5b51c4dbffe0743deb344ebdf3e4ebead1d107dbe6aa5a82ad70345fcd55a7b"
+    },
+    {
+      "species": "tapu-fini",
+      "national_dex": 788,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "652b68a732997d27350580e122203963b786b42e2865659a5e8e5f54455dbef7",
+      "geometry_motion_sha256": "6b567e5c08ca15ae294fb89bae18da3723aab8a7958f3da00584a1d80315a8d6"
+    },
+    {
+      "species": "nihilego",
+      "national_dex": 793,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "6dbe8704ec6a53172606c628f29bb27e391aecc2cd1f212cc789b2cc57c49b85",
+      "geometry_motion_sha256": "f611157348eb028c084658c4c5a833b262f829e5e871d3b8f4dad39588ef10dc"
+    },
+    {
+      "species": "buzzwole",
+      "national_dex": 794,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "6ddd620ef9bfaddc40b0037a3cda91364707962afd7b93bc74100938b7b1e876",
+      "geometry_motion_sha256": "af5964992fb752339e77d7f9b68b7b299862f79951144f34a5a7f78482235ca8"
+    },
+    {
+      "species": "pheromosa",
+      "national_dex": 795,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "a45402339939cc7992bfd708929081f9f2e4e07e17a29eaf831bdf7dba88b24b",
+      "geometry_motion_sha256": "3065c61d957d0c2d89c1b42e89cf37fc15415181d4694514c68ac1be02a4c54f"
+    },
+    {
+      "species": "xurkitree",
+      "national_dex": 796,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "3883d44f95aa4403d4fdfaf5f2d12353765c7e0b928ec93a876408d8477531b7",
+      "geometry_motion_sha256": "3af8a398cee91dbd2354afd9feeeb93eacaef93ac2831ae959092f70bd5ea6cc"
+    },
+    {
+      "species": "celesteela",
+      "national_dex": 797,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "c31e199eebeb9be69f6c48d783afb47468c05f7e2eb2539d7ef17c07993718ee",
+      "geometry_motion_sha256": "506c69baea297e49a111d7a0e888e23cdc57f0ccc4044cdff1839b579b5647af"
+    },
+    {
+      "species": "kartana",
+      "national_dex": 798,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "46a50f3c5742da0f559bb5e4d18f5317fb7eb6443f71707fdd7394a89ac8323a",
+      "geometry_motion_sha256": "647c457fd9c4fe8cd75627d52e4c93d29252f4710f919470dd9c6c8a1019876e"
+    },
+    {
+      "species": "guzzlord",
+      "national_dex": 799,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "8460186150bb281d9b7c8c4c0cddda88e3fc4941839d238432c1605003ece949",
+      "geometry_motion_sha256": "4a6140d994041168404b800c2d33c1b8f185770cf02404585c5c444cb39d4f97"
+    },
+    {
+      "species": "necrozma",
+      "national_dex": 800,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "poipole",
+      "national_dex": 803,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native emission is active; separate reconstruction needed: Eye"
+    },
+    {
+      "species": "naganadel",
+      "national_dex": 804,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "cb6b5cb38e46523a8bc5e65446276029a5e2a278dbc9ebebb04cd7922ebaffe8",
+      "geometry_motion_sha256": "54dbdc286a438587a1ed99b619bbbe11d752e8f13d9f0edf02db333801e9baa8"
+    },
+    {
+      "species": "stakataka",
+      "national_dex": 805,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "Empty action: sleep"
+    },
+    {
+      "species": "blacephalon",
+      "national_dex": 806,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "6702d9cb9836481fef8ac105147d96b22eecf4f326819613e47203fd18f7876f",
+      "geometry_motion_sha256": "a131b1bd599c42ec7b02e5748c5c26a03dfd278d3cf39385a61935f8a918288f"
+    },
+    {
+      "species": "blipbug",
+      "national_dex": 824,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "471017ec5fad1d130b4a4deff3cc6b5ebfe52f82c763cbd8e8f1bf716beadc35",
+      "geometry_motion_sha256": "7a7c4858af1a35ac4588633164d265ae5f0e7e2237e9076303a8ba93cf50184c"
+    },
+    {
+      "species": "dottler",
+      "national_dex": 825,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "orbeetle",
+      "national_dex": 826,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "7029a3e8e0af6681402e29e94764c74ec405601049dd6010a119145a081b5a3e",
+      "geometry_motion_sha256": "ed9bbcc77536e7f4f6ffb1042959d3ad1a193867594cd1991a2eaef1b0459b9a"
+    },
+    {
+      "species": "gossifleur",
+      "national_dex": 829,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "10d961230fbb4b1631c3e82e9be30f00c09be7cd48f95fd582e22c818eb7f641",
+      "geometry_motion_sha256": "00fba8f350269a0392055d9c7f17182b3f808731d4d79f12b2281e665db51f07"
+    },
+    {
+      "species": "eldegoss",
+      "national_dex": 830,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "9dc2989f4d481728406a32f3896523b5a87fa5c57b009b0881e4fcf221744682",
+      "geometry_motion_sha256": "a4ac6b130f1928e99ece9362fcbccfae787da3b4954796c9b7f46481582a231a"
+    },
+    {
+      "species": "wooloo",
+      "national_dex": 831,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "14b2ef15c6ca143bb4d31a3ca9437ab1342232d1c5f924b27bc6b703a69df07e",
+      "geometry_motion_sha256": "89af3f7bc9d192968b46ece8823ff31b7236c43e835be98fc984aa7aff76088d"
+    },
+    {
+      "species": "dubwool",
+      "national_dex": 832,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "9e8692d787554ae34b3500ff8e3af65f6afe8fe7a8de7ce8c592b3c65147e189",
+      "geometry_motion_sha256": "c6fe6d346b5564ad9c7dbb9f67c42372cef1cb604c5c0359e69a2e9b3ffe3d0e"
+    },
+    {
+      "species": "yamper",
+      "national_dex": 835,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "eab0d262a503624d061de33af8036f73c74be95994ae7f61693fe005ea5128e3",
+      "geometry_motion_sha256": "7bf4836d5419bb26a3028280f353b44354f0c7589e26e1a6d30c6ae8cd002c54"
+    },
+    {
+      "species": "boltund",
+      "national_dex": 836,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "7d6170870b935ff8cd5567e7e2b02186008b1b3b419f310b3c4a9c77b2c7c19b",
+      "geometry_motion_sha256": "da6de4ba315f2d3042b4235b708152c42c6fa13b16c2b5e452cb7c0eee132ce3"
+    },
+    {
+      "species": "cramorant",
+      "national_dex": 845,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "sizzlipede",
+      "national_dex": 850,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "d3b45a750ec9a8014eac4091f3be9d839c695941522b92a697a25fa6caef34dc",
+      "geometry_motion_sha256": "fb88bf42814698f04965ffb25c9a2a9845b165f3cc7c02120868a2a5b6a6b516"
+    },
+    {
+      "species": "centiskorch",
+      "national_dex": 851,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native shader mix is not Principled plus emission"
+    },
+    {
+      "species": "clobbopus",
+      "national_dex": 852,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "f2ca23d8cf4e4c92e902978cecc8cbf00e3b2f66ae712e86ce531379cdcc16ed",
+      "shiny_glb_sha256": "1311f368ab031154915bfb17cfcd65c436cb637645dc3ee8db1bdd428669bd63",
+      "normal_runtime_sha256": "1c5788812909aa081ce4dae34c4365c6e8852a75d785f693da5d6fae562f48ba",
+      "shiny_runtime_sha256": "74083131baada394f2feb37824c243c9312cdd75510c64593cc4d0120912e562",
+      "geometry_animation_sha256": "4345908934b0bb622d58754f42e949005848cd9e2d177e24d8fb0c3e548e65b2",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "grapploct",
+      "national_dex": 853,
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "normal_glb_sha256": "c6440e2b145d937a1cbb6212f769c4accab995711ea853be2d2181ec12235da8",
+      "shiny_glb_sha256": "9f627c62e843c708b6da9c6499f16403b06d5365059035f771055ce2d3895edb",
+      "normal_runtime_sha256": "5937f183cb964e75f7e4fb55a9913760cb0d33cbd3496c5528a238ad23416bfd",
+      "shiny_runtime_sha256": "9722776239ee57f3bcc424fec71717450c06388d4d72f61da9ea068e12a4e98f",
+      "geometry_animation_sha256": "10811dd579299888ad93f510414ca83a412a44e332be810e334ae779d17a11c0",
+      "source": "matched_ZA_default_model_and_native_motion_bank",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "battle_clearance_passed": true,
+      "published": false
+    },
+    {
+      "species": "sirfetchd",
+      "national_dex": 865,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "16fccce497897f0c9d0baeb81f3730813e45f1b7adff2097e9926fd61ebac0b2",
+      "geometry_motion_sha256": "8491314705db0ba81f12201382877d930010637000fbddaa6dc0471927bc8c45"
+    },
+    {
+      "species": "mr-rime",
+      "national_dex": 866,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Native emission is active; separate reconstruction needed: ice"
+    },
+    {
+      "species": "runerigus",
+      "national_dex": 867,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions"
+    },
+    {
+      "species": "alcremie",
+      "national_dex": 869,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "morpeko",
+      "national_dex": 877,
+      "runtime_approved": false,
+      "status": "source_or_motion_recovery_pending",
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed"
+    },
+    {
+      "species": "dracozolt",
+      "national_dex": 880,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "5b39c4534a41132b07a834ec0d5d39cb0046ecd21b7f524798865d059e368130",
+      "geometry_motion_sha256": "54516359ded518d6a2ada7e493904d846794e72e72591e33bc1cd62efb82b3cb"
+    },
+    {
+      "species": "arctozolt",
+      "national_dex": 881,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "afe5142820a396e01a1deaaa826bfd9b0552a361822e753cc503e9abe5da6e4a",
+      "geometry_motion_sha256": "d6467cea15d918720c8bda609bd24c7ecd73f9ed652d267d9b7949ab51b18838"
+    },
+    {
+      "species": "dracovish",
+      "national_dex": 882,
+      "runtime_approved": false,
+      "status": "normal_restored_shiny_pending",
+      "normal_glb_sha256": "07e8de071652530a740512b6f2da11190a6c236fb609deb1dcc8f108c906c099",
+      "geometry_motion_sha256": "58a731773f805380a57bd04aec16c0db4c5c56902f41580d4fb64cbb91f0ea06"
+    },
+    {
+      "species": "arctovish",
+      "national_dex": 883,
+      "runtime_approved": false,
+      "status": "native_material_hold",
+      "reason": "Material without baseColorTexture requires separate reconstruction"
+    },
+    {
+      "species": "dipplin",
+      "national_dex": 1011,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1134"
+    },
+    {
+      "species": "poltchageist",
+      "national_dex": 1012,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1121"
+    },
+    {
+      "species": "sinistcha",
+      "national_dex": 1013,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1122"
+    },
+    {
+      "species": "okidogi",
+      "national_dex": 1014,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1123"
+    },
+    {
+      "species": "munkidori",
+      "national_dex": 1015,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1124"
+    },
+    {
+      "species": "fezandipiti",
+      "national_dex": 1016,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1125"
+    },
+    {
+      "species": "ogerpon",
+      "national_dex": 1017,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1120"
+    },
+    {
+      "species": "archaludon",
+      "national_dex": 1018,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1132"
+    },
+    {
+      "species": "hydrapple",
+      "national_dex": 1019,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1133"
+    },
+    {
+      "species": "gouging-fire",
+      "national_dex": 1020,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1126"
+    },
+    {
+      "species": "raging-bolt",
+      "national_dex": 1021,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1127"
+    },
+    {
+      "species": "iron-boulder",
+      "national_dex": 1022,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1129"
+    },
+    {
+      "species": "iron-crown",
+      "national_dex": 1023,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1128"
+    },
+    {
+      "species": "terapagos",
+      "national_dex": 1024,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1130"
+    },
+    {
+      "species": "pecharunt",
+      "national_dex": 1025,
+      "runtime_approved": false,
+      "status": "dlc_model_found_native_motion_missing",
+      "resource_id": "pm1131"
+    }
+  ],
+  "appearance_approval": {
+    "initial_feedback": "Meeste goed; Aggron lijkt goed; Panpour en Simipour oogproblemen",
+    "final_correction_feedback": "Alle drie goed",
+    "approved_pairs": 56,
+    "final_correction_capture_report_sha256": "285826be6a154caf95fa6c30970e62be3618cc4fa8c64df7496e0baf5bdb55d7",
+    "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
+    "corrected_venusaur_battle_approval_answer": "Allemaal goed"
+  },
+  "current_stage": "za-final-stage-v3.json",
+  "battle_checkpoint": {
+    "clearance_passed_pairs": 56,
+    "visual_battle_approved_pairs": 56,
+    "pending_pairs": [],
+    "measurement_hz": 120,
+    "shiny_scope": "Actual rendered shiny SCNs; clearance reused only after exact normal/shiny mesh/skin/animation parity.",
+    "review_url": "http://127.0.0.1:8781/battle-56-review-v1/index.html",
+    "actual_camera_images": 1792,
+    "visual_review_pending": false,
+    "battle_approval_answer": "Allemaal goed"
+  },
+  "inventory_base_species": 274,
+  "bundle_qualification_sha256": "afea4c0c29d3f8c2bf9fa6b2ab540c214397bf3001614484f96d09b5d59eeccb"
+}

@@ -19,18 +19,22 @@ from blender_action_state import select_action
 
 def input_values(node):
     result = {}
-    for socket in node.inputs:
+    for index, socket in enumerate(node.inputs):
         if socket.is_linked or not hasattr(socket, 'default_value'):
             continue
         value = socket.default_value
-        result[socket.identifier] = tuple(value) if hasattr(value, '__len__') and not isinstance(value, str) else value
+        # Blender can renumber interface identifiers when copying a group.
+        # Require the same ordered name/type instead; changed input layouts
+        # still fail verification rather than silently losing their values.
+        result[(index, socket.name, socket.type)] = tuple(value) if hasattr(value, '__len__') and not isinstance(value, str) else value
     return result
 
 
 def restore_inputs(node, values):
-    for socket in node.inputs:
-        if socket.identifier in values:
-            socket.default_value = values[socket.identifier]
+    for index, socket in enumerate(node.inputs):
+        key = (index, socket.name, socket.type)
+        if key in values:
+            socket.default_value = values[key]
     actual = input_values(node)
     if any(key not in actual or actual[key] != value for key, value in values.items()):
         raise ValueError('Authored shader inputs changed while cloning the graph')

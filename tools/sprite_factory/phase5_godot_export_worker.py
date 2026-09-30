@@ -312,7 +312,8 @@ def run(job):
         'source_repair': source_repair,
         'unrepresented_rare_textures': unrepresented_textures,
         'quaternion_continuity_repair': quaternion_repair,
-        'flatten_bone_hierarchy': job.get('identity_intake', {}).get('flatten_bone_hierarchy_diagnostic') is True,
+        'flatten_bone_hierarchy': (job.get('native_flatten_bone_hierarchy_diagnostic') is True
+            or job.get('identity_intake', {}).get('flatten_bone_hierarchy_diagnostic') is True),
         'eye_material_repair': eye_material_repair,
         'verified_rare_float_overrides': float_overrides,
         'verified_rare_color_overrides': color_overrides,

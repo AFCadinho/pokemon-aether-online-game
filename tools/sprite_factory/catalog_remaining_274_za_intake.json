@@ -1,0 +1,902 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "entries": [
+    {
+      "national_dex": 13,
+      "species": "weedle",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0013_00.blend",
+        "bytes": 1422606,
+        "crc32": "5e05f866"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0013",
+      "za_identity": "pm0013_00_00"
+    },
+    {
+      "national_dex": 14,
+      "species": "kakuna",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0014_00.blend",
+        "bytes": 571042,
+        "crc32": "f7c39bf1"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0014",
+      "za_identity": "pm0014_00_00"
+    },
+    {
+      "national_dex": 15,
+      "species": "beedrill",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0015_00.blend",
+        "bytes": 2018346,
+        "crc32": "e3a9d8e7"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0015",
+      "za_identity": "pm0015_00_00"
+    },
+    {
+      "national_dex": 17,
+      "species": "pidgeotto",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0017_00.blend",
+        "bytes": 2565631,
+        "crc32": "0a73ea11"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0017",
+      "za_identity": "pm0017_00_00"
+    },
+    {
+      "national_dex": 18,
+      "species": "pidgeot",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0018_00.blend",
+        "bytes": 3747022,
+        "crc32": "97fac544"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0018",
+      "za_identity": "pm0018_00_00"
+    },
+    {
+      "national_dex": 41,
+      "species": "zubat",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0041_00.blend",
+        "bytes": 1259718,
+        "crc32": "31b3fc64"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0041",
+      "za_identity": "pm0041_00_00"
+    },
+    {
+      "national_dex": 42,
+      "species": "golbat",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0042_00.blend",
+        "bytes": 1699982,
+        "crc32": "30e1d390"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0042",
+      "za_identity": "pm0042_00_00"
+    },
+    {
+      "national_dex": 63,
+      "species": "abra",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0063_00.blend",
+        "bytes": 3224070,
+        "crc32": "64b49004"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0063",
+      "za_identity": "pm0063_00_00"
+    },
+    {
+      "national_dex": 64,
+      "species": "kadabra",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0064_00.blend",
+        "bytes": 3849979,
+        "crc32": "e3ba8b3e"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0064",
+      "za_identity": "pm0064_00_00"
+    },
+    {
+      "national_dex": 65,
+      "species": "alakazam",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0065_00.blend",
+        "bytes": 5099234,
+        "crc32": "615d227c"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0065",
+      "za_identity": "pm0065_00_00"
+    },
+    {
+      "national_dex": 66,
+      "species": "machop",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0066_00.blend",
+        "bytes": 3012592,
+        "crc32": "df2ec578"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0066",
+      "za_identity": "pm0066_00_00"
+    },
+    {
+      "national_dex": 67,
+      "species": "machoke",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0067_00.blend",
+        "bytes": 2958564,
+        "crc32": "92567547"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0067",
+      "za_identity": "pm0067_00_00"
+    },
+    {
+      "national_dex": 68,
+      "species": "machamp",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0068_00.blend",
+        "bytes": 5716156,
+        "crc32": "207fed22"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0068",
+      "za_identity": "pm0068_00_00"
+    },
+    {
+      "national_dex": 95,
+      "species": "onix",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0095_00.blend",
+        "bytes": 2333098,
+        "crc32": "4a570967"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0095",
+      "za_identity": "pm0095_00_00"
+    },
+    {
+      "national_dex": 115,
+      "species": "kangaskhan",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0115_00.blend",
+        "bytes": 5392825,
+        "crc32": "e6e2a44f"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0115",
+      "za_identity": "pm0115_00_00"
+    },
+    {
+      "national_dex": 121,
+      "species": "starmie",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0121_00.blend",
+        "bytes": 2079872,
+        "crc32": "edf3992b"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0121",
+      "za_identity": "pm0121_00_00"
+    },
+    {
+      "national_dex": 122,
+      "species": "mr-mime",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0122_00.blend",
+        "bytes": 2545216,
+        "crc32": "c5e048fa"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0122",
+      "za_identity": "pm0122_00_00"
+    },
+    {
+      "national_dex": 127,
+      "species": "pinsir",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0127_00.blend",
+        "bytes": 2617653,
+        "crc32": "1d3c1151"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0127",
+      "za_identity": "pm0127_00_00"
+    },
+    {
+      "national_dex": 142,
+      "species": "aerodactyl",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0142_00.blend",
+        "bytes": 3488442,
+        "crc32": "87850969"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0142",
+      "za_identity": "pm0142_00_00"
+    },
+    {
+      "national_dex": 169,
+      "species": "crobat",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen2.zip",
+        "member": "pm0169_00.blend",
+        "bytes": 1484699,
+        "crc32": "2ab6fbb1"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0169",
+      "za_identity": "pm0169_00_00"
+    },
+    {
+      "national_dex": 208,
+      "species": "steelix",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen2.zip",
+        "member": "pm0208_00.blend",
+        "bytes": 1811210,
+        "crc32": "306dbfdb"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0208",
+      "za_identity": "pm0208_00_00"
+    },
+    {
+      "national_dex": 227,
+      "species": "skarmory",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen2.zip",
+        "member": "pm0227.blend",
+        "bytes": 15204904,
+        "crc32": "6cd142b7"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_ambiguous",
+      "za_motion_candidate": true,
+      "resource_id": "pm0227",
+      "za_identity": "pm0227_00_00"
+    },
+    {
+      "national_dex": 304,
+      "species": "aron",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0304_00.blend",
+        "bytes": 864797,
+        "crc32": "656e1982"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0304",
+      "za_identity": "pm0304_00_00"
+    },
+    {
+      "national_dex": 305,
+      "species": "lairon",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0305_00.blend",
+        "bytes": 2956878,
+        "crc32": "d8a38f68"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0305",
+      "za_identity": "pm0305_00_00"
+    },
+    {
+      "national_dex": 306,
+      "species": "aggron",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0306_00.blend",
+        "bytes": 3650402,
+        "crc32": "bd59584c"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0306",
+      "za_identity": "pm0306_00_00"
+    },
+    {
+      "national_dex": 309,
+      "species": "electrike",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0309_00.blend",
+        "bytes": 2255959,
+        "crc32": "69fe855e"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0309",
+      "za_identity": "pm0309_00_00"
+    },
+    {
+      "national_dex": 318,
+      "species": "carvanha",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0318_00.blend",
+        "bytes": 1404057,
+        "crc32": "eeddb6b8"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0318",
+      "za_identity": "pm0318_00_00"
+    },
+    {
+      "national_dex": 352,
+      "species": "kecleon",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0352_00.blend",
+        "bytes": 1097112,
+        "crc32": "e58262da"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0352",
+      "za_identity": "pm0352_00_00"
+    },
+    {
+      "national_dex": 504,
+      "species": "patrat",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0504_00.blend",
+        "bytes": 6730761,
+        "crc32": "9e7fc294"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0504",
+      "za_identity": "pm0504_00_00"
+    },
+    {
+      "national_dex": 505,
+      "species": "watchog",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0505_00.blend",
+        "bytes": 6511534,
+        "crc32": "761ce2c2"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0505",
+      "za_identity": "pm0505_00_00"
+    },
+    {
+      "national_dex": 511,
+      "species": "pansage",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0511_00.blend",
+        "bytes": 8992018,
+        "crc32": "894e64bf"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0511",
+      "za_identity": "pm0511_00_00"
+    },
+    {
+      "national_dex": 512,
+      "species": "simisage",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0512_00.blend",
+        "bytes": 10443157,
+        "crc32": "b5e9c6a2"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0512",
+      "za_identity": "pm0512_00_00"
+    },
+    {
+      "national_dex": 513,
+      "species": "pansear",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0513_00.blend",
+        "bytes": 7176336,
+        "crc32": "038a3cdc"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0513",
+      "za_identity": "pm0513_00_00"
+    },
+    {
+      "national_dex": 514,
+      "species": "simisear",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0514_00.blend",
+        "bytes": 11122044,
+        "crc32": "d8664f13"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0514",
+      "za_identity": "pm0514_00_00"
+    },
+    {
+      "national_dex": 515,
+      "species": "panpour",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0515_00.blend",
+        "bytes": 7546264,
+        "crc32": "47f14f7b"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0515",
+      "za_identity": "pm0515_00_00"
+    },
+    {
+      "national_dex": 516,
+      "species": "simipour",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0516_00.blend",
+        "bytes": 13124649,
+        "crc32": "48153c80"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0516",
+      "za_identity": "pm0516_00_00"
+    },
+    {
+      "national_dex": 518,
+      "species": "musharna",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0518_00.blend",
+        "bytes": 12349713,
+        "crc32": "5befe013"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0518",
+      "za_identity": "pm0518_00_00"
+    },
+    {
+      "national_dex": 538,
+      "species": "throh",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0538_00.blend",
+        "bytes": 16714436,
+        "crc32": "6ade6908"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0538",
+      "za_identity": "pm0538_00_00"
+    },
+    {
+      "national_dex": 539,
+      "species": "sawk",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0539_00.blend",
+        "bytes": 14562031,
+        "crc32": "47118865"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0539",
+      "za_identity": "pm0539_00_00"
+    },
+    {
+      "national_dex": 543,
+      "species": "venipede",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0543_00.blend",
+        "bytes": 8190647,
+        "crc32": "569b42e9"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0543",
+      "za_identity": "pm0543_00_00"
+    },
+    {
+      "national_dex": 544,
+      "species": "whirlipede",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0544_00.blend",
+        "bytes": 2255721,
+        "crc32": "f6981865"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0544",
+      "za_identity": "pm0544_00_00"
+    },
+    {
+      "national_dex": 545,
+      "species": "scolipede",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0545_00.blend",
+        "bytes": 12689837,
+        "crc32": "4cf07000"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0545",
+      "za_identity": "pm0545_00_00"
+    },
+    {
+      "national_dex": 562,
+      "species": "yamask",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0562_00.blend",
+        "bytes": 12223322,
+        "crc32": "f50ddcba"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0562",
+      "za_identity": "pm0562_00_00"
+    },
+    {
+      "national_dex": 569,
+      "species": "garbodor",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0569_00.blend",
+        "bytes": 11928614,
+        "crc32": "6fe21c67"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0569",
+      "za_identity": "pm0569_00_00"
+    },
+    {
+      "national_dex": 582,
+      "species": "vanillite",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0582_00.blend",
+        "bytes": 4309014,
+        "crc32": "f8c8ab41"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0582",
+      "za_identity": "pm0582_00_00"
+    },
+    {
+      "national_dex": 583,
+      "species": "vanillish",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen5.zip",
+        "member": "pm0583_00.blend",
+        "bytes": 2741957,
+        "crc32": "04611d75"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_missing",
+      "za_motion_candidate": true,
+      "resource_id": "pm0583",
+      "za_identity": "pm0583_00_00"
+    },
+    {
+      "national_dex": 684,
+      "species": "swirlix",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen6.zip",
+        "member": "pm0742.blend",
+        "bytes": 91355052,
+        "crc32": "86490dac"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_ambiguous",
+      "za_motion_candidate": true,
+      "resource_id": "pm0742",
+      "za_identity": "pm0742_00_00"
+    },
+    {
+      "national_dex": 767,
+      "species": "wimpod",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen7.zip",
+        "member": "pm0866.blend",
+        "bytes": 152097185,
+        "crc32": "bc716f87"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_ambiguous",
+      "za_motion_candidate": true,
+      "resource_id": "pm0866",
+      "za_identity": "pm0866_00_00"
+    },
+    {
+      "national_dex": 852,
+      "species": "clobbopus",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen8.zip",
+        "member": "pm0964.blend",
+        "bytes": 78141688,
+        "crc32": "8d95bf94"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_ambiguous",
+      "za_motion_candidate": true,
+      "resource_id": "pm0964",
+      "za_identity": "pm0964_00_00"
+    },
+    {
+      "national_dex": 853,
+      "species": "grapploct",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen8.zip",
+        "member": "pm0965.blend",
+        "bytes": 139471758,
+        "crc32": "ce165250"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "native_action_status": "native_actions_ambiguous",
+      "za_motion_candidate": true,
+      "resource_id": "pm0965",
+      "za_identity": "pm0965_00_00"
+    },
+    {
+      "national_dex": 3,
+      "species": "venusaur",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen1.zip",
+        "member": "pm0003.blend",
+        "bytes": 97185800,
+        "crc32": "d14738ce"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed",
+      "native_action_status": null,
+      "za_motion_candidate": false,
+      "resource_id": "pm0003",
+      "za_identity": "pm0003_00_00"
+    },
+    {
+      "national_dex": 154,
+      "species": "meganium",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen2.zip",
+        "member": "pm0154.blend",
+        "bytes": 28483467,
+        "crc32": "7edb8726"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed",
+      "native_action_status": null,
+      "za_motion_candidate": false,
+      "resource_id": "pm0154",
+      "za_identity": "pm0154_00_00"
+    },
+    {
+      "national_dex": 256,
+      "species": "combusken",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0256.blend",
+        "bytes": 34721881,
+        "crc32": "84b5a523"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed",
+      "native_action_status": null,
+      "za_motion_candidate": false,
+      "resource_id": "pm0256",
+      "za_identity": "pm0256_00_00"
+    },
+    {
+      "national_dex": 257,
+      "species": "blaziken",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0257.blend",
+        "bytes": 33539524,
+        "crc32": "f1e561b1"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed",
+      "native_action_status": null,
+      "za_motion_candidate": false,
+      "resource_id": "pm0257",
+      "za_identity": "pm0257_00_00"
+    },
+    {
+      "national_dex": 350,
+      "species": "milotic",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen3.zip",
+        "member": "pm0350.blend",
+        "bytes": 72801841,
+        "crc32": "8a7ff1ff"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed",
+      "native_action_status": null,
+      "za_motion_candidate": false,
+      "resource_id": "pm0350",
+      "za_identity": "pm0350_00_00"
+    },
+    {
+      "national_dex": 407,
+      "species": "roserade",
+      "legacy_source": {
+        "archive": "/home/adinho/Documents/3d_models/Biochao/Gen4.zip",
+        "member": "pm0407.blend",
+        "bytes": 14577959,
+        "crc32": "c42c36fb"
+      },
+      "previous_status": "review_hold",
+      "previous_reason": "source_probe_not_passed",
+      "native_action_status": null,
+      "za_motion_candidate": false,
+      "resource_id": "pm0407",
+      "za_identity": "pm0407_00_00"
+    }
+  ]
+}
