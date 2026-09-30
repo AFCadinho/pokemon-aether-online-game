@@ -8,6 +8,18 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_x3286"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_q2i8i"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="life_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="life_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="life_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="life_poke_fan_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="life_elder_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="life_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="life_ace_trainer_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/camper_frames.tres" id="life_camper"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="life_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_frames.tres" id="life_elder"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="life_picnicker"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -288,6 +300,156 @@ shape = SubResource("shape_docks")
 
 [node name="Entities" type="Node2D" parent="." unique_id=754563147]
 z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="VisitorIris" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(432, 528)
+npc_id = "kanto_vermilion_city_visitor_iris"
+npc_definition_id = "trainer_class_lass"
+display_name = "Harbor Visitor Iris"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("life_lass")
+
+[node name="FanClubHugo" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(784, 720)
+npc_id = "kanto_vermilion_city_fan_club_hugo"
+npc_definition_id = "trainer_class_poke_fan_m"
+display_name = "Pokemon Fan Hugo"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("life_poke_fan_m")
+
+[node name="ElderElsie" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(1072, 912)
+npc_id = "kanto_vermilion_city_elder_elsie"
+npc_definition_id = "trainer_class_elder"
+display_name = "Resident Elsie"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("life_elder_f")
+
+[node name="WorkerOwen" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(1616, 560)
+npc_id = "kanto_vermilion_city_worker_owen"
+npc_definition_id = "trainer_class_worker"
+display_name = "Worker Owen"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("life_worker")
+
+[node name="AceTrainerSienna" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(2032, 1040)
+npc_id = "kanto_vermilion_city_ace_trainer_sienna"
+npc_definition_id = "trainer_class_ace_trainer_f"
+display_name = "Ace Trainer Sienna"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("life_ace_trainer_f")
+
+[node name="TrainerFelix" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(432, 1296)
+npc_id = "kanto_vermilion_city_trainer_felix"
+npc_definition_id = "trainer_class_camper"
+display_name = "Trainer Felix"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("life_camper")
+
+[node name="ChildToby" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(528, 1360)
+npc_id = "kanto_vermilion_city_child_toby"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Toby"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("life_youngster")
+
+[node name="HarborWorkerBram" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(1616, 1648)
+npc_id = "kanto_vermilion_city_harbor_worker_bram"
+npc_definition_id = "trainer_class_worker"
+display_name = "Harbor Worker Bram"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("life_worker")
+
+[node name="RetiredSailorAbel" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(1392, 1520)
+npc_id = "kanto_vermilion_city_retired_sailor_abel"
+npc_definition_id = "trainer_class_elder"
+display_name = "Retired Sailor Abel"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("life_elder")
+
+[node name="PicnickerJune" parent="Entities/NPCs" instance=ExtResource("life_dialogue")]
+position = Vector2(1232, 1648)
+npc_id = "kanto_vermilion_city_picnicker_june"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker June"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("life_picnicker")
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(816, 496)
+overworld_pokemon_id = "kanto_vermilion_city_pidgey_1"
+species_id = "pidgey"
+level = 12
+display_name = "Pidgey"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 45.0
+
+[node name="Meowth" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(720, 912)
+overworld_pokemon_id = "kanto_vermilion_city_meowth_1"
+species_id = "meowth"
+level = 14
+display_name = "Meowth"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 45.0
+
+[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(592, 1360)
+overworld_pokemon_id = "kanto_vermilion_city_pikachu_1"
+species_id = "pikachu"
+level = 16
+display_name = "Pikachu"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 45.0
+
+[node name="Machop" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(1520, 1648)
+overworld_pokemon_id = "kanto_vermilion_city_machop_1"
+species_id = "machop"
+level = 18
+display_name = "Machop"
+movement_behavior = "idle"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 45.0
+
+[node name="Krabby" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(1264, 1808)
+overworld_pokemon_id = "kanto_vermilion_city_krabby_1"
+species_id = "krabby"
+level = 15
+display_name = "Krabby"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 45.0
+
+[node name="Psyduck" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(1200, 1520)
+overworld_pokemon_id = "kanto_vermilion_city_psyduck_1"
+species_id = "psyduck"
+level = 14
+display_name = "Psyduck"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 45.0
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=934936651]
 

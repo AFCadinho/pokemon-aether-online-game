@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion City heeft tien nieuwe aanspreekbare en pickpocketbare buiten-NPC’s en zes rondlopende of rustende overworld-Pokémon.
+
 - Nog 56 Pokémon hebben goedgekeurde normal/shiny-3D-modellen in individuele bundles. Kleuren, ogen, battleplaatsing, animaties en installatie zijn gecontroleerd. De lokale catalogus bevat nu 807 gewone Pokémon plus Mega Dragonite.
 
 - Mt. Moon's fossil ambush only stops players while its story step is active, and failed cutscene attempts restore the actors and follower before retrying.
