@@ -1,0 +1,59 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "sandslash",
+          "runtime_sha256": "9f635982c03fccf6457575385d05d33a2a407ac3ee2546c5ac6c7e6caa687963",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "sandslash@shiny",
+          "runtime_sha256": "de86e60775e7e11b1a4d18e6d174de042ddcaa271d610466cc15aaacbf8efaf0",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:sandslash:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 28,
+      "object_key": "optional-assets/pokemon_3d/sandslash/base/v1-d6b0cf852346171071c188999aae58b10cb875c9624ad3f0fcb91a2517b173c3.zip",
+      "sha256": "d6b0cf852346171071c188999aae58b10cb875c9624ad3f0fcb91a2517b173c3",
+      "size_bytes": 17941750,
+      "species_id": "sandslash",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "toucannon",
+          "runtime_sha256": "135359e7ef537f24f25fedd3351282d48d62d53322038d86b9b5aac9e767e3db",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "toucannon@shiny",
+          "runtime_sha256": "7f6233d1dc4ee195e67851e6670c07c917e3a9a9f37383d25bfa439e9de8187f",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:toucannon:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 733,
+      "object_key": "optional-assets/pokemon_3d/toucannon/base/v1-3271c6f988827355743d69542dbd426a8870bf92f471d5ac8ecdc1c535c0fd18.zip",
+      "sha256": "3271c6f988827355743d69542dbd426a8870bf92f471d5ac8ecdc1c535c0fd18",
+      "size_bytes": 40306783,
+      "species_id": "toucannon",
+      "version": 1
+    }
+  ],
+  "catalog_revision": "animation-recovery-pair-approved-v1",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}
