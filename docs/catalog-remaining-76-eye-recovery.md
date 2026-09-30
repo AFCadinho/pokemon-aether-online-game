@@ -84,13 +84,42 @@ Evidence is under `shiny-76/sleep-battle-v1`: `native-pose-proof.json`,
 `runtime-pair-parity.json`, `transition-all.json`, `eye-sleep-policy.json`
 and `eye-sleep-captures/review.json`.
 
+## Battle measurements
+
+The selected 76 normal scenes passed actual 120 Hz motion clearance and
+camera/HUD checks in both cameras and on both sides. Shiny geometry, skin,
+visibility and animation tracks match the current actual normal scenes;
+the latest shiny scenes were also captured in both cameras and on both sides.
+
+Six cases required scoped repairs. Togetic, Swoobat and Tapu Koko needed
+upward-only sleep clearance; native hovering motion was retained. Turtonator's
+faint and Yamper's physical attack needed a tighter neighbouring offset
+envelope after actual half-frame failures. The original reports are retained,
+and the two corrected profiles passed fresh actual 120 Hz checks.
+
+Dhelmise's faint pose floated about 0.83 m too high after the idle lift.
+`visual_ground_motion_pack.gd` supplies an authored offset on a separate visual
+parent, leaving the gameplay root and every original bone curve intact.
+Only faint uses that offset; other clips explicitly restore zero. The selected
+normal/shiny pair passed exact scene parity, native key/clock/bone-pose
+preservation, fresh 60 Hz measurements and actual 120 Hz motion validation.
+Focused tests verify that gameplay placement and native keys are preserved,
+idle restores the visual offset, and invalid clocks are rejected.
+
+`battle-76/normal-combined.json` binds the latest normal results and their
+retained source reports. `final-canonical-stage.json` and
+`final-pair-proof.json` bind the latest selected 152 SCNs, including Dhelmise's
+replacement pair. Final visual battle review is still required.
+
 ## Remaining work
 
-Final battle qualification remains pending for all 76. Thirty-four native
+Final user battle review and qualification remain pending for all 76. Thirty-four native
 sources use centimetres and require placement scale 0.01; the other 42 retain
-scale 1.0. This unit conversion is checked against local species dimensions
-and retains native proportions. Battle readability, large-model framing and
-motion clearance still require fresh measurements and review.
+scale 1.0 before readability/framing calibration. This unit conversion is
+checked against local species dimensions and retains native proportions.
+Small models use the existing 66-pixel readability target; large models are
+checked against actual projections so an oversized first projection cannot
+shrink them unnecessarily.
 
 The earlier 73-model grounding report belongs to superseded scene hashes.
 It also reported idle half-frame failures for Togedemaru and Dhelmise. Resolve
