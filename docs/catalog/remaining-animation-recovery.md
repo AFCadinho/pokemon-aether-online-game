@@ -125,3 +125,19 @@ scenes have 16 in-view captures without HUD proxy overlap. Three production
 presenter lifecycle rounds passed for both species and variants. The portable
 `catalog_animation_recovery_pair_battle.json` records those scene hashes and
 the explicit interpolation recipe. Human battle approval remains pending.
+
+## Approved individual bundles
+
+The user approved the final battle page ("akkoord"). Sandslash and Toucannon
+now have two local individual bundles (58,248,533 bytes total), each with
+normal and shiny. Transactional launcher installation, no-op update, restart
+and three battle lifecycle rounds on installed scenes passed. Their four
+exact scene hashes and shared per-species placement profiles were admitted
+to both game and launcher registries. The earlier recovery inventory is a
+historical snapshot; the total is now 712 approved base species plus Mega
+Dragonite, leaving 313 base species. Of this 41-normal recovery cohort, 39
+normals and 21 prepared shiny variants remain candidates.
+
+Bundle evidence is in `catalog_animation_recovery_pair_bundle_qualification.json`.
+Artifacts remain under `.tmp/remaining-animation-recovery/repaired-pair-battle/bundles`
+in slot-a. These bundles have not been uploaded or released.

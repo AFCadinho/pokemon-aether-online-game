@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Sandslash en Toucannon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Ogen, shiny-kleuren, battleplaatsing en Toucannons vleugelovergangen zijn gecontroleerd.
+
 - Fixed the entrances to Rival’s House and the Cerulean Bike Shop so stepping onto the door tile reliably enters the building on Android and other platforms.
 
 - Browser map downloads now cover the current Kanto world beyond Cerulean, including Route 5, Vermilion, Rock Tunnel and Cinnabar. Normal progression requirements still apply.
