@@ -28,6 +28,7 @@ class PackageWebReleaseTests(unittest.TestCase):
             'scenes/overworld/kanto/routes/kanto_route_9.tscn',
             'scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn',
             'scenes/overworld/kanto/routes/route_10_pokemon_center.tscn',
+            'scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn',
         ):
             with self.subTest(scene=scene):
                 self.assertIn(f'res://{scene}', extended)

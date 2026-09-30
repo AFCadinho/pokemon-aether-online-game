@@ -20,6 +20,11 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_frames.tres" id="life_elder"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="life_picnicker"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
+
+[sub_resource type="RectangleShape2D" id="shape_center_door"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -263,6 +268,9 @@ position = Vector2(2320, 720)
 [node name="FromDocks" type="Marker2D" parent="Spawns" unique_id=1137533576]
 position = Vector2(1040, 2160)
 
+[node name="FromPokecenter" type="Marker2D" parent="Spawns"]
+position = Vector2(400, 528)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1021724467]
 
 [node name="ToRoute6" type="Area2D" parent="Exits" unique_id=1456232347]
@@ -297,6 +305,21 @@ transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDocks" unique_id=1550545660]
 shape = SubResource("shape_docks")
+
+[node name="ToPokecenter" type="Area2D" parent="Exits"]
+position = Vector2(400, 464)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_vermilion_city__to_pokemon_center"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter"]
+shape = SubResource("shape_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokecenter" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+flow_direction = "up"
 
 [node name="Entities" type="Node2D" parent="." unique_id=754563147]
 z_index = 5
@@ -491,3 +514,5 @@ tile_set = SubResource("TileSet_e74de")
 [connection signal="body_entered" from="Exits/ToRoute6" to="Exits/ToRoute6" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute11" to="Exits/ToRoute11" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToDocks" to="Exits/ToDocks" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]

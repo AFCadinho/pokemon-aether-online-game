@@ -2988,6 +2988,16 @@
 						"y": 67
 					}
 				},
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "Pokémon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 12,
+						"y": 16
+					}
+				},
 				"from_route_11": {
 					"facingDirection": "down",
 					"label": "Route 11",
@@ -3006,6 +3016,38 @@
 					"tile": {
 						"x": 21,
 						"y": 1
+					}
+				}
+			}
+		},
+		"kanto_vermilion_city_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Vermilion City Pokémon Center",
+			"locationGroupId": "kanto_vermilion_city",
+			"locationGroupLabel": "Vermilion City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
 					}
 				}
 			}
@@ -6098,6 +6140,21 @@
 			"destinationAreaId": "kanto_vermilion_docks",
 			"sourceMapId": "kanto_vermilion_city"
 		},
+		"kanto_vermilion_city__to_pokemon_center": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_vermilion_city_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_vermilion_city_pokemon_center",
+			"sourceMapId": "kanto_vermilion_city"
+		},
 		"kanto_vermilion_city__to_route11": {
 			"destination": {
 				"facingDirection": "right",
@@ -6129,6 +6186,23 @@
 			},
 			"destinationAreaId": "kanto_route_6",
 			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city_pokemon_center__to_outside": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 528.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_vermilion_city_pokemon_center"
 		},
 		"kanto_vermilion_docks__to_city": {
 			"destination": {
