@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Desktop 3D battles now ignore a saved forest-manifest path if that file has moved, and use the launcher-installed forest assets instead.
+
 - De vrouwelijke Team Rocket-haarstijl toont nu ook de bijbehorende wenkbrauwen.
 
 - Cerulean City laadt weer correct met de gedeelde Surf-encounterinstellingen. De encountermaskers op Route 6, 9 en 10 en in Vermilion City blijven onzichtbaar achter de kaartvisuals.

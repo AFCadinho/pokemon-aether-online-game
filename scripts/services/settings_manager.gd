@@ -333,8 +333,9 @@ func set_battle_3d_forest_manifest(path: String) -> void:
 	_save_and_emit()
 
 func get_battle_3d_forest_manifest() -> String:
-	if not battle_3d_forest_manifest.is_empty():
-		return battle_3d_forest_manifest
+	var configured_manifest := battle_3d_forest_manifest.strip_edges()
+	if not configured_manifest.is_empty() and FileAccess.file_exists(configured_manifest):
+		return configured_manifest
 	if not OS.has_feature("web") and not OS.has_feature("mobile"):
 		var installed := OS.get_environment("POKEAETHER_FOREST_MANIFEST")
 		if installed.is_absolute_path() and FileAccess.file_exists(installed):
