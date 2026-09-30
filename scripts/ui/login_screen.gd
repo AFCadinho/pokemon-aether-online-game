@@ -40,6 +40,8 @@ const SERVER_HEALTH_RETRY_SECONDS := 10.0
 @onready var server_status_value: Label = $Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout/StatusValue
 @onready var online_players_value: Label = $Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/StatusCard/StatusMargin/StatusLayout/OnlinePlayersValue
 @onready var login_news_label: RichTextLabel = $Background/Shell/MainSplit/BrandPanel/BrandMargin/BrandLayout/NewsCard/NewsMargin/NewsLayout/LoginNewsLabel
+var _mobile_video_path := ""
+
 @onready var hero_background: TextureRect = $Background/HeroBackground
 @onready var background_video_player: VideoStreamPlayer = $Background/VideoBackground
 @onready var news_request: HTTPRequest = $NewsRequest
@@ -394,6 +396,11 @@ func _setup_background_video() -> void:
 		($Background as ColorRect).color.a = 0.0
 		get_viewport().transparent_bg = true
 		JavaScriptBridge.eval("window.pokeaetherLoginVideo?.start()", true)
+		return
+	if OS.has_feature("mobile"):
+		background_video_player.hide()
+		hero_background.show()
+		_load_mobile_video()
 		return
 	background_video_player.stream = load("res://assets/video/login_background.ogv") as VideoStream
 	var has_video := background_video_player.stream != null
@@ -1122,6 +1129,22 @@ func _get_login_error_message(result: Dictionary) -> String:
 
 
 func _exit_tree() -> void:
+	if _mobile_video_path != "":
+		background_video_player.stop()
+		get_tree().root.get_node("MobileAssetService").cache.pins.erase(_mobile_video_path)
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.pokeaetherLoginVideo?.stop()", true)
 		get_viewport().transparent_bg = false
+
+func _load_mobile_video() -> void:
+	var path: String = await get_tree().root.get_node("MobileAssetService").fetch("login-media/world.ogv")
+	if not is_inside_tree() or path == "":
+		return
+	get_tree().root.get_node("MobileAssetService").cache.pins[path] = true
+	_mobile_video_path = path
+	var stream := VideoStreamTheora.new()
+	stream.file = path
+	background_video_player.stream = stream
+	background_video_player.show()
+	hero_background.hide()
+	background_video_player.play()

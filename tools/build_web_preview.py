@@ -13,9 +13,9 @@ import subprocess
 import struct
 import time
 try:
-    from .build_web_on_demand import prepare_home_icons, prepare_login_media
+    from .build_web_on_demand import prepare_home_icons, prepare_login_media, prepare_mobile_assets
 except ImportError:
-    from build_web_on_demand import prepare_home_icons, prepare_login_media
+    from build_web_on_demand import prepare_home_icons, prepare_login_media, prepare_mobile_assets
 
 ROOT = Path(__file__).resolve().parents[1]
 # Browser audio is external; only its availability catalog stays bundled.
@@ -188,6 +188,7 @@ def main():
     home_bytes = prepare_home_icons(ROOT, output)
     print('Preparing streamed login video at source quality...', flush=True)
     media_bytes = prepare_login_media(ROOT, output)
+    mobile_bytes = prepare_mobile_assets(ROOT, output)
     console_log = output / 'export-console.log'
     # Godot treats any previously imported file below the project as an
     # exportable resource, even when an export exclude_filter names that
@@ -289,6 +290,7 @@ def main():
         'initialBytes': initial_bytes,
         'homeIconBytes': home_bytes,
         'loginMediaBytes': media_bytes,
+        'mobileAssetBytes': mobile_bytes,
     }
     (output / 'build-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(f"Web preview exported: {receipt['initialBytes'] / 1048576:.1f} MiB before HTTP compression.")

@@ -3,7 +3,11 @@
 Status: Android V1 implementation in slot A; device gates remain open
 Target: direct APK distribution from the PokeAether website, with Discord linking to it
 Project baseline: Godot 4.6.2, shared client codebase
-Last updated: 2026-09-25
+Last updated: 2026-09-30
+
+Android asset-size follow-up: [on-demand icons, cries, video and persistent
+battle-sprite cache](android-on-demand-assets.md). Publish the matching asset
+release before distributing the updated APK. Native maps remain bundled.
 
 Device smoke test (Samsung SM-G780F, Android 13): debug APK installed and
 launched, production server status loaded, login entered the world, and party

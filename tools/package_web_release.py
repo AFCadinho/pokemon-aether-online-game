@@ -126,7 +126,7 @@ def main() -> None:
         relative_name = relative.as_posix()
         if relative_name in {"index.html", "build-receipt.json"} or source.suffix == ".log" or any(part.startswith(".") for part in relative.parts):
             continue
-        on_r2 = relative_name.startswith(("browser-audio/", "home-icons/", "login-media/")) or (
+        on_r2 = relative_name.startswith(("browser-audio/", "home-icons/", "login-media/", "mobile-assets/")) or (
             source.name.startswith("index.") and source.name != "index.js"
         )
         if on_r2:
