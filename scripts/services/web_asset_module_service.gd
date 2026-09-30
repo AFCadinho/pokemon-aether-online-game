@@ -28,16 +28,47 @@ const MISTY_MAP_SCENES := {
 	"kanto_route_25_bills_house": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 }
 const EXTENDED_MAP_SCENES := {
-	"kanto_route_5": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
-	"kanto_route_9": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 	"kanto_cerulean_cave": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
+	"kanto_cerulean_cave_2f": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
+	"kanto_cerulean_cave_b1f": "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn",
+	"kanto_cinnabar_island": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+	"kanto_diglett_cave_route_11_entrance": "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn",
+	"kanto_diglett_cave_route_2_entrance": "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn",
+	"kanto_diglett_cave_tunnel": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
+	"kanto_lavender_town_north": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
+	"kanto_power_plant": "res://scenes/overworld/kanto/interiors/power_plant.tscn",
+	"kanto_rock_tunnel_1f": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+	"kanto_rock_tunnel_b1f": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+	"kanto_route_10": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 	"kanto_route_10_pokemon_center": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
+	"kanto_route_11": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+	"kanto_route_12_west": "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn",
+	"kanto_route_21": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
+	"kanto_route_5": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+	"kanto_route_5_daycare": "res://scenes/overworld/kanto/routes/route5/daycare.tscn",
+	"kanto_route_5_saffron_gate": "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn",
+	"kanto_route_6": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+	"kanto_route_6_saffron_gate": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
+	"kanto_route_9": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+	"kanto_saffron_city": "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn",
+	"kanto_saffron_city_north": "res://scenes/overworld/kanto/routes/connections/saffron_city_north.tscn",
+	"kanto_saffron_city_south": "res://scenes/overworld/kanto/routes/connections/saffron_city_south.tscn",
+	"kanto_underground_path_route_5_entrance": "res://scenes/overworld/kanto/interiors/underground_path/route_5_entrance.tscn",
+	"kanto_underground_path_route_6_entrance": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
+	"kanto_underground_path_tunnel": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
+	"kanto_vermilion_city": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+	"kanto_vermilion_docks": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
 }
+
 const REQUEST_TIMEOUT_SECONDS := 60.0
 
 var _loaded_modules: Dictionary = {}
 var _loading_modules: Dictionary = {}
 var _module_results: Dictionary = {}
+
+
+static func scene_for_map(map_id: String) -> String:
+	return str(MISTY_MAP_SCENES.get(map_id, EXTENDED_MAP_SCENES.get(map_id, "")))
 
 
 static func module_for_scene(scene_path: String) -> String:

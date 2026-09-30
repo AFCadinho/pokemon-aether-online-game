@@ -52,8 +52,8 @@ func set_anchor(destination_id: String, beacon_position: Vector2, anchor_slot: i
 
 
 func travel(destination_id: String) -> Dictionary:
-	if OS.has_feature("web") and destination_id == "kanto_cerulean_city":
-		var assets := await WebAssetModuleService.ensure_scene_available("res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn")
+	if OS.has_feature("web") and not WebAssetModuleService.scene_for_map(destination_id).is_empty():
+		var assets := await WebAssetModuleService.ensure_scene_available(WebAssetModuleService.scene_for_map(destination_id))
 		if not bool(assets.get("success", false)):
 			return assets
 	var request_id := str(pending_request_ids.get(destination_id, ""))

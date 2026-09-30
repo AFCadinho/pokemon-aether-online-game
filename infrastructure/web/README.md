@@ -118,8 +118,9 @@ rotates only other web sessions; desktop login rotates only desktop sessions.
 Web logout does not cancel desktop queues. Existing desktop-only and ranked
 routes reject web tokens by default. Browser movement uses the canonical
 character state through a server-owned projection of the canonical map and
-transition catalogs. The final browser world reaches Misty, including Mt. Moon,
-Route 24/25 and Bill, and permanently blocks Route 5, Route 9 and Cerulean Cave.
+transition catalogs. The current browser uses the shared `/game/world` access and transition routes.
+Its map modules cover the current Kanto catalog beyond Cerulean, including
+Route 5, Route 9 and Cerulean Cave; canonical story and area requirements apply.
 The normal Brock, Bill and Misty story requirements still apply. A character at another
 Aethernet destination can explicitly move to the Aether Clash Lobby; this never
 happens automatically and changes the shared desktop position. Background trade,
@@ -353,3 +354,21 @@ catalog is included; sound downloads remain outside that initial figure.
 Focused audio checks cover PCK exclusion, native animation timing and resource
 lifetimes, native Mega Evolution, browser login/world entry, and actual browser
 playback of music, an OGG cry, a battle WAV and the notification MP3.
+
+The full-world map partition is listed in `docs/browser-full-world-scope.json`:
+22 core maps (including the Aether Clash Lobby), 16 maps in the Misty module,
+and 30 later Kanto maps in `kanto-extended-maps`. The extended module also
+contains interiors, connecting gates, Underground Path, Diglett's Cave, both
+Rock Tunnel floors and all three Cerulean Cave floors. Empty/unimplemented
+catalog scene paths are not turned into playable maps. Transition and Aethernet
+travel prepare the requested map module before committing travel; saved-map
+restoration loads it before opening the world. Trade/asset transfer remains
+blocked by the persisted browser session type. Legacy `/auth/web/world` demo
+endpoints retain their compatibility scope and are not used by this client.
+
+Local export after partitioning all later maps: initial 162.7 MiB; extended
+module 9.7 MiB. Focused checks cover the complete current Kanto scene catalog,
+actual module contents and audio exclusion, shared browser area access and
+Cerulean Cave progression, unchanged transfer denial, plus Chromium login and
+map restoration on Route 5, Vermilion City and Rock Tunnel 1F. No live release
+has been published. New Kanto scenes missing from the partition fail the build.

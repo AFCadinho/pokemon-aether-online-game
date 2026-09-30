@@ -63,7 +63,7 @@ const assert = require('node:assert/strict');
     });
   });
   const page = await context.newPage();
-  const errors = [], external = [], api = [], pokemonAssets = [], homeAssets = [];
+  const errors = [], external = [], api = [], pokemonAssets = [], homeAssets = [], modules = [];
   const output = path.join(frontend, 'builds/web-accounts-qa');
   fs.mkdirSync(output, { recursive: true });
   await context.route('**/*', async route => {
@@ -72,6 +72,7 @@ const assert = require('node:assert/strict');
 		if (url.pathname.startsWith('/pokemon-assets/battle/') || url.pathname.startsWith('/pokemon-assets/gen5/')) {
 			pokemonAssets.push(url.pathname);
 		}
+    if (url.pathname.startsWith('/modules/')) modules.push(url.pathname);
     if (url.pathname.startsWith('/home-icons/')) homeAssets.push(url.pathname);
     if (!url.pathname.startsWith('/api/')) return route.continue();
 		const result = await request({ method: req.method(), path: url.pathname, body: req.postData() || '', headers: req.headers() });
@@ -115,11 +116,20 @@ const assert = require('node:assert/strict');
     await page.getByText('Account created. Check your email', { exact: false }).waitFor();
     await page.screenshot({ path: path.join(output, 'registration.png') });
     assert.equal((await request({ command: 'verify_test_email' })).status, 200);
-    if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
-      assert.equal((await request({command: 'prepare_misty_map', checkpoint: 'trainer_school',
-        mapId: 'kanto_players_house', position: {x: 432, y: 976}})).status, 200);
+    if (process.env.POKEAETHER_WORLD_MAP) {
+      assert(process.env.POKEAETHER_STARTUP_ASSETS_ONLY, 'map smoke uses bounded startup checks');
+      const catalog=JSON.parse(fs.readFileSync(path.join(frontend,'generated/world_access_catalog.json'),'utf8'));
+      const mapId=process.env.POKEAETHER_WORLD_MAP;
+      const spawn=Object.values(catalog.areas[mapId].spawnPoints)[0];
+      assert.equal((await request({command:'prepare_misty_map',checkpoint:'trainer_school',mapId,
+        position:{x:spawn.tile.x*32+16,y:spawn.tile.y*32+16},facingDirection:spawn.facingDirection})).status,200);
+    } else {
+      if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
+        assert.equal((await request({command: 'prepare_misty_map', checkpoint: 'trainer_school',
+          mapId: 'kanto_players_house', position: {x: 432, y: 976}})).status, 200);
+      }
+      assert.equal((await request({ command: 'prepare_custom_exit_state' })).status, 200);
     }
-    assert.equal((await request({ command: 'prepare_custom_exit_state' })).status, 200);
     await page.getByRole('button', { name: 'Back to login' }).click();
     await page.mouse.click(600, 494); // Return focus to the Godot username field.
     await page.screenshot({ path: path.join(output, 'login.png') });
@@ -145,6 +155,17 @@ const assert = require('node:assert/strict');
 		await waitForApi(item => ['/api/game/story', '/api/game/story/bootstrap'].includes(item.path) && item.status === 200, 30000);
 		await page.waitForTimeout(3000);
     await page.screenshot({ path: path.join(output, 'world.png') });
+    if (process.env.POKEAETHER_WORLD_MAP) {
+      const mapId=process.env.POKEAETHER_WORLD_MAP;
+      await page.waitForFunction(()=>window.pokeaetherPreview?.worldReady);
+      assert.equal(lastPresenceMapId,mapId,'world restores the requested later map');
+      assert(modules.includes('/modules/kanto-extended-maps.pck'),'later map downloads the extended pack');
+      assert(!errors.some(message=>/^(SCRIPT ERROR|ERROR:)/.test(message)), 'map loads without script/resource errors');
+      assert.deepEqual(external,[]);
+      await page.screenshot({path:path.join(output,mapId+'.png')});
+      console.log('web_accounts_browser_smoke: PASS (on-demand world map '+mapId+')');
+      return;
+    }
     if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
       assert(await page.evaluate(() => {
         const video = document.getElementById('login-video');
