@@ -55,6 +55,8 @@ func _run() -> void:
 			var guru_cell := collision.local_to_map(guru.position)
 			_check(collision.get_cell_source_id(guru_cell) == -1 and reached.has(guru_cell + Vector2i.DOWN), "Guru stands on free floor and is reachable from the entrance")
 			_check(guru_cell != start, "Guru does not occupy the arrival tile")
+		if number in [2, 3]:
+			_check_residents(house)
 		var entrance := city.get_node("Exits/ToHouse%d" % number)
 		var exit := house.get_node("Exits/ToOutside")
 		_check(entrance.target_scene_path == house_path and entrance.target_spawn_name == "FromOutside", "city doorway destination")
@@ -79,3 +81,58 @@ func _check(ok: bool, label: String) -> void:
 	if not ok:
 		failed = true
 		push_error("FAIL " + label)
+
+func _check_residents(house: Node) -> void:
+	var collision := house.get_node("Tiles/Collision") as TileMapLayer
+	var npcs := house.get_node("Entities/NPCs")
+	var pokemon := house.get_node("Entities/Pokemon")
+	_check(npcs.get_child_count() == 2 and pokemon.get_child_count() == 1, "two residents and one Pokemon inhabit each house")
+	var occupied: Dictionary = {}
+	var actors: Array[Node2D] = []
+	var start := collision.local_to_map(house.get_node("Spawns/FromOutside").position)
+	for container in [npcs, pokemon]:
+		for actor: Node2D in container.get_children():
+			var cell := collision.local_to_map(actor.position)
+			_check(collision.get_cell_source_id(cell) == -1, str(actor.name) + " stands on free floor")
+			_check(not occupied.has(cell) and cell != start, "actors have separate tiles and leave arrival free")
+			occupied[cell] = true
+			actors.append(actor)
+			if container == npcs:
+				_check(actor.scene_file_path == "res://scenes/npcs/dialogue_npc.tscn" and not str(actor.get("npc_id")).is_empty(), "residents use dialogue interaction and metadata")
+				_check(actor.get("npc_sprite_frames") != null, "residents have sprites")
+	for actor: Node2D in pokemon.get_children():
+		_check(actor.scene_file_path == "res://scenes/npcs/overworld_pokemon.tscn" and not str(actor.get("overworld_pokemon_id")).is_empty(), "Pokemon uses overworld interaction and metadata")
+		var cell := collision.local_to_map(actor.position)
+		_check(actor.get("movement_behavior") == "pace_horizontal", "Pokemon has a short horizontal walking route")
+		for offset in [-1, 1]:
+			var target := cell + Vector2i(offset, 0)
+			_check(collision.get_cell_source_id(target) == -1 and not occupied.has(target) and target != start, "walking route avoids furniture, residents and arrival")
+	_check_actor_access(house, actors)
+	for actor: Node2D in pokemon.get_children():
+		var original_position := actor.position
+		for offset in [-1, 1]:
+			actor.position = original_position + Vector2(offset * 32, 0)
+			_check_actor_access(house, actors)
+		actor.position = original_position
+
+func _check_actor_access(house: Node, actors: Array[Node2D]) -> void:
+	var collision := house.get_node("Tiles/Collision") as TileMapLayer
+	var start := collision.local_to_map(house.get_node("Spawns/FromOutside").position)
+	var occupied: Dictionary = {}
+	for actor in actors:
+		occupied[collision.local_to_map(actor.position)] = true
+	var reached: Dictionary = {}
+	var pending: Array[Vector2i] = [start]
+	while not pending.is_empty():
+		var cell: Vector2i = pending.pop_back()
+		if reached.has(cell) or occupied.has(cell) or collision.get_cell_source_id(cell) != -1 or cell.x < 0 or cell.y < 0 or cell.x >= 20 or cell.y >= 20:
+			continue
+		reached[cell] = true
+		for direction in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			pending.append(cell + direction)
+	for actor in actors:
+		var cell := collision.local_to_map(actor.position)
+		var accessible := false
+		for direction in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			accessible = accessible or reached.has(cell + direction)
+		_check(accessible, str(actor.name) + " remains accessible for interaction")

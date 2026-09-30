@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Huis 2 en Huis 3 in Vermilion City hebben elk twee bewoners met gelokaliseerde dialogen en een rondlopende overworld-Pokemon: Krabby en Pikachu.
+
 - Player and future-self dialogue portraits show the full trainer-card artwork at its original resolution, without a zoomed crop.
 
 - De Fishing Guru geeft zijn Old Rod en visles-quest nu in Huis 1 in Vermilion City. Zijn lesbeloning en hulp verhuizen mee; bestaande questvoortgang blijft behouden.
