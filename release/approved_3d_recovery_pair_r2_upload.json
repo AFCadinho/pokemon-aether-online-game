@@ -1,0 +1,50 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 4,
+  "bundle_bytes": 58248533,
+  "bundle_qualification_sha256": "de8c02dab98443812970296be00f0c962f164cffda170072008d1033db8f7b99",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:sandslash:base",
+      "object_key": "optional-assets/pokemon_3d/sandslash/base/v1-d6b0cf852346171071c188999aae58b10cb875c9624ad3f0fcb91a2517b173c3.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "d6b0cf852346171071c188999aae58b10cb875c9624ad3f0fcb91a2517b173c3",
+      "size_bytes": 17941750,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:toucannon:base",
+      "object_key": "optional-assets/pokemon_3d/toucannon/base/v1-3271c6f988827355743d69542dbd426a8870bf92f471d5ac8ecdc1c535c0fd18.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "3271c6f988827355743d69542dbd426a8870bf92f471d5ac8ecdc1c535c0fd18",
+      "size_bytes": 40306783,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "animation-recovery-pair-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/animation-recovery-pair-approved-v1-1635ba36b3c929aa9ed60124f6e30016fce7a3fdccc3565c92d3733144ca56ae.json",
+    "sha256": "1635ba36b3c929aa9ed60124f6e30016fce7a3fdccc3565c92d3733144ca56ae",
+    "size_bytes": 1992
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/animation-recovery-pair-approved-v1-1635ba36b3c929aa9ed60124f6e30016fce7a3fdccc3565c92d3733144ca56ae.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "1635ba36b3c929aa9ed60124f6e30016fce7a3fdccc3565c92d3733144ca56ae",
+    "size_bytes": 1992,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 2,
+  "profile_count": 2,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 3,
+  "public_head_size_verified_objects": 3,
+  "reviewed_catalog_sha256": "4106a1e621b71d46fef350f5220d450a0a508762b770b7350af3d158e79c2b81",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-09-30T18:50:03.707651+00:00"
+}

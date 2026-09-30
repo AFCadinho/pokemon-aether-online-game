@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Browser players on phones and tablets now get a compact login, larger touch controls and collapsible HUD panels. Settings includes a saved UI scale slider with a reset button; login and chat follow the browser keyboard.
+- Vermilion City heeft tien nieuwe aanspreekbare en pickpocketbare buiten-NPC’s en zes rondlopende of rustende overworld-Pokémon.
 
 - Nog 56 Pokémon hebben goedgekeurde normal/shiny-3D-modellen in individuele bundles. Kleuren, ogen, battleplaatsing, animaties en installatie zijn gecontroleerd. De lokale catalogus bevat nu 807 gewone Pokémon plus Mega Dragonite.
 
