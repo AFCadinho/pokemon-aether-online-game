@@ -214,12 +214,13 @@ func _reveal_cover() -> void:
 		return
 	# Keep the opaque loading cover until 3D or its 2D fallback is ready.
 	loading_label.get_parent().hide()
+	entry_transition.is_revealing = true
 	entry_transition.cover_progress = 1.0
 	entry_transition.show()
 	entry_transition.set_process(true)
 	$Cover.color.a = 0.0
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(entry_transition, "cover_progress", 0.0, WildEncounterTransition.REVEAL_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	reveal_tween.tween_property(entry_transition, "cover_progress", 0.0, WildEncounterTransition.REVEAL_SECONDS).set_trans(Tween.TRANS_LINEAR if entry_transition.transition_style == WildEncounterTransition.STYLE_WILD else Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await reveal_tween.finished
 	if not released:
 		entry_transition.hide()
@@ -227,6 +228,11 @@ func _reveal_cover() -> void:
 		$Cover.hide()
 		if is_instance_valid(battle):
 			battle.remove_meta("battle_screen_preparing")
+
+func wait_until_revealed() -> void:
+	var token := generation
+	while not released and token == generation and is_inside_tree() and $Cover.visible:
+		await get_tree().process_frame
 
 func release() -> void:
 	if released:
