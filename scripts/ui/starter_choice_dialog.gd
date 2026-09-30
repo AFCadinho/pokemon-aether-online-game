@@ -331,7 +331,7 @@ func _render_cards() -> void:
 		icon.custom_minimum_size = Vector2(88, 88)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.texture = PokemonAssets.load_home_sprite(str(choice.get("name", species_id)), true)
+		icon.texture = PokemonAssets.load_home_sprite(str(choice.get("name", species_id)))
 		if icon.texture == null:
 			icon.texture = PokemonAssets.load_unknown_icon()
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -354,7 +354,7 @@ func _select_choice(choice: Dictionary) -> void:
 	for species_id: String in card_buttons:
 		_apply_card_style(card_buttons[species_id] as Button, species_id == str(selected_choice.get("speciesId", "")))
 	var species_name := str(selected_choice.get("name", selected_choice.get("speciesId", "Pokemon")))
-	preview_sprite.texture = PokemonAssets.load_home_sprite(species_name, true)
+	preview_sprite.texture = PokemonAssets.load_home_sprite(species_name)
 	if preview_sprite.texture == null:
 		preview_sprite.texture = PokemonAssets.load_unknown_icon()
 	preview_name.text = species_name
