@@ -543,7 +543,7 @@ movement_wait_seconds = 1.5
 movement_speed_pixels = 45.0
 
 [node name="Psyduck" parent="Entities/Pokemon" unique_id=921032284 instance=ExtResource("life_pokemon")]
-position = Vector2(1200, 1520)
+position = Vector2(1232, 1520)
 overworld_pokemon_id = "kanto_vermilion_city_psyduck_1"
 species_id = "psyduck"
 level = 14
