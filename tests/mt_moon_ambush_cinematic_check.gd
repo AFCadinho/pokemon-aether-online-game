@@ -43,6 +43,7 @@ func _run() -> void:
 	_expect(not is_instance_valid(attack_effect), "Cinematic attack effect completes and cleans itself up")
 
 	var controller_source := _read_text("res://scripts/world/story/mt_moon_ambush_controller.gd")
+	_expect("_create_cutscene_pokemon(species_id, to_local(starter_target), true)" in controller_source, "future self summons the shiny final evolution of the selected starter")
 	_expect("_summon_rocket_pokemon" in controller_source, "Ambush summons Team Rocket's Pokémon")
 	_expect("await _attack_and_faint_follower()" in controller_source, "Team Rocket attacks the player's visible follower before the rescue")
 	_expect("func set_story_player(player: Node2D)" in controller_source and "_resolve_player_follower(player)" in controller_source, "the ambush targets the player that actually entered the trigger")
