@@ -60,7 +60,7 @@ def restore(row, normal_root, output):
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=600)
         textures = []
         shader_receipt = json.loads((place / 'shader-receipt.json').read_text())
-        if shader_receipt != [{'material': item['name'], 'native_emission_strength': 0}
+        if shader_receipt != [{'material': item['name'], 'native_emission_output_zero': True}
                               for item in materials]:
             raise ValueError('Incomplete native shader evidence')
         for material, item in zip(document['materials'], materials):
@@ -73,7 +73,7 @@ def restore(row, normal_root, output):
             pbr['baseColorTexture'] = {'index': index, 'texCoord': previous.get('texCoord', 0)}
             pbr['baseColorFactor'] = [1, 1, 1, 1]
             # Blender exported a mask as emission despite zero authored strength.
-            # Remove it only after the native graph proved emission disabled.
+            # Remove it only after baking the native graph proved zero emission.
             material.pop('emissiveTexture', None)
             material.pop('emissiveFactor', None)
             material.get('extensions', {}).pop('KHR_materials_emissive_strength', None)
