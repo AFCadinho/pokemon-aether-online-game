@@ -1,0 +1,1227 @@
+{
+  "schema": 1,
+  "provenance": "authored-local-home-reference-palette-v1",
+  "recipes": [
+    {
+      "species": "wurmple",
+      "source_sha256": "4231a40c8c7e4a4a760c2f8d3e47697c0f7aecfd6cdc60cdb8e90edd4ee37eff",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Wurmple.png",
+          "sha256": "c48e70e64a20bc83fbc67ff4f3a91412206360e4387dd0516f1f57b9abb094ff"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/wurmple.png",
+          "sha256": "33eac05e511925a0501fc0f3ddb897957f3c8edf7a0a2afc5031c5d0fb582429"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              166,
+              50,
+              71
+            ],
+            "to": [
+              127,
+              58,
+              157
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              150,
+              151,
+              120
+            ],
+            "to": [
+              174,
+              174,
+              174
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              166,
+              50,
+              71
+            ],
+            "to": [
+              127,
+              58,
+              157
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "silcoon",
+      "source_sha256": "c89cdef1ac426a86c4d99f44ad31596cf422aa976b0172ad4f173bf09cefbd66",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Silcoon.png",
+          "sha256": "cc503e5a01b93002a95b7c92ae06df1d8e1e97030c92ded6edc2346514f305da"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/silcoon.png",
+          "sha256": "7098d094fc89d9c4b9d5ab6c18848ba1f618ddcbd9f053e9d56ca8ced4ebba0c"
+        }
+      ],
+      "materials": {
+        "body": [
+          {
+            "from": [
+              155,
+              157,
+              155
+            ],
+            "to": [
+              179,
+              157,
+              109
+            ],
+            "tolerance": 40
+          }
+        ],
+        "l_eye": [
+          {
+            "from": [
+              174,
+              174,
+              174
+            ],
+            "to": [
+              184,
+              169,
+              131
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              166,
+              50,
+              71
+            ],
+            "to": [
+              29,
+              107,
+              158
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              150,
+              40,
+              59
+            ],
+            "to": [
+              25,
+              96,
+              145
+            ],
+            "tolerance": 40
+          }
+        ],
+        "r_eye": [
+          {
+            "from": [
+              174,
+              174,
+              174
+            ],
+            "to": [
+              184,
+              169,
+              131
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              166,
+              50,
+              71
+            ],
+            "to": [
+              29,
+              107,
+              158
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              150,
+              40,
+              59
+            ],
+            "to": [
+              25,
+              96,
+              145
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "beautifly",
+      "source_sha256": "c6176f892d048b5e3f42d4941502cf164c4fa2e731321bdc22b8454061dcff9f",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Beautifly.png",
+          "sha256": "5d3064e519c96ebac6635c13574cd9443878d6c58343c22a08866522135ba0b6"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/beautifly.png",
+          "sha256": "e86c26e8c4eeedc5476996891bef184c8a4f5128537369aede73317e0ccf5e83"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              84,
+              86,
+              86
+            ],
+            "to": [
+              87,
+              58,
+              112
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              149,
+              151,
+              150
+            ],
+            "to": [
+              175,
+              166,
+              115
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b_00": [
+          {
+            "from": [
+              84,
+              86,
+              86
+            ],
+            "to": [
+              87,
+              58,
+              112
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              182,
+              147,
+              32
+            ],
+            "to": [
+              181,
+              168,
+              117
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              167,
+              32,
+              57
+            ],
+            "to": [
+              170,
+              83,
+              68
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              33,
+              108,
+              144
+            ],
+            "to": [
+              169,
+              116,
+              92
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "cascoon",
+      "source_sha256": "fe312ca1e75ff6d18d68d3f3dd8da75c71d787ea43d02a1a0cc0f63861ea52fe",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Cascoon.png",
+          "sha256": "fb9b88e3e11506aab7b51309115be362cad21ef4bc2ae48dde6689c2c0ce10c2"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/cascoon.png",
+          "sha256": "42d4622a03f3366951dfc5aa83b0304456805f5615739d721c23bc8fc3132e12"
+        }
+      ],
+      "materials": {
+        "body": [
+          {
+            "from": [
+              161,
+              139,
+              168
+            ],
+            "to": [
+              108,
+              162,
+              63
+            ],
+            "tolerance": 40
+          }
+        ],
+        "l_eye": [
+          {
+            "from": [
+              145,
+              107,
+              161
+            ],
+            "to": [
+              95,
+              148,
+              55
+            ],
+            "tolerance": 40
+          }
+        ],
+        "r_eye": [
+          {
+            "from": [
+              145,
+              107,
+              161
+            ],
+            "to": [
+              95,
+              148,
+              55
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "budew",
+      "source_sha256": "977c64e8324ac0eb820fda0775f8ef6eba8804fbdfde148756b93db270d3a995",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Budew.png",
+          "sha256": "297a77d0a039f939cd7b125819c1159e1290ee69581998f6fd3848d0107b1667"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/budew.png",
+          "sha256": "41a4e5f8c3c3e20e70d26152aa0b8b492c766272199c23c85ca22d8fd4047bf7"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              62,
+              108,
+              42
+            ],
+            "to": [
+              132,
+              66,
+              156
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              151,
+              170,
+              94
+            ],
+            "to": [
+              178,
+              180,
+              74
+            ],
+            "tolerance": 22
+          }
+        ]
+      }
+    },
+    {
+      "species": "mothim",
+      "source_sha256": "9e3be224493d11fc90710fa3172926a7961c45357d38907ed55d33020a171764",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Mothim.png",
+          "sha256": "ffc9c0ed4672d78923951fbdb9913ef3f918e26e3cb9d965a75ae74c3c21b315"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/mothim.png",
+          "sha256": "e7ec7527e0b1ee53c3e6e50cb84cd78c6bdbbd41ddbe9dbad7cc8518e1c36519"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              171,
+              91,
+              30
+            ],
+            "to": [
+              28,
+              145,
+              173
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              172,
+              89,
+              26
+            ],
+            "to": [
+              26,
+              150,
+              185
+            ],
+            "tolerance": 40
+          }
+        ],
+        "l_eye": [
+          {
+            "from": [
+              172,
+              89,
+              26
+            ],
+            "to": [
+              26,
+              131,
+              158
+            ],
+            "tolerance": 40
+          }
+        ],
+        "r_eye": [
+          {
+            "from": [
+              172,
+              89,
+              26
+            ],
+            "to": [
+              26,
+              131,
+              158
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "cherubi",
+      "source_sha256": "904a22ce61a2251affa55b43dae5e52a0efa6553ebc7119f520ccfb6e11949a4",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Cherubi.png",
+          "sha256": "287d5f3ce129aebf084ca9c36810feea636d734192de4f9c81ee1b14179557ab"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/cherubi.png",
+          "sha256": "dc37f856912468e1ae6c7969ac12ba3ecd21e84075611e6be0d5e7392952d10d"
+        }
+      ],
+      "materials": {
+        "body": [
+          {
+            "from": [
+              171,
+              65,
+              82
+            ],
+            "to": [
+              184,
+              107,
+              65
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              26,
+              112,
+              57
+            ],
+            "to": [
+              138,
+              159,
+              36
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "glameow",
+      "source_sha256": "539206aa644bf94c130a8b630e620a0d08b8eb77785c48c22b889016393efb38",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Glameow.png",
+          "sha256": "e7a736e6bc75d433b134355545f0cec37ed7be90f6a2d9cd470264d0cdf83af0"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/glameow.png",
+          "sha256": "2b3616cf2f0ffdaad3d84a41e3db76d80bdd12a3ccc0526a79544561f5afd5a2"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              80,
+              109,
+              126
+            ],
+            "to": [
+              133,
+              92,
+              145
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              80,
+              109,
+              126
+            ],
+            "to": [
+              133,
+              92,
+              145
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "purugly",
+      "source_sha256": "c68e6abe28311981572f8302b74c44288dfa3f50824906cf44a55dae3203c057",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Purugly.png",
+          "sha256": "68d91e6152acf170287d38010e9a389ecafe73656a7098dc83801611350ae35f"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/purugly.png",
+          "sha256": "fe6bd8a8f96eddb494da685c034506073bc814aee23f5f9d8e363c0243ce185a"
+        }
+      ],
+      "materials": {
+        "body_a_00": [
+          {
+            "from": [
+              80,
+              109,
+              126
+            ],
+            "to": [
+              133,
+              92,
+              145
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              80,
+              109,
+              126
+            ],
+            "to": [
+              133,
+              92,
+              145
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              133,
+              89,
+              146
+            ],
+            "to": [
+              87,
+              106,
+              160
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "chatot",
+      "source_sha256": "a2617156c1b287389ff5e7500ec635625ff6b1727ba1d4d90456785386bc4ae3",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Chatot.png",
+          "sha256": "20cc75b4c9f21d59cfbe04e5981e53360d9e253f84664c305f29f202a2cc4e29"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/chatot.png",
+          "sha256": "0fb9e63d561ef2035b0a32e324e24f485a43961c6fcaf82a0c0b895c428782ec"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              22,
+              102,
+              143
+            ],
+            "to": [
+              153,
+              42,
+              69
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              30,
+              109,
+              60
+            ],
+            "to": [
+              178,
+              146,
+              31
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              72,
+              60,
+              62
+            ],
+            "to": [
+              29,
+              57,
+              105
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              26,
+              103,
+              141
+            ],
+            "to": [
+              153,
+              42,
+              69
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              175,
+              132,
+              88
+            ],
+            "to": [
+              182,
+              156,
+              43
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              175,
+              93,
+              109
+            ],
+            "to": [
+              182,
+              156,
+              43
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "skorupi",
+      "source_sha256": "5d9500addb0b376658e7895676675debf184ff50585184d930be822cd5d72990",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Skorupi.png",
+          "sha256": "2d34cf07262e23f798d812d9a619734026dc1d94d16d66143b885af71dd2dc08"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/skorupi.png",
+          "sha256": "c40a869cd74a0f82174b7893c3e15e006c7b0c5d05a61a067f3bb85c5c56036a"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              104,
+              119,
+              166
+            ],
+            "to": [
+              180,
+              65,
+              74
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              70,
+              63,
+              92
+            ],
+            "to": [
+              111,
+              29,
+              29
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              104,
+              119,
+              166
+            ],
+            "to": [
+              180,
+              65,
+              74
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              63,
+              60,
+              90
+            ],
+            "to": [
+              111,
+              29,
+              29
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "drapion",
+      "source_sha256": "615384faae1d63f43a88b335158f182782da30b6c61f2e351a57c8443561d80a",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Drapion.png",
+          "sha256": "8a5c5abb1e12a2800c78680573171c59befa38060d814b7bd512dc691e6c2cfe"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/drapion.png",
+          "sha256": "98d4c7ab4d40fac69d777f586068817175af6e7cf1e647153d29b7a6512384ff"
+        }
+      ],
+      "materials": {
+        "body_a_00": [
+          {
+            "from": [
+              139,
+              88,
+              115
+            ],
+            "to": [
+              145,
+              79,
+              86
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              114,
+              52,
+              88
+            ],
+            "to": [
+              126,
+              54,
+              59
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_a_01": [
+          {
+            "from": [
+              114,
+              52,
+              88
+            ],
+            "to": [
+              126,
+              54,
+              59
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              139,
+              88,
+              115
+            ],
+            "to": [
+              145,
+              79,
+              86
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              114,
+              53,
+              88
+            ],
+            "to": [
+              126,
+              54,
+              59
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              93,
+              71,
+              110
+            ],
+            "to": [
+              133,
+              70,
+              74
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "carnivine",
+      "source_sha256": "ba75d1c83a0aeaf158acaabe97c9cac4c173e9968356a5a00cf4ee5732cad3cf",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Carnivine.png",
+          "sha256": "8838a3d0c1af2a2b00c9272aa520890fea741902de16b917b4c51edd0d87e546"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/carnivine.png",
+          "sha256": "736a1211e8c3b71904cc10b8f60843c46c6a3644ee562def3998869139f63095"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              58,
+              115,
+              41
+            ],
+            "to": [
+              142,
+              114,
+              34
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              116,
+              155,
+              67
+            ],
+            "to": [
+              158,
+              156,
+              84
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              116,
+              155,
+              67
+            ],
+            "to": [
+              158,
+              156,
+              84
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "mantyke",
+      "source_sha256": "d624dcbfb068b97a0a39c66b8fd69036a17316217d88b93ad04496b24666f940",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Mantyke.png",
+          "sha256": "d62908366be7daa1686d1d35bac477367f44b0271c2624c457079b5dea286058"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/mantyke.png",
+          "sha256": "ee27ee15ce69cd9798238fcb776061a1b4fcbb2674c9e0a96d8902c0813ae192"
+        }
+      ],
+      "materials": {
+        "body": [
+          {
+            "from": [
+              26,
+              113,
+              162
+            ],
+            "to": [
+              27,
+              125,
+              128
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              124,
+              154,
+              171
+            ],
+            "to": [
+              117,
+              147,
+              149
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "lickilicky",
+      "source_sha256": "d2c57fa5a3de2a807e939681161dc69261356248fd5300c7b4194a6f656e2629",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Lickilicky.png",
+          "sha256": "fab50f8fe45349caee405bb0cc0031a9c291c13446823b3edf34295b1205706e"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/lickilicky.png",
+          "sha256": "9ef7eb21aaeab77e9d892874e4c8d434ebc48a3bf0d7ecde21a50a91cc48afa9"
+        }
+      ],
+      "materials": {
+        "body_a": [
+          {
+            "from": [
+              169,
+              89,
+              106
+            ],
+            "to": [
+              184,
+              166,
+              58
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "tangrowth",
+      "source_sha256": "3fd9c1b9a798861f0cddd2226c6bc7219ab199ca9d2ee6d014b7be725b079aad",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Tangrowth.png",
+          "sha256": "b5c2934b83608a8c07171188ee0a4bfc5bd15a123be78d9e821b8f0cb92a266d"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/tangrowth.png",
+          "sha256": "1ff770295f147b78e22460876c785603dbecffb12fc894725b4711359c92e637"
+        }
+      ],
+      "materials": {
+        "body_a_00": [
+          {
+            "from": [
+              44,
+              110,
+              133
+            ],
+            "to": [
+              66,
+              131,
+              41
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              44,
+              110,
+              133
+            ],
+            "to": [
+              66,
+              131,
+              41
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    },
+    {
+      "species": "togekiss",
+      "source_sha256": "78c6e8d1d610af165d5471ce3e0fa1739a04feb980d14a10ded77923bb9c09dc",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Togekiss.png",
+          "sha256": "985050a4b61a32d247c105a1da62211cbeea487cc3cf6141212e4fb44c870aa7"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/togekiss.png",
+          "sha256": "6f21d27d88d729f1edffa8e1de6bb496171112d376a8ae7c2825ccbe65248c98"
+        }
+      ],
+      "materials": {
+        "body": [
+          {
+            "from": [
+              157,
+              170,
+              170
+            ],
+            "to": [
+              176,
+              171,
+              146
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              100,
+              38,
+              42
+            ],
+            "to": [
+              60,
+              102,
+              138
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              166,
+              61,
+              50
+            ],
+            "to": [
+              65,
+              110,
+              155
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              67,
+              128,
+              168
+            ],
+            "to": [
+              168,
+              60,
+              48
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              176,
+              96,
+              91
+            ],
+            "to": [
+              103,
+              144,
+              173
+            ],
+            "tolerance": 35
+          }
+        ]
+      }
+    },
+    {
+      "species": "roselia",
+      "source_sha256": "7b219395e4d3423a8573dca1d91c8cd9398113c8c07445d5382e95cf4a40a006",
+      "references": [
+        {
+          "path": "assets/sprites/pokemon/pokemon_home/Roselia.png",
+          "sha256": "9f536aa67d2b52b9c49de63df46793ba253536064baba622f937ab92b180ca97"
+        },
+        {
+          "path": "assets/sprites/pokemon/pokemon_home_shiny/roselia.png",
+          "sha256": "623c1e43877f891755482e82d43f80f7400177e96e58b56ac30520c62de7854d"
+        }
+      ],
+      "materials": {
+        "body_a_00": [
+          {
+            "from": [
+              75,
+              140,
+              56
+            ],
+            "to": [
+              135,
+              157,
+              90
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              139,
+              163,
+              91
+            ],
+            "to": [
+              157,
+              173,
+              114
+            ],
+            "tolerance": 40
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              183,
+              54,
+              67
+            ],
+            "to": [
+              121,
+              68,
+              161
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              26,
+              117,
+              164
+            ],
+            "to": [
+              76,
+              74,
+              74
+            ],
+            "tolerance": 40
+          },
+          {
+            "from": [
+              70,
+              137,
+              70
+            ],
+            "to": [
+              135,
+              157,
+              90
+            ],
+            "tolerance": 40
+          }
+        ]
+      }
+    }
+  ],
+  "chatot_geometry_repair": "Apply the same material palette to the reviewed source-mesh repair; source GLB hash must be repinned explicitly. Geometry changes do not authorize palette changes."
+}

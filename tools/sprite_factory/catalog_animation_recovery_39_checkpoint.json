@@ -1,0 +1,681 @@
+{
+  "schema": 1,
+  "date": "2026-09-30",
+  "scope": "remaining_39_recovery_checkpoint_no_catalogue_admission",
+  "approved_base_species": 712,
+  "candidate_pairs": 39,
+  "appearance_approved_pairs": 38,
+  "appearance_approval": "User: Zien er allemaal goed uit, alleen chatot lijkt 2 poses in 1 te hebben",
+  "appearance_review_stage_sha256": "81a155e72214bb9009571c42f9da9d76850564350a43b3c29e9cc908193c5a98",
+  "appearance_capture_manifest_sha256": "83092f6de7ccd7f1060c6939910d79b5c69502a736cd8b033128f737b42b9468",
+  "pending_appearance_species": [
+    "chatot"
+  ],
+  "battle_visual_approval": false,
+  "bundles_created": false,
+  "records": [
+    {
+      "species": "sandshrew",
+      "variant": "normal",
+      "source_sha256": "479997cc0effc4a3db19330d9d81bb575c1bab1557d3f3f13ad4ecb1a0c1ad7d",
+      "glb_sha256": "78ce6fa1da43c74b161cd604fcec9f86db6703dd91a95781d8e660bc57a857fa",
+      "runtime_sha256": "615c1158b510e2e0d395c3c22e317e95710552b45fd2d35c44cab58e4a48dcfd",
+      "appearance_approved": true
+    },
+    {
+      "species": "clefairy",
+      "variant": "normal",
+      "source_sha256": "ebede96af4855fc398202783d1b6f90b7eecd87d0ed3b1423cf6904fdad678ab",
+      "glb_sha256": "c98ce5732c5bda9b99792ea6e1477c216435d41aff79d4bb7b3f2e84e505b960",
+      "runtime_sha256": "41e45c62c844bd0b6e5fe1e4aef35a72239aa29af09d7b3803f939d29431a097",
+      "appearance_approved": true
+    },
+    {
+      "species": "clefable",
+      "variant": "normal",
+      "source_sha256": "895e38caf8b95ca24c5f78fbd6e14e9a5693d0006ce211fd210c5defd20484f8",
+      "glb_sha256": "b10ba5f6adb1b0e7240cbc9e2cbaec73111ab25d176b679e0bbe909d334c216e",
+      "runtime_sha256": "7f1ed386c1409047b0a998e1d6b9a642830d058531d2b534327b90e2eff563a3",
+      "appearance_approved": true
+    },
+    {
+      "species": "exeggutor",
+      "variant": "normal",
+      "source_sha256": "ba752d3a8b0b2a80c4850122bb1eb470608e96f5e4d927dc7ab87738140d28dd",
+      "glb_sha256": "2d4a87b46f17bf88f16078bfb741e6cc860feee94cfb9cfb8755bed7fb916d74",
+      "runtime_sha256": "307a7b4b06d3190ffd12366f616bae37372f583dd46e7cc376e5037ec11bbb71",
+      "appearance_approved": true
+    },
+    {
+      "species": "cleffa",
+      "variant": "normal",
+      "source_sha256": "5fe83912093e0c44c964d97e29424da13b70d3eb7993a9056f2857359554328a",
+      "glb_sha256": "34eead23bd2809af3485a2dd11bb172fd964488787d3d81613fdd400533d85d7",
+      "runtime_sha256": "99b8cf13f668230150f318cfa73e167dada241e582afb372ef5ad9805633ad12",
+      "appearance_approved": true
+    },
+    {
+      "species": "ludicolo",
+      "variant": "normal",
+      "source_sha256": "f5280dd9707f3806917f0c58470078646d6c913ab94ee45359270827225ecead",
+      "glb_sha256": "3ad8360e085409efffd5a6957b7e2f8a22ccbe2f46e2eefc706c0357fb8e669a",
+      "runtime_sha256": "6a6f9eec6d402b2ae9cd7d055c38df66786a1b73c39962f9d720765cabdbc170",
+      "appearance_approved": true
+    },
+    {
+      "species": "trapinch",
+      "variant": "normal",
+      "source_sha256": "46f5e3ae78c95742a53cdbb43cdd78a8dae68f68f783be29b29de24efb5015ce",
+      "glb_sha256": "342e9941008ba5ce12b2bff5fdbd16e1476b5aabebae8060de64a464fb8fb031",
+      "runtime_sha256": "7f66c1db09533418a4ac0116446d483759ae792994396c8e46151600ee3baa5d",
+      "appearance_approved": true
+    },
+    {
+      "species": "turtwig",
+      "variant": "normal",
+      "source_sha256": "17507458ff6345be73a249f0ab72edd53349e128628c2ecd1426310fdbf11002",
+      "glb_sha256": "49c86ebde0f90c9e87c0473487655032762621dc8e97f105661ee222a2b0cf33",
+      "runtime_sha256": "ab555cf50c95dc8d4dc7c0db8cb8c3537ecba98fbd7f3dea81fa4f04124f3036",
+      "appearance_approved": true
+    },
+    {
+      "species": "shieldon",
+      "variant": "normal",
+      "source_sha256": "369079413995620c035cfdd26f9090819d1ab8bd237a3711d850bc15a6e48d2f",
+      "glb_sha256": "91056bfca049a6f87a2bd390a083c7b426f231121985f41ae276f5dabe53eb87",
+      "runtime_sha256": "b0f6a4d2b257db158b0bb7b58e3ba14d42692e7d4fdc826dfc3007deae9ba7d4",
+      "appearance_approved": true
+    },
+    {
+      "species": "phione",
+      "variant": "normal",
+      "source_sha256": "98d2731ec1fb78c0e59b53b3a48ddab233f5b1331d654e649ad8c6db3dc5c1df",
+      "glb_sha256": "14a5a084659f1eae13646d9b974c4bfeacccbd7c7fe4fcdb63ba3423a579ffd8",
+      "runtime_sha256": "d295f905126c4cf23f85e25120e8b65b0d3e68f9aaa33f38b564868c2bd31078",
+      "appearance_approved": true
+    },
+    {
+      "species": "manaphy",
+      "variant": "normal",
+      "source_sha256": "3b0ff1b7b61398de9fa56ecb5ddf34511e58f6fa23e408519c1f840281765845",
+      "glb_sha256": "0d85787c88380e69ff69b69dda4464c38782799f26b1c9bbc46d20b0c0320432",
+      "runtime_sha256": "de3ea96fc1bcd23e4bc5ab003bc6960a837df7cbdcf55474708070012a5fb94b",
+      "appearance_approved": true
+    },
+    {
+      "species": "serperior",
+      "variant": "normal",
+      "source_sha256": "c19428c9da17af2f458efb5d71a788c99d8bbdc49d91cedddcee3258cd662cef",
+      "glb_sha256": "457bca6071a877dfa4ced3e1f8e140f9adceb070b841cb0e394994ca5598931a",
+      "runtime_sha256": "ce94ec4b282e11cd3e239afa629cd9b5534e77e910785f3f9832e64bbd37b18a",
+      "appearance_approved": true
+    },
+    {
+      "species": "duosion",
+      "variant": "normal",
+      "source_sha256": "5ef08b153913c60a9bac63951618c07db42b59de319978208ab7a7206e1f6eed",
+      "glb_sha256": "413e47231f9ea10f11f6661d84a6629fd3d93c5fcc94ccd3773a354e1404933e",
+      "runtime_sha256": "6c0b733d3bbd239d92f851ad99eecbfa0221d0556e77bac0baeb7c75b0335d4e",
+      "appearance_approved": true
+    },
+    {
+      "species": "lampent",
+      "variant": "normal",
+      "source_sha256": "7d8a0d23dbf777a07ec197700eace25ff956d72722b6f80b1fd669677641954a",
+      "glb_sha256": "a5ecfd7d68e889b5c7e8133b34fe6557952b5f78ff28fbad7848faae9760eebb",
+      "runtime_sha256": "8713528feb54740aba1fa33fcd0fb4559da20bf8db7f32e4db431e3377590517",
+      "appearance_approved": true
+    },
+    {
+      "species": "chandelure",
+      "variant": "normal",
+      "source_sha256": "285a421dfc8f9a033a6fd8661b664d749b358124c4777fdaf54586ce8320e401",
+      "glb_sha256": "58c637976a864c5e43e9d222d78017e3e2ad00ad4d7b24b24ab1a1aaa2bdba6b",
+      "runtime_sha256": "e3794e7bb54f031602b1dc9efe991529c76cb8844c5bd898f73c250dee9ac987",
+      "appearance_approved": true
+    },
+    {
+      "species": "golurk",
+      "variant": "normal",
+      "source_sha256": "afb6ebaa62463b17a4f64a7037f5be0d61c56a4ec13e97e498a8ccaff6cffb1e",
+      "glb_sha256": "e4809488834304d9e25f2ce6fb2a940e25af0b83a711bc6c847d116ef479fed3",
+      "runtime_sha256": "9876dbdb96656b238a2b0010ff992d4c2ba7b35cf51f1bd91bf78babd059ae8c",
+      "appearance_approved": true
+    },
+    {
+      "species": "lunala",
+      "variant": "normal",
+      "source_sha256": "a16f41b84f961df2d06b011633fddbeb1c8e3b9eaec5d191cf55c32f703adb6b",
+      "glb_sha256": "d01a39e13080be1acaf3927376a134832d9c79eb4cb745e4c66071e1e73aabe6",
+      "runtime_sha256": "bbd9b9fa933c608e153ee04ac6a10cb6ce4b6d7f42cbb245a3bd32610e0c9ac3",
+      "appearance_approved": true
+    },
+    {
+      "species": "sandshrew",
+      "variant": "shiny",
+      "source_sha256": "479997cc0effc4a3db19330d9d81bb575c1bab1557d3f3f13ad4ecb1a0c1ad7d",
+      "glb_sha256": "39a2a8fa6ee3f85c11dc813936d62fbc3a3c923b7c5c2a772f448dc04895238a",
+      "runtime_sha256": "e915501e88330f567f293f814fa620676d5b6f131f7b5caf9e0df4deb40bee89",
+      "appearance_approved": true
+    },
+    {
+      "species": "clefairy",
+      "variant": "shiny",
+      "source_sha256": "ebede96af4855fc398202783d1b6f90b7eecd87d0ed3b1423cf6904fdad678ab",
+      "glb_sha256": "df1c64bf10e372c490dc9ed7cb402533600737c76456eb63482c6e7ffb6ec1a0",
+      "runtime_sha256": "7c842b2d9e537fdab9c0fa8cb18baf85ba76dd9b555f0d363c4e3fc86d706649",
+      "appearance_approved": true
+    },
+    {
+      "species": "clefable",
+      "variant": "shiny",
+      "source_sha256": "895e38caf8b95ca24c5f78fbd6e14e9a5693d0006ce211fd210c5defd20484f8",
+      "glb_sha256": "99aa9db1c46a52d1521499669d791ad1825d8861deee11bc7227eb17912d3c15",
+      "runtime_sha256": "5895439ea6f1fc9d3c9fb6c41f732f8b4e6b6bfcbeacb794d76c9f0b2dddffe8",
+      "appearance_approved": true
+    },
+    {
+      "species": "exeggutor",
+      "variant": "shiny",
+      "source_sha256": "ba752d3a8b0b2a80c4850122bb1eb470608e96f5e4d927dc7ab87738140d28dd",
+      "glb_sha256": "00b9c1ecac416bfa665ac96aa03ebbd1585bc1011b68140acd70c873f94e76ca",
+      "runtime_sha256": "867dabb00fc19d19a23cd5711f22c5c3c5be353edd8300e251c4bf39fa694438",
+      "appearance_approved": true
+    },
+    {
+      "species": "cleffa",
+      "variant": "shiny",
+      "source_sha256": "5fe83912093e0c44c964d97e29424da13b70d3eb7993a9056f2857359554328a",
+      "glb_sha256": "1893b026a668f35ee2a3223a419d83379a82aa36e8afa3eea2893c5d6c4f67f1",
+      "runtime_sha256": "7d05548b9d8ce4eb75e4d63f4e6ec75d45ccd3bf08db64e6741b87a02096d403",
+      "appearance_approved": true
+    },
+    {
+      "species": "ludicolo",
+      "variant": "shiny",
+      "source_sha256": "f5280dd9707f3806917f0c58470078646d6c913ab94ee45359270827225ecead",
+      "glb_sha256": "ddf1225dff0231476ffb3dd23794b254f424a9fdd1853230b2882e0d6ccab95d",
+      "runtime_sha256": "7065045f9c53e320e1d64e943c426dd2638edc01c404b4aa69736fd94ee62e59",
+      "appearance_approved": true
+    },
+    {
+      "species": "trapinch",
+      "variant": "shiny",
+      "source_sha256": "46f5e3ae78c95742a53cdbb43cdd78a8dae68f68f783be29b29de24efb5015ce",
+      "glb_sha256": "08e685ef5b337e971480cda0d5bd5df3e7d377897efc35bcc0cab12f5e4dc14e",
+      "runtime_sha256": "03c70fc884844539c1740e74bb4f18eadadaa572d9967ae5fb64c55ac367b41e",
+      "appearance_approved": true
+    },
+    {
+      "species": "turtwig",
+      "variant": "shiny",
+      "source_sha256": "17507458ff6345be73a249f0ab72edd53349e128628c2ecd1426310fdbf11002",
+      "glb_sha256": "453b8f64cf5ca70a4a8490aa685a2fe8b912108976a042f2bff7330fd3dd1bcf",
+      "runtime_sha256": "c7f2df4485706f17b0d56af5332908f391fd3fec1f9f1a1eb175ea891ce2aa7d",
+      "appearance_approved": true
+    },
+    {
+      "species": "shieldon",
+      "variant": "shiny",
+      "source_sha256": "369079413995620c035cfdd26f9090819d1ab8bd237a3711d850bc15a6e48d2f",
+      "glb_sha256": "70c2dde527fe4511671aba0605b4c25864fabe905507be3c10aee66446165a7c",
+      "runtime_sha256": "ac2796c263856ce5525517b6f6ab906a702c09d2a1e31190b06e0b98e21b2ada",
+      "appearance_approved": true
+    },
+    {
+      "species": "phione",
+      "variant": "shiny",
+      "source_sha256": "98d2731ec1fb78c0e59b53b3a48ddab233f5b1331d654e649ad8c6db3dc5c1df",
+      "glb_sha256": "61d2df3d1384ce76d545208dd97a43061cdd5f242ee445fa152de657410fdd5c",
+      "runtime_sha256": "360ebe6669b355a99fcb16cc1f3f5359c323f76725be27c56f612d9849e0fd28",
+      "appearance_approved": true
+    },
+    {
+      "species": "manaphy",
+      "variant": "shiny",
+      "source_sha256": "3b0ff1b7b61398de9fa56ecb5ddf34511e58f6fa23e408519c1f840281765845",
+      "glb_sha256": "c447e894864cc5ea1b1a80e84345d925cd0325291a9246900b36d76e2d9d2f0a",
+      "runtime_sha256": "2028d21d1d9295a5531c01072d38b4b3c9e604b0fdbc94226067437db11a53fb",
+      "appearance_approved": true
+    },
+    {
+      "species": "serperior",
+      "variant": "shiny",
+      "source_sha256": "c19428c9da17af2f458efb5d71a788c99d8bbdc49d91cedddcee3258cd662cef",
+      "glb_sha256": "b4483f82a5da86662a4a676802a6a3a66c33ef6214e75a45f7427c52fde370ba",
+      "runtime_sha256": "61988421424becfbf5d7b91eafafc4a14cf3556ce2b9c1d7c2a723bd9dd11eef",
+      "appearance_approved": true
+    },
+    {
+      "species": "duosion",
+      "variant": "shiny",
+      "source_sha256": "5ef08b153913c60a9bac63951618c07db42b59de319978208ab7a7206e1f6eed",
+      "glb_sha256": "fa931fae291146b761a75a22e32cc0ed0ff3f6680c21bde9e34ef9a5a61f28ec",
+      "runtime_sha256": "0c6c82c3a3ae74b5f4dbba5677e922e38c9bd2eefb6c8b937b14e13c9a8aa5da",
+      "appearance_approved": true
+    },
+    {
+      "species": "lampent",
+      "variant": "shiny",
+      "source_sha256": "7d8a0d23dbf777a07ec197700eace25ff956d72722b6f80b1fd669677641954a",
+      "glb_sha256": "84e3c7c041d8e0cdde00e0f3fbde1e79d97b7e76963090142e0e110d1353437a",
+      "runtime_sha256": "79a9958cc49f896ed315b89d080e4edbf3e0d9fde4b36ecf4939fa889925df22",
+      "appearance_approved": true
+    },
+    {
+      "species": "chandelure",
+      "variant": "shiny",
+      "source_sha256": "285a421dfc8f9a033a6fd8661b664d749b358124c4777fdaf54586ce8320e401",
+      "glb_sha256": "6e2ff1738b17d0760f0ee3ce8f98d347299245dcb310579c549a60b7e177c77d",
+      "runtime_sha256": "9ad9b15a4f21e0e72e6198f88f59757d29fdea5da1bf27704943d095b17e6d5b",
+      "appearance_approved": true
+    },
+    {
+      "species": "golurk",
+      "variant": "shiny",
+      "source_sha256": "afb6ebaa62463b17a4f64a7037f5be0d61c56a4ec13e97e498a8ccaff6cffb1e",
+      "glb_sha256": "8e387c9c2e6816c88a4293322d91c9417e0378c279fbe3ab7d805bfc702e7875",
+      "runtime_sha256": "16ed97057e24a9e143f1bb3827aa4fdc2ae90e5e71aeb02e128288f5b7e7e0de",
+      "appearance_approved": true
+    },
+    {
+      "species": "lunala",
+      "variant": "shiny",
+      "source_sha256": "a16f41b84f961df2d06b011633fddbeb1c8e3b9eaec5d191cf55c32f703adb6b",
+      "glb_sha256": "d3dbede33ec865a5c6b487408ae89bcd640d834aa20c1c95485263a627a60eb1",
+      "runtime_sha256": "26e35e38c745fd23f1a32dd0aca45acc37ba3b8046cb32a941accad437d381df",
+      "appearance_approved": true
+    },
+    {
+      "species": "buneary",
+      "variant": "normal",
+      "source_sha256": "29eaf0b06b1b20c0e0316e7fd2f73b2e93a38f27d536a4fb90f5acd708af53bd",
+      "glb_sha256": "3b81cca6017aeda951683d0921eec1394fc8a0778ad2a771732c37385ea9fda7",
+      "runtime_sha256": "6c6e17a2878ce92fca995212498938646f4dd607083727eecf4e324fbb45a6b7",
+      "appearance_approved": true
+    },
+    {
+      "species": "lopunny",
+      "variant": "normal",
+      "source_sha256": "975417233120fc72266e781a5c4436100ba83b02a560cd96338f85147add98ff",
+      "glb_sha256": "7acb384e018d7cd497eed7be548d0294c5dd107e791048d06369045c57a33b87",
+      "runtime_sha256": "d9402ea4f1bd23fca7a7e788fc4be2ef6cb46c340e701362f42fb44605ad83a9",
+      "appearance_approved": true
+    },
+    {
+      "species": "mime-jr",
+      "variant": "normal",
+      "source_sha256": "f3a755ed89195d37dc4d43ffebcd807e28da8ccbc273f867721f00255ca2f34c",
+      "glb_sha256": "eefea7c41c625ee0992ad84991aebd895869b9c6600148ccd4958995eea36cee",
+      "runtime_sha256": "33ea90105eff1baba78490270fad6526543bb9655117f85d7a4e579d757c57b2",
+      "appearance_approved": true
+    },
+    {
+      "species": "drampa",
+      "variant": "normal",
+      "source_sha256": "70fbb2c61b41a1eb0b880d2a54f36f3f29a78483e0cddee49508aeeaa1ba89b4",
+      "glb_sha256": "009246f0a38d9ba697011346f638628bad0a947305d19977174c22f10896ffca",
+      "runtime_sha256": "1ddcc44d4644fc225382c7a3477d1dc06e0fcdedc93438c7fc8add2890aa057e",
+      "appearance_approved": true
+    },
+    {
+      "species": "buneary",
+      "variant": "shiny",
+      "source_sha256": "29eaf0b06b1b20c0e0316e7fd2f73b2e93a38f27d536a4fb90f5acd708af53bd",
+      "glb_sha256": "f8bad2ffab7fd865ab9b101c5cb2173bad33bb5da076b87f6138ae3c15ac0abc",
+      "runtime_sha256": "73feb141d3850d6efedd3a43f75aabda35fae44b33c66d72fba83170aa2e2180",
+      "appearance_approved": true
+    },
+    {
+      "species": "lopunny",
+      "variant": "shiny",
+      "source_sha256": "975417233120fc72266e781a5c4436100ba83b02a560cd96338f85147add98ff",
+      "glb_sha256": "8ad88db5f5f0271f37252e2f52ed47b254d257fdafde2a24839edcfe8ed24bcc",
+      "runtime_sha256": "34da354ec44f07a5fb60482d6f9311774aff1ef2333ee8708ffa6ac70e0b02e7",
+      "appearance_approved": true
+    },
+    {
+      "species": "mime-jr",
+      "variant": "shiny",
+      "source_sha256": "f3a755ed89195d37dc4d43ffebcd807e28da8ccbc273f867721f00255ca2f34c",
+      "glb_sha256": "d13e07e2ee56deba2e009ddf1e9eee9487632f7b868f16b1c68f3d1074549143",
+      "runtime_sha256": "5580ea479327fcbca8b9ba57d24543ba97f7487763ecce779e51cca79dbc55db",
+      "appearance_approved": true
+    },
+    {
+      "species": "drampa",
+      "variant": "shiny",
+      "source_sha256": "70fbb2c61b41a1eb0b880d2a54f36f3f29a78483e0cddee49508aeeaa1ba89b4",
+      "glb_sha256": "065fa00d977c486a8f24f5e2554b5663ac497eb5dc9702c87b0c21519c66837b",
+      "runtime_sha256": "57a3f8ba69f6e4d5f1a96e942ce9693787860e5ede717e35cf3b556723dcd145",
+      "appearance_approved": true
+    },
+    {
+      "species": "wurmple",
+      "variant": "normal",
+      "source_sha256": "802d99a89d901bd2201a15777d2756cab606f71be0118ec1a4b2634436d03612",
+      "glb_sha256": "4231a40c8c7e4a4a760c2f8d3e47697c0f7aecfd6cdc60cdb8e90edd4ee37eff",
+      "runtime_sha256": "c9b0db0de7c3a7b6c16625a2eda868eac844aee3c5b4977e93b9b47094f7aabf",
+      "appearance_approved": true
+    },
+    {
+      "species": "silcoon",
+      "variant": "normal",
+      "source_sha256": "258d69827ebf62545db3bc2ae3a2e4d0fa74bd1c608bc0217e909a6567ad87eb",
+      "glb_sha256": "c89cdef1ac426a86c4d99f44ad31596cf422aa976b0172ad4f173bf09cefbd66",
+      "runtime_sha256": "c0e1ac054cef080db9bbc036091766f5c4aa5c9ba7f0f8c1611f91ce7f624698",
+      "appearance_approved": true
+    },
+    {
+      "species": "beautifly",
+      "variant": "normal",
+      "source_sha256": "32745fd30306ccce3778a98c9e830a32dfa32da491f4f0d2504d56d815dc1ced",
+      "glb_sha256": "c6176f892d048b5e3f42d4941502cf164c4fa2e731321bdc22b8454061dcff9f",
+      "runtime_sha256": "9ec63f9add1b27887dd097b13b317427e5463b280641632b3e0b22896794f0a5",
+      "appearance_approved": true
+    },
+    {
+      "species": "cascoon",
+      "variant": "normal",
+      "source_sha256": "1f9b1f72a4f04f1458807333833e32c227cab1ed8f2d21323a0761feb5aec531",
+      "glb_sha256": "fe312ca1e75ff6d18d68d3f3dd8da75c71d787ea43d02a1a0cc0f63861ea52fe",
+      "runtime_sha256": "01ba3e88be8a73250b90666cf8bd67ab54b89acf7bd22de68ad4771a5cf57ba1",
+      "appearance_approved": true
+    },
+    {
+      "species": "budew",
+      "variant": "normal",
+      "source_sha256": "76f368fd8acf43513bc08d2b0d2043afff6938edeed311a1d38d107fc940c9d5",
+      "glb_sha256": "977c64e8324ac0eb820fda0775f8ef6eba8804fbdfde148756b93db270d3a995",
+      "runtime_sha256": "2ed719e8e39ecab285f04e952a9d101a238025b3e6aee4a501cb64ea3a226d38",
+      "appearance_approved": true
+    },
+    {
+      "species": "mothim",
+      "variant": "normal",
+      "source_sha256": "ba12fbc380d15c152075611b3fabd7b436c28d706c3e5115dc2bcf2e35bc3232",
+      "glb_sha256": "9e3be224493d11fc90710fa3172926a7961c45357d38907ed55d33020a171764",
+      "runtime_sha256": "acf49c7a74be557e6c6e52860c2331fd40d86ac5a6c566a0f5571bce1a9e67bb",
+      "appearance_approved": true
+    },
+    {
+      "species": "cherubi",
+      "variant": "normal",
+      "source_sha256": "b2d512e02cf4872976963a986fbb73d41aa31f9c41175111f1db57060d03dd34",
+      "glb_sha256": "904a22ce61a2251affa55b43dae5e52a0efa6553ebc7119f520ccfb6e11949a4",
+      "runtime_sha256": "d6f1ddd2cc81b61897a37c1af206cdf582760c240a52f3f641277efcc79f849f",
+      "appearance_approved": true
+    },
+    {
+      "species": "glameow",
+      "variant": "normal",
+      "source_sha256": "0176a755505277f2521021158c3e72409837a22dcef1fd7e2008e68f717355b7",
+      "glb_sha256": "539206aa644bf94c130a8b630e620a0d08b8eb77785c48c22b889016393efb38",
+      "runtime_sha256": "d1db9429f6889f8b884419a51226de129cf8936b1d41e72a60d0fd148743db4c",
+      "appearance_approved": true
+    },
+    {
+      "species": "purugly",
+      "variant": "normal",
+      "source_sha256": "cc9cc6a1d20105d0bb546ac6e9c70e4be046723029af62f9515a5b8b0b3f3cf3",
+      "glb_sha256": "c68e6abe28311981572f8302b74c44288dfa3f50824906cf44a55dae3203c057",
+      "runtime_sha256": "5aca3a3b1e4dd864b101fbfcbc191cd31d5d28c94236850eb1c79487391188ed",
+      "appearance_approved": true
+    },
+    {
+      "species": "chatot",
+      "variant": "normal",
+      "source_sha256": "6dd3db778952ba7a5acfc1b96ed9e8d7cbddc35f17511a1090af7d9c74c88986",
+      "glb_sha256": "508d9d2388721db7c76fc35a3eae39b36c5b0443e30b90f862b63435c3f39f2d",
+      "runtime_sha256": "cd7127edc7adfbb440bd3cbe69a7d7bb7489d5ffbf2d24f3db0a503b9af3f573",
+      "appearance_approved": false
+    },
+    {
+      "species": "skorupi",
+      "variant": "normal",
+      "source_sha256": "c4f8e677e4639a78b194a6ecafa72e2359accea7805946f8be681b44b8accab3",
+      "glb_sha256": "5d9500addb0b376658e7895676675debf184ff50585184d930be822cd5d72990",
+      "runtime_sha256": "0081f12c32554d4705cb87034733480789bdb424630ffdc5dd1771632b0ebbd2",
+      "appearance_approved": true
+    },
+    {
+      "species": "drapion",
+      "variant": "normal",
+      "source_sha256": "33f0da658e36f0dc32bb060f1afd0dd04080bd80af899a93fac83a9703896a73",
+      "glb_sha256": "615384faae1d63f43a88b335158f182782da30b6c61f2e351a57c8443561d80a",
+      "runtime_sha256": "746f2825a65e5f97fd8e1d2cbf0836550dd313da8d75387fb315350b99b4cff5",
+      "appearance_approved": true
+    },
+    {
+      "species": "carnivine",
+      "variant": "normal",
+      "source_sha256": "b5ffa40bf12b2fa1bc55715b7f993178d4b9a27d12ac42ab413e8ba41707ffb9",
+      "glb_sha256": "ba75d1c83a0aeaf158acaabe97c9cac4c173e9968356a5a00cf4ee5732cad3cf",
+      "runtime_sha256": "ebdc5d3da26961d65de78f9bbe141ba02998d2b47126cd83f20b5bd7bec6e5b6",
+      "appearance_approved": true
+    },
+    {
+      "species": "mantyke",
+      "variant": "normal",
+      "source_sha256": "a8168a8db96b974c4406fa8ea05c9b740054749d19a799c25a44f4e95a5266e6",
+      "glb_sha256": "d624dcbfb068b97a0a39c66b8fd69036a17316217d88b93ad04496b24666f940",
+      "runtime_sha256": "f57a569d5e0cf88016ab4ead5bebdb53a0e4e5d4bd079b27481fcf1e2d181047",
+      "appearance_approved": true
+    },
+    {
+      "species": "lickilicky",
+      "variant": "normal",
+      "source_sha256": "59b5462394f7c49bc97fe5a2c15b506d900491cd3cd13416a5ac0f993ae7baa7",
+      "glb_sha256": "d2c57fa5a3de2a807e939681161dc69261356248fd5300c7b4194a6f656e2629",
+      "runtime_sha256": "011841b5af5deb16c72d8e99246903f5e17de59c334bb221309fda6062adeb4c",
+      "appearance_approved": true
+    },
+    {
+      "species": "tangrowth",
+      "variant": "normal",
+      "source_sha256": "79a1d2c3b6a340c0e598f6ba0cd137d5605115b997502d13bcd9d0563a8eed30",
+      "glb_sha256": "3fd9c1b9a798861f0cddd2226c6bc7219ab199ca9d2ee6d014b7be725b079aad",
+      "runtime_sha256": "45e62e5b7f2f6ead795eaa7345d0a3cfa1efea949aff302df4382f66a5e5fffe",
+      "appearance_approved": true
+    },
+    {
+      "species": "togekiss",
+      "variant": "normal",
+      "source_sha256": "5da3d2a405f1d7ac5de7b230111271ee4dbf54de566600a4039cc629995a12ad",
+      "glb_sha256": "78c6e8d1d610af165d5471ce3e0fa1739a04feb980d14a10ded77923bb9c09dc",
+      "runtime_sha256": "7741d0d2467dfcefdf77cc15f941aefd3298613e3081e66341fb13be2eba430c",
+      "appearance_approved": true
+    },
+    {
+      "species": "roselia",
+      "variant": "normal",
+      "source_sha256": "ef343a0420bd1c9cd46751ccbc7b1b7a85127fef88a5389eb2cc0bb661f9e64d",
+      "glb_sha256": "7b219395e4d3423a8573dca1d91c8cd9398113c8c07445d5382e95cf4a40a006",
+      "runtime_sha256": "2dfa289f4e7decf264f03e8d138e19ffb348be3526c8a3a12ecd5802006cd290",
+      "appearance_approved": true
+    },
+    {
+      "species": "wurmple",
+      "variant": "shiny",
+      "source_sha256": "802d99a89d901bd2201a15777d2756cab606f71be0118ec1a4b2634436d03612",
+      "glb_sha256": "670440d57832205da9a50a6c6c8f840e186d8ad7119e3f72d68a2df759007f39",
+      "runtime_sha256": "678be991d1e51795326d1099d1c1b48336f2394fa7ef5e91c990c6d51115424c",
+      "appearance_approved": true
+    },
+    {
+      "species": "silcoon",
+      "variant": "shiny",
+      "source_sha256": "258d69827ebf62545db3bc2ae3a2e4d0fa74bd1c608bc0217e909a6567ad87eb",
+      "glb_sha256": "dec2945392782c9a40098a5f04f833bc8989279747b6b568535f20e3b3fd6699",
+      "runtime_sha256": "b19d29fb9aa30d64b6005b1d55f73d6329a79df94ccfab5cb44fbc14f0f93b42",
+      "appearance_approved": true
+    },
+    {
+      "species": "beautifly",
+      "variant": "shiny",
+      "source_sha256": "32745fd30306ccce3778a98c9e830a32dfa32da491f4f0d2504d56d815dc1ced",
+      "glb_sha256": "a6534c9ac74be71ec8a3d9eb22e63b4ab9d17197eeb87df3d4964caec6310fb9",
+      "runtime_sha256": "497ea5ee7f519c9a2e7eb325744f410043daf692008427b1af2b4038d135f0d2",
+      "appearance_approved": true
+    },
+    {
+      "species": "cascoon",
+      "variant": "shiny",
+      "source_sha256": "1f9b1f72a4f04f1458807333833e32c227cab1ed8f2d21323a0761feb5aec531",
+      "glb_sha256": "384e9dd9880941c43445ac3c3bbd981234be8e5d1541db93a6471704f60fca81",
+      "runtime_sha256": "ca16e67428f50626b1ca48edb9549269c8b15483703160c181d19944e6986739",
+      "appearance_approved": true
+    },
+    {
+      "species": "budew",
+      "variant": "shiny",
+      "source_sha256": "76f368fd8acf43513bc08d2b0d2043afff6938edeed311a1d38d107fc940c9d5",
+      "glb_sha256": "d99ac885f6b8036c230da3abcdb32e351a54610ecc43cea35913a1f51fbcb06b",
+      "runtime_sha256": "a2320b7451b8856ab493075439200ef6b536a82529824f0278b5cd1def6fceed",
+      "appearance_approved": true
+    },
+    {
+      "species": "mothim",
+      "variant": "shiny",
+      "source_sha256": "ba12fbc380d15c152075611b3fabd7b436c28d706c3e5115dc2bcf2e35bc3232",
+      "glb_sha256": "c19297257189a81a061496366edd74e10c7d226c06492d0136e127f3dff21823",
+      "runtime_sha256": "c4928bee86efb15f78e79b31783b4c97473c5ab8285891a9cc560292e6907252",
+      "appearance_approved": true
+    },
+    {
+      "species": "cherubi",
+      "variant": "shiny",
+      "source_sha256": "b2d512e02cf4872976963a986fbb73d41aa31f9c41175111f1db57060d03dd34",
+      "glb_sha256": "5247ed7d7d4458df5c1fee04cb741b075cbb241e8d10ad619e3a7b2971d02e2d",
+      "runtime_sha256": "c5989715dd42eca0b301365d8171e6cf801d38cf5abee2ad82f2f8cfa7ffbf52",
+      "appearance_approved": true
+    },
+    {
+      "species": "glameow",
+      "variant": "shiny",
+      "source_sha256": "0176a755505277f2521021158c3e72409837a22dcef1fd7e2008e68f717355b7",
+      "glb_sha256": "723519ac30e63e2b451b72b51cd1f566afb7a9e1c3aa618c6c44f18aa89a89c1",
+      "runtime_sha256": "f2fbd3a052f638982d7c0aa353a100275e3cb292f371edebb43bb5150e353d7d",
+      "appearance_approved": true
+    },
+    {
+      "species": "purugly",
+      "variant": "shiny",
+      "source_sha256": "cc9cc6a1d20105d0bb546ac6e9c70e4be046723029af62f9515a5b8b0b3f3cf3",
+      "glb_sha256": "e138000d35379d50a48a79cd3bf4c9b4352dab05a1d94efc80f6eaf615edb722",
+      "runtime_sha256": "fc56be994c9ed2b951d9a9e1d1e0dc70d769371e5e8657ab3810b04a460d2f26",
+      "appearance_approved": true
+    },
+    {
+      "species": "chatot",
+      "variant": "shiny",
+      "source_sha256": "6dd3db778952ba7a5acfc1b96ed9e8d7cbddc35f17511a1090af7d9c74c88986",
+      "glb_sha256": "d1ee836e8cd55c5cf7e2eb0b66405eb35ecfcd17c766f43c703283f4bdff3334",
+      "runtime_sha256": "c8b4da9fc3f749ae667e6921ed442aeeff9fe4731a5d4a02263c6904a838fad0",
+      "appearance_approved": false
+    },
+    {
+      "species": "skorupi",
+      "variant": "shiny",
+      "source_sha256": "c4f8e677e4639a78b194a6ecafa72e2359accea7805946f8be681b44b8accab3",
+      "glb_sha256": "b8eafd6bc48af820e61502587799963954ffdf91484b967c005f7eeedac777f8",
+      "runtime_sha256": "c8250f5f25f6f98a0612ac52cbfe36e6d5f9f77eec8f04aca41a7db560b6d1ef",
+      "appearance_approved": true
+    },
+    {
+      "species": "drapion",
+      "variant": "shiny",
+      "source_sha256": "33f0da658e36f0dc32bb060f1afd0dd04080bd80af899a93fac83a9703896a73",
+      "glb_sha256": "eb59027e9b1ad9113859cc1bb9199dbbe5017c6a2b63d129ed97562a4f86cfbd",
+      "runtime_sha256": "70a91125ee8a61dcbb291e1dd0ce117cb99f007c35ab8ae9b8ad9e893fd5310e",
+      "appearance_approved": true
+    },
+    {
+      "species": "carnivine",
+      "variant": "shiny",
+      "source_sha256": "b5ffa40bf12b2fa1bc55715b7f993178d4b9a27d12ac42ab413e8ba41707ffb9",
+      "glb_sha256": "14f6fe5f6c41a4ea2f47441a65202f010d8bc25be1ebeff0741e6d6af8edccfc",
+      "runtime_sha256": "dc25e495d21e7afa3a4c032831398cf33678c6398c9692dc746d51635443bfb4",
+      "appearance_approved": true
+    },
+    {
+      "species": "mantyke",
+      "variant": "shiny",
+      "source_sha256": "a8168a8db96b974c4406fa8ea05c9b740054749d19a799c25a44f4e95a5266e6",
+      "glb_sha256": "bbd53f794c0cdeb80501b549bddabe93d55286e22cf70e6fe4688e6532176210",
+      "runtime_sha256": "b3a6a4ef1a69fde4ed4040fbb17f869608befccaf5f2fe02657ef4323d501d16",
+      "appearance_approved": true
+    },
+    {
+      "species": "lickilicky",
+      "variant": "shiny",
+      "source_sha256": "59b5462394f7c49bc97fe5a2c15b506d900491cd3cd13416a5ac0f993ae7baa7",
+      "glb_sha256": "1d1032a454149c6c015be3b4ea63814b4b97200e63ed51ebbbfb96c29e8e2d22",
+      "runtime_sha256": "d85eedee2a188a3a8e96f8b31584cedaf80f3214f31d8a3e8b1b1d414d8f4c18",
+      "appearance_approved": true
+    },
+    {
+      "species": "tangrowth",
+      "variant": "shiny",
+      "source_sha256": "79a1d2c3b6a340c0e598f6ba0cd137d5605115b997502d13bcd9d0563a8eed30",
+      "glb_sha256": "1cd1fda61635eed754211821ede5d8fe2165da0ad0c30b5fea0bffc1a25a142e",
+      "runtime_sha256": "68719d7b2ba20336f0d1eafba2273fa10e5896249531e1df84438f50788c5ba3",
+      "appearance_approved": true
+    },
+    {
+      "species": "togekiss",
+      "variant": "shiny",
+      "source_sha256": "5da3d2a405f1d7ac5de7b230111271ee4dbf54de566600a4039cc629995a12ad",
+      "glb_sha256": "5c343ed264ac89f3abf851033d28dc94b51f8bf03d5310deaa65a9b1cce49b0e",
+      "runtime_sha256": "c9f5aab867af32baf88e1d23bcb3e4ae00c03b854e4396a5be0aa973a2e6431c",
+      "appearance_approved": true
+    },
+    {
+      "species": "roselia",
+      "variant": "shiny",
+      "source_sha256": "ef343a0420bd1c9cd46751ccbc7b1b7a85127fef88a5389eb2cc0bb661f9e64d",
+      "glb_sha256": "c214080e316c0a0940c1de05e5742be63d327702cb74d7cf6324125072901e3c",
+      "runtime_sha256": "3c7556a7274e938fc69e24e6168b9a9086bf79394d2c70437cf1602584d00c97",
+      "appearance_approved": true
+    }
+  ],
+  "shiny_provenance": {
+    "prepared_source_variants": 21,
+    "authored_home_reference_palettes": 18,
+    "authored_species": [
+      "beautifly",
+      "budew",
+      "carnivine",
+      "cascoon",
+      "chatot",
+      "cherubi",
+      "drapion",
+      "glameow",
+      "lickilicky",
+      "mantyke",
+      "mothim",
+      "purugly",
+      "roselia",
+      "silcoon",
+      "skorupi",
+      "tangrowth",
+      "togekiss",
+      "wurmple"
+    ]
+  },
+  "technical_validation": {
+    "normal_scenes_independently_sampled_at_hz": 120,
+    "normal_scenes_passed": 39,
+    "shiny_scope": "Exact SCN geometry and animation parity proves shared clearance; camera captures remain per actual SCN. This is not independent shiny resampling.",
+    "final_camera_scenes": 78,
+    "final_camera_images": 1248,
+    "final_camera_report_sha256": "42a4b848a9c85237677c516c26cb587efde598f04a208ff655fd73f858ab65a7",
+    "all_shots_in_view": true,
+    "all_shots_clear_of_hud_proxy": true
+  },
+  "corrections": {
+    "chatot": "Omit both folded-wing accessory meshes only for source SHA and eight native battle actions in reviewed_source_repairs.json; preserve approved materials. New appearance review pending.",
+    "tangrowth_and_lickilicky": "Flatten native bone export hierarchy; transfer exact reviewed native materials; regenerate corresponding authored shiny geometry.",
+    "mantyke": "Add 0.03m clearance to physical_attack motion profile after 120Hz half-frame sampling identified a dip; independently revalidated."
+  }
+}

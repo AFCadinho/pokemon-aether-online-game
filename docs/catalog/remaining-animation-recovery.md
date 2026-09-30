@@ -141,3 +141,36 @@ normals and 21 prepared shiny variants remain candidates.
 Bundle evidence is in `catalog_animation_recovery_pair_bundle_qualification.json`.
 Artifacts remain under `.tmp/remaining-animation-recovery/repaired-pair-battle/bundles`
 in slot-a. These bundles have not been uploaded or released.
+
+## Remaining 39 pairs — review checkpoint
+
+All 39 now have standalone normal and shiny scenes. Twenty-one shiny variants
+use the prepared source variants; eighteen use explicit, alpha-preserving
+local HOME-reference palette recipes, not official rare material tables.
+Normal/shiny GLB geometry and animations match. Exact standalone SCN mesh,
+skin, bone and animation parity was also checked, excluding materials.
+
+The user approved 38 pairs on `remaining-39-v2`, reporting duplicate poses
+only for Chatot. Its native addition-base action scales both folded-wing
+accessories to zero, but isolated action selection resets the unkeyed bones
+to unit scale. A source-SHA/action-bound repair excludes these two meshes
+only for the eight selected battle clips. Normal and shiny were rebuilt with
+their reviewed materials; `chatot-wings-v1` awaits appearance approval.
+
+Tangrowth and Lickilicky use flattened native bone hierarchies to retain
+their source limb/tongue proportions. Those corrected pairs are included in
+the user's 38-pair approval. Independent 120 Hz clearance checks pass for
+all 39 final normal scenes. Mantyke required 0.03 m extra clearance in its
+first physical attack after a half-frame dip was detected and rechecked.
+
+All 78 final scenes have 16 actual camera captures each (1,248 total), within
+view and clear of the HUD proxy. Shiny clearance reuses
+the independent normal measurements only after exact SCN geometry/animation
+parity; it is not presented as independent shiny sampling. Human battle
+approval, production presenter qualification and individual bundle admission
+remain pending. The approved total remains 712 base species plus Mega
+Dragonite. No upload or release is part of this checkpoint.
+
+Portable scene hashes and approval boundaries are recorded in
+`tools/sprite_factory/catalog_animation_recovery_39_checkpoint.json`.
+Working evidence is under `.tmp/remaining-animation-recovery/remaining-39`.
