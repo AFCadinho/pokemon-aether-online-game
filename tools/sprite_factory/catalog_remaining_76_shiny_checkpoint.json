@@ -14,7 +14,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 11,
       "legacy_source": {
@@ -1571,7 +1571,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 12,
       "legacy_source": {
@@ -2508,7 +2508,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 20,
       "legacy_source": {
@@ -3840,7 +3840,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 29,
       "legacy_source": {
@@ -5097,7 +5097,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 32,
       "legacy_source": {
@@ -6823,7 +6823,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 47,
       "legacy_source": {
@@ -7738,7 +7738,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 108,
       "legacy_source": {
@@ -9052,7 +9052,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 114,
       "legacy_source": {
@@ -10858,7 +10858,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 118,
       "legacy_source": {
@@ -13686,7 +13686,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 175,
       "legacy_source": {
@@ -16393,7 +16393,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 176,
       "legacy_source": {
@@ -17806,7 +17806,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 177,
       "legacy_source": {
@@ -19550,7 +19550,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 178,
       "legacy_source": {
@@ -22976,7 +22976,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 202,
       "legacy_source": {
@@ -24344,7 +24344,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 213,
       "legacy_source": {
@@ -26885,7 +26885,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 238,
       "legacy_source": {
@@ -30442,7 +30442,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 241,
       "legacy_source": {
@@ -32753,7 +32753,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 251,
       "legacy_source": {
@@ -34597,7 +34597,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 263,
       "legacy_source": {
@@ -36024,7 +36024,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 264,
       "legacy_source": {
@@ -38681,14 +38681,14 @@
     },
     {
       "species": "wailord",
-      "status": "wailord_battle_size_correction_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "dbb85dc4d3019ed7a7a9f328106e32b2cc2e86275bfa8a40dc0d6b99d17073b8",
       "shiny_runtime_sha256": "a0020794fe4b7b318fb5321695a8ea8177ac518ab07c3fa8f1db46ec36ac52e7",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 321,
       "legacy_source": {
@@ -42301,10 +42301,11 @@
         },
         "source_report": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-normal/captures/battle-review.json"
       },
-      "battle_user_approved": false,
+      "battle_user_approved": true,
       "battle_approval": {
-        "user_feedback": "Wailord too small",
-        "review_required": true
+        "date": "2026-10-01",
+        "answer": "Nieuwe grootte is goed",
+        "receipt_sha256": "b0d72d0cddd6989a22a89014e6e52d4c2d15290cc052da7f9e49491b68bb35be"
       },
       "superseded_battle_calibration_candidate": {
         "runtime_approved": false,
@@ -42994,7 +42995,7 @@
         "source_report": "final/battle-review.json"
       },
       "battle_size_review": {
-        "user_review_pending": true,
+        "user_review_pending": false,
         "scale_before": 0.215157454223633,
         "scale_after": 0.343594257507324,
         "policy": "Wailord species override; largest actual idle projection fitting620x390px in both cameras and sides;120Hz idle and allclips clearance; all16 actual views in frame and HUD proxy clear",
@@ -43016,7 +43017,11 @@
             "path": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-review-v1/receipt.json",
             "sha256": "b0d72d0cddd6989a22a89014e6e52d4c2d15290cc052da7f9e49491b68bb35be"
           }
-        ]
+        ],
+        "user_approval": {
+          "date": "2026-10-01",
+          "answer": "Nieuwe grootte is goed"
+        }
       }
     },
     {
@@ -43028,7 +43033,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 360,
       "legacy_source": {
@@ -45630,7 +45635,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 363,
       "legacy_source": {
@@ -47490,7 +47495,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 494,
       "legacy_source": {
@@ -49613,7 +49618,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 507,
       "legacy_source": {
@@ -50842,7 +50847,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 508,
       "legacy_source": {
@@ -52155,7 +52160,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 519,
       "legacy_source": {
@@ -54322,7 +54327,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 527,
       "legacy_source": {
@@ -55954,7 +55959,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 528,
       "legacy_source": {
@@ -58662,7 +58667,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 554,
       "legacy_source": {
@@ -60012,7 +60017,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 556,
       "legacy_source": {
@@ -61566,7 +61571,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 557,
       "legacy_source": {
@@ -64582,7 +64587,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 558,
       "legacy_source": {
@@ -66685,7 +66690,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 561,
       "legacy_source": {
@@ -68702,7 +68707,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 566,
       "legacy_source": {
@@ -72078,7 +72083,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 592,
       "legacy_source": {
@@ -73419,7 +73424,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 598,
       "legacy_source": {
@@ -77090,7 +77095,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 599,
       "legacy_source": {
@@ -77937,7 +77942,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 600,
       "legacy_source": {
@@ -78867,7 +78872,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 601,
       "legacy_source": {
@@ -79946,7 +79951,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 626,
       "legacy_source": {
@@ -84699,7 +84704,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 755,
       "legacy_source": {
@@ -86639,7 +86644,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 756,
       "legacy_source": {
@@ -88449,7 +88454,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 759,
       "legacy_source": {
@@ -90393,7 +90398,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 760,
       "legacy_source": {
@@ -92593,7 +92598,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 771,
       "legacy_source": {
@@ -94281,7 +94286,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 772,
       "legacy_source": {
@@ -97772,7 +97777,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 776,
       "legacy_source": {
@@ -102204,7 +102209,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 777,
       "legacy_source": {
@@ -104742,7 +104747,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 781,
       "legacy_source": {
@@ -109811,7 +109816,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 785,
       "legacy_source": {
@@ -113878,7 +113883,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 786,
       "legacy_source": {
@@ -118092,7 +118097,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 787,
       "legacy_source": {
@@ -122110,7 +122115,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 788,
       "legacy_source": {
@@ -125750,7 +125755,7 @@
         "nihilego-head-captures-v5/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 793,
       "legacy_source": {
@@ -127521,7 +127526,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 794,
       "legacy_source": {
@@ -129503,7 +129508,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 795,
       "legacy_source": {
@@ -132154,7 +132159,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 796,
       "legacy_source": {
@@ -133864,7 +133869,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 797,
       "legacy_source": {
@@ -138726,7 +138731,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 798,
       "legacy_source": {
@@ -141100,7 +141105,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 799,
       "legacy_source": {
@@ -145725,7 +145730,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 804,
       "legacy_source": {
@@ -147412,7 +147417,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 806,
       "legacy_source": {
@@ -150866,7 +150871,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 824,
       "legacy_source": {
@@ -153819,7 +153824,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 826,
       "legacy_source": {
@@ -155053,7 +155058,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 829,
       "legacy_source": {
@@ -156350,7 +156355,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 830,
       "legacy_source": {
@@ -157717,7 +157722,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 831,
       "legacy_source": {
@@ -159127,7 +159132,7 @@
         "uv-palette-final-captures-v3/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 832,
       "legacy_source": {
@@ -160547,7 +160552,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 835,
       "legacy_source": {
@@ -161848,7 +161853,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 836,
       "legacy_source": {
@@ -163951,7 +163956,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 850,
       "legacy_source": {
@@ -167150,7 +167155,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 865,
       "legacy_source": {
@@ -168130,7 +168135,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 880,
       "legacy_source": {
@@ -170260,7 +170265,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 881,
       "legacy_source": {
@@ -173356,7 +173361,7 @@
         "uv-corrected-pair-captures-v2/review.json"
       ],
       "note": "",
-      "user_approved": false,
+      "user_approved": true,
       "battle_qualified": false,
       "national_dex": 882,
       "legacy_source": {
@@ -174995,7 +175000,7 @@
     }
   },
   "appearance_url": "http://127.0.0.1:8781/shiny-76/appearance-76-v2/index.html",
-  "battle_status": "75 user-approved battle pairs; Wailord size correction and final qualification/bundles pending",
+  "battle_status": "76 visual approvals complete; qualification and bundle installation pending",
   "evidence_root": ".tmp/remaining-274-production/shiny-76",
   "user_feedback": {
     "date": "2026-09-30",
@@ -175075,7 +175080,7 @@
     "capture_report_sha256": "fbeca9f70ea7c155e72719c19899c3a451ed2483674a7486af2c6521c555d2e4",
     "url": "http://127.0.0.1:8781/shiny-76/sleep-battle-v1/index.html"
   },
-  "battle_user_review_pending": 1,
+  "battle_user_review_pending": 0,
   "battle_technical_passed_pairs": 76,
   "battle_url": "http://127.0.0.1:8781/shiny-76/sleep-battle-v1/battle-76/review-v1/index.html",
   "battle_review_evidence": {
@@ -175094,5 +175099,5 @@
     "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
     "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
   },
-  "battle_user_approved_pairs": 75
+  "battle_user_approved_pairs": 76
 }
