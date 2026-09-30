@@ -20,6 +20,7 @@ var cover_progress := 0.0:
 var animation_elapsed := 0.0
 var active_tween: Tween
 var transition_style := STYLE_WILD
+var is_revealing := false
 
 
 func _ready() -> void:
@@ -48,13 +49,14 @@ func begin(style: String = STYLE_WILD) -> void:
 		STYLE_SPECIAL_TRAINER,
 	] else STYLE_WILD
 	animation_elapsed = 0.0
+	is_revealing = false
 	cover_progress = 0.0
 	visible = true
 	set_process(true)
 
 	active_tween = create_tween()
 	active_tween.tween_property(self, "cover_progress", 1.0, COVER_SECONDS) \
-		.set_trans(Tween.TRANS_QUAD) \
+		.set_trans(Tween.TRANS_LINEAR if transition_style == STYLE_WILD else Tween.TRANS_QUAD) \
 		.set_ease(Tween.EASE_IN_OUT)
 	active_tween.finished.connect(_on_cover_finished, CONNECT_ONE_SHOT)
 
@@ -70,9 +72,10 @@ func reveal() -> void:
 		return
 
 	_stop_active_tween()
+	is_revealing = true
 	active_tween = create_tween()
 	active_tween.tween_property(self, "cover_progress", 0.0, REVEAL_SECONDS) \
-		.set_trans(Tween.TRANS_QUAD) \
+		.set_trans(Tween.TRANS_LINEAR if transition_style == STYLE_WILD else Tween.TRANS_QUAD) \
 		.set_ease(Tween.EASE_OUT)
 	await active_tween.finished
 	active_tween = null
@@ -212,25 +215,25 @@ func _draw_special_trainer_panels(viewport_size: Vector2) -> void:
 	)
 
 
+func band_progress(index: int) -> float:
+	var stagger := (float(index) / float(BAND_COUNT - 1)) * BAND_STAGGER_SHARE
+	# Ease each band once, with zero velocity at both ends. Applying an
+	# exponent below one on top of the tween made each staggered start snap.
+	return smoothstep(stagger, stagger + 1.0 - BAND_STAGGER_SHARE, cover_progress)
+
+
 func _draw_bands(viewport_size: Vector2) -> void:
-	var band_height := ceilf(viewport_size.y / float(BAND_COUNT)) + 2.0
+	var band_height := viewport_size.y / float(BAND_COUNT)
 	for index in range(BAND_COUNT):
-		var stagger := (float(index) / float(BAND_COUNT - 1)) * BAND_STAGGER_SHARE
-		var band_progress := clampf(
-			(cover_progress - stagger) / (1.0 - BAND_STAGGER_SHARE),
-			0.0,
-			1.0
-		)
-		band_progress = ease(band_progress, 0.72)
-		var band_width := viewport_size.x * band_progress
+		var band_width := viewport_size.x * band_progress(index)
 		var band_x := 0.0 if index % 2 == 0 else viewport_size.x - band_width
 		var blue_lift := 0.008 * float(index % 3)
 		draw_rect(
 			Rect2(
-				Vector2(band_x, (float(index) * band_height) - 1.0),
-				Vector2(band_width, band_height)
+				Vector2(band_x, float(index) * band_height - 1.0),
+				Vector2(band_width, band_height + 2.0)
 			),
-			Color(0.003, 0.01 + blue_lift, 0.035 + blue_lift, 0.985)
+			Color(0.003, 0.01 + blue_lift, 0.035 + blue_lift, 1.0)
 		)
 
 
@@ -255,9 +258,16 @@ func _draw_moving_streaks(viewport_size: Vector2) -> void:
 		)
 
 
-func _draw_encounter_flash(viewport_size: Vector2) -> void:
+func encounter_flash_alpha() -> float:
+	if transition_style == STYLE_WILD and is_revealing:
+		return 0.0
 	var flash_phase := clampf(cover_progress / 0.46, 0.0, 1.0)
-	var flash_alpha := sin(flash_phase * PI) * 0.72
+	var strength := 0.24 if transition_style == STYLE_WILD else 0.72
+	return sin(flash_phase * PI) * strength
+
+
+func _draw_encounter_flash(viewport_size: Vector2) -> void:
+	var flash_alpha := encounter_flash_alpha()
 	if flash_alpha <= 0.001:
 		return
 	draw_rect(

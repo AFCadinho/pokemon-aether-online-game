@@ -18,6 +18,26 @@ func _run_checks() -> void:
 	await process_frame
 	_check_true(transition.size.x > 0.0 and transition.size.y > 0.0, "encounter transition fills the viewport")
 
+	# Sample every band at its staggered start and end: motion must begin
+	# gently, remain monotonic, and fully cover even the final band.
+	for index in range(WildEncounterTransition.BAND_COUNT):
+		var start := float(index) / float(WildEncounterTransition.BAND_COUNT - 1) * WildEncounterTransition.BAND_STAGGER_SHARE
+		transition.cover_progress = start
+		_check_true(is_zero_approx(transition.band_progress(index)), "band starts at zero width")
+		transition.cover_progress = start + 0.001
+		_check_true(transition.band_progress(index) < 0.00001, "band starts without an abrupt velocity jump")
+		var previous := 0.0
+		for sample_index in range(101):
+			transition.cover_progress = float(sample_index) / 100.0
+			var progress := transition.band_progress(index)
+			_check_true(progress >= previous, "band motion remains monotonic")
+			previous = progress
+		_check_true(is_equal_approx(previous, 1.0), "every band fully covers at the endpoint")
+	transition.cover_progress = 0.23
+	_check_true(transition.encounter_flash_alpha() <= 0.24, "wild entry flash stays soft")
+	transition.is_revealing = true
+	_check_true(is_zero_approx(transition.encounter_flash_alpha()), "wild reveal never repeats the entry flash")
+
 	transition.begin()
 	_check_true(transition.visible, "encounter transition becomes visible immediately")
 	_check_true(transition.is_processing(), "encounter transition animates while covering")

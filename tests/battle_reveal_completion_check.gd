@@ -12,6 +12,15 @@ class RevealWorld extends "res://scripts/world/world.gd":
 		pass
 
 
+class DelayedScreenHost extends Control:
+	var revealed := false
+
+	func wait_until_revealed() -> void:
+		await get_tree().process_frame
+		await get_tree().process_frame
+		revealed = true
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -34,13 +43,23 @@ func _run() -> void:
 	world.wild_encounter_transition = overlay
 	overlay.visible = true
 	overlay.cover_progress = 1.0
-	get_tree().create_timer(5.0).timeout.connect(func():
+	get_tree().create_timer(8.0).timeout.connect(func():
 		push_error("Battle reveal waited on an already completed tween")
 		get_tree().quit(1)
 	)
 	await world._reveal_prepared_wild_battle()
 	if overlay.visible or not is_equal_approx(battle.modulate.a, 1.0):
 		push_error("Battle reveal did not finish visibly")
+		get_tree().quit(1)
+		return
+	var host := DelayedScreenHost.new()
+	world.add_child(host)
+	world.battle_screen_host = host
+	overlay.visible = true
+	overlay.cover_progress = 1.0
+	await world._reveal_prepared_wild_battle()
+	if not host.revealed:
+		push_error("Battle intro continued before the screen's loading cover cleared")
 		get_tree().quit(1)
 		return
 	world.free()

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wild battles now use smoother sliding bands, a softer entry flash without a second flash on reveal, and an opaque cover while the first battle frame loads. Battle intros wait until the dedicated loading cover has cleared.
+
 - Vermilion City heeft tien nieuwe aanspreekbare en pickpocketbare buiten-NPC’s en zes rondlopende of rustende overworld-Pokémon.
 
 - Nog 56 Pokémon hebben goedgekeurde normal/shiny-3D-modellen in individuele bundles. Kleuren, ogen, battleplaatsing, animaties en installatie zijn gecontroleerd. De lokale catalogus bevat nu 807 gewone Pokémon plus Mega Dragonite.
