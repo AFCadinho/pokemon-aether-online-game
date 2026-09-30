@@ -32,7 +32,7 @@ func _run() -> void:
 	restarted.cache = Cache.new(directory, 4096)
 	root.add_child(restarted)
 	ProjectSettings.set_setting("application/config/android_asset_build_id", "fixture-build-7")
-	_check(await restarted.release_prefix() == "https://web-assets.pokeaether.com/web/releases/fixture-build-7/", "Android assets are pinned without fetching the active browser release")
+	_check(await restarted.release_prefix() == "https://web-assets.pokeaether.com/android/releases/fixture-build-7/", "Android assets are pinned without fetching the active browser release")
 	ProjectSettings.set_setting("application/config/android_asset_build_id", "../invalid")
 	_check(await restarted.release_prefix() == "", "invalid pinned asset build is rejected")
 	ProjectSettings.set_setting("application/config/android_asset_build_id", "")

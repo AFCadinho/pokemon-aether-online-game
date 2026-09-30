@@ -39,7 +39,7 @@ func release_prefix() -> String:
 	if pinned != "":
 		if "/" in pinned or ".." in pinned or ":" in pinned or "\\" in pinned:
 			return ""
-		return "https://web-assets.pokeaether.com/web/releases/" + pinned + "/"
+		return "https://web-assets.pokeaether.com/android/releases/" + pinned + "/"
 	var config: Dictionary = await get_tree().root.get_node("WebPokemonSpriteService")._get_release_config()
 	var build := str(config.get("buildId", ""))
 	if build == "" or "/" in build or ".." in build:

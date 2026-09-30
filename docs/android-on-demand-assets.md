@@ -7,7 +7,7 @@ are excluded. Desktop loading and browser trade restrictions are unchanged.
 
 Android builds stamp `application/config/android_asset_build_id` with their
 immutable APK build ID. `MobileAssetService` downloads
-`https://web-assets.pokeaether.com/web/releases/BUILD_ID/mobile-assets/catalog.json`
+`https://web-assets.pokeaether.com/android/releases/BUILD_ID/mobile-assets/catalog.json`
 without needing a browser release. Unstamped local builds retain the active
 `web-release-config.json` fallback. The manifest records exact
 byte sizes and SHA-256 checksums for the existing `home-icons/` and
@@ -45,7 +45,8 @@ python3 tools/prepare_android_assets.py --asset-output builds/android-demand-ass
 The Android build workflow retains both the signed candidate and its matching
 native asset payload. Run `Prepare Android test download` with the successful
 main candidate run ID. It uploads the verified assets to the browser asset
-bucket under the APK's own immutable build ID, then uploads and verifies the
+bucket under `android/releases/BUILD_ID/`, separate from browser retention,
+then uploads and verifies the
 signed APK in the updates bucket. It does not replace any updater manifest,
 Pages deployment, or active browser configuration. Test the resulting direct
 APK link on a device before running the existing `Publish Android release`

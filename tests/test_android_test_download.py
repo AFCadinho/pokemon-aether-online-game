@@ -37,7 +37,7 @@ class AndroidTestDownloadTests(unittest.TestCase):
             if corrupt:
                 (root / 'android-assets/home-icons/icon.png').write_bytes(b'bad')
             previous = b'{"game":{"version":"0.3.89","versionCode":6}}'
-            origin = f'https://web-assets.pokeaether.com/web/releases/{build}/'
+            origin = f'https://web-assets.pokeaether.com/android/releases/{build}/'
             responses = {origin + relative: body for relative, body in payload.items()}
             responses[origin + 'mobile-assets/catalog.json'] = catalog_bytes
             responses[game['url']] = b'apk'
@@ -68,7 +68,7 @@ class AndroidTestDownloadTests(unittest.TestCase):
                     self.assertNotIn('web-release-config.json', keys)
                     if mode == '--assets-only':
                         self.assertEqual(len(keys), 5)
-                        self.assertEqual(keys[-1], f'web/releases/{build}/mobile-assets/catalog.json')
+                        self.assertEqual(keys[-1], f'android/releases/{build}/mobile-assets/catalog.json')
                     else:
                         self.assertEqual(keys, ['game/' + apk_name])
                         self.assertTrue(json.loads(Path('android-test-download.json').read_text())['apkDownloadReady'])

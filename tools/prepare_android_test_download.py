@@ -59,7 +59,7 @@ def main() -> None:
     previous_game = json.loads(previous_manifest)['game']
     if game['versionCode'] <= previous_game['versionCode']:
         raise SystemExit('Test version code must exceed the active Android release')
-    prefix = f'web/releases/{build}/'
+    prefix = f'android/releases/{build}/'
     def upload(item):
         path, relative = item
         _upload_file(config, path, prefix + relative)
