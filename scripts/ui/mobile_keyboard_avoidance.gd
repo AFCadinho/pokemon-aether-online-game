@@ -12,10 +12,15 @@ var _shift := Vector2.ZERO
 
 
 func _process(_delta: float) -> void:
-	if not OS.has_feature("mobile"):
+	var window_fit := get_node_or_null("/root/WindowFit")
+	if window_fit == null or not window_fit.call("is_touch_ui"):
 		return
-	var keyboard_height := DisplayServer.virtual_keyboard_get_height()
+	var keyboard_height := DisplayServer.virtual_keyboard_get_height() if DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD) else 0
 	var window_bottom := float(DisplayServer.window_get_position().y + DisplayServer.window_get_size().y)
+	if OS.has_feature("web"):
+		var obscured := float(JavaScriptBridge.eval("window.visualViewport ? Math.max(0, window.innerHeight - visualViewport.height - visualViewport.offsetTop) : 0", true))
+		var css_height := float(JavaScriptBridge.eval("window.innerHeight", true))
+		keyboard_height = obscured * float(DisplayServer.window_get_size().y) / maxf(css_height, 1.0)
 	update_layout(keyboard_height, window_bottom)
 
 

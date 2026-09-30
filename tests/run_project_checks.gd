@@ -104,6 +104,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/account_email_login_check.gd",
 	"res://tests/login_return_notice_check.gd",
 	"res://tests/mobile_keyboard_avoidance_check.gd",
+	"res://tests/mobile_browser_ui_check.gd",
 	"res://tests/web_memory_probe_check.gd",
 	"res://tests/privacy_account_controls_check.gd",
 	"res://tests/client_version_contract_check.gd",

@@ -35,6 +35,9 @@ const WORLD_PIXEL_SCALE_MODE_AUTO := "auto"
 const WORLD_PIXEL_SCALE_MODE_FIXED := "fixed"
 const MOUNT_MODE_LAND := MountServiceScript.MOVEMENT_MODE_LAND
 const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
+const DEFAULT_UI_SCALE := 100.0
+const MIN_UI_SCALE := 75.0
+const MAX_UI_SCALE := 150.0
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
@@ -79,6 +82,7 @@ var world_pixel_scale := DEFAULT_WORLD_PIXEL_SCALE
 var world_pixel_scale_mode := WORLD_PIXEL_SCALE_MODE_AUTO
 var selected_land_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_LAND)
 var selected_surf_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_SURF)
+var ui_scale := DEFAULT_UI_SCALE
 var cursor_scale := DEFAULT_CURSOR_SCALE
 var master_volume := 80.0
 var music_volume := 55.0
@@ -178,6 +182,7 @@ func load_settings() -> void:
 		MOUNT_MODE_SURF,
 		true
 	)
+	ui_scale = _validated_ui_scale(data.get("ui_scale", DEFAULT_UI_SCALE))
 	cursor_scale = _validated_cursor_scale(data.get("cursor_scale", cursor_scale))
 	master_volume = _validated_volume(data.get("master_volume", master_volume))
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
@@ -258,6 +263,7 @@ func save_settings() -> void:
 		"world_pixel_scale_mode": world_pixel_scale_mode,
 		"selected_land_mount_id": selected_land_mount_id,
 		"selected_surf_mount_id": selected_surf_mount_id,
+		"ui_scale": ui_scale,
 		"cursor_scale": cursor_scale,
 		"master_volume": master_volume,
 		"music_volume": music_volume,
@@ -533,6 +539,21 @@ func set_selected_mount_id(movement_mode: String, mount_id: String) -> bool:
 	return true
 
 
+func set_ui_scale(value: float) -> void:
+	var validated := _validated_ui_scale(value)
+	if is_equal_approx(ui_scale, validated):
+		return
+	ui_scale = validated
+	WindowFit.apply_ui_scale()
+	_save_and_emit()
+
+
+func _validated_ui_scale(value: Variant) -> float:
+	if not (value is float or value is int) or not is_finite(float(value)):
+		return DEFAULT_UI_SCALE
+	return clampf(float(value), MIN_UI_SCALE, MAX_UI_SCALE)
+
+
 func set_cursor_scale(value: float) -> void:
 	var validated_scale := _validated_cursor_scale(value)
 	if is_equal_approx(cursor_scale, validated_scale):
@@ -769,6 +790,7 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 
 func _apply_runtime_settings() -> void:
+	WindowFit.apply_ui_scale()
 	_apply_pixel_rendering_defaults()
 	_apply_input_bindings()
 	LocalizationManager.set_locale(locale)

@@ -644,6 +644,7 @@ var donator_store_popup: DonatorStorePopup
 @onready var message_list: VBoxContainer = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList
 @onready var message_entry_template: RichTextLabel = $Control/ChatPanel/MarginContainer/VBoxContainer/MessageScroll/MarginContainer/MessageList/MessageEntry
 @onready var chat_tabs_panel: Control = $Control/ChatTabsPanel
+@onready var chat_tab_row: HBoxContainer = $Control/ChatTabsPanel/TabRow
 @onready var general_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/GeneralButton
 @onready var trade_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/TradeButton
 @onready var system_chat_tab_button: Button = $Control/ChatTabsPanel/TabRow/SystemButton
@@ -790,6 +791,7 @@ var hotbar_page_label: Label
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var dev_encounter_metadata: Dictionary = {}
 var dev_map_encounter_mode := false
+var _touch_chat_layout := Vector3.ZERO
 var collapsible_panels: Dictionary = {}
 var _collapsible_layout_dirty := true
 var chat_resize_button: Button
@@ -1784,7 +1786,7 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if OS.has_feature("mobile"):
+	if WindowFit.is_touch_ui():
 		_apply_mobile_right_quick_buttons()
 		_apply_mobile_global_buff_buttons()
 	root_control.theme = _make_main_ui_tooltip_theme()
@@ -1926,7 +1928,7 @@ func _ready() -> void:
 	_setup_chat_translate_mode_ui()
 	_setup_chat_context_selector_ui()
 	_setup_chat_tab_settings_ui()
-	if OS.has_feature("mobile"):
+	if WindowFit.is_touch_ui():
 		_apply_mobile_chat_controls()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	trade_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -2075,12 +2077,12 @@ func _apply_mobile_right_quick_buttons() -> void:
 	]
 	var bottom := -104.0
 	for button in buttons:
-		button.custom_minimum_size = Vector2(50, 50)
-		button.offset_left = -54.0
+		button.custom_minimum_size = Vector2(64, 64)
+		button.offset_left = -68.0
 		button.offset_right = -4.0
-		button.offset_top = bottom - 50.0
+		button.offset_top = bottom - 64.0
 		button.offset_bottom = bottom
-		bottom -= 55.0
+		bottom -= 68.0
 
 
 func _apply_mobile_global_buff_buttons() -> void:
@@ -2096,22 +2098,28 @@ func _apply_mobile_global_buff_buttons() -> void:
 
 
 func _apply_mobile_chat_controls() -> void:
-	var tab_row := $Control/ChatTabsPanel/TabRow as HBoxContainer
+	var scroll := ScrollContainer.new()
+	scroll.name = "TouchChatTabsScroll"
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	chat_tabs_panel.add_child(scroll)
+	chat_tab_row.reparent(scroll)
+	var tab_row := chat_tab_row
 	for child in tab_row.get_children():
 		var button := child as Button
 		if button == null:
 			continue
-		button.custom_minimum_size = Vector2(button.custom_minimum_size.x, 38.0)
-		button.add_theme_font_size_override("font_size", 15)
+		button.custom_minimum_size = Vector2(button.custom_minimum_size.x, 64.0)
+		button.add_theme_font_size_override("font_size", 20)
 	if chat_settings_button != null:
-		chat_settings_button.custom_minimum_size = Vector2(38.0, 38.0)
-	chat_input.custom_minimum_size = Vector2(chat_input.custom_minimum_size.x, 44.0)
-	chat_input.add_theme_font_size_override("font_size", 16)
-	send_button.custom_minimum_size = Vector2(send_button.custom_minimum_size.x, 44.0)
-	send_button.add_theme_font_size_override("font_size", 15)
+		chat_settings_button.custom_minimum_size = Vector2(64.0, 64.0)
+	chat_input.custom_minimum_size = Vector2(chat_input.custom_minimum_size.x, 64.0)
+	chat_input.add_theme_font_size_override("font_size", 20)
+	send_button.custom_minimum_size = Vector2(send_button.custom_minimum_size.x, 64.0)
+	send_button.add_theme_font_size_override("font_size", 20)
 	if chat_context_selector_button != null:
-		chat_context_selector_button.custom_minimum_size = Vector2(chat_context_selector_button.custom_minimum_size.x, 44.0)
-		chat_context_selector_button.add_theme_font_size_override("font_size", 15)
+		chat_context_selector_button.custom_minimum_size = Vector2(chat_context_selector_button.custom_minimum_size.x, 64.0)
+		chat_context_selector_button.add_theme_font_size_override("font_size", 20)
 	_position_chat_tabs_panel.call_deferred()
 
 
@@ -4113,7 +4121,7 @@ func _setup_normal_ui_focus_groups() -> void:
 			^"ChatPanel/MarginContainer/VBoxContainer/ChatInputDock",
 			^"ChatPanel/MarginContainer/VBoxContainer/ChatInputDock/MarginContainer/InputRow",
 			^"ChatTabsPanel",
-			^"ChatTabsPanel/TabRow",
+			^"ChatTabsPanel/TouchChatTabsScroll/TabRow" if WindowFit.is_touch_ui() else ^"ChatTabsPanel/TabRow",
 		],
 		party_panel: [
 			^"PartyPanel",
@@ -12534,6 +12542,8 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	if WindowFit.is_touch_ui():
+		_fit_touch_popups()
 	if has_meta("battle_chat_active"):
 		_refresh_session_logout_countdown()
 		_refresh_chat_mute_countdown()
@@ -31186,7 +31196,39 @@ func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "action_bar", toggle_actions_collapse_button)
 	_register_collapsible_panel("dex_actions", dex_actions_panel, "action_bar", dex_actions_collapse_button)
+	if WindowFit.is_touch_ui():
+		for panel_id: String in ["party", "chat", "location", "dex_actions", "hotkey_sidebar", "options", "actions", "player_status"]:
+			collapsible_panels[panel_id]["collapsed"] = true
+			_apply_collapsible_panel_state(panel_id)
 	_position_collapsible_buttons()
+
+func _fit_touch_popups() -> void:
+	# Existing desktop workspaces keep their own layout, but their close buttons
+	# must remain inside the touch viewport after resize or UI zoom.
+	var hud: Array[Control] = [chat_panel, chat_tabs_panel, global_buffs_panel, personal_buffs_panel, settings_menu]
+	var columns := maxi(1, int((root_control.size.x - 8) / 68))
+	var top := 8.0 + ceilf(8.0 / columns) * 68.0
+	var available := root_control.size - Vector2(16, top + 8)
+	var chat_layout := Vector3(root_control.size.x, root_control.size.y, 1.0 if chat_panel.visible else 0.0)
+	if chat_layout != _touch_chat_layout:
+		_touch_chat_layout = chat_layout
+		if chat_panel.visible:
+			var tabs_height := chat_tabs_panel.get_combined_minimum_size().y + CHAT_TABS_GAP
+			var factor := minf(1, minf(available.x / chat_panel.size.x, available.y / (chat_panel.size.y + tabs_height)))
+			chat_panel.scale = Vector2.ONE * factor
+			chat_tabs_panel.scale = chat_panel.scale
+			chat_panel.position = Vector2(8, top + tabs_height * factor)
+			_position_chat_tabs_panel()
+	for child in root_control.get_children():
+		var panel := child as PanelContainer
+		if panel == null or not panel.visible or panel in hud:
+			continue
+		var factor := minf(1, minf(available.x / maxf(panel.size.x, 1), available.y / maxf(panel.size.y, 1)))
+		panel.scale = Vector2.ONE * maxf(0.1, factor)
+		var extent := panel.size * panel.scale
+		panel.position.x = clampf(panel.position.x, 8, maxf(8, root_control.size.x - extent.x - 8))
+		panel.position.y = clampf(panel.position.y, top, maxf(top, root_control.size.y - extent.y - 8))
+
 
 func _setup_chat_resize_button() -> void:
 	chat_panel.custom_minimum_size = CHAT_MIN_SIZE
@@ -31274,8 +31316,8 @@ func _register_collapsible_panel(
 	if button == null:
 		button = Button.new()
 		root_control.add_child(button)
-	button.custom_minimum_size = COLLAPSE_BUTTON_SIZE
-	button.size = COLLAPSE_BUTTON_SIZE
+	button.custom_minimum_size = Vector2(44, 44) if WindowFit.is_touch_ui() else COLLAPSE_BUTTON_SIZE
+	button.size = button.custom_minimum_size
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.z_index = UI_BASE_Z_INDEX
 	button.text = _collapsible_button_glyph(side, false)
@@ -31303,6 +31345,11 @@ func _on_collapsible_panel_button_pressed(panel_id: String) -> void:
 	_focus_normal_ui_group(panel)
 
 	var collapsed := not bool(state.get("collapsed", false))
+	if WindowFit.is_touch_ui() and not collapsed:
+		for other_id: String in collapsible_panels:
+			if other_id != panel_id:
+				collapsible_panels[other_id]["collapsed"] = true
+				_apply_collapsible_panel_state(other_id)
 	state["collapsed"] = collapsed
 	collapsible_panels[panel_id] = state
 	_apply_collapsible_panel_state(panel_id)
@@ -31335,6 +31382,8 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 		var companion := companion_value as Control
 		if companion != null:
 			companion.visible = group_visible and bool(companion.get_meta("group_available", true))
+	if WindowFit.is_touch_ui() and panel_id == "player_status":
+		settings_button.visible = true
 	button.visible = available
 	button.text = _collapsible_button_glyph(str(state.get("side", "right")), collapsed)
 	_set_localized_control_property(
@@ -31466,11 +31515,22 @@ func _position_collapsible_button(panel_id: String) -> void:
 			position.x = rect.position.x + rect.size.x + COLLAPSE_BUTTON_MARGIN
 			position.y = rect.position.y + rect.size.y - COLLAPSE_BUTTON_SIZE.y
 
+	var button_size := Vector2(64, 64) if WindowFit.is_touch_ui() else COLLAPSE_BUTTON_SIZE
+	if WindowFit.is_touch_ui():
+		var order: Array[String] = ["options", "actions", "party", "chat", "location", "dex_actions", "hotkey_sidebar", "player_status"]
+		var index := order.find(panel_id)
+		var columns := maxi(1, int((root_control.size.x - 8) / 68))
+		position = Vector2(4 + (index % columns) * 68, 4 + int(index / columns) * 68)
+		button.text = LocalizationManager.text("ui.mobile.panel." + panel_id)
+		button.add_theme_font_size_override("font_size", 16)
 	button.position = position
-	button.size = COLLAPSE_BUTTON_SIZE
+	button.size = button_size
 
 func _position_chat_resize_button() -> void:
 	if chat_resize_button == null:
+		return
+	if WindowFit.is_touch_ui():
+		chat_resize_button.hide()
 		return
 
 	var state: Dictionary = collapsible_panels.get("chat", {})
@@ -31510,7 +31570,7 @@ func _position_chat_tabs_panel() -> void:
 	var viewport_size := root_control.size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
 		viewport_size = get_viewport().get_visible_rect().size
-	var tab_row := $Control/ChatTabsPanel/TabRow as HBoxContainer
+	var tab_row := chat_tab_row
 	var tabs_size := chat_tabs_panel.get_combined_minimum_size()
 	if tab_row != null:
 		var row_minimum_size := tab_row.get_combined_minimum_size()
@@ -31521,7 +31581,7 @@ func _position_chat_tabs_panel() -> void:
 	chat_tabs_panel.size = tabs_size
 	chat_tabs_panel.position = Vector2(
 		clampf(chat_panel.position.x + CHAT_TABS_LEFT_INSET, 0.0, max(0.0, viewport_size.x - tabs_size.x)),
-		max(0.0, chat_panel.position.y - tabs_size.y - CHAT_TABS_GAP)
+		max(0.0, chat_panel.position.y - tabs_size.y * chat_tabs_panel.scale.y - CHAT_TABS_GAP)
 	)
 	if chat_settings_popup != null and chat_settings_popup.visible:
 		_position_action_slot_popup(chat_settings_popup, chat_settings_button)
@@ -32157,7 +32217,7 @@ func _setup_pm_chat_ui() -> void:
 	_set_localized_control_property(pm_tab_button, "text", "ui.chat.tab.pm")
 	pm_tab_button.focus_mode = Control.FOCUS_NONE
 	pm_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_PM))
-	$Control/ChatTabsPanel/TabRow.add_child(pm_tab_button)
+	chat_tab_row.add_child(pm_tab_button)
 	_apply_button_style(pm_tab_button, "primary")
 	pm_tab_attention_badge = _create_attention_badge_for_button(pm_tab_button, 4.0, 3.0)
 	_refresh_pm_tab_label()
@@ -32287,7 +32347,7 @@ func _setup_guild_chat_ui() -> void:
 	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(guild_chat_tab_button, "tooltip_text", "ui.chat.guild.tooltip")
 	guild_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_GUILD))
-	$Control/ChatTabsPanel/TabRow.add_child(guild_chat_tab_button)
+	chat_tab_row.add_child(guild_chat_tab_button)
 	_apply_button_style(guild_chat_tab_button, "primary")
 	guild_chat_attention_badge = _create_attention_badge_for_button(
 		guild_chat_tab_button,
@@ -32316,7 +32376,7 @@ func _setup_language_chat_ui() -> void:
 		"ui.chat.languages.tooltip"
 	)
 	language_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_LANGUAGES))
-	$Control/ChatTabsPanel/TabRow.add_child(language_chat_tab_button)
+	chat_tab_row.add_child(language_chat_tab_button)
 	_apply_button_style(language_chat_tab_button, "primary")
 
 	var empty_state := _create_chat_empty_state(
@@ -32736,7 +32796,7 @@ func _setup_all_chat_tab() -> void:
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(all_chat_tab_button, "tooltip_text", "ui.chat.all.tooltip")
 	all_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_ALL))
-	$Control/ChatTabsPanel/TabRow.add_child(all_chat_tab_button)
+	chat_tab_row.add_child(all_chat_tab_button)
 	_apply_button_style(all_chat_tab_button, "primary")
 	_reorder_chat_tab_buttons()
 
@@ -32750,7 +32810,7 @@ func _setup_help_chat_tab() -> void:
 	_set_localized_control_property(help_chat_tab_button, "text", "ui.chat.tab.help")
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_HELP))
-	$Control/ChatTabsPanel/TabRow.add_child(help_chat_tab_button)
+	chat_tab_row.add_child(help_chat_tab_button)
 	_apply_button_style(help_chat_tab_button, "primary")
 	_reorder_chat_tab_buttons()
 
@@ -32759,7 +32819,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	if chat_settings_button != null:
 		return
 
-	var tab_row := $Control/ChatTabsPanel/TabRow
+	var tab_row := chat_tab_row
 	chat_settings_button = Button.new()
 	chat_settings_button.name = "ChatSettingsButton"
 	chat_settings_button.icon = MORE_ACTIONS_ICON
@@ -33033,7 +33093,7 @@ func _chat_tab_button_for_id(tab_id: String) -> Button:
 
 
 func _reorder_chat_tab_buttons() -> void:
-	var tab_row := $Control/ChatTabsPanel/TabRow
+	var tab_row := chat_tab_row
 	var index: int = 0
 	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
 		var button := _chat_tab_button_for_id(tab_id)
