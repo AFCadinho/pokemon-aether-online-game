@@ -19,9 +19,6 @@ var _story_player: Node2D
 var _heart_origin := Vector2.ZERO
 var _heart_tween: Tween
 var _misty_nameplate: Control
-var _portrait_overlay_layer: CanvasLayer
-var _portrait_overlay_root: Control
-var _player_portrait_renderer: TrainerHeadPortrait
 
 
 func _ready() -> void:
@@ -35,8 +32,6 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if _heart_tween != null and _heart_tween.is_valid():
 		_heart_tween.kill()
-	if is_instance_valid(_portrait_overlay_layer):
-		_portrait_overlay_layer.queue_free()
 
 
 func set_story_player(player: Node2D) -> void:
@@ -219,36 +214,7 @@ func _dialogue_portrait(stage: int, speaker_name: String) -> Texture2D:
 
 
 func _player_mugshot() -> Texture2D:
-	if not is_instance_valid(_player_portrait_renderer):
-		_ensure_portrait_overlay()
-		_player_portrait_renderer = TrainerHeadPortrait.new()
-		_player_portrait_renderer.name = "PlayerDialoguePortrait"
-		_player_portrait_renderer.head_only = false
-		_player_portrait_renderer.render_scale = 1.25
-		_player_portrait_renderer.custom_minimum_size = Vector2(64, 64)
-		_player_portrait_renderer.size = Vector2(64, 64)
-		_player_portrait_renderer.position = Vector2(-128, -128)
-		_player_portrait_renderer.appearance_state = PlayerSave.to_appearance_state()
-		_portrait_overlay_root.add_child(_player_portrait_renderer)
-		await get_tree().process_frame
-	if _player_portrait_renderer.viewport == null:
-		return null
-	return _player_portrait_renderer.viewport.get_texture()
-
-
-func _ensure_portrait_overlay() -> void:
-	if is_instance_valid(_portrait_overlay_root):
-		return
-	_portrait_overlay_layer = CanvasLayer.new()
-	_portrait_overlay_layer.layer = 80
-	var overlay_host := get_tree().current_scene
-	if overlay_host == null:
-		overlay_host = get_tree().root
-	overlay_host.add_child(_portrait_overlay_layer)
-	_portrait_overlay_root = Control.new()
-	_portrait_overlay_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_portrait_overlay_layer.add_child(_portrait_overlay_root)
-	_portrait_overlay_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	return BattlePlayerTrainerCatalog.build_dialogue_portrait(PlayerSave.to_appearance_state())
 
 
 func _player_speaker_name() -> String:

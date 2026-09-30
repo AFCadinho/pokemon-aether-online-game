@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player dialogue portraits now use trainer-card artwork; Mt. Moon’s future self uses the matching masked Mysterious Outfit portrait.
+
 - Shiny follower sparkles now surround the visible Pokémon and scale with its sprite, instead of floating above small followers.
 
 - De drie huizen in Vermilion City hebben toegankelijke interieurs met de gedeelde Vermilion House-visual, collision en eigen stadsverbindingen.
