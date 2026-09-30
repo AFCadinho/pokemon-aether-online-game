@@ -79,7 +79,7 @@ func _ensure_catalog() -> void:
 	if not _catalog.is_empty() or _now() < _catalog_retry_at:
 		return
 	_catalog_loading = true
-	var bytes := await _download(_asset_url("home-icons/catalog.json"))
+	var bytes := await _download_relative("home-icons/catalog.json")
 	var parsed: Variant = JSON.parse_string(bytes.get_string_from_utf8())
 	if parsed is Dictionary and parsed.get("normal") is Dictionary and parsed.get("shiny") is Dictionary:
 		_catalog = parsed
@@ -95,7 +95,7 @@ func _load_image(relative: String) -> Image:
 	if _files.has(relative):
 		return _files[relative] as Image
 	_files[relative] = null
-	var bytes := await _download(_asset_url(relative))
+	var bytes := await _download_relative(relative)
 	var image := Image.new()
 	if bytes.is_empty() or image.load_png_from_buffer(bytes) != OK or image.get_width() > 2048 or image.get_height() > 2048:
 		_files.erase(relative)
@@ -185,3 +185,9 @@ func _trim_texture_cache() -> void:
 		for texture: Texture2D in [entry.full, entry.party]:
 			bytes -= texture.get_width() * texture.get_height() * 4
 		_cache.erase(key)
+
+func _download_relative(relative: String) -> PackedByteArray:
+	if OS.has_feature("mobile"):
+		var path: String = await get_tree().root.get_node("MobileAssetService").fetch(relative)
+		return FileAccess.get_file_as_bytes(path) if path != "" else PackedByteArray()
+	return await _download(_asset_url(relative))

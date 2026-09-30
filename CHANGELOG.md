@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Android HOME icons, Pokémon cries and the full-quality login video now download separately and remain cached between launches. Battle sprites also use a bounded persistent cache.
+
 - Sandslash en Toucannon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Ogen, shiny-kleuren, battleplaatsing en Toucannons vleugelovergangen zijn gecontroleerd.
 
 - Fixed the entrances to Rival’s House and the Cerulean Bike Shop so stepping onto the door tile reliably enters the building on Android and other platforms.

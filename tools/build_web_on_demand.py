@@ -49,3 +49,21 @@ def prepare_login_media(root: Path, output: Path, ffmpeg='ffmpeg') -> int:
                     '-frames:v', '1', '-c:v', 'libwebp', '-quality', '95', str(poster)], check=True)
     marker.write_text(digest)
     return video.stat().st_size + poster.stat().st_size
+
+
+def prepare_mobile_assets(root: Path, output: Path) -> int:
+    """Reuse the browser release's assets; native Godot needs the original Theora."""
+    source = root / 'assets/video/login_background.ogv'
+    target = output / 'login-media/world.ogv'
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, target)
+    files = [p for folder in ('home-icons', 'browser-audio', 'login-media')
+             for p in (output / folder).rglob('*') if p.is_file()
+             and (folder == 'home-icons' or p == target or '/pokemon_cries/' in p.as_posix())]
+    catalog = {p.relative_to(output).as_posix(): {
+        'sha256': hashlib.sha256(p.read_bytes()).hexdigest(), 'size': p.stat().st_size
+    } for p in sorted(files)}
+    destination = output / 'mobile-assets/catalog.json'
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(catalog, ensure_ascii=True) + '\n')
+    return target.stat().st_size + destination.stat().st_size

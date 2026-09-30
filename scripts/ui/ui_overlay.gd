@@ -11532,7 +11532,7 @@ func _warm_up_pokedex() -> void:
 		var species_values := _array_from_variant(search_result.get("species", []))
 		for index in range(species_values.size()):
 			var species_value: Variant = species_values[index]
-			if species_value is Dictionary and not OS.has_feature("web"):
+			if species_value is Dictionary and not (OS.has_feature("web") or OS.has_feature("mobile")):
 				_load_pokedex_species_list_icon(species_value as Dictionary)
 			if index > 0 and index % 8 == 0:
 				await get_tree().process_frame
@@ -27282,7 +27282,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 		pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
 		_apply_pokemon_summary_sprite_center_offset(frames, pokemon_summary_animated_sprite.animation)
 		pokemon_summary_animated_sprite.play()
-		if OS.has_feature("web") and bool(frames.get_meta("home_fallback", false)):
+		if (OS.has_feature("web") or OS.has_feature("mobile")) and bool(frames.get_meta("home_fallback", false)):
 			var home_texture := frames.get_frame_texture("idle", 0)
 			home_texture.changed.connect(_refresh_summary_home_preview.bind(web_generation, weakref(frames)), CONNECT_ONE_SHOT)
 		if frames.has_meta("rendered_asset"):
@@ -36667,7 +36667,7 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	if OS.has_feature("web"):
+	if (OS.has_feature("web") or OS.has_feature("mobile")):
 		WebHomeIconService.bind_visible(icon, species_name, pokedex_shiny_mode)
 	else:
 		icon.texture = _load_pokedex_species_list_icon(species)
@@ -37015,7 +37015,7 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
 		_apply_pokedex_sprite_center_offset(loaded_frames, pokedex_animated_sprite.animation)
 		pokedex_animated_sprite.play()
-		if OS.has_feature("web") and bool(loaded_frames.get_meta("home_fallback", false)):
+		if (OS.has_feature("web") or OS.has_feature("mobile")) and bool(loaded_frames.get_meta("home_fallback", false)):
 			var home_texture := loaded_frames.get_frame_texture("idle", 0)
 			home_texture.changed.connect(_refresh_pokedex_home_preview.bind(web_generation, weakref(loaded_frames)), CONNECT_ONE_SHOT)
 		if loaded_frames.has_meta("rendered_asset"):

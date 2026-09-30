@@ -40,7 +40,7 @@ func _get_cry_path(cry_key: String, prefer_anime_cry: bool) -> String:
 
 
 func _cry_exists(path: String) -> bool:
-	return WebAudioBridge.has_resource(path) if OS.has_feature("web") else ResourceLoader.exists(path)
+	return WebAudioBridge.has_resource(path) if (OS.has_feature("web") or OS.has_feature("mobile")) else ResourceLoader.exists(path)
 
 
 func _normalize_species_id(species: String) -> String:

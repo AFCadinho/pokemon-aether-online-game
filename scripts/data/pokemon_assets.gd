@@ -133,7 +133,7 @@ static func load_texture(path: String) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 static func load_home_sprite(species: String, is_shiny: bool = false) -> Texture2D:
-	if OS.has_feature("web"):
+	if (OS.has_feature("web") or OS.has_feature("mobile")):
 		return (Engine.get_main_loop() as SceneTree).root.get_node("WebHomeIconService").get_icon(species, is_shiny)
 	if is_shiny:
 		for sprite_name in _get_home_sprite_names(species):
@@ -246,7 +246,7 @@ static func _normalize_home_sprite_key(value: String) -> String:
 	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-").replace(".", "")
 
 static func load_party_icon(species: String, is_shiny: bool = false) -> Texture2D:
-	if OS.has_feature("web"):
+	if (OS.has_feature("web") or OS.has_feature("mobile")):
 		return (Engine.get_main_loop() as SceneTree).root.get_node("WebHomeIconService").get_icon(species, is_shiny, true)
 	var cache_key := "%s|%s" % [species, str(is_shiny)]
 	var cached_icon: Variant = party_icon_cache.get(cache_key)
@@ -264,7 +264,7 @@ static func load_party_icon(species: String, is_shiny: bool = false) -> Texture2
 	return unknown_icon
 
 static func load_unknown_icon() -> Texture2D:
-	if OS.has_feature("web"):
+	if (OS.has_feature("web") or OS.has_feature("mobile")):
 		return load(UNKNOWN_HOME_SPRITE_PATH) as Texture2D
 	for path in build_pokemon_sprite_path("pokemon_home/unknown.png"):
 		var texture := load_texture(path)

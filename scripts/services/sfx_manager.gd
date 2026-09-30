@@ -157,8 +157,19 @@ func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scal
 		WebAudioBridge.play_sfx(sound_path, _web_cry_volume(volume_offset_db), pitch_scale)
 		return
 
-	var stream := ContentPacks.cry(species)
-	if stream == null:
+	var stream: AudioStream
+	if OS.has_feature("mobile"):
+		if sound_path == "":
+			return
+		var started := Time.get_ticks_msec()
+		var path: String = await get_tree().root.get_node("MobileAssetService").fetch("browser-audio/" + sound_path.trim_prefix("res://"))
+		# A cry should not suddenly play long after the triggering action.
+		if path == "" or Time.get_ticks_msec() - started > 1500:
+			return
+		stream = AudioStreamOggVorbis.load_from_file(path)
+	else:
+		stream = ContentPacks.cry(species)
+	if stream == null and not OS.has_feature("mobile"):
 		stream = _get_stream("pokemon_cry:%s" % sound_path, {"path": sound_path})
 	if stream == null:
 		return
