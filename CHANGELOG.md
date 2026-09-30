@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion Port heeft een interieur met de artist-TMX-visual, collision en doorgangen tussen de stad en de docks.
+
 - Vermilion City gebruikt de opnieuw geïmporteerde artist-TMX-visual, met bijgewerkte terrein-, gras- en objectlagen.
 
 - Geschilderde waterranden in Vermilion City worden nu als water herkend: lopen is geblokkeerd en Surf en vissen gebruiken de Water-laag.
