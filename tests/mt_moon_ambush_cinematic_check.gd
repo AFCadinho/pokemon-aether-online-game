@@ -14,7 +14,7 @@ func _init() -> void:
 func _run() -> void:
 	for gender: String in ["male", "female"]:
 		var portrait := BattlePlayerTrainerCatalog.build_dialogue_portrait({"gender": gender})
-		_expect(portrait != null and portrait.get_size() == Vector2(64, 64), "%s trainer-card portrait fits dialogue" % gender)
+		_expect(portrait != null and portrait.get_size() == Vector2(160, 160), "%s trainer-card portrait retains the full native canvas" % gender)
 		_expect(portrait != null and portrait.get_image().get_used_rect().has_area(), "%s portrait contains visible art" % gender)
 	var controller = load("res://scripts/world/story/mt_moon_ambush_controller.gd").new()
 	var player_portrait: Texture2D = controller._player_mugshot()
