@@ -31,6 +31,8 @@ func _run() -> void:
 		var prepared := _convert(entry, output)
 		if not prepared.is_empty():
 			result.append(prepared)
+	if result.size() != data.size():
+		errors.append("Runtime conversion did not produce every requested model")
 	if not errors.is_empty():
 		_write_json(output.path_join("conversion-errors.json"), errors)
 		printerr("CONVERSION_FAILED: ", "\n".join(errors), "\nPartial scenes retained; no catalog published")
@@ -121,6 +123,12 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 	if errors.size() != before:
 		node.free()
 		return {}
+	if entry.get("complete_pose_channels", false):
+		var completion := preload("complete_pose_channels.gd").new()
+		if not completion.apply(node):
+			errors.append(species + ": pose channel completion failed: " + completion.failure)
+			node.free()
+			return {}
 	if entry.has("visibility"):
 		var visibility := preload("visibility_pack.gd").new()
 		if not entry.visibility is Dictionary or not visibility.apply(node, entry.visibility, glb_hash):

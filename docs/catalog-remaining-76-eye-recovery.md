@@ -51,13 +51,46 @@ inspected again. On 2026-09-30 the user answered **“allemaal goed”** to the
 new page's **idle/attack eyes and body details** review. That approval is bound
 to the exact page and runtime-stage hashes in the checkpoint.
 
+## Sleep review and clip transitions
+
+The source eye graphs and atlases were checked for all 75 selected Biochao
+sources, preserving the original Blend identity and SHA. Sirfetch'd uses its
+selected native ZA sleep expression. For 58 species, the actual closed native
+atlas selection is embedded only in the sleep clip. Fixed or geometric eye
+sources retain their native presentation. This is an authored expression
+selection; it does not claim to recover native blink timing.
+
+All 152 candidates were rendered in idle and sleep with zero reported errors.
+On 2026-09-30 the user approved the combined 76-pair sleep page with
+**“Allemaal goed”**. Exact page, capture report and scene-stage hashes are
+recorded separately from the earlier appearance approval.
+
+The earlier Togedemaru and Dhelmise failures were traced to omitted constant
+transform channels in native clips. Godot retained an attack's bone scale when
+idle did not animate that channel. The opt-in offline `complete_pose_channels`
+step now supplies missing channels using the scene's original baseline pose.
+Existing native curves are untouched. Conversion also rejects an incomplete
+result count instead of publishing an empty report after a script failure.
+
+Focused Godot checks cover restoration after an attack, unchanged original
+keys, repeat application and rejection of an unknown bone binding. Actual
+candidate proofs verify all 57,716 original tracks, clocks and interpolations,
+plus fresh bone poses at start/midpoint/end of every clip in all 152 scenes.
+All 76 normal/shiny scene structures match, and all 76 normals return to their
+original idle bounds after a full sequential clip cycle. No clearance gate
+was weakened.
+
+Evidence is under `shiny-76/sleep-battle-v1`: `native-pose-proof.json`,
+`runtime-pair-parity.json`, `transition-all.json`, `eye-sleep-policy.json`
+and `eye-sleep-captures/review.json`.
+
 ## Remaining work
 
-Sleep expressions and final battle qualification were explicitly excluded
-from that appearance approval. They remain pending for all 76. The four-model
-sleep-expression pilot is separate evidence and is not admitted into these
-current scenes. Native eye atlas layouts must be checked before applying
-sleep expression offsets to other materials.
+Final battle qualification remains pending for all 76. Thirty-four native
+sources use centimetres and require placement scale 0.01; the other 42 retain
+scale 1.0. This unit conversion is checked against local species dimensions
+and retains native proportions. Battle readability, large-model framing and
+motion clearance still require fresh measurements and review.
 
 The earlier 73-model grounding report belongs to superseded scene hashes.
 It also reported idle half-frame failures for Togedemaru and Dhelmise. Resolve

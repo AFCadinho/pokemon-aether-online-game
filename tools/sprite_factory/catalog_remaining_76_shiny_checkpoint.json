@@ -7,9 +7,9 @@
   "entries": [
     {
       "species": "metapod",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "abf873d5b32d587cf9c2054557f868bb2c046510d3541a15502b721fedc4aa52",
-      "shiny_runtime_sha256": "d38ddbe659c9e984eb6fae65bcd3a7e1a6f839a8af2702d469958753f88c2e0e",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "b70776099c145c484be37d27a8693710d5ed8f9187bc97a8ed15e28a4e24e701",
+      "shiny_runtime_sha256": "0a789c6030342555d05f90565c12239f2ebab9cdc6309f6770433cea2a5a995e",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -34,7 +34,7 @@
           "sha256": "635cc73da3827eff2d163de1d6f31ea949f3b2016088aa28fa2a726c72611a59"
         }
       ],
-      "scene_geometry_animation_sha256": "9bbf13c99160098135ee9b9b8d6fbdfa95379ceba2c90af43134e125e4c6a328",
+      "scene_geometry_animation_sha256": "5ee64ae31d89a59e0ae10725e7603760a6717c2784b4c19487f10a99ed28a712",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -553,13 +553,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "abf873d5b32d587cf9c2054557f868bb2c046510d3541a15502b721fedc4aa52",
+        "shiny": "d38ddbe659c9e984eb6fae65bcd3a7e1a6f839a8af2702d469958753f88c2e0e"
+      },
+      "sleep_policy": {
+        "species": "metapod",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "butterfree",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "044c1f65e42ace2d5d8040a4b925f814be3323dbb2c716b129469765715e42d6",
-      "shiny_runtime_sha256": "c7c40e3aecb733e90f3c8ca639a39e73aba2f169a0099fefae3c1a25097ab2ec",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "211e0b200a086bf4be0cf35decfd760df6307ac543664713864211441ba51243",
+      "shiny_runtime_sha256": "bf764540c047c26084ff837806ebbdceedb0482a36c5d49f0a2c498d1e463033",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -584,7 +616,7 @@
           "sha256": "d406c1648b059a1257300a4163dab806c389d6ca72f781dd280e1b3062c478d7"
         }
       ],
-      "scene_geometry_animation_sha256": "6fd78332e2f648cb9b756bcdbff06dd77a985678d4bbe6e9019044c79417cbd3",
+      "scene_geometry_animation_sha256": "33e77eea1b23e760c1d39b8ff6024f18b47d23538d161d7aa3cdee3dfc77a14e",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -910,13 +942,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "044c1f65e42ace2d5d8040a4b925f814be3323dbb2c716b129469765715e42d6",
+        "shiny": "c7c40e3aecb733e90f3c8ca639a39e73aba2f169a0099fefae3c1a25097ab2ec"
+      },
+      "sleep_policy": {
+        "species": "butterfree",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "raticate",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "95698d912b1ff3da2e33be97e4772025a701c9f91cf2bf11d8018e98a9bb2726",
-      "shiny_runtime_sha256": "99bc75a20fac695cf540474472170cc63f387708aa3bd0119dd5e8f12713fe63",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "18f3117d31a66e690eb0d82399300a42d6e14d30b83318cb37740774aa63cd6d",
+      "shiny_runtime_sha256": "bdeb5a7c7ef7d357c0311c23f0874a1b12e0ec801601407522953ef8d842b4ff",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -941,7 +985,7 @@
           "sha256": "3625521157a524c3c8aeb603df5463b6147e6cbe7f8b57b797b031f7d64a6f7f"
         }
       ],
-      "scene_geometry_animation_sha256": "57fa8649a8ae25abcb0b8c34b9753f9c5917d40c75b6c00ac0259084d730b99c",
+      "scene_geometry_animation_sha256": "82c823178a77201f92639b93f9ba79243ff9fad8d88d1dc7578d36de67fb0b5d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -1187,13 +1231,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "95698d912b1ff3da2e33be97e4772025a701c9f91cf2bf11d8018e98a9bb2726",
+        "shiny": "99bc75a20fac695cf540474472170cc63f387708aa3bd0119dd5e8f12713fe63"
+      },
+      "sleep_policy": {
+        "species": "raticate",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              0.5,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            0.5,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "nidoran-f",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "76c5c11156461c84113921d81b167c35eabf9a707dc80b7a753b73fa7d138037",
-      "shiny_runtime_sha256": "630cc9c81df91967d1f67df1a2d29fc60e4106cfd76ceee992af8f033c13385c",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "9e4cf09bdba2f6a4e8cbc6e34ea69036916282fd1e6315eceddbcb9296cb23b5",
+      "shiny_runtime_sha256": "a2121192a21917b736722a40e5991881d7fed4464db163e83ad4229bec1b4837",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -1218,7 +1294,7 @@
           "sha256": "79db28327cd08e98ab369b867a8968a2b0eefa0d160d31dcc0e9ed64cba6b9e7"
         }
       ],
-      "scene_geometry_animation_sha256": "e31a73d272b36fdb7ea1d56583d0e0e1b14e56868ea7684b934e12014d4b929c",
+      "scene_geometry_animation_sha256": "ccb2f9a132b4a5ce36c2d299e1ca8311e2b40c0cbc9abd5cd581ea5faea3cf38",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -1490,13 +1566,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "76c5c11156461c84113921d81b167c35eabf9a707dc80b7a753b73fa7d138037",
+        "shiny": "630cc9c81df91967d1f67df1a2d29fc60e4106cfd76ceee992af8f033c13385c"
+      },
+      "sleep_policy": {
+        "species": "nidoran-f",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              0.5,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            0.5,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "nidoran-m",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "5736ea362a16ccda95a756690dd211082b4e35532736f9805a9c719769596952",
-      "shiny_runtime_sha256": "3533a7220f067953c591587e6c3873eac5b02d9c73dba8bf570b7040a27e1e67",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "09c0a538a77a83fa69688519d10d506c441b9e291d7909b3daa112363ef5a74c",
+      "shiny_runtime_sha256": "0f7e107f4bdb7373d235ef5bbf39b112242b40a61e16e174ffd406b33a38bd6f",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -1521,7 +1629,7 @@
           "sha256": "805b42d7153c85685643264d93118969f7873e27964033332dd1ba51c379b2b7"
         }
       ],
-      "scene_geometry_animation_sha256": "2ae2018b03a9091e7754cf499749b209ab9009926ffc456e3649dbc9e8892be5",
+      "scene_geometry_animation_sha256": "1e14d3b1283500af64ae92f7700845a97e00d206c379bc600fb84206bf97585d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -1842,13 +1950,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "5736ea362a16ccda95a756690dd211082b4e35532736f9805a9c719769596952",
+        "shiny": "3533a7220f067953c591587e6c3873eac5b02d9c73dba8bf570b7040a27e1e67"
+      },
+      "sleep_policy": {
+        "species": "nidoran-m",
+        "sleep_eye_materials": [
+          "EyeL",
+          "EyeR"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "EyeL",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              -1.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            -1.0,
+            1.5
+          ]
+        },
+        {
+          "material": "EyeR",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "parasect",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "9dfc48e79025985b5b7104d45d04513db615e4769e4d382d97ec5b4297f93299",
-      "shiny_runtime_sha256": "38e24c0991fedfaa225f6132754d8672f1f52db5a0478bb48b071ad7a516b3e5",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "7a53d5a78647b3af614e4868a9684096c97f4079dd2edc6778513c472b390802",
+      "shiny_runtime_sha256": "92d41c3872d4ab9b64e6fae0087907857137567859b6e09da1b495e2352ac7b4",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -1873,7 +2031,7 @@
           "sha256": "3e029beb655847a7992de98db465866aa36ab49931fea8464e289e9e201a7f3a"
         }
       ],
-      "scene_geometry_animation_sha256": "a68d797b24d520cb5e2b910c16ace2a55e09d3aec73be84b10cd5b08ccf9da0e",
+      "scene_geometry_animation_sha256": "7a85424488db81f4572a97ccb763062ff1242d373b463904a9e5fc5c42ca134c",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -2109,13 +2267,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "9dfc48e79025985b5b7104d45d04513db615e4769e4d382d97ec5b4297f93299",
+        "shiny": "38e24c0991fedfaa225f6132754d8672f1f52db5a0478bb48b071ad7a516b3e5"
+      },
+      "sleep_policy": {
+        "species": "parasect",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "lickitung",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "4e2d3679d2b7da031d69e03f667a59f3039a47fff37e7447e738fc349f42ec61",
-      "shiny_runtime_sha256": "0c27817af696c867468ff326e1db018c305dd093b9aa31d4333ffed968a4402d",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "790cf2f0cd05a59fe4dee4f22b3ada5d66f134c1a4887b75ddfcba4b4b6d2104",
+      "shiny_runtime_sha256": "c608da3e99ff30cbcb631930bb98ab4652d4620a1bded8d90a05a190ebecd3ee",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -2140,7 +2310,7 @@
           "sha256": "01205e3963462c90980510bcd49aae70d45b77af5450a27144ea2ca2bd2e866d"
         }
       ],
-      "scene_geometry_animation_sha256": "77ad75adb8eb7dedc3a2aafd406c53db9b8320a6cf86e1cc1b28eea953ba075c",
+      "scene_geometry_animation_sha256": "5d938b4dbea76335f36860c982ba41ca5c57e2732bea2115fb4b5b46dceca629",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -2373,13 +2543,45 @@
         "runtime_approved": false
       },
       "uv_palette_selection": "Source Tongue* bones with summed weight >0.5; preserve pink tongue in gold body.",
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "4e2d3679d2b7da031d69e03f667a59f3039a47fff37e7447e738fc349f42ec61",
+        "shiny": "0c27817af696c867468ff326e1db018c305dd093b9aa31d4333ffed968a4402d"
+      },
+      "sleep_policy": {
+        "species": "lickitung",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              0.5,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            0.5,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "tangela",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "837cae45bf818a917d145e12032c288c656de10e218bd999ea52d0501c076632",
-      "shiny_runtime_sha256": "cbbee8a448043799a89a69db2a912d82bb927e555c38ed2ccb1555a8eda00e90",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "609ca19a2f3efd163fde87ed36d632b32166ccc6e46c5b00c9dfa3afe8d165f6",
+      "shiny_runtime_sha256": "ceaa52d66631230b7ba82291e90c86b81c4bb0edf778ec2cb3ed79b3c86fa4c6",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -2404,7 +2606,7 @@
           "sha256": "df8b399324040a8cf15b05e8bb16fe69bdc3bd929042f359d75cda3175f7344f"
         }
       ],
-      "scene_geometry_animation_sha256": "a54b65c0197e108f5fffce306324965dd2ca69dde7d911cb1bb8b7151446d628",
+      "scene_geometry_animation_sha256": "a0a89b2233d98d86b6a9b92e33dc44c255ffc1ae59bd047ed29e437351c9177d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -2697,13 +2899,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "837cae45bf818a917d145e12032c288c656de10e218bd999ea52d0501c076632",
+        "shiny": "cbbee8a448043799a89a69db2a912d82bb927e555c38ed2ccb1555a8eda00e90"
+      },
+      "sleep_policy": {
+        "species": "tangela",
+        "sleep_eye_materials": [
+          "EyeL",
+          "EyeR"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "EyeL",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              -1.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            -1.0,
+            2.5
+          ]
+        },
+        {
+          "material": "EyeR",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "goldeen",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "cbf9fdb5cadbc713bbc904111eb10134bddb87be95368579bbf7b7cb09b61e9b",
-      "shiny_runtime_sha256": "b36a23a15362abefc0a903acdd07baa8d6e33524040763dee8d0e14d6d4126d8",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "99b1ed79ca6a66f5e57b8db7c09efc8f7c2882abfd4a1f843ae637335084b559",
+      "shiny_runtime_sha256": "69fdd7a06faf69ae19d557dbd9a0ba5c8ee16ae64111b53e5ad55035a056d516",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -2728,7 +2980,7 @@
           "sha256": "92da8217efcc9810eca58155236d66d07f0ad58e75f746fae835c47f6854123a"
         }
       ],
-      "scene_geometry_animation_sha256": "29cfb90f37b32e2e84d3dfb2c032fc623c9f3e8d9795d50411e77b6ad94d4f9b",
+      "scene_geometry_animation_sha256": "2dc4eb6b7b05d7b5c9c80124243337498f6463a1f77d38f3b2d84b205b9d389d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -4137,13 +4389,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "cbf9fdb5cadbc713bbc904111eb10134bddb87be95368579bbf7b7cb09b61e9b",
+        "shiny": "b36a23a15362abefc0a903acdd07baa8d6e33524040763dee8d0e14d6d4126d8"
+      },
+      "sleep_policy": {
+        "species": "goldeen",
+        "sleep_eye_materials": [
+          "EyeL",
+          "EyeR"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "EyeL",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              -1.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            -1.0,
+            2.5
+          ]
+        },
+        {
+          "material": "EyeR",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "togepi",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "ae5a30ef7429e0a767d9bf0aca2831b730a8e267e2f8fac78da05a5b8bfe2ee2",
-      "shiny_runtime_sha256": "04a7fe56934392279499538d55125c3803daffae448e08071f047147786fadca",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "cbaf86210da322c349658a92c063b80278ee7030a64fc9e1fe44f2787240dda7",
+      "shiny_runtime_sha256": "1571f7a6867e29916c05fd0a3e7b77dd9b0eec01b89e8e63618b54d1d98aa1ba",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -4168,7 +4470,7 @@
           "sha256": "71b18b2f1ecd1b8cbd3fbbf3949202eb86a13ee5b155f30fd80745e032ba0902"
         }
       ],
-      "scene_geometry_animation_sha256": "21e0cb6a0c048d9d3f28cee1e7915684ea9dbcba8df4e5d18b8d71ec571d4a0c",
+      "scene_geometry_animation_sha256": "e630245842c9cc6d369efdb995d3752baa57f4df0c9366eb46597c0d235b9862",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -5762,13 +6064,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "ae5a30ef7429e0a767d9bf0aca2831b730a8e267e2f8fac78da05a5b8bfe2ee2",
+        "shiny": "04a7fe56934392279499538d55125c3803daffae448e08071f047147786fadca"
+      },
+      "sleep_policy": {
+        "species": "togepi",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "togetic",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "1792e6c6faf3d5f76d25248c0e1627eaf5905ae10ffbb16b47e9a58f3c3e0507",
-      "shiny_runtime_sha256": "1bc2f6487a7c436e52d2fdefa1678054cda187a430a39b221d2f80eff43f770f",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "b557a139c9eb3bd84ec32485bd8f775e999820315f9c59f0e1276449ff4e9cfc",
+      "shiny_runtime_sha256": "b8456bf7cbd0e25c16d52732dfbf4eb39c9fd0d805821c9b705f8e0d3a038c44",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -5794,7 +6128,7 @@
           "sha256": "83f06127b198215fb1b5f61b86edabf11a19671c60f7d4bf2431e0c9617fa1f6"
         }
       ],
-      "scene_geometry_animation_sha256": "e311cf7651786d1d41085bedebe69c4f07043c160376cbc2d17902177200357b",
+      "scene_geometry_animation_sha256": "8b64476429722f4e97bb0c61ebc211e374cf3f535b5ec87ac20cae87dfa110d2",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -6102,13 +6436,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "1792e6c6faf3d5f76d25248c0e1627eaf5905ae10ffbb16b47e9a58f3c3e0507",
+        "shiny": "1bc2f6487a7c436e52d2fdefa1678054cda187a430a39b221d2f80eff43f770f"
+      },
+      "sleep_policy": {
+        "species": "togetic",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "natu",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "dd0511d511518c9c64f97ba1fee6b423d6117d9d71458bf20ebc3a1668266739",
-      "shiny_runtime_sha256": "5570e5261f3252bd8aa3309f179743b0f4b3d95b18e7ce35b7a50c16cc919d49",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "38f0776952099c869d54456e97477a3882bf779586523ff67d8312084b876795",
+      "shiny_runtime_sha256": "29b05253626684d24d80afd84f9d9e52e57a1c23720ec66ab1a58e45b6b64a09",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -6133,7 +6499,7 @@
           "sha256": "bdbd698cdd00dd3c8dafa60a15c747b476427c5edfd4a7abc38769bfbbc21a18"
         }
       ],
-      "scene_geometry_animation_sha256": "9507eb55a5170fd8686e4491d65a60442213e650bda70b22dc68b315ea5dbb20",
+      "scene_geometry_animation_sha256": "ac0554817a57ba1f1ca431c0e3e7a45fc2e7a82e03978c7e3bb6b8e34efc981b",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -6808,13 +7174,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "dd0511d511518c9c64f97ba1fee6b423d6117d9d71458bf20ebc3a1668266739",
+        "shiny": "5570e5261f3252bd8aa3309f179743b0f4b3d95b18e7ce35b7a50c16cc919d49"
+      },
+      "sleep_policy": {
+        "species": "natu",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "xatu",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "71e565edb27cb3564918773d29724b94a8e864c84df7eceb027fb39271f76f84",
-      "shiny_runtime_sha256": "07f08e23b125e80169cf014ad66bf7789d8e47053933a07ea14225f2c9312da5",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "5047340bd3ea496dbda27e43ef94f65ab6c67418f42187197729feadcdcc7a1e",
+      "shiny_runtime_sha256": "e342d59eea56d3270e4b0a3fcf8ef2ca09749590a01dd087e36b1de50ebcc201",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -6839,7 +7237,7 @@
           "sha256": "2089ac13dfef55452cbd7bbb4c7ddd4d8e86631b2ee0974344ea33055289ffe3"
         }
       ],
-      "scene_geometry_animation_sha256": "3a5eb631af0851908a4e6c8004575ec972a99ad55c0ca3b57a525d725e9c96c4",
+      "scene_geometry_animation_sha256": "100dda865e3a7651cdfb7ec913f1dfc3e7646a146f310aa8213125c4b6c9d86e",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -9040,13 +9438,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "71e565edb27cb3564918773d29724b94a8e864c84df7eceb027fb39271f76f84",
+        "shiny": "07f08e23b125e80169cf014ad66bf7789d8e47053933a07ea14225f2c9312da5"
+      },
+      "sleep_policy": {
+        "species": "xatu",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "wobbuffet",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "b26423bb7cc64879d82136b00c0df9394025452b06c1becdf06f34068af97008",
-      "shiny_runtime_sha256": "d829d18b8697f72c5dbffefc5d4d4199e2329d5e2af8df9ee87c39044dd4c4ce",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "8acee9334c2264bd717115ad32c67399780b05dedab656d9eafa6696b84a889a",
+      "shiny_runtime_sha256": "563371d51f7c0d3ff2eecd5e99d170f85d851db36072aa23e3598d26e2addd7f",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -9071,7 +9501,7 @@
           "sha256": "b2e3c15dfb971c73fcd111fe27bc7e23ac049a1728004f27757445a125a6b8d8"
         }
       ],
-      "scene_geometry_animation_sha256": "1ac8e7ee352959703ec708e2d50c08d0064289ac64b1b2af56970c2da2a468be",
+      "scene_geometry_animation_sha256": "283234ea5401f1c18f2fc41578174a4b2a18b16fe915b56befb889e436a7b98c",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -9700,13 +10130,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "b26423bb7cc64879d82136b00c0df9394025452b06c1becdf06f34068af97008",
+        "shiny": "d829d18b8697f72c5dbffefc5d4d4199e2329d5e2af8df9ee87c39044dd4c4ce"
+      },
+      "sleep_policy": {
+        "species": "wobbuffet",
+        "sleep_eye_materials": [],
+        "policy": "Single tail-eye image; face is native squint geometry"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "shuckle",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "4178e206808317872b055580279df9001c95ef407d8074b2cf3a1b51e41400e9",
-      "shiny_runtime_sha256": "44de2de73cc33d1a20ae53d634437c9fb377bccd437b5c1f248bf4889733af9d",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "f5bd4ce8976021f9077699cd95a8bd89f31a33fab7daf2511219bcd6372b7fff",
+      "shiny_runtime_sha256": "d566526f4f84303541008d233b3642eea69cf2dd32c7be39835155225e66f3e2",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -9731,7 +10173,7 @@
           "sha256": "ac260c209406101238125d174e3de6984d0a278ca93737081e98eaa5e72a05a0"
         }
       ],
-      "scene_geometry_animation_sha256": "d93e29a97387608afce2ed6c0027853823923560841f893df2cdae08c5f11ead",
+      "scene_geometry_animation_sha256": "4272e02b572a1873e4e5fc6737099bbceb544297a3d8af406e7a105db2933e2d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -11059,13 +11501,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "4178e206808317872b055580279df9001c95ef407d8074b2cf3a1b51e41400e9",
+        "shiny": "44de2de73cc33d1a20ae53d634437c9fb377bccd437b5c1f248bf4889733af9d"
+      },
+      "sleep_policy": {
+        "species": "shuckle",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "smoochum",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "277bd928020ec13fe80fb7b900d0b83314fcb79ecdbada177f76e570a89cfcfd",
-      "shiny_runtime_sha256": "4e0501021cace0adaa014247442a643c158fa88e92fa1cc04b35e50c6276f845",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "73a9b6fcf4379b0038ff050a98d9ad2428de087948e9d94e95d5db0bd60d125b",
+      "shiny_runtime_sha256": "597b8dddc8d17af3f83d168b46f339bed666a48346280d6917941e0b66476d8a",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -11090,7 +11564,7 @@
           "sha256": "dfd72e0ba65a3d7cad57e577cdc1b0ba77c3d2877a54bef5292d076ec0c377d9"
         }
       ],
-      "scene_geometry_animation_sha256": "b27130554ef1505a148bae155c36d96ee3d390979b46820e48b823310688be28",
+      "scene_geometry_animation_sha256": "b3c2a47267162785e449331ad76e7c879008194e70737f3b99c42a2be14156ac",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -13177,13 +13651,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "277bd928020ec13fe80fb7b900d0b83314fcb79ecdbada177f76e570a89cfcfd",
+        "shiny": "4e0501021cace0adaa014247442a643c158fa88e92fa1cc04b35e50c6276f845"
+      },
+      "sleep_policy": {
+        "species": "smoochum",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "miltank",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "f1e4b349677d576fe4aa4ce2c5c6ee8ba7b2c318395a38053f45d97145093202",
-      "shiny_runtime_sha256": "9373cf5e96445238d8a88ee7b20435a6a7183fefad66d944fefbaafd1c97a565",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "113186d7f0cb0b3d0c69cbaf0a4ad072c0ae10d33f2aeb643154fda7b3b07a54",
+      "shiny_runtime_sha256": "93996e80dc5213a77af8d664be3ec92245756fec5d2692ca3d0cc998a6171b11",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -13208,7 +13732,7 @@
           "sha256": "aed4721435c09ec96df85b19291d06ce77019a1b40b395427621efa69f5db3c7"
         }
       ],
-      "scene_geometry_animation_sha256": "a88a11e27b89b8805b2c052e21b11b8530801cc9c8d40000e110da9d6018f1bc",
+      "scene_geometry_animation_sha256": "6876d21dcb76f09315999bd3bbeae8caaf4211515446de09ec6b91b704d3a207",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -14023,13 +14547,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "f1e4b349677d576fe4aa4ce2c5c6ee8ba7b2c318395a38053f45d97145093202",
+        "shiny": "9373cf5e96445238d8a88ee7b20435a6a7183fefad66d944fefbaafd1c97a565"
+      },
+      "sleep_policy": {
+        "species": "miltank",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "celebi",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "b92180b44d4ab123c5b358efb7875203a1d27a6e014dab0317da03f8d08b4f36",
-      "shiny_runtime_sha256": "4ab43388d8e62303498d8fe6c48360a06d7ecd2cb50e903bfc0994a022e84a52",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "74f8c4b2b8d0c9c4e10e4f7f9c67e51dfe354f6acbe54b127032cb6612c32166",
+      "shiny_runtime_sha256": "3427de1789dea346b79ba69c6eaf0b1e2bc3ca993f12fe35d651ac0e6474e407",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -14054,7 +14628,7 @@
           "sha256": "0f499219374ae4de67b26401b20dad0e6469beaf3eac187ecfad760be881f221"
         }
       ],
-      "scene_geometry_animation_sha256": "27dfe3b47573f6d8958b6e8de288ff569af8e5cd900d347e72dc1845e4d9fc52",
+      "scene_geometry_animation_sha256": "ed53f07bf995f85d12d9d1b3a395877397a81d7cf057f5ac872a6086847f892e",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -14546,13 +15120,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "b92180b44d4ab123c5b358efb7875203a1d27a6e014dab0317da03f8d08b4f36",
+        "shiny": "4ab43388d8e62303498d8fe6c48360a06d7ecd2cb50e903bfc0994a022e84a52"
+      },
+      "sleep_policy": {
+        "species": "celebi",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "zigzagoon",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "56a1041f3cdb7a7080cbb395f999017fc25f6a9611c1a9955154b6a2365f2c95",
-      "shiny_runtime_sha256": "4fe619c229f7e32c871e58e9e48e298c3b6c9121a67da5817c9edceceb329a3e",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "21a545432c530a350f025066758909b9f678587b9fb4e488ef3024e06618ca1b",
+      "shiny_runtime_sha256": "7970af200d02112651bf5940b1fba36c1395fc7f3913c5c529ceb8904d98d2c4",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -14577,7 +15201,7 @@
           "sha256": "f38255a268c57ab186922f76b252c1538396d59a1a36555a7be17e5f07d472ff"
         }
       ],
-      "scene_geometry_animation_sha256": "c5090dfa99ebf1e5cc8a7304df39e18808a41de630a7c709b24f54be0ad7fe4c",
+      "scene_geometry_animation_sha256": "d1e75bac07546765848cb2f6814a8c7a36bf91952659255bf456e6d46d5bdc9a",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -14887,13 +15511,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "56a1041f3cdb7a7080cbb395f999017fc25f6a9611c1a9955154b6a2365f2c95",
+        "shiny": "4fe619c229f7e32c871e58e9e48e298c3b6c9121a67da5817c9edceceb329a3e"
+      },
+      "sleep_policy": {
+        "species": "zigzagoon",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "linoone",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "8f2cce981cd7f89b739e663f704746e975b5cdccea01cc4d362fa8352d0398fd",
-      "shiny_runtime_sha256": "ead2223742ce8a7b3d153bbf9ef35b6f2654cbd6f4a82d35be9af6f4557ff2bc",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "b43b81f0083f051c5035542615d7177c2ddfd7301828c113701be75e453a08cf",
+      "shiny_runtime_sha256": "e60e07ca9da64d0d270326575f98582116098d98a4a60a5abec9231b3c0163a1",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -14918,7 +15574,7 @@
           "sha256": "923ec8cedceb1b1cfc7b29abfd55ba7f7b5a057365c872703db2f26cd9112a4f"
         }
       ],
-      "scene_geometry_animation_sha256": "1a94f990fe44c68b084220f99b4227040f4a095192ba352a1c7003aa780b0e4e",
+      "scene_geometry_animation_sha256": "3c840749c99f0bd3d3022f9aab80df2c2025c27648433eb3b5707c870512c086",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -16429,13 +17085,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "8f2cce981cd7f89b739e663f704746e975b5cdccea01cc4d362fa8352d0398fd",
+        "shiny": "ead2223742ce8a7b3d153bbf9ef35b6f2654cbd6f4a82d35be9af6f4557ff2bc"
+      },
+      "sleep_policy": {
+        "species": "linoone",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "wailord",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "668d63100d4ec2f618531146974fd9436baf3ac670a529dcaf950651c48c1785",
-      "shiny_runtime_sha256": "25e1a89a81016a34b4f2dd59fd174cd6d09ae7e52b248f4e14ab1ce614962780",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "dbb85dc4d3019ed7a7a9f328106e32b2cc2e86275bfa8a40dc0d6b99d17073b8",
+      "shiny_runtime_sha256": "a0020794fe4b7b318fb5321695a8ea8177ac518ab07c3fa8f1db46ec36ac52e7",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -16460,7 +17148,7 @@
           "sha256": "4d484f1b1d168fe267c1f71ea500267364296b602913ef4ca66874761217a40e"
         }
       ],
-      "scene_geometry_animation_sha256": "e9900c750bef04dc134d22b610a95971bc6cde90f2796ad27bf07be6d8e55c0f",
+      "scene_geometry_animation_sha256": "1ced1e7e42e2d2fc684381ea17d89e400774a9a7207339c14568db79d811ce7e",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -18612,13 +19300,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "668d63100d4ec2f618531146974fd9436baf3ac670a529dcaf950651c48c1785",
+        "shiny": "25e1a89a81016a34b4f2dd59fd174cd6d09ae7e52b248f4e14ab1ce614962780"
+      },
+      "sleep_policy": {
+        "species": "wailord",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "wynaut",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "0cff630a8240beb0f16e999e090c1852b859bdc14a1a252f82a86f5d4f7e70ac",
-      "shiny_runtime_sha256": "e12824ca67984b85461753b19520bfa1d307ade166343566940b5ba02db60bbc",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "2fc3b6fbaff15ca3696c0c62d65cb814cf3ccd92b2a66187d7ffeacd073f7165",
+      "shiny_runtime_sha256": "936f5fa0bb730774895e7cb299406f3bea2584a902966bddd26622005d74f918",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -18643,7 +19381,7 @@
           "sha256": "66dd364c1254b22d87350f4280eb37d9c041f207d44fdb8fd78c1ee9ad96ec91"
         }
       ],
-      "scene_geometry_animation_sha256": "e711f1925856ae6c19ffb514928045284d893296f2929d3a99c7dfc6d93a11a2",
+      "scene_geometry_animation_sha256": "c882227ffb3c55305a63340bf1b2d36b79f8ab2c08d80c2074c2e5a720a33191",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -20200,13 +20938,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "0cff630a8240beb0f16e999e090c1852b859bdc14a1a252f82a86f5d4f7e70ac",
+        "shiny": "e12824ca67984b85461753b19520bfa1d307ade166343566940b5ba02db60bbc"
+      },
+      "sleep_policy": {
+        "species": "wynaut",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "spheal",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "a1630e5f1c27b472825de6749bdcb409a5a8ccaa43c7de585785a25a8974a442",
-      "shiny_runtime_sha256": "8963d2b5f6187de76fafd5fcb66f076cfa8b6edddd22a528e6b2ae3cabd1f30e",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "01d01a956d801c9567fe27f94a410a3ca80aa0f71383cfbc494da4f12ff3ea9c",
+      "shiny_runtime_sha256": "5d1ee503531f2ce998bc780165fac47204cc5f89e04016871ab3340ec4de81e3",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -20231,7 +21001,7 @@
           "sha256": "561720156dbc438a1b9ca4b31a2a3ea154b1182e1378611dca9aeefdbd090c7f"
         }
       ],
-      "scene_geometry_animation_sha256": "26d0dd46e699971bc3bf7a050546d17519aa95b35180b40fcb8fbac35dd88368",
+      "scene_geometry_animation_sha256": "77d2903bc72f035b417560ac1db16d9bd4505525fabf0f6fed02e960806e99d3",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -20880,13 +21650,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "a1630e5f1c27b472825de6749bdcb409a5a8ccaa43c7de585785a25a8974a442",
+        "shiny": "8963d2b5f6187de76fafd5fcb66f076cfa8b6edddd22a528e6b2ae3cabd1f30e"
+      },
+      "sleep_policy": {
+        "species": "spheal",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "victini",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "261f5c489caf0b859977bdac75b9c806a5bf2e304cb3548d2c22f3fa1c3e91c9",
-      "shiny_runtime_sha256": "1aa34bb213edf80fbdfbbbd100d4706b4f8e8b8a1c49c3da0babb6c58134de7a",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "937aaa06d19cde55a23d569a186acf174b948c029d1b763609eea0fb8c35ebd3",
+      "shiny_runtime_sha256": "f5f412c603875b08e18f469cc89e10c9c142848095f3df8ba16ac2a4196a237a",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -20911,7 +21713,7 @@
           "sha256": "9324cf4f7f3fcfbb2bd16ad043261384ae2f5657f744de90a6bbc34dee92c8e5"
         }
       ],
-      "scene_geometry_animation_sha256": "f919afac354a41d0be61130864b0fae4d500deb2300ddcca769027d9689ca87e",
+      "scene_geometry_animation_sha256": "8e5ddaecb12851c701874727262c9e2d7ac714c4b6a964fe5d20f05c83700b8a",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -21306,13 +22108,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "261f5c489caf0b859977bdac75b9c806a5bf2e304cb3548d2c22f3fa1c3e91c9",
+        "shiny": "1aa34bb213edf80fbdfbbbd100d4706b4f8e8b8a1c49c3da0babb6c58134de7a"
+      },
+      "sleep_policy": {
+        "species": "victini",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "herdier",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "583b6e304e84d214af2742cac3a772aa304a74bb3a58706294c65d5ef7943e1f",
-      "shiny_runtime_sha256": "9164488c818e7313f51175f2aecf4d7e45935474f6c241c22caa8eeb2259dfb0",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "d141159b766cad842e365fdd954805d14a33124fd36edc2a39590dfd5ab0958b",
+      "shiny_runtime_sha256": "2e70a8f356b9c0ca6b706f51443f7071d4f206d8889b200a356cc32194840a47",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -21337,7 +22189,7 @@
           "sha256": "f9ec51e538b8b00f1cb0319f90b11a6dddf96c5da3d3ad116ae637347aed966d"
         }
       ],
-      "scene_geometry_animation_sha256": "b67be5a173635cb372c573123b0e3e3e8fcc5371c570e7090e359dfeda59a972",
+      "scene_geometry_animation_sha256": "18921482f8649ee8dd4f70e7b215fb0e561d0dbed9881dc018bf09f6ade223bf",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -21634,13 +22486,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "583b6e304e84d214af2742cac3a772aa304a74bb3a58706294c65d5ef7943e1f",
+        "shiny": "9164488c818e7313f51175f2aecf4d7e45935474f6c241c22caa8eeb2259dfb0"
+      },
+      "sleep_policy": {
+        "species": "herdier",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "stoutland",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "4c9ef2d0a694ab2a5ccde736b56b9ccc95a7d399402c67319c2f06d7aacd3657",
-      "shiny_runtime_sha256": "f158a3a0762ec2d97a860c09e962495f0079aa28206713fa7fb4526f29e5a4ab",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "95f9d45f54d9d3e50ff6059712be625ab29d7fdbc4080b36080d5b57c9584bec",
+      "shiny_runtime_sha256": "0df4ebcb599a24401be7bea09339853e51cd0ca82f2c8d4e3cbc3b19e60b846f",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -21666,7 +22550,7 @@
           "sha256": "53a0cfd326a2d69f995e10b513391204823e6002a29038267d77e99e88c17fae"
         }
       ],
-      "scene_geometry_animation_sha256": "75c2e755534c26d6e361850f7d101f67d301de8509886e3f9f38fe3771d0c3fd",
+      "scene_geometry_animation_sha256": "b24920d3d323bd2e78e024677054072a41cb451e3d316a91191be0c5ab3eedcd",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -22090,13 +22974,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "4c9ef2d0a694ab2a5ccde736b56b9ccc95a7d399402c67319c2f06d7aacd3657",
+        "shiny": "f158a3a0762ec2d97a860c09e962495f0079aa28206713fa7fb4526f29e5a4ab"
+      },
+      "sleep_policy": {
+        "species": "stoutland",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "pidove",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "c2b1dbfda03727767ce3e4cefe8c8ef62b455e06790380f2e0f02050e1c9d71e",
-      "shiny_runtime_sha256": "38420c396d91dd608201c57ce5da6fd43094a1825fd7f02f4c405c68ae092be8",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "634eb1cf9a5ad1e6bd5ad74b26d5209c469f9683ec9911ede4fae0d73249d922",
+      "shiny_runtime_sha256": "42f3422419ba1dcec8b3ce8a6c5ff38e3551ebe903ba6df20774b04619532e3a",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -22121,7 +23037,7 @@
           "sha256": "ffac6ea275a2b2549823fed7a9b11d706f3b962d29af51ce56d3879141115b76"
         }
       ],
-      "scene_geometry_animation_sha256": "92a0739064564b5a8727ee61be5f35b259a76d82d32fa058b9fe85197b8372b9",
+      "scene_geometry_animation_sha256": "50ba6ba3b95458c4ebbf4ba434c895935df156e5761d774bd6d9b200f73e3abc",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -22897,13 +23813,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "c2b1dbfda03727767ce3e4cefe8c8ef62b455e06790380f2e0f02050e1c9d71e",
+        "shiny": "38420c396d91dd608201c57ce5da6fd43094a1825fd7f02f4c405c68ae092be8"
+      },
+      "sleep_policy": {
+        "species": "pidove",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "woobat",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "4498bcf58180b6c380792c25effc39facf9906787cc58a79670ddf06a15bebce",
-      "shiny_runtime_sha256": "3189b255baaa07146b6127235a3c93aec7b96e19b0845d50cb51b95f38c2937b",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "0d348b5e798b87bc44d64da978d460bdba710f8a739a36305e465636a9964671",
+      "shiny_runtime_sha256": "aa926373d71d1830c144e6e6c57f78e67b97cee6375af66bfed9f47ebcc222f3",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -22928,7 +23894,7 @@
           "sha256": "6bcd313ad25655b2b9e23aafa1a868bf6e23c2f9d412372a009618a0112df0f9"
         }
       ],
-      "scene_geometry_animation_sha256": "54889d2ccbe83c3d0c16b2345f646ee23557fd82a6565cb2257d69f68e26ad9b",
+      "scene_geometry_animation_sha256": "1a730b8f49e59290a28d837d6cc7288ff570a99d78126d07a1c9155e7386c651",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -24130,13 +25096,25 @@
         "geometry_motion_sha256": "d2f2b00cc73025a78bdb4e0a9401cdad50a1baa09febe59d91ba1fcecd8a76c5",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "4498bcf58180b6c380792c25effc39facf9906787cc58a79670ddf06a15bebce",
+        "shiny": "3189b255baaa07146b6127235a3c93aec7b96e19b0845d50cb51b95f38c2937b"
+      },
+      "sleep_policy": {
+        "species": "woobat",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "swoobat",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "c69a440862aeac69d55f6d801c0fed51794b8769cf055c06e6b325321b593b38",
-      "shiny_runtime_sha256": "f779a0632785239b3d455f9b6d0d73733139446ce5d7e97cb87dba9ad5797da8",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "f574207d7727628e4d6b1a1d8af3a549ec91f5a6ef0c269f3b78c02d8dc8a64c",
+      "shiny_runtime_sha256": "256fef2060d6cc8f382fc2b62eecb0192acb02c79638fd58643dfacdaa909c29",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -24161,7 +25139,7 @@
           "sha256": "e791cf7b439bed1111562699b5c3272ba081c7db6174ba236b5e139d924cd3ad"
         }
       ],
-      "scene_geometry_animation_sha256": "0b1f41a2eae75a5dea3af1331cda8d56827ff89870d4d27bd02765966d212549",
+      "scene_geometry_animation_sha256": "8970f5e4a3e27143bd2ad89ca6ba5bdf6237e32179548f42db99de78ae3449f6",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -25482,13 +26460,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "c69a440862aeac69d55f6d801c0fed51794b8769cf055c06e6b325321b593b38",
+        "shiny": "f779a0632785239b3d455f9b6d0d73733139446ce5d7e97cb87dba9ad5797da8"
+      },
+      "sleep_policy": {
+        "species": "swoobat",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              0.5,
+              0.0,
+              0.5
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            0.5,
+            0.0,
+            0.75
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              0.5,
+              0.0,
+              0.5
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            0.5,
+            0.0,
+            0.75
+          ]
+        }
+      ]
     },
     {
       "species": "darumaka",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "244c5f233c3b5994d7c2a9881913011f8d76cd6afe243dbce96fe19bad440bde",
-      "shiny_runtime_sha256": "d63b47b09c280940403bfb77c22e283d9f73978d45f669387d1d96b58319d004",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "855445fab7d36d9264811acdff8b981b19a03f1041e7f4078e62383a6f41ddaa",
+      "shiny_runtime_sha256": "3a8d5b39cb8104af3283fd9e69e728d32b0043521a1e9f3af1938a5b1d5dab9d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -25514,7 +26542,7 @@
           "sha256": "d53d3f427dd945dbe517fae54954be7e62c45d1bd629739388db6ba50341ee58"
         }
       ],
-      "scene_geometry_animation_sha256": "074bbddbde81811d2634e7c06d8ee9aead8d743405a0743fc6f3781b099d349d",
+      "scene_geometry_animation_sha256": "3ca21129d5aa5f5ebbd8a1e5ebd4e1ec990aaf8425019b3bb10537a12fa8bbf8",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -25802,13 +26830,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "244c5f233c3b5994d7c2a9881913011f8d76cd6afe243dbce96fe19bad440bde",
+        "shiny": "d63b47b09c280940403bfb77c22e283d9f73978d45f669387d1d96b58319d004"
+      },
+      "sleep_policy": {
+        "species": "darumaka",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "maractus",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "cd6c0398ec186e8455768e7b94346c43b52228ec68af5362f0a889dd6c3046f4",
-      "shiny_runtime_sha256": "8c4f4d5c9211592e8b7cb5b4119d6fa5862cad1220cd62810f26dce8cd2f955f",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "95be01543d1d1c842f532d738c956e286fd1555228c9be40d3a18c6a4146da3b",
+      "shiny_runtime_sha256": "ee419b3f4201ed178b9a0d1ab3ddc38c534bad073b178d54cffb0eadda5e3fbb",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -25833,7 +26893,7 @@
           "sha256": "8a512060986bc28f6f93f382b143a0e38cf909a284e9093d90b8cd91cc56928f"
         }
       ],
-      "scene_geometry_animation_sha256": "098695c56e8d1436df11ef56bedfb144c041cafca9c3ff28a2d29fbe47760b12",
+      "scene_geometry_animation_sha256": "6aed6f3134a4ce772ef39e42759576ff2b5d8a75c66a8ae1924d626d715ebd85",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -26769,13 +27829,25 @@
         "geometry_motion_sha256": "e33e9aec969fb8451a165bd67b70ce5432eafa66da8ac270d3a58fd2a369ce79",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "cd6c0398ec186e8455768e7b94346c43b52228ec68af5362f0a889dd6c3046f4",
+        "shiny": "8c4f4d5c9211592e8b7cb5b4119d6fa5862cad1220cd62810f26dce8cd2f955f"
+      },
+      "sleep_policy": {
+        "species": "maractus",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "dwebble",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "c97316053800e6b140ded7be5019cebd68722768981c41dbcec0560fcf4c6caa",
-      "shiny_runtime_sha256": "37a75de5326ff036ccfa93bae0aa845ef17f72f61339da72e60ed6e37ab66269",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "eddc6c924b1004f6f865c49c0ffbe37f2212816944681dfdbb870be675be5527",
+      "shiny_runtime_sha256": "1408bbf67e96edadadbad7fc650e752198f282f74024c4d61fe0bb5fd4d7cdcc",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -26800,7 +27872,7 @@
           "sha256": "6a52f853b08e6a4ee8a0c7d44a22d4575d6cb0a8a519e637b335784f046bd48e"
         }
       ],
-      "scene_geometry_animation_sha256": "e70a565e515db6e5119e8db06817a4f506974ea733f125becbd86efa0f793b0c",
+      "scene_geometry_animation_sha256": "13072b6a16a44bbef328d81084a869a1f7b0b89a802d06d77df7fe4cbed394a5",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -28475,13 +29547,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "c97316053800e6b140ded7be5019cebd68722768981c41dbcec0560fcf4c6caa",
+        "shiny": "37a75de5326ff036ccfa93bae0aa845ef17f72f61339da72e60ed6e37ab66269"
+      },
+      "sleep_policy": {
+        "species": "dwebble",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "crustle",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "691a0905324c49d80876f7d84e507c3cf93b8b1d6a41f3529fb928f75abd28c3",
-      "shiny_runtime_sha256": "623de0cc80b15374ff3d396569c502eae9749e97e8ceee433f17667db2db1d65",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "43118effa326280853e2ead1a64d70deb658e3267d7185a06e1457dd35115bdc",
+      "shiny_runtime_sha256": "086eb5f096ae02b66977786611ce0682767237f1404b9323bd6520666aa502b7",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -28506,7 +29628,7 @@
           "sha256": "53fbaa6a8a63129e2c8318689997c4d236e5886a580e0f9537b6a60803e9ee02"
         }
       ],
-      "scene_geometry_animation_sha256": "20debb75718b38dd31be933636ebd9802db3505710f2276a9fa160404389194d",
+      "scene_geometry_animation_sha256": "719149834d0787c6140441e1f7ae99e0d186d49a45fbeeafa8e8acf9fcdbbe00",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -29658,13 +30780,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "691a0905324c49d80876f7d84e507c3cf93b8b1d6a41f3529fb928f75abd28c3",
+        "shiny": "623de0cc80b15374ff3d396569c502eae9749e97e8ceee433f17667db2db1d65"
+      },
+      "sleep_policy": {
+        "species": "crustle",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "sigilyph",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "b03d421a933a9b048a7125d9ac7bbe2c8b91672d266c5b65db3f0dd79601e69a",
-      "shiny_runtime_sha256": "5d9832c5b3178d17bec8bc9fa557d4d13104983eb26b229c2ac2bc2460bf8e43",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "78ec0b60330f8573aacc8db31df58900a492faf1c68e0eff1d17c65fd5e29707",
+      "shiny_runtime_sha256": "ab3acb66c64e7dfcd81c548d2991a9fed55e55386faaf1a2e7c9dbb9e114c296",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -29689,7 +30843,7 @@
           "sha256": "e39886d3502f7ee788feb6eca16b7e9ec0abdeaa8482e73e8f424a8d39f55e2b"
         }
       ],
-      "scene_geometry_animation_sha256": "ae631384d3632936cf1a87a1259564b432ceabd3057a73d92cffefdc8923162d",
+      "scene_geometry_animation_sha256": "cac1c97d1b161dd66f43deae1c337ebf3e173ad2cef9a1c7a7e6f9ed2d07bcdd",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -30792,13 +31946,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "b03d421a933a9b048a7125d9ac7bbe2c8b91672d266c5b65db3f0dd79601e69a",
+        "shiny": "5d9832c5b3178d17bec8bc9fa557d4d13104983eb26b229c2ac2bc2460bf8e43"
+      },
+      "sleep_policy": {
+        "species": "sigilyph",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "archen",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "03eb4533ded89865a3a9d82607c302076c46ac18812b875e998e0040ae77ffa3",
-      "shiny_runtime_sha256": "d405612334370e2415d48cc437cad87a899292f4e10747d9611f617e8a23461d",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "8291c93295ae9d576073a126fc0d2271c839ed7a1046049f2397850a0a918904",
+      "shiny_runtime_sha256": "7249b6c2f103f5d697139ff14d116e9834e2016d291882eb5a849c398b9cc726",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -30823,7 +32009,7 @@
           "sha256": "55b5dcbe303155f7d92fa9f47e6ec0657cd8ba06bd257e6a3558bfffa0d54807"
         }
       ],
-      "scene_geometry_animation_sha256": "45393b94a6a04c7f000080c776f19e2ad6db53bc88f66da08d3d5eafb8f37bcf",
+      "scene_geometry_animation_sha256": "c5214b7973292b8812d58c586cba228dbf7ea18fbc716ad32b9144ec7fbca050",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -32876,13 +34062,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "03eb4533ded89865a3a9d82607c302076c46ac18812b875e998e0040ae77ffa3",
+        "shiny": "d405612334370e2415d48cc437cad87a899292f4e10747d9611f617e8a23461d"
+      },
+      "sleep_policy": {
+        "species": "archen",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "frillish-male",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "149831c5bef7bb220adea9f6ed7f14b368c4d051dc89af000867aae6f39d0d75",
-      "shiny_runtime_sha256": "88b9bcb7923f1736b5f690c2c19dda0979eabe9520545de3c2428ef102aafdeb",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "3b0278b5bf515d03a5c2f85c781605effb3c2439aa54557606f1b1baa6f306f8",
+      "shiny_runtime_sha256": "719d520db78f5faa6d1cb93a82f8b69effda98439d8930246c3a14b63bfffe89",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -32908,7 +34144,7 @@
           "sha256": "295672bc29102238f1258bc05f1657f77ed2ba29a59ba91ca30221b9d0e4a7d8"
         }
       ],
-      "scene_geometry_animation_sha256": "1936a6ad2df0249f61fcd076ae9aaf211134c4b001fde0666747a664eaee2129",
+      "scene_geometry_animation_sha256": "3ab0ce9cedf6dfa4f45434eeca8740c1a2c8a96b71c36d1ac0d02324c443cc0a",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -33325,13 +34561,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "149831c5bef7bb220adea9f6ed7f14b368c4d051dc89af000867aae6f39d0d75",
+        "shiny": "88b9bcb7923f1736b5f690c2c19dda0979eabe9520545de3c2428ef102aafdeb"
+      },
+      "sleep_policy": {
+        "species": "frillish-male",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "ferrothorn",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "a0c9d25183b08fd059fe637a0f1900f7901aa34b88b578b65a27f3050d41b106",
-      "shiny_runtime_sha256": "b7b506433574e8bde2beee52932782bbc973d304a8ad129b81d0bd9ba76f3495",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "e9980cdab8e4d315b626ee7c2390624a444b7adbe8cd69d21ee362ad55a13d06",
+      "shiny_runtime_sha256": "bad17eb0ef64264f173a5174276645754a7708389c256f349423ee798a3cdc7d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -33356,7 +34624,7 @@
           "sha256": "455cdaba723a2fd461324f7327d1a61f889b3c9c08446e0215e39c7d41357d1e"
         }
       ],
-      "scene_geometry_animation_sha256": "31625ba34d41c338c388fb670ccbecfe1e989ec7aaf2a98a69796943dba03e61",
+      "scene_geometry_animation_sha256": "7f7dfa7a1d91ff3174f201dd50a598af81c8b83d7969f742c369d7efe3f3d16d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -34983,13 +36251,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "a0c9d25183b08fd059fe637a0f1900f7901aa34b88b578b65a27f3050d41b106",
+        "shiny": "b7b506433574e8bde2beee52932782bbc973d304a8ad129b81d0bd9ba76f3495"
+      },
+      "sleep_policy": {
+        "species": "ferrothorn",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "klink",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "7423fae21b774a7f7b8213fcab0d9fdeb231cfff347c666d366a2e0401ede974",
-      "shiny_runtime_sha256": "4383e95ed03dbf6b5abac5cae7c824d3381338a47f35b450d1563f0ecae5b2a5",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "1e5705f5dc6c9ef7d84aed41410934257fc8369ff0f109cef6b24ed5dd07fc46",
+      "shiny_runtime_sha256": "baccafad6ca045b86706bf8f712b1a17073ee134e0ed4329fbef20616305f04c",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -35014,7 +36314,7 @@
           "sha256": "883f29ceec46b94dc85c07d4a629015ae42c50534656cff0824b867c69fdbafb"
         }
       ],
-      "scene_geometry_animation_sha256": "f78a6425f9c5c6581b1636c5c98fef4592d9809f62c70763c21c6ed62ddfed51",
+      "scene_geometry_animation_sha256": "00ada9b887fda34a73ff42086d68cf77ff3e5b0ec1e2ff307a49e6a43f85c891",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -35332,13 +36632,25 @@
         "geometry_motion_sha256": "61b73705315fdb7656b0dda27b17d8f30d6e02fc018e2c7473e814b2ed553d7c",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "7423fae21b774a7f7b8213fcab0d9fdeb231cfff347c666d366a2e0401ede974",
+        "shiny": "4383e95ed03dbf6b5abac5cae7c824d3381338a47f35b450d1563f0ecae5b2a5"
+      },
+      "sleep_policy": {
+        "species": "klink",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "klang",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "4ec1485c26a40026f7568be3c33dcfc05093d0312332e4cefca511cc60dfda1f",
-      "shiny_runtime_sha256": "1d53d834dd698b639660fad4b4979013d1c85d9917a7ad8b3a71abea7e7d7f9b",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "b9eef5abb4a8aa29eb3348eabfcd00db1ca9d84fc65ef812e43d84ebac14e680",
+      "shiny_runtime_sha256": "4ff3571d7a75b5b9c8e33fb4291be7ccdf8ff5c5a1ce1c1eae20288547c59a7f",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -35363,7 +36675,7 @@
           "sha256": "4e7077a425e1700e95e2f1be6b0f8f4e81707df95b44bfc36280b72ab21bd54d"
         }
       ],
-      "scene_geometry_animation_sha256": "48e9c2734cedf9be680f87f3c1949e831a5bf49dcf55fc7b2a354e9752cbd13f",
+      "scene_geometry_animation_sha256": "3b7e16010e150f3e1ee153901d95d58eefe3b9e6c22c4d4673d79dde570623ab",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -35726,13 +37038,25 @@
         "geometry_motion_sha256": "5db8f0a81a7274ca31480b7ac465f9ed2252a50a8bc76bd2e81cd025a0757a4f",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "4ec1485c26a40026f7568be3c33dcfc05093d0312332e4cefca511cc60dfda1f",
+        "shiny": "1d53d834dd698b639660fad4b4979013d1c85d9917a7ad8b3a71abea7e7d7f9b"
+      },
+      "sleep_policy": {
+        "species": "klang",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "klinklang",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "f51333bb4b637b3f5bf14f15f18187af1c551b7f03fd288b534a00200969ee09",
-      "shiny_runtime_sha256": "3df7d8a6d1229b3400efe82a2dd024ce99b33daaeb4592bda63303a4712d1d25",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "30a8b75506b9ddd3e263b481ca82f215f14962155e7bd0d58897499ccb28d0c4",
+      "shiny_runtime_sha256": "9b5e673f8295fb819d5b139a62ebf9016eb80033e0d09d5eb6cf8ececc8672e1",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -35757,7 +37081,7 @@
           "sha256": "14ea6a8de88c51dc327b0906fdee73844e4d9e49541901e22e227b7f75c07ad2"
         }
       ],
-      "scene_geometry_animation_sha256": "26f1c04af5a19ea01a325b1ea05d659ce580901a68b88d9868f9ada3572e24db",
+      "scene_geometry_animation_sha256": "37052ba8ab234afa82bbf52af2d39d0f94a2bf7317ecb408b17ac924088c07c2",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -36254,13 +37578,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "f51333bb4b637b3f5bf14f15f18187af1c551b7f03fd288b534a00200969ee09",
+        "shiny": "3df7d8a6d1229b3400efe82a2dd024ce99b33daaeb4592bda63303a4712d1d25"
+      },
+      "sleep_policy": {
+        "species": "klinklang",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "bouffalant",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "1353abc5a2c5b6613da6cebfd40a9d4b14fba52bb87f9663f98d2fde78a468e2",
-      "shiny_runtime_sha256": "23543ce388a126d361099785ed712f7a31fa52993b68a3a0590f03db86fc2dd3",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "0d469e41db70cce3b11d7f2e644fd84dcc2ce05bb06c7064dd8090cca9cffc23",
+      "shiny_runtime_sha256": "e9d0a08e6109eba01f9241b14ffdaf520819123cdb549e2ad7d15314d38de6f0",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -36285,7 +37621,7 @@
           "sha256": "394444f010c7b0bd8254238165fcae640cfdd5a85c86ed66e32069e917ac36e7"
         }
       ],
-      "scene_geometry_animation_sha256": "dea2c10f47d7f40ac725f402526205d801ffa553005fdd840369d225074bccff",
+      "scene_geometry_animation_sha256": "42feaedf7835114f64e5edbad7fe94fc52d0afd1d44a60fff1fff293de3cefad",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -39362,13 +40698,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "1353abc5a2c5b6613da6cebfd40a9d4b14fba52bb87f9663f98d2fde78a468e2",
+        "shiny": "23543ce388a126d361099785ed712f7a31fa52993b68a3a0590f03db86fc2dd3"
+      },
+      "sleep_policy": {
+        "species": "bouffalant",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "morelull",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "d8422610b42b0e4bc4b96ddae1ac45b39dec2103ed35b0f00c0e87d4ecfdb873",
-      "shiny_runtime_sha256": "aec5fbda82184b396b78f77503351d2a55aa735adb4590b6127483033a5b5cce",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "8b8ec6f5c550d552cfbcc9eb48dc66c6c6ea23344e277b9c5a0e18babc0d90e8",
+      "shiny_runtime_sha256": "7cf81f52e74182d7db288ae2664a74134f39999be1336fb4be14a5f21c1c7940",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -39394,7 +40780,7 @@
           "sha256": "4d7ed85195eb73f4d4578e7c9dabfe4a7b21822d5b705768548676ce9d520cf6"
         }
       ],
-      "scene_geometry_animation_sha256": "9f8d477ed26756506acea8bd33637894d0c8ee2d445f6e928f94ed2b9e9bfff9",
+      "scene_geometry_animation_sha256": "76ae22bc2d7e1c0e24ec6b5c39fd579ae31c06240e3ee7edc0a7aa4d64815314",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -39840,13 +41226,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "d8422610b42b0e4bc4b96ddae1ac45b39dec2103ed35b0f00c0e87d4ecfdb873",
+        "shiny": "aec5fbda82184b396b78f77503351d2a55aa735adb4590b6127483033a5b5cce"
+      },
+      "sleep_policy": {
+        "species": "morelull",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "shiinotic",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "0e9c7fbc5357089b4eccd3d71ef0af1de461364d291fce6a50b79a3ac4c47c9b",
-      "shiny_runtime_sha256": "9f969741bd0d55b9650c21cce76f633b4aa55e5f0e1f2aaf0d0889c37ae66891",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "f5541b79545e368c3fdfc3515de1d2141e584d4bed48ea4596bb71d73d390b01",
+      "shiny_runtime_sha256": "31f8e2ea47a079fecaf0ba81e62686ba91d8359c8c9094dc2fc0d3a445204537",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -39872,7 +41290,7 @@
           "sha256": "9be57a6f6dfa02581de8c6dc12adb2a26fe629544163b30b58783bd2679fb7c8"
         }
       ],
-      "scene_geometry_animation_sha256": "40250a69d20a9c8c5513b68f092e421c07f7bf84608e178ec1205b9842867b92",
+      "scene_geometry_animation_sha256": "0cdc3c540fae1c494479a08fbfa41bc857134dad659e63ed457a06212fa2fa29",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -40190,13 +41608,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "0e9c7fbc5357089b4eccd3d71ef0af1de461364d291fce6a50b79a3ac4c47c9b",
+        "shiny": "9f969741bd0d55b9650c21cce76f633b4aa55e5f0e1f2aaf0d0889c37ae66891"
+      },
+      "sleep_policy": {
+        "species": "shiinotic",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "stufful",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "87967aec80e371440c9f5f1176f8f76f43ce7e0611860583d1eeb2c5e57374ec",
-      "shiny_runtime_sha256": "ca1917cb53cebbd0f8e866febd5a5d0f0811ce46040b31003c6dba5b6367ba3b",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "33fd144f5bd21a3bd78e9bbd388ea43bb3855d90b5f86d0a877ca072cc32e003",
+      "shiny_runtime_sha256": "0e6bab87e20992b47d1adfa810a33217efc996e9fa2620f4deafad6f9e01fdee",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -40222,7 +41672,7 @@
           "sha256": "4e206bf1ac0ba314247ac9103a054a492a215710fbad162179edc0acf1497c1f"
         }
       ],
-      "scene_geometry_animation_sha256": "4a6a467d987e6cf895d176a6e6c608b9876e6de2eff04c0cd7e6d276873ee08f",
+      "scene_geometry_animation_sha256": "a2dc8cd5cc618a1266d398d471bda124b28c71c49dafa1696743d722fd896797",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -40596,13 +42046,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "87967aec80e371440c9f5f1176f8f76f43ce7e0611860583d1eeb2c5e57374ec",
+        "shiny": "ca1917cb53cebbd0f8e866febd5a5d0f0811ce46040b31003c6dba5b6367ba3b"
+      },
+      "sleep_policy": {
+        "species": "stufful",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "bewear",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "504b21a86944c7251dfa2cc4bbac407768963783cb87daee84e7eac0c8bfc64b",
-      "shiny_runtime_sha256": "be2220809a0d4940fc839c85eb3437957380f83f851cef30880cdecfd86069c6",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "5709661feb892be546bf1f0f3bc01d7c770fba81ca950217b5925c729e3c7a1b",
+      "shiny_runtime_sha256": "6d4e59b89ab7950e53e745048250a2898c3bd8b30f34b72bbf43edddfb35f04d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -40628,7 +42110,7 @@
           "sha256": "d9a596dea583d7b764bad345aa684ad04ac62d192c20e9f3473aee529da78db5"
         }
       ],
-      "scene_geometry_animation_sha256": "6938fa1af6b8b5a928769f985e5349ef16f063c9ed33efe65afa75eb3ef11250",
+      "scene_geometry_animation_sha256": "9a1655d8224662aba028d3fb1d2f68f581c35720197f65b3f21e7172fa6268e2",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -40980,13 +42462,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "504b21a86944c7251dfa2cc4bbac407768963783cb87daee84e7eac0c8bfc64b",
+        "shiny": "be2220809a0d4940fc839c85eb3437957380f83f851cef30880cdecfd86069c6"
+      },
+      "sleep_policy": {
+        "species": "bewear",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "pyukumuku",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "c82855e9f6929a5eb368c7a10bf655e32f223a6f233853533447a008c8c9b05d",
-      "shiny_runtime_sha256": "d5443c6ad865a2b587338c6d45020394b3a7ff6bb5cbeec20fdec9a7006a50ed",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "06b614b3b23a1906514220c054eec4e3a055f99ac6a50892785ece5c1e6af7ce",
+      "shiny_runtime_sha256": "d385d28879c0572acd6ff033ed5d10392f2199b21845431fd8b4ea92b7b42916",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -41011,7 +42525,7 @@
           "sha256": "06a3fd25d8c4c582a25b794aeaeb32f109503b7a652ae9196aac52d1d7ffde74"
         }
       ],
-      "scene_geometry_animation_sha256": "84fa0b5929765761847bddfe1c7aed8d2959eb451234e4a0a66ddb0f36ddfc42",
+      "scene_geometry_animation_sha256": "1e5411dd130e4d5ced66b7384af8e305364052fda917a5aabee6f82ef8fed84b",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -41674,13 +43188,25 @@
         "geometry_motion_sha256": "2b0dd6bfde50add33cac1342b8c4e1a7e25f7e232c9dda5e5229975bad6318b2",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "c82855e9f6929a5eb368c7a10bf655e32f223a6f233853533447a008c8c9b05d",
+        "shiny": "d5443c6ad865a2b587338c6d45020394b3a7ff6bb5cbeec20fdec9a7006a50ed"
+      },
+      "sleep_policy": {
+        "species": "pyukumuku",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "type-null",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "cb190f8c21daeeb4f5689617070f60f513206af2cf061a3b31ced886f8dd6328",
-      "shiny_runtime_sha256": "7e68690b1f0277f038af9ad857b62f20950880a604152582c4ea63bce49bfbee",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "f850343b40eb25ebf4f141aa02ad4dbe155839ba658edec45292322b940bd218",
+      "shiny_runtime_sha256": "bba3a7c982a55ea351d3a730e26b80dc0018d5d8f2a5e8a1f2e33cc861c676ba",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -41705,7 +43231,7 @@
           "sha256": "b0b6e8f9db378448fec132d70b44bd6ce10375cc6f44cf6c408badbd42bb6778"
         }
       ],
-      "scene_geometry_animation_sha256": "ab96b3ad9617ceb8c7d1ec3bd9bb949f436da75228da3741c645319bdfaba4db",
+      "scene_geometry_animation_sha256": "4c2c23b6bfcfbcbdd4658e00c7afbbad40acf04cd09577511abc572ca804d62b",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -43612,13 +45138,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "cb190f8c21daeeb4f5689617070f60f513206af2cf061a3b31ced886f8dd6328",
+        "shiny": "7e68690b1f0277f038af9ad857b62f20950880a604152582c4ea63bce49bfbee"
+      },
+      "sleep_policy": {
+        "species": "type-null",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "turtonator",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "22d584f477df4117b69f250804eae91127b0743987fe041ea80c7d5f208e9e82",
-      "shiny_runtime_sha256": "d0d578ae128d05ee577c8e077f271b40cdabea2018a8ebd94833a3af13c4100a",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "2622a771599656ac1cf4f6aebdfaf420ca3fa4c0dd5c6e2f74258b2fb318a489",
+      "shiny_runtime_sha256": "0c0b6f6bdf9181d751cfbfa2f6bc3e6755262e8b6eb4d76ed2ca43a8e94d97e0",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -43643,7 +45201,7 @@
           "sha256": "96413852dd590254a7e151937ff1616be81f06d4572f722c243462b23fe4ffb6"
         }
       ],
-      "scene_geometry_animation_sha256": "31ddde04e3c5252127c7fc03bd4a8906049895eb549ddea25f128b6f43595eb1",
+      "scene_geometry_animation_sha256": "306c2a0a3660d59cc0df05c151589c5bbc57e5631b6de47bfe7021b426c6ade0",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -45818,13 +47376,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "22d584f477df4117b69f250804eae91127b0743987fe041ea80c7d5f208e9e82",
+        "shiny": "d0d578ae128d05ee577c8e077f271b40cdabea2018a8ebd94833a3af13c4100a"
+      },
+      "sleep_policy": {
+        "species": "turtonator",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "togedemaru",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "62c5605e0df2bd8ca0304b85543ca90a9fdef50356269069e05325c5df517d17",
-      "shiny_runtime_sha256": "6195a3cadcdd39ea69d318dc371eba1303389daedddac56430e6a38faab12136",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "4e70f0604700683bc6c81cdd4d628c381da1be441e9725022f1de6f555486a86",
+      "shiny_runtime_sha256": "fd3d491f285e9eb82323b440228395be192464804246ecc611ff34cc52d7c3b9",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -45850,7 +47458,7 @@
           "sha256": "7a2ebfa259c61aa6220864faac32afc5ee083c16366c46b6cd7933e734a3ac63"
         }
       ],
-      "scene_geometry_animation_sha256": "49dffc2ef7020e8ff88063a3dada5c4a7b86dfda3944be12a1cb3b8af13c5fc5",
+      "scene_geometry_animation_sha256": "caecfba53d12637c762855b6e4fa843cd8c6cc41644bf2068ba6e6bdfe7d000b",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -46424,13 +48032,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "62c5605e0df2bd8ca0304b85543ca90a9fdef50356269069e05325c5df517d17",
+        "shiny": "6195a3cadcdd39ea69d318dc371eba1303389daedddac56430e6a38faab12136"
+      },
+      "sleep_policy": {
+        "species": "togedemaru",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "dhelmise",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "d43e4da5c5005006a586bd34b6ec64f058d436279d908f00da36b9f390fcac2f",
-      "shiny_runtime_sha256": "97806de1d86b3d7456cba6bc174a160b916f560207755c848852f2e8014bf745",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "7bf855ef2207b108365ba8e3733458d56f26f9409fa14c296233e0339f47a25a",
+      "shiny_runtime_sha256": "66f51fdcd403c63394ed0c8c71c0f2aa5bf1e032b3c834e2fea0c921570e4354",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -46455,7 +48095,7 @@
           "sha256": "08c34bac916c9d967a1f1cb4d115c02d4e5f4ffa2a561c6e41d952daa5f96d25"
         }
       ],
-      "scene_geometry_animation_sha256": "6b2d582dae8fcfc3d9473f76efe310abbd055764306a976f858c590e589e8cb6",
+      "scene_geometry_animation_sha256": "17457c78aff635ac955741f402d152e4f2eb56844a24c09050eb947d12ce3ea4",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -48386,13 +50026,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "d43e4da5c5005006a586bd34b6ec64f058d436279d908f00da36b9f390fcac2f",
+        "shiny": "97806de1d86b3d7456cba6bc174a160b916f560207755c848852f2e8014bf745"
+      },
+      "sleep_policy": {
+        "species": "dhelmise",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "tapu-koko",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "0c5fb7e5e84f1464bae7f903c0a6adebb04e92124e427df2d049fe7bf4c14cce",
-      "shiny_runtime_sha256": "1355067b09a605e91d33abb69ecaeacff931e95770cc10d75defeab5b2ff1589",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "087ba35348367801f56dbadc11c95ef4e37eac13479924abdcf511dcbe8eb07a",
+      "shiny_runtime_sha256": "daa4f7d66ddc65cae34fbb52406a96c3cf15a46db168980bac814c36f13ad5a0",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -48417,7 +50069,7 @@
           "sha256": "b807b6b1269ae3180617e713d5a4b1e2db865a9d2145f141a80eacb7d0153936"
         }
       ],
-      "scene_geometry_animation_sha256": "123feb736b9076789e79989cdd1763f860744493deb63963d1257c15b1afa049",
+      "scene_geometry_animation_sha256": "15a5158193028b55f1a1c0b9389797f7a082e833df263644065fd243c64a171c",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -50711,13 +52363,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "0c5fb7e5e84f1464bae7f903c0a6adebb04e92124e427df2d049fe7bf4c14cce",
+        "shiny": "1355067b09a605e91d33abb69ecaeacff931e95770cc10d75defeab5b2ff1589"
+      },
+      "sleep_policy": {
+        "species": "tapu-koko",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "tapu-lele",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "3a1c3c1e298c30a339f0694228a8ac1c6b96fba20e564126f217d6cfc1e5f250",
-      "shiny_runtime_sha256": "af879fa125c46e35e6b63a922c1c4ed17a759f7ae66d77a0ff857ea0514d597b",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "381af25e09f14b1487221c53164ee3d2d7a68568a01c8f4034f11ee89728b188",
+      "shiny_runtime_sha256": "a42d1f773cf2aff9cff1167f71fe5bb8a1cfbae3732b683d6e055255ee24e276",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -50742,7 +52426,7 @@
           "sha256": "4aca9da8182b6d020dd48e993bb7c9e97048bec0f0e172b7f542affeaa798bf5"
         }
       ],
-      "scene_geometry_animation_sha256": "1c63e13dd77ccf6d73ab2bc27232f5cf7611f7eea89f463a56c68e68186bebd8",
+      "scene_geometry_animation_sha256": "79dd6ab9bc6b68270bb7027613ae7607d26a33ae44ec11ec128d28cf2a71c37f",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -53302,13 +54986,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "3a1c3c1e298c30a339f0694228a8ac1c6b96fba20e564126f217d6cfc1e5f250",
+        "shiny": "af879fa125c46e35e6b63a922c1c4ed17a759f7ae66d77a0ff857ea0514d597b"
+      },
+      "sleep_policy": {
+        "species": "tapu-lele",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "tapu-bulu",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "36d18a1c035221187db1be8e60d1020f2a57c16d109234b9fb78dffa564a2277",
-      "shiny_runtime_sha256": "1825d0211ae982220c459dc9dd8433df216019b17e1f0f1ef51b950a224f470c",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "12170bd9036dfdb54985700771d7f406bcbbfdea0e8d5b6792da77ffd8b20709",
+      "shiny_runtime_sha256": "db5ba78bb8b652decec6f577d9d8072050e476ca8f89deacddae089477eb5072",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -53333,7 +55049,7 @@
           "sha256": "36702f71712f19e485bf216663abef9873e032e50e6ad811d545a3bf53e1382b"
         }
       ],
-      "scene_geometry_animation_sha256": "85089cd53fdba9f1de09778f6da54ffdd6a4467c53971cead6a9531083979948",
+      "scene_geometry_animation_sha256": "72bf0d180d416a328cdf7ccd5935a0a940c24b5f889c30159e936e72d7148ac6",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -55796,13 +57512,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "36d18a1c035221187db1be8e60d1020f2a57c16d109234b9fb78dffa564a2277",
+        "shiny": "1825d0211ae982220c459dc9dd8433df216019b17e1f0f1ef51b950a224f470c"
+      },
+      "sleep_policy": {
+        "species": "tapu-bulu",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "tapu-fini",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "b3771bc9c7a80cca009bea2198735a335391d237da16ff735dcc3fb88f8b3304",
-      "shiny_runtime_sha256": "3c2d43d2e69b223d05404270790c394f67da2555b3a2fdc72eac07025d5dca55",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "2b326dd2a725a67d00edf334e7b8c4aa44ec21371e94cab8c24975d7dda96573",
+      "shiny_runtime_sha256": "7d27512e61d85db0817580892d98e3682359a0914cd2eb7ce7a5584a7d8531e6",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -55827,7 +57575,7 @@
           "sha256": "bd353792cbc73499e12fc4f2b1e2df96a99ea7c383d8d26c2384571a8e27a5cd"
         }
       ],
-      "scene_geometry_animation_sha256": "b2aeb457480418923a2f99005be569da048175661d16cc739ac178d6874c4554",
+      "scene_geometry_animation_sha256": "75f71b8888fbccc4ac7f4656aabbd785092aaedb47e1798e7c445b54dc1eb07d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -57861,13 +59609,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "b3771bc9c7a80cca009bea2198735a335391d237da16ff735dcc3fb88f8b3304",
+        "shiny": "3c2d43d2e69b223d05404270790c394f67da2555b3a2fdc72eac07025d5dca55"
+      },
+      "sleep_policy": {
+        "species": "tapu-fini",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "nihilego",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "adb989477b730c1208416e00140cd53f22cc8131a98d8da5a82bd2edc6e65fe0",
-      "shiny_runtime_sha256": "08039e3d05d7c385d947da0efdfe1c872de2149a8a190fdff5287b10705b90ae",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "7efe2c2ad68ac1c788e8bfee2f051e946fdda99a82a54a13df2a5b49561069ff",
+      "shiny_runtime_sha256": "83a2f5fe0bc19bc0cc708f30a9527d3b5f2f5d22883a580b90a0945224e38b6d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json",
@@ -57894,7 +59674,7 @@
           "sha256": "ec10913cae430f243905cac9549ccc1b03d2085e532bd9d8c61a5c42dcf41aad"
         }
       ],
-      "scene_geometry_animation_sha256": "9c0f7b72abfffb1e826a85857ffb7362d708fb98b3799b6b0077d85256c7d5de",
+      "scene_geometry_animation_sha256": "ddb0249a19eb093a84a56fd34108fd1d196b0e57356c4ae3375649cbb6c1f605",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -58269,13 +60049,25 @@
         "runtime_approved": false
       },
       "uv_palette_selection": "Source Head/Spine/FeelerA..P/FeelerR region receives tan cap/yellow rim; tentacle UV regions preserve normal white. All masks apply native KHR UV transforms before rasterization.",
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "adb989477b730c1208416e00140cd53f22cc8131a98d8da5a82bd2edc6e65fe0",
+        "shiny": "08039e3d05d7c385d947da0efdfe1c872de2149a8a190fdff5287b10705b90ae"
+      },
+      "sleep_policy": {
+        "species": "nihilego",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "buzzwole",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "00d0bb1c03bc4b0b15265b5cb3ade8d14142c77f3df9b0abe0d0b91a0fd61d0e",
-      "shiny_runtime_sha256": "a2fea98d3ca320222b97b7179e839b46795da14b3ebf52ba95ae80febb419688",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "4ca9d36527d435ccd7886cbe445cb243b000991b3a2ec56b64c10e5dcf00e934",
+      "shiny_runtime_sha256": "5bdd19b9613f497e39d6dcedfd535137ab7e30285d61c0310969fd1533f14776",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -58300,7 +60092,7 @@
           "sha256": "5362276362280bb823fd5ec61e7510cb8de6b9a297035356d46e0c38cdb0c792"
         }
       ],
-      "scene_geometry_animation_sha256": "f2587d7ac5193de5d3b8f70e8e05df43f34a6954117cf1c7032d8ef1bc30526a",
+      "scene_geometry_animation_sha256": "dd2b0371a93635d34698b7631e26fc00a5fcd26449cbf5c9af778a47a6154aef",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -58711,13 +60503,25 @@
         "runtime_approved": false
       },
       "uv_palette_selection": "Preserve native chest via Spine1/Spine2/Hips weights; preserve BodyE_Trans and BodyE_Ura_Opa.",
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "00d0bb1c03bc4b0b15265b5cb3ade8d14142c77f3df9b0abe0d0b91a0fd61d0e",
+        "shiny": "a2fea98d3ca320222b97b7179e839b46795da14b3ebf52ba95ae80febb419688"
+      },
+      "sleep_policy": {
+        "species": "buzzwole",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "pheromosa",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "cbcd5418138e770beef332feb5ba139d1d13bc5286ff86df2a83a6d465f00681",
-      "shiny_runtime_sha256": "f6864afcbd9cf067d3a3dd0bef0814086b1b663cdbabd0b2df640a8fd93fdfad",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "b200d3e0f05b9e0e3b3f839db369dc540d1642bb3b3b64a6a43b5f7c9c60db1f",
+      "shiny_runtime_sha256": "d4b0d4f0c821aa4034f4b65e83f4253c1941378de3133aab17cc672dcc8a03b9",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -58742,7 +60546,7 @@
           "sha256": "2999a3a99bc01e419d105ef98bb3366f61f53da4f17d0c2454ce52e0cd8b1795"
         }
       ],
-      "scene_geometry_animation_sha256": "a952d66b44b99ae829ebde9f9ac06258e5db44cb013c1b3d69a710227b65439e",
+      "scene_geometry_animation_sha256": "63c07605abbc8c51e305eab52c4d7484c9fc620218b09c9eae342233c213d295",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -59146,13 +60950,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "cbcd5418138e770beef332feb5ba139d1d13bc5286ff86df2a83a6d465f00681",
+        "shiny": "f6864afcbd9cf067d3a3dd0bef0814086b1b663cdbabd0b2df640a8fd93fdfad"
+      },
+      "sleep_policy": {
+        "species": "pheromosa",
+        "sleep_eye_materials": [
+          "LEye",
+          "REye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "xurkitree",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "472d6e0a41159fcbc1dcf2931c015053e623625ce2a9f6847c5294840fba0a2e",
-      "shiny_runtime_sha256": "020b7ece074b87e1156f13afdc8a19710e981ab00b1eca16e74b3646a9aafcce",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "e4dbbb624256c9d918027ba5ba59b58bb7af58a9567fc4c2346705b37b047438",
+      "shiny_runtime_sha256": "406f3b70a4f7634a8372c623768f0102af537bf9114cbbf76d0370c213a1754b",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -59177,7 +61031,7 @@
           "sha256": "16854b125631b908ac6e87a179541f78cfc805988cd2e02ab10376aaf94649eb"
         }
       ],
-      "scene_geometry_animation_sha256": "550025004bc7cff4829434f17021379da040a2c3471c63590b4ca15edc8e8d8c",
+      "scene_geometry_animation_sha256": "53ec635cbb29c231276cc715016a2239cccc17642a33baa5c5467cb254d04727",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -59463,13 +61317,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "472d6e0a41159fcbc1dcf2931c015053e623625ce2a9f6847c5294840fba0a2e",
+        "shiny": "020b7ece074b87e1156f13afdc8a19710e981ab00b1eca16e74b3646a9aafcce"
+      },
+      "sleep_policy": {
+        "species": "xurkitree",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "celesteela",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "0e64be08e587e01e85eb5a653d07571f933cc154d6c6289a0fbb61e82d533559",
-      "shiny_runtime_sha256": "404f62930df5ad59395cb7856e8de8bf9ae617de1c1a5033dd30c2ad03f0cf66",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "f451a2cbb8f289a8096623b6a188bd7574cbc0d57df54e0dee044c6095a0cc3b",
+      "shiny_runtime_sha256": "1c1d268e63697066b60b64c1aff0fc497da9f643099f893c8f37583848d72fb0",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -59494,7 +61360,7 @@
           "sha256": "c9fc749255b27f4ab42354a56736fbc7d4c3b986e1452c7e38e248e9221807f5"
         }
       ],
-      "scene_geometry_animation_sha256": "30fc49d5d9df3b7c95ee3d16064b9c25bfd68e6297f210c8a672870b81af1b5b",
+      "scene_geometry_animation_sha256": "e1cff2daf68c732f51c71e46e1827d4f3ff4874d81f4c91267d7b9ebf7eaf99c",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -62752,13 +64618,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "0e64be08e587e01e85eb5a653d07571f933cc154d6c6289a0fbb61e82d533559",
+        "shiny": "404f62930df5ad59395cb7856e8de8bf9ae617de1c1a5033dd30c2ad03f0cf66"
+      },
+      "sleep_policy": {
+        "species": "celesteela",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "kartana",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "fd9d170cebf5b79836b1690fb1a4c54c06f1ee6b59d3914f14af4f8ed1ff4085",
-      "shiny_runtime_sha256": "8a3c7cf13c3cd0605ce37eaafeeb8fc29094a47f589a0c1ab5c46a38ccc42db4",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "93ab0616b2e788769089799195b352b22c9114a25dbfa76788c5721e96c35338",
+      "shiny_runtime_sha256": "c0d6fa741cb57e34063cf9b80d12b47903d56ece29c3661901ec4d0af557a4c6",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -62783,7 +64661,7 @@
           "sha256": "731e26b08f7d5c287f06889cb72f1d3969492ec7de3890e139f414c197a7548e"
         }
       ],
-      "scene_geometry_animation_sha256": "270283cb3b4345694b3690724fea86578158acf9c0268ffd9d005e0246b50319",
+      "scene_geometry_animation_sha256": "fc0219f8c5d319ddce9d8160a892571cfc714d44f4fc25296317e9dff0474b11",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -63735,13 +65613,25 @@
         "geometry_motion_sha256": "647c457fd9c4fe8cd75627d52e4c93d29252f4710f919470dd9c6c8a1019876e",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "fd9d170cebf5b79836b1690fb1a4c54c06f1ee6b59d3914f14af4f8ed1ff4085",
+        "shiny": "8a3c7cf13c3cd0605ce37eaafeeb8fc29094a47f589a0c1ab5c46a38ccc42db4"
+      },
+      "sleep_policy": {
+        "species": "kartana",
+        "sleep_eye_materials": [],
+        "policy": "Native skeletal/graphic sleep expression; no fabricated eye texture"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "guzzlord",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "3bdcd7cf187773fb4ee614f04841fb2c2b798588165efdb8f79e198cb520b2fc",
-      "shiny_runtime_sha256": "3f7778d5efa38425c29a59c277e0498f44b4f5dbb4523a8e152f55654194cf28",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "3026d6e1733cd38679f90a58b36017b761f0905ed1e9f07d67bd33b4bf983812",
+      "shiny_runtime_sha256": "110baf0b29f53702de0eda69401d7abf8618bc1c7f4b93761fd3eb5b88addd66",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -63766,7 +65656,7 @@
           "sha256": "13fdc3bec297b9f1c8c6fd6930d54a9f20a9a94799cb74642701013d35e643ac"
         }
       ],
-      "scene_geometry_animation_sha256": "f69322ed2f4063e35161d73861c132f1eb8913878140f1ebd3ee9e021557b60b",
+      "scene_geometry_animation_sha256": "f5fded305a875339de91c95f10d558e315f97a15ca7e4d98c7a2286f78e1779f",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -66129,13 +68019,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "3bdcd7cf187773fb4ee614f04841fb2c2b798588165efdb8f79e198cb520b2fc",
+        "shiny": "3f7778d5efa38425c29a59c277e0498f44b4f5dbb4523a8e152f55654194cf28"
+      },
+      "sleep_policy": {
+        "species": "guzzlord",
+        "sleep_eye_materials": [
+          "AEye",
+          "BEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "AEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "BEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "naganadel",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "57db599f071ca362fd87ab47d07691483b3ed7ce3c50fcba570636a7b92431e9",
-      "shiny_runtime_sha256": "6821b92418fc77fcf1813a449c9fe227c656d3b3ec5f854f332dc0dd8bd5c54c",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "6b84d8f6fbbd724452cded34bc764617b97d262b7bede2b1fc571213f405b5c1",
+      "shiny_runtime_sha256": "bbff1b01d68e3178fd505622323c8d0b99106a2f78344d1e5e09f1ddc87cb4d1",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -66160,7 +68100,7 @@
           "sha256": "e6c87ae63deb361c9f13409eed1058fac41d75828e1b1c1de121918038151263"
         }
       ],
-      "scene_geometry_animation_sha256": "cbc460c202741c0130b44b1999ced5c749aeed029cd6794577a50c65d66855d7",
+      "scene_geometry_animation_sha256": "ad8a258de46109822bb0a975b56a9e6d50dd9ba14f63ce7ce30b60742d6029b3",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -66564,13 +68504,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "57db599f071ca362fd87ab47d07691483b3ed7ce3c50fcba570636a7b92431e9",
+        "shiny": "6821b92418fc77fcf1813a449c9fe227c656d3b3ec5f854f332dc0dd8bd5c54c"
+      },
+      "sleep_policy": {
+        "species": "naganadel",
+        "sleep_eye_materials": [],
+        "policy": "Native eye atlas has no distinct closed expression"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "blacephalon",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "ff2a1507950845428db9df3fe976d9b7fd069fb581c959d9ef7db6cff6d355e9",
-      "shiny_runtime_sha256": "2cce351d29e5ee8f05b490b823d230e5e407469710083a147a313ef2b0ce6838",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "cf73acd452c47b8f424611bf0eff00f528598052dea88f13977876143bf609fd",
+      "shiny_runtime_sha256": "d523fd281d3d96ff02ffafc79cc0fb755244bde0314160dd7c2ecf896e794c2a",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -66595,7 +68547,7 @@
           "sha256": "8a56cf2cc5a4a76f2e85603cbfe8d6166fca7f4610472a800b211548874defb4"
         }
       ],
-      "scene_geometry_animation_sha256": "dd9a07d270c8432bf70592c64a32f654d9b2212e01e7e1d3ec33b0c0f77b64e3",
+      "scene_geometry_animation_sha256": "80dccdc038c95034f0275b7a715af9c6ad65836533eb7b5b7fe3f7a31ae368f6",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -68226,13 +70178,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "ff2a1507950845428db9df3fe976d9b7fd069fb581c959d9ef7db6cff6d355e9",
+        "shiny": "2cce351d29e5ee8f05b490b823d230e5e407469710083a147a313ef2b0ce6838"
+      },
+      "sleep_policy": {
+        "species": "blacephalon",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              3.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            3.5
+          ]
+        }
+      ]
     },
     {
       "species": "blipbug",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "1aa792c146e0f8e23ab067de0c524ae665c398e0e6667c7a371549188764258f",
-      "shiny_runtime_sha256": "f6816c73c721f145522bc2792cc71582f24190fa5c75d1e827cc9aaea496e927",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "116905693f21674ba2bb6e81ebf2375e54c8dc90d367139edfb10384bbb1ab35",
+      "shiny_runtime_sha256": "bc3429cf4611354a23d46f1550956c87d69311fd033f79483dc9d339ab68e7f3",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -68257,7 +70241,7 @@
           "sha256": "9a35b6342a4bfaf453f5eedb65e3b72def85b65c4a02adb92b91f660a66651a4"
         }
       ],
-      "scene_geometry_animation_sha256": "53e49bf0946f56777b6c3d4a8cdf568811f61730d03fe766a9bdff3618bfff42",
+      "scene_geometry_animation_sha256": "4365c00ed5ccb0f579c40363f81c2b5f9a0319044da0a3fb7c9d46694f4efd4d",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -69809,13 +71793,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "1aa792c146e0f8e23ab067de0c524ae665c398e0e6667c7a371549188764258f",
+        "shiny": "f6816c73c721f145522bc2792cc71582f24190fa5c75d1e827cc9aaea496e927"
+      },
+      "sleep_policy": {
+        "species": "blipbug",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "orbeetle",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "a8ef36dd910e6dafd99c7fa61381c14e8169a7ab2dadcf3b21e2a7f8d7983543",
-      "shiny_runtime_sha256": "0bd543c9015d3a113ca42d98090824491ff10bc89012d7c9107844e56a110ae2",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "0ef884d21d22332052b82f0e51b6b1b3e0b168acd5929936d303dfbf3c024149",
+      "shiny_runtime_sha256": "f58e9151fca8de8ec18c99db0cc2e5bf5ec084d4a92ef175f94a1a9893d221d5",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -69840,7 +71874,7 @@
           "sha256": "e9a6341966f43ebd5e0e87901c9802b4719e36e9b232fb833bfa71e39adefd08"
         }
       ],
-      "scene_geometry_animation_sha256": "35fe86f6c36f773965a7ae90d76e39ab82afbf47606f01ad297c24b560cc8259",
+      "scene_geometry_animation_sha256": "f6991968807a87bd7161ad4635d23408dd9c8efbd73d45276655c7e4e3c486d4",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -70596,13 +72630,25 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "a8ef36dd910e6dafd99c7fa61381c14e8169a7ab2dadcf3b21e2a7f8d7983543",
+        "shiny": "0bd543c9015d3a113ca42d98090824491ff10bc89012d7c9107844e56a110ae2"
+      },
+      "sleep_policy": {
+        "species": "orbeetle",
+        "sleep_eye_materials": [],
+        "policy": "Native eye image is a light stripe, not a closed-eye atlas"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "gossifleur",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "f943366f65ed9112b531946c95156990fbf2d15113ebbe732c8223669468bcd5",
-      "shiny_runtime_sha256": "82a9eea0cfd1e22668aae81ef99bf6b460bfa64f4ff541c9ccd115ab85472985",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "1dd60557cb0b00171976f4dfd106238d4bb021edd3f7deacce98eadb7c031a85",
+      "shiny_runtime_sha256": "680ee38d495230bae93ccc6e7a1b65a55ff1eac94659474a4d83198c180d45af",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -70628,7 +72674,7 @@
           "sha256": "25ad63a87ed2b7f255f47f1e8fbbfbebc6dc774d1a5d8b955e2ffe65718d6a1e"
         }
       ],
-      "scene_geometry_animation_sha256": "a9c919ad56c567edddbcb5905b1d5bbb5a449ba273463ddbb40584bcc14c6f6f",
+      "scene_geometry_animation_sha256": "1cec242238352da912c627ab0977eee38391ad0947887901cdea99c493ae69fb",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -70968,13 +73014,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "f943366f65ed9112b531946c95156990fbf2d15113ebbe732c8223669468bcd5",
+        "shiny": "82a9eea0cfd1e22668aae81ef99bf6b460bfa64f4ff541c9ccd115ab85472985"
+      },
+      "sleep_policy": {
+        "species": "gossifleur",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "eldegoss",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "90e0b5be3487178810510705ac6570e3161e28bb3ef1d5a24a83aa6b39909c88",
-      "shiny_runtime_sha256": "3156bc718b4cb82dd4dd15a21758ef2b53fecaa8b834856095369455fcf56ff2",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "c87c75ff34006fa59095367ef3f76eb6219b82815505f60af713eaea0240a780",
+      "shiny_runtime_sha256": "7b9e2929800c5acc1405bd7680d4ea48441723dc5bf70acdc86d1dcb81529c83",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -70999,7 +73077,7 @@
           "sha256": "caef5834465934bf6434a0d6a67b3ee3d93c64c171df16557c8547fe945a2d47"
         }
       ],
-      "scene_geometry_animation_sha256": "23f556f411b691d113bf5bf9b72d1a3c1fbdcde13a7e2d473638947182d76f0b",
+      "scene_geometry_animation_sha256": "23c016e89dab3572508f456036b6130bf9bd74945de7c969bdae5d45537943e8",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -71425,13 +73503,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "90e0b5be3487178810510705ac6570e3161e28bb3ef1d5a24a83aa6b39909c88",
+        "shiny": "3156bc718b4cb82dd4dd15a21758ef2b53fecaa8b834856095369455fcf56ff2"
+      },
+      "sleep_policy": {
+        "species": "eldegoss",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "wooloo",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "9b4cdf20835a00de8c2f092b0b6db4b86657c617c468ead6e569582cbe17530c",
-      "shiny_runtime_sha256": "50ee80624f31808eef4bc9bd560f667bf6d9aa5d630ec9e12c483c3386016805",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "2730d5d20142b9289ecbb7cbc39cb151a3a6b487412da248eca899dabf6fd3a5",
+      "shiny_runtime_sha256": "c2c9f9cf8f859cd3c74f5899cdc9abcd6ca200aaf662016c9f16f381dc6a257b",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -71456,7 +73566,7 @@
           "sha256": "fd54990e546eadfe833bf2f281bb111fc28194fbd47079ac3205dadf1c9ca5c7"
         }
       ],
-      "scene_geometry_animation_sha256": "78f1857a08c2326826087da3dbba327ddb80d33332f8c7113e84db8a8f64c3ac",
+      "scene_geometry_animation_sha256": "ef33f54b5e31a957e683b9b02ee2b06a00ef30b28d23bb250539aa335dc9b4c7",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -71802,13 +73912,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "9b4cdf20835a00de8c2f092b0b6db4b86657c617c468ead6e569582cbe17530c",
+        "shiny": "50ee80624f31808eef4bc9bd560f667bf6d9aa5d630ec9e12c483c3386016805"
+      },
+      "sleep_policy": {
+        "species": "wooloo",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "dubwool",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "27e8de9379a383a2a7331b9026ca8d3c97b99d8fa5ce4d3843d353bb8f551999",
-      "shiny_runtime_sha256": "6b4693941ab8e2f3014bde48980d9d13731a3e6341233e5d3b1f842b68ecde16",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "c4b8a76c292d1a76efa96782e619a6843915ebce151d8423fe106dbf5aa4af59",
+      "shiny_runtime_sha256": "37bace2aff8782dae6f7611b2d5a5dc7097f03036522b14748b300c5f8e893e2",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json",
         "uv-palette-final-captures-v3/review.json"
@@ -71834,7 +73976,7 @@
           "sha256": "5e9faa173e490bec61249a2040e7628813455bd4bf4c6e4e889b3a8e00f56597"
         }
       ],
-      "scene_geometry_animation_sha256": "deb81badab100a5c4dd312bcdc5ed0cd3cd9d679534e07efd382eca19013dac9",
+      "scene_geometry_animation_sha256": "d45f0f2a3449ac6307ef81e965b447736a10e0409398d10fa6155ec1ef66588e",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -72198,13 +74340,45 @@
         "runtime_approved": false
       },
       "uv_palette_selection": "BodyA00 on source HornSkin mesh is head/face; Eye background white; source LegSkin and dark horns protected.",
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "27e8de9379a383a2a7331b9026ca8d3c97b99d8fa5ce4d3843d353bb8f551999",
+        "shiny": "6b4693941ab8e2f3014bde48980d9d13731a3e6341233e5d3b1f842b68ecde16"
+      },
+      "sleep_policy": {
+        "species": "dubwool",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "yamper",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "c081303add30ab43fec321e9084f57d14ee84146254ab3168c9f74208d6af889",
-      "shiny_runtime_sha256": "246d43f5dedb821399ecd364da16a1e63adeddcd24f60306b7e9d7bbe6160c22",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "7a462968bc8c95b61b9f7f0e42e8b96fae04b313a625edc1fb1ce147ed2e112f",
+      "shiny_runtime_sha256": "42dccc5d266f8978ca041e7301099210941d45ad8ac79fd2127d6ea67cc57d73",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -72229,7 +74403,7 @@
           "sha256": "42f3a72171dabefcc69bdcdfb928d2a3452be24604fa3485f8386d2a72d7a3b5"
         }
       ],
-      "scene_geometry_animation_sha256": "dc84a9e2b78a6cef6bf526b1b1ec1a84bf6e513879c4b8fe6b43c29128ba20a7",
+      "scene_geometry_animation_sha256": "f5435c3a6b951b5ee5bbd629cb9d6e33538fb9d7a2a31259168d1d74360c24cb",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -72506,13 +74680,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "c081303add30ab43fec321e9084f57d14ee84146254ab3168c9f74208d6af889",
+        "shiny": "246d43f5dedb821399ecd364da16a1e63adeddcd24f60306b7e9d7bbe6160c22"
+      },
+      "sleep_policy": {
+        "species": "yamper",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "boltund",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "0a6b565d41e6dd4451c1e348a89844eeb0e1611c781be1386fb6a7e0c27f53ad",
-      "shiny_runtime_sha256": "66ec5a499ec6e56c4d02f0e8e45d8c9fed136faffbed987a514219330ae04c3d",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "2223720f0aefa94066254ffd1f7e04b78685398fb683c95cd8577c954388153c",
+      "shiny_runtime_sha256": "4592bd762a80e0ba8b28634513703ac425836880835a523587ec47962482bd6d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -72537,7 +74743,7 @@
           "sha256": "da4ce69ce8bdc37db8e4599d0f25471f231b961fc36f770dd75165a951c0a7dc"
         }
       ],
-      "scene_geometry_animation_sha256": "6d447a480b4a78fbba1462a73d9ad730510af13b0d51e0eb4c79e3661b82e2de",
+      "scene_geometry_animation_sha256": "d3e80ffc8df0a1c508cc2addc1354c1f3fcb2a57af92bbbf0ecff5b914939e4b",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -73614,13 +75820,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "0a6b565d41e6dd4451c1e348a89844eeb0e1611c781be1386fb6a7e0c27f53ad",
+        "shiny": "66ec5a499ec6e56c4d02f0e8e45d8c9fed136faffbed987a514219330ae04c3d"
+      },
+      "sleep_policy": {
+        "species": "boltund",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "sizzlipede",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "632ac08e2b3c4306822354f974e327d79e6edca3047763d1ffbf8f552630f9b8",
-      "shiny_runtime_sha256": "b3224311fb8d8c40401a8319c77680e909e485ce3122928b4bc2e2d07207dbc7",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "7ebecb3591f661e23466e619e5346cbcef02624cedfe18661237a2e3aabdc9de",
+      "shiny_runtime_sha256": "ed35fe8eefedbbf7975b861b0a28f335ce3d4ad119f3d2cfb395a20f443b5d0d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -73645,7 +75883,7 @@
           "sha256": "23ec80dd25ceae93e8bde5a401a706de84720c21487e948622cbaf524fb5b0a4"
         }
       ],
-      "scene_geometry_animation_sha256": "1e1a4cf5bccbaaea03f7f9c95e83c4e7e15d1db084bde2dab252ea67303a4840",
+      "scene_geometry_animation_sha256": "9bc6d686f8abba4f5f65ae2075ebcee09dd350967bb73dc1d29865f703bb5e4f",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -75502,13 +77740,63 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "632ac08e2b3c4306822354f974e327d79e6edca3047763d1ffbf8f552630f9b8",
+        "shiny": "b3224311fb8d8c40401a8319c77680e909e485ce3122928b4bc2e2d07207dbc7"
+      },
+      "sleep_policy": {
+        "species": "sizzlipede",
+        "sleep_eye_materials": [
+          "REye",
+          "LEye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "REye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        },
+        {
+          "material": "LEye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            2.5
+          ]
+        }
+      ]
     },
     {
       "species": "sirfetchd",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "2ed18f270e44d8f0c745162926740d61375c00457d753ed13dc402ea14612ef6",
-      "shiny_runtime_sha256": "ebbce4f23d53eefedcb675c2d5fd9aeec710282178c4087207521e2f04407fba",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "328862e54e5c0b085272ce323364112a447da6d3febc7083348e8c19a2762633",
+      "shiny_runtime_sha256": "a526394affa2289ca18d287f8e9f17673a25f7757d3dc00b4ce15418452d509d",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -75533,7 +77821,7 @@
           "sha256": "0a8d24cfc52b446d615175ba0a56afba36bbe360c5532639ed312db6860360d3"
         }
       ],
-      "scene_geometry_animation_sha256": "753d52261bfad7ab9a36fb0964fa1a203e33832f97c7ea7ab8b409d777ef5fb3",
+      "scene_geometry_animation_sha256": "948c887e0e53028927d0c96e7acc9bb1fc85f91ccba35ee50065a1118b4ae796",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -75732,13 +78020,25 @@
         "current_selected_source": "sirfetchd-za-pair-v1, resource pm0981_00_31"
       },
       "authored_base_palette": null,
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "2ed18f270e44d8f0c745162926740d61375c00457d753ed13dc402ea14612ef6",
+        "shiny": "ebbce4f23d53eefedcb675c2d5fd9aeec710282178c4087207521e2f04407fba"
+      },
+      "sleep_policy": {
+        "species": "sirfetchd",
+        "sleep_eye_materials": [],
+        "policy": "Verified ZA skeletal eye/sleep source"
+      },
+      "sleep_material_selection": []
     },
     {
       "species": "dracozolt",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "9ef2ee6def7197c9ec8b9c378e1914d3b80a9a4ff8926419a8449639b2b901fb",
-      "shiny_runtime_sha256": "7de450d2f6b1c020b238073ad4f1de5010b9217ef8bd8fcd6ddd2c6263d15bf1",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "e44f6420444a0f11c7d2786a7972d6d36c0700464be4b6d5c0bebc853aad69ca",
+      "shiny_runtime_sha256": "40b8608b5e1bfc7c07ec66e565969f93577d8396b06f835546a0f79a64721972",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -75763,7 +78063,7 @@
           "sha256": "e1a5c42e68b85901599c25fb512dd37ff3fe7df898bf3367a885503d3678882d"
         }
       ],
-      "scene_geometry_animation_sha256": "5a799efb4a610cb17df653a93fa5d0ef05bb67b51dd5c3b15b0075c76f8f6c8d",
+      "scene_geometry_animation_sha256": "674e058b4b937fb05b498290933a00a049dcc3e103a8ae6268d4e4456d7c0a4b",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -76821,13 +79121,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "9ef2ee6def7197c9ec8b9c378e1914d3b80a9a4ff8926419a8449639b2b901fb",
+        "shiny": "7de450d2f6b1c020b238073ad4f1de5010b9217ef8bd8fcd6ddd2c6263d15bf1"
+      },
+      "sleep_policy": {
+        "species": "dracozolt",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "arctozolt",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "8bd6af6c869ac336ecdede8ac952da2f3562651525a78b7e28158bae0122217b",
-      "shiny_runtime_sha256": "eb1eedf09da50db9a76546961584725edfa7dea4c3e2abf8ecadb14d0b9adbb9",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "986f5fcef72839feb105b52c2d08cabb70cdab4096dff64c21ca572918ed6c0b",
+      "shiny_runtime_sha256": "f019193bd4a4058313597dcaba8923955dac8b9f3fe7e4b188f480aa329920e9",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -76852,7 +79184,7 @@
           "sha256": "576c629e93ee39b1a1e75bb011f50f44c5f856ca74ec21e2d139eb498643dbd8"
         }
       ],
-      "scene_geometry_animation_sha256": "5c712c12dea4482c6ea702dc9a58529ff5d176e4e05fe90977b68d0ebed00f41",
+      "scene_geometry_animation_sha256": "f380309239c7537b15c342ff312701b13e217c556520a8d131a4feda5702d411",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -78877,13 +81209,45 @@
         "alpha_policy": "native evaluation, not identity with the erroneous first-tile bake",
         "runtime_approved": false
       },
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "8bd6af6c869ac336ecdede8ac952da2f3562651525a78b7e28158bae0122217b",
+        "shiny": "eb1eedf09da50db9a76546961584725edfa7dea4c3e2abf8ecadb14d0b9adbb9"
+      },
+      "sleep_policy": {
+        "species": "arctozolt",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     },
     {
       "species": "dracovish",
-      "status": "appearance_approved_sleep_and_battle_pending",
-      "normal_runtime_sha256": "6bcea34b32846d716246aedc67a5f149a89a4de5971aa8a9d4261857296c2dfd",
-      "shiny_runtime_sha256": "b4349f7e693f0f9054cee7754ba55ae8becbf03bb43c2a55fcf954c2aecf03ca",
+      "status": "appearance_and_sleep_approved_battle_pending",
+      "normal_runtime_sha256": "0569350afe9790ae6f64e2e1d19b0a47bfa0e8e762c480f7570eefe32cb26540",
+      "shiny_runtime_sha256": "22c07ce48de3f03c34d9de36404e4c849492873b9afb5bfec4c1bcf95e870ae8",
       "capture_report_paths": [
         "uv-corrected-pair-captures-v2/review.json"
       ],
@@ -78908,7 +81272,7 @@
           "sha256": "313a205bc8e3ed0939e98b665ea65ca0fdf45942834b386b8ddd98fee0fe4afd"
         }
       ],
-      "scene_geometry_animation_sha256": "79a2d6631e801c9cc97e26686f3cd72fab1abddc083a80ff37ceaa8302d6cb14",
+      "scene_geometry_animation_sha256": "b2995eb1d4af7712bb4c35d37fc5f59a0b3b9b6757e7e00e9b169819081a27d7",
       "normal_candidate": {
         "action_timing": {
           "damage": {
@@ -79389,7 +81753,39 @@
         "runtime_approved": false
       },
       "uv_palette_selection": "Head/Jaw weights: white head and purple head marking, black/red-body-region replacement outside mask.",
-      "appearance_user_approved": true
+      "appearance_user_approved": true,
+      "sleep_user_approved": true,
+      "complete_pose_channels": true,
+      "appearance_runtime_sha256": {
+        "normal": "6bcea34b32846d716246aedc67a5f149a89a4de5971aa8a9d4261857296c2dfd",
+        "shiny": "b4349f7e693f0f9054cee7754ba55ae8becbf03bb43c2a55fcf954c2aecf03ca"
+      },
+      "sleep_policy": {
+        "species": "dracovish",
+        "sleep_eye_materials": [
+          "Eye"
+        ],
+        "policy": "Native closed atlas"
+      },
+      "sleep_material_selection": [
+        {
+          "material": "Eye",
+          "defaults": {
+            "UVScaleOffset": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          "sleep_uv": [
+            1.0,
+            1.0,
+            0.0,
+            1.5
+          ]
+        }
+      ]
     }
   ],
   "scope": "review-only; no runtime admission, bundle, publication or player-visible change",
@@ -79405,10 +81801,22 @@
     "focused_tests": "10 passed: native UV domains, palette variants and GLB geometry/animation parity",
     "native_uv_domain_rebakes": 69,
     "unchanged_first_tile": 7,
-    "own_visual_review": "76 normals and 76 shinies checked against local references; 12 further authored palette repairs plus scoped Nihilego rim correction. User re-review pending."
+    "own_visual_review": "76 normals and 76 shinies checked against local references; 12 further authored palette repairs plus scoped Nihilego rim correction. User re-review pending.",
+    "completed_native_channel_evidence": {
+      "runtime_pair_proof_sha256": "c30bb33ac4c705f4c6d5fe9f9c5483b94aedceb23b0e96ecb44652365f111cdc",
+      "native_curve_proof_sha256": "c12049759ec511f10d91c8ccafe70bae1bc741cbf6022644045523db8e619fa4",
+      "native_pose_proof_sha256": "bbfdb53d457131b9934cc07e1a6c1be20baa7509264921e78df810138fe84f1c",
+      "transition_proof_sha256": "756045004f210e98827d35e412a466ae01c84ece463a5e98892bc9b4183d84eb",
+      "pairs": 76,
+      "unchanged_native_tracks": 57716,
+      "added_constant_default_channels": 13678,
+      "transition_failures": 0,
+      "focused_test": "tests/complete_pose_channels_check.gd",
+      "native_pose_proof_tool": "tools/sprite_factory/catalog_runtime_channel_proof.gd"
+    }
   },
   "appearance_url": "http://127.0.0.1:8781/shiny-76/appearance-76-v2/index.html",
-  "battle_status": "All 76 fresh scenes await grounding/battle qualification. Old 73 measurements are superseded; Togedemaru/Dhelmise had idle half-frame errors.",
+  "battle_status": "76 sleep-approved pairs; initial battle scaling/grounding in progress; no runtime admission",
   "evidence_root": ".tmp/remaining-274-production/shiny-76",
   "user_feedback": {
     "date": "2026-09-30",
@@ -79460,7 +81868,7 @@
     "approval": false
   },
   "eye_and_detail_audit_pending": 0,
-  "sleep_expression_review_pending": 76,
+  "sleep_expression_review_pending": 0,
   "superseded_evidence": {
     "appearance_url": "http://127.0.0.1:8781/shiny-76/appearance-76-v1/index.html",
     "technical_checks": {
@@ -79477,5 +81885,15 @@
     "scope": "eyes and body details in idle and attacks, normal and shiny; sleep expressions and final battle qualification expressly excluded",
     "page_sha256": "b2b91bbc23fe950edb5cc4420282e26d959c973b6c2bbf4f66acae4aaabcc68b",
     "runtime_stage_sha256": "8dde20df22aee9123d0f7aeef1a55b5e6b3f5643abb7887eab0fe8b7ba7028c3"
+  },
+  "sleep_user_approved_pairs": 76,
+  "sleep_approval": {
+    "date": "2026-09-30",
+    "reply": "Allemaal goed",
+    "scope": "sleep faces and poses for normal and shiny; battle size and grounding remain pending",
+    "page_sha256": "52b8fa8024aacbfc081c5f1d4eacffc7c2e24fc5eb036c19d391b8295efeaa5d",
+    "runtime_stage_sha256": "7d1368471673d812aaeea8d514148cf7699537a07bad1c56280ede17519805c8",
+    "capture_report_sha256": "fbeca9f70ea7c155e72719c19899c3a451ed2483674a7486af2c6521c555d2e4",
+    "url": "http://127.0.0.1:8781/shiny-76/sleep-battle-v1/index.html"
   }
 }
