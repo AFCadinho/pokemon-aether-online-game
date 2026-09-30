@@ -7,7 +7,7 @@
   "entries": [
     {
       "species": "metapod",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "b70776099c145c484be37d27a8693710d5ed8f9187bc97a8ed15e28a4e24e701",
       "shiny_runtime_sha256": "0a789c6030342555d05f90565c12239f2ebab9cdc6309f6770433cea2a5a995e",
       "capture_report_paths": [
@@ -1552,11 +1552,19 @@
           "special_attack": 0.0299974866211414
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "butterfree",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "211e0b200a086bf4be0cf35decfd760df6307ac543664713864211441ba51243",
       "shiny_runtime_sha256": "bf764540c047c26084ff837806ebbdceedb0482a36c5d49f0a2c498d1e463033",
       "capture_report_paths": [
@@ -2481,11 +2489,19 @@
           "special_attack": 0.385669857263565
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "raticate",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "18f3117d31a66e690eb0d82399300a42d6e14d30b83318cb37740774aa63cd6d",
       "shiny_runtime_sha256": "bdeb5a7c7ef7d357c0311c23f0874a1b12e0ec801601407522953ef8d842b4ff",
       "capture_report_paths": [
@@ -3805,11 +3821,19 @@
           "special_attack": 0.0299999602138996
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "nidoran-f",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "9e4cf09bdba2f6a4e8cbc6e34ea69036916282fd1e6315eceddbcb9296cb23b5",
       "shiny_runtime_sha256": "a2121192a21917b736722a40e5991881d7fed4464db163e83ad4229bec1b4837",
       "capture_report_paths": [
@@ -5054,11 +5078,19 @@
           "special_attack": 0.0299821458756924
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "nidoran-m",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "09c0a538a77a83fa69688519d10d506c441b9e291d7909b3daa112363ef5a74c",
       "shiny_runtime_sha256": "0f7e107f4bdb7373d235ef5bbf39b112242b40a61e16e174ffd406b33a38bd6f",
       "capture_report_paths": [
@@ -6772,11 +6804,19 @@
           "special_attack": 0.0299965143203735
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "parasect",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "7a53d5a78647b3af614e4868a9684096c97f4079dd2edc6778513c472b390802",
       "shiny_runtime_sha256": "92d41c3872d4ab9b64e6fae0087907857137567859b6e09da1b495e2352ac7b4",
       "capture_report_paths": [
@@ -7679,11 +7719,19 @@
           "special_attack": 0.029897952452302
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "lickitung",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "790cf2f0cd05a59fe4dee4f22b3ada5d66f134c1a4887b75ddfcba4b4b6d2104",
       "shiny_runtime_sha256": "c608da3e99ff30cbcb631930bb98ab4652d4620a1bded8d90a05a190ebecd3ee",
       "capture_report_paths": [
@@ -8985,11 +9033,19 @@
           "special_attack": 0.0299011152237654
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "tangela",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "609ca19a2f3efd163fde87ed36d632b32166ccc6e46c5b00c9dfa3afe8d165f6",
       "shiny_runtime_sha256": "ceaa52d66631230b7ba82291e90c86b81c4bb0edf778ec2cb3ed79b3c86fa4c6",
       "capture_report_paths": [
@@ -10783,11 +10839,19 @@
           "special_attack": 0.0283830054104328
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "goldeen",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "99b1ed79ca6a66f5e57b8db7c09efc8f7c2882abfd4a1f843ae637335084b559",
       "shiny_runtime_sha256": "69fdd7a06faf69ae19d557dbd9a0ba5c8ee16ae64111b53e5ad55035a056d516",
       "capture_report_paths": [
@@ -13603,11 +13667,19 @@
           "special_attack": 0.366867512464523
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "togepi",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "cbaf86210da322c349658a92c063b80278ee7030a64fc9e1fe44f2787240dda7",
       "shiny_runtime_sha256": "1571f7a6867e29916c05fd0a3e7b77dd9b0eec01b89e8e63618b54d1d98aa1ba",
       "capture_report_paths": [
@@ -16301,11 +16373,19 @@
           "special_attack": 0.0299966931343079
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "togetic",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "b557a139c9eb3bd84ec32485bd8f775e999820315f9c59f0e1276449ff4e9cfc",
       "shiny_runtime_sha256": "b8456bf7cbd0e25c16d52732dfbf4eb39c9fd0d805821c9b705f8e0d3a038c44",
       "capture_report_paths": [
@@ -17707,11 +17787,19 @@
           "special_attack": 0.118897490203381
         },
         "source_report": "sleep-contact-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "natu",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "38f0776952099c869d54456e97477a3882bf779586523ff67d8312084b876795",
       "shiny_runtime_sha256": "29b05253626684d24d80afd84f9d9e52e57a1c23720ec66ab1a58e45b6b64a09",
       "capture_report_paths": [
@@ -19443,11 +19531,19 @@
           "special_attack": 0.0299999564886093
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "xatu",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "5047340bd3ea496dbda27e43ef94f65ab6c67418f42187197729feadcdcc7a1e",
       "shiny_runtime_sha256": "e342d59eea56d3270e4b0a3fcf8ef2ca09749590a01dd087e36b1de50ebcc201",
       "capture_report_paths": [
@@ -22861,11 +22957,19 @@
           "special_attack": 0.0300000160932541
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "wobbuffet",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "8acee9334c2264bd717115ad32c67399780b05dedab656d9eafa6696b84a889a",
       "shiny_runtime_sha256": "563371d51f7c0d3ff2eecd5e99d170f85d851db36072aa23e3598d26e2addd7f",
       "capture_report_paths": [
@@ -24221,11 +24325,19 @@
           "special_attack": 0.0299863088876009
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "shuckle",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "f5bd4ce8976021f9077699cd95a8bd89f31a33fab7daf2511219bcd6372b7fff",
       "shiny_runtime_sha256": "d566526f4f84303541008d233b3642eea69cf2dd32c7be39835155225e66f3e2",
       "capture_report_paths": [
@@ -26754,11 +26866,19 @@
           "special_attack": 0.0299998186528683
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "smoochum",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "73a9b6fcf4379b0038ff050a98d9ad2428de087948e9d94e95d5db0bd60d125b",
       "shiny_runtime_sha256": "597b8dddc8d17af3f83d168b46f339bed666a48346280d6917941e0b66476d8a",
       "capture_report_paths": [
@@ -30303,11 +30423,19 @@
           "special_attack": 0.0299351233989
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "miltank",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "113186d7f0cb0b3d0c69cbaf0a4ad072c0ae10d33f2aeb643154fda7b3b07a54",
       "shiny_runtime_sha256": "93996e80dc5213a77af8d664be3ec92245756fec5d2692ca3d0cc998a6171b11",
       "capture_report_paths": [
@@ -32606,11 +32734,19 @@
           "special_attack": 0.029943460598588
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "celebi",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "74f8c4b2b8d0c9c4e10e4f7f9c67e51dfe354f6acbe54b127032cb6612c32166",
       "shiny_runtime_sha256": "3427de1789dea346b79ba69c6eaf0b1e2bc3ca993f12fe35d651ac0e6474e407",
       "capture_report_paths": [
@@ -34442,11 +34578,19 @@
           "special_attack": 0.245459467172623
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "zigzagoon",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "21a545432c530a350f025066758909b9f678587b9fb4e488ef3024e06618ca1b",
       "shiny_runtime_sha256": "7970af200d02112651bf5940b1fba36c1395fc7f3913c5c529ceb8904d98d2c4",
       "capture_report_paths": [
@@ -35861,11 +36005,19 @@
           "special_attack": 0.0299620032310486
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "linoone",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "b43b81f0083f051c5035542615d7177c2ddfd7301828c113701be75e453a08cf",
       "shiny_runtime_sha256": "e60e07ca9da64d0d270326575f98582116098d98a4a60a5abec9231b3c0163a1",
       "capture_report_paths": [
@@ -38517,11 +38669,19 @@
           "special_attack": 0.0299835987389088
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "wailord",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "wailord_battle_size_correction_pending",
       "normal_runtime_sha256": "dbb85dc4d3019ed7a7a9f328106e32b2cc2e86275bfa8a40dc0d6b99d17073b8",
       "shiny_runtime_sha256": "a0020794fe4b7b318fb5321695a8ea8177ac518ab07c3fa8f1db46ec36ac52e7",
       "capture_report_paths": [
@@ -41461,6 +41621,698 @@
         "motion": {
           "schema": 1,
           "sha256": "ccf0ec9e299909691802e97b3881a8fe889db108b35f59cdc532c4be5f09560f",
+          "scale": 0.343594257507324,
+          "yaw_degrees": 0.0,
+          "lift": 0.0,
+          "clips": {
+            "physical_attack": {
+              "duration": 3.64000010490417,
+              "intent": "clearance_only",
+              "offsets": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "special_attack": {
+              "duration": 3.24000000953674,
+              "intent": "clearance_only",
+              "offsets": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "damage": {
+              "duration": 1.24000000953674,
+              "intent": "clearance_only",
+              "offsets": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "faint_start": {
+              "duration": 2.44000005722046,
+              "intent": "clearance_only",
+              "offsets": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.0017357,
+                0.0039926,
+                0.0062498,
+                0.0085189,
+                0.0107968,
+                0.0130675,
+                0.01531,
+                0.0175527,
+                0.0199101,
+                0.0222962,
+                0.0246099,
+                0.0268151,
+                0.0290196,
+                0.0290196,
+                0.0290196,
+                0.0290196,
+                0.0290196
+              ]
+            }
+          }
+        },
+        "minimum_y_120hz": {
+          "damage": 0.159820601344109,
+          "faint_start": 0.0300000086426735,
+          "idle": 0.151113510131836,
+          "physical_attack": 0.0707943812012672,
+          "sleep": 0.0745788663625717,
+          "special_attack": 0.159863173961639
+        },
+        "source_report": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": false,
+      "battle_approval": {
+        "user_feedback": "Wailord too small",
+        "review_required": true
+      },
+      "superseded_battle_calibration_candidate": {
+        "runtime_approved": false,
+        "normal_scene_sha256": "dbb85dc4d3019ed7a7a9f328106e32b2cc2e86275bfa8a40dc0d6b99d17073b8",
+        "shiny_scene_sha256": "a0020794fe4b7b318fb5321695a8ea8177ac518ab07c3fa8f1db46ec36ac52e7",
+        "motion": {
+          "schema": 1,
+          "sha256": "ccf0ec9e299909691802e97b3881a8fe889db108b35f59cdc532c4be5f09560f",
           "scale": 0.215157454223633,
           "yaw_degrees": 0.0,
           "lift": 0.0,
@@ -42140,11 +42992,36 @@
           "special_attack": 0.100105732679367
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_size_review": {
+        "user_review_pending": true,
+        "scale_before": 0.215157454223633,
+        "scale_after": 0.343594257507324,
+        "policy": "Wailord species override; largest actual idle projection fitting620x390px in both cameras and sides;120Hz idle and allclips clearance; all16 actual views in frame and HUD proxy clear",
+        "url": "http://127.0.0.1:8781/shiny-76/sleep-battle-v1/battle-76/wailord-size-review-v1/index.html",
+        "reports": [
+          {
+            "path": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-idle-v1.json",
+            "sha256": "34238e426e794e00dfe38af4091746ddf4e08d484e61162586c8d16c23f8ed68"
+          },
+          {
+            "path": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-normal/captures/battle-review.json",
+            "sha256": "f8db228b1b9967227fc136db79c4bfd1a244f22f0ea81de61cebfc890ae76832"
+          },
+          {
+            "path": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-shiny/captures/battle-review.json",
+            "sha256": "352dce57edbe39da8f097e2e59dd3df1a105581f5c8a42c3016fb39ba9d12f11"
+          },
+          {
+            "path": ".tmp/remaining-274-production/shiny-76/sleep-battle-v1/battle-76/wailord-size-review-v1/receipt.json",
+            "sha256": "b0d72d0cddd6989a22a89014e6e52d4c2d15290cc052da7f9e49491b68bb35be"
+          }
+        ]
       }
     },
     {
       "species": "wynaut",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "2fc3b6fbaff15ca3696c0c62d65cb814cf3ccd92b2a66187d7ffeacd073f7165",
       "shiny_runtime_sha256": "936f5fa0bb730774895e7cb299406f3bea2584a902966bddd26622005d74f918",
       "capture_report_paths": [
@@ -44734,11 +45611,19 @@
           "special_attack": 0.0296516213566065
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "spheal",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "01d01a956d801c9567fe27f94a410a3ca80aa0f71383cfbc494da4f12ff3ea9c",
       "shiny_runtime_sha256": "5d1ee503531f2ce998bc780165fac47204cc5f89e04016871ab3340ec4de81e3",
       "capture_report_paths": [
@@ -46586,11 +47471,19 @@
           "special_attack": 0.0299919936805964
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "victini",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "937aaa06d19cde55a23d569a186acf174b948c029d1b763609eea0fb8c35ebd3",
       "shiny_runtime_sha256": "f5f412c603875b08e18f469cc89e10c9c142848095f3df8ba16ac2a4196a237a",
       "capture_report_paths": [
@@ -48701,11 +49594,19 @@
           "special_attack": 0.029999952763319
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "herdier",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "d141159b766cad842e365fdd954805d14a33124fd36edc2a39590dfd5ab0958b",
       "shiny_runtime_sha256": "2e70a8f356b9c0ca6b706f51443f7071d4f206d8889b200a356cc32194840a47",
       "capture_report_paths": [
@@ -49921,11 +50822,19 @@
           "special_attack": 0.0297706797719002
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "stoutland",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "95f9d45f54d9d3e50ff6059712be625ab29d7fdbc4080b36080d5b57c9584bec",
       "shiny_runtime_sha256": "0df4ebcb599a24401be7bea09339853e51cd0ca82f2c8d4e3cbc3b19e60b846f",
       "capture_report_paths": [
@@ -51227,11 +52136,19 @@
           "special_attack": 0.0299929417669773
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "pidove",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "634eb1cf9a5ad1e6bd5ad74b26d5209c469f9683ec9911ede4fae0d73249d922",
       "shiny_runtime_sha256": "42f3422419ba1dcec8b3ce8a6c5ff38e3551ebe903ba6df20774b04619532e3a",
       "capture_report_paths": [
@@ -53386,11 +54303,19 @@
           "special_attack": 0.02825135178864
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "woobat",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "0d348b5e798b87bc44d64da978d460bdba710f8a739a36305e465636a9964671",
       "shiny_runtime_sha256": "aa926373d71d1830c144e6e6c57f78e67b97cee6375af66bfed9f47ebcc222f3",
       "capture_report_paths": [
@@ -55010,11 +55935,19 @@
           "special_attack": 0.282584011554718
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "swoobat",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "f574207d7727628e4d6b1a1d8af3a549ec91f5a6ef0c269f3b78c02d8dc8a64c",
       "shiny_runtime_sha256": "256fef2060d6cc8f382fc2b62eecb0192acb02c79638fd58643dfacdaa909c29",
       "capture_report_paths": [
@@ -57709,11 +58642,19 @@
           "special_attack": 0.325932234525681
         },
         "source_report": "sleep-contact-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "darumaka",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "855445fab7d36d9264811acdff8b981b19a03f1041e7f4078e62383a6f41ddaa",
       "shiny_runtime_sha256": "3a8d5b39cb8104af3283fd9e69e728d32b0043521a1e9f3af1938a5b1d5dab9d",
       "capture_report_paths": [
@@ -59052,11 +59993,19 @@
           "special_attack": 0.0299007669091225
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "maractus",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "95be01543d1d1c842f532d738c956e286fd1555228c9be40d3a18c6a4146da3b",
       "shiny_runtime_sha256": "ee419b3f4201ed178b9a0d1ab3ddc38c534bad073b178d54cffb0eadda5e3fbb",
       "capture_report_paths": [
@@ -60598,11 +61547,19 @@
           "special_attack": 0.029999352991581
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "dwebble",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "eddc6c924b1004f6f865c49c0ffbe37f2212816944681dfdbb870be675be5527",
       "shiny_runtime_sha256": "1408bbf67e96edadadbad7fc650e752198f282f74024c4d61fe0bb5fd4d7cdcc",
       "capture_report_paths": [
@@ -63606,11 +64563,19 @@
           "special_attack": 0.0299973972141743
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "crustle",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "43118effa326280853e2ead1a64d70deb658e3267d7185a06e1457dd35115bdc",
       "shiny_runtime_sha256": "086eb5f096ae02b66977786611ce0682767237f1404b9323bd6520666aa502b7",
       "capture_report_paths": [
@@ -65701,11 +66666,19 @@
           "special_attack": 0.0299995727837086
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "sigilyph",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "78ec0b60330f8573aacc8db31df58900a492faf1c68e0eff1d17c65fd5e29707",
       "shiny_runtime_sha256": "ab3acb66c64e7dfcd81c548d2991a9fed55e55386faaf1a2e7c9dbb9e114c296",
       "capture_report_paths": [
@@ -67710,11 +68683,19 @@
           "special_attack": 0.289601594209671
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "archen",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "8291c93295ae9d576073a126fc0d2271c839ed7a1046049f2397850a0a918904",
       "shiny_runtime_sha256": "7249b6c2f103f5d697139ff14d116e9834e2016d291882eb5a849c398b9cc726",
       "capture_report_paths": [
@@ -71077,11 +72058,19 @@
           "special_attack": 0.0299288928508759
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "frillish-male",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "3b0278b5bf515d03a5c2f85c781605effb3c2439aa54557606f1b1baa6f306f8",
       "shiny_runtime_sha256": "719d520db78f5faa6d1cb93a82f8b69effda98439d8930246c3a14b63bfffe89",
       "capture_report_paths": [
@@ -72411,11 +73400,19 @@
           "special_attack": 0.351441651582718
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "ferrothorn",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "e9980cdab8e4d315b626ee7c2390624a444b7adbe8cd69d21ee362ad55a13d06",
       "shiny_runtime_sha256": "bad17eb0ef64264f173a5174276645754a7708389c256f349423ee798a3cdc7d",
       "capture_report_paths": [
@@ -76074,11 +77071,19 @@
           "special_attack": 0.0299816131591797
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "klink",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "1e5705f5dc6c9ef7d84aed41410934257fc8369ff0f109cef6b24ed5dd07fc46",
       "shiny_runtime_sha256": "baccafad6ca045b86706bf8f712b1a17073ee134e0ed4329fbef20616305f04c",
       "capture_report_paths": [
@@ -76913,11 +77918,19 @@
           "special_attack": 0.313912600278854
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "klang",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "b9eef5abb4a8aa29eb3348eabfcd00db1ca9d84fc65ef812e43d84ebac14e680",
       "shiny_runtime_sha256": "4ff3571d7a75b5b9c8e33fb4291be7ccdf8ff5c5a1ce1c1eae20288547c59a7f",
       "capture_report_paths": [
@@ -77835,11 +78848,19 @@
           "special_attack": 0.15423609316349
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "klinklang",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "30a8b75506b9ddd3e263b481ca82f215f14962155e7bd0d58897499ccb28d0c4",
       "shiny_runtime_sha256": "9b5e673f8295fb819d5b139a62ebf9016eb80033e0d09d5eb6cf8ececc8672e1",
       "capture_report_paths": [
@@ -78906,11 +79927,19 @@
           "special_attack": 0.0722607970237732
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "bouffalant",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "0d469e41db70cce3b11d7f2e644fd84dcc2ce05bb06c7064dd8090cca9cffc23",
       "shiny_runtime_sha256": "e9d0a08e6109eba01f9241b14ffdaf520819123cdb549e2ad7d15314d38de6f0",
       "capture_report_paths": [
@@ -83650,11 +84679,19 @@
           "special_attack": 0.0299945455044508
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "morelull",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "8b8ec6f5c550d552cfbcc9eb48dc66c6c6ea23344e277b9c5a0e18babc0d90e8",
       "shiny_runtime_sha256": "7cf81f52e74182d7db288ae2664a74134f39999be1336fb4be14a5f21c1c7940",
       "capture_report_paths": [
@@ -85582,11 +86619,19 @@
           "special_attack": 0.029999852180481
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "shiinotic",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "f5541b79545e368c3fdfc3515de1d2141e584d4bed48ea4596bb71d73d390b01",
       "shiny_runtime_sha256": "31f8e2ea47a079fecaf0ba81e62686ba91d8359c8c9094dc2fc0d3a445204537",
       "capture_report_paths": [
@@ -87384,11 +88429,19 @@
           "special_attack": 0.0299999620765448
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "stufful",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "33fd144f5bd21a3bd78e9bbd388ea43bb3855d90b5f86d0a877ca072cc32e003",
       "shiny_runtime_sha256": "0e6bab87e20992b47d1adfa810a33217efc996e9fa2620f4deafad6f9e01fdee",
       "capture_report_paths": [
@@ -89320,11 +90373,19 @@
           "special_attack": 0.0299956984817982
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "bewear",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "5709661feb892be546bf1f0f3bc01d7c770fba81ca950217b5925c729e3c7a1b",
       "shiny_runtime_sha256": "6d4e59b89ab7950e53e745048250a2898c3bd8b30f34b72bbf43edddfb35f04d",
       "capture_report_paths": [
@@ -91513,11 +92574,19 @@
           "special_attack": 0.0299441665410995
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "pyukumuku",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "06b614b3b23a1906514220c054eec4e3a055f99ac6a50892785ece5c1e6af7ce",
       "shiny_runtime_sha256": "d385d28879c0572acd6ff033ed5d10392f2199b21845431fd8b4ea92b7b42916",
       "capture_report_paths": [
@@ -93193,11 +94262,19 @@
           "special_attack": 0.0299956165254116
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "type-null",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "f850343b40eb25ebf4f141aa02ad4dbe155839ba658edec45292322b940bd218",
       "shiny_runtime_sha256": "bba3a7c982a55ea351d3a730e26b80dc0018d5d8f2a5e8a1f2e33cc861c676ba",
       "capture_report_paths": [
@@ -96676,11 +97753,19 @@
           "special_attack": 0.0299979094415903
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "turtonator",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "2622a771599656ac1cf4f6aebdfaf420ca3fa4c0dd5c6e2f74258b2fb318a489",
       "shiny_runtime_sha256": "0c0b6f6bdf9181d751cfbfa2f6bc3e6755262e8b6eb4d76ed2ca43a8e94d97e0",
       "capture_report_paths": [
@@ -101099,11 +102184,19 @@
           "special_attack": 0.0302873235195875
         },
         "source_report": "half-frame-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "togedemaru",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "4e70f0604700683bc6c81cdd4d628c381da1be441e9725022f1de6f555486a86",
       "shiny_runtime_sha256": "fd3d491f285e9eb82323b440228395be192464804246ecc611ff34cc52d7c3b9",
       "capture_report_paths": [
@@ -103630,11 +104723,19 @@
           "special_attack": 0.0299999564886093
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "dhelmise",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "465afff99780c68c350527f113a58eed2ad66f3edce19e3c0aa2579a6c6e6ad4",
       "shiny_runtime_sha256": "ce4281f96bd825b96cbc0532bd7c7951a2864ea0a0eee26b216cffa6bf0206d9",
       "capture_report_paths": [
@@ -108691,11 +109792,19 @@
           "special_attack": 0.0299999713897705
         },
         "source_report": "dhelmise-ground-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "tapu-koko",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "087ba35348367801f56dbadc11c95ef4e37eac13479924abdcf511dcbe8eb07a",
       "shiny_runtime_sha256": "daa4f7d66ddc65cae34fbb52406a96c3cf15a46db168980bac814c36f13ad5a0",
       "capture_report_paths": [
@@ -112750,11 +113859,19 @@
           "special_attack": 0.0300000309944153
         },
         "source_report": "sleep-contact-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "tapu-lele",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "381af25e09f14b1487221c53164ee3d2d7a68568a01c8f4034f11ee89728b188",
       "shiny_runtime_sha256": "a42d1f773cf2aff9cff1167f71fe5bb8a1cfbae3732b683d6e055255ee24e276",
       "capture_report_paths": [
@@ -116956,11 +118073,19 @@
           "special_attack": 0.0913776382803917
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "tapu-bulu",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "12170bd9036dfdb54985700771d7f406bcbbfdea0e8d5b6792da77ffd8b20709",
       "shiny_runtime_sha256": "db5ba78bb8b652decec6f577d9d8072050e476ca8f89deacddae089477eb5072",
       "capture_report_paths": [
@@ -120966,11 +122091,19 @@
           "special_attack": 0.0320339947938919
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "tapu-fini",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "2b326dd2a725a67d00edf334e7b8c4aa44ec21371e94cab8c24975d7dda96573",
       "shiny_runtime_sha256": "7d27512e61d85db0817580892d98e3682359a0914cd2eb7ce7a5584a7d8531e6",
       "capture_report_paths": [
@@ -124596,11 +125729,19 @@
           "special_attack": 0.237044677138329
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "nihilego",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "7efe2c2ad68ac1c788e8bfee2f051e946fdda99a82a54a13df2a5b49561069ff",
       "shiny_runtime_sha256": "83a2f5fe0bc19bc0cc708f30a9527d3b5f2f5d22883a580b90a0945224e38b6d",
       "capture_report_paths": [
@@ -126361,11 +127502,19 @@
           "special_attack": 0.167418748140335
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "buzzwole",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "4ca9d36527d435ccd7886cbe445cb243b000991b3a2ec56b64c10e5dcf00e934",
       "shiny_runtime_sha256": "5bdd19b9613f497e39d6dcedfd535137ab7e30285d61c0310969fd1533f14776",
       "capture_report_paths": [
@@ -128335,11 +129484,19 @@
           "special_attack": 0.0299957450479269
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "pheromosa",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "b200d3e0f05b9e0e3b3f839db369dc540d1642bb3b3b64a6a43b5f7c9c60db1f",
       "shiny_runtime_sha256": "d4b0d4f0c821aa4034f4b65e83f4253c1941378de3133aab17cc672dcc8a03b9",
       "capture_report_paths": [
@@ -130978,11 +132135,19 @@
           "special_attack": 0.029998280107975
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "xurkitree",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "e4dbbb624256c9d918027ba5ba59b58bb7af58a9567fc4c2346705b37b047438",
       "shiny_runtime_sha256": "406f3b70a4f7634a8372c623768f0102af537bf9114cbbf76d0370c213a1754b",
       "capture_report_paths": [
@@ -132680,11 +133845,19 @@
           "special_attack": 0.0299544297158718
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "celesteela",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "f451a2cbb8f289a8096623b6a188bd7574cbc0d57df54e0dee044c6095a0cc3b",
       "shiny_runtime_sha256": "1c1d268e63697066b60b64c1aff0fc497da9f643099f893c8f37583848d72fb0",
       "capture_report_paths": [
@@ -137534,11 +138707,19 @@
           "special_attack": 0.0299999807029963
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "kartana",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "93ab0616b2e788769089799195b352b22c9114a25dbfa76788c5721e96c35338",
       "shiny_runtime_sha256": "c0d6fa741cb57e34063cf9b80d12b47903d56ece29c3661901ec4d0af557a4c6",
       "capture_report_paths": [
@@ -139900,11 +141081,19 @@
           "special_attack": 0.120471656322479
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "guzzlord",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "3026d6e1733cd38679f90a58b36017b761f0905ed1e9f07d67bd33b4bf983812",
       "shiny_runtime_sha256": "110baf0b29f53702de0eda69401d7abf8618bc1c7f4b93761fd3eb5b88addd66",
       "capture_report_paths": [
@@ -144517,11 +145706,19 @@
           "special_attack": 0.0299929995089769
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "naganadel",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "6b84d8f6fbbd724452cded34bc764617b97d262b7bede2b1fc571213f405b5c1",
       "shiny_runtime_sha256": "bbff1b01d68e3178fd505622323c8d0b99106a2f78344d1e5e09f1ddc87cb4d1",
       "capture_report_paths": [
@@ -146196,11 +147393,19 @@
           "special_attack": 0.0497250333428383
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "blacephalon",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "cf73acd452c47b8f424611bf0eff00f528598052dea88f13977876143bf609fd",
       "shiny_runtime_sha256": "d523fd281d3d96ff02ffafc79cc0fb755244bde0314160dd7c2ecf896e794c2a",
       "capture_report_paths": [
@@ -149642,11 +150847,19 @@
           "special_attack": 0.0299960561096668
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "blipbug",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "116905693f21674ba2bb6e81ebf2375e54c8dc90d367139edfb10384bbb1ab35",
       "shiny_runtime_sha256": "bc3429cf4611354a23d46f1550956c87d69311fd033f79483dc9d339ab68e7f3",
       "capture_report_paths": [
@@ -152587,11 +153800,19 @@
           "special_attack": 0.0299924928694963
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "orbeetle",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "0ef884d21d22332052b82f0e51b6b1b3e0b168acd5929936d303dfbf3c024149",
       "shiny_runtime_sha256": "f58e9151fca8de8ec18c99db0cc2e5bf5ec084d4a92ef175f94a1a9893d221d5",
       "capture_report_paths": [
@@ -153812,11 +155033,19 @@
           "special_attack": 0.414860457181931
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "gossifleur",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "1dd60557cb0b00171976f4dfd106238d4bb021edd3f7deacce98eadb7c031a85",
       "shiny_runtime_sha256": "680ee38d495230bae93ccc6e7a1b65a55ff1eac94659474a4d83198c180d45af",
       "capture_report_paths": [
@@ -155102,11 +156331,19 @@
           "special_attack": 0.0299985911697149
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "eldegoss",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "c87c75ff34006fa59095367ef3f76eb6219b82815505f60af713eaea0240a780",
       "shiny_runtime_sha256": "7b9e2929800c5acc1405bd7680d4ea48441723dc5bf70acdc86d1dcb81529c83",
       "capture_report_paths": [
@@ -156461,11 +157698,19 @@
           "special_attack": 0.0299888607114553
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "wooloo",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "2730d5d20142b9289ecbb7cbc39cb151a3a6b487412da248eca899dabf6fd3a5",
       "shiny_runtime_sha256": "c2c9f9cf8f859cd3c74f5899cdc9abcd6ca200aaf662016c9f16f381dc6a257b",
       "capture_report_paths": [
@@ -157862,11 +159107,19 @@
           "special_attack": 0.0299829207360744
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "dubwool",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "c4b8a76c292d1a76efa96782e619a6843915ebce151d8423fe106dbf5aa4af59",
       "shiny_runtime_sha256": "37bace2aff8782dae6f7611b2d5a5dc7097f03036522b14748b300c5f8e893e2",
       "capture_report_paths": [
@@ -159275,11 +160528,19 @@
           "special_attack": 0.0292181223630905
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "yamper",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "7a462968bc8c95b61b9f7f0e42e8b96fae04b313a625edc1fb1ce147ed2e112f",
       "shiny_runtime_sha256": "42dccc5d266f8978ca041e7301099210941d45ad8ac79fd2127d6ea67cc57d73",
       "capture_report_paths": [
@@ -160568,11 +161829,19 @@
           "special_attack": 0.0284733064472675
         },
         "source_report": "half-frame-normal/captures/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "boltund",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "2223720f0aefa94066254ffd1f7e04b78685398fb683c95cd8577c954388153c",
       "shiny_runtime_sha256": "4592bd762a80e0ba8b28634513703ac425836880835a523587ec47962482bd6d",
       "capture_report_paths": [
@@ -162663,11 +163932,19 @@
           "special_attack": 0.0299354922026396
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "sizzlipede",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "7ebecb3591f661e23466e619e5346cbcef02624cedfe18661237a2e3aabdc9de",
       "shiny_runtime_sha256": "ed35fe8eefedbbf7975b861b0a28f335ce3d4ad119f3d2cfb395a20f443b5d0d",
       "capture_report_paths": [
@@ -165854,11 +167131,19 @@
           "special_attack": 0.029999952763319
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "sirfetchd",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "328862e54e5c0b085272ce323364112a447da6d3febc7083348e8c19a2762633",
       "shiny_runtime_sha256": "a526394affa2289ca18d287f8e9f17673a25f7757d3dc00b4ce15418452d509d",
       "capture_report_paths": [
@@ -166826,11 +168111,19 @@
           "special_attack": 0.0299431122839451
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "dracozolt",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "e44f6420444a0f11c7d2786a7972d6d36c0700464be4b6d5c0bebc853aad69ca",
       "shiny_runtime_sha256": "40b8608b5e1bfc7c07ec66e565969f93577d8396b06f835546a0f79a64721972",
       "capture_report_paths": [
@@ -168948,11 +170241,19 @@
           "special_attack": 0.0286204516887665
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "arctozolt",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "986f5fcef72839feb105b52c2d08cabb70cdab4096dff64c21ca572918ed6c0b",
       "shiny_runtime_sha256": "f019193bd4a4058313597dcaba8923955dac8b9f3fe7e4b188f480aa329920e9",
       "capture_report_paths": [
@@ -172036,11 +173337,19 @@
           "special_attack": 0.0299915187060833
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     },
     {
       "species": "dracovish",
-      "status": "appearance_and_sleep_approved_battle_user_review_pending",
+      "status": "appearance_sleep_and_battle_approved_qualification_pending",
       "normal_runtime_sha256": "0569350afe9790ae6f64e2e1d19b0a47bfa0e8e762c480f7570eefe32cb26540",
       "shiny_runtime_sha256": "22c07ce48de3f03c34d9de36404e4c849492873b9afb5bfec4c1bcf95e870ae8",
       "capture_report_paths": [
@@ -173631,6 +174940,14 @@
           "special_attack": 0.0295924097299576
         },
         "source_report": "final/battle-review.json"
+      },
+      "battle_user_approved": true,
+      "battle_approval": {
+        "date": "2026-10-01",
+        "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+        "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+        "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+        "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
       }
     }
   ],
@@ -173678,7 +174995,7 @@
     }
   },
   "appearance_url": "http://127.0.0.1:8781/shiny-76/appearance-76-v2/index.html",
-  "battle_status": "76 actual normal120Hz floor/framing/HUD checks passed after6 scoped repairs; latest actual shiny captures passed; final visual battle review pending",
+  "battle_status": "75 user-approved battle pairs; Wailord size correction and final qualification/bundles pending",
   "evidence_root": ".tmp/remaining-274-production/shiny-76",
   "user_feedback": {
     "date": "2026-09-30",
@@ -173758,7 +175075,7 @@
     "capture_report_sha256": "fbeca9f70ea7c155e72719c19899c3a451ed2483674a7486af2c6521c555d2e4",
     "url": "http://127.0.0.1:8781/shiny-76/sleep-battle-v1/index.html"
   },
-  "battle_user_review_pending": 76,
+  "battle_user_review_pending": 1,
   "battle_technical_passed_pairs": 76,
   "battle_url": "http://127.0.0.1:8781/shiny-76/sleep-battle-v1/battle-76/review-v1/index.html",
   "battle_review_evidence": {
@@ -173769,5 +175086,13 @@
     "images": 2432,
     "runtime_stage_sha256": "984d8b0f8d590fa767a34cb6dc1dd21c6f385f3d1cb76350c475eb287503ca6e",
     "scope": "Final visual battle review pending; all automatic gates passed; no runtime admission or bundles"
-  }
+  },
+  "battle_partial_approval": {
+    "date": "2026-10-01",
+    "response": "Waarom is Wailord zo klein? Voor de rest lijkt het allemaal goed.",
+    "page_sha256": "e7154fc4ddc96e8fa6564b606772261d629f08f371a41f73640765b8666253fe",
+    "receipt_sha256": "6e14f3574036d7b1a55b0c7c1719581636f8f3c41f8cc29f16940d58bdca29f8",
+    "scope": "75 pairs approved in final battle review; Wailord held for size correction; qualification and bundle checks pending"
+  },
+  "battle_user_approved_pairs": 75
 }
