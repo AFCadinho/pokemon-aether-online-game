@@ -18,6 +18,7 @@ config/icon="res://assets/ui/logo.png"
 config/build_id="0.3.81-66ca54100"
 config/android_version_code=2
 config/android_asset_build_id=""
+config/android_test_compatible_build_id=""
 
 [autoload]
 

@@ -553,7 +553,8 @@ func _request_json(
 	method: HTTPClient.Method,
 	headers: PackedStringArray,
 	body: String,
-	timeout_seconds: float = REQUEST_TIMEOUT_SECONDS
+	timeout_seconds: float = REQUEST_TIMEOUT_SECONDS,
+	candidate_retry: bool = true
 ) -> Dictionary:
 	var request := HTTPRequest.new()
 	request.timeout = timeout_seconds
@@ -587,6 +588,13 @@ func _request_json(
 		body_dictionary = parsed_body
 
 	if response_code < 200 or response_code >= 300:
+		if candidate_retry and ClientBuild.accept_android_candidate_requirement(body_dictionary):
+			var retry_headers := PackedStringArray()
+			for header in headers:
+				if not header.to_lower().begins_with(ClientBuild.HEADER_NAME.to_lower() + ":"):
+					retry_headers.append(header)
+			retry_headers.append(ClientBuild.get_http_header())
+			return await _request_json(url, method, retry_headers, body, timeout_seconds, false)
 		return {
 			"success": false,
 			"status": response_code,

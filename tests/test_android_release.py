@@ -95,14 +95,15 @@ class AndroidReleaseTests(unittest.TestCase):
         with TemporaryDirectory() as directory:
             project = Path(directory) / "project.godot"
             presets = Path(directory) / "export_presets.cfg"
-            project.write_text('[application]\nconfig/version="old"\nconfig/build_id="old"\nconfig/android_version_code=2\nconfig/android_asset_build_id=""\n')
+            project.write_text('[application]\nconfig/version="old"\nconfig/build_id="old"\nconfig/android_version_code=2\nconfig/android_asset_build_id=""\nconfig/android_test_compatible_build_id=""\n')
             presets.write_text('[preset.7.options]\nversion/code=2\nversion/name="old"\npackage/unique_name="com.pokeaether.game"\n')
             with self.assertRaisesRegex(ValueError, "greater than 2"):
                 prepare(project, presets, "0.3.84-alpha.3", 2, "build-3")
-            prepare(project, presets, "0.3.84-alpha.3", 3, "build-3")
+            prepare(project, presets, "0.3.84-alpha.3", 3, "build-3", "published-build-2")
             self.assertEqual(setting(project, "application", "config/android_version_code"), "3")
             self.assertEqual(setting(project, "application", "config/build_id"), '"build-3"')
             self.assertEqual(setting(project, "application", "config/android_asset_build_id"), '"build-3"')
+            self.assertEqual(setting(project, "application", "config/android_test_compatible_build_id"), '"published-build-2"')
             self.assertEqual(setting(presets, "preset.7.options", "version/code"), "3")
             self.assertEqual(setting(presets, "preset.7.options", "version/name"), '"0.3.84-alpha.3"')
 

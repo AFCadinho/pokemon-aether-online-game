@@ -54,6 +54,14 @@ workflow for that same candidate. The regular web pipeline can still include
 native assets, but Android publication does not depend on publishing the
 browser game.
 
+The signed candidate also records the currently published Android build ID as
+its only approved test compatibility identity. On a version rejection during
+login or session restoration it retries once using that identity. After the
+candidate is published, the same APK switches back to its own immutable build
+ID. Any unrelated later required build still follows the normal update gate.
+The test-download workflow rejects a candidate if the active Android build has
+changed since its build. This does not change backend version enforcement.
+
 Keep the current Android map files bundled. Browser map packs are exported for
 a different target; using them on Android requires a separately verified native
 pack pipeline and transition tests.

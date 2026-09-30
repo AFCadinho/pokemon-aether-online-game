@@ -16,7 +16,7 @@ class AndroidTestDownloadTests(unittest.TestCase):
             root = Path(directory)
             build = 'a' * 40 + '-123-1'
             apk_name = f'game-{build}-android.apk'
-            game = {'buildId': build, 'version': '0.3.90', 'versionCode': 7,
+            game = {'buildId': build, 'version': '0.3.90', 'versionCode': 7, 'testCompatibleBuildId': 'published-6',
                     'url': 'https://updates.pokeaether.com/game/' + apk_name,
                     'sizeBytes': 3, 'sha256': hashlib.sha256(b'apk').hexdigest()}
             (root / 'release').mkdir()
@@ -36,7 +36,7 @@ class AndroidTestDownloadTests(unittest.TestCase):
             (root / 'android-assets/mobile-assets/catalog.json').write_bytes(catalog_bytes)
             if corrupt:
                 (root / 'android-assets/home-icons/icon.png').write_bytes(b'bad')
-            previous = b'{"game":{"version":"0.3.89","versionCode":6}}'
+            previous = b'{"game":{"version":"0.3.89","versionCode":6,"buildId":"published-6"}}'
             origin = f'https://web-assets.pokeaether.com/android/releases/{build}/'
             responses = {origin + relative: body for relative, body in payload.items()}
             responses[origin + 'mobile-assets/catalog.json'] = catalog_bytes
