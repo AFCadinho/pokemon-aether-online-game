@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 import json
 from pathlib import Path
@@ -11,6 +12,12 @@ from upload_launcher_release import _load_config, _load_updates_config, _upload_
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MAX_UPLOAD_WORKERS = 8
+
+
+def _upload_object(config, source: Path, key: str, size: int) -> None:
+    print(f"Uploading immutable web object {key} ({size} bytes)", flush=True)
+    _upload_file(config, source, key)
 
 
 def main() -> None:
@@ -29,6 +36,7 @@ def main() -> None:
     config = None if args.verify_only or args.manifest_only else _load_config()
 
     if not args.manifest_only:
+        verified_objects = []
         for item in manifest["objects"]:
             source = release_dir / item["source"]
             if not source.is_file() or source.stat().st_size != item["bytes"]:
@@ -37,11 +45,16 @@ def main() -> None:
                 digest = hashlib.file_digest(stream, "sha256").hexdigest()
             if digest != item["sha256"]:
                 raise SystemExit(f"SHA-256 mismatch for release object: {source}")
-            if not args.verify_only:
-                print(f"Uploading immutable web object {item['key']} ({item['bytes']} bytes)", flush=True)
-                _upload_file(config, source, item["key"])
+            verified_objects.append((source, item["key"], item["bytes"]))
 
         if not args.verify_only:
+            with ThreadPoolExecutor(max_workers=MAX_UPLOAD_WORKERS, thread_name_prefix="r2-web-upload") as executor:
+                futures = [
+                    executor.submit(_upload_object, config, source, key, size)
+                    for source, key, size in verified_objects
+                ]
+                for future in as_completed(futures):
+                    future.result()
             _upload_file(config, release_dir / "web-release.json", f"web/releases/{manifest['buildId']}/web-release.json")
         else:
             print(f"Verified {len(manifest['objects'])} immutable web objects", flush=True)

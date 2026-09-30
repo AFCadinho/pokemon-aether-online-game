@@ -1,9 +1,12 @@
 import json
+import hashlib
 import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 import unittest
 import zipfile
 from types import SimpleNamespace
@@ -63,10 +66,47 @@ class PackageWebReleaseTests(unittest.TestCase):
                 with patch.object(upload_web_release, '_upload_file') as upload:
                     with patch('sys.argv', ['upload_web_release.py', str(root)]):
                         upload_web_release.main()
-            self.assertEqual(upload.call_args_list, [
+            self.assertCountEqual(upload.call_args_list, [
                 unittest.mock.call(config, source, 'web/releases/candidate-123/index.wasm'),
                 unittest.mock.call(config, root / 'web-release.json', 'web/releases/candidate-123/web-release.json'),
             ])
+
+    def test_browser_runtime_uploads_verified_objects_with_bounded_parallelism(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            objects = []
+            for index in range(24):
+                source = root / f'asset-{index}.bin'
+                source.write_bytes(f'asset-{index}'.encode())
+                objects.append({
+                    'source': source.name,
+                    'key': f'web/releases/candidate-123/{source.name}',
+                    'bytes': source.stat().st_size,
+                    'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+                })
+            (root / 'web-release.json').write_text(json.dumps({'buildId': 'candidate-123', 'objects': objects}))
+            config = SimpleNamespace(bucket='pokeaether-web')
+            lock = threading.Lock()
+            active = 0
+            maximum_active = 0
+
+            def fake_upload(_config, _source, _key):
+                nonlocal active, maximum_active
+                with lock:
+                    active += 1
+                    maximum_active = max(maximum_active, active)
+                time.sleep(0.01)
+                with lock:
+                    active -= 1
+
+            with patch.object(upload_web_release, '_load_config', return_value=config):
+                with patch.object(upload_web_release, '_upload_file', side_effect=fake_upload) as upload:
+                    with patch('sys.argv', ['upload_web_release.py', str(root)]):
+                        upload_web_release.main()
+
+            self.assertEqual(upload.call_count, len(objects) + 1)
+            self.assertGreater(maximum_active, 1)
+            self.assertLessEqual(maximum_active, upload_web_release.MAX_UPLOAD_WORKERS)
 
     def test_update_manifest_bucket_uses_its_own_credentials(self):
         values = {
