@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/vermilion_house_template.tscn" id="template"]
+
+[node name="House1" instance=ExtResource("template")]
+map_id = "kanto_vermilion_city_house_1"
+map_display_name = "Vermilion City House 1"
+location_id = "kanto.vermilion_city.house_1"
+location_name = "Vermilion City House 1"
+
+[node name="ToOutside" parent="Exits" index="0"]
+target_spawn_name = "FromHouse1"
+transition_id = "kanto_vermilion_city_house_1__to_outside"

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De drie huizen in Vermilion City hebben toegankelijke interieurs met de gedeelde Vermilion House-visual, collision en eigen stadsverbindingen.
+
 - De Pokemon Fan Club in Vermilion City is toegankelijk, met de Chairman en zijn Bike Voucher-quest, drie nieuwe bezoekers en Rapidash, Eevee en Clefairy. De Chairman staat niet meer in de Cerulean Bike Shop.
 
 - Professor Oak's starter catalog and selection preview show normal forms to keep the shiny gift a surprise. Your future self in Mt. Moon summons a shiny final evolution of your chosen starter.
