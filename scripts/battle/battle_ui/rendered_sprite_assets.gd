@@ -11,7 +11,6 @@ static var _active_action_decodes := 0
 const BATTLE_DISPLAY_SCALE_MULTIPLIER := 1.3
 const CACHE_LIMIT := 2
 const PREVIEW_CACHE_LIMIT := 16
-const LOCAL_PREVIEW_CATALOG_POINTER := "res://.pokeaether/rendered-preview-catalog"
 
 
 static func load_frames(species: String, side: String, shiny: bool) -> SpriteFrames:
@@ -305,12 +304,9 @@ static func _preview_frame_source(manifest_path: String, side: String, idle: Dic
 
 
 static func _preview_catalog_path() -> String:
-	var preview_path := OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").strip_edges()
-	if not preview_path.is_empty() or not OS.is_debug_build():
-		return preview_path
-	if not FileAccess.file_exists(LOCAL_PREVIEW_CATALOG_POINTER):
-		return ""
-	return FileAccess.get_file_as_string(LOCAL_PREVIEW_CATALOG_POINTER).strip_edges()
+	# Reviews opt in for this process only. An old machine-local pointer must
+	# never silently replace the player's downloaded 2D battle sprites.
+	return OS.get_environment("POKEAETHER_RENDERED_PREVIEW_CATALOG").strip_edges()
 
 
 static func _remember_frames(cache_key: String, frames: SpriteFrames, static_preview: bool = false) -> void:
