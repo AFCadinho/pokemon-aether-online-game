@@ -306,7 +306,9 @@ HOME source archives remain the source of these assets; the browser fetches
 individual PNGs rather than downloading or opening a whole ZIP. The placeholder
 is bundled as `assets/ui/home_unknown.png`. Shared mutable textures refresh the
 current UI in place; downloads are coalesced and limited to four concurrent
-requests, and each memory cache retains at most 256 entries. Pokédex list icons
+requests, and each memory cache retains at most 256 entries. Conservative RGBA estimates
+also cap retained UI textures at 32 MiB and decoded images at 16 MiB; displayed
+textures remain valid when evicted from the cache. Pokédex list icons
 start loading only when their rows intersect the visible scroll area.
 
 FFmpeg is required for web builds. It prepares `login-media/world.mp4` (H.264,
@@ -327,3 +329,12 @@ Focused checks include `web_home_icon_service_check.gd`,
 `web_login_background_check.gd`, the Python export/packaging tests, fullscreen
 smoke, and browser startup assets with
 `POKEAETHER_STARTUP_ASSETS_ONLY=1` in `web_accounts_browser_smoke.cjs`.
+
+
+Local comparison (2026-09-30, slot B, Godot 4.6.2): changing only the web
+resource-selection preset on the same source/import cache reduced PCK payload
+from 285.87 to 168.90 MiB. With the same engine and shell files, startup is
+approximately 322.33 to 205.36 MiB (116.97 MiB, 36.3% less, before HTTP
+compression). These figures exclude on-demand transfers and do not measure RAM.
+The world-login smoke also found a pre-existing 3D sparkle preload under the
+excluded `tools/` tree; its runtime copy now lives under `assets/battles/effect`.

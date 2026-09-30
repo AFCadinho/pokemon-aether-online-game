@@ -36,6 +36,15 @@ func _run() -> void:
 	_check(service.requests.get("home-icons/catalog.json") == 1, "catalog fetch is coalesced")
 	_check(service.requests.get("home-icons/normal.png") == 1, "same file across aliases downloads once")
 	_check(await service._load_image("home-icons/../secret.png") == null, "unsafe catalog path refused")
+	var large := Image.create(1024, 1024, false, Image.FORMAT_RGBA8)
+	var held := ImageTexture.create_from_image(large)
+	service._cache.clear()
+	for index in range(10):
+		service._cache[str(index)] = {"full": ImageTexture.create_from_image(large), "party": ImageTexture.create_from_image(large)}
+	service._cache["held"] = {"full": held, "party": held}
+	service._trim_texture_cache()
+	_check(service._cache.size() <= 4, "texture byte budget bounds retained cache")
+	_check(held.get_width() == 1024, "eviction preserves textures held by UI consumers")
 	service.queue_free()
 	await process_frame
 	print("web_home_icon_service_check: %s" % ("PASS" if failures == 0 else "FAIL"))

@@ -4,7 +4,7 @@ extends Node3D
 signal reveal_requested
 signal finished
 
-const SPARK = preload("res://tools/sprite_factory/mega_evolution_preview_assets/spark_04.png")
+const SPARK = preload("res://assets/battles/effect/mega_evolution_spark.png")
 const CHARGE_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution1.wav")
 const REVEAL_SOUND = preload("res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav")
 const CHARGE_SECONDS := 1.35

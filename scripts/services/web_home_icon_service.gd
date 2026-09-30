@@ -5,6 +5,8 @@ extends Node
 const PokemonAssets := preload("res://scripts/data/pokemon_assets.gd")
 const CACHE_LIMIT := 256
 const CONCURRENCY := 4
+const TEXTURE_CACHE_BYTES := 32 * 1024 * 1024
+const IMAGE_CACHE_BYTES := 16 * 1024 * 1024
 const RETRY_SECONDS := 20.0
 var _cache: Dictionary = {}
 var _queue: Array[Dictionary] = []
@@ -22,6 +24,7 @@ func get_icon(species: String, shiny := false, cropped := false) -> Texture2D:
 		if _cache.size() >= CACHE_LIMIT:
 			_cache.erase(_cache.keys()[0])
 		var placeholder := PokemonAssets.load_unknown_icon().get_image()
+		placeholder.resize(64, 64, Image.INTERPOLATE_LANCZOS)
 		var entry := {"species": species, "shiny": shiny, "full": ImageTexture.create_from_image(placeholder),
 			"party": ImageTexture.create_from_image(placeholder), "loading": false, "ready": false, "retry_at": 0.0}
 		_cache[key] = entry
@@ -58,6 +61,7 @@ func _load_entry(entry: Dictionary) -> void:
 	entry.ready = image != null
 	entry.loading = false
 	entry.retry_at = _now() + RETRY_SECONDS
+	_trim_texture_cache()
 	_active -= 1
 	_drain()
 
@@ -97,12 +101,17 @@ func _load_image(relative: String) -> Image:
 		_files.erase(relative)
 		return null
 	_files[relative] = image
-	# Only a bounded set of decoded images is retained. UI textures survive eviction.
-	if _files.size() > CACHE_LIMIT:
-		for path: String in _files.keys():
-			if _files[path] != null and path != relative:
-				_files.erase(path)
-				break
+	var image_bytes := 0
+	for value: Variant in _files.values():
+		if value is Image:
+			image_bytes += (value as Image).get_width() * (value as Image).get_height() * 4
+	for path: String in _files.keys():
+		if _files.size() <= CACHE_LIMIT and image_bytes <= IMAGE_CACHE_BYTES:
+			break
+		if _files[path] != null and path != relative:
+			var old_image := _files[path] as Image
+			image_bytes -= old_image.get_width() * old_image.get_height() * 4
+			_files.erase(path)
 	return image
 
 func _asset_url(relative: String) -> String:
@@ -162,3 +171,17 @@ func load_icon(species: String, shiny := false) -> Texture2D:
 	while entry.loading:
 		await get_tree().process_frame
 	return texture
+
+
+func _trim_texture_cache() -> void:
+	var bytes := 0
+	for entry: Dictionary in _cache.values():
+		for texture: Texture2D in [entry.full, entry.party]:
+			bytes += texture.get_width() * texture.get_height() * 4
+	for key: String in _cache.keys():
+		if bytes <= TEXTURE_CACHE_BYTES:
+			break
+		var entry: Dictionary = _cache[key]
+		for texture: Texture2D in [entry.full, entry.party]:
+			bytes -= texture.get_width() * texture.get_height() * 4
+		_cache.erase(key)

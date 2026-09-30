@@ -55,6 +55,27 @@ func _run() -> void:
 	)
 
 	var sprite_loader := overlay.get("pokedex_sprite_loader") as Node
+	var mutable_frames := _create_frames(Vector2i(64, 64), Rect2i())
+	var mutable_texture := mutable_frames.get_frame_texture("idle", 0) as ImageTexture
+	var mutable_preview := AnimatedSprite2D.new()
+	mutable_preview.sprite_frames = mutable_frames
+	overlay.set("pokedex_animated_sprite", mutable_preview)
+	overlay.set("pokedex_web_sprite_generation", 42)
+	sprite_loader.call("_set_sprite_frames_auto_anchor", mutable_frames, Vector2(64, 64))
+	var downloaded_image := Image.create(512, 512, false, Image.FORMAT_RGBA8)
+	downloaded_image.fill(Color.WHITE)
+	mutable_texture.set_image(downloaded_image)
+	overlay.call("_refresh_pokedex_home_preview", 42, weakref(mutable_frames))
+	_check(sprite_loader.call("_get_sprite_frames_frame_size", mutable_frames) == Vector2(512, 512),
+		"downloaded HOME dimensions replace placeholder preview metadata")
+	_check(mutable_preview.scale.x < 0.5, "downloaded large HOME preview is fitted again")
+	overlay.set("pokedex_web_sprite_generation", 43)
+	mutable_texture.set_image(Image.create(1024, 1024, false, Image.FORMAT_RGBA8))
+	overlay.call("_refresh_pokedex_home_preview", 42, weakref(mutable_frames))
+	_check(sprite_loader.call("_get_sprite_frames_frame_size", mutable_frames) == Vector2(512, 512),
+		"stale download cannot resize a newer Pokédex selection")
+	overlay.set("pokedex_animated_sprite", null)
+	mutable_preview.free()
 	var squirtle_frames_value: Variant = sprite_loader.call(
 		"_load_sprite_frames",
 		"squirtle",
