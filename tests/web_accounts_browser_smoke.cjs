@@ -63,7 +63,7 @@ const assert = require('node:assert/strict');
     });
   });
   const page = await context.newPage();
-  const errors = [], external = [], api = [], pokemonAssets = [];
+  const errors = [], external = [], api = [], pokemonAssets = [], homeAssets = [], modules = [];
   const output = path.join(frontend, 'builds/web-accounts-qa');
   fs.mkdirSync(output, { recursive: true });
   await context.route('**/*', async route => {
@@ -72,6 +72,8 @@ const assert = require('node:assert/strict');
 		if (url.pathname.startsWith('/pokemon-assets/battle/') || url.pathname.startsWith('/pokemon-assets/gen5/')) {
 			pokemonAssets.push(url.pathname);
 		}
+    if (url.pathname.startsWith('/modules/')) modules.push(url.pathname);
+    if (url.pathname.startsWith('/home-icons/')) homeAssets.push(url.pathname);
     if (!url.pathname.startsWith('/api/')) return route.continue();
 		const result = await request({ method: req.method(), path: url.pathname, body: req.postData() || '', headers: req.headers() });
     api.push({ path: url.pathname, status: result.status });
@@ -96,6 +98,10 @@ const assert = require('node:assert/strict');
   try {
 		await page.goto(previewUrl);
     await start();
+    if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
+      await page.waitForFunction(() => document.getElementById('login-video').currentTime > 0);
+      assert.equal(await page.evaluate(() => document.getElementById('canvas').getContext('webgl2').getContextAttributes().alpha), true);
+    }
     // The Godot canvas link calls this same shell entry point. Invoke it
     // directly so password-recovery/link layout changes do not make account
     // registration coverage depend on a viewport coordinate.
@@ -110,7 +116,20 @@ const assert = require('node:assert/strict');
     await page.getByText('Account created. Check your email', { exact: false }).waitFor();
     await page.screenshot({ path: path.join(output, 'registration.png') });
     assert.equal((await request({ command: 'verify_test_email' })).status, 200);
-    assert.equal((await request({ command: 'prepare_custom_exit_state' })).status, 200);
+    if (process.env.POKEAETHER_WORLD_MAP) {
+      assert(process.env.POKEAETHER_STARTUP_ASSETS_ONLY, 'map smoke uses bounded startup checks');
+      const catalog=JSON.parse(fs.readFileSync(path.join(frontend,'generated/world_access_catalog.json'),'utf8'));
+      const mapId=process.env.POKEAETHER_WORLD_MAP;
+      const spawn=Object.values(catalog.areas[mapId].spawnPoints)[0];
+      assert.equal((await request({command:'prepare_misty_map',checkpoint:'trainer_school',mapId,
+        position:{x:spawn.tile.x*32+16,y:spawn.tile.y*32+16},facingDirection:spawn.facingDirection})).status,200);
+    } else {
+      if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
+        assert.equal((await request({command: 'prepare_misty_map', checkpoint: 'trainer_school',
+          mapId: 'kanto_players_house', position: {x: 432, y: 976}})).status, 200);
+      }
+      assert.equal((await request({ command: 'prepare_custom_exit_state' })).status, 200);
+    }
     await page.getByRole('button', { name: 'Back to login' }).click();
     await page.mouse.click(600, 494); // Return focus to the Godot username field.
     await page.screenshot({ path: path.join(output, 'login.png') });
@@ -133,11 +152,54 @@ const assert = require('node:assert/strict');
 		}
 		await page.waitForFunction(() => window.pokeaetherPreview?.worldReady, null, { timeout: 120000 });
 		await waitForApi(item => item.path === '/api/game/profile' && item.status === 200, 30000);
-		await waitForApi(item => item.path === '/api/game/story' && item.status === 200, 30000);
+		await waitForApi(item => ['/api/game/story', '/api/game/story/bootstrap'].includes(item.path) && item.status === 200, 30000);
 		await page.waitForTimeout(3000);
     await page.screenshot({ path: path.join(output, 'world.png') });
+    if (process.env.POKEAETHER_WORLD_MAP) {
+      const mapId=process.env.POKEAETHER_WORLD_MAP;
+      await page.waitForFunction(()=>window.pokeaetherPreview?.worldReady);
+      assert.equal(lastPresenceMapId,mapId,'world restores the requested later map');
+      assert(modules.includes('/modules/kanto-extended-maps.pck'),'later map downloads the extended pack');
+      assert(!errors.some(message=>/^(SCRIPT ERROR|ERROR:)/.test(message)), 'map loads without script/resource errors');
+      assert.deepEqual(external,[]);
+      await page.screenshot({path:path.join(output,mapId+'.png')});
+      console.log('web_accounts_browser_smoke: PASS (on-demand world map '+mapId+')');
+      return;
+    }
+    if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
+      assert(await page.evaluate(() => {
+        const video = document.getElementById('login-video');
+        return video.hidden && video.paused && !video.hasAttribute('src');
+      }), 'world entry stops video and releases its source');
+      await page.mouse.click(1363, 85); // Open the unlocked Pokédex.
+      const homeDeadline = Date.now() + 30000;
+      while (!homeAssets.some(name => name.endsWith('.png'))) {
+        assert(Date.now() < homeDeadline, 'visible Pokédex HOME images load');
+        await page.waitForTimeout(100);
+      }
+      await page.waitForTimeout(2000);
+      await page.screenshot({path: path.join(output, 'home-icons.png')});
+      const normalRequests = homeAssets.length;
+      await page.mouse.move(425, 620);
+      await page.mouse.wheel(0, 350);
+      await page.waitForTimeout(1500);
+      assert(homeAssets.length > normalRequests, 'scrolling downloads newly visible HOME icons');
+      const beforeShiny = homeAssets.length;
+      await page.mouse.click(476, 310); // Shiny view.
+      await page.waitForTimeout(2000);
+      assert(homeAssets.length > beforeShiny, 'shiny view requests distinct HOME images');
+      await page.screenshot({path: path.join(output, 'home-icons-shiny.png')});
+      assert(homeAssets.some(name => name.endsWith('/catalog.json')), 'HOME catalog loads');
+      assert(homeAssets.some(name => name.endsWith('.png')), 'visible HOME images download on demand');
+      assert(homeAssets.length < 45, 'opening Pokédex does not fetch the entire HOME collection');
+      assert.deepEqual(external, []);
+      assert(!errors.some(message => /^(SCRIPT ERROR|ERROR:)/.test(message)), 'startup has no script or resource errors');
+      fs.writeFileSync(path.join(output, 'startup-assets.json'), JSON.stringify({homeAssets, videoStopped: true}, null, 2));
+      console.log('web_accounts_browser_smoke: PASS (startup assets: login video, world entry, individual HOME icons)');
+      return;
+    }
 		assert(api.some(item => item.path === '/api/game/profile' && item.status === 200), 'browser profile supplies the initial world position');
-    assert(api.some(item => item.path === '/api/game/story' && item.status === 200), 'shared story loads through the browser boundary');
+    assert(api.some(item => ['/api/game/story', '/api/game/story/bootstrap'].includes(item.path) && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status === 200), 'demo NPC metadata really loads');
 		assert(presencePositions > 0, 'browser publishes its world position through the websocket');
 		assert(api.some(item => item.path === '/api/game/player-position/teleport-ack' && item.status === 200), 'browser acknowledges the pending staff teleport through its scoped route');

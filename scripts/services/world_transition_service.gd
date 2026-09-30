@@ -86,7 +86,7 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 		var access := _dictionary_from_value(checked.get("access", {}))
 		if bool(access.get("allowed", false)):
 			var area_id := str(access.get("areaId", ""))
-			var scene_path := str(WebAssetModuleService.MISTY_MAP_SCENES.get(area_id, WebAssetModuleService.EXTENDED_MAP_SCENES.get(area_id, "")))
+			var scene_path := WebAssetModuleService.scene_for_map(area_id)
 			if not scene_path.is_empty():
 				var assets := await WebAssetModuleService.ensure_scene_available(scene_path)
 				if not bool(assets.get("success", false)):

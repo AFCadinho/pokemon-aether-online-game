@@ -4,312 +4,131 @@
 
 - Sandslash en Toucannon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Ogen, shiny-kleuren, battleplaatsing en Toucannons vleugelovergangen zijn gecontroleerd.
 
-- Desktop 3D battles now ignore a saved forest-manifest path if that file has moved, and use the launcher-installed forest assets instead.
-
-- De vrouwelijke Team Rocket-haarstijl toont nu ook de bijbehorende wenkbrauwen.
-
-- Cerulean City laadt weer correct met de gedeelde Surf-encounterinstellingen. De encountermaskers op Route 6, 9 en 10 en in Vermilion City blijven onzichtbaar achter de kaartvisuals.
-
-- De desktoprelease activeert catalogus v7 met 160 individueel downloadbare, goedgekeurde normal/shiny-3D-bundles.
-
-- Unown, Darmanitan, Wishiwashi, Silvally, Obstagoon en Cursola hebben lokaal goedgekeurde normal/shiny-3D-modellen in zes losse bundles. Kleuren, ogen, battleplaatsing en animaties zijn gecontroleerd.
-
-- Route 6 gebruikt de nieuwste Tiled-kaart; collision, water, hoog gras, ledges en de zuidelijke uitgang volgen de bijgewerkte indeling.
-
-- Vermilion City gebruikt de nieuwste Tiled-visual met de bijgewerkte buitentileset; de aansluitingen naar Route 6, Route 11 en de docks volgen de nieuwe kaartopeningen.
-
-- De desktopclient verwijdert de vorige lokale versie van een Pokémon-sprite automatisch zodra de nieuwe metadata en sheet succesvol zijn geladen. Bestaande spritecaches zonder versie-index worden eenmalig opgeschoond.
-
-- Pokémon Centers gebruiken nu de standaard metadata uit hun gedeelde template. Route 10 heeft twee nieuwe bezoekers met Magnemite en Emolga.
-
-- Het geplande 3D-starterpakket wordt nog niet vooraf gedownload. De desktopclient laadt alleen modellen voor de huidige party, map en gevechten wanneer ze nodig zijn.
-
-- Nieuwe desktopspelers starten standaard in 3D. Als een model ontbreekt of niet kan worden geladen, schakelt het gevecht automatisch over naar 2D.
-
-- 17 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in losse bundles. Staryu's juweel en Vanilluxe's ijs en gezicht zijn hersteld; alle 17 zijn visueel en in battle gecontroleerd.
-
-- Slugma, Magcargo, mannelijke Meowstic en Trevenant hebben lokaal goedgekeurde normal/shiny-3D-modellen in vier losse bundles. Ogen, kleuren, animaties en battleplaatsing zijn gecontroleerd.
-
-- De desktopclient biedt 2D-sprites, 3D-modellen op een 2D-achtergrond en volledige 3D-gevechten. Sprites en goedgekeurde modellen worden per Pokémon vooraf geladen zodra een map wordt betreden, blijven lokaal bewaard en kunnen via Instellingen weer worden verwijderd; ontbrekende 3D-modellen vallen terug op 2D.
-
-- Diglett's Cave heeft bij beide entreekamers complete grotopeningen; de uitgangen in Godot volgen nu de volle breedte.
-
-- Bij de trappen van de Underground Passage kijkt de speler na aankomst de kamer of tunnel in, vanuit zowel Route 5 als Route 6.
-
-- 12 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Xerneas is groter in battle; voor Doublade, Inkay en Cosmoem is de vloerafstand gecorrigeerd.
-
-- Route 10 gebruikt de nieuwste Tiled-visual; het Pokémon Center is via de servercatalogus bereikbaar en beschikbaar als bestemming voor staffteleport.
-
-- 32 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen en individuele bundles. Kleuren, ogen en battleplaatsing zijn gecontroleerd; Mamoswine en Malamar blijven ook tijdens hun aanvallen boven de vloer.
-
-- 30 extra Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. De ogen van Torchic, Dodrio en Vileplume en de battleschaal van Torchic zijn gecontroleerd. De resterende catalogusintake staat per Pokémon in een technische wachtlijst.
-
-- Nog 144 Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, met gecontroleerde ogen, kleuren, animaties en battleplaatsing. Elk paar heeft een afzonderlijke bundle voor een volgende contentrelease.
-
-- Het 3D-stadion bouwt de publiekslichten nu betrouwbaar op bij herhaalde battles.
-
-- Route 10 gebruikt de nieuwste Tiled-visual in de bestaande Godot-scene.
-
-- Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar, Primarina en Dewpider hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen bundle voor een volgende contentrelease.
-
-- De zuidoever van Route 9 is nu afgesloten met een dichte bomenrand; de Surf-opgang blijft vrij en de collision volgt de bomen.
-
-- Route 9 heeft afgesloten rivieroevers met leuningen, extra bomen en bijpassende collision; het Surf-pad en de route naar Route 10 blijven open.
-
-- Jirachi en Zekrom hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles, met herstelde ogen en lichaamsdelen en gecontroleerde battleplaatsing. Beschikbaar voor een volgende contentrelease.
-
-- Cinnabar Island heeft doorlopende wegranden en hoeken; de Mansion-trap sluit via een breed, vrij pad aan op het plein naast het onderzoekslab.
-
-- Saffron City gebruikt de nieuwste Tiled-visual met complete bomenranden, doorlopende noord-/zuidpaden en halve oost-/westpoorten met aansluitende bomen.
-
-- De Cerulean Cave-quest kan via Dev Tools worden gegeven of voltooid; zodra ze actief is, gaat de League-agent in Cerulean City opzij en is de grot toegankelijk.
-
-- Saffron City gebruikt de volledige Tiled-stad en is via aparte verticale poortinterieurs met Route 5 en Route 6 verbonden, inclusief wederzijdse aankomstpunten en indoor zichtmaskers.
-
-- De Trainer Card past Aether Royal-delen zonder Patreon-rol niet meer lokaal toe en zet een door de server afgewezen preview terug naar de opgeslagen outfit, zonder console-warning.
-
-- De Trainer Card toont een duidelijke melding als de Patreon-rol ontbreekt; positiebewaring werkt de gedragen Aether Royal-outfit bij zodra de server een verlopen onderdeel verwijdert.
-
-- Patreon Support toont nu de Aether Royal-outfit op het spelersmodel in de Gift Store. De kaart behoudt het Patreon-pixelicoon.
-
-- In Cerulean Cave kunnen spelers en hun Pokémon over de droge doorgang onder de brug lopen, terwijl de bovenliggende brugroute en Surf gescheiden blijven.
-
-- 200 extra Pokémon hebben lokaal goedgekeurde 3D-modellen voor normal en shiny, elk in een eigen downloadbare bundle. Typhlosions gekleurde vlammen en andere eerder beoordeelde correcties zijn in de definitieve modellen hersteld.
-
-- De rugcosmetic-categorie heet nu Back. De Aether Royal-cape valt van opzij smaller en rechter naar beneden, voor beide modellen en alle overworld-activiteiten.
-
-- De Aether Royal Patreon-outfit heeft een gedeelde, niet-verhandelbare outfitbox voor male en female, met vijf losse onderdelen: kroon, jas, broek, laarzen en skillcape. De cape heeft een eigen uitrustingsslot en is met andere kleding te combineren. Inclusief trainer-, loop-, vis- en rijsprites; nog niet in de store.
-
-- Route 21 heeft onder Pallet Town een zandstrand met branding en kliffen; verderop maken twee zandbanken en losse rifrotsen de Surf-route opener.
-
-- Cinnabar Island en de aparte Vermilion Docks zijn nu in Godot geïmporteerd, met wederzijdse overgangen naar Route 21 en Vermilion City. Vermilion City gebruikt weer de actuele Tiled-indeling met grijze straten.
-
-- In Cerulean Cave kun je over de brug lopen en onder dezelfde brug door surfen. De brughoofden bepalen wanneer de speler het hogere pad betreedt of verlaat.
-
-- Cerulean Cave gebruikt de normale cave-wandtrappen voor verbindingen omhoog; de twee ontbrekende trapgaten naar B1F zijn hersteld.
-
-- De Aether Ronin-mouwen sluiten nu ook bij male-lopen en bij vissen en rijden voor beide geslachten, zodat geen lichte huidstrook door de kleding schijnt.
-
-- Cerulean Cave 1F, 2F en B1F gebruiken nu hun Tiled-visuals met wederzijdse trapverbindingen en staffteleports. De Power Plant is via Route 10 bereikbaar; de indoor scenes gebruiken de zichtmaskers voor hun vloer.
-
-- De vrouwelijke Aether Ronin-top heeft gesloten mouwnaden in de zijwaartse loopframes, zodat daar geen lichte huidpuntjes doorheen komen.
-
-- De Route 5-daycare heeft een compact interieur met ontvangstbalie achterin, rode loper, zithoek en een Pokémon-PC.
-
-- Het Route 5-daycare-interior heeft een volledig afgewerkte balie, verzorgingstafel, planten en bloemenpot.
-
-- De Underground Path heeft zijwaartse trappen tegen de wanden, met bijpassende aankomstpunten en vrije bordessen.
-- Route 5- en Route 6-ingangen van de Underground Passage hebben bijgewerkte tegel- en blokkeerlagen.
-
-- Route 5 heeft een eigen daycare-interior met ontvangstbalie, rustplekjes en speelruimte, gekoppelde deuren en een bestemming voor staffteleport.
-
-- Nieuwe 3D-cataloguskandidaten voor Grimer en Muk kunnen zonder scheuren tussen hun bewegende lichaamsdelen worden weergegeven.
-
-- Herstelt aanvullende 3D-bronmodellen en shiny-materialen voor catalogusreview, met behoud van metaal, gloed en bewegende oppervlakken.
-
-- Nieuwe 3D-modelbundles behouden bij gedeelde texturen de juiste shiny-kleur per onderdeel, onder meer bij Veluza.
-
-- Nieuwe Paradox-3D-modelbundles kunnen lichtgevende kleurvlakken, geanimeerde LED-ogen, metaalkaarten en de oorspronkelijke lensdoorzichtigheid behouden.
-
-- Nieuwe 3D-modelbundles ondersteunen een aangepaste rookweergave met een duidelijker gezicht voor Gastly.
-
-- Statische vuureffecten in nieuwe 3D-modelbundles behouden hun gebakken kleurindeling, zodat Typhlosions vlammen geen witte vlakken krijgen door een dubbel toegepaste textuurschaal.
-
-- De Aether Ronin-tailleband loopt in de overworld-zijframes niet meer over de armen; ook de female-top laat de armen vrij bij lopen.
-
-- Route 5 toont de nieuwste handmatige Tiled-aanpassingen in de bestaande Godot-scene, met behoud van de animaties en gameplaylagen.
-
-- De Underground Passage-ingang op Route 5 staat naast het wandelpad met een eigen toegangspad; deur, terugkeerpositie en collision sluiten hierop aan.
-
-- Route 5 heeft bijgewerkte Tiled-visuals en ingetekende lagen voor collision, sprongranden en hoog gras.
-
-- De Aether Wayfarer is als aparte male- en female-outfitbox beschikbaar met trainer- en overworldlagen voor lopen, vissen en rijden. De boxen staan niet in de store.
-
-- De vrouwelijke Rocket-traineroutfit heeft een zichtbare tailleband en donkerdere rok, zodat shirt en rok duidelijk van elkaar te onderscheiden zijn.
-
-- De laatste aanpassing aan de kraag, taille, rok en logokleur van de female Rocket-overworld-outfit is teruggedraaid naar de voorgaande versie.
-
-- De vrouwelijke Rocket-outfit heeft duidelijkere handschoenen, een zichtbare rok met vrije knieën, een herkenbare petklep en een korter bobkapsel in de overworld.
-- De zuidelijke uitgang van Rock Tunnel 1F heeft nu een complete grotboog en een lage voorwand zoals in Mt. Moon; de uitgang en aankomst staan midden onder de boog.
-
-- De vrouwelijke Team Rocket-outfit is beschikbaar als outfitbox met uniform, rok, laarzen, paars bobkapsel en pet, inclusief trainer- en overworld-sprites. De box staat nog niet in de store.
-
-- Nieuwe Kanto-route-, grot- en verbindingsscenes tonen de geïmporteerde Tiled-maps en hebben gekoppelde ingangspunten en uitgangen. Route 2 en Pallet Town sluiten nu aan op Diglett Cave en Route 21; de locaties zijn beschikbaar voor staffteleport.
-
-- Het Team Rocket-uniform heeft nu dezelfde open halsuitsnede als de starter-outfit, zodat een stukje nek zichtbaar blijft tijdens staan en lopen.
-
-- De kraag van het Team Rocket-uniform volgt nu de nek tijdens het lopen, zonder extra omhoog te springen in de stapstanden.
-
-- Tall grass beweegt nu standaard zacht met verschillende rustpauzes per groepje, ook in Viridian Forest. Nieuwe Tiled-imports krijgen dezelfde animatie automatisch.
-
-- Kleding volgt tijdens lopen exact de animatie van het lichaam, ook bij starten en van richting veranderen. Het Team Rocket-shirt heeft een stabiele romp en borstmarkering zonder opspringende tailleband.
-
-- Een aparte Route 1-proef laat één veld tall grass zacht bewegen, met verschillende pauzes per groepje en een aan/uitvergelijking.
-
-- De Team Rocket-laarzen volgen nu de voeten in ieder loopframe; de broek dekt de benen volledig. De losse streep achter op de pet is verwijderd en de pet krijgt bij vissen en rijden geen dubbele verschuiving meer.
-
-- Het roze bloemetje naast het pad in Pallet Town heeft weer een complete onderkant; de map is opnieuw geïmporteerd met behoud van de animaties.
-
-- De mannelijke Team Rocket-outfit volgt nu de Gen 4-gruntreferentie met een donkerder uniform, paarsgrijze handschoenen en laarzen, en een losse pet in de outfitbox.
-
-- Water, boombladeren en bloemen bewegen nu subtiel in de bestaande maps; ook grotvijvers hebben wateranimatie. De statische mapindeling en botsingsgegevens blijven behouden.
-
-- De mannelijke Team Rocket-outfit is toegevoegd als outfitbox met uniform en handschoenen, broek en laarzen, inclusief trainer- en overworld-sprites.
-
-- Een aparte Pallet Town-preview combineert echte Tiled-animaties voor water, boombladeren en bloemen, met een vergelijking tegen stilstaande tegels.
-
-- De pantalon van de mannelijke smoking-trainersprite volgt de benen beter, met aangepaste contouren en plooien.
-
-- De geselecteerde tegenstander in gedeelde 3D-double battles krijgt een gloed langs het Pokémon-model in plaats van een groot kader rond de klikzone.
-
-- De mannelijke smoking is toegevoegd als outfitbox met los jasje, broek en schoenen, inclusief overworld- en trainer-sprites. De box staat nog niet in de store.
-
-- De Tiled-importer ondersteunt nu tegelanimaties. Een aparte Viridian City-proef toont bewegend vijverwater; de bestaande speelbare stad blijft ongewijzigd.
-
-- Tijdens de eigen keuze in een gedeelde 3D-double battle schuift de camera rustig achter de eigen Pokémon en iets dichterbij; na de keuze keert het overzicht terug.
-
-- De Poké Ball-keuze in gedeelde gevechten toont baliconen en een apart, heel aantal in plaats van een decimaal aantal.
-
-- De laatste 25 Pokémon uit batch 03 zijn lokaal goedgekeurd als 3D-model in normale en shiny vorm, elk met een eigen bijwerkbare bundle. De modellen komen pas met een aparte publicatie beschikbaar voor spelers.
-
-- Gedeelde double battles behouden de portrethoeken met compacte pixelportretten: beide partytrainers links naast elkaar, bij wilde gevechten één generiek encounterportrait rechts en bij trainergevechten één trainer rechts. De turn- en cameraknoppen wijken voor het rechterportrait.
-
-- Gedeelde double battles spelen het gebruikelijke schadegeluid af naast de 3D-hitreactie. De turn- en cameraknoppen blijven rechtsboven staan wanneer er geen zichtbaar tegenstanderportrait is.
-
-- Gedeelde double battles tonen weer en terrein linksboven vanuit de actuele battle-status, melden publieke veldwisselingen in het gevechtslog en schalen statveranderingen mee met de compacte 3D-HP-kaarten.
-
-- Adventure Party double battles plaatsen de twee 3D-Pokémon per team ook vanuit de standaardcamera recht naast elkaar, laten ze naar hun eigen tegenstander kijken en tonen de vier HP-kaarten in een compacte statusrij boven het speelveld.
-
-- Nog 75 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm. Elk modelpaar heeft een eigen downloadbare bundle; publicatie volgt in een latere desktoprelease.
-
-- Gedeelde Adventure Party-encounters melden nu wanneer de lokale backend de nieuwe route nog niet heeft, in plaats van dit als verbindingsfout te tonen.
-
-- Devtools-spawns starten voor een beschikbare Adventure Party nu één gedeeld double battle met de gekozen Pokémon; beide spelers zien hetzelfde gevecht. Zonder beschikbare partner volgt geen onbedoelde single battle.
-
-- Android-release builds now restore and checksum both Pokémon HOME sprite packs before export, so party icons are available in the installed APK.
-
-- Adventure Party double battles tonen op desktop vier goedgekeurde 3D-Pokémon naast elkaar, met passende camerakadering, modelanimaties en doelvlakken. Als een actief model ontbreekt, blijft de hele battle in de bestaande 2D-opstelling.
-
-- Wilde 3D-gevechten gebruiken de rustige standaardarena voor gras, grot of water. Trainergevechten gebruiken de arena van de map; gymgevechten hun eigen zaal. De bestaande 2D-achtergronden blijven op hun locatie gebaseerd.
-
-- De volgende 71 goedgekeurde Pokémon zijn voorbereid voor 3D-gevechten in normale en shiny vorm. Hun modellen blijven individuele downloads; de nieuwe catalogus wordt actief na de desktoprelease.
-
-- Explicitly include normal and shiny Pokémon HOME icons in Android exports so party slots can resolve their portraits.
-- Pokémon-summary cards met 3D-modellen gebruiken de bestaande grassfield-, cave- en waterarena’s als automatische 3D-achtergrond op basis van hun types. De camera kadert de zichtbare Pokémon groter in en bewaart ruimte voor de kaartknoppen.
-
-- Enable the virtual keyboard for browser builds on touchscreen devices.
-
-- De desktoplauncher haalt bij een update alleen de goedgekeurde 3D-catalogusindex op. Ontbrekende Pokémon-modellen worden afzonderlijk geladen voordat ze in een 3D-gevecht verschijnen, met downloadvoortgang en een geschatte resterende tijd.
-
-- Pallet Town, Viridian City en Pewter City hebben eigen 3D-battlearena’s naar hun pixelmaps, met herkenbare gebouwen, tuinen en bergterrassen rondom de camera. Viridian bevat ook het omheinde EV-trainingsgrasveld. Pallet heeft een open oceaan richting Cinnabar; Pallet en Viridian hebben ook een aparte waterarena.
-
-- Pewter Gym en Cerulean Gym hebben eigen, rondom ingerichte 3D-battlearena’s naar hun pixelmaps: een stenen rotshal voor Brock en een zwembadhal met gele loopbruggen voor Misty. Ook de gymtrainers gebruiken hun lokale arena.
-
-- Oudere desktoplaunchers bieden een beschikbare launcher-update nu ook aan wanneer ze de nieuwe 3D-bundellijst nog niet kennen; game- en modeldownloads starten pas na de herstart met de nieuwe launcher.
-
-- Shroomish en Bronzong zijn na extra controle ook lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm, met elk een afzonderlijke bijwerkbare bundel.
-
-- Vanuit de 3D-battlearena van Route 24 is nu Cerulean City zichtbaar aan de overkant van Nugget Bridge, met blauwe daken, een rivierpromenade, het Pokémon Center en de Gym.
-
-- Cerulean City, Route 24 en Route 25 hebben eigen 3D-battlearena’s voor land en water, rondom ingericht naar de pixelmaps met Nugget Bridge, de stad, bergterrassen, Bill’s huis en een rotsachtige oceaankust.
-
-- Nog 69 Pokémon zijn lokaal goedgekeurd voor 3D-gevechten in normale en shiny vorm, elk met een afzonderlijke bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte release.
-
-- Route 2 en Route 4 hebben nu eigen 3D-battlearena’s voor land- en watergevechten, rondom ingericht naar hun pixelmaps met bospoorten, Diglett’s Cave, Mt. Moon, een rivierbrug en extra natuurdetails.
-
-- De 3D-battlearena's van Route 1 en Route 22 zijn rondom vernieuwd naar de pixelmaps, met vollere bosranden, aansluitende terrassen, grasvelden en bloemperken; Route 22 heeft nu ook een League-poort en een zuidelijke vijver met voetbrug. De draaibare camera blijft ook bij watergevechten vrij van boomkruinen en blokkerende trapleuningen.
-
-- De 3D-battlearena van Route 3 is nu rondom ingericht voor de draaibare camera, met aansluitende rotsterrassen, een zuidelijk pad met trap en extra bomen, rotsen, struiken en bloemen.
-
-- Muisklikken en aanrakingen boven zichtbare UI-knoppen worden niet meer door de vrije-ruimtebediening van de wereld onderschept.
-- De lokale desktopreview kan 81 nieuwe 3D-Pokémon veilig in de Pokédex en summary cards tonen; de camera blijft ook bij modellen met een afwijkende skin-koppeling werken.
-
-- Route 3 heeft nu een rijkere 3D-battlearena naar de pixelmap, met het Pokémon Center, de ingang van Mt. Moon, rotsterrassen met trappen, afgebakende grasvelden, struiken en bloemen.
-
-- De browser- en desktopclient ondersteunen nu een korte klik op vrije speelruimte als interactie en muis slepen als tijdelijke joystick.
-
-- Gevechten met wilde Pokémon en trainers op Route 3 gebruiken nu een eigen 3D-arena met het rotsachtige pad en de begroeiing van die route.
-
-- De desktoplauncher kan de volledige goedgekeurde 3D-catalogus van 82 Pokémon plus Mega Dragonite normal en shiny als afzonderlijke bundles downloaden zodra release v5 is gepubliceerd.
-
-- Mega Dragonite normal en shiny zijn lokaal goedgekeurd voor 3D-gevechten en hebben samen een eigen bijwerkbare bundel; beschikbaarheid voor spelers volgt pas na een aparte desktoprelease.
-
-- Het inlogscherm controleert de serverstatus opnieuw na een mislukte aanvraag. Een tijdelijke netwerkfout laat de browserclient daardoor niet permanent offline staan.
-
-- De lokale 3D-Mega Dragonite-proef gebruikt nu gemeten grondcorrectie voor de oorspronkelijke Mega-pose en verbergt de eigen HP-balk tijdens de transformatie zodat die de pose niet afdekt.
-
-- Mega Dragonite gebruikt in lokale 3D-gevechten het goedgekeurde transformatie-effect met het bestaande Mega-geluid en de oorspronkelijke Mega-pose, zodra een geschikt model lokaal beschikbaar is.
-
-- De browser kan weeracties, Calcdex, team export, AI-gevechten bekijken en account- en privacyfuncties via de normale API gebruiken.
-- Ranked kiest in de browser standaard Aether OU en kan een gevonden gevecht nu ook vanuit de browser openen of hervatten.
-- De Android-downloadlink op de website en de updateserver ondersteunen nu de ondertekende APK, inclusief controle van manifest, bestandsgrootte en SHA-256.
-- Browser play now uses the same gameplay routes as desktop and can continue through all currently available maps, including Route 5, Route 9 and Cerulean Cave. Guild activity and ranked PvP are available; player asset transfers still require the desktop or Android client.
-- De Android-client kan een vereiste nieuwe APK via de eigen updateserver vinden, gecontroleerd downloaden en aanbieden in Androids installatiescherm. De oude client pauzeert totdat de update is geïnstalleerd.
-- De mountdialoog op Android en desktop heeft nu een knop om op de geselecteerde landmount te stappen of af te stappen.
-- De HP-panelen in Android-gevechten blijven boven hun Pokémon staan, ook zonder 3D-presenter.
-- Wilde encounters op Android bereiden het gevechtsscherm vooraf voor en houden de overgang vloeiend terwijl de server en sprites laden. Nieuwe Pokémon tonen tijdelijk een subtiel silhouet totdat hun animatiesprite beschikbaar is; de sprites van het huidige gebied worden al bij binnenkomst opgehaald.
-- De Android-proefbuild heeft nu muziek op het inlogscherm, in de wereld en tijdens wilde gevechten. Hij haalt het volledige muziekpakket automatisch binnen, controleert de download en bewaart die voor volgende starts.
-- Na een muziekupdate verwijdert Android bij de volgende start de oude muziekversie om opslagruimte vrij te maken.
-- Android toont geen crashrapport meer na een normale onderbreking op de achtergrond.
-- De Android-proefbuild gebruikt liggende 2D-gevechten met de volledige battleweergave en laadt de normale geanimeerde Pokémon-sprites via de bestaande online assetroute.
-- De Android-wereldinterface laadt nu zonder afhankelijkheid van een uitgesloten desktopbestand voor lokale 3D-modelreview.
-- Op Android beweeg je met een virtuele joystick die verschijnt waar je je duim vasthoudt; een korte tik op de wereld gebruikt interactie.
-- De Android-proefbuild toont login en wereldinterface groter, vergroot de rechter actieknoppen, globale buffknoppen, chattabs en chatinvoer, opent het toetsenbord pas bij het kiezen van een invoerveld en laat dialoog met één tik per regel doorgaan.
-- In Android-gevechten begint het battle-log onder de linker party-slots, zodat de onderste Pokémon niet achter de logknoppen vallen; het vooraf laden van geanimeerde Pokémon-sprites onderbreekt de overgang naar het gevecht niet meer.
-
-- Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles.
-
-- Defeat dialogue after shared NPC battles now uses the defeated Trainer's own mugshot, including class portraits such as Lass Zoe; missing portraits no longer show Professor Oak.
-
-- Approved 55 more Pokémon for local 3D battles in normal and shiny form, with one individually updatable bundle per Pokémon.
-
-- Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes.
-
-- Classic wild battles now briefly show the player Trainer sprite and callout when throwing a Poké Ball and receiving the capture result.
-
-- The Adventure Party EXP buff now covers shared wild and NPC battles, and hides when a party member is offline or on another map and battles are solo.
-
-- Immersive Adventure Party doubles now use the single-battle Trainer voice variants for move callouts instead of repeating one fixed line.
-
-- Trainer callouts in Immersive Adventure Party doubles now name the acting Pokémon when ordering a move, as in single battles.
-
-- Immersive 2D/2.5D double battles now size move effects for two Pokémon per side and aim projectile sheets from the acting Pokémon to their actual target.
-
-- Adventure Party members now see a +25% EXP buff while grouped; it increases their own EXP rewards from shared wild battles.
-
-- NPC Trainers in Immersive Adventure Party doubles now use their own mugshot when giving commands, with their class battle portrait or overworld sprite as a fallback.
-
-- Fixed duplicate large and small Trainer figures in Immersive Adventure Party doubles. Both players now receive a battle result message, and trainer victories play the NPC's defeat dialogue after returning to the world.
-
-- In Immersive Adventure Party battles, Trainer sprites appear beside their party rails only while giving a battle command.
-
-- A local battle review accepted 14 additional Pokémon in normal and shiny form. Their individual 3D bundles are prepared for a later desktop release.
-
-- Adventure Party members can start shared trainer battles when they encounter a supported trainer, even if their partner leads the party.
-
-- Adventure Party battles now show that a requested exit is being processed when the partner has disconnected.
-
+- Fixed the entrances to Rival’s House and the Cerulean Bike Shop so stepping onto the door tile reliably enters the building on Android and other platforms.
+
+- Browser map downloads now cover the current Kanto world beyond Cerulean, including Route 5, Vermilion, Rock Tunnel and Cinnabar. Normal progression requirements still apply.
+
+- Browser cries and sound effects now load as separate audio files, reducing the initial game download.
+
+- Browser HOME icons now load individually when displayed. The world video on the login screen streams separately at its original resolution, reducing the required startup download.
+
+### 3D Battles and Model Catalog
+
+- Desktop 3D battles now ignore a saved forest manifest path when the file has moved and use the launcher-installed forest assets instead.
+- Desktop battles now support 2D sprites, 3D models on 2D backgrounds, and full 3D arenas. Sprites and approved models are cached per Pokémon when a map is entered, remain available locally, and can be removed in Settings. Battles fall back to 2D when a model is unavailable.
+- New desktop players now start in 3D battles. Battles automatically fall back to 2D if a model is missing or cannot be loaded.
+- The planned starter model pack is no longer downloaded in advance. The desktop client downloads models for the current party, map, and battles only when needed.
+- Desktop launcher updates now fetch only the approved 3D catalog index. Missing Pokémon models download individually before a 3D battle, with progress and an estimated time remaining. Older launchers also offer an available launcher update even if they do not know about the new bundle list; game and model downloads begin after restarting with the updated launcher.
+- Desktop release v7 activates catalog version 7 with 160 individually downloadable, approved normal and shiny 3D bundles.
+- Locally approved normal and shiny model bundles are ready for these catalog groups: 200 Pokémon; 144 Pokémon; 75 Pokémon; 71 Pokémon; 69 Pokémon; 32 Pokémon; 30 Pokémon; 17 Pokémon; 12 Pokémon; the final 25 Pokémon from batch 03; and 81 models for local Pokédex and summary-card review. Each model pair has its own downloadable or updatable bundle, and player availability depends on a separate desktop release where noted.
+- Additional individually bundled normal and shiny models are approved for Unown, Darmanitan, Wishiwashi, Silvally, Obstagoon, Cursola, Slugma, Magcargo, male Meowstic, Trevenant, Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar, Primarina, Dewpider, Jirachi, Zekrom, Shroomish, and Bronzong. Review covered colors, eyes, animations, and battle placement. Fixes include Staryu’s gem, Vanilluxe’s ice and face, Xerneas’s battle scale, floor alignment for Doublade, Inkay, and Cosmoem, and keeping Mamoswine and Malamar above the floor during attacks.
+- The final 200-model set restores Typhlosion’s colored flames and other previously reviewed fixes. Other reviewed corrections include Torchic’s battle scale, eyes for Torchic, Dodrio, and Vileplume, and Jirachi’s and Zekrom’s repaired eyes and body parts.
+- New catalog model bundles preserve shared-texture shiny colors per part, including Veluza; glowing color regions, animated LED eyes, metal maps, and original lens transparency for Paradox Pokémon; custom smoke rendering and a clearer face for Gastly; and baked color regions in static fire effects, preventing white patches on Typhlosion’s flames.
+- Grimer and Muk catalog candidates render without seams between moving body parts. Additional source models and shiny materials retain metal, glow, and animated surfaces during catalog review.
+- The desktop launcher can download the approved catalog of 82 Pokémon plus Mega Dragonite in normal and shiny forms as individual bundles once release v5 is published. Mega Dragonite’s forms have a locally approved, updateable bundle for a later desktop release.
+- Mega Dragonite’s local 3D battle preview now uses measured ground correction for its original Mega pose and hides its own HP bar during transformation. Local 3D battles use the approved transformation effect, existing Mega sound, and original pose when a suitable model is available.
+- Shared 3D double battles highlight the selected opponent along the Pokémon model instead of drawing a large frame around its click area. The camera moves smoothly behind and closer to the player’s Pokémon during their choice, then returns to the overview.
+- Shared double battles retain compact pixel portraits: both party trainers appear side by side on the left, while a generic encounter portrait or the opposing trainer appears on the right. Turn and camera controls move aside for the right portrait, and stay in the upper-right corner when no opponent portrait is shown.
+- Shared double battles play the usual damage sound with 3D hit reactions, show weather and terrain from the current battle state, report public field changes in the battle log, and scale stat changes alongside compact 3D HP cards. Poké Ball selection shows ball icons and a separate whole-number count.
+- Adventure Party double battles place both 3D Pokémon on each team side by side from the default camera, facing their respective opponents, with four compact HP cards above the field. Desktop battles show four approved 3D Pokémon with suitable framing, model animations, and target areas; if any active model is missing, the entire battle stays in the existing 2D layout.
+- Adventure Party encounters now explain when the local backend does not yet support the new route instead of reporting a connection error. Dev Tools spawns start one shared double battle with the selected Pokémon when a partner is available, so both players see the same battle; without a partner, no unintended single battle starts.
+- Wild 3D battles use a calm default arena for grass, caves, or water. Trainer battles use the map’s arena, and Gym battles use their own room. Existing 2D backgrounds remain based on location.
+- Pokémon summary cards with 3D models now use the existing grass, cave, or water arena as a type-based 3D background. The camera frames the visible Pokémon larger while leaving room for card controls.
+- The 3D stadium now builds its audience lights reliably across repeated battles.
+- Pewter Gym and Cerulean Gym now have fully decorated 3D battle arenas based on their pixel maps: a stone cavern for Brock and a pool hall with yellow walkways for Misty. Gym trainers use their local arena too.
+- Pallet Town, Viridian City, and Pewter City now have 3D battle arenas based on their pixel maps, with recognizable buildings, gardens, and mountain terraces around the camera. Viridian includes the fenced EV training field. Pallet has an open ocean view toward Cinnabar, and Pallet and Viridian also have separate water arenas.
+- Cerulean City, Route 24, and Route 25 now have dedicated land and water battle arenas based on their pixel maps, including Nugget Bridge, the city, mountain terraces, Bill’s house, and a rocky coast. Cerulean City is visible across Nugget Bridge from Route 24’s arena, with blue roofs, a riverside promenade, the Pokémon Center, and the Gym.
+- Routes 1 and 22 now have expanded 3D arenas based on their pixel maps, with fuller forest edges, connected terraces, grass, and flowerbeds. Route 22 also has a League gate and southern pond with a footbridge. The rotating camera stays clear of treetops and blocking stair rails during water battles.
+- Route 2 and Route 4 now have dedicated land and water arenas based on their pixel maps, including forest gates, Diglett’s Cave, Mt. Moon, a river bridge, and added natural details.
+- Route 3 now has a detailed 3D arena based on its pixel map, including the Pokémon Center, Mt. Moon entrance, stepped rock terraces, enclosed grass, shrubs, and flowers. Wild and trainer battles on Route 3 use this route-specific arena. Its rotating camera is surrounded by connected rock terraces, a southern path and stairs, and added trees, rocks, shrubs, and flowers.
+
+### Maps, Routes, and Exploration
+
+- Cerulean City now loads correctly with shared Surf encounter settings. Encounter masks on Routes 6, 9, and 10 and in Vermilion City remain hidden behind map visuals.
+- Route 6 uses the latest Tiled map, with collision, water, tall grass, ledges, and the southern exit following the updated layout. Vermilion City uses the latest Tiled visuals and exterior tileset, with openings to Route 6, Route 11, and the docks aligned to the updated map.
+- Route 10 uses the latest Tiled visuals in the existing Godot scene. Its Pokémon Center is available through the server catalog and as a staff teleport destination. Two new visitors, Magnemite and Emolga, appear there. Route 9 now has enclosed riverbanks with railings, extra trees, and matching collision; the Surf path and route to Route 10 remain open, while a dense tree line closes the southern shore and leaves the Surf entrance clear.
+- Cerulean Cave 1F, 2F, and B1F now use their Tiled visuals with reciprocal stair connections and staff teleport destinations. The Power Plant is reachable from Route 10, and indoor scenes use floor visibility masks. The two missing stair openings to B1F are restored, and upward connections use the standard cave wall stairs.
+- In Cerulean Cave, players can walk across the bridge and surf underneath it. Bridgeheads determine where the player enters and leaves the raised path, keeping the bridge route and Surf route separate. Players and Pokémon can also walk along the dry passage under the bridge.
+- The Cerulean Cave quest can be granted or completed through Dev Tools. Once active, the League agent in Cerulean City moves aside and opens the cave.
+- Diglett’s Cave now has complete cave openings in both entrance rooms, and the Godot exits span their full width.
+- The player now faces into the room or tunnel after arriving at the Underground Passage stairs from either Route 5 or Route 6. The Underground Path has side stairs against the walls, matching arrival points, and clear landings. Route 5 and Route 6 Underground Passage entrances have updated tile and blocking layers.
+- Route 5’s Underground Passage entrance now sits beside the walking path with its own access path; the door, return position, and collision align with it. Route 5 also has updated Tiled visuals and layers for collision, ledges, and tall grass, shown in the existing Godot scene while retaining animations and gameplay layers.
+- Route 5 now has its own daycare interior with a reception desk, red carpet, seating and rest areas, a care table, plants, flowers, and a play area. Its doors are connected, and it is available as a staff teleport destination. A Pokémon PC is included.
+- Cinnabar Island now has continuous road edges and corners. The Mansion stairs connect to the plaza beside the research lab through a wide, clear path. Cinnabar Island and the separate Vermilion Docks are imported into Godot, with reciprocal transitions to Route 21 and Vermilion City. Vermilion City uses the current Tiled layout with gray streets.
+- Route 21 now has a sandy beach with surf and cliffs below Pallet Town. Farther along, two sandbars and scattered reef rocks make the Surf route feel more open.
+- Saffron City now uses the complete Tiled city, with full tree borders, continuous north-south paths, and half-width east-west gates connected to trees. Separate vertical gate interiors connect it to Routes 5 and 6, with reciprocal arrival points and indoor visibility masks.
+- New Kanto route, cave, and connector scenes now show the imported Tiled maps and have linked entrances and exits. Route 2 and Pallet Town connect to Diglett Cave and Route 21; these locations are available for staff teleport.
+- The southern exit of Rock Tunnel 1F now has a complete cave arch and low front wall, matching Mt. Moon. The exit and arrival point are centered beneath the arch.
+- The pink flower beside the path in Pallet Town once again has a complete base. The map was reimported while retaining its animations.
+
+### Outfits and Trainer Customization
+
+- The female Team Rocket hairstyle now includes its matching eyebrows. The female Rocket overworld outfit has clearer gloves, a visible skirt with unobstructed knees, a recognizable cap brim, and a shorter bob. Its trainer outfit has a visible waistband and darker skirt to distinguish the shirt and skirt. A later collar, waist, skirt, and logo-color adjustment was reverted to the previous version.
+- The female Team Rocket outfit is available in an outfit box with uniform, skirt, boots, purple bob hairstyle, and cap, including trainer and overworld sprites. It is not in the store yet.
+- The male Team Rocket outfit now follows the Gen 4 grunt reference, with a darker uniform, purple-gray gloves and boots, and a separate cap in the outfit box. The box includes the uniform, gloves, pants, boots, and trainer and overworld sprites.
+- The Team Rocket uniform now has the same open neckline as the starter outfit, leaving a small part of the neck visible while standing and walking. Its collar follows the neck while walking without jumping during step poses. Clothing follows body animations precisely when walking, starting, and changing direction; the shirt’s torso and chest emblem stay in place without the waistband jumping. The boots follow the feet in every walking frame, the pants fully cover the legs, and the stray stripe behind the cap is removed. The cap no longer shifts twice while fishing or riding.
+- The male tuxedo trainer sprite’s trousers now follow the legs more closely, with revised outlines and folds. The male tuxedo is available in an outfit box with separate jacket, pants, and shoes, including overworld and trainer sprites. The box is not in the store yet.
+- The Aether Wayfarer is available in separate male and female outfit boxes, with trainer and overworld layers for walking, fishing, and riding. The boxes are not in the store.
+- Aether Ronin sleeves now fully cover the arms in male walking frames and in fishing and riding frames for both genders. The female top has closed sleeve seams in side-facing walking frames and leaves the arms clear while walking. The waistband no longer crosses the arms in overworld side frames.
+- The Aether Royal Patreon outfit now has a shared, non-tradeable box for male and female characters, containing a crown, jacket, pants, boots, and skill cape. The cape has its own equipment slot and can be combined with other clothing. Trainer, walking, fishing, and riding sprites are included; the outfit is not in the store yet. The Back cosmetic category now uses a narrower, straighter side profile for the Aether Royal cape on both models and in all overworld activities.
+- The Trainer Card no longer applies Aether Royal items locally without the Patreon role. If the server rejects a preview, the card restores the saved outfit without a console warning. It clearly reports when the role is missing, and position persistence updates the equipped outfit when the server removes an expired item.
+- Patreon Support now displays the Aether Royal outfit on the player model in the Gift Store. The card retains its Patreon pixel icon.
+
+### World Animations and Rendering
+
+- Tall grass now sways softly by default, with varied pauses for each patch, including in Viridian Forest. New Tiled imports receive the same animation automatically. A separate Route 1 preview demonstrates the effect with an on/off comparison.
+- Water, tree leaves, and flowers now move subtly in existing maps, including animated water in cave ponds. Static map layouts and collision data are preserved. A separate Pallet Town preview compares real Tiled animations for water, leaves, and flowers with static tiles; a Viridian City preview demonstrates animated pond water without changing the playable city.
+- The Tiled importer now supports tile animations.
+- Mouse clicks and touches over visible UI buttons are no longer intercepted by the world’s free-space controls. Browser and desktop clients now support a short click on open play space as an interaction and mouse dragging as a temporary joystick.
+- The browser build now enables the virtual keyboard on touchscreen devices.
+- The login screen now checks server status again after a failed request, so a temporary network error does not leave the browser client permanently offline.
+
+### Android
+
+- Android release builds now restore and checksum both Pokémon HOME sprite packs before export, so party icons are available in the installed APK. Normal and shiny Pokémon HOME icons are explicitly included so party slots can resolve their portraits.
+- The desktop client removes the previous local Pokémon sprite version after the new metadata and sprite sheet load successfully. Existing sprite caches without a version index are cleaned up once.
+- Pokémon Centers use the standard metadata from their shared template.
+
+### Browser and Android Clients
+
+- The browser can use weather actions, view Calcdex, export teams, watch AI battles, and access account and privacy features through the standard API.
+- Ranked defaults to Aether OU in the browser and can open or resume a found battle there.
+- The website’s Android download link and the update server now support signed APKs, including validation of the manifest, file size, and SHA-256 checksum.
+- Browser play uses the same gameplay routes as desktop and can continue through all currently available maps, including Routes 5 and 9 and Cerulean Cave. Guild activity and ranked PvP are available; player asset transfers still require the desktop or Android client.
+- The Android client can find a required APK update through its update server, download and verify it, and offer it through Android’s installer. The old client pauses until the update is installed.
+- The mount dialog on Android and desktop now has a button to mount or dismount the selected land mount.
+- HP panels in Android battles stay above their Pokémon, even without a 3D presenter.
+- Android prepares the battle screen for wild encounters in advance and keeps transitions smooth while the server and sprites load. New Pokémon briefly appear as subtle silhouettes until their animated sprites are ready; sprites for the current area are fetched on entry.
+- The Android preview build now plays music on the login screen, in the world, and during wild battles. It downloads and verifies the full music pack automatically and keeps it for future launches. After a music update, Android removes the old version on the next launch to free storage.
+- Android no longer displays a crash report after a normal interruption in the background.
+- The Android preview build uses landscape 2D battles with the full battle view and loads standard animated Pokémon sprites through the existing online asset route.
+- The Android world interface no longer depends on a desktop-only file excluded from local 3D model review.
+- Android movement uses a virtual joystick that appears where the player places a thumb; a short tap on the world interacts with it.
+- The Android preview build enlarges the login and world interfaces, right-side action buttons, global boost buttons, chat tabs, and chat input. The keyboard opens only when selecting an input field, and dialogue advances one line per tap.
+- In Android battles, the battle log starts below the left party slots so the bottom Pokémon stays clear of its controls. Preloading animated Pokémon sprites no longer interrupts the transition into battle.
+- Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser. Classic remains available for single battles.
+
+### Adventure Party and Battle Presentation
+
+- Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter, and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles. A local battle review accepted 14 additional Pokémon in normal and shiny forms for a later desktop release, and approved 55 more Pokémon for local 3D battles, each with its own updateable bundle.
+- Defeat dialogue after shared NPC battles now uses the defeated Trainer’s mugshot, including class portraits such as Lass Zoe. Missing portraits no longer show Professor Oak.
+- Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes. The Adventure Party HUD also no longer briefly appears over Immersive battles during presence updates.
+- Classic wild battles now briefly show the player’s Trainer sprite and a callout when throwing a Poké Ball and receiving the capture result.
+- The Adventure Party EXP buff now applies to shared wild and NPC battles and is hidden when a party member is offline or on another map and battles are solo. Grouped Adventure Party members see a +25% EXP buff that increases their own rewards from shared wild battles.
+- Immersive Adventure Party doubles now use the single-battle Trainer voice variants for move callouts, name the acting Pokémon when a Trainer orders a move, and show NPC Trainers’ own mugshots while they give commands. Their class battle portrait or overworld sprite is used if the mugshot is unavailable.
+- Immersive 2D/2.5D double battles now size move effects for two Pokémon per side and aim projectile sheets from the acting Pokémon to the actual target.
+- Duplicate large and small Trainer figures in Immersive Adventure Party doubles are fixed. Both players receive a battle result message, and trainer victories play the NPC’s defeat dialogue after returning to the world. Trainer sprites appear beside party rails only while giving a battle command.
+- Adventure Party members can start shared battles with supported Trainers they encounter, even if their partner leads the party. When a partner disconnects, the battle now indicates that a requested exit is being processed.
 - The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
+- Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side, with the two pairs spaced across separate battlefield platforms.
+- The Pokédex preview zoom button now enlarges local 3D Pokémon, making model details easier to inspect.
 
-- Fixed the Adventure Party HUD briefly appearing over Immersive battles when party presence updates arrive.
+### Store, Tools, and Lobby
 
-- Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side.
-
-- Immersive 2D Adventure Party double battles now space the two Pokémon pairs across separate battlefield platforms.
-
-- The Pokédex preview zoom button now enlarges local 3D Pokémon too, so model details can be inspected more closely.
-
-- Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser; Classic remains available for single battles.
-
-- De visuals van de Aether Clash-lobby zijn bijgewerkt voor de desktop- en browserclient.
-
-- De Pokémon Rental-specialist legt nu uit dat spelers al voor PvP kunnen huren, maar hun rental pas permanent kunnen maken als hun Kanto level cap 100 is.
-
-- Alpha Tools toont het Aetherite-bedrag nu in een klein venster na een klik op Generate Aetherite, zodat het hoofdmenu compact blijft.
-
-- Content Creator Tools kan nu één niet-shiny Pokémon maken, toont de bestaande Creator-Pokémon en laat die gericht verwijderen voordat je een nieuwe maakt.
-
-- Alpha Tools heeft nu een Aetherite-generator met een zelf te kiezen bedrag in plaats van de knoppen om Alpha-Pokémon te maken of te wissen.
+- The Aether Clash lobby visuals have been updated for desktop and browser clients.
+- The Pokémon Rental specialist now explains that players can rent Pokémon for PvP, but can make a rental permanent only after reaching the Kanto level cap of 100.
+- Alpha Tools now shows the Aetherite amount in a small dialog after selecting Generate Aetherite, keeping the main menu compact. Its generator accepts a custom amount instead of offering buttons to create or delete Alpha Pokémon.
+- Content Creator Tools can create one non-shiny Pokémon, show existing Creator Pokémon, and remove a selected one before creating another.
 
 ## 0.3.83
 

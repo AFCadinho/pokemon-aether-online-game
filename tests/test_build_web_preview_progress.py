@@ -1,5 +1,7 @@
 from contextlib import redirect_stdout
 import io
+import json
+from unittest.mock import patch
 from pathlib import Path
 import sys
 import tempfile
@@ -12,6 +14,8 @@ from tools.build_web_preview import (
     initial_size_limit,
     parse_export_progress,
     run_export,
+    write_browser_audio_catalog,
+    validate_external_audio_pack,
 )
 
 
@@ -60,6 +64,30 @@ class BuildWebPreviewProgressTests(unittest.TestCase):
             )
         self.assertEqual(returncode, 0)
         self.assertIn('Godot export: 12% (export)', output.getvalue())
+
+    def test_audio_catalog_lists_copied_resources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'generated/catalog.json'
+            write_browser_audio_catalog([{'name': 'audio/sfx/pokemon_cries/PIKACHU.ogg'},
+                                         {'name': 'battles/animations/hit.wav'}], target)
+            self.assertEqual(json.loads(target.read_text()), [
+                'res://assets/audio/sfx/pokemon_cries/PIKACHU.ogg',
+                'res://assets/battles/animations/hit.wav'])
+
+    def test_pack_guard_rejects_imported_and_raw_audio(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            metadata = root / 'assets/audio/cry.ogg.import'
+            metadata.parent.mkdir(parents=True)
+            metadata.write_text('path="res://.godot/imported/cry.ogg-hash.oggvorbisstr"')
+            for name in ['assets/audio/cry.ogg', '.godot/imported/cry.ogg-hash.oggvorbisstr']:
+                with self.subTest(name=name), patch('tools.build_web_preview.ROOT', root), \
+                     patch('tools.build_web_preview.pack_entry_names', return_value=[name]):
+                    with self.assertRaisesRegex(RuntimeError, 'embeds browser audio'):
+                        validate_external_audio_pack(root / 'index.pck')
+            with patch('tools.build_web_preview.ROOT', root), \
+                 patch('tools.build_web_preview.pack_entry_names', return_value=['assets/ui/icon.png']):
+                validate_external_audio_pack(root / 'index.pck')
 
     def test_shell_logo_is_copied_into_web_build(self):
         with tempfile.TemporaryDirectory() as directory:

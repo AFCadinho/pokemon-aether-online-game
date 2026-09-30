@@ -9,7 +9,9 @@
     :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #060b16; color: #f5f1ff; }
     * { box-sizing: border-box; }
     body { margin: 0; overflow: hidden; background: #060b16; }
-    canvas { display: block; width: 100vw; height: 100vh; outline: none; }
+    #game-surface { position: fixed; inset: 0; background: #060b16; }
+    #login-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    canvas { position: relative; display: block; width: 100vw; height: 100vh; outline: none; }
     #cover { position: fixed; inset: 0; display: grid; place-items: center; overflow: auto; padding: 28px 18px; background: radial-gradient(circle at 50% 22%, #34285c 0, #131a31 38%, #060b16 78%); }
     #cover::before { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .25; background: linear-gradient(115deg, transparent 20%, #9874ff18 50%, transparent 80%); }
     #cover[hidden] { display: none; }
@@ -49,7 +51,8 @@
   $GODOT_HEAD_INCLUDE
 </head>
 <body>
-  <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
+  <div id="game-surface"><video id="login-video" muted playsinline loop preload="none" hidden aria-hidden="true"></video>
+  <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas></div>
   <div id="cover">
     <main>
       <figure class="world-preview" aria-hidden="true"><img src="pokeaether-world-preview.webp" alt=""></figure>
@@ -118,14 +121,15 @@
   <script id="pokeaether-fullscreen">
     (() => {
       const canvas = document.getElementById('canvas');
+      const surface = document.getElementById('game-surface');
       const retry = document.createElement('button');
       retry.textContent = 'Enter fullscreen';
       retry.hidden = true;
       retry.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:auto;z-index:1000';
       document.body.appendChild(retry);
       let error = '';
-      const supported = () => Boolean(document.fullscreenEnabled && canvas.requestFullscreen);
-      const active = () => document.fullscreenElement === canvas;
+      const supported = () => Boolean(document.fullscreenEnabled && surface.requestFullscreen);
+      const active = () => document.fullscreenElement === surface;
       const request = enabled => {
         error = '';
         retry.hidden = true;
@@ -140,7 +144,7 @@
         }
         // Call before any await: fullscreen requires a recent user gesture.
         try {
-          const operation = enabled ? canvas.requestFullscreen() : document.exitFullscreen();
+          const operation = enabled ? surface.requestFullscreen() : document.exitFullscreen();
           Promise.resolve(operation).catch(() => {
             error = 'Fullscreen could not be enabled. Use the fullscreen button to retry.';
             retry.hidden = !enabled;
@@ -160,9 +164,49 @@
       window.pokeaetherFullscreen = {request, supported, active, error: () => error};
     })();
   </script>
+  <script id="pokeaether-canvas-alpha">
+    // Godot requests an opaque WebGL context by default. The login viewport
+    // supplies alpha so the native video can remain behind its UI.
+    (() => {
+      const canvas = document.getElementById('canvas');
+      const getContext = canvas.getContext.bind(canvas);
+      canvas.getContext = (type, attributes) => getContext(type,
+        type === 'webgl2' ? { ...attributes, alpha: true } : attributes);
+    })();
+  </script>
   <script src="$GODOT_URL"></script>
   <script>
     const webRelease = window.POKEAETHER_WEB_RELEASE || null;
+    // Keep the native decoder behind the transparent Godot login UI, including
+    // fullscreen. No media request is made until the login scene starts.
+    const loginVideo = document.getElementById('login-video');
+    let loginVideoActive = false;
+    const loginMediaUrl = name => webRelease
+      ? '/web/releases/' + webRelease.buildId + '/login-media/' + name
+      : '/login-media/' + name;
+    window.pokeaetherLoginVideo = {
+      start() {
+        loginVideoActive = true;
+        loginVideo.poster = loginMediaUrl('poster.webp');
+        loginVideo.src = loginMediaUrl('world.mp4');
+        loginVideo.hidden = false;
+        loginVideo.play().catch(() => {}); // Poster remains if autoplay is denied.
+      },
+      stop() {
+        loginVideoActive = false;
+        loginVideo.pause();
+        loginVideo.hidden = true;
+        loginVideo.removeAttribute('src');
+        loginVideo.removeAttribute('poster');
+        loginVideo.load(); // Release decoder/buffers and cancel outstanding loads.
+      }
+    };
+    document.addEventListener('visibilitychange', () => {
+      if (!loginVideoActive) return;
+      if (document.hidden) loginVideo.pause();
+      else loginVideo.play().catch(() => {});
+    });
+
     const releaseAssetUrl = relativePath => webRelease
       ? webRelease.assetBaseUrl + '/' + relativePath.replace(/^\/+/, '')
       : '/' + relativePath.replace(/^\/+/, '');

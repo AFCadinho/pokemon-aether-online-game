@@ -1853,6 +1853,8 @@ func _ready() -> void:
 	_setup_socials_attention_badge()
 	if mail_notification_sound != null and AudioServer.get_bus_index(SettingsManager.NOTIFICATION_BUS) >= 0:
 		mail_notification_sound.bus = SettingsManager.get_audio_output_bus(SettingsManager.NOTIFICATION_BUS)
+	if mail_notification_sound != null and not OS.has_feature("web"):
+		mail_notification_sound.stream = load("res://assets/audio/notification/notification.mp3")
 	_setup_loan_return_request_attention()
 	_set_socials_attention("mail", false)
 	_refresh_location_label()
@@ -2301,6 +2303,11 @@ func _refresh_pvp_localized_ui() -> void:
 
 
 func _play_mail_notification_sound() -> void:
+	if OS.has_feature("web"):
+		var volume := SettingsManager.master_volume / 100.0 * SettingsManager.notification_volume / 100.0
+		var bridge := preload("res://scripts/services/web_audio_bridge.gd")
+		bridge.play_sfx("res://assets/audio/notification/notification.mp3", volume)
+		return
 	if mail_notification_sound == null:
 		return
 	if mail_notification_sound.playing:
@@ -11525,7 +11532,7 @@ func _warm_up_pokedex() -> void:
 		var species_values := _array_from_variant(search_result.get("species", []))
 		for index in range(species_values.size()):
 			var species_value: Variant = species_values[index]
-			if species_value is Dictionary:
+			if species_value is Dictionary and not OS.has_feature("web"):
 				_load_pokedex_species_list_icon(species_value as Dictionary)
 			if index > 0 and index % 8 == 0:
 				await get_tree().process_frame
@@ -27275,6 +27282,9 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 		pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
 		_apply_pokemon_summary_sprite_center_offset(frames, pokemon_summary_animated_sprite.animation)
 		pokemon_summary_animated_sprite.play()
+		if OS.has_feature("web") and bool(frames.get_meta("home_fallback", false)):
+			var home_texture := frames.get_frame_texture("idle", 0)
+			home_texture.changed.connect(_refresh_summary_home_preview.bind(web_generation, weakref(frames)), CONNECT_ONE_SHOT)
 		if frames.has_meta("rendered_asset"):
 			_prefetch_pokemon_summary_rendered_view.call_deferred(
 				pokemon.species,
@@ -27302,6 +27312,16 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_prefetch_pokemon_summary_web_sprites(pokemon)
 	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+
+
+func _refresh_summary_home_preview(generation: int, frames_ref: WeakRef) -> void:
+	var frames := frames_ref.get_ref() as SpriteFrames
+	if frames == null or generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite.sprite_frames != frames:
+		return
+	var texture := frames.get_frame_texture("idle", 0)
+	pokemon_summary_sprite_loader.call("_set_sprite_frames_auto_anchor", frames, texture.get_size())
+	pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
+	_apply_pokemon_summary_sprite_center_offset(frames, "idle")
 
 
 func _prefetch_pokemon_summary_web_sprites(pokemon: Pokemon) -> void:
@@ -36647,7 +36667,10 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = _load_pokedex_species_list_icon(species)
+	if OS.has_feature("web"):
+		WebHomeIconService.bind_visible(icon, species_name, pokedex_shiny_mode)
+	else:
+		icon.texture = _load_pokedex_species_list_icon(species)
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
@@ -36992,6 +37015,9 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
 		_apply_pokedex_sprite_center_offset(loaded_frames, pokedex_animated_sprite.animation)
 		pokedex_animated_sprite.play()
+		if OS.has_feature("web") and bool(loaded_frames.get_meta("home_fallback", false)):
+			var home_texture := loaded_frames.get_frame_texture("idle", 0)
+			home_texture.changed.connect(_refresh_pokedex_home_preview.bind(web_generation, weakref(loaded_frames)), CONNECT_ONE_SHOT)
 		if loaded_frames.has_meta("rendered_asset"):
 			_prefetch_pokedex_rendered_view.call_deferred(
 				species.duplicate(true),
@@ -37019,6 +37045,16 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		})
 	if loaded_frames == null or not loaded_frames.has_meta("rendered_asset"):
 		_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+
+
+func _refresh_pokedex_home_preview(generation: int, frames_ref: WeakRef) -> void:
+	var frames := frames_ref.get_ref() as SpriteFrames
+	if frames == null or generation != pokedex_web_sprite_generation or pokedex_animated_sprite.sprite_frames != frames:
+		return
+	var texture := frames.get_frame_texture("idle", 0)
+	pokedex_sprite_loader.call("_set_sprite_frames_auto_anchor", frames, texture.get_size())
+	pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(frames)
+	_apply_pokedex_sprite_center_offset(frames, "idle")
 
 
 func _prefetch_pokedex_rendered_view(species: Dictionary, side: String, is_shiny: bool) -> void:
