@@ -1,0 +1,402 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "species": "skarmory",
+  "status": "higher_flight_candidate_user_review_pending",
+  "runtime_approved": false,
+  "published": false,
+  "reason": "Original minimum flight clearance was0.025m; user reported low flight. Candidate adds0.7m visual height to idle, attacks and damage, smoothly removes it during faint, and keeps sleep/faint loop unchanged.",
+  "source_scene_hashes": {
+    "normal": "a19514d01214ca0f17495216a647475691ffb108648da3cf2ae41ee92d735fe0",
+    "shiny": "3b53c7c98264b0972b8c0c0ced70e149c61a95f22078d1c8e42b13afb308157d"
+  },
+  "candidates": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 114.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2.0,
+      "glb_sha256": "a4f8dba6cec5d3170dd33668dbf4b1506dc835a3973adc63137268e53d27edd8",
+      "godot_version": "4.6.2-stable (official)",
+      "path": ".tmp/remaining-274-production/za-repairs/skarmory/normal/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1.0,
+      "runtime_approved": false,
+      "runtime_path": ".tmp/remaining-274-production/skarmory-flight-v1/skarmory-normal.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "08933010421a1284bbfa42cf4d0e21d259816ebf0b1d30aee7e22620e9d024e6",
+      "source_sha256": "65a1edb50f5ea9b519e66f70d0a56b9f32fad6d95b6c420540a7a308eb605fbc",
+      "species": "skarmory-normal",
+      "variant": "normal",
+      "visual_ground_motion": {
+        "clips": {
+          "damage": {
+            "duration": 0.666666666666667,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                0.666666666666667,
+                0.7
+              ]
+            ],
+            "loop": false
+          },
+          "faint_loop": {
+            "duration": 1.66666666666667,
+            "keys": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                1.66666666666667,
+                0.0
+              ]
+            ],
+            "loop": true
+          },
+          "faint_start": {
+            "duration": 1.9,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                0.4,
+                0.7
+              ],
+              [
+                1.4,
+                0.0
+              ],
+              [
+                1.9,
+                0.0
+              ]
+            ],
+            "loop": false
+          },
+          "idle": {
+            "duration": 3.33333333333333,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                3.33333333333333,
+                0.7
+              ]
+            ],
+            "loop": true
+          },
+          "physical_attack": {
+            "duration": 1.76666666666667,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                1.76666666666667,
+                0.7
+              ]
+            ],
+            "loop": false
+          },
+          "sleep": {
+            "duration": 2.33333333333333,
+            "keys": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                2.33333333333333,
+                0.0
+              ]
+            ],
+            "loop": true
+          },
+          "special_attack": {
+            "duration": 2.0,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                2.0,
+                0.7
+              ]
+            ],
+            "loop": false
+          }
+        },
+        "glb_sha256": "a4f8dba6cec5d3170dd33668dbf4b1506dc835a3973adc63137268e53d27edd8",
+        "review_required": true,
+        "schema": 1
+      }
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 114.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 106.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2.0,
+      "glb_sha256": "1b1ed5ff774659dc4f523c85621e8d814f104c2728287f6825d8538f84c0d1aa",
+      "godot_version": "4.6.2-stable (official)",
+      "path": ".tmp/remaining-274-production/za-repairs/skarmory/shiny/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1.0,
+      "runtime_approved": false,
+      "runtime_path": ".tmp/remaining-274-production/skarmory-flight-v1/skarmory-shiny.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "01fc9dcaca01bd6bf9c0a46980ae0ce86b6d0b19fd88fa5814612d8c77973991",
+      "source_sha256": "65a1edb50f5ea9b519e66f70d0a56b9f32fad6d95b6c420540a7a308eb605fbc",
+      "species": "skarmory-shiny",
+      "variant": "shiny",
+      "visual_ground_motion": {
+        "clips": {
+          "damage": {
+            "duration": 0.666666666666667,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                0.666666666666667,
+                0.7
+              ]
+            ],
+            "loop": false
+          },
+          "faint_loop": {
+            "duration": 1.66666666666667,
+            "keys": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                1.66666666666667,
+                0.0
+              ]
+            ],
+            "loop": true
+          },
+          "faint_start": {
+            "duration": 1.9,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                0.4,
+                0.7
+              ],
+              [
+                1.4,
+                0.0
+              ],
+              [
+                1.9,
+                0.0
+              ]
+            ],
+            "loop": false
+          },
+          "idle": {
+            "duration": 3.33333333333333,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                3.33333333333333,
+                0.7
+              ]
+            ],
+            "loop": true
+          },
+          "physical_attack": {
+            "duration": 1.76666666666667,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                1.76666666666667,
+                0.7
+              ]
+            ],
+            "loop": false
+          },
+          "sleep": {
+            "duration": 2.33333333333333,
+            "keys": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                2.33333333333333,
+                0.0
+              ]
+            ],
+            "loop": true
+          },
+          "special_attack": {
+            "duration": 2.0,
+            "keys": [
+              [
+                0.0,
+                0.7
+              ],
+              [
+                2.0,
+                0.7
+              ]
+            ],
+            "loop": false
+          }
+        },
+        "glb_sha256": "1b1ed5ff774659dc4f523c85621e8d814f104c2728287f6825d8538f84c0d1aa",
+        "review_required": true,
+        "schema": 1
+      }
+    }
+  ],
+  "native_preservation": [
+    {
+      "fresh_pose_comparisons": 21,
+      "inserted_default_channels": -1,
+      "native_tracks_verified": 820,
+      "new_runtime_sha256": "08933010421a1284bbfa42cf4d0e21d259816ebf0b1d30aee7e22620e9d024e6",
+      "old_runtime_sha256": "a19514d01214ca0f17495216a647475691ffb108648da3cf2ae41ee92d735fe0",
+      "species": "skarmory-normal"
+    },
+    {
+      "fresh_pose_comparisons": 21,
+      "inserted_default_channels": -1,
+      "native_tracks_verified": 820,
+      "new_runtime_sha256": "01fc9dcaca01bd6bf9c0a46980ae0ce86b6d0b19fd88fa5814612d8c77973991",
+      "old_runtime_sha256": "3b53c7c98264b0972b8c0c0ced70e149c61a95f22078d1c8e42b13afb308157d",
+      "species": "skarmory-shiny"
+    }
+  ],
+  "pair_parity": {
+    "pairs": [
+      {
+        "geometry_animation_sha256": "65c0e7881c5354464fae4c238096b1ae08b384e63e47155fafcbf3c08c5556dd",
+        "normal_runtime_sha256": "08933010421a1284bbfa42cf4d0e21d259816ebf0b1d30aee7e22620e9d024e6",
+        "shiny_runtime_sha256": "01fc9dcaca01bd6bf9c0a46980ae0ce86b6d0b19fd88fa5814612d8c77973991",
+        "species": "skarmory"
+      }
+    ],
+    "report_sha256": "0371bdd5564a02c943ebae35a18553fba97dbf40790973f5edebac8e557f1711",
+    "schema": 1,
+    "scope": "exact node transforms, mesh arrays, skins, bone rests and poses, animation tracks and keys; materials excluded"
+  },
+  "clearance_sample_hz": 120,
+  "camera_views": 32,
+  "review_url": "http://127.0.0.1:8781/skarmory-flight-v1/review-v1/index.html",
+  "evidence_sha256": {
+    ".tmp/remaining-274-production/skarmory-flight-v1/source-stage.json": "f78e65ae3acf4b94ebc86a3c2af7703f470704a8cb3b09c183bec814bea19bdc",
+    ".tmp/remaining-274-production/skarmory-flight-v1/runtime.json": "98fb5e1f78d2a6182879e0fbfe3cb2d29b8e5db3742d414514f2d3076146a720",
+    ".tmp/remaining-274-production/skarmory-flight-v1/wrap.gd": "5d57a7e48e4ee45344680583439a72d10f9dc9404072dfdf818d452a140adf81",
+    ".tmp/remaining-274-production/skarmory-flight-v1/native-proof-v2.json": "a6b72380431d2ee57804fb313a4832749f911ee64c54b78ddd0f948705d3c28d",
+    ".tmp/remaining-274-production/skarmory-flight-v1/pair-proof-v2.json": "3a4061d2099ecc1e728d6aecff5244c4b1b0e35f9d5df7ab3e1100e9f9453c01",
+    ".tmp/remaining-274-production/skarmory-flight-v1/captures-v2/battle-review.json": "5aa3f073be12db2369a40ac96194f1f88c01b590c3ad2ffddd25d2169040926f",
+    ".tmp/remaining-274-production/skarmory-flight-v1/captures-v2.log": "a08a7abefc3cc67a34a9ff9b715d8ede6e8ea59ebafa5cc5f8450fed8af70d55",
+    ".tmp/remaining-274-production/skarmory-flight-v1/review-v1/receipt.json": "d096aab936d4ff82a15d570739195ce353b4a940b96d63d342ba2a6604f85819",
+    ".tmp/remaining-274-production/skarmory-flight-v1/review-v1/index.html": "9257510efebdc036326acc00d8c081586fb3bfe030517f670762d3db01167e72"
+  },
+  "remaining": [
+    "User height approval",
+    "Final compressed standalone scenes and installation/runtime checks",
+    "Version2 Skarmory bundle and registry update",
+    "R2 publication"
+  ]
+}
